@@ -1,20 +1,21 @@
 ---
 id: cs-036
-title: "Database Fundamentals / Фундаментальные основы баз данных"
-aliases: ["Database Fundamentals", "Фундаментальные основы баз данных"]
+title: "Database Fundamentals / 4fdff04121"
+aliases: ["Database Fundamentals", "04fdff04121"]
 topic: cs
-subtopics: [databases, indexing, nosql, sql, transactions]
+subtopics: [databases, indexing, transactions]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-database-design, c-relational-databases, q-sql-nosql-databases--system-design--medium]
+related: [c-relational-databases, c-database-design, q-sql-nosql-databases--system-design--medium]
 created: "2025-10-13"
-updated: 2025-01-25
+updated: "2025-11-11"
 tags: [acid, database, difficulty/hard, indexing, normalization, nosql, sql, transactions]
-sources: [https://en.wikipedia.org/wiki/Database]
+sources: ["https://en.wikipedia.org/wiki/Database"]
+
 ---
 
 # Вопрос (RU)
@@ -28,11 +29,11 @@ sources: [https://en.wikipedia.org/wiki/Database]
 ## Ответ (RU)
 
 **Теория баз данных:**
-База данных - организованная структура для хранения и управления данными. Основные концепции: ACID (атомарность, согласованность, изолированность, долговечность), транзакции (атомарные операции), индексы (ускорение поиска), нормализация (устранение избыточности). SQL базы - реляционные, NoSQL - нереляционные с различными моделями данных.
+База данных — организованная структура для хранения и управления данными. Основные концепции: ACID (атомарность, согласованность, изолированность, долговечность), транзакции (атомарные единицы работы), индексы (ускорение поиска), нормализация (устранение избыточности и аномалий). SQL-базы — реляционные; NoSQL-базы — нереляционные с различными моделями данных.
 
 **1. SQL vs NoSQL:**
 
-*Теория:* SQL базы данных используют реляционную модель (таблицы, строки, столбцы), строгий schema, ACID транзакции, сложные запросы с JOINs. NoSQL базы используют различные модели (document, key-value, graph, column-family), flexible schema, eventual consistency, горизонтальное масштабирование.
+*Теория:* SQL-базы данных используют реляционную модель (таблицы, строки, столбцы), как правило, фиксированную схему, ACID-транзакции и сложные запросы с `JOIN`. NoSQL-базы используют различные модели (document, key-value, graph, column-family), предлагают гибкую схему и часто обеспечивают eventual или настраиваемую (`tunable`) согласованность (часть систем поддерживает сильную согласованность), а также ориентированы на горизонтальное масштабирование.
 
 ```kotlin
 // ✅ SQL (Room/SQLite)
@@ -53,32 +54,38 @@ interface UserDao {
     suspend fun insertUser(user: User)
 }
 
-// ✅ NoSQL (Flexible schema)
+// ✅ NoSQL (гибкая схема)
 data class UserDocument(
     val id: String = "",
     val name: String = "",
-    val metadata: Map<String, Any> = emptyMap()  // Flexible!
+    val metadata: Map<String, Any> = emptyMap()  // Гибкая структура
 )
 ```
 
 **Когда использовать SQL:**
-- Сложные запросы с JOINs
-- ACID транзакции критичны
-- Фиксированный schema
-- Реляционные данные
+- Сложные запросы с `JOIN`
+- Критичны сильные ACID-гарантии
+- Относительно стабильная схема
+- Сильно реляционные данные
 
 **Когда использовать NoSQL:**
-- Гибкий schema нужен
-- Горизонтальное масштабирование
-- Простые запросы
-- Высокий write throughput
+- Нужна гибкая/эволюционирующая схема
+- Требуется горизонтальное масштабирование
+- Простые шаблоны доступа
+- Очень высокий поток записей / большие объемы данных
 
 **2. ACID Properties:**
 
-*Теория:* ACID - набор свойств транзакций в БД: **Atomicity** (всё или ничего - транзакция выполняется полностью или не выполняется), **Consistency** (валидное состояние БД до и после), **Isolation** (конкурентные транзакции не видят промежуточных изменений), **Durability** (изменения сохраняются после commit).
+*Теория:* ACID — свойства, ожидаемые от транзакций в СУБД:
+- Atomicity (атомарность): всё или ничего.
+- Consistency (согласованность): каждая зафиксированная транзакция сохраняет все ограничения; БД переходит из одного корректного состояния в другое.
+- Isolation (изолированность): конкурентные транзакции (в той или иной степени, в зависимости от уровня изоляции) не видят промежуточных состояний друг друга.
+- Durability (долговечность): после `COMMIT` изменения переживают сбои, как реализовано движком хранения.
+
+Важно: аннотации фреймворков (например, `@Transaction` в Room) лишь используют механизмы конкретной СУБД и не создают дополнительных гарантий долговечности/изоляции сверх того, что поддерживает сам движок.
 
 ```kotlin
-// ✅ Atomicity: либо все операции, либо ни одна
+// ✅ Атомарный перевод, опирающийся на транзакционную семантику БД
 @Database(entities = [Account::class], version = 1)
 abstract class BankDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
@@ -88,37 +95,40 @@ abstract class BankDatabase : RoomDatabase() {
 interface AccountDao {
     @Transaction
     suspend fun transfer(fromId: String, toId: String, amount: Int) {
-        // Всё выполняется атомарно
         updateBalance(fromId, -amount)
         updateBalance(toId, amount)
     }
+
+    @Query("UPDATE Account SET balance = balance + :delta WHERE id = :id")
+    suspend fun updateBalance(id: String, delta: Int)
 }
 
-// ✅ Isolation: конкурентные транзакции изолированы
-// ✅ Consistency: балансы всегда корректны
-// ✅ Durability: изменения сохраняются на диск
+// Детали isolation/consistency/durability зависят от конкретной СУБД (например, настроек SQLite).
 ```
 
 **3. Transactions и Concurrency Control:**
 
-*Теория:* Транзакция - последовательность операций, выполняемых как атомарная единица. Isolation levels определяют видимость промежуточных состояний между транзакциями. Read Uncommitted (грязное чтение), Read Committed (грязное чтение невозможно), Repeatable Read (фантомное чтение возможно), Serializable (полная изоляция).
+*Теория:* Транзакция — последовательность операций, выполняемых как единое атомарное целое. Уровни изоляции определяют, когда изменения одной транзакции становятся видимы другим:
+- Read Uncommitted: допускает «грязные» чтения.
+- Read Committed: грязные чтения запрещены.
+- Repeatable Read: повторное чтение одной и той же строки в транзакции возвращает те же значения; фантомные чтения ещё возможны.
+- `Serializable`: максимальная изоляция, эквивалент сериализованному выполнению.
 
 ```kotlin
-// ✅ Room transactions
+// ✅ Транзакция в Room (использует транзакции SQLite)
 suspend fun performComplexOperation() {
     database.withTransaction {
         val user = userDao.getUser("123")
         userDao.updateUser(user.copy(name = "Updated"))
-        productDao.insertProducts(listOf(...))
-        // Все операции в одной транзакции
+        productDao.insertProducts(listOf(/* ... */))
+        // Все операции выполняются в одной транзакции
     }
 }
 
-// ✅ Pessimistic locking
-@Query("SELECT * FROM User WHERE id = :id FOR UPDATE")
-suspend fun getUserWithLock(id: String): User
+// Концепция пессимистичной блокировки (пример SQL; в SQLite/Room SELECT ... FOR UPDATE в таком виде не используется)
+// SELECT * FROM Users WHERE id = :id FOR UPDATE;
 
-// ✅ Optimistic locking с version
+// ✅ Оптимистичная блокировка с версией
 @Entity
 data class Product(
     @PrimaryKey val id: String,
@@ -129,14 +139,17 @@ data class Product(
 
 **4. Indexing и Query Optimization:**
 
-*Теория:* Индекс - структура данных, ускоряющая поиск в таблице. Создаёт ordered structure на основе indexed columns. Поиск O(log n) вместо O(n). Trade-off: замедляет INSERT/UPDATE/DELETE, занимает дополнительную память. Используется для columns в WHERE, foreign keys, columns для JOINs.
+*Теория:* Индекс — структура данных (часто B-tree или его вариант), ускоряющая поиск за счёт дополнительных операций записи и потребления памяти. Поддерживает упорядоченное (или иное эффективно ищущееся) представление по одному или нескольким столбцам.
+- Типичный сценарий: переход от линейного сканирования O(n) к поиску порядка O(log n) или лучше.
+- Trade-off: каждая операция INSERT/UPDATE/DELETE по индексируемым столбцам должна обновлять индекс; индексы занимают место.
+- Практика: индексировать столбцы из WHERE, условия JOIN и внешние ключи.
 
 ```kotlin
 // ✅ Индексы в Room
 @Entity(
     indices = [
-        Index("userId"),  // Single column index
-        Index(value = ["userId", "status"], unique = true)  // Composite index
+        Index("userId"),  // Индекс по одному столбцу
+        Index(value = ["userId", "status"], unique = true)  // Составной индекс
     ]
 )
 data class Task(
@@ -147,34 +160,32 @@ data class Task(
 
 @Dao
 interface TaskDao {
-    // ✅ Использование индекса
+    // Использует индекс по userId
     @Query("SELECT * FROM Task WHERE userId = :userId")
     suspend fun getTasksByUser(userId: String): List<Task>
 
-    // ✅ Index order matters!
+    // Составной индекс (userId, status) хорошо подходит под этот предикат
     @Query("SELECT * FROM Task WHERE userId = :userId AND status = :status")
     suspend fun getTasks(userId: String, status: String): List<Task>
 
-    // ❌ Неправильный порядок - индекс менее эффективен
-    @Query("SELECT * FROM Task WHERE status = :status AND userId = :userId")
-    suspend fun getTasksWrongOrder(userId: String, status: String): List<Task>
+    // Если бы составной индекс был (status, userId), оптимальный предикат должен начинаться с status
 }
 ```
 
-**Индексы - trade-offs:**
-| Операция | Без индекса | С индексом |
-|----------|------------|------------|
-| SELECT | O(n) | O(log n) |
-| INSERT | O(1) | O(log n) |
-| UPDATE | O(n) | O(log n) |
-| DELETE | O(n) | O(log n) |
+**Индексы — ключевые trade-offs (интуитивно, не строгие оценки для всех движков):**
+- SELECT: может перейти от полного сканирования к логарифмическому или более эффективному поиску при подходящем индексе.
+- INSERT/UPDATE/DELETE: становятся несколько дороже из-за поддержки индексов.
 
 **5. Normalization и Denormalization:**
 
-*Теория:* Нормализация - процесс упорядочивания data в БД для устранения redundancy и anomalies. 1NF (atomic values, no repeating groups), 2NF (1NF + no partial dependencies on composite key), 3NF (2NF + no transitive dependencies). Денормализация - умышленное добавление redundancy для улучшения read performance.
+*Теория:* Нормализация — организация данных для снижения избыточности и предотвращения аномалий.
+- 1NF: атомарные значения, без повторяющихся групп.
+- 2NF: 1NF и отсутствие частичных зависимостей неключевых атрибутов от части составного ключа.
+- 3NF: 2NF и отсутствие транзитивных зависимостей неключевых атрибутов от первичного ключа.
+Денормализация — осознанное введение избыточности ради производительности чтения под конкретные паттерны доступа.
 
 ```kotlin
-// ❌ Unnormalized: избыточность данных
+// ❌ Ненормализовано: избыточность
 data class OrderUnnormalized(
     val orderId: String,
     val customerName: String,
@@ -182,9 +193,9 @@ data class OrderUnnormalized(
     val productName: String,
     val productPrice: Double
 )
-// Проблема: данные customer повторяются для каждого товара
+// Проблема: данные клиента и товара дублируются.
 
-// ✅ 1NF: atomic values, no repeating groups
+// ✅ 1NF
 @Entity
 data class Order1NF(
     @PrimaryKey val orderId: String,
@@ -192,7 +203,7 @@ data class Order1NF(
     val productId: String
 )
 
-// ✅ 2NF: no partial dependencies
+// ✅ Разделение сущностей
 @Entity
 data class Customer(
     @PrimaryKey val id: String,
@@ -207,15 +218,19 @@ data class Product(
     val price: Double
 )
 
-@Entity(foreignKeys = [ForeignKey(...)])
-data class Order2NF(
+@Entity(
+    foreignKeys = [
+        ForeignKey(entity = Customer::class, parentColumns = ["id"], childColumns = ["customerId"]),
+        ForeignKey(entity = Product::class, parentColumns = ["id"], childColumns = ["productId"])
+    ]
+)
+data class OrderNormalized(
     @PrimaryKey val id: String,
     val customerId: String,
     val productId: String
 )
-// ✅ Нет частичных зависимостей от composite key
 
-// ✅ 3NF: no transitive dependencies
+// ✅ 3NF: избегаем транзитивных зависимостей
 @Entity
 data class City(
     @PrimaryKey val id: String,
@@ -232,26 +247,32 @@ data class Country(
 @Entity
 data class Customer3NF(
     @PrimaryKey val id: String,
-    val cityId: String  // ✅ Нет countryId (transitive dependency удалён)
+    val cityId: String  // countryId выводится через связь город → страна
 )
 ```
 
-**6. Database Design Principles:**
+**6. Принципы проектирования БД:**
 
-*Теория:* Принципы проектирования БД: выбор правильных data types, использование foreign keys для integrity, правильная нормализация (баланс между 3NF и performance), индексы для частых запросов, partitioning для больших таблиц, backup strategies, security considerations.
+*Теория:* Ключевые принципы:
+- Выбор подходящих типов данных.
+- Использование внешних ключей (где поддерживается) для ссылочной целостности.
+- Нормализация как минимум до 3NF; денормализация только при явном обосновании паттернами доступа и производительностью.
+- Создание индексов под частые и критичные запросы.
+- Рассмотрение partitioning для очень больших таблиц.
+- Планирование backup/restore и обеспечение безопасности (аутентификация, контроль доступа, шифрование).
 
 ```kotlin
-// ✅ Правильный дизайн
+// ✅ Пример аккуратного дизайна
 @Entity(
     foreignKeys = [
         ForeignKey(
             entity = Customer::class,
             parentColumns = ["id"],
             childColumns = ["customerId"],
-            onDelete = ForeignKey.CASCADE  // Cascade delete
+            onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("customerId")]  // Index foreign key
+    indices = [Index("customerId")]
 )
 data class Order(
     @PrimaryKey val id: String,
@@ -262,10 +283,13 @@ data class Order(
 
 **7. Room Database Best Practices:**
 
-*Теория:* Room - SQLite abstraction layer для Android. Используется для local data storage, caching, offline-first подходов. Ключевые компоненты: Entity (таблицы), DAO (database access objects), Database (главный класс). Flow для reactive queries, транзакции для atomicity, migrations для schema changes.
+*Теория:* Room — абстракция над SQLite для Android, используемая как конкретный пример реляционного хранилища в приложениях. Ключевые компоненты: `Entity` (таблицы), `DAO` (Data Access Object), `RoomDatabase`. Рекомендации:
+- Использовать `Flow`/`LiveData` для реактивных запросов.
+- Использовать `@Transaction` / `withTransaction` для атомарных операций.
+- Настраивать `Migration` для изменений схемы между версиями.
 
 ```kotlin
-// ✅ Room setup
+// ✅ Настройка Room
 @Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
@@ -281,16 +305,16 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 
-// ✅ Reactive queries с Flow
+// ✅ Реактивные запросы с Flow
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
-    fun getAllUsers(): Flow<List<User>>  // Автоматически обновляется!
+    fun getAllUsers(): Flow<List<User>>  // Наблюдатели получают обновления при изменениях БД
 }
 
-// ✅ Migrations
+// ✅ Пример миграции
 @Database(entities = [User::class], version = 2)
-abstract class AppDatabase : RoomDatabase() {
+abstract class AppDatabaseV2 : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object {
@@ -300,8 +324,8 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        fun create(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+        fun create(context: Context): AppDatabaseV2 {
+            return Room.databaseBuilder(context, AppDatabaseV2::class.java, "app.db")
                 .addMigrations(MIGRATION_1_2)
                 .build()
         }
@@ -311,23 +335,23 @@ abstract class AppDatabase : RoomDatabase() {
 
 **Ключевые концепции:**
 
-1. **ACID** - гарантии корректности транзакций
-2. **Indexing** - trade-off между read и write performance
-3. **Normalization** - устранение anomalies, улучшение integrity
-4. **SQL vs NoSQL** - разные use cases и trade-offs
-5. **Transactions** - atomicity и isolation для consistency
+1. ACID — гарантии транзакций (в том виде, как их реализует конкретная СУБД).
+2. Indexing — ускоряет чтение ценой более дорогих операций записи и доп. памяти.
+3. Normalization — уменьшает аномалии и повышает согласованность; денормализуем осознанно.
+4. SQL vs NoSQL — разные модели данных и гарантии; NoSQL не обязательно «без ACID» и не всегда только eventual consistency.
+5. Transactions — обеспечивают атомарность и изоляцию; поведение зависит от настроек уровня изоляции.
 
 ## Answer (EN)
 
 **Database Theory:**
-Database - organized structure for storing and managing data. Main concepts: ACID (atomicity, consistency, isolation, durability), transactions (atomic operations), indexes (search speedup), normalization (eliminate redundancy). SQL databases - relational, NoSQL - non-relational with different data models.
+Database is an organized structure for storing and managing data. Main concepts: ACID (atomicity, consistency, isolation, durability), transactions (atomic units of work), indexes (speed up lookups), normalization (reduce redundancy and anomalies). SQL databases are relational; NoSQL databases are non-relational with various data models.
 
 **1. SQL vs NoSQL:**
 
-*Theory:* SQL databases use relational model (tables, rows, columns), strict schema, ACID transactions, complex queries with JOINs. NoSQL databases use various models (document, key-value, graph, column-family), flexible schema, eventual consistency, horizontal scaling.
+*Theory:* SQL databases use the relational model (tables, rows, columns), typically a defined schema, ACID transactions, and support complex queries with JOINs. NoSQL databases use various models (document, key-value, graph, column-family), offer flexible schemas, and often provide eventual or tunable consistency (some also support strong consistency), and are designed for horizontal scalability.
 
 ```kotlin
-// ✅ SQL (Room/SQLite)
+// SQL (Room/SQLite) — concrete relational example
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey val id: String,
@@ -345,7 +369,7 @@ interface UserDao {
     suspend fun insertUser(user: User)
 }
 
-// ✅ NoSQL (Flexible schema)
+// NoSQL-style (flexible document) example
 data class UserDocument(
     val id: String = "",
     val name: String = "",
@@ -355,22 +379,28 @@ data class UserDocument(
 
 **When to use SQL:**
 - Complex queries with JOINs
-- ACID transactions critical
-- Fixed schema
-- Relational data
+- Strong ACID guarantees are critical
+- Relatively stable schema
+- Highly relational data
 
 **When to use NoSQL:**
-- Flexible schema needed
-- Horizontal scaling
-- Simple queries
-- High write throughput
+- Flexible or evolving schema
+- High horizontal scalability requirements
+- Simple access patterns
+- Very high write throughput / large-scale data
 
 **2. ACID Properties:**
 
-*Theory:* ACID - set of transaction properties in databases: **Atomicity** (all or nothing - transaction executes fully or not), **Consistency** (valid database state before and after), **Isolation** (concurrent transactions don't see intermediate changes), **Durability** (changes persisted after commit).
+*Theory:* ACID is the set of properties expected from transactions in database systems:
+- Atomicity: all-or-nothing execution.
+- Consistency: each committed transaction preserves all defined constraints; database moves from one valid state to another.
+- Isolation: concurrent transactions do not see each other's intermediate states (to the degree provided by the configured isolation level).
+- Durability: once a transaction is committed, its changes survive crashes (as implemented by the underlying storage engine).
+
+Note: Framework annotations (e.g., Room's @Transaction) rely on the underlying DB engine; they do not by themselves create durability or isolation guarantees beyond what the engine provides.
 
 ```kotlin
-// ✅ Atomicity: either all operations or none
+// Atomic transfer example, relying on DB transactional semantics
 @Database(entities = [Account::class], version = 1)
 abstract class BankDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
@@ -380,37 +410,40 @@ abstract class BankDatabase : RoomDatabase() {
 interface AccountDao {
     @Transaction
     suspend fun transfer(fromId: String, toId: String, amount: Int) {
-        // Everything executes atomically
         updateBalance(fromId, -amount)
         updateBalance(toId, amount)
     }
+
+    @Query("UPDATE Account SET balance = balance + :delta WHERE id = :id")
+    suspend fun updateBalance(id: String, delta: Int)
 }
 
-// ✅ Isolation: concurrent transactions isolated
-// ✅ Consistency: balances always correct
-// ✅ Durability: changes saved to disk
+// Isolation, consistency, and durability specifics depend on the concrete DB (e.g., SQLite settings).
 ```
 
 **3. Transactions and Concurrency Control:**
 
-*Theory:* Transaction - sequence of operations executed as atomic unit. Isolation levels determine visibility of intermediate states between transactions. Read Uncommitted (dirty read), Read Committed (no dirty read), Repeatable Read (phantom read possible), Serializable (full isolation).
+*Theory:* A transaction is a sequence of operations executed as a single atomic unit. Isolation levels define how and when changes from one transaction become visible to others:
+- Read Uncommitted: allows dirty reads.
+- Read Committed: no dirty reads.
+- Repeatable Read: same row read multiple times within a transaction does not change; phantom reads may still occur.
+- `Serializable`: full isolation equivalent to serial execution.
 
 ```kotlin
-// ✅ Room transactions
+// Room transaction (uses underlying SQLite transaction)
 suspend fun performComplexOperation() {
     database.withTransaction {
         val user = userDao.getUser("123")
         userDao.updateUser(user.copy(name = "Updated"))
-        productDao.insertProducts(listOf(...))
-        // All operations in one transaction
+        productDao.insertProducts(listOf(/* ... */))
+        // All operations are part of a single transaction
     }
 }
 
-// ✅ Pessimistic locking
-@Query("SELECT * FROM User WHERE id = :id FOR UPDATE")
-suspend fun getUserWithLock(id: String): User
+// Pessimistic locking concept (example SQL; not supported as-is by SQLite/Room with SELECT ... FOR UPDATE)
+// SELECT * FROM Users WHERE id = :id FOR UPDATE;
 
-// ✅ Optimistic locking with version
+// Optimistic locking with version field
 @Entity
 data class Product(
     @PrimaryKey val id: String,
@@ -421,10 +454,13 @@ data class Product(
 
 **4. Indexing and Query Optimization:**
 
-*Theory:* Index - data structure speeding up search in table. Creates ordered structure based on indexed columns. Search O(log n) instead of O(n). Trade-off: slows INSERT/UPDATE/DELETE, uses additional memory. Used for columns in WHERE, foreign keys, columns for JOINs.
+*Theory:* An index is a data structure (commonly a B-tree or variant) that speeds up lookups at the cost of extra writes and storage. It maintains an ordered (or otherwise searchable) structure over one or more columns.
+- Typical lookup via index: O(log n) instead of scanning all rows O(n).
+- Trade-offs: each INSERT/UPDATE/DELETE affecting indexed columns must also update the index, adding overhead; indexes consume disk/memory.
+- Use indexes on columns frequently used in WHERE, JOIN conditions, and as foreign keys.
 
 ```kotlin
-// ✅ Indexes in Room
+// Indexes in Room
 @Entity(
     indices = [
         Index("userId"),  // Single column index
@@ -439,30 +475,33 @@ data class Task(
 
 @Dao
 interface TaskDao {
-    // ✅ Using index
+    // Uses index on userId
     @Query("SELECT * FROM Task WHERE userId = :userId")
     suspend fun getTasksByUser(userId: String): List<Task>
 
-    // ✅ Index order matters!
+    // Composite index (userId, status) is well-suited for this predicate
     @Query("SELECT * FROM Task WHERE userId = :userId AND status = :status")
     suspend fun getTasks(userId: String, status: String): List<Task>
+
+    // If the composite index were defined as (status, userId), the access pattern should lead with status
+    // to fully benefit from index ordering.
 }
 ```
 
-**Index trade-offs:**
-| Operation | Without Index | With Index |
-|-----------|---------------|------------|
-| SELECT | O(n) | O(log n) |
-| INSERT | O(1) | O(log n) |
-| UPDATE | O(n) | O(log n) |
-| DELETE | O(n) | O(log n) |
+**Index trade-offs (simplified intuition, not strict for all engines):**
+- SELECT: can drop from O(n) scan to O(log n) or better with suitable index.
+- INSERT/UPDATE/DELETE: become slightly more expensive when affected columns are indexed due to index maintenance.
 
 **5. Normalization and Denormalization:**
 
-*Theory:* Normalization - process of organizing data in database to eliminate redundancy and anomalies. 1NF (atomic values, no repeating groups), 2NF (1NF + no partial dependencies on composite key), 3NF (2NF + no transitive dependencies). Denormalization - intentional adding of redundancy to improve read performance.
+*Theory:* Normalization is organizing data to reduce redundancy and avoid anomalies.
+- 1NF: atomic column values, no repeating groups.
+- 2NF: 1NF and no partial dependency of non-key attributes on part of a composite key.
+- 3NF: 2NF and no transitive dependencies of non-key attributes on the primary key.
+Denormalization intentionally adds some redundancy to improve read performance when justified by access patterns.
 
 ```kotlin
-// ❌ Unnormalized: data redundancy
+// Unnormalized: redundancy issues
 data class OrderUnnormalized(
     val orderId: String,
     val customerName: String,
@@ -470,9 +509,9 @@ data class OrderUnnormalized(
     val productName: String,
     val productPrice: Double
 )
-// Problem: customer data repeated for each product
+// Problem: customer and product data repeated per order line.
 
-// ✅ 1NF: atomic values, no repeating groups
+// 1NF: atomic values, no repeating groups
 @Entity
 data class Order1NF(
     @PrimaryKey val orderId: String,
@@ -480,7 +519,7 @@ data class Order1NF(
     val productId: String
 )
 
-// ✅ 2NF: no partial dependencies
+// Further normalization: separate entities and relations
 @Entity
 data class Customer(
     @PrimaryKey val id: String,
@@ -495,15 +534,19 @@ data class Product(
     val price: Double
 )
 
-@Entity(foreignKeys = [ForeignKey(...)])
-data class Order2NF(
+@Entity(
+    foreignKeys = [
+        ForeignKey(entity = Customer::class, parentColumns = ["id"], childColumns = ["customerId"]),
+        ForeignKey(entity = Product::class, parentColumns = ["id"], childColumns = ["productId"])
+    ]
+)
+data class OrderNormalized(
     @PrimaryKey val id: String,
     val customerId: String,
     val productId: String
 )
-// ✅ No partial dependencies on composite key
 
-// ✅ 3NF: no transitive dependencies
+// 3NF example: avoid transitive dependencies
 @Entity
 data class City(
     @PrimaryKey val id: String,
@@ -520,26 +563,32 @@ data class Country(
 @Entity
 data class Customer3NF(
     @PrimaryKey val id: String,
-    val cityId: String  // ✅ No countryId (transitive dependency removed)
+    val cityId: String  // countryId derivable via city -> country
 )
 ```
 
 **6. Database Design Principles:**
 
-*Theory:* Database design principles: choosing right data types, using foreign keys for integrity, proper normalization (balance between 3NF and performance), indexes for frequent queries, partitioning for large tables, backup strategies, security considerations.
+*Theory:* Core principles:
+- Choose appropriate data types.
+- Use foreign keys (where supported) to enforce referential integrity.
+- Normalize to at least 3NF where appropriate; denormalize only when access patterns and performance justify it.
+- Create indexes for frequent and performance-critical queries.
+- Consider partitioning for very large tables.
+- Plan backup/restore, security (auth, access control, encryption).
 
 ```kotlin
-// ✅ Proper design
+// Example schema quality aspects
 @Entity(
     foreignKeys = [
         ForeignKey(
             entity = Customer::class,
             parentColumns = ["id"],
             childColumns = ["customerId"],
-            onDelete = ForeignKey.CASCADE  // Cascade delete
+            onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("customerId")]  // Index foreign key
+    indices = [Index("customerId")]
 )
 data class Order(
     @PrimaryKey val id: String,
@@ -550,10 +599,13 @@ data class Order(
 
 **7. Room Database Best Practices:**
 
-*Theory:* Room - SQLite abstraction layer for Android. Used for local data storage, caching, offline-first approaches. Key components: Entity (tables), DAO (database access objects), Database (main class). Flow for reactive queries, transactions for atomicity, migrations for schema changes.
+*Theory:* Room is an SQLite abstraction layer for Android used for local persistence and caching. It is included here as a concrete example of relational database usage in applications. Key components: Entity (tables), DAO (data access objects), Database (RoomDatabase). Use:
+- `Flow`/`LiveData` for reactive queries.
+- @Transaction / withTransaction for atomic operations.
+- Migrations for schema changes across versions.
 
 ```kotlin
-// ✅ Room setup
+// Room setup
 @Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
@@ -569,16 +621,16 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 
-// ✅ Reactive queries with Flow
+// Reactive queries with Flow
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
-    fun getAllUsers(): Flow<List<User>>  // Auto-updates!
+    fun getAllUsers(): Flow<List<User>>  // Observers get updates on DB changes
 }
 
-// ✅ Migrations
+// Migrations example
 @Database(entities = [User::class], version = 2)
-abstract class AppDatabase : RoomDatabase() {
+abstract class AppDatabaseV2 : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     companion object {
@@ -588,8 +640,8 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        fun create(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+        fun create(context: Context): AppDatabaseV2 {
+            return Room.databaseBuilder(context, AppDatabaseV2::class.java, "app.db")
                 .addMigrations(MIGRATION_1_2)
                 .build()
         }
@@ -599,19 +651,40 @@ abstract class AppDatabase : RoomDatabase() {
 
 **Key Concepts:**
 
-1. **ACID** - guarantees for transaction correctness
-2. **Indexing** - trade-off between read and write performance
-3. **Normalization** - eliminate anomalies, improve integrity
-4. **SQL vs NoSQL** - different use cases and trade-offs
-5. **Transactions** - atomicity and isolation for consistency
+1. ACID - transactional guarantees (as implemented by the specific DB engine).
+2. Indexing - improves reads at the cost of slower writes and extra storage.
+3. Normalization - reduces anomalies and improves consistency; denormalize selectively.
+4. SQL vs NoSQL - different data models, guarantees, and trade-offs; NoSQL is not inherently "non-ACID" or "eventually consistent only".
+5. Transactions - provide atomicity and isolation for correctness; behavior depends on configured isolation levels.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как вы управляете миграциями базы данных в продакшене?
+- В чем разница между оптимистичной и пессимистичной блокировкой?
+- Когда имеет смысл денормализовать базу данных?
 
 ## Follow-ups
 
 - How do you handle database migrations in production?
 - What is the difference between optimistic and pessimistic locking?
 - When should you denormalize a database?
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовые концепции баз данных
+- Основы SQL
+
+### Связанные (тот же уровень)
+- [[q-sql-nosql-databases--system-design--medium]] — подробное сравнение SQL vs NoSQL
+- [[c-relational-databases]] — реляционные базы данных
+
+### Продвинутое (сложнее)
+- Шардинг и партиционирование баз данных
+- Распределенные системы управления базами данных
+- Продвинутые стратегии индексирования
 
 ## Related Questions
 
@@ -627,3 +700,9 @@ abstract class AppDatabase : RoomDatabase() {
 - Database sharding and partitioning
 - Distributed database systems
 - Advanced indexing strategies
+
+## References
+
+- [[c-relational-databases]]
+- [[c-database-design]]
+- "https://en.wikipedia.org/wiki/Database"

@@ -3,18 +3,18 @@ id: cs-014
 title: "MVI Pattern / Паттерн MVI (Model-View-Intent)"
 aliases: ["MVI Pattern", "Паттерн MVI"]
 topic: cs
-subtopics: [android-architecture, architecture-patterns, state-management, unidirectional-data-flow]
+subtopics: [architecture-patterns, state-management, unidirectional-data-flow]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-clean-architecture--architecture-patterns--hard, q-mvp-pattern--architecture-patterns--medium, q-mvvm-pattern--architecture-patterns--medium]
+related: [c-architecture-patterns, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
-updated: 2025-01-25
-tags: [android-architecture, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]
-sources: [https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a]
+updated: 2025-11-11
+tags: [architecture-patterns, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]
+sources: ["https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a"]
 ---
 
 # Вопрос (RU)
@@ -28,14 +28,26 @@ sources: [https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a
 ## Ответ (RU)
 
 **Теория MVI Pattern:**
-MVI (Model-View-Intent) - архитектурный паттерн для Android с unidirectional data flow. Вдохновлён Cycle.js framework. Решает проблему: управление state в complex applications. Model представляет immutable state, View отображает state, Intent представляет user actions или app events. Data flows: Intent → Model → View (цикл).
+MVI (Model-`View`-`Intent`) — архитектурный паттерн с unidirectional data flow, часто используемый в Android и фронтенд-приложениях. Идеи вдохновлены Cycle.js и Redux-подобными подходами к управлению состоянием. Основной фокус — предсказуемое управление состоянием в сложных интерфейсах.
+
+В классическом формулировании:
+- Model — это не «слой данных» в смысле Android, а «модель состояния» + бизнес-логика/редьюсер (store), которая хранит и изменяет immutable state.
+- `View` — отображает текущее состояние и порождает пользовательские события.
+- `Intent` — намерения пользователя или события системы, которые описывают «что произошло».
+
+Поток данных организован как цикл:
+`View` → `Intent` → Model (обработка/редьюсер → новый State) → `View`.
+При этом направление данных одностороннее (нет двустороннего биндинга), а цикл образуется за счет повторяющихся итераций цикла взаимодействия.
 
 **Определение:**
 
-*Теория:* MVI - один из новейших архитектурных паттернов для Android. Работает unidirectional data flow от user actions через model к view. Model - immutable state (single source of truth). View реализуется в Activity/Fragment, просто отображает state. Intent - user actions или app events, трансформируются в new state.
+*Теория:* MVI — архитектурный паттерн с односторонним потоком данных, где все изменения UI описываются как преобразования `Intent` → State:
+- Model: immutable state (single source of truth) для конкретного экрана/фичи.
+- `View`: реализуется в `Activity`/`Fragment`/Compose и только отображает state и отправляет Intents.
+- `Intent`: пользовательские действия или события системы, которые приводят к вычислению нового state.
 
 ```kotlin
-// ✅ MVI Basic Example
+// ✅ MVI Basic Example (упрощённо)
 sealed class MviState {
     object Loading : MviState()
     data class Success(val data: List<Item>) : MviState()
@@ -48,13 +60,16 @@ sealed class MviIntent {
     data class ItemClick(val item: Item) : MviIntent()
 }
 
-class MviViewModel : ViewModel() {
+class MviViewModel(
+    private val repository: Repository
+) : ViewModel() { // androidx.lifecycle.ViewModel
+
     private val _state = MutableStateFlow<MviState>(MviState.Loading)
     val state: StateFlow<MviState> = _state.asStateFlow()
 
     fun processIntent(intent: MviIntent) {
         when (intent) {
-            is MviIntent.LoadData -> {
+            is MviIntent.LoadData, is MviIntent.RefreshData -> {
                 _state.value = MviState.Loading
                 viewModelScope.launch {
                     try {
@@ -65,7 +80,9 @@ class MviViewModel : ViewModel() {
                     }
                 }
             }
-            // ... other intents
+            is MviIntent.ItemClick -> {
+                // Обработка клика может порождать отдельный эффект/навигацию
+            }
         }
     }
 }
@@ -73,17 +90,23 @@ class MviViewModel : ViewModel() {
 
 **MVI Workflow:**
 
-*Теория:* MVI workflow циклический: 1) User interaction создаёт Intent. 2) Intent передаётся в Model. 3) Model обрабатывает Intent и создаёт new State. 4) View получает new State и отображает его. 5) User видит updated UI. Цикл повторяется для каждого user action. Unidirectional flow обеспечивает predictable behavior.
+*Теория:* MVI workflow цикличен по взаимодействию, но поток данных остаётся односторонним:
+1) User interaction во `View` создаёт `Intent`.
+2) `Intent` передаётся в слой Model (`ViewModel`/Reducer/Store).
+3) Model обрабатывает `Intent`, запрашивает данные при необходимости и эмитит новый State.
+4) `View` подписана на поток State, получает новый State и отображает его.
+5) Пользователь видит обновлённый UI и совершает новые действия.
 
 ```kotlin
-// ✅ MVI Workflow
+// ✅ MVI Workflow (наблюдение state + отправка intents)
 class MainActivity : AppCompatActivity() {
     private val viewModel: MviViewModel = /* ... */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentView(...)
 
-        // Observe state
+        // Observe state (lifecycle-aware in real code)
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 render(state)  // View renders state
@@ -92,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 
         // User interactions create Intents
         button.setOnClickListener {
-            viewModel.processIntent(MviIntent.LoadData)  // Intent → Model
+            viewModel.processIntent(MviIntent.LoadData)  // View → Intent → Model
         }
     }
 
@@ -108,12 +131,16 @@ class MainActivity : AppCompatActivity() {
 
 **Ключевые принципы:**
 
-*Теория:* MVI основан на 4 принципах: Single Source of Truth (один state для всего screen), Immutable State (states не изменяются после создания), Unidirectional Data Flow (Intent → Model → View), Reactive Programming (StateFlow для state propagation).
+*Теория:* Классический MVI опирается на принципы:
+- Single Source of Truth — один источник истины для состояния конкретного экрана/фичи.
+- Immutable State — состояния не мутируют, а заменяются новыми экземплярами.
+- Unidirectional Data `Flow` — данные текут в одном направлении: `View` → `Intent` → Model/Reducer → State → `View`.
+- Reactive Programming — распространение состояний через реактивные стримы (`Flow`, Rx, и т.п.).
 
 **1. Single Source of Truth:**
 
 ```kotlin
-// ✅ Один state для всего screen
+// ✅ Один state для всего экрана
 data class FeatureState(
     val isLoading: Boolean,
     val data: List<Item>?,
@@ -122,14 +149,14 @@ data class FeatureState(
 )
 
 class FeatureViewModel : ViewModel() {
-    private val _state = MutableStateFlow<FeatureState>(
-        FeatureState(false, null, null, null)
+    private val _state = MutableStateFlow(
+        FeatureState(isLoading = false, data = null, error = null, selectedItem = null)
     )
     val state: StateFlow<FeatureState> = _state.asStateFlow()
 
-    // Все изменения state через новую копию
-    fun updateState(newState: FeatureState) {
-        _state.value = newState
+    // Все изменения — через публикацию нового значения
+    fun updateState(reducer: (FeatureState) -> FeatureState) {
+        _state.value = reducer(_state.value)
     }
 }
 ```
@@ -149,85 +176,119 @@ data class TodoState(
 }
 ```
 
-**3. Unidirectional Flow:**
+**3. Unidirectional `Flow`:**
 
-*Теория:* Data flows в одном direction: Intent → Model → View. User actions (clicks, input) → Intents → ViewModel processes → new State → View renders. No back-flow или circular dependencies. Это делает code predictable и testable.
+*Теория:* Данные текут в одном направлении: `View` генерирует Intents → Model/Reducer обрабатывает их и эмитит новый State → `View` отображает этот State. Нет двустороннего биндинга и прямых циклических зависимостей; цикл взаимодействия формируется повторением шага `Intent` → State → Render.
 
 ```kotlin
-// ✅ Unidirectional flow пример
+// ✅ Упрощённый пример одностороннего потока
 sealed class Intent {
     object Refresh : Intent()
     data class Filter(val type: FilterType) : Intent()
 }
 
-class ViewModel {
-    fun processIntent(intent: Intent): Flow<State> = when (intent) {
-        is Intent.Refresh -> {
-            flow {
-                emit(State.Loading)
-                val data = repository.fetch()
-                emit(State.Success(data))
+sealed class State {
+    object Loading : State()
+    data class Success(val items: List<Item>) : State()
+}
+
+class MviStore(
+    private val repository: Repository
+) {
+    private val _state = MutableStateFlow<State>(State.Loading)
+    val state: StateFlow<State> = _state.asStateFlow()
+
+    fun dispatch(intent: Intent) {
+        when (intent) {
+            is Intent.Refresh -> {
+                _state.value = State.Loading
+                // launch in scope in real implementation
+            }
+            is Intent.Filter -> {
+                // обновление state через copy/новый объект
             }
         }
-        // ...
     }
 }
 ```
 
 **Преимущества:**
 
-1. **No State Problems** - one source of truth для state
-2. **Unidirectional Flow** - predictable и easy to understand
-3. **Immutability** - thread-safe, share-able benefits
-4. **Debuggability** - можно log state changes и reproduce bugs
-5. **Decoupled Logic** - каждый component имеет responsibility
-6. **Testability** - test через business methods и check states
+1. Single Source of Truth — меньше проблем с рассинхронизацией состояния.
+2. Unidirectional `Flow` — предсказуемое поведение, проще reasoning.
+3. Immutability — упрощает отладку и делает состояние более безопасным для многопоточности.
+4. Debuggability — можно логировать последовательность Intents и States и воспроизводить баги.
+5. Decoupled Logic — бизнес-логика изолирована в reducer/store/`ViewModel`.
+6. Testability — можно тестировать преобразования `Intent` → State как чистые сценарии.
 
 **Недостатки:**
 
-1. **Boilerplate** - каждый UI change требует Intent и State objects
-2. **Complexity** - много logic, нужно time для newcomers learn
-3. **Object Creation** - может создавать много objects (memory issues)
-4. **SingleLiveEvents** - сложно для one-time events (snackbars)
+1. Boilerplate — много типов (State, `Intent`, Effects), особенно для простых экранов.
+2. Complexity — концептуально сложнее для команды без опыта с реактивным/функциональным подходом.
+3. Object Creation — частое создание новых State-объектов, что требует аккуратности (но обычно приемлемо).
+4. One-time events (effects) — требуют отдельного механизма (effects/side-effects channel), нельзя просто зашить их в persistent state.
 
 **Когда использовать:**
 
-*Теория:* Используйте MVI когда: complex UI с multiple state changes, need strict state management, debugging state changes critical, feature-rich apps с complex interactions. Не используйте для: simple UIs (over-engineering), simple use cases (too much boilerplate).
+*Теория:* Используйте MVI, когда:
+- UI сложный, с множеством состояний и переходов.
+- Нужен строгий контроль над состоянием и история изменений.
+- Важна предсказуемость и воспроизводимость (logging, time-travel, дебаг).
+- Приложение/фича насыщены взаимодействиями и побочными эффектами.
 
-✅ **Use MVI when:**
-- Complex UI с multiple states
-- Need strict state management
-- Debugging critical
-- Feature-rich applications
+Не используйте (или не переусложняйте) MVI, когда:
+- Экран очень простой, MVI создаёт избыточный boilerplate.
+- Команда не готова к реактивной/функциональной модели и строгим инвариантам.
 
-❌ **Don't use MVI when:**
-- Simple UI (over-engineering)
-- Simple use cases (too much boilerplate)
-- Team не знаком с reactive programming
+✅ Использовать MVI, когда:
+- Complex UI с multiple states.
+- Need strict state management.
+- Debugging critical.
+- Feature-rich applications.
+
+❌ Не использовать MVI, когда:
+- Simple UI (over-engineering).
+- Simple use cases (too much boilerplate).
+- Team не знакома с reactive programming и эффектами.
 
 **MVI vs MVVM vs MVP:**
 
-*Теория:* MVVM - two-way binding (View ↔ ViewModel), LiveData/StateFlow для state. MVP - View пассивная, Presenter updates View. MVI - unidirectional flow, Intent-based, immutable state. MVI более strict и predictable, но больше boilerplate.
+*Теория:* 
+- MVP: `View` пассивная, Presenter управляет `View` и часто напрямую вызывает методы `View` — поток часто менее строго односторонний.
+- MVVM: `View` наблюдает за `ViewModel` (`LiveData`/`StateFlow`); нередко используется двусторонний биндинг, возможны более сложные зависимости.
+- MVI: строго односторонний поток, `Intent`-ориентированная модель, единый immutable state. Более строгий и предсказуемый, но требует больше кода и дисциплины.
 
 **Ключевые концепции:**
 
-1. **Unidirectional Flow** - data flows в одном direction
-2. **Single Source of Truth** - один state для всего feature
-3. **Immutability** - states immutable после создания
-4. **Intent-Based** - все actions как Intents
-5. **Reactive State** - state propagated через reactive streams
+1. Unidirectional `Flow` — данные текут в одном направлении (`View` → `Intent` → Model/Reducer → State → `View`).
+2. Single Source of Truth — один state-контейнер для фичи/экрана.
+3. Immutability — состояние не мутирует, а переопределяется.
+4. `Intent`-Based — любые действия и события описываются как Intents.
+5. Reactive State — состояния распространяются через реактивные стримы.
 
 ## Answer (EN)
 
 **MVI Pattern Theory:**
-MVI (Model-View-Intent) - architecture pattern for Android with unidirectional data flow. Inspired by Cycle.js framework. Solves problem: state management in complex applications. Model represents immutable state, View displays state, Intent represents user actions or app events. Data flows: Intent → Model → View (cycle).
+MVI (Model-`View`-`Intent`) is an architectural pattern with unidirectional data flow, commonly used in Android and frontend applications. It is inspired by Cycle.js and Redux-like state management approaches. Its primary focus is predictable state management in complex UIs.
+
+In the classic formulation:
+- Model is not just a "data layer"; it is the state model plus business logic/reducer (store) that holds and transforms immutable state.
+- `View` renders the current state and emits user events.
+- `Intent` represents user intentions or system events describing "what happened".
+
+The data flow is organized as a cycle:
+`View` → `Intent` → Model (handling/reducer → new State) → `View`.
+The flow direction is one-way (no two-way binding); the cycle appears from repeated iterations of this loop.
 
 **Definition:**
 
-*Theory:* MVI - one of newest architecture patterns for Android. Works with unidirectional data flow from user actions through model to view. Model - immutable state (single source of truth). View implemented in Activity/Fragment, simply displays state. Intent - user actions or app events, transformed into new state.
+*Theory:* MVI is an architectural pattern with unidirectional data flow where all UI updates are modeled as transformations `Intent` → State:
+- Model: immutable state (single source of truth) for the given screen/feature.
+- `View`: implemented in `Activity`/`Fragment`/Compose and only renders state and sends Intents.
+- `Intent`: user actions or system events that lead to computing a new state.
 
 ```kotlin
-// ✅ MVI Basic Example
+// ✅ MVI Basic Example (simplified)
 sealed class MviState {
     object Loading : MviState()
     data class Success(val data: List<Item>) : MviState()
@@ -240,13 +301,16 @@ sealed class MviIntent {
     data class ItemClick(val item: Item) : MviIntent()
 }
 
-class MviViewModel : ViewModel() {
+class MviViewModel(
+    private val repository: Repository
+) : ViewModel() { // androidx.lifecycle.ViewModel
+
     private val _state = MutableStateFlow<MviState>(MviState.Loading)
     val state: StateFlow<MviState> = _state.asStateFlow()
 
     fun processIntent(intent: MviIntent) {
         when (intent) {
-            is MviIntent.LoadData -> {
+            is MviIntent.LoadData, is MviIntent.RefreshData -> {
                 _state.value = MviState.Loading
                 viewModelScope.launch {
                     try {
@@ -257,7 +321,9 @@ class MviViewModel : ViewModel() {
                     }
                 }
             }
-            // ... other intents
+            is MviIntent.ItemClick -> {
+                // Handle click: may trigger navigation/one-time effect
+            }
         }
     }
 }
@@ -265,17 +331,23 @@ class MviViewModel : ViewModel() {
 
 **MVI Workflow:**
 
-*Theory:* MVI workflow is cyclical: 1) User interaction creates Intent. 2) Intent passed to Model. 3) Model processes Intent and creates new State. 4) View receives new State and displays it. 5) User sees updated UI. Cycle repeats for each user action. Unidirectional flow ensures predictable behavior.
+*Theory:* The MVI workflow is cyclical in interaction, but the data flow remains one-way:
+1) User interaction in the `View` creates an `Intent`.
+2) `Intent` is passed to the Model layer (`ViewModel`/Reducer/Store).
+3) Model processes the `Intent`, performs data requests if needed, and emits a new State.
+4) `View` subscribes to the State stream, receives the new State, and renders it.
+5) User sees updated UI and performs new actions.
 
 ```kotlin
-// ✅ MVI Workflow
+// ✅ MVI Workflow (observe state + send intents)
 class MainActivity : AppCompatActivity() {
     private val viewModel: MviViewModel = /* ... */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentView(...)
 
-        // Observe state
+        // Observe state (lifecycle-aware in real code)
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 render(state)  // View renders state
@@ -284,7 +356,7 @@ class MainActivity : AppCompatActivity() {
 
         // User interactions create Intents
         button.setOnClickListener {
-            viewModel.processIntent(MviIntent.LoadData)  // Intent → Model
+            viewModel.processIntent(MviIntent.LoadData)  // View → Intent → Model
         }
     }
 
@@ -300,7 +372,11 @@ class MainActivity : AppCompatActivity() {
 
 **Key Principles:**
 
-*Theory:* MVI based on 4 principles: Single Source of Truth (one state for entire screen), Immutable State (states can't be modified after creation), Unidirectional Data Flow (Intent → Model → View), Reactive Programming (StateFlow for state propagation).
+*Theory:* Classic MVI relies on:
+- Single Source of Truth: one state holder per screen/feature.
+- Immutable State: states are not mutated; new instances are produced.
+- Unidirectional Data `Flow`: `View` → `Intent` → Model/Reducer → State → `View`.
+- Reactive Programming: state propagation via reactive streams (`Flow`, Rx, etc.).
 
 **1. Single Source of Truth:**
 
@@ -314,14 +390,14 @@ data class FeatureState(
 )
 
 class FeatureViewModel : ViewModel() {
-    private val _state = MutableStateFlow<FeatureState>(
-        FeatureState(false, null, null, null)
+    private val _state = MutableStateFlow(
+        FeatureState(isLoading = false, data = null, error = null, selectedItem = null)
     )
     val state: StateFlow<FeatureState> = _state.asStateFlow()
 
-    // All state changes through new copy
-    fun updateState(newState: FeatureState) {
-        _state.value = newState
+    // All state changes via publishing a new value
+    fun updateState(reducer: (FeatureState) -> FeatureState) {
+        _state.value = reducer(_state.value)
     }
 }
 ```
@@ -341,80 +417,102 @@ data class TodoState(
 }
 ```
 
-**3. Unidirectional Flow:**
+**3. Unidirectional `Flow`:**
 
-*Theory:* Data flows in one direction: Intent → Model → View. User actions (clicks, input) → Intents → ViewModel processes → new State → View renders. No back-flow or circular dependencies. This makes code predictable and testable.
+*Theory:* Data flows in one direction: the `View` emits Intents → Model/Reducer handles them and emits new State → `View` renders that State. There is no two-way binding or direct circular dependencies; the interaction loop is `Intent` → State → Render repeated over time.
 
 ```kotlin
-// ✅ Unidirectional flow example
+// ✅ Simplified unidirectional flow example
 sealed class Intent {
     object Refresh : Intent()
     data class Filter(val type: FilterType) : Intent()
 }
 
-class ViewModel {
-    fun processIntent(intent: Intent): Flow<State> = when (intent) {
-        is Intent.Refresh -> {
-            flow {
-                emit(State.Loading)
-                val data = repository.fetch()
-                emit(State.Success(data))
+sealed class State {
+    object Loading : State()
+    data class Success(val items: List<Item>) : State()
+}
+
+class MviStore(
+    private val repository: Repository
+) {
+    private val _state = MutableStateFlow<State>(State.Loading)
+    val state: StateFlow<State> = _state.asStateFlow()
+
+    fun dispatch(intent: Intent) {
+        when (intent) {
+            is Intent.Refresh -> {
+                _state.value = State.Loading
+                // launch async load and update _state in real implementation
+            }
+            is Intent.Filter -> {
+                // update state via new instances
             }
         }
-        // ...
     }
 }
 ```
 
 **Advantages:**
 
-1. **No State Problems** - one source of truth for state
-2. **Unidirectional Flow** - predictable and easy to understand
-3. **Immutability** - thread-safe, share-able benefits
-4. **Debuggability** - can log state changes and reproduce bugs
-5. **Decoupled Logic** - each component has responsibility
-6. **Testability** - test through business methods and check states
+1. Single Source of Truth — reduces state desynchronization issues.
+2. Unidirectional `Flow` — predictable behavior, easier reasoning.
+3. Immutability — simplifies debugging and is safer for concurrency.
+4. Debuggability — you can log `Intent`/State sequences and reproduce bugs.
+5. Decoupled Logic — business logic isolated in reducer/store/`ViewModel`.
+6. Testability — `Intent` → State transformations are easy to unit test.
 
 **Disadvantages:**
 
-1. **Boilerplate** - each UI change requires Intent and State objects
-2. **Complexity** - much logic, need time for newcomers to learn
-3. **Object Creation** - may create many objects (memory issues)
-4. **SingleLiveEvents** - complex for one-time events (snackbars)
+1. Boilerplate — many types (State, `Intent`, Effects), especially for simple screens.
+2. Complexity — conceptually heavier for teams new to reactive/functional style.
+3. Object Creation — frequent new State instances; usually fine but requires care.
+4. One-time events (effects) — require a dedicated mechanism (effects/side-effects channel) rather than being embedded in persistent state.
 
 **When to Use:**
 
-*Theory:* Use MVI when: complex UI with multiple state changes, need strict state management, debugging state changes critical, feature-rich apps with complex interactions. Don't use for: simple UIs (over-engineering), simple use cases (too much boilerplate).
+*Theory:* Use MVI when:
+- UI is complex with many states and transitions.
+- You need strict state management and auditability.
+- Predictability and debuggability are critical.
+- Features have rich interactions and side effects.
 
-✅ **Use MVI when:**
-- Complex UI with multiple states
-- Need strict state management
-- Debugging critical
-- Feature-rich applications
+Avoid (or avoid over-engineering with MVI) when:
+- Screen is very simple and MVI adds unnecessary boilerplate.
+- Team is not ready for reactive/functional patterns and strict invariants.
 
-❌ **Don't use MVI when:**
-- Simple UI (over-engineering)
-- Simple use cases (too much boilerplate)
-- Team not familiar with reactive programming
+✅ Use MVI when:
+- Complex UI with multiple states.
+- Need strict state management.
+- Debugging is critical.
+- Feature-rich applications.
+
+❌ Don't use MVI when:
+- Simple UI (over-engineering).
+- Simple use cases (too much boilerplate).
+- Team not familiar with reactive programming and effects.
 
 **MVI vs MVVM vs MVP:**
 
-*Theory:* MVVM - two-way binding (View ↔ ViewModel), LiveData/StateFlow for state. MVP - View passive, Presenter updates View. MVI - unidirectional flow, Intent-based, immutable state. MVI more strict and predictable, but more boilerplate.
+*Theory:*
+- MVP: passive `View`, Presenter manipulates `View` and may create looser unidirectional constraints.
+- MVVM: `View` observes `ViewModel` (`LiveData`/`StateFlow`); often two-way binding is used, which can blur strict one-way flow.
+- MVI: strictly unidirectional, `Intent`-based, immutable single state. More predictable but more verbose and demanding.
 
 **Key Concepts:**
 
-1. **Unidirectional Flow** - data flows in one direction
-2. **Single Source of Truth** - one state for entire feature
-3. **Immutability** - states immutable after creation
-4. **Intent-Based** - all actions as Intents
-5. **Reactive State** - state propagated through reactive streams
+1. Unidirectional `Flow` — one-way data flow (`View` → `Intent` → Model/Reducer → State → `View`).
+2. Single Source of Truth — one state container for a feature/screen.
+3. Immutability — state is not mutated but replaced.
+4. `Intent`-Based — all actions and events represented as Intents.
+5. Reactive State — state propagated via reactive streams.
 
 ---
 
 ## Follow-ups
 
 - What is the difference between MVI and Redux?
-- How do you handle SingleLiveEvents in MVI architecture?
+- How do you handle one-time events / side effects in MVI architecture?
 - When should you choose MVVM over MVI?
 
 ## Related Questions
@@ -424,10 +522,14 @@ class ViewModel {
 - Understanding of MVP/MVVM patterns
 
 ### Related (Same Level)
-- [[q-mvvm-pattern--architecture-patterns--medium]] - MVVM pattern
-- [[q-mvp-pattern--architecture-patterns--medium]] - MVP pattern
+- [[q-android-architectural-patterns--android--medium]] - Android architectural patterns
 
 ### Advanced (Harder)
-- [[q-clean-architecture--architecture-patterns--hard]] - Clean Architecture
 - Advanced state management patterns
 - Redux vs MVI comparison
+
+## References
+
+- [[c-architecture-patterns]]
+- [[q-android-architectural-patterns--android--medium]]
+- "MVI - a new member of the MVx band" on ProAndroidDev

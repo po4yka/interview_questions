@@ -3,18 +3,18 @@ id: cs-034
 title: "Command Pattern / Паттерн Command"
 aliases: ["Command Pattern", "Паттерн Command"]
 topic: cs
-subtopics: [behavioral-patterns, design-patterns, gof-patterns]
+subtopics: [behavioral]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-command-pattern]
+related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
-updated: 2025-01-25
-tags: [behavioral-patterns, command, design-patterns, difficulty/medium, gof-patterns]
-sources: [https://en.wikipedia.org/wiki/Command_pattern]
+updated: 2025-11-11
+tags: [behavioral, command, design-patterns, difficulty/medium, gof-patterns]
+sources: ["https://en.wikipedia.org/wiki/Command_pattern"]
 ---
 
 # Вопрос (RU)
@@ -28,7 +28,7 @@ sources: [https://en.wikipedia.org/wiki/Command_pattern]
 ## Ответ (RU)
 
 **Теория паттерна Command:**
-Command (Команда) - поведенческий паттерн проектирования, который инкапсулирует запрос как объект. Превращает запросы в stand-alone объекты, содержащие всю информацию о запросе. Позволяет параметризовать методы разными запросами, ставить запросы в очередь, логировать их и поддерживать отмену операций (undo/redo).
+Command (Команда) - поведенческий паттерн проектирования, который инкапсулирует запрос как объект. Превращает запросы в stand-alone объекты, содержащие всю информацию о запросе. Позволяет параметризовать методы разными запросами, ставить запросы в очередь, логировать их и поддерживать отмену операций (undo/redo). См. также [[c-architecture-patterns]].
 
 **Проблемы, которые решает:**
 
@@ -115,7 +115,7 @@ fun main() {
 
 **Пример 2: Текстовый редактор с Undo/Redo:**
 
-*Теория:* Для undo/redo нужно хранить историю команд. Каждая команда реализует метод `undo()`, который отменяет действие `execute()`. История хранится в стеке.
+*Теория:* Для undo/redo нужно хранить историю команд. Каждая команда реализует метод `undo()`, который отменяет действие `execute()`. История хранится в стеке. Ниже пример упрощен и не содержит проверок границ индексов для краткости.
 
 ```kotlin
 // ✅ Command с поддержкой undo
@@ -204,13 +204,25 @@ class CommandManager {
 
 **Пример 3: Макрокоманды (Composite Command):**
 
-*Теория:* Макрокоманда - команда, содержащая несколько команд. Выполняет все команды последовательно. Используется для группировки операций в транзакцию.
+*Теория:* Макрокоманда - команда, содержащая несколько команд. Выполняет все команды последовательно. Используется для группировки операций в логическую транзакцию (пример упрощен, без реального rollback).
 
 ```kotlin
 // ✅ Макрокоманда
 class MacroCommand(private val commands: List<Command>) : Command {
     override fun execute() {
         commands.forEach { it.execute() }
+    }
+}
+
+// Дополнительный Receiver
+class Fan {
+    fun turnOn() = println("Fan is ON")
+}
+
+// Дополнительная ConcreteCommand
+class FanOnCommand(private val fan: Fan) : Command {
+    override fun execute() {
+        fan.turnOn()
     }
 }
 
@@ -256,7 +268,7 @@ fun main() {
 ## Answer (EN)
 
 **Command Pattern Theory:**
-Command (Action) - behavioral design pattern that encapsulates request as object. Turns requests into stand-alone objects containing all information about request. Allows parameterizing methods with different requests, queueing requests, logging them, and supporting undo operations (undo/redo).
+Command (Action) - behavioral design pattern that encapsulates a request as an object. Turns requests into stand-alone objects containing all information about the request. Allows parameterizing methods with different requests, queueing requests, logging them, and supporting undo operations (undo/redo).
 
 **Problems it Solves:**
 
@@ -268,7 +280,7 @@ Command (Action) - behavioral design pattern that encapsulates request as object
 
 **Solution:**
 
-*Theory:* Encapsulate request in separate object (command). Invoker calls `execute()` method on command object, not knowing implementation details. Receiver performs actual work. Command stores reference to receiver and request parameters.
+*Theory:* Encapsulate a request in a separate object (command). Invoker calls `execute()` method on the command object without knowing implementation details. Receiver performs the actual work. Command stores a reference to the receiver and request parameters.
 
 **Pattern Structure:**
 
@@ -280,13 +292,13 @@ Command (Action) - behavioral design pattern that encapsulates request as object
 
 **When to Use:**
 
-✅ **Use Command:**
+✅ **Use Command when you:**
 - Need operation undo (undo/redo)
 - Need to log operations
-- Need request queue
+- Need a request queue
 - Need deferred execution
 - Need to parameterize objects with operations
-- Need transactional system (commit/rollback)
+- Need a transactional-like system (commit/rollback semantics)
 
 **Example 1: Light Control (basic):**
 
@@ -343,7 +355,7 @@ fun main() {
 
 **Example 2: Text Editor with Undo/Redo:**
 
-*Theory:* For undo/redo need to store command history. Each command implements `undo()` method that reverses `execute()` action. History stored in stack.
+*Theory:* For undo/redo you need to store command history. Each command implements `undo()` method that reverses the `execute()` action. History is stored in a stack. The example below is simplified and omits bounds checking for brevity.
 
 ```kotlin
 // ✅ Command with undo support
@@ -432,13 +444,25 @@ class CommandManager {
 
 **Example 3: Macro Commands (Composite Command):**
 
-*Theory:* Macro command - command containing multiple commands. Executes all commands sequentially. Used for grouping operations into transaction.
+*Theory:* Macro command is a command containing multiple commands. It executes all commands sequentially. Used for grouping operations into a logical transaction (simplified example without real rollback).
 
 ```kotlin
 // ✅ Macro command
 class MacroCommand(private val commands: List<Command>) : Command {
     override fun execute() {
         commands.forEach { it.execute() }
+    }
+}
+
+// Additional Receiver
+class Fan {
+    fun turnOn() = println("Fan is ON")
+}
+
+// Additional ConcreteCommand
+class FanOnCommand(private val fan: Fan) : Command {
+    override fun execute() {
+        fan.turnOn()
     }
 }
 
@@ -483,6 +507,17 @@ fun main() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как реализовать undo/redo с использованием паттерна Command?
+- В чем разница между паттернами Command и Strategy?
+- Как обрабатывать валидацию команд и ошибки при выполнении?
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовые ООП-концепции
+
 ## Follow-ups
 
 - How do you implement undo/redo with Command pattern?
@@ -493,3 +528,8 @@ fun main() {
 
 ### Prerequisites (Easier)
 - Basic OOP concepts
+
+## References
+
+- [[c-architecture-patterns]]
+- "https://en.wikipedia.org/wiki/Command_pattern"

@@ -1,68 +1,456 @@
 ---
-id: design-patterns-010
+id: cs-060
 title: "Chain Of Responsibility / Цепочка обязанностей"
 aliases: [Chain Of Responsibility, Цепочка обязанностей]
-topic: design-patterns
-subtopics: [behavioral-patterns, chain-of-responsibility, object-interaction]
+topic: behavioral
+subtopics: [chain-of-responsibility]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-design-patterns
-related: [c-design-patterns]
+moc: moc-cs
+related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [behavioral-patterns, chain-of-responsibility, chain-pattern, design-patterns, difficulty/medium, gof-patterns]
+updated: 2025-11-11
+tags: [behavioral, chain-of-responsibility, design-patterns, difficulty/medium]
+
 ---
 
-# Chain of Responsibility Pattern
+# Вопрос (RU)
+> Что такое паттерн Chain of Responsibility? Когда и зачем его использовать?
 
 # Question (EN)
 > What is the Chain of Responsibility pattern? When and why should it be used?
 
-# Вопрос (RU)
-> Что такое паттерн Chain of Responsibility? Когда и зачем его использовать?
+---
+
+## Ответ (RU)
+
+Chain of Responsibility (Цепочка обязанностей) — это поведенческий паттерн проектирования, в котором запрос последовательно передается через цепочку потенциальных обработчиков, пока один из них не обработает запрос или цепочка не закончится. Каждый обработчик в цепочке имеет возможность либо обработать запрос, либо передать его следующему обработчику. Клиенту не нужно знать, какой обработчик фактически обработает запрос — он просто отправляет его в цепочку.
+
+Этот паттерн отделяет клиента от конкретного получателя, выполняющего действие, следуя принципу открытости/закрытости и позволяя добавлять новые обработчики без изменения существующего кода.
+
+### Определение
+
+Chain of Responsibility — это паттерн, в котором запрос последовательно проходит через цепочку обработчиков, и каждый обработчик решает, может ли он обработать запрос (и остановить цепочку) или передать его дальше. Как правило, клиент взаимодействует только с начальным звеном цепочки.
+
+### Проблемы, которые решает
+
+1. Необходимо избежать жесткой связи отправителя запроса с конкретным получателем.
+2. Должно быть несколько потенциальных обработчиков, при этом конкретный выбирается во время выполнения.
+3. Логика обработки не должна быть "зашита" в один монолитный класс с огромным количеством if/else/when.
+
+### Решение
+
+Определяется цепочка объектов-обработчиков. Каждый обработчик:
+- знает о следующем обработчике;
+- либо обрабатывает запрос, либо перенаправляет его дальше по цепочке;
+- клиенту не нужно знать, кто именно обработает запрос.
+
+В классической формулировке GoF обычно только один обработчик обрабатывает запрос и может остановить дальнейшее распространение. Вариации допускают, что несколько обработчиков могут обработать один и тот же запрос.
+
+### Когда использовать?
+
+Используйте Chain of Responsibility, когда:
+
+1. Есть несколько возможных обработчиков запроса, и выбор конкретного должен решаться во время выполнения.
+2. Нужно заменить громоздкие условные конструкции (if/else/when) более гибкой структурой.
+3. Требуется возможность динамически расширять, переупорядочивать или конфигурировать цепочку обработчиков без изменения клиентского кода.
+
+### Пример: обработчики запросов (Kotlin)
+
+```kotlin
+// Интерфейс обработчика
+interface Handler {
+    var nextHandler: Handler?
+    fun handleRequest(request: String): Boolean
+}
+
+// Конкретные обработчики
+class FirstHandler : Handler {
+    override var nextHandler: Handler? = null
+
+    override fun handleRequest(request: String): Boolean {
+        if (request == "Request1") {
+            println("FirstHandler handled $request")
+            return true
+        }
+        return nextHandler?.handleRequest(request) ?: false
+    }
+}
+
+class SecondHandler : Handler {
+    override var nextHandler: Handler? = null
+
+    override fun handleRequest(request: String): Boolean {
+        if (request == "Request2") {
+            println("SecondHandler handled $request")
+            return true
+        }
+        return nextHandler?.handleRequest(request) ?: false
+    }
+}
+
+class DefaultHandler : Handler {
+    override var nextHandler: Handler? = null
+
+    override fun handleRequest(request: String): Boolean {
+        println("DefaultHandler handled $request")
+        return true
+    }
+}
+
+// Построение цепочки
+fun main() {
+    val firstHandler = FirstHandler()
+    val secondHandler = SecondHandler()
+    val defaultHandler = DefaultHandler()
+
+    firstHandler.nextHandler = secondHandler
+    secondHandler.nextHandler = defaultHandler
+
+    listOf("Request1", "Request2", "Request3").forEach {
+        if (!firstHandler.handleRequest(it)) {
+            println("$it was not handled")
+        }
+    }
+}
+```
+
+Результат:
+
+- `Request1` обрабатывается `FirstHandler`.
+- `Request2` обрабатывается `SecondHandler`.
+- `Request3` обрабатывается `DefaultHandler` как обработчиком по умолчанию.
+
+### Android-пример: обработка событий `View` (концептуально)
+
+```kotlin
+// Концептуальная цепочка обработки touch-событий (упрощенная)
+sealed class TouchEvent {
+    data class Click(val x: Int, val y: Int) : TouchEvent()
+    data class LongPress(val x: Int, val y: Int) : TouchEvent()
+    data class Swipe(val direction: String) : TouchEvent()
+}
+
+interface TouchHandler {
+    var nextHandler: TouchHandler?
+    fun handle(event: TouchEvent): Boolean
+}
+
+class ClickHandler : TouchHandler {
+    override var nextHandler: TouchHandler? = null
+
+    override fun handle(event: TouchEvent): Boolean {
+        return when (event) {
+            is TouchEvent.Click -> {
+                println("Click handled at (${event.x}, ${event.y})")
+                true
+            }
+            else -> nextHandler?.handle(event) ?: false
+        }
+    }
+}
+
+class LongPressHandler : TouchHandler {
+    override var nextHandler: TouchHandler? = null
+
+    override fun handle(event: TouchEvent): Boolean {
+        return when (event) {
+            is TouchEvent.LongPress -> {
+                println("Long press handled at (${event.x}, ${event.y})")
+                true
+            }
+            else -> nextHandler?.handle(event) ?: false
+        }
+    }
+}
+
+class SwipeHandler : TouchHandler {
+    override var nextHandler: TouchHandler? = null
+
+    override fun handle(event: TouchEvent): Boolean {
+        return when (event) {
+            is TouchEvent.Swipe -> {
+                println("Swipe ${event.direction} handled")
+                true
+            }
+            else -> nextHandler?.handle(event) ?: false
+        }
+    }
+}
+
+class GestureDetector {
+    private val chain: TouchHandler
+
+    init {
+        val clickHandler = ClickHandler()
+        val longPressHandler = LongPressHandler()
+        val swipeHandler = SwipeHandler()
+
+        clickHandler.nextHandler = longPressHandler
+        longPressHandler.nextHandler = swipeHandler
+
+        chain = clickHandler
+    }
+
+    fun processEvent(event: TouchEvent) {
+        if (!chain.handle(event)) {
+            println("Event not handled: $event")
+        }
+    }
+}
+```
+
+Здесь событие проходит по цепочке обработчиков: каждый пытается обработать его и при необходимости передает дальше.
+
+### Kotlin-пример: цепочка валидации
+
+```kotlin
+// Интерфейс обработчика валидации
+interface ValidationHandler {
+    var next: ValidationHandler?
+
+    fun validate(data: UserData): ValidationResult {
+        val result = doValidate(data)
+        return if (result is ValidationResult.Valid && next != null) {
+            next!!.validate(data)
+        } else {
+            result
+        }
+    }
+
+    fun doValidate(data: UserData): ValidationResult
+}
+
+sealed class ValidationResult {
+    object Valid : ValidationResult()
+    data class Invalid(val message: String) : ValidationResult()
+}
+
+data class UserData(
+    val email: String,
+    val password: String,
+    val age: Int
+)
+
+// Конкретные валидаторы
+class EmailValidator : ValidationHandler {
+    override var next: ValidationHandler? = null
+
+    override fun doValidate(data: UserData): ValidationResult {
+        return if (data.email.contains("@")) {
+            ValidationResult.Valid
+        } else {
+            ValidationResult.Invalid("Invalid email format")
+        }
+    }
+}
+
+class PasswordValidator : ValidationHandler {
+    override var next: ValidationHandler? = null
+
+    override fun doValidate(data: UserData): ValidationResult {
+        return if (data.password.length >= 8) {
+            ValidationResult.Valid
+        } else {
+            ValidationResult.Invalid("Password must be at least 8 characters")
+        }
+    }
+}
+
+class AgeValidator : ValidationHandler {
+    override var next: ValidationHandler? = null
+
+    override fun doValidate(data: UserData): ValidationResult {
+        return if (data.age >= 18) {
+            ValidationResult.Valid
+        } else {
+            ValidationResult.Invalid("Must be 18 or older")
+        }
+    }
+}
+
+// Построение цепочки
+fun createValidationChain(): ValidationHandler {
+    val emailValidator = EmailValidator()
+    val passwordValidator = PasswordValidator()
+    val ageValidator = AgeValidator()
+
+    emailValidator.next = passwordValidator
+    passwordValidator.next = ageValidator
+
+    return emailValidator
+}
+
+// Использование
+fun main() {
+    val validator = createValidationChain()
+
+    val userData = UserData("user@example.com", "pass123", 20)
+    when (val result = validator.validate(userData)) {
+        is ValidationResult.Valid -> println("Validation passed")
+        is ValidationResult.Invalid -> println("Validation failed: ${result.message}")
+    }
+}
+```
+
+Цепочка валидаторов поочередно проверяет данные; при первой ошибке валидация останавливается.
+
+### Пример: цепочка интерсепторов (OkHttp-подобная, упрощенно)
+
+```kotlin
+// Упрощенная цепочка интерсепторов в стиле OkHttp
+interface Interceptor {
+    fun intercept(chain: Chain): Response
+}
+
+interface Chain {
+    fun request(): Request
+    fun proceed(request: Request): Response
+}
+
+class RealInterceptorChain(
+    private val interceptors: List<Interceptor>,
+    private val index: Int,
+    private val request: Request
+) : Chain {
+
+    override fun request() = request
+
+    override fun proceed(request: Request): Response {
+        if (index >= interceptors.size) {
+            // Конец цепочки — реальный запрос (упрощено)
+            return makeRealRequest(request)
+        }
+
+        val next = RealInterceptorChain(interceptors, index + 1, request)
+        val interceptor = interceptors[index]
+        return interceptor.intercept(next)
+    }
+
+    private fun makeRealRequest(request: Request): Response {
+        return Response(200, "Success")
+    }
+}
+
+// Конкретные интерсепторы
+class LoggingInterceptor : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val request = chain.request()
+        println("Request: ${request.url}")
+        val response = chain.proceed(request)
+        println("Response: ${response.code}")
+        return response
+    }
+}
+
+class AuthInterceptor(private val token: String) : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val originalRequest = chain.request()
+        val authorizedRequest = originalRequest.copy(
+            headers = originalRequest.headers + ("Authorization" to "Bearer $token")
+        )
+        return chain.proceed(authorizedRequest)
+    }
+}
+
+class CacheInterceptor : Interceptor {
+    private val cache = mutableMapOf<String, Response>()
+
+    override fun intercept(chain: Chain): Response {
+        val request = chain.request()
+        cache[request.url]?.let {
+            println("Returning cached response")
+            return it
+        }
+
+        val response = chain.proceed(request)
+        cache[request.url] = response
+        return response
+    }
+}
+
+data class Request(val url: String, val headers: Map<String, String> = emptyMap())
+data class Response(val code: Int, val body: String)
+```
+
+Этот пример иллюстрирует цепочку перехватчиков, где каждый может модифицировать запрос/ответ или передать дальше.
+
+### Лучшие практики
+
+```kotlin
+// РЕКОМЕНДУЕТСЯ: использовать обработчик по умолчанию в конце цепочки, когда это уместно
+class DefaultHandler : Handler {
+    override var nextHandler: Handler? = null
+    override fun handleRequest(request: String): Boolean {
+        println("Default: No specific handler for $request")
+        return true
+    }
+}
+
+// РЕКОМЕНДУЕТСЯ: сделать цепочку неизменяемой после создания, когда это возможно
+fun buildChain(): Handler {
+    return FirstHandler().apply {
+        nextHandler = SecondHandler().apply {
+            nextHandler = DefaultHandler()
+        }
+    }
+}
+
+// РЕКОМЕНДУЕТСЯ: при простой логике использовать функциональный подход,
+// сохраняя идею последовательной проверки
+val validationChain = listOf<(UserData) -> Boolean>(
+    { it.email.isNotBlank() },
+    { it.password.length >= 8 },
+    { it.age >= 18 }
+)
+
+fun validate(data: UserData) = validationChain.all { it(data) }
+
+// НЕ РЕКОМЕНДУЕТСЯ: создавать циклические цепочки
+// НЕ РЕКОМЕНДУЕТСЯ: класть тяжелую бизнес-логику в конструирование цепочки
+// НЕ РЕКОМЕНДУЕТСЯ: делать обработчики сильно связанными друг с другом
+```
+
+Кратко: Chain of Responsibility позволяет передавать запрос по цепочке обработчиков до тех пор, пока один из них его не обработает или цепочка не закончится, что уменьшает связность и повышает гибкость архитектуры. Паттерн полезен для обработки событий, валидации, логирования, интерсепторов и других последовательных конвейеров.
 
 ---
 
 ## Answer (EN)
 
-
-**Chain of Responsibility (Цепочка обязанностей)** - это поведенческий паттерн проектирования, который позволяет передавать запросы последовательно по цепочке обработчиков. Каждый последующий обработчик решает, может ли он обработать запрос сам и стоит ли передавать запрос дальше по цепи.
+Chain of Responsibility is a behavioral design pattern that allows passing requests along a chain of handlers. Each handler decides whether it can handle the request and whether to pass it further along the chain.
 
 ### Definition
 
-
-Chain of Responsibility is a design pattern in which **a request is passed sequentially through a chain of potential handlers until one of them handles the request**. Each handler in the chain has a chance to either process the request or pass it to the next handler. The client doesn't need to know which handler will actually deal with the request — it simply sends it into the chain.
+Chain of Responsibility is a design pattern in which a request is passed sequentially through a chain of potential handlers until one of them handles the request (or the chain ends). Each handler in the chain has a chance to either process the request or pass it to the next handler. The client doesn't need to know which handler will actually deal with the request — it simply sends it into the chain.
 
 This pattern decouples the client from the specific receiver that performs the action, following the Open/Closed Principle by allowing new handlers to be added without modifying existing code.
 
 ### Problems it Solves
 
-
-What problems can the Chain of Responsibility design pattern solve?
-
-1. **Coupling the sender of a request to its receiver should be avoided**
-2. **It should be possible that more than one receiver can handle a request**
-3. **Implementing a request directly within the class is inflexible** - Couples the class to a particular receiver
+1. Coupling the sender of a request to its receiver should be avoided.
+2. It should be possible to have multiple potential receivers for a request, with the actual receiver determined at runtime.
+3. Implementing request handling logic directly in the sender class is inflexible — it tightly couples the class to concrete receivers and complex conditional logic.
 
 ### Solution
 
+Define a chain of receiver objects that, depending on run-time conditions, either handle a request or forward it to the next receiver in the chain (if any).
 
-Define a **chain of receiver objects** having the responsibility, depending on run-time conditions, to either **handle a request or forward it to the next receiver** on the chain (if any).
+This enables us to send a request to a chain of receivers without having to know which one handles the request. The request gets passed along the chain until a receiver handles the request or the chain is exhausted. The sender of a request is no longer coupled to a particular receiver.
 
-This enables us to send a request to a chain of receivers without having to know which one handles the request. The request gets passed along the chain until a receiver handles the request. The sender of a request is no longer coupled to a particular receiver.
+Note: In the classic GoF formulation, typically at most one handler processes a given request (and may stop propagation). Variations may allow multiple handlers to act on the same request.
 
-## Когда Использовать?
+### When to Use?
 
 You might consider using Chain of Responsibility when:
 
-1. **Multiple handlers for a type of request** - Which one handles it may depend on runtime conditions (e.g., UI event propagation)
-2. **Avoid monolithic conditional logic** - Replace big if/else or when chains with separate handler classes
-3. **Flexible chains** - Need chains that can be extended or reordered dynamically
+1. Multiple handlers for a type of request – which one handles it is decided at runtime (e.g., conceptual UI event propagation).
+2. You want to avoid monolithic conditional logic – replace big if/else or when chains with separate handler classes.
+3. You need flexible chains that can be extended, composed, or reordered dynamically.
 
-## Пример: Request Handlers
+### Example: Request Handlers
 
 ```kotlin
 // Step 1: Handler Interface
@@ -122,17 +510,16 @@ fun main() {
 }
 ```
 
-**Output**:
-```
+Output:
+
 FirstHandler handled Request1
 SecondHandler handled Request2
 DefaultHandler handled Request3
-```
 
-## Android Example: View Event Handling
+### Android Example: `View` Event Handling (Conceptual)
 
 ```kotlin
-// Touch event chain
+// Conceptual touch event chain (simplified, not full Android implementation)
 sealed class TouchEvent {
     data class Click(val x: Int, val y: Int) : TouchEvent()
     data class LongPress(val x: Int, val y: Int) : TouchEvent()
@@ -209,7 +596,9 @@ class GestureDetector {
 }
 ```
 
-## Kotlin Example: Validation Chain
+Note: This example is conceptual and demonstrates the pattern; real Android input handling also involves framework-defined propagation rules.
+
+### Kotlin Example: Validation Chain
 
 ```kotlin
 // Validation handler interface
@@ -300,10 +689,10 @@ fun main() {
 }
 ```
 
-## Android Interceptor Chain Example
+### Android Interceptor Chain Example (Simplified)
 
 ```kotlin
-// OkHttp-style interceptor chain
+// OkHttp-style interceptor chain (simplified proof-of-concept)
 interface Interceptor {
     fun intercept(chain: Chain): Response
 }
@@ -323,7 +712,7 @@ class RealInterceptorChain(
 
     override fun proceed(request: Request): Response {
         if (index >= interceptors.size) {
-            // End of chain - make actual request
+            // End of chain - make actual request (simplified)
             return makeRealRequest(request)
         }
 
@@ -379,58 +768,19 @@ data class Request(val url: String, val headers: Map<String, String> = emptyMap(
 data class Response(val code: Int, val body: String)
 ```
 
-### Explanation
-
-
-**Explanation**:
-
-- **Handler interface** declares methods for handling and chaining
-- **Concrete handlers** check if they can handle request, otherwise pass to next
-- **Chain** is built by linking handlers together
-- **Android**: View event handling, OkHttp interceptors, validation chains
-- Each handler can **modify** the request or **stop** the chain
-
-## Преимущества И Недостатки
-
-### Pros (Преимущества)
-
-
-1. **Decoupling** - Sender doesn't need to know which handler processes request
-2. **Flexibility** - Can add/remove/reorder handlers easily
-3. **Single Responsibility** - Each handler handles one type of request
-4. **Dynamic configuration** - Chain can be modified at runtime
-5. **Open/Closed Principle** - New handlers without modifying existing code
-
-### Cons (Недостатки)
-
-
-1. **No guarantee of handling** - Request might not be handled at all
-2. **Performance overhead** - Request passes through multiple handlers
-3. **Debugging difficulty** - Hard to track request flow
-4. **Runtime complexity** - Dynamic chains can be hard to manage
-
-## Best Practices
+### Best Practices
 
 ```kotlin
-// - DO: Provide a default handler at the end
+// DO: Provide a default handler at the end when appropriate
 class DefaultHandler : Handler {
     override var nextHandler: Handler? = null
     override fun handleRequest(request: String): Boolean {
         println("Default: No specific handler for $request")
-        return true // Always handles
+        return true
     }
 }
 
-// - DO: Use for UI event propagation
-class ViewGroup {
-    private val childHandlers = mutableListOf<ViewEventHandler>()
-
-    fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        return childHandlers.any { it.onTouchEvent(event) }
-    }
-}
-
-// - DO: Make chain immutable after creation
+// DO: Make chain immutable after creation when possible
 fun buildChain(): Handler {
     return FirstHandler().apply {
         nextHandler = SecondHandler().apply {
@@ -439,7 +789,7 @@ fun buildChain(): Handler {
     }
 }
 
-// - DO: Use functional approach in Kotlin
+// DO: Use functional approach in Kotlin as an alternative when suitable
 val validationChain = listOf<(UserData) -> Boolean>(
     { it.email.isNotBlank() },
     { it.password.length >= 8 },
@@ -448,95 +798,33 @@ val validationChain = listOf<(UserData) -> Boolean>(
 
 fun validate(data: UserData) = validationChain.all { it(data) }
 
-// - DON'T: Create circular chains
-// - DON'T: Put business logic in chain construction
-// - DON'T: Make handlers depend on each other
+// DON'T: Create circular chains
+// DON'T: Put heavy business logic in chain construction
+// DON'T: Make handlers depend tightly on each other
 ```
 
-**English**: **Chain of Responsibility** is a behavioral pattern that passes requests through a chain of handlers until one processes it. **Problem**: Need to avoid coupling sender to specific receiver, multiple potential handlers. **Solution**: Chain handlers together, each decides to process or pass to next. **Use when**: (1) Multiple handlers for requests, (2) Avoid complex conditionals, (3) Need flexible, reconfigurable chains. **Android**: View event handling, OkHttp interceptors, validation chains. **Pros**: decoupling, flexibility, dynamic configuration. **Cons**: no guarantee of handling, performance overhead, debugging difficulty. **Examples**: Touch event propagation, HTTP interceptors, validation pipeline, logging chain.
-
-## Links
-
-- [Stop Hardcoding Logic: Use the Chain of Responsibility Instead](https://maxim-gorin.medium.com/stop-hardcoding-logic-use-the-chain-of-responsibility-instead-62146c9cf93a)
-- [Chain-of-responsibility pattern](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern)
-- [Chain of Responsibility Design Pattern in Kotlin](https://www.javaguides.net/2023/10/chain-of-responsibility-design-pattern-in-kotlin.html)
-- [Chain of Responsibility Design Pattern](https://www.geeksforgeeks.org/system-design/chain-responsibility-design-pattern/)
-
-## Further Reading
-
-- [Chain of Responsibility](https://sourcemaking.com/design_patterns/chain_of_responsibility)
-- [Chain of Responsibility](https://refactoring.guru/design-patterns/chain-of-responsibility)
-- [Chain of Responsibility Software Pattern Kotlin Examples](https://softwarepatterns.com/kotlin/chain-of-responsibility-software-pattern-kotlin-example)
-
----
-*Source: Kirchhoff Android Interview Questions*
-
-
-## Ответ (RU)
-
-### Определение
-
-Chain of Responsibility (Цепочка обязанностей) - это паттерн проектирования, в котором **запрос последовательно передается через цепочку потенциальных обработчиков, пока один из них не обработает запрос**. Каждый обработчик в цепочке имеет возможность либо обработать запрос, либо передать его следующему обработчику. Клиенту не нужно знать, какой обработчик фактически обработает запрос — он просто отправляет его в цепочку.
-
-Этот паттерн отделяет клиента от конкретного получателя, выполняющего действие, следуя принципу открытости/закрытости, позволяя добавлять новые обработчики без изменения существующего кода.
-
-### Проблемы, Которые Решает
-
-Какие проблемы решает паттерн Chain of Responsibility?
-
-1. **Следует избегать связывания отправителя запроса с его получателем**
-2. **Должна быть возможность, чтобы более одного получателя могли обработать запрос**
-3. **Реализация запроса непосредственно в классе негибка** - Связывает класс с конкретным получателем
-
-### Решение
-
-Определить **цепочку объектов-получателей**, которые имеют ответственность, в зависимости от условий во время выполнения, либо **обработать запрос, либо передать его следующему получателю** в цепочке (если он есть).
-
-Это позволяет нам отправлять запрос в цепочку получателей, не зная, какой из них обработает запрос. Запрос передается по цепочке, пока получатель не обработает запрос. Отправитель запроса больше не связан с конкретным получателем.
-
-### Объяснение
-
-**Пояснение**:
-
-- **Интерфейс Handler** объявляет методы для обработки и построения цепочки
-- **Конкретные обработчики** проверяют, могут ли они обработать запрос, иначе передают следующему
-- **Цепочка** строится путем связывания обработчиков вместе
-- **Android**: Обработка событий View, OkHttp interceptors, цепочки валидации
-- Каждый обработчик может **изменить** запрос или **остановить** цепочку
-
-### Pros (Преимущества)
-
-1. **Разделение** - Отправителю не нужно знать, какой обработчик обрабатывает запрос
-2. **Гибкость** - Легко добавлять/удалять/переупорядочивать обработчики
-3. **Единственная ответственность** - Каждый обработчик обрабатывает один тип запроса
-4. **Динамическая конфигурация** - Цепочка может быть изменена во время выполнения
-5. **Принцип открытости/закрытости** - Новые обработчики без изменения существующего кода
-
-### Cons (Недостатки)
-
-1. **Нет гарантии обработки** - Запрос может быть вообще не обработан
-2. **Накладные расходы производительности** - Запрос проходит через несколько обработчиков
-3. **Сложность отладки** - Трудно отследить поток запроса
-4. **Сложность во время выполнения** - Динамические цепочки могут быть трудны в управлении
-
+Summary: Chain of Responsibility is a behavioral pattern that passes requests through a chain of handlers until one processes it (or the chain ends). It reduces coupling between sender and receiver, replaces complex conditionals with composable handlers, and is useful for event handling, validation pipelines, logging, and interceptor chains.
 
 ---
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+- [[q-adapter-pattern--cs--medium]]
+- [[q-abstract-factory-pattern--cs--medium]]
 
-### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
-- [[q-command-pattern--design-patterns--medium]] - Command pattern
-- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
-- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
+## Follow-ups
 
-### Creational Patterns
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- How would you implement error handling or fallback strategies in a chain if multiple handlers can act on the same request?
+- How does Chain of Responsibility compare to the Decorator and Middleware patterns conceptually?
+- In what cases might Chain of Responsibility harm readability or performance, and how would you mitigate that?
 
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+## References
 
+- [[c-architecture-patterns]]
+- https://maxim-gorin.medium.com/stop-hardcoding-logic-use-the-chain-of-responsibility-instead-62146c9cf93a
+- https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
+- https://www.javaguides.net/2023/10/chain-of-responsibility-design-pattern-in-kotlin.html
+- https://www.geeksforgeeks.org/system-design/chain-responsibility-design-pattern/
+- https://sourcemaking.com/design_patterns/chain-of-responsibility
+- https://refactoring.guru/design-patterns/chain-of-responsibility
+- https://softwarepatterns.com/kotlin/chain-of-responsibility-software-pattern-kotlin-example

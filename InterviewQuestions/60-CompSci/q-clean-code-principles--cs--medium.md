@@ -3,18 +3,19 @@ id: cs-001
 title: "Clean Code Principles / Принципы чистого кода"
 aliases: ["Clean Code Principles", "Принципы чистого кода"]
 topic: cs
-subtopics: [best-practices, clean-code, code-quality, software-engineering]
+subtopics: [clean-code, code-quality, software-engineering]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-clean-code]
+related: [q-abstract-class-purpose--cs--medium]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [best-practices, clean-code, code-quality, difficulty/medium, refactoring]
-sources: [https://en.wikipedia.org/wiki/Clean_code]
+sources: ["https://en.wikipedia.org/wiki/Clean_code"]
+
 ---
 
 # Вопрос (RU)
@@ -28,11 +29,11 @@ sources: [https://en.wikipedia.org/wiki/Clean_code]
 ## Ответ (RU)
 
 **Теория чистого кода:**
-Clean Code - код, который легко понять, поддерживать и расширять. Основан на принципах Robert C. Martin (Uncle Bob). Чистый код читается как хорошо написанная проза, минимизирует когнитивную нагрузку и делает намерения программиста явными.
+Clean Code — код, который легко понять, поддерживать и расширять. Часто опирается на идеи Robert C. Martin (Uncle Bob) и другие признанные практики промышленной разработки. Чистый код читается как хорошо написанная проза, минимизирует когнитивную нагрузку и делает намерения программиста явными.
 
 **1. Осмысленные имена:**
 
-*Теория:* Имена должны раскрывать намерение, быть произносимыми и искомыми. Имена классов - существительные, методов - глаголы. Избегайте дезинформации и магических чисел.
+*Теория:* Имена должны раскрывать намерение, быть произносимыми и искомыми. Имена классов — существительные, методов — глаголы. Избегайте дезинформации и магических чисел.
 
 *Принципы:*
 - Раскрывают намерение (intention-revealing)
@@ -66,13 +67,13 @@ class UserRepository {
 
 **2. Функции:**
 
-*Теория:* Функции должны быть маленькими (< 20 строк), делать одно дело, иметь мало аргументов (0-2 идеально, избегайте 3+). Без побочных эффектов. Разделение команд (изменяют состояние) и запросов (возвращают данные).
+*Теория:* Функции должны быть маленькими, делать одно дело, иметь мало аргументов (0–2 желательно; 3+ — повод пересмотреть дизайн). Минимизируйте побочные эффекты. Разделяйте команды (изменяют состояние) и запросы (возвращают данные).
 
 *Принципы:*
-- Маленькие (< 20 строк)
+- Маленькие (ориентир — до ~20 строк как практическое правило, а не жесткое ограничение)
 - Делают одно дело (Single Responsibility)
-- Мало аргументов (0-2 идеально)
-- Без побочных эффектов
+- Мало аргументов (0–2 обычно достаточно)
+- Минимум побочных эффектов
 - Command-Query Separation
 
 ```kotlin
@@ -100,19 +101,19 @@ fun saveUser(user: User) {
 }
 
 // ✅ Command-Query Separation
-fun getUser(id: Long): User  // Query - только читает
-fun updateUser(user: User)   // Command - только изменяет
+fun getUser(id: Long): User?  // Query — только читает, может вернуть null/Option/Result если не найден
+fun updateUser(user: User)   // Command — только изменяет
 ```
 
 **3. Комментарии:**
 
-*Теория:* Объясняйте "почему", не "что". Код должен быть самодокументируемым. Комментарии для TODO/FIXME/WARNING. Избегайте избыточных комментариев. Не комментируйте плохой код - перепишите его.
+*Теория:* Объясняйте «почему», не «что». Код по возможности должен быть самодокументируемым. Используйте комментарии для TODO/FIXME/WARNING и сложной доменной логики. Избегайте избыточных комментариев. Не оставляйте закомментированный «мертвый» код в репозитории — его место в системе контроля версий.
 
 *Принципы:*
-- Объясняйте "почему", не "что"
-- Код должен быть самодокументируемым
+- Объясняйте «почему», не «что»
+- Код должен быть максимально самодокументируемым
 - TODO/FIXME/WARNING для заметок
-- Не комментируйте код - удаляйте его
+- Не оставляйте закомментированный мертвый код — удаляйте, опирайтесь на git history
 - Избегайте избыточных комментариев
 
 ```kotlin
@@ -138,11 +139,11 @@ val result = calculateNewWay(data)
 
 **4. Форматирование:**
 
-*Теория:* Вертикальное форматирование - связанные концепции близко друг к другу. Горизонтальное - строки 80-120 символов. Консистентный стиль в проекте. Пустые строки для разделения концепций.
+*Теория:* Вертикальное форматирование — связанные концепции близко друг к другу. Горизонтальное — разумная длина строк (часто 80–120 символов в качестве ориентира). Важен консистентный стиль в проекте. Пустые строки для разделения концепций.
 
 *Принципы:*
 - Связанные концепции близко вертикально
-- Строки 80-120 символов
+- Строки 80–120 символов как практическое правило
 - Консистентный стиль
 - Пустые строки разделяют концепции
 
@@ -172,23 +173,23 @@ class UserService(
 
 **5. Обработка ошибок:**
 
-*Теория:* Используйте exceptions вместо error codes. Извлекайте try/catch в отдельные функции. Не возвращайте null - используйте Optional/Result. Exceptions для исключительных ситуаций, не для flow control.
+*Теория:* В прикладном коде обычно предпочтительнее использовать исключения или Result-типы вместо «магических» кодов ошибок. Выносите громоздкий try/catch в отдельные функции. Избегайте неожиданных null: используйте явные nullable-типы, Option/Result и проверку входных данных. Исключения предназначены для действительно исключительных ситуаций, а не для обычного управления потоком.
 
 *Принципы:*
-- Exceptions вместо error codes
-- Извлекайте try/catch в отдельные функции
-- Не возвращайте null
-- Exceptions для исключительных ситуаций
+- Вместо неявных кодов ошибок используйте исключения или явные типы результатов (Result/ sealed class)
+- Выносите try/catch в отдельные функции для улучшения читаемости
+- Избегайте неожиданных null; используйте явный nullable / Option / Result при необходимости
+- Не используйте исключения для нормального flow control
 
 ```kotlin
-// ❌ Плохо: error codes
+// ❌ Плохо: неявные error codes
 fun saveUser(user: User): Int {
     if (!isValid(user)) return -1
     if (!database.save(user)) return -2
     return 0
 }
 
-// ✅ Хорошо: exceptions
+// ✅ Лучше: исключения или типизированный результат
 fun saveUser(user: User) {
     require(isValid(user)) { "Invalid user" }
     database.save(user)
@@ -204,35 +205,41 @@ fun deleteUser(id: Long) {
     }
 }
 
-// ✅ Не возвращайте null
-fun findUser(id: Long): User?  // Явно nullable
-fun getUser(id: Long): User    // Бросает exception если не найден
+// ✅ Явное поведение при "не найден"
+fun findUser(id: Long): User?          // Может вернуть null — это явно видно из сигнатуры
+// или
+// fun findUser(id: Long): Result<User>
+
+// Исключение — только если отсутствие пользователя является действительно исключительной ситуацией
+fun getExistingUser(id: Long): User {
+    return findUser(id) ?: throw UserNotFoundException(id)
+}
 ```
 
 **6. Code Smells (Запахи кода):**
 
-*Теория:* Признаки плохого дизайна, которые указывают на необходимость рефакторинга. Дублирование, длинные методы/классы, feature envy, primitive obsession, data clumps.
+*Теория:* Признаки проблемного дизайна, которые указывают на необходимость рефакторинга. Примеры: дублирование, длинные методы/классы, feature envy, primitive obsession, data clumps.
 
 **Основные code smells:**
 
-1. **Дублирование кода** - повторение логики
-2. **Длинные методы** (> 20 строк) - трудно понять
-3. **Большие классы** (> 300 строк) - делают слишком много
-4. **Feature Envy** - метод больше интересуется другим классом
-5. **Primitive Obsession** - использование примитивов вместо объектов
-6. **Data Clumps** - группы данных, которые всегда вместе
+1. **Дублирование кода** — повторение логики
+2. **Длинные методы** (обычно заметно > ~20–30 строк) — трудно понять
+3. **Большие классы** (сотни строк, много обязанностей) — делают слишком много
+4. **Feature Envy** — метод больше интересуется данными другого класса, чем своими
+5. **Primitive Obsession** — использование примитивов вместо объектов для значимых концепций
+6. **Data Clumps** — группы данных, которые всегда передаются вместе
 
 ```kotlin
 // ❌ Code Smell: Feature Envy
 class Order {
     fun calculateTotal(customer: Customer): BigDecimal {
-        // Метод Order больше интересуется Customer
+        // Метод Order подозрительно много знает о деталях Customer
         val discount = customer.loyaltyLevel * customer.discountRate
-        return items.sum() * (1 - discount)
+        return items.sum() * (BigDecimal.ONE - discount)
     }
 }
 
-// ✅ Рефакторинг: переместить логику в Customer
+// ✅ Рефакторинг: переместить логику скидки в Customer
 class Customer {
     fun calculateDiscount(): BigDecimal {
         return loyaltyLevel * discountRate
@@ -241,7 +248,7 @@ class Customer {
 
 class Order {
     fun calculateTotal(customer: Customer): BigDecimal {
-        return items.sum() * (1 - customer.calculateDiscount())
+        return items.sum() * (BigDecimal.ONE - customer.calculateDiscount())
     }
 }
 
@@ -252,24 +259,28 @@ fun createUser(email: String, age: Int)
 data class Email(val value: String) {
     init { require(value.contains("@")) }
 }
+
 data class Age(val value: Int) {
     init { require(value in 0..150) }
 }
+
 fun createUser(email: Email, age: Age)
 ```
 
 **Ключевые правила:**
 
-1. **Boy Scout Rule** - оставляйте код чище, чем нашли
-2. **DRY** (Don't Repeat Yourself) - избегайте дублирования
-3. **KISS** (Keep It Simple, Stupid) - простота важнее сложности
-4. **YAGNI** (You Aren't Gonna Need It) - не пишите код "на будущее"
-5. **Single Responsibility** - одна причина для изменения
+1. **Boy Scout Rule** — оставляйте код чище, чем нашли
+2. **DRY** (Don't Repeat Yourself) — избегайте дублирования
+3. **KISS** (Keep It Simple, Stupid) — простота важнее излишней сложности
+4. **YAGNI** (You Aren't Gonna Need It) — не пишите код «на будущее» без реальной потребности
+5. **Single Responsibility** — у модуля должна быть одна причина для изменения
+
+---
 
 ## Answer (EN)
 
 **Clean Code Theory:**
-Clean Code - code that is easy to understand, maintain, and extend. Based on Robert C. Martin (Uncle Bob) principles. Clean code reads like well-written prose, minimizes cognitive load, and makes programmer's intentions explicit.
+Clean code is code that is easy to understand, maintain, and extend. It is strongly influenced by Robert C. Martin (Uncle Bob) and other widely accepted industry practices. Clean code reads like well-written prose, minimizes cognitive load, and makes the programmer's intentions explicit.
 
 **1. Meaningful Names:**
 
@@ -307,17 +318,17 @@ class UserRepository {
 
 **2. Functions:**
 
-*Theory:* Functions should be small (< 20 lines), do one thing, have few arguments (0-2 ideal, avoid 3+). No side effects. Separate commands (change state) and queries (return data).
+*Theory:* Functions should be small, do one thing, and have few parameters (0–2 is usually enough; 3+ is a design smell to re-evaluate). Minimize side effects. Separate commands (change state) and queries (return data).
 
 *Principles:*
-- Small (< 20 lines)
+- Small (roughly up to ~20 lines as a heuristic, not a hard rule)
 - Do one thing (Single Responsibility)
-- Few arguments (0-2 ideal)
-- No side effects
+- Few parameters (0–2 typical)
+- Minimize side effects
 - Command-Query Separation
 
 ```kotlin
-// ❌ Bad: does many things, long, many arguments
+// ❌ Bad: does many things, long, many parameters
 fun processUserData(name: String, email: String, age: Int, address: String, phone: String) {
     validateEmail(email)
     saveToDatabase(name, email, age)
@@ -341,19 +352,19 @@ fun saveUser(user: User) {
 }
 
 // ✅ Command-Query Separation
-fun getUser(id: Long): User  // Query - only reads
-fun updateUser(user: User)   // Command - only changes
+fun getUser(id: Long): User?  // Query — only reads; may return null/Option/Result if not found
+fun updateUser(user: User)   // Command — only changes state
 ```
 
 **3. Comments:**
 
-*Theory:* Explain "why", not "what". Code should be self-documenting. Comments for TODO/FIXME/WARNING. Avoid redundant comments. Don't comment bad code - rewrite it.
+*Theory:* Explain "why", not "what". Code should be as self-documenting as reasonably possible. Use comments for TODO/FIXME/WARNING and for clarifying non-obvious domain or algorithmic decisions. Avoid redundant comments. Do not leave large blocks of commented-out dead code — rely on version control.
 
 *Principles:*
-- Explain "why", not "what"
-- Code should be self-documenting
+- Explain "why", not (obvious) "what"
+- Code should be as self-documenting as practical
 - TODO/FIXME/WARNING for notes
-- Don't comment code - delete it
+- Don't keep commented-out dead code; delete it and rely on git history
 - Avoid redundant comments
 
 ```kotlin
@@ -362,14 +373,14 @@ fun updateUser(user: User)   // Command - only changes
 counter++
 
 // ✅ Good: explains "why"
-// Use exponential backoff for retry to avoid overloading server
+// Use exponential backoff for retry to avoid overloading the server
 val delay = baseDelay * (2.0.pow(retryCount))
 
 // ✅ Good: TODO for deferred work
 // TODO: Add caching after DB optimization
 fun getUserData(id: Long): User
 
-// ❌ Bad: commented code
+// ❌ Bad: commented-out old implementation
 // val oldResult = calculateOldWay(data)
 val result = calculateNewWay(data)
 
@@ -379,11 +390,11 @@ val result = calculateNewWay(data)
 
 **4. Formatting:**
 
-*Theory:* Vertical formatting - related concepts close together. Horizontal - lines 80-120 characters. Consistent style in project. Blank lines separate concepts.
+*Theory:* Vertical formatting: keep related concepts close together. Horizontal formatting: use reasonable line length (often 80–120 characters as a guideline). Maintain a consistent style across the project. Use blank lines to separate logical sections.
 
 *Principles:*
 - Related concepts close vertically
-- Lines 80-120 characters
+- Lines of 80–120 characters as a practical guideline
 - Consistent style
 - Blank lines separate concepts
 
@@ -413,23 +424,23 @@ class UserService(
 
 **5. Error Handling:**
 
-*Theory:* Use exceptions instead of error codes. Extract try/catch into separate functions. Don't return null - use Optional/Result. Exceptions for exceptional situations, not for flow control.
+*Theory:* In typical application/business code, prefer exceptions or explicit result types over ad-hoc error codes. Extract heavy try/catch blocks into separate functions for readability. Avoid unexpected nulls: use explicit nullable types, Option/Result, and input validation. Use exceptions for truly exceptional situations, not for normal control flow (e.g., a routinely missing record).
 
 *Principles:*
-- Exceptions instead of error codes
-- Extract try/catch into separate functions
-- Don't return null
-- Exceptions for exceptional situations
+- Prefer exceptions or typed results over magic error codes
+- Extract try/catch into helper functions when it improves clarity
+- Avoid unexpected null; use explicit nullable / Option / Result instead
+- Don't use exceptions for normal flow control
 
 ```kotlin
-// ❌ Bad: error codes
+// ❌ Bad: magic error codes
 fun saveUser(user: User): Int {
     if (!isValid(user)) return -1
     if (!database.save(user)) return -2
     return 0
 }
 
-// ✅ Good: exceptions
+// ✅ Better: exceptions or typed result
 fun saveUser(user: User) {
     require(isValid(user)) { "Invalid user" }
     database.save(user)
@@ -445,35 +456,41 @@ fun deleteUser(id: Long) {
     }
 }
 
-// ✅ Don't return null
-fun findUser(id: Long): User?  // Explicitly nullable
-fun getUser(id: Long): User    // Throws exception if not found
+// ✅ Explicit behavior for "not found"
+fun findUser(id: Long): User?          // May return null — explicit in signature
+// or
+// fun findUser(id: Long): Result<User>
+
+// Throw only if absence is exceptional in this context
+fun getExistingUser(id: Long): User {
+    return findUser(id) ?: throw UserNotFoundException(id)
+}
 ```
 
-**6. Code Smells:**
+**6. Code Smells (Запахи кода):**
 
-*Theory:* Signs of bad design indicating need for refactoring. Duplication, long methods/classes, feature envy, primitive obsession, data clumps.
+*Theory:* Signs of problematic design that indicate the need for refactoring. Examples: duplication, long methods/classes, feature envy, primitive obsession, data clumps.
 
 **Main code smells:**
 
-1. **Code Duplication** - repeated logic
-2. **Long Methods** (> 20 lines) - hard to understand
-3. **Large Classes** (> 300 lines) - do too much
-4. **Feature Envy** - method more interested in another class
-5. **Primitive Obsession** - using primitives instead of objects
-6. **Data Clumps** - groups of data always together
+1. **Code Duplication** — repeated logic
+2. **Long Methods** (commonly noticeable > ~20–30 lines) — hard to understand
+3. **Large Classes** (hundreds of lines, many responsibilities) — do too much
+4. **Feature Envy** — a method is more interested in another class's data than its own
+5. **Primitive Obsession** — using primitives for rich domain concepts instead of dedicated types
+6. **Data Clumps** — groups of data that are always passed together
 
 ```kotlin
 // ❌ Code Smell: Feature Envy
 class Order {
     fun calculateTotal(customer: Customer): BigDecimal {
-        // Order method more interested in Customer
+        // Order method suspiciously depends on Customer internals
         val discount = customer.loyaltyLevel * customer.discountRate
-        return items.sum() * (1 - discount)
+        return items.sum() * (BigDecimal.ONE - discount)
     }
 }
 
-// ✅ Refactoring: move logic to Customer
+// ✅ Refactoring: move discount logic to Customer
 class Customer {
     fun calculateDiscount(): BigDecimal {
         return loyaltyLevel * discountRate
@@ -482,7 +499,7 @@ class Customer {
 
 class Order {
     fun calculateTotal(customer: Customer): BigDecimal {
-        return items.sum() * (1 - customer.calculateDiscount())
+        return items.sum() * (BigDecimal.ONE - customer.calculateDiscount())
     }
 }
 
@@ -493,21 +510,29 @@ fun createUser(email: String, age: Int)
 data class Email(val value: String) {
     init { require(value.contains("@")) }
 }
+
 data class Age(val value: Int) {
     init { require(value in 0..150) }
 }
+
 fun createUser(email: Email, age: Age)
 ```
 
 **Key Rules:**
 
-1. **Boy Scout Rule** - leave code cleaner than you found it
-2. **DRY** (Don't Repeat Yourself) - avoid duplication
-3. **KISS** (Keep It Simple, Stupid) - simplicity over complexity
-4. **YAGNI** (You Aren't Gonna Need It) - don't write code "for future"
-5. **Single Responsibility** - one reason to change
+1. **Boy Scout Rule** — leave the code cleaner than you found it
+2. **DRY** (Don't Repeat Yourself) — avoid duplication
+3. **KISS** (Keep It Simple, Stupid) — favor simplicity over unnecessary complexity
+4. **YAGNI** (You Aren't Gonna Need It) — don't build for hypothetical future needs without evidence
+5. **Single Responsibility** — a module should have one reason to change
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем разница между связностью (cohesion) и зацеплением (coupling)?
+- Как refactorить длинные методы?
+- Что такое принципы SOLID?
 
 ## Follow-ups
 
@@ -515,9 +540,22 @@ fun createUser(email: Email, age: Age)
 - How do you refactor long methods?
 - What are SOLID principles?
 
+## Связанные вопросы (RU)
+
+### Предпосылки (более простые)
+- Базовые концепции программирования
+- Объектно-ориентированное программирование
+
 ## Related Questions
 
 ### Prerequisites (Easier)
 - Basic programming concepts
 - Object-oriented programming
 
+## References (RU)
+
+- Статья "Clean Code" на Википедии: https://ru.wikipedia.org/wiki/Clean_Code
+
+## References
+
+- [Clean Code (Wikipedia)](https://en.wikipedia.org/wiki/Clean_code)

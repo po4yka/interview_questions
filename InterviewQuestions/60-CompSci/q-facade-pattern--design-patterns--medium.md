@@ -1,59 +1,367 @@
 ---
-id: design-patterns-007
+id: cs-060
 title: "Facade Pattern / Паттерн фасад"
 aliases: [Facade Pattern, Паттерн фасад]
-topic: design-patterns
-subtopics: [facade, simplification, structural-patterns]
+topic: cs
+subtopics: [design-patterns, structural-patterns, abstraction]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-design-patterns
-related: [c-design-patterns]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [design-patterns, difficulty/medium, facade, gof-patterns, structural-patterns]
+moc: moc-cs
+related: [c-computer-science, c-architecture-patterns, q-adapter-pattern--cs--medium]
+created: 2023-10-15
+updated: 2025-11-11
+tags: [cs, difficulty/medium, facade, gof-patterns, structural-patterns]
 ---
-
-# Facade Pattern
-
-# Question (EN)
-> What is the Facade pattern? When and why should it be used?
 
 # Вопрос (RU)
 > Что такое паттерн Facade? Когда и зачем его использовать?
 
----
+# Question (EN)
+> What is the Facade pattern? When and why should it be used?
+
+## Ответ (RU)
+
+**Facade (Фасад)** — это структурный паттерн проектирования, который предоставляет простой интерфейс к сложной системе классов, библиотеке или фреймворку. Фасад скрывает сложность системы и предоставляет клиенту простой способ взаимодействия.
+
+### Определение
+
+Паттерн Facade — это структурный паттерн проектирования, целью которого является **сокрытие внутренней сложности за единым интерфейсом, который выглядит простым снаружи**. Он предоставляет упрощенный интерфейс к сложной подсистеме или набору подсистем.
+
+### Проблемы, которые решает
+
+Какие проблемы может решить паттерн проектирования Facade?
+
+1. **Сделать сложную подсистему проще в использовании** — предоставить единый простой интерфейс к набору интерфейсов в подсистеме.
+2. **Минимизировать зависимости от подсистемы** — клиентский код зависит от фасада, а не от деталей реализации.
+
+### Ключевые моменты
+
+Ключевые моменты паттерна Facade:
+
+1. **Упрощение** — предоставляет упрощенный интерфейс к сложной системе классов.
+2. **Ослабление связности** — отделяет клиентский код от внутренней реализации подсистем.
+3. **Облегчение поддержки** — изменения в подсистемах не требуют изменений клиентского кода при сохранении контракта фасада.
+
+### Пример: Домашний кинотеатр (Home Theater)
+
+```kotlin
+// Подсистемы
+class Lights {
+    fun dim() {
+        println("Lights dimmed.")
+    }
+
+    fun on() {
+        println("Lights turned on.")
+    }
+}
+
+class Blinds {
+    fun lower() {
+        println("Blinds lowered.")
+    }
+
+    fun raise() {
+        println("Blinds raised.")
+    }
+}
+
+class Projector {
+    fun turnOn() {
+        println("Projector turned on.")
+    }
+
+    fun turnOff() {
+        println("Projector turned off.")
+    }
+}
+
+class MoviePlayer {
+    fun play() {
+        println("Movie started playing.")
+    }
+
+    fun stop() {
+        println("Movie stopped.")
+    }
+}
+
+// Фасад
+class HomeTheaterFacade(
+    private val lights: Lights,
+    private val blinds: Blinds,
+    private val projector: Projector,
+    private val moviePlayer: MoviePlayer
+) {
+    fun watchMovie() {
+        println("Getting ready to watch movie...")
+        lights.dim()
+        blinds.lower()
+        projector.turnOn()
+        moviePlayer.play()
+    }
+
+    fun endMovie() {
+        println("Shutting down movie theater...")
+        moviePlayer.stop()
+        projector.turnOff()
+        blinds.raise()
+        lights.on()
+    }
+}
+
+fun main() {
+    val homeTheater = HomeTheaterFacade(
+        Lights(), Blinds(), Projector(), MoviePlayer()
+    )
+    homeTheater.watchMovie()
+    println()
+    homeTheater.endMovie()
+}
+```
+
+Вывод:
+```
+Getting ready to watch movie...
+Lights dimmed.
+Blinds lowered.
+Projector turned on.
+Movie started playing.
+
+Shutting down movie theater...
+Movie stopped.
+Projector turned off.
+Blinds raised.
+Lights turned on.
+```
+
+### Пример: Android — фасад над Retrofit и кэшем
+
+```kotlin
+// Сложные подсистемы
+class NetworkClient {
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("https://api.example.com")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    fun <T> createService(serviceClass: Class<T>): T {
+        return retrofit.create(serviceClass)
+    }
+}
+
+class CacheManager(private val context: Context) {
+    fun saveToCache(key: String, data: String) {
+        context.getSharedPreferences("cache", Context.MODE_PRIVATE)
+            .edit()
+            .putString(key, data)
+            .apply()
+    }
+
+    fun getFromCache(key: String): String? {
+        return context.getSharedPreferences("cache", Context.MODE_PRIVATE)
+            .getString(key, null)
+    }
+}
+
+class ErrorHandler {
+    fun handleError(error: Throwable): String {
+        return when (error) {
+            is IOException -> "Network error occurred"
+            is HttpException -> "Server error: ${error.code()}"
+            else -> "Unknown error occurred"
+        }
+    }
+}
+
+// Фасад — простой API-интерфейс
+class ApiFacade(private val context: Context) {
+    private val networkClient = NetworkClient()
+    private val cacheManager = CacheManager(context)
+    private val errorHandler = ErrorHandler()
+
+    suspend fun getUserData(userId: String): Result<User> {
+        return try {
+            // Сначала кэш
+            val cached = cacheManager.getFromCache("user_$userId")
+            if (cached != null) {
+                return Result.success(Gson().fromJson(cached, User::class.java))
+            }
+
+            // Потом сеть
+            val api = networkClient.createService(ApiService::class.java)
+            val user = api.getUser(userId)
+
+            // Сохранить в кэш
+            cacheManager.saveToCache("user_$userId", Gson().toJson(user))
+
+            Result.success(user)
+        } catch (e: Exception) {
+            // Упрощённая обработка ошибок
+            Result.failure(Exception(errorHandler.handleError(e)))
+        }
+    }
+
+    suspend fun updateUser(user: User): Result<Unit> {
+        return try {
+            val api = networkClient.createService(ApiService::class.java)
+            api.updateUser(user)
+            cacheManager.saveToCache("user_${user.id}", Gson().toJson(user))
+            Result.success(Unit)
+        } catch (e: Exception) {
+            // Упрощённая обработка ошибок
+            Result.failure(Exception(errorHandler.handleError(e)))
+        }
+    }
+}
+
+// Клиентский код — простой в использовании
+class UserRepository(context: Context) {
+    private val apiFacade = ApiFacade(context)
+
+    suspend fun getUser(id: String) = apiFacade.getUserData(id)
+    suspend fun updateUser(user: User) = apiFacade.updateUser(user)
+}
+```
+
+### Пример: Kotlin — фасад над базой данных
+
+```kotlin
+// Сложные подсистемы
+class DatabaseConnection {
+    fun connect() = println("Database connected")
+    fun disconnect() = println("Database disconnected")
+}
+
+class QueryBuilder {
+    fun buildSelectQuery(table: String, where: String) =
+        "SELECT * FROM $table WHERE $where"
+}
+
+class ResultProcessor {
+    fun <T> processResult(rawData: List<Any>, type: Class<T>): List<T> {
+        // Сложная логика обработки (упрощено для примера)
+        @Suppress("UNCHECKED_CAST")
+        return rawData.map { it as T }
+    }
+}
+
+// Фасад
+class DatabaseFacade {
+    private val connection = DatabaseConnection()
+    private val queryBuilder = QueryBuilder()
+    private val processor = ResultProcessor()
+
+    fun <T> queryData(table: String, where: String, type: Class<T>): List<T> {
+        connection.connect()
+        val query = queryBuilder.buildSelectQuery(table, where)
+        println("Executing: $query")
+        val rawData = listOf<Any>() // Эмуляция результата БД
+        val result = processor.processResult(rawData, type)
+        connection.disconnect()
+        return result
+    }
+}
+
+// Пример использования
+fun main() {
+    val db = DatabaseFacade()
+    val users = db.queryData("users", "age > 18", User::class.java)
+}
+```
+
+### Пояснение
+
+- **Подсистемы** (Lights, Blinds, Projector, MoviePlayer и др.) — отдельные компоненты.
+- **Фасад** (например, `HomeTheaterFacade`, `ApiFacade`, `DatabaseFacade`) предоставляет простые методы, которые оркеструют работу нескольких подсистем.
+- **Клиент** взаимодействует только с фасадом, а не напрямую с каждой подсистемой.
+- В Android фасады часто упрощают комбинацию сетевых запросов, кэширования и обработки ошибок.
+
+### Применение
+
+Use Cases паттерна Facade:
+
+1. **Упрощение сложных внешних систем** — работа с БД, API, legacy-системами.
+2. **Слоение подсистем** — формирование чётких границ между слоями (UI, domain, data).
+3. **Единый унифицированный интерфейс** — объединение нескольких API/подсистем в один вход.
+4. **Защита клиентов от изменений** — стабильный фасад экранирует изменения внутренних подсистем.
+
+### Преимущества
+
+1. **Упрощенный интерфейс** — делает сложные системы проще в использовании.
+2. **Уменьшение связанности** — клиенты зависят от фасада, а не от конкретных подсистем.
+3. **Инкапсуляция** — скрывает детали реализации.
+4. **Улучшенная поддерживаемость** — изменения в подсистемах не влияют напрямую на клиентов.
+5. **Облегчение тестирования** — можно мокировать фасад вместо всех подсистем.
+
+### Недостатки
+
+1. **Увеличение сложности** — дополнительный уровень абстракции.
+2. **Снижение гибкости** — может ограничить доступ к продвинутым возможностям подсистем.
+3. **Избыточная инженерия** — не нужен для простых систем.
+4. **Потенциальные накладные расходы** — дополнительный уровень косвенности.
+5. **Риск God Object** — фасад может «раздуться» и взять на себя слишком много ответственности.
+
+### Рекомендации по использованию (Best Practices)
+
+```kotlin
+// DO: Используйте фасад для сложных подсистем
+class PaymentFacade(
+    private val validator: CardValidator,
+    private val processor: PaymentProcessor,
+    private val notifier: NotificationService
+) {
+    suspend fun processPayment(card: CreditCard, amount: Double): Result<String> {
+        if (!validator.isValid(card)) return Result.failure(Exception("Invalid card"))
+        val txId = processor.process(card, amount)
+        notifier.notify("Payment successful: $txId")
+        return Result.success(txId)
+    }
+}
+
+// DO: Держите фасад сфокусированным
+class NetworkFacade {
+    suspend fun get(url: String): String { /* simplified example */ TODO("Implement HTTP GET") }
+    suspend fun post(url: String, body: String): String { /* simplified example */ TODO("Implement HTTP POST") }
+}
+
+// DO: При необходимости разрешайте прямой доступ к подсистемам
+class SystemFacade(private val subsystem: AdvancedSubsystem) {
+    val advancedFeatures: AdvancedSubsystem get() = subsystem
+}
+
+// DON'T: Не превращайте фасад в god object
+// DON'T: Не кладите сложную бизнес-логику во фасад
+// DON'T: Не используйте фасад для чрезмерно простых систем
+```
+
+### Краткое резюме (RU)
+
+Паттерн **Facade** предоставляет упрощенный интерфейс к сложным подсистемам. Применяется, когда нужно упростить использование сложной системы, уменьшить количество зависимостей и выделить стабильный слой между клиентом и подсистемами. Частые примеры: фасад для домашнего кинотеатра, API-фасад (сеть + кэш + ошибки), фасад над базой данных.
 
 ## Answer (EN)
 
-
-**Facade (Фасад)** - это структурный паттерн проектирования, который предоставляет простой интерфейс к сложной системе классов, библиотеке или фреймворку. Фасад скрывает сложность системы и предоставляет клиенту простой способ взаимодействия.
+Facade is a structural design pattern that provides a simple interface to a complex system of classes, libraries, or frameworks. It hides complexity and exposes an easy-to-use API to clients.
 
 ### Definition
-
 
 Facade pattern is a structural design pattern whose purpose is to **hide internal complexity behind a single interface that appears simple from the outside**. It provides a simplified interface to a complex subsystem.
 
 ### Problems it Solves
 
-
-What problems can the Facade design pattern solve?
-
-1. **To make a complex subsystem easier to use, a simple interface should be provided for a set of interfaces in the subsystem**
-2. **The dependencies on a subsystem should be minimized**
+1. **Make a complex subsystem easier to use** — provide a single simple interface to a set of interfaces in the subsystem.
+2. **Minimize dependencies on the subsystem** — client code depends on the facade instead of concrete implementation details.
 
 ### Key Points
 
+1. **Simplification** — provides a simplified interface to a complex system of classes.
+2. **Decoupling** — decouples client code from internal subsystem details.
+3. **Easier Maintenance** — changes in subsystems do not require changes in client code as long as the facade contract is preserved.
 
-Key Points of the Facade Pattern:
-
-1. **Simplification** - Provides a simplified interface to a complex system of classes
-2. **Decoupling** - Decouples the client code from the internal workings of the system
-3. **Easier Maintenance** - Allows for easier maintenance, as changes in underlying subsystems don't directly affect client code
-
-## Пример: Home Theater
+### Example: Home Theater
 
 ```kotlin
 // Subsystems
@@ -131,7 +439,7 @@ fun main() {
 }
 ```
 
-**Output**:
+Output:
 ```
 Getting ready to watch movie...
 Lights dimmed.
@@ -146,7 +454,7 @@ Blinds raised.
 Lights turned on.
 ```
 
-## Android Example: Retrofit Facade
+### Android Example: Retrofit Facade
 
 ```kotlin
 // Complex subsystems
@@ -208,6 +516,7 @@ class ApiFacade(private val context: Context) {
 
             Result.success(user)
         } catch (e: Exception) {
+            // Simplified error handling for example purposes.
             Result.failure(Exception(errorHandler.handleError(e)))
         }
     }
@@ -219,6 +528,7 @@ class ApiFacade(private val context: Context) {
             cacheManager.saveToCache("user_${user.id}", Gson().toJson(user))
             Result.success(Unit)
         } catch (e: Exception) {
+            // Simplified error handling for example purposes.
             Result.failure(Exception(errorHandler.handleError(e)))
         }
     }
@@ -233,7 +543,7 @@ class UserRepository(context: Context) {
 }
 ```
 
-## Kotlin Example: Database Facade
+### Kotlin Example: Database Facade
 
 ```kotlin
 // Complex subsystems
@@ -249,7 +559,8 @@ class QueryBuilder {
 
 class ResultProcessor {
     fun <T> processResult(rawData: List<Any>, type: Class<T>): List<T> {
-        // Complex processing logic
+        // Complex processing logic (simplified for example)
+        @Suppress("UNCHECKED_CAST")
         return rawData.map { it as T }
     }
 }
@@ -271,7 +582,7 @@ class DatabaseFacade {
     }
 }
 
-// Simple usage
+// Simple usage (example only)
 fun main() {
     val db = DatabaseFacade()
     val users = db.queryData("users", "age > 18", User::class.java)
@@ -280,47 +591,38 @@ fun main() {
 
 ### Explanation
 
+- **Subsystems** (Lights, Blinds, Projector, MoviePlayer, etc.) are individual components.
+- **Facade** (e.g., `HomeTheaterFacade`, `ApiFacade`, `DatabaseFacade`) provides simple methods that orchestrate multiple subsystems.
+- **Client** interacts only with the facade, not with each subsystem directly.
+- In Android, facades often simplify combinations of network calls, caching, and error handling.
 
-**Explanation**:
+### Use Cases of Facade Pattern
 
-- **Subsystems** (Lights, Blinds, Projector, MoviePlayer) are complex individual components
-- **Facade** (HomeTheaterFacade) provides simple methods (`watchMovie()`, `endMovie()`) that orchestrate multiple subsystems
-- **Client** only interacts with the facade, not the complex subsystems
-- In Android, facades simplify complex operations like network + cache + error handling
+1. **Simplifying Complex External Systems** — database connections, API calls, legacy systems.
+2. **Layering Subsystems** — defining clear boundaries between layers (UI, domain, data).
+3. **Providing Unified Interface** — combining multiple APIs/subsystems into a single entry point.
+4. **Protecting Clients from Changes** — stable facade interface shields clients from subsystem changes.
 
-## Применение
+### Pros
 
-Use Cases of Facade Pattern:
+1. **Simplified Interface** — makes complex systems easier to use.
+2. **Reduced Coupling** — clients depend on the facade instead of subsystems.
+3. **Encapsulation** — hides implementation details.
+4. **Improved Maintainability** — subsystem changes do not directly affect clients.
+5. **Easier Testing** — you can mock the facade instead of all subsystems.
 
-1. **Simplifying Complex External Systems** - Database connections, API calls
-2. **Layering Subsystems** - Define clear boundaries between subsystems
-3. **Providing Unified Interface** - Combine multiple APIs into single interface
-4. **Protecting Clients from Changes** - Stable facade interface shields clients from subsystem changes
+### Cons
 
-## Преимущества И Недостатки
+1. **Increased Complexity** — adds an extra abstraction layer.
+2. **Reduced Flexibility** — may limit access to advanced subsystem features.
+3. **Overengineering Risk** — unnecessary for simple systems.
+4. **Potential Performance Overhead** — extra indirection.
+5. **God Object Risk** — facade may grow too large.
 
-### Pros (Преимущества)
-
-
-1. **Simplified Interface** - Makes complex systems easy to use
-2. **Reduced Coupling** - Clients depend on facade, not subsystems
-3. **Encapsulation** - Hides implementation details
-4. **Improved Maintainability** - Changes to subsystems don't affect clients
-5. **Easier Testing** - Can mock the facade instead of all subsystems
-
-### Cons (Недостатки)
-
-
-1. **Increased Complexity** - Additional abstraction layer
-2. **Reduced Flexibility** - May limit access to advanced features
-3. **Overengineering** - Unnecessary for simple systems
-4. **Potential Performance Overhead** - Extra indirection layer
-5. **God Object Risk** - Facade can become too large
-
-## Best Practices
+### Best Practices
 
 ```kotlin
-// - DO: Use facade for complex subsystems
+// DO: Use facade for complex subsystems
 class PaymentFacade(
     private val validator: CardValidator,
     private val processor: PaymentProcessor,
@@ -334,97 +636,62 @@ class PaymentFacade(
     }
 }
 
-// - DO: Keep facade focused
+// DO: Keep facade focused
 class NetworkFacade {
-    suspend fun get(url: String): String { /* ... */ }
-    suspend fun post(url: String, body: String): String { /* ... */ }
+    suspend fun get(url: String): String { /* simplified example */ TODO("Implement HTTP GET") }
+    suspend fun post(url: String, body: String): String { /* simplified example */ TODO("Implement HTTP POST") }
 }
 
-// - DO: Allow direct subsystem access when needed
-class SystemFacade {
+// DO: Allow direct subsystem access when needed
+class SystemFacade(private val subsystem: AdvancedSubsystem) {
     val advancedFeatures: AdvancedSubsystem get() = subsystem
 }
 
-// - DON'T: Make facade a god object
-// - DON'T: Put business logic in facade
-// - DON'T: Use facade for simple systems
+// DON'T: Make facade a god object
+// DON'T: Put complex business logic in facade
+// DON'T: Use facade for simple systems
 ```
 
-**English**: **Facade** is a structural pattern that provides a simplified interface to complex subsystems. **Problem**: Complex system is hard to use. **Solution**: Create facade that wraps subsystems and provides simple methods. **Use when**: (1) Complex subsystem needs simple interface, (2) Want to reduce dependencies, (3) Layering system. **Android**: Network + cache + error handling, database operations. **Pros**: simplification, decoupling, easier maintenance. **Cons**: added complexity, reduced flexibility. **Examples**: Home theater system, API facade, database facade.
+### Summary (EN)
 
-## Links
+Facade is a structural pattern that provides a simplified interface to complex subsystems.
+Use it when:
+- a complex subsystem needs a simple entry point,
+- you want to reduce coupling between clients and implementation details,
+- you introduce a stable layer between modules.
 
-- [Facade Design Pattern](https://howtodoinjava.com/design-patterns/structural/facade-design-pattern/)
-- [Facade pattern](https://en.wikipedia.org/wiki/Facade_pattern)
-- [Facade Design Pattern in Android](https://medium.com/@naimish-trivedi/facade-design-pattern-in-android-3eb959df5478)
-- [Facade Design Pattern in Kotlin](https://www.javaguides.net/2023/10/facade-design-pattern-in-kotlin.html)
+Common examples: home theater system, API facade (network + cache + error handling), database facade.
 
-## Further Reading
+## Дополнительные вопросы (RU)
 
-- [Facade](https://refactoring.guru/design-patterns/facade)
-- [Facade Method Design Pattern](https://www.geeksforgeeks.org/facade-design-pattern-introduction/)
+- Чем паттерн Facade отличается от паттернов Adapter и Proxy?
+- Когда использование Facade может стать вредным (например, god object, чрезмерное сокрытие деталей)?
+- Как бы вы применили Facade в слоистой архитектуре реального проекта?
 
----
-*Source: Kirchhoff Android Interview Questions*
+## Follow-ups
 
+- How does Facade differ from Adapter and Proxy patterns?
+- When can using a Facade become harmful (e.g., god object, hiding too much)?
+- How would you apply Facade in a layered architecture for a real project?
 
-## Ответ (RU)
+## Ссылки (RU)
 
-### Определение
-
-Паттерн Facade — это структурный паттерн проектирования, целью которого является **сокрытие внутренней сложности за единым интерфейсом, который выглядит простым снаружи**. Он предоставляет упрощенный интерфейс к сложной подсистеме.
-
-### Проблемы, Которые Решает
-
-Какие проблемы может решить паттерн проектирования Facade?
-
-1. **Чтобы сделать сложную подсистему проще в использовании, должен быть предоставлен простой интерфейс для набора интерфейсов в подсистеме**
-2. **Зависимости от подсистемы должны быть минимизированы**
-
-### Ключевые Моменты
-
-Ключевые моменты паттерна Facade:
-
-1. **Упрощение** - предоставляет упрощенный интерфейс к сложной системе классов
-2. **Разделение ответственности** - отделяет клиентский код от внутренней работы системы
-3. **Облегчение поддержки** - позволяет проще поддерживать код, так как изменения в базовых подсистемах не влияют напрямую на клиентский код
-
-### Объяснение
-
-**Пояснение**:
-
-- **Подсистемы (Subsystems)** (Lights, Blinds, Projector, MoviePlayer) — это сложные отдельные компоненты
-- **Фасад (Facade)** (HomeTheaterFacade) предоставляет простые методы (`watchMovie()`, `endMovie()`), которые оркеструют множество подсистем
-- **Клиент (Client)** взаимодействует только с фасадом, а не со сложными подсистемами
-- В Android фасады упрощают сложные операции, такие как сеть + кэш + обработка ошибок
-
-### Преимущества
-
-1. **Упрощенный интерфейс** - делает сложные системы простыми в использовании
-2. **Уменьшение связанности** - клиенты зависят от фасада, а не от подсистем
-3. **Инкапсуляция** - скрывает детали реализации
-4. **Улучшенная поддерживаемость** - изменения в подсистемах не влияют на клиентов
-5. **Облегчение тестирования** - можно мокировать фасад вместо всех подсистем
-
-### Недостатки
-
-1. **Увеличение сложности** - дополнительный уровень абстракции
-2. **Уменьшение гибкости** - может ограничить доступ к продвинутым возможностям
-3. **Избыточная инженерия** - не нужен для простых систем
-4. **Потенциальные накладные расходы производительности** - дополнительный уровень косвенности
-5. **Риск God Object** - фасад может стать слишком большим
-
-
----
+- [[c-architecture-patterns]]
+- [[c-computer-science]]
+- [[q-adapter-pattern--cs--medium]]
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+- [[q-adapter-pattern--cs--medium]]
 
-### Structural Patterns
+## References
 
-### Creational Patterns
+- [Facade Design Pattern](https://howtodoinjava.com/design-patterns/structural/facade-design-pattern/)
+- [Facade pattern](https://en.wikipedia.org/wiki/Facade_pattern)
+- [Facade](https://refactoring.guru/design-patterns/facade)
+- [Facade Method Design Pattern](https://www.geeksforgeeks.org/facade-design-pattern-introduction/)
+- [Facade Design Pattern in Android](https://medium.com/@naimish-trivedi/facade-design-pattern-in-android-3eb959df5478)
+- [Facade Design Pattern in Kotlin](https://www.javaguides.net/2023/10/facade-design-pattern-in-kotlin.html)
 
-### Behavioral Patterns
-
+---
+*Source: Kirchhoff Android Interview Questions*

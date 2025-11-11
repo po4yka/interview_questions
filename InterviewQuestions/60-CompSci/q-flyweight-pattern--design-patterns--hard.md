@@ -1,82 +1,80 @@
 ---
-id: design-patterns-012
+id: cs-012
 title: "Flyweight Pattern / Паттерн легкий вес"
 aliases: [Flyweight Pattern, Паттерн легкий вес]
-topic: design-patterns
-subtopics: [flyweight, memory-optimization, structural-patterns]
+topic: cs
+subtopics: [design-patterns, memory-optimization, structural-patterns]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-design-patterns
-related: [c-design-patterns]
+moc: moc-cs
+related: [c-computer-science, c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [design-patterns, difficulty/hard, flyweight, gof-patterns, memory-optimization, structural-patterns]
+updated: 2025-11-11
+tags: [cs, difficulty/hard, flyweight, gof-patterns, memory-optimization, structural-patterns]
+
 ---
-
-# Flyweight Pattern
-
-# Question (EN)
-> What is the Flyweight pattern? When and why should it be used?
 
 # Вопрос (RU)
 > Что такое паттерн Flyweight? Когда и зачем его использовать?
 
+# Question (EN)
+> What is the Flyweight pattern? When and why should it be used?
+
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
+### Определение
 
-**Flyweight (Легковес/Приспособленец)** - это структурный паттерн проектирования, который позволяет использовать разделяемые объекты одновременно в большом количестве, вместо создания отдельного объекта для каждого случая. Приспособленец экономит память за счёт разделения общего состояния, вынесенного в один объект, между множеством объектов.
+**Flyweight (Легковес/Приспособленец)** — это структурный паттерн проектирования, который позволяет эффективно работать с очень большим количеством похожих объектов за счёт разделения общего (внутреннего, intrinsic) состояния между ними. Общие, как правило неизменяемые данные хранятся в разделяемых объектах, а контекстно-зависимое (внешнее, extrinsic) состояние передаётся снаружи при использовании.
 
-### Definition
+### Проблемы, которые решает
 
+Паттерн Flyweight решает следующие задачи:
 
-A flyweight is an object that **minimizes memory usage by sharing as much data as possible with other similar objects**. It's a way to use objects in large numbers when a simple repeated representation would use an unacceptable amount of memory. Often some parts of the object state can be shared, and it's common practice to hold them in external data structures and pass them temporarily when used.
+1. Необходимость эффективно поддерживать огромное количество однотипных объектов.
+2. Необходимость избежать дублирования тяжёлого общего состояния в каждом объекте.
 
-### Problems it Solves
+Пример: в текстовом редакторе хранить полный набор данных (глиф, метрики, шрифт) для каждого символа дорого. Вместо этого глифы и метрики шрифта разделяются, а позиции и оформление хранятся отдельно.
 
+### Решение
 
-The flyweight design pattern solves problems like:
+Определяются объекты `Flyweight`, которые:
 
-1. **Large numbers of objects should be supported efficiently**
-2. **Creating large numbers of objects should be avoided**
+- Хранят внутреннее (инвариантное, общее) состояние.
+- Предоставляют операции, принимающие внешнее (вариативное, контекстное) состояние как параметры.
 
-When representing large text documents, for example, creating an object for each character would result in a huge number of objects that could not be processed efficiently.
+Клиенты:
 
-### Solution
+- Получают flyweight-объекты из фабрики/кэша и переиспользуют их.
+- Передают внешнее состояние (позиция, цвет, контекст) при каждом вызове.
 
+Это значительно уменьшает объём дублируемых данных без отказа от объектной модели.
 
-Define **`Flyweight`** objects that:
+### Ключевые концепции
 
-- Store **intrinsic (invariant) state** that can be shared
-- Provide an interface through which **extrinsic (variant) state** can be passed in
+- Внутреннее состояние (intrinsic): общее, разделяемое, хранится внутри Flyweight и должно быть по сути неизменяемым (например, глиф символа, bitmap иконки, внешний вид частицы).
+- Внешнее состояние (extrinsic): контекстно-зависимое, не разделяется, передаётся клиентом (например, позиция, цвет, скорость, конкретный контекст использования).
 
-This enables clients to (1) reuse (share) Flyweight objects and (2) pass in extrinsic state when they invoke a Flyweight operation. This greatly reduces the number of physically created objects.
-
-## Ключевые Концепции
-
-**Intrinsic state**: Shared, stored in Flyweight (e.g., character glyph, icon bitmap)
-**Extrinsic state**: Context-dependent, passed by client (e.g., character position, color)
-
-## Пример: Text Editor Characters
+### Пример: символы в текстовом редакторе
 
 ```kotlin
-// Flyweight interface
+// Интерфейс Flyweight
 interface CharacterFlyweight {
     fun display(row: Int, column: Int, font: String)
 }
 
-// Concrete flyweight
+// Конкретный flyweight: внутреннее состояние — сам символ
 class Character(private val char: Char) : CharacterFlyweight {
     override fun display(row: Int, column: Int, font: String) {
         println("Displaying '$char' at ($row, $column) with font $font")
     }
 }
 
-// Flyweight factory
+// Фабрика Flyweight: управляет общими экземплярами Character
 class CharacterFactory {
     private val characters = mutableMapOf<Char, CharacterFlyweight>()
 
@@ -90,7 +88,7 @@ class CharacterFactory {
     fun getTotalFlyweights() = characters.size
 }
 
-// Client
+// Клиент: хранит внешнее состояние (позицию) отдельно
 class TextEditor {
     private val factory = CharacterFactory()
     private val document = mutableListOf<Triple<CharacterFlyweight, Int, Int>>()
@@ -102,63 +100,357 @@ class TextEditor {
 
     fun display(font: String) {
         document.forEach { (char, row, col) ->
-            char.display(row, col, font)
+            char.display(row, col, font) // font — внешнее состояние
         }
         println("Total unique characters: ${factory.getTotalFlyweights()}")
     }
 }
-
-fun main() {
-    val editor = TextEditor()
-    val text = "HELLO"
-
-    text.forEachIndexed { index, char ->
-        editor.insertCharacter(char, 0, index)
-    }
-
-    editor.display("Arial")
-}
 ```
 
-**Output**:
-```
-Creating new flyweight for 'H'
-Creating new flyweight for 'E'
-Creating new flyweight for 'L'
-Creating new flyweight for 'O'
-Displaying 'H' at (0, 0) with font Arial
-Displaying 'E' at (0, 1) with font Arial
-Displaying 'L' at (0, 2) with font Arial
-Displaying 'L' at (0, 3) with font Arial
-Displaying 'O' at (0, 4) with font Arial
-Total unique characters: 4
-```
+Здесь символ (`char`) и логика его отображения являются внутренним состоянием, а позиция и шрифт — внешним.
 
-## Android Example: Icon Cache
+### Android пример: кэш иконок
 
 ```kotlin
-// Flyweight
+// Flyweight: общий bitmap для заданного resourceId
 data class IconBitmap(
-    val resourceId: Int,
     val bitmap: Bitmap
 )
 
-// Flyweight factory with memory cache
+// Фабрика Flyweight с кэшем в памяти (упрощённо)
 class IconCache(private val context: Context) {
-    private val cache = LruCache<Int, IconBitmap>(
-        (Runtime.getRuntime().maxMemory() / 1024 / 8).toInt()
-    )
+    // Для краткости считаем размер единичным. В реальности sizeOf должен учитывать байты.
+    private val cache = object : LruCache<Int, IconBitmap>(128) {}
 
     fun getIcon(resourceId: Int): IconBitmap {
-        return cache.get(resourceId) ?: run {
-            val bitmap = BitmapFactory.decodeResource(
-                context.resources,
-                resourceId
-            )
-            val icon = IconBitmap(resourceId, bitmap)
-            cache.put(resourceId, icon)
-            icon
+        val cached = cache.get(resourceId)
+        if (cached != null) return cached
+
+        val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+        val icon = IconBitmap(bitmap)
+        cache.put(resourceId, icon)
+        return icon
+    }
+
+    fun clear() = cache.evictAll()
+}
+
+// Использование в RecyclerView
+class AppAdapter(
+    private val apps: List<AppInfo>,
+    private val iconCache: IconCache
+) : RecyclerView.Adapter<AppViewHolder>() {
+
+    override fun onBindViewHolder(holder: AppViewHolder, position: Int) {
+        val app = apps[position]
+        val icon = iconCache.getIcon(app.iconResourceId)
+        holder.imageView.setImageBitmap(icon.bitmap)
+        holder.textView.text = app.name
+    }
+
+    override fun getItemCount(): Int = apps.size
+
+    // ... onCreateViewHolder и др.
+}
+```
+
+Тяжёлые bitmap-ы общие для всех элементов, используют идею Flyweight.
+
+### Kotlin пример: частицы в игре
+
+```kotlin
+// Flyweight — общий внешний вид частицы (внутреннее состояние)
+data class ParticleType(
+    val color: String,
+    val sprite: String,
+    val size: Int
+) {
+    fun draw(x: Int, y: Int, velocity: Pair<Int, Int>) {
+        println("Drawing $color $sprite particle at ($x, $y) moving $velocity")
+    }
+}
+
+// Фабрика Flyweight
+object ParticleFactory {
+    private val types = mutableMapOf<String, ParticleType>()
+
+    fun getParticleType(
+        color: String,
+        sprite: String,
+        size: Int
+    ): ParticleType {
+        val key = "$color-$sprite-$size"
+        return types.getOrPut(key) {
+            println("Creating new particle type: $key")
+            ParticleType(color, sprite, size)
         }
+    }
+}
+
+// Частица с внешним состоянием (позиция, скорость)
+data class Particle(
+    val type: ParticleType,
+    var x: Int,
+    var y: Int,
+    var velocity: Pair<Int, Int>
+) {
+    fun move() {
+        x += velocity.first
+        y += velocity.second
+    }
+
+    fun draw() = type.draw(x, y, velocity)
+}
+
+// Система с большим количеством частиц и немногими типами
+class ParticleSystem {
+    private val particles = mutableListOf<Particle>()
+
+    fun addParticle(
+        x: Int, y: Int,
+        color: String, sprite: String, size: Int,
+        velocity: Pair<Int, Int>
+    ) {
+        val type = ParticleFactory.getParticleType(color, sprite, size)
+        particles.add(Particle(type, x, y, velocity))
+    }
+
+    fun update() {
+        particles.forEach { it.move() }
+    }
+
+    fun render() {
+        particles.forEach { it.draw() }
+    }
+}
+```
+
+Экономия памяти достигается за счёт разделения `ParticleType` (внутреннее состояние), при этом каждая `Particle` хранит только свои координаты и скорость.
+
+### Пояснение
+
+- Внутреннее состояние (глифы, внешний вид частицы, bitmap иконки) разделяется между многими объектами и должно быть по сути неизменяемым.
+- Внешнее состояние (позиция, скорость, текущий шрифт, контекст) передаётся при каждом использовании.
+- Фабрика или кэш управляет пулом flyweight-объектов, обеспечивая их переиспользование.
+- Экономия памяти достигается за счёт избегания дублирования тяжёлых данных (а не полного устранения объектов).
+- Типичные применения: кэши иконок/bitmap, текстовый рендеринг, пулы строк, системы частиц, тайловые карты.
+
+### Применение
+
+Используйте Flyweight, если одновременно выполняются условия:
+
+- Нужны очень многие однотипные объекты.
+- У них есть существенная доля общего, преимущественно неизменяемого состояния.
+- Важна экономия памяти.
+- Дополнительная сложность разделения состояния оправдана.
+
+Примеры:
+
+- Текстовые редакторы: общие глифы и метрики шрифтов.
+- Игровые частицы: общие типы частиц при разных координатах.
+- Кэширование иконок: общие bitmap для повторяющихся иконок.
+- Пулы строк / интернирование строк.
+- Тайловые карты и ресурсы, которые повторяются очень часто.
+
+### Преимущества
+
+1. Экономия памяти — сокращает дублирование общего состояния.
+2. Повышение производительности — меньше тяжёлых объектов для создания и GC.
+3. Масштабируемость — позволяет обрабатывать очень большие наборы объектов.
+4. Централизованное управление — фабрика/кэш управляет жизненным циклом flyweight.
+
+### Недостатки
+
+1. Сложность — нужно аккуратно выделить внутреннее и внешнее состояние.
+2. Нагрузка на CPU — дополнительные обращения к фабрике/кэшу и косвенность.
+3. Требование неизменяемости — внутреннее состояние должно быть по сути неизменяемым.
+4. Потокобезопасность — фабрика и кэш должны быть корректно синхронизированы в многопоточной среде.
+
+### Лучшие практики
+
+```kotlin
+// ИСПОЛЬЗУЙТЕ: когда есть большие массивы однотипных элементов с общим тяжёлым состоянием
+class TileMap {
+    private val tileFactory = TileFactory()
+    private val map = Array(1000) { Array(1000) { TileType.GRASS } }
+
+    fun setTile(x: Int, y: Int, type: TileType) {
+        map[x][y] = type
+    }
+
+    fun render() {
+        map.forEachIndexed { x, row ->
+            row.forEachIndexed { y, type ->
+                tileFactory.getTile(type).draw(x, y)
+            }
+        }
+    }
+}
+
+// ДЕЛАЙТЕ: внутреннее состояние flyweight неизменяемым
+data class Tile(val image: String, val walkable: Boolean) {
+    fun draw(x: Int, y: Int) { /* ... */ }
+}
+
+// ДЕЛАЙТЕ: аккуратно выбирайте семантику ссылок в кэшах
+// (WeakHashMap ослабляет только ключи; значения могут оставаться сильно достижимыми.)
+class ResourceCache {
+    private val cache = WeakHashMap<String, Resource>()
+}
+
+// ДЕЛАЙТЕ: комбинируйте с паттерном Factory для централизованного шаринга
+object FontCache {
+    private val fonts = mutableMapOf<Pair<String, Int>, Typeface>()
+
+    fun getFont(name: String, size: Int): Typeface {
+        return fonts.getOrPut(name to size) {
+            // Создать и вернуть Typeface
+        }
+    }
+}
+
+// НЕ ДЕЛАЙТЕ: использовать Flyweight там, где объекты почти не переиспользуются.
+// НЕ ДЕЛАЙТЕ: шарить внешнее (изменяемое, контекстное) состояние между клиентами.
+// НЕ ДЕЛАЙТЕ: делать flyweight изменяемым так, чтобы это неожиданно влияло на всех клиентов.
+```
+
+### Краткое резюме (RU)
+
+Flyweight — структурный паттерн, минимизирующий использование памяти за счёт разделения общего, по сути неизменяемого состояния между множеством похожих объектов и передачи внешнего состояния извне. Экономия достигается за счёт избежания дублирования тяжёлых общих данных, а не за счёт полного устранения объектов. Применяется при очень большом количестве однотипных объектов с общей тяжёлой частью данных и значимой нагрузкой на память. Типичные кейсы: глифы при рендеринге текста, кэши иконок/bitmap, пулы строк, системы частиц, тайловые карты.
+
+### Дополнительные вопросы (RU)
+
+- Как вы бы комбинировали Flyweight с Factory или пулом объектов на вашей платформе?
+- В каких случаях Flyweight станет преждевременной оптимизацией или излишним усложнением?
+- Как спроектировать потокобезопасную Flyweight-фабрику для высоконагруженной системы?
+- Как соотнести Flyweight с кэшем на основе `WeakHashMap` или мемоизацией тяжёлых объектов?
+- Как с помощью профилирования/метрик проверить, что Flyweight действительно даёт выигрыш в вашей системе?
+
+### Похожие вопросы (RU)
+
+- [[q-abstract-factory-pattern--cs--medium]]
+
+### Ссылки (RU)
+
+- [Flyweight pattern](https://en.wikipedia.org/wiki/Flyweight_pattern)
+- [Flyweight Design Pattern](https://howtodoinjava.com/design-patterns/structural/flyweight-design-pattern/)
+- [Flyweight](https://refactoring.guru/design-patterns/flyweight)
+- [Flyweight Design Pattern](https://sourcemaking.com/design_patterns/flyweight)
+
+---
+
+## Answer (EN)
+
+Flyweight is a structural design pattern that lets you use a large number of objects efficiently by sharing common (intrinsic) state instead of storing it separately in each object. It reduces memory consumption by separating shared, immutable data from per-use, context-specific (extrinsic) data.
+
+### Definition
+
+A flyweight is an object that:
+
+- Minimizes memory usage by sharing as much data as possible with other similar objects.
+- Stores intrinsic (shared) state.
+- Accepts extrinsic (context-dependent) state as parameters when performing operations.
+
+It's used when you need many fine-grained objects and a naive representation would consume unacceptable memory.
+
+### Problems it Solves
+
+The Flyweight pattern solves problems such as:
+
+1. Need to efficiently support a very large number of similar objects.
+2. Need to avoid duplicating heavy, shared state across those objects.
+
+Example: In a text editor, creating a full object with font metrics and glyph data for every single character leads to huge memory consumption. With Flyweight, glyph data is shared, while positions and formatting are stored externally.
+
+### Solution
+
+Define `Flyweight` objects that:
+
+- Store intrinsic (invariant, shared) state.
+- Expose methods that take extrinsic (variant, context) state as parameters.
+
+Clients:
+
+- Reuse flyweight instances (usually via a factory that manages a pool / cache).
+- Provide extrinsic state upon each use (e.g., position, color, context).
+
+This reduces the amount of duplicated data while preserving object-oriented structure.
+
+### Key Concepts
+
+- Intrinsic state: Shared, stored in Flyweight (e.g., character glyph, icon bitmap, particle appearance).
+- Extrinsic state: Context-dependent, passed by client (e.g., position, color, velocity, current context).
+
+### Example: Text Editor Characters
+
+```kotlin
+// Flyweight interface
+interface CharacterFlyweight {
+    fun display(row: Int, column: Int, font: String)
+}
+
+// Concrete flyweight: intrinsic state is the character itself
+class Character(private val char: Char) : CharacterFlyweight {
+    override fun display(row: Int, column: Int, font: String) {
+        println("Displaying '$char' at ($row, $column) with font $font")
+    }
+}
+
+// Flyweight factory: manages shared Character instances
+class CharacterFactory {
+    private val characters = mutableMapOf<Char, CharacterFlyweight>()
+
+    fun getCharacter(char: Char): CharacterFlyweight {
+        return characters.getOrPut(char) {
+            println("Creating new flyweight for '$char'")
+            Character(char)
+        }
+    }
+
+    fun getTotalFlyweights() = characters.size
+}
+
+// Client: stores extrinsic state (position) separately
+class TextEditor {
+    private val factory = CharacterFactory()
+    private val document = mutableListOf<Triple<CharacterFlyweight, Int, Int>>()
+
+    fun insertCharacter(char: Char, row: Int, column: Int) {
+        val flyweight = factory.getCharacter(char)
+        document.add(Triple(flyweight, row, column))
+    }
+
+    fun display(font: String) {
+        document.forEach { (char, row, col) ->
+            char.display(row, col, font) // font is extrinsic state
+        }
+        println("Total unique characters: ${factory.getTotalFlyweights()}")
+    }
+}
+```
+
+### Android Example: Icon Cache
+
+```kotlin
+// Flyweight: shared bitmap for a given resource ID
+data class IconBitmap(
+    val bitmap: Bitmap
+)
+
+// Flyweight factory with memory cache (simplified)
+class IconCache(private val context: Context) {
+    // NOTE: For brevity we treat each entry as size=1.
+    // In production, override sizeOf to account for bitmap size in bytes.
+    private val cache = object : LruCache<Int, IconBitmap>(128) {}
+
+    fun getIcon(resourceId: Int): IconBitmap {
+        val cached = cache.get(resourceId)
+        if (cached != null) return cached
+
+        val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+        val icon = IconBitmap(bitmap)
+        cache.put(resourceId, icon)
+        return icon
     }
 
     fun clear() = cache.evictAll()
@@ -177,14 +469,16 @@ class AppAdapter(
         holder.textView.text = app.name
     }
 
-    // ...
+    override fun getItemCount(): Int = apps.size
+
+    // ... onCreateViewHolder, etc.
 }
 ```
 
-## Kotlin Example: Game Particles
+### Kotlin Example: Game Particles
 
 ```kotlin
-// Flyweight - shared particle appearance
+// Flyweight - shared particle appearance (intrinsic state)
 data class ParticleType(
     val color: String,
     val sprite: String,
@@ -212,7 +506,7 @@ object ParticleFactory {
     }
 }
 
-// Particle with extrinsic state
+// Particle with extrinsic state (position, velocity)
 data class Particle(
     val type: ParticleType,
     var x: Int,
@@ -227,7 +521,7 @@ data class Particle(
     fun draw() = type.draw(x, y, velocity)
 }
 
-// Game with many particles
+// Game with many particles sharing a few types
 class ParticleSystem {
     private val particles = mutableListOf<Particle>()
 
@@ -248,69 +542,53 @@ class ParticleSystem {
         particles.forEach { it.draw() }
     }
 }
-
-fun main() {
-    val system = ParticleSystem()
-
-    // Create 1000 particles, but only few types
-    repeat(1000) {
-        system.addParticle(
-            x = it % 100,
-            y = it / 100,
-            color = if (it % 2 == 0) "red" else "blue",
-            sprite = "circle",
-            size = 5,
-            velocity = (1 to -1)
-        )
-    }
-
-    system.render()
-}
 ```
 
 ### Explanation
 
+- Intrinsic state (glyph, particle appearance, bitmap) is shared in flyweight instances and should be effectively immutable.
+- Extrinsic state (position, velocity, current font, context) is supplied by the client on each use.
+- A factory (or cache) manages the pool of flyweights and ensures reuse.
+- Memory savings come from avoiding duplication of heavy shared data, not from eliminating all objects.
+- Typical uses: icon/bitmap caches, glyph sharing in text rendering, string interning, particle systems.
 
-**Explanation**:
+### Usage
 
-- **Intrinsic state** (Character glyph, Particle appearance) is shared in flyweight
-- **Extrinsic state** (position, velocity) is passed by client
-- **Factory** manages flyweight pool, ensures sharing
-- **Memory savings** - Instead of 1000 objects, only few shared types
-- **Android**: Icon caches, string pools, typeface caching
+Use Flyweight when all of the following hold:
 
-## Применение
+- You have a very large number of similar objects.
+- These objects share substantial, mostly immutable state.
+- Memory footprint is a concern.
+- The cost/complexity of separating intrinsic/extrinsic state is justified.
 
-Use cases:
+Examples:
 
-- **Text editors** - Glyph objects for characters
-- **Game particles** - Shared particle types with different positions
-- **Icon caching** - Shared bitmaps for repeated icons
-- **String pools** - Shared string literals
-- **Android resources** - Drawable/Bitmap caching
+- Text editors: shared glyph / font metrics for characters.
+- Game particles: shared particle types with different positions.
+- Icon caching: shared bitmaps for repeated icons.
+- `String` pools / interning: shared string literals.
+- Resource caching (e.g., typefaces, drawables).
 
-## Преимущества И Недостатки
+### Pros and Cons
 
-### Pros (Преимущества)
+#### Pros
 
+1. Memory savings: drastically reduces duplicated shared state.
+2. Performance: fewer heavy objects to allocate and collect.
+3. Scalability: enables handling of large object graphs.
+4. Centralized management: factory/cache controls flyweight lifecycle.
 
-1. **Memory savings** - Drastically reduces memory usage
-2. **Performance** - Fewer objects to create and garbage collect
-3. **Scalability** - Can handle large numbers of objects
-4. **Centralized management** - Factory controls object lifecycle
+#### Cons
 
-### Cons (Недостатки)
+1. Increased complexity: must carefully separate intrinsic and extrinsic state.
+2. CPU trade-off: extra indirection and cache lookups may add overhead.
+3. Immutability constraint: intrinsic shared state should be effectively immutable.
+4. Thread safety: flyweight factory/cache and shared state management must be thread-safe in concurrent environments.
 
-
-1. **Complexity** - Separating intrinsic/extrinsic state is complex
-2. **CPU trade-off** - Saves RAM but may use more CPU for lookups
-3. **Immutability** - Flyweights must be immutable
-4. **Thread safety** - Factory must be thread-safe
-
-## Best Practices
+### Best Practices
 
 ```kotlin
-// - DO: Use for large numbers of similar objects
+// DO: Use for large numbers of similar objects sharing heavy state
 class TileMap {
     private val tileFactory = TileFactory()
     private val map = Array(1000) { Array(1000) { TileType.GRASS } }
@@ -328,103 +606,62 @@ class TileMap {
     }
 }
 
-// - DO: Make flyweights immutable
+// DO: Make flyweight intrinsic state immutable
 data class Tile(val image: String, val walkable: Boolean) {
     fun draw(x: Int, y: Int) { /* ... */ }
 }
 
-// - DO: Use with weak references for cache
+// DO: Consider reference semantics carefully in caches
+// (WeakHashMap only weakens keys; values may still be strongly referenced.)
 class ResourceCache {
     private val cache = WeakHashMap<String, Resource>()
 }
 
-// - DO: Combine with Factory pattern
+// DO: Combine with Factory pattern for centralized sharing
 object FontCache {
     private val fonts = mutableMapOf<Pair<String, Int>, Typeface>()
 
     fun getFont(name: String, size: Int): Typeface {
         return fonts.getOrPut(name to size) {
-            // Create font
+            // Create and return Typeface instance
         }
     }
 }
 
-// - DON'T: Use for mutable objects
-// - DON'T: Use when objects aren't reused
-// - DON'T: Share extrinsic state
+// DON'T: Use for objects that are not heavily reused.
+// DON'T: Share extrinsic (mutable, context-specific) state across clients.
+// DON'T: Make flyweights mutable in ways that affect all clients unexpectedly.
 ```
 
-**English**: **Flyweight** is a structural pattern that minimizes memory by sharing data among similar objects. **Problem**: Large numbers of similar objects consume excessive memory. **Solution**: Share intrinsic (common) state in flyweights, pass extrinsic (unique) state from client. **Use when**: (1) App uses large numbers of objects, (2) Memory is limited, (3) Objects have shared state. **Android**: Icon/bitmap caching, string pools, typeface cache. **Pros**: memory savings, performance, scalability. **Cons**: complexity, CPU overhead, immutability required. **Examples**: Text editor characters, game particles, tile maps, icon caches.
+### English summary
 
-## Links
+Flyweight is a structural pattern that minimizes memory by sharing intrinsic, effectively immutable state among many similar objects while passing extrinsic state from the client. Memory savings are achieved by avoiding duplication of heavy shared data, not by eliminating objects altogether. Use it when you have huge numbers of similar objects with substantial shared data and memory pressure is important. Typical uses: glyphs in text rendering, icon/bitmap caches, string pools, particle systems, tile maps. Pros: memory savings, performance, scalability. Cons: added complexity, CPU/cache overhead, need for immutability and thread-safe factories.
+
+### Links
 
 - [Flyweight pattern](https://en.wikipedia.org/wiki/Flyweight_pattern)
 - [Flyweight Design Pattern](https://howtodoinjava.com/design-patterns/structural/flyweight-design-pattern/)
 
-## Further Reading
+### Further Reading
 
 - [Flyweight](https://refactoring.guru/design-patterns/flyweight)
 - [Flyweight Design Pattern](https://sourcemaking.com/design_patterns/flyweight)
 
 ---
-*Source: Kirchhoff Android Interview Questions*
 
+## Follow-ups
 
-## Ответ (RU)
-
-### Определение
-
-**Flyweight (Легковес)** - это объект, который **минимизирует использование памяти путем совместного использования максимального количества данных с другими похожими объектами**. Это способ использования объектов в большом количестве, когда простое повторяющееся представление потребует неприемлемого объема памяти. Часто некоторые части состояния объекта могут быть разделены, и принято хранить их во внешних структурах данных и передавать временно при использовании.
-
-### Проблемы, Которые Решает
-
-Паттерн проектирования Flyweight решает такие проблемы:
-
-1. **Необходимость эффективной поддержки большого количества объектов**
-2. **Необходимость избегать создания большого количества объектов**
-
-Например, при представлении больших текстовых документов создание объекта для каждого символа приведет к огромному количеству объектов, которые не могут быть обработаны эффективно.
-
-### Решение
-
-Определите объекты **`Flyweight`**, которые:
-
-- Хранят **внутреннее (инвариантное) состояние**, которое может быть разделено
-- Предоставляют интерфейс, через который может быть передано **внешнее (вариантное) состояние**
-
-Это позволяет клиентам (1) повторно использовать (разделять) объекты Flyweight и (2) передавать внешнее состояние при вызове операции Flyweight. Это значительно уменьшает количество физически созданных объектов.
-
-### Объяснение
-
-**Пояснение**:
-
-- **Внутреннее состояние** (глиф символа, внешний вид частицы) разделяется в flyweight
-- **Внешнее состояние** (позиция, скорость) передается клиентом
-- **Factory** управляет пулом flyweight, обеспечивает разделение
-- **Экономия памяти** - Вместо 1000 объектов только несколько разделяемых типов
-- **Android**: Кэши иконок, пулы строк, кэширование шрифтов
-
-### Pros (Преимущества)
-
-1. **Экономия памяти** - Значительно уменьшает использование памяти
-2. **Производительность** - Меньше объектов для создания и сборки мусора
-3. **Масштабируемость** - Может обрабатывать большое количество объектов
-4. **Централизованное управление** - Factory контролирует жизненный цикл объектов
-
-### Cons (Недостатки)
-
-1. **Сложность** - Разделение внутреннего/внешнего состояния сложно
-2. **Компромисс CPU** - Экономит RAM, но может использовать больше CPU для поиска
-3. **Неизменяемость** - Flyweight должны быть неизменяемыми
-4. **Потокобезопасность** - Factory должна быть потокобезопасной
-
-
----
+- How would you combine Flyweight with Factory or Pooling in your platform of choice?
+- When would Flyweight be an over-optimization or introduce unnecessary complexity?
+- How would you design a thread-safe Flyweight factory for a high-concurrency system?
+- How does Flyweight compare to using a `WeakHashMap`-based cache or memoization for heavy objects?
+- How would you detect (with profiling/metrics) that Flyweight is actually providing benefits in your system?
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+- [[q-abstract-factory-pattern--cs--medium]]
 
-### Advanced Patterns
+## References
 
+- [[c-computer-science]]
+- [[c-architecture-patterns]]

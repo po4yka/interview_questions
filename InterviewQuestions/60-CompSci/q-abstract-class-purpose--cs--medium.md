@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-inheritance, c-oop-principles]
+related: [c-inheritance, c-computer-science]
 created: 2025-10-15
-updated: 2025-01-25
-tags: [abstract-class, difficulty/medium, inheritance, kotlin, oop, template-method]
-sources: [https://kotlinlang.org/docs/inheritance.html]
+updated: 2025-11-11
+tags: [abstract-class, difficulty/medium, inheritance, oop, template-method]
+sources: ["https://en.wikipedia.org/wiki/Abstract_type"]
+
 ---
 
 # Вопрос (RU)
@@ -43,7 +44,7 @@ Abstract class - класс, который не может быть инста�
 
 **Применение:**
 ```kotlin
-// ✅ Абстрактный класс для геометрических фигур
+// Абстрактный класс для геометрических фигур
 abstract class Shape {
     abstract fun area(): Double
 
@@ -60,6 +61,25 @@ class Rectangle(val width: Double, val height: Double) : Shape() {
     override fun area() = width * height
 }
 ```
+
+## Дополнительные вопросы (RU)
+
+- Когда использовать абстрактный класс, а когда интерфейс?
+- Паттерн Template Method с абстрактными классами?
+- Состояние в абстрактных классах vs stateless-дизайн интерфейсов?
+
+## Ссылки (RU)
+
+- [[c-data-structures]]
+- [[c-computer-science]]
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-inheritance-vs-composition--oop--medium]] - концепции наследования
+
+### Смежные (средней сложности)
+- [[q-abstract-class-vs-interface--kotlin--medium]] - когда использовать интерфейс vs абстрактный класс
 
 ---
 
@@ -79,9 +99,9 @@ Abstract class is a class that cannot be instantiated directly. It's intended fo
 2. **Encapsulating common properties**: Encapsulates attributes and methods common to all subclasses
 3. **Enforcing method implementation**: Requires certain methods to be implemented, guaranteeing consistent interface
 
-**Application:**
+**`Application`:**
 ```kotlin
-// ✅ Abstract class for geometric shapes
+// Abstract class for geometric shapes
 abstract class Shape {
     abstract fun area(): Double
 
@@ -108,16 +128,12 @@ class Rectangle(val width: Double, val height: Double) : Shape() {
 ## References
 
 - [[c-data-structures]]
-- [[c-oop-fundamentals]]
+- [[c-computer-science]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-inheritance-vs-composition--oop--medium]] - Inheritance concepts
-- [[q-oop-principles-deep-dive--computer-science--medium]] - OOP fundamentals
 
 ### Related (Medium)
-- [[q-interface-vs-abstract-class--programming-languages--medium]] - When to use interface vs abstract class
-
-### Advanced (Harder)
-- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+- [[q-abstract-class-vs-interface--kotlin--medium]] - When to use interface vs abstract class

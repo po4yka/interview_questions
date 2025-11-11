@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-composite-pattern]
+related: [c-architecture-patterns, q-adapter-pattern--cs--medium]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [composite, design-patterns, difficulty/medium, gof-patterns, structural-patterns, tree-structure]
-sources: [https://en.wikipedia.org/wiki/Composite_pattern]
+sources: ["https://en.wikipedia.org/wiki/Composite_pattern"]
+
 ---
 
 # Вопрос (RU)
@@ -28,7 +29,7 @@ sources: [https://en.wikipedia.org/wiki/Composite_pattern]
 ## Ответ (RU)
 
 **Теория паттерна Composite:**
-Composite (Компоновщик) - структурный паттерн проектирования, который позволяет компоновать объекты в древовидные структуры для представления иерархий "часть-целое". Позволяет клиентам единообразно обрабатывать отдельные объекты (Leaf) и композиции объектов (Composite). Ключевая идея - рекурсивная композиция.
+Composite (Компоновщик) - структурный паттерн проектирования, который позволяет компоновать объекты в древовидные структуры для представления иерархий "часть-целое". Позволяет клиентам единообразно обрабатывать отдельные объекты (Leaf) и композиции объектов (Composite). Ключевая идея - рекурсивная композиция и общий интерфейс для всех элементов.
 
 **Проблемы, которые решает:**
 
@@ -38,14 +39,14 @@ Composite (Компоновщик) - структурный паттерн пр�
 
 **Решение:**
 
-*Теория:* Определить единый интерфейс **Component** для Leaf (листья) и Composite (композиции). Leaf реализует интерфейс напрямую. Composite содержит коллекцию Component и делегирует запросы дочерним компонентам рекурсивно вниз по дереву.
+*Теория:* Определить единый интерфейс `Component` для Leaf (листья) и Composite (композиции). Leaf реализует интерфейс напрямую. Composite содержит коллекцию `Component` и делегирует запросы дочерним компонентам рекурсивно вниз по дереву.
 
 **Структура паттерна:**
 
 - **Component** (интерфейс) - объявляет общие операции для Leaf и Composite
-- **Leaf** - конечный элемент (не имеет детей), реализует Component
-- **Composite** - контейнер, содержит детей (Leaf или Composite), реализует Component, делегирует операции детям
-- **Client** - работает с Component, не различая Leaf и Composite
+- **Leaf** - конечный элемент (не имеет детей), реализует `Component`
+- **Composite** - контейнер, содержит детей (Leaf или Composite), реализует `Component`, делегирует операции детям
+- **Client** - работает с `Component`, не различая Leaf и Composite
 
 **Когда использовать:**
 
@@ -57,7 +58,7 @@ Composite (Компоновщик) - структурный паттерн пр�
 
 **Пример 1: Файловая система:**
 
-*Теория:* Классический пример Composite. File (Leaf) и Directory (Composite) реализуют FileSystemComponent. Directory содержит список детей и рекурсивно вычисляет размер.
+*Теория:* Классический пример Composite. `File` (Leaf) и `Directory` (Composite) реализуют `FileSystemComponent`. `Directory` содержит список детей и рекурсивно вычисляет размер.
 
 ```kotlin
 // ✅ Component интерфейс
@@ -123,9 +124,9 @@ fun main() {
 }
 ```
 
-**Пример 2: UI компоненты (Android View Hierarchy):**
+**Пример 2: UI компоненты (Android `View` Hierarchy):**
 
-*Теория:* Android View система - пример Composite. View (Leaf) и ViewGroup (Composite) реализуют общий интерфейс. ViewGroup содержит детей и рекурсивно вызывает measure/draw.
+*Теория:* Система Android `View` является примером использования идей Composite: `View` (Leaf) и `ViewGroup` (Composite) реализуют общий контракт отображения/измерения. `ViewGroup` содержит детей и рекурсивно вызывает measure/draw. Ниже упрощенный пример, иллюстрирующий структуру, а не реальное API.
 
 ```kotlin
 // ✅ Component интерфейс
@@ -145,7 +146,7 @@ class TextView(private val text: String) : ViewComponent {
     }
 }
 
-// ✅ Composite - LinearLayout
+// ✅ Composite - LinearLayout (упрощенный пример)
 class LinearLayout(
     private val orientation: String
 ) : ViewComponent {
@@ -183,7 +184,7 @@ fun buildUI(): ViewComponent {
 
 **Пример 3: Организационная структура:**
 
-*Теория:* Сотрудники (Developer - Leaf) и менеджеры (Manager - Composite). Manager содержит подчинённых и рекурсивно показывает детали.
+*Теория:* Сотрудники (`Developer` - Leaf) и менеджеры (`Manager` - Composite). `Manager` содержит подчинённых и рекурсивно показывает детали.
 
 ```kotlin
 // ✅ Component интерфейс
@@ -236,55 +237,57 @@ class Manager(
 
 1. **Сложность ограничений** - трудно ограничить типы компонентов в Composite
 2. **Overhead** - дополнительные объекты для простых структур
-3. **Нарушение Interface Segregation** - Leaf может иметь методы управления детьми (add/remove), которые не используются
+3. **Нарушение Interface Segregation** - при "прозрачном" интерфейсе Leaf может иметь методы управления детьми (`add`/`remove`), которые ему не нужны
 
 **Связанные паттерны:**
 
 - **Iterator** - для обхода Composite структуры
 - **Visitor** - для операций над Composite структурой
-- **Decorator** - похожая рекурсивная структура, но разные цели
-- **Chain of Responsibility** - может использовать Composite для цепочки
+- **Decorator** - похожая рекурсивная структура, но другая цель
+- **Chain of Responsibility** - может использовать Composite для организации цепочки
 
 **Ключевые моменты:**
 
 1. **Рекурсия** - Composite рекурсивно делегирует операции детям
-2. **Единообразие** - клиент работает через Component интерфейс
+2. **Единообразие** - клиент работает через `Component` интерфейс
 3. **Древовидная структура** - естественная модель для иерархий
-4. **Прозрачность vs Безопасность** - trade-off между единым интерфейсом и type safety
+4. **Прозрачность vs Безопасность** - "прозрачный" интерфейс делает Leaf и Composite неотличимыми для клиента (удобнее, но может нарушать ISP), "безопасный" интерфейс выносит операции управления детьми только в Composite (строже типобезопасность, но клиенту сложнее)
+
+---
 
 ## Answer (EN)
 
 **Composite Pattern Theory:**
-Composite (Composer) - structural design pattern that allows composing objects into tree-like structures to represent part-whole hierarchies. Allows clients to treat individual objects (Leaf) and compositions of objects (Composite) uniformly. Key idea - recursive composition.
+Composite is a structural design pattern that allows composing objects into tree-like structures to represent part-whole hierarchies. It allows clients to treat individual objects (`Leaf`) and compositions of objects (`Composite`) uniformly. Key idea: recursive composition and a common interface for all elements.
 
 **Problems it Solves:**
 
 1. **Need for uniform treatment** of individual objects and compositions
 2. **Representing part-whole hierarchy** as tree structure
-3. **Avoiding different treatment** of Leaf and Composite objects (complicates client code)
+3. **Avoiding different treatment** of `Leaf` and `Composite` objects (which complicates client code)
 
 **Solution:**
 
-*Theory:* Define unified **Component** interface for Leaf (leaves) and Composite (compositions). Leaf implements interface directly. Composite contains collection of Components and delegates requests to children recursively down the tree.
+*Theory:* Define a unified `Component` interface for `Leaf` and `Composite`. `Leaf` implements the interface directly. `Composite` contains a collection of `Component` and delegates requests to its children recursively down the tree.
 
 **Pattern Structure:**
 
-- **Component** (interface) - declares common operations for Leaf and Composite
-- **Leaf** - end element (no children), implements Component
-- **Composite** - container, contains children (Leaf or Composite), implements Component, delegates operations to children
-- **Client** - works with Component, not distinguishing Leaf and Composite
+- **Component** (interface) - declares common operations for `Leaf` and `Composite`
+- **Leaf** - leaf element (no children), implements `Component`
+- **Composite** - container, holds children (`Leaf` or `Composite`), implements `Component`, delegates operations to children
+- **Client** - works with `Component` without distinguishing `Leaf` and `Composite`
 
 **When to Use:**
 
-✅ **Use Composite:**
-- Need to represent part-whole hierarchy
+✅ **Use Composite when:**
+- You need to represent part-whole hierarchy
 - Clients should treat individual objects and compositions uniformly
-- Structure has tree-like form (file system, UI components, organizational structure)
-- Need recursive structure processing
+- The structure is naturally tree-like (file system, UI components, organizational structure)
+- You need recursive processing of the structure
 
 **Example 1: File System:**
 
-*Theory:* Classic Composite example. File (Leaf) and Directory (Composite) implement FileSystemComponent. Directory contains list of children and recursively calculates size.
+*Theory:* Classic Composite example. `File` (Leaf) and `Directory` (Composite) implement `FileSystemComponent`. `Directory` holds child components and recursively calculates size.
 
 ```kotlin
 // ✅ Component interface
@@ -350,9 +353,9 @@ fun main() {
 }
 ```
 
-**Example 2: UI Components (Android View Hierarchy):**
+**Example 2: UI Components (Android `View` Hierarchy):**
 
-*Theory:* Android View system - Composite example. View (Leaf) and ViewGroup (Composite) implement common interface. ViewGroup contains children and recursively calls measure/draw.
+*Theory:* The Android `View` system is an example of applying Composite ideas: `View` (Leaf) and `ViewGroup` (Composite) share common rendering/measurement contracts. `ViewGroup` holds children and calls measure/draw recursively. The simplified example below illustrates the structure, not the exact Android APIs.
 
 ```kotlin
 // ✅ Component interface
@@ -372,7 +375,7 @@ class TextView(private val text: String) : ViewComponent {
     }
 }
 
-// ✅ Composite - LinearLayout
+// ✅ Composite - LinearLayout (simplified example)
 class LinearLayout(
     private val orientation: String
 ) : ViewComponent {
@@ -410,7 +413,7 @@ fun buildUI(): ViewComponent {
 
 **Example 3: Organizational Structure:**
 
-*Theory:* Employees (Developer - Leaf) and managers (Manager - Composite). Manager contains subordinates and recursively shows details.
+*Theory:* Employees (`Developer` - Leaf) and managers (`Manager` - Composite). `Manager` contains subordinates and recursively shows details.
 
 ```kotlin
 // ✅ Component interface
@@ -453,33 +456,39 @@ class Manager(
 
 **Advantages:**
 
-1. **Uniform treatment** - client doesn't distinguish Leaf and Composite
-2. **Simplified client code** - no need to check type
+1. **Uniform treatment** - client doesn't distinguish `Leaf` and `Composite`
+2. **Simplified client code** - no need for type checks
 3. **Open/Closed Principle** - easy to add new component types
 4. **Recursive composition** - can build complex structures
 5. **Flexibility** - easy to add/remove components at runtime
 
 **Disadvantages:**
 
-1. **Constraint complexity** - hard to restrict component types in Composite
-2. **Overhead** - additional objects for simple structures
-3. **Interface Segregation violation** - Leaf may have child management methods (add/remove) that aren't used
+1. **Constraint complexity** - hard to restrict which component types `Composite` can contain
+2. **Overhead** - additional objects/abstraction for simple structures
+3. **Interface Segregation violation** - with a "transparent" interface, `Leaf` may expose child-management methods (`add`/`remove`) it does not need
 
 **Related Patterns:**
 
-- **Iterator** - for traversing Composite structure
-- **Visitor** - for operations on Composite structure
-- **Decorator** - similar recursive structure, different goals
-- **Chain of Responsibility** - can use Composite for chain
+- **Iterator** - for traversing Composite structures
+- **Visitor** - for operations on Composite structures
+- **Decorator** - similar recursive structure, but different intent
+- **Chain of Responsibility** - can be combined with Composite to organize chains
 
 **Key Points:**
 
 1. **Recursion** - Composite recursively delegates operations to children
-2. **Uniformity** - client works through Component interface
-3. **Tree structure** - natural model for hierarchies
-4. **Transparency vs Safety** - trade-off between unified interface and type safety
+2. **Uniformity** - client works through the `Component` interface
+3. **Tree structure** - natural model for hierarchical data
+4. **Transparency vs Safety** - "transparent" interface makes `Leaf` and `Composite` indistinguishable to clients (easier to use, may hurt ISP); "safe" interface exposes child-management only on `Composite` (better type safety, but less uniform)
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем разница между паттернами Composite и Decorator?
+- Как реализовать обход дерева в паттерне Composite?
+- В чем суть компромисса между прозрачностью и безопасностью интерфейса в Composite?
 
 ## Follow-ups
 
@@ -487,7 +496,17 @@ class Manager(
 - How do you implement tree traversal in Composite pattern?
 - What is the transparency vs safety trade-off?
 
+## Связанные вопросы / Предпосылки (RU)
+
+### Базовые знания (проще)
+- Базовые знания ООП и рекурсии
+
 ## Related Questions
 
 ### Prerequisites (Easier)
 - Basic OOP and recursion concepts
+
+## References
+
+- [[c-architecture-patterns]]
+- [[q-adapter-pattern--cs--medium]]

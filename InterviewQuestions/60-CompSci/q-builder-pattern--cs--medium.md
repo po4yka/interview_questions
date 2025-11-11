@@ -12,9 +12,10 @@ status: draft
 moc: moc-cs
 related: [q-factory-method-pattern--design-patterns--medium]
 created: 2025-10-15
-updated: 2025-01-25
-tags: [builder, creational-patterns, design-patterns, difficulty/medium, gof-patterns, kotlin]
-sources: [https://refactoring.guru/design-patterns/builder]
+updated: 2025-11-11
+tags: [builder, creational-patterns, design-patterns, difficulty/medium, gof-patterns]
+sources: ["https://refactoring.guru/design-patterns/builder"]
+
 ---
 
 # Вопрос (RU)
@@ -28,17 +29,17 @@ sources: [https://refactoring.guru/design-patterns/builder]
 ## Ответ (RU)
 
 **Теория Builder:**
-Builder - порождающий паттерн, который позволяет конструировать сложные объекты шаг за шагом. Позволяет создавать различные типы и представления объекта, используя один и тот же код конструирования. Решает проблему телескопических конструкторов и делает создание сложных объектов более гибким.
+Builder — порождающий паттерн, который позволяет конструировать сложные объекты пошагово (step-by-step). Он отделяет процесс построения объекта от его конечного представления, что позволяет использовать один и тот же код конструирования для создания разных вариантов (представлений) объекта. В прикладном коде (как в примере ниже) часто используется упрощённый "fluent builder" для решения проблемы телескопических конструкторов.
 
 **Проблема телескопических конструкторов:**
-Создание множества вариантов конструктора с увеличивающимся числом аргументов. На практике добавление нового поля требует модификации каждого конструктора. Негибко и трудно поддерживать.
+Создание множества перегруженных конструкторов с увеличивающимся числом аргументов. Добавление нового поля требует модификации каждого конструктора. Сложно читать, легко ошибиться, трудно поддерживать.
 
 **Решение:**
-Инкапсулировать создание и сборку частей сложного объекта в отдельном объекте Builder. Класс делегирует создание объекта объекту Builder вместо прямого создания. Класс может делегировать различным Builder объектам создание различных представлений.
+Инкапсулировать создание и сборку частей сложного объекта в отдельном объекте Builder. Клиентский код вызывает цепочку методов Builder вместо множества конструкторов. Возможны разные реализации Builder для формирования различных представлений одного и того же объекта.
 
-**Применение:**
+**Применение (флюент-Builder для неизменяемого объекта):**
 ```kotlin
-// ✅ Builder Pattern
+// ✅ Builder Pattern (fluent builder для решения телескопических конструкторов)
 class FoodOrder private constructor(
     val bread: String,
     val condiments: String?,
@@ -56,14 +57,19 @@ class FoodOrder private constructor(
         fun meat(meat: String) = apply { this.meat = meat }
         fun fish(fish: String) = apply { this.fish = fish }
 
-        fun build() = FoodOrder(
-            bread ?: "Flat bread",
-            condiments, meat, fish
-        )
+        fun build(): FoodOrder {
+            // Здесь можно добавить валидацию и значения по умолчанию
+            return FoodOrder(
+                bread = bread ?: "Flat bread",
+                condiments = condiments,
+                meat = meat,
+                fish = fish
+            )
+        }
     }
 }
 
-// ✅ Usage
+// ✅ Использование
 val order = FoodOrder.Builder()
     .bread("white bread")
     .meat("bacon")
@@ -73,17 +79,18 @@ val order = FoodOrder.Builder()
 
 **Android применение:**
 ```kotlin
-// ✅ Notification Builder (классический пример)
-val notification = Notification.Builder(context, "channelId")
+// ✅ Notification Builder (классический пример Builder-подхода)
+// На практике чаще используется NotificationCompat.Builder из AndroidX
+val notification = NotificationCompat.Builder(context, "channelId")
     .setContentTitle("Title")
     .setContentText("Content")
     .setSmallIcon(R.drawable.icon)
     .build()
 ```
 
-**Альтернатива в Kotlin - именованные параметры:**
+**Альтернатива в Kotlin — именованные параметры и значения по умолчанию:**
 ```kotlin
-// ✅ Для простых случаев предпочтительнее
+// ✅ Для простых случаев это часто предпочтительнее, чем вручную писать Builder
 data class User(
     val firstName: String,
     val lastName: String = "",
@@ -96,45 +103,46 @@ val user = User(
     email = "john@example.com"
 )
 ```
+Именованные аргументы и значения по умолчанию хорошо решают проблему читаемости и множества необязательных параметров, но не заменяют Builder там, где нужна сложная пошаговая сборка, валидация или несколько вариантов представления.
 
 **Преимущества:**
 - Избегает телескопических конструкторов
-- Инкапсулирует логику конструирования
-- Fluent интерфейс улучшает читаемость
-- Контроль над шагами конструирования
-- Разделяет представления объекта
+- Инкапсулирует логику конструирования (включая валидацию и значения по умолчанию)
+- Fluent-интерфейс улучшает читаемость
+- Даёт контроль над шагами конструирования
+- Позволяет иметь разные реализации Builder для разных представлений объекта
 
 **Недостатки:**
-- Builder классы должны быть изменяемыми
-- Больше кода
-- Избыточность для простых объектов
+- Обычно требует дополнительного Builder-класса (больше кода)
+- Может быть избыточен для простых объектов
+- Часто реализуется через изменяемый Builder (что нормально), хотя возможны и неизменяемые реализации
 
 **Когда использовать:**
 - Много необязательных параметров
-- Сложная логика валидации
-- Условное создание объектов
-- Множественные варианты сборки
+- Сложная логика валидации и/или зависимые параметры
+- Условное создание или пошаговая конфигурация объекта
+- Несколько вариантов сборки / представлений одного и того же объекта
 
 **Не использовать когда:**
 - Простой объект с малым числом параметров
-- Kotlin именованные параметры достаточны
+- Именованные параметры и значения по умолчанию в Kotlin уже достаточно решают задачу
 
 ---
 
 ## Answer (EN)
 
 **Builder Theory:**
-Builder is a creational design pattern that lets you construct complex objects step by step. Allows you to produce different types and representations of an object using the same construction code. Solves telescoping constructor problem and makes creating complex objects more flexible.
+Builder is a creational design pattern that allows constructing complex objects step by step. It separates the construction process from the final representation so that the same construction code can create different representations of an object. In practical Kotlin/OO code (as in the example below), a common variant is the fluent builder used primarily to solve the telescoping constructor problem.
 
 **Telescoping Constructor Problem:**
-Creating many constructor variants with increasing number of arguments. In practice, adding a new field requires modifying each constructor. Inflexible and hard to maintain.
+You end up with many overloaded constructors with an increasing number of arguments. Adding a new field requires updating multiple constructors, the API becomes hard to read, error-prone, and difficult to maintain.
 
 **Solution:**
-Encapsulate creating and assembling parts of a complex object in a separate Builder object. A class delegates object creation to a Builder object instead of creating objects directly. A class can delegate to different Builder objects to create different representations.
+Encapsulate the creation and assembly of a complex object inside a separate Builder object. Client code calls a chain of builder methods instead of dealing with multiple constructors. Different Builder implementations can be used to produce different representations or configurations of the same product.
 
-**Application:**
+**`Application` (fluent Builder for an immutable object):**
 ```kotlin
-// ✅ Builder Pattern
+// ✅ Builder Pattern (fluent builder addressing telescoping constructors)
 class FoodOrder private constructor(
     val bread: String,
     val condiments: String?,
@@ -152,10 +160,15 @@ class FoodOrder private constructor(
         fun meat(meat: String) = apply { this.meat = meat }
         fun fish(fish: String) = apply { this.fish = fish }
 
-        fun build() = FoodOrder(
-            bread ?: "Flat bread",
-            condiments, meat, fish
-        )
+        fun build(): FoodOrder {
+            // Validation and defaults can be applied here
+            return FoodOrder(
+                bread = bread ?: "Flat bread",
+                condiments = condiments,
+                meat = meat,
+                fish = fish
+            )
+        }
     }
 }
 
@@ -167,19 +180,20 @@ val order = FoodOrder.Builder()
     .build()
 ```
 
-**Android Application:**
+**Android `Application`:**
 ```kotlin
-// ✅ Notification Builder (classic example)
-val notification = Notification.Builder(context, "channelId")
+// ✅ Notification Builder (classic Builder-style API)
+// In modern apps, NotificationCompat.Builder from AndroidX is typically preferred for compatibility
+val notification = NotificationCompat.Builder(context, "channelId")
     .setContentTitle("Title")
     .setContentText("Content")
     .setSmallIcon(R.drawable.icon)
     .build()
 ```
 
-**Kotlin Alternative - Named Parameters:**
+**Kotlin Alternative — Named Parameters and Default Values:**
 ```kotlin
-// ✅ For simple cases, prefer this
+// ✅ For simple cases, this is often preferable to writing a custom Builder
 data class User(
     val firstName: String,
     val lastName: String = "",
@@ -192,28 +206,29 @@ val user = User(
     email = "john@example.com"
 )
 ```
+Named arguments and default values address readability and optional parameters well, but they do not replace Builder when you need complex stepwise construction, validation, or multiple product variants.
 
 **Advantages:**
 - Avoids telescoping constructors
-- Encapsulates construction logic
+- Encapsulates construction logic (including validation and defaults)
 - Fluent interface improves readability
-- Control over construction steps
-- Separates object representations
+- Gives control over construction steps
+- Allows different Builder implementations for different representations/configurations
 
 **Disadvantages:**
-- Builder classes must be mutable
-- More code required
-- Overkill for simple objects
+- Requires additional Builder classes/logic (more code)
+- Can be overkill for simple objects
+- Often implemented with a mutable Builder (which is fine), though immutable builder implementations are also possible
 
 **When to use:**
 - Many optional parameters
-- Complex validation logic
-- Conditional object creation
-- Multiple build variants
+- Complex validation logic and/or interdependent parameters
+- Conditional or stepwise object construction
+- Multiple build variants/representations of the same product
 
 **When not to use:**
-- Simple object with few parameters
-- Kotlin named parameters sufficient
+- Simple objects with few parameters
+- Kotlin named parameters and default values already solve the problem sufficiently
 
 ## Follow-ups
 

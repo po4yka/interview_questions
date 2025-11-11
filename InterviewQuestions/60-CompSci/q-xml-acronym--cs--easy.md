@@ -10,32 +10,36 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-builder-pattern--design-patterns--medium, q-design-patterns-types--design-patterns--medium, q-factory-method-pattern--design-patterns--medium]
+related: [c-computer-science]
 created: 2025-10-13
-updated: 2025-01-25
-tags: [data-format, difficulty/easy, fundamentals, markup-language, xml]
-sources: [https://www.w3.org/XML/]
+updated: 2025-11-11
+tags: [cs, data-format, difficulty/easy, fundamentals, markup-language, xml]
+sources: ["https://www.w3.org/XML/"]
+
 ---
 
 # Вопрос (RU)
 > Как расшифровывается аббревиатура XML?
 
 # Question (EN)
-> How is XML acronym deciphered?
+> How is the XML acronym deciphered?
 
 ---
 
 ## Ответ (RU)
 
+**Краткий ответ:**
+XML — это eXtensible Markup Language (Расширяемый язык разметки).
+
 **Теория XML:**
-XML - eXtensible Markup Language (Расширяемый язык разметки). Markup language - uses tags для structuring data, self-describing format, human и machine readable. Extensible - can define own tags, not limited к predefined set (unlike HTML).
+XML — расширяемый язык разметки. "Markup language" означает, что используется разметка (теги) для структурирования данных; формат самодокументируемый, читаем как человеком, так и машиной. "Extensible" означает, что можно определять собственные теги, не ограничиваясь фиксированным предопределённым набором (в отличие от HTML).
 
 **Определение:**
 
-*Теория:* XML - text-based markup language для storing и transporting structured data. Key characteristics: tags-based syntax, attributes support, hierarchical structure, comments support `<!-- -->`. Widely used для: configuration files, data exchange, document storage, web services (SOAP).
+*Теория:* XML — текстовый язык разметки для хранения и передачи структурированных данных. Ключевые характеристики: синтаксис на основе тегов, поддержка атрибутов, иерархическая структура, поддержка комментариев `<!-- -->`. Широко используется для: файлов конфигурации, обмена данными, хранения документов, веб-сервисов (например, SOAP).
 
 ```xml
-// ✅ XML structure
+<!-- XML structure -->
 <?xml version="1.0" encoding="UTF-8"?>
 <library>
     <book id="1">
@@ -48,29 +52,30 @@ XML - eXtensible Markup Language (Расширяемый язык разметк
 
 **Ключевые характеристики:**
 
-**1. Extensible:**
-*Теория:* You can define own tags, not limited к predefined set. Unlike HTML - HTML has fixed tags (div, p, span), XML allows custom tags для any domain.
+**1. Extensible (расширяемый):**
+*Теория:* Можно определять собственные теги, не ограничиваясь заранее заданным набором. В отличие от HTML, где существует фиксированный набор элементов (div, p, span и др.), XML позволяет создавать теги под любую предметную область.
 
 ```xml
-// ✅ Custom tags
+<!-- Custom tags -->
 <user>
     <name>John Doe</name>
     <email>john@example.com</email>
 </user>
 ```
 
-**2. Markup Language:**
-*Теория:* Uses tags для structuring data. Self-describing format - tags describe content meaning. Both human и machine readable - easy для humans, parsable для computers.
+**2. Markup Language (язык разметки):**
+*Теория:* Использует теги для структурирования данных. Формат самодокументируемый — теги описывают смысл содержимого. Данные удобны для чтения человеком и однозначно разбираются программами.
 
-**3. Common Uses:**
-*Теория:* XML used в: Configuration files (Android layouts, Maven pom.xml), Data exchange между systems, Document storage, Web services (SOAP), Android resources (strings.xml, AndroidManifest.xml).
+**3. Типичные области применения:**
+*Теория:* XML используется в: файлах конфигурации (например, Maven pom.xml), обмене данными между системами, хранении документов, веб-сервисах (SOAP), а также во многих платформах как формат ресурсов (например, Android layouts, ресурсы и манифесты).
 
 ```xml
-// ✅ Android Layout (XML)
+<!-- Android Layout (XML) -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <TextView
         android:text="Hello World"
         android:layout_width="wrap_content"
@@ -78,29 +83,34 @@ XML - eXtensible Markup Language (Расширяемый язык разметк
 </LinearLayout>
 ```
 
-**XML vs JSON:**
+**XML vs JSON (кратко):**
 
-*Теория:* Syntax differences, verbosity, attributes support, use cases. XML: verbose, supports attributes, comments, config files. JSON: compact, no attributes, no comments, web APIs.
+*Теория:* Отличия в синтаксисе, подробности записи, поддержке атрибутов и типичных сценариях.
 
 | Feature | XML | JSON |
 |---------|-----|------|
 | Syntax | Tag-based | Key-value pairs |
 | Verbosity | More verbose | More compact |
 | Attributes | Supports attributes | No attributes |
-| Comments | Supports `<!-- -->` | No comments |
-| Use case | Config files, docs | Web APIs |
+| Comments | Supports `<!-- -->` | No comments in standard JSON |
+| Use case | Config files, docs, protocols | Web APIs, data exchange |
+
+См. также: [[c-computer-science]].
 
 ## Answer (EN)
 
+**Short answer:**
+XML stands for eXtensible Markup Language.
+
 **XML Theory:**
-XML - eXtensible Markup Language. Markup language - uses tags for structuring data, self-describing format, human and machine readable. Extensible - can define own tags, not limited to predefined set (unlike HTML).
+XML is an extensible markup language. "Markup language" means it uses markup (tags) to structure data; it is self-describing, both human-readable and machine-readable. "Extensible" means you can define your own tags and are not limited to a fixed predefined set (unlike HTML).
 
 **Definition:**
 
-*Theory:* XML - text-based markup language for storing and transporting structured data. Key characteristics: tags-based syntax, attributes support, hierarchical structure, comments support `<!-- -->`. Widely used for: configuration files, data exchange, document storage, web services (SOAP).
+*Theory:* XML is a text-based markup language for storing and transporting structured data. Key characteristics: tag-based syntax, support for attributes, hierarchical structure, support for comments `<!-- -->`. Widely used for configuration files, data exchange, document storage, and web services (e.g., SOAP).
 
 ```xml
-// ✅ XML structure
+<!-- XML structure -->
 <?xml version="1.0" encoding="UTF-8"?>
 <library>
     <book id="1">
@@ -114,10 +124,10 @@ XML - eXtensible Markup Language. Markup language - uses tags for structuring da
 **Key Characteristics:**
 
 **1. Extensible:**
-*Theory:* You can define own tags, not limited to predefined set. Unlike HTML - HTML has fixed tags (div, p, span), XML allows custom tags for any domain.
+*Theory:* You can define your own tags and are not limited to a predefined set. Unlike HTML, which has a fixed set of elements (div, p, span, etc.), XML allows custom tags for any domain.
 
 ```xml
-// ✅ Custom tags
+<!-- Custom tags -->
 <user>
     <name>John Doe</name>
     <email>john@example.com</email>
@@ -125,17 +135,18 @@ XML - eXtensible Markup Language. Markup language - uses tags for structuring da
 ```
 
 **2. Markup Language:**
-*Theory:* Uses tags for structuring data. Self-describing format - tags describe content meaning. Both human and machine readable - easy for humans, parsable for computers.
+*Theory:* Uses tags to structure data. It is self-describing — tags convey the meaning of the content. It is both human-readable and easily parsed by programs.
 
 **3. Common Uses:**
-*Theory:* XML used in: Configuration files (Android layouts, Maven pom.xml), Data exchange between systems, Document storage, Web services (SOAP), Android resources (strings.xml, AndroidManifest.xml).
+*Theory:* XML is used for configuration files (e.g., Maven pom.xml), data exchange between systems, document storage, web services (SOAP), and as a resource format on various platforms (e.g., Android layouts, resources, and manifests).
 
 ```xml
-// ✅ Android Layout (XML)
+<!-- Android Layout (XML) -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <TextView
         android:text="Hello World"
         android:layout_width="wrap_content"
@@ -143,25 +154,44 @@ XML - eXtensible Markup Language. Markup language - uses tags for structuring da
 </LinearLayout>
 ```
 
-**XML vs JSON:**
+**XML vs JSON (brief):**
 
-*Theory:* Syntax differences, verbosity, attributes support, use cases. XML: verbose, supports attributes, comments, config files. JSON: compact, no attributes, no comments, web APIs.
+*Theory:* They differ in syntax, verbosity, attribute support, and typical use cases.
 
 | Feature | XML | JSON |
 |---------|-----|------|
 | Syntax | Tag-based | Key-value pairs |
 | Verbosity | More verbose | More compact |
 | Attributes | Supports attributes | No attributes |
-| Comments | Supports `<!-- -->` | No comments |
-| Use case | Config files, docs | Web APIs |
+| Comments | Supports `<!-- -->` | No comments in standard JSON |
+| Use case | Config files, docs, protocols | Web APIs, data exchange |
+
+See also: [[c-computer-science]].
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем разница между XML и JSON?
+- Как используется XML в разработке под Android?
+- Что такое XML-парсеры и как они работают?
 
 ## Follow-ups
 
 - What is the difference between XML and JSON?
 - How is XML used in Android development?
 - What are XML parsers and how do they work?
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовые представления о форматах данных
+- Понимание текстового представления данных
+
+### Связанные (тот же уровень)
+- Форматы сериализации данных
+- Ресурсы и разметка в Android
+- Проектирование веб-API
 
 ## Related Questions
 
@@ -173,3 +203,11 @@ XML - eXtensible Markup Language. Markup language - uses tags for structuring da
 - Data serialization formats
 - Android resources and layouts
 - Web API design
+
+## Ссылки (RU)
+
+- [W3C XML](https://www.w3.org/XML/)
+
+## References
+
+- [W3C XML](https://www.w3.org/XML/)

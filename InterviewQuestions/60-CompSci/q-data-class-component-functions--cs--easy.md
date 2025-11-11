@@ -2,40 +2,40 @@
 id: cs-016
 title: "Data Class Component Functions / Компонентные функции Data Class"
 aliases: ["Data Class Component Functions", "Компонентные функции Data Class"]
-topic: cs
-subtopics: [data-classes, destructuring, kotlin, programming-languages]
+topic: kotlin
+subtopics: [data-classes, destructuring, functions]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-cs
-related: [c-data-classes]
+moc: moc-kotlin
+related: [c-concepts--kotlin--medium, q-abstract-class-purpose--cs--medium]
 created: 2025-10-15
-updated: 2025-01-25
-tags: [component-functions, data-class, destructuring, difficulty/easy, kotlin, programming-languages]
-sources: [https://kotlinlang.org/docs/data-classes.html]
+updated: 2025-11-11
+tags: [kotlin, data-classes, destructuring, component-functions, difficulty/easy]
+sources: ["https://kotlinlang.org/docs/data-classes.html"]
 ---
 
 # Вопрос (RU)
-> Для чего служат component функции в data class? Как они работают и генерируются?
+> Для чего служат `component` функции в `data class`? Как они работают и генерируются?
 
 # Question (EN)
-> What are component functions used for in data class? How do they work and get generated?
+> What are `component` functions used for in a `data class`? How do they work and get generated?
 
 ---
 
 ## Ответ (RU)
 
 **Теория Component Functions:**
-Component functions (`component1()`, `component2()`, etc.) - автоматически генерируемые функции для data classes, обеспечивающие destructuring declarations. Компилятор Kotlin генерирует `componentN()` функцию для каждого property в primary constructor по порядку объявления. Component functions позволяют извлекать properties из объекта в отдельные переменные одной строкой.
+Component functions (`component1()`, `component2()`, и т.д.) — автоматически генерируемые функции для `data class`, обеспечивающие `destructuring` declarations. Компилятор Kotlin генерирует `componentN()` функцию для каждого `property` в `primary constructor` по порядку объявления. Component functions позволяют извлекать свойства из объекта в отдельные переменные одной строкой.
 
 **Автоматическая генерация:**
 
-*Теория:* Для каждого property в primary constructor data class компилятор автоматически генерирует соответствующую `componentN()` функцию. `component1()` для первого property, `component2()` для второго, и т.д. Порядок определяется порядком в primary constructor, не алфавитным порядком.
+*Теория:* Для каждого `property` в `primary constructor` `data class` компилятор автоматически генерирует соответствующую `componentN()` функцию. `component1()` для первого свойства, `component2()` для второго и т.д. Порядок определяется порядком в `primary constructor`, а не алфавитным порядком.
 
 ```kotlin
-// ✅ Data class с автоматическими component functions
+// Data class с автоматическими component functions
 data class Person(val name: String, val age: Int, val city: String)
 
 // Компилятор генерирует:
@@ -53,19 +53,19 @@ println(person.component3())  // "New York"
 
 **Destructuring Declarations:**
 
-*Теория:* Destructuring declarations - синтаксический сахар для вызова component functions. `val (a, b, c) = obj` эквивалентно `val a = obj.component1(); val b = obj.component2(); val c = obj.component3()`. Можно destructure любой объект с component functions, не только data classes.
+*Теория:* Destructuring declarations — синтаксический сахар для вызова component functions. `val (a, b, c) = obj` эквивалентно `val a = obj.component1(); val b = obj.component2(); val c = obj.component3()`. Можно выполнять destructuring для любого объекта с определёнными component functions, не только для `data class`.
 
 ```kotlin
-// ✅ Destructuring с data class
+// Destructuring с data class
 data class User(val id: Int, val name: String, val email: String)
 
 val user = User(1, "Bob", "bob@example.com")
 
-// Destructuring - извлекаем все properties
+// Destructuring — извлекаем все свойства
 val (id, name, email) = user
 println("$id: $name ($email)")  // 1: Bob (bob@example.com)
 
-// Destructuring - извлекаем только нужные properties
+// Destructuring — извлекаем только нужные свойства
 val (userId, userName) = user  // email игнорируется
 println("$userId: $userName")  // 1: Bob
 
@@ -76,10 +76,10 @@ println(userEmail)  // bob@example.com
 
 **Использование в циклах:**
 
-*Теория:* Destructuring особенно полезен в циклах для итерации по коллекциям data classes. Позволяет сразу извлекать properties без дополнительных переменных. Улучшает читаемость кода при работе с парами и тройками.
+*Теория:* Destructuring особенно полезен в циклах при итерации по коллекциям `data class`. Позволяет сразу извлекать свойства без дополнительных обращений к полям, улучшая читаемость кода, особенно при работе с парами и тройками.
 
 ```kotlin
-// ✅ Destructuring в for-loop
+// Destructuring в for-loop
 data class Product(val id: Int, val name: String, val price: Double)
 
 val products = listOf(
@@ -92,7 +92,7 @@ for ((id, name, price) in products) {
     println("$id: $name - $$price")
 }
 
-// ✅ Destructuring с Map entries
+// Destructuring с Map entries
 val map = mapOf("key1" to "value1", "key2" to "value2")
 
 for ((key, value) in map) {
@@ -101,12 +101,12 @@ for ((key, value) in map) {
 // Map.Entry имеет component1() и component2()
 ```
 
-**Использование в lambda параметрах:**
+**Использование в lambda-параметрах:**
 
-*Теория:* Destructuring можно использовать в lambda параметрах для автоматического извлечения properties. Особенно полезно с коллекциями data classes. Улучшает читаемость функциональных операций.
+*Теория:* Destructuring можно использовать в параметрах `lambda` для автоматического извлечения значений. Особенно полезно с коллекциями `data class`. Это улучшает читаемость функционального стиля кода.
 
 ```kotlin
-// ✅ Destructuring в lambda
+// Destructuring в lambda
 data class Point(val x: Int, val y: Int)
 
 val points = listOf(Point(1, 2), Point(3, 4), Point(5, 6))
@@ -127,38 +127,38 @@ points.forEach { (x, y) ->
 
 **Ограничения Component Functions:**
 
-*Теория:* Component functions генерируются только для properties в primary constructor. Properties в body класса не получают component functions. Порядок component functions фиксирован порядком в constructor. Нельзя переименовать или пропустить component functions при генерации.
+*Теория:* Component functions генерируются только для свойств в `primary constructor`. Свойства в теле класса не получают component functions. Порядок component functions фиксирован порядком в `constructor`. Нельзя переименовать или пропустить component functions при автоматической генерации.
 
 ```kotlin
-// ✅ Component functions только для primary constructor
+// Component functions только для primary constructor
 data class Employee(
     val id: Int,        // component1()
     val name: String    // component2()
 ) {
-    var department: String = ""  // НЕТ component3()
+    var department: String = ""  // нет component3()
 }
 
 val emp = Employee(1, "Alice")
 emp.department = "IT"
 
 val (id, name) = emp  // OK
-// val (id, name, dept) = emp  // ❌ Error: нет component3()
+// val (id, name, dept) = emp  // Error: нет component3()
 
-// ✅ Порядок фиксирован
+// Порядок фиксирован
 data class Person(val age: Int, val name: String)
 
 val person = Person(30, "Bob")
 val (first, second) = person
 // first = 30 (age), second = "Bob" (name)
-// Порядок определяется constructor, не именами переменных
+// Порядок определяется constructor, а не именами переменных
 ```
 
 **Component Functions для обычных классов:**
 
-*Теория:* Можно вручную определить component functions для обычных (не data) классов. Это позволяет использовать destructuring для любых классов. Полезно для создания custom destructuring логики.
+*Теория:* Можно вручную определить component functions для обычных (не `data`) классов. Это позволяет использовать destructuring для любых классов и создавать кастомную логику разложения.
 
 ```kotlin
-// ✅ Ручное определение component functions
+// Ручное определение component functions
 class Rectangle(val width: Int, val height: Int) {
     operator fun component1() = width
     operator fun component2() = height
@@ -169,7 +169,7 @@ val rect = Rectangle(10, 20)
 val (w, h, area) = rect
 println("$w x $h = $area")  // 10 x 20 = 200
 
-// ✅ Custom destructuring логика
+// Custom destructuring логика
 class Range(val start: Int, val end: Int) {
     operator fun component1() = start
     operator fun component2() = end
@@ -184,7 +184,7 @@ println("Range: $from..$to, length: $length")  // Range: 5..15, length: 10
 **Практические примеры:**
 
 ```kotlin
-// ✅ Destructuring с функциями, возвращающими data class
+// Destructuring с функциями, возвращающими data class
 data class Result(val success: Boolean, val message: String, val data: Any?)
 
 fun performOperation(): Result {
@@ -196,7 +196,7 @@ if (success) {
     println("$message: $data")
 }
 
-// ✅ Destructuring в when expression
+// Destructuring в when expression
 data class Coordinate(val x: Int, val y: Int)
 
 fun processCoordinate(coord: Coordinate) = when (coord) {
@@ -210,23 +210,23 @@ fun processCoordinate(coord: Coordinate) = when (coord) {
 
 **Ключевые концепции:**
 
-1. **Auto-generation** - component functions генерируются автоматически для data classes
-2. **Destructuring** - синтаксический сахар для извлечения properties
-3. **Order Matters** - порядок определяется primary constructor
-4. **Primary Constructor Only** - только properties в primary constructor
-5. **Operator Functions** - component functions - это operator functions
+1. Auto-generation — component functions генерируются автоматически для `data class`.
+2. Destructuring — синтаксический сахар для извлечения свойств.
+3. Order matters — порядок определяется `primary constructor`.
+4. Primary constructor only — только свойства в `primary constructor`.
+5. Operator functions — component functions являются operator-функциями.
 
 ## Answer (EN)
 
 **Component Functions Theory:**
-Component functions (`component1()`, `component2()`, etc.) - automatically generated functions for data classes, enabling destructuring declarations. Kotlin compiler generates `componentN()` function for each property in primary constructor in declaration order. Component functions allow extracting properties from object into separate variables in one line.
+Component functions (`component1()`, `component2()`, etc.) are automatically generated functions for `data class`es, enabling destructuring declarations. The Kotlin compiler generates a `componentN()` function for each property in the primary constructor in declaration order. Component functions allow extracting properties from an object into separate variables in one line.
 
 **Automatic Generation:**
 
-*Theory:* For each property in primary constructor of data class, compiler automatically generates corresponding `componentN()` function. `component1()` for first property, `component2()` for second, etc. Order determined by primary constructor order, not alphabetical order.
+*Theory:* For each property in the primary constructor of a `data class`, the compiler automatically generates the corresponding `componentN()` function. `component1()` for the first property, `component2()` for the second, etc. The order is determined by the primary constructor order, not alphabetical order.
 
 ```kotlin
-// ✅ Data class with automatic component functions
+// Data class with automatic component functions
 data class Person(val name: String, val age: Int, val city: String)
 
 // Compiler generates:
@@ -244,19 +244,19 @@ println(person.component3())  // "New York"
 
 **Destructuring Declarations:**
 
-*Theory:* Destructuring declarations - syntactic sugar for calling component functions. `val (a, b, c) = obj` equivalent to `val a = obj.component1(); val b = obj.component2(); val c = obj.component3()`. Can destructure any object with component functions, not only data classes.
+*Theory:* Destructuring declarations are syntactic sugar for calling component functions. `val (a, b, c) = obj` is equivalent to `val a = obj.component1(); val b = obj.component2(); val c = obj.component3()`. You can destructure any object that has component functions defined, not only `data class`es.
 
 ```kotlin
-// ✅ Destructuring with data class
+// Destructuring with data class
 data class User(val id: Int, val name: String, val email: String)
 
 val user = User(1, "Bob", "bob@example.com")
 
-// Destructuring - extract all properties
+// Destructuring — extract all properties
 val (id, name, email) = user
 println("$id: $name ($email)")  // 1: Bob (bob@example.com)
 
-// Destructuring - extract only needed properties
+// Destructuring — extract only needed properties
 val (userId, userName) = user  // email ignored
 println("$userId: $userName")  // 1: Bob
 
@@ -267,10 +267,10 @@ println(userEmail)  // bob@example.com
 
 **Usage in Loops:**
 
-*Theory:* Destructuring especially useful in loops for iterating over collections of data classes. Allows extracting properties immediately without additional variables. Improves code readability when working with pairs and triples.
+*Theory:* Destructuring is especially useful in loops when iterating over collections of `data class`es. It allows extracting properties immediately without extra field access, improving readability, especially when working with pairs and triples.
 
 ```kotlin
-// ✅ Destructuring in for-loop
+// Destructuring in for-loop
 data class Product(val id: Int, val name: String, val price: Double)
 
 val products = listOf(
@@ -283,7 +283,7 @@ for ((id, name, price) in products) {
     println("$id: $name - $$price")
 }
 
-// ✅ Destructuring with Map entries
+// Destructuring with Map entries
 val map = mapOf("key1" to "value1", "key2" to "value2")
 
 for ((key, value) in map) {
@@ -294,10 +294,10 @@ for ((key, value) in map) {
 
 **Usage in Lambda Parameters:**
 
-*Theory:* Destructuring can be used in lambda parameters for automatic property extraction. Especially useful with collections of data classes. Improves readability of functional operations.
+*Theory:* Destructuring can be used in lambda parameters for automatic property extraction. This is especially useful with collections of `data class`es and improves the readability of functional-style code.
 
 ```kotlin
-// ✅ Destructuring in lambda
+// Destructuring in lambda
 data class Point(val x: Int, val y: Int)
 
 val points = listOf(Point(1, 2), Point(3, 4), Point(5, 6))
@@ -318,24 +318,24 @@ points.forEach { (x, y) ->
 
 **Component Functions Limitations:**
 
-*Theory:* Component functions generated only for properties in primary constructor. Properties in class body don't get component functions. Order of component functions fixed by constructor order. Cannot rename or skip component functions during generation.
+*Theory:* Component functions are generated only for properties in the primary constructor. Properties in the class body do not get component functions. The order of component functions is fixed by the constructor order. You cannot rename or skip component functions in automatic generation.
 
 ```kotlin
-// ✅ Component functions only for primary constructor
+// Component functions only for primary constructor
 data class Employee(
     val id: Int,        // component1()
     val name: String    // component2()
 ) {
-    var department: String = ""  // NO component3()
+    var department: String = ""  // no component3()
 }
 
 val emp = Employee(1, "Alice")
 emp.department = "IT"
 
 val (id, name) = emp  // OK
-// val (id, name, dept) = emp  // ❌ Error: no component3()
+// val (id, name, dept) = emp  // Error: no component3()
 
-// ✅ Order is fixed
+// Order is fixed
 data class Person(val age: Int, val name: String)
 
 val person = Person(30, "Bob")
@@ -346,10 +346,10 @@ val (first, second) = person
 
 **Component Functions for Regular Classes:**
 
-*Theory:* Can manually define component functions for regular (non-data) classes. This allows using destructuring for any classes. Useful for creating custom destructuring logic.
+*Theory:* You can manually define component functions for regular (non-data) classes. This allows using destructuring for any classes and implementing custom destructuring logic.
 
 ```kotlin
-// ✅ Manual component functions definition
+// Manual component functions definition
 class Rectangle(val width: Int, val height: Int) {
     operator fun component1() = width
     operator fun component2() = height
@@ -360,7 +360,7 @@ val rect = Rectangle(10, 20)
 val (w, h, area) = rect
 println("$w x $h = $area")  // 10 x 20 = 200
 
-// ✅ Custom destructuring logic
+// Custom destructuring logic
 class Range(val start: Int, val end: Int) {
     operator fun component1() = start
     operator fun component2() = end
@@ -375,7 +375,7 @@ println("Range: $from..$to, length: $length")  // Range: 5..15, length: 10
 **Practical Examples:**
 
 ```kotlin
-// ✅ Destructuring with functions returning data class
+// Destructuring with functions returning data class
 data class Result(val success: Boolean, val message: String, val data: Any?)
 
 fun performOperation(): Result {
@@ -387,7 +387,7 @@ if (success) {
     println("$message: $data")
 }
 
-// ✅ Destructuring in when expression
+// Destructuring in when expression
 data class Coordinate(val x: Int, val y: Int)
 
 fun processCoordinate(coord: Coordinate) = when (coord) {
@@ -401,19 +401,39 @@ fun processCoordinate(coord: Coordinate) = when (coord) {
 
 **Key Concepts:**
 
-1. **Auto-generation** - component functions generated automatically for data classes
-2. **Destructuring** - syntactic sugar for extracting properties
-3. **Order Matters** - order determined by primary constructor
-4. **Primary Constructor Only** - only properties in primary constructor
-5. **Operator Functions** - component functions are operator functions
+1. Auto-generation — component functions are generated automatically for `data class`es.
+2. Destructuring — syntactic sugar for extracting properties.
+3. Order matters — order is determined by the primary constructor.
+4. Primary constructor only — only properties in the primary constructor.
+5. Operator functions — component functions are operator functions.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Можно ли определить component functions для обычных (не `data`) классов?
+- Что произойдет, если попытаться сделать destructuring с большим количеством переменных, чем есть component functions?
+- Как работает destructuring с nullable `data class` экземплярами?
 
 ## Follow-ups
 
 - Can you define component functions for regular (non-data) classes?
 - What happens if you destructure with more variables than component functions?
 - How does destructuring work with nullable data classes?
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- Базовые `data class` в Kotlin
+- Свойства и конструкторы в Kotlin
+
+### Связанные (тот же уровень)
+- Основы `data class` в Kotlin
+- Детали destructuring declarations
+
+### Продвинутые (сложнее)
+- Кастомный operator overloading
+- Продвинутые паттерны destructuring
 
 ## Related Questions
 
@@ -422,9 +442,14 @@ fun processCoordinate(coord: Coordinate) = when (coord) {
 - Kotlin properties and constructors
 
 ### Related (Same Level)
-- [[q-kotlin-data-classes--kotlin--easy]] - Data classes basics
-- [[q-destructuring-declarations--programming-languages--medium]] - Destructuring details
+- Data classes basics
+- Destructuring declarations details
 
 ### Advanced (Harder)
 - Custom operator overloading
 - Advanced destructuring patterns
+
+## References
+
+- [[c-concepts--kotlin--medium]]
+- "https://kotlinlang.org/docs/data-classes.html"

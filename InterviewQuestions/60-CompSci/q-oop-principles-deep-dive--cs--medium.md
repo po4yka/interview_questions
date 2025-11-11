@@ -3,18 +3,18 @@ id: cs-002
 title: "OOP Principles Deep Dive / Глубокое погружение в принципы ООП"
 aliases: ["OOP Principles", "Принципы ООП"]
 topic: cs
-subtopics: [abstraction, encapsulation, inheritance, oop, polymorphism]
+subtopics: [abstraction, encapsulation, inheritance]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-clean-code-principles--software-engineering--medium, q-design-patterns-fundamentals--software-engineering--hard]
+related: [c-architecture-patterns, q-solid-principles--software-design--medium]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [abstraction, composition, difficulty/medium, encapsulation, inheritance, oop, polymorphism]
-sources: [https://en.wikipedia.org/wiki/Object-oriented_programming]
+sources: ["https://en.wikipedia.org/wiki/Object-oriented_programming"]
 ---
 
 # Вопрос (RU)
@@ -28,15 +28,15 @@ sources: [https://en.wikipedia.org/wiki/Object-oriented_programming]
 ## Ответ (RU)
 
 **Теория ООП:**
-Object-Oriented Programming (ООП) - paradigm based on objects containing data and behavior. Four pillars: Encapsulation, Inheritance, Polymorphism, Abstraction. Provide structure для building maintainable, reusable code. Key concepts: IS-A vs HAS-A relationships, composition over inheritance, interfaces vs abstract classes, behavioral vs structural patterns.
+Объектно-ориентированное программирование (ООП) — парадигма, основанная на объектах, которые объединяют данные и поведение. Четыре базовых принципа: инкапсуляция, наследование, полиморфизм, абстракция. Они задают структуру для построения поддерживаемого и переиспользуемого кода. Ключевые концепции: отношения IS-A vs HAS-A, "composition over inheritance", интерфейсы vs абстрактные классы, поведенческие vs структурные паттерны (см. [[c-architecture-patterns]]).
 
 **1. Инкапсуляция:**
 
-*Теория:* Инкапсуляция - bundle data и methods что work с этими data. Hide internal details, control access (private/public). Validate state changes, maintain invariants. Allows changing internals без affecting users.
+*Теория:* Инкапсуляция — объединение данных и методов, которые работают с этими данными, в один объект, с ограничением и контролем доступа к внутреннему состоянию (модификаторы доступа). Позволяет валидировать изменения состояния, поддерживать инварианты и изменять реализацию без влияния на пользователей класса.
 
 ```kotlin
 // ✅ Инкапсуляция с валидацией
-class BankAccount(private val initialBalance: Double) {
+class BankAccount(initialBalance: Double) {
     private var _balance: Double = initialBalance
         set(value) {
             require(value >= 0) { "Balance cannot be negative" }
@@ -60,10 +60,10 @@ class BankAccount(private val initialBalance: Double) {
 
 **2. Наследование:**
 
-*Теория:* Inheritance - создание new class от existing class. IS-A relationship, code reuse. Types: single, multi-level, hierarchical. Benefits: reuse, polymorphism base, organized hierarchy. Pitfalls: deep hierarchies, tight coupling, rigidity.
+*Теория:* Наследование — механизм создания нового класса на основе существующего. Описывает отношение IS-A и позволяет переиспользовать код. Бывает одиночное, многоуровневое, иерархическое. Даёт базу для полиморфизма. Недостатки: глубокие иерархии, тесная связанность, хрупкие базовые классы.
 
 ```kotlin
-// ✅ Inheritance с Animal hierarchy
+// ✅ Наследование с иерархией Animal
 open class Animal(val name: String) {
     open fun makeSound() {
         println("$name makes a sound")
@@ -90,9 +90,9 @@ class Cat(name: String) : Animal(name) {
     }
 }
 
-// ✅ Polymorphism в действии
+// ✅ Полиморфизм в действии
 fun processAnimal(animal: Animal) {
-    animal.makeSound()  // Calls override method
+    animal.makeSound()  // Вызовет переопределённый метод
 }
 
 val dog = Dog("Rex")
@@ -103,10 +103,14 @@ processAnimal(cat)  // Cat meows
 
 **3. Полиморфизм:**
 
-*Теория:* Polymorphism - many forms. Same interface, different implementations. Types: runtime (method overriding), compile-time (method overloading). Позволяет treat different types uniformly, increases flexibility, simplifies code. Key для polymorphism: late binding, virtual methods, interface/abstract class contracts.
+*Теория:* Полиморфизм — "множество форм": единый интерфейс, разные реализации. В контексте ООП обычно выделяют:
+- полиморфизм подтипов (runtime, через переопределение методов и позднее связывание);
+- полиморфизм перегрузки (compile-time, ad-hoc, через методы с разной сигнатурой).
+
+Он позволяет обрабатывать разные типы единообразно, повышает гибкость и упрощает код. Ключ: виртуальные методы, контракты интерфейсов/абстрактных классов, позднее связывание.
 
 ```kotlin
-// ✅ Polymorphism с Shape
+// ✅ Полиморфизм с Shape
 open class Shape {
     open fun area(): Double = 0.0
     open fun draw() = println("Drawing shape")
@@ -122,7 +126,7 @@ class Rectangle(val width: Double, val height: Double) : Shape() {
     override fun draw() = println("Drawing rectangle ${width}x${height}")
 }
 
-// ✅ Uniform interface
+// ✅ Единый интерфейс работы с фигурами
 fun processShape(shape: Shape) {
     shape.draw()
     println("Area: ${shape.area()}")
@@ -134,10 +138,10 @@ shapes.forEach { processShape(it) }
 
 **4. Абстракция:**
 
-*Теория:* Abstraction - hide complexity, show only essential features. Interfaces (CAN-DO), abstract classes (IS-A). Allows work с concepts без knowing implementation. Simplifies complex systems, reduces coupling, improves maintainability.
+*Теория:* Абстракция — сокрытие избыточной сложности и выделение существенных характеристик. В ООП это достигается через интерфейсы и абстрактные классы, которые задают контракты. Позволяет работать с концепциями, не зная деталей реализации, упрощает сложные системы, снижает связность и повышает поддерживаемость.
 
 ```kotlin
-// ✅ Abstract class для IS-A
+// ✅ Абстрактный класс для IS-A
 abstract class Employee(val name: String, val id: String) {
     abstract fun calculateSalary(): Double
     abstract val department: String
@@ -165,7 +169,7 @@ class Contractor(
 
 **Интерфейсы:**
 
-*Теория:* Interfaces - multiple inheritance, CAN-DO relationships. No state (abstract properties only), all methods abstract unless default implementation. Use для capabilities, contracts, decoupling.
+*Теория:* Интерфейсы задают контракты и позволяют типам объявлять, что они "умеют" делать (CAN-DO). В Kotlin интерфейс может содержать абстрактные методы/свойства и реализации по умолчанию. Главное: интерфейсы позволяют типу реализовывать несколько таких контрактов (множественное наследование типов) и используются для задания возможностей, слабой связности и полиморфизма. Не стоит связывать интерфейсы только с "множественным наследованием реализации".
 
 ```kotlin
 // ✅ Interface для CAN-DO
@@ -197,10 +201,10 @@ button.erase()
 
 **Композиция vs Наследование:**
 
-*Теория:* Composition - HAS-A relationship, more flexible than inheritance. Prefer composition для: behavior changes, flexibility, avoiding tight coupling. Inheritance для: IS-A relationships, code reuse, shared behavior.
+*Теория:* Композиция — отношение HAS-A, часто более гибкая альтернатива наследованию. Предпочтительна, когда нужно легко изменять поведение, избегать тесной связанности и хрупких иерархий. Наследование оправдано при явном IS-A и общем поведении.
 
 ```kotlin
-// ❌ Inheritance (rigid)
+// ❌ Наследование (жёстко)
 open class Vehicle {
     open fun start() = println("Starting vehicle")
 }
@@ -209,11 +213,11 @@ class Car : Vehicle() {
     override fun start() = println("Starting car engine")
 }
 
-class ElectricCar : Car() {  // Forced inheritance
+class ElectricCar : Car() {  // Навязанное наследование
     override fun start() = println("Starting electric motor")
 }
 
-// ✅ Composition (flexible)
+// ✅ Композиция (гибко)
 interface Engine {
     fun start()
 }
@@ -226,7 +230,7 @@ class ElectricMotor : Engine {
     override fun start() = println("Starting electric motor")
 }
 
-class FlexibleCar(private val engine: Engine) {  // Composition
+class FlexibleCar(private val engine: Engine) {  // Композиция
     fun start() = engine.start()
 }
 
@@ -240,7 +244,7 @@ electricCar.start()  // Electric motor
 **Общие ошибки:**
 
 **1. God Objects:**
-*Теория:* God Object - class с too many responsibilities. Violates Single Responsibility Principle. Hard to maintain, test, reuse. Solution: split into focused classes, extract services, use composition.
+*Теория:* God Object — класс с чрезмерным числомresponsibilities. Нарушает принцип единственной ответственности, его сложно поддерживать, тестировать и переиспользовать. Решение: разбивать на специализированные классы, выносить сервисы, использовать композицию.
 
 ```kotlin
 // ❌ God Object
@@ -254,15 +258,15 @@ class UserManager {
     // ... 50 more methods
 }
 
-// ✅ Single Responsibility
+// ✅ Single Responsibility (упрощённый пример)
 class UserService { fun createUser() { } fun deleteUser() { } }
-class UserValidator { fun validate(user: User): Boolean { } }
-class AuthService { fun authenticate(creds: Credentials): Boolean { } }
-class EmailService { fun sendEmail(to: String, subject: String, body: String) { } }
+class UserValidator { fun validate(user: User): Boolean { /* ... */ return true } }
+class AuthService { fun authenticate(creds: Credentials): Boolean { /* ... */ return true } }
+class EmailService { fun sendEmail(to: String, subject: String, body: String) { /* ... */ } }
 ```
 
-**2. Deep Inheritance:**
-*Теория:* Deep hierarchies - hard to understand, maintain, test. Multiple levels inheritance create coupling, fragile base class problem. Solution: shallow hierarchies, prefer composition, use interfaces.
+**2. Глубокое наследование:**
+*Теория:* Глубокие иерархии усложняют понимание, сопровождение и тестирование. Множество уровней наследования усиливает связанность и приводит к проблеме хрупкого базового класса. Решения: предпочитать неглубокие иерархии, композицию и интерфейсы.
 
 ```kotlin
 // ❌ Deep inheritance
@@ -270,9 +274,9 @@ open class A
 open class B : A()
 open class C : B()
 open class D : C()
-open class E : D()  // Too deep
+open class E : D()  // Слишком глубоко
 
-// ✅ Shallow + interfaces
+// ✅ Неглубокие иерархии + интерфейсы
 interface Behavior1
 interface Behavior2
 interface Behavior3
@@ -280,14 +284,14 @@ interface Behavior3
 class MyClass : Behavior1, Behavior2, Behavior3
 ```
 
-**3. Leaky Abstractions:**
-*Теория:* Leaky abstraction - exposes implementation details. Interface references specific implementation concepts. Solution: pure abstractions, hide internals, dependency inversion.
+**3. Текущие (leaky) абстракции:**
+*Теория:* Текущая абстракция раскрывает детали реализации во внешнем контракте. Например, интерфейс, который ссылается на конкретную технологию хранения. Решение: формулировать "чистые" абстракции, скрывать детали и применять принцип инверсии зависимостей.
 
 ```kotlin
 // ❌ Leaky abstraction
 interface DataStore {
     fun save(data: String)
-    fun getSQLConnection(): Connection  // Exposes SQL!
+    fun getSQLConnection(): Connection  // Экспонирует конкретную технологию
 }
 
 // ✅ Pure abstraction
@@ -298,29 +302,29 @@ interface DataStore {
 ```
 
 **Ключевые выводы:**
-1. Encapsulation - bundle data + methods, control access
-2. Inheritance - IS-A relationship, code reuse
-3. Polymorphism - same interface, different implementations
-4. Abstraction - hide complexity, show essentials
-5. Composition > Inheritance для flexibility
-6. Interfaces для CAN-DO, Abstract classes для IS-A
-7. Single Responsibility - each class does one thing
-8. Avoid deep inheritance - shallow hierarchies
-9. Pure abstractions - no leaky details
-10. Program to interfaces - depend on abstractions
+1. Encapsulation — объединяем данные и поведение, контролируем доступ.
+2. Inheritance — IS-A, переиспользование кода, база для полиморфизма, но использовать осознанно.
+3. Polymorphism — единый интерфейс, разные реализации (подтипы, перегрузка).
+4. Abstraction — скрываем сложность, показываем существенное.
+5. Composition > Inheritance для гибкости.
+6. Interfaces — для CAN-DO контрактов и полиморфизма; abstract classes — для общих IS-A и частичной реализации.
+7. Single Responsibility — каждый класс фокусируется на своей задаче.
+8. Избегать глубокого наследования — предпочитать неглубокие иерархии.
+9. Чистые абстракции — не протекают деталями реализации.
+10. Program to interfaces — зависеть от абстракций, а не реализаций.
 
 ## Answer (EN)
 
 **OOP Theory:**
-Object-Oriented Programming (OOP) - paradigm based on objects containing data and behavior. Four pillars: Encapsulation, Inheritance, Polymorphism, Abstraction. Provide structure for building maintainable, reusable code. Key concepts: IS-A vs HAS-A relationships, composition over inheritance, interfaces vs abstract classes, behavioral vs structural patterns.
+Object-Oriented Programming (OOP) is a paradigm based on objects that combine data and behavior. The four core principles: Encapsulation, Inheritance, Polymorphism, Abstraction. They provide structure for building maintainable, reusable code. Key concepts: IS-A vs HAS-A relationships, composition over inheritance, interfaces vs abstract classes, behavioral vs structural patterns (see [[c-architecture-patterns]]).
 
 **1. Encapsulation:**
 
-*Theory:* Encapsulation - bundle data and methods that work with that data. Hide internal details, control access (private/public). Validate state changes, maintain invariants. Allows changing internals without affecting users.
+*Theory:* Encapsulation is bundling data and the methods that operate on that data into a single unit, while hiding internal details via access control. It enables validation of state changes, maintaining invariants, and changing internals without affecting clients.
 
 ```kotlin
 // ✅ Encapsulation with validation
-class BankAccount(private val initialBalance: Double) {
+class BankAccount(initialBalance: Double) {
     private var _balance: Double = initialBalance
         set(value) {
             require(value >= 0) { "Balance cannot be negative" }
@@ -344,7 +348,7 @@ class BankAccount(private val initialBalance: Double) {
 
 **2. Inheritance:**
 
-*Theory:* Inheritance - create new class from existing class. IS-A relationship, code reuse. Types: single, multi-level, hierarchical. Benefits: reuse, polymorphism base, organized hierarchy. Pitfalls: deep hierarchies, tight coupling, rigidity.
+*Theory:* Inheritance is creating a new class from an existing one. It models an IS-A relationship and supports code reuse and subtype polymorphism. Common forms: single, multi-level, hierarchical. Benefits: reuse, shared behavior, polymorphic APIs. Pitfalls: deep hierarchies, tight coupling, fragile base classes.
 
 ```kotlin
 // ✅ Inheritance with Animal hierarchy
@@ -376,7 +380,7 @@ class Cat(name: String) : Animal(name) {
 
 // ✅ Polymorphism in action
 fun processAnimal(animal: Animal) {
-    animal.makeSound()  // Calls override method
+    animal.makeSound()  // Calls overridden method
 }
 
 val dog = Dog("Rex")
@@ -387,7 +391,11 @@ processAnimal(cat)  // Cat meows
 
 **3. Polymorphism:**
 
-*Theory:* Polymorphism - many forms. Same interface, different implementations. Types: runtime (method overriding), compile-time (method overloading). Allows treating different types uniformly, increases flexibility, simplifies code. Key for polymorphism: late binding, virtual methods, interface/abstract class contracts.
+*Theory:* Polymorphism means "many forms": the same interface with different implementations. In OO we distinguish primarily:
+- subtype polymorphism (runtime) via method overriding and late binding;
+- ad-hoc/overload polymorphism (compile-time) via methods with different signatures.
+
+It allows treating different types uniformly, increases flexibility, and simplifies code. Key enablers: virtual methods, interface/abstract class contracts, and late binding.
 
 ```kotlin
 // ✅ Polymorphism with Shape
@@ -418,7 +426,7 @@ shapes.forEach { processShape(it) }
 
 **4. Abstraction:**
 
-*Theory:* Abstraction - hide complexity, show only essential features. Interfaces (CAN-DO), abstract classes (IS-A). Allows working with concepts without knowing implementation. Simplifies complex systems, reduces coupling, improves maintainability.
+*Theory:* Abstraction is hiding complexity and exposing only the essential features. In OO this is modeled via interfaces and abstract classes that define contracts. It allows working with concepts without knowing concrete implementations, simplifies complex systems, reduces coupling, and improves maintainability.
 
 ```kotlin
 // ✅ Abstract class for IS-A
@@ -449,7 +457,7 @@ class Contractor(
 
 **Interfaces:**
 
-*Theory:* Interfaces - multiple inheritance, CAN-DO relationships. No state (abstract properties only), all methods abstract unless default implementation. Use for capabilities, contracts, decoupling.
+*Theory:* Interfaces define contracts and describe what a type can do (CAN-DO). In Kotlin, interfaces can declare abstract members and also provide default method implementations. Implementing multiple interfaces lets a class support multiple roles (multiple inheritance of type). They are used for capabilities, decoupling, and polymorphism. Do not confuse this with multiple inheritance of concrete implementation.
 
 ```kotlin
 // ✅ Interface for CAN-DO
@@ -481,7 +489,7 @@ button.erase()
 
 **Composition vs Inheritance:**
 
-*Theory:* Composition - HAS-A relationship, more flexible than inheritance. Prefer composition for: behavior changes, flexibility, avoiding tight coupling. Inheritance for: IS-A relationships, code reuse, shared behavior.
+*Theory:* Composition is a HAS-A relationship and is often more flexible than inheritance. Prefer composition when you need to vary behavior, reduce coupling, or avoid brittle hierarchies. Use inheritance where there is a strong IS-A relationship and shared behavior.
 
 ```kotlin
 // ❌ Inheritance (rigid)
@@ -524,7 +532,7 @@ electricCar.start()  // Electric motor
 **Common Pitfalls:**
 
 **1. God Objects:**
-*Theory:* God Object - class with too many responsibilities. Violates Single Responsibility Principle. Hard to maintain, test, reuse. Solution: split into focused classes, extract services, use composition.
+*Theory:* A God Object is a class with too many responsibilities. It violates the Single Responsibility Principle and becomes hard to maintain, test, and reuse. Solution: split into focused classes, extract services, use composition.
 
 ```kotlin
 // ❌ God Object
@@ -538,15 +546,15 @@ class UserManager {
     // ... 50 more methods
 }
 
-// ✅ Single Responsibility
+// ✅ Single Responsibility (simplified example)
 class UserService { fun createUser() { } fun deleteUser() { } }
-class UserValidator { fun validate(user: User): Boolean { } }
-class AuthService { fun authenticate(creds: Credentials): Boolean { } }
-class EmailService { fun sendEmail(to: String, subject: String, body: String) { } }
+class UserValidator { fun validate(user: User): Boolean { /* ... */ return true } }
+class AuthService { fun authenticate(creds: Credentials): Boolean { /* ... */ return true } }
+class EmailService { fun sendEmail(to: String, subject: String, body: String) { /* ... */ } }
 ```
 
 **2. Deep Inheritance:**
-*Theory:* Deep hierarchies - hard to understand, maintain, test. Multiple levels inheritance create coupling, fragile base class problem. Solution: shallow hierarchies, prefer composition, use interfaces.
+*Theory:* Deep hierarchies are hard to understand, maintain, and test. Multiple inheritance levels increase coupling and cause fragile base class problems. Solution: prefer shallow hierarchies, composition, and interfaces.
 
 ```kotlin
 // ❌ Deep inheritance
@@ -565,13 +573,13 @@ class MyClass : Behavior1, Behavior2, Behavior3
 ```
 
 **3. Leaky Abstractions:**
-*Theory:* Leaky abstraction - exposes implementation details. Interface references specific implementation concepts. Solution: pure abstractions, hide internals, dependency inversion.
+*Theory:* A leaky abstraction exposes implementation details through its interface (e.g., returning technology-specific types). Solution: define pure abstractions, hide internals, and apply dependency inversion.
 
 ```kotlin
 // ❌ Leaky abstraction
 interface DataStore {
     fun save(data: String)
-    fun getSQLConnection(): Connection  // Exposes SQL!
+    fun getSQLConnection(): Connection  // Exposes SQL-specific detail
 }
 
 // ✅ Pure abstraction
@@ -582,16 +590,16 @@ interface DataStore {
 ```
 
 **Key Takeaways:**
-1. Encapsulation - bundle data + methods, control access
-2. Inheritance - IS-A relationship, code reuse
-3. Polymorphism - same interface, different implementations
-4. Abstraction - hide complexity, show essentials
-5. Composition > Inheritance for flexibility
-6. Interfaces for CAN-DO, Abstract classes for IS-A
-7. Single Responsibility - each class does one thing
-8. Avoid deep inheritance - shallow hierarchies
-9. Pure abstractions - no leaky details
-10. Program to interfaces - depend on abstractions
+1. Encapsulation — bundle data and behavior, control access.
+2. Inheritance — IS-A, code reuse, and a basis for polymorphism; use carefully.
+3. Polymorphism — same interface, different implementations (subtype and overload polymorphism).
+4. Abstraction — hide complexity, expose essentials.
+5. Composition > Inheritance for flexibility.
+6. Interfaces — CAN-DO contracts and polymorphic roles; abstract classes — IS-A with shared base implementation.
+7. Single Responsibility — each class focuses on one reason to change.
+8. Avoid deep inheritance — prefer shallow hierarchies.
+9. Pure abstractions — do not leak implementation details.
+10. Program to interfaces — depend on abstractions, not concretions.
 
 ---
 
@@ -611,9 +619,12 @@ interface DataStore {
 
 ### Related (Same Level)
 - [[q-solid-principles--software-design--medium]] - SOLID principles
-- [[q-clean-code-principles--software-engineering--medium]] - Clean code
 
 ### Advanced (Harder)
-- [[q-design-patterns-fundamentals--software-engineering--hard]] - Design patterns
 - Advanced OOP patterns
 - Functional vs OOP programming
+
+## References
+
+- [[c-architecture-patterns]]
+- "https://en.wikipedia.org/wiki/Object-oriented_programming"

@@ -3,18 +3,18 @@ id: cs-003
 title: "Concurrency Fundamentals / Основы параллелизма"
 aliases: ["Concurrency Fundamentals", "Основы параллелизма"]
 topic: cs
-subtopics: [concurrency, multithreading, synchronization]
+subtopics: [concurrency]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-concurrency]
+related: [q-abstract-class-purpose--cs--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [concurrency, difficulty/hard, multithreading, mutexes, race-conditions, synchronization]
-sources: [https://en.wikipedia.org/wiki/Concurrency_(computer_science)]
+updated: 2025-11-11
+tags: [concurrency, difficulty/hard]
+sources: ["https://en.wikipedia.org/wiki/Concurrency_(computer_science)"]
 ---
 
 # Вопрос (RU)
@@ -23,45 +23,49 @@ sources: [https://en.wikipedia.org/wiki/Concurrency_(computer_science)]
 # Question (EN)
 > What is concurrency vs parallelism? What are race conditions and how to prevent them? What are mutexes, semaphores, and monitors? How do you avoid deadlocks?
 
----
-
 ## Ответ (RU)
 
-**Теория параллелизма:**
-Concurrency - способность выполнять несколько задач с прогрессом (не обязательно одновременно). Parallelism - истинное одновременное выполнение на нескольких ядрах. Критические концепции: race conditions, synchronization primitives, deadlocks, thread-safe структуры данных.
+**Concurrency / Параллелизм:**
+Concurrency — способность системы выполнять несколько задач с прогрессом (не обязательно одновременно). Parallelism — истинное одновременное выполнение на нескольких ядрах/процессорах. Критические концепции: race conditions, примитивы синхронизации, deadlocks, thread-safe структуры данных.
 
 **1. Concurrency vs Parallelism:**
 
 *Теория:*
-- **Concurrency** - множество задач делают прогресс (не обязательно одновременно). О работе с несколькими вещами сразу. Достигается даже на одном ядре через time-slicing (переключение контекста).
-- **Parallelism** - множество задач выполняются одновременно. О выполнении нескольких вещей сразу. Требует несколько ядер CPU.
+- **Concurrency** — множество задач делают прогресс (не обязательно одновременно). Это про работу с несколькими вещами сразу (interleaving), а не обязательно про одновременное исполнение. Может достигаться даже на одном ядре через time-slicing (переключение контекста).
+- **Parallelism** — множество задач выполняются физически одновременно. Это про выполнение нескольких вещей одновременно. Обычно требует нескольких ядер CPU или нескольких машин.
 
 *Аналогия:*
-- **Concurrency**: Один повар готовит несколько блюд (ставит пасту, пока она варится - режет овощи, пока овощи готовятся - делает соус)
-- **Parallelism**: Несколько поваров готовят одновременно (повар 1 - паста, повар 2 - салат, повар 3 - десерт)
+- **Concurrency**: Один повар готовит несколько блюд (ставит пасту, пока она варится — режет овощи, пока овощи готовятся — делает соус).
+- **Parallelism**: Несколько поваров готовят одновременно (повар 1 — паста, повар 2 — салат, повар 3 — десерт).
 
 ```kotlin
-// ✅ Concurrency: Coroutines (могут работать на одном потоке)
-suspend fun fetchDataConcurrently() {
-    val user = async { fetchUser() }      // Suspend, не блокирует
-    val posts = async { fetchPosts() }    // Могут чередоваться
-    // Concurrent, но могут использовать один поток
+// ✅ Concurrency: coroutines могут давать конкурентное выполнение (interleaving)
+// даже на одном потоке; реальный параллелизм зависит от диспетчера.
+
+suspend fun fetchDataConcurrently(scope: CoroutineScope) {
+    val user = scope.async { fetchUser() }      // suspend, не блокирует поток
+    val posts = scope.async { fetchPosts() }    // могут чередоваться
+    // Concurrent; при использовании одного потока задачи выполняются вперемешку
     println("${user.await()} has ${posts.await().size} posts")
 }
 
-// ✅ Parallelism: Множество потоков
+// ✅ Parallelism: множество потоков
 fun fetchDataInParallel() {
     val executor = Executors.newFixedThreadPool(2)  // 2 потока
-    val userFuture = executor.submit { fetchUser() }    // Поток 1
-    val postsFuture = executor.submit { fetchPosts() }  // Поток 2
-    // Истинный параллелизм на multi-core CPU
-    println("${userFuture.get()} has ${postsFuture.get().size} posts")
+    try {
+        val userFuture = executor.submit(Callable { fetchUser() })    // Поток 1
+        val postsFuture = executor.submit(Callable { fetchPosts() })  // Поток 2
+        // Истинный параллелизм на multi-core CPU (если доступен)
+        println("${userFuture.get()} has ${postsFuture.get().size} posts")
+    } finally {
+        executor.shutdown()
+    }
 }
 ```
 
 **2. Race Conditions:**
 
-*Теория:* Race condition - ситуация, когда несколько потоков обращаются к shared data, хотя бы один модифицирует, и результат зависит от timing. Происходит из-за non-atomic операций (например, `count++` = read + add + write).
+*Теория:* Race condition — ситуация, когда несколько потоков обращаются к shared data, хотя бы один модифицирует её, и результат зависит от порядка/тайминга операций. Возникает из-за неатомарных операций (например, `count++` = read + add + write).
 
 ```kotlin
 // ❌ Race condition
@@ -69,15 +73,12 @@ class Counter {
     private var count = 0
 
     fun increment() {
-        count++  // НЕ атомарно! 3 операции:
-                 // 1. Read count
-                 // 2. Add 1
-                 // 3. Write count
+        count++  // НЕ атомарно: read + add + write
     }
 }
 
-// Проблема: 1000 потоков × 1000 инкрементов = ожидаем 1,000,000
-// Получаем: ~950,000 (варьируется!)
+// Пример: 1000 потоков × 1000 инкрементов = ожидаем 1_000_000
+// Реально: меньше, результат недетерминирован.
 
 // ✅ Решение 1: synchronized
 class SafeCounter {
@@ -105,7 +106,7 @@ class AtomicCounter {
 
 **Mutex (Mutual Exclusion Lock):**
 
-*Теория:* Mutex - примитив синхронизации, позволяющий только одному потоку владеть lock одновременно. Другие потоки блокируются до unlock. Используется для защиты critical section.
+*Теория:* Mutex — примитив синхронизации, позволяющий только одному потоку владеть блокировкой одновременно. Другие потоки блокируются до unlock. Используется для защиты critical section. (Частный случай — бинарный семафор, но с более строгой моделью владения.)
 
 ```kotlin
 // ✅ Mutex с ReentrantLock
@@ -125,11 +126,12 @@ class BankAccount {
     fun withdraw(amount: Int): Boolean {
         lock.lock()
         try {
-            if (balance >= amount) {
+            return if (balance >= amount) {
                 balance -= amount
-                return true
+                true
+            } else {
+                false
             }
-            return false
         } finally {
             lock.unlock()
         }
@@ -139,62 +141,77 @@ class BankAccount {
 
 **Semaphore:**
 
-*Теория:* Semaphore - счётчик, ограничивающий количество потоков, которые могут получить доступ к ресурсу одновременно. Mutex = semaphore с count=1. Используется для resource pooling (например, connection pool).
+*Теория:* Semaphore — счётчик, ограничивающий количество потоков, которые могут получить доступ к ресурсу одновременно. Часто говорят "mutex = semaphore с count=1" как интуитивное сравнение, но в реальных API модели владения различаются.
 
 ```kotlin
-// ✅ Semaphore для connection pool
-class ConnectionPool(maxConnections: Int) {
+// ✅ Semaphore для ограничения количества одновременно используемых соединений
+class ConnectionPool(maxConnections: Int, private val factory: () -> Connection) {
     private val semaphore = Semaphore(maxConnections)
-    private val connections = mutableListOf<Connection>()
+    private val connections = ArrayDeque<Connection>().apply {
+        repeat(maxConnections) { add(factory()) }
+    }
+    private val lock = ReentrantLock()
 
     fun acquireConnection(): Connection {
-        semaphore.acquire()  // Блокируется если нет доступных
-        return connections.removeFirst()
+        semaphore.acquire()              // Блокируется, если нет доступных слотов
+        lock.lock()
+        try {
+            return connections.removeFirst()
+        } finally {
+            lock.unlock()
+        }
     }
 
     fun releaseConnection(conn: Connection) {
-        connections.add(conn)
-        semaphore.release()  // Освобождает слот
+        lock.lock()
+        try {
+            connections.addLast(conn)
+        } finally {
+            lock.unlock()
+        }
+        semaphore.release()              // Освобождает слот
     }
 }
 ```
 
 **Monitor (synchronized):**
 
-*Теория:* Monitor - высокоуровневый примитив, комбинирующий mutex + condition variables. В Java/Kotlin - `synchronized` блоки. Автоматически управляет lock + позволяет wait/notify.
+*Теория:* Monitor — высокоуровневый примитив, комбинирующий mutual exclusion + condition variables. В Java/Kotlin на JVM — это `synchronized` и связанный с ним монитор объекта + методы `wait/notify/notifyAll`, которые должны вызываться на том же мониторе.
 
 ```kotlin
-// ✅ Monitor pattern: Producer-Consumer
+// ✅ Monitor pattern: Producer-Consumer с использованием монитора this
 class BlockingQueue<T>(private val capacity: Int) {
     private val queue = LinkedList<T>()
 
-    @Synchronized
     fun put(item: T) {
-        while (queue.size >= capacity) {
-            (this as Object).wait()  // Ждём, пока не освободится место
+        synchronized(this) {
+            while (queue.size >= capacity) {
+                (this as java.lang.Object).wait()  // ждём, пока не освободится место
+            }
+            queue.add(item)
+            (this as java.lang.Object).notifyAll() // уведомляем consumers
         }
-        queue.add(item)
-        (this as Object).notifyAll()  // Уведомляем consumers
     }
 
-    @Synchronized
     fun take(): T {
-        while (queue.isEmpty()) {
-            (this as Object).wait()  // Ждём, пока не появится элемент
+        synchronized(this) {
+            while (queue.isEmpty()) {
+                (this as java.lang.Object).wait()  // ждём, пока не появится элемент
+            }
+            val item = queue.removeFirst()
+            (this as java.lang.Object).notifyAll() // уведомляем producers
+            return item
         }
-        val item = queue.removeFirst()
-        (this as Object).notifyAll()  // Уведомляем producers
-        return item
     }
 }
 ```
 
 **4. Deadlocks:**
 
-*Теория:* Deadlock - ситуация, когда два или более потока ждут друг друга бесконечно. Возникает при выполнении 4 условий Coffman: mutual exclusion, hold and wait, no preemption, circular wait.
+*Теория:* Deadlock — ситуация, когда два или более потока навсегда ждут освобождения ресурсов друг другом. Часто анализируют через 4 условия Coffman: mutual exclusion, hold and wait, no preemption, circular wait.
 
 ```kotlin
-// ❌ Deadlock пример
+// ❌ Потенциальный deadlock-пример
 class Account(val id: Int, var balance: Int)
 
 fun transfer(from: Account, to: Account, amount: Int) {
@@ -207,17 +224,16 @@ fun transfer(from: Account, to: Account, amount: Int) {
     }
 }
 
-// Deadlock:
-// Thread 1: transfer(accountA, accountB, 100) - locks A, waits for B
-// Thread 2: transfer(accountB, accountA, 50)  - locks B, waits for A
-// Circular wait!
+// Возможный deadlock:
+// Thread 1: transfer(accountA, accountB, 100) - держит A, ждёт B
+// Thread 2: transfer(accountB, accountA, 50)  - держит B, ждёт A
+// Циклическое ожидание -> возможный взаимный блок (недетерминированно).
 
-// ✅ Решение: Lock ordering
+// ✅ Решение: фиксированный порядок захвата блокировок
 fun transferSafe(from: Account, to: Account, amount: Int) {
-    val first = if (from.id < to.id) from else to
-    val second = if (from.id < to.id) to else from
+    val (first, second) = if (from.id < to.id) from to to else to to from
 
-    synchronized(first) {   // Всегда блокируем в одном порядке
+    synchronized(first) {             // Всегда блокируем в одном порядке
         synchronized(second) {
             from.balance -= amount
             to.balance += amount
@@ -228,57 +244,41 @@ fun transferSafe(from: Account, to: Account, amount: Int) {
 
 **Предотвращение Deadlocks:**
 
-1. **Lock ordering** - всегда блокировать в одном порядке
-2. **Lock timeout** - использовать `tryLock(timeout)`
-3. **Deadlock detection** - мониторинг и recovery
-4. **Avoid nested locks** - минимизировать вложенные блокировки
-5. **Use higher-level primitives** - channels, actors вместо низкоуровневых locks
+1. **Lock ordering** — всегда блокировать ресурсы в консистентном порядке.
+2. **Lock timeout** — использовать `tryLock(timeout)` / неблокирующие попытки.
+3. **Deadlock detection** — мониторинг зависимостей и recovery.
+4. **Avoid nested locks** — минимизировать вложенные блокировки.
+5. **Use higher-level primitives** — channels, actors вместо низкоуровневых locks.
 
 **5. Thread-Safe Data Structures:**
 
-*Теория:* Thread-safe структуры данных используют внутреннюю синхронизацию. Примеры: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Trade-off: безопасность vs производительность.
+*Теория:* Thread-safe структуры данных используют внутреннюю синхронизацию или lock-free алгоритмы. Примеры: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Компромисс: безопасность vs производительность.
 
 ```kotlin
-// ✅ Thread-safe collections
+// ✅ Thread-safe collections (Java/JVM)
 val map = ConcurrentHashMap<String, Int>()
-map.put("key", 1)  // Thread-safe
+map["key"] = 1  // Thread-safe операции (с учётом контрактов коллекции)
 
 val queue = LinkedBlockingQueue<String>()
-queue.put("item")  // Блокирующая операция, thread-safe
+queue.put("item")  // Блокирующая, thread-safe
 
 // ✅ Atomic variables
 val counter = AtomicInteger(0)
 counter.incrementAndGet()  // Атомарная операция
 
-val reference = AtomicReference<User>(null)
-reference.compareAndSet(null, newUser)  // CAS operation
+val reference = AtomicReference<User?>(null)
+reference.compareAndSet(null, newUser)  // CAS-операция
 ```
 
 **6. Ключевые концепции:**
 
 **Visibility:**
-*Теория:* Изменения одного потока могут быть не видны другим из-за CPU cache. `volatile` гарантирует visibility (но не atomicity).
+*Теория:* Изменения одного потока могут быть не видны другим из-за кэширования и reorderings. В модели памяти Java (и Kotlin/JVM) `volatile` гарантирует видимость (happens-before для записи/чтения), но не делает составные операции атомарными.
 
 ```kotlin
-// ❌ Без volatile - может зависнуть
+// ❌ Без volatile - цикл может не увидеть обновление
 class Task {
     private var running = true
-
-    fun run() {
-        while (running) {  // Может кешироваться в CPU cache
-            // work
-        }
-    }
-
-    fun stop() {
-        running = false  // Может не быть видно другому потоку
-    }
-}
-
-// ✅ С volatile
-class SafeTask {
-    @Volatile
-    private var running = true  // Гарантирует visibility
 
     fun run() {
         while (running) {
@@ -287,59 +287,81 @@ class SafeTask {
     }
 
     fun stop() {
-        running = false  // Сразу видно всем потокам
+        running = false
+    }
+}
+
+// ✅ С volatile
+class SafeTask {
+    @Volatile
+    private var running = true
+
+    fun run() {
+        while (running) {
+            // work
+        }
+    }
+
+    fun stop() {
+        running = false  // Гарантирована видимость другим потокам
     }
 }
 ```
 
 **Happens-Before:**
-*Теория:* Happens-before relationship - гарантия, что операция A видна операции B. Устанавливается через: volatile, synchronized, thread start/join, lock acquire/release.
+*Теория:* Happens-before — отношение, гарантирующее, что эффекты операции A видимы операции B. На JVM устанавливается, например, через: volatile write->read, вход/выход из synchronized блока, lock acquire/release, `Thread.start()`, `Thread.join()` и др.
 
 **Ключевые правила:**
 
-1. **Minimize shared state** - меньше shared data = меньше проблем
-2. **Immutability** - immutable объекты thread-safe по определению
-3. **Use high-level primitives** - coroutines, actors вместо низкоуровневых threads
-4. **Avoid premature optimization** - сначала корректность, потом производительность
-5. **Test thoroughly** - concurrency bugs сложно воспроизвести
+1. **Minimize shared state** — меньше shared data = меньше проблем.
+2. **Immutability** — immutable-объекты thread-safe по определению (при корректной публикации).
+3. **Use high-level primitives** — coroutines, actors, thread pools вместо ручного управления потоками и raw locks, где это возможно.
+4. **Avoid premature optimization** — сначала корректность, потом производительность.
+5. **Test thoroughly** — concurrency-bugs сложно воспроизвести, нужны стресс-тесты.
 
 ## Answer (EN)
 
-**Concurrency Theory:**
-Concurrency - ability to execute multiple tasks with progress (not necessarily simultaneously). Parallelism - true simultaneous execution on multiple cores. Critical concepts: race conditions, synchronization primitives, deadlocks, thread-safe data structures.
+**Concurrency / Parallelism:**
+Concurrency is the ability of a system to make progress on multiple tasks (not necessarily simultaneously). Parallelism is true simultaneous execution on multiple cores/processors. Critical concepts: race conditions, synchronization primitives, deadlocks, thread-safe data structures.
 
 **1. Concurrency vs Parallelism:**
 
 *Theory:*
-- **Concurrency** - multiple tasks making progress (not necessarily simultaneously). About dealing with multiple things at once. Achieved even on single core through time-slicing (context switching).
-- **Parallelism** - multiple tasks executing simultaneously. About doing multiple things at once. Requires multiple CPU cores.
+- **Concurrency**: multiple tasks make progress (not necessarily at the same instant). It's about dealing with many things at once via interleaving; can be achieved even on a single core via time-slicing (context switching).
+- **Parallelism**: multiple tasks execute physically at the same time. It's about doing many things at once; typically requires multiple CPU cores or machines.
 
 *Analogy:*
-- **Concurrency**: One chef cooking multiple dishes (starts pasta, while it cooks - chops vegetables, while vegetables cook - makes sauce)
-- **Parallelism**: Multiple chefs cooking simultaneously (chef 1 - pasta, chef 2 - salad, chef 3 - dessert)
+- **Concurrency**: One chef cooking multiple dishes (starts pasta; while it cooks, chops vegetables; while vegetables cook, makes sauce).
+- **Parallelism**: Multiple chefs cooking simultaneously (chef 1 - pasta, chef 2 - salad, chef 3 - dessert).
 
 ```kotlin
-// ✅ Concurrency: Coroutines (can run on single thread)
-suspend fun fetchDataConcurrently() {
-    val user = async { fetchUser() }      // Suspend, doesn't block
-    val posts = async { fetchPosts() }    // Can interleave
-    // Concurrent, but may use same thread
+// ✅ Concurrency: coroutines provide concurrent (interleaved) execution
+// even on a single thread; actual parallelism depends on dispatcher/threads.
+
+suspend fun fetchDataConcurrently(scope: CoroutineScope) {
+    val user = scope.async { fetchUser() }      // suspend, non-blocking
+    val posts = scope.async { fetchPosts() }    // can interleave
+    // Concurrent; if using a single-threaded dispatcher, work is interleaved
     println("${user.await()} has ${posts.await().size} posts")
 }
 
-// ✅ Parallelism: Multiple threads
+// ✅ Parallelism: multiple threads
 fun fetchDataInParallel() {
     val executor = Executors.newFixedThreadPool(2)  // 2 threads
-    val userFuture = executor.submit { fetchUser() }    // Thread 1
-    val postsFuture = executor.submit { fetchPosts() }  // Thread 2
-    // True parallelism on multi-core CPU
-    println("${userFuture.get()} has ${postsFuture.get().size} posts")
+    try {
+        val userFuture = executor.submit(Callable { fetchUser() })    // Thread 1
+        val postsFuture = executor.submit(Callable { fetchPosts() })  // Thread 2
+        // True parallelism on multi-core CPU (if available)
+        println("${userFuture.get()} has ${postsFuture.get().size} posts")
+    } finally {
+        executor.shutdown()
+    }
 }
 ```
 
 **2. Race Conditions:**
 
-*Theory:* Race condition - situation when multiple threads access shared data, at least one modifies, and result depends on timing. Occurs due to non-atomic operations (e.g., `count++` = read + add + write).
+*Theory:* Race condition is a situation where multiple threads access shared data, at least one modifies it, and the result depends on timing/order of operations. It occurs due to non-atomic compound operations (e.g., `count++` = read + add + write).
 
 ```kotlin
 // ❌ Race condition
@@ -347,15 +369,12 @@ class Counter {
     private var count = 0
 
     fun increment() {
-        count++  // NOT atomic! 3 operations:
-                 // 1. Read count
-                 // 2. Add 1
-                 // 3. Write count
+        count++  // NOT atomic: read + add + write
     }
 }
 
-// Problem: 1000 threads × 1000 increments = expect 1,000,000
-// Get: ~950,000 (varies!)
+// Example: 1000 threads × 1000 increments = expect 1_000_000
+// In practice: less; result is nondeterministic.
 
 // ✅ Solution 1: synchronized
 class SafeCounter {
@@ -383,7 +402,7 @@ class AtomicCounter {
 
 **Mutex (Mutual Exclusion Lock):**
 
-*Theory:* Mutex - synchronization primitive allowing only one thread to own lock at a time. Other threads block until unlock. Used to protect critical section.
+*Theory:* Mutex is a synchronization primitive that allows only one thread to own the lock at a time. Other threads block until it is unlocked. Used to protect critical sections. (Often compared to a binary semaphore; real APIs differ in ownership semantics.)
 
 ```kotlin
 // ✅ Mutex with ReentrantLock
@@ -403,11 +422,12 @@ class BankAccount {
     fun withdraw(amount: Int): Boolean {
         lock.lock()
         try {
-            if (balance >= amount) {
+            return if (balance >= amount) {
                 balance -= amount
-                return true
+                true
+            } else {
+                false
             }
-            return false
         } finally {
             lock.unlock()
         }
@@ -417,62 +437,77 @@ class BankAccount {
 
 **Semaphore:**
 
-*Theory:* Semaphore - counter limiting number of threads that can access resource simultaneously. Mutex = semaphore with count=1. Used for resource pooling (e.g., connection pool).
+*Theory:* Semaphore is a counter that limits how many threads can access a resource simultaneously. People often say "mutex = semaphore with count=1" informally, but typical implementations have different usage/ownership semantics.
 
 ```kotlin
-// ✅ Semaphore for connection pool
-class ConnectionPool(maxConnections: Int) {
+// ✅ Semaphore for limiting concurrent connections
+class ConnectionPool(maxConnections: Int, private val factory: () -> Connection) {
     private val semaphore = Semaphore(maxConnections)
-    private val connections = mutableListOf<Connection>()
+    private val connections = ArrayDeque<Connection>().apply {
+        repeat(maxConnections) { add(factory()) }
+    }
+    private val lock = ReentrantLock()
 
     fun acquireConnection(): Connection {
-        semaphore.acquire()  // Blocks if none available
-        return connections.removeFirst()
+        semaphore.acquire()              // Blocks if no permits available
+        lock.lock()
+        try {
+            return connections.removeFirst()
+        } finally {
+            lock.unlock()
+        }
     }
 
     fun releaseConnection(conn: Connection) {
-        connections.add(conn)
-        semaphore.release()  // Frees slot
+        lock.lock()
+        try {
+            connections.addLast(conn)
+        } finally {
+            lock.unlock()
+        }
+        semaphore.release()              // Releases permit
     }
 }
 ```
 
 **Monitor (synchronized):**
 
-*Theory:* Monitor - high-level primitive combining mutex + condition variables. In Java/Kotlin - `synchronized` blocks. Automatically manages lock + allows wait/notify.
+*Theory:* A monitor is a high-level construct combining mutual exclusion with condition variables. On Java/Kotlin (JVM), `synchronized` uses an intrinsic monitor per object; `wait/notify/notifyAll` must be called on the same monitor while holding its lock.
 
 ```kotlin
-// ✅ Monitor pattern: Producer-Consumer
+// ✅ Monitor pattern: Producer-Consumer using this as monitor
 class BlockingQueue<T>(private val capacity: Int) {
     private val queue = LinkedList<T>()
 
-    @Synchronized
     fun put(item: T) {
-        while (queue.size >= capacity) {
-            (this as Object).wait()  // Wait until space available
+        synchronized(this) {
+            while (queue.size >= capacity) {
+                (this as java.lang.Object).wait()  // wait until space available
+            }
+            queue.add(item)
+            (this as java.lang.Object).notifyAll() // notify consumers
         }
-        queue.add(item)
-        (this as Object).notifyAll()  // Notify consumers
     }
 
-    @Synchronized
     fun take(): T {
-        while (queue.isEmpty()) {
-            (this as Object).wait()  // Wait until item available
+        synchronized(this) {
+            while (queue.isEmpty()) {
+                (this as java.lang.Object).wait()  // wait until item available
+            }
+            val item = queue.removeFirst()
+            (this as java.lang.Object).notifyAll() // notify producers
+            return item
         }
-        val item = queue.removeFirst()
-        (this as Object).notifyAll()  // Notify producers
-        return item
     }
 }
 ```
 
 **4. Deadlocks:**
 
-*Theory:* Deadlock - situation when two or more threads wait for each other infinitely. Occurs when 4 Coffman conditions met: mutual exclusion, hold and wait, no preemption, circular wait.
+*Theory:* Deadlock is a situation where two or more threads wait forever for resources held by each other. It can arise when the 4 Coffman conditions hold: mutual exclusion, hold and wait, no preemption, circular wait.
 
 ```kotlin
-// ❌ Deadlock example
+// ❌ Potential deadlock example
 class Account(val id: Int, var balance: Int)
 
 fun transfer(from: Account, to: Account, amount: Int) {
@@ -485,17 +520,16 @@ fun transfer(from: Account, to: Account, amount: Int) {
     }
 }
 
-// Deadlock:
-// Thread 1: transfer(accountA, accountB, 100) - locks A, waits for B
-// Thread 2: transfer(accountB, accountA, 50)  - locks B, waits for A
-// Circular wait!
+// Possible deadlock:
+// Thread 1: transfer(accountA, accountB, 100) - holds A, waits for B
+// Thread 2: transfer(accountB, accountA, 50)  - holds B, waits for A
+// Circular wait -> potential deadlock (nondeterministic).
 
-// ✅ Solution: Lock ordering
+// ✅ Solution: consistent lock ordering
 fun transferSafe(from: Account, to: Account, amount: Int) {
-    val first = if (from.id < to.id) from else to
-    val second = if (from.id < to.id) to else from
+    val (first, second) = if (from.id < to.id) from to to else to to from
 
-    synchronized(first) {   // Always lock in same order
+    synchronized(first) {             // Always lock in the same order
         synchronized(second) {
             from.balance -= amount
             to.balance += amount
@@ -506,57 +540,41 @@ fun transferSafe(from: Account, to: Account, amount: Int) {
 
 **Preventing Deadlocks:**
 
-1. **Lock ordering** - always lock in same order
-2. **Lock timeout** - use `tryLock(timeout)`
-3. **Deadlock detection** - monitoring and recovery
-4. **Avoid nested locks** - minimize nested locking
-5. **Use higher-level primitives** - channels, actors instead of low-level locks
+1. **Lock ordering** - always acquire locks in a consistent global order.
+2. **Lock timeout** - use `tryLock(timeout)` / non-blocking attempts.
+3. **Deadlock detection** - monitor lock dependencies and recover.
+4. **Avoid nested locks** - minimize nested locking.
+5. **Use higher-level primitives** - channels, actors instead of low-level locks when possible.
 
 **5. Thread-Safe Data Structures:**
 
-*Theory:* Thread-safe data structures use internal synchronization. Examples: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Trade-off: safety vs performance.
+*Theory:* Thread-safe data structures use internal synchronization or lock-free algorithms. Examples: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Trade-off: safety vs performance.
 
 ```kotlin
-// ✅ Thread-safe collections
+// ✅ Thread-safe collections (Java/JVM)
 val map = ConcurrentHashMap<String, Int>()
-map.put("key", 1)  // Thread-safe
+map["key"] = 1  // Thread-safe operations (per collection's contract)
 
 val queue = LinkedBlockingQueue<String>()
-queue.put("item")  // Blocking operation, thread-safe
+queue.put("item")  // Blocking, thread-safe
 
 // ✅ Atomic variables
 val counter = AtomicInteger(0)
 counter.incrementAndGet()  // Atomic operation
 
-val reference = AtomicReference<User>(null)
+val reference = AtomicReference<User?>(null)
 reference.compareAndSet(null, newUser)  // CAS operation
 ```
 
 **6. Key Concepts:**
 
 **Visibility:**
-*Theory:* Changes by one thread may not be visible to others due to CPU cache. `volatile` guarantees visibility (but not atomicity).
+*Theory:* Changes by one thread may not be visible to others due to caching and reordering. On the Java Memory Model (also used by Kotlin/JVM), `volatile` guarantees visibility and establishes happens-before between write and subsequent read, but does not make compound operations atomic.
 
 ```kotlin
-// ❌ Without volatile - may hang
+// ❌ Without volatile - loop may never observe update
 class Task {
     private var running = true
-
-    fun run() {
-        while (running) {  // May be cached in CPU cache
-            // work
-        }
-    }
-
-    fun stop() {
-        running = false  // May not be visible to other thread
-    }
-}
-
-// ✅ With volatile
-class SafeTask {
-    @Volatile
-    private var running = true  // Guarantees visibility
 
     fun run() {
         while (running) {
@@ -565,37 +583,70 @@ class SafeTask {
     }
 
     fun stop() {
-        running = false  // Immediately visible to all threads
+        running = false
+    }
+}
+
+// ✅ With volatile
+class SafeTask {
+    @Volatile
+    private var running = true
+
+    fun run() {
+        while (running) {
+            // work
+        }
+    }
+
+    fun stop() {
+        running = false  // Guaranteed visible to other threads
     }
 }
 ```
 
 **Happens-Before:**
-*Theory:* Happens-before relationship - guarantee that operation A is visible to operation B. Established through: volatile, synchronized, thread start/join, lock acquire/release.
+*Theory:* A happens-before relationship guarantees that effects of operation A are visible to operation B. On the JVM it's established via, e.g., volatile write->read, entering/exiting synchronized blocks, lock acquire/release, `Thread.start()`, `Thread.join()`, etc.
 
 **Key Rules:**
 
-1. **Minimize shared state** - less shared data = fewer problems
-2. **Immutability** - immutable objects thread-safe by definition
-3. **Use high-level primitives** - coroutines, actors instead of low-level threads
-4. **Avoid premature optimization** - correctness first, performance later
-5. **Test thoroughly** - concurrency bugs hard to reproduce
+1. **Minimize shared state** - less shared data -> fewer issues.
+2. **Immutability** - immutable objects are thread-safe by definition (given correct publication).
+3. **Use high-level primitives** - coroutines, actors, thread pools instead of raw threads/locks where possible.
+4. **Avoid premature optimization** - correctness first, then performance.
+5. **Test thoroughly** - concurrency bugs are hard to reproduce; use stress tests.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем разница между `volatile` и `synchronized`?
+- Как реализуются lock-free структуры данных?
+- Что такое операции compare-and-swap (CAS)?
+
 ## Follow-ups
 
-- What is the difference between volatile and synchronized?
+- What is the difference between `volatile` and `synchronized`?
 - How do you implement lock-free data structures?
 - What are compare-and-swap (CAS) operations?
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+- Базовые концепции потоков
+
+### Продвинутые (сложнее)
+- Продвинутые паттерны конкурентности
+- Lock-free алгоритмы
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-clean-code-principles--software-engineering--medium]] - Clean code principles
 - Basic threading concepts
-
 
 ### Advanced (Harder)
 - Advanced concurrency patterns
 - Lock-free algorithms
+
+## References
+
+- "https://en.wikipedia.org/wiki/Concurrency_(computer_science)"

@@ -1,77 +1,26 @@
 ---
 id: cs-011
-title: "Kotlin Data Sealed Classes Combined"
+title: "Kotlin Data Sealed Classes Combined / Kotlin Data и Sealed классы вместе"
 aliases: []
-topic: computer-science
-subtopics: [class-features, operators, type-system]
+topic: cs
+subtopics: [types]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-kotlin
-related: [q-channels-basics-types--kotlin--medium, q-kotlin-native--kotlin--hard, q-stateflow-sharedflow-differences--kotlin--medium]
+moc: moc-cs
+related: [c-computer-science, c-concepts--kotlin--medium, q-channels-basics-types--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-11
 tags: [difficulty/medium]
 ---
 
-# Расскажи Data Классы И Sealed Классы
+# Вопрос (RU)
+> Расскажи про data классы и sealed классы и как их сочетать
 
 # Question (EN)
-> Tell me about data classes and sealed classes
-
-# Вопрос (RU)
-> Расскажи data классы и sealed классы
-
----
-
-## Answer (EN)
-
-### Data Classes
-
-Data classes are designed for **storing data** and automatically generate useful methods:
-- `equals()` - value-based equality
-- `hashCode()` - consistent hashing
-- `toString()` - readable string representation
-- `copy()` - create modified copies
-
-```kotlin
-data class User(val name: String, val age: Int)
-
-val user1 = User("John", 30)
-val user2 = user1.copy(age = 31)
-```
-
-### Sealed Classes
-
-Sealed classes represent **restricted inheritance hierarchies** where all possible subclasses are known at compile time:
-
-```kotlin
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val error: String) : Result<Nothing>()
-    object Loading : Result<Nothing>()
-}
-```
-
-### Combining Both
-
-Together, they create **type-safe and easily manageable data structures**, especially for `when` expressions:
-
-```kotlin
-fun handleResult(result: Result<String>) = when (result) {
-    is Result.Success -> println("Data: ${result.data}")
-    is Result.Error -> println("Error: ${result.error}")
-    Result.Loading -> println("Loading...")
-}  // Exhaustive - compiler checks all cases!
-```
-
-**Benefits of combination:**
-- Type safety at compile time
-- Exhaustive when expressions
-- Clean, maintainable code
-- Perfect for state management
+> Tell me about data classes and sealed classes and how to combine them
 
 ---
 
@@ -79,11 +28,12 @@ fun handleResult(result: Result<String>) = when (result) {
 
 ### Data Классы
 
-Data классы предназначены для **хранения данных** и автоматически генерируют полезные методы:
-- `equals()` - равенство на основе значений
-- `hashCode()` - согласованное хеширование
-- `toString()` - читаемое строковое представление
-- `copy()` - создание модифицированных копий
+Data классы предназначены для "хранения данных" и автоматически генерируют полезные методы на основе свойств, объявленных в первичном конструкторе:
+- `equals()` — сравнение по значению (для свойств из первичного конструктора)
+- `hashCode()` — согласованное хеширование (по свойствам из первичного конструктора)
+- `toString()` — читаемое строковое представление
+- `copy()` — создание модифицированных копий
+- `componentN()` — поддержка деструктуризации
 
 ```kotlin
 data class User(val name: String, val age: Int)
@@ -92,13 +42,15 @@ val user1 = User("John", 30)
 val user2 = user1.copy(age = 31)
 ```
 
+По умолчанию в `equals`, `hashCode`, `toString`, `copy` и `componentN` участвуют только свойства из первичного конструктора.
+
 ### Sealed Классы
 
-Sealed классы представляют **ограниченные иерархии наследования**, где все возможные подклассы известны во время компиляции:
+Sealed классы представляют "ограниченные иерархии наследования", где все разрешённые подклассы известны компилятору (они должны находиться в том же пакете и модуле в современных версиях Kotlin):
 
 ```kotlin
 sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
+    data class Success<out T>(val data: T) : Result<T>()
     data class Error(val error: String) : Result<Nothing>()
     object Loading : Result<Nothing>()
 }
@@ -106,24 +58,96 @@ sealed class Result<out T> {
 
 ### Комбинация Обоих
 
-Вместе они создают **типобезопасные и легко управляемые структуры данных**, особенно для выражений `when`:
+Вместе они создают "типобезопасные и легко управляемые структуры данных", особенно для `when`-выражений:
 
 ```kotlin
 fun handleResult(result: Result<String>) = when (result) {
     is Result.Success -> println("Data: ${result.data}")
     is Result.Error -> println("Error: ${result.error}")
     Result.Loading -> println("Loading...")
-}  // Исчерпывающе - компилятор проверяет все случаи!
+}  // Исчерпывающе для ненулевого Result: компилятор проверяет все случаи
 ```
 
-**Преимущества комбинации:**
+Преимущества комбинации:
 - Типобезопасность во время компиляции
-- Исчерпывающие when-выражения
+- Исчерпывающие `when`-выражения для ненулевых sealed-типов
 - Чистый, поддерживаемый код
-- Идеально для управления состоянием
+- Отлично подходит для представления иерархий UI/состояний/результатов
+
+См. также: [[c-concepts--kotlin--medium]]
+
+---
+
+## Answer (EN)
+
+### Data Classes
+
+Data classes are designed for "storing data" and automatically generate useful methods based on the properties declared in the primary constructor:
+- `equals()` - value-based equality (for primary-constructor properties)
+- `hashCode()` - consistent hashing (for primary-constructor properties)
+- `toString()` - readable string representation
+- `copy()` - create modified copies
+- `componentN()` - support for destructuring declarations
+
+```kotlin
+data class User(val name: String, val age: Int)
+
+val user1 = User("John", 30)
+val user2 = user1.copy(age = 31)
+```
+
+Only properties from the primary constructor participate in `equals`, `hashCode`, `toString`, `copy`, and `componentN` by default.
+
+### Sealed Classes
+
+Sealed classes represent "restricted inheritance hierarchies" where all permitted subclasses are known to the compiler (they must be in the same package and module in modern Kotlin):
+
+```kotlin
+sealed class Result<out T> {
+    data class Success<out T>(val data: T) : Result<T>()
+    data class Error(val error: String) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+```
+
+### Combining Both
+
+Together, they create "type-safe and easily manageable data structures", especially for `when` expressions:
+
+```kotlin
+fun handleResult(result: Result<String>) = when (result) {
+    is Result.Success -> println("Data: ${result.data}")
+    is Result.Error -> println("Error: ${result.error}")
+    Result.Loading -> println("Loading...")
+}  // Exhaustive for non-nullable Result: compiler checks all cases
+```
+
+Benefits of combination:
+- Type safety at compile time
+- Exhaustive `when` expressions for non-nullable sealed types
+- Clean, maintainable code
+- Great for representing UI/state/result hierarchies
+
+---
+
+## Дополнительные вопросы (RU)
+
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[q-channels-basics-types--kotlin--medium]]
+- [[q-kotlin-native--kotlin--hard]]
 
 ## Related Questions
 
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 - [[q-channels-basics-types--kotlin--medium]]
 - [[q-kotlin-native--kotlin--hard]]
+
+## Ссылки (RU)
+
+- [[c-computer-science]]
+- [[c-concepts--kotlin--medium]]
+
+## References
+
+- [[c-computer-science]]
+- [[c-concepts--kotlin--medium]]

@@ -3,39 +3,39 @@ id: cs-033
 title: "Nothing Class Purpose / Назначение класса Nothing"
 aliases: ["Nothing Class", "Класс Nothing"]
 topic: cs
-subtopics: [control-flow, exceptions, type-system]
+subtopics: [type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-sealed-classes-vs-enum--programming-languages--medium, q-smart-casts-how--programming-languages--easy, q-unit-type-purpose--programming-languages--medium]
+related: [c-computer-science, q-abstract-class-purpose--cs--medium]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [control-flow, difficulty/medium, exceptions, kotlin, type-system, unreachable-code]
-sources: [https://kotlinlang.org/docs/whatsnew15.html]
+sources: ["https://kotlinlang.org/docs/whatsnew15.html"]
 ---
 
 # Вопрос (RU)
-> Зачем нужен класс Nothing в Kotlin? Какую роль он играет в системе типов?
+> Зачем нужен класс `Nothing` в Kotlin? Какую роль он играет в системе типов?
 
 # Question (EN)
-> Why is the Nothing class needed in Kotlin? What role does it play in the type system?
+> Why is the `Nothing` class needed in Kotlin? What role does it play in the type system?
 
 ---
 
 ## Ответ (RU)
 
 **Теория Nothing Type:**
-Nothing - type that has no values, represents unreachable code и denotes operations that never complete normally. Nothing - bottom type в Kotlin hierarchy, является subtype всех types. Используется для: static analysis, smart casts, code optimization, unreachable code detection.
+Nothing — тип без значений, который обозначает недостижимый код и операции, которые никогда не завершаются нормально. Nothing — bottom type в иерархии типов Kotlin, является подтипом всех типов. Используется для: анализа управляющего потока, смарт-кастов, оптимизаций и обнаружения недостижимого кода.
 
 **Определение:**
 
-*Теория:* Nothing - special type representing no possible value. Обозначает функции, которые never return normally - either throw exception или run infinitely. Компилятор использует Nothing для inferring unreachable code paths. Nothing - bottom type - subtype всего, что позволяет ему быть "safe" в любом context.
+*Теория:* Nothing — специальный тип, представляющий отсутствие возможных значений. Им помечают функции, которые не возвращают управление нормально: либо бросают исключение, либо выполняются бесконечно. Компилятор использует Nothing для вывода недостижимых путей выполнения. Как bottom type (подтип всего) он может подставляться там, где ожидается любой другой тип, что безопасно с точки зрения типов.
 
 ```kotlin
-// ✅ Nothing для functions что never return
+// ✅ Nothing для функций, которые никогда не возвращают
 fun fail(message: String): Nothing {
     throw IllegalArgumentException(message)
 }
@@ -43,11 +43,11 @@ fun fail(message: String): Nothing {
 // ✅ Компилятор знает: код после error недостижим
 fun processValue(value: String?): String {
     val result = value ?: error("Value cannot be null")
-    // value здесь non-null (smart cast)
+    // result здесь гарантированно non-null (smart cast через Elvis + Nothing)
     return result.uppercase()
 }
 
-// ✅ Infinite loop - never returns
+// ✅ Бесконечный цикл — никогда не возвращает
 fun eventLoop(): Nothing {
     while (true) {
         handleEvent(waitForEvent())
@@ -58,118 +58,124 @@ fun eventLoop(): Nothing {
 **Ключевое использование:**
 
 **1. Static Code Analysis:**
-*Теория:* Compiler использует Nothing для control flow analysis. Если function возвращает Nothing, compiler знает что code after call недостижим. Это enables: smart casts (value becomes non-null), unreachable code detection, code optimization. Помогает prevent errors и improves performance.
+*Теория:* Компилятор использует Nothing при анализе управляющего потока. Если ветка заканчивается вызовом функции с возвращаемым типом Nothing, он знает, что после неё выполнение не продолжается. Это позволяет:
+- делать смарт-касты (после "фатальной" ветки переменная считается проверенной),
+- выявлять недостижимый код,
+- выполнять оптимизации.
 
 ```kotlin
-// ✅ Smart cast после Nothing
+// ✅ Smart cast через Nothing
 fun validateString(value: String?): String {
     if (value == null) {
-        throw IllegalArgumentException("Null value")  // Returns Nothing
+        throw IllegalArgumentException("Null value")  // тип результата ветки: Nothing
     }
     // value здесь smart cast к String
-    return value.uppercase()  // No null check needed
+    return value.uppercase()  // Дополнительная проверка на null не нужна
 }
 
-// ✅ Compiler знает: division safe
+// ✅ Аналогично для проверок
 fun divide(a: Int, b: Int): Int {
     if (b == 0) {
-        throw IllegalArgumentException("Cannot divide by zero")  // Nothing
+        throw IllegalArgumentException("Cannot divide by zero")  // ветка с Nothing
     }
-    // Compiler knows b != 0
-    return a / b  // Safe division
+    // По анализу потока b != 0 в оставшемся коде
+    return a / b
 }
 ```
 
 **2. Error Functions:**
-*Теория:* error() и TODO() возвращают Nothing, потому что они always throw exceptions. Это позволяет compiler infer что code после них unreachable. Улучшает code safety и static analysis.
+*Теория:* Функции `error()` и `TODO()` возвращают Nothing, потому что всегда выбрасывают исключение и не завершаются нормально. Это позволяет компилятору считать код после них недостижимым и усиливает статический анализ.
 
 ```kotlin
 // ✅ Standard library error() возвращает Nothing
 fun require(condition: Boolean, message: () -> String) {
     if (!condition) {
-        error(message())  // Never returns
+        error(message())  // Never returns (Nothing)
     }
+    // При true выполнение продолжается нормально
 }
 
-// ✅ Usage: smart cast после require
+// ✅ Использование: smart cast после require
 fun processUser(user: User?) {
     require(user != null) { "User cannot be null" }
-    // user здесь non-null
-    println(user.name)  // No null check needed
+    // Если мы здесь, условие true, user != null по анализу потока
+    println(user!!.name)
 }
 
 // ✅ TODO() тоже возвращает Nothing
 fun calculateTax(amount: Double): Double {
     TODO("Not implemented yet")
-    // Code here недостижим
+    // Код здесь недостижим
 }
 
-// ✅ Custom error handler
+// ✅ Кастомный helper с Nothing на "ошибочном" пути
 fun requireNonNull(value: String?): String {
     return value ?: throw IllegalArgumentException("Value is null")
+    // throw имеет тип Nothing, поэтому выражение имеет тип String
 }
 ```
 
 **3. Type Hierarchy (Bottom Type):**
-*Теория:* Nothing - bottom type в Kotlin. Это значит что Nothing является subtype всех types. Это позволяет Nothing be used в любом type context. Поддерживает type safety и allows creating generic functions что "never return but can return any type".
+*Теория:* Nothing — bottom type в Kotlin: подтип всех типов. Это позволяет значениям типа Nothing (а фактически — отсутствию значения, например ветви с `throw` или вызовами `error/TODO`) подставляться туда, где ожидается любой другой тип. Это поддерживает безопасные generic-конструкции и выражения, которые "логически возвращают T", но фактически никогда не завершаются.
 
 ```kotlin
-// ✅ Nothing - subtype всего
-val stringOrNothing: String = TODO()  // Valid: Nothing → String
-val intOrNothing: Int = error("Error")  // Valid: Nothing → Int
-val anyTypeOrNothing: Any = TODO()  // Valid: Nothing → Any
+// ✅ Nothing как подтип любого типа
+val stringOrNothing: String = TODO()       // TODO(): Nothing → совместимо с String
+val intOrNothing: Int = error("Error")    // Nothing → Int
+val anyTypeOrNothing: Any = TODO()         // Nothing → Any
 
-// ✅ Generic function using Nothing
+// ✅ Generic-функция, которая "может вернуть T", но фактически всегда кидает
 fun <T> fail(): T = throw Exception()
 
-val str: String = fail()  // T inferred as String, Nothing → String
-val num: Int = fail()     // T inferred as Int, Nothing → Int
+val str: String = fail()  // T выводится как String, тело: Nothing
+val num: Int = fail()     // T выводится как Int
 
-// ✅ Type hierarchy
+// ✅ Упрощённая иерархия
 // Any (top type)
 //   ↓
-// All concrete types
+//  ... конкретные типы ...
 //   ↓
-// Nothing (bottom type - subtype of all)
+// Nothing (bottom type — подтип всех)
 ```
 
 **4. Nullable Nothing:**
-*Теория:* `Nothing?` - type который может быть только null. Useful для empty collections, nullable lists, functions что always return null. Represent "no value" в type-safe way.
+*Теория:* `Nothing?` — тип, чьим единственным значением на нормально достижимых путях может быть `null`. Он полезен как результат, обозначающий "может быть только null или не завершиться". Также `List<Nothing>` используется стандартной библиотекой как тип пустых коллекций: так как значений Nothing не существует, такая коллекция не может содержать элементов.
 
 ```kotlin
-// ✅ Nothing? может быть только null
-val onlyNull: Nothing? = null  // Only valid value
+// ✅ Nothing? может быть только null (при нормальном завершении)
+val onlyNull: Nothing? = null
 
-// ✅ Empty collections
+// ✅ Пустые коллекции
 val emptyList: List<Nothing> = emptyList()
-// emptyList не может содержать elements (Nothing has no values)
+// Такая коллекция не может содержать элементов, т.к. нет значений типа Nothing
 
-// ✅ Functions always returning null
+// ✅ Функция, которая либо возвращает null, либо не завершается
 fun alwaysNull(): Nothing? = null
-fun validateAndReturnNull(): Nothing? {
-    if (someCondition) {
-        throw Exception()  // Returns Nothing, not Nothing?
+
+fun validateAndReturnNull(shouldThrow: Boolean): Nothing? {
+    if (shouldThrow) {
+        throw Exception()  // тип Nothing, совместим с Nothing?
     }
-    return null  // Returns Nothing?
+    return null            // единственное нормальное значение Nothing?
 }
 ```
 
 **Компоненты Nothing:**
 
 **1. Unreachable Code Detection:**
-*Теория:* Compiler analyzes code paths. Если code после function call unreachable (function returns Nothing), compiler может: warn о unreachable code, optimize code (remove unreachable branches), improve smart casts (know that variable cannot be null).
+*Теория:* Компилятор анализирует пути выполнения. Если путь оканчивается вызовом функции с возвращаемым типом Nothing, код после этого вызова считается недостижимым: возможны предупреждения, удаление недостижимых веток и более точные смарт-касты.
 
 ```kotlin
-// ✅ Unreachable code warning
+// ✅ Предупреждение о недостижимом коде
 fun process() {
     if (someCondition) {
         return
     }
     error("Should not happen")  // Returns Nothing
-    println("Unreachable")  // Compiler warning
+    println("Unreachable")       // Может быть помечено как недостижимо
 }
 
-// ✅ Exhaustive when
+// ✅ Exhaustive when с использованием Nothing
 sealed class Result<out T> {
     data class Success<T>(val data: T) : Result<T>()
     data class Error(val message: String) : Result<Nothing>()
@@ -177,17 +183,17 @@ sealed class Result<out T> {
 
 fun <T> handleResult(result: Result<T>): T {
     return when (result) {
-        is Result.Success -> result.data  // T
-        is Result.Error -> error(result.message)  // Nothing → T
+        is Result.Success -> result.data          // T
+        is Result.Error -> error(result.message)  // Nothing совместим с T
     }
 }
 ```
 
 **2. Smart Casts:**
-*Теория:* Smart casting - automatic type casting based на control flow. Nothing улучшает smart casting: если function returns Nothing после null check, compiler knows variable cannot be null after check. Eliminates need для !! operator или ?. null checks.
+*Теория:* Смарт-касты основаны на анализе условий и недостижимых веток. Nothing помогает зафиксировать ветки, где выполнение не продолжается: если в ветке "ошибки" мы вызываем функцию, возвращающую Nothing, компилятор может считать остальные варианты безопасными и опускать лишние проверки.
 
 ```kotlin
-// ✅ Smart cast после Nothing
+// ✅ Smart cast через Nothing в Elvis-операторе
 fun safeCast(obj: Any): String {
     return obj as? String ?: error("Not a string")
     // obj as? String → String?
@@ -195,41 +201,42 @@ fun safeCast(obj: Any): String {
     // String? ?: Nothing → String
 }
 
-// ✅ Null checks with Nothing
+// ✅ Null-check с использованием throw (Nothing)
 fun processNonNull(value: String?): Int {
     val nonNull = value ?: throw IllegalArgumentException("Value is null")
-    // Smart cast: nonNull теперь String
+    // nonNull здесь имеет тип String
     return nonNull.length
 }
 
-// ✅ Using require for smart casts
+// ✅ require/check используют throw (Nothing) на ошибочном пути
 fun <T> List<T>.getOrThrow(index: Int): T {
     require(index in indices) { "Index out of bounds" }
-    return this[index]  // No bounds check needed
+    // Если мы здесь, индекс валиден
+    return this[index]
 }
 ```
 
 **Практические примеры:**
 
 **1. Validation Helpers:**
-*Теория:* require(), check(), assert() используют Nothing для создания validation helpers. После call value becomes non-null или condition становится true в view of compiler. Это enables type-safe validation без manual null checks.
+*Теория:* Стандартные функции `require`, `check`, `assert` сами по себе имеют обычные возвращаемые типы (`Unit`), но в ветке нарушения условия они бросают исключение (то есть фактически возвращают Nothing и не продолжают выполнение). Это позволяет после успешного вызова использовать результаты проверок для смарт-кастов и безопасного кода без лишних null-check'ов.
 
 ```kotlin
-// ✅ Preconditions с Nothing
+// ✅ Preconditions
 fun divide(a: Int, b: Int): Int {
     require(b != 0) { "Divisor cannot be zero" }
-    // Compiler knows b != 0
+    // После успешного require по анализу потока b != 0
     return a / b
 }
 
-// ✅ Check condition
+// ✅ Проверка и smart cast
 fun processUser(user: User?) {
     check(user != null) { "User must not be null" }
-    // user smart cast to non-null
-    println(user.name)
+    // Если мы здесь, user != null
+    println(user!!.name)
 }
 
-// ✅ Assert в debug
+// ✅ Assert в debug-сборках бросает при нарушении
 fun calculate(value: Int): Int {
     val result = value * 2
     assert(result >= 0) { "Result should be positive" }
@@ -238,55 +245,55 @@ fun calculate(value: Int): Int {
 ```
 
 **2. Early Returns:**
-*Теория:* Using Nothing для early returns в validation. Если validation fails, throw exception (returns Nothing), остальной code недостижим. This enables safe access без null checks в rest of function.
+*Теория:* Использование выражений с типом Nothing (броски исключений, `error`, `TODO`) в ветках валидации позволяет раннее завершение и делает оставшийся код безопасным и более читаемым.
 
 ```kotlin
-// ✅ Early return с exception
+// ✅ Ранний выход через исключение
 fun findUser(id: Int): User {
     val user = database.findById(id) ?: throw NotFoundException("User not found")
-    // user guaranteed non-null after this
+    // user гарантированно non-null
     return user
 }
 
-// ✅ Precondition checks
+// ✅ Проверки предусловий
 fun processConfig(config: Config) {
     require(config.isValid()) { "Invalid configuration" }
-    // config guaranteed valid
+    // Если мы здесь, конфиг валиден
     initializeWith(config)
 }
 ```
 
 **Nothing vs Unit vs Void:**
 
-*Теория:* Unit - функция completed successfully но не возвращает useful value. Nothing - функция never completes normally. Void (Java) - similar to Unit. Nothing unique в том что он represents unreachable code и bottom type.
+*Теория:* `Unit` — функция завершается успешно, но не возвращает полезного значения. `Nothing` — функция не завершается нормально (всегда бросает исключение или зависает). `void` в Java ближе к `Unit`: обозначает отсутствие возвращаемого значения, но не является bottom type. Nothing уникален тем, что одновременно обозначает недостижимый код и является bottom type, подтипом всех типов.
 
 ```kotlin
-// ✅ Unit - returns successfully, no value
+// ✅ Unit — успешно завершается, без значения
 fun printMessage(msg: String): Unit {
     println(msg)
-    // Returns normally
+    // Возврат нормальный
 }
 
-// ✅ Nothing - never returns
+// ✅ Nothing — никогда не возвращает
 fun failWithMessage(msg: String): Nothing {
     throw Exception(msg)
-    // Never returns
+    // Никогда не возвращает
 }
 
-// Comparison:
-// Unit: Function completes but has no return value
-// Nothing: Function never completes
-// Void (Java): Similar to Unit
+// Сравнение:
+// Unit: функция завершается, но без значения
+// Nothing: функция не завершается нормально
+// Void (Java): аналог Unit, не bottom type
 ```
 
 ## Answer (EN)
 
 **Nothing Type Theory:**
-Nothing - type that has no values, represents unreachable code and denotes operations that never complete normally. Nothing - bottom type in Kotlin hierarchy, is subtype of all types. Used for: static analysis, smart casts, code optimization, unreachable code detection.
+Nothing is a type that has no values, represents unreachable code, and denotes operations that never complete normally. Nothing is the bottom type in Kotlin's type hierarchy and is a subtype of all types. It is used for control-flow analysis, smart casts, optimizations, and unreachable code detection.
 
 **Definition:**
 
-*Theory:* Nothing - special type representing no possible value. Denotes functions that never return normally - either throw exception or run infinitely. Compiler uses Nothing for inferring unreachable code paths. Nothing - bottom type - subtype of everything, which allows it to be "safe" in any context.
+*Theory:* Nothing is a special type representing no possible value. It is used for functions that never return normally: they either throw an exception or run forever. The compiler uses Nothing to model unreachable code paths. As the bottom type (a subtype of everything), it can safely appear where any other type is expected.
 
 ```kotlin
 // ✅ Nothing for functions that never return
@@ -294,10 +301,10 @@ fun fail(message: String): Nothing {
     throw IllegalArgumentException(message)
 }
 
-// ✅ Compiler knows: code after error is unreachable
+// ✅ Compiler knows: code after error is unreachable on that branch
 fun processValue(value: String?): String {
     val result = value ?: error("Value cannot be null")
-    // value here is non-null (smart cast)
+    // result is guaranteed non-null here (Elvis + Nothing)
     return result.uppercase()
 }
 
@@ -312,44 +319,48 @@ fun eventLoop(): Nothing {
 **Key Uses:**
 
 **1. Static Code Analysis:**
-*Theory:* Compiler uses Nothing for control flow analysis. If function returns Nothing, compiler knows that code after call is unreachable. This enables: smart casts (value becomes non-null), unreachable code detection, code optimization. Helps prevent errors and improves performance.
+*Theory:* The compiler uses Nothing during control-flow analysis. If a branch ends with a call to a function returning Nothing, it knows execution does not continue past that point. This enables:
+- smart casts (after a "fatal" branch, remaining paths are refined),
+- unreachable code detection,
+- optimizations.
 
 ```kotlin
-// ✅ Smart cast after Nothing
+// ✅ Smart cast via Nothing
 fun validateString(value: String?): String {
     if (value == null) {
-        throw IllegalArgumentException("Null value")  // Returns Nothing
+        throw IllegalArgumentException("Null value")  // branch has type Nothing
     }
-    // value here smart cast to String
-    return value.uppercase()  // No null check needed
+    // value here smart-cast to String
+    return value.uppercase()
 }
 
-// ✅ Compiler knows: division safe
+// ✅ Similarly for other checks
 fun divide(a: Int, b: Int): Int {
     if (b == 0) {
-        throw IllegalArgumentException("Cannot divide by zero")  // Nothing
+        throw IllegalArgumentException("Cannot divide by zero")  // Nothing branch
     }
-    // Compiler knows b != 0
-    return a / b  // Safe division
+    // By flow analysis, b != 0 here
+    return a / b
 }
 ```
 
 **2. Error Functions:**
-*Theory:* error() and TODO() return Nothing because they always throw exceptions. This allows compiler to infer that code after them is unreachable. Improves code safety and static analysis.
+*Theory:* `error()` and `TODO()` return Nothing because they always throw exceptions and never complete normally. This lets the compiler treat code after them as unreachable and strengthens static analysis.
 
 ```kotlin
 // ✅ Standard library error() returns Nothing
 fun require(condition: Boolean, message: () -> String) {
     if (!condition) {
-        error(message())  // Never returns
+        error(message())  // Never returns (Nothing)
     }
+    // When condition is true, execution continues normally
 }
 
 // ✅ Usage: smart cast after require
 fun processUser(user: User?) {
     require(user != null) { "User cannot be null" }
-    // user here is non-null
-    println(user.name)  // No null check needed
+    // If we're here, condition is true, so user != null by flow analysis
+    println(user!!.name)
 }
 
 // ✅ TODO() also returns Nothing
@@ -358,60 +369,62 @@ fun calculateTax(amount: Double): Double {
     // Code here is unreachable
 }
 
-// ✅ Custom error handler
+// ✅ Custom helper: Nothing on the failing path
 fun requireNonNull(value: String?): String {
     return value ?: throw IllegalArgumentException("Value is null")
+    // throw has type Nothing, so the whole expression has type String
 }
 ```
 
 **3. Type Hierarchy (Bottom Type):**
-*Theory:* Nothing - bottom type in Kotlin. This means Nothing is subtype of all types. This allows Nothing to be used in any type context. Supports type safety and allows creating generic functions that "never return but can return any type".
+*Theory:* Nothing is the bottom type in Kotlin: it is a subtype of all types. That allows expressions of type Nothing (such as `throw` or calls to `error`/`TODO`) to be used wherever any other type is expected. This supports type safety in generic APIs and expressions that "conceptually return T" but never complete.
 
 ```kotlin
-// ✅ Nothing - subtype of everything
-val stringOrNothing: String = TODO()  // Valid: Nothing → String
-val intOrNothing: Int = error("Error")  // Valid: Nothing → Int
-val anyTypeOrNothing: Any = TODO()  // Valid: Nothing → Any
+// ✅ Nothing as subtype of any type
+val stringOrNothing: String = TODO()       // TODO(): Nothing → compatible with String
+val intOrNothing: Int = error("Error")    // Nothing → Int
+val anyTypeOrNothing: Any = TODO()         // Nothing → Any
 
-// ✅ Generic function using Nothing
+// ✅ Generic function that "returns T" but actually never completes
 fun <T> fail(): T = throw Exception()
 
-val str: String = fail()  // T inferred as String, Nothing → String
-val num: Int = fail()     // T inferred as Int, Nothing → Int
+val str: String = fail()  // T inferred as String, body is Nothing
+val num: Int = fail()     // T inferred as Int
 
-// ✅ Type hierarchy
+// ✅ Simplified hierarchy
 // Any (top type)
 //   ↓
-// All concrete types
+//  ... concrete types ...
 //   ↓
 // Nothing (bottom type - subtype of all)
 ```
 
 **4. Nullable Nothing:**
-*Theory:* `Nothing?` - type that can only be null. Useful for empty collections, nullable lists, functions that always return null. Represent "no value" in type-safe way.
+*Theory:* `Nothing?` is a type whose only normal value is `null`. A function of type `Nothing?` may either return `null` or never complete (throw / loop); `throw` expressions have type Nothing, which is compatible with Nothing?. `List<Nothing>` is used by the standard library as the type of empty collections: since there are no values of type Nothing, such a list cannot contain elements.
 
 ```kotlin
-// ✅ Nothing? can only be null
-val onlyNull: Nothing? = null  // Only valid value
+// ✅ Nothing? can only be null on normal completion
+val onlyNull: Nothing? = null
 
 // ✅ Empty collections
 val emptyList: List<Nothing> = emptyList()
-// emptyList cannot contain elements (Nothing has no values)
+// This list cannot contain elements because there are no values of type Nothing
 
-// ✅ Functions always returning null
+// ✅ Function that either returns null or does not complete
 fun alwaysNull(): Nothing? = null
-fun validateAndReturnNull(): Nothing? {
-    if (someCondition) {
-        throw Exception()  // Returns Nothing, not Nothing?
+
+fun validateAndReturnNull(shouldThrow: Boolean): Nothing? {
+    if (shouldThrow) {
+        throw Exception()  // type Nothing, compatible with Nothing?
     }
-    return null  // Returns Nothing?
+    return null            // the only normal value of Nothing?
 }
 ```
 
 **Nothing Components:**
 
 **1. Unreachable Code Detection:**
-*Theory:* Compiler analyzes code paths. If code after function call is unreachable (function returns Nothing), compiler can: warn about unreachable code, optimize code (remove unreachable branches), improve smart casts (know that variable cannot be null).
+*Theory:* The compiler analyzes control flow. If a path ends with a function returning Nothing, code after that call is considered unreachable: it may emit warnings, remove unreachable branches, and apply more precise smart casts.
 
 ```kotlin
 // ✅ Unreachable code warning
@@ -420,10 +433,10 @@ fun process() {
         return
     }
     error("Should not happen")  // Returns Nothing
-    println("Unreachable")  // Compiler warning
+    println("Unreachable")       // May be reported as unreachable
 }
 
-// ✅ Exhaustive when
+// ✅ Exhaustive when leveraging Nothing
 sealed class Result<out T> {
     data class Success<T>(val data: T) : Result<T>()
     data class Error(val message: String) : Result<Nothing>()
@@ -431,17 +444,17 @@ sealed class Result<out T> {
 
 fun <T> handleResult(result: Result<T>): T {
     return when (result) {
-        is Result.Success -> result.data  // T
-        is Result.Error -> error(result.message)  // Nothing → T
+        is Result.Success -> result.data          // T
+        is Result.Error -> error(result.message)  // Nothing is compatible with T
     }
 }
 ```
 
 **2. Smart Casts:**
-*Theory:* Smart casting - automatic type casting based on control flow. Nothing improves smart casting: if function returns Nothing after null check, compiler knows variable cannot be null after check. Eliminates need for !! operator or ?. null checks.
+*Theory:* Smart casts are based on control-flow analysis. Nothing marks paths where execution does not continue. If the "error" branch calls a Nothing-returning function, the remaining paths get refined types (e.g., non-null), eliminating the need for extra `!!` or `?.` checks.
 
 ```kotlin
-// ✅ Smart cast after Nothing
+// ✅ Smart cast via Nothing in Elvis
 fun safeCast(obj: Any): String {
     return obj as? String ?: error("Not a string")
     // obj as? String → String?
@@ -449,41 +462,42 @@ fun safeCast(obj: Any): String {
     // String? ?: Nothing → String
 }
 
-// ✅ Null checks with Nothing
+// ✅ Null checks with throw (Nothing)
 fun processNonNull(value: String?): Int {
     val nonNull = value ?: throw IllegalArgumentException("Value is null")
-    // Smart cast: nonNull now String
+    // nonNull now has type String
     return nonNull.length
 }
 
-// ✅ Using require for smart casts
+// ✅ require/check rely on throwing (Nothing) on the failing path
 fun <T> List<T>.getOrThrow(index: Int): T {
     require(index in indices) { "Index out of bounds" }
-    return this[index]  // No bounds check needed
+    // If we're here, index is valid
+    return this[index]
 }
 ```
 
 **Practical Examples:**
 
 **1. Validation Helpers:**
-*Theory:* require(), check(), assert() use Nothing to create validation helpers. After call value becomes non-null or condition becomes true in view of compiler. This enables type-safe validation without manual null checks.
+*Theory:* Standard helpers `require`, `check`, and `assert` have regular return types (typically Unit) on success, but throw on failure; those throwing branches have type Nothing. This pattern, combined with control-flow analysis, enables type-safe validation without manual null checks.
 
 ```kotlin
-// ✅ Preconditions with Nothing
+// ✅ Preconditions
 fun divide(a: Int, b: Int): Int {
     require(b != 0) { "Divisor cannot be zero" }
-    // Compiler knows b != 0
+    // After a successful require, b != 0 by flow analysis
     return a / b
 }
 
 // ✅ Check condition
 fun processUser(user: User?) {
     check(user != null) { "User must not be null" }
-    // user smart cast to non-null
-    println(user.name)
+    // If we're here, user != null
+    println(user!!.name)
 }
 
-// ✅ Assert in debug
+// ✅ Assert in debug builds throws on violation
 fun calculate(value: Int): Int {
     val result = value * 2
     assert(result >= 0) { "Result should be positive" }
@@ -492,27 +506,27 @@ fun calculate(value: Int): Int {
 ```
 
 **2. Early Returns:**
-*Theory:* Using Nothing for early returns in validation. If validation fails, throw exception (returns Nothing), rest of code is unreachable. This enables safe access without null checks in rest of function.
+*Theory:* Using expressions of type Nothing (throws, `error`, `TODO`) in validation branches provides early exits and makes the remaining code safe and simpler.
 
 ```kotlin
-// ✅ Early return with exception
+// ✅ Early exit via exception
 fun findUser(id: Int): User {
     val user = database.findById(id) ?: throw NotFoundException("User not found")
-    // user guaranteed non-null after this
+    // user is guaranteed non-null
     return user
 }
 
 // ✅ Precondition checks
 fun processConfig(config: Config) {
     require(config.isValid()) { "Invalid configuration" }
-    // config guaranteed valid
+    // If we're here, config is valid
     initializeWith(config)
 }
 ```
 
 **Nothing vs Unit vs Void:**
 
-*Theory:* Unit - function completed successfully but doesn't return useful value. Nothing - function never completes normally. Void (Java) - similar to Unit. Nothing unique in that it represents unreachable code and bottom type.
+*Theory:* Unit means a function completes successfully but does not return a useful value. Nothing means a function never completes normally (it always throws or loops forever). Java's void is similar to Unit (no value) but is not a bottom type. Nothing is unique in that it both models unreachable code paths and is the bottom type, a subtype of all types.
 
 ```kotlin
 // ✅ Unit - returns successfully, no value
@@ -521,25 +535,47 @@ fun printMessage(msg: String): Unit {
     // Returns normally
 }
 
-// ✅ Nothing - never returns
+// ✅ Nothing - never returns normally
 fun failWithMessage(msg: String): Nothing {
     throw Exception(msg)
     // Never returns
 }
 
 // Comparison:
-// Unit: Function completes but has no return value
-// Nothing: Function never completes
-// Void (Java): Similar to Unit
+// Unit: function completes but has no value
+// Nothing: function never completes normally
+// Void (Java): similar to Unit, not a bottom type
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем разница между `Nothing` и `Unit`?
+- Как `Nothing` помогает реализовать smart cast в Kotlin?
+- Когда стоит использовать `Nothing?` вместо `Nothing`?
+
 ## Follow-ups
 
-- What is the difference between Nothing and Unit?
-- How does Nothing enable smart casts in Kotlin?
+- What is the difference between `Nothing` and `Unit`?
+- How does `Nothing` enable smart casts in Kotlin?
 - When should you use `Nothing?` instead of `Nothing`?
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовые понятия системы типов Kotlin
+- Null-safety и smart cast'ы
+
+### Связанные (тот же уровень)
+- Тип `Unit`
+- Smart cast'ы и их использование
+- Sealed-классы и исчерпывающие `when`
+
+### Продвинутые (сложнее)
+- Продвинутые концепции системы типов
+- Обобщенное программирование с использованием `Nothing`
+- Типобезопасные паттерны обработки ошибок
 
 ## Related Questions
 
@@ -548,11 +584,15 @@ fun failWithMessage(msg: String): Nothing {
 - Null safety and smart casts
 
 ### Related (Same Level)
-- [[q-unit-type-purpose--programming-languages--medium]] - Unit type
-- [[q-smart-casts-how--programming-languages--easy]] - Smart casts
-- [[q-sealed-classes-vs-enum--programming-languages--medium]] - Sealed classes
+- Unit type
+- Smart casts
+- Sealed classes and exhaustive `when`
 
 ### Advanced (Harder)
 - Advanced type system concepts
-- Generic programming with Nothing
+- Generic programming with `Nothing`
 - Type-safe error handling patterns
+
+## References
+
+- "Kotlin 1.5: What's new" - Kotlin documentation

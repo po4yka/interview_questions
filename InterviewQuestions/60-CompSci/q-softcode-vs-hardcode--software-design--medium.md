@@ -1,83 +1,83 @@
 ---
-id: software-design-001
+id: cs-001
 title: "Softcode Vs Hardcode / Softcode против Hardcode"
 aliases: [Softcode Vs Hardcode, Softcode против Hardcode]
-topic: software-design
-subtopics: [best-practices, configuration-management, maintainability]
+topic: cs
+subtopics: [architecture, clean-code, configuration]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-software-design
-related: [q-extensions-concept--programming-languages--easy, q-flyweight-pattern--design-patterns--hard, q-proxy-pattern--design-patterns--medium]
+moc: moc-cs
+related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-13
-updated: 2025-10-31
-tags: [best-practices, configuration, difficulty/medium, flexibility, hardcoding, maintainability, softcoding, software-design]
+updated: 2025-11-11
+tags: [cs, configuration, difficulty/medium, flexibility, hardcoding, maintainability, softcoding]
+
 ---
-
-# Что Такое Софткод?
-
-# Question (EN)
-> What is softcode?
 
 # Вопрос (RU)
-> Что такое софткод?
+> Что такое софткод и чем он отличается от хардкода?
 
----
+# Question (EN)
+> What is softcode and how is it different from hardcode?
 
-## Answer (EN)
+## Ответ (RU)
 
-**Softcode (Soft Coding)** is a programming approach where **program logic is stored in configuration files, databases, or other external sources** rather than being **hardcoded** (hard-coded) directly in the code.
+Софткод (Softcode, Soft Coding) — это подход к проектированию, при котором поведение и настройки системы делают конфигурируемыми через внешние источники (конфигурационные файлы, переменные окружения, удалённый конфиг, базы данных, feature flags и т.п.), вместо жёсткого (hardcoded) вшивания всех значений в код. Базовая логика и инварианты остаются в коде, а внешними делают только те параметры и правила, которые ожидаемо могут меняться.
 
-## Hardcode Vs Softcode
+Ниже — детальное сравнение с хардкодом и примеры.
 
-### Hardcode (Hard Coding)
+### Хардкод против софткода
 
-**Hardcoding** means writing **fixed values or logic directly in the source code**.
+#### Хардкод (Hard Coding)
 
-#### - Hardcoded Example
+Хардкод — это запись фиксированных значений или логики напрямую в исходный код.
+
+Пример хардкода:
 
 ```kotlin
 class PaymentProcessor {
     fun calculateFee(amount: Double): Double {
-        // - Fee rate is hardcoded
-        return amount * 0.03  // 3% fee
+        // Тариф комиссии захардкожен
+        return amount * 0.03  // 3% комиссия
     }
 
     fun getApiUrl(): String {
-        // - URL is hardcoded
+        // URL захардкожен
         return "https://api.payment.com/v1"
     }
 
     fun getMaxRetries(): Int {
-        // - Max retries hardcoded
+        // Максимальное число ретраев захардкожено
         return 3
     }
 
     fun getSupportedCurrencies(): List<String> {
-        // - Currencies hardcoded
+        // Поддерживаемые валюты захардкожены
         return listOf("USD", "EUR", "GBP")
     }
 }
 ```
 
-**Problems with hardcoding:**
-- Changing fee rate requires **code modification and redeployment**
-- Can't configure different values for dev/staging/production
-- No way to change values without rebuilding the app
-- Business logic is mixed with implementation
+Проблемы хардкода:
+- Любое изменение требует правки кода и релиза
+- Сложно задавать разные значения для dev/staging/production
+- Нельзя гибко менять поведение без пересборки
+- Бизнес-правила смешаны с реализацией и медленно адаптируются
 
----
+#### Софткод (Soft Coding)
 
-### Softcode (Soft Coding)
+Софткод — это вынос настраиваемых значений и правил во внешние источники, чтобы менять поведение без изменения и перезагрузки кода.
 
-**Softcoding** means storing **configurable values in external sources**.
-
-#### - Softcoded Example
+Пример софткода:
 
 ```kotlin
-// Configuration stored externally
+// NOTE: демонстрационный пример; предполагаются нужные импорты и настройка
+
+// Конфигурация хранится во внешнем источнике
+@kotlinx.serialization.Serializable
 class AppConfig(
     val paymentFeeRate: Double,
     val apiUrl: String,
@@ -85,11 +85,11 @@ class AppConfig(
     val supportedCurrencies: List<String>
 )
 
-// Load from JSON file
+// Загрузка из JSON-файла
 class ConfigLoader {
     fun loadConfig(): AppConfig {
-        val json = File("config.json").readText()
-        return Json.decodeFromString<AppConfig>(json)
+        val json = java.io.File("config.json").readText()
+        return kotlinx.serialization.json.Json.decodeFromString<AppConfig>(json)
     }
 }
 
@@ -103,43 +103,43 @@ class ConfigLoader {
 }
 */
 
-// Usage
+// Использование
 class PaymentProcessor(private val config: AppConfig) {
     fun calculateFee(amount: Double): Double {
-        // - Fee rate from config
+        // Тариф берётся из конфигурации
         return amount * config.paymentFeeRate
     }
 
     fun getApiUrl(): String {
-        // - URL from config
+        // URL берётся из конфигурации
         return config.apiUrl
     }
 
     fun getMaxRetries(): Int {
-        // - Max retries from config
+        // Максимальное число ретраев берётся из конфигурации
         return config.maxRetries
     }
 
     fun getSupportedCurrencies(): List<String> {
-        // - Currencies from config
+        // Валюты берутся из конфигурации
         return config.supportedCurrencies
     }
 }
 ```
 
-**Benefits of softcoding:**
-- Change values **without rebuilding** the app
-- Different configs for **dev/staging/production**
-- **Business users** can modify configurations
-- Easier A/B testing and feature flags
+Преимущества софткода:
+- Можно менять значения без пересборки
+- Удобно задавать разные конфиги для окружений
+- Конфигурацией могут управлять ops/бизнес через панели/сервисы
+- Проще реализовать A/B-тесты и feature flags
 
 ---
 
-## Common Softcode Sources
+### Типичные источники софткода
 
-### 1. Configuration Files
+#### 1. Конфигурационные файлы
 
-**JSON, YAML, TOML, Properties files**
+JSON, YAML, TOML, properties-файлы.
 
 ```kotlin
 // application.properties
@@ -150,11 +150,11 @@ max.retries=3
 supported.currencies=USD,EUR,GBP
 */
 
-// Load from Properties
+// Загрузка из properties (упрощено)
 class PropertiesConfigLoader {
     fun loadConfig(): AppConfig {
-        val props = Properties()
-        props.load(FileInputStream("application.properties"))
+        val props = java.util.Properties()
+        props.load(java.io.FileInputStream("application.properties"))
 
         return AppConfig(
             paymentFeeRate = props.getProperty("payment.fee.rate").toDouble(),
@@ -166,69 +166,67 @@ class PropertiesConfigLoader {
 }
 ```
 
----
-
-### 2. Environment Variables
+#### 2. Переменные окружения
 
 ```kotlin
-// Read from environment
+// Чтение из переменных окружения (упрощено; в реальном коде нужна валидация)
 class EnvConfigLoader {
     fun loadConfig(): AppConfig {
         return AppConfig(
-            paymentFeeRate = System.getenv("PAYMENT_FEE_RATE")?.toDouble() ?: 0.03,
+            paymentFeeRate = System.getenv("PAYMENT_FEE_RATE")?.toDoubleOrNull() ?: 0.03,
             apiUrl = System.getenv("API_URL") ?: "https://api.payment.com/v1",
-            maxRetries = System.getenv("MAX_RETRIES")?.toInt() ?: 3,
+            maxRetries = System.getenv("MAX_RETRIES")?.toIntOrNull() ?: 3,
             supportedCurrencies = System.getenv("SUPPORTED_CURRENCIES")
                 ?.split(",") ?: listOf("USD", "EUR", "GBP")
         )
     }
 }
 
-// Set environment variables
+// Примеры:
 // export PAYMENT_FEE_RATE=0.025
 // export API_URL=https://api.staging.payment.com/v1
 // export MAX_RETRIES=5
 ```
 
-**Use cases:**
-- **Kubernetes/Docker** configurations
-- **CI/CD** pipeline settings
-- **Secrets** (API keys, passwords)
+Используется для:
+- Настроек контейнеров, Kubernetes/Docker
+- CI/CD-конфигураций
+- Секретов (через менеджер секретов + env)
 
----
-
-### 3. Remote Configuration (Firebase Remote Config, Server)
+#### 3. Удалённая конфигурация
 
 ```kotlin
-// Firebase Remote Config
+// Firebase Remote Config (упрощено)
 class RemoteConfigLoader(private val remoteConfig: FirebaseRemoteConfig) {
 
     suspend fun loadConfig(): AppConfig {
         remoteConfig.fetchAndActivate().await()
 
+        val supportedCurrenciesRaw = remoteConfig.getString("supported_currencies")
+
         return AppConfig(
             paymentFeeRate = remoteConfig.getDouble("payment_fee_rate"),
             apiUrl = remoteConfig.getString("api_url"),
             maxRetries = remoteConfig.getLong("max_retries").toInt(),
-            supportedCurrencies = remoteConfig.getString("supported_currencies")
-                .split(",")
+            supportedCurrencies = if (supportedCurrenciesRaw.isNotEmpty())
+                supportedCurrenciesRaw.split(",")
+            else
+                listOf("USD", "EUR", "GBP")
         )
     }
 }
 
-// Benefits:
-// - Update config without app update
-// - A/B testing
+// Преимущества:
+// - Обновление конфигурации без обновления приложения
+// - A/B-тесты
 // - Feature flags
-// - Per-user configurations
+// - Персонализация по сегментам
 ```
 
----
-
-### 4. Database
+#### 4. База данных
 
 ```kotlin
-// Store config in database
+// Хранение конфигурации в БД (пример на Room, упрощённый)
 @Entity(tableName = "app_config")
 data class ConfigEntity(
     @PrimaryKey val key: String,
@@ -244,14 +242,14 @@ interface ConfigDao {
     suspend fun setValue(config: ConfigEntity)
 }
 
-// Load from database
+// Загрузка из БД
 class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
     suspend fun loadConfig(): AppConfig {
         return AppConfig(
-            paymentFeeRate = configDao.getValue("payment_fee_rate")?.toDouble() ?: 0.03,
+            paymentFeeRate = configDao.getValue("payment_fee_rate")?.toDoubleOrNull() ?: 0.03,
             apiUrl = configDao.getValue("api_url") ?: "https://api.payment.com/v1",
-            maxRetries = configDao.getValue("max_retries")?.toInt() ?: 3,
+            maxRetries = configDao.getValue("max_retries")?.toIntOrNull() ?: 3,
             supportedCurrencies = configDao.getValue("supported_currencies")
                 ?.split(",") ?: listOf("USD", "EUR", "GBP")
         )
@@ -261,38 +259,35 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 ---
 
-## When to Use Softcode Vs Hardcode
+### Когда использовать софткод и когда хардкод
 
-### - Use Softcode For:
+Используем софткод для:
 
-1. **Configuration values** that may change:
+1. Конфигурационных значений, которые могут меняться:
    ```kotlin
-   // - Softcode
    val apiUrl = config.getApiUrl()
    val timeoutMs = config.getTimeout()
    val maxRetries = config.getMaxRetries()
    ```
 
-2. **Environment-specific values**:
+2. Значений, зависящих от окружения:
    ```kotlin
-   // - Different per environment
    val apiUrl = when (BuildConfig.BUILD_TYPE) {
        "debug" -> config.devApiUrl
        "staging" -> config.stagingApiUrl
        "release" -> config.prodApiUrl
+       else -> config.devApiUrl
    }
    ```
 
-3. **Business rules** that change frequently:
+3. Бизнес-правил, часто меняющихся продуктовой командой:
    ```kotlin
-   // - Business team can update
    val feeRate = remoteConfig.getDouble("payment_fee_rate")
    val minOrderAmount = remoteConfig.getDouble("min_order_amount")
    ```
 
-4. **Feature flags**:
+4. Feature flags:
    ```kotlin
-   // - Enable/disable features remotely
    if (remoteConfig.getBoolean("new_checkout_enabled")) {
        showNewCheckout()
    } else {
@@ -300,69 +295,61 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
    }
    ```
 
-5. **A/B testing parameters**:
+5. Параметров A/B-тестов:
    ```kotlin
-   // - Different values for different users
    val buttonColor = remoteConfig.getString("button_color_variant")
    ```
 
-6. **Localized content**:
+6. Локализуемого контента:
    ```kotlin
-   // - Translations from external source
    val welcomeMessage = localizationService.getString("welcome_message")
    ```
 
----
+Используем хардкод для:
 
-### - Use Hardcode For:
-
-1. **Constants that never change**:
+1. Фундаментальных констант:
    ```kotlin
-   // - Hardcode - mathematical constants
    const val PI = 3.14159265359
    const val SPEED_OF_LIGHT = 299792458  // m/s
    ```
 
-2. **Application structure/logic**:
+2. Стабильной доменной логики:
    ```kotlin
-   // - Hardcode - business logic
    fun calculateDiscount(price: Double, quantity: Int): Double {
        return if (quantity >= 10) {
-           price * 0.9  // 10% discount for bulk
+           price * 0.9  // 10% скидка
        } else {
            price
        }
    }
    ```
 
-3. **Internal IDs and constants**:
+3. Внутренних идентификаторов и констант:
    ```kotlin
-   // - Hardcode - internal constants
    const val REQUEST_CODE_CAMERA = 1001
    const val PERMISSION_REQUEST_CODE = 2001
    ```
 
-4. **View IDs, resource references**:
+4. Идентификаторов `View` и ресурсов:
    ```kotlin
-   // - Hardcode - Android resources
    findViewById<TextView>(R.id.title)
    getString(R.string.app_name)
    ```
 
 ---
 
-## Over-Softcoding (Anti-pattern)
+### Овер-софткодинг (антипаттерн)
 
-**Warning:** Too much softcoding can be harmful!
+Чрезмерный софткодинг вреден.
 
-### - BAD: Over-Softcoded
+Плохой пример:
 
 ```kotlin
-// - Everything is softcoded, even basic logic!
+// Всё конфигурируется, даже базовые операции — избыточная гибкость
 class Calculator(private val config: CalculatorConfig) {
 
     fun add(a: Int, b: Int): Int {
-        // - Even basic operators are "configured"
+        // Даже оператор сложения "настраивается"
         return when (config.additionOperator) {
             "plus" -> a + b
             "concat" -> (a.toString() + b.toString()).toInt()
@@ -371,7 +358,7 @@ class Calculator(private val config: CalculatorConfig) {
     }
 
     fun multiply(a: Int, b: Int): Int {
-        // - Absurd configuration
+        // Ненужная сложность
         return when (config.multiplicationStrategy) {
             "repeated_addition" -> {
                 var result = 0
@@ -385,18 +372,22 @@ class Calculator(private val config: CalculatorConfig) {
 }
 ```
 
-**Problems:**
-- Makes code **unnecessarily complex**
-- **Harms performance** (loading configs repeatedly)
-- **Harder to understand** and debug
-- **Error-prone** (wrong config values cause bugs)
+Проблемы:
+- Лишняя сложность и косвенные уровни
+- Потери в производительности
+- Код труднее понимать и отлаживать
+- Ошибки из-за некорректных конфигураций
+
+Правило: фундаментальные алгоритмы, инварианты и safety-critical логика должны оставаться в коде; во внешние конфиги выносить только то, что ожидаемо меняется.
 
 ---
 
-## Android Example: Complete Configuration System
+### Android-пример: система конфигурации
 
 ```kotlin
-// 1. Define config data class
+// Демонстрационный пример; опущены импорты и обработка ошибок
+
+// 1. Data class конфигурации
 data class AppConfig(
     val apiBaseUrl: String,
     val apiTimeout: Long,
@@ -411,7 +402,7 @@ data class FeatureFlags(
     val experimentalFeaturesEnabled: Boolean
 )
 
-// 2. Create config repository
+// 2. Репозиторий конфигурации
 interface ConfigRepository {
     suspend fun getConfig(): AppConfig
     suspend fun updateConfig(config: AppConfig)
@@ -423,7 +414,6 @@ class ConfigRepositoryImpl(
 ) : ConfigRepository {
 
     override suspend fun getConfig(): AppConfig {
-        // Try remote config first
         remoteConfig.fetchAndActivate().await()
 
         return AppConfig(
@@ -464,7 +454,7 @@ class ConfigRepositoryImpl(
     }
 }
 
-// 3. Use config in ViewModel
+// 3. Использование в ViewModel
 class MainViewModel(
     private val configRepository: ConfigRepository,
     private val apiService: ApiService
@@ -482,14 +472,13 @@ class MainViewModel(
             val config = configRepository.getConfig()
             _config.value = config
 
-            // Apply config
             apiService.updateBaseUrl(config.apiBaseUrl)
             apiService.updateTimeout(config.apiTimeout)
         }
     }
 }
 
-// 4. Use feature flags in UI
+// 4. Использование feature flags в UI
 class CheckoutFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
@@ -512,22 +501,22 @@ class CheckoutFragment : Fragment() {
 
 ---
 
-## Best Practices
+### Лучшие практики (RU)
 
-### - DO
+#### Делайте (DO)
 
-1. **Use softcode for configurable values**:
+1. Используйте софткод для конфигурируемых значений:
    ```kotlin
-   val apiUrl = BuildConfig.API_URL  // From gradle
+   val apiUrl = BuildConfig.API_URL
    val timeout = remoteConfig.getLong("timeout")
    ```
 
-2. **Provide sensible defaults**:
+2. Задавайте разумные значения по умолчанию:
    ```kotlin
    val maxRetries = config.getInt("max_retries", defaultValue = 3)
    ```
 
-3. **Validate configuration**:
+3. Валидируйте конфигурацию:
    ```kotlin
    fun validateConfig(config: AppConfig): Result<Unit> {
        if (config.apiTimeout <= 0) {
@@ -537,85 +526,585 @@ class CheckoutFragment : Fragment() {
    }
    ```
 
-4. **Use type-safe configs**:
+4. Используйте типобезопасные конфиги:
    ```kotlin
-   data class AppConfig(...)  // - Type-safe
-   // vs
-   Map<String, Any>  // - Not type-safe
+   data class AppConfig(/* поля */)
+   // вместо
+   val rawConfig: Map<String, Any>
+   ```
+
+#### Не делайте (DON'T)
+
+1. Не переусердствуйте с софткодом:
+   ```kotlin
+   // Не стоит конфигурировать базовые операторы и контроль потока
+   if (config.getString("comparison_operator") == "equals") { /* ... */ }
+   ```
+
+2. Не храните чувствительные данные в небезопасных конфигурациях:
+   ```kotlin
+   // Избегайте хранения секретов в открытом виде на клиенте
+   val apiKey = remoteConfig.getString("api_key")
+   ```
+
+3. Не выносите в конфиг то, что стабильно и критично для корректности:
+   ```kotlin
+   const val MAX_USERNAME_LENGTH = 50
    ```
 
 ---
 
-### - DON'T
+## Answer (EN)
 
-1. **Don't over-softcode**:
+Softcode (soft coding) is a design approach where system behavior and configuration are made configurable through external sources (configuration files, environment variables, remote config, databases, feature flags, etc.) instead of hardcoding all values into the source code. Core logic and invariants remain in code; only parameters and rules expected to change are externalized.
+
+Below is a detailed comparison with hardcoding and aligned examples.
+
+### Hardcode vs softcode
+
+#### Hardcode
+
+Hardcoding is putting fixed values or logic directly into source code.
+
+Example of hardcoding:
+
+```kotlin
+class PaymentProcessor {
+    fun calculateFee(amount: Double): Double {
+        // Fee rate is hardcoded
+        return amount * 0.03  // 3% fee
+    }
+
+    fun getApiUrl(): String {
+        // URL is hardcoded
+        return "https://api.payment.com/v1"
+    }
+
+    fun getMaxRetries(): Int {
+        // Max retries are hardcoded
+        return 3
+    }
+
+    fun getSupportedCurrencies(): List<String> {
+        // Supported currencies are hardcoded
+        return listOf("USD", "EUR", "GBP")
+    }
+}
+```
+
+Problems with hardcoding:
+- Any change requires code modification and release
+- Hard to have different values for dev/staging/production
+- Cannot flexibly change behavior without rebuild
+- Business rules get mixed with implementation and adapt slowly
+
+#### Softcode
+
+Softcoding is moving configurable values and rules into external sources so behavior can change without modifying/redeploying code.
+
+Example of softcoding:
+
+```kotlin
+// NOTE: demo example; assumes required imports and setup
+
+// Configuration stored externally
+@kotlinx.serialization.Serializable
+class AppConfig(
+    val paymentFeeRate: Double,
+    val apiUrl: String,
+    val maxRetries: Int,
+    val supportedCurrencies: List<String>
+)
+
+// Load from JSON file
+class ConfigLoader {
+    fun loadConfig(): AppConfig {
+        val json = java.io.File("config.json").readText()
+        return kotlinx.serialization.json.Json.decodeFromString<AppConfig>(json)
+    }
+}
+
+// config.json
+/*
+{
+  "paymentFeeRate": 0.03,
+  "apiUrl": "https://api.payment.com/v1",
+  "maxRetries": 3,
+  "supportedCurrencies": ["USD", "EUR", "GBP"]
+}
+*/
+
+// Usage
+class PaymentProcessor(private val config: AppConfig) {
+    fun calculateFee(amount: Double): Double {
+        // Fee is taken from config
+        return amount * config.paymentFeeRate
+    }
+
+    fun getApiUrl(): String {
+        // URL from config
+        return config.apiUrl
+    }
+
+    fun getMaxRetries(): Int {
+        // Max retries from config
+        return config.maxRetries
+    }
+
+    fun getSupportedCurrencies(): List<String> {
+        // Currencies from config
+        return config.supportedCurrencies
+    }
+}
+```
+
+Benefits of softcoding:
+- Change values without rebuild
+- Easy environment-specific configs
+- Ops/product can manage configs via tools/services
+- Easier A/B tests and feature flags
+
+---
+
+### Typical sources of softcode
+
+#### 1. Configuration files
+
+JSON, YAML, TOML, properties files.
+
+```kotlin
+// application.properties
+/*
+payment.fee.rate=0.03
+api.url=https://api.payment.com/v1
+max.retries=3
+supported.currencies=USD,EUR,GBP
+*/
+
+// Simplified loading from properties
+class PropertiesConfigLoader {
+    fun loadConfig(): AppConfig {
+        val props = java.util.Properties()
+        props.load(java.io.FileInputStream("application.properties"))
+
+        return AppConfig(
+            paymentFeeRate = props.getProperty("payment.fee.rate").toDouble(),
+            apiUrl = props.getProperty("api.url"),
+            maxRetries = props.getProperty("max.retries").toInt(),
+            supportedCurrencies = props.getProperty("supported.currencies").split(",")
+        )
+    }
+}
+```
+
+#### 2. Environment variables
+
+```kotlin
+// Reading from environment variables (simplified; real code needs validation)
+class EnvConfigLoader {
+    fun loadConfig(): AppConfig {
+        return AppConfig(
+            paymentFeeRate = System.getenv("PAYMENT_FEE_RATE")?.toDoubleOrNull() ?: 0.03,
+            apiUrl = System.getenv("API_URL") ?: "https://api.payment.com/v1",
+            maxRetries = System.getenv("MAX_RETRIES")?.toIntOrNull() ?: 3,
+            supportedCurrencies = System.getenv("SUPPORTED_CURRENCIES")
+                ?.split(",") ?: listOf("USD", "EUR", "GBP")
+        )
+    }
+}
+
+// Examples:
+// export PAYMENT_FEE_RATE=0.025
+// export API_URL=https://api.staging.payment.com/v1
+// export MAX_RETRIES=5
+```
+
+Used for:
+- Container/Kubernetes/Docker configuration
+- CI/CD configuration
+- Secrets (combined with secrets manager + env)
+
+#### 3. Remote configuration
+
+```kotlin
+// Firebase Remote Config (simplified)
+class RemoteConfigLoader(private val remoteConfig: FirebaseRemoteConfig) {
+
+    suspend fun loadConfig(): AppConfig {
+        remoteConfig.fetchAndActivate().await()
+
+        val supportedCurrenciesRaw = remoteConfig.getString("supported_currencies")
+
+        return AppConfig(
+            paymentFeeRate = remoteConfig.getDouble("payment_fee_rate"),
+            apiUrl = remoteConfig.getString("api_url"),
+            maxRetries = remoteConfig.getLong("max_retries").toInt(),
+            supportedCurrencies = if (supportedCurrenciesRaw.isNotEmpty())
+                supportedCurrenciesRaw.split(",")
+            else
+                listOf("USD", "EUR", "GBP")
+        )
+    }
+}
+
+// Advantages:
+// - Update config without app update
+// - A/B tests
+// - Feature flags
+// - Segmentation/personalization
+```
+
+#### 4. Database
+
+```kotlin
+// Storing config in DB (Room example, simplified)
+@Entity(tableName = "app_config")
+data class ConfigEntity(
+    @PrimaryKey val key: String,
+    val value: String
+)
+
+@Dao
+interface ConfigDao {
+    @Query("SELECT value FROM app_config WHERE key = :key")
+    suspend fun getValue(key: String): String?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun setValue(config: ConfigEntity)
+}
+
+// Load from DB
+class DatabaseConfigLoader(private val configDao: ConfigDao) {
+
+    suspend fun loadConfig(): AppConfig {
+        return AppConfig(
+            paymentFeeRate = configDao.getValue("payment_fee_rate")?.toDoubleOrNull() ?: 0.03,
+            apiUrl = configDao.getValue("api_url") ?: "https://api.payment.com/v1",
+            maxRetries = configDao.getValue("max_retries")?.toIntOrNull() ?: 3,
+            supportedCurrencies = configDao.getValue("supported_currencies")
+                ?.split(",") ?: listOf("USD", "EUR", "GBP")
+        )
+    }
+}
+```
+
+---
+
+### When to use softcoding vs hardcoding
+
+Use softcoding for:
+
+1. Config values that may change:
    ```kotlin
-   // - Don't softcode basic logic
-   if (config.getString("comparison_operator") == "equals") { ... }
+   val apiUrl = config.getApiUrl()
+   val timeoutMs = config.getTimeout()
+   val maxRetries = config.getMaxRetries()
    ```
 
-2. **Don't expose sensitive data**:
+2. Environment-dependent values:
    ```kotlin
-   // - Don't store secrets in remote config
-   val apiKey = remoteConfig.getString("api_key")  // - Insecure!
+   val apiUrl = when (BuildConfig.BUILD_TYPE) {
+       "debug" -> config.devApiUrl
+       "staging" -> config.stagingApiUrl
+       "release" -> config.prodApiUrl
+       else -> config.devApiUrl
+   }
    ```
 
-3. **Don't softcode everything**:
+3. Business rules frequently tuned by product/ops:
    ```kotlin
-   // - Constants don't need softcoding
-   const val MAX_USERNAME_LENGTH = 50  // - Hardcode is fine
+   val feeRate = remoteConfig.getDouble("payment_fee_rate")
+   val minOrderAmount = remoteConfig.getDouble("min_order_amount")
+   ```
+
+4. Feature flags:
+   ```kotlin
+   if (remoteConfig.getBoolean("new_checkout_enabled")) {
+       showNewCheckout()
+   } else {
+       showOldCheckout()
+   }
+   ```
+
+5. A/B test parameters:
+   ```kotlin
+   val buttonColor = remoteConfig.getString("button_color_variant")
+   ```
+
+6. Localizable content:
+   ```kotlin
+   val welcomeMessage = localizationService.getString("welcome_message")
+   ```
+
+Use hardcoding for:
+
+1. Fundamental constants:
+   ```kotlin
+   const val PI = 3.14159265359
+   const val SPEED_OF_LIGHT = 299792458  // m/s
+   ```
+
+2. Stable domain logic:
+   ```kotlin
+   fun calculateDiscount(price: Double, quantity: Int): Double {
+       return if (quantity >= 10) {
+           price * 0.9  // 10% discount
+       } else {
+           price
+       }
+   }
+   ```
+
+3. Internal IDs and constants:
+   ```kotlin
+   const val REQUEST_CODE_CAMERA = 1001
+   const val PERMISSION_REQUEST_CODE = 2001
+   ```
+
+4. `View` and resource IDs:
+   ```kotlin
+   findViewById<TextView>(R.id.title)
+   getString(R.string.app_name)
    ```
 
 ---
 
-## Summary
+### Over-softcoding (antipattern)
 
-**Softcode:**
-- Configuration stored in **external sources** (files, database, remote config)
-- Can be changed **without code modification**
-- Good for **configurable business rules** and **feature flags**
+Excessive softcoding is harmful.
 
-**Hardcode:**
-- Values written directly in **source code**
-- Requires **code change and redeployment** to modify
-- Good for **constants** and **core logic**
+Bad example:
 
-**Best approach:** Use **softcode for things that change**, **hardcode for things that don't**.
+```kotlin
+// Everything is configurable, even basic operations — unnecessary flexibility
+class Calculator(private val config: CalculatorConfig) {
+
+    fun add(a: Int, b: Int): Int {
+        // Even the addition operator is "configurable"
+        return when (config.additionOperator) {
+            "plus" -> a + b
+            "concat" -> (a.toString() + b.toString()).toInt()
+            else -> 0
+        }
+    }
+
+    fun multiply(a: Int, b: Int): Int {
+        // Unnecessary complexity
+        return when (config.multiplicationStrategy) {
+            "repeated_addition" -> {
+                var result = 0
+                repeat(b) { result += a }
+                result
+            }
+            "normal" -> a * b
+            else -> 0
+        }
+    }
+}
+```
+
+Issues:
+- Extra layers of indirection and complexity
+- Performance overhead
+- Harder to read and debug
+- Higher risk of misconfiguration
+
+Rule: fundamental algorithms, invariants, and safety-critical logic should stay in code; only externalize what is expected to change.
 
 ---
 
-## Ответ (RU)
+### Android example: configuration system
 
-Софткод (Softcode, Soft Coding) — это подход к программированию, при котором логика программы хранится в конфигурационных файлах, базе данных или других внешних источниках, а не жёстко (hardcoded) прописана в коде.
+```kotlin
+// Demo example; imports and error handling omitted
 
-**Преимущества софткода:**
-- Изменение конфигурации без перекомпиляции
-- Разные настройки для разных окружений (dev/staging/production)
-- Бизнес-пользователи могут изменять параметры
-- Легче проводить A/B тестирование
+// 1. Configuration data class
+data class AppConfig(
+    val apiBaseUrl: String,
+    val apiTimeout: Long,
+    val maxRetries: Int,
+    val enableAnalytics: Boolean,
+    val featureFlags: FeatureFlags
+)
 
-**Когда использовать:**
-- Для конфигурационных значений (URL API, таймауты)
-- Для бизнес-правил, которые могут меняться
-- Для feature flags (включение/выключение функций)
-- Для локализации
+data class FeatureFlags(
+    val newCheckoutEnabled: Boolean,
+    val darkModeEnabled: Boolean,
+    val experimentalFeaturesEnabled: Boolean
+)
 
-**Когда НЕ использовать (хардкод лучше):**
-- Математические константы
-- Основная бизнес-логика
-- Внутренние идентификаторы
+// 2. Config repository
+interface ConfigRepository {
+    suspend fun getConfig(): AppConfig
+    suspend fun updateConfig(config: AppConfig)
+}
 
+class ConfigRepositoryImpl(
+    private val remoteConfig: FirebaseRemoteConfig,
+    private val localPrefs: SharedPreferences
+) : ConfigRepository {
+
+    override suspend fun getConfig(): AppConfig {
+        remoteConfig.fetchAndActivate().await()
+
+        return AppConfig(
+            apiBaseUrl = remoteConfig.getString("api_base_url")
+                .takeIf { it.isNotEmpty() }
+                ?: localPrefs.getString("api_base_url", DEFAULT_API_URL)!!,
+
+            apiTimeout = remoteConfig.getLong("api_timeout")
+                .takeIf { it > 0 }
+                ?: localPrefs.getLong("api_timeout", DEFAULT_TIMEOUT),
+
+            maxRetries = remoteConfig.getLong("max_retries").toInt()
+                .takeIf { it > 0 }
+                ?: localPrefs.getInt("max_retries", DEFAULT_MAX_RETRIES),
+
+            enableAnalytics = remoteConfig.getBoolean("enable_analytics"),
+
+            featureFlags = FeatureFlags(
+                newCheckoutEnabled = remoteConfig.getBoolean("new_checkout_enabled"),
+                darkModeEnabled = remoteConfig.getBoolean("dark_mode_enabled"),
+                experimentalFeaturesEnabled = remoteConfig.getBoolean("experimental_features_enabled")
+            )
+        )
+    }
+
+    override suspend fun updateConfig(config: AppConfig) {
+        localPrefs.edit {
+            putString("api_base_url", config.apiBaseUrl)
+            putLong("api_timeout", config.apiTimeout)
+            putInt("max_retries", config.maxRetries)
+        }
+    }
+
+    companion object {
+        private const val DEFAULT_API_URL = "https://api.myapp.com/v1"
+        private const val DEFAULT_TIMEOUT = 30000L
+        private const val DEFAULT_MAX_RETRIES = 3
+    }
+}
+
+// 3. Usage in ViewModel
+class MainViewModel(
+    private val configRepository: ConfigRepository,
+    private val apiService: ApiService
+) : ViewModel() {
+
+    private val _config = MutableStateFlow<AppConfig?>(null)
+    val config: StateFlow<AppConfig?> = _config.asStateFlow()
+
+    init {
+        loadConfig()
+    }
+
+    private fun loadConfig() {
+        viewModelScope.launch {
+            val config = configRepository.getConfig()
+            _config.value = config
+
+            apiService.updateBaseUrl(config.apiBaseUrl)
+            apiService.updateTimeout(config.apiTimeout)
+        }
+    }
+}
+
+// 4. Using feature flags in UI
+class CheckoutFragment : Fragment() {
+
+    private val viewModel: MainViewModel by activityViewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.config.collect { config ->
+                if (config?.featureFlags?.newCheckoutEnabled == true) {
+                    showNewCheckout()
+                } else {
+                    showOldCheckout()
+                }
+            }
+        }
+    }
+}
+```
 
 ---
+
+### Best practices (EN)
+
+#### DO
+
+1. Use softcoding for configurable values:
+   ```kotlin
+   val apiUrl = BuildConfig.API_URL
+   val timeout = remoteConfig.getLong("timeout")
+   ```
+
+2. Provide reasonable defaults:
+   ```kotlin
+   val maxRetries = config.getInt("max_retries", defaultValue = 3)
+   ```
+
+3. Validate configuration:
+   ```kotlin
+   fun validateConfig(config: AppConfig): Result<Unit> {
+       if (config.apiTimeout <= 0) {
+           return Result.failure(IllegalArgumentException("Timeout must be positive"))
+       }
+       return Result.success(Unit)
+   }
+   ```
+
+4. Use type-safe configs:
+   ```kotlin
+   data class AppConfig(/* fields */)
+   // instead of
+   val rawConfig: Map<String, Any>
+   ```
+
+#### DON'T
+
+1. Don't overuse softcoding:
+   ```kotlin
+   // Avoid configuring basic operators and control flow
+   if (config.getString("comparison_operator") == "equals") { /* ... */ }
+   ```
+
+2. Don't store sensitive data in insecure configs:
+   ```kotlin
+   // Avoid storing secrets in plain text on the client
+   val apiKey = remoteConfig.getString("api_key")
+   ```
+
+3. Don't externalize values that are stable and critical for correctness:
+   ```kotlin
+   const val MAX_USERNAME_LENGTH = 50
+   ```
+
+---
+
+## Дополнительные вопросы (RU)
+
+- Сравните использование софткода с dependency injection для достижения гибкости.
+- В каких случаях избыточный софткодинг повышает риски системы вместо их снижения?
+- Как спроектировать миграцию с хардкоженных конфигов на софткод в легаси-системе?
+
+## Additional Questions (EN)
+
+- Compare softcoding with using dependency injection for flexibility.
+- When can over-softcoding increase system risk instead of reducing it?
+- How would you design a migration from hardcoded configs to softcoded configs in a legacy system?
+
+## Ссылки (RU)
+
+- [[c-architecture-patterns]]
+
+## References (EN)
+
+- [[c-architecture-patterns]]
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-solid-principles--software-design--medium]] - Design Principles
-- [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-
-### Advanced (Harder)
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-design-instagram-stories--android--hard]] - Media
-- [[q-design-uber-app--android--hard]] - Location
+- [[q-abstract-factory-pattern--cs--medium]]

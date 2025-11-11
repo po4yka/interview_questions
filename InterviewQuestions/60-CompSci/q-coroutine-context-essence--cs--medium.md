@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-coroutine-context]
+related: [c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [context, coroutinecontext, coroutines, difficulty/medium, kotlin, programming-languages]
-sources: [https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html]
+sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
+
 ---
 
 # Вопрос (RU)
@@ -28,14 +29,14 @@ sources: [https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html]
 ## Ответ (RU)
 
 **Теория CoroutineContext:**
-CoroutineContext - ключевая часть механизма корутин, определяющая различные аспекты поведения корутины: политику планирования (dispatcher), lifecycle (Job), обработку исключений (CoroutineExceptionHandler), имя для отладки (CoroutineName). Представляет собой indexed set элементов, где каждый элемент имеет уникальный ключ.
+CoroutineContext — ключевая часть механизма корутин, определяющая различные аспекты поведения корутины: политику планирования (`dispatcher`), жизненный цикл (`Job`), обработку необработанных исключений (`CoroutineExceptionHandler`), имя для отладки (`CoroutineName`) и другие элементы. Представляет собой индексированное множество элементов, где каждый элемент имеет уникальный ключ.
 
 **Структура CoroutineContext:**
 
-*Теория:* CoroutineContext - это immutable indexed set элементов. Каждый элемент имеет `CoroutineContext.Key<*>`. Элементы можно комбинировать оператором `+`. При комбинировании элементы с одинаковым ключом заменяют друг друга.
+*Теория:* CoroutineContext — это immutable indexed set элементов. Каждый элемент реализует `CoroutineContext.Element` и имеет ключ `CoroutineContext.Key<*>`. Элементы можно комбинировать оператором `+`. При комбинировании элементы с одинаковым ключом заменяют друг друга (правый заменяет левый).
 
 ```kotlin
-// ✅ CoroutineContext как indexed set
+// CoroutineContext как indexed set
 interface CoroutineContext {
     operator fun <E : Element> get(key: Key<E>): E?
     operator fun plus(context: CoroutineContext): CoroutineContext
@@ -50,15 +51,15 @@ interface CoroutineContext {
 
 **1. Job:**
 
-*Теория:* Job - управляет lifecycle корутины и cancellation. Каждая корутина имеет Job. Parent Job отменяет все child Jobs при cancellation. Structured concurrency основана на иерархии Jobs.
+*Теория:* `Job` управляет жизненным циклом корутины и отменой. Каждая корутина имеет `Job` в своём контексте. Родительский `Job` при отмене отменяет все дочерние `Job`. Structured concurrency основана на иерархии `Job`.
 
 ```kotlin
-// ✅ Job в контексте
+// Job в контексте
 val job = Job()
 val scope = CoroutineScope(job)
 
 scope.launch {
-    println("Job: ${coroutineContext[Job]}")  // Получить Job из контекста
+    println("Job: ${coroutineContext[Job]}")  // Получаем Job из контекста (Job является своим ключом)
 }
 
 job.cancel()  // Отменяет все корутины в scope
@@ -66,10 +67,10 @@ job.cancel()  // Отменяет все корутины в scope
 
 **2. Dispatcher:**
 
-*Теория:* Dispatcher - определяет, на каком потоке выполняется корутина. `Dispatchers.Main` (UI thread), `Dispatchers.IO` (I/O операции), `Dispatchers.Default` (CPU-intensive), `Dispatchers.Unconfined` (не привязан к потоку).
+*Теория:* `Dispatcher` определяет, на каком потоке или пуле потоков выполняется корутина. `Dispatchers.Main` (UI thread), `Dispatchers.IO` (I/O операции), `Dispatchers.Default` (CPU-intensive), `Dispatchers.Unconfined` (не закреплён за конкретным потоком, поведение зависит от точки возобновления).
 
 ```kotlin
-// ✅ Dispatcher в контексте
+// Dispatcher в контексте
 launch(Dispatchers.IO) {
     // Выполняется на IO thread pool
     val data = fetchData()
@@ -83,10 +84,10 @@ launch(Dispatchers.IO) {
 
 **3. CoroutineExceptionHandler:**
 
-*Теория:* CoroutineExceptionHandler - обрабатывает uncaught exceptions в корутинах. Работает только для launch (не для async). Устанавливается в root корутине.
+*Теория:* `CoroutineExceptionHandler` обрабатывает не перехваченные исключения в корутинах. Он применяется к корутинам, запущенным через `launch` (root или supervisor), где исключения не возвращаются вызывающему коду. Для `async` исключения передаются через `Deferred` и должны быть обработаны при `await`, поэтому `CoroutineExceptionHandler` не перехватывает такие исключения до вызова `await`.
 
 ```kotlin
-// ✅ Exception handler в контексте
+// Exception handler в контексте
 val handler = CoroutineExceptionHandler { context, exception ->
     println("Caught: ${exception.message}")
 }
@@ -94,16 +95,16 @@ val handler = CoroutineExceptionHandler { context, exception ->
 val scope = CoroutineScope(Job() + handler)
 
 scope.launch {
-    throw RuntimeException("Error!")  // Будет обработано handler
+    throw RuntimeException("Error!")  // Будет обработано handler, если это root coroutine в данном scope
 }
 ```
 
 **4. CoroutineName:**
 
-*Теория:* CoroutineName - имя корутины для отладки. Полезно для логирования и debugging. Видно в stack traces и debugger.
+*Теория:* `CoroutineName` — имя корутины для отладки. Полезно для логирования и debugging. Видно в stack traces и debugger.
 
 ```kotlin
-// ✅ CoroutineName в контексте
+// CoroutineName в контексте
 launch(CoroutineName("MyCoroutine")) {
     println("Running: ${coroutineContext[CoroutineName]?.name}")
 }
@@ -111,10 +112,10 @@ launch(CoroutineName("MyCoroutine")) {
 
 **Комбинирование элементов:**
 
-*Теория:* Оператор `+` комбинирует элементы контекста. Элементы с одинаковым ключом заменяют друг друга (правый заменяет левый). EmptyCoroutineContext - нейтральный элемент.
+*Теория:* Оператор `+` комбинирует элементы контекста. Элементы с одинаковым ключом заменяют друг друга (правый заменяет левый). `EmptyCoroutineContext` — нейтральный элемент.
 
 ```kotlin
-// ✅ Комбинирование контекстов
+// Комбинирование контекстов
 val context = Dispatchers.IO +
               Job() +
               CoroutineName("Worker") +
@@ -124,17 +125,17 @@ launch(context) {
     // Все элементы доступны в coroutineContext
 }
 
-// ✅ Замена элементов
+// Замена элементов
 val context1 = Dispatchers.IO + CoroutineName("First")
 val context2 = context1 + CoroutineName("Second")  // "Second" заменяет "First"
 ```
 
 **Наследование контекста:**
 
-*Теория:* Child корутины наследуют контекст от parent, но могут переопределять элементы. Job всегда новый (parent-child relationship). Dispatcher наследуется, если не указан явно.
+*Теория:* Дочерние корутины наследуют контекст от родительской, но могут переопределять отдельные элементы. Для каждой дочерней корутины создаётся новый `Job`, связанный с родительским (parent-child relationship). `Dispatcher` наследуется, если не указан явно.
 
 ```kotlin
-// ✅ Наследование контекста
+// Наследование контекста
 val parentScope = CoroutineScope(Dispatchers.IO + CoroutineName("Parent"))
 
 parentScope.launch {
@@ -151,7 +152,7 @@ parentScope.launch {
 **Доступ к элементам контекста:**
 
 ```kotlin
-// ✅ Получение элементов из контекста
+// Получение элементов из контекста
 suspend fun example() {
     val job = coroutineContext[Job]
     val dispatcher = coroutineContext[ContinuationInterceptor] as? CoroutineDispatcher
@@ -163,27 +164,27 @@ suspend fun example() {
 
 **Ключевые концепции:**
 
-1. **Immutability** - CoroutineContext immutable, `+` создаёт новый контекст
-2. **Indexed Set** - элементы идентифицируются по ключу
-3. **Composition** - элементы комбинируются оператором `+`
-4. **Inheritance** - child корутины наследуют контекст parent
-5. **Structured Concurrency** - иерархия Jobs обеспечивает structured concurrency
+1. Immutability — `CoroutineContext` immutable, `+` создаёт новый контекст
+2. Indexed Set — элементы идентифицируются по ключу
+3. Composition — элементы комбинируются оператором `+`
+4. Inheritance — дочерние корутины наследуют контекст родителя
+5. Structured Concurrency — иерархия `Job` обеспечивает structured concurrency
 
 ## Answer (EN)
 
 **CoroutineContext Theory:**
-CoroutineContext - key part of coroutine mechanism, defining various aspects of coroutine behavior: scheduling policy (dispatcher), lifecycle (Job), exception handling (CoroutineExceptionHandler), debugging name (CoroutineName). Represents indexed set of elements, where each element has unique key.
+CoroutineContext is a key part of the coroutine mechanism. It defines various aspects of coroutine behavior: scheduling policy (`dispatcher`), lifecycle (`Job`), handling of uncaught exceptions (`CoroutineExceptionHandler`), debugging name (`CoroutineName`), and other elements. It represents an indexed set of elements, where each element has a unique key.
 
 **CoroutineContext Structure:**
 
-*Theory:* CoroutineContext - immutable indexed set of elements. Each element has `CoroutineContext.Key<*>`. Elements can be combined with `+` operator. When combining, elements with same key replace each other.
+*Theory:* CoroutineContext is an immutable indexed set of elements. Each element implements `CoroutineContext.Element` and has a `CoroutineContext.Key<*>`. Elements can be combined with the `+` operator. When combining, elements with the same key replace each other (the right-hand one replaces the left-hand one).
 
 ```kotlin
-// ✅ CoroutineContext as indexed set
+// CoroutineContext as indexed set
 interface CoroutineContext {
     operator fun <E : Element> get(key: Key<E>): E?
     operator fun plus(context: CoroutineContext): CoroutineContext
-    fun minusKey(key: Key<*>): CoroutineContext
+    fun minusKey(key: Key<*>) : CoroutineContext
 
     interface Element : CoroutineContext
     interface Key<E : Element>
@@ -194,15 +195,15 @@ interface CoroutineContext {
 
 **1. Job:**
 
-*Theory:* Job - manages coroutine lifecycle and cancellation. Each coroutine has Job. Parent Job cancels all child Jobs on cancellation. Structured concurrency based on Job hierarchy.
+*Theory:* `Job` manages coroutine lifecycle and cancellation. Each coroutine has a `Job` in its context. A parent `Job` cancels all child `Job` on cancellation. Structured concurrency is based on the `Job` hierarchy.
 
 ```kotlin
-// ✅ Job in context
+// Job in context
 val job = Job()
 val scope = CoroutineScope(job)
 
 scope.launch {
-    println("Job: ${coroutineContext[Job]}")  // Get Job from context
+    println("Job: ${coroutineContext[Job]}")  // Get Job from context (Job is its own key)
 }
 
 job.cancel()  // Cancels all coroutines in scope
@@ -210,10 +211,10 @@ job.cancel()  // Cancels all coroutines in scope
 
 **2. Dispatcher:**
 
-*Theory:* Dispatcher - determines which thread coroutine executes on. `Dispatchers.Main` (UI thread), `Dispatchers.IO` (I/O operations), `Dispatchers.Default` (CPU-intensive), `Dispatchers.Unconfined` (not confined to thread).
+*Theory:* `Dispatcher` determines which thread or thread pool the coroutine runs on. `Dispatchers.Main` (UI thread), `Dispatchers.IO` (I/O operations), `Dispatchers.Default` (CPU-intensive work), `Dispatchers.Unconfined` (not confined to a specific thread; behavior depends on suspension/resumption).
 
 ```kotlin
-// ✅ Dispatcher in context
+// Dispatcher in context
 launch(Dispatchers.IO) {
     // Executes on IO thread pool
     val data = fetchData()
@@ -227,10 +228,10 @@ launch(Dispatchers.IO) {
 
 **3. CoroutineExceptionHandler:**
 
-*Theory:* CoroutineExceptionHandler - handles uncaught exceptions in coroutines. Works only for launch (not async). Set in root coroutine.
+*Theory:* `CoroutineExceptionHandler` handles uncaught exceptions in coroutines. It is applied to coroutines started with `launch` (root or supervisor coroutines) where exceptions are not returned to the caller. For `async`, exceptions are represented in the resulting `Deferred` and must be handled when calling `await`, so `CoroutineExceptionHandler` does not intercept them until then.
 
 ```kotlin
-// ✅ Exception handler in context
+// Exception handler in context
 val handler = CoroutineExceptionHandler { context, exception ->
     println("Caught: ${exception.message}")
 }
@@ -238,16 +239,16 @@ val handler = CoroutineExceptionHandler { context, exception ->
 val scope = CoroutineScope(Job() + handler)
 
 scope.launch {
-    throw RuntimeException("Error!")  // Will be handled by handler
+    throw RuntimeException("Error!")  // Will be handled by handler if this is a root coroutine in this scope
 }
 ```
 
 **4. CoroutineName:**
 
-*Theory:* CoroutineName - coroutine name for debugging. Useful for logging and debugging. Visible in stack traces and debugger.
+*Theory:* `CoroutineName` is a coroutine name used for debugging. Useful for logging and debugging; visible in stack traces and debugger.
 
 ```kotlin
-// ✅ CoroutineName in context
+// CoroutineName in context
 launch(CoroutineName("MyCoroutine")) {
     println("Running: ${coroutineContext[CoroutineName]?.name}")
 }
@@ -255,10 +256,10 @@ launch(CoroutineName("MyCoroutine")) {
 
 **Combining Elements:**
 
-*Theory:* `+` operator combines context elements. Elements with same key replace each other (right replaces left). EmptyCoroutineContext - neutral element.
+*Theory:* The `+` operator combines context elements. Elements with the same key replace each other (right replaces left). `EmptyCoroutineContext` is the neutral element.
 
 ```kotlin
-// ✅ Combining contexts
+// Combining contexts
 val context = Dispatchers.IO +
               Job() +
               CoroutineName("Worker") +
@@ -268,17 +269,17 @@ launch(context) {
     // All elements available in coroutineContext
 }
 
-// ✅ Replacing elements
+// Replacing elements
 val context1 = Dispatchers.IO + CoroutineName("First")
 val context2 = context1 + CoroutineName("Second")  // "Second" replaces "First"
 ```
 
 **Context Inheritance:**
 
-*Theory:* Child coroutines inherit context from parent, but can override elements. Job always new (parent-child relationship). Dispatcher inherited if not explicitly specified.
+*Theory:* Child coroutines inherit the context from their parent but can override individual elements. A new `Job` is created for each child coroutine and linked to the parent `Job` (parent-child relationship). The dispatcher is inherited if not explicitly specified.
 
 ```kotlin
-// ✅ Context inheritance
+// Context inheritance
 val parentScope = CoroutineScope(Dispatchers.IO + CoroutineName("Parent"))
 
 parentScope.launch {
@@ -295,7 +296,7 @@ parentScope.launch {
 **Accessing Context Elements:**
 
 ```kotlin
-// ✅ Getting elements from context
+// Getting elements from context
 suspend fun example() {
     val job = coroutineContext[Job]
     val dispatcher = coroutineContext[ContinuationInterceptor] as? CoroutineDispatcher
@@ -307,19 +308,35 @@ suspend fun example() {
 
 **Key Concepts:**
 
-1. **Immutability** - CoroutineContext immutable, `+` creates new context
-2. **Indexed Set** - elements identified by key
-3. **Composition** - elements combined with `+` operator
-4. **Inheritance** - child coroutines inherit parent context
-5. **Structured Concurrency** - Job hierarchy ensures structured concurrency
+1. Immutability - `CoroutineContext` is immutable; `+` creates a new context
+2. Indexed Set - elements are identified by key
+3. Composition - elements are combined with the `+` operator
+4. Inheritance - child coroutines inherit parent context
+5. Structured Concurrency - `Job` hierarchy ensures structured concurrency
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как работает наследование контекста в корутинах?
+- В чём разница между `Job` и `SupervisorJob`?
+- Как создать собственные элементы `CoroutineContext`?
 
 ## Follow-ups
 
 - How does context inheritance work in coroutines?
-- What is the difference between Job and SupervisorJob?
-- How do you create custom CoroutineContext elements?
+- What is the difference between `Job` and `SupervisorJob`?
+- How do you create custom `CoroutineContext` elements?
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+- Базовые концепции Kotlin-корутин
+- Основы многопоточности
+
+### Продвинутые (сложнее)
+- Пользовательские элементы `CoroutineContext`
+- Продвинутые паттерны structured concurrency
 
 ## Related Questions
 
@@ -327,7 +344,12 @@ suspend fun example() {
 - Basic Kotlin coroutines concepts
 - Threading fundamentals
 
-
 ### Advanced (Harder)
-- Custom CoroutineContext elements
+- Custom `CoroutineContext` elements
 - Advanced structured concurrency patterns
+
+## References
+
+- [[c-coroutines]]
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- "https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"

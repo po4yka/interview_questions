@@ -2,58 +2,25 @@
 id: cs-004
 title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 aliases: []
-topic: computer-science
-subtopics: [functions, null-safety, type-system]
+topic: kotlin
+subtopics: [functions, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-supervisorjob-use-cases--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium, q-sharedflow-stateflow--kotlin--medium]
+related: [c--kotlin--medium, q-coroutine-supervisorjob-use-cases--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium, q-sharedflow-stateflow--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-11
 tags: [difficulty/medium]
 ---
 
-# Что Известно Про Типы Any, Unit, Nothing В Kotlin ?
+# Вопрос (RU)
+> Что известно про типы `Any`, `Unit`, `Nothing` в Kotlin?
 
 # Question (EN)
-> What do you know about Any, Unit, Nothing types in Kotlin?
-
-# Вопрос (RU)
-> Что известно про типы any, unit, nothing в Kotlin ?
-
----
-
-## Answer (EN)
-
-There are special types in Kotlin with unique purposes:
-
-### Any
-- Root type for all non-nullable types in Kotlin (analogous to Object in Java)
-- Any object except null inherits from Any
-- Used where representation of any possible value except null is required
-- Defines basic methods: `equals()`, `hashCode()`, `toString()`
-
-### Unit
-- Analogous to `void` in Java, but unlike void, it is a full-fledged object
-- Functions that don't return a meaningful result actually return Unit
-- Used to indicate that function performs an action but doesn't return a value
-- Although Unit return type is usually omitted, it can be specified explicitly
-
-### Nothing
-- Type that has no values
-- Used to denote "impossibility" - situations when function never completes normally
-- Function may loop forever or always throw an exception
-- Indicates that this code point is unreachable
-
-**Example:**
-```kotlin
-fun fail(message: String): Nothing {
-    throw IllegalArgumentException(message)
-}
-```
+> What do you know about `Any`, `Unit`, `Nothing` types in Kotlin?
 
 ---
 
@@ -62,22 +29,22 @@ fun fail(message: String): Nothing {
 В Kotlin существуют специальные типы с уникальными целями:
 
 ### Any
-- Корневой тип для всех ненулевых типов в Kotlin (аналог Object в Java)
-- Любой объект, кроме null, наследуется от Any
-- Используется там, где требуется представление любого возможного значения, кроме null
+- Корневой тип для всех ненулевых типов в Kotlin; полная иерархия, включая `null`, коренится в `Any?` (аналог `Object` в Java и `Object?` для nullable)
+- Любое ненулевое значение в Kotlin имеет тип, являющийся подтипом `Any`
+- Используется там, где требуется представление любого возможного ненулевого значения
 - Определяет базовые методы: `equals()`, `hashCode()`, `toString()`
 
 ### Unit
-- Аналог `void` в Java, но в отличие от void, это полноценный объект
-- Функции, которые не возвращают значимый результат, на самом деле возвращают Unit
-- Используется для обозначения того, что функция выполняет действие, но не возвращает значение
-- Хотя тип возврата Unit обычно опускается, его можно указать явно
+- Аналог `void` в Java, но в отличие от `void`, `Unit` — это реальный тип
+- Функции, которые не возвращают значимый результат, концептуально возвращают единственное значение `Unit`
+- Используется для обозначения того, что функция выполняет действие, но не возвращает полезного значения
+- Хотя тип возврата `Unit` обычно опускается, его можно указать явно
 
 ### Nothing
-- Тип, который не имеет значений
-- Используется для обозначения "невозможности" - ситуаций, когда функция никогда не завершается нормально
-- Функция может зацикливаться навсегда или всегда выбрасывать исключение
-- Указывает, что данная точка кода недостижима
+- Тип, который не имеет значений (нижний тип), является подтипом всех типов
+- Используется для обозначения "невозможности" — ситуаций, когда функция никогда не завершает выполнение нормально
+- Такая функция может зацикливаться навсегда или всегда выбрасывать исключение
+- Указывает, что данная точка кода недостижима; полезен для анализа потока выполнения и в обобщённых API (например, `Result<Nothing>`)
 
 **Пример:**
 ```kotlin
@@ -85,6 +52,45 @@ fun fail(message: String): Nothing {
     throw IllegalArgumentException(message)
 }
 ```
+
+## Answer (EN)
+
+There are special types in Kotlin with unique purposes:
+
+### Any
+- Root type for all non-nullable types in Kotlin; the full hierarchy including `null` is rooted at `Any?` (analogous to `Object` in Java and `Object?` for nullable)
+- Any non-null value in Kotlin has a type that is a subtype of `Any`
+- Used where representation of any possible non-null value is required
+- Defines basic methods: `equals()`, `hashCode()`, `toString()`
+
+### Unit
+- Analogous to `void` in Java, but unlike `void`, `Unit` is a real type
+- Functions that don't return a meaningful result conceptually return the single `Unit` value
+- Used to indicate that a function performs an action but doesn't return a useful value
+- Although the `Unit` return type is usually omitted, it can be specified explicitly
+
+### Nothing
+- Type that has no values (bottom type), a subtype of all types
+- Used to denote "impossibility" - situations when a function never completes normally
+- Such a function may loop forever or always throw an exception
+- Indicates that this code point is unreachable; useful in control-flow analysis and generic APIs (e.g. `Result<Nothing>`)
+
+**Example:**
+```kotlin
+fun fail(message: String): Nothing {
+    throw IllegalArgumentException(message)
+}
+```
+
+## Follow-ups
+
+- How are `Any`, `Unit`, and `Nothing` used in designing type-safe APIs in Kotlin?
+- How does `Nothing` improve control-flow analysis for functions like `error()` or `TODO()`?
+- In what scenarios would you explicitly specify `Unit` or `Any` in function signatures instead of relying on type inference?
+
+## References
+
+- [[c--kotlin--medium]]
 
 ## Related Questions
 

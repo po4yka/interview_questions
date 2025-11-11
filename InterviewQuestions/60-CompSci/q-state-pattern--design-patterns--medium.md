@@ -1,73 +1,400 @@
 ---
-id: design-patterns-009
-title: "State Pattern / State Паттерн"
+id: cs-060
+title: "State Pattern / Паттерн State"
 aliases: [State Pattern, State Паттерн]
-topic: design-patterns
-subtopics: [behavioral-patterns, polymorphism, state-machine]
+topic: behavioral
+subtopics: [state-machine, polymorphism]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-design-patterns
-related: [q-adapter-pattern--design-patterns--medium, q-command-pattern--design-patterns--medium, q-iterator-pattern--design-patterns--medium, q-observer-pattern--design-patterns--medium]
+moc: moc-cs
+related: [c-architecture-patterns, c-computer-science, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, state, state-machine]
+updated: 2025-11-11
+tags: [behavioral, state-machine, difficulty/medium]
+
 ---
 
-# State Pattern
+# Вопрос (RU)
+> Что такое паттерн State? Когда и зачем его следует использовать?
 
 # Question (EN)
 > What is the State pattern? When and why should it be used?
 
-# Вопрос (RU)
-> Что такое паттерн State? Когда и зачем его следует использовать?
+---
+
+## Ответ (RU)
+
+### Определение
+
+Паттерн State (Состояние) - это поведенческий паттерн проектирования, который **позволяет объекту изменять свое поведение при изменении внутреннего состояния**. Этот паттерн инкапсулирует различное поведение одного и того же объекта на основе его внутреннего состояния и предоставляет более чистый способ изменения поведения объекта во время выполнения за счет полиморфизма вместо длинных цепочек условных операторов.
+
+### Проблемы, которые решает
+
+Паттерн State решает две основные проблемы:
+
+1. **Объект должен изменять свое поведение при изменении внутреннего состояния**.
+2. **Поведение, специфичное для состояния, должно быть определено независимо** — добавление новых состояний не должно влиять на поведение существующих состояний.
+
+### Почему это проблема?
+
+Реализация поведения, специфичного для состояния, непосредственно в классе через условные операторы негибка, так как жестко привязывает класс ко всем возможным вариантам поведения и усложняет добавление новых состояний или изменение существующих без изменения этого класса.
+
+### Решение
+
+Паттерн описывает два ключевых подхода:
+
+1. **Определить отдельные объекты состояний**, которые инкапсулируют поведение, специфичное для каждого состояния.
+2. **Контекст делегирует поведение, специфичное для состояния**, своему текущему объекту состояния вместо прямой реализации через условные конструкции.
+
+Это делает контекст независимым от конкретной реализации поведения состояний. Новые состояния добавляются путем создания новых классов состояний. Контекст может изменять свое поведение во время выполнения, переключая текущий объект состояния.
+
+### Ключевые особенности
+
+1. **Инкапсуляция состояния** — каждое состояние выделено в собственный класс или вариант.
+2. **Динамическое изменение поведения** — поведение объекта меняется при смене состояния за счет полиморфизма.
+3. **Меньше условной логики** — длинные цепочки if-else/when заменяются делегированием состояниям (при этом переходы между состояниями могут содержать простые проверки).
+
+### Пример: базовый конечный автомат
+
+(Код идентичен английскому примеру; изменены только комментарии.)
+
+```kotlin
+// Интерфейс состояния
+interface State {
+    fun handle(context: Context)
+}
+
+// Конкретные состояния
+class ConcreteStateA : State {
+    override fun handle(context: Context) {
+        println("State A: Обработка запроса и переход в State B")
+        context.setState(ConcreteStateB())
+    }
+}
+
+class ConcreteStateB : State {
+    override fun handle(context: Context) {
+        println("State B: Обработка запроса и переход в State A")
+        context.setState(ConcreteStateA())
+    }
+}
+
+// Контекст
+class Context {
+    private var currentState: State? = null
+
+    fun setState(state: State) {
+        currentState = state
+        println("Context: Состояние изменено на ${state::class.simpleName}")
+    }
+
+    fun request() {
+        currentState?.handle(this) ?: println("Context: Состояние не установлено")
+    }
+}
+
+fun main() {
+    val context = Context()
+    context.setState(ConcreteStateA())
+    context.request() // State A -> State B
+    context.request() // State B -> State A
+    context.request() // State A -> State B
+}
+```
+
+Этот пример отражает классический GoF-подход: `Context` хранит ссылку на `State` и меняет поведение, переключая объекты состояний.
+
+### Пример для Android: состояния медиаплеера
+
+```kotlin
+// Интерфейс состояния
+interface PlayerState {
+    fun play(player: MediaPlayer)
+    fun pause(player: MediaPlayer)
+    fun stop(player: MediaPlayer)
+    fun getStateName(): String
+}
+
+// Конкретные состояния
+class PlayingState : PlayerState {
+    override fun play(player: MediaPlayer) {
+        println("Уже воспроизводится")
+    }
+
+    override fun pause(player: MediaPlayer) {
+        println("Пауза воспроизведения")
+        player.setState(PausedState())
+    }
+
+    override fun stop(player: MediaPlayer) {
+        println("Остановка воспроизведения")
+        player.setState(StoppedState())
+    }
+
+    override fun getStateName() = "Playing"
+}
+
+class PausedState : PlayerState {
+    override fun play(player: MediaPlayer) {
+        println("Продолжение воспроизведения")
+        player.setState(PlayingState())
+    }
+
+    override fun pause(player: MediaPlayer) {
+        println("Уже на паузе")
+    }
+
+    override fun stop(player: MediaPlayer) {
+        println("Остановка из состояния паузы")
+        player.setState(StoppedState())
+    }
+
+    override fun getStateName() = "Paused"
+}
+
+class StoppedState : PlayerState {
+    override fun play(player: MediaPlayer) {
+        println("Старт воспроизведения")
+        player.setState(PlayingState())
+    }
+
+    override fun pause(player: MediaPlayer) {
+        println("Нельзя поставить на паузу — плеер остановлен")
+    }
+
+    override fun stop(player: MediaPlayer) {
+        println("Уже остановлен")
+    }
+
+    override fun getStateName() = "Stopped"
+}
+
+// Контекст — медиаплеер
+class MediaPlayer {
+    private var state: PlayerState = StoppedState()
+
+    fun setState(newState: PlayerState) {
+        state = newState
+        println("State changed to: ${state.getStateName()}")
+    }
+
+    fun play() = state.play(this)
+    fun pause() = state.pause(this)
+    fun stop() = state.stop(this)
+    fun getCurrentState() = state.getStateName()
+}
+
+fun main() {
+    val player = MediaPlayer()
+    player.play()   // Stopped -> Playing
+    player.pause()  // Playing -> Paused
+    player.play()   // Paused -> Playing
+    player.stop()   // Playing -> Stopped
+}
+```
+
+Этот пример соответствует паттерну State: `MediaPlayer` (контекст) делегирует поведение текущему `PlayerState`.
+
+### Пример `ViewModel`: UI-состояния
+
+Здесь используется `sealed class` для моделирования UI-состояний. Это ближе к конечному автомату/ADT, но решает ту же задачу: поведение и отображение зависят от состояния.
+
+```kotlin
+// Состояния UI
+sealed class UiState {
+    object Loading : UiState()
+    data class Success(val data: List<String>) : UiState()
+    data class Error(val message: String) : UiState()
+    object Empty : UiState()
+}
+
+// ViewModel
+class DataViewModel(
+    private val repository: DataRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadData() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            try {
+                val data = repository.fetchData()
+                _uiState.value = if (data.isEmpty()) {
+                    UiState.Empty
+                } else {
+                    UiState.Success(data)
+                }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun retry() = loadData()
+}
+```
+
+### Kotlin-пример: обработка заказа
+
+Тот же подход с `sealed class`, как в английском примере:
+
+```kotlin
+sealed class OrderState {
+    abstract fun processNext(order: Order)
+    abstract fun cancel(order: Order)
+
+    object Pending : OrderState() {
+        override fun processNext(order: Order) {
+            println("Обработка платежа...")
+            order.setState(Processing)
+        }
+
+        override fun cancel(order: Order) {
+            println("Заказ отменен")
+            order.setState(Cancelled)
+        }
+    }
+
+    object Processing : OrderState() {
+        override fun processNext(order: Order) {
+            println("Отправка заказа...")
+            order.setState(Shipped)
+        }
+
+        override fun cancel(order: Order) {
+            println("Нельзя отменить — уже в обработке")
+        }
+    }
+
+    object Shipped : OrderState() {
+        override fun processNext(order: Order) {
+            println("Заказ доставлен")
+            order.setState(Delivered)
+        }
+
+        override fun cancel(order: Order) {
+            println("Нельзя отменить — уже отправлен")
+        }
+    }
+
+    object Delivered : OrderState() {
+        override fun processNext(order: Order) {
+            println("Заказ завершен — действий нет")
+        }
+
+        override fun cancel(order: Order) {
+            println("Нельзя отменить — уже доставлен")
+        }
+    }
+
+    object Cancelled : OrderState() {
+        override fun processNext(order: Order) {
+            println("Отмененный заказ — действий нет")
+        }
+
+        override fun cancel(order: Order) {
+            println("Уже отменен")
+        }
+    }
+}
+
+class Order(private var state: OrderState = OrderState.Pending) {
+    fun setState(newState: OrderState) {
+        state = newState
+        println("Состояние заказа: ${state::class.simpleName}")
+    }
+
+    fun processNext() = state.processNext(this)
+    fun cancel() = state.cancel(this)
+}
+```
+
+### Объяснение (итог)
+
+- **Интерфейс/абстракция состояния** задает контракт.
+- **Конкретные состояния** реализуют различающееся поведение.
+- **Контекст** хранит текущее состояние и делегирует ему вызовы.
+- **Переходы между состояниями** могут быть реализованы внутри состояний или контекста.
+- Классический GoF-подход опирается на полиморфные объекты-состояния.
+- В Kotlin/Android также распространен подход с `sealed class` + `when`/`StateFlow` для моделирования конечных автоматов; он структурно отличается от классического GoF State, но решает ту же задачу: "поведение зависит от состояния".
+
+### Применение (реальные примеры)
+
+1. **ТВ-приставка** — кнопки пульта работают по-разному в состояниях ON/OFF.
+2. **Состояния потока/потока выполнения** — жизненный цикл потоков.
+3. **Обработка заказа** — Pending → Processing → Shipped → Delivered.
+4. **Медиаплееры** — Playing, Paused, Stopped.
+
+### Когда использовать
+
+Используйте State, когда:
+
+- Поведение объекта существенно зависит от его состояния.
+- Есть несколько состояний с разным поведением.
+- Хотите избежать разрастания условных операторов и "божественных" классов.
+
+### Лучшие практики
+
+- Ясно определяйте возможные состояния и допустимые переходы.
+- Держите логику, специфичную для состояния, внутри соответствующего состояния.
+- Для Kotlin/Android UI удобно использовать `sealed class` + потоки (`StateFlow`) для реактивных обновлений.
+- Не применяйте тяжеловесную реализацию State там, где достаточно простого булева флага.
+
+### Дополнительные вопросы (RU)
+
+- Как вы бы отрефакторили сложную цепочку `when`/`if` в дизайн на основе State?
+- Сравните классический паттерн State (GoF) с моделированием на основе `sealed class` + `when` в Kotlin.
+- Когда паттерн State является избыточным и какие более простые альтернативы вы бы использовали?
+
+### Ссылки (RU)
+
+- [[c-architecture-patterns]]
+- [[c-computer-science]]
+- [State pattern](https://en.wikipedia.org/wiki/State_pattern)
+- [State Design Pattern in Kotlin](https://medium.com/softaai-blogs/gain-clarity-on-the-state-design-pattern-in-kotlin-a-step-by-step-guide-4f768db2cc03)
+- [State Design Pattern](https://howtodoinjava.com/design-patterns/behavioral/state-design-pattern/)
+- [State Design Pattern](https://sourcemaking.com/design_patterns/state)
+- [State pattern for changing internal processes](https://blog.devgenius.io/state-pattern-for-changing-internal-processes-kotlin-72bd4ef92b2e)
 
 ---
 
 ## Answer (EN)
 
-
-**State (Состояние)** - это поведенческий паттерн проектирования, который позволяет объекту изменять своё поведение в зависимости от внутреннего состояния. При этом создается впечатление, что изменился класс объекта.
+State is a behavioral design pattern that allows an object to change its behavior when its internal state changes. It encapsulates varying behavior into separate state types instead of hard-coding all branches in one "god" class.
 
 ### Definition
 
+The State pattern is a behavioral software design pattern that **allows an object to alter its behavior when its internal state changes**. This pattern encapsulates varying behavior for the same object based on its internal state, providing a cleaner way for an object to change its behavior at runtime by using polymorphism instead of long conditional statements.
 
-The state pattern is a behavioral software design pattern that **allows an object to alter its behavior when its internal state changes**. This pattern encapsulates varying behavior for the same object based on its internal state, providing a cleaner way for an object to change its behavior at runtime without resorting to conditional statements.
+### Problems it solves
 
-### Problems it Solves
+1. An object should change its behavior when its internal state changes.
+2. State-specific behavior should be defined independently so that adding new states does not break existing behavior.
 
+### Why is this a problem?
 
-The state pattern is set to solve two main problems:
-
-1. **An object should change its behavior when its internal state changes**
-2. **State-specific behavior should be defined independently** - Adding new states should not affect the behavior of existing states
-
-### Why is This a Problem?
-
-
-Implementing state-specific behavior directly within a class is inflexible because it commits the class to a particular behavior and makes it impossible to add a new state or change the behavior of an existing state later without changing the class.
+Implementing state-specific behavior directly within a class via conditionals is inflexible because it tightly couples the class to all possible behaviors and makes it hard to add a new state or change existing behavior later without modifying that class.
 
 ### Solution
 
+1. Define separate state objects that encapsulate state-specific behavior.
+2. A context class delegates state-specific behavior to its current state object instead of implementing it directly with conditionals.
 
-The pattern describes two solutions:
+New states can be added by defining new state classes; behavior changes at runtime by switching the current state object.
 
-1. **Define separate (state) objects** that encapsulate state-specific behavior for each state
-2. **A class delegates state-specific behavior** to its current state object instead of implementing it directly
+### Key Features
 
-This makes a class independent of how state-specific behavior is implemented. New states can be added by defining new state classes. A class can change its behavior at run-time by changing its current state object.
+1. State encapsulation in dedicated types.
+2. Dynamic behavior changes via polymorphism.
+3. Reduced conditional complexity.
 
-## Ключевые Особенности
-
-Key Features:
-
-1. **State Encapsulation** - Each state is encapsulated in its own class
-2. **Behavioral Changes** - Behavior changes dynamically as object's state changes
-3. **No Conditionals** - Eliminates long if-else or when chains by using polymorphism
-
-## Пример: Basic State Machine
+### Example: Basic State Machine
 
 ```kotlin
 // State Interface
@@ -113,21 +440,11 @@ fun main() {
 }
 ```
 
-**Output**:
-```
-Context: State changed to ConcreteStateA
-State A: Handling request and transitioning to State B
-Context: State changed to ConcreteStateB
-State B: Handling request and transitioning to State A
-Context: State changed to ConcreteStateA
-State A: Handling request and transitioning to State B
-Context: State changed to ConcreteStateB
-```
+This is the classic GoF State implementation: `Context` holds a `State` and behavior changes by switching state objects.
 
-## Android Example: Media Player States
+### Android Example: Media Player States
 
 ```kotlin
-// State interface
 interface PlayerState {
     fun play(player: MediaPlayer)
     fun pause(player: MediaPlayer)
@@ -135,7 +452,6 @@ interface PlayerState {
     fun getStateName(): String
 }
 
-// Concrete states
 class PlayingState : PlayerState {
     override fun play(player: MediaPlayer) {
         println("Already playing")
@@ -189,7 +505,6 @@ class StoppedState : PlayerState {
     override fun getStateName() = "Stopped"
 }
 
-// Context - Media Player
 class MediaPlayer {
     private var state: PlayerState = StoppedState()
 
@@ -203,21 +518,15 @@ class MediaPlayer {
     fun stop() = state.stop(this)
     fun getCurrentState() = state.getStateName()
 }
-
-// Usage
-fun main() {
-    val player = MediaPlayer()
-    player.play()   // Stopped -> Playing
-    player.pause()  // Playing -> Paused
-    player.play()   // Paused -> Playing
-    player.stop()   // Playing -> Stopped
-}
 ```
 
-## Android ViewModel Example: UI States
+The `MediaPlayer` context delegates to the current `PlayerState`.
+
+### Android `ViewModel` Example: UI States
+
+This example uses a sealed class and flows; conceptually close to an FSM and used heavily in Kotlin/Android.
 
 ```kotlin
-// State sealed class
 sealed class UiState {
     object Loading : UiState()
     data class Success(val data: List<String>) : UiState()
@@ -225,7 +534,6 @@ sealed class UiState {
     object Empty : UiState()
 }
 
-// ViewModel
 class DataViewModel(
     private val repository: DataRepository
 ) : ViewModel() {
@@ -252,34 +560,9 @@ class DataViewModel(
 
     fun retry() = loadData()
 }
-
-// Fragment/Activity
-class DataFragment : Fragment() {
-    private val viewModel: DataViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                when (state) {
-                    is UiState.Loading -> showLoading()
-                    is UiState.Success -> showData(state.data)
-                    is UiState.Error -> showError(state.message)
-                    is UiState.Empty -> showEmpty()
-                }
-            }
-        }
-    }
-
-    private fun showLoading() { /* Show progress */ }
-    private fun showData(data: List<String>) { /* Display data */ }
-    private fun showError(message: String) { /* Show error */ }
-    private fun showEmpty() { /* Show empty state */ }
-}
 ```
 
-## Kotlin Example: Order Processing
+### Kotlin Example: Order Processing
 
 ```kotlin
 sealed class OrderState {
@@ -322,7 +605,7 @@ sealed class OrderState {
 
     object Delivered : OrderState() {
         override fun processNext(order: Order) {
-            println("Order complete - no further action")
+            println("Order complete - no further actions")
         }
 
         override fun cancel(order: Order) {
@@ -332,7 +615,7 @@ sealed class OrderState {
 
     object Cancelled : OrderState() {
         override fun processNext(order: Order) {
-            println("Cancelled order - no action")
+            println("Cancelled order - no actions")
         }
 
         override fun cancel(order: Order) {
@@ -354,166 +637,54 @@ class Order(private var state: OrderState = OrderState.Pending) {
 
 ### Explanation
 
+- State abstraction defines the interface.
+- Concrete states implement per-state behavior.
+- `Context` holds current state and delegates.
+- Transitions may live in states or in context.
+- Classic GoF State uses polymorphic state objects.
+- Sealed-class based approaches (e.g., `sealed class` + `when`/`StateFlow`) are structurally different from classic GoF State but solve the same core concern: behavior depends on state.
 
-**Explanation**:
+### Real World Examples
 
-- **State interface** defines methods for handling state-specific behavior
-- **Concrete states** implement specific behavior for each state
-- **Context** maintains reference to current state and delegates behavior
-- **State transitions** happen within state classes themselves
-- **Android**: UI states with sealed classes, media player states, order processing
+1. TV box power states.
+2. Thread lifecycle states.
+3. Order workflow.
+4. Media player states.
 
-## Применение
+### When to use
 
-Real World Examples:
+Use State when:
 
-1. **TV box** - Different states (ON/OFF) respond differently to remote buttons
-2. **Thread states** - Java thread lifecycle states
-3. **Order processing** - Pending → Processing → Shipped → Delivered
-4. **Media players** - Playing, Paused, Stopped states
+- Object behavior depends on state.
+- There are multiple states with different behavior.
+- You want to avoid huge conditional blocks.
 
-## Преимущества И Недостатки
+### Best Practices
 
-### Pros (Преимущества)
+- Model clear states and transitions.
+- Keep state-specific logic inside state implementations.
+- In Kotlin, sealed classes + `when` + `StateFlow` are great for UI and FSM-like logic.
+- Do not overuse the pattern for trivial flags.
 
+## Related Questions
 
-1. **Single Responsibility** - Each state is in separate class
-2. **Open/Closed Principle** - Easy to add new states
-3. **Eliminates conditionals** - No complex if-else chains
-4. **Cleaner code** - State-specific behavior is localized
-5. **Easy to understand** - Clear state transitions
+- How would you refactor a complex `when`/`if` chain into a State-based design?
+- Compare the classic GoF State pattern with sealed class + `when` modeling in Kotlin.
+- When is the State pattern overkill, and what simpler alternatives would you use?
 
-### Cons (Недостатки)
-
-
-1. **Overkill for simple states** - Too complex for few states
-2. **Many classes** - Each state needs a class
-3. **State coupling** - States need to know about each other
-4. **Complexity** - Can be hard to track state transitions
-
-## Best Practices
-
-```kotlin
-// - DO: Use sealed classes in Kotlin
-sealed class ConnectionState {
-    object Disconnected : ConnectionState()
-    object Connecting : ConnectionState()
-    object Connected : ConnectionState()
-    data class Failed(val error: String) : ConnectionState()
-}
-
-// - DO: Use with StateFlow for reactive updates
-class ConnectionManager {
-    private val _state = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
-    val state: StateFlow<ConnectionState> = _state.asStateFlow()
-
-    fun connect() {
-        when (_state.value) {
-            is ConnectionState.Disconnected -> {
-                _state.value = ConnectionState.Connecting
-                // Connect logic
-            }
-            else -> println("Invalid state for connect")
-        }
-    }
-}
-
-// - DO: Define clear state transitions
-interface State {
-    fun nextState(): State?
-}
-
-// - DON'T: Use for simple boolean flags
-// - DON'T: Make states mutable
-// - DON'T: Put business logic in context
-```
-
-**English**: **State** is a behavioral pattern that allows an object to change its behavior when internal state changes. **Problem**: Complex conditionals for state-specific behavior. **Solution**: Encapsulate each state in separate class, delegate behavior to current state. **Use when**: (1) Object behavior depends on state, (2) Many states with different behaviors, (3) Want to avoid complex conditionals. **Android**: UI states with sealed classes, media player, network connection states. **Pros**: eliminates conditionals, easy to add states, cleaner code. **Cons**: many classes, complexity for simple states. **Examples**: Media player, order processing, connection states, UI states.
-
-## Links
+### Links
 
 - [State pattern](https://en.wikipedia.org/wiki/State_pattern)
 - [State Design Pattern in Kotlin](https://medium.com/softaai-blogs/gain-clarity-on-the-state-design-pattern-in-kotlin-a-step-by-step-guide-4f768db2cc03)
 - [State Design Pattern](https://howtodoinjava.com/design-patterns/behavioral/state-design-pattern/)
 
-## Further Reading
+### Further Reading
 
 - [State Design Pattern](https://sourcemaking.com/design_patterns/state)
 - [State pattern for changing internal processes](https://blog.devgenius.io/state-pattern-for-changing-internal-processes-kotlin-72bd4ef92b2e)
 
----
-*Source: Kirchhoff Android Interview Questions*
+### References
 
-
-## Ответ (RU)
-
-### Определение
-
-Паттерн State (Состояние) - это поведенческий паттерн проектирования, который **позволяет объекту изменять свое поведение при изменении внутреннего состояния**. Этот паттерн инкапсулирует различное поведение одного и того же объекта на основе его внутреннего состояния, предоставляя более чистый способ изменения поведения объекта во время выполнения без использования условных операторов.
-
-### Проблемы, Которые Решает
-
-Паттерн State решает две основные проблемы:
-
-1. **Объект должен изменять свое поведение при изменении внутреннего состояния**
-2. **Поведение, специфичное для состояния, должно быть определено независимо** - Добавление новых состояний не должно влиять на поведение существующих состояний
-
-### Почему Это Проблема?
-
-Реализация поведения, специфичного для состояния, непосредственно в классе негибка, поскольку привязывает класс к конкретному поведению и делает невозможным добавление нового состояния или изменение поведения существующего состояния позже без изменения класса.
-
-### Решение
-
-Паттерн описывает два решения:
-
-1. **Определить отдельные объекты состояний**, которые инкапсулируют поведение, специфичное для каждого состояния
-2. **Класс делегирует поведение, специфичное для состояния**, своему текущему объекту состояния вместо прямой реализации
-
-Это делает класс независимым от того, как реализовано поведение, специфичное для состояния. Новые состояния могут быть добавлены путем определения новых классов состояний. Класс может изменять свое поведение во время выполнения, изменяя свой текущий объект состояния.
-
-### Объяснение
-
-**Пояснение**:
-
-- **Интерфейс State** определяет методы для обработки поведения, специфичного для состояния
-- **Конкретные состояния** реализуют специфичное поведение для каждого состояния
-- **Context (Контекст)** поддерживает ссылку на текущее состояние и делегирует поведение
-- **Переходы между состояниями** происходят внутри самих классов состояний
-- **Android**: UI состояния с sealed классами, состояния медиа-плеера, обработка заказов
-
-### Pros (Преимущества)
-
-1. **Единственная ответственность** - Каждое состояние в отдельном классе
-2. **Принцип открытости/закрытости** - Легко добавлять новые состояния
-3. **Устраняет условные операторы** - Нет сложных цепочек if-else
-4. **Чище код** - Поведение, специфичное для состояния, локализовано
-5. **Легко понять** - Четкие переходы между состояниями
-
-### Cons (Недостатки)
-
-1. **Избыточность для простых состояний** - Слишком сложно для нескольких состояний
-2. **Много классов** - Каждое состояние требует класс
-3. **Связанность состояний** - Состояния должны знать друг о друге
-4. **Сложность** - Может быть трудно отслеживать переходы между состояниями
-
-
----
-
-## Related Questions
-
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
-
-### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
-- [[q-command-pattern--design-patterns--medium]] - Command pattern
-- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
-- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
-
-### Creational Patterns
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
-
+- [[c-architecture-patterns]]
+- [[c-computer-science]]
+- [State pattern](https://en.wikipedia.org/wiki/State_pattern)

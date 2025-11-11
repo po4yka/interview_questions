@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-software-design-patterns, c-dependency-injection, c-kotlin-features]
+related: [c-architecture-patterns, c-clean-architecture, c-computer-science]
 created: "2025-10-13"
-updated: 2025-01-25
-tags: [android, behavioral, creational, design-patterns, difficulty/hard, gof, kotlin, structural]
-sources: [https://refactoring.guru/design-patterns]
+updated: "2025-11-11"
+tags: [design-patterns, gof, difficulty/hard]
+sources: ["https://refactoring.guru/design-patterns"]
+
 ---
 
 # Вопрос (RU)
@@ -28,34 +29,29 @@ sources: [https://refactoring.guru/design-patterns]
 ## Ответ (RU)
 
 **Теория Design Patterns:**
-Design Patterns - общие, переиспользуемые решения типовых проблем в объектно-ориентированном проектировании. Gang of Four (GoF) документировали 23 фундаментальных паттерна в 1994 году. Паттерны делятся на 3 категории: Creational (порождающие), Structural (структурные), Behavioral (поведенческие). Паттерны обеспечивают common vocabulary, proven solutions, code reuse, maintainability.
+Design Patterns — общие, переиспользуемые решения типовых проблем в объектно-ориентированном проектировании. Gang of Four (GoF) документировали 23 фундаментальных паттерна в 1994 году. Классические GoF-паттерны делятся на 3 категории: Creational (порождающие), Structural (структурные), Behavioral (поведенческие). Паттерны обеспечивают общий словарь, проверенные решения, переиспользование кода, уменьшение связности и улучшение сопровождаемости.
 
 **Три основные категории:**
 
 | Категория | Назначение | Примеры |
 |-----------|-----------|---------|
-| **Creational** | Создание объектов | Singleton, Factory Method, Builder |
-| **Structural** | Композиция объектов | Adapter, Decorator, Facade |
-| **Behavioral** | Взаимодействие объектов | Observer, Strategy, Command |
+| **Creational** | Создание и инициализация объектов | Singleton, Factory Method, Builder |
+| **Structural** | Композиция объектов и структур | Adapter, Decorator, Facade |
+| **Behavioral** | Взаимодействие и распределение обязанностей | Observer, Strategy, Command |
 
 **Creational Patterns:**
 
-*Теория:* Порождающие паттерны управляют созданием объектов. Singleton - единственный instance, Factory Method - создание через методы, Abstract Factory - семейства объектов, Builder - пошаговое построение, Prototype - клонирование. Используются для: управления creation logic, избежания tight coupling с конкретными классами, обеспечения гибкости в создании объектов.
+*Теория:* Порождающие паттерны управляют созданием объектов. Singleton — один глобально доступный экземпляр, Factory Method — создание через фабричные методы, Abstract Factory — создание семейств связанных объектов, Builder — пошаговое построение сложных объектов, Prototype — клонирование. Используются для управления логикой создания, избежания жёсткой связи с конкретными классами и обеспечения гибкости при создании объектов.
 
 ```kotlin
-// ✅ Singleton example
+// ✅ Idiomatic Kotlin Singleton example
 object DatabaseManager {
-    private var instance: Database? = null
+    fun getConnection(): Database = Database.create()
+}
 
-    fun getInstance(): Database {
-        if (instance == null) {
-            synchronized(this) {
-                if (instance == null) {
-                    instance = Database.create()
-                }
-            }
-        }
-        return instance!!
+class Database {
+    companion object {
+        fun create(): Database = Database()
     }
 }
 
@@ -65,207 +61,17 @@ interface NetworkRequest {
 }
 
 class GetRequest : NetworkRequest {
-    override fun execute() { /* GET */ }
+    override fun execute() { /* handle GET */ }
 }
 
 class PostRequest : NetworkRequest {
-    override fun execute() { /* POST */ }
+    override fun execute() { /* handle POST */ }
 }
 
 fun createRequest(method: String): NetworkRequest = when (method) {
     "GET" -> GetRequest()
     "POST" -> PostRequest()
-    else -> throw IllegalArgumentException()
-}
-
-// ✅ Builder example
-class User private constructor(val name: String, val age: Int) {
-    class Builder {
-    private var name: String = ""
-        private var age: Int = 0
-
-    fun name(name: String) = apply { this.name = name }
-    fun age(age: Int) = apply { this.age = age }
-        fun build() = User(name, age)
-    }
-}
-```
-
-**Structural Patterns:**
-
-*Теория:* Структурные паттерны управляют композицией объектов в более крупные структуры. Adapter - преобразование интерфейса, Decorator - добавление функциональности, Facade - упрощение сложной системы, Proxy - контролируемый доступ, Composite - древовидные структуры. Используются для: работы с legacy code, упрощения сложных интерфейсов, добавления responsibilities без subclassing.
-
-```kotlin
-// ✅ Adapter example
-interface MediaPlayer {
-    fun play(file: String)
-}
-
-class VlcPlayer : MediaPlayer {
-    override fun play(file: String) { /* play VLC */ }
-}
-
-class Mp4Adapter(private val player: Mp4Player) : MediaPlayer {
-    override fun play(file: String) {
-        player.playMp4(file)  // Adapts interface
-    }
-}
-
-// ✅ Decorator example
-interface Coffee {
-    fun cost(): Double
-}
-
-class BasicCoffee : Coffee {
-    override fun cost() = 2.0
-}
-
-class MilkDecorator(private val coffee: Coffee) : Coffee {
-    override fun cost() = coffee.cost() + 0.5
-}
-```
-
-**Behavioral Patterns:**
-
-*Теория:* Поведенческие паттерны управляют взаимодействием объектов. Observer - уведомление зависимостей, Strategy - взаимозаменяемые алгоритмы, Command - инкапсуляция запросов, State - поведение на основе состояния, Template Method - скелет алгоритма. Используются для: гибкой коммуникации, расширяемости алгоритмов, undo/redo functionality, state management.
-
-```kotlin
-// ✅ Observer example
-class Button {
-    private val observers = mutableListOf<() -> Unit>()
-
-    fun addObserver(observer: () -> Unit) {
-        observers.add(observer)
-    }
-
-    fun click() {
-        observers.forEach { it() }
-    }
-}
-
-// ✅ Strategy example
-interface SortStrategy {
-    fun sort(list: List<Int>): List<Int>
-}
-
-class BubbleSort : SortStrategy {
-    override fun sort(list: List<Int>) = /* bubble sort */
-}
-
-class QuickSort : SortStrategy {
-    override fun sort(list: List<Int>) = /* quick sort */
-}
-
-class Sorter(private val strategy: SortStrategy) {
-    fun sort(list: List<Int>) = strategy.sort(list)
-}
-```
-
-**Когда использовать паттерны:**
-
-✅ Когда есть proven solution для данной проблемы
-✅ Когда нужна flexibility и extensibility
-✅ Когда код нуждается в refactoring
-✅ Когда команда использует common vocabulary
-
-❌ Не использовать для простых случаев без необходимости
-❌ Не переусложнять architecture паттернами
-❌ Не применять без понимания trade-offs
-
-**Modern Android альтернативы:**
-
-*Теория:* Современные подходы в Android: Dependency Injection (Hilt/Dagger) вместо Singleton, StateFlow/SharedFlow вместо classic Observer, Sealed classes для State pattern, Coroutines для async patterns. Эти подходы более idiomatic для Kotlin и Android.
-
-```kotlin
-// ✅ Modern: Dependency Injection
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideApiService(): ApiService = Retrofit.Builder()
-        .baseUrl("https://api.example.com")
-        .build()
-        .create(ApiService::class.java)
-}
-
-// ✅ Modern: StateFlow вместо Observer
-class ViewModel : ViewModel() {
-    private val _state = MutableStateFlow<UiState>(UiState.Loading)
-    val state: StateFlow<UiState> = _state.asStateFlow()
-
-    fun updateState(newState: UiState) {
-        _state.value = newState
-    }
-}
-
-// ✅ Modern: Sealed classes для State pattern
-sealed class UiState {
-    object Loading : UiState()
-    data class Success(val data: List<Item>) : UiState()
-    data class Error(val message: String) : UiState()
-}
-```
-
-**Ключевые концепции:**
-
-1. **Common Vocabulary** - паттерны дают общий язык команде
-2. **Proven Solutions** - проверенные временем решения
-3. **Flexibility** - паттерны обеспечивают flexibility
-4. **Maintainability** - код становится более maintainable
-5. **Modern Alternatives** - использовать Kotlin/Android idiom совместимые подходы
-
-## Answer (EN)
-
-**Design Patterns Theory:**
-Design Patterns - general, reusable solutions to typical problems in object-oriented design. Gang of Four (GoF) documented 23 fundamental patterns in 1994. Patterns divided into 3 categories: Creational, Structural, Behavioral. Patterns provide common vocabulary, proven solutions, code reuse, maintainability.
-
-**Three Main Categories:**
-
-| Category | Purpose | Examples |
-|----------|---------|----------|
-| **Creational** | Object creation | Singleton, Factory Method, Builder |
-| **Structural** | Object composition | Adapter, Decorator, Facade |
-| **Behavioral** | Object interaction | Observer, Strategy, Command |
-
-**Creational Patterns:**
-
-*Theory:* Creational patterns manage object creation. Singleton - single instance, Factory Method - creation through methods, Abstract Factory - object families, Builder - step-by-step construction, Prototype - cloning. Used for: managing creation logic, avoiding tight coupling with concrete classes, ensuring flexibility in object creation.
-
-```kotlin
-// ✅ Singleton example
-object DatabaseManager {
-    private var instance: Database? = null
-
-    fun getInstance(): Database {
-        if (instance == null) {
-            synchronized(this) {
-                if (instance == null) {
-                    instance = Database.create()
-                }
-            }
-        }
-        return instance!!
-    }
-}
-
-// ✅ Factory Method example
-interface NetworkRequest {
-    fun execute()
-}
-
-class GetRequest : NetworkRequest {
-    override fun execute() { /* GET */ }
-}
-
-class PostRequest : NetworkRequest {
-    override fun execute() { /* POST */ }
-}
-
-fun createRequest(method: String): NetworkRequest = when (method) {
-    "GET" -> GetRequest()
-    "POST" -> PostRequest()
-    else -> throw IllegalArgumentException()
+    else -> throw IllegalArgumentException("Unsupported method")
 }
 
 // ✅ Builder example
@@ -283,7 +89,7 @@ class User private constructor(val name: String, val age: Int) {
 
 **Structural Patterns:**
 
-*Theory:* Structural patterns manage object composition into larger structures. Adapter - interface transformation, Decorator - adding functionality, Facade - simplifying complex system, Proxy - controlled access, Composite - tree structures. Used for: working with legacy code, simplifying complex interfaces, adding responsibilities without subclassing.
+*Теория:* Структурные паттерны управляют композицией объектов в более крупные структуры. Adapter — преобразование одного интерфейса в другой, Decorator — динамическое добавление функциональности без изменения исходного класса, Facade — упрощение сложной подсистемы единым интерфейсом, Proxy — контролируемый доступ к объекту, Composite — работа с древовидными структурами как с единым объектом. Используются для работы с legacy-кодом, упрощения сложных интерфейсов, добавления обязанностей без наследования.
 
 ```kotlin
 // ✅ Adapter example
@@ -292,12 +98,16 @@ interface MediaPlayer {
 }
 
 class VlcPlayer : MediaPlayer {
-    override fun play(file: String) { /* play VLC */ }
+    override fun play(file: String) { /* play VLC file */ }
+}
+
+class Mp4Player {
+    fun playMp4(file: String) { /* play MP4 file */ }
 }
 
 class Mp4Adapter(private val player: Mp4Player) : MediaPlayer {
     override fun play(file: String) {
-        player.playMp4(file)  // Adapts interface
+        player.playMp4(file) // адаптация интерфейса
     }
 }
 
@@ -317,10 +127,10 @@ class MilkDecorator(private val coffee: Coffee) : Coffee {
 
 **Behavioral Patterns:**
 
-*Theory:* Behavioral patterns manage object interaction. Observer - dependency notification, Strategy - interchangeable algorithms, Command - request encapsulation, State - behavior based on state, Template Method - algorithm skeleton. Used for: flexible communication, algorithm extensibility, undo/redo functionality, state management.
+*Теория:* Поведенческие паттерны управляют взаимодействием объектов и распределением обязанностей. Observer — оповещение подписчиков об изменении состояния субъекта, Strategy — взаимозаменяемые алгоритмы под единым интерфейсом, Command — инкапсуляция запроса как объекта, State — изменение поведения в зависимости от текущего состояния, Template Method — задание «скелета» алгоритма с переопределяемыми шагами. Используются для гибкой коммуникации, расширяемости алгоритмов, реализации undo/redo и управления состоянием.
 
 ```kotlin
-// ✅ Observer example
+// ✅ Simplified Observer-style example
 class Button {
     private val observers = mutableListOf<() -> Unit>()
 
@@ -339,35 +149,35 @@ interface SortStrategy {
 }
 
 class BubbleSort : SortStrategy {
-    override fun sort(list: List<Int>) = /* bubble sort */
+    override fun sort(list: List<Int>): List<Int> = list.sorted() // placeholder
 }
 
 class QuickSort : SortStrategy {
-    override fun sort(list: List<Int>) = /* quick sort */
+    override fun sort(list: List<Int>): List<Int> = list.sorted() // placeholder
 }
 
 class Sorter(private val strategy: SortStrategy) {
-    fun sort(list: List<Int>) = strategy.sort(list)
+    fun sort(list: List<Int>): List<Int> = strategy.sort(list)
 }
 ```
 
-**When to Use Patterns:**
+**Когда использовать паттерны:**
 
-✅ When there's proven solution for given problem
-✅ When need flexibility and extensibility
-✅ When code needs refactoring
-✅ When team uses common vocabulary
+✅ Когда есть хорошо известное, проверенное решение для данной проблемы
+✅ Когда нужна гибкость и расширяемость без жёсткой связности
+✅ Когда код требует рефакторинга для улучшения структуры
+✅ Когда команда опирается на общий словарь архитектурных решений
 
-❌ Don't use for simple cases without need
-❌ Don't overcomplicate architecture with patterns
-❌ Don't apply without understanding trade-offs
+❌ Не использовать для тривиальных случаев без необходимости
+❌ Не переусложнять архитектуру паттернами
+❌ Не применять без понимания trade-offs и контекста
 
-**Modern Android Alternatives:**
+**Современные Android/Kotlin-подходы:**
 
-*Theory:* Modern approaches in Android: Dependency Injection (Hilt/Dagger) instead of Singleton, StateFlow/SharedFlow instead of classic Observer, Sealed classes for State pattern, Coroutines for async patterns. These approaches more idiomatic for Kotlin and Android.
+*Теория:* Современные подходы на Android и в Kotlin: Dependency Injection (Hilt/Dagger) вместо ручного Singleton для зависимостей, `StateFlow`/`SharedFlow` вместо самописного Observer, sealed-классы для выражения состояний (частично решают задачи State/Result-паттернов), корутины для асинхронных задач. Эти подходы более идиоматичны для Kotlin и Android, но концептуально опираются на те же идеи, что и классические паттерны.
 
 ```kotlin
-// ✅ Modern: Dependency Injection
+// ✅ Modern: Dependency Injection (пример DI контейнера вместо ручного Singleton)
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -379,8 +189,10 @@ object NetworkModule {
         .create(ApiService::class.java)
 }
 
-// ✅ Modern: StateFlow instead of Observer
-class ViewModel : ViewModel() {
+interface ApiService
+
+// ✅ Modern: StateFlow вместо самописного Observer
+class SampleViewModel : ViewModel() {
     private val _state = MutableStateFlow<UiState>(UiState.Loading)
     val state: StateFlow<UiState> = _state.asStateFlow()
 
@@ -389,29 +201,243 @@ class ViewModel : ViewModel() {
     }
 }
 
-// ✅ Modern: Sealed classes for State pattern
+// ✅ Modern: Sealed classes для представления состояний UI
 sealed class UiState {
     object Loading : UiState()
     data class Success(val data: List<Item>) : UiState()
     data class Error(val message: String) : UiState()
 }
+
+class Item
+```
+
+**Ключевые концепции:**
+
+1. **Common Vocabulary** — паттерны дают общий язык команде.
+2. **Proven Solutions** — проверенные временем решения повторяющихся задач.
+3. **Flexibility & Decoupling** — снижение связности и повышение гибкости.
+4. **Maintainability** — код становится проще расширять и сопровождать.
+5. **Modern Alternatives** — использовать идиоматичные для Kotlin/Android подходы, сохраняя понимание базовых паттернов.
+
+## Answer (EN)
+
+**Design Patterns Theory:**
+Design patterns are general, reusable solutions to typical problems in object-oriented design. The Gang of Four (GoF) documented 23 fundamental patterns in 1994. The classic GoF patterns are grouped into 3 categories: Creational, Structural, and Behavioral. Patterns provide a common vocabulary, proven solutions, code reuse, reduced coupling, and improved maintainability.
+
+**Three Main Categories:**
+
+| Category | Purpose | Examples |
+|----------|---------|----------|
+| **Creational** | Object creation and initialization | Singleton, Factory Method, Builder |
+| **Structural** | Object and structure composition | Adapter, Decorator, Facade |
+| **Behavioral** | Object interaction and responsibility distribution | Observer, Strategy, Command |
+
+**Creational Patterns:**
+
+*Theory:* Creational patterns manage object creation. Singleton — a single globally accessible instance, Factory Method — creation via factory methods, Abstract Factory — families of related objects, Builder — step-by-step construction of complex objects, Prototype — cloning. Used for managing creation logic, avoiding tight coupling to concrete classes, and ensuring flexibility in object creation.
+
+```kotlin
+// ✅ Idiomatic Kotlin Singleton example
+object DatabaseManager {
+    fun getConnection(): Database = Database.create()
+}
+
+class Database {
+    companion object {
+        fun create(): Database = Database()
+    }
+}
+
+// ✅ Factory Method example
+interface NetworkRequest {
+    fun execute()
+}
+
+class GetRequest : NetworkRequest {
+    override fun execute() { /* handle GET */ }
+}
+
+class PostRequest : NetworkRequest {
+    override fun execute() { /* handle POST */ }
+}
+
+fun createRequest(method: String): NetworkRequest = when (method) {
+    "GET" -> GetRequest()
+    "POST" -> PostRequest()
+    else -> throw IllegalArgumentException("Unsupported method")
+}
+
+// ✅ Builder example
+class User private constructor(val name: String, val age: Int) {
+    class Builder {
+        private var name: String = ""
+        private var age: Int = 0
+
+        fun name(name: String) = apply { this.name = name }
+        fun age(age: Int) = apply { this.age = age }
+        fun build() = User(name, age)
+    }
+}
+```
+
+**Structural Patterns:**
+
+*Theory:* Structural patterns manage object composition into larger structures. Adapter — converting one interface to another, Decorator — dynamically adding functionality without modifying the original class, Facade — providing a simplified interface to a complex subsystem, Proxy — controlled access to an object, Composite — treating tree structures uniformly. Used for working with legacy code, simplifying complex interfaces, and adding responsibilities without subclassing.
+
+```kotlin
+// ✅ Adapter example
+interface MediaPlayer {
+    fun play(file: String)
+}
+
+class VlcPlayer : MediaPlayer {
+    override fun play(file: String) { /* play VLC file */ }
+}
+
+class Mp4Player {
+    fun playMp4(file: String) { /* play MP4 file */ }
+}
+
+class Mp4Adapter(private val player: Mp4Player) : MediaPlayer {
+    override fun play(file: String) {
+        player.playMp4(file) // adapts interface
+    }
+}
+
+// ✅ Decorator example
+interface Coffee {
+    fun cost(): Double
+}
+
+class BasicCoffee : Coffee {
+    override fun cost() = 2.0
+}
+
+class MilkDecorator(private val coffee: Coffee) : Coffee {
+    override fun cost() = coffee.cost() + 0.5
+}
+```
+
+**Behavioral Patterns:**
+
+*Theory:* Behavioral patterns manage object interaction and responsibility distribution. Observer — notifying subscribers about subject state changes, Strategy — interchangeable algorithms under a common interface, Command — encapsulating a request as an object, State — changing behavior based on current state, Template Method — defining the skeleton of an algorithm with overridable steps. Used for flexible communication, algorithm extensibility, undo/redo functionality, and state management.
+
+```kotlin
+// ✅ Simplified Observer-style example
+class Button {
+    private val observers = mutableListOf<() -> Unit>()
+
+    fun addObserver(observer: () -> Unit) {
+        observers.add(observer)
+    }
+
+    fun click() {
+        observers.forEach { it() }
+    }
+}
+
+// ✅ Strategy example
+interface SortStrategy {
+    fun sort(list: List<Int>): List<Int>
+}
+
+class BubbleSort : SortStrategy {
+    override fun sort(list: List<Int>): List<Int> = list.sorted() // placeholder
+}
+
+class QuickSort : SortStrategy {
+    override fun sort(list: List<Int>): List<Int> = list.sorted() // placeholder
+}
+
+class Sorter(private val strategy: SortStrategy) {
+    fun sort(list: List<Int>): List<Int> = strategy.sort(list)
+}
+```
+
+**When to Use Patterns:**
+
+✅ When there is a well-known, proven solution for the given problem
+✅ When flexibility and extensibility are needed without tight coupling
+✅ When code needs refactoring to improve structure
+✅ When the team relies on a shared vocabulary of architectural solutions
+
+❌ Don't use for trivial cases without need
+❌ Don't overcomplicate architecture with patterns
+❌ Don't apply without understanding trade-offs and context
+
+**Modern Android/Kotlin Approaches:**
+
+*Theory:* Modern approaches in Android and Kotlin: Dependency Injection (Hilt/Dagger) instead of manual singletons for dependencies, `StateFlow`/`SharedFlow` instead of ad-hoc Observer implementations, sealed classes for representing states (partially covering State/Result-like patterns), coroutines for async patterns. These approaches are more idiomatic for Kotlin and Android, while conceptually building on the same underlying design principles.
+
+```kotlin
+// ✅ Modern: Dependency Injection (use DI container instead of manual Singleton)
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideApiService(): ApiService = Retrofit.Builder()
+        .baseUrl("https://api.example.com")
+        .build()
+        .create(ApiService::class.java)
+}
+
+interface ApiService
+
+// ✅ Modern: StateFlow instead of custom Observer
+class SampleViewModel : ViewModel() {
+    private val _state = MutableStateFlow<UiState>(UiState.Loading)
+    val state: StateFlow<UiState> = _state.asStateFlow()
+
+    fun updateState(newState: UiState) {
+        _state.value = newState
+    }
+}
+
+// ✅ Modern: Sealed classes for UI state representation
+sealed class UiState {
+    object Loading : UiState()
+    data class Success(val data: List<Item>) : UiState()
+    data class Error(val message: String) : UiState()
+}
+
+class Item
 ```
 
 **Key Concepts:**
 
-1. **Common Vocabulary** - patterns provide common team language
-2. **Proven Solutions** - time-tested solutions
-3. **Flexibility** - patterns ensure flexibility
-4. **Maintainability** - code becomes more maintainable
-5. **Modern Alternatives** - use Kotlin/Android idiomatic approaches
+1. **Common Vocabulary** — patterns provide a shared language for the team.
+2. **Proven Solutions** — time-tested solutions to recurring problems.
+3. **Flexibility & Decoupling** — reduced coupling and increased flexibility.
+4. **Maintainability** — code becomes easier to extend and maintain.
+5. **Modern Alternatives** — use idiomatic Kotlin/Android approaches while understanding core pattern concepts.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Когда следует предпочесть композицию наследованию?
+- Каковы современные альтернативы классическим GoF-паттернам?
+- Как `StateFlow`/`SharedFlow` соотносятся с паттерном Observer?
 
 ## Follow-ups
 
 - When should you prefer composition over inheritance?
 - What are the modern alternatives to classic GoF patterns?
-- How do StateFlow/SharedFlow relate to Observer pattern?
+- How do `StateFlow`/`SharedFlow` relate to the Observer pattern?
+
+## Связанные вопросы (RU)
+
+### Обзор
+- [[q-design-patterns-types--design-patterns--medium]] — Категории паттернов
+
+### Порождающие паттерны
+- [[q-singleton-pattern--design-patterns--easy]] — Singleton
+
+### Поведенческие паттерны
+- [[q-strategy-pattern--design-patterns--medium]] — Strategy
+- [[q-state-pattern--design-patterns--medium]] — State
+- [[q-template-method-pattern--design-patterns--medium]] — Template Method
 
 ## Related Questions
 
@@ -421,14 +447,14 @@ sealed class UiState {
 ### Creational Patterns
 - [[q-singleton-pattern--design-patterns--easy]] - Singleton
 
-### Structural Patterns
-
 ### Behavioral Patterns
-- [[q-observer-pattern--design-patterns--medium]] - Observer
 - [[q-strategy-pattern--design-patterns--medium]] - Strategy
-- [[q-command-pattern--design-patterns--medium]] - Command
 - [[q-state-pattern--design-patterns--medium]] - State
 - [[q-template-method-pattern--design-patterns--medium]] - Template Method
-- [[q-iterator-pattern--design-patterns--medium]] - Iterator
 
-### Advanced Patterns
+## References
+
+- [[c-architecture-patterns]]
+- [[c-clean-architecture]]
+- [[c-computer-science]]
+- "https://refactoring.guru/design-patterns"

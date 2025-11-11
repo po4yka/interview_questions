@@ -10,29 +10,30 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-dependency-injection-pattern--architecture-patterns--hard, q-singleton-pattern--design-patterns--medium]
+related: [c-computer-science, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [dependency-management, design-patterns, difficulty/medium, service-discovery, service-locator]
-sources: [https://martinfowler.com/articles/injection.html]
+sources: ["https://martinfowler.com/articles/injection.html"]
+
 ---
 
 # Вопрос (RU)
-> Что такое паттерн Service Locator? Когда его использовать и как он работает?
+> Что такое паттерн `Service` Locator? Когда его использовать и как он работает?
 
 # Question (EN)
-> What is the Service Locator pattern? When to use it and how does it work?
+> What is the `Service` Locator pattern? When to use it and how does it work?
 
 ---
 
 ## Ответ (RU)
 
-**Теория Service Locator Pattern:**
-Service Locator - design pattern для encapsulating processes involved в obtaining services. Uses central registry (service locator) returns information necessary для certain tasks. Solves: runtime service selection, avoiding DI complexity, simple service discovery. Components: Service Locator, Service, Client, Service Interface.
+**Теория `Service` Locator Pattern:**
+`Service` Locator — это порождающий/структурный паттерн, инкапсулирующий логику получения зависимостей ("сервисов") через центральный реестр (service locator). Клиент запрашивает сервис по ключу/типу, а локатор возвращает зарегистрированный экземпляр. Основные компоненты: `Service` Locator, `Service` Interface, `Service` (реализация), Client. Паттерн решает задачу централизованного доступа к сервисам и выбора реализации во время выполнения, но вводит скрытые зависимости и глобальное состояние.
 
 **Определение:**
 
-*Теория:* Service Locator - pattern для encapsulating service access с strong abstraction layer. Central registry manages services и provides access. Client requests service, locator returns instance. Trade-off: simpler than DI для small apps, но harder to test и creates hidden dependencies.
+*Теория:* `Service` Locator предоставляет абстракцию над доступом к зависимостям: центральный реестр управляет сервисами и предоставляет к ним доступ по запросу клиентов. Клиент запрашивает нужный сервис, локатор возвращает инстанс. Обратная сторона: по сравнению с явной Dependency Injection паттерн проще встроить в небольшой или legacy-код, но сложнее тестировать, ухудшает прозрачность зависимостей и потому в современном дизайне часто рассматривается как анти-паттерн.
 
 ```kotlin
 // ✅ Basic Service Locator
@@ -46,7 +47,7 @@ object ServiceRegistry {
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> get(serviceClass: Class<T>): T {
         return services[serviceClass] as? T
-            ?: throw IllegalStateException("Service not registered")
+            ?: throw IllegalStateException("Service not registered: ${serviceClass.name}")
     }
 }
 
@@ -59,6 +60,15 @@ interface DatabaseService {
     fun saveData(data: String)
 }
 
+// Пример реализаций (условно)
+class AuthServiceImpl : AuthService {
+    override fun login(username: String, password: String): Boolean = true
+}
+
+class DatabaseServiceImpl : DatabaseService {
+    override fun saveData(data: String) { /* persist */ }
+}
+
 // ✅ Initialization
 fun initializeServices() {
     ServiceRegistry.register(AuthService::class.java, AuthServiceImpl())
@@ -67,6 +77,7 @@ fun initializeServices() {
 
 // ✅ Client usage
 class UserManager {
+    // Скрытые зависимости: берутся из глобального реестра
     private val authService = ServiceRegistry.get(AuthService::class.java)
     private val dbService = ServiceRegistry.get(DatabaseService::class.java)
 
@@ -80,14 +91,14 @@ class UserManager {
 
 **Проблемы, которые решает:**
 
-**1. Runtime Service Selection:**
-*Теория:* Selecting services at runtime rather than compile-time. Allows adding code at runtime without recompiling, enables optimization through selective adding/removing. Applications can optimize themselves.
+**1. Runtime `Service` Selection:**
+*Теория:* Позволяет выбирать конкретные реализации сервисов во время выполнения (по типу, имени, конфигурации), не меняя код клиентов. Это упрощает подмену реализаций (например, mock vs real, разные стратегии) без перекомпиляции клиентского кода, при условии, что сами реализации доступны приложению.
 
 **2. Avoiding DI Complexity:**
-*Theory:* For simple apps с well-defined services, Service Locator simpler than full DI framework. Avoids complexity of constructor/setter injection, factories, containers. Works well для component/service designs.
+*Теория:* Для простых приложений с ограниченным набором сервисов ручной `Service` Locator может быть проще, чем внедрение полноценного DI-фреймворка. Не требует сложной конфигурации контейнера, но при этом все ещё предоставляет единый механизм получения зависимостей.
 
 **3. Legacy Code Support:**
-*Theory:* Service Locator useful для legacy code that doesn't support DI. Can integrate with existing code without major refactoring. Provides centralized service access без changing entire architecture.
+*Теория:* Полезен для legacy-кода, где сложно внедрить конструкторное/интерфейсное внедрение зависимостей. Локатор можно интегрировать минимальными изменениями, централизовав создание и выдачу сервисов.
 
 ```kotlin
 // ✅ Service Locator в legacy code
@@ -106,56 +117,58 @@ class LegacyActivity : Activity() {
 
 **Преимущества:**
 
-1. **Runtime Flexibility** - add code at runtime without recompiling
-2. **Optimization** - selectively add/remove items
-3. **Separation** - large sections completely separated
-4. **Multiple Locators** - different locators для different purposes
-5. **Simplicity** - simpler than DI для structured designs
+1. **Централизованный доступ** — единая точка регистрации и получения сервисов.
+2. **Гибкость выбора реализаций во время выполнения** — можно подменять реализации без изменения клиентского кода.
+3. **Инкапсуляция создания сервисов** — скрывает детали создания и жизненного цикла за локатором.
+4. **Упрощённая интеграция с legacy** — позволяет постепенно выносить создание зависимостей из разбросанного кода.
 
 **Недостатки:**
 
-1. **Hidden Dependencies** - runtime errors вместо compile-time
-2. **Testing Difficulties** - global state makes testing harder
-3. **Global State** - creates global state, harder to reason
-4. **Runtime Errors** - missing services detected only at runtime
-5. **Tight Coupling** - coupling to service locator itself
+1. **Скрытые зависимости** — класс использует `Service` Locator внутри, зависимости не видны в API (конструкторах/интерфейсах).
+2. **Глобальное состояние** — локатор часто реализуется как синглтон с изменяемым состоянием, что усложняет понимание и сопровождение.
+3. **Сложность тестирования** — требуется настраивать глобальный реестр или мокать его; легко получить неочевидное взаимодействие тестов.
+4. **Ошибки только во время выполнения** — отсутствие регистрации или конфликтные регистрации обнаруживаются в рантайме.
+5. **Жёсткая связность с локатором** — клиенты зависят от конкретного механизма поиска сервисов.
 
-**Service Locator vs Dependency Injection:**
+**`Service` Locator vs Dependency Injection:**
 
-*Теория:* Key differences: dependencies visibility, error detection, testing complexity. Service Locator hides dependencies (runtime errors), Dependency Injection makes explicit (compile-time errors). Service Locator harder to test, DI easier to test.
+*Теория:* Ключевые различия: явность зависимостей, точка контроля и типы ошибок.
+- В `Service` Locator зависимости скрыты внутри реализации: класс сам "тянет" их из локатора.
+- В Dependency Injection зависимости явны: передаются через конструктор/поля/методы, обычно настраиваются в одном месте.
+- SL чаще приводит к рантайм-ошибкам (нет регистрации), сложнее для модульного тестирования.
+- DI облегчает тестирование (можно передать моки) и позволяет ловить часть ошибок конфигурации раньше (на уровне компиляции или старта приложения, особенно с compile-time DI).
 
-| Aspect | Service Locator | Dependency Injection |
+| Aspect | `Service` Locator | Dependency Injection |
 |--------|-----------------|---------------------|
-| Dependencies | Hidden, runtime | Explicit, injected |
-| Testing | Harder | Easier |
-| Errors | Runtime | Compile-time (frameworks) |
-| Complexity | Simple для small apps | Complex setup |
-| Popularity | Less | More (industry standard) |
+| Dependencies | Hidden (pulled from locator) | Explicit (pushed/injected) |
+| Testing | Harder (глобальное состояние, требуется настройка локатора) | Easier (моки/стабы передаются явно) |
+| Errors | В основном runtime (нет/неверная регистрация) | Могут выявляться раньше (compile-time или на старте, в зависимости от фреймворка), но тоже возможны runtime |
+| Complexity | Простая реализация для небольших проектов | Выше порог входа, особенно с DI-фреймворками |
+| Modern practice | Часто рассматривается как анти-паттерн | Де-факто стандарт для масштабируемых систем |
 
 **Когда использовать:**
 
-✅ **Use Service Locator when:**
-- Simple application с well-defined services
-- Need runtime flexibility в service selection
-- Want avoid DI framework complexity
-- Working с legacy code без DI support
-- Need quick service discovery
+✅ **Использовать `Service` Locator можно, если:**
+- Приложение небольшое, набор сервисов невелик и стабилен.
+- Нужна ограниченная гибкость выбора реализаций во время выполнения без внедрения DI-фреймворка.
+- Требуется быстро централизовать создание зависимостей в legacy-коде.
+- Команда осознаёт минусы скрытых зависимостей и глобального состояния.
 
-❌ **Don't use Service Locator when:**
-- Large, complex application (prefer DI)
-- Testability is high priority
-- Want compile-time dependency verification
-- Following modern best practices (Google recommends DI)
-- Building new application from scratch
+❌ **Не использовать (или избегать), если:**
+- Система крупная и развивающаяся (предпочтительнее DI).
+- Тестируемость и прозрачность зависимостей — приоритет.
+- Нужна как можно более строгая проверка зависимостей (compile-time / детерминированная конфигурация).
+- Следуете современным практикам чистой архитектуры.
+- Проект создаётся с нуля, и нет ограничений, мешающих использовать DI.
 
-**Android Context:**
+**Android `Context`:**
 
-*Теория:* In Android, Google recommends DI (Dagger/Hilt) over Service Locator. Reasons: testability (DI makes testing easier), compile-time safety, explicit dependencies, better for large apps. Service Locator considered anti-pattern by many Android developers due to hidden dependencies и global state.
+*Теория:* В Android Google и сообщество рекомендуют DI (Dagger/Hilt/Koin и т.п.) вместо `Service` Locator. Причины: лучшая тестируемость, явные зависимости во `ViewModel`/`Activity`/`Fragment`, compile-time-поддержка (в случае Dagger/Hilt), предсказуемость жизненного цикла. `Service` Locator во многих Android-кодовых базах рассматривается как анти-паттерн из-за скрытых зависимостей и глобального состояния.
 
 ```kotlin
 // ❌ Service Locator (Android anti-pattern)
 class MyViewModel {
-    private val repository = ServiceLocator.get(Repository::class.java)
+    private val repository = ServiceRegistry.get(Repository::class.java)
     // Hidden dependency, hard to test
 }
 
@@ -169,12 +182,12 @@ class MyViewModel @Inject constructor(
 
 ## Answer (EN)
 
-**Service Locator Pattern Theory:**
-Service Locator - design pattern for encapsulating processes involved in obtaining services. Uses central registry (service locator) that returns information necessary for certain tasks. Solves: runtime service selection, avoiding DI complexity, simple service discovery. Components: Service Locator, Service, Client, Service Interface.
+**`Service` Locator Pattern Theory:**
+The `Service` Locator is a creational/structural pattern that encapsulates how application components obtain their dependencies ("services") via a central registry (the service locator). Clients request services by key/type, and the locator returns registered instances. Core components: `Service` Locator, `Service` Interface, `Service` implementation, Client. It provides centralized access and runtime selection of implementations, but introduces hidden dependencies and global state.
 
 **Definition:**
 
-*Theory:* Service Locator - pattern for encapsulating service access with strong abstraction layer. Central registry manages services and provides access. Client requests service, locator returns instance. Trade-off: simpler than DI for small apps, but harder to test and creates hidden dependencies.
+*Theory:* `Service` Locator provides an abstraction over service access: a central registry manages services and provides them to clients on request. The client asks for what it needs; the locator returns an instance. Trade-off: it can be simpler than introducing a full DI framework for small or legacy systems, but it makes dependencies implicit, complicates testing, and is therefore often considered an anti-pattern in modern design.
 
 ```kotlin
 // ✅ Basic Service Locator
@@ -188,7 +201,7 @@ object ServiceRegistry {
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> get(serviceClass: Class<T>): T {
         return services[serviceClass] as? T
-            ?: throw IllegalStateException("Service not registered")
+            ?: throw IllegalStateException("Service not registered: ${serviceClass.name}")
     }
 }
 
@@ -201,6 +214,15 @@ interface DatabaseService {
     fun saveData(data: String)
 }
 
+// Example implementations (simplified)
+class AuthServiceImpl : AuthService {
+    override fun login(username: String, password: String): Boolean = true
+}
+
+class DatabaseServiceImpl : DatabaseService {
+    override fun saveData(data: String) { /* persist */ }
+}
+
 // ✅ Initialization
 fun initializeServices() {
     ServiceRegistry.register(AuthService::class.java, AuthServiceImpl())
@@ -209,6 +231,7 @@ fun initializeServices() {
 
 // ✅ Client usage
 class UserManager {
+    // Hidden dependencies: pulled from global registry
     private val authService = ServiceRegistry.get(AuthService::class.java)
     private val dbService = ServiceRegistry.get(DatabaseService::class.java)
 
@@ -222,14 +245,14 @@ class UserManager {
 
 **Problems Solved:**
 
-**1. Runtime Service Selection:**
-*Theory:* Selecting services at runtime rather than compile-time. Allows adding code at runtime without recompiling, enables optimization through selective adding/removing. Applications can optimize themselves.
+**1. Runtime `Service` Selection:**
+*Theory:* Allows choosing specific service implementations at runtime (by type/name/configuration) without changing client code. This makes it easier to swap implementations (e.g., mock vs real, different strategies), as long as those implementations are available to the application.
 
 **2. Avoiding DI Complexity:**
-*Theory:* For simple apps with well-defined services, Service Locator simpler than full DI framework. Avoids complexity of constructor/setter injection, factories, containers. Works well for component/service designs.
+*Theory:* For small applications with a limited, stable set of services, a hand-rolled `Service` Locator can be simpler than adopting a full DI framework. It avoids complex container configuration while still centralizing how services are obtained.
 
 **3. Legacy Code Support:**
-*Theory:* Service Locator useful for legacy code that doesn't support DI. Can integrate with existing code without major refactoring. Provides centralized service access without changing entire architecture.
+*Theory:* Useful in legacy codebases where introducing constructor-based or interface-based DI is difficult. A locator can be integrated with minimal code changes, centralizing service creation and lookup.
 
 ```kotlin
 // ✅ Service Locator in legacy code
@@ -248,56 +271,57 @@ class LegacyActivity : Activity() {
 
 **Advantages:**
 
-1. **Runtime Flexibility** - add code at runtime without recompiling
-2. **Optimization** - selectively add/remove items
-3. **Separation** - large sections completely separated
-4. **Multiple Locators** - different locators for different purposes
-5. **Simplicity** - simpler than DI for structured designs
+1. **Centralized access** - single place to register and retrieve services.
+2. **Runtime implementation flexibility** - implementations can be swapped without changing client code.
+3. **Encapsulation of creation** - hides construction and lifecycle details behind the locator.
+4. **Legacy integration** - makes it easier to gradually centralize dependency creation.
 
 **Disadvantages:**
 
-1. **Hidden Dependencies** - runtime errors instead of compile-time
-2. **Testing Difficulties** - global state makes testing harder
-3. **Global State** - creates global state, harder to reason
-4. **Runtime Errors** - missing services detected only at runtime
-5. **Tight Coupling** - coupling to service locator itself
+1. **Hidden dependencies** - classes pull dependencies from the locator; not visible in constructors/APIs.
+2. **Global state** - often implemented as a mutable singleton, which complicates reasoning about behavior.
+3. **Testing difficulties** - tests must configure/override global registry; can lead to brittle tests.
+4. **Runtime errors** - missing or misconfigured registrations are discovered only at runtime.
+5. **Tight coupling to locator** - clients depend directly on the locator mechanism.
 
-**Service Locator vs Dependency Injection:**
+**`Service` Locator vs Dependency Injection:**
 
-*Theory:* Key differences: dependencies visibility, error detection, testing complexity. Service Locator hides dependencies (runtime errors), Dependency Injection makes explicit (compile-time errors). Service Locator harder to test, DI easier to test.
+*Theory:* Key differences concern dependency visibility, control, and error detection.
+- With a `Service` Locator, dependencies are pulled implicitly; configuration errors tend to show up at runtime.
+- With Dependency Injection, dependencies are explicit and supplied from the outside; this improves readability and testability.
+- DI (especially compile-time checked frameworks) can surface some configuration errors earlier (compile time or application startup), while SL typically cannot.
 
-| Aspect | Service Locator | Dependency Injection |
+| Aspect | `Service` Locator | Dependency Injection |
 |--------|-----------------|---------------------|
-| Dependencies | Hidden, runtime | Explicit, injected |
-| Testing | Harder | Easier |
-| Errors | Runtime | Compile-time (frameworks) |
-| Complexity | Simple for small apps | Complex setup |
-| Popularity | Less | More (industry standard) |
+| Dependencies | Hidden (pulled from locator) | Explicit (pushed/injected) |
+| Testing | Harder (global state, special setup) | Easier (mocks/stubs passed explicitly) |
+| Errors | Mostly runtime (missing/wrong registration) | Often caught earlier (compile/startup with frameworks), though runtime issues still possible |
+| Complexity | Simple to implement for small apps | Higher setup/learning cost, esp. with frameworks |
+| Modern practice | Often treated as an anti-pattern | Industry standard for scalable systems |
 
 **When to Use:**
 
-✅ **Use Service Locator when:**
-- Simple application with well-defined services
-- Need runtime flexibility in service selection
-- Want to avoid DI framework complexity
-- Working with legacy code without DI support
-- Need quick service discovery
+✅ **Use `Service` Locator when:**
+- The application is small with a limited, stable set of services.
+- You need modest runtime flexibility in implementation choice without adopting a DI framework.
+- You are working with legacy code where introducing full DI is not yet feasible.
+- The team is aware of the trade-offs (hidden dependencies, global state).
 
-❌ **Don't use Service Locator when:**
-- Large, complex application (prefer DI)
-- Testability is high priority
-- Want compile-time dependency verification
-- Following modern best practices (Google recommends DI)
-- Building new application from scratch
+❌ **Avoid `Service` Locator when:**
+- Building large, complex, or long-lived applications (prefer DI).
+- Testability, maintainability, and explicit design are priorities.
+- You want strong guarantees about dependency wiring (compile-time/startup validation).
+- Following modern best practices such as Clean Architecture.
+- Starting a new project without constraints against DI.
 
-**Android Context:**
+**Android `Context`:**
 
-*Theory:* In Android, Google recommends DI (Dagger/Hilt) over Service Locator. Reasons: testability (DI makes testing easier), compile-time safety, explicit dependencies, better for large apps. Service Locator considered anti-pattern by many Android developers due to hidden dependencies and global state.
+*Theory:* In Android development, Google and the community recommend Dependency Injection (e.g., Dagger/Hilt/Koin) over a `Service` Locator. Reasons: better testability, explicit dependencies in ViewModels/Activities/Fragments, compile-time support in some frameworks, and more predictable lifecycles. `Service` Locator is widely viewed as an anti-pattern in Android codebases because of hidden dependencies and reliance on global mutable state.
 
 ```kotlin
 // ❌ Service Locator (Android anti-pattern)
 class MyViewModel {
-    private val repository = ServiceLocator.get(Repository::class.java)
+    private val repository = ServiceRegistry.get(Repository::class.java)
     // Hidden dependency, hard to test
 }
 
@@ -311,11 +335,31 @@ class MyViewModel @Inject constructor(
 
 ---
 
+## Продолжение / Дополнительные вопросы (RU)
+
+- В чем разница между `Service` Locator и Dependency Injection?
+- Почему `Service` Locator считается анти-паттерном в современной Android-разработке?
+- Как рефакторить код с `Service` Locator на Dependency Injection?
+
 ## Follow-ups
 
-- What is the difference between Service Locator and Dependency Injection?
-- Why is Service Locator considered an anti-pattern in modern Android development?
-- How to refactor from Service Locator to Dependency Injection?
+- What is the difference between `Service` Locator and Dependency Injection?
+- Why is `Service` Locator considered an anti-pattern in modern Android development?
+- How to refactor from `Service` Locator to Dependency Injection?
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовые концепции шаблонов проектирования
+- Понимание управления зависимостями
+
+### Связанные (тот же уровень)
+- [[q-abstract-factory-pattern--cs--medium]] — Паттерн Abstract Factory
+
+### Продвинутые (сложнее)
+- Продвинутые подходы к DI
+- Сравнение DI-фреймворков
+- Паттерны рефакторинга зависимостей
 
 ## Related Questions
 
@@ -324,11 +368,14 @@ class MyViewModel @Inject constructor(
 - Understanding of dependency management
 
 ### Related (Same Level)
-- [[q-dependency-injection-pattern--architecture-patterns--hard]] - Dependency Injection
-- [[q-singleton-pattern--design-patterns--medium]] - Singleton pattern
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-abstract-factory-pattern--cs--medium]] - Abstract Factory pattern
 
 ### Advanced (Harder)
 - Advanced DI patterns
 - DI frameworks comparison
 - Refactoring patterns
+
+## References
+
+- [[c-computer-science]]
+- "Inversion of Control Containers and the Dependency Injection pattern" — Martin Fowler (https://martinfowler.com/articles/injection.html)

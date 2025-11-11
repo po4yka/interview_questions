@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-builder-pattern, c-design-patterns, c-factory-pattern]
+related: [c-architecture-patterns, c-computer-science, q-abstract-class-purpose--cs--medium]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [abstract-factory, creational-patterns, design-patterns, difficulty/medium, factory, gof-patterns]
-sources: [https://refactoring.guru/design-patterns/abstract-factory]
+sources: ["https://refactoring.guru/design-patterns/abstract-factory"]
+
 ---
 
 # Вопрос (RU)
@@ -28,19 +29,19 @@ sources: [https://refactoring.guru/design-patterns/abstract-factory]
 ## Ответ (RU)
 
 **Теория Abstract Factory:**
-Abstract Factory - порождающий паттерн, цель которого - предоставить единый интерфейс для создания семейств связанных объектов без раскрытия конкретной реализации. Решает проблему создания семейств объектов одной темы, гарантируя их совместимость и согласованность.
+Abstract Factory — порождающий паттерн, цель которого — предоставить единый интерфейс для создания семейств связанных объектов без раскрытия их конкретной реализации. Он решает проблему создания семейств объектов одной темы, гарантируя их совместимость и согласованность.
 
 **Проблема:**
-Создание объектов напрямую внутри класса делает код негибким - привязывает к конкретным объектам, затрудняет изменение реализации, препятствует повторному использованию, затрудняет тестирование.
+Создание объектов напрямую внутри класса делает код негибким: жёстко привязывает к конкретным реализациям, усложняет замену реализации, препятствует повторному использованию и усложняет тестирование.
 
 **Решение:**
-Инкапсулировать создание объектов в отдельном (фабричном) объекте, делегировать создание фабричному объекту. Это делает класс независимым от способа создания объектов - фабричный объект может быть заменён во время выполнения.
+Инкапсулировать создание объектов в отдельном (фабричном) объекте: определить интерфейс фабрики и делегировать ей создание продуктов. Клиентский код работает только с абстракциями (Abstract Factory и Abstract Product), а конкретная фабрика может быть выбрана или заменена во время выполнения для переключения семейств продуктов без изменения клиентского кода.
 
 **Ключевые компоненты:**
-- **Abstract Factory** - интерфейс для создания семейств объектов
-- **Concrete Factory** - конкретная реализация для каждого семейства
-- **Abstract Product** - интерфейс для объекта семейства
-- **Concrete Product** - конкретные реализации объектов
+- **Abstract Factory** — интерфейс для создания семейств связанных объектов
+- **Concrete Factory** — конкретная реализация для каждого семейства
+- **Abstract Product** — интерфейс/абстракция для объектов семейства
+- **Concrete Product** — конкретные реализации объектов
 
 **Применение:**
 ```kotlin
@@ -80,43 +81,48 @@ class DarkThemeFactory : GUIFactory {
     override fun createButton() = DarkButton()
     override fun createWindow() = DarkWindow()
 }
+
+// Клиентский код получает GUIFactory (например, на основе темы)
+// и использует только её абстрактный интерфейс:
+fun createUI(factory: GUIFactory): Pair<Button, Window> =
+    factory.createButton() to factory.createWindow()
 ```
 
 **Преимущества:**
 - Обеспечивает совместимость созданных объектов
-- Снижает связанность
-- Обеспечивает согласованность интерфейса
+- Снижает связанность между клиентом и конкретными классами
+- Обеспечивает согласованность интерфейсов внутри семейства
 - Изолирует конкретные классы от клиента
-- Легко менять семейства продуктов
+- Позволяет легко менять семейства продуктов (сменой фабрики)
 
 **Недостатки:**
-- Много классов для множественных семейств
-- Излишняя сложность для простых систем
-- Поддержка новых продуктов требует расширения фабрики
+- Увеличивает количество классов при множестве семейств
+- Вводит излишнюю сложность для простых систем
+- Добавление новых типов продуктов требует изменения всех фабрик
 
 **Когда использовать:**
-- Клиент независим от способа создания объектов
-- Система состоит из нескольких семейств объектов
-- Нужно значение времени выполнения для построения зависимости
+- Клиент должен быть независим от того, как создаются и как представлены объекты
+- Система использует несколько семейств связанных продуктов, и нужно гарантировать их совместимость
+- Необходимо выбирать конкретное семейство продуктов (конкретную фабрику) на этапе конфигурации или во время выполнения (например, по платформе, теме, окружению)
 
 ---
 
 ## Answer (EN)
 
 **Abstract Factory Theory:**
-Abstract Factory is a creational design pattern that provides a single interface for creating families of related objects without exposing their concrete implementation. Solves the problem of creating families of objects with the same theme, ensuring compatibility and consistency.
+Abstract Factory is a creational design pattern that provides a single interface for creating families of related objects without exposing their concrete implementations. It solves the problem of creating themed families of objects while ensuring their compatibility and consistency.
 
 **Problem:**
-Creating objects directly within a class makes code inflexible - binds to particular objects, makes it impossible to change implementation later, prevents reusability, makes testing difficult.
+Creating objects directly inside a class makes the code inflexible: it tightly couples the client to concrete implementations, makes replacing implementations harder, hinders reuse, and complicates testing.
 
 **Solution:**
-Encapsulate object creation in a separate (factory) object by defining and implementing an interface for creating objects, delegate object creation to a factory object. This makes a class independent of how its objects are created - factory object can be exchanged at runtime.
+Encapsulate object creation in a separate factory object: define a factory interface and delegate product creation to it. Client code works only with abstractions (Abstract Factory and Abstract Products), and a concrete factory can be selected or swapped at runtime to switch product families without changing client code.
 
 **Key Components:**
-- **Abstract Factory** - interface for creating families of objects
-- **Concrete Factory** - concrete implementation for each family
-- **Abstract Product** - interface for family objects
-- **Concrete Product** - concrete implementations of objects
+- **Abstract Factory** - interface for creating families of related objects
+- **Concrete Factory** - concrete implementation for each product family
+- **Abstract Product** - interface/abstraction for family objects
+- **Concrete Product** - concrete implementations of the products
 
 **Application:**
 ```kotlin
@@ -156,24 +162,29 @@ class DarkThemeFactory : GUIFactory {
     override fun createButton() = DarkButton()
     override fun createWindow() = DarkWindow()
 }
+
+// Client code receives a GUIFactory (e.g., based on theme)
+// and uses only its abstract interface:
+fun createUI(factory: GUIFactory): Pair<Button, Window> =
+    factory.createButton() to factory.createWindow()
 ```
 
 **Advantages:**
 - Ensures compatibility of created objects
-- Promotes decoupling
-- Enforces consistency of interface
-- Isolates concrete classes from client
-- Easy to exchange product families
+- Promotes decoupling between client and concrete classes
+- Enforces consistency of interfaces within a family
+- Isolates concrete classes from client code
+- Makes it easy to switch product families (by swapping factories)
 
 **Disadvantages:**
-- Many classes for multiple families
-- Complexity for simple systems
-- Supporting new products requires extending factory
+- Increases the number of classes when many families exist
+- Adds unnecessary complexity for simple systems
+- Adding new product types requires modifying all factories
 
 **When to use:**
-- Client is independent of how objects are created
-- System consists of multiple families of objects
-- Need runtime value to construct particular dependency
+- Client should be independent of how objects are created and represented
+- System consists of multiple families of related products that must be used together
+- You need to select the concrete product family (concrete factory) at configuration time or at runtime (e.g., by platform, theme, or environment)
 
 ## Follow-ups
 
@@ -183,17 +194,15 @@ class DarkThemeFactory : GUIFactory {
 
 ## References
 
-- [[c-design-patterns]]
 - https://refactoring.guru/design-patterns/abstract-factory
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-design-patterns-fundamentals--software-engineering--hard]] - Design patterns overview
+- [[q-abstract-class-purpose--cs--medium]] - Abstract class purpose
 
 ### Related (Medium)
 - [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-- [[q-builder-pattern--design-patterns--medium]] - Builder pattern
 
 ### Advanced (Harder)
-- [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
+- No specific advanced related questions linked (previous broken links removed)

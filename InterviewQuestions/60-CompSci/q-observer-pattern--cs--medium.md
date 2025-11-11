@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-command-pattern--design-patterns--medium]
+related: [c-architecture-patterns, q-strategy-pattern--design-patterns--medium]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, flow, gof-patterns, livedata, observer, publish-subscribe]
-sources: [https://refactoring.guru/design-patterns/observer]
+sources: ["https://refactoring.guru/design-patterns/observer"]
+
 ---
 
 # Вопрос (RU)
@@ -28,14 +29,14 @@ sources: [https://refactoring.guru/design-patterns/observer]
 ## Ответ (RU)
 
 **Теория Observer Pattern:**
-Observer - behavioral pattern, определяет one-to-many dependency между objects. Subject maintains list observers, notifies при state changes. Solve: need notify objects без tight coupling, open-ended number dependents, flexibility в adding/removing observers. Solution: Subject+Observer interface, automatic notification, loose coupling.
+Observer — поведенческий паттерн проектирования, который определяет отношение "один-ко-многим" между объектами. Subject (издатель) хранит список observers (подписчиков) и оповещает их при изменении своего состояния. Он решает задачи: уведомить связанные объекты без жёсткой связанности, поддержать произвольное количество зависимых объектов и дать гибкость в добавлении/удалении наблюдателей. Решение: общий интерфейс `Subject` + `Observer`, автоматическое уведомление, слабое зацепление (loose coupling). См. также [[c-architecture-patterns]].
 
 **Определение:**
 
-*Теория:* Observer - software design pattern где object (subject) maintains list dependents (observers). При state change, notifies observers автоматически через calling их methods. Обеспечивает loose coupling: subject doesn't know specific observers, observers don't know other observers. Open-ended: можно добавить/удалить observers без changing subject code.
+*Теория:* Observer — шаблон, при котором объект (subject) хранит список зависимых от него объектов (observers). При изменении состояния subject уведомляет наблюдателей через вызов их методов. Обеспечивается слабое зацепление: subject не знает конкретных типов наблюдателей, наблюдатели не зависят друг от друга. Открытость: можно добавлять/удалять observers без изменения кода subject.
 
 ```kotlin
-// ✅ Basic Observer Structure
+// ✅ Basic Observer Structure (simple, non-generic variant)
 interface Observer {
     fun update(data: Any)
 }
@@ -89,7 +90,7 @@ fun main() {
 **Проблемы, которые решает:**
 
 **1. Loose Coupling:**
-*Теория:* Without Observer: subject directly updates specific dependents. Tight coupling - subject knows exact dependents. Hard to reuse, hard to maintain. With Observer: subject knows только Observer interface, doesn't know конкретных implementations. Loose coupling - легко add/remove observers без changing subject code.
+*Теория:* Без Observer subject напрямую обновляет конкретные зависимые объекты. Это порождает tight coupling — subject знает точные типы зависимых объектов. Трудно переиспользовать и расширять. С Observer subject работает только с интерфейсом Observer и не зависит от конкретных реализаций. Loose coupling — легко добавлять/удалять наблюдателей без изменения кода subject.
 
 ```kotlin
 // ❌ Tight Coupling (Bad)
@@ -118,7 +119,7 @@ class Subject {
 ```
 
 **2. Open-Ended Dependents:**
-*Теория:* Number dependent objects unknown или dynamic. Нужно notify open-ended number objects. Subject не знает сколько observers, но can notify все. Flexibility - можно add/remove observers at runtime без modifying subject.
+*Теория:* Количество зависимых объектов заранее неизвестно или динамично. Нужно уведомлять произвольное количество объектов. Subject не знает, сколько observers подписано, но уведомляет всех. Гибкость — можно добавлять/удалять observers во время выполнения без модификации subject.
 
 ```kotlin
 // ✅ Dynamic observer management
@@ -147,7 +148,7 @@ manager.fireEvent(SomeEvent())  // All notified
 ```
 
 **3. Broadcast Communication:**
-*Теория:* Subject needs notify objects без knowing who they are. Observer Pattern provides broadcast mechanism: subject publishes changes, interested objects subscribe. Decoupled: subject doesn't know subscribers, subscribers don't know each other.
+*Теория:* Subject нужно уведомлять множество объектов, не зная их конкретных типов. Observer Pattern предоставляет механизм "издатель-подписчик": subject публикует изменения, заинтересованные объекты подписываются и получают уведомления. Связь ослаблена: subject не знает подписчиков, подписчики не знают друг друга.
 
 ```kotlin
 // ✅ Broadcast communication
@@ -167,7 +168,7 @@ class NewsPublisher {
 **Компоненты Observer:**
 
 **1. Subject:**
-*Теория:* Subject - observable object. Maintains list observers. Provides methods: addObserver(), removeObserver(), notifyObservers(). Single responsibility: manage observers и notify при state changes. Doesn't depend on concrete observer types.
+*Теория:* Subject — наблюдаемый объект. Хранит список observers. Предоставляет методы: addObserver()/attach(), removeObserver()/detach(), notifyObservers(). Основная ответственность: управлять наблюдателями и уведомлять их при изменении своего состояния. Не зависит от конкретных типов наблюдателей.
 
 ```kotlin
 // ✅ Subject implementation
@@ -191,10 +192,10 @@ class StockPriceSubject {
 ```
 
 **2. Observer:**
-*Теория:* Observer - object interested в state changes. Implements Observer interface с update() method. Registers with subject через addObserver(). Updates state при notify. Single responsibility: respond to notifications. Doesn't know about other observers.
+*Теория:* Observer — объект, который заинтересован в изменениях состояния subject. Реализует интерфейс Observer с методом update() (или специализированным методом). Регистрируется в subject через addObserver()/attach(). Обновляет своё состояние при получении уведомления. Не знает о других наблюдателях.
 
 ```kotlin
-// ✅ Observer interface
+// ✅ Observer interface (generic variant)
 interface Observer<T> {
     fun update(data: T)
 }
@@ -219,10 +220,10 @@ class LogNotifier : Observer<String> {
 }
 ```
 
-**Android/Kotlin Examples:**
+**Android/Kotlin примеры:**
 
-**1. LiveData Pattern:**
-*Теория:* LiveData - lifecycle-aware observable data holder. Implements Observer pattern для UI updates. ViewModel (subject) holds LiveData. View (observer) observes changes. Auto unregisters при lifecycle destroyed. Prevents memory leaks.
+**1. Паттерн `LiveData`:**
+*Теория:* `LiveData` — lifecycle-aware observable data holder, реализующий принципы паттерна Observer для обновления UI. `ViewModel` (как источник данных) держит `LiveData`. `View` (`Activity`/`Fragment`) выступает как наблюдатель и подписывается на изменения. При использовании `observe(owner, ...)` `LiveData` автоматически удаляет observer, когда соответствующий `LifecycleOwner` уничтожается, что снижает риск утечек памяти (при не зависящих от жизненного цикла наблюдателях ответственность за отписку остаётся на разработчике).
 
 ```kotlin
 // ✅ LiveData Observer Pattern
@@ -245,7 +246,7 @@ class UserActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
-        // Observer: subscribes to changes
+        // Observer: подписывается на изменения
         viewModel.user.observe(this) { user ->
             updateUI(user)
         }
@@ -253,11 +254,11 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-**2. Flow Pattern:**
-*Теория:* Flow - Kotlin coroutines implementation of Observer pattern. Cold stream - emissions happen when collector subscribes. StateFlow/SharedFlow provide hot streams. Backpressure support через Flow operators. Suitable для data streams.
+**2. Паттерн `Flow`:**
+*Теория:* `Flow` — часть корутин в Kotlin, предоставляющая асинхронные потоки значений и поддерживающая реактивный стиль программирования. Холодный `Flow` генерирует значения при подписке (collect), `StateFlow`/`SharedFlow` предоставляют горячие потоки. Эти абстракции удобно использовать для реализации взаимодействий в духе паттерна Observer (подписка-уведомление), хотя они не являются буквальной реализацией GoF Observer. Управление нагрузкой и координацией возможно через операторы `Flow`.
 
 ```kotlin
-// ✅ Flow Observer Pattern
+// ✅ Flow-based reactive updates
 class DataRepository {
     private val _dataFlow = MutableStateFlow<Data?>(null)
     val dataFlow: StateFlow<Data?> = _dataFlow.asStateFlow()
@@ -273,7 +274,7 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
     init {
         viewModelScope.launch {
             data.collect { data ->
-                // Observer reaction
+                // Observer-like reaction to new data
                 handleData(data)
             }
         }
@@ -283,46 +284,46 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
 
 **Преимущества:**
 
-1. **Loose Coupling** - Subject и observers decoupled
-2. **Flexibility** - Add/remove observers at runtime
-3. **Broadcast** - Subject не знает конкретных observers
-4. **Open/Closed** - Можем add observers без changing subject
-5. **Reusability** - Subject и observers reusable independently
+1. Loose Coupling — Subject и observers слабо связаны
+2. Flexibility — Можно добавлять/удалять observers во время выполнения
+3. Broadcast — Subject не знает конкретных observers
+4. Open/Closed — Можно добавлять новых observers без изменения subject
+5. Reusability — Subject и observers можно переиспользовать независимо
 
 **Недостатки:**
 
-1. **Memory Leaks** - Need unregister observers (Lapsed listener problem)
-2. **Unpredictable Order** - Observers notified в unknown order
-3. **Performance** - Notifying many observers expensive
-4. **Debugging** - Hard track which observer caused change
-5. **Cascade Updates** - Can lead complex update chains
+1. Memory Leaks — Нужно корректно отписывать observers (проблема "lapsed listener"), если нет автоматического управления жизненным циклом
+2. Unpredictable Order — Порядок уведомления observers обычно не гарантируется
+3. Performance — Уведомление большого количества observers может быть затратным
+4. Debugging — Сложно отследить, какой observer вызвал цепочку изменений
+5. Cascade Updates — Возможны сложные каскадные обновления
 
 **Когда использовать:**
 
-✅ **Use Observer when:**
-- Changes to one object require changing others
-- Number dependent objects unknown или dynamic
-- Want notify objects without knowing who they are
-- Need broadcast communication pattern
-- UI updates based on data changes
+✅ Используйте Observer, когда:
+- изменения одного объекта требуют изменения других;
+- количество зависимых объектов неизвестно или динамично;
+- нужно уведомлять объекты, не зная, кто именно подписан;
+- нужен механизм широковещательной рассылки уведомлений;
+- требуются обновления UI на основе изменений данных.
 
-❌ **Don't use Observer when:**
-- Simple one-to-one dependencies
-- Tight coupling acceptable
-- Performance critical (many observers)
-- Update order matters critically
+❌ Не используйте Observer, когда:
+- связь простая один-к-одному;
+- допустима жёсткая связанность;
+- критична производительность при большом количестве подписчиков;
+- критичен строгий порядок уведомлений.
 
 ## Answer (EN)
 
 **Observer Pattern Theory:**
-Observer - behavioral pattern that defines one-to-many dependency between objects. Subject maintains list of observers, notifies them on state changes. Solves: need to notify objects without tight coupling, open-ended number of dependents, flexibility in adding/removing observers. Solution: Subject + Observer interface, automatic notification, loose coupling.
+Observer is a behavioral design pattern that defines a one-to-many dependency between objects. A Subject maintains a list of Observers and notifies them when its state changes. It solves: notifying dependents without tight coupling, supporting an open-ended number of dependents, and allowing flexible adding/removing of observers. The solution: `Subject` + `Observer` interface, automatic notification, loose coupling. See also [[c-architecture-patterns]].
 
 **Definition:**
 
-*Theory:* Observer - software design pattern where object (subject) maintains list of dependents (observers). On state change, notifies observers automatically by calling their methods. Ensures loose coupling: subject doesn't know specific observers, observers don't know about other observers. Open-ended: can add/remove observers without changing subject code.
+*Theory:* Observer is a pattern where an object (subject) maintains a list of dependent objects (observers). On state change, it notifies observers automatically by calling their methods. This ensures loose coupling: the subject does not depend on concrete observer implementations, and observers do not depend on each other. It is open-ended: you can add/remove observers without changing subject code.
 
 ```kotlin
-// ✅ Basic Observer Structure
+// ✅ Basic Observer Structure (simple, non-generic variant)
 interface Observer {
     fun update(data: Any)
 }
@@ -376,7 +377,7 @@ fun main() {
 **Problems Solved:**
 
 **1. Loose Coupling:**
-*Theory:* Without Observer: subject directly updates specific dependents. Tight coupling - subject knows exact dependents. Hard to reuse, hard to maintain. With Observer: subject knows only Observer interface, doesn't know concrete implementations. Loose coupling - easy to add/remove observers without changing subject code.
+*Theory:* Without Observer, the subject directly updates specific dependents. This creates tight coupling — the subject knows exact dependent types. Hard to reuse and maintain. With Observer, the subject depends only on the Observer interface and does not know concrete implementations. Loose coupling — easy to add/remove observers without changing subject code.
 
 ```kotlin
 // ❌ Tight Coupling (Bad)
@@ -405,7 +406,7 @@ class Subject {
 ```
 
 **2. Open-Ended Dependents:**
-*Theory:* Number of dependent objects unknown or dynamic. Need to notify open-ended number of objects. Subject doesn't know how many observers, but can notify all. Flexibility - can add/remove observers at runtime without modifying subject.
+*Theory:* The number of dependent objects is unknown or dynamic. You need to notify an open-ended number of objects. The subject does not know how many observers are registered but can notify all of them. Flexibility — you can add/remove observers at runtime without modifying the subject.
 
 ```kotlin
 // ✅ Dynamic observer management
@@ -434,7 +435,7 @@ manager.fireEvent(SomeEvent())  // All notified
 ```
 
 **3. Broadcast Communication:**
-*Theory:* Subject needs to notify objects without knowing who they are. Observer Pattern provides broadcast mechanism: subject publishes changes, interested objects subscribe. Decoupled: subject doesn't know subscribers, subscribers don't know each other.
+*Theory:* The subject needs to notify multiple objects without knowing who they are. The Observer pattern provides a publisher-subscriber style mechanism: the subject publishes changes, interested objects subscribe. Decoupled: the subject does not know subscribers, subscribers do not know each other.
 
 ```kotlin
 // ✅ Broadcast communication
@@ -454,7 +455,7 @@ class NewsPublisher {
 **Observer Components:**
 
 **1. Subject:**
-*Theory:* Subject - observable object. Maintains list of observers. Provides methods: addObserver(), removeObserver(), notifyObservers(). Single responsibility: manage observers and notify on state changes. Doesn't depend on concrete observer types.
+*Theory:* The Subject is the observable object. It maintains a list of observers. It provides methods like addObserver()/attach(), removeObserver()/detach(), notifyObservers(). Its main responsibility is to manage observers and notify them on state changes. It does not depend on concrete observer types.
 
 ```kotlin
 // ✅ Subject implementation
@@ -478,10 +479,10 @@ class StockPriceSubject {
 ```
 
 **2. Observer:**
-*Theory:* Observer - object interested in state changes. Implements Observer interface with update() method. Registers with subject via addObserver(). Updates state on notify. Single responsibility: respond to notifications. Doesn't know about other observers.
+*Theory:* An Observer is an object interested in the Subject's state changes. It implements an Observer interface with an update() (or specialized) method. It registers with the Subject via addObserver()/attach(). It updates its state when notified. It does not know about other observers.
 
 ```kotlin
-// ✅ Observer interface
+// ✅ Observer interface (generic variant)
 interface Observer<T> {
     fun update(data: T)
 }
@@ -508,8 +509,8 @@ class LogNotifier : Observer<String> {
 
 **Android/Kotlin Examples:**
 
-**1. LiveData Pattern:**
-*Theory:* LiveData - lifecycle-aware observable data holder. Implements Observer pattern for UI updates. ViewModel (subject) holds LiveData. View (observer) observes changes. Auto unregisters when lifecycle destroyed. Prevents memory leaks.
+**1. `LiveData` Pattern:**
+*Theory:* `LiveData` is a lifecycle-aware observable data holder that applies Observer pattern principles for UI updates. A `ViewModel` (as a data source) holds `LiveData`. A `View` (`Activity`/`Fragment`) acts as an observer and observes changes. When using `observe(owner, ...)`, `LiveData` automatically removes the observer when the associated `LifecycleOwner` is destroyed, which helps prevent memory leaks (with non-lifecycle-aware observation, proper unsubscription is still the developer's responsibility).
 
 ```kotlin
 // ✅ LiveData Observer Pattern
@@ -540,11 +541,11 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-**2. Flow Pattern:**
-*Theory:* Flow - Kotlin coroutines implementation of Observer pattern. Cold stream - emissions happen when collector subscribes. StateFlow/SharedFlow provide hot streams. Backpressure support via Flow operators. Suitable for data streams.
+**2. `Flow` Pattern:**
+*Theory:* `Flow` is part of Kotlin coroutines providing asynchronous streams of values and supporting a reactive programming style. A cold `Flow` emits values when a collector subscribes; `StateFlow`/`SharedFlow` provide hot streams. These abstractions are convenient for building Observer-like publisher-subscriber interactions, although they are not a literal implementation of the GoF Observer pattern. Backpressure and coordination can be handled via `Flow` operators.
 
 ```kotlin
-// ✅ Flow Observer Pattern
+// ✅ Flow-based reactive updates
 class DataRepository {
     private val _dataFlow = MutableStateFlow<Data?>(null)
     val dataFlow: StateFlow<Data?> = _dataFlow.asStateFlow()
@@ -560,7 +561,7 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
     init {
         viewModelScope.launch {
             data.collect { data ->
-                // Observer reaction
+                // Observer-like reaction to new data
                 handleData(data)
             }
         }
@@ -570,42 +571,64 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
 
 **Advantages:**
 
-1. **Loose Coupling** - Subject and observers decoupled
-2. **Flexibility** - Add/remove observers at runtime
-3. **Broadcast** - Subject doesn't know specific observers
-4. **Open/Closed** - Can add observers without changing subject
-5. **Reusability** - Subject and observers reusable independently
+1. Loose Coupling — Subject and observers are decoupled
+2. Flexibility — Add/remove observers at runtime
+3. Broadcast — Subject does not know specific observers
+4. Open/Closed — Add new observers without changing the subject
+5. Reusability — Subject and observers can be reused independently
 
 **Disadvantages:**
 
-1. **Memory Leaks** - Need to unregister observers (Lapsed listener problem)
-2. **Unpredictable Order** - Observers notified in unknown order
-3. **Performance** - Notifying many observers expensive
-4. **Debugging** - Hard to track which observer caused change
-5. **Cascade Updates** - Can lead to complex update chains
+1. Memory Leaks — Need to unregister observers properly (lapsed listener problem), unless lifecycle-aware mechanisms handle it
+2. Unpredictable Order — Notification order of observers is usually not guaranteed
+3. Performance — Notifying many observers may be expensive
+4. Debugging — Hard to trace which observer caused follow-up changes
+5. Cascade Updates — Can lead to complex update chains
 
 **When to Use:**
 
-✅ **Use Observer when:**
-- Changes to one object require changing others
-- Number of dependent objects unknown or dynamic
-- Want to notify objects without knowing who they are
-- Need broadcast communication pattern
-- UI updates based on data changes
+✅ Use Observer when:
+- Changes to one object require updating others
+- Number of dependent objects is unknown or dynamic
+- You want to notify objects without knowing who they are
+- You need a broadcast-like notification mechanism
+- You need UI updates based on data changes
 
-❌ **Don't use Observer when:**
-- Simple one-to-one dependencies
-- Tight coupling acceptable
-- Performance critical (many observers)
-- Update order matters critically
+❌ Don't use Observer when:
+- Dependencies are simple one-to-one
+- Tight coupling is acceptable
+- Scenario is highly performance-critical with many observers
+- Strict notification order is critical
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как Observer отличается от паттерна Pub/Sub?
+- Каковы типичные реализации Observer в Android?
+- Как предотвратить утечки памяти при использовании паттерна Observer?
 
 ## Follow-ups
 
 - How does Observer differ from Pub/Sub pattern?
 - What are common Android implementations of Observer?
 - How to prevent memory leaks with Observer pattern?
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовые концепции паттернов проектирования
+- Понимание событийно-ориентированного программирования
+
+### Связанные (того же уровня)
+- [[q-strategy-pattern--design-patterns--medium]] — паттерн Strategy
+- Паттерн Command (см. соответствующий вопрос)
+- Паттерн State (см. соответствующий вопрос)
+
+### Продвинутое (сложнее)
+- Паттерны наблюдаемых в RxJava
+- Продвинутые паттерны `Flow` с контролем нагрузки
+- Проектирование событийно-ориентированных архитектур
 
 ## Related Questions
 
@@ -615,10 +638,15 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
 
 ### Related (Same Level)
 - [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-- [[q-command-pattern--design-patterns--medium]] - Command pattern
-- [[q-state-pattern--design-patterns--medium]] - State pattern
+- Command pattern (see corresponding question)
+- State pattern (see corresponding question)
 
 ### Advanced (Harder)
 - RxJava observable patterns
-- Advanced Flow patterns with backpressure
+- Advanced `Flow` patterns with backpressure
 - Event-driven architecture design
+
+## References
+
+- [[c-architecture-patterns]]
+- "https://refactoring.guru/design-patterns/observer"

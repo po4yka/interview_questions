@@ -2,29 +2,52 @@
 id: cs-008
 title: "Kotlin Constants / Константы в Kotlin"
 aliases: []
-topic: computer-science
-subtopics: [functions, type-system]
+topic: kotlin
+subtopics: [functions, types]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-function-limitations--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-native--kotlin--hard]
+related: [c-concepts--kotlin--medium, q-inline-function-limitations--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-native--kotlin--hard]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-11
 tags: [difficulty/easy]
+
 ---
-
-# Что Такое Константы И Можно Ли Их Изменять?
-
-# Question (EN)
-> What are constants and can they be changed?
 
 # Вопрос (RU)
 > Что такое константы и можно ли их изменять?
 
+# Question (EN)
+> What are constants and can they be changed?
+
 ---
+
+## Ответ (RU)
+
+Константы — это фиксированные значения, которые не могут быть изменены после их определения. Они используются для значений, остающихся неизменными на протяжении выполнения программы.
+
+**В Kotlin:**
+
+- **`val`**: Неизменяемая ссылка (только для чтения), значение присваивается один раз во время выполнения
+```kotlin
+val name = "John" // Нельзя переназначить ссылку
+```
+Важно: если `val` хранит изменяемый объект (например, список), его внутреннее состояние может изменяться; неизменяемой является ссылка, а не обязательно объект.
+
+- **`const val`**: Константа времени компиляции (должна быть на верхнем уровне или внутри `object`/`companion object`; тип — примитивный или `String`)
+```kotlin
+const val MAX_SIZE = 100 // Значение известно во время компиляции
+```
+
+**Ключевые различия:**
+- `val` может быть инициализирована во время выполнения
+- `const val` должна быть известна во время компиляции
+- `const val` может использоваться только с примитивными типами и `String`
+
+Константы (включая `const val` и используемые как константы свойства `val`) не могут быть переназначены после инициализации.
 
 ## Answer (EN)
 
@@ -32,12 +55,13 @@ Constants are fixed values that cannot be changed after their definition. They a
 
 **In Kotlin:**
 
-- **`val`**: Immutable variable (read-only), value assigned once at runtime
+- **`val`**: Immutable reference (read-only), value is assigned once at runtime
 ```kotlin
-val name = "John" // Cannot reassign
+val name = "John" // Cannot reassign the reference
 ```
+Note: if `val` holds a mutable object (e.g. a list), the object’s internal state can still change; only the reference is immutable.
 
-- **`const val`**: Compile-time constant (must be top-level or in object, primitive or String)
+- **`const val`**: Compile-time constant (must be top-level, or inside an object or companion object; type must be a primitive or `String`)
 ```kotlin
 const val MAX_SIZE = 100 // Known at compile time
 ```
@@ -45,37 +69,38 @@ const val MAX_SIZE = 100 // Known at compile time
 **Key differences:**
 - `val` can be initialized at runtime
 - `const val` must be known at compile time
-- `const val` can only be used with primitive types and String
+- `const val` can only be used with primitive types and `String`
 
-Constants are **immutable** - their value cannot be changed after definition.
+Constants (including `const val` and `val` properties used as constants) are not reassignable after initialization.
 
----
+## Дополнительные вопросы (RU)
 
-## Ответ (RU)
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-kotlin-native--kotlin--hard]]
+- [[q-kotlin-extensions-overview--programming-languages--medium]]
 
-Константы — это фиксированные значения, которые не могут быть изменены после их определения. Они используются для определения значений, которые остаются неизменными на протяжении всего выполнения программы.
+## Follow-ups
 
-**В Kotlin:**
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-kotlin-native--kotlin--hard]]
+- [[q-kotlin-extensions-overview--programming-languages--medium]]
 
-- **`val`**: Неизменяемая переменная (только для чтения), значение присваивается один раз во время выполнения
-```kotlin
-val name = "John" // Нельзя переназначить
-```
+## Связанные вопросы (RU)
 
-- **`const val`**: Константа времени компиляции (должна быть на верхнем уровне или в object, только примитивы или String)
-```kotlin
-const val MAX_SIZE = 100 // Известна во время компиляции
-```
-
-**Ключевые различия:**
-- `val` может быть инициализирована во время выполнения
-- `const val` должна быть известна во время компиляции
-- `const val` может использоваться только с примитивными типами и String
-
-Константы **неизменяемы** — их значение не может быть изменено после определения.
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-kotlin-native--kotlin--hard]]
+- [[q-kotlin-extensions-overview--programming-languages--medium]]
 
 ## Related Questions
 
 - [[q-inline-function-limitations--kotlin--medium]]
 - [[q-kotlin-native--kotlin--hard]]
 - [[q-kotlin-extensions-overview--programming-languages--medium]]
+
+## Ссылки (RU)
+
+- [[c-concepts--kotlin--medium]]
+
+## References
+
+- [[c-concepts--kotlin--medium]]

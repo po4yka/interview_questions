@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-adapter-pattern, c-decorator-pattern, c-design-patterns]
+related: [c-adapter-pattern, c-architecture-patterns, c-design-patterns]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [abstraction, bridge, design-patterns, difficulty/hard, gof-patterns, structural-patterns]
-sources: [https://refactoring.guru/design-patterns/bridge]
+sources: ["https://refactoring.guru/design-patterns/bridge"]
+
 ---
 
 # Вопрос (RU)
@@ -28,19 +29,19 @@ sources: [https://refactoring.guru/design-patterns/bridge]
 ## Ответ (RU)
 
 **Теория Bridge:**
-Bridge - структурный паттерн, который разделяет большой класс или набор тесно связанных классов на две отдельные иерархии - абстракцию и реализацию, которые могут разрабатываться независимо друг от друга. Делает функциональность конкретных классов независимой от классов-реализаторов интерфейса.
+Bridge — структурный паттерн, который разделяет большой класс или набор тесно связанных классов на две отдельные иерархии — абстракцию и реализацию, — которые могут разрабатываться независимо друг от друга. Паттерн ослабляет связь между абстракцией и конкретными классами-реализаторами, делая их независимыми друг от друга и позволяя комбинировать их произвольно.
 
 **Проблема:**
-Абстракция и её реализация должны определяться и расширяться независимо друг от друга. Следует избегать привязки во время компиляции между абстракцией и реализацией, чтобы реализация могла выбираться во время выполнения.
+Абстракция и её реализация должны определяться и расширяться независимо друг от друга. Следует избегать жёсткой привязки во время компиляции между абстракцией и реализацией, чтобы реализация могла выбираться или изменяться во время выполнения.
 
 **Решение:**
-Создать две иерархии, связанные композицией - абстракция содержит ссылку на реализатор. Это позволяет изменять реализацию во время выполнения без влияния на абстракцию.
+Создать две иерархии, связанные композицией: абстракция содержит ссылку на реализатор (Implementor). Это позволяет изменять реализацию во время выполнения без изменения абстракции и независимо развивать обе иерархии.
 
 **Ключевые компоненты:**
-- **Abstraction** - высокоуровневый интерфейс, определяющий абстрактные методы
-- **Implementor** - интерфейс/абстрактный класс, определяющий методы для конкретных реализаторов
-- **Concrete Abstraction** - расширяет Abstraction, использует Implementor
-- **Concrete Implementor** - реализует интерфейс Implementor
+- **Abstraction** — высокоуровневый интерфейс/абстрактный класс, определяющий поведение с точки зрения клиента.
+- **Implementor** — интерфейс/абстрактный класс, определяющий базовые операции для конкретных реализаций.
+- **Refined Abstraction** — конкретные варианты абстракции, использующие Implementor.
+- **Concrete Implementor** — конкретные реализации интерфейса Implementor.
 
 **Применение:**
 ```kotlin
@@ -84,6 +85,8 @@ open class RemoteControl(protected val device: Device) {
     }
 
     fun volumeUp() {
+        // пример: меняем реализацию управления громкостью через Implementor
+        // в реальном коде могли бы хранить текущее значение; здесь фиксированное значение для простоты
         device.setVolume(50)
     }
 }
@@ -154,35 +157,35 @@ class Square(renderer: Renderer, private var side: Float) : Shape(renderer) {
 ```
 
 **Преимущества:**
-- Разделение абстракции и реализации
-- Улучшенная расширяемость - иерархии расширяются независимо
-- Повышенная гибкость - изменение реализации без влияния на абстракцию
-- Привязка во время выполнения - можно переключать реализации
-- Принцип открытости/закрытости
+- Разделение абстракции и реализации.
+- Улучшенная расширяемость — иерархии расширяются независимо.
+- Повышенная гибкость — можно изменять реализации без изменения абстракции.
+- Связывание во время выполнения — можно переключать реализации.
+- Соответствие принципу открытости/закрытости.
 
 **Недостатки:**
-- Увеличенная сложность - больше классов и интерфейсов
-- Косвенность - дополнительный уровень абстракции
-- Накладные расходы на проектирование
+- Увеличенная сложность — больше классов и интерфейсов.
+- Дополнительный уровень косвенности — сложнее понимать структуру.
+- Накладные расходы на проектирование.
 
 ---
 
 ## Answer (EN)
 
 **Bridge Theory:**
-Bridge is a structural design pattern that lets you split a large class or a set of closely related classes into two separate hierarchies - abstraction and implementation - which can be developed independently of each other. Makes functionality of concrete classes independent from interface implementer classes.
+Bridge is a structural design pattern that splits a large class or a set of closely related classes into two separate hierarchies — abstraction and implementation — which can be developed independently. It decouples the abstraction from its concrete implementor classes so that both can vary independently and be combined flexibly.
 
 **Problem:**
-An abstraction and its implementation should be defined and extended independently from each other. A compile-time binding between an abstraction and its implementation should be avoided so that an implementation can be selected at runtime.
+An abstraction and its implementation should be defined and extended independently from each other. A rigid compile-time binding between an abstraction and its implementation should be avoided so that an implementation can be selected or changed at runtime.
 
 **Solution:**
-Create two hierarchies connected by composition - abstraction holds reference to implementor. This allows changing implementation at runtime without affecting abstraction.
+Create two hierarchies connected via composition: the abstraction holds a reference to the implementor. This allows changing the implementation at runtime without modifying the abstraction and lets both hierarchies evolve independently.
 
 **Key Components:**
-- **Abstraction** - high-level interface that defines abstract methods
-- **Implementor** - interface/abstract class defining methods for concrete implementors
-- **Concrete Abstraction** - extends Abstraction, uses Implementor
-- **Concrete Implementor** - implements the Implementor interface
+- **Abstraction** - high-level interface/abstract class that defines behavior from the client perspective.
+- **Implementor** - interface/abstract class that defines low-level operations for concrete implementors.
+- **Refined Abstraction** - concrete variants of the abstraction that delegate to an Implementor.
+- **Concrete Implementor** - concrete classes that implement the Implementor interface.
 
 **Application:**
 ```kotlin
@@ -226,6 +229,8 @@ open class RemoteControl(protected val device: Device) {
     }
 
     fun volumeUp() {
+        // example: delegate volume control through Implementor;
+        // using a fixed value here keeps the snippet simple
         device.setVolume(50)
     }
 }
@@ -296,16 +301,16 @@ class Square(renderer: Renderer, private var side: Float) : Shape(renderer) {
 ```
 
 **Advantages:**
-- Decoupling abstraction from implementation
-- Improved extensibility - hierarchies extend independently
-- Enhanced flexibility - change implementation without affecting abstraction
-- Runtime binding - can switch implementations
-- Open/Closed Principle
+- Decouples abstraction from implementation.
+- Improved extensibility — hierarchies can evolve independently.
+- Enhanced flexibility — implementations can be changed without affecting the abstraction.
+- Runtime binding — implementations can be switched at runtime.
+- Aligns with the Open/Closed Principle.
 
 **Disadvantages:**
-- Increased complexity - more classes and interfaces
-- Indirection - extra layer of abstraction
-- Design overhead
+- Increased complexity — more classes and interfaces.
+- Extra indirection — structure is harder to follow.
+- Design overhead.
 
 ## Follow-ups
 
@@ -321,12 +326,11 @@ class Square(renderer: Renderer, private var side: Float) : Shape(renderer) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-design-patterns-fundamentals--software-engineering--hard]] - Design patterns overview
+- Design patterns overview
 
 ### Related (Medium)
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
-- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
+- Adapter pattern
+- Decorator pattern
 
 ### Advanced (Harder)
-- [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
-- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
+- Visitor pattern

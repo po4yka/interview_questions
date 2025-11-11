@@ -2,19 +2,19 @@
 id: cs-019
 title: "Data Class Special Features / Специальные возможности Data Class"
 aliases: ["Data Class Special Features", "Специальные возможности Data Class"]
-topic: cs
-subtopics: [data-classes, kotlin, programming-languages]
+topic: kotlin
+subtopics: [functions, types]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-cs
-related: [c-data-classes]
+moc: moc-kotlin
+related: [c-computer-science, q-abstract-class-purpose--cs--medium]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [copy, data-class, difficulty/easy, equals, hashcode, kotlin, programming-languages, tostring]
-sources: [https://kotlinlang.org/docs/data-classes.html]
+sources: ["https://kotlinlang.org/docs/data-classes.html"]
 ---
 
 # Вопрос (RU)
@@ -28,16 +28,16 @@ sources: [https://kotlinlang.org/docs/data-classes.html]
 ## Ответ (RU)
 
 **Теория Data Classes:**
-Data classes - специальные классы в Kotlin для хранения данных. Компилятор автоматически генерирует 5 методов: `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. Эти методы основаны на properties в primary constructor. Data classes упрощают работу с immutable data и value objects.
+Data classes — специальные классы в Kotlin для хранения данных. Компилятор автоматически генерирует 5 основных методов: `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. Эти методы основаны на `properties` в primary constructor. Data classes упрощают работу с immutable data и value objects.
 
 **Автоматически генерируемые методы:**
 
 **1. equals() - Сравнение по содержимому:**
 
-*Теория:* `equals()` сравнивает structural equality (содержимое properties), не referential equality (ссылки). Для data classes два объекта равны, если все properties в primary constructor равны. Для обычных классов `==` сравнивает ссылки (referential equality).
+*Теория:* `equals()` сравнивает structural equality (содержимое properties), не referential equality (ссылки). Для data classes два объекта равны, если все properties в primary constructor равны. Для обычных классов, если `equals()` не переопределён, `==` (operator) по умолчанию использует реализацию `equals()` из `Any`, которая сравнивает ссылки (referential equality).
 
 ```kotlin
-// ✅ Data class - сравнение по содержимому
+// Data class - сравнение по содержимому
 data class User(val name: String, val age: Int)
 
 val user1 = User("Alice", 30)
@@ -48,7 +48,7 @@ println(user1 == user2)  // true - одинаковое содержимое
 println(user1 == user3)  // false - разное содержимое
 println(user1 === user2) // false - разные объекты в памяти
 
-// ❌ Regular class - сравнение по ссылкам
+// Regular class без переопределения equals - сравнение по ссылкам
 class Person(val name: String, val age: Int)
 
 val p1 = Person("Alice", 30)
@@ -58,10 +58,10 @@ println(p1 == p2)  // false - разные ссылки!
 
 **2. hashCode() - Генерация хеша:**
 
-*Теория:* `hashCode()` генерирует hash code на основе properties в primary constructor. Гарантирует contract: если `equals()` возвращает `true`, то `hashCode()` одинаковый. Необходимо для корректной работы в hash-based коллекциях (HashSet, HashMap).
+*Теория:* `hashCode()` генерирует hash code на основе properties в primary constructor. Соблюдается контракт: если `equals()` возвращает `true`, то `hashCode()` одинаковый. Важно для корректной работы в hash-based коллекциях (`HashSet`, `HashMap`).
 
 ```kotlin
-// ✅ Data class - корректный hashCode
+// Data class - корректный hashCode
 data class User(val name: String, val age: Int)
 
 val user1 = User("Alice", 30)
@@ -79,16 +79,16 @@ println(map[user2])  // "data" - находит по содержимому
 
 **3. toString() - Читаемое представление:**
 
-*Теория:* `toString()` генерирует human-readable строку в формате `ClassName(property1=value1, property2=value2)`. Включает все properties из primary constructor. Полезно для debugging и logging. Для обычных классов возвращает `ClassName@hashCode`.
+*Теория:* `toString()` генерирует human-readable строку в формате `ClassName(property1=value1, property2=value2)`. Включает все properties из primary constructor. Полезно для debugging и logging. Для обычных классов по умолчанию возвращается `ClassName@hashCode`.
 
 ```kotlin
-// ✅ Data class - читаемый toString
+// Data class - читаемый toString
 data class User(val name: String, val age: Int, val email: String)
 
 val user = User("Alice", 30, "alice@example.com")
 println(user)  // User(name=Alice, age=30, email=alice@example.com)
 
-// ❌ Regular class - нечитаемый toString
+// Regular class - нечитаемый toString по умолчанию
 class Person(val name: String, val age: Int)
 val person = Person("Alice", 30)
 println(person)  // Person@7a81197d - бесполезно для debugging!
@@ -96,10 +96,10 @@ println(person)  // Person@7a81197d - бесполезно для debugging!
 
 **4. copy() - Создание модифицированной копии:**
 
-*Теория:* `copy()` создаёт shallow copy объекта с возможностью изменить некоторые properties. Поддерживает immutability pattern - вместо изменения объекта создаём новый. Принимает named parameters для properties, которые нужно изменить. Properties не указанные в `copy()` копируются из оригинала.
+*Теория:* `copy()` создаёт shallow copy объекта с возможностью изменить некоторые properties. Поддерживает immutability pattern — вместо изменения объекта создаём новый. Принимает named parameters для properties, которые нужно изменить. Properties, не указанные в `copy()`, копируются из оригинала.
 
 ```kotlin
-// ✅ copy() для immutability
+// copy() для immutability
 data class User(val name: String, val age: Int, val email: String)
 
 val user = User("Alice", 30, "alice@example.com")
@@ -120,10 +120,10 @@ println(duplicate === user) // false - разные объекты
 
 **5. componentN() - Destructuring:**
 
-*Теория:* `componentN()` функции (component1(), component2(), etc.) генерируются для каждого property в primary constructor. Позволяют destructuring declarations - извлечение properties в отдельные переменные. Порядок определяется порядком в primary constructor.
+*Теория:* Функции `componentN()` (`component1()`, `component2()`, и т.д.) генерируются для каждого property в primary constructor. Позволяют destructuring declarations — извлечение properties в отдельные переменные. Порядок определяется порядком в primary constructor.
 
 ```kotlin
-// ✅ Destructuring с data class
+// Destructuring с data class
 data class User(val name: String, val age: Int, val email: String)
 
 val user = User("Alice", 30, "alice@example.com")
@@ -149,17 +149,21 @@ for ((name, age) in users) {
 
 **Требования к Data Classes:**
 
-*Теория:* Data class должен иметь primary constructor с хотя бы одним parameter. Все parameters должны быть `val` или `var`. Не может быть `abstract`, `open`, `sealed`, или `inner`. Эти ограничения обеспечивают корректную генерацию методов.
+*Теория:* Data class должен иметь primary constructor с хотя бы одним параметром. Параметры в primary constructor могут быть обычными параметрами или помечены как `val` / `var`. Только параметры, объявленные как `val` или `var`, становятся свойствами класса и участвуют в генерации `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. Data class не может быть `abstract`, `open` или `inner`. (Начиная с Kotlin 1.1 data class может быть `sealed`.)
 
 ```kotlin
-// ✅ Валидные data classes
+// Валидные data classes
 data class User(val name: String, val age: Int)
 data class MutableUser(var name: String, var age: Int)
 
-// ❌ Невалидные data classes
-// data class Empty()  // Error: нет parameters
-// open data class OpenUser(val name: String)  // Error: open
-// abstract data class AbstractUser(val name: String)  // Error: abstract
+// Параметр без val/var не становится property
+data class UserWithParam(val name: String, age: Int)
+
+// Невалидные data classes
+// data class Empty()  // Error: нет параметров
+// open data class OpenUser(val name: String)  // Error: data class не может быть open
+// abstract data class AbstractUser(val name: String)  // Error: data class не может быть abstract
+// inner data class InnerUser(val name: String)  // Error: data class не может быть inner
 ```
 
 **Генерация только для Primary Constructor:**
@@ -167,7 +171,7 @@ data class MutableUser(var name: String, var age: Int)
 *Теория:* Автоматически генерируемые методы используют только properties из primary constructor. Properties в body класса игнорируются в `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. Это может привести к неожиданному поведению.
 
 ```kotlin
-// ✅ Properties в body игнорируются
+// Properties в body игнорируются
 data class User(val name: String, val age: Int) {
     var address: String = ""  // НЕ в primary constructor
 }
@@ -189,7 +193,7 @@ println(user1)  // User(name=Alice, age=30) - без address
 **Сравнение: Data Class vs Regular Class:**
 
 ```kotlin
-// ❌ Regular class - всё вручную
+// Regular class - всё вручную
 class Person(val name: String, val age: Int) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -205,34 +209,34 @@ class Person(val name: String, val age: Int) {
 
     override fun toString() = "Person(name=$name, age=$age)"
 
-    // copy() недоступен
-    // componentN() недоступны
+    // copy() недоступен по умолчанию
+    // componentN() недоступны по умолчанию
 }
 
-// ✅ Data class - всё автоматически!
+// Data class - всё автоматически!
 data class Person(val name: String, val age: Int)
 ```
 
 **Use Cases для Data Classes:**
 
-*Теория:* Data classes идеальны для value objects, DTOs, API responses, database entities, configuration, immutable state. Не использовать для классов с бизнес-логикой или mutable state management.
+*Теория:* Data classes идеальны для value objects, DTOs, API responses, database entities, configuration, immutable state. Как правило, не рекомендуются для типов с сложной бизнес-логикой или активным mutable state management — их основная цель хранить данные.
 
 ```kotlin
-// ✅ API response
+// API response
 data class UserResponse(
     val id: Int,
     val name: String,
     val email: String
 )
 
-// ✅ Database entity
+// Database entity
 data class TodoItem(
     val id: Long,
     val title: String,
     val completed: Boolean
 )
 
-// ✅ UI state
+// UI state
 data class UiState(
     val isLoading: Boolean,
     val data: List<Item>?,
@@ -242,25 +246,25 @@ data class UiState(
 
 **Ключевые концепции:**
 
-1. **Auto-generation** - 5 методов генерируются автоматически
-2. **Structural Equality** - сравнение по содержимому, не по ссылкам
-3. **Immutability Pattern** - `copy()` для создания изменённых копий
-4. **Primary Constructor Only** - генерация только для primary constructor properties
-5. **Value Objects** - идеальны для хранения данных без бизнес-логики
+1. **Auto-generation** — 5 основных методов генерируются автоматически
+2. **Structural Equality** — сравнение по содержимому, не по ссылкам (по умолчанию)
+3. **Immutability Pattern** — `copy()` для создания изменённых копий
+4. **Primary Constructor Only** — генерация только для primary constructor properties
+5. **Value Objects** — идеальны для хранения данных без сложной бизнес-логики
 
 ## Answer (EN)
 
 **Data Classes Theory:**
-Data classes - special classes in Kotlin for storing data. Compiler automatically generates 5 methods: `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. These methods based on properties in primary constructor. Data classes simplify working with immutable data and value objects.
+Data classes are special classes in Kotlin for storing data. The compiler automatically generates 5 primary methods: `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. These methods are based on the properties in the primary constructor. Data classes simplify working with immutable data and value objects.
 
 **Automatically Generated Methods:**
 
 **1. equals() - Content Comparison:**
 
-*Theory:* `equals()` compares structural equality (properties content), not referential equality (references). For data classes two objects equal if all properties in primary constructor equal. For regular classes `==` compares references (referential equality).
+*Theory:* `equals()` compares structural equality (properties content), not referential equality (references). For data classes two objects are equal if all properties in the primary constructor are equal. For regular classes, if `equals()` is not overridden, `==` uses the implementation from `Any`, which compares references (referential equality).
 
 ```kotlin
-// ✅ Data class - content comparison
+// Data class - content comparison
 data class User(val name: String, val age: Int)
 
 val user1 = User("Alice", 30)
@@ -271,7 +275,7 @@ println(user1 == user2)  // true - same content
 println(user1 == user3)  // false - different content
 println(user1 === user2) // false - different objects in memory
 
-// ❌ Regular class - reference comparison
+// Regular class without overridden equals - reference comparison
 class Person(val name: String, val age: Int)
 
 val p1 = Person("Alice", 30)
@@ -281,10 +285,10 @@ println(p1 == p2)  // false - different references!
 
 **2. hashCode() - Hash Generation:**
 
-*Theory:* `hashCode()` generates hash code based on properties in primary constructor. Guarantees contract: if `equals()` returns `true`, then `hashCode()` same. Required for correct work in hash-based collections (HashSet, HashMap).
+*Theory:* `hashCode()` generates a hash code based on properties in the primary constructor. The contract is respected: if `equals()` returns `true`, then `hashCode()` is the same. This is required for correct behavior in hash-based collections (`HashSet`, `HashMap`).
 
 ```kotlin
-// ✅ Data class - correct hashCode
+// Data class - correct hashCode
 data class User(val name: String, val age: Int)
 
 val user1 = User("Alice", 30)
@@ -302,16 +306,16 @@ println(map[user2])  // "data" - finds by content
 
 **3. toString() - Readable Representation:**
 
-*Theory:* `toString()` generates human-readable string in format `ClassName(property1=value1, property2=value2)`. Includes all properties from primary constructor. Useful for debugging and logging. For regular classes returns `ClassName@hashCode`.
+*Theory:* `toString()` generates a human-readable string in format `ClassName(property1=value1, property2=value2)`. It includes all properties from the primary constructor. Useful for debugging and logging. For regular classes, the default implementation returns `ClassName@hashCode`.
 
 ```kotlin
-// ✅ Data class - readable toString
+// Data class - readable toString
 data class User(val name: String, val age: Int, val email: String)
 
 val user = User("Alice", 30, "alice@example.com")
 println(user)  // User(name=Alice, age=30, email=alice@example.com)
 
-// ❌ Regular class - unreadable toString
+// Regular class - unreadable default toString
 class Person(val name: String, val age: Int)
 val person = Person("Alice", 30)
 println(person)  // Person@7a81197d - useless for debugging!
@@ -319,10 +323,10 @@ println(person)  // Person@7a81197d - useless for debugging!
 
 **4. copy() - Creating Modified Copy:**
 
-*Theory:* `copy()` creates shallow copy of object with ability to change some properties. Supports immutability pattern - instead of changing object create new one. Accepts named parameters for properties to change. Properties not specified in `copy()` copied from original.
+*Theory:* `copy()` creates a shallow copy of an object with the ability to change some properties. It supports the immutability pattern — instead of changing an object, create a new one. It accepts named parameters for properties to change. Properties not specified in `copy()` are copied from the original.
 
 ```kotlin
-// ✅ copy() for immutability
+// copy() for immutability
 data class User(val name: String, val age: Int, val email: String)
 
 val user = User("Alice", 30, "alice@example.com")
@@ -343,10 +347,10 @@ println(duplicate === user) // false - different objects
 
 **5. componentN() - Destructuring:**
 
-*Theory:* `componentN()` functions (component1(), component2(), etc.) generated for each property in primary constructor. Allow destructuring declarations - extracting properties into separate variables. Order determined by primary constructor order.
+*Theory:* `componentN()` functions (`component1()`, `component2()`, etc.) are generated for each property in the primary constructor. They allow destructuring declarations — extracting properties into separate variables. The order is determined by the order in the primary constructor.
 
 ```kotlin
-// ✅ Destructuring with data class
+// Destructuring with data class
 data class User(val name: String, val age: Int, val email: String)
 
 val user = User("Alice", 30, "alice@example.com")
@@ -372,25 +376,29 @@ for ((name, age) in users) {
 
 **Data Classes Requirements:**
 
-*Theory:* Data class must have primary constructor with at least one parameter. All parameters must be `val` or `var`. Cannot be `abstract`, `open`, `sealed`, or `inner`. These restrictions ensure correct method generation.
+*Theory:* A data class must have a primary constructor with at least one parameter. Parameters in the primary constructor may be regular parameters or marked as `val` / `var`. Only parameters declared as `val` or `var` become properties of the class and participate in the generation of `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. A data class cannot be `abstract`, `open`, or `inner`. (Since Kotlin 1.1, a data class is allowed to be `sealed`.)
 
 ```kotlin
-// ✅ Valid data classes
+// Valid data classes
 data class User(val name: String, val age: Int)
 data class MutableUser(var name: String, var age: Int)
 
-// ❌ Invalid data classes
+// Parameter without val/var is not a property
+data class UserWithParam(val name: String, age: Int)
+
+// Invalid data classes
 // data class Empty()  // Error: no parameters
-// open data class OpenUser(val name: String)  // Error: open
-// abstract data class AbstractUser(val name: String)  // Error: abstract
+// open data class OpenUser(val name: String)  // Error: data class cannot be open
+// abstract data class AbstractUser(val name: String)  // Error: data class cannot be abstract
+// inner data class InnerUser(val name: String)  // Error: data class cannot be inner
 ```
 
 **Generation Only for Primary Constructor:**
 
-*Theory:* Automatically generated methods use only properties from primary constructor. Properties in class body ignored in `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. This can lead to unexpected behavior.
+*Theory:* Automatically generated methods use only properties from the primary constructor. Properties in the class body are ignored in `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN()`. This can lead to unexpected behavior.
 
 ```kotlin
-// ✅ Properties in body ignored
+// Properties in body are ignored
 data class User(val name: String, val age: Int) {
     var address: String = ""  // NOT in primary constructor
 }
@@ -412,7 +420,7 @@ println(user1)  // User(name=Alice, age=30) - without address
 **Comparison: Data Class vs Regular Class:**
 
 ```kotlin
-// ❌ Regular class - everything manual
+// Regular class - everything manual
 class Person(val name: String, val age: Int) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -428,34 +436,34 @@ class Person(val name: String, val age: Int) {
 
     override fun toString() = "Person(name=$name, age=$age)"
 
-    // copy() unavailable
-    // componentN() unavailable
+    // copy() unavailable by default
+    // componentN() unavailable by default
 }
 
-// ✅ Data class - everything automatic!
+// Data class - everything automatic!
 data class Person(val name: String, val age: Int)
 ```
 
 **Use Cases for Data Classes:**
 
-*Theory:* Data classes ideal for value objects, DTOs, API responses, database entities, configuration, immutable state. Don't use for classes with business logic or mutable state management.
+*Theory:* Data classes are ideal for value objects, DTOs, API responses, database entities, configuration, immutable state. As a rule of thumb, they are not recommended for types with complex business logic or heavy mutable state management — their primary purpose is to hold data.
 
 ```kotlin
-// ✅ API response
+// API response
 data class UserResponse(
     val id: Int,
     val name: String,
     val email: String
 )
 
-// ✅ Database entity
+// Database entity
 data class TodoItem(
     val id: Long,
     val title: String,
     val completed: Boolean
 )
 
-// ✅ UI state
+// UI state
 data class UiState(
     val isLoading: Boolean,
     val data: List<Item>?,
@@ -465,19 +473,39 @@ data class UiState(
 
 **Key Concepts:**
 
-1. **Auto-generation** - 5 methods generated automatically
-2. **Structural Equality** - comparison by content, not references
+1. **Auto-generation** - 5 primary methods generated automatically
+2. **Structural Equality** - comparison by content (by default), not references
 3. **Immutability Pattern** - `copy()` for creating modified copies
 4. **Primary Constructor Only** - generation only for primary constructor properties
-5. **Value Objects** - ideal for storing data without business logic
+5. **Value Objects** - ideal for storing data without complex business logic
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что произойдет, если переопределить `equals()` без переопределения `hashCode()` в data class?
+- Могут ли data classes наследоваться от других классов?
+- Как работает `copy()` с вложенными data classes?
+
 ## Follow-ups
 
-- What happens if you override equals() but not hashCode() in data class?
+- What happens if you override `equals()` but not `hashCode()` in a data class?
 - Can data classes inherit from other classes?
-- How does copy() work with nested data classes?
+- How does `copy()` work with nested data classes?
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовые Kotlin-классы
+- Свойства и конструкторы в Kotlin
+
+### Похожие (тот же уровень)
+- Компонентные функции data classes
+- Базовые операции с data classes
+
+### Продвинутые (сложнее)
+- Глубокое копирование вложенных data classes
+- Пользовательская реализация `equals()`/`hashCode()`
 
 ## Related Questions
 
@@ -486,9 +514,17 @@ data class UiState(
 - Kotlin properties and constructors
 
 ### Related (Same Level)
-- [[q-data-class-component-functions--programming-languages--easy]] - Component functions details
-- [[q-kotlin-data-classes--kotlin--easy]] - Data classes basics
+- Data classes component functions
+- Data classes basics
 
 ### Advanced (Harder)
 - Deep copy for nested data classes
 - Custom equals/hashCode implementation
+
+## Ссылки (RU)
+
+- [Документация Kotlin: Data classes](https://kotlinlang.org/docs/data-classes.html)
+
+## References
+
+- [Kotlin Documentation: Data classes](https://kotlinlang.org/docs/data-classes.html)

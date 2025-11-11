@@ -8,14 +8,15 @@ subtopics:
   - tls
 question_kind: android
 difficulty: medium
-status: reviewed
+status: draft
 moc: moc-security
 related:
+  - c-computer-science
   - q-android-keystore-system--security--medium
   - q-android-security-practices-checklist--android--medium
   - q-app-security-best-practices--android--medium
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-11-11
 original_language: en
 language_tags:
   - en
@@ -31,12 +32,16 @@ tags: [difficulty/medium, networking, okhttp, security, tls]
 # Question (EN)
 > What is certificate pinning, why use it, and how to implement it safely on Android (OkHttp and Network Security Config)?
 
+---
+
 ## Ответ (RU)
 
 ### Теория
 - Назначение: ограничить доверие TLS известным сертификатом/ключом, чтобы исключить MITM даже при компрометации CA.
 - Что пинить: предпочтительно публичный ключ (переживает продление), всегда добавлять резервные пины для ротации.
 - Область: пинить на хост; wildcard — только при чётком понимании рисков.
+
+См. также: [[c-computer-science]], moc-security.
 
 ### Минимальная Настройка OkHttp
 ```kotlin
@@ -70,7 +75,7 @@ val client = OkHttpClient.Builder()
 
 ### Тестирование
 - Авто: MockWebServer с выданным сертификатом; проверять успех/неуспех.
-- Ручное: прокси (mitmproxy/Charles). Приложение должно падать с SSLPeerUnverifiedException.
+- Ручное: прокси (mitmproxy/Charles). Приложение должно падать с `SSLPeerUnverifiedException`.
 
 ---
 
@@ -80,6 +85,8 @@ val client = OkHttpClient.Builder()
 - Purpose: constrain TLS trust to known cert/public key to defeat MITM even if a rogue/root CA exists.
 - What to pin: prefer public key (survives cert renewal), include backup pins for rotation.
 - Scope: pin per host; add wildcards only if necessary and well understood.
+
+See also: [[c-computer-science]], moc-security.
 
 ### Minimal OkHttp Setup
 ```kotlin
@@ -113,7 +120,32 @@ val client = OkHttpClient.Builder()
 
 ### Testing
 - Automated: MockWebServer with held certificate; verify success/failure paths.
-- Manual: proxy (mitmproxy/Charles). App must fail with SSLPeerUnverifiedException.
+- Manual: proxy (mitmproxy/Charles). App must fail with `SSLPeerUnverifiedException`.
+
+---
+
+## Follow-ups (RU)
+- Компромиссы между пиннингом публичного ключа и конечного сертификата?
+- Как планировать и выкатывать ротацию пинов без блокировки пользователей?
+- Как отслеживать срок действия сертификатов и автоматизировать оповещения?
+
+## References (RU)
+- https://square.github.io/okhttp/features/certificate_pinning/
+- https://developer.android.com/training/articles/security-config#CertificatePinning
+
+## Related Questions (RU)
+
+### Предпосылки (проще)
+- [[q-app-security-best-practices--android--medium]]
+
+### Связанные (тот же уровень)
+- [[q-android-security-practices-checklist--android--medium]]
+- [[q-android-keystore-system--security--medium]]
+
+### Продвинутые (сложнее)
+- [[q-android-runtime-art--android--medium]]
+
+---
 
 ## Follow-ups
 - Public key vs leaf certificate pinning trade-offs?
@@ -135,4 +167,3 @@ val client = OkHttpClient.Builder()
 
 ### Advanced (Harder)
 - [[q-android-runtime-art--android--medium]]
-
