@@ -81,3 +81,111 @@ Parcelable details are similar.
     assert "`Bundle`" in result.revised_text
     assert "`Parcelable`" in result.revised_text
     assert "https://developer.android.com/reference/android/os/Bundle" in result.revised_text
+
+
+def test_type_name_backticks_plural_variants():
+    """Plural mentions of type names should also gain backticks."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+Legacy applications juggle Activities across modules while background Services
+handle work in the foreground and background simultaneously.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Activity' found without backticks.",
+            field="content",
+        ),
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Service' found without backticks.",
+            field="content",
+        ),
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`Activities`" in result.revised_text
+    assert "`Services`" in result.revised_text
+
+
+def test_normalizes_optional_version_headings():
+    """Headings for optional versions should be normalized deterministically."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+### Краткая версия
+RU short body.
+### Подробная версия
+RU detailed body.
+### Short Version
+EN short body mentioning Short type in the flow.
+### Detailed version
+EN detailed body.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Short' found without backticks.",
+            field="content",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "## Краткая Версия" in result.revised_text
+    assert "## Подробная Версия" in result.revised_text
+    assert "## Short Version" in result.revised_text
+    assert "## Detailed Version" in result.revised_text
+    assert "`Short` type" in result.revised_text
+    assert "## `Short` Version" not in result.revised_text
+
+
+def test_normalizes_optional_heading_synonyms():
+    """Synonym headings such as 'Краткий вариант' should be normalized."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+### Краткий вариант
+RU short body.
+### Подробный вариант
+RU detailed body.
+### Short answer
+EN short body mentioning Short type reference.
+### Detailed answer
+EN detailed body.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Short' found without backticks.",
+            field="content",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "## Краткая Версия" in result.revised_text
+    assert "## Подробная Версия" in result.revised_text
+    assert "## Short Version" in result.revised_text
+    assert "## Detailed Version" in result.revised_text
+    assert "## `Short` Version" not in result.revised_text
