@@ -212,6 +212,7 @@ class ReviewGraph:
         completion_mode: CompletionMode = CompletionMode.STANDARD,
         processing_profile: ProcessingProfile = ProcessingProfile.BALANCED,
         enable_analytics: bool | None = None,
+        allow_file_moves: bool = False,
     ):
         """Initialize the review graph.
 
@@ -224,6 +225,8 @@ class ReviewGraph:
             completion_mode: Strictness level for issue completion (default: STANDARD)
             processing_profile: Workflow mode that balances stability vs throughput
             enable_analytics: Optional override to enable/disable analytics capture
+            allow_file_moves: If True, allow automatic file moves via git mv (default: False)
+                             When False, file location issues are flagged but not auto-fixed
         """
         self.vault_root = vault_root
         self.taxonomy = taxonomy
@@ -243,6 +246,7 @@ class ReviewGraph:
             )
         self.max_iterations = max_iterations + bonus_iterations
         self.dry_run = dry_run
+        self.allow_file_moves = allow_file_moves
         self.completion_mode = completion_mode
         # Use OrderedDict for LRU eviction (Python 3.7+ dicts are ordered, but explicit is better)
         self.fix_memory: OrderedDict[str, FixMemory] = OrderedDict()
@@ -1756,35 +1760,76 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 # Use corrected text if available
                 final_text = validation.corrected_text or result.revised_text
 
-                # Handle file moves
+                # Handle file moves - use git mv for proper tracking
                 if result.file_moved and result.new_file_path:
-                    logger.warning(
-                        f"File needs to be moved: {state_obj.note_path} -> {result.new_file_path}"
-                    )
-                    history_updates.append(
-                        state_obj.add_history_entry(
-                            "try_oscillation_fix",
-                            f"File will be moved to: {result.new_file_path}",
-                            old_path=state_obj.note_path,
-                            new_path=result.new_file_path,
-                        )
-                    )
-
-                    # Update note path for subsequent operations
-                    if not self.dry_run:
-                        # Move the file
+                    if self.allow_file_moves and not self.dry_run:
+                        # Automatic file move enabled
                         old_path = Path(state_obj.note_path)
                         new_path = Path(result.new_file_path)
 
                         # Create directory if needed
                         new_path.parent.mkdir(parents=True, exist_ok=True)
 
-                        # Move the file
-                        logger.info(f"Moving file: {old_path} -> {new_path}")
-                        old_path.rename(new_path)
+                        # Use git mv to preserve history and proper tracking
+                        import subprocess
+
+                        try:
+                            # Try git mv first (preserves history)
+                            subprocess.run(
+                                ["git", "mv", str(old_path), str(new_path)],
+                                cwd=self.vault_root,
+                                check=True,
+                                capture_output=True,
+                                text=True,
+                            )
+                            logger.info(f"✓ Moved file via git: {old_path} -> {new_path}")
+                            history_updates.append(
+                                state_obj.add_history_entry(
+                                    "try_oscillation_fix",
+                                    f"File moved successfully: {result.new_file_path}",
+                                    old_path=state_obj.note_path,
+                                    new_path=result.new_file_path,
+                                    method="git_mv",
+                                )
+                            )
+                        except subprocess.CalledProcessError as e:
+                            # Fallback to regular move if git fails (not in repo, etc.)
+                            logger.warning(
+                                f"git mv failed ({e.stderr.strip()}), using regular move"
+                            )
+                            old_path.rename(new_path)
+                            logger.info(f"✓ Moved file: {old_path} -> {new_path}")
+                            history_updates.append(
+                                state_obj.add_history_entry(
+                                    "try_oscillation_fix",
+                                    f"File moved successfully: {result.new_file_path}",
+                                    old_path=state_obj.note_path,
+                                    new_path=result.new_file_path,
+                                    method="rename",
+                                )
+                            )
 
                         # Update state with new path
                         state_obj.note_path = str(new_path)
+                    else:
+                        # File moves disabled - just log the recommendation
+                        logger.warning(
+                            f"⚠ File should be moved: {state_obj.note_path} -> {result.new_file_path}"
+                        )
+                        logger.warning(
+                            "  File moves are disabled. To enable: ReviewGraph(allow_file_moves=True)"
+                        )
+                        history_updates.append(
+                            state_obj.add_history_entry(
+                                "try_oscillation_fix",
+                                f"File should be moved to: {result.new_file_path} (auto-move disabled)",
+                                old_path=state_obj.note_path,
+                                new_path=result.new_file_path,
+                                auto_move_disabled=True,
+                            )
+                        )
+                        # Mark issue as still present since we didn't fix it
+                        state_obj.requires_human_review = True
 
                 logger.info(
                     f"Oscillation fixer applied {len(result.fixes_applied)} fix(es): {', '.join(result.fixes_applied)}"
