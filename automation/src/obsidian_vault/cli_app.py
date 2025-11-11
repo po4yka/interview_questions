@@ -1,5 +1,4 @@
-"""
-Modern CLI application using Typer and Rich.
+"""Modern CLI application using Typer and Rich.
 
 This is an enhanced version of the vault CLI with:
 - Beautiful terminal output using Rich
@@ -16,10 +15,9 @@ from __future__ import annotations
 
 import json
 import os
-import sys
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Any, Never, cast
 
 import typer
 from dotenv import load_dotenv
@@ -28,11 +26,10 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
-from rich.text import Text
 
-from obsidian_vault.qa_generation.workflow import NoteIngestionWorkflow, WorkflowConfig
-from obsidian_vault.qa_generation.gap_analysis import GapAnalysisWorkflow, GapWorkflowConfig
 from obsidian_vault.llm_review import CompletionMode, ProcessingProfile
+from obsidian_vault.qa_generation.gap_analysis import GapAnalysisWorkflow, GapWorkflowConfig
+from obsidian_vault.qa_generation.workflow import NoteIngestionWorkflow, WorkflowConfig
 from obsidian_vault.technical_validation import TechnicalValidationFlow
 from obsidian_vault.utils import (
     FileResult,
@@ -66,6 +63,13 @@ app = typer.Typer(
 console = Console()
 
 
+def _abort(exc: Exception | None = None) -> Never:
+    """Exit the CLI with a consistent Typer handling."""
+    if exc is None:
+        raise typer.Exit(code=1) from None
+    raise typer.Exit(code=1) from exc
+
+
 class ExportFormat(str, Enum):
     """Graph export formats."""
 
@@ -77,15 +81,14 @@ class ExportFormat(str, Enum):
 
 @app.command()
 def validate(
-    path: Optional[str] = typer.Argument(None, help="File or directory to validate"),
+    path: str | None = typer.Argument(None, help="File or directory to validate"),
     all: bool = typer.Option(False, "--all", "-a", help="Validate all notes in vault"),
     parallel: bool = typer.Option(False, "--parallel", "-p", help="Use parallel processing"),
     workers: int = typer.Option(4, "--workers", "-w", help="Number of parallel workers"),
-    report: Optional[str] = typer.Option(None, "--report", "-r", help="Write report to file"),
+    report: str | None = typer.Option(None, "--report", "-r", help="Write report to file"),
     quiet: bool = typer.Option(False, "--quiet", "-q", help="Only print summary"),
 ):
-    """
-    Validate vault notes for structure, format, and quality.
+    """Validate vault notes for structure, format, and quality.
 
     Checks YAML frontmatter, content structure, links, and more.
     """
@@ -102,7 +105,7 @@ def validate(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory not found: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
         if all:
             targets = collect_validatable_files(vault_dir)
@@ -120,7 +123,7 @@ def validate(
                         f"  • 40-Android/q-compose-state--android--medium.md\n"
                         f"  • Or use --all to validate entire vault"
                     )
-                    raise typer.Exit(code=1)
+                    _abort(e)
 
             if not safe_path.exists():
                 console.print(
@@ -129,23 +132,25 @@ def validate(
                     f"  • InterviewQuestions/40-Android\n"
                     f"  • 40-Android/q-compose-state--android--medium.md"
                 )
-                raise typer.Exit(code=1)
+                _abort()
 
             if safe_path.is_file() and safe_path.suffix.lower() == ".md":
                 targets = [safe_path]
             elif safe_path.is_dir():
                 targets = collect_validatable_files(safe_path)
             else:
-                console.print(f"[red]✗[/red] Invalid path: {path} is not a markdown file or directory")
-                raise typer.Exit(code=1)
+                console.print(
+                    f"[red]✗[/red] Invalid path: {path} is not a markdown file or directory"
+                )
+                _abort()
         else:
             console.print("[yellow]⚠[/yellow] Either provide a path or use --all")
-            raise typer.Exit(code=1)
+            _abort()
 
         if not targets:
             console.print("[yellow]⚠[/yellow] No Markdown notes found")
             logger.warning("No Markdown notes found to validate")
-            raise typer.Exit(code=1)
+            _abort()
 
         logger.info(f"Found {len(targets)} file(s) to validate")
         logger.debug(f"Targets: {[str(t) for t in targets[:5]]}{'...' if len(targets) > 5 else ''}")
@@ -189,24 +194,27 @@ def validate(
         else:
             _print_detailed_results(results)
 
-        logger.success("Validation complete" if not has_critical else "Validation complete with critical issues")
+        logger.success(
+            "Validation complete"
+            if not has_critical
+            else "Validation complete with critical issues"
+        )
         raise typer.Exit(code=1 if has_critical else 0)
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Validation failed with error: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command("technical-validate")
 def technical_validate(
-    path: Optional[str] = typer.Argument(None, help="File or directory to analyze"),
+    path: str | None = typer.Argument(None, help="File or directory to analyze"),
     all: bool = typer.Option(False, "--all", "-a", help="Validate every note in the vault"),
-    limit: Optional[int] = typer.Option(None, "--limit", "-l", help="Limit the number of notes"),
-    json_output: Optional[str] = typer.Option(None, "--json", help="Write JSON results to file"),
+    limit: int | None = typer.Option(None, "--limit", "-l", help="Limit the number of notes"),
+    json_output: str | None = typer.Option(None, "--json", help="Write JSON results to file"),
 ):
     """Run the LangChain-powered technical validation workflow."""
-
     from obsidian_vault.utils import ensure_vault_exists, safe_resolve_path
 
     logger.info("Starting technical validation run")
@@ -216,7 +224,7 @@ def technical_validate(
     except ValueError as error:
         console.print(f"[red]✗[/red] {error}")
         logger.error("Vault discovery failed: {}", error)
-        raise typer.Exit(code=1)
+        _abort(error)
 
     if all:
         targets = collect_validatable_files(vault_dir)
@@ -228,7 +236,7 @@ def technical_validate(
                 safe_path = safe_resolve_path(path, repo_root)
             except ValueError as error:
                 console.print(f"[red]✗[/red] Invalid path: {error}")
-                raise typer.Exit(code=1)
+                _abort(error)
 
         if safe_path.is_file() and safe_path.suffix.lower() == ".md":
             targets = [safe_path]
@@ -236,15 +244,15 @@ def technical_validate(
             targets = collect_validatable_files(safe_path)
         else:
             console.print(f"[red]✗[/red] Invalid path: {path} is not a markdown file or directory")
-            raise typer.Exit(code=1)
+            _abort()
     else:
         console.print("[yellow]⚠[/yellow] Either provide a path or use --all")
-        raise typer.Exit(code=1)
+        _abort()
 
     if not targets:
         console.print("[yellow]⚠[/yellow] No Markdown notes found")
         logger.warning("No Markdown notes available for technical validation")
-        raise typer.Exit(code=1)
+        _abort()
 
     if limit is not None and limit > 0:
         targets = targets[:limit]
@@ -267,7 +275,9 @@ def technical_validate(
         relative_path = report.path.relative_to(repo_root)
         severity = report.highest_severity.value if report.highest_severity else "INFO"
         summary = (report.summary or "See detailed findings below.").strip()
-        table.add_row(str(relative_path), severity, summary[:160] + ("…" if len(summary) > 160 else ""))
+        table.add_row(
+            str(relative_path), severity, summary[:160] + ("…" if len(summary) > 160 else "")
+        )
 
     console.print("\n[bold]Technical Validation Findings[/bold]\n")
     console.print(table)
@@ -318,6 +328,7 @@ def technical_validate(
 
     logger.success("Technical validation completed with {} notes showing issues", len(reports))
     raise typer.Exit(code=0)
+
 
 def _validate_files(targets, repo_root, vault_dir, taxonomy, note_index) -> list[FileResult]:
     """Validate a list of files."""
@@ -387,9 +398,11 @@ def _print_detailed_results(results):
     """Print detailed results for each file."""
     for result in results:
         if result.issues:
-            severity_counts = {}
+            severity_counts: dict[str, int] = {}
             for issue in result.issues:
-                severity_counts[issue.severity.value] = severity_counts.get(issue.severity.value, 0) + 1
+                severity_counts[issue.severity.value] = (
+                    severity_counts.get(issue.severity.value, 0) + 1
+                )
 
             summary = ", ".join(f"{k}: {v}" for k, v in sorted(severity_counts.items()))
             title = f"📄 {result.path} - Issues: {summary}"
@@ -404,7 +417,9 @@ def _print_detailed_results(results):
                 }.get(issue.severity.value, "white")
 
                 field_info = f" [dim]\\[{issue.field}][/dim]" if issue.field else ""
-                panel_content.append(f"[{color}]●[/{color}] {issue.severity.value}: {issue.message}{field_info}")
+                panel_content.append(
+                    f"[{color}]●[/{color}] {issue.severity.value}: {issue.message}{field_info}"
+                )
 
             console.print(
                 Panel(
@@ -419,11 +434,12 @@ def _print_detailed_results(results):
 
 @app.command()
 def graph_stats(
-    hubs: Optional[int] = typer.Option(None, "--hubs", "-h", help="Show top N hub notes"),
-    authorities: Optional[int] = typer.Option(None, "--authorities", "-a", help="Show top N authority notes"),
+    hubs: int | None = typer.Option(None, "--hubs", "-h", help="Show top N hub notes"),
+    authorities: int | None = typer.Option(
+        None, "--authorities", "-a", help="Show top N authority notes"
+    ),
 ):
-    """
-    Display vault network statistics and link quality metrics.
+    """Display vault network statistics and link quality metrics.
 
     Shows total notes, links, density, orphaned notes, and more.
     """
@@ -440,7 +456,7 @@ def graph_stats(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory error: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
         with console.status("[bold green]Analyzing vault graph...", spinner="dots"):
             logger.debug("Building vault graph")
@@ -462,15 +478,21 @@ def graph_stats(
         table.add_row("", "")
         table.add_row("Reciprocal Links", str(quality["reciprocal_links"]))
         table.add_row("Unidirectional Links", str(quality["unidirectional_links"]))
-        table.add_row("Orphaned Notes", f"{stats['orphaned_notes']} ({quality['orphaned_ratio']:.1%})")
-        table.add_row("Isolated Notes", f"{stats['isolated_notes']} ({quality['isolated_ratio']:.1%})")
+        table.add_row(
+            "Orphaned Notes", f"{stats['orphaned_notes']} ({quality['orphaned_ratio']:.1%})"
+        )
+        table.add_row(
+            "Isolated Notes", f"{stats['isolated_notes']} ({quality['isolated_ratio']:.1%})"
+        )
 
         console.print(table)
 
         if hubs:
             hub_notes = vg.get_hub_notes(hubs)
             if hub_notes:
-                hub_table = Table(title=f"Top {hubs} Hub Notes", show_header=True, header_style="bold green")
+                hub_table = Table(
+                    title=f"Top {hubs} Hub Notes", show_header=True, header_style="bold green"
+                )
                 hub_table.add_column("Note", style="cyan")
                 hub_table.add_column("Outgoing Links", justify="right", style="green")
 
@@ -495,20 +517,21 @@ def graph_stats(
 
                 console.print("\n", auth_table)
 
-        logger.success(f"Graph statistics complete: {stats['total_notes']} notes, {stats['total_links']} links")
+        logger.success(
+            f"Graph statistics complete: {stats['total_notes']} notes, {stats['total_links']} links"
+        )
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Graph stats failed with error: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command()
 def orphans(
-    output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Write results to file"),
 ):
-    """
-    Find orphaned notes (no incoming or outgoing links).
+    """Find orphaned notes (no incoming or outgoing links).
 
     Helps identify disconnected content that needs linking.
     """
@@ -523,14 +546,16 @@ def orphans(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory error: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
         with console.status("[bold green]Finding orphaned notes...", spinner="dots"):
             vg = VaultGraph(vault_dir)
             orphan_notes = vg.get_orphaned_notes()
 
         if not orphan_notes:
-            console.print("[green]✓[/green] No orphaned notes found! All notes have at least one link.")
+            console.print(
+                "[green]✓[/green] No orphaned notes found! All notes have at least one link."
+            )
             logger.success("No orphaned notes found")
             return
 
@@ -543,21 +568,22 @@ def orphans(
 
         if output:
             Path(output).write_text("\n".join(orphan_notes), encoding="utf-8")
-            console.print(f"\n[green]✓[/green] Wrote {len(orphan_notes)} orphaned notes to {output}")
+            console.print(
+                f"\n[green]✓[/green] Wrote {len(orphan_notes)} orphaned notes to {output}"
+            )
             logger.info(f"Wrote orphaned notes to {output}")
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Orphans command failed with error: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command()
 def broken_links(
-    output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Write results to file"),
 ):
-    """
-    Find notes with broken links (links to non-existent notes).
+    """Find notes with broken links (links to non-existent notes).
 
     Helps maintain vault integrity by identifying missing link targets.
     """
@@ -572,14 +598,16 @@ def broken_links(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory error: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
         with console.status("[bold green]Finding broken links...", spinner="dots"):
             vg = VaultGraph(vault_dir)
             broken = vg.get_broken_links()
 
         if not broken:
-            console.print("[green]✓[/green] No broken links found! All links point to existing notes.")
+            console.print(
+                "[green]✓[/green] No broken links found! All links point to existing notes."
+            )
             logger.success("No broken links found")
             return
 
@@ -602,20 +630,19 @@ def broken_links(
             console.print(f"\n[green]✓[/green] Wrote broken links report to {output}")
             logger.info(f"Wrote broken links report to {output}")
 
-        raise typer.Exit(code=1)
+        _abort()
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Broken links command failed with error: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command()
 def link_report(
-    output: Optional[str] = typer.Option(None, "--output", "-o", help="Output file path"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Output file path"),
 ):
-    """
-    Generate comprehensive markdown link health report.
+    """Generate comprehensive markdown link health report.
 
     Creates a detailed report with statistics, orphans, hubs, and authorities.
     """
@@ -630,7 +657,7 @@ def link_report(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory error: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
         with console.status("[bold green]Generating link health report...", spinner="dots"):
             logger.debug("Generating comprehensive link health report")
@@ -647,18 +674,23 @@ def link_report(
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Link report command failed with error: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command()
 def graph_export(
-    output: str = typer.Argument(..., help="Output file path"),
-    format: Optional[ExportFormat] = typer.Option(
-        None, "--format", "-f", help="Export format (auto-detected from extension if not specified)"
-    ),
+    output: Annotated[str, typer.Argument(..., help="Output file path")],
+    export_format: Annotated[
+        ExportFormat | None,
+        typer.Option(
+            None,
+            "--format",
+            "-f",
+            help="Export format (auto-detected from extension if not specified)",
+        ),
+    ] = None,
 ):
-    """
-    Export vault graph to various formats for external analysis.
+    """Export vault graph to various formats for external analysis.
 
     Supports GEXF, GraphML, JSON, and CSV formats.
     """
@@ -673,12 +705,12 @@ def graph_export(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory error: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
         output_path = Path(output)
 
-        if format:
-            export_format = format.value
+        if export_format:
+            resolved_format = export_format.value
         else:
             format_map = {
                 ".gexf": "gexf",
@@ -686,34 +718,35 @@ def graph_export(
                 ".json": "json",
                 ".csv": "csv",
             }
-            export_format = format_map.get(output_path.suffix.lower(), "gexf")
+            resolved_format = format_map.get(output_path.suffix.lower(), "gexf")
 
         try:
-            export_format = validate_choice(
-                export_format,
-                {"gexf", "graphml", "json", "csv"}
-            )
+            resolved_format = validate_choice(resolved_format, {"gexf", "graphml", "json", "csv"})
         except ValueError as e:
             console.print(f"[red]✗ Error:[/red] {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
-        logger.debug(f"Export format: {export_format}")
+        logger.debug(f"Export format: {resolved_format}")
 
-        with console.status(f"[bold green]Exporting graph to {export_format.upper()}...", spinner="dots"):
+        with console.status(
+            f"[bold green]Exporting graph to {resolved_format.upper()}...", spinner="dots"
+        ):
             vg = VaultGraph(vault_dir)
-            vg.export_graph_data(output_path, format=export_format)
+            vg.export_graph_data(output_path, format=resolved_format)
 
-        console.print(f"[green]✓[/green] Graph exported to {output_path} (format: {export_format})")
-        logger.success(f"Graph exported to {output_path} (format: {export_format})")
+        console.print(
+            f"[green]✓[/green] Graph exported to {output_path} (format: {resolved_format})"
+        )
+        logger.success(f"Graph exported to {output_path} (format: {resolved_format})")
 
     except ValueError as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.error(f"Invalid export format: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Graph export failed with error: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command()
@@ -725,12 +758,11 @@ def communities(
         help="Algorithm: louvain, greedy, or label_propagation",
     ),
     min_size: int = typer.Option(2, "--min-size", "-m", help="Minimum community size"),
-    top_n: Optional[int] = typer.Option(None, "--top", "-n", help="Show only top N communities"),
+    top_n: int | None = typer.Option(None, "--top", "-n", help="Show only top N communities"),
     show_notes: bool = typer.Option(False, "--show-notes", help="Show notes in each community"),
-    output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Write results to file"),
 ):
-    """
-    Detect communities (clusters) of related notes using graph algorithms.
+    """Detect clusters of related notes using graph algorithms.
 
     Communities are groups of notes that are more densely connected to each
     other than to notes outside the group. Useful for understanding vault
@@ -742,7 +774,7 @@ def communities(
         algorithm = validate_choice(algorithm, {"louvain", "greedy", "label_propagation"})
     except ValueError as e:
         console.print(f"[red]✗[/red] {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
     logger.info(f"Detecting communities using {algorithm} algorithm")
     try:
@@ -753,13 +785,15 @@ def communities(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory error: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
         with console.status("[bold green]Analyzing vault communities...", spinner="dots"):
             logger.debug("Building vault graph")
             vg = VaultGraph(vault_dir)
             logger.debug(f"Detecting communities with algorithm={algorithm}, min_size={min_size}")
-            communities_data = vg.detect_communities(algorithm=algorithm, min_size=min_size)
+            communities_data = cast(
+                list[dict[str, Any]], vg.detect_communities(algorithm=algorithm, min_size=min_size)
+            )
 
         if not communities_data:
             console.print("[yellow]⚠[/yellow] No communities found")
@@ -782,9 +816,7 @@ def communities(
         summary_table.add_column("Top Topics", style="yellow")
 
         for comm in communities_data:
-            topics_str = ", ".join(
-                [f"{topic} ({count})" for topic, count in comm["topics"][:3]]
-            )
+            topics_str = ", ".join([f"{topic} ({count})" for topic, count in comm["topics"][:3]])
             summary_table.add_row(
                 str(comm["id"]),
                 str(comm["size"]),
@@ -855,7 +887,7 @@ def communities(
             else 0
         )
 
-        console.print(f"\n[bold]Statistics:[/bold]")
+        console.print("\n[bold]Statistics:[/bold]")
         console.print(f"  Total communities: {len(communities_data)}")
         console.print(f"  Total notes in communities: {total_notes}")
         console.print(f"  Average community size: {avg_size:.1f}")
@@ -869,12 +901,12 @@ def communities(
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Community detection failed: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command()
 def suggest_links(
-    note: Optional[str] = typer.Option(None, "--note", "-n", help="Specific note to analyze"),
+    note: str | None = typer.Option(None, "--note", "-n", help="Specific note to analyze"),
     top_k: int = typer.Option(5, "--top", "-k", help="Number of suggestions per note"),
     min_similarity: float = typer.Option(
         0.3, "--min-similarity", "-s", help="Minimum similarity threshold (0.0-1.0)"
@@ -882,10 +914,9 @@ def suggest_links(
     include_existing: bool = typer.Option(
         False, "--include-existing", help="Include already linked notes"
     ),
-    output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
+    output: str | None = typer.Option(None, "--output", "-o", help="Write results to file"),
 ):
-    """
-    Suggest missing links using ML-based content similarity (TF-IDF).
+    """Suggest missing links using ML-based content similarity (TF-IDF).
 
     Uses machine learning to analyze note content and suggest related notes
     that should be linked but currently aren't. Based on TF-IDF vectorization
@@ -902,17 +933,16 @@ def suggest_links(
         except ValueError as e:
             console.print(f"[red]✗[/red] {e}")
             logger.error(f"Vault directory error: {e}")
-            raise typer.Exit(code=1)
+            _abort(e)
 
-        with console.status(
-            "[bold green]Analyzing note content with TF-IDF...", spinner="dots"
-        ):
+        with console.status("[bold green]Analyzing note content with TF-IDF...", spinner="dots"):
             logger.debug("Building vault graph")
             vg = VaultGraph(vault_dir)
             logger.debug(
                 f"Generating link suggestions: note={note}, top_k={top_k}, "
                 f"min_similarity={min_similarity}"
             )
+            suggestions: dict[str, list[tuple[str, float]]]
             suggestions = vg.suggest_links(
                 note_name=note,
                 top_k=top_k,
@@ -925,7 +955,7 @@ def suggest_links(
             logger.warning("No link suggestions generated")
             return
 
-        stats = vg.analyze_link_predictions(suggestions)
+        stats: dict[str, Any] = vg.analyze_link_predictions(suggestions)
         logger.success(
             f"Generated {stats['total_suggestions']} suggestions "
             f"for {stats['total_notes_analyzed']} notes"
@@ -933,9 +963,7 @@ def suggest_links(
 
         if note and note in suggestions:
             # Show suggestions for specific note
-            console.print(
-                f"\n[bold cyan]Link Suggestions for {note}[/bold cyan] (top {top_k})\n"
-            )
+            console.print(f"\n[bold cyan]Link Suggestions for {note}[/bold cyan] (top {top_k})\n")
 
             table = Table(show_header=True, header_style="bold cyan")
             table.add_column("Rank", style="cyan", width=6)
@@ -953,9 +981,7 @@ def suggest_links(
                 f"(showing top {min(10, len(suggestions))} notes with suggestions)\n"
             )
 
-            sorted_notes = sorted(suggestions.items(), key=lambda x: len(x[1]), reverse=True)[
-                :10
-            ]
+            sorted_notes = sorted(suggestions.items(), key=lambda x: len(x[1]), reverse=True)[:10]
 
             for note_name, note_suggestions in sorted_notes:
                 if not note_suggestions:
@@ -965,17 +991,19 @@ def suggest_links(
                 for i, (suggested, sim) in enumerate(note_suggestions, 1):
                     console.print(f"  {i}. {suggested} (similarity: {sim:.3f})")
 
-        console.print(f"\n[bold]Statistics:[/bold]")
+        console.print("\n[bold]Statistics:[/bold]")
         console.print(f"  Notes analyzed: {stats['total_notes_analyzed']}")
         console.print(f"  Total suggestions: {stats['total_suggestions']}")
         console.print(f"  Avg suggestions per note: {stats['avg_suggestions_per_note']:.1f}")
         console.print(f"  Avg similarity: {stats['avg_similarity']:.3f}")
-        console.print(f"  Similarity range: {stats['min_similarity']:.3f} - {stats['max_similarity']:.3f}")
+        console.print(
+            f"  Similarity range: {stats['min_similarity']:.3f} - {stats['max_similarity']:.3f}"
+        )
 
         if output:
             output_lines = [
                 "# Link Suggestions (ML-Based)\n\n",
-                f"**Algorithm**: TF-IDF + Cosine Similarity\n",
+                "**Algorithm**: TF-IDF + Cosine Similarity\n",
                 f"**Minimum Similarity**: {min_similarity}\n",
                 f"**Top K**: {top_k}\n\n",
                 "## Statistics\n\n",
@@ -1006,7 +1034,7 @@ def suggest_links(
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Link suggestion failed: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command()
@@ -1044,15 +1072,14 @@ def llm_review(
         "--backup/--no-backup",
         help="Create backups before modifying files",
     ),
-    report: Optional[str] = typer.Option(
+    report: str | None = typer.Option(
         None,
         "--report",
         "-r",
         help="Write detailed report to file",
     ),
 ):
-    """
-    Review and fix notes using LLM (PydanticAI + LangGraph).
+    """Review and fix notes using LLM (PydanticAI + LangGraph).
 
     This command uses AI to:
     1. Review notes for technical accuracy
@@ -1074,16 +1101,16 @@ def llm_review(
                 "[red]✗[/red] OPENROUTER_API_KEY environment variable not set\n"
                 "Get your API key from https://openrouter.ai/keys"
             )
-            raise typer.Exit(code=1)
+            _abort()
 
         repo_root = discover_repo_root()
         vault_dir = repo_root / "InterviewQuestions"
 
         if not vault_dir.exists():
             console.print("[red]✗[/red] InterviewQuestions directory not found")
-            raise typer.Exit(code=1)
+            _abort()
 
-        from obsidian_vault.llm_review import create_review_graph, CompletionMode
+        from obsidian_vault.llm_review import CompletionMode, create_review_graph
 
         try:
             mode = CompletionMode(completion_mode.lower())
@@ -1092,7 +1119,7 @@ def llm_review(
                 f"[red]✗[/red] Invalid completion mode: {completion_mode}\n"
                 f"Valid options: strict, standard, permissive"
             )
-            raise typer.Exit(code=1)
+            _abort()
 
         if pattern.startswith("InterviewQuestions/"):
             search_pattern = pattern.replace("InterviewQuestions/", "", 1)
@@ -1100,6 +1127,7 @@ def llm_review(
             notes = [n for n in notes if n.suffix == ".md" and n.is_file()]
         else:
             from obsidian_vault.utils.common import collect_validatable_files
+
             notes = list(collect_validatable_files(repo_root / pattern.split("/")[0]))
 
         if not notes:
@@ -1119,66 +1147,83 @@ def llm_review(
                 completion_mode=mode,
             )
 
-        results = []
+        results: list[tuple[Path, Any]] = []
+        error_results: list[tuple[Path, Exception]] = []
 
         async def process_all():
             """Process notes in parallel with concurrency limit."""
             semaphore = asyncio.Semaphore(max_concurrent)
 
-            async def process_one(note_path: Path) -> tuple[Path, any]:
+            async def process_one(note_path: Path) -> tuple[Path, Any | None, Exception | None]:
                 """Process a single note with semaphore control."""
                 async with semaphore:
                     console.print(f"[cyan]Processing:[/cyan] {note_path.relative_to(repo_root)}")
-                    state = await review_graph.process_note(note_path)
+                    try:
+                        state = await review_graph.process_note(note_path)
 
-                    # Show summary
-                    if state.error:
-                        console.print(f"  [red]✗[/red] Error: {state.error}")
-                    elif state.changed:
-                        console.print(
-                            f"  [green]✓[/green] Modified "
-                            f"({state.iteration} iteration(s), {len(state.issues)} final issue(s))"
-                        )
-                    else:
-                        console.print("  [green]✓[/green] No changes needed")
-
-                    # Save if not dry-run
-                    if not dry_run and state.changed:
-                        sanitized_text = sanitize_text_for_yaml(state.current_text)
-                        if sanitized_text != state.current_text:
-                            logger.warning(
-                                f"Sanitized {len(state.current_text) - len(sanitized_text)} "
-                                f"invalid character(s) from {note_path.name}"
+                        # Show summary
+                        if state.error:
+                            console.print(f"  [red]✗[/red] Error: {state.error}")
+                        elif state.changed:
+                            console.print(
+                                f"  [green]✓[/green] Modified "
+                                f"({state.iteration} iteration(s), {len(state.issues)} final issue(s))"
                             )
+                        else:
+                            console.print("  [green]✓[/green] No changes needed")
 
-                        # Use atomic write with optional backup
-                        try:
-                            atomic_write(note_path, sanitized_text, encoding="utf-8", create_backup=backup)
-                            console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
-                            if backup:
-                                console.print(f"  [dim]Backup created: {note_path.name}.backup[/dim]")
-                        except Exception as e:
-                            console.print(f"  [red]✗[/red] Failed to save {note_path.name}: {e}")
-                            logger.error(f"Failed to write {note_path}: {e}")
+                        # Save if not dry-run
+                        if not dry_run and state.changed:
+                            sanitized_text = sanitize_text_for_yaml(state.current_text)
+                            if sanitized_text != state.current_text:
+                                logger.warning(
+                                    f"Sanitized {len(state.current_text) - len(sanitized_text)} "
+                                    f"invalid character(s) from {note_path.name}"
+                                )
 
-                    console.print()
-                    return (note_path, state)
+                            # Use atomic write with optional backup
+                            try:
+                                atomic_write(
+                                    note_path,
+                                    sanitized_text,
+                                    encoding="utf-8",
+                                    create_backup=backup,
+                                )
+                                console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
+                                if backup:
+                                    console.print(
+                                        f"  [dim]Backup created: {note_path.name}.backup[/dim]"
+                                    )
+                            except Exception as e:  # pragma: no cover - disk errors
+                                console.print(
+                                    f"  [red]✗[/red] Failed to save {note_path.name}: {e}"
+                                )
+                                logger.error(f"Failed to write {note_path}: {e}")
+
+                        console.print()
+                        return (note_path, state, None)
+                    except Exception as exc:
+                        console.print(f"  [red]✗[/red] Error: {exc}")
+                        logger.exception("LLM review crashed for {}", note_path)
+                        console.print()
+                        return (note_path, None, exc)
 
             console.print(f"[bold]Processing up to {max_concurrent} notes concurrently[/bold]\n")
             tasks = [process_one(note_path) for note_path in notes]
-            results_list = await asyncio.gather(*tasks, return_exceptions=True)
+            results_list = await asyncio.gather(*tasks)
 
-            for result in results_list:
-                if isinstance(result, Exception):
-                    console.print(f"  [red]✗[/red] Error: {result}")
+            for note_path, state, exc in results_list:
+                if exc:
+                    error_results.append((note_path, exc))
                 else:
-                    results.append(result)
+                    results.append((note_path, state))
 
         asyncio.run(process_all())
 
-        total = len(results)
+        total = len(results) + len(error_results)
         modified = sum(1 for _, state in results if state.changed)
-        errors = sum(1 for _, state in results if state.error)
+        errors = len(error_results) + sum(1 for _, state in results if state.error)
+        unchanged = max(total - modified - errors, 0)
 
         table = Table(title="LLM Review Summary", show_header=True, header_style="bold cyan")
         table.add_column("Metric", style="cyan")
@@ -1187,7 +1232,7 @@ def llm_review(
         table.add_row("Notes Processed", str(total))
         table.add_row("Modified", f"[{'yellow' if dry_run else 'green'}]{modified}[/]")
         table.add_row("Errors", f"[{'red' if errors > 0 else 'green'}]{errors}[/]")
-        table.add_row("Unchanged", str(total - modified - errors))
+        table.add_row("Unchanged", str(unchanged))
 
         console.print(table)
 
@@ -1217,15 +1262,27 @@ def llm_review(
 
                 report_lines.append("\n---\n\n")
 
+            if error_results:
+                report_lines.append("## Notes that failed before producing a state\n\n")
+                for note_path, exc in error_results:
+                    report_lines.append(f"### {note_path.relative_to(repo_root)}\n\n")
+                    report_lines.append("**Changed**: False\n")
+                    report_lines.append("**Iterations**: 0\n")
+                    report_lines.append("**Final issues**: 0\n")
+                    report_lines.append(f"**Error**: {exc}\n")
+                    report_lines.append("\n---\n\n")
+
             Path(report).write_text("".join(report_lines), encoding="utf-8")
             console.print(f"\n[green]✓[/green] Report written to {report}")
 
-        logger.success(
-            f"LLM review complete: {total} notes, {modified} modified, {errors} errors"
-        )
+        message = f"LLM review complete: {total} notes, {modified} modified, {errors} errors"
+        if errors > 0:
+            logger.warning(message)
+        else:
+            logger.success(message)
 
         if errors > 0:
-            raise typer.Exit(code=1)
+            _abort()
 
     except ImportError as e:
         console.print(
@@ -1233,11 +1290,11 @@ def llm_review(
             f"Install with: pip install pydantic-ai langgraph\n"
             f"Details: {e}"
         )
-        raise typer.Exit(code=1)
+        _abort(e)
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"LLM review failed: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
 
 @app.command("qa-ingest")
@@ -1273,27 +1330,27 @@ def qa_ingest(
         url = validate_url(url)
     except ValidationError as e:
         console.print(f"[red]✗[/red] Invalid URL: {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
     try:
         max_cards = validate_integer(max_cards, min_value=1, max_value=5, param_name="max_cards")
     except ValidationError as e:
         console.print(f"[red]✗[/red] {e}")
-        raise typer.Exit(code=1)
+        _abort(e)
 
     if not os.getenv("FIRECRAWL_API_KEY"):
         console.print(
             "[red]✗[/red] FIRECRAWL_API_KEY environment variable not set."
             "\nCreate a Firecrawl account and set the API key to fetch articles."
         )
-        raise typer.Exit(code=1)
+        _abort()
 
     if not os.getenv("OPENROUTER_API_KEY"):
         console.print(
             "[red]✗[/red] OPENROUTER_API_KEY environment variable not set."
             "\nObtain an API key from https://openrouter.ai/keys and export it before running."
         )
-        raise typer.Exit(code=1)
+        _abort()
 
     try:
         mode = CompletionMode(completion_mode.lower())
@@ -1302,7 +1359,7 @@ def qa_ingest(
             f"[red]✗[/red] Invalid completion mode: {completion_mode}\n"
             "Valid options: strict, standard, permissive"
         )
-        raise typer.Exit(code=1)
+        _abort()
 
     try:
         profile = ProcessingProfile(processing_profile.lower())
@@ -1311,7 +1368,7 @@ def qa_ingest(
             f"[red]✗[/red] Invalid processing profile: {processing_profile}\n"
             "Valid options: balanced, stability, thorough"
         )
-        raise typer.Exit(code=1)
+        _abort()
 
     console.print(Panel.fit(f"[bold]Fetching and processing article:[/bold]\n{url}"))
     workflow = NoteIngestionWorkflow()
@@ -1328,7 +1385,7 @@ def qa_ingest(
     except Exception as exc:  # pragma: no cover - top-level workflow guard
         console.print(f"[red]✗ Error:[/red] {exc}")
         logger.exception("Q&A ingestion workflow failed: {}", exc)
-        raise typer.Exit(code=1)
+        _abort(exc)
 
     created_count = len(result.created_paths)
     duplicates_count = len(result.skipped_duplicates)
@@ -1389,13 +1446,12 @@ def qa_gap_analysis(
     ),
 ):
     """Analyze vault coverage, propose missing questions, and optionally create notes."""
-
     if not os.getenv("OPENROUTER_API_KEY"):
         console.print(
             "[red]✗[/red] OPENROUTER_API_KEY environment variable not set."
             "\nObtain an API key from https://openrouter.ai/keys and export it before running."
         )
-        raise typer.Exit(code=1)
+        _abort()
 
     try:
         mode = CompletionMode(completion_mode.lower())
@@ -1404,7 +1460,7 @@ def qa_gap_analysis(
             f"[red]✗[/red] Invalid completion mode: {completion_mode}\n"
             "Valid options: strict, standard, permissive"
         )
-        raise typer.Exit(code=1)
+        _abort()
 
     try:
         profile = ProcessingProfile(processing_profile.lower())
@@ -1413,7 +1469,7 @@ def qa_gap_analysis(
             f"[red]✗[/red] Invalid processing profile: {processing_profile}\n"
             "Valid options: balanced, stability, thorough"
         )
-        raise typer.Exit(code=1)
+        _abort()
 
     workflow = GapAnalysisWorkflow()
     config = GapWorkflowConfig(
@@ -1431,7 +1487,7 @@ def qa_gap_analysis(
     except Exception as exc:  # pragma: no cover - top-level workflow guard
         console.print(f"[red]✗ Error:[/red] {exc}")
         logger.exception("Gap analysis workflow failed: {}", exc)
-        raise typer.Exit(code=1)
+        _abort(exc)
 
     console.print()
     summary_table = Table(title="Coverage Gap Report", show_header=True, header_style="bold cyan")
@@ -1485,7 +1541,7 @@ def qa_gap_analysis(
     except Exception as exc:  # pragma: no cover - top-level workflow guard
         console.print(f"[red]✗ Error:[/red] {exc}")
         logger.exception("Failed to create notes from gap analysis: {}", exc)
-        raise typer.Exit(code=1)
+        _abort(exc)
 
     if apply_result.created_paths:
         console.print("\n[bold]Created notes:[/bold]")

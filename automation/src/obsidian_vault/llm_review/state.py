@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Annotated, Any, Literal, Mapping, TypedDict, cast
+from typing import Annotated, Any, Literal, TypedDict, cast
 
 from .issue_history import filter_blocking_issue_history
 
@@ -12,7 +13,6 @@ def _append_history(
     existing: list[dict[str, Any]], new_entries: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
     """Aggregator that appends new history entries."""
-
     return [*existing, *new_entries]
 
 from obsidian_vault.validators.base import ValidationIssue
@@ -123,9 +123,8 @@ class NoteReviewState:
     trace_id: str | None = None
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "NoteReviewState":
+    def from_dict(cls, data: Mapping[str, Any]) -> NoteReviewState:
         """Create state from a mapping, copying mutable fields."""
-
         issues = [
             issue
             if isinstance(issue, ReviewIssue)
@@ -180,7 +179,6 @@ class NoteReviewState:
 
     def to_dict(self) -> NoteReviewStateDict:
         """Convert state to a typed dictionary for LangGraph."""
-
         return {
             "note_path": self.note_path,
             "original_text": self.original_text,
@@ -244,7 +242,7 @@ class NoteReviewState:
             # `.value` preserves the canonical "WARNING" form so downstream
             # filters treat it as non-blocking.
             if hasattr(severity, "value"):
-                enum_value = getattr(severity, "value")
+                enum_value = severity.value
                 if isinstance(enum_value, str):
                     severity = enum_value
                 else:

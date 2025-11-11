@@ -39,10 +39,11 @@ monitoring stack.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import datetime
 from statistics import mean
-from typing import Any, Iterable
+from typing import Any
 
 
 @dataclass
@@ -86,14 +87,12 @@ class NoteAnalytics:
 
     def record_iteration(self, stats: IterationAnalytics) -> None:
         """Append iteration analytics and track the first issue count."""
-
         if self.initial_issue_count is None:
             self.initial_issue_count = stats.total_issues
         self.iteration_stats.append(stats)
 
     def set_decision(self, iteration: int, decision: str) -> None:
         """Attach the decision that followed a specific iteration."""
-
         for stat in self.iteration_stats:
             if stat.iteration == iteration:
                 stat.decision = decision
@@ -101,7 +100,6 @@ class NoteAnalytics:
 
     def add_qa_attempt(self, attempt: QAAttemptAnalytics) -> None:
         """Store a QA verification attempt."""
-
         self.qa_attempts.append(attempt)
 
     def finalize(
@@ -115,7 +113,6 @@ class NoteAnalytics:
         requires_human_review: bool,
     ) -> None:
         """Mark the note as complete and persist summary level data."""
-
         self.iterations = iterations
         self.final_issue_count = final_issue_count
         self.elapsed_seconds = elapsed_seconds
@@ -127,7 +124,6 @@ class NoteAnalytics:
     @property
     def issues_resolved(self) -> int | None:
         """Return the number of issues resolved during the run."""
-
         if self.initial_issue_count is None:
             return None
         return self.initial_issue_count - self.final_issue_count
@@ -142,7 +138,6 @@ class ReviewAnalyticsRecorder:
 
     def start_note(self, note_path: str, *, profile: str) -> None:
         """Initialise tracking for a note."""
-
         if not self._enabled:
             return
         self._notes[note_path] = NoteAnalytics(note_path=note_path, profile=profile)
@@ -157,7 +152,6 @@ class ReviewAnalyticsRecorder:
         parity_issues: int,
     ) -> None:
         """Store validator outcome for the iteration."""
-
         if not self._enabled:
             return
         stats = IterationAnalytics(
@@ -173,7 +167,6 @@ class ReviewAnalyticsRecorder:
 
     def set_iteration_decision(self, note_path: str, iteration: int, decision: str) -> None:
         """Attach a routing decision to a recorded iteration."""
-
         if not self._enabled:
             return
         if note_path in self._notes:
@@ -188,7 +181,6 @@ class ReviewAnalyticsRecorder:
         summary: str | None,
     ) -> None:
         """Store information about a QA verification run."""
-
         if not self._enabled:
             return
         attempt = QAAttemptAnalytics(iteration=iteration, passed=passed, summary=summary)
@@ -208,7 +200,6 @@ class ReviewAnalyticsRecorder:
         requires_human_review: bool,
     ) -> None:
         """Mark a note run as finished and attach summary data."""
-
         if not self._enabled:
             return
         self._notes.setdefault(
@@ -224,17 +215,14 @@ class ReviewAnalyticsRecorder:
 
     def get_note(self, note_path: str) -> NoteAnalytics | None:
         """Return analytics for a specific note if present."""
-
         return self._notes.get(note_path)
 
     def iter_notes(self) -> Iterable[NoteAnalytics]:
         """Iterate over all recorded note analytics objects."""
-
         return self._notes.values()
 
     def summary(self) -> dict[str, Any]:
         """Return aggregated statistics for all tracked notes."""
-
         if not self._enabled or not self._notes:
             return {
                 "enabled": self._enabled,
@@ -269,4 +257,3 @@ class ReviewAnalyticsRecorder:
             "avg_iterations": mean(iterations) if iterations else None,
             "avg_issues_resolved": mean(issues_resolved) if issues_resolved else None,
         }
-

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import io
 import json
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable, Sequence
 
-from langchain.agents.agent import AgentExecutor
+from langchain_classic.agents import AgentExecutor
 from loguru import logger
 from ruamel.yaml import YAML
 
@@ -32,7 +32,6 @@ _yaml.allow_unicode = True
 
 def _frontmatter_to_text(frontmatter: dict) -> str:
     """Serialize frontmatter to a readable YAML string for agent context."""
-
     buffer = io.StringIO()
     _yaml.dump(frontmatter or {}, buffer)
     return buffer.getvalue()
@@ -59,7 +58,6 @@ class TechnicalValidationReport:
     @property
     def highest_severity(self) -> Severity | None:
         """Return the most severe issue for quick triage."""
-
         if not self.findings:
             return None
         severity_order = {
@@ -68,7 +66,9 @@ class TechnicalValidationReport:
             Severity.WARNING: 2,
             Severity.INFO: 1,
         }
-        return max(self.findings, key=lambda finding: severity_order[finding.issue.severity]).issue.severity
+        return max(
+            self.findings, key=lambda finding: severity_order[finding.issue.severity]
+        ).issue.severity
 
 
 class TechnicalValidationFlow:
@@ -95,9 +95,8 @@ class TechnicalValidationFlow:
         repo_root: Path | None = None,
         *,
         agent: AgentExecutor | None = None,
-    ) -> "TechnicalValidationFlow":
+    ) -> TechnicalValidationFlow:
         """Construct the flow by discovering repository metadata."""
-
         discovered_root = repo_root or discover_repo_root()
         vault_root = ensure_vault_exists(discovered_root)
         taxonomy_loader = TaxonomyLoader(discovered_root)
@@ -119,13 +118,11 @@ class TechnicalValidationFlow:
 
     def validate_all(self) -> list[TechnicalValidationReport]:
         """Run validation for every note in the vault."""
-
         targets = collect_validatable_files(self.vault_root)
         return self.validate_paths(targets)
 
     def validate_paths(self, paths: Sequence[Path]) -> list[TechnicalValidationReport]:
         """Run validation for a provided set of note paths."""
-
         reports: list[TechnicalValidationReport] = []
         for note_path in paths:
             report = self._validate_single(note_path)
@@ -135,7 +132,6 @@ class TechnicalValidationFlow:
 
     def _validate_single(self, note_path: Path) -> TechnicalValidationReport:
         """Validate a single note returning detailed findings."""
-
         logger.debug("Validating note: {}", note_path)
         frontmatter, body = parse_note(note_path)
         validators = ValidatorRegistry.create_validators(
@@ -163,7 +159,9 @@ class TechnicalValidationFlow:
             return TechnicalValidationReport(path=note_path)
 
         enriched_findings, summary_text = self._call_agent(note_path, frontmatter, body, findings)
-        return TechnicalValidationReport(path=note_path, findings=enriched_findings, summary=summary_text)
+        return TechnicalValidationReport(
+            path=note_path, findings=enriched_findings, summary=summary_text
+        )
 
     def _call_agent(
         self,
@@ -173,7 +171,6 @@ class TechnicalValidationFlow:
         findings: list[TechnicalValidationFinding],
     ) -> tuple[list[TechnicalValidationFinding], str | None]:
         """Enrich validator findings using the LangChain agent."""
-
         issues_payload = [
             {
                 "validator": finding.validator,
@@ -212,7 +209,6 @@ class TechnicalValidationFlow:
         agent_issues: Iterable[dict[str, object]],
     ) -> list[TechnicalValidationFinding]:
         """Merge agent-provided fixes with raw validator findings."""
-
         guidance_by_key: dict[tuple[str, str], dict[str, object]] = {}
         for entry in agent_issues:
             validator = str(entry.get("validator", ""))
@@ -223,7 +219,7 @@ class TechnicalValidationFlow:
             guidance_by_key[key] = {
                 "fix": str(fix) if fix is not None else None,
                 "references": [str(ref) for ref in references]
-                if isinstance(references, (list, tuple))
+                if isinstance(references, list | tuple)
                 else [],
             }
 
@@ -252,7 +248,6 @@ def run_technical_validation(
     paths: Sequence[Path] | None = None,
 ) -> list[TechnicalValidationReport]:
     """Convenience wrapper for running the technical validation flow."""
-
     flow = TechnicalValidationFlow.from_repo(repo_root, agent=agent)
     if paths is not None:
         return flow.validate_paths(paths)

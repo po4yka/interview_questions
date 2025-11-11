@@ -25,6 +25,7 @@ Claude Code automatically loads custom instructions from `.claude/custom_instruc
 - No emoji rule
 
 **Key Files**:
+
 - **Full rules**: `AGENTS.md`
 - **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
 - **Controlled vocabularies**: `00-Administration/Vault-Rules/TAXONOMY.md`
@@ -86,9 +87,11 @@ _templates/         # Templater templates
 Claude Code provides custom slash commands in `.claude/commands/`:
 
 ### /create-qna
+
 Create a new Q&A note with full validation.
 
 **Usage**:
+
 ```
 /create-qna Create a note about coroutine context
 Topic: kotlin
@@ -96,6 +99,7 @@ Difficulty: medium
 ```
 
 **What it does**:
+
 1. Determines correct folder (70-Kotlin/)
 2. Generates filename (q-coroutine-context--kotlin--medium.md)
 3. Uses template from `_templates/_tpl-qna.md`
@@ -105,28 +109,34 @@ Difficulty: medium
 7. Creates bilingual content structure
 
 ### /create-concept
+
 Create a new concept note.
 
 **Usage**:
+
 ```
 /create-concept Create concept for MVVM pattern
 ```
 
 **What it does**:
+
 1. Places in `10-Concepts/`
 2. Uses template from `_templates/_tpl-concept.md`
 3. Creates c-mvvm-pattern.md
 4. Includes EN/RU summary sections
 
 ### /create-moc
+
 Create a new MOC (Map of Content) to organize related Q&As.
 
 **Usage**:
+
 ```
 /create-moc Create MOC for Kotlin topic
 ```
 
 **What it does**:
+
 1. Places in `90-MOCs/`
 2. Uses template from `_templates/_tpl-moc.md`
 3. Creates moc-kotlin.md
@@ -134,14 +144,17 @@ Create a new MOC (Map of Content) to organize related Q&As.
 5. Organizes content by difficulty and subtopic
 
 ### /translate
+
 Add missing language to an existing note.
 
 **Usage**:
+
 ```
 /translate Add Russian translation to q-coroutine-basics--kotlin--easy.md
 ```
 
 **What it does**:
+
 1. Reads the file
 2. Identifies missing language sections
 3. Translates while preserving code and links
@@ -149,17 +162,20 @@ Add missing language to an existing note.
 5. Keeps `status: draft`
 
 ### /validate
+
 Comprehensive validation of a note against vault rules.
 
 **Usage**:
+
 ```
 /validate 40-Android/q-compose-state--android--medium.md
 ```
 
 **What it does**:
+
 1. Checks YAML completeness
 2. Validates topic against TAXONOMY.md
-3. Checks tags (English-only, includes difficulty/*)
+3. Checks tags (English-only, includes difficulty/\*)
 4. Verifies Android subtopic mirroring
 5. Checks folder placement
 6. Validates links (MOC, related)
@@ -167,14 +183,17 @@ Comprehensive validation of a note against vault rules.
 8. Reports issues with severity levels
 
 ### /link-concepts
+
 Suggest and add cross-references between notes.
 
 **Usage**:
+
 ```
 /link-concepts q-coroutine-scope--kotlin--medium.md
 ```
 
 **What it does**:
+
 1. Analyzes the note
 2. Searches vault for related concepts and questions
 3. Suggests 3-5 relevant links
@@ -189,6 +208,7 @@ Suggest and add cross-references between notes.
 **User request**: "Create a note about Kotlin coroutine context"
 
 **Agent actions**:
+
 1. Determine classification:
    - Topic: `kotlin`
    - Difficulty: `medium`
@@ -227,6 +247,7 @@ Suggest and add cross-references between notes.
 **User request**: "Add Russian translation to q-coroutine-basics--kotlin--easy.md"
 
 **Agent actions**:
+
 1. Read the file
 2. Check for existing sections (has EN, missing RU)
 3. Translate:
@@ -249,6 +270,7 @@ Suggest and add cross-references between notes.
 **User request**: "Validate 40-Android/q-compose-state--android--medium.md"
 
 **Agent actions**:
+
 1. Read the file
 2. Check YAML frontmatter:
    - All required fields present
@@ -278,6 +300,7 @@ Suggest and add cross-references between notes.
 **User request**: "Create a concept note for MVVM pattern"
 
 **Agent actions**:
+
 1. Filename: `c-mvvm-pattern.md`
 2. Folder: `10-Concepts/`
 3. Use template: `_templates/_tpl-concept.md`
@@ -305,6 +328,7 @@ Suggest and add cross-references between notes.
 **User request**: "Suggest related questions for q-coroutine-scope--kotlin--medium.md"
 
 **Agent actions**:
+
 1. Read the note
 2. Analyze metadata (topic, subtopics, difficulty)
 3. Search vault for related notes:
@@ -325,11 +349,13 @@ Suggest and add cross-references between notes.
 ## File Naming Patterns
 
 ### Question Notes
+
 ```
 q-[english-slug]--[topic]--[difficulty].md
 ```
 
 **Examples**:
+
 ```
 q-what-is-viewmodel--android--medium.md
 q-coroutine-context--kotlin--medium.md
@@ -338,6 +364,7 @@ q-design-url-shortener--system-design--hard.md
 ```
 
 **Rules**:
+
 - English only (NO Cyrillic)
 - Lowercase, hyphens as separators
 - 3-8 words in slug
@@ -345,11 +372,13 @@ q-design-url-shortener--system-design--hard.md
 - Difficulty: easy | medium | hard
 
 ### Concept Notes
+
 ```
 c-[english-concept-name].md
 ```
 
 **Examples**:
+
 ```
 c-viewmodel.md
 c-coroutines.md
@@ -358,11 +387,13 @@ c-hash-map.md
 ```
 
 ### MOC Notes
+
 ```
 moc-[english-topic-name].md
 ```
 
 **Examples**:
+
 ```
 moc-android.md
 moc-kotlin.md
@@ -420,20 +451,22 @@ When `topic: android`, you MUST:
 2. **Mirror subtopics to tags** with `android/` prefix
 
 **Example**:
+
 ```yaml
 topic: android
 subtopics: [ui-compose, lifecycle, coroutines]
 tags: [
-  android/ui-compose,     # REQUIRED - mirrored from subtopics
-  android/lifecycle,      # REQUIRED - mirrored from subtopics
-  android/coroutines,     # REQUIRED - mirrored from subtopics
-  compose,                # Optional additional tags
-  jetpack,
-  difficulty/medium
-]
+    android/ui-compose, # REQUIRED - mirrored from subtopics
+    android/lifecycle, # REQUIRED - mirrored from subtopics
+    android/coroutines, # REQUIRED - mirrored from subtopics
+    compose, # Optional additional tags
+    jetpack,
+    difficulty/medium,
+  ]
 ```
 
 **Android Subtopics** (examples from TAXONOMY.md):
+
 ```
 ui-compose, ui-views, ui-navigation, ui-state, ui-animation,
 architecture-mvvm, architecture-mvi, architecture-clean,
@@ -454,30 +487,30 @@ gradle, build-variants, dependency-management
 
 ```yaml
 ---
-id: kotlin-001                         # <subject>-<serial> (e.g., algo-001, android-134)
+id: kotlin-001 # <subject>-<serial> (e.g., algo-001, android-134)
 title: Question Title EN / Заголовок RU
 aliases: [Title EN, Заголовок RU]
 
 # Classification
-topic: kotlin                          # ONE from TAXONOMY.md
-subtopics: [coroutines, concurrency]   # 1-3 relevant subtopics
-question_kind: theory                  # coding | theory | system-design | android
-difficulty: medium                     # easy | medium | hard
+topic: kotlin # ONE from TAXONOMY.md
+subtopics: [coroutines, concurrency] # 1-3 relevant subtopics
+question_kind: theory # coding | theory | system-design | android
+difficulty: medium # easy | medium | hard
 
 # Language
-original_language: en                  # en | ru
-language_tags: [en, ru]               # Which languages present
+original_language: en # en | ru
+language_tags: [en, ru] # Which languages present
 
 # Workflow
-status: draft                          # ALWAYS draft for AI
+status: draft # ALWAYS draft for AI
 
 # Links (WITHOUT brackets in YAML!)
-moc: moc-kotlin                        # Single MOC, NO brackets
-related: [c-coroutines, c-scope, q-coroutine-context--kotlin--hard]  # Array, NO double brackets
+moc: moc-kotlin # Single MOC, NO brackets
+related: [c-coroutines, c-scope, q-coroutine-context--kotlin--hard] # Array, NO double brackets
 
 # Timestamps
-created: 2025-10-18                    # YYYY-MM-DD
-updated: 2025-10-18                    # YYYY-MM-DD
+created: 2025-10-18 # YYYY-MM-DD
+updated: 2025-10-18 # YYYY-MM-DD
 
 # Tags (English only!)
 tags: [kotlin, coroutines, concurrency, difficulty/medium]
@@ -487,13 +520,15 @@ tags: [kotlin, coroutines, concurrency, difficulty/medium]
 ### YAML Format Rules
 
 **CORRECT**:
+
 ```yaml
-moc: moc-algorithms                    # NO brackets
-related: [c-hash-map, c-array]         # Array WITHOUT double brackets
-tags: [leetcode, arrays, difficulty/easy]  # English only
+moc: moc-algorithms # NO brackets
+related: [c-hash-map, c-array] # Array WITHOUT double brackets
+tags: [leetcode, arrays, difficulty/easy] # English only
 ```
 
 **WRONG**:
+
 ```yaml
 moc: [[moc-algorithms]]                # FORBIDDEN - has brackets
 related: [[c-hash-map]], [[c-array]]   # FORBIDDEN - double brackets
@@ -506,11 +541,13 @@ tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
 
 ### Q&A Note Structure
 
-```markdown
+````markdown
 # Question (EN)
+
 > Clear, concise English version of the question
 
 # Вопрос (RU)
+
 > Точная русская формулировка вопроса
 
 ---
@@ -523,8 +560,8 @@ tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
 
 \```kotlin
 fun solution(input: List<Int>): Int {
-    // Implementation
-    return result
+// Implementation
+return result
 }
 \```
 
@@ -555,15 +592,18 @@ fun solution(input: List<Int>): Int {
 ## Related Questions
 
 ### Prerequisites (Easier)
+
 - [[q-what-is-coroutine--kotlin--easy]]
 
 ### Related (Same Level)
+
 - [[q-coroutine-context--kotlin--medium]]
 - [[q-coroutine-scope--kotlin--medium]]
 
 ### Advanced (Harder)
+
 - [[q-structured-concurrency--kotlin--hard]]
-```
+````
 
 ---
 
@@ -613,6 +653,7 @@ concurrency, multithreading, recursion, immutability
 Before finalizing any note, verify:
 
 ### YAML Validation
+
 - [ ] `id` present (YYYYMMDD-HHmmss format)
 - [ ] `title` includes both EN and RU
 - [ ] `topic` is exactly ONE value from TAXONOMY.md
@@ -627,6 +668,7 @@ Before finalizing any note, verify:
 - [ ] For Android: `tags` include `android/<subtopic>` for each subtopic
 
 ### Content Validation
+
 - [ ] `# Question (EN)` section present
 - [ ] `# Вопрос (RU)` section present
 - [ ] `## Answer (EN)` section present
@@ -636,6 +678,7 @@ Before finalizing any note, verify:
 - [ ] Links use correct format `[[note-name]]`
 
 ### File Organization
+
 - [ ] File in correct folder (matches `topic` field)
 - [ ] Filename follows pattern: `q-[slug]--[topic]--[difficulty].md`
 - [ ] Filename is English-only, lowercase, hyphenated
@@ -646,6 +689,7 @@ Before finalizing any note, verify:
 ## Common Mistakes to Avoid
 
 ### MISTAKE 1: Multiple Topics
+
 ```yaml
 # WRONG
 topic: [algorithms, data-structures]
@@ -655,6 +699,7 @@ topic: algorithms
 ```
 
 ### MISTAKE 2: Brackets in YAML Links
+
 ```yaml
 # WRONG
 moc: [[moc-algorithms]]
@@ -666,6 +711,7 @@ related: [c-hash-map, c-array]
 ```
 
 ### MISTAKE 3: Russian in Tags
+
 ```yaml
 # WRONG
 tags: [kotlin, корутины, сложность/средняя]
@@ -676,6 +722,7 @@ aliases: [Coroutines, Корутины]  # Russian goes here
 ```
 
 ### MISTAKE 4: Android Without Mirrored Tags
+
 ```yaml
 # WRONG
 topic: android
@@ -689,6 +736,7 @@ tags: [android/ui-compose, android/lifecycle, compose, difficulty/medium]
 ```
 
 ### MISTAKE 5: Setting Status to reviewed/ready
+
 ```yaml
 # WRONG - AI must never set these
 status: reviewed
@@ -699,6 +747,7 @@ status: draft
 ```
 
 ### MISTAKE 6: Splitting Languages
+
 ```
 # WRONG - Don't create separate files
 q-coroutine-basics-en.md
@@ -711,6 +760,7 @@ q-coroutine-basics--kotlin--easy.md
 ```
 
 ### MISTAKE 7: File in Wrong Folder
+
 ```
 # WRONG - kotlin note in android folder
 40-Android/q-coroutine-basics--kotlin--easy.md
@@ -724,12 +774,15 @@ q-coroutine-basics--kotlin--easy.md
 ## Quick Reference Commands
 
 ### Check Vault Health
+
 Use the link health dashboard in Obsidian:
+
 ```
 Open: 00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md
 ```
 
 This dashboard shows:
+
 - Overall health score
 - Link integrity
 - Orphan files
@@ -737,7 +790,9 @@ This dashboard shows:
 - Missing cross-references
 
 ### Validate Multiple Files
+
 When creating multiple files, validate each one:
+
 ```
 For each file:
   1. Check YAML completeness
@@ -748,7 +803,9 @@ For each file:
 ```
 
 ### Find Examples
+
 Look for similar notes as examples:
+
 ```
 Similar algorithm note: 20-Algorithms/q-two-sum--algorithms--easy.md
 Similar Android note: 40-Android/q-compose-state--android--medium.md
@@ -759,15 +816,15 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 
 ## Folder → Topic → MOC Mapping
 
-| Folder | Topic | MOC | Example |
-|--------|-------|-----|---------|
-| 20-Algorithms/ | algorithms | moc-algorithms | q-binary-search--algorithms--easy.md |
-| 30-System-Design/ | system-design | moc-system-design | q-design-cache--system-design--hard.md |
-| 40-Android/ | android | moc-android | q-compose-state--android--medium.md |
-| 50-Backend/ | databases | moc-backend | q-sql-joins--databases--medium.md |
-| 60-CompSci/ | operating-systems | moc-cs | q-process-vs-thread--operating-systems--medium.md |
-| 70-Kotlin/ | kotlin | moc-kotlin | q-coroutine-basics--kotlin--easy.md |
-| 80-Tools/ | tools | moc-tools | q-git-rebase--tools--medium.md |
+| Folder            | Topic             | MOC               | Example                                           |
+| ----------------- | ----------------- | ----------------- | ------------------------------------------------- |
+| 20-Algorithms/    | algorithms        | moc-algorithms    | q-binary-search--algorithms--easy.md              |
+| 30-System-Design/ | system-design     | moc-system-design | q-design-cache--system-design--hard.md            |
+| 40-Android/       | android           | moc-android       | q-compose-state--android--medium.md               |
+| 50-Backend/       | databases         | moc-backend       | q-sql-joins--databases--medium.md                 |
+| 60-CompSci/       | operating-systems | moc-cs            | q-process-vs-thread--operating-systems--medium.md |
+| 70-Kotlin/        | kotlin            | moc-kotlin        | q-coroutine-basics--kotlin--easy.md               |
+| 80-Tools/         | tools             | moc-tools         | q-git-rebase--tools--medium.md                    |
 
 **Rule**: Folder MUST match topic, MOC MUST be appropriate for topic.
 
@@ -789,12 +846,14 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 ## Error Prevention
 
 ### Before Creating a Note
+
 1. Validate topic against TAXONOMY.md
 2. Determine correct folder
 3. Check for similar existing notes
 4. Use appropriate template
 
 ### Before Saving
+
 1. Run through quality checklist
 2. Verify YAML completeness
 3. Check both languages present
@@ -802,6 +861,7 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 5. Confirm `status: draft`
 
 ### After Creating
+
 1. Verify file created in correct location
 2. Check filename follows pattern
 3. Confirm YAML valid
@@ -812,6 +872,7 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 ## Resources
 
 ### Vault Documentation
+
 - **Agent instructions**: `AGENTS.md`
 - **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
 - **Controlled vocabularies**: `00-Administration/Vault-Rules/TAXONOMY.md`
@@ -820,17 +881,20 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 - **Link health**: `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md`
 
 ### Templates
+
 - **Q&A template**: `_templates/_tpl-qna.md`
 - **Concept template**: `_templates/_tpl-concept.md`
 - **MOC template**: `_templates/_tpl-moc.md`
 
 ### Claude Code Configuration
+
 - **Setup guide**: `.claude/README.md`
 - **Auto-loaded context**: `.claude/custom_instructions.md`
 - **Slash commands**: `.claude/commands/` (6 commands available)
 - **Permissions**: `.claude/settings.local.json`
 
 ### Other AI Tools
+
 - **Cursor AI rules**: `.cursor/rules/` (modern MDC format)
 - **Gemini CLI guide**: `GEMINI.md`
 - **AI tools comparison**: `00-Administration/AI-TOOLS.md`
@@ -840,6 +904,7 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 ## Example Sessions
 
 ### Session 1: Create Single Note
+
 ```
 User: Create a note about Kotlin coroutine scope
 
@@ -860,6 +925,7 @@ Done! Created q-coroutine-scope--kotlin--medium.md in 70-Kotlin/
 ```
 
 ### Session 2: Translate Existing Note
+
 ```
 User: Add Russian translation to q-coroutine-basics--kotlin--easy.md
 
@@ -878,6 +944,7 @@ Translation complete! Ready for review.
 ```
 
 ### Session 3: Validate Note
+
 ```
 User: Validate 40-Android/q-compose-state--android--medium.md
 
@@ -913,6 +980,7 @@ Claude Code is configured to work seamlessly with this vault:
 **Documentation**: Complete reference in `.claude/README.md`
 
 **Key Reminders**:
+
 - Always use `status: draft`
 - Both languages in same file
 - English-only tags

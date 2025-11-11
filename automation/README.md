@@ -53,6 +53,7 @@ pip install -e ".[dev]"
 ```
 
 This includes:
+
 - **pytest** - Testing framework
 - **pytest-cov** - Code coverage reporting
 - **ruff** - Fast Python linter and formatter
@@ -122,6 +123,7 @@ vault-app qa-gap-analysis
 ```
 
 **Features:**
+
 - **Rich Tables**: Beautiful formatted tables with box-drawing characters
 - **Color Output**: Syntax highlighting and semantic colors
 - **Progress Bars**: Visual feedback for long-running operations
@@ -166,6 +168,7 @@ make help              # Show all available commands
 ```
 
 **Benefits**:
+
 - 🚀 **Shorter commands**: `make test` vs `uv run pytest tests/ -v`
 - 🔄 **Common workflows**: `make quick-check` runs multiple tools
 - 📝 **Self-documenting**: `make help` shows all available commands
@@ -178,12 +181,14 @@ make help              # Show all available commands
 The automation tools use **Loguru** for professional logging with two output levels:
 
 **Console Logging (INFO level):**
+
 - Useful, concise messages shown during command execution
 - Operation start/completion messages
 - Warnings and errors
 - Success confirmations
 
 **File Logging (DEBUG level):**
+
 - Detailed diagnostic information
 - Full stack traces for exceptions
 - Debug messages with function/line numbers
@@ -192,6 +197,7 @@ The automation tools use **Loguru** for professional logging with two output lev
 - 1 week retention
 
 **Example log file location:**
+
 ```bash
 # View recent logs
 tail -f ~/.cache/obsidian-vault/vault.log
@@ -201,6 +207,7 @@ cat ~/.cache/obsidian-vault/vault.log
 ```
 
 **Log file format:**
+
 ```
 2025-11-08 10:27:40.390 | INFO     | obsidian_vault.cli_app:orphans:379 | Finding orphaned notes
 2025-11-08 10:27:41.523 | DEBUG    | obsidian_vault.utils.graph_analytics:__init__:32 | Building vault graph
@@ -208,6 +215,7 @@ cat ~/.cache/obsidian-vault/vault.log
 ```
 
 **Programmatic configuration:**
+
 ```python
 from obsidian_vault.utils import setup_logging
 
@@ -269,6 +277,7 @@ automation/
 Comprehensive validation framework with auto-discovery registry. See `src/obsidian_vault/validators/README.md` for detailed documentation.
 
 **Available validators:**
+
 - `YAMLValidator` - Frontmatter structure and field types
 - `ContentValidator` - Bilingual content structure
 - `LinkValidator` - Wikilink resolution and quality
@@ -300,11 +309,13 @@ Utility helpers used across scripts and validators:
 Both provide the same eight subcommands:
 
 **Content Validation:**
+
 - **validate** - Comprehensive note validation with parallel processing support
 - **normalize** - Normalize concept note frontmatter with dry-run support
 - **check-translations** - Find notes missing Russian or English translations
 
 **Graph Analytics:**
+
 - **graph-stats** - Display vault network statistics and link quality metrics
 - **orphans** - Find orphaned notes (no incoming or outgoing links)
 - **broken-links** - Find notes with broken links (links to non-existent notes)
@@ -312,6 +323,7 @@ Both provide the same eight subcommands:
 - **graph-export** - Export vault graph to various formats (GEXF, GraphML, JSON, CSV)
 
 The **vault-app** version adds:
+
 - Rich tables with box-drawing characters
 - Color-coded output (errors=red, warnings=yellow, info=blue)
 - Progress bars for long operations
@@ -372,6 +384,7 @@ vault normalize
 ```
 
 This will:
+
 - Normalize YAML frontmatter
 - Infer missing fields from tags
 - Set correct MOC references
@@ -406,6 +419,7 @@ vault graph-stats --hubs 10 --authorities 10
 ```
 
 Example output:
+
 ```
 ================================================================================
 Vault Network Statistics
@@ -456,6 +470,7 @@ vault link-report --output link-health-report.md
 ```
 
 The report includes:
+
 - Network statistics (nodes, edges, density, components)
 - Link quality metrics (reciprocal vs unidirectional links)
 - Orphaned notes list
@@ -483,6 +498,7 @@ vault graph-export output.txt --format json
 ```
 
 Supported formats:
+
 - **GEXF** - Graph Exchange XML Format (for Gephi)
 - **GraphML** - Graph Markup Language (for yEd, Cytoscape)
 - **JSON** - Node-link data format
@@ -532,6 +548,7 @@ handler.dump(fm, body, Path("output.md"))
 ```
 
 **Key Benefits:**
+
 - **Order Preservation**: Fields stay in the order you define them
 - **Comment Preservation**: Comments in YAML frontmatter are maintained
 - **Round-trip Safe**: Read → Modify → Write preserves structure
@@ -601,6 +618,7 @@ result = has_required_headings(markdown_text, ["Question (EN)", "Answer (EN)", "
 ```
 
 **Key Features:**
+
 - **AST-based Parsing**: Uses marko for CommonMark-compliant parsing
 - **Heading Extraction**: Extract all headings with levels and text
 - **Wikilink Support**: Parse Obsidian-style `[[links]]` and `[[link|alias]]`
@@ -705,6 +723,7 @@ This has been consolidated into the new `automation/` directory with proper Pyth
 ### Old vs New Usage
 
 **v0.1 (scattered scripts):**
+
 ```bash
 # Three separate scripts with sys.path hacks
 uv run --project utils python -m utils.validate_note InterviewQuestions/40-Android
@@ -713,6 +732,7 @@ python scripts/list_missing_ru_sections.py
 ```
 
 **v0.2 (consolidated directory):**
+
 ```bash
 # Clean command-line tools, still separate
 validate-notes InterviewQuestions/40-Android
@@ -721,6 +741,7 @@ list-missing-ru
 ```
 
 **v0.3 (unified CLI) - Current:**
+
 ```bash
 # Single CLI with subcommands
 vault validate InterviewQuestions/40-Android
@@ -731,6 +752,7 @@ vault check-translations
 ## Requirements
 
 ### Runtime
+
 - Python >= 3.11 (3.11, 3.12, 3.13 supported)
 - PyYAML >= 6.0.2
 - python-frontmatter >= 1.0.0 (YAML frontmatter extraction/insertion)
@@ -743,10 +765,12 @@ vault check-translations
 - networkx >= 3.0 (graph analysis)
 
 ### Build
+
 - setuptools >= 75.0.0
 - wheel
 
 ### Development (Optional)
+
 - pytest >= 8.0.0
 - pytest-cov >= 5.0.0
 - ruff >= 0.8.0 (linting and formatting)
@@ -781,6 +805,7 @@ uv run mypy src/
 ## Version History
 
 ### 0.8.0 (Current)
+
 - **Professional Logging**: Integrated Loguru for comprehensive logging
 - **Dual-Level Logging**:
   - Console: INFO level with useful, concise messages
@@ -795,6 +820,7 @@ uv run mypy src/
 - **CLI Integration**: All commands now use structured logging
 
 ### 0.7.0
+
 - **Modern CLI**: Integrated typer + rich for beautiful terminal output
 - **New CLI Application**: Created `cli_app.py` with typer-based modern CLI
 - **Rich Terminal Features**:
@@ -807,6 +833,7 @@ uv run mypy src/
 - **Enhanced UX**: Better error messages, validation, and formatted output
 
 ### 0.6.0
+
 - **Markdown Parsing**: Integrated marko for AST-based Markdown analysis
 - **New Markdown Module**: Created `utils/markdown.py` with MarkdownAnalyzer class
 - **Content Analysis Features**:
@@ -820,6 +847,7 @@ uv run mypy src/
 - **New Dependency**: marko >= 2.0.0 (CommonMark-compliant parser)
 
 ### 0.5.0
+
 - **Robust Frontmatter Handling**: Integrated python-frontmatter + ruamel.yaml
 - **Order Preservation**: YAML fields now maintain their original order
 - **Comment Preservation**: Comments in frontmatter are preserved during edits
@@ -829,6 +857,7 @@ uv run mypy src/
 - **Backward Compatible**: Existing code continues to work seamlessly
 
 ### 0.4.0
+
 - **Graph Analytics**: Integrated obsidiantools for advanced vault analysis
 - **New CLI Commands**:
   - `vault graph-stats` - Network statistics and link quality metrics
@@ -840,6 +869,7 @@ uv run mypy src/
 - **Graph Analytics Module**: Created `utils/graph_analytics.py` with VaultGraph class
 
 ### 0.3.1
+
 - **Updated dependencies**: PyYAML >= 6.0.2, setuptools >= 75.0.0
 - **Python 3.13 support**: Added support for Python 3.13
 - **Development tooling**: Added optional dev dependencies (pytest, ruff, mypy)
@@ -847,12 +877,14 @@ uv run mypy src/
 - **Enhanced build**: Added wheel to build requirements
 
 ### 0.3.0
+
 - **Consolidated CLI**: Single `vault` command with subcommands
 - **Removed duplication**: Eliminated ~400 lines of duplicate code
 - **Shared utilities**: Created `utils/common.py` with shared functions
 - **Breaking change**: Old individual commands (`validate-notes`, `normalize-concepts`, `list-missing-ru`) replaced with `vault` subcommands
 
 ### 0.2.0
+
 - Reorganized into unified `automation/` directory
 - Proper Python package structure
 - Command-line entry points
@@ -860,6 +892,7 @@ uv run mypy src/
 - Clear module hierarchy
 
 ### 0.1.0 (Legacy)
+
 - Original scattered structure across `scripts/`, `utils/`, `validators/`
 
 ## License
@@ -871,12 +904,14 @@ See LICENSE file in repository root.
 The automation package is integrated with GitHub Actions for continuous validation and reporting:
 
 **Workflows**:
+
 - **Validate Notes** (PR checks) - Validates all changed notes before merge
 - **Vault Health Report** (daily) - Generates comprehensive health reports
 - **Normalize Concepts** (manual) - Standardizes concept frontmatter
 - **Graph Export** (weekly) - Exports vault graph for analysis
 
 **Benefits**:
+
 - Automated quality checks on every PR
 - Daily health monitoring
 - Historical tracking via separate branches
@@ -904,6 +939,7 @@ When adding new automation:
 ## Support
 
 For issues or questions:
+
 1. Check the documentation in this README and validators/README.md
 2. Review existing scripts for examples
 3. Consult AGENTS.md for vault-specific rules

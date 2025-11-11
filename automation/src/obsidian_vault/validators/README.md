@@ -5,6 +5,7 @@ Comprehensive validation framework for the Obsidian Interview Questions vault. T
 ## Overview
 
 The validators package provides a modular, extensible validation system with:
+
 - **Auto-discovery registry** for validators
 - **Shared configuration** for consistency
 - **Parallel processing** support
@@ -33,9 +34,11 @@ validators/
 ### Core Validators
 
 #### 1. YAMLValidator (`yaml_validator.py`)
+
 **Purpose**: Validates YAML frontmatter structure and field types
 
 **Checks**:
+
 - Required fields (15 total): id, title, aliases, topic, subtopics, tags, difficulty, etc.
 - Field types (strings, lists, dates)
 - Date formats (created_at, updated_at)
@@ -45,9 +48,11 @@ validators/
 **Severity**: Mostly ERROR for missing/invalid fields
 
 #### 2. ContentValidator (`content_validator.py`)
+
 **Purpose**: Validates bilingual (RU/EN) content structure
 
 **Checks**:
+
 - Required headings for Q&A and concept notes
 - Heading order (RU question → EN question → RU answer → EN answer)
 - Section body presence
@@ -59,20 +64,24 @@ validators/
 **Severity**: CRITICAL for missing headings, ERROR for blockquotes, WARNING/INFO for quality
 
 #### 3. LinkValidator (`link_validator.py`)
+
 **Purpose**: Validates internal wikilinks and cross-references
 
 **Checks**:
+
 - Wikilink resolution (`[[note-id]]`)
 - Related links quality (2-5 recommended)
-- Concept link presence (c-* notes)
+- Concept link presence (c-\* notes)
 - Cross-reference balance
 
 **Severity**: ERROR for broken links, WARNING/INFO for quality
 
 #### 4. FormatValidator (`format_validator.py`)
+
 **Purpose**: Validates filename conventions and folder placement
 
 **Checks**:
+
 - Filename patterns:
   - Questions: `q-<slug>--<topic>--<difficulty>.md`
   - Concepts: `c-<slug>.md`
@@ -83,9 +92,11 @@ validators/
 **Severity**: ERROR for invalid patterns/placement
 
 #### 5. CodeFormatValidator (`code_format_validator.py`)
+
 **Purpose**: Validates code formatting rules
 
 **Checks**:
+
 - Unescaped generic types (e.g., `ArrayList<String>` → should be `` `ArrayList<String>` ``)
 - Common type names without backticks (String, Int, ViewModel, etc.)
 - Prevents HTML interpretation issues
@@ -95,9 +106,11 @@ validators/
 ### Domain-Specific Validators
 
 #### 6. AndroidValidator (`android_validator.py`)
+
 **Purpose**: Android-specific taxonomy validation
 
 **Checks**:
+
 - Android subtopics (from taxonomy)
 - Tag mirroring (subtopics must appear in tags as `android/<subtopic>`)
 - MOC reference (`moc-android`)
@@ -105,9 +118,11 @@ validators/
 **Severity**: ERROR for invalid taxonomy
 
 #### 7. SystemDesignValidator (`system_design_validator.py`)
+
 **Purpose**: System design question patterns and best practices
 
 **Checks**:
+
 - Optional Short/Detailed versions (recommended for hard questions)
 - Requirements subsection (Functional/Non-functional)
 - Architecture subsection (components, data flow)
@@ -120,6 +135,7 @@ validators/
 Shared constants used across validators:
 
 ### Content Structure
+
 - `STRUCTURED_REQUIRED_HEADINGS`: Required headings for Q&A and concept notes
 - `GENERIC_FOLLOWUP_PATTERNS`: Patterns to detect low-quality follow-ups
 - `FOLLOWUP_MIN_RECOMMENDED`: 3 (recommended minimum)
@@ -128,6 +144,7 @@ Shared constants used across validators:
 - `MIN_FOLLOWUP_QUESTION_LENGTH`: 20 chars
 
 ### File Format
+
 - `FILENAME_PATTERN`: Regex for question filename validation
 - `TOPIC_TO_FOLDER_MAPPING`: Topic → folder mapping (8 topics)
 - `CONCEPTS_FOLDER`: "10-Concepts"
@@ -137,10 +154,12 @@ Shared constants used across validators:
 - `QUESTION_PREFIX`: "q-"
 
 ### Code Format
+
 - `COMMON_TYPE_NAMES`: 60+ common types that should be in backticks
 - `UNESCAPED_GENERIC_PATTERN`: Regex for detecting unescaped generics
 
 ### System Design
+
 - `SYSTEM_DESIGN_SUBSECTIONS`: Requirements/Architecture headings (RU/EN)
 - `OPTIONAL_VERSION_SUBSECTIONS`: Short/Detailed version headings (RU/EN)
 
@@ -170,6 +189,7 @@ class MyValidator(BaseValidator):
 - `create_validators(...)`: Instantiate all validators with appropriate parameters
 
 **Benefits**:
+
 - No manual validator list maintenance
 - Automatic instantiation with correct parameters
 - Supports validators with different constructor signatures (FormatValidator needs vault_root, LinkValidator needs note_index)
@@ -285,6 +305,7 @@ uv run --project utils python -m utils.validate_note InterviewQuestions/40-Andro
 ## Recent Improvements
 
 ### January 2025
+
 - **Registry system**: Auto-discovery for validators (eliminates manual imports)
 - **Shared config**: Extracted constants to `config.py` (150+ lines of duplication eliminated)
 - **Follow-ups quality**: Detects generic questions, checks count (3-5 recommended)
@@ -297,6 +318,7 @@ uv run --project utils python -m utils.validate_note InterviewQuestions/40-Andro
 ## Future Enhancements
 
 Potential improvements identified:
+
 - Content length validator (200-400 lines target)
 - Code snippet validator (3-5 snippets, 5-15 lines each)
 - Complexity analysis validator (O(n) notation for algorithms)
@@ -308,6 +330,7 @@ Potential improvements identified:
 ## Contributing
 
 When adding validators:
+
 1. Follow the decorator pattern (`@ValidatorRegistry.register`)
 2. Use shared constants from `config.py`
 3. Add clear docstrings explaining checks

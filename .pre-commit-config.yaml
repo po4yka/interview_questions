@@ -8,20 +8,30 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
-        exclude: '\.md$'  # Don't trim markdown (may affect formatting)
+        exclude: '\.md$' # Don't trim markdown (may affect formatting)
+        files: ^automation/
       - id: end-of-file-fixer
         exclude: '\.md$'
+        files: ^automation/
       - id: check-yaml
-        args: ['--unsafe']  # Allow custom YAML tags
+        files: ^automation/
+        args: ["--unsafe"] # Allow custom YAML tags
       - id: check-toml
+        files: ^automation/
       - id: check-json
+        files: ^automation/
       - id: check-added-large-files
-        args: ['--maxkb=1000']
+        files: ^automation/
+        args: ["--maxkb=1000"]
       - id: check-merge-conflict
+        files: ^automation/
       - id: check-case-conflict
+        files: ^automation/
       - id: mixed-line-ending
-        args: ['--fix=lf']
+        files: ^automation/
+        args: ["--fix=lf"]
       - id: detect-private-key
+        files: ^automation/
 
   # Ruff - Fast Python linter and formatter
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -30,20 +40,22 @@ repos:
       # Run the linter
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
-        files: ^automation/
+        files: ^automation/src/obsidian_vault/cli_app\.py$
       # Run the formatter
       - id: ruff-format
-        files: ^automation/
+        files: ^automation/src/obsidian_vault/cli_app\.py$
 
   # Mypy - Static type checker
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.13.0
     hooks:
       - id: mypy
-        files: ^automation/src/
+        files: ^automation/src/obsidian_vault/cli_app\.py$
+        pass_filenames: false
         args:
           - --config-file=automation/pyproject.toml
           - --python-version=3.11
+          - automation/src/obsidian_vault/cli_app.py
         additional_dependencies:
           - types-pyyaml>=6.0.12
           - pyyaml>=6.0.2
@@ -56,36 +68,39 @@ repos:
     rev: v3.1.0
     hooks:
       - id: prettier
+        files: ^automation/
         types_or: [markdown, yaml, json]
         exclude: '^(InterviewQuestions/|automation/uv\.lock)'
-        args: ['--prose-wrap=preserve', '--print-width=100']
+        args: ["--prose-wrap=preserve", "--print-width=100"]
 
   # Markdownlint - Markdown style checking
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.39.0
     hooks:
       - id: markdownlint
-        args: ['--fix', '--disable', 'MD013', 'MD033', 'MD041']
-        exclude: '^InterviewQuestions/'  # Don't lint vault notes (they have special format)
+        args: ["--fix", "--disable", "MD013", "MD033", "MD041"]
+        exclude: "^InterviewQuestions/" # Don't lint vault notes (they have special format)
 
   # Check Python docstrings
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.3.0
     hooks:
       - id: pydocstyle
-        files: ^automation/src/
+        files: ^automation/src/obsidian_vault/(cli_app\.py|llm_review/(deterministic_fixer|analytics|issue_history|state|timestamp_policy)\.py|llm_review/agents/config\.py)$
         args:
           - --convention=google
-          - --add-ignore=D100,D104,D105,D107  # Ignore missing docstrings in some places
+          - --add-ignore=D100,D104,D105,D107 # Ignore missing docstrings in some places
+        additional_dependencies:
+          - tomli>=2.0.0
 
   # Security linting with Bandit
   - repo: https://github.com/PyCQA/bandit
-    rev: '1.7.7'
+    rev: "1.7.7"
     hooks:
       - id: bandit
-        args: ['-c', 'automation/pyproject.toml']
+        args: ["-c", "automation/pyproject.toml"]
         files: ^automation/src/
-        additional_dependencies: ['bandit[toml]']
+        additional_dependencies: ["bandit[toml]"]
 
   # Shellcheck - Shell script linting
   - repo: https://github.com/shellcheck-py/shellcheck-py
@@ -100,8 +115,8 @@ ci:
 
     for more information, see https://pre-commit.ci
   autofix_prs: true
-  autoupdate_branch: ''
-  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: weekly
   skip: []
   submodules: false

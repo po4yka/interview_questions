@@ -7,6 +7,7 @@ This guide provides specific instructions for AI coding agents working with this
 This repository contains a **personal** Obsidian vault designed for building and maintaining a bilingual (Russian/English) interview Q&A knowledge base across **Computer Science**, **Algorithms/LeetCode**, **Android**, **System Design**, and related topics.
 
 **Key Goals:**
+
 - Maintain bilingual interview questions and answers in a single note
 - Organize content using folders, YAML metadata, and tags
 - Enable rich linking between concepts, MOCs (Maps of Content), and related questions
@@ -35,6 +36,7 @@ This repository contains a **personal** Obsidian vault designed for building and
 ```
 
 **Critical Rules:**
+
 - Files belong to **exactly one topic folder**
 - Use tags/links for cross-cutting concerns
 - Keep hierarchy shallow - rely on YAML/tags/links for fine-grained organization
@@ -42,12 +44,14 @@ This repository contains a **personal** Obsidian vault designed for building and
 ## File Naming Conventions
 
 **MUST FOLLOW these patterns:**
+
 - **Questions (Q&A)**: `q-<slug>--<short-topic>--<difficulty>.md`
   - Example: `q-two-sum--algorithms--easy.md`
 - **Concepts**: `c-<slug>.md` → `c-hash-map.md`
 - **MOCs**: `moc-<topic>.md` → `moc-algorithms.md`
 
 **Rules:**
+
 - Keep filenames **English, kebab-case**, short and stable
 - Language variants are handled inside the note via `aliases`
 - Never use numbers in folder names
@@ -59,29 +63,29 @@ Every note MUST include this YAML structure:
 ```yaml
 ---
 # Identity
-id: iv-2025-0001           # unique id (string)
+id: iv-2025-0001 # unique id (string)
 title: Two Sum / Два слагаемых
-aliases:                   # all common titles; EN & RU recommended
+aliases: # all common titles; EN & RU recommended
   - Two Sum
   - Два слагаемых
 
 # Classification
-topic: algorithms          # one of: algorithms | system-design | android | cs | behavioral
-subtopics: [arrays, hash-map]  # optional, small set
-question_kind: coding      # coding | theory | system-design | android
-difficulty: easy           # easy | medium | hard
+topic: algorithms # one of: algorithms | system-design | android | cs | behavioral
+subtopics: [arrays, hash-map] # optional, small set
+question_kind: coding # coding | theory | system-design | android
+difficulty: easy # easy | medium | hard
 
 # Language & provenance
-original_language: ru      # ru | en (Russian is now primary)
-language_tags: [ru, en]    # which languages exist in this note
+original_language: ru # ru | en (Russian is now primary)
+language_tags: [ru, en] # which languages exist in this note
 sources:
   - url: https://leetcode.com/problems/two-sum/
     note: Original statement
 
 # Workflow & relations
-status: draft              # draft | reviewed | ready
-moc: moc-algorithms        # link to Map of Content (WITHOUT brackets)
-related: [c-hash-map, q-three-sum--algorithms--medium]  # cross-links (array, WITHOUT double brackets)
+status: draft # draft | reviewed | ready
+moc: moc-algorithms # link to Map of Content (WITHOUT brackets)
+related: [c-hash-map, q-three-sum--algorithms--medium] # cross-links (array, WITHOUT double brackets)
 
 # Timestamps (ISO8601)
 created: 2025-09-28
@@ -93,6 +97,7 @@ tags: [leetcode, arrays, hash-map, difficulty/easy]
 ```
 
 **Critical YAML Rules:**
+
 - `topic` must match exactly one folder name
 - `tags` must be English, descriptive, reusable
 - Use namespaces for controlled vocabularies: `difficulty/easy`, `lang/kotlin`, `platform/android`
@@ -129,34 +134,42 @@ tags: [leetcode, arrays, hash-map, difficulty/easy]
 
 ```markdown
 # Вопрос (RU)
+
 > Точная русская формулировка задачи.
 
 # Question (EN)
+
 > Clear, concise English version of the prompt.
 
 ---
 
 ## Ответ (RU)
+
 Подробное объяснение на русском. Код при необходимости.
 
 ## Answer (EN)
+
 Explain approach, complexity, trade-offs, pitfalls. Include code when relevant.
 
 ---
 
 ## Follow-ups
+
 - Variation A …
 - Edge cases …
 
 ## References
+
 - [[c-hash-map]]
 - Link(s) to external sources (also listed in YAML `sources`).
 
 ## Related Questions
+
 - [[q-three-sum--algorithms--medium]]
 ```
 
 **Content Rules:**
+
 - Keep **both languages side by side**; they must be semantically equivalent
 - Prefer **EN code identifiers/comments**; RU comments optional
 - Keep answers **complete yet skimmable** with headings and lists
@@ -171,6 +184,7 @@ Explain approach, complexity, trade-offs, pitfalls. Include code when relevant.
 ## Linking Rules
 
 **CRITICAL for AI agents:**
+
 - Every Q&A **SHOULD** link to at least one **Concept** (`c-*`) and one **MOC** (`moc-*`)
 - Use concept notes for reusable theory (e.g., `c-binary-tree`, `c-consistent-hashing`)
 - MOCs act as human-curated hubs per topic
@@ -210,6 +224,7 @@ SORT updated DESC
 **No build process required** - this is a static Obsidian vault.
 
 **Setup:**
+
 1. Clone repository
 2. Open in Obsidian
 3. Install plugins: Dataview, Templater (optional: MetaEdit, Tag Wrangler, Breadcrumbs)
@@ -217,12 +232,14 @@ SORT updated DESC
 ## Code Style and Conventions
 
 **File Operations:**
+
 - Always preserve exact indentation (tabs/spaces)
 - Use absolute paths when possible
 - Prefer editing existing files over creating new ones
 - Never create documentation files unless explicitly requested
 
 **Content Creation:**
+
 - Follow the bilingual template structure exactly
 - Ensure YAML frontmatter is complete and valid
 - Use English for code, comments, and technical terms
@@ -238,13 +255,15 @@ SORT updated DESC
 ## YAML Format Rules
 
 **CORRECT**:
+
 ```yaml
-moc: moc-algorithms                    # NO brackets
-related: [c-hash-map, c-array]         # Array WITHOUT double brackets
-tags: [leetcode, arrays, difficulty/easy]  # English only
+moc: moc-algorithms # NO brackets
+related: [c-hash-map, c-array] # Array WITHOUT double brackets
+tags: [leetcode, arrays, difficulty/easy] # English only
 ```
 
 **WRONG**:
+
 ```yaml
 moc: [[moc-algorithms]]                # FORBIDDEN - has brackets
 related: [[c-hash-map]], [[c-array]]   # FORBIDDEN - double brackets
@@ -254,6 +273,7 @@ tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
 ## AI Agent Specific Instructions
 
 **When creating new content:**
+
 1. Use the provided YAML template structure
 2. Ensure Russian content comes before English content
 3. Include proper cross-links to concepts and MOCs
@@ -261,18 +281,21 @@ tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
 5. Set appropriate difficulty and topic classifications
 
 **When modifying existing content:**
+
 1. Always update the `updated` timestamp in YAML
 2. Preserve the bilingual structure
 3. Maintain semantic equivalence between languages
 4. Update related links if content changes significantly
 
 **When searching or querying:**
+
 1. Use Dataview syntax for dynamic queries
 2. Reference folder names without numbers (e.g., "Algorithms", not "20-Algorithms")
 3. Use English tags for filtering
 4. Consider both topic folders and cross-cutting tag relationships
 
 **File Management:**
+
 - Respect the one-folder-per-file rule
 - Use proper naming conventions
 - Maintain consistent kebab-case for filenames
@@ -281,12 +304,14 @@ tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
 ## Maintenance & Hygiene
 
 **Status Workflow:**
+
 - `draft` → `reviewed` → `ready`
 - Always bump `updated` in YAML when modifying
 - Prefer adding aliases over renaming filenames
 - Move outdated/duplicate notes to archive and mark `status: retired`
 
 **Tag Health:**
+
 - Periodically audit and merge near-duplicates (e.g., `hashmap` vs `hash-map`)
 - Use consistent naming patterns
 - Maintain controlled vocabularies with namespaces

@@ -7,6 +7,7 @@ This repository uses [pre-commit](https://pre-commit.com/) to automatically run 
 The pre-commit hooks will automatically:
 
 1. **Standard Checks** (all files)
+
    - Remove trailing whitespace
    - Fix end-of-file issues
    - Validate YAML, TOML, JSON syntax
@@ -15,12 +16,14 @@ The pre-commit hooks will automatically:
    - Detect private keys
 
 2. **Python Code** (automation/)
+
    - **Ruff**: Auto-format and lint Python code
    - **Mypy**: Static type checking
    - **Bandit**: Security vulnerability scanning
    - **Pydocstyle**: Docstring style checking
 
 3. **Documentation**
+
    - **Prettier**: Format Markdown, YAML, JSON
    - **Markdownlint**: Markdown style consistency
 
@@ -34,17 +37,20 @@ The pre-commit hooks will automatically:
 ### 1. Install pre-commit
 
 **Option A: Using pip**
+
 ```bash
 pip install pre-commit
 ```
 
 **Option B: Using uv (recommended for this project)**
+
 ```bash
 cd automation
 uv sync --extra dev
 ```
 
 **Option C: Using system package manager**
+
 ```bash
 # macOS
 brew install pre-commit
@@ -119,12 +125,14 @@ git commit --no-verify -m "emergency fix"
 **Purpose**: Fast Python linter and formatter (replaces black, isort, flake8)
 
 **What it fixes**:
+
 - Code formatting (PEP 8 compliance)
 - Import sorting
 - Unused imports/variables
 - Simple code improvements
 
 **Example**:
+
 ```python
 # Before
 import sys
@@ -148,11 +156,13 @@ def foo(x, y):
 **Purpose**: Static type analysis for Python
 
 **What it checks**:
+
 - Type annotations correctness
 - Type consistency
 - Potential runtime type errors
 
 **Example**:
+
 ```python
 # This will fail mypy
 def add(x: int, y: int) -> int:
@@ -169,6 +179,7 @@ result: int = add(1, 2)  # ✓ Correct
 **Purpose**: Find common security issues in Python code
 
 **What it detects**:
+
 - SQL injection vulnerabilities
 - Hardcoded passwords
 - Unsafe YAML loading
@@ -176,6 +187,7 @@ result: int = add(1, 2)  # ✓ Correct
 - Weak cryptography
 
 **Example**:
+
 ```python
 # ✗ Security issue detected
 password = "hardcoded_password"  # B105: Hardcoded password
@@ -189,11 +201,13 @@ password = os.getenv("PASSWORD")
 **Purpose**: Ensure consistent docstring style (Google convention)
 
 **What it checks**:
+
 - Docstring presence
 - Docstring formatting
 - Parameter documentation
 
 **Example**:
+
 ```python
 # ✗ Missing docstring
 def calculate_total(items):
@@ -217,6 +231,7 @@ def calculate_total(items):
 **Purpose**: Auto-format documentation files
 
 **What it fixes**:
+
 - Consistent indentation
 - Line wrapping
 - Quote style
@@ -227,6 +242,7 @@ def calculate_total(items):
 **Purpose**: Markdown style consistency
 
 **What it checks**:
+
 - Heading style
 - List formatting
 - Code block fencing
@@ -238,11 +254,11 @@ def calculate_total(items):
 
 Pre-commit uses these configuration files:
 
-| File | Purpose |
-|------|---------|
-| `.pre-commit-config.yaml` | Pre-commit hook definitions |
-| `.prettierrc` | Prettier formatting rules |
-| `.markdownlint.json` | Markdown linting rules |
+| File                        | Purpose                                              |
+| --------------------------- | ---------------------------------------------------- |
+| `.pre-commit-config.yaml`   | Pre-commit hook definitions                          |
+| `.prettierrc`               | Prettier formatting rules                            |
+| `.markdownlint.json`        | Markdown linting rules                               |
 | `automation/pyproject.toml` | Python tool configs (ruff, mypy, bandit, pydocstyle) |
 
 ---
@@ -254,6 +270,7 @@ Pre-commit uses these configuration files:
 **Problem**: Pre-commit can't find a required tool
 
 **Solution**: Update pre-commit environments
+
 ```bash
 pre-commit clean
 pre-commit install
@@ -265,6 +282,7 @@ pre-commit run --all-files
 **Problem**: Missing type stubs for dependencies
 
 **Solution**: Install additional type stubs
+
 ```bash
 cd automation
 uv sync --extra dev  # Installs types-pyyaml and others
@@ -275,6 +293,7 @@ uv sync --extra dev  # Installs types-pyyaml and others
 **Problem**: Ruff formatting differs from your style
 
 **Solution**: Update ruff config in `automation/pyproject.toml`
+
 ```toml
 [tool.ruff]
 line-length = 120  # Change from 100
@@ -285,6 +304,7 @@ line-length = 120  # Change from 100
 **Problem**: Running hooks on many files takes time
 
 **Solution**: Run only on changed files
+
 ```bash
 # Instead of --all-files
 pre-commit run
@@ -295,6 +315,7 @@ pre-commit run
 **Problem**: Need to temporarily disable a hook
 
 **Solution**: Set SKIP environment variable
+
 ```bash
 SKIP=mypy git commit -m "WIP: incomplete types"
 ```
@@ -326,6 +347,7 @@ Pre-commit runs automatically in GitHub Actions via the **Code Quality** workflo
 **File**: `.github/workflows/code-quality.yml`
 
 If hooks fail in CI but pass locally, ensure:
+
 1. You have the latest `.pre-commit-config.yaml`
 2. Your Python version matches CI (3.11+)
 3. All dev dependencies are installed
@@ -335,6 +357,7 @@ If hooks fail in CI but pass locally, ensure:
 ## Best Practices
 
 ### 1. Run Before Committing
+
 ```bash
 # Good workflow
 pre-commit run --all-files
@@ -345,6 +368,7 @@ git commit -m "your message"
 ### 2. Fix Issues Properly
 
 Don't bypass hooks unless absolutely necessary. If a hook fails:
+
 1. Read the error message
 2. Fix the underlying issue
 3. Stage the changes
@@ -353,6 +377,7 @@ Don't bypass hooks unless absolutely necessary. If a hook fails:
 ### 3. Keep Hooks Updated
 
 Update hooks monthly:
+
 ```bash
 pre-commit autoupdate
 ```
@@ -360,6 +385,7 @@ pre-commit autoupdate
 ### 4. Use in Development
 
 Run hooks during development, not just at commit time:
+
 ```bash
 # Watch mode (requires entr or similar)
 find automation/src -name "*.py" | entr -c pre-commit run ruff
@@ -417,6 +443,7 @@ Edit tool-specific configs:
 ### Q: Can I run hooks on specific files?
 
 **A:** Yes:
+
 ```bash
 pre-commit run --files automation/src/obsidian_vault/cli.py
 ```
@@ -432,6 +459,7 @@ pre-commit run --files automation/src/obsidian_vault/cli.py
 ### Q: Can I use pre-commit with other tools?
 
 **A:** Yes! Pre-commit works alongside:
+
 - GitHub Actions (CI checks)
 - IDE linters (VS Code, PyCharm)
 - Manual tool runs

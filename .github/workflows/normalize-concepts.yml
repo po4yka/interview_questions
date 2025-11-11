@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run (preview changes without applying)'
+        description: "Dry run (preview changes without applying)"
         required: false
         type: boolean
         default: true
@@ -24,7 +24,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install uv
         run: |
@@ -74,8 +74,8 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: normalize concept frontmatter'
-          title: 'Automated: Normalize concept frontmatter'
+          commit-message: "chore: normalize concept frontmatter"
+          title: "Automated: Normalize concept frontmatter"
           body: |
             ## Automated Normalization
 

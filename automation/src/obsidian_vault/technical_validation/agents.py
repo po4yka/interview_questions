@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import json
 import os
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import Any
 
-from langchain.agents import create_tool_calling_agent
-from langchain.agents.agent import AgentExecutor
+from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.tools import BaseTool
 from langchain_openai import ChatOpenAI
@@ -33,7 +33,6 @@ class TechnicalAgentConfig:
 
 def _resolve_langchain_llm(config: TechnicalAgentConfig) -> ChatOpenAI:
     """Return a LangChain chat model configured for OpenRouter."""
-
     api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         raise ValueError(
@@ -95,7 +94,6 @@ def _resolve_langchain_llm(config: TechnicalAgentConfig) -> ChatOpenAI:
 
 def _build_tools(config: TechnicalAgentConfig) -> list[BaseTool]:
     """Construct the tool set for the validation agent."""
-
     tools: list[BaseTool] = []
     if not config.enable_web_search:
         return tools
@@ -120,7 +118,6 @@ def build_technical_validation_agent(
     tools: Sequence[BaseTool] | None = None,
 ) -> AgentExecutor:
     """Create an AgentExecutor that can reason about validator issues."""
-
     resolved_config = config or TechnicalAgentConfig()
     llm = _resolve_langchain_llm(resolved_config)
     toolset = list(tools) if tools is not None else _build_tools(resolved_config)
@@ -152,7 +149,6 @@ def build_technical_validation_agent(
 
 def extract_agent_payload(agent_result: dict[str, Any]) -> dict[str, Any]:
     """Parse the agent output ensuring valid JSON is returned."""
-
     raw_output = agent_result.get("output")
     if raw_output is None:
         logger.error("Agent result missing 'output' key: {}", agent_result)

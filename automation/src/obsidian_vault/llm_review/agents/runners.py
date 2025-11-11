@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from loguru import logger
 from pydantic_ai import Agent
-from pydantic_ai.exceptions import AgentRunError, ModelHTTPError, UserError
+from pydantic_ai.exceptions import AgentRunError, ModelHTTPError
 
 from obsidian_vault.exceptions import LLMResponseError
 from obsidian_vault.utils import sanitize_text_for_yaml
@@ -101,7 +101,6 @@ def _build_related_notes_context(
     Returns:
         Formatted string with related notes context
     """
-    from pathlib import Path
     from obsidian_vault.utils.common import parse_note
 
     if vault_root is None or note_index is None:
@@ -427,7 +426,7 @@ async def run_issue_fixing(
 
     issues_text = "\n".join(f"- {issue}" for issue in issues)
 
-    current_date_iso = datetime.now(timezone.utc).date().isoformat()
+    current_date_iso = datetime.now(UTC).date().isoformat()
 
     prompt = f"""Fix the following issues in this note.
 

@@ -91,6 +91,7 @@ make install-dev       # Installs package + dev deps + pre-commit hooks
 ```
 
 This sets up:
+
 - ✅ Python package and dependencies
 - ✅ Development tools (pytest, ruff, mypy, bandit)
 - ✅ Pre-commit hooks in `.git/hooks/`
@@ -98,6 +99,7 @@ This sets up:
 ### Daily Development
 
 **Option 1: Quick iteration**
+
 ```bash
 # Edit code
 vim src/obsidian_vault/cli.py
@@ -111,6 +113,7 @@ git commit -m "feat: add feature"
 ```
 
 **Option 2: Full quality check**
+
 ```bash
 # Edit code
 vim src/obsidian_vault/validators/yaml_validator.py
@@ -124,6 +127,7 @@ git commit -m "feat: improve validator"
 ```
 
 **Option 3: Test-driven development**
+
 ```bash
 # Write test first
 vim tests/test_validators.py
@@ -141,16 +145,19 @@ make test-cov
 ### Before Committing
 
 **Minimal check** (2-3 seconds):
+
 ```bash
 make quick-check
 ```
 
 **Recommended check** (10-20 seconds):
+
 ```bash
 make full-check
 ```
 
 **Complete CI simulation** (30-60 seconds):
+
 ```bash
 make ci
 ```
@@ -184,6 +191,7 @@ make docs
 ### Vault Maintenance
 
 **Quick health check**:
+
 ```bash
 make graph-stats
 make orphans
@@ -191,6 +199,7 @@ make broken-links
 ```
 
 **Full validation**:
+
 ```bash
 # Validate everything (slow)
 make validate
@@ -204,12 +213,14 @@ make validate-kotlin
 ```
 
 **Generate reports**:
+
 ```bash
 make link-report       # Comprehensive link health report
 make check-translations # Find missing EN/RU translations
 ```
 
 **Normalize concepts**:
+
 ```bash
 # Preview changes
 make normalize
@@ -309,6 +320,7 @@ my-custom-task: ## Description of my task
 ```
 
 Then run:
+
 ```bash
 make my-custom-task
 ```
@@ -355,6 +367,7 @@ alias mfc='make full-check'
 ```
 
 Then use:
+
 ```bash
 m test       # Instead of: make test
 mqc          # Instead of: make quick-check
@@ -456,12 +469,12 @@ nnoremap <leader>mq :!make quick-check<CR>
 
 ## Comparison with Direct Commands
 
-| Makefile | Direct Command | Time Saved |
-|----------|---------------|------------|
-| `make test` | `uv run pytest tests/ -v` | ~50% typing |
-| `make install-dev` | `uv sync --extra dev && cd .. && uv run --project automation pre-commit install` | ~80% typing |
-| `make full-check` | `uv run ruff format src/ && uv run ruff check src/ && uv run mypy src/ && ...` | ~90% typing |
-| `make validate-parallel` | `uv run vault validate --all --parallel --workers 8` | ~70% typing |
+| Makefile                 | Direct Command                                                                   | Time Saved  |
+| ------------------------ | -------------------------------------------------------------------------------- | ----------- |
+| `make test`              | `uv run pytest tests/ -v`                                                        | ~50% typing |
+| `make install-dev`       | `uv sync --extra dev && cd .. && uv run --project automation pre-commit install` | ~80% typing |
+| `make full-check`        | `uv run ruff format src/ && uv run ruff check src/ && uv run mypy src/ && ...`   | ~90% typing |
+| `make validate-parallel` | `uv run vault validate --all --parallel --workers 8`                             | ~70% typing |
 
 **Average time saved**: 2-3 minutes per command → **10-20 minutes per day**
 
@@ -503,6 +516,7 @@ make lint & make type-check & make security & wait
 Run `make help` for a categorized list of all available targets.
 
 **Categories**:
+
 - **Setup**: `install`, `install-dev`, `check-deps`
 - **Testing**: `test`, `test-cov`, `test-fast`, `test-failed`, `test-watch`
 - **Code Quality**: `lint`, `format`, `type-check`, `security`, `check-all`

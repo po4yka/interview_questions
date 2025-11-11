@@ -135,13 +135,13 @@ def _write_temp_and_rename(path: Path, content: str, encoding: str) -> None:
         if fd is not None:
             try:
                 os.close(fd)
-            except:
-                pass
+            except Exception as cleanup_error:
+                logger.debug("Failed to close temp fd: {}", cleanup_error)
         if temp_path and temp_path.exists():
             try:
                 temp_path.unlink()
-            except:
-                pass
+            except Exception as cleanup_error:
+                logger.debug("Failed to remove temp file %s: %s", temp_path, cleanup_error)
         raise
 
 

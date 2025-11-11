@@ -3,15 +3,15 @@ name: Validate Notes
 on:
   pull_request:
     paths:
-      - 'InterviewQuestions/**/*.md'
-      - 'automation/**'
-      - '.github/workflows/validate-notes.yml'
+      - "InterviewQuestions/**/*.md"
+      - "automation/**"
+      - ".github/workflows/validate-notes.yml"
   push:
     branches:
       - main
     paths:
-      - 'InterviewQuestions/**/*.md'
-      - 'automation/**'
+      - "InterviewQuestions/**/*.md"
+      - "automation/**"
 
 permissions:
   contents: read
@@ -33,7 +33,7 @@ jobs:
       - name: Set up uv with Python 3.12
         uses: astral-sh/setup-uv@v3
         with:
-          python-version: '3.12'
+          python-version: "3.12"
           cache: true
           cache-dependency-path: automation/uv.lock
 

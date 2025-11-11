@@ -857,4 +857,3 @@ def _resolve_graph_node(graph: object, note: ExistingNote, vault_root: Path) -> 
         except Exception:  # pragma: no cover - defensive fallback
             return None
     return None
-

@@ -4,7 +4,6 @@ This test suite provides comprehensive coverage of the decision logic,
 ensuring all decision paths and edge cases are tested.
 """
 
-import pytest
 
 from obsidian_vault.llm_review.decision_logic import (
     DecisionContext,
@@ -12,7 +11,6 @@ from obsidian_vault.llm_review.decision_logic import (
     should_issues_block_completion,
 )
 from obsidian_vault.llm_review.state import ReviewIssue
-
 
 # Test fixtures for completion thresholds
 STRICT_THRESHOLDS = {

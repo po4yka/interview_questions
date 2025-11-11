@@ -35,12 +35,12 @@ gh workflow run graph-export.yml -f format=json
 
 ## Workflows at a Glance
 
-| Workflow | Trigger | Purpose | Runtime |
-|----------|---------|---------|---------|
-| **Validate Notes** | PR, push to main | Validate changed notes | ~2-5 min |
-| **Vault Health Report** | Daily 00:00 UTC | Generate health reports | ~5-10 min |
-| **Normalize Concepts** | Manual only | Standardize frontmatter | ~1-3 min |
-| **Graph Export** | Weekly Sunday | Export vault graph | ~2-4 min |
+| Workflow                | Trigger          | Purpose                 | Runtime   |
+| ----------------------- | ---------------- | ----------------------- | --------- |
+| **Validate Notes**      | PR, push to main | Validate changed notes  | ~2-5 min  |
+| **Vault Health Report** | Daily 00:00 UTC  | Generate health reports | ~5-10 min |
+| **Normalize Concepts**  | Manual only      | Standardize frontmatter | ~1-3 min  |
+| **Graph Export**        | Weekly Sunday    | Export vault graph      | ~2-4 min  |
 
 ---
 
@@ -57,18 +57,21 @@ gh workflow run graph-export.yml -f format=json
 ### Check Vault Health
 
 **Option 1: Latest report (fastest)**
+
 ```bash
 # View in browser
 open https://github.com/YOUR_ORG/YOUR_REPO/tree/reports/vault-reports
 ```
 
 **Option 2: Trigger new report**
+
 1. Go to Actions > Vault Health Report
 2. Click "Run workflow"
 3. Wait ~5-10 minutes
 4. Check `reports` branch for results
 
 **Option 3: Download artifact**
+
 1. Go to Actions > Vault Health Report
 2. Click latest run
 3. Download "vault-health-reports" artifact
@@ -99,6 +102,7 @@ status: draft
 ### Normalize Concept Notes
 
 **Step 1: Preview changes**
+
 1. Go to Actions > Normalize Concepts
 2. Click "Run workflow"
 3. Keep `dry_run` as `true`
@@ -107,6 +111,7 @@ status: draft
 6. Review the step summary
 
 **Step 2: Apply if good**
+
 1. Run workflow again
 2. Set `dry_run` to `false`
 3. Review the created PR
@@ -115,17 +120,20 @@ status: draft
 ### Export Vault Graph
 
 **For Gephi visualization**:
+
 1. Go to Actions > Graph Export
 2. Run workflow with format: `gexf`
 3. Download artifact
 4. Open `.gexf` file in Gephi
 
 **For programmatic analysis**:
+
 1. Run workflow with format: `json`
 2. Download artifact
 3. Parse JSON with your tool
 
 **All formats at once**:
+
 - Scheduled: Runs every Sunday automatically
 - Manual: Run with format: `all`
 
@@ -168,12 +176,12 @@ gh workflow view vault-health-report.yml
 
 ### Severity Levels
 
-| Severity | Meaning | Action |
-|----------|---------|--------|
-| **CRITICAL** | Structural issues | **Must fix** before merge |
-| **ERROR** | Serious problems | **Should fix** before merge |
-| **WARNING** | Issues to address | Fix when possible |
-| **INFO** | Recommendations | Optional improvements |
+| Severity     | Meaning           | Action                      |
+| ------------ | ----------------- | --------------------------- |
+| **CRITICAL** | Structural issues | **Must fix** before merge   |
+| **ERROR**    | Serious problems  | **Should fix** before merge |
+| **WARNING**  | Issues to address | Fix when possible           |
+| **INFO**     | Recommendations   | Optional improvements       |
 
 ### Common Validation Issues
 
@@ -213,6 +221,7 @@ cat vault-reports/link-health-report.md
 ```
 
 **Or in browser**:
+
 ```
 https://github.com/YOUR_ORG/YOUR_REPO/tree/reports/vault-reports
 ```
@@ -243,6 +252,7 @@ ls exports/
 ### Workflow Failed
 
 **Step 1**: Check logs
+
 ```
 Actions → Failed run → Click failed job → View logs
 ```
@@ -263,11 +273,13 @@ Actions → Failed run → Click failed job → View logs
 ### Validation Passes Locally but Fails in CI
 
 **Possible causes**:
+
 1. Different Python version (CI uses 3.12)
 2. Different automation package version
 3. Missing files in git
 
 **Fix**:
+
 ```bash
 # Use same Python version
 python --version  # should be 3.12
@@ -283,11 +295,13 @@ uv run vault validate InterviewQuestions/YOUR_FILE.md
 ### Health Report Not Updated
 
 **Check**:
+
 1. Workflow succeeded? (Actions tab)
 2. Reports committed to `reports` branch?
 3. GitHub Pages enabled? (Settings → Pages)
 
 **Force update**:
+
 ```bash
 # Manually trigger workflow
 gh workflow run vault-health-report.yml
@@ -317,11 +331,13 @@ uv run vault validate InterviewQuestions/YOUR_CHANGES
 ### Regular Maintenance
 
 **Weekly**:
+
 - Review health report issues
 - Fix broken links
 - Link orphaned notes
 
 **Monthly**:
+
 - Review graph exports for trends
 - Check missing translations
 - Normalize concept notes
@@ -330,12 +346,12 @@ uv run vault validate InterviewQuestions/YOUR_CHANGES
 
 ## Workflow Files
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `validate-notes.yml` | ~180 | PR validation |
-| `vault-health-report.yml` | ~250 | Health reporting |
-| `normalize-concepts.yml` | ~90 | Frontmatter normalization |
-| `graph-export.yml` | ~120 | Graph exports |
+| File                      | Lines | Purpose                   |
+| ------------------------- | ----- | ------------------------- |
+| `validate-notes.yml`      | ~180  | PR validation             |
+| `vault-health-report.yml` | ~250  | Health reporting          |
+| `normalize-concepts.yml`  | ~90   | Frontmatter normalization |
+| `graph-export.yml`        | ~120  | Graph exports             |
 
 **Total**: ~640 lines of workflow automation
 
@@ -375,16 +391,19 @@ Manual as needed    → Concept Normalization
 ## Emergency: Disable Workflows
 
 **Temporarily disable**:
+
 ```
 Repository → Actions → Select workflow → "..." → Disable workflow
 ```
 
 **Re-enable**:
+
 ```
 Repository → Actions → Select workflow → "..." → Enable workflow
 ```
 
 **Remove entirely**:
+
 ```bash
 git rm .github/workflows/WORKFLOW_NAME.yml
 git commit -m "Remove workflow"

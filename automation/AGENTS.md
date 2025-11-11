@@ -57,6 +57,7 @@ automation/
 ### 1. Validator Pattern
 
 **All validators must**:
+
 - Inherit from `BaseValidator`
 - Register with `@ValidatorRegistry.register`
 - Implement `validate()` method
@@ -64,6 +65,7 @@ automation/
 - Return `ValidationSummary`
 
 **Example**:
+
 ```python
 from .base import BaseValidator, Severity
 from .registry import ValidatorRegistry
@@ -88,12 +90,14 @@ class ExampleValidator(BaseValidator):
 ### 2. State Management
 
 **LLM review uses immutable state updates**:
+
 - State is passed through workflow
 - Nodes return dicts with updates
 - LangGraph merges updates into state
 - Never mutate state directly
 
 **Example**:
+
 ```python
 async def _node_handler(self, state: NoteReviewState) -> dict:
     # Don't do: state.field = value
@@ -107,12 +111,14 @@ async def _node_handler(self, state: NoteReviewState) -> dict:
 ### 3. Logging Requirements
 
 **All operations must log**:
+
 - Use `loguru` logger
 - Appropriate log levels (DEBUG, INFO, SUCCESS, WARNING, ERROR)
 - Context in error messages
 - Function entry/exit for complex operations
 
 **Example**:
+
 ```python
 from loguru import logger
 
@@ -131,12 +137,14 @@ async def process(item: str) -> Result:
 ### 4. Error Handling
 
 **All async operations must**:
+
 - Wrap in try-except
 - Log errors with context
 - Re-raise exceptions
 - Return error state when appropriate
 
 **Example**:
+
 ```python
 async def risky_operation() -> Result:
     try:
@@ -159,6 +167,7 @@ async def risky_operation() -> Result:
 1. **Create validator file** in `src/obsidian_vault/validators/`
 
 2. **Implement validator class**:
+
    ```python
    from .base import BaseValidator, Severity
    from .registry import ValidatorRegistry
@@ -179,6 +188,7 @@ async def risky_operation() -> Result:
    ```
 
 3. **Import in `validators/__init__.py`**:
+
    ```python
    from .my_validator import MyValidator
    ```
@@ -193,11 +203,13 @@ async def risky_operation() -> Result:
 ### Modifying LLM Agents
 
 **Files to modify**:
+
 - `src/obsidian_vault/llm_review/agents.py`
 
 **Common changes**:
 
 1. **Update system prompts**:
+
    ```python
    TECHNICAL_REVIEW_PROMPT = """
    Your new or updated prompt here...
@@ -205,6 +217,7 @@ async def risky_operation() -> Result:
    ```
 
 2. **Modify result models**:
+
    ```python
    class TechnicalReviewResult(BaseModel):
        existing_field: str
@@ -212,6 +225,7 @@ async def risky_operation() -> Result:
    ```
 
 3. **Update agent logic**:
+
    ```python
    async def run_technical_review(...) -> TechnicalReviewResult:
        logger.debug(f"Starting review: {note_path}")
@@ -229,6 +243,7 @@ async def risky_operation() -> Result:
 **Add new node**:
 
 1. **Create node handler**:
+
    ```python
    async def _new_node(self, state: NoteReviewState) -> dict:
        logger.info("Running new node")
@@ -243,6 +258,7 @@ async def risky_operation() -> Result:
    ```
 
 2. **Register in workflow**:
+
    ```python
    def _build_graph(self) -> StateGraph:
        workflow = StateGraph(NoteReviewState)
@@ -263,6 +279,7 @@ async def risky_operation() -> Result:
 **File**: `src/obsidian_vault/cli_app.py`
 
 **Pattern**:
+
 ```python
 @app.command()
 def my_command(
@@ -455,12 +472,14 @@ async def test_agent():
 ### Code Style
 
 1. **Use type hints**:
+
    ```python
    def function(arg: str, opt: Optional[int] = None) -> Result:
        pass
    ```
 
 2. **Document functions**:
+
    ```python
    def function(arg: str) -> Result:
        """Short description.
@@ -474,6 +493,7 @@ async def test_agent():
    ```
 
 3. **Use f-strings**:
+
    ```python
    message = f"Processing {name} with {count} items"
    ```
@@ -487,6 +507,7 @@ async def test_agent():
 ### Logging
 
 1. **Log at appropriate levels**:
+
    - `DEBUG`: Detailed execution flow
    - `INFO`: High-level progress
    - `SUCCESS`: Completion of major operations
@@ -494,6 +515,7 @@ async def test_agent():
    - `ERROR`: Failures and exceptions
 
 2. **Include context**:
+
    ```python
    logger.error(f"Failed to process {file_path}: {error}")
    # Not: logger.error(f"Failed: {error}")
@@ -510,6 +532,7 @@ async def test_agent():
 ### Error Handling
 
 1. **Catch specific exceptions when possible**:
+
    ```python
    try:
        result = operation()
@@ -522,6 +545,7 @@ async def test_agent():
    ```
 
 2. **Always log before re-raising**:
+
    ```python
    except Exception as e:
        logger.error(f"Operation failed: {e}")
@@ -537,6 +561,7 @@ async def test_agent():
 ### State Management
 
 1. **Never mutate state directly**:
+
    ```python
    # Don't do this
    state.field = new_value
@@ -546,6 +571,7 @@ async def test_agent():
    ```
 
 2. **Return partial updates**:
+
    ```python
    # Only update what changed
    return {"changed": True}  # Not entire state

@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
 from loguru import logger
 
 from obsidian_vault.utils.frontmatter import load_frontmatter_text
@@ -315,7 +316,6 @@ class DeterministicFixer:
 
     def _fix_future_timestamps(self, yaml_data: dict[str, Any]) -> tuple[bool, list[str]]:
         """Clamp future-dated timestamps back to the current date."""
-
         current_date = datetime.now().date()
         current_date_str = current_date.strftime("%Y-%m-%d")
         changed = False
@@ -381,7 +381,6 @@ class DeterministicFixer:
 
     def _wrap_type_name_in_body(self, body: str, type_name: str) -> tuple[str, bool]:
         """Wrap occurrences of a type name in backticks outside code blocks."""
-
         segments = self._split_by_code_blocks(body)
         pattern = re.compile(rf"(?<!`)\b{re.escape(type_name)}\b(?!`)")
         url_pattern = re.compile(r"https?://[^\s)]+")
@@ -421,7 +420,6 @@ class DeterministicFixer:
 
     def _split_by_code_blocks(self, content: str) -> list[tuple[str, bool]]:
         """Split content into (segment, is_code_block) tuples."""
-
         parts: list[tuple[str, bool]] = []
         code_block_pattern = re.compile(r"```[\s\S]*?```")
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 import uuid
-from collections import Counter, OrderedDict
+from collections import OrderedDict
 from dataclasses import dataclass, replace
 from datetime import datetime
 from enum import Enum
@@ -47,9 +47,10 @@ class CompletionMode(str, Enum):
 
     Determines how strict the system is about remaining issues before completion.
     """
-    STRICT = "strict"           # Block on any issue
-    STANDARD = "standard"       # Allow minor warnings (recommended)
-    PERMISSIVE = "permissive"   # Allow some errors (use with caution)
+
+    STRICT = "strict"  # Block on any issue
+    STANDARD = "standard"  # Allow minor warnings (recommended)
+    PERMISSIVE = "permissive"  # Allow some errors (use with caution)
 
 
 # Thresholds: {severity: max_allowed_count}
@@ -58,19 +59,19 @@ COMPLETION_THRESHOLDS = {
         "CRITICAL": 0,
         "ERROR": 0,
         "WARNING": 0,
-        "INFO": float('inf'),  # Informational never blocks
+        "INFO": float("inf"),  # Informational never blocks
     },
     CompletionMode.STANDARD: {
         "CRITICAL": 0,
         "ERROR": 0,
         "WARNING": 3,  # Allow up to 3 warnings
-        "INFO": float('inf'),
+        "INFO": float("inf"),
     },
     CompletionMode.PERMISSIVE: {
         "CRITICAL": 0,
-        "ERROR": 2,   # Allow up to 2 errors (use cautiously)
+        "ERROR": 2,  # Allow up to 2 errors (use cautiously)
         "WARNING": 10,  # Allow up to 10 warnings
-        "INFO": float('inf'),
+        "INFO": float("inf"),
     },
 }
 
@@ -251,9 +252,7 @@ class ReviewGraph:
         self.strict_qa = StrictQAVerifier()
         self.deterministic_fixer = DeterministicFixer()
         analytics_enabled = (
-            profile_settings["enable_analytics"]
-            if enable_analytics is None
-            else enable_analytics
+            profile_settings["enable_analytics"] if enable_analytics is None else enable_analytics
         )
         self.analytics = ReviewAnalyticsRecorder(enabled=analytics_enabled)
         self.graph = self._build_graph()
@@ -290,7 +289,7 @@ class ReviewGraph:
         # Evict oldest entries if we exceeded the limit
         while len(self.fix_memory) > MAX_FIX_MEMORY_SIZE:
             oldest_key = next(iter(self.fix_memory))
-            evicted = self.fix_memory.pop(oldest_key)
+            self.fix_memory.pop(oldest_key)
             logger.debug(
                 f"Evicted fix memory for {oldest_key} (LRU cache limit: {MAX_FIX_MEMORY_SIZE})"
             )
@@ -430,9 +429,7 @@ class ReviewGraph:
             else:
                 logger.info("No technical issues found")
                 history_updates.append(
-                    state_obj.add_history_entry(
-                        "initial_llm_review", "No technical issues found"
-                    )
+                    state_obj.add_history_entry("initial_llm_review", "No technical issues found")
                 )
 
             updates["history"] = history_updates
@@ -444,16 +441,21 @@ class ReviewGraph:
             logger.error("Exception details: {}", repr(e))
 
             # Log underlying cause if available
-            if hasattr(e, '__cause__') and e.__cause__:
+            if hasattr(e, "__cause__") and e.__cause__:
                 logger.error("Underlying cause: {} - {}", type(e.__cause__).__name__, e.__cause__)
 
             # Log traceback for debugging
             import traceback
-            logger.error("Traceback:\n{}", ''.join(traceback.format_exception(type(e), e, e.__traceback__)))
 
-            history_updates.append(state_obj.add_history_entry(
-                "initial_llm_review", f"Error during technical review: {e}"
-            ))
+            logger.error(
+                "Traceback:\n{}", "".join(traceback.format_exception(type(e), e, e.__traceback__))
+            )
+
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "initial_llm_review", f"Error during technical review: {e}"
+                )
+            )
             return {
                 "error": f"Technical review failed: {e}",
                 "completed": True,
@@ -561,7 +563,7 @@ class ReviewGraph:
 
     def _validate_fix(
         self, text_before: str, text_after: str, note_path: str
-    ) -> "LLMReviewGraph.FixValidationResult":
+    ) -> ReviewGraph.FixValidationResult:
         """Validate that a fix didn't break the note structure.
 
         IMPROVEMENT 2: Post-fix validation to reject broken fixes.
@@ -580,9 +582,7 @@ class ReviewGraph:
         try:
             yaml_before, body_before = load_frontmatter_text(text_before)
         except Exception as e:
-            logger.debug(
-                "Failed to parse original text during fix validation: {}", e
-            )
+            logger.debug("Failed to parse original text during fix validation: {}", e)
             yaml_before, body_before = None, text_before
 
         try:
@@ -650,18 +650,14 @@ class ReviewGraph:
             )
 
         # Check 4: No null bytes or invalid characters
-        if '\x00' in text_after:
-            return self.FixValidationResult(
-                False, "Fix introduced null bytes into the content"
-            )
+        if "\x00" in text_after:
+            return self.FixValidationResult(False, "Fix introduced null bytes into the content")
 
         # Check 5: Text is valid UTF-8
         try:
-            text_after.encode('utf-8')
+            text_after.encode("utf-8")
         except UnicodeEncodeError as e:
-            return self.FixValidationResult(
-                False, f"Fix introduced invalid UTF-8 characters: {e}"
-            )
+            return self.FixValidationResult(False, f"Fix introduced invalid UTF-8 characters: {e}")
 
         logger.debug("Fix validation passed - all checks successful")
         return self.FixValidationResult(True, None, text_after)
@@ -677,7 +673,6 @@ class ReviewGraph:
         missing_sections: list[str],
     ) -> str | None:
         """Restore required sections removed by a fix using original text snippets."""
-
         required_order = [
             "# Вопрос (RU)",
             "# Question (EN)",
@@ -709,9 +704,7 @@ class ReviewGraph:
                 return None
 
         present_ranges = [
-            section_ranges_after[h]
-            for h in required_order
-            if h in section_ranges_after
+            section_ranges_after[h] for h in required_order if h in section_ranges_after
         ]
 
         if present_ranges:
@@ -736,9 +729,8 @@ class ReviewGraph:
                 start, end = before_range
                 lines = before_lines[start:end]
 
-            if restored_lines and lines:
-                if restored_lines[-1].strip() and lines[0].strip():
-                    restored_lines.append("")
+            if restored_lines and lines and restored_lines[-1].strip() and lines[0].strip():
+                restored_lines.append("")
 
             restored_lines.extend(lines)
 
@@ -763,15 +755,10 @@ class ReviewGraph:
 
         return dump_frontmatter(yaml_after, new_body)
 
-    def _extract_section_range(
-        self, lines: list[str], heading: str
-    ) -> tuple[int, int] | None:
+    def _extract_section_range(self, lines: list[str], heading: str) -> tuple[int, int] | None:
         """Get the line range for a heading including its content."""
-
         try:
-            start = next(
-                idx for idx, line in enumerate(lines) if line.strip() == heading
-            )
+            start = next(idx for idx, line in enumerate(lines) if line.strip() == heading)
         except StopIteration:
             return None
 
@@ -789,7 +776,6 @@ class ReviewGraph:
     @staticmethod
     def _heading_level(line: str) -> int:
         """Count heading level from a markdown heading line."""
-
         level = 0
         for char in line:
             if char == "#":
@@ -830,16 +816,17 @@ class ReviewGraph:
 
             # Check 2: Valid UTF-8 encoding
             try:
-                text.encode('utf-8')
+                text.encode("utf-8")
             except UnicodeEncodeError as e:
                 errors.append(f"Invalid UTF-8 encoding: {e}")
 
             # Check 3: No null bytes
-            if '\x00' in text:
+            if "\x00" in text:
                 errors.append("Content contains null bytes")
 
             # Check 4: YAML frontmatter is parseable
             from obsidian_vault.utils.frontmatter import load_frontmatter_text
+
             try:
                 yaml_data, body = load_frontmatter_text(text)
                 if yaml_data is None:
@@ -960,7 +947,13 @@ class ReviewGraph:
                 state_obj.changed_sections = changed_sections
             else:
                 # First iteration - all sections considered changed
-                state_obj.changed_sections = {"yaml", "question_en", "question_ru", "answer_en", "answer_ru"}
+                state_obj.changed_sections = {
+                    "yaml",
+                    "question_en",
+                    "question_ru",
+                    "answer_en",
+                    "answer_ru",
+                }
 
             selected_validators: list[str] = []
             if state_obj.iteration == 0 or self.force_full_validator_pass:
@@ -977,10 +970,19 @@ class ReviewGraph:
                         logger.debug("YAML changed → metadata validator needed")
 
                     # If any content section changed, run structural + parity
-                    content_sections = {"question_en", "question_ru", "answer_en", "answer_ru", "followups", "references"}
+                    content_sections = {
+                        "question_en",
+                        "question_ru",
+                        "answer_en",
+                        "answer_ru",
+                        "followups",
+                        "references",
+                    }
                     if content_sections & state_obj.changed_sections:
                         selected_validators.extend(["structural", "parity"])
-                        logger.debug("Content sections changed → structural + parity validators needed")
+                        logger.debug(
+                            "Content sections changed → structural + parity validators needed"
+                        )
 
                     # If nothing changed (shouldn't happen, but just in case)
                     if not state_obj.changed_sections:
@@ -994,13 +996,15 @@ class ReviewGraph:
                     # Estimate savings
                     total_validators = 3
                     calls_saved = total_validators - len(selected_validators)
-                    pct_saved = (calls_saved / total_validators) * 100 if total_validators > 0 else 0
+                    pct_saved = (
+                        (calls_saved / total_validators) * 100 if total_validators > 0 else 0
+                    )
                     if calls_saved > 0:
                         logger.info(
                             "Incremental validation saved %d validator call(s) (%.0f%%) - changed sections: %s",
                             calls_saved,
                             pct_saved,
-                            ', '.join(sorted(state_obj.changed_sections)),
+                            ", ".join(sorted(state_obj.changed_sections)),
                         )
                 else:
                     selected_validators = ["metadata", "structural", "parity"]
@@ -1033,7 +1037,7 @@ class ReviewGraph:
                     for _, coro in task_items:
                         results.append(await coro)
                 result_map = {
-                    name: result for (name, _), result in zip(task_items, results)
+                    name: result for (name, _), result in zip(task_items, results, strict=False)
                 }
                 metadata_result = result_map.get("metadata")
                 parity_result = result_map.get("parity")
@@ -1098,9 +1102,7 @@ class ReviewGraph:
                     )
 
                 if parity_issues:
-                    logger.info(
-                        f"Parity check found {len(parity_issues)} issue(s)"
-                    )
+                    logger.info(f"Parity check found {len(parity_issues)} issue(s)")
                     history_updates.append(
                         state_obj.add_history_entry(
                             "bilingual_parity_check",
@@ -1227,9 +1229,7 @@ class ReviewGraph:
 
             decision, decision_message = self._compute_decision(next_state)
             next_state.decision = decision
-            history_updates.append(
-                next_state.add_history_entry("decision", decision_message)
-            )
+            history_updates.append(next_state.add_history_entry("decision", decision_message))
 
             return {
                 "issues": all_review_issues,
@@ -1245,9 +1245,7 @@ class ReviewGraph:
         except Exception as e:
             logger.error("Error running validators: {}", e)
             history_updates.append(
-                state_obj.add_history_entry(
-                    "run_validators", f"Error during validation: {e}"
-                )
+                state_obj.add_history_entry("run_validators", f"Error during validation: {e}")
             )
             return {
                 "error": f"Validation failed: {e}",
@@ -1278,27 +1276,21 @@ class ReviewGraph:
         logger.debug(
             f"Using existing issue recording from validators (iteration {state_obj.iteration})"
         )
-        logger.debug(
-            f"Issue history has {len(state_obj.issue_history)} snapshot(s)"
-        )
+        logger.debug(f"Issue history has {len(state_obj.issue_history)} snapshot(s)")
 
         try:
             existing_issue_count = len(state_obj.issues) if state_obj.issues else 0
-            logger.info(
-                f"Total issues after parallel validation: {existing_issue_count}"
-            )
+            logger.info(f"Total issues after parallel validation: {existing_issue_count}")
             history_updates.append(
                 state_obj.add_history_entry(
                     "check_bilingual_parity",
-                    f"Using issue state with {existing_issue_count} issue(s) for decision"
-                    )
+                    f"Using issue state with {existing_issue_count} issue(s) for decision",
                 )
+            )
 
             decision, decision_message = self._compute_decision(state_obj)
             logger.debug(f"Decision after issue recording: {decision} - {decision_message}")
-            history_updates.append(
-                state_obj.add_history_entry("decision", decision_message)
-            )
+            history_updates.append(state_obj.add_history_entry("decision", decision_message))
 
             logger.info(
                 f"[Issue Recording Complete] "
@@ -1348,7 +1340,7 @@ class ReviewGraph:
         created_files = []
 
         # Pattern to match concept file names (c-*.md)
-        concept_pattern = re.compile(r'c-[\w-]+(?:\.md)?')
+        concept_pattern = re.compile(r"c-[\w-]+(?:\.md)?")
 
         # Extract all concept file references from issue messages
         concept_files = set()
@@ -1356,7 +1348,7 @@ class ReviewGraph:
             matches = concept_pattern.findall(issue.message)
             for match in matches:
                 # Ensure .md extension
-                if not match.endswith('.md'):
+                if not match.endswith(".md"):
                     match = f"{match}.md"
                 concept_files.add(match)
 
@@ -1380,26 +1372,26 @@ class ReviewGraph:
                 continue
 
             # Extract concept name from filename (remove c- prefix and .md extension)
-            concept_name = concept_file.replace('c-', '').replace('.md', '')
+            concept_name = concept_file.replace("c-", "").replace(".md", "")
             # Convert kebab-case to Title Case
-            concept_title = ' '.join(word.capitalize() for word in concept_name.split('-'))
+            concept_title = " ".join(word.capitalize() for word in concept_name.split("-"))
 
             # Generate concept file content
             now = datetime.now()
-            date_str = now.strftime('%Y-%m-%d')
-            id_str = now.strftime('%Y%m%d-%H%M%S')
+            date_str = now.strftime("%Y-%m-%d")
+            id_str = now.strftime("%Y%m%d-%H%M%S")
 
             # Determine topic from concept name (fallback to general if unknown)
             # Common mappings for concept topics
             topic_keywords = {
-                'kotlin': 'kotlin',
-                'android': 'android',
-                'algorithm': 'algorithms',
-                'data-structure': 'data-structures',
-                'design': 'system-design',
-                'pattern': 'architecture-patterns',
+                "kotlin": "kotlin",
+                "android": "android",
+                "algorithm": "algorithms",
+                "data-structure": "data-structures",
+                "design": "system-design",
+                "pattern": "architecture-patterns",
             }
-            topic = 'programming-languages'  # Default fallback
+            topic = "programming-languages"  # Default fallback
             for keyword, topic_value in topic_keywords.items():
                 if keyword in concept_name.lower():
                     topic = topic_value
@@ -1407,15 +1399,15 @@ class ReviewGraph:
 
             # Determine MOC based on topic
             topic_to_moc = {
-                'kotlin': 'moc-kotlin',
-                'android': 'moc-android',
-                'algorithms': 'moc-algorithms',
-                'data-structures': 'moc-algorithms',
-                'system-design': 'moc-system-design',
-                'architecture-patterns': 'moc-system-design',
-                'programming-languages': 'moc-kotlin',
+                "kotlin": "moc-kotlin",
+                "android": "moc-android",
+                "algorithms": "moc-algorithms",
+                "data-structures": "moc-algorithms",
+                "system-design": "moc-system-design",
+                "architecture-patterns": "moc-system-design",
+                "programming-languages": "moc-kotlin",
             }
-            moc = topic_to_moc.get(topic, 'moc-cs')
+            moc = topic_to_moc.get(topic, "moc-cs")
 
             content = f"""---
 id: "{id_str}"
@@ -1469,16 +1461,17 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         f"(in production, this would resolve broken link issues)"
                     )
                 else:
-                    concept_path.write_text(content, encoding='utf-8')
+                    concept_path.write_text(content, encoding="utf-8")
                     logger.info(f"Created missing concept file: {concept_file}")
 
                     # Verify the generated file has valid frontmatter
                     try:
                         from obsidian_vault.utils.frontmatter import load_frontmatter
+
                         fm, _ = load_frontmatter(concept_path)
 
                         # Check for critical required fields
-                        required = ['id', 'title', 'topic', 'difficulty', 'moc', 'related', 'tags']
+                        required = ["id", "title", "topic", "difficulty", "moc", "related", "tags"]
                         missing = [f for f in required if f not in fm]
 
                         if missing:
@@ -1487,10 +1480,14 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                                 f"This is a bug in the auto-generation template and should be reported."
                             )
                         else:
-                            logger.debug(f"Verified {concept_file} has all required frontmatter fields")
+                            logger.debug(
+                                f"Verified {concept_file} has all required frontmatter fields"
+                            )
 
                     except Exception as verify_err:
-                        logger.warning(f"Could not verify frontmatter for {concept_file}: {verify_err}")
+                        logger.warning(
+                            f"Could not verify frontmatter for {concept_file}: {verify_err}"
+                        )
 
                 created_files.append(concept_file)
 
@@ -1499,7 +1496,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 # (validators would think file exists when it doesn't)
                 if not self.dry_run:
                     # Remove .md extension for note index
-                    concept_id = concept_file.replace('.md', '')
+                    concept_id = concept_file.replace(".md", "")
                     self.note_index.add(concept_id)
                     logger.debug(f"Added {concept_id} to note index")
                 else:
@@ -1521,7 +1518,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         )
 
                         # Write enriched content back to file
-                        concept_path.write_text(enrichment_result.enriched_content, encoding='utf-8')
+                        concept_path.write_text(
+                            enrichment_result.enriched_content, encoding="utf-8"
+                        )
                         logger.success(
                             f"Enriched concept file {concept_file}: {enrichment_result.explanation}"
                         )
@@ -1557,9 +1556,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         if not concepts_dir.exists():
             return []
 
-        return sorted([
-            f.stem for f in concepts_dir.glob("c-*.md")
-        ])
+        return sorted([f.stem for f in concepts_dir.glob("c-*.md")])
 
     def _get_qa_files(self) -> list[str]:
         """Return list of available Q&A file basenames (without .md).
@@ -1569,7 +1566,11 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         """
         qa_files = []
         for folder in self.vault_root.glob("*/"):
-            if folder.name.startswith("00-") or folder.name.startswith("10-") or folder.name.startswith("90-"):
+            if (
+                folder.name.startswith("00-")
+                or folder.name.startswith("10-")
+                or folder.name.startswith("90-")
+            ):
                 continue  # Skip admin, concepts, MOCs
             qa_files.extend([f.stem for f in folder.glob("q-*.md")])
         return sorted(qa_files)
@@ -1584,9 +1585,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         if not mocs_dir.exists():
             return []
 
-        return sorted([
-            f.stem for f in mocs_dir.glob("moc-*.md")
-        ])
+        return sorted([f.stem for f in mocs_dir.glob("moc-*.md")])
 
     def _should_issues_block_completion(self, issues: list[ReviewIssue]) -> tuple[bool, str]:
         """Check if issues should block completion based on severity thresholds.
@@ -1605,17 +1604,8 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             completion_thresholds=COMPLETION_THRESHOLDS[self.completion_mode],
         )
 
-    def _get_fix_memory(self, note_path: str) -> FixMemory:
-        """Get or create FixMemory for a note.
-
-        Returns a FixMemory instance that tracks already-fixed fields to prevent oscillation.
-
-        Args:
-            note_path: Path to the note
-
-        Returns:
-            FixMemory instance for this note
-        """
+    def _ensure_fix_memory(self, note_path: str) -> FixMemory:
+        """Return a FixMemory for the note, creating one if necessary."""
         memory = self._get_fix_memory(note_path)
         if memory is None:
             memory = FixMemory()
@@ -1623,7 +1613,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.debug(f"Created new FixMemory for {note_path}")
         return memory
 
-    def _format_fix_history(self, fix_attempts: list, note_path: str, current_iteration: int) -> str:
+    def _format_fix_history(
+        self, fix_attempts: list, note_path: str, current_iteration: int
+    ) -> str:
         """Format fix attempt history for fixer agent context.
 
         Args:
@@ -1636,7 +1628,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         """
         lines = []
 
-        memory = self._get_fix_memory(note_path)
+        memory = self._ensure_fix_memory(note_path)
         memory_context = memory.get_context_for_fixer(current_iteration)
         lines.append(memory_context)
         lines.append("")
@@ -1651,16 +1643,11 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
         lines.append("PREVIOUS FIX ATTEMPTS (learn from these):")
         for attempt in recent_attempts:
-            result_emoji = {
-                "success": "✓",
-                "partial": "~",
-                "failed": "✗",
-                "reverted": "↩"
-            }.get(attempt.result, "?")
-
-            lines.append(
-                f"\nIteration {attempt.iteration} [{result_emoji} {attempt.result}]:"
+            result_emoji = {"success": "✓", "partial": "~", "failed": "✗", "reverted": "↩"}.get(
+                attempt.result, "?"
             )
+
+            lines.append(f"\nIteration {attempt.iteration} [{result_emoji} {attempt.result}]:")
             lines.append(f"  Targeted: {len(attempt.issues_targeted)} issue(s)")
 
             if attempt.fixes_applied:
@@ -1700,14 +1687,20 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         try:
             # IMPROVEMENT 1: Run coordinator agent to create optimal fix plan
             from .agents.runners import run_fix_coordination
+
             fix_plan = await run_fix_coordination(
                 issues=[issue.message for issue in state_obj.issues],
                 iteration=state_obj.iteration,
                 max_iterations=state_obj.max_iterations,
-                fix_history=[attempt.__dict__ if hasattr(attempt, '__dict__') else attempt for attempt in state_obj.fix_attempts],
+                fix_history=[
+                    attempt.__dict__ if hasattr(attempt, "__dict__") else attempt
+                    for attempt in state_obj.fix_attempts
+                ],
                 note_path=state_obj.note_path,
             )
-            logger.info(f"Coordinator created fix plan: {len(fix_plan.issue_groups)} groups, order={' → '.join(fix_plan.fix_order)}")
+            logger.info(
+                f"Coordinator created fix plan: {len(fix_plan.issue_groups)} groups, order={' → '.join(fix_plan.fix_order)}"
+            )
             history_updates.append(
                 state_obj.add_history_entry(
                     "fix_coordinator",
@@ -1720,6 +1713,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
             # IMPROVEMENT 2: Run deterministic fixer + concept creation in parallel
             import asyncio
+
             logger.debug("Running deterministic fixer and concept creation in parallel...")
             deterministic_task = asyncio.create_task(
                 asyncio.to_thread(
@@ -1729,9 +1723,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     note_path=state_obj.note_path,
                 )
             )
-            concept_task = asyncio.create_task(
-                self._create_missing_concept_files(state_obj.issues)
-            )
+            concept_task = asyncio.create_task(self._create_missing_concept_files(state_obj.issues))
 
             # Wait for both to complete
             deterministic_result, created_concepts = await asyncio.gather(
@@ -1758,15 +1750,11 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
                 # IMPROVEMENT 2: Validate deterministic fix before accepting
                 validation = self._validate_fix(
-                    state_obj.current_text,
-                    deterministic_result.revised_text,
-                    state_obj.note_path
+                    state_obj.current_text, deterministic_result.revised_text, state_obj.note_path
                 )
 
                 if not validation.is_valid:
-                    logger.error(
-                        f"Deterministic fix validation FAILED: {validation.error}"
-                    )
+                    logger.error(f"Deterministic fix validation FAILED: {validation.error}")
                     logger.warning("Rejecting deterministic fix and keeping original text")
                     history_updates.append(
                         state_obj.add_history_entry(
@@ -1814,7 +1802,8 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     state_obj.current_text = validated_text
 
                 remaining_issues = [
-                    issue for issue in state_obj.issues
+                    issue
+                    for issue in state_obj.issues
                     if issue.message not in deterministic_result.issues_fixed
                 ]
 
@@ -1823,7 +1812,8 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     return {
                         "current_text": deterministic_result.revised_text,
                         "changed": True,
-                        "fix_attempts": state_obj.fix_attempts + [
+                        "fix_attempts": state_obj.fix_attempts
+                        + [
                             {
                                 "iteration": state_obj.iteration,
                                 "issues_targeted": [i.message for i in state_obj.issues],
@@ -1837,9 +1827,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     }
 
                 state_obj.issues = remaining_issues
-                logger.info(
-                    f"Deterministic fixer left {len(remaining_issues)} issue(s) for LLM"
-                )
+                logger.info(f"Deterministic fixer left {len(remaining_issues)} issue(s) for LLM")
             else:
                 logger.debug("No issues can be fixed deterministically - using LLM for all")
 
@@ -1861,13 +1849,13 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
 
             fix_history = self._format_fix_history(
-                state_obj.fix_attempts,
-                state_obj.note_path,
-                state_obj.iteration
+                state_obj.fix_attempts, state_obj.note_path, state_obj.iteration
             )
-            logger.debug(f"Providing fix history: {len(state_obj.fix_attempts)} previous attempt(s)")
+            logger.debug(
+                f"Providing fix history: {len(state_obj.fix_attempts)} previous attempt(s)"
+            )
 
-            memory = self._get_fix_memory(state_obj.note_path)
+            memory = self._ensure_fix_memory(state_obj.note_path)
             logger.debug(f"Fix Memory status: {memory.get_summary()}")
 
             atomic_related_rules = self.atomic_related.format_rules_for_prompt()
@@ -1890,6 +1878,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
 
             from .state import FixAttempt
+
             attempt = FixAttempt(
                 iteration=state_obj.iteration,
                 issues_targeted=[issue.message for issue in state_obj.issues],
@@ -1902,9 +1891,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             if result.changes_made:
                 # IMPROVEMENT 2: Validate fix before accepting it
                 validation = self._validate_fix(
-                    state_obj.current_text,
-                    result.revised_text,
-                    state_obj.note_path
+                    state_obj.current_text, result.revised_text, state_obj.note_path
                 )
 
                 if not validation.is_valid:
@@ -1959,10 +1946,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
                     if yaml_before and yaml_after:
                         memory.extract_fixes_from_description(
-                            result.fixes_applied,
-                            yaml_before,
-                            yaml_after,
-                            state_obj.iteration
+                            result.fixes_applied, yaml_before, yaml_after, state_obj.iteration
                         )
                         logger.debug(f"Updated Fix Memory: {memory.get_summary()}")
 
@@ -2018,9 +2002,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         except Exception as e:
             logger.error("Error fixing issues: {}", e)
             history_updates.append(
-                state_obj.add_history_entry(
-                    "llm_fix_issues", f"Error applying fixes: {e}"
-                )
+                state_obj.add_history_entry("llm_fix_issues", f"Error applying fixes: {e}")
             )
             return {
                 "error": f"Fix failed: {e}",
@@ -2185,9 +2167,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         except Exception as e:
             logger.error("Error in QA verification: {}", e)
             history_updates.append(
-                state_obj.add_history_entry(
-                    "qa_verification", f"Error during QA verification: {e}"
-                )
+                state_obj.add_history_entry("qa_verification", f"Error during QA verification: {e}")
             )
             self.analytics.record_qa_attempt(
                 state_obj.note_path,
@@ -2306,7 +2286,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         8. If no validator/parity issues AND QA passed -> done
         9. If validator/parity issues remain -> continue
         """
-
         logger.debug(
             f"[Decision] Evaluating next step: "
             f"iteration={state.iteration}/{state.max_iterations}, "
@@ -2381,9 +2360,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             return state_obj.decision
 
         decision, _ = self._compute_decision(state_obj)
-        self.analytics.set_iteration_decision(
-            state_obj.note_path, state_obj.iteration, decision
-        )
+        self.analytics.set_iteration_decision(state_obj.note_path, state_obj.iteration, decision)
         return decision
 
     def _should_continue_after_qa(self, state: NoteReviewStateDict) -> str:
@@ -2408,9 +2385,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             return state_obj.decision
 
         if state_obj.qa_verification_passed:
-            self.analytics.set_iteration_decision(
-                state_obj.note_path, state_obj.iteration, "done"
-            )
+            self.analytics.set_iteration_decision(state_obj.note_path, state_obj.iteration, "done")
             return "done"
         else:
             self.analytics.set_iteration_decision(
@@ -2420,7 +2395,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
     def _resolve_note_path_key(self, note_path: Path) -> str:
         """Return a stable key for analytics and fix memory tracking."""
-
         try:
             return str(note_path.relative_to(self.vault_root.parent))
         except ValueError:
@@ -2442,7 +2416,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         history_message: str | None = None,
     ) -> NoteReviewState:
         """Build a :class:`NoteReviewState` representing a terminal error."""
-
         state = NoteReviewState(
             note_path=note_path_key,
             original_text=original_text,
@@ -2469,7 +2442,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             state will have ``error`` and ``requires_human_review`` populated so
             callers can surface the failure without crashing the batch run.
         """
-
         import time
 
         # IMPROVEMENT 1: Generate UUID trace ID for structured logging
@@ -2533,9 +2505,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         bound_logger.info(f"Starting LangGraph workflow for {note_path.name}")
         try:
             config = {"recursion_limit": 50}
-            final_state_dict = await self.graph.ainvoke(
-                initial_state.to_dict(), config=config
-            )
+            final_state_dict = await self.graph.ainvoke(initial_state.to_dict(), config=config)
             final_state = NoteReviewState.from_dict(final_state_dict)
             elapsed_time = time.time() - start_time
             bound_logger.debug(f"LangGraph workflow completed in {elapsed_time:.2f}s")
@@ -2595,7 +2565,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
     def get_note_analytics(self, note_path: str) -> dict[str, Any] | None:
         """Return analytics for a specific note path if recorded."""
-
         note_data = self.analytics.get_note(note_path)
         if not note_data:
             return None
@@ -2633,7 +2602,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
     def get_analytics_summary(self) -> dict[str, Any]:
         """Return aggregated analytics for the current review session."""
-
         return self.analytics.summary()
 
 
@@ -2673,7 +2641,9 @@ def create_review_graph(
     logger.info("Loading taxonomy from TAXONOMY.md")
     try:
         taxonomy = TaxonomyLoader(repo_root).load()
-        logger.debug(f"Taxonomy loaded - topics: {len(taxonomy.topics) if hasattr(taxonomy, 'topics') else 'unknown'}")
+        logger.debug(
+            f"Taxonomy loaded - topics: {len(taxonomy.topics) if hasattr(taxonomy, 'topics') else 'unknown'}"
+        )
     except Exception as e:
         logger.error("Failed to load taxonomy: {}", e)
         raise

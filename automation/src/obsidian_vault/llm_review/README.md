@@ -15,10 +15,12 @@ This module implements an automated system for reviewing and improving Markdown 
 ### Components
 
 1. **State Management** (`state.py`)
+
    - `NoteReviewState`: Tracks the review workflow for a single note
    - `ReviewIssue`: Standardized issue representation
 
 2. **AI Agents** (`agents.py`)
+
    - `technical_review_agent`: Reviews technical/factual correctness
    - `metadata_sanity_agent`: Lightweight frontmatter/structure check
    - `issue_fix_agent`: Fixes formatting and structure issues
@@ -147,11 +149,11 @@ The review workflow provides multiple processing profiles that trade execution
 time for stability or thoroughness. Select the appropriate profile via the
 `processing_profile` argument when creating the graph.
 
-| Profile | Description |
-|---------|-------------|
-| `ProcessingProfile.BALANCED` | Default behaviour. Keeps validator concurrency and smart selection for faster runs. |
-| `ProcessingProfile.STABILITY` | Runs metadata/parity helpers sequentially to improve determinism and aid debugging. |
-| `ProcessingProfile.THOROUGH` | Always executes the full validator suite and adds two extra iterations for maximum coverage. |
+| Profile                       | Description                                                                                  |
+| ----------------------------- | -------------------------------------------------------------------------------------------- |
+| `ProcessingProfile.BALANCED`  | Default behaviour. Keeps validator concurrency and smart selection for faster runs.          |
+| `ProcessingProfile.STABILITY` | Runs metadata/parity helpers sequentially to improve determinism and aid debugging.          |
+| `ProcessingProfile.THOROUGH`  | Always executes the full validator suite and adds two extra iterations for maximum coverage. |
 
 Analytics are collected automatically per note. Retrieve granular data with
 `ReviewGraph.get_note_analytics(path)` or fetch aggregate metrics using
@@ -171,14 +173,14 @@ export OPENROUTER_MODEL="anthropic/claude-sonnet-4"
 
 ### Parameters
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `pattern` | `InterviewQuestions/**/*.md` | File glob pattern |
-| `dry_run` | `true` | Preview mode (no file modifications) |
-| `max_iterations` | `5` | Max fix iterations per note |
-| `backup` | `true` | Create `.md.backup` files |
-| `report` | `None` | Path for detailed report |
-| `processing_profile` | `balanced` | Choose between balanced, stability, or thorough modes |
+| Parameter            | Default                      | Description                                           |
+| -------------------- | ---------------------------- | ----------------------------------------------------- |
+| `pattern`            | `InterviewQuestions/**/*.md` | File glob pattern                                     |
+| `dry_run`            | `true`                       | Preview mode (no file modifications)                  |
+| `max_iterations`     | `5`                          | Max fix iterations per note                           |
+| `backup`             | `true`                       | Create `.md.backup` files                             |
+| `report`             | `None`                       | Path for detailed report                              |
+| `processing_profile` | `balanced`                   | Choose between balanced, stability, or thorough modes |
 
 ## Features
 
@@ -197,26 +199,31 @@ The initial LLM review phase checks:
 A lightweight validation layer that runs BEFORE detailed validators to catch common schema problems early:
 
 **YAML Structural Integrity**:
+
 - Is frontmatter present and parseable?
 - Are required fields present (id, title, topic, difficulty, etc.)?
 - Are field types correct (lists vs strings)?
 
 **Topic Consistency**:
+
 - Does the `topic` field match the file's folder location?
 - Is the MOC field appropriate for the topic?
 - Example: topic=kotlin should be in 70-Kotlin/ with moc=moc-kotlin
 
 **Timestamp Freshness**:
+
 - Are `created` and `updated` dates present and valid?
 - Is `updated` >= `created`?
 - Are dates in the correct format (YYYY-MM-DD)?
 
 **Bilingual Structure Ordering**:
+
 - Are both EN and RU sections present?
 - Are required sections in expected order?
 - Sections: "# Question (EN)", "# Вопрос (RU)", "## Answer (EN)", "## Ответ (RU)"
 
 **Common Formatting Issues**:
+
 - Brackets in YAML fields that shouldn't have them (moc field)?
 - Double brackets in YAML arrays (related field)?
 - Russian characters in tags (should be English only)?

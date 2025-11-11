@@ -10,7 +10,6 @@ from loguru import logger
 from pydantic_ai.models.openai import ModelSettings, OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
-
 DEFAULT_OPENROUTER_MODEL = "openrouter/polaris-alpha"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
@@ -36,7 +35,6 @@ class AgentModelSettings:
 
 def _get_float_from_env(var_name: str) -> float | None:
     """Return a float value from the environment if it can be parsed."""
-
     raw_value = os.getenv(var_name)
     if raw_value is None:
         return None
@@ -52,7 +50,6 @@ def _get_float_from_env(var_name: str) -> float | None:
 
 def _get_int_from_env(var_name: str) -> int | None:
     """Return an int value from the environment if it can be parsed."""
-
     raw_value = os.getenv(var_name)
     if raw_value is None:
         return None
@@ -68,7 +65,6 @@ def _get_int_from_env(var_name: str) -> int | None:
 
 def _get_bool_from_env(var_name: str) -> bool | None:
     """Return a bool value from the environment if it can be parsed."""
-
     raw_value = os.getenv(var_name)
     if raw_value is None:
         return None
@@ -92,9 +88,8 @@ class OpenRouterConfig:
     settings_kwargs: dict[str, Any]
 
     @classmethod
-    def from_environment(cls, override_model: str | None = None) -> "OpenRouterConfig":
+    def from_environment(cls, override_model: str | None = None) -> OpenRouterConfig:
         """Construct configuration, applying environment overrides with validation."""
-
         resolved_model = override_model or os.getenv(
             "OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL
         )

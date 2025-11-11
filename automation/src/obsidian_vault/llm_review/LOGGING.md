@@ -9,9 +9,11 @@ The LLM review system uses **loguru** for comprehensive logging at all stages of
 The system uses the following log levels:
 
 ### DEBUG (Most Verbose)
+
 **When to use**: Development, troubleshooting, detailed analysis
 
 **What is logged**:
+
 - Model initialization details
 - Agent creation
 - Note file reading (character counts)
@@ -24,6 +26,7 @@ The system uses the following log levels:
 - Individual issue processing
 
 **Example**:
+
 ```
 DEBUG | Initializing OpenRouter model: anthropic/claude-sonnet-4
 DEBUG | Creating technical review agent
@@ -34,9 +37,11 @@ DEBUG | Technical review complete - has_issues: False, changes_made: False, issu
 ```
 
 ### INFO (Standard Operation)
+
 **When to use**: Normal operation, tracking workflow progress
 
 **What is logged**:
+
 - Workflow initialization
 - Note processing start/end
 - LangGraph workflow execution
@@ -45,6 +50,7 @@ DEBUG | Technical review complete - has_issues: False, changes_made: False, issu
 - High-level workflow status
 
 **Example**:
+
 ```
 INFO | ======================================================================
 INFO | Processing note: q-coroutines--kotlin--medium.md
@@ -54,14 +60,17 @@ INFO | ======================================================================
 ```
 
 ### SUCCESS (Completion)
+
 **When to use**: Successful completion of major operations
 
 **What is logged**:
+
 - Workflow completion with summary
 - ReviewGraph initialization
 - Clean validation (no issues)
 
 **Example**:
+
 ```
 SUCCESS | Completed review for q-coroutines--kotlin--medium.md - changed: True, iterations: 2, final_issues: 0
 SUCCESS | No issues remaining - workflow complete
@@ -69,21 +78,26 @@ SUCCESS | ReviewGraph initialized successfully
 ```
 
 ### WARNING (Non-Critical Issues)
+
 **When to use**: Max iterations reached, potential problems
 
 **What is logged**:
+
 - Max iterations limit reached
 - Unexpected but non-fatal conditions
 
 **Example**:
+
 ```
 WARNING | Max iterations (5) reached
 ```
 
 ### ERROR (Failures)
+
 **When to use**: Operation failures, exceptions
 
 **What is logged**:
+
 - API key missing
 - File read failures
 - Agent execution failures
@@ -92,6 +106,7 @@ WARNING | Max iterations (5) reached
 - Exception details
 
 **Example**:
+
 ```
 ERROR | OPENROUTER_API_KEY environment variable not set
 ERROR | Failed to read note /path/to/note.md: [Errno 2] No such file or directory
@@ -104,22 +119,26 @@ ERROR | LangGraph workflow failed for note.md: Connection timeout
 ### agents.py
 
 **get_openrouter_model()**:
+
 ```
 DEBUG | Initializing OpenRouter model: {model_name}
 ERROR | OPENROUTER_API_KEY environment variable not set
 ```
 
 **get_technical_review_agent()**:
+
 ```
 DEBUG | Creating technical review agent
 ```
 
 **get_issue_fix_agent()**:
+
 ```
 DEBUG | Creating issue fix agent
 ```
 
 **run_technical_review()**:
+
 ```
 DEBUG | Starting technical review for: {note_path}
 DEBUG | Note length: {len} characters
@@ -130,6 +149,7 @@ ERROR | Technical review failed for {note_path}: {error}
 ```
 
 **run_issue_fixing()**:
+
 ```
 DEBUG | Starting issue fixing for: {note_path}
 DEBUG | Number of issues to fix: {count}
@@ -142,12 +162,14 @@ ERROR | Issue fixing failed for {note_path}: {error}
 
 ### graph.py
 
-**ReviewGraph.__init__()**:
+**ReviewGraph.**init**()**:
+
 ```
 (No direct logging - initialization is lightweight)
 ```
 
-**_initial_llm_review()**:
+**\_initial_llm_review()**:
+
 ```
 INFO  | Running initial technical review for {note_path}
 INFO  | Technical review made changes: {explanation}
@@ -155,14 +177,16 @@ INFO  | No technical issues found
 ERROR | Error in technical review: {error}
 ```
 
-**_run_validators()**:
+**\_run_validators()**:
+
 ```
 INFO  | Running validators (iteration {n})
 INFO  | Found {count} issues
 ERROR | Error running validators: {error}
 ```
 
-**_llm_fix_issues()**:
+**\_llm_fix_issues()**:
+
 ```
 INFO  | Fixing {count} issues
 INFO  | Applied fixes: {fixes}
@@ -170,7 +194,8 @@ WARNING | No fixes could be applied
 ERROR | Error fixing issues: {error}
 ```
 
-**_should_continue_fixing()**:
+**\_should_continue_fixing()**:
+
 ```
 DEBUG | Decision point - iteration: {i}/{max}, issues: {count}, error: {bool}, completed: {bool}
 WARNING | Max iterations ({max}) reached
@@ -181,6 +206,7 @@ INFO  | Continuing to iteration {n} - {count} issue(s) remaining
 ```
 
 **process_note()**:
+
 ```
 INFO  | ======================================================================
 INFO  | Processing note: {note_name}
@@ -198,6 +224,7 @@ INFO  | ======================================================================
 ```
 
 **create_review_graph()**:
+
 ```
 INFO  | Initializing ReviewGraph
 DEBUG | Vault root: {path}
@@ -249,6 +276,7 @@ vault-app llm-review --pattern "..." 2>&1 | tee llm-review.log
 ### Common Patterns
 
 **Normal successful run**:
+
 ```
 INFO  | Processing note: note1.md
 INFO  | Starting LangGraph workflow
@@ -263,6 +291,7 @@ SUCCESS | Completed review for note1.md - changed: True, iterations: 2, final_is
 ```
 
 **Hit max iterations**:
+
 ```
 INFO  | Processing note: complex-note.md
 ...
@@ -273,6 +302,7 @@ SUCCESS | Completed review - changed: True, iterations: 5, final_issues: 1
 ```
 
 **Error during processing**:
+
 ```
 INFO  | Processing note: bad-note.md
 INFO  | Starting LangGraph workflow
@@ -285,16 +315,19 @@ SUCCESS | Completed review - changed: False, iterations: 0, final_issues: 0
 ### Debugging Failed Runs
 
 1. **Check for API errors**:
+
    ```bash
    grep "ERROR.*API" llm-review.log
    ```
 
 2. **Find which notes failed**:
+
    ```bash
    grep "ERROR.*failed for" llm-review.log
    ```
 
 3. **See iteration counts**:
+
    ```bash
    grep "Completed review" llm-review.log | grep -o "iterations: [0-9]*"
    ```
@@ -309,6 +342,7 @@ SUCCESS | Completed review - changed: False, iterations: 0, final_issues: 0
 ### Typical Log Volume
 
 For a single note:
+
 - **DEBUG**: 30-50 log lines
 - **INFO**: 10-15 log lines
 - **SUCCESS**: 2-3 log lines
@@ -316,6 +350,7 @@ For a single note:
 - **ERROR**: 0 log lines (on success)
 
 For 100 notes (INFO level):
+
 - ~1000-1500 log lines
 - ~100-200 KB log file
 
@@ -361,11 +396,13 @@ logger.add(
 ## Log Message Format
 
 Loguru default format:
+
 ```
 {time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}
 ```
 
 Example:
+
 ```
 2025-11-08 12:34:56 | INFO     | graph:process_note:281 - Processing note: example.md
 ```

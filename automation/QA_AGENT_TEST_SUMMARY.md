@@ -10,12 +10,14 @@
 ### ✅ Completed Components
 
 1. **QA Agent Implementation** (`agents.py`)
+
    - ✅ `QAVerificationResult` model with all required fields
    - ✅ `QA_VERIFICATION_PROMPT` with comprehensive instructions
    - ✅ `run_qa_verification()` async function
    - ✅ `get_qa_verification_agent()` factory function
 
 2. **State Management** (`state.py`)
+
    - ✅ Added `qa_verification_passed: bool | None`
    - ✅ Added `qa_verification_summary: str | None`
    - ✅ Updated `from_dict()` and `to_dict()` serialization
@@ -91,6 +93,7 @@ run_validators (comprehensive validation)
 ### What QA Agent Checks
 
 1. **Factual Accuracy**
+
    - Technical statements correctness
    - Algorithm explanations
    - Complexity analysis (Big-O notation)
@@ -98,12 +101,14 @@ run_validators (comprehensive validation)
    - Platform-specific guidance
 
 2. **Bilingual Parity**
+
    - EN and RU semantic equivalence
    - No missing translations
    - Code examples consistency
    - Technical terms consistency
 
 3. **Content Quality**
+
    - Answer completeness
    - Explanation clarity
    - Appropriate technical depth
@@ -136,12 +141,14 @@ run_validators (comprehensive validation)
 ### QA Agent Decision Logic
 
 **Pass (`is_acceptable = true`):**
+
 - No factual errors
 - No bilingual parity issues
 - Content complete and correct
 - (quality_concerns are logged but don't block)
 
 **Fail (`is_acceptable = false`):**
+
 - Any factual/technical errors exist
 - EN and RU content not equivalent
 - Answer incomplete or incorrect
@@ -153,6 +160,7 @@ run_validators (comprehensive validation)
 ### Test Attempt
 
 **Command:**
+
 ```bash
 uv run vault-app llm-review \
   --pattern "InterviewQuestions/70-Kotlin/q-test-qa-agent--kotlin--easy.md" \
@@ -161,6 +169,7 @@ uv run vault-app llm-review \
 ```
 
 **Result:**
+
 ```
 ❌ API Credits Insufficient
 Error: status_code: 402
@@ -173,6 +182,7 @@ Message: "This request requires more credits, or fewer max_tokens.
 ### What This Means
 
 The implementation is **complete and correct** but cannot be fully integration-tested because:
+
 1. The OpenRouter API key has insufficient credits
 2. The test requires multiple LLM calls (initial review + metadata check + QA verification)
 3. Claude Sonnet 4 is an expensive model
@@ -187,6 +197,7 @@ To verify the QA agent works, you can:
    export OPENROUTER_MODEL="openai/gpt-4o-mini"
    ```
 3. **Unit test** the agent function directly:
+
    ```python
    from obsidian_vault.llm_review.agents import run_qa_verification
 
@@ -205,7 +216,7 @@ To verify the QA agent works, you can:
 
 ### 1. QA Agent Function (`agents.py:540-598`)
 
-```python
+````python
 async def run_qa_verification(
     note_text: str, note_path: str, iteration_count: int, **kwargs: Any
 ) -> QAVerificationResult:
@@ -242,7 +253,7 @@ async def run_qa_verification(
         logger.success(f"QA verification passed: {result.output.summary}")
 
     return result.output
-```
+````
 
 ### 2. QA Verification Node (`graph.py:596-696`)
 
@@ -356,6 +367,7 @@ def _compute_decision(self, state: NoteReviewState) -> tuple[str, str]:
 ```
 
 **Log Output:**
+
 ```
 INFO | Running final QA verification for note.md
 SUCCESS | QA verification passed: Note is factually correct...
@@ -384,6 +396,7 @@ SUCCESS | Workflow complete - QA verification passed
 ```
 
 **Log Output:**
+
 ```
 INFO | Running final QA verification for note.md
 WARNING | QA verification found issues preventing completion: 1 factual errors, 1 parity issues
@@ -400,6 +413,7 @@ SUCCESS | QA verification passed: Issues corrected, note now acceptable
 ### ✅ Implementation Complete
 
 All code for the QA/critic agent is implemented and integrated:
+
 - Agent definition and prompt
 - State tracking
 - Workflow node
@@ -450,7 +464,7 @@ The implementation successfully addresses the original requirement:
 > "The current decision logic stops once validator issues are gone or iteration
 > limits are hit, but no LLM re-check ensures the fixes didn't introduce new
 > factual errors. Adding a lightweight critic agent on the final state could
-> confirm bilingual parity and summarize remaining risks before _compute_decision
+> confirm bilingual parity and summarize remaining risks before \_compute_decision
 > returns 'done'."
 
 **Status: ✅ Feature Complete**

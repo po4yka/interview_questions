@@ -81,4 +81,3 @@ Parcelable details are similar.
     assert "`Bundle`" in result.revised_text
     assert "`Parcelable`" in result.revised_text
     assert "https://developer.android.com/reference/android/os/Bundle" in result.revised_text
-

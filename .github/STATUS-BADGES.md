@@ -24,26 +24,31 @@ Add this section to the top of your main README.md:
 ### Individual Badge URLs
 
 #### Validate Notes
+
 ```markdown
 ![Validate Notes](https://github.com/YOUR_USERNAME/interview_questions/actions/workflows/validate-notes.yml/badge.svg)
 ```
 
 #### Vault Health Report
+
 ```markdown
 ![Vault Health](https://github.com/YOUR_USERNAME/interview_questions/actions/workflows/vault-health-report.yml/badge.svg)
 ```
 
 #### Code Quality
+
 ```markdown
 ![Code Quality](https://github.com/YOUR_USERNAME/interview_questions/actions/workflows/code-quality.yml/badge.svg)
 ```
 
 #### Normalize Concepts
+
 ```markdown
 ![Normalize](https://github.com/YOUR_USERNAME/interview_questions/actions/workflows/normalize-concepts.yml/badge.svg)
 ```
 
 #### Graph Export
+
 ```markdown
 ![Graph Export](https://github.com/YOUR_USERNAME/interview_questions/actions/workflows/graph-export.yml/badge.svg)
 ```
@@ -77,6 +82,7 @@ For more customization, use shields.io:
 ```
 
 **Styles available**:
+
 - `flat` (default)
 - `flat-square`
 - `plastic`
@@ -86,6 +92,7 @@ For more customization, use shields.io:
 #### Example with multiple styles:
 
 **Flat Square**:
+
 ```markdown
 ![Validate](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/interview_questions/validate-notes.yml?style=flat-square&label=notes)
 ![Health](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/interview_questions/vault-health-report.yml?style=flat-square&label=health)
@@ -93,6 +100,7 @@ For more customization, use shields.io:
 ```
 
 **For-the-Badge**:
+
 ```markdown
 ![Validate](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/interview_questions/validate-notes.yml?style=for-the-badge&label=validation)
 ```
@@ -104,31 +112,37 @@ For more customization, use shields.io:
 #### Repository Stats
 
 **Last Commit**:
+
 ```markdown
 ![Last Commit](https://img.shields.io/github/last-commit/YOUR_USERNAME/interview_questions)
 ```
 
 **License**:
+
 ```markdown
 ![License](https://img.shields.io/github/license/YOUR_USERNAME/interview_questions)
 ```
 
 **Issues**:
+
 ```markdown
 ![Issues](https://img.shields.io/github/issues/YOUR_USERNAME/interview_questions)
 ```
 
 **Pull Requests**:
+
 ```markdown
 ![PRs](https://img.shields.io/github/issues-pr/YOUR_USERNAME/interview_questions)
 ```
 
 **Repository Size**:
+
 ```markdown
 ![Repo Size](https://img.shields.io/github/repo-size/YOUR_USERNAME/interview_questions)
 ```
 
 **Lines of Code**:
+
 ```markdown
 ![Lines of Code](https://img.shields.io/tokei/lines/github/YOUR_USERNAME/interview_questions)
 ```
@@ -140,16 +154,19 @@ For more customization, use shields.io:
 Create custom badges for vault statistics:
 
 #### Notes Count (requires setup)
+
 ```markdown
 ![Notes](https://img.shields.io/badge/notes-1069-blue)
 ```
 
 #### Languages
+
 ```markdown
 ![Languages](https://img.shields.io/badge/languages-EN%20%7C%20RU-green)
 ```
 
 #### Topics
+
 ```markdown
 ![Topics](https://img.shields.io/badge/topics-22-orange)
 ```
@@ -191,15 +208,18 @@ Create custom badges for vault statistics:
 ### Troubleshooting
 
 **Badge shows "failing"**:
+
 - Check the workflow run in Actions tab
 - Review the workflow logs
 - Fix any issues and push again
 
 **Badge shows "no status"**:
+
 - Workflow has never run
 - Trigger the workflow manually or push a change
 
 **Badge not updating**:
+
 - GitHub caches badge status for ~5 minutes
 - Force refresh: add `?v=1`, `?v=2`, etc. to URL
 - Clear browser cache
@@ -207,6 +227,7 @@ Create custom badges for vault statistics:
 ---
 
 **Related**:
+
 - [GitHub Actions Badges Documentation](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge)
 - [Shields.io Documentation](https://shields.io/)
 - [Simple Icons (for logos)](https://simpleicons.org/)

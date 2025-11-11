@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-
+from collections.abc import Iterable
 
 _NON_BLOCKING_SEVERITIES = {"WARNING", "INFO"}
 
 
 def _severity_from_signature(signature: str) -> str:
     """Extract the severity prefix from an issue signature."""
-
     severity, _, _ = signature.partition(":")
 
     if not severity:
@@ -33,7 +31,6 @@ def filter_blocking_issue_history(history: Iterable[set[str]]) -> list[set[str]]
         List mirroring the input ordering where each set only contains
         signatures with blocking severities (ERROR/CRITICAL).
     """
-
     filtered: list[set[str]] = []
     for iteration in history:
         filtered.append(
@@ -44,4 +41,3 @@ def filter_blocking_issue_history(history: Iterable[set[str]]) -> list[set[str]]
             }
         )
     return filtered
-

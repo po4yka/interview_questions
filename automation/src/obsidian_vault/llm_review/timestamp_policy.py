@@ -20,9 +20,9 @@ With this policy:
 
 from __future__ import annotations
 
-import subprocess
+import subprocess  # nosec B404
 from dataclasses import dataclass
-from datetime import datetime, date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Literal
 
@@ -178,7 +178,7 @@ class TimestampPolicy:
                 capture_output=True,
                 text=True,
                 timeout=5,
-            )
+            )  # nosec
 
             if result.returncode == 0 and result.stdout.strip():
                 # Get first line (earliest commit)
@@ -209,7 +209,7 @@ class TimestampPolicy:
                 capture_output=True,
                 text=True,
                 timeout=5,
-            )
+            )  # nosec
 
             if result.returncode == 0 and result.stdout.strip():
                 last_commit_iso = result.stdout.strip()

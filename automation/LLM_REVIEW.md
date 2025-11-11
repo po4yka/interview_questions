@@ -12,6 +12,7 @@ uv sync
 ```
 
 This installs all required dependencies including:
+
 - `pydantic-ai`: Structured LLM interactions
 - `langgraph`: Workflow orchestration
 - `openai`: OpenRouter API client
@@ -38,6 +39,7 @@ uv run vault-app llm-review --dry-run --pattern "InterviewQuestions/70-Kotlin/**
 ```
 
 This will:
+
 - Review all Kotlin notes
 - Show what changes would be made
 - NOT modify any files
@@ -80,6 +82,7 @@ Runs existing vault validators, then uses AI to fix:
 - File organization
 
 The system iterates (up to 5 times by default) until:
+
 - All issues are fixed, OR
 - Maximum iterations reached, OR
 - No more fixes can be applied
@@ -99,6 +102,7 @@ The system iterates (up to 5 times by default) until:
 **Example transformation**:
 
 Before (generic stub):
+
 ```markdown
 # Summary (EN)
 
@@ -110,6 +114,7 @@ Test Concept is a fundamental concept in software development.
 ```
 
 After (enriched):
+
 ```markdown
 # Summary (EN)
 
@@ -127,12 +132,14 @@ enabling rapid feedback during development and facilitating refactoring.
 ```
 
 **Benefits**:
+
 - **Reduced validator churn**: Concept files have meaningful content from the start
 - **Better downstream passes**: Validators see complete documentation instead of placeholders
 - **Improved vault quality**: Auto-generated concepts are actually useful for interview prep
 - **Human intervention still needed**: Files marked `status: draft` with disclaimer for human review
 
 **How it works**:
+
 - Agent uses taxonomy context (topic, subtopics) to infer relevant content
 - Can incorporate excerpts from Q&A notes that reference the concept
 - Preserves YAML frontmatter exactly as-is (no modifications)
@@ -217,6 +224,7 @@ When running with `dry_run=false` and `create_pr=true`:
 5. Uploads detailed report as artifact
 
 **Review the PR carefully** before merging, especially:
+
 - Technical accuracy of modified content
 - Code examples still work
 - YAML frontmatter is valid
@@ -276,22 +284,22 @@ View history in the report.
 
 ### Environment Variables
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `OPENROUTER_API_KEY` | Yes | - | OpenRouter API key |
-| `OPENROUTER_MODEL` | No | `anthropic/claude-sonnet-4` | Model to use |
+| Variable             | Required | Default                     | Description        |
+| -------------------- | -------- | --------------------------- | ------------------ |
+| `OPENROUTER_API_KEY` | Yes      | -                           | OpenRouter API key |
+| `OPENROUTER_MODEL`   | No       | `anthropic/claude-sonnet-4` | Model to use       |
 
 ### CLI Options
 
-| Option | Short | Default | Description |
-|--------|-------|---------|-------------|
-| `--pattern` | `-p` | `InterviewQuestions/**/*.md` | File glob pattern |
-| `--dry-run` | - | `true` | Preview without modifying |
-| `--no-dry-run` | - | - | Actually modify files |
-| `--max-iterations` | `-m` | `5` | Max fix iterations |
-| `--backup` | - | `true` | Create backups |
-| `--no-backup` | - | - | Don't create backups |
-| `--report` | `-r` | `None` | Report file path |
+| Option             | Short | Default                      | Description               |
+| ------------------ | ----- | ---------------------------- | ------------------------- |
+| `--pattern`        | `-p`  | `InterviewQuestions/**/*.md` | File glob pattern         |
+| `--dry-run`        | -     | `true`                       | Preview without modifying |
+| `--no-dry-run`     | -     | -                            | Actually modify files     |
+| `--max-iterations` | `-m`  | `5`                          | Max fix iterations        |
+| `--backup`         | -     | `true`                       | Create backups            |
+| `--no-backup`      | -     | -                            | Don't create backups      |
+| `--report`         | `-r`  | `None`                       | Report file path          |
 
 ## Costs
 
@@ -358,6 +366,7 @@ vault-app llm-review \
 ```
 
 Keep reports for:
+
 - Tracking improvements over time
 - Understanding what was changed
 - Debugging issues
@@ -536,6 +545,7 @@ If you use Cursor, Claude, or other AI tools:
 ### Q: Will it break my notes?
 
 **A:** Unlikely if used correctly:
+
 - Start with `--dry-run`
 - Use `--backup`
 - Review changes in PR
@@ -544,11 +554,13 @@ If you use Cursor, Claude, or other AI tools:
 ### Q: How accurate are the fixes?
 
 **A:** Generally good for:
+
 - Formatting issues (very accurate)
 - YAML fixes (very accurate)
 - Technical content (mostly accurate, review recommended)
 
 Less reliable for:
+
 - Complex technical nuances
 - Domain-specific details
 - Code that requires execution
@@ -556,6 +568,7 @@ Less reliable for:
 ### Q: Can I run this locally vs CI?
 
 **A:** Both!
+
 - **Local**: Faster feedback, immediate iteration
 - **CI**: Consistent environment, PR-based review
 

@@ -51,7 +51,6 @@ def load_yaml(text: str) -> dict:
 
 def _simple_yaml_parse(lines: list[str]) -> dict[str, Any]:
     """Parse a limited subset of YAML (sufficient for the vault schema)."""
-
     result: dict[str, Any] = {}
     i = 0
     while i < len(lines):

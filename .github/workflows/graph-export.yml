@@ -3,13 +3,13 @@ name: Graph Export
 on:
   # Run weekly on Sundays at 00:00 UTC
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
   # Allow manual trigger
   workflow_dispatch:
     inputs:
       format:
-        description: 'Export format'
+        description: "Export format"
         required: true
         type: choice
         options:
@@ -18,7 +18,7 @@ on:
           - graphml
           - json
           - csv
-        default: 'all'
+        default: "all"
 
 permissions:
   contents: write
@@ -40,7 +40,7 @@ jobs:
       - name: Set up uv with Python 3.12
         uses: astral-sh/setup-uv@v3
         with:
-          python-version: '3.12'
+          python-version: "3.12"
           cache: true
           cache-dependency-path: automation/uv.lock
 

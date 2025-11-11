@@ -3,13 +3,13 @@ name: Code Quality
 on:
   pull_request:
     paths:
-      - 'automation/**/*.py'
-      - '.github/workflows/code-quality.yml'
+      - "automation/**/*.py"
+      - ".github/workflows/code-quality.yml"
   push:
     branches:
       - main
     paths:
-      - 'automation/**/*.py'
+      - "automation/**/*.py"
 
 permissions:
   contents: read
@@ -47,7 +47,7 @@ jobs:
       - name: Set up uv with Python 3.12
         uses: astral-sh/setup-uv@v3
         with:
-          python-version: '3.12'
+          python-version: "3.12"
           cache: true
           cache-dependency-path: automation/uv.lock
 

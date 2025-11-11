@@ -1,13 +1,11 @@
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 
-import asyncio
-import pytest
-
+from obsidian_vault.llm_review.agents.models import TechnicalReviewResult
 from obsidian_vault.llm_review.graph import ReviewGraph
 from obsidian_vault.llm_review.state import NoteReviewState
-from obsidian_vault.llm_review.agents.models import TechnicalReviewResult
 
 
 class _StubGraph(ReviewGraph):

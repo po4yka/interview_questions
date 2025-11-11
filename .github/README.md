@@ -26,12 +26,14 @@ All workflows leverage the [obsidian-vault automation package](../automation/) (
 **File**: [`validate-notes.yml`](./workflows/validate-notes.yml)
 
 **Triggers**:
+
 - Pull requests that modify `InterviewQuestions/**/*.md`
 - Push to `main` branch
 
 **Purpose**: Ensure all new and modified notes meet quality standards before merging.
 
 **What it does**:
+
 1. Detects changed Markdown files in PRs
 2. Validates each changed file using the automation package
 3. Runs comprehensive validators:
@@ -47,10 +49,12 @@ All workflows leverage the [obsidian-vault automation package](../automation/) (
 6. Uploads validation report as artifact
 
 **Exit behavior**:
+
 - **Fails** if any CRITICAL issues are found
 - **Passes** with warnings/info messages if no critical issues
 
 **Example comment**:
+
 ```
 ## Validation Results
 
@@ -74,6 +78,7 @@ WARNING (1 issue):
 **File**: [`vault-health-report.yml`](./workflows/vault-health-report.yml)
 
 **Triggers**:
+
 - Daily at 00:00 UTC (cron schedule)
 - Manual trigger via `workflow_dispatch`
 - Push to `main` that modifies the workflow file
@@ -81,6 +86,7 @@ WARNING (1 issue):
 **Purpose**: Generate comprehensive vault health reports and track repository quality over time.
 
 **What it does**:
+
 1. Generates comprehensive health reports:
    - Link health analysis
    - Network statistics (nodes, edges, density)
@@ -93,6 +99,7 @@ WARNING (1 issue):
 4. Creates GitHub issue if critical problems are found (broken links, orphans)
 
 **Reports generated**:
+
 - `VAULT-HEALTH-SUMMARY.md` - Executive summary
 - `link-health-report.md` - Comprehensive link analysis
 - `validation-report.md` - Full vault validation results
@@ -112,14 +119,17 @@ WARNING (1 issue):
 **File**: [`normalize-concepts.yml`](./workflows/normalize-concepts.yml)
 
 **Triggers**:
+
 - Manual trigger only (`workflow_dispatch`)
 
 **Purpose**: Standardize concept note frontmatter across the vault.
 
 **Inputs**:
+
 - `dry_run` (boolean, default: true) - Preview changes without applying
 
 **What it does**:
+
 1. Runs frontmatter normalization on all concept notes (`10-Concepts/c-*.md`)
 2. Normalizes:
    - YAML field ordering
@@ -130,11 +140,13 @@ WARNING (1 issue):
 4. In apply mode: Creates a Pull Request with normalized changes
 
 **Safety**:
+
 - Default is dry-run mode to prevent accidental changes
 - Always creates a PR for review before merging
 - Labels PR as `automated` and `normalization`
 
 **Example usage**:
+
 1. Go to Actions > Normalize Concepts
 2. Click "Run workflow"
 3. Select dry_run: false
@@ -148,15 +160,18 @@ WARNING (1 issue):
 **File**: [`graph-export.yml`](./workflows/graph-export.yml)
 
 **Triggers**:
+
 - Weekly on Sundays at 00:00 UTC
 - Manual trigger with format selection
 
 **Purpose**: Export vault link graph for external analysis and visualization.
 
 **Inputs** (manual trigger):
+
 - `format` (choice: all, gexf, graphml, json, csv) - Export format
 
 **What it does**:
+
 1. Exports vault graph to multiple formats:
    - **GEXF** - For Gephi visualization
    - **GraphML** - For yEd, Cytoscape
@@ -168,6 +183,7 @@ WARNING (1 issue):
 5. Uploads as artifacts (90-day retention)
 
 **Use cases**:
+
 - Visualize vault structure in Gephi
 - Analyze link patterns programmatically
 - Track graph evolution over time
@@ -193,6 +209,7 @@ The CI/CD system uses separate branches for different types of outputs:
 ### Prerequisites
 
 The workflows require:
+
 - Python 3.12
 - [uv](https://github.com/astral-sh/uv) package installer
 - [automation](../automation/) package dependencies
@@ -202,6 +219,7 @@ All dependencies are automatically installed by the workflows.
 ### Permissions
 
 Workflows require the following permissions:
+
 - `contents: write` - To commit reports and exports to branches
 - `issues: write` - To create health issues
 - `pull-requests: write` - To comment on PRs
@@ -219,6 +237,7 @@ No secrets are required. Workflows use the default `GITHUB_TOKEN` which is autom
 All workflows use the [automation package](../automation/) which provides:
 
 **CLI Commands**:
+
 - `vault validate` - Comprehensive note validation
 - `vault normalize` - Concept frontmatter normalization
 - `vault check-translations` - Find missing translations
@@ -229,6 +248,7 @@ All workflows use the [automation package](../automation/) which provides:
 - `vault graph-export` - Export graph data
 
 **Validators** (7 total):
+
 - YAMLValidator - Frontmatter structure
 - ContentValidator - Bilingual content
 - LinkValidator - Link integrity
@@ -246,6 +266,7 @@ All workflows use the [automation package](../automation/) which provides:
 ### Workflow Status
 
 Check workflow status:
+
 - [Actions tab](../../actions) - All workflow runs
 - [Validate Notes runs](../../actions/workflows/validate-notes.yml)
 - [Vault Health Report runs](../../actions/workflows/vault-health-report.yml)
@@ -253,6 +274,7 @@ Check workflow status:
 ### Reports
 
 Access generated reports:
+
 - **Latest reports**: [reports branch](../../tree/reports/vault-reports)
 - **Latest exports**: [graph-exports branch](../../tree/graph-exports/exports)
 - **Artifacts**: Available in workflow run pages (90-day retention)
@@ -260,6 +282,7 @@ Access generated reports:
 ### Issues
 
 Health issues are automatically created:
+
 - Label: `vault-health`
 - Updated daily if problems persist
 - Auto-closed when problems are resolved
@@ -359,6 +382,7 @@ Add debug output to workflows:
 ```
 
 Enable debug logging:
+
 - Repository Settings > Secrets > New repository secret
 - Name: `ACTIONS_STEP_DEBUG`, Value: `true`
 
@@ -473,6 +497,7 @@ Initial CI/CD system implementation:
 ## Support
 
 For issues or questions:
+
 1. Check workflow logs in [Actions tab](../../actions)
 2. Review [automation package documentation](../automation/README.md)
 3. Create an issue with the `ci-cd` label
