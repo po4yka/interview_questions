@@ -39,6 +39,7 @@ from obsidian_vault.utils import (
     build_note_index,
     collect_validatable_files,
     discover_repo_root,
+    ensure_vault_exists,
     parse_note,
     sanitize_text_for_yaml,
     setup_logging,
@@ -167,7 +168,7 @@ def validate(
 
     Checks YAML frontmatter, content structure, links, and more.
     """
-    from obsidian_vault.utils import ensure_vault_exists, safe_resolve_path
+    from obsidian_vault.utils import safe_resolve_path
 
     logger.info("Starting validation")
     try:
@@ -278,7 +279,7 @@ def technical_validate(
     json_output: str | None = typer.Option(None, "--json", help="Write JSON results to file"),
 ):
     """Run the LangChain-powered technical validation workflow."""
-    from obsidian_vault.utils import ensure_vault_exists, safe_resolve_path
+    from obsidian_vault.utils import safe_resolve_path
 
     logger.info("Starting technical validation run")
     repo_root, vault_dir = _get_vault_dir()
@@ -503,7 +504,6 @@ def graph_stats(
 
     Shows total notes, links, density, orphaned notes, and more.
     """
-    from obsidian_vault.utils import ensure_vault_exists
 
     logger.info("Analyzing vault graph statistics")
     try:
@@ -586,7 +586,6 @@ def orphans(
 
     Helps identify disconnected content that needs linking.
     """
-    from obsidian_vault.utils import ensure_vault_exists
 
     logger.info("Finding orphaned notes")
     try:
@@ -632,7 +631,6 @@ def broken_links(
 
     Helps maintain vault integrity by identifying missing link targets.
     """
-    from obsidian_vault.utils import ensure_vault_exists
 
     logger.info("Finding broken links")
     try:
@@ -685,7 +683,6 @@ def link_report(
 
     Creates a detailed report with statistics, orphans, hubs, and authorities.
     """
-    from obsidian_vault.utils import ensure_vault_exists
 
     logger.info("Generating link health report")
     try:
@@ -724,7 +721,7 @@ def graph_export(
 
     Supports GEXF, GraphML, JSON, and CSV formats.
     """
-    from obsidian_vault.utils import ensure_vault_exists, validate_choice
+    from obsidian_vault.utils import validate_choice
 
     logger.info(f"Exporting graph to {output}")
     try:
@@ -791,7 +788,7 @@ def communities(
     other than to notes outside the group. Useful for understanding vault
     organization and discovering hidden topic clusters.
     """
-    from obsidian_vault.utils import ensure_vault_exists, validate_choice
+    from obsidian_vault.utils import validate_choice
 
     try:
         algorithm = validate_choice(algorithm, {"louvain", "greedy", "label_propagation"})
@@ -939,7 +936,6 @@ def suggest_links(
     that should be linked but currently aren't. Based on TF-IDF vectorization
     and cosine similarity.
     """
-    from obsidian_vault.utils import ensure_vault_exists
 
     logger.info("Analyzing notes for link suggestions using ML")
     try:
@@ -1100,7 +1096,6 @@ def llm_review(
     Requires OPENROUTER_API_KEY environment variable.
     """
     import asyncio
-    from pathlib import Path
 
     logger.info("Starting LLM-based note review")
 
