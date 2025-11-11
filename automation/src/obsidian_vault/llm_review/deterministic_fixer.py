@@ -183,7 +183,9 @@ class DeterministicFixer:
             if type_name in processed_type_names:
                 continue
 
-            updated_body, wrapped = self._wrap_type_name_in_body(body_text, type_name)
+            updated_body, wrapped = self._wrap_type_name_in_body(
+                body_text, type_name
+            )
             if wrapped:
                 body_text = updated_body
                 fixes_applied.append(f"Wrapped type name `{type_name}` in backticks")
@@ -380,9 +382,15 @@ class DeterministicFixer:
         return dump_frontmatter(yaml_data, body)
 
     def _wrap_type_name_in_body(self, body: str, type_name: str) -> tuple[str, bool]:
-        """Wrap occurrences of a type name in backticks outside code blocks."""
+        """Wrap occurrences of a type name (including simple variants) in backticks."""
+
         segments = self._split_by_code_blocks(body)
-        pattern = re.compile(rf"(?<!`)\b{re.escape(type_name)}\b(?!`)")
+        variants = self._build_type_variants(type_name)
+        if not variants:
+            return body, False
+
+        joined_variants = "|".join(re.escape(variant) for variant in variants)
+        pattern = re.compile(rf"(?<!`)\b(?:{joined_variants})\b(?!`)")
         url_pattern = re.compile(r"https?://[^\s)]+")
 
         updated_segments: list[str] = []
@@ -417,6 +425,22 @@ class DeterministicFixer:
             return body, False
 
         return "".join(updated_segments), True
+
+    def _build_type_variants(self, type_name: str) -> list[str]:
+        """Return simple variants (plural forms) for a given type name."""
+
+        variants: set[str] = {type_name}
+
+        # Basic pluralization rules to catch common validator reports
+        if type_name.endswith("y") and len(type_name) > 1 and type_name[-2] not in "aeiou":
+            variants.add(f"{type_name[:-1]}ies")
+        else:
+            if not type_name.endswith("s"):
+                variants.add(f"{type_name}s")
+            if type_name.endswith(("s", "x", "z", "ch", "sh")):
+                variants.add(f"{type_name}es")
+
+        return sorted(variants, key=len, reverse=True)
 
     def _split_by_code_blocks(self, content: str) -> list[tuple[str, bool]]:
         """Split content into (segment, is_code_block) tuples."""
