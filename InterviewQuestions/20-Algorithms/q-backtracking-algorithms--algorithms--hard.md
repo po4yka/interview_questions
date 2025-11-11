@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-backtracking-algorithm]
+related: [c-algorithms, q-advanced-graph-algorithms--algorithms--hard]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [algorithms, backtracking, combinations, difficulty/hard, n-queens, permutations, recursion, sudoku]
-sources: [https://en.wikipedia.org/wiki/Backtracking]
+sources: ["https://en.wikipedia.org/wiki/Backtracking"]
+
 ---
 
 # Вопрос (RU)
@@ -28,22 +29,23 @@ sources: [https://en.wikipedia.org/wiki/Backtracking]
 ## Ответ (RU)
 
 **Теория Backtracking:**
-Backtracking - это мощная техника для решения задач с ограничениями. Она строит решения постепенно и отказывается от частичных решений, которые не могут привести к валидным решениям. Используется для головоломок, комбинаторики и оптимизационных задач.
+Backtracking - это техника для систематического перебора вариантов в задачах с ограничениями. Алгоритм пошагово строит частичное решение и откатывается (backtrack), когда текущая конфигурация не может привести к валидному полному решению. Широко используется для головоломок, комбинаторных и некоторых оптимизационных задач (см. [[c-algorithms]]).
 
 **Основные концепции:**
-- Систематический перебор всех возможностей
-- Раннее отсечение невалидных ветвей
-- Естественное использование рекурсии
-- Часто имеет сложность O(2^n) или O(n!)
-- Пространственная сложность O(n) для стека рекурсии
+- Систематический перебор всех (или почти всех) возможностей
+- Раннее отсечение невалидных ветвей по проверкам ограничений
+- Естественное использование рекурсии (но можно реализовать итеративно со стеком)
+- Типичная (часто худшая) сложность: экспоненциальная, например O(2^n) или O(n!) в зависимости от постановки, размеров входа и силы отсечения
+- Пространственная сложность обычно O(n) для глубины рекурсии / стека состояния (n — размер решения)
 
-**Общий шаблон Backtracking:**
+**Общий шаблон Backtracking (упрощённый):**
 ```kotlin
-// Универсальный шаблон backtracking
-fun backtrack(
-    state: MutableList<Any>,
-    choices: List<Any>,
-    result: MutableList<List<Any>>
+// Универсальный упрощённый шаблон backtracking
+// В реальных задачах множество допустимых choice'ов обычно зависит от текущего state.
+fun <T> backtrack(
+    state: MutableList<T>,
+    choices: List<T>,
+    result: MutableList<List<T>>
 ) {
     // Базовый случай: решение найдено
     if (isSolution(state)) {
@@ -51,18 +53,18 @@ fun backtrack(
         return
     }
 
-    // Пробуем каждый выбор
+    // Пробуем каждый возможный выбор для текущего состояния
     for (choice in choices) {
+        if (!isValid(state, choice)) continue
+
         // 1. Делаем выбор
-        if (isValid(state, choice)) {
-            state.add(choice)
+        state.add(choice)
 
-            // 2. Рекурсия
-            backtrack(state, choices, result)
+        // 2. Рекурсия
+        backtrack(state, choices, result)
 
-            // 3. Откат (отменяем выбор)
-            state.removeAt(state.size - 1)
-        }
+        // 3. Откат (отменяем выбор)
+        state.removeAt(state.size - 1)
     }
 }
 ```
@@ -91,7 +93,7 @@ fun backtrackQueens(
         return
     }
 
-    // Пробуем разместить ферзя в каждом столбце
+    // Пробуем разместить ферзя в каждом столбце текущей строки
     for (col in 0 until n) {
         if (isValidQueenPlacement(board, row, col)) {
             // Делаем выбор
@@ -134,6 +136,7 @@ fun isValidQueenPlacement(board: Array<CharArray>, row: Int, col: Int): Boolean 
 
     return true
 }
+// Временная сложность: экспоненциальная; грубо O(N!) без учёта отсечения.
 ```
 
 **Sudoku Solver:**
@@ -144,14 +147,14 @@ fun solveSudoku(board: Array<CharArray>): Boolean {
 }
 
 fun backtrackSudoku(board: Array<CharArray>, row: Int, col: Int): Boolean {
-    // Переходим к следующей строке
-    if (col == 9) {
-        return backtrackSudoku(board, row + 1, 0)
-    }
-
-    // Базовый случай: все строки заполнены
+    // Базовый случай: все строки обработаны
     if (row == 9) {
         return true
+    }
+
+    // Переход на следующую строку
+    if (col == 9) {
+        return backtrackSudoku(board, row + 1, 0)
     }
 
     // Пропускаем заполненные клетки
@@ -201,6 +204,7 @@ fun isValidSudoku(board: Array<CharArray>, row: Int, col: Int, digit: Char): Boo
 
     return true
 }
+// Временная сложность (в худшем случае) экспоненциальная относительно количества пустых клеток.
 ```
 
 **Permutations:**
@@ -238,11 +242,12 @@ fun permute(nums: IntArray): List<List<Int>> {
     backtrack()
     return result
 }
+// Временная сложность: O(n * n!) по количеству генерируемых перестановок.
 ```
 
 **Combinations:**
 ```kotlin
-// Сгенерировать все подмножества размера k
+// Сгенерировать все подмножества размера k из чисел 1..n
 fun combine(n: Int, k: Int): List<List<Int>> {
     val result = mutableListOf<List<Int>>()
     val current = mutableListOf<Int>()
@@ -253,6 +258,9 @@ fun combine(n: Int, k: Int): List<List<Int>> {
             result.add(current.toList())
             return
         }
+
+        // Если оставшихся чисел недостаточно, можно прекратить
+        if (current.size + (n - start + 1) < k) return
 
         // Пробуем числа от start до n
         for (i in start..n) {
@@ -270,9 +278,10 @@ fun combine(n: Int, k: Int): List<List<Int>> {
     backtrack(1)
     return result
 }
+// Временная сложность: O(C(n, k) * k) на генерацию всех комбинаций.
 ```
 
-**Subsets (Power Set):**
+**Subsets (Power `Set`):**
 ```kotlin
 // Сгенерировать все возможные подмножества множества
 fun subsets(nums: IntArray): List<List<Int>> {
@@ -299,27 +308,29 @@ fun subsets(nums: IntArray): List<List<Int>> {
     backtrack(0)
     return result
 }
+// Временная сложность: O(2^n * n) на генерацию всех подмножеств.
 ```
 
 ## Answer (EN)
 
 **Backtracking Theory:**
-Backtracking is a powerful technique for solving constraint satisfaction problems. It builds solutions incrementally and abandons partial solutions that cannot lead to valid solutions. Essential for puzzles, combinatorics, and optimization problems.
+Backtracking is a technique for systematically exploring search spaces in constraint satisfaction and combinatorial problems. It incrementally builds a partial solution and backtracks when the current configuration cannot lead to any valid complete solution. Commonly used for puzzles, combinatorics, and some optimization/search problems (see [[c-algorithms]]).
 
 **Main concepts:**
-- Systematically explores all possibilities
-- Prunes invalid branches early
-- Naturally uses recursion
-- Often O(2^n) or O(n!) time complexity
-- O(n) space for recursion stack
+- Systematically explores all (or almost all) possibilities
+- Prunes invalid branches early using constraint checks
+- Naturally implemented via recursion (or iteratively with an explicit stack)
+- Typical (often worst-case) complexity is exponential, e.g. O(2^n) or O(n!), depending on the problem, input size, and pruning power
+- Space complexity usually O(n) for recursion depth / state stack (n being the solution size)
 
-**General Backtracking Template:**
+**General Backtracking Template (simplified):**
 ```kotlin
-// Generic backtracking template
-fun backtrack(
-    state: MutableList<Any>,
-    choices: List<Any>,
-    result: MutableList<List<Any>>
+// Generic simplified backtracking template.
+// In real problems, available choices usually depend on the current state.
+fun <T> backtrack(
+    state: MutableList<T>,
+    choices: List<T>,
+    result: MutableList<List<T>>
 ) {
     // Base case: solution found
     if (isSolution(state)) {
@@ -327,25 +338,25 @@ fun backtrack(
         return
     }
 
-    // Try each choice
+    // Try each possible choice for the current state
     for (choice in choices) {
+        if (!isValid(state, choice)) continue
+
         // 1. Make choice
-        if (isValid(state, choice)) {
-            state.add(choice)
+        state.add(choice)
 
-            // 2. Recurse
-            backtrack(state, choices, result)
+        // 2. Recurse
+        backtrack(state, choices, result)
 
-            // 3. Backtrack (undo choice)
-            state.removeAt(state.size - 1)
-        }
+        // 3. Backtrack (undo choice)
+        state.removeAt(state.size - 1)
     }
 }
 ```
 
 **N-Queens Problem:**
 ```kotlin
-// Place N queens on N×N chessboard so no two attack each other
+// Place N queens on an N×N chessboard so no two attack each other
 fun solveNQueens(n: Int): List<List<String>> {
     val result = mutableListOf<List<String>>()
     val board = Array(n) { CharArray(n) { '.' } }
@@ -367,7 +378,7 @@ fun backtrackQueens(
         return
     }
 
-    // Try placing queen in each column
+    // Try placing a queen in each column of the current row
     for (col in 0 until n) {
         if (isValidQueenPlacement(board, row, col)) {
             // Make choice
@@ -410,24 +421,25 @@ fun isValidQueenPlacement(board: Array<CharArray>, row: Int, col: Int): Boolean 
 
     return true
 }
+// Time complexity: exponential; roughly O(N!) in the worst case without advanced pruning.
 ```
 
 **Sudoku Solver:**
 ```kotlin
-// Fill 9×9 grid with digits 1-9 following Sudoku rules
+// Fill a 9×9 grid with digits 1-9 following Sudoku rules
 fun solveSudoku(board: Array<CharArray>): Boolean {
     return backtrackSudoku(board, 0, 0)
 }
 
 fun backtrackSudoku(board: Array<CharArray>, row: Int, col: Int): Boolean {
+    // Base case: all rows processed
+    if (row == 9) {
+        return true
+    }
+
     // Move to next row
     if (col == 9) {
         return backtrackSudoku(board, row + 1, 0)
-    }
-
-    // Base case: all rows filled
-    if (row == 9) {
-        return true
     }
 
     // Skip filled cells
@@ -477,6 +489,7 @@ fun isValidSudoku(board: Array<CharArray>, row: Int, col: Int, digit: Char): Boo
 
     return true
 }
+// Time complexity: exponential in the number of empty cells (backtracking over possibilities).
 ```
 
 **Permutations:**
@@ -514,11 +527,12 @@ fun permute(nums: IntArray): List<List<Int>> {
     backtrack()
     return result
 }
+// Time complexity: O(n * n!) to generate all permutations.
 ```
 
 **Combinations:**
 ```kotlin
-// Generate all k-sized subsets
+// Generate all k-sized subsets from 1..n
 fun combine(n: Int, k: Int): List<List<Int>> {
     val result = mutableListOf<List<Int>>()
     val current = mutableListOf<Int>()
@@ -529,6 +543,9 @@ fun combine(n: Int, k: Int): List<List<Int>> {
             result.add(current.toList())
             return
         }
+
+        // Prune: if not enough numbers left to reach size k
+        if (current.size + (n - start + 1) < k) return
 
         // Try numbers from start to n
         for (i in start..n) {
@@ -546,9 +563,10 @@ fun combine(n: Int, k: Int): List<List<Int>> {
     backtrack(1)
     return result
 }
+// Time complexity: O(C(n, k) * k) to generate all combinations.
 ```
 
-**Subsets (Power Set):**
+**Subsets (Power `Set`):**
 ```kotlin
 // Generate all possible subsets of a set
 fun subsets(nums: IntArray): List<List<Int>> {
@@ -575,15 +593,43 @@ fun subsets(nums: IntArray): List<List<Int>> {
     backtrack(0)
     return result
 }
+// Time complexity: O(2^n * n) to generate the entire power set.
 ```
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Чем backtracking отличается от динамического программирования?
+- Каковы ключевые техники оптимизации backtracking-алгоритмов?
+- Когда следует использовать backtracking по сравнению с другими подходами?
 
 ## Follow-ups
 
 - How does backtracking differ from dynamic programming?
 - What are the key optimization techniques for backtracking?
 - When should you use backtracking vs other approaches?
+
+## Ссылки (RU)
+
+- [[c-algorithms]]
+- "https://en.wikipedia.org/wiki/Backtracking"
+
+## References
+
+- [[c-algorithms]]
+- "https://en.wikipedia.org/wiki/Backtracking"
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-data-structures-overview--algorithms--easy]] - Структуры данных
+
+### Связанные (тот же уровень)
+- [[q-dynamic-programming-fundamentals--algorithms--hard]] - Базовые концепции динамического программирования
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Графовые алгоритмы
+
+### Продвинутое (сложнее)
 
 ## Related Questions
 

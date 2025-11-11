@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-dijkstra-algorithm, c-mst-algorithms]
+related: [c-algorithms, q-graph-algorithms-bfs-dfs--algorithms--hard]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [algorithms, bellman-ford, difficulty/hard, dijkstra, floyd-warshall, graph, mst, shortest-path]
-sources: [https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm, https://en.wikipedia.org/wiki/Minimum_spanning_tree]
+sources: ["https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm", "https://en.wikipedia.org/wiki/Minimum_spanning_tree"]
+
 ---
 
 # Вопрос (RU)
@@ -28,20 +29,24 @@ sources: [https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm, https://en.wikip
 ## Ответ (RU)
 
 **Теория продвинутых алгоритмов на графах:**
-Продвинутые алгоритмы на графах решают две основные категории задач: кратчайшие пути и минимальные остовные деревья. Выбор алгоритма зависит от характеристик графа и требований задачи.
+Продвинутые алгоритмы на графах решают две основные категории задач: кратчайшие пути и минимальные остовные деревья. Выбор алгоритма зависит от характеристик графа (ориентированный/неориентированный, наличие отрицательных весов, плотность) и требований задачи. См. также [[c-algorithms]].
 
 **Основные концепции:**
-- **Кратчайшие пути**: нахождение оптимальных маршрутов между вершинами
-- **MST**: соединение всех вершин с минимальной стоимостью
-- **Жадные алгоритмы**: локально оптимальный выбор на каждом шаге
-- **Динамическое программирование**: решение через подзадачи
+- **Кратчайшие пути**: нахождение оптимальных маршрутов между вершинами.
+- **MST**: соединение всех вершин связного неориентированного взвешенного графа с минимальной суммарной стоимостью (без циклов).
+- **Жадные алгоритмы**: локально оптимальный выбор на каждом шаге (Дейкстра, Краскал, Прим).
+- **Динамическое программирование**: решение через подзадачи (Флойд–Уоршелл).
 
-**Алгоритм Дейкстры:**
+Ниже приведены канонические реализации и ключевые идеи.
+
+**Алгоритм Дейкстры (O((V + E) log V) с очередью с приоритетом):**
 ```kotlin
-// Находит кратчайшие пути от одной исходной вершины с неотрицательными весами
+// Находит кратчайшие пути от одной исходной вершины в графе без отрицательных весов рёбер
+// graph.vertices: количество вершин
+// graph.adj[u]: список рёбер из u, каждое Edge(to, weight)
 data class Edge(val to: Int, val weight: Int)
 data class Node(val vertex: Int, val distance: Int) : Comparable<Node> {
-    override fun compareTo(other: Node) = distance - other.distance
+    override fun compareTo(other: Node): Int = compareValues(this.distance, other.distance)
 }
 
 fun dijkstra(graph: Graph, source: Int): IntArray {
@@ -62,9 +67,9 @@ fun dijkstra(graph: Graph, source: Int): IntArray {
             val v = edge.to
             val weight = edge.weight
 
-            if (distances[u] != Int.MAX_VALUE &&
-                distances[u] + weight < distances[v]) {
-                distances[v] = distances[u] + weight
+            if (dist != Int.MAX_VALUE &&
+                dist + weight < distances[v]) {
+                distances[v] = dist + weight
                 priorityQueue.offer(Node(v, distances[v]))
             }
         }
@@ -74,11 +79,12 @@ fun dijkstra(graph: Graph, source: Int): IntArray {
 }
 ```
 
-**Алгоритм Краскала (MST):**
+**Алгоритм Краскала (MST, O(E log E)):**
 ```kotlin
-// Находит минимальное остовное дерево через сортировку рёбер
+// Находит минимальное остовное дерево в связном неориентированном взвешенном графе через сортировку рёбер
+// edges: список рёбер вида (u, v, weight)
 data class MSTEdge(val from: Int, val to: Int, val weight: Int) : Comparable<MSTEdge> {
-    override fun compareTo(other: MSTEdge) = weight - other.weight
+    override fun compareTo(other: MSTEdge): Int = compareValues(this.weight, other.weight)
 }
 
 class UnionFind(size: Int) {
@@ -129,9 +135,10 @@ fun kruskalMST(vertices: Int, edges: List<MSTEdge>): List<MSTEdge> {
 }
 ```
 
-**Алгоритм Прима (MST):**
+**Алгоритм Прима (MST, O(E log V) с очередью с приоритетом):**
 ```kotlin
-// Растит MST от стартовой вершины
+// Растит MST от стартовой вершины в связном неориентированном взвешенном графе
+// graph.adj[u]: список рёбер Edge(to, weight) для неориентированного графа
 fun primMST(graph: Graph): List<MSTEdge> {
     val mst = mutableListOf<MSTEdge>()
     val visited = BooleanArray(graph.vertices)
@@ -145,15 +152,21 @@ fun primMST(graph: Graph): List<MSTEdge> {
 
     while (pq.isNotEmpty() && mst.size < graph.vertices - 1) {
         val edge = pq.poll()
-        if (visited[edge.to]) continue
+        val u = edge.from
+        val v = edge.to
 
-        mst.add(edge)
-        visited[edge.to] = true
+        // Выбираем ребро, которое ведет в ещё не посещённую вершину
+        if (visited[u] && visited[v]) continue
+
+        val next = if (visited[u]) v else u
+        mst.add(MSTEdge(u, next, edge.weight))
+        visited[next] = true
 
         // Добавляем рёбра из новой вершины
-        for (nextEdge in graph.adj[edge.to]) {
-            if (!visited[nextEdge.to]) {
-                pq.offer(MSTEdge(edge.to, nextEdge.to, nextEdge.weight))
+        for (nextEdge in graph.adj[next]) {
+            val to = nextEdge.to
+            if (!visited[to]) {
+                pq.offer(MSTEdge(next, to, nextEdge.weight))
             }
         }
     }
@@ -162,23 +175,23 @@ fun primMST(graph: Graph): List<MSTEdge> {
 }
 ```
 
-**Алгоритм Флойда-Уоршелла:**
+**Алгоритм Флойда–Уоршелла (O(V^3)):**
 ```kotlin
 // Находит кратчайшие пути между всеми парами вершин
+// graph[i][j]: вес ребра i->j или INF (например, Int.MAX_VALUE / 2) если ребра нет;
+// graph[i][i] обычно 0.
 fun floydWarshall(graph: Array<IntArray>): Array<IntArray> {
     val V = graph.size
     val dist = Array(V) { i -> graph[i].clone() }
 
-    // Для каждой промежуточной вершины k
     for (k in 0 until V) {
-        // Для каждой пары вершин (i, j)
         for (i in 0 until V) {
+            if (dist[i][k] == Int.MAX_VALUE) continue
             for (j in 0 until V) {
-                // Если путь через k короче текущего
-                if (dist[i][k] != Int.MAX_VALUE &&
-                    dist[k][j] != Int.MAX_VALUE &&
-                    dist[i][k] + dist[k][j] < dist[i][j]) {
-                    dist[i][j] = dist[i][k] + dist[k][j]
+                if (dist[k][j] == Int.MAX_VALUE) continue
+                val throughK = dist[i][k] + dist[k][j]
+                if (throughK < dist[i][j]) {
+                    dist[i][j] = throughK
                 }
             }
         }
@@ -187,7 +200,7 @@ fun floydWarshall(graph: Array<IntArray>): Array<IntArray> {
     return dist
 }
 
-// Обнаружение отрицательных циклов
+// Обнаружение отрицательных циклов (если dist[i][i] < 0)
 fun hasNegativeCycle(dist: Array<IntArray>): Boolean {
     val V = dist.size
     for (i in 0 until V) {
@@ -197,30 +210,40 @@ fun hasNegativeCycle(dist: Array<IntArray>): Boolean {
 }
 ```
 
-**Алгоритм Беллмана-Форда:**
+**Алгоритм Беллмана–Форда (O(V * E)):**
 ```kotlin
-// Находит кратчайшие пути с отрицательными весами и обнаруживает циклы
-fun bellmanFord(graph: Graph, edges: List<MSTEdge>, source: Int): IntArray? {
-    val V = graph.vertices
-    val distances = IntArray(V) { Int.MAX_VALUE }
+// Находит кратчайшие пути от одной вершины в ориентированном графе,
+// поддерживает отрицательные веса и обнаруживает отрицательные циклы, достижимые из source.
+// edges: список направленных рёбер Edge(u, v, weight)
+data class BFEdge(val from: Int, val to: Int, val weight: Int)
+
+fun bellmanFord(vertices: Int, edges: List<BFEdge>, source: Int): IntArray? {
+    val distances = IntArray(vertices) { Int.MAX_VALUE }
     distances[source] = 0
 
     // Релаксируем все рёбра V-1 раз
-    repeat(V - 1) {
+    repeat(vertices - 1) {
+        var updated = false
         for (edge in edges) {
-            val (u, v, weight) = edge
+            val u = edge.from
+            val v = edge.to
+            val w = edge.weight
             if (distances[u] != Int.MAX_VALUE &&
-                distances[u] + weight < distances[v]) {
-                distances[v] = distances[u] + weight
+                distances[u] + w < distances[v]) {
+                distances[v] = distances[u] + w
+                updated = true
             }
         }
+        if (!updated) return distances
     }
 
-    // V-я итерация: проверка на отрицательные циклы
+    // Дополнительная итерация: проверка на отрицательные циклы
     for (edge in edges) {
-        val (u, v, weight) = edge
+        val u = edge.from
+        val v = edge.to
+        val w = edge.weight
         if (distances[u] != Int.MAX_VALUE &&
-            distances[u] + weight < distances[v]) {
+            distances[u] + w < distances[v]) {
             return null  // Обнаружен отрицательный цикл
         }
     }
@@ -232,20 +255,24 @@ fun bellmanFord(graph: Graph, edges: List<MSTEdge>, source: Int): IntArray? {
 ## Answer (EN)
 
 **Advanced Graph Algorithms Theory:**
-Advanced graph algorithms solve two main categories of problems: shortest paths and minimum spanning trees. Algorithm choice depends on graph characteristics and problem requirements.
+Advanced graph algorithms primarily solve two categories of problems: shortest paths and minimum spanning trees. The choice of algorithm depends on graph characteristics (directed/undirected, presence of negative weights, density) and problem requirements. See also [[c-algorithms]].
 
 **Main concepts:**
-- **Shortest paths**: finding optimal routes between vertices
-- **MST**: connecting all vertices with minimum cost
-- **Greedy algorithms**: locally optimal choice at each step
-- **Dynamic programming**: solving through subproblems
+- **Shortest paths**: finding optimal routes between vertices.
+- **MST**: connecting all vertices of a connected, undirected, weighted graph with minimum total cost (no cycles).
+- **Greedy algorithms**: locally optimal choice at each step (Dijkstra, Kruskal, Prim).
+- **Dynamic programming**: solving via subproblems (Floyd–Warshall).
 
-**Dijkstra's Algorithm:**
+Below are canonical implementations and key ideas.
+
+**Dijkstra's Algorithm (O((V + E) log V) with a priority queue):**
 ```kotlin
-// Finds shortest paths from single source with non-negative weights
+// Finds shortest paths from a single source in a graph with non-negative edge weights
+// graph.vertices: number of vertices
+// graph.adj[u]: list of edges from u, each Edge(to, weight)
 data class Edge(val to: Int, val weight: Int)
 data class Node(val vertex: Int, val distance: Int) : Comparable<Node> {
-    override fun compareTo(other: Node) = distance - other.distance
+    override fun compareTo(other: Node): Int = compareValues(this.distance, other.distance)
 }
 
 fun dijkstra(graph: Graph, source: Int): IntArray {
@@ -266,9 +293,9 @@ fun dijkstra(graph: Graph, source: Int): IntArray {
             val v = edge.to
             val weight = edge.weight
 
-            if (distances[u] != Int.MAX_VALUE &&
-                distances[u] + weight < distances[v]) {
-                distances[v] = distances[u] + weight
+            if (dist != Int.MAX_VALUE &&
+                dist + weight < distances[v]) {
+                distances[v] = dist + weight
                 priorityQueue.offer(Node(v, distances[v]))
             }
         }
@@ -278,11 +305,12 @@ fun dijkstra(graph: Graph, source: Int): IntArray {
 }
 ```
 
-**Kruskal's Algorithm (MST):**
+**Kruskal's Algorithm (MST, O(E log E)):**
 ```kotlin
-// Finds minimum spanning tree through edge sorting
+// Finds a minimum spanning tree of a connected, undirected, weighted graph via edge sorting
+// edges: list of edges (u, v, weight)
 data class MSTEdge(val from: Int, val to: Int, val weight: Int) : Comparable<MSTEdge> {
-    override fun compareTo(other: MSTEdge) = weight - other.weight
+    override fun compareTo(other: MSTEdge): Int = compareValues(this.weight, other.weight)
 }
 
 class UnionFind(size: Int) {
@@ -333,15 +361,16 @@ fun kruskalMST(vertices: Int, edges: List<MSTEdge>): List<MSTEdge> {
 }
 ```
 
-**Prim's Algorithm (MST):**
+**Prim's Algorithm (MST, O(E log V) with a priority queue):**
 ```kotlin
-// Grows MST from starting vertex
+// Grows an MST from a starting vertex in a connected, undirected, weighted graph
+// graph.adj[u]: list of edges Edge(to, weight) for an undirected graph
 fun primMST(graph: Graph): List<MSTEdge> {
     val mst = mutableListOf<MSTEdge>()
     val visited = BooleanArray(graph.vertices)
     val pq = PriorityQueue<MSTEdge>()
 
-    // Start with vertex 0
+    // Start from vertex 0
     visited[0] = true
     for (edge in graph.adj[0]) {
         pq.offer(MSTEdge(0, edge.to, edge.weight))
@@ -349,15 +378,21 @@ fun primMST(graph: Graph): List<MSTEdge> {
 
     while (pq.isNotEmpty() && mst.size < graph.vertices - 1) {
         val edge = pq.poll()
-        if (visited[edge.to]) continue
+        val u = edge.from
+        val v = edge.to
 
-        mst.add(edge)
-        visited[edge.to] = true
+        // Choose edge that leads to an unvisited vertex
+        if (visited[u] && visited[v]) continue
 
-        // Add edges from new vertex
-        for (nextEdge in graph.adj[edge.to]) {
-            if (!visited[nextEdge.to]) {
-                pq.offer(MSTEdge(edge.to, nextEdge.to, nextEdge.weight))
+        val next = if (visited[u]) v else u
+        mst.add(MSTEdge(u, next, edge.weight))
+        visited[next] = true
+
+        // Add edges from the new vertex
+        for (nextEdge in graph.adj[next]) {
+            val to = nextEdge.to
+            if (!visited[to]) {
+                pq.offer(MSTEdge(next, to, nextEdge.weight))
             }
         }
     }
@@ -366,23 +401,23 @@ fun primMST(graph: Graph): List<MSTEdge> {
 }
 ```
 
-**Floyd-Warshall Algorithm:**
+**Floyd–Warshall Algorithm (O(V^3)):**
 ```kotlin
 // Finds shortest paths between all pairs of vertices
+// graph[i][j]: weight of edge i->j or INF (e.g., Int.MAX_VALUE / 2) if no edge;
+// graph[i][i] is typically 0.
 fun floydWarshall(graph: Array<IntArray>): Array<IntArray> {
     val V = graph.size
     val dist = Array(V) { i -> graph[i].clone() }
 
-    // For each intermediate vertex k
     for (k in 0 until V) {
-        // For each pair of vertices (i, j)
         for (i in 0 until V) {
+            if (dist[i][k] == Int.MAX_VALUE) continue
             for (j in 0 until V) {
-                // If path through k is shorter than current
-                if (dist[i][k] != Int.MAX_VALUE &&
-                    dist[k][j] != Int.MAX_VALUE &&
-                    dist[i][k] + dist[k][j] < dist[i][j]) {
-                    dist[i][j] = dist[i][k] + dist[k][j]
+                if (dist[k][j] == Int.MAX_VALUE) continue
+                val throughK = dist[i][k] + dist[k][j]
+                if (throughK < dist[i][j]) {
+                    dist[i][j] = throughK
                 }
             }
         }
@@ -391,7 +426,7 @@ fun floydWarshall(graph: Array<IntArray>): Array<IntArray> {
     return dist
 }
 
-// Detect negative cycles
+// Detect negative cycles (if dist[i][i] < 0)
 fun hasNegativeCycle(dist: Array<IntArray>): Boolean {
     val V = dist.size
     for (i in 0 until V) {
@@ -401,30 +436,40 @@ fun hasNegativeCycle(dist: Array<IntArray>): Boolean {
 }
 ```
 
-**Bellman-Ford Algorithm:**
+**Bellman–Ford Algorithm (O(V * E)):**
 ```kotlin
-// Finds shortest paths with negative weights and detects cycles
-fun bellmanFord(graph: Graph, edges: List<MSTEdge>, source: Int): IntArray? {
-    val V = graph.vertices
-    val distances = IntArray(V) { Int.MAX_VALUE }
+// Finds shortest paths from a single source in a directed graph,
+// supports negative weights and detects negative-weight cycles reachable from the source.
+// edges: list of directed edges Edge(u, v, weight)
+data class BFEdge(val from: Int, val to: Int, val weight: Int)
+
+fun bellmanFord(vertices: Int, edges: List<BFEdge>, source: Int): IntArray? {
+    val distances = IntArray(vertices) { Int.MAX_VALUE }
     distances[source] = 0
 
     // Relax all edges V-1 times
-    repeat(V - 1) {
+    repeat(vertices - 1) {
+        var updated = false
         for (edge in edges) {
-            val (u, v, weight) = edge
+            val u = edge.from
+            val v = edge.to
+            val w = edge.weight
             if (distances[u] != Int.MAX_VALUE &&
-                distances[u] + weight < distances[v]) {
-                distances[v] = distances[u] + weight
+                distances[u] + w < distances[v]) {
+                distances[v] = distances[u] + w
+                updated = true
             }
         }
+        if (!updated) return distances
     }
 
-    // V-th iteration: check for negative cycles
+    // Extra iteration: check for negative-weight cycles
     for (edge in edges) {
-        val (u, v, weight) = edge
+        val u = edge.from
+        val v = edge.to
+        val w = edge.weight
         if (distances[u] != Int.MAX_VALUE &&
-            distances[u] + weight < distances[v]) {
+            distances[u] + w < distances[v]) {
             return null  // Negative cycle detected
         }
     }
@@ -435,11 +480,29 @@ fun bellmanFord(graph: Graph, edges: List<MSTEdge>, source: Int): IntArray? {
 
 ---
 
+## Дополнительные вопросы (RU)
+- Как выбрать между алгоритмами Дейкстры и Беллмана-Форда?
+- Каковы особенности и trade-off'ы между алгоритмами Краскала и Прима для построения MST?
+- В каких случаях алгоритм Флойда-Уоршелла предпочтительнее, чем запускать Дейкстру V раз?
+
 ## Follow-ups
 
 - How do you choose between Dijkstra and Bellman-Ford?
 - What are the trade-offs between Kruskal and Prim for MST?
 - When is Floyd-Warshall better than running Dijkstra V times?
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Базовые алгоритмы на графах
+- [[q-data-structures-overview--algorithms--easy]] - Структуры данных
+
+### Связанные (тот же уровень)
+- [[q-dynamic-programming-fundamentals--algorithms--hard]] - Основы динамического программирования
+- [[q-binary-search-trees-bst--algorithms--hard]] - Алгоритмы на деревьях
+
+### Продвинутые (сложнее)
+- [[q-dynamic-programming-fundamentals--algorithms--hard]] - Комбинирование DP и графов
 
 ## Related Questions
 
@@ -452,4 +515,9 @@ fun bellmanFord(graph: Graph, edges: List<MSTEdge>, source: Int): IntArray? {
 - [[q-binary-search-trees-bst--algorithms--hard]] - Tree algorithms
 
 ### Advanced (Harder)
-- [[q-advanced-graph-algorithms--algorithms--hard]] - Advanced graph topics
+- [[q-dynamic-programming-fundamentals--algorithms--hard]] - Combining DP with graphs
+
+## References
+- [[c-algorithms]]
+- "https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm"
+- "https://en.wikipedia.org/wiki/Minimum_spanning_tree"

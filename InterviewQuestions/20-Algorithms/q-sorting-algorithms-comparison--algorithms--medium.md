@@ -3,18 +3,19 @@ id: algo-008
 title: "Sorting Algorithms Comparison / Сравнение алгоритмов сортировки"
 aliases: ["Sorting Algorithms", "Сравнение алгоритмов сортировки"]
 topic: algorithms
-subtopics: [heapsort, mergesort, quicksort, sorting]
+subtopics: [heapsort, mergesort, quicksort]
 question_kind: coding
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-sorting-algorithms, q-binary-search-variants--algorithms--medium, q-graph-algorithms-bfs-dfs--algorithms--hard]
+related: [c-algorithms, q-binary-search-variants--algorithms--medium, q-graph-algorithms-bfs-dfs--algorithms--hard]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [algorithms, complexity, difficulty/medium, mergesort, quicksort, sorting]
-sources: [https://en.wikipedia.org/wiki/Sorting_algorithm]
+sources: ["https://en.wikipedia.org/wiki/Sorting_algorithm"]
+
 ---
 
 # Вопрос (RU)
@@ -28,7 +29,7 @@ sources: [https://en.wikipedia.org/wiki/Sorting_algorithm]
 ## Ответ (RU)
 
 **Теория алгоритмов сортировки:**
-Сортировка - фундаментальная операция в информатике. Различные алгоритмы имеют разные характеристики сложности и применения в зависимости от типа данных и требований.
+Сортировка — фундаментальная операция в информатике. Различные алгоритмы имеют разные характеристики сложности и применения в зависимости от типа данных, ограничений по памяти и требований к стабильности.
 
 **Сравнительная таблица:**
 | Алгоритм | Лучший | Средний | Худший | Память | Стабильный | На месте |
@@ -37,6 +38,16 @@ sources: [https://en.wikipedia.org/wiki/Sorting_algorithm]
 | **Merge Sort** | O(n log n) | O(n log n) | O(n log n) | O(n) | Да | Нет |
 | **Heap Sort** | O(n log n) | O(n log n) | O(n log n) | O(1) | Нет | Да |
 | **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) | Да | Да |
+| **Counting Sort*** | O(n + k) | O(n + k) | O(n + k) | O(n + k) | Да | Нет |
+
+\* Counting Sort применим, когда диапазон значений k относительно мал по сравнению с n.
+
+**Когда использовать (кратко):**
+- Quick Sort: общий случай, хороший выбор по среднему времени и кэш-локальности; избегать без защиты от худшего случая для уже частично отсортированных/паттерновых данных.
+- Merge Sort: когда важна стабильность, предсказуемое O(n log n) и/или удобна работа с потоками/связанными списками.
+- Heap Sort: когда нужна O(1) доп. память и приемлемы нестабильность и худшая константа времени.
+- Insertion Sort: очень маленькие массивы, почти отсортированные данные; часто используется как часть гибридных алгоритмов.
+- Counting Sort: целые ключи из ограниченного диапазона; подходит как базовый шаг в Radix Sort.
 
 **Quick Sort - разделяй и властвуй:**
 ```kotlin
@@ -56,11 +67,18 @@ fun partition(arr: IntArray, low: Int, high: Int): Int {
     for (j in low until high) {
         if (arr[j] <= pivot) {
             i++
-            arr[i] = arr[j].also { arr[j] = arr[i] }
+            // стандартный swap двух элементов
+            val temp = arr[i]
+            arr[i] = arr[j]
+            arr[j] = temp
         }
     }
 
-    arr[i + 1] = arr[high].also { arr[high] = arr[i + 1] }
+    // поместить опорный элемент на позицию i+1
+    val temp = arr[i + 1]
+    arr[i + 1] = arr[high]
+    arr[high] = temp
+
     return i + 1
 }
 ```
@@ -110,7 +128,9 @@ fun heapSort(arr: IntArray) {
 
     // Извлечение элементов из кучи
     for (i in n - 1 downTo 1) {
-        arr[0] = arr[i].also { arr[i] = arr[0] }
+        val temp = arr[0]
+        arr[0] = arr[i]
+        arr[i] = temp
         heapify(arr, i, 0)
     }
 }
@@ -124,7 +144,9 @@ fun heapify(arr: IntArray, n: Int, i: Int) {
     if (right < n && arr[right] > arr[largest]) largest = right
 
     if (largest != i) {
-        arr[i] = arr[largest].also { arr[largest] = arr[i] }
+        val temp = arr[i]
+        arr[i] = arr[largest]
+        arr[largest] = temp
         heapify(arr, n, largest)
     }
 }
@@ -151,6 +173,7 @@ fun insertionSort(arr: IntArray) {
 **Counting Sort - для малого диапазона:**
 ```kotlin
 // Подсчёт вхождений, восстановление отсортированного массива
+// Время: O(n + k), Память: O(n + k), где k — диапазон значений.
 fun countingSort(arr: IntArray): IntArray {
     if (arr.isEmpty()) return arr
 
@@ -179,7 +202,7 @@ fun countingSort(arr: IntArray): IntArray {
 ## Answer (EN)
 
 **Sorting Algorithms Theory:**
-Sorting is a fundamental operation in computer science. Different algorithms have different complexity characteristics and applications depending on data type and requirements.
+Sorting is a fundamental operation in computer science. Different algorithms have different complexity characteristics and use cases depending on data distribution, memory constraints, and stability requirements.
 
 **Comparison Table:**
 | Algorithm | Best | Average | Worst | Space | Stable | In-Place |
@@ -188,6 +211,16 @@ Sorting is a fundamental operation in computer science. Different algorithms hav
 | **Merge Sort** | O(n log n) | O(n log n) | O(n log n) | O(n) | Yes | No |
 | **Heap Sort** | O(n log n) | O(n log n) | O(n log n) | O(1) | No | Yes |
 | **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) | Yes | Yes |
+| **Counting Sort*** | O(n + k) | O(n + k) | O(n + k) | O(n + k) | Yes | No |
+
+*Counting Sort is applicable when the key range k is relatively small compared to n.
+
+**When to use (brief):**
+- Quick Sort: general-purpose choice with good average performance and cache locality; avoid naive pivoting on adversarial/structured inputs unless you have worst-case protections.
+- Merge Sort: when you require stability, predictable O(n log n) time, or work with linked lists / external data streams.
+- Heap Sort: when you need O(1) extra memory and can tolerate being unstable and slightly slower constants.
+- Insertion Sort: very small arrays or nearly sorted data; commonly used as a base case in hybrid algorithms.
+- Counting Sort: integers/keys from a limited range; often used as a building block in Radix Sort.
 
 **Quick Sort - Divide and Conquer:**
 ```kotlin
@@ -207,11 +240,18 @@ fun partition(arr: IntArray, low: Int, high: Int): Int {
     for (j in low until high) {
         if (arr[j] <= pivot) {
             i++
-            arr[i] = arr[j].also { arr[j] = arr[i] }
+            // standard swap of two elements
+            val temp = arr[i]
+            arr[i] = arr[j]
+            arr[j] = temp
         }
     }
 
-    arr[i + 1] = arr[high].also { arr[high] = arr[i + 1] }
+    // place pivot at position i+1
+    val temp = arr[i + 1]
+    arr[i + 1] = arr[high]
+    arr[high] = temp
+
     return i + 1
 }
 ```
@@ -261,7 +301,9 @@ fun heapSort(arr: IntArray) {
 
     // Extract elements from heap
     for (i in n - 1 downTo 1) {
-        arr[0] = arr[i].also { arr[i] = arr[0] }
+        val temp = arr[0]
+        arr[0] = arr[i]
+        arr[i] = temp
         heapify(arr, i, 0)
     }
 }
@@ -275,7 +317,9 @@ fun heapify(arr: IntArray, n: Int, i: Int) {
     if (right < n && arr[right] > arr[largest]) largest = right
 
     if (largest != i) {
-        arr[i] = arr[largest].also { arr[largest] = arr[i] }
+        val temp = arr[i]
+        arr[i] = arr[largest]
+        arr[largest] = temp
         heapify(arr, n, largest)
     }
 }
@@ -302,6 +346,7 @@ fun insertionSort(arr: IntArray) {
 **Counting Sort - For Small Range:**
 ```kotlin
 // Count occurrences, reconstruct sorted array
+// Time: O(n + k), Space: O(n + k), where k is the range of values.
 fun countingSort(arr: IntArray): IntArray {
     if (arr.isEmpty()) return arr
 
@@ -335,6 +380,11 @@ fun countingSort(arr: IntArray): IntArray {
 - Why is QuickSort preferred over MergeSort in practice?
 - What is the lower bound for comparison-based sorting?
 
+## References
+
+- [[c-algorithms]]
+- "https://en.wikipedia.org/wiki/Sorting_algorithm"
+
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -346,3 +396,16 @@ fun countingSort(arr: IntArray): IntArray {
 
 ### Advanced (Harder)
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP algorithms
+
+## Дополнительные вопросы (RU)
+- В чем разница между стабильной и нестабильной сортировкой?
+- Почему на практике часто предпочитают QuickSort вместо MergeSort?
+- Каков теоретический нижний предел для сравнивающих алгоритмов сортировки?
+## Связанные вопросы (RU)
+### Предварительные (проще)
+- [[q-data-structures-overview--algorithms--easy]] - Основы структур данных
+### Связанные (тот же уровень)
+- [[q-binary-search-variants--algorithms--medium]] - Алгоритмы поиска
+- [[q-two-pointers-sliding-window--algorithms--medium]] - Техника двух указателей
+### Продвинутые (сложнее)
+- [[q-dynamic-programming-fundamentals--algorithms--hard]] - Динамическое программирование

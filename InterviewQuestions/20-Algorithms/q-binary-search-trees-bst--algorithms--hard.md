@@ -3,18 +3,19 @@ id: algo-007
 title: "Binary Search Trees and AVL Trees / Бинарные деревья поиска и AVL деревья"
 aliases: ["AVL Trees", "AVL деревья", "Binary Search Trees", "Бинарные деревья поиска"]
 topic: algorithms
-subtopics: [avl, balanced-trees, bst, trees]
+subtopics: [bst, avl, trees]
 question_kind: coding
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-binary-search-tree, q-binary-search-variants--algorithms--medium]
+related: [c-algorithms, q-binary-search-variants--algorithms--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [algorithms, avl, bst, data-structures, difficulty/hard, trees]
-sources: [https://en.wikipedia.org/wiki/AVL_tree, https://en.wikipedia.org/wiki/Binary_search_tree]
+updated: 2025-11-11
+tags: [algorithms, bst, avl, data-structures, difficulty/hard, trees]
+sources: ["https://en.wikipedia.org/wiki/AVL_tree", "https://en.wikipedia.org/wiki/Binary_search_tree"]
+
 ---
 
 # Вопрос (RU)
@@ -28,14 +29,14 @@ sources: [https://en.wikipedia.org/wiki/AVL_tree, https://en.wikipedia.org/wiki/
 ## Ответ (RU)
 
 **Теория BST:**
-Бинарное дерево поиска (BST) - структура данных, где для каждого узла все значения в левом поддереве меньше значения узла, а все значения в правом поддереве больше. Это свойство обеспечивает эффективный поиск, вставку и удаление.
+Бинарное дерево поиска (BST) - структура данных, где для каждого узла все значения в левом поддереве меньше значения узла, а все значения в правом поддереве больше. Это свойство обеспечивает эффективный поиск, вставку и удаление. На практике также нужно явно определить политику работы с дубликатами (запрет, хранение счётчика, всегда влево/вправо и т.п.); в приведённом коде дубликаты просто игнорируются.
 
 **Основные операции BST:**
 - Поиск: O(h), где h - высота дерева
 - Вставка: O(h)
 - Удаление: O(h)
 - В худшем случае (вырожденное дерево): O(n)
-- В среднем случае: O(log n)
+- В среднем случае при достаточно случайном порядке вставок или сбалансированной структуре: O(log n)
 
 **BST Implementation:**
 ```kotlin
@@ -74,7 +75,7 @@ class BST {
         when {
             value < node.value -> node.left = insertRec(node.left, value)
             value > node.value -> node.right = insertRec(node.right, value)
-            // Дубликаты обычно игнорируются
+            // Дубликаты игнорируются (альтернативные политики возможны)
         }
 
         return node
@@ -123,7 +124,7 @@ class BST {
 
 **Tree Traversals:**
 ```kotlin
-// Inorder (Левый → Корень → Правый) - даёт отсортированный порядок для BST!
+// Inorder (Левый → Корень → Правый) - даёт отсортированный порядок для BST
 fun inorderTraversal(node: TreeNode?): List<Int> {
     val result = mutableListOf<Int>()
 
@@ -139,7 +140,7 @@ fun inorderTraversal(node: TreeNode?): List<Int> {
     return result
 }
 
-// Preorder (Корень → Левый → Правый) - для создания копии дерева
+// Preorder (Корень → Левый → Правый) - часто используют для сериализации/копирования дерева
 fun preorderTraversal(node: TreeNode?): List<Int> {
     val result = mutableListOf<Int>()
 
@@ -155,7 +156,7 @@ fun preorderTraversal(node: TreeNode?): List<Int> {
     return result
 }
 
-// Postorder (Левый → Правый → Корень) - для удаления дерева
+// Postorder (Левый → Правый → Корень) - удобно для удаления дерева или вычисления на поддеревьях
 fun postorderTraversal(node: TreeNode?): List<Int> {
     val result = mutableListOf<Int>()
 
@@ -199,7 +200,7 @@ fun levelOrder(root: TreeNode?): List<List<Int>> {
 ```
 
 **AVL Trees (Self-Balancing BST):**
-AVL деревья поддерживают баланс, гарантируя высоту O(log n) для всех операций. Для каждого узла разность высот между левым и правым поддеревьями не превышает 1.
+AVL деревья являются самобалансирующимися BST: они поддерживают высоту дерева O(log n), поэтому операции поиска, вставки и удаления работают за O(log n) в худшем случае. Для каждого узла разность высот между левым и правым поддеревьями не превышает 1.
 
 **Balance Factor:** height(left) - height(right) ∈ {-1, 0, 1}
 
@@ -264,16 +265,16 @@ class AVLTree {
         when {
             value < node.value -> node.left = insertRec(node.left, value)
             value > node.value -> node.right = insertRec(node.right, value)
-            else -> return node  // Дубликат
+            else -> return node  // Дубликат не вставляем
         }
 
-        // Обновляем высоту
+        // Обновляем высоту текущего узла
         updateHeight(node)
 
-        // Получаем фактор баланса
+        // Вычисляем фактор баланса
         val balance = balanceFactor(node)
 
-        // Четыре случая нарушения баланса:
+        // Четыре стандартных случая дисбаланса на пути вставки:
         // Left-Left Case
         if (balance > 1 && value < node.left!!.value) {
             return rotateRight(node)
@@ -304,14 +305,14 @@ class AVLTree {
 ## Answer (EN)
 
 **BST Theory:**
-Binary Search Tree (BST) is a data structure where for every node, all values in the left subtree are less than the node's value, and all values in the right subtree are greater. This property enables efficient search, insertion, and deletion.
+Binary Search Tree (BST) is a data structure where for every node, all values in the left subtree are less than the node's value, and all values in the right subtree are greater. This property enables efficient search, insertion, and deletion. In practice, you must define how to handle duplicates (disallow, keep a count, always go left/right, etc.); in the code below duplicates are simply ignored.
 
 **Main BST Operations:**
 - Search: O(h), where h = height
 - Insert: O(h)
 - Delete: O(h)
 - Worst case (skewed tree): O(n)
-- Average case: O(log n)
+- Average case, assuming random insertion order or a balanced structure: O(log n)
 
 **BST Implementation:**
 ```kotlin
@@ -350,7 +351,7 @@ class BST {
         when {
             value < node.value -> node.left = insertRec(node.left, value)
             value > node.value -> node.right = insertRec(node.right, value)
-            // Duplicates typically ignored
+            // Duplicates are ignored (other policies are possible)
         }
 
         return node
@@ -399,7 +400,7 @@ class BST {
 
 **Tree Traversals:**
 ```kotlin
-// Inorder (Left → Root → Right) - produces sorted order for BST!
+// Inorder (Left → Root → Right) - produces sorted order for BST
 fun inorderTraversal(node: TreeNode?): List<Int> {
     val result = mutableListOf<Int>()
 
@@ -415,7 +416,7 @@ fun inorderTraversal(node: TreeNode?): List<Int> {
     return result
 }
 
-// Preorder (Root → Left → Right) - for creating copy of tree
+// Preorder (Root → Left → Right) - often used for serialization/copying
 fun preorderTraversal(node: TreeNode?): List<Int> {
     val result = mutableListOf<Int>()
 
@@ -431,7 +432,7 @@ fun preorderTraversal(node: TreeNode?): List<Int> {
     return result
 }
 
-// Postorder (Left → Right → Root) - for deleting tree
+// Postorder (Left → Right → Root) - useful for deleting the tree or bottom-up computations
 fun postorderTraversal(node: TreeNode?): List<Int> {
     val result = mutableListOf<Int>()
 
@@ -475,7 +476,7 @@ fun levelOrder(root: TreeNode?): List<List<Int>> {
 ```
 
 **AVL Trees (Self-Balancing BST):**
-AVL trees maintain balance, guaranteeing O(log n) height for all operations. For every node, the height difference between left and right subtrees is at most 1.
+AVL trees are self-balancing BSTs: they maintain tree height O(log n), so search, insert, and delete operations run in O(log n) time in the worst case. For every node, the height difference between left and right subtrees is at most 1.
 
 **Balance Factor:** height(left) - height(right) ∈ {-1, 0, 1}
 
@@ -540,16 +541,16 @@ class AVLTree {
         when {
             value < node.value -> node.left = insertRec(node.left, value)
             value > node.value -> node.right = insertRec(node.right, value)
-            else -> return node  // Duplicate
+            else -> return node  // Do not insert duplicates
         }
 
-        // Update height
+        // Update height of this node
         updateHeight(node)
 
-        // Get balance factor
+        // Compute balance factor
         val balance = balanceFactor(node)
 
-        // Four rotation cases:
+        // Four standard imbalance cases along the insertion path:
         // Left-Left Case
         if (balance > 1 && value < node.left!!.value) {
             return rotateRight(node)
@@ -585,6 +586,12 @@ class AVLTree {
 - How do AVL trees compare to Red-Black trees?
 - What are the four rotation cases in AVL trees?
 
+## References
+
+- [[c-algorithms]]
+- "https://en.wikipedia.org/wiki/AVL_tree"
+- "https://en.wikipedia.org/wiki/Binary_search_tree"
+
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -596,3 +603,16 @@ class AVLTree {
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP concepts
 
 ### Advanced (Harder)
+
+## Дополнительные вопросы (RU)
+- В чем разница между BST и бинарным деревом?
+- Как AVL деревья сравниваются с красно-черными деревьями?
+- Каковы четыре типа вращений в AVL деревьях?
+## Связанные вопросы (RU)
+### Предпосылки (проще)
+- [[q-data-structures-overview--algorithms--easy]] - Базовые структуры данных
+- [[q-binary-search-variants--algorithms--medium]] - Концепции бинарного поиска
+### Связанные (тот же уровень)
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Обходы графов
+- [[q-dynamic-programming-fundamentals--algorithms--hard]] - Основы динамического программирования
+### Продвинутые (сложнее)

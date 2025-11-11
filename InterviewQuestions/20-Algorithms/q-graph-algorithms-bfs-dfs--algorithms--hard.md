@@ -3,18 +3,19 @@ id: algo-002
 title: "Graph Algorithms: BFS and DFS / Алгоритмы графов: BFS и DFS"
 aliases: ["BFS and DFS", "BFS и DFS", "Graph Algorithms", "Алгоритмы графов"]
 topic: algorithms
-subtopics: [bfs, dfs, graphs, traversal]
+subtopics: [bfs, dfs, graphs]
 question_kind: coding
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-graph-algorithms]
+related: [c-algorithms, q-advanced-graph-algorithms--algorithms--hard]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [algorithms, bfs, dfs, difficulty/hard, graphs, traversal]
-sources: [https://en.wikipedia.org/wiki/Breadth-first_search, https://en.wikipedia.org/wiki/Depth-first_search]
+sources: ["https://en.wikipedia.org/wiki/Breadth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search"]
+
 ---
 
 # Вопрос (RU)
@@ -28,17 +29,27 @@ sources: [https://en.wikipedia.org/wiki/Breadth-first_search, https://en.wikiped
 ## Ответ (RU)
 
 **Теория алгоритмов графов:**
-Графы - структуры данных, представляющие отношения между сущностями. BFS (поиск в ширину) и DFS (поиск в глубину) - основные алгоритмы обхода графов с различными характеристиками и применениями.
+Графы — структуры данных, представляющие отношения между сущностями. BFS (поиск в ширину) и DFS (поиск в глубину) — базовые алгоритмы обхода графов с разными свойствами и применением. См. также [[c-algorithms]].
+
+Ключевые идеи:
+- Оба алгоритма посещают вершины и рёбра максимум по одному разу: сложность O(V + E).
+- BFS использует очередь и обходит граф по слоям.
+- DFS использует стек (явный или стек вызовов) и уходит в глубину.
+- По памяти:
+  - BFS в худшем случае хранит весь «фронт» слоя: O(V).
+  - DFS хранит путь (глубину рекурсии/стека): O(H), где H ≤ V; в худшем случае O(V).
 
 **Представление графа:**
 ```kotlin
-// Список смежности - наиболее распространённый способ
-class Graph(val vertices: Int) {
+// Список смежности — распространённый способ для разреженных графов
+class Graph(val vertices: Int, val directed: Boolean = false) {
     val adj = Array(vertices) { mutableListOf<Int>() }
 
     fun addEdge(u: Int, v: Int) {
         adj[u].add(v)
-        adj[v].add(u)  // Для неориентированного графа
+        if (!directed) {
+            adj[v].add(u)  // Для неориентированного графа
+        }
     }
 }
 ```
@@ -46,21 +57,22 @@ class Graph(val vertices: Int) {
 **BFS (Breadth-First Search):**
 ```kotlin
 // Обход по уровням с использованием очереди
+// Предполагается, что граф не взвешенный, рёбра равной «стоимости»
 fun bfs(graph: Graph, start: Int) {
     val visited = BooleanArray(graph.vertices)
-    val queue = LinkedList<Int>()
+    val queue: ArrayDeque<Int> = ArrayDeque()
 
     visited[start] = true
-    queue.offer(start)
+    queue.add(start)
 
     while (queue.isNotEmpty()) {
-        val vertex = queue.poll()
+        val vertex = queue.removeFirst()
         print("$vertex ")
 
         for (neighbor in graph.adj[vertex]) {
             if (!visited[neighbor]) {
                 visited[neighbor] = true
-                queue.offer(neighbor)
+                queue.add(neighbor)
             }
         }
     }
@@ -71,6 +83,7 @@ fun bfs(graph: Graph, start: Int) {
 ```kotlin
 // Обход в глубину с использованием рекурсии
 fun dfs(graph: Graph, start: Int, visited: BooleanArray = BooleanArray(graph.vertices)) {
+    if (visited[start]) return
     visited[start] = true
     print("$start ")
 
@@ -84,21 +97,22 @@ fun dfs(graph: Graph, start: Int, visited: BooleanArray = BooleanArray(graph.ver
 // Итеративная версия DFS со стеком
 fun dfsIterative(graph: Graph, start: Int) {
     val visited = BooleanArray(graph.vertices)
-    val stack = Stack<Int>()
+    val stack = ArrayDeque<Int>()
 
-    stack.push(start)
+    stack.addLast(start)
 
     while (stack.isNotEmpty()) {
-        val vertex = stack.pop()
+        val vertex = stack.removeLast()
 
         if (!visited[vertex]) {
             visited[vertex] = true
             print("$vertex ")
 
-            // Добавляем соседей в обратном порядке для сохранения порядка слева направо
+            // Добавляем соседей в обратном порядке для сохранения детерминированного порядка обхода
             for (i in graph.adj[vertex].size - 1 downTo 0) {
-                if (!visited[graph.adj[vertex][i]]) {
-                    stack.push(graph.adj[vertex][i])
+                val neighbor = graph.adj[vertex][i]
+                if (!visited[neighbor]) {
+                    stack.addLast(neighbor)
                 }
             }
         }
@@ -106,25 +120,25 @@ fun dfsIterative(graph: Graph, start: Int) {
 }
 ```
 
-**Кратчайший путь (BFS):**
+**Кратчайший путь (BFS в невзвешенном графе):**
 ```kotlin
-// Найти кратчайший путь между двумя узлами
+// Найти длину кратчайшего пути между двумя узлами в невзвешенном графе
 fun shortestPath(graph: Graph, start: Int, end: Int): Int {
     val visited = BooleanArray(graph.vertices)
-    val queue = LinkedList<Pair<Int, Int>>()  // (вершина, расстояние)
+    val queue: ArrayDeque<Pair<Int, Int>> = ArrayDeque()  // (вершина, расстояние)
 
     visited[start] = true
-    queue.offer(start to 0)
+    queue.add(start to 0)
 
     while (queue.isNotEmpty()) {
-        val (vertex, dist) = queue.poll()
+        val (vertex, dist) = queue.removeFirst()
 
         if (vertex == end) return dist
 
         for (neighbor in graph.adj[vertex]) {
             if (!visited[neighbor]) {
                 visited[neighbor] = true
-                queue.offer(neighbor to dist + 1)
+                queue.add(neighbor to dist + 1)
             }
         }
     }
@@ -133,30 +147,28 @@ fun shortestPath(graph: Graph, start: Int, end: Int): Int {
 }
 ```
 
-**Обнаружение цикла (DFS):**
+**Обнаружение цикла (DFS в ориентированном графе):**
 ```kotlin
-// Обнаружить цикл в ориентированном графе
+// Обнаружить цикл в ориентированном графе (классическая задача Course Schedule)
 fun canFinish(numCourses: Int, prerequisites: Array<IntArray>): Boolean {
     val adj = Array(numCourses) { mutableListOf<Int>() }
 
-    // Строим список смежности
+    // Строим список смежности: prereq -> course
     for ((course, prereq) in prerequisites) {
         adj[prereq].add(course)
     }
 
-    val visited = IntArray(numCourses)  // 0=не посещён, 1=посещается, 2=посещён
+    val state = IntArray(numCourses)  // 0=не посещён, 1=в стеке (visiting), 2=завершён
 
-    fun hasCycle(course: Int): Boolean {
-        if (visited[course] == 1) return true  // Цикл обнаружен!
-        if (visited[course] == 2) return false // Уже посещён
+    fun hasCycle(v: Int): Boolean {
+        if (state[v] == 1) return true       // Цикл обнаружен
+        if (state[v] == 2) return false      // Уже обработан
 
-        visited[course] = 1  // Отмечаем как посещаемый
-
-        for (neighbor in adj[course]) {
-            if (hasCycle(neighbor)) return true
+        state[v] = 1
+        for (to in adj[v]) {
+            if (hasCycle(to)) return true
         }
-
-        visited[course] = 2  // Отмечаем как посещённый
+        state[v] = 2
         return false
     }
 
@@ -170,7 +182,8 @@ fun canFinish(numCourses: Int, prerequisites: Array<IntArray>): Boolean {
 
 **Количество островов (DFS):**
 ```kotlin
-// Подсчитать количество связанных компонентов в 2D сетке
+// Подсчитать количество «островов» (связанных компонент из '1') в 2D-сетке.
+// Мы умышленно модифицируем grid, помечая посещённые клетки как '0'.
 fun numIslands(grid: Array<CharArray>): Int {
     if (grid.isEmpty()) return 0
 
@@ -179,17 +192,15 @@ fun numIslands(grid: Array<CharArray>): Int {
     var count = 0
 
     fun dfs(i: Int, j: Int) {
-        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0') {
-            return
-        }
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0') return
 
-        grid[i][j] = '0'  // Отмечаем как посещённый
+        grid[i][j] = '0'  // Отмечаем как посещённую; можно также использовать отдельный visited[][]
 
         // Исследуем 4 направления
-        dfs(i + 1, j)  // Вниз
-        dfs(i - 1, j)  // Вверх
-        dfs(i, j + 1)  // Вправо
-        dfs(i, j - 1)  // Влево
+        dfs(i + 1, j)
+        dfs(i - 1, j)
+        dfs(i, j + 1)
+        dfs(i, j - 1)
     }
 
     for (i in 0 until m) {
@@ -205,42 +216,62 @@ fun numIslands(grid: Array<CharArray>): Int {
 }
 ```
 
+**Когда использовать BFS vs DFS (RU):**
+- BFS:
+  - Кратчайший путь в невзвешенном графе (по количеству рёбер).
+  - Обход по слоям (поиск ближайшего решения, многoисточниковый BFS и подобные задачи).
+- DFS:
+  - Обход всей компоненты, проверка достижимости.
+  - Обнаружение циклов, топологическая сортировка (ориентированные графы).
+  - Задачи на связные компоненты ("острова", компоненты в неориентированном графе).
+
 ## Answer (EN)
 
 **Graph Algorithms Theory:**
-Graphs are data structures representing relationships between entities. BFS (Breadth-First Search) and DFS (Depth-First Search) are fundamental graph traversal algorithms with different characteristics and applications.
+Graphs are data structures representing relationships between entities. BFS (Breadth-First Search) and DFS (Depth-First Search) are fundamental traversal algorithms with different properties and use cases.
+
+Key points:
+- Both run in O(V + E), visiting each vertex and edge at most once.
+- BFS uses a queue and explores the graph level by level.
+- DFS uses a stack (explicit or call stack) and explores as deep as possible.
+- Space:
+  - BFS may keep an entire frontier level in memory: O(V) in the worst case.
+  - DFS keeps the recursion/stack path: O(H) where H ≤ V; O(V) in the worst case.
 
 **Graph Representation:**
 ```kotlin
-// Adjacency list - most common representation
-class Graph(val vertices: Int) {
+// Adjacency list — typical for sparse graphs
+class Graph(val vertices: Int, val directed: Boolean = false) {
     val adj = Array(vertices) { mutableListOf<Int>() }
 
     fun addEdge(u: Int, v: Int) {
         adj[u].add(v)
-        adj[v].add(u)  // For undirected graph
+        if (!directed) {
+            adj[v].add(u)  // For undirected graphs
+        }
     }
 }
 ```
 
 **BFS (Breadth-First Search):**
 ```kotlin
-// Level-by-level traversal using queue
+// Level-order traversal using a queue
+// Assumes an unweighted graph with equal edge "cost"
 fun bfs(graph: Graph, start: Int) {
     val visited = BooleanArray(graph.vertices)
-    val queue = LinkedList<Int>()
+    val queue: ArrayDeque<Int> = ArrayDeque()
 
     visited[start] = true
-    queue.offer(start)
+    queue.add(start)
 
     while (queue.isNotEmpty()) {
-        val vertex = queue.poll()
+        val vertex = queue.removeFirst()
         print("$vertex ")
 
         for (neighbor in graph.adj[vertex]) {
             if (!visited[neighbor]) {
                 visited[neighbor] = true
-                queue.offer(neighbor)
+                queue.add(neighbor)
             }
         }
     }
@@ -249,8 +280,9 @@ fun bfs(graph: Graph, start: Int) {
 
 **DFS (Depth-First Search):**
 ```kotlin
-// Deep traversal using recursion
+// Depth-first traversal using recursion
 fun dfs(graph: Graph, start: Int, visited: BooleanArray = BooleanArray(graph.vertices)) {
+    if (visited[start]) return
     visited[start] = true
     print("$start ")
 
@@ -261,24 +293,25 @@ fun dfs(graph: Graph, start: Int, visited: BooleanArray = BooleanArray(graph.ver
     }
 }
 
-// Iterative DFS with stack
+// Iterative DFS using a stack
 fun dfsIterative(graph: Graph, start: Int) {
     val visited = BooleanArray(graph.vertices)
-    val stack = Stack<Int>()
+    val stack = ArrayDeque<Int>()
 
-    stack.push(start)
+    stack.addLast(start)
 
     while (stack.isNotEmpty()) {
-        val vertex = stack.pop()
+        val vertex = stack.removeLast()
 
         if (!visited[vertex]) {
             visited[vertex] = true
             print("$vertex ")
 
-            // Push neighbors in reverse order to maintain left-to-right order
+            // Push neighbors in reverse order for deterministic left-to-right traversal
             for (i in graph.adj[vertex].size - 1 downTo 0) {
-                if (!visited[graph.adj[vertex][i]]) {
-                    stack.push(graph.adj[vertex][i])
+                val neighbor = graph.adj[vertex][i]
+                if (!visited[neighbor]) {
+                    stack.addLast(neighbor)
                 }
             }
         }
@@ -286,25 +319,25 @@ fun dfsIterative(graph: Graph, start: Int) {
 }
 ```
 
-**Shortest Path (BFS):**
+**Shortest Path (BFS on Unweighted Graph):**
 ```kotlin
-// Find shortest path between two nodes
+// Find the length of the shortest path between two nodes in an unweighted graph
 fun shortestPath(graph: Graph, start: Int, end: Int): Int {
     val visited = BooleanArray(graph.vertices)
-    val queue = LinkedList<Pair<Int, Int>>()  // (vertex, distance)
+    val queue: ArrayDeque<Pair<Int, Int>> = ArrayDeque()  // (vertex, distance)
 
     visited[start] = true
-    queue.offer(start to 0)
+    queue.add(start to 0)
 
     while (queue.isNotEmpty()) {
-        val (vertex, dist) = queue.poll()
+        val (vertex, dist) = queue.removeFirst()
 
         if (vertex == end) return dist
 
         for (neighbor in graph.adj[vertex]) {
             if (!visited[neighbor]) {
                 visited[neighbor] = true
-                queue.offer(neighbor to dist + 1)
+                queue.add(neighbor to dist + 1)
             }
         }
     }
@@ -313,30 +346,28 @@ fun shortestPath(graph: Graph, start: Int, end: Int): Int {
 }
 ```
 
-**Cycle Detection (DFS):**
+**Cycle Detection (DFS in Directed Graph):**
 ```kotlin
-// Detect cycle in directed graph
+// Detect a cycle in a directed graph (classic Course Schedule problem)
 fun canFinish(numCourses: Int, prerequisites: Array<IntArray>): Boolean {
     val adj = Array(numCourses) { mutableListOf<Int>() }
 
-    // Build adjacency list
+    // Build adjacency list: prereq -> course
     for ((course, prereq) in prerequisites) {
         adj[prereq].add(course)
     }
 
-    val visited = IntArray(numCourses)  // 0=unvisited, 1=visiting, 2=visited
+    val state = IntArray(numCourses)  // 0=unvisited, 1=visiting, 2=visited
 
-    fun hasCycle(course: Int): Boolean {
-        if (visited[course] == 1) return true  // Cycle detected!
-        if (visited[course] == 2) return false // Already visited
+    fun hasCycle(v: Int): Boolean {
+        if (state[v] == 1) return true      // Back edge -> cycle
+        if (state[v] == 2) return false     // Already fully processed
 
-        visited[course] = 1  // Mark as visiting
-
-        for (neighbor in adj[course]) {
-            if (hasCycle(neighbor)) return true
+        state[v] = 1
+        for (to in adj[v]) {
+            if (hasCycle(to)) return true
         }
-
-        visited[course] = 2  // Mark as visited
+        state[v] = 2
         return false
     }
 
@@ -350,7 +381,8 @@ fun canFinish(numCourses: Int, prerequisites: Array<IntArray>): Boolean {
 
 **Number of Islands (DFS):**
 ```kotlin
-// Count connected components in 2D grid
+// Count the number of "islands" (connected components of '1') in a 2D grid.
+// We intentionally mutate the grid, marking visited land cells as '0'.
 fun numIslands(grid: Array<CharArray>): Int {
     if (grid.isEmpty()) return 0
 
@@ -359,17 +391,15 @@ fun numIslands(grid: Array<CharArray>): Int {
     var count = 0
 
     fun dfs(i: Int, j: Int) {
-        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0') {
-            return
-        }
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0') return
 
-        grid[i][j] = '0'  // Mark as visited
+        grid[i][j] = '0'  // Mark as visited; alternatively, use a separate visited[][] array
 
         // Explore 4 directions
-        dfs(i + 1, j)  // Down
-        dfs(i - 1, j)  // Up
-        dfs(i, j + 1)  // Right
-        dfs(i, j - 1)  // Left
+        dfs(i + 1, j)
+        dfs(i - 1, j)
+        dfs(i, j + 1)
+        dfs(i, j - 1)
     }
 
     for (i in 0 until m) {
@@ -385,6 +415,15 @@ fun numIslands(grid: Array<CharArray>): Int {
 }
 ```
 
+**When to use BFS vs DFS (EN):**
+- BFS:
+  - Shortest path in an unweighted graph (by number of edges).
+  - Level-order exploration (finding nearest solution, multi-source BFS, etc.).
+- DFS:
+  - Exploring full components and reachability.
+  - Cycle detection, topological sort (directed graphs).
+  - Connected components / island-style problems.
+
 ---
 
 ## Follow-ups
@@ -392,6 +431,12 @@ fun numIslands(grid: Array<CharArray>): Int {
 - What is the difference between BFS and DFS space complexity?
 - How do you detect a cycle in an undirected vs directed graph?
 - What is bidirectional BFS and when is it useful?
+
+## References
+
+- [[c-algorithms]]
+- "Breadth-First Search" — Wikipedia
+- "Depth-First Search" — Wikipedia
 
 ## Related Questions
 
@@ -403,3 +448,15 @@ fun numIslands(grid: Array<CharArray>): Int {
 - [[q-binary-search-variants--algorithms--medium]] - Search algorithms
 
 ### Advanced (Harder)
+
+## Дополнительные вопросы (RU)
+- В чём разница в потреблении памяти между BFS и DFS?
+- Как обнаружить цикл в неориентированном и ориентированном графе?
+- Что такое двунаправленный BFS и когда он полезен?
+## Связанные вопросы (RU)
+### Предпосылки (проще)
+- [[q-data-structures-overview--algorithms--easy]] - Базовые структуры данных
+### Связанные (такой же уровень)
+- [[q-dynamic-programming-fundamentals--algorithms--hard]] - Алгоритмы динамического программирования
+- [[q-binary-search-variants--algorithms--medium]] - Варианты бинарного поиска
+### Продвинутые (сложнее)

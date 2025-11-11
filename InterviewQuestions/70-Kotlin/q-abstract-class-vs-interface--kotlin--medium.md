@@ -15,6 +15,8 @@ created: 2025-10-05
 updated: 2025-11-09
 tags: [abstract-class, difficulty/medium, inheritance, interface, kotlin, kotlin-features, oop]
 sources: ["https://kotlinlang.org/docs/interfaces.html"]
+date created: Monday, November 10th 2025, 7:48:48 am
+date modified: Tuesday, November 11th 2025, 10:05:02 am
 ---
 
 # Вопрос (RU)
@@ -114,7 +116,7 @@ interface Test {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда выбирать абстрактный класс вместо интерфейса?
 - Чем sealed классы отличаются от абстрактных?
@@ -125,12 +127,12 @@ interface Test {
 - [[c-kotlin]]
 - https://kotlinlang.org/docs/interfaces.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (Легче)
 - [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы
 
-### Того же уровня (Medium)
+### Того Же Уровня (Medium)
 - [[q-inheritance-open-final--kotlin--medium]] - Наследование
 - [[q-inner-nested-classes--kotlin--medium]] - Классы
 - [[q-data-class-detailed--kotlin--medium]] - Data классы

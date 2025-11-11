@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-binary-search, q-binary-search-trees-bst--algorithms--hard, q-two-pointers-sliding-window--algorithms--medium]
+related: [c-algorithms, q-binary-search-trees-bst--algorithms--hard, q-two-pointers-sliding-window--algorithms--medium]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [algorithms, binary-search, difficulty/medium, log-n, searching]
-sources: [https://en.wikipedia.org/wiki/Binary_search_algorithm]
+sources: ["https://en.wikipedia.org/wiki/Binary_search_algorithm"]
+
 ---
 
 # Вопрос (RU)
@@ -28,13 +29,15 @@ sources: [https://en.wikipedia.org/wiki/Binary_search_algorithm]
 ## Ответ (RU)
 
 **Теория бинарного поиска:**
-Бинарный поиск - алгоритм поиска в отсортированном массиве со сложностью O(log n). Он работает путём деления поискового пространства пополам на каждой итерации, исключая половину элементов.
+Бинарный поиск — алгоритм поиска в отсортированном массиве со сложностью O(log n). Он работает путём деления поискового пространства пополам на каждой итерации, исключая половину элементов.
 
 **Основные принципы:**
 - Требует отсортированный массив
-- Время: O(log n) - очень быстро
-- Память: O(1) - константная
+- Время: O(log n) — очень быстро
+- Память: O(1) — константная
 - Ключевая формула: `mid = left + (right - left) / 2` (избегает overflow)
+
+См. также: [[c-algorithms]]
 
 **Классический бинарный поиск:**
 ```kotlin
@@ -119,7 +122,7 @@ fun searchRotated(nums: IntArray, target: Int): Int {
 
         if (nums[mid] == target) return mid
 
-        // Определяем какая половина отсортирована
+        // Определяем, какая половина отсортирована
         if (nums[left] <= nums[mid]) {
             // Левая половина отсортирована
             if (target >= nums[left] && target < nums[mid]) {
@@ -196,6 +199,8 @@ Binary search is a search algorithm for sorted arrays with O(log n) complexity. 
 - Time: O(log n) - extremely fast
 - Space: O(1) - constant
 - Key formula: `mid = left + (right - left) / 2` (avoids overflow)
+
+See also: [[c-algorithms]]
 
 **Classic Binary Search:**
 ```kotlin
@@ -349,11 +354,40 @@ fun minEatingSpeed(piles: IntArray, h: Int): Int {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как реализовать бинарный поиск рекурсивно?
+- В чём разница между `lower_bound` и `upper_bound`?
+- Как найти медиану двух отсортированных массивов?
+
 ## Follow-ups
 
 - How do you implement binary search recursively?
 - What is the difference between lower_bound and upper_bound?
 - How do you find the median of two sorted arrays?
+
+## Ссылки (RU)
+
+- [[c-algorithms]]
+- "https://en.wikipedia.org/wiki/Binary_search_algorithm"
+
+## References
+
+- [[c-algorithms]]
+- "https://en.wikipedia.org/wiki/Binary_search_algorithm"
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-data-structures-overview--algorithms--easy]] - Базовые структуры данных
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - Концепции сортировки
+
+### Связанные (тот же уровень)
+- [[q-two-pointers-sliding-window--algorithms--medium]] - Техника двух указателей
+- [[q-backtracking-algorithms--algorithms--hard]] - Алгоритмы с возвратом (backtracking)
+
+### Продвинутые (сложнее)
+- [[q-binary-search-trees-bst--algorithms--hard]] - Реализация деревьев поиска (BST)
 
 ## Related Questions
 
