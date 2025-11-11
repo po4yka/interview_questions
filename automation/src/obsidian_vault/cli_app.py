@@ -17,7 +17,7 @@ import json
 import os
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, Any, Never, cast
+from typing import Any, Never, cast
 
 import typer
 from dotenv import load_dotenv
@@ -160,8 +160,6 @@ class ExportFormat(str, Enum):
 def validate(
     path: str | None = typer.Argument(None, help="File or directory to validate"),
     all_notes: bool = typer.Option(False, "--all", "-a", help="Validate all notes in vault"),
-    parallel: bool = typer.Option(False, "--parallel", "-p", help="Use parallel processing"),
-    workers: int = typer.Option(4, "--workers", "-w", help="Number of parallel workers"),
     report: str | None = typer.Option(None, "--report", "-r", help="Write report to file"),
     quiet: bool = typer.Option(False, "--quiet", "-q", help="Only print summary"),
 ):
@@ -237,11 +235,7 @@ def validate(
 
         console.print(f"\n[bold]Validating {len(targets)} file(s)...[/bold]\n")
 
-        if parallel and len(targets) > 1:
-            # For now, use sequential (can enhance with actual parallel processing)
-            results = _validate_files(targets, repo_root, vault_dir, taxonomy, note_index)
-        else:
-            results = _validate_files(targets, repo_root, vault_dir, taxonomy, note_index)
+        results = _validate_files(targets, repo_root, vault_dir, taxonomy, note_index)
 
         has_critical = any(
             any(issue.severity == Severity.CRITICAL for issue in result.issues)
@@ -718,15 +712,13 @@ def link_report(
 
 @app.command()
 def graph_export(
-    output: Annotated[str, typer.Argument(..., help="Output file path")],
-    export_format: Annotated[
-        ExportFormat | None,
-        typer.Option(
-            "--format",
-            "-f",
-            help="Export format (auto-detected from extension if not specified)",
-        ),
-    ] = None,
+    output: str = typer.Argument(..., help="Output file path"),
+    export_format: ExportFormat | None = typer.Option(
+        None,
+        "--format",
+        "-f",
+        help="Export format (auto-detected from extension if not specified)",
+    ),
 ):
     """Export vault graph to various formats for external analysis.
 
