@@ -82,7 +82,7 @@ class ExportFormat(str, Enum):
 @app.command()
 def validate(
     path: str | None = typer.Argument(None, help="File or directory to validate"),
-    all: bool = typer.Option(False, "--all", "-a", help="Validate all notes in vault"),
+    all_notes: bool = typer.Option(False, "--all", "-a", help="Validate all notes in vault"),
     parallel: bool = typer.Option(False, "--parallel", "-p", help="Use parallel processing"),
     workers: int = typer.Option(4, "--workers", "-w", help="Number of parallel workers"),
     report: str | None = typer.Option(None, "--report", "-r", help="Write report to file"),
@@ -107,7 +107,7 @@ def validate(
             logger.error(f"Vault directory not found: {e}")
             _abort(e)
 
-        if all:
+        if all_notes:
             targets = collect_validatable_files(vault_dir)
         elif path:
             try:
@@ -210,7 +210,7 @@ def validate(
 @app.command("technical-validate")
 def technical_validate(
     path: str | None = typer.Argument(None, help="File or directory to analyze"),
-    all: bool = typer.Option(False, "--all", "-a", help="Validate every note in the vault"),
+    all_notes: bool = typer.Option(False, "--all", "-a", help="Validate every note in the vault"),
     limit: int | None = typer.Option(None, "--limit", "-l", help="Limit the number of notes"),
     json_output: str | None = typer.Option(None, "--json", help="Write JSON results to file"),
 ):
@@ -226,7 +226,7 @@ def technical_validate(
         logger.error("Vault discovery failed: {}", error)
         _abort(error)
 
-    if all:
+    if all_notes:
         targets = collect_validatable_files(vault_dir)
     elif path:
         try:
@@ -683,7 +683,6 @@ def graph_export(
     export_format: Annotated[
         ExportFormat | None,
         typer.Option(
-            None,
             "--format",
             "-f",
             help="Export format (auto-detected from extension if not specified)",
@@ -1065,7 +1064,7 @@ def llm_review(
     max_concurrent: int = typer.Option(
         5,
         "--max-concurrent",
-        help="Maximum number of notes to process concurrently (PHASE 2 FIX)",
+        help="Maximum number of notes to process concurrently",
     ),
     backup: bool = typer.Option(
         True,
