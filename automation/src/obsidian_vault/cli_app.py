@@ -70,6 +70,83 @@ def _abort(exc: Exception | None = None) -> Never:
     raise typer.Exit(code=1) from exc
 
 
+def _get_vault_dir() -> tuple[Path, Path]:
+    """Discover repo root and vault directory with consistent error handling.
+
+    Returns:
+        Tuple of (repo_root, vault_dir)
+
+    Raises:
+        typer.Exit: On failure (calls _abort internally)
+    """
+    try:
+        repo_root = discover_repo_root()
+        logger.debug(f"Repository root: {repo_root}")
+
+        vault_dir = ensure_vault_exists(repo_root)
+        logger.debug(f"Vault directory: {vault_dir}")
+
+        return repo_root, vault_dir
+    except ValueError as e:
+        console.print(f"[red]✗[/red] {e}")
+        logger.error(f"Vault discovery failed: {e}")
+        _abort(e)
+
+
+def _validate_output_path(output_path: str) -> Path:
+    """Validate and sanitize user-provided output file path.
+
+    Prevents path traversal attacks by ensuring the output path:
+    - Does not escape the current working directory
+    - Does not use absolute paths to system locations
+    - Has valid parent directories created
+
+    Args:
+        output_path: User-provided output file path
+
+    Returns:
+        Validated and resolved Path object
+
+    Raises:
+        ValueError: If path is invalid or potentially dangerous
+    """
+    try:
+        path = Path(output_path).resolve()
+        cwd = Path.cwd().resolve()
+
+        # Check if path is within or relative to current working directory
+        # Allow paths in cwd or subdirectories, but not parent directories
+        try:
+            # This will raise ValueError if path is not relative to cwd
+            relative = path.relative_to(cwd)
+
+            # Ensure we're not escaping via symlinks or similar
+            if ".." in str(relative):
+                raise ValueError(f"Output path cannot contain '..' components: {output_path}")
+
+        except ValueError:
+            # Path is not under cwd - check if it's trying to write to system locations
+            forbidden_prefixes = ["/etc", "/var", "/usr", "/bin", "/sbin", "/sys", "/proc"]
+            path_str = str(path)
+
+            if any(path_str.startswith(prefix) for prefix in forbidden_prefixes):
+                raise ValueError(
+                    f"Cannot write to system directories. "
+                    f"Use a relative path or path within {cwd}"
+                )
+
+            # Allow absolute paths but warn user
+            logger.warning(f"Using absolute path outside working directory: {path}")
+
+        # Create parent directory if needed
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        return path
+
+    except OSError as e:
+        raise ValueError(f"Invalid output path '{output_path}': {e}") from e
+
+
 class ExportFormat(str, Enum):
     """Graph export formats."""
 
@@ -96,16 +173,7 @@ def validate(
 
     logger.info("Starting validation")
     try:
-        repo_root = discover_repo_root()
-        logger.debug(f"Repository root: {repo_root}")
-
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-            logger.debug(f"Vault directory: {vault_dir}")
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory not found: {e}")
-            _abort(e)
+        repo_root, vault_dir = _get_vault_dir()
 
         if all_notes:
             targets = collect_validatable_files(vault_dir)
@@ -185,9 +253,10 @@ def validate(
         logger.debug(f"Critical issues: {has_critical}")
 
         if report:
-            ReportGenerator(results).write_markdown(Path(report))
-            console.print(f"\n[green]✓[/green] Report written to {report}")
-            logger.info(f"Validation report written to {report}")
+            report_path = _validate_output_path(report)
+            ReportGenerator(results).write_markdown(report_path)
+            console.print(f"\n[green]✓[/green] Report written to {report_path}")
+            logger.info(f"Validation report written to {report_path}")
 
         if quiet:
             _print_summary(results)
@@ -218,13 +287,7 @@ def technical_validate(
     from obsidian_vault.utils import ensure_vault_exists, safe_resolve_path
 
     logger.info("Starting technical validation run")
-    try:
-        repo_root = discover_repo_root()
-        vault_dir = ensure_vault_exists(repo_root)
-    except ValueError as error:
-        console.print(f"[red]✗[/red] {error}")
-        logger.error("Vault discovery failed: {}", error)
-        _abort(error)
+    repo_root, vault_dir = _get_vault_dir()
 
     if all_notes:
         targets = collect_validatable_files(vault_dir)
@@ -254,7 +317,10 @@ def technical_validate(
         logger.warning("No Markdown notes available for technical validation")
         _abort()
 
-    if limit is not None and limit > 0:
+    if limit is not None:
+        if limit <= 0:
+            console.print(f"[red]✗[/red] Limit must be positive, got {limit}")
+            _abort()
         targets = targets[:limit]
         logger.debug("Limiting validation to {} notes", len(targets))
 
@@ -301,7 +367,7 @@ def technical_validate(
             console.print(f"\n[italic]Agent summary:[/italic] {report.summary}")
 
     if json_output:
-        output_path = Path(json_output)
+        output_path = _validate_output_path(json_output)
         payload = [
             {
                 "path": str(report.path.relative_to(repo_root)),
@@ -405,7 +471,7 @@ def _print_detailed_results(results):
                 )
 
             summary = ", ".join(f"{k}: {v}" for k, v in sorted(severity_counts.items()))
-            title = f"📄 {result.path} - Issues: {summary}"
+            title = f"FILE: {result.path} - Issues: {summary}"
 
             panel_content = []
             for issue in result.issues:
@@ -447,16 +513,7 @@ def graph_stats(
 
     logger.info("Analyzing vault graph statistics")
     try:
-        repo_root = discover_repo_root()
-        logger.debug(f"Repository root: {repo_root}")
-
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-            logger.debug(f"Vault directory: {vault_dir}")
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory error: {e}")
-            _abort(e)
+        repo_root, vault_dir = _get_vault_dir()
 
         with console.status("[bold green]Analyzing vault graph...", spinner="dots"):
             logger.debug("Building vault graph")
@@ -539,14 +596,7 @@ def orphans(
 
     logger.info("Finding orphaned notes")
     try:
-        repo_root = discover_repo_root()
-
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory error: {e}")
-            _abort(e)
+        repo_root, vault_dir = _get_vault_dir()
 
         with console.status("[bold green]Finding orphaned notes...", spinner="dots"):
             vg = VaultGraph(vault_dir)
@@ -567,11 +617,12 @@ def orphans(
             console.print(f"  • {note}")
 
         if output:
-            Path(output).write_text("\n".join(orphan_notes), encoding="utf-8")
+            output_path = _validate_output_path(output)
+            output_path.write_text("\n".join(orphan_notes), encoding="utf-8")
             console.print(
-                f"\n[green]✓[/green] Wrote {len(orphan_notes)} orphaned notes to {output}"
+                f"\n[green]✓[/green] Wrote {len(orphan_notes)} orphaned notes to {output_path}"
             )
-            logger.info(f"Wrote orphaned notes to {output}")
+            logger.info(f"Wrote orphaned notes to {output_path}")
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
@@ -591,14 +642,7 @@ def broken_links(
 
     logger.info("Finding broken links")
     try:
-        repo_root = discover_repo_root()
-
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory error: {e}")
-            _abort(e)
+        repo_root, vault_dir = _get_vault_dir()
 
         with console.status("[bold green]Finding broken links...", spinner="dots"):
             vg = VaultGraph(vault_dir)
@@ -621,14 +665,15 @@ def broken_links(
                 console.print(f"  [red]→[/red] {target} [dim](missing)[/dim]")
 
         if output:
+            output_path = _validate_output_path(output)
             lines = []
             for source, targets in sorted(broken.items()):
                 lines.append(f"{source}:")
                 for target in targets:
                     lines.append(f"  - {target}")
-            Path(output).write_text("\n".join(lines), encoding="utf-8")
-            console.print(f"\n[green]✓[/green] Wrote broken links report to {output}")
-            logger.info(f"Wrote broken links report to {output}")
+            output_path.write_text("\n".join(lines), encoding="utf-8")
+            console.print(f"\n[green]✓[/green] Wrote broken links report to {output_path}")
+            logger.info(f"Wrote broken links report to {output_path}")
 
         _abort()
 
@@ -650,23 +695,17 @@ def link_report(
 
     logger.info("Generating link health report")
     try:
-        repo_root = discover_repo_root()
-
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory error: {e}")
-            _abort(e)
+        repo_root, vault_dir = _get_vault_dir()
 
         with console.status("[bold green]Generating link health report...", spinner="dots"):
             logger.debug("Generating comprehensive link health report")
             report = generate_link_health_report(vault_dir)
 
         if output:
-            Path(output).write_text(report, encoding="utf-8")
-            console.print(f"[green]✓[/green] Link health report written to {output}")
-            logger.success(f"Link health report written to {output}")
+            output_path = _validate_output_path(output)
+            output_path.write_text(report, encoding="utf-8")
+            console.print(f"[green]✓[/green] Link health report written to {output_path}")
+            logger.success(f"Link health report written to {output_path}")
         else:
             console.print(report)
             logger.success("Link health report generated")
@@ -697,16 +736,9 @@ def graph_export(
 
     logger.info(f"Exporting graph to {output}")
     try:
-        repo_root = discover_repo_root()
+        repo_root, vault_dir = _get_vault_dir()
 
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory error: {e}")
-            _abort(e)
-
-        output_path = Path(output)
+        output_path = _validate_output_path(output)
 
         if export_format:
             resolved_format = export_format.value
@@ -777,14 +809,7 @@ def communities(
 
     logger.info(f"Detecting communities using {algorithm} algorithm")
     try:
-        repo_root = discover_repo_root()
-
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory error: {e}")
-            _abort(e)
+        repo_root, vault_dir = _get_vault_dir()
 
         with console.status("[bold green]Analyzing vault communities...", spinner="dots"):
             logger.debug("Building vault graph")
@@ -874,9 +899,10 @@ def communities(
 
                 output_lines.append("\n---\n\n")
 
-            Path(output).write_text("".join(output_lines), encoding="utf-8")
-            console.print(f"\n[green]✓[/green] Communities report written to {output}")
-            logger.info(f"Communities report written to {output}")
+            output_path = _validate_output_path(output)
+            output_path.write_text("".join(output_lines), encoding="utf-8")
+            console.print(f"\n[green]✓[/green] Communities report written to {output_path}")
+            logger.info(f"Communities report written to {output_path}")
 
         total_notes = sum(c["size"] for c in communities_data)
         avg_size = total_notes / len(communities_data) if communities_data else 0
@@ -925,14 +951,7 @@ def suggest_links(
 
     logger.info("Analyzing notes for link suggestions using ML")
     try:
-        repo_root = discover_repo_root()
-
-        try:
-            vault_dir = ensure_vault_exists(repo_root)
-        except ValueError as e:
-            console.print(f"[red]✗[/red] {e}")
-            logger.error(f"Vault directory error: {e}")
-            _abort(e)
+        repo_root, vault_dir = _get_vault_dir()
 
         with console.status("[bold green]Analyzing note content with TF-IDF...", spinner="dots"):
             logger.debug("Building vault graph")
@@ -1024,9 +1043,10 @@ def suggest_links(
                     output_lines.append(f"{i}. [[{suggested}]] (similarity: {sim:.3f})\n")
                 output_lines.append("\n")
 
-            Path(output).write_text("".join(output_lines), encoding="utf-8")
-            console.print(f"\n[green]✓[/green] Link suggestions written to {output}")
-            logger.info(f"Link suggestions written to {output}")
+            output_path = _validate_output_path(output)
+            output_path.write_text("".join(output_lines), encoding="utf-8")
+            console.print(f"\n[green]✓[/green] Link suggestions written to {output_path}")
+            logger.info(f"Link suggestions written to {output_path}")
 
         logger.success("Link suggestion analysis complete")
 
@@ -1093,8 +1113,6 @@ def llm_review(
     logger.info("Starting LLM-based note review")
 
     try:
-        import os
-
         if not os.getenv("OPENROUTER_API_KEY"):
             console.print(
                 "[red]✗[/red] OPENROUTER_API_KEY environment variable not set\n"
@@ -1102,12 +1120,7 @@ def llm_review(
             )
             _abort()
 
-        repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
-
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            _abort()
+        repo_root, vault_dir = _get_vault_dir()
 
         from obsidian_vault.llm_review import CompletionMode, create_review_graph
 
@@ -1271,8 +1284,9 @@ def llm_review(
                     report_lines.append(f"**Error**: {exc}\n")
                     report_lines.append("\n---\n\n")
 
-            Path(report).write_text("".join(report_lines), encoding="utf-8")
-            console.print(f"\n[green]✓[/green] Report written to {report}")
+            report_path = _validate_output_path(report)
+            report_path.write_text("".join(report_lines), encoding="utf-8")
+            console.print(f"\n[green]✓[/green] Report written to {report_path}")
 
         message = f"LLM review complete: {total} notes, {modified} modified, {errors} errors"
         if errors > 0:
