@@ -32,6 +32,7 @@ from .atomic_related_fixer import AtomicRelatedFixer
 from .decision_logic import DecisionContext, compute_decision, should_issues_block_completion
 from .deterministic_fixer import DeterministicFixer
 from .fix_memory import FixMemory
+from .oscillation_fixer import OscillationFixer
 from .smart_code_parity import SmartCodeParityChecker
 from .smart_validators import SmartValidatorSelector
 from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
@@ -211,6 +212,7 @@ class ReviewGraph:
         completion_mode: CompletionMode = CompletionMode.STANDARD,
         processing_profile: ProcessingProfile = ProcessingProfile.BALANCED,
         enable_analytics: bool | None = None,
+        allow_file_moves: bool = False,
     ):
         """Initialize the review graph.
 
@@ -223,6 +225,8 @@ class ReviewGraph:
             completion_mode: Strictness level for issue completion (default: STANDARD)
             processing_profile: Workflow mode that balances stability vs throughput
             enable_analytics: Optional override to enable/disable analytics capture
+            allow_file_moves: If True, allow automatic file moves via git mv (default: False)
+                             When False, file location issues are flagged but not auto-fixed
         """
         self.vault_root = vault_root
         self.taxonomy = taxonomy
@@ -242,6 +246,7 @@ class ReviewGraph:
             )
         self.max_iterations = max_iterations + bonus_iterations
         self.dry_run = dry_run
+        self.allow_file_moves = allow_file_moves
         self.completion_mode = completion_mode
         # Use OrderedDict for LRU eviction (Python 3.7+ dicts are ordered, but explicit is better)
         self.fix_memory: OrderedDict[str, FixMemory] = OrderedDict()
@@ -251,6 +256,7 @@ class ReviewGraph:
         self.code_parity = SmartCodeParityChecker()
         self.strict_qa = StrictQAVerifier()
         self.deterministic_fixer = DeterministicFixer()
+        self.oscillation_fixer = OscillationFixer(vault_root)
         analytics_enabled = (
             profile_settings["enable_analytics"] if enable_analytics is None else enable_analytics
         )
@@ -302,6 +308,7 @@ class ReviewGraph:
         workflow.add_node("initial_llm_review", self._initial_llm_review)
         workflow.add_node("run_validators", self._run_validators)
         workflow.add_node("check_bilingual_parity", self._check_bilingual_parity)
+        workflow.add_node("try_oscillation_fix", self._try_oscillation_fix)
         workflow.add_node("llm_fix_issues", self._llm_fix_issues)
         workflow.add_node("qa_verification", self._qa_verification)
         workflow.add_node("summarize_qa_failures", self._summarize_qa_failures)
@@ -324,12 +331,21 @@ class ReviewGraph:
             {
                 "continue": "llm_fix_issues",
                 "qa_verify": "qa_verification",
-                "summarize_failures": "summarize_qa_failures",
+                "summarize_failures": "try_oscillation_fix",
                 "done": END,
             },
         )
 
         workflow.add_edge("llm_fix_issues", "run_validators")
+
+        workflow.add_conditional_edges(
+            "try_oscillation_fix",
+            lambda state: state.get("decision", "summarize_failures"),
+            {
+                "continue": "run_validators",
+                "summarize_failures": "summarize_qa_failures",
+            },
+        )
 
         workflow.add_conditional_edges(
             "qa_verification",
@@ -1664,6 +1680,207 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         lines.append("\nIMPORTANT: Do NOT repeat failed approaches. Learn from the patterns above.")
 
         return "\n".join(lines)
+
+    async def _try_oscillation_fix(self, state: NoteReviewStateDict) -> dict[str, Any]:
+        """Node: Try to fix oscillation-prone issues before giving up.
+
+        This node runs when oscillation is detected and attempts to apply
+        deterministic fixes for known oscillation-causing patterns (file location,
+        heading order, etc.) before escalating to human review.
+
+        Args:
+            state: Current state
+
+        Returns:
+            State updates with decision to continue or summarize failures
+        """
+        state_obj = NoteReviewState.from_dict(state)
+        history_updates: list[dict[str, Any]] = []
+
+        logger.warning(
+            f"Oscillation detected - attempting specialized fixes for {len(state_obj.issues)} issues"
+        )
+        history_updates.append(
+            state_obj.add_history_entry(
+                "try_oscillation_fix",
+                f"Attempting oscillation fixes for {len(state_obj.issues)} issues",
+            )
+        )
+
+        # Check if oscillation fixer can handle any of these issues
+        if not self.oscillation_fixer.can_fix(state_obj.issues):
+            logger.warning("No oscillation fixes available - escalating to human review")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "try_oscillation_fix",
+                    "No applicable oscillation fixes - escalating to human review",
+                )
+            )
+            return {
+                "decision": "summarize_failures",
+                "requires_human_review": True,
+                "history": history_updates,
+            }
+
+        # Try oscillation fixes
+        try:
+            result = self.oscillation_fixer.fix(
+                note_text=state_obj.current_text,
+                issues=state_obj.issues,
+                note_path=state_obj.note_path,
+            )
+
+            if result.changes_made:
+                # Validate the fix
+                validation = self._validate_fix(
+                    state_obj.current_text,
+                    result.revised_text,
+                    state_obj.note_path,
+                )
+
+                if not validation.is_valid:
+                    logger.error(
+                        "Oscillation fix validation FAILED: {}",
+                        validation.error,
+                    )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "try_oscillation_fix",
+                            f"Oscillation fix rejected: {validation.error}",
+                            validation_error=validation.error,
+                        )
+                    )
+                    return {
+                        "decision": "summarize_failures",
+                        "requires_human_review": True,
+                        "error": f"Oscillation fix produced invalid output: {validation.error}",
+                        "history": history_updates,
+                    }
+
+                # Use corrected text if available
+                final_text = validation.corrected_text or result.revised_text
+
+                # Handle file moves - use git mv for proper tracking
+                if result.file_moved and result.new_file_path:
+                    if self.allow_file_moves and not self.dry_run:
+                        # Automatic file move enabled
+                        old_path = Path(state_obj.note_path)
+                        new_path = Path(result.new_file_path)
+
+                        # Create directory if needed
+                        new_path.parent.mkdir(parents=True, exist_ok=True)
+
+                        # Use git mv to preserve history and proper tracking
+                        import subprocess
+
+                        try:
+                            # Try git mv first (preserves history)
+                            subprocess.run(
+                                ["git", "mv", str(old_path), str(new_path)],
+                                cwd=self.vault_root,
+                                check=True,
+                                capture_output=True,
+                                text=True,
+                            )
+                            logger.info(f"✓ Moved file via git: {old_path} -> {new_path}")
+                            history_updates.append(
+                                state_obj.add_history_entry(
+                                    "try_oscillation_fix",
+                                    f"File moved successfully: {result.new_file_path}",
+                                    old_path=state_obj.note_path,
+                                    new_path=result.new_file_path,
+                                    method="git_mv",
+                                )
+                            )
+                        except subprocess.CalledProcessError as e:
+                            # Fallback to regular move if git fails (not in repo, etc.)
+                            logger.warning(
+                                f"git mv failed ({e.stderr.strip()}), using regular move"
+                            )
+                            old_path.rename(new_path)
+                            logger.info(f"✓ Moved file: {old_path} -> {new_path}")
+                            history_updates.append(
+                                state_obj.add_history_entry(
+                                    "try_oscillation_fix",
+                                    f"File moved successfully: {result.new_file_path}",
+                                    old_path=state_obj.note_path,
+                                    new_path=result.new_file_path,
+                                    method="rename",
+                                )
+                            )
+
+                        # Update state with new path
+                        state_obj.note_path = str(new_path)
+                    else:
+                        # File moves disabled - just log the recommendation
+                        logger.warning(
+                            f"⚠ File should be moved: {state_obj.note_path} -> {result.new_file_path}"
+                        )
+                        logger.warning(
+                            "  File moves are disabled. To enable: ReviewGraph(allow_file_moves=True)"
+                        )
+                        history_updates.append(
+                            state_obj.add_history_entry(
+                                "try_oscillation_fix",
+                                f"File should be moved to: {result.new_file_path} (auto-move disabled)",
+                                old_path=state_obj.note_path,
+                                new_path=result.new_file_path,
+                                auto_move_disabled=True,
+                            )
+                        )
+                        # Mark issue as still present since we didn't fix it
+                        state_obj.requires_human_review = True
+
+                logger.info(
+                    f"Oscillation fixer applied {len(result.fixes_applied)} fix(es): {', '.join(result.fixes_applied)}"
+                )
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "try_oscillation_fix",
+                        f"Applied {len(result.fixes_applied)} oscillation fix(es)",
+                        fixes_applied=result.fixes_applied,
+                        issues_fixed=result.issues_fixed,
+                    )
+                )
+
+                # Clear the oscillation error and continue
+                return {
+                    "current_text": final_text,
+                    "note_path": state_obj.note_path,
+                    "changed": True,
+                    "decision": "continue",
+                    "requires_human_review": False,
+                    "error": None,  # Clear the oscillation error
+                    "history": history_updates,
+                }
+            else:
+                logger.warning("Oscillation fixer made no changes - escalating to human review")
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "try_oscillation_fix",
+                        "No changes made - escalating to human review",
+                    )
+                )
+                return {
+                    "decision": "summarize_failures",
+                    "requires_human_review": True,
+                    "history": history_updates,
+                }
+
+        except Exception as e:
+            logger.error("Error in oscillation fixer: {}", e)
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "try_oscillation_fix",
+                    f"Error during oscillation fix: {e}",
+                )
+            )
+            return {
+                "decision": "summarize_failures",
+                "requires_human_review": True,
+                "error": f"Oscillation fix failed: {e}",
+                "history": history_updates,
+            }
 
     async def _llm_fix_issues(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: LLM fixes formatting/structure issues.
