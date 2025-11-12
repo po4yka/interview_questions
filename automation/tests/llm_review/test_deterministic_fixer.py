@@ -114,3 +114,153 @@ handle work in the foreground and background simultaneously.
     assert result.changes_made
     assert "`Activities`" in result.revised_text
     assert "`Services`" in result.revised_text
+
+
+def test_alias_string_coerced_to_list():
+    """String aliases should be split into a normalized list."""
+
+    note = """---
+title: Sample
+aliases: Retrofit Call Adapter / Продвинутый адаптер | Retrofit Adapter
+created: 2024-01-01
+updated: 2024-01-01
+---
+Body
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="ERROR",
+            message="ERROR:aliases must be a list",
+            field="frontmatter",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+
+    yaml_data, _ = load_frontmatter_text(result.revised_text)
+    assert yaml_data["aliases"] == [
+        "Retrofit Call Adapter",
+        "Продвинутый адаптер",
+        "Retrofit Adapter",
+    ]
+
+
+def test_remove_unresolved_related_links():
+    """Unresolved related entries should be removed deterministically."""
+
+    note = """---
+title: Sample
+related: [c-backend, c-retrofit]
+created: 2024-01-01
+updated: 2024-01-01
+---
+Body
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="ERROR",
+            message="ERROR:related link 'c-backend' cannot be resolved",
+            field="frontmatter",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "Removed unresolved related link 'c-backend'" in result.fixes_applied
+
+    yaml_data, _ = load_frontmatter_text(result.revised_text)
+    assert yaml_data["related"] == ["c-retrofit"]
+
+
+def test_generic_type_backticks_message():
+    """Generic type lint messages should trigger backtick wrapping."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+We convert Retrofit responses into Result<T> for better ergonomics.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="ERROR",
+            message=(
+                "ERROR:Generic type 'Result<T>' not wrapped in backticks (will be "
+                "interpreted as HTML tag). Use: `Result<T>`"
+            ),
+            field="content",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`Result<T>`" in result.revised_text
+
+
+def test_nested_generic_type_backticks_are_balanced():
+    """Nested generics missing closing brackets from lint messages are wrapped."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+We propagate Result<List<T>> across layers.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="ERROR",
+            message=(
+                "ERROR:Generic type 'Result<List<T>' not wrapped in backticks "
+                "(will be interpreted as HTML tag). Use: `Result<List<T>`"
+            ),
+            field="content",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`Result<List<T>>`" in result.revised_text
+
+
+def test_simple_generic_backticks_from_message():
+    """Simple generic type mentions are wrapped when validators flag them."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+List<T> collections should be immutable.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="ERROR",
+            message=(
+                "ERROR:Generic type 'List<T>' not wrapped in backticks (will be "
+                "interpreted as HTML tag). Use: `List<T>`"
+            ),
+            field="content",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`List<T>`" in result.revised_text
