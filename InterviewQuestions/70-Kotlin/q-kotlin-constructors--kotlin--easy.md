@@ -2,30 +2,23 @@
 id: kotlin-088
 title: "Kotlin Constructors / Конструкторы в Kotlin"
 aliases: ["Kotlin Constructors", "Конструкторы в Kotlin"]
-
-# Classification
 topic: kotlin
 subtopics: [constructors, init-block, initialization]
 question_kind: theory
 difficulty: easy
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive guide on Kotlin constructors
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-kotlin-init-block--kotlin--easy, q-kotlin-properties--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
-
-# Timestamps
 created: 2025-10-12
 updated: 2025-11-09
-
 tags: [constructors, difficulty/easy, init, initialization, kotlin, primary-constructor, secondary-constructor]
+
 ---
+
 # Вопрос (RU)
 > Что такое конструкторы в Kotlin? Объясните первичные конструкторы, вторичные конструкторы и блоки init.
 
@@ -975,52 +968,37 @@ val request = HttpRequest.Builder()
 
 ---
 
-## Дополнительные вопросы (RU)
-
-- В чем ключевые отличия системы конструкторов Kotlin от Java?
-- Когда использовать вторичные конструкторы вместо значений по умолчанию и именованных аргументов?
-- Какие распространенные ошибки при использовании `init` и вторичных конструкторов?
-
-## Additional Questions (EN)
-
-- What are the key differences between Kotlin's constructor system and Java's?
-- When should you use secondary constructors instead of default values and named arguments?
-- What are common pitfalls when using `init` blocks and secondary constructors?
-
-## Ссылки (RU)
-
-- [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
-- [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
-- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
-
-## References (EN)
-
-- [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
-- [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
-- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
-
-## Связанные вопросы (RU)
-
-- [[q-kotlin-init-block--kotlin--easy]]
-- [[q-kotlin-properties--kotlin--easy]]
-- [[q-kotlin-val-vs-var--kotlin--easy]]
-
-## Related Questions (EN)
-
-- [[q-kotlin-init-block--kotlin--easy]]
-- [[q-kotlin-properties--kotlin--easy]]
-- [[q-kotlin-val-vs-var--kotlin--easy]]
-
-## MOC Ссылки (RU)
-
-- [[moc-kotlin]]
-
-## MOC Links (EN)
-
-- [[moc-kotlin]]
-
 ## Follow-ups
 
 - Compare how constructor overloading in Java maps to Kotlin's primary + secondary constructors and default parameters.
 - Explain how `init` blocks interact with property initialization order in more complex class hierarchies.
 - Discuss when to prefer factory functions or builder patterns over exposing multiple constructors.
+
+## Дополнительные вопросы (RU)
+- В чем ключевые отличия системы конструкторов Kotlin от Java?
+- Когда использовать вторичные конструкторы вместо значений по умолчанию и именованных аргументов?
+- Какие распространенные ошибки при использовании `init` и вторичных конструкторов?
+## Additional Questions (EN)
+- What are the key differences between Kotlin's constructor system and Java's?
+- When should you use secondary constructors instead of default values and named arguments?
+- What are common pitfalls when using `init` blocks and secondary constructors?
+## Ссылки (RU)
+- [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
+- [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
+- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
+## References (EN)
+- [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
+- [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
+- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
+## Связанные вопросы (RU)
+- [[q-kotlin-init-block--kotlin--easy]]
+- [[q-kotlin-properties--kotlin--easy]]
+- [[q-kotlin-val-vs-var--kotlin--easy]]
+## Related Questions (EN)
+- [[q-kotlin-init-block--kotlin--easy]]
+- [[q-kotlin-properties--kotlin--easy]]
+- [[q-kotlin-val-vs-var--kotlin--easy]]
+## MOC Ссылки (RU)
+- [[moc-kotlin]]
+## MOC Links (EN)
+- [[moc-kotlin]]

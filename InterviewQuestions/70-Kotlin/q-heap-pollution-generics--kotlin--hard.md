@@ -3,7 +3,7 @@ id: kotlin-177
 title: "Heap Pollution Generics / Heap Pollution (Загрязнение кучи)"
 aliases: [Heap Pollution Generics, Heap Pollution, Heap Pollution (Загрязнение кучи)]
 topic: kotlin
-subtopics: [kotlin-features, c-kotlin, c-collections]
+subtopics: [functions, types, collections]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -12,9 +12,11 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-collections, q-suspend-functions-basics--kotlin--easy]
 created: 2023-10-15
-updated: 2025-11-09
-tags: [difficulty/hard]
+updated: 2025-11-11
+tags: [kotlin/functions, kotlin/types, kotlin/collections, difficulty/hard]
+
 ---
+
 # Вопрос (RU)
 > Что такое heap pollution (загрязнение кучи) в дженериках Kotlin/Java? Как это происходит и как можно предотвратить?
 
@@ -91,7 +93,7 @@ fun testDangerousVarargs() {
 }
 ```
 
-Важно: в Kotlin `@SafeVarargs` обычно не используется напрямую для Kotlin-функций и применим в основном к Java-коду или специальным случаям. Он не делает небезопасный код безопасным.
+Важно: в Kotlin `@SafeVarargs` обычно не используется напрямую для Kotlin-функций и применим в основном к Java-коду или специальным случаям. Он не делает небезопасный код безопасным и не исправляет логически ошибочные тела методов.
 
 ### Пример 3: Проблема с `Array<T>` в Kotlin
 
@@ -487,6 +489,8 @@ fun testDangerousVarargs() {
 }
 ```
 
+Important: in Kotlin, `@SafeVarargs` is typically relevant for Java methods or very specific interop cases. It does not make inherently unsafe code safe and does not fix logically unsafe method bodies.
+
 ### Example 3: Unsafe `Array<T>` construction
 
 ```kotlin
@@ -647,8 +651,39 @@ Treat such warnings as indicators of potential heap pollution; suppress only wit
 ### Annotations and suppression (EN)
 
 - `@Suppress("UNCHECKED_CAST")` or Java's `@SuppressWarnings("unchecked")` only hide warnings.
-- `@SafeVarargs` is meaningful for specific Java signatures; it does not fix logically unsafe bodies.
-- Confine these annotations to narrow, well-justified helpers.
+- `@SafeVarargs` is primarily relevant for certain Java methods and does not make unsafe code safe or fix logically unsafe bodies.
+- Confine these annotations to narrow, well-justified helpers and never suppress warnings without understanding the cause.
+
+### Runtime heap pollution check (EN)
+
+```kotlin
+fun <T> checkHeapPollution(array: Array<T>, expectedClass: KClass<*>): Unit {
+    array.forEach { element ->
+        if (element != null && !expectedClass.isInstance(element)) {
+            throw IllegalStateException(
+                "Heap pollution detected! Expected ${expectedClass.simpleName}, " +
+                    "but found ${element::class.simpleName}"
+            )
+        }
+    }
+}
+
+fun testHeapPollutionCheck() {
+    val stringArray: Array<String> = arrayOf("A", "B", "C")
+
+    checkHeapPollution(stringArray, String::class) // OK
+
+    val rawArray = stringArray as Array<Any?>
+    rawArray[0] = 42
+
+    try {
+        checkHeapPollution(stringArray, String::class) // throws
+    } catch (e: IllegalStateException) {
+        println(e.message)
+        // Output: Heap pollution detected! Expected String, but found Int
+    }
+}
+```
 
 ### Best Practices (EN)
 
@@ -656,7 +691,7 @@ Treat such warnings as indicators of potential heap pollution; suppress only wit
 2. Avoid raw types and over-generic `Any` containers in public APIs.
 3. Use sealed hierarchies for heterogeneous data instead of `Any`.
 4. Use `inline` + `reified` or explicit `KClass` where real type information is required.
-5. Treat unchecked operations as exceptional: localize `@Suppress("UNCHECKED_CAST")` and document assumptions.
+5. Treat unchecked operations as exceptional: localize `@Suppress("UNCHECKED_CAST")`, document assumptions, and do not suppress warnings without understanding them.
 6. Validate invariants in critical code using runtime checks (for example, `checkHeapPollution`).
 
 ## Follow-ups (RU)
@@ -673,9 +708,9 @@ Treat such warnings as indicators of potential heap pollution; suppress only wit
 
 ## References (RU)
 
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 - [[c-collections]]
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## References (EN)
 

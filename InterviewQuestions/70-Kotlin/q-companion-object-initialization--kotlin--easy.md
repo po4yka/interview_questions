@@ -25,7 +25,7 @@ tags: [companion-objects, difficulty/easy, initialization, programming-languages
 
 Companion object инициализируется **при инициализации соответствующего класса** (на JVM — при инициализации сгенерированного `Companion`/класса-холдера), которая обычно происходит при первом реальном использовании его членов или других статических аспектов класса. Инициализация выполняется один раз; дальнейшие обращения используют уже инициализированный объект.
 
-Важно: точный момент инициализации зависит от целевой платформы и правил инициализации классов (особенно на JVM). Поэтому фразу "лениво при первом использовании" стоит понимать как практическое наблюдение, а не как жесткую гарантию, отделенную от механики инициализации класса: создание экземпляра, статические вызовы или другие обращения, которые требуют инициализации класса, могут инициализировать companion object раньше, чем первое явное обращение к его членам.
+Важно: точный момент инициализации зависит от целевой платформы и правил инициализации классов (особенно на JVM). Поэтому фразу "лениво при первом использовании" стоит понимать как практическое наблюдение, а не как жесткую гарантию, отделенную от механики инициализации класса: создание экземпляра, статические вызовы или другие обращения, которые требуют инициализации класса согласно семантике платформы, могут инициализировать companion object раньше, чем первое явное обращение к его членам.
 
 **Ключевые моменты:**
 - Инициализация companion object привязана к инициализации соответствующего класса
@@ -35,10 +35,10 @@ Companion object инициализируется **при инициализа�
 - На JVM поведение сопоставимо со статическими блоками инициализации и правилами инициализации классов в Java
 
 **Не гарантировано, что companion object НЕ будет инициализирован, если:**
-- Просто создается экземпляр содержащего класса: в конкретной ситуации это может привести к инициализации companion object, если байткод требует инициализации класса
-- Класс загружен: при определенных оптимизациях или обращениях к статическим элементам/метаданным инициализация может произойти до первого явного обращения к членам companion object
+- Просто создается экземпляр содержащего класса: в конкретной ситуации это может привести к инициализации companion object, если сгенерированный байткод/семантика платформы требуют инициализации класса
+- Класс загружен: при определенных обращениях к статическим элементам/метаданным или особенностях реализации инициализация может произойти до первого явного обращения к членам companion object
 
-(Примеры ниже иллюстрируют типичное поведение, но фактический момент инициализации может отличаться в зависимости от платформы и реализации.)
+(Примеры ниже иллюстрируют типичное поведение; фактический момент инициализации может отличаться в зависимости от платформы и реализации.)
 
 ### Пример базовой инициализации
 
@@ -58,7 +58,7 @@ class MyClass {
 
 fun main() {
     println("Before creating instance")
-    val instance = MyClass()  // Инициализация класса (и companion) может произойти здесь на JVM
+    val instance = MyClass()  // Инициализация класса (и companion) может произойти здесь в зависимости от платформы/JVM
 
     println("\nBefore accessing companion")
     println(MyClass.value)    // Если companion еще не инициализирован, он будет инициализирован к этому моменту
@@ -294,7 +294,7 @@ fun main() {
 }
 ```
 
-### Избежание преждевременной инициализации
+### Избежание преждевременной инициализации (иллюстрация возможной проблемы)
 
 ```kotlin
 class ConfigManager {
@@ -330,11 +330,13 @@ fun main() {
 }
 ```
 
+(В этом примере тяжелая инициализация по-прежнему происходит при инициализации класса/companion object; код иллюстрирует, как такая инициализация может сработать раньше или позже в зависимости от того, когда класс будет инициализирован, и показывает потенциальную проблему, а не решение.)
+
 ## Answer (EN)
 
 A companion object is initialized **when its containing class (or the generated `Companion`/holder class) is initialized**, which typically happens around the first real use of its members or other static aspects of the class. Initialization happens once; all subsequent accesses use the already initialized instance.
 
-Important: The exact timing depends on the target platform and class initialization rules (notably on the JVM). The common "initialized on first use" description is a useful intuition, but not a strict, platform-independent guarantee that is fully decoupled from class initialization. Creating instances, calling certain methods, or other bytecode-level accesses that require class initialization may trigger the companion object initialization earlier than the first explicit access to its members.
+Important: The exact timing depends on the target platform and class initialization rules (notably on the JVM). The common "initialized on first use" description is a useful intuition, but not a strict, platform-independent guarantee decoupled from class initialization. Creating instances, calling certain methods, or other accesses that, per platform semantics, require class initialization may trigger the companion object initialization earlier than the first explicit access to its members.
 
 **Key points:**
 - Companion object initialization is tied to initialization of the corresponding class
@@ -344,8 +346,8 @@ Important: The exact timing depends on the target platform and class initializat
 - On the JVM, behavior aligns with Java's class initialization and static initializer semantics
 
 **Not guaranteed to avoid initialization when:**
-- Merely creating an instance of the containing class: in specific cases this can cause class (and thus companion) initialization, depending on generated bytecode
-- The class is loaded: certain accesses/optimizations may cause initialization before the first explicit companion member use
+- Merely creating an instance of the containing class: in specific cases this can cause class (and thus companion) initialization, depending on generated bytecode and platform rules
+- The class is loaded: certain metadata or static accesses/optimizations may cause initialization before the first explicit companion member use
 
 (The examples below illustrate typical behavior; actual timing may vary by platform and implementation.)
 
@@ -370,7 +372,7 @@ class MyClass {
 
 fun main() {
     println("Before creating instance")
-    val instance = MyClass()  // On JVM, class (and companion) initialization may occur here
+    val instance = MyClass()  // On JVM/platforms, class (and companion) initialization may occur here depending on semantics
 
     println("\nBefore accessing companion")
     println(MyClass.value)    // If not yet initialized, companion will be initialized by this point
@@ -606,7 +608,7 @@ fun main() {
 }
 ```
 
-#### Avoiding premature initialization
+#### Avoiding premature initialization (illustrating a potential issue)
 
 ```kotlin
 class ConfigManager {
@@ -641,6 +643,8 @@ fun main() {
     println("API URL: $apiUrl")
 }
 ```
+
+(In this example, heavy work still runs during class/companion initialization; it illustrates how such initialization may happen earlier or later depending on when the class is initialized, highlighting a potential pitfall rather than a solution.)
 
 ## Дополнительные вопросы (RU)
 

@@ -10,10 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-retrofit, c-coroutines, q-flow-basics--kotlin--easy]
+related: [c-coroutines, q-flow-basics--kotlin--easy]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [android, best-practices, coroutines, difficulty/medium, error-handling, kotlin, networking, okhttp, rest-api, retrofit]
+
 ---
 
 # Вопрос (RU)
@@ -26,11 +27,11 @@ tags: [android, best-practices, coroutines, difficulty/medium, error-handling, k
 
 ## Ответ (RU)
 
-Ниже приведено детальное двуязычное руководство. Русская секция полностью эквивалентна английской по структуре и коду.
+Ниже приведено детальное двуязычное руководство. Русская секция эквивалентна английской по структуре и коду; все ключевые примеры и практики представлены.
 
 ## Answer (EN)
 
-Detailed best-practices guide follows below. English and Russian sections are structurally equivalent with identical code.
+Detailed best-practices guide follows below. English and Russian sections are structurally equivalent with identical code where provided.
 
 ---
 
@@ -51,9 +52,9 @@ Detailed best-practices guide follows below. English and Russian sections are st
 - [Concurrent Requests](#concurrent-requests)
 - [Sequential vs Parallel Patterns](#sequential-vs-parallel-patterns)
 - [Call Adapter vs Suspend Functions](#call-adapter-vs-suspend-functions)
-- [Flow Return Types](#flow-return-types)
+- [`Flow` Return Types](#flow-return-types)
 - [Complete Repository Implementation](#complete-repository-implementation)
-- [Caching with Room + Flow](#caching-with-room--flow)
+- [Caching with Room + `Flow`](#caching-with-room--flow)
 - [Retry Logic with Exponential Backoff](#retry-logic-with-exponential-backoff)
 - [Testing](#testing)
 - [OkHttp Interceptors](#okhttp-interceptors)
@@ -68,7 +69,7 @@ Detailed best-practices guide follows below. English and Russian sections are st
 
 ## Overview
 
-Retrofit with Kotlin Coroutines provides a modern, efficient way to handle network operations in Android applications. This guide covers best practices for integrating Retrofit with coroutines. See also [[c-retrofit]] and [[c-coroutines]].
+Retrofit with Kotlin Coroutines provides a modern, efficient way to handle network operations in Android applications. This guide covers best practices for integrating Retrofit with coroutines. See also [[c-coroutines]].
 
 **Key Benefits:**
 - Natural async/await syntax with suspend functions
@@ -117,6 +118,46 @@ interface ApiService {
     //  Headers
     @GET("profile")
     suspend fun getProfile(@Header("Authorization") token: String): Profile
+
+    @GET("users/{id}/posts")
+    suspend fun getUserPosts(@Path("id") userId: String): List<Post>
+
+    @GET("notifications")
+    suspend fun getNotifications(): List<Notification>
+
+    @GET("feed")
+    suspend fun getFeedPosts(): List<Post>
+
+    @GET("suggestions")
+    suspend fun getSuggestions(): List<User>
+
+    @GET("orders/{id}")
+    suspend fun getOrder(@Path("id") orderId: String): Order
+
+    @GET("products/{id}")
+    suspend fun getProduct(@Path("id") productId: String): Product
+
+    @POST("orders/{id}/payment")
+    suspend fun processPayment(
+        @Path("id") orderId: String,
+        @Query("amount") amount: Long,
+        @Query("userId") userId: String
+    ): Payment
+
+    @POST("profiles/{id}")
+    suspend fun createProfile(@Path("id") userId: String, @Body profile: ProfileRequest): Profile
+
+    @POST("profiles/{id}/avatar")
+    suspend fun uploadAvatar(@Path("id") profileId: String, @Body avatar: ByteArray): String
+
+    @GET("products")
+    suspend fun getAllProducts(): List<Product>
+
+    @POST("upload")
+    suspend fun uploadFile(@Body file: File): UploadResult
+
+    @GET("search/users")
+    suspend fun searchUsers(@Query("q") query: String): List<User>
 }
 ```
 
@@ -486,10 +527,11 @@ class CancellableUserViewModel(private val repository: UserRepository) : ViewMod
 }
 ```
 
-### Manual Cancellation with Job Tracking (Corrected)
+### Manual Cancellation with Job Tracking (Illustrative)
 
 ```kotlin
 class CancellableRepository(private val api: ApiService) {
+    // This simple map assumes single-threaded access within a given scope.
     private val activeRequests = mutableMapOf<String, Deferred<User>>()
 
     suspend fun getUser(userId: String): User = coroutineScope {
@@ -952,12 +994,6 @@ class UserRepository(
     }
 }
 
-sealed class ApiResult<out T> {
-    data class Success<T>(val data: T) : ApiResult<T>()
-    data class Error(val exception: Throwable) : ApiResult<Nothing>()
-    object Loading : ApiResult<Nothing>()
-}
-
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey val id: String,
@@ -1003,9 +1039,9 @@ class ProductRepository(
 ) {
     fun observeProduct(productId: String): Flow<Product?> =
         productDao.observeProduct(productId)
-            .onStart { refreshProduct(productId) }
+            .onStart { emitInitial(productId) }
 
-    private suspend fun refreshProduct(productId: String) {
+    private suspend fun emitInitial(productId: String) {
         try {
             val product = api.getProduct(productId)
             productDao.insertProduct(product)
@@ -1381,7 +1417,10 @@ class TokenRefreshInterceptor(
         val newToken = runBlocking {
             mutex.withLock {
                 val current = tokenManager.getAccessToken()
-                if (current != null && current != request.header("Authorization")?.removePrefix("Bearer ")) {
+                val usedToken = request.header("Authorization")?.removePrefix("Bearer ")
+
+                if (current != null && current != usedToken) {
+                    // Another thread has already refreshed the token
                     current
                 } else {
                     val refreshToken = tokenManager.getRefreshToken()
@@ -1404,7 +1443,6 @@ class TokenRefreshInterceptor(
                 .build()
             chain.proceed(newRequest)
         } else {
-            // Return original 401 if refresh failed
             chain.proceed(chain.request())
         }
     }
@@ -1547,18 +1585,20 @@ Key pitfalls (with correct patterns embedded earlier):
 - Creating multiple Retrofit instances.
 - Relying on unsuitable timeout defaults instead of configuring for your needs.
 - Blocking the main thread with `runBlocking`.
+- Mixing callbacks and coroutines for the same API surface.
+- Swallowing exceptions without surfacing them to callers or UI state.
 
 ---
 
 ## Follow-ups
 
-1. When should you prefer `Response<T>` over direct `T` in suspend endpoints, and how does that impact your error-handling strategy?
-2. How does Retrofit integrate with coroutine cancellation and structured concurrency in complex screens with multiple parallel requests?
-3. What patterns can you use to combine `flowOn()` and `withContext()` correctly when exposing Retrofit data as `Flow` from a repository?
-4. How can you avoid duplicate concurrent requests for the same resource across multiple consumers (e.g., screens or `ViewModel`s)?
-5. How would you design an offline-first architecture using Retrofit, Room, and `Flow` that handles retries, backoff, and cache invalidation?
-6. How can you implement robust token refresh logic with OkHttp, interceptors, and coroutines without breaking structured concurrency?
-7. Why are sealed classes (such as `ApiResult` or `NetworkResponse`) useful for modeling API results compared to plain exceptions or nullable types?
+1. When should you prefer `Response<T>` over direct `T` in suspend endpoints, and how does that choice change your error parsing and logging strategy for different status codes?
+2. How does Retrofit cooperate with coroutine cancellation and structured concurrency on complex screens (e.g., dashboards) that fire multiple parallel requests and navigations?
+3. What concrete patterns can you use to combine `flowOn()` and `withContext()` when exposing Retrofit-backed data as `Flow` from repositories without breaking dispatcher confinement?
+4. How can you deduplicate concurrent requests for the same resource across multiple consumers (for example, different `ViewModel`s or screens) while still keeping proper cancellation semantics?
+5. How would you design an offline-first stack with Retrofit, Room, and `Flow` that includes cache invalidation rules, retry with exponential backoff, and proper handling of stale-but-usable data?
+6. How can you implement robust, race-free token refresh with OkHttp interceptors and coroutines so that all pending requests either reuse the refreshed token or fail fast when refresh is impossible?
+7. Why are sealed result hierarchies (`ApiResult`, `NetworkResponse`) more suitable for modeling API outcomes in coroutine-based architectures than nullable types or unchecked exceptions alone?
 
 ---
 
@@ -1588,7 +1628,7 @@ Key pitfalls (with correct patterns embedded earlier):
 
 - [Обзор](#обзор-ru)
 - [Suspend функции в Retrofit](#suspend-функции-в-retrofit)
-- [Типы ответов `Response<T>` vs `T`](#типы-ответов-responset-vs-t)
+- [Типы ответов: `Response<T>` vs `T`](#типы-ответов-responset-vs-t)
 - [Стратегии обработки ошибок](#стратегии-обработки-ошибок-ru)
 - [Конфигурация таймаутов](#конфигурация-таймаутов)
 - [Обработка отмены](#обработка-отмены)
@@ -1613,20 +1653,20 @@ Key pitfalls (with correct patterns embedded earlier):
 <a name="обзор-ru"></a>
 ## Обзор
 
-Retrofit с Kotlin корутинами предоставляет современный, эффективный способ обработки сетевых операций в Android-приложениях. Это руководство охватывает лучшие практики интеграции Retrofit с корутинами и соответствует содержанию английской версии. См. также [[c-retrofit]] и [[c-coroutines]].
+Retrofit с Kotlin корутинами предоставляет современный и эффективный способ обработки сетевых операций в Android-приложениях. Далее приведены лучшие практики интеграции Retrofit и корутин. См. также [[c-coroutines]].
 
 **Ключевые преимущества:**
 - Естественный синтаксис async/await с suspend-функциями
-- Автоматическая отмена запросов при отмене корутины
-- Бесшовная интеграция с `Flow` для реактивных потоков
+- Автоматическая отмена HTTP-запроса при отмене корутины
+- Интеграция с `Flow` для реактивных потоков данных
 - Улучшенная обработка ошибок через try-catch и типизированные результаты
-- Избавление от callback hell
+- Отсутствие callback hell
 
 ---
 
 ## Suspend функции в Retrofit
 
-### Современный Retrofit интерфейс
+### Современный интерфейс Retrofit
 
 ```kotlin
 interface ApiService {
@@ -1634,14 +1674,15 @@ interface ApiService {
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: String): User
 
-    // С обёрткой Response для доступа к заголовкам/статусу
+    // Обёртка Response для доступа к заголовкам и статусу
     @GET("users/{id}")
     suspend fun getUserWithResponse(@Path("id") userId: String): Response<User>
 
-    // Старый подход: `Call<T>` (обычно не нужен в новом коде с корутинами)
+    // Старый подход: `Call<T>` (в новом коде с корутинами не нужен)
     @GET("users/{id}")
     fun getUserOld(@Path("id") userId: String): Call<User>
 
+    // Создание/обновление/удаление
     @POST("users")
     suspend fun createUser(@Body user: UserRequest): User
 
@@ -1651,14 +1692,56 @@ interface ApiService {
     @DELETE("users/{id}")
     suspend fun deleteUser(@Path("id") id: String)
 
+    // Query-параметры
     @GET("users")
     suspend fun getUsers(
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): List<User>
 
+    // Заголовки
     @GET("profile")
     suspend fun getProfile(@Header("Authorization") token: String): Profile
+
+    @GET("users/{id}/posts")
+    suspend fun getUserPosts(@Path("id") userId: String): List<Post>
+
+    @GET("notifications")
+    suspend fun getNotifications(): List<Notification>
+
+    @GET("feed")
+    suspend fun getFeedPosts(): List<Post>
+
+    @GET("suggestions")
+    suspend fun getSuggestions(): List<User>
+
+    @GET("orders/{id}")
+    suspend fun getOrder(@Path("id") orderId: String): Order
+
+    @GET("products/{id}")
+    suspend fun getProduct(@Path("id") productId: String): Product
+
+    @POST("orders/{id}/payment")
+    suspend fun processPayment(
+        @Path("id") orderId: String,
+        @Query("amount") amount: Long,
+        @Query("userId") userId: String
+    ): Payment
+
+    @POST("profiles/{id}")
+    suspend fun createProfile(@Path("id") userId: String, @Body profile: ProfileRequest): Profile
+
+    @POST("profiles/{id}/avatar")
+    suspend fun uploadAvatar(@Path("id") profileId: String, @Body avatar: ByteArray): String
+
+    @GET("products")
+    suspend fun getAllProducts(): List<Product>
+
+    @POST("upload")
+    suspend fun uploadFile(@Body file: File): UploadResult
+
+    @GET("search/users")
+    suspend fun searchUsers(@Query("q") query: String): List<User>
 }
 ```
 
@@ -1681,7 +1764,7 @@ object RetrofitClient {
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
-        // Отдельный CallAdapter для корутин не нужен (Retrofit 2.6+)
+        // Для suspend-функций (Retrofit 2.6+) отдельный CallAdapter не требуется
         .build()
 
     val apiService: ApiService = retrofit.create(ApiService::class.java)
@@ -1691,11 +1774,11 @@ object RetrofitClient {
 ---
 
 <a name="типы-ответов-responset-vs-t"></a>
-## Типы ответов `Response<T>` vs `T`
+## Типы ответов: `Response<T>` vs `T`
 
-### Когда использовать прямой тип `T`
+### Когда использовать прямой `T`
 
-Используйте прямой тип `T`, когда важен только успешный результат, а неуспешные коды и сетевые ошибки готовы обрабатывать как исключения:
+Используйте прямой тип `T`, когда важен только успешный результат, а не 2xx/сетевые ошибки вы готовы обрабатывать через исключения в одном месте:
 
 ```kotlin
 interface ApiService {
@@ -1715,9 +1798,19 @@ suspend fun loadUser(userId: String): ApiResult<User> {
 }
 ```
 
+**Плюсы:**
+- Простой и чистый API
+- Меньше шаблонного кода
+- Все неуспехи централизованно ловятся как исключения
+
+**Минусы:**
+- Нет доступа к заголовкам
+- Нет прямого доступа к коду ответа
+- Ошибки только через исключения
+
 ### Когда использовать `Response<T>`
 
-Используйте `Response<T>`, когда нужны заголовки, коды статуса или детальная обработка ошибок. Реализация полностью повторяет английский пример:
+Используйте `Response<T>`, если нужны заголовки, статус-коды или тонкая логика ошибок:
 
 ```kotlin
 interface ApiService {
@@ -1731,7 +1824,7 @@ suspend fun loadUserWithDetails(userId: String): UserResult {
     return when {
         response.isSuccessful -> {
             val user = response.body()
-                ?: return UserResult.Error(response.code(), "Пустое тело ответа")
+                ?: return UserResult.Error(response.code(), "Empty response body")
             val etag = response.headers()["ETag"]
             UserResult.Success(user, etag)
         }
@@ -1755,135 +1848,325 @@ sealed class UserResult {
 }
 ```
 
+**Плюсы:**
+- Доступ к заголовкам (ETag, Cache-Control и др.)
+- Доступ к статус-коду
+- Гибкая обработка разных ошибок
+- Неуспешные коды не превращаются автоматически в исключения
+
+**Минусы:**
+- Больше кода
+- Нужно явно проверять `isSuccessful`
+
 ---
 
 <a name="стратегии-обработки-ошибок-ru"></a>
 ## Стратегии обработки ошибок
 
-Во всех стратегиях не глотайте `CancellationException` — всегда пробрасывайте его дальше.
+Во всех стратегиях ниже важно не глотать `CancellationException` — его нужно пробрасывать дальше.
 
-(Код стратегий идентичен английским примерам: `ApiResult<T>`, `NetworkResponse<T, E>`, try-catch вокруг suspend-вызовов и т.д.)
+### Стратегия 1: Простой try-catch
+
+```kotlin
+class UserRepository(private val api: ApiService) {
+    suspend fun getUser(userId: String): User? {
+        return try {
+            api.getUser(userId)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: IOException) {
+            // Сетевые ошибки
+            Log.e("UserRepository", "Network error", e)
+            null
+        } catch (e: HttpException) {
+            // HTTP-ошибки (4xx, 5xx)
+            Log.e("UserRepository", "HTTP error: ${e.code()}", e)
+            null
+        } catch (e: Exception) {
+            // Прочие ошибки
+            Log.e("UserRepository", "Unknown error", e)
+            null
+        }
+    }
+}
+```
+
+### Стратегия 2: Sealed-класс `ApiResult<T>`
+
+```kotlin
+sealed class ApiResult<out T> {
+    data class Success<T>(val data: T) : ApiResult<T>()
+    data class Error(val exception: Throwable) : ApiResult<Nothing>()
+    object Loading : ApiResult<Nothing>()
+}
+
+class UserRepository(private val api: ApiService) {
+    suspend fun getUser(userId: String): ApiResult<User> {
+        return try {
+            val user = api.getUser(userId)
+            ApiResult.Success(user)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            ApiResult.Error(e)
+        }
+    }
+}
+
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
+    private val _userState = MutableStateFlow<ApiResult<User>>(ApiResult.Loading)
+    val userState: StateFlow<ApiResult<User>> = _userState.asStateFlow()
+
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            _userState.value = ApiResult.Loading
+            _userState.value = repository.getUser(userId)
+        }
+    }
+}
+```
+
+### Стратегия 3: `NetworkResponse<T, E>` (расширенная)
+
+```kotlin
+sealed class NetworkResponse<out T, out E> {
+    data class Success<T>(val data: T) : NetworkResponse<T, Nothing>()
+    data class ApiError<E>(val body: E, val code: Int) : NetworkResponse<Nothing, E>()
+    data class NetworkError(val error: IOException) : NetworkResponse<Nothing, Nothing>()
+    data class UnknownError(val error: Throwable) : NetworkResponse<Nothing, Nothing>()
+}
+
+data class ApiErrorResponse(
+    val message: String,
+    val code: String?,
+    val details: Map<String, String>?
+)
+
+suspend fun <T, E> safeApiCall(
+    errorClass: Class<E>,
+    apiCall: suspend () -> Response<T>
+): NetworkResponse<T, E> {
+    return try {
+        val response = apiCall()
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body != null) {
+                NetworkResponse.Success(body)
+            } else {
+                NetworkResponse.UnknownError(NullPointerException("Response body is null"))
+            }
+        } else {
+            val errorBody = response.errorBody()?.use { it.string() }
+            val errorResponse = try {
+                if (errorBody != null) Gson().fromJson(errorBody, errorClass) else null
+            } catch (e: Exception) {
+                null
+            }
+            if (errorResponse != null) {
+                NetworkResponse.ApiError(errorResponse, response.code())
+            } else {
+                NetworkResponse.UnknownError(Exception("Unknown API error"))
+            }
+        }
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: IOException) {
+        NetworkResponse.NetworkError(e)
+    } catch (e: Exception) {
+        NetworkResponse.UnknownError(e)
+    }
+}
+
+class NetworkUserRepository(private val api: ApiService) {
+    suspend fun getUser(userId: String): NetworkResponse<User, ApiErrorResponse> {
+        return safeApiCall(ApiErrorResponse::class.java) {
+            api.getUserWithResponse(userId)
+        }
+    }
+}
+```
 
 ---
 
-<a name="конфигурация-таймаутов"></a>
 ## Конфигурация таймаутов
 
-Совпадает с английскими примерами: настройки таймаутов на уровне OkHttp, использование `withTimeout`/`withTimeoutOrNull`, `TimeoutInterceptor` с заголовком `X-Timeout`.
+- Настройте `connectTimeout`, `readTimeout`, `writeTimeout`, `callTimeout` на уровне OkHttp.
+- Используйте `withTimeout` / `withTimeoutOrNull` для ограничений на уровне корутин.
+- При необходимости добавьте `TimeoutInterceptor` и заголовки вроде `X-Timeout` для специфичных запросов.
+
+(Код совпадает с английским разделом Timeout Configuration.)
 
 ---
 
-<a name="обработка-отмены"></a>
 ## Обработка отмены
 
-Включает те же паттерны, что и английская версия:
+- Retrofit (2.6+) отменяет HTTP-вызов при отмене корутины.
+- В `ViewModel` храните `Job` и отменяйте предыдущие загрузки при новых запросах.
+- Для нескольких запросов одного ресурса можно отслеживать активные `Deferred` (пример `CancellableRepository`).
+- При отмене выполняйте очистку ресурсов (файлы, стримы) и пробрасывайте `CancellationException` дальше.
 
-- Автоматическая отмена запросов Retrofit при отмене корутин.
-- `ViewModel` с отменой предыдущего `Job` перед запуском нового.
-- Репозиторий с явным отслеживанием `Deferred` для отмены активных запросов.
-- Безопасная очистка ресурсов в блоке `catch (e: CancellationException)`.
+(Код совпадает с английскими примерами Cancellation Handling.)
 
 ---
 
 <a name="конкурентные-запросы-ru"></a>
 ## Конкурентные запросы
 
-Полностью дублируют английские примеры параллельных запросов, обработки частичных отказов и использования `supervisorScope`.
+- Для параллельных запросов используйте `coroutineScope` + `async/await`.
+- Для дашбордов и комплексных экранов объединяйте несколько запросов в один результат (`DashboardData`).
+- Для частичных отказов оборачивайте каждый `async` в `try-catch`.
+- При необходимости изолировать ошибки используйте `supervisorScope`.
+
+(Код идентичен разделу Concurrent Requests на английском.)
 
 ---
 
-<a name="последовательные-vs-параллельные-паттерны"></a>
 ## Последовательные vs параллельные паттерны
 
-Содержит те же примеры последовательного, параллельного и комбинированного выполнения запросов, что и английская секция.
+- Последовательные: когда каждый следующий запрос зависит от результата предыдущего (пример `createUserWithProfile`).
+- Параллельные: независимые запросы (`loadMultipleUsers`).
+- Смешанные: часть данных грузится параллельно, затем используется в последующих шагах (`processOrder`).
+
+(Код совпадает с английской секцией Sequential Vs Parallel Patterns.)
 
 ---
 
-<a name="call-adapter-vs-suspend-функции"></a>
 ## Call Adapter vs suspend функции
 
-- Показан устаревший подход с CallAdapter (RxJava).
-- Показан современный подход с suspend-функциями без дополнительных адаптеров.
+- Устаревший подход: `CallAdapter` (RxJava и др.) с возвратом `Call<T>` или `Single<T>`.
+- Современный подход: нативные suspend-функции в Retrofit (2.6+) без дополнительных адаптеров.
+
+(Кодовые примеры Call Adapter и CoroutineApiService совпадают с английскими.)
 
 ---
 
-<a name="flow-типы-возврата"></a>
 ## `Flow` типы возврата
 
-Раздел повторяет английскую секцию:
+- Используйте `Flow` для периодического опроса (polling) и подписок.
+- Для SSE/WebSocket используйте `callbackFlow` с ручным управлением ресурсами и `awaitClose`.
+- Переключайте выполнение на `Dispatchers.IO` через `flowOn`.
 
-- Пример `Flow<User>` для периодического опроса API.
-- SSE через `callbackFlow`.
-- WebSocket + `callbackFlow` для потоковых сообщений.
+(Кодовые примеры `observeUser`, SSE и WebSocket идентичны английской секции `Flow` Return Types.)
 
 ---
 
-<a name="полная-реализация-репозитория"></a>
 ## Полная реализация репозитория
 
-Пример `UserRepository`, `ApiResult`, сущности `User` и `UserDao` идентичен английской версии (переведены только комментарии и сообщения).
+- Репозиторий объединяет Retrofit и Room.
+- Используются `ApiResult` для представления состояний (Loading/Success/Error).
+- Реализованы кеширование, пагинация, обновление и удаление пользователя.
+- Корутинный контекст (`Dispatchers.IO`) применяется для операций ввода-вывода.
+
+(Код полностью совпадает с английской секцией Complete Repository Implementation.)
 
 ---
 
-<a name="кеширование-с-room--flow"></a>
 ## Кеширование с Room + `Flow`
 
-Включает те же три стратегии кеширования: Cache-First, Network-First и реактивные обновления, полностью соответствуя английским примерам.
+- Подход Cache-First: сначала отдать кеш, затем обновить из сети.
+- Подход Network-First: сначала сеть, в случае неудачи — кеш.
+- Реактивные обновления: `Flow` из DAO + фоновые синхронизации.
+
+(Кодовые примеры ProductRepository и ReactiveProductRepository идентичны английскому разделу.)
 
 ---
 
-<a name="логика-повторных-попыток-с-экспоненциальной-задержкой"></a>
 ## Логика повторных попыток с экспоненциальной задержкой
 
-Повторяет английские реализации `retryIO`, `RetryConfig`/`retryWithPolicy` и `retryWithBackoff` для `Flow`.
+- `retryIO` для простого ретрая по `IOException`.
+- `RetryConfig` + `retryWithPolicy` для гибких политик (типы ошибок, лимиты, коэффициенты).
+- `retryWithBackoff` для `Flow` с экспоненциальной задержкой между попытками.
+
+(Код совпадает с английской секцией Retry Logic with Exponential Backoff.)
 
 ---
 
 <a name="тестирование-ru"></a>
 ## Тестирование
 
-Отражает английские примеры использования `MockWebServer`, тестовых диспетчеров и `runTest`.
+- Используйте `MockWebServer` для контролируемых ответов сервера.
+- Применяйте тестовые диспетчеры (`UnconfinedTestDispatcher`, `runTest`) для управления корутинами.
+- Инъецируйте зависимости (API, DAO, диспетчеры), не используйте реальные сети/БД в unit-тестах.
+
+(Код идентичен английской секции Testing.)
 
 ---
 
 <a name="okhttp-перехватчики"></a>
 ## OkHttp перехватчики
 
-Включает те же реализации логирующего, аутентификационного, перехватчика обновления токена, перехватчика повторных попыток и кеширующего перехватчика.
+- Перехватчик логирования запросов/ответов.
+- Перехватчик авторизации: добавление `Authorization`-заголовка.
+- Перехватчик обновления токена с синхронизацией через `Mutex`.
+- Перехватчик повторных попыток для 5xx/сетевых ошибок.
+- Перехватчик кеширования с заголовками `Cache-Control`.
+
+(Код идентичен английским примерам OkHttp Interceptors.)
 
 ---
 
 <a name="чек-лист-лучших-практик"></a>
 ## Чек-лист лучших практик
 
-Дублирует английский список Do/Don't, адаптированный на русском.
+### Что делать
+
+1. Использовать suspend-функции вместо `Call<T>` в новом коде.
+2. Явно обрабатывать отмену (пробрасывать `CancellationException`).
+3. Поручать Retrofit управление потоками для сети, использовать `Dispatchers.IO` для диска.
+4. Настраивать таймауты под реальные условия.
+5. Использовать структурированный параллелизм (`coroutineScope`/`async`).
+6. Применять sealed-классы (`ApiResult`, `NetworkResponse`) для результатов запросов.
+7. Кешировать ответы через Room для оффлайн-режима.
+8. Использовать `Flow` для реактивной работы с кешом и сетью.
+
+### Чего избегать
+
+1. Не смешивать `Call<T>.enqueue` и корутины для одного и того же API.
+2. Не глотать `CancellationException`.
+3. Не использовать `GlobalScope` в продакшене.
+4. Не блокировать главный поток через `runBlocking`.
+5. Не игнорировать обработку ошибок.
+6. Не вызывать синхронный `execute()` на главном потоке.
+7. Не создавать новый Retrofit/OkHttp client на каждый запрос.
 
 ---
 
 <a name="полный-пример-android-приложения"></a>
 ## Полный пример Android приложения
 
-Концептуально повторяет английский раздел: API-сервис, репозиторий, `ViewModel`, DI и UI-слой.
+- API-сервис определяет suspend-эндпоинты (пример `UserApiService`).
+- Репозитории инкапсулируют сетевую и кеширующую логику, возвращают `Flow`/`ApiResult`.
+- `ViewModel` использует `viewModelScope`, слушает репозитории и предоставляет `StateFlow` в UI.
+- UI (Compose/Views) подписывается на состояния и не содержит сетевой логики.
+
+(Структура слоев соответствует английскому разделу Complete Android App Example.)
 
 ---
 
 <a name="распространенные-ошибки-ru"></a>
 ## Распространенные ошибки
 
-Список совпадает с английским разделом Common Pitfalls.
+Основные типичные ошибки:
+- Не пробрасывается `CancellationException`.
+- Обращение к `Response.body()` без проверки на null.
+- Забывают закрыть `errorBody()`.
+- Создают несколько экземпляров Retrofit/OkHttp без необходимости.
+- Смешивают callback-API и корутины для одного и того же эндпоинта.
+- Используют неподходящие значения таймаутов.
+- Блокируют главный поток с помощью `runBlocking` или синхронных вызовов.
 
 ---
 
 <a name="дополнительные-вопросы-ru"></a>
 ## Дополнительные вопросы (RU)
 
-1. В каких случаях стоит выбирать `Response<T>` вместо прямого `T` в suspend-методах и как это влияет на стратегию обработки ошибок?
-2. Как Retrofit взаимодействует с отменой корутин и структурированным параллелизмом в сложных экранах с несколькими параллельными запросами?
-3. Какие паттерны стоит использовать для корректного сочетания `flowOn()` и `withContext()` при экспонировании данных Retrofit как `Flow` из репозитория?
-4. Как избежать дублирования параллельных запросов к одному и тому же ресурсу между разными потребителями (экранами или `ViewModel`)?
-5. Как спроектировать offline-first архитектуру с Retrofit, Room и `Flow`, учитывающую ретраи, backoff и инвалидацию кеша?
-6. Как реализовать надежную логику обновления токена с OkHttp, интерцепторами и корутинами без нарушения структурированного параллелизма?
-7. Почему sealed-классы (`ApiResult`, `NetworkResponse`) удобнее для моделирования результатов API по сравнению с голыми исключениями или nullable-типами?
+1. В каких случаях стоит предпочесть `Response<T>` прямому `T` в suspend-эндпоинтах и как это влияет на стратегию парсинга и логирования ошибок для разных статус-кодов?
+2. Как Retrofit взаимодействует с отменой корутин и структурированным параллелизмом на сложных экранах (например, дашбордах) с несколькими параллельными запросами и навигацией?
+3. Какие конкретные паттерны позволяют корректно сочетать `flowOn()` и `withContext()` при экспонировании данных Retrofit как `Flow` из репозиториев, не нарушая ограничений диспетчеров?
+4. Как дедуплицировать параллельные запросы одного и того же ресурса между несколькими потребителями (например, разными `ViewModel` или экранами), сохраняя корректную отмену?
+5. Как спроектировать offline-first стек с Retrofit, Room и `Flow`, включающий правила инвалидации кеша, ретраи с экспоненциальной задержкой и обработку устаревших, но пригодных данных?
+6. Как реализовать надёжную, свободную от гонок логику обновления токена с OkHttp-перехватчиками и корутинами так, чтобы ожидающие запросы либо переиспользовали новый токен, либо быстро завершались при неуспешном обновлении?
+7. Почему и в каких сценариях иерархии результатов (`ApiResult`, `NetworkResponse`) удобнее для моделирования исходов API в корутинной архитектуре, чем nullable-типы или только исключения?
 
 ---
 

@@ -49,21 +49,21 @@ tags:
 
 ## Ответ (RU)
 
-**Да**, можно повысить «важность» процесса (его приоритет в системе) косвенно, запуская **foreground service** через **`startForeground()`** или удерживая в процессе компоненты, которые система считает важными (activity на переднем плане, bound service и т.п.). Напрямую управлять уровнем приоритета процесса (как через `nice`/`renice`) нельзя.
+**Да**, можно повысить "важность" процесса (его приоритетную категорию в системе) косвенно, запуская **foreground service** через **`startForeground()`** или удерживая в процессе компоненты, которые система считает важными (activity на переднем плане, bound service и т.п.). Напрямую управлять уровнем приоритета процесса на уровне Linux (`nice`/`renice`) для обычного приложения нельзя.
 
-В случае foreground service процесс попадает в группу с высокой важностью и становится значительно менее подвержен уничтожению при нехватке памяти, хотя **полная гарантия сохранения процесса отсутствует**.
+В случае foreground service процесс переводится в более высокую категорию важности и становится значительно менее подвержен уничтожению при нехватке памяти, хотя **полной гарантии сохранения процесса нет**.
 
 ### Уровни Приоритета Процессов (упрощённо)
 
-Android использует иерархию важности процессов для принятия решений об освобождении памяти (ниже приведена упрощённая схема):
+Android использует иерархию важности процессов для принятия решений об освобождении памяти (ниже приведена упрощённая схема, реальные категории и эвристики чуть детальнее):
 
-1. **Foreground Process** (наивысший) — активная activity на переднем плане, foreground service, или компонент, выполняющий важную для пользователя работу
-2. **Visible/Perceptible Process** — видимый пользователю (видимая, но не в фокусе activity, важные пользовательские операции)
-3. **`Service` Process** — обычный фоновый сервис без foreground уведомления
+1. **Foreground Process** (наивысший) — активная activity на переднем плане, foreground service, или компонент, выполняющий важную/видимую для пользователя работу
+2. **Visible/Perceptible Process** — видим для пользователя, но не в фокусе, или выполняет пользовательски заметную работу
+3. **`Service` Process** — обычный фоновый сервис без foreground-уведомления
 4. **Cached Process** — недавно использованный, без активных компонентов
-5. **Empty Process** (наименьший приоритет) — убивается первым
+5. **Empty Process** (наименьший приоритет) — убивается первым при нехватке памяти
 
-При нехватке памяти система убивает процессы начиная с наименее важных.
+При нехватке памяти система убивает процессы, начиная с наименее важных.
 
 ### Foreground `Service` (высокий приоритет)
 
@@ -108,7 +108,7 @@ class DownloadService : Service() {
 ### Запуск Foreground `Service`
 
 ```kotlin
-// Android 8.0+ требует startForegroundService() для запуска из фона
+// Android 8.0+ требует startForegroundService() при запуске из фона
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     startForegroundService(Intent(this, DownloadService::class.java))
 } else {
@@ -116,7 +116,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 }
 ```
 
-**Важно:** На Android 8.0+ необходимо вызвать `startForeground()` в течение **5 секунд** после запуска foreground service, иначе система остановит сервис (IllegalStateException / убийство процесса).
+**Важно:** На Android 8.0+ необходимо вызвать `startForeground()` в течение примерно **5 секунд** после `startForegroundService()`; иначе система остановит сервис (и может выбросить `IllegalStateException` или убить процесс). Это требование относится к сервисам, запущенным как foreground.
 
 ### Когда Использовать
 
@@ -134,15 +134,15 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 **Bound `Service` с foreground/visible activity:**
 ```kotlin
-// Сервис становится более приоритетным, пока на него ссылается foreground/visible компонент
+// Важность процесса с сервисом повышается, пока на него ссылается компонент с высокой важностью
 bindService(Intent(this, MyService::class.java), connection, BIND_AUTO_CREATE)
 ```
 
-Процесс с bound service получает более высокий приоритет, если на сервис ссылаются компоненты с высокой важностью (например, activity на переднем плане), но это не «прямое наследование» приоритета, а результат политики системы.
+Процесс с bound service получает более высокий приоритет, если на сервис ссылаются компоненты с высокой важностью (например, foreground/visible activity). Это не "наследование приоритета" через явный API, а результат правил системы, учитывающих важность вызывающей стороны и тип привязки.
 
 **JobScheduler priority hint (API 26+):**
 ```kotlin
-// ❌ Приоритет — это лишь подсказка для планировщика, не гарантия и доступен только на поддерживаемых API
+// ❌ Priority здесь — подсказка для планировщика (реализация и доступность зависят от версии/устройства), не гарантия важности процесса
 val job = JobInfo.Builder(JOB_ID, componentName)
     .setPriority(JobInfo.PRIORITY_HIGH)
     .build()
@@ -171,19 +171,19 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 
 ## Answer (EN)
 
-**Yes**, you can indirectly raise a process's importance (its priority class in the system) by running components that the framework treats as important, most notably a **foreground service** via **`startForeground()`**, or by keeping foreground/visible UI or bound services. You cannot directly set Linux-level priority (like `nice/renice`) for your app process.
+**Yes**, you can indirectly raise a process's importance (its priority class in the system) by running components that the framework treats as important, most notably a **foreground service** via **`startForeground()`**, or by keeping foreground/visible UI or bound services in that process. You cannot directly change the underlying Linux process priority (like `nice/renice`) for a regular app.
 
-When using a foreground service, the hosting process is moved into a high-importance group and becomes much less likely to be killed under memory pressure, though **this is not an absolute guarantee**.
+When using a foreground service, the hosting process is moved into a higher-importance bucket and becomes much less likely to be killed under memory pressure, though **this is not an absolute guarantee**.
 
 ### Process Priority Levels (simplified)
 
-Android uses a process importance hierarchy for memory management decisions (simplified view below):
+Android uses a process importance hierarchy for memory management decisions (simplified; real categories and heuristics are more detailed):
 
-1. **Foreground Process** (highest) — activity in the foreground, foreground service, or other components doing work visible/critical to the user
-2. **Visible/Perceptible Process** — visible to the user but not in focus, or performing user-perceptible work
+1. **Foreground Process** (highest) — activity in the foreground, foreground service, or other components doing visible/critical user work
+2. **Visible/Perceptible Process** — visible to the user but not in focus, or doing user-perceptible work
 3. **`Service` Process** — background service without a foreground notification
 4. **Cached Process** — recently used, no active components
-5. **Empty Process** (lowest) — killed first
+5. **Empty Process** (lowest) — killed first under memory pressure
 
 On low memory, the system kills from the least important upwards.
 
@@ -238,7 +238,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 }
 ```
 
-**Important:** On Android 8.0+, you **must** call `startForeground()` within **5 seconds** of starting a foreground service, otherwise the system will stop it (and may throw `IllegalStateException` or kill the process).
+**Important:** On Android 8.0+, you must call `startForeground()` within roughly **5 seconds** after `startForegroundService()`; otherwise the system will stop the service (and may throw `IllegalStateException` or kill the process). This applies to services started as foreground services.
 
 ### When to Use
 
@@ -256,15 +256,15 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 **Bound `Service` with foreground/visible activity:**
 ```kotlin
-// Process importance is raised while a foreground/visible component is bound to the service
+// Process importance is raised while a high-importance component (e.g., foreground/visible activity) is bound to the service
 bindService(Intent(this, MyService::class.java), connection, BIND_AUTO_CREATE)
 ```
 
-A process hosting a bound service gets higher importance if it is bound to by high-importance components (e.g., a foreground activity). This is not a literal "priority inheritance" API, but the result of the system's importance rules.
+A process hosting a bound service gets higher importance when it is bound to by high-importance components (e.g., a foreground activity). This is not a literal "priority inheritance" API, but the effect of the system's importance rules based on the caller's importance and binding type.
 
 **JobScheduler priority hint (API 26+):**
 ```kotlin
-// ❌ Priority is only a scheduler hint (and API-dependent), not a guarantee
+// ❌ Priority here is only a scheduler hint (implementation and availability vary by version/device), not a guarantee of process importance
 val job = JobInfo.Builder(JOB_ID, componentName)
     .setPriority(JobInfo.PRIORITY_HIGH)
     .build()
@@ -273,8 +273,8 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 ### Limitations
 
 1. **Notification required** — a foreground service must show a notification; you cannot hide long-running work from the user.
-2. **Android 12+ restrictions** — generally you cannot start a foreground service from the background; there are specific documented exceptions (e.g., certain foreground service types and scenarios) that must be followed.
-3. **`Service` type (Android 10+)** — for some use cases you must declare `foregroundServiceType` in the manifest (and it is mandatory for certain types/permissions); in other cases it is recommended for correct behavior.
+2. **Android 12+ restrictions** — generally you cannot start a foreground service from the background; there are specific documented exceptions (including certain foreground service types and scenarios) that must be respected.
+3. **`Service` type (Android 10+)** — for some use cases you must declare `foregroundServiceType` in the manifest (mandatory for certain types/permissions); in other cases it is recommended for correct behavior.
 
 ```xml
 <service
@@ -284,7 +284,7 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 
 ### Best Practices
 
-- Use a foreground service only when **truly necessary** and justified by user-facing work.
+- Use a foreground service only when **truly necessary** and justified by user-visible work.
 - Always call `stopForeground(STOP_FOREGROUND_REMOVE)` and stop the service when the task is complete.
 - Declare the correct `foregroundServiceType` on Android 10+ where applicable.
 - Prefer WorkManager for deferrable / periodic tasks instead of artificially holding a high process priority.

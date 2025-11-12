@@ -14,6 +14,7 @@ updated: 2025-11-09
 tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, microservices, patterns, production, resilience]
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+
 ---
 
 # Вопрос (RU)
@@ -26,11 +27,21 @@ related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
 
 ## Ответ (RU)
 
-Ниже приведено детальное объяснение и практические примеры реализации circuit breaker с корутинами, включая состояния, конфигурацию, потокобезопасность, мониторинг, интеграцию с retry/timeout и примеры для разных сервисов.
+Ниже приведено детальное объяснение и практические примеры реализации circuit breaker с корутинами, включая состояния, конфигурацию, потокобезопасность, мониторинг, интеграцию с retry/timeout и примеры для разных сервисов. Примеры кода демонстрационные; для реального продакшена потребуются дополнительные проверки и тестирование под нагрузкой.
 
 ## Answer (EN)
 
-Below is a detailed explanation and practical implementation examples of a coroutine-based circuit breaker, covering states, configuration, thread safety, monitoring, integration with retry/timeout, and usage for different services.
+Below is a detailed explanation and practical implementation examples of a coroutine-based circuit breaker, covering states, configuration, thread safety, monitoring, integration with retry/timeout, and usage for different services. Code snippets are illustrative; a production-ready implementation requires additional validation and concurrency testing.
+
+---
+
+## Follow-ups
+
+1. What is the difference between circuit breaker and retry pattern?
+2. How would you choose `failureThreshold` and `resetTimeout` for different services?
+3. How do you keep the implementation thread-safe under high concurrency with coroutines?
+4. How would you expose circuit breaker metrics to your monitoring stack?
+5. How do you test state transitions deterministically (including time-based)?
 
 ---
 
@@ -58,7 +69,7 @@ Below is a detailed explanation and practical implementation examples of a corou
 - [Production Metrics](#production-metrics)
 - [Testing with Simulated Failures](#testing-with-simulated-failures)
 - [Resilience4j Comparison](#resilience4j-comparison)
-- [Real Example: Payment Service](#real-example-payment-service)
+- [Real Example: Payment `Service`](#real-example-payment-service)
 - [Best Practices](#best-practices)
 - [When NOT to Use](#when-not-to-use)
 - [Common Pitfalls](#common-pitfalls)
@@ -304,6 +315,8 @@ data class CircuitBreakerConfig(
 )
 ```
 
+Note: the example combines "consecutive failures" and a time window. In a real implementation you should clarify whether you use consecutive failures, a sliding window, or both, and implement counters accordingly.
+
 ### Advanced Configuration with Sliding Window
 
 ```kotlin
@@ -396,13 +409,15 @@ class CircuitBreaker(
     }
 
     suspend fun <T> execute(operation: suspend () -> T): T {
-        // Refer to Full Implementation section for full logic
+        // Simplified example; see Full Implementation for state handling.
         return operation()
     }
 }
 ```
 
 ### Recovery Period Strategies
+
+The following strategies are conceptual examples for backoff policies; they are not wired into the full CircuitBreaker implementation above.
 
 ```kotlin
 // Strategy 1: Fixed delay
@@ -498,6 +513,8 @@ class CircuitBreaker(
                 state.set(open)
                 Log.w("CircuitBreaker", "Circuit re-opened after failure in half-open state")
 
+                // In this illustrative snippet we wrap as CircuitBreakerOpenException;
+                // in the full implementation below we rethrow the original exception.
                 throw CircuitBreakerOpenException("Circuit breaker re-opened", e)
             }
         }
@@ -506,6 +523,8 @@ class CircuitBreaker(
     // executeInClosedState and executeInOpenState are implemented as in Full Implementation
 }
 ```
+
+To avoid confusion, pick one consistent behavior for Half-Open failures in your actual implementation (either wrap as CircuitBreakerOpenException or rethrow original) so callers can reliably distinguish open-circuit rejections.
 
 ### Test Request Strategy
 
@@ -626,7 +645,7 @@ class CircuitBreaker(
         operation: suspend () -> T,
         currentState: CircuitBreakerState.HalfOpen
     ): T = mutex.withLock {
-        // Only one test execution at a time
+        // Only one test execution at a time in this sample implementation
         try {
             val result = operation()
             recordHalfOpenSuccess(currentState)
@@ -665,7 +684,8 @@ class CircuitBreaker(
         currentState.failureCount++
         currentState.lastFailureTime = System.currentTimeMillis()
 
-        // Check if we should open circuit
+        // Check if we should open circuit. This sample uses failureThreshold
+        // together with failureTimeWindow for simplicity.
         if (shouldOpenCircuit(currentState)) {
             val openState = CircuitBreakerState.Open()
             state.set(openState)
@@ -780,6 +800,8 @@ class CircuitBreakerOpenException(
     cause: Throwable? = null
 ) : Exception(message, cause)
 ```
+
+Note: For true thread safety under high concurrency, consider making state transitions purely via compare-and-set on immutable state objects instead of mutating properties on data classes shared across coroutines.
 
 ---
 
@@ -1099,7 +1121,9 @@ class CompositeResilienceStrategy(
     }
 }
 
-// Simplified rate limiter: max N calls per time window
+// Simplified rate limiter: max N calls per time window.
+// For production, avoid holding a mutex across delay loops as below;
+// this is intentionally simplified for teaching purposes.
 class SimpleRateLimiter(
     private val permitsPerSecond: Int
 ) {
@@ -1135,7 +1159,7 @@ class SimpleRateLimiter(
 class Bulkhead(
     private val maxConcurrentCalls: Int
 ) {
-    private val semaphore = Semaphore(maxConcurrentCalls)
+    private val semaphore = kotlinx.coroutines.sync.Semaphore(maxConcurrentCalls)
 
     suspend fun <T> execute(operation: suspend () -> T): T {
         semaphore.acquire()
@@ -1386,7 +1410,7 @@ This ensures:
 - [Production метрики](#production-метрики-ru)
 - [Тестирование с симуляцией сбоев](#тестирование-с-симуляцией-сбоев)
 - [Сравнение с Resilience4j](#сравнение-с-resilience4j)
-- [Реальный пример: Payment Service](#реальный-пример-payment-service)
+- [Реальный пример: Payment `Service`](#реальный-пример-payment-service)
 - [Лучшие практики](#лучшие-практики-ru)
 - [Когда НЕ использовать](#когда-не-использовать)
 - [Распространённые ошибки](#распространённые-ошибки-ru)
@@ -1562,6 +1586,8 @@ data class CircuitBreakerConfig(
 )
 ```
 
+Примечание: пример одновременно упоминает «последовательные ошибки» и окно времени. В реальной реализации нужно явно выбрать модель (последовательные ошибки, скользящее окно и т.п.) и согласованно её реализовать.
+
 ### Продвинутая конфигурация со sliding window
 
 ```kotlin
@@ -1654,12 +1680,15 @@ class CircuitBreaker(
     }
 
     suspend fun <T> execute(operation: suspend () -> T): T {
+        // Упрощённый пример; за полной логикой см. «Полная реализация».
         return operation()
     }
 }
 ```
 
 ### Стратегии периода восстановления
+
+Примеры ниже концептуальные и не подключены напрямую к классу CircuitBreaker выше.
 
 ```kotlin
 // Стратегия 1: фиксированная задержка
@@ -1745,12 +1774,16 @@ class CircuitBreaker(
                 val open = CircuitBreakerState.Open()
                 state.set(open)
                 Log.w("CircuitBreaker", "Circuit re-opened after failure in half-open state")
+                // В этом фрагменте оборачиваем как CircuitBreakerOpenException;
+                // в полной реализации ниже ошибка пробрасывается как есть.
                 throw CircuitBreakerOpenException("Circuit breaker re-opened", e)
             }
         }
     }
 }
 ```
+
+Важно: в реальной реализации выберите единообразное поведение для ошибок в HALF_OPEN (либо всегда `CircuitBreakerOpenException`, либо оригинальное исключение), чтобы вызывающий код мог детерминированно их обрабатывать.
 
 ---
 
@@ -1952,6 +1985,8 @@ class CircuitBreakerOpenException(
     cause: Throwable? = null
 ) : Exception(message, cause)
 ```
+
+Примечание: для настоящей потокобезопасности под высокой нагрузкой стоит использовать неизменяемые состояния и `compareAndSet` вместо мутации полей `failureCount`/`successCount` у разделяемых объектов.
 
 ---
 

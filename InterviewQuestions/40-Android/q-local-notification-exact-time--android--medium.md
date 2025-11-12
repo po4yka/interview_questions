@@ -24,13 +24,11 @@ related:
 - q-recomposition-choreographer--android--hard
 - q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-06
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/background-execution
 - android/notifications
 - difficulty/medium
-- en
-- ru
 
 ---
 
@@ -44,12 +42,12 @@ tags:
 
 ## Ответ (RU)
 
-Для планирования локального (на устройстве) уведомления на (почти) точное время в Android обычно используют AlarmManager с PendingIntent, который в нужный момент запустит код, создающий уведомление.
+Для планирования локального (на устройстве) уведомления на точное время (с учётом ограничений Doze/стэндбая и возможного небольшого дрейфа, контролируемого системой) в Android обычно используют AlarmManager с PendingIntent, который в нужный момент запустит код (например, `BroadcastReceiver`), создающий уведомление.
 
 Ключевые моменты:
 - Используем AlarmManager для локальных, основанных на времени событий, а не для удалённых уведомлений (FCM).
 - По возможности применяем неточные (inexact) будильники; точные (exact) используем только при реальной бизнес-необходимости (календарь, будильник, критичные напоминания).
-- Поведение зависит от версии Android (Doze, standby, ограничения на точные будильники).
+- Поведение зависит от версии Android (Doze, standby, ограничения на точные будильники с Android 12+ и особенно Android 13+).
 
 Типичный поток:
 1) Создать `BroadcastReceiver` (или другую точку входа: `Service`/Worker), который собирает и показывает уведомление.
@@ -73,8 +71,8 @@ class ReminderReceiver : BroadcastReceiver() {
         }
 
         val notification = NotificationCompat.Builder(context, channelId)
-            .setContentTitle("Напоминание")
-            .setContentText("Пора!")
+            .setContentTitle("Reminder")
+            .setContentText("It's time!")
             .setSmallIcon(R.drawable.ic_notification)
             .setAutoCancel(true)
             .build()
@@ -100,7 +98,8 @@ fun scheduleExactReminder(context: Context, triggerAtMillis: Long) {
 
     when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-            // Будет стараться сработать точно и разбудить устройство при необходимости
+            // Будет стараться сработать как можно точнее и разбудить устройство при необходимости,
+            // включая режим Doze (при наличии соответствующих разрешений на точные будильники, если требуются)
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 triggerAtMillis,
@@ -118,9 +117,10 @@ fun scheduleExactReminder(context: Context, triggerAtMillis: Long) {
 ```
 
 Важные нюансы:
-- Ограничения на точные будильники (Android 12+):
-  - Для некоторых приложений требуется permission `SCHEDULE_EXACT_ALARM` или принадлежность к льготным категориям (часы, календарь и т.п.). Актуальные требования смотрите в документации.
-  - Пользователь может запретить приложению использование точных будильников.
+- Ограничения на точные будильники (Android 12+ / 13+):
+  - Для некоторых приложений требуется permission `SCHEDULE_EXACT_ALARM` или принадлежность к льготным категориям (часы, календарь и т.п.). Актуальные требования смотрите в документации к вашей целевой версии Android.
+  - На Android 13+ пользователь может управлять доступом приложения к точным будильникам и запретить их использование.
+- AlarmManager только запускает ваш код (через PendingIntent); само уведомление нужно создать и показать внутри обработчика (например, в `BroadcastReceiver`).
 - Не используйте точные будильники для частых фоновых задач; вместо этого применяйте WorkManager или неточные будильники.
 - После перезагрузки устройства будильники сбрасываются. Если напоминания должны сохраняться:
   - Обрабатывайте `BOOT_COMPLETED` в `BroadcastReceiver`.
@@ -130,12 +130,12 @@ fun scheduleExactReminder(context: Context, triggerAtMillis: Long) {
 
 ## Answer (EN)
 
-To schedule a truly local (on-device) notification at (approximately) an exact time on Android, you typically use AlarmManager with a PendingIntent that eventually posts the notification.
+To schedule a local (on-device) notification at an exact time (subject to Doze/standby constraints and small system-controlled drift), you typically use AlarmManager with a PendingIntent that, at the trigger time, starts your code (e.g., a `BroadcastReceiver`) which posts the notification.
 
 Key points:
-- Use AlarmManager for time-based triggers, not remote/FCM.
-- Prefer inexact alarms when possible; use exact alarms only when product requirements demand it (e.g., calendar, alarms, critical reminders).
-- Behavior and restrictions depend on Android version (Doze, app standby, exact alarm restrictions).
+- Use AlarmManager for time-based local triggers, not remote/FCM.
+- Prefer inexact alarms when possible; use exact alarms only when product requirements demand it (e.g., calendar events, alarms, critical reminders).
+- Behavior and restrictions depend on Android version (Doze, app standby, and exact alarm restrictions starting Android 12+ and especially Android 13+).
 
 Typical flow:
 1) Create a `BroadcastReceiver` (or a `Service`/Worker entry point) that builds and shows the notification.
@@ -186,7 +186,8 @@ fun scheduleExactReminder(context: Context, triggerAtMillis: Long) {
 
     when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-            // Wakes device if needed; attempts to be exact even in Doze
+            // Attempts to be exact and wake the device if needed, including in Doze,
+            // assuming the app has the required exact alarm permission when applicable
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 triggerAtMillis,
@@ -204,23 +205,18 @@ fun scheduleExactReminder(context: Context, triggerAtMillis: Long) {
 ```
 
 Important considerations:
-- Exact alarm restrictions (Android 12+):
-  - Some apps must declare the `SCHEDULE_EXACT_ALARM` permission or be in exempt categories (e.g., clock, calendar). Check current platform guidelines.
-  - The user can revoke exact alarm access.
+- Exact alarm restrictions (Android 12+ / 13+):
+  - Some apps must declare the `SCHEDULE_EXACT_ALARM` permission or belong to exempt categories (e.g., clock, calendar). Check the official docs for your target API level.
+  - On Android 13+, the user can control and revoke an app's ability to use exact alarms.
+- AlarmManager only triggers your PendingIntent; you must build and post the notification in the handler (e.g., in the `BroadcastReceiver`).
 - Do not use exact alarms for frequent background work; use WorkManager or inexact alarms instead.
-- After a device reboot, scheduled alarms are lost. If the reminders must persist:
+- After device reboot, scheduled alarms are lost. If reminders must persist:
   - Listen for `BOOT_COMPLETED` in a `BroadcastReceiver`.
   - Re-schedule alarms from persisted data.
 
-This approach ensures local notifications are fired as close as possible to the requested time while respecting Android's power-management and background-execution constraints.
+This approach schedules local notifications to fire as close as possible to the requested time while respecting Android's power-management and background-execution constraints.
 
 ---
-
-## Дополнительные вопросы (RU)
-
-- [[q-fragments-history-and-purpose--android--hard]]
-- [[q-recomposition-choreographer--android--hard]]
-- [[q-which-event-is-called-when-user-touches-screen--android--medium]]
 
 ## Follow-ups
 
@@ -228,17 +224,15 @@ This approach ensures local notifications are fired as close as possible to the 
 - [[q-recomposition-choreographer--android--hard]]
 - [[q-which-event-is-called-when-user-touches-screen--android--medium]]
 
-## Связанные вопросы и концепты (RU)
-
-### Предпосылки / Концепты
-
-- [[c-background-tasks]]
-
-## Related Questions and Concepts
-
-### Prerequisites / Concepts
-
-- [[c-background-tasks]]
-
 ## References
-- [Android Documentation](https://developer.android.com)
+
+- "https://developer.android.com/training/scheduling/alarms"
+- "https://developer.android.com/training/notify-user/build-notification"
+
+## Дополнительные вопросы (RU)
+## Связанные вопросы и концепты (RU)
+### Предпосылки / Концепты
+- [[c-background-tasks]]
+## Related Questions and Concepts
+### Prerequisites / Concepts
+- [[c-background-tasks]]

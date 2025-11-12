@@ -24,7 +24,7 @@ related:
 - q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/camera
 - android/performance-rendering
@@ -71,7 +71,7 @@ class FaceDetectionManager {
     suspend fun detectFaces(image: InputImage, useAccurate: Boolean = false): Result<List<Face>> =
         suspendCancellableCoroutine { cont ->
             val detector = if (useAccurate) accurateDetector else fastDetector
-            val task = detector.process(image)
+            detector.process(image)
                 .addOnSuccessListener { faces ->
                     if (cont.isActive) cont.resume(Result.success(faces))
                 }
@@ -284,7 +284,7 @@ class FaceDetectionManager {
     suspend fun detectFaces(image: InputImage, useAccurate: Boolean = false): Result<List<Face>> =
         suspendCancellableCoroutine { cont ->
             val detector = if (useAccurate) accurateDetector else fastDetector
-            val task = detector.process(image)
+            detector.process(image)
                 .addOnSuccessListener { faces ->
                     if (cont.isActive) cont.resume(Result.success(faces))
                 }
@@ -293,7 +293,7 @@ class FaceDetectionManager {
                 }
 
             cont.invokeOnCancellation {
-                // Task cannot be actively cancelled; guard via cont.isActive above.
+                // Task cannot be actively cancelled; guarded by cont.isActive above.
             }
         }
 }

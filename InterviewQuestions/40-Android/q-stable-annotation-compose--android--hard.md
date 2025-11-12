@@ -139,7 +139,7 @@ ProductCard(product)      // Может быть пропущена: тот же
 // Новый экземпляр с теми же значениями:
 ProductCard(Product("1", "Laptop", 999.99))
 // Пропуск здесь не гарантирован только по equals().
-// Для стабильных параметров компилятор учитывает модель стабильности и чтения полей;
+// Для стабильных параметров компилятор опирается на модель стабильности и фактические изменения;
 // если он не может доказать отсутствие изменений, рекомпозиция произойдёт.
 ```
 
@@ -150,15 +150,12 @@ ProductCard(Product("1", "Laptop", 999.99))
 ### Частые ошибки
 
 ```kotlin
-// ❌ Ошибка: @Stable на классе, чьё наблюдаемое поведение
-// может меняться без уведомления Compose
+// ❌ Потенциальная ошибка: @Stable на типе, чьё наблюдаемое поведение
+// может меняться без уведомления Compose (например, через внутренние мутации, не завязанные на SnapshotState)
 @Stable
-class User(val id: String, val name: String)
-// Используется ссылочное равенство, возможны скрытые мутации внутренних объектов и т.п.,
-// что нарушает контракт.
+class UserHolder(val user: MutableUser)
 
-// ✅ Лучше: immutable/value-like data class
-// (и можно использовать @Immutable, если гарантированно не мутирует)
+// ✅ Лучше: immutable/value-like data class или тип, где изменения делаются через observable state
 @Immutable
 data class User(val id: String, val name: String)
 ```
@@ -304,24 +301,23 @@ ProductCard(product)      // May be skipped: same stable instance, fields unchan
 // New instance with same values:
 ProductCard(Product("1", "Laptop", 999.99))
 // Skipping here is not guaranteed purely by equals().
-// For stable parameters, the compiler tracks reads and identity/field changes;
-// if it cannot prove fields did not change, it will recompute.
+// For stable parameters, the compiler relies on the stability model and actual changes;
+// if it cannot prove that nothing relevant changed, it will recompose.
 ```
 
-Key correction:
+Key clarification:
 - `@Stable` improves the compiler's ability to skip recomposition when stable parameters did not change in relevant ways.
 - It does NOT mean "equals() true ⇒ recomposition always skipped"; skippability is based on the stability model, tracked reads, and known changes.
 
 ### Common Mistakes
 
 ```kotlin
-// ❌ Misuse: @Stable on a class whose observable behavior can change without notifying Compose
+// ❌ Potential misuse: @Stable on a type whose observable behavior
+// can change without notifying Compose (e.g. internal mutations not based on SnapshotState)
 @Stable
-class User(val id: String, val name: String)
-// Uses referential equality, fields are mutable if 'val' wraps a mutable object, etc.
-// If such internals change without observable state, this breaks the contract.
+class UserHolder(val user: MutableUser)
 
-// ✅ Safer: immutable/value-like data class (or mark @Immutable if it truly never mutates)
+// ✅ Safer: immutable/value-like data class or a type whose changes are driven via observable state
 @Immutable
 data class User(val id: String, val name: String)
 ```
@@ -360,7 +356,7 @@ stable class User {
 
 - Что произойдет, если пометить нестабильный класс как `@Stable`?
 - Чем `@Stable` отличается от `@Immutable` в практических сценариях?
-- Можно ли применять `@Stable` к функциям и лямбдам?
+- Можно ли применять `@Stable` к функциям и лямбдам? (подсказка: аннотация сама по себе не сделает лямбду стабильной для Compose)
 - Как метрики компилятора помогают разбирать проблемы со стабильностью?
 - Каковы последствия для производительности, если в иерархии Compose много нестабильных типов?
 
@@ -370,7 +366,7 @@ stable class User {
 
 - What happens if you mark an unstable class as `@Stable` incorrectly?
 - How does `@Stable` differ from `@Immutable` in practical scenarios?
-- Can `@Stable` be applied to function types and lambdas?
+- Can `@Stable` be applied to function types and lambdas? (hint: the annotation alone does not make a lambda stable for Compose)
 - How do compiler metrics help debug stability issues?
 - What are the performance implications of having many unstable types in a Compose hierarchy?
 

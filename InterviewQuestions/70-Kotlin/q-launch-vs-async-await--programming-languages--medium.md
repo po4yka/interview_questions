@@ -23,19 +23,19 @@ tags: [async, await, coroutines, difficulty/medium, kotlin, launch, programming-
 
 ## Ответ (RU)
 
-`launch` используется для запуска корутин без блокировки текущего потока, когда не требуется вернуть результат. Он возвращает объект `Job` для управления корутиной (отмена, ожидание завершения через `join` и т.п.).
+`launch` используется для запуска корутин без блокировки текущего потока, когда не требуется вернуть результат вызывающему коду. Он возвращает объект `Job` для управления корутиной (отмена, ожидание завершения через `join` и т.п.); сама корутина обычно имеет тип результата `Unit`.
 
-`async` используется для запуска корутины, которая должна вернуть результат. Он сразу возвращает объект `Deferred<T>`, из которого результат получается через приостановку с помощью `await()`.
+`async` используется для запуска корутины, которая должна вернуть результат. Он сразу возвращает объект `Deferred<T>` (наследник `Job`), который представляет отложенный результат; сам результат получается через приостановку с помощью `await()` (или через `getCompleted()` после завершения).
 
 Ключевые отличия:
-- `launch` не возвращает результат (`Unit`) и обычно применяется для fire-and-forget задач (например, побочные эффекты), при этом неперехваченные исключения обрабатываются через `CoroutineExceptionHandler` контекста.
-- `async` возвращает `Deferred<T>`, используется для конкурентного выполнения вычислений с последующим получением результата через `await()`; исключения пробрасываются при вызове `await()`.
+- `launch` возвращает `Job` и обычно применяется для fire-and-forget задач (например, побочные эффекты). Неперехваченные исключения обрабатываются немедленно через `CoroutineExceptionHandler` контекста или приводят к завершению scope в соответствии с правилами структурированной конкурентности.
+- `async` возвращает `Deferred<T>` и используется для конкурентного выполнения вычислений с последующим получением результата через `await()`. Исключения сохраняются внутри `Deferred` и пробрасываются при вызове `await()`/`getCompleted()`.
 
-Оба варианта не блокируют поток и должны вызываться из корректного `CoroutineScope`. Выбор зависит от того, нужен ли результат асинхронной операции и как вы планируете обрабатывать ошибки.
+Оба варианта не блокируют поток и являются extension-функциями `CoroutineScope` (или могут вызываться через `GlobalScope`, что в продакшене обычно не рекомендуется). Выбор зависит от того, нужен ли результат асинхронной операции и как вы планируете обрабатывать ошибки и управлять временем жизни корутин.
 
 Пример:
 ```kotlin
-// launch - результат не нужен
+// launch - результат не нужен вызывающему коду
 scope.launch {
     updateUI()
 }
@@ -51,19 +51,19 @@ val result = deferred.await()
 
 ## Answer (EN)
 
-`launch` is used to start a coroutine without blocking the current thread when no return value is needed. It returns a `Job` object for managing the coroutine (cancellation, waiting for completion via `join`, etc.).
+`launch` is used to start a coroutine without blocking the current thread when the caller does not need a return value. It returns a `Job` used to manage the coroutine (cancellation, waiting for completion via `join`, etc.); the coroutine body itself typically has a `Unit` return type.
 
-`async` is used to start a coroutine that is expected to produce a result. It immediately returns a `Deferred<T>`, from which you obtain the result by suspending with `await()`.
+`async` is used to start a coroutine that is expected to produce a result. It immediately returns a `Deferred<T>` (a `Job` with a result), which represents the deferred value; you obtain the value by suspending with `await()` (or by calling `getCompleted()` after completion).
 
 Main differences:
-- `launch`: Returns `Unit`, no result value; typically used for fire-and-forget tasks (e.g., side effects). Uncaught exceptions are handled via the `CoroutineExceptionHandler` of its context.
-- `async`: Returns `Deferred<T>`; used for concurrent computations where you need the result via `await()`. Exceptions are propagated when `await()` is called.
+- `launch`: Returns a `Job` and is typically used for fire-and-forget tasks (e.g., side effects). Uncaught exceptions are handled immediately via the `CoroutineExceptionHandler` of its context or cause the parent scope to fail according to structured concurrency rules.
+- `async`: Returns a `Deferred<T>` and is used for concurrent computations where you need a result via `await()`. Exceptions are captured in the `Deferred` and rethrown when `await()`/`getCompleted()` is called.
 
-Both do not block the underlying thread and must be called from a proper `CoroutineScope`. The choice depends on whether you need a result from the asynchronous operation and how you want to handle errors.
+Both builders are non-blocking and are extension functions on `CoroutineScope` (or can be used with `GlobalScope`, which is generally discouraged in production). The choice depends on whether you need a result from the asynchronous operation and how you plan to handle errors and manage coroutine lifetime.
 
 Example:
 ```kotlin
-// launch - no result needed
+// launch - no result needed by the caller
 scope.launch {
     updateUI()
 }

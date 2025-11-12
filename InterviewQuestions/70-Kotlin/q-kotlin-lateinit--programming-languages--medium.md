@@ -12,23 +12,29 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-map-flatmap--kotlin--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [dependency-injection, difficulty/medium, initialization, lateinit, programming-languages, properties]
 ---
 # Вопрос (RU)
 > Что известно о `lateinit`?
 
+# Question (EN)
+> What do you know about `lateinit`?
+
 ## Ответ (RU)
 
-`lateinit` используется для отложенной инициализации свойств в Kotlin.
+`lateinit` используется для отложенной инициализации свойств в Kotlin, когда вы гарантированно знаете, что значение будет присвоено до первого чтения, и не хотите использовать nullable-тип.
 
 Ключевые моменты:
 
 1. Только для `var`-свойств: нельзя использовать с `val`.
-2. Только для ненулевых ссылочных типов: нельзя использовать с типами вида `String?`.
-3. Только для свойств: разрешён для топ-левел свойств и свойств классов/объектов; нельзя использовать для локальных переменных и параметров первичного конструктора.
+2. Только для ненулевых ссылочных типов: нельзя использовать с типами вида `String?` и с примитивами вроде `Int` (для них используются `Int?` или делегаты).
+3. Только для свойств и локальных переменных:
+   - Разрешён для топ-левел свойств и свойств классов/объектов.
+   - Разрешён для локальных переменных (начиная с Kotlin 1.2).
+   - Нельзя использовать в параметрах первичного конструктора.
 4. Должно быть проинициализировано до первого чтения, иначе будет выброшено `UninitializedPropertyAccessException`.
-5. Позволяет избежать nullable-типов, когда вы гарантированно знаете, что значение будет присвоено до использования (DI, тесты, жизненный цикл Android-компонентов).
+5. Смещает проверку инициализации на рантайм: помогает избежать nullable-типов в API, но при ошибке вы получаете исключение во время выполнения, а не ошибку компиляции.
 
 Синтаксис (отложенная инициализация в классе):
 ```kotlin
@@ -88,24 +94,24 @@ if (::name.isInitialized) {
 Ограничения:
 - Нельзя использовать с nullable-типами.
 - Нельзя использовать в параметрах первичного конструктора.
-- Нельзя использовать для локальных переменных.
+- Нельзя использовать с `val`.
 
 ---
 
-# Question (EN)
-> What do you know about `lateinit`?
-
 ## Answer (EN)
 
-`lateinit` is used for deferred initialization of properties in Kotlin.
+`lateinit` is used for deferred initialization of properties in Kotlin when you know the value will be assigned before first read and you don't want the property type to be nullable.
 
 Key characteristics:
 
 1. Only for `var`: Cannot be used with `val`.
-2. Only non-null reference types: Cannot be used with nullable types like `String?`.
-3. Properties only: Allowed for top-level properties and member properties of classes/objects; not allowed for local variables or primary constructor parameters.
+2. Only non-null reference types: Cannot be used with nullable types like `String?` or with primitive value types like `Int` (for those you use `Int?` or delegates instead).
+3. For properties and local variables only:
+   - Allowed for top-level and member properties of classes/objects.
+   - Allowed for local variables (since Kotlin 1.2).
+   - Not allowed for primary constructor parameters.
 4. Must be initialized before use: Accessing it before initialization throws `UninitializedPropertyAccessException`.
-5. Avoids nullable overhead: Useful when you know a property will be initialized later and should not be nullable.
+5. Shifts checks to runtime: It keeps the property non-nullable in the type system, but incorrect usage will fail at runtime instead of compile time.
 
 Syntax:
 ```kotlin
@@ -165,7 +171,7 @@ if (::name.isInitialized) {
 Constraints:
 - Cannot be used with nullable types.
 - Cannot be used in primary constructor parameters.
-- Cannot be used with local variables.
+- Cannot be used with `val`.
 
 ---
 

@@ -64,10 +64,10 @@ fun <T> Flow<T>.retry(
 ```
 
 **Характеристики:**
-- **Повторяет немедленно** после сбоя (если в предикате не используется `delay`)
-- **Количество повторов управляемо:** `retries` — максимальное число повторных попыток (по умолчанию `Long.MAX_VALUE`, т.е. практически бесконечно)
-- **Предикат** определяет, при каких исключениях выполнять повтор
-- **Просто** — хорошо для базовой логики повтора
+- **Повторяет немедленно** после сбоя (если в предикате не используется `delay`).
+- **Количество повторов управляемо:** `retries` — максимальное число повторных попыток (по умолчанию `Long.MAX_VALUE`, т.е. практически бесконечно относительно количества ретраев; исходная попытка в это число не входит).
+- **Предикат** определяет, при каких исключениях выполнять повтор.
+- **Просто** — хорошо для базовой логики повтора.
 
 ### Реальные примеры использования Retry
 
@@ -94,7 +94,7 @@ class ConfigRepository {
         val config = api.fetchConfig()
         emit(config)
     }
-    .retry { exception ->  // Практически бесконечные повторы
+    .retry { exception ->  // Практически бесконечные повторы ретраев
         exception is IOException
     }
 }
@@ -123,10 +123,10 @@ fun <T> Flow<T>.retryWhen(
 ```
 
 **Особенности:**
-- Параметр **`attempt`** — номер попытки повтора (с нуля)
-- Можно реализовать **кастомные задержки** (экспоненциальная, линейная и т.п.)
-- **Сложные условия** повтора по типам ошибок и числу попыток
-- Есть доступ к **FlowCollector** — можно эмитить состояния (например, прогресс) между попытками
+- Параметр **`attempt`** — номер попытки повтора (начинается с 0 для первого ретрая).
+- Можно реализовать **кастомные задержки** (экспоненциальная, линейная и т.п.).
+- **Сложные условия** повтора по типам ошибок и числу попыток.
+- Есть доступ к **FlowCollector** — можно эмитить состояния (например, прогресс) между попытками.
 
 ### Примеры retryWhen
 
@@ -372,32 +372,7 @@ fun `retry должен повторять 3 раза при IOException`() = ru
     val result = flow.first()
 
     assertEquals("Success", result)
-    assertEquals(4, attempts)  // Первая + 3 повтора
-}
-
-@Test
-fun `retryWhen должен применять экспоненциальную задержку`() = runTest {
-    val delays = mutableListOf<Long>()
-    val startTime = currentTime
-
-    flow {
-        if (delays.size < 3) {
-            delays.add(currentTime - startTime)
-            throw IOException()
-        }
-        emit("Success")
-    }
-    .retryWhen { cause, attempt ->
-        if (cause is IOException && attempt < 3) {
-            delay(1000 * (2.0.pow(attempt.toInt())).toLong())
-            true
-        } else false
-    }
-    .first()
-
-    // Проверяем экспоненциальные задержки: ~0ms, ~1000ms, ~2000ms
-    assertTrue(delays[1] in 900..1100)
-    assertTrue(delays[2] in 2900..3100)
+    assertEquals(4, attempts)  // Первая попытка + 3 ретрая
 }
 ```
 
@@ -452,7 +427,7 @@ fun `retryWhen должен применять экспоненциальную 
 }
 ```
 
-**Краткое содержание**: `retry` немедленно повторяет `Flow` при исключении (количество повторов задается параметром `retries`, по умолчанию практически бесконечно; используйте предикат для фильтрации ошибок). `retryWhen` предоставляет продвинутый контроль (доступ к номеру попытки, кастомные задержки, разные стратегии по типу ошибки, возможность эмитить промежуточные состояния). Используйте `retry` для простой логики повтора, `retryWhen` — для экспоненциальной задержки, разных стратегий и обновления прогресса. Всегда фильтруйте исключения, добавляйте задержки при сетевых ретраях и устанавливайте максимальное число попыток. См. также [[c-flow]] для базовых концепций.
+**Краткое содержание**: `retry` немедленно повторяет `Flow` при исключении (количество ретраев задается параметром `retries`, по умолчанию практически бесконечно относительно числа ретраев; используйте предикат для фильтрации ошибок). `retryWhen` предоставляет продвинутый контроль (доступ к номеру попытки ретрая, кастомные задержки, разные стратегии по типу ошибки, возможность эмитить промежуточные состояния). Используйте `retry` для простой логики повтора, `retryWhen` — для экспоненциальной задержки, разных стратегий и обновления прогресса. Всегда фильтруйте исключения, добавляйте задержки при сетевых ретраях и устанавливайте максимальное число попыток. См. также [[c-flow]] для базовых концепций.
 
 ---
 
@@ -486,10 +461,10 @@ fun <T> Flow<T>.retry(
 ```
 
 **Characteristics:**
-- **Retries immediately** after failure by default (unless you call `delay` inside the predicate)
-- **Retry count is controlled**: `retries` is the maximum number of retry attempts (default `Long.MAX_VALUE`, i.e., effectively infinite)
-- **Predicate** determines which exceptions to retry on
-- **Simple** - good for basic retry logic
+- **Retries immediately** after failure by default (unless you call `delay` inside the predicate).
+- **Retry count is controlled**: `retries` is the maximum number of retry attempts (default `Long.MAX_VALUE`, i.e., effectively infinite in terms of retries; the initial attempt is not counted).
+- **Predicate** determines which exceptions to retry on.
+- **Simple** - good for basic retry logic.
 
 ### Real-World Retry Examples
 
@@ -516,7 +491,7 @@ class ConfigRepository {
         val config = api.fetchConfig()
         emit(config)
     }
-    .retry { exception ->  // Effectively infinite retries
+    .retry { exception ->  // Effectively infinite retries (for retries themselves)
         exception is IOException
     }
 }
@@ -545,10 +520,10 @@ fun <T> Flow<T>.retryWhen(
 ```
 
 **Key features:**
-- **`attempt` parameter** - retry attempt number (0-based)
-- **Custom delay** - implement exponential/linear backoff
-- **Conditional logic** - complex retry conditions per error type and attempt
-- **Access to FlowCollector** - can emit values (e.g., progress) between attempts
+- **`attempt` parameter** - retry attempt number (0-based, for retries only).
+- **Custom delay** - implement exponential/linear backoff.
+- **Conditional logic** - complex retry conditions per error type and attempt.
+- **Access to FlowCollector** - can emit values (e.g., progress) between attempts.
 
 ### retryWhen Examples
 
@@ -792,32 +767,7 @@ fun `retry should retry 3 times on IOException`() = runTest {
     val result = flow.first()
 
     assertEquals("Success", result)
-    assertEquals(4, attempts)  // Initial + 3 retries
-}
-
-@Test
-fun `retryWhen should apply exponential backoff`() = runTest {
-    val delays = mutableListOf<Long>()
-    val startTime = currentTime
-
-    flow {
-        if (delays.size < 3) {
-            delays.add(currentTime - startTime)
-            throw IOException()
-        }
-        emit("Success")
-    }
-    .retryWhen { cause, attempt ->
-        if (cause is IOException && attempt < 3) {
-            delay(1000 * (2.0.pow(attempt.toInt())).toLong())
-            true
-        } else false
-    }
-    .first()
-
-    // Verify exponential delays: ~0ms, ~1000ms, ~2000ms
-    assertTrue(delays[1] in 900..1100)
-    assertTrue(delays[2] in 2900..3100)
+    assertEquals(4, attempts)  // Initial attempt + 3 retries
 }
 ```
 
@@ -872,7 +822,7 @@ fun `retryWhen should apply exponential backoff`() = runTest {
 }
 ```
 
-**English Summary**: `retry` immediately retries the `Flow` on exception (number of retries controlled by `retries`, default effectively infinite; use predicate to filter which errors are retried). `retryWhen` provides advanced control (attempt number, custom delays, different strategies per error type, ability to emit progress states). Use `retry` for simple retry logic; use `retryWhen` for exponential backoff, differentiated strategies, and progress updates. Always filter exceptions, add delays for network retries, and set maximum attempts. See also [[c-flow]] for foundational concepts.
+**English Summary**: `retry` immediately retries the `Flow` on exception (number of retries controlled by `retries`, default effectively infinite for retries; use predicate to filter which errors are retried). `retryWhen` provides advanced control (attempt number, custom delays, different strategies per error type, ability to emit progress states). Use `retry` for simple retry logic; use `retryWhen` for exponential backoff, differentiated strategies, and progress updates. Always filter exceptions, add delays for network retries, and set maximum attempts. See also [[c-flow]] for foundational concepts.
 
 ## Дополнительные вопросы (RU)
 

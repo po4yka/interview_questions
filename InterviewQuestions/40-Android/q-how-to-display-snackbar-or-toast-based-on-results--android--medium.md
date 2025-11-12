@@ -33,7 +33,7 @@ tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-views,
 **Toast** — простое временное уведомление без взаимодействия:
 - Не требует действий пользователя
 - Исчезает автоматически
-- Не может быть закрыто вручную (без использования дополнительных обходных решений)
+- Не может быть закрыто вручную пользователем (без дополнительных обходных решений)
 - Использует только `Context`
 
 **Snackbar** — продвинутое уведомление с возможностями:
@@ -77,23 +77,29 @@ class MyViewModel : ViewModel() {
             _messages.emit(UiMessage.Error(e.message ?: "Ошибка", canRetry = true))
         }
     }
+
+    suspend fun performRetry() {
+        performAction()
+    }
 }
 
 // ✅ В Activity/Fragment (lifecycle-aware)
-repeatOnLifecycle(Lifecycle.State.STARTED) {
-    viewModel.messages.collect { message ->
-        when (message) {
-            is UiMessage.Success ->
-                Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
-            is UiMessage.Error -> {
-                Snackbar.make(binding.root, message.text, Snackbar.LENGTH_LONG).apply {
-                    if (message.canRetry) {
-                        setAction("Повтор") { 
-                            // Повторный запуск операции через ViewModel
-                            lifecycleScope.launch { viewModel.performAction() }
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.messages.collect { message ->
+            when (message) {
+                is UiMessage.Success ->
+                    Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
+                is UiMessage.Error -> {
+                    Snackbar.make(binding.root, message.text, Snackbar.LENGTH_LONG).apply {
+                        if (message.canRetry) {
+                            setAction("Повтор") {
+                                // Повторный запуск операции через ViewModel
+                                lifecycleScope.launch { viewModel.performAction() }
+                            }
                         }
-                    }
-                }.show()
+                    }.show()
+                }
             }
         }
     }
@@ -109,7 +115,7 @@ fun MyScreen(viewModel: MyViewModel) {
     val context = LocalContext.current
 
     // ✅ Обработка UI-событий
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.messages.collect { message ->
             when (message) {
                 is UiMessage.Success ->
@@ -153,7 +159,7 @@ fun MyScreen(viewModel: MyViewModel) {
 **Toast** — simple temporary notification without interaction:
 - Requires no user action
 - Disappears automatically
-- Cannot be dismissed manually (without workaround APIs)
+- Cannot be dismissed manually by the user (without workaround approaches)
 - Requires only `Context`
 
 **Snackbar** — advanced notification with capabilities:
@@ -197,23 +203,29 @@ class MyViewModel : ViewModel() {
             _messages.emit(UiMessage.Error(e.message ?: "Error", canRetry = true))
         }
     }
+
+    suspend fun performRetry() {
+        performAction()
+    }
 }
 
 // ✅ In Activity/Fragment (lifecycle-aware)
-repeatOnLifecycle(Lifecycle.State.STARTED) {
-    viewModel.messages.collect { message ->
-        when (message) {
-            is UiMessage.Success ->
-                Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
-            is UiMessage.Error -> {
-                Snackbar.make(binding.root, message.text, Snackbar.LENGTH_LONG).apply {
-                    if (message.canRetry) {
-                        setAction("Retry") { 
-                            // Trigger retry via ViewModel
-                            lifecycleScope.launch { viewModel.performAction() }
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.messages.collect { message ->
+            when (message) {
+                is UiMessage.Success ->
+                    Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
+                is UiMessage.Error -> {
+                    Snackbar.make(binding.root, message.text, Snackbar.LENGTH_LONG).apply {
+                        if (message.canRetry) {
+                            setAction("Retry") {
+                                // Trigger retry via ViewModel
+                                lifecycleScope.launch { viewModel.performAction() }
+                            }
                         }
-                    }
-                }.show()
+                    }.show()
+                }
             }
         }
     }
@@ -229,7 +241,7 @@ fun MyScreen(viewModel: MyViewModel) {
     val context = LocalContext.current
 
     // ✅ Handle UI events
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.messages.collect { message ->
             when (message) {
                 is UiMessage.Success ->

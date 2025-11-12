@@ -23,8 +23,8 @@ tags:
 - difficulty/medium
 moc: moc-android
 related:
-- c-memory-management
-- c-coroutines
+- c-android
+- c-concurrency
 ---
 
 # Вопрос (RU)
@@ -56,13 +56,13 @@ related:
 ```kotlin
 // Каждый поток имеет свой стек
 Thread {
-    val localVar = 10  // Хранится в стеке этого потока (примитив/локальная ссылка)
+    val localVar = 10  // Локальная переменная этого потока; логически относится к его стеку
     recursiveFunction()  // Использует стек этого потока
 }.start()
 ```
 
 Ключевые моменты:
-- Размер стека на поток обычно составляет от сотен КБ до нескольких МБ и может настраиваться.
+- Размер стека на поток обычно составляет от сотен КБ до нескольких МБ и может настраиваться; конкретные значения зависят от платформы и конфигурации.
 - Больше потоков → больше суммарной памяти, зарезервированной/используемой под стеки.
 
 **Память кучи (Heap):**
@@ -85,7 +85,7 @@ Thread {
 
 **Иллюстративный расчёт памяти (пример):**
 
-Предположим (только для наглядности):
+Предположим (условные числа только для наглядности, не реальные значения по умолчанию):
 - Стек главного потока:     8 MB
 - Стек рабочего потока:     1 MB каждый
 - Максимальный heap процесса: 512 MB (общий)
@@ -133,13 +133,13 @@ Each Java/Kotlin thread gets its own stack for:
 ```kotlin
 // Each thread has its own stack
 Thread {
-    val localVar = 10  // Stored in this thread's stack (primitive/local reference)
+    val localVar = 10  // Local variable for this thread; conceptually lives in its stack
     recursiveFunction()  // Uses this thread's stack frames
 }.start()
 ```
 
 Key points:
-- Per-thread stack size is typically on the order of hundreds of KB to a few MB and is configurable.
+- Per-thread stack size is typically on the order of hundreds of KB to a few MB and is configurable; exact values depend on platform and configuration.
 - More threads → more total memory reserved/used for stacks.
 
 **Heap Memory:**
@@ -162,7 +162,7 @@ Key points:
 
 **Illustrative Memory Calculation (example only):**
 
-Assume (for illustration):
+Assume (numbers are arbitrary for illustration only, not actual defaults):
 - Main thread stack:    8 MB
 - Worker thread stack:  1 MB each
 - Max heap for process: 512 MB (shared)

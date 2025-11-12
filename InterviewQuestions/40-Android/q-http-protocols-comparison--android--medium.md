@@ -68,13 +68,13 @@ class UserRepository(private val api: ApiService) {
 
 ### 2. `Long`-Polling
 
-**Модель**: Клиент → Длинный запрос удерживается до появления данных или timeout → Ответ → Новый запрос.
+**Модель**: Клиент → длинный запрос удерживается до появления данных или timeout → Ответ → Новый запрос.
 
 **Характеристики:**
 - Сервер держит соединение открытым до данных или timeout
 - После ответа клиент сразу инициирует новый запрос
 - Работает через большинство firewalls/proxy
-- Накладные расходы HTTP заголовков и установления (особенно без HTTP/2)
+- На каждый цикл приходятся накладные расходы HTTP-заголовков и поддержания долгоживущих соединений (особенно без HTTP/2)
 
 **Когда использовать:**
 - ✅ WebSocket заблокирован firewall/proxy
@@ -109,7 +109,7 @@ class LongPollingClient(
                     }
                 } catch (e: Exception) {
                     handleException(e)
-                    delay(5000) // Задержка при ошибке
+                    delay(5000) // Задержка при ошибке (backoff)
                 }
             }
         }
@@ -132,7 +132,7 @@ class LongPollingClient(
 **Характеристики:**
 - Полнодуплексная связь через одно TCP соединение
 - Минимальные накладные расходы после handshake (кадры WebSocket вместо HTTP-заголовков)
-- Подходящ для низкой задержки; фактическая задержка зависит от сети
+- Подходит для низкой задержки; фактическая задержка зависит от сети
 - Поддержка текстовых и бинарных сообщений
 
 **Когда использовать:**
@@ -185,11 +185,11 @@ class WebSocketManager(
 
 ### 4. Server-Sent Events (SSE)
 
-**Модель**: Клиент подписывается (HTTP-запрос с Accept: text/event-stream) → Сервер отправляет события в одном длинном ответе → Клиент автоматически переподключается при обрыве.
+**Модель**: Клиент подписывается (HTTP-запрос с Accept: text/event-stream) → Сервер отправляет события в одном длинном ответе → Клиент при обрыве соединения инициирует новый запрос (часто с учётом последнего полученного id).
 
 **Характеристики:**
 - Однонаправленный (только сервер → клиент)
-- Поддержка автоматического переподключения через EventSource-подобный механизм (или его реализацию)
+- Семантика автоматического переподключения и `Last-Event-ID` обычно реализуется на клиенте (в браузере через EventSource или аналогичный механизм)
 - Event ID для отслеживания последнего события и возобновления
 - Формат событий текстовый; двоичные данные при необходимости инкапсулируются (base64 и т.п.)
 
@@ -219,9 +219,12 @@ class SSEClient(private val client: OkHttpClient) {
                     val source = response.body?.source() ?: return@use
                     while (!isClosedForSend && !source.exhausted()) {
                         val line = source.readUtf8Line() ?: continue
+                        // Упрощённый парсер: обрабатываем только строки вида "data: ..."
                         if (line.startsWith("data: ")) {
-                            trySend(line.substring(6)).isSuccess
+                            trySend(line.substring(6))
                         }
+                        // Полноценный SSE-парсинг (event, id, многострочные data, разделение пустой строкой,
+                        // reconnect и Last-Event-ID) должен быть реализован отдельно.
                     }
                 }
             } catch (e: Exception) {
@@ -253,13 +256,13 @@ class SSEClient(private val client: OkHttpClient) {
 4. Использование компактных форматов (например, Protocol Buffers) для уменьшения размера сообщений
 
 **SSE:**
-1. Отслеживание event ID для возобновления потока
+1. Отслеживание event ID для возобновления потока (через Last-Event-ID или собственный механизм)
 2. Timeout и обработка обрыва соединения
-3. Использование HTTP/2 (если доступен) для лучшей эффективности соединений
+3. При использовании поверх HTTP/2 учитывать особенности буферизации/мультиплексирования сервера и клиента для сохранения своевременной доставки событий
 
 **`Long`-Polling:**
 1. Корректные timeout-ы на стороне сервера
-2. Jitter для предотвращения эффекта thundering herd
+2. Jitter/backoff для предотвращения эффекта thundering herd
 3. Корректная обработка ошибок и отмены запросов
 
 ## Answer (EN)
@@ -304,13 +307,13 @@ class UserRepository(private val api: ApiService) {
 
 ### 2. `Long`-Polling
 
-**Model**: Client → `Long` request held until data or timeout → Response → New request.
+**Model**: Client → long request held until data or timeout → Response → New request.
 
 **Characteristics:**
-- Server keeps connection open until data is available or timeout
+- Server keeps the connection open until data is available or timeout
 - Client issues a new request immediately after each response
 - Works through most firewalls/proxies
-- HTTP header and connection overhead on each cycle (unless mitigated by HTTP/2)
+- Each cycle has HTTP header and long-held connection overhead (especially without HTTP/2)
 
 **When to use:**
 - ✅ WebSocket blocked by firewall/proxy
@@ -421,12 +424,12 @@ class WebSocketManager(
 
 ### 4. Server-Sent Events (SSE)
 
-**Model**: Client subscribes (HTTP request with Accept: text/event-stream) → Server sends events over a single long-lived response → Client reconnects on disconnect.
+**Model**: Client subscribes (HTTP request with Accept: text/event-stream) → Server sends events over a single long-lived response → Client re-issues the request after disconnect (often using the last received id).
 
 **Characteristics:**
 - Unidirectional (server → client only)
-- Supports automatic reconnection semantics (EventSource-style)
-- Event IDs to track last event and resume on reconnect
+- Automatic reconnection semantics and `Last-Event-ID` handling are typically implemented by the client (e.g., EventSource in browsers or a custom mechanism)
+- Event IDs to track the last event and resume on reconnect
 - Events are textual; binary payloads must be encoded if needed
 
 **When to use:**
@@ -455,9 +458,12 @@ class SSEClient(private val client: OkHttpClient) {
                     val source = response.body?.source() ?: return@use
                     while (!isClosedForSend && !source.exhausted()) {
                         val line = source.readUtf8Line() ?: continue
+                        // Simplified parser: handle only "data: ..." lines
                         if (line.startsWith("data: ")) {
-                            trySend(line.substring(6)).isSuccess
+                            trySend(line.substring(6))
                         }
+                        // Full SSE parsing (event, id, multi-line data, blank line delimiters,
+                        // reconnect and Last-Event-ID) should be implemented separately.
                     }
                 }
             } catch (e: Exception) {
@@ -489,9 +495,9 @@ class SSEClient(private val client: OkHttpClient) {
 4. Use compact formats (e.g., Protocol Buffers) to reduce payload size
 
 **SSE:**
-1. Track event IDs for resumption
+1. Track event IDs for resumption (via Last-Event-ID or custom mechanism)
 2. Timeout and proper handling of dropped connections
-3. Use HTTP/2 (when available) for better connection efficiency
+3. When using over HTTP/2, be aware of server/client buffering and multiplexing behavior to maintain timely event delivery
 
 **`Long`-Polling:**
 1. Proper server-side timeouts

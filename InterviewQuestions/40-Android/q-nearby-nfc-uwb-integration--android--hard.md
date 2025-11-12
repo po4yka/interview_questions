@@ -18,9 +18,11 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-nearby-uwb
+- c-android
+- c-android-ipc
+- q-android-auto-guidelines--android--hard
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/networking-http
 - android/nfc
@@ -46,23 +48,16 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
+## Краткая Версия
 - NFC: одноразовый tap для безопасного обмена параметрами сессии.
 - Nearby Connections: основной зашифрованный канал данных.
 - UWB: высокоточное измерение расстояния/угла при наличии поддержки, с fallback на BLE/Nearby.
 - Строгая проверка аппаратных возможностей, разрешений и ограниченного доступа к UWB.
 - Связка всех каналов через криптографически защищённую сессию.
 
-### Подробный вариант
+## Подробная Версия
 
-#### 1. Архитектура потока
-
-1. **NFC tap** — обмен первичным payload (например, session key, peer ID, nonce, идентификатор сервиса).
-2. **Nearby Connections** — создание зашифрованного канала для данных (TLS/Noise/доп. шифрование поверх встроенной защиты Nearby).
-3. **UWB ranging** — запуск точного позиционирования/дистанции при наличии поддержки.
-
-#### 2. Требования
+### Требования
 
 - Функциональные:
   - Инициализация связи через NFC одним касанием.
@@ -75,20 +70,15 @@ sources:
   - Надёжность в условиях помех и различного железа.
   - Соответствие требованиям разрешений и приватности.
 
-#### 3. Архитектура
+### Архитектура
 
-- Клиентское приложение:
-  - NFC-слой для bootstrapping и верификации peer.
-  - Nearby-слой для защищённого транспорта данных.
-  - UWB-слой для ranging (если доступен) с привязкой к сессии.
-  - Модуль capability detection (NFC/UWB/BLE, версии Android, доступность разрешений).
-- Бэкенд (если используется):
-  - Валидация подписи и ключей, выданных при NFC-инициализации.
-  - Хранение и ротация ключей, управление сессиями и device binding.
-- Поток данных:
-  - NFC передаёт контекст/ключи → Nearby использует их для взаимной аутентификации → UWB использует те же идентификаторы/ключи для привязки измерений к сессии.
+#### 1. Архитектура потока
 
-#### 4. NFC bootstrapping
+1. NFC tap — обмен первичным payload (например, session key, peer ID, nonce, идентификатор сервиса).
+2. Nearby Connections — создание зашифрованного канала для данных (TLS/Noise/доп. шифрование поверх встроенной защиты Nearby).
+3. UWB ranging — запуск точного позиционирования/дистанции при наличии поддержки.
+
+#### 2. NFC bootstrapping
 
 ```kotlin
 nfcAdapter.enableReaderMode(
@@ -106,9 +96,9 @@ nfcAdapter.enableReaderMode(
 ```
 
 - Для платежей/HCE используются `HostApduService`, `IsoDep` и протоколы уровня ISO-7816.
-- Чтение тегов требует активности приложения на переднем плане (foreground dispatch/reader mode); полное прозрачное чтение в фоне для обычных приложений недоступно (усилены ограничения в Android 10+ и 12+).
+- Чтение тегов требует активности приложения на переднем плане (foreground dispatch/reader mode); полное прозрачное чтение в фоне для обычных приложений недоступно.
 
-#### 5. Nearby Connections
+#### 3. Nearby Connections
 
 ```kotlin
 val options = AdvertisingOptions.Builder()
@@ -125,9 +115,9 @@ connectionsClient.startAdvertising(
 
 - Требуются разрешения на Bluetooth и геолокацию (ACCESS_FINE_LOCATION/NEARBY_DEVICES в зависимости от версии).
 - Соединения Nearby Connections уже шифруются; при повышенных требованиях добавляйте своё приложение-уровневое шифрование поверх `Payload.Type.BYTES`.
-- Устанавливайте timeout на discover/advertise и ограничивайте размер/частоту payload (энергопотребление и надёжность).
+- Устанавливайте timeout на discover/advertise и ограничивайте размер/частоту payload.
 
-#### 6. UWB Ranging
+#### 4. UWB Ranging
 
 ```kotlin
 val uwbManager = context.getSystemService(UwbManager::class.java)
@@ -138,47 +128,40 @@ session.start(params)
 
 - На поддерживаемых устройствах требуется разрешение `android.permission.UWB_RANGING`, обычно доступное только системным/OEM/партнёрским приложениям.
 - `RangingSessionCallback.onRangingResult` предоставляет distance/angle/quality; используйте фильтрацию и сглаживание.
-- Если прямой UWB API недоступен для вашего приложения или региона, стройте UX с graceful fallback (BLE RSSI/Angle-of-Arrival, только Nearby и NFC). Любые партнёрские API рассматривайте как ограниченно доступные.
+- Если прямой UWB API недоступен, стройте UX с graceful fallback (BLE RSSI/Angle-of-Arrival, только Nearby и NFC).
 
-#### 7. Безопасность
+#### 5. Безопасность
 
-- NFC payload должен содержать подпись, nonce и идентификатор контекста; верифицируйте на сервере или с помощью встроенного trust anchor.
-- На уровне Nearby выполняйте взаимную аутентификацию (challenge/response, проверка ключей/сертификатов), не полагайтесь только на имя endpoint.
-- UWB доступ ограничен; минимизируйте собираемые данные, соблюдайте требования к разрешениям и используйте безопасное сопоставление с сессией (привязка к ключам из NFC/Nearby).
+- NFC payload должен содержать подпись, nonce и идентификатор контекста.
+- На уровне Nearby выполняйте взаимную аутентификацию, не полагайтесь только на имя endpoint.
+- UWB доступ ограничен; минимизируйте данные и привязывайте измерения к сессии.
 
-#### 8. Аппаратная совместимость
+#### 6. Аппаратная совместимость
 
 - Проверяйте `PackageManager.hasSystemFeature(PackageManager.FEATURE_NFC)` и `PackageManager.hasSystemFeature(PackageManager.FEATURE_UWB)`.
-- Для устройств без UWB используйте BLE (RSSI или AoA на поддерживаемых API Android 14+) как более грубую оценку расстояния.
-- Реализуйте graceful degradation: только NFC (односторонний bootstrap), NFC + Nearby без UWB, или только Nearby там, где нет NFC.
+- Для устройств без UWB используйте BLE как более грубую оценку расстояния.
+- Реализуйте graceful degradation: только NFC, NFC + Nearby без UWB или только Nearby.
 
-#### 9. Тестирование
+#### 7. Тестирование
 
-- NFC: тестирование на реальных устройствах и реальных тегах/ридерах; эмулятор ограничен.
-- Nearby: инструментальные тесты с mock/stub `ConnectionsClient`, тесты в разных условиях радиопомех.
-- UWB: реальные устройства с поддержкой, анализ логов (`adb shell dumpsys uwb`), проверка работы fallback-путей.
+- NFC: тестирование на реальных устройствах и реальных тегах.
+- Nearby: инструментальные тесты с mock/stub `ConnectionsClient`.
+- UWB: реальные устройства с поддержкой, анализ логов и проверка fallback-путей.
 
 ---
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Use NFC for a single tap to bootstrap a secure session.
 - Use Nearby Connections as the main encrypted data channel.
 - Use UWB for precise ranging when available, with BLE/Nearby fallbacks.
 - Enforce strict capability checks, permissions, and limited UWB access.
 - Cryptographically bind all channels into one authenticated session.
 
-### Detailed Version
+## Detailed Version
 
-#### 1. Flow architecture
-
-1. Use an NFC tap to exchange an initial payload (e.g., session key material, peer ID, nonce, service identifier).
-2. Use Nearby Connections to establish a secure data channel (built-in encryption plus optional app-layer crypto over `Payload.Type.BYTES`).
-3. Start UWB ranging for precise distance/angle when supported; otherwise rely on BLE-based proximity or stay with NFC + Nearby.
-
-#### 2. Requirements
+### Requirements
 
 - Functional:
   - Initialize communication via single NFC tap.
@@ -191,53 +174,48 @@ session.start(params)
   - Robustness across devices and radio environments.
   - Compliance with permission/privacy requirements.
 
-#### 3. Architecture
+### Architecture
 
-- Client app:
-  - NFC layer for bootstrapping and peer verification.
-  - Nearby layer for secure data transport.
-  - UWB layer for ranging (when available), bound to the authenticated session.
-  - Capability detection module (NFC/UWB/BLE support, Android version, permissions).
-- Backend (if present):
-  - Validates signed bootstrap data and keys.
-  - Manages key rotation, sessions, and device binding.
-- Data flow:
-  - NFC provides context/keys → Nearby uses them for mutual auth → UWB uses the same identifiers/keys to bind ranging results to the session.
+#### 1. Flow architecture
 
-#### 4. NFC bootstrapping
+1. Use an NFC tap to exchange an initial payload (e.g., session key material, peer ID, nonce, service identifier).
+2. Use Nearby Connections to establish a secure data channel.
+3. Start UWB ranging for precise distance/angle when supported; otherwise rely on BLE-based proximity or stay with NFC + Nearby.
+
+#### 2. NFC bootstrapping
 
 - Use `NfcAdapter.enableReaderMode` (or foreground dispatch) in a foreground `Activity` to read an NDEF record and extract the signed bootstrap payload.
 - For payments/HCE flows, use `HostApduService` and `IsoDep` following ISO-7816 instead of generic NDEF.
-- Background/transparent NFC tag reads for general apps are not supported; user presence/foreground is expected on modern Android (tightened on Android 10+ / 12+).
+- Background/transparent NFC tag reads for general apps are not supported; user presence/foreground is expected.
 
-#### 5. Nearby Connections
+#### 3. Nearby Connections
 
 - Require proper Bluetooth and Location/Nearby Devices permissions depending on Android version.
-- Nearby Connections already encrypts traffic; add application-level encryption if you need stronger guarantees or end-to-end binding to your backend.
+- Nearby Connections already encrypts traffic; add application-level encryption if you need stronger guarantees.
 - Configure strategies, timeouts, and payload sizing to balance reliability, latency, and battery.
 
-#### 6. UWB Ranging
+#### 4. UWB Ranging
 
 - Use `UwbManager` and ranging sessions on devices that support UWB.
-- The `android.permission.UWB_RANGING` runtime permission (where applicable) is typically limited to system/OEM/partner apps; confirm feasibility before making UWB the only option.
-- Use UWB ranging results (distance/angle/quality) only when available and validated; otherwise fall back to BLE RSSI/AoA or Nearby-only flows.
+- The `android.permission.UWB_RANGING` permission is typically limited to system/OEM/partner apps.
+- Use UWB ranging results only when available and validated; otherwise fall back to BLE RSSI/AoA or Nearby-only flows.
 
-#### 7. Security
+#### 5. Security
 
-- Make NFC bootstrapping payloads signed and bound to a nonce/session ID to prevent replay; verify on server or against a trusted keystore.
-- Perform mutual authentication over Nearby (e.g., challenge/response based on NFC-derived secrets); do not rely solely on endpoint names.
-- Bind UWB ranging sessions to the authenticated session established via NFC + Nearby to prevent spoofing and unauthorized tracking.
+- Make NFC bootstrapping payloads signed and bound to a nonce/session ID; verify on server or against a trusted keystore.
+- Perform mutual authentication over Nearby; do not rely solely on endpoint names.
+- Bind UWB ranging sessions to the authenticated session established via NFC + Nearby.
 
-#### 8. Hardware compatibility & fallbacks
+#### 6. Hardware compatibility & fallbacks
 
 - Check `FEATURE_NFC` and `FEATURE_UWB` (and required Bluetooth features) at runtime.
-- Provide fallbacks: NFC + Nearby without UWB; Nearby-only when NFC/UWB are missing; BLE-based proximity where UWB is unavailable or restricted.
+- Provide fallbacks: NFC + Nearby without UWB; Nearby-only when NFC/UWB are missing; BLE-based proximity where UWB is unavailable.
 
-#### 9. Testing
+#### 7. Testing
 
-- NFC: test on real devices and tags; emulator support is limited.
-- Nearby: use instrumented tests with mocked/stubbed `ConnectionsClient` plus tests in varied RF environments.
-- UWB: test on UWB-capable devices, inspect `adb shell dumpsys uwb`, and verify fallback paths when UWB is disabled or unsupported.
+- NFC: test on real devices and tags.
+- Nearby: use instrumented tests with mocked/stubbed `ConnectionsClient`.
+- UWB: test on UWB-capable devices, inspect logs, and verify fallback paths.
 
 ---
 
@@ -252,17 +230,17 @@ session.start(params)
 - What degradation strategies work in regions where UWB is disabled by regulators?
 
 ## References (RU)
-- [[c-nearby-uwb]]
+- [[c-android]]
 - https://developer.android.com/guide/topics/connectivity/nfc
 - https://developer.android.com/guide/topics/connectivity/uwb
 - https://developers.google.com/nearby/connections/overview
 
 ## References (EN)
-- [[c-nearby-uwb]]
+- [[c-android]]
 - https://developer.android.com/guide/topics/connectivity/nfc
 - https://developer.android.com/guide/topics/connectivity/uwb
 - https://developers.google.com/nearby/connections/overview
 
 ## Related Questions
 
-- [[c-nearby-uwb]]
+- [[q-android-auto-guidelines--android--hard]]

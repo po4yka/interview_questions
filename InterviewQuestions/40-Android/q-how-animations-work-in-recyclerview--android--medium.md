@@ -44,7 +44,7 @@ RecyclerView предоставляет несколько способов ре
 
 Ключевые механизмы:
 - `ItemAnimator`: отвечает за анимации добавления/удаления/перемещения/изменения при уведомлениях адаптера.
-- Анимации во время биндинга (`onBindViewHolder`) и layout- или property-анимации: управляют тем, как появляются и меняются `View` при привязке данных.
+- Анимации во время биндинга (`onBindViewHolder`) и property-анимации: управляют тем, как появляются и меняются `View` при привязке данных (RecyclerView не использует стандартные `LayoutAnimation` для дочерних элементов, поэтому анимации делаются через `ItemAnimator` и анимации свойств).
 - `ItemTouchHelper` и shared element transitions: для анимаций взаимодействия (свайпы/drag) и переходов между экранами.
 
 ### 1. Использование DefaultItemAnimator
@@ -71,8 +71,9 @@ recyclerView.itemAnimator = DefaultItemAnimator()
 - Вызывать `dispatchAddStarting`/`dispatchAddFinished` и аналогичные методы в нужные моменты.
 - Управлять и отменять анимации в `endAnimation`/`endAnimations`.
 - Возвращать `true` только при реальном запуске анимации.
+- В конечном итоге вызывать `dispatchAnimationFinished(holder)` (напрямую или через базовую реализацию), чтобы RecyclerView знал об окончании анимации.
 
-Упрощённый пример анимации появления (для иллюстрации, без полной реализации всех методов):
+Упрощённый пример анимации появления (для иллюстрации, без полной реализации всех методов и служебной логики управления списками pending/running):
 
 ```kotlin
 class FadeInItemAnimator : DefaultItemAnimator() {
@@ -93,6 +94,9 @@ class FadeInItemAnimator : DefaultItemAnimator() {
                 override fun onAnimationEnd(animation: Animator) {
                     view.alpha = 1f
                     dispatchAddFinished(holder)
+                    // В полноценной реализации нужно также убедиться,
+                    // что вызвано dispatchAnimationFinished(holder)
+                    // и holder удалён из внутренних коллекций анимаций.
                 }
             })
             .start()
@@ -118,7 +122,7 @@ class MyAdapter(private val items: List<String>) :
         holder.itemView.clearAnimation()
         holder.textView.text = items[position]
 
-        // Пример анимации появления
+        // Пример анимации появления (упрощённый, без проверки "уже анимировано")
         holder.itemView.alpha = 0f
         holder.itemView.animate()
             .alpha(1f)
@@ -164,6 +168,8 @@ class ScaleItemAnimator : DefaultItemAnimator() {
                     view.scaleY = 1f
                     view.alpha = 1f
                     dispatchAddFinished(holder)
+                    // Аналогично, в полной реализации нужно уведомить о завершении
+                    // анимации через инфраструктуру ItemAnimator.
                 }
             })
             .start()
@@ -181,6 +187,8 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
     override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
         val view = holder.itemView
         view.clearAnimation()
+        // В упрощённом примере используем width; на практике важно учитывать,
+        // что при старте анимации элемент должен быть уже измерен/размещён.
         view.translationX = -view.width.toFloat()
         view.alpha = 0f
 
@@ -231,7 +239,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 }
 ```
 
-(Полная реализация должна также корректно обрабатывать pending/running анимации.)
+(Полная реализация должна также корректно обрабатывать pending/running анимации и вызывать соответствующие методы завершения.)
 
 ### 6. Использование сторонних библиотек
 
@@ -397,7 +405,7 @@ itemTouchHelper.attachToRecyclerView(recyclerView)
 3. По возможности используйте `ItemAnimator` и property-анимации для структурных изменений.
 4. Держите анимации короткими: обычно 150–300 мс.
 5. Профилируйте производительность и стремитесь к плавной (~60 fps) прокрутке.
-6. Уважайте настройки пользователя: если системные анимации отключены/уменьшены, минимизируйте необязательные анимации.
+6. Уважайте настройки пользователя: если системные анимации отключены/уменьшены, минимизируйте необязательные анимации. Пример ниже — упрощённая проверка одного из масштабов анимаций.
 
 ```kotlin
 fun Context.isGlobalAnimationsDisabled(): Boolean {
@@ -413,7 +421,7 @@ fun Context.isGlobalAnimationsDisabled(): Boolean {
 }
 
 if (!context.isGlobalAnimationsDisabled()) {
-    // Применяем анимации
+    // Применяем анимации (пример; в реальном коде можно учитывать и другие системные флаги)
 }
 ```
 
@@ -424,7 +432,7 @@ RecyclerView provides several ways to implement animations, from simple built-in
 
 Key mechanisms:
 - `ItemAnimator`: handles add/remove/move/change animations when the adapter notifies item changes.
-- Layout animations / view property animations in `onBindViewHolder`: control how views appear as they are bound.
+- View property animations in `onBindViewHolder` and programmatic layout/position changes: control how views appear as they are bound (RecyclerView does not use standard `LayoutAnimation` for its children; animations are driven via `ItemAnimator` and property animations).
 - `ItemTouchHelper` and shared element transitions: for interaction and navigation related animations.
 
 ### 1. Using DefaultItemAnimator
@@ -451,8 +459,9 @@ You can create a custom `ItemAnimator` by extending `SimpleItemAnimator` or `Def
 - Call `dispatchAddStarting`/`dispatchAddFinished`, etc., at appropriate times.
 - Manage and cancel running animations in `endAnimation`/`endAnimations`.
 - Return `true` only when an animation was started.
+- Eventually call `dispatchAnimationFinished(holder)` (directly or via base helpers) so RecyclerView knows the animation is complete.
 
-Conceptual example for a fade-in on add (simplified; production code should also implement other required methods and proper cleanup):
+Conceptual example for a fade-in on add (simplified; production code should also implement other required methods and proper cleanup of pending/running animations):
 
 ```kotlin
 class FadeInItemAnimator : DefaultItemAnimator() {
@@ -473,6 +482,8 @@ class FadeInItemAnimator : DefaultItemAnimator() {
                 override fun onAnimationEnd(animation: Animator) {
                     view.alpha = 1f
                     dispatchAddFinished(holder)
+                    // In a complete implementation, ensure dispatchAnimationFinished(holder)
+                    // is called and internal tracking is updated.
                 }
             })
             .start()
@@ -498,7 +509,7 @@ class MyAdapter(private val items: List<String>) :
         holder.itemView.clearAnimation()
         holder.textView.text = items[position]
 
-        // Simple fade-in for newly bound items (example)
+        // Simple fade-in for newly bound items (simplified example)
         holder.itemView.alpha = 0f
         holder.itemView.animate()
             .alpha(1f)
@@ -546,6 +557,8 @@ class ScaleItemAnimator : DefaultItemAnimator() {
                     view.scaleY = 1f
                     view.alpha = 1f
                     dispatchAddFinished(holder)
+                    // For a full implementation, also mark this animation as finished
+                    // via the ItemAnimator's completion mechanisms.
                 }
             })
             .start()
@@ -563,6 +576,8 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
     override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
         val view = holder.itemView
         view.clearAnimation()
+        // Simplified: relies on view.width; in real code ensure the view is laid out
+        // or use a fixed/relative offset.
         view.translationX = -view.width.toFloat()
         view.alpha = 0f
 
@@ -613,7 +628,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 }
 ```
 
-(Other lifecycle methods are omitted for brevity; a production `ItemAnimator` must properly manage all pending/running animations.)
+(Other lifecycle methods are omitted; a production `ItemAnimator` must properly track and finish all pending/running animations.)
 
 ### 6. Using Third-Party Libraries
 
@@ -779,7 +794,7 @@ itemTouchHelper.attachToRecyclerView(recyclerView)
 3. Prefer property animations and let `RecyclerView`/`ItemAnimator` handle structural changes.
 4. Keep animations short: around 150–300 ms is usually a good balance.
 5. Profile performance (e.g., with Android Studio Profiler) and aim for smooth (~60 fps) scrolling.
-6. Respect user settings: if system animations are disabled or reduced, minimize or disable non-essential animations.
+6. Respect user settings: if system animations are disabled or reduced, minimize or disable non-essential animations. The example below checks only one global scale as a simplified illustration.
 
 ```kotlin
 fun Context.isGlobalAnimationsDisabled(): Boolean {
@@ -795,7 +810,7 @@ fun Context.isGlobalAnimationsDisabled(): Boolean {
 }
 
 if (!context.isGlobalAnimationsDisabled()) {
-    // Apply animations
+    // Apply animations (example; real-world code may check additional flags)
 }
 ```
 

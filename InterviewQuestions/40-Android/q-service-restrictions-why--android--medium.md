@@ -100,7 +100,7 @@ Android 13 (T)           - Разрешение на уведомления
            recordAudio()
            trackLocation()
            sendDataToServer()
-           return START_STICKY // Перезапускается после убийства процессa
+           return START_STICKY // Перезапускается после убийства процесса
        }
    }
    ```
@@ -200,7 +200,7 @@ Android 9 вводит «корзины» активности приложен�
 
 ### Android 10 (Q) — Запуск `Activity` из фона
 
-Android 10 существенно ограничивает старт `Activity` из фона (в том числе из сервисов):
+Android 10 существенно ограничивает старт `Activity` из фона (в том числе из сервисов). Разрешены только отдельные сценарии (пользовательское действие, системные UI, уведомление, полноэкранный интент и т.п.), в остальных случаях запуск будет заблокирован.
 
 ```kotlin
 // НЕ НАДЕЙТЕСЬ: запуск Activity из фонового сервиса
@@ -208,7 +208,7 @@ class MyService : Service() {
     fun showActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent) // На Android 10+ чаще всего блокируется/игнорируется
+        startActivity(intent) // На Android 10+ в большинстве фоновых сценариев блокируется/игнорируется
     }
 }
 ```
@@ -235,10 +235,11 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 На Android 12+ точные (exact) будильники дополнительно контролируются:
 
-- Для свободного использования `setExact()`/`setExactAndAllowWhileIdle()` нужно спец-разрешение `SCHEDULE_EXACT_ALARM` или привилегированный статус (системные/OEM-приложения).
+- Для свободного использования `setExact()`/`setExactAndAllowWhileIdle()` приложению требуется специальное разрешение `SCHEDULE_EXACT_ALARM` (или статус системного/OEM-приложения, или иное системное исключение).
+- Без этого разрешения приоритет отдается неточным/гибким вариантам, и система может не предоставить точное срабатывание.
 
 ```kotlin
-// Точный будильник на Android 12+
+// Точный будильник на Android 12+ (при наличии соответствующего разрешения/исключения)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     alarmManager.setExact(
         AlarmManager.RTC_WAKEUP,
@@ -247,7 +248,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     )
 }
 
-// Предпочтительно использовать неточный/оконный будильник
+// Предпочтительно использовать неточный/оконный будильник, если точность не критична
 alarmManager.setWindow(
     AlarmManager.RTC_WAKEUP,
     triggerTime,
@@ -297,6 +298,8 @@ alarmManager.setWindow(
        startService(intent)
    }
    ```
+
+   Начиная с Android 10+/11+ для таких сервисов также важно указывать корректный `foregroundServiceType` в манифесте в соответствии с задачей сервиса.
 
 ---
 
@@ -418,12 +421,12 @@ alarmManager.setWindow(
 Ключевые моменты:
 - Нельзя свободно запускать фоновые `Service` из фона на Android 8.0+.
 - Doze/App Standby/App Standby Buckets агрессивно откладывают фоновую работу.
-- Android 10+ ограничивает запуск `Activity` из фона.
+- Android 10+ ограничивает запуск `Activity` из фона, кроме специально разрешенных сценариев.
 - Android 12+ ужесточает использование точных будильников; Android 13+ требует разрешение на уведомления.
 
 Используйте:
 - WorkManager/JobScheduler для отложенных задач.
-- Foreground `Service` для длительной, заметной пользователю работы.
+- Foreground `Service` (с корректным `foregroundServiceType`) для длительной, заметной пользователю работы.
 - FCM (+ WorkManager/FGS) для событий с сервера.
 - `setAndAllowWhileIdle()` / `setExactAndAllowWhileIdle()` только для действительно критичных будильников.
 
@@ -539,14 +542,14 @@ System delays and batches work more aggressively for less-used apps.
 
 ### Android 10 (Q) - Background `Activity` Starts
 
-Apps generally cannot start activities from background (including from services):
+Android 10 significantly restricts starting activities from the background (including from services). Only specific cases are allowed (user-initiated actions, system UI, notification taps, full-screen intents, etc.); in other cases the start is blocked.
 
 ```kotlin
 class MyService : Service() {
     fun showActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent) // Blocked/ignored on Android 10+ in most cases
+        startActivity(intent) // On Android 10+ blocked/ignored in most background scenarios
     }
 }
 ```
@@ -569,10 +572,13 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### Android 12 (S) - Exact Alarms
 
-Exact alarms are gated:
-- `SCHEDULE_EXACT_ALARM` special permission or privileged/OEM app status is needed for unrestricted `setExact*`.
+On Android 12+ exact alarms are gated:
+
+- To freely use `setExact()`/`setExactAndAllowWhileIdle()` an app typically needs the `SCHEDULE_EXACT_ALARM` special permission (or system/OEM/other privileged exemption).
+- Without this, the system may restrict exact behavior and encourage inexact/batched alarms.
 
 ```kotlin
+// Exact alarm on Android 12+ (assuming the app holds the proper permission/exemption)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     alarmManager.setExact(
         AlarmManager.RTC_WAKEUP,
@@ -581,6 +587,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     )
 }
 
+// Prefer inexact/window alarms when strict exactness is not critical
 alarmManager.setWindow(
     AlarmManager.RTC_WAKEUP,
     triggerTime,
@@ -596,6 +603,8 @@ Allowed (with limits) even under Doze/standby:
 1. High-priority FCM messages.
 2. `setAndAllowWhileIdle()` / `setExactAndAllowWhileIdle()` (rate-limited).
 3. Foreground services started via `startForegroundService()` that promptly call `startForeground()`.
+   
+   On modern Android versions it is also important to declare an appropriate `foregroundServiceType` in the manifest corresponding to what the FGS does.
 
 ### Modern Alternatives to Background Services
 
@@ -706,12 +715,12 @@ Why restrictions exist:
 Key points:
 - No free-form background services on Android 8.0+ from background.
 - Doze/App Standby/App Standby Buckets aggressively defer work.
-- Android 10+ restricts background activity starts.
+- Android 10+ restricts background activity starts, except for explicitly allowed cases.
 - Android 12+ gates exact alarms; Android 13+ gates notifications.
 
 Use:
 - WorkManager/JobScheduler for deferrable tasks.
-- Foreground services for user-visible ongoing work.
+- Foreground services (with correct `foregroundServiceType`) for user-visible ongoing work.
 - FCM (+ WorkManager/FGS) for server-driven events.
 - `setAndAllowWhileIdle()` / `setExactAndAllowWhileIdle()` only for truly critical alarms.
 

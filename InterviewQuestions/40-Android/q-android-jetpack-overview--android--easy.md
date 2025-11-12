@@ -15,11 +15,12 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android
 - q-room-library-definition--android--easy
 - q-viewmodel-pattern--android--easy
 sources: []
 created: 2025-10-13
-updated: 2025-10-30
+updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-compose, difficulty/easy, jetpack]
 question_kind: android
 
@@ -33,7 +34,7 @@ question_kind: android
 
 ## Ответ (RU)
 
-Android Jetpack — набор поддерживаемых Google библиотек и инструментов для упрощения разработки Android-приложений. Помогает унифицировать подход к архитектуре, UI, фоновой работе и хранению данных.
+Android Jetpack — набор официально поддерживаемых Google библиотек и инструментов (в основном в пространстве имён AndroidX) для упрощения разработки Android-приложений. Помогает унифицировать подход к архитектуре, UI, фоновой работе и хранению данных. См. также [[c-android]].
 
 **Четыре категории (официально):** Architecture, UI, Behavior, Foundation.
 Ниже — практическая группировка ключевых компонентов.
@@ -78,7 +79,7 @@ fun UserList(viewModel: UserViewModel = hiltViewModel()) {
 
 ### Background Work
 
-**WorkManager** — гарантированное выполнение отложенных задач даже после перезагрузки устройства (с поддержкой ограничений и настраиваемой политики повторов, включая exponential backoff).
+**WorkManager** — надёжное выполнение отложенных задач и задач с условиями, в том числе с возможностью переживать перезагрузку устройства (при соответствующей настройке), с поддержкой ограничений и гибкой политики повторов (включая exponential backoff). Точное время запуска не жёстко гарантируется.
 
 ```kotlin
 class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
@@ -111,7 +112,7 @@ val cursor = db.rawQuery("SELECT * FROM users WHERE active = 1", null)
 
 **Dependency Injection**
 
-**Hilt** — упрощённый DI на базе Dagger с поддержкой Android-компонентов.
+**Hilt** — рекомендуемый DI-фреймворк на базе Dagger с поддержкой Android-компонентов, часто используется совместно с Jetpack-компонентами.
 
 ```kotlin
 @HiltViewModel
@@ -122,7 +123,7 @@ class UserViewModel @Inject constructor(
 
 ## Answer (EN)
 
-Android Jetpack is Google's set of supported libraries and tools for simplifying Android development. It helps unify approaches to architecture, UI, background work, and data storage.
+Android Jetpack is Google's set of officially supported libraries and tools (primarily shipped under the AndroidX namespace) for simplifying Android development. It helps unify approaches to architecture, UI, background work, and data storage. See also [[c-android]].
 
 **Four official categories:** Architecture, UI, Behavior, Foundation.
 Below is a practical grouping of key components.
@@ -167,7 +168,7 @@ fun UserList(viewModel: UserViewModel = hiltViewModel()) {
 
 ### Background Work
 
-**WorkManager** — guaranteed execution of deferrable tasks even after device reboot (with constraints and configurable retry policies, including exponential backoff).
+**WorkManager** — robust execution of deferrable and constraint-based background work, including the ability to survive device reboots when configured, with constraints and flexible retry policies (including exponential backoff). It does not strictly guarantee exact timing.
 
 ```kotlin
 class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
@@ -200,7 +201,7 @@ val cursor = db.rawQuery("SELECT * FROM users WHERE active = 1", null)
 
 **Dependency Injection**
 
-**Hilt** — simplified DI built on Dagger with first-class Android component support.
+**Hilt** — recommended DI framework built on Dagger with first-class Android component support, commonly used together with Jetpack components.
 
 ```kotlin
 @HiltViewModel
@@ -208,6 +209,14 @@ class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel()
 ```
+
+## Дополнительные вопросы (RU)
+
+- Когда использовать WorkManager, а когда AlarmManager или foreground `Service`?
+- Как `ViewModel` внутренне переживает конфигурационные изменения?
+- Каков путь миграции с `View`-системы на Jetpack Compose?
+- Чем Hilt отличается от ручной настройки Dagger?
+- Каковы преимущества Room по сравнению с "сырым" SQLite?
 
 ## Follow-ups
 
@@ -217,9 +226,26 @@ class UserViewModel @Inject constructor(
 - How does Hilt differ from manual Dagger setup?
 - What are the benefits of Room over raw SQLite?
 
+## Ссылки (RU)
+
+- Официальная документация: https://developer.android.com/jetpack
+
 ## References
 
 - Official docs: https://developer.android.com/jetpack
+
+## Связанные вопросы (RU)
+
+### Предварительные знания
+- [[q-android-app-components--android--easy]] — базовые компоненты Android
+
+### Связанные
+- [[q-viewmodel-pattern--android--easy]] — детали паттерна `ViewModel`
+- [[q-room-library-definition--android--easy]] — детали базы данных Room
+
+### Продвинутые
+- [[q-workmanager-decision-guide--android--medium]] — стратегии фоновых задач
+- [[q-compose-performance-optimization--android--hard]] — оптимизация производительности Compose
 
 ## Related Questions
 

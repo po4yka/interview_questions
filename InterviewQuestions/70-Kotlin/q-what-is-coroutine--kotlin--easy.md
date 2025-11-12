@@ -2,30 +2,23 @@
 id: kotlin-072
 title: "What is a Coroutine? Basic Concepts / Что такое корутина? Основные концепции"
 aliases: ["What is a Coroutine? Basic Concepts", "Что такое корутина? Основные концепции"]
-
-# Classification
 topic: kotlin
 subtopics: [concurrency, coroutines]
 question_kind: theory
 difficulty: easy
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-coroutine-scope-basics--kotlin--easy, q-suspend-functions-basics--kotlin--easy]
-
-# Timestamps
 created: 2025-10-12
-updated: 2025-11-09
-
+updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
+
 ---
+
 # Вопрос (RU)
 > Что такое корутина в Kotlin? Объясните её основные концепции и чем она отличается от потока.
 
@@ -34,7 +27,7 @@ tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
 
 ## Ответ (RU)
 
-**Корутина** (или сопрограмма) — это экземпляр **приостанавливаемого вычисления**. Концептуально она похожа на поток, так как выполняет блок кода параллельно (точнее — конкурентно) с остальной частью программы. Однако корутина не привязана к какому-либо конкретному потоку. Она может приостановить свое выполнение в одном потоке и возобновить в другом.
+**Корутина** (или сопрограмма) — это экземпляр **приостанавливаемого вычисления**. Концептуально она похожа на поток, так как выполняет блок кода конкурентно (точнее — асинхронно/конкурентно) с остальной частью программы. Однако корутина не привязана к какому-либо конкретному потоку. Она может приостановить свое выполнение в одном потоке и возобновить в другом.
 
 См. также: [[c-kotlin]], [[c-coroutines]].
 
@@ -49,7 +42,7 @@ tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
 | Характеристика | Корутина | Поток |
 | :--- | :--- | :--- |
 | **Затраты ресурсов**| Очень дешевые (легковесные) | Дорогие (тяжеловесные) |
-| **Блокировка** | Неблокирующие (используют приостановку вместо блокировки) | Часто блокирующие (операции блокируют поток) |
+| **Блокировка** | Неблокирующий стиль (используют приостановку вместо блокировки для асинхронных операций) | Часто блокирующие (операции блокируют поток) |
 | **Управление** | Планируются и управляются диспетчером корутин (библиотекой/рантаймом поверх потоков ОС) | Управляются операционной системой |
 | **Создание** | Быстрое | Медленное |
 | **Переключение контекста**| Быстрое (между корутинами внутри процесса) | Медленное (на уровне ОС) |
@@ -83,13 +76,13 @@ fun main() = runBlocking { // Создает CoroutineScope и блокируе�
 Основная программа завершается: main
 ```
 
-В этом примере `delay()` — это `suspend`-функция. Когда `Coroutine` вызывает `delay()`, она приостанавливается, но поток `main` не блокируется другими корутинами и может быть использован для выполнения других задач.
+В этом примере `delay()` — это `suspend`-функция. Когда корутина вызывает `delay()`, она приостанавливается, но поток `main` не блокируется этой корутиной и может быть использован для выполнения других задач или корутин.
 
 ---
 
 ## Answer (EN)
 
-A **coroutine** is an instance of a **suspendable computation**. It is conceptually similar to a thread, in that it runs a block of code that can execute concurrently (more precisely, asynchronously/concurrently) with the rest of the program. However, a coroutine is not bound to any particular thread. It may suspend its execution in one thread and resume in another.
+A **coroutine** is an instance of a **suspendable computation**. It is conceptually similar to a thread in that it runs a block of code that can execute concurrently (more precisely, asynchronously/concurrently) with the rest of the program. However, a coroutine is not bound to any particular thread. It may suspend its execution in one thread and resume in another.
 
 See also: [[c-kotlin]], [[c-coroutines]].
 
@@ -104,7 +97,7 @@ See also: [[c-kotlin]], [[c-coroutines]].
 | Feature | Coroutine | Thread |
 | :--- | :--- | :--- |
 | **Resource Cost** | Very cheap (lightweight) | Expensive (heavyweight) |
-| **Blocking** | Non-blocking style (uses suspension instead of blocking for async APIs) | Often blocking (operations block the thread) |
+| **Blocking** | Non-blocking style (uses suspension instead of blocking for async APIs/operations) | Often blocking (operations block the thread) |
 | **Management** | Scheduled and managed by the coroutine dispatcher/runtime on top of OS threads | Managed by the Operating System |
 | **Creation** | Fast | Slow |
 | **Context Switching**| Fast (between coroutines in-process) | Slow (OS-level) |

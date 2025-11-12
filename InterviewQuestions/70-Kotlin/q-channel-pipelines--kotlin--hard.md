@@ -434,14 +434,14 @@ class BufferingStrategies {
         println("Получено $count элементов")
     }
 
-    // 4. Conflated channel - хранит только последнее значение
+    // 4. Conflated channel - хранит только последнее значение (медленный потребитель теряет промежуточные)
     fun conflatedChannel() = runBlocking {
         val channel = Channel<Int>(capacity = Channel.CONFLATED)
 
         launch {
             repeat(10) { i ->
                 println("Отправка $i")
-                channel.send(i)  // Перезаписывает предыдущее значение
+                channel.send(i)  // Перезаписывает предыдущее значение при переполнении
                 delay(50)
             }
             channel.close()
@@ -450,7 +450,7 @@ class BufferingStrategies {
         delay(1000)
         for (value in channel) {
             // При медленном потребителе многие промежуточные значения будут отброшены
-            println("Получено $value")  // Получим только последние наблюдаемые значения
+            println("Получено $value")
         }
     }
 }
@@ -482,14 +482,14 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
     }
 
     // Этап 2: Загрузка изображений (I/O bound - можно распараллелить)
-    // Используем общий выходной канал и workers, которые пишут в него напрямую.
+    // Реализуем fan-out с общим выходным каналом и корректным завершением.
     private fun loadImages(
         tasks: ReceiveChannel<ImageTask>,
         parallelism: Int
     ): ReceiveChannel<LoadedImage> {
         val output = Channel<LoadedImage>(capacity = 10)
 
-        repeat(parallelism) { workerId ->
+        val workers = List(parallelism) { workerId ->
             scope.launch {
                 for (task in tasks) {
                     try {
@@ -504,7 +504,8 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
         }
 
         scope.launch {
-            tasks.consume { }
+            // Ждем завершения всех workers, затем закрываем выходной канал
+            workers.forEach { it.join() }
             output.close()
         }
 
@@ -518,7 +519,7 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
     ): ReceiveChannel<ProcessedImage> {
         val output = Channel<ProcessedImage>(capacity = 5)
 
-        repeat(parallelism) { workerId ->
+        val workers = List(parallelism) { workerId ->
             scope.launch {
                 for (loaded in images) {
                     val processed = applyGrayscaleFilter(loaded.image)
@@ -529,7 +530,8 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
         }
 
         scope.launch {
-            images.consume { }
+            // Ждем завершения всех workers, затем закрываем выходной канал
+            workers.forEach { it.join() }
             output.close()
         }
 
@@ -720,6 +722,7 @@ class ETLPipeline(private val scope: CoroutineScope) {
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.channels.BufferOverflow
 
 class BackpressureExample {
 
@@ -1390,22 +1393,22 @@ class BufferingStrategies {
         println("Received $count items")
     }
 
-    // 4. Conflated channel - keeps only latest
+    // 4. Conflated channel - keeps only latest value when consumer is slow
     fun conflatedChannel() = runBlocking {
         val channel = Channel<Int>(capacity = Channel.CONFLATED)
 
         launch {
             repeat(10) { i ->
                 println("Sending $i")
-                channel.send(i)  // Overwrites previous value
+                channel.send(i)  // Overwrites previous value when needed
                 delay(50)
             }
             channel.close()
         }
 
-        delay(1000)  // Many intermediate values are dropped with slow consumer
+        delay(1000)  // Many intermediate values will be dropped for slow consumer
         for (value in channel) {
-            println("Received $value")  // Only latest observed values
+            println("Received $value")
         }
     }
 }
@@ -1443,7 +1446,7 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
     ): ReceiveChannel<LoadedImage> {
         val output = Channel<LoadedImage>(capacity = 10)
 
-        repeat(parallelism) { workerId ->
+        val workers = List(parallelism) { workerId ->
             scope.launch {
                 for (task in tasks) {
                     try {
@@ -1458,7 +1461,7 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
         }
 
         scope.launch {
-            tasks.consume { }
+            workers.forEach { it.join() }
             output.close()
         }
 
@@ -1472,7 +1475,7 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
     ): ReceiveChannel<ProcessedImage> {
         val output = Channel<ProcessedImage>(capacity = 5)
 
-        repeat(parallelism) { workerId ->
+        val workers = List(parallelism) { workerId ->
             scope.launch {
                 for (loaded in images) {
                     val processed = applyGrayscaleFilter(loaded.image)
@@ -1483,7 +1486,7 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
         }
 
         scope.launch {
-            images.consume { }
+            workers.forEach { it.join() }
             output.close()
         }
 
@@ -1695,6 +1698,7 @@ Managing flow control when producers are faster than consumers:
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.channels.BufferOverflow
 
 class BackpressureExample {
 
@@ -2000,3 +2004,4 @@ suspend fun processAsync(item: Int): Int {
 - [[q-flow-backpressure-strategies--kotlin--hard]]
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]
+```

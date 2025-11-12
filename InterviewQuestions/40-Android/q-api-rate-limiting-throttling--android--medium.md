@@ -28,13 +28,13 @@ tags: [android/networking-http, android/performance-startup, difficulty/medium, 
 
 ## Ответ (RU)
 
-**Rate limiting** и **throttling** — техники контроля частоты запросов для защиты серверов от перегрузки и обеспечения стабильности приложения.
+**Rate limiting** и **throttling** — техники контроля частоты запросов для защиты серверов от перегрузки и обеспечения стабильности приложения. На клиенте это дополняет, но не заменяет серверные лимиты — стратегии должны согласовываться с ограничениями API.
 
 См. также: [[c-android-basics]].
 
 ### 1. Token Bucket Interceptor
 
-Позволяет всплески трафика при сохранении средней скорости.
+Позволяет всплески трафика при сохранении средней скорости. Состояние ведра общее для всех запросов в рамках одного экземпляра OkHttpClient (что обычно и требуется).
 
 ```kotlin
 class TokenBucketInterceptor(
@@ -72,7 +72,9 @@ class TokenBucketInterceptor(
 
 ### 2. Exponential Backoff
 
-Обрабатывает 429 и 5xx ошибки с увеличивающимися задержками. Пример ниже синхронный и блокирующий (подходит только для фоновых потоков OkHttp).
+Обрабатывает 429 и 5xx ошибки с увеличивающимися задержками. Пример ниже синхронный и блокирующий (подходит только для фоновых потоков OkHttp / синхронных вызовов; не использовать на главном потоке).
+
+Важно: слепое повторение небезопасно для неидемпотентных методов (POST и др.); в реальных приложениях ограничивайтесь идемпотентными запросами или следуйте рекомендациям API.
 
 ```kotlin
 class RetryInterceptor(
@@ -101,7 +103,8 @@ class RetryInterceptor(
                         ?: (initialDelayMs * (1L shl attempt)) // 1, 2, 4, ... * initialDelayMs
 
                     // ⚠️ Thread.sleep блокирует поток OkHttp.
-                    // Использовать только в соответствующем пуле потоков; для корутин лучше delay().
+                    // Использовать только там, где блокировка допустима; в корутинах реализуйте
+                    // ретраи в suspend-контексте через delay(), а не внутри стандартного Interceptor.
                     Thread.sleep(delayMs)
                     attempt++
                 }
@@ -158,19 +161,20 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 **Рекомендации:**
 - Использовать token bucket для API, допускающих burst-трафик.
 - Учитывать `Retry-After` header и применять экспоненциальный backoff.
+- Повторно отправлять только те запросы, которые безопасно ретраить (обычно идемпотентные).
 - Применять debounce 300–500 мс для поиска.
 - Использовать кеширование с ETag для условных запросов как дополнение к лимитированию.
 - Мониторить ответы 429 в аналитике и корректировать стратегии.
 
 ## Answer (EN)
 
-**Rate limiting** and **throttling** control request frequency to protect servers from overload and ensure app stability.
+**Rate limiting** and **throttling** control request frequency to protect servers from overload and ensure app stability. On the client side this complements, but does not replace, server-side limits; your strategy should align with the API's documented constraints.
 
 See also: [[c-android-basics]].
 
 ### 1. Token Bucket Interceptor
 
-Allows burst traffic while maintaining average rate.
+Allows burst traffic while maintaining average rate. The bucket state is shared across all requests made with the same OkHttpClient instance (which is typically desired).
 
 ```kotlin
 class TokenBucketInterceptor(
@@ -208,7 +212,9 @@ class TokenBucketInterceptor(
 
 ### 2. Exponential Backoff
 
-Handles 429 and 5xx errors with increasing delays. The example below is synchronous and blocking (intended for OkHttp background threads).
+Handles 429 and 5xx errors with increasing delays. The example below is synchronous and blocking (intended only for OkHttp background threads / synchronous calls; do not use this pattern on the main thread).
+
+Important: blindly retrying is unsafe for non-idempotent methods (e.g. POST); in real apps restrict retries to idempotent requests or follow the API's guidelines.
 
 ```kotlin
 class RetryInterceptor(
@@ -237,7 +243,8 @@ class RetryInterceptor(
                         ?: (initialDelayMs * (1L shl attempt)) // 1, 2, 4, ... * initialDelayMs
 
                     // ⚠️ Thread.sleep blocks the OkHttp thread.
-                    // Use only where blocking is acceptable; for coroutines prefer delay().
+                    // Use only where blocking is acceptable; in coroutines implement retries
+                    // in a suspend context with delay(), not inside a standard Interceptor.
                     Thread.sleep(delayMs)
                     attempt++
                 }
@@ -294,6 +301,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 **Best practices:**
 - Use token bucket for burst-friendly APIs.
 - Always respect `Retry-After` header and apply exponential backoff.
+- Retry only requests that are safe to retry (typically idempotent).
 - Apply 300–500 ms debounce for search.
 - Use ETag-based conditional requests as a complement to rate limiting.
 - Monitor 429 responses in analytics and adjust strategies.
@@ -305,7 +313,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - Как тестировать rate limiting интерцепторы с MockWebServer?
 - В чем разница между алгоритмами token bucket и leaky bucket?
 - Как реализовать per-endpoint rate limiting с разными лимитами?
-- Когда использовать `delay()` корутин вместо `Thread.sleep()` в интерцепторах?
+- Когда использовать `delay()` корутин вместо `Thread.sleep()` в реализациях ретраев?
 - Как реализовать адаптивный rate limiting на основе заголовков ответа сервера?
 
 ## Follow-ups
@@ -313,7 +321,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - How to test rate limiting interceptors with MockWebServer?
 - What's the difference between token bucket and leaky bucket algorithms?
 - How to implement per-endpoint rate limiting with different limits?
-- When to use coroutine `delay()` vs `Thread.sleep()` in interceptors?
+- When to use coroutine `delay()` vs `Thread.sleep()` in retry implementations?
 - How to implement adaptive rate limiting based on server response headers?
 
 ## Ссылки (RU)

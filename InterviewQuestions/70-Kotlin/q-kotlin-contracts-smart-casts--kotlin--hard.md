@@ -134,7 +134,7 @@ fun example(name: String?) {
 }
 ```
 
-3. `returnsNotNull()` — гарантирует, что возвращаемое значение не равно `null`.
+3. `returnsNotNull()` — гарантирует, что возвращаемое значение самой функции не равно `null`.
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -148,7 +148,7 @@ fun String?.ifNotEmpty(): String? {
 fun example(text: String?) {
     val result = text.ifNotEmpty()
     if (result != null) {
-        // result smart-cast к String
+        // result smart-cast к String, так как мы явно проверили его на null
         println(result.length)
     }
 }
@@ -198,7 +198,7 @@ callsInPlace(block, InvocationKind.UNKNOWN)
 
 ### Контракты в стандартной библиотеке
 
-(упрощённые схемы, реальные реализации могут отличаться по деталям, но идея та же).
+(упрощённые схемы; реальные реализации и сигнатуры в stdlib используют контракты похожим образом, но могут отличаться по деталям.)
 
 **`require` и `check`:**
 
@@ -679,7 +679,7 @@ fun String?.ifNotEmpty(): String? {
 fun example(text: String?) {
     val result = text.ifNotEmpty()
     if (result != null) {
-        // result is smart-cast to String
+        // result is smart-cast to String because we explicitly checked it for null
         println(result.length)
     }
 }
@@ -729,7 +729,7 @@ callsInPlace(block, InvocationKind.UNKNOWN)
 
 ### Standard Library Contracts
 
-The following simplified examples mirror what the standard library achieves conceptually.
+The following simplified examples mirror what the standard library achieves conceptually; real stdlib implementations and signatures use contracts in a similar but not necessarily identical way.
 
 **`require` / `check`:**
 
@@ -887,6 +887,20 @@ fun isValidForm(form: RegistrationForm): Boolean {
         isValidAge(form.age) &&
         form.terms
 }
+
+fun register(form: RegistrationForm) {
+    if (isValidForm(form)) {
+        val user = User(
+            email = form.email!!,
+            password = form.password!!,
+            age = form.age!!
+        )
+
+        saveUser(user)
+    } else {
+        showError("Invalid form")
+    }
+}
 ```
 
 ---
@@ -907,6 +921,16 @@ inline fun <T : AutoCloseable, R> T.safeUse(block: (T) -> R): R {
         close()
     }
 }
+
+fun example() {
+    val data: String
+
+    FileInputStream("file.txt").safeUse { stream ->
+        data = stream.readBytes().decodeToString()
+    }
+
+    println(data)
+}
 ```
 
 ```kotlin
@@ -916,6 +940,16 @@ inline fun initialize(block: () -> Unit) {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
     block()
+}
+
+fun example() {
+    val name: String
+
+    initialize {
+        name = "John"
+    }
+
+    println(name)
 }
 ```
 

@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-activity, q-fragment-vs-activity-lifecycle--android--medium, q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard]
 
 ---
@@ -31,15 +31,13 @@ tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard]
 
 `Fragment` имеет более сложный lifecycle, чем `Activity`, из-за **фундаментального архитектурного различия**: `Fragment` живет внутри `Activity` и его жизненный цикл зависит от хоста.
 
-### Краткий ответ
-
+### Краткая Версия
 - `Fragment` вложен в `Activity` и должен синхронизироваться с ее жизненным циклом.
 - У `Fragment` разделены жизненные циклы объекта и его `View`, поэтому нужны отдельные колбэки (`onCreateView/onDestroyView`).
 - Есть колбэки, связанные с привязкой/отвязкой от хоста (`onAttach/onDetach`).
 - Это позволяет переиспользовать фрагменты, держать их в back stack без `View` и эффективнее управлять памятью.
 
-### Подробный ответ
-
+### Подробная Версия
 ### Ключевые различия
 
 **`Activity`**: автономный компонент с более линейным жизненным циклом
@@ -301,14 +299,12 @@ class OptimizedFragment : Fragment() {
 `Fragment` has a more complex lifecycle than `Activity` due to a **fundamental architectural difference**: a `Fragment` lives inside a host (usually an `Activity`) and its lifecycle is coupled to that host.
 
 ### Short Version
-
 - A `Fragment` is hosted inside an `Activity` and must coordinate with its lifecycle.
 - The `Fragment` object lifecycle is separated from its `View` lifecycle (`onCreateView/onDestroyView`).
 - There are host-related callbacks (`onAttach/onDetach`).
 - This enables reuse, back stack behavior without holding `View`s, and better memory management.
 
 ### Detailed Version
-
 ### Key Differences
 
 **`Activity`**: autonomous component with a more linear lifecycle
@@ -371,7 +367,7 @@ class MyFragment : Fragment() {
 - **BackStack**: when a transaction is added to back stack, the outgoing `Fragment`'s `View` is destroyed while the `Fragment` stays in the stack.
 - **Certain navigation flows**: `Fragment` from back stack recreates its `View` when user navigates back.
 
-**Important**: on a normal configuration change (e.g., rotation) the system destroys the `Activity` and all its Fragments and creates new instances. The separate `View` lifecycle is primarily crucial within a single `Activity` lifetime and when Fragments are kept in back stack, not for preserving the exact same `Fragment` object instance across full `Activity` recreation.
+**Important**: on a normal configuration change (e.g., rotation) the system destroys the `Activity` and all its `Fragments` and creates new instances. The separate `View` lifecycle is primarily crucial within a single `Activity` lifetime and when `Fragments` are kept in back stack, not for preserving the exact same `Fragment` object instance across full `Activity` recreation.
 
 **2. `Fragment` depends on `Activity`**
 
@@ -565,11 +561,19 @@ Benefits (within a single `Activity` lifetime / back stack):
 
 ---
 
+## Follow-ups (RU)
+
+1. Почему у `Fragment` есть и `onCreate()`, и `onCreateView()`, в то время как у `Activity` только `onCreate()`, и как это разделение помогает управлять ресурсами UI?
+2. Что произойдет, если в `Fragment` вы будете наблюдать `LiveData` с `this` вместо `viewLifecycleOwner`, и к каким утечкам памяти или крашам это может привести?
+3. Как использование retained-фрагментов или `ViewModel`, привязанного к `Fragment`, влияет на стратегию обработки конфигурационных изменений и сохранения дорогих данных?
+4. Сравните поведение lifecycle `Fragment` во `ViewPager` (или paging-адаптере) и при участии в стандартном back stack `FragmentManager`.
+5. В каких колбэках безопасно обращаться к `requireActivity()`, иерархии `View` или навигационным контроллерам, и как защититься от доступа к ним после `onDestroyView()` или `onDetach()`?
+
 ## Follow-ups
 
 1. Why does `Fragment` have both `onCreate()` and `onCreateView()` when `Activity` only has `onCreate()` (and how does this separation help manage UI resources)?
 2. What happens if you observe `LiveData` with `this` instead of `viewLifecycleOwner` in a `Fragment`, and what issues can it cause in terms of leaks and crashes?
-3. How does using retained Fragments or `Fragment`-scoped `ViewModel`s influence your strategy for handling configuration changes and preserving expensive data?
+3. How does using retained `Fragments` or `Fragment`-scoped `ViewModel`s influence your strategy for handling configuration changes and preserving expensive data?
 4. Compare the lifecycle of a `Fragment` when used in a `ViewPager` (or paging adapter) versus when it participates in the standard FragmentManager back stack.
 5. In which callbacks is it safe to access `requireActivity()`, the `View` hierarchy, or navigation controllers, and how do you guard against accessing them after `onDestroyView()` or `onDetach()`?
 

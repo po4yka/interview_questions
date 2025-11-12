@@ -127,16 +127,16 @@ Design a complete E2E‑encrypted WhatsApp messenger for Android with the follow
 
 **Обмен сообщениями:**
 -   Текстовые сообщения с поддержкой форматирования (жирный, курсив, моноширинный)
--   Медиафайлы: изображения (`JPEG`, `PNG`, `WEBP`), видео (`H.264`, `H.265`), аудио (`Opus`, `AAC`), документы
+-   Медиафайлы: изображения (`JPEG`, `PNG`, `WEBP`), видео (например, `H.264`, `H.265`), аудио (например, `Opus`, `AAC`), документы — конкретные кодеки выбираются продуктом и не жёстко заданы протоколом
 -   Голосовые сообщения с записью в реальном времени и сжатием
 
 **Группы:**
--   Создание групп до 256 участников (для малых групп — до 32 для оптимизации)
+-   Создание групп (типично до 256 участников; для "малых" групп можно оптимизировать UX/поведение под 32+ участников в зависимости от требований продукта)
 -   Управление участниками (добавление/удаление), изменение названия/аватара
 -   Групповые настройки (кто может отправлять сообщения, админы)
 
 **Статусы доставки:**
--   `sent` — сообщение отправлено с клиента
+-   `sent` — сообщение доставлено на сервер (подтверждено server ack)
 -   `delivered` — сообщение доставлено на устройство получателя (сервер получил ack от клиента-получателя)
 -   `read` — сообщение прочитано получателем (double checkmark)
 
@@ -214,7 +214,7 @@ Design a complete E2E‑encrypted WhatsApp messenger for Android with the follow
 Загрузка медиафайлов с шифрованием и оптимизацией:
 
 **Этапы:**
-1.   **Сжатие**: компрессия медиа (изображения: `JPEG`/`WEBP`, видео: `H.264` с битрейтом 2-4 Mbps для экономии трафика)
+1.   **Сжатие**: компрессия медиа (изображения: `JPEG`/`WEBP`, видео: например, `H.264` с целевым битрейтом в несколько Mbps — конкретные значения выбираются продуктом)
 2.   **Шифрование**: `AES-GCM` шифрование медиафайла с уникальным симметричным ключом (per-media key) для E2E защиты
 3.   **Upload на CDN**: загрузка зашифрованного файла на `S3` с последующей доставкой через `CDN` для глобальной доступности
 4.   **Отправка metadata**: отправка `URL` медиа и `thumbnail` для превью, а также `decryption key` (зашифрованного через `Signal Protocol`) получателю; серверы хранения медиа не имеют доступа к незашифрованному ключу
@@ -226,7 +226,7 @@ Design a complete E2E‑encrypted WhatsApp messenger for Android with the follow
 
 **Механизм:**
 -   **Очередь unsent**: сохранение неотправленных сообщений в `Room` database со статусом `pending`
--   **Хранение**: персистентное хранение в рамках заданной политики ретенции (например, до 30 дней) для гарантии доставки при длительном отсутствии сети
+-   **Хранение**: персистентное хранение в рамках заданной политики ретенции (например, до 30 дней — конкретное значение определяется продуктом)
 -   **Автоматический resend**: автоматическая отправка при восстановлении сети через `WorkManager` с constraints
 -   **Exponential backoff**: увеличение интервала между retry при ошибках (1s, 2s, 4s, 8s) для предотвращения перегрузки сервера
 
@@ -539,7 +539,7 @@ OUTBOX state machine:
 
 **Поиск и гигиена:**
 
--   **FTS** только по локально доступному расшифрованному тексту
+-   **FTS** только по локально доступному расфшифрованному тексту
 -   **LRU/age eviction** медиа
 -   **Настройки автоскачивания**
 
@@ -573,16 +573,16 @@ OUTBOX state machine:
 
 **Messaging:**
 -   Text messages with formatting support (bold, italic, monospace)
--   Media files: images (`JPEG`, `PNG`, `WEBP`), video (`H.264`, `H.265`), audio (`Opus`, `AAC`), documents
+-   Media files: images (`JPEG`, `PNG`, `WEBP`), video (e.g., `H.264`, `H.265`), audio (e.g., `Opus`, `AAC`), documents — concrete codecs are product choices, not protocol constraints
 -   Voice messages with real-time recording and compression
 
 **Groups:**
--   Create groups up to 256 participants (for small groups — up to 32 for optimization)
+-   Create groups (commonly up to 256 participants; for "small" groups you may optimize UX/behavior around 32+ members depending on product requirements)
 -   Participant management (add/remove), change name/avatar
 -   Group settings (who can send messages, admins)
 
 **Delivery statuses:**
--   `sent` — message delivered to server
+-   `sent` — message delivered to server (server ack received)
 -   `delivered` — message delivered to recipient device (server receives device ack)
 -   `read` — message read by recipient (double checkmark)
 
@@ -660,7 +660,7 @@ Incoming message processing with decryption and synchronization:
 Media file upload with encryption and optimization:
 
 **Steps:**
-1.   **Compression**: compress media (images: `JPEG`/`WEBP`, video: `H.264` with 2-4 Mbps bitrate)
+1.   **Compression**: compress media (images: `JPEG`/`WEBP`, video: e.g., `H.264` with target bitrate in a few Mbps — concrete values are product choices)
 2.   **Encryption**: `AES-GCM` encrypt media file with a unique per-media key for E2E protection
 3.   **Upload to CDN**: upload encrypted file to `S3` with delivery via `CDN` for global availability
 4.   **Send metadata**: send media `URL`, `thumbnail`, and `decryption key` (encrypted via `Signal Protocol`) to recipient; media service never sees plaintext key
@@ -672,7 +672,7 @@ Unsent message queue with automatic synchronization:
 
 **Mechanism:**
 -   **Unsent queue**: save unsent messages to `Room` database with `pending` status
--   **Storage**: persist according to retention policy (e.g., up to 30 days)
+-   **Storage**: persist according to retention policy (e.g., up to 30 days — concrete value is a product choice)
 -   **Automatic resend**: resend on network recovery via `WorkManager` with constraints
 -   **Exponential backoff**: increase retry intervals on errors to avoid overload
 

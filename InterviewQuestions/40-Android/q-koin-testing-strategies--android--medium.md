@@ -84,12 +84,16 @@ class UserRepositoryTest : KoinTest {
         )
     }
 
+    // В реальном проекте репозиторий обычно внедряется через конструктор;
+    // здесь `by inject()` используется как тестовый helper.
     private val repository: UserRepository by inject()
+
+    private val userApi: UserApi by inject()
 
     @Test
     fun `возвращает кеш при сетевой ошибке`() = runTest {
-        // Здесь в реальных тестах лучше мокать UserApi/UserDatabase, а не сам репозиторий
-        coEvery { getKoin().get<UserApi>().getUser("42") } returns User("42")
+        // Мокаем зависимость репозитория
+        coEvery { userApi.getUser("42") } returns User("42")
 
         val result = repository.getUser("42")
 
@@ -113,6 +117,12 @@ class DashboardViewModelTest : KoinTest {
         single<UserRepository> { FakeUserRepository() }
     }
 
+    @get:Rule
+    val koinRule = KoinTestRule.create {
+        // Здесь подключаются production-модули приложения
+        modules(appModules)
+    }
+
     @Before
     fun setup() {
         // Подключаем тестовый модуль, перекрывающий production-определения
@@ -121,7 +131,7 @@ class DashboardViewModelTest : KoinTest {
 
     @After
     fun tearDown() {
-        // Удаляем тестовые определения; контейнер должен контролироваться общим правилом/настройкой
+        // Удаляем тестовые определения; контейнер управляется KoinTestRule
         unloadKoinModules(overrideModule)
     }
 
@@ -137,7 +147,7 @@ class DashboardViewModelTest : KoinTest {
 ```
 
 - `loadKoinModules` загружает дополнительные тестовые определения.
-- Используйте `module(override = true)` или соответствующий механизм переопределения для замены production-зависимостей.
+- Используйте `module(override = true)` или соответствующий механизм переопределения (в зависимости от версии Koin) для замены production-зависимостей.
 - Не дублируйте управление жизненным циклом: если используете `KoinTestRule` или общий `startKoin` в тестовом раннере, не вызывайте `stopKoin()` точечно в каждом таком тесте без необходимости.
 
 ### 4. Инструментальные тесты с KoinTestRule
@@ -218,12 +228,15 @@ class UserRepositoryTest : KoinTest {
         )
     }
 
+    // In real code, prefer constructor injection; `by inject()` here is a test helper.
     private val repository: UserRepository by inject()
+
+    private val userApi: UserApi by inject()
 
     @Test
     fun `returns cached data on network failure`() = runTest {
-        // In real tests, mock UserApi/UserDatabase instead of the repository itself
-        coEvery { getKoin().get<UserApi>().getUser("42") } returns User("42")
+        // Mock the repository's dependency rather than the repository itself
+        coEvery { userApi.getUser("42") } returns User("42")
 
         val result = repository.getUser("42")
 
@@ -247,6 +260,12 @@ class DashboardViewModelTest : KoinTest {
         single<UserRepository> { FakeUserRepository() }
     }
 
+    @get:Rule
+    val koinRule = KoinTestRule.create {
+        // Load production modules here
+        modules(appModules)
+    }
+
     @Before
     fun setup() {
         // Load a test module that overrides production bindings
@@ -255,7 +274,7 @@ class DashboardViewModelTest : KoinTest {
 
     @After
     fun tearDown() {
-        // Remove test bindings; lifecycle should be controlled at suite level
+        // Remove test bindings; lifecycle is controlled by KoinTestRule
         unloadKoinModules(overrideModule)
     }
 

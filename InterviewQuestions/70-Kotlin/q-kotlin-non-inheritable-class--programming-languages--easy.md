@@ -23,7 +23,7 @@ tags: [class-design, classes, difficulty/easy, final, inheritance, keywords, ope
 
 ## Ответ (RU)
 
-В Kotlin, чтобы определить класс, который не может быть унаследован, достаточно объявить его без ключевого слова `open`. По умолчанию все классы в Kotlin являются `final` и не могут быть унаследованы без явного указания `open`. Ключевое слово `final` можно использовать явно, но в определении класса это, как правило, избыточно.
+В Kotlin, чтобы определить класс, который не может быть унаследован, достаточно объявить его без ключевого слова `open`. По умолчанию все классы в Kotlin являются `final` и не могут быть унаследованы без явного указания `open` (или `abstract`, `sealed` и т.п.). Ключевое слово `final` можно использовать явно, но в определении класса это, как правило, избыточно.
 
 **Поведение по умолчанию (`final`):**
 ```kotlin
@@ -75,9 +75,11 @@ class MoreDerived : Derived() {
 }
 ```
 
-**Абстрактные и `sealed` классы:**
+**Абстрактные и `sealed` классы (для контекста, не для запрета наследования):**
 - `abstract`-классы по определению открыты для наследования и не используются для запрета наследования, а для задания базового контракта.
-- `sealed`-классы допускают наследование, но строго ограничивают круг допустимых наследников областью, определяемой версией языка (например, тем же файлом или модулем/компиляционной единицей).
+- `sealed`-классы допускают наследование, но строго ограничивают круг допустимых наследников:
+  - наследники должны находиться в той же компиляционной единице (например, в том же модуле/`source set` или, в более старых версиях языка, в том же файле);
+  - они не используются как механизм сделать класс полностью не-наследуемым для всех, а как механизм ограниченного и контролируемого наследования.
 
 **Итоговая сводка:**
 
@@ -86,19 +88,19 @@ class MoreDerived : Derived() {
 | Поведение по умолчанию (`final`) | `class MyClass` | Нет |
 | Явный `final` | `final class MyClass` | Нет (избыточно) |
 | `open` | `open class MyClass` | Да |
-| `abstract` | `abstract class MyClass` | Да (абстрактные классы открыты для наследования) |
-| `sealed` | `sealed class MyClass` | Да, но наследники ограничены допустимой областью (например, тем же файлом или модулем/компиляционной единицей) |
+| `abstract` | `abstract class MyClass` | Да (открыт для наследования, не используется для запрета) |
+| `sealed` | `sealed class MyClass` | Да, но наследники ограничены областью, определяемой правилами языка (ограниченное наследование) |
 
 ## Answer (EN)
 
-In Kotlin, to define a class that cannot be inherited, you simply declare it without the `open` keyword. All classes in Kotlin are `final` by default and thus non-inheritable unless explicitly marked `open` (or `abstract`, etc.). The `final` keyword can be used explicitly, but for classes it's usually redundant.
+In Kotlin, to define a class that cannot be inherited, you simply declare it without the `open` keyword. All classes in Kotlin are `final` by default and thus non-inheritable unless explicitly marked `open` (or `abstract`, `sealed`, etc.). The `final` keyword can be used explicitly, but for classes it's usually redundant.
 
 **Default behavior (final):**
 ```kotlin
 class FinalClass  // Cannot be inherited (final by default)
 
 // Attempting to inherit will cause a compilation error:
-// class Derived : FinalClass()  // Error: This type is final
+// class Derived : FinalClass()  // Error: This type is final and cannot be inherited
 ```
 
 **Explicit `final` keyword (optional, already default):**
@@ -143,6 +145,12 @@ class MoreDerived : Derived() {
 }
 ```
 
+**Abstract and sealed classes (for context, not to forbid inheritance):**
+- `abstract` classes are, by definition, open for inheritance and are used to define a base contract, not to make a type non-inheritable.
+- `sealed` classes allow inheritance but tightly restrict which classes can inherit from them:
+  - inheritors must reside in the same compilation unit (e.g., same module/source set, or in older language versions — the same file);
+  - they are a mechanism for controlled/limited inheritance, not for making a class completely non-inheritable.
+
 **Summary:**
 
 | Approach | Syntax | Inheritable? |
@@ -150,8 +158,8 @@ class MoreDerived : Derived() {
 | Default (final) | `class MyClass` | No |
 | Explicit final | `final class MyClass` | No (redundant) |
 | Open | `open class MyClass` | Yes |
-| Abstract | `abstract class MyClass` | Yes (abstract classes are open for inheritance) |
-| Sealed | `sealed class MyClass` | Yes, but inheritors are restricted to the allowed scope defined by the language version (e.g. same file or same compilation unit/module) |
+| Abstract | `abstract class MyClass` | Yes (open for inheritance; not used to forbid it) |
+| Sealed | `sealed class MyClass` | Yes, with inheritors restricted by language rules (limited inheritance) |
 
 **Best practice:**
 - To make a class non-inheritable, just omit `open` (rely on the default `final` behavior).

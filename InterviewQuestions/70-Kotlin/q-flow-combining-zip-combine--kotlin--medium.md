@@ -2,35 +2,28 @@
 id: kotlin-101
 title: "Flow Combining: zip, combine, merge / Комбинирование Flow: zip, combine, merge"
 aliases: []
-
-# Classification
 topic: kotlin
 subtopics: [coroutines]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140020
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-flow, q-kotlin-collections--kotlin--easy]
-
-# Timestamps
 created: 2025-10-12
-updated: 2025-11-09
-
+updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin]
+
 ---
+
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140020
 
 # Question (EN)
-> Kotlin Coroutines advanced topic 140020
+> Kotlin `Coroutines` advanced topic 140020
 
 ## Ответ (RU)
 
@@ -178,11 +171,11 @@ See also: [[c-flow]], [[c-coroutines]]
 
 ## Ссылки (RU)
 
-- [Документация по Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+- [Документация по Kotlin `Coroutines`](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ## References
 
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [Kotlin `Coroutines` Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ## Связанные вопросы (RU)
 
@@ -212,14 +205,14 @@ See also: [[c-flow]], [[c-coroutines]]
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+- [[q-what-is-coroutine--kotlin--easy]] - `Coroutines`
 - [[q-suspend-functions-basics--kotlin--easy]] - Basic `suspend` functions
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutine builders
+- [[q-coroutine-builders-basics--kotlin--easy]] - `Coroutine` builders
 
 ### Advanced (Harder)
 - [[q-flow-performance--kotlin--hard]] - `Flow` performance
 - [[q-select-expression-channels--kotlin--hard]] - `select` expression & channels
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutine profiling
+- [[q-coroutine-profiling--kotlin--hard]] - `Coroutine` profiling
 - [[q-flowon-operator-context-switching--kotlin--hard]] - `flowOn` & context switching
 - [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

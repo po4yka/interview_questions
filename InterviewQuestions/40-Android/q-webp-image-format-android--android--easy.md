@@ -94,11 +94,11 @@ WebP поддерживает анимацию (animated WebP), как GIF, но
 
 | Android версия | Поддержка WebP |
 |----------------|----------------|
-| Android 4.0+ (API 14) | WebP lossy (без потерь поддержки с ограничениями) |
-| Android 4.3+ (API 18) | WebP lossless + transparency в платформенном декодере |
-| Android 9.0+ (API 28) | Animated WebP |
+| Android 4.0+ (API 14) | Поддержка статичных WebP с потерями |
+| Android 4.3+ (API 18) | Полная поддержка WebP без потерь и с прозрачностью в платформенном декодере |
+| Android 9.0+ (API 28) | Поддержка анимированных WebP |
 
-(Библиотеки вроде Glide/Coil могут обеспечивать более широкую поддержку за счет собственных декодеров.)
+(Библиотеки вроде Glide/Coil могут обеспечивать более широкую и унифицированную поддержку за счет собственных декодеров.)
 
 ### Конвертация изображений в WebP
 
@@ -312,7 +312,7 @@ cwebp -lossless logo.png -o logo.webp
 
 #### 3. Fallback для старых версий Android
 
-Если minSdk < 14 (очень старые устройства), можно хранить альтернативы в PNG/JPEG и использовать совместимые библиотеки/логики выбора ресурсов. В современных проектах (minSdk ≥ 21) отдельный fallback для WebP обычно не требуется.
+Если minSdk < 14 (наследие, практически не используется), можно хранить альтернативы в PNG/JPEG и использовать совместимые библиотеки/логику выбора ресурсов. В современных проектах (minSdk ≥ 21 и WebP в ресурсах только для API 14+) отдельный fallback для WebP обычно не требуется.
 
 ```kotlin
 // Стандартный выбор ресурсов по квалификаторам
@@ -380,7 +380,7 @@ lifecycleScope.launch {
 |--------|--------|-----------|-------------------|
 | JPEG | Средний | Везде | Для совместимости и простых фотографий |
 | PNG | Большой | Везде | Когда нужна строгая без потерь графика |
-| WebP | Маленький | Android 4.0+ (поддержка зависит от типа WebP и API) | Рекомендуется для большинства кейсов |
+| WebP | Маленький | Android 4.0+ (тип WebP зависит от API) | Рекомендуется для большинства кейсов |
 | AVIF | Очень маленький | Android 12+ (статичные изображения) | Перспективный формат, поддержка растет |
 | HEIF | Маленький | Android 9+ | Альтернатива для фотографий |
 
@@ -391,8 +391,8 @@ WebP — это оптимальный выбор для Android-приложе�
 1. Размеру: обычно на 25-45% меньше по сравнению с JPEG/PNG
 2. Качеству: поддержка lossy и lossless
 3. Функциональности: прозрачность + анимация (animated WebP)
-4. Поддержке: базовая поддержка с Android 4.0+ (детали зависят от типа WebP)
-5. Простоте: встроенные инструменты конвертации и поддержка в популярных библиотеке изображений
+4. Поддержке: широкая поддержка начиная с Android 4.0+ (детали зависят от типа WebP)
+5. Простоте: встроенные инструменты конвертации и поддержка в популярных библиотеках изображений
 
 **Рекомендации:**
 - Конвертируйте JPEG/PNG в WebP там, где это визуально приемлемо
@@ -458,11 +458,11 @@ WebP supports animated images (animated WebP), similar to GIF but usually with m
 
 | Android version | WebP support |
 |-----------------|--------------|
-| Android 4.0+ (API 14) | WebP lossy (limited lossless support) |
-| Android 4.3+ (API 18) | WebP lossless + transparency in platform decoder |
-| Android 9.0+ (API 28) | Animated WebP |
+| Android 4.0+ (API 14) | Static lossy WebP support |
+| Android 4.3+ (API 18) | Full support for lossless WebP and transparency in the platform decoder |
+| Android 9.0+ (API 28) | Animated WebP support |
 
-(Libraries like Glide/Coil may offer broader support via their own decoders.)
+(Libraries like Glide/Coil can provide broader and more unified support via their own decoders.)
 
 ### Conversion to WebP
 
@@ -674,7 +674,7 @@ cwebp -lossless logo.png -o logo.webp
 
 #### 3. Fallback for old Android versions
 
-If minSdk < 14 (very old devices), provide PNG/JPEG alternatives and select resources accordingly. For modern projects (minSdk ≥ 21) explicit WebP fallback is usually not needed.
+If minSdk < 14 (legacy, virtually unused now), you can provide PNG/JPEG alternatives and select resources accordingly. For modern projects (minSdk ≥ 21, and WebP in resources only targeting API 14+), explicit WebP-specific fallback is usually not needed.
 
 ```kotlin
 imageView.setImageResource(R.drawable.image)
@@ -737,7 +737,7 @@ lifecycleScope.launch {
 |--------|------|---------|-------------|
 | JPEG | Medium | Everywhere | Simple photos, compatibility |
 | PNG | Large | Everywhere | Strict lossless graphics |
-| WebP | Small | Android 4.0+ (type/API dependent) | Recommended default in most cases |
+| WebP | Small | Android 4.0+ (type depends on API) | Recommended default in most cases |
 | AVIF | Very small | Android 12+ (static) | Future-proof, growing support |
 | HEIF | Small | Android 9+ | Photo alternative |
 
@@ -748,7 +748,7 @@ WebP is an excellent choice for Android apps because it:
 1. Reduces size by about 25–45% vs JPEG/PNG.
 2. Offers both lossy and lossless modes.
 3. Supports transparency and animation.
-4. Has broad Android support (4.0+; details depend on WebP type).
+4. Has broad Android support (4.0+; exact feature support depends on WebP type and API level).
 5. Is easy to integrate via Android Studio tools and popular image libraries.
 
 Recommendations:

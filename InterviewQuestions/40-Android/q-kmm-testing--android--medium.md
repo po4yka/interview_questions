@@ -28,7 +28,7 @@ tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium,
 
 ## Ответ (RU)
 
-Тестирование в KMM строится вокруг максимального использования общего кода и общих тестов в `commonTest`, с выделением платформо-специфичных тестов в отдельных source sets. Общие тесты пишутся на базе `kotlin.test`. Для моков можно использовать мультиплатформенные библиотеки (например, MockK для поддерживаемых таргетов или KMP-friendly альтернативы).
+Тестирование в KMM строится вокруг максимального использования общего кода и общих тестов в `commonTest`, с выделением платформо-специфичных тестов в отдельных source sets. Общие тесты пишутся на базе `kotlin.test`. Для моков используйте мультиплатформенные библиотеки (например, KMP-совместимые артефакты MockK или специализированные KMP-friendly альтернативы), а JVM-специфичные моки (такие как стандартный `io.mockk:mockk`) подключайте только в JVM/Android тестовых source sets.
 
 См. также: [[moc-android]]
 
@@ -45,7 +45,8 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
                 implementation("app.cash.turbine:turbine")
-                implementation("io.mockk:mockk") // для JVM; для других таргетов используйте совместимую версию или альтернативу
+                // Подключайте только мультиплатформенные зависимости;
+                // JVM-only библиотеки (например, io.mockk:mockk) выносите в JVM-специфичные source sets
             }
         }
 
@@ -53,6 +54,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation("androidx.test:core")
+                implementation("io.mockk:mockk") // JVM-only, безопасно использовать здесь
             }
         }
 
@@ -66,7 +68,7 @@ kotlin {
 ```
 shared/src/
   commonTest/kotlin/         # Общие тесты (все платформы)
-  androidUnitTest/kotlin/    # Android-специфичные unit-тесты
+  androidUnitTest/kotlin/    # Android-специфичные unit-тесты (JVM)
   iosTest/kotlin/            # iOS-специфичные тесты
 ```
 
@@ -108,6 +110,8 @@ class TaskRepositoryTest {
 }
 ```
 
+Примечание: чтобы этот пример корректно работал как общий тест, используйте либо KMP-совместимую версию мок-библиотеки, либо замените `mockk()` на фейк/тестовую реализацию `TaskApi`, описанную в общем коде.
+
 **Тестирование `Flow` с Turbine:**
 
 ```kotlin
@@ -145,7 +149,8 @@ class ObserveTasksTest {
 **Expect/Actual для тестовых драйверов БД:**
 
 ```kotlin
-// commonTest - объявление
+// Общий тестовый контракт - размещается в общем test source set,
+// который компонуется для всех целевых платформ (например, commonTest)
 expect class TestDatabaseDriver() {
     fun createInMemoryDriver(): SqlDriver
 }
@@ -237,7 +242,7 @@ fun `loadTasks обновляет состояние`() = runTest {
 
 **Android (инструментальные / JVM):**
 
-Платформенный код (например, работа с `Context`, SharedPreferences, файлами) тестируется в `androidUnitTest` или `androidInstrumentedTest`.
+Платформенный код (например, работа с `Context`, SharedPreferences, файлами) тестируется в `androidUnitTest` (JVM unit-тесты) или `androidTest` (инструментальные тесты на устройстве/эмуляторе).
 
 ```kotlin
 // Не используйте реальный Context в commonTest
@@ -286,7 +291,7 @@ class IOSKeychainTest {
 **Покрытие:**
 - Стремитесь к высокому покрытию (особенно общего кода).
 - Тестируйте позитивные и негативные сценарии.
-- Для сложных зависимостей используйте фейки и тестовые реализаций через DI и `expect/actual`.
+- Для сложных зависимостей используйте фейки и тестовые реализации через DI и `expect/actual`.
 
 **Производительность:**
 - Избегайте реальных сетевых вызовов и тяжелых ресурсов.
@@ -297,7 +302,7 @@ class IOSKeychainTest {
 
 ## Answer (EN)
 
-KMM testing centers on maximizing shared code and shared tests in `commonTest`, with platform-specific tests in dedicated source sets. Use `kotlin.test` for assertions and multiplatform-friendly mocking libraries (e.g., MockK for supported targets or alternatives).
+KMM testing centers on maximizing shared code and shared tests in `commonTest`, with platform-specific tests in dedicated source sets. Use `kotlin.test` for assertions and multiplatform-friendly mocking libraries. JVM-only mocking libraries (such as the standard `io.mockk:mockk`) should be added only to JVM/Android test source sets.
 
 See also: [[moc-android]]
 
@@ -314,7 +319,8 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
                 implementation("app.cash.turbine:turbine")
-                implementation("io.mockk:mockk") // JVM; use compatible variants/alternatives for other targets
+                // Use only multiplatform-compatible dependencies here;
+                // JVM-only libraries (e.g., io.mockk:mockk) belong in JVM-specific source sets
             }
         }
 
@@ -322,10 +328,11 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation("androidx.test:core")
+                implementation("io.mockk:mockk") // JVM-only; safe in Android/JVM tests
             }
         }
 
-        // iosTest is configured via KMP plugin; it reuses commonTest and can add iOS-specific implementations
+        // iosTest is configured via the KMP plugin; it reuses commonTest and can add iOS-specific dependencies
     }
 }
 ```
@@ -335,7 +342,7 @@ Directory layout:
 ```
 shared/src/
   commonTest/kotlin/         # Shared tests (all platforms)
-  androidUnitTest/kotlin/    # Android-specific unit tests
+  androidUnitTest/kotlin/    # Android-specific unit tests (JVM)
   iosTest/kotlin/            # iOS-specific tests
 ```
 
@@ -377,6 +384,8 @@ class TaskRepositoryTest {
 }
 ```
 
+Note: for this to be a truly shared test, use a KMP-compatible mocking solution or replace `mockk()` with a fake/test implementation of `TaskApi` defined in shared code.
+
 **`Flow` testing with Turbine:**
 
 ```kotlin
@@ -409,12 +418,13 @@ class ObserveTasksTest {
 
 ### Mocking Platform-Specific Code
 
-For platform-specific dependencies used from common code, use `expect/actual` and dependency injection instead of calling platform APIs directly.
+For platform-specific dependencies used from shared code, use `expect/actual` declarations and dependency injection instead of direct platform API calls.
 
 **Expect/Actual for test database driver:**
 
 ```kotlin
-// commonTest - declaration
+// Shared test contract - placed in a shared test source set
+// that is compiled for all relevant targets (e.g., commonTest)
 expect class TestDatabaseDriver() {
     fun createInMemoryDriver(): SqlDriver
 }
@@ -506,7 +516,7 @@ fun `loadTasks updates state`() = runTest {
 
 **Android:**
 
-Use `androidUnitTest` or `androidTest` for Android-specific code (`Context`, SharedPreferences, etc.).
+Use `androidUnitTest` (JVM unit tests) or `androidTest` (instrumented tests on device/emulator) for Android-specific code (`Context`, SharedPreferences, files, etc.).
 
 ```kotlin
 // Don't use real Context in commonTest
@@ -558,7 +568,7 @@ class IOSKeychainTest {
 - Prefer fakes and test implementations via DI and `expect/actual` for complex dependencies.
 
 **Performance:**
-- Avoid real network calls and heavy I/O in tests.
+- Avoid real network calls and heavy resources in tests.
 - Use in-memory databases where possible.
 - Keep tests fast, deterministic, and reliable.
 

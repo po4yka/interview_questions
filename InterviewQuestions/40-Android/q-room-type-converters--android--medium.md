@@ -27,11 +27,11 @@ tags: [android/room, difficulty/medium]
 
 ## Ответ (RU)
 
-**Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы, которые Room умеет сохранять в SQLite. Они позволяют работать с Date, Enum, `List` и сложными объектами как с обычными полями Entity.
+**Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы и иные поддерживаемые типы (например, `String`, `Int`, `Long`), которые Room умеет сохранять в SQLite. Они позволяют работать с `Date`, `Enum`, `List` и сложными объектами как с обычными полями Entity, если есть корректные конвертеры.
 
 ### Основной Принцип
 
-Room знает только примитивы (`Int`, `Long`, `String`, `Boolean`, etc). Для кастомных типов нужны конвертеры.
+Room напрямую поддерживает ограниченный набор типов (`Int`, `Long`, `String`, `Boolean`, `Double`, `byte[]`, и некоторые другие). Для остальных (кастомных) типов нужны конвертеры.
 
 **Простой пример:**
 
@@ -136,22 +136,23 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
 
 ### Ограничения И Best Practices
 
-1. Избегайте тяжёлых операций — конвертеры вызываются на каждой операции чтения/записи
-2. Не для связей — Room запрещает хранить ссылки на другие Entity (используйте Foreign Keys + @Relation)
-3. Обрабатывайте null — используйте nullable типы (`Long?`, `Date?`)
-4. Тестируйте двусторонность — `toX(fromX(value)) == value`
+1. Избегайте тяжёлых операций — конвертеры вызываются при чтении/записи соответствующих полей.
+2. Не для связей — Room не должен хранить ссылки на другие Entity как вложенные объекты (используйте Foreign Keys + @Relation или отдельные таблицы).
+3. Обрабатывайте null — используйте nullable типы (`Long?`, `Date?`), учитывая, что SQLite допускает NULL.
+4. Тестируйте двусторонность — для симметричных конвертеров проверяйте, что `toX(fromX(value)) == value`.
 
-**Почему Room не поддерживает Object References:**
+**Почему не стоит хранить объектные ссылки напрямую:**
 
 ```kotlin
-// ❌ ЗАПРЕЩЕНО — Room не сохранит вложенный объект
+// ❌ Не рекомендуется — Room попытается применить конвертер или сообщит об ошибке,
+// хранить Entity как вложенный объект без явной схемы неверно с точки зрения модели данных
 @Entity
 data class Post(
     @PrimaryKey val id: Int,
-    val author: User  // ❌ Компилятор выдаст ошибку
+    val author: User
 )
 
-// ✅ ПРАВИЛЬНО — связь через Foreign Key
+// ✅ Правильно — связь через внешний ключ или колонку-идентификатор
 @Entity
 data class Post(
     @PrimaryKey val id: Int,
@@ -161,22 +162,22 @@ data class Post(
 data class PostWithAuthor(
     @Embedded val post: Post,
     @Relation(parentColumn = "authorId", entityColumn = "id")
-    val author: User  // ✅ Автоматическая загрузка через JOIN
+    val author: User  // ✅ Загрузка через JOIN
 )
 ```
 
-Причины запрета:
-- Избежание ленивой загрузки на UI-потоке
-- Контроль потребления памяти
-- Явное определение связей
+Причины такого подхода:
+- Явная схема и нормализация данных
+- Предсказуемые запросы и отсутствие скрытой ленивой загрузки
+- Контроль ресурсов и зависимостей между сущностями
 
 ## Answer (EN)
 
-**Room TypeConverters** are a mechanism for converting custom data types to primitive types that Room can persist in SQLite. They enable working with Date, Enum, `List`, and complex objects as regular Entity fields.
+**Room TypeConverters** are a mechanism for converting custom data types into primitive and other supported types (e.g., `String`, `Int`, `Long`) that Room can persist in SQLite. They allow you to use `Date`, `Enum`, `List`, and complex objects as entity fields, as long as corresponding converters are defined.
 
 ### Core Principle
 
-Room only understands primitives (`Int`, `Long`, `String`, `Boolean`, etc). Custom types require converters.
+Room natively supports only a limited set of types (`Int`, `Long`, `String`, `Boolean`, `Double`, `byte[]`, and a few others). Custom types require converters.
 
 **Basic Example:**
 
@@ -281,22 +282,23 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
 
 ### Constraints and Best Practices
 
-1. Avoid heavy operations — converters run on every read/write
-2. Not for relationships — Room forbids storing Entity references (use Foreign Keys + @Relation)
-3. Handle nullability — use nullable types (`Long?`, `Date?`)
-4. Test bidirectionality — `toX(fromX(value)) == value`
+1. Avoid heavy operations — converters are invoked on read/write of the mapped fields.
+2. Not for relationships — you should not store entity references as nested objects; use Foreign Keys + @Relation or separate tables.
+3. Handle nullability — use nullable types (`Long?`, `Date?`) appropriately, considering SQLite allows NULL.
+4. Test bidirectionality — for symmetric converters, validate `toX(fromX(value)) == value`.
 
-**Why Room Disallows Object References:**
+**Why you shouldn't store object references directly:**
 
 ```kotlin
-// ❌ FORBIDDEN — Room won't save nested object
+// ❌ Not recommended — Room will either require a converter or fail,
+// and persisting another Entity as a nested object breaks proper schema design
 @Entity
 data class Post(
     @PrimaryKey val id: Int,
-    val author: User  // ❌ Compiler error
+    val author: User
 )
 
-// ✅ CORRECT — relationship via Foreign Key
+// ✅ Correct — relationship via foreign key or identifier column
 @Entity
 data class Post(
     @PrimaryKey val id: Int,
@@ -306,14 +308,14 @@ data class Post(
 data class PostWithAuthor(
     @Embedded val post: Post,
     @Relation(parentColumn = "authorId", entityColumn = "id")
-    val author: User  // ✅ Automatic JOIN loading
+    val author: User  // ✅ Loaded via JOIN
 )
 ```
 
-Reasons:
-- Avoid lazy loading on UI thread
-- Control memory consumption
-- Explicit relationship definition
+Reasons for this approach:
+- Explicit schema and normalized data
+- Predictable queries without hidden lazy loading
+- Better control over resources and entity relationships
 
 ## Дополнительные вопросы (RU)
 

@@ -26,10 +26,10 @@ tags: [coroutines, difficulty/medium, flow, kotlin, reactive]
 ## Ответ (RU)
 
 Холодные потоки (cold) начинают генерировать данные только после подписки (ленивые) — выполнение запускается для каждого нового коллектора.
-Примеры: `Flow` (`kotlinx.coroutines.flow.Flow`), `Observable` (Rx).
+Примеры: `Flow` (`kotlinx.coroutines.flow.Flow`).
 
 Горячие потоки (hot) существуют независимо от подписчиков — источник данных активен в своем жизненном цикле и эмитит значения независимо от того, есть ли текущие коллекторы.
-Примеры: `SharedFlow`, `StateFlow`, `LiveData`, широковещательные источники (Broadcast).
+Примеры: `SharedFlow`, `StateFlow`, `LiveData`, широковещательные источники (Broadcast-like).
 
 ### Характеристики холодных потоков
 
@@ -58,7 +58,7 @@ fun main() = runBlocking {
     }
 }
 
-// Output:
+// Возможный вывод:
 // Flow created
 // (1 second delay)
 // Starting collection
@@ -99,7 +99,7 @@ fun hotFlowExample() = runBlocking {
     delay(500)
 }
 
-// Пример результата при replay = 0:
+// Возможный результат при replay = 0 (зависит от планировщика и таймингов):
 // Emitting 0  <- До появления подписчика
 // Emitting 1  <- До появления подписчика
 // Emitting 2
@@ -133,7 +133,7 @@ fun multipleColdCollectors() = runBlocking {
     }
 }
 
-// Вывод (порядок зависит от планировщика):
+// Возможный вывод (порядок зависит от планировщика):
 // Flow started for ...  <- Запуск для коллектора 1
 // Collector 1: 0
 // Flow started for ...  <- Отдельный запуск для коллектора 2
@@ -175,7 +175,7 @@ fun multipleHotCollectors() = runBlocking {
     delay(500)
 }
 
-// Пример результата при replay = 0:
+// Возможный результат при replay = 0 (зависит от таймингов):
 // Collector 1: 0
 // Collector 1: 1
 // Collector 2: 2  <- Поздний подписчик не видит 0 и 1
@@ -271,9 +271,9 @@ fun stateFlowExample() = runBlocking {
     delay(500)
 }
 
-// Пример результата:
+// Возможный результат (зависит от таймингов):
 // Initial value: 0
-// Subscriber: 3  <- Поздний подписчик сразу получает текущее значение
+// Subscriber: 3  <- Поздний подписчик сразу получает текущее значение на момент подписки
 // Subscriber: 4
 // Subscriber: 5
 ```
@@ -316,16 +316,16 @@ class ViewModel {
 | Характеристика | Холодный поток | Горячий поток |
 |----------------|----------------|---------------|
 | Старт | Запускается при collect (ленивый) | Продюсер активен по своему жизненному циклу, не на collect |
-| Выполнение | Новое выполнение на каждого коллектора | Общее выполнение для всех коллектора |
+| Выполнение | Новое выполнение для каждого коллектора | Общее выполнение для всех коллектора |
 | Поздние подписчики | Получают значения с момента начала своего collect | Могут пропускать прошлые значения (если нет replay/буфера) |
-| Примеры | `Flow`, Rx `Observable` | `SharedFlow`, `StateFlow`, `LiveData` |
-| Use case | API вызовы, преобразования | События, состояние, сенсоры, broadcast-источники |
+| Примеры | `Flow` | `SharedFlow`, `StateFlow`, `LiveData` |
+| Use case | API-вызовы, преобразования | События, состояние, сенсоры, broadcast-источники |
 | Ресурсы | Возможное дублирование работы на коллектора | Один продюсер переиспользуется коллекторами |
 
 ## Answer (EN)
 
 Cold flows start producing data only when they are collected (lazy) — a new execution is started for each collector.
-Examples: `Flow` (`kotlinx.coroutines.flow.Flow`), `Observable` (Rx).
+Examples: `Flow` (`kotlinx.coroutines.flow.Flow`).
 
 Hot flows have an active producer that exists independently of individual subscribers — emissions are driven by the producer's lifecycle, not by each collector.
 Examples: `SharedFlow`, `StateFlow`, `LiveData`, broadcast-like sources.
@@ -357,7 +357,7 @@ fun main() = runBlocking {
     }
 }
 
-// Output:
+// Possible output:
 // Flow created
 // (1 second delay)
 // Starting collection
@@ -398,7 +398,7 @@ fun hotFlowExample() = runBlocking {
     delay(500)
 }
 
-// Example outcome with replay = 0:
+// Possible outcome with replay = 0 (timing-dependent):
 // Emitting 0  <- Emitted before any subscriber
 // Emitting 1  <- Emitted before any subscriber
 // Emitting 2
@@ -432,7 +432,7 @@ fun multipleColdCollectors() = runBlocking {
     }
 }
 
-// Output (order may vary by scheduling):
+// Possible output (order depends on scheduling):
 // Flow started for ...  <- Started for collector 1
 // Collector 1: 0
 // Flow started for ...  <- Started again for collector 2
@@ -474,7 +474,7 @@ fun multipleHotCollectors() = runBlocking {
     delay(500)
 }
 
-// Example outcome with replay = 0 (timing-dependent):
+// Possible outcome with replay = 0 (timing-dependent):
 // Collector 1: 0
 // Collector 1: 1
 // Collector 2: 2  <- Joins later; does not receive 0 or 1
@@ -570,7 +570,7 @@ fun stateFlowExample() = runBlocking {
     delay(500)
 }
 
-// Example outcome:
+// Possible outcome (timing-dependent):
 // Initial value: 0
 // Subscriber: 3  <- Late subscriber immediately gets current value at time of subscription
 // Subscriber: 4
@@ -614,12 +614,12 @@ class ViewModel {
 
 | Feature | Cold Flow | Hot Flow |
 |---------|-----------|----------|
-| **Start behavior** | Starts on collection (lazy) | Producer active based on its own scope/lifecycle, not per collector |
-| **Execution** | New execution per collector | Shared execution for all collectors |
-| **Late subscribers** | Receive all values from their own start of collection | May miss values emitted before subscription (unless replay/buffering is used) |
-| **Examples** | `Flow`, Rx `Observable` | `SharedFlow`, `StateFlow`, `LiveData` |
-| **Use case** | API calls, transformations | Events, state, sensors, broadcasts |
-| **Resource usage** | Potentially repeated work per collector | Single producer reused across collectors |
+| Start behavior | Starts on collection (lazy) | Producer active based on its own scope/lifecycle, not per collector |
+| Execution | New execution per collector | Shared execution for all collectors |
+| Late subscribers | Receive values from the moment their collection starts | May miss values emitted before subscription (unless replay/buffering is used) |
+| Examples | `Flow` | `SharedFlow`, `StateFlow`, `LiveData` |
+| Use case | API calls, transformations | Events, state, sensors, broadcasts |
+| Resource usage | Potentially repeated work per collector | Single producer reused across collectors |
 
 ---
 

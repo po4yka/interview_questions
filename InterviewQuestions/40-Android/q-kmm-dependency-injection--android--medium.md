@@ -1,7 +1,7 @@
 ---
 id: android-222
-title: "KMM Dependency Injection / Dependency Injection в KMM"
-aliases: [Dependency Injection в KMM, KMM Dependency Injection, KMM DI, Koin, Koin для KMM]
+title: "KMM Dependency Injection"
+aliases: ["Dependency Injection в KMM", "KMM Dependency Injection", "KMM DI", "Koin", "Koin для KMM"]
 topic: android
 subtopics: [di-koin, kmp]
 question_kind: theory
@@ -10,11 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-dependency-injection]
+related: [c-dependency-injection, moc-android]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/di-koin, android/kmp, DI, difficulty/medium, Koin, Kotlin]
+tags: [android/di-koin, android/kmp, di, difficulty/medium, koin, kotlin]
 
 ---
 

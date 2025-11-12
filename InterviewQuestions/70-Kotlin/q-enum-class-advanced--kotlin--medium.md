@@ -92,7 +92,7 @@ enum class HttpMethod(val requiresBody: Boolean = false) {
 }
 ```
 
-**Использование when с enum:**
+**Использование `when` с enum:**
 ```kotlin
 enum class Status {
     LOADING, SUCCESS, ERROR
@@ -129,6 +129,30 @@ enum class Color(val rgb: Int) {
 val color = Color.fromString("red") // RED
 val exists = Color.hasColor("purple") // false
 ```
+
+## Дополнительные вопросы (RU)
+
+- Когда использовать `enum` vs `sealed class`?
+- Как использовать `enum` с типобезопасной сериализацией?
+- Какие особенности производительности у `enum`?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/enum-classes.html
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Базовые enum классы
+
+### Похожие (среднего уровня)
+- [[q-sealed-class-sealed-interface--kotlin--medium]] - Sealed классы
+- [[q-data-class-detailed--kotlin--medium]] - Data классы
+- [[q-class-initialization-order--kotlin--medium]] - Порядок инициализации классов
+
+### Продвинутые (сложнее)
+- [[q-kotlin-reified-types--kotlin--hard]] - Reified типы
 
 ---
 
@@ -199,7 +223,7 @@ enum class HttpMethod(val requiresBody: Boolean = false) {
 }
 ```
 
-**Using when with Enum:**
+**Using `when` with Enum:**
 ```kotlin
 enum class Status {
     LOADING, SUCCESS, ERROR
@@ -239,7 +263,7 @@ val exists = Color.hasColor("purple") // false
 
 ## Follow-ups
 
-- When to use enum vs sealed class?
+- When to use `enum` vs `sealed class`?
 - How to use enums with type-safe serialization?
 - Enum performance considerations?
 

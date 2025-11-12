@@ -36,17 +36,19 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 **Material Design** — стандарт для Android, интегрированный в экосистему через библиотеку Material Components.
 
 **Ключевые элементы**:
-- Цветовые схемы (primary, secondary, surface)
+- Цветовые схемы (primary, secondary, surface и др.)
 - Типографика и иконки
 - Elevation (тени для глубины)
 - Shape theming (кастомизация форм)
 - Motion (анимации и переходы)
 
-**Пример базовой темы**:
+**Пример базовой темы (упрощённый M3-пример)**:
 
 ```xml
-<!-- ✅ Material 3 тема; для динамических цветов на Android 12+ используйте dynamicColor или генерацию палитры -->
-<style name="AppTheme" parent="Theme.Material3.DayNight">
+<!-- ✅ Упрощённый пример темы на базе Material 3.
+     На практике используйте полный набор M3-атрибутов (colorPrimary, colorSecondary,
+     surface, background и т.д.) и dynamic color для Android 12+ при необходимости. -->
+<style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
     <item name="colorPrimary">@color/md_theme_primary</item>
     <item name="colorOnPrimary">@color/md_theme_on_primary</item>
     <item name="colorSecondary">@color/md_theme_secondary</item>
@@ -106,13 +108,14 @@ object DesignTokens {
 - Поддержка темной темы и accessibility
 - Сокращение дублирования кода
 
-### Fluent Design (Microsoft) И HIG (Apple)
+### Fluent Design (Microsoft) и HIG (Apple)
 
-**Fluent** и **HIG** — системы для Windows/iOS, редко используются напрямую в Android, но их принципы полезны для кросс-платформенных приложений.
+**Fluent** и **HIG** — системы для экосистем Microsoft и Apple (Windows, iOS, iPadOS, macOS и др.), редко используются напрямую в Android, но их принципы полезны для кросс-платформенных приложений.
 
 ```kotlin
-// ❌ Избегайте смешивания стилей из разных систем
-// ✅ Придерживайтесь одной системы для консистентности
+// ❌ Избегайте неконтролируемого смешивания визуальных паттернов разных систем в одном Android-приложении.
+// ✅ Базируйтесь на одной основной системе (обычно Material) и аккуратно учитывайте другие
+//    только на уровне принципов для кросс-платформенного брендирования.
 ```
 
 ## Answer (EN)
@@ -124,17 +127,19 @@ A design system is a collection of reusable components, guidelines, and patterns
 **Material Design** is the standard for Android, integrated through the Material Components library.
 
 **Key elements**:
-- Color schemes (primary, secondary, surface)
+- Color schemes (primary, secondary, surface, etc.)
 - Typography and icons
 - Elevation (shadows for depth)
 - Shape theming (customization)
 - Motion (animations and transitions)
 
-**Example theme setup**:
+**Example theme setup (simplified M3 example)**:
 
 ```xml
-<!-- ✅ Material 3 theme; for dynamic colors on Android 12+ use dynamicColor support or generated palettes -->
-<style name="AppTheme" parent="Theme.Material3.DayNight">
+<!-- ✅ Simplified example of a Material 3-based theme.
+     In real projects, use the full M3 attribute set (colorPrimary, colorSecondary,
+     surface, background, etc.) and dynamic color on Android 12+ when appropriate. -->
+<style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
     <item name="colorPrimary">@color/md_theme_primary</item>
     <item name="colorOnPrimary">@color/md_theme_on_primary</item>
     <item name="colorSecondary">@color/md_theme_secondary</item>
@@ -196,11 +201,12 @@ object DesignTokens {
 
 ### Fluent Design (Microsoft) and HIG (Apple)
 
-**Fluent** and **HIG** are systems for Windows/iOS, rarely used directly in Android, but their principles are useful for cross-platform apps.
+**Fluent** and **HIG** are systems for Microsoft and Apple ecosystems (Windows, iOS, iPadOS, macOS, etc.), rarely used directly in Android, but their principles are useful for cross-platform apps.
 
 ```kotlin
-// ❌ Avoid mixing styles from different systems
-// ✅ Stick to one system for consistency
+// ❌ Avoid uncontrolled mixing of visual patterns from different systems in a single Android app.
+// ✅ Use one primary system (typically Material) and carefully apply others only as guiding
+//    principles for cross-platform branding where needed.
 ```
 
 ---

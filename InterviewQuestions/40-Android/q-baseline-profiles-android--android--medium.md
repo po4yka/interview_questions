@@ -64,13 +64,13 @@ Baseline Profiles — это метаданные компиляции, кото
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("androidx.baselineprofile") // применяется в модуле для генерации профилей
+    id("androidx.baselineprofile") // применяется в модуле/конфигурации для генерации профилей
 }
 
 android {
     defaultConfig {
-        // Рекомендуется minSdk >= 21;
-        // пользу от baseline profiles на реальных устройствах дают современные ART (особенно API 28+)
+        // Библиотека baselineprofile поддерживает minSdk >= 21,
+        // но максимальный эффект даёт на современных ART-рантаймах (особенно API 28+)
         minSdk = 21
     }
 }
@@ -123,9 +123,9 @@ when (status.profileInstallResultCode) {
 
 ### Производительность
 
-(Фактический выигрыш зависит от устройства и покрытия профилем.) Типичные наблюдаемые диапазоны:
-- **Холодный запуск**: до ~20-40% быстрее
-- **Первая отрисовка UI**: до ~30-50% быстрее (Compose-приложения часто выигрывают больше)
+(Фактический выигрыш зависит от устройства, версии Android и покрытия профилем; значения ниже иллюстративны, на основе официальных и практических измерений.) Типично наблюдаются диапазоны "до":
+- **Холодный запуск**: до ~20–40% быстрее
+- **Первая отрисовка UI**: до ~30–50% быстрее (Compose-приложения часто выигрывают больше)
 - **Стабильность**: заметно меньше пропущенных кадров в первых сессиях
 
 ### Лучшие практики
@@ -162,13 +162,13 @@ Install/optimization → AOT compile critical methods → Launch → Faster nati
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("androidx.baselineprofile") // applied in the module responsible for profile generation
+    id("androidx.baselineprofile") // applied in the module/configuration responsible for profile generation
 }
 
 android {
     defaultConfig {
-        // Recommended minSdk >= 21;
-        // real benefits come on modern ART runtimes (in practice API 28+ devices)
+        // The baselineprofile library supports minSdk >= 21,
+        // but the most significant benefits appear on modern ART runtimes (especially API 28+)
         minSdk = 21
     }
 }
@@ -221,9 +221,9 @@ when (status.profileInstallResultCode) {
 
 ### Performance
 
-(Actual gains depend on device and profile coverage.) Typical observed ranges:
-- **Cold startup**: up to ~20-40% faster
-- **First UI render**: up to ~30-50% faster (Compose apps often benefit most)
+(Actual gains depend on device, Android version, and profile coverage; values below are illustrative "up to" ranges based on official and practical benchmarks.) Commonly reported:
+- **Cold startup**: up to ~20–40% faster
+- **First UI render**: up to ~30–50% faster (Compose apps often benefit more)
 - **Stability**: noticeably fewer dropped frames during early sessions
 
 ### Best Practices

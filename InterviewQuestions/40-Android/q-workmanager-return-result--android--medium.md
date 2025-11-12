@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, c-coroutines, c-flow, c-workmanager]
+related: [c-android, c-background-tasks, c-concurrency, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 sources: []
 tags: [android/background-execution, android/coroutines, difficulty/medium, workmanager]
 
@@ -30,15 +30,15 @@ tags: [android/background-execution, android/coroutines, difficulty/medium, work
 
 ## Ответ (RU)
 
-WorkManager возвращает результаты через механизм `outputData`:
+WorkManager возвращает результаты через механизм `outputData`.
 
 **Основной подход**:
 1. В Worker используем `Result.success(outputData)` для передачи данных
 2. В `Activity`/`ViewModel` наблюдаем за `WorkInfo` через `LiveData` или `Flow`
-3. Проверяем состояние `WorkInfo.State.SUCCEEDED`
-4. Извлекаем данные из `workInfo.outputData`
+3. Проверяем состояние `WorkInfo.State.SUCCEEDED` (или `state.isFinished` для общих кейсов)
+4. Извлекаем данные из `workInfo.outputData` (доступно только для завершённых работ)
 
-Важно: `Data` в WorkManager поддерживает только примитивные типы и строки (и их массивы), поэтому сложные объекты нужно сериализовать (например, в JSON).
+Важно: `Data` в WorkManager поддерживает только примитивные типы, строки и их массивы, поэтому сложные объекты нужно сериализовать (например, в JSON).
 
 ### Реализация Worker
 
@@ -51,24 +51,24 @@ class DataWorker(
     override suspend fun doWork(): Result {
         return try {
             val input = inputData.getInt("value", 0)
-            val result = processData(input) // ✅ Perform work, e.g. Int or String
+            val result: String = processData(input) // ✅ Выполняем работу, получаем String
 
-            // ✅ Return success with output data
+            // ✅ Возвращаем успех с выходными данными
             Result.success(workDataOf(
                 "result" to result,
                 "timestamp" to System.currentTimeMillis()
             ))
         } catch (e: IOException) {
-            Result.retry() // ✅ Network error - retry
+            Result.retry() // ✅ Сетевые ошибки — пробуем ещё раз
         } catch (e: Exception) {
-            // ❌ Fatal error - fail with error info
+            // ❌ Фатальная ошибка — завершаем с информацией об ошибке
             Result.failure(workDataOf("error" to (e.message ?: "Unknown error")))
         }
     }
 }
 ```
 
-(В этом примере предполагается, что `result` имеет тип, поддерживаемый `Data` (например, `Int` или `String`). Тип чтения должен совпадать с типом записи.)
+(В этом примере `result` имеет тип `String`, поддерживаемый `Data`. Метод чтения должен совпадать с типом записи, например `getString("result")`.)
 
 ### Наблюдение в `ViewModel` (рекомендуемый способ)
 
@@ -87,7 +87,7 @@ class DataViewModel(
 
         workManager.enqueue(request)
 
-        // ✅ Observe work status
+        // ✅ Наблюдаем за статусом работы
         workManager.getWorkInfoByIdLiveData(request.id)
             .observeForever { workInfo ->
                 if (workInfo == null) return@observeForever
@@ -103,7 +103,7 @@ class DataViewModel(
                     WorkInfo.State.RUNNING -> {
                         _result.value = WorkResult.Loading
                     }
-                    else -> { /* ENQUEUED, BLOCKED, CANCELLED */ }
+                    else -> { /* ENQUEUED, BLOCKED, CANCELLED и т.п. при необходимости можно обработать отдельно */ }
                 }
             }
     }
@@ -131,7 +131,7 @@ class DataRepository(
 
         workManager.enqueue(request)
 
-        // ✅ Directly use WorkManager KTX Flow API
+        // ✅ Используем KTX Flow API WorkManager
         return workManager.getWorkInfoByIdFlow(request.id)
             .map { workInfo ->
                 if (workInfo == null) {
@@ -174,13 +174,13 @@ class ComplexDataWorker(
             errors = listOf("Error 1", "Error 2")
         )
 
-        // ✅ Serialize complex data to JSON
+        // ✅ Сериализуем сложные данные в JSON
         val json = Json.encodeToString(result)
         return Result.success(workDataOf("result_json" to json))
     }
 }
 
-// In observer:
+// В наблюдателе:
 val json = workInfo.outputData.getString("result_json")
 val result = json?.let { Json.decodeFromString<ProcessingResult>(it) }
 ```
@@ -188,7 +188,7 @@ val result = json?.let { Json.decodeFromString<ProcessingResult>(it) }
 ### Наблюдение по тегу или уникальному имени
 
 ```kotlin
-// By tag
+// По тегу
 workManager.getWorkInfosByTagLiveData("data_sync")
     .observe(this) { workInfoList ->
         workInfoList.forEach { workInfo ->
@@ -198,11 +198,13 @@ workManager.getWorkInfosByTagLiveData("data_sync")
         }
     }
 
-// By unique name
+// По уникальному имени
 workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
     .observe(this) { workInfoList ->
         workInfoList.firstOrNull()?.let { workInfo ->
-            processResult(workInfo.outputData)
+            if (workInfo.state.isFinished) {
+                processResult(workInfo.outputData)
+            }
         }
     }
 ```
@@ -212,7 +214,7 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 - `Result.success(data)` — возврат с данными
 - `Result.failure(data)` — возврат с ошибкой
 - `WorkInfo.State` — состояние работы
-- `workInfo.outputData` — извлечение результата
+- `workInfo.outputData` — извлечение результата для завершённой работы
 
 **Лучшие практики**:
 - Используйте `ViewModel` для разделения логики
@@ -226,13 +228,13 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 
 ## Answer (EN)
 
-WorkManager returns results through the `outputData` mechanism:
+WorkManager returns results through the `outputData` mechanism.
 
 **Core Approach**:
 1. In Worker, use `Result.success(outputData)` to pass data
 2. In `Activity`/`ViewModel`, observe `WorkInfo` via `LiveData` or `Flow`
-3. Check for `WorkInfo.State.SUCCEEDED` state
-4. Extract data from `workInfo.outputData`
+3. Check for `WorkInfo.State.SUCCEEDED` (or `state.isFinished` for generic finished checks)
+4. Extract data from `workInfo.outputData` (available only for finished work)
 
 Note: WorkManager `Data` supports only primitive types, Strings, and their arrays, so complex objects must be serialized (e.g., to JSON).
 
@@ -247,7 +249,7 @@ class DataWorker(
     override suspend fun doWork(): Result {
         return try {
             val input = inputData.getInt("value", 0)
-            val result = processData(input) // ✅ Perform work, e.g. Int or String
+            val result: String = processData(input) // ✅ Perform work, producing a String
 
             // ✅ Return success with output data
             Result.success(workDataOf(
@@ -264,7 +266,7 @@ class DataWorker(
 }
 ```
 
-(In this example, `result` is assumed to be a type supported by `Data` (e.g., `Int` or `String`). The read method must match the written type.)
+(In this example, `result` is a `String`, which is supported by `Data`. The getter must match the stored type, e.g., `getString("result")`.)
 
 ### `ViewModel` Observation (Recommended)
 
@@ -299,7 +301,7 @@ class DataViewModel(
                     WorkInfo.State.RUNNING -> {
                         _result.value = WorkResult.Loading
                     }
-                    else -> { /* ENQUEUED, BLOCKED, CANCELLED */ }
+                    else -> { /* ENQUEUED, BLOCKED, CANCELLED etc.; handle explicitly if needed */ }
                 }
             }
     }
@@ -312,7 +314,7 @@ sealed class WorkResult {
 }
 ```
 
-Important: in production code, avoid `observeForever` without removing the observer (e.g., in `onCleared()`), otherwise you can leak the `ViewModel`. Prefer observing from UI with `observe(owner, ...)`.
+Important: in production code, avoid `observeForever` without removing the observer (e.g., in `onCleared()`), otherwise you can leak the observer. Prefer observing from UI with `observe(owner, ...)`.
 
 ### Modern `Flow` Approach
 
@@ -398,7 +400,9 @@ workManager.getWorkInfosByTagLiveData("data_sync")
 workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
     .observe(this) { workInfoList ->
         workInfoList.firstOrNull()?.let { workInfo ->
-            processResult(workInfo.outputData)
+            if (workInfo.state.isFinished) {
+                processResult(workInfo.outputData)
+            }
         }
     }
 ```
@@ -408,7 +412,7 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 - `Result.success(data)` — return with data
 - `Result.failure(data)` — return with error
 - `WorkInfo.State` — work state
-- `workInfo.outputData` — extract result
+- `workInfo.outputData` — extract result for finished work
 
 **Best Practices**:
 - Use `ViewModel` for separation of concerns
@@ -420,30 +424,65 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Как реализовать обновление прогресса для долгих задач WorkManager с помощью `setProgress`/`setProgressAsync`, как наблюдать `WorkInfo.progress` и какие паттерны использовать для стабильных обновлений UI после изменения конфигурации?
+2. Каковы ограничения по размеру и типам данных `Data`/`outputData` в WorkManager, как они влияют на максимальный размер возвращаемого результата и когда следует использовать только идентификаторы с последующим чтением из БД или файлов?
+3. Как связать несколько `Worker` так, чтобы `outputData` одного становился входными данными следующего (через `then()`/`beginWith()`), и как при этом корректно организовать обработку ошибок и повторов?
+4. В каких случаях оправдано использование `observeForever()` для отслеживания `WorkInfo`, и как структурировать код (например, через `ViewModel` или репозиторий), чтобы гарантированно отписываться и не допускать утечек памяти?
+5. Как спроектировать обработку результатов так, чтобы вывод WorkManager корректно доставлялся и восстанавливался при убийстве и последующем перезапуске процесса приложения (используя уникальные имена работ, теги, идемпотентных потребителей и персистентное хранилище)?
+
+---
+
 ## Follow-ups
 
 1. How can you implement progress updates for long-running WorkManager tasks using `setProgress`/`setProgressAsync` and observe them via `WorkInfo.progress`, and what patterns ensure consistent UI updates after configuration changes?
-2. What are the size and type limitations of `Data`/`outputData` in WorkManager, how do they restrict the payload you can return, and what strategies (e.g., IDs, database, files) can you use to bypass those limits?
-3. How would you chain multiple `Worker`s so that the output of one becomes the input of the next (e.g., with `then()`/`beginWith()`), and what are the trade-offs for error handling and retries?
-4. When would you use `observeForever()` vs `observe()` for tracking `WorkInfo`, and how do you structure the code to avoid memory leaks in each case?
-5. How should you design result handling so that WorkManager outputs are correctly restored and delivered if the app process is killed and later recreated (e.g., using unique work names, tags, and idempotent consumers)?
+2. What are the size and type limitations of `Data`/`outputData` in WorkManager, how do they restrict the payload you can return, and when should you switch to using only identifiers with actual data stored in a database or files?
+3. How would you chain multiple `Worker`s so that the output of one becomes the input of the next using APIs like `then()`/`beginWith()`, and how do you design error handling and retries in such chains?
+4. When is using `observeForever()` for tracking `WorkInfo` justified, and how do you structure code (e.g., via `ViewModel`/repository) to ensure observers are removed and memory leaks are avoided?
+5. How should you design result handling so that WorkManager outputs are correctly restored and delivered if the app process is killed and later recreated (e.g., with unique work names, tags, idempotent consumers, and persistent storage)?
+
+---
+
+## Ссылки (RU)
+
+- [[c-android]] — базовые концепции Android
+- [[c-background-tasks]] — общие подходы к фоновой работе
+- [Документация WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+- [Расширенное руководство по WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/advanced)
 
 ---
 
 ## References
 
-- [[c-workmanager]] — WorkManager core concepts
-- [[c-coroutines]] — Kotlin coroutines fundamentals
-- [[c-flow]] — Kotlin `Flow` fundamentals
+- [[c-android]] — Android core concepts
+- [[c-background-tasks]] — Background work concepts
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [WorkManager Advanced Guide](https://developer.android.com/topic/libraries/architecture/workmanager/advanced)
+
+---
+
+## Связанные вопросы (RU)
+
+### База (проще)
+- Основы WorkManager — см. более простые вопросы по WorkManager в этом хранилище
+- Введение в корутины — см. базовые вопросы по корутинам в этом хранилище
+
+### Связанные (тот же уровень)
+- Настройка ограничений WorkManager и их влияние на выполнение работ
+- Цепочки WorkRequests и передача данных между ними
+- Сравнение `LiveData` и `Flow` для наблюдения за результатами фоновых задач
+
+### Продвинуто (сложнее)
+- Стратегии и подводные камни при тестировании логики на базе WorkManager
+- Ограничения фонового выполнения в Android и их влияние на дизайн WorkManager-задач
 
 ---
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- `WorkManager` basics — see easier-level WorkManager introduction questions in this vault
+- WorkManager basics — see easier-level WorkManager introduction questions in this vault
 - Coroutines introduction — see easier-level coroutine basics questions in this vault
 
 ### Related (Same Level)

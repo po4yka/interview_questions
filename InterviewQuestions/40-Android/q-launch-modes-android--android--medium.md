@@ -21,18 +21,18 @@ moc: moc-android
 related:
 - c-compose-navigation
 - c-activity
-- c-fragments
 - q-kapt-vs-ksp--android--medium
 - q-viewmodel-vs-onsavedinstancestate--android--medium
 - q-which-event-is-triggered-when-user-presses-screen--android--medium
 created: 2025-10-05
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/activity
 - android/ui-navigation
 - difficulty/medium
 - en
 - ru
+
 
 ---
 
@@ -57,7 +57,7 @@ tags:
 - `singleTask`
 - `singleInstance`
 
-Начиная с Android 5.0, документ-ориентированный режим (`FLAG_ACTIVITY_NEW_DOCUMENT` и `FLAG_ACTIVITY_MULTIPLE_TASK`) вводит поведение `singleInstancePerTask` для отдельных `Activity`, но это не отдельное значение атрибута `android:launchMode`.
+Начиная с Android 5.0, документ-ориентированный режим (`FLAG_ACTIVITY_NEW_DOCUMENT` и `FLAG_ACTIVITY_MULTIPLE_TASK`) вводит поведение, аналогичное `singleInstancePerTask`, для отдельных `Activity`, но это не отдельное значение атрибута `android:launchMode` и не отдельный «режим запуска» в манифесте.
 
 ### standard (режим по умолчанию)
 
@@ -89,7 +89,7 @@ A -> B -> C -> D -> B
 - Так как C не на вершине, создается новый экземпляр C.
 - Новый стек: A -> C -> B -> C.
 
-Примечание: Если создается новый экземпляр `Activity`, пользователь может с помощью "Назад" вернуться к предыдущей `Activity`. Если же существующий экземпляр обрабатывает новый `Intent` через `onNewIntent()`, его предыдущее состояние перезаписывается, и по "Назад" вернуться к состоянию до прихода нового `Intent` нельзя.
+Примечание: Если создается новый экземпляр `Activity`, пользователь может с помощью "Назад" вернуться к предыдущей `Activity`. Если же существующий экземпляр обрабатывает новый `Intent` через `onNewIntent()`, поведение при возврате по "Назад" зависит от того, как вы обновляете состояние в `onNewIntent()` (по умолчанию стек задач не дополняется новой записью, и отдельного «предыдущего состояния» этой же `Activity` в стеке не появляется).
 
 ### singleTask
 
@@ -129,7 +129,7 @@ A -> B -> C -> D -> B
 
 ### singleInstancePerTask
 
-`singleInstancePerTask` не является допустимым значением `android:launchMode` в манифесте. Это термин для описания поведения документ-ориентированных `Activity` (например, с флагами `FLAG_ACTIVITY_NEW_DOCUMENT` и `FLAG_ACTIVITY_MULTIPLE_TASK`). В этом режиме:
+`singleInstancePerTask` не является допустимым значением `android:launchMode` в манифесте. Это термин для описания поведения документ-ориентированных `Activity` (например, с флагами `FLAG_ACTIVITY_NEW_DOCUMENT` и `FLAG_ACTIVITY_MULTIPLE_TASK`). В этом подходе:
 
 - Экземпляр `Activity` может быть только корневой `Activity` своей задачи.
 - Может существовать несколько таких задач (каждая со своим корневым экземпляром этой `Activity`), но в каждой задаче не более одного экземпляра этой `Activity`.
@@ -144,7 +144,7 @@ A -> B -> C -> D -> B
 
 ## Answer (EN)
 
-When declaring an activity in your manifest file, you can specify how the activity should associate with a task. There are two ways to influence launch behavior:
+When declaring an activity in your manifest file, you can specify how the activity should associate with a task. There are two main ways to influence launch behavior:
 - via the `android:launchMode` attribute in the Android Manifest
 - via `Intent` flags
 
@@ -155,7 +155,7 @@ There are four standard launch modes you can assign directly to the `launchMode`
 - `singleTask`
 - `singleInstance`
 
-Starting with Android 5.0, document-mode flags (such as `FLAG_ACTIVITY_NEW_DOCUMENT` and `FLAG_ACTIVITY_MULTIPLE_TASK`) introduce `singleInstancePerTask` behavior for certain activities, but this is not a separate value of `android:launchMode`.
+Starting with Android 5.0, document-mode flags (such as `FLAG_ACTIVITY_NEW_DOCUMENT` and `FLAG_ACTIVITY_MULTIPLE_TASK`) can be used to achieve behavior similar to `singleInstancePerTask` for specific activities, but this is not a distinct `android:launchMode` value and not an official manifest launch mode.
 
 ### standard (the default mode)
 
@@ -173,7 +173,7 @@ A -> B -> C -> D -> B
 
 ### singleTop
 
-If an instance of the activity already exists at the top of the current task's back stack, the system routes the intent to that instance through a call to its `onNewIntent()` method, rather than creating a new instance. The activity can still have multiple instances overall: multiple tasks may host it, and a single task may contain multiple instances as long as none of them (except possibly the top one) is at the top of the stack at launch time.
+If an instance of the activity already exists at the top of the current task's back stack, the system routes the intent to that instance through a call to its `onNewIntent()` method, rather than creating a new instance. Multiple instances of such an activity may still exist overall: across different tasks, or within one task if none of the existing instances (except possibly the top one) is at the top at launch time.
 
 Scenario 1:
 - `Activity` C is at the top of the back stack.
@@ -187,7 +187,7 @@ Scenario 2:
 - Because C is not at the top, a new instance of C is created.
 - New back stack: A -> C -> B -> C.
 
-Note: When a new instance of an activity is created, the user can press or gesture Back to return to the previous activity. When an existing instance handles a new intent via `onNewIntent()`, the previous state of that instance is overwritten; Back will not return to its prior state.
+Note: When a new instance of an activity is created, the user can press or gesture Back to return to the previous activity. When an existing instance handles a new intent via `onNewIntent()`, the task's back stack is not extended with an additional entry for that same activity; the actual Back behavior then depends on how you update the activity's state in `onNewIntent()`.
 
 ### singleTask
 
@@ -198,7 +198,7 @@ Scenario 1 (no existing instance):
 - No C exists yet.
 - A new task is created; C becomes the root of this new task.
 - From C you can start other activities (e.g., D with default mode), which will be placed on top of C in that task.
-- Within that task, Back pops D and returns to C; leaving the task then returns to the previous task (if any), subject to launcher/recents behavior.
+- Within that task, Back pops D and returns to C; leaving the task then returns to the previous task (if any), according to launcher/recents behavior.
 
 Scenario 2 (existing instance in its own task):
 - C (singleTask) already exists as root of its own task with some activities above it.
@@ -210,7 +210,7 @@ Scenario 3 (existing instance in current task as root):
 - From D you start A.
 - Because A is singleTask and already at the root of this task, all activities above A (B, C, D) are finished; A receives `onNewIntent()` and becomes top.
 
-Note: The "Back" button/gesture operates within the current task's back stack. When a singleTask activity brings its existing task to foreground and clears activities above it, Back navigates among the remaining activities in that task or eventually leaves the task.
+Note: The Back button/gesture operates within the current task's back stack. When a singleTask activity reuses its existing task and clears activities above it, Back navigates among the remaining activities in that task or eventually leaves the task.
 
 ### singleInstance
 
@@ -226,25 +226,18 @@ Example:
 
 ### singleInstancePerTask
 
-`singleInstancePerTask` is not a value of `android:launchMode` in the manifest. It describes behavior used with document-mode activities (e.g., using `FLAG_ACTIVITY_NEW_DOCUMENT` and `FLAG_ACTIVITY_MULTIPLE_TASK`). In this mode:
+`singleInstancePerTask` is not a value of `android:launchMode` in the manifest. It is a term used to describe behavior achieved with document-mode activities (e.g., using `FLAG_ACTIVITY_NEW_DOCUMENT` and `FLAG_ACTIVITY_MULTIPLE_TASK`). In this approach:
 
 - An activity instance can only be the root of its task.
 - There can be multiple such tasks (each with its own root instance of that activity), but each task has at most one instance of that activity.
-- When reusing an existing instance (similar to `singleTask` semantics for that task), activities above it in that task are removed.
+- When reusing an existing instance (similar to singleTask semantics for that task), activities above it in that task are removed.
 
-Note: For both `singleTask`-like behavior and `singleInstancePerTask` in document mode, when an existing instance is reused, all activities that are above that instance in its task are finished. For example:
+Note: For both singleTask-like behavior and `singleInstancePerTask` in document mode, when an existing instance is reused, all activities that are above that instance in its task are finished. For example:
 - Task: A (root) -> B -> C (top)
 - An intent arrives for A (singleTask-like behavior).
 - Existing A receives `onNewIntent()`, B and C are finished, and the task becomes A.
 
 ---
-
-## References
-- [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
-- [Understand the types of Launch Modes in an Android `Activity`](https://mohamedyousufmo.medium.com/understand-android-activity-launch-mode-c21fcecf04b8)
-- [Android `Activity` Launch Mode](https://medium.com/android-news/android-activity-launch-mode-e0df1aa72242)
-- [Understand Android `Activity`'s launchMode: standard, singleTop, singleTask and singleInstance](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en)
-
 
 ## Follow-ups
 
@@ -253,13 +246,19 @@ Note: For both `singleTask`-like behavior and `singleInstancePerTask` in documen
 - [[q-which-event-is-triggered-when-user-presses-screen--android--medium]]
 
 
+## References
+- [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+- [Understand the types of Launch Modes in an Android `Activity`](https://mohamedyousufmo.medium.com/understand-android-activity-launch-mode-c21fcecf04b8)
+- [Android `Activity` Launch Mode](https://medium.com/android-news/android-activity-launch-mode-e0df1aa72242)
+- [Understand Android `Activity`'s launchMode: standard, singleTop, singleTask and singleInstance](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en)
+
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-compose-navigation]]
 - [[c-activity]]
-- [[c-fragments]]
 
 
 ### Related (Medium)

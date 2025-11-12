@@ -37,8 +37,8 @@ tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-exp
 **Технически — да**, **можно создавать object expressions (анонимные классы) внутри inline функций**.
 
 Но важно понимать ограничения и последствия:
-- **Если object expression захватывает inline lambda-параметр (по умолчанию inline)** — компилятор выдаст ошибку, потому что такой параметр подставляется на место вызова и не может быть сохранён в поле/замыкании.
-- **Если object expression не захватывает inline параметры**, он компилируется нормально, но **создаёт объект**, т.е. не даёт преимуществ inline и может ухудшать производительность.
+- **Если object expression пытается сохранять или использовать inline lambda-параметр (по умолчанию inline) вне его непосредственного вызова**, компилятор выдаст ошибку. Такой параметр подставляется на место вызова и не может быть сохранён в поле/долгоживущем замыкании.
+- **Если object expression не захватывает inline-параметры, которые должны пережить вызов**, он компилируется нормально, но **создаёт объект во время выполнения**, т.е. не даёт преимуществ inline и может ухудшать производительность.
 
 При этом знание базовых концепций [[c-kotlin]] помогает лучше понимать поведение inline функций и анонимных классов.
 
@@ -46,15 +46,15 @@ tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-exp
 
 **Inline функции** в основном используются для устранения накладных расходов на создание объектов лямбд и вызовов функций: тело лямбды подставляется в место вызова.
 
-**Анонимные классы** (object expressions) всегда создают экземпляры объектов. Поэтому:
+**Анонимные классы** (object expressions) при обычной семантике всегда приводят к созданию экземпляра объекта. Поэтому:
 - Они **не запрещены**, но
-- Они **противоречат основной мотивации inline**, если используются для тех же целей, что и лямбды.
+- Они **часто противоречат основной мотивации inline**, если используются как обёртка вокруг колбэков и добавляют лишние аллокации.
 
 ### Ключевые моменты
 
-1. **Object expression всегда создаёт объект** → не даёт выигрыш от inline.
-2. **Нельзя захватывать inline lambda-параметры** внутри object expression/лямбды, если они помечены как inline (по умолчанию) и должны быть сохранены.
-3. **Возможна потеря производительности**, если ожидался выигрыш от inline, но добавлены анонимные классы.
+1. **Object expression приводит к созданию объекта во время выполнения** → не даёт выигрыша от inline по аллокациям (если только компилятор не применит дополнительные оптимизации, на которые не стоит полагаться).
+2. **Нельзя сохранять inline lambda-параметры** в полях, долгоживущих объектах или замыканиях, которые могут пережить вызов inline функции (включая object expressions, которые выходят за её пределы). Для таких случаев параметр нужно пометить `noinline`.
+3. **Возможна потеря производительности**, если ожидался выигрыш от inline, но добавлены анонимные классы и дополнительные аллокации.
 
 ### Пример с ограничением захвата
 
@@ -62,32 +62,32 @@ tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-exp
 inline fun process(action: (Int) -> Unit) {
     val handler = object : Handler {
         override fun handle(value: Int) {
-            // НЕЛЬЗЯ захватывать inline-параметр таким образом:
-            // action(value) // Ошибка компиляции: inline-параметр нельзя сохранять
+            // НЕЛЬЗЯ сохранять inline-параметр таким образом в долгоживущем объекте:
+            // action(value) // Ошибка компиляции: inline-параметр нельзя сохранять в поле/объекте, переживающем вызов
         }
     }
     handler.handle(42)
 }
 ```
 
-Здесь проблема не в том, что "inline нельзя содержать object expressions", а в том, что **inline-параметр `action` нельзя сохранять и вызывать позже через созданный объект**.
+Здесь проблема не в том, что «inline функции не могут содержать object expressions», а в том, что **inline-параметр `action` нельзя сохранять и вызывать позже через созданный объект**, если этот объект или ссылка на параметр потенциально переживают сам вызов inline функции.
 
 ### Правильный подход: используйте лямбды, когда нужна инлайнизация
 
 ```kotlin
 inline fun process(action: (Int) -> Unit) {
-    // Лямбда будет инлайнена в место вызова
+    // Лямбда будет инлайнена в месте вызова
     action(42)
 }
 ```
 
-Когда мы не создаём анонимный класс и не сохраняем `action`, inline может дать ожидаемый выигрыш.
+Когда мы не создаём анонимный класс и не сохраняем `action` за пределами контекста вызова, inline может дать ожидаемый выигрыш.
 
 ### Когда нужны анонимные классы
 
 Если вам действительно нужен анонимный класс/`object` (например, реализация интерфейса с несколькими методами или хранение состояния), вы можете:
 - использовать **обычную функцию** (не inline), или
-- использовать inline, но так, чтобы не захватывать inline-параметры в сохраняемые объекты.
+- использовать inline так, чтобы не сохранять inline-параметры в объекты, которые переживают вызов.
 
 ```kotlin
 fun createHandler(): EventHandler {
@@ -124,13 +124,13 @@ inline fun process(
 **Можно ли создавать анонимные классы в inline функциях?**
 
 - **Технически:** Да, это разрешено.
-- **Ограничения:** Нельзя сохранять и вызывать inline lambda-параметры (по умолчанию inline) из таких объектов; для этого используйте `noinline` или перепишите дизайн.
+- **Ограничения:** Нельзя сохранять и вызывать inline lambda-параметры (по умолчанию inline) из объектов или замыканий, которые переживают вызов; для этого используйте `noinline` или перепишите дизайн.
 - **Практически:** Часто нет смысла, так как создание анонимного класса нивелирует выигрыш от inline.
 
 **Рекомендации:**
 - Для single-method интерфейсов и простых колбэков используйте **лямбды + inline**.
 - Для сложных анонимных реализаций используйте **обычные функции** или `noinline`-параметры.
-- Помните: inline оптимален, когда **избегает создания лишних объектов**, а object expressions эти объекты создают.
+- Помните: inline оптимален, когда **избегает создания лишних объектов**, а object expressions эти объекты добавляют.
 
 ---
 
@@ -139,14 +139,14 @@ inline fun process(
 **Technically yes**, **you can create object expressions (anonymous classes) inside inline functions** in Kotlin.
 
 But there are important constraints and trade-offs:
-- **If the object expression captures an inline lambda parameter (default behavior)**, the compiler will report an error, because such parameters are inlined at call sites and cannot be stored in fields/closures.
-- **If the object expression does not capture inline parameters**, it compiles fine, but it **allocates an object**, so you do not get the intended inline performance benefits and may even regress performance.
+- **If the object expression attempts to store or use an inline lambda parameter (default inline) beyond its immediate call**, the compiler will report an error. Such parameters are inlined at the call site and cannot be safely stored in fields or long-lived closures.
+- **If the object expression does not capture inline parameters that need to escape the call**, it compiles fine, but it **allocates an object at runtime**, so you do not get the intended inline performance benefits and might even regress performance.
 
 ### Key points
 
-1. An object expression always creates an object → no allocation savings from inlining.
-2. You cannot capture inline lambda parameters in objects or lambdas that outlive the call; to do that, you must mark them as `noinline`.
-3. Using anonymous classes inside an inline function is allowed, but often contradicts the usual goal of using inline for allocation and call overhead reduction.
+1. An object expression, under its usual semantics, results in a runtime allocation → no allocation savings from inlining (unless additional compiler optimizations apply; you should not rely on those here).
+2. You cannot store inline function parameters (including inline lambdas) in fields or objects that may outlive the inline call (including object expressions that escape); to do that safely, those parameters must be marked `noinline`.
+3. Using anonymous classes inside an inline function is allowed, but if they capture/stash parameters they often defeat the usual goal of using inline for allocation and call overhead reduction.
 
 ### Example with capture restriction
 
@@ -154,15 +154,15 @@ But there are important constraints and trade-offs:
 inline fun process(action: (Int) -> Unit) {
     val handler = object : Handler {
         override fun handle(value: Int) {
-            // You CANNOT capture the inline parameter like this:
-            // action(value) // Compilation error: cannot store inline parameter
+            // You CANNOT store the inline parameter like this in a long-lived object:
+            // action(value) // Compilation error: cannot store an inline parameter in a field/object that outlives the call
         }
     }
     handler.handle(42)
 }
 ```
 
-The issue is not that "inline functions cannot contain object expressions", but that **the inline parameter `action` cannot be stored and invoked later through the created object**.
+The issue is not that "inline functions cannot contain object expressions", but that **the inline parameter `action` cannot be stored and invoked later through the created object** if that object or reference may outlive the inline function call.
 
 ### Preferred usage: lambdas for inlining benefits
 
@@ -173,13 +173,13 @@ inline fun process(action: (Int) -> Unit) {
 }
 ```
 
-If you avoid creating anonymous classes and do not store the lambda, the inline function can deliver its benefits.
+If you avoid creating anonymous classes and do not store `action` beyond the call context, the inline function can deliver its intended benefits.
 
 ### When to use anonymous classes
 
-If you truly need an anonymous class/object (e.g., multi-method interface implementation or stateful handler), you can:
+If you truly need an anonymous class/object (e.g., multi-method interface implementation or a stateful handler), you can:
 - use a **regular (non-inline) function**, or
-- use an inline function but design it so that it does not capture inline parameters into stored objects.
+- use an inline function but design it so that it does not store inline parameters into objects that outlive the call.
 
 ```kotlin
 fun createHandler(): EventHandler {
@@ -209,12 +209,12 @@ inline fun process(
 }
 ```
 
-**Trade-off:** `complexHandler` is no longer inlined, so you lose the inline benefits for that parameter, but it becomes safe to capture.
+**Trade-off:** `complexHandler` is no longer inlined, so you lose inline benefits for that parameter, but it becomes safe to capture in an object expression.
 
 ### Summary
 
 - You **can** declare anonymous classes inside inline functions.
-- The main restriction: **do not capture inline lambda parameters in objects that outlive the call**; use `noinline` (or redesign) when you need to store them.
+- The main restriction: **do not store inline lambda parameters (or other inline parameters) in objects/closures that can outlive the inline call**; use `noinline` or redesign when you need to store them.
 - In practice, prefer lambdas plus inline when you want performance benefits, and use anonymous classes where their semantics are needed, understanding that they allocate objects.
 
 ## Follow-ups

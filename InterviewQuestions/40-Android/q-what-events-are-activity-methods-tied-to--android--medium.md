@@ -28,10 +28,14 @@ tags:
 - difficulty/medium
 - events
 - lifecycle
+
 ---
 
 # Вопрос (RU)
 > К каким событиям привязаны методы `Activity`?
+
+# Question (EN)
+> What events are `Activity` lifecycle methods tied to?
 
 ## Ответ (RU)
 
@@ -110,6 +114,7 @@ class MainActivity : AppCompatActivity() {
 override fun onStart() {
     super.onStart()
 
+    // Пример для иллюстрации; CONNECTIVITY_ACTION устарел для сторонних приложений на новых версиях Android
     val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
     registerReceiver(networkReceiver, intentFilter)
 
@@ -215,7 +220,7 @@ override fun onStop() {
 
 На момент вызова:
 - по флагу `isFinishing` можно отличить обычное завершение от пересоздания при конфигурации;
-- не все случаи уничтожения гарантированно вызывают `onDestroy()` (при убийстве процесса метод может не быть вызван).
+- не во всех сценариях уничтожения гарантированно вызывается `onDestroy()` (при убийстве процесса метод может не быть вызван).
 
 ```kotlin
 override fun onDestroy() {
@@ -295,6 +300,7 @@ class DetailActivity : AppCompatActivity() {
 
         networkReceiver = NetworkChangeReceiver()
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        // Пример; CONNECTIVITY_ACTION устарел для сторонних приложений на новых версиях Android
         registerReceiver(networkReceiver, filter)
     }
 
@@ -399,8 +405,8 @@ onResume()
 ```
 
 Важно:
-- `onSaveInstanceState()` вызывается до `onStop()`;
-- `onSaveInstanceState()` и `onDestroy()` не гарантируются при убийстве процесса системой — критичные данные должны быть сохранены заранее.
+- `onSaveInstanceState()` обычно вызывается до `onStop()` при конфигурационных изменениях и большинстве фоновых переходов;
+- `onSaveInstanceState()` и `onDestroy()` не гарантируются при убийстве процесса системой или при некоторых сценариях завершения (`finish()`, нажатие Back) — критичные данные должны быть сохранены заранее.
 
 ```kotlin
 override fun onSaveInstanceState(outState: Bundle) {
@@ -427,7 +433,7 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
 ### Многооконный режим (Android 7.0+)
 
-`onMultiWindowModeChanged(isInMultiWindowMode: Boolean)` вызывается при входе/выходе из многооконного режима и дополняет основные методы жизненного цикла.
+`onMultiWindowModeChanged(isInMultiWindowMode: `Boolean`)` вызывается при входе/выходе из многооконного режима и дополняет основные методы жизненного цикла.
 
 ```kotlin
 override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
@@ -474,7 +480,7 @@ override fun onPictureInPictureModeChanged(
   - `onCreate()` → `onStart()` → `onResume()`
 
 - Сценарий 2: Нажатие кнопки Home (`Activity` уходит в фон)
-  - `onPause()` → `onStop()`
+  - `onPause()` → `onStop()` (обычно также вызывается `onSaveInstanceState()` перед `onStop()`, но это не строго гарантируется для всех сценариев)
 
 - Сценарий 3: Возврат в приложение
   - `onRestart()` → `onStart()` → `onResume()`
@@ -483,7 +489,7 @@ override fun onPictureInPictureModeChanged(
   - `onPause()` → `onSaveInstanceState()` → `onStop()` → `onDestroy()` → `onCreate()` → `onStart()` → `onRestoreInstanceState()` → `onResume()`
 
 - Сценарий 5: Нажатие кнопки Back
-  - `onPause()` → `onStop()` → `onDestroy()`
+  - `onPause()` → `onStop()` → `onDestroy()` (без гарантированного вызова `onSaveInstanceState()`)
 
 - Сценарий 6: Временное прерывание (например, входящий звонок / системное окно)
   - Обычно: `onPause()` при прерывании → затем `onResume()` при возврате
@@ -554,9 +560,6 @@ override fun onStop() {
 - Глобальные синглтоны, базы данных и т.п. не должны закрываться внутри конкретной `Activity`, если только они реально не принадлежат её жизненному циклу.
 
 ---
-
-# Question (EN)
-> What events are `Activity` lifecycle methods tied to?
 
 ## Answer (EN)
 
@@ -634,6 +637,7 @@ Use for:
 override fun onStart() {
     super.onStart()
 
+    // Example for illustration; CONNECTIVITY_ACTION is deprecated for third-party apps on recent Android versions
     val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
     registerReceiver(networkReceiver, intentFilter)
 
@@ -735,11 +739,11 @@ Use for:
 
 Called when:
 - the `Activity` is finishing (`finish()` or Back pressed);
-- the system is temporarily destroying the `Activity` (e.g., for a configuration change or to reclaim memory).
+- the system is destroying the `Activity` (e.g., for a configuration change or to reclaim memory).
 
 Notes:
 - `isFinishing` distinguishes user-initiated finish from destruction for recreation;
-- if the process is killed, `onDestroy()` may not be called.
+- in some destruction scenarios (e.g., process kill) `onDestroy()` may not be called.
 
 ```kotlin
 override fun onDestroy() {
@@ -813,6 +817,7 @@ class DetailActivity : AppCompatActivity() {
 
         networkReceiver = NetworkChangeReceiver()
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        // Example; CONNECTIVITY_ACTION is deprecated for third-party apps on recent Android versions
         registerReceiver(networkReceiver, filter)
     }
 
@@ -918,8 +923,8 @@ onResume()
 ```
 
 Important:
-- `onSaveInstanceState()` is called before `onStop()`;
-- `onSaveInstanceState()` and `onDestroy()` are not guaranteed if the process is killed abruptly, so critical data should be saved proactively.
+- `onSaveInstanceState()` is typically called before `onStop()` for configuration changes and many background transitions;
+- `onSaveInstanceState()` and `onDestroy()` are not guaranteed if the process is killed abruptly or for some finish/back scenarios, so critical data should be saved proactively.
 
 ```kotlin
 override fun onSaveInstanceState(outState: Bundle) {
@@ -946,7 +951,7 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
 ### Multi-Window Events (Android 7.0+)
 
-`onMultiWindowModeChanged(isInMultiWindowMode: Boolean)` is called when the `Activity` enters or exits multi-window mode. It complements (does not replace) the core lifecycle.
+`onMultiWindowModeChanged(isInMultiWindowMode: `Boolean`)` is called when the `Activity` enters or exits multi-window mode. It complements (does not replace) the core lifecycle.
 
 ```kotlin
 override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
@@ -993,7 +998,7 @@ override fun onPictureInPictureModeChanged(
   - `onCreate()` → `onStart()` → `onResume()` → [User interacts]
 
 - Scenario 2: User Presses Home Button
-  - `onPause()` → `onStop()` → [App in background]
+  - `onPause()` → `onStop()` (often with `onSaveInstanceState()` before `onStop()`, but this is not strictly guaranteed for all cases)
 
 - Scenario 3: User Returns to App
   - `onRestart()` → `onStart()` → `onResume()`
@@ -1002,7 +1007,7 @@ override fun onPictureInPictureModeChanged(
   - `onPause()` → `onSaveInstanceState()` → `onStop()` → `onDestroy()` → `onCreate()` → `onStart()` → `onRestoreInstanceState()` → `onResume()`
 
 - Scenario 5: User Presses Back Button
-  - `onPause()` → `onStop()` → `onDestroy()`
+  - `onPause()` → `onStop()` → `onDestroy()` (without guaranteed `onSaveInstanceState()`)
 
 - Scenario 6: Temporary Interruption (e.g., phone call UI)
   - Often: `onPause()` when interrupted → later `onResume()` when returning

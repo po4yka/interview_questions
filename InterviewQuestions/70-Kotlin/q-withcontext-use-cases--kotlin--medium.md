@@ -26,7 +26,7 @@ tags: [context-switching, coroutines, difficulty/medium, dispatchers, kotlin, wi
 
 ## Ответ (RU)
 
-Функция `withContext` — это приостанавливающий API для переключения контекста корутины, но понимание того, когда и почему использовать её вместо альтернатив, таких как `launch` или `async`, может быть запутанным. `withContext` — это приостанавливающая функция, которая (при необходимости) переключает контекст корутины, выполняет блок кода и возвращает результат. Она в основном используется для переключения диспетчеров и выполнения операций на подходящих потоках, оставаясь в рамках структурированной конкуренции.
+Функция `withContext` — это приостанавливающий API для смены контекста корутины. Она (при необходимости) меняет контекст, выполняет блок кода и возвращает результат, оставаясь в рамках той же иерархии структурированной конкуренции (не создаёт отдельный независимый `Job`, как `launch`). Основное применение — переключение диспетчеров и выполнение операций на подходящих потоках без нарушения структурированной конкуренции.
 
 См. также: [[c-coroutines]].
 
@@ -45,7 +45,7 @@ suspend fun loadData(): String = withContext(Dispatchers.IO) {
 fun basicWithContextExample() = runBlocking {
     println("Главный поток: ${Thread.currentThread().name}")
 
-    val data = loadData() // Приостанавливается и переключается на IO-диспетчер
+    val data = loadData() // Приостанавливается и (если нужно) переключается на IO-диспетчер
 
     println("Снова на потоке: ${Thread.currentThread().name}")
     println("Данные: $data")
@@ -79,7 +79,7 @@ fun compareWithLaunch() = runBlocking {
     // которые должны завершиться до продолжения и/или требуют переключения диспетчера
     val data1 = withContext(Dispatchers.IO) { loadFromDatabase() }
     val data2 = withContext(Dispatchers.Default) { processData(data1) }
-    val data3 = withContext(Dispatchers.IO) { saveToDatabase(data2) }
+    withContext(Dispatchers.IO) { saveToDatabase(data2) }
 
     // launch подходит для fire-and-forget или конкурентной работы
     launch { updateUI() }
@@ -127,9 +127,9 @@ fun compareWithAsync() = runBlocking {
         }
         println("Результаты: $result1, $result2")
     }
-    println("withContext заняло: $time1 мс") // ~2000 мс
+    println("withContext заняло: $time1 мс") // порядка 2000 мс при последовательном выполнении
 
-    // async: потенциальное параллельное выполнение в рамках одной области видимости
+    // async: потенциально конкурентное выполнение в рамках одной области видимости
     val time2 = measureTimeMillis {
         val deferred1 = async(Dispatchers.IO) {
             delay(1000)
@@ -141,7 +141,9 @@ fun compareWithAsync() = runBlocking {
         }
         println("Результаты: ${deferred1.await()}, ${deferred2.await()}")
     }
-    println("async заняло: $time2 мс") // ~1000 мс при реальном параллелизме
+    // Фактическое время зависит от числа потоков в пуле;
+    // при достаточных ресурсах может быть ~1000 мс
+    println("async заняло: $time2 мс")
 
     // Используйте withContext, когда нужна одиночная приостанавливающая операция,
     // которая должна завершиться перед продолжением (последовательный поток, смена контекста).
@@ -219,8 +221,8 @@ import kotlin.system.measureTimeMillis
 fun performanceComparisons() = runBlocking {
     println("=== Соображения производительности ===")
 
-    // 1. withContext переиспользует Job родителя
-    // Меньше накладных расходов по сравнению с созданием большого числа отдельных Job
+    // 1. withContext использует контекст и Job родителя (как дочерняя coroutine),
+    // не создавая отдельный Deferred-объект.
     val time1 = measureTimeMillis {
         repeat(10000) {
             withContext(Dispatchers.Default) {
@@ -245,7 +247,8 @@ fun performanceComparisons() = runBlocking {
         repeat(1000) {
             withContext(Dispatchers.Default) {
                 withContext(Dispatchers.Default) {
-                    // Ненужное переключение при идентичном контексте
+                    // При одинаковом контексте дополнительного переключения не происходит,
+                    // но сам вызов withContext добавляет накладные расходы
                     val result = 1 + 1
                 }
             }
@@ -327,7 +330,7 @@ suspend fun <T> runOnComputation(block: suspend () -> T): T =
     withContext(Dispatchers.Default) { block() }
 
 // Использование
-suspend fun loadUser(id: String): User = runOnIO {
+suspend fun loadUserOnIO(id: String): User = runOnIO {
     // Автоматически выполняется на IO-диспетчере
     fetchUserFromDatabase(id)
 }
@@ -420,15 +423,15 @@ fun commonMistakes() = runBlocking {
         val result1 = withContext(Dispatchers.IO) { delay(1000); "A" }
         val result2 = withContext(Dispatchers.IO) { delay(1000); "B" }
     }
-    println("Последовательное: $time1 мс") // ~2000 мс
+    println("Последовательное: $time1 мс") // порядка 2000 мс
 
-    // Хорошо — параллельно с async
+    // Хорошо — конкурентно с async (фактический параллелизм зависит от пула потоков)
     val time2 = measureTimeMillis {
         val deferred1 = async(Dispatchers.IO) { delay(1000); "A" }
         val deferred2 = async(Dispatchers.IO) { delay(1000); "B" }
         val results = awaitAll(deferred1, deferred2)
     }
-    println("Параллельное: $time2 мс") // ~1000 мс
+    println("Конкурентное: $time2 мс")
 
     // Ошибка 2: Ненужные переключения диспетчера
     // Плохо
@@ -464,7 +467,7 @@ fun commonMistakes() = runBlocking {
         }
     }
 
-    // Хорошо: сразу запускать на IO-диспетчере для этой работы
+    // Хорошо: сразу запускать на IO-диспетчере для этой работы (если не нужен результат)
     fun goodViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             logEvent()
@@ -548,9 +551,9 @@ suspend fun <T> withOptimalDispatcher(
     block: suspend (List<T>) -> Unit
 ) {
     val dispatcher = if (data.size > threshold) {
-        Dispatchers.Default // как правило, лучше для CPU-интенсивной обработки больших коллекций
+        Dispatchers.Default // например, большие коллекции с CPU-работой
     } else {
-        Dispatchers.Default // по умолчанию оставляем CPU-работу на Default
+        Dispatchers.IO // пример: для небольших I/O-нагруженных задач
     }
 
     withContext(dispatcher) {
@@ -610,7 +613,7 @@ class WithContextRuTest {
             Thread.currentThread().name
         }
 
-        // Проверяем, что код выполнялся с переданным тестовым диспетчером
+        // Проверяем, что код выполнялся с переданным тестовым диспетчером.
         assert(threadName.contains("Test"))
     }
 
@@ -663,7 +666,7 @@ class WithContextRuTest {
 
 ## Answer (EN)
 
-The `withContext` function is a suspending API used for switching the coroutine context, but understanding when and why to use it over alternatives like `launch` or `async` can be confusing. `withContext` is a suspending function that (optionally) switches the coroutine context, executes a block of code, and returns the result. It's primarily used for switching dispatchers to perform specific operations on appropriate threads while staying within the same structured-concurrency scope.
+The `withContext` function is a suspending API used for changing the coroutine context. It (optionally) switches the context, executes a block of code, and returns a result while remaining in the same structured-concurrency hierarchy (it does not create an independent `Job` like `launch` does; it is part of the caller's job). Its primary use is to switch dispatchers to run work on appropriate threads without breaking structured concurrency.
 
 See also: [[c-coroutines]].
 
@@ -682,7 +685,7 @@ suspend fun loadData(): String = withContext(Dispatchers.IO) {
 fun basicWithContextExample() = runBlocking {
     println("Main thread: ${Thread.currentThread().name}")
 
-    val data = loadData() // Suspends and switches to IO dispatcher
+    val data = loadData() // Suspends and (if needed) switches to IO dispatcher
 
     println("Back on thread: ${Thread.currentThread().name}")
     println("Data: $data")
@@ -697,12 +700,12 @@ import kotlinx.coroutines.*
 fun compareWithLaunch() = runBlocking {
     println("=== withContext vs launch ===")
 
-    // withContext: suspends caller and returns result within same Job
+    // withContext: suspends caller and returns result within the same Job hierarchy
     val result1 = withContext(Dispatchers.IO) {
         delay(1000)
         "Result from withContext"
     }
-    println("Got result immediately after suspension: $result1")
+    println("Got result after suspension: $result1")
 
     // launch: returns Job, does not produce a direct result
     val job = launch(Dispatchers.IO) {
@@ -716,7 +719,7 @@ fun compareWithLaunch() = runBlocking {
     // complete before proceeding and/or require dispatcher switching
     val data1 = withContext(Dispatchers.IO) { loadFromDatabase() }
     val data2 = withContext(Dispatchers.Default) { processData(data1) }
-    val data3 = withContext(Dispatchers.IO) { saveToDatabase(data2) }
+    withContext(Dispatchers.IO) { saveToDatabase(data2) }
 
     // launch is appropriate for fire-and-forget or concurrent work
     launch { updateUI() }
@@ -764,9 +767,9 @@ fun compareWithAsync() = runBlocking {
         }
         println("Results: $result1, $result2")
     }
-    println("withContext took: $time1 ms") // ~2000ms
+    println("withContext took: $time1 ms") // ~2000ms with sequential execution
 
-    // async: potential parallel execution within the same scope
+    // async: potentially concurrent execution within the same scope
     val time2 = measureTimeMillis {
         val deferred1 = async(Dispatchers.IO) {
             delay(1000)
@@ -778,7 +781,8 @@ fun compareWithAsync() = runBlocking {
         }
         println("Results: ${deferred1.await()}, ${deferred2.await()}")
     }
-    println("async took: $time2 ms") // ~1000ms when truly concurrent
+    // Actual timing depends on dispatcher threads; with enough threads may be ~1000ms
+    println("async took: $time2 ms")
 
     // Use withContext when you need a single suspending operation that
     // must complete before moving on (sequential flow, context switch).
@@ -810,7 +814,7 @@ class UserRepository {
 
     // Use case 3: UI updates (Android/Desktop)
     suspend fun updateUserUI(user: User) = withContext(Dispatchers.Main) {
-        // Update UI components (on Main thread-capable platforms)
+        // Update UI components (on Main-thread platforms)
         println("Updating UI with user: ${user.name}")
     }
 
@@ -856,8 +860,8 @@ import kotlin.system.measureTimeMillis
 fun performanceComparisons() = runBlocking {
     println("=== Performance Considerations ===")
 
-    // 1. withContext reuses parent's Job
-    // Less Job allocation overhead than creating many child Jobs explicitly
+    // 1. withContext reuses parent's context and Job (as a child),
+    // without creating a separate Deferred instance.
     val time1 = measureTimeMillis {
         repeat(10000) {
             withContext(Dispatchers.Default) {
@@ -867,7 +871,7 @@ fun performanceComparisons() = runBlocking {
     }
     println("withContext overhead: $time1 ms")
 
-    // 2. async + await has additional Job allocation overhead per Deferred
+    // 2. async + await allocates an additional Job (Deferred) per operation
     val time2 = measureTimeMillis {
         repeat(10000) {
             async(Dispatchers.Default) {
@@ -882,7 +886,8 @@ fun performanceComparisons() = runBlocking {
         repeat(1000) {
             withContext(Dispatchers.Default) {
                 withContext(Dispatchers.Default) {
-                    // Unnecessary switch when context is identical
+                    // When context is identical, dispatcher won't switch threads,
+                    // but extra withContext calls still add overhead
                     val result = 1 + 1
                 }
             }
@@ -908,7 +913,7 @@ fun performanceComparisons() = runBlocking {
 ```kotlin
 import kotlinx.coroutines.*
 
-// Pattern 1: Repository pattern with dispatcher switching
+// Pattern 1: Repository with dispatcher switching
 class ArticleRepository {
     private val apiService = ApiService()
     private val database = Database()
@@ -964,7 +969,7 @@ suspend fun <T> runOnComputation(block: suspend () -> T): T =
     withContext(Dispatchers.Default) { block() }
 
 // Usage
-suspend fun loadUser(id: String): User = runOnIO {
+suspend fun loadUserOnIO(id: String): User = runOnIO {
     // Automatically runs on IO dispatcher
     fetchUserFromDatabase(id)
 }
@@ -1059,13 +1064,13 @@ fun commonMistakes() = runBlocking {
     }
     println("Sequential: $time1 ms") // ~2000ms
 
-    // Good - parallel with async
+    // Good - concurrent with async (actual parallelism depends on threads)
     val time2 = measureTimeMillis {
         val deferred1 = async(Dispatchers.IO) { delay(1000); "A" }
         val deferred2 = async(Dispatchers.IO) { delay(1000); "B" }
         val results = awaitAll(deferred1, deferred2)
     }
-    println("Parallel: $time2 ms") // ~1000ms
+    println("Parallel (concurrent): $time2 ms")
 
     // Mistake 2: Unnecessary dispatcher switches
     // Bad
@@ -1101,7 +1106,7 @@ fun commonMistakes() = runBlocking {
         }
     }
 
-    // Good: launch directly on IO dispatcher for that work
+    // Good: launch directly on IO dispatcher for that work (when result is not needed)
     fun goodViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             logEvent()
@@ -1185,9 +1190,9 @@ suspend fun <T> withOptimalDispatcher(
     block: suspend (List<T>) -> Unit
 ) {
     val dispatcher = if (data.size > threshold) {
-        Dispatchers.Default // often better for CPU-heavy processing on large collections
+        Dispatchers.Default // e.g. CPU-heavy processing for large collections
     } else {
-        Dispatchers.Default // keep CPU work on Default by default
+        Dispatchers.IO // e.g. I/O-oriented work for smaller batches
     }
 
     withContext(dispatcher) {
@@ -1247,8 +1252,7 @@ class WithContextTest {
             Thread.currentThread().name
         }
 
-        // We assert that our code ran with the provided dispatcher,
-        // not on the default main/IO dispatchers.
+        // We assert that our code ran with the provided test dispatcher.
         assert(threadName.contains("Test"))
     }
 

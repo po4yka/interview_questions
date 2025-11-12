@@ -39,7 +39,7 @@ tags:
 
 **SQLite** – это **низкоуровневая реляционная база данных**, которая требует **ручного написания SQL-запросов**.
 
-**Room** – это **обертка/ORM (Object-Relational Mapping) над SQLite**, которая предоставляет **удобный API с аннотациями**, поддерживает **`LiveData` и `Flow`**, и предлагает **структурированную систему миграций** (включая ограниченную поддержку autoMigrations для совместимых изменений схемы).
+**Room** – это **библиотека-абстракция с ORM-подобным маппингом над SQLite** (но не «полноценный» универсальный ORM), которая предоставляет **удобный API с аннотациями**, поддерживает **`LiveData` и `Flow`**, и предлагает **структурированную систему миграций** (включая ограниченную поддержку autoMigrations для совместимых изменений схемы).
 
 Room упрощает работу с базой данных и делает код более читаемым, но **внутри все равно использует SQLite**.
 
@@ -70,7 +70,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 }
 ```
 
-**Room — высокоуровневый:**
+**Room — более высокоуровневый:**
 
 ```kotlin
 @Entity(tableName = "users")
@@ -300,7 +300,8 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "database")
 **SQLite — сложнее:**
 
 ```kotlin
-// Часто приходится мокать SQLiteDatabase, SQLiteOpenHelper, Cursor и т.п.
+// Можно писать тесты, работая с реальной SQLite (инструментальные тесты),
+// но при прямом использовании API часто возникает много шаблонного кода и ручной настройки.
 @Test
 fun testGetUser() {
     val mockDb = mock(SQLiteDatabase::class.java)
@@ -336,15 +337,15 @@ fun testGetUser() = runTest {
 
 | Функция | SQLite | Room |
 |---------|--------|------|
-| **Абстракция** | Низкоуровневая | Высокоуровневая ORM |
+| **Абстракция** | Низкоуровневая | Высокоуровневый ORM-подобный слой |
 | **Шаблонный код** | Много | Мало |
 | **Проверка SQL** | Во время выполнения | На этапе компиляции |
 | **Типобезопасность** | Нет | Да |
 | **CRUD-операции** | Ручные ContentValues | Аннотации |
-| **Реактивность (`Flow`/`LiveData`)** | Нет | Да |
-| **Поддержка корутин** | Нет | Да |
+| **Реактивность (`Flow`/`LiveData`)** | Нет | Да (через API Room) |
+| **Поддержка корутин** | Нет встроенной | Поддерживаются `suspend`/`Flow` API Room (выполняются вне UI-потока) |
 | **Миграции** | Ручные | Структурированные (есть autoMigrations для части кейсов) |
-| **Тестирование** | Сложнее | Проще |
+| **Тестирование** | Сложнее | Проще (in-memory / инструментальные тесты) |
 | **Производительность** | Быстро | Быстро (использует SQLite внутри) |
 | **Зависимости** | Встроено | Библиотека Jetpack |
 
@@ -416,7 +417,7 @@ class UserRepository(private val userDao: UserDao) {
 - Встроено в Android
 
 **Room:**
-- Высокоуровневая ORM-подобная абстракция над SQLite
+- Высокоуровневая ORM-подобная абстракция над SQLite (но с ограничениями по сравнению с полноценными ORM)
 - Типобезопасный API на основе аннотаций
 - Проверка SQL и схемы на этапе компиляции
 - Поддержка `LiveData`/`Flow`
@@ -433,7 +434,7 @@ class UserRepository(private val userDao: UserDao) {
 
 **SQLite** is a **low-level relational database** that requires **manual SQL queries**.
 
-**Room** is a **wrapper/ORM (Object-Relational Mapping) layer over SQLite** that provides a **convenient API with annotations**, supports **`LiveData` and `Flow`**, and offers a **structured migrations system** (including limited support for autoMigrations for compatible schema changes).
+**Room** is a **SQLite abstraction library with ORM-style mapping** (but not a fully generic ORM) that provides a **convenient annotation-based API**, supports **`LiveData` and `Flow`**, and offers a **structured migrations system** (including limited support for autoMigrations for compatible schema changes).
 
 Room simplifies database operations and makes code more readable, but **internally it still uses SQLite**.
 
@@ -710,7 +711,8 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "database")
 **SQLite - Difficult:**
 
 ```kotlin
-// Need to mock SQLiteDatabase, SQLiteOpenHelper, Cursor, etc.
+// You can test against real SQLite (instrumented tests),
+// but using the low-level APIs often involves more boilerplate and setup.
 @Test
 fun testGetUser() {
     val mockDb = mock(SQLiteDatabase::class.java)
@@ -750,15 +752,15 @@ fun testGetUser() = runTest {
 
 | Feature | SQLite | Room |
 |---------|--------|------|
-| **Abstraction** | Low-level | High-level ORM |
+| **Abstraction** | Low-level | High-level ORM-style layer |
 | **Boilerplate** | High | Low |
 | **SQL Validation** | Runtime | Compile-time |
 | **Type Safety** | No | Yes |
 | **CRUD Operations** | Manual ContentValues | Annotations |
-| **Reactive (`Flow`/`LiveData`)** | No | Yes |
-| **Coroutines Support** | No | Yes |
+| **Reactive (`Flow`/`LiveData`)** | No | Yes (via Room APIs) |
+| **Coroutines Support** | No built-in | `suspend`/`Flow` APIs provided by Room (off main thread) |
 | **Migrations** | Manual | Structured (with optional autoMigrations) |
-| **Testing** | Difficult | Easier |
+| **Testing** | More boilerplate | Easier (in-memory / instrumented tests) |
 | **Performance** | Fast | Fast (uses SQLite internally) |
 | **Dependencies** | Built-in | Jetpack library |
 | **Learning Curve** | SQL knowledge | Annotations + SQL |
@@ -831,9 +833,9 @@ class UserRepository(private val userDao: UserDao) {
 - Built into Android
 
 **Room:**
-- High-level ORM-style abstraction over SQLite
+- High-level ORM-style abstraction over SQLite (with limitations compared to full ORMs)
 - Type-safe, annotation-based API
-- Compile-time SQL validation
+- Compile-time SQL and schema validation
 - `LiveData`/`Flow` support
 - Structured migrations (with optional autoMigrations for supported changes)
 - Easier testing

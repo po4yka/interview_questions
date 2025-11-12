@@ -14,14 +14,14 @@ tags: [bugs, concurrency, coroutines, data-races, difficulty/hard, kotlin, race-
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-debugging-coroutines-techniques--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
 subtopics:
-  - concurrency
-  - coroutines
-  - race-conditions
----
-# Вопрос (RU)
-> Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?
+- concurrency
+- coroutines
+- race-conditions
 
 ---
+
+# Вопрос (RU)
+> Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?
 
 # Question (EN)
 > What are race conditions and data races in Kotlin coroutines? How do you detect and prevent them?
@@ -37,36 +37,41 @@ subtopics:
 
 Ключевое различие:
 - Data race — нарушение правил памяти / синхронизации.
-- Состояние гонки — ошибка бизнес-логики, даже если отдельные операции формально синхронизированы.
+- Состояние гонки — ошибка бизнес-логики, которая может возникать даже без формальной data race или при наличии частичной/локальной синхронизации.
 
 ```kotlin
 // Пример data race (на JVM)
 var counter = 0 // разделяемое изменяемое состояние
 
-launch { repeat(1000) { counter++ } }
-launch { repeat(1000) { counter++ } }
+runBlocking {
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+}
 
 // Data race: обе корутины читают/пишут counter без синхронизации
 // Итоговое значение непредсказуемо (< 2000)
 
-// Пример логического состояния гонки
+// Пример логического состояния гонки (без прямой data race при атомарных операциях)
 var balance = 100
 
-launch {
-    if (balance >= 50) { // check
-        delay(10)
-        balance -= 50   // act
+runBlocking {
+    launch(Dispatchers.Default) {
+        if (balance >= 50) { // check
+            delay(10)
+            balance -= 50   // act
+        }
+    }
+
+    launch(Dispatchers.Default) {
+        if (balance >= 50) { // check
+            delay(10)
+            balance -= 50   // act
+        }
     }
 }
 
-launch {
-    if (balance >= 50) { // check
-        delay(10)
-        balance -= 50   // act
-    }
-}
-
-// Оба проходят проверку, баланс становится 0, хотя второй перевод должен был не пройти.
+// Оба могут пройти проверку, баланс становится 0,
+// хотя по бизнес-логике второй перевод должен был не пройти.
 // Даже при атомарных чтениях/записях логика остаётся "гоночной".
 ```
 
@@ -78,7 +83,7 @@ launch {
 class BankAccount {
     private var balance = 100
 
-    // СОСТОЯНИЕ ГОНКИ
+    // СОСТОЯНИЕ ГОНКИ (и data race на JVM, если вызывается из разных потоков)
     suspend fun withdraw(amount: Int): Boolean {
         if (balance >= amount) { // Check
             delay(10)            // Имитируем обработку
@@ -89,10 +94,12 @@ class BankAccount {
     }
 }
 
-val account = BankAccount()
+suspend fun demo() = coroutineScope {
+    val account = BankAccount()
 
-launch { account.withdraw(60) } // Корутина 1
-launch { account.withdraw(60) } // Корутина 2
+    launch { account.withdraw(60) } // Корутина 1
+    launch { account.withdraw(60) } // Корутина 2
+}
 
 // Обе проверки могут пройти при balance = 100
 // Обе спишут по 60
@@ -126,14 +133,19 @@ class BankAccount {
 ```kotlin
 var counter = 0
 
-// СОСТОЯНИЕ ГОНКИ
-repeat(1000) {
-    launch {
-        counter++ // Read-modify-write
+suspend fun demo() = coroutineScope {
+    // СОСТОЯНИЕ ГОНКИ + data race
+    repeat(1000) {
+        launch(Dispatchers.Default) {
+            counter++ // Read-modify-write
+        }
     }
 }
 
-delay(1000)
+runBlocking {
+    demo()
+}
+
 println(counter) // Ожидаем: 1000, фактически: < 1000
 ```
 
@@ -160,10 +172,12 @@ println(counter) // Ожидаем: 1000, фактически: < 1000
 val mutex = Mutex()
 var counter = 0
 
-repeat(1000) {
-    launch {
-        mutex.withLock {
-            counter++
+runBlocking {
+    repeat(1000) {
+        launch(Dispatchers.Default) {
+            mutex.withLock {
+                counter++
+            }
         }
     }
 }
@@ -171,19 +185,23 @@ repeat(1000) {
 // Решение 2: AtomicInteger (JVM; для простых счётчиков)
 val atomicCounter = java.util.concurrent.atomic.AtomicInteger(0)
 
-repeat(1000) {
-    launch {
-        atomicCounter.incrementAndGet()
+runBlocking {
+    repeat(1000) {
+        launch(Dispatchers.Default) {
+            atomicCounter.incrementAndGet()
+        }
     }
 }
 
-// Решение 3: Ограничение одним потоком
+// Решение 3: Ограничение одним потоком (конфайнмент)
 val singleThreadContext = newSingleThreadContext("Counter")
 var confinedCounter = 0
 
-repeat(1000) {
-    launch(singleThreadContext) {
-        confinedCounter++ // Безопасно: всегда один поток
+runBlocking {
+    repeat(1000) {
+        launch(singleThreadContext) {
+            confinedCounter++ // Безопасно: всегда один поток
+        }
     }
 }
 ```
@@ -200,16 +218,17 @@ class UserCache(private val api: Api) {
     suspend fun getUser(id: String): User {
         return cache[id] ?: run {
             val user = api.fetchUser(id)
-            cache[id] = user // Гонка: параллельные изменения без синхронизации
+            cache[id] = user // Возможна гонка: параллельные изменения без синхронизации
             user
         }
     }
 }
 
-val cache = UserCache(api)
-launch { cache.getUser("1") }
-launch { cache.getUser("2") }
-launch { cache.getUser("3") }
+suspend fun demo(cache: UserCache) = coroutineScope {
+    launch { cache.getUser("1") }
+    launch { cache.getUser("2") }
+    launch { cache.getUser("3") }
+}
 ```
 
 Решение 1: Mutex + корректный double-check.
@@ -289,7 +308,7 @@ class UserCache(private val api: Api, scope: CoroutineScope) {
 
 ### Техники обнаружения (RU)
 
-1. Стресс-тесты конкурентности: много корутин, много повторений, сравнение ожидаемого и фактического результата.
+1. Стресс-тесты конкурентности: много корутин, много повторений, сравнение ожидаемого и фактического результата для подозрительного кода.
 2. Логирование с таймстампами и анализ межпоточных interleavings.
 3. Thread Sanitizer (в первую очередь Kotlin/Native; для JVM поддержка ограничена/экспериментальна).
 4. Чек-листы код-ревью:
@@ -298,27 +317,27 @@ class UserCache(private val api: Api, scope: CoroutineScope) {
    - Используются ли `Mutex`, атомики, ограниченный `Dispatcher` и т.п.?
    - Есть ли паттерны check-then-act или read-modify-write без синхронизации?
 
-Пример стресс-теста:
+Пример стресс-теста (важно: проверяем код без атомиков, здесь показан паттерн):
 
 ```kotlin
 @Test
 fun `stress test for race conditions`() = runTest {
-    val counter = java.util.concurrent.atomic.AtomicInteger(0)
+    var counter = 0
     val iterations = 10_000
     val coroutines = 100
 
     repeat(coroutines) {
         launch {
             repeat(iterations) {
-                counter.incrementAndGet()
+                counter++ // намеренно без синхронизации
             }
         }
     }
 
     val expected = coroutines * iterations
-    val actual = counter.get()
+    val actual = counter
 
-    assertEquals(expected, actual, "Race condition detected or lost increments!")
+    assertNotEquals(expected, actual, "Race condition likely present (lost increments)")
 }
 ```
 
@@ -462,41 +481,45 @@ sealed class UserState {
 
 Happens-before гарантирует, что эффекты одной операции видимы для другой.
 
-В контексте корутин (с учётом JVM-модели памяти):
+В контексте корутин (с учётом JVM-модели памяти) важно опираться на явные синхронизационные точки:
 
-1. Запуск корутины (`launch`/`async`) задаёт порядок между местом запуска и началом выполнения в её контексте.
-2. Завершение корутины happens-before успешным `join`/`await` другой корутины.
-3. `send` в `Channel` happens-before соответствующего `receive` этого элемента.
-4. Для `Mutex`: все записи до `unlock` видимы после следующего успешного `lock`.
+1. Завершение корутины happens-before её успешный `join`/`await` из другой корутины.
+2. `send` в `Channel` happens-before соответствующего `receive` этого элемента.
+3. Для `Mutex`: все записи до `unlock` видимы после следующего успешного `lock`.
+4. Конфайнмент в один поток (например, `newSingleThreadContext`) упрощает reasoning: в пределах одного потока доступ последовательный.
 
 ```kotlin
 var x = 0
 val channel = Channel<Unit>()
 
-// Корутина 1
-launch {
-    x = 42
-    channel.send(Unit) // Запись x happens-before этого send
-}
+runBlocking {
+    // Корутина 1
+    launch {
+        x = 42
+        channel.send(Unit) // Запись x happens-before этого send
+    }
 
-// Корутина 2
-launch {
-    channel.receive()  // После send
-    println(x)         // Обязан увидеть 42
+    // Корутина 2
+    launch {
+        channel.receive()  // Happens-after send для данного элемента
+        println(x)         // Обязан увидеть 42
+    }
 }
 ```
 
 ### Volatile и `@Volatile` в Kotlin (JVM) (RU)
 
-`@Volatile` гарантирует видимость между потоками, но не атомарность и не взаимное исключение.
+`@Volatile` гарантирует видимость между потоками, но не атомарность составных операций и не взаимное исключение.
 
 ```kotlin
 // ВСЁ ЕЩЁ ГОНОЧНО
 @Volatile
 var counter = 0
 
-launch(Dispatchers.Default) { repeat(1000) { counter++ } }
-launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+runBlocking {
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+}
 
 // counter++ остаётся неатомарной read-modify-write операцией.
 ```
@@ -523,12 +546,12 @@ isRunning = false // Быстро становится видимым worker-п�
 
 ### Тестирование на состояния гонки (RU)
 
-Подход: интенсивный параллельный доступ + многократные прогоны.
+Подход: интенсивный параллельный доступ + многократные прогоны, но важно понимать, что отсутствие проявлений ещё не доказывает отсутствие гонки.
 
 ```kotlin
 @Test
 fun `test no race condition in counter`() = runTest {
-    val counter = SafeCounter() // Ваша реализация
+    val counter = SafeCounter() // Ваша потокобезопасная реализация
     val iterations = 1000
     val coroutines = 100
 
@@ -691,8 +714,10 @@ semaphore.withPermit {
 }
 
 val channel = Channel<Int>()
-launch { channel.send(42) }
-launch { val value = channel.receive() }
+runBlocking {
+    launch { channel.send(42) }
+    launch { val value = channel.receive() }
+}
 ```
 
 ### Лучшие практики конкурентного кода с корутинами (RU)
@@ -717,11 +742,9 @@ launch { val value = channel.receive() }
 5. `Mutex` подходит для сложных атомарных последовательностей.
 6. Атомарные типы — для простых счётчиков/флагов.
 7. `StateFlow`/`SharedFlow` помогают с наблюдаемым состоянием и атомарными обновлениями.
-8. Тестируйте конкурентность и используйте стресс-тесты.
+8. Тестируйте конкурентность и используйте стресс-тесты (но понимайте их ограничения).
 9. `@Volatile` даёт только видимость, не атомарность.
 10. Конфайнмент контекста (однопоточные диспетчеры) сериализует доступ и устраняет гонки по этому состоянию.
-
----
 
 ## Answer (EN)
 
@@ -729,41 +752,45 @@ Coroutines make concurrent programming easier, but they don't eliminate race con
 
 ### Race Condition Vs Data Race
 
-- Race condition: A bug where program behavior depends on the timing/ordering of concurrent operations.
+- Race condition: A logic bug where program behavior depends on timing/ordering of concurrent operations.
 - Data race: Two threads access the same memory location concurrently, at least one is a write, and the access is not properly synchronized (no happens-before relation), violating the memory model.
 
 Key difference:
-- Data race = low-level memory access/synchronization problem.
-- Race condition = high-level logic bug that can exist even when individual operations are synchronized.
+- Data race = low-level memory access/synchronization violation.
+- Race condition = higher-level logic bug, which may occur even without a formal data race or with only partial/local synchronization.
 
 ```kotlin
 // Data race example (JVM)
 var counter = 0 // Shared mutable state
 
-launch { repeat(1000) { counter++ } }
-launch { repeat(1000) { counter++ } }
+runBlocking {
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+}
 
-// Data race: Both coroutines read/write counter without proper synchronization
+// Data race: both coroutines read/write counter without proper synchronization
 // Final value is unpredictable (< 2000)
 
-// Race condition example
+// Logical race condition example (can exist even with atomic operations)
 var balance = 100
 
-launch {
-    if (balance >= 50) { // Check
-        delay(10)
-        balance -= 50    // Act
+runBlocking {
+    launch(Dispatchers.Default) {
+        if (balance >= 50) { // Check
+            delay(10)
+            balance -= 50    // Act
+        }
+    }
+
+    launch(Dispatchers.Default) {
+        if (balance >= 50) { // Check
+            delay(10)
+            balance -= 50    // Act
+        }
     }
 }
 
-launch {
-    if (balance >= 50) { // Check
-        delay(10)
-        balance -= 50    // Act
-    }
-}
-
-// Both pass the check, balance becomes 0, even though the second withdrawal should fail.
+// Both may pass the check, balance becomes 0, even though the second withdrawal should fail.
 // Even with atomic reads/writes, this pattern remains logically racy.
 ```
 
@@ -775,7 +802,7 @@ Problem: State may change between the check and the action.
 class BankAccount {
     private var balance = 100
 
-    // RACE CONDITION
+    // RACE CONDITION (and data race on JVM if called from multiple threads)
     suspend fun withdraw(amount: Int): Boolean {
         if (balance >= amount) { // Check
             delay(10)           // Simulate processing
@@ -786,14 +813,12 @@ class BankAccount {
     }
 }
 
-val account = BankAccount()
+suspend fun demo() = coroutineScope {
+    val account = BankAccount()
 
-launch { account.withdraw(60) } // Coroutine 1
-launch { account.withdraw(60) } // Coroutine 2
-
-// Both checks may pass with balance = 100
-// Both withdraw 60
-// Final balance can become -20 (invalid)
+    launch { account.withdraw(60) } // Coroutine 1
+    launch { account.withdraw(60) } // Coroutine 2
+}
 ```
 
 Solution: use `Mutex` to make check+act atomic.
@@ -823,14 +848,19 @@ Problem: Counter increment without synchronization.
 ```kotlin
 var counter = 0
 
-// RACE CONDITION
-repeat(1000) {
-    launch {
-        counter++ // Read-modify-write
+suspend fun demo() = coroutineScope {
+    // RACE CONDITION + data race
+    repeat(1000) {
+        launch(Dispatchers.Default) {
+            counter++ // Read-modify-write
+        }
     }
 }
 
-delay(1000)
+runBlocking {
+    demo()
+}
+
 println(counter) // Expected: 1000, Actual: < 1000
 ```
 
@@ -839,7 +869,7 @@ Why? `counter++` is:
 2. Add 1.
 3. Write back.
 
-Interleaving:
+Possible interleaving:
 
 ```
 Coroutine 1: Read(0)
@@ -857,10 +887,12 @@ Solutions:
 val mutex = Mutex()
 var counter = 0
 
-repeat(1000) {
-    launch {
-        mutex.withLock {
-            counter++
+runBlocking {
+    repeat(1000) {
+        launch(Dispatchers.Default) {
+            mutex.withLock {
+                counter++
+            }
         }
     }
 }
@@ -868,9 +900,11 @@ repeat(1000) {
 // Solution 2: AtomicInteger (on JVM; good for simple counters)
 val atomicCounter = java.util.concurrent.atomic.AtomicInteger(0)
 
-repeat(1000) {
-    launch {
-        atomicCounter.incrementAndGet()
+runBlocking {
+    repeat(1000) {
+        launch(Dispatchers.Default) {
+            atomicCounter.incrementAndGet()
+        }
     }
 }
 
@@ -878,16 +912,18 @@ repeat(1000) {
 val singleThreadContext = newSingleThreadContext("Counter")
 var confinedCounter = 0
 
-repeat(1000) {
-    launch(singleThreadContext) {
-        confinedCounter++ // Safe: always same thread
+runBlocking {
+    repeat(1000) {
+        launch(singleThreadContext) {
+            confinedCounter++ // Safe: always same thread
+        }
     }
 }
 ```
 
 ### Shared Mutable State Problems
 
-Problem: Multiple coroutines modifying shared state.
+Primary source of races: shared mutable data structures.
 
 ```kotlin
 // DANGEROUS (JVM example)
@@ -897,16 +933,17 @@ class UserCache(private val api: Api) {
     suspend fun getUser(id: String): User {
         return cache[id] ?: run {
             val user = api.fetchUser(id)
-            cache[id] = user // RACE: concurrent modifications not synchronized
+            cache[id] = user // Potential race: concurrent modifications without synchronization
             user
         }
     }
 }
 
-val cache = UserCache(api)
-launch { cache.getUser("1") }
-launch { cache.getUser("2") }
-launch { cache.getUser("3") }
+suspend fun demo(cache: UserCache) = coroutineScope {
+    launch { cache.getUser("1") }
+    launch { cache.getUser("2") }
+    launch { cache.getUser("3") }
+}
 ```
 
 Corrected Solution 1: `Mutex` with proper double-checked logic.
@@ -989,28 +1026,27 @@ class UserCache(private val api: Api, scope: CoroutineScope) {
 
 ### Detection Techniques
 
-1. Stress testing: many coroutines, many iterations, compare expected vs actual.
+1. Stress testing: many coroutines, many iterations, compare expected vs actual for suspicious (non-synchronized) code. Absence of failures does NOT prove correctness.
 
 ```kotlin
 @Test
 fun `stress test for race conditions`() = runTest {
-    val counter = java.util.concurrent.atomic.AtomicInteger(0)
+    var counter = 0
     val iterations = 10_000
     val coroutines = 100
 
     repeat(coroutines) {
         launch {
             repeat(iterations) {
-                // Exercise concurrent access
-                counter.incrementAndGet()
+                counter++ // intentionally unsynchronized
             }
         }
     }
 
     val expected = coroutines * iterations
-    val actual = counter.get()
+    val actual = counter
 
-    assertEquals(expected, actual, "Race condition detected or lost increments!")
+    assertNotEquals(expected, actual, "Race condition likely present (lost increments)")
 }
 ```
 
@@ -1030,10 +1066,10 @@ suspend fun operation(id: Int) {
     log.add("[$id] Wrote: ${'$'}sharedState at ${'$'}{System.nanoTime()}")
 }
 
-launch { operation(1) }
-launch { operation(2) }
-
-delay(100)
+runBlocking {
+    launch { operation(1) }
+    launch { operation(2) }
+}
 
 log.forEach { println(it) }
 ```
@@ -1121,7 +1157,7 @@ class ConfigManager {
 
 ### Prevention Strategy 3: Confined Dispatcher / Context Confinement
 
-When to use: keep mutable state confined to a single thread or a single serialized dispatcher.
+When to use: keep mutable state confined to a single thread or to a single serialized dispatcher.
 
 ```kotlin
 class DatabaseManager(private val database: Database) {
@@ -1200,48 +1236,52 @@ Why relatively safe:
 
 ### Happens-Before Relationships (Coroutines + JVM)
 
-Happens-before: a guarantee that effects of one operation are visible to another.
+Happens-before: a guarantee that effects of one operation are visible to another when there is a defined synchronization edge.
 
-In coroutines (aligned with JVM semantics):
+In coroutines (aligned with JVM semantics), rely on explicit synchronization points:
 
-1. Starting a coroutine (`launch`/`async`) establishes order between the start call and the coroutine body execution.
-2. Completion of a coroutine happens-before successful `join`/`await` by another coroutine.
-3. `send` on a `Channel` happens-before the corresponding `receive` of that element.
-4. For `Mutex`: all writes before `unlock` happen-before subsequent successful `lock` acquisitions that observe those writes.
+1. Completion of a coroutine happens-before a successful `join`/`await` from another coroutine.
+2. `send` on a `Channel` happens-before the corresponding `receive` of that element.
+3. For `Mutex`: all writes before `unlock` happen-before subsequent successful `lock` acquisitions that observe those writes.
+4. Confining a state to a single thread/dispatcher simplifies reasoning: within that thread, operations are sequenced.
 
 ```kotlin
 var x = 0
 val channel = Channel<Unit>()
 
-// Coroutine 1
-launch {
-    x = 42
-    channel.send(Unit) // Writes to x happen-before this send
-}
+runBlocking {
+    // Coroutine 1
+    launch {
+        x = 42
+        channel.send(Unit) // Writes to x happen-before this send
+    }
 
-// Coroutine 2
-launch {
-    channel.receive()  // Happens-after the send
-    println(x)         // Must see 42
+    // Coroutine 2
+    launch {
+        channel.receive()  // Happens-after the send for this element
+        println(x)         // Must see 42
+    }
 }
 ```
 
 ### Volatile and `@Volatile` in Kotlin (JVM)
 
-`@Volatile` ensures visibility across threads but NOT atomicity or mutual exclusion.
+`@Volatile` ensures visibility across threads but NOT atomicity of compound operations and NOT mutual exclusion.
 
 ```kotlin
 // STILL RACY
 @Volatile
 var counter = 0
 
-launch(Dispatchers.Default) { repeat(1000) { counter++ } }
-launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+runBlocking {
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+    launch(Dispatchers.Default) { repeat(1000) { counter++ } }
+}
 
-// counter++ is read-modify-write and remains non-atomic.
+// counter++ is a read-modify-write and remains non-atomic.
 ```
 
-When to use `@Volatile` (JVM): simple publication/flags where each write is independent.
+When to use `@Volatile` (JVM): simple publication/flags where each write is self-contained.
 
 ```kotlin
 @Volatile
@@ -1263,12 +1303,12 @@ Key difference:
 
 ### Testing for Race Conditions
 
-Pattern: heavy concurrent access + repeated runs to increase the chance of catching races.
+Pattern: heavy concurrent access + repeated runs to increase the chance of catching races, while understanding this is heuristic.
 
 ```kotlin
 @Test
 fun `test no race condition in counter`() = runTest {
-    val counter = SafeCounter() // Your implementation
+    val counter = SafeCounter() // Your thread-safe implementation
     val iterations = 1000
     val coroutines = 100
 
@@ -1320,7 +1360,7 @@ class SessionManager {
     fun isLoggedIn(): Boolean = currentUser != null
 }
 
-// Concurrent login/logout can leave currentUser set but loginTime = 0, etc.
+// Concurrent calls can leave currentUser set but loginTime = 0, etc.
 ```
 
 Solution: protect the invariant as a whole.
@@ -1435,8 +1475,10 @@ semaphore.withPermit {
 }
 
 val channel = Channel<Int>()
-launch { channel.send(42) }
-launch { val value = channel.receive() }
+runBlocking {
+    launch { channel.send(42) }
+    launch { val value = channel.receive() }
+}
 ```
 
 ### Best Practices for Concurrent Coroutine Code
@@ -1461,21 +1503,9 @@ launch { val value = channel.receive() }
 5. Use `Mutex` for complex atomicity across multiple operations.
 6. Use Atomic types for simple counters/flags.
 7. Use `StateFlow`/`SharedFlow` for observable state with atomic value updates.
-8. Test concurrency thoroughly; stress tests can expose races.
+8. Test concurrency thoroughly; stress tests can expose races but are not proofs.
 9. `@Volatile` != atomic: it only ensures visibility (JVM).
-10. Confined dispatchers/contexts serialize access: single owner = no races on that state.
-
----
-
-## Дополнительные вопросы (RU)
-
-1. Как вы обнаруживаете data race в Kotlin/JVM и Kotlin/Native, какие инструменты используете?
-2. Как сравнить накладные расходы `Mutex`, атомарных типов и конфайнмента по потокам?
-3. Какие подходы к lock-free алгоритмам применимы в экосистеме Kotlin корутин?
-4. Как Java Memory Model влияет на поведение корутин на JVM?
-5. Как вы предотвращаете состояния гонки при использовании операторов `Flow`?
-6. Какие средства автоматического поиска гонок доступны для JVM и Native-проектов?
-7. Как спроектировать API coroutine-библиотеки так, чтобы минимизировать вероятность гонок?
+10. Confined dispatchers/contexts serialize access: a single owner removes races on that state.
 
 ## Follow-ups
 
@@ -1487,14 +1517,6 @@ launch { val value = channel.receive() }
 6. What tools exist for automated race condition detection on JVM vs Native?
 7. How do you design race-free APIs for coroutine-based libraries?
 
-## Related Questions
-
-- [[q-actor-pattern--kotlin--hard]]
-- [[q-advanced-coroutine-patterns--kotlin--hard]]
-- [[q-debugging-coroutines-techniques--kotlin--medium]]
-- [[q-mutex-synchronized-coroutines--kotlin--medium]]
-- [[q-semaphore-rate-limiting--kotlin--medium]]
-
 ## References
 
 - https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html
@@ -1503,3 +1525,20 @@ launch { val value = channel.receive() }
 - https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/package-summary.html
 - [[c-kotlin]]
 - [[c-coroutines]]
+
+## Related Questions
+
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-debugging-coroutines-techniques--kotlin--medium]]
+- [[q-mutex-synchronized-coroutines--kotlin--medium]]
+- [[q-semaphore-rate-limiting--kotlin--medium]]
+
+## Дополнительные вопросы (RU)
+1. Как вы обнаруживаете data race в Kotlin/JVM и Kotlin/Native, какие инструменты используете?
+2. Как сравнить накладные расходы `Mutex`, атомарных типов и конфайнмента по потокам?
+3. Какие подходы к lock-free алгоритмам применимы в экосистеме Kotlin корутин?
+4. Как Java Memory Model влияет на поведение корутин на JVM?
+5. Как вы предотвращаете состояния гонки при использовании операторов `Flow`?
+6. Какие средства автоматического поиска гонок доступны для JVM и Native-проектов?
+7. Как спроектировать API coroutine-библиотеки так, чтобы минимизировать вероятность гонок?

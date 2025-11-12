@@ -207,23 +207,9 @@ private fun Node.children(): List<Node> {
 }
 ```
 
-Room + TypeConverter:
+Room + поиск по JSON-строке (без JSON-операторов):
 
 ```kotlin
-class Converters {
-    private val gson = Gson()
-
-    @TypeConverter
-    fun fromMarkdownStructure(value: MarkdownStructure?): String? {
-        return gson.toJson(value)
-    }
-
-    @TypeConverter
-    fun toMarkdownStructure(value: String?): MarkdownStructure? {
-        return value?.let { gson.fromJson(it, MarkdownStructure::class.java) }
-    }
-}
-
 @Dao
 interface DocumentEntityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -238,7 +224,6 @@ interface DocumentEntityDao {
 }
 
 @Database(entities = [DocumentEntity::class], version = 1)
-@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun documentEntityDao(): DocumentEntityDao
 }
@@ -267,13 +252,13 @@ class MarkdownStructureRepository(
 
     // Наивный пример: поиск заголовков по JSON-строке
     suspend fun searchHeadings(query: String): List<DocumentEntity> {
-        val pattern = "%\"type\":\"heading\"%${'$'}query%"
+        val pattern = "%\"type\":\"heading\"%" + query + "%"
         return documentDao.searchByStructure(pattern)
     }
 }
 ```
 
-Замечание: поиск по JSON через LIKE в SQLite хрупкий и неэффективный. Для серьезных задач стоит:
+Замечание: поиск по JSON через LIKE в SQLite (включая Android) хрупкий и неэффективный, так как нет нативных JSON-операторов. Для серьезных задач стоит:
 - нормализовать структуру в отдельные таблицы (например, таблица заголовков), и/или
 - использовать FTS (Full-Text Search) по содержимому.
 
@@ -480,18 +465,25 @@ class HybridMarkdownRepository(
             .filter { it.isNotBlank() }
             .size
 
-        val document = HybridDocument(
+        // В реальном коде имеет смысл сначала сохранить документ, получить id, затем вычислить filePath
+        val tempDocument = HybridDocument(
             title = title,
             markdownContent = markdown,
             htmlCache = html,
             tags = tags.joinToString(","),
             wordCount = wordCount
         )
-        val id = dao.insert(document)
+        val id = dao.insert(tempDocument)
 
-        // Опционально: бэкап в файл; при необходимости можно сохранить путь в filePath
         val filename = "doc_$id"
         fileManager.saveToInternalStorage(filename, markdown)
+        val filePath = "${'$'}{filename}.md"
+
+        val finalDocument = tempDocument.copy(
+            id = id,
+            filePath = filePath
+        )
+        dao.insert(finalDocument)
 
         return id
     }
@@ -536,7 +528,7 @@ Saving Markdown (and optionally its structure) depends on your application's goa
 
 Best for: Simple use cases, read-heavy applications, rich text editors.
 
-Store the raw Markdown text as a string in the database (e.g., Room over SQLite) or in a file.
+Store the raw Markdown text as a string in the database (e.g., Room over SQLite).
 
 ```kotlin
 @Entity(tableName = "documents")
@@ -702,23 +694,9 @@ private fun Node.children(): List<Node> {
 }
 ```
 
-Room + TypeConverter:
+Room + LIKE-based JSON search (no JSON operators):
 
 ```kotlin
-class Converters {
-    private val gson = Gson()
-
-    @TypeConverter
-    fun fromMarkdownStructure(value: MarkdownStructure?): String? {
-        return gson.toJson(value)
-    }
-
-    @TypeConverter
-    fun toMarkdownStructure(value: String?): MarkdownStructure? {
-        return value?.let { gson.fromJson(it, MarkdownStructure::class.java) }
-    }
-}
-
 @Dao
 interface DocumentEntityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -733,7 +711,6 @@ interface DocumentEntityDao {
 }
 
 @Database(entities = [DocumentEntity::class], version = 1)
-@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun documentEntityDao(): DocumentEntityDao
 }
@@ -762,13 +739,13 @@ class MarkdownStructureRepository(
 
     // Naive example: LIKE-based heading search over JSON string
     suspend fun searchHeadings(query: String): List<DocumentEntity> {
-        val pattern = "%\"type\":\"heading\"%${'$'}query%"
+        val pattern = "%\"type\":\"heading\"%" + query + "%"
         return documentDao.searchByStructure(pattern)
     }
 }
 ```
 
-Note: JSON LIKE search in SQLite is fragile and inefficient. For serious use cases, prefer:
+Note: JSON LIKE search in SQLite on Android is fragile and inefficient because there are no native JSON operators by default. For serious use cases, prefer:
 - normalized tables for key structural elements (e.g., headings), and/or
 - FTS (Full-Text Search) for content.
 
@@ -975,18 +952,25 @@ class HybridMarkdownRepository(
             .filter { it.isNotBlank() }
             .size
 
-        val document = HybridDocument(
+        // In real code you would typically insert first, get id, then compute and persist filePath
+        val tempDocument = HybridDocument(
             title = title,
             markdownContent = markdown,
             htmlCache = html,
             tags = tags.joinToString(","),
             wordCount = wordCount
         )
-        val id = dao.insert(document)
+        val id = dao.insert(tempDocument)
 
-        // Optional file backup; store path in filePath if desired
         val filename = "doc_$id"
         fileManager.saveToInternalStorage(filename, markdown)
+        val filePath = "${'$'}{filename}.md"
+
+        val finalDocument = tempDocument.copy(
+            id = id,
+            filePath = filePath
+        )
+        dao.insert(finalDocument)
 
         return id
     }

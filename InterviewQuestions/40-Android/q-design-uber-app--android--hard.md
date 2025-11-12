@@ -187,18 +187,24 @@ fusedLocationClient.requestLocationUpdates(req, callback, Looper.getMainLooper()
 
 **Дебаунс и батчинг (пример с `Flow`-подобным API):**
 
--   **Дебаунс**: задержка отправки на 3 секунды после последнего обновления — предотвращает spam запросов при частых изменениях координат
+-   **Дебаунс**: задержка отправки на 3 секунды после последнего обновления — предотвращает лишние запросы при частых изменениях координат
 -   **Батчинг**: накопление координат в буфере и отправка пакетами раз в 5-10 секунд — снижение количества HTTP-запросов и overhead
 -   **Coalescing**: объединение обновлений для отправки раз в 5-10 секунд вместо каждого обновления
 
 ```kotlin
 // ✅ Debounce + background sync with batching (псевдокод поверх Flow)
+// debounce здесь показан для иллюстрации; для реального батчинга
+// нужны buffer/window-операторы и явное накопление списка координат.
 locationFlow
   .filterNotNull()
-  .debounce(3000L)              // Дебаунс 3 секунды
-  // Далее: собираем обновления за окно и шлём батчем
-  .onEach { bufferedLocations ->
-    repo.updateLocationBatch(bufferedLocations)
+  .debounce(3000L)              // Дебаунс 3 секунды (эмитирует последний элемент)
+  .onEach { latestLocation ->
+    // Пример: добавляем в локальный буфер и периодически шлём батчем
+    buffer.add(latestLocation)
+    if (shouldFlushNow()) {
+      repo.updateLocationBatch(buffer.toList())
+      buffer.clear()
+    }
   }
   .launchIn(viewModelScope)
 ```
@@ -494,14 +500,26 @@ fusedLocationClient.requestLocationUpdates(req, callback, Looper.getMainLooper()
 
 Efficient coordinate synchronization with debounce and batching (`Flow`-style pseudocode) to minimize network requests and support offline mode.
 
+**Debounce and batching (Flow-style pseudocode):**
+
+-   **Debounce**: delay send by 3 seconds after last update — prevents excessive requests on frequent location changes
+-   **Batching**: accumulate coordinates in a buffer and send in 5-10 second batches — reduces HTTP request count and overhead
+-   **Coalescing**: merge multiple updates into periodic sends instead of sending every single update
+
 ```kotlin
 // ✅ Debounce + background sync with batching (pseudocode over Flow)
+// Note: debounce emits only the latest element; real batching requires
+// buffer/window operators and explicit accumulation.
 locationFlow
   .filterNotNull()
-  .debounce(3000L)              // Debounce 3 seconds
-  // Then: collect updates for a time window and send as batch
-  .onEach { bufferedLocations ->
-    repo.updateLocationBatch(bufferedLocations)
+  .debounce(3000L)              // 3s debounce (latest element)
+  .onEach { latestLocation ->
+    // Example: append to local buffer and periodically flush as batch
+    buffer.add(latestLocation)
+    if (shouldFlushNow()) {
+      repo.updateLocationBatch(buffer.toList())
+      buffer.clear()
+    }
   }
   .launchIn(viewModelScope)
 ```

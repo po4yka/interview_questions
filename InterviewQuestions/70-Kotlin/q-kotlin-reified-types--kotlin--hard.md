@@ -26,7 +26,7 @@ tags: [difficulty/hard, generics, inline, kotlin, reified, type-parameters]
 
 ## Ответ (RU)
 
-`reified` параметры типа в [[c-kotlin]] могут использоваться только в `inline` функциях.
+`reified` параметры типа в [[c-kotlin]] могут использоваться только в `inline` функциях (включая inline-аксессоры и inline extension properties).
 
 Из-за встраивания (inlining) тело такой функции разворачивается в месте вызова, и конкретный аргумент типа становится известен внутри этого кода. Это не "отключает" стирание типов JVM глобально, но позволяет компилятору подставить реальный тип там, где он нужен в заинлайненном коде.
 
@@ -36,7 +36,7 @@ tags: [difficulty/hard, generics, inline, kotlin, reified, type-parameters]
 - Получать `KClass`/`Class` для аргумента типа: `T::class`, `T::class.java`.
 
 Типичные use cases:
-- Типобезопасные JSON-хелперы: `fun <reified T> String.fromJson(): T`.
+- Типобезопасные JSON-хелперы: `inline fun <reified T> String.fromJson(): T`.
 - Обобщённые фабрики/билдеры: например, `inline fun <reified T> createWith(...)`, использующие `T::class`.
 - Типобезопасные Android-хелперы: например, `inline fun <reified A : Activity> Context.startActivity(...)`.
 - Утилиты рефлексии и DSL, которым нужен фактический аргумент типа.
@@ -80,13 +80,16 @@ val user: User = jsonString.parseJson()
 val users: List<User> = jsonString.parseJson()
 ```
 
+(Здесь `Json.decodeFromString` подразумевает реализацию/библиотеку, умеющую работать с `reified` типами; конкретный JSON-движок опущен.)
+
 ### Типобезопасные фабрики / Android-хелперы (упрощённо)
 
 ```kotlin
 // Пример упрощённого фабричного метода для Fragment.
-// На практике следует учитывать требования к конструктору и API уровня.
+// На практике рекомендуется использовать newInstance()/конструкторы без логики
+// и учитывать API-ограничения; этот пример иллюстративный.
 inline fun <reified T : Fragment> newFragment(args: Bundle? = null): T {
-    val fragment = T::class.java.newInstance() // Требует публичного no-arg конструктора; используется здесь только как демонстрация
+    val fragment = T::class.java.newInstance() // Требует публичного no-arg конструктора; не рекомендуется в боевом коде
     return fragment.apply { arguments = args }
 }
 
@@ -126,11 +129,12 @@ class MyFragment : Fragment() {
 
 ### Ограничения
 
-1. `reified` можно объявить только у параметров типа `inline` функций.
+1. `reified` можно объявить только у параметров типа `inline` функций (включая их inline-аксессоры/extension properties), а не у обычных функций.
 2. Нельзя объявить `reified` параметр типа у класса/интерфейса/свойства.
 3. Нельзя "передать reified как есть" в не-inline функцию: чтобы использовать тип дальше, нужно явно передать `T::class` / `T::class.java` или результат вычислений на их основе.
 4. Чрезмерное использование `inline` + `reified` может привести к росту байткода и ухудшить читаемость.
-5. Нельзя просто написать `T()` без соответствующих ограничений: обычно для создания экземпляра требуется рефлексия или известный конструктор.
+5. Нельзя полагаться на `reified` для обхода ограничений стирания типов за пределами заинлайненного участка: вся "видимость" реального типа существует только в результирующем сгенерированном коде.
+6. Нельзя просто написать `T()` без соответствующих ограничений: обычно для создания экземпляра требуется рефлексия, известный конструктор или переданный фабричный метод.
 
 ```kotlin
 // ЗАПРЕЩЕНО / НЕВОЗМОЖНО
@@ -146,7 +150,7 @@ inline fun <reified T> process() {
 
 ## Answer (EN)
 
-In Kotlin, a type parameter can be marked as `reified` only in an `inline` function.
+In Kotlin, a type parameter can be marked as `reified` only in an `inline` function (including inline accessors and inline extension properties).
 
 Because the function is inlined at call sites, the concrete type argument used at each call site becomes available in the function body. On the JVM this does not "turn off" Java's type erasure globally, but it lets the compiler substitute the real type where needed inside the inlined code.
 
@@ -156,7 +160,7 @@ This enables:
 - Accessing `KClass`/`Class` for the type argument: `T::class`, `T::class.java`.
 
 Typical use cases:
-- Type-safe JSON parsing helpers: `fun <reified T> String.fromJson(): T`.
+- Type-safe JSON parsing helpers: `inline fun <reified T> String.fromJson(): T`.
 - Generic factories/builders: e.g., `inline fun <reified T> createWith(...)` that use `T::class`.
 - Type-safe Android helpers: e.g., `inline fun <reified A : Activity> Context.startActivity(...)`.
 - Safer reflection utilities and DSLs that depend on the actual type argument.
@@ -200,13 +204,16 @@ val user: User = jsonString.parseJson()
 val users: List<User> = jsonString.parseJson()
 ```
 
+(Here `Json.decodeFromString` stands for a JSON implementation that can leverage `reified` type information; the concrete library is omitted.)
+
 ### Type-safe factories / Android helpers (simplified)
 
 ```kotlin
 // Simplified factory method for Fragment.
-// In real code you must respect constructor and API-level requirements.
+// In real code you should rely on recommended patterns (e.g., newInstance) and
+// respect constructor/API constraints; this is illustrative only.
 inline fun <reified T : Fragment> newFragment(args: Bundle? = null): T {
-    val fragment = T::class.java.newInstance() // Requires public no-arg constructor; demo only
+    val fragment = T::class.java.newInstance() // Requires public no-arg constructor; not recommended in production
     return fragment.apply { arguments = args }
 }
 
@@ -246,11 +253,12 @@ class MyFragment : Fragment() {
 
 ### Limitations
 
-1. `reified` is allowed only on type parameters of `inline` functions.
+1. `reified` is allowed only on type parameters of `inline` functions (including their inline accessors/extension properties), not on regular non-inline functions.
 2. You cannot declare `reified` type parameters on classes/interfaces/properties.
 3. You cannot "export" a `reified` parameter directly to non-inline code; pass `T::class` / `T::class.java` or derived values instead.
 4. Excessive use of `inline` + `reified` can increase bytecode size and hurt readability.
-5. You generally cannot just call `T()` without proper constraints; usually you need reflection or a known constructor.
+5. You cannot rely on `reified` to bypass type erasure beyond the inlined site: visibility of the actual type exists only in the resulting expanded code.
+6. You generally cannot just call `T()` without proper constraints; you usually need reflection, a known constructor, or a provided factory.
 
 ```kotlin
 // FORBIDDEN / IMPOSSIBLE

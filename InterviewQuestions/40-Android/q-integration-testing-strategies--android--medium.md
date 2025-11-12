@@ -16,7 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-testing
+- c-android-testing
 - q-android-manifest-file--android--easy
 created: 2025-10-15
 updated: 2025-11-10
@@ -38,6 +38,8 @@ tags:
 
 Интеграционные тесты проверяют, что несколько компонентов корректно работают вместе. Они фокусируются на взаимодействии между слоями приложения, при этом внешние зависимости (сеть, системные сервисы, сторонние SDK) заменяются моками или фейками.
 
+(Для корутинных примеров ниже предполагается использование артефакта `kotlinx-coroutines-test` и корректная настройка диспетчеров как для JVM-тестов, так и для Android instrumented-тестов.)
+
 ### Пирамида тестирования
 
 ```
@@ -55,7 +57,7 @@ tags:
    - Реальными являются `ViewModel`, Repository, Room.
 
 2. Repository + сеть + кеш:
-   - Минимизируем мокинг (например, используем MockWebServer или фейковый API).
+   - Минимизируем мокинг (например, используем `OkHttp MockWebServer` или фейковый API).
    - Тестируем реальную логику репозитория, кеширование и (опционально) сериализацию.
 
 3. Full `Stack` (кроме внешних сервисов):
@@ -155,6 +157,8 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
+(В этом примере `runTest`, `launch` и `advanceUntilIdle` берутся из `kotlinx-coroutines-test`; для корректной работы требуется соответствующая настройка тестового `CoroutineDispatcher`.)
+
 ### Интеграция `ViewModel` + Repository
 
 ```kotlin
@@ -202,6 +206,8 @@ class UserViewModelIntegrationTest {
     }
 }
 ```
+
+(Здесь используется правило `MainDispatcherRule` для переопределения `Dispatchers.Main` тестовым диспетчером; API корутин-тестов предоставляется `kotlinx-coroutines-test`.)
 
 ### Full `Stack` интеграционный / E2E-тест
 
@@ -260,6 +266,8 @@ class FullStackIntegrationTest {
 }
 ```
 
+(Это full-stack интеграционный тест внутри границ приложения, часто также рассматривается как E2E UI-тест.)
+
 ### Лучшие практики
 
 1. Используйте in-memory БД для скорости и детерминизма.
@@ -270,11 +278,43 @@ class FullStackIntegrationTest {
 6. Покрывайте негативные сценарии: ошибки сети, парсинга, БД и корректные фоллбеки.
 7. Соблюдайте баланс между покрытием и скоростью: максимум логики — в юнит-тестах, ключевые потоки — в интеграционных тестах.
 
+### Дополнительные вопросы (RU)
+
+- [[q-android-manifest-file--android--easy]]
+- Как бы вы разграничили юнит-, интеграционные и end-to-end тесты в Android-приложении и решили, что к какому уровню относится?
+- Как вы структурировали бы модули и граф зависимостей, чтобы упростить интеграционное тестирование (например, с Hilt/Koin)?
+- Как вы подошли бы к тестированию offline-first сценариев, включающих кеш, локальную БД и sync workers?
+- Как бы вы спроектировали интеграционные тесты для проверок обработки ошибок (сбои сети, изменения контракта API)?
+
+### Ссылки (RU)
+
+- [Instrumented Tests](https://developer.android.com/training/testing/instrumented-tests)
+
+### Связанные вопросы (RU)
+
+#### Предпосылки / Концепты
+
+- [[c-android-testing]]
+
+#### Связанные (Medium)
+
+- [[q-testing-viewmodels-turbine--android--medium]] - Тестирование
+- [[q-testing-compose-ui--android--medium]] - Тестирование
+- [[q-compose-testing--android--medium]] - Тестирование
+- [[q-robolectric-vs-instrumented--android--medium]] - Тестирование
+- [[q-screenshot-snapshot-testing--android--medium]] - Тестирование
+
+#### Продвинутое (Harder)
+
+- [[q-testing-coroutines-flow--android--hard]] - Тестирование
+
 ---
 
 ## Answer (EN)
 
 Integration tests verify that multiple components work together correctly. They test the interaction between layers while mocking or faking external dependencies like network and system services.
+
+(Examples below assume the `kotlinx-coroutines-test` library for `runTest`/`launch`/`advanceUntilIdle` and proper dispatcher configuration for JVM vs Android instrumented tests.)
 
 ### Integration Test Pyramid
 
@@ -293,7 +333,7 @@ Integration Tests (Multiple Layers)
 - Real: `ViewModel`, Repository, Room Database
 
 **2. Repository + Network + Cache**
-- Mock/Fake: Prefer minimal mocking (e.g., use OkHttp MockWebServer or fake API)
+- Mock/Fake: Prefer minimal mocking (e.g., use `OkHttp MockWebServer` or a fake API)
 - Real: Repository logic, caching, (optionally) serialization
 
 **3. Full `Stack` (except external services)**
@@ -393,7 +433,7 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
-(Assumes kotlinx-coroutines-test `runTest`/`advanceUntilIdle` and appropriate imports.)
+(Assumes `kotlinx-coroutines-test` for `runTest`/`launch`/`advanceUntilIdle` and proper test `CoroutineDispatcher` setup.)
 
 ### `ViewModel` + Repository Integration
 
@@ -443,7 +483,7 @@ class UserViewModelIntegrationTest {
 }
 ```
 
-(Uses a test dispatcher rule to control `Dispatchers.Main`.)
+(Uses `MainDispatcherRule` to override `Dispatchers.Main` with a test dispatcher; coroutine test APIs are from `kotlinx-coroutines-test`.)
 
 ### Full `Stack` Integration / E2E-style Test
 
@@ -519,6 +559,10 @@ class FullStackIntegrationTest {
 ## Follow-ups
 
 - [[q-android-manifest-file--android--easy]]
+- How would you differentiate unit, integration, and end-to-end tests in an Android app and decide what belongs where?
+- How would you structure your modules and dependency graph to make integration testing easier (e.g., with Hilt/Koin)?
+- How would you approach testing offline-first flows that involve cache, local DB, and sync workers?
+- How would you design integration tests for error handling paths (network failures, API contract changes)?
 
 ## References
 
@@ -528,7 +572,7 @@ class FullStackIntegrationTest {
 
 ### Prerequisites / Concepts
 
-- [[c-testing]]
+- [[c-android-testing]]
 
 ### Related (Medium)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing

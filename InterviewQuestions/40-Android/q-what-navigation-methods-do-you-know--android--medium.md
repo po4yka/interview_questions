@@ -7,7 +7,7 @@ aliases:
 topic: android
 subtopics:
 - ui-navigation
-question_kind: qa
+question_kind: android
 difficulty: medium
 original_language: en
 language_tags:

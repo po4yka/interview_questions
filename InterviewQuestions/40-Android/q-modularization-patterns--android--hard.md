@@ -23,14 +23,13 @@ related:
 - q-does-state-made-in-compose-help-avoid-race-condition--android--medium
 - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-05
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/architecture-clean
 - android/architecture-modularization
 - difficulty/hard
 - en
 - ru
-
 ---
 
 # Вопрос (RU)
@@ -52,7 +51,7 @@ tags:
 
 ### Взаимодействие между модулями
 
-Модули редко существуют в полной изоляции и часто зависят от других модулях и взаимодействуют с ними. Важно поддерживать низкое зацепление даже тогда, когда модули активно обмениваются данными. Иногда прямое взаимодействие между двумя модулями нежелательно из-за архитектурных ограничений или вообще невозможно, например при циклических зависимостях.
+Модули редко существуют в полной изоляции и часто зависят от других модулей и взаимодействуют с ними. Важно поддерживать низкое зацепление даже тогда, когда модули активно обмениваются данными. Иногда прямое взаимодействие между двумя модулями нежелательно из-за архитектурных ограничений или вообще невозможно, например при циклических зависимостях.
 
 Чтобы преодолеть эту проблему, вы можете использовать третий модуль, выступающий посредником между двумя другими модулями. Модуль-посредник может принимать сообщения от обоих модулей и перенаправлять их по мере необходимости. Часто таким модулем является модуль приложения, которому принадлежит граф навигации.
 
@@ -69,7 +68,7 @@ tags:
 
 Модули, использующие поведение, определённое в модуле абстракций, должны зависеть только от абстракций, а не от конкретных реализаций.
 
-Feature-модуль связан с модулем реализации через механизм внедрения зависимостей (DI). Feature-модуль не создаёт напрямую, например, экземпляр базы данных. Вместо этого он объявляет, какие зависимости ему нужны, а необходимые реализации предоставляются извне, обычно на уровне application-модуля или слоя DI.
+Feature-модуль связан с модулем реализации через механизм внедрения зависимостей (DI). Feature-модуль не создаёт напрямую, например, экземпляр базы данных. Вместо этого он объявляет, какие зависимости ему нужны, а необходимые реализации предоставляются извне, обычно на уровне application-модуля.
 
 Отделение API от их реализаций полезно в следующих случаях:
 
@@ -114,7 +113,7 @@ One way of characterizing a modular codebase would be to use the **coupling** an
 
 Modules rarely exist in total separation and often rely on other modules and communicate with them. It's important to keep the coupling low even when modules work together and exchange information frequently. Sometimes direct communication between two modules is either not desirable, as in the case of architecture constraints. It may also be impossible, such as with cyclic dependencies.
 
-To overcome this problem you can have a third module mediating between two other modules. The mediator module can listen for messages from both of the modules and forward them as needed. The mediator is the module that owns the navigation graph (usually an app module).
+To overcome this problem you can have a third module mediating between two other modules. The mediator module can listen for messages from both of the modules and forward them as needed. The mediator is often the module that owns the navigation graph (usually an app module).
 
 Although navigation libraries technically allow passing `Parcelable`/`Serializable` objects as navigation arguments, in a modularized architecture you should prefer passing simple IDs that features can use to access and load desired resources from the data layer. This way, you keep the coupling low, avoid leaking implementation details, and don't violate the single source of truth principle.
 
@@ -129,7 +128,7 @@ Dependency inversion is when you organize your code such that the abstraction is
 
 Modules that rely on the behavior defined in the abstraction module should only depend on the abstraction itself, rather than the specific implementations.
 
-The feature module is connected with the implementation module via Dependency Injection. The feature module doesn't directly create the required database instance. Instead, it specifies what dependencies it needs. These dependencies are then supplied externally, usually in the app module.
+The feature module is connected with the implementation module via Dependency Injection. The feature module doesn't directly create the required database instance. Instead, it specifies what dependencies it needs. These dependencies are then supplied externally, usually in the app module or the DI layer.
 
 It is beneficial to separate your APIs from their implementations in the following cases:
 
@@ -161,10 +160,6 @@ Since Android (app/library) modules come with additional build and configuration
 
 ---
 
-## References
-- [Common modularization patterns](https://developer.android.com/topic/modularization/patterns)
-
-
 ## Follow-ups
 
 - [[q-does-state-made-in-compose-help-avoid-race-condition--android--medium]]
@@ -173,6 +168,9 @@ Since Android (app/library) modules come with additional build and configuration
 - What strategies would you use to minimize build times in a heavily modularized project?
 - How would you handle cross-cutting concerns (analytics, logging, auth) in a modular architecture without increasing coupling?
 
+## References
+
+- [Common modularization patterns](https://developer.android.com/topic/modularization/patterns)
 
 ## Related Questions
 
@@ -180,14 +178,44 @@ Since Android (app/library) modules come with additional build and configuration
 
 - [[c-clean-architecture]]
 
-
 ### Related (Hard)
+
 - [[q-data-sync-unstable-network--android--hard]] - Networking
 - [[q-multi-module-best-practices--android--hard]] - Architecture
 - [[q-clean-architecture-android--android--hard]] - Architecture
 - [[q-design-instagram-stories--android--hard]] - Media
 
 ### Prerequisites (Easier)
+
 - [[q-android-security-practices-checklist--android--medium]] - Security
 - [[q-build-optimization-gradle--android--medium]] - Gradle
 - [[q-usecase-pattern-android--android--medium]] - Architecture
+
+## Ссылки (RU)
+
+- [Паттерны модуляризации (Common modularization patterns)](https://developer.android.com/topic/modularization/patterns)
+
+## Дополнительные вопросы (RU)
+
+- Как бы вы спроектировали модули для поддержки on-demand фич или динамической доставки модулей?
+- Какие стратегии вы бы использовали для минимизации времени сборки в сильно модульном проекте?
+- Как вы бы обрабатывали сквозные задачи (аналитика, логирование, аутентификация) в модульной архитектуре без увеличения зацепления?
+
+## Связанные вопросы (RU)
+
+### Предварительные знания / Концепции
+
+- [[c-clean-architecture]]
+
+### Связанные (Сложные)
+
+- [[q-data-sync-unstable-network--android--hard]] - Сетевое взаимодействие
+- [[q-multi-module-best-practices--android--hard]] - Архитектура
+- [[q-clean-architecture-android--android--hard]] - Архитектура
+- [[q-design-instagram-stories--android--hard]] - Медиа
+
+### Предварительные (Проще)
+
+- [[q-android-security-practices-checklist--android--medium]] - Безопасность
+- [[q-build-optimization-gradle--android--medium]] - Gradle
+- [[q-usecase-pattern-android--android--medium]] - Архитектура

@@ -30,19 +30,19 @@ tags: [android/room, difficulty/hard]
 
 ## Ответ (RU)
 
-**Полнотекстовый поиск (FTS)** в Room обеспечивает эффективный текстовый поиск через расширения FTS SQLite. На больших наборах данных FTS обычно значительно быстрее, чем LIKE-запросы по неиндексированному тексту, и поддерживает ранжирование (FTS5), префиксный поиск и булевы операторы.
+**Полнотекстовый поиск (FTS)** в Room обеспечивает эффективный текстовый поиск через расширения FTS SQLite. На больших наборах данных FTS обычно значительно быстрее, чем LIKE-запросы по неиндексированному тексту или LIKE c ведущим `%`, и поддерживает ранжирование (FTS5), префиксный поиск и булевы операторы.
 
 ### Когда Использовать FTS
 
 | Сценарий | LIKE | FTS4/FTS5 |
 |----------|------|-----------|
 | Малые таблицы (порядка сотен записей) | ✅ Часто достаточно | ⚠️ Может быть избыточно |
-| Крупные таблицы (десятки/сотни тысяч записей) | ❌ Часто медленно без спец. индексов | ✅ Обычно быстрее и масштабируемее |
+| Крупные таблицы (десятки/сотни тысяч записей) | ❌ Часто медленно (особенно с ведущим `%`) | ✅ Обычно быстрее и масштабируемее |
 | Простой поиск по одному полю | ✅ Проще | ⚠️ Сложнее в настройке |
 | Ранжирование по релевантности | ❌ Нет | ✅ Через `bm25()` (FTS5) |
 | Продвинутый / префиксный поиск | ❌ Ограничен шаблонами `%` | ✅ Специализированные операторы и индексация |
 
-(Цифры про «10-100x» рассматривайте как типичную оценку для полнотекстовых задач, а не жёсткую гарантию: всё зависит от данных и запросов.)
+(Оценки типа «10–100x быстрее» стоит рассматривать как типичную оценку для полнотекстовых задач, а не жёсткую гарантию: всё зависит от данных и запросов.)
 
 **Ключевые возможности FTS (особенно FTS5)**:
 - Повышенная производительность полнотекстового поиска по сравнению с последовательным LIKE-поиском
@@ -52,7 +52,7 @@ tags: [android/room, difficulty/hard]
 
 ### Базовая Реализация (пример с FTS5)
 
-Пример ниже показывает FTS-таблицу с внешним содержимым (external content) для FTS5.
+Пример ниже показывает FTS-таблицу с внешним содержимым (external content) для FTS5, управляемую Room через `contentEntity`.
 
 ```kotlin
 // ✅ Основная сущность
@@ -64,8 +64,9 @@ data class Article(
     val content: String
 )
 
-// ✅ FTS5 сущность с внешним содержимым (избегает дублирования)
-// Требуется версия Room с поддержкой @Fts5
+// ✅ FTS5 сущность с external content (избегает дублирования хранений текста)
+// Room с @Fts5(contentEntity = ...) создаёт виртуальную таблицу вида:
+// CREATE VIRTUAL TABLE articles_fts USING fts5(title, content, content='articles', content_rowid='id');
 @Fts5(contentEntity = Article::class)
 @Entity(tableName = "articles_fts")
 data class ArticleFts(
@@ -79,12 +80,27 @@ data class ArticleFts(
 
 ### Синхронизация С Основной Таблицей
 
-Для external content FTS-таблиц есть два основных подхода:
+Важно различать два режима:
+- external content (`contentEntity` / `content='articles'` + `content_rowid='id'`)
+- contentless / standalone FTS-таблица с явным дублированием данных
 
-1. Настроить виртуальную таблицу как `content='articles'`, `content_rowid='id'` (Room делает это при `contentEntity`), и обеспечивать согласованность вставками/обновлениями в основную таблицу.
-2. Использовать триггеры для явного обновления FTS-таблицы при изменениях основной таблицы.
+Для них механика синхронизации различается.
 
-Ниже пример с триггерами (упрощённый; подходит для базового сценария, не учитывает все варианты contentless-таблиц):
+1) External content через `contentEntity` (рекомендуемый способ в Room)
+
+- Room генерирует FTS-таблицу, привязанную к `articles` по `id`.
+- Для корректной синхронизации в SQLite требуются специальные FTS-команды (`INSERT`, `DELETE`, `UPDATE`) в FTS-таблицу, а не обычные UPDATE/DELETE строк:
+  - `INSERT INTO articles_fts(articles_fts, rowid, title, content) VALUES('insert', new.id, new.title, new.content);`
+  - `INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);`
+  - `INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);` + `INSERT INTO articles_fts(articles_fts, 'insert', new.id, new.title, new.content);` для UPDATE.
+- Room может управлять этим автоматически в зависимости от конфигурации; если вы создаёте триггеры вручную, их нужно писать в соответствии с документацией SQLite FTS, а не делать обычные `UPDATE articles_fts ...`.
+
+2) Contentless или дублирующая FTS-таблица
+
+- Вы храните данные как в основной таблице, так и в FTS-таблице.
+- В этом случае вы можете реализовать триггеры, которые используют FTS-специфические команды (например, через управляющий столбец) или инкапсулировать операции в DAO так, чтобы все изменения проходили через один путь и обновляли обе таблицы атомарно.
+
+Ниже — упрощённый пример триггеров для external content FTS5 (демо-идея, проверяйте точный синтаксис под свою схему и версию SQLite):
 
 ```kotlin
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
@@ -93,41 +109,39 @@ abstract class AppDatabase : RoomDatabase() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
 
-        // ✅ Автоматическая синхронизация при INSERT
-        db.execSQL("""
-            CREATE TRIGGER IF NOT EXISTS articles_fts_insert
-            AFTER INSERT ON articles
-            BEGIN
-                INSERT INTO articles_fts(rowid, title, content)
-                VALUES (new.id, new.title, new.content);
+        // ✅ INSERT: синхронизация через спец. команду FTS5
+        db.execSQL(
+            """
+            CREATE TRIGGER IF NOT EXISTS articles_ai AFTER INSERT ON articles BEGIN
+                INSERT INTO articles_fts(articles_fts, rowid, title, content)
+                VALUES('insert', new.id, new.title, new.content);
             END;
-        """)
+            """
+        )
 
-        // ✅ Автоматическая синхронизация при UPDATE
-        db.execSQL("""
-            CREATE TRIGGER IF NOT EXISTS articles_fts_update
-            AFTER UPDATE ON articles
-            BEGIN
-                UPDATE articles_fts
-                SET title = new.title,
-                    content = new.content
-                WHERE rowid = new.id;
+        // ✅ DELETE
+        db.execSQL(
+            """
+            CREATE TRIGGER IF NOT EXISTS articles_ad AFTER DELETE ON articles BEGIN
+                INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);
             END;
-        """)
+            """
+        )
 
-        // ✅ Автоматическая синхронизация при DELETE
-        db.execSQL("""
-            CREATE TRIGGER IF NOT EXISTS articles_fts_delete
-            AFTER DELETE ON articles
-            BEGIN
-                DELETE FROM articles_fts WHERE rowid = old.id;
+        // ✅ UPDATE
+        db.execSQL(
+            """
+            CREATE TRIGGER IF NOT EXISTS articles_au AFTER UPDATE ON articles BEGIN
+                INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);
+                INSERT INTO articles_fts(articles_fts, 'insert', new.id, new.title, new.content);
             END;
-        """)
+            """
+        )
     }
 }
 ```
 
-Важно: точная схема триггеров и использование вспомогательных команд FTS (`INSERT`, `DELETE`, `UPDATE`) зависит от того, используется ли external content/contentless режим. Для production-решения нужно строго следовать документации SQLite FTS и Room.
+Важно: точная схема триггеров и использование управляющего столбца (значения `'insert'`, `'delete'`) зависит от варианта FTS и режима (external content/contentless). Для production-решения нужно строго следовать документации SQLite FTS и актуальной документации Room; не используйте обычные `UPDATE`/`DELETE` над строками FTS-таблицы для external content.
 
 ### Поиск С Ранжированием BM25 (FTS5)
 
@@ -265,7 +279,7 @@ data class ArticleFtsSimple(
 
 1. ✅ **Используйте FTS5 для новых проектов**, если версия Room/SQLite его поддерживает: больше возможностей и лучшее ранжирование.
 2. ✅ **Рассмотрите external content (`contentEntity`)**, чтобы избегать ненужного дублирования, но допускается и contentless-схема, если она лучше подходит под задачи.
-3. ✅ **Настройте автоматическую синхронизацию** FTS-таблиц через триггеры или корректно сконфигурированный external content.
+3. ✅ **Настройте автоматическую синхронизацию корректно**: для external content — через FTS-специфичные команды и триггеры; для дублирующей схемы — через триггеры или строго инкапсулированные DAO-операции.
 4. ✅ **Индексируйте только действительно searchable-поля**, чтобы уменьшить размер индекса и ускорить поиск.
 5. ✅ **Используйте debouncing и/или throttling** в UI, чтобы не спамить базу запросами на каждый символ.
 6. ✅ **Используйте ранжирование (`bm25`)** там, где важна релевантность (FTS5).
@@ -277,7 +291,7 @@ data class ArticleFtsSimple(
 ### Частые Ошибки
 
 ```kotlin
-// ❌ Ручная синхронизация без триггеров (подвержена расхождениям)
+// ❌ Ручная синхронизация без триггеров или единой точки записи (подвержена расхождениям)
 @Transaction
 suspend fun insert(article: Article) {
     val id = insertArticle(article)
@@ -285,8 +299,8 @@ suspend fun insert(article: Article) {
     insertFts(ArticleFts(title = article.title, content = article.content))
 }
 
-// ✅ Предпочтительно: автоматическая синхронизация через триггеры
-// или строго инкапсулированные DAO-операции
+// ✅ Предпочтительно: корректные FTS-триггеры для external content
+// или строго инкапсулированные DAO-операции с обновлением обеих таблиц.
 
 // ❌ Отсутствие обработки пользовательского ввода в MATCH
 // dao.search(userInput)
@@ -315,19 +329,19 @@ data class ArticleFtsNarrow(
 
 ## Answer (EN)
 
-**Full-Text Search (FTS)** in Room provides efficient text search via SQLite FTS extensions. On large datasets, FTS is typically much faster than naive LIKE scans over unindexed text and supports (with FTS5) relevance ranking, prefix search, and boolean operators.
+**Full-Text Search (FTS)** in Room provides efficient text search via SQLite FTS extensions. On large datasets, FTS is typically much faster than naive LIKE scans (especially with leading `%`) over unindexed text, and supports (with FTS5) relevance ranking, prefix search, and boolean operators.
 
 ### When to Use FTS
 
 | Scenario | LIKE | FTS4/FTS5 |
 |----------|------|-----------|
 | Small tables (hundreds of rows) | ✅ Often sufficient | ⚠️ May be overkill |
-| Large tables (tens/hundreds of thousands of rows) | ❌ Often slow without proper indexes | ✅ Usually faster and more scalable |
+| Large tables (tens/hundreds of thousands of rows) | ❌ Often slow (especially with leading `%`) | ✅ Usually faster and more scalable |
 | Simple search on one column | ✅ Simpler | ⚠️ More setup |
 | Relevance ranking | ❌ Not built-in | ✅ `bm25()` (FTS5) |
 | Advanced/prefix search | ❌ Limited to `%` patterns | ✅ Dedicated MATCH syntax/indexing |
 
-(Values like "10-100x faster" should be treated as typical for full-text workloads, not a strict guarantee. Actual gains depend on schema, data, and queries.)
+(Values like "10–100x faster" should be treated as typical for full-text workloads, not a strict guarantee; actual gains depend on schema, data, and queries.)
 
 **Key FTS (esp. FTS5) features**:
 - Better performance for full-text queries vs. sequential LIKE scans
@@ -337,7 +351,7 @@ data class ArticleFtsNarrow(
 
 ### Basic Implementation (FTS5 Example)
 
-The following shows an FTS5 table with external content (no duplicated storage).
+The following shows an FTS5 table with external content managed by Room via `contentEntity`.
 
 ```kotlin
 // ✅ Main entity
@@ -349,8 +363,9 @@ data class Article(
     val content: String
 )
 
-// ✅ FTS5 entity with external content (avoids duplication)
-// Requires a Room version that supports @Fts5
+// ✅ FTS5 entity with external content (avoids duplicated text storage)
+// Room with @Fts5(contentEntity = ...) generates something like:
+// CREATE VIRTUAL TABLE articles_fts USING fts5(title, content, content='articles', content_rowid='id');
 @Fts5(contentEntity = Article::class)
 @Entity(tableName = "articles_fts")
 data class ArticleFts(
@@ -364,12 +379,29 @@ If you use FTS4 instead, replace `@Fts5` with `@Fts4` and note that features lik
 
 ### Synchronization with Main Table
 
-For external content FTS tables you have two main options:
+Two conceptual modes matter here:
+- external content (`content='articles'` + `content_rowid='id'`, configured via `contentEntity`)
+- contentless/duplicated FTS table where you insert searchable text directly
 
-1. Configure the virtual table with `content='articles'` and `content_rowid='id'` (Room does this based on `contentEntity`), and rely on consistent writes to the main table.
-2. Use triggers to explicitly keep the FTS table in sync with the main table.
+They require different sync strategies.
 
-Below is a simplified trigger-based example (suitable for a basic external content pattern; details depend on your exact FTS mode):
+1) External content via `contentEntity` (preferred with Room)
+
+- Room creates the FTS table bound to `articles` by `id`.
+- In SQLite FTS, keeping such a table in sync requires special maintenance statements that target the FTS table:
+  - `INSERT INTO articles_fts(articles_fts, rowid, title, content) VALUES('insert', new.id, new.title, new.content);`
+  - `INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);`
+  - For UPDATE: a `'delete'` for `old.*` followed by an `'insert'` for `new.*`.
+- If you define triggers manually, they must use these FTS-specific forms; doing `UPDATE articles_fts SET ... WHERE rowid = new.id;` or plain `DELETE FROM articles_fts WHERE rowid = old.id;` is not the correct pattern for external content FTS maintenance.
+
+2) Contentless / duplicated FTS table
+
+- You store search text both in the base table and in the FTS table.
+- You can:
+  - Use triggers that insert into/delete from the FTS table using the appropriate FTS commands; or
+  - Ensure all writes go through DAO methods that update both tables atomically.
+
+Below is a simplified trigger example for an external-content-style FTS5 setup (illustrative only; adjust to your schema and SQLite/Room version):
 
 ```kotlin
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
@@ -378,41 +410,39 @@ abstract class AppDatabase : RoomDatabase() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
 
-        // ✅ Auto-sync on INSERT
-        db.execSQL("""
-            CREATE TRIGGER IF NOT EXISTS articles_fts_insert
-            AFTER INSERT ON articles
-            BEGIN
-                INSERT INTO articles_fts(rowid, title, content)
-                VALUES (new.id, new.title, new.content);
+        // ✅ INSERT sync
+        db.execSQL(
+            """
+            CREATE TRIGGER IF NOT EXISTS articles_ai AFTER INSERT ON articles BEGIN
+                INSERT INTO articles_fts(articles_fts, rowid, title, content)
+                VALUES('insert', new.id, new.title, new.content);
             END;
-        """)
+            """
+        )
 
-        // ✅ Auto-sync on UPDATE
-        db.execSQL("""
-            CREATE TRIGGER IF NOT EXISTS articles_fts_update
-            AFTER UPDATE ON articles
-            BEGIN
-                UPDATE articles_fts
-                SET title = new.title,
-                    content = new.content
-                WHERE rowid = new.id;
+        // ✅ DELETE sync
+        db.execSQL(
+            """
+            CREATE TRIGGER IF NOT EXISTS articles_ad AFTER DELETE ON articles BEGIN
+                INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);
             END;
-        """)
+            """
+        )
 
-        // ✅ Auto-sync on DELETE
-        db.execSQL("""
-            CREATE TRIGGER IF NOT EXISTS articles_fts_delete
-            AFTER DELETE ON articles
-            BEGIN
-                DELETE FROM articles_fts WHERE rowid = old.id;
+        // ✅ UPDATE sync
+        db.execSQL(
+            """
+            CREATE TRIGGER IF NOT EXISTS articles_au AFTER UPDATE ON articles BEGIN
+                INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);
+                INSERT INTO articles_fts(articles_fts, 'insert', new.id, new.title, new.content);
             END;
-        """)
+            """
+        )
     }
 }
 ```
 
-Note: For production, align your triggers and FTS table definition (external content vs contentless) strictly with the SQLite FTS documentation; auxiliary `INSERT/UPDATE/DELETE` commands for FTS may be required depending on configuration.
+Note: For production, verify trigger syntax against the official SQLite FTS4/FTS5 documentation and the Room version you target. The key point is: do not treat FTS external-content tables like normal tables with arbitrary `UPDATE`/`DELETE` statements.
 
 ### Search with BM25 Ranking (FTS5)
 
@@ -549,14 +579,14 @@ Actual tokenizer availability/parameters depend on your SQLite/Room build.
 
 1. ✅ Prefer **FTS5 for new projects** (if supported by your Room/SQLite) for better ranking and features.
 2. ✅ Consider **external content (`contentEntity`)** to avoid unnecessary duplication, but contentless setups are valid where they simplify maintenance or offer better control.
-3. ✅ Ensure **automatic synchronization** between base and FTS tables (via triggers or tightly controlled DAO operations).
+3. ✅ Ensure **synchronization is implemented with correct FTS maintenance commands**: for external content, do not rely on plain UPDATE/DELETE on the FTS table; for duplicated setups, keep all writes atomic and consistent.
 4. ✅ **Index only real searchable text fields** to reduce index size and improve performance.
 5. ✅ Use **debouncing/throttling** in the UI to limit query frequency.
 6. ✅ Use **bm25 ranking** (FTS5) when relevance matters.
 7. ✅ **Handle user input safely** for MATCH (escape/normalize special characters and operators).
 8. ⚠️ Use **Paging** for large result sets.
 9. ⚠️ Ensure **atomicity** of writes affecting both main and FTS tables.
-10. ⚠️ **Choose between external content and duplication consciously**; "never duplicate" is incorrect as a blanket rule.
+10. ⚠️ **Choose between external content and duplication consciously**; "never duplicate" is not a universal rule.
 
 ### Common Mistakes
 
@@ -569,7 +599,8 @@ suspend fun insert(article: Article) {
     insertFts(ArticleFts(title = article.title, content = article.content))
 }
 
-// ✅ Prefer triggers or a single well-defined insertion path that updates both.
+// ✅ Prefer proper FTS triggers for external content
+// or a single well-defined insertion path updating both.
 
 // ❌ Passing raw user input to MATCH
 // dao.search(userInput)
@@ -593,6 +624,28 @@ data class ArticleFtsNarrow(
     val content: String
 )
 ```
+
+---
+
+## Дополнительные вопросы (RU)
+
+1. Как FTS5 обрабатывает многоязычный контент (например, английский и русский текст в одном документе), и как выбирать подходящие токенизаторы?
+2. Каковы накладные расходы по хранилищу и последствия для миграций при добавлении FTS-таблиц в существующую схему Room?
+3. Как можно реализовать нечёткий поиск или устойчивость к опечаткам поверх FTS (например, с вспомогательными таблицами или клиентским ранжированием)?
+4. Как спроектировать синхронизацию и логику восстановления FTS после частичной потери данных или повреждения FTS-индекса?
+5. Как бенчмаркать и профилировать FTS против LIKE для вашего конкретного сценария на Android-устройствах?
+
+## Ссылки (RU)
+
+- [[c-android-basics]]
+- [[c-database-performance]]
+- Room FTS документация: https://developer.android.com/training/data-storage/room/defining-data#fts
+- SQLite FTS5 Extension: https://www.sqlite.org/fts5.html
+- Рекомендации по производительности Room: https://developer.android.com/topic/performance/sqlite-performance-best-practices
+
+## Связанные вопросы (RU)
+
+- [[q-android-storage-types--android--medium]]
 
 ---
 

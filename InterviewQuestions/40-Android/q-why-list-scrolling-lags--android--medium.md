@@ -13,7 +13,7 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-views, android/threads-sync, difficulty/medium, optimization, performance, recyclerview]
 moc: moc-android
-related: [q-android-app-lag-analysis--android--medium, q-recyclerview-explained--android--medium, q-android-performance-measurement-tools--android--medium]
+related: [c-android-profiler, q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium]
 sources: []
 
 ---
@@ -30,7 +30,7 @@ sources: []
 
 ## Ответ (RU)
 
-Торможение списка происходит из-за проблем производительности в реализации RecyclerView. Основные причины:
+Торможение списка происходит из-за проблем производительности в реализации RecyclerView. Основные причины (см. также [[c-android-view-system]], [[c-android-profiler]]):
 
 ### 1. Неправильное Использование ViewHolder
 
@@ -90,7 +90,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Принцип**: onBindViewHolder должен только устанавливать данные, не вычислять их.
+**Принцип**: `onBindViewHolder` должен только устанавливать данные, не вычислять их.
 
 ### 3. Неоптимизированная Обработка Изображений
 
@@ -156,7 +156,7 @@ fun addItem(item: Item) {
 }
 ```
 
-✅ **Лучше**: ListAdapter с DiffUtil
+✅ **Лучше**: `ListAdapter` с `DiffUtil`
 
 ```kotlin
 class MyAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
@@ -206,7 +206,7 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ## Answer (EN)
 
-`List` scrolling lags due to **RecyclerView performance issues**. Main causes:
+`List` scrolling lags due to **RecyclerView performance issues**. Main causes (see also [[c-android-view-system]], [[c-android-profiler]]):
 
 ### 1. Incorrect ViewHolder Usage
 
@@ -266,11 +266,11 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Principle**: onBindViewHolder should **only set data**, not compute it.
+**Principle**: `onBindViewHolder` should only set data, not compute it.
 
 ### 3. Unoptimized Image Handling
 
-✅ **Use image loading libraries**:
+✅ Use image loading libraries:
 
 ```kotlin
 // Glide: automatic caching, resizing
@@ -312,7 +312,7 @@ Glide.with(context)
 </ConstraintLayout>
 ```
 
-### 5. Excessive notifyDataSetChanged()
+### 5. Excessive `notifyDataSetChanged()`
 
 ❌ **Bad**: Redraw entire list
 
@@ -332,7 +332,7 @@ fun addItem(item: Item) {
 }
 ```
 
-✅ **Better**: ListAdapter with DiffUtil
+✅ **Better**: `ListAdapter` with `DiffUtil`
 
 ```kotlin
 class MyAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
@@ -348,7 +348,7 @@ adapter.submitList(newItems)
 
 ### 6. Missing Data Caching
 
-✅ **Repository pattern with caching**:
+✅ Repository pattern with caching:
 
 ```kotlin
 class ItemRepository(private val api: ApiService, private val db: ItemDao) {

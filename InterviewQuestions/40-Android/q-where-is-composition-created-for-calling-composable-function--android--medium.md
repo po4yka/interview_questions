@@ -1,6 +1,6 @@
 ---
 id: android-410
-title: "Where Is Composition Created For Calling Composable Function"
+title: "Где создается Composition для вызова composable функции / Where Is Composition Created For Calling Composable Function"
 aliases: ["Where Is Composition Created", "Где создается Composition"]
 topic: android
 subtopics: [ui-compose]
@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-does-jetpackcompose-work--android--medium, q-compositionlocal-advanced--android--medium]
+related: [c-android-ui-composition, q-how-does-jetpackcompose-work--android--medium, q-compositionlocal-advanced--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
@@ -232,14 +232,12 @@ A composition lives as long as its host lives: the `setContent` host on an `Acti
 
 ## Ссылки (RU)
 
-- [[c-jetpack-compose]]
 - [Compose Lifecycle](https://developer.android.com/jetpack/compose/lifecycle)
 - [Understanding Composition](https://developer.android.com/jetpack/compose/mental-model)
 - [Thinking in Compose](https://developer.android.com/jetpack/compose/mental-model)
 
 ## References
 
-- [[c-jetpack-compose]] - Core Jetpack Compose concepts
 - [Compose Lifecycle](https://developer.android.com/jetpack/compose/lifecycle)
 - [Understanding Composition](https://developer.android.com/jetpack/compose/mental-model)
 - [Thinking in Compose](https://developer.android.com/jetpack/compose/mental-model)

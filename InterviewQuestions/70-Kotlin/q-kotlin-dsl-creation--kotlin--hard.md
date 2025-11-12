@@ -18,6 +18,9 @@ tags: [difficulty/hard]
 # Вопрос (RU)
 > Разработайте и реализуйте типобезопасный DSL для построения UI компонентов. Используйте контроль области видимости, extension-лямбды и `@DslMarker`.
 
+# Question (EN)
+> Design and implement a type-safe DSL for building UI components. Use scope control, extension lambdas, and `@DslMarker`.
+
 ## Ответ (RU)
 
 **DSL (Domain-Specific Language)** в Kotlin строится на возможностях языка: лямбдах с получателем, extension-функциях, инфиксных и операторных перегрузках. Это позволяет создавать выразительные и типобезопасные API, в том числе для UI.
@@ -25,6 +28,8 @@ tags: [difficulty/hard]
 ### Базовая структура DSL
 
 Используем лямбды с получателем: `block: HtmlTag.() -> Unit` — это позволяет внутри блока вызывать методы `HtmlTag` без явного указания объекта.
+
+Ниже пример базового структурного DSL (на HTML), который иллюстрирует техники, применимые затем к UI DSL:
 
 ```kotlin
 @DslMarker
@@ -88,7 +93,7 @@ fun buildPage() = HtmlBuilder().html {
 
 `@DslMarker` используется для ограничения выбора неявных получателей и предотвращения случайного обращения к внешнему builder'у из вложенного.
 
-Типичный приём: помечаем все классы одного DSL одной и той же аннотацией. Тогда при наличии нескольких помеченных получателей внутри лямбды компилятор запрещает неявные обращения к внешнему получателю, делая вложенный DSL более безопасным.
+Типичный приём: помечаем все классы и функции одного DSL одной и той же аннотацией. Тогда при наличии нескольких помеченных получателей внутри лямбды компилятор запрещает неявные обращения к внешнему получателю, делая вложенный DSL более безопасным.
 
 ### Полный типобезопасный UI DSL
 
@@ -129,7 +134,7 @@ class Text(private val content: String) : Component() {
     override fun render() = "<p>$content</p>"
 }
 
-// DSL-функции
+// Точка входа в DSL
 @UiDsl
 fun ui(block: Container.() -> Unit): Container {
     val container = Container()
@@ -137,14 +142,18 @@ fun ui(block: Container.() -> Unit): Container {
     return container
 }
 
+// DSL-функции для вложенного построения UI
+@UiDsl
 fun Container.button(text: String, onClick: () -> Unit) {
     add(Button(text, onClick))
 }
 
+@UiDsl
 fun Container.text(content: String) {
     add(Text(content))
 }
 
+@UiDsl
 fun Container.column(block: Container.() -> Unit) {
     val container = Container()
     container.block()
@@ -172,9 +181,11 @@ val page = ui {
 - использует лямбды с получателем для декларативного описания дерева;
 - с помощью `@UiDsl` предотвращает смешивание контекстов разных уровней UI DSL.
 
+Обработчики `onClick` здесь сохраняются как лямбды; пример фокусируется на построении декларативной структуры и контроле областей, а не на реальном исполнении UI.
+
 ### Продвинутый DSL: SQL Query Builder
 
-Пример другого домена: простой и типобезопасный (на уровне конструкции выражений) SQL DSL с infix-функциями.
+Пример другого домена: простой и читаемый SQL DSL с infix-функциями. Здесь мы всё ещё оперируем строками, поэтому типобезопасность ограничена уровнем операций над выражениями, а не полной моделью схемы.
 
 ```kotlin
 @DslMarker
@@ -241,7 +252,7 @@ val sql = query {
 // SELECT name, email, age FROM users WHERE age > 18 AND status = 'active' ORDER BY name
 ```
 
-Здесь `@SqlDsl` помечает классы DSL; для данного упрощённого примера он в основном демонстрационный. В реальном проекте аннотацию применяют ко всем builder'ам одного DSL, чтобы избежать коллизий с другими DSL в одной области видимости.
+Здесь `@SqlDsl` помечает классы DSL; для данного упрощённого примера он в основном демонстрационный: настоящая type-safe модель потребовала бы типов для колонок и таблиц, а не операций со строками.
 
 ### Лучшие практики (RU)
 
@@ -277,24 +288,6 @@ fun Container.button(text: String, onClick: () -> Unit) {
 fun Container.add(component: Any) { /* ... */ }
 ```
 
-## Дополнительные вопросы (RU)
-
-- В чем ключевые отличия подхода к DSL в Kotlin по сравнению с Java?
-- В каких практических сценариях вы бы использовали такой DSL (например, описание UI, конфигурации, Gradle-подобные скрипты)?
-- Какие типичные ошибки стоит избегать при проектировании DSL на Kotlin?
-
-## Ссылки (RU)
-
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
-- [[c-kotlin]]
-
-## Связанные вопросы (RU)
-
-- [[q-array-vs-list-kotlin--kotlin--easy]]
-
-# Question (EN)
-> Design and implement a type-safe DSL for building UI components. Use scope control, extension lambdas, and `@DslMarker`.
-
 ## Answer (EN)
 
 A **DSL (Domain-Specific Language)** in Kotlin is built using language features such as lambdas with receivers, extension functions, and infix/operator overloading to create expressive and type-safe APIs, e.g., for UI building.
@@ -302,6 +295,8 @@ A **DSL (Domain-Specific Language)** in Kotlin is built using language features 
 ### Basic DSL Structure
 
 Use lambdas with receivers: `block: HtmlTag.() -> Unit` so that inside the block you can call `HtmlTag` members without qualifying the receiver.
+
+Below is a minimal structural (HTML) DSL example that demonstrates techniques directly applicable to UI DSLs:
 
 ```kotlin
 @DslMarker
@@ -365,7 +360,7 @@ fun buildPage() = HtmlBuilder().html {
 
 `@DslMarker` is used to limit implicit receiver resolution and to prevent accidentally calling members of an outer builder from an inner DSL scope.
 
-If multiple receivers annotated with the same `@DslMarker` are in scope, the compiler restricts implicit access to only the closest one. This keeps nested builders type-safe and avoids mixing domains.
+A common pattern is to annotate all relevant builder classes and functions of a DSL with the same marker. When multiple marked receivers are in scope, the compiler restricts implicit access to only the closest one, which keeps nested builders safe and domains separated.
 
 ### Complete Type-Safe UI DSL
 
@@ -406,6 +401,7 @@ class Text(private val content: String) : Component() {
     override fun render() = "<p>$content</p>"
 }
 
+// DSL entry point
 @UiDsl
 fun ui(block: Container.() -> Unit): Container {
     val container = Container()
@@ -413,14 +409,18 @@ fun ui(block: Container.() -> Unit): Container {
     return container
 }
 
+// DSL functions for nested UI construction
+@UiDsl
 fun Container.button(text: String, onClick: () -> Unit) {
     add(Button(text, onClick))
 }
 
+@UiDsl
 fun Container.text(content: String) {
     add(Text(content))
 }
 
+@UiDsl
 fun Container.column(block: Container.() -> Unit) {
     val container = Container()
     container.block()
@@ -448,9 +448,11 @@ This DSL is:
 - declarative via lambdas with receivers;
 - using `@UiDsl` to keep nested scopes clean and avoid mixing different UI builder contexts.
 
+Here `onClick` handlers are stored as lambdas; the example focuses on declarative structure and scope control, not on runtime UI execution.
+
 ### Advanced DSL: SQL Query Builder
 
-Example in another domain with infix functions:
+Example in another domain with infix functions. Note that this implementation still builds raw SQL strings, so its type-safety is limited to structured expression building rather than schema-level guarantees.
 
 ```kotlin
 @DslMarker
@@ -517,7 +519,7 @@ val sql = query {
 // SELECT name, email, age FROM users WHERE age > 18 AND status = 'active' ORDER BY name
 ```
 
-Here `@SqlDsl` marks the DSL builder types. In this simplified example it mainly illustrates the pattern; in a larger codebase it helps prevent mixing this DSL with others in the same scope.
+Here `@SqlDsl` marks the builder types; in this simplified version it mainly demonstrates the pattern. A fully type-safe implementation would model tables and columns as types instead of plain strings.
 
 ### Best Practices
 
@@ -531,7 +533,7 @@ annotation class BuilderDsl
 class Builder { /* ... */ }
 ```
 
-Apply it consistently to all core DSL builder types to prevent leaking outer receivers.
+Apply it consistently to all core DSL builder classes and functions to prevent leaking outer receivers.
 
 2. Prefer extension lambdas with receivers:
 
@@ -558,6 +560,21 @@ fun Container.add(component: Any) { /* ... */ }
 ```
 
 Ensure your builder functions accept and produce well-defined domain types.
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия подхода к DSL в Kotlin по сравнению с Java?
+- В каких практических сценариях вы бы использовали такой DSL (например, описание UI, конфигурации, Gradle-подобные скрипты)?
+- Какие типичные ошибки стоит избегать при проектировании DSL на Kotlin?
+
+## Ссылки (RU)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-array-vs-list-kotlin--kotlin--easy]]
 
 ## Follow-ups
 

@@ -57,7 +57,7 @@ inline fun processDataNow(callback: () -> Unit) {
 
 ### 2. Нельзя передавать лямбду в обычную (non-inline) функцию (без `noinline`)
 
-Нельзя передать инлайновый параметр (лямбду без `noinline`) туда, где от него ожидается значение-функция, которое может быть сохранено или использовано позже, например — в обычную функцию.
+Нельзя передать инлайновый параметр (лямбду без `noinline`) туда, где от него ожидается значение-функция, которое может быть сохранено или использовано позже, например — в обычную функцию. (Передача в другую `inline`-функцию с совместимым параметром допускается.)
 
 ```kotlin
 // - ОШИБКА КОМПИЛЯЦИИ
@@ -156,11 +156,11 @@ fun log(message: String) {
 }
 ```
 
-Ключевая мысль: «часто вызывается» само по себе не аргумент против или за `inline`; нужно учитывать размер тела, избегание аллокаций и накладные расходы вызова.
+Ключевая мысль: «часто вызывается» само по себе не аргумент против или за `inline`; нужно учитывать размер тела, избегание аллокаций и накладные расходы вызова (при этом JIT/HotSpot способен сам инлайнить небольшие функции).
 
 ### 6. `reified` без реальной необходимости
 
-`reified` тип-параметры требуют `inline`. Но их использование добавляет ограничения (например, вызовы только из Kotlin, инлайнинг в код клиента). Не стоит добавлять `reified`/`inline`, если не нужен доступ к типу в runtime.
+`reified` тип-параметры требуют `inline`. Но их использование добавляет ограничения (например, необходимость инлайнинга в вызывающий код). Не стоит добавлять `reified`/`inline`, если не нужен доступ к типу в runtime. При этом наличие `inline`/`reified` не делает функцию автоматически "недоступной" из Java — это зависит от итоговой сигнатуры (например, будет ли параметр `Class<T>` и т.п.).
 
 ```kotlin
 // - СОМНИТЕЛЬНО — создание инстанса через reflection
@@ -185,7 +185,7 @@ context.startActivity<MainActivity>()
 
 ### 7. Публичный API библиотеки
 
-`inline`-функции встраиваются в байткод клиента. Изменение реализации/сигнатуры такой функции влияет на бинарную совместимость иначе, чем для обычных функций, и может ломать клиентов, собранных против старой версии.
+`inline`-функции встраиваются в байткод клиента. Изменение реализации/сигнатуры такой функции влияет на бинарную совместимость иначе, чем для обычных функций, и может ломать клиентов, собранных против старой версии (если они не пересобраны).
 
 ```kotlin
 // - РИСКОВАНО — inline в публичном API библиотеки
@@ -215,35 +215,26 @@ public fun processRequest(url: String, callback: (Response) -> Unit) {
 // Обновление библиотеки меняет поведение без необходимости пересборки клиента.
 ```
 
-### 8. Public inline функции и менее видимые зависимости
+### 8. Public inline функции и зависимости с меньшей видимостью
 
-Так как тело `public inline` функции раскрывается в коде вызвавшей стороны, оно не может использовать сущности с меньшей видимостью (`private`, `internal` из другого модуля). Иначе возникнет ошибка компиляции.
+Так как тело `public inline` функции раскрывается в коде вызвавшей стороны, оно фактически становится частью публичного API. Оно не должно опираться на объявления, которые недоступны из модулей-клиентов с точки зрения бинарной совместимости (например, `internal` из другого модуля), иначе использование такой функции снаружи станет невозможно. При этом доступ к `private`/`internal` членам того же файла/модуля в теле `inline` технически допустим: код разворачивается там же, где эти члены видимы при компиляции.
 
 ```kotlin
 class UserManager {
     private val cache = mutableMapOf<Int, User>()
 
     public inline fun getUser(id: Int): User? {
-        // ERROR: Public-API inline function cannot access private property 'cache'
-        return cache[id]
+        return cache[id]  // OK: инлайнинг происходит в том же модуле, где cache виден
     }
 }
 
-//  ВАРИАНТ 1 — убрать inline, оставить private
-class UserManager1 {
+//  ВАРИАНТ — если функция должна быть доступна из других модулей
+//  и не должна раскрывать детали реализации, лучше не делать её inline.
+class UserManagerApi {
     private val cache = mutableMapOf<Int, User>()
 
-    fun getUser(id: Int): User? {
-        return cache[id]
-    }
-}
-
-//  ВАРИАНТ 2 — оставить inline, выровнять видимость
-class UserManager2 {
-    internal val cache = mutableMapOf<Int, User>()
-
-    internal inline fun getUser(id: Int): User? {
-        return cache[id]  // OK: обе сущности internal в одном модуле
+    public fun getUser(id: Int): User? {
+        return cache[id]  // Реализация остаётся внутри модуля
     }
 }
 ```
@@ -282,15 +273,15 @@ fun processItemsSafe(items: List<String>) {
 
 ### 10. Когда производительность не критична
 
-Инлайнинг уменьшает накладные расходы вызова и может убрать аллокации лямбд, но увеличивает размер кода и раскрывает реализацию. Избегайте `inline`, если выигрыша почти нет.
+Инлайнинг уменьшает накладные расходы вызова и может убрать аллокации лямбд, но увеличивает размер кода и раскрывает реализацию. Если функция тривиальна, часто используется из Java, или важнее стабильность бинарного контракта и читаемость, `inline` может быть излишним — особенно учитывая, что JVM JIT способен самостоятельно инлайнить небольшие методы.
 
 ```kotlin
-// - НЕОБЯЗАТЕЛЬНО — inline почти ничего не даёт
+// - ЧАЩЕ ВСЕГО НЕОБЯЗАТЕЛЬНО — выигрыш от inline минимален
 inline fun formatUserNameInline(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
 
-// Предпочтительнее обычная функция
+// Часто достаточно обычной функции
 fun formatUserName(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
@@ -347,7 +338,7 @@ inline fun buildUser(init: UserBuilder.() -> Unit): User {
 | Функция с `reified` типом | Да (inline обязателен) | Нужен доступ к типу `T` во время выполнения |
 | Публичный API библиотеки | Осторожно | Вопросы бинарной совместимости и обновлений |
 | Хранение/передача лямбды как значения | Использовать `noinline` | Нужна обычная семантика значения |
-| Часто вызываемая функция | Зависит | Баланс между размером и скоростью |
+| Часто вызываемая функция | Зависит | Баланс между размером и скоростью, JIT-инлайнингом |
 
 ### Использование `noinline` и `crossinline`
 
@@ -405,7 +396,7 @@ inline fun processDataNow(callback: () -> Unit) {
 
 ### 2. Cannot Pass Lambda to Regular (non-inline) Function (Without noinline)
 
-You cannot pass an inlined function parameter (higher-order parameter without `noinline`) where it would need to be stored or treated as a regular value, such as passing it to another function that expects a function value.
+You cannot pass an inlined parameter (lambda without `noinline`) where it is expected to be a regular function value that may be stored or used later, such as a regular non-inline function. (Passing to another `inline` function with a compatible inline parameter is allowed.)
 
 ```kotlin
 // - COMPILATION ERROR
@@ -485,11 +476,11 @@ fun processUserData(user: User, callback: (Result) -> Unit) {
 }
 ```
 
-Recommendation: Prefer inline for small functions and higher-order utilities; be careful with inlining large bodies.
+Recommendation: Prefer inline for small functions and higher-order utilities; avoid it for large bodies.
 
 ### 5. Frequently Called Functions: Consider Trade-offs
 
-For very small functions, inlining even when called frequently can be beneficial (fewer call overheads, better optimizations). For non-trivial bodies, inlining at many call sites can cause code size bloat.
+For very small functions, inlining even when called frequently can be beneficial (less call overhead, better optimizations). For non-trivial bodies with many call sites, inlining may produce excessive code size.
 
 ```kotlin
 // Example where inline is reasonable (tiny wrapper)
@@ -504,19 +495,19 @@ fun log(message: String) {
 }
 ```
 
-Key point: "frequently called" alone is not a reason to avoid inline; you must balance body size, allocation avoidance, and call overhead.
+Key point: "frequently called" alone is neither a reason for nor against `inline`; you must balance body size, allocation-avoidance, call overhead, and remember that the JVM JIT can inline small methods automatically.
 
 ### 6. Functions with Reified Types without Necessity
 
-`reified` type parameters require `inline`. But using `reified`/`inline` adds constraints (e.g., only callable from Kotlin, inlining into client code). Avoid them when you don't actually need type information at runtime.
+`reified` type parameters require `inline`. But using `reified`/`inline` adds constraints (e.g., it forces inlining into caller bytecode). Avoid them when you don't actually need type information at runtime. Also, using `inline`/`reified` does not automatically forbid Java callers; Java interop depends on the resulting signature (for example, parameters like `Class<T>` vs relying purely on reified semantics inside Kotlin).
 
 ```kotlin
-// - QUESTIONABLE - uses reflection and deprecated/unsafe API
+// - QUESTIONABLE - uses reflection, may be unnecessary
 inline fun <reified T> createInstance(): T {
     return T::class.java.getDeclaredConstructor().newInstance()
 }
 
-// Use reified only when you need T at runtime, e.g. to pass T::class.java
+// Use reified when you actually need T at runtime, e.g., to pass T::class.java
 inline fun <reified T> Gson.fromJson(json: String): T {
     return fromJson(json, T::class.java)
 }
@@ -528,12 +519,12 @@ inline fun <reified T : Activity> Context.startActivity() {
 }
 
 // Usage
-context.startActivity<MainActivity>()  // No explicit .java class literal
+context.startActivity<MainActivity>()
 ```
 
 ### 7. Public Library API
 
-Inline functions are inlined into client bytecode. Changing their implementation/signature affects binary compatibility differently from regular functions and may break clients compiled against old versions.
+Inline functions are inlined into client bytecode. Changing their implementation/signature affects binary compatibility differently from regular functions and may break clients compiled against old versions (until they are recompiled).
 
 ```kotlin
 // - RISKY - inline in public API of a library
@@ -560,45 +551,36 @@ public fun processRequest(url: String, callback: (Response) -> Unit) {
     callback(response)
 }
 
-// Updating the library updates behavior without requiring recompilation.
+// Updating the library updates behavior without requiring client recompilation.
 ```
 
-### 8. Public Inline Functions with Non-public Dependencies
+### 8. Public Inline Functions with Less-visible Dependencies
 
-Public inline functions have their bodies exposed to callers at the call site. They must not depend on declarations that are less visible than the function itself (private or internal in another module), otherwise compilation will fail.
+Because the body of a `public inline` function is effectively part of the public API surface (it is inlined into callers), it should not rely on declarations that will be invisible or unavailable to client modules (e.g., `internal` declarations from another module), or the function will not be usable externally. Accessing `private`/`internal` members from the same file/module in an inline function is technically allowed because inlining happens where those members are visible at compile time.
 
 ```kotlin
 class UserManager {
     private val cache = mutableMapOf<Int, User>()
 
     public inline fun getUser(id: Int): User? {
-        // ERROR: Public-API inline function cannot access private property 'cache'
-        return cache[id]
+        return cache[id]  // OK: inlining occurs in the same module where cache is visible
     }
 }
 
-//  CORRECT OPTION 1 - remove inline and keep cache private
-class UserManager1 {
+//  OPTION - if the function is part of a public API for other modules
+//  and you don't want to expose implementation details, prefer non-inline.
+class UserManagerApi {
     private val cache = mutableMapOf<Int, User>()
 
-    fun getUser(id: Int): User? {
+    public fun getUser(id: Int): User? {
         return cache[id]
-    }
-}
-
-//  CORRECT OPTION 2 - keep inline but align visibility
-class UserManager2 {
-    internal val cache = mutableMapOf<Int, User>()
-
-    internal inline fun getUser(id: Int): User? {
-        return cache[id]  // OK: both are internal (same module)
     }
 }
 ```
 
 ### 9. Non-local Returns: Behavioral Pitfall
 
-Inline functions allow non-local returns from lambda parameters (unless marked `crossinline`). This is legal but can be confusing. This is not a prohibition on using inline, but a semantics caveat.
+Inline functions allow non-local returns from lambda parameters (unless marked `crossinline`). This is legal but can be confusing, so it's more of a semantics caveat than a strict prohibition.
 
 ```kotlin
 inline fun processItems(items: List<String>) {
@@ -626,17 +608,19 @@ fun processItemsSafe(items: List<String>) {
 }
 ```
 
+To forbid non-local returns for a particular parameter, use `crossinline`.
+
 ### 10. When Performance is not Critical
 
-Using `inline` has trade-offs: it can reduce call overhead and allocations for lambdas, but increases code size and exposes implementation. Avoid `inline` when performance benefits are negligible.
+Inlining reduces call overhead and can eliminate lambda allocations, but increases code size and exposes implementation details. If performance is not critical, the function is trivial, or binary compatibility and readability are more important, `inline` may be unnecessary — especially given that the JVM JIT can inline small methods on its own.
 
 ```kotlin
-// - UNNECESSARY - inline gives no real benefit here
+// - OFTEN UNNECESSARY - inline gives minimal benefit here
 inline fun formatUserNameInline(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
 
-// Prefer regular function
+// Regular function is often sufficient
 fun formatUserName(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
@@ -690,10 +674,10 @@ inline fun buildUser(init: UserBuilder.() -> Unit): User {
 | Small function with lambda | Yes | Avoid call + lambda overhead |
 | Large function (many lines) | Usually no | Risk of code bloat |
 | Recursive function | No | Inline recursive not allowed |
-| Function with reified type | Yes (inline required) | Needs T at runtime |
+| Function with `reified` type | Yes (inline required) | Needs T at runtime |
 | Public library API | Careful | Binary compatibility & update issues |
 | Storing/passing lambda as value | Use noinline | Normal value semantics needed |
-| Frequently called function | Depends | Trade off size vs speed |
+| Frequently called function | Depends | Trade off size vs speed, JIT inlining |
 
 ### Using Noinline and Crossinline
 

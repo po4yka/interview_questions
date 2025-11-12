@@ -2,30 +2,23 @@
 id: kotlin-115
 title: "Room Database with Coroutines and Flow / Room БД с корутинами и Flow"
 aliases: ["Room Database with Coroutines and Flow", "Room БД с корутинами и Flow"]
-
-# Classification
 topic: kotlin
-subtopics: [coroutines, database]
+subtopics: [coroutines]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Room Coroutines Flow Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-room, c-flow, q-stateflow-sharedflow-android--kotlin--medium]
-
-# Timestamps
+related: [c--kotlin--medium, q-sharedflow-stateflow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
+tags: [kotlin, coroutines, flow, room, difficulty/medium]
 
-tags: [android, coroutines, database, difficulty/medium, flow, kotlin, room]
 ---
+
 # Вопрос (RU)
 > Как использовать Room БД с корутинами и `Flow`? Объясните suspend функции в DAO, `Flow` для реактивных запросов, обработку транзакций и лучшие практики.
 
@@ -87,13 +80,13 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     fun insertUser(user: User) {
         viewModelScope.launch {
             userDao.insertUser(user)
-            // При использовании `Flow` обычно нет необходимости вручную обновлять список
+            // При использовании Flow-стримов из DAO обычно нет необходимости вручную обновлять список
         }
     }
 }
 ```
 
-Примечание: suspend-вызовы DAO Room выполняет вне главного потока с помощью своих исполнителей, поэтому обычно не требуется оборачивать их в `withContext(Dispatchers.IO)`.
+Примечание: suspend-вызовы DAO Room выполняет вне главного потока с помощью своих внутренних исполнителей (при использовании соответствующих зависимостей Room), поэтому обычно не требуется оборачивать их в `withContext(Dispatchers.IO)`.
 
 ### Реактивные запросы с `Flow`
 
@@ -102,6 +95,7 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 @Dao
 interface UserDao {
     // Возвращает Flow, который повторно выполняет запрос и эмитит значения при изменениях таблицы users
+    // Flow от Room является холодным: запрос выполняется при коллекции и заново при каждом новом коллекторе.
     @Query("SELECT * FROM users")
     fun observeAllUsers(): Flow<List<User>>
 
@@ -145,10 +139,11 @@ class UserFragment : Fragment() {
 ```kotlin
 @Dao
 interface UserDao {
-    // Relations + @Transaction для атомарной и согласованной загрузки связанных данных
+    // Relations + @Transaction для атомарной и согласованной загрузки связанных данных.
+    // Если пользователь не найден, функция должна возвращать null (UserWithDetails?).
     @Transaction
     @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUserWithDetails(userId: Int): UserWithDetails
+    suspend fun getUserWithDetails(userId: Int): UserWithDetails?
 
     // Объединение нескольких операций в одной транзакции
     @Transaction
@@ -169,7 +164,7 @@ interface UserDao {
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
-    // Пользовательская транзакция с withTransaction
+    // Пользовательская транзакция с withTransaction из room-ktx (suspend-расширение для RoomDatabase)
     suspend fun performTransaction() {
         withTransaction {
             // Все операции выполняются атомарно
@@ -213,9 +208,11 @@ class UserRepository(private val userDao: UserDao) {
         userDao.deleteUser(user)
     }
 
-    // Пример объединения источников: cache-then-network
+    // Упрощённый пример cache-then-network.
+    // Обратите внимание: этот Flow холодный и при каждом новом коллекторе заново выполнит запрос БД и сети.
+    // Для настоящего "кэш = Room" обычно наблюдают Flow из DAO и отдельно триггерят обновление из сети.
     fun getUserWithCache(userId: Int): Flow<User?> = flow {
-        // Сначала отдаем данные из кэша (Room)
+        // Сначала отдаём данные из кэша (Room)
         emit(userDao.getUserById(userId))
 
         // Затем пробуем получить данные из сети и обновить БД
@@ -247,6 +244,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
         viewModelScope.launch {
             repository.insertUser(
                 User(
+                    // В реальном коде предпочитайте autoGenerate или надёжную генерацию идентификатора.
                     id = System.currentTimeMillis().toInt(),
                     name = name,
                     email = email
@@ -259,7 +257,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 Кратко:
 - Используйте suspend-функции в DAO для одноразовых операций.
-- Используйте `Flow` для реактивных запросов и автоматических обновлений UI.
+- Используйте `Flow` для реактивных запросов и автоматических обновлений UI; Room переисполняет запрос при изменениях соответствующих таблиц.
 - Применяйте `@Transaction` и `withTransaction` для атомарности.
 - Инкапсулируйте доступ к БД в репозитории и комбинируйте Room с сетью по необходимости.
 
@@ -318,13 +316,13 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     fun insertUser(user: User) {
         viewModelScope.launch {
             userDao.insertUser(user)
-            // Optionally reload or rely on a Flow-backed source instead of manual refresh
+            // Typically, when using DAO Flows, you don't need to manually refresh the list.
         }
     }
 }
 ```
 
-Note: Room executes suspend DAO calls off the main thread using its own executors, so you generally do not need to wrap them in `withContext(Dispatchers.IO)`.
+Note: Room executes suspend DAO calls off the main thread using its own executors (with the appropriate Room dependencies), so you generally do not need to wrap them in `withContext(Dispatchers.IO)`.
 
 ### Reactive Queries with `Flow`
 
@@ -332,7 +330,8 @@ Note: Room executes suspend DAO calls off the main thread using its own executor
 // DAO with Flow
 @Dao
 interface UserDao {
-    // Returns Flow that re-runs the query and emits whenever "users" table changes
+    // Returns a Flow that re-runs the query and emits whenever the "users" table changes.
+    // Room Flows are cold: the query runs when collected and is re-run per active collector.
     @Query("SELECT * FROM users")
     fun observeAllUsers(): Flow<List<User>>
 
@@ -377,10 +376,11 @@ class UserFragment : Fragment() {
 ```kotlin
 @Dao
 interface UserDao {
-    // Relations + @Transaction to load related data atomically & consistently
+    // Relations + @Transaction to load related data atomically & consistently.
+    // If the user does not exist, this should return null (UserWithDetails?).
     @Transaction
     @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUserWithDetails(userId: Int): UserWithDetails
+    suspend fun getUserWithDetails(userId: Int): UserWithDetails?
 
     // Wrap multiple operations in a single transaction
     @Transaction
@@ -401,7 +401,7 @@ interface UserDao {
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
-    // Custom transaction using Room's withTransaction extension
+    // Custom transaction using Room's withTransaction extension from room-ktx
     suspend fun performTransaction() {
         withTransaction {
             // All operations in one atomic transaction
@@ -445,9 +445,11 @@ class UserRepository(private val userDao: UserDao) {
         userDao.deleteUser(user)
     }
 
-    // Combine multiple sources: simple cache-then-network pattern
+    // Simplified cache-then-network example.
+    // Note: this Flow is cold and will perform the DB and network calls per collector.
+    // In a typical Room-as-cache setup, you observe a DAO Flow and trigger network refresh separately.
     fun getUserWithCache(userId: Int): Flow<User?> = flow {
-        // Emit cached data first (may call suspend Room function inside flow)
+        // Emit cached data first (Room)
         emit(userDao.getUserById(userId))
 
         // Then fetch from network and update DB
@@ -456,7 +458,7 @@ class UserRepository(private val userDao: UserDao) {
             userDao.insertUser(networkUser)
             emit(networkUser)
         } catch (e: Exception) {
-            // Handle error (e.g., emit(null) or log)
+            // Handle error (e.g., log or emit a separate error signal)
         }
     }
 
@@ -479,6 +481,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
         viewModelScope.launch {
             repository.insertUser(
                 User(
+                    // In real apps prefer autoGenerate or a robust ID generation strategy.
                     id = System.currentTimeMillis().toInt(),
                     name = name,
                     email = email
@@ -489,47 +492,83 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
+In short:
+- Use suspend functions in DAO for one-off operations.
+- Use `Flow` for reactive queries and automatic UI updates; Room re-runs the query when relevant tables change.
+- Use `@Transaction` and `withTransaction` for atomic operations.
+- Encapsulate DB access in a repository and combine Room with network as needed.
+
+---
+
+## Дополнительные вопросы (RU)
+
+1. Как безопасно выполнять миграции Room с использованием корутин, чтобы операции чтения/записи оставались неблокирующими?
+2. В каких случаях предпочтительнее использовать `Flow` в DAO, а в каких — только suspend-функции для одноразовых запросов?
+3. Как тестировать DAO и репозитории Room, которые используют корутины и `Flow` (например, с `runTest` и `TestDispatcher`)?
+4. Как обрабатывать и пробрасывать ошибки при работе с Room через `Flow` и структурированную конкуррентность?
+5. Как интегрировать `Flow` из Room с `StateFlow`/`SharedFlow` во ViewModel для управления состоянием UI?
+
 ---
 
 ## Follow-ups
 
-1. How to handle database migrations with coroutines and ensure queries remain non-blocking?
-2. When to use `Flow` vs `suspend` functions in DAO for different use cases?
-3. How to test Room DAOs and repositories that use coroutines and `Flow`?
-4. How to handle and propagate errors from Room operations using `Flow` and structured concurrency?
-5. How to integrate Room `Flow` streams with UI state holders like `StateFlow` and `SharedFlow`?
+1. How to safely perform Room migrations with coroutines so that reads/writes remain non-blocking?
+2. In which scenarios should you prefer `Flow` in DAO vs only suspend functions for one-shot queries?
+3. How to test Room DAOs and repositories using coroutines and `Flow` (e.g., with `runTest` and `TestDispatcher`)?
+4. How to handle and propagate errors from Room when using `Flow` and structured concurrency?
+5. How to integrate Room `Flow` streams with `StateFlow`/`SharedFlow` in ViewModel for UI state management?
+
+---
+
+## Ссылки (RU)
+
+- [Room с корутинами](https://developer.android.com/training/data-storage/room/async-queries)
+- [[c--kotlin--medium]]
 
 ---
 
 ## References
 
 - [Room with Coroutines](https://developer.android.com/training/data-storage/room/async-queries)
-- [[c-room]]
-- [[c-flow]]
+- [[c--kotlin--medium]]
+
+---
+
+## Связанные вопросы (RU)
+
+### База (проще)
+- [[q-kotlin-flow-basics--kotlin--medium]] - Введение в `Flow`
+
+### Связанные (Medium)
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
+- [[q-flow-operators-map-filter--kotlin--medium]] - Операторы `map`/`filter`
+- [[q-channel-flow-comparison--kotlin--medium]] - Каналы и `Flow`
+- [[q-hot-cold-flows--kotlin--medium]] - Горячие и холодные `Flow`
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
+
+### Продвинутое (Hard)
+- [[q-testing-flow-operators--kotlin--hard]] - Тестирование операторов `Flow`
+- [[q-flowon-operator-context-switching--kotlin--hard]] - `flowOn` и переключение контекстов
 
 ---
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction
 
 ### Related (Medium)
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
-- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs `LiveData`
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
 - [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
 - [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

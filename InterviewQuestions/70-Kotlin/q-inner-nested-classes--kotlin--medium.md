@@ -3,7 +3,7 @@ id: kotlin-233
 title: "Inner vs Nested Classes in Kotlin / Внутренние и вложенные классы в Kotlin"
 aliases: ["Inner vs Nested Classes", "Внутренние vs вложенные классы"]
 topic: kotlin
-subtopics: [classes, kotlin-features, scoping]
+subtopics: [classes, scoping]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -12,9 +12,10 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: "2025-10-12"
-updated: "2025-11-09"
-tags: [classes, difficulty/medium, inner-classes, kotlin, kotlin-features, nested-classes]
+updated: "2025-11-11"
+tags: [kotlin/classes, difficulty/medium, kotlin/inner-classes, kotlin/nested-classes]
 sources: ["https://kotlinlang.org/docs/nested-classes.html"]
+
 ---
 
 # Вопрос (RU)

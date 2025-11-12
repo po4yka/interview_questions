@@ -14,9 +14,14 @@ related: [c-kotlin, q-kotlin-sealed-classes-features--programming-languages--med
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, functions, generics, kotlin, syntax, type-parameters]
+
 ---
+
 # Вопрос (RU)
 > Какой синтаксис используется для объявления обобщенной функции в Kotlin?
+
+# Question (EN)
+> What syntax is used to declare a generic function in Kotlin?
 
 ## Ответ (RU)
 
@@ -57,9 +62,6 @@ val name = identity("Hello")     // T выводится как String
 
 ---
 
-# Question (EN)
-> What syntax is used to declare a generic function in Kotlin?
-
 ## Answer (EN)
 
 To declare a generic function in Kotlin, use angle brackets `<T>` before the function name:
@@ -99,24 +101,6 @@ val name = identity("Hello")     // T inferred as String
 
 ---
 
-## Дополнительные вопросы (RU)
-
-- В чем ключевые отличия этого синтаксиса от Java?
-- Когда вы бы использовали обобщенные функции на практике?
-- Каковы распространенные ошибки и подводные камни при использовании обобщений?
-
-## Ссылки (RU)
-
-- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-- [[c-kotlin]]
-
-## Связанные вопросы (RU)
-
-- [[q-kotlin-sealed-classes-features--programming-languages--medium]]
-- [[q-retrofit-coroutines-best-practices--kotlin--medium]]
-
----
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -132,3 +116,11 @@ val name = identity("Hello")     // T inferred as String
 
 - [[q-kotlin-sealed-classes-features--programming-languages--medium]]
 - [[q-retrofit-coroutines-best-practices--kotlin--medium]]
+
+## Дополнительные вопросы (RU)
+- В чем ключевые отличия этого синтаксиса от Java?
+- Когда вы бы использовали обобщенные функции на практике?
+- Каковы распространенные ошибки и подводные камни при использовании обобщений?
+## Ссылки (RU)
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+## Связанные вопросы (RU)

@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-dependency-injection, c-hilt]
 created: 2025-10-11
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/di-hilt, android/lifecycle, dependency-injection, difficulty/medium, hilt]
 sources: ["https://dagger.dev/hilt/entry-points.html"]
 

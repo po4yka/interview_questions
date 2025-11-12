@@ -21,7 +21,7 @@ related:
 - q-compose-testing--android--medium
 - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/ui-compose
 - difficulty/medium
@@ -37,11 +37,12 @@ tags:
 ---
 
 ## Ответ (RU)
-В Jetpack Compose для реализации списков, аналогичных RecyclerView (но в Compose-среде), используются ленивые компоненты: **LazyColumn**, **LazyRow** и **LazyVerticalGrid**.
+В Jetpack Compose для реализации списков, аналогичных RecyclerView (но в Compose-среде), используются ленивые компоненты: `LazyColumn`, `LazyRow` и `LazyVerticalGrid`.
 
 Основные идеи:
-- Компонозятся только видимые и ближайшие к ним элементы.
-- Идентичность элементов поддерживается с помощью ключей, а управление отображением выполняется декларативно, без адаптеров и ViewHolder.
+- Композируются только видимые и ближайшие к ним элементы.
+- Цель та же, что и у `RecyclerView` (эффективная работа с памятью и производительностью), но вместо ручного ресайклинга `View` используется декларативная композиция и состояние.
+- Идентичность элементов поддерживается с помощью стабильных ключей, а управление отображением выполняется декларативно, без адаптеров и `ViewHolder`.
 
 ### Базовый пример LazyColumn
 
@@ -80,7 +81,7 @@ fun UserList(users: List<User>) {
     ) {
         items(
             items = users,
-            key = { it.id } // стабильный ключ для корректной идентификации элементов
+            key = { it.id } // стабильный уникальный ключ для корректной идентификации элементов
         ) { user ->
             UserItem(user)
         }
@@ -211,6 +212,8 @@ fun SectionedList(sections: Map<String, List<User>>) {
 ```
 
 ### Пагинация (загрузка при прокрутке к концу)
+
+Упрощенный пример, который отслеживает позицию прокрутки и вызывает `loadMore()`, когда пользователь приближается к концу списка.
 
 ```kotlin
 @Composable
@@ -403,6 +406,8 @@ fun AnimatedItemRow(item: Item) {
 
 ### Свайп для удаления (Material 2 пример)
 
+Ниже используется `SwipeToDismiss` из Material 2 (`androidx.compose.material`). При использовании Material 3 следует применять соответствующие API из Material 3.
+
 ```kotlin
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -503,30 +508,31 @@ fun ItemRow(item: Item) {
 ```
 
 - Выносите сложные элементы в отдельные `@Composable`, чтобы уменьшить область рекомпозиции.
-- Используйте `key` для стабильной идентификации элементов.
-- Следите за количеством состояний внутри элементов, избегайте тяжелой логики в `Lazy`-элементах.
+- Используйте стабильные `key`, когда элементы могут переставляться/вставляться/удаляться.
+- Избегайте тяжелой логики и побочных эффектов внутри лямбд `items {}`, контролируйте работу со стейтом.
 
 ### Сравнение: RecyclerView vs LazyColumn (в Compose UI)
 
 | Возможность | RecyclerView | LazyColumn |
 |------------|-------------|-----------|
-| Адаптер | Обязателен | Не нужен, используется `items {}` DSL |
+| Адаптер | Обязателен | Не нужен, используется `items {}` DSL внутри LazyColumn |
 | ViewHolder | Обязателен | Не нужен |
-| DiffUtil | Часто настраивается вручную | Используются ключи и идентичность элементов, без явного DiffUtil |
+| DiffUtil / диффинг | Часто настраивается вручную через `DiffUtil` | Нет явного `DiffUtil`; поведение основано на декларативной композиции, `key` и идентичности элементов |
 | Типы элементов | `getItemViewType()` | Условные composable / разные блоки `item` |
 | Разделители | `ItemDecoration` | Компоненты `Divider` между элементами |
 | Заголовки | Отдельные view-типы | `item {}` / `stickyHeader {}` |
-| Анимации | `ItemAnimator`, кастомные | `AnimatedVisibility` и API анимаций Compose |
+| Анимации | `ItemAnimator`, кастомные | `AnimatedVisibility` и анимационные API Compose |
 | Объем кода | Много шаблонного кода | Более декларативно и компактно |
 
 ---
 
 ## Answer (EN)
-In Jetpack Compose, you use lazy layouts like **LazyColumn**, **LazyRow**, and **LazyVerticalGrid** to implement efficient scrollable lists and grids that cover the same use cases as RecyclerView within Compose-based UIs.
+In Jetpack Compose, you use lazy layouts like `LazyColumn`, `LazyRow`, and `LazyVerticalGrid` to implement efficient scrollable lists and grids that cover the same use cases as `RecyclerView` in Compose-based UIs.
 
-They:
-- Only compose items that are visible or near-visible.
-- Reuse composition for items as they scroll in/out (conceptually similar goal to RecyclerView's view recycling, but implemented differently).
+Key ideas:
+- Only items that are visible or near-visible are composed.
+- The goal is similar to `RecyclerView` (efficient memory/performance), but instead of manual view recycling you rely on declarative composition and state.
+- Item identity is tracked via stable keys; there are no adapters or `ViewHolder`.
 
 ### Basic LazyColumn
 
@@ -584,7 +590,6 @@ fun UserItem(user: User) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Avatar (e.g., Coil AsyncImage)
             AsyncImage(
                 model = user.avatarUrl,
                 contentDescription = "Avatar",
@@ -698,7 +703,7 @@ fun SectionedList(sections: Map<String, List<User>>) {
 
 ### LazyColumn with "Load More" (pagination trigger simplified)
 
-Below is a simplified pattern that triggers loading more when the user scrolls near the end. It observes scroll position instead of item count changes.
+Below is a simplified pattern that triggers loading more when the user scrolls near the end. It observes scroll position via `snapshotFlow`.
 
 ```kotlin
 @Composable
@@ -856,7 +861,7 @@ fun AdaptiveGrid(items: List<Item>) {
 }
 ```
 
-### `List` with Item Animations
+### List with Item Animations
 
 ```kotlin
 @Composable
@@ -944,6 +949,25 @@ fun SwipeableList(
 }
 ```
 
+### Scroll State Management
+
+```kotlin
+@Composable
+fun RememberScrollStateExample(items: List<Item>) {
+    val listState = rememberLazyListState()
+
+    LazyColumn(state = listState) {
+        items(items) { item ->
+            ItemView(item)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        listState.scrollToItem(10)
+    }
+}
+```
+
 ### Performance Tips
 
 ```kotlin
@@ -975,20 +999,55 @@ fun ItemRow(item: Item) {
 
 - Extract complex item UIs into separate `@Composable`s to reduce recomposition scope.
 - Use stable `key` values when items can be reordered/inserted/removed.
-- Avoid heavy work inside item lambdas; keep side effects controlled.
+- Avoid heavy work and uncontrolled side effects inside `items {}` lambdas; keep state handling explicit.
 
 ### Comparison: RecyclerView vs LazyColumn (in Compose UIs)
 
 | Feature | RecyclerView | LazyColumn |
 |---------|-------------|------------|
-| Adapter | Required | Not needed; `items {}` DSL instead |
+| Adapter | Required | Not needed; use `items {}` DSL inside LazyColumn |
 | ViewHolder | Required | Not needed |
-| Diffing | Often uses `DiffUtil` manually | Uses item keys and identity; no explicit `DiffUtil` |
-| Item types | `getItemViewType()` | Conditional composables / different item blocks |
+| Diffing | Typically uses `DiffUtil` manually | No explicit `DiffUtil`; behavior relies on declarative composition plus `key`/item identity |
+| Item types | `getItemViewType()` | Conditional composables / different `item` blocks |
 | Dividers | `ItemDecoration` | `Divider` composables between items |
 | Headers | Special view types | `item {}` / `stickyHeader {}` |
-| Animations | `ItemAnimator`, custom | `AnimatedVisibility`/animation APIs |
-| Code | More boilerplate | More concise declarative API |
+| Animations | `ItemAnimator`, custom | `AnimatedVisibility` / Compose animation APIs |
+| Code | More boilerplate | More declarative and concise |
+
+---
+
+## Дополнительные вопросы (RU)
+
+- [[q-animated-visibility-vs-content--android--medium]]
+- [[q-compose-testing--android--medium]]
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]]
+
+## Ссылки (RU)
+
+- [Документация Android](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
+### Хаб
+- [[q-jetpack-compose-basics--android--medium]] - Базовое введение в Compose
+
+### Похожие (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]] - Как работает Compose
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Ключевые компоненты Compose
+- [[q-mutable-state-compose--android--medium]] - Основы MutableState
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+- [[q-compose-remember-derived-state--android--medium]] - Паттерны derived state
+
+### Продвинутое (Harder)
+- [[q-compose-stability-skippability--android--hard]] - Stability и skippability
+- [[q-stable-classes-compose--android--hard]] - Аннотация @Stable
+- [[q-stable-annotation-compose--android--hard]] - Аннотации стабильности
 
 ---
 

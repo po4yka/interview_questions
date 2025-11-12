@@ -1,9 +1,9 @@
 ---
 id: kotlin-162
 title: "Launch Vs Async Vs Runblocking / Launch против Async против Runblocking"
-aliases: [Async, Coroutine Builders, Launch, RunBlocking, Запуск корутин]
+aliases: [Async, Coroutine Builders, Launch, RunBlocking]
 topic: kotlin
-subtopics: [coroutines, coroutine-builders, concurrency]
+subtopics: [coroutines, concurrency]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,8 +11,8 @@ language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-coroutine-memory-leak-detection--kotlin--hard, q-executor-service-java--kotlin--medium, q-list-vs-sequence--kotlin--medium]
-created: 2025-10-15
-updated: 2025-11-09
+created: 2024-10-15
+updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblocking]
 ---
 # Вопрос (RU)
@@ -23,15 +23,15 @@ tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblo
 
 ## Ответ (RU)
 
-**Launch**, **async**, и **runBlocking** - три основных способа запуска корутин, каждый с разным назначением:
+**launch**, **async** и **runBlocking** — три ключевых coroutine builder'а с разным назначением:
 
 | Builder | Возвращает | Блокирует поток | Результат | Use case |
 |---------|------------|-----------------|-----------|----------|
-| **launch** | `Job` | Нет | Нет (fire-and-forget) | Фоновые задачи без результата или с результатом через побочные эффекты |
-| **async** | `Deferred<T>` | Нет | Да через `await()` | Параллельные вычисления с результатом |
-| **runBlocking** | `T` | **ДА** | Да напрямую | Тесты, `main` функция, блокирующий bridge к suspend-коду |
+| **launch** | `Job` | Нет | Нет (fire-and-forget, через сайд-эффекты) | Фоновые задачи без прямого результата или с результатом через состояние/сайд-эффекты |
+| **async** | `Deferred<T>` | Нет | Да, через `await()` | Параллельные вычисления с результатом |
+| **runBlocking** | `T` | **ДА** | Да, напрямую | Тесты, `main` функция, блокирующий мост к suspend-коду |
 
-### Launch - Fire and Forget
+### launch — fire-and-forget
 
 ```kotlin
 fun loadUserInBackground() {
@@ -44,14 +44,14 @@ fun loadUserInBackground() {
 }
 ```
 
-**Характеристики launch**:
+Характеристики `launch`:
 - Не возвращает вычисленный результат напрямую
-- Возвращает `Job` для управления lifecycle
+- Возвращает `Job` для управления жизненным циклом (cancel, join и т.п.)
 - Не блокирует вызывающий поток
-- Необработанные исключения отменяют родительский scope и обрабатываются его `CoroutineExceptionHandler`
-- Use case: фоновая работа, обновление UI, side effects
+- Необработанные исключения по умолчанию отменяют родительский scope и обрабатываются его `CoroutineExceptionHandler`
+- Используется для фоновой работы, обновления UI и других сайд-эффектов
 
-#### Примеры Использования Launch
+#### Примеры использования launch
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -91,22 +91,23 @@ class UserViewModel : ViewModel() {
         viewModelScope.launch { loadUsers() }
         viewModelScope.launch { loadStats() }
         viewModelScope.launch { loadNotifications() }
-        // Все три запускаются параллельно
+        // Все три запускаются параллельно в рамках одного scope
     }
 }
 ```
 
-#### Job Management С Launch
+#### Управление Job с launch
 
 ```kotlin
-class DownloadManager {
+class DownloadManager(private val scope: CoroutineScope) {
     private var downloadJob: Job? = null
 
     fun startDownload(url: String) {
         // Отменяем предыдущую загрузку если есть
         downloadJob?.cancel()
 
-        downloadJob = CoroutineScope(Dispatchers.IO).launch {
+        // Используем предоставленный scope, а не глобальный
+        downloadJob = scope.launch(Dispatchers.IO) {
             try {
                 val file = downloadFile(url)
                 withContext(Dispatchers.Main) {
@@ -117,6 +118,7 @@ class DownloadManager {
                 withContext(Dispatchers.Main) {
                     showCancelled()
                 }
+                throw e
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     showError(e)
@@ -130,22 +132,19 @@ class DownloadManager {
         downloadJob = null
     }
 
-    fun isDownloading(): Boolean {
-        return downloadJob?.isActive == true
-    }
+    fun isDownloading(): Boolean = downloadJob?.isActive == true
 }
 ```
 
-### Async - Параллельные Вычисления С Результатом
+### async — параллельные вычисления с результатом
 
 ```kotlin
 suspend fun loadDashboard(): DashboardData = coroutineScope {
-    // Запускаем три запроса параллельно
+    // Запускаем три запроса параллельно (в рамках структурированной конкуренции)
     val userDeferred = async { userApi.getUser() }
     val statsDeferred = async { statsApi.getStats() }
     val notificationsDeferred = async { notificationsApi.getNotifications() }
 
-    // Ждем всех результатов
     DashboardData(
         user = userDeferred.await(),
         stats = statsDeferred.await(),
@@ -154,14 +153,15 @@ suspend fun loadDashboard(): DashboardData = coroutineScope {
 }
 ```
 
-**Характеристики async**:
-- Возвращает результат через `Deferred<T>`
-- Можно получить результат через `await()`
-- Не блокирует вызывающий поток до вызова `await()`
-- Исключения выбрасываются при вызове `await()` (и при завершении scope, если результат так и не запрошен)
-- Use case: параллельные вычисления, где нужен результат
+Характеристики `async`:
+- Возвращает `Deferred<T>`
+- Результат получается через `await()`
+- Не блокирует поток; `await()` приостанавливает корутину до результата
+- Исключения сохраняются в `Deferred` и повторно выбрасываются при `await()`;
+  в структурированном scope необработанное исключение дочернего `async` также приведёт к отмене родителя при завершении scope
+- Используется для параллельных вычислений, где нужен результат
 
-#### Примеры Использования Async
+#### Примеры использования async
 
 ```kotlin
 // 1. Параллельная загрузка нескольких ресурсов
@@ -171,7 +171,7 @@ suspend fun loadUserProfile(userId: Int): UserProfile = coroutineScope {
     val followersDeferred = async { socialRepository.getFollowers(userId) }
 
     // Все три запроса идут параллельно
-    // Время ~ max(user, posts, followers), не сумма
+    // Время ~ max(user, posts, followers), а не сумма
     UserProfile(
         user = userDeferred.await(),
         posts = postsDeferred.await(),
@@ -183,28 +183,28 @@ suspend fun loadUserProfile(userId: Int): UserProfile = coroutineScope {
 suspend fun loadMultipleUsers(ids: List<Int>): List<User> = coroutineScope {
     ids.map { id ->
         async { userRepository.getUser(id) }
-    }.awaitAll() // Ждем всех одновременно
+    }.awaitAll() // Ждем всех одновременно; ошибки не теряются
 }
 
-// 3. First successful result
+// 3. First successful result (продвинутый пример)
 suspend fun loadFromMultipleSources(): Data = coroutineScope {
     val source1 = async { loadFromServer1() }
     val source2 = async { loadFromServer2() }
     val source3 = async { loadFromCache() }
 
-    // Возвращаем первый успешный результат
     select<Data> {
         source1.onAwait { it }
         source2.onAwait { it }
         source3.onAwait { it }
     }
+    // Остальные Deferred следует при необходимости отменить, если их результат больше не нужен
 }
 ```
 
-#### Async С Обработкой Ошибок
+#### async с обработкой ошибок
 
 ```kotlin
-suspend fun loadWithFallback(): UserData = coroutineScope {
+suspend fun loadWithFallback(cachedData: UserData): UserData = coroutineScope {
     val primaryDeferred = async {
         try {
             primaryApi.loadData()
@@ -221,36 +221,38 @@ suspend fun loadWithFallback(): UserData = coroutineScope {
         }
     }
 
-    // Используем первый успешный результат
     primaryDeferred.await() ?: secondaryDeferred.await() ?: cachedData
 }
 ```
 
-### runBlocking - Блокирующий Мост
+### runBlocking — блокирующий мост
 
 ```kotlin
-fun main() = runBlocking { // Блокирует main поток
+fun main() = runBlocking { // Блокирует main-поток
     val user = userRepository.getUser(1)
     println("User: $user")
-} // main поток разблокируется только здесь
+} // main-поток разблокируется только здесь
 ```
 
-**Характеристики runBlocking**:
-- Возвращает результат напрямую
-- **БЛОКИРУЕТ** вызывающий поток до завершения
-- Для тестов, `main` функции и точечных блокирующих мостов к suspend-коду; в обычном production-коде следует избегать
-- Use case: мост между синхронным и асинхронным кодом
+Характеристики `runBlocking`:
+- Возвращает результат напрямую (значение последнего выражения в блоке или указанное явно)
+- Блокирует вызывающий поток до завершения
+- Предназначен для:
+  - `main` функции JVM-приложений
+  - некоторых unit-тестов (хотя лучше `runTest`)
+  - точечных блокирующих мостов к suspend-коду
+- В обычном production-коде, особенно на Android main thread, следует избегать
 
-#### Когда Использовать runBlocking
+#### Когда использовать runBlocking
 
 ```kotlin
-// 1. Main функция
+// 1. Main-функция
 fun main() = runBlocking {
     val app = MyApplication()
     app.start()
 }
 
-// 2. Unit тесты (но лучше runTest)
+// 2. Unit-тесты (но лучше runTest из kotlinx-coroutines-test)
 @Test
 fun `test user loading`() = runBlocking {
     val repository = UserRepository()
@@ -258,18 +260,17 @@ fun `test user loading`() = runBlocking {
     assertEquals("Alice", user.name)
 }
 
-// 3. Migration legacy code
+// 3. Временная миграция легаси-кода
 class LegacyService {
     fun getUserSync(id: Int): User = runBlocking {
-        // Временное решение для интеграции с suspend функциями
         userRepository.getUser(id)
     }
 }
 
-// Никогда не используйте в Android UI коде
+// Никогда не используйте runBlocking в Android UI-коде
 class BadViewModel : ViewModel() {
     fun loadUser(id: Int) {
-        val user = runBlocking { // ПЛОХО: блокирует UI поток
+        val user = runBlocking { // ПЛОХО: блокирует UI-поток
             userRepository.getUser(id)
         }
         _user.value = user
@@ -277,62 +278,62 @@ class BadViewModel : ViewModel() {
 }
 ```
 
-### Сравнение На Реальном Примере
+### Сравнение на реальном примере
 
 ```kotlin
 class DataLoader(
     private val repository: DataRepository,
     private val scope: CoroutineScope
 ) {
-    // launch - результат не возвращается напрямую
+    // launch — результат не возвращается напрямую
     fun loadWithLaunch() {
         scope.launch {
             val data = repository.loadData()
-            // Как получить data наружу? Через callback/StateFlow и т.п.
+            // Отдаем data наружу через StateFlow/LiveData/callback и т.п.
         }
-        // Возвращается сразу, data еще не загружена
+        // Возвращается сразу, data ещё не загружена
     }
 
-    // async - можно получить результат
+    // async — можно получить результат через Deferred
     fun loadWithAsync(): Deferred<Data> {
         return scope.async {
             repository.loadData()
         }
-        // Возвращается Deferred<Data>, результат через await()
     }
 
-    // runBlocking - блокирует поток
+    // runBlocking — блокирует вызывающий поток
     fun loadWithRunBlocking(): Data {
         return runBlocking {
             repository.loadData()
         }
-        // Возвращается только после загрузки, поток заблокирован
     }
 
-    // Правильный подход - suspend функция
+    // Предпочтительный подход — suspending API
     suspend fun loadData(): Data {
         return repository.loadData()
     }
 }
 
-// Использование
-class ViewModel {
+class ExampleViewModel(
+    private val loader: DataLoader
+) : ViewModel() {
+
     fun example() {
-        // launch - fire and forget
+        // launch — fire-and-forget
         viewModelScope.launch {
-            loader.loadWithLaunch() // Не можем получить результат
+            loader.loadWithLaunch()
         }
 
-        // async - получаем Deferred
+        // async — получаем Deferred и явно ждем результат
         viewModelScope.launch {
             val deferred = loader.loadWithAsync()
-            val data = deferred.await() // Получаем результат
+            val data = deferred.await()
         }
 
-        // runBlocking - не делайте так в UI коде
-        val data = loader.loadWithRunBlocking() // Блокирует текущий поток
+        // runBlocking — не делайте так в UI-коде (пример анти-паттерна)
+        // val data = loader.loadWithRunBlocking()
 
-        // Правильно - suspend функция
+        // Правильно — вызывать suspend-функцию из корутины
         viewModelScope.launch {
             val data2 = loader.loadData()
         }
@@ -340,52 +341,51 @@ class ViewModel {
 }
 ```
 
-### Launch Vs Async - Когда Что Использовать
+### launch vs async — когда что использовать
 
 ```kotlin
-// НЕПРАВИЛЬНО - async без await()
+// НЕПРАВИЛЬНО — async без await()
 viewModelScope.launch {
-    async { loadUsers() } // Результат и возможные исключения игнорируются
+    async { loadUsers() } // Результат и возможные исключения могут быть проигнорированы
     async { loadPosts() }
 }
 
-// ПРАВИЛЬНО - launch для fire-and-forget
+// ПРАВИЛЬНО — launch для fire-and-forget
 viewModelScope.launch {
     launch { loadUsers() }
     launch { loadPosts() }
 }
 
-// НЕПРАВИЛЬНО - launch когда нужен результат
+// НЕПРАВИЛЬНО — launch когда нужен результат
 viewModelScope.launch {
-    launch { userRepository.getUser(1) } // Как получить User?
+    launch { userRepository.getUser(1) } // Непонятно, как получить User
 }
 
-// ПРАВИЛЬНО - async когда нужен результат
+// ПРАВИЛЬНО — async когда нужен результат
 viewModelScope.launch {
     val user = async { userRepository.getUser(1) }.await()
 }
 
-// Или еще лучше - просто suspend вызов
+// Или ещё лучше — просто последовательный suspend-вызов
 viewModelScope.launch {
-    val user = userRepository.getUser(1) // Последовательно
+    val user = userRepository.getUser(1)
 }
 ```
 
-### Structured Concurrency
+### Structured concurrency
 
 ```kotlin
 suspend fun loadAllData() = coroutineScope {
-    // Все дочерние корутины должны завершиться перед return
+    // Все дочерние корутины должны завершиться перед возвратом
 
     launch {
-        loadUsers() // Дочерняя корутина 1
+        loadUsers()
     }
 
     launch {
-        loadPosts() // Дочерняя корутина 2
+        loadPosts()
     }
-
-    // coroutineScope ждет завершения ВСЕХ дочерних корутин
+    // coroutineScope дождётся завершения ВСЕХ дочерних корутин или выбросит исключение при ошибке
 }
 
 suspend fun computeResults() = coroutineScope {
@@ -393,14 +393,14 @@ suspend fun computeResults() = coroutineScope {
     val result2 = async { compute2() }
 
     result1.await() + result2.await()
-    // Возвращается только когда ОБА async завершены
+    // Возвращается только когда ОБА async завершены или выброшено исключение
 }
 ```
 
-### Exception Handling
+### Обработка исключений
 
 ```kotlin
-// launch - исключения обрабатываются родительским scope
+// launch — исключения можно обрабатывать внутри корутины
 viewModelScope.launch {
     try {
         userRepository.getUser(1)
@@ -409,20 +409,21 @@ viewModelScope.launch {
     }
 }
 
-// async - исключения выбрасываются при await()
+// async — исключения выбрасываются при await()
 viewModelScope.launch {
     val deferred = async {
-        userRepository.getUser(1) // Исключение не выбросится наружу здесь
+        userRepository.getUser(1)
     }
 
     try {
-        val user = deferred.await() // Исключение выбросится здесь
+        val user = deferred.await() // Исключение появится здесь
+        _user.value = user
     } catch (e: Exception) {
         _error.value = e.message
     }
 }
 
-// runBlocking - исключения выбрасываются синхронно
+// runBlocking — исключения ведут себя как в обычном блокирующем коде
 try {
     runBlocking {
         userRepository.getUser(1)
@@ -432,21 +433,25 @@ try {
 }
 ```
 
-### supervisorScope - Независимые Дочерние Корутины
+Примечания:
+- Для `launch` необработанное исключение пробрасывается в родительский scope/handler.
+- Для `async` важно всегда «потреблять» `Deferred` через `await`/`awaitAll`, иначе ошибка может быть замечена только при завершении scope; как правило, `async` без `await` — запах.
+
+### supervisorScope — независимые дочерние корутины
 
 ```kotlin
-// coroutineScope - одна ошибка отменяет все
+// coroutineScope — одна ошибка отменяет все
 suspend fun loadDataStrict() = coroutineScope {
-    launch { loadUsers() }     // Если упадет -
-    launch { loadPosts() }     // - все дочерние отменятся
+    launch { loadUsers() }
+    launch { loadPosts() }
     launch { loadComments() }
 }
 
-// supervisorScope - ошибки изолированы
+// supervisorScope — ошибки изолированы
 suspend fun loadDataResilient() = supervisorScope {
     launch {
         try {
-            loadUsers() // Если упадет - только эта корутина
+            loadUsers()
         } catch (e: Exception) {
             logError(e)
         }
@@ -454,7 +459,7 @@ suspend fun loadDataResilient() = supervisorScope {
 
     launch {
         try {
-            loadPosts() // Продолжит работать даже если loadUsers упал
+            loadPosts()
         } catch (e: Exception) {
             logError(e)
         }
@@ -462,9 +467,9 @@ suspend fun loadDataResilient() = supervisorScope {
 }
 ```
 
-### Продвинутые Паттерны
+### Продвинутые паттерны
 
-#### 1. Timeout Для Async
+#### 1. Timeout для async
 
 ```kotlin
 suspend fun loadWithTimeout(): Data? = coroutineScope {
@@ -475,13 +480,13 @@ suspend fun loadWithTimeout(): Data? = coroutineScope {
             deferred.await()
         }
     } catch (e: TimeoutCancellationException) {
-        deferred.cancel() // Отменяем корутину
+        deferred.cancel() // Отменяем корутину, если результат больше не нужен
         null
     }
 }
 ```
 
-#### 2. Retry Для Launch
+#### 2. Retry для launch
 
 ```kotlin
 fun loadUserWithRetry(id: Int) {
@@ -490,26 +495,26 @@ fun loadUserWithRetry(id: Int) {
             try {
                 val user = userRepository.getUser(id)
                 _user.value = user
-                return@launch // Успех - выходим
+                return@launch // Успех — выходим
             } catch (e: Exception) {
                 if (attempt == 2) throw e // Последняя попытка
-                delay(1000L * (attempt + 1)) // Линейная задержка
+                delay(1000L * (attempt + 1))
             }
         }
     }
 }
 ```
 
-#### 3. Cancellable Async Работа
+#### 3. Отменяемая работа с async
 
 ```kotlin
-class ImageProcessor {
+class ImageProcessor(private val scope: CoroutineScope) {
     private var processingJob: Job? = null
 
     fun processImage(bitmap: Bitmap) {
-        processingJob?.cancel() // Отменяем предыдущую обработку
+        processingJob?.cancel()
 
-        processingJob = CoroutineScope(Dispatchers.Default).launch {
+        processingJob = scope.launch(Dispatchers.Default) {
             val deferred = async {
                 applyFilters(bitmap)
             }
@@ -521,6 +526,7 @@ class ImageProcessor {
                 }
             } catch (e: CancellationException) {
                 // Processing cancelled
+                throw e
             }
         }
     }
@@ -531,7 +537,7 @@ class ImageProcessor {
 }
 ```
 
-### Performance Comparison
+### Сравнение производительности
 
 ```kotlin
 // Последовательное выполнение
@@ -553,115 +559,40 @@ suspend fun loadInParallel() = coroutineScope {
         postsDeferred.await(),
         commentsDeferred.await()
     )
-    // Общее время: ~500ms (max из трех)
+    // Общее время: ~500ms (max из трёх)
 }
 
-// Параллельное с launch - без прямого результата
-fun loadWithLaunch() {
+// Параллельное с launch — без прямого результата
+fun loadWithLaunch(scope: CoroutineScope) {
     scope.launch {
         launch { loadUsers() }
         launch { loadPosts() }
         launch { loadComments() }
-        // Чтобы собрать результаты, используйте общий стейт/каналы и т.п.
+        // Результаты передаются через общее состояние/каналы и т.п.
     }
 }
 ```
 
-### Best Practices
+### Best practices (RU)
 
-#### 1. Используйте Launch Для Side Effects
-
-```kotlin
-// ПРАВИЛЬНО
-viewModelScope.launch {
-    analyticsService.logEvent("screen_viewed")
-    cacheService.warmUpCache()
-}
-```
-
-#### 2. Используйте Async Для Параллельных Вычислений
-
-```kotlin
-// ПРАВИЛЬНО
-suspend fun calculateComplexResult() = coroutineScope {
-    val part1 = async { calculatePart1() }
-    val part2 = async { calculatePart2() }
-    val part3 = async { calculatePart3() }
-
-    combineResults(part1.await(), part2.await(), part3.await())
-}
-```
-
-#### 3. Не Используйте runBlocking В Обычном Production-Коде
-
-```kotlin
-// НЕПРАВИЛЬНО (за исключением контролируемых точек входа/тестов)
-fun loadUser(id: Int): User = runBlocking {
-    userRepository.getUser(id)
-}
-
-// ПРАВИЛЬНО - сделайте suspend функцию
-suspend fun loadUser(id: Int): User {
-    return userRepository.getUser(id)
-}
-
-// Или используйте scope
-fun loadUser(id: Int) {
-    viewModelScope.launch {
-        val user = userRepository.getUser(id)
-        _user.value = user
-    }
-}
-```
-
-#### 4. Всегда await() Результаты Async
-
-```kotlin
-// НЕПРАВИЛЬНО - async без await
-scope.launch {
-    async { loadData() } // Результат и исключения потеряны
-}
-
-// ПРАВИЛЬНО
-scope.launch {
-    val data = async { loadData() }.await()
-}
-
-// Или используйте launch, если результат не нужен
-scope.launch {
-    loadData()
-}
-```
-
-#### 5. Обрабатывайте Cancellation
-
-```kotlin
-viewModelScope.launch {
-    try {
-        val data = async { repository.loadData() }.await()
-        processData(data)
-    } catch (e: CancellationException) {
-        // Cleanup if needed, затем пробрасываем дальше
-        throw e
-    } catch (e: Exception) {
-        _error.value = e.message
-    }
-}
-```
+1. Используйте `launch` для сайд-эффектов.
+2. Используйте `async` для параллельных вычислений, когда результат нужен.
+3. Не используйте `runBlocking` в обычных продакшн-путях, особенно на UI-потоке.
+4. Всегда потребляйте результаты `Deferred` (`await`/`awaitAll`) или используйте `launch` вместо `async`.
+5. Обрабатывайте отмену, при необходимости делая cleanup и повторно бросая `CancellationException`.
 
 ### Тестирование
 
 ```kotlin
 class DataLoaderTest {
     @Test
-    fun `test launch execution`() = runTest { // runTest вместо runBlocking
+    fun `test launch execution`() = runTest {
         val loader = DataLoader(repository, this)
 
         loader.loadWithLaunch()
 
-        // Как проверить результат? launch не возвращает данные
-        advanceUntilIdle() // Ждем завершения всех корутин
-        // Проверяем side effects
+        advanceUntilIdle() // Ждем завершения всех корутин во времени теста
+        // Проверяем сайд-эффекты
     }
 
     @Test
@@ -687,14 +618,15 @@ class DataLoaderTest {
         }
 
         val duration = currentTime - startTime
-        assertTrue(duration < 150) // Параллельно, не 200ms
+        // В тесте с виртуальным временем обе корутины завершаются "параллельно":
+        assertTrue(duration < 150)
     }
 }
 ```
 
 ## Answer (EN)
 
-**launch**, **async**, and **runBlocking** are three main coroutine builders with different purposes:
+`launch`, `async`, and `runBlocking` are three primary coroutine builders with different purposes:
 
 | Builder | Returns | Blocks thread | Result | Use case |
 |---------|---------|---------------|--------|----------|
@@ -702,7 +634,7 @@ class DataLoaderTest {
 | **async** | `Deferred<T>` | No | Yes via `await()` | Parallel computations with results |
 | **runBlocking** | `T` | **YES** | Yes directly | Tests, `main` function, blocking bridge to suspending code |
 
-### Launch - Fire and Forget
+### launch — fire-and-forget
 
 ```kotlin
 fun loadUserInBackground() {
@@ -720,28 +652,30 @@ Key properties of `launch`:
 - Returns a `Job` that you can use to manage lifecycle (cancel, join, etc.)
 - Does not block the calling thread
 - Unhandled exceptions cancel the parent scope and are handled by its `CoroutineExceptionHandler`
-- Use for: background work, UI updates, side effects, fire-and-forget tasks
+- Use for background work, UI updates, and other side effects
 
 Example usages:
 - Loading data into `StateFlow`/`LiveData` in `viewModelScope`
 - Periodic refresh loops (with `isActive` and `delay`)
-- Running multiple independent tasks in parallel using multiple `launch` calls
+- Running multiple independent tasks in parallel using multiple `launch` calls within the same scope
 
 Job management example:
 
 ```kotlin
-class DownloadManager {
+class DownloadManager(private val scope: CoroutineScope) {
     private var downloadJob: Job? = null
 
     fun startDownload(url: String) {
         downloadJob?.cancel()
 
-        downloadJob = CoroutineScope(Dispatchers.IO).launch {
+        // Use the passed-in scope instead of creating a global one
+        downloadJob = scope.launch(Dispatchers.IO) {
             try {
                 val file = downloadFile(url)
                 withContext(Dispatchers.Main) { showSuccess(file) }
             } catch (e: CancellationException) {
                 withContext(Dispatchers.Main) { showCancelled() }
+                throw e
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) { showError(e) }
             }
@@ -757,7 +691,7 @@ class DownloadManager {
 }
 ```
 
-### Async - Parallel Computations With Result
+### async — parallel computations with a result
 
 ```kotlin
 suspend fun loadDashboard(): DashboardData = coroutineScope {
@@ -775,19 +709,51 @@ suspend fun loadDashboard(): DashboardData = coroutineScope {
 
 Key properties of `async`:
 - Returns `Deferred<T>`; call `await()` to get the result
-- Non-blocking until you call `await()`
-- Exceptions are thrown when `await()` is called (or on parent completion if never awaited)
-- Use for: parallel API calls/computations when you need the results
+- Non-blocking; `await()` suspends the coroutine until completion
+- Exceptions are captured in the `Deferred` and rethrown when `await()` is called;
+  in a structured scope, an unhandled exception in an `async` child will also cancel the parent when the scope completes
+- Use for parallel API calls/computations when you need their results
 
 Example usages:
-- Parallel loading of parts of a profile (`user`, `posts`, `followers`) and combining them
-- `parallelMap` style helpers using `map { async { ... } }.awaitAll()`
-- Competing sources pattern (first-successful result) with `select {}`
-
-Error-handling example with fallback:
 
 ```kotlin
-suspend fun loadWithFallback(): UserData = coroutineScope {
+// 1. Parallel loading of multiple resources
+suspend fun loadUserProfile(userId: Int): UserProfile = coroutineScope {
+    val userDeferred = async { userRepository.getUser(userId) }
+    val postsDeferred = async { postsRepository.getUserPosts(userId) }
+    val followersDeferred = async { socialRepository.getFollowers(userId) }
+
+    UserProfile(
+        user = userDeferred.await(),
+        posts = postsDeferred.await(),
+        followers = followersDeferred.await()
+    )
+}
+
+// 2. Parallel map
+suspend fun loadMultipleUsers(ids: List<Int>): List<User> = coroutineScope {
+    ids.map { id -> async { userRepository.getUser(id) } }.awaitAll()
+}
+
+// 3. First successful result (advanced)
+suspend fun loadFromMultipleSources(): Data = coroutineScope {
+    val source1 = async { loadFromServer1() }
+    val source2 = async { loadFromServer2() }
+    val source3 = async { loadFromCache() }
+
+    select<Data> {
+        source1.onAwait { it }
+        source2.onAwait { it }
+        source3.onAwait { it }
+    }
+    // Cancel or ignore remaining Deferreds if their results are no longer needed
+}
+```
+
+Error-handling with fallback:
+
+```kotlin
+suspend fun loadWithFallback(cachedData: UserData): UserData = coroutineScope {
     val primaryDeferred = async {
         try {
             primaryApi.loadData()
@@ -809,10 +775,10 @@ suspend fun loadWithFallback(): UserData = coroutineScope {
 ```
 
 Important:
-- Always `await`/`awaitAll` on `Deferred`s you create, or you risk missing failures.
+- Always `await`/`awaitAll` on `Deferred`s you create (or otherwise handle them), or you risk effectively ignoring failures.
 - If you only need fire-and-forget semantics, prefer `launch` over `async`.
 
-### runBlocking - Blocking Bridge
+### runBlocking — blocking bridge
 
 ```kotlin
 fun main() = runBlocking {
@@ -828,42 +794,33 @@ Key properties of `runBlocking`:
 - Avoid in normal production code; never use on Android main thread
 
 Examples:
-- Main entry point:
 
 ```kotlin
+// 1. Main entry point
 fun main() = runBlocking {
     val app = MyApplication()
     app.start()
 }
-```
 
-- Tests (though `runTest` from kotlinx-coroutines-test is preferred):
-
-```kotlin
+// 2. Unit tests (though runTest from kotlinx-coroutines-test is preferred)
 @Test
 fun `test user loading`() = runBlocking {
     val repository = UserRepository()
     val user = repository.getUser(1)
     assertEquals("Alice", user.name)
 }
-```
 
-- Temporary bridge in legacy synchronous APIs:
-
-```kotlin
+// 3. Temporary bridge in legacy synchronous APIs
 class LegacyService {
     fun getUserSync(id: Int): User = runBlocking {
         userRepository.getUser(id)
     }
 }
-```
 
-Anti-example (do NOT do this):
-
-```kotlin
+// Anti-example: do NOT do this on main/UI thread
 class BadViewModel : ViewModel() {
     fun loadUser(id: Int) {
-        val user = runBlocking { // Blocks UI thread
+        val user = runBlocking { // Blocks UI thread — bad
             userRepository.getUser(id)
         }
         _user.value = user
@@ -871,7 +828,7 @@ class BadViewModel : ViewModel() {
 }
 ```
 
-### Practical Comparison Example
+### Practical comparison
 
 ```kotlin
 class DataLoader(
@@ -895,22 +852,44 @@ class DataLoader(
 
     suspend fun loadData(): Data = repository.loadData()
 }
+
+class ExampleViewModel(
+    private val loader: DataLoader
+) : ViewModel() {
+
+    fun example() {
+        viewModelScope.launch {
+            loader.loadWithLaunch()
+        }
+
+        viewModelScope.launch {
+            val deferred = loader.loadWithAsync()
+            val data = deferred.await()
+        }
+
+        // val data = loader.loadWithRunBlocking() // Anti-pattern on UI thread
+
+        viewModelScope.launch {
+            val data2 = loader.loadData()
+        }
+    }
+}
 ```
 
-Usage:
-- `launch`: fire-and-forget, caller returns immediately
-- `async`: caller gets `Deferred` and can `await()` result
-- `runBlocking`: caller blocked until result is ready (only for controlled boundaries)
-- Preferred: expose `suspend` APIs instead of forcing `runBlocking`
+Usage summary:
+- `launch`: fire-and-forget; caller returns immediately.
+- `async`: returns `Deferred`; caller can `await()` for result.
+- `runBlocking`: blocks caller; only for controlled boundaries.
+- Preferred: expose `suspend` APIs and call them from coroutines.
 
-### Launch vs Async - When to Use What
+### launch vs async — when to use what
 
 Misuse:
 
 ```kotlin
 // Wrong: async without await()
 viewModelScope.launch {
-    async { loadUsers() } // Result and failures ignored
+    async { loadUsers() } // Result and failures may be ignored
     async { loadPosts() }
 }
 ```
@@ -929,18 +908,18 @@ viewModelScope.launch {
     val user = async { userRepository.getUser(1) }.await()
 }
 
-// Or keep it simple: plain suspend call in a launch
+// Or just call suspend in launch
 viewModelScope.launch {
     val user = userRepository.getUser(1)
 }
 ```
 
 Guidelines:
-- If you need a result: `async` + `await()` (or structured helper around it)
-- If you need side effects only: `launch`
-- Never use `async` as fire-and-forget
+- Need a result: `async` + `await()`.
+- Need only side effects: `launch`.
+- Don't use `async` as fire-and-forget.
 
-### Structured Concurrency
+### Structured concurrency
 
 ```kotlin
 suspend fun loadAllData() = coroutineScope {
@@ -956,10 +935,10 @@ suspend fun computeResults() = coroutineScope {
 ```
 
 Key points:
-- `coroutineScope` waits for all children to complete
-- Child failures cancel the scope (unless using supervisor-style scopes)
+- `coroutineScope` waits for all children to complete or throws on first failure.
+- Child failures cancel the scope (unless using supervisor-style scopes).
 
-### Exception Handling
+### Exception handling
 
 ```kotlin
 // launch: handle inside the coroutine
@@ -991,10 +970,10 @@ try {
 ```
 
 Notes:
-- For `launch`, unhandled exceptions go to the parent/supervisor
-- For `async`, if you never `await`, failures can be effectively ignored; always consume results
+- For `launch`, unhandled exceptions go to the parent/supervisor/handler.
+- For `async`, if you never `await`, failures can be effectively ignored or only surface when the scope completes.
 
-### supervisorScope - Independent Children
+### supervisorScope — independent children
 
 ```kotlin
 suspend fun loadDataStrict() = coroutineScope {
@@ -1022,10 +1001,10 @@ suspend fun loadDataResilient() = supervisorScope {
 }
 ```
 
-- `coroutineScope`: one child failure cancels all children
-- `supervisorScope`: children fail independently; useful for UI where partial failure is acceptable
+- `coroutineScope`: one child failure cancels all children.
+- `supervisorScope`: children fail independently; good for UI/partial-failure scenarios.
 
-### Advanced Patterns
+### Advanced patterns
 
 1) Timeout with async:
 
@@ -1063,19 +1042,20 @@ fun loadUserWithRetry(id: Int) {
 3) Cancellable async work:
 
 ```kotlin
-class ImageProcessor {
+class ImageProcessor(private val scope: CoroutineScope) {
     private var processingJob: Job? = null
 
     fun processImage(bitmap: Bitmap) {
         processingJob?.cancel()
 
-        processingJob = CoroutineScope(Dispatchers.Default).launch {
+        processingJob = scope.launch(Dispatchers.Default) {
             val deferred = async { applyFilters(bitmap) }
             try {
                 val result = deferred.await()
                 withContext(Dispatchers.Main) { showResult(result) }
             } catch (e: CancellationException) {
                 // Cancelled
+                throw e
             }
         }
     }
@@ -1086,7 +1066,7 @@ class ImageProcessor {
 }
 ```
 
-### Performance Comparison
+### Performance comparison
 
 ```kotlin
 suspend fun loadSequentially() {
@@ -1107,7 +1087,7 @@ suspend fun loadInParallel() = coroutineScope {
     )
 }
 
-fun loadWithLaunch() {
+fun loadWithLaunch(scope: CoroutineScope) {
     scope.launch {
         launch { loadUsers() }
         launch { loadPosts() }
@@ -1117,39 +1097,25 @@ fun loadWithLaunch() {
 ```
 
 Observations:
-- Sequential: total time ≈ sum
-- Parallel with `async`: total time ≈ max
-- `launch` is fine when you publish results via shared state instead of return values
+- Sequential: total time ≈ sum of individual times.
+- Parallel with `async`: total time ≈ max of individual times.
+- `launch` is appropriate when publishing results via shared state instead of return values.
 
-### Best Practices
+### Best Practices (EN)
 
-1) Use `launch` for side effects:
-
-```kotlin
-viewModelScope.launch {
-    analyticsService.logEvent("screen_viewed")
-    cacheService.warmUpCache()
-}
-```
-
-2) Use `async` for parallel computations with required results:
-
-```kotlin
-suspend fun calculateComplexResult() = coroutineScope {
-    val part1 = async { calculatePart1() }
-    val part2 = async { calculatePart2() }
-    val part3 = async { calculatePart3() }
-    combineResults(part1.await(), part2.await(), part3.await())
-}
-```
-
-3) Avoid `runBlocking` in production paths; prefer `suspend` APIs and coroutine scopes.
-
-4) Always consume `Deferred` results (via `await`/`awaitAll`), or use `launch` instead.
-
-5) Handle cancellation explicitly when needed; rethrow `CancellationException` after cleanup.
+1) Use `launch` for side effects.
+2) Use `async` for parallel computations when you need the results.
+3) Avoid `runBlocking` on production hot paths; prefer `suspend` APIs and coroutine scopes.
+4) Always consume `Deferred` results (`await`/`awaitAll`), or use `launch` instead when no result is needed.
+5) Handle cancellation explicitly when needed and rethrow `CancellationException` after cleanup.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия этих билдров от Java executors/futures?
+- Когда бы вы использовали каждый из билдров на практике в реальном проекте?
+- Каковы распространённые ошибки (например, `async` без `await`, `runBlocking` на main-потоке)?
 
 ## Follow-ups
 
@@ -1157,11 +1123,23 @@ suspend fun calculateComplexResult() = coroutineScope {
 - When would you use each builder in practice in a real project?
 - What are common pitfalls (e.g., `async` without `await`, `runBlocking` on main thread)?
 
+## Ссылки (RU)
+
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [[c-kotlin]]
+- [[c-coroutines]]
+
 ## References
 
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [[c-kotlin]]
 - [[c-coroutines]]
+
+## Связанные вопросы (RU)
+
+- [[q-executor-service-java--kotlin--medium]]
+- [[q-coroutine-memory-leak-detection--kotlin--hard]]
+- [[q-list-vs-sequence--kotlin--medium]]
 
 ## Related Questions
 

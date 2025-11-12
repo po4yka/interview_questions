@@ -1,6 +1,6 @@
 ---
 id: kotlin-152
-title: "Describe Data Sealed Classes / Data и Sealed классы описание"
+title: "Describe Data and Sealed Classes / Описание Data и Sealed классов"
 aliases: [Data и Sealed классы описание, Describe Data Sealed Classes]
 topic: kotlin
 subtopics: [data-classes, sealed-classes]
@@ -12,9 +12,11 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-sealed-classes, q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
+
 ---
+
 # Вопрос (RU)
 > Опишите data классы и sealed классы в Kotlin. Каковы их ключевые особенности и применения?
 
@@ -29,8 +31,13 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 
 **Data классы** в Kotlin предназначены для хранения данных и автоматически генерируют методы: `equals()`, `hashCode()`, `toString()` и `copy()`, а также компонентные функции для деструктуризации. Они идеально подходят для создания POJO/POCO объектов (Plain Old Java/C# Objects). Важно помнить, что data классы сами по себе не гарантируют неизменяемость — она достигается за счёт использования `val` свойств и отсутствия изменяемых полей.
 
+Также важно учитывать несколько ограничений data классов:
+- Должен быть как минимум один параметр в primary-конструкторе.
+- Класс не может быть `open`, `abstract`, `sealed` или `inner`.
+- Наследование от data класса возможно, но сам data класс не может быть `open`.
+
 **Ключевые особенности data классов:**
-- Автоматическая генерация utility методов
+- Автоматическая генерация utility-методов (`equals()`, `hashCode()`, `toString()`, `copy()`, componentN)
 - Встроенная поддержка деструктуризации (destructuring declarations)
 - Возможность легко реализовать immutability, если использовать только `val` и не держать изменяемые ссылки
 - Простое копирование объектов с изменениями через `copy()`
@@ -104,14 +111,14 @@ data class Address(
 
 ### Sealed Классы
 
-**Sealed классы** используются для представления ограниченного набора подтипов, похожих на перечисления, но с возможностью иметь классы с разными свойствами и методами. Это обеспечивает безопасное использование при работе с типами во время компиляции, улучшая обработку ошибок и логику ветвления.
+**Sealed классы** используются для представления ограниченного набора подтипов, похожих на перечисления, но с возможностью иметь классы с разными свойствами и методами. Это обеспечивает безопасное использование при работе с типами во время компиляции, улучшая обработку ошибок и логику ветвления. Sealed класс сам по себе является абстрактным и не может быть создан напрямую.
 
 **Ключевые особенности sealed классов:**
 - Ограниченные иерархии классов
 - Compile-time exhaustiveness checking в `when` выражениях
 - Типобезопасное представление конечного множества состояний
 - Идеальны для управления состоянием и Result типов
-- Подклассы должны находиться в контролируемой области: либо в том же файле (для классического sealed), либо в том же пакете и модуле (для package-wide sealed из новых версий Kotlin)
+- Подклассы должны находиться в контролируемой области: в классическом варианте — в том же файле, в более новых версиях Kotlin — могут быть распределены по нескольким файлам в пределах одного compilation unit (например, одного модуля), что по-прежнему сохраняет ограниченность иерархии
 
 **Пример:**
 ```kotlin
@@ -355,35 +362,46 @@ fun handleValidation(result: ValidationResult) {
 }
 ```
 
-### Краткий Ответ
-
+## Краткая Версия
 **Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и компонентные функции. Идеальны для POJO/POCO объектов, DTOs, моделей данных и value objects. Поддерживают деструктуризацию и простое копирование с изменениями. Не делают объекты неизменяемыми автоматически — это достигается выбором типов свойств и API.
 
-**Sealed классы**: Представляют ограниченный набор типов. Ограничивают наследование контролируемой областью (тот же файл или тот же пакет и модуль, в зависимости от варианта). Обеспечивают compile-time exhaustiveness checking в `when` выражениях. Идеальны для управления состоянием, Result типов, навигационных событий и представления конечных множеств состояний. Хорошо комбинируются с data классами для создания надёжных type-safe API.
+**Sealed классы**: Представляют ограниченный набор типов. Ограничивают наследование контролируемой областью и позволяют компилятору проверять исчерпывающий разбор в `when` выражениях. Идеальны для управления состоянием, Result типов, навигационных событий и представления конечных множеств состояний. Хорошо комбинируются с data классами для создания надёжных type-safe API.
+
+## Short Version
+**Data classes**: Designed for holding data. Automatically generate `equals()`, `hashCode()`, `toString()`, `copy()`, and component functions. Ideal for POJO/POCO objects, DTOs, data models, and value objects. Support destructuring and easy copying with modifications. Do not make objects immutable by default — immutability is achieved via property choices and API design.
+
+**Sealed classes**: Represent a restricted set of types. Constrain inheritance to a controlled scope and enable the compiler to enforce exhaustive `when` expressions. Ideal for modeling state, result types, navigation events, and finite state sets. Combine well with data classes to build robust type-safe APIs.
 
 ## Answer (EN)
 
 **Data Classes:**
 Data classes in Kotlin are designed for storing data and automatically generate methods such as `equals()`, `hashCode()`, `toString()`, `copy()`, and component functions for destructuring. They are ideal for creating POJO/POCO objects (Plain Old Java/C# Objects). Note that data classes do not inherently guarantee immutability; immutability is achieved by using `val` properties and avoiding mutable state.
 
+Additionally, data classes have a few important constraints:
+- The primary constructor must have at least one parameter.
+- A data class cannot be `open`, `abstract`, `sealed`, or `inner`.
+- Inheritance from a data class is possible (e.g., if it extends another type), but the data class itself cannot be declared `open`.
+
 **Key features of data classes:**
-- Automatic generation of utility methods
+- Automatic generation of utility methods (`equals()`, `hashCode()`, `toString()`, `copy()`, componentN)
 - Built-in support for destructuring declarations
 - Easy to make immutable by using `val` properties and not exposing mutable fields
 - Easy object copying with modifications via `copy()`
 - Perfect for DTOs, models, and value objects
 
 **Sealed Classes:**
-Sealed classes are used to represent a restricted set of types, similar to enums, but with the ability to have subclasses with different properties and methods. This helps ensure safe usage when working with types at compile time, improving error handling and branching logic.
+Sealed classes are used to represent a restricted set of types, similar to enums, but with the ability to have subclasses with different properties and methods. This helps ensure safe usage when working with types at compile time, improving error handling and branching logic. A sealed class itself is abstract and cannot be instantiated directly.
 
 **Key features of sealed classes:**
 - Restricted class hierarchies
 - Compile-time exhaustiveness checking in `when` expressions
 - Type-safe representation of a finite set of states
-- Perfect for state management and result types
-- Subclasses must be declared within a controlled scope: either in the same file (classic sealed) or in the same package and module (for package-wide sealed in newer Kotlin versions)
+- Great for state management and result types
+- Subclasses must be declared within a controlled scope: in classic sealed semantics within the same file; in newer Kotlin versions they may be distributed across multiple files within the same compilation unit (e.g., module), preserving a closed hierarchy
 
 ### Code Examples
+
+(Each of the following code snippets is a standalone example; in a real project they would typically live in separate files / scopes rather than sharing multiple `main` functions.)
 
 **Data class comprehensive example:**
 
@@ -396,7 +414,7 @@ data class User(
     val age: Int
 )
 
-fun main() {
+fun useUser() {
     val user = User(1, "alice", "alice@example.com", 30)
 
     // Automatic toString()
@@ -476,7 +494,7 @@ fun login(request: LoginRequest): LoginResponse {
     }
 }
 
-fun main() {
+fun useLogin() {
     val request = LoginRequest("alice", "password", true)
     val response = login(request)
 
@@ -516,20 +534,6 @@ fun handleNetworkState(state: NetworkState) {
                 println("You can retry this operation")
             }
         }
-    }
-}
-
-fun main() {
-    val states = listOf(
-        NetworkState.Idle,
-        NetworkState.Loading,
-        NetworkState.Success("User data loaded", System.currentTimeMillis()),
-        NetworkState.Error(Exception("Network timeout"), true)
-    )
-
-    states.forEach { state ->
-        handleNetworkState(state)
-        println("---")
     }
 }
 ```
@@ -594,22 +598,6 @@ fun processPayment(method: PaymentMethod, amount: Double) {
             println("Currency: ${method.currency}")
             println("Wallet: ${method.walletAddress}")
         }
-    }
-}
-
-fun main() {
-    val payments = listOf(
-        PaymentMethod.CreditCard("1234567890123456", "Alice Smith", 12, 2025, "123"),
-        PaymentMethod.PayPal("alice@example.com", true),
-        PaymentMethod.BankTransfer("9876543210", "Chase Bank", "021000021"),
-        PaymentMethod.Cash,
-        PaymentMethod.Cryptocurrency("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", "BTC")
-    )
-
-    payments.forEachIndexed { index, method ->
-        println("Payment ${index + 1}:")
-        processPayment(method, 100.0)
-        println()
     }
 }
 ```
@@ -688,18 +676,6 @@ fun displayArticle(result: Result<Article>) {
         }
     }
 }
-
-fun main() {
-    val service = ArticleService()
-
-    println("Fetching article 1:")
-    val result1 = service.fetchArticle(1)
-    displayArticle(result1)
-
-    println("\nFetching article -1:")
-    val result2 = service.fetchArticle(-1)
-    displayArticle(result2)
-}
 ```
 
 **Real-world example: Form validation:**
@@ -770,30 +746,6 @@ fun handleValidation(result: ValidationResult) {
             }
         }
     }
-}
-
-fun main() {
-    val validForm = RegistrationForm(
-        username = "alice",
-        email = "alice@example.com",
-        password = "securepass123",
-        confirmPassword = "securepass123",
-        agreeToTerms = true
-    )
-
-    val invalidForm = RegistrationForm(
-        username = "al",
-        email = "invalid-email",
-        password = "123",
-        confirmPassword = "456",
-        agreeToTerms = false
-    )
-
-    println("Validating valid form:")
-    handleValidation(validateRegistration(validForm))
-
-    println("\nValidating invalid form:")
-    handleValidation(validateRegistration(invalidForm))
 }
 ```
 

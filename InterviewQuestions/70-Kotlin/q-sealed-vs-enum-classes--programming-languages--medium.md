@@ -27,11 +27,12 @@ tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, 
 
 | Характеристика | Enum Class | Sealed Class |
 |---------------|-----------|--------------|
-| **Структура** | Фиксированный набор именованных значений с общей объявленной структурой (возможны переопределения по константам) | Ограниченная иерархия классов |
+| **Структура** | Фиксированный набор именованных значений с общей объявленной структурой (возможны переопределения по константам) | Ограниченная иерархия типов (sealed-класс + ограниченный набор подклассов) |
 | **Количество экземпляров** | Фиксировано на этапе компиляции для каждого значения (одиночные экземпляры констант) | Можно создавать множество экземпляров подклассов |
 | **Свойства** | Все значения разделяют общий набор объявленных свойств и методов | Подклассы могут иметь разные свойства |
-| **Наследование** | Наследует `Enum` и не может быть произвольно расширен, константы могут иметь собственные реализации | Может иметь несколько подклассов в пределах разрешённой области (файл/пакет/модуль) |
-| **Применение** | Простые фиксированные значения или состояния | Сложные состояния с разными данными |
+| **Наследование** | Наследует `Enum`, не может быть произвольно расширен; enum-константы могут иметь собственные реализации | Разрешённые прямые наследники должны быть явно задекларированы: либо в том же файле (Kotlin < 1.5), либо с указанием `permits`-подтипов в объявлении sealed-иерархии (современный синтаксис) |
+| **Возможности из коробки** | Имеют `name`, `ordinal`, реализуют `Comparable`, `Serializable`, поддерживают `values()` / `valueOf()` | Не имеют автоматических утилит как у enum; поведение и API полностью определяются разработчиком |
+| **Применение** | Простые фиксированные значения или состояния с одинаковой структурой | Сложные, разнотипные состояния с разными данными (алгебраические / дискриминированные объединения) |
 
 ### Enum Class
 
@@ -67,6 +68,7 @@ when (color) {
 - Можно определить дополнительные свойства/методы и переопределять поведение на уровне конкретных констант
 - Нельзя создавать новые значения enum в runtime
 - Можно перебрать все значения: `Color.values()`
+- У каждого значения есть `name`, `ordinal`; enum реализуют `Comparable<Enum>` и (на JVM) `Serializable`
 
 ### Sealed Class
 
@@ -99,7 +101,9 @@ val result2 = Result.Success("data2", 456L)
 - Подклассы могут иметь совершенно разные свойства и типы
 - В качестве подклассов могут быть data-классы, object'ы, обычные классы
 - Нельзя создать экземпляр самого sealed-класса
-- Наследование ограничено: разрешённые подклассы должны находиться в том же файле (для ранних версий) или в том же пакете/модуле в зависимости от платформы и версии Kotlin
+- Наследование ограничено и должно быть явно контролируемым разработчиком:
+  - в старом синтаксисе подклассы объявляются в том же файле, что и sealed-класс
+  - в новом синтаксисе (sealed interface / sealed class с перечислением permit-типов) явно задаётся допустимый набор наследников
 
 ### Когда Использовать Каждый
 
@@ -157,11 +161,12 @@ sealed class TaskResult {
 
 | Feature | Enum Class | Sealed Class |
 |---------|-----------|--------------|
-| **Structure** | Fixed set of named values with a shared declared structure (per-constant overrides possible) | Restricted class hierarchy |
-| **Instance count** | One singleton instance per enum constant, fixed at compile time | Can create multiple instances of subclasses |
+| **Structure** | Fixed set of named values with a shared declared structure (per-constant overrides possible) | Restricted type hierarchy (sealed class + restricted set of subclasses) |
+| **Instance count** | One singleton instance per enum constant, fixed at compile time | Multiple instances of subclasses can be created |
 | **Properties** | All values share the same declared properties/methods | Subclasses can have different properties |
-| **Inheritance** | Extends `Enum` and cannot be arbitrarily subclassed; constants may provide their own implementations | Can have multiple subclasses within the allowed scope (file/package/module) |
-| **Use case** | Simple fixed values or states | Complex states with different data |
+| **Inheritance** | Extends `Enum` and cannot be arbitrarily subclassed; constants may provide their own implementations | Permitted direct subclasses must be explicitly controlled: either declared in the same file (classic syntax) or listed as permitted subclasses in the sealed declaration (modern syntax) |
+| **Built-in capabilities** | Have `name`, `ordinal`, implement `Comparable`, `Serializable` (on JVM), support `values()` / `valueOf()` | No such built-in utilities; API and behavior are defined by the developer |
+| **Use case** | Simple fixed values or states with uniform structure | Complex heterogeneous states with different data (algebraic / discriminated unions) |
 
 ### Enum Class
 
@@ -197,6 +202,7 @@ when (color) {
 - You can define additional properties/methods and override behavior per constant
 - Cannot create new enum constants at runtime
 - Can iterate over all values: `Color.values()`
+- Each constant has `name`, `ordinal`; enums implement `Comparable<Enum>` and (on JVM) `Serializable`
 
 ### Sealed Class
 
@@ -229,7 +235,9 @@ val result2 = Result.Success("data2", 456L)
 - Subclasses can have completely different properties and types
 - Subclasses can be data classes, objects, or regular classes
 - Cannot create instances of sealed class itself
-- Inheritance is restricted: permitted subclasses must be defined in the same file (older versions) or in the same package/module depending on platform and Kotlin version
+- Inheritance is restricted and must be explicitly controlled by the developer:
+  - in the classic syntax, subclasses are declared in the same file as the sealed class
+  - in the newer syntax (sealed interfaces / sealed classes with an explicit list of permitted subclasses), the allowed set of subclasses is listed directly in the sealed declaration
 
 ### When to Use Each
 

@@ -77,7 +77,7 @@ class UserDiffCallback(
         return oldList[oldItemPosition] == newList[newItemPosition]
     }
 
-    // Опционально: payload для частичных обновлений
+    // Опционально: payload для частичных обновлений (здесь возвращается только первый обнаруженный тип изменения)
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
@@ -494,7 +494,7 @@ class UserDiffCallback(
         return oldList[oldItemPosition] == newList[newItemPosition]
     }
 
-    // Optional: provide payload for partial updates
+    // Optional: provide payload for partial updates (here only the first detected change type is returned)
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
@@ -593,7 +593,7 @@ class AsyncUserAdapter : RecyclerView.Adapter<AsyncUserAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = currentList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int,): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_user, parent, false)
         return ViewHolder(view)

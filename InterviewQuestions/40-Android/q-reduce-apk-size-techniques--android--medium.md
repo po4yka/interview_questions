@@ -47,21 +47,25 @@ android {
 }
 ```
 
-**Эффект**: удаление мертвого кода, обфускация имен, оптимизация байткода. Типичное уменьшение 20–40% (зависит от проекта).
+**Эффект**: удаление мертвого кода, обфускация имен, оптимизация байткода. Типичное уменьшение порядка 20–40% (в зависимости от проекта).
 
 ### 2. Android App `Bundle`
 
 ```gradle
 android {
+    // Для Android App Bundle Play сам генерирует сплиты по ABI, density и языкам.
+    // Отдельная декларация splits здесь обычно не требуется для AAB.
+    // Пример настройки языка при необходимости:
     bundle {
-        language { enableSplit = true }   // ✅ Сплиты по языкам
-        density { enableSplit = true }    // ✅ Сплиты по плотности экранов
-        abi { enableSplit = true }        // ✅ Сплиты по ABI
+        language {
+            // enableSplit = true  // ✅ Разрешить раздельную доставку языковых пакетов
+            // enableSplit = false // ✅ Отключить сплиты, если хотим все языки в базовом APK
+        }
     }
 }
 ```
 
-**Эффект**: Google Play на основе App `Bundle` генерирует оптимизированные APK/сплиты для каждой конфигурации устройства. Пользователи загружают только нужные ресурсы. Типичное уменьшение 15–35%.
+**Эффект**: Google Play на основе App `Bundle` генерирует оптимизированные APK/сплиты для каждой конфигурации устройства (ABI, плотность, язык). Пользователи загружают только нужные им части. Типичное уменьшение порядка 15–35% по сравнению с монолитным APK.
 
 ### 3. Оптимизация Ресурсов
 
@@ -69,10 +73,11 @@ android {
 android {
     defaultConfig {
         // ✅ Ограничиваем только нужные языки для ресурсов
+        // ВНИМАНИЕ: resConfigs физически удаляет ресурсы из APK/AAB.
         resConfigs "en", "ru"
     }
 
-    // ✅ Для APK: сплиты по ABI и плотности; для App Bundle сплиты управляются Play
+    // ✅ Для прямых APK-сборок можно включить сплиты по плотности
     splits {
         density {
             enable true
@@ -83,8 +88,8 @@ android {
 }
 ```
 
-- **WebP**: лучшее сжатие, чем PNG/JPEG, без видимой потери качества (часто 20–35%).
-- **VectorDrawable**: вместо множества PNG для иконок и простых форм (может дать значительное уменьшение при поддерживаемых версиях API).
+- **WebP**: лучшее сжатие, чем PNG/JPEG, без видимой потери качества для большинства ресурсов (часто экономия 20–35%).
+- **VectorDrawable**: используйте для иконок и простых форм; для сложных изображений векторы могут быть больше растров.
 - **Lint + shrinkResources**: автоматический поиск и удаление неиспользуемых ресурсов.
 
 ### 4. Нативные Библиотеки
@@ -99,7 +104,7 @@ android {
 }
 ```
 
-**Эффект**: заметное уменьшение размера (до ~50%) при исключении x86/x86_64 и других неиспользуемых ABI.
+**Эффект**: заметное уменьшение размера (часто до ~50% от нативной части), если исключить x86/x86_64 и другие неиспользуемые ABI.
 
 ### 5. Зависимости
 
@@ -111,19 +116,19 @@ implementation "com.google.android.gms:play-services-maps:..."
 // implementation "com.google.android.gms:play-services:..."
 ```
 
-Анализ размера: `./gradlew :app:analyzeReleaseBundle` или APK Analyzer в Android Studio.
+Анализ размера: `./gradlew :app:analyzeReleaseBundle` (при поддержке текущей версии AGP) или APK Analyzer в Android Studio.
 
 ### Ожидаемые Результаты
 
 | Техника | Уменьшение |
 |---------|-----------|
-| R8/ProGuard + Resource Shrinking | 20-40% |
-| Android App `Bundle` | 15-35% |
-| WebP + VectorDrawable | 25-50% |
-| ABI фильтры | 30-50% |
-| **Комбинированно** | **40-70%** |
+| R8/ProGuard + Resource Shrinking | ~20-40% |
+| Android App `Bundle` | ~15-35% |
+| WebP + VectorDrawable | ~25-50% |
+| ABI фильтры | ~30-50% |
+| **Комбинированно** | **до ~40-70%** |
 
-(Фактические значения зависят от структуры конкретного приложения.)
+(Фактические значения зависят от структуры конкретного приложения и характера ресурсов.)
 
 ### Лучшие Практики
 
@@ -182,21 +187,25 @@ android {
 }
 ```
 
-**Effect**: dead code elimination, name obfuscation, bytecode optimization. Typical reduction 20–40% (project-dependent).
+**Effect**: dead code elimination, name obfuscation, bytecode optimization. Typical reduction on the order of 20–40% (project-dependent).
 
 ### 2. Android App `Bundle`
 
 ```gradle
 android {
+    // For Android App Bundle, Play generates ABI/density/language splits automatically.
+    // Explicit splits configuration is usually not required for AAB itself.
+    // Example for language configuration if needed:
     bundle {
-        language { enableSplit = true }   // ✅ Language splits
-        density { enableSplit = true }    // ✅ Density splits
-        abi { enableSplit = true }        // ✅ ABI splits
+        language {
+            // enableSplit = true  // ✅ Enable separate language splits
+            // enableSplit = false // ✅ Disable language splits to keep all languages together
+        }
     }
 }
 ```
 
-**Effect**: Google Play generates optimized APKs/splits for each device configuration from the App `Bundle`. Users download only what they need. Typical reduction 15–35%.
+**Effect**: Google Play generates optimized APKs/splits per device configuration (ABI, density, language) from the App `Bundle`. Users download only what they need. Typical reduction around 15–35% vs a single universal APK.
 
 ### 3. Resource Optimization
 
@@ -204,10 +213,11 @@ android {
 android {
     defaultConfig {
         // ✅ Limit to required resource languages
+        // NOTE: resConfigs physically removes resources from APK/AAB.
         resConfigs "en", "ru"
     }
 
-    // ✅ For APK builds: enable density splits; for App Bundle, Play manages splits.
+    // ✅ For direct APK builds you can enable density splits.
     splits {
         density {
             enable true
@@ -218,8 +228,8 @@ android {
 }
 ```
 
-- **WebP**: better compression than PNG/JPEG without noticeable quality loss (often 20–35%).
-- **VectorDrawable**: use for icons/simple shapes instead of multiple PNGs (can significantly reduce size on supported APIs).
+- **WebP**: better compression than PNG/JPEG without visible quality loss for most assets (often 20–35% savings).
+- **VectorDrawable**: best for icons and simple shapes; for complex images vectors can be larger than bitmaps.
 - **Lint + shrinkResources**: automatically detect and remove unused resources.
 
 ### 4. Native Libraries
@@ -234,7 +244,7 @@ android {
 }
 ```
 
-**Effect**: significant reduction (up to ~50%) when excluding x86/x86_64 and other unused ABIs.
+**Effect**: significant reduction in the native portion size (often up to ~50%) when excluding x86/x86_64 and other unused ABIs.
 
 ### 5. Dependencies
 
@@ -246,19 +256,19 @@ implementation "com.google.android.gms:play-services-maps:..."
 // implementation "com.google.android.gms:play-services:..."
 ```
 
-Size analysis: `./gradlew :app:analyzeReleaseBundle` or APK Analyzer in Android Studio.
+Size analysis: `./gradlew :app:analyzeReleaseBundle` (if supported by your AGP version) or APK Analyzer in Android Studio.
 
 ### Expected Results
 
 | Technique | Reduction |
 |-----------|-----------|
-| R8/ProGuard + Resource Shrinking | 20-40% |
-| Android App `Bundle` | 15-35% |
-| WebP + VectorDrawable | 25-50% |
-| ABI filters | 30-50% |
-| **Combined** | **40-70%** |
+| R8/ProGuard + Resource Shrinking | ~20-40% |
+| Android App `Bundle` | ~15-35% |
+| WebP + VectorDrawable | ~25-50% |
+| ABI filters | ~30-50% |
+| **Combined** | **up to ~40-70%** |
 
-(Actual numbers depend on the app's structure.)
+(Actual values depend on the app structure and asset characteristics.)
 
 ### Best Practices
 

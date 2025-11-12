@@ -74,7 +74,7 @@ WorkManager.getInstance(context)
 ### Передача Данных Между Воркерами
 
 **Ограничения WorkData**
-- Максимальный размер: 10 KB (суммарно для `inputData` + `outputData`)
+- Практический лимит ~10 KB на `Data` (input/output), хранится в БД WorkManager
 - Только примитивные типы и `String`/Array
 - ❌ Не передавать большие объекты напрямую
 - ✅ Передавать ID, пути к файлам, метаданные
@@ -123,14 +123,14 @@ class ReliableWorker(appContext: Context, params: WorkerParameters) : CoroutineW
             // ✅ Сетевые ошибки → retry с экспоненциальной задержкой (см. BackoffCriteria)
             if (runAttemptCount < 3) Result.retry()
             else {
-                // В реальных сценариях чаще отдаём failure, здесь показан вариант частичного успеха
+                // В реальных сценариях чаще отдаём failure; здесь показан вариант частичного успеха
                 Result.success(workDataOf("partial_success" to true))
             }
         } catch (e: AuthException) { // domain-specific
             // ❌ Ошибки авторизации → немедленный failure
             Result.failure(workDataOf("error_type" to "auth"))
         } catch (e: ValidationException) { // domain-specific
-            // ✅ Ошибки валидации → можно продолжить цепь с пометкой
+            // ✅ Ошибки валидации → можно продолжить цепь с пометкой (псевдокод invalidIds)
             val skippedIdsJson = invalidIds.toJson() // псевдокод сериализации
             Result.success(workDataOf(
                 "partial_success" to true,
@@ -143,27 +143,35 @@ class ReliableWorker(appContext: Context, params: WorkerParameters) : CoroutineW
 
 **Fallback-цепи для критических сбоев**
 
-WorkManager не поддерживает условные ветки напрямую, поэтому fallback обычно реализуется через:
-- анализ `WorkInfo` и постановку альтернативной задачи из приложения, или
-- интерпретацию `outputData` и состояния как сигнала для следующего воркера.
+WorkManager не поддерживает условные ветки напрямую. Важно:
+- если воркер возвращает `Result.failure()`, следующие по цепочке воркеры не будут выполнены;
+- fallback обычно реализуется через:
+  - анализ `WorkInfo` и постановку альтернативной задачи из приложения, или
+  - моделирование «fallback» в рамках success-результата с контекстом ошибки в `outputData` и логикой в следующем воркере.
 
 ```kotlin
-// ✅ Пример: fallback-воркер читает контекст ошибки из outputData предыдущего воркера
+// ✅ Пример: fallback-воркер читает контекст из outputData и решает, что делать
 class PrimaryWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
         return try {
             doPrimary()
             Result.success()
         } catch (e: Exception) {
-            Result.failure(workDataOf("primary_error" to (e.message ?: "error")))
+            // Моделируем soft-failure как success с флагом и сообщением,
+            // чтобы цепочка продолжилась до FallbackWorker
+            Result.success(workDataOf(
+                "primary_error" to (e.message ?: "error"),
+                "should_fallback" to true
+            ))
         }
     }
 }
 
 class FallbackWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
+        val shouldFallback = inputData.getBoolean("should_fallback", false)
         val error = inputData.getString("primary_error")
-        if (error != null) {
+        if (shouldFallback && error != null) {
             performFallback(error)
         }
         return Result.success()
@@ -175,17 +183,20 @@ val fallback = OneTimeWorkRequestBuilder<FallbackWorker>().build()
 
 WorkManager.getInstance(context)
     .beginWith(primary)
-    .then(fallback) // выполнится только если PrimaryWorker завершился success или был помечен как success
+    .then(fallback) // fallback анализирует контекст и выполняется только логически при soft-failure
     .enqueue()
 ```
 
 ### Мониторинг И Наблюдение
 
 **Отслеживание прогресса цепи**
+
+Ниже используется псевдо-обертка над стандартными API WorkManager; `getWorkInfosByTagFlow` иллюстрирует идею и может быть реализован, например, через `getWorkInfosByTagLiveData().asFlow()`.
+
 ```kotlin
 class ChainMonitor(private val workManager: WorkManager) {
     fun monitorChain(chainTag: String): Flow<ChainStatus> =
-        workManager.getWorkInfosByTagFlow(chainTag)
+        getWorkInfosByTagFlow(chainTag)
             .map { workInfos ->
                 ChainStatus(
                     total = workInfos.size,
@@ -195,6 +206,8 @@ class ChainMonitor(private val workManager: WorkManager) {
                     progress = calculateProgress(workInfos)
                 )
             }
+
+    // Реализация getWorkInfosByTagFlow зависит от инфраструктуры проекта (LiveData.asFlow и т.п.)
 
     private fun calculateProgress(workInfos: List<WorkInfo>): Int {
         val totalProgress = workInfos.sumOf { workInfo ->
@@ -212,23 +225,22 @@ class ChainMonitor(private val workManager: WorkManager) {
 ### Лучшие Практики
 
 **1. Передача данных**
-- Держите WorkData < 10 KB (включая output)
+- Держите WorkData ≲ 10 KB (включая output)
 - Используйте БД/файлы для больших данных
 - Передавайте ID вместо объектов
 - Сериализуйте через JSON для коллекций
 
 **2. Обработка ошибок**
 - Проектируйте для частичных сбоев
-- Разные retry-политики для разных ошибок
-- Передавайте контекст ошибки downstream
-- Fallback/альтернативные ветки реализуйте через анализ состояния/данных, а не "магические" цепи
+- Задавайте разные retry-политики для разных типов ошибок
+- Передавайте контекст ошибки downstream при необходимости
+- Fallback/альтернативные ветки реализуйте через анализ состояния/данных или моделирование soft-failure, а не через ожидание встроенной условной логики цепей
 
 **3. Дизайн цепи**
 - Используйте теги для группировки: `.addTag(batchId)`
-- Минимизируйте количество воркеров
-- Группируйте похожие операции
-- Проектируйте для наблюдаемости
-- Используйте `beginUniqueWork` / `enqueueUniqueWork` и `ExistingWorkPolicy` для управления переотправками цепочек
+- Минимизируйте количество воркеров, группируйте похожие операции
+- Проектируйте для наблюдаемости (логи, прогресс, теги)
+- Используйте `beginUniqueWork` / `enqueueUniqueWork` и `ExistingWorkPolicy` для управления уникальными цепочками и повторными постановками
 
 **4. Constraints и политики**
 ```kotlin
@@ -250,9 +262,9 @@ val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
 ### Частые Ошибки
 
 1. **Слишком сложные цепи** — усложняют отладку
-2. **Большие объемы в WorkData** — превышают лимит 10 KB
+2. **Большие объемы в WorkData** — приближаются или превышают лимит
 3. **Циклические зависимости** — недопустимы, приводят к некорректному графу
-4. **Отсутствие обработки ошибок** — может блокировать всю цепь
+4. **Отсутствие обработки ошибок** — может блокировать или скрывать состояние цепи
 5. **Нет reporting прогресса** — плохой UX для долгих задач
 
 ## Answer (EN)
@@ -302,9 +314,9 @@ WorkManager.getInstance(context)
 
 ### Data Passing Between Workers
 
-**WorkData Constraints**
-- Maximum size: 10 KB (combined input + output)
-- Only primitive types and `String`/Array
+**WorkData constraints**
+- Practical limit is ~10 KB for `Data` (input/output), stored in WorkManager DB
+- Only primitive types and `String`/Array are supported
 - ❌ Don't pass large objects directly
 - ✅ Pass IDs, file paths, metadata
 
@@ -352,14 +364,14 @@ class ReliableWorker(appContext: Context, params: WorkerParameters) : CoroutineW
             // ✅ Network errors → retry with exponential backoff (see BackoffCriteria)
             if (runAttemptCount < 3) Result.retry()
             else {
-                // In many real cases you'd return failure here; this illustrates partial success handling
+                // In many real cases you'd return failure; this illustrates partial success handling
                 Result.success(workDataOf("partial_success" to true))
             }
         } catch (e: AuthException) { // domain-specific
             // ❌ Auth errors → immediate failure
             Result.failure(workDataOf("error_type" to "auth"))
         } catch (e: ValidationException) { // domain-specific
-            // ✅ Validation errors → continue chain with context
+            // ✅ Validation errors → continue chain with context (pseudo-code invalidIds)
             val skippedIdsJson = invalidIds.toJson() // serialization pseudo-code
             Result.success(workDataOf(
                 "partial_success" to true,
@@ -372,27 +384,34 @@ class ReliableWorker(appContext: Context, params: WorkerParameters) : CoroutineW
 
 **Fallback chains for critical failures**
 
-WorkManager does not support conditional branches natively in chains. Typical fallback patterns:
-- observe `WorkInfo` in app code and enqueue alternative work when a chain/worker fails;
-- encode error context in `outputData` and let subsequent workers decide what to do.
+WorkManager does not support conditional branches natively inside chains. Important points:
+- when a worker returns `Result.failure()`, subsequent chained workers are not executed;
+- typical fallback patterns:
+  - observe `WorkInfo` in app code and enqueue alternative work when a chain/worker fails;
+  - model a "fallback" as a soft failure: encode error context in `outputData` of a successful result and let the next worker decide.
 
 ```kotlin
-// ✅ Example: fallback worker reads error context from previous worker's outputData
+// ✅ Example: fallback worker reads context from outputData and decides what to do
 class PrimaryWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
         return try {
             doPrimary()
             Result.success()
         } catch (e: Exception) {
-            Result.failure(workDataOf("primary_error" to (e.message ?: "error")))
+            // Model soft-failure as success with flags so that chain continues to FallbackWorker
+            Result.success(workDataOf(
+                "primary_error" to (e.message ?: "error"),
+                "should_fallback" to true
+            ))
         }
     }
 }
 
 class FallbackWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
+        val shouldFallback = inputData.getBoolean("should_fallback", false)
         val error = inputData.getString("primary_error")
-        if (error != null) {
+        if (shouldFallback && error != null) {
             performFallback(error)
         }
         return Result.success()
@@ -404,17 +423,20 @@ val fallback = OneTimeWorkRequestBuilder<FallbackWorker>().build()
 
 WorkManager.getInstance(context)
     .beginWith(primary)
-    .then(fallback) // runs if PrimaryWorker reports success OR is modeled as success
+    .then(fallback) // fallback decides based on context; no implicit run-after-failure
     .enqueue()
 ```
 
 ### Monitoring and Observing
 
 **Chain progress tracking**
+
+The following uses a pseudo-wrapper over standard WorkManager APIs; `getWorkInfosByTagFlow` is illustrative and could be implemented via `getWorkInfosByTagLiveData().asFlow()` or similar.
+
 ```kotlin
 class ChainMonitor(private val workManager: WorkManager) {
     fun monitorChain(chainTag: String): Flow<ChainStatus> =
-        workManager.getWorkInfosByTagFlow(chainTag)
+        getWorkInfosByTagFlow(chainTag)
             .map { workInfos ->
                 ChainStatus(
                     total = workInfos.size,
@@ -424,6 +446,8 @@ class ChainMonitor(private val workManager: WorkManager) {
                     progress = calculateProgress(workInfos)
                 )
             }
+
+    // Implementation of getWorkInfosByTagFlow depends on your project stack (e.g., LiveData.asFlow)
 
     private fun calculateProgress(workInfos: List<WorkInfo>): Int {
         val totalProgress = workInfos.sumOf { workInfo ->
@@ -441,23 +465,22 @@ class ChainMonitor(private val workManager: WorkManager) {
 ### Best Practices
 
 **1. Data Passing**
-- Keep WorkData < 10 KB (including outputs)
+- Keep WorkData ≲ 10 KB (including outputs)
 - Use database/files for large data
 - Pass IDs instead of objects
-- Serialize via JSON for collections
+- Use JSON or similar serialization for collections
 
 **2. Error Handling**
 - Design for partial failures where appropriate
-- Use different retry policies for different error types
-- Pass error context downstream where needed
-- Implement fallback/alternative flows via state inspection rather than assuming built-in conditional branches
+- Apply different retry policies for different error types
+- Pass error context downstream when needed
+- Implement fallback/alternative flows via state inspection or soft-failure modeling, not by assuming built-in conditional branches in chains
 
 **3. Chain Design**
 - Use tags for grouping: `.addTag(batchId)`
-- Minimize number of workers
-- Batch similar operations
-- Design for observability
-- Use `beginUniqueWork` / `enqueueUniqueWork` with `ExistingWorkPolicy` to control duplicate chains and restarts
+- Minimize number of workers; batch similar operations
+- Design for observability (logs, progress, tags)
+- Use `beginUniqueWork` / `enqueueUniqueWork` with `ExistingWorkPolicy` to control unique chains and restarts
 
 **4. Constraints and policies**
 ```kotlin
@@ -479,9 +502,9 @@ val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
 ### Common Pitfalls
 
 1. **Over-complex chains** — make debugging difficult
-2. **Large WorkData payloads** — exceed 10 KB limit
+2. **Large WorkData payloads** — approach or exceed practical limits
 3. **Circular dependencies** — invalid graphs / non-executable chains
-4. **Missing error handling** — may block entire chain or hide failures
+4. **Missing error handling** — may block or obscure overall chain state
 5. **No progress reporting** — poor UX for long-running tasks
 
 ## Follow-ups

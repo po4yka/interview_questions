@@ -84,13 +84,14 @@ suspend fun pipelineExample() = coroutineScope {
         println(strings.receive())
     }
 
-    coroutineContext.cancelChildren() // корректно завершаем pipeline
+    coroutineContext.cancelChildren() // корректно завершаем pipeline и освобождаем ресурсы
 }
 ```
 
 Ключевые моменты:
 - использовать `CoroutineScope.produce` и `ReceiveChannel` для композиции стадий;
-- обязательно отменять/закрывать каналы, когда результат больше не нужен.
+- обязательно отменять/закрывать каналы, когда результат больше не нужен, чтобы избежать утечек;
+- стадии должны уважать отмену (`for (x in channel)` корректно завершится после `cancel`).
 
 ### Producer-Consumer с несколькими стадиями
 
@@ -112,6 +113,7 @@ class DataPipeline(private val scope: CoroutineScope) {
             delay(50)
             send(RawData(i, "raw_$i"))
         }
+        // produce автоматически закроет канал по завершении блока
     }
 
     // Stage 2: обработка с несколькими воркерами
@@ -137,8 +139,11 @@ class DataPipeline(private val scope: CoroutineScope) {
         }
 
         scope.launch {
-            // Здесь можно дождаться завершения всех воркеров и закрыть out,
-            // координируя закрытие rawChannel.
+            // Пример корректного закрытия out после завершения всех воркеров
+            // и исчерпания rawChannel.
+            // Здесь можно использовать join на запущенных job'ах.
+            // Для краткости оставлено как комментарий, так как точная
+            // реализация зависит от требований.
         }
 
         return out
@@ -194,7 +199,7 @@ class DataPipeline(private val scope: CoroutineScope) {
 }
 ```
 
-Идея: использовать каналы для связывания стадий и `launch` для параллельных воркеров.
+Идея: использовать каналы для связывания стадий и `launch` для параллельных воркеров. Для production-кода важно корректно закрывать `out` и не допускать зависания потребителей.
 
 ### Пулинг ресурсов с Semaphore
 
@@ -232,7 +237,7 @@ class ConnectionPool(private val size: Int) {
 }
 ```
 
-Идея: `Semaphore` ограничивает одновременное количество пользователей ресурса; очередь ресурсов защищена синхронизацией.
+Идея: `Semaphore` ограничивает одновременное количество пользователей ресурса; очередь ресурсов защищена синхронизацией (в реальных приложениях обычно используют неблокирующие структуры или отдельный мьютекс).
 
 ### Пулинг ресурсов с Mutex
 
@@ -275,7 +280,7 @@ Mutex защищает структуру данных пула; `Semaphore` о�
 
 ### Rate Limiting (ограничение частоты)
 
-Упрощённый token-bucket через `Semaphore`:
+Упрощённый token-bucket через `Semaphore` (для демонстрации, без гарантии строгой структурированной конкуренции):
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -292,7 +297,8 @@ class RateLimiter(
     suspend fun <T> execute(block: suspend () -> T): T {
         semaphore.acquire()
 
-        // Планируем возврат токена через окно; используем переданный scope
+        // Планируем возврат токена через окно; важно, чтобы переданный scope
+        // имел корректный жизненный цикл, иначе возможны утечки.
         scope.launch {
             delay(window)
             semaphore.release()
@@ -303,7 +309,9 @@ class RateLimiter(
 }
 ```
 
-Замечание: для продакшена стоит аккуратно выбирать scope и учитывать отмену.
+Замечание: в продакшене важно выбирать scope так, чтобы фоновые задачки на release
+не терялись при отмене/завершении, и учитывать, что при ошибках `block` токен
+всё равно будет возвращён по таймеру.
 
 Скользящее окно через `Mutex`:
 
@@ -489,7 +497,6 @@ class CircuitBreaker(
 
 ```kotlin
 import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
 import java.util.concurrent.atomic.AtomicInteger
 
 class Bulkhead(private val maxConcurrent: Int) {
@@ -515,7 +522,7 @@ class Bulkhead(private val maxConcurrent: Int) {
 }
 ```
 
-Идея: разделять ресурсы по типам нагрузки и ограничивать конкуренцию для каждой группы отдельно (часто с немедленным отказом).
+Идея: разделять ресурсы по типам нагрузки и ограничивать конкуренцию для каждой группы отдельно (часто с немедленным отказом) — пример демонстрационный.
 
 ### Лучшие практики (RU)
 
@@ -611,13 +618,14 @@ suspend fun pipelineExample() = coroutineScope {
         println(strings.receive())
     }
 
-    coroutineContext.cancelChildren() // cancel the pipeline when done
+    coroutineContext.cancelChildren() // cancel the pipeline and free resources when done
 }
 ```
 
 Key points:
 - use `produce`/`ReceiveChannel` to compose stages;
-- always cancel/close channels when you no longer need results.
+- always cancel/close channels when you no longer need results to avoid leaks;
+- stages should be cancellation-cooperative (`for (x in channel)` terminates on cancel).
 
 ### Producer-Consumer with Multiple Stages
 
@@ -639,6 +647,7 @@ class DataPipeline(private val scope: CoroutineScope) {
             delay(50)
             send(RawData(i, "raw_$i"))
         }
+        // produce will close the channel when this block completes
     }
 
     // Stage 2: processing with multiple workers
@@ -664,8 +673,8 @@ class DataPipeline(private val scope: CoroutineScope) {
         }
 
         scope.launch {
-            // Here you can coordinate closing of rawChannel and out
-            // once all producers/consumers are finished.
+            // Here you would typically await worker completion and then close `out`.
+            // Kept as a comment because the exact coordination depends on requirements.
         }
 
         return out
@@ -721,7 +730,7 @@ class DataPipeline(private val scope: CoroutineScope) {
 }
 ```
 
-Idea: use channels to connect stages and `launch` for parallel workers.
+Idea: use channels to connect stages and `launch` for parallel workers. For production code, ensure `out` is closed correctly to avoid consumers hanging.
 
 ### Resource Pooling with Semaphore
 
@@ -761,8 +770,8 @@ class ConnectionPool(private val size: Int) {
 
 Key ideas:
 - `Semaphore` bounds concurrent usage;
-- shared queue is synchronized;
-- `withPermit` ensures permit release.
+- the shared queue is protected via synchronization (in real systems, prefer non-blocking or coroutine-friendly primitives);
+- `withPermit` guarantees permit release.
 
 ### Resource Pooling with Mutex
 
@@ -803,7 +812,7 @@ class ResourceManager<T>(
 
 ### Rate Limiting Pattern
 
-Simple token-bucket-style limiter using `Semaphore`:
+Simple token-bucket-style limiter using `Semaphore` (demo-level; scope lifecycle and cancellation must be handled with care):
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -820,7 +829,8 @@ class RateLimiter(
     suspend fun <T> execute(block: suspend () -> T): T {
         semaphore.acquire()
 
-        // Schedule permit release after the window using caller-provided scope
+        // Schedule permit release after the window using caller-provided scope.
+        // Ensure this scope lives long enough and handles cancellation properly.
         scope.launch {
             delay(window)
             semaphore.release()
@@ -1008,7 +1018,7 @@ class CircuitBreaker(
 }
 ```
 
-Key idea: protect only state transitions with `Mutex`; do not hold it while executing `block`.
+Key idea: only protect state transitions with `Mutex`; do not hold it while executing `block`.
 
 ### Bulkhead Pattern
 
@@ -1094,10 +1104,10 @@ GlobalScope.launch {
 
 ## References
 
-- [Kotlin Coroutines Guide]("https://kotlinlang.org/docs/coroutines-guide.html")
-- [Channels Documentation]("https://kotlinlang.org/docs/channels.html")
-- [Shared Mutable State and Concurrency]("https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html")
-- [Coroutine Context and Dispatchers]("https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html")
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Channels Documentation](https://kotlinlang.org/docs/channels.html)
+- [Shared Mutable State and Concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html)
+- [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 
 ## Related Questions
 

@@ -48,6 +48,7 @@ public class Person {
 Kotlin:
 ```kotlin
 class Person(val name: String, val age: Int)
+// Первичный конструктор объявлен в заголовке класса, параметры с val/var сразу становятся свойствами
 ```
 
 2. Статические члены (`static`) и `companion object`
@@ -110,7 +111,7 @@ public class User {
 Kotlin:
 ```kotlin
 data class User(val name: String, val age: Int)
-// Автоматически генерирует: equals(), hashCode(), toString(), copy(), componentN()
+// Автоматически генерирует: equals(), hashCode(), toString(), copy(), componentN() для свойств primary-конструктора (объявленных через val/var)
 ```
 
 4. Свойства и аксессоры
@@ -137,13 +138,13 @@ class Rectangle(var width: Int, var height: Int)
 
 5. Наследование
 
-Java (по умолчанию класс открытый для наследования):
+Java (если явно не указан `final`, класс можно наследовать):
 ```java
 public class Base {}  // можно наследовать
 public final class Final {}  // нельзя наследовать
 ```
 
-Kotlin (по умолчанию `final`):
+Kotlin (`final` по умолчанию, нужно явно указать `open` для наследования):
 ```kotlin
 class Base  // нельзя наследовать (final по умолчанию)
 open class Open  // можно наследовать
@@ -151,11 +152,11 @@ open class Open  // можно наследовать
 
 6. Модификаторы видимости
 
-| Модификатор            | Java по умолчанию        | Kotlin по умолчанию          |
-|------------------------|--------------------------|------------------------------|
+| Модификатор              | Java по умолчанию        | Kotlin по умолчанию          |
+|--------------------------|--------------------------|------------------------------|
 | Верхнеуровневые сущности | package-private          | public                       |
-| Члены класса           | package-private          | public                       |
-| `internal` Kotlin      | Нет прямого аналога      | Видимость в пределах модуля  |
+| Члены класса             | package-private          | public                       |
+| `internal` Kotlin        | Нет прямого аналога      | Видимость в пределах модуля  |
 
 7. Создание объектов без `new`
 
@@ -171,7 +172,7 @@ val person = Person("Alice", 30)
 
 8. Однострочные (single-expression) функции
 
-Kotlin позволяет задавать методы в виде однострочных функций, что делает объявления короче:
+Kotlin позволяет объявлять методы в виде однострочных функций вместо стандартного блочного синтаксиса Java, что делает объявления короче:
 
 ```kotlin
 class Calculator {
@@ -197,7 +198,7 @@ class Error(val message: String) : Result()
 | Свойства           | Ручные геттеры/сеттеры           | `val`/`var`, аксессоры генерируются автоматически |
 | Data-классы        | Ручная реализация методов         | Ключевое слово `data class`                     |
 | Статические члены  | `static`                          | `companion object`, `@JvmStatic`                |
-| Наследование       | Открыто по умолчанию              | `final` по умолчанию, нужен `open`              |
+| Наследование       | Не final по умолчанию (если не указан `final`) | `final` по умолчанию, нужен `open`     |
 | Видимость          | package-private по умолчанию      | `public` по умолчанию, есть `internal`          |
 | Конструкторы       | Отдельно от объявления класса     | Первичный конструктор в заголовке класса        |
 | Создание объектов  | Ключевое слово `new`              | Без `new`                                       |
@@ -229,6 +230,7 @@ public class Person {
 **Kotlin:**
 ```kotlin
 class Person(val name: String, val age: Int)
+// Primary constructor in the class header; val/var parameters become properties
 ```
 
 **2. Static Members**
@@ -251,7 +253,7 @@ class MyClass {
         const val CONSTANT = "constant"
 
         @JvmStatic
-        fun staticMethod() {
+        public fun staticMethod() {
             // code
         }
     }
@@ -291,7 +293,7 @@ public class User {
 **Kotlin:**
 ```kotlin
 data class User(val name: String, val age: Int)
-// Auto-generates: equals(), hashCode(), toString(), copy(), componentN()
+// Auto-generates: equals(), hashCode(), toString(), copy(), componentN() for primary-constructor properties declared with val/var
 ```
 
 **4. Properties and Accessors**
@@ -318,13 +320,13 @@ class Rectangle(var width: Int, var height: Int)
 
 **5. Inheritance**
 
-**Java (open by default):**
+**Java (not final by default; can be inherited unless marked final):**
 ```java
 public class Base {}  // Can be inherited
 public final class Final {}  // Cannot be inherited
 ```
 
-**Kotlin (final by default):**
+**Kotlin (final by default; must be marked open to inherit):**
 ```kotlin
 class Base  // Cannot be inherited (final by default)
 open class Open  // Can be inherited
@@ -336,7 +338,7 @@ open class Open  // Can be inherited
 |-------------------|-----------------------------|-----------------------------------------|
 | Top-level         | package-private              | public                                  |
 | Class members     | package-private              | public                                  |
-| Kotlin `internal` | No direct equivalent         | Module-visible                          |
+| Kotlin `internal` | No direct equivalent         | Visible within a module                 |
 
 **7. No `new` Keyword**
 
@@ -352,7 +354,8 @@ val person = Person("Alice", 30)
 
 **8. Single-Expression Functions**
 
-**Kotlin:**
+Kotlin allows methods to be written as single-expression functions instead of Java's typical block-bodied methods, making declarations shorter and more expressive:
+
 ```kotlin
 class Calculator {
     fun add(a: Int, b: Int) = a + b  // Single-expression function
@@ -378,7 +381,7 @@ Note: Modern Java (since Java 17) also supports sealed classes, but Kotlin's sea
 | Properties       | Manual getters/setters       | Auto-generated (`val`/`var`)               |
 | Data classes     | Manual equals/hashCode/toString | `data class` keyword                    |
 | Static members   | `static` keyword             | `companion object` (+ `@JvmStatic` for Java interop) |
-| Inheritance      | Open by default              | Final by default (`open` required)         |
+| Inheritance      | Not final by default         | Final by default (`open` required)         |
 | Visibility       | package-private default (no modifier) | `public` default; has `internal` (module scope) |
 | Constructors     | Separate from class header   | Primary constructor in class header        |
 | Object creation  | `new` keyword                | No `new`                                   |

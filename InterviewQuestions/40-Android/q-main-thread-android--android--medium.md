@@ -248,16 +248,16 @@ class MyViewModel : ViewModel() {
 
 ## Follow-ups
 
-- How does Looper.prepare() work internally?
-- What's the difference between Handler.post() and `View`.post()?
+- How does `Looper.prepare()` work internally?
+- What's the difference between `Handler.post()` and `View.post()`?
 - How to detect if current code is running on main thread?
-- What happens when MessageQueue is full?
+- What happens when `MessageQueue` is full?
 - How does StrictMode detect main thread violations?
 
 ## References
 
-- Official Android documentation on threading
-- Kotlin Coroutines guide
+- ["https://developer.android.com/guide/components/processes-and-threads"]
+- ["https://developer.android.com/kotlin/coroutines"]
 
 ## Related Questions
 

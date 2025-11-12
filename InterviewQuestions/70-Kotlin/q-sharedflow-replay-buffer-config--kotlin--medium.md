@@ -15,6 +15,7 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [backpressure, buffer, configuration, coroutines, difficulty/medium, flow, hot-flow, kotlin, replay, sharedflow]
 contributors: []
+
 ---
 
 # Вопрос (RU)
@@ -49,7 +50,7 @@ public fun <T> MutableSharedFlow(
 
 1. `replay`: Количество значений, кешируемых для поздних подписчиков
 2. `extraBufferCapacity`: Дополнительные слоты буфера помимо `replay`
-3. `onBufferOverflow`: Что происходит, когда общий буфер заполнен
+3. `onBufferOverflow`: Что происходит, когда общий буфер заполнен (`replay + extraBufferCapacity`)
 
 #### Параметр `replay`
 
@@ -74,7 +75,7 @@ fun demonstrateReplayRu() = runBlocking {
             println("Коллектор 1: $value")
         }
     }
-    // Вывод:
+    // Один из возможных выводов:
     // Коллектор 1: 2
     // Коллектор 1: 3
 
@@ -82,7 +83,7 @@ fun demonstrateReplayRu() = runBlocking {
 
     // Эмитим ещё одно значение
     flow.emit(4)
-    // Коллектор 1: 4
+    // Коллектор 1 также получит 4
 
     // Новый коллектор получает последние 2 значения (3, 4)
     launch {
@@ -90,7 +91,7 @@ fun demonstrateReplayRu() = runBlocking {
             println("Коллектор 2: $value")
         }
     }
-    // Вывод:
+    // Один из возможных выводов (для второго коллектора):
     // Коллектор 2: 3
     // Коллектор 2: 4
 
@@ -173,7 +174,7 @@ fun demonstrateExtraBufferRu() = runBlocking {
 
 #### Параметр `onBufferOverflow`
 
-Когда общий буфер заполнен, `onBufferOverflow` определяет поведение:
+Когда общий буфер (`replay + extraBufferCapacity`) заполнен, `onBufferOverflow` определяет поведение при попытке эмитировать новое значение:
 
 ```kotlin
 enum class BufferOverflow {
@@ -182,6 +183,8 @@ enum class BufferOverflow {
     DROP_LATEST  // Отбросить новое значение, сохранить существующие
 }
 ```
+
+Важно: политика применяется только если буфер уже заполнен; до этого все значения записываются без потерь.
 
 **1. `BufferOverflow.SUSPEND` (по умолчанию)**
 
@@ -208,7 +211,7 @@ fun demonstrateSuspendRu() = runBlocking {
     launch {
         repeat(5) { i ->
             println("Эмитим $i")
-            flow.emit(i) // при заполнении буфера будет приостановлен
+            flow.emit(i) // при заполнении буфера будет приостановлен, пока не появится место
         }
     }
 
@@ -231,13 +234,17 @@ fun demonstrateDropOldestRu() = runBlocking {
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
+    // Общая ёмкость буфера = 3; первые 3 значения будут сохранены полностью.
     repeat(5) {
         println("Эмитим $it")
-        flow.emit(it) // не блокируется; при заполнении выбрасывается самое старое
+        flow.emit(it)
     }
 
     println("Replay cache: ${flow.replayCache}")
-    // Вывод: [4] — из-за replay = 1 хранится только последнее значение
+    // При такой конфигурации и отсутствии коллекторов в конце останется одно последнее значение,
+    // так как replay = 1 хранит только последний элемент.
+    // DROP_OLDEST влияет на то, какие значения попадут в буфер при переполнении,
+    // но не увеличивает размер replay-кеша.
 }
 ```
 
@@ -254,14 +261,19 @@ fun demonstrateDropLatestRu() = runBlocking {
         onBufferOverflow = BufferOverflow.DROP_LATEST
     )
 
+    // Общая ёмкость = 3. Первые 3 значения будут сохранены; дальнейшие,
+    // при заполненном буфере, могут быть отброшены согласно DROP_LATEST.
     flow.emit(1)
     flow.emit(2)
     flow.emit(3)
-    flow.emit(4) // при полном буфере будет отброшено
-    flow.emit(5) // при полном буфере будет отброшено
+    flow.emit(4) // может быть отброшено, если буфер полон
+    flow.emit(5) // аналогично
 
     println("Replay cache: ${flow.replayCache}")
-    // Вывод: [3]
+    // Здесь replayCache гарантированно содержит только один элемент (из-за replay = 1),
+    // но конкретное значение зависит от того, какие значения были отброшены
+    // в момент переполнения. Не следует полагаться на это как на детерминированный сценарий
+    // без учёта временных характеристик.
 }
 ```
 
@@ -270,12 +282,14 @@ fun demonstrateDropLatestRu() = runBlocking {
 | Стратегия | Поведение | Сценарий использования | Эмиттер блокируется? |
 |-----------|-----------|------------------------|----------------------|
 | SUSPEND | Ждёт освобождения места | Критичные данные | Да |
-| DROP_OLDEST | Удаляет старейшее значение | Важно последнее состояние | Нет |
-| DROP_LATEST | Отбрасывает новое | Важны ранние события | Нет |
+| DROP_OLDEST | Удаляет старейшее значение при полном буфере | Важно последнее состояние | Нет |
+| DROP_LATEST | Отбрасывает новое значение при полном буфере | Важны ранние события | Нет |
 
 #### Совместная работа `replay` и буфера
 
-Общий размер буфера — это `replay + extraBufferCapacity`, а выбранная стратегия `onBufferOverflow` определяет, что делать при переполнении.
+Общий размер буфера — это `replay + extraBufferCapacity`, а выбранная стратегия `onBufferOverflow` определяет, что делать при переполнении. При этом:
+- `replay` задаёт, сколько последних значений гарантированно доступны новым коллекторам.
+- `extraBufferCapacity` влияет на то, сколько значений может быть "в пути" для текущих коллекторов.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -293,7 +307,8 @@ fun demonstrateReplayAndBufferRu() = runBlocking {
     }
 
     println("Replay cache: ${flow.replayCache}")
-    // Ожидаемо: [Value-8, Value-9]
+    // Ожидаемо для этой конфигурации: в replayCache два последних значения (Value-8, Value-9),
+    // так как replay = 2.
 
     launch {
         flow.take(2).collect { value ->
@@ -436,6 +451,7 @@ class ViewModelRu {
     val uiState: SharedFlow<UiStateRu> = _uiState
 
     init {
+        // В реальном коде лучше использовать viewModelScope; runBlocking здесь только для примера.
         runBlocking {
             _uiState.emit(UiStateRu())
         }
@@ -584,6 +600,8 @@ val lowMemoryRu = MutableSharedFlow<LargeObjectRu>(
 
 **Тестирование конфигураций `SharedFlow` (RU)**
 
+Ниже — примерные тесты, иллюстрирующие поведение. Они демонстрационные; при использовании `runTest` и `delay` важно правильно учитывать виртуальное время тестового диспетчера.
+
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -617,7 +635,7 @@ class SharedFlowTestsRu {
         val collected = mutableListOf<Int>()
         flow.take(3).collect { collected.add(it) }
 
-        // Первые два значения — из replay (2, 3)
+        // Первые два значения в collected приходят из replay: (2, 3)
         assertEquals(listOf(2, 3), collected.take(2))
     }
 
@@ -630,14 +648,13 @@ class SharedFlowTestsRu {
 
         var emitCount = 0
 
-        // Медленный коллектор
+        // Медленный коллектор (используем виртуальное время тестового диспетчера)
         launch {
             flow.collect {
                 delay(100)
             }
         }
 
-        // Быстрый эмиттер
         val emitter = launch {
             repeat(10) {
                 flow.emit(it)
@@ -647,7 +664,7 @@ class SharedFlowTestsRu {
 
         advanceTimeBy(150)
 
-        // Консервативная проверка: не все 10 значений успели эмититься
+        // Консервативная проверка: предполагаем, что при SUSPEND эмиттер не смог мгновенно отправить все 10 значений
         assert(emitCount < 10)
 
         emitter.cancel()
@@ -663,7 +680,8 @@ class SharedFlowTestsRu {
 
         repeat(10) { flow.emit(it) }
 
-        // Должно сохраниться только последнее значение
+        // replay = 1 гарантирует, что останется только последнее значение,
+        // DROP_OLDEST влияет только на то, какие значения будут отброшены по пути.
         assertEquals(listOf(9), flow.replayCache)
     }
 }
@@ -752,7 +770,7 @@ suspend fun benchmarkOverflowRu() = coroutineScope {
 
 ### Understanding `SharedFlow`
 
-`SharedFlow` is a **hot flow** that emits values to all active collectors. Unlike cold flows, it doesn't restart for each collector.
+`SharedFlow` is a hot flow that emits values to all active collectors. Unlike cold flows, it doesn't restart for each collector.
 
 Key characteristics:
 - Hot: Emits regardless of collectors
@@ -772,7 +790,7 @@ public fun <T> MutableSharedFlow(
 
 - `replay`: Number of values to cache for late subscribers
 - `extraBufferCapacity`: Additional buffer beyond `replay`
-- `onBufferOverflow`: What happens when buffer is full
+- `onBufferOverflow`: What happens when total buffer (`replay + extraBufferCapacity`) is full
 
 ### The `replay` Parameter
 
@@ -784,6 +802,7 @@ import kotlinx.coroutines.flow.*
 
 fun demonstrateReplay() = runBlocking {
     val flow = MutableSharedFlow<Int>(replay = 2)
+
     flow.emit(1)
     flow.emit(2)
     flow.emit(3)
@@ -794,14 +813,24 @@ fun demonstrateReplay() = runBlocking {
         }
     }
 
+    // One possible output:
+    // Collector 1: 2
+    // Collector 1: 3
+
     delay(100)
     flow.emit(4)
+
+    // Collector 1 will also receive 4
 
     launch {
         flow.collect { value ->
             println("Collector 2: $value")
         }
     }
+
+    // One possible output for collector 2:
+    // Collector 2: 3
+    // Collector 2: 4
 
     delay(100)
 }
@@ -824,7 +853,7 @@ fun accessReplayCache() = runBlocking {
     flow.emit("B")
     flow.emit("C")
     val cached: List<String> = flow.replayCache
-    println("Cached: $cached")
+    println("Cached: $cached") // [A, B, C]
 }
 ```
 
@@ -866,7 +895,7 @@ Total capacity = `replay + extraBufferCapacity`.
 
 ### The `onBufferOverflow` Parameter
 
-When total buffer (`replay + extraBufferCapacity`) is full, `onBufferOverflow` controls behavior.
+When total buffer (`replay + extraBufferCapacity`) is full, `onBufferOverflow` controls behavior for new emissions.
 
 ```kotlin
 enum class BufferOverflow {
@@ -876,9 +905,11 @@ enum class BufferOverflow {
 }
 ```
 
-- `SUSPEND`: Backpressure, emitter suspends
-- `DROP_OLDEST`: Drop oldest buffered value
-- `DROP_LATEST`: Drop new value
+- `SUSPEND`: Backpressure, emitter suspends until space is available
+- `DROP_OLDEST`: Drop oldest buffered value and append new value
+- `DROP_LATEST`: Drop the new value, keep existing buffer
+
+Note: the strategy applies only when the buffer is already full.
 
 Example: `SUSPEND`:
 
@@ -900,7 +931,7 @@ fun demonstrateSuspend() = runBlocking {
     launch {
         repeat(5) { i ->
             println("Emitting $i at ${System.currentTimeMillis()}")
-            flow.emit(i)
+            flow.emit(i) // suspends when buffer is full
             println("Emitted $i")
         }
     }
@@ -919,12 +950,17 @@ fun demonstrateDropOldest() = runBlocking {
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
+    // Total capacity = 3. First 3 emissions fit; subsequent emissions cause
+    // the oldest buffered value to be dropped.
     repeat(5) {
         println("Emitting $it")
         flow.emit(it)
     }
 
     println("Replay cache: ${flow.replayCache}")
+    // With replay = 1, only the last value is kept in replayCache.
+    // DROP_OLDEST controls which values are dropped on overflow,
+    // but does not change replay size.
 }
 ```
 
@@ -938,13 +974,18 @@ fun demonstrateDropLatest() = runBlocking {
         onBufferOverflow = BufferOverflow.DROP_LATEST
     )
 
+    // Total capacity = 3. The first 3 emissions are stored; further emissions
+    // when full may be dropped according to DROP_LATEST.
     flow.emit(1)
     flow.emit(2)
     flow.emit(3)
-    flow.emit(4)
-    flow.emit(5)
+    flow.emit(4) // may be dropped if buffer is full
+    flow.emit(5) // may also be dropped
 
     println("Replay cache: ${flow.replayCache}")
+    // replayCache will contain exactly one value (because replay = 1),
+    // but which one depends on overflow timing; don't rely on this pattern
+    // as a deterministic example without controlled scheduling.
 }
 ```
 
@@ -966,6 +1007,7 @@ fun demonstrateReplayAndBuffer() = runBlocking {
     }
 
     println("Replay cache: ${flow.replayCache}")
+    // With replay = 2, replayCache will contain the last two values, e.g. [Value-8, Value-9].
 
     launch {
         flow.take(2).collect { value ->
@@ -1044,6 +1086,12 @@ suspend fun demonstrateEventBus() = coroutineScope {
 Example 2: UI state with latest value (like `StateFlow`):
 
 ```kotlin
+data class UiState(
+    val isLoading: Boolean = false,
+    val data: String? = null,
+    val error: String? = null
+)
+
 class ViewModel {
     private val _uiState = MutableSharedFlow<UiState>(
         replay = 1,
@@ -1052,6 +1100,7 @@ class ViewModel {
     val uiState: SharedFlow<UiState> = _uiState
 
     init {
+        // In real apps prefer a proper scope; runBlocking only for illustration.
         runBlocking {
             _uiState.emit(UiState())
         }
@@ -1063,13 +1112,20 @@ class ViewModel {
         _uiState.emit(UiState(isLoading = false, data = "Loaded data"))
     }
 }
-```
 
-Note: `StateFlow` is usually better for this use case.
+// Note: `StateFlow` is usually better for this use case.
+```
 
 Example 3: Recent notifications (replay last N):
 
 ```kotlin
+data class Notification(
+    val id: String,
+    val title: String,
+    val message: String,
+    val timestamp: Long = System.currentTimeMillis()
+)
+
 class NotificationManager {
     private val _notifications = MutableSharedFlow<Notification>(
         replay = 5,
@@ -1160,6 +1216,8 @@ fun demonstrateLateSubscriber() = runBlocking {
 
     delay(1000)
 }
+
+// Late subscriber first receives last 3 values from replay, then new emissions.
 ```
 
 ### Performance Implications
@@ -1232,16 +1290,16 @@ suspend fun benchmarkOverflow() = coroutineScope {
 ### When to Use Replay vs `StateFlow`
 
 Use `StateFlow` when:
-- Representing state
-- Need exactly one current value
-- Need conflated "latest only" behavior
-- Want `.value` API
+- Representing state, not events
+- You need exactly one current value
+- You want conflated "latest only" behavior
+- You need `.value` API
 
 Use `SharedFlow` with `replay` when:
-- Need more than 1 replayed value
-- Need events (with `replay = 0` or small)
-- Need control over buffer overflow
-- Need to distinguish "no value" from `null`
+- You need more than one replayed value
+- You need event-style patterns (`replay = 0` or small)
+- You need explicit buffer overflow control
+- You need to distinguish "no value" from `null`
 
 ```kotlin
 val stateFlow = MutableStateFlow("initial")
@@ -1283,6 +1341,7 @@ class SharedFlowTests {
         val collected = mutableListOf<Int>()
         flow.take(3).collect { collected.add(it) }
 
+        // First two values come from replay: (2, 3)
         assertEquals(listOf(2, 3), collected.take(2))
     }
 
@@ -1309,7 +1368,10 @@ class SharedFlowTests {
         }
 
         advanceTimeBy(150)
+
+        // Conservative: with SUSPEND, emitter should not be able to emit all 10 immediately
         assert(emitCount < 10)
+
         emitter.cancel()
     }
 
@@ -1322,6 +1384,8 @@ class SharedFlowTests {
         )
 
         repeat(10) { flow.emit(it) }
+
+        // replay = 1 ensures only the last value is retained in replayCache.
         assertEquals(listOf(9), flow.replayCache)
     }
 }
@@ -1330,9 +1394,9 @@ class SharedFlowTests {
 ### Summary
 
 `SharedFlow` configuration centers on:
-- `replay`
-- `extraBufferCapacity`
-- `onBufferOverflow`
+- `replay`: how many values new collectors receive
+- `extraBufferCapacity`: additional buffer for slow collectors
+- `onBufferOverflow`: strategy when buffer is full
 
 Total capacity = `replay + extraBufferCapacity`.
 
@@ -1340,7 +1404,7 @@ Choose based on use case:
 - Events: `replay = 0`, `DROP_OLDEST`
 - State: `replay = 1`, `DROP_OLDEST` or `StateFlow`
 - History: `replay = N`, consider memory
-- Critical data: `SUSPEND` with capacity
+- Critical data: `SUSPEND` with reasonable capacity
 
 ## Дополнительные вопросы (RU)
 
@@ -1377,8 +1441,8 @@ Choose based on use case:
 - Kotlin `SharedFlow` Documentation: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/
 - MutableSharedFlow API: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/
 - BufferOverflow Documentation: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-buffer-overflow/
-- Roman Elizarov - SharedFlow and StateFlow: https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c
-- Kotlin Flow Guide: https://kotlinlang.org/docs/flow.html
+- Roman Elizarov - `SharedFlow` and `StateFlow`: https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c
+- Kotlin `Flow` Guide: https://kotlinlang.org/docs/flow.html
 - [[c-kotlin]]
 - [[c-flow]]
 

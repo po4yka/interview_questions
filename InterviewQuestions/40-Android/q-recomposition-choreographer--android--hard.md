@@ -31,9 +31,9 @@ tags: [android/coroutines, android/performance-rendering, android/ui-compose, ch
 
 **Упрощённый процесс:**
 1. Изменение `MutableState` помечает соответствующие composable-области как "невалидные" (требуют рекомпозиции).
-2. Рантайм Compose планирует задачу рекомпозиции; для отображения на экране изменения синхронизируются с кадровыми колбэками `Choreographer`.
+2. Рантайм Compose планирует задачу рекомпозиции; для отображения на экране изменения обычно синхронизируются с кадровыми колбэками `Choreographer`.
 3. На очередном кадре (колбэк `Choreographer`, выровненный по VSYNC) выполняется рекомпозиция для помеченных областей и подготавливается обновлённое дерево для отрисовки.
-4. Обновлённый UI передаётся в систему отрисовки; перерисовываются только те composable-области, которые были инвалидированы (Compose использует пропуски/skip-группы, а не полный diff всех элементов).
+4. Обновлённый UI передаётся в систему отрисовки; перерисовываются только те composable-области, которые были инвалидированы (Compose использует пропуски/skip-группы и целенаправленную инвалидацию, а не полный diff всех элементов как в виртуальном DOM).
 
 **Важно:** Choreographer не "управляет" логикой Compose напрямую, он предоставляет VSYNC-синхронизированные колбэки, которые Compose использует для планирования применения изменений и рисования кадров.
 
@@ -50,14 +50,14 @@ tags: [android/coroutines, android/performance-rendering, android/ui-compose, ch
 fun Counter() {
     var count by remember { mutableStateOf(0) }
 
-    Button(onClick = { count++ }) { // ✅ Изменение попадает в список инвалидаций и будет обработано до ближайшего кадра
+    Button(onClick = { count++ }) { // ✅ Изменение попадает в список инвалидаций и будет обработано до ближайшего VSYNC-выравненного кадра
         Text("Счетчик: $count")
     }
 }
 
 // Упрощённая временная шкала (60Hz):
 // 0ms: onClick → count++ → соответствующие области помечены для рекомпозиции
-// До ~16.67ms: рантайм планирует рекомпозицию в окне текущего/следующего кадра
+// До ~16.67ms: рантайм планирует рекомпозицию, чтобы применить изменения к следующему VSYNC-кадру
 // ~16.67ms: Choreographer кадр → выполняется рекомпозиция помеченных composable и последующий draw
 // Если всё укладывается в бюджет, обновлённый кадр отображается без джанка
 ```
@@ -84,7 +84,7 @@ fun SlowComposition() {
 
 Если суммарное время рекомпозиции + layout + draw (и другого кода на главном потоке) превышает бюджет кадра, кадр будет пропущен.
 
-**Важно:** Для дисплеев 120Hz (бюджет ~8.33ms) критично, чтобы вся работа кадра на главном потоке (включая рекомпозицию) укладывалась в этот интервал. Это не жёсткое правило "рекомпозиция < 8ms", но ориентир: не допускайте тяжёлой логики в рекомпозиции на главном потоке.
+**Важно:** Для дисплеев 120Hz (бюджет ~8.33ms) критично, чтобы вся работа кадра на главном потоке (включая рекомпозицию) укладывалась в этот интервал. Это не жёсткое правило "рекомпозиция < 8ms", а практический ориентир: не допускайте тяжёлой логики в рекомпозиции на главном потоке.
 
 ## Answer (EN)
 
@@ -92,9 +92,9 @@ In Compose, recomposition is started by the **Compose runtime** in response to s
 
 **Simplified process:**
 1. A `MutableState` change marks the corresponding composable scopes as invalid and needing recomposition.
-2. The Compose runtime schedules recomposition work; for what appears on screen, this work is aligned with `Choreographer` frame callbacks.
+2. The Compose runtime schedules recomposition work; for what affects what you see on screen, this work is generally aligned with `Choreographer` frame callbacks.
 3. On the next frame (`Choreographer` callback aligned with VSYNC), the invalidated composables are recomposed and an updated tree is prepared.
-4. The updated UI is sent to the rendering pipeline; only invalidated composable regions are recomposed and redrawn (Compose uses skip groups/smart invalidation rather than a full virtual DOM diff).
+4. The updated UI is sent into the rendering pipeline; only invalidated composable regions are recomposed and redrawn (Compose uses skip groups/targeted invalidation rather than a full virtual DOM diff).
 
 **Important:** Choreographer does not directly "control" Compose logic; it provides VSYNC-aligned callbacks that Compose uses to schedule applying changes and drawing frames.
 
@@ -111,14 +111,14 @@ This budget covers input processing, recomposition, measure, layout, and drawing
 fun Counter() {
     var count by remember { mutableStateOf(0) }
 
-    Button(onClick = { count++ }) { // ✅ Change is enqueued as invalidation and handled before the next frame
+    Button(onClick = { count++ }) { // ✅ Change is enqueued as invalidation and applied for the next VSYNC-aligned frame
         Text("Count: $count")
     }
 }
 
 // Simplified timeline (60Hz):
 // 0ms: onClick → count++ → corresponding scopes are marked invalid
-// Until ~16.67ms: runtime schedules recomposition within the current/next frame window
+// Until ~16.67ms: runtime schedules recomposition so that changes are ready for the next VSYNC frame
 // ~16.67ms: Choreographer frame → invalidated composables are recomposed and then drawn
 // If all work fits the budget, the updated frame is shown without jank
 ```

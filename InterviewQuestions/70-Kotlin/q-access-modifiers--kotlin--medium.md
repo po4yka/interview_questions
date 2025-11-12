@@ -31,7 +31,7 @@ tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibili
 
 **Модификаторы доступа в Kotlin:**
 
-1. **private** — виден только внутри того же файла или класса / объекта.
+1. **private** — для верхнеуровневых объявлений: виден только внутри того же файла; для членов класса/объекта: виден только внутри этого класса/объекта.
 2. **protected** — виден внутри класса и его подклассов (и не даёт видимости на уровне пакета).
 3. **internal** — виден внутри того же модуля.
 4. **public** — виден везде (по умолчанию).
@@ -302,10 +302,6 @@ class Person {
     var name: String = ""
         private set
 
-    // Публичный геттер, protected-сеттер (менять могут класс и наследники)
-    var age: Int = 0
-        protected set
-
     // Публичный геттер, internal-сеттер (менять может только модуль)
     var email: String = ""
         internal set
@@ -316,8 +312,10 @@ class Person {
 }
 
 class Employee : Person() {
-    fun celebrateBirthday() {
-        age++  // OK — protected-сеттер в подклассе
+    fun someAction() {
+        // Здесь нельзя напрямую сделать name = ... (private set)
+        // email можно менять, если мы в том же модуле (internal set)
+        email = "employee@example.com"
     }
 }
 
@@ -326,12 +324,10 @@ fun main() {
 
     // Геттеры публичны
     println(person.name)
-    println(person.age)
     println(person.email)
 
     // Сеттеры с ограниченным доступом
     // person.name = "Alice"      // ОШИБКА — private-сеттер
-    // person.age = 30             // ОШИБКА — protected-сеттер
     person.email = "alice@example.com"  // OK — internal-сеттер в том же модуле
 
     person.changeName("Alice")  // OK — через публичный метод
@@ -388,7 +384,7 @@ fun main() {
     println("Users: ${repo.getUsers()}")
 
     // repo.clearAll()  // OK — internal, тот же модуль
-    // repo.validateUser(User(3, "Charlie", "charlie@example.com"))  // ОШИБКА — private
+    // repo.validateUser(User(3, "Charlie", "charlie@example.com"))  // ОШИБКА — private (пример недоступной валидации)
 }
 ```
 
@@ -401,10 +397,16 @@ See also: [[c-kotlin]]
 
 **Kotlin access modifiers:**
 
-1. **private** - visible only within the same file or class/object
-2. **protected** - visible in the class and its subclasses (and does NOT grant package-level visibility)
-3. **internal** - visible within the same module
-4. **public** - visible everywhere (default)
+1. **private** - for top-level declarations: visible only within the same file; for class/object members: visible only within that class/object.
+2. **protected** - visible in the class and its subclasses (and does NOT grant package-level visibility).
+3. **internal** - visible within the same module.
+4. **public** - visible everywhere (default).
+
+**Key differences from Java:**
+- In Kotlin, the default visibility is **public** (in Java it is package-private).
+- **internal** exists only in Kotlin (module-level visibility).
+- **protected** members are NOT visible to other classes in the same package (in Java they are visible within the same package).
+- **protected** cannot be used for top-level declarations in Kotlin.
 
 ### Code Examples
 
@@ -664,10 +666,6 @@ class Person {
     var name: String = ""
         private set
 
-    // Public getter, protected setter (only this class and subclasses can modify)
-    var age: Int = 0
-        protected set
-
     // Public getter, internal setter (only same module can modify)
     var email: String = ""
         internal set
@@ -678,8 +676,10 @@ class Person {
 }
 
 class Employee : Person() {
-    fun celebrateBirthday() {
-        age++  // OK - protected setter in subclass
+    fun someAction() {
+        // Cannot assign to name directly here (private setter)
+        // email is mutable here if we're in the same module (internal setter)
+        email = "employee@example.com"
     }
 }
 
@@ -688,12 +688,10 @@ fun main() {
 
     // Getters are public
     println(person.name)
-    println(person.age)
     println(person.email)
 
     // Setters have restricted access
     // person.name = "Alice"  // ERROR - private setter
-    // person.age = 30         // ERROR - protected setter
     person.email = "alice@example.com"  // OK - internal setter in same module
 
     person.changeName("Alice")  // OK - public method
@@ -750,7 +748,7 @@ fun main() {
     println("Users: ${repo.getUsers()}")
 
     // repo.clearAll()  // OK - internal, same module
-    // repo.validateUser(User(3, "Charlie", "charlie@example.com"))  // ERROR - private
+    // repo.validateUser(User(3, "Charlie", "charlie@example.com"))  // ERROR - private (example of inaccessible validation)
 }
 ```
 

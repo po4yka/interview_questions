@@ -43,16 +43,14 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
+## Краткая Версия
 - Использовать `Composition` + `EditedMediaItem` для сборки таймлайна.
 - Настроить `TransformationRequest` (кодек, битрейт, разрешение, fallback) и запустить через `Transformer`.
-- Выполнять экспорт в фоне (`ForegroundService`/`WorkManager`), отслеживать прогресс и ошибки через `Transformer.Listener`.
+- Выполнять экспорт в фоне (`ForegroundService`/`WorkManager` при соблюдении ограничений), отслеживать прогресс и ошибки через `Transformer.Listener`.
 - Проверять доступные кодеки (`MediaCodecList`) и реализовать fallback-стратегии.
 - Логировать метрики и тестировать на разных устройствах.
 
-### Подробный вариант
-
+## Подробная Версия
 ### 1. Структура Composition
 
 ```kotlin
@@ -63,7 +61,9 @@ val editedItem1 = EditedMediaItem.Builder(MediaItem.fromUri(uri1))
             listOf(VolumeEffect(0.8f))
         )
     )
-    .setRemoveAudio(true)
+    // При одновременном использовании аудио-эффектов и removeAudio следует учитывать,
+    // что removeAudio удалит дорожку и эффекты к ней не применятся.
+    // .setRemoveAudio(true)
     .build()
 
 val editedItem2 = EditedMediaItem.Builder(MediaItem.fromUri(uri2))
@@ -80,7 +80,7 @@ val composition = Composition.Builder(editedItem1)
     .build()
 ```
 
-- `Composition` объединяет несколько `EditedMediaItem` для последовательного воспроизведения/экспорта.
+- `Composition` объединяет несколько `EditedMediaItem` для последовательного воспроизведения/экспорта в один трек.
 - Эффекты: LUT/ColorMatrix, overlays (`OverlayEffect`), текст, анимации и другие video/audio эффекты через `Effects`.
 
 ### 2. Требования
@@ -102,7 +102,7 @@ val composition = Composition.Builder(editedItem1)
   - Модуль, формирующий `Composition` и `EditedMediaItem` на основе пользовательского сценария.
   - Модуль, формирующий `TransformationRequest` (кодек, битрейт, разрешение, `setEnableFallback(true)`).
 - Слой выполнения:
-  - Обертка над `Transformer`, запущенная из `ForegroundService` или `WorkManager`.
+  - Обертка над `Transformer`, запускаемая из `ForegroundService` или `WorkManager` worker-а (с учетом ограничений долгих задач).
   - Подписка на `Transformer.Listener` для прогресса (`onProgress`), завершения (`onCompleted`) и ошибок (`onError`).
 - Слой совместимости и аналитики:
   - Проверка кодеков через `MediaCodecList`/`MediaCodecInfo`.
@@ -116,7 +116,9 @@ val transformationRequest = TransformationRequest.Builder()
     .setVideoMimeType(MimeTypes.VIDEO_H265) // целевой кодек; при отсутствии возможен фоллбэк
     .setAudioMimeType(MimeTypes.AUDIO_AAC)
     .setVideoEncodingBitrate(8_000_000)
-    .setResolution(1920, 1080)
+    // setResolution(int) в текущем API задает целевой размер (одна сторона),
+    // точная сигнатура зависит от версии Media3; использовать актуальный метод.
+    .setResolution(1080)
     .setEnableFallback(true) // разрешить понижение параметров/смену кодека при неподдержке
     .build()
 
@@ -129,12 +131,15 @@ transformer.start(composition, outputPath)
 ```
 
 - Используйте `setEnableFallback(true)` для автоматического перехода на поддерживаемые конфигурации (кодек, профиль, разрешение, битрейт).
-- Настраивайте целевые `mimeType`, `bitrate`, `resolution`; по умолчанию Transformer пытается сохранить исходные параметры.
+- Настраивайте целевые `mimeType`, `bitrate`, `resolution`; по умолчанию Transformer старается сохранить исходные параметры.
 - Учитывайте, что конкретные доступные конфигурации зависят от `MediaCodec` на устройстве.
 
 ### 5. Фоновая обработка
 
-- Запускайте Transformer вне main thread, обычно в `ForegroundService` или через `WorkManager` (при необходимости expedited work), чтобы долгий экспорт не был убит системой.
+- `Transformer.start(...)` асинхронен, но сам процесс ресурсоемкий, поэтому его жизненный цикл должен быть привязан к компоненту,
+  который система не уничтожит произвольно.
+- Для длительных экспортов используйте `ForegroundService` с foreground-уведомлением; `WorkManager` может использоваться,
+  если вы учитываете его политику для долгих/foreground задач.
 - Прогресс: используйте `Transformer.Listener.onProgress(progressHolder)` и/или `onCompleted`/`onError` для обновления уведомлений.
 - Обрабатывайте cancel (например, через `transformer.cancel()`) и при завершении/сбое очищайте временные файлы.
 
@@ -160,16 +165,14 @@ transformer.start(composition, outputPath)
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Use `Composition` + `EditedMediaItem` to build the editing timeline.
 - Configure `TransformationRequest` (codec, bitrate, resolution, fallback) and run via `Transformer`.
-- Execute in background (`ForegroundService`/`WorkManager`), track progress and errors via `Transformer.Listener`.
+- Execute in background (`ForegroundService`/`WorkManager` with constraints) and track progress and errors via `Transformer.Listener`.
 - Probe codecs (`MediaCodecList`) and implement fallback strategies.
 - Log metrics and test across devices.
 
-### Detailed Version
-
+## Detailed Version
 ### 1. Composition structure
 
 ```kotlin
@@ -180,7 +183,9 @@ val editedItem1 = EditedMediaItem.Builder(MediaItem.fromUri(uri1))
             listOf(VolumeEffect(0.8f))
         )
     )
-    .setRemoveAudio(true)
+    // When combining audio effects with removeAudio, note that removeAudio will drop the track
+    // and the audio effects will not be applied.
+    // .setRemoveAudio(true)
     .build()
 
 val editedItem2 = EditedMediaItem.Builder(MediaItem.fromUri(uri2))
@@ -197,7 +202,7 @@ val composition = Composition.Builder(editedItem1)
     .build()
 ```
 
-- Use `Composition` to join multiple `EditedMediaItem` instances into a sequential timeline for playback/export.
+- `Composition` joins multiple `EditedMediaItem` instances into a single sequential track for playback/export.
 - Effects: LUT/ColorMatrix, overlays (`OverlayEffect`), text, animations, and other video/audio effects via `Effects`.
 
 ### 2. Requirements
@@ -205,8 +210,8 @@ val composition = Composition.Builder(editedItem1)
 - Functional:
   - Combine multiple clips into a single final video.
   - Apply color correction, overlays, text, and audio/video effects.
-  - Control codec, bitrate, resolution, mute/unmute audio.
-  - Run export in background with progress and cancellation.
+  - Control codec, bitrate, resolution, and audio presence.
+  - Run export in background with progress reporting and cancellation.
   - Handle errors and apply fallback configurations.
 - Non-functional:
   - Robust behavior across devices and Android versions.
@@ -219,8 +224,8 @@ val composition = Composition.Builder(editedItem1)
   - Module building `Composition` and `EditedMediaItem` from user scenarios.
   - Module building `TransformationRequest` (codec, bitrate, resolution, `setEnableFallback(true)`).
 - Execution layer:
-  - Wrapper around `Transformer` invoked from a `ForegroundService` or `WorkManager` worker.
-  - `Transformer.Listener` for progress (`onProgress`), completion (`onCompleted`), and errors (`onError`).
+  - Wrapper around `Transformer` invoked from a `ForegroundService` or a `WorkManager` worker (respecting long-running work constraints).
+  - Use `Transformer.Listener` for progress (`onProgress`), completion (`onCompleted`), and errors (`onError`).
 - Compatibility and analytics layer:
   - Codec probing via `MediaCodecList`/`MediaCodecInfo`.
   - Fallback logic (codec switch, downscaling/bitrate reduction).
@@ -233,7 +238,9 @@ val transformationRequest = TransformationRequest.Builder()
     .setVideoMimeType(MimeTypes.VIDEO_H265) // target codec; fallback may be needed
     .setAudioMimeType(MimeTypes.AUDIO_AAC)
     .setVideoEncodingBitrate(8_000_000)
-    .setResolution(1920, 1080)
+    // setResolution(int) in current APIs sets the target size (one dimension);
+    // use the concrete signature available in your Media3 version.
+    .setResolution(1080)
     .setEnableFallback(true) // allow downgrade/codec switch if unsupported
     .build()
 
@@ -246,32 +253,33 @@ transformer.start(composition, outputPath)
 ```
 
 - Use `setEnableFallback(true)` so Transformer can automatically switch to supported codec/profile/resolution/bitrate.
-- Explicitly tune target `mimeType`, bitrate, and resolution; by default Transformer tries to preserve source properties.
-- Remember that valid configurations depend on available `MediaCodec` implementations on the device.
+- Tune target `mimeType`, bitrate, and resolution; by default Transformer attempts to preserve source properties.
+- Valid configurations depend on the available `MediaCodec` implementations on the device.
 
 ### 5. Background execution
 
-- Run Transformer off the main thread, typically in a `ForegroundService` or via `WorkManager` (with expedited work when appropriate) so long-running exports are not killed.
+- `Transformer.start(...)` is asynchronous, but the transformation is resource-intensive, so tie it to a component that the system will keep alive for its duration.
+- For long-running exports, prefer a `ForegroundService` with a proper foreground notification; `WorkManager` can be used when its execution and foreground constraints fit your case.
 - Use `Transformer.Listener.onProgress(progressHolder)` and `onCompleted`/`onError` to update notifications and UI.
-- Support cancellation (e.g., `transformer.cancel()`), and clean up temporary/partial files on completion or failure.
+- Support cancellation (e.g., `transformer.cancel()`) and clean up temporary/partial files on completion or failure.
 
 ### 6. Codec management
 
 - When needed, probe codecs using `MediaCodecList`/`MediaCodecInfo` (supported MIME, profile/level) to choose between H.265 and H.264.
-- For HDR, consider `ColorTransfer`, `ColorSpace`, `ColorRange`; if unsupported by codecs/surfaces, fall back to SDR.
-- For audio, select supported MIME types (e.g., AAC, Opus where available), channels, sample rate, and bitrate; arbitrary sample bit depth control is not exposed via the high-level API.
+- For HDR, consider `ColorTransfer`, `ColorSpace`, and `ColorRange`; if unsupported by codecs/surfaces, fall back to SDR.
+- For audio, choose supported MIME types (e.g., AAC, Opus where available), channels, sample rate, and bitrate; arbitrary sample bit depth control is not exposed via the high-level API.
 
 ### 7. Error handling
 
-- Catch `TransformationException` in `Transformer.Listener.onError` and inspect `errorCode` (decoder/encoder failures, unsupported format, file I/O issues).
-- Implement retry with safer presets (e.g., downscale to 720p or switch to H.264) when errors indicate capability problems.
-- Log metrics such as processing duration, success/failure rate, and device distribution to diagnose issues and guide optimization.
+- Handle `TransformationException` in `Transformer.Listener.onError` and inspect `errorCode` (decoder/encoder failures, unsupported format, file I/O issues, etc.).
+- Add retry logic with more conservative presets (e.g., downscale to 720p or switch to H.264) when errors indicate capability limits.
+- Log metrics such as processing duration, success rate, and device distribution to diagnose issues and guide optimization.
 
 ### 8. Testing and performance
 
-- Test across diverse chipsets and Android versions: hardware codec support and stability differ significantly.
-- Measure export time, memory usage, and temperature/throttling impact under realistic workloads.
-- Automate export scenarios (varied formats, durations, resolutions, and effects) using Media3 test utilities and instrumentation tests to catch regressions.
+- Test across diverse chipsets and Android versions: hardware codec support and stability vary significantly.
+- Measure export time, memory usage, and thermal/throttling impact.
+- Automate export scenarios (different formats, durations, resolutions, effects) using Media3 test utilities and instrumentation tests to catch regressions.
 
 ---
 

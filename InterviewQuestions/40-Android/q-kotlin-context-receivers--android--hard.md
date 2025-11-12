@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-kotlin, q-kotlin-dsl-builders--android--hard]
+related: [c--android, q-kotlin-dsl-builders--android--hard]
 created: 2025-10-12
 updated: 2025-11-10
 tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
@@ -29,20 +29,22 @@ sources: ["https://kotlinlang.org/docs/whatsnew15.html#context-receivers"]
 ## Ответ (RU)
 
 **Краткая версия:**
-`Context` receivers позволяют объявлять, какие контексты (типы) должны быть доступны для вызова функции/свойства, чтобы сделать зависимости явными на уровне типов и поддерживать несколько контекстов без проброса параметров.
+`Context` receivers позволяют объявлять, какие контекстные типы (implicit receivers) должны быть в области видимости при вызове функции/свойства. Это делает зависимости явными на уровне типов, позволяет использовать несколько контекстов без проброса параметров и без создания дополнительных обёрток.
 
 **Подробная версия:**
 
 **Концепция:**
-`Context` receivers — возможность Kotlin, позволяющая объявлять контекстные зависимости для функций и свойств. Ключевое преимущество — поддержка множественных контекстов (в отличие от extension-функций с одним receiver).
+`Context` receivers — возможность Kotlin, позволяющая объявлять контекстные зависимости для функций и свойств: функция может быть вызвана только при наличии определённых implicit receivers в области видимости. Ключевое преимущество — поддержка множественных контекстов (в отличие от extension-функций с одним receiver).
 
-(На момент Kotlin 1.6–1.8 — экспериментальная фича с флагом компилятора; в современных версиях Kotlin спецификацию и статус нужно проверять по актуальной документации проекта.)
+(В Kotlin 1.6–1.8 фича была экспериментальной и требовала флаг компилятора; в современных версиях Kotlin (2.x) контекстные ресиверы уже стабилизированы. Всегда проверяйте актуальную документацию для вашей версии Kotlin.)
 
 **Основные концепции:**
 - Множественные контексты (extension-функции ограничены одним receiver)
-- В ранних версиях требует compiler flag `-Xcontext-receivers`
+- В ранних версиях требовали compiler flag `-Xcontext-receivers`
+- В актуальных версиях Kotlin — стабильная часть языка (без дополнительных флагов)
 - Идеальны для DSL и cross-cutting concerns (логирование, навигация, DI)
 - Могут упростить dependency injection и сделать зависимости явными на уровне типа (но не являются заменой DI-фреймворков сами по себе)
+- Отличаются от extension-функций тем, что добавляют требования к окружению вызова (set of implicit receivers), а не только один дополнительный receiver
 
 **Базовый синтаксис:**
 ```kotlin
@@ -166,20 +168,22 @@ fun openCamera() {
 ## Answer (EN)
 
 **Short version:**
-`Context` receivers let you declare which context types must be in scope to call a function/property, making dependencies explicit in the type system and supporting multiple contexts without threading parameters around.
+`Context` receivers let you declare which contextual types (implicit receivers) must be in scope to call a function/property. This makes dependencies explicit in the type system and supports multiple contexts without threading parameters around or wrapping them.
 
 **Detailed version:**
 
 **Concept:**
-`Context` receivers are a Kotlin language feature that allow you to declare contextual dependencies for functions and properties. The key advantage is support for multiple contexts (unlike extension functions, which have a single receiver).
+`Context` receivers are a Kotlin language feature that allow you to declare contextual dependencies for functions and properties: a function can only be called when specific implicit receivers are available in scope. The key advantage is support for multiple contexts (unlike extension functions, which have a single receiver).
 
-(For Kotlin 1.6–1.8 they were experimental and required a compiler flag; always verify their status against the current Kotlin documentation for your project.)
+(For Kotlin 1.6–1.8 they were experimental and required a compiler flag; in modern Kotlin (2.x) context receivers are stabilized. Always verify their status against the Kotlin docs for the version used in your project.)
 
 **Main concepts:**
-- Multiple contexts (extension functions limited to one receiver)
-- In earlier versions, requires compiler flag `-Xcontext-receivers`
+- Multiple contexts (extension functions are limited to one receiver)
+- In earlier versions, required the `-Xcontext-receivers` compiler flag
+- In current Kotlin versions, they are a stable part of the language (no extra flags)
 - Ideal for DSLs and cross-cutting concerns (logging, navigation, DI)
-- Can simplify dependency injection and make dependencies explicit in the type system (but are not a full replacement for DI frameworks by themselves)
+- Can simplify dependency injection and make dependencies explicit in the type system (but are not a full DI framework replacement)
+- Unlike plain extension functions, they add requirements on the call-site environment (a set of implicit receivers), not just a single extra receiver
 
 **Basic syntax:**
 ```kotlin
@@ -302,33 +306,52 @@ fun openCamera() {
 
 ---
 
-## Дополнительные вопросы / Follow-ups (RU/EN)
+## Дополнительные вопросы (RU)
 
-- Как context receivers влияют на бинарную совместимость при эволюции библиотеки? / How do context receivers affect binary compatibility when library evolves?
-- Каков накладной расход по сравнению с явной передачей параметров? / What's the performance impact compared to explicit parameter passing?
-- Как эффективно тестировать код с context receivers? / How do you test code with context receivers effectively?
-- Когда стоит предпочесть extension-функции вместо context receivers? / When should you prefer extension functions over context receivers?
-- Как context receivers взаимодействуют с inline-функциями и `reified`-типами? / How do context receivers interact with inline functions and reification?
+- Как context receivers влияют на бинарную совместимость при эволюции библиотеки?
+- Каков накладной расход по сравнению с явной передачей параметров?
+- Как эффективно тестировать код с context receivers?
+- Когда стоит предпочесть extension-функции вместо context receivers?
+- Как context receivers взаимодействуют с inline-функциями и `reified`-типами?
 
-## Ссылки / References (RU/EN)
+## Follow-ups (EN)
 
-- [[c-dependency-injection]]
+- How do context receivers affect binary compatibility when library evolves?
+- What's the performance impact compared to explicit parameter passing?
+- How do you test code with context receivers effectively?
+- When should you prefer extension functions over context receivers?
+- How do context receivers interact with inline functions and reification?
+
+## Ссылки (RU)
+
+- [[c--android]]
 - [Kotlin `Context` Receivers (KEEP)](https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md)
 - [Kotlin 1.6.20 Release Notes](https://kotlinlang.org/docs/whatsnew1620.html)
 
-## Связанные вопросы / Related Questions (RU/EN)
+## References (EN)
 
-### Предпосылки / Prerequisites (Medium)
-- [[q-kotlin-value-classes--android--medium]] - Value classes для типобезопасности / Value classes for type safety
-- [[q-koin-vs-hilt-comparison--android--medium]] - Паттерны dependency injection / Dependency injection patterns
-- [[q-repository-pattern--android--medium]] - Базовые принципы Repository pattern / Repository pattern basics
+- [[c--android]]
+- [Kotlin `Context` Receivers (KEEP)](https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md)
+- [Kotlin 1.6.20 Release Notes](https://kotlinlang.org/docs/whatsnew1620.html)
 
-### Связанные / Related (Same Level)
+## Связанные вопросы (RU)
+
+### Предпосылки (Medium)
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders
-- [[q-dagger-custom-scopes--android--hard]] - Кастомные DI-скоупы / Custom DI scopes
-- [[q-koin-resolution-internals--android--hard]] - Механика разрешения зависимостей / DI resolution mechanics
 
-### Продвинутые / Advanced (Harder)
-- [[q-compose-compiler-plugin--android--hard]] - Механика compiler plugin / Compiler plugin mechanics
-- [[q-android-runtime-internals--android--hard]] - Внутренние оптимизации рантайма / Runtime optimizations
-- [[q-kotlin-dsl-builders--android--hard]] - Продвинутые DSL-паттерны / Advanced DSL patterns
+### Связанные (Same Level)
+- [[q-kotlin-dsl-builders--android--hard]] - DSL builders
+
+### Продвинутые (Harder)
+- [[q-android-runtime-internals--android--hard]] - Внутренние оптимизации рантайма
+
+## Related Questions (EN)
+
+### Prerequisites (Medium)
+- [[q-kotlin-dsl-builders--android--hard]] - DSL builders
+
+### Related (Same Level)
+- [[q-kotlin-dsl-builders--android--hard]] - DSL builders
+
+### Advanced (Harder)
+- [[q-android-runtime-internals--android--hard]] - Runtime internals

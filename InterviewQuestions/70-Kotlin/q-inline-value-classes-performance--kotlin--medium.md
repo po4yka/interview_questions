@@ -3,7 +3,7 @@ id: kotlin-145
 title: "Inline Value Classes Performance / Производительность value-классов"
 aliases: [Classes, Inline, Performance, Value]
 topic: kotlin
-subtopics: [delegation, null-safety, object-comparison]
+subtopics: [object-comparison]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,12 +11,10 @@ language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-expect-actual-kotlin--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
-created: 2025-10-15
-updated: 2025-11-09
+created: 2024-10-15
+updated: 2025-11-11
 tags: [difficulty/medium]
 ---
-# Inline Value Classes and Performance
-
 # Вопрос (RU)
 > Как работают inline value классы? Когда следует использовать их для производительности? Каковы ограничения?
 
@@ -27,7 +25,7 @@ tags: [difficulty/medium]
 
 ## Ответ (RU)
 
-**Value классы** (`value class`, ранее "inline classes") — это легковесные обертки, которые добавляют безопасность типов. В большинстве случаев компилятор может представлять их как их базовый тип (примитив или ссылочный), избегая дополнительных аллокаций по сравнению с обычными обертками.
+**Value классы** (`value class`, ранее "inline classes") — это легковесные обертки, которые добавляют безопасность типов. В большинстве случаев компилятор может представлять их как их базовый тип (примитив или ссылочный), избегая дополнительных аллокаций по сравнению с обычными обертками, когда это возможно. Однако это оптимизация реализации, а не жесткая гарантия для всех контекстов: на производительность нужно смотреть эмпирически.
 
 ---
 
@@ -44,8 +42,8 @@ fun sendEmail(userId: UserId, email: Email) {
     // Типобезопасно!
 }
 
-// На местах вызова представление обычно сводится к Int и String,
-// без отдельных wrapper-объектов, когда оптимизатор может это сделать.
+// На местах вызова представление обычно может сводиться к Int и String
+// без отдельных wrapper-объектов, когда backend/JIT может это оптимизировать.
 ```
 
 ---
@@ -61,7 +59,7 @@ fun process(id: UserId) {
     println(id.value)
 }
 
-// Каждый вызов обычно приводит к аллокации UserId на heap:
+// Каждый вызов обычно приводит к созданию экземпляра UserId в heap:
 process(UserId(123))
 ```
 
@@ -75,8 +73,9 @@ fun process(id: UserId) {
     println(id.value)
 }
 
-// Во многих случаях вызов компилируется так, что используется только Int без
-// дополнительной обертки, но в ряде контекстов все еще возможен boxing.
+// Во многих случаях вызов может быть скомпилирован так, что используется только Int без
+// дополнительной обертки. Но в ряде контекстов (generics, nullable, Any и др.)
+// все еще возможен boxing и аллокации.
 process(UserId(123))
 ```
 
@@ -84,9 +83,9 @@ process(UserId(123))
 
 ### Когда использовать (c акцентом на производительность)
 
-Используйте value-классы, когда:
+Используйте value-классы в первую очередь для:
 
-- Нужны типобезопасные примитивы / доменные типы (например, метры, секунды), чтобы избежать путаницы единиц.
+- Типобезопасных примитивов / доменных типов (например, метры, секунды), чтобы избежать путаницы единиц.
 
 ```kotlin
 @JvmInline
@@ -103,7 +102,7 @@ fun calculateSpeed(distance: Meters, time: Seconds): Double {
 // calculateSpeed(Seconds(10), Meters(100)) // Ошибка компиляции
 ```
 
-- Нужны обертки для API-ключей, ID, токенов, чтобы избежать случайной подстановки строк друг вместо друга.
+- Оберток для API-ключей, ID, токенов, чтобы избежать случайной подстановки строк друг вместо друга.
 
 ```kotlin
 @JvmInline
@@ -117,8 +116,10 @@ fun authenticate(apiKey: ApiKey, token: SessionToken) {
 }
 ```
 
-- Эти типы часто участвуют в вызовах/передаче параметров, и важно избежать лишних аллокаций.
-- Не требуется идентичность объекта или сложное внутреннее состояние — достаточно представления через одно значение.
+- Сценариев, где такие типы часто участвуют в вызовах/передаче параметров, и важно уменьшить количество лишних аллокаций.
+- Ситуаций, где не требуется идентичность объекта или сложное внутреннее состояние — достаточно представления через одно значение.
+
+При этом на выигрыш по памяти/GC стоит рассчитывать как на потенциальную оптимизацию: он зависит от конкретных контекстов и целевой платформы.
 
 ---
 
@@ -144,7 +145,7 @@ val id2 = UserId(123)
 
 // Сравнение по ссылке здесь не имеет смысла
 // id1 === id2 // не то, что нужно
-id1 == id2 // Сравнение по значению
+id1 == id2 // Сравнение по значению, через базовое свойство
 ```
 
 **3. Boxing-сценарии (могут приводить к аллокациям):**
@@ -156,7 +157,7 @@ value class UserId(val value: Int)
 // Boxing как generic:
 val list: List<UserId> = listOf(UserId(1))
 
-// Boxing для nullable:
+// Boxing для nullable: для отличия null от значения используется представление-обертка
 val nullable: UserId? = null
 
 // Boxing при использовании как Any:
@@ -169,13 +170,13 @@ val any: Any = UserId(1)
 
 - Нельзя быть `open`, `inner`, `abstract`; нет наследования от классов (только реализации интерфейсов).
 - Базовое свойство фактически `val`: внутри нельзя иметь изменяемое состояние, как в обычных классах.
-- Сгенерированное поведение (`equals`, `hashCode`, `toString`) должно соответствовать базовому значению.
+- Семантика `equals`, `hashCode`, `toString` определяется через базовое значение и должна рассматриваться как value-based.
 
-При соблюдении этих условий value-классы дают усиленную type-safety и потенциальную выгоду по производительности без лишних аллокаций в hot-путях.
+При соблюдении этих условий value-классы дают усиленную type-safety и потенциальную выгоду по производительности без лишних аллокаций в hot-путях, но использовать их стоит прежде всего ради четких доменных типов.
 
 ## Answer (EN)
 
-**Value classes** (`value class`, previously called "inline classes") are lightweight wrappers that provide type safety. In many cases, the compiler represents them as their underlying type (primitive or reference), which avoids extra object allocations compared to regular wrapper classes.
+**Value classes** (`value class`, previously called "inline classes") are lightweight wrappers that provide type safety. In many cases, the compiler can represent them as their underlying type (primitive or reference), which avoids extra object allocations compared to regular wrapper classes when possible. However, this is an implementation optimization, not an unconditional guarantee in all contexts; you should validate performance empirically.
 
 ---
 
@@ -192,8 +193,8 @@ fun sendEmail(userId: UserId, email: Email) {
     // Type-safe!
 }
 
-// At call sites, the representation is typically just Int and String,
-// not separate wrapper objects, where the optimizer can apply this.
+// At call sites, the representation can often be just Int and String,
+// not separate wrapper objects, where the backend/JIT can optimize it.
 ```
 
 ---
@@ -209,8 +210,8 @@ fun process(id: UserId) {
     println(id.value)
 }
 
-// Every call generally allocates a UserId instance:
-process(UserId(123)) // Heap allocation
+// Each call typically allocates a UserId instance on the heap:
+process(UserId(123))
 ```
 
 With a value class:
@@ -223,14 +224,17 @@ fun process(id: UserId) {
     println(id.value)
 }
 
-// In many cases the call can be compiled to just work with Int (no extra wrapper),
-// but boxing may still occur in some contexts.
+// In many cases, the call can be compiled to just work with Int (no extra wrapper),
+// but boxing and allocations may still occur in certain contexts
+// (generics, nullable, Any, reflection, etc.).
 process(UserId(123))
 ```
 
 ---
 
 ### When to Use
+
+Primarily use value classes for:
 
 - Type-safe primitives / domain-specific types:
 
@@ -265,8 +269,10 @@ fun authenticate(apiKey: ApiKey, token: SessionToken) {
 
 Use them when:
 - you want stronger type safety over primitives/strings,
-- you call such APIs frequently enough that avoiding wrapper allocations matters,
-- you do not need object identity or complex state.
+- such types appear frequently in call sites and you want to reduce wrapper allocations,
+- you do not need object identity or complex mutable state.
+
+Treat performance benefits as potential optimizations, not as a strict ABI-level guarantee.
 
 ---
 
@@ -284,7 +290,7 @@ value class Name(val value: String)
 value class Person(val name: String, val age: Int)
 ```
 
-**2. No identity:**
+**2. No identity (value-based semantics):**
 
 ```kotlin
 val id1 = UserId(123)
@@ -292,7 +298,7 @@ val id2 = UserId(123)
 
 // Reference identity is not meaningful here
 // id1 === id2 // Not the intended comparison
-id1 == id2 // Value equality
+id1 == id2 // Value equality via the underlying property
 ```
 
 **3. Boxing scenarios (may allocate):**
@@ -301,23 +307,25 @@ id1 == id2 // Value equality
 @JvmInline
 value class UserId(val value: Int)
 
-// Boxed as generic:
+// Boxed when used as a generic type argument:
 val list: List<UserId> = listOf(UserId(1))
 
-// Boxed when nullable:
+// Boxed when nullable: needs a wrapper representation to distinguish null from values
 val nullable: UserId? = null
 
 // Boxed when used as Any:
 val any: Any = UserId(1)
 ```
 
+In these scenarios, the value class is actually boxed, so memory/GC savings are reduced.
+
 **4. Other constraints:**
 
-- Cannot be `open`, `inner`, `abstract`; no subclassing (but may implement interfaces).
-- Underlying property is effectively `val`; no mutable state like regular classes.
-- Some generated methods (e.g., `equals`, `hashCode`, `toString`) are constrained by representation; behavior should match the underlying value.
+- Cannot be `open`, `inner`, or `abstract`; no subclassing (they may implement interfaces).
+- The underlying property is effectively `val`; you cannot keep additional mutable state like in regular classes.
+- The semantics of `equals`, `hashCode`, and `toString` are defined in terms of the underlying value and should be treated as value-based.
 
----
+When used within these constraints, value classes provide stronger type safety and can offer performance benefits (fewer allocations, smaller representations) on hot paths, but they should be introduced primarily for clearer domain modeling.
 
 ## Дополнительные вопросы (RU)
 

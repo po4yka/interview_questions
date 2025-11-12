@@ -37,7 +37,9 @@ tags:
 ---
 
 ## Ответ (RU)
-Разделение отображения (UI) и бизнес-логики — это фундаментальный принцип архитектуры программного обеспечения. Это разделение улучшает качество кода, тестируемость, поддерживаемость, возможность масштабирования и командную работу.
+Разделение отображения (UI) и бизнес-логики — это фундаментальный принцип архитектуры программного обеспечения. Такое разделение улучшает качество кода, тестируемость, поддерживаемость, возможность масштабирования и командную работу.
+
+Важно: в примерах ниже часть логики вынесена во `ViewModel` для иллюстрации разделения UI-слоя и слоя презентационной/бизнес-логики. В реальных проектах часть доменной логики обычно выносится ещё глубже — в отдельный доменный слой, независимый от Android.
 
 ### Зачем разделять UI и бизнес-логику?
 
@@ -52,7 +54,7 @@ tags:
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_login) // предполагается разметка с нужными view
 
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString()
@@ -89,10 +91,10 @@ class LoginActivity : AppCompatActivity() {
 // Такой код тяжело тестировать без запуска Activity и Android-фреймворка.
 ```
 
-Правильный подход — вынести бизнес-логику и валидацию в `ViewModel`, чтобы её можно было тестировать как обычный Kotlin-код.
+Правильный подход — вынести проверку, работу с данными и вызовы репозиториев в `ViewModel`/доменный слой, чтобы их можно было тестировать как обычный Kotlin-код.
 
 ```kotlin
-// Хорошо: бизнес-логика во ViewModel
+// Хорошо: бизнес-/презентационная логика во ViewModel
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -117,9 +119,10 @@ class LoginViewModel(
             _loginState.value = LoginState.Loading
 
             val result = authRepository.login(email, password)
-            _loginState.value = when {
-                result.isSuccess -> LoginState.Success
-                else -> LoginState.Error(result.exceptionOrNull()?.message ?: "Login failed")
+            _loginState.value = if (result.isSuccess) {
+                LoginState.Success
+            } else {
+                LoginState.Error(result.exceptionOrNull()?.message ?: "Login failed")
             }
         }
     }
@@ -222,6 +225,7 @@ class LoginViewModelTest {
 class UserListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_list)
 
         lifecycleScope.launch {
             val users = api.getUsers()
@@ -260,6 +264,7 @@ class UserListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_list)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -274,10 +279,12 @@ class UserListActivity : AppCompatActivity() {
 }
 
 // Fragment
-class UserListFragment : Fragment() {
+class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private val viewModel: UserListViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.users.collect { users ->
@@ -316,6 +323,7 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel()) {
 class ProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product)
 
         loadButton.setOnClickListener {
             lifecycleScope.launch {
@@ -349,10 +357,10 @@ class ProductActivity : AppCompatActivity() {
 }
 ```
 
-Лучше вынести бизнес-логику в `ViewModel`, а UI оставить только для рендера состояния.
+Лучше вынести бизнес-/презентационную логику в `ViewModel`, а UI оставить только для рендера состояния.
 
 ```kotlin
-// Хорошо: бизнес-логика в одном месте
+// Хорошо: бизнес-/презентационная логика в одном месте
 class ProductViewModel(
     private val productRepository: ProductRepository
 ) : ViewModel() {
@@ -366,19 +374,18 @@ class ProductViewModel(
 
             val result = productRepository.getProducts()
 
-            _uiState.value = when {
-                result.isSuccess -> {
-                    val products = result.getOrThrow()
-                    val filtered = filterProducts(products, maxPrice)
-                    val sorted = sortProducts(filtered)
+            _uiState.value = if (result.isSuccess) {
+                val products = result.getOrThrow()
+                val filtered = filterProducts(products, maxPrice)
+                val sorted = sortProducts(filtered)
 
-                    if (sorted.isEmpty()) {
-                        ProductUiState.Empty
-                    } else {
-                        ProductUiState.Success(sorted)
-                    }
+                if (sorted.isEmpty()) {
+                    ProductUiState.Empty
+                } else {
+                    ProductUiState.Success(sorted)
                 }
-                else -> ProductUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
+            } else {
+                ProductUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
             }
         }
     }
@@ -404,6 +411,7 @@ class ProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product)
 
         loadButton.setOnClickListener {
             viewModel.loadProducts()
@@ -459,23 +467,23 @@ interface UserRepository {
     suspend fun updateUser(user: User): Result<Unit>
 }
 
-// Команда бизнес-логики:
+// Команда бизнес-/доменной логики:
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
-    // Бизнес-логика здесь
+    // Бизнес-/презентационная логика здесь
 }
 
 // UI/UX команда:
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
-    // Только рендеринг UI
+    // Только рендеринг UI и взаимодействие с пользователем
 }
 ```
 
 #### 5. Сохранение состояния и конфигурационные изменения
 
-Если состояние хранится в `Activity`/`Fragment`, при повороте экрана оно теряется.
+Если состояние хранится в `Activity`/`Fragment`, при повороте экрана оно теряется (если не сохранять его вручную).
 
 ```kotlin
 // Плохо: состояние не переживает поворот
@@ -484,6 +492,7 @@ class CounterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_counter)
 
         incrementButton.setOnClickListener {
             counter++
@@ -493,10 +502,10 @@ class CounterActivity : AppCompatActivity() {
 }
 ```
 
-Используя `ViewModel`, мы выносим состояние из UI-класса, и оно переживает изменение конфигурации (в пределах жизненного цикла владельца).
+Используя `ViewModel`, мы выносим состояние из UI-класса. Экземпляр `ViewModel`, созданный через делегат `by viewModels()`, переживает изменение конфигурации и живёт, пока жив соответствующий `LifecycleOwner`.
 
 ```kotlin
-// Хорошо: состояние в ViewModel
+// Хорошо: состояние во ViewModel
 class CounterViewModel : ViewModel() {
     private val _counter = MutableStateFlow(0)
     val counter: StateFlow<Int> = _counter
@@ -511,6 +520,7 @@ class CounterActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_counter)
 
         incrementButton.setOnClickListener {
             viewModel.increment()
@@ -539,7 +549,7 @@ interface UserRepository {
     suspend fun getUsers(): List<User>
 }
 
-// ViewModel (бизнес-логика)
+// ViewModel (бизнес-/презентационная логика)
 class UserListViewModel2(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -560,6 +570,7 @@ class UserActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_list)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -575,6 +586,8 @@ class UserActivity2 : AppCompatActivity() {
 ```
 
 #### MVI (Model-`View`-`Intent`)
+
+(Упрощённый пример для демонстрации разделения, без отдельного слоя для сайд-эффектов.)
 
 ```kotlin
 // State
@@ -617,7 +630,7 @@ class UserMviViewModel(
     }
 
     private fun selectUser(userId: String) {
-        // Обработка выбора пользователя
+        // Обработка выбора пользователя (упрощено)
     }
 }
 
@@ -627,6 +640,7 @@ class UserMviActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_mvi)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -650,26 +664,29 @@ class UserMviActivity : AppCompatActivity() {
 | Тестирование | Нужен UI/фреймворк для проверки логики | Чистые unit-тесты для `ViewModel`/доменного слоя |
 | Переиспользуемость | Дублирование логики в разных экранах | Одна логика для `Activity`/`Fragment`/Compose |
 | Поддерживаемость | Любое изменение UI трогает логику | UI и логика меняются независимо |
-| Конфигурационные изменения | Потеря состояния при повороте | Состояние хранится во `ViewModel`/компонентах |
+| Конфигурационные изменения | Потеря состояния при повороте | Состояние хранится во `ViewModel`/архитектурных компонентах |
 | Командная работа | Сильная связность, блокировки | Параллельная работа разных команд |
 | Чистота кода | Смешение ответственностей | Принцип единственной ответственности |
 
 ---
 
 ## Answer (EN)
-Separating presentation (UI) and business logic is a fundamental principle of software architecture. This separation improves code quality, testability, maintainability, and team collaboration.
+Separating presentation (UI) and business logic is a fundamental principle of software architecture. This separation improves code quality, testability, maintainability, scalability, and team collaboration.
+
+Note: In the examples below, some logic is moved into `ViewModel` to demonstrate separation between the UI layer and presentation/business logic. In real projects, core domain logic is often extracted into a dedicated domain layer independent of Android.
 
 ### Why Separate UI and Business Logic?
 
 #### 1. Testability
 
-**Without Separation:**
+Without separation, business logic ends up inside `Activity`/`Fragment`/Compose functions, tightly coupled to the Android framework and UI events — such classes are hard and expensive to test.
+
 ```kotlin
 // Bad: Business logic mixed with UI
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_login) // layout assumed to define required views
 
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString()
@@ -703,12 +720,13 @@ class LoginActivity : AppCompatActivity() {
     }
 }
 
-// Cannot easily test without Activity and Android framework!
+// Cannot easily test without Activity and Android framework.
 ```
 
-**With Separation:**
+With separation, validation and data handling move to `ViewModel`/domain, which can be unit tested as plain Kotlin code.
+
 ```kotlin
-// Good: Business logic in ViewModel
+// Good: Business / presentation logic in ViewModel
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -730,32 +748,29 @@ class LoginViewModel(
             return
         }
 
-        // Business logic (testable)
+        // Repository call and result mapping (testable)
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
 
             val result = authRepository.login(email, password)
-            _loginState.value = when {
-                result.isSuccess -> LoginState.Success
-                else -> LoginState.Error(result.exceptionOrNull()?.message ?: "Login failed")
+            _loginState.value = if (result.isSuccess) {
+                LoginState.Success
+            } else {
+                LoginState.Error(result.exceptionOrNull()?.message ?: "Login failed")
             }
         }
     }
 
-    private fun validateEmail(email: String): String? {
-        return when {
-            email.isEmpty() -> "Email cannot be empty"
-            !email.contains("@") -> "Invalid email format"
-            else -> null
-        }
+    private fun validateEmail(email: String): String? = when {
+        email.isEmpty() -> "Email cannot be empty"
+        !email.contains("@") -> "Invalid email format"
+        else -> null
     }
 
-    private fun validatePassword(password: String): String? {
-        return when {
-            password.isEmpty() -> "Password cannot be empty"
-            password.length < 6 -> "Password must be at least 6 characters"
-            else -> null
-        }
+    private fun validatePassword(password: String): String? = when {
+        password.isEmpty() -> "Password cannot be empty"
+        password.length < 6 -> "Password must be at least 6 characters"
+        else -> null
     }
 }
 
@@ -842,6 +857,7 @@ class LoginViewModelTest {
 class UserListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_list)
 
         lifecycleScope.launch {
             val users = api.getUsers()
@@ -850,7 +866,7 @@ class UserListActivity : AppCompatActivity() {
     }
 }
 
-// Cannot reuse in Fragment or Compose!
+// Cannot reuse in Fragment or Compose without duplication.
 
 // Good: Logic separated
 class UserListViewModel(
@@ -876,6 +892,7 @@ class UserListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_list)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -890,10 +907,12 @@ class UserListActivity : AppCompatActivity() {
 }
 
 // Can use in Fragment
-class UserListFragment : Fragment() {
+class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private val viewModel: UserListViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.users.collect { users ->
@@ -930,6 +949,7 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel()) {
 class ProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product)
 
         loadButton.setOnClickListener {
             lifecycleScope.launch {
@@ -963,10 +983,13 @@ class ProductActivity : AppCompatActivity() {
     }
 }
 
-// What if we need to change filtering? UI changes too!
-// What if we need different UI for tablet? Duplicate logic!
+// Business logic, caching, and UI concerns are all mixed.
+```
 
-// Good: Easy to maintain
+Better: keep business/presentation logic in `ViewModel` and UI only renders state.
+
+```kotlin
+// Good: Business / presentation logic in one place
 class ProductViewModel(
     private val productRepository: ProductRepository
 ) : ViewModel() {
@@ -980,30 +1003,27 @@ class ProductViewModel(
 
             val result = productRepository.getProducts()
 
-            _uiState.value = when {
-                result.isSuccess -> {
-                    val products = result.getOrThrow()
-                    val filtered = filterProducts(products, maxPrice)
-                    val sorted = sortProducts(filtered)
+            _uiState.value = if (result.isSuccess) {
+                val products = result.getOrThrow()
+                val filtered = filterProducts(products, maxPrice)
+                val sorted = sortProducts(filtered)
 
-                    if (sorted.isEmpty()) {
-                        ProductUiState.Empty
-                    } else {
-                        ProductUiState.Success(sorted)
-                    }
+                if (sorted.isEmpty()) {
+                    ProductUiState.Empty
+                } else {
+                    ProductUiState.Success(sorted)
                 }
-                else -> ProductUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
+            } else {
+                ProductUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
             }
         }
     }
 
-    private fun filterProducts(products: List<Product>, maxPrice: Double): List<Product> {
-        return products.filter { it.price < maxPrice }
-    }
+    private fun filterProducts(products: List<Product>, maxPrice: Double): List<Product> =
+        products.filter { it.price < maxPrice }
 
-    private fun sortProducts(products: List<Product>): List<Product> {
-        return products.sortedBy { it.name }
-    }
+    private fun sortProducts(products: List<Product>): List<Product> =
+        products.sortedBy { it.name }
 }
 
 sealed class ProductUiState {
@@ -1020,6 +1040,7 @@ class ProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product)
 
         loadButton.setOnClickListener {
             viewModel.loadProducts()
@@ -1066,29 +1087,27 @@ class ProductActivity : AppCompatActivity() {
 
 #### 4. Team Collaboration
 
-```kotlin
-// With separation, teams can work independently:
+With separation, different teams can work independently:
 
-// Backend team works on:
+```kotlin
+// Backend / infrastructure:
 interface UserRepository {
     suspend fun getUsers(): Result<List<User>>
     suspend fun updateUser(user: User): Result<Unit>
 }
 
-// Business logic team works on:
+// Business / domain or presentation team:
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
-    // Business logic here
+    // Business / presentation logic here
 }
 
-// UI/UX team works on:
+// UI/UX team:
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
-    // UI rendering here
+    // UI rendering and user interaction here
 }
-
-// Teams don't block each other!
 ```
 
 #### 5. Configuration Changes
@@ -1100,6 +1119,7 @@ class CounterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_counter)
 
         incrementButton.setOnClickListener {
             counter++
@@ -1107,10 +1127,12 @@ class CounterActivity : AppCompatActivity() {
         }
     }
 
-    // Rotate device -> counter resets to 0!
+    // Rotate device -> counter resets to 0 (unless manually saved/restored).
 }
+```
 
-// Good: Data survives rotation when using ViewModel
+```kotlin
+// Good: Data survives configuration changes when using ViewModel
 class CounterViewModel : ViewModel() {
     private val _counter = MutableStateFlow(0)
     val counter: StateFlow<Int> = _counter
@@ -1125,6 +1147,7 @@ class CounterActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_counter)
 
         incrementButton.setOnClickListener {
             viewModel.increment()
@@ -1139,7 +1162,8 @@ class CounterActivity2 : AppCompatActivity() {
         }
     }
 
-    // Rotate device -> counter value preserved for this Activity instance scope as long as ViewModel is provided correctly.
+    // ViewModel instance is retained across configuration changes
+    // for this Activity's lifecycle, so counter value is preserved.
 }
 ```
 
@@ -1155,7 +1179,7 @@ interface UserRepository {
     suspend fun getUsers(): List<User>
 }
 
-// ViewModel (Business Logic)
+// ViewModel (Business / presentation logic)
 class UserListViewModel2(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -1176,11 +1200,12 @@ class UserActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_list)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.users.collect { users ->
-                    // Update UI
+                    // Update UI based on state
                 }
             }
         }
@@ -1191,6 +1216,8 @@ class UserActivity2 : AppCompatActivity() {
 ```
 
 #### MVI (Model-`View`-`Intent`)
+
+(Simplified example to illustrate separation; real-world MVI implementations often use a dedicated effect/side-effect layer.)
 
 ```kotlin
 // State
@@ -1233,7 +1260,7 @@ class UserMviViewModel(
     }
 
     private fun selectUser(userId: String) {
-        // handle selection; for brevity, omitted
+        // handle selection; simplified
     }
 }
 
@@ -1243,6 +1270,7 @@ class UserMviActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user_mvi)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -1263,12 +1291,12 @@ class UserMviActivity : AppCompatActivity() {
 
 | Benefit | Without Separation | With Separation |
 |---------|-------------------|-----------------|
-| **Testing** | Need UI framework | Pure unit tests |
-| **Reusability** | Duplicate logic | Reuse in `Activity`/`Fragment`/Compose |
-| **Maintainability** | Change UI = change logic | Independent changes |
-| **Configuration changes** | Lose state | State preserved via `ViewModel`/architecture components |
-| **Team collaboration** | Blocking dependencies | Parallel work |
-| **Code clarity** | Mixed concerns | Single responsibility |
+| **Testing** | Need UI framework | Pure unit tests for `ViewModel`/domain |
+| **Reusability** | Duplicate logic per screen | Reuse in `Activity`/`Fragment`/Compose |
+| **Maintainability** | Change UI = change logic | Independent evolution of UI and logic |
+| **Configuration changes** | Lose state | State preserved via `ViewModel`/arch components |
+| **Team collaboration** | Tight coupling, blocking | Parallel work of multiple teams |
+| **Code clarity** | Mixed concerns | Single responsibility principle |
 
 ---
 

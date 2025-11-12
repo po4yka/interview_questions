@@ -135,29 +135,29 @@ user1 === user3  // true (same reference)
 
 ## Дополнительные вопросы (RU)
 
-- В чем ключевые отличия `===` от проверки в Java оператором `==`?
+- В чем ключевые отличия оператора `===` от оператора `==` в Java?
 - В каких случаях на практике следует использовать `===`?
 - Какие распространенные ошибки и подводные камни связаны с использованием `===`?
+
+## Follow-ups
+
+- What are the key differences between the `===` operator and Java's `==` operator?
+- When would you use `===` in practice?
+- What are common pitfalls to avoid when using `===`?
 
 ## Ссылки (RU)
 
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Связанные вопросы (RU)
 
 - [[q-data-class-detailed--kotlin--medium]]
 - [[q-destructuring-declarations--kotlin--medium]]
 - [[q-mutex-synchronized-coroutines--kotlin--medium]]
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
-
-## References
-
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-channels-basics-types--kotlin--medium, q-coroutine-timeout-withtimeout--kotlin--medium, q-kotlin-sealed-when-exhaustive--kotlin--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/medium]
 ---
 

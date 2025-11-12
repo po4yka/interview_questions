@@ -105,7 +105,7 @@ class UserViewModelTest {
 - Автоматически предоставляет `TestScope` и `TestCoroutineScheduler`.
 - Может автоматически ожидать дочерние корутины тестового скоупа.
 - Перескакивает `delay()` через виртуальное время.
-- Работает совместно с `TestDispatcher` при подмене `Dispatchers.Main`.
+- Корректно работает совместно с `TestDispatcher` при подмене `Dispatchers.Main`.
 
 ### MainDispatcherRule для viewModelScope
 
@@ -123,7 +123,7 @@ class MainDispatcherRule(
     }
 }
 
-// Использование в тестах
+// Использование в тестах: выбирайте ОДИН подход — либо правило, либо явный setMain/resetMain.
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserViewModelTest {
 
@@ -157,6 +157,7 @@ class UserViewModelTest {
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test
 fun `test with StandardTestDispatcher`() = runTest {
+    // Используем планировщик текущего TestScope
     val dispatcher = StandardTestDispatcher(testScheduler)
     Dispatchers.setMain(dispatcher)
 
@@ -267,7 +268,8 @@ class TimerViewModel : ViewModel() {
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test
 fun `timer increments every second`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
     val viewModel = TimerViewModel()
 
     viewModel.startTimer()
@@ -387,6 +389,9 @@ class DashboardViewModel(
     private val notificationsRepo: NotificationsRepository
 ) : ViewModel() {
 
+    private val _dashboardState = MutableStateFlow<DashboardData?>(null)
+    val dashboardState: StateFlow<DashboardData?> = _dashboardState.asStateFlow()
+
     fun loadDashboard() = viewModelScope.launch {
         coroutineScope {
             val userDeferred = async { userRepo.getUser() }
@@ -421,9 +426,9 @@ fun `loadDashboard loads all data in parallel`() = runTest {
     // Если бы было последовательно: ~300ms; параллельно: ~100ms виртуального времени.
     advanceTimeBy(150)
 
-    assertNotNull(viewModel.dashboardState.value.user)
-    assertNotNull(viewModel.dashboardState.value.stats)
-    assertNotNull(viewModel.dashboardState.value.notifications)
+    assertNotNull(viewModel.dashboardState.value?.user)
+    assertNotNull(viewModel.dashboardState.value?.stats)
+    assertNotNull(viewModel.dashboardState.value?.notifications)
 
     Dispatchers.resetMain()
 }
@@ -510,9 +515,8 @@ class EventsViewModel : ViewModel() {
     val events: SharedFlow<Event> = _events.asSharedFlow()
 
     fun sendEvent(event: Event) {
-        viewModelScope.launch {
-            _events.emit(event)
-        }
+        // Для простых единичных событий в тестах можно использовать tryEmit без отдельной корутины
+        _events.tryEmit(event)
     }
 }
 
@@ -599,11 +603,12 @@ fun `bad test - no runTest`() {
     assertEquals(expected, viewModel.user.value)
 }
 
-// Исправление: использовать runTest + подмену Main
+// Исправление: использовать runTest + подмену Main (через правило или вручную)
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test
 fun `good test - with runTest and Main dispatcher`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
 
     val viewModel = UserViewModel(fakeRepository)
     viewModel.loadUser(1)
@@ -618,7 +623,9 @@ fun `good test - with runTest and Main dispatcher`() = runTest {
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test(expected = IllegalStateException::class)
 fun `bad test - no main dispatcher`() = runTest {
-    // viewModelScope использует Dispatchers.Main; без setMain это падает в JVM-тестах
+    // Во многих конфигурациях JVM-тестов viewModelScope/Dispatchers.Main без setMain
+    // приведёт к падению (например, IllegalStateException об отсутствии Main dispatcher).
+    // Конкретный тип ошибки может зависеть от версии библиотек и окружения.
     UserViewModel(fakeRepository)
 }
 
@@ -832,7 +839,7 @@ class MainDispatcherRule(
     }
 }
 
-// Usage in tests
+// Usage in tests: choose ONE approach — rule or manual setMain/resetMain.
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserViewModelTest {
 
@@ -866,6 +873,7 @@ class UserViewModelTest {
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test
 fun `test with StandardTestDispatcher`() = runTest {
+    // Use this TestScope's scheduler
     val dispatcher = StandardTestDispatcher(testScheduler)
     Dispatchers.setMain(dispatcher)
 
@@ -976,7 +984,8 @@ class TimerViewModel : ViewModel() {
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test
 fun `timer increments every second`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
     val viewModel = TimerViewModel()
 
     viewModel.startTimer()
@@ -1096,6 +1105,9 @@ class DashboardViewModel(
     private val notificationsRepo: NotificationsRepository
 ) : ViewModel() {
 
+    private val _dashboardState = MutableStateFlow<DashboardData?>(null)
+    val dashboardState: StateFlow<DashboardData?> = _dashboardState.asStateFlow()
+
     fun loadDashboard() = viewModelScope.launch {
         coroutineScope {
             val userDeferred = async { userRepo.getUser() }
@@ -1130,9 +1142,9 @@ fun `loadDashboard loads all data in parallel`() = runTest {
     // If executed sequentially: 300ms; in parallel: ~100ms virtual time.
     advanceTimeBy(150)
 
-    assertNotNull(viewModel.dashboardState.value.user)
-    assertNotNull(viewModel.dashboardState.value.stats)
-    assertNotNull(viewModel.dashboardState.value.notifications)
+    assertNotNull(viewModel.dashboardState.value?.user)
+    assertNotNull(viewModel.dashboardState.value?.stats)
+    assertNotNull(viewModel.dashboardState.value?.notifications)
 
     Dispatchers.resetMain()
 }
@@ -1219,9 +1231,8 @@ class EventsViewModel : ViewModel() {
     val events: SharedFlow<Event> = _events.asSharedFlow()
 
     fun sendEvent(event: Event) {
-        viewModelScope.launch {
-            _events.emit(event)
-        }
+        // For simple one-off events in tests, use tryEmit without launching a new coroutine
+        _events.tryEmit(event)
     }
 }
 
@@ -1308,11 +1319,12 @@ fun `bad test - no runTest`() {
     assertEquals(expected, viewModel.user.value)
 }
 
-// Fix: use runTest + Main dispatcher override
+// Fix: use runTest + Main dispatcher override (via rule or manual)
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test
 fun `good test - with runTest and Main dispatcher`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
 
     val viewModel = UserViewModel(fakeRepository)
     viewModel.loadUser(1)
@@ -1327,7 +1339,9 @@ fun `good test - with runTest and Main dispatcher`() = runTest {
 @OptIn(ExperimentalCoroutinesApi::class)
 @Test(expected = IllegalStateException::class)
 fun `bad test - no main dispatcher`() = runTest {
-    // viewModelScope uses Dispatchers.Main; without setMain this crashes on JVM tests
+    // In many JVM test setups, viewModelScope/Dispatchers.Main without setMain
+    // will crash (e.g., IllegalStateException about missing Main dispatcher).
+    // The exact exception type may depend on library versions and environment.
     UserViewModel(fakeRepository)
 }
 

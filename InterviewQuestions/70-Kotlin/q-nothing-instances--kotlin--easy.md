@@ -1,12 +1,12 @@
 ---
 id: kotlin-178
-title: "Nothing Instances"
-aliases: [Bottom Type, Nothing, Nothing Type, Nothing тип]
+title: "Nothing Instances / Экземпляры Nothing"
+aliases: [Bottom Type, Nothing, Nothing Type]
 topic: kotlin
 subtopics: [type-system]
 question_kind: theory
 difficulty: easy
-original_language: en
+original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
@@ -14,7 +14,9 @@ related: [c-kotlin, q-circuit-breaker-coroutines--kotlin--hard, q-request-coales
 created: 2025-10-15
 updated: 2025-11-09
 tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
+
 ---
+
 # Вопрос (RU)
 > Сколько экземпляров имеет тип Nothing в Kotlin?
 
@@ -194,8 +196,7 @@ class UserRepositoryImpl : UserRepository {
 }
 ```
 
-### Краткий ответ
-
+## Краткая Версия
 Nothing имеет **ноль экземпляров**. Это необитаемый тип (bottom type), который:
 - Не может быть проинстанцирован
 - Является подтипом всех типов

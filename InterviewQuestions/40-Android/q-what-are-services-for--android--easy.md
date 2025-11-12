@@ -30,13 +30,13 @@ tags: [android/background-execution, android/service, background-execution, diff
 
 ## Ответ (RU)
 
-**`Service`** — компонент Android для выполнения длительных операций без UI, которые могут продолжаться независимо от конкретной `Activity` (с учётом ограничений фонового выполнения на современных версиях Android).
+**`Service`** — компонент Android для выполнения длительных операций без UI, которые могут продолжаться независимо от конкретной `Activity` (с учётом ограничений фонового выполнения на современных версиях Android). Сам по себе `Service` не создаёт отдельный процесс или поток — долгие операции нужно выносить на фоновые потоки/корутины.
 
 ### Основные Сценарии Использования
 
 **1. Воспроизведение музыки / долгие пользовательские активности**
 
-Для воспроизведения музыки или навигации на современных версиях Android должен использоваться Foreground `Service` с постоянным уведомлением.
+Для воспроизведения музыки или навигации на современных версиях Android обычно используется Foreground `Service` с постоянным уведомлением (и корректным соблюдением ограничений запуска Foreground Service из фона).
 
 ```kotlin
 class MusicService : Service() {
@@ -48,7 +48,8 @@ class MusicService : Service() {
         // Выполнение реальной работы переносим с main thread на фоновый поток/корутину
         playMusicInBackground()
 
-        // Для медиаплеера обычно подходят START_STICKY или START_NOT_STICKY в зависимости от желаемого поведения
+        // Конкретный флаг (START_STICKY / START_NOT_STICKY) подбирается под желаемое
+        // поведение при убийстве процесса; здесь используется START_STICKY как пример.
         return START_STICKY
     }
 }
@@ -73,9 +74,11 @@ class DataSyncService : Service() {
 ```kotlin
 class DownloadService : Service() {
     // ⚠️ На современных Android для фоновых/отложенных загрузок
-    // предпочтительнее WorkManager или DownloadManager.
+    // предпочтительнее WorkManager или DownloadManager. Этот пример — устаревший подход.
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         downloadFilesInBackground()
+        // START_REDELIVER_INTENT здесь приведён как один из вариантов поведения
+        // при перезапуске, не как универсальное правило.
         return START_REDELIVER_INTENT
     }
 }
@@ -87,6 +90,7 @@ class DownloadService : Service() {
 - Подходит для операций, которые должны жить дольше, чем конкретная `Activity`
 - Может продолжать работу после закрытия `Activity` или перехода приложения в фон,
   если корректно запущен (started/foreground) и не нарушает ограничения фонового выполнения (особенно Android 8.0+)
+- Сам по себе не создаёт отдельный поток/процесс — долгие задачи нужно выполнять на фоне явно
 - Ресурсоёмкий — влияет на батарею, поэтому использование должно быть обосновано
 
 ### Современная Альтернатива
@@ -108,7 +112,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 **Когда использовать `Service`:**
 - Foreground `Service` для долгих, заметных пользователю задач (музыка, навигация, активный трекинг) — с обязательным notification
 - Bound `Service` для межпроцессного взаимодействия (IPC) или предоставления интерфейса другим компонентам/приложениям
-- Started `Service` для немедленных, недеферрируемых задач, которые должны завершиться, даже если пользователь покинул `Activity`
+- Started `Service` для немедленных, недеферрируемых задач, которые должны завершиться, даже если пользователь покинул `Activity` (с учётом ограничений фонового запуска сервисов на Android 8.0+)
 
 **Когда НЕ использовать:**
 - Простые/отложенные фоновые задачи → WorkManager
@@ -119,13 +123,13 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ## Answer (EN)
 
-A **`Service`** is an Android component for operations without a UI that may need to continue independently of a specific `Activity` (subject to modern Android background execution limits).
+A **`Service`** is an Android component for operations without a UI that may need to continue independently of a specific `Activity` (subject to modern Android background execution limits). A `Service` itself does not create a separate process or thread — long-running work must be moved to background threads/coroutines explicitly.
 
 ### Primary Use Cases
 
 **1. Music Playback / long-running user-visible activities**
 
-For music playback or navigation on modern Android, you should use a Foreground `Service` with a persistent notification.
+For music playback or navigation on modern Android, you typically use a Foreground `Service` with a persistent notification (and comply with foreground service/background start restrictions).
 
 ```kotlin
 class MusicService : Service() {
@@ -137,8 +141,8 @@ class MusicService : Service() {
         // Do real work off the main thread
         playMusicInBackground()
 
-        // For media players START_STICKY or START_NOT_STICKY can be used
-        // depending on desired restart behavior
+        // The exact flag (START_STICKY / START_NOT_STICKY) depends on desired behavior
+        // when the process is killed; START_STICKY is used here as an example.
         return START_STICKY
     }
 }
@@ -163,9 +167,11 @@ class DataSyncService : Service() {
 ```kotlin
 class DownloadService : Service() {
     // ⚠️ On modern Android, prefer WorkManager or DownloadManager
-    // for background/deferrable downloads.
+    // for background/deferrable downloads. This is a legacy-style example.
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         downloadFilesInBackground()
+        // START_REDELIVER_INTENT is shown here as one option for restart behavior,
+        // not as a universal choice.
         return START_REDELIVER_INTENT
     }
 }
@@ -177,6 +183,7 @@ class DownloadService : Service() {
 - Suitable for work that may need to outlive a single `Activity`
 - Can continue after an `Activity` is closed or app goes to background
   when properly started (started/foreground) and compliant with background limits (especially Android 8.0+)
+- Does not itself create a new thread/process — long-running work must run on background executors
 - Resource-intensive — impacts battery, so usage must be justified
 
 ### Modern Alternative
@@ -198,7 +205,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 **When to use `Service`:**
 - Foreground `Service` for long-running, user-visible tasks (music, navigation, active tracking) — requires a notification
 - Bound `Service` for inter-process communication (IPC) or exposing an interface to other components/apps
-- Started `Service` for immediate, non-deferrable work that should continue even if the user leaves the `Activity`
+- Started `Service` for immediate, non-deferrable work that should continue even if the user leaves the `Activity` (respecting Android 8.0+ background start limits)
 
 **When NOT to use:**
 - Simple/deferrable background tasks → WorkManager

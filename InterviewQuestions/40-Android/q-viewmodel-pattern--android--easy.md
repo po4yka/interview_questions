@@ -17,10 +17,12 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android
+- c-android-lifecycle
 - q-viewmodel-vs-onsavedinstancestate--android--medium
 - q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/architecture-mvvm
 - android/lifecycle
@@ -355,6 +357,7 @@ This leads to clear separation between logic and rendering, better testability, 
 
 ## References
 
+- [[c-android]]
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
 - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)

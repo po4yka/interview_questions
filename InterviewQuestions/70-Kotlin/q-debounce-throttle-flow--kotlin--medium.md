@@ -36,7 +36,7 @@ tags: [debounce, difficulty/medium, flow, kotlin, operators, throttle]
 
 ## Ответ (RU)
 
-**Debounce** и **throttle** — операторы, завязанные на время, которые контролируют частоту эмиссий из `Flow`, но работают по-разному.
+**Debounce** и **throttle** — операторы/паттерны, завязанные на времени, которые контролируют частоту эмиссий из `Flow`, но работают по-разному.
 
 ### Визуальное Сравнение
 
@@ -136,9 +136,11 @@ class EditorViewModel : ViewModel() {
 
 ### Throttle - Ограничение Частоты
 
-**Throttle** в общем смысле — это операторы, ограничивающие количество эмиссий за период времени (например, не чаще одного раза в X миллисекунд).
+**Throttle** в общем смысле — это операторы/паттерны, ограничивающие количество эмиссий за период времени (например, не чаще одного раза в X миллисекунд).
 
-**В Kotlin `Flow` нет встроенного `throttleFirst`/`throttleLatest`, но их можно реализовать.** Ниже — простая реализация `throttleFirst`, которая эмитит не чаще одного значения за окно времени.
+**В Kotlin `Flow` нет встроенных `throttleFirst`/`throttleLatest`, приведённые далее реализации носят упрощённый, иллюстративный характер и не претендуют на точную/продакшн-семантику.**
+
+Ниже — простая реализация `throttleFirst`, которая эмитит не чаще одного значения за окно времени.
 
 ```kotlin
 fun <T> Flow<T>.throttleFirst(windowDurationMillis: Long): Flow<T> = flow {
@@ -155,7 +157,7 @@ fun <T> Flow<T>.throttleFirst(windowDurationMillis: Long): Flow<T> = flow {
 
 - Первое значение проходит сразу (так как `lastEmissionTime = 0`).
 - Все значения, пришедшие раньше чем через `windowDurationMillis` после последней эмиссии, игнорируются.
-- Эта реализация завязана на `System.currentTimeMillis()` и упрощена: для продакшена/тестов лучше использовать источники времени, совместимые с корутинами (например, виртуальное время в тестах) и учитывать структуру корутин, отмену и диспетчеры.
+- Использование `System.currentTimeMillis()` делает реализацию чувствительной к изменениям системных часов и не учитывает корутинное виртуальное время; для реального применения лучше использовать тестируемые источники времени и аккуратно прорабатывать семантику окон.
 
 **Как это работает концептуально:**
 1. Приходит значение → если вне текущего окна → эмитим и начинаем окно.
@@ -225,7 +227,7 @@ class ScrollViewModel : ViewModel() {
 | Функция | debounce | throttleFirst (пример throttling) |
 |--------|----------|------------------------------------|
 | Эмитит | Последнее значение после периода тишины | Не чаще одного значения в окно (обычно первое) |
-| Таймер | Сбрасывается при каждой эмиссии | Фиксированное окно, без сброса из-за новых значений |
+| Таймер | Сбрасывается при каждой эмиссии | Фиксированное окно, новые значения не перезапускают окно |
 | Применение | Дождаться окончания ввода/бурста | Ограничить частоту реакций |
 | Пример | Ввод поиска | Клики по кнопке |
 | Задержка | После последнего события | После первого события в каждом окне |
@@ -260,9 +262,9 @@ class ScrollViewModel : ViewModel() {
 
 ### Продвинутые Замечания о Реализациях
 
-Ниже примеры пользовательских операторов упрощены для иллюстрации идей. Для реального применения следует внимательно продумать работу с временем, конкурентностью, отменой, диспетчерами и структурированными корутинами.
+Ниже примеры пользовательских операторов упрощены для иллюстрации идей. Для реального применения следует тщательно продумать работу с временем (в том числе избегать зависимости от системных часов), конкурентностью, отменой, диспетчерами и структурированными корутинами.
 
-**Пример упрощенного throttleLatest (эмитит последнее значение не чаще чем раз в окно):**
+**Пример упрощенного throttleLatest (эмитит последнее значение не чаще чем раз в окно; иллюстрация, не точная реализация):**
 
 ```kotlin
 fun <T> Flow<T>.throttleLatest(windowDurationMillis: Long): Flow<T> = flow {
@@ -283,14 +285,14 @@ fun <T> Flow<T>.throttleLatest(windowDurationMillis: Long): Flow<T> = flow {
         emitIfDue(now)
     }
 
-    // По завершении исходного Flow можно эмитить последний pending при необходимости
+    // По завершении исходного Flow можно (опционально) эмитить последний pending
     pending?.let { emit(it) }
 }
 ```
 
-(Это лишь иллюстрация: корректная реализация требует аккуратной работы с задержками и таймерами.)
+(Это лишь иллюстрация принципа; фактическая реализация throttleLatest потребует явного управления задержками и окнами и использования надёжного источника времени.)
 
-**Пример debounce с немедленной первой эмиссией (приближенная идея):**
+**Пример debounce с немедленной первой эмиссией (приближённая идея; не продакшн-реализация):**
 
 ```kotlin
 fun <T> Flow<T>.debounceImmediate(timeoutMillis: Long): Flow<T> = channelFlow {
@@ -317,7 +319,7 @@ fun <T> Flow<T>.debounceImmediate(timeoutMillis: Long): Flow<T> = channelFlow {
 }
 ```
 
-Эти реализации демонстрируют принципы, но могут потребовать адаптации под конкретный use-case и тестирование с использованием виртуального времени.
+Эта реализация демонстрирует идею комбинации "leading + trailing" debounce, но опирается на `System.currentTimeMillis()` и не учитывает всех нюансов отмены и конкуренции, поэтому должна рассматриваться как учебный пример.
 
 ### Комбинирование Debounce и Throttle
 
@@ -346,7 +348,7 @@ class SmartSearchViewModel : ViewModel() {
 **`debounce` — эффективность по памяти:**
 
 ```kotlin
-// debounce хранит только последнее значение
+// debounce хранит только последнее ожидающее значение
 searchQuery
     .debounce(300)
     .collect { /* ... */ }
@@ -446,7 +448,7 @@ searchQuery
     .launchIn(viewModelScope)
 ```
 
-**Краткое содержание (RU)**: `debounce` ждёт период тишины после последней эмиссии (сбрасывает таймер на каждом значении) и эмитит последнее значение. `throttle`-подходы ограничивают частоту эмиссий (например, `throttleFirst` пропускает не чаще одного значения за окно). Используйте `debounce` для поиска, валидации форм, авто-сохранения (нужна реакция после окончания ввода). Используйте `throttle` для кликов, обновлений локации, событий прокрутки (нужно ограничить частоту). `debounce` сохраняет последнее ожидающее значение, а `throttleFirst` — первое значение в каждом окне. Типичные таймауты: поиск ~300мс, авто-сохранение ~2с, кнопка ~1с.
+**Краткое содержание (RU)**: `debounce` ждёт период тишины после последней эмиссии (сбрасывает таймер на каждом значении) и эмитит последнее значение. `throttle`-подходы ограничивают частоту эмиссий (например, `throttleFirst` пропускает не чаще одного значения за окно). Используйте `debounce` для поиска, валидации форм, авто-сохранения (нужна реакция после окончания ввода). Используйте `throttle` для кликов, обновлений локации, событий прокрутки (нужно ограничить частоту). `debounce` хранит только последнее ожидающее значение, а `throttleFirst` — пропускает первое значение в каждом окне, остальные отбрасывает. Приведённые реализации throttle* и debounceImmediate являются учебными и требуют доработки для продакшена.
 
 ---
 
@@ -552,9 +554,11 @@ class EditorViewModel : ViewModel() {
 
 ### Throttle - Rate Limiting
 
-"Throttle" generally refers to operators that limit how often values are emitted (e.g., at most one value per X milliseconds).
+"Throttle" generally refers to operators/patterns that limit how often values are emitted (e.g., at most one value per X milliseconds).
 
-Kotlin `Flow` does not provide built-in `throttleFirst`/`throttleLatest`, but we can implement them. Below is a simple `throttleFirst` implementation that emits at most one value per window:
+Kotlin `Flow` does not provide built-in `throttleFirst`/`throttleLatest`. The implementations below are intentionally simplified for explanation purposes and should not be treated as production-accurate.
+
+Below is a simple `throttleFirst` implementation that emits at most one value per window:
 
 ```kotlin
 fun <T> Flow<T>.throttleFirst(windowDurationMillis: Long): Flow<T> = flow {
@@ -571,9 +575,9 @@ fun <T> Flow<T>.throttleFirst(windowDurationMillis: Long): Flow<T> = flow {
 
 - First value passes immediately (since `lastEmissionTime = 0`).
 - Any value arriving sooner than `windowDurationMillis` after the last emitted one is ignored.
-- This implementation is simplified and tied to `System.currentTimeMillis()`. For production and tests, prefer time sources compatible with coroutines (e.g., virtual time in tests) and be careful about clock changes.
+- This implementation is tied to `System.currentTimeMillis()` (sensitive to clock changes) and does not integrate with coroutine virtual time; real implementations should use reliable, testable time sources and a clearly defined windowing strategy.
 
-**How it works conceptually:**
+**Conceptual behavior:**
 1. Value arrives → if outside the current window → emit and start a new window.
 2. Values inside the window → ignored.
 3. Next value after the window ends → may be emitted.
@@ -641,7 +645,7 @@ class ScrollViewModel : ViewModel() {
 | Feature | debounce | throttleFirst (example of throttling) |
 |---------|----------|----------------------------------------|
 | Emits | Last value after quiet period | At most one value per window (typically first) |
-| Timer | Resets on each emission | Fixed window; new values don't reset it |
+| Timer | Resets on each emission | Fixed window; new values do not reset it |
 | Use case | Wait until user finishes / burst ends | Limit frequency of actions |
 | Example | Search input | Button clicks |
 | Delay | After last event | After first event in each window |
@@ -676,9 +680,9 @@ class ScrollViewModel : ViewModel() {
 
 ### Advanced Implementation Notes
 
-The following operators are illustrative only. A production-ready implementation must consider dispatcher, structured concurrency, cancellation, and consistent time sources.
+The following operators are illustrative only. A production-ready implementation must consider dispatcher, structured concurrency, cancellation, and consistent time sources, and typically uses explicit delays/timers instead of relying solely on `System.currentTimeMillis()`.
 
-**Example of a simplified throttleLatest (emit latest value at most once per window):**
+**Example of a simplified throttleLatest (emit latest value at most once per window; illustrative, not exact semantics):**
 
 ```kotlin
 fun <T> Flow<T>.throttleLatest(windowDurationMillis: Long): Flow<T> = flow {
@@ -699,12 +703,12 @@ fun <T> Flow<T>.throttleLatest(windowDurationMillis: Long): Flow<T> = flow {
         emitIfDue(now)
     }
 
-    // On completion, you may choose to emit pending
+    // On completion, you may (optionally) emit the last pending value
     pending?.let { emit(it) }
 }
 ```
 
-**Example of debounce with immediate first emission (leading+trailing idea):**
+**Example of debounce with immediate first emission (approximate leading+trailing behavior; educational only):**
 
 ```kotlin
 fun <T> Flow<T>.debounceImmediate(timeoutMillis: Long): Flow<T> = channelFlow {
@@ -731,7 +735,7 @@ fun <T> Flow<T>.debounceImmediate(timeoutMillis: Long): Flow<T> = channelFlow {
 }
 ```
 
-Again, this is an approximation used for explanation; real-world code should be tested with virtual time and aligned with your UX requirements.
+This demonstrates the idea of combining leading and trailing debounce, but it depends on `System.currentTimeMillis()` and does not cover all edge cases, so it should not be used as-is in production.
 
 ### Combining Debounce and Throttle
 
@@ -760,7 +764,7 @@ class SmartSearchViewModel : ViewModel() {
 **`debounce` - Memory efficient:**
 
 ```kotlin
-// debounce keeps only the latest value
+// debounce keeps only the latest pending value
 searchQuery
     .debounce(300)
     .collect { /* ... */ }
@@ -860,7 +864,7 @@ searchQuery
     .launchIn(viewModelScope)
 ```
 
-**English Summary**: `debounce` waits for a quiet period after the last emission (timer resets on each value) and emits the latest value. Throttling operators (e.g., `throttleFirst`) limit how often values are emitted (e.g., at most one value per window). Use `debounce` for search inputs, form validation, and auto-save (wait until user finishes). Use `throttle` for button clicks, location updates, and scroll events (rate limiting). `debounce` keeps the latest pending value; `throttleFirst` keeps the first in each window. Typical timeouts: search ~300ms, auto-save ~2s, button ~1s.
+**English Summary**: `debounce` waits for a quiet period after the last emission (timer resets on each value) and emits the latest value. Throttling operators (e.g., `throttleFirst`) limit how often values are emitted (e.g., at most one value per window). Use `debounce` for search inputs, form validation, and auto-save (wait until user finishes). Use `throttle` for button clicks, location updates, and scroll events (rate limiting). `debounce` keeps only the latest pending value; `throttleFirst` lets the first value in each window through and drops the rest. The provided throttle* and debounceImmediate implementations are educational and should be hardened before production use.
 
 ## Follow-ups
 
@@ -869,8 +873,8 @@ searchQuery
 - What are common pitfalls to avoid?
 
 ## References
-- [Flow Operators - Kotlin Documentation]("https://kotlinlang.org/docs/flow.html#intermediate-flow-operators")
-- [Debounce and Throttle]("https://medium.com/androiddevelopers/effective-state-management-for-textfield-in-compose-d6e5b070fbe5")
+- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
+- [Debounce and Throttle](https://medium.com/androiddevelopers/effective-state-management-for-textfield-in-compose-d6e5b070fbe5)
 - [[c-flow]]
 
 ## Related Questions

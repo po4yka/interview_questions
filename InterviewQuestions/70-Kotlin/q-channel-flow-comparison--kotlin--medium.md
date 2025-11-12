@@ -2,29 +2,21 @@
 id: kotlin-085
 title: "Channel vs Flow Comparison / Сравнение Channel и Flow"
 aliases: ["Channel vs Flow Comparison", "Сравнение Channel и Flow"]
-
-# Classification
 topic: kotlin
-subtopics: [channels, coroutines, backpressure]
+subtopics: [channels, coroutines]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Coroutines Channel vs Flow Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
-
-# Timestamps
+related: [c--kotlin--medium, c-concurrency, q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
+tags: [channels, cold-stream, concurrency, coroutines, difficulty/medium, flow, hot-stream, kotlin]
 
-tags: [backpressure, channels, cold-stream, coroutines, difficulty/medium, flow, hot-stream, kotlin]
 ---
 
 # Вопрос (RU)
@@ -49,7 +41,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
-// CHANNEL: концептуально "горячий" продьюсер - живет в своем scope
+// CHANNEL: "горячий" по паттерну использования продьюсер - живет в своем scope
 fun channelHotExample() = runBlocking {
     val channel = Channel<Int>()
 
@@ -73,7 +65,7 @@ fun channelHotExample() = runBlocking {
     }
 }
 
-// FLOW: холодный поток — код выполняется на каждого коллектора
+// FLOW: холодный поток — код выполняется для каждого коллектора отдельно
 fun flowColdExample() = runBlocking {
     val flow = flow {
         println("Producer started")
@@ -94,7 +86,7 @@ fun flowColdExample() = runBlocking {
 ```
 
 Ключевая идея:
-- Продьюсер на `Channel` может жить независимо от конкретных потребителей (горячий паттерн), а конкретная семантика (suspend, буфер) задает, будут ли значения реально производиться заранее.
+- Продьюсер на `Channel` обычно живет независимо от конкретных потребителей (горячий паттерн использования), а конкретная семантика (suspend, буфер) определяет, будут ли значения реально производиться заранее или продьюсер будет блокироваться.
 - `Flow` по умолчанию холодный: collect запускает производство, для каждого коллектора выполняется свой экземпляр.
 
 ### Краткое резюме ключевых различий
@@ -123,7 +115,7 @@ class ChannelVsFlowComparison(private val scope: CoroutineScope) {
                 println("Consumer 2: $value")
             }
         }
-        // Каждое значение получит ровно одного потребителя.
+        // Каждое значение получает ровно один потребитель.
 
         // FLOW: холодный; каждый коллектор получает полную последовательность
         val flow = flow {
@@ -203,7 +195,7 @@ class ChannelVsFlowComparison(private val scope: CoroutineScope) {
 /**
  * CHANNEL vs FLOW Detailed Comparison
  *
- *  Тип потока:         Channel — горячий по использованию (продьюсер в своем scope)
+ *  Тип потока:         Channel — горячий по паттерну использования (продьюсер в своем scope)
  *                      Flow — холодный по умолчанию
  *  Активация:          Channel — управляется продьюсером
  *                      Flow — при collect
@@ -241,6 +233,7 @@ class PracticalComparison(private val scope: CoroutineScope) {
             events.trySend(event)
         }
 
+        // Предполагается запущенная корутина, которая вызывает observeEvents()
         suspend fun observeEvents() {
             for (event in events) {
                 handleEvent(event)
@@ -556,7 +549,7 @@ class ChannelFlowConversion(private val scope: CoroutineScope) {
 ```kotlin
 class PerformanceComparison(private val scope: CoroutineScope) {
 
-    // Channel: эффективная передача сообщений, но все зависит от нагрузки
+    // Channel: эффективная передача сообщений, но итоговая производительность зависит от нагрузки и конфигурации
     suspend fun channelPerformance() = withContext(Dispatchers.Default) {
         val channel = Channel<Int>(Channel.UNLIMITED)
 
@@ -576,7 +569,7 @@ class PerformanceComparison(private val scope: CoroutineScope) {
         println("Channel: $count items in $duration ms")
     }
 
-    // Flow: подходит для конвейеров, operator fusion может снижать накладные расходы
+    // Flow: подходит для конвейеров; operator fusion может снижать накладные расходы
     suspend fun flowPerformance() = withContext(Dispatchers.Default) {
         val flow = flow {
             repeat(1_000_000) { emit(it) }
@@ -600,7 +593,7 @@ class PerformanceComparison(private val scope: CoroutineScope) {
 ```kotlin
 class Patterns {
 
-    // GOOD: Channel для команд/акторов
+    // GOOD: Channel для команд/акторов (нужна корутина-обработчик команд)
     class GoodChannelUsage {
         private val commands = Channel<Command>()
 
@@ -638,7 +631,7 @@ class Patterns {
         private fun fetchData(): Data = Data(0)
     }
 
-    // BAD (часто): использовать `SharedFlow` вместо Channel для одноразовых команд
+    // BAD (часто): без аккуратной конфигурации использовать `SharedFlow` вместо Channel для одноразовых команд
     class BadFlowUsage {
         private val commands = MutableSharedFlow<Command>(extraBufferCapacity = 0)
 
@@ -646,7 +639,7 @@ class Patterns {
             object Save : Command()
         }
 
-        // Без replay/buffer поздние подписчики могут пропустить событие.
+        // Без replay/buffer и явного жизненного цикла потребителя поздние подписчики могут пропустить событие.
         suspend fun sendCommand(cmd: Command) {
             commands.emit(cmd)
         }
@@ -670,7 +663,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
-// CHANNEL: Conceptually "hot" producer - lifetime independent from collectors
+// CHANNEL: Conceptually "hot-style" producer - lifetime independent from collectors
 fun channelHotExampleEn() = runBlocking {
     val channel = Channel<Int>()
 
@@ -716,8 +709,8 @@ fun flowColdExampleEn() = runBlocking {
 ```
 
 Key idea:
-- Channel-based producers can be started and run independently of who will consume ("hot" usage pattern),
-  but send/receive semantics (suspension, buffering) define whether data is actually produced ahead of consumers.
+- Channel-based producers are typically started and run independently of who will consume ("hot-style" usage pattern),
+  but send/receive semantics (suspension, buffering) define whether data can be produced ahead of consumers.
 - `Flow` is cold by default: collection triggers execution, each collector runs the upstream block independently.
 
 ### Key Differences Summary
@@ -865,6 +858,7 @@ class PracticalComparisonEn(private val scope: CoroutineScope) {
             events.trySend(event)
         }
 
+        // Assumes a coroutine is running observeEvents()
         suspend fun observeEvents() {
             for (event in events) {
                 handleEvent(event)
@@ -1012,7 +1006,7 @@ class WhenToUseChannelEn(private val scope: CoroutineScope) {
         }
 
         private fun process(data: Data): ProcessedData {
-            return ProcessedData(data.raw.uppercase())
+            return Data(data.raw.uppercase()).let { ProcessedData(it.raw) }
         }
 
         private fun save(data: ProcessedData) {
@@ -1250,7 +1244,7 @@ class PerformanceComparisonEn(private val scope: CoroutineScope) {
 ```kotlin
 class PatternsEn {
 
-    //  GOOD: Use Channel for imperative communication / actors
+    //  GOOD: Use Channel for imperative communication / actors (with a consuming coroutine)
     class GoodChannelUsage {
         private val commands = Channel<Command>()
 
@@ -1290,7 +1284,7 @@ class PatternsEn {
         private fun fetchData(): Data = Data(0)
     }
 
-    //  BAD (often): Using `SharedFlow` instead of Channel for one-off commands
+    //  BAD (often): using `SharedFlow` naively for one-off commands instead of Channel
     class BadFlowUsage {
         private val commands = MutableSharedFlow<Command>(extraBufferCapacity = 0)
 
@@ -1298,9 +1292,9 @@ class PatternsEn {
             object Save : Command()
         }
 
-        // Issue: `SharedFlow` is hot, and without replay/buffer, late collectors may miss events.
-        // For strict request-reply or actor-like command handling, a Channel with structured
-        // consumption is usually clearer.
+        // Issue: `SharedFlow` is hot, and without replay/buffer and clear consumer lifecycle,
+        // late collectors may miss events. For strict command/response, a Channel-based actor
+        // or structured consumption is usually clearer.
         suspend fun sendCommand(cmd: Command) {
             commands.emit(cmd)
         }
@@ -1310,14 +1304,6 @@ class PatternsEn {
 
 ---
 
-## Дополнительные вопросы (RU)
-
-1. Как `SharedFlow` сочетает свойства `Channel` и `Flow`, и когда он предпочтительнее каждого из них?
-2. В каких случаях стоит выбирать `StateFlow` вместо `SharedFlow` или `Channel` для экспонирования состояния UI из `ViewModel`?
-3. Как реализовать и настроить стратегии backpressure с помощью емкости каналов и операторов `Flow` (`buffer`, `conflate`, `debounce`)?
-4. Каковы семантические и производительные trade-off'ы при конвертации между `Channel` и `Flow` через `receiveAsFlow` и `produceIn`?
-5. Как выстроить unit-тесты для акторов на основе `Channel` и конвейеров на основе `Flow` (включая использование Turbine и test dispatchers)?
-
 ## Follow-ups
 
 1. How does `SharedFlow` combine characteristics of `Channel` and `Flow`, and when is it preferable over each?
@@ -1326,11 +1312,11 @@ class PatternsEn {
 4. What are the trade-offs when converting between `Channel` and `Flow` using `receiveAsFlow` and `produceIn` in terms of semantics and performance?
 5. How would you structure unit tests for `Channel`-based actors versus `Flow`-based pipelines (including use of Turbine and test dispatchers)?
 
-## Связанные вопросы (RU)
+## References
 
-- [[q-channels-basics-types--kotlin--medium]]
-- [[q-kotlin-flow-basics--kotlin--medium]]
-- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[c--kotlin--medium]]
+- [[c-concurrency]]
+- Official Kotlin Coroutines documentation: "Channels" and "Flows" (see sections for `Channel`, `Flow`, `SharedFlow`, `StateFlow` on kotlinlang.org)
 
 ## Related Questions
 
@@ -1338,14 +1324,12 @@ class PatternsEn {
 - [[q-kotlin-flow-basics--kotlin--medium]]
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 
+## Дополнительные вопросы (RU)
+1. Как `SharedFlow` сочетает свойства `Channel` и `Flow`, и когда он предпочтительнее каждого из них?
+2. В каких случаях стоит выбирать `StateFlow` вместо `SharedFlow` или `Channel` для экспонирования состояния UI из `ViewModel`?
+3. Как реализовать и настроить стратегии backpressure с помощью емкости каналов и операторов `Flow` (`buffer`, `conflate`, `debounce`)?
+4. Каковы семантические и производительные trade-off'ы при конвертации между `Channel` и `Flow` через `receiveAsFlow` и `produceIn`?
+5. Как выстроить unit-тесты для акторов на основе `Channel` и конвейеров на основе `Flow` (включая использование Turbine и test dispatchers)?
+## Связанные вопросы (RU)
 ## Ссылки (RU)
-
-- [[c-kotlin]]
-- [[c-coroutines]]
 - Официальная документация Kotlin Coroutines: "Channels" и "Flows" (смотрите разделы про `Channel`, `Flow`, `SharedFlow`, `StateFlow` на kotlinlang.org)
-
-## References
-
-- [[c-kotlin]]
-- [[c-coroutines]]
-- Official Kotlin Coroutines documentation: "Channels" and "Flows" (see sections for `Channel`, `Flow`, `SharedFlow`, `StateFlow` on kotlinlang.org)

@@ -22,7 +22,7 @@ related: [c-kotlin, q-array-vs-list-kotlin--kotlin--easy, q-coroutine-memory-lea
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-11-09
+updated: 2025-11-11
 
 tags: [access-control, difficulty/easy, encapsulation, kotlin, modifiers, visibility]
 ---
@@ -45,10 +45,10 @@ Kotlin позволяет контролировать видимость объ
 Общее поведение:
 
 - **public**:
-  - По умолчанию для большинства деклараций.
+  - Является значением по умолчанию для большинства объявлений на уровне файла и членов классов (если не ограничено контекстом, например `private` классом или файлом).
   - Объявления видны везде, где виден сам контейнер (класс, файл, пакет, модуль).
 - **private**:
-  - Для членoв класса/интерфейса: видно только внутри этого класса/интерфейса.
+  - Для членов класса/интерфейса: видно только внутри этого класса/интерфейса.
   - Для top-level объявлений (в файле): видно только внутри этого файла.
 - **protected**:
   - Применимо только к членам классов/интерфейсов.
@@ -56,11 +56,11 @@ Kotlin позволяет контролировать видимость объ
 - **internal**:
   - Видно везде внутри одного и того же модуля.
 
-Если вы не указываете модификатор видимости, вы получаете уровень видимости по умолчанию: для top-level объявлений и членов классов он **public** (если не ограничен контекстом), а для локальных объявлений (внутри функций) модификаторы видимости вообще не применяются.
+Если вы не указываете модификатор видимости, вы получаете уровень видимости по умолчанию: для top-level объявлений и членов классов он **public** (если не ограничен областью видимости контейнера), а для локальных объявлений (внутри функций) модификаторы видимости вообще не применяются.
 
 ### Java vs Kotlin
 
-- В Java модификатор по умолчанию для top-level классов/членов без модификатора — **package-private**; в Kotlin — **public**.
+- В Java для классов и членов без явного модификатора, объявленных в пакете, используется уровень доступа по умолчанию (часто называемый **package-private**): он основан на пакете. В Kotlin по умолчанию для таких объявлений используется **public**, и доступ не привязан к пакету.
 - **package-private** в Java не имеет прямого эквивалента в Kotlin; ближайшая по смыслу (но основанная на модуле, а не пакете) — **internal**.
 - В Kotlin внешний класс не видит **private** члены другого класса, включая его `inner`/`nested` классы; `private` всегда ограничивает видимость телом того типа или файла, в котором объявлен член.
 - Если вы переопределяете **protected** член и не указываете видимость явно, переопределяющий член в Kotlin не может быть менее видимым и по умолчанию остаётся **protected** (вы можете сделать его более открытым, например `public`). В Java аналогично: переопределяющий метод не может иметь более строгую видимость, чем у базового.
@@ -78,7 +78,7 @@ There are four visibility modifiers in Kotlin: **private**, **protected**, **int
 General behavior:
 
 - **public**:
-  - Default for most declarations.
+  - Is the default for most top-level declarations and class members (unless restricted by the containing scope).
   - Declarations are visible everywhere the containing declaration (class/file/module) is visible.
 - **private**:
   - For class/interface members: visible only inside that class/interface.
@@ -89,11 +89,11 @@ General behavior:
 - **internal**:
   - Visible everywhere within the same module.
 
-If you don't specify a visibility modifier, you get the default visibility: for top-level declarations and class members it is **public** (subject to the containing scope), and visibility modifiers are not applicable to local declarations inside functions.
+If you don't specify a visibility modifier, you get the default visibility: for top-level declarations and class members, it is **public** (subject to the containing scope), and visibility modifiers are not applicable to local declarations inside functions.
 
 ### Java vs Kotlin
 
-- In Java, the default (no modifier) for top-level classes/members is **package-private**; in Kotlin it's **public**.
+- In Java, classes and members declared without an explicit modifier in a package use the default ("package-private") visibility, which is package-based. In Kotlin, such declarations are **public** by default, and visibility is not based on packages.
 - Java's **package-private** has no direct equivalent in Kotlin; the closest conceptually (but module-based, not package-based) is **internal**.
 - In Kotlin, an outer class does not see **private** members of another class, including its `inner`/`nested` classes; `private` visibility is always limited to the body of the declaring type or file.
 - If you override a **protected** member and do not specify visibility explicitly, the overriding member in Kotlin cannot be less visible and remains **protected** by default (you may widen it, e.g., to `public`). In Java, similarly, an overriding method cannot reduce the visibility of the overridden method.
@@ -108,11 +108,11 @@ See also [[c-kotlin]].
 - Когда на практике использовать каждый модификатор видимости?
 - Каковы типичные ошибки и подводные камни при работе с модификаторами видимости?
 
-## Follow-ups
+## Follow-ups (EN)
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between Kotlin visibility modifiers and Java visibility modifiers?
+- When would you use each visibility modifier in practice?
+- What are common mistakes and pitfalls to avoid when working with visibility modifiers?
 
 ---
 
@@ -138,4 +138,4 @@ See also [[c-kotlin]].
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
+- [[q-visibility-modifiers-kotlin--kotlin--medium]] — more detailed consideration of visibility modifiers in the context of classes.

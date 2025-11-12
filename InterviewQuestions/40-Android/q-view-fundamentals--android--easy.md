@@ -10,8 +10,8 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fragments-and-activity-relationship--android--hard, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
-sources: []
+related: [c-android-views, q-fragments-and-activity-relationship--android--hard, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
+sources: ["https://developer.android.com/reference/android/view/View", "https://developer.android.com/develop/ui/views/layout/custom-views/custom-components"]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/ui-views, android/ui-widgets, difficulty/easy, view, view-hierarchy]
@@ -31,6 +31,8 @@ tags: [android/ui-views, android/ui-widgets, difficulty/easy, view, view-hierarc
 ## Ответ (RU)
 
 **`View`** — это базовый класс для всех компонентов пользовательского интерфейса в Android. `View` занимает прямоугольную область на экране и отвечает за отрисовку и обработку событий.
+
+См. также: [[c-android-views]]
 
 ### Иерархия `View`
 
@@ -207,6 +209,8 @@ class CustomView @JvmOverloads constructor(
 
 **`View`** is the base class for all user interface components in Android. A `View` occupies a rectangular area on the screen and is responsible for drawing and event handling.
 
+See also: [[c-android-views]]
+
 ### `View` Hierarchy
 
 All views are arranged in a **tree structure**. You can add views:
@@ -314,7 +318,7 @@ textView.setTextColor(Color.RED)
 
 ### Threading and UI
 
-**CRITICAL RULE**: Accessing Views and updating UI must be done ONLY from the main (UI) thread.
+**CRITICAL RULE**: Accessing `Views` and updating UI must be done ONLY from the main (UI) thread.
 
 ```kotlin
 // ❌ WRONG - may cause an exception
@@ -371,8 +375,8 @@ class CustomView @JvmOverloads constructor(
 ### Summary
 
 - `View` is the fundamental UI building block occupying a rectangular area
-- Views are organized in a tree hierarchy
-- UI toolkit is not thread-safe — update Views only from the main/UI thread
+- `Views` are organized in a tree hierarchy
+- UI toolkit is not thread-safe — update `Views` only from the main/UI thread
 - `requestLayout()` for changes affecting size/position; `invalidate()` for appearance changes
 - `ViewGroup` is a special `View` that contains child views
 
@@ -402,7 +406,7 @@ class CustomView @JvmOverloads constructor(
 ## References
 
 - [`View` API Reference](https://developer.android.com/reference/android/view/View)
-- [Custom Views Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
+- [Custom `Views` Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 
 ## Связанные вопросы (RU)
 

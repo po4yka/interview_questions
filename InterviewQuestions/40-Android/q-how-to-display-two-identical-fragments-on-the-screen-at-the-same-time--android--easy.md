@@ -1,7 +1,6 @@
 ---
 id: android-245
-title: How To Display Two Identical Fragments On The Screen At The Same Time / Как
-  отобразить два одинаковых Fragment на экране одновременно
+title: How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно
 aliases:
 - Display Two Identical Fragments
 - Multiple Fragment Instances
@@ -10,7 +9,6 @@ aliases:
 topic: android
 subtopics:
 - fragment
-- lifecycle
 - ui-views
 question_kind: android
 difficulty: easy
@@ -27,20 +25,20 @@ related:
 - q-how-to-choose-layout-for-fragment--android--easy
 - q-save-data-outside-fragment--android--medium
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-11
 sources: []
 tags:
 - android/fragment
-- android/lifecycle
 - android/ui-views
 - difficulty/easy
 - fragments
 - ui
+
 ---
 
 # Вопрос (RU)
 
-> Как на экране одновременно отобразить два одинаковых Fragment?
+> Как на экране одновременно отобразить два одинаковых `Fragment`?
 
 # Question (EN)
 
@@ -50,11 +48,11 @@ tags:
 
 ## Ответ (RU)
 
-Добавьте два независимых экземпляра одного класса Fragment в разные контейнеры макета Activity. Каждый экземпляр работает независимо с собственным состоянием. Нельзя добавлять один и тот же экземпляр Fragment в несколько контейнеров — для каждого контейнера нужен свой экземпляр.
+Добавьте два независимых экземпляра одного и того же класса `Fragment` в разные контейнеры макета `Activity`. Класс и разметка могут быть одинаковыми, но каждый `Fragment` — это отдельный объект со своим состоянием. Нельзя добавлять один и тот же экземпляр `Fragment` (один и тот же объект) в несколько контейнеров — для каждого контейнера нужен свой экземпляр.
 
-### Основной Подход
+### Основной подход
 
-**1. Макет Activity с двумя контейнерами**
+**1. Макет `Activity` с двумя контейнерами**
 
 ```xml
 <LinearLayout
@@ -76,11 +74,18 @@ tags:
 </LinearLayout>
 ```
 
-**2. Fragment с factory-методом**
+**2. `Fragment` с factory-методом**
 
 ```kotlin
 class CounterFragment : Fragment() {
     private var count = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // В реальном коде восстанавливайте состояние здесь или в onViewStateRestored,
+        // а не в onCreateView
+        count = savedInstanceState?.getInt(KEY_COUNT, 0) ?: 0
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,7 +93,6 @@ class CounterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val title = arguments?.getString(ARG_TITLE) ?: "Counter"
-        savedInstanceState?.let { count = it.getInt(KEY_COUNT, 0) }
 
         // Пример простого UI (важно вернуть View)
         return TextView(requireContext()).apply {
@@ -112,7 +116,7 @@ class CounterFragment : Fragment() {
 }
 ```
 
-**3. Добавление в Activity**
+**3. Добавление в `Activity`**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -138,27 +142,29 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые Принципы
+### Ключевые принципы
 
-✅ **Используйте уникальные теги** — для идентификации экземпляров.
-✅ **Проверяйте savedInstanceState** — чтобы не создавать дубликаты при пересоздании Activity.
-✅ **Сохраняйте состояние по отдельности** — каждый Fragment независимо сохраняет своё состояние.
-✅ **Factory-метод newInstance()** — стандартный паттерн для передачи аргументов и создания отдельных экземпляров.
-✅ **Отдельный экземпляр на контейнер** — один и тот же объект Fragment нельзя добавить в несколько контейнеров.
+- Отдельный экземпляр на контейнер: один и тот же объект `Fragment` нельзя добавить в несколько контейнеров.
+- Используйте уникальные теги (при необходимости): помогают идентифицировать экземпляры через FragmentManager.
+- Проверяйте `savedInstanceState`: чтобы не создавать дубликаты при пересоздании `Activity`.
+- Сохраняйте состояние по отдельности: каждый `Fragment` независимо сохраняет и восстанавливает своё состояние.
+- Используйте factory-метод `newInstance()`: стандартный паттерн для передачи аргументов и создания отдельных экземпляров.
 
-❌ Не создавайте фрагменты повторно при каждом onCreate().
-❌ Не используйте один тег для разных экземпляров.
-❌ Не пытайтесь переиспользовать один экземпляр Fragment для нескольких контейнеров.
+Анти-примеры:
+
+- Не создавайте фрагменты повторно при каждом `onCreate()` без проверки `savedInstanceState`.
+- Не используйте один тег для разных экземпляров.
+- Не пытайтесь переиспользовать один и тот же объект `Fragment` для нескольких контейнеров.
 
 ---
 
 ## Answer (EN)
 
-Add two independent instances of the same Fragment class to separate container views in the Activity layout. Each instance maintains its own state. You cannot attach the same Fragment instance to multiple containers — each container must get its own instance.
+Add two independent instances of the same `Fragment` class to separate container views in the `Activity` layout. The class and layout can be identical, but each `Fragment` is a separate object with its own state. You cannot attach the same `Fragment` instance (same object) to multiple containers — each container must get its own instance.
 
 ### Basic Approach
 
-**1. Activity Layout with Two Containers**
+**1. `Activity` Layout with Two Containers**
 
 ```xml
 <LinearLayout
@@ -180,11 +186,18 @@ Add two independent instances of the same Fragment class to separate container v
 </LinearLayout>
 ```
 
-**2. Fragment with Factory Method**
+**2. `Fragment` with Factory Method**
 
 ```kotlin
 class CounterFragment : Fragment() {
     private var count = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // In real code, restore state here or in onViewStateRestored,
+        // not inside onCreateView
+        count = savedInstanceState?.getInt(KEY_COUNT, 0) ?: 0
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -192,7 +205,6 @@ class CounterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val title = arguments?.getString(ARG_TITLE) ?: "Counter"
-        savedInstanceState?.let { count = it.getInt(KEY_COUNT, 0) }
 
         // Simple example UI (must return a View)
         return TextView(requireContext()).apply {
@@ -216,7 +228,7 @@ class CounterFragment : Fragment() {
 }
 ```
 
-**3. Adding to Activity**
+**3. Adding to `Activity`**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -244,32 +256,72 @@ class MainActivity : AppCompatActivity() {
 
 ### Key Principles
 
-✅ **Use unique tags** — to identify fragment instances.
-✅ **Check savedInstanceState** — to avoid creating duplicates on Activity recreation.
-✅ **Save state independently** — each Fragment manages its own state.
-✅ **Factory method newInstance()** — standard pattern for passing arguments and creating distinct instances.
-✅ **One instance per container** — you cannot add the same Fragment object to multiple containers.
+- One instance per container: you cannot add the same `Fragment` object to multiple containers.
+- Use unique tags (when needed): helpful for identifying instances via FragmentManager.
+- Check `savedInstanceState`: to avoid creating duplicates on `Activity` recreation.
+- Save state independently: each `Fragment` manages its own state separately.
+- Use a `newInstance()` factory method: standard pattern for passing arguments and creating separate instances.
 
-❌ Don't recreate fragments on every onCreate().
-❌ Don't use the same tag for different instances.
-❌ Don't try to reuse a single Fragment instance for multiple containers.
+Anti-patterns:
+
+- Don't recreate fragments on every `onCreate()` without checking `savedInstanceState`.
+- Don't use the same tag for different instances.
+- Don't try to reuse a single `Fragment` object for multiple containers.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что произойдёт, если не проверять `savedInstanceState` перед добавлением фрагментов?
+- Как фрагменты могут взаимодействовать друг с другом через родительскую `Activity`?
+- В чём разница между `add()` и `replace()` в транзакциях фрагментов?
+- Как обрабатывать изменения конфигурации при наличии нескольких экземпляров `Fragment`?
+- Можно ли использовать один и тот же экземпляр `Fragment` в нескольких контейнерах?
+
 ## Follow-ups
 
-- What happens if you don't check savedInstanceState before adding fragments?
-- How can fragments communicate with each other through the parent Activity?
-- What's the difference between add() and replace() for fragment transactions?
+- What happens if you don't check `savedInstanceState` before adding fragments?
+- How can fragments communicate with each other through the parent `Activity`?
+- What's the difference between `add()` and `replace()` for fragment transactions?
 - How do you handle configuration changes with multiple fragment instances?
-- Can you use the same Fragment instance in multiple containers?
+- Can you use the same `Fragment` instance in multiple containers?
+
+## Ссылки (RU)
+
+- [Документация по фрагментам (`Fragments`)](https://developer.android.com/guide/fragments)
+- [API `FragmentTransaction`](https://developer.android.com/reference/androidx/fragment/app/FragmentTransaction)
+- [Жизненный цикл `Fragment`](https://developer.android.com/guide/fragments/lifecycle)
+- [Рекомендации по работе с `Fragments`](https://developer.android.com/guide/fragments/best-practices)
 
 ## References
 
-- [Android Fragments Documentation](https://developer.android.com/guide/fragments)
+- [Android `Fragments` Documentation](https://developer.android.com/guide/fragments)
 - [FragmentTransaction API](https://developer.android.com/reference/androidx/fragment/app/FragmentTransaction)
-- [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
-- [Best Practices for Fragments](https://developer.android.com/guide/fragments/best-practices)
+- [`Fragment` Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [Best Practices for `Fragments`](https://developer.android.com/guide/fragments/best-practices)
+
+## Связанные вопросы (RU)
+
+### Предварительные знания / Концепции
+
+- [[c-fragments]]
+- [[c-lifecycle]]
+
+### Предварительные вопросы (проще)
+
+- [[q-fragment-basics--android--easy]] — основы `Fragment`
+- [[q-how-to-choose-layout-for-fragment--android--easy]] — выбор разметки для `Fragment`
+
+### Похожие вопросы (тот же уровень)
+
+- [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] — жизненный цикл `View`
+- [[q-which-class-to-catch-gestures--android--easy]] — обработка касаний
+
+### Продвинутые (сложнее)
+
+- [[q-save-data-outside-fragment--android--medium]] — сохранение данных `Fragment`
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] — назначение `Fragment`
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] — `Fragment` vs `Activity`
 
 ## Related Questions
 
@@ -278,16 +330,18 @@ class MainActivity : AppCompatActivity() {
 - [[c-fragments]]
 - [[c-lifecycle]]
 
-
 ### Prerequisites (Easier)
-- [[q-fragment-basics--android--easy]] - Fragment basics
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment layouts
+
+- [[q-fragment-basics--android--easy]] - `Fragment` basics
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment` layouts
 
 ### Related (Same Level)
-- [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] - View lifecycle
+
+- [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] - `View` lifecycle
 - [[q-which-class-to-catch-gestures--android--easy]] - Touch handling
 
 ### Advanced (Harder)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment data persistence
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment use cases
-- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Fragment vs Activity
+
+- [[q-save-data-outside-fragment--android--medium]] - `Fragment` data persistence
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - `Fragment` use cases
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - `Fragment` vs `Activity`

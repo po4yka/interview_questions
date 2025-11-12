@@ -14,7 +14,9 @@ related: [c-kotlin, c-sealed-classes, q-kotlin-channels--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [sealed-classes, difficulty/hard, programming-languages]
+
 ---
+
 # Вопрос (RU)
 > Что такое Data Class и Sealed Classes в Kotlin? Объясните их характеристики, применения и приведите подробные примеры.
 
@@ -48,7 +50,8 @@ tags: [sealed-classes, difficulty/hard, programming-languages]
    - Должен иметь primary constructor
    - Должен содержать минимум один параметр в primary constructor
    - Для участия в автогенерации методов параметры должны быть объявлены как `val` или `var`
-   - Нельзя объявлять `data` класс как `abstract`, `open`, `sealed` или `inner`
+   - Нельзя объявлять `data` класс как `abstract`, `sealed` или `inner`
+   - Класс `data` по умолчанию `final`; его можно явно сделать `open`, но это следует делать осознанно, так как наследование может нарушить ожидаемую "value"-семантику
    - Нельзя явно объявлять `component1`, `component2` и `copy` с несовместимой сигнатурой
 
 **Пример data class:**
@@ -114,7 +117,7 @@ data class UserResponse(
     val message: String
 )
 
-// ViewModel
+// Условный ViewModel
 class UserViewModel {
     private var currentUser: User? = null
 
@@ -145,15 +148,15 @@ class UserViewModel {
 
 ### Sealed Class
 
-**Sealed Class** — класс, который ограничивает множество допустимых реализаций. Он позволяет определять ограниченные иерархии типов, где все возможные подклассы известны (и контролируются) на этапе компиляции. Особенно полезен с `when`, так как компилятор может проверять исчерпывающую обработку.
+**Sealed Class** — класс, который ограничивает множество допустимых реализаций. Он позволяет определять ограниченные иерархии типов, где все возможные подклассы контролируются на этапе компиляции. Особенно полезен с `when`, так как компилятор может проверять исчерпывающую обработку.
 
 **Ключевые особенности:**
 
 1. **Ограниченное наследование**:
-   - В классическом виде все непосредственные подклассы должны быть объявлены в том же файле, что и sealed-класс
-   - В современных версиях Kotlin для sealed классов и интерфейсов также поддерживается объявление подклассов в том же package при соблюдении правил компилятора (а не в произвольном месте модуля)
+   - Для классического `sealed` (без `permits` на JVM) все непосредственные подклассы должны быть объявлены в том же файле, что и sealed-класс
+   - В современных версиях Kotlin/JVM возможно использование `sealed` с `permits` (поддержка JVM), что позволяет указывать конкретные разрешённые подклассы, объявленные в пределах того же модуля, но по-прежнему не в произвольном месте без контроля
 
-2. **Использование с `when`**: Идеально подходят для `when`-выражений, поскольку Kotlin знает полный набор подклассов и может требовать исчерпывающей обработки без ветки `else`
+2. **Использование с `when`**: Идеально подходит для `when`-выражений, поскольку Kotlin знает полный набор вариантов (подклассов) и может требовать исчерпывающей обработки без ветки `else`
 
 3. **Типобезопасность**: Обеспечивает compile-time безопасность при моделировании конечного (закрытого) набора вариантов
 
@@ -364,19 +367,18 @@ fun handleFormState(state: FormState) {
 | Характеристика | Data Class | Sealed Class |
 |----------------|-----------|--------------|
 | **Назначение** | Хранение и перенос данных | Ограниченная (закрытая) иерархия типов |
-| **Автогенерация** | `equals`, `hashCode`, `toString`, `copy`, `componentN` для свойств из primary constructor | Нет автогенерации, обычные правила классов |
-| **Наследование** | По умолчанию `final`, можно сделать `open`; `data` нельзя сочетать с `abstract`/`sealed`/`inner` | Наследование ограничено: новые подклассы могут быть объявлены только в разрешённом контексте (файл/пакет по правилам sealed) |
-| **Подклассы** | Не ограничены самим фактом `data` | Жёстко ограничены местом объявления (контролируемый набор вариантов) |
+| **Автогенерация** | `equals`, `hashCode`, `toString`, `copy`, `componentN` для свойств из primary constructor | Нет специальных автогенераций сверх обычных правил классов |
+| **Наследование** | По умолчанию `final`; `data` нельзя сочетать с `abstract`/`sealed`/`inner` | Для классического `sealed` подклассы объявляются в том же файле; с `permits` на JVM — только явно перечисленные подклассы в рамках модуля |
+| **Подклассы** | Не ограничены самим фактом `data` | Жёстко контролируемый набор допустимых подклассов |
 | **Применение** | Модели, DTO, значения, ответы API | Состояния, результаты, события, вариации доменных моделей |
 | **When exhaustive** | Не даёт специальных гарантий; обычные классы | Да, для `when` над sealed-иерархией возможна проверка исчерпывающей обработки |
-| **Деструктуризация** | Да, через `componentN()` для свойств из primary constructor | Только если подкласс сам (обычно `data`) её предоставляет |
+| **Деструктуризация** | Да, через `componentN()` для свойств из primary constructor | Только если подкласс сам (часто `data`) её предоставляет |
 | **copy()** | Да, для data class | Только если реализовано вручную или подкласс — data class |
 
-### Краткий Ответ
-
+## Краткая Версия
 **Data Class**: Специальный класс для хранения и переноса данных. Автоматически генерирует `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()` для свойств из primary constructor. Требует primary constructor с минимум одним параметром. Параметры, объявленные как `val`/`var`, участвуют в автогенерации. Используется для моделей данных, DTO, ответов API, сущностей в MVC/MVVM.
 
-**Sealed Class**: Ограничивает возможные наследники контролируемым набором (тот же файл или разрешённый контекст / тот же package в современных версиях Kotlin). Позволяет строить типобезопасные иерархии, для которых `when` может быть исчерпывающим без `else`. Все допустимые варианты известны на этапе компиляции. Используется для UI состояний (Loading/Success/Error), Result-типов, навигационных событий, команд.
+**Sealed Class**: Ограничивает возможные наследники контролируемым набором (для классического `sealed` — тот же файл; для вариантов с `permits` на JVM — явно указанные подклассы в рамках модуля). Позволяет строить типобезопасные иерархии, для которых `when` может быть исчерпывающим без `else`. Все допустимые варианты известны на этапе компиляции.
 
 **Комбинирование**: Частый паттерн — sealed класс с data-подклассами для представления состояний с данными (например, `sealed class UiState` с `data class Success<T>(val data: T)`).
 
@@ -384,7 +386,7 @@ fun handleFormState(state: FormState) {
 
 ### Data Class
 
-A data class is a special kind of class primarily intended for holding and transferring data. Declared using the `data` keyword. Business logic can exist, but these classes are optimized for representing values.
+A data class is a special kind of class primarily intended for holding and transferring data. Declared using the `data` keyword. Business logic may exist, but these classes are optimized for representing values.
 
 **Key features of data class:**
 - Automatic generation of:
@@ -397,17 +399,18 @@ A data class is a special kind of class primarily intended for holding and trans
   - Must have a primary constructor
   - Must have at least one parameter in the primary constructor
   - Only `val`/`var` parameters in the primary constructor participate in generated methods
-  - Cannot be `abstract`, `open`, `sealed`, or `inner`
+  - Cannot be `abstract`, `sealed`, or `inner`
+  - Data classes are `final` by default; they can be marked `open`, but this should be done carefully, as inheritance may break expected value semantics
   - Must not declare `copy`/`componentN` with incompatible signatures
 
 ### Sealed Class
 
-A sealed class restricts which classes can inherit from it, defining a closed hierarchy where all permitted subclasses are known and controlled at compile time. This is especially powerful with `when` expressions, because the compiler can enforce exhaustive handling.
+A sealed class restricts which classes can inherit from it, defining a closed hierarchy where the set of permitted subclasses is controlled at compile time. This is especially powerful with `when` expressions, because the compiler can enforce exhaustive handling.
 
 **Key features:**
 - Restricted inheritance:
-  - Traditionally, all direct subclasses must be in the same file as the sealed class
-  - In modern Kotlin, sealed classes/interfaces may also have subclasses in the same package under specific compiler rules; subclasses still cannot be defined arbitrarily anywhere in the module
+  - For classic `sealed` (without JVM `permits`), all direct subclasses must be defined in the same file as the sealed class
+  - In modern Kotlin on JVM, `sealed` with `permits` allows you to explicitly list permitted subclasses defined within the same module, still under compiler control rather than arbitrary locations
 - Excellent with `when`:
   - Enables exhaustive `when` without an `else` when all subclasses are covered
 - Type safety:
@@ -607,17 +610,16 @@ fun displayArticles(response: ApiResponse<List<Article>>) {
 |----------------|-----------|--------------|
 | Purpose | Holding and transferring data | Restricted (closed) type hierarchy |
 | Auto-generation | `equals`, `hashCode`, `toString`, `copy`, `componentN` for primary-constructor properties | No special auto-generation beyond normal rules |
-| Inheritance | `final` by default; cannot be `abstract`/`sealed`/`inner` as `data` | Subclasses restricted to allowed contexts (same file / same package per sealed rules) |
+| Inheritance | `final` by default; cannot be `abstract`/`sealed`/`inner` | Classic `sealed`: subclasses in same file; JVM `permits`: only explicitly listed subclasses within the module |
 | Subclasses | Not restricted by being `data` | Strictly controlled set of subclasses |
 | Use cases | Models, DTOs, value objects, API responses | States, results, events, domain variants |
 | When exhaustive | No special guarantees | Enables exhaustive `when` over the sealed hierarchy |
 | Destructuring | Yes, via generated `componentN()` | Only if specific subclasses (often `data`) define it |
 | `copy()` | Provided for data classes | Only if implemented manually or subclass is a data class |
 
-### Short Answer
-
+## Short Version
 - Data classes: concise value types with generated `equals`/`hashCode`/`toString`/`copy`/`componentN`, ideal for models, DTOs, and API payloads.
-- Sealed classes: define a closed set of subclasses (same file or, in modern Kotlin, same package under rules), ideal for modeling states, results, and events with exhaustive `when`.
+- Sealed classes: define a closed set of subclasses (classic: same file; JVM `permits`: explicit list in module), ideal for modeling states, results, and events with exhaustive `when`.
 - Common pattern: use sealed class as the closed hierarchy and data subclasses to carry structured data for each variant (for example, `sealed class UiState` with `data class Success<T>(val data: T)`).
 
 ---

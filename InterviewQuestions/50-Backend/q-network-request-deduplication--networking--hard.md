@@ -3,31 +3,34 @@ id: net-005
 title: "Network Request Deduplication / Дедупликация сетевых запросов"
 aliases: [Network Request Deduplication, Request Deduplication, Дедупликация запросов, Дедупликация сетевых запросов]
 topic: networking
-subtopics: [caching, concurrency, optimization]
+subtopics: [concurrency]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-android
-related: [c-coroutines, c-flow, q-data-sync-unstable-network--android--hard, q-retrofit-call-adapter-advanced--networking--medium]
+moc: moc-backend
+related: [c-algorithms, q-data-sync-unstable-network--android--hard, q-retrofit-call-adapter-advanced--networking--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-11
 sources: []
-tags: [caching, concurrency, deduplication, difficulty/hard, networking, optimization, performance]
+tags: [networking, concurrency, deduplication, difficulty/hard, performance]
+
 ---
 
 # Вопрос (RU)
-> Как реализовать дедупликацию сетевых запросов в Android для предотвращения множественных идентичных вызовов API? Объясните стратегии с использованием Kotlin coroutines и Flow.
+> Как реализовать дедупликацию сетевых запросов в Android для предотвращения множественных идентичных вызовов API? Объясните стратегии с использованием Kotlin coroutines и `Flow`.
 
 # Question (EN)
-> How to implement network request deduplication in Android to prevent multiple identical API calls? Explain strategies using Kotlin coroutines and Flow.
+> How to implement network request deduplication in Android to prevent multiple identical API calls? Explain strategies using Kotlin coroutines and `Flow`.
 
 ---
 
 ## Ответ (RU)
 
-**Дедупликация запросов** - это техника оптимизации, которая предотвращает выполнение множественных идентичных сетевых запросов одновременно. Когда несколько частей приложения запрашивают одни и те же данные одновременно, дедупликация гарантирует, что выполняется только один реальный сетевый вызов, а все вызывающие получают один и тот же результат.
+**Дедупликация запросов** - это техника оптимизации, которая предотвращает выполнение множественных идентичных сетевых запросов одновременно. Когда несколько частей приложения запрашивают одни и те же данные одновременно, дедупликация гарантирует, что выполняется только один реальный сетевой вызов, а все вызывающие получают один и тот же результат для данного запроса.
+
+Важно: дедупликация работает на уровне "одновременных" (overlapping) запросов. Если первый запрос уже завершился и данные не были закешированы или переиспользованы, следующий такой же запрос снова пойдет в сеть.
 
 ### Проблема
 
@@ -44,9 +47,11 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 ### Стратегии Дедупликации
 
-#### 1. Дедупликация На Основе Mutex
+#### 1. Дедупликация на основе Mutex (ограничение)
 
-Простой подход: только одна корутина может выполнять запрос для конкретного ключа.
+Простой подход: только одна корутина может выполнять критическую секцию для конкретного ключа.
+
+Важное ограничение: такой вариант обеспечивает взаимное исключение, но сам по себе не гарантирует, что все конкурирующие вызовы переиспользуют один и тот же результат. Новые вызовы после выхода из `withLock` выполнят `block()` заново, поэтому для реальной дедупликации его обычно комбинируют с кешированием.
 
 ```kotlin
 class MutexDeduplicator {
@@ -55,33 +60,51 @@ class MutexDeduplicator {
     suspend fun <T> deduplicate(key: String, block: suspend () -> T): T {
         val mutex = mutexMap.getOrPut(key) { Mutex() }
         return mutex.withLock { block() }
+        // ⚠️ В проде стоит подумать об удалении неиспользуемых mutex-ов,
+        // чтобы избежать неограниченного роста mutexMap.
     }
 }
 ```
 
-#### 2. Дедупликация На Основе Deferred
+#### 2. Дедупликация на основе Deferred
 
-Эффективнее для множества одновременных вызывающих.
+Более подходящий подход для множества одновременных вызывающих: все конкурирующие запросы получают один и тот же `Deferred` и ждут общего результата.
 
 ```kotlin
-class DeferredDeduplicator(private val scope: CoroutineScope) {
+interface RequestDeduplicator {
+    suspend fun <T> deduplicate(key: String, block: suspend () -> T): T
+}
+
+class DeferredDeduplicator(private val scope: CoroutineScope) : RequestDeduplicator {
     private val requests = ConcurrentHashMap<String, Deferred<*>>()
 
-    suspend fun <T> deduplicate(key: String, block: suspend () -> T): T {
-        @Suppress("UNCHECKED_CAST")
-        val deferred = requests.getOrPut(key) {
-            scope.async {
-                try { block() }
-                finally { requests.remove(key) }
-            }
-        } as Deferred<T>
+    @Suppress("UNCHECKED_CAST")
+    override suspend fun <T> deduplicate(key: String, block: suspend () -> T): T {
+        val existing = requests[key] as? Deferred<T>
+        if (existing != null) return existing.await()
 
-        return deferred.await()
+        val newDeferred = scope.async {
+            try {
+                block()
+            } finally {
+                requests.remove(key)
+            }
+        }
+
+        val result = requests.putIfAbsent(key, newDeferred) as Deferred<T>?
+        return (result ?: newDeferred).await()
     }
 }
 ```
 
-### Паттерн Cache-Aside С Дедупликацией
+Такой вариант:
+- гарантирует, что конкурирующие вызовы для одного ключа делят общий `Deferred`;
+- очищает `requests` в `finally`;
+- уменьшает риск гонок при `getOrPut`.
+
+Важно: отмена одного из ожидающих не должна бездумно вызывать `cancel()` у общего `Deferred`, иначе вы отмените запрос и для остальных. Обычно инициатор, создавший `Deferred`, контролирует его отмену, а остальные только `await()`.
+
+### Паттерн Cache-Aside с дедупликацией
 
 ```kotlin
 class CacheAsideRepository<K, V>(
@@ -98,7 +121,7 @@ class CacheAsideRepository<K, V>(
             cache.get(key)?.let { return it }
         }
 
-        // ✅ Загрузить с дедупликацией
+        // ✅ Загрузить с дедупликацией (для одновременных запросов одного ключа)
         val value = deduplicator.deduplicate(key.toString()) { loader(key) }
         cache.put(key, value)
         return value
@@ -106,10 +129,14 @@ class CacheAsideRepository<K, V>(
 }
 ```
 
-### Debouncing И Throttling
+### Debouncing и Throttling (связанные, но отдельные техники)
+
+Эти техники не являются дедупликацией в строгом смысле, но полезны для снижения числа запросов (например, при вводе текста).
 
 ```kotlin
-// Debouncing: ждать период тишины перед выполнением
+// Упрощённый debouncer: ждать период тишины перед выполнением.
+// ⚠️ Пример не потокобезопасен для высококонкурентных сценариев
+// и больше иллюстративный, чем готовый продакшн-код.
 class Debouncer {
     private val lastCallTime = AtomicLong(0)
 
@@ -122,13 +149,15 @@ class Debouncer {
     }
 }
 
-// Throttling: ограничить частоту выполнения
+// Упрощённый throttler: ограничить частоту выполнения.
+// ⚠️ Аналогично, для реальной конкуренции нужна атомарная логика обновления.
 class Throttler {
     private val lastExecutionTime = AtomicLong(0)
 
     suspend fun <T> throttle(intervalMs: Long, block: suspend () -> T): T? {
         val currentTime = System.currentTimeMillis()
-        if (currentTime - lastExecutionTime.get() < intervalMs) return null
+        val last = lastExecutionTime.get()
+        if (currentTime - last < intervalMs) return null
 
         lastExecutionTime.set(currentTime)
         return block()
@@ -136,14 +165,14 @@ class Throttler {
 }
 ```
 
-### Полный Repository С Дедупликацией
+### Полный Repository с дедупликацией
 
 ```kotlin
 class OptimizedUserRepository(
     private val api: UserApiService,
     scope: CoroutineScope
 ) {
-    private val deduplicator = DeferredDeduplicator(scope)
+    private val deduplicator: RequestDeduplicator = DeferredDeduplicator(scope)
     private val cache = MemoryCache<String, User>()
     private val searchDebouncer = Debouncer()
 
@@ -154,7 +183,7 @@ class OptimizedUserRepository(
                 cache.get(userId)?.let { return@runCatching it }
             }
 
-            // ✅ Загрузить с дедупликацией
+            // ✅ Загрузить с дедупликацией для конкурирующих запросов userId
             deduplicator.deduplicate("user:$userId") {
                 api.getUser(userId).also { cache.put(userId, it) }
             }
@@ -176,62 +205,66 @@ class OptimizedUserRepository(
 ### Best Practices
 
 1. **Выбирайте правильную стратегию**
-   - Mutex: простая, последовательное выполнение
-   - Deferred: лучше для множества одновременных вызовов
-   - SharedFlow: лучше для реактивных потоков
+   - Mutex: простая синхронизация, но для дедупликации почти всегда должен сочетаться с кешированием.
+   - Deferred: лучше для множества одновременных вызовов, позволяет шарить результат.
+   - `SharedFlow`/`StateFlow`: подходят для реактивных потоков, где подписчики разделяют одни и те же данные.
 
 2. **Устанавливайте TTL для кеша**
    ```kotlin
    val cache = MemoryCache(ttlMs = TimeUnit.MINUTES.toMillis(5))
    ```
 
-3. **Обрабатывайте отмену**
-   ```kotlin
-   deferred.cancel() // Отменить активный запрос
-   ```
+3. **Аккуратно обрабатывайте отмену**
+   - Отмена одного потребителя не должна неожиданно отменять общий запрос для всех.
+   - Отмену общего `Deferred` контролирует владелец, а не каждый await-ящий.
 
 4. **Используйте debouncing для пользовательского ввода**
    ```kotlin
    searchDebouncer.debounce(300L) { searchUsers(query) }
    ```
 
-### Распространённые Ошибки
+### Распространённые ошибки
 
 ```kotlin
-// ❌ Не обработка ошибок и очистка
+// ❌ Нет очистки состояния при ошибках
 val result = block()
 
 // ✅ Правильно: очистка в finally
-try { block() }
-finally { requests.remove(key) }
+try {
+    block()
+} finally {
+    requests.remove(key)
+}
 
 // ❌ Неограниченный кеш
 val cache = mutableMapOf<String, Data>()
 
-// ✅ LRU кеш с maxSize
+// ✅ LRU-кеш с maxSize
 val cache = MemoryCache(maxSize = 100)
 ```
 
 ### Резюме
 
 **Преимущества дедупликации:**
-- Сокращение сетевых вызовов: множество вызывающих делят один запрос
-- Лучшая производительность: меньше задержек и нагрузки
-- Эффективность ресурсов: меньше одновременных соединений
-- Улучшенный UX: быстрые ответы из кеша
+- Сокращение сетевых вызовов: множество вызывающих делят один запрос.
+- Лучшая производительность: меньше задержек и нагрузки.
+- Эффективность ресурсов: меньше одновременных соединений.
+- Улучшенный UX: быстрые ответы из кеша.
 
 **Ключевые техники:**
-- Дедупликация с Mutex/Deferred
-- Паттерн Cache-aside
-- Debouncing для пользовательского ввода
-- Throttling для частых событий
-- LRU кеширование с TTL
+- Дедупликация с помощью Deferred (и Mutex + кеш для простых случаев).
+- Паттерн Cache-aside.
+- Debouncing для пользовательского ввода.
+- Throttling для частых событий.
+- Ограниченное кеширование (LRU) с TTL.
 
 ---
 
 ## Answer (EN)
 
-**Request deduplication** is an optimization technique that prevents making multiple identical network requests simultaneously. When multiple parts of an application request the same data concurrently, deduplication ensures only one actual network call is made, with all callers receiving the same response.
+**Request deduplication** is an optimization technique that prevents making multiple identical network requests simultaneously. When multiple parts of an application request the same data concurrently, deduplication ensures only one actual network call is performed, and all callers share the same result for that overlapping request.
+
+Note: deduplication acts on overlapping (concurrent) requests. If one request is already completed and the result is not cached or reused, a subsequent identical request will still hit the network.
 
 ### The Problem
 
@@ -248,9 +281,11 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 ### Deduplication Strategies
 
-#### 1. Mutex-Based Deduplication
+#### 1. Mutex-Based Deduplication (with a caveat)
 
-Simple approach: only one coroutine can execute request for specific key.
+Simple approach: only one coroutine can execute the critical section for a given key.
+
+Important caveat: this ensures mutual exclusion but does not, by itself, guarantee that all competing calls reuse the same result. New callers entering after `withLock` completes will run `block()` again. In real deduplication scenarios this is typically combined with caching.
 
 ```kotlin
 class MutexDeduplicator {
@@ -259,31 +294,49 @@ class MutexDeduplicator {
     suspend fun <T> deduplicate(key: String, block: suspend () -> T): T {
         val mutex = mutexMap.getOrPut(key) { Mutex() }
         return mutex.withLock { block() }
+        // ⚠️ In production, consider cleaning up unused mutexes
+        // to avoid unbounded growth of mutexMap.
     }
 }
 ```
 
 #### 2. Deferred-Based Deduplication
 
-More efficient for many concurrent callers.
+More suitable for many concurrent callers: all competing calls for the same key share a single `Deferred` and await the same result.
 
 ```kotlin
-class DeferredDeduplicator(private val scope: CoroutineScope) {
+interface RequestDeduplicator {
+    suspend fun <T> deduplicate(key: String, block: suspend () -> T): T
+}
+
+class DeferredDeduplicator(private val scope: CoroutineScope) : RequestDeduplicator {
     private val requests = ConcurrentHashMap<String, Deferred<*>>()
 
-    suspend fun <T> deduplicate(key: String, block: suspend () -> T): T {
-        @Suppress("UNCHECKED_CAST")
-        val deferred = requests.getOrPut(key) {
-            scope.async {
-                try { block() }
-                finally { requests.remove(key) }
-            }
-        } as Deferred<T>
+    @Suppress("UNCHECKED_CAST")
+    override suspend fun <T> deduplicate(key: String, block: suspend () -> T): T {
+        val existing = requests[key] as? Deferred<T>
+        if (existing != null) return existing.await()
 
-        return deferred.await()
+        val newDeferred = scope.async {
+            try {
+                block()
+            } finally {
+                requests.remove(key)
+            }
+        }
+
+        val result = requests.putIfAbsent(key, newDeferred) as Deferred<T>?
+        return (result ?: newDeferred).await()
     }
 }
 ```
+
+This approach:
+- Ensures concurrent callers for the same key share the same `Deferred`.
+- Cleans up the `requests` map in `finally`.
+- Reduces races versus a naive `getOrPut`.
+
+Important: cancellation of one waiter should not blindly call `cancel()` on the shared `Deferred`, otherwise you cancel the request for everyone. Typically, the creator controls cancellation; others only `await()`.
 
 ### Cache-Aside Pattern with Deduplication
 
@@ -302,7 +355,7 @@ class CacheAsideRepository<K, V>(
             cache.get(key)?.let { return it }
         }
 
-        // ✅ Load with deduplication
+        // ✅ Load with deduplication for overlapping requests
         val value = deduplicator.deduplicate(key.toString()) { loader(key) }
         cache.put(key, value)
         return value
@@ -310,10 +363,13 @@ class CacheAsideRepository<K, V>(
 }
 ```
 
-### Debouncing and Throttling
+### Debouncing and Throttling (related but distinct)
+
+These are not strict deduplication, but they reduce the number of calls (e.g., for search).
 
 ```kotlin
-// Debouncing: wait for quiet period before executing
+// Simplified debouncer: wait for a quiet period before executing.
+// ⚠️ Not fully thread-safe for heavy concurrency; illustrative only.
 class Debouncer {
     private val lastCallTime = AtomicLong(0)
 
@@ -326,13 +382,15 @@ class Debouncer {
     }
 }
 
-// Throttling: limit execution frequency
+// Simplified throttler: limit execution frequency.
+// ⚠️ For real concurrent load, atomic update logic must be tightened.
 class Throttler {
     private val lastExecutionTime = AtomicLong(0)
 
     suspend fun <T> throttle(intervalMs: Long, block: suspend () -> T): T? {
         val currentTime = System.currentTimeMillis()
-        if (currentTime - lastExecutionTime.get() < intervalMs) return null
+        val last = lastExecutionTime.get()
+        if (currentTime - last < intervalMs) return null
 
         lastExecutionTime.set(currentTime)
         return block()
@@ -347,18 +405,18 @@ class OptimizedUserRepository(
     private val api: UserApiService,
     scope: CoroutineScope
 ) {
-    private val deduplicator = DeferredDeduplicator(scope)
+    private val deduplicator: RequestDeduplicator = DeferredDeduplicator(scope)
     private val cache = MemoryCache<String, User>()
     private val searchDebouncer = Debouncer()
 
     suspend fun getUser(userId: String, forceRefresh: Boolean = false): Result<User> {
         return runCatching {
-            // ✅ Check cache
+            // ✅ Check cache first
             if (!forceRefresh) {
                 cache.get(userId)?.let { return@runCatching it }
             }
 
-            // ✅ Load with deduplication
+            // ✅ Load with deduplication for concurrent userId requests
             deduplicator.deduplicate("user:$userId") {
                 api.getUser(userId).also { cache.put(userId, it) }
             }
@@ -379,22 +437,21 @@ class OptimizedUserRepository(
 
 ### Best Practices
 
-1. **Choose Right Strategy**
-   - Mutex: simple, sequential execution
-   - Deferred: best for many concurrent callers
-   - SharedFlow: best for reactive streams
+1. **Choose the right strategy**
+   - Mutex: simple synchronization; for true deduplication, combine with caching.
+   - Deferred: best for many concurrent callers, allows sharing a single result.
+   - `SharedFlow`/`StateFlow`: good for reactive streams where subscribers share the same data.
 
-2. **Set Appropriate TTL**
+2. **Set appropriate TTL**
    ```kotlin
    val cache = MemoryCache(ttlMs = TimeUnit.MINUTES.toMillis(5))
    ```
 
-3. **Handle Cancellation**
-   ```kotlin
-   deferred.cancel() // Cancel active request
-   ```
+3. **Handle cancellation carefully**
+   - Do not let one consumer cancel a shared request for everyone unintentionally.
+   - The owner that created the shared `Deferred` typically manages its lifecycle.
 
-4. **Use Debouncing for User Input**
+4. **Use debouncing for user input**
    ```kotlin
    searchDebouncer.debounce(300L) { searchUsers(query) }
    ```
@@ -402,12 +459,15 @@ class OptimizedUserRepository(
 ### Common Pitfalls
 
 ```kotlin
-// ❌ Not handling errors and cleanup
+// ❌ Not cleaning up state on error
 val result = block()
 
 // ✅ Correct: cleanup in finally
-try { block() }
-finally { requests.remove(key) }
+try {
+    block()
+} finally {
+    requests.remove(key)
+}
 
 // ❌ Unbounded cache
 val cache = mutableMapOf<String, Data>()
@@ -419,19 +479,27 @@ val cache = MemoryCache(maxSize = 100)
 ### Summary
 
 **Deduplication Benefits:**
-- Reduced network calls: multiple callers share single request
-- Better performance: less latency and load
-- Resource efficiency: fewer concurrent connections
-- Improved UX: faster responses from cache
+- Reduced network calls: multiple callers share a single request.
+- Better performance: less latency and load.
+- Resource efficiency: fewer concurrent connections.
+- Improved UX: faster responses from cache.
 
 **Key Techniques:**
-- Deduplication with Mutex/Deferred
-- Cache-aside pattern
-- Debouncing for user input
-- Throttling for frequent events
-- LRU caching with TTL
+- Deduplication with Deferred (and Mutex + cache for simpler cases).
+- Cache-aside pattern.
+- Debouncing for user input.
+- Throttling for frequent events.
+- Bounded caching (LRU) with TTL.
 
 ---
+
+## Follow-ups (RU)
+
+- Как обрабатывать частичные ошибки в батч-запросах при дедупликации?
+- В чем разница между debouncing и throttling для поисковых запросов?
+- Как реализовать дедупликацию для GraphQL-запросов с разными параметрами?
+- Когда следует инвалидировать кеш дедупликации?
+- Как мониторить эффективность дедупликации в продакшене?
 
 ## Follow-ups
 
@@ -441,12 +509,25 @@ val cache = MemoryCache(maxSize = 100)
 - When should you invalidate the deduplication cache?
 - How to monitor deduplication effectiveness in production?
 
+## References (RU)
+
+- Официальная документация Kotlin Coroutines
+- Официальные рекомендации по кешированию сетевых данных
+- [[c-algorithms]]
+
 ## References
 
-- [[c-coroutines]] - Kotlin Coroutines basics
-- [[c-flow]] - Flow fundamentals
 - Kotlin Coroutines official documentation
-- Android caching best practices
+- Official best practices for network data caching
+- [[c-algorithms]]
+
+## Related Questions (RU)
+
+### Предпосылки (проще)
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Основы сетевого взаимодействия
+
+### Похожие (тот же уровень)
+- [[q-data-sync-unstable-network--android--hard]] - Паттерны надёжности сети
 
 ## Related Questions
 

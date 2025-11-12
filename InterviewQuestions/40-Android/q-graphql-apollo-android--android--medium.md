@@ -145,7 +145,7 @@ interface TokenProvider {
     fun getAccessToken(): String?
 }
 
-class ApolloClientProviderEn(
+class ApolloClientProvider(
     context: Context,
     private val tokenProvider: TokenProvider
 ) {
@@ -195,7 +195,7 @@ class ApolloClientProviderEn(
 ```
 
 Примечания:
-- Используйте OkHttp через `OkHttpEngine` (или актуальный движок из документации Apollo).
+- Используйте OkHttp через `OkHttpEngine` (или актуальный движок из документации Apollo для используемой версии).
 - Зависимость `apollo-websocket-network-transport` используется для реализации подписок через WebSocket.
 
 ### Пример запроса
@@ -216,7 +216,7 @@ query GetUser($id: ID!) {
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.exception.ApolloException
 
-class UserRepositoryEn(private val apolloClient: ApolloClient) {
+class UserRepository(private val apolloClient: ApolloClient) {
 
     suspend fun getUser(userId: String): Result<GetUserQuery.User?> {
         return try {
@@ -257,9 +257,12 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.optimisticUpdates
 import com.apollographql.apollo3.exception.ApolloException
 
-suspend fun likePostEn(apolloClient: ApolloClient, postId: String): Result<Int> {
+suspend fun likePost(
+    apolloClient: ApolloClient,
+    postId: String
+): Result<Int> {
     return try {
-        // Читаем текущее значение лайков из кеша (если есть)
+        // Читаем текущее значение лайков из кеша (если есть соответствующий запрос, например GetPostQuery)
         val cached = apolloClient.apolloStore.readOperation(GetPostQuery(id = postId))
         val currentLikes = cached?.post?.likes ?: 0
 
@@ -295,7 +298,7 @@ import com.apollographql.apollo3.ApolloClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-fun subscribeToNewPostsEn(client: ApolloClient): Flow<OnPostCreatedSubscription.PostCreated?> {
+fun subscribeToNewPosts(client: ApolloClient): Flow<OnPostCreatedSubscription.PostCreated?> {
     return client
         .subscription(OnPostCreatedSubscription())
         .toFlow()
@@ -315,7 +318,7 @@ Apollo нормализует объекты по ключам (например
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 
-suspend fun getUserCacheFirstEn(client: ApolloClient, userId: String): GetUserQuery.User? {
+suspend fun getUserCacheFirst(client: ApolloClient, userId: String): GetUserQuery.User? {
     val response = client
         .query(GetUserQuery(id = userId))
         .fetchPolicy(FetchPolicy.CacheFirst)
@@ -330,41 +333,41 @@ suspend fun getUserCacheFirstEn(client: ApolloClient, userId: String): GetUserQu
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.*
 
-sealed class GraphQLResultEn<out T> {
-    data class Success<T>(val data: T) : GraphQLResultEn<T>()
-    data class Error(val error: GraphQLErrorEn) : GraphQLResultEn<Nothing>()
+sealed class GraphQLResult<out T> {
+    data class Success<T>(val data: T) : GraphQLResult<T>()
+    data class Error(val error: GraphQLError) : GraphQLResult<Nothing>()
 }
 
-sealed class GraphQLErrorEn {
-    data class Network(val message: String) : GraphQLErrorEn()
-    data class Http(val code: Int, val message: String) : GraphQLErrorEn()
-    data class GraphQL(val errors: List<String>) : GraphQLErrorEn()
-    data class Parse(val message: String) : GraphQLErrorEn()
-    data class Unknown(val throwable: Throwable) : GraphQLErrorEn()
+sealed class GraphQLError {
+    data class Network(val message: String) : GraphQLError()
+    data class Http(val code: Int, val message: String) : GraphQLError()
+    data class GraphQL(val errors: List<String>) : GraphQLError()
+    data class Parse(val message: String) : GraphQLError()
+    data class Unknown(val throwable: Throwable) : GraphQLError()
 }
 
-suspend fun <T> executeApolloEn(
+suspend fun <T> executeApollo(
     block: suspend () -> ApolloResponse<T>
-): GraphQLResultEn<T> {
+): GraphQLResult<T> {
     return try {
         val response = block()
         when {
             response.data != null && !response.hasErrors() ->
-                GraphQLResultEn.Success(response.data!!)
+                GraphQLResult.Success(response.data!!)
             response.hasErrors() -> {
                 val msgs = response.errors?.map { it.message } ?: emptyList()
-                GraphQLResultEn.Error(GraphQLErrorEn.GraphQL(msgs))
+                GraphQLResult.Error(GraphQLError.GraphQL(msgs))
             }
-            else -> GraphQLResultEn.Error(GraphQLErrorEn.Unknown(Exception("Unknown error")))
+            else -> GraphQLResult.Error(GraphQLError.Unknown(Exception("Unknown error")))
         }
     } catch (e: ApolloNetworkException) {
-        GraphQLResultEn.Error(GraphQLErrorEn.Network(e.message ?: "Network error"))
+        GraphQLResult.Error(GraphQLError.Network(e.message ?: "Network error"))
     } catch (e: ApolloHttpException) {
-        GraphQLResultEn.Error(GraphQLErrorEn.Http(e.statusCode, e.message ?: "HTTP error"))
+        GraphQLResult.Error(GraphQLError.Http(e.statusCode, e.message ?: "HTTP error"))
     } catch (e: ApolloParseException) {
-        GraphQLResultEn.Error(GraphQLErrorEn.Parse(e.message ?: "Parse error"))
+        GraphQLResult.Error(GraphQLError.Parse(e.message ?: "Parse error"))
     } catch (e: ApolloException) {
-        GraphQLResultEn.Error(GraphQLErrorEn.Unknown(e))
+        GraphQLResult.Error(GraphQLError.Unknown(e))
     }
 }
 ```
@@ -382,7 +385,7 @@ suspend fun <T> executeApolloEn(
 ---
 
 ## Answer (EN)
-Apollo Android is a strongly-typed GraphQL client for Android (and Kotlin multiplatform) that provides:
+Apollo Android is a strongly-typed GraphQL client for Android (and Kotlin Multiplatform) that provides:
 - Generated Kotlin models and operations from your GraphQL schema
 - Compile-time type safety
 - Normalized cache with multiple backends (in-memory, SQL, etc.)
@@ -476,8 +479,8 @@ apollo {
 ```kotlin
 import android.content.Context
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
+import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.http.OkHttpEngine
 import com.apollographql.apollo3.network.ws.ApolloWebSocketEngine
@@ -485,13 +488,13 @@ import com.apollographql.apollo3.network.ws.WebSocketNetworkTransport
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
-interface TokenProviderEn {
+interface TokenProvider {
     fun getAccessToken(): String?
 }
 
-class ApolloClientProviderEn2(
+class ApolloClientProvider(
     context: Context,
-    private val tokenProvider: TokenProviderEn
+    private val tokenProvider: TokenProvider
 ) {
     companion object {
         private const val BASE_URL = "https://api.example.com/graphql"
@@ -516,12 +519,14 @@ class ApolloClientProviderEn2(
     private val cacheFactory = MemoryCacheFactory(MEMORY_CACHE_SIZE)
         .chain(SqlNormalizedCacheFactory(context, "apollo.db"))
 
+    // Client for queries/mutations
     val apolloClient: ApolloClient = ApolloClient.Builder()
         .serverUrl(BASE_URL)
         .httpEngine(OkHttpEngine(okHttpClient))
         .normalizedCache(cacheFactory)
         .build()
 
+    // Client with WebSocket subscriptions
     val apolloClientWithSubscriptions: ApolloClient = ApolloClient.Builder()
         .serverUrl(BASE_URL)
         .httpEngine(OkHttpEngine(okHttpClient))
@@ -537,7 +542,7 @@ class ApolloClientProviderEn2(
 ```
 
 Notes:
-- Use OkHttp via `OkHttpEngine` (or the current engine recommended by Apollo docs).
+- Use OkHttp via `OkHttpEngine` (or the current engine recommended by Apollo docs for your version).
 - Use `apollo-websocket-network-transport` (or equivalent) for subscriptions.
 
 ### Queries Example
@@ -558,7 +563,7 @@ query GetUser($id: ID!) {
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.exception.ApolloException
 
-class UserRepositoryEn2(private val apolloClient: ApolloClient) {
+class UserRepository(private val apolloClient: ApolloClient) {
 
     suspend fun getUser(userId: String): Result<GetUserQuery.User?> {
         return try {
@@ -599,9 +604,12 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.optimisticUpdates
 import com.apollographql.apollo3.exception.ApolloException
 
-suspend fun likePostEn2(apolloClient: ApolloClient, postId: String): Result<Int> {
+suspend fun likePost(
+    apolloClient: ApolloClient,
+    postId: String
+): Result<Int> {
     return try {
-        // Read current likes from cache (if available)
+        // Read current likes from cache (if there is a corresponding query such as GetPostQuery)
         val cached = apolloClient.apolloStore.readOperation(GetPostQuery(id = postId))
         val currentLikes = cached?.post?.likes ?: 0
 
@@ -637,7 +645,7 @@ import com.apollographql.apollo3.ApolloClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-fun subscribeToNewPostsEn2(client: ApolloClient): Flow<OnPostCreatedSubscription.PostCreated?> {
+fun subscribeToNewPosts(client: ApolloClient): Flow<OnPostCreatedSubscription.PostCreated?> {
     return client
         .subscription(OnPostCreatedSubscription())
         .toFlow()
@@ -649,7 +657,7 @@ fun subscribeToNewPostsEn2(client: ApolloClient): Flow<OnPostCreatedSubscription
 
 ### Normalized Cache and Fetch Policies
 
-Apollo stores entities by cache key (e.g. `User:123`) and references them from other records. Updates to one entity propagate to all queries that reference it.
+Apollo stores entities by cache key (e.g. `User:123`) and shares them across all queries. Updating one entity automatically affects all queries that reference it.
 
 Use Apollo's built-in fetch policies, for example:
 
@@ -657,7 +665,7 @@ Use Apollo's built-in fetch policies, for example:
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 
-suspend fun getUserCacheFirstEn2(client: ApolloClient, userId: String): GetUserQuery.User? {
+suspend fun getUserCacheFirst(client: ApolloClient, userId: String): GetUserQuery.User? {
     val response = client
         .query(GetUserQuery(id = userId))
         .fetchPolicy(FetchPolicy.CacheFirst)
@@ -672,41 +680,41 @@ suspend fun getUserCacheFirstEn2(client: ApolloClient, userId: String): GetUserQ
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.*
 
-sealed class GraphQLResultEn2<out T> {
-    data class Success<T>(val data: T) : GraphQLResultEn2<T>()
-    data class Error(val error: GraphQLErrorEn2) : GraphQLResultEn2<Nothing>()
+sealed class GraphQLResult<out T> {
+    data class Success<T>(val data: T) : GraphQLResult<T>()
+    data class Error(val error: GraphQLError) : GraphQLResult<Nothing>()
 }
 
-sealed class GraphQLErrorEn2 {
-    data class Network(val message: String) : GraphQLErrorEn2()
-    data class Http(val code: Int, val message: String) : GraphQLErrorEn2()
-    data class GraphQL(val errors: List<String>) : GraphQLErrorEn2()
-    data class Parse(val message: String) : GraphQLErrorEn2()
-    data class Unknown(val throwable: Throwable) : GraphQLErrorEn2()
+sealed class GraphQLError {
+    data class Network(val message: String) : GraphQLError()
+    data class Http(val code: Int, val message: String) : GraphQLError()
+    data class GraphQL(val errors: List<String>) : GraphQLError()
+    data class Parse(val message: String) : GraphQLError()
+    data class Unknown(val throwable: Throwable) : GraphQLError()
 }
 
-suspend fun <T> executeApolloEn2(
+suspend fun <T> executeApollo(
     block: suspend () -> ApolloResponse<T>
-): GraphQLResultEn2<T> {
+): GraphQLResult<T> {
     return try {
         val response = block()
         when {
             response.data != null && !response.hasErrors() ->
-                GraphQLResultEn2.Success(response.data!!)
+                GraphQLResult.Success(response.data!!)
             response.hasErrors() -> {
                 val msgs = response.errors?.map { it.message } ?: emptyList()
-                GraphQLResultEn2.Error(GraphQLErrorEn2.GraphQL(msgs))
+                GraphQLResult.Error(GraphQLError.GraphQL(msgs))
             }
-            else -> GraphQLResultEn2.Error(GraphQLErrorEn2.Unknown(Exception("Unknown error")))
+            else -> GraphQLResult.Error(GraphQLError.Unknown(Exception("Unknown error")))
         }
     } catch (e: ApolloNetworkException) {
-        GraphQLResultEn2.Error(GraphQLErrorEn2.Network(e.message ?: "Network error"))
+        GraphQLResult.Error(GraphQLError.Network(e.message ?: "Network error"))
     } catch (e: ApolloHttpException) {
-        GraphQLResultEn2.Error(GraphQLErrorEn2.Http(e.statusCode, e.message ?: "HTTP error"))
+        GraphQLResult.Error(GraphQLError.Http(e.statusCode, e.message ?: "HTTP error"))
     } catch (e: ApolloParseException) {
-        GraphQLResultEn2.Error(GraphQLErrorEn2.Parse(e.message ?: "Parse error"))
+        GraphQLResult.Error(GraphQLError.Parse(e.message ?: "Parse error"))
     } catch (e: ApolloException) {
-        GraphQLResultEn2.Error(GraphQLErrorEn2.Unknown(e))
+        GraphQLResult.Error(GraphQLError.Unknown(e))
     }
 }
 ```

@@ -63,7 +63,7 @@ class MyService : Service() {
         fun getService(): MyService = this@MyService
     }
 
-    override fun onBind(intent: Intent): IBinder = binder // ✅ Возвращаем IBinder для bound-сценария
+    override fun onBind(intent: Intent): IBinder = binder
 
     fun performTask(): String = "Task completed"
 }
@@ -74,7 +74,6 @@ class MyActivity : AppCompatActivity() {
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            // ✅ Получаем ссылку на Service
             myService = (service as MyService.MyBinder).getService()
             isBound = true
         }
@@ -87,15 +86,12 @@ class MyActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        // ✅ BIND_AUTO_CREATE создаст Service, если он не запущен,
-        //    либо привяжет к уже запущенному, если он жив
         bindService(Intent(this, MyService::class.java), connection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onStop() {
         super.onStop()
         if (isBound) {
-            // ✅ Развязываем соединение симметрично выбранному lifecycle (onStart/onStop)
             unbindService(connection)
             isBound = false
         }
@@ -129,7 +125,7 @@ class MyService : Service() {
         fun getService(): MyService = this@MyService
     }
 
-    override fun onBind(intent: Intent): IBinder = binder // ✅ Return IBinder for bound scenario
+    override fun onBind(intent: Intent): IBinder = binder
 
     fun performTask(): String = "Task completed"
 }
@@ -140,7 +136,6 @@ class MyActivity : AppCompatActivity() {
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            // ✅ Get reference to Service
             myService = (service as MyService.MyBinder).getService()
             isBound = true
         }
@@ -153,15 +148,12 @@ class MyActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        // ✅ BIND_AUTO_CREATE will either create the Service if not running
-        //    or bind to it if it is already running
         bindService(Intent(this, MyService::class.java), connection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onStop() {
         super.onStop()
         if (isBound) {
-            // ✅ Unbind symmetrically to the chosen lifecycle (onStart/onStop)
             unbindService(connection)
             isBound = false
         }
@@ -181,12 +173,23 @@ class MyActivity : AppCompatActivity() {
 
 ---
 
+## Follow-ups (RU)
+
+- Что произойдет, если несколько клиентов привяжутся к одному и тому же `Service`?
+- Когда следует использовать запущенный (`started`) `Service` vs привязанный (`bound`) `Service`?
+- Как `AIDL` позволяет организовать межпроцессное связывание с `Service`?
+- В чем разница между `BIND_AUTO_CREATE` и другими флагами привязки?
+
 ## Follow-ups
 
 - What happens if multiple clients bind to the same `Service`?
 - When should you use started vs bound Services?
 - How does AIDL enable cross-process `Service` binding?
 - What is the difference between BIND_AUTO_CREATE and other binding flags?
+
+## References (RU)
+
+- Документация по привязанным сервисам: https://developer.android.com/develop/background-work/services/bound-services
 
 ## References
 
@@ -199,13 +202,15 @@ class MyActivity : AppCompatActivity() {
 - [[c-intent]]
 - [[c-lifecycle]]
 
-
 ### Prerequisites (Easier)
+
 - [[q-android-components-besides-activity--android--easy]] - Android components overview
 
 ### Related (Medium)
+
 - [[q-service-component--android--medium]] - `Service` fundamentals
 - [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` lifecycle and memory
 
 ### Advanced (Harder)
+
 - [[q-design-whatsapp-app--android--hard]] - System design with background services

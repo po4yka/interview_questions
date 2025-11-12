@@ -46,17 +46,18 @@ tags:
 
 ## Ответ (RU)
 
-ML Kit поддерживает пользовательские модели через TensorFlow Lite (TFLite). Можно:
-- либо использовать API кастомных моделей ML Kit (если доступно в текущей версии SDK),
-- либо напрямую интегрировать TFLite-интерпретатор, реализуя загрузку, обновления и A/B тестирование на уровне приложения.
+ML Kit поддерживает работу с пользовательскими моделями через TensorFlow Lite (TFLite) и связанные сервисы Firebase/Google Cloud.
+На практике обычно:
+- либо используем (если доступно) API ML Kit для загрузки кастомных моделей как on-device/remote (актуальную документацию нужно проверять, так как часть старых API устарела),
+- либо интегрируем TFLite-интерпретатор напрямую и реализуем загрузку, кеширование, обновления и A/B тестирование на уровне приложения, используя Firebase Remote Config / A/B Testing / Storage или собственный backend.
 
-Это даёт гибкость сверх предобученных моделей ML Kit. Важно учитывать актуальность API: старый Firebase ML (FirebaseModelSource и пр.) устарел; используем современные ML Kit / TFLite подходы.
+Это даёт гибкость сверх предобученных моделей ML Kit. Важно учитывать актуальность API: старый Firebase ML (например, FirebaseModelSource и т.п.) устарел; необходимо использовать современные подходы на базе TFLite, актуальных ML Kit APIs и/или собственных механизмов доставки моделей.
 
 ### Краткий вариант
 
-- Используйте TFLite модель (кастомную или AutoML) либо как локальную (в APK/AAB), либо как удалённую (через CDN/Firebase/ML Kit).
+- Используйте TFLite модель (кастомную или AutoML) либо как локальную (в APK/AAB), либо как удалённую (через Firebase/Cloud Storage/CDN/ML Kit Custom Models, если доступны в текущем SDK).
 - Всегда имейте локальный fallback.
-- Для обновлений и A/B тестов управляйте выбором модели через Remote Config/feature flags и отслеживайте метрики.
+- Для обновлений и A/B тестов управляйте выбором модели через Remote Config / feature flags и отслеживайте метрики.
 
 ### Подробный вариант
 
@@ -68,18 +69,18 @@ ML Kit поддерживает пользовательские модели ч
 - Требуют обновления приложения для обновления модели
 
 **2. Удалённые модели (Dynamic / Remote):**
-- Хостятся в удалённом источнике (например, Firebase Remote Config, собственный CDN/endpoint или ML Kit Custom Remote Models, если используется соответствующий SDK)
+- Хостятся в удалённом источнике (например, Firebase Storage + собственная логика загрузки, собственный CDN/endpoint или ML Kit Custom Remote Models, если используется соответствующий SDK)
 - Загружаются по требованию, можно обновлять без релиза приложения
 - Требуют интернет для первой загрузки и обновлений
 
 **3. AutoML модели:**
 - Обучены через Google Cloud AutoML / Vertex AI и экспортированы как TFLite
 - Автоматическая/полуавтоматическая оптимизация архитектуры под задачу
-- Упрощённый процесс обучения, развёртывание аналогично кастомным TFLite моделям (локально или удалённо)
+- Развёртывание аналогично кастомным TFLite моделям (локально или удалённо)
 
 ### Интеграция TensorFlow Lite (пример)
 
-Ниже — упрощённый пример, показывающий общую идею сочетания локальной и удалённой модели. Вспомогательные компоненты (remoteModelManager, ModelLoader и т.п.) предполагаются реализованными отдельно.
+Ниже — упрощённый пример, показывающий общую идею сочетания локальной и удалённой модели. Вспомогательные компоненты (RemoteModelProvider, ModelLoader и т.п.) предполагаются реализованными отдельно.
 
 ```kotlin
 class CustomModelManager(private val context: Context) {
@@ -100,11 +101,13 @@ class CustomModelManager(private val context: Context) {
                 FileUtil.loadMappedFile(context, localModelPath)
             }
 
-            interpreter = Interpreter(modelBuffer, Interpreter.Options().apply {
+            val options = Interpreter.Options().apply {
                 setNumThreads(4)
-                // Использование NNAPI имеет смысл только при поддержке устройством и модели
-                setUseNNAPI(true)
-            })
+                // Использование NNAPI / других делегатов зависит от версии TFLite и поддержки устройством;
+                // в продакшене предпочитайте явные делегаты (NNAPI/GPU) и проверку доступности.
+            }
+
+            interpreter = Interpreter(modelBuffer, options)
 
             Result.success(Unit)
         } catch (e: Exception) {
@@ -115,8 +118,8 @@ class CustomModelManager(private val context: Context) {
 ```
 
 Примечания:
-- RemoteModelProvider и FileUtil.loadMappedFile(File) здесь условные/примерные — в реальном коде нужно использовать конкретный способ загрузки (ML Kit Custom Model API или собственную реализацию).
-- Важно валидировать совместимость версии модели и входных данных.
+- RemoteModelProvider и FileUtil.loadMappedFile(File) здесь условные/примерные — в реальном коде нужно использовать конкретный способ загрузки (ML Kit Custom Model API, если доступно, или собственную реализацию скачивания/кеша файлов).
+- Важно валидировать совместимость версии модели и входных данных и не использовать один и тот же Interpreter из разных потоков без синхронизации.
 
 ### Требования
 
@@ -131,7 +134,7 @@ class CustomModelManager(private val context: Context) {
 
 ### Архитектура
 
-- Компонент управления моделями (ModelManager), инкапсулирующий загрузку локальной/удалённой модели и валидацию.
+- Компонент управления моделями (ModelManager), инкапсулирующий загрузку локальной/удалённой модели, валидацию и версионирование.
 - Слой конфигурации/feature flags (например, Remote Config) для выбора активной модели и A/B стратегий.
 - Отдельный слой логирования и метрик (Firebase Analytics/Crashlytics и др.) для мониторинга качества и производительности.
 - Инференс из UI/Domain слоя идёт только через абстракцию, не напрямую к TFLite.
@@ -210,7 +213,7 @@ def quantize_model(model_path, output_path):
     with open(output_path, 'wb') as f:
         f.write(quantized_model)
 ```
-Комментарий: уменьшение размера "до ~75%" — ориентировочная оценка и зависит от модели.
+Комментарий: уменьшение размера "до ~75%" — ориентировочная оценка и зависит от модели; точное значение не гарантируется.
 
 **GPU делегирование (пример):**
 ```kotlin
@@ -222,12 +225,13 @@ fun createOptimizedInterpreter(context: Context, modelPath: String): Interpreter
         setNumThreads(4)
         setAllowFp16PrecisionForFp32(true)
     }
+    // В реальном коде важно корректно освобождать делегат и интерпретатор
     return Interpreter(modelBuffer, options)
 }
 ```
 Примечания:
-- Фактический выигрыш ("до 10x") не гарантирован и сильно зависит от устройства и модели.
-- Необходимо корректно освобождать делегаты и интерпретатор.
+- Фактический выигрыш (например, "до 10x") не гарантирован и сильно зависит от устройства и модели.
+- Необходимо корректно управлять жизненным циклом делегатов и интерпретатора и иметь fallback на CPU.
 
 ### Стратегии Развёртывания
 
@@ -236,13 +240,14 @@ fun createOptimizedInterpreter(context: Context, modelPath: String): Interpreter
 - 50% пользователей → проверка стабильности и качества
 - 100% пользователей → полный запуск
 
-**2. Условия загрузки (для удалённых моделей):**
+**2. Условия загрузки (для удалённых моделей через ML Kit Custom Remote Models):**
 ```kotlin
 val conditions = DownloadConditions.Builder()
     .requireWifi()      // ✅ Только Wi‑Fi
     .requireCharging()  // ✅ Для больших моделей — во время зарядки
     .build()
 ```
+Если вы хостите модели на своём CDN/сервере, аналогичные условия (Wi‑Fi, зарядка, не в роуминге) реализуются собственной логикой.
 
 **3. Fallback стратегия:**
 - Всегда включать локальную модель в APK/AAB как безопасный вариант
@@ -269,15 +274,16 @@ val conditions = DownloadConditions.Builder()
 
 ## Answer (EN)
 
-ML Kit supports custom models through TensorFlow Lite (TFLite). You can:
-- use the ML Kit Custom Model API (where available in the current SDK), or
-- integrate TFLite directly and implement loading, updates, and A/B logic in your app.
+ML Kit supports working with custom models via TensorFlow Lite (TFLite) and related Firebase/Google Cloud services.
+In practice, you typically:
+- use the ML Kit custom model capabilities (where available in the current SDK) to manage on-device/remote models, and
+- or integrate TFLite directly and implement model file delivery, caching, updates, and A/B testing at the app/backend level using Firebase Remote Config / A/B Testing / Storage or your own infrastructure.
 
-This provides flexibility beyond built-in ML Kit models. Be aware that the old Firebase ML APIs have been deprecated; use modern ML Kit / TFLite-based approaches.
+This gives you flexibility beyond ML Kit’s built-in models. Be aware that the older Firebase ML APIs (e.g., FirebaseModelSource and friends) are deprecated; rely on TFLite-based flows, up-to-date ML Kit APIs, and/or your own delivery mechanism.
 
 ### Short Version
 
-- Use a TFLite model (custom or AutoML) either bundled in the app or downloaded remotely.
+- Use a TFLite model (custom or AutoML) either bundled in the app or downloaded remotely (Firebase/Cloud Storage/CDN/ML Kit Custom Models where available).
 - Always keep a local fallback.
 - Control active model and A/B experiments via Remote Config/feature flags and track metrics.
 
@@ -291,7 +297,7 @@ This provides flexibility beyond built-in ML Kit models. Be aware that the old F
 - Require app update to ship a new model version
 
 **2. Dynamic / Remote Models:**
-- Hosted remotely (e.g., via Firebase / Remote Config + storage, your own CDN/endpoint, or ML Kit Custom Remote Models if using that SDK)
+- Hosted remotely (e.g., Firebase Storage plus your own loading logic, your CDN/endpoint, or ML Kit Custom Remote Models where supported)
 - Downloaded on demand; can be updated without releasing a new app build
 - Require network for initial download and updates
 
@@ -323,11 +329,13 @@ class CustomModelManager(private val context: Context) {
                 FileUtil.loadMappedFile(context, localModelPath)
             }
 
-            interpreter = Interpreter(modelBuffer, Interpreter.Options().apply {
+            val options = Interpreter.Options().apply {
                 setNumThreads(4)
-                // Use NNAPI only when supported by device and model
-                setUseNNAPI(true)
-            })
+                // NNAPI / other delegates usage depends on your TFLite version and device support;
+                // in production prefer explicit delegates (NNAPI/GPU) with capability checks.
+            }
+
+            interpreter = Interpreter(modelBuffer, options)
 
             Result.success(Unit)
         } catch (e: Exception) {
@@ -338,14 +346,14 @@ class CustomModelManager(private val context: Context) {
 ```
 
 Notes:
-- RemoteModelProvider and FileUtil.loadMappedFile(File) are placeholders; in production use ML Kit Custom Model APIs or your own robust download/cache.
-- Validate input/output compatibility and handle model versioning.
+- RemoteModelProvider and FileUtil.loadMappedFile(File) are placeholders; in production you must implement robust download/cache logic or use ML Kit Custom Model APIs where available.
+- Validate I/O tensor compatibility and handle model versioning; avoid sharing a single Interpreter instance across threads without proper synchronization.
 
 ### Requirements
 
 - Functional:
   - Support both bundled and remote models.
-  - Allow safe model updates without crashes or UX regression.
+  - Allow safe model updates without crashes or UX regressions.
   - Provide A/B testing and gradual rollout mechanism.
 - Non-functional:
   - Low latency and controlled memory usage.
@@ -354,10 +362,10 @@ Notes:
 
 ### Architecture
 
-- Model Manager component abstracting model loading (local/remote), versioning, and validation.
+- Model Manager component abstracting model loading (local/remote), validation, and versioning.
 - Config/feature-flag layer (e.g., Remote Config) controlling active model and experiments.
-- Metrics/logging layer (Firebase Analytics/Crashlytics etc.) monitoring quality/perf.
-- UI/Domain call inference only through abstraction, not directly via TFLite.
+- Metrics/logging layer (Firebase Analytics/Crashlytics etc.) monitoring quality/performance.
+- UI/Domain layers call inference only through an abstraction, not directly through TFLite.
 
 ### Model A/B Testing
 
@@ -433,7 +441,7 @@ def quantize_model(model_path, output_path):
     with open(output_path, 'wb') as f:
         f.write(quantized_model)
 ```
-Note: "up to ~75% size reduction" is typical but not guaranteed; it depends on the model.
+Note: "up to ~75% size reduction" is typical but not guaranteed; depends on the model.
 
 **GPU delegation (example):**
 ```kotlin
@@ -445,12 +453,13 @@ fun createOptimizedInterpreter(context: Context, modelPath: String): Interpreter
         setNumThreads(4)
         setAllowFp16PrecisionForFp32(true)
     }
+    // In production, properly manage delegate/interpreter lifecycle
     return Interpreter(modelBuffer, options)
 }
 ```
 Notes:
-- Actual speedups vary widely; not guaranteed to be 10x.
-- Properly manage delegate and interpreter lifecycle and fall back if GPU is unavailable.
+- Actual speedups vary; 10x improvements are not guaranteed.
+- Always manage delegate lifecycle and have a CPU fallback if GPU is unavailable or fails.
 
 ### Deployment Strategies
 
@@ -459,13 +468,14 @@ Notes:
 - 50% of users → validate stability and quality
 - 100% of users → full rollout
 
-**2. Download conditions (for remote models):**
+**2. Download conditions (for remote models via ML Kit Custom Remote Models):**
 ```kotlin
 val conditions = DownloadConditions.Builder()
     .requireWifi()      // ✅ Wi‑Fi only
     .requireCharging()  // ✅ While charging for large models
     .build()
 ```
+If you host models on your own CDN/server, implement equivalent conditions (Wi‑Fi, charging, no roaming) in your own logic.
 
 **3. Fallback strategy:**
 - Always bundle a local model in APK/AAB as a safe default
@@ -474,7 +484,7 @@ val conditions = DownloadConditions.Builder()
 
 ### Performance Metrics
 
-Recommended to track (heuristics, not hard rules):
+Recommended to track (heuristics, not strict rules):
 - Inference time (latency)
 - Model size
 - Accuracy / quality metrics

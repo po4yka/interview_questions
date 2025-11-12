@@ -50,29 +50,29 @@ Design secure sign‑in and transaction signing for a banking app. Use passkeys/
 
 ## Ответ (RU)
 
-Банковская аутентификация требует passkeys, биометрии, device attestation и корректно спроектированного secure transaction signing.
+Банковская аутентификация требует passkeys (на базе FIDO2), биометрии, device attestation и корректно спроектированного secure transaction signing.
 
 ### Архитектура
 
-Модули: auth-core, crypto (Keystore), session, approvals, notifications, flags, analytics.
+Модули: auth-core, crypto (Keystore), session, approvals, notifications, flags, analytics. Поддержка жизненного цикла ключей и мульти-девайсных привязок (регистрация/отзыв девайсов и ключей).
 
 ### Credentials
 
-Passkeys через FIDO2/WebAuthn API; fallback на username+OTP (rate‑limited). Аутентификационные ключи и ключи подписания хранятся в Android Keystore (StrongBox где возможно), помечены как non-exportable и защищены biometric / user verification gating. Биометрия используется для разблокировки ключа и подтверждения пользователя, а не как самостоятельный секрет.
+Passkeys через FIDO2 API на Android (совместимые с WebAuthn на стороне сервера); fallback на username+OTP (строго rate‑limited, SMS не используется как единственный фактор для высокорисковых операций). Аутентификационные ключи и ключи подписания хранятся в Android Keystore (StrongBox где доступен), помечены как non-exportable и защищены user verification gating (биометрия / экранный PIN). Биометрия используется для разблокировки ключа и подтверждения пользователя, а не как самостоятельный секрет.
 
 ### Attestation
 
-Сигналы Play Integrity и аналогичные механизмы интегритета устройства; привязка сессии и доверенных ключей к "device posture"; деградация возможностей на устройствах с низкой целостностью (например, блокировка высокорисковых операций).
+Сигналы Play Integrity и аналогичные механизмы интегритета устройства; привязка сессии и доверенных ключей к "device posture"; деградация возможностей на устройствах с низкой целостностью (например, блокировка высокорисковых операций, ограничения лимитов).
 
 ### Session
 
-`Short`‑lived access token + refresh; ротация на risk events; для 3DS flows в WebView — secure cookies и изоляция origin; CSRF tokens для веб‑контента при наличии встроенных веб‑флоу.
+`Short`‑lived access token + refresh; ротация на risk events. Для 3DS flows использовать безопасную загрузку страниц эмитента/банка (через безопасный браузер/Custom Tab либо изолированный WebView с корректной привязкой origin и редиректов); для встроенных веб-флоу — secure cookies, строгое управление origin и CSRF tokens.
 
 ### Transaction Signing
 
 - Для чувствительных операций формировать канонический payload (идентификатор получателя, сумма, валюта, время, nonce/челлендж, срок действия, идентификатор устройства/ключа).
-- Подписывать payload приватным ключом, хранящимся в Android Keystore, привязанным к устройству и аккаунту, с включенной user authentication (например, биометрия) перед подписанием.
-- Сервер хранит соответствующий публичный ключ (или его сертификат), проверяет подпись, валидирует nonce/челлендж и сроки, сопоставляет поля payload c фактической транзакцией для защиты от подмены и replay.
+- Подписывать payload приватным ключом, хранящимся в Android Keystore, привязанным к устройству и аккаунту, с включённой user authentication (например, биометрия) перед подписанием.
+- Сервер хранит соответствующий публичный ключ (или его сертификат), проверяет подпись, валидирует nonce/челлендж и сроки, сопоставляет поля payload с фактической транзакцией для защиты от подмены и replay. При отзыве устройства/ключа сервер прекращает доверять соответствующим подписям.
 - Пользователю показывать out‑of‑band push approval с детальным, человекочитаемым контекстом (получатель, сумма, валюта, комиссия), чтобы уменьшить риск подтверждения поддельных MFA‑запросов.
 
 ### Notifications
@@ -85,11 +85,11 @@ FCM data messages → открытие защищенного in‑app экра�
 
 ### Наблюдаемость
 
-Отслеживать: login p95, процент успешных approvals, false reject/accept, долю операций, отклоненных по сигналам целостности устройства, crash/ANR. Логирование должно исключать чувствительные данные.
+Отслеживать: login p95, процент успешных approvals, false reject/accept, долю операций, отклонённых по сигналам целостности устройства, crash/ANR, аномальные паттерны аутентификации и подписания. Логирование должно исключать чувствительные данные.
 
 ### Тестирование
 
-Покрыть сценарии: смена устройства и привязка ключей, clock skew, попытки MITM (TLS pinning + корректная обработка ошибок), biometric lockouts и fallback‑флоу, SIM‑swap сценарии (противодействие чрезмерной доверенности к SMS), защита от replay подписанных payload (одноразовые nonce), корректная работа 3DS‑флоу, поведение ограниченного офлайн‑режима и ротация ключей/токенов.
+Покрыть сценарии: смена устройства и привязка/отзыв ключей и девайсов, clock skew, попытки MITM (TLS pinning + корректная обработка ошибок), biometric lockouts и fallback‑флоу, SIM‑swap сценарии (SMS OTP не использовать как единственный или основной фактор для критичных операций), защита от replay подписанных payload (одноразовые nonce/челленджи), корректная работа 3DS‑флоу (включая редиректы и origin), поведение ограниченного офлайн‑режима (ограниченные лимиты/операции без онлайновой валидации), ротация ключей/токенов.
 
 ### Tradeoffs
 
@@ -97,29 +97,29 @@ FCM data messages → открытие защищенного in‑app экра�
 
 ## Answer (EN)
 
-Banking authentication requires passkeys, biometrics, device attestation, and a correctly designed secure transaction signing scheme.
+Banking authentication requires passkeys (FIDO2-based), biometrics, device attestation, and a correctly designed secure transaction signing scheme.
 
 ### Architecture
 
-auth-core, crypto (Keystore), session, approvals, notifications, flags, analytics.
+auth-core, crypto (Keystore), session, approvals, notifications, flags, analytics. Include key lifecycle and multi-device support (device/key registration and revocation).
 
 ### Credentials
 
-Passkeys via FIDO2/WebAuthn APIs; fallback to username+OTP (rate‑limited). Authentication keys and signing keys are stored in Android Keystore (StrongBox where possible), marked non-exportable and protected via biometric / user verification gating. Biometrics are used to unlock the key / verify the user, not as a standalone secret.
+Passkeys via Android FIDO2 APIs (compatible with WebAuthn on the server side); fallback to username+OTP (strictly rate‑limited, SMS OTP not used as the sole factor for high-risk operations). Authentication keys and signing keys are stored in Android Keystore (StrongBox where available), marked non-exportable and protected via user verification gating (biometrics / screen lock). Biometrics are used to unlock the key / verify the user, not as a standalone secret.
 
 ### Attestation
 
-Use Play Integrity and similar device integrity signals; bind sessions and trusted keys to device posture; degrade capabilities on low‑integrity devices (e.g., block high‑risk operations).
+Use Play Integrity and similar device integrity signals; bind sessions and trusted keys to device posture; degrade capabilities on low‑integrity devices (e.g., block high‑risk operations, enforce lower limits).
 
 ### Session
 
-`Short`‑lived access token + refresh; rotate on risk events; for 3DS flows in WebView use secure cookies and proper origin isolation; CSRF tokens for embedded web content where applicable.
+Short‑lived access token + refresh; rotate on risk events. For 3DS flows, load issuer/acquirer pages securely (prefer Custom Tabs or a well-isolated WebView with proper origin binding and redirect handling); for embedded web content use secure cookies, strict origin management, and CSRF tokens.
 
 ### Transaction Signing
 
 - For sensitive operations, build a canonical payload (beneficiary identifier, amount, currency, timestamp, nonce/challenge, expiration, device/key identifier).
 - Sign the payload with a private key stored in Android Keystore, device- and account-bound, with user authentication (e.g., biometric) required before signing.
-- The server maintains the corresponding public key (or certificate), verifies the signature, validates nonce/challenge and expiry, and checks that payload fields match the intended transaction to prevent tampering and replay.
+- The server maintains the corresponding public key (or certificate), verifies the signature, validates nonce/challenge and expiry, and checks that payload fields match the intended transaction to prevent tampering and replay. On device/key revocation, the server must stop trusting signatures from that key.
 - Show an out‑of‑band push approval screen with clear, human-readable context (recipient, amount, currency, fees) to reduce the risk of users approving fraudulent MFA prompts.
 
 ### Notifications
@@ -132,11 +132,11 @@ Use an encrypted DB for session metadata and security-critical attributes; avoid
 
 ### Observability
 
-Track: login p95, approval success%, false reject/accept rates, share of operations rejected by device integrity policies, crash/ANR. Ensure logs exclude sensitive data.
+Track: login p95, approval success%, false reject/accept rates, share of operations rejected by device integrity policies, crash/ANR, and anomalous auth/signing patterns. Ensure logs exclude sensitive data.
 
 ### Testing
 
-Cover: device changes and key binding, clock skew, MITM attempts (TLS pinning + robust failure handling), biometric lockouts and fallback flows, SIM‑swap scenarios (avoid over-reliance on SMS), replay protection for signed payloads (one-time nonce), correct 3DS integration, offline-limited mode behavior, and key/token rotation flows.
+Cover: device changes and device/key binding & revocation, clock skew, MITM attempts (TLS pinning + robust failure handling), biometric lockouts and fallback flows, SIM‑swap scenarios (do not treat SMS OTP as the only or primary factor for critical actions), replay protection for signed payloads (one-time nonces/challenges), correct 3DS integration (including redirects and origin handling), offline-limited mode behavior (restricted limits/operations without online validation), and key/token rotation flows.
 
 ### Tradeoffs
 
@@ -147,14 +147,14 @@ Aggressive pinning/attestation and strict policies can block some legitimate use
 ## Дополнительные вопросы (RU)
 
 - Как обрабатывать отказы биометрии и fallback-флоу?
-- Какая стратегия помогает против SIM-swap атак?
+- Какая стратегия помогает против SIM-swap атак (почему SMS не должно быть единственным сильным фактором)?
 - Как сбалансировать безопасность и UX в аутентификации?
 - Как реализовать безопасное управление мульти-девайсными сессиями?
 
 ## Follow-ups
 
 - How to handle biometric failures and fallback flows?
-- What strategy prevents SIM-swap attacks?
+- What strategy prevents SIM-swap attacks (why SMS must not be the only strong factor)?
 - How to balance security with user experience in authentication?
 - How to implement secure multi-device session management?
 

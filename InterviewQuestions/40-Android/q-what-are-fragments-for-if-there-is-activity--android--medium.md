@@ -115,7 +115,7 @@ class DataFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Жизненный цикл фрагмента и его ViewModel scoped к хост-Activity
+        // Жизненный цикл фрагмента и его ViewModel scoped к самому фрагменту
         viewModel = ViewModelProvider(this)[DataViewModel::class.java]
     }
 
@@ -406,19 +406,19 @@ class DataFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Fragment has its own lifecycle callbacks, scoped to the host Activity
+        // Fragment has its own lifecycle callbacks, ViewModel scoped to the fragment itself
         viewModel = ViewModelProvider(this)[DataViewModel::class.java]
     }
 
     override fun onResume() {
         super.onResume()
-        // Can handle its own UI updates without forcing Activity recreation
+        // Handle its own UI updates within the Activity lifecycle
         viewModel.refreshData()
     }
 
     override fun onPause() {
         super.onPause()
-        // Can manage its own state within the Activity lifecycle
+        // Manage its own state within the Activity lifecycle
         viewModel.saveState()
     }
 }

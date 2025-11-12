@@ -27,11 +27,13 @@ tags: [difficulty/medium, oop, programming-languages, sealed-classes, type-hiera
 
 ## Ответ (RU)
 
-Sealed классы в Kotlin (см. [[c-sealed-classes]]) позволяют **ограничить набор подклассов**, которые могут быть созданы для класса, обеспечивая строгую, закрытую иерархию. Все разрешённые наследники должны быть объявлены в том же пакете и модуле (для sealed interface — в том же модуле), что и sealed класс.
+Sealed классы в Kotlin (см. [[c-sealed-classes]]) позволяют **ограничить набор подклассов**, которые могут быть созданы для класса, обеспечивая контролируемую, закрытую иерархию: все разрешённые наследники должны находиться в том же модуле и в том же пакете, что и sealed-тип (при этом они могут быть в разных файлах).
+
+Для sealed interface действуют те же правила (наследники в том же модуле и пакете, могут быть в разных файлах).
 
 **Зачем они нужны:**
 
-1. **Конечный набор состояний**: Идеально подходят для данных, которые могут иметь ограниченное число состояний
+1. **Конечный набор состояний**: Идеально подходят для данных, которые могут иметь ограниченное число чётко определённых состояний.
 ```kotlin
 sealed class Result<out T> {
     data class Success<out T>(val data: T) : Result<T>()
@@ -40,33 +42,35 @@ sealed class Result<out T> {
 }
 ```
 
-2. **Исчерпывающие when-выражения**: Компилятор проверяет, что все случаи охвачены (без ветки `else`), если все возможные наследники sealed класса видимы и `when` используется как выражение
+2. **Исчерпывающие when-выражения**: Компилятор может проверять, что все случаи охвачены (без ветки `else`), если все возможные наследники sealed-типа находятся в том же модуле и видимы, и `when` используется как выражение.
 ```kotlin
 when (result) {
     is Result.Success -> showData(result.data)
     is Result.Error -> showError(result.message)
     Result.Loading -> showLoading()
-    // 'else' не нужен - компилятор знает все случаи в иерархии Result
+    // 'else' не нужен - компилятор знает все варианты в иерархии Result
 }
 ```
 
-3. **Типобезопасность**: Все возможные подтипы известны во время компиляции (в пределах модуля, где определён sealed класс), что позволяет избежать непредусмотренных вариантов.
+3. **Типобезопасность**: Все возможные подтипы известны во время компиляции в пределах модуля, где определён sealed-тип, что помогает избежать непредусмотренных вариантов и позволяет компилятору поддерживать исчерпывающие проверки.
 
-4. **Гибче, чем enum**: Каждый подкласс может иметь собственные свойства и методы, поддерживаются data классы, объекты и обычные классы.
+4. **Гибче, чем enum**: Каждый подкласс может иметь собственные свойства и методы; поддерживаются data классы, объекты и обычные классы.
 
 **Преимущества:**
 - Код более безопасен и понятен
 - Компилятор помогает отловить пропущенные случаи в `when`
-- Лучше, чем использовать несколько nullable полей для представления состояний
+- Лучше, чем использовать несколько nullable полей для представления альтернатив
 - Идеально для конечных автоматов, ответов API, навигации
 
 ## Answer (EN)
 
-Sealed classes in Kotlin (see [[c-sealed-classes]]) allow you to **restrict the set of subclasses** that can be created for a class, providing a strict, closed hierarchy. All permitted subclasses must be declared in the same package and module as the sealed class (for sealed interfaces: in the same module).
+Sealed classes in Kotlin (see [[c-sealed-classes]]) allow you to **restrict the set of subclasses** that can be created for a class, providing a controlled, closed hierarchy: all permitted direct subclasses must be in the same module and the same package as the sealed type (they may live in different files).
+
+The same rules apply to sealed interfaces (subclasses in the same module and package, possibly in different files).
 
 **Why they're needed:**
 
-1. **Finite set of states**: Perfect for data that can have a limited number of well-defined states
+1. **Finite set of states**: Perfect for data that can have a limited number of well-defined states.
 ```kotlin
 sealed class Result<out T> {
     data class Success<out T>(val data: T) : Result<T>()
@@ -75,17 +79,17 @@ sealed class Result<out T> {
 }
 ```
 
-2. **Exhaustive when expressions**: The compiler checks that all cases are covered (without an `else` branch) when all sealed subclasses are visible and `when` is used as an expression
+2. **Exhaustive when expressions**: The compiler can verify that all cases are covered (without an `else` branch) when all sealed subclasses are known and visible in the same module and `when` is used as an expression.
 ```kotlin
 when (result) {
     is Result.Success -> showData(result.data)
     is Result.Error -> showError(result.message)
     Result.Loading -> showLoading()
-    // No 'else' needed - the compiler knows all cases in the Result hierarchy
+    // No 'else' needed - the compiler knows all variants in the Result hierarchy
 }
 ```
 
-3. **Type safety**: All possible subtypes are known at compile time (within the module where the sealed class is defined), which prevents unexpected variants.
+3. **Type safety**: All possible subtypes are known at compile time within the defining module, which prevents unexpected variants and enables exhaustive compile-time checks.
 
 4. **More flexible than enums**: Each subclass can have its own properties and behavior; you can use data classes, objects, and regular classes.
 

@@ -38,11 +38,11 @@ tags: [android/gradle, android/performance-memory, difficulty/medium]
 
 ## Ответ (RU)
 
-Проблема «16KB DEX page size» относится к тому, как DEX-код и связанные данные выравниваются и отображаются страницами памяти (обычно 16 КБ) в рантайме ART на некоторых версиях Android. Определённые варианты раскладки DEX могут приводить к неэффективному использованию 16 КБ страниц и, как следствие, к заметному росту размера установочного артефакта и к большему объёму загружаемых данных.
+Проблема «16KB DEX page size» относится к тому, как DEX-код и связанные данные выравниваются и отображаются страницами памяти (на некоторых версиях Android — с эффективным размером страницы 16 КБ) в рантайме ART и связанных форматах (например, oat/odex). Определённые варианты раскладки DEX могут приводить к неэффективному использованию этих страниц и, как следствие, к заметному росту размера установочного артефакта и к большему объёму загружаемых данных.
 
-Это не баг R8/ProGuard как таковых, а эффект того, как их оптимизации (переупаковка, переупорядочивание, уменьшение числа методов/классов) взаимодействуют с 16 КБ выравниванием секций/страниц.
+Это не баг R8/ProGuard как таковых, а эффект того, как их оптимизации (переупаковка, переупорядочивание, уменьшение числа методов/классов) взаимодействуют с выравниванием секций/страниц под 16 КБ.
 
-**Причина (упрощённо)**: при загрузке и оптимизации DEX рантайм использует страницы фиксированного размера (16 КБ). Если данные (классы, методы, таблицы индексов и др.) размещены так, что границы страниц попадают в «неудачные» места, часть пространства на странице остаётся неиспользованной, а следующий блок данных переносится на новую страницу. При определённом расположении и количестве методов это может накопить значительное количество «пустого» пространства.
+**Причина (упрощённо)**: при отображении и оптимизации DEX рантайм и формат oat используют страницы фиксированного размера (например, 16 КБ на части устройств/версий). Если данные (классы, методы, таблицы индексов и др.) размещены так, что границы страниц попадают в «неудачные» места, часть пространства на странице остаётся неиспользованной, а следующий блок данных переносится на новую страницу. При определённом расположении и количестве методов это может накопить значительное количество «пустого» пространства.
 
 Условная иллюстрация:
 
@@ -56,12 +56,13 @@ tags: [android/gradle, android/performance-memory, difficulty/medium]
 - Малые приложения (< 5 MB): рост размера может достигать ~20–40%
 - Большие приложения (> 50 MB): увеличение обычно меньше, порядка нескольких–десяти процентов
 
-Фактический эффект зависит от структуры DEX, порядка методов/классов и конфигурации сборки.
+Фактический эффект зависит от структуры DEX, порядка методов/классов, конфигурации сборки и конкретной среды выполнения.
 
 **Решение / смягчение**:
 
 - Использовать актуальные версии Android Gradle Plugin (AGP), D8 и R8, в которых реализованы улучшения раскладки DEX и упаковки.
-- Включить минификацию и шринк ресурсов для релизных сборок, но отслеживать реальные размеры артефактов, так как изменения порядка/количества элементов могут как уменьшить, так и увеличить потери на выравнивании.
+- Включить минификацию и шринк ресурсов для релизных сборок, но обязательно отслеживать реальные размеры артефактов: изменения порядка/количества элементов могут как уменьшить, так и увеличить потери на выравнивании.
+- Сравнивать размеры и содержимое DEX/APK/AAB между сборками (включая отчёты AGP/R8 по размерам), чтобы обнаружить аномальный рост из-за неэффективного выравнивания.
 
 Пример базовой конфигурации:
 
@@ -82,17 +83,17 @@ android {
 
 **Лучшие практики**:
 - Использовать App Bundle вместо монолитного APK, чтобы уменьшить итоговый размер загружаемого пользователю пакета.
-- Мониторить размер DEX и финальных артефактов в CI/CD и сравнивать сборки при изменении конфигурации R8/AGP.
+- Мониторить размер DEX и финальных артефактов в CI/CD и сравнивать сборки при изменении конфигурации R8/AGP, чтобы вовремя заметить регрессии, связанные с выравниванием.
 
 ---
 
 ## Answer (EN)
 
-The "16KB DEX page size" issue refers to how DEX code and related data are laid out and mapped into memory using fixed-size pages (commonly 16 KB) by the ART runtime on some Android versions. Certain DEX layouts can lead to inefficient use of these 16 KB pages, causing noticeable increases in installable artifact size and the amount of data that must be loaded.
+The "16KB DEX page size" issue refers to how DEX code and related data are laid out and memory-mapped using fixed-size pages (on some Android versions/environments effectively 16 KB) by the ART runtime and related formats (such as oat/odex). Certain DEX layouts can cause inefficient use of these pages, leading to noticeable increases in the installable artifact size and the amount of data that must be loaded.
 
-This is not a bug in R8/ProGuard themselves. Instead, their optimizations (repackaging, reordering, shrinking methods/classes) can interact with 16 KB page alignment of sections/pages in a way that exposes or worsens padding overhead.
+This is not a bug in R8/ProGuard themselves. Instead, their optimizations (repackaging, reordering, shrinking methods/classes) can interact with 16 KB-aligned sections/pages in ways that expose or worsen padding overhead.
 
-**Cause (simplified)**: when DEX files are loaded/optimized, the runtime works with fixed-size memory pages (e.g., 16 KB). If sections of the DEX (classes, methods, index tables, etc.) are arranged such that page boundaries cut through them unfavorably, part of a page can remain unused while the next section is pushed onto a new page. Depending on method/class counts and ordering, this accumulated padding can become significant.
+**Cause (simplified)**: when DEX files are mapped/optimized, the runtime and oat format operate on fixed-size memory pages (e.g., 16 KB on some devices/versions). If DEX sections (classes, methods, index tables, etc.) are arranged so that page boundaries cut through them unfavorably, part of a page ends up unused while the next section is pushed onto a new page. Depending on method/class counts and ordering, this accumulated padding can become significant.
 
 Illustrative view:
 
@@ -106,12 +107,13 @@ Suboptimal:    [Data A..padding][Data B......]
 - Small apps (< 5 MB): size increase can reach roughly ~20–40%
 - Large apps (> 50 MB): increases are usually smaller, on the order of several to low tens of percent
 
-The actual impact depends on DEX structure, method/class ordering, and build configuration.
+The actual impact depends on the DEX structure, method/class ordering, build configuration, and the specific runtime environment.
 
 **Mitigation / solution**:
 
 - Use up-to-date versions of the Android Gradle Plugin (AGP), D8, and R8, which include improvements to DEX layout and packing.
-- Enable code shrinking and resource shrinking for release builds, while monitoring resulting artifact sizes, since changes in ordering/counts can either reduce or, in some edge cases, increase alignment-related padding.
+- Enable code shrinking and resource shrinking for release builds, but always monitor resulting artifact sizes: changes in ordering/counts can either reduce or, in some edge cases, increase alignment-related padding.
+- Compare DEX/APK/AAB sizes and contents between builds (including AGP/R8 size reports) to detect abnormal growth caused by inefficient alignment.
 
 Example baseline configuration:
 
@@ -132,7 +134,7 @@ android {
 
 **Best practices**:
 - Use App Bundles instead of a single universal APK to reduce what each user downloads.
-- Track DEX and artifact sizes in CI/CD and compare builds when changing R8/AGP configurations.
+- Track DEX and artifact sizes in CI/CD and compare builds when changing R8/AGP configurations so alignment-related regressions are caught early.
 
 ---
 

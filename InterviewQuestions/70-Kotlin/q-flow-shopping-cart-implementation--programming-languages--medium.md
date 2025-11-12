@@ -18,9 +18,12 @@ tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management]
 # Вопрос (RU)
 > Как реализовать работу `Flow` в приложении, когда нужно самостоятельно управлять всей корзиной на устройстве?
 
+# Question (EN)
+> How to implement `Flow` in an application when you need to manage the entire shopping cart on the phone?
+
 ## Ответ (RU)
 
-Используйте `StateFlow` (или `SharedFlow` при необходимости) для хранения и распространения текущего состояния корзины. Обновляйте состояние через атомарные операции `value`/`update` у `MutableStateFlow` (а не через `emit` напрямую), чтобы динамически отслеживать изменения. Реализуйте методы для добавления, удаления и обновления товаров, которые изменяют единое неизменяемое состояние корзины.
+Используйте `StateFlow` (или `SharedFlow` при необходимости) для хранения и распространения текущего состояния корзины. Обновляйте состояние через атомарные операции `value`/`update` у `MutableStateFlow` (в suspend-контекстах также доступен `emit`), чтобы динамически и потокобезопасно отслеживать изменения. Реализуйте методы для добавления, удаления и обновления товаров, которые изменяют единое неизменяемое состояние корзины.
 
 `StateFlow` идеально подходит для управления корзиной, так как всегда хранит актуальное состояние и уведомляет всех наблюдателей при его изменении.
 
@@ -294,7 +297,7 @@ fun CartItemRow(
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Изображение товара (пример с Coil: rememberImagePainter)
+        // Изображение товара (пример; в реальном приложении используйте актуальный API библиотеки, например Coil)
         Image(
             painter = rememberImagePainter(cartItem.product.imageUrl),
             contentDescription = null,
@@ -477,12 +480,9 @@ class ShoppingCartManagerTest {
 
 ---
 
-# Question (EN)
-> How to implement `Flow` in an application when you need to manage the entire shopping cart on the phone?
-
 ## Answer (EN)
 
-Use `StateFlow` (or `SharedFlow` if needed) to hold and expose the current cart state. Update state via `value`/`update` on `MutableStateFlow` (not `emit` directly) so that changes are tracked reactively. Implement methods for adding, removing, and updating items that modify a single immutable cart state.
+Use `StateFlow` (or `SharedFlow` if needed) to hold and expose the current cart state. Update state via atomic `value`/`update` on `MutableStateFlow` (in suspend contexts you can also use `emit`) so that changes are tracked reactively and safely. Implement methods for adding, removing, and updating items that modify a single immutable cart state.
 
 `StateFlow` is ideal for shopping cart management because it always maintains the current state and notifies all observers when the state changes.
 
@@ -754,7 +754,7 @@ fun CartItemRow(
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Product Image (placeholder example, e.g. using Coil's rememberImagePainter)
+        // Product Image example; use an up-to-date image loading API in real apps (e.g., Coil)
         Image(
             painter = rememberImagePainter(cartItem.product.imageUrl),
             contentDescription = null,

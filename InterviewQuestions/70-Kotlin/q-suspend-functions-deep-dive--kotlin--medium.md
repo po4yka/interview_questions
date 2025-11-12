@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-destructuring-declarations--kotlin--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [concurrency, continuation, coroutines, difficulty/medium, kotlin, suspend-functions]
 ---
 
@@ -26,7 +26,9 @@ tags: [concurrency, continuation, coroutines, difficulty/medium, kotlin, suspend
 
 ## Ответ (RU)
 
-**Suspend функции** — это функции, которые могут приостанавливать выполнение без блокировки потоков. Ключевое слово `suspend` помечает функцию, чьё выполнение может быть приостановлено и возобновлено позже с помощью механизма корутин. Когда в suspend функции есть точки приостановки (вызовы других suspend функций, таких как `delay`, `withContext` и т.п.), компилятор переписывает её в **машину состояний** на основе Continuation Passing Style (CPS).
+**Suspend функции** — это функции, которые могут приостанавливать выполнение без обязательной блокировки потоков. Ключевое слово `suspend` помечает функцию, чьё выполнение может быть приостановлено и возобновлено позже с помощью механизма корутин. Важно: `suspend` само по себе не гарантирует неблокирующее поведение — оно лишь позволяет интегрировать функцию в корутинную модель и использовать точки приостановки.
+
+Когда в suspend функции есть точки приостановки (вызовы других suspend функций, таких как `delay`, `withContext` и т.п.), компилятор (концептуально) переписывает её в **машину состояний** на основе Continuation Passing Style (CPS), чтобы уметь приостанавливать и возобновлять выполнение.
 
 ### Что делает `suspend`
 
@@ -37,7 +39,7 @@ fun loadUser(id: Int): User {
     return database.getUser(id)
 }
 
-// Suspend функция — не блокирует поток при использовании suspend-friendly API
+// Suspend функция — может не блокировать поток при использовании неблокирующих suspend-API
 suspend fun loadUser(id: Int): User {
     delay(1000) // Приостанавливает корутину, поток освобождается
     return database.getUser(id)
@@ -46,7 +48,7 @@ suspend fun loadUser(id: Int): User {
 
 Ключевые отличия:
 - Обычная функция выполняется до конца на текущем потоке; блокирующие вызовы (например, `Thread.sleep()`) блокируют поток.
-- Suspend функция может останавливаться в точках приостановки, не блокируя поток, позволяя выполнять другие корутины.
+- Suspend функция может останавливаться в точках приостановки, не блокируя поток, если использует корректные неблокирующие suspend-API или смену контекста. При этом внутри `suspend` функции всё ещё можно заблокировать поток, если вызвать блокирующий код напрямую, поэтому `suspend` — это не автоматическая магия.
 
 ### Правила использования suspend функций
 
@@ -64,7 +66,7 @@ class UserRepository {
         }
     }
 
-    // НЕЛЬЗЯ вызывать напрямую из обычной функции
+    // НЕЛЬЗЯ вызывать напрямую из обычной функции без корутины / runBlocking
     fun getUserSync(id: Int): User {
         return getUser(id) // Ошибка компиляции!
     }
@@ -74,11 +76,11 @@ class UserRepository {
 3 способа вызывать suspend функции:
 1. Из другой suspend функции
 2. Из корутинных билдров (`launch`, `async` и т.д.)
-3. Из `runBlocking` (обычно для тестов или `main`)
+3. Из `runBlocking` на границах (например, `main`, тесты)
 
 ### Как suspend работает под капотом
 
-Компилятор Kotlin реализует suspend функции через **CPS** и при наличии точек приостановки преобразует их в **машину состояний**.
+Компилятор Kotlin реализует suspend функции через **CPS** и при наличии точек приостановки концептуально преобразует их в **машину состояний**.
 
 ```kotlin
 // Код, который вы пишете:
@@ -88,7 +90,7 @@ suspend fun loginUser(email: String, password: String): User {
     return user
 }
 
-// Концептуально сгенерированный код (упрощённо):
+// Концептуально сгенерированный код (сильно упрощено, иллюстрация):
 fun loginUser(
     email: String,
     password: String,
@@ -97,30 +99,34 @@ fun loginUser(
     val stateMachine = continuation as? LoginUserStateMachine
         ?: LoginUserStateMachine(continuation)
 
-    when (stateMachine.label) {
+    return when (stateMachine.label) {
         0 -> {
             stateMachine.label = 1
             val result = authenticate(email, password, stateMachine)
             if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
             stateMachine.token = result as String
+            // Переход логики к следующему состоянию
+            stateMachine.label = 1
+            loginUser(email, password, stateMachine)
         }
         1 -> {
             val token = stateMachine.token
             stateMachine.label = 2
             val result = fetchUserData(token, stateMachine)
             if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-            return result as User
+            result as User
         }
         else -> error("Already completed")
     }
 }
 ```
 
-Что здесь происходит (концептуально):
-1. Suspend функция с точками приостановки превращается в машину состояний с метками.
-2. Параметр `Continuation<T>` хранит контекст возобновления.
-3. В точке приостановки функция может вернуть `COROUTINE_SUSPENDED`.
-4. По завершении асинхронной операции вызывается `continuation.resumeWith(result)` для возобновления.
+Что здесь важно (концептуально):
+1. Suspend функция с точками приостановки представляется как машина состояний с метками.
+2. Параметр `Continuation<T>` хранит контекст возобновления и текущее состояние.
+3. В точке приостановки функция может вернуть `COROUTINE_SUSPENDED`, управление уходит рантайму.
+4. После завершения асинхронной операции вызывается `continuation.resumeWith(result)`, что приводит к возобновлению машины состояний в нужном месте.
+5. Конкретный сгенерированный код зависит от версии компилятора и детали следует воспринимать как модель, а не точную реализацию.
 
 ### `Continuation` — что это такое?
 
@@ -288,7 +294,7 @@ interface UserDao {
     suspend fun insertUser(user: User)
 
     @Query("SELECT * FROM users")
-    fun observeUsers(): Flow<List<User>> // `Flow` тоже интегрируется с suspend
+    fun observeUsers(): Flow<List<User>> // `Flow` интегрируется с suspend через операторы и collect
 }
 
 class LocalUserRepository(private val dao: UserDao) {
@@ -408,7 +414,7 @@ fun loadUserSync(id: Int): User {
 }
 ```
 
-#### Правильно: используйте `CoroutineScope`
+#### Правильно: используйте `CoroutineScope` (а `runBlocking` — только на границах, например, в `main` или тестах)
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -429,7 +435,7 @@ suspend fun calculateSum(a: Int, b: Int): Int {
 }
 ```
 
-#### Правильно: `suspend` только при реальной приостановке
+#### Правильно: `suspend` только при реальной приостановке / асинхронной работе
 
 ```kotlin
 fun calculateSum(a: Int, b: Int): Int {
@@ -638,7 +644,7 @@ suspend fun withSuspension(): Int {
 Выводы:
 - Сам по себе модификатор `suspend` почти бесплатный.
 - Оверхед появляется при реальном приостановлении (`delay`, `withContext` и т.д.).
-- Машина состояний создаётся только при наличии точек приостановки.
+- Концептуально машина состояний важна при наличии точек приостановки; конкретные детали реализации зависят от компилятора.
 
 ### Suspend функции и `inline`
 
@@ -705,7 +711,9 @@ suspend fun fetchData() {
 
 ## Answer (EN)
 
-Suspend functions are functions that can suspend execution without blocking threads. The `suspend` keyword marks a function whose execution may be paused and resumed later using the coroutine machinery. When a suspend function contains at least one suspension point (calls another suspend function such as `delay`, `withContext`, etc.), the compiler rewrites it into a state machine.
+Suspend functions are functions that can suspend execution without necessarily blocking threads. The `suspend` keyword marks a function whose execution may be paused and resumed later using the coroutine machinery. Importantly, `suspend` by itself does not guarantee non-blocking behavior; it enables integration with the coroutine model and use of suspension points.
+
+When a suspend function contains at least one suspension point (calls another suspend function such as `delay`, `withContext`, etc.), the compiler (conceptually) rewrites it into a state machine so it can be paused and resumed.
 
 ### What the `suspend` keyword does
 
@@ -716,16 +724,16 @@ fun loadUser(id: Int): User {
     return database.getUser(id)
 }
 
-// Suspend function - does NOT block thread when used with suspend-friendly APIs
+// Suspend function - can avoid blocking when using non-blocking suspend APIs
 suspend fun loadUser(id: Int): User {
-    delay(1000) // Suspends coroutine, releases thread
+    delay(1000) // Suspends coroutine, underlying thread is released
     return database.getUser(id)
 }
 ```
 
-Key differences:
+Key points:
 - Regular function: runs to completion on the current thread; blocking calls like `Thread.sleep()` block the thread.
-- Suspend function: can pause at suspension points without blocking the underlying thread, allowing other coroutines to run.
+- Suspend function: can pause at suspension points without blocking the underlying thread when using proper suspend/non-blocking APIs or appropriate dispatchers. You can still block a thread inside a suspend function if you call blocking code directly, so `suspend` is not magic by itself.
 
 ### Rules for using suspend functions
 
@@ -736,14 +744,14 @@ class UserRepository {
         return apiService.fetchUser(id)
     }
 
-    // Or from coroutine scope
+    // Or from a coroutine scope
     fun loadUserInBackground(id: Int) {
         viewModelScope.launch {
             val user = getUser(id) // OK inside coroutine
         }
     }
 
-    // CANNOT call directly from regular function
+    // Cannot call directly from a regular function without a coroutine / runBlocking
     fun getUserSync(id: Int): User {
         return getUser(id) // Compilation error
     }
@@ -753,11 +761,11 @@ class UserRepository {
 Ways to call suspend functions:
 1. From another suspend function
 2. From coroutine builders (`launch`, `async`, etc.)
-3. From `runBlocking` (typically tests or main entry points)
+3. From `runBlocking` at boundaries (e.g., `main`, tests)
 
 ### How suspend works under the hood
 
-The Kotlin compiler implements suspend functions using Continuation Passing Style (CPS) and, when there are suspension points, transforms them into state machines.
+The Kotlin compiler implements suspend functions using Continuation Passing Style (CPS) and, when there are suspension points, conceptually transforms them into state machines.
 
 ```kotlin
 // Code you write
@@ -767,7 +775,7 @@ suspend fun loginUser(email: String, password: String): User {
     return user
 }
 
-// Conceptual generated code (simplified)
+// Conceptual generated code (highly simplified, illustrative only)
 fun loginUser(
     email: String,
     password: String,
@@ -776,19 +784,22 @@ fun loginUser(
     val stateMachine = continuation as? LoginUserStateMachine
         ?: LoginUserStateMachine(continuation)
 
-    when (stateMachine.label) {
+    return when (stateMachine.label) {
         0 -> {
             stateMachine.label = 1
             val result = authenticate(email, password, stateMachine)
             if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
             stateMachine.token = result as String
+            // Continue with next state
+            stateMachine.label = 1
+            loginUser(email, password, stateMachine)
         }
         1 -> {
             val token = stateMachine.token
             stateMachine.label = 2
             val result = fetchUserData(token, stateMachine)
             if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-            return result as User
+            result as User
         }
         else -> error("Already completed")
     }
@@ -796,10 +807,11 @@ fun loginUser(
 ```
 
 Conceptually:
-- Suspend functions with suspension points are rewritten into labeled state machines.
-- A `Continuation<T>` parameter captures where and how to resume.
-- At suspension, they may return `COROUTINE_SUSPENDED`.
-- On completion, `continuation.resumeWith(result)` resumes execution.
+- Suspend functions with suspension points are represented as labeled state machines.
+- A `Continuation<T>` parameter captures where and how to resume and holds the state.
+- At suspension, they may return `COROUTINE_SUSPENDED`, handing control to the runtime.
+- On completion of async work, `continuation.resumeWith(result)` resumes execution at the appropriate state.
+- The exact generated code is compiler-version-specific; treat this as a mental model, not a decompiled reality.
 
 ### Continuation - what is it?
 
@@ -897,7 +909,7 @@ suspend fun processData() {
 }
 ```
 
-Important: a coroutine may resume on a different thread after suspension depending on its dispatcher.
+Important: after suspension a coroutine may resume on a different thread depending on its dispatcher and context.
 
 ### Real examples of suspend functions
 
@@ -1073,7 +1085,7 @@ fun loadUserSync(id: Int): User {
 }
 ```
 
-#### Correct: use `CoroutineScope`
+#### Correct: use `CoroutineScope` (and keep `runBlocking` for top-level boundaries, e.g., `main`, tests)
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -1167,7 +1179,7 @@ class ExpensiveResource2 {
 }
 ```
 
-#### 2. Suspend and property delegation (caveat)
+#### 2. Suspend and property delegation (warning)
 
 ```kotlin
 class UserCache {
@@ -1219,7 +1231,7 @@ suspend fun withSuspension(): Int {
 Key points:
 - The `suspend` modifier itself is almost free.
 - Overhead appears at real suspension points (`delay`, `withContext`, etc.).
-- A state machine is generated only when there are suspension points.
+- Treat the state machine transformation as the conceptual mechanism used when suspension is involved; exact details are compiler-specific.
 
 ### Common mistakes
 

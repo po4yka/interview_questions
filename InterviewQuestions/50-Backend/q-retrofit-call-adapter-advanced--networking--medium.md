@@ -3,33 +3,36 @@ id: net-002
 title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
 aliases: ["Retrofit Call Adapter Advanced", "Продвинутый CallAdapter для Retrofit"]
 topic: networking
-subtopics: [error-handling, retrofit, sealed-classes]
-question_kind: android
+subtopics: [retrofit]
+question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-backend
-related: [c-error-handling, c-retrofit, c-sealed-classes]
+related: [c-backend, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-11
 sources: []
-tags: [call-adapter, difficulty/medium, error-handling, networking, result, retrofit, sealed-classes]
+tags: [backend, call-adapter, difficulty/medium, networking, retrofit, result]
+
 ---
 
 # Вопрос (RU)
 
-Как реализовать кастомный Retrofit CallAdapter для типа Result<T>? Как централизованно обрабатывать разные типы ошибок с помощью sealed классов?
+> Как реализовать кастомный Retrofit CallAdapter для типа `Result<T>`? Как централизованно обрабатывать разные типы ошибок с помощью sealed классов?
 
 # Question (EN)
 
-How to implement custom Retrofit CallAdapter for Result<T> type? How to centrally handle different response types and errors with sealed classes?
+> How to implement custom Retrofit CallAdapter for `Result<T>` type? How to centrally handle different response types and errors with sealed classes?
 
 ---
 
 ## Ответ (RU)
 
-**Retrofit CallAdapter** - механизм трансформации HTTP ответов в кастомные типы. Позволяет централизовать обработку ошибок, стандартизировать работу с API и интегрироваться с корутинами.
+**Retrofit CallAdapter** - механизм трансформации HTTP-ответов в кастомные типы. Позволяет централизовать обработку ошибок, стандартизировать работу с API и интегрироваться с разными моделями вызовов (Call, suspend и т.п.). См. также [[c-backend]].
+
+Важно: приведённая реализация адаптера ниже работает для методов, которые возвращают `Call<Result<T>>`. Для `suspend`-функций Retrofit использует встроенную поддержку корутин; чтобы применить этот подход к `suspend fun`, сигнатуры методов должны быть согласованы с тем, что ожидает `CallAdapter` (см. пример ниже).
 
 ### Зачем Нужен CallAdapter?
 
@@ -48,18 +51,24 @@ suspend fun getUser(id: String): User? {
 }
 ```
 
-С CallAdapter обработка централизована:
+С кастомным CallAdapter мы можем централизовать обработку ошибок, если описываем API в терминах `Call<Result<T>>` и адаптер берёт на себя конвертацию:
 
 ```kotlin
-// ✅ Чистый API, централизованная обработка
+// ✅ Чистый API использования в репозитории
 suspend fun getUser(id: String): Result<User> {
-    return apiService.getUser(id) // автоматически обёрнуто в Result
+    return withContext(Dispatchers.IO) {
+        // ApiService.getUser(...) возвращает Call<Result<User>>,
+        // наш CallAdapter гарантирует, что enqueue/execute вернут Result<User>
+        apiService.getUser(id).execute().body()!!
+    }
 }
 ```
 
+(Вариант с прямым `suspend fun ...: Result<T>` возможен только при реализации CallAdapter, который адаптирует к корутинным типам; в этом примере фокус на адаптере для `Call<Result<T>>`.)
+
 ### Result Type С Sealed Classes
 
-Sealed классы обеспечивают exhaustive checking разных типов ошибок:
+Sealed-классы обеспечивают exhaustive checking разных типов ошибок:
 
 ```kotlin
 sealed class Result<out T> {
@@ -105,14 +114,16 @@ class ResultCallAdapterFactory : CallAdapter.Factory() {
         annotations: Array<out Annotation>,
         retrofit: Retrofit
     ): CallAdapter<*, *>? {
-        // ✅ Проверяем что возвращается Call<Result<T>>
+        // ✅ Ожидаем Call<Result<T>>
         if (getRawType(returnType) != Call::class.java) return null
+        if (returnType !is ParameterizedType) return null
 
-        val callType = getParameterUpperBound(0, returnType as ParameterizedType)
+        val callType = getParameterUpperBound(0, returnType)
         if (getRawType(callType) != Result::class.java) return null
+        if (callType !is ParameterizedType) return null
 
         // ✅ Извлекаем тип T из Result<T>
-        val resultType = getParameterUpperBound(0, callType as ParameterizedType)
+        val resultType = getParameterUpperBound(0, callType)
         return ResultCallAdapter<Any>(resultType)
     }
 }
@@ -191,10 +202,10 @@ val retrofit = Retrofit.Builder()
 
 interface ApiService {
     @GET("users/{id}")
-    suspend fun getUser(@Path("id") userId: String): Result<User>
+    fun getUser(@Path("id") userId: String): Call<Result<User>>
 
     @GET("users/{id}/posts")
-    suspend fun getUserPosts(@Path("id") userId: String): Result<List<Post>>
+    fun getUserPosts(@Path("id") userId: String): Call<Result<List<Post>>>
 }
 ```
 
@@ -205,21 +216,23 @@ class UserRepository(
     private val apiService: ApiService,
     private val userDao: UserDao
 ) {
-    // ✅ Чистый код без try-catch
+    // ✅ Чистый код: CallAdapter гарантирует, что Call вернёт Result
     suspend fun getUser(userId: String): Result<User> {
-        return apiService.getUser(userId)
+        return withContext(Dispatchers.IO) {
+            apiService.getUser(userId).execute().body()!!
+        }
     }
 
     // ✅ Трансформация данных
     suspend fun getUserProfile(userId: String): Result<UserProfile> {
-        return apiService.getUser(userId).map { user ->
+        return getUser(userId).map { user ->
             UserProfile(user, getPostCount(userId))
         }
     }
 
     // ✅ Fallback на кеш при ошибке
     suspend fun getUserWithCache(userId: String): Result<User> {
-        return apiService.getUser(userId).also { result ->
+        return getUser(userId).also { result ->
             result.onSuccess { user -> userDao.insert(user) }
         }.let { result ->
             if (result is Result.Error) {
@@ -262,11 +275,11 @@ class UserViewModel(
 
 ### Best Practices
 
-1. **Sealed Classes для типобезопасности** - компилятор гарантирует обработку всех случаев
-2. **Централизация маппинга ошибок** - конвертация в CallAdapter, не в репозиториях
-3. **User-friendly сообщения** - мапим технические ошибки в понятный текст
-4. **Не бросать исключения** - возвращаем Result.Error вместо throw
-5. **Тестируемость** - легко тестировать с MockWebServer
+1. **Sealed Classes для типобезопасности** - компилятор гарантирует обработку всех случаев.
+2. **Централизация маппинга ошибок** - конвертация в CallAdapter, а не в репозиториях.
+3. **User-friendly сообщения** - мапим технические ошибки в понятный текст.
+4. **Не бросать исключения в CallAdapter** - возвращаем Result.Error вместо throw.
+5. **Тестируемость** - легко тестировать с MockWebServer.
 
 ### Распространённые Ошибки
 
@@ -300,11 +313,13 @@ override fun adapt(call: Call<T>): Call<Result<T>> {
 
 ## Answer (EN)
 
-**Retrofit CallAdapter** is a mechanism for transforming HTTP responses into custom types. It centralizes error handling, standardizes API interaction, and integrates with coroutines.
+A **Retrofit CallAdapter** is a mechanism for transforming HTTP responses into custom types. It centralizes error handling, standardizes API interaction, and can integrate with different calling models (Call, suspend, etc.). See also [[c-backend]].
+
+Important: the implementation below targets methods that return `Call<Result<T>>`. For `suspend` functions Retrofit uses its built-in coroutine support; to apply this pattern directly to `suspend fun` you need a CallAdapter that adapts to coroutine return types. In this example we focus on `Call<Result<T>>` for clarity and correctness.
 
 ### Why Custom CallAdapter?
 
-Without CallAdapter, error handling is duplicated across calls:
+Without a CallAdapter, error handling is duplicated across calls:
 
 ```kotlin
 // ❌ Repetitive error handling in every call
@@ -319,18 +334,24 @@ suspend fun getUser(id: String): User? {
 }
 ```
 
-With CallAdapter, handling is centralized:
+With a custom CallAdapter, we centralize error mapping by defining the API in terms of `Call<Result<T>>` and letting the adapter produce `Result` values:
 
 ```kotlin
-// ✅ Clean API with centralized handling
+// ✅ Clean usage in the repository
 suspend fun getUser(id: String): Result<User> {
-    return apiService.getUser(id) // automatically wrapped in Result
+    return withContext(Dispatchers.IO) {
+        // ApiService.getUser(...) returns Call<Result<User>>;
+        // our CallAdapter guarantees that execute/enqueue yield Result<User>
+        apiService.getUser(id).execute().body()!!
+    }
 }
 ```
 
+(A direct `suspend fun ...: Result<T>` variant requires a different adapter that targets coroutine types; this note focuses on the `Call<Result<T>>` adapter.)
+
 ### Result Type with Sealed Classes
 
-Sealed classes provide exhaustive checking of error types:
+Sealed classes provide exhaustive checking of different error types:
 
 ```kotlin
 sealed class Result<out T> {
@@ -376,14 +397,16 @@ class ResultCallAdapterFactory : CallAdapter.Factory() {
         annotations: Array<out Annotation>,
         retrofit: Retrofit
     ): CallAdapter<*, *>? {
-        // ✅ Check if return type is Call<Result<T>>
+        // ✅ Expect Call<Result<T>>
         if (getRawType(returnType) != Call::class.java) return null
+        if (returnType !is ParameterizedType) return null
 
-        val callType = getParameterUpperBound(0, returnType as ParameterizedType)
+        val callType = getParameterUpperBound(0, returnType)
         if (getRawType(callType) != Result::class.java) return null
+        if (callType !is ParameterizedType) return null
 
-        // ✅ Extract type T from Result<T>
-        val resultType = getParameterUpperBound(0, callType as ParameterizedType)
+        // ✅ Extract T from Result<T>
+        val resultType = getParameterUpperBound(0, callType)
         return ResultCallAdapter<Any>(resultType)
     }
 }
@@ -462,10 +485,10 @@ val retrofit = Retrofit.Builder()
 
 interface ApiService {
     @GET("users/{id}")
-    suspend fun getUser(@Path("id") userId: String): Result<User>
+    fun getUser(@Path("id") userId: String): Call<Result<User>>
 
     @GET("users/{id}/posts")
-    suspend fun getUserPosts(@Path("id") userId: String): Result<List<Post>>
+    fun getUserPosts(@Path("id") userId: String): Call<Result<List<Post>>>
 }
 ```
 
@@ -476,21 +499,23 @@ class UserRepository(
     private val apiService: ApiService,
     private val userDao: UserDao
 ) {
-    // ✅ Clean code without try-catch
+    // ✅ Clean code: CallAdapter guarantees that Call returns Result
     suspend fun getUser(userId: String): Result<User> {
-        return apiService.getUser(userId)
+        return withContext(Dispatchers.IO) {
+            apiService.getUser(userId).execute().body()!!
+        }
     }
 
     // ✅ Data transformation
     suspend fun getUserProfile(userId: String): Result<UserProfile> {
-        return apiService.getUser(userId).map { user ->
+        return getUser(userId).map { user ->
             UserProfile(user, getPostCount(userId))
         }
     }
 
     // ✅ Fallback to cache on error
     suspend fun getUserWithCache(userId: String): Result<User> {
-        return apiService.getUser(userId).also { result ->
+        return getUser(userId).also { result ->
             result.onSuccess { user -> userDao.insert(user) }
         }.let { result ->
             if (result is Result.Error) {
@@ -533,11 +558,11 @@ class UserViewModel(
 
 ### Best Practices
 
-1. **Sealed Classes for type safety** - compiler guarantees exhaustive handling
-2. **Centralize error mapping** - convert in CallAdapter, not repositories
-3. **User-friendly messages** - map technical errors to readable text
-4. **Never throw exceptions** - return Result.Error instead of throw
-5. **Testability** - easy to test with MockWebServer
+1. **Sealed Classes for type safety** - compiler guarantees exhaustive handling.
+2. **Centralize error mapping** - convert in the CallAdapter, not in repositories.
+3. **User-friendly messages** - map technical errors to human-readable text.
+4. **Do not throw from CallAdapter** - return Result.Error instead of throwing.
+5. **Testability** - easy to test with MockWebServer.
 
 ### Common Mistakes
 
@@ -571,7 +596,7 @@ override fun adapt(call: Call<T>): Call<Result<T>> {
 
 ## Follow-ups
 
-- How to support Flow<Result<T>> return type in CallAdapter?
+- How to support `Flow<Result<T>>` return type in CallAdapter?
 - How to handle multipart/form-data uploads with Result wrapper?
 - What is the performance overhead of wrapping every response?
 - How to integrate custom CallAdapter with OkHttp interceptors?
@@ -579,9 +604,8 @@ override fun adapt(call: Call<T>): Call<Result<T>> {
 
 ## References
 
-- [[c-sealed-classes]] - Sealed classes for type-safe hierarchies
-- [[c-error-handling]] - Error handling patterns in Kotlin
-- [[c-retrofit]] - Retrofit fundamentals and architecture
+- Official Retrofit documentation
+- Community articles on custom CallAdapter implementations
 
 ## Related Questions
 
@@ -593,12 +617,10 @@ override fun adapt(call: Call<T>): Call<Result<T>> {
 
 ### Related (Medium)
 
-- [[q-http-protocols-comparison--android--medium]] - HTTP protocols comparison
-- OkHttp interceptor chains
+- Error handling in backend services
 - Repository pattern with error handling
 
 ### Advanced (Harder)
 
-- [[q-data-sync-unstable-network--android--hard]] - Data sync in unstable networks
 - Custom Retrofit converters
 - Advanced type reflection patterns

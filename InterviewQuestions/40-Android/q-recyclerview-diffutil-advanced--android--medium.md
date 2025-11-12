@@ -19,7 +19,7 @@ related:
 - c-recyclerview
 - q-android-project-parts--android--easy
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/ui-views
 - difficulty/medium
@@ -27,10 +27,10 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского DiffUtil.`Callback`, использование ListAdapter и оптимизацию DiffUtil для больших наборов данных.
+> Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского `DiffUtil.Callback`, использование `ListAdapter` и оптимизацию DiffUtil для больших наборов данных.
 
 # Question (EN)
-> How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom DiffUtil.`Callback`, using ListAdapter, and optimizing DiffUtil for large datasets.
+> How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom `DiffUtil.Callback`, using `ListAdapter`, and optimizing DiffUtil for large datasets.
 
 ---
 
@@ -1139,6 +1139,10 @@ DiffUtil-based approaches reduce main-thread work and provide better UX compared
 ## Follow-ups
 
 - [[q-android-project-parts--android--easy]]
+- How would you design `DiffUtil.ItemCallback` for complex composite items (e.g., posts with media and reactions)?
+- When would you prefer manual diffing or `notifyDataSetChanged()` over DiffUtil, and why?
+- How does using `setHasStableIds(true)` interact with DiffUtil and what pitfalls can arise?
+- How would you benchmark and profile diff performance in a real app with Paging 3 and multiple view types?
 
 ## References
 

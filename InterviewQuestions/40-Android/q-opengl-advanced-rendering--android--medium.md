@@ -33,6 +33,8 @@ OpenGL ES — основной API Android для 3D-графики и прод�
 
 См. также: [[c-android-surfaces]].
 
+Ниже примеры ориентированы на OpenGL ES 3.0+ (GLES30): используются VAO и индексный тип `GL_UNSIGNED_INT`.
+
 ### Основные Компоненты
 
 **GLSurfaceView и Renderer:**
@@ -75,6 +77,10 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         val vertexShader = compileShader(GLES30.GL_VERTEX_SHADER, vertexCode)
         val fragmentShader = compileShader(GLES30.GL_FRAGMENT_SHADER, fragmentCode)
 
+        // ✅ Always validate shader compilation
+        checkShaderCompileStatus(vertexShader, "vertex")
+        checkShaderCompileStatus(fragmentShader, "fragment")
+
         programId = GLES30.glCreateProgram()
         GLES30.glAttachShader(programId, vertexShader)
         GLES30.glAttachShader(programId, fragmentShader)
@@ -84,11 +90,23 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         val linkStatus = IntArray(1)
         GLES30.glGetProgramiv(programId, GLES30.GL_LINK_STATUS, linkStatus, 0)
         if (linkStatus[0] == GLES30.GL_FALSE) {
-            throw RuntimeException("Shader linking failed: ${GLES30.glGetProgramInfoLog(programId)}")
+            val infoLog = GLES30.glGetProgramInfoLog(programId)
+            GLES30.glDeleteProgram(programId)
+            throw RuntimeException("Shader linking failed: $infoLog")
         }
 
         GLES30.glDeleteShader(vertexShader)
         GLES30.glDeleteShader(fragmentShader)
+    }
+
+    private fun checkShaderCompileStatus(shaderId: Int, stage: String) {
+        val status = IntArray(1)
+        GLES30.glGetShaderiv(shaderId, GLES30.GL_COMPILE_STATUS, status, 0)
+        if (status[0] == GLES30.GL_FALSE) {
+            val infoLog = GLES30.glGetShaderInfoLog(shaderId)
+            GLES30.glDeleteShader(shaderId)
+            throw RuntimeException("$stage shader compilation failed: $infoLog")
+        }
     }
 
     fun use() {
@@ -99,7 +117,9 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         val location = uniformLocations.getOrPut(name) {
             GLES30.glGetUniformLocation(programId, name)
         }
-        GLES30.glUniformMatrix4fv(location, 1, false, matrix, 0)
+        if (location >= 0) {
+            GLES30.glUniformMatrix4fv(location, 1, false, matrix, 0)
+        }
     }
 }
 ```
@@ -138,7 +158,7 @@ class Mesh(vertices: FloatArray, indices: IntArray, private val stride: Int = 8)
             GLES30.GL_STATIC_DRAW
         )
 
-        // ✅ Upload index data
+        // ✅ Upload index data (requires ES 3.0+ for GL_UNSIGNED_INT)
         val indexBuffer = ByteBuffer.allocateDirect(indices.size * 4)
             .order(ByteOrder.nativeOrder())
             .asIntBuffer()
@@ -187,7 +207,7 @@ class Texture private constructor(val textureId: Int) {
     }
 
     companion object {
-        fun loadFromBitmap(bitmap: Bitmap): Texture {
+        fun loadFromBitmap(bitmap: Bitmap, recycle: Boolean = true): Texture {
             val textureIds = IntArray(1)
             GLES30.glGenTextures(1, textureIds, 0)
             val id = textureIds[0]
@@ -213,7 +233,7 @@ class Texture private constructor(val textureId: Int) {
             // GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_REPEAT)
 
             GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
-            bitmap.recycle()
+            if (recycle) bitmap.recycle()
             return Texture(id)
         }
 
@@ -279,7 +299,7 @@ class Framebuffer(width: Int, height: Int) {
             0
         )
 
-        // Depth attachment
+        // Depth attachment (for depth testing). For stencil, use a depth-stencil format.
         val rboIds = IntArray(1)
         GLES30.glGenRenderbuffers(1, rboIds, 0)
         depthRenderbuffer = rboIds[0]
@@ -312,17 +332,17 @@ class Framebuffer(width: Int, height: Int) {
 
 **Управление шейдерами:**
 - Кешируйте скомпилированные программы
-- Валидируйте компиляцию и линковку
+- Валидируйте компиляцию и линковку (и логируйте info log)
 - Минимизируйте обновления uniform-переменных
 
 **Вершинные данные:**
-- Используйте VAO для эффективного управления атрибутами
+- Используйте VAO для эффективного управления атрибутами (ES 3.0+ или расширение)
 - Чередуйте атрибуты в одном буфере
 - Используйте индексы для устранения дублирования вершин
 
 **Текстуры:**
 - Генерируйте mipmaps для фильтрованных текстур
-- Используйте сжатие (ETC2, ASTC) для экономии памяти
+- Используйте сжатие (ETC2, ASTC) для экономии памяти (учитывая поддержку устройств)
 - Применяйте texture atlas для мелких текстур
 
 **Производительность рендеринга:**
@@ -332,14 +352,14 @@ class Framebuffer(width: Int, height: Int) {
 
 **FBO:**
 - Переиспользуйте framebuffer-ы когда возможно
-- Используйте renderbuffer для depth/stencil
+- Используйте renderbuffer для depth/stencil при необходимости
 - Проверяйте completeness после создания
 
 ### Распространённые Ошибки
 
 - ❌ Не проверять компиляцию шейдеров — тихие сбои
 - ❌ Забывать привязывать текстуры — чёрный экран
-- ❌ Не освобождать GL ресурсы — утечки памяти
+- ❌ Не освобождать GL ресурсы — утечки памяти / context leaks
 - ❌ Загрязнение GL состояния — неожиданный рендеринг
 - ❌ Неэффективные draw calls — низкая производительность
 
@@ -350,6 +370,8 @@ class Framebuffer(width: Int, height: Int) {
 OpenGL ES is Android's primary API for 3D graphics and advanced 2D rendering. Understanding advanced techniques (buffer objects, FBOs, complex shaders, post-processing) is critical for high-performance graphics applications.
 
 See also: [[c-android-surfaces]].
+
+Examples below target OpenGL ES 3.0+ (GLES30), as they use VAOs and `GL_UNSIGNED_INT` indices.
 
 ### Core Components
 
@@ -393,6 +415,10 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         val vertexShader = compileShader(GLES30.GL_VERTEX_SHADER, vertexCode)
         val fragmentShader = compileShader(GLES30.GL_FRAGMENT_SHADER, fragmentCode)
 
+        // ✅ Always validate shader compilation
+        checkShaderCompileStatus(vertexShader, "vertex")
+        checkShaderCompileStatus(fragmentShader, "fragment")
+
         programId = GLES30.glCreateProgram()
         GLES30.glAttachShader(programId, vertexShader)
         GLES30.glAttachShader(programId, fragmentShader)
@@ -402,11 +428,23 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         val linkStatus = IntArray(1)
         GLES30.glGetProgramiv(programId, GLES30.GL_LINK_STATUS, linkStatus, 0)
         if (linkStatus[0] == GLES30.GL_FALSE) {
-            throw RuntimeException("Shader linking failed: ${GLES30.glGetProgramInfoLog(programId)}")
+            val infoLog = GLES30.glGetProgramInfoLog(programId)
+            GLES30.glDeleteProgram(programId)
+            throw RuntimeException("Shader linking failed: $infoLog")
         }
 
         GLES30.glDeleteShader(vertexShader)
         GLES30.glDeleteShader(fragmentShader)
+    }
+
+    private fun checkShaderCompileStatus(shaderId: Int, stage: String) {
+        val status = IntArray(1)
+        GLES30.glGetShaderiv(shaderId, GLES30.GL_COMPILE_STATUS, status, 0)
+        if (status[0] == GLES30.GL_FALSE) {
+            val infoLog = GLES30.glGetShaderInfoLog(shaderId)
+            GLES30.glDeleteShader(shaderId)
+            throw RuntimeException("$stage shader compilation failed: $infoLog")
+        }
     }
 
     fun use() {
@@ -417,7 +455,9 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         val location = uniformLocations.getOrPut(name) {
             GLES30.glGetUniformLocation(programId, name)
         }
-        GLES30.glUniformMatrix4fv(location, 1, false, matrix, 0)
+        if (location >= 0) {
+            GLES30.glUniformMatrix4fv(location, 1, false, matrix, 0)
+        }
     }
 }
 ```
@@ -456,7 +496,7 @@ class Mesh(vertices: FloatArray, indices: IntArray, private val stride: Int = 8)
             GLES30.GL_STATIC_DRAW
         )
 
-        // ✅ Upload index data
+        // ✅ Upload index data (requires ES 3.0+ for GL_UNSIGNED_INT)
         val indexBuffer = ByteBuffer.allocateDirect(indices.size * 4)
             .order(ByteOrder.nativeOrder())
             .asIntBuffer()
@@ -505,7 +545,7 @@ class Texture private constructor(val textureId: Int) {
     }
 
     companion object {
-        fun loadFromBitmap(bitmap: Bitmap): Texture {
+        fun loadFromBitmap(bitmap: Bitmap, recycle: Boolean = true): Texture {
             val textureIds = IntArray(1)
             GLES30.glGenTextures(1, textureIds, 0)
             val id = textureIds[0]
@@ -531,7 +571,7 @@ class Texture private constructor(val textureId: Int) {
             // GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_REPEAT)
 
             GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
-            bitmap.recycle()
+            if (recycle) bitmap.recycle()
             return Texture(id)
         }
 
@@ -597,7 +637,7 @@ class Framebuffer(width: Int, height: Int) {
             0
         )
 
-        // Depth attachment
+        // Depth attachment (for depth testing). For stencil, use a depth-stencil format.
         val rboIds = IntArray(1)
         GLES30.glGenRenderbuffers(1, rboIds, 0)
         depthRenderbuffer = rboIds[0]
@@ -630,17 +670,17 @@ class Framebuffer(width: Int, height: Int) {
 
 **Shader Management:**
 - Cache compiled programs
-- Validate compilation and linking
+- Validate compilation and linking (and log info logs)
 - Minimize uniform updates
 
 **Vertex Data:**
-- Use VAOs for efficient attribute management
+- Use VAOs for efficient attribute management (ES 3.0+ or extension)
 - Interleave attributes in a single buffer
 - Use indices to eliminate vertex duplication
 
 **Textures:**
 - Generate mipmaps for filtered textures
-- Use compression (ETC2, ASTC) to save memory
+- Use compression (ETC2, ASTC) to save memory (respect device support)
 - Apply texture atlases for small textures
 
 **Rendering Performance:**
@@ -650,14 +690,14 @@ class Framebuffer(width: Int, height: Int) {
 
 **FBO:**
 - Reuse framebuffers when possible
-- Use renderbuffers for depth/stencil
+- Use renderbuffers for depth/stencil where needed
 - Check completeness after creation
 
 ### Common Pitfalls
 
 - ❌ Not checking shader compilation — silent failures
 - ❌ Forgetting to bind textures — black screen
-- ❌ Not releasing GL resources — memory leaks
+- ❌ Not releasing GL resources — memory / context leaks
 - ❌ GL state pollution — unexpected rendering
 - ❌ Inefficient draw calls — poor performance
 
@@ -665,19 +705,19 @@ class Framebuffer(width: Int, height: Int) {
 
 ## Дополнительные вопросы (RU)
 
-- Как реализовать instanced rendering для повторяющейся геометрии?
+- Как реализовать instanced rendering для повторяющейся геометрии (в ES 3.0+ или через соответствующие расширения)?
 - В чем различия между GLSL ES и десктопным GLSL?
 - Как отлаживать проблемы рендеринга в OpenGL ES?
 - Какие форматы сжатия текстур поддерживаются на разных Android-устройствах?
-- Как реализовать deferred shading в OpenGL ES?
+- Как реализовать deferred shading в OpenGL ES (учитывая ограничения и необходимость нескольких рендер-таргетов)?
 
 ## Follow-ups
 
-- How do you implement instanced rendering for repeated geometry?
+- How do you implement instanced rendering for repeated geometry (in ES 3.0+ or via extensions)?
 - What are the differences between GLSL ES and desktop GLSL?
 - How do you debug OpenGL ES rendering issues?
 - What compression formats are supported across different Android devices?
-- How do you implement deferred shading in OpenGL ES?
+- How do you implement deferred shading in OpenGL ES (considering limitations and use of multiple render targets)?
 
 ## Ссылки (RU)
 
@@ -698,7 +738,7 @@ class Framebuffer(width: Int, height: Int) {
 - [[q-jank-detection-frame-metrics--android--medium]] — Мониторинг производительности
 
 ### Продвинутое
-- (Требуются заметки о compute shaders и PBR-рендеринге, когда будут доступны)
+- (Требуются заметки о compute shaders и PBR-рендеринге для поддерживаемых API/расширений, когда будут доступны)
 
 ## Related Questions
 
@@ -709,4 +749,4 @@ class Framebuffer(width: Int, height: Int) {
 - [[q-jank-detection-frame-metrics--android--medium]] — Performance monitoring
 
 ### Advanced
-- (Requires notes on compute shaders and PBR rendering once available)
+- (Requires notes on compute shaders and PBR rendering for supported APIs/extensions once available)

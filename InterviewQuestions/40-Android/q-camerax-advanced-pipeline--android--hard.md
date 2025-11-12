@@ -17,11 +17,12 @@ status: draft
 moc: moc-android
 related:
 - c-camerax
+- q-advanced-share-sheet-shortcuts--android--hard
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/camerax
-- realtime-processing
+- android/camera
 - difficulty/hard
 sources:
 - url: "https://developer.android.com/training/camerax"
@@ -76,15 +77,13 @@ cameraProvider.bindToLifecycle(
 )
 ```
 
-### Краткая версия
-
+## Краткая Версия
 - Используйте `ProcessCameraProvider` для биндинга нескольких use case (`Preview`, `ImageAnalysis`, `VideoCapture`).
 - Распараллеливайте ML-инференс через выделенный `Executor`/корутины, используйте `STRATEGY_KEEP_ONLY_LATEST`.
 - Настраивайте ручные параметры через `Camera2Interop` до биндинга use case.
 - Регулируйте разрешение и качество под возможности устройства, следите за backpressure и временем обработки.
 
-### Подробная версия
-
+## Подробная Версия
 #### Требования
 
 - Функциональные:
@@ -196,15 +195,13 @@ cameraProvider.bindToLifecycle(
 )
 ```
 
-### Short Version
-
+## Short Version
 - Use `ProcessCameraProvider` to bind `Preview`, `ImageAnalysis`, and `VideoCapture` together.
 - Offload ML inference to dedicated executors/coroutines and use `STRATEGY_KEEP_ONLY_LATEST`.
 - Configure manual parameters with `Camera2Interop` on use case builders before binding.
 - Tune resolution and quality based on device capabilities; monitor backpressure and processing time.
 
-### Detailed Version
-
+## Detailed Version
 #### Requirements
 
 - Functional:

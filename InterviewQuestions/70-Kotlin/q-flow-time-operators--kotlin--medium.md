@@ -46,7 +46,7 @@ tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, 
 | Оператор | Назначение | Когда излучает | Случай использования |
 |----------|------------|----------------|----------------------|
 | **`debounce`** | Ждать паузы | После таймаута с последней эмиссии | Поиск, валидация формы |
-| **`sample`** | Периодическая выборка | В фиксированные интервалы | Real-time данные, сенсоры |
+| **`sample`** | Периодическая выборка | В точках фиксированных интервалов, если были новые значения | Real-time данные, сенсоры |
 | **`throttleFirst`** (кастомный) | Ограничение частоты | Первое в временном окне | Клики кнопки, быстрые события |
 
 ### Debounce: Ждать Тишины
@@ -100,7 +100,7 @@ class SearchViewModel : ViewModel() {
 
 ### Sample: Периодическая Выборка
 
-**`sample`** излучает самое недавнее значение через фиксированные временные интервалы:
+**`sample`** излучает самое недавнее значение в моменты, разделённые фиксированными временными интервалами (если за интервал было хотя бы одно новое значение):
 
 ```kotlin
 locationUpdates
@@ -112,13 +112,13 @@ locationUpdates
 // Таймлайн:
 // Вход:    A-B-C-D-E-F-G-H-I-J-K-L-M-N-O-P
 // Выход:   ----D-------H-------L-------P---
-//          (каждые 1000мс берётся последнее значение)
+//          (каждые 1000мс берётся последнее значение, если оно было)
 ```
 
 **Как работает** (упрощённо):
 1. Определяется фиксированный интервал (например, 1000мс)
-2. В конце каждого интервала оператор излучает последнее полученное значение, если оно было
-3. Если в интервале не было новых значений, новое значение не излучается
+2. В конце каждого интервала оператор излучает последнее полученное за интервал значение, если оно есть
+3. Если в интервале не было новых значений, в этот момент ничего не излучается
 
 **Пример: Real-time дашборд**
 
@@ -159,7 +159,7 @@ buttonClicks
 //          (взять первое, игнорировать 1000мс)
 ```
 
-Реализация (пример):
+Реализация (упрощённый пример для иллюстрации идеи, использует системное время):
 
 ```kotlin
 fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
@@ -174,7 +174,7 @@ fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
 }
 ```
 
-Эта реализация опирается на `System.currentTimeMillis()` и ограничивает частоту относительно времени обработки коллекции. Для тестов или виртуального времени можно адаптировать подход.
+Эта реализация основана на `System.currentTimeMillis()` и ограничивает частоту относительно времени обработки коллекции; в продакшене и для тестов обычно предпочтительно использовать управляемый источник времени или подход с `delay`, если требуется точная интеграция с корутинным временем.
 
 Пример использования (защита от дорогих операций по клику):
 
@@ -404,7 +404,7 @@ Time-based operators in Kotlin `Flow` control the rate of emissions based on tim
 | Operator | Purpose | When Emits | Use Case |
 |----------|---------|------------|----------|
 | **`debounce`** | Wait for pause | After timeout since last emission | Search input, form validation |
-| **`sample`** | Periodic sampling | At fixed intervals | Real-time data, sensor readings |
+| **`sample`** | Periodic sampling | At fixed interval points, if there were new values | Real-time data, sensor readings |
 | **`throttleFirst`** (custom) | Rate limiting | First in time window | Button clicks, rapid events |
 
 ### Debounce: Wait for Silence
@@ -458,7 +458,7 @@ class SearchViewModel : ViewModel() {
 
 ### Sample: Periodic Sampling
 
-**`sample`** emits the most recent value at fixed time intervals:
+**`sample`** emits the most recent value at points separated by fixed time intervals, if at least one new value arrived during the interval:
 
 ```kotlin
 locationUpdates
@@ -470,13 +470,13 @@ locationUpdates
 // Timeline:
 // Input:    A-B-C-D-E-F-G-H-I-J-K-L-M-N-O-P
 // Output:   ----D-------H-------L-------P---
-//           (every 1000ms, take latest value)
+//           (every 1000ms, take the latest value if there was one)
 ```
 
 **How it works** (simplified):
-1. A fixed interval (e.g., 1000ms) is defined
-2. At each interval, it emits the most recent value if there was one
-3. If no new value since last emission, nothing is emitted for that interval
+1. Define a fixed interval (e.g., 1000ms)
+2. At the end of each interval, emit the last value received during that interval, if any
+3. If no new value since last emission, nothing is emitted for that tick
 
 **Example: Real-time Dashboard**
 
@@ -517,7 +517,7 @@ buttonClicks
 //           (take first, ignore for 1000ms)
 ```
 
-One possible implementation:
+One possible (simplified) implementation for illustration:
 
 ```kotlin
 fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
@@ -532,7 +532,7 @@ fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
 }
 ```
 
-This implementation uses `System.currentTimeMillis()` and throttles relative to collection time. For better testability or virtual time, you could adapt the time source.
+This implementation relies on `System.currentTimeMillis()` and throttles relative to collection time; for production code and tests it's usually preferable to use a controllable time source or a `delay`-based approach if you need precise alignment with coroutine/virtual time.
 
 Usage example (button click prevention):
 
@@ -578,17 +578,6 @@ class SearchActivity : AppCompatActivity() {
                 viewModel.search(query.toString())
             }
             .launchIn(lifecycleScope)
-    }
-}
-
-class SearchViewModel : ViewModel() {
-    private val _results = MutableStateFlow<List<Result>>(emptyList())
-    val results: StateFlow<List<Result>> = _results
-
-    fun search(query: String) {
-        viewModelScope.launch {
-            _results.value = repository.search(query)
-        }
     }
 }
 ```

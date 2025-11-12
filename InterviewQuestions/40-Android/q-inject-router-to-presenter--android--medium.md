@@ -31,6 +31,8 @@ tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, depend
 
 Для внедрения роутера в презентер используйте **Dependency Injection (DI)** фреймворки. Они обеспечивают слабую связанность, упрощают тестирование и позволяют лучше следовать SOLID-принципам.
 
+Важно: под "прямой инъекцией" подразумевается инъекция абстракции `Router` в конструктор презентера, а не прямой инъекции `NavController` или `Fragment`.
+
 **Основные подходы**:
 
 1. **Hilt** — официальный Android DI, минимальный boilerplate
@@ -50,38 +52,43 @@ interface Router {
 
 ### Пример с Hilt (Рекомендуется)
 
-Важно: `NavController` привязан к `NavHostFragment` и обычно не инжектится напрямую как зависимость на уровне `ActivityComponent`/`SingletonComponent`. Вместо этого инжектируйте абстракцию `Router`, а внутри реализации получайте `NavController` из актуального `Fragment`/`View` (или передавайте его в методах), чтобы избежать проблем с жизненным циклом.
+Важно: `NavController` привязан к `NavHostFragment` и обычно не инжектится напрямую как долгоживущая зависимость на уровне `ActivityComponent`/`SingletonComponent`. Вместо этого инжектируйте абстракцию `Router` в презентер, а `Router` реализуйте так, чтобы он получал актуальный `NavController` через переданные зависимости, события или коллбеки, не нарушая жизненный цикл.
+
+Один из безопасных вариантов — `Router`, которому UI-слой (Fragment/Activity) передает навигационные события/handler, либо который оперирует навигационными событиями (например, `LiveData` / `Flow`) вместо прямого хранения `NavController`.
 
 ```kotlin
-// Реализация роутера, завязанная на NavController
-class AppRouter @Inject constructor() : Router {
+// Реализация роутера, завязанная на NavController через переданный navControllerProvider
+class AppRouter @Inject constructor(
+    private val navControllerProvider: () -> NavController
+) : Router {
 
-    // Получение NavController должно быть безопасно по жизненному циклу,
-    // например, через слабую ссылку на Activity/Fragment или через callback.
-    private fun navController(fragment: Fragment): NavController =
-        fragment.findNavController()
+    private val navController: NavController
+        get() = navControllerProvider()
 
     override fun navigateToDetails(itemId: String) {
-        // пример: навигация должна выполняться с актуального fragment/navController
-        // navController(currentFragment).navigate("details/$itemId")
+        navController.navigate("details/$itemId")
     }
 
     override fun navigateToSettings() {
-        // navController(currentFragment).navigate("settings")
+        navController.navigate("settings")
     }
 
     override fun navigateBack() {
-        // navController(currentFragment).popBackStack()
+        navController.popBackStack()
     }
 }
 
-// Модуль Hilt — биндим интерфейс на реализацию без нарушения жизненного цикла
+// Модуль Hilt — биндим интерфейс на реализацию
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class NavigationModule {
     @Binds
     abstract fun bindRouter(impl: AppRouter): Router
 }
+
+// В Activity/Fragment вы можете предоставить navControllerProvider,
+// замыкающийся на актуальный NavController текущего NavHostFragment.
+// Конкретная реализация зависит от структуры навигации приложения.
 
 // ✅ Презентер с конструкторной инъекцией Router
 class ProductListPresenter @Inject constructor(
@@ -100,7 +107,7 @@ class ProductListFragment : Fragment() {
 }
 ```
 
-Этот пример демонстрирует идею: презентер получает `Router` по интерфейсу, а конкретная реализация `Router` знает, как работать с `NavController`/`Activity`/`Fragment`. Важно спроектировать `Router` так, чтобы он не держал долгоживущих ссылок на `NavController`.
+Этот пример демонстрирует идею: презентер получает `Router` по интерфейсу, а конкретная реализация `Router` знает, как работать с навигацией. Важно спроектировать `Router` так, чтобы он не держал долгоживущих ссылок на `NavController` или `Fragment` и уважал scope компонентов Hilt.
 
 ### Пример с Koin
 
@@ -109,10 +116,8 @@ class ProductListFragment : Fragment() {
 val navigationModule = module {
     // Router с областью жизни Activity или конкретного навигационного контейнера
     scope<MainActivity> {
-        scoped<Router> {
-            // Реализация должна безопасно получать NavController,
-            // например, через activity.findNavController(...)
-            AppRouter()
+        scoped<Router> { (navController: NavController) ->
+            AppRouter(navControllerProvider = { navController })
         }
     }
 }
@@ -125,11 +130,15 @@ val presenterModule = module {
 
 // Fragment
 class ProductListFragment : Fragment() {
-    private val presenter: ProductListPresenter by inject()
+    private val navController by lazy { findNavController() }
+
+    private val presenter: ProductListPresenter by scopedInject(parameters = {
+        parametersOf(navController)
+    })
 }
 ```
 
-Здесь также ключевая идея: презентер получает `Router` по интерфейсу, а детали получения `NavController` инкапсулируются в реализации роутера и должны быть согласованы с областью жизни (scope).
+Здесь ключевая идея сохраняется: презентер получает `Router` по интерфейсу, а детали получения `NavController` инкапсулируются в реализации роутера и согласованы с областью жизни (scope). Можно выбрать и другие варианты (например, события навигации), главное — не передавать во внутренние слои долгоживущие ссылки на UI.
 
 ### Тестирование с mock Router
 
@@ -183,6 +192,8 @@ class Presenter @Inject constructor(private val navController: NavController)
 
 To inject a router into a presenter, use **Dependency Injection (DI)** frameworks. They ensure loose coupling, make testing easier, and help better adhere to SOLID principles.
 
+Importantly, "direct injection" here should mean injecting a `Router` abstraction into the presenter's constructor, not injecting `NavController` or `Fragment` directly.
+
 **Main approaches**:
 
 1. **Hilt** — official Android DI, minimal boilerplate
@@ -202,38 +213,43 @@ interface Router {
 
 ### Hilt Example (Recommended)
 
-Important: `NavController` is tied to a `NavHostFragment` and usually should not be injected as a long-lived dependency at `ActivityComponent`/`SingletonComponent` level. Instead, inject a `Router` abstraction into the presenter and let the router implementation deal with obtaining/using the current `NavController` safely.
+Important: `NavController` is tied to a `NavHostFragment` and usually should not be injected as a long-lived dependency at `ActivityComponent`/`SingletonComponent` level. Instead, inject a `Router` abstraction into the presenter and implement the `Router` so that it obtains and uses the current `NavController` via provided dependencies, callbacks or navigation events without breaking lifecycle constraints.
+
+One safe option is to have a `Router` that receives a `navControllerProvider` from the UI layer or operates on navigation events (e.g., `LiveData`/`Flow`) rather than storing a `NavController` reference directly inside the presenter.
 
 ```kotlin
-// Router implementation that works with NavController
-class AppRouter @Inject constructor() : Router {
+// Router implementation that uses NavController via a provider
+class AppRouter @Inject constructor(
+    private val navControllerProvider: () -> NavController
+) : Router {
 
-    // NavController access must respect the lifecycle,
-    // e.g., via a weak reference to Activity/Fragment or a callback.
-    private fun navController(fragment: Fragment): NavController =
-        fragment.findNavController()
+    private val navController: NavController
+        get() = navControllerProvider()
 
     override fun navigateToDetails(itemId: String) {
-        // Example: perform navigation using the current fragment/navController
-        // navController(currentFragment).navigate("details/$itemId")
+        navController.navigate("details/$itemId")
     }
 
     override fun navigateToSettings() {
-        // navController(currentFragment).navigate("settings")
+        navController.navigate("settings")
     }
 
     override fun navigateBack() {
-        // navController(currentFragment).popBackStack()
+        navController.popBackStack()
     }
 }
 
-// Hilt module — bind interface to implementation without breaking lifecycle constraints
+// Hilt module — bind interface to implementation
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class NavigationModule {
     @Binds
     abstract fun bindRouter(impl: AppRouter): Router
 }
+
+// In Activity/Fragment, you can provide a navControllerProvider
+// that captures the current NavController of your NavHostFragment.
+// Concrete wiring depends on your app's navigation setup.
 
 // ✅ Presenter with constructor-injected Router
 class ProductListPresenter @Inject constructor(
@@ -252,7 +268,7 @@ class ProductListFragment : Fragment() {
 }
 ```
 
-This example illustrates the idea: the presenter depends only on the `Router` interface, and the `Router` implementation encapsulates the `NavController`/host component details. It is crucial to design the router so it does not hold long-lived references to a specific `NavController` instance.
+This example illustrates the idea: the presenter depends only on the `Router` interface; the `Router` implementation encapsulates NavController/host details and is scoped properly so that it does not hold invalid or leaking references.
 
 ### Koin Example
 
@@ -261,10 +277,8 @@ This example illustrates the idea: the presenter depends only on the `Router` in
 val navigationModule = module {
     // Router scoped to Activity or specific navigation host
     scope<MainActivity> {
-        scoped<Router> {
-            // Implementation must obtain NavController safely,
-            // for example via activity.findNavController(...)
-            AppRouter()
+        scoped<Router> { (navController: NavController) ->
+            AppRouter(navControllerProvider = { navController })
         }
     }
 }
@@ -277,11 +291,15 @@ val presenterModule = module {
 
 // Fragment
 class ProductListFragment : Fragment() {
-    private val presenter: ProductListPresenter by inject()
+    private val navController by lazy { findNavController() }
+
+    private val presenter: ProductListPresenter by scopedInject(parameters = {
+        parametersOf(navController)
+    })
 }
 ```
 
-Again, the key idea: the presenter gets an interface-based `Router`, and the router implementation (with proper scoping) handles how to reach the `NavController` or other navigation primitives.
+Again, the key idea: the presenter depends on an interface-based `Router`, and the router implementation (with proper scoping) knows how to reach the `NavController` or other navigation primitives. Other variants (like emitting navigation events) are also valid as long as you avoid leaking UI components into long-lived layers.
 
 ### Testing With Mock Router
 
@@ -311,7 +329,7 @@ class ProductListPresenterTest {
 2. **Easy testing** — router can be mocked/stubbed in unit tests
 3. **Separation of concerns** — presentation logic is decoupled from navigation implementation details
 4. **Reusability** — one `Router` (or a set of interfaces) can be reused across multiple presenters
-5. **Module isolation** — feature modules depend on navigation abstractions instead of concrete navigation stack
+5. **Module isolation** — feature modules depend on navigation abstractions instead of a concrete navigation stack
 
 ### Best Practices
 
@@ -350,16 +368,16 @@ class Presenter @Inject constructor(private val navController: NavController)
 ## Ссылки (RU)
 
 - [[c-dependency-injection]] — Принципы DI
-- [Hilt Documentation]("https://developer.android.com/training/dependency-injection/hilt-android")
-- [Koin Documentation]("https://insert-koin.io/")
-- [Navigation Component Guide]("https://developer.android.com/guide/navigation")
+- [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
+- [Koin Documentation](https://insert-koin.io/)
+- [Navigation Component Guide](https://developer.android.com/guide/navigation)
 
 ## References
 
 - [[c-dependency-injection]] — DI principles
-- [Hilt Documentation]("https://developer.android.com/training/dependency-injection/hilt-android")
-- [Koin Documentation]("https://insert-koin.io/")
-- [Navigation Component Guide]("https://developer.android.com/guide/navigation")
+- [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
+- [Koin Documentation](https://insert-koin.io/)
+- [Navigation Component Guide](https://developer.android.com/guide/navigation)
 
 ## Связанные вопросы (RU)
 

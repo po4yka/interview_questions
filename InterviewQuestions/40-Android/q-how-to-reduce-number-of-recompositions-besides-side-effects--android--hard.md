@@ -29,21 +29,26 @@ tags: [android, android/performance-rendering, android/ui-compose, compose, diff
 
 ## Ответ (RU)
 
-Уменьшение рекомпозиций улучшает производительность [[c-compose-recomposition]]. Ключевые техники: `remember`, `derivedStateOf`, стабильные и корректно аннотированные модели данных, неизменяемые коллекции, правильное размещение состояния и использование `key()`.
+Уменьшение лишних рекомпозиций и работы внутри них улучшает производительность [[c-compose-recomposition]]. Ключевые техники: `remember`, `derivedStateOf`, стабильные и корректно аннотированные модели данных, неизменяемые коллекции, правильное размещение состояния и использование `key()`.
 
 ### 1. Remember Для Дорогих Вычислений
 
+(Варианты ниже взаимоисключающие; показаны для контраста.)
+
 ```kotlin
 @Composable
-fun ExpensiveCalculation(items: List<Item>) {
+fun ExpensiveCalculationBad(items: List<Item>) {
     // ❌ Пересчитывает при каждой рекомпозиции
     val result = items.map { it.value * 2 }.sum()
+    Text("Result: $result")
+}
 
+@Composable
+fun ExpensiveCalculationGood(items: List<Item>) {
     // ✅ Пересчитывает только при изменении items (или их ссылок)
     val result = remember(items) {
         items.map { it.value * 2 }.sum()
     }
-
     Text("Result: $result")
 }
 ```
@@ -57,7 +62,7 @@ fun SearchScreen() {
     val items = remember { List(1000) { "Item $it" } }
 
     // ❌ Фильтрует при каждой рекомпозиции этого scope
-    val filteredItems = items.filter { it.contains(query, ignoreCase = true) }
+    // val filteredItems = items.filter { it.contains(query, ignoreCase = true) }
 
     // ✅ Фильтрует только при изменении query / items
     val filteredItems by remember {
@@ -77,22 +82,23 @@ fun SearchScreen() {
 (Альтернативные варианты, не компилируются вместе, показаны для иллюстрации.)
 
 ```kotlin
-// ❌ Потенциально нестабильный класс из-за mutable коллекции
-//    Изменения friends могут не приводить к новому экземпляру
-//    и усложняют отслеживание изменений.
+// ❌ Потенциально нестабильный класс из-за mutable коллекции:
+//    изменения friends могут происходить по месту без нового экземпляра,
+//    что усложняет отслеживание изменений.
 data class UserMutableFriends(
     val name: String,
     val friends: MutableList<String>
 )
 
-// ✅ Предпочтительно: неизменяемые поля + @Immutable для ручной подсказки компилятору
+// ✅ Предпочтительно: неизменяемые поля + @Immutable для явного контракта стабильности
 @Immutable
 data class UserImmutableFriends(
     val name: String,
     val friends: List<String>
 )
 
-// ✅ Вариант с persistent коллекциями, аннотированными @Stable
+// ✅ Вариант с persistent-коллекцией из kotlinx.collections.immutable,
+//    которая аннотирована как @Stable
 @Stable
 data class UserPersistentFriends(
     val name: String,
@@ -100,20 +106,22 @@ data class UserPersistentFriends(
 )
 ```
 
-Аннотации и неизменяемые коллекции сами по себе не уменьшают количество изменений, но помогают компилятору корректно определять стабильность и чаще пропускать рекомпозиции.
+Аннотации и неизменяемые коллекции сами по себе не уменьшают количество изменений и рекомпозиций, но помогают компилятору корректно определять стабильность и чаще безопасно пропускать рекомпозиции.
 
 ### 4. Стабильные Ссылки На Лямбды
 
 ```kotlin
-// ✅ Обычное использование: лямбда захватывает стабильный viewModel,
-//    Compose рассматривает это как стабильный параметр, отдельный remember не нужен.
+// ✅ Базовый случай: лямбда захватывает стабильный viewModel.
+//    Хотя лямбды по умолчанию считаются нестабильными, повторное создание
+//    обработчиков, меняющихся при каждой рекомпозиции, может мешать пропуску
+//    рекомпозиций дочерних composable.
 @Composable
 fun ParentScreen(viewModel: ViewModel) {
     ChildScreen(onClick = { viewModel.handleClick() })
 }
 
 // ✅ Явная стабилизация полезна, когда лямбда зависит от меняющихся значений,
-//    но вы хотите контролировать, когда именно она пересоздаётся.
+//    и вы хотите контролировать, когда именно она пересоздаётся.
 @Composable
 fun ParentScreenControlled(viewModel: ViewModel, enabled: Boolean) {
     val onClick = remember(enabled) {
@@ -123,12 +131,13 @@ fun ParentScreenControlled(viewModel: ViewModel, enabled: Boolean) {
 }
 ```
 
-Ключевая идея: избегать создания новых функциональных значений без необходимости, когда это мешает пропускать рекомпозиции дочерних компонентов.
+Ключевая идея: избегать лишнего создания новых функциональных значений в параметрах, когда это препятствует skippability дочерних composable.
 
 ### 5. Правильное Размещение Состояния
 
 ```kotlin
-// ❌ Состояние слишком высоко: любое изменение текста триггерит пересмотр всего содержимого BadParent
+// ❌ Состояние слишком высоко: любое изменение текста триггерит рекомпозицию
+//    всего содержимого BadParent
 @Composable
 fun BadParent() {
     var text1 by remember { mutableStateOf("") }
@@ -161,7 +170,7 @@ fun UserList(users: List<UserImmutableFriends>) {
     LazyColumn {
         items(
             items = users,
-            key = { user -> user.name } // Пример стабильного ключа, в реальном коде лучше использовать уникальный id
+            key = { user -> user.name } // Пример ключа; в реальном коде предпочтителен уникальный id
         ) { user ->
             UserRow(user)
         }
@@ -183,7 +192,7 @@ fun BadCounter() {
     }
 }
 
-// ✅ Локализуем чтения: только дочерние, читающие count.value, рекомпозируются
+// ✅ Локализуем чтения: только дочерние composable, читающие count, рекомпозируются
 @Composable
 fun CountDisplay(count: Int) {
     Text("Count: $count")
@@ -200,12 +209,12 @@ fun GoodCounter() {
 }
 ```
 
-### 8. Immutable Коллекции
+### 8. Неизменяемые Коллекции
 
 ```kotlin
 // Зависимость: kotlinx-collections-immutable
 
-// ❌ Mutable список может меняться по месту, что осложняет отслеживание изменений
+// ❌ Mutable-список может меняться по месту, что усложняет отслеживание изменений
 @Composable
 fun MutableListExample(items: MutableList<String>) {
     LazyColumn {
@@ -213,10 +222,11 @@ fun MutableListExample(items: MutableList<String>) {
     }
 }
 
-// ✅ Immutable список / persistent коллекция — изменения отражаются через новые экземпляры,
-//    что упрощает определение изменений и пропуск рекомпозиций
+// ✅ Persistent-список из kotlinx.collections.immutable: изменения
+//    отражаются созданием новых экземпляров, что упрощает определение изменений
+//    и может улучшать поведение пропуска рекомпозиций
 @Composable
-fun ImmutableListExample(items: ImmutableList<String>) {
+fun ImmutableListExample(items: PersistentList<String>) {
     LazyColumn {
         items(items.size) { Text(items[it]) }
     }
@@ -225,20 +235,21 @@ fun ImmutableListExample(items: ImmutableList<String>) {
 
 ### Чеклист Производительности
 
-1. ✅ Использовать `remember` для дорогих вычислений
+1. ✅ Использовать `remember` для дорогих вычислений (уменьшать повторную работу в рекомпозиции)
 2. ✅ Использовать `derivedStateOf` для производного состояния
 3. ✅ Использовать стабильные `key()` в списках
 4. ✅ Проектировать модели так, чтобы они были стабильными; при необходимости помечать `@Immutable` / `@Stable`
-5. ✅ Использовать неизменяемые / persistent коллекции вместо мутабельных
-6. ✅ Размещать состояние рядом с местом использования (не поднимать чрезмерно высоко)
+5. ✅ Использовать неизменяемые / persistent-коллекции вместо мутабельных
+6. ✅ Размещать состояние рядом с местом использования (не поднимать чрезмерно высоко без необходимости)
 7. ✅ Избегать лишнего создания новых лямбд и объектов в параметрах
 8. ✅ Минимизировать и локализовать чтения состояния внутри иерархии
 
 ### Отладка Рекомпозиций
 
 ```kotlin
-// Счётчик показывает, сколько раз был успешно применён этот composable.
-// SideEffect выполняется после каждого успешного применения RecompositionCounter.
+// Демонстрационный пример: считает, сколько раз был применён этот composable.
+// Важно: обновление состояния внутри SideEffect само по себе вызывает новые
+// рекомпозиции, поэтому так не следует измерять или использовать это в продакшене.
 @Composable
 fun RecompositionCounter() {
     val count = remember { mutableStateOf(0) }
@@ -253,21 +264,26 @@ fun RecompositionCounter() {
 
 ## Answer (EN)
 
-Reducing recompositions improves [[c-compose-recomposition]] performance. Key techniques: `remember`, `derivedStateOf`, stable and properly annotated data models, immutable collections, proper state placement, and using `key()`.
+Reducing unnecessary recompositions and work done inside them improves [[c-compose-recomposition]] performance. Key techniques: `remember`, `derivedStateOf`, stable and properly annotated data models, immutable collections, proper state placement, and using `key()`.
 
 ### 1. Remember For Expensive Calculations
 
+(The following variants are mutually exclusive; shown for contrast.)
+
 ```kotlin
 @Composable
-fun ExpensiveCalculation(items: List<Item>) {
+fun ExpensiveCalculationBad(items: List<Item>) {
     // ❌ Recalculates on every recomposition
     val result = items.map { it.value * 2 }.sum()
+    Text("Result: $result")
+}
 
+@Composable
+fun ExpensiveCalculationGood(items: List<Item>) {
     // ✅ Only recalculates when items (or their references) change
     val result = remember(items) {
         items.map { it.value * 2 }.sum()
     }
-
     Text("Result: $result")
 }
 ```
@@ -281,7 +297,7 @@ fun SearchScreen() {
     val items = remember { List(1000) { "Item $it" } }
 
     // ❌ Filters on every recomposition of this scope
-    val filteredItems = items.filter { it.contains(query, ignoreCase = true) }
+    // val filteredItems = items.filter { it.contains(query, ignoreCase = true) }
 
     // ✅ Only filters when query / items change
     val filteredItems by remember {
@@ -308,14 +324,15 @@ data class UserMutableFriends(
     val friends: MutableList<String>
 )
 
-// ✅ Prefer immutable properties + @Immutable to hint stability
+// ✅ Prefer immutable properties + @Immutable as an explicit stability contract
 @Immutable
 data class UserImmutableFriends(
     val name: String,
     val friends: List<String>
 )
 
-// ✅ Variant using persistent collections annotated as @Stable
+// ✅ Variant using a persistent collection from kotlinx.collections.immutable
+//    which is annotated as @Stable
 @Stable
 data class UserPersistentFriends(
     val name: String,
@@ -323,13 +340,14 @@ data class UserPersistentFriends(
 )
 ```
 
-Annotations and immutable collections do not magically reduce recompositions; they help the compiler infer stability correctly and enable more recomposition skipping.
+Annotations and immutable collections do not magically reduce recompositions; they help the compiler infer stability correctly and enable safe recomposition skipping.
 
 ### 4. Stable Lambda References
 
 ```kotlin
-// ✅ Typical usage: lambda captures a stable viewModel.
-//    Compose considers this a stable parameter; no extra remember is needed.
+// ✅ Basic case: lambda captures a stable viewModel.
+//    Lambdas themselves are generally treated as unstable; if you recreate them
+//    every time, it can affect children's skippability.
 @Composable
 fun ParentScreen(viewModel: ViewModel) {
     ChildScreen(onClick = { viewModel.handleClick() })
@@ -384,7 +402,7 @@ fun UserList(users: List<UserImmutableFriends>) {
     LazyColumn {
         items(
             items = users,
-            key = { user -> user.name } // Example of a stable key; in real apps prefer a unique id
+            key = { user -> user.name } // Example key; in real apps prefer a unique id
         ) { user ->
             UserRow(user)
         }
@@ -395,7 +413,7 @@ fun UserList(users: List<UserImmutableFriends>) {
 ### 7. Minimize State Reads
 
 ```kotlin
-// ❌ Reads state in the parent scope, making the whole Column participate in recomposition
+// ❌ Reads state in the parent scope, making the whole Column participate in recomposition when count changes
 @Composable
 fun BadCounter() {
     val count = remember { mutableStateOf(0) }
@@ -406,7 +424,7 @@ fun BadCounter() {
     }
 }
 
-// ✅ Localize reads: only children that read count.value recompose
+// ✅ Localize reads: only children that read count recompose
 @Composable
 fun CountDisplay(count: Int) {
     Text("Count: $count")
@@ -436,10 +454,10 @@ fun MutableListExample(items: MutableList<String>) {
     }
 }
 
-// ✅ Immutable / persistent list: modifications are represented as new instances,
-//    which simplifies change detection and can improve skipping behavior
+// ✅ Persistent list from kotlinx.collections.immutable: modifications are represented
+//    as new instances, which simplifies change detection and can improve skipping behavior
 @Composable
-fun ImmutableListExample(items: ImmutableList<String>) {
+fun ImmutableListExample(items: PersistentList<String>) {
     LazyColumn {
         items(items.size) { Text(items[it]) }
     }
@@ -448,20 +466,21 @@ fun ImmutableListExample(items: ImmutableList<String>) {
 
 ### Performance Checklist
 
-1. ✅ Use `remember` for expensive calculations
+1. ✅ Use `remember` for expensive calculations (to reduce repeated work during recomposition)
 2. ✅ Use `derivedStateOf` for derived state
 3. ✅ Use stable `key()` in lists
 4. ✅ Design models to be stable; annotate with `@Immutable` / `@Stable` when appropriate
 5. ✅ Prefer immutable / persistent collections over mutable ones
-6. ✅ Place state close to where it is used (avoid hoisting too high)
+6. ✅ Place state close to where it is used (avoid hoisting too high unnecessarily)
 7. ✅ Avoid unnecessary creation of new lambdas and objects in parameters
 8. ✅ Minimize and localize state reads within the hierarchy
 
 ### Debugging Recompositions
 
 ```kotlin
-// Counts how many times this composable has been successfully applied.
-// SideEffect runs after every successful recomposition of RecompositionCounter.
+// Demonstration example: counts how many times this composable has been applied.
+// Important: updating state inside SideEffect itself triggers further
+// recompositions; do not use this pattern as-is in production or for precise metrics.
 @Composable
 fun RecompositionCounter() {
     val count = remember { mutableStateOf(0) }

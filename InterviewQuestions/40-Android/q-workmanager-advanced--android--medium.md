@@ -27,7 +27,7 @@ sources: ["https://developer.android.com/topic/libraries/architecture/workmanage
 
 ## Ответ (RU)
 
-WorkManager обеспечивает надежное (best-effort) выполнение отложенной фоновой работы с поддержкой ограничений, цепочек и восстановления после перезагрузок в рамках системных лимитов платформы.
+WorkManager обеспечивает надежное планирование и выполнение отложенной фоновой работы (best-effort, без гарантий точного времени запуска), с поддержкой ограничений, цепочек, уникальной работы и восстановления после перезагрузок в рамках системных лимитов платформы.
 
 **Constraints (Ограничения):**
 Выполнение работы только при соблюдении условий для экономии батареи и трафика.
@@ -55,13 +55,13 @@ val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
 WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork(
         "daily_sync",
-        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't restart if existing periodic work with this name exists
+        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Не запускать новую, если уже есть работа с этим именем
         syncRequest
     )
 ```
 
 **Work Chaining:**
-Последовательное/параллельное выполнение с передачей данных.
+Последовательное/параллельное выполнение с передачей данных через InputData/OutputData.
 
 ```kotlin
 // Sequential: download → process → upload
@@ -74,15 +74,15 @@ WorkManager.getInstance(context)
 // Parallel + combine
 WorkManager.getInstance(context)
     .beginWith(listOf(task1, task2))  // ✅ Parallel
-    .then(combineRequest)              // ✅ Waits for both
+    .then(combineRequest)             // ✅ Waits for both
     .enqueue()
 ```
 
-**ExistingWorkPolicy:**
+**ExistingWorkPolicy (Unique Work):**
 Управление поведением при повторной постановке уникальной работы.
 
 ```kotlin
-// REPLACE — отменить существующую, запустить новую
+// REPLACE — отменить существующую цепочку и запустить новую
 WorkManager.getInstance(context)
     .enqueueUniqueWork("sync", ExistingWorkPolicy.REPLACE, request)
 
@@ -90,15 +90,16 @@ WorkManager.getInstance(context)
 WorkManager.getInstance(context)
     .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
 
-// APPEND_OR_REPLACE — добавить в цепочку после существующей; если существующая завершилась с ошибкой, заменить её новой
+// APPEND_OR_REPLACE — если существует незавершённая уникальная работа, добавить новый Work в конец цепочки;
+// если вся цепочка завершилась (включая FAILURE/CANCELLED), она будет заменена новой
 WorkManager.getInstance(context)
     .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND_OR_REPLACE, request)
 ```
 
-(Примечание: `APPEND` устарел и заменен на `APPEND_OR_REPLACE`.)
+(Примечание: `APPEND` устарел и заменён на `APPEND_OR_REPLACE`.)
 
 **Persistence:**
-WorkManager сохраняет задачи в SQLite, восстанавливает после перезагрузки/обновления приложения.
+WorkManager сохраняет задачи в SQLite и восстанавливает их после перезагрузки устройства или обновления приложения.
 
 ```kotlin
 @HiltWorker
@@ -112,18 +113,22 @@ class MigrationWorker @AssistedInject constructor(
         database.migrate(fromVersion, BuildConfig.VERSION_CODE)
         Result.success()  // ✅ Успешное завершение, без повторных запусков
     } catch (e: Exception) {
-        Result.retry()    // ✅ Запросить повторный запуск с backoff policy
+        Result.retry()    // ✅ Запросить повторный запуск согласно backoff policy
     }
 }
 ```
 
-**Progress Tracking:**
-Обновление прогресса для UI.
+**Прогресс и результаты (Progress / Result / Retry):**
+- Worker может публиковать прогресс, чтобы UI мог подписаться на обновления.
+- Через `Result.success()`, `Result.failure()` и `Result.retry()` контролируется окончательный исход и повторные попытки (с backoff-стратегией).
 
 ```kotlin
-// In Worker
-setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
-// Для CoroutineWorker предпочтительно использовать setProgressAsync, но setProgress доступен через базовый Worker.
+// In CoroutineWorker
+override suspend fun doWork(): Result {
+    setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
+    // ... work ...
+    return Result.success()
+}
 
 // In ViewModel
 val progress = workManager.getWorkInfoByIdLiveData(workId)
@@ -132,7 +137,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ## Answer (EN)
 
-WorkManager provides reliable (best-effort) execution of deferrable background work with constraints, chaining, and recovery after reboots within platform limits.
+WorkManager provides robust scheduling and execution of deferrable background work (best-effort, no guarantee of exact execution time), with support for constraints, chaining, unique work, and recovery after reboots within platform limits.
 
 **Constraints:**
 Execute work only when conditions are met to save battery and data.
@@ -160,13 +165,13 @@ val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
 WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork(
         "daily_sync",
-        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't start a new one if existing periodic work with this name exists
+        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't start new if one with this name already exists
         syncRequest
     )
 ```
 
 **Work Chaining:**
-Sequential/parallel execution with data passing.
+Sequential/parallel execution with data passing via InputData/OutputData.
 
 ```kotlin
 // Sequential: download → process → upload
@@ -179,15 +184,15 @@ WorkManager.getInstance(context)
 // Parallel + combine
 WorkManager.getInstance(context)
     .beginWith(listOf(task1, task2))  // ✅ Parallel
-    .then(combineRequest)              // ✅ Waits for both
+    .then(combineRequest)             // ✅ Waits for both
     .enqueue()
 ```
 
-**ExistingWorkPolicy:**
+**ExistingWorkPolicy (Unique Work):**
 Control behavior when re-enqueueing unique work.
 
 ```kotlin
-// REPLACE — cancel existing, start new
+// REPLACE — cancel existing chain and start a new one
 WorkManager.getInstance(context)
     .enqueueUniqueWork("sync", ExistingWorkPolicy.REPLACE, request)
 
@@ -195,7 +200,8 @@ WorkManager.getInstance(context)
 WorkManager.getInstance(context)
     .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
 
-// APPEND_OR_REPLACE — append after existing; if existing finished with failure, replace with the new work
+// APPEND_OR_REPLACE — if there is unfinished unique work, append the new request to the end of its chain;
+// if the entire chain has finished (including FAILURE/CANCELLED), replace it with the new work
 WorkManager.getInstance(context)
     .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND_OR_REPLACE, request)
 ```
@@ -203,7 +209,7 @@ WorkManager.getInstance(context)
 (Note: `APPEND` is deprecated and replaced by `APPEND_OR_REPLACE`.)
 
 **Persistence:**
-WorkManager persists work in SQLite and restores it after reboot/app update.
+WorkManager persists work in SQLite and restores it after device reboot or app update.
 
 ```kotlin
 @HiltWorker
@@ -217,18 +223,22 @@ class MigrationWorker @AssistedInject constructor(
         database.migrate(fromVersion, BuildConfig.VERSION_CODE)
         Result.success()  // ✅ Successful completion, no further retries
     } catch (e: Exception) {
-        Result.retry()    // ✅ Request retry with configured backoff policy
+        Result.retry()    // ✅ Request retry according to the configured backoff policy
     }
 }
 ```
 
-**Progress Tracking:**
-Update progress for UI.
+**Progress and Result/Retry:**
+- A Worker can publish progress so that UI can observe updates.
+- `Result.success()`, `Result.failure()`, and `Result.retry()` control completion outcome and retries (with backoff policy).
 
 ```kotlin
-// In Worker
-setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
-// For CoroutineWorker, prefer setProgressAsync; setProgress is available via the base Worker API.
+// In CoroutineWorker
+override suspend fun doWork(): Result {
+    setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
+    // ... work ...
+    return Result.success()
+}
 
 // In ViewModel
 val progress = workManager.getWorkInfoByIdLiveData(workId)

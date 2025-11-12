@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-storage-options
 - q-android-storage-types--android--medium
 created: 2025-11-02
 updated: 2025-11-10
@@ -40,15 +41,13 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
+## Краткая Версия
 - Провести аудит всех мест записи/чтения файлов.
 - Перенести данные в приватные и app-specific директории или в `MediaStore`/SAF в зависимости от типа данных.
 - Отказаться от глобальных прав на внешнее хранилище в пользу scoped storage, `MediaStore`, SAF и точечных разрешений.
 - Обеспечить корректные сценарии backup/export без утечек приватных данных.
 
-### Подробный вариант
-
+## Подробная Версия
 ### Требования
 
 - Функциональные:
@@ -68,6 +67,8 @@ sources:
   - Документы и произвольные директории через SAF (`ACTION_OPEN_DOCUMENT*`).
 - Использовать URI и `ContentResolver` / `DocumentFile` вместо прямых путей.
 - Добавить модуль миграции, который запускается один раз после обновления и логирует прогресс.
+
+См. также: [[c-android-storage-options]].
 
 ### 1. Аудит данных
 
@@ -148,15 +149,13 @@ uri?.let { destUri ->
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Audit all legacy file reads/writes.
 - Move data into private/app-specific directories or `MediaStore`/SAF depending on data type.
 - Replace broad external storage access with scoped storage, `MediaStore`, SAF, and granular permissions.
 - Preserve robust backup/export flows without leaking private data.
 
-### Detailed Version
-
+## Detailed Version
 ### Requirements
 
 - Functional:
@@ -176,6 +175,8 @@ uri?.let { destUri ->
   - Documents/custom directories via SAF (`ACTION_OPEN_DOCUMENT*`).
 - Use URIs and `ContentResolver` / `DocumentFile` instead of direct file paths.
 - Add a migration module that runs once after update and logs progress.
+
+See also: [[c-android-storage-options]].
 
 ### 1. Audit Data
 

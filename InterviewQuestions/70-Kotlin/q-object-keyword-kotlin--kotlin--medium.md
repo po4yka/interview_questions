@@ -12,9 +12,11 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-flow-backpressure--kotlin--hard, q-kotlin-intrange--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
+
 ---
+
 # Вопрос (RU)
 > Расскажите про ключевое слово `object` в Kotlin. Каковы его применения и характеристики?
 
@@ -27,20 +29,20 @@ tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
 
 Ключевое слово `object` в Kotlin является одной из наиболее мощных и уникальных возможностей языка. Оно имеет несколько важных применений:
 
-1. **Object declaration (Объявление объекта)** - Создаёт единственный экземпляр (Singleton), который гарантированно инициализируется лениво при первом обращении и потокобезопасен по спецификации языка.
-2. **Companion objects (Объекты-компаньоны)** - Объявляет члены, доступные без создания экземпляра класса (аналог `static` в Java); являются по сути объект-декларациями, связанными с классом, и также инициализируются лениво и потокобезопасно.
+1. **Object declaration (Объявление объекта)** - Создаёт единственный экземпляр (Singleton); инициализируется при первом обращении к нему или его членам и по спецификации языка и платформы (например, JVM) обеспечивает потокобезопасную инициализацию.
+2. **Companion objects (Объекты-компаньоны)** - Объявляет члены, доступные без создания экземпляра класса (аналог `static` в Java); являются по сути объект-декларациями, связанными с классом, и также инициализируются при первом обращении к ним или их членам с потокобезопасной инициализацией.
 3. **Object expressions (Объект-выражения / анонимные объекты)** - Создают анонимные объекты "на лету" (аналог anonymous inner classes в Java), позволяющие реализовывать интерфейсы или расширять классы без объявления отдельного именованного класса.
 
 **Ключевые характеристики: (для object declarations и companion objects)**
-- Гарантированно потокобезопасная инициализация по умолчанию
-- Ленивая инициализация при первом обращении
+- Гарантированно потокобезопасная инициализация по умолчанию (в рамках гарантий спецификации Kotlin и целевой платформы)
+- Инициализация при первом обращении (lazy по отношению к использованию объекта/его членов)
 - Могут реализовывать интерфейсы и наследоваться от классов (с одним суперклассом)
 - Могут иметь свойства, методы и `init` блоки
 
 Для object expressions / анонимных объектов:
 - Не являются синглтонами и создаются в месте использования, как обычные объекты
 - Не обладают специальными гарантиями потокобезопасности сверх обычных правил
-- Тип анонимного объекта локален: при возвращении из функции используется объявленный тип (например, интерфейс), а не структурный тип по его свойствам
+- Тип анонимного объекта локален: при возвращении из функции используется объявленный тип (например, интерфейс или базовый класс), а не структурный тип по его свойствам
 
 ### Примеры Кода
 
@@ -340,7 +342,7 @@ fun main() {
 
 **1. Singleton паттерн (object declarations / companion objects):**
 - Единственный экземпляр на всё приложение
-- Гарантированно потокобезопасная, ленивая инициализация по языку
+- Потокобезопасная инициализация при первом обращении (по спецификации Kotlin и платформы)
 
 **2. Companion objects:**
 - "Статические" члены класса
@@ -357,27 +359,26 @@ fun main() {
 - Пространства имён
 - Константы
 
-### Краткий Ответ
-
+## Краткая Версия
 `object` в Kotlin используется для:
-- **Object declarations / Singleton**: Создание единственного потокобезопасного экземпляра с ленивой инициализацией
+- **Object declarations / Singleton**: Создание единственного потокобезопасно инициализируемого экземпляра с инициализацией при первом обращении
 - **Companion objects**: Статико-подобные члены внутри классов
 - **Object expressions / Anonymous objects**: Анонимные реализации интерфейсов и наследование от классов "на лету" (не синглтоны)
 - **Utility objects**: Группировка утилитных функций и констант
 
-Object declarations и companion objects являются лениво и потокобезопасно инициализируемыми синглтонами. Object expressions создают обычные объекты без дополнительных гарантий.
+Object declarations и companion objects являются по сути синглтонами с потокобезопасной инициализацией при первом использовании. Object expressions создают обычные объекты без дополнительных гарантий.
 
 ## Answer (EN)
 
 The `object` keyword in Kotlin is one of the most powerful and unique features of the language. It has several important applications:
 
-1. **Object declaration (Singleton)** - Defines a single instance that is guaranteed to be lazily initialized on first access and is thread-safe according to the language specification.
-2. **Companion objects** - Declare members accessible without creating a class instance (similar to `static` in Java); they are essentially object declarations tied to a class and are also lazily and thread-safely initialized.
+1. **Object declaration (Singleton)** - Defines a single instance; it is initialized on first access to the object or its members, and according to the Kotlin language and platform (e.g. JVM) guarantees, its initialization is thread-safe.
+2. **Companion objects** - Declare members accessible without creating a class instance (similar to `static` in Java); they are essentially object declarations tied to a class and are also initialized on first access to them or their members with thread-safe initialization.
 3. **Object expressions (anonymous objects)** - Create anonymous objects on the fly (similar to anonymous inner classes in Java), allowing you to implement interfaces or extend classes without declaring a separate named class.
 
 **Key characteristics (for object declarations and companion objects):**
-- Thread-safe initialization by default
-- Lazy initialization on first access
+- Thread-safe initialization by default (within the guarantees of Kotlin specification and the target platform)
+- Initialization happens on first access (lazy with respect to object/member usage)
 - Can implement interfaces and inherit from a single superclass
 - Can have properties, functions, and `init` blocks
 
@@ -702,9 +703,20 @@ fun demonstrateSingletonComparison() {
 - В каких практических сценариях вы бы использовали `object`?
 - Каковы типичные ошибки и подводные камни при использовании `object`?
 
+## Follow-ups (EN)
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## Ссылки (RU)
 
 - Официальная документация Kotlin: https://kotlinlang.org/docs/home.html
+- [[c-kotlin]]
+
+## References (EN)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
 ## Связанные вопросы (RU)
@@ -712,18 +724,7 @@ fun demonstrateSingletonComparison() {
 - [[q-flow-backpressure--kotlin--hard]]
 - [[q-kotlin-intrange--programming-languages--easy]]
 
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
-
-## References
-
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
-- [[c-kotlin]]
-
-## Related Questions
+## Related Questions (EN)
 
 - [[q-flow-backpressure--kotlin--hard]]
 - [[q-kotlin-intrange--programming-languages--easy]]

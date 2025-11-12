@@ -2,30 +2,23 @@
 id: kotlin-035
 title: "Kotlin Flow Basics / Основы Flow в Kotlin"
 aliases: ["Kotlin Flow Basics", "Основы Flow в Kotlin"]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-flow, c-kotlin, q-channels-vs-flow--kotlin--medium]
-
-# Timestamps
 created: 2025-10-05
 updated: 2025-11-10
-
 tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
+
 ---
+
 # Вопрос (RU)
 > Что вы знаете о `Flow` в Kotlin?
 
@@ -38,7 +31,7 @@ tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
 
 В корутинах *flow* — это тип, который может последовательно выдавать несколько значений, в отличие от *suspend функций*, которые возвращают только одно значение. Например, вы можете использовать flow для получения живых обновлений из базы данных.
 
-Flow построены поверх корутин и могут предоставлять несколько значений. Flow концептуально является *потоком данных*, который может вычисляться асинхронно. Чтобы представить поток значений, которые вычисляются асинхронно, мы можем использовать тип `Flow<Int>`:
+`Flow` построены поверх корутин и могут предоставлять несколько значений. `Flow` концептуально является *потоком данных*, который может вычисляться асинхронно. Чтобы представить поток значений, которые вычисляются асинхронно, мы можем использовать тип `Flow<Int>`:
 
 ```kotlin
 fun simple(): Flow<Int> = flow { // билдер flow
@@ -72,7 +65,7 @@ I'm not blocked 3
 3
 ```
 
-Flow очень похож на `Iterator`, который производит последовательность значений, но он использует suspend функции для асинхронного производства и потребления значений. Это означает, например, что flow может безопасно сделать сетевой запрос для производства следующего значения без блокировки вызывающего потока.
+`Flow` очень похож на `Iterator`, который производит последовательность значений, но он использует suspend функции для асинхронного производства и потребления значений. Это означает, например, что flow может безопасно сделать сетевой запрос для производства следующего значения без блокировки вызывающего потока.
 
 В потоках данных участвуют три сущности:
 - **Производитель** производит данные, которые добавляются в поток. Благодаря корутинам, flow также могут производить данные асинхронно;
@@ -94,7 +87,7 @@ Flow очень похож на `Iterator`, который производит 
 
 ### Flow Являются Холодными
 
-Flow являются *холодными потоками*, похожими на последовательности — код внутри билдера flow не выполняется до тех пор, пока flow не будет собран. Это становится ясно из следующего примера:
+`Flow` являются *холодными потоками*, похожими на последовательности — код внутри билдера flow не выполняется до тех пор, пока flow не будет собран. Это становится ясно из следующего примера:
 
 ```kotlin
 fun simple(): Flow<Int> = flow {
@@ -130,7 +123,7 @@ Flow started
 3
 ```
 
-Это ключевая причина, по которой функция `simple` (которая возвращает flow) не помечена модификатором `suspend`. Сам по себе вызов `simple()` возвращается быстро и ничего не ждет. Flow запускается каждый раз, когда он собирается, поэтому мы видим "Flow started", когда вызываем `collect` снова.
+Это ключевая причина, по которой функция `simple` (которая возвращает flow) не помечена модификатором `suspend`. Сам по себе вызов `simple()` возвращается быстро и ничего не ждет. `Flow` запускается каждый раз, когда он собирается, поэтому мы видим "`Flow` started", когда вызываем `collect` снова.
 
 *Промежуточные операторы* на flow, такие как `map`, `filter`, `take`, `zip` и т.д., являются функциями, которые применяются к *upstream* flow или flows и возвращают *downstream* flow, к которому могут быть применены дальнейшие операторы. Промежуточные операции не выполняют никакого кода в flow и не являются suspend функциями. Они только настраивают цепочку операций для будущего выполнения и быстро возвращаются. Это известно как свойство *холодного flow*.
 
@@ -157,28 +150,28 @@ try {
 - Каких распространенных ошибок при работе с `Flow` следует избегать?
 
 ## Ссылки (RU)
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
-- [Android Flow Guide](https://developer.android.com/kotlin/flow)
-- [Flow API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
+- [Kotlin `Flow` Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
+- [Android `Flow` Guide](https://developer.android.com/kotlin/flow)
+- [`Flow` API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
 - [Testing Kotlin flows on Android](https://developer.android.com/kotlin/flow/test)
-- [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`StateFlow` and `SharedFlow`](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ## Связанные вопросы (RU)
 
 ### Предпосылки (проще)
-- [[q-flow-basics--kotlin--easy]] - Основы Flow и способы создания
-- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Базовые понятия холодных Flow
+- [[q-flow-basics--kotlin--easy]] - Основы `Flow` и способы создания
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Базовые понятия холодных `Flow`
 
 ### Связанные (средний уровень)
-- [[q-catch-operator-flow--kotlin--medium]] - Оператор catch в Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Основные операторы Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Оператор catch в `Flow`
+- [[q-flow-operators-map-filter--kotlin--medium]] - Основные операторы `Flow`
 - [[q-channel-flow-comparison--kotlin--medium]] - Сравнение channelFlow и других подходов
 
 ### Основы Flow (средний уровень)
 - [[q-hot-cold-flows--kotlin--medium]] - Горячие и холодные потоки
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Объяснение различий холодных и горячих Flow
+- [[q-cold-vs-hot-flows--kotlin--medium]] - Объяснение различий холодных и горячих `Flow`
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - Сравнение `Flow` и `LiveData`
-- [[q-channels-vs-flow--kotlin--medium]] - Каналы против Flow
+- [[q-channels-vs-flow--kotlin--medium]] - Каналы против `Flow`
 - [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` против `StateFlow`
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - Отличия `StateFlow` и `SharedFlow`
 - [[q-stateflow-sharedflow-android--kotlin--medium]] - `StateFlow` и `SharedFlow` в Android
@@ -186,7 +179,7 @@ try {
 
 ### Операторы Flow (средний уровень)
 - [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Настройка replay и буфера в `SharedFlow`
-- [[q-flow-operators--kotlin--medium]] - Обзор операторов Flow
+- [[q-flow-operators--kotlin--medium]] - Обзор операторов `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Операторы map, filter, transform
 - [[q-flow-time-operators--kotlin--medium]] - debounce, sample, throttle
 - [[q-debounce-throttle-flow--kotlin--medium]] - Debounce против Throttle
@@ -199,19 +192,19 @@ try {
 ### Продвинутый Flow (средний уровень)
 - [[q-retry-exponential-backoff-flow--kotlin--medium]] - Ретрей с экспоненциальной задержкой
 - [[q-channelflow-callbackflow-flow--kotlin--medium]] - channelFlow против callbackFlow
-- [[q-flow-exception-handling--kotlin--medium]] - Обработка ошибок в Flow
-- [[q-instant-search-flow-operators--kotlin--medium]] - Мгновенный поиск с Flow
-- [[q-room-coroutines-flow--kotlin--medium]] - Использование Room с Flow
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Тестирование горячих Flow
+- [[q-flow-exception-handling--kotlin--medium]] - Обработка ошибок в `Flow`
+- [[q-instant-search-flow-operators--kotlin--medium]] - Мгновенный поиск с `Flow`
+- [[q-room-coroutines-flow--kotlin--medium]] - Использование Room с `Flow`
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Тестирование горячих `Flow`
 
 ### Продвинутые (сложнее)
 - [[q-flowon-operator-context-switching--kotlin--hard]] - Оператор flowOn и переключение контекста
 - [[q-flow-backpressure--kotlin--hard]] - Обработка backpressure
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Стратегии backpressure
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Глубокое погружение в операторы Flow
-- [[q-flow-performance--kotlin--hard]] - Оптимизация производительности Flow
-- [[q-flow-testing-advanced--kotlin--hard]] - Продвинутое тестирование Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Тестирование операторов Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Глубокое погружение в операторы `Flow`
+- [[q-flow-performance--kotlin--hard]] - Оптимизация производительности `Flow`
+- [[q-flow-testing-advanced--kotlin--hard]] - Продвинутое тестирование `Flow`
+- [[q-testing-flow-operators--kotlin--hard]] - Тестирование операторов `Flow`
 
 ---
 
@@ -219,7 +212,7 @@ try {
 
 In coroutines, a *flow* is a type that can emit multiple values sequentially, as opposed to *suspend functions* that return only a single value. For example, you can use a flow to receive live updates from a database.
 
-Flows are built on top of coroutines and can provide multiple values. A flow is conceptually a *stream of data* that can be computed asynchronously. To represent the stream of values that are being asynchronously computed, we can use a `Flow<Int>` type:
+`Flows` are built on top of coroutines and can provide multiple values. A flow is conceptually a *stream of data* that can be computed asynchronously. To represent the stream of values that are being asynchronously computed, we can use a `Flow<Int>` type:
 
 ```kotlin
 fun simple(): Flow<Int> = flow { // flow builder
@@ -275,7 +268,7 @@ There are the following basic ways to create a flow:
 
 ### Flows Are Cold
 
-Flows are *cold streams* similar to sequences — the code inside a flow builder does not run until the flow is collected. This becomes clear in the following example:
+`Flows` are *cold streams* similar to sequences — the code inside a flow builder does not run until the flow is collected. This becomes clear in the following example:
 
 ```kotlin
 fun simple(): Flow<Int> = flow {
@@ -311,7 +304,7 @@ Flow started
 3
 ```
 
-This is a key reason the `simple` function (which returns a flow) is not marked with the `suspend` modifier. By itself, the `simple()` call returns quickly and does not wait for anything. The flow starts every time it is collected, that is why we see "Flow started" when we call `collect` again.
+This is a key reason the `simple` function (which returns a flow) is not marked with the `suspend` modifier. By itself, the `simple()` call returns quickly and does not wait for anything. The flow starts every time it is collected, that is why we see "`Flow` started" when we call `collect` again.
 
 *Intermediate operators* on the flow such as `map`, `filter`, `take`, `zip`, etc. are functions that are applied to the *upstream* flow or flows and return a *downstream* flow where further operators can be applied. Intermediate operations do not execute any code in the flow and are not suspending functions themselves. They only set up a chain of operations for future execution and quickly return. This is known as a *cold flow* property.
 
@@ -338,28 +331,28 @@ By default, flows are *sequential* and all flow operations are executed sequenti
 - What are common pitfalls to avoid when working with `Flow`?
 
 ## References
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
-- [Android Flow Guide](https://developer.android.com/kotlin/flow)
-- [Flow API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
+- [Kotlin `Flow` Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
+- [Android `Flow` Guide](https://developer.android.com/kotlin/flow)
+- [`Flow` API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
 - [Testing Kotlin flows on Android](https://developer.android.com/kotlin/flow/test)
-- [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`StateFlow` and `SharedFlow`](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow basics and creation
+- [[q-flow-basics--kotlin--easy]] - `Flow` basics and creation
 - [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Cold flow fundamentals
 
 ### Related (Medium)
-- [[q-catch-operator-flow--kotlin--medium]] - Flow catch operator
-- [[q-flow-operators-map-filter--kotlin--medium]] - Core Flow operators
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow` catch operator
+- [[q-flow-operators-map-filter--kotlin--medium]] - Core `Flow` operators
 - [[q-channel-flow-comparison--kotlin--medium]] - channelFlow vs other approaches
 
 ### Flow Fundamentals (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs `LiveData`
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow`
 - [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - `StateFlow` & `SharedFlow` differences
 - [[q-stateflow-sharedflow-android--kotlin--medium]] - `StateFlow` & `SharedFlow` in Android
@@ -367,7 +360,7 @@ By default, flows are *sequential* and all flow operations are executed sequenti
 
 ### Flow Operators (Medium)
 - [[q-sharedflow-replay-buffer-config--kotlin--medium]] - `SharedFlow` replay & buffer config
-- [[q-flow-operators--kotlin--medium]] - Flow operators overview
+- [[q-flow-operators--kotlin--medium]] - `Flow` operators overview
 - [[q-flow-operators-map-filter--kotlin--medium]] - map, filter, transform operators
 - [[q-flow-time-operators--kotlin--medium]] - debounce, sample, throttle
 - [[q-debounce-throttle-flow--kotlin--medium]] - Debounce vs Throttle
@@ -380,10 +373,10 @@ By default, flows are *sequential* and all flow operations are executed sequenti
 ### Advanced Flow (Medium)
 - [[q-retry-exponential-backoff-flow--kotlin--medium]] - Retry with backoff
 - [[q-channelflow-callbackflow-flow--kotlin--medium]] - channelFlow vs callbackFlow
-- [[q-flow-exception-handling--kotlin--medium]] - Exception handling in Flow
-- [[q-instant-search-flow-operators--kotlin--medium]] - Instant search with Flow
-- [[q-room-coroutines-flow--kotlin--medium]] - Room with Flow
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing hot Flows
+- [[q-flow-exception-handling--kotlin--medium]] - Exception handling in `Flow`
+- [[q-instant-search-flow-operators--kotlin--medium]] - Instant search with `Flow`
+- [[q-room-coroutines-flow--kotlin--medium]] - Room with `Flow`
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing hot `Flows`
 
 ### Advanced (Harder)
 - [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
@@ -391,5 +384,5 @@ By default, flows are *sequential* and all flow operations are executed sequenti
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Deep dive into operators
 - [[q-flow-performance--kotlin--hard]] - Performance optimization
-- [[q-flow-testing-advanced--kotlin--hard]] - Advanced Flow testing
-- [[q-testing-flow-operators--kotlin--hard]] - Testing Flow operators
+- [[q-flow-testing-advanced--kotlin--hard]] - Advanced `Flow` testing
+- [[q-testing-flow-operators--kotlin--hard]] - Testing `Flow` operators

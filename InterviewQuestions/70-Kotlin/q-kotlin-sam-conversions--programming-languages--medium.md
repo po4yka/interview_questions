@@ -62,7 +62,8 @@ setListener { view ->
    - Java интерфейс с одним абстрактным методом (фактический SAM/functional interface)
    - либо Kotlin `fun interface` (с одним абстрактным методом)
 2. **Параметры метода соответствуют параметрам лямбды** (типы должны быть совместимы)
-3. SAM-конверсия — это синтаксический сахар: создаётся анонимная реализация интерфейса, а не «чистая» функция.
+3. **Должен быть известен целевой тип (target type)**: контекст (тип параметра функции, типа переменной, generic-аргумента) должен однозначно указывать на функциональный интерфейс, чтобы компилятор мог применить SAM-конверсию.
+4. SAM-конверсия — это синтаксический сахар: создаётся анонимная реализация интерфейса, а не «чистая» функция.
 
 ### Примеры
 
@@ -75,17 +76,20 @@ button.setOnClickListener { view ->
 
 **2. Runnable (Java SAM)**
 ```kotlin
-// Java: Runnable interface
+// Java: Thread(Runnable target)
 Thread {
     println("Running in thread")
 }.start()
+// Здесь лямбда конвертируется в Runnable, так как конструктор ожидает Runnable.
 ```
 
-**3. Comparator (Java SAM)**
+**3. Comparator (Java SAM / лямбда-форма)**
 ```kotlin
 val sorted = list.sortedWith { a, b ->
     a.length.compareTo(b.length)
 }
+// Используется перегрузка sortedWith, принимающая (T, T) -> Int,
+// которая затем реализуется через Comparator.
 ```
 
 ### Kotlin Fun Interfaces
@@ -155,8 +159,9 @@ setListener { view ->
 1. **Functional interface** with exactly one abstract method:
    - Java interface with a single abstract method (a SAM / functional interface)
    - or a Kotlin `fun interface` (with a single abstract method)
-2. **Method parameters must be compatible with lambda parameters**
-3. SAM conversion is compile-time sugar that creates an anonymous implementation of the interface (not a raw function type at runtime).
+2. **Method parameters must be compatible with lambda parameters** (types must be compatible)
+3. **Target type must be known**: the context (function parameter type, variable type, or generic argument) must clearly expect that functional interface so the compiler can apply SAM conversion.
+4. SAM conversion is compile-time sugar that creates an anonymous implementation of the interface (not a raw function type at runtime).
 
 ### Examples
 
@@ -169,17 +174,20 @@ button.setOnClickListener { view ->
 
 **2. Runnable (Java SAM)**
 ```kotlin
-// Java: Runnable interface
+// Java: Thread(Runnable target)
 Thread {
     println("Running in thread")
 }.start()
+// Here the lambda is converted to Runnable because the constructor expects a Runnable.
 ```
 
-**3. Comparator (Java SAM)**
+**3. Comparator (Java SAM / lambda form)**
 ```kotlin
 val sorted = list.sortedWith { a, b ->
     a.length.compareTo(b.length)
 }
+// Uses the sortedWith overload taking (T, T) -> Int,
+// which is implemented via a Comparator under the hood.
 ```
 
 ### Kotlin Fun Interfaces

@@ -3,18 +3,19 @@ id: sysdes-007
 title: "Load Balancing Algorithms and Strategies / Алгоритмы и стратегии балансировки нагрузки"
 aliases: ["Load Balancing Algorithms", "Алгоритмы балансировки нагрузки"]
 topic: system-design
-subtopics: [distributed-systems, high-availability, load-balancing, scalability]
+subtopics: [distributed-systems, load-balancing, scalability]
 question_kind: system-design
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-system-design
-related: [c-load-balancing, q-caching-strategies--system-design--medium, q-horizontal-vertical-scaling--system-design--medium]
+related: [c-caching-strategies, q-caching-strategies--system-design--medium, q-horizontal-vertical-scaling--system-design--medium]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [algorithms, difficulty/medium, load-balancing, scalability, system-design]
-sources: [https://en.wikipedia.org/wiki/Load_balancing_(computing)]
+sources: ["https://en.wikipedia.org/wiki/Load_balancing_(computing)"]
+
 ---
 
 # Вопрос (RU)
@@ -27,6 +28,27 @@ sources: [https://en.wikipedia.org/wiki/Load_balancing_(computing)]
 
 ## Ответ (RU)
 
+### Требования
+
+- Функциональные:
+  - Распределение запросов между несколькими серверами
+  - Поддержка различных алгоритмов балансировки нагрузки
+  - Обработка недоступности инстансов (health checks, выведение из пула)
+  - Возможность горизонтального масштабирования балансеров
+- Нефункциональные:
+  - Высокая доступность и отказоустойчивость
+  - Низкая латентность при маршрутизации
+  - Масштабируемость при росте трафика
+  - Наблюдаемость: метрики, логирование, алёрты
+
+### Архитектура
+
+- Клиенты отправляют запросы на публичную точку входа (DNS или внешний балансировщик)
+- L4/L7 балансировщик распределяет трафик по пулу приложений согласно выбранному алгоритму
+- Балансировщик использует health checks для исключения нездоровых инстансов
+- Интеграция с авто-масштабированием: при добавлении/удалении инстансов пул обновляется
+- Возможна многоуровневая схема: DNS → глобальный балансировщик → региональные балансировщики → приложения/кэш/БД
+
 **Теория балансировки нагрузки:**
 Load balancing - распределение входящего трафика между несколькими серверами для обеспечения высокой доступности, производительности и эффективного использования ресурсов. Выбор алгоритма критически влияет на справедливость распределения, производительность и пользовательский опыт.
 
@@ -38,15 +60,14 @@ Load balancing - распределение входящего трафика м
 
 **1. Round Robin (Циклический):**
 
-*Теория:* Последовательное распределение запросов по серверам в порядке очереди. Простейший алгоритм, не требует состояния, справедлив для гомогенных серверов.
+*Теория:* Последовательное распределение запросов по серверам по кругу. Простейший алгоритм, справедлив для гомогенных серверов.
 
 *Работа:* Request 1 → Server 1, Request 2 → Server 2, Request 3 → Server 3, Request 4 → Server 1 (цикл)
 
 *Преимущества:*
 - Простая реализация
-- Справедливое распределение
-- Не требует состояния сервера
-- Работает хорошо для одинаковых серверов
+- Справедливое распределение при одинаковых серверах
+- Не требует знания о текущей нагрузке
 
 *Недостатки:*
 - Игнорирует текущую нагрузку сервера
@@ -56,18 +77,22 @@ Load balancing - распределение входящего трафика м
 *Сценарии:* Гомогенные серверы с похожими запросами
 
 ```kotlin
-// Простейшая реализация Round Robin
+// Простейшая реализация Round Robin (иллюстративно)
 class RoundRobinLoadBalancer(private val servers: List<Server>) {
-    private var currentIndex = AtomicInteger(0)
-    fun getNextServer() = servers[currentIndex.getAndIncrement() % servers.size]
+    private val currentIndex = AtomicInteger(0)
+    fun getNextServer(): Server {
+        val i = currentIndex.getAndIncrement()
+        // В реальной системе стоит добавить защиту от переполнения
+        return servers[Math.floorMod(i, servers.size)]
+    }
 }
 ```
 
 **2. Weighted Round Robin (Взвешенный циклический):**
 
-*Теория:* Назначение весов серверам в зависимости от их мощности. Сервер с весом 3 получает в 3 раза больше запросов, чем сервер с весом 1. Учитывает гетерогенность инфраструктуры.
+*Теория:* Назначение весов серверам в зависимости от их мощности. Сервер с весом 3 получает примерно в 3 раза больше запросов, чем сервер с весом 1. Учитывает гетерогенность инфраструктуры.
 
-*Работа:* Server 1 (weight=3) получает 3 запроса, Server 2 (weight=2) получает 2 запроса, Server 3 (weight=1) получает 1 запрос за цикл
+*Работа:* Server 1 (weight=3) получает 3 запроса, Server 2 (weight=2) получает 2 запроса, Server 3 (weight=1) получает 1 запрос за цикл.
 
 *Преимущества:*
 - Обрабатывает гетерогенные серверы
@@ -81,12 +106,16 @@ class RoundRobinLoadBalancer(private val servers: List<Server>) {
 *Сценарии:* Серверы разной мощности (m5.large vs m5.2xlarge)
 
 ```kotlin
-// Взвешенный Round Robin
+// Упрощённый взвешенный Round Robin (иллюстративно)
 data class WeightedServer(val server: Server, val weight: Int)
 class WeightedRoundRobinLB(servers: List<WeightedServer>) {
-    private val expandedList = servers.flatMap { ws -> List(ws.weight) { ws.server } }
-    private var index = AtomicInteger(0)
-    fun getNextServer() = expandedList[index.getAndIncrement() % expandedList.size]
+    private val expandedList: List<Server> = servers.flatMap { ws -> List(ws.weight) { ws.server } }
+    private val index = AtomicInteger(0)
+    fun getNextServer(): Server {
+        val i = index.getAndIncrement()
+        // В реальной системе стоит добавить защиту от переполнения
+        return expandedList[Math.floorMod(i, expandedList.size)]
+    }
 }
 ```
 
@@ -106,49 +135,64 @@ class WeightedRoundRobinLB(servers: List<WeightedServer>) {
 - Сложнее реализация
 - Не учитывает сложность запросов
 
-*Сценарии:* Long-lived соединения (WebSocket, database connections, streaming)
+*Сценарии:* `Long`-lived соединения (WebSocket, database connections, streaming)
 
 ```kotlin
-// Least Connections
+// Least Connections (упрощённо, иллюстративно)
 class LeastConnectionsLB(private val servers: List<Server>) {
-    private val counts = ConcurrentHashMap<Server, AtomicInteger>()
-    fun getNextServer() = servers.minByOrNull { counts[it]?.get() ?: 0 }!!
-    fun onRequestComplete(server: Server) { counts[server]?.decrementAndGet() }
+    private val counts = ConcurrentHashMap<Server, AtomicInteger>().apply {
+        servers.forEach { putIfAbsent(it, AtomicInteger(0)) }
+    }
+
+    fun getNextServer(): Server {
+        val server = servers.minByOrNull { counts[it]?.get() ?: 0 }!!
+        counts[server]!!.incrementAndGet()
+        return server
+    }
+
+    fun onRequestComplete(server: Server) {
+        counts[server]?.decrementAndGet()
+    }
 }
 ```
 
 **4. Least Response Time (Наименьшее время отклика):**
 
-*Теория:* Выбор сервера с наименьшим временем отклика и наименьшим количеством активных соединений. Комбинирует метрики производительности и нагрузки для оптимального выбора.
+*Теория:* Выбор сервера с минимальным временем отклика и/или наименьшим количеством активных соединений. Комбинирует метрики производительности и нагрузки.
 
-*Работа:* Выбирается сервер с минимальным (response_time * active_connections)
+*Работа:* Например, можно выбирать сервер с минимальным (response_time * active_connections) либо с минимальным средним временем отклика при схожем числе соединений.
 
 *Преимущества:*
-- Учитывает производительность сервера
-- Лучший user experience
-- Адаптивный к производительности
+- Учитывает фактическую производительность сервера
+- Улучшает пользовательский опыт
+- Адаптивен к изменениям нагрузки
 
 *Недостатки:*
 - Требует мониторинга метрик
-- Сложная реализация
+- Более сложная реализация
 - Overhead на измерения
 
 *Сценарии:* Критичные к latency приложения (real-time, trading, gaming)
 
 ```kotlin
-// Least Response Time
+// Least Response Time (упрощённо, иллюстративно)
 class LeastResponseTimeLB(private val servers: List<Server>) {
     private val metrics = ConcurrentHashMap<Server, ServerMetrics>()
-    fun getNextServer() = servers.minByOrNull {
-        val m = metrics[it]!!
-        m.avgResponseTime * m.activeConnections
-    }!!
+
+    fun getNextServer(): Server {
+        val server = servers.minByOrNull { s ->
+            val m = metrics[s]
+            if (m == null || m.activeConnections == 0) m?.avgResponseTime ?: 0L
+            else m.avgResponseTime * m.activeConnections
+        }!!
+        return server
+    }
 }
 ```
 
 **5. IP Hash (Хеширование IP):**
 
-*Теория:* Использование хеша IP-адреса клиента для определения сервера. Обеспечивает session persistence - один клиент всегда попадает на один сервер (пока сервер доступен).
+*Теория:* Использование хеша IP-адреса клиента для определения сервера. Обеспечивает session persistence: один клиент обычно попадает на один и тот же сервер (пока конфигурация не меняется и сервер доступен).
 
 *Работа:* hash(client_ip) % server_count = server_index
 
@@ -159,82 +203,110 @@ class LeastResponseTimeLB(private val servers: List<Server>) {
 
 *Недостатки:*
 - Неравномерное распределение при NAT
-- Проблемы при изменении количества серверов
+- Перераспределение при изменении количества серверов
 - Не учитывает нагрузку
 
-*Сценарии:* Stateful приложения, кеширование на сервере, legacy системы без внешней сессии
+*Сценарии:* Stateful приложения, кеширование на сервере, legacy системы без внешнего хранилища сессий
 
 ```kotlin
-// IP Hash
+// IP Hash (упрощённо)
 class IPHashLoadBalancer(private val servers: List<Server>) {
     fun getServer(clientIP: String): Server {
-        val hash = clientIP.hashCode().absoluteValue
-        return servers[hash % servers.size]
+        val hash = clientIP.hashCode()
+        return servers[Math.floorMod(hash, servers.size)]
     }
 }
 ```
 
 **6. Consistent Hashing (Консистентное хеширование):**
 
-*Теория:* Использование кольца хешей для минимизации перераспределения при добавлении/удалении серверов. При изменении количества серверов перемещается только K/n ключей (K - ключи, n - серверы), а не все.
+*Теория:* Использование кольца хешей для минимизации перераспределения при добавлении/удалении серверов. При изменении количества серверов перемещается только часть ключей (порядка K/n, где K - количество ключей, n - серверов), а не все.
 
-*Работа:* Серверы и запросы размещаются на кольце хешей, запрос идёт на ближайший сервер по часовой стрелке
+*Работа:* Серверы и ключи (запросы) размещаются на кольце хешей, запрос идёт на ближайший сервер по часовой стрелке.
 
 *Преимущества:*
 - Минимальное перераспределение при масштабировании
 - Хорошо для distributed caching
-- Predictable routing
+- Предсказуемая маршрутизация
 
 *Недостатки:*
-- Сложная реализация
-- Требует virtual nodes для баланса
+- Более сложная реализация
+- Для хорошего баланса обычно нужны virtual nodes
 - Не учитывает текущую нагрузку
 
-*Сценарии:* Distributed caching (Redis, Memcached), CDN, distributed databases
+*Сценарии:* Distributed caching (Redis, Memcached), CDN, распределённые базы данных
 
 ```kotlin
-// Consistent Hashing (упрощённо)
+// Consistent Hashing (упрощённо, иллюстративно)
 class ConsistentHashLB(servers: List<Server>, virtualNodes: Int = 150) {
     private val ring = TreeMap<Int, Server>()
+
     init {
         servers.forEach { server ->
             repeat(virtualNodes) { i ->
-                ring["$server-$i".hashCode()] = server
+                val hash = ("$server-$i").hashCode()
+                ring[hash] = server
             }
         }
     }
-    fun getServer(key: String) = ring.ceilingEntry(key.hashCode())?.value ?: ring.firstEntry().value
+
+    fun getServer(key: String): Server {
+        val hash = key.hashCode()
+        val entry = ring.ceilingEntry(hash) ?: ring.firstEntry()
+        return entry.value
+    }
 }
 ```
 
 **Сравнительная таблица:**
 
-| Алгоритм | Сложность | State | Справедливость | Сценарий |
-|----------|-----------|-------|----------------|----------|
-| Round Robin | O(1) | Нет | Высокая | Гомогенные серверы |
-| Weighted RR | O(1) | Нет | Средняя | Гетерогенные серверы |
-| Least Conn | O(n) | Да | Высокая | Long-lived соединения |
-| Least RT | O(n) | Да | Высокая | Latency-critical |
-| IP Hash | O(1) | Нет | Низкая | Session persistence |
-| Consistent Hash | O(log n) | Нет | Средняя | Distributed cache |
+| Алгоритм | Сложность выбора (на запрос) | Состояние балансера | Справедливость | Сценарий |
+|----------|------------------------------|----------------------|----------------|----------|
+| Round Robin | O(1) | Да (индекс) | Высокая при одинаковых серверах | Гомогенные серверы |
+| Weighted RR | O(1) | Да (индекс/веса) | Высокая относительно весов | Гетерогенные серверы |
+| Least Conn | O(n) | Да (счётчики) | Высокая | `Long`-lived соединения |
+| Least RT | O(n) | Да (метрики) | Высокая | Latency-critical |
+| IP Hash | O(1) | Нет (по сути только конфиг) | Зависит от распределения IP | Session persistence |
+| Consistent Hash | O(log n) | Нет/минимальное (кольцо) | Средняя, улучшается виртуальными нодами | Distributed cache |
 
 **Уровни балансировки:**
 
 *Layer 4 (Transport):* Балансировка на уровне TCP/UDP, быстрая, не видит содержимое запроса. Используется для высокой производительности.
 
-*Layer 7 (Application):* Балансировка на уровне HTTP, видит URL/headers/cookies, медленнее, но умнее. Используется для content-based routing.
+*Layer 7 (`Application`):* Балансировка на уровне HTTP, видит URL/headers/cookies, медленнее, но гибче. Используется для content-based routing.
 
 **Дополнительные концепции:**
 
 - **Health checks** - периодическая проверка доступности серверов
-- **Sticky sessions** - привязка клиента к серверу через cookies
-- **Connection draining** - graceful shutdown с завершением активных соединений
+- **Sticky sessions** - привязка клиента к серверу через cookies/маркеры
+- **Connection draining** - корректное выведение инстанса из пула с завершением активных соединений
 - **Auto-scaling integration** - динамическое добавление/удаление серверов
 
 ## Answer (EN)
 
+### Requirements
+
+- Functional:
+  - Distribute requests across multiple servers
+  - Support multiple load balancing algorithms
+  - Handle instance failures (health checks, draining, removal from pool)
+  - Allow horizontal scaling of load balancers
+- Non-functional:
+  - High availability and fault tolerance
+  - Low latency routing
+  - Scalability with traffic growth
+  - Observability: metrics, logging, alerting
+
+### Architecture
+
+- Clients send requests to a public entry point (DNS or external load balancer)
+- L4/L7 load balancer routes traffic to application pool using the chosen algorithm
+- Load balancer performs health checks and stops sending traffic to unhealthy instances
+- Integrated with auto-scaling: when instances are added/removed, the pool is updated
+- Possible multi-layer setup: DNS → global LB → regional LBs → app/cache/DB tiers
+
 **Load Balancing Theory:**
-Load balancing - distributing incoming traffic across multiple servers to ensure high availability, performance, and efficient resource utilization. Algorithm choice critically impacts distribution fairness, performance, and user experience.
+Load balancing is distributing incoming traffic across multiple servers to ensure high availability, performance, and efficient resource utilization. Algorithm choice critically impacts fairness, performance, and user experience.
 
 **Main Goals:**
 - Prevent individual server overload
@@ -242,17 +314,16 @@ Load balancing - distributing incoming traffic across multiple servers to ensure
 - Better response times
 - Efficient resource utilization
 
-**1. Round Robin (Sequential):**
+**1. Round Robin:**
 
-*Theory:* Sequential distribution of requests across servers in queue order. Simplest algorithm, requires no state, fair for homogeneous servers.
+*Theory:* Sequentially distributes requests across servers in a loop. Simplest algorithm, fair for homogeneous servers.
 
 *How it works:* Request 1 → Server 1, Request 2 → Server 2, Request 3 → Server 3, Request 4 → Server 1 (cycle)
 
 *Advantages:*
 - Simple implementation
-- Fair distribution
-- No server state needed
-- Works well for identical servers
+- Fair distribution for identical servers
+- Does not require load awareness
 
 *Disadvantages:*
 - Ignores current server load
@@ -262,18 +333,22 @@ Load balancing - distributing incoming traffic across multiple servers to ensure
 *Use cases:* Homogeneous servers with similar requests
 
 ```kotlin
-// Simple Round Robin implementation
+// Simple Round Robin implementation (illustrative)
 class RoundRobinLoadBalancer(private val servers: List<Server>) {
-    private var currentIndex = AtomicInteger(0)
-    fun getNextServer() = servers[currentIndex.getAndIncrement() % servers.size]
+    private val currentIndex = AtomicInteger(0)
+    fun getNextServer(): Server {
+        val i = currentIndex.getAndIncrement()
+        // In real systems, handle overflow/wrap-around explicitly
+        return servers[Math.floorMod(i, servers.size)]
+    }
 }
 ```
 
 **2. Weighted Round Robin:**
 
-*Theory:* Assigning weights to servers based on their capacity. Server with weight 3 gets 3x more requests than server with weight 1. Accounts for infrastructure heterogeneity.
+*Theory:* Assigns weights to servers based on capacity. A server with weight 3 receives roughly 3x more requests than a server with weight 1. Accounts for infrastructure heterogeneity.
 
-*How it works:* Server 1 (weight=3) gets 3 requests, Server 2 (weight=2) gets 2 requests, Server 3 (weight=1) gets 1 request per cycle
+*How it works:* Server 1 (weight=3) gets 3 requests, Server 2 (weight=2) gets 2, Server 3 (weight=1) gets 1 per cycle.
 
 *Advantages:*
 - Handles heterogeneous servers
@@ -287,18 +362,22 @@ class RoundRobinLoadBalancer(private val servers: List<Server>) {
 *Use cases:* Servers with different capacities (m5.large vs m5.2xlarge)
 
 ```kotlin
-// Weighted Round Robin
+// Simplified Weighted Round Robin (illustrative)
 data class WeightedServer(val server: Server, val weight: Int)
 class WeightedRoundRobinLB(servers: List<WeightedServer>) {
-    private val expandedList = servers.flatMap { ws -> List(ws.weight) { ws.server } }
-    private var index = AtomicInteger(0)
-    fun getNextServer() = expandedList[index.getAndIncrement() % expandedList.size]
+    private val expandedList: List<Server> = servers.flatMap { ws -> List(ws.weight) { ws.server } }
+    private val index = AtomicInteger(0)
+    fun getNextServer(): Server {
+        val i = index.getAndIncrement()
+        // In real systems, handle overflow/wrap-around explicitly
+        return expandedList[Math.floorMod(i, expandedList.size)]
+    }
 }
 ```
 
 **3. Least Connections:**
 
-*Theory:* Sending request to server with fewest active connections. Dynamically accounts for current load, assuming fewer connections = less load.
+*Theory:* Sends each new request to the server with the fewest active connections. Dynamically accounts for current load, assuming fewer connections ≈ less load.
 
 *How it works:* Before request: Server 1 (5 conn), Server 2 (3 conn) ← chosen, Server 3 (7 conn)
 
@@ -312,49 +391,64 @@ class WeightedRoundRobinLB(servers: List<WeightedServer>) {
 - More complex implementation
 - Doesn't consider request complexity
 
-*Use cases:* Long-lived connections (WebSocket, database connections, streaming)
+*Use cases:* `Long`-lived connections (WebSocket, database connections, streaming)
 
 ```kotlin
-// Least Connections
+// Least Connections (simplified, illustrative)
 class LeastConnectionsLB(private val servers: List<Server>) {
-    private val counts = ConcurrentHashMap<Server, AtomicInteger>()
-    fun getNextServer() = servers.minByOrNull { counts[it]?.get() ?: 0 }!!
-    fun onRequestComplete(server: Server) { counts[server]?.decrementAndGet() }
+    private val counts = ConcurrentHashMap<Server, AtomicInteger>().apply {
+        servers.forEach { putIfAbsent(it, AtomicInteger(0)) }
+    }
+
+    fun getNextServer(): Server {
+        val server = servers.minByOrNull { counts[it]?.get() ?: 0 }!!
+        counts[server]!!.incrementAndGet()
+        return server
+    }
+
+    fun onRequestComplete(server: Server) {
+        counts[server]?.decrementAndGet()
+    }
 }
 ```
 
 **4. Least Response Time:**
 
-*Theory:* Choosing server with lowest response time and fewest active connections. Combines performance and load metrics for optimal selection.
+*Theory:* Chooses server with the lowest observed response time and/or fewest active connections. Combines performance and load metrics.
 
-*How it works:* Selects server with minimum (response_time * active_connections)
+*How it works:* For example, select server with minimal (response_time * active_connections) or minimal average latency among servers with similar load.
 
 *Advantages:*
-- Accounts for server performance
+- Accounts for actual server performance
 - Better user experience
-- Adaptive to performance
+- Adaptive to changing conditions
 
 *Disadvantages:*
-- Requires metrics monitoring
-- Complex implementation
+- Requires metrics collection/monitoring
+- More complex implementation
 - Measurement overhead
 
 *Use cases:* Latency-critical applications (real-time, trading, gaming)
 
 ```kotlin
-// Least Response Time
+// Least Response Time (simplified, illustrative)
 class LeastResponseTimeLB(private val servers: List<Server>) {
     private val metrics = ConcurrentHashMap<Server, ServerMetrics>()
-    fun getNextServer() = servers.minByOrNull {
-        val m = metrics[it]!!
-        m.avgResponseTime * m.activeConnections
-    }!!
+
+    fun getNextServer(): Server {
+        val server = servers.minByOrNull { s ->
+            val m = metrics[s]
+            if (m == null || m.activeConnections == 0) m?.avgResponseTime ?: 0L
+            else m.avgResponseTime * m.activeConnections
+        }!!
+        return server
+    }
 }
 ```
 
 **5. IP Hash:**
 
-*Theory:* Using client IP address hash to determine server. Provides session persistence - one client always hits same server (while server is available).
+*Theory:* Uses a hash of the client IP address to choose server. Provides basic session persistence: the same client tends to hit the same server (while configuration is stable and server is available).
 
 *How it works:* hash(client_ip) % server_count = server_index
 
@@ -365,76 +459,83 @@ class LeastResponseTimeLB(private val servers: List<Server>) {
 
 *Disadvantages:*
 - Uneven distribution with NAT
-- Problems when server count changes
+- Rebalancing when server count changes
 - Doesn't account for load
 
-*Use cases:* Stateful applications, server-side caching, legacy systems without external sessions
+*Use cases:* Stateful applications, server-side caching, legacy systems without external session storage
 
 ```kotlin
-// IP Hash
+// IP Hash (simplified)
 class IPHashLoadBalancer(private val servers: List<Server>) {
     fun getServer(clientIP: String): Server {
-        val hash = clientIP.hashCode().absoluteValue
-        return servers[hash % servers.size]
+        val hash = clientIP.hashCode()
+        return servers[Math.floorMod(hash, servers.size)]
     }
 }
 ```
 
 **6. Consistent Hashing:**
 
-*Theory:* Using hash ring to minimize redistribution when adding/removing servers. When server count changes, only K/n keys move (K - keys, n - servers), not all.
+*Theory:* Uses a hash ring to minimize redistribution when adding/removing servers. When server count changes, only a fraction (~K/n) of keys move instead of all keys.
 
-*How it works:* Servers and requests placed on hash ring, request goes to nearest server clockwise
+*How it works:* Servers and keys are placed on a hash ring; each key maps to the next server clockwise.
 
 *Advantages:*
 - Minimal redistribution on scaling
-- Good for distributed caching
+- Great for distributed caching
 - Predictable routing
 
 *Disadvantages:*
-- Complex implementation
-- Requires virtual nodes for balance
-- Doesn't account for current load
+- More complex implementation
+- Needs virtual nodes for good balance
+- Doesn't inherently account for current load
 
-*Use cases:* Distributed caching (Redis, Memcached), CDN, distributed databases
+*Use cases:* Distributed caching (Redis, Memcached), CDNs, distributed databases
 
 ```kotlin
-// Consistent Hashing (simplified)
+// Consistent Hashing (simplified, illustrative)
 class ConsistentHashLB(servers: List<Server>, virtualNodes: Int = 150) {
     private val ring = TreeMap<Int, Server>()
+
     init {
         servers.forEach { server ->
             repeat(virtualNodes) { i ->
-                ring["$server-$i".hashCode()] = server
+                val hash = ("$server-$i").hashCode()
+                ring[hash] = server
             }
         }
     }
-    fun getServer(key: String) = ring.ceilingEntry(key.hashCode())?.value ?: ring.firstEntry().value
+
+    fun getServer(key: String): Server {
+        val hash = key.hashCode()
+        val entry = ring.ceilingEntry(hash) ?: ring.firstEntry()
+        return entry.value
+    }
 }
 ```
 
 **Comparison Table:**
 
-| Algorithm | Complexity | State | Fairness | Use Case |
-|-----------|-----------|-------|----------|----------|
-| Round Robin | O(1) | No | High | Homogeneous servers |
-| Weighted RR | O(1) | No | Medium | Heterogeneous servers |
-| Least Conn | O(n) | Yes | High | Long-lived connections |
-| Least RT | O(n) | Yes | High | Latency-critical |
-| IP Hash | O(1) | No | Low | Session persistence |
-| Consistent Hash | O(log n) | No | Medium | Distributed cache |
+| Algorithm | Selection Complexity (per request) | Balancer State | Fairness | Use Case |
+|-----------|------------------------------------|----------------|----------|----------|
+| Round Robin | O(1) | Yes (index) | High for homogeneous servers | Homogeneous servers |
+| Weighted RR | O(1) | Yes (index/weights) | High relative to weights | Heterogeneous servers |
+| Least Conn | O(n) | Yes (connection counters) | High | `Long`-lived connections |
+| Least RT | O(n) | Yes (metrics) | High | Latency-critical |
+| IP Hash | O(1) | No (beyond config) | Depends on IP distribution | Session persistence |
+| Consistent Hash | O(log n) | Minimal (hash ring) | Medium, improved with virtual nodes | Distributed cache |
 
 **Load Balancing Layers:**
 
-*Layer 4 (Transport):* Balancing at TCP/UDP level, fast, doesn't see request content. Used for high performance.
+*Layer 4 (Transport):* Balancing at TCP/UDP level, fast, unaware of request content. Used for high throughput and generic traffic.
 
-*Layer 7 (Application):* Balancing at HTTP level, sees URL/headers/cookies, slower but smarter. Used for content-based routing.
+*Layer 7 (`Application`):* Balancing at HTTP/application level, can inspect URL/headers/cookies, slower but more flexible. Used for content-based routing.
 
 **Additional Concepts:**
 
-- **Health checks** - periodic server availability verification
-- **Sticky sessions** - client-to-server binding via cookies
-- **Connection draining** - graceful shutdown with active connection completion
+- **Health checks** - periodic verification of server availability
+- **Sticky sessions** - client-to-server affinity via cookies/tokens
+- **Connection draining** - graceful instance removal allowing active connections to complete
 - **Auto-scaling integration** - dynamic server addition/removal
 
 ---
@@ -444,6 +545,11 @@ class ConsistentHashLB(servers: List<Server>, virtualNodes: Int = 150) {
 - How do you implement health checks for load balancers?
 - What is the difference between Layer 4 and Layer 7 load balancing?
 - How do you handle session persistence in distributed systems?
+
+## References
+
+- "Load balancing (computing)" on Wikipedia: "https://en.wikipedia.org/wiki/Load_balancing_(computing)"
+- [[c-caching-strategies]]
 
 ## Related Questions
 

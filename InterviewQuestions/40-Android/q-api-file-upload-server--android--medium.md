@@ -52,10 +52,14 @@ interface FileUploadApi {
     ): Response<UploadResponse>
 }
 
+// Предполагается, что экземпляр FileUploadApi (uploadApi) создан через Retrofit и
+// передан в место вызова (через DI или иным способом).
+
 suspend fun uploadFile(
     context: Context,
     uri: Uri,
-    descriptionText: String? = null
+    descriptionText: String? = null,
+    uploadApi: FileUploadApi
 ): Result<UploadResponse> = runCatching {
     val contentResolver = context.contentResolver
 
@@ -76,7 +80,7 @@ suspend fun uploadFile(
     val description = descriptionText
         ?.toRequestBody("text/plain".toMediaType())
 
-    val response = api.uploadFile(part, description)
+    val response = uploadApi.uploadFile(part, description)
     if (!response.isSuccessful) throw HttpException(response)
     response.body() ?: throw IOException("Empty response body")
 }
@@ -85,8 +89,9 @@ suspend fun uploadFile(
 **Ключевые моменты**:
 - `@Multipart` для `multipart/form-data`.
 - `@Part` для отдельных полей.
-- Для `Uri` используем `ContentResolver` (особенно важно с scoped storage).
+- Для `Uri` используем `ContentResolver` (особенно важно с scoped storage и SAF).
 - `Result<T>` через `runCatching` для безопасной обработки ошибок.
+- `FileUploadApi` должен быть корректно создан (Retrofit) и передан в функцию (например, через DI).
 
 ### 2. Отслеживание Прогресса
 
@@ -140,14 +145,17 @@ class FileUploadWorker(
         val uri = inputData.getString("file_uri")?.let(Uri::parse)
             ?: return Result.failure()
 
-        return uploadFile(applicationContext, uri).fold(
+        return uploadFile(
+            context = applicationContext,
+            uri = uri,
+            uploadApi = /* предоставить экземпляр FileUploadApi (через DI или ServiceLocator) */
+        ).fold(
             onSuccess = {
                 setProgressAsync(workDataOf("progress" to 100))
                 Result.success()
             },
             onFailure = { e ->
-                // Retry с exponential backoff при сетевых ошибках
-                return@fold if (e is IOException && runAttemptCount < 3) {
+                if (e is IOException && runAttemptCount < 3) {
                     Result.retry()
                 } else {
                     Result.failure(workDataOf("error" to (e.message ?: "unknown error")))
@@ -218,9 +226,9 @@ class FileUploadViewModel @Inject constructor(
             _uploadState.value = UploadState.Compressing
             val compressed = compressImage(context, uri)
 
-            val mimeType = context.contentResolver.getType(uri) ?: "image/jpeg"
-            val requestBody = compressed
-                .asRequestBody(mimeType.toMediaType())
+            // Формат файла соответствует JPEG после сжатия
+            val mimeType = "image/jpeg"
+            val requestBody = compressed.asRequestBody(mimeType.toMediaType())
 
             val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
                 val progress = if (total > 0) (uploaded * 100 / total).toInt() else 0
@@ -264,7 +272,7 @@ sealed class UploadState {
 | Retry | До 3 попыток с exponential backoff | Учитывает временные сетевые проблемы |
 | Размер | < 10MB для мобильных сетей (по возможности) | Снижение риска таймаутов и ограничений |
 | Фоновая загрузка | WorkManager вместо `Service` | Гарантированные условия выполнения, экономия батареи |
-| Разрешения | READ_MEDIA_IMAGES / READ_EXTERNAL_STORAGE в зависимости от API | Корректная работа с медиа-файлами и scoped storage |
+| Разрешения | В зависимости от API уровня: для API 33+ `READ_MEDIA_IMAGES` (при доступе к медиа), для ниже — `READ_EXTERNAL_STORAGE`; для SAF/Uri-провайдеров возможен доступ без явных storage-разрешений | Корректная работа с медиа-файлами и scoped storage |
 
 ## Answer (EN)
 
@@ -282,10 +290,14 @@ interface FileUploadApi {
     ): Response<UploadResponse>
 }
 
+// Assume FileUploadApi (uploadApi) is created via Retrofit and
+// injected or otherwise provided to the caller.
+
 suspend fun uploadFile(
     context: Context,
     uri: Uri,
-    descriptionText: String? = null
+    descriptionText: String? = null,
+    uploadApi: FileUploadApi
 ): Result<UploadResponse> = runCatching {
     val contentResolver = context.contentResolver
 
@@ -306,7 +318,7 @@ suspend fun uploadFile(
     val description = descriptionText
         ?.toRequestBody("text/plain".toMediaType())
 
-    val response = api.uploadFile(part, description)
+    val response = uploadApi.uploadFile(part, description)
     if (!response.isSuccessful) throw HttpException(response)
     response.body() ?: throw IOException("Empty response body")
 }
@@ -315,8 +327,9 @@ suspend fun uploadFile(
 **Key points**:
 - `@Multipart` for `multipart/form-data`.
 - `@Part` for individual fields.
-- Use `ContentResolver` with `Uri` (important for scoped storage).
+- Use `ContentResolver` with `Uri` (important for scoped storage and SAF).
 - Use `Result<T>` / `runCatching` for safer error handling.
+- Ensure `FileUploadApi` is properly created (Retrofit) and passed into the function (e.g., via DI).
 
 ### 2. Progress Tracking
 
@@ -370,14 +383,17 @@ class FileUploadWorker(
         val uri = inputData.getString("file_uri")?.let(Uri::parse)
             ?: return Result.failure()
 
-        return uploadFile(applicationContext, uri).fold(
+        return uploadFile(
+            context = applicationContext,
+            uri = uri,
+            uploadApi = /* provide FileUploadApi instance (via DI or ServiceLocator) */
+        ).fold(
             onSuccess = {
                 setProgressAsync(workDataOf("progress" to 100))
                 Result.success()
             },
             onFailure = { e ->
-                // Retry with exponential backoff on network errors
-                return@fold if (e is IOException && runAttemptCount < 3) {
+                if (e is IOException && runAttemptCount < 3) {
                     Result.retry()
                 } else {
                     Result.failure(workDataOf("error" to (e.message ?: "unknown error")))
@@ -448,9 +464,9 @@ class FileUploadViewModel @Inject constructor(
             _uploadState.value = UploadState.Compressing
             val compressed = compressImage(context, uri)
 
-            val mimeType = context.contentResolver.getType(uri) ?: "image/jpeg"
-            val requestBody = compressed
-                .asRequestBody(mimeType.toMediaType())
+            // The compressed file is JPEG, make MIME type consistent
+            val mimeType = "image/jpeg"
+            val requestBody = compressed.asRequestBody(mimeType.toMediaType())
 
             val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
                 val progress = if (total > 0) (uploaded * 100 / total).toInt() else 0
@@ -494,7 +510,7 @@ sealed class UploadState {
 | Retry | Up to 3 attempts with exponential backoff | Handles temporary network issues |
 | Size | Prefer < 10MB over mobile networks when possible | Reduces risk of timeouts and carrier limits |
 | Background upload | Use WorkManager instead of a plain `Service` | Better execution guarantees, battery efficiency |
-| Permissions | Use READ_MEDIA_IMAGES / READ_EXTERNAL_STORAGE as appropriate for API level | Correct access to media under scoped storage |
+| Permissions | Depends on API level: for API 33+ use `READ_MEDIA_IMAGES` when accessing shared media; below 33 use `READ_EXTERNAL_STORAGE`; for SAF/provider Uris you may rely on granted URI permissions without broad storage permission | Correct access to media under scoped storage |
 
 ---
 
@@ -535,3 +551,4 @@ sealed class UploadState {
 - Resumable upload implementation with chunked transfer
 - Multi-file upload orchestration with priority
 - Network request deduplication for retry scenarios
+```

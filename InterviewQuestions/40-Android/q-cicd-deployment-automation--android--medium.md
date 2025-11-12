@@ -49,11 +49,12 @@ Promote (alpha/beta/prod) → Monitor → Rollback
 Gradle как единый источник истины: автоматическое управление `versionCode` на CI (монотоно растущее для Play Store), встраивание Git SHA.
 
 ```kotlin
-// ✅ Автоматизация версий (пример)
+// ✅ Автоматизация версий (упрощенный пример для демонстрации идеи)
 android {
     defaultConfig {
         val ciBuildNumber = System.getenv("CI_BUILD_NUMBER")?.toIntOrNull()
         // CI_BUILD_NUMBER должен быть глобально монотоно растущим, не сбрасываться по веткам
+        // В реальном пайплайне убедитесь, что источник versionCode надёжен (например, tag/релизный номер или отдельное хранилище).
         versionCode = ciBuildNumber ?: 1
         versionName = "1.2.$versionCode"
         buildConfigField("String", "GIT_SHA", "\"${getGitSha()}\"")
@@ -66,13 +67,13 @@ fun String.runCommand(): String =
     Runtime.getRuntime().exec(this.split(" ").toTypedArray()).inputStream.bufferedReader().readText()
 ```
 
-(В реальном проекте вы можете выносить получение SHA и versionCode в Gradle tasks/`androidComponents` вместо вызова git на этапе конфигурации.)
+(В реальном проекте получение SHA и versionCode лучше выносить в Gradle tasks/`androidComponents` или скрипты CI, а не вызывать git на этапе конфигурации Gradle и не использовать `Runtime.exec` напрямую в продакшене.)
 
 ### Подписание
 **Play App Signing:** Google управляет production keystore, вы используете upload keystore из CI secrets.
 
 ```kotlin
-// ✅ Подписание через env-переменные
+// ✅ Подписание через env-переменные (пример)
 android {
     signingConfigs {
         create("release") {
@@ -88,8 +89,8 @@ android {
 ❌ Никогда не коммитить keystores/пароли в репозиторий.
 
 ### Артефакты
-- **AAB** для Play Store
-- **APK** для internal тестирования
+- **AAB** (основной формат для Play Store)
+- **APK** при необходимости для internal тестирования или внешней дистрибуции вне Play Store
 - **mapping.txt** для деобфускации стектрейсов
 - **Release notes** автогенерируются из conventional commits
 
@@ -115,7 +116,7 @@ jobs:
             -Pplay.track=internal
 ```
 
-(Точные задачи и параметры зависят от используемого плагина публикации, например, `gradle-play-publisher`.)
+(Точные задачи и параметры зависят от используемого плагина публикации, например, `gradle-play-publisher`; приведённый YAML — схема, а не готовый универсальный конфиг.)
 
 ### Staged Rollout
 **Internal** (PR merge) → **Alpha** (5%) → **Beta** (20%) → **Production** (100%)
@@ -133,8 +134,9 @@ jobs:
 - Критичные ошибки в Crashlytics
 
 ```bash
-# ✅ Автоматический откат (пример логики, требуется интеграция с Play Developer API)
-# Скрипт читает метрики, при нарушении порогов переводит rollout на предыдущую стабильную версию
+# ✅ Автоматический откат (пример логики высокого уровня)
+# Требуется корректная интеграция с Play Developer API или плагином публикации.
+# Скрипт читает метрики и при нарушении порогов переводит rollout на предыдущую стабильную версию.
 ./gradlew publishRelease --track production --user-fraction 0.0
 ./gradlew publishRelease --track production --version-codes "<previous-stable-version-code>"
 ```
@@ -158,11 +160,12 @@ Promote (alpha/beta/prod) → Monitor → Rollback
 Gradle as single source of truth: automatic `versionCode` management on CI (monotonically increasing for Play Store), embed Git SHA.
 
 ```kotlin
-// ✅ Automated versioning (example)
+// ✅ Automated versioning (simplified example to illustrate the idea)
 android {
     defaultConfig {
         val ciBuildNumber = System.getenv("CI_BUILD_NUMBER")?.toIntOrNull()
-        // CI_BUILD_NUMBER must be globally monotonically increasing, not reset per-branch
+        // CI_BUILD_NUMBER must be globally monotonically increasing and not reset per branch.
+        // In a real pipeline, ensure versionCode is derived from a reliable source (e.g., release tags or dedicated storage).
         versionCode = ciBuildNumber ?: 1
         versionName = "1.2.$versionCode"
         buildConfigField("String", "GIT_SHA", "\"${getGitSha()}\"")
@@ -175,13 +178,13 @@ fun String.runCommand(): String =
     Runtime.getRuntime().exec(this.split(" ").toTypedArray()).inputStream.bufferedReader().readText()
 ```
 
-(In a real project, prefer Gradle tasks/`androidComponents` for computing SHA/versionCode instead of running git at configuration time.)
+(In a real project, prefer using Gradle tasks/`androidComponents` or CI scripts to compute SHA/versionCode instead of calling git in the Gradle configuration phase and avoid relying on `Runtime.exec` directly in production builds.)
 
 ### Signing
-**Play App Signing:** Google manages the production keystore, you use an upload keystore provided via CI secrets.
+**Play App Signing:** Google manages the production keystore; you use an upload keystore provided via CI secrets.
 
 ```kotlin
-// ✅ Signing via environment variables
+// ✅ Signing via environment variables (example)
 android {
     signingConfigs {
         create("release") {
@@ -197,8 +200,8 @@ android {
 ❌ Never commit keystores/passwords to the repository.
 
 ### Artifacts
-- **AAB** for Play Store
-- **APK** for internal testing
+- **AAB** (primary format for Play Store)
+- **APK** when needed for internal testing or distribution outside Play Store
 - **mapping.txt** for stack trace deobfuscation
 - **Release notes** auto-generated from conventional commits
 
@@ -224,7 +227,7 @@ jobs:
             -Pplay.track=internal
 ```
 
-(Exact tasks/flags depend on the chosen publishing plugin, e.g., `gradle-play-publisher`.)
+(Exact tasks/flags depend on the chosen publishing plugin, e.g., `gradle-play-publisher`; this YAML is a conceptual example, not a universal drop-in.)
 
 ### Staged Rollout
 **Internal** (PR merge) → **Alpha** (5%) → **Beta** (20%) → **Production** (100%)
@@ -242,8 +245,9 @@ Metrics for auto-rollback (implemented via Play Developer API/CI scripts, not bu
 - Critical errors in Crashlytics
 
 ```bash
-# ✅ Automatic rollback (example logic, requires Play Developer API integration)
-# Script reads metrics and, on threshold breach, reverts rollout to previous stable version
+# ✅ Automatic rollback (high-level example logic)
+# Requires proper integration with Play Developer API or a publishing plugin.
+# Script reads metrics and, on threshold breach, reverts rollout to a previous stable version.
 ./gradlew publishRelease --track production --user-fraction 0.0
 ./gradlew publishRelease --track production --version-codes "<previous-stable-version-code>"
 ```

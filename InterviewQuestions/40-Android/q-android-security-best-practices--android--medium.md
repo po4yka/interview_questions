@@ -4,24 +4,25 @@ title: Android Security Best Practices / Лучшие практики безо�
 aliases: [Android Security Best Practices, Лучшие практики безопасности Android]
 topic: android
 subtopics:
-  - keystore-crypto
-  - network-security-config
-  - permissions
+- keystore-crypto
+- network-security-config
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-encryption
-  - c-permissions
+- c-encryption
+- c-permissions
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-11
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, encryption, security]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -98,7 +99,7 @@ Network Security Config помогает:
 ```
 
 **4. Защита компонентов:**
-Используйте `android:exported="false"` для внутренних Activity/Service/Provider, которые не должны вызываться извне. Для экспортируемых компонентов валидируйте Intent от внешних источников.
+Используйте `android:exported="false"` для внутренних `Activity`/`Service`/Provider, которые не должны вызываться извне. Для экспортируемых компонентов валидируйте `Intent` от внешних источников.
 
 ```kotlin
 // ✅ Валидация Intent
@@ -141,6 +142,36 @@ webView.addJavascriptInterface(object {
 - Используйте BiometricPrompt для криптографически стойкой аутентификации пользователей
 - Используйте Android Lint/StrictMode для выявления потенциальных уязвимостей и неправильного использования API
 - Выполняйте анализ зависимостей (например, OWASP Dependency-Check) для поиска известных уязвимостей
+
+## Ответы / Дополнительные вопросы (RU)
+
+- Как реализовать certificate pinning для разных build variant (dev/staging/prod)?
+- Каковы риски использования рефлексии и динамической загрузки кода с точки зрения безопасности?
+- Как безопасно хранить API-ключи и предотвращать их извлечение из APK?
+- В чем разница между аутентификаторами BIOMETRIC_STRONG и BIOMETRIC_WEAK?
+- Как обрабатывать чувствительные данные в памяти, чтобы снизить риск дампов памяти и атак холодной перезагрузки?
+
+## Ссылки (RU)
+
+- [[c-encryption]] - Основы шифрования
+- [[c-permissions]] - Система разрешений Android
+- https://developer.android.com/topic/security/best-practices
+- https://owasp.org/www-project-mobile-app-security/
+
+## Связанные вопросы (RU)
+
+### Предпосылки (Проще)
+- [[q-android-manifest-file--android--easy]] - Конфигурация Manifest
+- [[q-android-app-components--android--easy]] - Базовые компоненты приложения
+
+### Связанные (Того же уровня)
+- Runtime permissions
+- [[q-android-lint-tool--android--medium]] - Инструменты анализа кода
+- [[q-biometric-authentication--android--medium]] - Биометрическая аутентификация
+
+### Продвинутые (Сложнее)
+- Методы обнаружения рута (root detection techniques)
+- Предотвращение обхода SSL pinning
 
 ## Answer (EN)
 
@@ -208,7 +239,7 @@ By itself, Network Security Config does not implement certificate pinning; pinni
 ```
 
 **4. Component Protection:**
-Use `android:exported="false"` for internal Activity/Service/Provider components that must not be invoked externally. For exported components, always validate Intents from external sources.
+Use `android:exported="false"` for internal `Activity`/`Service`/Provider components that must not be invoked externally. For exported components, always validate `Intents` from external sources.
 
 ```kotlin
 // ✅ Validate Intent
@@ -276,10 +307,10 @@ webView.addJavascriptInterface(object {
 - [[q-android-app-components--android--easy]] - App components basics
 
 ### Related (Same Level)
- - Runtime permissions
+- Runtime permissions
 - [[q-android-lint-tool--android--medium]] - Code analysis tools
 - [[q-biometric-authentication--android--medium]] - Biometric authentication
 
 ### Advanced (Harder)
- - Root detection techniques
- - SSL pinning bypass prevention
+- Root detection techniques
+- SSL pinning bypass prevention

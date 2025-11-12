@@ -12,9 +12,11 @@ status: draft
 moc: moc-kotlin
 related: [c-sealed-classes, q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-state-machine-transitions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-10-15
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
+
 ---
+
 # Вопрос (RU)
 > Что известно о data классах и sealed классах в Kotlin? Каковы их характеристики и применения?
 
@@ -49,21 +51,67 @@ data class User(
     val age: Int
 )
 
-val user1 = User(1, "Alice", "alice@example.com", 30)
-val user2 = User(1, "Alice", "alice@example.com", 30)
+fun main() {
+    val user1 = User(1, "Alice", "alice@example.com", 30)
+    val user2 = User(1, "Alice", "alice@example.com", 30)
+    val user3 = User(2, "Bob", "bob@example.com", 25)
 
-// Автоматический equals()
-println(user1 == user2)  // true (одинаковое содержимое)
+    // Автоматический equals()
+    println(user1 == user2)  // true (одинаковое содержимое)
+    println(user1 == user3)  // false (разное содержимое)
 
-// Автоматический toString()
-println(user1)  // User(id=1, name=Alice, email=alice@example.com, age=30)
+    // Автоматический toString()
+    println(user1)  // User(id=1, name=Alice, email=alice@example.com, age=30)
 
-// copy() функция
-val olderUser = user1.copy(age = 31)
+    // Автоматический hashCode()
+    val userSet = setOf(user1, user2, user3)
+    println(userSet.size)  // 2 (user1 и user2 равны)
 
-// Деструктуризация с componentN()
-val (id, name, email, age) = user1
-println("$name is $age years old")
+    // copy() функция
+    val olderUser = user1.copy(age = 31)
+    println(olderUser)  // User(id=1, name=Alice, email=alice@example.com, age=31)
+
+    // Деструктуризация с componentN()
+    val (id, name, email, age) = user1
+    println("$name is $age years old")
+}
+```
+
+**Пример data класса как DTO/Model:**
+```kotlin
+// Модель ответа API
+data class ApiResponse(
+    val success: Boolean,
+    val message: String,
+    val data: List<User>?
+)
+
+data class User(
+    val id: Int,
+    val username: String,
+    val isActive: Boolean
+)
+
+fun parseApiResponse(json: String): ApiResponse {
+    // Упрощённый пример парсинга JSON
+    return ApiResponse(
+        success = true,
+        message = "Users fetched successfully",
+        data = listOf(
+            User(1, "alice", true),
+            User(2, "bob", false)
+        )
+    )
+}
+
+fun main() {
+    val response = parseApiResponse("{}")
+    println(response)
+
+    response.data?.forEach { user ->
+        println("User: ${user.username}, Active: ${user.isActive}")
+    }
+}
 ```
 
 ### Sealed Классы
@@ -74,7 +122,7 @@ println("$name is $age years old")
 - Отлично работают с `when` выражениями (exhaustive checking без `else` при обработке всех вариантов)
 - Часто используются для управления состояниями в архитектурных компонентах
 
-Исторически sealed классы позволяли наследование только в том же файле. В более новых версиях Kotlin (и с sealed интерфейсами) правила могут расширяться (например, до одного модуля или пакета для определённых таргетов), но ключевая идея остаётся: набор подклассов замкнут и контролируем.
+Исторически sealed классы позволяли наследование только в том же файле. В более новых версиях Kotlin (и с sealed интерфейсами) правила могут расширяться (например, до одного модуля или пакета для определённых таргетов), но ключевая идея остаётся: набор подклассов замкнут и контролируем компилятором.
 
 **Применение:**
 - Управление UI состояниями (Loading, Success, Error)
@@ -99,6 +147,13 @@ fun renderUi(state: UiState) {
         is UiState.Empty -> println("Нет данных")
         // else не нужен - компилятор знает все варианты
     }
+}
+
+fun main() {
+    renderUi(UiState.Loading)
+    renderUi(UiState.Success(listOf("Item 1", "Item 2")))
+    renderUi(UiState.Error("Network error", 500))
+    renderUi(UiState.Empty)
 }
 ```
 
@@ -140,11 +195,19 @@ fun handleResult(result: NetworkResult<List<Product>>) {
         }
     }
 }
+
+fun main() {
+    val result = fetchProducts()
+    handleResult(result)
+}
 ```
 
 ### Комбинирование Data и Sealed Классов
 
-**Очень распространённый паттерн — sealed класс с data подклассами:**
+Очень распространённый паттерн — sealed класс с data подклассами. Это позволяет одновременно:
+- Иметь удобные value-объекты с автогенерируемыми методами
+- Гарантировать закрытый набор вариантов для исчерпывающих `when`:
+
 ```kotlin
 sealed class Result {
     data class Success(val value: Int) : Result()
@@ -159,10 +222,19 @@ fun divide(a: Int, b: Int): Result {
     }
 }
 
-val result1 = divide(10, 2)
-when (result1) {
-    is Result.Success -> println("Результат: ${result1.value}")
-    is Result.Failure -> println("Ошибка: ${result1.error}")
+fun main() {
+    val result1 = divide(10, 2)
+    val result2 = divide(10, 0)
+
+    when (result1) {
+        is Result.Success -> println("Результат: ${result1.value}")
+        is Result.Failure -> println("Ошибка: ${result1.error}")
+    }
+
+    when (result2) {
+        is Result.Success -> println("Результат: ${result2.value}")
+        is Result.Failure -> println("Ошибка: ${result2.error}")
+    }
 }
 ```
 
@@ -203,16 +275,26 @@ class ProfileViewModel {
     fun getState() = state
 }
 
-// В Activity/Fragment
-when (val state = viewModel.getState()) {
-    is ProfileState.Initial -> println("Ещё не загружено")
-    is ProfileState.Loading -> println("Загрузка...")
-    is ProfileState.Success -> {
-        // Деструктуризация data класса
-        val (name, email, avatarUrl) = state.profile
-        println("Пользователь: $name, Email: $email")
+fun main() {
+    val viewModel = ProfileViewModel()
+
+    when (val state = viewModel.getState()) {
+        is ProfileState.Initial -> println("Ещё не загружено")
+        is ProfileState.Loading -> println("Загрузка...")
+        is ProfileState.Success -> println("Пользователь: ${state.profile.name}")
+        is ProfileState.Error -> println("Ошибка: ${state.message}")
     }
-    is ProfileState.Error -> println("Ошибка: ${state.message}")
+
+    viewModel.loadProfile()
+
+    when (val state = viewModel.getState()) {
+        is ProfileState.Success -> {
+            // Деструктуризация data класса
+            val (name, email, avatarUrl) = state.profile
+            println("Пользователь: $name, Email: $email")
+        }
+        else -> println("Неуспешное состояние")
+    }
 }
 ```
 
@@ -221,19 +303,18 @@ when (val state = viewModel.getState()) {
 | Характеристика | Data класс | Sealed класс |
 |----------------|-----------|--------------|
 | **Назначение** | Хранение данных | Ограниченная иерархия типов (закрытый набор вариантов) |
-| **Автогенерация** | equals, hashCode, toString, copy, componentN для свойств из первичного конструктора | Нет автогенерации этих методов по умолчанию |
-| **Наследование** | Обычный класс, может быть final/open/abstract | Является абстрактным, разрешает наследование только в контролируемой области (файл/модуль в зависимости от версии/таргета) |
+| **Автогенерация** | `equals`, `hashCode`, `toString`, `copy`, `componentN` для свойств из первичного конструктора | Нет автогенерации этих методов по умолчанию |
+| **Наследование** | Обычный класс, может быть `final`/`open`/`abstract` | Абстрактный, наследование только в контролируемой области (файл/модуль в зависимости от версии/таргета) |
 | **Подклассы** | Не ограничены языком | Жёстко ограничены: компилятор знает полный набор подклассов |
 | **Применение** | Модели, DTOs, value-объекты | Состояния, результаты, события, sum types |
 | **When exhaustiveness** | Не даёт исчерпывающей проверки сам по себе | Позволяет исчерпывающие `when` без `else` при обработке всех подклассов |
 
-### Краткий Ответ
-
+## Краткая Версия
 **Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()` (для свойств из первичного конструктора). Используются для моделей данных, DTOs, API responses.
 
-**Sealed классы**: Ограничивают множество подклассов контролируемой областью (как минимум файл, в новых версиях — расширенные правила). Создают типобезопасные иерархии и позволяют исчерпывающие `when`-проверки. Используются для UI состояний (Loading/Success/Error), Result типов, навигационных событий и иерархий команд/действий.
+**Sealed классы**: Ограничивают множество подклассов контролируемой областью. Создают типобезопасные иерархии и позволяют исчерпывающие `when`-проверки. Используются для UI состояний (Loading/Success/Error), Result типов, навигационных событий и иерархий команд/действий.
 
-**В Android**: Data классы — для моделей данных, sealed классы — для управления состояниями во `ViewModel` и других слоях. Часто комбинируются: sealed класс с data подклассами.
+**В Kotlin и Android**: Data классы широко применяются для моделей данных, sealed классы — для выражения состояний, результатов и событий (особенно во `ViewModel` и других слоях). Часто комбинируются: sealed класс с data подклассами.
 
 ## Answer (EN)
 
@@ -517,13 +598,18 @@ fun main() {
 | Typical usage | Models, DTOs, value objects | States, results, events, sum types |
 | `when` exhaustiveness | Does not itself enable exhaustive `when` | Enables exhaustive `when` without `else` when all subclasses are covered |
 
-### Short Answer
-
+## Short Version
 - Data classes: For representing data with automatically generated utility methods; ideal for models, DTOs, and API responses.
 - Sealed classes: For defining a closed set of variants; ideal for UI states (Loading/Success/Error), Result types, navigation events, and command/action hierarchies with exhaustive `when` handling.
-- In Android: Data classes are used for data models, sealed classes for representing states, results, and events in `ViewModel` and other layers; often combined as sealed hierarchies with data subclasses.
+- In Kotlin and Android: Data classes are widely used for data models, sealed classes for representing states, results, and events (especially in `ViewModel` and other layers); they are often combined as sealed hierarchies with data subclasses.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия от подхода в Java?
+- Когда вы бы использовали такие конструкции на практике?
+- Каких типичных ошибок при работе с data и sealed классами следует избегать?
 
 ## Follow-ups
 
@@ -531,10 +617,20 @@ fun main() {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-sealed-classes]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-sealed-classes]]
+
+## Связанные вопросы (RU)
+
+- [[q-job-state-machine-transitions--kotlin--medium]]
+- [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]
 
 ## Related Questions
 

@@ -36,14 +36,16 @@ tags: [difficulty/medium, inline-functions, kotlin, lambdas, optimization, perfo
 
 ## Ответ (RU)
 
-Inline функции - это мощная возможность Kotlin, которая инструктирует компилятор вставлять байт-код функции непосредственно в место вызова вместо создания отдельного вызова функции. Это уменьшает накладные расходы на вызов функции и позволяет использовать продвинутые возможности, такие как реифицированные параметры типов (см. также [[c-kotlin]]).
+Inline функции - это возможность Kotlin, которая инструктирует компилятор (на уровне Kotlin) попытаться вставить байт-код функции непосредственно в место вызова вместо генерации отдельного вызова функции, особенно для функций высшего порядка с лямбда-параметрами. Это может уменьшать накладные расходы на вызов функций и аллокации для некоторых лямбд и позволяет использовать возможности, такие как реифицированные параметры типов (см. также [[c-kotlin]]). Конкретный эффект зависит от целевой платформы и оптимизаций (включая JIT для JVM).
 
 ### Зачем нужны inline функции
 
-В Kotlin лямбда-выражения обычно компилируются в объекты (например, анонимные классы или функциональные объекты `FunctionN`), особенно если они захватывают контекст. Это может приводить к:
+В Kotlin лямбда-выражения на JVM обычно компилируются в объекты (например, анонимные классы или функциональные объекты `FunctionN`), особенно если они захватывают контекст. Это может приводить к:
 1. Выделению памяти в куче
 2. Давлению на сборщик мусора
 3. Дополнительной косвенности через накладные расходы вызова функции
+
+При этом JVM и компилятор могут оптимизировать часть этих накладных расходов (например, через `invokedynamic` и escape-анализ), поэтому inline не гарантирует ускорения во всех сценариях, а дает компилятору дополнительные возможности.
 
 **Проблема без inline**:
 ```kotlin
@@ -74,7 +76,7 @@ for (i in 0 until 5) {
 ```kotlin
 inline fun repeat(times: Int, action: () -> Unit) {
     for (i in 0 until times) {
-        action()  // Тело лямбды встраивается напрямую
+        action()  // Тело лямбды может быть встроено
     }
 }
 
@@ -83,7 +85,7 @@ repeat(5) {
     println("Привет")
 }
 
-// Концептуально после встраивания:
+// Концептуально после встраивания (упрощенно):
 for (i in 0 until 5) {
     println("Привет")  // Прямой код, без отдельного объекта для некэпчеринговой лямбды
 }
@@ -115,7 +117,7 @@ val end = System.nanoTime()
 val time = end - start
 ```
 
-При этом реальные детали зависят от backend'а (JVM/JS/Native) и оптимизаций.
+При этом реальные детали зависят от backend'а (JVM/JS/Native) и оптимизаций; inlining для конкретного вызова может быть частичным или не произойти, если это нецелесообразно.
 
 ### Преимущества inline функций
 
@@ -138,18 +140,18 @@ fun benchmark() {
     repeat(iterations) {
         result += inlined { 1 }
     }
-    println("Inline: ${System.currentTimeMillis() - start1}мс (примерное значение)")
+    println("Inline: ${System.currentTimeMillis() - start1}мс (примерно)")
 
     result = 0
     val start2 = System.currentTimeMillis()
     repeat(iterations) {
         result += notInlined { 1 }
     }
-    println("Не inline: ${System.currentTimeMillis() - start2}мс (примерное значение)")
+    println("Не inline: ${System.currentTimeMillis() - start2}мс (примерно)")
 }
 ```
 
-Комментарий: конкретные числа зависят от JVM, оптимизаций и среды, пример иллюстрирует порядок разницы.
+Комментарий: конкретные числа зависят от JVM, JIT, оптимизаций и среды. Inline может дать выигрыш, но его следует подтверждать бенчмарками.
 
 #### 2. Сокращение выделения объектов для лямбд
 
@@ -168,7 +170,7 @@ class MemoryTest {
 
 // Вызов много раз:
 // processItems: потенциально больше аллокаций под лямбды
-// processItemsInline: меньше аллокаций, особенно для некэпчеринговых лямбд
+// processItemsInline: меньше аллокаций, особенно для некэпчеринговых лямбд (фактическое поведение зависит от оптимизаций)
 ```
 
 #### 3. Реифицированные параметры типов
@@ -204,7 +206,7 @@ val user: User = gson.fromJson<User>(jsonString)
 
 #### 4. Нелокальные возвраты
 
-В inline функциях лямбда может использовать `return` для выхода из охватывающей функции:
+В inline функциях лямбда может использовать `return` для выхода из охватывающей функции (non-local return):
 
 ```kotlin
 fun findFirstNegative(numbers: List<Int>): Int? {
@@ -236,7 +238,7 @@ inline fun <R> synchronized(lock: Any, block: () -> R): R {
 }
 ```
 
-(Реальная реализация и названия методов зависят от версии stdlib/JVM, приведено концептуально.)
+(Реальная stdlib использует внутренние API; этот пример носит учебный, концептуальный характер. В прикладном коде следует использовать стандартный `synchronized` / высокоуровневые утилиты, а не вызывать внутренние Intrinsics напрямую.)
 
 #### Пример 2: Паттерн use-ресурса (try-with-resources)
 
@@ -301,6 +303,8 @@ inline fun <T> measureMemory(block: () -> T): Pair<T, Long> {
     return result to (after - before)
 }
 ```
+
+Комментарий: `measureMemory` с ручными вызовами `System.gc()` приведен только как упрощенная демонстрация идеи и не является надежным способом измерения потребления памяти в реальных приложениях.
 
 #### Пример 4: DSL builders
 
@@ -373,7 +377,7 @@ val list = mutableListOf(1, 2, 3)
 
 ### Модификатор noinline
 
-Иногда нужно предотвратить встраивание конкретных параметров-лямбд:
+Иногда нужно явно предотвратить встраивание конкретных параметров-лямбд и сохранить их как значения (для хранения или передачи дальше):
 
 ```kotlin
 inline fun performOperation(
@@ -433,7 +437,7 @@ inline fun <T, R> List<T>.myMap(
 
 ### Модификатор crossinline
 
-`crossinline` предотвращает нелокальные возвраты в лямбдах, которые вызываются в другом контексте:
+`crossinline` предотвращает нелокальные возвраты в лямбдах, которые будут вызваны в другом контексте или отложенно, где non-local return невозможен:
 
 ```kotlin
 inline fun runInThread(crossinline block: () -> Unit) {
@@ -445,13 +449,13 @@ inline fun runInThread(crossinline block: () -> Unit) {
 fun test() {
     runInThread {
         println("В потоке")
-        // return  // Ошибка компилятора
+        // return  // Ошибка компилятора: нелокальный return недопустим
     }
     println("После runInThread")
 }
 ```
 
-Без `crossinline` встраивание в подобные контексты с потенциальным нелокальным `return` было бы некорректным, компилятор это запрещает.
+Без `crossinline` компилятор запрещает такие случаи с потенциальным нелокальным `return`, так как он не может корректно их сгенерировать при вызове из другого контекста.
 
 **Пример**:
 
@@ -531,19 +535,21 @@ inline fun factorial(n: Int): Int {
 }
 ```
 
-Рекурсивные inline-функции формально допустимы, но приводят к росту байт-кода и, как правило, не дают ожидаемой оптимизации, поэтому обычно не рекомендуются.
+Рекурсивные inline-функции формально допустимы, но вызовы не будут разворачиваться бесконечно на месте вызова; компилятор обрабатывает такие случаи особо. Как правило, это не дает ожидаемой оптимизации и может ухудшить читаемость, поэтому обычно не рекомендуется.
 
 ### Анализ производительности
 
 Примеры бенчмарков из разделов выше иллюстрируют, что inline-функции могут:
-- уменьшать накладные расходы вызова функций высшего порядка;
+- уменьшать накладные расходы вызова функций высшего порядка в некоторых сценариях;
 - уменьшать количество аллокаций для некэпчеринговых лямбд;
 - давать компилятору больше возможностей для оптимизаций.
 
 Фактический выигрыш зависит от:
 - целевой платформы (JVM/JS/Native);
-- включенных оптимизаций;
+- включенных оптимизаций и поведения JIT;
 - паттернов использования (захваты, escape-анализ и т.п.).
+
+Поэтому inline следует рассматривать как инструмент, требующий измерений в реальном окружении.
 
 ### Когда использовать inline функции
 
@@ -623,14 +629,16 @@ inline fun logIf(condition: Boolean, message: () -> String) {
 
 ## Answer (EN)
 
-Inline functions are a Kotlin feature that instructs the compiler to insert the function's bytecode directly at each call site instead of always emitting a separate call. This can reduce call overhead and enables features like reified type parameters.
+Inline functions are a Kotlin feature that instruct the compiler to (where profitable and applicable) insert the function's bytecode directly at each call site instead of always emitting a separate call, especially for higher-order functions with lambda parameters. This can reduce call overhead and some lambda allocations and enables features like reified type parameters. The actual impact is platform- and optimizer-dependent.
 
 ### Why Inline Functions Exist
 
-In Kotlin, lambda expressions on JVM are often compiled to objects (such as anonymous classes or `FunctionN` implementations), especially when they capture variables. This can:
+On the JVM, Kotlin lambda expressions are typically compiled to objects (such as anonymous classes or `FunctionN` implementations), especially when they capture variables. This can:
 1. Allocate memory on the heap
 2. Add pressure to the garbage collector
 3. Introduce indirection and extra call overhead
+
+At the same time, JVM and the compiler can optimize some of this (e.g., via `invokedynamic` and escape analysis), so inline is not a guaranteed win, but a tool that can unlock additional optimizations.
 
 **Problem without inline**:
 ```kotlin
@@ -667,7 +675,7 @@ repeat(5) {
     println("Hello")
 }
 
-// Conceptually after inlining:
+// Conceptually after inlining (simplified):
 for (i in 0 until 5) {
     println("Hello")  // Direct code for non-capturing lambda
 }
@@ -698,7 +706,7 @@ val end = System.nanoTime()
 val time = end - start
 ```
 
-Actual code generation details depend on the target (JVM/JS/Native) and optimizations.
+Actual code generation depends on the target (JVM/JS/Native) and optimizer. Inlining for a given call site can be partial or skipped based on heuristics.
 
 ### Benefits of Inline Functions
 
@@ -732,13 +740,13 @@ fun benchmark() {
 }
 ```
 
-Numbers are illustrative; actual performance depends on the runtime and optimizer.
+These numbers are illustrative; real performance depends on the runtime and JIT. Inline can help, but always measure.
 
 #### 2. Fewer Lambda Allocations
 
 ```kotlin
 class MemoryTest {
-    // Without inline - typically involves a function object, especially for capturing lambdas
+    // Without inline - typically involves a function object (especially for capturing lambdas)
     fun processItems(items: List<String>, transform: (String) -> String): List<String> {
         return items.map(transform)
     }
@@ -751,12 +759,12 @@ class MemoryTest {
 
 // When called many times:
 // processItems: potentially more allocations for lambdas
-// processItemsInline: fewer allocations, especially for non-capturing lambdas
+// processItemsInline: fewer allocations, especially for non-capturing lambdas (subject to optimizations)
 ```
 
 #### 3. Enables Reified Type Parameters
 
-Only inline functions can use `reified`, which allows type checks and operations with the actual type at runtime:
+Only inline functions can use `reified`, which allows working with the actual type at runtime:
 
 ```kotlin
 fun <T> isInstanceOf(value: Any): Boolean {
@@ -785,7 +793,7 @@ val user: User = gson.fromJson<User>(jsonString)
 
 #### 4. Allows Non-Local Returns
 
-With inline functions, lambdas can use `return` to exit the enclosing function:
+With inline functions, lambdas can use `return` to exit the enclosing function (non-local return):
 
 ```kotlin
 fun findFirstNegative(numbers: List<Int>): Int? {
@@ -816,7 +824,7 @@ inline fun <R> synchronized(lock: Any, block: () -> R): R {
 }
 ```
 
-(Exact implementation details may vary across Kotlin versions.)
+(This mirrors how stdlib does it conceptually. It relies on internal APIs and is for educational purposes; production code should use standard `synchronized`/utilities rather than calling Intrinsics directly.)
 
 #### Example 2: Use-Resource Pattern (try-with-resources)
 
@@ -881,6 +889,8 @@ inline fun <T> measureMemory(block: () -> T): Pair<T, Long> {
     return result to (after - before)
 }
 ```
+
+Note: `measureMemory` here is a simplistic illustration; explicit `System.gc()` and single-shot measurements are not reliable profiling techniques.
 
 #### Example 4: DSL Builders
 
@@ -953,7 +963,7 @@ val list = mutableListOf(1, 2, 3)
 
 ### The Noinline Modifier
 
-Sometimes you need to prevent specific lambda parameters from being inlined:
+Sometimes you need to prevent specific lambda parameters from being inlined and treat them as regular function values (e.g., to store or pass them):
 
 ```kotlin
 inline fun performOperation(
@@ -1013,7 +1023,7 @@ inline fun <T, R> List<T>.myMap(
 
 ### The Crossinline Modifier
 
-`crossinline` prevents non-local returns in lambdas that are called in a different context:
+`crossinline` prevents non-local returns in lambdas that are invoked in a different or deferred context where such returns would be invalid:
 
 ```kotlin
 inline fun runInThread(crossinline block: () -> Unit) {
@@ -1025,13 +1035,13 @@ inline fun runInThread(crossinline block: () -> Unit) {
 fun test() {
     runInThread {
         println("In thread")
-        // return  // Compiler error
+        // return  // Compiler error: non-local return is not allowed here
     }
     println("After runInThread")
 }
 ```
 
-Without `crossinline`, using a non-local `return` inside such a lambda would be ill-formed; the compiler enforces this.
+Without `crossinline`, the compiler would reject using non-local `return` from lambdas passed to contexts where it cannot be implemented correctly; `crossinline` explicitly enforces this.
 
 **Example**:
 
@@ -1064,8 +1074,8 @@ class TaskExecutor {
 ```kotlin
 inline fun complexOperation(
     normalLambda: () -> Unit,            // Fully inlined
-    noinline storedLambda: () -> Unit,  // Not inlined, can be stored
-    crossinline asyncLambda: () -> Unit // Inlined but no non-local returns
+    noinline storedLambda: () -> Unit,   // Not inlined, can be stored
+    crossinline asyncLambda: () -> Unit  // Inlined but no non-local returns
 ) {
     normalLambda()
 
@@ -1082,7 +1092,7 @@ inline fun complexOperation(
 
 #### 1. Code Size Increase
 
-Inlining duplicates the function body at each call site, which can significantly increase bytecode size for large functions.
+Inlining duplicates the function body at each call site, potentially increasing bytecode size. Prefer inlining small functions or those with lambda parameters.
 
 #### 2. Can't Be Virtual (open, override, abstract)
 
@@ -1101,7 +1111,7 @@ Reason: inlining is resolved at compile time, while virtual dispatch is runtime-
 
 #### 3. Access to Private Members
 
-Public inline functions that access private members of their class or module may cause visibility issues at call sites; the compiler restricts this or generates accessors.
+Public inline functions that access private members of their class or file can cause visibility issues at call sites; the compiler either forbids this or generates synthetic accessors. Keep this in mind for public APIs.
 
 #### 4. Recursive Inline Functions
 
@@ -1111,46 +1121,50 @@ inline fun factorial(n: Int): Int {
 }
 ```
 
-Recursive inline functions are allowed but can lead to large bytecode (each call is another expansion) and are usually discouraged for performance/size reasons.
+Recursive inline functions are syntactically allowed, but calls are not infinitely expanded inline; the compiler handles them specially. In practice, they rarely bring benefits and may hurt bytecode size/readability, so they're usually discouraged.
 
 ### Performance Analysis
 
 Inline functions can:
-- remove some higher-order function overhead;
-- reduce allocations for non-capturing lambdas;
+- reduce some higher-order function overhead;
+- reduce allocations for certain non-capturing lambdas;
 - enable further optimizations by the backend.
 
-However, actual gains vary and should be measured in the real target environment. The earlier benchmark-style snippets are illustrative, not guarantees.
+However, actual gains:
+- depend on the target (JVM/JS/Native) and JIT;
+- are sensitive to capture patterns, escape analysis, and call frequency.
+
+Treat inline as a tool to be validated with measurements in your real workload.
 
 ### When to Use Inline Functions
 
 DO use inline for:
 - higher-order functions with lambda parameters;
-- functions that require reified type parameters;
+- functions requiring reified type parameters;
 - small utilities and hot paths;
 - DSL builders;
-- resource management wrappers (`use`, `synchronized`, transaction helpers).
+- resource-management wrappers (`use`, `synchronized`, transaction helpers).
 
 DON'T use inline for:
 - large, complex functions (code bloat);
 - virtual (open/override/abstract) APIs;
 - most recursive functions;
 - cases where lambda allocation cost is negligible;
-- public APIs without considering binary compatibility (changes require callers to recompile).
+- public APIs without considering binary compatibility (callers must recompile when implementation changes).
 
 ### Best Practices
 
-1. Inline small, frequently-called functions.
+1. Inline small, frequently called functions.
 2. Use `noinline` when you need to store or pass a lambda as a value.
-3. Use `crossinline` for lambdas invoked in different contexts (threads, coroutines) where non-local returns are invalid.
+3. Use `crossinline` for lambdas invoked in different/deferred contexts (threads, coroutines) where non-local returns are not valid.
 4. Prefer inline for DSL builders and control-like utilities.
-5. Be cautious with public inline APIs: changing them affects all call sites.
+5. Be cautious with public inline APIs: changes affect all call sites and require recompilation.
 
 ### Common Mistakes
 
 1. Over-inlining large or rarely used functions.
 2. Forgetting `noinline` when storing lambdas.
-3. Using `crossinline` unnecessarily when lambda is called directly.
+3. Using `crossinline` unnecessarily when the lambda is called directly.
 
 ### Real-World Use Cases
 

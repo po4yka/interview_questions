@@ -53,7 +53,8 @@ class SearchViewModel(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
-    private val searchQuery = MutableStateFlow("")
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     val searchResults: StateFlow<List<SearchResult>> = searchQuery
         .debounce(300) // Ждем 300 мс после остановки ввода
@@ -70,7 +71,7 @@ class SearchViewModel(
         )
 
     fun onSearchQueryChanged(query: String) {
-        searchQuery.value = query
+        _searchQuery.value = query
     }
 }
 ```
@@ -398,6 +399,7 @@ class OptimizedSearchViewModel(
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     val searchState: StateFlow<SearchUiState> = _searchQuery
         .debounce(300)
@@ -440,7 +442,7 @@ fun `search debounces user input`() = runTest {
     val fakeRepository = FakeSearchRepository()
     val viewModel = SearchViewModel(fakeRepository)
 
-    // Эмуляция быстрого ввода
+    // Эмуляция быстрого ввода (используется виртуальное время runTest)
     viewModel.onSearchQueryChanged("a")
     advanceTimeBy(100)
     viewModel.onSearchQueryChanged("ab")
@@ -499,7 +501,8 @@ class SearchViewModel(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
-    private val searchQuery = MutableStateFlow("")
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     val searchResults: StateFlow<List<SearchResult>> = searchQuery
         .debounce(300) // Wait 300ms after user stops typing
@@ -516,7 +519,7 @@ class SearchViewModel(
         )
 
     fun onSearchQueryChanged(query: String) {
-        searchQuery.value = query
+        _searchQuery.value = query
     }
 }
 ```
@@ -837,6 +840,7 @@ class OptimizedSearchViewModel(
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     val searchState: StateFlow<SearchUiState> = _searchQuery
         .debounce(300)
@@ -879,7 +883,7 @@ fun `search debounces user input`() = runTest {
     val fakeRepository = FakeSearchRepository()
     val viewModel = SearchViewModel(fakeRepository)
 
-    // Simulate rapid typing
+    // Simulate rapid typing (using runTest virtual time)
     viewModel.onSearchQueryChanged("a")
     advanceTimeBy(100)
     viewModel.onSearchQueryChanged("ab")

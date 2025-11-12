@@ -18,6 +18,7 @@ sources:
 status: draft
 moc: moc-android
 related:
+- c-android
 - q-data-sync-unstable-network--android--hard
 - q-database-optimization-android--android--medium
 created: 2025-10-20
@@ -31,11 +32,9 @@ tags: [android/architecture-clean, android/media, android/service, architecture,
 > Как спроектировать Instagram Stories для Android?
 
 ## Краткая Версия
-
 Спроектируйте систему для создания, загрузки и воспроизведения Stories на Android. Система должна поддерживать быстрый захват видео, надежную загрузку в фоне, и плавное воспроизведение с автоматическим удалением через 24 часа.
 
 ## Подробная Версия
-
 Спроектируйте полноценную систему Instagram Stories для Android со следующими требованиями:
 
 **Захват видео:**
@@ -63,6 +62,42 @@ tags: [android/architecture-clean, android/media, android/service, architecture,
 - Ресурсы: аудиофокус, меры по теплу/батарее (thermal throttling)
 - Операции: наблюдаемость (метрики), релиз/откат (staged rollout)
 - Доступность: `TalkBack`, субтитры, крупные тач-таргеты
+
+## Question (EN)
+
+> How to design Instagram Stories for Android?
+
+## Short Version
+Design a system for creating, uploading, and playing Stories on Android. The system should support fast video capture, reliable background upload, and smooth playback with automatic deletion after 24 hours.
+
+## Detailed Version
+Design a complete Instagram Stories system for Android with the following requirements:
+
+**Video capture:**
+- Duration: 15 seconds
+- Resolution: target 720p @ 30fps (you may capture higher and transcode server-side if needed)
+- AR effects: optional (real-time filters)
+- Export: <3 seconds (p95) on mid-tier device (Snapdragon 7‑series)
+
+**Playback:**
+- Startup: <150ms (p95, assuming aggressive prefetch/caching)
+- Smoothness: 60fps on modern devices
+- Adaptation: graceful degradation on low-end devices (30fps, lower resolution)
+
+**Reliability:**
+- Support intermittent connectivity (offline-first approach)
+- Background resumable upload (chunked upload with retry)
+
+**Implementation details (for discussion):**
+- Camera choice: `CameraX` vs `Camera2` (justify selection)
+- Render pipeline: zero-copy path from camera to encoder
+- Encoder configuration: codec, profile, bitrate, `GOP` (Group of Pictures)
+- Upload: chunked structure, resumption by offset
+- Caching: CDN prefetch, on-device cache policy (`LRU`, eviction)
+- Playback: `ExoPlayer` strategy (`HLS`/`DASH`, `ABR`)
+- Resources: audio focus, thermal/battery mitigation (thermal throttling)
+- Operations: observability (metrics), release/rollback (staged rollout)
+- Accessibility: `TalkBack`, captions, larger tap targets
 
 ## Ответ (RU)
 
@@ -131,7 +166,7 @@ class UploadStoryWorker(ctx: Context, params: WorkerParameters) : CoroutineWorke
       )
       Result.success()
     } catch (e: Exception) {
-      // Экспоненциальный backoff: автоматический retry до 3 попыток
+      // Экспоненциальный backoff настраивается при создании WorkRequest
       if (runAttemptCount < 3) Result.retry() else Result.failure()
     }
   }
@@ -142,7 +177,7 @@ class UploadStoryWorker(ctx: Context, params: WorkerParameters) : CoroutineWorke
 
 - **Сжатие**: Используйте `MediaCodec` с `H.264` кодеком (Baseline profile для совместимости, High profile для лучшего качества), битрейт 4-6 Mbps для 720p/30fps, `GOP` (Group of Pictures) ≈ 1 секунда для быстрого старта воспроизведения
 - **Чанковая загрузка**: Разбивайте файлы на чанки 4-8MB для возобновления при обрыве сети, используйте `SHA-256` хеш каждого чанка для проверки целостности
-- **Возобновление**: При восстановлении сети `WorkManager` обеспечивает надёжные ретраи и сохранение состояния задачи, а клиент и сервер по протоколу offset negotiation продолжают загрузку с последнего успешно принятого чанка
+- **Возобновление**: При восстановлении сети `WorkManager` обеспечивает персистентность и повторный запуск задач, а клиент и сервер по протоколу offset negotiation продолжают загрузку с последнего успешно принятого чанка
 
 **Просмотр:**
 
@@ -345,78 +380,6 @@ MVP → Hardening → Scale:
 -   **Larger tap targets**: Минимальный размер тач-таргетов 48dp для удобства нажатия — поддержка для пользователей с ограниченной моторикой
 -   **Retry flows**: Четкие UI-сообщения и кнопки повтора при обрыве сети или ошибках загрузки — улучшение UX при сбоях
 
-## Дополнительные вопросы (RU)
-
-- Как обрабатывать неудачи транскодирования видео и стратегию повторных попыток?
-- Какую стратегию кеширования выбрать, чтобы минимизировать трафик и обеспечить плавное воспроизведение?
-- Как реализовать эффективный preloading без чрезмерного расхода батареи?
-- Какие меры безопасности предотвратят несанкционированный доступ к истекшим stories?
-- Как оптимизировать конфигурацию `MediaCodec` под разные классы устройств?
-- Какие стратегии улучшают время старта `ExoPlayer` на слабых устройствах?
-
-## Ссылки (RU)
-
-- [Android Media APIs](https://developer.android.com/guide/topics/media)
-- [Android Background Tasks](https://developer.android.com/guide/background)
-- [CameraX Documentation](https://developer.android.com/training/camerax)
-- [ExoPlayer Documentation](https://developer.android.com/guide/topics/media/exoplayer)
-- [MediaCodec API](https://developer.android.com/reference/android/media/MediaCodec)
-
-## Связанные вопросы (RU)
-
-### Предварительные знания
-
-- Понимание политик повторных попыток и ограничений `WorkManager`
-- Базовые знания `ExoPlayer` для видео-воспроизведения
-
-### Связанные
-
-- [[q-data-sync-unstable-network--android--hard]]
-- [[q-database-optimization-android--android--medium]]
-
-### Продвинутые
-
-- Проектирование стратегии CDN-кеширования для эфемерного контента
-- Реализация счетчиков просмотров в реальном времени на масштабе Instagram
-
-# Question (EN)
-
-> How to design Instagram Stories for Android?
-
-## Short Version
-
-Design a system for creating, uploading, and playing Stories on Android. The system should support fast video capture, reliable background upload, and smooth playback with automatic deletion after 24 hours.
-
-## Detailed Version
-
-Design a complete Instagram Stories system for Android with the following requirements:
-
-**Video capture:**
-- Duration: 15 seconds
-- Resolution: target 720p @ 30fps (you may capture higher and transcode server-side if needed)
-- AR effects: optional (real-time filters)
-- Export: <3 seconds (p95) on mid-tier device (Snapdragon 7‑series)
-
-**Playback:**
-- Startup: <150ms (p95, assuming aggressive prefetch/caching)
-- Smoothness: 60fps on modern devices
-- Adaptation: graceful degradation on low-end devices (30fps, lower resolution)
-
-**Reliability:**
-- Support intermittent connectivity (offline-first approach)
-- Background resumable upload (chunked upload with retry)
-
-**Implementation details (for discussion):**
-- Camera choice: `CameraX` vs `Camera2` (justify selection)
-- Render pipeline: zero-copy path from camera to encoder
-- Encoder configuration: codec, profile, bitrate, `GOP` (Group of Pictures)
-- Upload: chunked structure, resumption by offset
-- Caching: CDN prefetch, on-device cache policy (`LRU`, eviction)
-- Playback: `ExoPlayer` strategy (`HLS`/`DASH`, `ABR`)
-- Resources: audio focus, thermal/battery mitigation (thermal throttling)
-- Operations: observability (metrics), release/rollback (staged rollout)
-- Accessibility: `TalkBack`, captions, larger tap targets
-
 ## Answer (EN)
 
 `Instagram Stories` is a system for creating, uploading, playing, and auto-deleting media after 24 hours. Key requirements: fast video capture (15 seconds @ 720p/30fps), optimized export (<3 seconds p95), smooth playback (target p95 startup <150ms with effective prefetch/cache), support for intermittent connectivity, and efficient device resource usage (battery, thermal, memory).
@@ -484,7 +447,7 @@ class UploadStoryWorker(ctx: Context, params: WorkerParameters) : CoroutineWorke
       )
       Result.success()
     } catch (e: Exception) {
-      // Exponential backoff: automatic retry up to 3 attempts
+      // Exponential backoff is configured on the WorkRequest
       if (runAttemptCount < 3) Result.retry() else Result.failure()
     }
   }
@@ -698,6 +661,15 @@ MVP → Hardening → Scale:
 -   **Larger tap targets**: Minimum 48dp tap target size for easier tapping — support for users with limited motor skills
 -   **Retry flows**: Clear UI messages and retry buttons on network interruption or upload errors — improved UX on failures
 
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать неудачи транскодирования видео и стратегию повторных попыток?
+- Какую стратегию кеширования выбрать, чтобы минимизировать трафик и обеспечить плавное воспроизведение?
+- Как реализовать эффективный preloading без чрезмерного расхода батареи?
+- Какие меры безопасности предотвратят несанкционированный доступ к истекшим stories?
+- Как оптимизировать конфигурацию `MediaCodec` под разные классы устройств?
+- Какие стратегии улучшают время старта `ExoPlayer` на слабых устройствах?
+
 ## Follow-ups
 
 -   How to handle video transcoding failures and retry strategies?
@@ -707,6 +679,15 @@ MVP → Hardening → Scale:
 -   How to optimize `MediaCodec` configuration for different device capabilities?
 -   What strategies improve `ExoPlayer` startup time on low-end devices?
 
+## Ссылки (RU)
+
+- [Android Media APIs](https://developer.android.com/guide/topics/media)
+- [Android Background Tasks](https://developer.android.com/guide/background)
+- [CameraX Documentation](https://developer.android.com/training/camerax)
+- [ExoPlayer Documentation](https://developer.android.com/guide/topics/media/exoplayer)
+- [MediaCodec API](https://developer.android.com/reference/android/media/MediaCodec)
+- [[c-android]]
+
 ## References
 
 -   [Android Media APIs](https://developer.android.com/guide/topics/media)
@@ -714,6 +695,24 @@ MVP → Hardening → Scale:
 -   [CameraX Documentation](https://developer.android.com/training/camerax)
 -   [ExoPlayer Documentation](https://developer.android.com/guide/topics/media/exoplayer)
 -   [MediaCodec API](https://developer.android.com/reference/android/media/MediaCodec)
+-   [[c-android]]
+
+## Связанные вопросы (RU)
+
+### Предварительные знания
+
+- Понимание политик повторных попыток и ограничений `WorkManager`
+- Базовые знания `ExoPlayer` для видео-воспроизведения
+
+### Связанные
+
+- [[q-data-sync-unstable-network--android--hard]]
+- [[q-database-optimization-android--android--medium]]
+
+### Продвинутые
+
+- Проектирование стратегии CDN-кеширования для эфемерного контента
+- Реализация счетчиков просмотров в реальном времени на масштабе Instagram
 
 ## Related Questions
 

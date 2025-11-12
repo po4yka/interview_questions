@@ -92,7 +92,7 @@ class ProductActivity : AppCompatActivity() {
 
 ```kotlin
 val productIntent = Intent(this, ProductActivity::class.java).apply {
-    // ✅ Часто используемая комбинация для deeplink-сценариев
+    // ✅ Часто используемая комбинация для deeplink-сценариев (при запуске из кода приложения)
     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
     putExtra("product_id", productId)
 }
@@ -101,13 +101,13 @@ startActivity(productIntent)
 
 **Комбинации флагов**:
 ```kotlin
-// CLEAR_TOP + SINGLE_TOP: найти существующую, очистить выше, вызвать onNewIntent()
+// CLEAR_TOP + SINGLE_TOP: найти существующую в текущем task, очистить выше, вызвать onNewIntent()
 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
-// CLEAR_TASK + NEW_TASK: полностью очистить task
+// CLEAR_TASK + NEW_TASK: полностью очистить текущий task и запустить новую задачу
 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
-// REORDER_TO_FRONT: переместить существующую на вершину
+// REORDER_TO_FRONT: переместить существующую Activity в текущем task на вершину, если она там есть
 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 ```
 
@@ -150,6 +150,7 @@ class DeeplinkActivity : Activity() {
             data.path?.startsWith("/product") == true -> {
                 Intent(this, ProductActivity::class.java).apply {
                     // ✅ В типичном случае предотвращает создание дубликатов ProductActivity
+                    // (если существующий экземпляр находится в том же task)
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
                             Intent.FLAG_ACTIVITY_SINGLE_TOP
                     putExtra("product_id", data.lastPathSegment)
@@ -163,6 +164,8 @@ class DeeplinkActivity : Activity() {
     }
 }
 ```
+
+(Учтите, что trampoline-подход дает гибкость, но добавляет накладные расходы и усложняет навигацию; его стоит применять только когда нужна централизованная сложная маршрутизация.)
 
 ### Решение 4: Navigation Component
 
@@ -186,15 +189,18 @@ class DeeplinkActivity : Activity() {
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // ✅ Должен содержать NavHostFragment с nav_host_fragment
+        setContentView(R.layout.activity_main) // ✅ Должен содержать NavHostFragment с nav_host_fragment id
 
         val navController = findNavController(R.id.nav_host_fragment)
+        // ✅ Обычно достаточно, когда Activity создается посредством deeplink.
+        // Если Activity уже запущена и приходит новый intent, обрабатывайте его в onNewIntent().
         navController.handleDeepLink(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        // ✅ Вызывайте handleDeepLink здесь для deeplink, приходящих в уже существующую Activity
         findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
     }
 }
@@ -202,7 +208,7 @@ class MainActivity : AppCompatActivity() {
 
 **Преимущества Navigation Component**:
 - Автоматическое управление back stack
-- Single `Activity` pattern
+- Паттерн Single-Activity
 - Type-safe аргументы
 
 ### Сравнение Решений
@@ -210,18 +216,18 @@ class MainActivity : AppCompatActivity() {
 | Решение | Плюсы | Минусы | Когда использовать |
 |---------|-------|--------|-------------------|
 | singleTop | Простота, предотвращает дубликаты на вершине | Разрешает дубликаты ниже в стеке | Большинство deeplink сценариев |
-| `Intent` flags | Гибкость, программный контроль | Требует явного применения | Динамическая логика |
-| Trampoline | Полный контроль маршрутизации | Дополнительная `Activity` | Сложная маршрутизация |
-| Navigation Component | Современный, type-safe | Кривая обучения | Новые проекты |
+| `Intent` flags | Гибкость, программный контроль | Требует явного применения и понимания поведения task | Динамическая логика |
+| Trampoline | Полный контроль маршрутизации | Дополнительная `Activity`, усложнение и накладные расходы | Сложная централизованная маршрутизация |
+| Navigation Component | Современный, type-safe | Кривая обучения | Новые проекты, Single-Activity подход |
 
 ### Best Practices
 
-1. Используйте **singleTop** для большинства deeplink целей (если это соответствует UX и навигации)
-2. Всегда реализуйте **onNewIntent()** для deeplink-целей для обработки обновлений
-3. Вызывайте **setIntent()** в `onNewIntent()` для обновления текущего intent
-4. Используйте **Navigation Component** для новых проектов
-5. Применяйте **Trampoline pattern** для сложной маршрутизации и централизованной обработки deeplink
-6. Тщательно **тестируйте** с различными состояниями навигации и сценариями запуска приложения
+1. Используйте **singleTop** для большинства deeplink целей (если это соответствует UX и навигации).
+2. Реализуйте **onNewIntent()** для deeplink-целей, если вы ожидаете получать новые intents в уже существующую Activity (например, при `singleTop` или `FLAG_ACTIVITY_SINGLE_TOP`).
+3. Вызывайте **setIntent()** в `onNewIntent()` для обновления текущего intent.
+4. Используйте **Navigation Component** для новых проектов и сценариев с Single-Activity архитектурой.
+5. Применяйте **Trampoline pattern** только при необходимости сложной маршрутизации и централизованной обработки deeplink.
+6. Тщательно **тестируйте** с различными состояниями навигации, сценариями запуска приложения и конфигурациями task.
 
 ## Answer (EN)
 
@@ -287,7 +293,7 @@ Programmatic control with flags:
 
 ```kotlin
 val productIntent = Intent(this, ProductActivity::class.java).apply {
-    // ✅ Commonly used combination for deeplink scenarios
+    // ✅ Commonly used combination for deeplink scenarios (when starting from within the app)
     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
     putExtra("product_id", productId)
 }
@@ -296,13 +302,13 @@ startActivity(productIntent)
 
 **Flag combinations**:
 ```kotlin
-// CLEAR_TOP + SINGLE_TOP: find existing, clear above, call onNewIntent()
+// CLEAR_TOP + SINGLE_TOP: find existing in the current task, clear above, call onNewIntent()
 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
-// CLEAR_TASK + NEW_TASK: completely clear task
+// CLEAR_TASK + NEW_TASK: completely clear the current task and start a new one
 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
-// REORDER_TO_FRONT: move existing to front
+// REORDER_TO_FRONT: move existing Activity in the current task to the front if it exists
 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 ```
 
@@ -345,6 +351,7 @@ class DeeplinkActivity : Activity() {
             data.path?.startsWith("/product") == true -> {
                 Intent(this, ProductActivity::class.java).apply {
                     // ✅ In typical cases prevents creating duplicate ProductActivity instances
+                    // (provided the existing instance is in the same task)
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
                             Intent.FLAG_ACTIVITY_SINGLE_TOP
                     putExtra("product_id", data.lastPathSegment)
@@ -358,6 +365,8 @@ class DeeplinkActivity : Activity() {
     }
 }
 ```
+
+(Note that while the trampoline approach gives flexibility, it adds overhead and complexity; use it only when you truly need centralized, complex routing.)
 
 ### Solution 4: Navigation Component
 
@@ -384,12 +393,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main) // ✅ Must contain NavHostFragment with nav_host_fragment id
 
         val navController = findNavController(R.id.nav_host_fragment)
+        // ✅ Typically sufficient when the Activity is created via the deeplink.
+        // If the Activity is already running and a new intent arrives, handle it in onNewIntent().
         navController.handleDeepLink(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        // ✅ Call handleDeepLink here for deeplinks delivered to an existing Activity
         findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
     }
 }
@@ -397,7 +409,7 @@ class MainActivity : AppCompatActivity() {
 
 **Navigation Component benefits**:
 - Automatic back stack management
-- Single `Activity` pattern
+- Single-Activity pattern
 - Type-safe arguments
 
 ### Solution Comparison
@@ -405,18 +417,18 @@ class MainActivity : AppCompatActivity() {
 | Solution | Pros | Cons | When to use |
 |----------|------|------|-------------|
 | singleTop | Simple, prevents top duplicates | Allows duplicates below in stack | Most deeplink scenarios |
-| `Intent` flags | Flexible, programmatic control | Requires explicit application | Dynamic logic |
-| Trampoline | Full routing control | Extra activity | Complex routing |
-| Navigation Component | Modern, type-safe | Learning curve | New projects |
+| `Intent` flags | Flexible, programmatic control | Requires explicit use and understanding of task behavior | Dynamic logic |
+| Trampoline | Full routing control | Extra activity, overhead and complexity | Complex centralized routing |
+| Navigation Component | Modern, type-safe | Learning curve | New projects, Single-Activity setups |
 
 ### Best Practices
 
-1. Use **singleTop** for most deeplink targets (when aligned with UX and navigation design)
-2. Always implement **onNewIntent()** for deeplink targets to handle updates
-3. Call **setIntent()** in `onNewIntent()` to update the current intent
-4. Use **Navigation Component** for new projects
-5. Apply the **Trampoline pattern** for complex routing and centralized deeplink handling
-6. Thoroughly **test** with different navigation states and app launch scenarios
+1. Use **singleTop** for most deeplink targets (when aligned with UX and navigation design).
+2. Implement **onNewIntent()** for deeplink targets when you expect to receive new intents in an existing Activity (e.g., with `singleTop` or `FLAG_ACTIVITY_SINGLE_TOP`).
+3. Call **setIntent()** in `onNewIntent()` to update the current intent.
+4. Use **Navigation Component** for new projects and Single-Activity style navigation.
+5. Apply the **Trampoline pattern** only when you need complex routing and centralized deeplink handling.
+6. Thoroughly **test** across different navigation states, app launch modes, and task configurations.
 
 ---
 

@@ -61,15 +61,17 @@ class MainActivity : ComponentActivity() {
 
 ### Composition Tree & Slot Table
 
-Compose строит дерево composable-функций — **Composition**. Внутри использует **slot table** (структура на основе gap buffer) для эффективного отслеживания:
+Compose строит дерево вызовов composable-функций — **Composition**. Внутри оно отображается в **slot table** — эффективную структуру (по принципу gap buffer) для отслеживания:
 
+- Групп (groups) и их ключей в композиции
 - Активных composables и их позиций
 - Объектов состояния и запоминаемых значений
-- Групповых ключей для интеллектуальной рекомпозиции
+
+Slot table позволяет быстро соотносить результаты рекомпозиции с уже существующей структурой и минимизировать перераспределения памяти.
 
 ### Рекомпозиция — Ядро Compose
 
-При изменении данных Compose умно перекомпонует только затронутые части.
+При изменении данных Compose умно рекомпозирует только затронутые части.
 
 ```kotlin
 @Composable
@@ -81,15 +83,16 @@ fun Counter() {
         Text("Счет: $count")
 
         Button(onClick = { count++ }) {
-            // ⚠️ Содержимое может быть пропущено при рекомпозиции,
-            // если Compose определит, что оно не изменилось
+            // ⚠️ Тело Button может быть пропущено при рекомпозиции,
+            // если Compose на основе анализа стабильности определит,
+            // что оно логически не изменилось
             Text("Увеличить")
         }
     }
 }
 ```
 
-**Процесс**: Изменение state → Compose помечает зависимые composables невалидными → Перевыполняются только невалидные участки дерева → UI обновляется.
+**Процесс**: Изменение state → Compose помечает зависящие composables невалидными → Перевыполняются только невалидные участки дерева → UI обновляется.
 
 ### Управление Состоянием
 
@@ -162,10 +165,10 @@ fun EffectsExample(userId: String) {
 
 ### Модификаторы — Стилизация И Поведение
 
-Порядок модификаторов критичен!
+Порядок модификаторов критичен.
 
 ```kotlin
-// ✅ Правильно: padding → background → clickable
+// ✅ Пример: padding → background → clickable
 Text(
     "Привет",
     modifier = Modifier
@@ -174,7 +177,7 @@ Text(
         .clickable { /* ... */ }
 )
 
-// ❌ Неправильно: фон без padding
+// ❌ Другой порядок: фон без padding
 Text(
     "Привет",
     modifier = Modifier
@@ -199,7 +202,7 @@ fun OptimizedList(items: List<Item>) {
 @Composable
 fun ItemRow(item: Item) {
     // ✅ derivedStateOf — пересчет только при изменении зависимостей
-    val isExpensive by remember(item) {
+    val isExpensive by remember {
         derivedStateOf { expensiveCalculation(item) }
     }
 
@@ -220,7 +223,8 @@ class HomeViewModel : ViewModel() {
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
-    // Для простоты примера используется collectAsState без указания LifecycleOwner
+    // Для простоты: используем collectAsState для StateFlow.
+    // В реальном приложении предпочтительно collectAsStateWithLifecycle для учета жизненного цикла.
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
@@ -235,11 +239,11 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
 **Три фазы рендеринга**:
 
-1. **Composition** — построение UI дерева из @Composable функций
+1. **Composition** — построение UI дерева из @Composable функций и запись структуры в slot table
 2. **Layout** — измерение и позиционирование элементов
 3. **Drawing** — рендеринг пикселей на экран
 
-**Slot Table** использует структуру на основе gap buffer для эффективного хранения состояния и минимизации перевыделения памяти при рекомпозиции.
+**Slot Table** использует структуру на основе gap buffer для эффективного хранения групп и состояния и минимизации перевыделения памяти при рекомпозиции.
 
 ### Ключевые Отличия От `View` System
 
@@ -287,11 +291,13 @@ class MainActivity : ComponentActivity() {
 
 ### Composition Tree & Slot Table
 
-Compose builds a tree of composable functions called **Composition**. Internally, it uses a **slot table** (a gap buffer–based structure) to efficiently track:
+Compose builds a tree of composable function calls called the **Composition**. Internally, it is represented in a **slot table** — an efficient gap-buffer-like structure used to track:
 
+- Groups and their keys in the composition
 - Active composables and their positions
 - State objects and remembered values
-- Group keys for intelligent recomposition
+
+The slot table allows mapping recomposition results back onto existing structure while minimizing allocations.
 
 ### Recomposition — The Heart of Compose
 
@@ -307,8 +313,9 @@ fun Counter() {
         Text("Count: $count")
 
         Button(onClick = { count++ }) {
-            // ⚠️ The content can be skipped during recomposition
-            // when Compose determines it has not changed
+            // ⚠️ Button content can be skipped during recomposition
+            // when Compose, via stability analysis, determines
+            // that it has not logically changed
             Text("Increment")
         }
     }
@@ -388,10 +395,10 @@ fun EffectsExample(userId: String) {
 
 ### Modifiers — Styling and Behavior
 
-Modifier order is critical!
+Modifier order is critical.
 
 ```kotlin
-// ✅ Correct: padding → background → clickable
+// ✅ Example: padding → background → clickable
 Text(
     "Hello",
     modifier = Modifier
@@ -400,7 +407,7 @@ Text(
         .clickable { /* ... */ }
 )
 
-// ❌ Incorrect: background without padding
+// ❌ Different order: background without padding
 Text(
     "Hello",
     modifier = Modifier
@@ -425,7 +432,7 @@ fun OptimizedList(items: List<Item>) {
 @Composable
 fun ItemRow(item: Item) {
     // ✅ derivedStateOf — recalculate only when dependencies change
-    val isExpensive by remember(item) {
+    val isExpensive by remember {
         derivedStateOf { expensiveCalculation(item) }
     }
 
@@ -446,7 +453,8 @@ class HomeViewModel : ViewModel() {
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
-    // For simplicity, collectAsState is used without explicit LifecycleOwner
+    // For simplicity: use collectAsState with StateFlow.
+    // In real apps, prefer collectAsStateWithLifecycle for lifecycle-aware collection.
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
@@ -461,11 +469,11 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
 **Three rendering phases**:
 
-1. **Composition** — build UI tree from @Composable functions
+1. **Composition** — build UI tree from @Composable functions and record structure into the slot table
 2. **Layout** — measure and position elements
 3. **Drawing** — render pixels to screen
 
-**Slot Table** uses a gap buffer–based structure for efficient state storage and to minimize memory reallocations during recomposition.
+**Slot Table** uses a gap buffer–based structure for efficient storage of groups and state and to minimize memory reallocations during recomposition.
 
 ### Key Differences From `View` System
 

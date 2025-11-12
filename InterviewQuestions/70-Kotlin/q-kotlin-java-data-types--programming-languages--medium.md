@@ -46,7 +46,7 @@ boolean flag = true;           // true/false
 
 #### Ссылочные типы
 
-Объекты в куче, на которые указывают ссылки:
+Объекты, доступ к которым осуществляется через ссылки:
 ```java
 String text = "Hello";                     // String
 Integer num = 10;                          // Класс-обёртка
@@ -55,6 +55,8 @@ List<String> list = new ArrayList<>();     // Коллекция
 MyClass obj = new MyClass();               // Пользовательский класс
 Runnable r = () -> {};                     // Интерфейс / лямбда
 ```
+
+(В большинстве реализаций размещаются в куче, но это деталь реализации, а не часть спецификации языка.)
 
 ### Типы данных Kotlin
 
@@ -76,7 +78,7 @@ val flag: Boolean = true
 
 Компилятор:
 - использует примитивы JVM (`int`, `double` и т.п.), когда это безопасно и эффективно;
-- использует классы-обёртки (`Integer` и т.д.), когда нужны объектные типы (дженерики, nullable-типы и др.).
+- использует классы-обёртки (`java.lang.Integer` и т.д.), когда нужны объектные типы (дженерики, nullable-типы и др.).
 
 #### Ссылочные типы
 
@@ -88,7 +90,7 @@ val obj: MyClass = MyClass()           // Пользовательский кл�
 
 // Специальные типы Kotlin
 fun doNothing(): Unit { }                // Unit — как void, но реальный тип
-fun fail(): Nothing = throw Exception()  // Nothing — функция не возвращает
+fun fail(): Nothing = throw Exception()  // Nothing — функция не возвращает нормально
 ```
 
 ### Ключевые отличия Java и Kotlin
@@ -99,8 +101,8 @@ fun fail(): Nothing = throw Exception()  // Nothing — функция не во
   - Есть 8 примитивных типов, синтаксически и концептуально отличных от ссылочных.
   - Примитивы не входят в иерархию `Object`; методы доступны только у обёрток.
 - Kotlin:
-  - Использует единообразные типы (`Int`, `Double`, и т.п.), которые в байткоде сопоставляются с примитивами/обёртками.
-  - Более унифицированная модель: числовые и логические типы выглядят как обычные типы с методами.
+  - Использует единообразные типы (`Int`, `Double` и т.п.), которые в байткоде сопоставляются с примитивами/обёртками JVM.
+  - Более унифицированная модель: числовые и логические типы выглядят как обычные типы с методами, хотя на уровне JVM это могут быть примитивы.
 
 ```java
 // Java — примитив не имеет методов
@@ -111,7 +113,7 @@ y.toString();      // OK
 ```
 
 ```kotlin
-// Kotlin — у `Int` есть методы
+// Kotlin — у `Int` есть методы (на уровне языка)
 val kx: Int = 10
 kx.toString()      // OK
 ```
@@ -157,7 +159,7 @@ val list: List<Unit> = listOf(Unit)
 ```
 
 ```java
-// Эквивалент в Java
+// Эквивалент по роли в Java
 void doSomething() {
     System.out.println("Done");
 }
@@ -173,6 +175,7 @@ fun infiniteLoop(): Nothing {
     while (true) { }
 }
 
+// Литерал null сам по себе имеет тип Nothing?
 val x = null  // Тип выводится как Nothing?
 ```
 
@@ -204,9 +207,9 @@ val doubles: DoubleArray = doubleArrayOf(1.0, 2.0)
   - Примитивы не входят в эту иерархию.
 
 - Kotlin (упрощённо, для JVM):
-  - `Any` — корень всех ненулевых ссылочных типов.
-  - От `Any` наследуются `Number`, `Int`, `Double`, `Float`, `Long`, `Short`, `Byte`, `String`, коллекции и др.
+  - `Any` — корень всех ненулевых ссылочных типов в системе типов Kotlin.
   - `Any?` — верхний тип для всех nullable-типов (включая `null`).
+  - Числовые типы (`Int`, `Double`, и т.п.) являются полноправными типами Kotlin; на JVM они отображаются в примитивы или соответствующие wrapper-типы.
   - `Nothing` — нижний тип: подтип всех типов, не имеет значений.
 
 ### Итог
@@ -224,7 +227,7 @@ val doubles: DoubleArray = doubleArrayOf(1.0, 2.0)
   - Kotlin: явное `T` vs `T?`.
 - Иерархия типов:
   - Java: примитивы вне иерархии `Object`.
-  - Kotlin: ненулевые типы наследуются от `Any`, nullable-версии под `Any?`.
+  - Kotlin: `Any` / `Any?` задают верхние типы для (не)nullable значений; числовые и другие базовые типы — часть единой системы типов и сопоставляются на JVM с примитивами/обёртками.
 - Специальные типы:
   - Java: `void` (не полноценный тип).
   - Kotlin: `Unit` (реальный тип), `Nothing` (нижний тип).
@@ -235,7 +238,7 @@ val doubles: DoubleArray = doubleArrayOf(1.0, 2.0)
 **Преимущества Kotlin в этом контексте:**
 - Более единообразная типовая система.
 - Встроенная null-безопасность через `T` / `T?`.
-- Меньше скрытых проблем, связанных с авто-боксингом.
+- Меньше скрытых проблем, связанных с (auto)boxing.
 - Методы и операторы доступны прямо на базовых типах.
 
 ## Answer (EN)
@@ -263,7 +266,7 @@ boolean flag = true;           // true/false
 
 #### Reference Types
 
-Objects allocated on the heap, accessed via references:
+Objects accessed via references:
 ```java
 String text = "Hello";                     // String
 Integer num = 10;                          // Wrapper class
@@ -273,11 +276,13 @@ MyClass obj = new MyClass();               // Custom class
 Runnable r = () -> {};                     // Interface / lambda
 ```
 
+(In most implementations they are heap-allocated, but that is an implementation detail, not a language guarantee.)
+
 ### Kotlin Data Types
 
 #### Value types mapped to JVM primitives when possible
 
-From the Kotlin perspective all types are first-class, have members, and participate in the type system; on the JVM they are compiled to Java primitives or wrappers as needed.
+From the Kotlin language perspective all types are first-class, have members, and participate in the type system; on the JVM they are compiled to Java primitives or wrappers as needed.
 ```kotlin
 val b: Byte = 127
 val s: Short = 32767
@@ -293,7 +298,7 @@ val flag: Boolean = true
 
 The compiler:
 - uses JVM primitive types (`int`, `double`, etc.) where safe and efficient,
-- uses wrapper types (e.g. `Integer`) when required (generics, nullable types, etc.).
+- uses wrapper types (e.g. `java.lang.Integer`) when required (generics, nullable types, etc.).
 
 #### Reference Types
 ```kotlin
@@ -303,8 +308,8 @@ val map: Map<String, Int> = mapOf()    // Map
 val obj: MyClass = MyClass()           // Custom class
 
 // Kotlin adds special types:
-fun doNothing(): Unit { }              // Unit - like void but is a real type
-fun fail(): Nothing = throw Exception()  // Nothing - function never returns
+fun doNothing(): Unit { }                // Unit - like void but is a real type
+fun fail(): Nothing = throw Exception()  // Nothing - function never returns normally
 ```
 
 ### Key Differences
@@ -313,8 +318,8 @@ fun fail(): Nothing = throw Exception()  // Nothing - function never returns
 
 | Aspect | Java | Kotlin |
 |--------|------|--------|
-| Primitive types | Yes (8 types) | No separate primitive syntax; uses value types (`Int`, etc.) mapped to JVM primitives when possible |
-| Unified system | No (primitives vs references) | More unified: numeric/boolean/char types are regular Kotlin classes in the type system |
+| Primitive types | Yes (8 types) | No separate primitive syntax; uses types like `Int` mapped to JVM primitives where possible |
+| Unified system | No (primitives vs references) | More unified: numeric/boolean/char types are regular Kotlin types in the language's type system |
 | Methods on numbers | Only on wrapper classes | Yes, on `Int`, `Double`, etc. |
 
 ```java
@@ -326,9 +331,9 @@ y.toString();      // OK
 ```
 
 ```kotlin
-// Kotlin - types like `Int` have members
+// Kotlin - types like `Int` have members at language level
 val kx: Int = 10
-kx.toString()      // OK
+kx.toString();     // OK
 ```
 
 #### 2. Nullability
@@ -362,7 +367,7 @@ val obj: MyClass? = null  // OK
 
 #### 3. Special Kotlin Types
 
-**Unit** - equivalent role to Java's `void`, but is a proper type with a single value:
+**Unit** - equivalent in role to Java's `void`, but is a proper type with a single value:
 ```kotlin
 fun doSomething(): Unit {
     println("Done")
@@ -372,7 +377,7 @@ val list: List<Unit> = listOf(Unit)  // Can be used as a type argument
 ```
 
 ```java
-// Java equivalent
+// Java equivalent by role
 void doSomething() {
     System.out.println("Done");
 }
@@ -388,7 +393,7 @@ fun infiniteLoop(): Nothing {
     while (true) { }
 }
 
-// `null` literal alone has type `Nothing?` in inference context
+// A standalone null literal has type Nothing? for type inference
 val x = null  // Type is Nothing?
 ```
 
@@ -405,7 +410,7 @@ String[] strings = {"a", "b"};   // Reference array
 ```kotlin
 val primitives: IntArray = intArrayOf(1, 2, 3)   // Compiles to int[]
 val objects: Array<Int> = arrayOf(1, 2, 3)       // Compiles to Integer[]
-val strings: Array<String> = arrayOf("a", "b") // Compiles to String[]
+val strings: Array<String> = arrayOf("a", "b")  // Compiles to String[]
 
 val bytes: ByteArray = byteArrayOf(1, 2)
 val chars: CharArray = charArrayOf('a', 'b')
@@ -428,26 +433,25 @@ java.lang.Object
 
 **Kotlin (simplified JVM view):**
 ```
-Any            // root of all non-null reference types
+Any            // root of all non-null reference types in Kotlin's type system
   ├─ Number
-  │    ├─ Int, Double, Float, Long, Short, Byte
-  ├─ CharSequence
-  │    ├─ String
-  ├─ Collections, custom classes, etc.
+  ├─ Other Kotlin types (String, collections, custom classes, etc.)
 
 Any?           // top type for all nullable types (includes Any and null)
 
 Nothing        // bottom type: subtype of all types, no values
 ```
 
+Numeric types (`Int`, `Double`, etc.) are proper Kotlin types that conceptually fit into this hierarchy at the language level, while on the JVM they are represented as primitives or wrapper classes depending on context.
+
 ### Summary
 
 | Feature | Java | Kotlin |
 |---------|------|--------|
-| Primitives | 8 primitive types, separate from `Object` | Value types like `Int`, `Double` compile to primitives when possible; no separate primitive syntax |
+| Primitives | 8 primitive types, separate from `Object` | Types like `Int`, `Double` compile to primitives when possible; no separate primitive syntax |
 | Reference types | `String`, classes, arrays, interfaces, wrappers | `String`, classes, collections, arrays, etc. |
 | Nullability | All reference types nullable by default | Explicit `T` vs `T?` |
-| Type hierarchy | Primitives outside `Object` hierarchy | Non-null types inherit from `Any`; nullable variants are under `Any?` |
+| Type hierarchy | Primitives outside `Object` hierarchy | `Any` / `Any?` as top types; basic types participate in single type system and map to primitives/wrappers on JVM |
 | Special types | `void` (not a real type) | `Unit` (real return type), `Nothing` (bottom type) |
 | Methods on numbers | Only on wrapper classes | Available on `Int`, `Double`, etc. |
 | Compilation | Primitives remain primitives | Maps to primitives/boxed types as needed |
@@ -455,7 +459,7 @@ Nothing        // bottom type: subtype of all types, no values
 **Kotlin advantages (in this context):**
 - More uniform type system (numeric and other types are regular Kotlin types).
 - Built-in null safety via `T` / `T?`.
-- Fewer surprises from manual boxing/unboxing.
+- Fewer surprises from boxing/unboxing.
 - Methods available directly on numeric and other basic types.
 
 ## Дополнительные вопросы (RU)

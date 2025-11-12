@@ -37,24 +37,28 @@ sources:
 
 ### Типы Аргументов
 
-**Path-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, с дефолтами, передаются через `?key=value`.
+**Path-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, поддерживают значения по умолчанию, задаются в маршруте как `?key={value}` и описываются через `navArgument`.
 
 ```kotlin
 // ✅ Path-аргумент (обязательный)
 composable(
-  "profile/{userId}",
-  listOf(navArgument("userId") { type = NavType.StringType })
+  route = "profile/{userId}",
+  arguments = listOf(navArgument("userId") { type = NavType.StringType })
 ) { entry ->
   ProfileScreen(entry.arguments?.getString("userId") ?: "")
 }
 
 // ✅ Query-аргумент (опциональный)
+// Маршрут: search?query={query}, аргумент объявлен через navArgument
 composable(
-  "search?q={query}",
-  listOf(navArgument("query") {
-    type = NavType.StringType
-    defaultValue = ""
-  })
+  route = "search?query={query}",
+  arguments = listOf(
+    navArgument("query") {
+      type = NavType.StringType
+      defaultValue = ""
+      nullable = true
+    }
+  )
 ) { entry ->
   SearchScreen(entry.arguments?.getString("query"))
 }
@@ -78,7 +82,7 @@ nav.navigate(Screen.Profile.createRoute("123"))
 
 ### Deep Links
 
-Deep links связывают внешние URI с маршрутами навигации. Для запуска из вне (`myapp://` или `https://`) требуется `intent-filter` в манифесте, согласованный с шаблонами URI.
+Deep links связывают внешние URI с маршрутами навигации. Для запуска извне (`myapp://` или `https://`) требуется `intent-filter` в манифесте, согласованный с шаблонами URI.
 
 ```kotlin
 composable(
@@ -93,7 +97,7 @@ composable(
 }
 ```
 
-Манифест (упрощенный пример, `data` должен соответствовать объявленным URI):
+Манифест (упрощенный пример; `<data>`-элементы должны соответствовать объявленным URI, может быть несколько `<data>` на один `intent-filter`):
 ```xml
 <intent-filter>
   <action android:name="android.intent.action.VIEW" />
@@ -111,9 +115,9 @@ composable(
 </intent-filter>
 ```
 
-### Контроль back `Stack`
+### Контроль back stack
 
-**launchSingleTop** — предотвращает дублирование верхней записи. **popUpTo** — очищает стек до указанного маршрута, `inclusive = true` удаляет и сам маршрут. Для bottom navigation и сохранения состояния используйте `saveState`/`restoreState`.
+**launchSingleTop** — предотвращает дублирование верхней записи. **popUpTo** — очищает стек до указанного маршрута; `inclusive = true` удаляет и сам маршрут. Для bottom navigation и сохранения состояния используйте комбинацию `saveState` и `restoreState`.
 
 ```kotlin
 // ✅ Избегаем дублей
@@ -124,19 +128,20 @@ nav.navigate("main") {
   popUpTo("login") { inclusive = true }
 }
 
-// ✅ Bottom nav с сохранением состояния
+// ✅ Bottom nav с сохранением состояния при повторном выборе
 nav.navigate("home") {
   launchSingleTop = true
+  saveState = true
   restoreState = true
 }
 
-// ❌ Без опций создаст дубликаты
+// ❌ Без опций создаст дубликаты при повторной навигации
 nav.navigate("home")
 ```
 
 ### Передача Сложных Данных
 
-Для сложных объектов используйте **shared `ViewModel`**, привязанный к общему `NavBackStackEntry` (например, графу нижней навигации или activity), или **SavedStateHandle** для восстановления после гибели процесса. URL-параметры ограничены размером и типами.
+Для сложных объектов используйте **shared `ViewModel`**, привязанный к общему `NavBackStackEntry` (например, к графу нижней навигации или activity), или **SavedStateHandle** для восстановления после гибели процесса. URL-параметры ограничены по размеру и типам.
 
 ```kotlin
 // ✅ Shared ViewModel
@@ -147,7 +152,7 @@ class SharedDataViewModel @Inject constructor() : ViewModel() {
   fun setData(data: Data) { _data.value = data }
 }
 
-// В источнике (оба экрана должны использовать один и тот же scope ViewModel)
+// В источнике (оба экрана должны получать ViewModel из одного и того же scope)
 viewModel.setData(complexObject)
 nav.navigate("details")
 
@@ -155,28 +160,54 @@ nav.navigate("details")
 val data = viewModel.data.collectAsState().value
 ```
 
+### Дополнительные вопросы (RU)
+
+- Как реализовать вложенные графы навигации для feature-модулей?
+- Как тестировать навигационные потоки с `NavController` в unit/UI-тестах?
+- Как обрабатывать навигацию с несколькими back stack (bottom nav с независимыми стеками)?
+- Как сохранять и восстанавливать состояние навигации после гибели процесса?
+- Как реализовать условную навигацию (login-gate, permissions)?
+
+### Ссылки (RU)
+
+- [[c-compose-navigation]]
+- https://developer.android.com/jetpack/compose/navigation
+- https://developer.android.com/guide/navigation/design
+
+### Связанные вопросы (RU)
+
+#### Предварительные (проще)
+- [[q-android-jetpack-overview--android--easy]]
+
+#### Продвинутые (сложнее)
+- [[q-compose-custom-layout--android--hard]]
+
 ## Answer (EN)
 
 ### Argument Types
 
-**Path arguments** are required, positional, part of the URL. **Query arguments** are optional, support defaults, passed via `?key=value`.
+**Path arguments** are required, positional, and part of the URL. **Query arguments** are optional, support defaults, and are defined in the route as `?key={value}` with a corresponding `navArgument`.
 
 ```kotlin
 // ✅ Path argument (required)
 composable(
-  "profile/{userId}",
-  listOf(navArgument("userId") { type = NavType.StringType })
+  route = "profile/{userId}",
+  arguments = listOf(navArgument("userId") { type = NavType.StringType })
 ) { entry ->
   ProfileScreen(entry.arguments?.getString("userId") ?: "")
 }
 
 // ✅ Query argument (optional)
+// Route: search?query={query}, argument declared via navArgument
 composable(
-  "search?q={query}",
-  listOf(navArgument("query") {
-    type = NavType.StringType
-    defaultValue = ""
-  })
+  route = "search?query={query}",
+  arguments = listOf(
+    navArgument("query") {
+      type = NavType.StringType
+      defaultValue = ""
+      nullable = true
+    }
+  )
 ) { entry ->
   SearchScreen(entry.arguments?.getString("query"))
 }
@@ -184,7 +215,7 @@ composable(
 
 ### Type-safe Routes
 
-Use sealed classes for centralized route definitions and string-safety.
+Use sealed classes for centralized route definitions and string safety.
 
 ```kotlin
 sealed class Screen(val route: String) {
@@ -215,7 +246,7 @@ composable(
 }
 ```
 
-Manifest (simplified; `data` should match the declared URIs):
+Manifest (simplified; `<data>` elements should match the declared URIs, and you can have multiple `<data>` entries per `intent-filter`):
 ```xml
 <intent-filter>
   <action android:name="android.intent.action.VIEW" />
@@ -233,9 +264,9 @@ Manifest (simplified; `data` should match the declared URIs):
 </intent-filter>
 ```
 
-### Back `Stack` Control
+### Back Stack Control
 
-**launchSingleTop** prevents duplicate top entries. **popUpTo** clears stack to a target route, `inclusive = true` removes the target itself. For bottom navigation and state preservation, use `saveState`/`restoreState`.
+**launchSingleTop** prevents duplicate top entries. **popUpTo** clears the stack up to the target route; `inclusive = true` removes the target itself. For bottom navigation and state preservation, combine `saveState` and `restoreState`.
 
 ```kotlin
 // ✅ Avoid duplicates
@@ -246,19 +277,20 @@ nav.navigate("main") {
   popUpTo("login") { inclusive = true }
 }
 
-// ✅ Bottom nav with state restore
+// ✅ Bottom nav with state preservation on reselection
 nav.navigate("home") {
   launchSingleTop = true
+  saveState = true
   restoreState = true
 }
 
-// ❌ Creates duplicates without options
+// ❌ Creates duplicates without options on repeated navigation
 nav.navigate("home")
 ```
 
 ### Passing Complex Data
 
-For complex objects, use a **shared `ViewModel`** scoped to a shared `NavBackStackEntry` (e.g., a navigation graph or activity) or **SavedStateHandle** for process death restoration. URL parameters are limited in size and types.
+For complex objects, use a **shared `ViewModel`** scoped to a shared `NavBackStackEntry` (e.g., a navigation graph or the activity), or **SavedStateHandle** for restoration after process death. URL parameters are limited in size and supported types.
 
 ```kotlin
 // ✅ Shared ViewModel
@@ -269,7 +301,7 @@ class SharedDataViewModel @Inject constructor() : ViewModel() {
   fun setData(data: Data) { _data.value = data }
 }
 
-// In source (both screens must obtain ViewModel from the same scope)
+// In source (both screens must obtain the ViewModel from the same scope)
 viewModel.setData(complexObject)
 nav.navigate("details")
 
@@ -280,7 +312,7 @@ val data = viewModel.data.collectAsState().value
 ## Follow-ups
 
 - How to implement nested navigation graphs for feature modules?
-- How to test navigation flows with NavController in unit/UI tests?
+- How to test navigation flows with `NavController` in unit/UI tests?
 - How to handle multi-backstack navigation (bottom nav with independent stacks)?
 - How to preserve/restore navigation state across process death?
 - How to implement conditional navigation (login gates, permissions)?

@@ -32,9 +32,9 @@ tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singl
 
 **Характеристики:**
 - Используется для создания единственного экземпляра класса (паттерн Singleton)
-- Потокобезопасен по умолчанию
-- Ленивая инициализация при первом обращении
-- Не может иметь конструкторов (создаётся автоматически)
+- Инициализация потокобезопасна по умолчанию (гарантируется корректная инициализация единственного экземпляра), но внутренняя изменяемая логика не становится автоматически потокобезопасной
+- Ленивая инициализация при первом обращении к объекту
+- Не может иметь конструкторов (экземпляр создаётся автоматически компилятором)
 - Может наследоваться от классов и реализовывать интерфейсы
 
 **Пример простого singleton:**
@@ -99,7 +99,7 @@ Logger.onClick()
 - Может иметь extension-функции
 - Только один companion object на класс
 - Может иметь имя (опционально)
-- Ленивая инициализация при первом обращении к companion object или его членам
+- Является единственным экземпляром, связанным с классом, и инициализируется при первом обращении к ним (или к содержащему классу); инициализация потокобезопасна
 
 **Пример со статико-подобными членами:**
 ```kotlin
@@ -186,7 +186,7 @@ fun setClickListener(listener: OnClickListener) {
     listener.onClick()
 }
 
-// Анонимный объект (как anonymous inner class в Java)
+// Анонимный объект (как anonymous inner class в Java), также использует ключевое слово `object`
 setClickListener(object : OnClickListener {
     override fun onClick() {
         println("Нажато!")
@@ -222,11 +222,11 @@ println(person.name)  // Имя по умолчанию
 |----------------|--------|------------------|
 | **Расположение** | Отдельная сущность | Внутри класса |
 | **Доступ** | Через имя object | Через имя класса |
-| **Назначение** | Singleton паттерн, утилиты, объекты как значения | "Статические" члены, связанные с классом |
+| **Назначение** | Singleton-паттерн, утилиты, объекты как значения | "Статические" члены, связанные с классом |
 | **Количество** | Один экземпляр на объявление | Не более одного на класс (опционально) |
 | **Конструктор** | Не может иметь | Не может иметь |
 | **Наследование** | Может наследоваться и реализовывать интерфейсы | Может реализовывать интерфейсы |
-| **Инициализация** | Ленивая при первом обращении | Ленивая при первом обращении к companion object или его членам |
+| **Инициализация** | Ленивая при первом обращении, инициализация потокобезопасна | Ленивая при первом обращении к companion object или его членам, инициализация потокобезопасна |
 | **Extension** | Можно объявлять extension-функции/свойства для конкретного `object` по его имени | Можно объявлять extension-функции/свойства для `Companion` (или именованного companion object) |
 
 ### Когда Использовать
@@ -235,7 +235,7 @@ println(person.name)  // Имя по умолчанию
 - Нужен единственный экземпляр (Singleton)
 - Создаёте утилитный класс
 - Реализуете глобальный менеджер
-- Создаёте константы на уровне модуля
+- Создаёте константы на уровне модуля / верхнего уровня (или используете `object` как контейнер)
 
 **Используйте `companion object` когда:**
 - Нужны фабричные методы
@@ -297,9 +297,9 @@ val page = HtmlBuilder.html {
 
 ### Краткий Ответ
 
-**`object`**: Создаёт потокобезопасный singleton с ленивой инициализацией. Используется для одиночных экземпляров, утилит, глобальных менеджеров. Может наследоваться и реализовывать интерфейсы.
+**`object`**: Создаёт singleton с ленивой, потокобезопасной инициализацией. Используется для одиночных экземпляров, утилит, глобальных менеджеров. Может наследоваться и реализовывать интерфейсы. Потокобезопасность касается инициализации экземпляра; синхронизация изменяемого состояния требует отдельного управления.
 
-**`companion object`**: Объявляет статико-подобные члены внутри класса, доступные через имя класса. Используется для фабричных методов, констант, "статических" функций. Может реализовывать интерфейсы и иметь extension-функции. Один на класс, может быть именованным. Ленивая инициализация при первом обращении.
+**`companion object`**: Объявляет статико-подобные члены внутри класса, доступные через имя класса. Используется для фабричных методов, констант, "статических" функций. Может реализовывать интерфейсы и иметь extension-функции. Один на класс, может быть именованным. Инициализируется лениво и потокобезопасно при первом обращении.
 
 ## Answer (EN)
 
@@ -309,9 +309,9 @@ val page = HtmlBuilder.html {
 
 **Characteristics:**
 - Used to create a single instance of a class (Singleton pattern)
-- Thread-safe by default
+- Initialization is thread-safe by default (the single instance is initialized safely), but mutable internal logic/state is not automatically thread-safe
 - Lazily initialized when first accessed
-- Cannot have constructors (automatically instantiated)
+- Cannot have constructors (the instance is created automatically by the compiler)
 - Can inherit from classes and implement interfaces
 
 **Object declaration (Singleton):**
@@ -336,10 +336,8 @@ object DatabaseConnection {
 }
 
 // Usage
-fun main() {
-    DatabaseConnection.connect()     // Connecting to database...
-    DatabaseConnection.disconnect()  // Disconnecting from database...
-}
+DatabaseConnection.connect()
+DatabaseConnection.disconnect()
 ```
 
 **Object with inheritance and interfaces:**
@@ -364,23 +362,22 @@ object Logger : BaseLogger(), ClickListener {
     }
 }
 
-fun main() {
-    Logger.log("Application started")
-    Logger.onClick()
-}
+// Usage
+Logger.log("Application started")
+Logger.onClick()
 ```
 
 ### Companion Object
 
 **Characteristics:**
 - Declared inside a class
-- Used to declare members accessible without creating an instance of the class
+- Used for members accessible without creating an instance of the class
 - Similar to static members in Java (but implemented as a regular object, not via `static` keyword)
 - Can implement interfaces
 - Can have extension functions
 - Only one companion object per class
 - Can be named (optional)
-- Lazily initialized when first accessed (the companion object or its members)
+- Acts as a single instance associated with the class; initialized on first access to it (or to the enclosing class); initialization is thread-safe
 
 **Companion object (static-like members):**
 ```kotlin
@@ -406,15 +403,12 @@ class User(val id: Int, val name: String) {
 }
 
 // Usage
-fun main() {
-    val user1 = User.create("Alice")
-    val user2 = User.create("Bob")
+val user1 = User.create("Alice")
+val user2 = User.create("Bob")
 
-    println("${user1.name} has ID ${user1.id}")  // Alice has ID 1
-    println("${user2.name} has ID ${user2.id}")  // Bob has ID 2
-
-    println("Min name length: ${User.MIN_NAME_LENGTH}")
-}
+println("${user1.name} has ID ${user1.id}")  // Alice has ID 1
+println("${user2.name} has ID ${user2.id}")  // Bob has ID 2
+println("Min name length: ${User.MIN_NAME_LENGTH}")
 ```
 
 **Named companion object:**
@@ -426,10 +420,8 @@ class MyClass {
 }
 
 // Can be called with or without name
-fun main() {
-    val obj1 = MyClass.create()           // Using companion object
-    val obj2 = MyClass.Factory.create()   // Using companion object name
-}
+val obj1 = MyClass.create()           // Using companion object
+val obj2 = MyClass.Factory.create()   // Using companion object name
 ```
 
 **Companion object with interface:**
@@ -457,9 +449,9 @@ class Person(val name: String, val age: Int) {
 
 fun main() {
     val person = Person("Alice", 30)
-    println(person.toJson())               // Instance method
-    println(Person.toJson())               // Companion object method
-    val newPerson = Person.fromJson("{}") // Factory method
+    println(person.toJson())                // Instance method
+    println(Person.toJson())                // Companion object method
+    val newPerson = Person.fromJson("{}")  // Factory method
 }
 ```
 
@@ -474,18 +466,16 @@ fun setClickListener(listener: OnClickListener) {
     listener.onClick()
 }
 
-fun main() {
-    // Anonymous object (like anonymous inner class in Java)
-    setClickListener(object : OnClickListener {
-        override fun onClick() {
-            println("Clicked!")
-        }
+// Anonymous object (like anonymous inner class in Java), also based on `object` keyword
+setClickListener(object : OnClickListener {
+    override fun onClick() {
+        println("Clicked!")
+    }
 
-        override fun onLongClick() {
-            println("Long clicked!")
-        }
-    })
-}
+    override fun onLongClick() {
+        println("Long clicked!")
+    }
+})
 ```
 
 **Companion object extension:**
@@ -501,10 +491,8 @@ fun Person.Companion.createDefault(): Person {
     return Person("Default Name")
 }
 
-fun main() {
-    val person = Person.createDefault()
-    println(person.name)  // Default Name
-}
+val person = Person.createDefault()
+println(person.name)  // Default Name
 ```
 
 ### Key Differences
@@ -517,7 +505,7 @@ fun main() {
 | Count | One instance per declaration | At most one per class (optional) |
 | Constructor | Cannot have one | Cannot have one |
 | Inheritance | Can extend classes and implement interfaces | Can implement interfaces |
-| Initialization | Lazy on first access | Lazy on first access to the companion or its members |
+| Initialization | Lazy on first access; initialization is thread-safe | Lazy on first access to the companion or its members; initialization is thread-safe |
 | Extensions | You can declare extension functions/properties for a specific `object` by its name | You can declare extensions for `Companion` (or the named companion object) |
 
 ### When to Use
@@ -526,7 +514,7 @@ Use `object` when:
 - You need a single instance (Singleton)
 - You are creating a utility holder
 - You implement a global manager
-- You define constants at module/top level
+- You define constants at module/top level (or use an `object` as a container)
 
 Use `companion object` when:
 - You need factory methods
@@ -588,8 +576,8 @@ val page = HtmlBuilder.html {
 
 ### Short Answer
 
-- `object`: Thread-safe, lazily initialized singleton. Good for one-off instances, utilities, global managers; can inherit and implement interfaces; can be used for constants at module/top level.
-- `companion object`: Provides static-like members inside a class, accessed via the class name. Good for factory methods, constants, and static helpers tied to that class; can implement interfaces and have extensions; exactly one per class, optionally named; lazily initialized on first access.
+- `object`: Singleton with lazy, thread-safe initialization. Good for one-off instances, utilities, global managers; can inherit and implement interfaces; can be used for constants at module/top level. Thread-safety here refers to initialization only; mutable state still requires explicit concurrency control.
+- `companion object`: Provides static-like members inside a class, accessed via the class name. Good for factory methods, constants, and static helpers tied to that class; can implement interfaces and have extensions; exactly one per class, optionally named; lazily and safely initialized on first access.
 
 ---
 

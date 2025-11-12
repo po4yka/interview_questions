@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-infix-functions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [class-modifiers, classes, difficulty/easy, final, inheritance, open, kotlin, syntax]
 ---
 # Вопрос (RU)
@@ -87,15 +87,30 @@ class Derived : OpenClass()
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого поведения от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные подводные камни следует избегать?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-infix-functions--kotlin--medium]]
+- [[q-flowon-operator-context-switching--kotlin--hard]]
 
 ## Related Questions
 

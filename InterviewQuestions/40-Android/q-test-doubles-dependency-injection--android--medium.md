@@ -20,7 +20,7 @@ related:
 - c-dependency-injection
 - q-what-is-hilt--android--medium
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-11
 tags:
 - android/di-hilt
 - android/testing-unit
@@ -671,11 +671,17 @@ class MockTest {
 
 - [[c-dependency-injection]]
 - [[q-what-is-hilt--android--medium]]
+- Как с помощью `@TestInstallIn` заменить сетевой слой на fake-реализацию в инструментальных тестах?
+- Как использовать `@BindValue` для конфигурации разных `UserRepository` в отдельных тестах?
+- Какие преимущества дают fakes по сравнению с mocks при тестировании архитектуры с Hilt?
 
 ## Follow-ups
 
 - [[c-dependency-injection]]
 - [[q-what-is-hilt--android--medium]]
+- How can you use `@TestInstallIn` to replace the network layer with a fake in instrumented tests?
+- How do you use `@BindValue` to configure different `UserRepository` implementations per test?
+- What are the benefits of using fakes instead of mocks when testing a Hilt-based architecture?
 
 ## Ссылки (RU)
 

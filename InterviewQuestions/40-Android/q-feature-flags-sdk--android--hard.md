@@ -32,11 +32,9 @@ tags: [android/architecture-clean, android/networking-http, android/service, dif
 > Как спроектировать SDK флагов функций и экспериментов для Android?
 
 ## Краткая Версия
-
 Спроектируйте SDK флагов функций для Android. Основные требования: динамическое включение/выключение функций, A/B тестирование, <150мс bootstrap, sticky assignments, офлайн кеш с TTL, kill-switch семантика, privacy-safe exposure logging.
 
 ## Подробная Версия
-
 Спроектируйте полноценный SDK флагов функций и экспериментов для Android со следующими требованиями:
 
 **Производительность:**
@@ -65,11 +63,9 @@ tags: [android/architecture-clean, android/networking-http, android/service, dif
 > How to design a feature flags & experimentation SDK for Android?
 
 ## Short Version
-
 Design a feature flags SDK for Android. Key requirements: dynamic feature toggles, A/B testing, <150ms bootstrap, sticky assignments, offline cache with TTL, kill-switch semantics, privacy-safe exposure logging.
 
 ## Detailed Version
-
 Design a complete feature flags & experimentation SDK for Android with the following requirements:
 
 **Performance:**
@@ -115,7 +111,7 @@ SDK флагов функций обеспечивает динамическо�
 
 **Exposure logging** — запись факта показа пользователю определенной версии функциональности. Необходим для статистического анализа экспериментов.
 
-### Requirements
+### Требования
 
 **Функциональные требования:**
 - Управление флагами функций и конфигурацией экспериментов на стороне сервера
@@ -169,6 +165,7 @@ interface FlagStore {
 class FlagBootstrapper(
     private val store: FlagStore,
     private val network: FlagNetworkClient,
+    private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     suspend fun bootstrap(): Config {
@@ -176,8 +173,8 @@ class FlagBootstrapper(
             // 1. Load last good config from disk (<150ms target)
             val cached = store.getConfig()
             if (cached != null && !store.isExpired(cached)) {
-                // Fire-and-forget async refresh in background
-                launch { refreshInBackground(cached) }
+                // Fire-and-forget async refresh in background using provided scope
+                scope.launch { refreshInBackground(cached) }
                 return@withContext cached
             }
 
@@ -202,7 +199,7 @@ class FlagBootstrapper(
 }
 ```
 
-`FlagNetworkClient`, `Config` (включая поле `etag`) и `getFailsafeDefaults()` подразумеваются как часть SDK контракта и должны быть определены отдельно.
+`FlagNetworkClient`, `Config` (включая поле `etag`) и `getFailsafeDefaults()` подразумеваются как часть SDK контракта и должны быть определены отдельно. Важно: для фонового обновления используется явный `CoroutineScope`.
 
 ### Evaluation Engine
 
@@ -269,14 +266,15 @@ class RoomFlagStore(private val dao: FlagDao) : FlagStore {
     }
 
     override fun isExpired(config: Config): Boolean {
-        // Для простоты: ответственность за TTL реализована в CachedConfig,
-        // сюда можно прокинуть метаданные при необходимости.
+        // В примере TTL/expiration реализованы через CachedConfig.
+        // В production-реализации следует последовательно применять
+        // единую стратегию истечения срока действия (например, через metadata).
         return false
     }
 }
 ```
 
-В реальной реализации TTL/expiration должна быть согласованной: либо через метаданные `CachedConfig`, либо через поля `Config`.
+В реальной реализации TTL/expiration должна быть согласованной: либо через метаданные `CachedConfig`, либо через поля `Config`, без дублирования логики.
 
 ### Kill-Switch
 
@@ -292,8 +290,8 @@ class KillSwitchManager(
         fcm.subscribeToTopic("kill_switch")
     }
 
-    fun shouldDisableFeature(feature: String): Boolean {
-        // Check kill switch first; если включен kill_switch_x, то фича отключается
+    fun isFeatureDisabled(feature: String): Boolean {
+        // Если включен kill_switch_<feature>, считаем фичу отключенной
         return flags.isEnabled("kill_switch_$feature")
     }
 }
@@ -333,7 +331,8 @@ class SecureFlagStore(private val context: Context) : FlagStore {
     }
 
     override fun isExpired(config: Config): Boolean {
-        // TTL/expiration может храниться внутри Config или в отдельных метаданных
+        // TTL/expiration может храниться внутри Config или в отдельных метаданных.
+        // Важно, чтобы стратегия была согласованной с bootstrap и cache.
         return false
     }
 }
@@ -435,6 +434,7 @@ Critical for UX — users should not wait for flag loading.
 class FlagBootstrapper(
     private val store: FlagStore,
     private val network: FlagNetworkClient,
+    private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     suspend fun bootstrap(): Config {
@@ -442,8 +442,8 @@ class FlagBootstrapper(
             // 1. Load last good config from disk (<150ms target)
             val cached = store.getConfig()
             if (cached != null && !store.isExpired(cached)) {
-                // Fire-and-forget async refresh in background
-                launch { refreshInBackground(cached) }
+                // Fire-and-forget async refresh in background using provided scope
+                scope.launch { refreshInBackground(cached) }
                 return@withContext cached
             }
 
@@ -468,7 +468,7 @@ class FlagBootstrapper(
 }
 ```
 
-`FlagNetworkClient`, `Config` (including `etag`) and `getFailsafeDefaults()` are part of the SDK contract and must be defined elsewhere.
+`FlagNetworkClient`, `Config` (including `etag`) and `getFailsafeDefaults()` are part of the SDK contract and must be defined elsewhere. Note: background refresh uses an explicit `CoroutineScope`.
 
 ### Evaluation Engine
 
@@ -535,14 +535,14 @@ class RoomFlagStore(private val dao: FlagDao) : FlagStore {
     }
 
     override fun isExpired(config: Config): Boolean {
-        // In this example, expiration is handled via CachedConfig metadata.
-        // This method can be implemented if Config carries its own TTL.
+        // In this example, expiration is implemented via CachedConfig metadata.
+        // In production, choose a single consistent expiration strategy.
         return false
     }
 }
 ```
 
-In a real implementation, TTL/expiration logic should be consistently defined either via cache metadata or fields on Config.
+In a real implementation, TTL/expiration logic should be consistently defined either via cache metadata or fields on Config, without duplicating or ignoring it.
 
 ### Kill-Switch
 
@@ -558,8 +558,8 @@ class KillSwitchManager(
         fcm.subscribeToTopic("kill_switch")
     }
 
-    fun shouldDisableFeature(feature: String): Boolean {
-        // Check kill switch first; if kill_switch_x is enabled, disable the feature
+    fun isFeatureDisabled(feature: String): Boolean {
+        // If kill_switch_<feature> is enabled, treat the feature as disabled
         return flags.isEnabled("kill_switch_$feature")
     }
 }
@@ -600,6 +600,7 @@ class SecureFlagStore(private val context: Context) : FlagStore {
 
     override fun isExpired(config: Config): Boolean {
         // TTL/expiration can be implemented using Config or separate metadata.
+        // Ensure alignment with bootstrap and cache behavior.
         return false
     }
 }
@@ -627,13 +628,13 @@ Key metrics for production reliability: bootstrap latency (<150ms), cache hit ra
 
 ---
 
-## References
+## Follow-ups
 
 - [[c-clean-architecture]]
 - [[c-dependency-injection]]
 - [[c-workmanager]]
 
-## Follow-ups
+## References
 
 - [[c-clean-architecture]]
 - [[c-dependency-injection]]
@@ -644,3 +645,6 @@ Key metrics for production reliability: bootstrap latency (<150ms), cache hit ra
 - [[c-clean-architecture]]
 - [[c-dependency-injection]]
 - [[c-workmanager]]
+
+## Ссылки (RU)
+## Дополнительные вопросы (RU)

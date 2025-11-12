@@ -1,20 +1,22 @@
 ---
 id: lang-011
-title: "Java Object Comparison"
+title: "Java Object Comparison / Сравнение объектов в Java"
 aliases: ["Java Object Comparison", "Java Object Сравнение"]
-topic: kotlin
+topic: programming-languages
 subtopics: [equality]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-kotlin
-related: [c-equality, c-java-features, q-flow-map-operator--programming-languages--medium]
+moc: moc-system-design
+related: [c-equality, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-13
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, programming-languages]
+
 ---
+
 # Вопрос (RU)
 > Как сравниваются объекты в Java?
 
@@ -27,7 +29,7 @@ tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, pro
 
 1. `==` — сравнение ссылок (идентичности объектов)
    - Оператор `==` для объектов проверяет, указывают ли две переменные на один и тот же объект в памяти.
-   - Для строк (`String`) это особенно важно: литералы могут находиться в пуле строк (string pool), поэтому два одинаковых литерала могут давать `true` при `==`, но два `new String("...")` — `false`.
+   - Для строк (`String`) это особенно важно: литералы могут находиться в пуле строк (string pool), поэтому два одинаковых литерала могут давать `true` при `==`, но два `new `String`("...")` — `false`.
 
    ```java
    String str1 = new String("Hello");
@@ -84,14 +86,17 @@ person.equals(null);  // false
 ### Контракт hashCode()
 
 ```java
+Person p1 = new Person("John", 30);
+Person p2 = new Person("John", 30);
+
 // Если equals() возвращает true, hashCode() обязан быть одинаковым
-if (person1.equals(person2)) {
-    assert person1.hashCode() == person2.hashCode();  // ДОЛЖНО быть true
+if (p1.equals(p2)) {
+    assert p1.hashCode() == p2.hashCode();  // ДОЛЖНО быть true
 }
 
 // Одинаковый hashCode() не гарантирует equals() == true (возможны коллизии)
-if (person1.hashCode() == person2.hashCode()) {
-    // person1.equals(person2) может быть как true, так и false
+if (p1.hashCode() == p2.hashCode()) {
+    // p1.equals(p2) может быть как true, так и false
 }
 ```
 
@@ -147,12 +152,20 @@ if (s1.equals(s2)) {  // true - одинаковое содержимое
     // выполнится
 }
 
-// Ошибка: переопределён equals(), но не переопределён hashCode()
+// Ошибка: логика equals() переопределена, но hashCode() не согласован
 class Bad {
+    private final String value;
+
+    Bad(String value) {
+        this.value = value;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        // некоторая логика
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (!(obj instanceof Bad)) return false;
+        Bad other = (Bad) obj;
+        return Objects.equals(value, other.value); // сравнение по содержимому
     }
     // Отсутствует согласованный hashCode() - ломает работу в хеш-коллекциях
 }
@@ -160,10 +173,10 @@ class Bad {
 
 ### Таблица сравнения
 
-| Оператор    | Что сравнивает                            | Когда использовать                    | Пример               |
-|-------------|-------------------------------------------|----------------------------------------|----------------------|
-| `==`        | Ссылки (идентичность объекта)            | Проверка, один ли это объект           | `obj1 == obj2`      |
-| `.equals()` | Реализацию в классе (обычно данные)      | Логическое равенство                   | `obj1.equals(obj2)` |
+| Оператор    | Что сравнивает                               | Когда использовать                    | Пример               |
+|-------------|----------------------------------------------|----------------------------------------|----------------------|
+| `==`        | Ссылки (идентичность объекта)               | Проверка, один ли это объект           | `obj1 == obj2`      |
+| `.equals()` | Реализацию в классе (обычно данные объекта) | Логическое равенство                   | `obj1.equals(obj2)` |
 
 ### Краткое резюме
 
@@ -180,7 +193,7 @@ Java provides two main ways to compare objects:
 
 1. Reference Comparison (`==`) - Compares object identity
    - The `==` operator compares references: it checks whether two variables refer to the same object.
-   - For `String`, this is important: literals may be stored in the string pool, so two identical literals may yield `true` with `==`, while two `new String("...")` instances yield `false`.
+   - For `String`, this is important: literals may be stored in the string pool, so two identical literals may yield `true` with `==`, while two `new `String`("...")` instances yield `false`.
 
    ```java
    String str1 = new String("Hello");
@@ -237,6 +250,9 @@ person.equals(null);  // false
 ### hashCode() Contract
 
 ```java
+Person p1 = new Person("John", 30);
+Person p2 = new Person("John", 30);
+
 // If equals() returns true, hashCode() must be equal
 if (p1.equals(p2)) {
     assert p1.hashCode() == p2.hashCode();  // MUST be true
@@ -300,12 +316,20 @@ if (s1.equals(s2)) {  // true - same content
     // Will execute
 }
 
-// Wrong: Overriding equals() without hashCode()
+// Wrong: equals() defines logical equality, but hashCode() is not consistent
 class Bad {
+    private final String value;
+
+    Bad(String value) {
+        this.value = value;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        // custom logic
-        return super.equals(obj);
+        if (this == obj) return true;
+        if (!(obj instanceof Bad)) return false;
+        Bad other = (Bad) obj;
+        return Objects.equals(value, other.value); // content-based equality
     }
     // Missing consistent hashCode() override - breaks behavior in hash-based collections
 }
@@ -313,10 +337,10 @@ class Bad {
 
 ### Comparison Table
 
-| Operator    | Compares                                | Use Case                  | Example               |
-|-------------|------------------------------------------|---------------------------|-----------------------|
-| `==`        | References (object identity)            | Identity check            | `obj1 == obj2`       |
-| `.equals()` | As implemented by the class (usually data) | Logical equality check | `obj1.equals(obj2)` |
+| Operator    | Compares                                   | Use Case                    | Example               |
+|-------------|--------------------------------------------|-----------------------------|-----------------------|
+| `==`        | References (object identity)               | Identity check              | `obj1 == obj2`       |
+| `.equals()` | As implemented by the class (usually data) | Logical equality check      | `obj1.equals(obj2)` |
 
 ### Summary
 

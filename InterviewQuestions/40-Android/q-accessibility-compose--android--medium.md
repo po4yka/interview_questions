@@ -37,7 +37,7 @@ tags: [accessibility, android/ui-accessibility, android/ui-compose, compose, dif
 
 ## Ответ (RU)
 
-**Доступность в Compose** обеспечивает использование приложения людьми с ограниченными возможностями через поддержку сервисов вроде TalkBack, корректные семантические свойства, фокусируемость элементов и соблюдение минимальных размеров сенсорных целей (48dp).
+**Доступность в Compose** обеспечивает использование приложения людьми с ограниченными возможностями через поддержку сервисов вроде TalkBack, корректные семантические свойства, фокусируемость элементов и соблюдение рекомендуемых минимальных размеров сенсорных целей (около 48dp).
 
 ### Ключевые Техники
 
@@ -56,6 +56,8 @@ Image(
     contentDescription = null  // Декоративное
 )
 ```
+
+- Для значимых не-текстовых элементов нужно обеспечить текстовый эквивалент (через `contentDescription` или другую семантику), при этом избегая дублирования уже читаемого текста.
 
 **2. Semantic Properties** — семантика для кастомных элементов (если стандартных модификаторов toggleable/selectable недостаточно):
 
@@ -94,13 +96,13 @@ Card(
 }
 ```
 
-**4. Touch Target Size** — минимум 48dp:
+**4. Touch Target Size** — минимум около 48dp:
 
 ```kotlin
 // ✅ Правильно: достаточно большой таргет
 IconButton(
     onClick = { },
-    modifier = Modifier.size(48.dp)  // Минимум 48dp, часто обеспечивается автоматически
+    modifier = Modifier.size(48.dp)  // Ориентир 48dp; Material-компоненты обычно обеспечивают это сами
 ) {
     Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
 }
@@ -129,8 +131,8 @@ Card(
 
 ### Ключевые Принципы
 
-- **contentDescription**: обязательно для информативных элементов, `null` для декоративных.
-- **Touch targets**: минимум 48dp для всех интерактивных элементов (учитывать, что многие Material-компоненты обеспечивают это по умолчанию).
+- **contentDescription**: для значимых визуальных элементов (особенно иконок без подписи) обеспечить читаемое описание; `null` для декоративных, чтобы избежать "шума".
+- **Touch targets**: ориентир минимум 48dp для всех интерактивных элементов (учитывать, что многие Material-компоненты обеспечивают это по умолчанию за счёт внутреннего отступа и минимального размера).
 - **mergeDescendants**: использовать для объединения сложных компонентов в единое семантическое представление, если покомпонентный анонс мешает восприятию.
 - **Semantic properties**: при кастомном поведении использовать `role`, `stateDescription`, `liveRegion` и др.; по возможности предпочитать готовые модификаторы (`clickable`, `toggleable`, `selectable`), которые уже интегрированы с accessibility.
 - **Тестирование**: всегда проверять с включённым TalkBack / Switch Access и системными инструментами.
@@ -139,7 +141,7 @@ Card(
 
 ## Answer (EN)
 
-**Accessibility in Compose** ensures app usability for people with disabilities through support of services like TalkBack, correct semantic properties, focusability, and respecting minimum touch target sizes (48dp).
+**Accessibility in Compose** ensures app usability for people with disabilities through support of services like TalkBack, correct semantic properties, focusability, and respecting recommended minimum touch target sizes (around 48dp).
 
 ### Key Techniques
 
@@ -158,6 +160,8 @@ Image(
     contentDescription = null  // Decorative only
 )
 ```
+
+- For meaningful non-text elements, provide an accessible text alternative (via `contentDescription` or other semantics) while avoiding redundant labels.
 
 **2. Semantic Properties** — semantics for custom elements (when built-in toggleable/selectable modifiers are not enough):
 
@@ -195,13 +199,13 @@ Card(
 }
 ```
 
-**4. Touch Target Size** — minimum 48dp:
+**4. Touch Target Size** — minimum around 48dp:
 
 ```kotlin
 // ✅ Correct: sufficiently large target
 IconButton(
     onClick = { },
-    modifier = Modifier.size(48.dp)  // At least 48dp, often ensured by Material defaults
+    modifier = Modifier.size(48.dp)  // 48dp guideline; many Material components ensure this via defaults
 ) {
     Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
 }
@@ -230,8 +234,8 @@ Card(
 
 ### Key Principles
 
-- **contentDescription**: required for meaningful elements, `null` for decorative ones.
-- **Touch targets**: minimum 48dp for all interactive elements (noting many Material components enforce this by default).
+- **contentDescription**: ensure meaningful visual elements (especially unlabeled icons) have an accessible name; use `null` for decorative content to avoid noise.
+- **Touch targets**: aim for at least 48dp for interactive elements (noting many Material components achieve this through padding/minSize rather than explicit sizes).
 - **mergeDescendants**: use to group complex components into a single semantic node when separate announcements harm usability.
 - **Semantic properties**: for custom behavior, use `role`, `stateDescription`, `liveRegion`, etc.; prefer built-in modifiers (`clickable`, `toggleable`, `selectable`) that are accessibility-aware.
 - **Testing**: always verify with TalkBack / Switch Access and platform accessibility tools enabled.

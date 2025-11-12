@@ -1,7 +1,7 @@
 ---
 id: kotlin-070
 title: "Java Kotlin Abstract Classes Difference / Главное отличие абстрактных классов в Java и Kotlin"
-aliases: []
+aliases: ["Java Kotlin Abstract Classes Difference"]
 topic: kotlin
 subtopics: [class-features, type-system]
 question_kind: theory
@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-inline-function-limitations--kotlin--medium]
+related: [c--kotlin--medium, q-inline-function-limitations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
@@ -73,7 +73,7 @@ Key points:
 
 ## Ссылки (RU)
 
-- [[c-kotlin]]
+- [[c--kotlin--medium]]
 
 ## References
 

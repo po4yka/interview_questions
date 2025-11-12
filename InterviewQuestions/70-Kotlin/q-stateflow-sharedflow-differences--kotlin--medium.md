@@ -2,30 +2,23 @@
 id: kotlin-016
 title: "StateFlow and SharedFlow / StateFlow и SharedFlow"
 aliases: ["StateFlow and SharedFlow", "StateFlow и SharedFlow"]
-
-# Classification
 topic: kotlin
-subtopics: [coroutines, flow, hot-flows]
+subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
-
-# Timestamps
+related: [c-kotlin, c-concurrency, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
 created: 2025-10-05
-updated: 2025-11-09
+updated: 2025-11-11
+tags: [coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
 
-tags: [coroutines, difficulty/medium, flow, hot-flows, kotlin, sharedflow, stateflow]
 ---
+
 # Вопрос (RU)
 > Что такое `StateFlow` и `SharedFlow` в Kotlin? В чем их отличия?
 
@@ -36,7 +29,7 @@ tags: [coroutines, difficulty/medium, flow, hot-flows, kotlin, sharedflow, state
 
 ## Ответ (RU)
 
-`StateFlow` и `SharedFlow` — это API для `Flow`, которые позволяют эффективно передавать обновления состояния и значения нескольким подписчикам. Это **горячие потоки** (hot flows), то есть они активны и могут испускать значения даже без подписчиков. Подробнее о контексте см. [[c-kotlin]] и [[c-flow]].
+`StateFlow` и `SharedFlow` — это API для `Flow`, которые позволяют эффективно передавать обновления состояния и значения нескольким подписчикам. Это **горячие потоки** (hot flows), то есть они существуют независимо от подписчиков и могут принимать/испускать значения, даже когда подписчиков нет (с учётом конфигурации буфера и возможной приостановки эмиттера). См. также [[c-concurrency]].
 
 ### StateFlow
 
@@ -47,7 +40,7 @@ tags: [coroutines, difficulty/medium, flow, hot-flows, kotlin, sharedflow, state
 1. **Всегда имеет значение** — требуется начальное состояние при создании.
 2. **Держатель состояния** — всегда представляет актуальное состояние.
 3. **Объединяет значения** — испускает только отличающиеся подряд значения (поведение аналогично `distinctUntilChanged`).
-4. **Горячий поток** — активен и находится в памяти даже без подписчиков.
+4. **Горячий поток** — активен независимо от наличия подписчиков.
 5. **Потокобезопасный** — можно безопасно обновлять из любого потока.
 
 #### Пример использования
@@ -215,7 +208,7 @@ sharedFlow.resetReplayCache()
 
 ## Answer (EN)
 
-`StateFlow` and `SharedFlow` are `Flow` APIs that enable flows to efficiently emit state updates and values to multiple collectors. They are **hot flows**, meaning they are active and can emit values even when there are no collectors.
+`StateFlow` and `SharedFlow` are `Flow` APIs that enable flows to efficiently emit state updates and values to multiple collectors. They are **hot flows**, meaning they exist independently of collectors and can be emitted to even when there are no active collectors (subject to buffer configuration and possible suspension of emitters). See also [[c-concurrency]].
 
 ### StateFlow
 
@@ -226,7 +219,7 @@ sharedFlow.resetReplayCache()
 1. **Always has a value** - Requires an initial state value when created.
 2. **State holder** - Always represents the latest state.
 3. **Conflates values** - Only emits distinct consecutive values (behavior similar to `distinctUntilChanged`).
-4. **Hot flow** - Active and kept in memory even without collectors.
+4. **Hot flow** - Active regardless of the presence of collectors.
 5. **Thread-safe** - Can be safely updated from any thread.
 
 #### Example Usage
@@ -401,20 +394,20 @@ sharedFlow.resetReplayCache()
 - What are common pitfalls to avoid?
 
 ## References
-- [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
-- [Flow - Kotlin Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
-- [Introducing StateFlow and SharedFlow - JetBrains Blog](https://blog.jetbrains.com/kotlin/2020/10/kotlinx-coroutines-1-4-0-introducing-stateflow-and-sharedflow/)
+- [`StateFlow` and `SharedFlow` - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`Flow` - Kotlin Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
+- [Introducing `StateFlow` and `SharedFlow` - JetBrains Blog](https://blog.jetbrains.com/kotlin/2020/10/kotlinx-coroutines-1-4-0-introducing-stateflow-and-sharedflow/)
 
 ## Related Questions
 
 ### Related (Medium)
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
 - [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
+- [[q-sharedflow-stateflow--kotlin--medium]] - `Flow`
 - [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

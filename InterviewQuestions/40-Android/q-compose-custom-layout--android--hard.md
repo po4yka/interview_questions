@@ -46,7 +46,7 @@ tags:
 
 Создать кастомный layout в Compose можно через `Layout` или собственный `MeasurePolicy`:
 - На этапе измерения передаем детям `Constraints` и получаем `Placeable`.
-- На этапе вычисления определяем размер layout на основе результатов измерения.
+- На этапе вычисления определяем размер layout на основе результатов измерения и своих `Constraints`.
 - На этапе размещения вызываем `place`/`placeRelative` для `Placeable` с нужными координатами, учитывая RTL.
 
 ### Подробный вариант
@@ -59,9 +59,9 @@ tags:
 3. Placement — размещение дочерних элементов в координатах layout.
 
 Ключевые правила:
-- Каждый `Measurable` должен измеряться детерминированно и с валидными ограничениями; повторные измерения возможны, но дороги.
+- Каждый `Measurable` должен измеряться детерминированно и с валидными ограничениями; повторные измерения допустимы и иногда необходимы, но могут быть дорогими, поэтому их стоит минимизировать.
 - Минимизируйте аллокации в `measure`/`place` (горячий путь, влияет на производительность).
-- Используйте `placeRelative` для корректной RTL-поддержки.
+- Используйте `placeRelative` для корректной RTL-поддержки: он интерпретирует горизонтальные координаты относительно "начала" (`start`), а не фиксированного `left`.
 
 #### Архитектура (пример кастомного layout)
 
@@ -94,6 +94,7 @@ fun TwoColumn(
         val rightMeasurables = measurables.subList(mid, measurables.size)
 
         // Распределяем доступную ширину между колонками с учетом gap
+        // Упрощение: считаем, что maxWidth задает полезную доступную ширину.
         val totalMaxWidth = constraints.maxWidth
         val availableForColumns = (totalMaxWidth - gapPx).coerceAtLeast(0)
         val leftMaxWidth = availableForColumns / 2
@@ -143,7 +144,7 @@ fun TwoColumn(
 }
 ```
 
-(Это обучающий пример: для production-кода следите за количеством аллокаций в `measure`.)
+(Это обучающий пример: для production-кода нужно тщательнее учитывать `Constraints` (в т.ч. ненулевой `minWidth`) и следить за количеством аллокаций в `measure`.)
 
 #### Переиспользуемый MeasurePolicy
 
@@ -163,7 +164,7 @@ fun TwoColumn(
 }
 ```
 
-Уточнение: top-level `MeasurePolicy` не должен напрямую захватывать `State`/`remember`. Если layout зависит от параметров (`gap`, `spacing`), `MeasurePolicy` обычно создают внутри composable.
+Уточнение: top-level `MeasurePolicy` не должен напрямую захватывать `State`/`remember`. Если layout зависит от параметров (`gap`, `spacing`), `MeasurePolicy` обычно создают внутри composable, чтобы он корректно отражал параметры.
 
 #### Intrinsics
 
@@ -185,7 +186,7 @@ val policy = object : MeasurePolicy {
 }
 ```
 
-Если кастомный `Layout` участвует в вычислениях intrinsic-типов у родителя, стоит реализовать все четыре intrinsic-метода.
+Здесь переопределен только один intrinsic-метод; остальные используют реализации по умолчанию. Если кастомный `Layout` участвует в вычислениях intrinsic-типов у родителя, имеет смысл реализовать все четыре intrinsic-метода.
 
 #### Рекомендации по производительности
 
@@ -216,22 +217,22 @@ val policy = object : MeasurePolicy {
 
 Create a custom layout in Compose using `Layout` or a custom `MeasurePolicy`:
 - In measurement, pass `Constraints` to children and obtain `Placeable`s.
-- In size calculation, compute the layout size from children and its own constraints.
+- In size calculation, compute the layout size from children and its own `Constraints`.
 - In placement, call `place`/`placeRelative` on `Placeable`s with proper coordinates, respecting RTL.
 
 ### Detailed Version
 
 #### Core Concepts
 
-`Layout` in Compose uses `MeasurePolicy` — a three-step contract:
+`Layout` in Compose uses a `MeasurePolicy` — a three-step contract:
 1. Measurement — measure each child with provided `Constraints` (min/max width/height).
-2. Calculation — compute the layout size based on measured children and its `Constraints`.
+2. Calculation — compute the layout size based on measured children and its own `Constraints`.
 3. Placement — place children in the layout's coordinate space.
 
 Key rules:
-- Each `Measurable` must be measured with valid constraints, deterministically; re-measurement is allowed but expensive.
-- Minimize allocations in `measure`/`place` (hot paths, affect performance).
-- Use `placeRelative` for correct RTL support.
+- Each `Measurable` must be measured deterministically with valid constraints; re-measurement is allowed and sometimes necessary but can be expensive, so keep it under control.
+- Minimize allocations in `measure`/`place` (they are hot paths and affect performance).
+- Use `placeRelative` for correct RTL support: it interprets horizontal coordinates relative to "start" instead of always using left.
 
 #### Architecture (example custom layout)
 
@@ -264,6 +265,7 @@ fun TwoColumn(
         val rightMeasurables = measurables.subList(mid, measurables.size)
 
         // Distribute available width between columns accounting for the gap
+        // Simplification: treat maxWidth as the effective available width.
         val totalMaxWidth = constraints.maxWidth
         val availableForColumns = (totalMaxWidth - gapPx).coerceAtLeast(0)
         val leftMaxWidth = availableForColumns / 2
@@ -313,11 +315,11 @@ fun TwoColumn(
 }
 ```
 
-(This is a didactic example; for production, watch allocations inside `measure`.)
+(This is a didactic example: in production you should handle `Constraints` more thoroughly (including non-zero `minWidth`) and carefully watch allocations inside `measure`.)
 
 #### Reusable MeasurePolicy
 
-You can extract `MeasurePolicy` if it does not capture composition-local state:
+You can extract a `MeasurePolicy` if it does not capture composition state:
 
 ```kotlin
 private val twoColumnMeasurePolicy = MeasurePolicy { measurables, constraints ->
@@ -333,7 +335,7 @@ fun TwoColumn(
 }
 ```
 
-Clarification: a top-level `MeasurePolicy` must not capture `State`/`remember`. If the layout depends on parameters (`gap`, `spacing`), create the `MeasurePolicy` inside the composable.
+Clarification: a top-level `MeasurePolicy` must not capture `State`/`remember`. If the layout depends on parameters (`gap`, `spacing`), construct the `MeasurePolicy` inside the composable so it correctly reflects those parameters.
 
 #### Intrinsics
 
@@ -355,13 +357,13 @@ val policy = object : MeasurePolicy {
 }
 ```
 
-If your custom `Layout` is used inside components relying on intrinsic sizes, implement the four intrinsic methods (`min/max width/height`).
+Here only one intrinsic method is overridden; others use defaults. If your custom `Layout` is used inside components that rely on intrinsic sizes, consider implementing all four intrinsic methods (`min/max width/height`).
 
 #### Performance Tips
 
-- Use stable/immutable parameters where possible.
+- Prefer stable and immutable parameters where possible.
 - Minimize temporary allocations in `measure`/`place`.
-- Avoid reading mutable composition state directly in `measure`/`place`; pass required values as parameters.
+- Avoid reading mutable state directly in `measure`/`place`; pass the required values as parameters.
 
 ### Requirements
 

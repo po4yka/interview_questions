@@ -38,19 +38,20 @@ tags:
 ---
 
 ## Ответ (RU)
-Создание списков чатов с точки зрения UI требует учёта нескольких ключевых аспектов: как представить список диалогов так, чтобы он был наглядным, отзывчивым и работал быстро.
+Создание списков чатов с точки зрения UI требует учёта нескольких ключевых аспектов: как представить список диалогов так, чтобы он был наглядным, отзывчивым, быстро работал и корректно масштабировался на большие активные чаты.
 
 ### Основные шаги
 
 1. Определить модель данных для элемента списка (чат/диалог).
-2. Создать UI-макет элемента списка (аватар, имя, последний текст, время, индикаторы онлайн/typing, бейдж непрочитанного, пин).
+2. Создать UI-макет элемента списка (аватар, имя, последний текст, время, индикаторы online/typing, бейдж непрочитанного, пин).
 3. Реализовать RecyclerView + Adapter + ViewHolder под эту модель.
 4. Настроить наблюдение за данными (`ViewModel`/`LiveData`/`Flow`) и обновление списка через `ListAdapter`/`DiffUtil`.
-5. Оптимизировать производительность (`DiffUtil`, пагинация, кеширование изображений).
+5. Обеспечить сортировку (сначала закреплённые, затем по времени последнего сообщения).
+6. Оптимизировать производительность (`DiffUtil`, пагинация, кеширование изображений).
 
 ### 1. Модели данных
 
-Важно разделять модель для списка чатов и модели для сообщений: список оперирует сущностью "чат/диалог", а пузырьки сообщений относятся к экрану деталей чата, но используют те же принципы согласованной модели данных.
+Важно разделять модель для списка чатов и модели для сообщений: список оперирует сущностью "чат/диалог", а пузырьки сообщений относятся к экрану деталей чата. Ниже модели сообщений приведены как контекст: они не обязательны для реализации списка, но демонстрируют согласованный подход к данным UI.
 
 ```kotlin
 // Модель чата (диалога) для списка чатов
@@ -66,7 +67,7 @@ data class ChatRoom(
     val isPinned: Boolean = false
 )
 
-// Модели сообщений для экрана деталей чата (а не для списка)
+// Модели сообщений для экрана деталей чата (контекст для UI, не часть списка чатов)
 sealed class ChatMessage {
     abstract val id: String
     abstract val timestamp: Long
@@ -237,7 +238,7 @@ enum class MessageStatus {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-#### Макет сообщения (для экрана деталей чата)
+#### Макет сообщения (для экрана деталей чата, контекст)
 
 ```xml
 <!-- item_message_sent.xml -->
@@ -442,13 +443,15 @@ class ChatRoomAdapter(
             return oldItem == newItem
         }
 
-        // Поддержка payload для частичных обновлений (unread, typing, lastMessage)
-        // При использовании payload необходимо, чтобы адаптер также обрабатывал их в onBindViewHolder с payloads.
+        // Поддержка payload для частичных обновлений (unread, typing, lastMessage).
+        // В данном упрощённом примере возвращается один тип payload за раз.
+        // В продакшне можно вернуть коллекцию payload'ов, если изменилось несколько полей.
         override fun getChangePayload(oldItem: ChatRoom, newItem: ChatRoom): Any? {
             return when {
                 oldItem.unreadCount != newItem.unreadCount -> PAYLOAD_UNREAD_COUNT
                 oldItem.isTyping != newItem.isTyping -> PAYLOAD_TYPING
-                oldItem.lastMessage != newItem.lastMessage -> PAYLOAD_LAST_MESSAGE
+                oldItem.lastMessage != newItem.lastMessage ||
+                    oldItem.lastMessageTime != newItem.lastMessageTime -> PAYLOAD_LAST_MESSAGE
                 else -> null
             }
         }
@@ -498,13 +501,14 @@ class ChatListFragment : Fragment() {
             // Необязательно: разделители между элементами
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-            // Подсказки для производительности
+            // Подсказки для производительности (подходят, если размеры элементов стабильны)
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
         }
 
         // Подписка на список чатов
         viewModel.chatRooms.observe(viewLifecycleOwner) { chatRooms ->
+            // Убедитесь, что chats отсортированы по isPinned и lastMessageTime до передачи в адаптер
             adapter.submitList(chatRooms)
         }
     }
@@ -515,7 +519,7 @@ class ChatListFragment : Fragment() {
 
 #### Использование DiffUtil
 
-Используйте `ListAdapter`/`DiffUtil` для эффективных обновлений, опираясь на стабильные `id` и сравнение содержимого. Если используете payload для частичных обновлений, обязательно реализуйте соответствующий вариант `onBindViewHolder` с `payloads` в адаптере, чтобы эти payload правильно обрабатывались.
+Используйте `ListAdapter`/`DiffUtil` для эффективных обновлений, опираясь на стабильные `id` и корректное сравнение содержимого. При использовании payload для частичных обновлений реализуйте соответствующий вариант `onBindViewHolder` с `payloads`, чтобы эти payload были обработаны. Для более точного контроля можно включить `setHasStableIds(true)` и переопределить `getItemId`, но это опционально.
 
 #### Пагинация (пример)
 
@@ -549,29 +553,30 @@ class ChatListViewModel : ViewModel() {
 3. Использовать `DiffUtil` или `ListAdapter` для обновления изменившихся элементов без полного пересоздания списка.
 4. Реализовать пагинацию или ленивую подгрузку для больших списков.
 5. Чётко отображать индикаторы typing/online и бейджи непрочитанных с понятной визуальной иерархией.
-6. Сортировать чаты по закреплению и времени последнего сообщения (сначала `isPinned`, затем `lastMessageTime`).
+6. Сортировать чаты по закреплению и времени последнего сообщения (сначала `isPinned`, затем по `lastMessageTime`).
 7. Использовать `ViewBinding` или data binding для безопасного доступа к вью.
 8. Реализовать свайп-действия (`ItemTouchHelper`) для удаления/архивации/мута, где это уместно.
 9. Отдельно проектировать макеты списка чатов и пузырьков сообщений для экрана деталей чата, используя общие принципы моделей данных, но не смешивая ответственности.
 
-Такой подход соответствует рекомендациям по работе с списками в Android и покрывает как визуальную часть (UI-паттерн списка чатов), так и продакшн-подобную реализацию.
+Такой подход соответствует рекомендациям по работе с списками в Android и покрывает как визуальную часть (UI-паттерн списка чатов), так и реалистичную реализацию.
 
 ---
 
 ## Answer (EN)
-Creating chat lists from a UI perspective requires considering multiple aspects to ensure usability, good performance, and attractive appearance. The focus is on how to visually structure and render a list of conversations, and how this ties into efficient implementation on Android.
+Creating chat lists from a UI perspective requires considering usability, clarity, performance, and scalability for large/active chat sets. The focus is on how to visually structure and render a list of conversations and how that maps to efficient Android implementation.
 
 ### Main Steps
 
-1. Define data models for chat list items
-2. Create layouts for list items (chat rows; optionally message bubbles for context)
-3. Create adapter for RecyclerView
-4. Configure RecyclerView and data observation
-5. Optimize performance for large/active lists
+1. Define a data model for chat list items (chat/conversation).
+2. Create a layout for each chat row (avatar, name, last message, timestamp, online/typing indicators, unread badge, pin).
+3. Implement RecyclerView + Adapter + ViewHolder for that model.
+4. Wire up data observation (`ViewModel`/`LiveData`/`Flow`) and submit updates via `ListAdapter`/`DiffUtil`.
+5. Ensure proper sorting (pinned first, then by last message time).
+6. Optimize for performance (DiffUtil, pagination, image caching).
 
 ### 1. Define Data Models
 
-For the chat list, define a model representing a conversation (chat room). For message-level UI (used in chat detail), define message models. While message bubbles are not part of the chat list itself, they follow similar UI/data principles.
+Keep a clear separation between the chat list model and message models: the list works with a "chat/conversation" entity, while message bubbles belong to the chat detail screen. Message models below are included as context to illustrate a consistent UI/data approach; they are not required to implement the list itself.
 
 ```kotlin
 // Chat room model for the chat list
@@ -587,7 +592,7 @@ data class ChatRoom(
     val isPinned: Boolean = false
 )
 
-// Message model for chat detail view (not for the list screen itself)
+// Message models for the chat detail screen (context for UI; not required for the list screen itself)
 sealed class ChatMessage {
     abstract val id: String
     abstract val timestamp: Long
@@ -758,7 +763,7 @@ enum class MessageStatus {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-#### Message Item Layouts (for detail screen)
+#### Message Item Layouts (for detail screen, context)
 
 ```xml
 <!-- item_message_sent.xml -->
@@ -963,12 +968,15 @@ class ChatRoomAdapter(
             return oldItem == newItem
         }
 
-        // Payload support is optional; if used, also override onBindViewHolder with payloads.
+        // Payload support for partial updates (unread, typing, lastMessage).
+        // This simplified example returns a single payload at a time.
+        // In production you may return a collection if multiple properties changed.
         override fun getChangePayload(oldItem: ChatRoom, newItem: ChatRoom): Any? {
             return when {
                 oldItem.unreadCount != newItem.unreadCount -> PAYLOAD_UNREAD_COUNT
                 oldItem.isTyping != newItem.isTyping -> PAYLOAD_TYPING
-                oldItem.lastMessage != newItem.lastMessage -> PAYLOAD_LAST_MESSAGE
+                oldItem.lastMessage != newItem.lastMessage ||
+                    oldItem.lastMessageTime != newItem.lastMessageTime -> PAYLOAD_LAST_MESSAGE
                 else -> null
             }
         }
@@ -997,7 +1005,6 @@ class ChatListFragment : Fragment() {
         }
     }
 
-    // viewModel initialization (e.g. by viewModels() delegate) is omitted for brevity
     private val viewModel: ChatListViewModel by viewModels()
 
     override fun onCreateView(
@@ -1019,13 +1026,14 @@ class ChatListFragment : Fragment() {
             // Optional: item decoration for dividers
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-            // Basic performance hints
+            // Basic performance hints (appropriate if item size is relatively stable)
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
         }
 
         // Observe chat list
         viewModel.chatRooms.observe(viewLifecycleOwner) { chatRooms ->
+            // Ensure chats are sorted (pinned first, then by lastMessageTime) before submission
             adapter.submitList(chatRooms)
         }
     }
@@ -1036,7 +1044,7 @@ class ChatListFragment : Fragment() {
 
 #### Use DiffUtil for Efficient Updates
 
-Already shown in `ChatRoomDiffCallback`: use stable IDs (chat IDs) and structural equality to avoid full list refreshes. If using payloads, also implement the corresponding `onBindViewHolder` overload with `payloads` so that partial updates are actually applied.
+Use `ListAdapter`/`DiffUtil` for efficient updates based on stable chat identifiers and correct content equality. If you leverage payloads, implement the `onBindViewHolder` overload with `payloads` so that partial updates are applied. Optionally, for stricter control, you may enable `setHasStableIds(true)` and override `getItemId`, but it is not mandatory.
 
 #### Implement Pagination (Conceptual Example)
 
@@ -1070,10 +1078,10 @@ class ChatListViewModel : ViewModel() {
 3. Use DiffUtil (or ListAdapter) for efficient updates when chats change.
 4. Implement pagination or incremental loading for large numbers of chats.
 5. Handle typing/online indicators and unread badges with clear visual hierarchy.
-6. Sort chats by pinned status and last message time on the UI layer or before binding.
+6. Sort chats by pinned status and last message time (pinned first, then by `lastMessageTime`).
 7. Use ViewBinding or data binding for safer view access.
 8. Implement swipe actions (delete/archive/mute) with ItemTouchHelper where appropriate.
-9. Keep chat list item layouts separate from message bubble layouts used on the chat detail screen; they share principles but serve different purposes.
+9. Keep chat list item layouts separate from message bubble layouts used on the chat detail screen; they share data principles but serve different purposes.
 
 ---
 

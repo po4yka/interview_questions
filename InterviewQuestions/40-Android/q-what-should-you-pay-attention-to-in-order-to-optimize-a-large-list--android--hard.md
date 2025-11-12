@@ -91,7 +91,7 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 
 ### 2. Использование DiffUtil для эффективных обновлений
 
-DiffUtil вычисляет минимальный набор изменений при обновлении данных и позволяет избежать `notifyDataSetChanged()`.
+DiffUtil вычисляет минимальный набор изменений при обновлении данных и позволяет избежать `notifyDataSetChanged()`. Сам `DiffUtil.calculateDiff` — синхронный; для больших списков использовать `ListAdapter` / `AsyncListDiffer`, которые запускают diff в фоне.
 
 ```kotlin
 class ItemDiffCallback(
@@ -123,7 +123,7 @@ class ItemDiffCallback(
     }
 }
 
-// Обновление списка (упрощенный пример)
+// Обновление списка (упрощенный пример; выполняется синхронно)
 fun RecyclerView.Adapter<*>.updateItemsWithDiff(
     current: MutableList<Item>,
     newItems: List<Item>
@@ -135,7 +135,7 @@ fun RecyclerView.Adapter<*>.updateItemsWithDiff(
 }
 ```
 
-Лучше использовать `ListAdapter`, который встроенно использует DiffUtil и выполняет вычисления не на главном потоке.
+Лучше использовать `ListAdapter`, который встроенно использует DiffUtil (через `AsyncListDiffer`) и выполняет вычисления не на главном потоке.
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallback()) {
@@ -267,7 +267,7 @@ class ItemPagingSource(
     private val repository: ItemRepository
 ) : PagingSource<Int, Item>() {
 
-    override suspend fun load(params: LoadParams<Int, Item>): LoadResult<Int, Item> = try {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item> = try {
         val page = params.key ?: 0
         val items = repository.getItems(page, params.loadSize)
 
@@ -297,6 +297,25 @@ class MyViewModel(repository: ItemRepository) : ViewModel() {
         ),
         pagingSourceFactory = { ItemPagingSource(repository) }
     ).flow.cachedIn(viewModelScope)
+}
+
+class ItemPagingAdapter : PagingDataAdapter<Item, ItemPagingAdapter.ViewHolder>(ItemDiffCallback()) {
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: Item) {
+            // Привязка полей item к view
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
+    }
 }
 ```
 
@@ -343,7 +362,7 @@ recyclerView.apply {
     // Аккуратно настраивать размер кэша; слишком большой = лишняя память
     setItemViewCacheSize(20)
 
-    // Настройка пула переработанных view (один адаптер)
+    // Настройка пула переработанных view (один тип viewType = 0)
     recycledViewPool.setMaxRecycledViews(0, 20)
 
     // Для вложенных RecyclerView стоит шарить общий RecycledViewPool между ними
@@ -398,7 +417,7 @@ recyclerView.apply {
 
 ### 8. Использование `View` Binding (типобезопасность)
 
-`View` Binding дает типобезопасный доступ к view и уменьшает количество ошибок; выигрыш по производительности вторичен.
+`View` Binding дает типобезопасный доступ к view и уменьшает количество ошибок; выигрыш по производительности вторичен (по сравнению с ручным `findViewById` при каждом биндинге).
 
 ```kotlin
 class ViewBindingViewHolder(
@@ -444,7 +463,7 @@ recyclerView.layoutManager = PrefetchingLayoutManager(context)
 ### 10. Мониторинг производительности
 
 ```kotlin
-// Включить StrictMode в debug-сборках
+// Включить StrictMode в debug-сборках для отслеживания обращения к диску/сети на главном потоке
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
@@ -468,7 +487,7 @@ if (BuildConfig.DEBUG) {
 Для оптимизации больших списков:
 
 1. Правильно использовать ViewHolder и держать биндинг легким.
-2. Использовать DiffUtil / ListAdapter для эффективных обновлений.
+2. Использовать DiffUtil / ListAdapter для эффективных обновлений (с учетом того, где выполняется diff).
 3. Оптимизировать загрузку изображений (кэш, уменьшение размера, отмена при рециклинге).
 4. Реализовать пагинацию; для сложных случаев использовать Paging 3.
 5. Избегать тяжелых операций в `onBindViewHolder()`, выносить их с главного потока.
@@ -529,7 +548,7 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 
 ### 2. Use DiffUtil for Efficient Updates
 
-DiffUtil calculates a minimal set of updates when data changes. It should be used to avoid calling `notifyDataSetChanged()` and to keep animations smooth.
+DiffUtil calculates a minimal set of updates when data changes and helps avoid `notifyDataSetChanged()`. `DiffUtil.calculateDiff` itself is synchronous; for large lists prefer `ListAdapter` / `AsyncListDiffer`, which perform diffing on a background thread.
 
 ```kotlin
 class ItemDiffCallback(
@@ -561,7 +580,7 @@ class ItemDiffCallback(
     }
 }
 
-// Adapter method to apply diff on a background thread (simplified example)
+// Adapter method to apply diff (synchronously in this example)
 fun RecyclerView.Adapter<*>.updateItemsWithDiff(
     current: MutableList<Item>,
     newItems: List<Item>
@@ -573,7 +592,7 @@ fun RecyclerView.Adapter<*>.updateItemsWithDiff(
 }
 ```
 
-Better: use `ListAdapter`, which integrates DiffUtil and runs diffing off the main thread.
+Better: use `ListAdapter`, which integrates DiffUtil (via `AsyncListDiffer`) and runs diffing off the main thread.
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallback()) {
@@ -606,7 +625,7 @@ adapter.submitList(newItems)
 
 ### 3. Image Loading Optimization
 
-Use mature libraries (Glide, Coil, Picasso) configured for your use case.
+Use mature libraries (Glide, Coil, Picasso) configured for your use case: caching, downsampling, and cancelling requests on recycle.
 
 ```kotlin
 class ImageOptimizedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -705,7 +724,7 @@ class ItemPagingSource(
     private val repository: ItemRepository
 ) : PagingSource<Int, Item>() {
 
-    override suspend fun load(params: LoadParams<Int, Item>): LoadResult<Int, Item> = try {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item> = try {
         val page = params.key ?: 0
         val items = repository.getItems(page, params.loadSize)
 
@@ -736,10 +755,24 @@ class MyViewModel(repository: ItemRepository) : ViewModel() {
         pagingSourceFactory = { ItemPagingSource(repository) }
     ).flow.cachedIn(viewModelScope)
 }
-```
 
 class ItemPagingAdapter : PagingDataAdapter<Item, ItemPagingAdapter.ViewHolder>(ItemDiffCallback()) {
-    // Implementation similar to ListAdapter
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: Item) {
+            // Bind item fields to views
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
+    }
 }
 
 class MyFragment : Fragment() {
@@ -802,7 +835,7 @@ recyclerView.apply {
     // Adjust cache size carefully; too large wastes memory
     setItemViewCacheSize(20)
 
-    // RecycledViewPool tuning (single adapter example)
+    // RecycledViewPool tuning for viewType = 0
     recycledViewPool.setMaxRecycledViews(0, 20)
 
     // For nested RecyclerViews, share a pool instance between them
@@ -857,7 +890,7 @@ recyclerView.apply {
 
 ### 8. Use `View` Binding (Type Safety / Fewer findViewById)
 
-`View` Binding mainly improves type safety and reduces boilerplate; its performance impact is neutral-to-slightly-positive compared to repeated `findViewById`.
+`View` Binding mainly improves type safety and reduces boilerplate; performance benefits versus repeated `findViewById` are secondary but positive.
 
 ```kotlin
 class ViewBindingViewHolder(
@@ -903,7 +936,7 @@ recyclerView.layoutManager = PrefetchingLayoutManager(context)
 ### 10. Monitor Performance
 
 ```kotlin
-// Enable strict mode in debug builds
+// Enable StrictMode in debug builds to catch disk/network operations on the main thread
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
@@ -919,7 +952,7 @@ if (BuildConfig.DEBUG) {
 // - CPU Profiler: find slow methods
 // - Memory Profiler: detect leaks / excessive allocations
 // - Network Profiler: monitor image loading
-// Use frame rendering tools (e.g., Profiler, Perfetto) for jank analysis.
+// - Frame rendering tools (Profiler, Perfetto) for jank analysis.
 ```
 
 ### Summary (EN)
@@ -927,7 +960,7 @@ if (BuildConfig.DEBUG) {
 To optimize large lists:
 
 1. Use ViewHolder correctly and keep bindings lightweight.
-2. Use DiffUtil / ListAdapter for efficient item updates.
+2. Use DiffUtil / ListAdapter for efficient item updates (being explicit about where diffing runs).
 3. Optimize image loading (caching, downsampling, cancel on recycle).
 4. Implement pagination; prefer Paging 3 for complex / large data.
 5. Avoid heavy work in `onBindViewHolder()`; precompute off the main thread.

@@ -45,7 +45,7 @@ sources: []
 
 ## Ответ (RU)
 
-Жизненный цикл `Fragment` **тесно связан** с жизненным циклом `Activity`. `Fragment` никогда не может находиться в более "высоком" состоянии жизненного цикла, чем `Activity`, но имеет **дополнительные колбэки** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). Переходы состояний `Fragment` инициируются через `FragmentManager` и синхронизируются с состоянием `Activity`.
+Жизненный цикл `Fragment` **тесно связан** с жизненным циклом `Activity`. `Fragment` не может находиться в состоянии жизненного цикла **выше**, чем состояние его хост-`Activity` (в терминах AndroidX Lifecycle), но имеет **дополнительные колбэки** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). Переходы состояний `Fragment` инициируются через `FragmentManager` и синхронизируются с состоянием `Activity`.
 
 ### Ключевые Правила Зависимости
 
@@ -53,12 +53,13 @@ sources: []
 ```kotlin
 // Fragment может быть STARTED только когда Activity как минимум STARTED
 // Fragment может быть RESUMED только когда Activity RESUMED
-// FragmentManager следит за тем, чтобы состояние Fragment не превысило состояние Activity
+// FragmentManager следит за тем, чтобы lifecycle-состояние Fragment
+// не превысило lifecycle-состояние Activity-хоста
 ```
 
-**2. При запуске — `Fragment` колбэки относительно `Activity`:**
+**2. При запуске — упрощённая последовательность колбэков `Fragment` относительно `Activity`:**
 
-Упрощённая последовательность (реальный порядок включает дополнительные колбэки):
+(Упрощено для иллюстрации, фактическая последовательность может включать дополнительные колбэки и зависеть от конкретных операций `FragmentManager`.)
 ```text
 Activity.onCreate()
   → Fragment.onAttach()
@@ -73,7 +74,9 @@ Activity.onResume()
   → Fragment.onResume()
 ```
 
-**3. При остановке — `Fragment` колбэки до финальных колбэков `Activity`:**
+**3. При остановке — упрощённый порядок:**
+
+(Точный порядок зависит от того, как удаляется/заменяется `Fragment` и как завершается `Activity`, но инвариант сохраняется: `Fragment` не остаётся в более "высоком" состоянии, чем `Activity`.)
 ```text
 Activity.onPause()
   → Fragment.onPause()
@@ -113,7 +116,7 @@ onStop()
 onDestroy()
 ```
 
-(Фактический порядок может незначительно отличаться в зависимости от операций `FragmentManager`, но инвариант сохраняется: `Fragment` не переходит в состояние выше, чем `Activity`.)
+(Это иллюстрация. При уничтожении `Activity` связанные `Fragment` уничтожаются как часть этого процесса; точный порядок отдельных колбэков может отличаться, но `Fragment` не переходит в состояние выше, чем `Activity`.)
 
 ### Раздельный Жизненный Цикл `View`
 
@@ -131,7 +134,7 @@ class MyFragment : Fragment() {
         // ❌ НЕПРАВИЛЬНО — наблюдатель переживёт onDestroyView()
         // и может удерживать View, вызывая утечки и крэши
         viewModel.data.observe(this) { data ->
-            textView.text = data // CRASH, если View уже уничтожен
+            textView.text = data // Возможен CRASH, если View уже уничтожен
         }
 
         // ✅ ПРАВИЛЬНО — привязан к viewLifecycleOwner и автоматически
@@ -143,7 +146,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Жизненные циклы:**
+**Жизненные циклы (схематично):**
 ```text
 Fragment:     onCreate ————————————————→ onDestroy
 View:              onCreateView ——→ onDestroyView
@@ -160,10 +163,11 @@ supportFragmentManager.beginTransaction()
 
 // Старый Fragment:
 // onPause() → onStop() → onDestroyView()
-// ⚠️ Экземпляр Fragment и его состояние сохраняются FragmentManager'ом,
-// onDestroy()/onDetach() НЕ вызываются на этом этапе
+// ⚠️ Экземпляр Fragment и его не-view-состояние могут быть сохранены FragmentManager'ом
+// для восстановления; onDestroy()/onDetach() обычно не вызываются до окончательного
+// удаления из BackStack. При нехватке ресурсов система может пересоздать экземпляр.
 
-// При возврате назад:
+// При возврате назад (упрощённо):
 // onCreateView() → onViewCreated() → onStart() → onResume()
 ```
 
@@ -193,11 +197,11 @@ class MyFragment : Fragment() {
 
 ### Лучшие Практики
 
-**1. Используйте `viewLifecycleOwner` для UI-событий и подписок:**
+**1. Используйте `viewLifecycleOwner` для UI-событий, подписок и корутин, завязанных на `View`:**
 ```kotlin
 viewLifecycleOwner.lifecycleScope.launch {
     viewModel.uiState.collect { state ->
-        // Коррутины будут отменены при onDestroyView()
+        // Коррутина будет отменена при onDestroyView()
     }
 }
 ```
@@ -219,7 +223,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## Answer (EN)
 
-`Fragment` lifecycle is **tightly coupled** with `Activity` lifecycle. A `Fragment` can never be in a "higher" lifecycle state than its host `Activity`, but it has **additional callbacks** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). `Fragment` state transitions are driven by the `FragmentManager` and synchronized with the `Activity` state.
+`Fragment` lifecycle is **tightly coupled** with `Activity` lifecycle. A `Fragment` cannot be in a lifecycle state **higher** than its host `Activity` (in AndroidX Lifecycle terms), but it has **additional callbacks** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). `Fragment` state transitions are driven by the `FragmentManager` and synchronized with the `Activity` state.
 
 ### Key Dependency Rules
 
@@ -227,12 +231,13 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 ```kotlin
 // Fragment can be STARTED only when Activity is at least STARTED
 // Fragment can be RESUMED only when Activity is RESUMED
-// FragmentManager ensures Fragment state does not exceed Activity state
+// FragmentManager ensures that the Fragment's lifecycle state
+// does not exceed the host Activity's lifecycle state
 ```
 
-**2. On startup — `Fragment` callbacks relative to `Activity`:**
+**2. On startup — simplified `Fragment` callbacks relative to `Activity`:**
 
-Simplified sequence (actual order includes more callbacks):
+(Simplified for illustration; the real sequence includes more callbacks and depends on `FragmentManager` operations.)
 ```text
 Activity.onCreate()
   → Fragment.onAttach()
@@ -247,7 +252,9 @@ Activity.onResume()
   → Fragment.onResume()
 ```
 
-**3. On shutdown — `Fragment` callbacks before `Activity`'s final destruction:**
+**3. On shutdown — simplified order:**
+
+(Exact order depends on how the `Fragment` is removed/replaced and how the `Activity` finishes, but the invariant holds: a `Fragment` will not remain in a "higher" state than its `Activity`.)
 ```text
 Activity.onPause()
   → Fragment.onPause()
@@ -287,11 +294,11 @@ onStop()
 onDestroy()
 ```
 
-(Actual ordering can vary slightly depending on `FragmentManager` operations, but the invariant holds: `Fragment` will not advance beyond the `Activity` state.)
+(This is an illustration. When an `Activity` is destroyed, its `Fragments` are destroyed as part of that process; individual callback ordering may vary, but a `Fragment` will not advance beyond the `Activity` state.)
 
 ### Separate `View` Lifecycle
 
-`Fragment` has **two lifecycle owners**:
+`Fragment` effectively exposes **two lifecycle owners**:
 - the `Fragment` itself (its instance and logical state),
 - the `viewLifecycleOwner` (for the `Fragment`'s `View` hierarchy).
 
@@ -305,7 +312,7 @@ class MyFragment : Fragment() {
         // ❌ WRONG — observer outlives onDestroyView() and may hold onto
         // the destroyed View, causing leaks and crashes
         viewModel.data.observe(this) { data ->
-            textView.text = data // CRASH if View is already destroyed
+            textView.text = data // Potential CRASH if View is already destroyed
         }
 
         // ✅ CORRECT — bound to viewLifecycleOwner and automatically
@@ -317,7 +324,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Lifecycles:**
+**Lifecycles (schematic):**
 ```text
 Fragment:     onCreate ————————————————→ onDestroy
 View:              onCreateView ——→ onDestroyView
@@ -334,10 +341,12 @@ supportFragmentManager.beginTransaction()
 
 // Old Fragment:
 // onPause() → onStop() → onDestroyView()
-// ⚠️ The Fragment instance and its non-view state are retained
-// by FragmentManager; onDestroy()/onDetach() are NOT called yet.
+// ⚠️ The Fragment instance and its non-view state may be retained by FragmentManager
+// for restoration; onDestroy()/onDetach() are typically not called until it is
+// finally removed from the BackStack. If needed, the system/FragmentManager may
+// recreate the instance later.
 
-// On back press:
+// On back press (simplified):
 // onCreateView() → onViewCreated() → onStart() → onResume()
 ```
 
@@ -367,7 +376,7 @@ class MyFragment : Fragment() {
 
 ### Best Practices
 
-**1. Use `viewLifecycleOwner` for UI-bound work:**
+**1. Use `viewLifecycleOwner` for UI-bound observers and coroutines tied to the `View`:**
 ```kotlin
 viewLifecycleOwner.lifecycleScope.launch {
     viewModel.uiState.collect { state ->

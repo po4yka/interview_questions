@@ -4,24 +4,25 @@ title: Biometric Authentication / Биометрическая аутентиф�
 aliases: [Biometric Authentication, Биометрическая аутентификация]
 topic: android
 subtopics:
-  - keystore-crypto
-  - permissions
+- keystore-crypto
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - c-android-keystore
-  - q-android-security-best-practices--android--medium
+- c-android-keystore
+- q-android-security-best-practices--android--medium
 sources:
-  - "https://developer.android.com/training/sign-in/biometric-auth"
+- "https://developer.android.com/training/sign-in/biometric-auth"
 created: 2024-10-12
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/keystore-crypto, android/permissions, authentication, biometric, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
@@ -77,7 +78,7 @@ prompt.authenticate(promptInfo)
 
 **Выбор по назначению**:
 - `BIOMETRIC_STRONG` — Class 3 (отпечаток, лицо), подходит для использования с `CryptoObject` и привязки ключей, когда требуются сильные гарантии.
-- `BIOMETRIC_WEAK` — Class 2, предназначен для менее критичных сценариев; ключи, требующие сильной аутентификации, не должны на него опираться.
+- `BIOMETRIC_WEAK` — Class 2, предназначен для менее критичных сценариев; ключи, защищающие высокоценные секреты, должны опираться на `BIOMETRIC_STRONG` и/или `DEVICE_CREDENTIAL`, а не только на слабую биометрию.
 - `DEVICE_CREDENTIAL` — PIN/pattern/password, системный credential, может использоваться как fallback или единственный метод.
 
 ```kotlin
@@ -99,12 +100,13 @@ when (manager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG))
 }
 ```
 
-### 3. Интеграция С Keystore
+### 3. Интеграция с Keystore
 
 **Для критичных операций** (шифрование токенов, паролей):
 
 ```kotlin
-// ✅ Генерация ключа с биометрической привязкой
+// ✅ Генерация ключа с биометрической / credential-привязкой
+// (обычно вызывается один раз; далее ключ загружается по alias для повторного использования)
 private fun generateBiometricKey(): SecretKey {
     val keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
     keyGen.init(
@@ -112,10 +114,13 @@ private fun generateBiometricKey(): SecretKey {
             "biometric_key",
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         )
+            // Для новых реализаций предпочтительно использовать AES/GCM:
+            // .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            // .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
             .setUserAuthenticationRequired(true)
-            // Привязка к аутентификации пользователя (биометрия/credential) в зависимости от выбранных аутентификаторов
+            // Привязка к аутентификации пользователя (биометрия/credential) согласно конфигурации
             .setInvalidatedByBiometricEnrollment(true)  // ❗ Ключ инвалидируется при изменении биометрии (на поддерживаемых версиях)
             .build()
     )
@@ -124,13 +129,17 @@ private fun generateBiometricKey(): SecretKey {
 
 // ✅ Использование CryptoObject
 fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
+    // В реальных реализациях нужно загружать существующий ключ из Android Keystore по alias,
+    // а не генерировать новый при каждом вызове.
+    val secretKey = generateBiometricKey()
     val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
-    cipher.init(Cipher.ENCRYPT_MODE, generateBiometricKey())
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle("Шифрование данных")
-        // При использовании только биометрии требуется negative button;
-        // при использовании DEVICE_CREDENTIAL в allowedAuthenticators negative button не указывается.
+        // При использовании только биометрии требуется negative button.
+        // При включении DEVICE_CREDENTIAL в allowedAuthenticators
+        // negative button НЕ задается.
         .setNegativeButtonText("Отмена")
         .build()
 
@@ -145,21 +154,21 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 ```
 
 **Важно**:
-- При `setInvalidatedByBiometricEnrollment(true)` ключ удаляется, если пользователь изменяет набор биометрических шаблонов → нужен механизм перегенерации и повторного шифрования данных.
-- Требуемый тип аутентификации (только биометрия или биометрия/credential) задается через флаги аутентификаторов при конфигурации Prompt и логике работы с ключами.
+- При `setInvalidatedByBiometricEnrollment(true)` ключ удаляется, если пользователь изменяет набор биометрических шаблонов → нужен механизм перегенерации ключа и повторного шифрования данных.
+- Ключи, защищающие чувствительные данные, следует конфигурировать так, чтобы требовать `BIOMETRIC_STRONG` и/или `DEVICE_CREDENTIAL` (через `setAllowedAuthenticators`) и не полагаться только на `BIOMETRIC_WEAK`.
 
-### 4. Best Practices
+### 4. Рекомендации (Best Practices)
 
 **Обработка ошибок**:
-- `ERROR_LOCKOUT` (временная блокировка, ~30 сек) → показать таймер/сообщение
-- `ERROR_LOCKOUT_PERMANENT` → предложить использовать device credential
-- `ERROR_NO_BIOMETRICS` → предложить регистрацию
-- `ERROR_USER_CANCELED` → не спамить диалогом, учитывать выбор пользователя
+- `ERROR_LOCKOUT` (временная блокировка, продолжительность задается системой) → показать сообщение/подсказку и не делать жестких предположений о точном времени.
+- `ERROR_LOCKOUT_PERMANENT` → предложить использовать device credential.
+- `ERROR_NO_BIOMETRICS` → предложить регистрацию.
+- `ERROR_USER_CANCELED` → не спамить диалогом, учитывать выбор пользователя.
 
 **UX**:
-- Не показывать биометрию на каждый экран — использовать таймаут (например, 5 минут после успешной аутентификации)
-- Всегда предоставлять альтернативу (PIN/password или device credential), если это допустимо бизнес-требованиями
-- Для конфигурации с `BIOMETRIC_STRONG or DEVICE_CREDENTIAL` отрицательная кнопка не задается вручную — системный UI обрабатывает отмену и fallback.
+- Не показывать запрос биометрии на каждом экране — использовать таймаут (например, несколько минут после успешной аутентификации, в зависимости от рисков).
+- Всегда предоставлять альтернативу (PIN/password или device credential), если это допускается бизнес-требованиями.
+- Для конфигурации `BIOMETRIC_STRONG or DEVICE_CREDENTIAL` в `setAllowedAuthenticators` не вызывать `setNegativeButtonText()`: системный UI сам обрабатывает отмену и fallback.
 
 ## Answer (EN)
 
@@ -206,7 +215,7 @@ prompt.authenticate(promptInfo)
 
 **Choose by use case**:
 - `BIOMETRIC_STRONG` — Class 3 (fingerprint, face), suitable for use with `CryptoObject` and key binding when strong guarantees are required.
-- `BIOMETRIC_WEAK` — Class 2, for less sensitive scenarios; keys that require strong user verification should not rely on it.
+- `BIOMETRIC_WEAK` — Class 2, for less sensitive scenarios; keys that require strong user verification should rely on `BIOMETRIC_STRONG` (or device credential), not only on weak biometrics.
 - `DEVICE_CREDENTIAL` — PIN/pattern/password, system credential that can serve as fallback or primary method.
 
 ```kotlin
@@ -233,7 +242,8 @@ when (manager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG))
 **For sensitive operations** (encrypting tokens, passwords):
 
 ```kotlin
-// ✅ Generate biometric-bound key
+// ✅ Generate a key bound to biometric / device credential authentication
+// (typically called once; key is then loaded by alias for later use)
 private fun generateBiometricKey(): SecretKey {
     val keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
     keyGen.init(
@@ -241,10 +251,13 @@ private fun generateBiometricKey(): SecretKey {
             "biometric_key",
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         )
+            // Prefer AES/GCM for new designs:
+            // .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            // .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
             .setUserAuthenticationRequired(true)
-            // Tied to user authentication (biometrics/credential) as configured
+            // Tied to user authentication (biometrics/credential) per configuration
             .setInvalidatedByBiometricEnrollment(true)  // ❗ Key invalidated on biometric enrollment changes (on supported versions)
             .build()
     )
@@ -253,13 +266,18 @@ private fun generateBiometricKey(): SecretKey {
 
 // ✅ Use CryptoObject
 fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
+    // In real implementations, load the existing key from Android Keystore by alias
+    // instead of generating a new one on every call.
+    val secretKey = generateBiometricKey()
     val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
-    cipher.init(Cipher.ENCRYPT_MODE, generateBiometricKey())
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle("Encrypt Data")
-        // When only biometrics are allowed, a negative button text is required.
-        // When DEVICE_CREDENTIAL is included in allowed authenticators, negative button must NOT be set.
+        // When ONLY biometric authenticators are allowed,
+        // negative button text is required.
+        // When DEVICE_CREDENTIAL is included in allowedAuthenticators,
+        // negative button must NOT be set.
         .setNegativeButtonText("Cancel")
         .build()
 
@@ -274,23 +292,31 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 ```
 
 **Important**:
-- With `setInvalidatedByBiometricEnrollment(true)`, the key is deleted if the user changes enrolled biometrics → you must handle key regeneration and data re-encryption.
-- The required authenticator type (biometric only vs biometric/credential) is defined by the authenticator flags in the prompt configuration and how keys are intended to be used.
+- With `setInvalidatedByBiometricEnrollment(true)`, the key is deleted if the user changes enrolled biometrics on supported versions → you must handle key regeneration and data re-encryption.
+- Keys protecting sensitive data should be configured so that only `BIOMETRIC_STRONG` and/or `DEVICE_CREDENTIAL` (set via `setAllowedAuthenticators`) satisfy the authentication requirement; do not rely solely on `BIOMETRIC_WEAK` for high-value secrets.
 
 ### 4. Best Practices
 
 **Error handling**:
-- `ERROR_LOCKOUT` (temporary lock, ~30 sec) → show timer/message
-- `ERROR_LOCKOUT_PERMANENT` → suggest using device credential
-- `ERROR_NO_BIOMETRICS` → offer enrollment
-- `ERROR_USER_CANCELED` → avoid spamming dialogs; respect user's choice
+- `ERROR_LOCKOUT` (temporary lock enforced by the system) → show an appropriate message / wait before retrying; do not hard-code assumptions about exact duration.
+- `ERROR_LOCKOUT_PERMANENT` → suggest using device credential.
+- `ERROR_NO_BIOMETRICS` → offer enrollment.
+- `ERROR_USER_CANCELED` → avoid spamming dialogs; respect user's choice.
 
 **UX**:
-- Don't prompt on every screen — use a timeout (e.g., 5 minutes after successful auth)
-- Always provide an alternative (PIN/password or device credential), if allowed by business requirements
-- For `BIOMETRIC_STRONG or DEVICE_CREDENTIAL`, do not set a custom Cancel button: system UI handles cancellation and fallback.
+- Don't prompt on every screen — use a timeout (e.g., a few minutes after successful auth) depending on risk.
+- Always provide an alternative (PIN/password or device credential), if allowed by business requirements.
+- For `BIOMETRIC_STRONG or DEVICE_CREDENTIAL` in `setAllowedAuthenticators`, do NOT call `setNegativeButtonText()`: system UI provides appropriate controls and handles fallback.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Что происходит с зашифрованными данными при изменении набора биометрии, если используется `setInvalidatedByBiometricEnrollment(true)`?
+- Как различия между `BIOMETRIC_STRONG` и `BIOMETRIC_WEAK` влияют на гарантии безопасности и использование `CryptoObject`/ключей?
+- Когда использовать `setUserAuthenticationRequired(true)` против `setUserAuthenticationValidityDurationSeconds()`?
+- Как реализовать биометрическую аутентификацию на устройствах с несколькими пользователями?
+- Какая стратегия ограничения количества попыток (rate limiting) рекомендуется дополнительно к системной блокировке?
 
 ## Follow-ups
 
@@ -300,10 +326,27 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 - How to implement biometric authentication for multi-user devices?
 - What's the recommended strategy for rate limiting authentication attempts beyond system lockout?
 
+## Ссылки (RU)
+
+- https://developer.android.com/training/sign-in/biometric-auth
+- https://developer.android.com/reference/androidx/biometric/BiometricPrompt
+
 ## References
 
 - https://developer.android.com/training/sign-in/biometric-auth
 - https://developer.android.com/reference/androidx/biometric/BiometricPrompt
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-android-security-best-practices--android--medium]] — Базовые принципы безопасности
+
+### Связанные (тот же уровень)
+- [[q-android-keystore-system--security--medium]] — Keystore API и генерация ключей
+- [[q-app-security-best-practices--android--medium]] — Подходы к безопасности приложения
+
+### Продвинутые (сложнее)
+- [[q-android-runtime-internals--android--hard]] — Архитектура безопасности платформы
 
 ## Related Questions
 

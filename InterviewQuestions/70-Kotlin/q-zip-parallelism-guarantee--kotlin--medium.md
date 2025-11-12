@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-partition-function--kotlin--easy]
+related: [c--kotlin--medium, c-coroutines, c-flow, q-partition-function--kotlin--easy]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]
 ---
 
@@ -98,7 +98,21 @@ suspend fun parallelCalls(): Pair<Result1, Result2> = coroutineScope {
 }
 ```
 
-См. также: [[c-kotlin]], [[c-coroutines]], [[c-flow]].
+См. также: [[c--kotlin--medium]], [[c-coroutines]], [[c-flow]].
+
+### Дополнительные вопросы (RU)
+
+- Каковы ключевые отличия этого поведения от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные подводные камни стоит учитывать?
+
+### Ссылки (RU)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+### Связанные вопросы (RU)
+
+- [[q-partition-function--kotlin--easy]]
 
 ## Answer (EN)
 

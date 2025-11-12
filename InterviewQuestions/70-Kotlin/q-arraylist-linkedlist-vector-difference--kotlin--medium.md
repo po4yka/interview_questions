@@ -23,7 +23,7 @@ tags: [collections, data-structures, difficulty/medium, kotlin]
 > What is the difference between `ArrayList`, `LinkedList`, and `Vector`?
 
 ## Ответ (RU)
-Это три разные реализации интерфейса `List` из Java, доступные в Kotlin. Идиоматичный Kotlin обычно использует интерфейсы `List`/`MutableList` и выбирает конкретную реализацию по необходимости.
+Это три разные реализации интерфейса `List` из Java, доступные в Kotlin (через Java interop). Идиоматичный Kotlin обычно использует интерфейсы `List`/`MutableList` и выбирает конкретную реализацию по необходимости.
 
 ### ArrayList
 
@@ -91,23 +91,25 @@ linkedList.poll()                  // Удаление из начала
 
 Характеристики:
 - Внутренне похож на `ArrayList`
-- Многие методы синхронизированы (относительно потокобезопасен)
+- Многие методы синхронизированы (пер-операционная потокобезопасность)
 - Медленнее `ArrayList` из-за накладных расходов на синхронизацию
-- Обычно растет, удваивая емкость
-- Считается устаревшим и не рекомендуется для нового кода
+- Обычно растет, увеличивая емкость на фиксированный коэффициент (часто в 2 раза)
+- Исторически считается устаревшим (legacy) и не рекомендуется для нового кода, хотя формально не помечен как `@Deprecated`
+
+Важно: синхронизация методов `Vector`/`Collections.synchronizedList` делает отдельные операции атомарными, но не защищает сложные последовательности действий (итерация + модификация и т.п.) без дополнительной внешней синхронизации.
 
 Лучше всего подходит для:
 - Поддержки легаси-кода на Java
-- Для нового кода на Kotlin предпочитайте `Collections.synchronizedList(ArrayList())` или конкурентные коллекции
+- Для нового кода на Kotlin предпочтительнее `Collections.synchronizedList(ArrayList())` или конкурентные коллекции
 
 ```kotlin
 val vector = Vector<String>()
-vector.add("Item 1")        // Синхронизировано — потокобезопасно, но медленнее
+vector.add("Item 1")        // Синхронизировано — потокобезопаснее по отдельным операциям, но медленнее
 vector.get(0)               // Синхронизировано
 
 // Современная альтернатива:
 val syncList = Collections.synchronizedList(ArrayList<String>())
-// Или использовать CopyOnWriteArrayList для конкурентного доступа
+// Или использовать CopyOnWriteArrayList для конкурентного доступа (особенно при частых чтениях и редких изменениях)
 ```
 
 ### Сравнение производительности
@@ -119,12 +121,14 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 | add(index, element)        | O(n)      | O(n)**          | O(n)   |
 | remove(index)              | O(n)      | O(n)**          | O(n)   |
 | contains(element)          | O(n)      | O(n)            | O(n)   |
-| Потокобезопасность         | Нет       | Нет             | Да     |
+| Потокобезопасность         | Нет       | Нет             | Да***  |
 | Накладные расходы по памяти| Низкие    | Высокие         | Низкие |
 
 *Амортизированное значение.
 
 **Вставка/удаление сами по себе O(1), если узел уже найден; поиск по индексу — O(n).
+
+***Методы синхронизированы, но для композиции операций и безопасной итерации требуется внешняя синхронизация.
 
 ### Когда что использовать
 
@@ -141,7 +145,7 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 `Vector`:
 - Не использовать в новом коде
 - Только для совместимости с существующим Java-кодом
-- Вместо него — `Collections.synchronizedList()` или `CopyOnWriteArrayList`
+- Вместо него — `Collections.synchronizedList()` или `CopyOnWriteArrayList` (+ другие конкурентные коллекции при необходимости)
 
 ### Примеры кода
 
@@ -164,13 +168,13 @@ println(queue.poll())  // Удаляет и возвращает первый э
 val legacyVector = Vector<Int>()
 legacyVector.add(1)
 legacyVector.add(2)
-// Предпочтительно: Collections.synchronizedList(ArrayList())
+// Предпочтительно: Collections.synchronizedList(ArrayList()) или другие современные коллекции
 ```
 
 ### Современные альтернативы
 
 Вместо `Vector` используйте:
-- `Collections.synchronizedList(ArrayList())` — простой потокобезопасный список
+- `Collections.synchronizedList(ArrayList())` — простой потокобезопасный список (с учётом необходимости внешней синхронизации при итерации)
 - `CopyOnWriteArrayList` — для сценариев с частыми чтениями и редкими записями
 - `ConcurrentLinkedQueue` — для конкурентных операций очереди
 
@@ -182,7 +186,7 @@ val concurrentQueue = ConcurrentLinkedQueue<String>()
 ```
 
 ## Answer (EN)
-These are three different Java `List` implementations with distinct characteristics that you can use from Kotlin. Idiomatic Kotlin code usually targets the `List`/`MutableList` interfaces and lets the implementation be chosen as needed.
+These are three different Java `List` implementations with distinct characteristics that you can use from Kotlin (via Java interop). Idiomatic Kotlin code usually targets the `List`/`MutableList` interfaces and chooses a concrete implementation as needed.
 
 ### ArrayList
 
@@ -218,7 +222,7 @@ Implementation: doubly-linked list (each element has prev/next pointers).
 
 Characteristics:
 - Slow random access: O(n) (must traverse from head or tail)
-- Fast insertion/deletion at any position: O(1) if you already have the node reference
+- Fast insertion/deletion at a position: O(1) if you already have the node reference
 - Fast add/remove at beginning or end: O(1)
 - More memory overhead per element (stores prev/next references)
 - Not synchronized (not thread-safe)
@@ -250,23 +254,25 @@ Implementation: synchronized dynamic array (legacy from Java 1.0).
 
 Characteristics:
 - Internally similar to `ArrayList`
-- Many methods are synchronized (thread-safe)
+- Many methods are synchronized (per-operation thread safety)
 - Slower than `ArrayList` due to synchronization overhead
-- Often grows by doubling capacity
-- Considered legacy - not recommended for new code
+- Typically grows by increasing capacity with a fixed factor (often doubling)
+- Considered a legacy class and not recommended for new code, although not formally annotated as `@Deprecated`
+
+Important: synchronization in `Vector`/`Collections.synchronizedList` makes individual operations atomic, but does not automatically make compound actions (e.g., iteration + modification) safe without additional external synchronization.
 
 Best for:
 - Legacy Java interop only
-- In new Kotlin code prefer `Collections.synchronizedList(ArrayList())` or concurrent collections instead
+- In new Kotlin code prefer `Collections.synchronizedList(ArrayList())` or appropriate concurrent collections instead
 
 ```kotlin
 val vector = Vector<String>()
-vector.add("Item 1")        // Synchronized - thread-safe but slower
+vector.add("Item 1")        // Synchronized — safer per operation in multi-threaded use, but slower
 vector.get(0)               // Synchronized
 
 // Modern alternative:
 val syncList = Collections.synchronizedList(ArrayList<String>())
-// Or use CopyOnWriteArrayList for concurrent access
+// Or use CopyOnWriteArrayList for concurrent access (especially read-heavy scenarios)
 ```
 
 ### Performance Comparison
@@ -278,12 +284,14 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 | add(index, element) | O(n)      | O(n)**     | O(n)   |
 | remove(index)       | O(n)      | O(n)**     | O(n)   |
 | contains(element)   | O(n)      | O(n)       | O(n)   |
-| Thread Safety       | No        | No         | Yes    |
+| Thread Safety       | No        | No         | Yes*** |
 | Memory Overhead     | Low       | High       | Low    |
 
 *Amortized.
 
 **Insertion/deletion is O(1) once the node is found; locating by index is O(n).
+
+***Methods are synchronized, but compound operations and safe iteration still require external synchronization.
 
 ### When to Use What
 
@@ -299,9 +307,9 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 - Frequent insertions/deletions near already-known positions/nodes
 
 `Vector`:
-- Don't use in new code
+- Do not use in new code
 - Only for legacy Java code compatibility
-- Prefer `Collections.synchronizedList()` or `CopyOnWriteArrayList` instead
+- Prefer `Collections.synchronizedList()` or `CopyOnWriteArrayList` (or other concurrent collections) instead
 
 ### Code Examples
 
@@ -320,17 +328,17 @@ queue.offer("Task 2")
 queue.offer("Task 3")
 println(queue.poll())  // Removes and returns first element
 
-// Vector - legacy, avoid
+// Vector - legacy, avoid in new code
 val legacyVector = Vector<Int>()
 legacyVector.add(1)
 legacyVector.add(2)
-// Prefer: Collections.synchronizedList(ArrayList())
+// Prefer: Collections.synchronizedList(ArrayList()) or other modern concurrent collections
 ```
 
 ### Modern Alternatives
 
 Instead of `Vector`, use:
-- `Collections.synchronizedList(ArrayList())` for simple thread-safety
+- `Collections.synchronizedList(ArrayList())` for simple thread-safety (remember to synchronize externally when iterating)
 - `CopyOnWriteArrayList` for read-heavy concurrent access
 - `ConcurrentLinkedQueue` for concurrent queue operations
 
@@ -360,7 +368,7 @@ val concurrentQueue = ConcurrentLinkedQueue<String>()
 
 ## References
 
-- [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 - [[c-collections]]
 

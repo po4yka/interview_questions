@@ -23,16 +23,18 @@ tags: [difficulty/medium, programming-languages, sealed-classes]
 # Question (EN)
 > What are the features of sealed classes?
 
+---
+
 ## Ответ (RU)
 
-Главная особенность sealed-классов — ограничение иерархии наследования и, как следствие, полный контроль над набором допустимых подтипов.
+Главная особенность sealed-классов (и sealed-интерфейсов) — ограничение иерархии наследования и, как следствие, полный контроль над набором допустимых подтипов.
 
 Ключевые моменты:
-- Подклассы sealed-класса должны быть известны на этапе компиляции. В современных версиях Kotlin (JVM) они могут быть объявлены:
-  - в том же файле, что и sealed-класс (изначальное правило), или
-  - в том же пакете и модуле (для расширенной формы),
-  что по-прежнему формирует "закрытую" иерархию.
-- Компилятор знает обо всех наследниках, поэтому `when` по sealed-типу может быть проверен на полноту (exhaustive), и `else` можно не писать, если обработаны все варианты.
+- Набор прямых наследников sealed-типа должен быть фиксирован и известен компилятору. В современных версиях Kotlin прямые наследники могут быть объявлены:
+  - в том же файле, что и sealed-класс/интерфейс (изначальное правило), или
+  - в том же модуле и пакете (для расширенной формы, поддерживаемой платформами, на которых реализована данная возможность),
+  что в итоге формирует "закрытую" иерархию для компилятора.
+- Компилятор знает обо всех прямых наследниках sealed-типа, поэтому `when` по sealed-типу может быть проверен на полноту (exhaustive), и `else` можно не писать, если обработаны все варианты.
 - Sealed-классы и sealed-интерфейсы удобно использовать для моделирования:
   - состояний (UI state, загрузка/успех/ошибка),
   - результатов операций (Success / Error / Loading и т.п.),
@@ -42,14 +44,14 @@ tags: [difficulty/medium, programming-languages, sealed-classes]
 
 ## Answer (EN)
 
-The main feature of sealed classes is that they restrict the inheritance hierarchy, giving you full control over the set of allowed subtypes.
+The main feature of sealed classes (and sealed interfaces) is that they restrict the inheritance hierarchy, giving you full control over the set of allowed subtypes.
 
 Key points:
-- Subclasses of a sealed class must be known at compile time. In modern Kotlin on the JVM they can be declared:
-  - in the same file as the sealed class (the original rule), or
-  - in the same package and module (for the extended form),
-  which still creates a "closed" hierarchy.
-- Because the compiler knows all possible subclasses, `when` expressions on a sealed type can be checked for exhaustiveness, and you can omit `else` when all cases are covered.
+- The set of direct subclasses of a sealed type must be fixed and known to the compiler. In modern Kotlin, direct subclasses can be declared:
+  - in the same file as the sealed class/interface (the original rule), or
+  - in the same module and package (for the extended form, on platforms where this is supported),
+  which effectively creates a "closed" hierarchy from the compiler's perspective.
+- Because the compiler knows all direct subclasses of a sealed type, `when` expressions on that type can be checked for exhaustiveness, and you can omit `else` when all variants are covered.
 - Sealed classes and sealed interfaces are ideal for modeling:
   - states (e.g., UI state, loading/success/error),
   - operation results (e.g., Success / Error / Loading),
@@ -73,11 +75,11 @@ Key points:
 
 ## Ссылки (RU)
 
-- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [Документация Kotlin]("https://kotlinlang.org/docs/home.html")
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
 
 ## Смежные вопросы (RU)
 

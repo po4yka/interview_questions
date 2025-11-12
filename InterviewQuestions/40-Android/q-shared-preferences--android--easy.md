@@ -8,10 +8,9 @@ question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
-sources: []
 status: draft
 moc: moc-android
-related: [q-room-relations-embedded--android--medium]
+related: [c-android-storage-options, q-room-relations-embedded--android--medium]
 created: 2023-10-15
 updated: 2025-11-10
 tags: [android, android/datastore, android/files-media, difficulty/easy]
@@ -32,7 +31,7 @@ tags: [android, android/datastore, android/files-media, difficulty/easy]
 
 SharedPreferences — это механизм Android для хранения небольших наборов пар ключ-значение (обычно настроек и флагов) в приватном хранилище приложения. Под капотом данные сохраняются в XML-файле во внутреннем хранилище приложения. Данные удаляются при удалении приложения.
 
-См. также: [[q-room-relations-embedded--android--medium]].
+См. также: [[c-android-storage-options]], [[q-room-relations-embedded--android--medium]].
 
 ### Поддерживаемые Типы Данных
 
@@ -139,7 +138,7 @@ securePrefs.edit {
 
 SharedPreferences is an Android mechanism for storing small sets of key-value pairs (typically flags and simple settings) in the app's private storage. Internally, data is saved in an XML file in the app's internal storage. Data is removed when the app is uninstalled.
 
-See also: [[q-room-relations-embedded--android--medium]].
+See also: [[c-android-storage-options]], [[q-room-relations-embedded--android--medium]].
 
 ### Supported Data Types
 

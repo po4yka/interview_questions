@@ -37,13 +37,13 @@ tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gesture
 
 Compose предоставляет два уровня API:
 
-1. **High-level модификаторы** — встроенные жесты с семантикой и доступностью
+1. **High-level модификаторы** — встроенные жесты с семантикой и поддержкой доступности
 2. **pointerInput** — низкоуровневый suspend-блок для кастомной логики
 
 ### Базовые Модификаторы
 
 ```kotlin
-// ✅ clickable: ripple, семантика, фокус из коробки
+// ✅ clickable: семантика, фокус, поддержка accessibility; визуальный эффект зависит от темы/indication
 Text(
     "Открыть",
     modifier = Modifier.clickable { onItemClick() }
@@ -52,12 +52,14 @@ Text(
 // ✅ draggable: однонаправленный drag с состоянием
 var offsetX by remember { mutableStateOf(0f) }
 Box(
-    Modifier.draggable(
-        orientation = Orientation.Horizontal,
-        state = rememberDraggableState { delta ->
-            offsetX += delta // обновляем offset при перетаскивании
-        }
-    )
+    Modifier
+        .offset { IntOffset(offsetX.toInt(), 0) } // применяем сдвиг
+        .draggable(
+            orientation = Orientation.Horizontal,
+            state = rememberDraggableState { delta ->
+                offsetX += delta // обновляем offset при перетаскивании
+            }
+        )
 )
 
 // ✅ verticalScroll: вертикальный скролл с ScrollState
@@ -85,7 +87,7 @@ Box(
 )
 ```
 
-**Важно**: ключ `Unit` сохраняет корутину; если передать зависимость, `pointerInput` будет пересоздаваться при её изменении.
+**Важно**: ключ в `pointerInput` определяет, когда блок будет перезапущен (корутина будет отменена и создана заново). При использовании `Unit` блок сохраняется, пока composable в композиции; при передаче зависимости `pointerInput` будет пересоздаваться при её изменении.
 
 ### Drag С Многомерным Движением
 
@@ -96,7 +98,7 @@ Box(
         .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
-                change.consume() // ✅ помечаем событие как обработанное для этого распознавателя
+                change.consume() // ✅ помечаем событие как использованное этим жестом (подавляем конкурентов)
                 offset += dragAmount
             }
         }
@@ -141,7 +143,7 @@ Compose provides two API levels:
 ### Basic Modifiers
 
 ```kotlin
-// ✅ clickable: ripple, semantics, focus out of the box
+// ✅ clickable: semantics, focus, accessibility support; visual effect depends on theme/indication
 Text(
     "Open",
     modifier = Modifier.clickable { onItemClick() }
@@ -150,12 +152,14 @@ Text(
 // ✅ draggable: unidirectional drag with state
 var offsetX by remember { mutableStateOf(0f) }
 Box(
-    Modifier.draggable(
-        orientation = Orientation.Horizontal,
-        state = rememberDraggableState { delta ->
-            offsetX += delta // update offset on drag
-        }
-    )
+    Modifier
+        .offset { IntOffset(offsetX.toInt(), 0) } // apply offset
+        .draggable(
+            orientation = Orientation.Horizontal,
+            state = rememberDraggableState { delta ->
+                offsetX += delta // update offset on drag
+            }
+        )
 )
 
 // ✅ verticalScroll: vertical scroll with ScrollState
@@ -183,7 +187,7 @@ Box(
 )
 ```
 
-**Important**: the `Unit` key keeps the coroutine scope; if you pass a changing dependency, `pointerInput` will be recreated when it changes.
+**Important**: the key passed to `pointerInput` controls when its block is restarted (coroutine cancelled and recreated). With `Unit`, it stays active as long as the composable is in the composition; with a changing dependency, `pointerInput` will be recreated whenever that dependency changes.
 
 ### Drag with Multi-dimensional Movement
 
@@ -194,7 +198,7 @@ Box(
         .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
-                change.consume() // ✅ mark event as handled for this recognizer
+                change.consume() // ✅ mark event as used by this gesture (suppress competitors)
                 offset += dragAmount
             }
         }

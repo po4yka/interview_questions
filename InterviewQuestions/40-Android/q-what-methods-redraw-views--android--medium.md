@@ -10,13 +10,14 @@ subtopics:
 - ui-views
 question_kind: theory
 difficulty: medium
-original_language: en
+original_language: ru
 language_tags:
 - en
 - ru
 status: draft
 moc: moc-android
 related:
+- c-android-view-system
 - q-view-methods-and-their-purpose--android--medium
 - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
@@ -42,7 +43,7 @@ tags:
 
 ## Ответ (RU)
 
-Android предоставляет несколько методов для запуска перерисовки `View` и пересчёта layout. Понимание того, когда и как использовать каждый метод, критично для эффективных обновлений UI.
+Android предоставляет несколько методов для запуска перерисовки `View` и пересчёта layout. Понимание того, когда и как использовать каждый метод, критично для эффективных обновлений UI. См. также [[c-android-view-system]].
 
 ### 1. invalidate()
 
@@ -353,6 +354,8 @@ class OptimizedView @JvmOverloads constructor(
 
     private var needsLayout = false
     private var needsRedraw = false
+    private var color: Int = Color.BLACK
+    private var size: Int = 0
 
     fun batchUpdates(updates: () -> Unit) {
         // Собираем изменения
@@ -370,15 +373,34 @@ class OptimizedView @JvmOverloads constructor(
         needsRedraw = false
     }
 
-    fun updateColor(color: Int) {
+    fun updateColor(newColor: Int) {
         // Только визуальное изменение
-        needsRedraw = true
+        if (color != newColor) {
+            color = newColor
+            needsRedraw = true
+        }
     }
 
-    fun updateSize(size: Int) {
+    fun updateSize(newSize: Int) {
         // Изменение, влияющее на layout
-        needsLayout = true
-        needsRedraw = true
+        if (size != newSize) {
+            size = newSize
+            needsLayout = true
+            needsRedraw = true
+        }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val desired = size
+        val width = resolveSize(desired, widthMeasureSpec)
+        val height = resolveSize(desired, heightMeasureSpec)
+        setMeasuredDimension(width, height)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = this@OptimizedView.color }
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
     }
 }
 
@@ -395,7 +417,7 @@ optimizedView.batchUpdates {
 2. Используйте `requestLayout()` при изменении размеров, положения или параметров, влияющих на измерение/размещение.
 3. Используйте `postInvalidate()` (или `post { invalidate() }`) при обновлении из фоновых потоков.
 4. Группируйте связанные обновления, чтобы избежать лишних проходов.
-5. Избегайте частых вызовов в плотных циклах: `invalidate()` и `requestLayout()` дорогие операции.
+5. Избегайте частых вызовов в плотных циклах: `invalidate()` и `requestLayout()` могут быть дорогими операциями, особенно при большом дереве `View`.
 6. По необходимости проверяйте `isAttachedToWindow` при асинхронных вызовах, чтобы избежать бесполезных обновлений.
 
 ```kotlin
@@ -419,11 +441,11 @@ fun View.safeInvalidate() {
 
 ## Answer (EN)
 
-Android provides several methods to trigger `View` redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
+Android provides several methods to trigger `View` redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates. See also [[c-android-view-system]].
 
 ### 1. invalidate()
 
-Marks the `View` as needing to be redrawn. The framework will call `onDraw()` (and `dispatchDraw()` for ViewGroups) during the next drawing pass. Use when the visual appearance changes but size and layout remain the same.
+Marks the `View` as needing to be redrawn. The framework will call `onDraw()` (and `dispatchDraw()` for `ViewGroup`s) during the next drawing pass. Use when the visual appearance changes but size and position remain the same.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -531,7 +553,7 @@ class ExpandableView @JvmOverloads constructor(
 - Margin/padding changes
 - LayoutParams changes
 - Adding/removing children
-- Changes that affect how parent or child views should be measured/positioned
+- Any changes that affect how parent or child views should be measured/positioned
 
 ```kotlin
 class DynamicSizeView @JvmOverloads constructor(
@@ -562,7 +584,7 @@ class DynamicSizeView @JvmOverloads constructor(
 
 ### 3. postInvalidate()
 
-Schedules a redraw from any thread by posting an invalidate request to the UI thread. Use this when you need to update the `View` from a background thread.
+Schedules a redraw from any thread by posting an invalidation request to the UI thread. Use this when you need to update the `View` from a background thread.
 
 ```kotlin
 class LoadingView @JvmOverloads constructor(
@@ -631,7 +653,7 @@ class ComparisonExample @JvmOverloads constructor(
 ### 4. Additional Redraw-Related Methods
 
 #### forceLayout()
-Marks the `View` as needing layout during the next layout pass. It does not itself start a layout pass immediately; typically you combine it with `requestLayout()` (or rely on a parent-triggered pass).
+Marks the `View` as needing layout during the next layout pass. It does not itself start a layout pass immediately; typically you combine it with `requestLayout()` (or rely on a parent-triggered layout pass).
 
 ```kotlin
 fun forceLayoutExample(view: View) {
@@ -729,6 +751,8 @@ class OptimizedView @JvmOverloads constructor(
 
     private var needsLayout = false
     private var needsRedraw = false
+    private var color: Int = Color.BLACK
+    private var size: Int = 0
 
     fun batchUpdates(updates: () -> Unit) {
         // Collect changes
@@ -746,15 +770,34 @@ class OptimizedView @JvmOverloads constructor(
         needsRedraw = false
     }
 
-    fun updateColor(color: Int) {
+    fun updateColor(newColor: Int) {
         // Only visual change; mark for redraw
-        needsRedraw = true
+        if (color != newColor) {
+            color = newColor
+            needsRedraw = true
+        }
     }
 
-    fun updateSize(size: Int) {
+    fun updateSize(newSize: Int) {
         // Layout-related change
-        needsLayout = true
-        needsRedraw = true
+        if (size != newSize) {
+            size = newSize
+            needsLayout = true
+            needsRedraw = true
+        }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val desired = size
+        val width = resolveSize(desired, widthMeasureSpec)
+        val height = resolveSize(desired, heightMeasureSpec)
+        setMeasuredDimension(width, height)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = this@OptimizedView.color }
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
     }
 }
 
@@ -768,11 +811,11 @@ optimizedView.batchUpdates {
 ### Best Practices
 
 1. Use `invalidate()` for visual-only changes that don't affect layout.
-2. Use `requestLayout()` when size, layout, or LayoutParams-based properties may change.
+2. Use `requestLayout()` when size, position, or LayoutParams-based properties may change.
 3. Use `postInvalidate()` (or `post { invalidate() }`) when updating from a background thread.
 4. Batch related updates where possible to avoid redundant passes.
-5. Avoid unnecessary calls in tight loops: `invalidate()`/`requestLayout()` can be expensive.
-6. Optionally check attachment (e.g., `isAttachedToWindow`) when invalidating from async callbacks to avoid no-op or confusing behavior.
+5. Avoid unnecessary calls in tight loops: `invalidate()`/`requestLayout()` can be expensive, especially for large view hierarchies.
+6. Optionally check attachment state (e.g., `isAttachedToWindow`) when invalidating from async callbacks to avoid unnecessary work.
 
 ```kotlin
 fun View.safeInvalidate() {
@@ -784,26 +827,28 @@ fun View.safeInvalidate() {
 
 ### Summary Table
 
-| Method            | Thread        | Calls                            | Use Case                          |
-|------------------|--------------|----------------------------------|-----------------------------------|
-| `invalidate()`    | UI thread    | `onDraw()`                       | Visual changes only               |
-| `requestLayout()` | UI thread    | `onMeasure()`, `onLayout()`      | Size/position/layout changes      |
-| `postInvalidate()`| Any thread   | `onDraw()` on UI thread          | Visual changes from background    |
-| `forceLayout()`   | UI thread    | Marks for layout (no pass by itself) | Force remeasure on next layout |
+| Method            | Thread        | Calls                            | Use Case                               |
+|------------------|--------------|----------------------------------|----------------------------------------|
+| `invalidate()`    | UI thread    | `onDraw()`                       | Visual changes only                    |
+| `requestLayout()` | UI thread    | `onMeasure()`, `onLayout()`      | Size/position/layout changes           |
+| `postInvalidate()`| Any thread   | `onDraw()` on UI thread          | Visual changes from background thread  |
+| `forceLayout()`   | UI thread    | Marks for layout (no pass by itself) | Force remeasure on next layout pass |
 
 ---
 
 ## Follow-ups
 
 - [[q-view-methods-and-their-purpose--android--medium]]
-
+- How does excessive use of `requestLayout()` affect performance in complex view hierarchies?
+- When would you combine `requestLayout()` and `invalidate()` in a single update, and why?
+- How would you safely update a `View` from a coroutine running on a background dispatcher?
+- What are potential pitfalls of calling `invalidate()`/`postInvalidate()` on a `View` that is not attached to window?
 
 ## References
 
-- [Views](https://developer.android.com/develop/ui/views)
+- [`Views`](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
-
 
 ## Related Questions
 

@@ -33,7 +33,7 @@ sources: []
 
 ## Ответ (RU)
 
-Dagger в Android обычно связывают с четырьмя ключевыми концепциями:
+Dagger (имеется в виду классический Dagger 2 с ручной конфигурацией под Android) обычно связывают с четырьмя ключевыми концепциями (это не исчерпывающий список, а базовый набор для понимания):
 
 ### 1. @Component — Граф Зависимостей
 
@@ -60,7 +60,7 @@ val component = DaggerAppComponent.create() // Dagger-generated
 @Module
 object NetworkModule {
     @Provides
-    @Singleton // ✅ Scoped dependency
+    @Singleton // ✅ Scoped dependency (привязана к сроку жизни компонента с тем же scope)
     fun provideApi(): ApiService =
         Retrofit.Builder().baseUrl("...").build().create(ApiService::class.java)
 }
@@ -103,7 +103,7 @@ abstract class RepositoryModule {
 
 ## Answer (EN)
 
-In Android, Dagger usage is usually framed around four key concepts:
+Dagger (here we mean classic Dagger 2 with manual setup for Android) is usually introduced with four key concepts (this is a focused core set, not an exhaustive list):
 
 ### 1. @Component — Dependency Graph
 
@@ -130,7 +130,7 @@ Class with `@Provides` or `@Binds` methods that describe how to construct object
 @Module
 object NetworkModule {
     @Provides
-    @Singleton // ✅ Scoped dependency
+    @Singleton // ✅ Scoped dependency (bound to the lifetime of a component with the same scope)
     fun provideApi(): ApiService =
         Retrofit.Builder().baseUrl("...").build().create(ApiService::class.java)
 }

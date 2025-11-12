@@ -35,7 +35,7 @@ sources: []
 
 ## Ответ (RU)
 
-**State saving** в custom views обеспечивает выживание UI состояния при configuration changes (поворот экрана) и process death. Для `View`, которая имеет стабильный `id` и включена в иерархию, где родительский `ViewGroup` сохраняет состояние, система через механизм `ViewGroup` вызывает `onSaveInstanceState()` и `onRestoreInstanceState()`.
+**State saving** в custom views обеспечивает выживание UI состояния при configuration changes (поворот экрана) и process death. Для `View`, которая имеет стабильный `id`, включена в иерархию, где родительский `ViewGroup` сохраняет состояние, и не отключено участие во вложенном сохранении (`isSaveFromParentEnabled == true`), система через механизм `ViewGroup` вызывает `onSaveInstanceState()` и `onRestoreInstanceState()`.
 
 См. также: [[c-custom-views]]
 
@@ -98,7 +98,9 @@ class CounterView @JvmOverloads constructor(
 ### Сложные Типы Данных
 
 ```kotlin
-class ComplexView : View {
+class ComplexView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null
+) : View(context, attrs) {
     private var items = mutableListOf<String>()
     private var mode = Mode.LIST
 
@@ -148,23 +150,23 @@ class ComplexView : View {
 
 ### Ключевые Правила
 
-1. **ID обязателен** — `View` должен иметь стабильный `android:id` и быть частью иерархии, в которой родительский `ViewGroup` сохраняет состояние; иначе `onSaveInstanceState()`/`onRestoreInstanceState()` для него не будут задействованы.
+1. **ID обязателен для автоматического механизма** — чтобы стандартный иерархический механизм сохранил состояние `View`, она должна иметь стабильный `android:id`, быть частью иерархии, где родительский `ViewGroup` сохраняет состояние, и участвовать в сохранении (`isSaveEnabled == true`, `isSaveFromParentEnabled == true`). В противном случае `View` можно сохранить только вручную.
 2. **BaseSavedState** — использовать для сохранения цепочки наследования.
 3. **Проверка типов** — state может быть `null` или другого типа.
-4. **Минимизация** — сохранять только критичное состояние (< 500 KB).
+4. **Минимизация** — сохранять только критичное состояние (ориентируйтесь на небольшой объём; слишком большие данные повышают риск `TransactionTooLargeException`).
 5. **SaveEnabled** — убедиться, что `isSaveEnabled` не отключён (`android:saveEnabled="false"` выключит сохранение состояния `View`).
 
 ### Pitfalls
 
 - Отсутствие ID у `View` — состояние не сохранится как часть стандартного механизма сохранения иерархии.
-- `saveEnabled = false` — отключает участие `View` в сохранении состояния.
-- Забыть `super.onSaveInstanceState()` — потеря базового состояния.
+- `saveEnabled = false` или `isSaveFromParentEnabled = false` — отключает участие `View` в сохранении состояния родителем.
+- Забыть `super.onSaveInstanceState()` / `super.onRestoreInstanceState()` — потеря базового состояния.
 - Сохранение `Context`/`Activity` — утечки памяти.
-- Сохранение больших объектов — `TransactionTooLargeException`.
+- Сохранение больших объектов — риск `TransactionTooLargeException`.
 
 ## Answer (EN)
 
-**State saving** in custom views ensures UI state survival during configuration changes (screen rotation) and process death. For a `View` that has a stable `id` and is included in a hierarchy whose parent `ViewGroup` participates in state saving, the system (via the parent) calls `onSaveInstanceState()` and `onRestoreInstanceState()` for it.
+**State saving** in custom views ensures UI state survival during configuration changes (screen rotation) and process death. For a `View` that has a stable `id`, is included in a hierarchy whose parent `ViewGroup` participates in state saving, and does not opt out (`isSaveFromParentEnabled == true`), the system (via the parent) calls `onSaveInstanceState()` and `onRestoreInstanceState()` for it.
 
 See also: [[c-custom-views]]
 
@@ -227,7 +229,9 @@ class CounterView @JvmOverloads constructor(
 ### Complex Data Types
 
 ```kotlin
-class ComplexView : View {
+class ComplexView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null
+) : View(context, attrs) {
     private var items = mutableListOf<String>()
     private var mode = Mode.LIST
 
@@ -277,19 +281,19 @@ class ComplexView : View {
 
 ### Key Rules
 
-1. **ID required** — `View` must have a stable `android:id` and be part of a hierarchy whose parent `ViewGroup` saves states; otherwise its `onSaveInstanceState()`/`onRestoreInstanceState()` will not participate in the standard hierarchy-based mechanism.
-2. **BaseSavedState** — use to preserve the inheritance chain.
-3. **Type checking** — state can be `null` or a different type.
-4. **Minimize** — save only critical state (< 500 KB).
+1. **ID required for automatic mechanism** — for the standard hierarchy-based mechanism to save this `View`'s state, it must have a stable `android:id`, be part of a hierarchy where the parent `ViewGroup` saves states, and participate in saving (`isSaveEnabled == true`, `isSaveFromParentEnabled == true`). Otherwise, the view can only be saved manually.
+2. **BaseSavedState** — use it to preserve the inheritance chain.
+3. **Type checking** — state can be `null` or of a different type.
+4. **Minimize** — save only critical state (aim for a small size; large payloads increase the risk of `TransactionTooLargeException`).
 5. **SaveEnabled** — ensure `isSaveEnabled` is not disabled (`android:saveEnabled="false"` will prevent view state from being saved).
 
 ### Pitfalls
 
-- Missing `View` ID — state will not be saved as part of the standard hierarchy state saving.
-- `saveEnabled = false` — prevents this `View` from participating in state saving.
-- Forgetting `super.onSaveInstanceState()` — losing base state.
+- Missing `View` ID — state will not be saved as part of the standard hierarchy-based mechanism.
+- `saveEnabled = false` or `isSaveFromParentEnabled = false` — prevents this `View` from participating in parent-driven state saving.
+- Forgetting `super.onSaveInstanceState()` / `super.onRestoreInstanceState()` — losing base state.
 - Saving `Context`/`Activity` — memory leaks.
-- Saving large objects — `TransactionTooLargeException`.
+- Saving large objects — risk of `TransactionTooLargeException`.
 
 ---
 

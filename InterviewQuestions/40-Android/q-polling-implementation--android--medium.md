@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-coroutine-basics--kotlin--easy, q-coroutine-flow-basics--kotlin--medium, q-workmanager-periodic-tasks--android--medium]
+related: [c-android, q-android-async-primitives--android--easy, q-android-lint-tool--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-11
 tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -49,6 +50,8 @@ class DataRepository(private val api: ApiService) {
         }
     }.flowOn(Dispatchers.IO)
 
+    suspend fun getData(): Data = api.getData()
+
     // ✅ Polling с условием остановки
     fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
         while (currentCoroutineContext().isActive) {
@@ -67,8 +70,8 @@ class OrderViewModel(private val repo: DataRepository) : ViewModel() {
 }
 ```
 
-**Преимущества**: Простота, lifecycle-aware, автоотмена.
-**Недостатки**: Работает только пока Activity/Fragment активны.
+**Преимущества**: Простота, lifecycle-aware (привязка к scope, например `viewModelScope`), автоотмена.
+**Недостатки**: Работает только пока жив соответствующий lifecycle/scope (например, `ViewModel`/экран).
 
 ### 2. WorkManager (Background)
 
@@ -83,7 +86,7 @@ class DataPollingWorker(
         return try {
             val data = RetrofitClient.api.getData()
             database.dataDao().insert(data)
-            // ✅ Retry с экспоненциальной задержкой
+            // ✅ Успех, WorkManager сам применит backoff при последующих retry согласно конфигурации
             Result.success()
         } catch (e: Exception) {
             if (runAttemptCount < 3) Result.retry() else Result.failure()
@@ -114,12 +117,15 @@ WorkManager.getInstance(context)
 Оптимизация частоты опроса на основе результатов.
 
 ```kotlin
-class SmartPollingManager(private val repo: DataRepository) {
-    private var interval = 5000L // Начальный интервал
-    private val minInterval = 1000L
-    private val maxInterval = 60000L
+import kotlin.math.max
+import kotlin.math.min
 
+class SmartPollingManager(private val repo: DataRepository) {
     fun startAdaptivePolling(): Flow<Data> = flow {
+        var interval = 5000L // Начальный интервал (локальный для этого poll)
+        val minInterval = 1000L
+        val maxInterval = 60000L
+
         while (currentCoroutineContext().isActive) {
             try {
                 val data = repo.getData()
@@ -132,7 +138,7 @@ class SmartPollingManager(private val repo: DataRepository) {
                 }
             } catch (e: Exception) {
                 // ❌ Не увеличивать интервал слишком агрессивно
-                interval = min(maxInterval, interval * 1.5)
+                interval = min(maxInterval, (interval * 1.5).toLong())
             }
             delay(interval)
         }
@@ -147,26 +153,27 @@ Retry-стратегия для устойчивости к ошибкам.
 ```kotlin
 fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
     var attempt = 0
-    var delay = 1000L
+    var currentDelay = 1000L
 
     while (attempt < maxAttempts && currentCoroutineContext().isActive) {
         try {
             emit(Result.success(api.getData()))
-            delay = 1000L // Сброс при успехе
-            attempt = 0
+            // Успех — можно выйти или продолжить по другой логике
+            return@flow
         } catch (e: Exception) {
             emit(Result.failure(e))
             attempt++
-            delay *= 2 // 1s, 2s, 4s, 8s, 16s
+            if (attempt >= maxAttempts) break
+            currentDelay *= 2 // 1s, 2s, 4s, 8s, 16s
+            delay(currentDelay)
         }
-        delay(delay)
     }
 }.flowOn(Dispatchers.IO)
 ```
 
 ### Best Practices
 
-1. **Lifecycle-aware cancellation**: Используйте `viewModelScope` для автоотмены.
+1. **Lifecycle-aware cancellation**: Используйте `viewModelScope` или другие scope'ы для автоотмены.
 2. **Network checks**: Проверяйте доступность сети перед запросом.
 3. **Battery optimization**: Избегайте частых запросов в фоне, используйте WorkManager constraints.
 4. **Error handling**: Используйте exponential backoff для retry.
@@ -176,10 +183,10 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 | Метод | Use Case | Интервал | Lifecycle |
 |-------|----------|----------|-----------|
-| Coroutines + Flow | UI-bound | Любой | Привязан к Activity/Fragment |
+| Coroutines + `Flow` | UI-bound | Любой | Привязан к lifecycle scope (`Activity`/`Fragment`/`ViewModel`) |
 | WorkManager | Background | ≥15 минут | Переживает перезагрузку |
 | Handler + Runnable | Simple tasks | Любой | Ручное управление |
-| AlarmManager | Exact timing | Любой | Работает в фоне, battery drain |
+| AlarmManager | Exact timing | Любой | Работает в фоне, возможен повышенный расход батареи |
 
 ---
 
@@ -205,6 +212,8 @@ class DataRepository(private val api: ApiService) {
         }
     }.flowOn(Dispatchers.IO)
 
+    suspend fun getData(): Data = api.getData()
+
     // ✅ Polling with stop condition
     fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
         while (currentCoroutineContext().isActive) {
@@ -223,8 +232,8 @@ class OrderViewModel(private val repo: DataRepository) : ViewModel() {
 }
 ```
 
-**Pros**: Simple, lifecycle-aware, auto-cancellation.
-**Cons**: Only works while Activity/Fragment is active.
+**Pros**: Simple, lifecycle-aware (tied to a scope such as `viewModelScope`), auto-cancellation.
+**Cons**: Only works while the corresponding lifecycle/scope (e.g., `ViewModel`/screen) is alive.
 
 ### 2. WorkManager (Background)
 
@@ -239,7 +248,7 @@ class DataPollingWorker(
         return try {
             val data = RetrofitClient.api.getData()
             database.dataDao().insert(data)
-            // ✅ Retry with exponential backoff
+            // ✅ On success; WorkManager applies configured backoff for retries
             Result.success()
         } catch (e: Exception) {
             if (runAttemptCount < 3) Result.retry() else Result.failure()
@@ -270,12 +279,15 @@ WorkManager.getInstance(context)
 Optimize polling frequency based on results.
 
 ```kotlin
-class SmartPollingManager(private val repo: DataRepository) {
-    private var interval = 5000L // Initial interval
-    private val minInterval = 1000L
-    private val maxInterval = 60000L
+import kotlin.math.max
+import kotlin.math.min
 
+class SmartPollingManager(private val repo: DataRepository) {
     fun startAdaptivePolling(): Flow<Data> = flow {
+        var interval = 5000L // Initial interval (local to this poll)
+        val minInterval = 1000L
+        val maxInterval = 60000L
+
         while (currentCoroutineContext().isActive) {
             try {
                 val data = repo.getData()
@@ -288,7 +300,7 @@ class SmartPollingManager(private val repo: DataRepository) {
                 }
             } catch (e: Exception) {
                 // ❌ Don't increase interval too aggressively
-                interval = min(maxInterval, interval * 1.5)
+                interval = min(maxInterval, (interval * 1.5).toLong())
             }
             delay(interval)
         }
@@ -303,26 +315,27 @@ Retry strategy for error resilience.
 ```kotlin
 fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
     var attempt = 0
-    var delay = 1000L
+    var currentDelay = 1000L
 
     while (attempt < maxAttempts && currentCoroutineContext().isActive) {
         try {
             emit(Result.success(api.getData()))
-            delay = 1000L // Reset on success
-            attempt = 0
+            // On success we can exit or switch to another strategy
+            return@flow
         } catch (e: Exception) {
             emit(Result.failure(e))
             attempt++
-            delay *= 2 // 1s, 2s, 4s, 8s, 16s
+            if (attempt >= maxAttempts) break
+            currentDelay *= 2 // 1s, 2s, 4s, 8s, 16s
+            delay(currentDelay)
         }
-        delay(delay)
     }
 }.flowOn(Dispatchers.IO)
 ```
 
 ### Best Practices
 
-1. **Lifecycle-aware cancellation**: Use `viewModelScope` for auto-cancellation.
+1. **Lifecycle-aware cancellation**: Use `viewModelScope` or other scopes for auto-cancellation.
 2. **Network checks**: Verify network availability before requests.
 3. **Battery optimization**: Avoid frequent background polling, use WorkManager constraints.
 4. **Error handling**: Use exponential backoff for retries.
@@ -332,12 +345,20 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 | Method | Use Case | Interval | Lifecycle |
 |--------|----------|----------|-----------|
-| Coroutines + Flow | UI-bound | Any | Tied to Activity/Fragment |
+| Coroutines + `Flow` | UI-bound | Any | Tied to lifecycle scope (`Activity`/`Fragment`/`ViewModel`) |
 | WorkManager | Background | ≥15 min | Survives reboot |
 | Handler + Runnable | Simple tasks | Any | Manual management |
-| AlarmManager | Exact timing | Any | Background, battery drain |
+| AlarmManager | Exact timing | Any | Background, possible higher battery usage |
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Как реализовать polling с fallback на WebSocket при ненадежном соединении?
+2. Как оптимизировать расход батареи при фоновом polling?
+3. Как обрабатывать обновление токена аутентификации во время длительного polling?
+4. Каковы компромиссы между polling и Server-Sent Events (SSE)?
+5. Как реализовать приоритетный polling для нескольких источников данных?
 
 ## Follow-ups
 
@@ -347,26 +368,31 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 4. What are the trade-offs between polling and Server-Sent Events (SSE)?
 5. How to implement priority-based polling for multiple data sources?
 
+## Ссылки (RU)
+
+- [[c-android]]
+
 ## References
 
-- [[c-coroutines]] - Coroutines fundamentals
-- [[c-flow]] - Flow basics and operators
-- [[c-workmanager]] - WorkManager architecture
 - [Android Background Work Guide](https://developer.android.com/guide/background)
 - [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+
+## Связанные вопросы (RU)
+
+### База (проще)
+
+- [[q-android-async-primitives--android--easy]]
+
+### На том же уровне
+
+- [[q-android-lint-tool--android--medium]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-coroutine-basics--kotlin--easy]] - Basic coroutine usage
-- [[q-retrofit-setup--android--easy]] - Network layer setup
+
+- [[q-android-async-primitives--android--easy]]
 
 ### Related (Same Level)
-- [[q-workmanager-periodic-tasks--android--medium]] - WorkManager periodic execution
-- [[q-coroutine-flow-basics--kotlin--medium]] - Flow operators and transformations
-- [[q-lifecycle-aware-components--android--medium]] - Lifecycle integration
 
-### Advanced (Harder)
-- [[q-background-work--android--hard]] - Complex background task orchestration
-- [[q-websocket-implementation--android--medium]] - Real-time alternatives to polling
-- [[q-battery-optimization--android--hard]] - Power-efficient background work
+- [[q-android-lint-tool--android--medium]]

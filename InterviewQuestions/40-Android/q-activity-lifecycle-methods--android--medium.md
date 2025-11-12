@@ -46,12 +46,19 @@ onCreate() → onStart() → onResume() → RUNNING
             onRestart() ← onPause() → onStop() → onDestroy()
 ```
 
-- `onCreate()`: Инициализация `Activity` (создание UI, привязка данных) — вызывается при каждом создании экземпляра (например, при первом запуске или после конфигурационных изменений)
-- `onStart()`: `Activity` становится видимой пользователю
-- `onResume()`: `Activity` на переднем плане, пользователь может взаимодействовать
-- `onPause()`: `Activity` теряет фокус (поверх может появиться другая `Activity`/диалог) — сохранить критичные данные, должен быть БЫСТРЫМ (< 1с); после `onPause()` возможен переход как в `onResume()`, так и в `onStop()`
-- `onStop()`: `Activity` больше не видна — освободить тяжёлые ресурсы
-- `onDestroy()`: `Activity` уничтожается системой (например, при завершении или повороте с пересозданием) — финальная очистка, НО система может убить процесс без вызова `onDestroy()`
+Типичный поток:
+- `onCreate()` → `onStart()` → `onResume()`
+- При возврате к остановленной Activity: `onRestart()` → `onStart()` → `onResume()`
+- При уходе с экрана: `onPause()` → `onStop()` → (возможен `onDestroy()`)
+
+Ключевые методы:
+
+- `onCreate()`: Инициализация `Activity` (создание UI, привязка данных) — вызывается при создании нового экземпляра (например, при первом запуске или при пересоздании после конфигурационных изменений/убийства процесса).
+- `onStart()`: `Activity` становится видимой пользователю.
+- `onResume()`: `Activity` на переднем плане, пользователь может взаимодействовать.
+- `onPause()`: `Activity` теряет фокус (поверх может появиться другая `Activity`/диалог) — сохранить критичные данные UI/состояния, должен быть БЫСТРЫМ (< 1с); после `onPause()` возможен переход как обратно в `onResume()`, так и далее в `onStop()`.
+- `onStop()`: `Activity` больше не видна — освободить тяжёлые и невидимые ресурсы (анимации, сенсоры, приостановить сложные операции, остановить слушателей и т.п.). После `onStop()` система может убить процесс без вызова `onDestroy()`.
+- `onDestroy()`: `Activity` уничтожается системой (например, при завершении через `finish()` или при пересоздании после конфигурационных изменений) — финальная очистка для случая, когда коллбек всё же вызывается; НЕЛЬЗЯ полагаться, что `onDestroy()` будет вызван при убийстве процесса.
 
 ### Правила Управления Ресурсами
 
@@ -66,7 +73,7 @@ class BadActivity : AppCompatActivity() {
     }
 }
 
-// ✅ ХОРОШО — Правильное управление
+// ✅ ХОРОШО — Правильное управление (упрощённый пример)
 class GoodActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
 
@@ -85,13 +92,16 @@ class GoodActivity : AppCompatActivity() {
         mediaPlayer?.pause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
+        // Высвобождение тяжёлых ресурсов, когда Activity больше не видна
         mediaPlayer?.release()
         mediaPlayer = null
     }
 }
 ```
+
+Важно: тяжёлые ресурсы (камера, плейер, сенсоры, подписки на локацию и т.п.) предпочтительно освобождать не позднее `onStop()`, так как процесс может быть убит после `onStop()` без вызова `onDestroy()`.
 
 ### Современный Подход: Lifecycle Observer
 
@@ -101,11 +111,13 @@ class LocationObserver(
     private val locationManager: LocationManager
 ) : DefaultLifecycleObserver {
 
-    override fun onResume(owner: LifecycleOwner) {
+    override fun onStart(owner: LifecycleOwner) {
+        // Начинаем обновления, когда владелец стал видимым
         locationManager.startUpdates()
     }
 
-    override fun onPause(owner: LifecycleOwner) {
+    override fun onStop(owner: LifecycleOwner) {
+        // Останавливаем, когда владелец больше не виден
         locationManager.stopUpdates()
     }
 }
@@ -114,15 +126,17 @@ class LocationObserver(
 lifecycle.addObserver(LocationObserver(locationManager))
 ```
 
+Такой подход инкапсулирует работу с жизненным циклом и помогает избежать утечек.
+
 ### Важные Различия
 
 **onPause() vs onStop()**:
-- `onPause()`: `Activity` частично видна (диалог поверх) — должен быть БЫСТРЫМ; не стоит выполнять длительные операции ввода-вывода
-- `onStop()`: `Activity` полностью скрыта — можно выполнять более тяжёлые операции и освобождать тяжёлые ресурсы
+- `onPause()`: `Activity` может быть частично видна (диалог поверх) — должен быть БЫСТРЫМ; избегать длительных/блокирующих операций и тяжёлого I/O.
+- `onStop()`: `Activity` полностью скрыта — можно выполнять более тяжёлые операции и освобождать тяжёлые ресурсы.
 
 **onStop() vs onDestroy()**:
-- `onStop()`: После него `Activity` может быть убита системой без вызова `onDestroy()`
-- `onDestroy()`: Вызывается системой перед уничтожением конкретного экземпляра `Activity`, если у процесса есть возможность отработать; нельзя рассчитывать на его вызов при убийстве процесса
+- `onStop()`: После него экземпляр `Activity` может быть уничтожен системой без вызова `onDestroy()`.
+- `onDestroy()`: Вызывается системой перед уничтожением конкретного экземпляра `Activity`, если у процесса есть возможность отработать; нельзя рассчитывать на его вызов при убийстве процесса.
 
 ### Обработка Конфигурационных Изменений
 
@@ -135,9 +149,12 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    // Восстановление только легковесного состояния UI/данных
     counter = savedInstanceState?.getInt("counter") ?: 0
 }
 ```
+
+`onSaveInstanceState()` используется для сохранения кратковременного UI-состояния. Для долгоживущих данных и работы, переживающей конфигурационные изменения, следует использовать такие механизмы, как `ViewModel`.
 
 ---
 
@@ -153,12 +170,19 @@ onCreate() → onStart() → onResume() → RUNNING
             onRestart() ← onPause() → onStop() → onDestroy()
 ```
 
-- `onCreate()`: Initialize `Activity` (create UI, bind data) — called each time a new instance is created (e.g., first launch or after configuration change / process recreation)
-- `onStart()`: `Activity` becomes visible to the user
-- `onResume()`: `Activity` in the foreground, user can interact
-- `onPause()`: `Activity` losing focus (another `Activity`/dialog on top) — save critical data, must be FAST (< 1s); after `onPause()` the system may go either back to `onResume()` or forward to `onStop()`
-- `onStop()`: `Activity` no longer visible — release heavy resources
-- `onDestroy()`: `Activity` is being destroyed by the system (e.g., finish() or configuration change recreation) — final cleanup; however, the process may be killed without `onDestroy()` being called
+Typical flows:
+- `onCreate()` → `onStart()` → `onResume()` for a fresh start.
+- Returning to a stopped Activity: `onRestart()` → `onStart()` → `onResume()`.
+- Leaving the screen: `onPause()` → `onStop()` → (optionally `onDestroy()`).
+
+Key methods:
+
+- `onCreate()`: Initialize the `Activity` (create UI, bind data) — called when a new instance is created (e.g., first launch or recreation after configuration change/process death).
+- `onStart()`: `Activity` becomes visible to the user.
+- `onResume()`: `Activity` is in the foreground; user can interact with it.
+- `onPause()`: `Activity` is losing focus (another `Activity`/dialog on top) — persist critical UI-related state; must be FAST (< 1s). After `onPause()` the system may return to `onResume()` or proceed to `onStop()`.
+- `onStop()`: `Activity` is no longer visible — release heavy and non-visible resources (animations, sensors, listeners, expensive work, etc.). After `onStop()`, the system may kill the process without calling `onDestroy()`.
+- `onDestroy()`: `Activity` is being destroyed (e.g., `finish()` or recreation for configuration changes) — final cleanup when this callback is actually invoked; you MUST NOT rely on it when the process is killed.
 
 ### Resource Management Rules
 
@@ -173,7 +197,7 @@ class BadActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD — Proper lifecycle management
+// ✅ GOOD — Proper lifecycle management (simplified)
 class GoodActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
 
@@ -192,13 +216,16 @@ class GoodActivity : AppCompatActivity() {
         mediaPlayer?.pause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
+        // Release heavy resources once Activity is no longer visible
         mediaPlayer?.release()
         mediaPlayer = null
     }
 }
 ```
+
+Important: heavy resources (camera, player, sensors, location updates, etc.) should generally be released no later than `onStop()`, since the process may be killed after `onStop()` without `onDestroy()` being called.
 
 ### Modern Approach: Lifecycle Observer
 
@@ -208,11 +235,13 @@ class LocationObserver(
     private val locationManager: LocationManager
 ) : DefaultLifecycleObserver {
 
-    override fun onResume(owner: LifecycleOwner) {
+    override fun onStart(owner: LifecycleOwner) {
+        // Start updates when the owner becomes visible
         locationManager.startUpdates()
     }
 
-    override fun onPause(owner: LifecycleOwner) {
+    override fun onStop(owner: LifecycleOwner) {
+        // Stop updates when the owner is no longer visible
         locationManager.stopUpdates()
     }
 }
@@ -221,15 +250,17 @@ class LocationObserver(
 lifecycle.addObserver(LocationObserver(locationManager))
 ```
 
+This encapsulates lifecycle-aware work and helps prevent leaks.
+
 ### Important Distinctions
 
 **onPause() vs onStop()**:
-- `onPause()`: `Activity` partially visible (dialog on top) — must be FAST; avoid long-running or blocking operations
-- `onStop()`: `Activity` fully hidden — you can perform heavier work and release heavy resources
+- `onPause()`: `Activity` may still be partially visible (e.g., dialog on top) — must be FAST; avoid long-running/blocking operations and heavy I/O.
+- `onStop()`: `Activity` is fully hidden — safe place for heavier work and releasing heavy resources.
 
 **onStop() vs onDestroy()**:
-- `onStop()`: After this, the `Activity` instance may be killed by the system without `onDestroy()` being called
-- `onDestroy()`: Called by the system before destroying this `Activity` instance when possible; you must not rely on it for scenarios where the process is killed
+- `onStop()`: After this, the `Activity` instance may be destroyed without `onDestroy()` being called.
+- `onDestroy()`: Called before destroying this `Activity` instance when the process can run it; you cannot rely on it when the process is killed.
 
 ### Handling Configuration Changes
 
@@ -242,9 +273,12 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    // Restore only lightweight UI/state data
     counter = savedInstanceState?.getInt("counter") ?: 0
 }
 ```
+
+`onSaveInstanceState()` is for saving transient, lightweight UI state. For longer-lived data and work that should survive configuration changes, use mechanisms like `ViewModel`.
 
 ---
 

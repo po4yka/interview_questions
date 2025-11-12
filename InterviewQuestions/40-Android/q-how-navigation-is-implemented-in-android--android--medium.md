@@ -62,7 +62,7 @@ tags:
 - Свайп от краев — возврат назад
 
 ```kotlin
-// ✅ Адаптация UI под жесты
+// ✅ Пример адаптации UI под жесты (упрощенный пример, не полный рецепт edge-to-edge)
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -78,7 +78,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 #### Кнопки (Legacy)
 
-Три экранные кнопки: Назад, Домой, Недавние приложения.
+Три навигационные кнопки (Назад, Домой, Недавние приложения) остаются поддерживаемым вариантом навигации на многих устройствах.
 
 ### Навигация В Приложении
 
@@ -116,8 +116,14 @@ findNavController().navigate(R.id.action_home_to_detail)
 ```kotlin
 bottomNav.setOnItemSelectedListener { item ->
     when (item.itemId) {
-        R.id.nav_home -> loadFragment(HomeFragment())
-        R.id.nav_search -> loadFragment(SearchFragment())
+        R.id.nav_home -> {
+            loadFragment(HomeFragment())
+            true
+        }
+        R.id.nav_search -> {
+            loadFragment(SearchFragment())
+            true
+        }
         else -> false
     }
 }
@@ -129,7 +135,7 @@ bottomNav.setOnItemSelectedListener { item ->
 
 #### 4. Predictive Back (Android 13+)
 
-Показ превью предыдущего экрана при жесте назад. Требует включения в манифесте (`android:enableOnBackInvokedCallback="true"` для соответствующей `Activity`) и корректной обработки callback.
+Показ превью предыдущего экрана при жесте назад. Требует включения поддержки в манифесте (`android:enableOnBackInvokedCallback="true"` для соответствующей `Activity`) и корректной обработки обратных вызовов (через `OnBackInvokedCallback` в API 33+ или совместимые API из ActivityX). При включении флага без реализации callback система может выдать предупреждение.
 
 ```kotlin
 // Пример кастомной анимации прогресса жеста (поддержка совместимости через BackEventCompat)
@@ -162,7 +168,7 @@ onBackPressedDispatcher.addCallback(
 2. Следуйте соглашениям платформы — используйте знакомые паттерны.
 3. Сохраняйте состояние — восстанавливайте навигацию после пересоздания `Activity`.
 4. Поддержка deep linking — позволяйте открывать экраны напрямую.
-5. Используйте predictive back на Android 13+ — при наличии поддержки улучшает UX на современных устройствах.
+5. Используйте predictive back на Android 13+ — при включении корректной обработки улучшает UX на современных устройствах.
 
 ## Answer (EN)
 
@@ -178,7 +184,7 @@ Modern devices use gesture navigation:
 - Swipe from edges — back navigation
 
 ```kotlin
-// ✅ Adapt UI for gesture navigation
+// ✅ Example of adapting UI for gesture navigation (simplified, not a full edge-to-edge recipe)
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -194,7 +200,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 #### Button Navigation (Legacy)
 
-Three on-screen buttons: Back, Home, Recent Apps.
+Three navigation buttons (Back, Home, Recent Apps) remain a supported navigation mode on many devices.
 
 ### `Application`-Level Navigation
 
@@ -232,8 +238,14 @@ findNavController().navigate(R.id.action_home_to_detail)
 ```kotlin
 bottomNav.setOnItemSelectedListener { item ->
     when (item.itemId) {
-        R.id.nav_home -> loadFragment(HomeFragment())
-        R.id.nav_search -> loadFragment(SearchFragment())
+        R.id.nav_home -> {
+            loadFragment(HomeFragment())
+            true
+        }
+        R.id.nav_search -> {
+            loadFragment(SearchFragment())
+            true
+        }
         else -> false
     }
 }
@@ -245,7 +257,7 @@ bottomNav.setOnItemSelectedListener { item ->
 
 #### 4. Predictive Back (Android 13+)
 
-Shows a preview of the previous screen during the back gesture. Requires enabling it in the manifest (`android:enableOnBackInvokedCallback="true"` for the `Activity`) and proper callback handling.
+Shows a preview of the previous screen during the back gesture. Requires enabling support in the manifest (`android:enableOnBackInvokedCallback="true"` for the `Activity`) and implementing proper callbacks (`OnBackInvokedCallback` on API 33+ or compatible ActivityX APIs). If you enable the flag without handling callbacks, the system may emit a warning.
 
 ```kotlin
 // Example of custom back gesture progress animation (with BackEventCompat for compatibility)
@@ -278,7 +290,7 @@ onBackPressedDispatcher.addCallback(
 2. Follow platform conventions — use familiar patterns.
 3. Preserve state — restore navigation after `Activity` recreation.
 4. Support deep linking — allow direct screen access.
-5. Use predictive back on Android 13+ — when supported, it improves UX on modern devices.
+5. Use predictive back on Android 13+ — when properly implemented, it improves UX on modern devices.
 
 ---
 

@@ -30,10 +30,10 @@ tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
 
 ## Ответ (RU)
 
-Для обработки стандартных жестов в Android используйте класс **GestureDetector**.
-Для жестов масштабирования (pinch-zoom) — **ScaleGestureDetector**.
+Для обработки стандартных жестов (tap, double tap, long press, scroll, fling и др.) в Android используйте класс **GestureDetector**.
+Для жестов масштабирования (pinch-zoom) можно использовать отдельный класс **ScaleGestureDetector**.
 
-Он отслеживает типичные жесты: tap, double tap, long press, fling, scroll.
+`GestureDetector` вызывает соответствующие callback-и слушателя для типичных жестов: tap, double tap, long press, fling, scroll.
 
 ### Базовое Использование
 
@@ -176,18 +176,18 @@ fun GestureExample() {
 ```
 
 **Основные классы (`View` API):**
-- **GestureDetector** — стандартные жесты (tap, fling, scroll, и др.)
+- **GestureDetector** — стандартные жесты (tap, fling, scroll и др.)
 - **ScaleGestureDetector** — pinch-zoom
-- **SimpleOnGestureListener** — базовый класс с пустыми реализациями
+- **GestureDetector.SimpleOnGestureListener** — базовый класс с пустыми реализациями
 
 ---
 
 ## Answer (EN)
 
-To handle standard gestures in Android, use the **GestureDetector** class.
-For scaling gestures (pinch-zoom), use **ScaleGestureDetector**.
+To handle standard gestures (tap, double tap, long press, scroll, fling, etc.) in Android, use the **GestureDetector** class.
+For scaling gestures (pinch-zoom), you can use the separate **ScaleGestureDetector** class.
 
-GestureDetector can track common gestures: tap, double tap, long press, fling, scroll.
+`GestureDetector` invokes the appropriate callbacks on its listener for common gestures: tap, double tap, long press, fling, scroll.
 
 ### Basic Usage
 
@@ -332,7 +332,7 @@ fun GestureExample() {
 **Key Classes (`View` API):**
 - **GestureDetector** — standard gestures (tap, fling, scroll, etc.)
 - **ScaleGestureDetector** — pinch-zoom
-- **SimpleOnGestureListener** — base class with empty implementations
+- **GestureDetector.SimpleOnGestureListener** — base class with empty implementations
 
 ---
 
@@ -369,7 +369,7 @@ fun GestureExample() {
 - [[q-fragments-vs-activity--android--medium]] - Контекст жизненного цикла компонентов
 
 ### Продвинутое
-- Кастомные речогнутые мультитач-распознаватели жестов
+- Кастомные мультитач-распознаватели жестов
 - Стратегии разрешения конфликтов жестов
 
 ## Related Questions

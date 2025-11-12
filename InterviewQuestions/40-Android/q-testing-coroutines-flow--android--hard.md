@@ -43,7 +43,7 @@ tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines
 
 ### TestDispatcher Типы
 
-**StandardTestDispatcher** — по умолчанию использует тестовый планировщик: корутины, запущенные внутри `runTest`, не будут выполняться до явного запуска отложенных задач (через `runCurrent`, управление временем и т.п.), что позволяет пошагово контролировать выполнение.
+**StandardTestDispatcher** — по умолчанию использует тестовый планировщик: корутины, запущенные внутри `runTest`, планируются и выполняются пошагово только при явном продвижении планировщика (`runCurrent`, управление временем и т.п.), что позволяет детерминированно контролировать выполнение без реального времени.
 
 ```kotlin
 @Test
@@ -51,13 +51,13 @@ fun testStandardDispatcher() = runTest {
     launch {
         println("1")
     }
-    println("2") // ✅ Выполнится первым, корутина внутри launch будет запланирована
-    runCurrent() // Запускаем отложенные задачи
+    println("2") // ✅ Выполнится первым, корутина внутри launch будет только запланирована
+    runCurrent() // Запускаем отложенные задачи "на сейчас"
     // Вывод: 2, 1
 }
 ```
 
-**UnconfinedTestDispatcher** — задачи выполняются немедленно в текущем контексте планировщика `runTest`, без требования явного продвижения времени, что делает поведение ближе к `Dispatchers.Unconfined` (но всё ещё управляемым тестовым планировщиком).
+**UnconfinedTestDispatcher** — задачи выполняются немедленно в текущем контексте планировщика `runTest`, без необходимости явного продвижения времени, что делает поведение ближе к `Dispatchers.Unconfined` (но всё ещё управляемым тестовым планировщиком).
 
 ```kotlin
 @Test
@@ -98,6 +98,8 @@ fun testTimeControl() = runTest {
 **`StateFlow`** всегда хранит текущее значение и немедленно его возвращает.
 
 ```kotlin
+data class User(val id: Int, val name: String)
+
 class UserViewModel {
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user
@@ -120,7 +122,7 @@ fun testStateFlow() = runTest {
 }
 ```
 
-(В реальных `ViewModel` обычно инжектируется `CoroutineDispatcher`, и тесты используют `StandardTestDispatcher` через `runTest` или правило.)
+(В реальных `ViewModel` обычно инжектируется `CoroutineDispatcher` и/или репозиторий, и тесты используют `StandardTestDispatcher` через `runTest` или правило.)
 
 ### Тестирование `SharedFlow`
 
@@ -205,12 +207,32 @@ fun testStateFlowWithTurbine() = runTest {
 ### Тестирование `ViewModel`
 
 ```kotlin
+class UserViewModelWithRepo(
+    private val repository: UserRepository,
+    private val dispatcher: CoroutineDispatcher
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState
+
+    private val _events = MutableSharedFlow<Event>()
+    val events: SharedFlow<Event> = _events
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch(dispatcher) {
+            val user = repository.fetchUser(id)
+            _uiState.value = UiState.Success(user)
+            _events.emit(Event.UserLoaded)
+        }
+    }
+}
+
 @Test
 fun testViewModel() = runTest {
     val repository = mockk<UserRepository>()
     coEvery { repository.fetchUser(1) } returns User(1, "John")
 
-    val viewModel = UserViewModel(repository)
+    val viewModel = UserViewModelWithRepo(repository, StandardTestDispatcher(testScheduler))
 
     // ✅ Тестируем uiState и events с помощью отдельных Turbine-блоков
 
@@ -253,10 +275,15 @@ fun test() = runBlocking { /* ... */ }
 @get:Rule
 val mainDispatcherRule = MainDispatcherRule()
 
-// ❌ DON'T — ручная настройка в каждом тесте
+// ✅ Вариант без правила (менее удобен):
 @Before
 fun setUp() {
-    Dispatchers.setMain(testDispatcher)
+    Dispatchers.setMain(StandardTestDispatcher())
+}
+
+@After
+fun tearDown() {
+    Dispatchers.resetMain()
 }
 ```
 
@@ -292,7 +319,7 @@ Testing coroutines and flows requires dedicated utilities to control virtual tim
 
 ### TestDispatcher Types
 
-**StandardTestDispatcher** — by default uses the test scheduler: coroutines launched inside `runTest` will not complete until you explicitly run pending tasks (via `runCurrent`, time control, etc.), allowing step-by-step control.
+**StandardTestDispatcher** — by default uses the test scheduler: coroutines launched inside `runTest` are scheduled and progressed only when you explicitly advance the scheduler (`runCurrent`, time control, etc.), giving deterministic control without real time.
 
 ```kotlin
 @Test
@@ -300,8 +327,8 @@ fun testStandardDispatcher() = runTest {
     launch {
         println("1")
     }
-    println("2") // ✅ Executes first; the launched coroutine is scheduled
-    runCurrent() // Run pending tasks
+    println("2") // ✅ Executes first; the launched coroutine is only scheduled
+    runCurrent() // Run tasks scheduled for "now"
     // Output: 2, 1
 }
 ```
@@ -347,6 +374,8 @@ fun testTimeControl() = runTest {
 **`StateFlow`** always holds a current value and exposes it immediately.
 
 ```kotlin
+data class User(val id: Int, val name: String)
+
 class UserViewModel {
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user
@@ -369,7 +398,7 @@ fun testStateFlow() = runTest {
 }
 ```
 
-(In real ViewModels you typically inject a `CoroutineDispatcher` and use a `StandardTestDispatcher` via `runTest` or a rule.)
+(In real ViewModels you typically inject a `CoroutineDispatcher` and/or repository and use a `StandardTestDispatcher` via `runTest` or a rule.)
 
 ### Testing `SharedFlow`
 
@@ -454,12 +483,32 @@ fun testStateFlowWithTurbine() = runTest {
 ### Testing `ViewModel`
 
 ```kotlin
+class UserViewModelWithRepo(
+    private val repository: UserRepository,
+    private val dispatcher: CoroutineDispatcher
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState
+
+    private val _events = MutableSharedFlow<Event>()
+    val events: SharedFlow<Event> = _events
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch(dispatcher) {
+            val user = repository.fetchUser(id)
+            _uiState.value = UiState.Success(user)
+            _events.emit(Event.UserLoaded)
+        }
+    }
+}
+
 @Test
 fun testViewModel() = runTest {
     val repository = mockk<UserRepository>()
     coEvery { repository.fetchUser(1) } returns User(1, "John")
 
-    val viewModel = UserViewModel(repository)
+    val viewModel = UserViewModelWithRepo(repository, StandardTestDispatcher(testScheduler))
 
     // ✅ Test uiState and events using separate Turbine blocks
 
@@ -502,10 +551,15 @@ fun test() = runBlocking { /* ... */ }
 @get:Rule
 val mainDispatcherRule = MainDispatcherRule()
 
-// ❌ DON'T — manual setup in every test
+// ✅ Alternative without a rule (less convenient):
 @Before
 fun setUp() {
-    Dispatchers.setMain(testDispatcher)
+    Dispatchers.setMain(StandardTestDispatcher())
+}
+
+@After
+fun tearDown() {
+    Dispatchers.resetMain()
 }
 ```
 

@@ -2,30 +2,23 @@
 id: kotlin-049
 title: "How to convert callback-based APIs to coroutines? / Как конвертировать callback-based API в корутины?"
 aliases: ["How to convert callback-based APIs to coroutines?", "Как конвертировать callback-based API в корутины?"]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines]
 question_kind: coding
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-what-is-coroutine--kotlin--easy]
-
-# Timestamps
 created: 2025-10-06
-updated: 2025-11-10
-
+updated: 2025-11-11
 tags: [async, callbacks, coroutines, difficulty/medium, kotlin, migration, suspendcoroutine]
+
 ---
+
 # Вопрос (RU)
 > Как конвертировать callback-based API в корутины в Kotlin?
 
@@ -854,7 +847,7 @@ fun badStream(): Flow<Data> = callbackFlow {
 
 ### 7. Common Patterns Summary
 
-| Callback Pattern            | Coroutine Solution              | Use Case                            |
+| `Callback` Pattern            | `Coroutine` Solution              | Use Case                            |
 |----------------------------|---------------------------------|-------------------------------------|
 | Single success/error       | `suspendCoroutine`              | Simple async operations             |
 | Cancellable operation      | `suspendCancellableCoroutine`   | Network requests, downloads         |
@@ -865,9 +858,9 @@ fun badStream(): Flow<Data> = callbackFlow {
 ### 8. Performance Considerations
 
 - Overhead of suspending functions and coroutines is low compared to creating OS threads.
-- Coroutines do not inherently use less memory than every callback-based design, but they help avoid retaining unnecessary callback objects and simplify lifecycles.
+- `Coroutines` do not inherently use less memory than every callback-based design, but they help avoid retaining unnecessary callback objects and simplify lifecycles.
 - Proper cancellation integration helps prevent resource leaks.
-- Coroutines run on dispatchers; they do not automatically create new threads unless configured to.
+- `Coroutines` run on dispatchers; they do not automatically create new threads unless configured to.
 
 ### 9. Testing
 
@@ -904,7 +897,7 @@ fun testCancellation() = runTest {
 - What are common pitfalls to avoid when bridging callbacks and coroutines?
 
 ## References
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [Kotlin `Coroutines` Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 - [suspendCoroutine API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/suspend-coroutine.html)
 - [callbackFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/callback-flow.html)
 - [[c-kotlin]]
@@ -913,13 +906,13 @@ fun testCancellation() = runTest {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+- [[q-what-is-coroutine--kotlin--easy]] - `Coroutines`
 
 ### Related (Medium)
-- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
-- [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutines
-- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
-- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - `Coroutines`
+- [[q-coroutine-builders-comparison--kotlin--medium]] - `Coroutines`
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - `Coroutines`
+- [[q-deferred-async-patterns--kotlin--medium]] - `Coroutines`
 
 ### Advanced (Harder)
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+- [[q-flow-testing-advanced--kotlin--hard]] - `Flow`

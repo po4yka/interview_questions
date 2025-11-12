@@ -74,7 +74,6 @@ fun initializeSamsungIap(context: Context) {
 // ✅ Проверка доступности HMS (концептуальный пример)
 fun isHmsAvailable(context: Context): Boolean {
     // Реализуется через официальные Huawei Mobile Services APIs
-    // (например, com.huawei.hms.api.HuaweiApiAvailability)
     val resultCode = com.huawei.hms.api.HuaweiApiAvailability.getInstance()
         .isHuaweiMobileServicesAvailable(context)
     return resultCode == com.huawei.hms.api.ConnectionResult.SUCCESS
@@ -85,7 +84,7 @@ fun isHmsAvailable(context: Context): Boolean {
 Используется на устройствах Fire и некоторых других, требует Amazon SDK для IAP и собственного билда.
 
 **4. Прямое распространение (sideloading)**  
-Установка APK напрямую — например, с корпоративного портала, сайта или через MDM. Для установки из приложения требуется разрешение `REQUEST_INSTALL_PACKAGES` (для сторонних источников) и включённая возможность установки из неизвестных источников для конкретного источника.
+Установка APK напрямую — например, с корпоративного портала, сайта или через MDM. Для инициирования установки из приложения требуется разрешение `REQUEST_INSTALL_PACKAGES` (для сторонних источников) и включённая пользователем возможность установки из неизвестных источников для конкретного источника. На современных версиях Android рекомендуется использовать intent `ACTION_INSTALL_PACKAGE`.
 
 ```kotlin
 // ✅ Установка APK (пример через FileProvider)
@@ -96,7 +95,7 @@ fun installApk(context: Context, apkFile: File) {
         apkFile
     )
 
-    val intent = Intent(Intent.ACTION_VIEW).apply {
+    val intent = Intent(Intent.ACTION_INSTALL_PACKAGE).apply {
         setDataAndType(uri, "application/vnd.android.package-archive")
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // важно при запуске вне Activity
@@ -183,7 +182,7 @@ fun isHmsAvailable(context: Context): Boolean {
 Used on Fire devices and others; requires Amazon SDK for IAP and its own build configuration.
 
 **4. Direct Distribution (sideloading)**  
-Direct APK installation, e.g. from a corporate portal, website, or via MDM. Installing from within an app requires the `REQUEST_INSTALL_PACKAGES` permission (for third-party sources) and the user enabling install from unknown sources for that source.
+Direct APK installation, e.g. from a corporate portal, website, or via MDM. To initiate installation from within an app you need the `REQUEST_INSTALL_PACKAGES` permission (for third-party sources) and the user must enable installing from unknown sources for that source. On modern Android versions, `ACTION_INSTALL_PACKAGE` is recommended.
 
 ```kotlin
 // ✅ APK installation (example via FileProvider)
@@ -194,7 +193,7 @@ fun installApk(context: Context, apkFile: File) {
         apkFile
     )
 
-    val intent = Intent(Intent.ACTION_VIEW).apply {
+    val intent = Intent(Intent.ACTION_INSTALL_PACKAGE).apply {
         setDataAndType(uri, "application/vnd.android.package-archive")
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // required when starting outside an Activity

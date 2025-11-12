@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-reduce-apk-size-techniques--android--medium, q-where-is-composition-created--android--medium, q-recyclerview-explained--android--medium]
+related: [c-android, q-reduce-apk-size-techniques--android--medium, q-where-is-composition-created--android--medium, q-recyclerview-explained--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
@@ -31,6 +31,8 @@ tags: [android/performance-memory, collections, difficulty/medium, memory-optimi
 ## Ответ (RU)
 
 Android предоставляет оптимизированные коллекции для целочисленных ключей и примитивных значений, которые минимизируют автоупаковку (boxing) и часто оказываются более эффективными по памяти, чем стандартные `HashMap` при работе с относительно небольшими коллекциями (порядка сотен элементов).
+
+См. также: [[c-android]].
 
 ### Основные Типы
 
@@ -95,7 +97,7 @@ timestampCache.put(timestamp, Event("Click"))
 
 **SparseArray и аналоги: преимущества:**
 - Нет boxing для ключей типа `int`/`long` (они хранятся во внутренних массивах примитивов).
-- Меньше накладных расходов по памяти по сравнению с `HashMap<Int, T>` или `HashMap<Long, T>`; на практических измерениях часто выигрывает порядка десятков процентов, но точные значения зависят от реализации и версии платформы.
+- Меньше накладных расходов по памяти по сравнению с `HashMap<`Int`, T>` или `HashMap<`Long`, T>`; на практических измерениях часто выигрывает порядка десятков процентов, но точные значения зависят от реализации и версии платформы.
 - Снижение давления на GC за счёт уменьшения количества объектов.
 
 **Ограничения и нюансы:**
@@ -189,6 +191,8 @@ val exists = cache2.indexOfKey(id) >= 0
 
 Android provides optimized collections for integer keys and primitive-like mappings that minimize boxing overhead and can be more memory-efficient than standard `HashMap` when dealing with relatively small to moderate collections (on the order of hundreds of elements) with int/long keys.
 
+See also: [[c-android]].
+
 ### Main Types
 
 **1. `SparseArray<E>` — `Int` → Object**
@@ -252,7 +256,7 @@ timestampCache.put(timestamp, Event("Click"))
 
 **SparseArray-family advantages:**
 - No boxing for int/long keys (stored in primitive arrays internally).
-- Lower memory overhead compared to `HashMap<Int, T>` / `HashMap<Long, T>` in many practical scenarios; the exact numbers are implementation-dependent.
+- Lower memory overhead compared to `HashMap<`Int`, T>` / `HashMap<`Long`, T>` in many practical scenarios; the exact numbers are implementation-dependent.
 - Reduced GC pressure due to fewer allocated objects.
 
 **Limitations and trade-offs:**

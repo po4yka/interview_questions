@@ -27,15 +27,17 @@ tags: [collections, difficulty/medium, iterators, kotlin]
 
 Порядок перебора элементов итератором зависит от контракта конкретной коллекции/структуры данных, а не от самого механизма `Iterator`. См. также [[c-collections]].
 
-- Для упорядоченных коллекций (например, `List`, `ArrayList`, `LinkedList`, а также коллекций с контрактом сохранения порядка вставки, таких как `LinkedHashSet`, `LinkedHashMap`) итератор гарантированно обходит элементы в определённом порядке (например, в порядке индексов или вставки), если коллекция не была структурно изменена в процессе обхода некорректным образом.
+- Для упорядоченных коллекций (например, `List`, `ArrayList`, `LinkedList`, а также коллекций с контрактом сохранения порядка вставки, таких как `LinkedHashSet`, `LinkedHashMap`) итератор гарантированно обходит элементы в определённом порядке (например, в порядке индексов или вставки), при условии что коллекция не была структурно изменена некорректным образом во время обхода.
 - Для неупорядоченных коллекций (например, `HashSet`, `HashMap.keySet()` и другие хеш-коллекции без определённого контракта порядка) порядок обхода официально не определён и не должен использоваться в логике программы, даже если на конкретной JVM/платформе он кажется стабильным.
+- В Kotlin (особенно на JVM) фактический порядок итерации для стандартных коллекций обычно наследует контракт соответствующей реализации платформы (например, Java-коллекций), но это не меняет общего правила: полагаться можно только на явно задокументированный контракт коллекции.
 
 ## Answer (EN)
 
 The iteration order is determined by the contract of the specific collection/data structure, not by the `Iterator` mechanism itself.
 
-- For ordered collections (e.g., `List`, `ArrayList`, `LinkedList`, and collections whose contract specifies insertion-order traversal such as `LinkedHashSet`, `LinkedHashMap`), the iterator is guaranteed to traverse elements in that defined order (e.g., index order or insertion order), as long as the collection is not structurally modified in an unsupported way during iteration.
+- For ordered collections (e.g., `List`, `ArrayList`, `LinkedList`, and collections whose contract specifies insertion-order traversal such as `LinkedHashSet`, `LinkedHashMap`), the iterator is guaranteed to traverse elements in that defined order (e.g., index order or insertion order), provided the collection is not structurally modified in an unsupported way during iteration.
 - For unordered collections (e.g., `HashSet`, `HashMap.keySet()` and other hash-based collections without a specified order contract), the traversal order is unspecified and must not be relied upon in program logic, even if it appears stable on a particular JVM/platform.
+- In Kotlin (especially on the JVM), the actual iteration order of standard collections typically follows the contract of the underlying platform implementations (e.g., Java collections), but the general rule remains: you may only rely on order when it is explicitly documented as part of the collection's contract.
 
 ---
 

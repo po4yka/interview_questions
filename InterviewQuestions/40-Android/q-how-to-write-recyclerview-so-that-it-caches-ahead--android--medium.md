@@ -1,6 +1,6 @@
 ---
 id: android-267
-title: How To Write RecyclerView So That It Caches Ahead / Как написать RecyclerView чтобы он кешировал вперед
+title: How To Write RecyclerView So That It Caches Ahead
 aliases:
 - RecyclerView caching
 - RecyclerView prefetching
@@ -26,7 +26,7 @@ related:
 - q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android
 - android/performance-memory

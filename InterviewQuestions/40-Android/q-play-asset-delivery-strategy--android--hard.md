@@ -46,7 +46,7 @@ sources:
 - Классифицировать ассеты и сопоставить им режимы доставки: install-time (критичные), fast-follow (крупные и скоро нужные), on-demand (опциональные/редкие).
 - Настроить `App Bundle` и asset packs (plugin `com.android.asset-pack`, delivery modes, связка с динамическими фичами и `dist:`-атрибутами).
 - Использовать `AssetPackManager` для запроса/мониторинга/чтения паков; корректно обрабатывать статусы и ошибки.
-- Применять asset-only updates через Play Console, версионировать ассеты и иметь безопасный fallback.
+- Применять asset-only updates через Play Console (в рамках поддерживаемых PAD-сценариев), версионировать ассеты и иметь безопасный fallback.
 - Мониторить доставку (Play Console, Reporting API), обеспечивать офлайн-устойчивость и деградацию качества.
 - Прогонять сценарии через internal testing, контролировать размер, документировать процессы.
 
@@ -107,7 +107,7 @@ assetManager.registerListener { state ->
     when (state.status()) {
         AssetPackStatus.DOWNLOADING ->
             showProgress(state.bytesDownloaded(), state.totalBytesToDownload())
-        AssetPackStatus.completed ->
+        AssetPackStatus.COMPLETED ->
             loadAssets(state)
         // Обрабатывайте также FAILED, CANCELED, WAITING_FOR_WIFI и другие статусы
     }
@@ -150,7 +150,7 @@ assetManager.registerListener { state ->
 - Classify assets and map them to delivery modes: install-time (critical core), fast-follow (large and likely needed soon), on-demand (optional/rare).
 - Configure the `App Bundle` and asset packs (`com.android.asset-pack` plugin, delivery modes, dynamic feature dependencies, `dist:` attributes).
 - Use `AssetPackManager` to request/monitor/consume packs; handle all key statuses and failures.
-- Use asset-only updates via Play Console, version assets, and keep safe fallbacks.
+- Use asset-only updates via Play Console (within PAD-supported scenarios), version assets, and keep safe fallbacks.
 - Monitor delivery health (Play Console, Reporting API), ensure offline resilience and graceful degradation.
 - Validate via internal testing, guard bundle size, and document asset workflows.
 

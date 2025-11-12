@@ -23,7 +23,7 @@ related:
 - q-what-is-viewmodel--android--medium
 - q-why-was-the-lifecycle-library-created--android--hard
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android
 - android/architecture-mvvm
@@ -31,11 +31,18 @@ tags:
 - difficulty/medium
 - lifecycle-aware
 
+
 ---
 
 # Вопрос (RU)
 
 > Что делает библиотека Lifecycle?
+
+---
+
+# Question (EN)
+
+> What does the Lifecycle library do?
 
 ---
 
@@ -47,7 +54,7 @@ tags:
 
 **1. Lifecycle** — абстракция, представляющая состояние жизненного цикла и события переходов  
 **2. LifecycleOwner** — интерфейс, реализуемый компонентами (`Activity`/`Fragment` и др.), предоставляющими `Lifecycle`  
-**3. LifecycleObserver** / **DefaultLifecycleObserver** — наблюдатели за изменениями жизненного цикла
+**3. LifecycleObserver** / **DefaultLifecycleObserver** — наблюдатели за изменениями жизненного цикла (**рекомендуется** `DefaultLifecycleObserver`, тогда как аннотированный `LifecycleObserver` считается устаревшим подходом)
 
 ### Современный Подход: DefaultLifecycleObserver
 
@@ -76,7 +83,7 @@ class VideoActivity : AppCompatActivity() {
 }
 ```
 
-Здесь освобождение ресурсов привязано к событиям жизненного цикла через `DefaultLifecycleObserver`: если `Activity` корректно проходит через `onStop`, будет вызван `onStop` у наблюдателя.
+Здесь освобождение ресурсов привязано к событиям жизненного цикла через `DefaultLifecycleObserver`: когда `Activity` переходит в `onStop` (и, соответственно, состояние `STOPPED`), будет вызван `onStop` у наблюдателя в соответствии с порядком переходов состояний.
 
 ### Состояния И События
 
@@ -87,7 +94,7 @@ class VideoActivity : AppCompatActivity() {
 ```kotlin
 // Проверка текущего состояния
 if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-    // Безопасно обращаться к UI (компонент в активном состоянии)
+    // Безопасно работать с UI (владелец в активном состоянии: STARTED или RESUMED)
 }
 ```
 
@@ -106,14 +113,16 @@ class MainActivity : AppCompatActivity() {
 
         // ✅ LiveData учитывает состояние LifecycleOwner
         viewModel.data.observe(this) { value ->
-            // Коллбек вызывается, когда Lifecycle как минимум STARTED;
-            // при возврате в активное состояние придут актуальные данные.
+            // Наблюдатель активен, когда lifecycle как минимум в состоянии STARTED
+            // (т.е. в STARTED или RESUMED); при повторном входе в активное состояние
+            // будет доставлено актуальное значение.
         }
 
         // ✅ lifecycleScope привязан к жизненному циклу Activity
         lifecycleScope.launch {
             fetchData()
-            // Coroutine будет отменена при onDestroy владельца lifecycleScope.
+            // Coroutine будет автоматически отменена, когда lifecycle владельца
+            // достигнет состояния DESTROYED (для Activity — в onDestroy).
         }
     }
 }
@@ -129,11 +138,11 @@ class MyApp : Application() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             object : DefaultLifecycleObserver {
                 override fun onStart(owner: LifecycleOwner) {
-                    // ✅ Все Activity в сумме перешли во фронт — приложение на переднем плане
+                    // ✅ Все Activity суммарно перешли на передний план — приложение во фронтграунде
                 }
 
                 override fun onStop(owner: LifecycleOwner) {
-                    // ✅ Ни одной видимой Activity — приложение в фоне
+                    // ✅ Нет видимых Activity — приложение в фоне
                 }
             }
         )
@@ -177,46 +186,6 @@ class GoodActivity : AppCompatActivity() {
 **3. Тестируемость** — компоненты, зависящие от `Lifecycle`, можно тестировать, эмулируя события состояний  
 **4. Уменьшение boilerplate** — меньше прямых переопределений методов жизненного цикла в UI-классах
 
-### Дополнительные вопросы (RU)
-
-- Как библиотека Lifecycle обрабатывает изменения конфигурации?
-- В чем разница между `LifecycleObserver` и `DefaultLifecycleObserver`?
-- Могут ли кастомные компоненты реализовывать `LifecycleOwner`?
-- Чем отличается `ProcessLifecycleOwner` от жизненного цикла конкретного компонента?
-- Что произойдет, если обратиться к UI в неактивном состоянии жизненного цикла?
-
-### Ссылки (RU)
-
-- [[q-why-was-the-lifecycle-library-created--android--hard]]
-- [[q-what-is-viewmodel--android--medium]]
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
-
-### Связанные вопросы (RU)
-
-#### Предпосылки / Концепции
-
-- [[c-android]]
-
-#### Предпосылки (проще)
-
-- [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Базовые Android-концепции
-
-#### Связанные (средний уровень)
-
-- [[q-what-is-viewmodel--android--medium]] - Использует библиотеку Lifecycle
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Сохранение состояния через жизненный цикл
-
-#### Продвинутые (сложнее)
-
-- [[q-why-was-the-lifecycle-library-created--android--hard]] - Мотивация дизайна
-- [[q-service-lifecycle-binding--android--hard]] - Продвинутое управление жизненным циклом
-
----
-
-# Question (EN)
-
-> What does the Lifecycle library do?
-
 ---
 
 ## Answer (EN)
@@ -227,7 +196,7 @@ The **Lifecycle library** provides classes and interfaces to build **lifecycle-a
 
 **1. Lifecycle** — abstraction that represents lifecycle state and transition events  
 **2. LifecycleOwner** — interface implemented by components (`Activity`/`Fragment` and others) that expose a `Lifecycle`  
-**3. LifecycleObserver** / **DefaultLifecycleObserver** — observers that react to lifecycle changes
+**3. LifecycleObserver** / **DefaultLifecycleObserver** — observers that react to lifecycle changes (`DefaultLifecycleObserver` is the recommended modern API; the generic `LifecycleObserver` with annotations is considered legacy-style)
 
 ### Modern Approach: DefaultLifecycleObserver
 
@@ -256,7 +225,7 @@ class VideoActivity : AppCompatActivity() {
 }
 ```
 
-Here resource cleanup is tied to lifecycle events via `DefaultLifecycleObserver`: when the `Activity` goes through `onStop`, the observer's `onStop` is invoked accordingly.
+Here resource cleanup is tied to lifecycle events via `DefaultLifecycleObserver`: when the `Activity` reaches `onStop` (and enters the `STOPPED` state), the observer's `onStop` is invoked according to the lifecycle state transition order.
 
 ### States and Events
 
@@ -267,7 +236,7 @@ Here resource cleanup is tied to lifecycle events via `DefaultLifecycleObserver`
 ```kotlin
 // Check current state
 if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-    // Safe to interact with UI (owner is in an active state)
+    // Safe to interact with UI when the owner is in an active state: STARTED or RESUMED
 }
 ```
 
@@ -286,14 +255,16 @@ class MainActivity : AppCompatActivity() {
 
         // ✅ LiveData respects the LifecycleOwner's state
         viewModel.data.observe(this) { value ->
-            // Called while Lifecycle is at least STARTED;
-            // when coming back to an active state, the latest value is delivered.
+            // Observer is active when lifecycle is at least STARTED
+            // (i.e., in STARTED or RESUMED); when returning to an active state,
+            // the latest value will be delivered.
         }
 
         // ✅ lifecycleScope is tied to Activity's lifecycle
         lifecycleScope.launch {
             fetchData()
-            // This coroutine will be cancelled when the LifecycleOwner reaches onDestroy.
+            // This coroutine will be automatically cancelled when the owner's
+            // lifecycle reaches the DESTROYED state (for an Activity, in onDestroy).
         }
     }
 }
@@ -309,11 +280,11 @@ class MyApp : Application() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             object : DefaultLifecycleObserver {
                 override fun onStart(owner: LifecycleOwner) {
-                    // ✅ All activities collectively moved to foreground — app in foreground
+                    // ✅ All activities collectively moved to foreground — app is in the foreground
                 }
 
                 override fun onStop(owner: LifecycleOwner) {
-                    // ✅ No visible activities — app in background
+                    // ✅ No visible activities — app is in the background
                 }
             }
         )
@@ -354,7 +325,7 @@ class GoodActivity : AppCompatActivity() {
 ```
 
 **2. Reusability** — the same observer works with any `LifecycleOwner` components  
-**3. Testability** — components depending on `Lifecycle` can be tested by simulating state events  
+**3. Testability** — components depending on `Lifecycle` can be tested by simulating lifecycle state events  
 **4. Reduces Boilerplate** — fewer direct lifecycle overrides in UI classes
 
 ---
@@ -389,3 +360,21 @@ class GoodActivity : AppCompatActivity() {
 ### Advanced (Harder)
 - [[q-why-was-the-lifecycle-library-created--android--hard]] - Design rationale
 - [[q-service-lifecycle-binding--android--hard]] - Advanced lifecycle management
+
+## Дополнительные вопросы (RU)
+- Как библиотека Lifecycle обрабатывает изменения конфигурации?
+- В чем разница между `LifecycleObserver` и `DefaultLifecycleObserver`?
+- Могут ли кастомные компоненты реализовывать `LifecycleOwner`?
+- Чем отличается `ProcessLifecycleOwner` от жизненного цикла конкретного компонента?
+- Что произойдет, если обратиться к UI в неактивном состоянии жизненного цикла?
+## Ссылки (RU)
+## Связанные вопросы (RU)
+### Предпосылки / Концепции
+### Предпосылки (проще)
+- [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Базовые Android-концепции
+### Связанные (средний уровень)
+- [[q-what-is-viewmodel--android--medium]] - Использует библиотеку Lifecycle
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Сохранение состояния через жизненный цикл
+### Продвинутые (сложнее)
+- [[q-why-was-the-lifecycle-library-created--android--hard]] - Мотивация дизайна
+- [[q-service-lifecycle-binding--android--hard]] - Продвинутое управление жизненным циклом

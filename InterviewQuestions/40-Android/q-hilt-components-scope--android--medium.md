@@ -48,7 +48,7 @@ Hilt предоставляет готовые компоненты для ос�
 | Компонент | Scope | Время жизни | Android-уровень |
 |-----------|-------|-------------|-----------------|
 | SingletonComponent | `@Singleton` | Весь срок жизни процесса приложения | `Application` |
-| ActivityRetainedComponent | `@ActivityRetainedScoped` | Переживает конфигурационные изменения, пока жива `Activity` | Базовый уровень для `@HiltViewModel` / retained `ViewModel` |
+| ActivityRetainedComponent | `@ActivityRetainedScoped` | Переживает конфигурационные изменения, пока жива логическая `Activity` | Базовый уровень для `@HiltViewModel` / retained `ViewModel` |
 | ViewModelComponent | `@ViewModelScoped` | Время жизни конкретного `ViewModel` | `ViewModel` |
 | ActivityComponent | `@ActivityScoped` | Конкретный экземпляр `Activity` (пересоздается при конфиг. изменениях) | `Activity` |
 | FragmentComponent | `@FragmentScoped` | Конкретный экземпляр `Fragment` | `Fragment` |
@@ -103,7 +103,7 @@ class UserRepository @Inject constructor(
 
 ### 2. ViewModelComponent (RU)
 
-Время жизни: один экземпляр `ViewModel` (переживает конфигурационные изменения, пока жив его владелец).
+Время жизни: один экземпляр `ViewModel` (сам `ViewModel` переживает конфигурационные изменения, пока жив его владелец).
 
 ```kotlin
 @Module
@@ -463,20 +463,26 @@ object InterceptorModule {
 ```text
 SingletonComponent (Application)
        ↓
-ActivityRetainedComponent (переживает конфиг. изменения)
+ActivityRetainedComponent (переживает конфиг. изменения, привязан к логическому жизненному циклу Activity)
        ↓
 ViewModelComponent (ViewModel)
-       ↓
+
+Отдельные дочерние ветки от SingletonComponent:
+
+SingletonComponent
+   ↓
 ActivityComponent (Activity)
-       ↓
+   ↓
 FragmentComponent (Fragment)
-       ↓
+   ↓
 ViewComponent (View)
 
-ServiceComponent (Service) ← независимая ветка
+SingletonComponent
+   ↓
+ServiceComponent (Service)
 ```
 
-Зависимости "текут" вниз: дочерние компоненты могут использовать биндинги родительских компонентов.
+Зависимости "текут" вниз по иерархиям: дочерние компоненты могут использовать биндинги родительских компонентов.
 
 ---
 
@@ -492,7 +498,7 @@ To add a module to a graph, use the `@InstallIn(ComponentName::class)` annotatio
 | Component | Scope | Lifetime | Android Class |
 |-----------|-------|----------|---------------|
 | **SingletonComponent** | `@Singleton` | Entire app process | `Application` |
-| **ActivityRetainedComponent** | `@ActivityRetainedScoped` | Survives configuration changes (tied to ActivityRetained) | Backing scope for `@HiltViewModel` / retained ViewModels |
+| **ActivityRetainedComponent** | `@ActivityRetainedScoped` | Survives configuration changes while the logical `Activity` exists | Backing scope for `@HiltViewModel` / retained ViewModels |
 | **ViewModelComponent** | `@ViewModelScoped` | `ViewModel` lifetime | `ViewModel` |
 | **ActivityComponent** | `@ActivityScoped` | `Activity` instance (recreated on config change) | `Activity` |
 | **FragmentComponent** | `@FragmentScoped` | `Fragment` instance | `Fragment` |
@@ -907,20 +913,26 @@ object InterceptorModule {
 ```text
 SingletonComponent (Application)
        ↓
-ActivityRetainedComponent (Survives config changes)
+ActivityRetainedComponent (Survives config changes, tied to Activity's logical lifecycle)
        ↓
 ViewModelComponent (ViewModel)
-       ↓
+
+Separate child branches from SingletonComponent:
+
+SingletonComponent
+   ↓
 ActivityComponent (Activity)
-       ↓
+   ↓
 FragmentComponent (Fragment)
-       ↓
+   ↓
 ViewComponent (View)
 
-ServiceComponent (Service) ← Independent
+SingletonComponent
+   ↓
+ServiceComponent (Service)
 ```
 
-Dependencies flow down: child components can access bindings from their parent components.
+Dependencies flow down within each hierarchy: child components can access bindings from their parent components.
 
 ---
 
@@ -929,7 +941,7 @@ Dependencies flow down: child components can access bindings from their parent c
 Кратко по компонентам Hilt:
 
 - `SingletonComponent` + `@Singleton` — зависимости на весь процесс приложения.
-- `ActivityRetainedComponent` + `@ActivityRetainedScoped` — объекты, переживающие конфигурационные изменения (граф для `@HiltViewModel`).
+- `ActivityRetainedComponent` + `@ActivityRetainedScoped` — объекты, переживающие конфигурационные изменения и привязанные к логическому жизненному циклу Activity (граф для `@HiltViewModel`).
 - `ViewModelComponent` + `@ViewModelScoped` — зависимости конкретного `ViewModel`.
 - `ActivityComponent` + `@ActivityScoped` — зависимости уровня `Activity`.
 - `FragmentComponent` + `@FragmentScoped` — зависимости уровня `Fragment`.
@@ -939,7 +951,7 @@ Dependencies flow down: child components can access bindings from their parent c
 Ключевые моменты:
 - Используйте `@InstallIn`, чтобы привязать модуль к нужному компоненту.
 - Используйте scope-аннотацию, соответствующую целевому компоненту.
-- Дочерние компоненты наследуют зависимости родительских.
+- Дочерние компоненты наследуют зависимости родительских в рамках своей иерархии.
 - Для интерфейсов используйте `@Binds`.
 - Для нескольких реализаций используйте квалификаторы (`@Qualifier`).
 
@@ -952,7 +964,7 @@ Hilt Components:
 | Component | Scope | Use For |
 |-----------|-------|---------|
 | SingletonComponent | `@Singleton` | App-wide singletons |
-| ActivityRetainedComponent | `@ActivityRetainedScoped` | Retained objects across config changes (e.g., backing `ViewModel` graph) |
+| ActivityRetainedComponent | `@ActivityRetainedScoped` | Retained objects across config changes (backing graph for `@HiltViewModel`) |
 | ViewModelComponent | `@ViewModelScoped` | `ViewModel` dependencies |
 | ActivityComponent | `@ActivityScoped` | `Activity`-specific |
 | FragmentComponent | `@FragmentScoped` | `Fragment`-specific |
@@ -977,7 +989,7 @@ object MyModule {
 Key points:
 - Use `@InstallIn` to bind modules to a specific component.
 - Use the scope annotation that matches the target component.
-- Child components inherit dependencies from parent components.
+- Child components inherit dependencies from parent components within their hierarchy.
 - Use `@Binds` for interfaces.
 - Use qualifiers (`@Qualifier`) when multiple bindings of the same type exist.
 

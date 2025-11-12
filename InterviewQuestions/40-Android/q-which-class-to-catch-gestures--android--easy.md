@@ -14,6 +14,7 @@ language_tags:
 - en
 - ru
 status: draft
+question_kind: android
 moc: moc-android
 related:
 - c-android-components

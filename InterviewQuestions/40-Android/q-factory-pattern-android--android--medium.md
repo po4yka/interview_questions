@@ -35,7 +35,7 @@ tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty
 
 ## Ответ (RU)
 
-Android фреймворк широко использует Factory паттерн. Основные примеры: **`LayoutInflater`** (создает Views из XML), **`Fragment.instantiate()` / `FragmentFactory`** (создают фрагменты), **`Intent.createChooser()`** (создает chooser dialogs), **`MediaPlayer.create()`** (создает pre-configured media players).
+Android фреймворк широко использует Factory / Factory Method паттерн. Основные примеры: **`LayoutInflater`** (создает Views из XML), **`Fragment.instantiate()` / `FragmentFactory`** (создают фрагменты), **`Intent.createChooser()`** (создает Intent-обертку для chooser UI), **`MediaPlayer.create()`** (создает pre-configured media players).
 
 См. также: [[c-android-basics]]
 
@@ -111,14 +111,13 @@ mediaPlayer.start() // готов к использованию
 
 // ❌ Без factory требует ручной настройки
 val mediaPlayer = MediaPlayer()
-val mediaPlayer = MediaPlayer()
 mediaPlayer.setDataSource(context, uri)
 mediaPlayer.prepare() // дополнительный шаг
 ```
 
 **4. `Intent.createChooser()` - Static Factory Method**
 
-Создает `Intent` для выбора приложения:
+Создает специальный chooser `Intent` для выбора приложения (chooser UI будет показан при передаче этого Intent в `startActivity()`):
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -169,7 +168,7 @@ class ViewHolderFactory {
 
 ## Answer (EN)
 
-Android framework extensively uses Factory pattern. Main examples: **`LayoutInflater`** (creates Views from XML), **`Fragment.instantiate()` / `FragmentFactory`** (create fragments), **`Intent.createChooser()`** (creates chooser dialogs), **`MediaPlayer.create()`** (creates pre-configured media players).
+Android framework extensively uses Factory / Factory Method pattern. Main examples: **`LayoutInflater`** (creates Views from XML), **`Fragment.instantiate()` / `FragmentFactory`** (create fragments), **`Intent.createChooser()`** (creates a chooser Intent that triggers chooser UI), **`MediaPlayer.create()`** (creates pre-configured media players).
 
 See also: [[c-android-basics]]
 
@@ -245,14 +244,13 @@ mediaPlayer.start() // ready to use
 
 // ❌ Without factory requires manual setup
 val mediaPlayer = MediaPlayer()
-val mediaPlayer = MediaPlayer()
 mediaPlayer.setDataSource(context, uri)
 mediaPlayer.prepare() // additional step
 ```
 
 **4. `Intent.createChooser()` - Static Factory Method**
 
-Creates an `Intent` for app selection:
+Creates a special chooser `Intent` used for app selection (chooser UI is shown when this Intent is passed to `startActivity()`):
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {

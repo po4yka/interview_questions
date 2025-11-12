@@ -5,7 +5,7 @@ aliases: ["select Expression with Channels", "Выражение select с ка�
 
 # Classification
 topic: kotlin
-subtopics: [channels, coroutines, advanced]
+subtopics: [channels, coroutines]
 question_kind: theory
 difficulty: hard
 
@@ -18,13 +18,13 @@ source_note: Comprehensive Kotlin Coroutines select Expression Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-kotlin, c-concurrency, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
 
-tags: [advanced, channels, coroutines, difficulty/hard, kotlin, multiplexing, select]
+tags: [kotlin, channels, coroutines, difficulty/hard]
 ---
 
 # Вопрос (RU)
@@ -37,9 +37,11 @@ tags: [advanced, channels, coroutines, difficulty/hard, kotlin, multiplexing, se
 
 ## Ответ (RU)
 
-Выражение `select` в `kotlinx.coroutines` позволяет одновременно ожидать несколько приостанавливаемых операций (отправка/получение из каналов, таймауты и др.) и продолжать выполнение по той ветке, которая первой становится доступна. Это основной механизм мультиплексирования каналов и построения сложных конкурентных паттернов поверх [[c-coroutines]] и [[c-kotlin]].
+Выражение `select` в `kotlinx.coroutines` позволяет одновременно ожидать несколько приостанавливаемых операций (отправка/получение из каналов, таймауты и др.) и продолжать выполнение по той ветке, которая первой становится доступна. Это основной механизм мультиплексирования каналов и построения сложных конкурентных паттернов поверх [[c-concurrency]] и [[c-kotlin]].
 
 Важно: во всех примерах предполагается выполнение внутри `CoroutineScope` (например, `runBlocking`, `coroutineScope`, `runTest`), так как `launch`, `produce` и работа с каналами требуют явного скоупа и соблюдения структурированной конкуренции.
+
+Также важно: обычный `select` не гарантирует честность или приоритет между ветками. При необходимости приоритета его нужно реализовывать явно (например, сначала пробовать `tryReceive` для высокоприоритетного канала).
 
 ### Базовый select с каналами
 
@@ -84,6 +86,7 @@ fun CoroutineScope.multipleSelects() = launch {
             delay(100)
             send("Fast-$it")
         }
+        close()
     }
 
     val channel2 = produce {
@@ -91,6 +94,7 @@ fun CoroutineScope.multipleSelects() = launch {
             delay(200)
             send("Slow-$it")
         }
+        close()
     }
 
     repeat(10) {
@@ -197,18 +201,19 @@ class FanInPattern {
 
         while (open.isNotEmpty()) {
             select<Unit> {
+                // ВАЖНО: не модифицировать 'open' напрямую внутри других веток select,
+                // закрытые каналы удаляются после select по их состоянию.
                 open.forEach { ch ->
                     ch.onReceiveCatching { result ->
                         val value = result.getOrNull()
                         if (value != null) {
                             send(value)
                         }
-                        if (result.isClosed) {
-                            open.remove(ch)
-                        }
+                        // Удаление откладывается до завершения итерации select.
                     }
                 }
             }
+            open.removeAll { it.isClosedForReceive }
         }
     }
 
@@ -273,7 +278,8 @@ class FanOutPattern {
         workers.joinAll()
     }
 
-    // Продвинутый вариант: worker с приоритетом на основе select
+    // Продвинутый вариант: worker с приоритетом на основе select.
+    // Завершение воркеров основано на закрытии обоих каналов.
     suspend fun selectBasedFanOut() = coroutineScope {
         val highPriority = Channel<String>()
         val lowPriority = Channel<String>()
@@ -331,7 +337,8 @@ class FanOutPattern {
 ```kotlin
 class PrioritySelection {
 
-    // Приоритет через явную логику (select сам по себе честность не гарантирует)
+    // Приоритет реализуется явной логикой: сначала пробуем highPriority.tryReceive(),
+    // затем используем select для ожидания, не полагаясь на честность реализации select.
     suspend fun priorityWithCustomLogic() = coroutineScope {
         val highPriority = Channel<String>()
         val lowPriority = Channel<String>()
@@ -472,16 +479,21 @@ class AdvancedSelectPatterns {
         }
     }
 
-    // Batch с таймаутом: собрать до batchSize или до таймаута/закрытия
+    // Batch с таймаутом: собрать до batchSize или до таймаута/закрытия.
+    // Здесь таймаут считается относительно начала вызова, чтобы не превышать timeoutMs.
     suspend fun <T> batchWithTimeout(
         channel: ReceiveChannel<T>,
         batchSize: Int,
         timeoutMs: Long
     ): List<T> = coroutineScope {
         val batch = mutableListOf<T>()
+        val start = System.currentTimeMillis()
 
         while (batch.size < batchSize) {
-            val remainingTimeout = timeoutMs
+            val elapsed = System.currentTimeMillis() - start
+            val remainingTimeout = timeoutMs - elapsed
+            if (remainingTimeout <= 0) break
+
             val completed = select<Boolean> {
                 channel.onReceiveCatching { result ->
                     val v = result.getOrNull()
@@ -502,7 +514,7 @@ class AdvancedSelectPatterns {
         batch
     }
 
-    // Упрощённый circuit breaker (использует withTimeout, часто комбинируется с select)
+    // Упрощённый circuit breaker (использует withTimeout, не select напрямую)
     class CircuitBreaker<T>(
         private val failureThreshold: Int,
         private val resetTimeoutMs: Long
@@ -718,9 +730,11 @@ class SelectTests {
 
 ## Answer (EN)
 
-The `select` expression in `kotlinx.coroutines` lets you wait on multiple suspending operations (sending/receiving on channels, timeouts, etc.) and resume with whichever becomes available first. It is the core primitive for multiplexing channels and building higher-level concurrency patterns on top of [[c-kotlin]] coroutines.
+The `select` expression in `kotlinx.coroutines` lets you wait on multiple suspending operations (sending/receiving on channels, timeouts, etc.) and resume with whichever becomes available first. It is the core primitive for multiplexing channels and building higher-level concurrency patterns on top of [[c-concurrency]] and [[c-kotlin]] coroutines.
 
 Note: all examples assume they are executed inside a `CoroutineScope` (e.g. `runBlocking`, `coroutineScope`, `runTest`), because `launch`, `produce` and channel operations require an explicit scope and structured concurrency.
+
+Also note: plain `select` does not guarantee fairness or priority between clauses. If you need priority, you must implement it explicitly (e.g. by probing high-priority channels with `tryReceive` first).
 
 ### Basic Select with Channels
 
@@ -765,6 +779,7 @@ fun CoroutineScope.multipleSelects() = launch {
             delay(100)
             send("Fast-$it")
         }
+        close()
     }
 
     val channel2 = produce {
@@ -772,6 +787,7 @@ fun CoroutineScope.multipleSelects() = launch {
             delay(200)
             send("Slow-$it")
         }
+        close()
     }
 
     repeat(10) {
@@ -811,7 +827,7 @@ class SelectOperations {
         println("Result: $result") // 84
     }
 
-    // onSend: Send to channel
+    // onSend: Send to channel when possible
     fun CoroutineScope.onSendExample() = launch {
         val channel = Channel<String>(capacity = 1)
 
@@ -827,7 +843,7 @@ class SelectOperations {
         }
     }
 
-    // onReceiveCatching: Safe receive with result
+    // onReceiveCatching: Safe receive with close-awareness
     fun CoroutineScope.onReceiveCatchingExample() = launch {
         val channel = Channel<Int>()
 
@@ -851,7 +867,7 @@ class SelectOperations {
     fun CoroutineScope.onTimeoutExample() = launch {
         val channel = Channel<String>()
 
-        // No one sends to channel
+        // No one sends to this channel
 
         val result = select<String> {
             channel.onReceive { it }
@@ -878,18 +894,19 @@ class FanInPattern {
 
         while (open.isNotEmpty()) {
             select<Unit> {
+                // IMPORTANT: do not structurally modify 'open' during iteration;
+                // closed channels are pruned after select based on their state.
                 open.forEach { ch ->
                     ch.onReceiveCatching { result ->
                         val value = result.getOrNull()
                         if (value != null) {
                             send(value)
                         }
-                        if (result.isClosed) {
-                            open.remove(ch)
-                        }
+                        // Removal is deferred until after this select iteration.
                     }
                 }
             }
+            open.removeAll { it.isClosedForReceive }
         }
     }
 
@@ -954,7 +971,8 @@ class FanOutPattern {
         workers.joinAll()
     }
 
-    // Advanced: Worker with select-based priority
+    // Advanced: Worker with select-based priority.
+    // Worker termination depends on both channels being closed.
     suspend fun selectBasedFanOut() = coroutineScope {
         val highPriority = Channel<String>()
         val lowPriority = Channel<String>()
@@ -1012,8 +1030,8 @@ class FanOutPattern {
 ```kotlin
 class PrioritySelection {
 
-    // Priority using selectUnbiased is NOT guaranteed.
-    // This example prefers highPriority when immediately available.
+    // Priority is implemented via explicit logic: first try highPriority.tryReceive(),
+    // then use select without assuming fairness or priority guarantees.
     suspend fun priorityWithCustomLogic() = coroutineScope {
         val highPriority = Channel<String>()
         val lowPriority = Channel<String>()
@@ -1154,16 +1172,21 @@ class AdvancedSelectPatterns {
         }
     }
 
-    // Batching with timeout: collect up to batchSize or until timeout/close
+    // Batching with timeout: collect up to batchSize or until timeout/close.
+    // Timeout is measured from the beginning so total wait does not exceed timeoutMs.
     suspend fun <T> batchWithTimeout(
         channel: ReceiveChannel<T>,
         batchSize: Int,
         timeoutMs: Long
     ): List<T> = coroutineScope {
         val batch = mutableListOf<T>()
+        val start = System.currentTimeMillis()
 
         while (batch.size < batchSize) {
-            val remainingTimeout = timeoutMs
+            val elapsed = System.currentTimeMillis() - start
+            val remainingTimeout = timeoutMs - elapsed
+            if (remainingTimeout <= 0) break
+
             val completed = select<Boolean> {
                 channel.onReceiveCatching { result ->
                     val v = result.getOrNull()
@@ -1184,7 +1207,7 @@ class AdvancedSelectPatterns {
         batch
     }
 
-    // Circuit breaker pattern (simplified, uses withTimeout, not select)
+    // Circuit breaker pattern (simplified, uses withTimeout, not select directly)
     class CircuitBreaker<T>(
         private val failureThreshold: Int,
         private val resetTimeoutMs: Long
@@ -1398,14 +1421,30 @@ class SelectTests {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как `select` взаимодействует со структурированной конкуренцией и отменой, когда одна ветка завершилась, а другие ещё выполняются?
+- В каких случаях вы предпочли бы использовать `select` вместо `Flow` или композиции `Deferred` для мультиплексирования результатов?
+- Каковы компромиссы между fan-in/fan-out на базе `select` и использованием более высокоуровневых библиотек или фреймворков для конкуренции?
+
 ## Follow-ups
 
 - How does `select` interact with structured concurrency and cancellation when one branch completes and others are still running?
 - In which cases would you prefer `select` over `Flow` or `Deferred` composition APIs for multiplexing results?
 - What are the trade-offs between using `select`-based fan-in/fan-out and higher-level libraries or frameworks for concurrency?
 
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-concurrency]]
+- Официальное руководство по Kotlin Coroutines: раздел "Select expression"
+
 ## References
 
 - [[c-kotlin]]
-- [[c-coroutines]]
+- [[c-concurrency]]
 - Official Kotlin Coroutines guide: "Select expression" section
+
+## Related Questions
+
+- [[q-advanced-coroutine-patterns--kotlin--hard]]

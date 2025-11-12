@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-architectural-patterns--android--medium, q-mvp-pattern--android--medium, q-mvvm-vs-mvp-differences--android--medium, q-why-separate-ui-and-business-logic--android--easy]
+related: [c-android, c-architecture-patterns, q-android-architectural-patterns--android--medium, q-mvp-pattern--android--medium, q-mvvm-vs-mvp-differences--android--medium, q-why-separate-ui-and-business-logic--android--easy]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, architecture-patterns, difficulty/easy, mvi, mvp, mvvm]
@@ -28,7 +28,7 @@ sources: ["https://developer.android.com/topic/architecture", "https://developer
 
 ## Ответ (RU)
 
-Android разработчики часто отказываются от MVP в новых проектах по нескольким ключевым причинам:
+Android разработчики часто отказываются от MVP в новых проектах по нескольким ключевым причинам (см. также [[c-android]], [[c-architecture-patterns]]):
 
 ### 1. Слишком Много Шаблонного Кода
 
@@ -208,6 +208,14 @@ MVP remains a valid pattern in existing codebases and specific scenarios, but th
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как `ViewModel` переживает изменения конфигурации?
+- В чем основное отличие между MVVM и MVI?
+- Когда всё еще имеет смысл использовать MVP?
+- Как Jetpack Compose влияет на выбор архитектурных паттернов?
+- Что такое паттерн Repository и как он сочетается с MVVM?
+
 ## Follow-ups
 
 - How does `ViewModel` survive configuration changes?
@@ -216,10 +224,34 @@ MVP remains a valid pattern in existing codebases and specific scenarios, but th
 - How does Jetpack Compose change architecture patterns?
 - What is the Repository pattern and how does it work with MVVM?
 
+## Ссылки (RU)
+
+- [Руководство по архитектуре Android](https://developer.android.com/topic/architecture)
+- [Руководство по архитектуре приложений](https://developer.android.com/jetpack/guide)
+
 ## References
 
 - [Android Architecture Guide](https://developer.android.com/topic/architecture)
 - [Guide to app architecture](https://developer.android.com/jetpack/guide)
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-why-separate-ui-and-business-logic--android--easy]]
+- [[q-viewmodel-pattern--android--easy]]
+- [[q-architecture-components-libraries--android--easy]]
+
+### Связанные (тот же уровень)
+- [[q-android-jetpack-overview--android--easy]]
+- [[q-what-is-data-binding--android--easy]]
+
+### Продвинутые (сложнее)
+- [[q-mvp-pattern--android--medium]]
+- [[q-mvvm-pattern--android--medium]]
+- [[q-mvvm-vs-mvp-differences--android--medium]]
+- [[q-android-architectural-patterns--android--medium]]
+- [[q-mvi-architecture--android--hard]]
+- [[q-clean-architecture-android--android--hard]]
 
 ## Related Questions
 

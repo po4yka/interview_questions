@@ -2,41 +2,34 @@
 id: kotlin-042
 title: "Coroutine Exception Handling / Обработка исключений в корутинах"
 aliases: ["Coroutine Exception Handling", "Обработка исключений в корутинах"]
-
-# Classification
 topic: kotlin
-subtopics: [coroutines, error-handling, exceptions]
+subtopics: [coroutines, error-handling]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
+source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
-
-# Timestamps
+related: [c--kotlin--medium, c-concurrency, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-06
-updated: 2025-11-09
+updated: 2025-11-11
+tags: [kotlin, coroutines, difficulty/medium, error-handling]
 
-tags: [coroutines, difficulty/medium, error-handling, exceptions, kotlin, supervisorscope]
 ---
+
 # Вопрос (RU)
 > Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?
 
 ---
 
 # Question (EN)
-> How does exception handling work in Kotlin Coroutines? What is the difference between coroutineScope and supervisorScope?
+> How does exception handling work in Kotlin `Coroutines`? What is the difference between coroutineScope and supervisorScope?
 
 ## Ответ (RU)
 
-Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа. См. также [[c-kotlin]] и [[c-coroutines]].
+Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа. См. также [[c--kotlin--medium]] и [[c-concurrency]].
 
 ### Правила распространения исключений
 
@@ -292,7 +285,7 @@ viewModelScope.launch {
 
 ## Answer (EN)
 
-Exception handling in coroutines follows specific rules based on the coroutine builder and scope used. See also [[c-kotlin]] and [[c-coroutines]].
+Exception handling in coroutines follows specific rules based on the coroutine builder and scope used. See also [[c--kotlin--medium]] and [[c-concurrency]].
 
 ### Exception Propagation Rules
 
@@ -551,27 +544,30 @@ viewModelScope.launch {
 - What are common pitfalls to avoid?
 
 ## References
-- [Coroutine Exceptions - Kotlin Documentation](https://kotlinlang.org/docs/exception-handling.html)
+- [`Coroutine` Exceptions - Kotlin Documentation](https://kotlinlang.org/docs/exception-handling.html)
 - [CoroutineExceptionHandler](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-exception-handler/)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+- [[q-what-is-coroutine--kotlin--easy]] - `Coroutines`
+
 ### Related (Medium)
-- [[q-flow-exception-handling--kotlin--medium]] - Flow
-- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
-- [[q-coroutine-timeout-withtimeout--kotlin--medium]] - Coroutines
-- [[q-coroutine-supervisorjob-use-cases--kotlin--medium]] - Coroutines
+- [[q-flow-exception-handling--kotlin--medium]] - `Flow`
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - `Coroutines`
+- [[q-coroutine-timeout-withtimeout--kotlin--medium]] - `Coroutines`
+- [[q-coroutine-supervisorjob-use-cases--kotlin--medium]] - `Coroutines`
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutine` dispatchers overview
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `Context`
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
+
 ### Advanced (Harder)
-- [[q-structured-concurrency--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
+- [[q-structured-concurrency--kotlin--hard]] - `Coroutines`
+- [[q-coroutine-profiling--kotlin--hard]] - `Coroutines`
 - [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
 - [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
+
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction

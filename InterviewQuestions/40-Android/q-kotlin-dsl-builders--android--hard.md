@@ -21,7 +21,7 @@ related:
 - c-gradle
 - q-kotlin-lambda-expressions--kotlin--medium
 created: 2025-10-12
-updated: 2025-10-31
+updated: 2025-11-11
 tags:
 - android/coroutines
 - android/ui-compose
@@ -50,7 +50,7 @@ DSL (Domain-Specific Language) строители позволяют созда�
 
 **Основные концепции:**
 - Лямбда с получателем (`T.() -> Unit`) — основа DSL: внутри блока `this` — экземпляр `T`.
-- `@DslMarker` — ограничивает видимость нескольких имплицитных получателей разных DSL-областей, предотвращая случайное обращение к «чужому» `this`.
+- `@DslMarker` — ограничивает разрешение нескольких имплицитных получателей разных DSL-областей, предотвращая случайное обращение к «чужому» `this` и заставляя явно указывать получателя при неоднозначности.
 - Функции-расширения — позволяют добавлять функции "строителя" к контекстному типу.
 - Перегрузка операторов — может улучшать читаемость (например, `unaryPlus` для текста в HTML DSL).
 
@@ -85,7 +85,7 @@ val html2 = buildHtml2 {
 }
 ```
 
-**Базовый DSL строитель (упрощённый HTML DSL):**
+**Базовый DSL строитель (упрощённый HTML DSL, иллюстративный пример без полноценного рендера):**
 ```kotlin
 @DslMarker
 annotation class HtmlTagMarker
@@ -163,16 +163,16 @@ class SafeRowBuilder {
     }
 }
 
-// Благодаря @TableDsl, когда внутри row { ... } одновременно есть получатель SafeRowBuilder
-// и внешний SafeTableBuilder, Kotlin запрещает неявные обращения к "чужому" this,
-// уменьшая риск ошибок при вложенных DSL-вызовах.
+// Благодаря @TableDsl, когда внутри row { ... } одновременно существуют получатели SafeRowBuilder
+// и внешний SafeTableBuilder, компилятор ограничивает неявное разрешение членов так,
+// чтобы нельзя было случайно вызвать функцию "чужого" получателя без явной квалификации.
 fun buildTable() {
     SafeTableBuilder().apply {
         row {
             cell("A")
-            // Вложенный вызов row() без явной ссылки на внешний билдер будет запрещён,
-            // если он создаёт конфликт имплицитных получателей.
-            // row { cell("B") } // пример потенциально проблемного кода
+            // Вызов row() отсюда будет требовать явной квалификации внешнего получателя,
+            // если это создаёт конфликт имплицитных получателей.
+            // this@TableDsl.row { cell("B") }
         }
     }
 }
@@ -251,7 +251,7 @@ val layout = context.verticalLayout {
 }
 ```
 
-(Этот пример иллюстрирует подход; в реальных Android-проектах чаще используют Jetpack Compose, который является DSL, основанным на аннотации `@Composable` и функциях с приемником.)
+(Этот пример иллюстрирует подход; в современных Android-проектах сам Jetpack Compose является Kotlin-DSL для UI, построенным на аннотации `@Composable` и функциях.)
 
 ## Answer (EN)
 
@@ -260,7 +260,7 @@ DSL (Domain-Specific Language) builders help create expressive, type-safe APIs t
 
 **Main concepts:**
 - Lambda with receiver (`T.() -> Unit`) — the core: inside the block, `this` is an instance of `T`.
-- `@DslMarker` — restricts visibility when multiple implicit receivers from different DSL scopes are in play, preventing accidental calls on the wrong `this`.
+- `@DslMarker` — restricts resolution when multiple implicit receivers from different DSL scopes are in play, preventing accidental calls on the wrong `this` and forcing explicit qualification when ambiguous.
 - Extension functions — provide builder-style functions on the context type.
 - Operator overloading — can improve readability (for example, `unaryPlus` for text in HTML DSL).
 
@@ -295,7 +295,7 @@ val html2 = buildHtml2 {
 }
 ```
 
-**Basic DSL builder (simplified HTML DSL):**
+**Basic DSL builder (simplified HTML DSL, illustrative example without full rendering):**
 ```kotlin
 @DslMarker
 annotation class HtmlTagMarker
@@ -373,15 +373,16 @@ class SafeRowBuilder {
     }
 }
 
-// With @TableDsl, when inside row { ... } there are both SafeRowBuilder and outer SafeTableBuilder
-// as potential receivers, Kotlin restricts implicit member resolution to avoid calling the wrong receiver.
+// With @TableDsl, when inside row { ... } both SafeRowBuilder and the outer SafeTableBuilder
+// exist as potential receivers, the compiler restricts implicit member resolution so you
+// cannot accidentally call a member of the "wrong" receiver without explicit qualification.
 fun buildTable() {
     SafeTableBuilder().apply {
         row {
             cell("A")
-            // Nested row() without qualifying the outer receiver would be disallowed
-            // if it causes conflicting implicit receivers.
-            // row { cell("B") } // example of potentially problematic code
+            // Calling row() from here would require explicit qualification of the outer receiver
+            // if it would otherwise cause conflicting implicit receivers.
+            // this@TableDsl.row { cell("B") }
         }
     }
 }
@@ -464,18 +465,42 @@ val layout = context.verticalLayout {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как сделать DSL удобным для обнаружения в IDE?
+- Каков влияние DSL строителей на производительность?
+- Как версионировать API вашего DSL?
+
+## Ссылки (RU)
+
+- [Документация Android](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-kotlin]]
+- [[c-gradle]]
+
+### Похожие (того же уровня)
+- [[q-kotlin-lambda-expressions--kotlin--medium]] - Лямбда с приемником
+
+### Продвинутые (сложнее)
+- [[q-kotlin-context-receivers--android--hard]] - `Context` receivers
+
+---
+
 ## Follow-ups
 
 - How do you make DSLs discoverable in IDE?
 - What's the performance impact of DSL builders?
 - How do you version DSL APIs?
 
-
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
 - [Jetpack Compose](https://developer.android.com/develop/ui/compose)
-
 
 ## Related Questions
 

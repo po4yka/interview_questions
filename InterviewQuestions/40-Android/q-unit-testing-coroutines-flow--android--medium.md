@@ -34,23 +34,23 @@ tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium
 
 ### Ключевые Инструменты
 
-**1. TestDispatchers**
-- `StandardTestDispatcher` — требует явного `advanceTimeBy()`/`runCurrent()`
-- `UnconfinedTestDispatcher` — выполняет корутины немедленно (менее детерминированен, обычно не используется как дефолтный для сложных тестов)
-- `runTest { }` — корутинный scope с виртуальным временем
+**1. TestDispatchers и runTest**
+- `runTest { }` — корутинный scope с виртуальным временем и встроенным `TestCoroutineScheduler`. Используйте его как основной entrypoint для тестов корутин.
+- `StandardTestDispatcher` — планирует выполнение задач; требует явного `advanceTimeBy()`/`runCurrent()`/`advanceUntilIdle()` через `testScheduler`.
+- `UnconfinedTestDispatcher` — выполняет корутины немедленно в текущем потоке; менее детерминирован, обычно не используется как дефолтный для сложных тестов.
 
 **2. Turbine**
-- Удобный API для тестирования `Flow`
-- `awaitItem()`, `awaitComplete()`, `awaitError()`
-- Автоматическая отмена коллекции
+- Удобный API для тестирования `Flow`.
+- `awaitItem()`, `awaitComplete()`, `awaitError()`.
+- Автоматическая отмена коллекции в конце блока `test { ... }`.
 
 **3. MockK**
-- `coEvery { }` для suspend функций
-- `coVerify { }` для проверки вызовов
+- `coEvery { }` для suspend-функций.
+- `coVerify { }` для проверки вызовов.
 
 ### Основные Паттерны
 
-**Тестирование suspend функций**
+**Тестирование suspend-функций**
 
 ```kotlin
 // ViewModel
@@ -99,7 +99,7 @@ fun `observeArticles emits periodically`() = runTest {
     repo.observeArticles().test {
         assertEquals(articles1, awaitItem())  // ✅ First emission
 
-        testScheduler.advanceTimeBy(5000)
+        testScheduler.advanceTimeBy(5000)     // ✅ Используем scheduler из runTest
         assertEquals(articles2, awaitItem())  // ✅ After delay
 
         cancelAndIgnoreRemainingEvents()
@@ -115,8 +115,8 @@ class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
     private val _query = MutableStateFlow("")
     val results = _query
         .debounce(300)
-        .filter { it.length >= 2 }  // ✅ Skip short queries
-        .flatMapLatest { repo.search(it) }
+        .filter { it.length >= 2 }  // ✅ Skip short queries before вызова search
+        .flatMapLatest { query -> repo.search(query) }
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun onQueryChanged(q: String) { _query.value = q }
@@ -131,17 +131,17 @@ fun `debounce prevents excessive calls`() = runTest {
     testScheduler.advanceTimeBy(100)
 
     viewModel.onQueryChanged("test")  // ✅ Valid
-    testScheduler.advanceTimeBy(400)  // ✅ Past debounce
+    testScheduler.advanceTimeBy(400)   // ✅ Past debounce
 
     coVerify(exactly = 1) { repo.search("test") }  // ✅ Only final query
-    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out
+    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out by length
 }
 ```
 
 ### MainDispatcherRule
 
 ```kotlin
-// Test rule для замены Dispatchers.Main
+// Test rule для замены Dispatchers.Main под тестовым диспетчером
 class MainDispatcherRule(
     private val dispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
@@ -157,29 +157,29 @@ class MainDispatcherRule(
 ### Best Practices
 
 **✅ Правильно:**
-- Используйте `runTest { }` вместо `runBlocking`
-- Инжектируйте `CoroutineDispatcher` для тестируемости
-- Управляйте виртуальным временем через `testScheduler`
-- Используйте Turbine для `Flow` тестов
-- Проверяйте error cases и cancellation
+- Используйте `runTest { }` вместо `runBlocking` для тестов корутин.
+- Инжектируйте `CoroutineDispatcher` для тестируемости (`Dispatchers.Main`, IO и т.п.).
+- Управляйте виртуальным временем через `testScheduler` из `runTest` или связанного `TestDispatcher`.
+- Используйте Turbine для тестирования `Flow`.
+- Тестируйте error cases и cancellation.
 
 **❌ Избегайте:**
-- `Thread.sleep()` — ломает виртуальное время
-- Забывать `advanceTimeBy()` для delay
-- Не закрывать infinite `Flow` (используйте `take()` или Turbine)
-- Не тестировать cancellation
-- Использовать реальные Dispatchers
+- `Thread.sleep()` — ломает виртуальное время.
+- Забывать `advanceTimeBy()`/`advanceUntilIdle()` для `delay` и отложенных задач.
+- Не ограничивать infinite `Flow` (используйте `take()` или правильную отмену/Turbine).
+- Не тестировать cancellation.
+- Использовать реальные `Dispatchers` (`Dispatchers.Main`, `Dispatchers.IO`) в unit-тестах.
 
 ### Распространённые Ошибки
 
 ```kotlin
-// ❌ WRONG: Реальный Main dispatcher
+// ❌ WRONG: Реальный Main dispatcher и блокирующий runBlocking
 @Test
-fun test() = runBlocking { ... }
+fun test() = runBlocking { /* ... */ }
 
-// ✅ CORRECT: TestDispatcher
+// ✅ CORRECT: Используем runTest с тестовым диспетчером
 @Test
-fun test() = runTest { ... }
+fun test() = runTest { /* ... */ }
 
 // ❌ WRONG: Тест завершается до выполнения корутины
 @Test
@@ -188,24 +188,24 @@ fun test() = runTest {
     verify { doWork() }  // ❌ Ещё не выполнилось
 }
 
-// ✅ CORRECT: Продвигаем время
+// ✅ CORRECT: Продвигаем виртуальное время
 @Test
 fun test() = runTest {
     launch { delay(1000); doWork() }
-    testScheduler.advanceUntilIdle()  // ✅ Выполняем все задачи
+    testScheduler.advanceUntilIdle()  // ✅ Выполняем все отложенные задачи
     verify { doWork() }
 }
 
 // ❌ WRONG: Infinite Flow висит
 @Test
 fun test() = runTest {
-    flow.collect { ... }  // ❌ Никогда не завершится
+    flow.collect { /* ... */ }  // ❌ Никогда не завершится
 }
 
-// ✅ CORRECT: Ограничиваем коллекцию
+// ✅ CORRECT: Ограничиваем коллекцию или явно отменяем
 @Test
 fun test() = runTest {
-    flow.take(3).test { ... }  // ✅ Завершится после 3 элементов
+    flow.take(3).test { /* ... */ }  // ✅ Завершится после 3 элементов
 }
 ```
 
@@ -217,19 +217,19 @@ Testing coroutines and `Flow` requires specialized tools: test dispatchers, virt
 
 ### Key Tools
 
-**1. TestDispatchers**
-- `StandardTestDispatcher` — requires explicit `advanceTimeBy()`/`runCurrent()`
-- `UnconfinedTestDispatcher` — executes coroutines immediately (less deterministic, usually not the default choice for complex tests)
-- `runTest { }` — coroutine scope with virtual time
+**1. TestDispatchers and runTest**
+- `runTest { }` — coroutine scope with virtual time and an internal `TestCoroutineScheduler`. Use it as the primary entrypoint for coroutine unit tests.
+- `StandardTestDispatcher` — schedules execution; requires explicit `advanceTimeBy()`/`runCurrent()`/`advanceUntilIdle()` via `testScheduler`.
+- `UnconfinedTestDispatcher` — executes coroutines immediately in the current call stack; less deterministic, usually not the default choice for complex tests.
 
 **2. Turbine**
-- Convenient API for `Flow` testing
-- `awaitItem()`, `awaitComplete()`, `awaitError()`
-- Automatic collection cancellation
+- Convenient API for `Flow` testing.
+- `awaitItem()`, `awaitComplete()`, `awaitError()`.
+- Automatically cancels collection when leaving the `test { ... }` block.
 
 **3. MockK**
-- `coEvery { }` for suspend functions
-- `coVerify { }` for call verification
+- `coEvery { }` for suspend functions.
+- `coVerify { }` for call verification.
 
 ### Core Patterns
 
@@ -282,7 +282,7 @@ fun `observeArticles emits periodically`() = runTest {
     repo.observeArticles().test {
         assertEquals(articles1, awaitItem())  // ✅ First emission
 
-        testScheduler.advanceTimeBy(5000)
+        testScheduler.advanceTimeBy(5000)     // ✅ Use scheduler from runTest
         assertEquals(articles2, awaitItem())  // ✅ After delay
 
         cancelAndIgnoreRemainingEvents()
@@ -298,8 +298,8 @@ class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
     private val _query = MutableStateFlow("")
     val results = _query
         .debounce(300)
-        .filter { it.length >= 2 }  // ✅ Skip short queries
-        .flatMapLatest { repo.search(it) }
+        .filter { it.length >= 2 }  // ✅ Skip short queries before calling search
+        .flatMapLatest { query -> repo.search(query) }
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun onQueryChanged(q: String) { _query.value = q }
@@ -314,17 +314,17 @@ fun `debounce prevents excessive calls`() = runTest {
     testScheduler.advanceTimeBy(100)
 
     viewModel.onQueryChanged("test")  // ✅ Valid
-    testScheduler.advanceTimeBy(400)  // ✅ Past debounce
+    testScheduler.advanceTimeBy(400)   // ✅ Past debounce
 
     coVerify(exactly = 1) { repo.search("test") }  // ✅ Only final query
-    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out
+    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out by length
 }
 ```
 
 ### MainDispatcherRule
 
 ```kotlin
-// Test rule to replace Dispatchers.Main
+// Test rule to replace Dispatchers.Main with a TestDispatcher
 class MainDispatcherRule(
     private val dispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
@@ -340,29 +340,29 @@ class MainDispatcherRule(
 ### Best Practices
 
 **✅ Do:**
-- Use `runTest { }` instead of `runBlocking`
-- Inject `CoroutineDispatcher` for testability
-- Control virtual time via `testScheduler`
-- Use Turbine for `Flow` tests
-- Test error cases and cancellation
+- Use `runTest { }` instead of `runBlocking` for coroutine tests.
+- Inject `CoroutineDispatcher` for testability (`Dispatchers.Main`, IO, etc.).
+- Control virtual time via the `testScheduler` from `runTest` or the associated `TestDispatcher`.
+- Use Turbine for `Flow` tests.
+- Cover error paths and cancellation behavior.
 
 **❌ Avoid:**
-- `Thread.sleep()` — breaks virtual time
-- Forgetting `advanceTimeBy()` for delays
-- Not closing infinite Flows (use `take()` or Turbine)
-- Not testing cancellation
-- Using real Dispatchers
+- `Thread.sleep()` — breaks virtual time.
+- Forgetting `advanceTimeBy()`/`advanceUntilIdle()` for `delay` and scheduled work.
+- Leaving infinite Flows unbounded (use `take()` or proper cancellation/Turbine helpers).
+- Skipping cancellation tests.
+- Using real `Dispatchers` (`Dispatchers.Main`, `Dispatchers.IO`) in unit tests.
 
 ### Common Pitfalls
 
 ```kotlin
-// ❌ WRONG: Real Main dispatcher
+// ❌ WRONG: Real Main dispatcher and blocking runBlocking
 @Test
-fun test() = runBlocking { ... }
+fun test() = runBlocking { /* ... */ }
 
-// ✅ CORRECT: TestDispatcher
+// ✅ CORRECT: Use runTest with a TestDispatcher
 @Test
-fun test() = runTest { ... }
+fun test() = runTest { /* ... */ }
 
 // ❌ WRONG: Test finishes before coroutine executes
 @Test
@@ -371,24 +371,24 @@ fun test() = runTest {
     verify { doWork() }  // ❌ Not executed yet
 }
 
-// ✅ CORRECT: Advance time
+// ✅ CORRECT: Advance virtual time
 @Test
 fun test() = runTest {
     launch { delay(1000); doWork() }
-    testScheduler.advanceUntilIdle()  // ✅ Execute all tasks
+    testScheduler.advanceUntilIdle()  // ✅ Execute all scheduled tasks
     verify { doWork() }
 }
 
 // ❌ WRONG: Infinite Flow hangs
 @Test
 fun test() = runTest {
-    flow.collect { ... }  // ❌ Never completes
+    flow.collect { /* ... */ }  // ❌ Never completes
 }
 
-// ✅ CORRECT: Limit collection
+// ✅ CORRECT: Limit collection or cancel explicitly
 @Test
 fun test() = runTest {
-    flow.take(3).test { ... }  // ✅ Completes after 3 items
+    flow.take(3).test { /* ... */ }  // ✅ Completes after 3 items
 }
 ```
 
@@ -455,3 +455,4 @@ fun test() = runTest {
 
 ### Advanced (Harder)
 - [[q-structured-concurrency--kotlin--hard]] — Complex coroutine hierarchies
+``

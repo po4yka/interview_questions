@@ -21,7 +21,7 @@ related:
 - q-tasks-back-stack--android--medium
 - q-what-is-broadcastreceiver--android--easy
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/room
 - difficulty/medium
@@ -1412,15 +1412,48 @@ Choose strategies based on data model complexity, schema evolution needs, and me
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]]
+- [[q-tasks-back-stack--android--medium]]
+- [[q-what-is-broadcastreceiver--android--easy]]
+
 ## Follow-ups
 
 - [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]]
 - [[q-tasks-back-stack--android--medium]]
 - [[q-what-is-broadcastreceiver--android--easy]]
 
+## Ссылки (RU)
+
+- [Room Database](https://developer.android.com/training/data-storage/room)
+
 ## References
 
 - [Room Database](https://developer.android.com/training/data-storage/room)
+
+## Связанные вопросы (RU)
+
+### Базовые концепции
+
+- [[c-room]]
+
+### Более простые вопросы
+
+- [[q-sharedpreferences-commit-vs-apply--android--easy]]
+- [[q-room-library-definition--android--easy]]
+
+### Средний уровень
+
+- [[q-room-code-generation-timing--android--medium]]
+- [[q-room-transactions-dao--android--medium]]
+- [[q-room-paging3-integration--android--medium]]
+- [[q-room-vs-sqlite--android--medium]]
+- [[q-room-type-converters--android--medium]]
+
+### Продвинутый уровень
+
+- [[q-room-fts-full-text-search--android--hard]]
 
 ## Related Questions
 
@@ -1429,15 +1462,18 @@ Choose strategies based on data model complexity, schema evolution needs, and me
 - [[c-room]]
 
 ### Prerequisites (Easier)
-- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
-- [[q-room-library-definition--android--easy]] - Storage
+
+- [[q-sharedpreferences-commit-vs-apply--android--easy]]
+- [[q-room-library-definition--android--easy]]
 
 ### Related (Medium)
-- [[q-room-code-generation-timing--android--medium]] - Storage
-- [[q-room-transactions-dao--android--medium]] - Storage
-- [[q-room-paging3-integration--android--medium]] - Storage
-- [[q-room-vs-sqlite--android--medium]] - Storage
-- [[q-room-type-converters--android--medium]] - Storage
+
+- [[q-room-code-generation-timing--android--medium]]
+- [[q-room-transactions-dao--android--medium]]
+- [[q-room-paging3-integration--android--medium]]
+- [[q-room-vs-sqlite--android--medium]]
+- [[q-room-type-converters--android--medium]]
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--android--hard]] - Storage
+
+- [[q-room-fts-full-text-search--android--hard]]

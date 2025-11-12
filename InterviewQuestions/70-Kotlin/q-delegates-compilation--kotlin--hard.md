@@ -25,7 +25,9 @@ tags: [advanced, bytecode, compilation, delegates, difficulty/hard, kotlin]
 
 ## Ответ (RU)
 
-Kotlin property delegates (делегированные свойства) используют ключевое слово `by` для делегирования логики геттеров/сеттеров другому объекту. На уровне компиляции для свойств (class / top-level / extension in companion) компилятор Kotlin генерирует скрытое поле-делегат, массив метаданных `KProperty` и методы доступа, которые вызывают операторы `getValue`/`setValue` делегата.
+Kotlin property delegates (делегированные свойства) используют ключевое слово `by` для делегирования логики геттеров/сеттеров другому объекту. На уровне компиляции для свойств (class / top-level / object/companion) компилятор Kotlin генерирует скрытое поле-делегат, ссылку(и) на `KProperty` (обычно через массив `$$delegatedProperties`), и методы доступа, которые вызывают операторы `getValue`/`setValue` делегата.
+
+Все фрагменты ниже — упрощенные/схематические и иллюстрируют паттерн компиляции, а не точный bytecode/stdlib-реализации для конкретной версии Kotlin.
 
 ### Базовый Пример Делегата
 
@@ -48,16 +50,16 @@ class StringDelegate {
 }
 ```
 
-### Что Генерируется В Java Bytecode
+### Что Генерируется В Java Bytecode (упрощенно)
 
 ```java
-// Сгенерированный Java код (упрощенный, близкий к реальному)
+// Сгенерированный Java-подобный код (упрощенный, схематичный)
 public final class Example {
     // 1. Скрытое поле для хранения делегата
     private final StringDelegate value$delegate = new StringDelegate();
 
     // 2. Property metadata (массив делегированных свойств)
-    private static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]
+    private static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
         new PropertyReference1Impl(
             Example.class,
             "value",
@@ -66,7 +68,7 @@ public final class Example {
         )
     };
 
-    // 3. Getter вызывает delegate.getValue()
+    // 3. Геттер свойства value вызывает delegate.getValue()
     public final String getValue() {
         return this.value$delegate.getValue(
             this,
@@ -74,7 +76,7 @@ public final class Example {
         );
     }
 
-    // 4. Setter вызывает delegate.setValue()
+    // 4. Сеттер свойства value вызывает delegate.setValue()
     public final void setValue(String value) {
         this.value$delegate.setValue(
             this,
@@ -84,6 +86,8 @@ public final class Example {
     }
 }
 ```
+
+(В реальном байткоде используются конкретные внутренние классы и сигнатуры, но структура: поле-делегат + `KProperty` + вызовы `getValue`/`setValue` — сохраняется.)
 
 ### Компоненты Компиляции Делегатов
 
@@ -105,13 +109,13 @@ public final class User {
     public User() {
         this.name$delegate = new ObservableProperty(
             "",
-            // lambda для обработки изменений
+            // lambda для обработки изменений (упрощено)
         );
     }
 }
 ```
 
-(Типы `ObservableProperty`/`VetoableProperty` и точные сигнатуры в stdlib могут отличаться; пример иллюстративный.)
+(Типы `ObservableProperty` и точные сигнатуры в stdlib отличаются; пример иллюстративный.)
 
 #### 2. Property Metadata (`KProperty`)
 
@@ -140,15 +144,17 @@ static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
 // Kotlin свойство
 var value: String by delegate
 
-// Генерируется Java код (упрощенно):
-public String getValue() {
+// Генерируется Java-подобный код (упрощенно):
+public final String getValue() {
     return delegate.getValue(this, $$delegatedProperties[0]);
 }
 
-public void setValue(String value) {
+public final void setValue(String value) {
     delegate.setValue(this, $$delegatedProperties[0], value);
 }
 ```
+
+(В реальном коде `delegate` — это скрытое поле `value$delegate`, и имена аксессоров зависят от имени свойства.)
 
 ### Примеры Популярных Делегатов
 
@@ -164,6 +170,7 @@ class Example {
 
 // Java (примерно, схематично)
 public final class Example {
+    // Скрытое поле-делегат Lazy
     private final Lazy data$delegate = LazyKt.lazy(
         new Function0<String>() {
             @Override
@@ -174,11 +181,12 @@ public final class Example {
     );
 
     public final String getData() {
+        // Для стандартного Lazy используется свой протокол (getValue() без KProperty)
         return (String) data$delegate.getValue();
     }
 }
 
-// Упрощенная версия интерфейса Lazy (для понимания идеи)
+// Упрощенная версия интерфейса Lazy (для понимания идеи, не общего протокола делегатов)
 public interface Lazy<T> {
     T getValue();
     boolean isInitialized();
@@ -216,7 +224,7 @@ internal class SynchronizedLazyImpl<T>(
 }
 ```
 
-(Реальные реализации в stdlib немного отличаются и включают аннотации/оптимизации; здесь показана концепция.)
+(Реальные реализации в stdlib немного отличаются и включают аннотации/оптимизации.)
 
 #### `observable` Делегат
 
@@ -232,6 +240,15 @@ class User {
 public final class User {
     private final ObservableProperty name$delegate;
 
+    private static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
+        new PropertyReference1Impl(
+            User.class,
+            "name",
+            "getName()Ljava/lang/String;",
+            0
+        )
+    };
+
     public User() {
         this.name$delegate = new ObservableProperty(
             "initial",  // initialValue
@@ -245,11 +262,11 @@ public final class User {
         );
     }
 
-    public String getName() {
+    public final String getName() {
         return name$delegate.getValue(this, $$delegatedProperties[0]);
     }
 
-    public void setName(String value) {
+    public final void setName(String value) {
         name$delegate.setValue(this, $$delegatedProperties[0], value);
     }
 }
@@ -274,7 +291,7 @@ open class ObservableProperty<T>(
 }
 ```
 
-(В stdlib используются внутренние типы и generics; пример иллюстрирует схему.)
+(В stdlib используются внутренние типы и `generics`; пример иллюстрирует схему.)
 
 #### `vetoable` Делегат
 
@@ -320,10 +337,9 @@ class Example {
 }
 ```
 
-**Сгенерированный Java код (упрощенный):**
+**Сгенерированный Java-подобный код (упрощенный):**
 
 ```java
-// LoggingDelegate класс
 public final class LoggingDelegate<T> {
     private T value;
 
@@ -352,7 +368,6 @@ public final class LoggingDelegate<T> {
     }
 }
 
-// Example класс
 public final class Example {
     // 1. Поле-делегат
     private final LoggingDelegate<String> data$delegate =
@@ -417,10 +432,12 @@ class ResourceProvider {
 class Example {
     var resource: String by ResourceProvider()
 }
+```
 
-// Java (примерно, схематично)
+```java
+// Java-подобный код (примерно, схематично)
 public final class Example {
-    // Вызывается провайдер при инициализации!
+    // Поле-делегат, создаваемый через provideDelegate при инициализации
     private final ReadWriteProperty<Object, String> resource$delegate;
 
     private static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
@@ -434,6 +451,7 @@ public final class Example {
 
     public Example() {
         ResourceProvider provider = new ResourceProvider();
+        // Вызов provideDelegate вместо прямого конструктора делегата
         this.resource$delegate = provider.provideDelegate(
             this,
             $$delegatedProperties[0]
@@ -458,8 +476,10 @@ class User(map: Map<String, Any?>) {
     val name: String by map
     val age: Int by map
 }
+```
 
-// Java (примерно, схематично)
+```java
+// Java-подобный код (примерно, схематично)
 public final class User {
     private final Map<String, Object> map;
 
@@ -473,7 +493,7 @@ public final class User {
     }
 
     public final String getName() {
-        // `Map` напрямую используется как делегат через extension-функцию MapsKt.getValue
+        // Map используется как делегат через extension-функцию MapsKt.getValue(map, property)
         return (String) MapsKt.getValue(
             map,
             $$delegatedProperties[0]
@@ -489,10 +509,12 @@ public final class User {
 }
 ```
 
+(На практике используются соответствующие `getValue` extensions, выполняющие доступ по ключу `property.name`.)
+
 ### Оптимизации Компилятора и Особенности
 
 ```kotlin
-// 1. Inline делегаты
+// 1. inline-делегаты
 inline operator fun <T> Foo.getValue(thisRef: Any?, property: KProperty<*>): T { /* ... */ }
 // Тело может быть встроено (inlined), уменьшая накладные расходы вызова.
 
@@ -503,10 +525,11 @@ fun example() {
 // Реализация на bytecode отличается от свойств класса; пример концептуальный.
 
 // 3. Делегаты поддерживаются для:
-//    - свойств классов
+//    - свойств классов (member properties)
 //    - top-level свойств
-//    - свойств в объектах/companion-объектах
-// Делегаты для extension-свойств без receiver-холдера не поддерживают собственный backing field.
+//    - свойств в object / companion object
+// Extension-свойства используют протокол делегатов, но их хранение зависит от того,
+// где объявлено свойство; отдельного backing field на receiver-типе не создается.
 ```
 
 ### Performance Сравнение
@@ -514,7 +537,7 @@ fun example() {
 ```kotlin
 // Обычное свойство
 class Normal {
-    var value: String = ""  // Прямой доступ к полю (через геттер/сеттер, но без делегата)
+    var value: String = ""  // Прямой доступ к полю через геттер/сеттер без делегата
 }
 
 // Делегированное свойство
@@ -524,18 +547,18 @@ class Delegated {
 }
 
 // Оценочно (для понимания порядка величин, не как гарантированный benchmark):
-// Normal.value (get):     ~1 ns
-// Delegated.value (get):  ~10 ns (из-за вызова метода делегата + работы с metadata)
+// Normal.value (get):     очень дешево (одно чтение поля / простой accessor)
+// Delegated.value (get):  существенно дороже из-за вызова делегата и работы с metadata
 ```
 
 ## Answer (EN)
 
-Kotlin property delegates use the `by` keyword to delegate getter/setter logic to another object. At the compilation level (for class / top-level / object/companion properties), the Kotlin compiler generates the same core artifacts as described in the Russian section:
+Kotlin property delegates use the `by` keyword to delegate getter/setter logic to another object. At the compilation level (for class / top-level / object/companion properties), the Kotlin compiler generates, in a simplified view:
 - a hidden delegate field;
-- a `KProperty` metadata array (`$$delegatedProperties`);
+- `KProperty` metadata (commonly via a `$$delegatedProperties` array);
 - accessors that call `getValue` / `setValue` on the delegate.
 
-All examples below are simplified/approximate and focus on the compilation pattern, not exact stdlib/internal implementations.
+All code below is simplified Java-like pseudocode illustrating the compilation pattern, not exact stdlib or bytecode.
 
 ### Basic delegate example
 
@@ -618,7 +641,7 @@ public final class User {
 
 #### 2. Property metadata (`KProperty`)
 
-The compiler creates a `$$delegatedProperties` array containing `KProperty` instances (e.g. `PropertyReference1Impl`) describing each delegated property.
+The compiler creates `KProperty` references (commonly via a `$$delegatedProperties` array) describing delegated properties.
 
 ```java
 static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
@@ -631,7 +654,7 @@ static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
 };
 ```
 
-This metadata is passed into `getValue` / `setValue` so delegates can know which property they serve and enable reflection.
+This metadata is passed into `getValue` / `setValue` so delegates can know which property they serve and support reflection.
 
 #### 3. Accessor methods
 
@@ -642,20 +665,22 @@ var value: String by delegate
 ```
 
 ```java
-public String getValue() {
+public final String getValue() {
     return delegate.getValue(this, $$delegatedProperties[0]);
 }
 
-public void setValue(String value) {
+public final void setValue(String value) {
     delegate.setValue(this, $$delegatedProperties[0], value);
 }
 ```
+
+(Here `delegate` conceptually stands for the hidden `$delegate` field; exact names follow Kotlin compiler conventions.)
 
 ### Built-in delegates
 
 #### `lazy`
 
-The `lazy` delegate compiles to a hidden `Lazy` instance. Accessors call its `getValue`.
+The `lazy` delegate compiles to a hidden `Lazy` instance. Accessors call its `getValue` (note: this is a specialized protocol for `Lazy`, not the general `getValue(thisRef, KProperty)` shape used for user-defined property delegates).
 
 ```kotlin
 class Example {
@@ -693,11 +718,7 @@ interface Lazy<T> {
 internal class SynchronizedLazyImpl<T>(
     initializer: () -> T
 ) : Lazy<T> {
-    private var initializer: (() -> T)? = initializer
-    private var _value: Any? = UNINITIALIZED_VALUE
-
-    override fun getValue(): T { /* same pattern as RU example */ }
-    override fun isInitialized(): Boolean = _value !== UNINITIALIZED_VALUE
+    // same pattern as RU section
 }
 ```
 
@@ -716,6 +737,15 @@ class User {
 ```java
 public final class User {
     private final ObservableProperty name$delegate;
+
+    private static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
+        new PropertyReference1Impl(
+            User.class,
+            "name",
+            "getName()Ljava/lang/String;",
+            0
+        )
+    };
 
     public User() {
         this.name$delegate = new ObservableProperty(
@@ -828,11 +858,11 @@ public final class Example {
 }
 ```
 
-This matches the same delegate compilation protocol: hidden field, `KProperty` metadata, accessor forwarding.
+This matches the delegate compilation protocol: hidden field, `KProperty` metadata, accessor forwarding.
 
 ### `provideDelegate` – delegate creation hook
 
-If a type defines `operator fun provideDelegate(thisRef, prop)`, the compiler uses it during initialization. Conceptually, the Kotlin:
+If a type defines `operator fun provideDelegate(thisRef, prop)`, the compiler uses it during initialization instead of constructing the delegate directly. Conceptually, the Kotlin:
 
 ```kotlin
 class ResourceDelegate<T> : ReadWriteProperty<Any?, T> { /* as in RU section */ }
@@ -882,11 +912,11 @@ public final class Example {
 }
 ```
 
-So `provideDelegate` controls how the delegate instance is constructed and allows validation based on `KProperty` at compile-time binding.
+So `provideDelegate` controls how the delegate instance is constructed and allows validation based on `KProperty` at binding time.
 
 ### `Map` delegates
 
-For `Map`-backed delegates, the map itself is the delegate; the compiler wires calls to extension functions like `MapsKt.getValue`.
+For `Map`-backed delegates, the map itself is the delegate; the compiler wires calls to extension functions like `MapsKt.getValue(map, property)` which typically use `property.name` as the key.
 
 ```kotlin
 class User(map: Map<String, Any?>) {
@@ -909,7 +939,6 @@ public final class User {
     }
 
     public final String getName() {
-        // `Map` is used directly as delegate via MapsKt.getValue
         return (String) MapsKt.getValue(
             map,
             $$delegatedProperties[0]
@@ -927,24 +956,24 @@ public final class User {
 
 ### Optimizations and supported use-cases
 
-- Inline delegates: `inline` `getValue`/`setValue` can be inlined, reducing call overhead.
-- Local variable delegates: `var x by SomeDelegate()` in a function compiles to helper calls (protocol is similar, layout differs from fields).
+- Inline delegates: `inline` `getValue`/`setValue` bodies can be inlined, reducing call overhead.
+- Local variable delegates: `var x by SomeDelegate()` in a function compiles to helper calls; layout differs from fields, but the protocol is analogous.
 - Delegates are supported for:
   - member properties;
   - top-level properties;
   - properties in `object` / `companion object`.
-- Extension properties use the delegate protocol but typically do not introduce a separate backing field on the receiver.
+- Extension properties use the delegate protocol, but storage is determined by where the extension property is declared; no backing field is added to the receiver type itself.
 
 ### Performance comparison
 
-Illustratively:
-- A normal field-backed property access is very cheap (single field read/write plus simple accessor).
+Illustratively (order-of-magnitude only):
+- A normal field-backed property access is very cheap (single field read/write plus a trivial accessor).
 - A delegated property adds:
-  - one extra object (the delegate instance),
-  - an extra call indirection,
+  - the delegate object (or uses an existing one like a `Map`),
+  - an extra method call indirection,
   - `KProperty` metadata construction/usage.
 
-This often makes delegated accesses roughly an order of magnitude slower in microbenchmarks (for example, `~1 ns` vs `~10 ns`), but actual numbers depend on the platform, JIT, and possible inlining.
+This often makes delegated accesses measurably slower in microbenchmarks, but actual numbers depend on platform, JIT, and optimizations.
 
 ## Дополнительные вопросы (RU)
 

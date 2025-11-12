@@ -26,7 +26,7 @@ tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-ex
 
 ## Ответ (RU)
 
-Sealed-классы ограничивают наследование фиксированным набором подклассов и в связке с when-выражениями позволяют компилятору проверять исчерпывающий разбор вариантов и строить типобезопасные конечные автоматы (state machines).
+Sealed-классы ограничивают наследование фиксированным набором подклассов и в связке с when-выражениями позволяют компилятору проверять исчерпывающий разбор вариантов и строить типобезопасные конечные автоматы (state machines). Для исчерпывающей проверки when должен использоваться как выражение (возвращать значение), либо следует полагаться на соответствующие инспекции.
 
 ### Базовый sealed-класс (Result)
 
@@ -99,7 +99,7 @@ suspend fun <T> apiCall(call: suspend () -> T): NetworkResult<T> {
     }
 }
 
-// Использование с исчерпывающим when-выражением
+// Использование с исчерпывающим when-выражением (как выражение или со всеми кейсами для читаемости)
 fun <T> handleNetworkResult(result: NetworkResult<T>) = when (result) {
     is NetworkResult.Success -> processData(result.data)
     is NetworkResult.Failure.HttpError -> handleHttpError(result.code)
@@ -130,6 +130,7 @@ fun handleNavigation(event: NavigationEvent) = when (event) {
     is NavigationEvent.ShowDialog -> event.dialog.show()
     NavigationEvent.Finish -> activity.finish()
 }
+// navController и activity предполагаются доступными во внешнем скоупе (или переданными как параметры)
 ```
 
 ### Состояние асинхронной операции (AsyncState)
@@ -202,7 +203,7 @@ fun showValidationError(result: ValidationResult) = when (result) {
 1. Используйте sealed interface для "чистых" контрактов (Kotlin 1.5+).
 2. Стройте вложенные sealed-иерархии для сложных состояний.
 3. Используйте data class для вариантов с данными и object для единичных состояний.
-4. Для when-выражений по sealed-иерархиям избегайте else и полагайтесь на проверку исчерпываемости компилятором.
+4. Для when-выражений по sealed-иерархиям избегайте else и полагайтесь на проверку исчерпываемости компилятором (для when, используемого как выражение).
 5. Выносите общие операции в extension-функции.
 6. Используйте обобщенные sealed-классы для переиспользуемых Result/State-паттернов.
 7. Документируйте переходы состояний для state machine.
@@ -210,7 +211,7 @@ fun showValidationError(result: ValidationResult) = when (result) {
 
 ## Answer (EN)
 
-Sealed classes restrict inheritance to a fixed set of subclasses, enabling (in combination with when used as an expression) exhaustiveness checks and type-safe state machines.
+Sealed classes restrict inheritance to a fixed set of subclasses, enabling (in combination with when used as an expression) exhaustiveness checks and type-safe state machines. To get compiler exhaustiveness checks, when should be used as an expression (returning a value); for plain statements, rely on inspections/tooling.
 
 ### Basic Sealed Class
 
@@ -283,7 +284,7 @@ suspend fun <T> apiCall(call: suspend () -> T): NetworkResult<T> {
     }
 }
 
-// Usage with exhaustive when-expression
+// Usage with exhaustive when-expression (as an expression or with all cases covered for clarity)
 fun <T> handleNetworkResult(result: NetworkResult<T>) = when (result) {
     is NetworkResult.Success -> processData(result.data)
     is NetworkResult.Failure.HttpError -> handleHttpError(result.code)
@@ -314,6 +315,7 @@ fun handleNavigation(event: NavigationEvent) = when (event) {
     is NavigationEvent.ShowDialog -> event.dialog.show()
     NavigationEvent.Finish -> activity.finish()
 }
+// navController and activity are assumed to be available in scope or passed as parameters
 ```
 
 ### Async Operation State
@@ -386,7 +388,7 @@ fun showValidationError(result: ValidationResult) = when (result) {
 1. Use sealed interfaces for pure contracts (Kotlin 1.5+).
 2. Use nested sealed hierarchies for complex states.
 3. Use data classes for cases with data, objects for singletons.
-4. For when-expressions over sealed hierarchies, avoid else: rely on exhaustiveness checks.
+4. For when-expressions over sealed hierarchies, avoid else and rely on exhaustiveness checks (when used as an expression).
 5. Provide extension functions for common operations.
 6. Use generic sealed classes for reusable patterns.
 7. Document state transitions for state machines.

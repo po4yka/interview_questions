@@ -12,7 +12,7 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-accessibility
@@ -255,6 +255,14 @@ fun testColorContrast() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как реализовать автоматизированную проверку контраста в CI/CD-конвейере?
+- В чем компромиссы между соответствием WCAG AA (4.5:1) и AAA (7:1)?
+- Как динамические цветовые схемы Material3 поддерживают гарантии контраста?
+- Как обеспечивать контраст для настраиваемых брендовых цветов пользователя?
+- Какие инструменты могут симулировать дальтонизм при разработке и тестировании?
+
 ## Follow-ups
 
 - How to implement automated contrast validation in CI/CD pipelines?
@@ -263,12 +271,32 @@ fun testColorContrast() {
 - How to handle contrast for user-customizable brand colors?
 - What tools can simulate color blindness during development and testing?
 
+## Ссылки (RU)
+
+- [[c-accessibility]] — Базовые концепции доступности
+- WCAG Contrast Guidelines
+- Material Design Color System
+- Android Accessibility Guide
+
 ## References
 
 - [[c-accessibility]] - Core accessibility concepts
 - WCAG Contrast Guidelines
 - Material Design Color System
 - Android Accessibility Guide
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-accessibility-compose--android--medium]] - Основы доступности в Compose
+
+### Связанные (средней сложности)
+- [[q-accessibility-testing--android--medium]] - Тестирование возможностей доступности
+- [[q-custom-view-accessibility--android--medium]] - Доступность для кастомных View
+
+### Продвинутые (сложнее)
+- Оптимизация для скринридеров и семантическая разметка
+- Динамические системы тем с ограничениями доступности
 
 ## Related Questions
 

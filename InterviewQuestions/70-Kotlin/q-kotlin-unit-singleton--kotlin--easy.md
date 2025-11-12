@@ -10,121 +10,133 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-channel-buffer-strategies-comparison--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
+related: [c-concepts--kotlin--medium, q-channel-buffer-strategies-comparison--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-11
 tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
+
 ---
-# Сколько Инстансов Unit На Одно Приложение
 
 # Вопрос (RU)
-> Сколько инстансов Unit на одно приложение
-
----
+> Сколько инстансов `Unit` существует в одном приложении?
 
 # Question (EN)
-> How many Unit instances per application?
+> How many `Unit` instances exist per application?
 
 ## Ответ (RU)
 
-**Unit является синглтоном** в Kotlin, то есть существует **только один экземпляр Unit** на всё приложение.
+**Unit в Kotlin имеет единственное допустимое значение** (синглтон-значение), то есть существует **одна каноническая "instance" `Unit`** как значение, которое используют все функции с возвращаемым типом `Unit`.
+
+На практике при обычном использовании вы можете считать, что для `Unit` есть один общий экземпляр-значение, а не множество отдельных объектов.
 
 **Ключевые характеристики:**
 
-- **Синглтон**: Существует только один экземпляр
+- **Синглтон-значение**: Только одно допустимое значение `Unit` (объект `Unit`), используемое везде
 - **Встроенный тип**: Часть стандартной библиотеки Kotlin
-- **Обозначает отсутствие**: Используется для указания отсутствия значимого значения
-- **Похож на void**: Но в отличие от `void`, Unit - это реальный объект
+- **Обозначает отсутствие**: Используется для указания отсутствия значимого возвращаемого значения
+- **Отличается от void**: В отличие от `void` в Java, `Unit` — это настоящий тип с единственным значением
 
-**Почему синглтон?**
+**Почему синглтон-значение?**
 
-Поскольку Unit представляет "отсутствие значимого значения", нет необходимости в нескольких экземплярах. Все функции, возвращающие Unit, возвращают один и тот же экземпляр синглтона.
+Поскольку `Unit` представляет "отсутствие значимого значения", нет необходимости в нескольких разных значениях. Все функции, возвращающие `Unit`, логически возвращают одно и то же значение `Unit`.
 
 **Пример:**
 ```kotlin
 fun printHello(): Unit {
     println("Hello")
-}  // Неявно возвращает синглтон Unit
+}  // Неявно возвращает значение Unit
 
 fun doSomething() {  // Тип возврата Unit выводится автоматически
     println("Doing something")
 }
 
-// Обе функции возвращают один и тот же экземпляр Unit
+// Обе функции логически возвращают одно и то же значение Unit
 val u1 = printHello()
 val u2 = doSomething()
-println(u1 === u2)  // true - один и тот же экземпляр!
+println(u1 === u2)  // true - одно и то же значение Unit
 ```
 
 **Сравнение с Java:**
 ```java
 // Java
-public void method() { }  // Ничего не возвращает (void)
+public void method() { }  // Ничего не возвращает (void), это не объект и не значение
 
 // Kotlin
-fun method(): Unit { }    // Возвращает синглтон Unit
+fun method(): Unit { }    // Возвращает значение типа Unit
 fun method2() { }         // То же самое (Unit выводится автоматически)
 ```
 
-**Эффективность памяти**: Поскольку это синглтон, нет потерь памяти от множества объектов Unit.
+**Эффективность памяти**: В типичной реализации `Unit` представляется как одно значение без создания новых объектов при каждом вызове функции. Компилятор и рантайм могут оптимизировать это так, что дополнительных аллокаций практически нет.
+
+---
 
 ## Answer (EN)
 
-**Unit is a singleton** in Kotlin, meaning there is **only one Unit instance** per entire application.
+**In Kotlin, `Unit` has a single allowed value** (a singleton value), meaning there is **one canonical `Unit` "instance" value** that all `Unit`-returning functions conceptually use.
+
+In practice, you can think of `Unit` as having one shared value rather than many separate objects.
 
 **Key characteristics:**
 
-- **Singleton**: Only one instance exists
-- **Built-in type**: Part of Kotlin standard library
-- **Denotes absence**: Used to indicate absence of meaningful value
-- **Similar to void**: But unlike `void`, Unit is an actual object
+- **Singleton value**: Only one valid value of type `Unit` (the `Unit` object) is used everywhere
+- **Built-in type**: Part of the Kotlin standard library
+- **Denotes absence**: Used to indicate absence of a meaningful return value
+- **Different from void**: Unlike `void` in Java, `Unit` is a real type with a single value
 
-**Why singleton?**
+**Why singleton value?**
 
-Since Unit represents "no meaningful value", there's no need for multiple instances. All functions returning Unit return the same singleton instance.
+Since `Unit` represents "no meaningful value", there's no need for multiple distinct values. All functions returning `Unit` conceptually return the same `Unit` value.
 
 **Example:**
 ```kotlin
 fun printHello(): Unit {
     println("Hello")
-}  // Implicitly returns Unit singleton
+}  // Implicitly returns Unit value
 
 fun doSomething() {  // Unit return type inferred
     println("Doing something")
 }
 
-// Both return the same Unit instance
+// Both logically return the same Unit value
 val u1 = printHello()
 val u2 = doSomething()
-println(u1 === u2)  // true - same instance!
+println(u1 === u2)  // true - same Unit value
 ```
 
 **Comparison with Java:**
 ```java
 // Java
-public void method() { }  // Returns nothing (void)
+public void method() { }  // Returns nothing (void); void is not an object/value instance
 
 // Kotlin
-fun method(): Unit { }    // Returns Unit singleton
+fun method(): Unit { }    // Returns a value of type Unit
 fun method2() { }         // Same as above (Unit inferred)
 ```
 
-**Memory efficiency**: Since it's a singleton, no memory waste from multiple Unit objects.
+**Memory efficiency**: In typical implementations, `Unit` is represented as a single value and does not require creating new objects per call. The compiler/runtime can optimize it so there's effectively no per-call allocation overhead.
 
 ---
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between `Unit` and Java's `void`?
+- When would you use `Unit` in practice (including explicit return type declarations)?
+- What are common misconceptions or pitfalls when using `Unit`?
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-concepts--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-channel-buffer-strategies-comparison--kotlin--hard]]
 - [[q-suspend-functions-basics--kotlin--easy]]
 - [[q-kotlin-generic-function-syntax--programming-languages--easy]]
+
+## Дополнительные вопросы (RU)
+- Каковы основные различия между `Unit` и `void` в Java?
+- Когда вы бы использовали `Unit` на практике (включая явное указание типа)?
+- Какие распространенные заблуждения или ошибки связаны с использованием `Unit`?
+## Ссылки (RU)
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)

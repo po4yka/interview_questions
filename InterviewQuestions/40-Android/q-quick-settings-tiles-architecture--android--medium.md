@@ -49,11 +49,22 @@ sources:
 ### TileService
 
 ```kotlin
+// AndroidManifest.xml:
+// <service
+//     android:name=".SyncTileService"
+//     android:label="@string/tile_label"
+//     android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+//     android:exported="false">
+//     <intent-filter>
+//         <action android:name="android.service.quicksettings.action.QS_TILE" />
+//     </intent-filter>
+// </service>
+
 class SyncTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        // Обновляем состояние тайла из общего источника данных
+        // Обновляем состояние тайла из общего источника данных (source of truth)
         qsTile?.apply {
             state = if (isSyncEnabled()) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
             label = getString(R.string.tile_label)
@@ -63,7 +74,8 @@ class SyncTileService : TileService() {
 
     override fun onClick() {
         super.onClick()
-        // Обрабатываем нажатие: сразу или через unlockAndRun при заблокированном устройстве
+        // Обрабатываем нажатие: при заблокированном устройстве используем unlockAndRun,
+        // чтобы выполнить действие после снятия блокировки при необходимости взаимодействия с UI.
         if (!isLocked) {
             toggleSync()
         } else {
@@ -73,68 +85,79 @@ class SyncTileService : TileService() {
 
     override fun onTileAdded() {
         super.onTileAdded()
-        // Инициализируем начальное состояние
-        qsTile?.updateTile()
+        // Инициализируем начальное состояние из общего источника данных,
+        // чтобы тайл не был в неопределённом состоянии до onStartListening()
+        qsTile?.apply {
+            state = if (isSyncEnabled()) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+            label = getString(R.string.tile_label)
+            updateTile()
+        }
     }
 
     override fun onStopListening() {
         super.onStopListening()
-        // Отпишемся/очистим ресурсы, если нужно
+        // Отписываемся от наблюдений/очищаем ресурсы, связанные с onStartListening()
     }
 }
 ```
 
-- `onStartListening()` синхронизирует визуальное состояние тайла с общим состоянием приложения.
-- `onTileAdded()` инициализирует тайл при добавлении.
-- `onStopListening()` используется для отписок/очистки ресурсов.
-- В `onClick()` обрабатывайте переключение; при заблокированном устройстве используйте `unlockAndRun { ... }`.
+- `onStartListening()` синхронизирует визуальное состояние тайла с общим состоянием приложения и вызывает `updateTile()`.
+- `onTileAdded()` гарантирует корректное начальное состояние тайла на базе того же источника истины.
+- `onStopListening()` используется для отписок и очистки ресурсов; важно не держать долгоживущих ссылок на контекст `TileService`.
+- В `onClick()` реализуйте переключение; при заблокированном устройстве используйте `unlockAndRun { ... }` для действий, требующих разблокировки.
 
 ### Фоновая работа
 
-- Держите `onClick()`/`onStartListening()` легкими: долгие операции выносите в `ForegroundService` с подходящим типом или `WorkManager` (включая expedited work при необходимости).
-- Используйте `TileService#startActivityAndCollapse` для открытия нужного UI при закрытии шторки.
+- Держите `onClick()`/`onStartListening()` лёгкими: долгие операции выносите в `ForegroundService` с подходящим типом или `WorkManager` (включая expedited work при необходимости), вместо прямых блокирующих вызовов.
+- Для открытия UI используйте `startActivityAndCollapse()` из `TileService`, чтобы свернуть шторку и показать нужный экран.
 
 ### Состояние и синхронизация
 
-- Храните состояние в общем источнике (`DataStore`/`Room`), чтобы и приложение, и `TileService` работали с одним state.
-- Наблюдайте изменения через `Flow`/другие реактивные механизмы, создавая собственный `CoroutineScope` в рамках `onStartListening()`/`onStopListening()`.
+- Храните состояние в общем источнике (`DataStore`/`Room` или иной single source of truth), чтобы и приложение, и `TileService` работали с одним state.
+- Наблюдайте изменения через `Flow`/другие реактивные механизмы, создавая `CoroutineScope`, привязанный к жизненному циклу тайла (подписка в `onStartListening()`, отписка в `onStopListening()`), чтобы избежать утечек.
 - При изменении состояния из приложения вызывайте `TileService.requestListeningState(context, componentName)`, чтобы система триггерила `onStartListening()` и вы могли обновить `qsTile`.
 
 ### App Shortcuts и виджеты
 
-- Используйте `ShortcutManager` для App Shortcuts, которые отражают те же действия/режимы, что и тайл.
-- Обновляйте dynamic shortcuts при включении/выключении функциональности, связанной с тайлом.
-- Для intent-ориентированных shortcuts/виджетов применяйте явные `Intent` и `PendingIntent` с `FLAG_IMMUTABLE` (и `FLAG_UPDATE_CURRENT` при обновлении extras), чтобы избежать подмены.
+- Используйте `ShortcutManager` для App Shortcuts, которые отражают те же действия/режимы, что и тайл, с явными `Intent`.
+- Обновляйте dynamic shortcuts при включении/выключении функциональности, связанной с тайлом, чтобы пользователь видел актуальные действия.
+- Для shortcuts/виджетов применяйте явные `Intent` и `PendingIntent` с корректной изменяемостью:
+  - используйте `FLAG_IMMUTABLE`, когда extras не должны меняться извне;
+  - дополняйте `FLAG_UPDATE_CURRENT`, если нужно обновлять extras при переиспользовании `PendingIntent`;
+  - это помогает избежать подмены данных и соответствует требованиям безопасности современных API.
 
 ### Безопасность, приватность и UX
 
-- Проверяйте и запрашивайте необходимые привилегии (например, VPN/hotspot/location) до выполнения действий тайла.
-- Не запускайте чувствительные потоки с заблокированного экрана; оборачивайте в `unlockAndRun`.
-- Проектируйте UX тайла понятно: мгновенный отклик, корректные состояния, отсутствие неожиданных side-effects.
+- Проверяйте и запрашивайте необходимые разрешения (например, связанные с VPN/hotspot/location) через обычные механизмы приложения; сам `TileService` не даёт дополнительных привилегий.
+- Не запускайте чувствительные потоки с заблокированного экрана без необходимости; для действий, требующих взаимодействия пользователя или разблокировки, используйте `unlockAndRun { ... }` или открывайте Activity через `startActivityAndCollapse()`.
+- Проектируйте UX тайла понятно: мгновенный отклик (optimistic UI при необходимости), корректные состояния, отсутствие неожиданных сайд-эффектов.
 
 ---
 
 ## Answer (EN)
 
-- Implement a `TileService` and handle its lifecycle callbacks:
-  - refresh tile state in `onStartListening()` based on shared app state, and call `qsTile.updateTile()`;
-  - initialize on `onTileAdded()`;
-  - clean up/stop observation in `onStopListening()`;
-  - toggle behavior in `onClick()`, using `unlockAndRun { ... }` when the device is locked.
+- Implement a `TileService` (declared in the manifest with `android.permission.BIND_QUICK_SETTINGS_TILE` and the QS_TILE intent-filter) and handle its lifecycle callbacks:
+  - in `onStartListening()`, refresh the tile state from the shared app state (single source of truth) and call `qsTile.updateTile()`;
+  - in `onTileAdded()`, initialize the tile label and state from the same shared source so the initial tile is consistent;
+  - in `onStopListening()`, stop observations and release resources tied to the listening lifecycle; avoid holding long-lived references to the `TileService` context;
+  - in `onClick()`, toggle behavior; when the device is locked, use `unlockAndRun { ... }` for work that should happen after keyguard dismissal.
 - Keep `onClick()`/`onStartListening()` light; offload long-running or network work to:
   - a `ForegroundService` with the appropriate foreground service type; or
-  - `WorkManager` (including expedited work when appropriate).
+  - `WorkManager` (including expedited work when appropriate), instead of blocking inside the tile callbacks.
 - Use `startActivityAndCollapse()` when you need to open UI from the tile while collapsing the shade.
-- Persist tile/app state in shared storage (e.g., `DataStore`/`Room`) so both the app and `TileService` read/write the same source of truth.
-- When state changes from the app side, call `TileService.requestListeningState(context, componentName)` so the system will invoke `onStartListening()` for that tile and you can update `qsTile` accordingly.
+- Persist tile/app state in shared storage (e.g., `DataStore`/`Room` or another single source of truth) so both the app and `TileService` read/write the same state.
+- When state changes from the app side, call `TileService.requestListeningState(context, componentName)` so the system invokes `onStartListening()` for that tile and you can update `qsTile` accordingly.
 - For App Shortcuts and widgets:
-  - use `ShortcutManager` for actions aligned with the tile, with explicit `Intent`s;
-  - update dynamic shortcuts when the underlying feature is enabled/disabled;
-  - for shortcuts/widgets `PendingIntent`s, prefer `FLAG_IMMUTABLE` (and `FLAG_UPDATE_CURRENT` when updating extras) to avoid tampering.
+  - use `ShortcutManager` for actions aligned with the tile, with explicit `Intent`s that map to the same features;
+  - update dynamic shortcuts when the related feature is enabled/disabled so shortcuts stay in sync;
+  - for shortcuts/widgets `PendingIntent`s, use correct mutability flags:
+    - prefer `FLAG_IMMUTABLE` when extras should not be modifiable by other apps;
+    - add `FLAG_UPDATE_CURRENT` when you need to update extras on an existing `PendingIntent`;
+    - this prevents tampering and complies with modern Android security requirements.
 - Security, privacy, and UX:
-  - require and validate appropriate permissions (e.g., VPN, hotspot, location) before executing privileged actions;
-  - avoid starting full activities or sensitive flows from a locked device unless wrapped in `unlockAndRun`;
-  - ensure clear, responsive UX with accurate tile states and minimal surprise for the user.
+  - validate and request appropriate permissions (e.g., VPN, hotspot, location) via normal app flows; the tile itself does not bypass permission models;
+  - avoid launching sensitive flows from a locked device unless gated via `unlockAndRun` or appropriate UX; use `startActivityAndCollapse()` for explicit navigation;
+  - ensure clear, responsive UX with accurate tile states, fast feedback, and no surprising side effects.
 
 ---
 

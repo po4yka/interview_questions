@@ -41,7 +41,7 @@ tags:
 
 ## Ответ (RU)
 
-RSS-агрегатор получает и отображает RSS-ленты из нескольких источников. Ключевые требования: парсинг XML, локальное хранение, фоновая синхронизация и уведомления о новых публикациях.
+RSS-агрегатор получает и отображает RSS-ленты из нескольких источников. Ключевые требования: парсинг XML (RSS/Atom), локальное хранение, фоновая синхронизация и уведомления о новых публикациях.
 
 ### Архитектура
 
@@ -86,7 +86,9 @@ data class RssFeed(
     indices = [Index("feedUrl")]
 )
 data class RssItem(
-    @PrimaryKey val guid: String,  // Уникальный ID из RSS (или запасной вариант — link)
+    // В продакшене разумно включать feedUrl в ключ (guid + feedUrl),
+    // чтобы избежать коллизий между лентами.
+    @PrimaryKey val guid: String,  // Уникальный ID из RSS или fallback: link/комбинация с feedUrl
     val feedUrl: String,
     val title: String,
     val description: String,
@@ -163,7 +165,7 @@ abstract class RssDatabase : RoomDatabase() {
 
 ### 3. RSS Parser (Jsoup)
 
-В реальном приложении обычно используют HTTP-клиент (например, OkHttp/Retrofit) и передают тело ответа в `Jsoup`; прямой вызов `Jsoup.connect` здесь приведён для простоты.
+В реальном приложении обычно используют HTTP-клиент (например, OkHttp/Retrofit) и передают тело ответа в `Jsoup`; прямой вызов `Jsoup.connect` здесь приведён для простоты. Также стоит учитывать, что Jsoup оптимизирован для HTML и демонстрационный код не покрывает все варианты RSS/Atom-форматов — для продакшена лучше использовать полнофункциональный XML-парсер или специализированную RSS-библиотеку.
 
 ```kotlin
 class RssParser {
@@ -289,6 +291,8 @@ class RssRepository(
             }
         }
 
+        // Упрощённая стратегия: если хоть одна лента не обновилась — считаем, что операция неуспешна.
+        // В продакшене можно возвращать частичный успех/детализированные ошибки.
         return if (hadFailure) Result.failure(IllegalStateException("Some feeds failed to refresh"))
         else Result.success(totalNew)
     }
@@ -331,7 +335,7 @@ class RssSyncWorker(
             Result.success()
         } catch (e: Exception) {
             Log.e(TAG, "RSS sync failed", e)
-            Result.retry()
+            return Result.retry()
         }
     }
 
@@ -356,6 +360,8 @@ class RssSyncWorker(
 }
 
 // Планирование периодической синхронизации
+// Минимальный интервал для PeriodicWorkRequest — 15 минут;
+// intervalHours должен соответствовать этому ограничению.
 fun scheduleRssSync(context: Context, intervalHours: Long = 1) {
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -400,6 +406,7 @@ class RssViewModel @Inject constructor(
     fun addFeed(url: String) {
         viewModelScope.launch {
             repository.addFeed(url)
+            // Демонстрационно: ошибки не пробрасываются в UI.
         }
     }
 
@@ -408,6 +415,7 @@ class RssViewModel @Inject constructor(
             _isRefreshing.value = true
             repository.refreshAllFeeds()
             _isRefreshing.value = false
+            // Упрощение: результат и ошибки не отображаются в UI.
         }
     }
 
@@ -504,12 +512,12 @@ fun formatDate(timestamp: Long): String {
 
 ### Итог
 
-RU: Архитектура RSS-агрегатора: Jsoup для парсинга XML, Room для локального хранения (ленты и элементы с внешним ключом), WorkManager для периодической синхронизации, Repository для координации данных. Реактивный UI на основе `Flow`/`StateFlow`, возможности: отметка как прочитано, избранное, swipe-to-refresh, очистка старых данных.
+RU: Архитектура RSS-агрегатора: Jsoup (в примере) для парсинга RSS/XML, Room для локального хранения (ленты и элементы с внешним ключом), WorkManager для периодической синхронизации (с учётом минимального интервала платформы), Repository для координации данных. Реактивный UI на основе `Flow`/`StateFlow`. Возможности: отметка как прочитано, избранное, swipe-to-refresh, очистка старых данных. Пример кода демонстрационный: обработка ошибок и ключи элементов могут быть доработаны в продакшене.
 
 ---
 
 ## Answer (EN)
-An RSS aggregator fetches and displays feeds from multiple sources. Key requirements: XML parsing, local storage, background sync, and notifications for new posts.
+An RSS aggregator fetches and displays feeds from multiple sources. Key requirements: XML (RSS/Atom) parsing, local storage, background sync, and notifications for new posts.
 
 ### Architecture
 
@@ -554,7 +562,9 @@ data class RssFeed(
     indices = [Index("feedUrl")]
 )
 data class RssItem(
-    @PrimaryKey val guid: String,  // Unique ID from RSS (or fallback to link)
+    // In production it's safer to include feedUrl in the key (guid + feedUrl)
+    // to avoid collisions across different feeds.
+    @PrimaryKey val guid: String,  // Unique ID from RSS or fallback: link/combination with feedUrl
     val feedUrl: String,
     val title: String,
     val description: String,
@@ -631,7 +641,7 @@ abstract class RssDatabase : RoomDatabase() {
 
 ### 3. RSS Parser (Jsoup)
 
-Note: In a real app you would usually use an HTTP client (e.g., OkHttp/Retrofit) and feed Jsoup with the response body; direct `Jsoup.connect` is used here for brevity.
+Note: In a real app you would usually use an HTTP client (e.g., OkHttp/Retrofit) and feed Jsoup with the response body; direct `Jsoup.connect` is used here for brevity. Also, Jsoup is HTML-oriented; this sample does not cover all RSS/Atom edge cases and should be treated as illustrative. For production, prefer a robust XML parser or dedicated RSS library.
 
 ```kotlin
 class RssParser {
@@ -757,6 +767,8 @@ class RssRepository(
             }
         }
 
+        // Simplified strategy: treat any single-feed failure as overall failure.
+        // In production you might want partial success reporting.
         return if (hadFailure) Result.failure(IllegalStateException("Some feeds failed to refresh"))
         else Result.success(totalNew)
     }
@@ -799,7 +811,7 @@ class RssSyncWorker(
             Result.success()
         } catch (e: Exception) {
             Log.e(TAG, "RSS sync failed", e)
-            Result.retry()
+            return Result.retry()
         }
     }
 
@@ -823,7 +835,9 @@ class RssSyncWorker(
     }
 }
 
-// Periodic sync scheduling (min interval for PeriodicWorkRequest is 15 minutes; 1 hour is valid)
+// Periodic sync scheduling
+// Minimum interval for PeriodicWorkRequest is 15 minutes;
+// intervalHours should respect that constraint.
 fun scheduleRssSync(context: Context, intervalHours: Long = 1) {
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -868,6 +882,7 @@ class RssViewModel @Inject constructor(
     fun addFeed(url: String) {
         viewModelScope.launch {
             repository.addFeed(url)
+            // Simplified: errors are not surfaced to UI.
         }
     }
 
@@ -876,6 +891,7 @@ class RssViewModel @Inject constructor(
             _isRefreshing.value = true
             repository.refreshAllFeeds()
             _isRefreshing.value = false
+            // Simplified: result/errors are ignored for brevity.
         }
     }
 
@@ -972,7 +988,7 @@ fun formatDate(timestamp: Long): String {
 
 ### Summary
 
-English: RSS aggregator architecture: Jsoup for XML parsing, Room for local storage (feeds + items with relations), WorkManager for periodic sync (e.g., 1-hour intervals, respecting platform minimums), Repository pattern for data coordination. Parse RSS with Jsoup, extract channel metadata and item fields (title/description/link/pubDate). Store in Room with ForeignKey relations. Background sync with PeriodicWorkRequest, show notification for new items, cleanup old items (30 days). Use `Flow` + `StateFlow` for reactive UI. Features: mark as read, favorites, swipe-to-refresh.
+English: RSS aggregator architecture: Jsoup (in this sample) for XML parsing, Room for local storage (feeds + items with relations), WorkManager for periodic sync (respecting the platform’s 15-minute minimum), Repository pattern for data coordination. Reactive UI with `Flow` + `StateFlow`. Features: mark as read, favorites, swipe-to-refresh, cleanup of old data. Sample code is illustrative; production code should improve error handling and item key strategy.
 
 ---
 

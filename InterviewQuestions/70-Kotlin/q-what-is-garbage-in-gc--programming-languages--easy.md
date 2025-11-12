@@ -18,6 +18,9 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management]
 # Вопрос (RU)
 > Что такое "мусор" в сборщике мусора?
 
+# Question (EN)
+> What is "garbage" in a garbage collector?
+
 ## Ответ (RU)
 
 "Мусор" в контексте сборщика мусора — это объекты в куче, которые больше не используются и недостижимы из корневых объектов (GC Roots).
@@ -94,11 +97,6 @@ val data = ByteArray(1000)
 ```
 
 Итого: мусор — это объекты в памяти, которые больше не нужны программе и недостижимы из GC Roots, поэтому рантайм может безопасно освободить занимаемую ими память.
-
----
-
-# Question (EN)
-> What is "garbage" in a garbage collector?
 
 ## Answer (EN)
 

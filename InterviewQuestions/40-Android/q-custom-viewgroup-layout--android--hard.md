@@ -77,7 +77,9 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
 
-        val usableWidth = max(0, widthSize - paddingLeft - paddingRight)
+        // При UNSPECIFIED ширина строки не ограничена родителем.
+        val maxLineWidth = if (widthMode == MeasureSpec.UNSPECIFIED) Int.MAX_VALUE
+                           else max(0, widthSize - paddingLeft - paddingRight)
 
         var rowWidth = 0
         var rowHeight = 0
@@ -107,8 +109,8 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            if (rowWidth > 0 && rowWidth + childWidth + horizontalSpacing > usableWidth && widthMode != MeasureSpec.UNSPECIFIED) {
-                // перенос строки
+            // Если это не первый элемент в строке и он не помещается, переносим на следующую строку
+            if (rowWidth > 0 && rowWidth + horizontalSpacing + childWidth > maxLineWidth && widthMode != MeasureSpec.UNSPECIFIED) {
                 maxWidth = max(maxWidth, rowWidth)
                 totalHeight += rowHeight + verticalSpacing
                 rowWidth = childWidth
@@ -127,30 +129,27 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             totalHeight += rowHeight
         }
 
-        var measuredWidth = when (widthMode) {
+        // В случае UNSPECIFIED/AT_MOST ширина берётся по содержимому (с учётом padding)
+        val measuredWidth = when (widthMode) {
             MeasureSpec.EXACTLY -> widthSize
-            MeasureSpec.AT_MOST -> paddingLeft + paddingRight + min(maxWidth, usableWidth)
+            MeasureSpec.AT_MOST -> paddingLeft + paddingRight + min(maxWidth, maxLineWidth)
             MeasureSpec.UNSPECIFIED -> paddingLeft + paddingRight + maxWidth
             else -> paddingLeft + paddingRight + maxWidth
-        }
+        }.coerceAtLeast(paddingLeft + paddingRight)
 
-        var measuredHeight = when (heightMode) {
+        val measuredHeight = when (heightMode) {
             MeasureSpec.EXACTLY -> heightSize
             MeasureSpec.AT_MOST -> min(totalHeight, heightSize)
             MeasureSpec.UNSPECIFIED -> totalHeight
             else -> totalHeight
-        }
-
-        // Защита от отрицательных значений
-        measuredWidth = max(measuredWidth, paddingLeft + paddingRight)
-        measuredHeight = max(measuredHeight, paddingTop + paddingBottom)
+        }.coerceAtLeast(paddingTop + paddingBottom)
 
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val width = r - l
-        val usableWidth = max(0, width - paddingLeft - paddingRight)
+        val maxLineWidth = max(0, width - paddingLeft - paddingRight)
 
         var x = paddingLeft
         var y = paddingTop
@@ -165,7 +164,7 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            if (x > paddingLeft && x + childWidth > paddingLeft + usableWidth) {
+            if (x > paddingLeft && x + childWidth > paddingLeft + maxLineWidth) {
                 // перенос строки
                 x = paddingLeft
                 y += rowHeight + verticalSpacing
@@ -189,12 +188,17 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
     override fun generateDefaultLayoutParams(): LayoutParams =
         MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
-    override fun generateLayoutParams(p: LayoutParams?): LayoutParams =
-        if (p is MarginLayoutParams) MarginLayoutParams(p) else MarginLayoutParams(p)
+    override fun generateLayoutParams(p: LayoutParams?): LayoutParams = when (p) {
+        is MarginLayoutParams -> MarginLayoutParams(p)
+        null -> MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        else -> MarginLayoutParams(p)
+    }
 
     override fun checkLayoutParams(p: LayoutParams?): Boolean = p is MarginLayoutParams
 }
 ```
+
+Дополнительно (для полноты ответа на собеседовании): если отдельный ребёнок оказывается шире доступной строки (например, по `MeasureSpec`), его обычно размещают в отдельной строке и позволяют занять максимально возможную ширину в рамках переданного `MeasureSpec` (или обрезается/масштабируется самим дочерним `View` согласно его логике измерения).
 
 ### Критические Правила
 
@@ -205,11 +209,11 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
 - Учитывать `padding` родителя и `margins` детей при расчете размеров и позиций.
 - Уважать `MeasureSpec` от родителя (можно использовать `resolveSize()` / `resolveSizeAndState()` как удобные хелперы).
 
-**ЗАПРЕЩЕНО:**
+**ЗАПРЕЩЕНО (в контексте обычного layout-контракта):**
 - Вызывать `requestLayout()` внутри `onLayout()` → риск бесконечных перезапусков layout-процесса.
 - Использовать `measuredWidth`/`measuredHeight` до вызова `measure()` на дочернем элементе.
 - Игнорировать `MeasureSpec` от родителя — нарушение контракта измерения.
-- Позиционировать детей вне границ родителя (без учета `padding`) — может привести к обрезанию/ошибкам.
+- Специально рассчитывать координаты так, чтобы дети выходили за границы родителя, если только это не контролируемый эффект с учётом возможного клиппинга/прокрутки.
 
 ### Оптимизации
 
@@ -236,7 +240,7 @@ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 }
 ```
 
-**2. RTL Support** — учет направления письма для арабского/иврита:
+**2. RTL Support** — учёт направления письма для арабского/иврита (при необходимости FlowLayout может зеркалировать расположение элементов):
 
 ```kotlin
 val isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
@@ -281,7 +285,9 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
 
-        val usableWidth = max(0, widthSize - paddingLeft - paddingRight)
+        // When UNSPECIFIED, row width is not constrained by the parent.
+        val maxLineWidth = if (widthMode == MeasureSpec.UNSPECIFIED) Int.MAX_VALUE
+                           else max(0, widthSize - paddingLeft - paddingRight)
 
         var rowWidth = 0
         var rowHeight = 0
@@ -310,8 +316,8 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            if (rowWidth > 0 && rowWidth + childWidth + horizontalSpacing > usableWidth && widthMode != MeasureSpec.UNSPECIFIED) {
-                // wrap to next line
+            // If not first in row and does not fit, wrap to next line (when width is constrained)
+            if (rowWidth > 0 && rowWidth + horizontalSpacing + childWidth > maxLineWidth && widthMode != MeasureSpec.UNSPECIFIED) {
                 maxWidth = max(maxWidth, rowWidth)
                 totalHeight += rowHeight + verticalSpacing
                 rowWidth = childWidth
@@ -330,29 +336,26 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             totalHeight += rowHeight
         }
 
-        var measuredWidth = when (widthMode) {
+        val measuredWidth = when (widthMode) {
             MeasureSpec.EXACTLY -> widthSize
-            MeasureSpec.AT_MOST -> paddingLeft + paddingRight + min(maxWidth, usableWidth)
+            MeasureSpec.AT_MOST -> paddingLeft + paddingRight + min(maxWidth, maxLineWidth)
             MeasureSpec.UNSPECIFIED -> paddingLeft + paddingRight + maxWidth
             else -> paddingLeft + paddingRight + maxWidth
-        }
+        }.coerceAtLeast(paddingLeft + paddingRight)
 
-        var measuredHeight = when (heightMode) {
+        val measuredHeight = when (heightMode) {
             MeasureSpec.EXACTLY -> heightSize
             MeasureSpec.AT_MOST -> min(totalHeight, heightSize)
             MeasureSpec.UNSPECIFIED -> totalHeight
             else -> totalHeight
-        }
-
-        measuredWidth = max(measuredWidth, paddingLeft + paddingRight)
-        measuredHeight = max(measuredHeight, paddingTop + paddingBottom)
+        }.coerceAtLeast(paddingTop + paddingBottom)
 
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val width = r - l
-        val usableWidth = max(0, width - paddingLeft - paddingRight)
+        val maxLineWidth = max(0, width - paddingLeft - paddingRight)
 
         var x = paddingLeft
         var y = paddingTop
@@ -367,7 +370,7 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            if (x > paddingLeft && x + childWidth > paddingLeft + usableWidth) {
+            if (x > paddingLeft && x + childWidth > paddingLeft + maxLineWidth) {
                 // wrap to next line
                 x = paddingLeft
                 y += rowHeight + verticalSpacing
@@ -391,12 +394,17 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
     override fun generateDefaultLayoutParams(): LayoutParams =
         MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
-    override fun generateLayoutParams(p: LayoutParams?): LayoutParams =
-        if (p is MarginLayoutParams) MarginLayoutParams(p) else MarginLayoutParams(p)
+    override fun generateLayoutParams(p: LayoutParams?): LayoutParams = when (p) {
+        is MarginLayoutParams -> MarginLayoutParams(p)
+        null -> MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        else -> MarginLayoutParams(p)
+    }
 
     override fun checkLayoutParams(p: LayoutParams?): Boolean = p is MarginLayoutParams
 }
 ```
+
+Additionally (for interview completeness): if a single child becomes wider than the available line width according to its `MeasureSpec`, it is usually placed on its own line and allowed to take as much space as permitted by that `MeasureSpec` (or it may clip/scale itself based on its own measurement logic).
 
 ### Critical Rules
 
@@ -407,15 +415,15 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
 - Account for parent's `padding` and children's `margins` when calculating sizes and positions.
 - Respect parent's `MeasureSpec`; `resolveSize()` / `resolveSizeAndState()` are recommended helpers.
 
-**FORBIDDEN:**
+**FORBIDDEN (within the normal layout contract context):**
 - Call `requestLayout()` inside `onLayout()` → risk of repeated layout passes / infinite loops.
 - Use `measuredWidth`/`measuredHeight` before calling `measure()` on the child.
 - Ignore `MeasureSpec` from parent — violates the measurement contract.
-- Layout children outside parent bounds (ignoring `padding`).
+- Intentionally compute child positions outside the parent's bounds unless you explicitly handle clipping/scrolling behavior.
 
 ### Optimizations
 
-**1. Cache bounds** between `onMeasure` and `onLayout` to avoid recalculating complex geometry. Ensure the cached bounds are consistent with measured sizes and updated when children change. Also ensure the number of cached bounds matches the number of visible children.
+**1. Cache bounds** between `onMeasure` and `onLayout` to avoid recalculating complex geometry. Ensure cached bounds are consistent with measured sizes and are updated when children change. Also ensure the number of cached bounds matches the number of visible children.
 
 ```kotlin
 private val childBounds = mutableListOf<Rect>()
@@ -438,7 +446,7 @@ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 }
 ```
 
-**2. RTL Support** — account for right-to-left layout direction:
+**2. RTL Support** — account for right-to-left layout direction (FlowLayout may mirror item placement if desired):
 
 ```kotlin
 val isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL

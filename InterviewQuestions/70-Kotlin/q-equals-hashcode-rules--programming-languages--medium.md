@@ -34,11 +34,11 @@ tags: [collections, contracts, difficulty/medium, equality, object-methods, kotl
 5. **Сравнение с null**: для любого не-null объекта `x`, вызов `x.equals(null)` должен возвращать `false`.
 
 **Контракт hashCode():**
-1. **Согласованность во времени**: в течение одного выполнения программы вызов `x.hashCode()` должен возвращать одно и то же значение, пока значения полей, участвующих в `equals()`, не меняются.
+1. **Согласованность во времени**: в течение одного выполнения программы вызов `x.hashCode()` должен возвращать одно и то же значение, пока состояние объекта, используемое в `equals()`/`hashCode()`, не меняется.
 2. **Согласованность с equals**:
    - если `x.equals(y)` возвращает `true`, то `x.hashCode() == y.hashCode()` должно быть `true`;
-   - если `x.hashCode() != y.hashCode()`, то `x.equals(y)` обязательно должно быть `false`.
-3. **Коллизии допустимы**: разные объекты могут иметь одинаковый `hashCode` (это не нарушает контракт), но для эффективности хеш-структур желательно минимизировать коллизии.
+   - если `x.equals(y)` возвращает `false`, то их `hashCode()` может быть как равным, так и разным (коллизии допустимы).
+3. **Коллизии допустимы**: разные объекты (в том числе не равные по `equals`) могут иметь одинаковый `hashCode` — это не нарушает контракт, но для эффективности хеш-структур желательно минимизировать коллизии.
 
 **Практическое правило**: когда вы переопределяете `equals()`, вы практически всегда должны переопределить и `hashCode()` таким образом, чтобы оба опирались на один и тот же набор значимых полей.
 
@@ -50,15 +50,15 @@ Methods `equals()` and `hashCode()` define how objects are compared and are crit
 1. **Reflexive**: for any non-null reference `x`, `x.equals(x)` must return `true`.
 2. **Symmetric**: if `x.equals(y)` is `true`, then `y.equals(x)` must also be `true`.
 3. **Transitive**: if `x.equals(y)` and `y.equals(z)` are `true`, then `x.equals(z)` must also be `true`.
-4. **Consistent**: repeated calls to `x.equals(y)` must consistently return the same result as long as the fields used in the comparison do not change.
+4. **Consistent**: repeated calls to `x.equals(y)` must return the same result as long as the state used in the comparison does not change.
 5. **Null comparison**: for any non-null reference `x`, `x.equals(null)` must return `false`.
 
 **hashCode() contract:**
-1. **Stable during execution**: during a single execution of the program, `x.hashCode()` must consistently return the same value as long as the fields used in `equals()` do not change.
+1. **Stable during execution**: during a single execution of the program, `x.hashCode()` must consistently return the same value as long as the object state used in `equals()`/`hashCode()` does not change.
 2. **Consistency with equals**:
    - if `x.equals(y)` is `true`, then `x.hashCode() == y.hashCode()` must be `true`;
-   - if `x.hashCode() != y.hashCode()`, then `x.equals(y)` must be `false`.
-3. **Collisions allowed**: different objects may have the same `hashCode` (this does not violate the contract), but good implementations minimize collisions for better performance.
+   - if `x.equals(y)` is `false`, their `hashCode()` values may be either equal or different (collisions are allowed).
+3. **Collisions allowed**: different objects (including unequal ones) may have the same `hashCode`; this does not violate the contract, but good implementations minimize collisions for better performance.
 
 **Practical rule**: when you override `equals()`, you should almost always override `hashCode()` as well, and both must be based on the same set of significant fields.
 

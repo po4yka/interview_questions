@@ -41,28 +41,34 @@ tags: [android/build-variants, android/dependency-management, android/gradle, di
 ### 1. Критичные настройки gradle.properties
 
 ```properties
-# ✅ Параллельная сборка (подбирайте значение под вашу машину)
+# ✅ Параллельная сборка
+# Обычно Gradle сам подбирает оптимальное число воркеров.
+# Явно задавайте org.gradle.workers.max только при понимании нагрузки и профилировании.
 org.gradle.parallel=true
-org.gradle.workers.max=8
+# org.gradle.workers.max=8
 
-# ✅ Build cache (кеш артефактов) и configuration cache (если плагины совместимы)
+# ✅ Build cache (кеш артефактов)
 org.gradle.caching=true
+
+# ✅ Configuration cache — ВКЛЮЧАТЬ ПОЭТАПНО, только если плагины/таски совместимы.
+# При несовместимых задачах возможны загадочные падения или некорректное поведение.
 org.gradle.configuration-cache=true
 
 # ✅ File system watching
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap (значение подбирается под доступную память)
+# ✅ JVM heap (значение подбирается под доступную память и результаты профилирования)
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Не транзитивные R-классы (уменьшает пересборку)
+# ✅ Не транзитивные R-классы (уменьшает пересборку и размер графа зависимостей)
 android.nonTransitiveRClass=true
 
 # ✅ Инкрементальная компиляция (в новых версиях включена по умолчанию)
 kotlin.incremental=true
 ```
 
-**Эффект**: Потенциально до +30-70% на инкрементальных сборках и +15-30% на clean-сборках, в зависимости от проекта и окружения.
+**Эффект**: Эти настройки могут дать заметный выигрыш (например, десятки процентов на инкрементальных сборках),
+но точные цифры сильно зависят от структуры проекта, плагинов, железа и CI-инфраструктуры.
 
 ### 2. Зависимости: implementation vs api
 
@@ -73,29 +79,33 @@ dependencies {
     implementation(libs.retrofit)
 
     // ❌ api выставляет зависимости наружу → изменения приводят к пересборке потребителей
+    // Использовать api только при реальной необходимости экспонировать типы наружу.
     // api(libs.retrofit)
 
-    // ✅ KSP вместо Kapt (часто до ~2x быстрее для аннотаций)
+    // ✅ KSP вместо Kapt (часто ощутимо быстрее для аннотаций)
     ksp(libs.hilt.compiler)
 }
 ```
 
-**Правило**: `api` использовать только если зависимость является частью публичного API модуля.
+**Правило**: `api` использовать только если зависимость является частью публичного API модуля, иначе предпочитать `implementation`.
 
 ### 3. Отключение неиспользуемых функций
 
 ```kotlin
 android {
     buildFeatures {
-        // Отключайте только если не используете соответствующие артефакты,
-        // иначе сборка или код сломаются.
+        // Отключайте только те фичи, которые гарантированно не используются в модуле.
+        // Например, buildConfig = false сломает доступ к BuildConfig.* в этом модуле.
         buildConfig = false
         aidl = false
         renderScript = false  // RenderScript устарел; включайте только при наличии легаси-кода
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Запускаем полный Lint в CI, не на локальных release-сборках
+        // ✅ Полный Lint имеет смысл запускать в CI.
+        // Отключение checkReleaseBuilds для локальных сборок уменьшает время сборки,
+        // но убедитесь, что релизные артефакты проверяются в pipeline.
+        checkReleaseBuilds = false
     }
 }
 ```
@@ -112,7 +122,7 @@ include(":core:network", ":core:database")
 // ✅ Изоляция изменений → меньше затронутых модулей при правках
 ```
 
-**Бонус**: Gradle Remote Build Cache для команды (при корректной конфигурации инфраструктуры).
+**Бонус**: Gradle Remote Build Cache для команды (при корректной и безопасной конфигурации инфраструктуры).
 
 ### 5. Профилирование
 
@@ -138,28 +148,34 @@ include(":core:network", ":core:database")
 ### 1. Critical gradle.properties settings
 
 ```properties
-# ✅ Parallel build (tune for your machine)
+# ✅ Parallel build
+# Gradle usually chooses a good default for workers based on CPU cores.
+# Set org.gradle.workers.max explicitly only when you understand the trade-offs and after profiling.
 org.gradle.parallel=true
-org.gradle.workers.max=8
+# org.gradle.workers.max=8
 
-# ✅ Build cache and configuration cache (only if plugins/tasks are compatible)
+# ✅ Build cache
 org.gradle.caching=true
+
+# ✅ Configuration cache — ENABLE GRADUALLY, only when plugins/tasks are compatible.
+# Incompatible tasks may cause failures or incorrect behavior.
 org.gradle.configuration-cache=true
 
 # ✅ File system watching
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap (adjust based on available memory)
+# ✅ JVM heap (tune based on available memory and profiling)
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Non-transitive R classes (reduces unnecessary recompilation)
+# ✅ Non-transitive R classes (reduces unnecessary recompilation and dependency graph size)
 android.nonTransitiveRClass=true
 
 # ✅ Incremental compilation (enabled by default in modern Kotlin/AGP)
 kotlin.incremental=true
 ```
 
-**Impact**: Potentially up to +30-70% on incremental builds and +15-30% on clean builds, depending on project and environment.
+**Impact**: These settings can bring significant improvements (e.g., noticeable gains on incremental builds),
+but exact percentages vary greatly with project structure, plugins, hardware, and CI setup.
 
 ### 2. Dependencies: implementation vs api
 
@@ -169,30 +185,34 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.retrofit)
 
-    // ❌ api exposes dependencies → changes trigger rebuilds of consumers
+    // ❌ api exposes dependencies → changes trigger rebuilds of consumers.
+    // Use api only when you really need to expose those types as part of the public API.
     // api(libs.retrofit)
 
-    // ✅ KSP instead of Kapt (often up to ~2x faster for annotation processing)
+    // ✅ KSP instead of Kapt (often noticeably faster for annotation processing)
     ksp(libs.hilt.compiler)
 }
 ```
 
-**Rule**: Use `api` only if the dependency is part of the module's public API.
+**Rule**: Use `api` only if the dependency is part of the module's public API; otherwise prefer `implementation`.
 
 ### 3. Disable unused features
 
 ```kotlin
 android {
     buildFeatures {
-        // Disable only if you are not using the generated artifacts;
-        // otherwise builds or references will break.
+        // Disable only the features that are definitely unused in this module.
+        // For example, buildConfig = false will break any BuildConfig.* references here.
         buildConfig = false
         aidl = false
         renderScript = false  // RenderScript is deprecated; enable only for existing legacy usage
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Run full Lint in CI instead of local release builds
+        // ✅ Running full Lint in CI makes sense.
+        // Disabling checkReleaseBuilds for local builds can speed up development,
+        // but ensure release artifacts are linted in your pipeline.
+        checkReleaseBuilds = false
     }
 }
 ```
@@ -209,7 +229,7 @@ include(":core:network", ":core:database")
 // ✅ Change isolation → fewer modules affected per change
 ```
 
-**Bonus**: Gradle Remote Build Cache for team collaboration (with proper infrastructure configuration).
+**Bonus**: Gradle Remote Build Cache for team collaboration (with correct and secure infrastructure configuration).
 
 ### 5. Profiling
 

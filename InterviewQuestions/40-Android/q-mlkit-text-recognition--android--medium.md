@@ -30,7 +30,7 @@ tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit
 
 ## Ответ (RU)
 
-ML Kit предоставляет on-device OCR для разных скриптов через отдельные модули: Latin, Chinese, Japanese, Korean, Devanagari (каждый требует загрузки модели ~10–30 MB при первом использовании, кроме Latin, который встроен).
+ML Kit предоставляет on-device OCR для разных скриптов через отдельные модули: Latin, Chinese, Japanese, Korean, Devanagari (каждый модуль имеет собственный размер; значения порядка десятков мегабайт типичны, но не являются гарантированными; Latin-модель поставляется вместе с библиотекой).
 
 ### Базовая Реализация
 
@@ -43,7 +43,7 @@ dependencies {
 }
 
 // ✅ Правильно: Suspend-обертка + явное управление ресурсами
-class TextRecognitionManager(context: Context) {
+class TextRecognitionManager {
     private val latinRecognizer = TextRecognition.getClient(
         TextRecognizerOptions.DEFAULT_OPTIONS
     )
@@ -80,7 +80,7 @@ class BadManager {
 ```
 
 **Ключевые моменты:**
-- Latin распознавание встроено (модель поставляется с библиотекой), остальные скрипты загружаются отдельно при первом использовании.
+- Latin распознавание доступно сразу (модель поставляется с библиотекой), остальные скрипты могут требовать загрузки модели при первом использовании.
 - On-device: быстро (~десятки-сотни мс), offline, приватно; подходит для большинства сценариев.
 - Облачное распознавание (Cloud Vision / Firebase ML) — отдельный сервис; выбирайте его только при жёстких требованиях к качеству, редким скриптам или сложным документам.
 - Закрывайте recognizers, когда они больше не нужны (например, в onCleared() `ViewModel` или при уничтожении компонента), чтобы освободить ресурсы.
@@ -239,9 +239,11 @@ data class ScannedDocument(
 enum class ScriptType { LATIN, CHINESE, JAPANESE, KOREAN, DEVANAGARI }
 
 class ModelDownloadManager(private val context: Context) {
-    // ✅ Пример: принудительная загрузка модели для конкретного скрипта (на основе опций)
+    // ⚠️ На момент подготовки заметки точный публичный API для пошагового прогресса
+    // загрузки on-device моделей Text Recognition v2 может отличаться; пример ниже
+    // является иллюстративным и требует проверки по актуальной документации ML Kit.
     fun downloadModelIfNeeded(script: ScriptType, onProgress: (Int) -> Unit) {
-        if (script == ScriptType.LATIN) return  // Latin модель уже доступна с библиотекой
+        if (script == ScriptType.LATIN) return  // Latin модель доступна с библиотекой
 
         val conditions = DownloadConditions.Builder()
             .requireWifi()
@@ -256,14 +258,10 @@ class ModelDownloadManager(private val context: Context) {
         }
 
         val client = TextRecognition.getClient(options)
+        // Проверяйте актуальный API ML Kit: этот вызов демонстрационный.
         client.downloadModelIfNeeded(conditions)
-            .addOnProgressListener { snapshot ->
-                val total = snapshot.totalByteCount
-                if (total > 0) {
-                    val progress = (snapshot.bytesDownloaded * 100 / total).toInt()
-                    onProgress(progress)
-                }
-            }
+            .addOnSuccessListener { onProgress(100) }
+            .addOnFailureListener { /* обработка ошибок */ }
     }
 }
 ```
@@ -295,7 +293,7 @@ class ModelDownloadManager(private val context: Context) {
 
 ## Answer (EN)
 
-ML Kit provides on-device OCR for different scripts via separate modules: Latin, Chinese, Japanese, Korean, Devanagari. Latin is bundled via its library; other script models are downloaded on demand (typically ~10–30 MB each).
+ML Kit provides on-device OCR for different scripts via separate modules: Latin, Chinese, Japanese, Korean, Devanagari. Latin is available via its library; other script models may be downloaded on demand (sizes are implementation-dependent; tens of MB are typical but not guaranteed).
 
 ### Basic Implementation
 
@@ -308,7 +306,7 @@ dependencies {
 }
 
 // ✅ Correct: suspend wrapper + explicit resource management
-class TextRecognitionManager(context: Context) {
+class TextRecognitionManager {
     private val latinRecognizer = TextRecognition.getClient(
         TextRecognizerOptions.DEFAULT_OPTIONS
     )
@@ -345,7 +343,7 @@ class BadManager {
 ```
 
 **Key points:**
-- Latin model is available with the library; other script models are downloaded on first use.
+- Latin model is available with the library; other script models are downloaded on first use if needed.
 - On-device: fast (tens to low hundreds of ms), offline, privacy-preserving; suitable for most use cases.
 - Cloud-based text recognition (Cloud Vision / Firebase ML) is a separate product; use it only when you need higher accuracy on complex layouts, rare scripts, or server-side processing.
 - Close recognizers when they are no longer needed (e.g., in `ViewModel`.onCleared or component teardown) to release resources.
@@ -504,7 +502,10 @@ data class ScannedDocument(
 enum class ScriptType { LATIN, CHINESE, JAPANESE, KOREAN, DEVANAGARI }
 
 class ModelDownloadManager(private val context: Context) {
-    // ✅ Example: proactively ensure model download for a given script using v2 APIs
+    // ⚠️ At the time of writing, the exact public API surface for tracking
+    // on-device Text Recognition v2 model download progress may differ.
+    // The example below is illustrative and must be verified against the
+    // latest official ML Kit documentation.
     fun downloadModelIfNeeded(script: ScriptType, onProgress: (Int) -> Unit) {
         if (script == ScriptType.LATIN) return  // Latin is available with the library
 
@@ -521,14 +522,10 @@ class ModelDownloadManager(private val context: Context) {
         }
 
         val client = TextRecognition.getClient(options)
+        // Check latest ML Kit APIs; this call is demonstrative only.
         client.downloadModelIfNeeded(conditions)
-            .addOnProgressListener { snapshot ->
-                val total = snapshot.totalByteCount
-                if (total > 0) {
-                    val progress = (snapshot.bytesDownloaded * 100 / total).toInt()
-                    onProgress(progress)
-                }
-            }
+            .addOnSuccessListener { onProgress(100) }
+            .addOnFailureListener { /* handle error */ }
     }
 }
 ```

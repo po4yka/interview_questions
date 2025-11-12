@@ -11,7 +11,7 @@ subtopics:
 - service
 question_kind: theory
 difficulty: medium
-original_language: en
+original_language: ru
 language_tags:
 - en
 - ru
@@ -33,6 +33,7 @@ tags:
 - difficulty/medium
 - en
 - ru
+
 
 ---
 
@@ -184,11 +185,6 @@ Two primary lifecycle paths:
 
 These paths can be combined. For example, you can start a background music service with `startService()` and later have an activity bind to it with `bindService()` to control playback. In such cases, `stopService()`/`stopSelf()` will not fully stop the service until all bound clients have unbound.
 
-## References
-- [Services overview](https://developer.android.com/guide/components/services)
-- [Android `Service` Tutorial](https://www.vogella.com/tutorials/AndroidServices/article.html)
-- [Android `Service` Tutorial](https://www.survivingwithandroid.com/android-service-tutorial-2/)
-
 ## Follow-ups
 
 - [[q-anr-application-not-responding--android--medium]]
@@ -196,6 +192,11 @@ These paths can be combined. For example, you can start a background music servi
 - В каких случаях предпочтительнее использовать `WorkManager` вместо `Service`?
 - Каковы ключевые отличия между started и bound `Service` в плане жизненного цикла и управления ресурсами?
 - Как правильно организовать foreground `Service` и уведомления для длительных операций (например, воспроизведения медиа или загрузок)?
+
+## References
+- [Services overview](https://developer.android.com/guide/components/services)
+- [Android `Service` Tutorial](https://www.vogella.com/tutorials/AndroidServices/article.html)
+- [Android `Service` Tutorial](https://www.survivingwithandroid.com/android-service-tutorial-2/)
 
 ## Related Questions
 

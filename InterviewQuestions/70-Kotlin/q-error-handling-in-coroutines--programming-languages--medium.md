@@ -18,13 +18,16 @@ tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin
 # Вопрос (RU)
 > Какие известны способы обработки ошибок в корутинах?
 
+# Question (EN)
+> What methods are known for error handling in coroutines?
+
 ## Ответ (RU)
 
 Существует несколько распространённых способов обработки ошибок в корутинах:
 
 1. Try-catch внутри `launch`/`async` (в том числе вокруг `await()`) — локальная обработка исключений.
-2. `CoroutineExceptionHandler` — обработка необработанных исключений на уровне scope для корутин типа `launch`.
-3. `supervisorScope` / `SupervisorJob` — когда нужно изолировать ошибки и не отменять "соседние" корутины.
+2. `CoroutineExceptionHandler` — обработка необработанных исключений на уровне scope для корутин типа `launch` (fire-and-forget).
+3. `supervisorScope` / `SupervisorJob` — когда нужно изолировать ошибки конкретных дочерних корутин и не отменять их "соседей".
 4. Использование `Result<T>` — обёртка результата для явной, функциональной обработки ошибок.
 
 ### Метод 1: Try-Catch
@@ -75,7 +78,7 @@ suspend fun tryCatchAroundAwait() = coroutineScope {
 ```kotlin
 import kotlinx.coroutines.*
 
-// Глобальный (на уровне scope) обработчик необработанных исключений в launch
+// Глобальный (на уровне scope) обработчик НЕобработанных исключений в launch-подобных корутинах
 fun exceptionHandler() = runBlocking {
     val handler = CoroutineExceptionHandler { _, exception ->
         println("Caught by handler: ${exception.message}")
@@ -84,14 +87,16 @@ fun exceptionHandler() = runBlocking {
     val scope = CoroutineScope(Job() + handler)
 
     scope.launch {
-        throw RuntimeException("Error!")  // Необработанное здесь -> попадёт в CoroutineExceptionHandler
+        throw RuntimeException("Error!")  // Не перехвачено здесь -> попадёт в CoroutineExceptionHandler
     }
 
     delay(100)
 }
 
 // Примечания:
-// - CoroutineExceptionHandler обрабатывает необработанные исключения из launch и других fire-and-forget корутин.
+// - CoroutineExceptionHandler срабатывает только для необработанных исключений в корутинах типа launch / fire-and-forget,
+//   когда корутина является "корневой" для данного scope.
+// - Если исключение уже перехвачено try-catch внутри корутины, до CoroutineExceptionHandler оно не дойдёт.
 // - Для async исключения сохраняются и выбрасываются при await(), поэтому их нужно ловить через try-catch вокруг await().
 
 // Пример в Android ViewModel
@@ -114,7 +119,7 @@ class MyViewModel : ViewModel() {
 ```kotlin
 import kotlinx.coroutines.*
 
-// supervisorScope: сбой одного потомка не отменяет других
+// supervisorScope: сбой одного дочернего не отменяет других дочерних
 suspend fun supervisorExample() = supervisorScope {
     launch {
         throw Exception("Error 1")  // Падает только эта корутина
@@ -126,7 +131,7 @@ suspend fun supervisorExample() = supervisorScope {
     }
 }
 
-// Несколько независимых задач с SupervisorJob
+// Несколько независимых задач с SupervisorJobs
 suspend fun loadWidgets() {
     val handler = CoroutineExceptionHandler { _, exception ->
         logError(exception)
@@ -134,15 +139,17 @@ suspend fun loadWidgets() {
 
     val scope = CoroutineScope(SupervisorJob() + handler)
 
-    scope.launch { loadWidget1() }  // Независимые задачи
+    scope.launch { loadWidget1() }  // Независимые дочерние задачи; падение одной не отменит остальные
     scope.launch { loadWidget2() }
     scope.launch { loadWidget3() }
 }
 ```
 
 // Примечания:
-// - `supervisorScope` / `SupervisorJob` предотвращают отмену "соседних" корутин при падении одной.
-// - Необработанное исключение в родительском scope (или не обработанное дочерней корутиной) всё ещё может отменить этот scope.
+// - `supervisorScope` / `SupervisorJob` изолируют ошибки: необработанное исключение отменяет только упавшую дочернюю корутину,
+//   но не отменяет её "соседей".
+// - При этом необработанное исключение всё равно репортится наверх (например, в CoroutineExceptionHandler родительского scope).
+// - Исключение в самом родителе (или вне дочерних корутин) по-прежнему может отменить весь scope.
 
 ### Метод 4: Тип Result
 
@@ -177,7 +184,7 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // DO: используйте CoroutineExceptionHandler на уровне scope для необработанных исключений в launch
+    // DO: используйте CoroutineExceptionHandler на уровне scope для необработанных исключений в launch-подобных корутинах
     fun good2() {
         val handler = CoroutineExceptionHandler { _, e -> logError(e) }
         CoroutineScope(SupervisorJob() + handler).launch {
@@ -202,18 +209,13 @@ class ErrorHandlingBestPractices {
 }
 ```
 
----
-
-# Question (EN)
-> What methods are known for error handling in coroutines?
-
 ## Answer (EN)
 
 There are several ways to handle errors in coroutines:
 
 1. Try-catch inside `launch`/`async` (including around `await()`) — local error handling.
-2. `CoroutineExceptionHandler` — scope-level handler for uncaught exceptions from `launch`-like coroutines.
-3. `supervisorScope` / `SupervisorJob` — isolate failures so sibling coroutines are not cancelled.
+2. `CoroutineExceptionHandler` — scope-level handler for uncaught exceptions from `launch`-like (fire-and-forget) coroutines.
+3. `supervisorScope` / `SupervisorJob` — isolate failures of specific children so sibling coroutines are not cancelled.
 4. `Result<T>` — wrap results in `Result` for explicit, functional-style error handling.
 
 ### Method 1: Try-Catch
@@ -264,7 +266,7 @@ suspend fun tryCatchAroundAwait() = coroutineScope {
 ```kotlin
 import kotlinx.coroutines.*
 
-// Global-like exception handler for uncaught exceptions in launch
+// Scope-level handler for UNCAUGHT exceptions in launch-like coroutines
 fun exceptionHandler() = runBlocking {
     val handler = CoroutineExceptionHandler { _, exception ->
         println("Caught by handler: ${exception.message}")
@@ -280,7 +282,9 @@ fun exceptionHandler() = runBlocking {
 }
 
 // Note:
-// - CoroutineExceptionHandler handles uncaught exceptions from launch and other fire-and-forget coroutines.
+// - CoroutineExceptionHandler triggers only for uncaught exceptions in launch / fire-and-forget coroutines
+//   where the coroutine is a "root" for that scope.
+// - If the exception is already caught via try-catch inside the coroutine, it will NOT reach CoroutineExceptionHandler.
 // - For async, exceptions are captured and rethrown on await(), so they must be handled via try-catch around await().
 
 // In Android ViewModel
@@ -303,10 +307,10 @@ class MyViewModel : ViewModel() {
 ```kotlin
 import kotlinx.coroutines.*
 
-// supervisorScope: one child failure doesn't cancel its siblings
+// supervisorScope: failure of one child does not cancel its siblings
 suspend fun supervisorExample() = supervisorScope {
     launch {
-        throw Exception("Error 1")  // Fails only this child
+        throw Exception("Error 1")  // Only this coroutine fails
     }
 
     launch {
@@ -323,15 +327,17 @@ suspend fun loadWidgets() {
 
     val scope = CoroutineScope(SupervisorJob() + handler)
 
-    scope.launch { loadWidget1() }  // Independent
-    scope.launch { loadWidget2() }  // Independent
-    scope.launch { loadWidget3() }  // Independent
+    scope.launch { loadWidget1() }  // Independent children; failure in one does not cancel others
+    scope.launch { loadWidget2() }
+    scope.launch { loadWidget3() }
 }
 ```
 
 // Note:
-// - supervisorScope / SupervisorJob prevent failure of one child from cancelling siblings.
-// - An unhandled exception in the parent itself (or not handled by a child) still can cancel that scope.
+// - `supervisorScope` / `SupervisorJob` isolate failures: an unhandled exception cancels only the failed child,
+//   but does not cancel its siblings.
+// - The exception is still reported upward (e.g., to the parent's CoroutineExceptionHandler).
+// - An exception in the parent itself (outside child coroutines) can still cancel the entire scope.
 
 ### Method 4: Result Type
 
@@ -366,7 +372,7 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // DO: Use CoroutineExceptionHandler at scope level for uncaught exceptions in launch coroutines
+    // DO: Use CoroutineExceptionHandler at scope level for uncaught exceptions in launch-like coroutines
     fun good2() {
         val handler = CoroutineExceptionHandler { _, e -> logError(e) }
         CoroutineScope(SupervisorJob() + handler).launch {
@@ -390,8 +396,6 @@ class ErrorHandlingBestPractices {
     }
 }
 ```
-
----
 
 ## Дополнительные вопросы (RU)
 

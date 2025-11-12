@@ -20,80 +20,83 @@ tags: [android, backward-compatibility, compilation, difficulty/medium, java, ko
 
 ---
 
+# Question (EN)
+> What is desugaring in Android and how does it work?
+
+---
+
 ## Ответ (RU)
 
-**Desugaring** — это процесс преобразования более современных конструкций языка и стандартной библиотеки в более примитивный байткод и/или вызовы вспомогательных библиотек, совместимые с ранними версиями Android Runtime. В контексте Android обычно выделяют:
+**Desugaring** — это процесс преобразования более современных конструкций языка и стандартной библиотеки в более примитивный байткод и/или вызовы вспомогательных библиотек, совместимые с более старыми реализациями Android Runtime (ART/Dalvik) и форматом DEX.
 
-- desugaring языковых возможностей Java 8+;
-- Core Library Desugaring — подмена части Java стандартной библиотеки (jdk8+ API) на реализации из `desugar_jdk_libs`.
+В контексте Android обычно выделяют:
 
-Kotlin-компилятор сам по себе компилирует Kotlin-код в байткод, совместимый с выбранным `jvmTarget` (часто 1.8); на Android дальнейший desugaring языка/библиотек делает D8/R8.
+- desugaring языковых возможностей Java 8+ (language desugaring);
+- Core Library Desugaring — подмена части Java стандартной библиотеки (Java 8+ API) на реализации из `desugar_jdk_libs` (API desugaring).
 
-### Зачем Нужен Desugaring?
+Kotlin-компилятор сам по себе компилирует Kotlin-код в байткод, совместимый с выбранным `jvmTarget` (часто `1.8`). На Android дальнейший desugaring и преобразование в DEX делает D8/R8 (для Java-байткода и перенаправления вызовов API).
 
-Android-устройства используют разные версии Android Runtime (ART или старую Dalvik VM). Часть устройств всё ещё работает на версиях, где нет поддержки многих Java 8+ языковых конструкций и стандартных API:
+Важно различать:
+- language desugaring (языковые конструкции Java 8+) — работает для низких `minSdk` (ниже 21 тоже),
+- Core Library Desugaring (Java 8+ API) — официально поддерживается для проектов с `minSdk 21+`.
 
-- Java-лямбды и method references (на уровне Java-байткода);
+### Зачем нужен Desugaring?
+
+Android-устройства используют разные версии Android Runtime (ART или старую Dalvik VM). Исторически часть устройств не имела поддержки многих Java 8+ языковых конструкций и стандартных API.
+
+Без desugaring было бы проблематично использовать:
+
+- Java-лямбды и method references (как фичу байткода Java 8);
 - default и static методы в интерфейсах;
-- `java.time` (официально доступен только с Android 8.0 / API 26);
+- `java.time` (официально доступен нативно с Android 8.0 / API 26);
 - `java.util.stream.*`;
 - `java.util.Optional`;
-- другие API Java 8+.
+- другие Java 8+ API.
 
-Desugaring позволяет использовать эти возможности при таргетинге minSdk 21+, автоматически преобразуя их в совместимый DEX-код и подключая нужные реализации библиотек.
+Desugaring позволяет использовать эти возможности при таргетинге старых API-уровней, автоматически преобразуя их в совместимый DEX-код и/или подключая нужные реализации библиотек.
 
 ### Типы Desugaring
 
 #### 1. Java 8+ Language Features Desugaring
 
-Android Gradle Plugin выполняет desugaring языковых возможностей Java 8+ на этапе D8/R8 для проекта с `minSdk < 24` (и соответствующими `compileOptions`). Это касается кода на Java. Kotlin-лямбды и inline-функции обрабатываются самим Kotlin-компилятором и не требуют отдельного Java-лямбда-desugaring.
+Android Gradle Plugin через D8/R8 выполняет desugaring Java 8+ языковых возможностей на этапе преобразования JVM-байткода в DEX, если таргетируемые устройства не поддерживают их нативно.
 
-Пример (идея для Java-кода):
+Это касается Java-кода: лямбды, method references, default/static методы в интерфейсах и т.п. переписываются в эквивалентные конструкции, понятные старому рантайму.
+
+Kotlin-лямбды, inline-функции и другие фичи Kotlin понижаются самим Kotlin-компилятором в обычные анонимные классы/вызовы (в соответствии с `jvmTarget`), а D8/R8 затем просто оптимизирует и конвертирует этот байткод в DEX.
+
+Упрощённый пример для Java (идея именно language desugaring):
 
 ```java
-// Java 8 стиль
-list.stream().filter(x -> x > 2);
+// Java 8 стиль (лямбда)
+Runnable r = () -> System.out.println("Hello");
 
-// После desugaring для ранних API
-list.stream().filter(new Predicate<Integer>() {
+// Концептуально после desugaring
+Runnable r2 = new Runnable() {
     @Override
-    public boolean test(Integer x) {
-        return x > 2;
+    public void run() {
+        System.out.println("Hello");
     }
-});
+};
 ```
 
-Пример Kotlin-кода, использующего лямбду (важно не путать с Java-лямбдами):
-
-```kotlin
-val list = listOf(1, 2, 3, 4, 5)
-val filtered = list.filter { it > 2 } // Обрабатывается Kotlin-компилятором; D8 лишь переводит байткод в DEX
-
-val names = listOf("Alice", "Bob", "Charlie")
-names.forEach(::println)
-
-interface Printer {
-    fun print(message: String) {
-        println("Printing: $message")
-    }
-}
-```
-
-Ключевой момент: на Android desugaring языка в D8/R8 гарантирует, что Java 8+ конструкции будут работать на устройствах с `minSdk 21+`, даже если VM не поддерживает их нативно.
+Ключевой момент: language desugaring обеспечивает поддержку Java 8+ языковых конструкций на устройствах, чьи VM их нативно не понимают (при корректной конфигурации Gradle/AGP).
 
 #### 2. Java 8+ API Desugaring (Core Library Desugaring)
 
-Для использования современных Java API (например, `java.time`, `java.util.stream`, `java.util.function`, `Optional`) на устройствах с `minSdk 21+` включают Core Library Desugaring:
+Для использования современных Java API (например, `java.time`, `java.util.stream`, `java.util.function`, `Optional`) на устройствах с `minSdk 21+` включают Core Library Desugaring. В этом режиме D8/R8 переписывает вызовы этих API на реализации из `desugar_jdk_libs`.
+
+Пример конфигурации:
 
 ```gradle
 // build.gradle (Module: app)
 android {
     compileOptions {
-        // Включаем поддержку Java 8
+        // Включаем поддержку Java 8+ синтаксиса
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
 
-        // Включаем Core Library Desugaring
+        // Включаем Core Library Desugaring для Java 8+ API
         coreLibraryDesugaringEnabled true
     }
 }
@@ -119,9 +122,10 @@ fun getCurrentDate(): String {
     return now.format(formatter)
 }
 
-// Использование Stream API через Java Streams
-fun sumOfEvenSquares(numbers: List<Int>): Int {
-    return numbers.stream() // Kotlin-список представлен как java.util.List
+// Пример Stream API обычно пишут в Java-коде; в Kotlin аналогичное делают через функции коллекций.
+// Здесь иллюстрируем концепцию для Java Streams (предполагается Java-код или соответствующий interop):
+fun sumOfEvenSquaresJavaStyle(numbers: java.util.List<Int>): Int {
+    return numbers.stream()
         .filter { it % 2 == 0 }
         .mapToInt { it * it }
         .sum()
@@ -133,9 +137,9 @@ fun printOptional() {
 }
 ```
 
-`desugar_jdk_libs` поставляет реализации нужных API, и D8/R8 перенаправляет вызовы на них.
+`desugar_jdk_libs` поставляет реализации нужных API, а D8/R8 переписывает байткод так, чтобы вызовы шли на них.
 
-### Как Работает Desugaring?
+### Как работает Desugaring?
 
 Упрощённо для Kotlin/Java-проекта под Android:
 
@@ -148,7 +152,10 @@ Kotlin/Java код → Kotlin/Java Compiler → JVM bytecode (обычно Java 
 #### Этап 2: Desugaring + DEX
 
 ```
-JVM bytecode (Java 8) → D8/R8: language desugaring + перенаправление на desugar_jdk_libs → DEX bytecode (для minSdk 21+)
+JVM bytecode → D8/R8:
+  - language desugaring для Java 8+ фич (где нужно),
+  - переписывание поддерживаемых Java 8+ API на desugar_jdk_libs (если coreLibraryDesugaringEnabled),
+  - вывод DEX bytecode под заданный minSdk.
 ```
 
 #### Этап 3: Упаковка
@@ -157,7 +164,7 @@ JVM bytecode (Java 8) → D8/R8: language desugaring + перенаправле�
 DEX bytecode + desugar_jdk_libs → APK/AAB
 ```
 
-### Какие API Поддерживаются Через Core Library Desugaring?
+### Какие API поддерживаются через Core Library Desugaring?
 
 (актуальные диапазоны зависят от версии `desugar_jdk_libs`, ниже типичный пример для minSdk 21+):
 
@@ -168,11 +175,11 @@ DEX bytecode + desugar_jdk_libs → APK/AAB
 | `java.util.Optional` | Android 7.0 (API 24) | Android 5.0+ (API 21+) |
 | `java.util.function.*` | Android 7.0 (API 24) | Android 5.0+ (API 21+) |
 
-Важно: официально поддерживаемый Core Library Desugaring ориентирован на `minSdk 21+`.
+Важно: ограничение по `minSdk 21+` относится именно к Core Library Desugaring (API), а не к language desugaring Java.
 
-### Пример: Работа С Датами Без Desugaring
+### Пример: работа с датами без desugaring
 
-**Без Core Library Desugaring (старый способ, совместим с minSdk < 21):**
+**Без Core Library Desugaring (старый способ, подходит и для очень низких minSdk):**
 
 ```kotlin
 import java.util.Calendar
@@ -219,35 +226,30 @@ import java.util.stream.Collectors
 
 data class User(val name: String, val age: Int, val city: String)
 
-fun filterUsersWithDesugaring() {
-    val users = listOf(
-        User("Alice", 25, "Moscow"),
-        User("Bob", 30, "London"),
-        User("Charlie", 22, "Moscow"),
-        User("Diana", 28, "Paris")
-    )
-
-    // Stream API работает благодаря Core Library Desugaring (minSdk 21+)
+// Для чистого Kotlin обычно используют функции стандартной библиотеки вместо Java Streams.
+// Здесь пример показывает, что при Core Library Desugaring Java Streams могут работать на API 21+,
+// если они используются из Java-кода или через Java-коллекции.
+fun filterUsersWithDesugaring(users: java.util.List<User>) {
     val moscowAdults = users.stream()
         .filter { it.city == "Moscow" }
         .filter { it.age >= 25 }
         .map { it.name }
         .collect(Collectors.toList())
 
-    println(moscowAdults) // [Alice]
+    println(moscowAdults)
 }
 ```
 
 ### Ограничения Desugaring
 
-1. Минимальная версия Android: официально поддерживаемый Core Library Desugaring рассчитан на `minSdk 21+`.
-2. Увеличение размера APK: добавляет порядка 100–300 КБ к размеру APK/AAB (в зависимости от фич и R8).
-3. Покрытие API: не все API Java 9+ и части Java 8+ доступны; нужно проверять документацию `desugar_jdk_libs`.
-4. Производительность: возможен небольшой overhead из-за дополнительного слоя совместимости и реализаций поверх рантайма.
+1. Core Library Desugaring официально поддерживается для проектов с `minSdk 21+`.
+2. Увеличение размера APK: обычно добавляет порядка 100–300 КБ к размеру APK/AAB (в зависимости от используемых API и R8).
+3. Покрытие API: поддерживается только определённый поднабор Java 8+ (и некоторых более новых) API; нужно проверять документацию `desugar_jdk_libs`.
+4. Производительность: возможен небольшой overhead из-за дополнительного слоя совместимости по сравнению с нативными реализациями.
 
 ### Альтернативы Desugaring
 
-#### 1. Использование ThreeTenABP (для java.time, особенно при minSdk < 21)
+#### 1. Использование ThreeTenABP (для `java.time`, особенно при очень низком minSdk)
 
 ```gradle
 dependencies {
@@ -268,7 +270,7 @@ fun getDateWithThreeTen(): String {
 
 #### 2. Повышение minSdkVersion
 
-Если ваше приложение не поддерживает старые версии Android и `minSdk >= 26`, большинство нужных Java 8 API уже доступны нативно, и Core Library Desugaring может быть не нужен:
+Если приложение поддерживает только новые версии Android и `minSdk >= 26`, большинство нужных Java 8 API доступны нативно, и Core Library Desugaring может быть не нужен:
 
 ```gradle
 android {
@@ -278,7 +280,7 @@ android {
 }
 ```
 
-### Проверка Работы Desugaring
+### Проверка работы Desugaring
 
 ```kotlin
 import java.time.LocalDate
@@ -291,9 +293,8 @@ class DesugaringExample {
         println("Date: $date")
     }
 
-    // Проверка Stream API
-    fun testStreamAPI() {
-        val numbers = listOf(1, 2, 3, 4, 5)
+    // Проверка Stream API (для Java-коллекций)
+    fun testStreamAPI(numbers: java.util.List<Int>) {
         val sum = numbers.stream()
             .filter { it > 2 }
             .mapToInt { it }
@@ -309,7 +310,7 @@ class DesugaringExample {
 }
 ```
 
-### Как Включить Desugaring: Полная Конфигурация
+### Как включить Desugaring: полная конфигурация
 
 ```gradle
 // build.gradle (Module: app)
@@ -323,7 +324,7 @@ android {
     }
 
     compileOptions {
-        // Поддержка Java 8+
+        // Java 8+ language features
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
 
@@ -342,7 +343,7 @@ dependencies {
 }
 ```
 
-### Практический Пример: До И После Desugaring
+### Практический пример: до и после Desugaring
 
 **До (без Core Library Desugaring, Java 6/7 стиль):**
 
@@ -366,7 +367,7 @@ fun processUsersBefore(users: List<User>): List<String> {
 fun formatDateBefore(timestamp: Long): String {
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = timestamp
-    val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+    val sdf = SimpleDateFormat("dd.MM.yYYY HH:mm", Locale.getDefault())
     return sdf.format(calendar.time)
 }
 ```
@@ -380,7 +381,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
 
-fun processUsersAfter(users: List<User>): List<String> {
+fun processUsersAfter(users: java.util.List<User>): java.util.List<String> {
     return users.stream()
         .filter { it.age >= 18 }
         .filter { it.city == "Moscow" }
@@ -391,8 +392,8 @@ fun processUsersAfter(users: List<User>): List<String> {
 fun formatDateAfter(timestamp: Long): String {
     val instant = Instant.ofEpochMilli(timestamp)
     val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yYYY HH:mm")
-    return dateTime.format(formatter)
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+    return dateTime.format(dateTime)
 }
 ```
 
@@ -400,87 +401,87 @@ fun formatDateAfter(timestamp: Long): String {
 
 Desugaring в Android — это механизм, позволяющий:
 
-1. Использовать Java 8+ языковые фичи при таргетинге `minSdk 21+`, даже если рантайм не поддерживает их нативно.
-2. Использовать часть Java 8+ API (через Core Library Desugaring) — `java.time`, Streams, `Optional`, `java.util.function` и др.
+1. Использовать Java 8+ языковые фичи даже на устройствах, где рантайм их нативно не поддерживает (language desugaring).
+2. Использовать часть Java 8+ API (через Core Library Desugaring) — `java.time`, Streams, `Optional`, `java.util.function` и др. при `minSdk 21+`.
 3. Писать более читаемый и безопасный код, уменьшая зависимость от устаревших API вроде `Calendar` и `SimpleDateFormat`.
-4. Сохранить поддержку широкого спектра устройств за счёт совместимости на уровне DEX и дополнительных библиотек.
+4. Сохранить поддержку широкого спектра устройств за счёт преобразований на уровне байткода и дополнительных библиотек.
 
 Когда использовать:
 
 - Если `minSdk 21+` и вы хотите использовать `java.time`, Stream API, Optional и другие Java 8+ API.
 - Если приемлем небольшой рост размера APK.
 
-Когда не использовать или он не критичен:
+Когда он менее критичен или может быть не нужен:
 
 - Если `minSdk >= 26` и нужные API доступны нативно.
 - Если критичен каждый килобайт и вы не используете соответствующие Java 8+ API.
-- Если вы используете альтернативы (например, ThreeTenABP) для более низких minSdk.
+- Если вы используете альтернативы (например, ThreeTenABP) для очень низких `minSdk`.
 
 ---
 
-# Question (EN)
-> What is desugaring in Android and how does it work?
-
 ## Answer (EN)
 
-Desugaring in Android is the process of converting newer Java 8+ language constructs and selected standard library APIs into simpler bytecode and/or calls to helper libraries so that they are compatible with older Android runtimes (ART/Dalvik and DEX). It lets you write modern code while still targeting lower API levels (commonly `minSdk 21+`), and is implemented primarily by D8/R8 based on your Gradle configuration.
+In Android, desugaring is the process of transforming newer Java 8+ language constructs and selected standard library APIs into simpler bytecode and/or calls to helper libraries so that they are compatible with older Android runtimes (ART/Dalvik) and the DEX format.
+
+In practice this includes two related mechanisms:
+
+- Java 8+ language desugaring: rewriting Java 8+ language features to older-style constructs.
+- Core Library Desugaring: providing alternative implementations of certain Java 8+ library APIs via `desugar_jdk_libs` and rewriting calls to them.
+
+Kotlin is compiled by the Kotlin compiler to JVM bytecode targeting a given `jvmTarget` (commonly `1.8`). On Android, D8/R8 then takes that bytecode (from both Java and Kotlin), performs desugaring where applicable, and converts it to DEX.
+
+Important distinction:
+- Language desugaring (Java 8+ syntax/features) works for low `minSdk` values.
+- Core Library Desugaring (Java 8+ APIs) is officially supported for projects with `minSdk 21+`.
 
 ### Why Desugaring Is Needed
 
-Android devices run different versions of the runtime (ART or the older Dalvik VM), and many of them originally lacked native support for key Java 8+ features. Without desugaring, the following would not work (or would be inconsistently available) on older API levels:
+Android devices run different runtime versions, and many older releases did not natively support important Java 8+ features. Without desugaring, the following would not work reliably on older API levels:
 
-- Java lambdas and method references (at the Java bytecode level),
+- Java lambdas and method references (as Java 8 bytecode features),
 - default and static interface methods,
-- `java.time` (formally only on Android 8.0 / API 26+),
+- `java.time` (natively from Android 8.0 / API 26),
 - `java.util.stream.*`,
 - `java.util.Optional`,
 - other Java 8+ APIs.
 
-Desugaring bridges this gap: it rewrites language features and selected APIs so that they run on older Android versions while you keep a modern code style and a low `minSdk`.
+Desugaring bridges this gap by rewriting language constructs and (optionally) selected APIs so you can keep a modern style while targeting lower API levels.
 
 ### Types of Desugaring
 
 #### 1. Java 8+ Language Features Desugaring
 
-- For Java sources (especially with `minSdk < 24`), Java 8+ language constructs such as lambdas, method references, default methods, and static interface methods are rewritten into an older-style representation that is executable on older runtimes.
-- Kotlin lambdas and inline functions are lowered by the Kotlin compiler itself; D8/R8 only converts that resulting bytecode to DEX and optimizes it, so no separate Java-lambda desugaring step is required for Kotlin.
+For Java sources, when targeting devices that do not support Java 8 features natively, D8/R8 performs language desugaring during bytecode-to-DEX conversion:
 
-Example (Java):
+- lambdas,
+- method references,
+- default/static interface methods,
+- etc.
+
+These are lowered to constructs executable on older runtimes.
+
+Kotlin lambdas and inline functions are lowered by the Kotlin compiler itself based on `jvmTarget`. D8/R8 then optimizes and converts the resulting JVM bytecode to DEX; there is no separate "Java lambda" desugaring step for Kotlin language features.
+
+Conceptual Java example (focusing on language desugaring):
 
 ```java
-// Java 8 style
-list.stream().filter(x -> x > 2);
+// Java 8 style lambda
+Runnable r = () -> System.out.println("Hello");
 
-// Conceptual desugared form for older runtimes
-list.stream().filter(new Predicate<Integer>() {
+// Conceptually desugared form
+Runnable r2 = new Runnable() {
     @Override
-    public boolean test(Integer x) {
-        return x > 2;
+    public void run() {
+        System.out.println("Hello");
     }
-});
+};
 ```
 
-Example (Kotlin lambdas):
-
-```kotlin
-val list = listOf(1, 2, 3, 4, 5)
-val filtered = list.filter { it > 2 } // Lowered by the Kotlin compiler; D8 only converts to DEX
-
-val names = listOf("Alice", "Bob", "Charlie")
-names.forEach(::println)
-
-interface Printer {
-    fun print(message: String) {
-        println("Printing: $message")
-    }
-}
-```
-
-Key idea: language desugaring ensures Java 8+ constructs run correctly even when the VM does not natively support them.
+Key idea: language desugaring enables Java 8+ constructs to run even when the underlying VM does not support them natively, assuming proper Gradle/AGP configuration.
 
 #### 2. Java 8+ API Desugaring (Core Library Desugaring)
 
-To use modern Java APIs such as `java.time`, `java.util.stream`, `java.util.function`, `java.util.Optional` on devices with `minSdk 21+`, you enable Core Library Desugaring. D8/R8 rewrites calls so they are routed to compatible implementations in `desugar_jdk_libs`.
+To use modern Java APIs such as `java.time`, `java.util.stream`, `java.util.function`, `java.util.Optional` on devices when your project has `minSdk 21+`, you can enable Core Library Desugaring. D8/R8 then rewrites those API calls to implementations shipped in `desugar_jdk_libs`.
 
 Configuration example:
 
@@ -488,11 +489,11 @@ Configuration example:
 // build.gradle (Module: app)
 android {
     compileOptions {
-        // Enable Java 8
+        // Enable Java 8+ language level
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
 
-        // Enable Core Library Desugaring
+        // Enable Core Library Desugaring for Java 8+ APIs
         coreLibraryDesugaringEnabled true
     }
 }
@@ -518,8 +519,8 @@ fun getCurrentDate(): String {
     return now.format(formatter)
 }
 
-// Stream API backed by Core Library Desugaring
-fun sumOfEvenSquares(numbers: List<Int>): Int {
+// Java Streams are typically used from Java code; here we show a Java-style example:
+fun sumOfEvenSquaresJavaStyle(numbers: java.util.List<Int>): Int {
     return numbers.stream()
         .filter { it % 2 == 0 }
         .mapToInt { it * it }
@@ -532,23 +533,23 @@ fun printOptional() {
 }
 ```
 
-`desugar_jdk_libs` provides the implementations; D8/R8 redirects the calls.
+`desugar_jdk_libs` supplies the implementations; D8/R8 rewrites bytecode so calls are routed there.
 
 ### How Desugaring Works (Pipeline)
 
 1. Kotlin/Java code → Kotlin/Java compiler → JVM bytecode (usually targeting Java 8).
 2. JVM bytecode → D8/R8:
-   - performs language desugaring for Java 8+ features,
-   - rewrites supported Java 8+ API calls to `desugar_jdk_libs`,
-   - outputs DEX bytecode compatible with the configured `minSdk`.
+   - performs language desugaring for Java 8+ features where required,
+   - rewrites supported Java 8+ API calls to `desugar_jdk_libs` when Core Library Desugaring is enabled,
+   - outputs DEX bytecode compatible with your configured `minSdk`.
 3. DEX bytecode + `desugar_jdk_libs` → packaged into APK/AAB.
 
-### Supported APIs via Core Library Desugaring (API Mapping)
+### Supported APIs via Core Library Desugaring (Typical Mapping)
 
-Typical mapping (exact support depends on `desugar_jdk_libs` version):
+(Exact support depends on the `desugar_jdk_libs` version.)
 
 - `java.time.*`
-  - Without desugaring: officially from Android 8.0 (API 26).
+  - Without desugaring: officially available from Android 8.0 (API 26).
   - With Core Library Desugaring: usable from Android 5.0+ (API 21+).
 - `java.util.stream.*`
   - Without desugaring: from Android 7.0 (API 24).
@@ -560,11 +561,11 @@ Typical mapping (exact support depends on `desugar_jdk_libs` version):
   - Without desugaring: from Android 7.0 (API 24).
   - With Core Library Desugaring: usable from Android 5.0+ (API 21+).
 
-Official Core Library Desugaring support is focused on `minSdk 21+`.
+Remember: the `minSdk 21+` constraint is specific to Core Library Desugaring for these APIs; language desugaring is more broadly applicable.
 
 ### Example: Working with Dates Without vs With Desugaring
 
-Without Core Library Desugaring (legacy, suitable for very low `minSdk`):
+Without Core Library Desugaring (legacy style, also fine for very low `minSdk`):
 
 ```kotlin
 import java.util.Calendar
@@ -611,35 +612,31 @@ import java.util.stream.Collectors
 
 data class User(val name: String, val age: Int, val city: String)
 
-fun filterUsersWithDesugaring() {
-    val users = listOf(
-        User("Alice", 25, "Moscow"),
-        User("Bob", 30, "London"),
-        User("Charlie", 22, "Moscow"),
-        User("Diana", 28, "Paris")
-    )
-
-    // Stream API works on minSdk 21+ when Core Library Desugaring is enabled
+// In Kotlin you normally use collection operations; this example shows Java Streams
+// working on a Java List when Core Library Desugaring is enabled (minSdk 21+).
+fun filterUsersWithDesugaring(users: java.util.List<User>) {
     val moscowAdults = users.stream()
         .filter { it.city == "Moscow" }
         .filter { it.age >= 25 }
         .map { it.name }
         .collect(Collectors.toList())
 
-    println(moscowAdults) // [Alice]
+    println(moscowAdults)
 }
 ```
 
 ### Limitations of Desugaring
 
-1. Minimum API: Core Library Desugaring is officially supported for `minSdk 21+`.
+1. Minimum API:
+   - Core Library Desugaring is officially supported for `minSdk 21+`.
+   - Language desugaring itself is not limited to 21+ and can support lower `minSdk` values.
 2. APK size: typically adds about 100–300 KB to APK/AAB size (depending on usage and R8 shrinking).
-3. API coverage: not all Java 8+/9+ APIs are available; always check the `desugar_jdk_libs` documentation.
-4. Performance: small overhead is possible due to the compatibility layer instead of native implementations.
+3. API coverage: only a subset of Java 8+/9+ APIs is supported; always check `desugar_jdk_libs` documentation.
+4. Performance: there can be a small overhead compared to native platform implementations.
 
 ### Alternatives to Desugaring
 
-#### 1. Using ThreeTenABP (for `java.time`, especially when `minSdk < 21`)
+#### 1. Using ThreeTenABP (for `java.time`, especially with very low `minSdk`)
 
 ```gradle
 dependencies {
@@ -660,7 +657,7 @@ fun getDateWithThreeTen(): String {
 
 #### 2. Increasing minSdkVersion
 
-If your app targets only newer Android versions and `minSdk >= 26`, most required Java 8 APIs are available natively and Core Library Desugaring may not be needed:
+If your app only targets newer Android versions and `minSdk >= 26`, most required Java 8 APIs are available natively and Core Library Desugaring might not be necessary:
 
 ```gradle
 android {
@@ -682,8 +679,7 @@ class DesugaringExample {
         println("Date: $date")
     }
 
-    fun testStreamAPI() {
-        val numbers = listOf(1, 2, 3, 4, 5)
+    fun testStreamAPI(numbers: java.util.List<Int>) {
         val sum = numbers.stream()
             .filter { it > 2 }
             .mapToInt { it }
@@ -769,7 +765,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
 
-fun processUsersAfter(users: List<User>): List<String> {
+fun processUsersAfter(users: java.util.List<User>): java.util.List<String> {
     return users.stream()
         .filter { it.age >= 18 }
         .filter { it.city == "Moscow" }
@@ -780,8 +776,8 @@ fun processUsersAfter(users: List<User>): List<String> {
 fun formatDateAfter(timestamp: Long): String {
     val instant = Instant.ofEpochMilli(timestamp)
     val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yYYY HH:mm")
-    return dateTime.format(formatter)
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+    return dateTime.format(dateTime)
 }
 ```
 
@@ -789,8 +785,8 @@ fun formatDateAfter(timestamp: Long): String {
 
 Desugaring in Android allows you to:
 
-1. Use Java 8+ language features on devices that do not natively support them.
-2. Use selected Java 8+ APIs (via Core Library Desugaring), such as `java.time`, Streams, `Optional`, and `java.util.function`.
+1. Use Java 8+ language features on devices that do not natively support them (language desugaring).
+2. Use selected Java 8+ APIs via Core Library Desugaring (`java.time`, Streams, `Optional`, `java.util.function`, etc.) when your project has `minSdk 21+`.
 3. Keep your code modern, readable, and safer while still supporting a wide range of devices.
 
 Use desugaring when:
@@ -798,7 +794,7 @@ Use desugaring when:
 - `minSdk 21+` and you want modern Java 8+ APIs like `java.time`, Streams, `Optional`.
 - The small size increase (~100–300 KB) is acceptable.
 
-It is less critical when:
+It is less critical or may be unnecessary when:
 
 - `minSdk >= 26` and the required APIs are available natively.
 - Every kilobyte of APK size matters and you are not using those APIs.

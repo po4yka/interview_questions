@@ -11,7 +11,7 @@ language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related: [q-android-storage-types--android--medium]
+related: [c-android-storage-options, q-android-storage-types--android--medium]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
@@ -19,10 +19,10 @@ tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
 ---
 
 # Вопрос (RU)
-> В чем разница между методами commit() и apply() в SharedPreferences?
+> В чем разница между методами `commit()` и `apply()` в `SharedPreferences`?
 
 # Question (EN)
-> What is the difference between commit() and apply() methods in SharedPreferences?
+> What is the difference between `commit()` and `apply()` methods in `SharedPreferences`?
 
 ---
 
@@ -113,7 +113,7 @@ fun onSliderChanged(value: Int) {
 }
 ```
 
-### Типичные Ошибки
+### Типичные ошибки
 
 ```kotlin
 // ❌ НЕ ДЕЛАЙТЕ: commit() на главном потоке для некритичных данных
@@ -143,7 +143,7 @@ fun saveWithValidation(): Boolean {
 }
 ```
 
-### Современная Альтернатива: DataStore
+### Современная альтернатива: DataStore
 
 ```kotlin
 // Для нового кода используйте DataStore вместо SharedPreferences
@@ -158,15 +158,15 @@ suspend fun savePreference(value: String) {
 }
 ```
 
-### Best Practices
+### Рекомендации (Best Practices)
 
-1. **По умолчанию используйте apply()** — подходит для большинства сценариев, снижает риск блокировки UI.
-2. **Используйте commit() только когда**:
-   - Нужно знать, успешна ли запись на диск
-   - Уже на фоновом потоке
-   - Требуются строгие синхронные гарантии
-3. **Не используйте commit() на главном потоке** для частых или некритичных записей.
-4. **Для нового кода рассматривайте миграцию на DataStore**, учитывая его асинхронную природу и более надежную модель.
+1. Используйте `apply()` по умолчанию — он подходит для большинства сценариев и снижает риск блокировки UI.
+2. Используйте `commit()` только когда:
+   - нужно знать, успешна ли запись на диск;
+   - вы уже находитесь на фоновом потоке;
+   - требуются строгие синхронные гарантии.
+3. Не используйте `commit()` на главном потоке для частых или некритичных записей.
+4. Для нового кода предпочитайте `DataStore`, используя его асинхронное поведение и более сильную модель согласованности данных.
 
 ---
 
@@ -314,6 +314,14 @@ suspend fun savePreference(value: String) {
 
 ---
 
+## Дополнительные Вопросы (Follow-ups, RU)
+
+1. Как `SharedPreferences` обрабатывает несколько последовательных вызовов `apply()`, и как это влияет на производительность и целостность данных?
+2. В каких сценариях использование `commit()` строго необходимо, несмотря на его блокирующее поведение?
+3. Как `SharedPreferences` ведет себя при конкурентных изменениях из разных потоков или процессов?
+4. В чем состоят различия между `SharedPreferences` и `DataStore` с точки зрения согласованности, производительности и обработки ошибок?
+5. Как безопасно мигрировать критичные данные из `SharedPreferences` в `DataStore` в продакшн-приложении?
+
 ## Follow-ups
 
 1. How does SharedPreferences batch or coalesce multiple apply() calls, and what are the implications?
@@ -322,11 +330,31 @@ suspend fun savePreference(value: String) {
 4. What are the trade-offs between SharedPreferences and DataStore in terms of consistency, performance, and error handling?
 5. How would you safely migrate critical SharedPreferences data to DataStore in a production app?
 
+## Ссылки (RU)
+
+- [[c-android-storage-options]]
+- [Документация SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences)
+- [Документация DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
+- [Руководство по миграции с SharedPreferences на DataStore](https://developer.android.com/codelabs/android-preferences-datastore)
+
 ## References
 
+- [[c-android-storage-options]]
 - [SharedPreferences Documentation](https://developer.android.com/reference/android/content/SharedPreferences)
 - [DataStore Documentation](https://developer.android.com/topic/libraries/architecture/datastore)
 - [Migration Guide: SharedPreferences to DataStore](https://developer.android.com/codelabs/android-preferences-datastore)
+
+## Связанные Вопросы (RU)
+
+### Предпосылки (Проще)
+- [[q-android-storage-types--android--medium]] - Обзор вариантов хранения данных на Android
+
+### Связанные (Тот же уровень)
+- [[q-android-app-bundles--android--easy]] - Основы `App Bundle`
+
+### Продвинутые (Сложнее)
+- [[q-android-runtime-art--android--medium]] - Внутреннее устройство Android Runtime
+- [[q-android-performance-measurement-tools--android--medium]] - Инструменты измерения производительности на Android
 
 ## Related Questions
 

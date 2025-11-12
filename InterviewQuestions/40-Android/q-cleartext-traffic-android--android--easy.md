@@ -37,9 +37,14 @@ sources:
 **Cleartext traffic** — это незашифрованная HTTP-связь без TLS/SSL (HTTP, WebSocket без wss и т.п.). Любой узел на пути передачи может перехватить и изменить данные.
 
 **Политика Android (упрощённо):**
-- **API 28+ (Android 9+)**: по умолчанию используется политика «secure by default»: cleartext-запросы к доменам без явного разрешения могут быть заблокированы (особенно если домен помечен как незащищённый в платформенных списках или доступен по HTTPS). Рекомендуется считать, что незашифрованный трафик должен быть явно разрешён.
-- **API 23-27**: cleartext разрешён по умолчанию, но может быть ограничен через Network Security Config или `usesCleartextTraffic`.
-- **API <23**: cleartext всегда разрешён (устаревшие версии, нет Network Security Config).
+- **API 28+ (Android 9+)**: действует принцип «secure by default». По умолчанию cleartext-трафик разрешён только если:
+  - приложение явно разрешает его через `android:usesCleartextTraffic="true"` в `<application>` ИЛИ
+  - домен явно разрешён в Network Security Config (`cleartextTrafficPermitted="true"`).
+  В остальных случаях попытки cleartext-запросов приводят к ошибке политики безопасности сети. Практически: относитесь к незашифрованному трафику как к тому, что должно быть явно разрешено и локализовано.
+- **API 23-27**: cleartext разрешён по умолчанию; его можно ограничить с помощью `android:usesCleartextTraffic` и (на поддерживаемых версиях) Network Security Config. Без явных ограничений HTTP-соединения будут работать.
+- **API <23**: cleartext всегда разрешён (устаревшие версии, поддержки Network Security Config нет).
+
+`android:usesCleartextTraffic` — грубый (app-wide) флаг. Network Security Config даёт более тонкий (per-domain) контроль и предпочтителен для production.
 
 ### Контроль через Network Security Config
 
@@ -93,9 +98,14 @@ CLEARTEXT communication not permitted by network security policy
 **Cleartext traffic** is unencrypted HTTP communication without TLS/SSL (e.g., HTTP, non-TLS WebSocket). Any node on the network path can intercept and modify the data.
 
 **Android policy (simplified):**
-- **API 28+ (Android 9+)**: follows a "secure by default" approach: cleartext requests to domains without explicit allowance may be blocked (especially for domains considered insecure by platform lists or when HTTPS is available). Treat cleartext as something that must be explicitly allowed.
-- **API 23-27**: cleartext is allowed by default but can be restricted using Network Security Config or `usesCleartextTraffic`.
-- **API <23**: cleartext always allowed (legacy versions; Network Security Config not supported).
+- **API 28+ (Android 9+)**: follows a "secure by default" approach. By default, cleartext traffic is only allowed if:
+  - the app explicitly allows it via `android:usesCleartextTraffic="true"` on `<application>`, OR
+  - the target domain is explicitly allowed in the Network Security Config (`cleartextTrafficPermitted="true"`).
+  Otherwise, cleartext requests will fail with a network security policy error. Practically: treat cleartext as something that must be explicitly and narrowly allowed.
+- **API 23-27**: cleartext is allowed by default; it can be restricted using `android:usesCleartextTraffic` and (on supported versions) Network Security Config. Without explicit restrictions, HTTP connections will work.
+- **API <23**: cleartext is always allowed (legacy versions; Network Security Config not supported).
+
+`android:usesCleartextTraffic` is a coarse, app-wide flag. Network Security Config provides fine-grained, per-domain control and is preferred for production setups.
 
 ### Control via Network Security Config
 
@@ -142,7 +152,7 @@ CLEARTEXT communication not permitted by network security policy
 1. **HTTPS everywhere** — use TLS for all connections.
 2. **Certificate pinning** — for sensitive APIs (banking, payments, etc.).
 3. **Build variants** — allow cleartext only in debug builds (separate Network Security Config and manifest per debug/release).
-4. **Build pipeline** — ensure debug configs (including XML and `usesCleartextTraffic="true") are excluded from release; handle this via productFlavors/Build Types rather than relying on ProGuard/R8 alone.
+4. **Build pipeline** — ensure debug configs (including XML and `usesCleartextTraffic="true") are excluded from release; do this via productFlavors/Build Types instead of relying on ProGuard/R8.
 
 ---
 

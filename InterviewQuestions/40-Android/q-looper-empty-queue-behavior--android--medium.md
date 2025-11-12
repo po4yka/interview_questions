@@ -19,10 +19,11 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-coroutines
+- c-android
+- c-concurrency
 sources: []
 created: 2025-10-13
-updated: 2025-10-31
+updated: 2025-11-11
 tags:
 - android/coroutines
 - android/threads-sync
@@ -52,7 +53,7 @@ tags:
 3. **Не выполняет активное ожидание и практически не потребляет CPU** во время простоя
 4. **Пробуждается** при добавлении нового сообщения (`nativeWake()`) или вызове `quit()/quitSafely()`
 
-Это **штатное поведение** — поток остается живым для обработки будущих сообщений.
+Это **штатное поведение** — поток остается живым, чтобы асинхронно обрабатывать будущие сообщения.
 
 ### Механизм Блокировки
 
@@ -133,7 +134,7 @@ thread.handler.looper.quitSafely()
 // quit() - немедленный запрос выхода из цикла, дальнейшие сообщения из очереди не будут обрабатываться
 looper.quit()
 
-// quitSafely() - дать обработать сообщения с time <= now, затем корректно выйти
+// quitSafely() - дать обработать сообщения с when <= now, затем корректно выйти
 looper.quitSafely()
 ```
 
@@ -189,7 +190,7 @@ Message next() {
 
 **Native mechanism:**
 - Uses an efficient blocking primitive (e.g., **epoll_wait** on Linux) instead of busy-waiting
-- Thread state is shown as **RUNNABLE**, but it is actually blocked in native code (not in Java `Object.wait()`)
+- Thread state is shown as **RUNNABLE**, but it is actually blocked in native code (not in Java `Object.wait()`) 
 - Woken up via **nativeWake()** when a message is posted or queue state changes (effectively immediately from the app's perspective, subject to scheduler)
 
 ### Example: Thread with Empty `Queue`
@@ -239,6 +240,14 @@ looper.quitSafely()
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем разница между `quit()` и `quitSafely()`?
+- Почему состояние потока отображается как RUNNABLE, когда он заблокирован?
+- Как `nativePollOnce()` пробуждается при поступлении сообщения?
+- Что произойдет, если вызвать `Looper.loop()` дважды в одном и том же потоке?
+- Как `HandlerThread` управляет жизненным циклом `Looper`?
+
 ## Follow-ups
 
 - What's the difference between `quit()` and `quitSafely()`?
@@ -247,18 +256,46 @@ looper.quitSafely()
 - What happens if you call `Looper.loop()` twice on the same thread?
 - How does HandlerThread manage Looper lifecycle?
 
+## Ссылки (RU)
+
+- Android Source: `Looper.java` (AOSP)
+- Android Source: `MessageQueue.java` (AOSP)
+- Документация по `epoll` в Linux
+
 ## References
 
 - [Android Source: Looper.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/Looper.java)
 - [Android Source: MessageQueue.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/MessageQueue.java)
 - [Linux epoll documentation](https://man7.org/linux/man-pages/man7/epoll.7.html)
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-coroutines]]
+
+### Предпосылки (проще)
+
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - базовые понятия о главном потоке
+- [[q-android-async-primitives--android--easy]] - обзор асинхронных примитивов
+- [[q-why-multithreading-tools--android--easy]] - основы многопоточности
+
+### Связанные (того же уровня)
+
+- [[q-handler-looper-comprehensive--android--medium]] - подробный разбор Handler и Looper
+- [[q-multithreading-tools-android--android--medium]] - сравнение инструментов многопоточности
+
+### Продвинутые (сложнее)
+
+- [[q-android-runtime-internals--android--hard]] - детали рантайма ART
+- [[q-recomposition-choreographer--android--hard]] - Choreographer и vsync
+- [[q-how-vsync-and-recomposition-events-are-related--android--hard]] - планирование кадров
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-coroutines]]
-
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics

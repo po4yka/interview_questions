@@ -46,7 +46,7 @@ tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, th
 | Диспетчер | Пул потоков | Случай использования | Примеры |
 |------------|-------------|----------|----------|
 | **Dispatchers.Main** | UI поток | Обновления UI, взаимодействие с пользователем | Обновить TextView, показать Dialog |
-| **Dispatchers.IO** | Общий пул (лимит потоков по умолчанию ≈ 64 или 2×CPU, совместно с Default) | I/O операции, блокирующие вызовы | Сеть, БД, файловый I/O |
+| **Dispatchers.IO** | Общий пул (отдельный от Default, с настраиваемым верхним лимитом, по умолчанию ≈ 64) | I/O операции, блокирующие вызовы | Сеть, БД, файловый I/O |
 | **Dispatchers.Default** | CPU-bound пул (ядра CPU) | CPU-интенсивная работа | Парсинг, сортировка, вычисления |
 | **Dispatchers.Unconfined** | Нет конкретного потока | Специальные/низкоуровневые случаи, отладка | Демонстрации, специфические сценарии |
 
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 **Характеристики**:
 - Однопоточный (UI поток)
 - Требуется для обновлений UI
-- По умолчанию для `lifecycleScope` и `viewModelScope`
+- В Android по умолчанию используется в `lifecycleScope` и `viewModelScope` (обычно как `Dispatchers.Main.immediate`)
 - Критично не блокировать: длительные операции должны выноситься в другие диспетчеры
 
 **Использовать для**:
@@ -111,10 +111,10 @@ class UserRepository(private val api: ApiService, private val db: UserDao) {
 ```
 
 **Характеристики**:
-- Большой общий пул потоков с верхним лимитом (по умолчанию около 64 или 2×число ядер, может настраиваться)
-- Реализован как расширение пула `Dispatchers.Default`
+- Большой общий пул потоков с верхним лимитом (по умолчанию примерно 64 потока; может настраиваться системными свойствами)
+- Реализован как отдельный пул, построенный поверх общей инфраструктуры корутин (не тот же пул, что и у `Dispatchers.Default`)
 - Предназначен для блокирующего I/O (сетевые запросы, дисковые операции)
-- Позволяет блокировать потоки без непосредственного вытеснения CPU-задач с Default, но чрезмерное блокирование всё равно вредит производительности
+- Позволяет блокировать потоки, минимизируя влияние на CPU-задачи `Default`, но чрезмерное блокирование всё равно вредит производительности
 
 **Использовать для**:
 - Сетевых запросов (Retrofit, Ktor)
@@ -148,7 +148,7 @@ class DataProcessor {
 ```
 
 **Характеристики**:
-- Размер пула потоков = количество ядер CPU (минимум 2)
+- Размер пула потоков ≈ количество ядер CPU (минимум 2)
 - Оптимизирован для вычислительной работы
 - Не должен использоваться для блокирующего I/O
 - Хорош для параллельной обработки
@@ -197,7 +197,7 @@ fun main() = runBlocking {
 - Демонстраций и отладки поведения корутин
 - Обычно **не рекомендуется** для production-кода и не является универсальным выбором для «производительно-критичного» кода
 
-### Переключение Диспетчеров С withContext
+### Переключение Диспетчеров C withContext
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -317,7 +317,7 @@ val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 ```
 
 **Примечание об устаревших API:**
-Функции `newSingleThreadContext()` и `newFixedThreadPoolContext()` были **помечены как устаревшие в Kotlin Coroutines 1.6.0** (2021). Современный код должен использовать `Executors.asCoroutineDispatcher()`, как показано выше.
+Функции `newSingleThreadContext()` и `newFixedThreadPoolContext()` были **помечены как устаревшие в Kotlin Coroutines 1.6.0**. Современный код должен использовать `Executors.asCoroutineDispatcher()`, как показано выше.
 
 **Управление жизненным циклом пользовательского диспетчера:**
 ```kotlin
@@ -388,14 +388,14 @@ suspend fun sortData(data: List<Int>) = withContext(Dispatchers.Default) {
     data.sorted()
 }
 
-// Использовать Main для обновлений UI
+// Использовать Main для обновлений UI (например, в Android)
 lifecycleScope.launch(Dispatchers.Main) {
     textView.text = "Обновлено"
 }
 
-// Позволить viewModelScope по умолчанию использовать Main
+// Позволить Android viewModelScope по умолчанию использовать Main
 viewModelScope.launch {
-    // Уже на Main
+    // Уже на Main (в Android реализации)
     updateUI()
 }
 
@@ -420,7 +420,7 @@ withContext(Dispatchers.IO) {
     heavyCalculation() // Тратит впустую I/O потоки
 }
 
-// Не обновлять UI не на Main потоке
+// Не обновлять UI не на Main потоке (например, в Android)
 withContext(Dispatchers.IO) {
     textView.text = "Ошибка" // Crash!
 }
@@ -463,7 +463,7 @@ Coroutine dispatchers determine which thread or thread pool executes a coroutine
 | Dispatcher | Thread Pool | Use Case | Examples |
 |------------|-------------|----------|----------|
 | **Dispatchers.Main** | UI thread | UI updates, user interaction | Update TextView, show Dialog |
-| **Dispatchers.IO** | Shared pool (default upper bound ≈ 64 or 2×CPU, shared with Default) | I/O operations, blocking calls | Network, Database, File I/O |
+| **Dispatchers.IO** | Shared pool (separate from Default, configurable upper bound, default ≈ 64 threads) | I/O operations, blocking calls | Network, Database, File I/O |
 | **Dispatchers.Default** | CPU-bound pool (CPU cores) | CPU-intensive work | Parsing, sorting, calculations |
 | **Dispatchers.Unconfined** | No specific thread | Special/low-level cases, debugging | Demos, specific scenarios |
 
@@ -495,7 +495,7 @@ class MainActivity : AppCompatActivity() {
 **Characteristics**:
 - Single-threaded (UI thread)
 - Required for UI updates
-- Default for `lifecycleScope` and `viewModelScope`
+- On Android, used by default in `lifecycleScope` and `viewModelScope` (commonly as `Dispatchers.Main.immediate`)
 - Must not be blocked: long-running work should be offloaded to other dispatchers
 
 **Use for**:
@@ -528,8 +528,8 @@ class UserRepository(private val api: ApiService, private val db: UserDao) {
 ```
 
 **Characteristics**:
-- Large shared thread pool with an upper limit (by default roughly 64 or 2×number of cores, configurable)
-- Implemented as an extension of the `Dispatchers.Default` pool
+- Large shared thread pool with an upper limit (by default about 64 threads; configurable via system properties)
+- Implemented as a separate pool built on top of the coroutine scheduler infrastructure (not the same pool as `Dispatchers.Default`)
 - Designed for blocking I/O (network, disk, database)
 - Allows blocking without immediately starving CPU-bound tasks on Default, but excessive blocking still degrades performance
 
@@ -565,7 +565,7 @@ class DataProcessor {
 ```
 
 **Characteristics**:
-- Thread pool size = number of CPU cores (min 2)
+- Thread pool size ≈ number of CPU cores (minimum 2)
 - Optimized for computational work
 - Should not be used for blocking I/O
 - Good for parallel processing
@@ -606,7 +606,7 @@ fun main() = runBlocking {
 **Characteristics**:
 - No fixed thread affinity
 - Resumes in whichever thread the suspending function resumes on
-- Unpredictable thread behavior from the perspective of application code
+- Unpredictable thread behavior from the application's perspective
 - Very low dispatch overhead
 
 **Use for** (with great caution):
@@ -734,7 +734,7 @@ val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 ```
 
 **Deprecation Note:**
-The `newSingleThreadContext()` and `newFixedThreadPoolContext()` functions were **deprecated in Kotlin Coroutines 1.6.0** (2021). Modern code should use `Executors.asCoroutineDispatcher()` as shown above.
+The `newSingleThreadContext()` and `newFixedThreadPoolContext()` functions were **deprecated in Kotlin Coroutines 1.6.0**. Modern code should use `Executors.asCoroutineDispatcher()` as shown above.
 
 **Custom Dispatcher Lifecycle Management:**
 ```kotlin
@@ -805,14 +805,14 @@ suspend fun sortData(data: List<Int>) = withContext(Dispatchers.Default) {
     data.sorted()
 }
 
-// Use Main for UI updates
+// Use Main for UI updates (e.g., on Android)
 lifecycleScope.launch(Dispatchers.Main) {
     textView.text = "Updated"
 }
 
-// Let viewModelScope default to Main
+// Let Android viewModelScope default to Main
 viewModelScope.launch {
-    // Already on Main
+    // Already on Main (in Android implementation)
     updateUI()
 }
 
@@ -837,7 +837,7 @@ withContext(Dispatchers.IO) {
     heavyCalculation() // Wastes I/O threads
 }
 
-// Don't update UI off Main thread
+// Don't update UI off Main thread (e.g., on Android)
 withContext(Dispatchers.IO) {
     textView.text = "Error" // Crash!
 }

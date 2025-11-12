@@ -51,16 +51,14 @@ class LoginScreenTest {
 
     @Test
     fun loginButton_clickable_when_fields_filled() {
-        // Устанавливаем контент
         composeTestRule.setContent {
+            // Пример: экран сам управляет состоянием полей внутри
             LoginScreen()
         }
 
-        // Находим и взаимодействуем
         composeTestRule.onNodeWithText("Email").performTextInput("user@example.com")
         composeTestRule.onNodeWithText("Password").performTextInput("password123")
 
-        // Проверяем
         composeTestRule.onNodeWithText("Login").assertIsEnabled()
     }
 }
@@ -430,6 +428,7 @@ fun clicking_product_navigates_to_details() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     val navController = TestNavHostController(context).apply {
         navigatorProvider.addNavigator(ComposeNavigator())
+        navigatorProvider.addNavigator(DialogNavigator())
     }
 
     composeTestRule.setContent {
@@ -529,7 +528,7 @@ fun ListItem(title: String, subtitle: String) {
     }
 }
 
-// Может не найтись, если subtitle был слит в родителя
+// В таком случае поиск по тексту может не сработать ожидаемо
 composeTestRule.onNodeWithText("Subtitle").assertExists() // Может упасть
 
 // Используем useUnmergedTree = true, чтобы искать без слияния
@@ -691,8 +690,8 @@ class LoginScreenTest {
 
     @Test
     fun loginButton_clickable_when_fields_filled() {
-        // Set content
         composeTestRule.setContent {
+            // Example: screen manages its own internal state
             LoginScreen()
         }
 
@@ -1070,6 +1069,7 @@ fun clicking_product_navigates_to_details() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     val navController = TestNavHostController(context).apply {
         navigatorProvider.addNavigator(ComposeNavigator())
+        navigatorProvider.addNavigator(DialogNavigator())
     }
 
     composeTestRule.setContent {
@@ -1160,7 +1160,7 @@ fun dialog_cancels_deletion() {
 ### unmergedTree - for Nested Elements
 
 ```kotlin
-// By default some semantics may be merged into parents
+// By default some semantics from children may be merged into the parent
 @Composable
 fun ListItem(title: String, subtitle: String) {
     Column {
@@ -1169,7 +1169,7 @@ fun ListItem(title: String, subtitle: String) {
     }
 }
 
-// May fail if subtitle semantics are merged
+// In such cases, a direct text lookup may not behave as expected
 composeTestRule.onNodeWithText("Subtitle").assertExists() // Might FAIL
 
 // Use useUnmergedTree = true to search without merged semantics

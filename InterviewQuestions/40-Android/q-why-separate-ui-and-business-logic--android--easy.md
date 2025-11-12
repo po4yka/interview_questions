@@ -45,7 +45,7 @@ tags:
 
 ## Ответ (RU)
 
-Разделение UI и бизнес-логики - это фундаментальный принцип хорошей архитектуры программного обеспечения.
+Разделение UI и бизнес-логики — это фундаментальный принцип хорошей архитектуры программного обеспечения.
 
 **Ключевые причины:**
 
@@ -56,15 +56,15 @@ tags:
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Бизнес-логика в Activity - сложно тестировать!
+        // Бизнес-логика в Activity — сложно тестировать и переиспользовать
         val users = database.getAllUsers()
         val activeUsers = users.filter { it.isActive }
         adapter.submitList(activeUsers.sortedBy { it.name })
     }
 }
 
-// ✅ Хорошо: логика отделена в ViewModel
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
+// ✅ Лучше: логика отделена в ViewModel (упрощенный пример)
+class SimpleUserViewModel(private val repository: UserRepository) : ViewModel() {
     fun getActiveUsers(): List<User> {
         return repository.getAllUsers()
             .filter { it.isActive }
@@ -75,16 +75,16 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 // Легко тестировать без Android-зависимостей
 @Test
 fun `active users are sorted by name`() {
-    val viewModel = UserViewModel(fakeRepository)
+    val viewModel = SimpleUserViewModel(fakeRepository)
     val result = viewModel.getActiveUsers()
     assertEquals(expected, result)
 }
 ```
 
 **2. Поддерживаемость**
-- Изменения в логике не влияют на UI
-- Изменения в UI не влияют на логику
-- Код легче понимать и модифицировать
+- Изменения в логике минимально влияют на UI
+- Изменения в UI не требуют переписывать бизнес-логику
+- Код легче понимать, изолировать и модифицировать
 
 **3. Переиспользуемость**
 
@@ -97,18 +97,20 @@ fun `active users are sorted by name`() {
 **Пример с MVVM:**
 
 ```kotlin
-// ✅ UI-слой - только отображение
+// ✅ UI-слой — только отображение и реакция на состояние из ViewModel
 class UserListFragment : Fragment() {
     private val viewModel: UserViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.users.observe(viewLifecycleOwner) { users ->
-            adapter.submitList(users)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.users.collect { users ->
+                adapter.submitList(users)
+            }
         }
     }
 }
 
-// ✅ Презентационный слой - оркестрация
+// ✅ Презентационный слой — оркестрация и подготовка данных для UI
 class UserViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() {
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users = _users.asStateFlow()
@@ -120,7 +122,7 @@ class UserViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() 
     }
 }
 
-// ✅ Доменный слой - чистая бизнес-логика
+// ✅ Доменный слой — чистая бизнес-логика
 class GetUsersUseCase(private val repository: UserRepository) {
     suspend operator fun invoke(): List<User> {
         return repository.getActiveUsers().sortedBy { it.name }
@@ -141,15 +143,15 @@ Separating UI and business logic is a fundamental principle of good software arc
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Business logic in Activity - hard to test!
+        // Business logic in Activity — hard to test and reuse
         val users = database.getAllUsers()
         val activeUsers = users.filter { it.isActive }
         adapter.submitList(activeUsers.sortedBy { it.name })
     }
 }
 
-// ✅ Good: Logic separated in ViewModel
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
+// ✅ Better: Logic separated into ViewModel (simplified example)
+class SimpleUserViewModel(private val repository: UserRepository) : ViewModel() {
     fun getActiveUsers(): List<User> {
         return repository.getAllUsers()
             .filter { it.isActive }
@@ -157,43 +159,45 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     }
 }
 
-// Easy to test without Android dependencies
+// Easy to test without Android framework dependencies
 @Test
 fun `active users are sorted by name`() {
-    val viewModel = UserViewModel(fakeRepository)
+    val viewModel = SimpleUserViewModel(fakeRepository)
     val result = viewModel.getActiveUsers()
     assertEquals(expected, result)
 }
 ```
 
 **2. Maintainability**
-- Logic changes don't affect UI
-- UI changes don't affect logic
-- Easier to understand and modify
+- Logic changes minimally affect UI
+- UI changes don’t require rewriting business logic
+- Easier to understand, isolate, and modify code
 
 **3. Reusability**
 
-Business logic can be reused in `Activity`, `Fragment`, Compose, even cross-platform via Kotlin Multiplatform (KMM).
+Business logic can be reused in `Activity`, `Fragment`, Compose, and even cross-platform via Kotlin Multiplatform (KMM).
 
 **4. Architectural Patterns**
 
-Follows `Separation of Concerns` principle in MVVM, MVI, Clean Architecture patterns.
+Follows the `Separation of Concerns` principle in MVVM, MVI, and Clean Architecture patterns.
 
 **Example with MVVM:**
 
 ```kotlin
-// ✅ UI Layer - presentation only
+// ✅ UI Layer — only rendering and reacting to state from ViewModel
 class UserListFragment : Fragment() {
     private val viewModel: UserViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.users.observe(viewLifecycleOwner) { users ->
-            adapter.submitList(users)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.users.collect { users ->
+                adapter.submitList(users)
+            }
         }
     }
 }
 
-// ✅ Presentation Layer - orchestration
+// ✅ Presentation Layer — orchestrates and prepares data for UI
 class UserViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() {
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users = _users.asStateFlow()
@@ -205,7 +209,7 @@ class UserViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() 
     }
 }
 
-// ✅ Domain Layer - pure business logic
+// ✅ Domain Layer — pure business logic
 class GetUsersUseCase(private val repository: UserRepository) {
     suspend operator fun invoke(): List<User> {
         return repository.getActiveUsers().sortedBy { it.name }

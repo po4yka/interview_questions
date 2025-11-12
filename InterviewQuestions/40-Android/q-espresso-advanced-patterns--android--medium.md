@@ -20,6 +20,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-testing
 - q-android-testing-strategies--android--medium
 sources:
 - "https://developer.android.com/training/testing/espresso"
@@ -219,6 +220,8 @@ onView(withId(R.id.recycler))
 - `perform()` — что именно сделать.
 - `getDescription()` — сообщение для ошибок.
 
+См. также: [[c-android-testing]]
+
 ## Answer (EN)
 
 ### Key Concepts
@@ -388,6 +391,8 @@ onView(withId(R.id.recycler))
 - `getConstraints()` — when the action can be executed.
 - `perform()` — what the action does.
 - `getDescription()` — for error messages.
+
+See also: [[c-android-testing]]
 
 ---
 

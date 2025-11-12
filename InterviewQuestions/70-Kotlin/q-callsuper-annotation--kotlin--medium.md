@@ -23,7 +23,7 @@ tags: [android, annotations, best-practices, difficulty/medium, kotlin, lifecycl
 
 ## Ответ (RU)
 
-Аннотация `@CallSuper` (из AndroidX/Support annotations, например `androidx.annotation.CallSuper`) используется как контракт для анализаторов кода и Lint: она указывает, что при переопределении метода в подклассе ожидается (обязательно по контракту API), что будет вызван метод суперкласса. Это не добавляет автоматической проверки на уровне JVM или компилятора Kotlin, но даёт статический анализ и предупреждения. Аннотация особенно полезна при работе с методами жизненного цикла Android (`onCreate`, `onStart`, `onDestroy`), где пропуск вызова `super` может привести к серьёзным проблемам: утечкам памяти, некорректной работе компонентов или крашам приложения.
+Аннотация `@CallSuper` (из AndroidX/Support annotations, например `androidx.annotation.CallSuper`) используется как контракт для анализаторов кода и Lint: она указывает, что при переопределении метода в подклассе ожидается (обязательно по контракту API), что будет вызван метод суперкласса. Это не добавляет автоматической проверки на уровне JVM или компилятора Kotlin, но даёт статический анализ и предупреждения (обычно на этапе сборки через Android Lint). Аннотация особенно полезна при работе с методами жизненного цикла Android (`onCreate`, `onStart`, `onDestroy`), где пропуск вызова `super` может привести к серьёзным проблемам: утечкам памяти, некорректной работе компонентов или крашам приложения.
 
 ### Основы Использования `@CallSuper`
 
@@ -137,7 +137,7 @@ abstract class BaseFragment : Fragment() {
 class LeakyFragment : BaseFragment() {
 
     override fun onDestroy() {
-        // - Нет super.onDestroy()
+        // - НАРУШЕНИЕ контракта @CallSuper: нет super.onDestroy()
         // Результат: disposables не очистятся → утечка памяти
         cleanup()
     }
@@ -306,7 +306,7 @@ class UserAdapter : BaseAdapter<User, UserAdapter.UserViewHolder>() {
 
     class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(user: User) {
-            // Bind user data to view
+            // Bind user data
         }
     }
 }
@@ -370,7 +370,7 @@ class CircleView @JvmOverloads constructor(
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh) // - Логирует изменение
+        super.onSizeChanged(w, h, oldh, oldh) // - Логирует изменение и поддерживает контракт @CallSuper
         radius = minOf(w, h) / 2f
     }
 
@@ -459,9 +459,9 @@ class UserRepository : BaseRepository() {
 ### `@CallSuper` vs `override`
 
 ```kotlin
-// `override` (в Kotlin) - проверяет, что метод переопределён
+// `override` (в Kotlin) - проверяет, что метод переопределён.
 // `@CallSuper` - задаёт контракт: переопределяющий метод должен вызвать super-реализацию;
-// это проверяется статическим анализом (Lint), а не JVM.
+// это проверяется статическим анализом (Lint на этапе сборки/CI), а не JVM.
 
 open class Parent {
 
@@ -556,7 +556,7 @@ class ConcreteActivity : Level2Activity() {
     }
 }
 
-// Вывод лога при создании ConcreteActivity:
+// Вывод лога при создании ConcreteActivity (упрощённо):
 // Level1: onCreate
 // Level2: onCreate
 // Concrete: onCreate
@@ -575,6 +575,7 @@ interface Trackable {
     }
 }
 
+// - ПЛОХО: Нарушение контракта @CallSuper — нет super.trackEvent(eventName)
 class TrackedActivity : AppCompatActivity(), Trackable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -584,7 +585,7 @@ class TrackedActivity : AppCompatActivity(), Trackable {
 
     override fun trackEvent(eventName: String) {
         // Если не вызвать super.trackEvent(eventName), базовая аналитика не выполнится.
-        // Аннотация @CallSuper здесь также служит контрактом для Lint.
+        // Это нарушение контракта @CallSuper; Lint может предупредить об этом.
         Log.d("TrackedActivity", "Custom tracking: $eventName")
     }
 }
@@ -672,7 +673,7 @@ interface UserView : BaseView {
 }
 ```
 
-### Проверка Во Время Компиляции
+### Проверка Во Время Сборки / Статический Анализ
 
 ```kotlin
 // Android Lint (в Android Studio и/или CI) проверяет @CallSuper автоматически
@@ -707,8 +708,8 @@ class SuppressedChild : BaseClass() {
 
 ### Best Practices
 
-1. Используйте `@CallSuper` для методов жизненного цикла в базовых классах `Activity`, `Fragment`, `ViewModel`.
-2. Применяйте к методам инициализации и очистки, где критически важно выполнить базовую логику.
+1. Используйте `@CallSuper` для методов жизненного цикла в базовых классах `Activity`, `Fragment`, `ViewModel` и других компонентах, где пропуск базовой логики критичен.
+2. Применяйте к методам инициализации и очистки, где необходимо гарантировать выполнение базовой логики.
 3. Документируйте необходимость вызова `super` в KDoc/JavaDoc, чтобы контракт был очевиден.
 4. Не подавляйте предупреждения `@Suppress("MissingSuperCall")` без очень веской причины.
 5. Проверяйте порядок вызовов — обычно `super` вызывается первым для `onCreate` и последним для `onDestroy`.
@@ -724,7 +725,7 @@ class SuppressedChild : BaseClass() {
 ### Связанные Аннотации
 
 ```kotlin
-// @CallSuper - контракт: должен быть вызван super-метод (проверяется Lint)
+// @CallSuper - контракт: должен быть вызван super-метод (проверяется Lint/статическим анализом)
 @CallSuper
 open fun method1() {}
 
@@ -834,7 +835,7 @@ class MyActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-The `@CallSuper` annotation (for example `androidx.annotation.CallSuper`) is a contract for static analysis tools (Android Lint) that indicates: when this method is overridden, the overriding implementation is expected to call the superclass implementation. It is not enforced by the JVM or the Kotlin compiler, but by Lint rules.
+The `@CallSuper` annotation (for example `androidx.annotation.CallSuper`) is a contract for static analysis tools (Android Lint) that indicates: when this method is overridden, the overriding implementation is expected to call the superclass implementation. It is not enforced by the JVM or the Kotlin compiler, but by Lint/static analysis rules (typically run during the build/CI process).
 
 Below is an English explanation mirroring the structure, examples, and intent of the RU answer.
 
@@ -949,8 +950,8 @@ abstract class BaseFragment : Fragment() {
 class LeakyFragment : BaseFragment() {
 
     override fun onDestroy() {
-        // Missing super.onDestroy()
-        // Result: no disposables.clear() → memory leak
+        // VIOLATION of @CallSuper contract: missing super.onDestroy()
+        // Result: disposables are not cleared → potential memory leak
         cleanup()
     }
 
@@ -1270,7 +1271,7 @@ class UserRepository : BaseRepository() {
 ```kotlin
 // `override` ensures the method actually overrides something.
 // `@CallSuper` adds a contract: overriding methods should call the super implementation.
-// This is checked by Lint, not by the JVM.
+// This is enforced by Lint/static analysis during build/CI, not by the JVM.
 
 open class Parent {
 
@@ -1369,6 +1370,7 @@ interface Trackable {
     }
 }
 
+// BAD: Violates @CallSuper contract — no super.trackEvent(eventName)
 class TrackedActivity : AppCompatActivity(), Trackable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -1377,11 +1379,13 @@ class TrackedActivity : AppCompatActivity(), Trackable {
     }
 
     override fun trackEvent(eventName: String) {
-        // If we do not call super.trackEvent(eventName), base tracking is skipped.
+        // By omitting super.trackEvent(eventName), base tracking is skipped.
+        // This breaks the @CallSuper contract; Lint may warn about this.
         Log.d("TrackedActivity", "Custom tracking: $eventName")
     }
 }
 
+// GOOD: Respects @CallSuper contract
 class ProperTrackedActivity : AppCompatActivity(), Trackable {
 
     override fun trackEvent(eventName: String) {
@@ -1495,10 +1499,10 @@ class SuppressedChild : BaseClass() {
 
 ### Best Practices (EN)
 
-1. Use `@CallSuper` on lifecycle methods in base `Activity`, `Fragment`, and `ViewModel` classes.
+1. Use `@CallSuper` on lifecycle methods in base `Activity`, `Fragment`, `ViewModel`, and similar components where base behavior is critical.
 2. Apply it to initialization/cleanup methods where skipping base logic breaks invariants.
 3. Document the "must call super" contract in KDoc/JavaDoc.
-4. Avoid `@Suppress("MissingSuperCall")` unless you are absolutely sure.
+4. Avoid `@Suppress("MissingSuperCall")` unless you are absolutely sure it's safe.
 5. Be mindful of call order (e.g., `super.onCreate()` usually first, `super.onDestroy()` usually last).
 6. Prefer `@CallSuper` in shared libraries/base modules so consumers don't accidentally violate required behavior.
 

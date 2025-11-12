@@ -2,32 +2,28 @@
 id: kotlin-118
 title: "repeatOnLifecycle in Android / repeatOnLifecycle в Android"
 aliases: ["repeatOnLifecycle in Android", "repeatOnLifecycle в Android"]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines, flow, lifecycle]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Android repeatOnLifecycle Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-lifecycle-aware-coroutines--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
-
-# Timestamps
 created: 2025-10-12
 updated: 2025-11-09
-
 tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeatonlifecycle]
+
 ---
+
 # Вопрос (RU)
 > Что такое `repeatOnLifecycle` и почему это важно? Объясните как он предотвращает утечки памяти при подписке на `Flow`, сравнение с `launchWhenStarted` и лучшие практики.
+
+## Question (EN)
+> What is `repeatOnLifecycle` and why is it important? Explain how it prevents memory leaks when collecting `Flow`s, comparison with `launchWhenStarted`, and best practices.
 
 ---
 
@@ -158,7 +154,7 @@ class ComparisonExample : Fragment() {
     fun withLaunchWhenStarted() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.dataFlow.collect { data ->
-                // При STOPPED корутина приостанавливается, но не полностью отменяется.
+                // При STOPPED эта корутина приостанавливается, но не полностью отменяется.
                 // Если upstream не привязан к этому Job, он может продолжать работу в фоне.
                 updateUI(data)
             }
@@ -195,11 +191,12 @@ class ComparisonExample : Fragment() {
 
 /**
  * launchWhenStarted:
- * - При STOPPED: корутина только приостановлена; не всегда очевидно, где продолжается работа.
- * - Выше риск оставить работающие в фоне задачи.
+ * - При STOPPED: корутина приостановлена; upstream, завязанный на этот collector, тоже приостанавливается.
+ * - Но работа, не связанная с этим Job, может продолжаться, что делает ошибки менее очевидными.
  *
  * repeatOnLifecycle:
- * - При STOPPED: scope отменяется; корректно построенные холодные потоки и upstream завершаются.
+ * - При STOPPED: scope отменяется; корректно построенные холодные потоки и upstream, завязанный на этот Job,
+ *   завершаются и будут перезапущены при следующем входе в целевое состояние.
  */
 ```
 
@@ -264,8 +261,8 @@ class BestPractices {
         }
     }
 
-    // Используйте CREATED для задач, которые должны работать, пока владелец существует,
-    // включая фон, если lifecycle еще не уничтожен.
+    // Используйте CREATED для задач, которые должны работать, пока владелец существует
+    // и находится как минимум в состоянии CREATED; обычно не для привязанных к видимости UI обновлений.
     class DataFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -416,9 +413,6 @@ class ProductDetailFragment : Fragment() {
 
 ---
 
-# Question (EN)
-> What is `repeatOnLifecycle` and why is it important? Explain how it prevents memory leaks when collecting `Flow`s, comparison with `launchWhenStarted`, and best practices.
-
 ## Answer (EN)
 
 `repeatOnLifecycle` is a lifecycle-aware API from AndroidX Lifecycle (lifecycle-runtime-ktx) that automatically starts and cancels coroutines based on the `LifecycleOwner`'s state. It helps prevent leaks and invalid UI access when collecting `Flow`s in Android.
@@ -490,8 +484,9 @@ class GoodFragment : Fragment() {
 ```
 
 Here, the collection:
-- runs only when the Fragment's view lifecycle is at least `STARTED`;
-- is cancelled when the view is `STOPPED`/`DESTROYED`, releasing references and cancelling upstream work tied to the collector coroutine.
+- runs only when the `Fragment`'s view lifecycle is at least `STARTED`;
+- is cancelled when the view falls below `STARTED` (e.g., `STOPPED`/`DESTROYED`), releasing references and cancelling upstream work tied to the collector coroutine;
+- restarts when the lifecycle returns to the target state.
 
 ### How `repeatOnLifecycle` Works
 
@@ -541,12 +536,12 @@ class LifecycleExample : Fragment() {
 class ComparisonExample : Fragment() {
     private val viewModel: FlowViewModel by viewModels()
 
-    // launchWhenStarted (DEPRECATED for this use case)
+    // launchWhenStarted (NOT RECOMMENDED for this use case)
     fun withLaunchWhenStarted() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.dataFlow.collect { data ->
                 // When STOPPED, this coroutine is suspended, not fully cancelled.
-                // If dataFlow's upstream work is not tied to this coroutine,
+                // If dataFlow's upstream work is not tied to this Job,
                 // it may continue producing in the background.
                 updateUI(data)
             }
@@ -583,16 +578,16 @@ class ComparisonExample : Fragment() {
 
 /**
  * With launchWhenStarted:
- * - On STOPPED: collection is suspended; upstream tied directly to this collector is paused.
- * - But work not bound to this Job can continue, making leaks easier.
+ * - On STOPPED: collection is suspended; upstream tied directly to this collector is also suspended.
+ * - But work not bound to this Job can continue, making issues less obvious.
  *
  * With repeatOnLifecycle:
  * - On STOPPED: the collection scope is cancelled; well-structured cold flows and upstream coroutines
- *   depending on this Job are cancelled too.
+ *   depending on this Job complete and will be restarted on the next entry into the target state.
  */
 ```
 
-Note: For hot flows (e.g., `StateFlow`, `SharedFlow`), producers typically outlive collectors and are not "stopped" by cancelling a single collector; `repeatOnLifecycle` ensures safe collection and UI updates, not global producer shutdown.
+Note: For hot flows (e.g., `StateFlow`, `SharedFlow`), producers typically outlive collectors and are not "stopped" by cancelling a single collector; `repeatOnLifecycle` ensures safe collection and UI updates in valid states, not global producer shutdown.
 
 ### Multiple `Flow` Collections
 
@@ -653,8 +648,8 @@ class BestPractices {
         }
     }
 
-    // Use CREATED for work that should run while the owner exists and is at least CREATED,
-    // including some background work until the lifecycle is destroyed.
+    // Use CREATED for work that should run while the owner is at least CREATED
+    // and not tied to UI visibility-sensitive updates.
     class DataFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             viewLifecycleOwner.lifecycleScope.launch {

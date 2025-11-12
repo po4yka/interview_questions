@@ -54,7 +54,7 @@ Android использует три основные единицы измере
 | mdpi (базовая) | 1.0x | 1dp = 1px |
 | hdpi | 1.5x | 1dp = 1.5px |
 | xhdpi | 2.0x | 1dp = 2px |
-| xxhdpi | 3.0x | 1dp = 3px |
+| xxhdpi | 3.0x | 3.0x | 1dp = 3px |
 | xxxhdpi | 4.0x | 1dp = 4px |
 
 ### Примеры Кода

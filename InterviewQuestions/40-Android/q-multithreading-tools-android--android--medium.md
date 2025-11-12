@@ -46,6 +46,9 @@ Android предоставляет несколько инструментов �
 
 ```kotlin
 class MyViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState
+
     fun fetchData() {
         viewModelScope.launch {
             try {
@@ -69,10 +72,12 @@ class MyViewModel : ViewModel() {
 **✅ Структурированная конкурентность:**
 
 ```kotlin
-coroutineScope {
-    val data1 = async(Dispatchers.IO) { fetchData1() }
-    val data2 = async(Dispatchers.IO) { fetchData2() }
-    val result = data1.await() + data2.await()
+suspend fun load(): Result {
+    return coroutineScope {
+        val data1 = async(Dispatchers.IO) { fetchData1() }
+        val data2 = async(Dispatchers.IO) { fetchData2() }
+        process(data1.await(), data2.await())
+    }
 }
 ```
 
@@ -114,7 +119,7 @@ viewModelScope.launch {
 API для планирования **отложенных и долговременных фоновых задач**, которые должны быть выполнены даже после закрытия приложения.
 
 **Ключевые особенности:**
-- **Надёжное выполнение** — задачи сохраняются и переиспользуются системой; `WorkManager` стремится выполнить их даже при убийстве приложения/перезагрузке устройства, с учётом ограничений ОС
+- **Надёжное (best-effort) выполнение** — задачи сохраняются и `WorkManager` старается выполнить их даже при убийстве приложения/перезагрузке устройства, с учётом ограничений ОС
 - **Ограничения** — запуск только при выполнении условий (сеть, заряд, батарея, хранилище)
 - **Обратная совместимость** — поддержка до API level 14
 - **Экономия батареи** — учитывает Doze и App Standby, использует подходящие механизмы (`AlarmManager`, `JobScheduler` и др.)
@@ -229,6 +234,9 @@ A **coroutine** is a high-level pattern for asynchrony and concurrency that runs
 
 ```kotlin
 class MyViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState
+
     fun fetchData() {
         viewModelScope.launch {
             try {
@@ -252,14 +260,16 @@ class MyViewModel : ViewModel() {
 **✅ Structured Concurrency:**
 
 ```kotlin
-coroutineScope {
-    val data1 = async(Dispatchers.IO) { fetchData1() }
-    val data2 = async(Dispatchers.IO) { fetchData2() }
-    val result = data1.await() + data2.await()
+suspend fun load(): Result {
+    return coroutineScope {
+        val data1 = async(Dispatchers.IO) { fetchData1() }
+        val data2 = async(Dispatchers.IO) { fetchData2() }
+        process(data1.await(), data2.await())
+    }
 }
 ```
 
-**`Coroutine` scopes:**
+**Coroutine scopes:**
 - `viewModelScope` — tied to `ViewModel` lifecycle
 - `lifecycleScope` — tied to `Activity`/`Fragment` lifecycle
 - `GlobalScope` — application-level scope (use carefully)
@@ -329,7 +339,7 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 - You need constraints (network, charging, battery)
 - Periodic tasks (sync, backup)
 
-Not suitable for low-latency or UI-tightly-coupled operations — use coroutines/`Executor` instead.
+Not suitable for low-latency or tightly UI-coupled operations — use coroutines/`Executor` instead.
 
 ### 4. RxJava / RxAndroid
 

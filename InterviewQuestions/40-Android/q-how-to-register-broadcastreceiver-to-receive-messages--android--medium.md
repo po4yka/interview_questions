@@ -32,7 +32,7 @@ sources: []
 
 ### 1. Динамическая регистрация (Runtime)
 
-Регистрируется программно через `IntentFilter` внутри компонента (`Activity`, `Service`, др.):
+Регистрируется программно через `IntentFilter` внутри компонента (`Activity`, `Service`, др.). На современных версиях Android важно учитывать флаги экспорта и ограничения фонового выполнения.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -50,7 +50,15 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val filter = IntentFilter("com.example.ACTION_CUSTOM")
-        registerReceiver(receiver, filter)  // ✅ Регистрация во время жизни Activity
+        // На Android 13+ (API 33+) рекомендуется указывать RECEIVER_EXPORTED/NOT_EXPORTED
+        registerReceiver(
+            receiver,
+            filter,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                RECEIVER_NOT_EXPORTED
+            else
+                0
+        ) // ✅ Регистрация во время жизни Activity
     }
 
     override fun onStop() {
@@ -63,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 **Преимущества:**
 - Принимает только пока компонент (`Activity`/`Service` и процесс приложения) жив
 - Нет привязки к манифесту; удобно для временных слушателей и UI-событий
-- Можно регистрировать на runtime с учётом логики и разрешений
+- Можно регистрировать на runtime с учётом логики, разрешений и флагов экспорта (API 33+)
 
 **Недостатки / ограничения:**
 - Требует явной отмены регистрации (иначе риск утечки контекста/исключений)
@@ -78,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 <receiver
     android:name=".BootReceiver"
     android:enabled="true"
-    android:exported="true">
+    android:exported="false">
     <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
     </intent-filter>
@@ -97,13 +105,15 @@ class BootReceiver : BroadcastReceiver() {
 }
 ```
 
+(Значение `android:exported` должно соответствовать требованиям безопасности: `true`, если ресивер должен быть доступен другим приложениям; `false`, если он предназначен только для внутриприложенческого использования.)
+
 **Преимущества:**
 - Может срабатывать даже когда UI не запущен (система поднимает процесс под broadcast)
 - Регистрация описана в манифесте и не требует ручного `unregisterReceiver`
 
 **Недостатки / ограничения:**
 - С Android 8+ есть серьёзные ограничения на implicit broadcasts и фоновое выполнение
-- Нельзя считать, что ресивер "всегда в памяти": он создаётся только на время обработки onReceive, но система может будить приложение чаще (влияние на ресурсы)
+- Нельзя считать, что ресивер "всегда в памяти": он создаётся только на время обработки onReceive; частые системные события могут влиять на ресурсы
 
 ### Современные альтернативы
 
@@ -112,7 +122,8 @@ class BootReceiver : BroadcastReceiver() {
 // LocalBroadcastManager.getInstance(context)
 //     .sendBroadcast(Intent("action"))
 
-// ✅ Предпочитайте Flow/LiveData/EventBus-подходы для внутриприложенческих событий
+// ✅ Предпочитайте Flow/LiveData/EventBus-подходы для внутриприложенческих событий,
+// но помните, что они не заменяют системные broadcast'ы и работают только внутри процесса.
 class EventBus {
     private val _events = MutableSharedFlow<Event>()
     val events = _events.asSharedFlow()
@@ -123,7 +134,7 @@ class EventBus {
 
 **Когда использовать:**
 - **Dynamic:** обновление UI, временные слушатели внутри живого компонента
-- **Static (Manifest):** системные события (BOOT_COMPLETED, SMS_RECEIVED и т.п. — с учётом разрешений и ограничений платформы)
+- **Static (Manifest):** системные события (BOOT_COMPLETED, SMS_RECEIVED и т.п. — с учётом разрешений, `android:exported` и ограничений платформы)
 - **WorkManager/JobScheduler:** долговременные фоновые задачи с условиями (сеть, зарядка и др.) вместо прямого запуска сервиса из ресивера
 - **`Flow`/`LiveData`:** внутриприложенческие события и коммуникация между компонентами без системных broadcast'ов
 
@@ -133,7 +144,7 @@ There are **two primary ways** to register a [[c-broadcast-receiver|`BroadcastRe
 
 ### 1. Dynamic Registration (Runtime)
 
-Register programmatically using an `IntentFilter` inside a component (`Activity`, `Service`, etc.):
+Register programmatically using an `IntentFilter` inside a component (`Activity`, `Service`, etc.). On modern Android versions you must also consider export flags and background limitations.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -142,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             // ✅ Handle broadcast
             when (intent?.action) {
                 "com.example.ACTION_CUSTOM" -> {
-                    // Handle your custom in-app/system-related event
+                    // Handle your custom event
                 }
             }
         }
@@ -151,7 +162,15 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val filter = IntentFilter("com.example.ACTION_CUSTOM")
-        registerReceiver(receiver, filter)  // ✅ Register tied to Activity lifecycle
+        // On Android 13+ (API 33+), specify RECEIVER_EXPORTED/NOT_EXPORTED when registering
+        registerReceiver(
+            receiver,
+            filter,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                RECEIVER_NOT_EXPORTED
+            else
+                0
+        ) // ✅ Register tied to Activity lifecycle
     }
 
     override fun onStop() {
@@ -164,10 +183,10 @@ class MainActivity : AppCompatActivity() {
 **Advantages:**
 - Active only while the component (`Activity`/`Service` and app process) is alive
 - Not tied to manifest; convenient for temporary listeners and UI-related events
-- Can be registered conditionally at runtime (permissions, feature flags, etc.)
+- Can be registered conditionally at runtime (permissions, feature flags, export flags on API 33+, etc.)
 
 **Disadvantages / limitations:**
-- Requires explicit unregistration (risk of leaks or IllegalArgumentException)
+- Requires explicit unregistration (risk of leaks or `IllegalArgumentException`)
 - Will not receive broadcasts once the component is destroyed and the process is killed
 - Background execution and implicit broadcast limitations on modern Android still apply (some system broadcasts only go to manifest-declared receivers)
 
@@ -179,7 +198,7 @@ Declare in AndroidManifest.xml (suitable for certain system events like BOOT_COM
 <receiver
     android:name=".BootReceiver"
     android:enabled="true"
-    android:exported="true">
+    android:exported="false">
     <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
     </intent-filter>
@@ -198,13 +217,15 @@ class BootReceiver : BroadcastReceiver() {
 }
 ```
 
+(`android:exported` must reflect your security requirements: `true` if other apps are allowed to send broadcasts to this receiver; `false` if it is only for in-app/system broadcasts targeted at your app.)
+
 **Advantages:**
 - Can trigger even when the UI is not running (system starts the process for the broadcast)
 - Registration is defined in the manifest; no manual `unregisterReceiver` is needed
 
 **Disadvantages / limitations:**
 - From Android 8+ many implicit broadcasts are restricted; background execution limits apply
-- The receiver is not "always in memory"; it is created per broadcast, but frequent system triggers can impact resources
+- The receiver is not "always in memory"; it is created only while handling `onReceive`, and frequent triggers may impact resources
 
 ### Modern Alternatives
 
@@ -213,7 +234,8 @@ class BootReceiver : BroadcastReceiver() {
 // LocalBroadcastManager.getInstance(context)
 //     .sendBroadcast(Intent("action"))
 
-// ✅ Prefer Flow/LiveData/EventBus-style patterns for in-app events instead of system broadcasts
+// ✅ Prefer Flow/LiveData/EventBus-style patterns for in-app events only;
+// they do not receive or replace system broadcasts.
 class EventBus {
     private val _events = MutableSharedFlow<Event>()
     val events = _events.asSharedFlow()
@@ -224,7 +246,7 @@ class EventBus {
 
 **When to use:**
 - **Dynamic:** UI updates, temporary listeners bound to the lifecycle of an `Activity`/`Service`
-- **Static (Manifest):** system events (BOOT_COMPLETED, SMS_RECEIVED, etc.), with required permissions and respecting platform limits
+- **Static (Manifest):** system events (BOOT_COMPLETED, SMS_RECEIVED, etc.), with required permissions, correct `android:exported` value, and platform limits
 - **WorkManager/JobScheduler:** reliable deferred/background work with constraints instead of directly starting long-running services from a receiver
 - **`Flow`/`LiveData`:** in-app events and communication between components without relying on system broadcasts
 

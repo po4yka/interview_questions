@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-sealed-classes, c-kotlin, q-kotlin-enum-classes--kotlin--easy]
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, polymorphism, sealed-classes, sealed-interfaces, when-expression]
 ---
 
@@ -20,9 +20,13 @@ tags: [classes, difficulty/medium, kotlin, polymorphism, sealed-classes, sealed-
 
 > В чем различия между sealed классами и sealed интерфейсами в Kotlin, как они используются, и как они соотносятся с enum?
 
+# Question (EN)
+
+> What are the differences between sealed classes and sealed interfaces in Kotlin, how are they used, and how do they compare to enums?
+
 ## Ответ (RU)
 
-**Sealed классы** и **sealed интерфейсы** определяют ограниченные иерархии типов, где все непосредственно наследующие типы должны быть объявлены в том же пакете (и, в зависимости от таргета/платформы, в рамках той же единицы компиляции). Это позволяет компилятору проверять полноту `when` выражений.
+**Sealed классы** и **sealed интерфейсы** определяют ограниченные иерархии типов, где все непосредственно наследующие типы должны быть объявлены в том же пакете (и, в актуальных версиях Kotlin, могут находиться в разных файлах внутри этого пакета). Это позволяет компилятору проверять полноту `when` выражений для таких иерархий, так как набор подтипов известен на этапе компиляции.
 
 #### Базовый Sealed Класс
 
@@ -38,7 +42,7 @@ fun handleResult(result: Result<String>) {
         is Result.Success -> println("Данные: ${result.data}")
         is Result.Error -> println("Ошибка: ${result.exception.message}")
         Result.Loading -> println("Загрузка...")
-        // else не нужен - выражение исчерпывающее
+        // else не нужен - выражение исчерпывающее, так как все подтипы Result известны
     }
 }
 ```
@@ -59,17 +63,19 @@ sealed interface Refreshable
 data class Content(val items: List<String>) : UiState, Loadable, Refreshable
 ```
 
+(Как и для sealed классов, все непосредственные реализации sealed интерфейса должны находиться в том же пакете, что и сам интерфейс.)
+
 #### Sealed Класс Vs Sealed Интерфейс
 
 ```kotlin
-// Sealed класс: одиночное наследование
+// Sealed класс: одиночное наследование по классу
 sealed class Animal {
     abstract val name: String
     data class Dog(override val name: String, val breed: String) : Animal()
     data class Cat(override val name: String, val color: String) : Animal()
 }
 
-// Sealed интерфейс: множественное наследование
+// Sealed интерфейс: множественное наследование интерфейсов (типа)
 sealed interface Clickable {
     fun onClick()
 }
@@ -106,7 +112,7 @@ fun calculate(initial: Int, operations: List<Operation>): Int {
             is Operation.Subtract -> result - op.value
             is Operation.Multiply -> result * op.value
             is Operation.Divide -> result / op.value
-            // Компилятор гарантирует обработку всех вариантов (else не нужен)
+            // Компилятор гарантирует исчерпывающий when, так как Operation — sealed и все подтипы перечислены
         }
     }
     return result
@@ -135,7 +141,8 @@ sealed class Result2 {
     object Loading : Result2()
 }
 
-// Enum — для простых и обычно однотипных состояний; sealed — для сложных, неоднородных иерархий
+// Enum — для простых и обычно однотипных состояний;
+// sealed — для сложных, неоднородных иерархий с разными данными и логикой
 ```
 
 #### Вложенные Иерархии
@@ -170,22 +177,22 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 
 | Аспект | Sealed класс | Sealed интерфейс | Enum |
 |--------|--------------|------------------|------|
-| Наследование | Одиночное | Множественное (можно реализовать несколько интерфейсов) | Нет (каждый enum — финальный элемент) |
-| Свойства | Разные для подклассов | Разные для реализаций | Общие поля/методы типа, entries могут иметь свои параметры/реализацию |
-| Когда использовать | Иерархия типов | Композиция поведений и контрактов | Простые фиксированные константы |
-| Exhaustive `when` | Да | Да | Да |
+| Наследование | Одиночное (как у абстрактных классов) | Множественное (можно реализовать несколько интерфейсов) | Нет (каждый enum-элемент final) |
+| Свойства | Разные для подклассов | Разные для реализаций | Общие поля/методы типа; элементы могут иметь свои параметры/реализацию |
+| Когда использовать | Иерархия связанных типов | Композиция поведений и контрактов поверх разных типов | Простые фиксированные константы/состояния |
+| Exhaustive `when` | Да, при известном наборе подтипов sealed | Да, при известном наборе реализаций sealed | Да, по всем enum-элементам |
 | Версия Kotlin | 1.0+ | 1.5+ | 1.0+ |
 
 ### Краткое Резюме
 
 **Sealed классы и интерфейсы** ограничивают иерархии типов, обеспечивая:
-- Exhaustive `when` выражения (компилятор проверяет полноту)
-- Известный на этапе компиляции набор подтипов
+- Exhaustive `when` выражения (компилятор может проверить полноту по известным подтипам)
+- Известный на этапе компиляции набор подтипов (в пределах пакета)
 - Типобезопасность
 
 **Различия:**
-- Sealed класс: одиночное наследование, может содержать реализацию и состояние.
-- Sealed интерфейс: разрешает множественное наследование, задает контракты (без хранения состояния по умолчанию).
+- Sealed класс: одиночное наследование по классу, может содержать реализацию и состояние.
+- Sealed интерфейс: разрешает множественное наследование интерфейсов, задает контракты (без хранения состояния по умолчанию).
 
 **Используйте для:**
 - UI состояний (Loading, Success, Error)
@@ -193,13 +200,9 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 - Command/Event паттернов
 - Навигационных состояний
 
-# Question (EN)
-
-> What are the differences between sealed classes and sealed interfaces in Kotlin, how are they used, and how do they compare to enums?
-
 ## Answer (EN)
 
-**Sealed classes** and **sealed interfaces** define restricted class hierarchies where all directly inheriting types must be declared in the same package (and, depending on the target/platform, within the same compilation unit). They enable the compiler to verify exhaustiveness in `when` expressions.
+**Sealed classes** and **sealed interfaces** define restricted hierarchies where all direct inheritors must be declared in the same package (and, in modern Kotlin, may reside in different files within that package). This allows the compiler to verify exhaustiveness of `when` expressions over such types, because the set of subtypes is known at compile time.
 
 #### Basic Sealed Class
 
@@ -215,7 +218,7 @@ fun handleResult(result: Result<String>) {
         is Result.Success -> println("Data: ${result.data}")
         is Result.Error -> println("Error: ${result.exception.message}")
         Result.Loading -> println("Loading...")
-        // No else needed - exhaustive!
+        // No else needed - exhaustive, since all Result subtypes are known
     }
 }
 ```
@@ -236,17 +239,19 @@ sealed interface Refreshable
 data class Content(val items: List<String>) : UiState, Loadable, Refreshable
 ```
 
+(As with sealed classes, all direct implementations of a sealed interface must be located in the same package as the interface.)
+
 #### Sealed Class Vs Sealed Interface
 
 ```kotlin
-// Sealed class: single inheritance
+// Sealed class: single class inheritance
 sealed class Animal {
     abstract val name: String
     data class Dog(override val name: String, val breed: String) : Animal()
     data class Cat(override val name: String, val color: String) : Animal()
 }
 
-// Sealed interface: multiple inheritance
+// Sealed interface: multiple interface inheritance
 sealed interface Clickable {
     fun onClick()
 }
@@ -283,7 +288,7 @@ fun calculate(initial: Int, operations: List<Operation>): Int {
             is Operation.Subtract -> result - op.value
             is Operation.Multiply -> result * op.value
             is Operation.Divide -> result / op.value
-            // Compiler ensures all cases are handled (no else needed)
+            // Compiler can ensure exhaustiveness because Operation is sealed
         }
     }
     return result
@@ -293,7 +298,7 @@ fun calculate(initial: Int, operations: List<Operation>): Int {
 #### Sealed Vs Enum
 
 ```kotlin
-// Enum: Fixed set of constants with uniform type
+// Enum: Fixed set of constants of a single enum type
 enum class Direction {
     NORTH, SOUTH, EAST, WEST;
 
@@ -305,14 +310,15 @@ enum class Direction {
     }
 }
 
-// Sealed: Each subclass can have different properties and behaviour
+// Sealed: Each subclass can have different properties and behavior
 sealed class Result2 {
     data class Success(val data: String, val timestamp: Long) : Result2()
     data class Error(val exception: Exception, val retryable: Boolean) : Result2()
     object Loading : Result2()
 }
 
-// Enum for simple, usually uniform cases; sealed for complex, heterogeneous hierarchies
+// Enum — for simple, usually uniform states;
+// sealed — for complex, heterogeneous hierarchies with different data/logic
 ```
 
 #### Nested Hierarchies
@@ -347,22 +353,22 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 
 | Aspect | Sealed class | Sealed interface | Enum |
 |--------|--------------|------------------|------|
-| Inheritance | Single | Multiple (can implement several interfaces) | None (each enum entry is final) |
+| Inheritance | Single (like abstract classes) | Multiple (can implement several interfaces) | None (each enum entry is final) |
 | Properties | Different per subclass | Different per implementation | Common type-level members; entries can have their own params/implementation |
-| When to use | Type hierarchies | Composition of behaviours/contracts | Simple fixed constants |
-| Exhaustive `when` | Yes | Yes | Yes |
+| When to use | Hierarchies of related types | Composition of behaviours/contracts across types | Simple fixed constants/states |
+| Exhaustive `when` | Yes, when all sealed subtypes are known | Yes, when all sealed implementations are known | Yes, over all enum entries |
 | Kotlin version | 1.0+ | 1.5+ | 1.0+ |
 
 ### Summary
 
 **Sealed classes and interfaces** restrict type hierarchies, providing:
-- Exhaustive `when` expressions (compiler-checked)
-- Compile-time known set of subtypes
+- Exhaustive `when` expressions (compiler-checked over known subtypes)
+- A compile-time known set of subtypes (within the package)
 - Type safety
 
 **Differences:**
-- Sealed class: single inheritance, can hold state and implementation.
-- Sealed interface: supports multiple inheritance, defines contracts (no state by default).
+- Sealed class: single class inheritance, can hold state and implementation.
+- Sealed interface: supports multiple interface inheritance, defines contracts (no state by default).
 
 **Use them for:**
 - UI state (Loading, Success, Error)

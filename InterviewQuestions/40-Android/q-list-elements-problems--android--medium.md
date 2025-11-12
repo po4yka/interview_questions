@@ -10,10 +10,10 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/performance-memory, android/performance-rendering, android/ui-views, concurrency, difficulty/medium, diffutil, memory, recyclerview]
 moc: moc-android
-related: [q-android-app-components--android--easy, q-android-app-bundles--android--easy]
+related: [c-android, q-android-app-components--android--easy, q-android-lint-tool--android--medium]
 sources: []
 
 ---
@@ -34,7 +34,7 @@ sources: []
 
 ### 1. Out of Memory (OOM)
 
-**Проблема:** Большие изображения или отсутствие переиспользования views приводят к переполнению памяти.
+**Проблема:** Большие изображения или отсутствие корректного переиспользования / масштабирования `View` и битмапов приводят к переполнению памяти.
 
 **Симптомы:**
 ```
@@ -43,28 +43,28 @@ java.lang.OutOfMemoryError: Failed to allocate a 12345678 byte allocation
 
 **Причины:**
 ```kotlin
-// ❌ BAD - Загрузка полноразмерных изображений
+// ❌ BAD - Загрузка полноразмерных изображений на UI-потоке без масштабирования
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val bitmap = BitmapFactory.decodeFile(photos[position].path) // 4K image!
-    holder.imageView.setImageBitmap(bitmap) // OOM!
+    holder.imageView.setImageBitmap(bitmap) // Высокий расход памяти, риск OOM
 }
 ```
 
-**Решение:** RecyclerView + библиотеки изображений
+**Решение:** RecyclerView (или корректно настроенный ListView) + библиотеки изображений
 ```kotlin
-// ✅ GOOD - Glide управляет памятью автоматически
+// ✅ GOOD - Glide управляет памятью и кэшем
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     Glide.with(holder.itemView.context)
         .load(photos[position].path)
-        .override(400, 400) // Resize to display size
+        .override(400, 400) // Resize до фактического размера отображения
         .centerCrop()
         .into(holder.binding.imageView)
 }
 ```
 
 **Преимущества:**
-- RecyclerView переиспользует views
-- Glide/Coil автоматически изменяют размер изображений
+- RecyclerView/Adapter используют переиспользование `ViewHolder`, снижая число аллокаций
+- Glide/Coil автоматически изменяют размер изображений и переиспользуют ресурсы
 - Memory + disk cache предотвращают повторную загрузку
 - Lifecycle awareness помогает корректно освобождать память
 
@@ -89,7 +89,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Решение:** Предобработка данных
+**Решение:** Предобработка данных вне адаптера (`ViewModel`/Repository, фоновые потоки)
 ```kotlin
 // ✅ GOOD - Обработка в ViewModel/Repository
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
@@ -98,13 +98,13 @@ class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
             rawItems.map { item ->
                 ProcessedItem(
                     id = item.id,
-                    processedText = item.text.uppercase(), // Pre-processed
-                    userName = item.userName, // Already fetched/derived
-                    commentCount = item.commentCount // Already counted
+                    processedText = item.text.uppercase(), // Предварительно обработано
+                    userName = item.userName, // Уже получено/вычислено
+                    commentCount = item.commentCount // Уже посчитано
                 )
             }
         }
-        .asLiveData()
+        .asLiveData() // Обработка может выполняться в нужном диспетчере внутри репозитория
 }
 
 // Простой биндинг - только установка уже подготовленных данных
@@ -125,7 +125,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Причины:**
 ```kotlin
-// ❌ BAD - Прямое изменение списка
+// ❌ BAD - Прямое изменение списка без корректного notify
 fun addItem(item: Item) {
     items.add(item)
     // Забыли notify!
@@ -174,7 +174,7 @@ android.view.ViewRootImpl$CalledFromWrongThreadException
 
 **Причины:**
 ```kotlin
-// ❌ BAD - Обновление из background потока
+// ❌ BAD - Обновление из background-потока
 fun loadDataInBackground() {
     Thread {
         val newItems = api.fetchItems()
@@ -185,29 +185,30 @@ fun loadDataInBackground() {
 }
 ```
 
-**Решение:** `LiveData`/`Flow` с учетом lifecycle
+**Решение:** `LiveData`/`Flow` с учетом lifecycle и правильными диспетчерами
 ```kotlin
 // ✅ GOOD - ViewModel - фоновая работа здесь
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
-    // repository.getItems() возвращает Flow<List<Item>> или другой асинхронный источник
+    // repository.getItems() возвращает Flow<List<Item>> или другой асинхронный источник,
+    // тяжелая работа должна выполняться вне main thread
     val items: LiveData<List<Item>> = repository.getItems()
-        .asLiveData() // Коллекция и эмиссия доставляются на main thread
+        .asLiveData() // Наблюдатели LiveData вызываются на main thread
 
     // Или через Flow для более гибкой обработки
     val itemsFlow: Flow<List<Item>> = repository.getItemsFlow()
-        .flowOn(Dispatchers.IO) // upstream на IO, коллекция (submitList) делается на main thread
+        .flowOn(Dispatchers.IO) // upstream на IO, collect { submitList(...) } вызывать на main thread
 }
 
-// Fragment - observe на main потоке
+// Fragment - observe на main-потоке
 viewModel.items.observe(viewLifecycleOwner) { items ->
-    adapter.submitList(items) // Всегда вызывается на main thread!
+    adapter.submitList(items) // Вызывается на main thread
 }
 ```
 
 **Преимущества:**
-- Доставка обновлений в UI на main thread
+- Доставка обновлений UI на main thread
 - Lifecycle-aware (меньше утечек памяти, корректная отписка)
-- Меньше шансов получить concurrent modification за счет единообразного потока обновлений
+- Меньше шансов получить concurrent modification за счет единого потока обновлений
 
 ### Лучшие Практики
 
@@ -226,7 +227,7 @@ class ItemAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-(При использовании ListAdapter stable IDs должны рассчитываться на основе getItem(position), без прямой модификации внутреннего списка.)
+(В реальном адаптере необходимо гарантировать стабильность ID между обновлениями данных и вызывать соответствующие `notify*` методы. При использовании `ListAdapter` stable IDs должны вычисляться на основе `getItem(position)`, без прямой модификации внутреннего списка.)
 
 **Безопасная обработка кликов:**
 ```kotlin
@@ -248,16 +249,16 @@ override fun onViewRecycled(holder: ViewHolder) {
 }
 ```
 
-Также см. официальные рекомендации по `RecyclerView` и `DiffUtil` для более глубокого понимания.
+Также см. официальные рекомендации по `RecyclerView` и `DiffUtil` для более глубокого понимания, а также [[c-android]] для общего контекста платформы.
 
 ### Таблица Решений
 
 | Проблема | Причина | Решение |
 |---------|---------|---------|
-| Out of Memory | Большие изображения, нет recycling | RecyclerView + Glide/Coil |
-| Медленная прокрутка | Тяжелые операции в onBindViewHolder | Предобработка данных |
+| Out of Memory | Большие изображения, некорректное использование битмапов, нет recycling/масштабирования | RecyclerView/ListView с переиспользованием view + Glide/Coil |
+| Медленная прокрутка | Тяжелые операции в onBindViewHolder | Предобработка данных, вынос тяжелой работы в `ViewModel`/Repository |
 | Несогласованность | Неправильные adapter updates | DiffUtil, ListAdapter |
-| Многопоточность | Multi-threaded updates | `LiveData`, `Flow` (обновления на main thread) |
+| Многопоточность | Multi-threaded updates без синхронизации/обновлений на main | `LiveData`, `Flow` (обновления UI на main thread) |
 | Утечки памяти | Удержание ссылок на `Activity`/`Context`, ресурсы не очищаются | ViewBinding, lifecycle components, очистка в onViewRecycled/onViewDetached |
 | Неверные клики | Position меняется async | Stable IDs (при необходимости), item callbacks с bindingAdapterPosition |
 
@@ -269,7 +270,7 @@ override fun onViewRecycled(holder: ViewHolder) {
 
 ### 1. Out of Memory (OOM)
 
-**Problem:** Large images or missing view recycling cause memory overflow.
+**Problem:** Large images or incorrect view/bitmap usage (no scaling/reuse) cause excessive memory usage and OOM.
 
 **Symptoms:**
 ```
@@ -278,28 +279,28 @@ java.lang.OutOfMemoryError: Failed to allocate a 12345678 byte allocation
 
 **Causes:**
 ```kotlin
-// ❌ BAD - Loading full-resolution images
+// ❌ BAD - Loading full-resolution images on the UI thread without downscaling
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val bitmap = BitmapFactory.decodeFile(photos[position].path) // 4K image!
-    holder.imageView.setImageBitmap(bitmap) // OOM!
+    holder.imageView.setImageBitmap(bitmap) // High memory usage, OOM risk
 }
 ```
 
-**Solution:** RecyclerView + image libraries
+**Solution:** RecyclerView (or properly configured ListView) + image loading libraries
 ```kotlin
-// ✅ GOOD - Glide manages memory automatically
+// ✅ GOOD - Glide manages memory and caching
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     Glide.with(holder.itemView.context)
         .load(photos[position].path)
-        .override(400, 400) // Resize to display size
+        .override(400, 400) // Resize to actual display size
         .centerCrop()
         .into(holder.binding.imageView)
 }
 ```
 
 **Benefits:**
-- RecyclerView recycles views
-- Glide/Coil automatically resize images
+- RecyclerView/Adapter use `ViewHolder` recycling, reducing allocations
+- Glide/Coil automatically resize images and reuse resources
 - Memory + disk cache prevent redundant loading
 - Lifecycle awareness helps free memory correctly
 
@@ -324,7 +325,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Solution:** Pre-process data
+**Solution:** Pre-process data outside the adapter (`ViewModel`/Repository, background threads)
 ```kotlin
 // ✅ GOOD - Processing in ViewModel/Repository
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
@@ -339,7 +340,7 @@ class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
                 )
             }
         }
-        .asLiveData()
+        .asLiveData() // Heavy work should be dispatched appropriately inside repository/Flow
 }
 
 // Simple binding - only setting prepared data
@@ -360,7 +361,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Causes:**
 ```kotlin
-// ❌ BAD - Direct list modification
+// ❌ BAD - Direct list modification without proper notifications
 fun addItem(item: Item) {
     items.add(item)
     // Forgot to notify!
@@ -420,22 +421,23 @@ fun loadDataInBackground() {
 }
 ```
 
-**Solution:** `LiveData`/`Flow` with lifecycle awareness
+**Solution:** `LiveData`/`Flow` with lifecycle awareness and proper dispatchers
 ```kotlin
 // ✅ GOOD - ViewModel - background work here
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
-    // repository.getItems() returns Flow<List<Item>> or another async source
+    // repository.getItems() returns Flow<List<Item>> or another async source;
+    // heavy work must run off the main thread
     val items: LiveData<List<Item>> = repository.getItems()
-        .asLiveData() // Collected and delivered to observers on main thread
+        .asLiveData() // LiveData observers are notified on the main thread
 
     // Or using Flow for more flexibility
-    val itemsFlow: Flow<List<Item>> = repository.getItemsFlow()
-        .flowOn(Dispatchers.IO) // upstream on IO; collect and submitList on main thread
+    val itemsFlow: Flow<List<List<Item>>> = repository.getItemsFlow()
+        .flowOn(Dispatchers.IO) // upstream on IO; collect { submitList(...) } on main thread
 }
 
 // Fragment - observes on main thread
 viewModel.items.observe(viewLifecycleOwner) { items ->
-    adapter.submitList(items) // Always on main thread!
+    adapter.submitList(items) // Called on main thread
 }
 ```
 
@@ -461,7 +463,7 @@ class ItemAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-(When using ListAdapter, stable IDs should be based on getItem(position), and you should not mutate the internal list directly.)
+(In a real adapter, you must ensure IDs remain stable across data updates and call appropriate `notify*` methods. When using `ListAdapter`, stable IDs should be based on `getItem(position)`, and you must not mutate the internal list directly.)
 
 **Safe click handling:**
 ```kotlin
@@ -483,16 +485,16 @@ override fun onViewRecycled(holder: ViewHolder) {
 }
 ```
 
-Also see official `RecyclerView` and `DiffUtil` documentation for more details.
+Also see official `RecyclerView` and `DiffUtil` documentation for more details, as well as [[c-android]] for general Android platform context.
 
 ### Solution Table
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| Out of Memory | Large images, no recycling | RecyclerView + Glide/Coil |
-| Lagging scroll | Heavy operations in onBindViewHolder | Pre-process data |
+| Out of Memory | Large images, incorrect bitmap usage, no recycling/downscaling | RecyclerView/ListView with view recycling + Glide/Coil |
+| Lagging scroll | Heavy operations in onBindViewHolder | Pre-process data, move heavy work to `ViewModel`/Repository |
 | Data inconsistency | Incorrect adapter updates | DiffUtil, ListAdapter |
-| Concurrency | Multi-threaded updates | `LiveData`, `Flow` (updates on main thread) |
+| Concurrency | Multi-threaded updates without proper main-thread dispatch | `LiveData`, `Flow` (UI updates on main thread) |
 | Memory leaks | Holding `Activity`/`Context` references, not clearing resources | ViewBinding, lifecycle components, cleanup in onViewRecycled/onViewDetached |
 | Wrong clicks | Position changes async | Stable IDs (when needed), item callbacks with bindingAdapterPosition |
 

@@ -35,7 +35,7 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
 **VectorDrawable** — это XML-представление векторной графики на основе синтаксиса SVG path. Обеспечивает независимость от разрешения экрана и уменьшает размер APK за счёт отсутствия отдельных bitmap-ресурсов для разных плотностей.
 
 **AnimatedVectorDrawable** позволяет анимировать свойства VectorDrawable:
-- **Path morphing** — трансформация путей (требует совместимых путей: одинаковый набор и порядок команд и сегментов, не только количество)
+- **Path morphing** — трансформация путей (требует совместимых путей: одинаковый набор, порядок и типы команд и сегментов, а не только количество или длина строки)
 - **Rotation, scale, translation** — трансформация групп
 - **Trim path** — эффект рисования линии
 - **Fill/stroke alpha** — анимация прозрачности
@@ -71,9 +71,22 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
 **2. AnimatedVectorDrawable с path morphing:**
 
 ```xml
+<!-- res/drawable/ic_play_to_pause.xml: VectorDrawable с path @name/play_pause_path -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <path
+        android:name="play_pause_path"
+        android:fillColor="@android:color/white"
+        android:pathData="M16,12L16,36L32,24Z"/>
+</vector>
+
 <!-- res/drawable/avd_play_to_pause.xml -->
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_play_pause">
+    android:drawable="@drawable/ic_play_to_pause">
     <target
         android:name="play_pause_path"
         android:animation="@animator/morph_animation" />
@@ -88,6 +101,8 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
     android:valueType="pathType"
     android:interpolator="@android:interpolator/fast_out_slow_in" />
 ```
+
+(Обратите внимание: `valueFrom` и `valueTo` должны описывать совместимые пути; пример иллюстративный.)
 
 **3. Управление анимацией в коде:**
 
@@ -129,29 +144,32 @@ val path1 = "M10,10L20,20"           // 2 команды
 val path2 = "M10,10L15,15L20,20"     // 3 команды
 
 // Совместимые пути — одинаковая структура команд и сегментов
-val path1 = "M10,10L20,20L30,10Z"
-val path2 = "M10,15L20,25L30,15Z"
+val path3 = "M10,10L20,20L30,10Z"
+val path4 = "M10,15L20,25L30,15Z"
 ```
 
 ### Оптимизация Производительности
 
-**1. Кеширование для повторного использования:**
+**1. Кеширование для повторного использования (упрощённый пример):**
 
 ```kotlin
 class VectorDrawableCache {
-    private val cache = LruCache<Int, Drawable>(50)
+    private val cache = LruCache<Int, Drawable.ConstantState>(50)
 
     fun get(context: Context, @DrawableRes resId: Int): Drawable? {
-        return cache.get(resId) ?: run {
-            val drawable = ContextCompat.getDrawable(context, resId)
-            drawable?.let { cache.put(resId, it.mutate()) }
-            drawable
+        val cachedState = cache.get(resId)
+        if (cachedState != null) {
+            return cachedState.newDrawable(context.resources).mutate()
         }
+
+        val drawable = ContextCompat.getDrawable(context, resId) ?: return null
+        drawable.constantState?.let { cache.put(resId, it) }
+        return drawable.mutate()
     }
 }
 ```
 
-**2. Растеризация для сложных векторов в списках:**
+**2. Растеризация для сложных векторов в списках (пример паттерна):**
 
 ```kotlin
 fun rasterizeIfComplex(drawable: Drawable, size: Int): Drawable {
@@ -168,6 +186,7 @@ fun rasterizeIfComplex(drawable: Drawable, size: Int): Drawable {
     }
 }
 
+// Заглушка: на практике сложность оценивается по числу путей, сегментов и т.п.
 fun measureComplexity(drawable: Drawable): Int {
     return 0
 }
@@ -177,11 +196,13 @@ fun measureComplexity(drawable: Drawable): Int {
 
 ```kotlin
 fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCompat) {
+    val previousLayerType = imageView.layerType
+
     imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
     avd.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
         override fun onAnimationEnd(drawable: Drawable?) {
-            imageView.setLayerType(View.LAYER_TYPE_NONE, null)
+            imageView.setLayerType(previousLayerType, null)
             avd.unregisterAnimationCallback(this)
         }
     })
@@ -189,6 +210,8 @@ fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCo
     avd.start()
 }
 ```
+
+(Используйте аппаратные слои только после профилирования: для некоторых векторов выгоды может не быть.)
 
 ### Compose Интеграция
 
@@ -219,13 +242,15 @@ fun AnimatedVectorIcon(
 }
 ```
 
+(В реальных проектах также можно использовать специализированные вспомогательные API из Compose для работы с AnimatedVectorDrawable.)
+
 ### Лучшие Практики
 
-1. **Path morphing**: используйте инструменты для нормализации путей (Vector Asset Studio, svg-path-morph); следите за идентичной структурой команд.
-2. **Производительность**: кешируйте `Drawable`, при необходимости растеризуйте особо сложные векторы для RecyclerView, выборочно используйте аппаратные слои на основе профилирования.
+1. **Path morphing**: используйте инструменты для нормализации путей (Vector Asset Studio, svg-path-morph); обеспечивайте идентичную структуру команд.
+2. **Производительность**: кешируйте `Drawable` (или их `ConstantState`), при необходимости растеризуйте особо сложные векторы для RecyclerView, выборочно используйте аппаратные слои на основе профилирования.
 3. **Импорт SVG**: импортируйте через Vector Asset Studio, упрощайте пути, оптимизируйте viewport и удаляйте неподдерживаемые эффекты.
 4. **Анимации**: длительность 200–400 мс для большинства UI-кейсов, используйте FastOutSlowInInterpolator, избегайте избыточного количества одновременно анимируемых путей.
-5. **Совместимость**: используйте VectorDrawableCompat / AnimatedVectorDrawableCompat для обратной совместимости, тестируйте на API 21+.
+5. **Совместимость**: используйте VectorDrawableCompat / AnimatedVectorDrawableCompat для поддержки старых версий, при этом на новых API можно использовать нативные классы; тестируйте на API 21+.
 
 ### Распространённые Ошибки
 
@@ -244,7 +269,7 @@ fun AnimatedVectorIcon(
 **VectorDrawable** is an XML representation of vector graphics based on SVG path syntax. It provides resolution independence and helps reduce APK size by avoiding separate bitmap resources for each density.
 
 **AnimatedVectorDrawable** enables animating VectorDrawable properties:
-- **Path morphing** — shape transitions (requires compatible paths: same types, order, and count of commands/segments, not just equal length)
+- **Path morphing** — shape transitions (requires compatible paths: same set, order, and types of commands/segments, not just equal string length)
 - **Rotation, scale, translation** — group transformations
 - **Trim path** — line drawing effects
 - **Fill/stroke alpha** — opacity animations
@@ -280,9 +305,22 @@ See also: [[c-android-graphics]], [[c-animation-framework]].
 **2. AnimatedVectorDrawable with path morphing:**
 
 ```xml
+<!-- res/drawable/ic_play_to_pause.xml: VectorDrawable with path @name/play_pause_path -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <path
+        android:name="play_pause_path"
+        android:fillColor="@android:color/white"
+        android:pathData="M16,12L16,36L32,24Z"/>
+</vector>
+
 <!-- res/drawable/avd_play_to_pause.xml -->
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_play_pause">
+    android:drawable="@drawable/ic_play_to_pause">
     <target
         android:name="play_pause_path"
         android:animation="@animator/morph_animation" />
@@ -297,6 +335,8 @@ See also: [[c-android-graphics]], [[c-animation-framework]].
     android:valueType="pathType"
     android:interpolator="@android:interpolator/fast_out_slow_in" />
 ```
+
+(Note: `valueFrom` and `valueTo` must describe compatible paths; the snippet is illustrative.)
 
 **3. Animation control in code:**
 
@@ -338,29 +378,32 @@ val path1 = "M10,10L20,20"           // 2 commands
 val path2 = "M10,10L15,15L20,20"     // 3 commands
 
 // Compatible paths - same command structure and segments
-val path1 = "M10,10L20,20L30,10Z"
-val path2 = "M10,15L20,25L30,15Z"
+val path3 = "M10,10L20,20L30,10Z"
+val path4 = "M10,15L20,25L30,15Z"
 ```
 
 ### Performance Optimization
 
-**1. Caching for reuse:**
+**1. Caching for reuse (simplified pattern):**
 
 ```kotlin
 class VectorDrawableCache {
-    private val cache = LruCache<Int, Drawable>(50)
+    private val cache = LruCache<Int, Drawable.ConstantState>(50)
 
     fun get(context: Context, @DrawableRes resId: Int): Drawable? {
-        return cache.get(resId) ?: run {
-            val drawable = ContextCompat.getDrawable(context, resId)
-            drawable?.let { cache.put(resId, it.mutate()) }
-            drawable
+        val cachedState = cache.get(resId)
+        if (cachedState != null) {
+            return cachedState.newDrawable(context.resources).mutate()
         }
+
+        val drawable = ContextCompat.getDrawable(context, resId) ?: return null
+        drawable.constantState?.let { cache.put(resId, it) }
+        return drawable.mutate()
     }
 }
 ```
 
-**2. Rasterization for complex vectors in lists:**
+**2. Rasterization for complex vectors in lists (pattern example):**
 
 ```kotlin
 fun rasterizeIfComplex(drawable: Drawable, size: Int): Drawable {
@@ -377,6 +420,7 @@ fun rasterizeIfComplex(drawable: Drawable, size: Int): Drawable {
     }
 }
 
+// Stub: in real code, base this on number of paths, segments, etc.
 fun measureComplexity(drawable: Drawable): Int {
     return 0
 }
@@ -386,11 +430,13 @@ fun measureComplexity(drawable: Drawable): Int {
 
 ```kotlin
 fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCompat) {
+    val previousLayerType = imageView.layerType
+
     imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
     avd.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
         override fun onAnimationEnd(drawable: Drawable?) {
-            imageView.setLayerType(View.LAYER_TYPE_NONE, null)
+            imageView.setLayerType(previousLayerType, null)
             avd.unregisterAnimationCallback(this)
         }
     })
@@ -398,6 +444,8 @@ fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCo
     avd.start()
 }
 ```
+
+(Use hardware layers only after profiling; they may not always improve performance for vector animations.)
 
 ### Compose Integration
 
@@ -428,13 +476,15 @@ fun AnimatedVectorIcon(
 }
 ```
 
+(In production, you can also use dedicated Compose helpers for AnimatedVectorDrawable.)
+
 ### Best Practices
 
 1. Path morphing: use tools to normalize paths; ensure identical command structure.
-2. Performance: cache drawables, rasterize very complex vectors for RecyclerView when needed, and apply hardware layers based on profiling.
+2. Performance: cache drawables (or their ConstantState), rasterize very complex vectors for RecyclerView when needed, and apply hardware layers based on profiling.
 3. SVG import: import via Vector Asset Studio, simplify paths, optimize viewport, and remove unsupported effects.
 4. Animation: use 200–400 ms for most UI cases, prefer FastOutSlowInInterpolator, avoid animating too many paths at once.
-5. Compatibility: use VectorDrawableCompat / AnimatedVectorDrawableCompat for backward compatibility; test on API 21+.
+5. Compatibility: use VectorDrawableCompat / AnimatedVectorDrawableCompat to support old APIs; on newer APIs native classes are fine. Test on API 21+.
 
 ### Common Pitfalls
 

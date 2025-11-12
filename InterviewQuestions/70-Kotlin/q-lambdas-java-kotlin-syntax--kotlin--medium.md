@@ -8,15 +8,18 @@ question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
-status: ready
+status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-kotlin, c-concepts--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, functional-programming, java, kotlin, lambdas, syntax]
 ---
 # Вопрос (RU)
 > Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?
+
+# Question (EN)
+> What are lambdas from syntax perspective in Java and Kotlin?
 
 ## Ответ (RU)
 
@@ -76,9 +79,6 @@ list.filter { it > 0 }
 - Trailing lambda:
   - Java: нет специального синтаксиса.
   - Kotlin: есть специальный синтаксис — лямбда может быть вынесена за скобки.
-
-# Question (EN)
-> What are lambdas from syntax perspective in Java and Kotlin?
 
 ## Answer (EN)
 

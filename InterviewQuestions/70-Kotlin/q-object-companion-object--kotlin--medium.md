@@ -27,11 +27,11 @@ tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, sin
 
 ## Ответ (RU)
 
-`object` и `companion object` используются для объявления объектов, доступных без явного создания экземпляра обычного класса: для реализации паттерна одиночка (singleton), объявления членов, аналогичных статическим, создания объектов-утилит, фабрик и объектных выражений.
+`object` и `companion object` используются для объявления объектов, доступных без явного создания экземпляра обычного класса: для реализации паттерна одиночка (singleton), объявления членов, аналогичных статическим по способу доступа, создания объектов-утилит, фабрик и объектных выражений.
 
 ### Object - Одиночка (Singleton)
 
-`object`-объявление создаёт одиночный экземпляр (singleton) конкретного объекта.
+`object`-объявление создаёт одиночный экземпляр (singleton) для данного объявления в области его видимости.
 
 ```kotlin
 object DatabaseManager {
@@ -67,11 +67,11 @@ object Config {
 }
 ```
 
-(Дополнительно: существуют object-выражения и локальные object-объявления, которые также используют ключевое слово `object`, но не являются синглтонами на уровне всего приложения.)
+(Дополнительно: существуют object-выражения и локальные object-объявления, которые также используют ключевое слово `object`, но не являются глобальными синглтонами — они создаются там, где объявлены/используются.)
 
 ### Companion Object - Статические Члены
 
-Используется внутри класса и служит для объявления членов, доступных без создания экземпляра этого класса (аналогично статическим членам в Java).
+Используется внутри класса и служит для объявления членов, доступных без создания экземпляра этого класса (по способу доступа аналогично статическим членам в Java), при этом сам `companion object` является полноценным объектом (может реализовывать интерфейсы, иметь своё состояние и передаваться как значение).
 
 ```kotlin
 class User private constructor(val id: Int, val name: String) {
@@ -98,7 +98,7 @@ println(User.MAX_NAME_LENGTH)  // 50
 |--------|--------|------------------|
 | **Расположение** | Отдельное объявление (top-level, локальное, вложенное) | Внутри класса, объявлено как `companion object` |
 | **Доступ** | Через имя object | Через имя класса (или имя companion, если указано) |
-| **Назначение** | Singleton для данного объявления, утилиты, object-выражения | "Статические" члены и фабрики, связанные с классом |
+| **Назначение** | Singleton для данного объявления, утилиты, object-выражения | "Статические" по способу доступа члены и фабрики, связанные с классом |
 | **Количество** | Один экземпляр на каждое `object`-объявление | Не более одного `companion object` на класс (необязателен) |
 
 ### Примеры Использования
@@ -205,11 +205,11 @@ MyClass.bar()  // "bar" - расширение
 
 ## Answer (EN)
 
-`object` and `companion object` are Kotlin features for declaring objects accessible without explicitly instantiating a regular class: used for singletons, static-like members, utilities, factories, and object expressions.
+`object` and `companion object` are Kotlin features for declaring objects accessible without explicitly instantiating a regular class: used for singletons, static-like access to members, utilities, factories, and object expressions.
 
 ### Object - Singleton
 
-`object` declarations create a single instance (a singleton) for that declaration.
+`object` declarations create a single instance (a singleton) for that declaration within its scope.
 
 ```kotlin
 object DatabaseManager {
@@ -245,11 +245,11 @@ object Config {
 }
 ```
 
-Note: there are also object expressions and local object declarations that use the `object` keyword but are not application-wide singletons (they are created where they are used).
+Note: there are also object expressions and local object declarations that use the `object` keyword but are not global singletons — they are created where they are declared/used.
 
 ### Companion Object - Static-like Members
 
-A `companion object` is declared inside a class and provides members that can be accessed without creating an instance of that class (similar to `static` members in Java).
+A `companion object` is declared inside a class and provides members that can be accessed without creating an instance of that class (similar in access style to `static` members in Java). However, the companion itself is a real object (it can implement interfaces, hold state, and be passed around as a value).
 
 ```kotlin
 class User private constructor(val id: Int, val name: String) {
@@ -276,7 +276,7 @@ println(User.MAX_NAME_LENGTH)  // 50
 |--------|--------|------------------|
 | Location | Separate declaration (top-level, local, nested) | Inside a class, declared as `companion object` |
 | Access | Via the object name | Via the class name (or companion name if specified) |
-| Purpose | Singleton for that declaration, utilities, object expressions | Static-like members and factories associated with the class |
+| Purpose | Singleton for that declaration, utilities, object expressions | Static-like access to members and factories associated with the class |
 | Count | One instance per `object` declaration | At most one `companion object` per class (optional) |
 
 ### Usage Examples
@@ -391,7 +391,7 @@ MyClass.bar()  // "bar"
 
 ## References
 
-- [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
 ## Related Questions

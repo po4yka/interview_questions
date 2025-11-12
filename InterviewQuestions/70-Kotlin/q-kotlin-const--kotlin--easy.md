@@ -41,7 +41,7 @@ tags: [compile-time-constants, const, difficulty/easy, kotlin, properties]
 ### Требования к `const`
 
 1. **Являться свойством `val` верхнего уровня или членом `object`/`companion object`** — Константа должна быть объявлена на верхнем уровне файла, внутри `object` или внутри `companion object`. Нельзя использовать `const` с `var` или для локальных переменных внутри функций.
-2. **Инициализироваться значением типа `String` или примитивного типа** — Только `String` или примитивные типы (`Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `Byte`, `Short`), инициализация должна быть константным выражением (литерал, простая комбинация констант и т.п.), без вычислений времени выполнения.
+2. **Инициализироваться значением типа `String` или примитивного типа** — Только `String` или примитивные типы (`Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `Byte`, `Short`). Инициализация должна быть константным выражением (литерал или выражение, составленное только из других `const`-значений и разрешённых операций), без вычислений времени выполнения. Нельзя использовать `const` для nullable-типов или пользовательских типов.
 3. **Без пользовательского getter** — Свойство не может иметь пользовательский getter.
 
 ### Пример
@@ -74,7 +74,7 @@ object AppConstants {
 // Константа времени компиляции — значение встраивается во время компиляции
 const val COMPILE_TIME = 100
 
-// Константа времени выполнения — значение определяется во время выполнения
+// Константа времени выполнения — значение вычисляется при инициализации во время выполнения
 val RUNTIME = calculateValue()
 
 class Example {
@@ -94,7 +94,7 @@ class Example {
 
 ### Замечание о производительности
 
-Использование `const` приводит к встраиванию значения в байткод как литерала (inlining), что убирает обращение к полю. Это может немного упростить доступ, но не следует рассматривать `const` как средство значительного ускорения кода; его основное назначение — корректное отражение compile-time констант и совместимость с требованиями к таким значениям (например, в аннотациях).
+Использование `const` приводит к встраиванию значения в байткод как литерала (inlining), что убирает обращение к полю. Это может немного упростить доступ, но не следует рассматривать `const` как средство значительного ускорения кода; его основное назначение — корректное отражение compile-time констант и соответствие требованиям к таким значениям (например, в аннотациях).
 
 ```kotlin
 const val MAX_SIZE = 1000
@@ -109,18 +109,18 @@ fun checkSize(size: Int) {
 // if (size > 1000) { ... }
 ```
 
-**Краткое содержание**: Модификатор `const` помечает свойство `val` как константу времени компиляции. Оно может использоваться только для примитивных типов или `String`, должно быть верхнего уровня или в `object`/`companion object`, не может иметь пользовательский getter или вычисление времени выполнения. Значение встраивается во время компиляции и может использоваться там, где требуется compile-time constant.
+**Краткое содержание**: Модификатор `const` помечает свойство `val` как константу времени компиляции. Оно может использоваться только для примитивных типов или `String`, должно быть верхнего уровня или в `object`/`companion object`, не может иметь пользовательский getter или зависимость от вычислений времени выполнения. Значение встраивается во время компиляции и может использоваться там, где требуется compile-time constant.
 
 ---
 
 ## Answer (EN)
 
-If the value of a read-only property is known at compile time and can be expressed as a valid constant expression, mark it as a **compile-time constant** using the `const` modifier. Such properties must satisfy the following requirements:
+If the value of a read-only property is known at compile time and can be expressed as a valid constant expression, you can mark it as a **compile-time constant** using the `const` modifier. Such properties must satisfy the following requirements:
 
 ### Requirements for `const`
 
 1. **Must be a `val` at the top level or a member of an `object`/`companion object`** — The constant must be declared at the top level of a file, inside an `object`, or inside a `companion object`. You cannot use `const` with `var` or for local variables inside functions.
-2. **Initialized with a value of type `String` or a primitive type** — Only `String` or primitive types (`Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `Byte`, `Short`) are allowed, and the initializer must be a constant expression (literal or simple combination of constants), without runtime computation.
+2. **Initialized with a value of type `String` or a primitive type** — Only `String` or primitive types (`Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `Byte`, `Short`) are allowed. The initializer must be a constant expression (a literal or an expression composed only of other `const` values and allowed operations), without any runtime computation. You cannot use `const` with nullable types or custom types.
 3. **No custom getter** — The property cannot have a custom getter.
 
 ### Example
@@ -153,7 +153,7 @@ The main differences between `const val` and `val`:
 // Compile-time constant — value is inlined at compile time
 const val COMPILE_TIME = 100
 
-// Runtime constant — value is determined at runtime
+// Runtime constant — value is computed during initialization at runtime
 val RUNTIME = calculateValue()
 
 class Example {

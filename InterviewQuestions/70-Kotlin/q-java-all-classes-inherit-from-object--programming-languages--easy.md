@@ -1,19 +1,19 @@
 ---
-id: lang-009
+id: algo-070
 title: "Java All Classes Inherit From Object / В Java все классы наследуются от Object"
 aliases: [Java All Classes Inherit From Object, В Java все классы наследуются от Object]
 topic: kotlin
-subtopics: [inheritance, object-class]
+subtopics: [inheritance]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-java-features, q-interface-vs-abstract-class--programming-languages--medium]
+related: [c-algorithms, c-computer-science, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
-updated: 2025-11-09
-tags: [difficulty/easy, inheritance, java, object-class, oop, programming-languages]
+updated: 2025-11-11
+tags: [difficulty/easy, programming-languages/inheritance, java, object-class, oop]
 ---
 
 # Вопрос (RU)
@@ -24,13 +24,15 @@ tags: [difficulty/easy, inheritance, java, object-class, oop, programming-langua
 # Question (EN)
 > From which object do all classes in Java inherit?
 
+---
+
 ## Ответ (RU)
 
 В Java все ссылочные типы (обычные классы) неявно наследуются от класса **Object**, если явно не указано другое наследование (кроме случая с `Object` и `enum`/`record`/`array`, которые тоже в конечном итоге связаны с `Object`). Примитивные типы не наследуются от `Object`.
 
 Знание этого важно и для Kotlin-разработчиков: при работе на JVM корневым типом для всех классов также является `java.lang.Object` (в Kotlin он заворачивается в тип `Any`), а стандартные комментарии о `toString()`, `equals()`, `hashCode()` и других методах остаются актуальными.
 
-См. также: [[c-kotlin]], [[c-java-features]]
+См. также: [[c-kotlin]]
 
 **Методы класса Object (основные):**
 
@@ -189,7 +191,7 @@ In Java, all reference types (regular classes) implicitly inherit from the **Obj
 
 This is also relevant for Kotlin developers targeting the JVM: the root of the hierarchy at the bytecode level is still `java.lang.Object` (Kotlin's `Any` maps to it), so the usual considerations around `toString()`, `equals()`, `hashCode()`, and other methods remain applicable.
 
-See also: [[c-kotlin]], [[c-java-features]]
+See also: [[c-kotlin]]
 
 **Object Class Methods (core):**
 
@@ -360,13 +362,11 @@ class User {
 
 - Официальная документация Java SE для `java.lang.Object`
 - [[c-kotlin]]
-- [[c-java-features]]
 
 ## References
 
 - Official Java SE API documentation for `java.lang.Object`
 - [[c-kotlin]]
-- [[c-java-features]]
 
 ## Related Questions
 

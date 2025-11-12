@@ -122,7 +122,8 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent("com.example.MY_CUSTOM_ACTION").apply {
             putExtra("message", "Hello from sender!")
         }
-        // Глобальный broadcast (может быть виден другим приложениям, если ресивер экспортирован)
+        // Широковещательный Intent (может быть виден другим приложениям при наличии подходящего ресивера,
+        // с учетом настроек exported/permission)
         sendBroadcast(intent)
     }
 
@@ -263,7 +264,7 @@ sendOrderedBroadcast(intent, null)
 class HighPriorityReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         // Обрабатываем broadcast
-        abortBroadcast() // Для упорядоченных broadcast-ов может остановить доставку низкоприоритетным ресиверам
+        abortBroadcast() // Для упорядоченных broadcast-ов может остановить доставку низкоприоритетным ресиверам (с учетом ограничений современных API)
     }
 }
 ```
@@ -354,7 +355,7 @@ class MyReceiver : BroadcastReceiver() {
 }
 ```
 
-2. Всегда корректно снимайте регистрацию динамических ресиверов:
+2. Всегда корректно снимайте регистрацию динамических ресиверов:
 
 ```kotlin
 override fun onDestroy() {
@@ -395,7 +396,7 @@ override fun onDestroy() {
 It is usually used for:
 
 - reacting to system events (battery, boot, connectivity, locale, etc.)
-- app-internal communication via custom broadcasts
+- app-internal communication via custom broadcasts (though other in-app patterns are often preferred)
 
 Note: `onReceive()` is called on the main thread, so work must be fast and non-blocking.
 
@@ -468,7 +469,8 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent("com.example.MY_CUSTOM_ACTION").apply {
             putExtra("message", "Hello from sender!")
         }
-        // Global broadcast (visible to other apps if exported)
+        // Broadcast Intent (may be visible to other apps if they have matching receivers,
+        // subject to exported/permission settings)
         sendBroadcast(intent)
     }
 
@@ -498,7 +500,7 @@ Declared in `AndroidManifest.xml`. A manifest-declared receiver can start the ap
 
 Important:
 
-- On modern Android (8.0+), many implicit system broadcasts can no longer be received this way.
+- On Android 8.0+ many implicit system broadcasts can no longer be received this way.
 - Explicit broadcasts (targeting your package) and some documented exceptions still work.
 
 ```xml
@@ -553,7 +555,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(batteryReceiver)
+        try {
+            unregisterReceiver(batteryReceiver)
+        } catch (e: IllegalArgumentException) {
+            // Receiver was not registered or already unregistered
+        }
     }
 }
 ```
@@ -578,7 +584,7 @@ sendBroadcast(intent)
 
 #### Ordered Broadcasts
 
-Sent with `sendOrderedBroadcast()`. Delivered one at a time in priority order; each receiver can modify the result and (for some cases) abort further delivery.
+Sent with `sendOrderedBroadcast()`. Delivered one at a time in priority order; each receiver can modify the result and, for ordered broadcasts, may abort further delivery.
 
 ```kotlin
 val intent = Intent("com.example.ORDERED_ACTION")
@@ -601,7 +607,7 @@ Receiver example:
 class HighPriorityReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         // Process broadcast
-        abortBroadcast() // For ordered broadcasts, stops propagation to lower-priority receivers
+        abortBroadcast() // For ordered broadcasts, may stop propagation to lower-priority receivers (subject to modern API limits)
     }
 }
 ```

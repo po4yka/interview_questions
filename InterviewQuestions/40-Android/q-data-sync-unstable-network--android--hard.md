@@ -62,12 +62,13 @@ class DataRepository @Inject constructor(
     suspend fun saveUser(user: User): Result<User> {
         // ✅ Сохраняем локально первым для мгновенного отклика UI
         val saved = localDb.saveUser(user)
-        // user.id может быть использован для таргетированной синхронизации; опущено для краткости
+        // user.id может быть использован для таргетированной синхронизации
         syncManager.scheduleSync(user.id)
         return Result.success(saved)
     }
 
-    // ❌ Не ждем сеть перед возвратом данных, читаем из локального источника
+    // ✅ Не ждем сеть перед возвратом данных: читаем из локального источника,
+    // а обновление из сети выполняется асинхронно
     suspend fun getUser(id: String): User = localDb.getUser(id)
 }
 ```
@@ -125,8 +126,10 @@ class SyncWorker(
 
     override suspend fun doWork(): Result {
         return try {
-            // В реальном приложении SyncManager обычно внедряется через DI
-            SyncManager(applicationContext).performSync()
+            // В реальном приложении зависимости (например, SyncManager) должны
+            // предоставляться через DI (Hilt/ручной Injector), здесь упрощено
+            val syncManager = (applicationContext as AppDependenciesProvider).syncManager
+            syncManager.performSync()
             Result.success()
         } catch (e: Exception) {
             // ✅ Управляемый retry при ошибке: пробуем до 3 попыток
@@ -140,10 +143,12 @@ class SyncManager @Inject constructor(private val context: Context) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)  // ✅ Ждем доступность сети
             .build()
+
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
-            // userId можно прокинуть через inputData при необходимости
             .setConstraints(constraints)
+            .setInputData(workDataOf("userId" to userId))  // пример передачи идентификатора
             .build()
+
         WorkManager.getInstance(context).enqueue(request)
     }
 
@@ -165,7 +170,8 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
             override fun onLost(network: Network) { trySend(false).isSuccess }
         }
         // Для упрощения примера ошибки регистрации не обрабатываются;
-        // в продакшене учтите API-уровень и nullability ConnectivityManager.
+        // в продакшене учтите API-уровень (registerDefaultNetworkCallback требует API 24+)
+        // и nullability ConnectivityManager, а для старых API используйте registerNetworkCallback.
         connectivityManager?.registerDefaultNetworkCallback(callback)
         awaitClose { connectivityManager?.unregisterNetworkCallback(callback) }
     }
@@ -203,12 +209,13 @@ class DataRepository @Inject constructor(
     suspend fun saveUser(user: User): Result<User> {
         // ✅ Save locally first for instant UI feedback
         val saved = localDb.saveUser(user)
-        // user.id can be used for targeted sync; omitted here for brevity
+        // user.id can be used for targeted sync
         syncManager.scheduleSync(user.id)
         return Result.success(saved)
     }
 
-    // ❌ Do not wait for network before returning; read from local source
+    // ✅ Do not wait for network before returning: read from local source,
+    // and refresh from network asynchronously
     suspend fun getUser(id: String): User = localDb.getUser(id)
 }
 ```
@@ -266,8 +273,10 @@ class SyncWorker(
 
     override suspend fun doWork(): Result {
         return try {
-            // In a real app SyncManager is typically provided via DI
-            SyncManager(applicationContext).performSync()
+            // In a real app dependencies (e.g., SyncManager) should be provided
+            // via DI (Hilt/manual injector); simplified here
+            val syncManager = (applicationContext as AppDependenciesProvider).syncManager
+            syncManager.performSync()
             Result.success()
         } catch (e: Exception) {
             // ✅ Controlled retry on failure: retry up to 3 attempts
@@ -281,10 +290,12 @@ class SyncManager @Inject constructor(private val context: Context) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)  // ✅ Wait for network
             .build()
+
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
-            // userId can be passed via inputData if needed
             .setConstraints(constraints)
+            .setInputData(workDataOf("userId" to userId))  // example of passing identifier
             .build()
+
         WorkManager.getInstance(context).enqueue(request)
     }
 
@@ -306,7 +317,8 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
             override fun onLost(network: Network) { trySend(false).isSuccess }
         }
         // For brevity, registration errors are not handled here;
-        // in production, handle API levels and nullability of ConnectivityManager.
+        // in production, account for API level (registerDefaultNetworkCallback requires API 24+)
+        // and ConnectivityManager nullability, and use registerNetworkCallback for older APIs.
         connectivityManager?.registerDefaultNetworkCallback(callback)
         awaitClose { connectivityManager?.unregisterNetworkCallback(callback) }
     }
@@ -345,3 +357,4 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 - Implementing operational transformation for real-time collaboration
 - Building distributed consensus algorithms for multi-node sync
 - `CRDTs` for automatic conflict resolution
+```

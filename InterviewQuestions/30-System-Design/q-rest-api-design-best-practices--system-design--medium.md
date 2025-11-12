@@ -1,20 +1,21 @@
 ---
 id: sysdes-003
-title: "REST API Design Best Practices / Лучшие практики проектирования REST API"
+title: "Проектирование REST API / REST API Design Best Practices"
 aliases: ["REST API Design", "Проектирование REST API"]
 topic: system-design
-subtopics: [api-design, http, rest-api, web-services]
+subtopics: [api-design, http, rest-api]
 question_kind: system-design
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-system-design
-related: [c-rest-api, q-caching-strategies--system-design--medium, q-microservices-vs-monolith--system-design--hard]
+related: [c-architecture-patterns, q-caching-strategies--system-design--medium, q-microservices-vs-monolith--system-design--hard]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-11-11
 tags: [api-design, difficulty/medium, http, rest-api, system-design]
-sources: [https://en.wikipedia.org/wiki/Representational_state_transfer]
+sources: ["https://en.wikipedia.org/wiki/Representational_state_transfer"]
+
 ---
 
 # Вопрос (RU)
@@ -26,6 +27,35 @@ sources: [https://en.wikipedia.org/wiki/Representational_state_transfer]
 ---
 
 ## Ответ (RU)
+
+### Требования
+
+**Функциональные:**
+- Поддержка CRUD-операций над ресурсами через RESTful endpoints.
+- Корректное использование HTTP методов и кодов статуса.
+- Стандартизированная обработка ошибок.
+- Поддержка пагинации, фильтрации и сортировки коллекций.
+- Версионирование API для эволюции контрактов.
+- Защищенный доступ к API (аутентификация, авторизация).
+- Поддержка кеширования и идемпотентности там, где необходимо.
+- Документация API (например, OpenAPI/Swagger).
+
+**Нефункциональные:**
+- Масштабируемость и расширяемость API.
+- Надежность и предсказуемость поведения (семантика методов, статусы).
+- Хороший developer experience (понятные URL, схемы ошибок, документация).
+- Производительность (кеширование, пагинация).
+- Безопасность (TLS, rate limiting, валидация входных данных).
+
+### Архитектура
+
+- Клиент-серверная архитектура с четким разделением ответственности.
+- Ресурсно-ориентированная модель: каждое бизнес-сущность как ресурс с уникальным URI.
+- Использование стандартных HTTP методов и кодов как контракта взаимодействия.
+- Прослойка маршрутизации/контроллеров, маппящая HTTP-запросы на доменные сервисы.
+- Централизованный обработчик ошибок, возвращающий единый формат ответа.
+- Интеграция с системами аутентификации/авторизации (JWT, OAuth2).
+- Использование механизмов кеширования (HTTP заголовки, CDN) и rate limiting на уровне API-шлюза или прокси.
 
 **Теория REST API:**
 REST (Representational State Transfer) - архитектурный стиль для распределённых систем, основанный на ресурсах, стандартных HTTP методах и stateless коммуникации. Хороший дизайн API критичен для maintainability, scalability и developer experience.
@@ -44,11 +74,11 @@ REST (Representational State Transfer) - архитектурный стиль �
 
 ✅ **Правильно:**
 ```
-GET    /users          # Получить всех пользователей
-POST   /users          # Создать пользователя
-GET    /users/123      # Получить конкретного пользователя
-PUT    /users/123      # Обновить пользователя
-DELETE /users/123      # Удалить пользователя
+GET    /users             # Получить всех пользователей
+POST   /users             # Создать пользователя
+GET    /users/123         # Получить конкретного пользователя
+PUT    /users/123         # Обновить пользователя
+DELETE /users/123         # Удалить пользователя
 GET    /users/123/orders  # Заказы пользователя (вложенный ресурс)
 ```
 
@@ -64,25 +94,41 @@ POST /updateUser/123
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(private val userService: UserService) {
-    @GetMapping fun getAll() = userService.findAll()
-    @GetMapping("/{id}") fun getOne(@PathVariable id: Long) = userService.findById(id)
-    @PostMapping fun create(@RequestBody user: User) = userService.create(user)
-    @PutMapping("/{id}") fun update(@PathVariable id: Long, @RequestBody user: User) = userService.update(id, user)
-    @DeleteMapping("/{id}") fun delete(@PathVariable id: Long) = userService.delete(id)
+    @GetMapping
+    fun getAll(): List<User> = userService.findAll()
+
+    @GetMapping("/{id}")
+    fun getOne(@PathVariable id: Long): User = userService.findById(id)
+
+    @PostMapping
+    fun create(@RequestBody user: User): ResponseEntity<User> {
+        val created = userService.create(user)
+        return ResponseEntity.status(HttpStatus.CREATED).body(created)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @RequestBody user: User): User =
+        userService.update(id, user)
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long): ResponseEntity<Void> {
+        userService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
 }
 ```
 
 **2. HTTP методы:**
 
-*Теория:* Каждый HTTP метод имеет семантику. GET - безопасный (safe) и идемпотентный. POST - не идемпотентный (создаёт новый ресурс каждый раз). PUT/DELETE - идемпотентные (повторный вызов даёт тот же результат).
+*Теория:* Каждый HTTP метод имеет семантику. GET - безопасный (safe) и идемпотентный. POST - не идемпотентный (обычно используется для операций, которые могут иметь побочные эффекты, например создание ресурса). PUT/DELETE - идемпотентные (повторный вызов даёт тот же наблюдаемый результат). PATCH обычно не гарантируется как идемпотентный.
 
 | Метод | Назначение | Идемпотентный | Safe | Request Body | Response Body |
 |-------|-----------|---------------|------|--------------|---------------|
-| GET | Получить ресурс | Да | Да | Нет | Да |
-| POST | Создать ресурс | Нет | Нет | Да | Да |
+| GET | Получить ресурс | Да | Да | Обычно нет | Да |
+| POST | Создать ресурс / выполнить команду | Нет | Нет | Да | Да |
 | PUT | Заменить ресурс | Да | Нет | Да | Да |
-| PATCH | Частичное обновление | Нет | Нет | Да | Да |
-| DELETE | Удалить ресурс | Да | Нет | Нет | Нет |
+| PATCH | Частичное обновление | Не гарантируется | Нет | Да | Да |
+| DELETE | Удалить ресурс | Да | Нет | Опционально | Опционально |
 
 **3. HTTP коды статуса:**
 
@@ -91,7 +137,7 @@ class UserController(private val userService: UserService) {
 **Успешные (2xx):**
 - `200 OK` - успешный GET, PUT, PATCH
 - `201 Created` - успешный POST (с заголовком Location)
-- `204 No Content` - успешный DELETE
+- `204 No Content` - успешный DELETE (и другие случаи без тела ответа)
 
 **Клиентские ошибки (4xx):**
 - `400 Bad Request` - невалидные данные
@@ -104,10 +150,12 @@ class UserController(private val userService: UserService) {
 
 **Серверные ошибки (5xx):**
 - `500 Internal Server Error` - ошибка сервера
-- `503 Service Unavailable` - сервис временно недоступен
+- `503 `Service` Unavailable` - сервис временно недоступен
 
 ```kotlin
 // Стандартизированный формат ошибок
+import jakarta.servlet.http.HttpServletRequest
+
 data class ErrorResponse(
     val status: Int,
     val error: String,
@@ -118,16 +166,15 @@ data class ErrorResponse(
 )
 
 @ExceptionHandler(UserNotFoundException::class)
-fun handleNotFound(ex: UserNotFoundException): ResponseEntity<ErrorResponse> {
-    return ResponseEntity.status(404).body(
-        ErrorResponse(
-            status = 404,
-            error = "Not Found",
-            message = ex.message ?: "User not found",
-            timestamp = Instant.now(),
-            path = request.requestURI
-        )
+fun handleNotFound(ex: UserNotFoundException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+    val body = ErrorResponse(
+        status = HttpStatus.NOT_FOUND.value(),
+        error = HttpStatus.NOT_FOUND.reasonPhrase,
+        message = ex.message ?: "User not found",
+        timestamp = Instant.now(),
+        path = request.requestURI
     )
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body)
 }
 ```
 
@@ -136,7 +183,7 @@ fun handleNotFound(ex: UserNotFoundException): ResponseEntity<ErrorResponse> {
 *Теория:* API эволюционирует, breaking changes неизбежны. Версионирование позволяет поддерживать старых клиентов при внедрении новых фич. Три основных подхода: URL path, query parameter, header.
 
 **Подходы:**
-- **URL path** (рекомендуется): `/api/v1/users`, `/api/v2/users`
+- **URL path** (распространено и просто): `/api/v1/users`, `/api/v2/users`
 - **Query parameter**: `/api/users?version=1`
 - **Header**: `Accept: application/vnd.api.v1+json`
 
@@ -156,6 +203,8 @@ class UserControllerV2  // Новая версия с breaking changes
 ```kotlin
 // Пагинация и фильтрация
 GET /users?page=0&size=20&sort=name,asc&status=active&role=admin
+
+// Пример структуры ответа
 
 data class PageResponse<T>(
     val content: List<T>,
@@ -178,10 +227,10 @@ fun getUsers(
 
 **6. HATEOAS (Hypermedia):**
 
-*Теория:* Включение ссылок на связанные ресурсы в ответ. Клиент может навигироваться по API, следуя ссылкам, не hardcoding URLs. Опционально, но улучшает discoverable API.
+*Теория:* Включение ссылок на связанные ресурсы в ответ. Клиент может навигироваться по API, следуя ссылкам, не hardcoding URLs. Опционально, но улучшает discoverability API.
 
 ```kotlin
-// HATEOAS response
+// Пример HATEOAS-совместимого ответа
 {
   "id": 123,
   "name": "John Doe",
@@ -207,25 +256,30 @@ fun getUsers(
 - **CORS** - правильная настройка Cross-Origin Resource Sharing
 
 ```kotlin
-// JWT Authentication
+// Современная конфигурация безопасности (Spring Security 5.7+)
 @Configuration
-class SecurityConfig : WebSecurityConfigurerAdapter() {
-    override fun configure(http: HttpSecurity) {
+@EnableWebSecurity
+class SecurityConfig {
+
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/api/v1/public/**").permitAll()
-            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-            .anyRequest().authenticated()
-            .and()
-            .oauth2ResourceServer().jwt()
+            .csrf { it.disable() }
+            .authorizeHttpRequests {
+                it.requestMatchers("/api/v1/public/**").permitAll()
+                    .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+            }
+            .oauth2ResourceServer { it.jwt {} }
+
+        return http.build()
     }
 }
 ```
 
 **8. Кеширование:**
 
-*Теория:* Используйте HTTP кеширование для улучшения производительности. `Cache-Control`, `ETag`, `Last-Modified` headers позволяют клиентам и CDN кешировать ответы.
+*Теория:* Используйте HTTP кеширование для улучшения производительности. Заголовки `Cache-Control`, `ETag`, `Last-Modified` позволяют клиентам и CDN кешировать ответы.
 
 ```kotlin
 // Cache headers
@@ -241,7 +295,7 @@ fun getUser(@PathVariable id: Long): ResponseEntity<User> {
 
 **9. Идемпотентность:**
 
-*Теория:* Идемпотентные операции (GET, PUT, DELETE) можно безопасно повторять. POST не идемпотентен. Для критичных POST операций используйте idempotency keys для предотвращения дублирования.
+*Теория:* Идемпотентные операции (GET, PUT, DELETE) можно безопасно повторять: повторный запрос не меняет результат дальше первого успешного применения. POST по умолчанию не идемпотентен. Для критичных POST операций используйте idempotency keys для предотвращения дублирования.
 
 ```kotlin
 // Idempotency key для POST
@@ -263,8 +317,10 @@ fun createPayment(
 // OpenAPI annotations
 @Operation(summary = "Get user by ID", description = "Returns a single user")
 @ApiResponses(
-    ApiResponse(responseCode = "200", description = "User found"),
-    ApiResponse(responseCode = "404", description = "User not found")
+    value = [
+        ApiResponse(responseCode = "200", description = "User found"),
+        ApiResponse(responseCode = "404", description = "User not found")
+    ]
 )
 @GetMapping("/users/{id}")
 fun getUser(@PathVariable id: Long): User
@@ -287,8 +343,37 @@ fun getUser(@PathVariable id: Long): User
 
 ## Answer (EN)
 
+### Requirements
+
+**Functional:**
+- Support CRUD operations on resources via RESTful endpoints.
+- Correct usage of HTTP methods and status codes.
+- Standardized error handling.
+- Support pagination, filtering, and sorting for collections.
+- API versioning to evolve contracts.
+- Secure access to the API (authentication, authorization).
+- Support caching and idempotency where appropriate.
+- API documentation (e.g., OpenAPI/Swagger).
+
+**Non-functional:**
+- Scalability and extensibility of the API.
+- Reliability and predictable behavior (method semantics, statuses).
+- Good developer experience (clean URLs, error schema, docs).
+- Performance (caching, pagination).
+- Security (TLS, rate limiting, input validation).
+
+### Architecture
+
+- Client-server architecture with clear separation of concerns.
+- Resource-oriented model: each business entity as a resource with a unique URI.
+- Use of standard HTTP methods and codes as the interaction contract.
+- Routing/controller layer mapping HTTP requests to domain services.
+- Centralized error handler returning a unified error format.
+- Integration with auth systems (JWT, OAuth2).
+- Use of caching mechanisms (HTTP headers, CDN) and rate limiting at API gateway or proxy level.
+
 **REST API Theory:**
-REST (Representational State Transfer) - architectural style for distributed systems, based on resources, standard HTTP methods, and stateless communication. Good API design is critical for maintainability, scalability, and developer experience.
+REST (Representational State Transfer) is an architectural style for distributed systems, based on resources, standard HTTP methods, and stateless communication. Good API design is critical for maintainability, scalability, and developer experience.
 
 **REST Principles:**
 1. **Resources** - everything is a resource (users, orders, products)
@@ -300,15 +385,15 @@ REST (Representational State Transfer) - architectural style for distributed sys
 
 **1. Resource Naming:**
 
-*Theory:* Use nouns, not verbs. HTTP methods are already verbs. Use plural for collections. Nested resources for relationships.
+*Theory:* Use nouns, not verbs. HTTP methods are already verbs. Use plural for collections. Use nested resources for relationships.
 
 ✅ **Correct:**
 ```
-GET    /users          # Get all users
-POST   /users          # Create user
-GET    /users/123      # Get specific user
-PUT    /users/123      # Update user
-DELETE /users/123      # Delete user
+GET    /users             # Get all users
+POST   /users             # Create user
+GET    /users/123         # Get specific user
+PUT    /users/123         # Update user
+DELETE /users/123         # Delete user
 GET    /users/123/orders  # User's orders (nested resource)
 ```
 
@@ -324,34 +409,50 @@ POST /updateUser/123
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(private val userService: UserService) {
-    @GetMapping fun getAll() = userService.findAll()
-    @GetMapping("/{id}") fun getOne(@PathVariable id: Long) = userService.findById(id)
-    @PostMapping fun create(@RequestBody user: User) = userService.create(user)
-    @PutMapping("/{id}") fun update(@PathVariable id: Long, @RequestBody user: User) = userService.update(id, user)
-    @DeleteMapping("/{id}") fun delete(@PathVariable id: Long) = userService.delete(id)
+    @GetMapping
+    fun getAll(): List<User> = userService.findAll()
+
+    @GetMapping("/{id}")
+    fun getOne(@PathVariable id: Long): User = userService.findById(id)
+
+    @PostMapping
+    fun create(@RequestBody user: User): ResponseEntity<User> {
+        val created = userService.create(user)
+        return ResponseEntity.status(HttpStatus.CREATED).body(created)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @RequestBody user: User): User =
+        userService.update(id, user)
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long): ResponseEntity<Void> {
+        userService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
 }
 ```
 
 **2. HTTP Methods:**
 
-*Theory:* Each HTTP method has semantics. GET - safe and idempotent. POST - not idempotent (creates new resource each time). PUT/DELETE - idempotent (repeated call gives same result).
+*Theory:* Each HTTP method has defined semantics. GET - safe and idempotent. POST - not idempotent (commonly used for operations that may have side effects, such as creating resources). PUT/DELETE - idempotent (repeated call results in the same observed state). PATCH is generally not guaranteed to be idempotent.
 
 | Method | Purpose | Idempotent | Safe | Request Body | Response Body |
 |--------|---------|------------|------|--------------|---------------|
-| GET | Retrieve resource | Yes | Yes | No | Yes |
-| POST | Create resource | No | No | Yes | Yes |
+| GET | Retrieve resource | Yes | Yes | Typically No | Yes |
+| POST | Create resource / perform command | No | No | Yes | Yes |
 | PUT | Replace resource | Yes | No | Yes | Yes |
-| PATCH | Partial update | No | No | Yes | Yes |
-| DELETE | Delete resource | Yes | No | No | No |
+| PATCH | Partial update | Not guaranteed | No | Yes | Yes |
+| DELETE | Delete resource | Yes | No | Optional | Optional |
 
 **3. HTTP Status Codes:**
 
-*Theory:* Use correct HTTP codes to convey operation result. Client should understand result by code, not parsing body.
+*Theory:* Use correct HTTP codes to convey operation result. Clients should understand the outcome by the status code without parsing the body.
 
 **Success (2xx):**
 - `200 OK` - successful GET, PUT, PATCH
 - `201 Created` - successful POST (with Location header)
-- `204 No Content` - successful DELETE
+- `204 No Content` - successful DELETE (and other cases with no response body)
 
 **Client Errors (4xx):**
 - `400 Bad Request` - invalid data
@@ -364,10 +465,12 @@ class UserController(private val userService: UserService) {
 
 **Server Errors (5xx):**
 - `500 Internal Server Error` - server error
-- `503 Service Unavailable` - service temporarily unavailable
+- `503 `Service` Unavailable` - service temporarily unavailable
 
 ```kotlin
 // Standardized error format
+import jakarta.servlet.http.HttpServletRequest
+
 data class ErrorResponse(
     val status: Int,
     val error: String,
@@ -378,25 +481,24 @@ data class ErrorResponse(
 )
 
 @ExceptionHandler(UserNotFoundException::class)
-fun handleNotFound(ex: UserNotFoundException): ResponseEntity<ErrorResponse> {
-    return ResponseEntity.status(404).body(
-        ErrorResponse(
-            status = 404,
-            error = "Not Found",
-            message = ex.message ?: "User not found",
-            timestamp = Instant.now(),
-            path = request.requestURI
-        )
+fun handleNotFound(ex: UserNotFoundException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+    val body = ErrorResponse(
+        status = HttpStatus.NOT_FOUND.value(),
+        error = HttpStatus.NOT_FOUND.reasonPhrase,
+        message = ex.message ?: "User not found",
+        timestamp = Instant.now(),
+        path = request.requestURI
     )
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body)
 }
 ```
 
 **4. API Versioning:**
 
-*Theory:* API evolves, breaking changes inevitable. Versioning allows supporting old clients while introducing new features. Three main approaches: URL path, query parameter, header.
+*Theory:* APIs evolve; breaking changes are inevitable. Versioning allows supporting existing clients while introducing new features. Three main approaches: URL path, query parameter, header.
 
 **Approaches:**
-- **URL path** (recommended): `/api/v1/users`, `/api/v2/users`
+- **URL path** (common and simple): `/api/v1/users`, `/api/v2/users`
 - **Query parameter**: `/api/users?version=1`
 - **Header**: `Accept: application/vnd.api.v1+json`
 
@@ -411,11 +513,13 @@ class UserControllerV2  // New version with breaking changes
 
 **5. Pagination, Filtering, Sorting:**
 
-*Theory:* Large collections should support pagination for performance. Filtering and sorting via query parameters. Standardize response format.
+*Theory:* Large collections should support pagination for performance. Filtering and sorting via query parameters. Standardize the response format.
 
 ```kotlin
 // Pagination and filtering
 GET /users?page=0&size=20&sort=name,asc&status=active&role=admin
+
+// Example response structure
 
 data class PageResponse<T>(
     val content: List<T>,
@@ -438,10 +542,10 @@ fun getUsers(
 
 **6. HATEOAS (Hypermedia):**
 
-*Theory:* Including links to related resources in response. Client can navigate API by following links, not hardcoding URLs. Optional, but improves discoverable API.
+*Theory:* Include links to related resources in responses. Clients can navigate the API by following links instead of hardcoding URLs. Optional, but improves API discoverability.
 
 ```kotlin
-// HATEOAS response
+// Example HATEOAS-style response
 {
   "id": 123,
   "name": "John Doe",
@@ -456,7 +560,7 @@ fun getUsers(
 
 **7. Security:**
 
-*Theory:* API must be secured. HTTPS mandatory. Authentication (who you are) via JWT/OAuth2. Authorization (what you can do) via roles/permissions. Rate limiting to protect from abuse.
+*Theory:* API must be secured. HTTPS is mandatory. Authentication (who you are) via JWT/OAuth2. Authorization (what you can do) via roles/permissions. Rate limiting to protect from abuse.
 
 **Core Practices:**
 - **HTTPS only** - always use TLS
@@ -467,25 +571,30 @@ fun getUsers(
 - **CORS** - proper Cross-Origin Resource Sharing configuration
 
 ```kotlin
-// JWT Authentication
+// Modern security configuration (Spring Security 5.7+)
 @Configuration
-class SecurityConfig : WebSecurityConfigurerAdapter() {
-    override fun configure(http: HttpSecurity) {
+@EnableWebSecurity
+class SecurityConfig {
+
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/api/v1/public/**").permitAll()
-            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-            .anyRequest().authenticated()
-            .and()
-            .oauth2ResourceServer().jwt()
+            .csrf { it.disable() }
+            .authorizeHttpRequests {
+                it.requestMatchers("/api/v1/public/**").permitAll()
+                    .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+            }
+            .oauth2ResourceServer { it.jwt {} }
+
+        return http.build()
     }
 }
 ```
 
 **8. Caching:**
 
-*Theory:* Use HTTP caching to improve performance. `Cache-Control`, `ETag`, `Last-Modified` headers allow clients and CDN to cache responses.
+*Theory:* Use HTTP caching to improve performance. `Cache-Control`, `ETag`, and `Last-Modified` headers enable clients and CDNs to cache responses.
 
 ```kotlin
 // Cache headers
@@ -501,7 +610,7 @@ fun getUser(@PathVariable id: Long): ResponseEntity<User> {
 
 **9. Idempotency:**
 
-*Theory:* Idempotent operations (GET, PUT, DELETE) can be safely repeated. POST not idempotent. For critical POST operations use idempotency keys to prevent duplication.
+*Theory:* Idempotent operations (GET, PUT, DELETE) can be safely retried: subsequent identical requests do not change the state beyond the first successful one. POST is not idempotent by default. For critical POST operations, use idempotency keys to prevent duplicates.
 
 ```kotlin
 // Idempotency key for POST
@@ -510,21 +619,23 @@ fun createPayment(
     @RequestHeader("Idempotency-Key") idempotencyKey: String,
     @RequestBody payment: Payment
 ): Payment {
-    // Check if this idempotencyKey was already processed
+    // Check if this idempotencyKey has already been processed
     return paymentService.createOrGet(idempotencyKey, payment)
 }
 ```
 
 **10. Documentation:**
 
-*Theory:* API without documentation is useless. Use OpenAPI/Swagger for automatic documentation generation from code. Include request/response examples, error descriptions.
+*Theory:* An API without documentation is useless. Use OpenAPI/Swagger for automatic documentation generation from code. Include request/response examples and error descriptions.
 
 ```kotlin
 // OpenAPI annotations
 @Operation(summary = "Get user by ID", description = "Returns a single user")
 @ApiResponses(
-    ApiResponse(responseCode = "200", description = "User found"),
-    ApiResponse(responseCode = "404", description = "User not found")
+    value = [
+        ApiResponse(responseCode = "200", description = "User found"),
+        ApiResponse(responseCode = "404", description = "User not found")
+    ]
 )
 @GetMapping("/users/{id}")
 fun getUser(@PathVariable id: Long): User
@@ -553,6 +664,11 @@ fun getUser(@PathVariable id: Long): User
 - What is the difference between PUT and PATCH?
 - How do you handle API deprecation?
 
+## References
+
+- [[c-architecture-patterns]]
+- "https://en.wikipedia.org/wiki/Representational_state_transfer"
+
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -566,3 +682,25 @@ fun getUser(@PathVariable id: Long): User
 ### Advanced (Harder)
 - [[q-microservices-vs-monolith--system-design--hard]] - Architecture patterns
 - [[q-cap-theorem-distributed-systems--system-design--hard]] - Distributed systems theory
+
+## Дополнительные вопросы (RU)
+
+- Как реализовать rate limiting в API?
+- В чем разница между PUT и PATCH?
+- Как правильно организовать процесс деприкации и удаления старых версий API?
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-caching-strategies--system-design--medium]] - Паттерны кеширования
+- [[q-horizontal-vertical-scaling--system-design--medium]] - Стратегии масштабирования
+
+### Связанные (средний уровень)
+- [[q-load-balancing-strategies--system-design--medium]] - Балансировка нагрузки
+- [[q-message-queues-event-driven--system-design--medium]] - Асинхронное взаимодействие
+
+### Продвинутые (сложнее)
+- [[q-microservices-vs-monolith--system-design--hard]] - Архитектурные подходы
+- [[q-cap-theorem-distributed-systems--system-design--hard]] - Теория распределенных систем
+
+## Ссылки (RU)

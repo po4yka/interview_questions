@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-testing
 - q-android-testing-strategies--android--medium
 - q-why-use-diffutil--android--medium
 created: 2025-10-15
@@ -37,6 +38,8 @@ tags:
 ## Ответ (RU)
 
 MockK — это ориентированная на Kotlin библиотека для мокирования, которая предоставляет нативный DSL и удобную поддержку особенностей Kotlin: null-safety, корутины, suspend-функции, final-классы, объекты, top-level и extension-функции.
+
+См. также: [[c-android-testing]].
 
 ---
 
@@ -75,7 +78,10 @@ mock.getUserCount() // MockKException: no answer found for: UserRepository(#1).g
 val relaxedMock = mockk<UserRepository>(relaxed = true)
 relaxedMock.getUserCount() // Возвращает 0
 relaxedMock.getUserName() // Возвращает ""
-relaxedMock.getUser() // Возвращает null для nullable типов
+
+// Для ссылочных типов возвращается null/пустое значение только если сигнатура позволяет
+// (для не-nullable типов по-прежнему требуется корректный stub или изменение API)
+relaxedMock.getNullableUser() // Возвращает null, если тип возврата User?
 
 // Можно переопределять конкретные методы
 every { relaxedMock.getUser(1) } returns User("John")
@@ -93,10 +99,10 @@ mock.getFloat() // 0f
 mock.getDouble() // 0.0
 mock.getBoolean() // false
 
-// Объекты
+// Объекты (в зависимости от объявленного типа)
 mock.getString() // ""
 mock.getList() // emptyList()
-mock.getUser() // null для nullable возвращаемых типов
+mock.getNullableUser() // null для возвращаемого типа User?
 
 // Коллекции
 mock.getUsers() // emptyList()
@@ -346,7 +352,8 @@ fun testSuspendException() = runTest {
     coEvery { api.fetchUser(any()) } throws IOException("Network error")
 
     assertThrows<IOException> {
-        runTest { api.fetchUser(1) }
+        // Внутри runTest можно напрямую вызывать suspend-функцию
+        api.fetchUser(1)
     }
 
     coVerify { api.fetchUser(1) }
@@ -544,9 +551,9 @@ fun testConstructorMock() {
   - Relaxed mocks из коробки.
 - Mockito:
   - Изначально Java-ориентирован; поддержка Kotlin улучшена через дополнительные артефакты (`mockito-inline`, `mockito-kotlin`).
-  - Может мокать final-классы и статические методы в современных версиях, но настройка часто более многословна по сравнению с MockK для Kotlin-кейсов.
+  - Современные версии позволяют мокать final-классы и статические методы; конфигурация для Kotlin-кейсов зачастую чуть более многословна по сравнению с MockK.
 
-Главный вывод для собеседования: MockK обычно требует меньше обходных путей для Kotlin-специфичных задач; Mockito способен на многое то же самое, но с дополнительной конфигурацией.
+Главный вывод для собеседования: MockK обычно требует меньше обходных путей для Kotlin-специфичных задач; Mockito способен на сопоставимый функционал, но иногда с дополнительной конфигурацией.
 
 ---
 
@@ -597,6 +604,8 @@ fun tearDown() {
 
 MockK is a Kotlin-first mocking library that provides strong support for Kotlin features (null-safety, coroutines, extension functions, objects, top-level functions, final classes) with a DSL that feels natural in Kotlin, and often requires less configuration than Mockito for Kotlin-heavy codebases.
 
+See also: [[c-android-testing]].
+
 ---
 
 ### Basic MockK Vs Mockito
@@ -634,7 +643,10 @@ mock.getUserCount() // MockKException: no answer found for: UserRepository(#1).g
 val relaxedMock = mockk<UserRepository>(relaxed = true)
 relaxedMock.getUserCount() // Returns 0
 relaxedMock.getUserName() // Returns ""
-relaxedMock.getUser() // Returns null for nullable return types
+
+// For reference types, null/empty is returned only if the signature allows it
+// (non-nullable return types still require proper stubbing or API adjustment)
+relaxedMock.getNullableUser() // Returns null if return type is User?
 
 // You can still override specific methods
 every { relaxedMock.getUser(1) } returns User("John")
@@ -652,10 +664,10 @@ mock.getFloat() // 0f
 mock.getDouble() // 0.0
 mock.getBoolean() // false
 
-// Objects
+// Objects (depending on declared type)
 mock.getString() // ""
 mock.getList() // emptyList()
-mock.getUser() // null for nullable return type
+mock.getNullableUser() // null for return type User?
 
 // Collections
 mock.getUsers() // emptyList()
@@ -905,7 +917,8 @@ fun testSuspendException() = runTest {
     coEvery { api.fetchUser(any()) } throws IOException("Network error")
 
     assertThrows<IOException> {
-        runTest { api.fetchUser(1) }
+        // Inside runTest we can call the suspend function directly
+        api.fetchUser(1)
     }
 
     coVerify { api.fetchUser(1) }
@@ -1104,9 +1117,9 @@ High-level differences (as relevant for Kotlin + Android at time of writing):
 - Mockito:
   - Primarily Java-first; Kotlin support improved via inline mocking and additional artifacts.
   - With newer versions + `mockito-inline` / `mockito-kotlin`, can mock final classes and use more idiomatic Kotlin helpers.
-  - Static/object mocking available in core (no longer requires PowerMock), but configuration is different and more verbose than MockK for some scenarios.
+  - Static/object mocking is available in core; configuration may be somewhat more verbose for some Kotlin scenarios compared to MockK.
 
-The key interview takeaway: MockK tends to require less workaround code for Kotlin-specific features; Mockito can achieve most of this with additional setup and APIs.
+The key interview takeaway: MockK tends to require fewer workarounds for Kotlin-specific features; Mockito can achieve most of this with additional setup and APIs.
 
 ---
 

@@ -7,7 +7,7 @@ aliases:
 topic: android
 status: draft
 created: 2025-10-05
-updated: 2025-11-10
+updated: 2025-11-11
 difficulty: medium
 subtopics:
 - build-variants
@@ -200,7 +200,7 @@ dependencies {
 **Характеристики:**
 - Может автоматически подписывать приложение во время сборки, если для типа сборки задана конфигурация подписания.
 - Debug-версии: подписываются отладочным ключом по умолчанию.
-- Release-версии: по умолчанию не подписаны; обычно настраиваются с собственной конфигурацией подписания для публикации.
+- Release-версии: по умолчанию не имеют настроенной конфигурации подписания; как правило, настраиваются с собственной конфигурацией для публикации.
 
 **Пример кода (НЕ хардкодить секреты в реальных проектах):**
 ```kotlin
@@ -261,7 +261,7 @@ android {
 android {
     splits {
         abi {
-            isEnable = true // Для блока abi splits используется isEnable в Kotlin DSL
+            isEnabled = true // Для блока abi splits в Kotlin DSL используется isEnabled
             reset()
             include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
             isUniversalApk = true
@@ -585,7 +585,7 @@ dependencies {
 **Characteristics:**
 - Can automatically sign your app during the build process when a signing configuration is associated with a build type.
 - Debug builds: Signed with the default debug key and certificate.
-- Release builds: Not signed by default; typically configured with a custom signing config for distribution.
+- Release builds: By default do not have a configured signing config; they are typically configured with a custom signing config for distribution.
 
 **Code example (DO NOT hardcode secrets in real projects):**
 ```kotlin
@@ -646,7 +646,7 @@ android {
 android {
     splits {
         abi {
-            isEnable = true // AGP Kotlin DSL uses isEnable for the abi splits block
+            isEnabled = true // Kotlin DSL for the abi splits block uses isEnabled
             reset()
             include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
             isUniversalApk = true
@@ -813,15 +813,13 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 ---
 
-## Ссылки (RU)
+## Follow-ups
 
-- [Android Developer Docs: Configure your build](https://developer.android.com/build)
-- [Gradle Docs: What is Gradle?](https://docs.gradle.org/current/userguide/what_is_gradle.html)
-- [Medium: Gradle Basics for Android Developers](https://medium.com/android-dev-corner/gradle-basics-for-android-developers-9d7a3bf062bb)
-- [Kodeco: Gradle Tutorial for Android: Getting Started](https://www.kodeco.com/249-gradle-tutorial-for-android-getting-started)
-- [Build Type, Product Flavor, Build Variant](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/Build%20Type%2C%20Product%20Flavor%2C%20Build%20Variant.md)
-- [ProGuard](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What's%20Proguard.md)
-- [App Bundles](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20App%20Bundles.md)
+- [[q-cache-implementation-strategies--android--medium]]
+- [[q-kapt-vs-ksp--android--medium]]
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]
+
+---
 
 ## References
 
@@ -834,40 +832,6 @@ sdk.dir=/Users/username/Library/Android/sdk
 - [App Bundles](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20App%20Bundles.md)
 
 ---
-
-## Дополнительные вопросы (RU)
-
-- [[q-cache-implementation-strategies--android--medium]]
-- [[q-kapt-vs-ksp--android--medium]]
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]
-
-## Follow-ups
-
-- [[q-cache-implementation-strategies--android--medium]]
-- [[q-kapt-vs-ksp--android--medium]]
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]
-
----
-
-## Связанные вопросы (RU)
-
-### Предпосылки / Концепты
-
-- [[c-gradle]]
-
-### Предпосылки (проще)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - UI
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI
-
-### Связанные (Medium)
-- [[q-dagger-build-time-optimization--android--medium]] - Build, UI
-- [[q-build-optimization-gradle--android--medium]] - Build, UI
-- [[q-android-build-optimization--android--medium]] - Build, UI
-- [[q-kapt-ksp-migration--android--medium]] - Build
-- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
-
-### Продвинутые (Hard)
-- [[q-kotlin-dsl-builders--android--hard]] - Build, UI
 
 ## Related Questions
 
@@ -888,3 +852,11 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 ### Advanced (Harder)
 - [[q-kotlin-dsl-builders--android--hard]] - Build, UI
+
+## Ссылки (RU)
+## Дополнительные вопросы (RU)
+## Связанные вопросы (RU)
+### Предпосылки / Концепты
+### Предпосылки (проще)
+### Связанные (Medium)
+### Продвинутые (Hard)

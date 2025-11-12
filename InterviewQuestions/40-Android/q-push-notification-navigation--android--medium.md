@@ -8,7 +8,6 @@ aliases:
 - Навигация из push уведомлений
 topic: android
 subtopics:
-- intents-deeplinks
 - notifications
 - ui-navigation
 question_kind: android
@@ -21,15 +20,12 @@ status: draft
 moc: moc-android
 related:
 - c-compose-navigation
-- c-fragments
-- c-intent
 - q-activity-navigation-how-it-works--android--medium
 - q-compose-navigation-advanced--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-11
 tags:
-- android/intents-deeplinks
 - android/notifications
 - android/ui-navigation
 - deeplink
@@ -52,9 +48,9 @@ tags:
 
 ## Ответ (RU)
 
-**Подход**: Настроить FCM service для создания PendingIntent с данными навигации, обработать intent в `Activity` через `onCreate()`/`onNewIntent()`.
+**Подход**: Настроить FCM service для создания PendingIntent с данными навигации, обработать `Intent` в `Activity` через `onCreate()`/`onNewIntent()` (при `launchMode="singleTop"` или эквивалентном сценарии переиспользования `Activity`).
 
-**Сложность**: Time O(1), Space O(1)
+**Сложность**: Константные накладные расходы (Time O(1), Space O(1)) относительно стандартного клика по уведомлению.
 
 ### 1. FCM `Service` С Навигационными Данными
 
@@ -98,7 +94,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 ```
 
 ✅ **Правильно**: Использование data payload для передачи параметров навигации.
-✅ **Правильно**: `FLAG_IMMUTABLE` для PendingIntent (Android 12+).
+✅ **Правильно**: `FLAG_IMMUTABLE` для `PendingIntent` (Android 12+).
 ❌ **Ограничение**: "Чистый" notification payload, обрабатываемый напрямую FCM без запуска вашего кода, ограничивает кастомизацию клика; для гибкой навигации используйте data-only сообщения или deep links/`click_action`.
 
 ### 2. Обработка Навигации В MainActivity
@@ -115,11 +111,16 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHost.navController
 
+        // Обработка интента для запуска из уведомления.
+        // При необходимости можно добавить проверку savedInstanceState,
+        // чтобы избежать повторной навигации при пересоздании Activity.
         handleNotificationIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        // Работает, если MainActivity сконфигурирована как singleTop
+        // или используется эквивалентное поведение.
         intent?.let { handleNotificationIntent(it) }
     }
 
@@ -143,9 +144,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-✅ **Правильно**: Обработка в `onNewIntent()` для `launchMode="singleTop"`.
+✅ **Правильно**: Обработка в `onNewIntent()` при `launchMode="singleTop"`, когда `Activity` переиспользуется.
 ✅ **Правильно**: Проверка extras перед навигацией.
-❌ **Неправильно**: Выполнять навигацию только в `onCreate()` — не сработает, если `Activity` уже открыта и переиспользуется.
+❌ **Неправильно**: Полагаться только на `onCreate()` для обработки клика по уведомлению — если `Activity` уже открыта и переиспользуется, новый `Intent` придет в `onNewIntent()`.
 
 ### 3. Deep Links Для Навигации
 
@@ -177,7 +178,7 @@ private fun createDeepLinkIntent(itemId: Int): Intent {
 
 ✅ **Правильно**: Deep links упрощают навигацию и могут переиспользоваться для web-to-app.
 ✅ **Правильно**: `setPackage()` предотвращает открытие ссылки в других приложениях.
-❌ **Неправильно**: Для HTTPS deep links (App Links) не настраивать `autoVerify` и проверку домена — это ломает гарантированное открытие в вашем приложении.
+❌ **Важно**: Для HTTPS App Links отсутствие `autoVerify` / Digital Asset Links не ломает возможность открытия в приложении вообще, но ломает гарантированное "подтвержденное" поведение (verified app links).
 
 ### 4. Back `Stack` Для Правильной Навигации (`Activity`-based)
 
@@ -200,22 +201,24 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 ```
 
 ✅ **Правильно**: `TaskStackBuilder` создает корректный back stack для цепочки `Activity`.
-❌ **Неправильно**: Переходить напрямую на DetailActivity/экран без родителя — кнопка Back закроет приложение вместо возврата на список.
+❌ **Замечание**: Переход напрямую на `DetailActivity` без родительского экрана технически возможен, но приведет к тому, что кнопка Back закроет приложение вместо возврата на список; `TaskStackBuilder` решает этот UX-вопрос.
 
 (Если используется Navigation Component и фрагменты внутри одной `Activity`, back stack управляется `NavController`, и `TaskStackBuilder` применяется к `Activity`, а не к отдельным `Fragment`.)
 
 **Объяснение**:
 1. FCM `Service` получает сообщение и парсит data payload.
 2. Создается `Intent` с extras (screen, itemId) или deep link URI.
-3. PendingIntent передается в уведомление через `setContentIntent()`.
-4. При клике `MainActivity` обрабатывает intent в `onCreate()`/`onNewIntent()`.
-5. `NavController` либо `Activity` навигация выполняет переход на нужный экран с параметрами.
+3. `PendingIntent` передается в уведомление через `setContentIntent()`.
+4. При клике `MainActivity` обрабатывает intent в `onCreate()`/`onNewIntent()` (в зависимости от launchMode/состояния).
+5. `NavController` либо навигация между `Activity` выполняет переход на нужный экран с параметрами.
+
+---
 
 ## Answer (EN)
 
-**Approach**: Configure FCM service to create a PendingIntent with navigation data, handle the intent in the `Activity` via `onCreate()`/`onNewIntent()`.
+**Approach**: Configure FCM service to create a PendingIntent with navigation data, handle the `Intent` in the `Activity` via `onCreate()`/`onNewIntent()` (when using `launchMode="singleTop"` or an equivalent single-activity reuse pattern).
 
-**Complexity**: Time O(1), Space O(1)
+**Complexity**: Constant overhead (Time O(1), Space O(1)) relative to a regular notification click.
 
 ### 1. FCM `Service` with Navigation Data
 
@@ -276,11 +279,15 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHost.navController
 
+        // Handle launch from notification.
+        // Optionally guard with savedInstanceState to avoid duplicate navigation
+        // when Activity is recreated.
         handleNotificationIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        // This is invoked when MainActivity is singleTop (or similar setup).
         intent?.let { handleNotificationIntent(it) }
     }
 
@@ -304,9 +311,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-✅ **Correct**: Handle in `onNewIntent()` for `launchMode="singleTop"`.
+✅ **Correct**: Handle in `onNewIntent()` when using `launchMode="singleTop"` so new intents from notifications are delivered correctly.
 ✅ **Correct**: Validate extras before navigation.
-❌ **Incorrect**: Handling navigation only in `onCreate()` — does not work when `Activity` is already running and gets a new intent.
+❌ **Incorrect**: Relying only on `onCreate()` for notification clicks — when the `Activity` is already running and reused, the new intent is delivered to `onNewIntent()` instead.
 
 ### 3. Deep Links for Navigation
 
@@ -338,7 +345,7 @@ private fun createDeepLinkIntent(itemId: Int): Intent {
 
 ✅ **Correct**: Deep links simplify navigation and can be reused for web-to-app.
 ✅ **Correct**: `setPackage()` prevents opening in other apps.
-❌ **Incorrect**: For HTTPS deep links (App Links), omitting `autoVerify` / digital asset links breaks verified app-link behavior.
+❌ **Important**: For HTTPS App Links, omitting `autoVerify` / Digital Asset Links does not completely prevent opening in your app, but it breaks verified app-link behavior (no guarantee the link will always resolve to your app).
 
 ### 4. Back `Stack` for Proper Navigation (`Activity`-based)
 
@@ -360,19 +367,27 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 }
 ```
 
-✅ **Correct**: `TaskStackBuilder` creates a proper back stack for Activities.
-❌ **Incorrect**: Jumping directly to `DetailActivity`/screen without its parent — Back button will close the app instead of navigating up.
+✅ **Correct**: `TaskStackBuilder` creates a proper back stack for `Activities`.
+❌ **Note**: Navigating directly to `DetailActivity` without its parent is technically valid but results in Back closing the app instead of returning to the list; `TaskStackBuilder` is recommended to provide a better UX.
 
-(When using the Navigation Component with a single-`Activity`, multi-`Fragment` setup, `NavController` manages the fragment back stack; `TaskStackBuilder` is for Activities, not for individual fragment destinations.)
+(When using the Navigation Component with a single-`Activity`, multi-`Fragment` setup, `NavController` manages the fragment back stack; `TaskStackBuilder` is for `Activities`, not individual fragment destinations.)
 
 **Explanation**:
 1. FCM service receives the message and parses the data payload.
 2. Create an `Intent` with extras (screen, itemId) or a deep link URI.
 3. Attach a PendingIntent to the notification via `setContentIntent()`.
-4. On click, `MainActivity` handles the intent in `onCreate()`/`onNewIntent()`.
-5. `NavController` or `Activity` navigation moves to the desired screen with the provided parameters.
+4. On click, `MainActivity` handles the intent in `onCreate()`/`onNewIntent()` depending on launchMode/state.
+5. `NavController` or `Activity`-level navigation moves to the desired screen with the provided parameters.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать уведомления в случаях: приложение убито, в фоне, на переднем плане?
+- В чем разница между notification payload и data-only payload?
+- Как передавать сложные объекты (не только примитивы) через `Intent` уведомления?
+- Как гарантировать, что откроется только одно окно при множественных нажатиях по уведомлению?
+- Как тестировать навигацию из push-уведомлений без реального backend?
 
 ## Follow-ups
 
@@ -382,6 +397,13 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 - How to ensure only one notification opens even with multiple taps?
 - How to test push notification navigation without backend?
 
+## Ссылки (RU)
+
+- [Руководство по уведомлениям Android](https://developer.android.com/develop/ui/views/notifications)
+- [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging)
+- [Deep Links в Navigation Component](https://developer.android.com/guide/navigation/navigation-deep-link)
+- [Документация TaskStackBuilder](https://developer.android.com/reference/androidx/core/app/TaskStackBuilder)
+
 ## References
 
 - [Android Notification Guide](https://developer.android.com/develop/ui/views/notifications)
@@ -389,14 +411,31 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 - [Navigation Component Deep Links](https://developer.android.com/guide/navigation/navigation-deep-link)
 - [TaskStackBuilder Documentation](https://developer.android.com/reference/androidx/core/app/TaskStackBuilder)
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-navigation]]
+
+### Предпосылки (Проще)
+
+- [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]]
+
+### Связанные (Тот же уровень)
+
+- [[q-compose-navigation-advanced--android--medium]]
+- [[q-activity-navigation-how-it-works--android--medium]]
+- [[q-what-navigation-methods-do-you-know--android--medium]]
+
+### Продвинутые (Сложнее)
+
+- [[q-mvi-architecture--android--hard]]
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-compose-navigation]]
-- [[c-fragments]]
-- [[c-intent]]
-
 
 ### Prerequisites (Easier)
 - [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]]

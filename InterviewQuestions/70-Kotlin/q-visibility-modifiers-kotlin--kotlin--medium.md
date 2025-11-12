@@ -3,17 +3,17 @@ id: kotlin-236
 title: "Visibility Modifiers in Kotlin / Модификаторы видимости в Kotlin"
 aliases: ["Visibility Modifiers", "Модификаторы видимости"]
 topic: kotlin
-subtopics: [access-modifiers, encapsulation, visibility-modifiers]
+subtopics: [visibility-modifiers]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+related: [c-kotlin, q-access-modifiers--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: "2025-10-12"
-updated: "2025-11-09"
-tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, kotlin-features, visibility-modifiers]
+updated: "2025-11-11"
+tags: [kotlin, visibility-modifiers, difficulty/medium]
 sources: ["https://kotlinlang.org/docs/visibility-modifiers.html"]
 ---
 
@@ -28,15 +28,15 @@ sources: ["https://kotlinlang.org/docs/visibility-modifiers.html"]
 ## Ответ (RU)
 
 **Теория модификаторов видимости:**
-Kotlin имеет 4 уровня видимости: `private`, `protected`, `internal`, `public`. В отличие от Java, default modifier — `public`, а не package-private. `internal` позволяет видеть элемент в пределах одного модуля — основная инкапсуляция для модульных проектов. В Kotlin нет отдельного package-private модификатора.
+Kotlin имеет 4 уровня видимости: `private`, `protected`, `internal`, `public`. В отличие от Java, default modifier — `public`, а не package-private. `internal` позволяет видеть элемент в пределах одного модуля (module) — удобно для инкапсуляции деталей внутри модуля; элементы с `internal` не видны за пределами модуля. В Kotlin нет отдельного package-private модификатора.
 
 См. также: [[c-kotlin]].
 
 **Уровни видимости:**
 - **public**: Видим везде (default модификатор).
-- **internal**: Видим внутри модуля.
+- **internal**: Видим внутри одного модуля.
 - **protected**: Видим в классе и наследниках (только для членов класса и его наследников; для top-level деклараций `protected` недоступен).
-- **private**: Видим только в пределах объявления или файла (для top-level деклараций — в пределах файла; для членов класса — в пределах этого класса).
+- **private**: Видим только в пределах области объявления или файла (для top-level деклараций — в пределах файла; для членов класса — в пределах этого класса; для конструкторов и аксессоров можно задавать модификатор отдельно).
 
 **Базовые примеры:**
 ```kotlin
@@ -151,7 +151,7 @@ class User(val name: String) {
     private var password: String = ""
 
     fun setPassword(newPassword: String) {
-        password = newPassword // ✅ Управляем изменение изнутри
+        password = newPassword // ✅ Управляем изменением изнутри
     }
 
     fun getMaskedPassword(): String {
@@ -163,24 +163,22 @@ class User(val name: String) {
 **Package-level visibility:**
 ```kotlin
 // ✅ Файл: helpers.kt
-private fun privateHelper() {} // Приватная функция файла
+private fun privateHelper() {} // Приватная функция этого файла
 internal fun internalHelper() {} // Видна в модуле
 public fun publicHelper() {} // Видна везде
 
 // Файл: main.kt (тот же модуль)
 fun test() {
-    // privateHelper() // ❌ Недоступно — другая файл-область
+    // privateHelper() // ❌ Недоступно — другой файл (file-private область)
     internalHelper() // ✅ Доступно — тот же модуль
     publicHelper() // ✅ Доступно
 }
 ```
 
----
-
 ## Answer (EN)
 
 **Visibility Modifiers Theory:**
-Kotlin has 4 visibility levels: `private`, `protected`, `internal`, `public`. Unlike Java, the default modifier is `public`, not package-private. `internal` makes a declaration visible within one module — primary encapsulation for modular projects. Kotlin has no dedicated package-private modifier.
+Kotlin has 4 visibility levels: `private`, `protected`, `internal`, `public`. Unlike Java, the default modifier is `public`, not package-private. `internal` makes a declaration visible within a single module — useful for encapsulating implementation details inside that module; declarations marked `internal` are not visible outside that module. Kotlin has no dedicated package-private modifier.
 
 See also: [[c-kotlin]].
 
@@ -188,7 +186,7 @@ See also: [[c-kotlin]].
 - **public**: Visible everywhere (default modifier).
 - **internal**: Visible within the same module.
 - **protected**: Visible in the class and its subclasses (only for class members; not allowed for top-level declarations).
-- **private**: Visible only within the declaring scope or file (for top-level declarations — within the file; for class members — within that class).
+- **private**: Visible only within the declaring scope or file (for top-level declarations — within the file; for class members — within that class; constructors and property accessors can declare their own visibility modifiers).
 
 **Basic Examples:**
 ```kotlin
@@ -321,11 +319,17 @@ public fun publicHelper() {} // Visible everywhere
 
 // File: main.kt (same module)
 fun test() {
-    // privateHelper() // ❌ Not accessible — different file scope
+    // privateHelper() // ❌ Not accessible — different file (file-private scope)
     internalHelper() // ✅ Accessible — same module
     publicHelper() // ✅ Accessible
 }
 ```
+
+## Дополнительные вопросы (RU)
+
+- Когда использовать `internal` vs `private`?
+- Как работает видимость с `sealed` классами?
+- Как управлять видимостью в multi-module проектах?
 
 ## Follow-ups
 
@@ -333,9 +337,26 @@ fun test() {
 - How does visibility work with sealed classes?
 - Visibility in multi-module projects?
 
+## Ссылки (RU)
+
+- https://kotlinlang.org/docs/visibility-modifiers.html
+
 ## References
 
 - https://kotlinlang.org/docs/visibility-modifiers.html
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы
+
+### Связанные (средней сложности)
+- [[q-access-modifiers--kotlin--medium]] - Модификаторы доступа
+- [[q-inheritance-open-final--kotlin--medium]] - Наследование
+- [[q-inner-nested-classes--kotlin--medium]] - Внутренние и вложенные классы
+
+### Продвинутое (сложнее)
+- [[q-kotlin-reified-types--kotlin--hard]] - Обобщения с reified типами
 
 ## Related Questions
 

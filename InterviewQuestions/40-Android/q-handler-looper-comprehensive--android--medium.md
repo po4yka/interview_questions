@@ -40,6 +40,8 @@ tags:
 
 Handler и Looper — это фундаментальные примитивы Android для организации межпоточного взаимодействия и обработки событий через очередь сообщений.
 
+Важно: далее примеры ориентированы на классический Handler API. В современном коде часть конструкторов помечена как deprecated — используйте явный Looper и/или Callback, и рассматривайте coroutines/Executors как предпочтительный инструмент, но принципы Handler/Looper остаются теми же.
+
 Важные идеи:
 - Handler связывает вызывающий код с конкретным Looper/потоком.
 - Looper крутит бесконечный цикл и вытаскивает сообщения/задачи из MessageQueue.
@@ -81,17 +83,21 @@ class Handler(val looper: Looper) {
 Looper создается и привязывается к потоку через `Looper.prepare()` и `Looper.loop()`.
 
 ```kotlin
-// Пример кастомного потока с собственным Looper
+// Пример кастомного потока с собственным Looper (для демонстрации, в реальном коде лучше HandlerThread)
 class MyHandlerThread : Thread() {
-    lateinit var handler: Handler
-        private set
+    @Volatile
+    private var _handler: Handler? = null
+    val handler: Handler
+        get() = _handler ?: throw IllegalStateException("Handler is not initialized yet")
+
+    private val initLatch = CountDownLatch(1)
 
     override fun run() {
         // 1. Создаем Looper для этого потока
         Looper.prepare()
 
         // 2. Создаем Handler, привязанный к Looper этого потока
-        handler = object : Handler(Looper.myLooper()!!) {
+        _handler = object : Handler(Looper.myLooper()!!) {
             override fun handleMessage(msg: Message) {
                 when (msg.what) {
                     MSG_TASK -> processTask(msg.obj as Task)
@@ -100,11 +106,18 @@ class MyHandlerThread : Thread() {
             }
         }
 
+        initLatch.countDown()
+
         // 3. Запускаем цикл обработки сообщений (блокирующий вызов!)
         Looper.loop()
 
         // Код здесь выполнится только после quit()/quitSafely()
         cleanup()
+    }
+
+    fun awaitHandler(): Handler {
+        initLatch.await()
+        return handler
     }
 
     fun quit() {
@@ -126,12 +139,10 @@ class MyHandlerThread : Thread() {
 val myThread = MyHandlerThread()
 myThread.start()
 
-// Ждем инициализации handler (упрощённый пример, в реальном коде лучше использовать синхронизацию)
-while (!::myThread.isInitialized) {
-    Thread.sleep(10)
-}
+// Корректно ждём инициализации handler
+val handler = myThread.awaitHandler()
 
-myThread.handler.sendMessage(
+handler.sendMessage(
     Message.obtain().apply {
         what = MyHandlerThread.MSG_TASK
         obj = Task("Download file")
@@ -142,7 +153,7 @@ myThread.handler.sendMessage(
 Важно:
 - `Looper.prepare()` создает Looper и сохраняет его в `ThreadLocal` текущего потока.
 - `Looper.loop()` — бесконечный цикл чтения/диспетчеризации сообщений из очереди; блокирует поток.
-- В большинстве случаев вместо ручного `Thread + Looper` следует использовать `HandlerThread`.
+- В большинстве случаев вместо ручного `Thread + Looper` следует использовать `HandlerThread` или другие высокоуровневые механизмы.
 
 ### 3. Проверка наличия Looper в потоке
 
@@ -176,7 +187,7 @@ fun demonstrateLooperCheck() {
     println("Looper exists in ${looper.thread.name}")
 }
 
-// Безопасное создание Handler
+// Безопасное создание Handler (важно явно указать Looper)
 fun createHandlerSafely(): Handler? {
     val looper = Looper.myLooper()
     return if (looper != null) {
@@ -377,6 +388,10 @@ val msg3 = Message.obtain(handler, MSG_DATA, data)
 // val correct = Message.obtain()
 ```
 
+Использование:
+- `Runnable` — для простых задач, когда не нужны коды/аргументы.
+- `Message` — когда нужны поля `what`, `arg1/arg2/obj`, разные типы событий или эффективное переиспользование объектов.
+
 ### 7. Управление очередью сообщений
 
 ```kotlin
@@ -395,9 +410,11 @@ class TaskQueue {
     }
 
     fun cancelTasks() {
+        // Удалить все callbacks и сообщения
         handler.removeCallbacksAndMessages(null)
 
         val myRunnable = Runnable { }
+        handler.post(myRunnable)
         handler.removeCallbacks(myRunnable)
 
         handler.removeMessages(MSG_PROCESS)
@@ -421,8 +438,11 @@ class TaskQueue {
 
 ### 8. IdleHandler — выполнение, когда очередь пуста
 
+Важно: доступ к очереди главного Looper через `Looper.getMainLooper().queue` относится к внутренним деталям реализации и может быть недоступен или изменён; такие примеры носят концептуальный характер.
+
 ```kotlin
 class IdleMonitor {
+    // Концептуальный пример; прямой доступ к queue — внутренний API/implementation detail.
     private val mainQueue = Looper.getMainLooper().queue
 
     fun setupIdleHandler() {
@@ -448,7 +468,7 @@ class IdleMonitor {
 ```
 
 ```kotlin
-// Использование для отложенной инициализации
+// Использование для отложенной инициализации (концептуально)
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -551,23 +571,27 @@ class ModernActivity : AppCompatActivity() {
 
 ### 10. Advanced Techniques (для полноты, с пометкой об ограничениях)
 
-Некоторые возможности доступны через скрытые/внутренние API и не предназначены для прямого использования в прикладном коде. Ниже — концепции, а не призыв использовать эти методы напрямую:
+Некоторые возможности доступны через скрытые/внутренние API и не предназначены для прямого использования в прикладном коде. Ниже — концепции, а не призыв использовать эти методы напрямую.
 
 ```kotlin
-// Async Messages: можно помечать сообщения как асинхронные
+// Async Messages: setAsynchronous(true) доступен не на всех API и влияет на sync barriers;
+// использовать только при чётком понимании поведения и совместимости.
 val asyncMsg = Message.obtain().apply {
     setAsynchronous(true)
 }
 handler.sendMessage(asyncMsg)
 
-// Группировка и удаление по token поддерживается только для удаления:
+// Группировка и удаление по token:
+// removeCallbacksAndMessages(token) удаляет только те элементы,
+// которые были отправлены/запланированы с этим token.
 val token = Any()
 
 val r1 = Runnable { task1() }
 val r2 = Runnable { task2() }
 
-handler.post(r1)
-handler.post(r2)
+// Пример корректной ассоциации token (концептуально):
+handler.postAtTime(r1, token, SystemClock.uptimeMillis() + 1000)
+handler.postAtTime(r2, token, SystemClock.uptimeMillis() + 2000)
 
 // Позже можно удалить callbacks/сообщения, ассоциированные с token
 handler.removeCallbacksAndMessages(token)
@@ -582,7 +606,7 @@ Looper.getMainLooper().setMessageLogging { log ->
 }
 ```
 
-(Методы sync barrier в Handler/MessageQueue — внутренние и не должны использоваться в production-коде без полной осознанности рисков и ограничений.)
+(Методы sync barrier в Handler/MessageQueue — внутренние и не должны использоваться в production-коде без полной осознанности рисков и ограничений и с учётом совместимости.)
 
 ### Сравнение компонентов
 
@@ -599,16 +623,18 @@ Looper.getMainLooper().setMessageLogging { log ->
    ```kotlin
    handler.removeCallbacksAndMessages(null)
    ```
-2. Не держать сильные ссылки на `Activity`/`Fragment`/`Context` в длительно живущих Handler- callback'ах; использовать WeakReference или lifecycle-aware решения.
+2. Не держать сильные ссылки на `Activity`/`Fragment`/`Context` в длительно живущих Handler-callback'ах; использовать WeakReference или lifecycle-aware решения.
 3. Для фоновых задач предпочтительнее `HandlerThread` или современные средства (Executors, coroutines), чем вручную созданный `Thread` с Looper.
 4. Использовать `Message.obtain()` вместо прямого конструктора для переиспользования объектов.
-5. Проверять lifecycle перед обновлением UI из отложенных задач.
+5. Проверять lifecycle/поток перед обновлением UI из отложенных задач.
 
 ---
 
 ## Answer (EN)
 
 Handler and Looper are fundamental Android primitives for thread-confined, message-based execution and inter-thread communication.
+
+Note: examples below illustrate the classic Handler API. Some constructors are deprecated in modern Android; always specify an explicit Looper and/or Callback, and prefer coroutines/Executors for many use cases. The core Handler/Looper principles remain valid.
 
 Key ideas:
 - A Handler binds calling code to a specific Looper/thread.
@@ -651,15 +677,19 @@ Constraints:
 A Looper is created and attached to a thread via `Looper.prepare()` and `Looper.loop()`.
 
 ```kotlin
-// Custom thread with its own Looper
+// Custom thread with its own Looper (demo only; prefer HandlerThread in production)
 class MyHandlerThread : Thread() {
-    lateinit var handler: Handler
-        private set
+    @Volatile
+    private var _handler: Handler? = null
+    val handler: Handler
+        get() = _handler ?: throw IllegalStateException("Handler is not initialized yet")
+
+    private val initLatch = CountDownLatch(1)
 
     override fun run() {
         Looper.prepare()
 
-        handler = object : Handler(Looper.myLooper()!!) {
+        _handler = object : Handler(Looper.myLooper()!!) {
             override fun handleMessage(msg: Message) {
                 when (msg.what) {
                     MSG_TASK -> processTask(msg.obj as Task)
@@ -668,11 +698,18 @@ class MyHandlerThread : Thread() {
             }
         }
 
+        initLatch.countDown()
+
         // Blocking message loop
         Looper.loop()
 
         // Executes after quit()/quitSafely()
         cleanup()
+    }
+
+    fun awaitHandler(): Handler {
+        initLatch.await()
+        return handler
     }
 
     fun quit() {
@@ -693,11 +730,10 @@ class MyHandlerThread : Thread() {
 val myThread = MyHandlerThread()
 myThread.start()
 
-while (!::myThread.isInitialized) {
-    Thread.sleep(10)
-}
+// Wait safely until handler is initialized
+val handler = myThread.awaitHandler()
 
-myThread.handler.sendMessage(
+handler.sendMessage(
     Message.obtain().apply {
         what = MyHandlerThread.MSG_TASK
         obj = Task("Download file")
@@ -708,7 +744,7 @@ myThread.handler.sendMessage(
 Notes:
 - `Looper.prepare()` creates and stores the Looper in the current thread's `ThreadLocal`.
 - `Looper.loop()` is a blocking loop that reads/dispatches messages from the queue.
-- In practice, prefer `HandlerThread` over manually wiring `Thread + Looper`.
+- In practice, prefer `HandlerThread` or other high-level APIs over raw `Thread + Looper`.
 
 ### 3. Checking for a Looper in the current thread
 
@@ -741,6 +777,7 @@ fun demonstrateLooperCheck() {
     println("Looper exists in ${looper.thread.name}")
 }
 
+// Safe Handler creation (always specify a Looper)
 fun createHandlerSafely(): Handler? {
     val looper = Looper.myLooper()
     return if (looper != null) {
@@ -961,9 +998,11 @@ class TaskQueue {
     }
 
     fun cancelTasks() {
+        // Remove all callbacks and messages
         handler.removeCallbacksAndMessages(null)
 
         val myRunnable = Runnable { }
+        handler.post(myRunnable)
         handler.removeCallbacks(myRunnable)
 
         handler.removeMessages(MSG_PROCESS)
@@ -992,8 +1031,11 @@ This shows how to:
 
 ### 8. IdleHandler — run work when the queue is idle
 
+Important: accessing `Looper.getMainLooper().queue` touches implementation details/internal APIs; treat this as conceptual and check your target SDK.
+
 ```kotlin
 class IdleMonitor {
+    // Conceptual example; direct queue access is implementation detail.
     private val mainQueue = Looper.getMainLooper().queue
 
     fun setupIdleHandler() {
@@ -1018,7 +1060,7 @@ class IdleMonitor {
 ```
 
 ```kotlin
-// Deferred initialization example
+// Deferred initialization example (conceptual)
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -1130,23 +1172,25 @@ Guidelines:
 
 ### 10. Advanced techniques (with caveats)
 
-Conceptual-only; most of this relies on hidden/internal APIs and must be used with caution.
+Conceptual-only; some of this interacts with hidden/internal behavior and must be used with caution.
 
 ```kotlin
-// Asynchronous messages
+// Asynchronous messages: setAsynchronous(true) affects sync barriers and is API/impl dependent.
+// Use only if you fully understand its behavior and platform support.
 val asyncMsg = Message.obtain().apply {
     setAsynchronous(true)
 }
 handler.sendMessage(asyncMsg)
 
-// Token-based removal (supported for removal)
+// Token-based removal:
+// removeCallbacksAndMessages(token) only affects items posted/sent with that token.
 val token = Any()
 
 val r1 = Runnable { task1() }
 val r2 = Runnable { task2() }
 
-handler.post(r1)
-handler.post(r2)
+handler.postAtTime(r1, token, SystemClock.uptimeMillis() + 1000)
+handler.postAtTime(r2, token, SystemClock.uptimeMillis() + 2000)
 
 handler.removeCallbacksAndMessages(token)
 
@@ -1160,7 +1204,7 @@ Looper.getMainLooper().setMessageLogging { log ->
 }
 ```
 
-Note: sync barriers and related internals are not for regular production use unless you fully understand the risks.
+Note: sync barriers and related internals are not for regular production use unless you fully understand the risks and compatibility implications.
 
 ### Component comparison
 
@@ -1180,7 +1224,7 @@ Note: sync barriers and related internals are not for regular production use unl
 2. Avoid strong references from long-lived Handlers to `Activity`/`Fragment`/`Context`; use `WeakReference` or lifecycle-aware APIs.
 3. Prefer `HandlerThread` or modern mechanisms (Executors, coroutines) for background work instead of raw `Thread + Looper`.
 4. Use `Message.obtain()` for pooling instead of `Message()`.
-5. Always ensure you are on the correct thread before updating UI.
+5. Always ensure you are on the correct thread/lifecycle state before updating UI.
 
 ---
 

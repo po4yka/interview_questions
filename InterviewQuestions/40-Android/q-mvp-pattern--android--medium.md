@@ -81,7 +81,7 @@ class UserPresenter(
 
     override fun loadUser(userId: Int) {
         view?.showLoading()
-        // Упрощённый пример: предполагаем, что getUser асинхронный
+        // Упрощённый пример: предполагаем, что getUser предоставляет результат через callback
         repository.getUser(userId) { result ->
             view?.hideLoading()
             result.onSuccess { user -> view?.showUser(user) }
@@ -103,7 +103,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
     }
 
     override fun onDestroy() {
-        presenter.detachView() // ✅ Отвязка View перед вызовом super, чтобы минимизировать риск утечек
+        presenter.detachView() // ✅ Отвязка View, чтобы минимизировать риск утечек
         super.onDestroy()
     }
 
@@ -221,7 +221,7 @@ class UserPresenter(
 
     override fun loadUser(userId: Int) {
         view?.showLoading()
-        // Simplified example: assuming getUser is asynchronous
+        // Simplified example: assuming getUser delivers result via callback
         repository.getUser(userId) { result ->
             view?.hideLoading()
             result.onSuccess { user -> view?.showUser(user) }
@@ -243,7 +243,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
     }
 
     override fun onDestroy() {
-        presenter.detachView() // ✅ Detach View before super to minimize leak risk
+        presenter.detachView() // ✅ Detach View to minimize leak risk
         super.onDestroy()
     }
 
@@ -337,3 +337,5 @@ view?.showData(data)
 - [[q-workmanager-chaining--android--hard]] — Background processing with architecture patterns
 - Clean Architecture with MVP in multi-module projects
 - State preservation strategies across configuration changes
+
+```

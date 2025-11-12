@@ -5,7 +5,6 @@ aliases: [Compose Multiplatform, KMP Compose]
 topic: android
 subtopics:
 - compose-multiplatform
-- kmp
 - ui-compose
 question_kind: android
 difficulty: hard
@@ -23,7 +22,7 @@ related:
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/compose-multiplatform, android/kmp, android/ui-compose, compose, difficulty/hard, kmp, multiplatform]
+tags: [android/compose-multiplatform, android/ui-compose, compose, difficulty/hard, multiplatform]
 
 ---
 
@@ -37,27 +36,33 @@ tags: [android/compose-multiplatform, android/kmp, android/ui-compose, compose, 
 
 ## Ответ (RU)
 
-**Compose Multiplatform (CMP)** — декларативный UI-фреймворк от JetBrains, расширяющий подход `Jetpack Compose` на Android, iOS, Desktop (`JVM`) и Web (рендеринг поверх Canvas/DOM, в том числе через WASM). Использует `Kotlin Multiplatform` для шаринга UI-кода и бизнес-логики между платформами.
+**Compose Multiplatform (CMP)** — декларативный UI-фреймворк от JetBrains, реализующий тот же подход декларативного UI, что и `Jetpack Compose`, и расширяющий его на Android, iOS, Desktop (`JVM`) и Web (рендеринг поверх Canvas/DOM, включая варианты на WASM/JS). Он использует `Kotlin Multiplatform` для шаринга UI-кода и бизнес-логики между платформами.
 
-**Основное отличие от KMM**:
+**Основное отличие от классического KMM-подхода**:
 - KMM → шаринг `domain`/`data` слоя, нативный UI на каждой платформе
-- CMP → единый UI-фреймворк + логика, один набор компонентов (с возможностью платформенных адаптаций)
+- CMP → единый декларативный UI-фреймворк + логика, общий набор компонентов (с возможностью платформенных адаптаций и использования нативного UI там, где нужно)
 
-**Целевой use case**: проекты с высоким уровнем UI-переиспользования (внутренние инструменты, enterprise-приложения, MVP), где приоритет — скорость разработки над платформенной кастомизацией.
+Поддержка отдельных таргетов и компонентов может находиться в разных стадиях зрелости (stable/RC/experimental) — это важно учитывать при выборе архитектуры продакшн-проекта.
+
+**Целевой use case**: проекты с высоким уровнем UI-переиспользования (внутренние инструменты, enterprise-приложения, MVP), где приоритет — скорость разработки и консистентный UX над глубокой платформенной кастомизацией.
 
 ### Project Structure
 
 ```kotlin
-// shared/build.gradle.kts
+// shared/build.gradle.kts (упрощённый пример)
 kotlin {
   androidTarget()
   jvm("desktop")
   iosX64(); iosArm64(); iosSimulatorArm64()
+  // при использовании Web:
+  // wasmJs("wasm") // или js(...) в зависимости от выбранного стека
 
   sourceSets {
     commonMain.dependencies {
       implementation(compose.runtime)
       implementation(compose.foundation)
+      // material/material3 доступны для основных таргетов CMP;
+      // проверять совместимость с конкретной версией и таргетами.
       implementation(compose.material3)
     }
     androidMain.dependencies {
@@ -80,8 +85,9 @@ actual fun getPlatformName() = "Android"
 // ✅ iosMain
 actual fun getPlatformName() = "iOS"
 
-// ❌ Избегать expect/actual для UI-компонентов,
-//    вместо этого инкапсулировать платформенно-специфичный UI в отдельных обёртках.
+// ❌ Избегать expect/actual для конкретных UI-компонентов;
+//    вместо этого инкапсулировать платформенно-специфичный UI за абстракциями/
+//    обёртками и вызывать их из общего кода.
 ```
 
 ### Entry Points
@@ -114,44 +120,45 @@ fun main() = application {
 ### Best Practices
 
 **Shared**:
-- State holders (`ViewModel` альтернативы)
-- Navigation logic
-- Screens, компоненты
-- Theming
+- State holders (альтернативы `ViewModel` или обёртки над ним)
+- Навигационная логика (абстрагированная от конкретных контроллеров)
+- Экраны и UI-компоненты
+- Темизация и дизайн-система
 
 **Platform-specific**:
-- Gesture handling (iOS swipe-back)
-- Windowing (`Desktop`)
-- Resources (через `expect`/`actual` и/или предоставленные CMP API для ресурсов)
-- Performance profiling per target
+- Жесты и навигационные паттерны (например, iOS swipe-back)
+- Окна и windowing (`Desktop`)
+- Ресурсы (через `expect`/`actual` и/или предоставленные CMP API для ресурсов)
+- Интеграция с системными API (камера, push, deeplink-и и др.)
+- Performance-профилирование и тюнинг под каждый таргет
 
 ### Trade-offs
 
 **iOS Integration**:
-- `UIViewController` wrapper → overhead
-- Ограниченная `SwiftUI` interop
-- Lifecycle mapping iOS ↔ Compose
+- Использование `UIViewController`/`UIResponder`-обёрток → накладные расходы и дополнительные уровни интеграции
+- Ограниченная и эволюционирующая interop с `SwiftUI` и нативной навигацией
+- Необходимость аккуратного маппинга жизненных циклов iOS ↔ Compose
 
 **Web**:
-- Реализации на базе Canvas/DOM → сложности с accessibility
-- `Bundle` size (минимум около нескольких MB)
+- Canvas/DOM/WASM-реализации → потенциальные сложности с accessibility и SEO
+- Размер бандла: типично несколько MB и выше (зависит от таргета, минификации и набора зависимостей)
 
 **Desktop**:
-- Windowing API различия (`macOS`/`Windows`/`Linux`)
+- Отличия Windowing API (`macOS`/`Windows`/`Linux`)
+- Особенности интеграции с нативными возможностями ОС (меню, системный трэй, shortcuts)
 
-### Краткая версия
+## Краткая Версия
+- CMP реализует многоплатформенный вариант декларативного подхода `Compose` поверх `Kotlin Multiplatform`.
+- Общий код: UI-дерево, состояние, навигация, тема, общая бизнес-логика.
+- Платформенный код: интеграция с системными API, нативная навигация, жесты, ресурсы, точка входа.
+- Использовать там, где важны переиспользование UI, единая дизайн-система и скорость разработки; при необходимости допускается смешанный подход с нативным UI для отдельных экранов.
 
-- CMP расширяет декларативный подход `Jetpack Compose` на несколько платформ через `Kotlin Multiplatform`.
-- Общий код: UI-дерево, состояние, навигация, тема.
-- Платформенный код: интеграция с системными API, навигация, жесты, ресурсы.
-- Использовать там, где важны переиспользование UI и скорость разработки.
-
-### Подробная версия
-
-- Описать требования к переиспользованию: какие части UI и логики должны быть общими.
+## Подробная Версия
+- Явно описать, какие части UI и логики должны быть общими.
 - Спроектировать общий модуль с Composable-экранами и бизнес-логикой на KMP.
-- Для каждой платформы реализовать точку входа и обёртки над системными API.
+- Для каждой платформы реализовать точку входа и обёртки над системными API (навигация, insets, permissions и т.п.).
 - Ясно разделить общий и платформенный слои, избегать утечек платформенных деталей в `commonMain`.
+- Учитывать зрелость поддержки целевых таргетов (особенно iOS/Web) при принятии архитектурных решений.
 
 ### Требования
 
@@ -161,38 +168,44 @@ fun main() = application {
   - Интеграция с нативной навигацией и системными API.
 - Нефункциональные:
   - Приемлемый размер бандла (особенно для Web).
-  - Производительность близкая к нативной.
+  - Производительность, приемлемая или близкая к нативной для ключевых сценариев.
   - Поддерживаемость и тестируемость общего кода.
 
 ### Архитектура
 
 - Общий модуль (`commonMain`): Composable-экраны, state management, навигация, общие use-case-ы.
 - Платформенные модули (`androidMain`, `iosMain`, `desktopMain`, `webMain`): точки входа, адаптеры под платформенные API, ресурсы.
-- Интеграция через абстракции и `expect`/`actual` только для инфраструктурных зависимостей.
+- Интеграция через абстракции и `expect`/`actual` только для инфраструктурных зависимостей (filesystem, haptics, secure storage, network, prefs и т.п.).
 
 ## Answer (EN)
 
-**Compose Multiplatform (CMP)** is a declarative UI framework by JetBrains that brings the `Jetpack Compose` approach to Android, iOS, Desktop (`JVM`), and Web (Canvas/DOM-based rendering, including via WASM). It uses `Kotlin Multiplatform` to share UI code and business logic across platforms.
+**Compose Multiplatform (CMP)** is a declarative UI framework by JetBrains that implements the same declarative Compose model and brings it to Android, iOS, Desktop (`JVM`), and Web (Canvas/DOM-based rendering, including WASM/JS options). It uses `Kotlin Multiplatform` to share UI code and business logic across platforms.
 
-**Key difference from KMM**:
+**Key difference from the classic KMM approach**:
 - KMM → shares `domain`/`data` layer, native UI per platform
-- CMP → unified UI framework + logic, one component set (with room for platform-specific adaptations)
+- CMP → unified declarative UI framework + logic, one component set (with room for platform-specific adaptations and using native UI where appropriate)
 
-**Target use case**: projects with high UI reusability (internal tools, enterprise apps, MVPs) where development speed outweighs platform customization.
+Support level for individual targets and components ranges from stable to experimental; this must be considered when designing production architecture.
+
+**Target use case**: projects with high UI reusability (internal tools, enterprise apps, MVPs), where development speed and consistent UX are more important than deep native tailoring.
 
 ### Project Structure
 
 ```kotlin
-// shared/build.gradle.kts
+// shared/build.gradle.kts (simplified example)
 kotlin {
   androidTarget()
   jvm("desktop")
   iosX64(); iosArm64(); iosSimulatorArm64()
+  // when using Web:
+  // wasmJs("wasm") // or js(...) depending on chosen stack
 
   sourceSets {
     commonMain.dependencies {
       implementation(compose.runtime)
       implementation(compose.foundation)
+      // material/material3 are available for major CMP targets;
+      // verify compatibility with your specific version and targets.
       implementation(compose.material3)
     }
     androidMain.dependencies {
@@ -215,8 +228,9 @@ actual fun getPlatformName() = "Android"
 // ✅ iosMain
 actual fun getPlatformName() = "iOS"
 
-// ❌ Avoid expect/actual for UI components directly;
-//    instead, wrap platform-specific UI behind composable/wrapper abstractions.
+// ❌ Avoid using expect/actual for concrete UI components directly;
+//    instead, hide platform-specific UI behind composable/wrapper abstractions
+//    and invoke them from shared code.
 ```
 
 ### Entry Points
@@ -249,44 +263,45 @@ fun main() = application {
 ### Best Practices
 
 **Shared**:
-- State holders (alternatives to `ViewModel`)
-- Navigation logic
-- Screens, components
-- Theming
+- State holders (alternatives to `ViewModel` or wrappers around it)
+- Navigation logic (abstracted away from concrete controllers)
+- Screens and UI components
+- Theming and design system
 
 **Platform-specific**:
-- Gesture handling (iOS swipe-back)
+- Gesture handling and navigation patterns (e.g., iOS back swipe)
 - Windowing (`Desktop`)
 - Resources (via `expect`/`actual` and/or CMP resource APIs)
-- Performance profiling per target
+- Integration with system APIs (camera, push, deeplinks, etc.)
+- Performance profiling and tuning per target
 
 ### Trade-offs
 
 **iOS Integration**:
-- `UIViewController` wrapper → overhead
-- Limited `SwiftUI` interop
-- Lifecycle mapping iOS ↔ Compose
+- Using `UIViewController`/`UIResponder`-based wrappers → overhead and integration complexity
+- Limited and evolving interop with `SwiftUI` and native navigation
+- Careful lifecycle mapping required between iOS and Compose
 
 **Web**:
-- Canvas/DOM-based implementations → accessibility challenges
-- `Bundle` size (minimum around a few MB)
+- Canvas/DOM/WASM-based implementations → potential challenges with accessibility and SEO
+- Bundle size: typically a few megabytes or more (depends on target, optimizations, and dependencies)
 
 **Desktop**:
-- Windowing API differences (`macOS`/`Windows`/`Linux`)
+- Differences in windowing APIs across `macOS`/`Windows`/`Linux`
+- Considerations for integrating with OS-native features (menus, system tray, shortcuts)
 
-### Short Version
+## Short Version
+- CMP is the multiplatform implementation of the declarative `Compose` approach built on `Kotlin Multiplatform`.
+- Shared: UI tree, state, navigation, theming, shared business logic.
+- Platform-specific: system integrations, native navigation, gestures, resources, entry points.
+- Use where UI reuse, unified design system, and development speed are priorities; combine with native UI for selected screens when needed.
 
-- CMP extends the declarative `Jetpack Compose` approach across platforms via `Kotlin Multiplatform`.
-- Shared: UI tree, state, navigation, theming.
-- Platform-specific: system APIs, navigation integration, gestures, resources.
-- Use when UI reuse and development speed matter more than deep native tailoring.
-
-### Detailed Version
-
-- Define what UI and logic must be shared across platforms.
+## Detailed Version
+- Explicitly define which parts of UI and logic must be shared.
 - Design a common module with composable screens and business logic using KMP.
-- For each platform implement entry points and adapters to native APIs.
-- Clearly separate shared and platform-specific layers; avoid leaking platform details into `commonMain`.
+- For each platform, implement entry points and adapters to platform APIs (navigation, insets, permissions, etc.).
+- Keep shared and platform-specific layers clearly separated; avoid leaking platform details into `commonMain`.
+- Consider the maturity level of target support (especially iOS/Web) when making architectural decisions.
 
 ### Requirements
 
@@ -296,14 +311,14 @@ fun main() = application {
   - Integration with native navigation and system APIs.
 - Non-functional:
   - Acceptable bundle size (especially for Web).
-  - Near-native performance.
+  - Performance close enough to native for critical flows.
   - Maintainability and testability of shared code.
 
 ### Architecture
 
 - Shared module (`commonMain`): composable screens, state management, navigation, shared use cases.
 - Platform modules (`androidMain`, `iosMain`, `desktopMain`, `webMain`): entry points, adapters to platform APIs, resources.
-- Integration via abstractions and `expect`/`actual` only for infrastructure-level dependencies.
+- Integration via abstractions and `expect`/`actual` only for infrastructure-level dependencies (filesystem, haptics, secure storage, network, preferences, etc.).
 
 ---
 

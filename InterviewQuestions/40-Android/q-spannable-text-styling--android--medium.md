@@ -14,9 +14,9 @@ original_language: en
 language_tags:
 - en
 - ru
-status: ready
+status: draft
 created: 2025-10-13
-updated: 2025-10-28
+updated: 2025-11-11
 sources: []
 tags:
 - android/ui-views
@@ -73,7 +73,7 @@ textView.text = text
 
 ### Категории Spans
 
-**1. Appearance spans** (изменяют внешний вид без изменения метрик шрифта, обычно без полного перерасчёта layout):
+**1. Appearance spans** (изменяют визуальное отображение текста; как правило не влияют на метрики шрифта, но всё равно могут приводить к перерисовке/перелэйауту при изменении):
 
 ```kotlin
 ForegroundColorSpan(Color.RED)        // Цвет текста
@@ -83,16 +83,16 @@ UnderlineSpan()                       // Подчёркивание
 StrikethroughSpan()                   // Зачёркивание
 ```
 
-**2. Metric spans** (влияют на метрики/размеры, требуют перерасчёта layout):
+**2. Metric spans** (влияют на метрики/размеры шрифта; требуют перерасчёта layout):
 
 ```kotlin
 RelativeSizeSpan(1.5f)                // Относительный размер
-AbsoluteSizeSpan(24, true)            // ✅ true = размер в sp
+AbsoluteSizeSpan(24, true)            // ✅ true = размер в sp; без true — в px
 ScaleXSpan(2.0f)                      // Масштабирование по X
-TypefaceSpan("monospace")             // Моноширинный шрифт (для новых API предпочтителен TypefaceSpan(typeface))
+TypefaceSpan("monospace")             // Моноширинный шрифт (на новых API предпочтителен конструктор с Typeface)
 ```
 
-**3. Paragraph spans** (применяются к целым абзацам, диапазону до символа перевода строки):
+**3. Paragraph spans** (применяются к целым абзацам, т.е. диапазону до символа перевода строки; корректное поведение ожидается, когда span покрывает весь абзац):
 
 ```kotlin
 QuoteSpan(Color.BLUE)                 // Вертикальная линия цитаты
@@ -103,9 +103,11 @@ AlignmentSpan.Standard(ALIGN_CENTER)  // Выравнивание абзаца
 ### Кликабельные Spans
 
 ```kotlin
+val spannable = SpannableString("Click me")
+
 val clickable = object : ClickableSpan() {
     override fun onClick(view: View) {
-        Toast.makeText(view.context, "Clicked", LENGTH_SHORT).show()
+        Toast.makeText(view.context, "Clicked", Toast.LENGTH_SHORT).show()
     }
 
     override fun updateDrawState(ds: TextPaint) {
@@ -115,7 +117,8 @@ val clickable = object : ClickableSpan() {
     }
 }
 
-spannable.setSpan(clickable, 0, 5, SPAN_EXCLUSIVE_EXCLUSIVE)
+spannable.setSpan(clickable, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+textView.text = spannable
 textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Обязательно для обработки кликов
 ```
 
@@ -125,7 +128,7 @@ textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Обязат�
 inline fun SpannableStringBuilder.appendSpan(
     text: CharSequence,
     what: Any,
-    flags: Int = SPAN_EXCLUSIVE_EXCLUSIVE
+    flags: Int = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 ) = apply {
     val start = length
     append(text)
@@ -180,7 +183,7 @@ textView.text = text
 
 ### Span Categories
 
-**1. Appearance spans** (change visual appearance without changing font metrics; usually do not require a full layout remeasure):
+**1. Appearance spans** (change visual appearance; generally do not change font metrics, but updates can still trigger redraw/re-layout as needed):
 
 ```kotlin
 ForegroundColorSpan(Color.RED)        // Text color
@@ -194,12 +197,12 @@ StrikethroughSpan()                   // Strikethrough
 
 ```kotlin
 RelativeSizeSpan(1.5f)                // Relative size
-AbsoluteSizeSpan(24, true)            // ✅ true = size in sp
+AbsoluteSizeSpan(24, true)            // ✅ true = size in sp; without true = px
 ScaleXSpan(2.0f)                      // X-axis scaling
-TypefaceSpan("monospace")             // Monospace font (for newer APIs, prefer TypefaceSpan(typeface))
+TypefaceSpan("monospace")             // Monospace font (for newer APIs, prefer constructor taking a Typeface)
 ```
 
-**3. Paragraph spans** (apply to entire paragraphs, i.e., up to newline):
+**3. Paragraph spans** (apply to entire paragraphs, i.e., ranges delimited by newlines; correct behavior is expected when the span covers the whole paragraph):
 
 ```kotlin
 QuoteSpan(Color.BLUE)                 // Quote vertical line
@@ -210,9 +213,11 @@ AlignmentSpan.Standard(ALIGN_CENTER)  // Paragraph alignment
 ### Clickable Spans
 
 ```kotlin
+val spannable = SpannableString("Click me")
+
 val clickable = object : ClickableSpan() {
     override fun onClick(view: View) {
-        Toast.makeText(view.context, "Clicked", LENGTH_SHORT).show()
+        Toast.makeText(view.context, "Clicked", Toast.LENGTH_SHORT).show()
     }
 
     override fun updateDrawState(ds: TextPaint) {
@@ -222,7 +227,8 @@ val clickable = object : ClickableSpan() {
     }
 }
 
-spannable.setSpan(clickable, 0, 5, SPAN_EXCLUSIVE_EXCLUSIVE)
+spannable.setSpan(clickable, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+textView.text = spannable
 textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Required for click handling
 ```
 
@@ -232,7 +238,7 @@ textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Required for 
 inline fun SpannableStringBuilder.appendSpan(
     text: CharSequence,
     what: Any,
-    flags: Int = SPAN_EXCLUSIVE_EXCLUSIVE
+    flags: Int = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 ) = apply {
     val start = length
     append(text)

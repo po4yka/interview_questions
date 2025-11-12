@@ -20,8 +20,8 @@ related:
 - c-coroutines
 - q-handler-looper-main-thread--android--medium
 sources: []
-created: 2025-10-15
-updated: 2025-10-28
+created: 2024-10-15
+updated: 2025-11-11
 tags:
 - android/coroutines
 - android/threads-sync
@@ -43,17 +43,19 @@ tags:
 
 ## Ответ (RU)
 
-**Looper** связывается с потоком через два ключевых метода:
+**Looper** связывается с потоком через два ключевых шага и `ThreadLocal`:
 
-1. **`Looper.prepare()`** — создает и привязывает Looper к текущему потоку через `ThreadLocal`
-2. **`Looper.loop()`** — запускает бесконечный цикл обработки сообщений для этого Looper
+1. **`Looper.prepare()`** — создаёт `Looper` и сохраняет его в `ThreadLocal<Looper>` текущего потока, логически привязывая один Looper к этому потоку.
+2. **`Looper.loop()`** — запускает бесконечный цикл обработки сообщений для `MessageQueue` этого `Looper` (блокирует поток до `quit()`/`quitSafely()`).
 
 ### Механизм Связывания
 
-**`Looper.prepare()`** сохраняет Looper в `ThreadLocal<Looper>` текущего потока. **`Handler`** при создании привязывается к конкретному `Looper` (и его `MessageQueue`), обычно полученному через `Looper.myLooper()` или явно переданному.
+- `Looper.prepare()` сохраняет Looper в `ThreadLocal<Looper>` текущего потока.
+- `Looper.myLooper()` читает Looper из этого `ThreadLocal`, тем самым обеспечивает доступ только из "своего" потока.
+- **`Handler`** при создании привязывается к конкретному `Looper` (и его `MessageQueue`), переданному явно или полученному через `Looper.myLooper()`.
 
 ```kotlin
-// ✅ Правильное создание потока с Looper (API 28+ используйте явный Looper)
+// ✅ Пример потока с Looper (используем явный Looper и Callback)
 class LooperThread : Thread() {
     override fun run() {
         Looper.prepare()  // Создать и привязать Looper к этому потоку
@@ -70,10 +72,10 @@ class LooperThread : Thread() {
 ```
 
 **Ключевые особенности:**
-- Один Looper на поток (повторный вызов `prepare()` выбросит `RuntimeException`)
-- Главный поток имеет Looper, подготовленный системой автоматически
-- `Looper.loop()` блокирует поток и извлекает сообщения/задачи из очереди до вызова `quit()`/`quitSafely()`
-- `Handler` связан с конкретным `Looper` при создании; `ThreadLocal` используется самим `Looper` для связи с потоком
+- Один `Looper` на поток (повторный вызов `prepare()` в одном потоке выбросит `RuntimeException`).
+- Главный поток имеет `Looper`, подготовленный системой автоматически при старте.
+- `Looper.loop()` блокирует поток и извлекает сообщения/задачи из очереди до вызова `quit()`/`quitSafely()`.
+- `Handler` жёстко связан с конкретным `Looper` при создании; `ThreadLocal` используется самим `Looper` для связи с конкретным потоком.
 
 ### Жизненный Цикл
 
@@ -90,7 +92,7 @@ val handler = Handler(handlerThread.looper) { msg ->
 handler.sendEmptyMessage(1)
 
 // Остановка
-handlerThread.quitSafely()  // Завершает цикл после обработки уже находящихся в очереди сообщений (без принятия новых)
+handlerThread.quitSafely()  // Завершает цикл после обработки уже находящихся в очереди сообщений
 ```
 
 ### Распространенные Ошибки
@@ -101,30 +103,33 @@ Looper.prepare()
 Looper.prepare()  // RuntimeException!
 
 // ❌ Handler до prepare() (если Looper ещё не создан)
-val handler = Handler(Looper.myLooper()!!)  // NPE или RuntimeException при отсутствии Looper!
-Looper.prepare()
+val looper = Looper.myLooper()  // null, если prepare() не вызывался
+val handler = Handler(looper!!)  // NPE из-за !! при отсутствии Looper
+// (или RuntimeException в реальном коде, если логика полагается на наличие Looper)
 
 // ❌ Забыли вызвать loop()
 Looper.prepare()
-val handler = Handler(Looper.myLooper()!!)
+val handler2 = Handler(Looper.myLooper()!!)
 // Сообщения не обрабатываются, т.к. не запущен цикл Looper!
 ```
 
-**Лучшая практика:** по возможности используйте `HandlerThread` вместо ручной настройки Looper.
+**Лучшая практика:** по возможности используйте `HandlerThread` вместо ручной настройки Looper и передавайте Looper явно при создании `Handler`.
 
 ## Answer (EN)
 
-**Looper** connects to a thread via two key methods:
+**Looper** connects to a thread via two key steps and a `ThreadLocal`:
 
-1. **`Looper.prepare()`** — creates and binds a Looper to the current thread using `ThreadLocal`
-2. **`Looper.loop()`** — starts the infinite message processing loop for that Looper
+1. **`Looper.prepare()`** — creates a `Looper` and stores it in the current thread's `ThreadLocal<Looper>`, logically binding a single Looper instance to that thread.
+2. **`Looper.loop()`** — starts the infinite message-processing loop for that `Looper`'s `MessageQueue` (blocking the thread until `quit()`/`quitSafely()`).
 
 ### Binding Mechanism
 
-**`Looper.prepare()`** stores the Looper in the current thread's `ThreadLocal<Looper>`. A **`Handler`** is bound to a specific `Looper` (and its `MessageQueue`) at construction time, typically obtained via `Looper.myLooper()` or passed explicitly.
+- `Looper.prepare()` stores the Looper in the current thread's `ThreadLocal<Looper>`.
+- `Looper.myLooper()` reads the Looper from this `ThreadLocal`, ensuring access only from its owning thread.
+- A **`Handler`** is bound to a specific `Looper` (and its `MessageQueue`) at construction time, either passed explicitly or obtained via `Looper.myLooper()`.
 
 ```kotlin
-// ✅ Correct Looper thread creation (on modern Android prefer explicit Looper)
+// ✅ Example of a thread with a Looper (using explicit Looper and Callback)
 class LooperThread : Thread() {
     override fun run() {
         Looper.prepare()  // Create and bind Looper to this thread
@@ -141,10 +146,10 @@ class LooperThread : Thread() {
 ```
 
 **Key characteristics:**
-- One Looper per thread (calling `prepare()` twice on the same thread throws `RuntimeException`)
-- The main thread gets its Looper prepared by the system automatically
-- `Looper.loop()` blocks the thread and pulls messages/tasks from the queue until `quit()`/`quitSafely()` is called
-- A `Handler` is bound to a specific `Looper` at construction; `ThreadLocal` is used internally by `Looper` to associate itself with the thread
+- One `Looper` per thread (calling `prepare()` twice on the same thread throws `RuntimeException`).
+- The main (UI) thread gets its `Looper` prepared automatically by the framework.
+- `Looper.loop()` blocks the thread and pulls messages/tasks from the queue until `quit()`/`quitSafely()` is called.
+- A `Handler` is tightly bound to a specific `Looper` at construction; `Looper` uses `ThreadLocal` internally to associate itself with its thread.
 
 ### Lifecycle
 
@@ -161,7 +166,7 @@ val handler = Handler(handlerThread.looper) { msg ->
 handler.sendEmptyMessage(1)
 
 // Stopping
-handlerThread.quitSafely()  // Ends loop after processing messages already in the queue (no new messages accepted)
+handlerThread.quitSafely()  // Ends loop after processing messages already in the queue
 ```
 
 ### Common Mistakes
@@ -171,17 +176,18 @@ handlerThread.quitSafely()  // Ends loop after processing messages already in th
 Looper.prepare()
 Looper.prepare()  // RuntimeException!
 
-// ❌ Handler before prepare() (if Looper not created yet)
-val handler = Handler(Looper.myLooper()!!)  // NPE or RuntimeException when no Looper!
-Looper.prepare()
+// ❌ Creating Handler before prepare() (if Looper not created yet)
+val looper = Looper.myLooper()  // null if prepare() hasn't been called
+val handler = Handler(looper!!)  // NPE due to !! when no Looper is present
+// (or a logical error / RuntimeException later if code assumes a Looper exists)
 
 // ❌ Forgot to call loop()
 Looper.prepare()
-val handler = Handler(Looper.myLooper()!!)
-// Messages won't be processed because Looper loop is not started!
+val handler2 = Handler(Looper.myLooper()!!)
+// Messages won't be processed because the Looper loop is not started!
 ```
 
-**Best practice:** Prefer `HandlerThread` over manual Looper setup when possible.
+**Best practice:** Prefer `HandlerThread` over manual Looper setup where possible, and always bind `Handler` to an explicit `Looper`.
 
 ---
 
@@ -203,7 +209,6 @@ val handler = Handler(Looper.myLooper()!!)
 ### Prerequisites / Concepts
 
 - [[c-coroutines]]
-
 
 ### Prerequisites
 - [[q-handler-looper-main-thread--android--medium]] — Understanding Handler-Looper-Thread relationship

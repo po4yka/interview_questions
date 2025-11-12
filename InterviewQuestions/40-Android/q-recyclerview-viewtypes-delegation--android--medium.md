@@ -42,10 +42,10 @@ sources:
 ## Ответ (RU)
 
 **Теория ViewTypes:**
-ViewTypes позволяют отображать разные макеты в одном RecyclerView (заголовки, элементы, футеры, реклама). Правильная реализация критична для производительности и поддерживаемости гетерогенных списков.
+ViewTypes позволяют отображать разные макеты в одном RecyclerView (заголовки, элементы, футеры, реклама). Правильная реализация критична для производительности и поддерживаемости гетерогенных списков. Важно, чтобы `getItemViewType(position)` устойчиво и однозначно соответствовал типу данных, иначе возможны артефакты из-за некорректного ресайклинга.
 
 **Основные компоненты:**
-- `getItemViewType(position)` — определяет тип view для позиции; его результат используется фреймворком при вызове `onCreateViewHolder(parent, viewType)`
+- `getItemViewType(position)` — определяет тип view для позиции; его результат используется фреймворком при вызове `onCreateViewHolder(parent, viewType)` и должен быть стабилен для данного элемента
 - `onCreateViewHolder(parent, viewType)` — создает `ViewHolder` по полученному типу
 - `onBindViewHolder(holder, position)` — привязывает данные к соответствующему `ViewHolder`
 
@@ -83,10 +83,11 @@ class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<Recy
         }
     }
 }
-// На практике вместо List<Any> лучше использовать типизированные модели (например, sealed-классы ниже) для типобезопасности.
+// На практике вместо List<Any> лучше использовать типизированные модели (например, sealed-классы ниже) для типобезопасности
+// и гарантировать стабильное соответствие между данными и viewType.
 ```
 
-**Sealed классы для типобезопасности:**
+**Sealed-классы для типобезопасности:**
 ```kotlin
 sealed class ListItem {
     abstract val id: String
@@ -105,7 +106,7 @@ sealed class ListItem {
 ```
 
 **Adapter Delegation Pattern:**
-Делегирование позволяет разделить логику разных типов элементов на отдельные делегаты и тем самым упростить адаптер.
+Делегирование позволяет разделить логику разных типов элементов на отдельные делегаты и тем самым упростить адаптер. Каждый делегат отвечает за свой viewType и используется адаптером для создания и биндинга соответствующих ViewHolder.
 
 ```kotlin
 // Пример контракта делегата (упрощённо)
@@ -135,16 +136,17 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 // В реальном адаптере регистрируются несколько делегатов, и каждый вызов
 // getItemViewType / onCreateViewHolder / onBindViewHolder проксируется
-// к подходящему делегату по isForViewType.
+// к подходящему делегату: адаптер находит делегат по isForViewType для позиции
+// и, при необходимости, сопоставляет каждому делегату уникальный viewType.
 ```
 
 ## Answer (EN)
 
 **ViewTypes Theory:**
-ViewTypes allow displaying different layouts in the same RecyclerView (headers, items, footers, ads). Proper implementation is critical for performance and maintainability of heterogeneous lists.
+ViewTypes allow displaying different layouts in the same RecyclerView (headers, items, footers, ads). Proper implementation is critical for performance and maintainability of heterogeneous lists. It is important that `getItemViewType(position)` consistently and uniquely reflects the data type; otherwise you may get visual artifacts due to incorrect view recycling.
 
 **Main components:**
-- `getItemViewType(position)` - determines view type for a position; its result is used by the framework when calling `onCreateViewHolder(parent, viewType)`
+- `getItemViewType(position)` - determines view type for a position; its result is used by the framework when calling `onCreateViewHolder(parent, viewType)` and must be stable for the given item
 - `onCreateViewHolder(parent, viewType)` - creates a `ViewHolder` based on the given type
 - `onBindViewHolder(holder, position)` - binds data to the appropriate `ViewHolder`
 
@@ -182,7 +184,8 @@ class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<Recy
         }
     }
 }
-// In real-world code, prefer typed models (e.g., the sealed classes below) over List<Any> for better type safety.
+// In real-world code, prefer typed models (e.g., the sealed classes below) over List<Any> for better type safety
+// and to ensure a stable mapping between data and viewType.
 ```
 
 **Sealed classes for type safety:**
@@ -204,7 +207,7 @@ sealed class ListItem {
 ```
 
 **Adapter Delegation Pattern:**
-Delegation allows separating logic for different item types into dedicated delegates, simplifying the main adapter.
+Delegation allows separating logic for different item types into dedicated delegates, simplifying the main adapter. Each delegate handles its own viewType and is used by the adapter to create and bind the corresponding ViewHolder.
 
 ```kotlin
 // Example of a delegate contract (simplified)
@@ -234,7 +237,8 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 // In a real adapter, multiple delegates are registered, and each call to
 // getItemViewType / onCreateViewHolder / onBindViewHolder is routed
-// to the appropriate delegate based on isForViewType.
+// to the appropriate delegate: the adapter finds a delegate via isForViewType
+// for the position and, if needed, maps each delegate to a unique viewType.
 ```
 
 ---
@@ -254,12 +258,12 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 ## Ссылки (RU)
 
 - [Views](https://developer.android.com/develop/ui/views)
-- [Документация Android](https://developer.android.com/docs)
+- [Документация Android](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 
 ## References (EN)
 
 - [Views](https://developer.android.com/develop/ui/views)
-- [Android Documentation](https://developer.android.com/docs)
+- [RecyclerView documentation](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 
 ## Связанные вопросы (RU)
 

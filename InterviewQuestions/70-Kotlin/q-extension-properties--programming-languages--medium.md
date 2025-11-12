@@ -3,7 +3,7 @@ id: lang-077
 title: "Extension Properties / Расширяющие свойства"
 aliases: [Extension Properties, Extension Properties RU]
 topic: kotlin
-subtopics: [extensions, kotlin, properties]
+subtopics: [extensions, properties]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,19 +13,17 @@ moc: moc-kotlin
 related: [c-kotlin, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, extensions, kotlin, programming-languages, properties]
+tags: [difficulty/medium, kotlin, programming-languages]
 ---
 # Вопрос (RU)
 > Свойства какого вида можно добавить как расширение?
 
+# Question (EN)
+> What kind of properties can be added as extensions?
+
 ## Ответ (RU)
 
 В Kotlin можно объявлять свойства-расширения (`extension properties`) как `val`, так и `var`, но они не могут иметь собственного backing field. Такие свойства всегда реализуются через функции доступа: `val` — только с кастомным `get()`, `var` — с кастомными `get()` и `set()` (если это требуется). То есть свойства-расширения всегда вычисляемые и не могут хранить состояние внутри самого расширения.
-
----
-
-# Question (EN)
-> What kind of properties can be added as extensions?
 
 ## Answer (EN)
 

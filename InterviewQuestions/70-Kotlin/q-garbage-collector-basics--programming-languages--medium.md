@@ -25,31 +25,33 @@ tags: [difficulty/medium, garbage-collection, java, kotlin, memory-management, p
 
 **Сборщик мусора (Garbage Collector, GC)** — это механизм управления памятью, который автоматически пытается освобождать память, занятую объектами, которые стали недостижимы из набора корневых ссылок (GC roots) и поэтому больше не могут быть использованы программой.
 
+В контексте Kotlin/Java на JVM GC является частью виртуальной машины и работает по своим эвристикам: разработчик не управляет им напрямую и не определяет точный момент сборки.
+
 **Как это работает:**
 
-1. **Отслеживает достижимость объектов**: Определяет, какие объекты всё ещё достижимы из корней (стек, статические поля, и т.п.)
-2. **Идентифицирует мусор**: Недостижимые объекты считаются мусором
-3. **Освобождает память**: Освобождает память, занятую недостижимыми объектами
-4. **Работает в фоне**: Обычно выполняется автоматически без явного управления разработчиком
+1. **Отслеживает достижимость объектов**: Определяет, какие объекты всё ещё достижимы из корней (стек, статические поля, и т.п.).
+2. **Идентифицирует мусор**: Недостижимые объекты считаются мусором.
+3. **Освобождает память**: Освобождает память, занятую недостижимыми объектами.
+4. **Выполняется автоматически**: Запускается автоматически по внутренним критериям/эвристикам; может включать паузы (stop-the-world), а не непрерывную "фоновую" работу.
 
-**В Kotlin/Java:**
-- GC автоматически работает в фоне на JVM
-- Нет необходимости вручную освобождать память (в отличие от C/C++)
-- Помогает уменьшить количество утечек памяти, связанных с забытым освобождением
-- Делает управление памятью безопаснее и проще, но логические утечки (например, из-за удержания ненужных ссылок) по-прежнему возможны
+**В Kotlin/Java (на JVM):**
+- GC автоматически управляет кучей JVM.
+- Нет необходимости вручную освобождать память (в отличие от C/C++ с malloc/free / new/delete).
+- Помогает уменьшить количество утечек памяти, связанных с забытым освобождением.
+- Делает управление памятью безопаснее и проще, но логические утечки (например, из-за удержания ненужных ссылок) по-прежнему возможны.
 
 **Преимущества:**
-- Автоматическое управление памятью
-- Снижает риск утечек памяти из-за отсутствия освобождения
-- Уменьшает ошибки программиста
-- Повышает продуктивность разработчика
+- Автоматическое управление памятью.
+- Снижает риск утечек памяти из-за отсутствия освобождения.
+- Уменьшает ошибки программиста.
+- Повышает продуктивность разработчика.
 
 **Что следует учитывать:**
-- Паузы GC могут влиять на производительность
-- Нет точного контроля над тем, когда именно запускается GC
-- Объекты остаются в памяти до тех пор, пока GC не определит их как недостижимые и не освободит
+- Паузы GC могут влиять на производительность.
+- Нет точного контроля над тем, когда именно запускается GC.
+- Объекты остаются в памяти до тех пор, пока GC не определит их как недостижимые и не освободит.
 
-**Пример освобождения памяти (кандидат на сборку, не гарантированный момент):**
+**Пример освобождения памяти (кандидат на сборку, момент не детерминирован):**
 ```kotlin
 fun createObject() {
     val obj = LargeObject()  // Объект создан
@@ -61,31 +63,33 @@ fun createObject() {
 
 **Garbage Collector (GC)** is a memory management mechanism that automatically attempts to reclaim memory occupied by objects that have become unreachable from the set of GC roots and therefore can no longer be used by the program.
 
+In the context of Kotlin/Java on the JVM, the GC is part of the virtual machine and runs based on its own heuristics: the developer does not control it directly or determine the exact moment when collection occurs.
+
 **How it works:**
 
-1. **Tracks reachability of objects**: Determines which objects are still reachable from roots (stack, static fields, etc.)
-2. **Identifies garbage**: Unreachable objects are considered garbage
-3. **Reclaims memory**: Frees memory occupied by unreachable objects
-4. **Runs automatically**: Typically runs automatically without explicit control from the developer
+1. **Tracks reachability of objects**: Determines which objects are still reachable from roots (stack, static fields, etc.).
+2. **Identifies garbage**: Unreachable objects are considered garbage.
+3. **Reclaims memory**: Frees memory occupied by unreachable objects.
+4. **Runs automatically**: Invoked automatically based on internal heuristics; may include stop-the-world pauses rather than being a purely continuous "background" process.
 
-**In Kotlin/Java:**
-- GC runs automatically in the background on the JVM
-- No need to manually free memory (unlike in C/C++)
-- Helps reduce memory leaks caused by missing deallocation
-- Makes memory management safer and simpler, but logical leaks (e.g., retaining unnecessary references) are still possible
+**In Kotlin/Java (on the JVM):**
+- GC automatically manages the JVM heap.
+- No need to manually free memory (unlike in C/C++ with malloc/free or new/delete).
+- Helps reduce memory leaks caused by missing deallocation.
+- Makes memory management safer and simpler, but logical leaks (e.g., retaining unnecessary references) are still possible.
 
 **Benefits:**
-- Automatic memory management
-- Reduces the risk of memory leaks due to missing frees
-- Reduces programmer errors
-- Improves developer productivity
+- Automatic memory management.
+- Reduces the risk of memory leaks due to missing frees.
+- Reduces programmer errors.
+- Improves developer productivity.
 
 **Considerations:**
-- GC pauses can affect performance
-- No precise control over when GC runs
-- Objects remain in memory until GC identifies them as unreachable and reclaims them
+- GC pauses can affect performance.
+- No precise control over when GC runs.
+- Objects remain in memory until GC identifies them as unreachable and reclaims them.
 
-**Example of memory reclamation (eligible for collection; timing is not deterministic):**
+**Example of memory reclamation (eligible for collection; timing is nondeterministic):**
 ```kotlin
 fun createObject() {
     val obj = LargeObject()  // Object created

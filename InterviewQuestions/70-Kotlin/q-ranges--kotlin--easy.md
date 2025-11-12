@@ -36,7 +36,9 @@ tags: [difficulty/easy, kotlin, ranges]
 
 ## Ответ (RU)
 
-Диапазон в Kotlin — это упорядоченная конечная последовательность значений одного совместимого типа, задаваемая границами и шагом. Для стандартных числовых и символьных типов используются специализированные типы (`IntRange`, `LongRange`, `CharRange` и т.п.), которые являются закрытыми диапазонами: начало и конец включительны. Шаг по умолчанию равен 1, не может быть 0 и должен быть положительным.
+Диапазон в Kotlin — это упорядоченная конечная последовательность значений одного совместимого типа, задаваемая границами. Для стандартных числовых и символьных типов используются специализированные типы диапазонов (`IntRange`, `LongRange`, `CharRange` и т.п.), которые являются закрытыми диапазонами: начало и конец включительны.
+
+Конструкции `..`, `downTo`, `until` и `step` создают объекты типов диапазонов и числовых прогрессий (`IntProgression`, `LongProgression`, `CharProgression` и соответствующих им `*Range`). Шаг по умолчанию равен 1, не может быть 0 и всегда положителен для возрастающих прогрессий; для `downTo` используется убывающая прогрессия с отрицательным внутренним шагом.
 
 ### Базовое использование
 
@@ -113,7 +115,7 @@ for (num in 1 until 5) {
 
 ### Функция `step()`
 
-`step` создает прогрессию с заданным положительным шагом на основе существующего диапазона или прогрессии. Шаг по умолчанию равен 1; шаг не может быть 0.
+`step` создает числовую прогрессию с заданным шагом на основе существующего диапазона или прогрессии. Шаг по умолчанию равен 1 и не может быть 0. Для возрастающих прогрессий шаг положителен, для прогрессий от `downTo` фактический шаг отрицателен.
 
 ```kotlin
 for (i in 3..10 step 2) print("$i ")  // Печатает: 3 5 7 9
@@ -123,21 +125,22 @@ println((11..20 step 4).last)   // 19
 println((11..20 step 5).step)   // 5
 ```
 
-### Типы диапазонов
+### Типы диапазонов и прогрессий
 
-- `IntRange` — диапазон целых чисел
-- `LongRange` — диапазон значений типа Long
-- `CharRange` — диапазон символов
+- `IntRange`, `LongRange`, `CharRange`, `UIntRange`, `ULongRange` — диапазоны для соответствующих типов
+- `IntProgression`, `LongProgression`, `CharProgression` — базовые типы для прогрессий с шагом
 
-Все они поддерживают использование в цикле `for` и проверку вхождения с оператором `in`.
+Все они поддерживают использование в цикле `for` и проверку вхождения с оператором `in` (для диапазонов).
 
-**Краткое содержание**: Диапазоны (и связанные прогрессии) в Kotlin представляют последовательности значений с началом и концом. Для `..`, `rangeTo` и `downTo` обе границы включительны, `until` создает полузакрытый диапазон с исключенной правой границей. Используйте `step` для пользовательских положительных (не равных 0) шагов. Диапазоны и прогрессии широко применяются для итерации, проверок принадлежности (`in`) и валидации значений.
+**Краткое содержание**: Диапазоны и прогрессии в Kotlin представляют последовательности значений с началом и концом. Для `..`, `rangeTo` и `downTo` обе границы включительны, `until` создает полузакрытый диапазон с исключенной правой границей. Используйте `step` для задания шага (не равного 0); для прямых прогрессий он положителен, для `downTo` — убывающий. Диапазоны и прогрессии широко применяются для итерации, проверок принадлежности (`in`) и валидации значений.
 
 ---
 
 ## Answer (EN)
 
-A range in Kotlin is an ordered finite sequence of values of a compatible type, defined by its bounds and step. For standard numeric and character types you get specialized types (`IntRange`, `LongRange`, `CharRange`, etc.) which are closed ranges: start and end are inclusive. The default step is 1 and cannot be 0.
+A range in Kotlin is an ordered finite sequence of values of a compatible type, defined by its bounds. For standard numeric and character types you get specialized range types (`IntRange`, `LongRange`, `CharRange`, etc.) which are closed ranges: both start and end are inclusive.
+
+The `..`, `downTo`, `until`, and `step` constructs create instances of range and numeric progression types (`IntProgression`, `LongProgression`, `CharProgression` and their corresponding `*Range` types). The default step is 1 and cannot be 0. For increasing progressions the step is positive; for `downTo` you get a decreasing progression with a negative internal step.
 
 ### Basic Usage
 
@@ -214,7 +217,7 @@ for (num in 1 until 5) {
 
 ### step() function
 
-`step` creates a progression with the given positive step based on an existing range or progression. Default step is 1; step cannot be 0.
+`step` creates a numeric progression with the given step based on an existing range or progression. The default step is 1 and it cannot be 0. For increasing progressions the step is positive; for `downTo` the resulting progression has a negative step.
 
 ```kotlin
 for (i in 3..10 step 2) print("$i ")  // Prints: 3 5 7 9
@@ -224,15 +227,14 @@ println((11..20 step 4).last)   // 19
 println((11..20 step 5).step)   // 5
 ```
 
-### Range Types
+### Range and Progression Types
 
-- `IntRange` - range of integers
-- `LongRange` - range of longs
-- `CharRange` - range of characters
+- `IntRange`, `LongRange`, `CharRange`, `UIntRange`, `ULongRange` - ranges for the corresponding types
+- `IntProgression`, `LongProgression`, `CharProgression` - base types for step-based progressions
 
-All support iteration in for loops and membership checks via the `in` operator.
+All of them support iteration in `for` loops, and range types support membership checks via the `in` operator.
 
-**English Summary**: In Kotlin, ranges (and the related progressions) represent sequences of values with a start and end. For `..`, `rangeTo`, and `downTo`, both ends are inclusive; `until` creates a half-open range with an exclusive end. Use `step` for custom increments (non-zero, positive). Ranges are commonly used for iteration, membership checks (`in`), and validation.
+**English Summary**: In Kotlin, ranges and progressions represent sequences of values with a start and end. For `..`, `rangeTo`, and `downTo`, both ends are inclusive; `until` creates a half-open interval with an exclusive end. Use `step` for custom (non-zero) step values; it's positive for increasing progressions and negative for `downTo`. Ranges and progressions are commonly used for iteration, membership checks (`in`), and validation.
 
 ## Дополнительные вопросы (RU)
 
@@ -249,12 +251,12 @@ All support iteration in for loops and membership checks via the `in` operator.
 ## Ссылки (RU)
 
 - [[c-kotlin]]
-- [Диапазоны — документация Kotlin](https://kotlinlang.org/docs/reference/ranges.html)
+- [Диапазоны и прогрессии — документация Kotlin](https://kotlinlang.org/docs/ranges.html)
 
 ## References
 
 - [[c-kotlin]]
-- [Ranges - Kotlin Documentation](https://kotlinlang.org/docs/reference/ranges.html)
+- [Ranges and progressions - Kotlin Documentation](https://kotlinlang.org/docs/ranges.html)
 
 ## Связанные вопросы (RU)
 

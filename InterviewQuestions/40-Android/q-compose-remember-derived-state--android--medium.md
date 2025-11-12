@@ -41,9 +41,9 @@ tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
 **`remember`** — кеширует значения в композиции; переживает рекомпозицию, но не пересоздание активити/хоста композиции.
 
-**`rememberSaveable`** — сохраняет значения через изменения конфигурации и может быть восстановлен после смерти процесса за счет механизма `SavedInstanceState` (использует `Bundle`/`Saver`), если хост правильно восстанавливает состояние.
+**`rememberSaveable`** — сохраняет значения через изменения конфигурации и может быть восстановлен после смерти процесса за счет механизма `SavedInstanceState` (использует `Bundle`/`Saver`), если хост (Activity / NavBackStackEntry и т.п.) правильно интегрирован с SavedState и восстанавливает состояние.
 
-**`derivedStateOf`** — описывает производное состояние на основе других состояний. Инвалидируется при изменении зависимостей, но вызывает рекомпозицию потребителей только если вычисленное значение реально изменилось (по сравнению с предыдущим).
+**`derivedStateOf`** — описывает производное состояние на основе других состояний. Инвалидируется при изменении зависимостей и сравнивает новое значение с предыдущим: только при фактическом изменении производного значения уведомляются его потребители. Это уменьшает лишние обновления для тех, кто подписан именно на производное состояние.
 
 ### Паттерны Использования
 
@@ -103,7 +103,7 @@ var form by rememberSaveable(stateSaver = FormSaver) {
 
 #### `derivedStateOf` (вычисляемое состояние)
 
-Используется для мемоизации производных значений и уменьшения количества лишних рекомпозиций потребителей: если при изменении зависимостей результат вычисления не изменился, потребители не будут перерисованы.
+Используется для мемоизации производных значений и уменьшения лишних уведомлений/рекомпозиций потребителей этого производного состояния. Когда зависящие состояния меняются, но вычисленное производное значение остается тем же, потребители `derivedStateOf` не будут перерисованы.
 
 ```kotlin
 // ✅ FAB показывается только когда прокрутили вниз
@@ -112,10 +112,11 @@ val showFab by remember {
   derivedStateOf { listState.firstVisibleItemIndex > 0 }
 }
 
-// ❌ Без `derivedStateOf` при использовании выражения в нескольких местах
-//      или при более сложном вычислении вы можете вызвать больше рекомпозиций
-//      и повторных вычислений, чем необходимо.
-val showFabWrong = listState.firstVisibleItemIndex > 0
+// ⚠️ Без `derivedStateOf`, если это условие используется в нескольких местах
+//     или вычисление более дорогое, оно будет пересчитываться каждый раз отдельно.
+//     `derivedStateOf` позволяет централизовать вычисление и уведомлять потребителей
+//     только при реальном изменении значения.
+val showFabDirect = listState.firstVisibleItemIndex > 0
 ```
 
 ### Когда Что Использовать
@@ -123,8 +124,8 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 | Функция | Область видимости | Персистентность | Применение |
 |---------|-------------------|-----------------|------------|
 | **remember** | Композиция | Нет | Временное UI-состояние, кеш |
-| **rememberSaveable** | Компонент с SavedState (`Bundle`) | Да, при восстановлении SavedInstanceState | Формы, input, навигация |
-| **derivedStateOf** | В паре с remember | Как у remember для обертки | Вычисляемые значения |
+| **rememberSaveable** | Там, где есть SavedState (`Bundle`) | Да, при восстановлении SavedInstanceState | Формы, input, навигация |
+| **derivedStateOf** | Обычно вместе с `remember` | Зависит от того, как обернуто (например, в `remember`) | Вычисляемые/производные значения |
 
 ## Answer (EN)
 
@@ -132,9 +133,9 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 
 **`remember`** — caches values in the composition; survives recomposition but not `Activity`/composition host recreation.
 
-**`rememberSaveable`** — persists values across configuration changes and can be restored after process death via the `SavedInstanceState` mechanism (uses `Bundle`/`Saver`), provided the host correctly restores that state.
+**`rememberSaveable`** — persists values across configuration changes and can be restored after process death via the `SavedInstanceState` mechanism (uses `Bundle`/`Saver`), provided the host (Activity / NavBackStackEntry, etc.) is properly integrated with SavedState and restores that state.
 
-**`derivedStateOf`** — describes derived state based on other states. It is invalidated when its dependencies change, but it will only trigger recomposition of its consumers when the computed value is actually different from the previous one.
+**`derivedStateOf`** — describes derived state based on other states. It is invalidated when its dependencies change and compares the new value to the previous one; only when the derived value actually changes are its consumers notified. This reduces unnecessary updates for observers of that derived state.
 
 ### Usage Patterns
 
@@ -194,7 +195,7 @@ var form by rememberSaveable(stateSaver = FormSaver) {
 
 #### `derivedStateOf` (computed state)
 
-Use to memoize derived values and avoid unnecessary recompositions of consumers: when dependencies change but the derived value remains the same, consumers are not recomposed.
+Use to memoize derived values and reduce unnecessary updates/recompositions of the consumers of that derived state. When dependencies change but the derived value remains the same, those consumers are not recomposed.
 
 ```kotlin
 // ✅ FAB shows only when scrolled down
@@ -203,10 +204,11 @@ val showFab by remember {
   derivedStateOf { listState.firstVisibleItemIndex > 0 }
 }
 
-// ❌ Without `derivedStateOf`, if this expression is used in multiple places
-//     or is more expensive, you may cause more recompositions and recomputations
-//     than necessary.
-val showFabWrong = listState.firstVisibleItemIndex > 0
+// ⚠️ Without `derivedStateOf`, if this condition is used in multiple places
+//     or is more expensive, it will be recomputed each time separately.
+//     `derivedStateOf` centralizes the computation and notifies consumers
+//     only when the value actually changes.
+val showFabDirect = listState.firstVisibleItemIndex > 0
 ```
 
 ### When to Use What
@@ -214,8 +216,8 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 | Function | Scope | Persistence | Use Case |
 |----------|-------|-------------|----------|
 | **remember** | Composition | No | Temporary UI state, cache |
-| **rememberSaveable** | Component with SavedState (`Bundle`) | Yes, when SavedInstanceState is restored | Forms, inputs, navigation |
-| **derivedStateOf** | With remember | Same as outer remember | Computed values |
+| **rememberSaveable** | Where SavedState (`Bundle`) is available | Yes, when SavedInstanceState is restored | Forms, inputs, navigation |
+| **derivedStateOf** | Typically wrapped in `remember` | Depends on how it's wrapped (e.g., in `remember`) | Computed/derived values |
 
 ---
 

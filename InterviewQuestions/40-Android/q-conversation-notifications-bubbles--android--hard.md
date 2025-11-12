@@ -71,12 +71,12 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
 ```
 
 - Для групповых чатов используйте `setGroupConversation(true)` и добавляйте всех участников через `addPerson`.
-- Убедитесь, что `shortcutId` существует и что уведомление помечено как категория MESSAGE для корректной обработки как беседы.
+- Убедитесь, что `shortcutId` существует, и что уведомление помечено как категория MESSAGE для корректной обработки как беседы.
 
 ### 3. Bubbles
 
-- Начиная с Android 11, bubbles поддерживаются только для conversation notifications, связанных с соответствующим shortcut/person-метаданными.
-- Требуется согласие пользователя (переключатель bubbles для приложения/диалога в системных настройках). Явного отдельного манифестного разрешения для bubbles не используется, но поведение зависит от версии и системных настроек.
+- Начиная с Android 11, платформенные bubbles предназначены для conversation notifications, связанных с корректным shortcut и person-метаданными; использование `MessagingStyle`, shortcut и `Person` делает поведение предсказуемым и соответствует рекомендациям.
+- Требуется согласие пользователя (переключатель bubbles для приложения/диалога в системных настройках). Явного отдельного манифестного разрешения для bubbles не используется, но фактическая доступность зависит от версии и системных настроек.
 - Используйте `NotificationCompat.BubbleMetadata`:
 
 ```kotlin
@@ -100,7 +100,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 
 ### 4. Background limits
 
-- Соблюдайте `POST_NOTIFICATIONS` runtime permission (Android 13+). При отсутствии разрешения не пытайтесь показывать bubbles/уведомления.
+- Соблюдайте `POST_NOTIFICATIONS` runtime permission (Android 13+). При отсутствии разрешения не показывайте обычные уведомления/бабблы для чата и уважайте выбор пользователя.
 - Если используется Foreground `Service` (например, для ongoing calls, screen sharing, записи аудио/видео), применяйте соответствующие типы (`FOREGROUND_SERVICE_MICROPHONE`, `FOREGROUND_SERVICE_CAMERA` и т.д.) и связанную `CATEGORY_CALL`/`ongoing` нотификацию. Сами по себе bubbles для чата не требуют FGS.
 - Android 13+: уведомления для новых установок по умолчанию отключены → нужен onboarding flow и явный запрос `POST_NOTIFICATIONS`.
 
@@ -123,7 +123,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 
 - Чувствительные данные скрывайте на lock screen через `setVisibility(NotificationCompat.VISIBILITY_PRIVATE)` и соответствующие настройки пользователя.
 - Предоставляйте в приложении настройки для бесед: отключение уведомлений для треда, отключение bubbles, уровни важности.
-- Соблюдайте требования Play/Android policy: bubbles и conversation surface используйте только для реальных, двусторонних коммуникаций (чат, звонки и т.п.), иначе возможен rejection.
+- Соблюдайте требования Play/Android policy: используйте bubbles и conversation surfaces для people-centric коммуникаций (личные и групповые чаты, звонки и т.п.), а не для агрессивного промо или нерелевантного контента, иначе возможен rejection.
 
 ---
 
@@ -161,8 +161,8 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
 
 ### 3. Bubbles
 
-- On Android 11+, bubbles are supported only for conversation notifications backed by proper shortcuts and person-centric metadata.
-- Respect user control: bubbles are enabled/disabled per app/conversation in system settings; there is no separate manifest permission, but behavior depends on OS and settings.
+- On Android 11+, platform bubbles are intended for conversation notifications backed by proper shortcuts and person-centric metadata; using `MessagingStyle`, shortcuts, and `Person` makes behavior predictable and aligned with guidelines.
+- Respect user control: bubbles are enabled/disabled per app/conversation in system settings; there is no separate manifest permission, but actual availability depends on OS version and user settings.
 - Use `NotificationCompat.BubbleMetadata`:
 
 ```kotlin
@@ -186,9 +186,8 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 
 ### 4. Background limits
 
-- Honor the `POST_NOTIFICATIONS` runtime permission (Android 13+). If not granted, do not attempt to show notifications or bubbles.
-- When using a foreground `Service` (e.g., for ongoing calls, screen sharing, audio/video recording), use the correct foreground service types (such as `FOREGROUND_SERVICE_MICROPHONE`, `FOREGROUND_SERVICE_CAMERA`) and an associated `CATEGORY_CALL`/ongoing notification.
-- Regular chat bubbles do not require a foreground service.
+- Honor the `POST_NOTIFICATIONS` runtime permission (Android 13+). If it is not granted, do not show regular chat notifications/bubbles and respect the user's choice.
+- When using a foreground `Service` (e.g., for ongoing calls, screen sharing, audio/video recording), use the correct foreground service types (such as `FOREGROUND_SERVICE_MICROPHONE`, `FOREGROUND_SERVICE_CAMERA`) and an associated `CATEGORY_CALL`/ongoing notification. Regular chat bubbles do not require a foreground service.
 - For Android 13+, notifications are disabled by default for new installs → implement onboarding and explicitly request `POST_NOTIFICATIONS`.
 
 ### 5. Analytics and UX
@@ -210,7 +209,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 
 - Hide sensitive information on the lock screen using `setVisibility(NotificationCompat.VISIBILITY_PRIVATE)` and respect user lockscreen preferences.
 - Provide in-app controls per conversation: mute thread, disable bubbles, configure importance levels.
-- Comply with Play/Android policies: use bubbles and conversation surfaces only for genuine, person-to-person (or similar) communication (chats, calls, etc.) to avoid rejection.
+- Comply with Play/Android policies: use bubbles and conversation surfaces for people-centric communication (direct and group chats, calls, etc.), not for aggressive promotion or irrelevant content, to avoid rejection.
 
 ---
 

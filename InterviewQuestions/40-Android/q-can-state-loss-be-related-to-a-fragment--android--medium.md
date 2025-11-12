@@ -17,8 +17,8 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-fragments
-- c-lifecycle
+- c-android-lifecycle
+- c-android-navigation
 - q-activity-lifecycle-methods--android--medium
 sources: []
 created: 2024-10-15
@@ -41,21 +41,25 @@ tags:
 ## Ответ (RU)
 
 **Определение**
-Потеря состояния фрагмента происходит, когда `FragmentTransaction` выполняется после вызова `onSaveInstanceState()` у `Activity` и изменения не попадают в сохранённое состояние `FragmentManager`. При последующем пересоздании процесса такие транзакции не будут восстановлены, и UI-изменения (добавление/замена фрагментов) теряются.
+Потеря состояния фрагментов (state loss) в контексте `FragmentManager` происходит, когда вы пытаетесь закоммитить (`commit()`) или уже закоммитили транзакцию фрагментов после того, как состояние было сохранено (`onSaveInstanceState()` у `Activity` / `Fragment` и `fragmentManager.isStateSaved() == true`). Такие изменения не попадают в сохранённое состояние и не будут корректно восстановлены при пересоздании процесса: UI-изменения (добавление/замена/удаление фрагментов, back stack) могут "потеряться" или привести к несогласованному состоянию.
+
+Ключевой признак: выполнение транзакций, когда `FragmentManager` уже пометил своё состояние как сохранённое (`isStateSaved() == true`).
 
 **Основные причины**
 
 1. **Транзакции после сохранения состояния**
-   - Асинхронные коллбэки (сеть, база данных)
-   - Обработчики событий, сработавшие в background
+   - Асинхронные коллбэки (сеть, база данных, таймеры), которые вызывают транзакции после `onSaveInstanceState()`
+   - Обработчики событий из background-потоков, не синхронизированные с жизненным циклом
 
 2. **Смерть процесса**
-   - System kill при нехватке памяти
-   - Отсутствие персистентного хранения для критичных данных (`ViewModel` и in-memory данные не восстанавливаются после убийства процесса без сохранения состояния)
+   - System kill при нехватке памяти или после длительного нахождения в фоне
+   - Отсутствие персистентного хранения для критичных данных: 
+     - `ViewModel` переживает только конфигурационные изменения в живом процессе и не восстанавливается после реальной смерти процесса
+     - любые чисто in-memory данные также не восстанавливаются
 
 3. **Пересоздание `Activity`**
-   - Configuration changes (поворот экрана)
-   - Возвращение из back stack без корректно сохранённого UI-состояния
+   - Configuration changes (поворот экрана и др.) требуют корректного сохранения состояния и недопустимости транзакций после сохранения состояния
+   - Неправильная работа с back stack и транзакциями (например, попытка изменить фрагменты после `onSaveInstanceState()` при возврате), что приводит к тому, что изменения не отражаются в сохранённом состоянии
 
 **Примеры**
 
@@ -64,17 +68,18 @@ tags:
 fun loadData() {
     repository.fetchData { result ->
         // Коллбэк может выполниться после onSaveInstanceState,
-        // когда FragmentManager уже сохранил своё состояние
+        // когда FragmentManager уже сохранил своё состояние (isStateSaved == true)
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, ResultFragment())
-            .commit() // требует, чтобы состояние ещё не было сохранено
+            .commit() // при isStateSaved == true вызовет IllegalStateException
     }
 }
 
-// ✅ Безопасная транзакция: учитываем жизненный цикл и состояние FragmentManager
+// ✅ Более безопасный вариант: учитываем жизненный цикл и состояние FragmentManager
 fun loadDataSafely() {
     lifecycleScope.launch {
         val result = repository.fetchData()
+        // Гарантируем, что находимся в RESUMED и проверяем, что состояние не сохранено
         lifecycle.whenResumed {
             if (!supportFragmentManager.isStateSaved) {
                 supportFragmentManager.beginTransaction()
@@ -85,12 +90,13 @@ fun loadDataSafely() {
     }
 }
 
-// ✅ ViewModel сохраняет данные при пересоздании Activity (но не заменяет сохранение FragmentTransaction)
+// ✅ ViewModel сохраняет данные при пересоздании Activity (но не заменяет корректное управление FragmentTransaction)
 class MyFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Данные переживают configuration changes, пока процесс жив или состояние восстановлено
+        // Данные переживают configuration changes, пока процесс жив;
+        // после смерти процесса ViewModel не восстанавливается автоматически.
         viewModel.data.observe(viewLifecycleOwner) { data ->
             updateUI(data)
         }
@@ -109,7 +115,8 @@ if (!fragmentManager.isStateSaved) {
 }
 
 // Использование commitAllowingStateLoss для некритичных UI-изменений:
-// транзакция выполнится даже если состояние уже сохранено, но не будет восстановлена после пересоздания
+// транзакция выполнится даже если состояние уже сохранено, но изменения
+// не будут отражены в сохранённом состоянии и не восстановятся после пересоздания процесса
 fragmentManager.beginTransaction()
     .replace(R.id.container, TransientDialogFragment())
     .commitAllowingStateLoss()
@@ -117,29 +124,33 @@ fragmentManager.beginTransaction()
 
 **Best Practices**
 
-- `ViewModel` для бизнес-логики и долгоживущих данных; не полагаться на фрагменты как источник данных
-- `onSaveInstanceState` только для временного UI-состояния (scroll position, input text)
-- `viewLifecycleOwner` для подписок во фрагментах
-- `commitAllowingStateLoss()` только для некритичных UI изменений, когда потеря транзакции при восстановлении допустима
+- Использовать `ViewModel` для бизнес-логики и долгоживущих данных; не полагаться на фрагменты как на источник истины
+- Использовать `onSaveInstanceState` для временного UI-состояния (позиция скролла, введённый текст и т.п.)
+- Подписки внутри фрагмента делать через `viewLifecycleOwner`, чтобы избежать утечек и гонок состояний `View`
+- Использовать `commitAllowingStateLoss()` только для некритичных UI-изменений, когда допустимо, что транзакция не будет восстановлена
 
 ## Answer (EN)
 
 **Definition**
-`Fragment` state loss occurs when a `FragmentTransaction` is executed after the host `Activity`'s `onSaveInstanceState()` has been called and the changes are not recorded into the `FragmentManager`'s saved state. On subsequent process recreation, such transactions will not be restored, so UI changes (adding/replacing fragments) are lost.
+`Fragment` state loss (in terms of `FragmentManager`) occurs when you commit a `FragmentTransaction` (or it is executed) after the state has been saved (`Activity`/`Fragment.onSaveInstanceState()` has run and `fragmentManager.isStateSaved() == true`). Such changes are not recorded into the saved state and will not be correctly restored on process recreation: UI changes (adding/replacing/removing fragments, back stack changes) may be "lost" or lead to an inconsistent state.
+
+The key signal is performing transactions while `FragmentManager` has marked its state as saved (`isStateSaved() == true`).
 
 **Common Causes**
 
-1. **Transactions After State Saved**
-   - Asynchronous callbacks (network, database)
-   - Event handlers triggered in background
+1. **Transactions After State Is Saved**
+   - Asynchronous callbacks (network, database, timers) firing after `onSaveInstanceState()`
+   - Event handlers running on background threads not synchronized with the lifecycle
 
 2. **Process Death**
-   - System kill due to memory pressure
-   - Missing persistent storage for critical data (`ViewModel` and in-memory data are not restored after process death without saved state)
+   - System kill due to memory pressure or long time in background
+   - Missing persistent storage for critical data:
+     - `ViewModel` only survives configuration changes in the same process and is not restored after real process death
+     - any purely in-memory data is also lost
 
 3. **`Activity` Recreation**
-   - Configuration changes (screen rotation)
-   - Returning from back stack without correctly saved UI state
+   - Configuration changes (rotation, etc.) require proper state saving and avoiding transactions after state is saved
+   - Incorrect handling of back stack and transactions (e.g., attempting to modify fragments after `onSaveInstanceState()` during returns) so that changes are not reflected in the saved state
 
 **Examples**
 
@@ -148,17 +159,18 @@ fragmentManager.beginTransaction()
 fun loadData() {
     repository.fetchData { result ->
         // Callback may execute after onSaveInstanceState,
-        // when FragmentManager has already saved its state
+        // when FragmentManager has already saved its state (isStateSaved == true)
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, ResultFragment())
-            .commit() // requires that state has not been saved yet
+            .commit() // will throw IllegalStateException if isStateSaved == true
     }
 }
 
-// ✅ Safe transaction: lifecycle-aware and checks FragmentManager state
+// ✅ Safer transaction: lifecycle-aware and checks FragmentManager state
 fun loadDataSafely() {
     lifecycleScope.launch {
         val result = repository.fetchData()
+        // Ensure we're in RESUMED state and state is not yet saved
         lifecycle.whenResumed {
             if (!supportFragmentManager.isStateSaved) {
                 supportFragmentManager.beginTransaction()
@@ -169,12 +181,13 @@ fun loadDataSafely() {
     }
 }
 
-// ✅ ViewModel preserves data across Activity recreation (but does not replace saving FragmentTransactions)
+// ✅ ViewModel preserves data across Activity recreation (but does not replace correct FragmentTransaction handling)
 class MyFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Data survives configuration changes while the process is alive or state is restored
+        // Data survives configuration changes while the process is alive;
+        // after real process death the ViewModel is not automatically recreated with previous data.
         viewModel.data.observe(viewLifecycleOwner) { data ->
             updateUI(data)
         }
@@ -185,7 +198,7 @@ class MyFragment : Fragment() {
 **State Loss Prevention**
 
 ```kotlin
-// Check before transaction: call commit() only if state is not yet saved
+// Check before transaction: call commit() only if state has not been saved yet
 if (!fragmentManager.isStateSaved) {
     fragmentManager.beginTransaction()
         .replace(R.id.container, fragment)
@@ -193,7 +206,8 @@ if (!fragmentManager.isStateSaved) {
 }
 
 // Use commitAllowingStateLoss for non-critical UI changes:
-// the transaction will run even if state is already saved, but it won't be restored after recreation
+// the transaction will run even if state is already saved, but changes
+// won't be part of the saved state and won't be restored after process recreation
 fragmentManager.beginTransaction()
     .replace(R.id.container, TransientDialogFragment())
     .commitAllowingStateLoss()
@@ -201,9 +215,9 @@ fragmentManager.beginTransaction()
 
 **Best Practices**
 
-- Use `ViewModel` for business logic and longer-lived data; do not treat Fragments as the single source of truth
-- Use `onSaveInstanceState` only for transient UI state (scroll position, input text)
-- Use `viewLifecycleOwner` for subscriptions in fragments
+- Use `ViewModel` for business logic and longer-lived data; do not treat `Fragments` as the single source of truth
+- Use `onSaveInstanceState` only for transient UI state (scroll position, input text, etc.)
+- Use `viewLifecycleOwner` for subscriptions in `Fragments` to avoid leaks and view state races
 - Use `commitAllowingStateLoss()` only for non-critical UI changes where losing the transaction on restore is acceptable
 
 ## Дополнительные вопросы (RU)
@@ -224,15 +238,17 @@ fragmentManager.beginTransaction()
 
 ## Ссылки (RU)
 
-- [[c-fragments]]
+- [[c-android-lifecycle]]
+- [[c-android-navigation]]
 - Официальная документация по жизненному циклу фрагментов: https://developer.android.com/guide/fragments/lifecycle
 - Документация по транзакциям фрагментов: https://developer.android.com/guide/fragments/transactions
 
 ## References
 
-- [[c-fragments]]
+- [[c-android-lifecycle]]
+- [[c-android-navigation]]
 - Official fragment lifecycle documentation: https://developer.android.com/guide/fragments/lifecycle
-- Fragment transactions documentation: https://developer.android.com/guide/fragments/transactions
+- `Fragment` transactions documentation: https://developer.android.com/guide/fragments/transactions
 
 ## Связанные вопросы (RU)
 

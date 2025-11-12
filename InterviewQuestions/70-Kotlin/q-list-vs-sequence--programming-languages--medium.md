@@ -12,11 +12,14 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-collections, q-list-vs-sequence--kotlin--medium]
 created: 2024-10-13
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequence]
 ---
 # Вопрос (RU)
 > В чем разница между работой с `List` и работой с `Sequence`?
+
+# Question (EN)
+> What is the difference between working with `List` and working with `Sequence`?
 
 ---
 
@@ -28,13 +31,10 @@ tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequ
 - `Sequence` полезен для:
   - больших коллекций или потенциально бесконечных источников;
   - длинных цепочек преобразований, где важно избежать создания множества промежуточных коллекций;
-  - ситуаций, когда результат может быть получен раньше, чем обработаны все элементы.
+  - случаев, когда можно остановить обработку раньше при выполнении условия (short-circuiting).
 - Важно: `Sequence` обычно однопроходный, и повторный обход требует повторного создания `Sequence` или явной материализации (например, `toList()`), в отличие от уже материализованного `List`.
 
 ---
-
-# Question (EN)
-> What is the difference between working with `List` and working with `Sequence`?
 
 ## Answer (EN)
 
@@ -55,7 +55,19 @@ tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequ
 - Когда вы бы использовали это на практике?
 - Какие распространенные подводные камни следует учитывать?
 
+## Follow-ups (EN)
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-collections]]
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## References (EN)
 
 - [[c-kotlin]]
 - [[c-collections]]
@@ -70,21 +82,7 @@ tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequ
 - [[q-list-vs-sequence--kotlin--medium]] — Структуры данных
 - [[q-kotlin-immutable-collections--programming-languages--easy]] — Структуры данных
 
----
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
-
-## References
-
-- [[c-kotlin]]
-- [[c-collections]]
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
-
-## Related Questions
+## Related Questions (EN)
 
 ### Android Implementation
 - [[q-what-problems-can-there-be-with-list-items--android--easy]] - Data Structures

@@ -137,7 +137,7 @@ A **`View`** is the fundamental building block for user interfaces in Android. I
 
 ### Core Characteristics
 
-**`View`** is the base class for widgets (Button, TextView, ImageView). **`ViewGroup`** is a subclass of `View` that acts as a container for other Views, forming a hierarchy and controlling how its children are measured and laid out (e.g., LinearLayout, ConstraintLayout).
+**`View`** is the base class for widgets (Button, TextView, ImageView). **`ViewGroup`** is a subclass of `View` that acts as a container for other `Views`, forming a hierarchy and controlling how its children are measured and laid out (e.g., LinearLayout, ConstraintLayout).
 
 ```kotlin
 // ✅ Typical View subclasses
@@ -153,10 +153,10 @@ class CustomLayout(context: Context) : LinearLayout(context)
 Each `View` participates in three main stages:
 
 - `onMeasure()` — determines the `View`'s desired size based on the MeasureSpecs from its parent.
-- `onLayout()` — positions child Views. Typically overridden only in `ViewGroup` implementations.
+- `onLayout()` — positions child `Views`. Typically overridden only in `ViewGroup` implementations.
 - `onDraw(Canvas)` — draws the `View`'s own content (not its children). Overridden when custom rendering is needed.
 
-Most standard Views do not need to override all of these methods: existing widgets and ViewGroups already provide correct implementations; you override only when you need custom behavior.
+Most standard `Views` do not need to override all of these methods: existing widgets and ViewGroups already provide correct implementations; you override only when you need custom behavior.
 
 ```kotlin
 class CustomView(context: Context) : View(context) {
@@ -195,10 +195,10 @@ Several layers affect a `View`'s visual appearance:
 2. `LayoutParams` provided by the parent `ViewGroup`:
    - Define how big the `View` is and how it is positioned (e.g., `match_parent`, `wrap_content`, constraints), which determines the area it can draw into.
 
-3. XML Layouts — declarative UI definition specifying Views and their attributes:
+3. XML Layouts — declarative UI definition specifying `Views` and their attributes:
    - dimensions, margins, colors, fonts, backgrounds, and other visual attributes.
 
-4. Styles and Themes — reusable sets of attributes applied to Views:
+4. Styles and Themes — reusable sets of attributes applied to `Views`:
 
 ```xml
 <style name="PrimaryButton">
@@ -228,17 +228,47 @@ Ultimately, the `View`'s visual part is defined by the combination of:
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как `onMeasure`, `onLayout` и `onDraw` взаимодействуют в процессе рендеринга?
+- Когда стоит переопределять `dispatchDraw`, а когда `onDraw`?
+- Как аппаратное ускорение влияет на производительность кастомных `View` и какие операции отрисовки не поддерживаются?
+
 ## Follow-ups
 
 - How do `onMeasure`, `onLayout`, and `onDraw` interact during the rendering pipeline?
 - When should you override `dispatchDraw` vs `onDraw`?
 - How does hardware acceleration affect custom `View` performance and what drawing operations are unsupported?
 
+## Ссылки (RU)
+
+- https://developer.android.com/reference/android/view/View — `View` API
+- https://developer.android.com/guide/topics/ui/custom-components — Кастомные компоненты
+- https://developer.android.com/guide/topics/ui/how-android-draws — Как Android рисует `View`
+
 ## References
 
 - https://developer.android.com/reference/android/view/View — `View` API
 - https://developer.android.com/guide/topics/ui/custom-components — Custom components
 - https://developer.android.com/guide/topics/ui/how-android-draws — How Android draws views
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-android-components]]
+
+### Предпосылки (проще)
+
+- [[q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium]] — Базовые понятия рендеринга в Android
+
+### Связанные (средний уровень)
+
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] — Инвалидация `View`
+
+### Продвинутые (сложнее)
+
+- [[q-compose-custom-layout--android--hard]] — Современный UI с Compose
 
 ## Related Questions
 

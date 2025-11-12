@@ -37,7 +37,8 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
   - Подходит для хранения данных, DTO, моделей, value-объектов.
 - `sealed class`:
   - Описывает закрытую иерархию типов с фиксированным набором подклассов.
-  - Не генерирует вспомогательные методы автоматически.
+  - Не генерирует вспомогательные методы автоматически (но подклассы могут быть `data class`).
+  - Нельзя напрямую создавать экземпляры базового sealed-класса: обычно используем только его подклассы.
   - Используется для описания состояний, результатов операций, конечных наборов вариантов (finite type sets).
 
 ### Примеры
@@ -100,8 +101,8 @@ sealed class State {
 }
 
 // Назначение: ограниченная иерархия состояний
-// Автогенерации нет (но подклассы могут быть data class)
-// Нельзя создавать напрямую, используем только подклассы.
+// Автогенерации нет у самого sealed-класса (но подклассы могут быть data class)
+// Нельзя создавать напрямую экземпляр State, используем только подклассы.
 // Use case: состояния, результаты, конечные наборы типов (finite type sets)
 
 fun demonstrateSealedClass(state: State) {
@@ -151,7 +152,7 @@ sealed class Screen {
 }
 
 sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Success<out T>(val data: T) : NetworkResult<T>()
     data class Failure(val error: Throwable) : NetworkResult<Nothing>()
 }
 ```
@@ -201,7 +202,7 @@ data class Post(val id: Int, val title: String, val content: String)
 sealed class LoadingState<out T> {
     object Idle : LoadingState<Nothing>()
     object Loading : LoadingState<Nothing>()
-    data class Success<T>(val data: T) : LoadingState<T>()
+    data class Success<out T>(val data: T) : LoadingState<T>()
     data class Error(val exception: Throwable) : LoadingState<Nothing>()
 }
 
@@ -234,8 +235,8 @@ DATA CLASS:
 
 SEALED CLASS:
 - Для описания иерархий и закрытых наборов вариантов.
-- Ничего не генерирует автоматически (подклассы могут быть data class).
-- Нельзя создавать напрямую, используем только подклассы.
+- Сам sealed-класс ничего не генерирует автоматически (подклассы могут быть data class).
+- Нельзя напрямую создавать экземпляр базового sealed-класса, используем только его подклассы.
 - Используем для состояний, результатов, finite type sets, when-выражений.
 
 КЛЮЧЕВОЕ:
@@ -258,8 +259,8 @@ SEALED CLASS:
   - Used for data containers: DTOs, models, value objects.
 - `sealed class`:
   - Describes a closed hierarchy with a fixed set of subclasses (finite type sets).
-  - Does not auto-generate helper methods (subclasses can be `data class`).
-  - Cannot be instantiated directly; you work only with its subclasses.
+  - The sealed base class itself does not auto-generate helper methods (subclasses can be `data class`).
+  - Cannot be instantiated directly in practice; you work only with its subclasses.
   - Used for representing states, operation results, and closed sets of variants.
 
 ### Code Examples
@@ -357,7 +358,7 @@ sealed class State {
 }
 
 // Purpose: Restricted type hierarchy (finite type set)
-// Auto-generated: nothing (subclasses may be data classes)
+// Auto-generated: none on the sealed base (subclasses may be data classes)
 // Cannot be instantiated directly; use its subclasses only.
 // Use case: state management, result types, finite sets of types
 
@@ -414,7 +415,7 @@ sealed class Screen {
 
 // 3. Network results
 sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Success<out T>(val data: T) : NetworkResult<T>()
     data class Failure(val error: Throwable) : NetworkResult<Nothing>()
 }
 ```
@@ -465,7 +466,7 @@ data class Post(val id: Int, val title: String, val content: String)
 sealed class LoadingState<out T> {
     object Idle : LoadingState<Nothing>()
     object Loading : LoadingState<Nothing>()
-    data class Success<T>(val data: T) : LoadingState<T>()
+    data class Success<out T>(val data: T) : LoadingState<T>()
     data class Error(val exception: Throwable) : LoadingState<Nothing>()
 }
 
@@ -506,7 +507,7 @@ DATA CLASS:
 
 SEALED CLASS:
 - Purpose: Type hierarchies and closed sets of variants (finite type sets).
-- Auto-generates: nothing (subclasses can be data classes).
+- Auto-generates: nothing on the sealed base (subclasses can be data classes).
 - Cannot be instantiated directly; use only its subclasses.
 - Use for: states, results, finite type sets, when expressions.
 

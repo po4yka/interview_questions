@@ -25,7 +25,7 @@ related:
 - q-clean-architecture-android--android--hard
 - q-repository-multiple-sources--android--medium
 created: 2025-10-12
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/architecture-clean
 - android/architecture-mvvm
@@ -33,10 +33,14 @@ tags:
 - en
 - ru
 
+
 ---
 
 # Вопрос (RU)
 > Что такое паттерн Repository в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
+
+# Question (EN)
+> What is the Repository pattern in Android? How does it abstract data sources, provide a single source of truth, and work with ViewModels?
 
 ## Ответ (RU)
 
@@ -774,11 +778,6 @@ class UserRepository(private val api: UserApi) {
 }
 ```
 
----
-
-# Question (EN)
-> What is the Repository pattern in Android? How does it abstract data sources, provide a single source of truth, and work with ViewModels?
-
 ## Answer (EN)
 
 **Repository Pattern** is an architectural pattern that abstracts data sources (network, database, cache) behind a clean API, providing a single source of truth and separating business logic from data access logic.
@@ -1509,8 +1508,6 @@ class UserRepository(private val api: UserApi) {
 }
 ```
 
----
-
 ## Follow-ups
 
 - [[q-clean-architecture-android--android--hard]]
@@ -1518,6 +1515,12 @@ class UserRepository(private val api: UserApi) {
 - Как реализовать репозиторий для оффлайн-first приложения с двусторонней синхронизацией?
 - Как разделить ответственность между Repository и UseCase в сложном домене?
 - Как тестировать репозиторий при сложных сценариях ошибок сети и БД?
+
+## References
+
+- [Data layer - Android](https://developer.android.com/topic/architecture/data-layer)
+- [Repository pattern](https://developer.android.com/codelabs/basic-android-kotlin-training-repository-pattern)
+- [Guide to app architecture](https://developer.android.com/topic/architecture)
 
 ## Related Questions
 
@@ -1539,12 +1542,5 @@ class UserRepository(private val api: UserApi) {
 ### Hub
 - [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
 
-## References
-
-- [Data layer - Android](https://developer.android.com/topic/architecture/data-layer)
-- [Repository pattern](https://developer.android.com/codelabs/basic-android-kotlin-training-repository-pattern)
-- [Guide to app architecture](https://developer.android.com/topic/architecture)
-
 ## MOC Links
-
 - [[moc-android]]

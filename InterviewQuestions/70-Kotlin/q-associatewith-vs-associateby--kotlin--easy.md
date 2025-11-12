@@ -14,6 +14,7 @@ related: [c-kotlin, c-collections, q-inline-function-limitations--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, kotlin, map, transformation]
+
 ---
 
 # Вопрос (RU)

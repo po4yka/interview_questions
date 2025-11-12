@@ -43,11 +43,13 @@ sources:
 ## Ответ (RU)
 
 **Теория Task Affinity:**
-TaskAffinity определяет, к какой задаче (task) активность "предпочитает" принадлежать. По умолчанию все активности одного приложения имеют одинаковое сродство, равное package name приложения. Можно переопределить это поведение, чтобы:
-- разделять независимые потоки внутри одного приложения;
-- (реже) группировать связанные активности между приложениями.
+TaskAffinity определяет, к какой задаче (task) активность "предпочитает" принадлежать. По умолчанию (если не переопределено ни у application, ни у activity) все активности одного приложения имеют одинаковое сродство, равное package name приложения. Это поведение можно изменить:
+- настроив `taskAffinity` на уровне `<application>` (тогда оно станет значением по умолчанию для активностей);
+- переопределив `taskAffinity` на уровне конкретной `<activity>`, чтобы:
+  - разделять независимые потоки внутри одного приложения;
+  - (реже) согласованно группировать связанные активности между приложениями.
 
-Важно: taskAffinity сама по себе не изменяет обычное поведение back stack. Она учитывается системой только в определённых сценариях (см. ниже) и в сочетании с флагами запуска и launchMode.
+Важно: `taskAffinity` само по себе не изменяет обычное поведение back stack внутри одной задачи. Оно учитывается системой в определённых сценариях (см. ниже) — в том числе при использовании `FLAG_ACTIVITY_NEW_TASK`, специальных `launchMode` и при перепривязке задач (`allowTaskReparenting`).
 
 **Объявление в AndroidManifest:**
 ```xml
@@ -56,15 +58,15 @@ TaskAffinity определяет, к какой задаче (task) актив�
     android:taskAffinity="com.example.weather"
     android:allowTaskReparenting="true" />
 ```
-Также можно указать пустую строку ("") , чтобы активность не разделяла affinity с приложением по умолчанию и не присоединялась к чужим задачам.
+Также можно указать пустую строку ("") , чтобы активность не наследовала affinity приложения по умолчанию и не присоединялась к задачам только на основании этого affinity (обычно используется для более точного контроля в сочетании с флагами запуска и launchMode).
 
 **Когда сродство вступает в силу:**
 TaskAffinity влияет на поведение активностей в типичных случаях:
 
-**1. FLAG_ACTIVITY_NEW_TASK (и связанные флаги):**
-При использовании флага `FLAG_ACTIVITY_NEW_TASK` (или launchMode вроде `singleTask` / `singleInstance`), система ищет существующую задачу с таким же `taskAffinity`:
-- если такая задача найдена, активность будет запущена/добавлена в эту задачу;
-- если нет — будет создана новая задача с этим affinity.
+**1. FLAG_ACTIVITY_NEW_TASK (и связанные флаги/launchMode):**
+При использовании флага `FLAG_ACTIVITY_NEW_TASK` (или launchMode вроде `singleTask` / `singleInstance` / `singleInstancePerTask`), система рассматривает `taskAffinity` целевой активности:
+- если уже существует задача с таким `taskAffinity`, активность будет запущена/добавлена именно в эту задачу;
+- если нет — будет создана новая задача с указанным affinity.
 
 ```kotlin
 // Запуск активности в новой задаче или существующей с тем же affinity
@@ -75,8 +77,8 @@ startActivity(intent)
 
 **2. allowTaskReparenting:**
 `android:allowTaskReparenting="true"` позволяет уже запущенной активности (часто запущенной из другого приложения или задачи) "перепривязаться" (reparent) к задаче с совпадающим `taskAffinity`, когда такая задача выходит на передний план. Типичный сценарий:
-- активность A вашего приложения запущена из чужой задачи (например, по ссылке из другого приложения);
-- позже пользователь открывает вашу основную задачу;
+- активность A вашего приложения запущена в задаче чужого приложения (например, по ссылке из другого приложения);
+- позже пользователь открывает основную задачу вашего приложения;
 - при включённом `allowTaskReparenting` активность A может быть перенесена в задачу вашего приложения, affinity которой она соответствует.
 
 ```xml
@@ -89,17 +91,19 @@ startActivity(intent)
 
 **Практические примеры:**
 - Разделение независимых рабочих процессов внутри одного приложения по разным задачам.
-- Управление задачами и back stack при запуске активностей из уведомлений через `FLAG_ACTIVITY_NEW_TASK`.
+- Управление задачами и back stack при запуске активностей из уведомлений через `FLAG_ACTIVITY_NEW_TASK` с нужным `taskAffinity`.
 - (Аккуратно) использование общего affinity между приложениями одного вендора для общего пользовательского сценария.
 
 ## Answer (EN)
 
 **Task Affinity Theory:**
-TaskAffinity defines which task an activity "prefers" to belong to. By default, all activities in the same app share the same affinity, equal to the app's package name. You can override this to:
-- separate independent flows within one app;
-- (less commonly) group related activities across apps.
+TaskAffinity defines which task an activity "prefers" to belong to. By default (when not overridden at either the application or activity level), all activities in the same app share the same affinity, equal to the app's package name. You can change this by:
+- setting `taskAffinity` on the `<application>` element (which becomes the default for its activities);
+- overriding `taskAffinity` on individual `<activity>` elements to:
+  - separate independent flows within one app;
+  - (less commonly) coordinate grouping of related activities across apps.
 
-Important: taskAffinity does not, by itself, change normal back stack behavior. It is only considered by the system in specific scenarios (see below) and in combination with launch flags and launch modes.
+Important: `taskAffinity` does not by itself change normal back stack behavior within a single task. It is taken into account by the system in specific scenarios (see below), including when using `FLAG_ACTIVITY_NEW_TASK`, special launch modes, and task reparenting via `allowTaskReparenting`.
 
 **Declaration in AndroidManifest:**
 ```xml
@@ -108,15 +112,15 @@ Important: taskAffinity does not, by itself, change normal back stack behavior. 
     android:taskAffinity="com.example.weather"
     android:allowTaskReparenting="true" />
 ```
-You can also set an empty string ("") so that an activity does not share the app's default affinity and will not join other tasks based on it.
+You can also set an empty string ("") so that an activity does not inherit the app's default affinity and will not join tasks solely based on that affinity (typically used for more fine-grained control together with specific launch flags and launch modes).
 
 **When affinity comes into play:**
 TaskAffinity affects activity behavior in typical cases:
 
-**1. FLAG_ACTIVITY_NEW_TASK (and related flags):**
-When using `FLAG_ACTIVITY_NEW_TASK` (or launch modes like `singleTask` / `singleInstance`), the system looks for an existing task whose `taskAffinity` matches the target activity:
-- if such a task exists, the activity will be launched/placed into that task;
-- otherwise a new task with that affinity is created.
+**1. FLAG_ACTIVITY_NEW_TASK (and related flags/launch modes):**
+When using `FLAG_ACTIVITY_NEW_TASK` (or launch modes like `singleTask` / `singleInstance` / `singleInstancePerTask`), the system uses the target activity's `taskAffinity` to resolve the task:
+- if there is an existing task with that `taskAffinity`, the activity will be launched/placed into that task;
+- otherwise a new task with that affinity will be created.
 
 ```kotlin
 // Launch activity in a new task or an existing one with the same affinity
@@ -141,7 +145,7 @@ startActivity(intent)
 
 **Practical examples:**
 - Separating independent workflows within a single app into different tasks.
-- Controlling tasks and back stack when launching activities from notifications via `FLAG_ACTIVITY_NEW_TASK`.
+- Controlling tasks and back stack when launching activities from notifications via `FLAG_ACTIVITY_NEW_TASK` and an appropriate `taskAffinity`.
 - (Carefully) sharing a common affinity between related vendor apps to support a unified user flow.
 
 ---
@@ -149,14 +153,14 @@ startActivity(intent)
 ## Дополнительные вопросы (RU)
 
 - Как taskAffinity влияет на back stack?
-- Что происходит, если не указывать taskAffinity?
-- Как использовать taskAffinity при работе с уведомлениями?
+- Что происходит, если не указывать taskAffinity (ни у application, ни у activity)?
+- Как использовать taskAffinity при работе с уведомлениями и `FLAG_ACTIVITY_NEW_TASK`?
 
 ## Follow-ups
 
 - How does taskAffinity affect the back stack?
-- What happens when you don't specify taskAffinity?
-- How do you handle taskAffinity with notifications?
+- What happens when you don't specify taskAffinity (neither on application nor on activity)?
+- How do you handle taskAffinity with notifications and `FLAG_ACTIVITY_NEW_TASK`?
 
 
 ## Ссылки (RU)

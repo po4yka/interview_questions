@@ -47,19 +47,20 @@ tags:
 **Pre-merge (быстрая обратная связь < 10 мин)**:
 - Статический анализ (`lint`/`detekt`)
 - Юнит-тесты (JVM)
-- Критические UI-тесты (sharded)
+- Критические/смоук UI-тесты (при необходимости, можно шардингом, но ограниченно по времени)
 - Генерация отчетов и артефактов
 
 **Post-merge/nightly (полное покрытие)**:
-- Все инструментальные тесты
+- Все релевантные инструментальные тесты
 - Регрессионные проверки
 - Device farm на разных API/размерах
-- Производительность и метрики
+- Тесты производительности и сбор метрик
 
 ### Стратегии тестирования
 
 ```kotlin
 // ✅ Unit-тесты: быстрые, изолированные, мокируем Android API
+// Для корутин используем runTest + TestDispatcher (опущено для краткости)
 class ViewModelTest {
     @Test
     fun `loadData updates state correctly`() = runTest {
@@ -75,6 +76,7 @@ class ViewModelTest {
 
 ```kotlin
 // ✅ Инструментальные: реальное устройство, проверка UI (Compose)
+// На CI рекомендуется отключать анимации для стабильности
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
     @get:Rule
@@ -176,7 +178,7 @@ fun animationTest() {
 **Что сохранять**:
 - JUnit XML (для CI-системы)
 - HTML отчеты (lint, результаты тестов)
-- Jacoco покрытие (объединенное: unit + instrumented)
+- Отчет покрытия (например, Jacoco), при необходимости объединённый для unit + instrumented (требует доп. конфигурации)
 - APK/AAB для QA
 
 **Визуализация**:
@@ -202,6 +204,7 @@ fun animationTest() {
 # ✅ Проверка зависимостей (supply-chain security)
 - name: Verify checksums
   run: ./gradlew --write-verification-metadata sha256
+  # Обычно метаданные коммитятся и далее используется --verify-configuration
 ```
 
 ## Answer (EN)
@@ -211,19 +214,20 @@ fun animationTest() {
 **Pre-merge (fast feedback < 10 min)**:
 - Static analysis (`lint`/`detekt`)
 - Unit tests (JVM)
-- Critical UI tests (sharded)
+- Critical/smoke UI tests (optionally, sharded; keep time-bounded)
 - Generate reports and artifacts
 
 **Post-merge/nightly (full coverage)**:
-- All instrumented tests
+- All relevant instrumented tests
 - Regression checks
 - Device farm across API levels/screen sizes
-- Performance metrics
+- Performance tests and metrics collection
 
 ### Testing Strategies
 
 ```kotlin
 // ✅ Unit tests: fast, isolated, mock Android APIs
+// For coroutines use runTest + proper TestDispatcher setup (omitted for brevity)
 class ViewModelTest {
     @Test
     fun `loadData updates state correctly`() = runTest {
@@ -239,6 +243,7 @@ class ViewModelTest {
 
 ```kotlin
 // ✅ Instrumented: real device, UI verification (Compose)
+// On CI it's recommended to disable animations for stability
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
     @get:Rule
@@ -340,7 +345,7 @@ fun animationTest() {
 **What to save**:
 - JUnit XML (for CI system)
 - HTML reports (lint, test results)
-- Jacoco coverage (merged: unit + instrumented)
+- Coverage report (e.g., Jacoco); merged unit + instrumented coverage is possible with extra configuration
 - APK/AAB for QA
 
 **Visualization**:
@@ -360,12 +365,13 @@ fun animationTest() {
     echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
     ./gradlew assembleRelease \
       -Pandroid.injected.signing.store.file=keystore.jks \
-      -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
+      -Pandroid.injected.signing.store.password="$KEY_PASSWORD" 
     rm keystore.jks
 
 # ✅ Verify dependencies (supply-chain security)
 - name: Verify checksums
   run: ./gradlew --write-verification-metadata sha256
+  # Typically the metadata is committed and then enforced via --verify-configuration
 ```
 
 ## Дополнительные вопросы (RU)

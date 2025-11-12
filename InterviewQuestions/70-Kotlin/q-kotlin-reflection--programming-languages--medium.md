@@ -62,13 +62,13 @@ val person = Person("Алиса", 30)
 // Получить класс
 val kClass = person::class
 println(kClass.simpleName)  // "Person"
-println(kClass.qualifiedName)  // "Person" или FQCN в зависимости от пакета
+println(kClass.qualifiedName)  // Полное имя (FQCN) в зависимости от пакета
 
 // Получить свойства
 kClass.memberProperties.forEach { prop ->
     println("${prop.name}: ${prop.get(person)}")
 }
-// Вывод:
+// Возможный вывод:
 // name: Алиса
 // age: 30
 ```
@@ -81,7 +81,7 @@ import kotlin.reflect.full.primaryConstructor
 // Получить KClass по имени через Java Reflection
 val kClass = Class.forName("com.example.Person").kotlin
 
-// Получить конструктор (в реальном коде лучше искать primaryConstructor по сигнатуре)
+// Получить конструктор (в реальном коде стоит выбирать primaryConstructor или по сигнатуре)
 val constructor = kClass.constructors.first()
 
 // Создать экземпляр
@@ -115,6 +115,8 @@ secretMethod?.isAccessible = true
 val secret = secretMethod?.call(user)
 println(secret)  // "Секрет: 12345"
 ```
+
+(Доступ к закрытым членам через `isAccessible` опирается на механизмы JVM и может быть ограничен или меняться между версиями платформы.)
 
 **4. Исследование аннотаций:**
 
@@ -216,7 +218,7 @@ val user = User("Алиса", 30)
 println(toJson(user))  // {"name": "Алиса", "age": "30"}
 ```
 
-**Dependency Injection (упрощённый рекурсивный пример):**
+**Dependency Injection (упрощённый рекурсивный пример, только для демонстрации идеи):**
 ```kotlin
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -241,7 +243,7 @@ fun <T : Any> inject(kClass: KClass<T>): T {
     return constructor.call(*params.toTypedArray()) as T
 }
 
-// Использование (только для демонстрации идеи)
+// Использование (только для демонстрации идеи; без кэша/графа зависимостей такой подход не подходит для production-кода)
 val service = inject(UserService::class)
 ```
 
@@ -279,10 +281,10 @@ class Person(val name: String)
 
 val person = Person("Алиса")
 
-// Прямой доступ - БЫСТРО
+// Прямой доступ — обычно быстрее
 val direct = person.name
 
-// Рефлексия - МЕДЛЕННЕЕ (обычно заметно, может быть в разы медленнее)
+// Рефлексия — обычно медленнее (часто значительно, из-за дополнительной метаинформации и проверок)
 import kotlin.reflect.full.memberProperties
 
 val nameProp = Person::class.memberProperties.find { it.name == "name" }
@@ -319,7 +321,7 @@ val viaReflection = nameProp?.get(person)
 - **Мощная**: Доступ к закрытым членам, динамическое создание экземпляров, обработка аннотаций
 - **Затратная**: Накладные расходы на производительность, потеря явной типобезопасности, нарушение инкапсуляции
 - **Применения**: Сериализация, DI, тестирование, ORM и другие фреймворки
-- **Зависимость**: Для Kotlin runtime reflection требуется библиотека `kotlin-reflect`
+- **Зависимость**: Для Kotlin runtime reflection часто требуется библиотека `kotlin-reflect`
 
 ## Answer (EN)
 
@@ -360,13 +362,13 @@ val person = Person("Alice", 30)
 // Get class
 val kClass = person::class
 println(kClass.simpleName)  // "Person"
-println(kClass.qualifiedName)  // "Person" or FQCN depending on package
+println(kClass.qualifiedName)  // Fully qualified name depending on package
 
 // Get properties
 kClass.memberProperties.forEach { prop ->
     println("${prop.name}: ${prop.get(person)}")
 }
-// Output:
+// Possible output:
 // name: Alice
 // age: 30
 ```
@@ -379,7 +381,7 @@ import kotlin.reflect.full.primaryConstructor
 // Get KClass by name via Java Reflection
 val kClass = Class.forName("com.example.Person").kotlin
 
-// Get constructor (in real code prefer selecting primaryConstructor by signature)
+// Get constructor (in real code prefer selecting primaryConstructor or by signature)
 val constructor = kClass.constructors.first()
 
 // Create instance
@@ -413,6 +415,8 @@ secretMethod?.isAccessible = true
 val secret = secretMethod?.call(user)
 println(secret)  // "Secret: 12345"
 ```
+
+(Accessing private members via `isAccessible` relies on JVM internals and may be restricted or behave differently across platform versions.)
 
 **4. Inspect Annotations:**
 
@@ -514,7 +518,7 @@ val user = User("Alice", 30)
 println(toJson(user))  // {"name": "Alice", "age": "30"}
 ```
 
-**Dependency Injection (simplified recursive example):**
+**Dependency Injection (simplified recursive example, for demonstration only):**
 ```kotlin
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -539,7 +543,7 @@ fun <T : Any> inject(kClass: KClass<T>): T {
     return constructor.call(*params.toTypedArray()) as T
 }
 
-// Usage (for demonstration only)
+// Usage (for demonstration only; without caching/graph this is not suitable for production DI)
 val service = inject(UserService::class)
 ```
 
@@ -577,10 +581,10 @@ class Person(val name: String)
 
 val person = Person("Alice")
 
-// Direct access - FAST
+// Direct access — typically faster
 val direct = person.name
 
-// Reflection - SLOWER (often significantly)
+// Reflection — typically slower (often significantly, due to extra metadata and checks)
 import kotlin.reflect.full.memberProperties
 
 val nameProp = Person::class.memberProperties.find { it.name == "name" }
@@ -617,7 +621,7 @@ val viaReflection = nameProp?.get(person)
 - **Powerful**: Access private members, create instances dynamically, process annotations
 - **Costly**: Performance overhead, loss of explicit type safety, encapsulation risks
 - **Use cases**: Serialization, DI, testing, ORMs, and other frameworks
-- **Dependency**: `kotlin-reflect` library required for Kotlin runtime reflection
+- **Dependency**: `kotlin-reflect` library is commonly required for runtime reflection
 
 ---
 

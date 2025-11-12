@@ -37,7 +37,7 @@ tags: [android/architecture-clean, android/coroutines, android/lifecycle, diffic
 ## Ответ (RU)
 
 ### Ключевая проблема
-`Presenter` не должен обновлять уничтоженную или detached `View` — это вызывает утечки памяти и крэши. Решение: привязать отмену запросов к событиям жизненного цикла `View`.
+`Presenter` не должен обновлять уничтоженную или detached `View` — это вызывает утечки памяти и крэши. Решение: привязать отмену запросов к событиям жизненного цикла `View` и корректно управлять областью (scope) асинхронной работы.
 
 ### Подход с coroutines (рекомендуется)
 
@@ -52,7 +52,7 @@ class UserPresenter(private val repo: UserRepository) {
 
   fun loadUser(id: String) {
     scope.launch {
-      // ✅ Cancellable, bound to presenter scope
+      // ✅ Cancellable, bound to presenter scope (при условии, что repo.fetchUser поддерживает отмену)
       val user = repo.fetchUser(id)
       view?.displayUser(user) // ✅ Null-safe
     }
@@ -60,16 +60,18 @@ class UserPresenter(private val repo: UserRepository) {
 
   fun detach() {
     view = null
-    scope.coroutineContext.cancelChildren() // ✅ Cancel pending work
+    scope.coroutineContext.cancelChildren() // ✅ Cancel pending work tied to current view
   }
 
   fun destroy() {
-    scope.cancel() // ✅ Clean up scope
+    scope.cancel() // ✅ Полная очистка scope презентера, используется при уничтожении презентера
   }
 }
 ```
 
-**Почему `Main.immediate`:** избегает состояния гонки, когда событие становится неактуальным к моменту диспатча.
+**Почему `Main.immediate`:** если уже на главном потоке, блок запускается немедленно без дополнительной диспатчеризации, что уменьшает задержки и вероятность обработать устаревшее состояние; если не на `Main`, всё равно будет диспатчеризация на главный поток.
+
+Важно: `repo.fetchUser` как suspend-функция должен быть кооперативно отменяемым (например, использовать функции, проверяющие `isActive`, или основанные на cancellable API), чтобы вызов действительно прерывался при `cancelChildren()` / `cancel()`.
 
 ### Подход с RxJava
 
@@ -77,6 +79,10 @@ class UserPresenter(private val repo: UserRepository) {
 class UserPresenter(private val repo: UserRepository) {
   private val disposables = CompositeDisposable()
   private var view: UserView? = null
+
+  fun attach(view: UserView) {
+    this.view = view
+  }
 
   fun loadUser(id: String) {
     repo.getUser(id)
@@ -91,7 +97,11 @@ class UserPresenter(private val repo: UserRepository) {
 
   fun detach() {
     view = null
-    disposables.clear() // ✅ Dispose subscriptions on detach to cancel work
+    disposables.clear() // ✅ Отменяет/освобождает активные подписки, связанные с текущей View
+  }
+
+  fun destroy() {
+    disposables.dispose() // ✅ Полная очистка при уничтожении презентера
   }
 }
 ```
@@ -106,14 +116,16 @@ class NoOpUserView : UserView {
 
 fun detach() {
   view = NoOpUserView() // ✅ Avoids null-checks
-  scope.coroutineContext.cancelChildren()
+  scope.coroutineContext.cancelChildren() // ✅ Всё ещё отменяем незавершённые операции
 }
 ```
+
+Шаблон no-op не заменяет отмену асинхронной работы: он лишь предотвращает попытки обновить уничтоженную View, поэтому отмена coroutine / подписок всё равно нужна.
 
 ## Answer (EN)
 
 ### Core Problem
-A `Presenter` must not update a destroyed or detached `View` — this causes memory leaks and crashes. Solution: bind request cancellation to `View` lifecycle events.
+A `Presenter` must not update a destroyed or detached `View` — this can cause memory leaks and crashes. The solution is to bind request cancellation to `View` lifecycle events and properly scope async work.
 
 ### Coroutines Approach (recommended)
 
@@ -128,7 +140,7 @@ class UserPresenter(private val repo: UserRepository) {
 
   fun loadUser(id: String) {
     scope.launch {
-      // ✅ Cancellable, bound to presenter scope
+      // ✅ Cancellable, bound to presenter scope (assuming repo.fetchUser is cooperative-cancellable)
       val user = repo.fetchUser(id)
       view?.displayUser(user) // ✅ Null-safe
     }
@@ -136,16 +148,18 @@ class UserPresenter(private val repo: UserRepository) {
 
   fun detach() {
     view = null
-    scope.coroutineContext.cancelChildren() // ✅ Cancel pending work
+    scope.coroutineContext.cancelChildren() // ✅ Cancel pending work tied to current view
   }
 
   fun destroy() {
-    scope.cancel() // ✅ Clean up scope
+    scope.cancel() // ✅ Full scope cleanup when presenter is destroyed
   }
 }
 ```
 
-**Why `Main.immediate`:** avoids race conditions where the event is stale by dispatch time.
+**Why `Main.immediate`:** when already on the main thread, it runs immediately without extra dispatch, reducing latency and the chance of acting on stale state; when off main, it still dispatches to the main thread.
+
+Important: `repo.fetchUser` as a suspend function must be cooperatively cancellable (e.g., using cancellable APIs or checking `isActive`) so that `cancelChildren()` / `cancel()` actually interrupt ongoing work.
 
 ### RxJava Approach
 
@@ -153,6 +167,10 @@ class UserPresenter(private val repo: UserRepository) {
 class UserPresenter(private val repo: UserRepository) {
   private val disposables = CompositeDisposable()
   private var view: UserView? = null
+
+  fun attach(view: UserView) {
+    this.view = view
+  }
 
   fun loadUser(id: String) {
     repo.getUser(id)
@@ -167,7 +185,11 @@ class UserPresenter(private val repo: UserRepository) {
 
   fun detach() {
     view = null
-    disposables.clear() // ✅ Dispose subscriptions on detach to cancel work
+    disposables.clear() // ✅ Cancels/clears active subscriptions for the current View
+  }
+
+  fun destroy() {
+    disposables.dispose() // ✅ Full cleanup when presenter is destroyed
   }
 }
 ```
@@ -182,23 +204,25 @@ class NoOpUserView : UserView {
 
 fun detach() {
   view = NoOpUserView() // ✅ Avoids null-checks
-  scope.coroutineContext.cancelChildren()
+  scope.coroutineContext.cancelChildren() // ✅ Still cancel ongoing async work
 }
 ```
+
+The no-op pattern does not replace cancellation of async work; it only prevents UI calls hitting a dead `View`, so you still need to cancel coroutines/subscriptions.
 
 ## Дополнительные вопросы (RU)
 
 1. В чем разница между `cancelChildren()` и `cancel()`, и когда использовать каждый из них в презентере?
-2. Что происходит, если coroutine отменяется во время выполнения `suspend`-вызова?
-3. Как протестировать, что `Presenter` корректно отменяет запросы при вызове `detach()`?
+2. Что происходит, если coroutine отменяется во время выполнения `suspend`-вызова, и какие вызовы корректно реагируют на отмену?
+3. Как протестировать, что `Presenter` корректно отменяет запросы при вызове `detach()` и `destroy()`?
 4. Почему в реализациях `Presenter` может быть предпочтителен диспетчер `Main.immediate` по сравнению с `Main`?
 5. Как DI-фреймворки (`Hilt`, `Koin`) могут помочь в автоматизации связывания жизненного цикла и области `Presenter`?
 
 ## Follow-ups
 
 1. How do `cancelChildren()` and `cancel()` differ, and when should each be used in a presenter?
-2. What happens if a coroutine is cancelled while performing a suspend call?
-3. How would you test that a `Presenter` correctly cancels requests on `detach()`?
+2. What happens if a coroutine is cancelled while performing a suspend call, and which calls correctly react to cancellation?
+3. How would you test that a `Presenter` correctly cancels requests on `detach()` and `destroy()`?
 4. Why prefer `Main.immediate` over `Main` dispatcher in `Presenter` implementations?
 5. How can DI frameworks (`Hilt`, `Koin`) automate `Presenter` lifecycle scoping?
 

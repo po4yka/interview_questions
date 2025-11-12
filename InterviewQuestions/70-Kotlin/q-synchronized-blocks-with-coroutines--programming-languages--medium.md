@@ -16,25 +16,27 @@ updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, synchronization]
 ---
 # Вопрос (RU)
-> Почему не следует использовать `synchronized`-блоки с корутинами?
+> Почему, как правило, не следует использовать `synchronized`-блоки с корутинами и когда это допустимо?
 
 # Question (EN)
-> Why should you not use synchronized blocks with coroutines?
+> Why should you generally avoid using synchronized blocks with coroutines, and when might it still be acceptable?
 
 ## Ответ (RU)
 
-Основные причины:
+Основные причины (для корутинного кода и suspend-функций):
 
 1. `synchronized` работает на уровне потоков, а не корутин: это мониторная блокировка потоков, а не кооперативный механизм приостановки.
 2. `synchronized` блокирует поток. При большом числе корутин это приводит к простоям и потере преимуществ неблокирующей модели. В отличие от этого, `Mutex` позволяет ожидающим корутинам приостанавливаться, не занимая поток во время ожидания блокировки.
 3. `synchronized` плохо сочетается с отменой и приостановкой: внутри `synchronized` нельзя вызывать suspend-функции, а если выполнять долгие блокирующие операции, отмена корутины не сможет их корректно прервать до выхода из критической секции.
+
+При этом для коротких, быстрых, не приостанавливающихся секций (особенно в чисто блокирующем коде) `synchronized` остаётся корректным и может использоваться.
 
 ### Проблема с synchronized
 
 ```kotlin
 import kotlinx.coroutines.*
 
-// ПЛОХО: использование synchronized с корутинами
+// ПЛОХО: использование synchronized с корутинами для защищённого доступа в suspend-контексте
 class BadExample {
     private var counter = 0
 
@@ -52,7 +54,7 @@ class BadExample {
 // Проблемы:
 // 1. Блокирует потоки (ограничивает масштабируемость корутин)
 // 2. Может приводить к истощению пула потоков при высокой нагрузке
-// 3. Поощряет смешивание блокирующего стиля с корутинами
+// 3. Поощряет смешивание блокирующего стиля с корутинами вместо использования Mutex/конфайнмента
 ```
 
 ### Проблема 1: Блокировка потоков
@@ -248,7 +250,7 @@ fun useAtomic() = runBlocking {
 import kotlinx.coroutines.*
 
 // Запуск всего доступа на одном потоке — синхронизация не нужна
-// В реальном коде newSingleThreadContext нужно корректно закрывать.
+// В реальном коде newSingleThreadContext нужно корректно закрывать, здесь — учебный пример.
 val singleThreadContext = newSingleThreadContext("CounterThread")
 
 class ConfinedCounter {
@@ -271,20 +273,19 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-// ПЛОХО: synchronized + runBlocking внутри API, блокирует вызывающего и смешивает стили
+// ПЛОХО: использование synchronized + runBlocking внутри API, блокирует вызывающего и смешивает стили.
+// Для такой простой операции здесь вообще не нужны корутины.
 class BadResourceManager {
     private val resources = mutableListOf<Resource>()
 
-    fun addResource(resource: Resource) = runBlocking {
-        launch {
-            synchronized(resources) {  // Блокирует поток и может привести к взаимоблокировкам в некоторых контекстах
-                resources.add(resource)
-            }
+    fun addResource(resource: Resource) {
+        synchronized(resources) {
+            resources.add(resource)
         }
     }
 }
 
-// ХОРОШО: использование Mutex в suspend-функциях
+// ХОРОШО: использование Mutex в suspend-функциях для корутинного API
 class GoodResourceManager {
     private val resources = mutableListOf<Resource>()
     private val mutex = Mutex()
@@ -309,7 +310,7 @@ class GoodResourceManager {
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-// Несколько Mutex для более тонкой синхронизации
+// Несколько Mutex для более тонкой синхронизации (упрощённый пример, без детального анализа дедлоков)
 class BankAccount {
     private var balance = 0.0
     private val balanceMutex = Mutex()
@@ -346,7 +347,7 @@ class BankAccount {
 ### Когда synchronized может быть допустим
 
 ```kotlin
-// ВНИМАНИЕ: потенциально допустимо для быстрого, некорутинного, неблокирующего кода
+// ВНИМАНИЕ: допустимо для быстрых, некорутинных, неблокирующих операций
 class CacheManager {
     private val cache = mutableMapOf<String, String>()
 
@@ -412,7 +413,7 @@ class SynchronizationBestPractices {
         }
     }
 
-    // НЕ ДЕЛАЙТЕ: не используйте synchronized для обновления общего состояния из корутин
+    // НЕ ДЕЛАЙТЕ: не используйте synchronized для обновления общего состояния из корутин, если ожидается масштабируемость
     fun bad1() = runBlocking {
         launch {
             synchronized(this@SynchronizationBestPractices) {  // ПЛОХО: блокирует поток
@@ -482,18 +483,20 @@ fun demonstrateThreadBlocking() = runBlocking {
 
 ## Answer (EN)
 
-There are three main reasons:
+For coroutine-based and suspending code, there are three main reasons to avoid `synchronized` as the primary synchronization tool:
 
-1. `synchronized` works at the thread/monitor level, not the coroutine level: it's a blocking monitor lock for threads, not a cooperative suspension mechanism.
+1. `synchronized` works at the thread/monitor level, not the coroutine level: it is a blocking monitor lock for threads, not a cooperative suspension mechanism.
 2. `synchronized` blocks the underlying thread. With many coroutines this leads to thread starvation and defeats the scalability benefits of coroutines. In contrast, `Mutex` lets waiting coroutines suspend without occupying a thread while waiting for the lock.
 3. `synchronized` does not work well with suspension/cancellation: you cannot call suspend functions inside `synchronized`, and if you perform long blocking work there, coroutine cancellation cannot safely interrupt it until the block exits.
+
+However, for short, fast, non-suspending critical sections (especially in purely blocking code), `synchronized` remains correct and can be used.
 
 ### The Problem with `synchronized`
 
 ```kotlin
 import kotlinx.coroutines.*
 
-// BAD: Using synchronized with coroutines
+// BAD: Using synchronized with coroutines for protected access in a suspending-style context
 class BadExample {
     private var counter = 0
 
@@ -511,7 +514,7 @@ class BadExample {
 // Problems:
 // 1. Blocks threads (limits coroutine scalability)
 // 2. Can contribute to thread starvation under heavy load
-// 3. Encourages mixing blocking style with coroutines
+// 3. Encourages mixing blocking style with coroutines instead of Mutex/confinement
 ```
 
 ### Issue 1: Thread Blocking
@@ -526,7 +529,7 @@ fun synchronizedBlocking() = runBlocking {
     launch(Dispatchers.Default) {
         synchronized(lock) {
             println("Thread: ${'$'}{Thread.currentThread().name}")
-            Thread.sleep(1000)  // Blocks thread while waiting (cannot use delay here)
+            Thread.sleep(1000)  // Blocks thread while held (cannot use delay here)
             println("Done")
         }
     }
@@ -707,7 +710,7 @@ fun useAtomic() = runBlocking {
 import kotlinx.coroutines.*
 
 // Run all access on a single thread - no synchronization needed
-// NOTE: newSingleThreadContext should be closed when no longer used in real applications.
+// NOTE: newSingleThreadContext should be closed properly in real applications; this is a simplified example.
 val singleThreadContext = newSingleThreadContext("CounterThread")
 
 class ConfinedCounter {
@@ -730,20 +733,19 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-// BAD: Using synchronized + runBlocking inside API, blocks caller and mixes styles
+// BAD: Using synchronized + runBlocking inside API, blocks the caller and mixes styles.
+// For this simple operation coroutines are not needed at all.
 class BadResourceManager {
     private val resources = mutableListOf<Resource>()
 
-    fun addResource(resource: Resource) = runBlocking {
-        launch {
-            synchronized(resources) {  // Blocks thread and can lead to deadlocks in some contexts
-                resources.add(resource)
-            }
+    fun addResource(resource: Resource) {
+        synchronized(resources) {
+            resources.add(resource)
         }
     }
 }
 
-// GOOD: Using Mutex in suspend functions
+// GOOD: Using Mutex in suspend functions for a coroutine-friendly API
 class GoodResourceManager {
     private val resources = mutableListOf<Resource>()
     private val mutex = Mutex()
@@ -768,7 +770,7 @@ class GoodResourceManager {
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-// Multiple mutexes for fine-grained locking
+// Multiple mutexes for fine-grained locking (simplified, without full deadlock analysis)
 class BankAccount {
     private var balance = 0.0
     private val balanceMutex = Mutex()
@@ -871,7 +873,7 @@ class SynchronizationBestPractices {
         }
     }
 
-    // DON'T: Use synchronized for coroutine-based shared state updates
+    // DON'T: Use synchronized for coroutine-based shared state updates when you rely on coroutine scalability
     fun bad1() = runBlocking {
         launch {
             synchronized(this@SynchronizationBestPractices) {  // BAD: blocks thread
@@ -912,7 +914,7 @@ fun demonstrateThreadBlocking() = runBlocking {
             }
         }
     }
-    // With only a limited number of threads, many coroutines will be blocked waiting.
+    // With a limited number of threads, many coroutines will be blocked waiting.
 
     val mutex = Mutex()
 

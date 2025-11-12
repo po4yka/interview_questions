@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-mvvm-pattern--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-viewmodel--android--medium]
+related: [c-android-lifecycle, q-mvvm-pattern--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
@@ -28,7 +28,7 @@ tags: [android, android/lifecycle, difficulty/medium, savedstatehandle, viewmode
 
 ## Ответ (RU)
 
-`ViewModel` сохраняет свое состояние (то есть свой инстанс и данные в нем) до тех пор, пока жива ее область видимости (`Activity`, `Fragment` или NavBackStackEntry) и процесс приложения не был уничтожен. Она переживает изменения конфигурации (например, поворот экрана), но не переживает смерть процесса или окончательное уничтожение связанного владельца (`Activity`/`Fragment`).
+`ViewModel` сохраняет свое состояние (то есть свой инстанс и данные в нем) до тех пор, пока жива ее область видимости (`Activity`, `Fragment` или NavBackStackEntry) и процесс приложения не был уничтожен. Она переживает изменения конфигурации (например, поворот экрана), но не переживает смерть процесса или окончательное уничтожение связанного владельца (`Activity`/`Fragment`). См. также [[c-android-lifecycle]].
 
 ### Когда Данные Сохраняются (инстанс `ViewModel` жив)
 
@@ -108,7 +108,7 @@ class MyViewModel : ViewModel() {
 
 ## Answer (EN)
 
-A `ViewModel` instance (and its in-memory state) is retained as long as its scope (`Activity`, `Fragment`, or NavBackStackEntry) is alive and the app process is not killed. It survives configuration changes (e.g., rotation) but does not survive process death or final destruction of its owner (`Activity`/`Fragment`).
+A `ViewModel` instance (and its in-memory state) is retained as long as its scope (`Activity`, `Fragment`, or NavBackStackEntry) is alive and the app process is not killed. It survives configuration changes (e.g., rotation) but does not survive process death or final destruction of its owner (`Activity`/`Fragment`). See also [[c-android-lifecycle]].
 
 ### When Data Survives (`ViewModel` instance is kept)
 

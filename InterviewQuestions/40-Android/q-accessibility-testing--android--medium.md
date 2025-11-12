@@ -38,38 +38,54 @@ sources: []
 Тестирование доступности гарантирует работу приложения для людей с ограниченными возможностями. Android предоставляет инструменты для ручного и автоматизированного тестирования.
 
 **Ручное тестирование с TalkBack:**
-- Все интерактивные элементы доступны через свайп
+- Все интерактивные элементы доступны через свайп и фокусируются в логичном порядке
 - `contentDescription` осмысленный для значимых элементов (не "Image", а "Фотография профиля пользователя"), декоративные изображения без смысла помечены `contentDescription = null`
 - Проверка custom actions и live regions
 
 **Accessibility Scanner:**
-- Touch target минимум 48dp
-- Контраст цветов минимум 4.5:1 для текста
+- Touch target минимум 48dp для интерактивных элементов
+- Контраст цветов для текста не ниже 4.5:1 для обычного текста (WCAG AA)
 - Читаемость шрифтов
 
 **Автоматизированное тестирование Espresso:**
 
 ```kotlin
-@Test
-fun testAccessibility() {
-    // ✅ Включить проверки для всех UI-действий
-    AccessibilityChecks.enable()
-        .setRunChecksFromRootView(true)
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
+import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.truth.content.IntentSubject.assertThat
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityChecks
 
-    onView(withId(R.id.submit)).perform(click())
-    // Тест упадёт при проблемах доступности
-}
+@LargeTest
+@RunWith(AndroidJUnit4::class)
+class AccessibilityTest {
 
-@Test
-fun testContentDescription() {
-    onView(withId(R.id.profile_image)).check { view, _ ->
-        // ✅ Проверить осмысленное описание для значимого изображения
-        assertThat(view.contentDescription).isNotEmpty()
-        // ❌ Избегать общих описаний
-        assertThat(view.contentDescription).isNotEqualTo("Image")
+    @Test
+    fun testAccessibility() {
+        // ✅ Включить проверки для всех UI-действий (обычно один раз в test suite / @BeforeClass)
+        AccessibilityChecks.enable()
+            .setRunChecksFromRootView(true)
+
+        onView(withId(R.id.submit)).perform(click())
+        // Тест (или любой Espresso шаг) упадёт при проблемах доступности
+    }
+
+    @Test
+    fun testContentDescription() {
+        onView(withId(R.id.profile_image)).check { view, _ ->
+            // ✅ Проверить осмысленное описание для значимого изображения
+            assertThat(view.contentDescription?.toString()).isNotEmpty()
+            // ❌ Избегать общих описаний
+            assertThat(view.contentDescription?.toString()).isNotEqualTo("Image")
+        }
     }
 }
 ```
+
+(В реальном проекте `AccessibilityChecks.enable()` следует вызывать один раз, например в `@BeforeClass`, так как он глобален для Espresso.)
 
 **Тестирование Compose через семантику:**
 
@@ -109,15 +125,15 @@ fun testStateDescription() {
 **Типичные ошибки:**
 
 ```kotlin
-// ❌ Нет описания у значимого изображения
+// ❌ Нет описания у значимого изображения (иконка несёт смысл)
 Image(painterResource(R.drawable.icon), contentDescription = null)
 
-// ❌ Touch target меньше 48dp
+// ❌ Touch target меньше 48dp для элемента, по которому нужно попадать касанием
 IconButton(modifier = Modifier.size(24.dp), onClick = { }) {
-    Icon(Icons.Default.Close, "Close")
+    Icon(Icons.Default.Close, contentDescription = "Close")
 }
 
-// ❌ Недостаточный контраст
+// ❌ Недостаточный контраст текста по отношению к фону
 Text(
     text = "Read more",
     color = Color.LightGray,
@@ -127,47 +143,62 @@ Text(
 
 **Лучшие практики:**
 - Тестируйте на реальных устройствах (эмуляторы неточны для TalkBack)
-- Интегрируйте проверки в CI/CD
-- Проверяйте разные настройки: масштаб шрифта, высокую контрастность
-- Используйте semantic testing вместо проверки деталей реализации
+- Интегрируйте проверки (например, Espresso Accessibility Checks) в CI/CD
+- Проверяйте разные настройки: масштаб шрифта, высокая контрастность, режимы доступности
+- Используйте тесты семантики (role, label, state, `contentDescription`) вместо проверки деталей реализации (конкретных вью/иерархий)
 
 ## Answer (EN)
 
 Accessibility testing ensures apps are usable by people with disabilities. Android provides tools for manual and automated testing.
 
 **Manual Testing with TalkBack:**
-- All interactive elements reachable via swipe
+- All interactive elements reachable via swipe with a logical focus order
 - `contentDescription` is meaningful for important elements (not "Image", but "User profile photo"), decorative images with no meaning are marked with `contentDescription = null`
-- Test custom actions and live regions
+- Verify custom actions and live regions
 
 **Accessibility Scanner:**
-- Touch target minimum 48dp
-- Color contrast minimum 4.5:1 for text
+- Touch target minimum 48dp for interactive elements
+- Color contrast for text at least 4.5:1 for normal text (WCAG AA)
 - Font readability
 
 **Automated Testing via Espresso:**
 
 ```kotlin
-@Test
-fun testAccessibility() {
-    // ✅ Enable checks for all UI actions
-    AccessibilityChecks.enable()
-        .setRunChecksFromRootView(true)
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
+import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityChecks
+// Use an assertion library such as Truth or JUnit assertions for checks
 
-    onView(withId(R.id.submit)).perform(click())
-    // Test fails if accessibility issues found
-}
+@LargeTest
+@RunWith(AndroidJUnit4::class)
+class AccessibilityTest {
 
-@Test
-fun testContentDescription() {
-    onView(withId(R.id.profile_image)).check { view, _ ->
-        // ✅ Verify meaningful description for a non-decorative image
-        assertThat(view.contentDescription).isNotEmpty()
-        // ❌ Avoid generic descriptions
-        assertThat(view.contentDescription).isNotEqualTo("Image")
+    @Test
+    fun testAccessibility() {
+        // ✅ Enable accessibility checks for all UI actions (typically once per test suite / @BeforeClass)
+        AccessibilityChecks.enable()
+            .setRunChecksFromRootView(true)
+
+        onView(withId(R.id.submit)).perform(click())
+        // Any Espresso action will fail if accessibility issues are found
+    }
+
+    @Test
+    fun testContentDescription() {
+        onView(withId(R.id.profile_image)).check { view, _ ->
+            // ✅ Verify meaningful description for a non-decorative image
+            assertThat(view.contentDescription?.toString()).isNotEmpty()
+            // ❌ Avoid generic descriptions
+            assertThat(view.contentDescription?.toString()).isNotEqualTo("Image")
+        }
     }
 }
 ```
+
+(In a real test suite, call `AccessibilityChecks.enable()` once, as it configures global Espresso behavior.)
 
 **Compose Testing via Semantics:**
 
@@ -207,15 +238,15 @@ fun testStateDescription() {
 **Common Issues:**
 
 ```kotlin
-// ❌ Missing contentDescription for a meaningful image
+// ❌ Missing contentDescription for a meaningful image (icon carries meaning)
 Image(painterResource(R.drawable.icon), contentDescription = null)
 
-// ❌ Touch target smaller than 48dp
+// ❌ Touch target smaller than 48dp for a tappable element
 IconButton(modifier = Modifier.size(24.dp), onClick = { }) {
-    Icon(Icons.Default.Close, "Close")
+    Icon(Icons.Default.Close, contentDescription = "Close")
 }
 
-// ❌ Insufficient contrast
+// ❌ Insufficient contrast between text and background
 Text(
     text = "Read more",
     color = Color.LightGray,
@@ -225,9 +256,9 @@ Text(
 
 **Best Practices:**
 - Test on real devices (emulators can be inaccurate for TalkBack)
-- Integrate checks into CI/CD
-- Test different settings: font scale, high contrast
-- Use semantic testing instead of implementation details
+- Integrate checks (e.g., Espresso Accessibility Checks) into CI/CD
+- Test different settings: font scale, high contrast text, accessibility modes
+- Target semantic properties in tests (role, label, state, `contentDescription`) instead of relying on implementation details (exact view classes/structure)
 
 ---
 

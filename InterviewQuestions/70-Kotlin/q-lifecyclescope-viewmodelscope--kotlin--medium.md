@@ -46,7 +46,7 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
  *
  *  Feature             lifecycleScope                          viewModelScope
  *
- *  Available in        Any LifecycleOwner (Activity, Fragment, ViewModel
+ *  Available in        Any LifecycleOwner (Activity, Fragment,  ViewModel
  *                       viewLifecycleOwner, etc.)
  *  Cancelled when      LifecycleOwner is destroyed             onCleared()
  *  Survives rotation   NO (owner destroyed)                    YES (while ViewModel retained)
@@ -116,7 +116,7 @@ class LifecycleScopeExamples : Fragment() {
             }
         }
 
-        // launchWhenStarted сейчас НЕ РЕКОМЕНДУЕТСЯ/устарел; предпочтительно repeatOnLifecycle
+        // launchWhenStarted помечен как @Deprecated; предпочтительно repeatOnLifecycle
         // для более предсказуемых семантик отмены и перезапуска.
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             // Приостанавливает выполнение, когда состояние ниже STARTED; может дольше удерживать ссылки.
@@ -254,7 +254,7 @@ class BestPractices {
         }
     }
 
-    // ПЛОХО (для UI Flow): сбор в lifecycleScope Fragment без учета видимости и без viewLifecycleOwner
+    // ПЛОХО (для UI Flow): сбор во Fragment.lifecycleScope без учета жизненного цикла view
     class BadFlowCollection : Fragment() {
         private val viewModel: MyViewModel by viewModels()
 
@@ -263,9 +263,8 @@ class BestPractices {
 
             lifecycleScope.launch {
                 viewModel.uiState.collect { state ->
-                    // Сбор продолжается до onDestroy() Fragment и игнорирует состояние STOPPED.
-                    // После уничтожения не течет, но без viewLifecycleOwner есть риск пытаться
-                    // обновлять неактуальные вью.
+                    // Сбор продолжается до onDestroy() Fragment и не привязан к жизненному циклу view.
+                    // Без viewLifecycleOwner есть риск обновлять уже уничтоженные вью.
                     updateUI(state)
                 }
             }
@@ -411,7 +410,7 @@ class ProductFragment : Fragment() {
  *
  *  Feature             lifecycleScope                          viewModelScope
  *
- *  Available in        Any LifecycleOwner (Activity, Fragment, ViewModel
+ *  Available in        Any LifecycleOwner (Activity, Fragment,  ViewModel
  *                       viewLifecycleOwner, etc.)
  *  Cancelled when      LifecycleOwner is destroyed             onCleared()
  *  Survives rotation   NO (owner destroyed)                    YES (while ViewModel retained)
@@ -436,7 +435,7 @@ class MainActivity : AppCompatActivity() {
             updateUI()
         }
 
-        // Lifecycle-aware collection: only active when STARTED or RESUMED
+        // Lifecycle-aware collection: only active when at least STARTED
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
@@ -579,10 +578,10 @@ class LifecycleScopeExamples : Fragment() {
             }
         }
 
-        // launchWhenStarted is now discouraged/obsolete; prefer repeatOnLifecycle
+        // launchWhenStarted is @Deprecated; prefer repeatOnLifecycle
         // for more predictable cancellation + restart semantics.
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            // Suspends when not STARTED; may keep references longer than desired.
+            // Suspends when below STARTED; may hold references longer than desired.
         }
     }
 
@@ -717,7 +716,7 @@ class BestPractices {
         }
     }
 
-    // BAD (for UI Flows): Collecting in Fragment's lifecycleScope without visibility awareness
+    // BAD (for UI Flows): Collecting in Fragment.lifecycleScope without view lifecycle awareness
     class BadFlowCollection : Fragment() {
         private val viewModel: MyViewModel by viewModels()
 
@@ -726,9 +725,8 @@ class BestPractices {
 
             lifecycleScope.launch {
                 viewModel.uiState.collect { state ->
-                    // This continues collecting while Fragment is STARTED/RESUMED and until onDestroy().
-                    // It does NOT leak after destroy, but it ignores STOPPED state and might try
-                    // to update views that are no longer valid if not using viewLifecycleOwner.
+                    // Collection continues until Fragment.onDestroy() and is not tied to view lifecycle.
+                    // Without viewLifecycleOwner you risk updating views after onDestroyView().
                     updateUI(state)
                 }
             }

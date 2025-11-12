@@ -26,7 +26,6 @@ tags:
 - android/ui-views
 - difficulty/medium
 - widgets
-
 ---
 
 # Вопрос (RU)
@@ -34,8 +33,6 @@ tags:
 
 # Question (EN)
 > Home Screen Widgets
-
----
 
 ## Ответ (RU)
 **Виджеты домашнего экрана** в Android реализуются через App Widget framework, основным компонентом которого является `AppWidgetProvider` (наследник `BroadcastReceiver`). Виджет отображается в приложении-хосте (чаще всего лаунчер) и позволяет показывать данные и выполнять действия без открытия полного приложения.
@@ -59,8 +56,6 @@ tags:
 
 **4. Гибридные (Hybrid widgets):**
 Сочетают данные и управление (например, плеер с названием трека и кнопками).
-
----
 
 **Шаги создания виджета:**
 
@@ -97,7 +92,7 @@ tags:
 </LinearLayout>
 ```
 
-(Используются только view, поддерживаемые `RemoteViews`.)
+(Используются только `View`, поддерживаемые `RemoteViews`.)
 
 **2. XML метаданные виджета:**
 
@@ -114,7 +109,7 @@ tags:
     android:previewImage="@drawable/widget_preview" />
 ```
 
-(Значения `updatePeriodMillis` меньше 30 минут на современных версиях Android, как правило, игнорируются.)
+(На современных версиях Android значения `android:updatePeriodMillis` меньше 30 минут, как правило, не используются системой для периодических обновлений; 0 отключает автоматическое периодическое обновление.)
 
 **3. AppWidgetProvider:**
 
@@ -195,7 +190,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 </receiver>
 ```
 
----
+(Использование `android:exported="false"` безопасно для современных конфигураций: хосты используют явные intent-ы к конкретному компоненту. Учитывайте требования целевой версии SDK и документацию.)
 
 **Методы жизненного цикла виджета:**
 
@@ -205,9 +200,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 | `onDisabled()` | Вызывается при удалении последнего экземпляра виджета |
 | `onUpdate()` | Вызывается при обновлении; содержит массив `appWidgetIds` для обновления |
 | `onDeleted()` | Вызывается при удалении отдельных экземпляров виджета |
-| `onReceive()` | Вызывается для каждого broadcast; как правило, обрабатываются только нужные action-ы |
-
----
+| `onReceive()` | Вызывается для каждого broadcast; обычно делегируем в super и обрабатываем только нужные action-ы |
 
 **RemoteViews для UI виджета:**
 
@@ -239,28 +232,25 @@ views.setOnClickPendingIntent(R.id.widget_button, pendingIntent)
 appWidgetManager.updateAppWidget(appWidgetId, views)
 ```
 
-Только определённые layout-ы и view поддерживаются `RemoteViews`; неподдерживаемые элементы приведут к ошибкам.
-
----
+Список поддерживаемых layout-ов и `View` в `RemoteViews` ограничен; использование неподдерживаемых элементов приведёт к ошибкам.
 
 **Ограничения виджетов:**
 
 **1. Жесты:**
 - Поддерживаются нажатия через `setOnClickPendingIntent`.
-- Прокрутка/вертикальный свайп поддерживаются опосредованно через коллекции/скроллируемые view, такие как `ListView`, `GridView`, `StackView` при использовании с `RemoteViewsService`.
+- Прокрутка поддерживается опосредованно через коллекции/скроллируемые `View`, такие как `ListView`, `GridView`, `StackView` при использовании с `RemoteViewsService`.
 - Произвольные сложные жесты недоступны.
 
 **2. Layout и `View`:**
-- Поддерживаются: `FrameLayout`, `LinearLayout`, `RelativeLayout`, `GridLayout`.
-- Поддерживаемые виджеты: `TextView`, `Button`, `ImageView`, `ImageButton`, `ProgressBar`, `ListView`, `GridView`, `StackView`, `AdapterViewFlipper`, `ViewFlipper`, `Chronometer` (часть устарела или зависит от хоста).
-- Использование неподдерживаемых элементов приводит к ошибкам в рантайме.
+- Типично поддерживаются: `FrameLayout`, `LinearLayout`, `RelativeLayout`, `GridLayout`.
+- Типично поддерживаемые виджеты: `TextView`, `Button`, `ImageView`, `ImageButton`, `ProgressBar`,
+  `ListView`, `GridView`, `StackView`, `AdapterViewFlipper`, `ViewFlipper`, `Chronometer`, `AnalogClock` (часть устарела или зависит от хоста).
+- Точный список см. в актуальной документации; неподдерживаемые элементы приводят к ошибкам в рантайме.
 
 **3. Ограничения по времени и ресурсам:**
-- Код в `onReceive`/`onUpdate` должен выполняться быстро (ограничения по времени, риск ANR).
+- Код в `onReceive`/`onUpdate` должен выполняться быстро: действуют ограничения на время выполнения broadcast receiver-ов (при превышении возможен ANR или завершение процесса).
 - Длительные операции (сеть, БД и т.п.) нужно выносить в `Service`, `JobIntentService` или `WorkManager` и после завершения обновлять виджет через `AppWidgetManager`.
 - Частые обновления расходуют батарею; используйте разумные интервалы и по возможности push-стиль обновлений (события/уведомления вместо постоянного опроса).
-
----
 
 **Продвинутые возможности:**
 
@@ -321,9 +311,9 @@ class WidgetRemoteViewsFactory(
 }
 ```
 
-**2. Конфигурационная Activity:**
+**2. Конфигурационная `Activity`:**
 
-Activity, которая может быть запущена при добавлении виджета для настройки параметров.
+`Activity`, которая может быть запущена при добавлении виджета для настройки параметров.
 
 ```kotlin
 class WidgetConfigActivity : AppCompatActivity() {
@@ -383,7 +373,7 @@ class WidgetConfigActivity : AppCompatActivity() {
     android:configure="com.example.WidgetConfigActivity" />
 ```
 
-**3. Обновление виджета из Service:**
+**3. Обновление виджета из `Service`:**
 
 ```kotlin
 class WidgetUpdateService : Service() {
@@ -395,6 +385,7 @@ class WidgetUpdateService : Service() {
         val componentName = ComponentName(this, MyWidgetProvider::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
 
+        // Обновляем виджеты напрямую через AppWidgetManager / логику провайдера
         MyWidgetProvider().onUpdate(this, appWidgetManager, appWidgetIds)
 
         stopSelf()
@@ -404,12 +395,12 @@ class WidgetUpdateService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun updateWidgetData() {
-        // Загрузка данных, вычисления и т.п.
+        // Загрузка данных, вычисления и т.п. (в фоне)
     }
 }
 ```
 
----
+(В реальном коде долгие операции должны выполняться в фоновом потоке; вызов `onUpdate` экземпляра провайдера из `Service` допустим как переиспользование логики, но ключевым является обновление через `AppWidgetManager`.)
 
 **Лучшие практики:**
 
@@ -418,14 +409,12 @@ class WidgetUpdateService : Service() {
 3. Оптимизируйте частоту обновлений; избегайте слишком частых периодических обновлений, по возможности используйте push-обновления.
 4. Добавляйте информативный `android:previewImage`.
 5. Обрабатывайте разные размеры с помощью адаптивной разметки и `resizeMode`.
-6. Используйте корректные флаги `PendingIntent`, включая `FLAG_IMMUTABLE` для Android 12+.
+6. Используйте корректные флаги `PendingIntent`, включая `FLAG_IMMUTABLE` (и `FLAG_MUTABLE`, когда это требуется) для Android 12+.
 7. Тестируйте на разных лаунчерах/хостах.
 8. Для коллекций предоставляйте empty view.
 
----
-
 ## Answer (EN)
-**Home screen widgets** are implemented via the App Widget framework, primarily using a specialized `BroadcastReceiver` subclass called `AppWidgetProvider`. They expose interactive components that appear on the home screen (and sometimes on the lock screen / other host apps) to show data and trigger actions without fully opening the app.
+**Home screen widgets** are implemented via the App Widget framework, primarily using a specialized `BroadcastReceiver` subclass called `AppWidgetProvider`. They expose interactive components that appear on the home screen (and sometimes on other host apps) to show data and trigger actions without fully opening the app.
 
 Widgets are mini app views that:
 - are hosted by another app (home screen / launcher / host),
@@ -471,8 +460,6 @@ Examples:
 
 Combine information and controls (for example, a music player widget that shows track info and playback controls).
 
----
-
 **Steps to Create a Widget:**
 
 **1. Define a layout file:**
@@ -512,7 +499,7 @@ Note: You must use views supported by `RemoteViews`.
 
 **2. Create XML metadata file:**
 
-Describes widget properties (size, update behavior, etc.). Remember that `android:updatePeriodMillis` below 30 minutes (1800000 ms) is ignored on modern Android.
+Describes widget properties (size, update behavior, etc.). On modern Android, `android:updatePeriodMillis` values below 30 minutes are generally not used by the system for periodic updates; `0` disables periodic updates entirely.
 
 ```xml
 <!-- res/xml/widget_info.xml -->
@@ -607,9 +594,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 </receiver>
 ```
 
-(Using `android:exported="false`" is typical; the host uses explicit intents.)
-
----
+(Using `android:exported="false"` is a safe default for modern Android: app widget hosts send explicit broadcasts to your provider. Always verify against the current SDK level requirements.)
 
 **Widget Lifecycle Methods:**
 
@@ -619,9 +604,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 | `onDisabled()` | Called when the last instance of your widget is removed |
 | `onUpdate()` | Called for updates of the widget; receives the IDs of widgets that should be updated |
 | `onDeleted()` | Called when specific widget instances are removed from the home screen |
-| `onReceive()` | Called for every broadcast; typically you delegate to super and handle only custom actions |
-
----
+| `onReceive()` | Called for every broadcast; typically delegate to super and handle only relevant actions |
 
 **RemoteViews - Building Widget UI:**
 
@@ -653,17 +636,15 @@ views.setOnClickPendingIntent(R.id.widget_button, pendingIntent)
 appWidgetManager.updateAppWidget(appWidgetId, views)
 ```
 
-Only certain layouts and views are supported by `RemoteViews`; unsupported ones will cause runtime errors.
-
----
+Only a limited, documented set of layouts and views are supported by `RemoteViews`; unsupported ones will cause runtime errors.
 
 **Widget Limitations:**
 
 **1. Limited Gesture Support:**
 
-Because widgets coexist with launcher navigation and are built on supported views:
+Because widgets coexist with launcher navigation and rely on supported views:
 - Clicks (via `setOnClickPendingIntent`) are supported.
-- Scroll/vertical swipe is supported indirectly through collection/scrollable views like `ListView`, `GridView`, `StackView` when used with `RemoteViewsService`.
+- Scroll is supported indirectly through collection/scrollable views like `ListView`, `GridView`, `StackView` when used with `RemoteViewsService`.
 - Arbitrary complex gestures are not supported.
 
 **2. Limited Layout and `View` Support:**
@@ -679,18 +660,16 @@ Common supported widgets:
 - `ListView`, `GridView`, `StackView`, `AdapterViewFlipper`, `ViewFlipper`
 - `Chronometer`, `AnalogClock` (deprecated / host-dependent)
 
-(The list is not exhaustive; always check latest documentation.)
+(This list is not exhaustive; always check the latest documentation.)
 
 **3. Runtime Restrictions:**
 
-Widget updates are delivered via broadcasts, subject to receiver limits:
-- Code in `onReceive`/`onUpdate` must complete quickly (about 10s ANR limit; historically treated as ~5s budget).
+Widget updates are delivered via broadcasts, subject to receiver execution limits:
+- Code in `onReceive`/`onUpdate` must complete quickly; long work risks ANR or the process being killed.
 - Offload long-running or network work to a `Service`, `JobIntentService`, or `WorkManager` and then update the widget via `AppWidgetManager`.
 
 Additionally:
 - Frequent updates drain battery; use reasonable intervals or push-style events.
-
----
 
 **Advanced Widget Features:**
 
@@ -825,6 +804,7 @@ class WidgetUpdateService : Service() {
         val componentName = ComponentName(this, MyWidgetProvider::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
 
+        // Reuse provider logic or call AppWidgetManager directly to push updates
         MyWidgetProvider().onUpdate(this, appWidgetManager, appWidgetIds)
 
         stopSelf()
@@ -834,12 +814,12 @@ class WidgetUpdateService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun updateWidgetData() {
-        // Fetch data, perform calculations, etc.
+        // Fetch data, perform calculations, etc. on a background thread
     }
 }
 ```
 
----
+(Real implementations must ensure long work happens off the main thread; the key mechanism is updating via `AppWidgetManager`.)
 
 **Best Practices:**
 
@@ -848,11 +828,9 @@ class WidgetUpdateService : Service() {
 3. Optimize update frequency; avoid very frequent periodic updates and prefer push-style updates where possible.
 4. Provide a meaningful preview (`android:previewImage`).
 5. Handle different sizes with responsive layouts and `resizeMode`.
-6. Use `PendingIntent.FLAG_IMMUTABLE` (and/or `FLAG_MUTABLE` where required) for Android 12+.
+6. Use appropriate `PendingIntent` flags, including `FLAG_IMMUTABLE` (and `FLAG_MUTABLE` where required) for Android 12+.
 7. Test on different launchers/hosts.
 8. Provide an empty view for collection widgets.
-
----
 
 ## Follow-ups
 

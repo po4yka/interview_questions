@@ -18,18 +18,18 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-room
 - c-workmanager
 - q-design-instagram-stories--android--hard
 sources: []
 created: 2025-10-29
-updated: 2025-10-29
+updated: 2025-11-11
 tags:
 - difficulty/hard
 - android/media
 - android/performance-rendering
 - android/service
 - topic/android
+
 ---
 
 # Вопрос (RU)
@@ -76,7 +76,7 @@ LRU по last‑played и возрасту с лимитом 300MB. Исполь
 
 Hardware MediaCodec H.264 (HEVC под флагом); GOP=1с; CBR‑biased VBR. Чанки 4–8MB с SHA‑256; возобновление с offset negotiation; TLS; опционально клиентское AES‑GCM шифрование.
 
-Для длинных/критичных загрузок использовать Foreground Service + WorkManager (expedited / с ограничениями) в соответствии с требованиями Android 11–15, с видимым уведомлением для пользователя. Генерация poster frame + blur превью на устройстве; отправка pre‑upload metadata.
+Для длинных/критичных загрузок использовать Foreground `Service` + WorkManager (expedited / с ограничениями) в соответствии с требованиями Android 11–15, с видимым уведомлением для пользователя. Генерация poster frame + blur превью на устройстве; отправка pre‑upload metadata.
 
 ### Фон/Питание
 
@@ -126,7 +126,7 @@ Use an LRU policy by last-played and age with a 300MB cap. Rely on ExoPlayer's s
 
 Use hardware MediaCodec for H.264 (HEVC behind a flag); GOP=1s; CBR-biased VBR. Chunk uploads into 4–8MB pieces with SHA-256; support resumable uploads with offset negotiation; use TLS; optionally encrypt chunks client-side with AES-GCM.
 
-For long/critical uploads, use a Foreground Service combined with WorkManager (expedited/with constraints) per Android 11–15 requirements, with a visible notification so the OS does not kill the job silently. Generate a poster frame + blurred preview on-device; send pre-upload metadata.
+For long/critical uploads, use a Foreground `Service` combined with WorkManager (expedited/with constraints) per Android 11–15 requirements, with a visible notification so the OS does not kill the job silently. Generate a poster frame + blurred preview on-device; send pre-upload metadata.
 
 ### Background/Power
 
@@ -152,32 +152,56 @@ Short segments improve startup but add overhead; mitigate via HTTP/2 and tuned p
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать ошибки кодирования видео и стратегии повторных попыток?
+- Какая стратегия prefetch минимизирует трафик при сохранении плавного воспроизведения?
+- Как оптимизировать расход батареи для непрерывного автоплея?
+- Как реализовать эффективную эвикцию кеша без влияния на воспроизведение?
+
 ## Follow-ups
 
--   How to handle video encoding failures and retry strategies?
--   What prefetch strategy minimizes bandwidth while ensuring smooth playback?
--   How to optimize battery for continuous autoplay?
--   How to implement efficient cache eviction without impacting playback?
+- How to handle video encoding failures and retry strategies?
+- What prefetch strategy minimizes bandwidth while ensuring smooth playback?
+- How to optimize battery for continuous autoplay?
+- How to implement efficient cache eviction without impacting playback?
+
+## Ссылки (RU)
+
+- [[c-workmanager]]
+- https://developer.android.com/guide/topics/media/exoplayer
 
 ## References
 
--   [[c-workmanager]]
--   [[c-room]]
--   https://developer.android.com/guide/topics/media/exoplayer
--   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
--   [[ANDROID-INTERVIEWER-GUIDE]]
+- [[c-workmanager]]
+- https://developer.android.com/guide/topics/media/exoplayer
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+
+- [[q-design-instagram-stories--android--hard]]
+
+### Связанные (того же уровня)
+
+- [[q-design-instagram-stories--android--hard]]
+- [[q-data-sync-unstable-network--android--hard]]
+
+### Продвинутые (сложнее)
+
+- Спроектируйте стратегию CDN-кеширования для видео-контента на масштабе TikTok
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
--   [[q-design-instagram-stories--android--hard]]
+- [[q-design-instagram-stories--android--hard]]
 
 ### Related (Same Level)
 
--   [[q-design-instagram-stories--android--hard]]
--   [[q-data-sync-unstable-network--android--hard]]
+- [[q-design-instagram-stories--android--hard]]
+- [[q-data-sync-unstable-network--android--hard]]
 
 ### Advanced (Harder)
 
--   Design a CDN caching strategy for video content at TikTok scale
+- Design a CDN caching strategy for video content at TikTok scale

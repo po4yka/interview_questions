@@ -22,7 +22,7 @@ related: [c-flow, c-coroutines, q-flow-operators--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
 
 tags: [coroutines, difficulty/medium, kotlin]
 ---
@@ -141,14 +141,14 @@ dataFlow
 
 ### Соображения Производительности
 
-- По умолчанию операторы выполняются **последовательно** для каждого значения в том же контексте корутины, пока вы явно не измените это (например, с помощью `buffer`/`conflate`/`flowOn`).
-- **Промежуточные коллекции не создаются**, операторы `Flow` ленивые и обрабатывают элементы по мере запроса `collect`-ом.
-- Операторы сохраняют семантику **поддержки отмены** и кооперативной обработки.
+- По умолчанию операторы выполняются последовательно для каждого значения в том же контексте корутины, пока вы явно не измените это (например, с помощью `buffer`/`conflate`/`flowOn`).
+- Промежуточные коллекции не создаются, операторы `Flow` ленивые и обрабатывают элементы по мере запроса `collect`-ом.
+- Операторы сохраняют семантику поддержки отмены и кооперативной обработки.
 - Каждая операция в цепочке добавляет небольшие накладные расходы, но обычно это приемлемо; избегайте чрезмерно длинных цепочек без необходимости.
 
 ### Типичные Ошибки
 
-1. **Ненужный запуск корутин внутри `map`**: `map` — suspending-оператор, внутри него можно вызывать suspend-функции напрямую. Проблемой является создание дополнительных корутин (`async`/`launch`) без необходимости.
+1. Ненужный запуск корутин внутри `map`: `map` — suspending-оператор, внутри него можно вызывать suspend-функции напрямую. Проблемой является создание дополнительных корутин (`async`/`launch`) без необходимости.
 ```kotlin
 // Избегайте: избыточный async внутри map
 flow.map { async { heavyOperation(it) }.await() }
@@ -162,7 +162,7 @@ flow.transform { value ->
 }
 ```
 
-2. **Побочные эффекты в операторе преобразования**: Старайтесь, чтобы `map`/`filter`/`transform` оставались как можно более чистыми.
+2. Побочные эффекты в операторе преобразования: Старайтесь, чтобы `map`/`filter`/`transform` оставались как можно более чистыми.
 ```kotlin
 // Избегайте
 flow.map {
@@ -284,14 +284,14 @@ dataFlow
 
 ### Performance Considerations
 
-- Operators by default are **executed sequentially** for each emission in the same coroutine context, unless you explicitly change it (e.g., with `buffer`/`conflate`/`flowOn`).
-- **No intermediate collections** are created; `Flow` operators are lazy and process values on demand as `collect` requests them.
-- Operators preserve cooperative **cancellation** semantics.
+- Operators by default are executed sequentially for each emission in the same coroutine context, unless you explicitly change it (e.g., with `buffer`/`conflate`/`flowOn`).
+- No intermediate collections are created; `Flow` operators are lazy and process values on demand as `collect` requests them.
+- Operators preserve cooperative cancellation semantics.
 - Each operator adds a small overhead; in most real-world pipelines this is negligible, but avoid excessively deep chains without purpose.
 
 ### Common Pitfalls
 
-1. **Unnecessary coroutine launches inside `map`**: `map` is a suspending operator, you can call suspend functions directly. The issue is spawning extra coroutines (`async`/`launch`) when not needed.
+1. Unnecessary coroutine launches inside `map`: `map` is a suspending operator, you can call suspend functions directly. The issue is spawning extra coroutines (`async`/`launch`) when not needed.
 ```kotlin
 // Avoid: redundant async inside map
 flow.map { async { heavyOperation(it) }.await() }
@@ -305,7 +305,7 @@ flow.transform { value ->
 }
 ```
 
-2. **Side effects inside transformation operators**: Keep `map`/`filter`/`transform` as pure as possible.
+2. Side effects inside transformation operators: Keep `map`/`filter`/`transform` as pure as possible.
 ```kotlin
 // Avoid
 flow.map {

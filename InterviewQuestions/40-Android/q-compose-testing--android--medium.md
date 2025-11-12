@@ -12,12 +12,13 @@ original_language: en
 language_tags:
 - en
 - ru
-status: draft
+status: active
 moc: moc-android
 related:
+- c-android-testing
 - q-compose-performance-optimization--android--hard
 - q-compose-semantics--android--medium
-created: 2025-10-20
+created: 2024-10-20
 updated: 2025-11-10
 tags: [android/testing-ui, android/ui-compose, compose, difficulty/medium, semantics, testing]
 sources:
@@ -35,7 +36,9 @@ sources:
 
 ## Ответ (RU)
 
-**Compose Testing** использует семантическое дерево вместо `View`-иерархии. Тестовый фреймворк синхронизирует выполнение с Compose runtime и основными корутинами (IdlingResource): он автоматически ждёт завершения recomposition и работы на `Dispatchers.Main`, но не произвольных фоновых потоков.
+**Compose Testing** использует семантическое дерево вместо `View`-иерархии. Тестовый фреймворк синхронизирует выполнение с Compose runtime и основным потоком/Looper: он автоматически ждёт завершения композиции/рекомпозиции и задач на `Dispatchers.Main`, но не произвольных фоновых потоков или корутин.
+
+См. также [[c-android-testing]].
 
 ### Ключевые Концепции
 
@@ -51,11 +54,13 @@ class LoginScreenTest {
         composeTestRule.setContent { LoginScreen() }
 
         composeTestRule.onNodeWithTag("login_btn").performClick()
-        // Automatic waiting for recomposition and main dispatcher idleness
+        // Автоматическое ожидание стабильного состояния Compose / главного потока
         composeTestRule.onNodeWithTag("progress").assertExists()
     }
 }
 ```
+
+(В интеграционных/инструментальных тестах для экранов, зависящих от `Activity`/ресурсов Android, используют `createAndroidComposeRule<YourActivity>()`).
 
 **Семантическое дерево** — структура из узлов с метаданными (text, role, actions). Элементы без семантики (например, декоративные Image) не попадают в доступное для поиска дерево, пока им явно не заданы семантики (или они не входят в состав элементов с объединённой семантикой).
 
@@ -70,7 +75,7 @@ composeTestRule.onNodeWithTag("submit").performClick()
 **Текст** (хрупко — зависит от локализации):
 ```kotlin
 composeTestRule.onNodeWithText("Submit").performClick()
-// Breaks when translated
+// Сломается после перевода строки
 ```
 
 **Семантика** (лучший выбор для accessibility):
@@ -119,7 +124,7 @@ fun asyncData_appearsAfterLoad() {
 
     composeTestRule.onNodeWithTag("loading").assertExists()
 
-    // Wait for element to appear (without crashing if no nodes yet)
+    // Явное ожидание появления данных; фоновые операции сами по себе не отслеживаются
     composeTestRule.waitUntil(timeoutMillis = 3000) {
         composeTestRule.onAllNodesWithTag("data_item")
             .fetchSemanticsNodes(atLeastOneExpected = false)
@@ -132,7 +137,9 @@ fun asyncData_appearsAfterLoad() {
 
 ## Answer (EN)
 
-**Compose Testing** uses a semantic tree instead of a `View` hierarchy. The test framework synchronizes with the Compose runtime and main coroutines (IdlingResource): it automatically waits for recomposition and work on `Dispatchers.Main`, but not for arbitrary background threads.
+**Compose Testing** uses a semantic tree instead of a `View` hierarchy. The test framework synchronizes with the Compose runtime and the main thread/looper: it automatically waits for composition/recomposition and work scheduled on `Dispatchers.Main`, but not for arbitrary background threads or coroutines.
+
+See also [[c-android-testing]].
 
 ### Key Concepts
 
@@ -148,11 +155,13 @@ class LoginScreenTest {
         composeTestRule.setContent { LoginScreen() }
 
         composeTestRule.onNodeWithTag("login_btn").performClick()
-        // Automatic waiting for recomposition and main dispatcher idleness
+        // Automatic waiting for stable Compose / main thread state
         composeTestRule.onNodeWithTag("progress").assertExists()
     }
 }
 ```
+
+(For instrumentation/integration tests that depend on `Activity`/Android resources, use `createAndroidComposeRule<YourActivity>()`).
 
 **Semantic tree** — a structure of nodes with metadata (text, role, actions). Elements without semantics (e.g., decorative Images) are not exposed in the searchable tree unless given semantics explicitly (or included via merged semantics of their parents).
 
@@ -216,7 +225,7 @@ fun asyncData_appearsAfterLoad() {
 
     composeTestRule.onNodeWithTag("loading").assertExists()
 
-    // Wait for element to appear (without crashing if no nodes yet)
+    // Explicitly wait for data to appear; background work is not auto-tracked
     composeTestRule.waitUntil(timeoutMillis = 3000) {
         composeTestRule.onAllNodesWithTag("data_item")
             .fetchSemanticsNodes(atLeastOneExpected = false)

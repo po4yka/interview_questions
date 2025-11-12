@@ -112,7 +112,7 @@ override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>)
 
 ### AsyncListDiffer
 
-**✅ Фоновые вычисления:**
+**✅ Фоновые вычисления и оркестрация обновлений:**
 
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -131,7 +131,7 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-> AsyncListDiffer вычисляет diff в фоне и применяет обновления на главном потоке, ожидая, что переданные списки не будут изменяться после передачи.
+> AsyncListDiffer вычисляет diff в фоне, отменяет неактуальные вычисления и применяет обновления на главном потоке, ожидая, что переданные списки не будут изменяться после передачи.
 
 ### ListAdapter (рекомендуется)
 
@@ -268,7 +268,7 @@ override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>)
 
 ### AsyncListDiffer
 
-**✅ Background calculation:**
+**✅ Background calculation and update orchestration:**
 
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -287,7 +287,7 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-> AsyncListDiffer computes the diff off the main thread and applies updates on the main thread, assuming the provided lists are not modified after submission.
+> AsyncListDiffer computes the diff off the main thread, cancels obsolete calculations, and applies updates on the main thread, assuming the provided lists are not modified after submission.
 
 ### ListAdapter (recommended)
 

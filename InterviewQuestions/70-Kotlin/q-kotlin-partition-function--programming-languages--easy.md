@@ -3,20 +3,25 @@ id: lang-055
 title: "Kotlin Partition Function / Функция partition в Kotlin"
 aliases: [Kotlin Partition Function, Функция partition в Kotlin]
 topic: kotlin
-subtopics: [c-collections, c-functional-programming]
+subtopics: [c-collections]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-continuation-cps-internals--kotlin--hard, q-fan-in-fan-out-channels--kotlin--hard]
+related: [c-collections, q-continuation-cps-internals--kotlin--hard, q-fan-in-fan-out-channels--kotlin--hard]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [collections, difficulty/easy, functions, kotlin]
+
 ---
+
 # Вопрос (RU)
 > Что делает функция коллекций `partition()`?
+
+# Question (EN)
+> What does the collection function `partition()` do?
 
 ## Ответ (RU)
 
@@ -74,24 +79,6 @@ fun <T> Iterable<T>.partition(
 - O(n) временная сложность
 - Создает два новых списка
 - Вычисляет предикат один раз на элемент
-
-## Дополнительные вопросы (RU)
-
-- В чем ключевые отличия этого подхода от аналогов в Java?
-- Когда вы бы использовали `partition()` на практике?
-- Каковы распространенные подводные камни при использовании `partition()`?
-
-## Ссылки (RU)
-
-- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-
-## Связанные вопросы (RU)
-
-- [[q-fan-in-fan-out-channels--kotlin--hard]]
-- [[q-continuation-cps-internals--kotlin--hard]]
-
-# Question (EN)
-> What does the collection function `partition()` do?
 
 ## Answer (EN)
 
@@ -164,3 +151,11 @@ fun <T> Iterable<T>.partition(
 
 - [[q-fan-in-fan-out-channels--kotlin--hard]]
 - [[q-continuation-cps-internals--kotlin--hard]]
+
+## Дополнительные вопросы (RU)
+- В чем ключевые отличия этого подхода от аналогов в Java?
+- Когда вы бы использовали `partition()` на практике?
+- Каковы распространенные подводные камни при использовании `partition()`?
+## Ссылки (RU)
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+## Связанные вопросы (RU)

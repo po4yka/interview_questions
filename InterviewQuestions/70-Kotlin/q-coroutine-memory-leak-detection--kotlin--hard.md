@@ -3,17 +3,18 @@ topic: kotlin
 id: kotlin-131
 title: "Detecting and preventing coroutine memory leaks / Обнаружение и предотвращение утечек памяти"
 aliases: [Coroutine Memory Leaks, Утечки памяти в корутинах]
-subtopics: [coroutines, memory-management]
+subtopics: [coroutines]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 moc: moc-kotlin
-related: [c-coroutines, c-memory-leaks, q-coroutine-resource-cleanup--kotlin--medium]
+related: [c-concurrency, c-android-profiling, q-coroutine-resource-cleanup--kotlin--medium]
 status: draft
 created: 2025-10-12
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, lifecycle, memory-leaks, profiling]
+
 ---
 
 # Вопрос (RU)
@@ -810,7 +811,7 @@ class JobTreeInspector {
         println("${indent}  isCancelled: ${job.isCancelled}")
 
         job.children.forEach { child ->
-            inspectJobTree(child, "$indent  ")
+            inspectJobTree(child, "${indent}  ")
         }
     }
 
@@ -876,7 +877,7 @@ class MyViewModel : ViewModel() {
 
 - `GlobalScope`: только для действительно процесс-широких задач; почти никогда не подходит для UI.
 - `lifecycleScope` (`Activity`/`Fragment`): для задач, привязанных к жизненному циклу компонента.
-- `viewLifecycleOwner.lifecycleScope`: для задач, завязанных на View фрагмента.
+- `viewLifecycleOwner.lifecycleScope`: для задач, завязанных на `View` фрагмента.
 - `viewModelScope`: для логики `ViewModel`, независимой от конкретных `View`.
 
 ### Предотвращение: структурированная конкуррентность
@@ -1044,7 +1045,7 @@ class LeakyActivity : AppCompatActivity() {
 | `GlobalScope` | `Application`-lifetime scope used for UI / component work, no automatic cancellation | Critical | Easy |
 | Missing cancellation | Custom scopes not cancelled on component teardown | High | Medium |
 | Captured context | Lambdas capture `Activity`/`View`/`Context` in long-running work | High | Medium–Hard |
-| Long operations | Tightly couple long I/O/CPU work with UI scope, or run off-scope work that still references UI | Medium–High | Medium |
+| `Long` operations | Tightly couple long I/O/CPU work with UI scope, or run off-scope work that still references UI | Medium–High | Medium |
 | Leaked collectors | `Flow` collectors live beyond lifecycle (e.g., `GlobalScope.collect`) | High | Hard |
 
 ### Leak #1: `GlobalScope` Usage
@@ -1094,8 +1095,8 @@ class GlobalScopeLeakActivity : AppCompatActivity() {
 
 1. `GlobalScope` is never cancelled automatically.
 2. The launched coroutine captures the enclosing `Activity` instance and its views via lambdas.
-3. As long as the coroutine is running, the Activity cannot be collected.
-4. Rotations / navigations can start more such coroutines → accumulated leaked Activities.
+3. As long as the coroutine is running, the `Activity` cannot be collected.
+4. Rotations / navigations can start more such coroutines → accumulated leaked `Activities`.
 
 #### Memory Impact (Conceptual)
 
@@ -1304,7 +1305,7 @@ class FixedViewModel : ViewModel() {
 
 ### Leak #3: Captured Strong References
 
-Problem: Coroutines capture strong references to Activities, Views, or `Context`s in lambdas used for long-running work that may outlive those owners.
+Problem: Coroutines capture strong references to `Activities`, `Views`, or `Context`s in lambdas used for long-running work that may outlive those owners.
 
 #### The Problem
 
@@ -1342,12 +1343,12 @@ data class LargeUserData(
 )
 ```
 
-This example illustrates retention, not a leak, because `lifecycleScope` cancels in `onDestroy`. It becomes a leak only if the coroutine is in a scope that outlives the Activity.
+This example illustrates retention, not a leak, because `lifecycleScope` cancels in `onDestroy`. It becomes a leak only if the coroutine is in a scope that outlives the `Activity`.
 
 #### Safer Patterns
 
 - Avoid capturing `Activity`/`View` in long-running background work.
-- Use separate layers (e.g., ViewModel, repository) that do not depend on UI references.
+- Use separate layers (e.g., `ViewModel`, repository) that do not depend on UI references.
 - Optionally, use weak references or lifecycle checks when necessary.
 
 ##### Fix Variant: Weak References (use sparingly)
@@ -1447,7 +1448,7 @@ class ExtractedProcessingActivity : AppCompatActivity() {
 
 ### Leak #4: Long-Running Operations Holding References
 
-Problem: Long-running I/O or CPU operations that are coupled directly to UI scopes and capture UI objects, or operations started from a scope that outlives the UI (e.g., `GlobalScope`).
+Problem: `Long`-running I/O or CPU operations that are coupled directly to UI scopes and capture UI objects, or operations started from a scope that outlives the UI (e.g., `GlobalScope`).
 
 #### The Problem
 
@@ -1494,7 +1495,7 @@ class LongOperationLeakActivity : AppCompatActivity() {
 }
 ```
 
-This is lifecycle-safe but can cause high memory usage. It becomes a leak if launched from a scope outliving the Activity or if the `Job` is not cancelled.
+This is lifecycle-safe but can cause high memory usage. It becomes a leak if launched from a scope outliving the `Activity` or if the `Job` is not cancelled.
 
 #### The Fix: Use `Flow` with Lifecycle-Aware Collection
 
@@ -1618,7 +1619,7 @@ class DownloadActivity : AppCompatActivity() {
 
 ### Leak #5: `Flow` Collectors Not Cancelled
 
-Problem: `Flow` collectors run in scopes that outlive their UI/component, e.g., `GlobalScope.launch { flow.collect { ... } }` from a Fragment, retaining the Fragment.
+Problem: `Flow` collectors run in scopes that outlive their UI/component, e.g., `GlobalScope.launch { flow.collect { ... } }` from a `Fragment`, retaining the `Fragment`.
 
 #### The Problem
 
@@ -1708,13 +1709,13 @@ dependencies {
 Typical signs of coroutine-related leaks:
 
 - GC root is a thread (e.g., `DefaultDispatcher-worker-1`) or a long-lived scope.
-- Trace shows `CoroutineScope`, `Job`, or dispatcher holding an Activity/Fragment instance.
+- Trace shows `CoroutineScope`, `Job`, or dispatcher holding an `Activity`/`Fragment` instance.
 
 ### Detection Tool #2: Android Studio Memory Profiler
 
 Use heap dumps to:
 
-1. Trigger a heap dump after destroying the suspected Activity/Fragment.
+1. Trigger a heap dump after destroying the suspected `Activity`/`Fragment`.
 2. Look for multiple instances of that class.
 3. Inspect references to see if they are retained via coroutine jobs/scopes/dispatchers.
 
@@ -1793,7 +1794,7 @@ class JobTreeInspector {
         println("${indent}  isCancelled: ${job.isCancelled}")
 
         job.children.forEach { child ->
-            inspectJobTree(child, "$indent  ")
+            inspectJobTree(child, "${indent}  ")
         }
     }
 
@@ -1859,8 +1860,8 @@ class MyViewModel : ViewModel() {
 
 - `GlobalScope`: process-lifetime work only; almost never appropriate for UI.
 - `lifecycleScope` (`Activity`/`Fragment`): for work bound to that component.
-- `viewLifecycleOwner.lifecycleScope`: for work bound to Fragment view.
-- `viewModelScope`: for ViewModel/business logic, independent of specific views.
+- `viewLifecycleOwner.lifecycleScope`: for work bound to `Fragment` view.
+- `viewModelScope`: for `ViewModel`/business logic, independent of specific views.
 
 ### Prevention: Structured Concurrency
 
@@ -1973,7 +1974,7 @@ class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
 1. Use lifecycle-aware scopes (`lifecycleScope`, `viewModelScope`, `viewLifecycleOwner.lifecycleScope`).
 2. Avoid `GlobalScope` for anything tied to a component lifecycle.
 3. If you create a custom `CoroutineScope`, you are responsible for cancelling it.
-4. Avoid capturing Activity/View/`Context` references in long-running operations; prefer passing minimal data or using separate layers.
+4. Avoid capturing `Activity`/`View`/`Context` references in long-running operations; prefer passing minimal data or using separate layers.
 5. Use `repeatOnLifecycle` (or similar) for `Flow` collection to auto-start/stop collectors.
 6. Enable LeakCanary in debug builds to catch leaks early.
 7. Review coroutine usage in code reviews (scope ownership, cancellation, `GlobalScope`, `Flow` collectors).
@@ -2009,5 +2010,5 @@ class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
 ## Related Questions
 
 - [[q-coroutine-resource-cleanup--kotlin--medium|Resource cleanup in coroutines]]
-- [[c-coroutines]]
-- [[c-memory-leaks]]
+- [[c-concurrency]]
+- [[c-android-profiling]]

@@ -16,19 +16,16 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-globalization
+- c-android
 - q-android-architectural-patterns--android--medium
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/i18n-l10n
 - difficulty/hard
 sources:
-- url: "https://developer.android.com/guide/topics/resources/localization"
-  note: Android localization guide
-- url: "https://developer.android.com/guide/topics/resources/pseudolocales"
-  note: Pseudo-localization documentation
-
+- "https://developer.android.com/guide/topics/resources/localization"
+- "https://developer.android.com/guide/topics/resources/pseudolocales"
 ---
 
 # Вопрос (RU)
@@ -41,8 +38,7 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
+## Краткая Версия
 - Четкая структура ресурсов и master-строк.
 - Псевдолокализация и автоматические UI-тесты.
 - Интеграция с TMS и review носителями языка.
@@ -122,8 +118,7 @@ sources:
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Clear resource structure and a single master strings source.
 - Pseudo-localization with automated UI tests.
 - Integration with a TMS and review by native speakers.
@@ -132,8 +127,7 @@ sources:
 - Deliberate use of per-app vs per-activity locales.
 - QA matrix and per-locale monitoring.
 
-### Detailed Version
-
+## Detailed Version
 #### 1. Resource catalog and structure
 
 - Use `res/values-<locale>` plus `res/xml/locales_config` to declare supported locales and integrate with per-app locale APIs.
@@ -201,17 +195,27 @@ sources:
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
 - Как синхронизировать переводы для dynamic feature modules и PAD?
 - Как управлять юридическими текстами (ToS, Privacy) в разных странах?
 - Какие метрики эффективности локализации (LQA defects, time-to-market)?
 
+## Additional Questions (EN)
+
+- How to synchronize translations for dynamic feature modules and PAD?
+- How to manage legal texts (ToS, Privacy) across different countries?
+- What localization effectiveness metrics to track (LQA defects, time-to-market)?
+
+## Follow-ups
+
+- [[q-android-architectural-patterns--android--medium]]
+
 ## References
 
-- [[c-globalization]]
+- [[c-android]]
 - [Localization](https://developer.android.com/guide/topics/resources/localization)
 
 ## Related Questions
 
-- [[c-globalization]]
+- [[q-android-architectural-patterns--android--medium]]

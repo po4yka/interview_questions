@@ -36,7 +36,7 @@ tags:
 ---
 
 ## Ответ (RU)
-`BroadcastReceiver` можно подключить двумя основными способами: статически через `AndroidManifest.xml` и динамически в коде. В ряде сценариев также используются упорядоченные (ordered) рассылки, разрешения и (исторически) `LocalBroadcastManager`. Конкретное поведение зависит от версии Android (ограничения фонового выполнения, ограничения на implicit broadcasts, требования к `android:exported`). Ниже приведены подробные примеры для каждого подхода.
+`BroadcastReceiver` можно подключить двумя основными способами: статически через `AndroidManifest.xml` и динамически в коде. В ряде сценариев также используются упорядоченные (ordered) рассылки, разрешения и (исторически) `LocalBroadcastManager`. Конкретное поведение зависит от версии Android (ограничения фонового выполнения, ограничения на implicit broadcasts, требования к `android:exported`). Важно учитывать, что динамическая регистрация не "отменяет" платформенные ограничения — некоторые broadcast'ы могут быть недоступны или изменены. Ниже приведены подробные примеры для каждого подхода.
 
 ### Метод 1: Статическая регистрация (Manifest)
 
@@ -90,7 +90,7 @@ class BootReceiver : BroadcastReceiver() {
 
 ### Метод 2: Динамическая регистрация (в коде)
 
-Регистрируем ресивер в коде так, чтобы его жизнь была связана с компонентом (`Activity`, `Service` и т.п.). Это основной способ получения многих implicit broadcasts на современных Android.
+Регистрируем ресивер в коде так, чтобы его жизнь была связана с компонентом (`Activity`, `Service` и т.п.). Это основной способ получения многих implicit broadcasts на современных Android (там, где они ещё поддерживаются).
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 Характеристики:
 - Ресивер активен только пока зарегистрирован; обычно привязан к жизненному циклу `Activity`/`Fragment`/`Service`.
 - Позволяет гибко включать/отключать обработку во время выполнения.
-- Помогает обойти часть ограничений на manifest-регистрацию implicit broadcasts.
+- Помогает корректно использовать оставшиеся implicit broadcasts без manifest-регистрации (но сами отправляемые системой broadcast'ы всё равно ограничены политиками платформы).
 - Требует корректного `unregisterReceiver` для предотвращения утечек и `IllegalArgumentException`.
 
 ### Метод 3: Ресивер с областью жизни компонента (Component-Scoped Receiver)
@@ -159,8 +159,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Для приложений с target N+ CONNECTIVITY_ACTION deprecated для manifest ресиверов.
-        // Динамическая регистрация допустима, но для сети лучше использовать NetworkCallback.
+        // Для приложений с target N+ CONNECTIVITY_ACTION помечен deprecated.
+        // Динамическая регистрация возможна, но для отслеживания сети рекомендуется
+        // использовать NetworkCallback API (registerDefaultNetworkCallback и др.).
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(networkReceiver, filter)
     }
@@ -182,7 +183,7 @@ class MainActivity : AppCompatActivity() {
 
 Характеристики:
 - Использует стандартные `registerReceiver`/`unregisterReceiver` с явной привязкой к жизненному циклу компонента.
-- Для сетевых изменений предпочтительнее `ConnectivityManager.registerDefaultNetworkCallback` и похожие API.
+- Для современных сценариев работы с сетью предпочтительнее `ConnectivityManager.registerDefaultNetworkCallback` и аналогичные API.
 
 ### Метод 4: LocalBroadcastManager (устаревший)
 
@@ -236,7 +237,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             Intent.ACTION_POWER_CONNECTED -> handlePowerConnected()
             Intent.ACTION_POWER_DISCONNECTED -> handlePowerDisconnected()
 
-            // Подключение (CONNECTIVITY_ACTION deprecated для manifest ресиверов)
+            // Подключение (CONNECTIVITY_ACTION deprecated, используйте NetworkCallback, где возможно)
             ConnectivityManager.CONNECTIVITY_ACTION -> handleConnectivityChange(context)
             WifiManager.WIFI_STATE_CHANGED_ACTION -> handleWifiStateChange()
 
@@ -249,10 +250,11 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             Intent.ACTION_SCREEN_OFF -> handleScreenOff()
 
             // Время
+            // Начиная с Android 12, ACTION_TIME_TICK больше не доставляется манифестным ресиверам сторонних приложений
             Intent.ACTION_TIME_TICK -> handleTimeTick()
             Intent.ACTION_TIMEZONE_CHANGED -> handleTimezoneChange()
 
-            // Пакеты
+            // Пакеты (требуют указания data scheme="package" в intent-filter манифеста)
             Intent.ACTION_PACKAGE_ADDED -> handlePackageAdded(intent)
             Intent.ACTION_PACKAGE_REMOVED -> handlePackageRemoved(intent)
         }
@@ -507,7 +509,7 @@ class EventBus {
 В итоге, чтобы `BroadcastReceiver` получал сообщения, нужно: (1) объявить или реализовать ресивер, (2) корректно зарегистрировать его (в манифесте или динамически), (3) учитывать экспорт/разрешения и (4) следовать лучшим практикам и современным альтернативам.
 
 ## Answer (EN)
-`BroadcastReceiver` can be registered in two main ways: statically in AndroidManifest.xml or dynamically in code. For some use cases, you also use ordered broadcasts, permissions, and (historically) LocalBroadcastManager. Exact behavior depends on Android version (background execution limits, implicit broadcasts restrictions, exported flag requirements).
+`BroadcastReceiver` can be registered in two main ways: statically in AndroidManifest.xml or dynamically in code. For some use cases, you can also use ordered broadcasts, permission-protected broadcasts, and (historically) LocalBroadcastManager. Exact behavior depends on Android version (background execution limits, implicit broadcast restrictions, exported flag requirements). Dynamic registration does not "override" platform policies: some broadcasts may still be limited or no longer sent.
 
 ### Method 1: Static Registration (Manifest)
 
@@ -536,7 +538,7 @@ class BootReceiver : BroadcastReceiver() {
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app">
 
-    <!-- Required permissions -->
+    <!-- Required permission -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application>
@@ -557,11 +559,11 @@ Characteristics:
 - Can receive certain system broadcasts even when the app is not running: the system may start your app process to deliver them.
 - Works across app restarts as long as the manifest entry remains.
 - Subject to Android 8.0+ background execution limits and implicit broadcast restrictions: many implicit broadcasts can no longer be received via manifest registration by third-party apps.
-- Can be enabled/disabled at runtime via PackageManager (not as straightforward as dynamic registration).
+- Can be enabled/disabled at runtime via PackageManager (less flexible than dynamic registration).
 
 ### Method 2: Dynamic Registration (Code)
 
-Register receiver in code so its lifetime is tied to a component (e.g., `Activity`, `Service`). This is the primary way to receive many implicit broadcasts on modern Android.
+Register receiver in code so its lifetime is tied to a component (e.g., `Activity`, `Service`). This is the primary way to receive many implicit broadcasts on modern Android where they are still supported.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -605,7 +607,7 @@ class MainActivity : AppCompatActivity() {
 Characteristics:
 - Receiver is active only while registered; typically tied to `Activity`/`Fragment`/`Service` lifecycle.
 - Allows flexible enable/disable behavior at runtime.
-- Avoids many implicit broadcast restrictions applied to manifest-declared receivers (the sending of broadcasts may still be constrained by the platform).
+- Helps correctly use remaining implicit broadcasts without manifest registration (but the underlying broadcasts are still governed by platform policies).
 - Must be unregistered in the corresponding lifecycle callback to avoid leaks or IllegalArgumentException.
 
 ### Method 3: Component-Scoped Receiver Example
@@ -628,8 +630,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // For apps targeting N+, CONNECTIVITY_ACTION is deprecated for manifest receivers.
-        // Dynamic registration like this is allowed but consider using NetworkCallback instead.
+        // For apps targeting N+, CONNECTIVITY_ACTION is deprecated.
+        // Dynamic registration is possible, but prefer NetworkCallback APIs
+        // (e.g., registerDefaultNetworkCallback) for production code.
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(networkReceiver, filter)
     }
@@ -651,15 +654,15 @@ class MainActivity : AppCompatActivity() {
 
 Characteristics:
 - Uses standard registerReceiver/unregisterReceiver with explicit lifecycle tie-in.
-- For modern networking use ConnectivityManager.registerDefaultNetworkCallback or similar APIs.
+- For modern networking scenarios, use `ConnectivityManager.registerDefaultNetworkCallback` or related APIs instead of relying on `CONNECTIVITY_ACTION`.
 
 ### Method 4: LocalBroadcastManager (Deprecated)
 
-For internal app broadcasts only. This API is deprecated; prefer other mechanisms.
+Previously used for in-app broadcasts only. Now deprecated; use other mechanisms.
 
 ```kotlin
 // WARNING: LocalBroadcastManager is deprecated.
-// Use other in-app communication mechanisms (e.g., shared ViewModel, Flow, LiveData).
+// Prefer in-app mechanisms like shared ViewModel, Flow, LiveData, etc.
 class SenderActivity : AppCompatActivity() {
 
     fun sendLocalBroadcast() {
@@ -705,7 +708,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             Intent.ACTION_POWER_CONNECTED -> handlePowerConnected()
             Intent.ACTION_POWER_DISCONNECTED -> handlePowerDisconnected()
 
-            // Connectivity (note: CONNECTIVITY_ACTION is deprecated for manifest receivers)
+            // Connectivity (CONNECTIVITY_ACTION deprecated; prefer NetworkCallback where possible)
             ConnectivityManager.CONNECTIVITY_ACTION -> handleConnectivityChange(context)
             WifiManager.WIFI_STATE_CHANGED_ACTION -> handleWifiStateChange()
 
@@ -718,10 +721,12 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             Intent.ACTION_SCREEN_OFF -> handleScreenOff()
 
             // Time
+            // Starting with Android 12, ACTION_TIME_TICK is no longer delivered
+            // to manifest-declared receivers in third-party apps
             Intent.ACTION_TIME_TICK -> handleTimeTick()
             Intent.ACTION_TIMEZONE_CHANGED -> handleTimezoneChange()
 
-            // Package
+            // Package (require data scheme="package" in manifest intent-filters)
             Intent.ACTION_PACKAGE_ADDED -> handlePackageAdded(intent)
             Intent.ACTION_PACKAGE_REMOVED -> handlePackageRemoved(intent)
         }
@@ -851,7 +856,7 @@ fun Context.sendCustomOrderedBroadcast() {
 ```
 
 Note:
-- Starting with Android 12 (API 31), specifying android:exported explicitly is mandatory for receivers (and other components) with intent filters.
+- Starting with Android 12 (API 31), specifying `android:exported` explicitly is mandatory for components with intent filters.
 
 ### Permission-Protected Broadcasts
 
@@ -924,9 +929,9 @@ class BestPracticesActivity : AppCompatActivity() {
 ```
 
 Key points:
-- Always match registration and unregistration in lifecycle.
-- Avoid long work in onReceive(); offload to WorkManager, foreground service, or another async mechanism.
-- For new code, prefer modern APIs (NetworkCallback, WorkManager, in-app event buses) over global broadcasts where appropriate.
+- Always match registration and unregistration to the appropriate lifecycle callbacks.
+- Avoid long-running work in `onReceive()`; offload to WorkManager, a foreground service, or other async mechanisms.
+- For new code, prefer modern APIs (`NetworkCallback`, `WorkManager`, in-app event buses, reactive streams) over global broadcasts where appropriate.
 
 ### Comparison Table
 

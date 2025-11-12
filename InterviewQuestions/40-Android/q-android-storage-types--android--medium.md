@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-storage-options
 - q-android-manifest-file--android--easy
 - q-android-security-best-practices--android--medium
 sources: []
@@ -107,6 +108,8 @@ interface UserDao {
 ```
 
 **Использование**: сложные запросы, связанные данные, offline-first, кеш доменной модели, когда требуется индексация и целостность.
+
+См. также: [[c-android-storage-options]]
 
 **Сравнительная таблица:**
 
@@ -201,6 +204,8 @@ interface UserDao {
 
 **Use for**: complex queries, relational/linked data, offline-first caching, when you need indexing and data integrity.
 
+See also: [[c-android-storage-options]]
+
 **Comparison Table:**
 
 | Storage | Size (typical) | Privacy | Scenario |
@@ -217,14 +222,6 @@ interface UserDao {
 - Prefer Room over raw SQLite for type safety and migration support;
 - Scoped Storage is mandatory for `targetSdk 30+`.
 
-## Дополнительные вопросы (RU)
-
-- В чем различия между Proto DataStore и Preferences DataStore и когда выбирать каждый из них?
-- Что происходит с данными во внутреннем хранилище при обновлении приложения и при удалении?
-- Как реализовать шифрованное хранилище для чувствительных данных (например, токенов авторизации)?
-- Каковы производственные компромиссы между Room и "чистым" SQLite?
-- Как обрабатывать изменения разрешений на хранилище при миграции с до-Scoped Storage на Android 10+?
-
 ## Follow-ups
 
 - How does Proto DataStore differ from Preferences DataStore and when should you choose each?
@@ -233,17 +230,9 @@ interface UserDao {
 - What are the performance trade-offs between Room and raw SQLite?
 - How do you handle storage permission changes when migrating from pre-Scoped Storage to Android 10+?
 
-## Ссылки (RU)
-
-- [Data Storage](https://developer.android.com/training/data-storage)
-- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
-- [Room Database](https://developer.android.com/training/data-storage/room)
-
 ## References
 
-- [Data Storage](https://developer.android.com/training/data-storage)
-- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
-- [Room Database](https://developer.android.com/training/data-storage/room)
+- [[c-android-storage-options]]
 
 ## Related Questions
 
@@ -257,3 +246,19 @@ interface UserDao {
 ### Advanced
 - Implementing custom `ContentProvider` for inter-app data sharing
 - Optimizing Room performance with indices and query optimization
+
+## Дополнительные вопросы (RU)
+- В чем различия между Proto DataStore и Preferences DataStore и когда выбирать каждый из них?
+- Что происходит с данными во внутреннем хранилище при обновлении приложения и при удалении?
+- Как реализовать шифрованное хранилище для чувствительных данных (например, токенов авторизации)?
+- Каковы производственные компромиссы между Room и "чистым" SQLite?
+- Как обрабатывать изменения разрешений на хранилище при миграции с до-Scoped Storage на Android 10+?
+## Связанные вопросы (RU)
+### Предпосылки
+- [[q-android-manifest-file--android--easy]] - Конфигурация разрешений для доступа к хранилищу
+### Связано
+- [[q-android-security-best-practices--android--medium]] - Шифрование и безопасные паттерны хранения
+- [[q-android-architectural-patterns--android--medium]] - Паттерн репозитория для слоя данных
+### Продвинутое
+- Реализация собственного `ContentProvider` для обмена данными между приложениями
+- Оптимизация производительности Room с помощью индексов и оптимизации запросов

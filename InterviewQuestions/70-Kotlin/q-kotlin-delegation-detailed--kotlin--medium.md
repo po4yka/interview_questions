@@ -106,7 +106,7 @@ class UserObservable {
 
 val userObservable = UserObservable()
 userObservable.name = "Alice"  // Печатает: <no name> -> Alice
-userObservable.name = "Bob"    // Печатает: <no name> -> Alice, Alice -> Bob
+userObservable.name = "Bob"    // Печатает: Alice -> Bob
 ```
 
 **3. vetoable - Вето на изменения свойства**
@@ -350,7 +350,7 @@ class UserObservable {
 
 val user = UserObservable()
 user.name = "Alice"  // Prints: <no name> -> Alice
-user.name = "Bob"    // Prints: <no name> -> Alice, Alice -> Bob
+user.name = "Bob"    // Prints: Alice -> Bob
 ```
 
 **3. vetoable - Veto property changes**

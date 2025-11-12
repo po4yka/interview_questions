@@ -55,7 +55,7 @@ tags:
 
 **1. Jetpack Compose (современный подход)**
 
-Современный декларативный UI toolkit, который позволяет описывать интерфейс без XML и заменяет его в большинстве новых проектов:
+Современный декларативный UI toolkit, который позволяет описывать интерфейс без XML и является рекомендованным решением для большинства новых проектов. Он может сосуществовать с существующим `View`-базированным UI.
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -101,8 +101,9 @@ class MainActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
             )
-            // Используем dp-расширение для конвертации dp в пиксели
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+            // Используем dp-расширение для установки паддингов в dp (конвертация в пиксели)
+            val padding = 16.dp
+            setPadding(padding, padding, padding, padding)
         }
 
         val textView = TextView(this).apply {
@@ -150,9 +151,9 @@ fun ProfileScreen(user: User) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // В реальном проекте используйте подходящую библиотеку для загрузки изображений.
-                // Для современных сетапов часто применяют AsyncImage или актуальные API Coil.
-                Image(
-                    painter = rememberImagePainter(user.avatarUrl),
+                // В актуальных версиях Coil предпочтительно использовать AsyncImage из coil-compose.
+                AsyncImage(
+                    model = user.avatarUrl,
                     contentDescription = "Avatar",
                     modifier = Modifier
                         .size(80.dp)
@@ -170,7 +171,7 @@ fun ProfileScreen(user: User) {
 }
 ```
 
-Примечание: `rememberImagePainter` относится к более старому API `coil-compose` и требует соответствующей зависимости. В новых проектах рекомендуется использовать `AsyncImage` или современные подходы загрузки изображений из актуальной версии Coil.
+Примечание: `AsyncImage` доступен в `coil-compose` и требует соответствующей зависимости. `rememberImagePainter` относится к более старому API и не рекомендуется для новых проектов.
 
 **Сравнение подходов:**
 
@@ -195,7 +196,7 @@ There are two main approaches to create UI without XML in Android:
 
 **1. Jetpack Compose (modern approach)**
 
-Modern declarative UI toolkit that lets you define UI without XML and is the recommended choice for most new projects:
+Modern declarative UI toolkit that lets you define UI without XML and is the recommended choice for most new projects. It can coexist with existing `View`-based UIs.
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -241,8 +242,9 @@ class MainActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
             )
-            // Use dp extension to convert dp to pixels
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+            // Use a dp extension to set padding in dp (converted to pixels)
+            val padding = 16.dp
+            setPadding(padding, padding, padding, padding)
         }
 
         val textView = TextView(this).apply {
@@ -290,9 +292,9 @@ fun ProfileScreen(user: User) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // In a real project use an appropriate image-loading library.
-                // For modern setups, a common choice is AsyncImage or other up-to-date Coil APIs.
-                Image(
-                    painter = rememberImagePainter(user.avatarUrl),
+                // With modern Coil versions, prefer AsyncImage from coil-compose.
+                AsyncImage(
+                    model = user.avatarUrl,
                     contentDescription = "Avatar",
                     modifier = Modifier
                         .size(80.dp)
@@ -310,7 +312,7 @@ fun ProfileScreen(user: User) {
 }
 ```
 
-Note: `rememberImagePainter` is part of an older `coil-compose` API and requires the proper Coil dependency. For new projects, it is recommended to use `AsyncImage` or other up-to-date image loading approaches from the latest Coil library.
+Note: `AsyncImage` is available in `coil-compose` and requires the corresponding dependency. `rememberImagePainter` belongs to an older API and is not recommended for new projects.
 
 **Comparison:**
 

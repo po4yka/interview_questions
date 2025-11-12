@@ -2,30 +2,23 @@
 id: kotlin-062
 title: "Testing StateFlow and SharedFlow in ViewModels / Тестирование StateFlow и SharedFlow в ViewModels"
 aliases: ["Testing StateFlow and SharedFlow in ViewModels", "Тестирование StateFlow и SharedFlow в ViewModels"]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines, stateflow, sharedflow]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Flow Testing Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-flow, q-stateflow-sharedflow-differences--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
-
-# Timestamps
 created: 2025-10-12
 updated: 2025-11-09
-
 tags: [coroutines, difficulty/medium, kotlin, sharedflow, stateflow, testing, viewmodel]
+
 ---
+
 # Вопрос (RU)
 > Как тестировать `StateFlow` и `SharedFlow` в `ViewModel`? Покрыть стратегии коллекции, библиотеку Turbine, `TestScope`, утверждения и граничные случаи вроде replay cache и семантики "latest value wins".
 
@@ -1026,13 +1019,13 @@ fun `SharedFlow has no current value property`() {
 
 ### Summary
 
-StateFlow:
+`StateFlow`:
 - Always has a current value (`.value`).
 - Emits current value immediately to new collectors.
 - Only emits on real value changes (`distinctUntilChanged`).
 - Great for representing UI state; often testable via direct `.value` assertions.
 
-SharedFlow:
+`SharedFlow`:
 - No `.value` by default.
 - Replay/buffer configurable; late collectors behavior depends on configuration.
 - Suitable for one-off events, navigation, messages.
@@ -1073,16 +1066,16 @@ Testing strategies:
 
 - Документация `StateFlow` и `SharedFlow`: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/
 - Библиотека Turbine: https://github.com/cashapp/turbine
-- Тестирование Flow на Android: https://developer.android.com/kotlin/flow/test
+- Тестирование `Flow` на Android: https://developer.android.com/kotlin/flow/test
 - См. также: [[c-kotlin]], [[c-flow]]
 
 ---
 
 ## References
 
-- StateFlow and SharedFlow - Kotlin Docs: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/
+- `StateFlow` and `SharedFlow` - Kotlin Docs: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/
 - Turbine - Testing Library: https://github.com/cashapp/turbine
-- Testing Flows - Android Developers: https://developer.android.com/kotlin/flow/test
+- Testing `Flows` - Android Developers: https://developer.android.com/kotlin/flow/test
 - See also: [[c-kotlin]], [[c-flow]]
 
 ---

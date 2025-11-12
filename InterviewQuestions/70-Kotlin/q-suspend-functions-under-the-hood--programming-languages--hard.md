@@ -12,9 +12,11 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-synchronized-blocks-with-coroutines--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [compiler, coroutines, difficulty/hard, kotlin]
+
 ---
+
 # Вопрос (RU)
 > Как работают suspend-функции под капотом?
 
@@ -23,16 +25,18 @@ tags: [compiler, coroutines, difficulty/hard, kotlin]
 
 ## Ответ (RU)
 
-Suspend-функции в Kotlin позволяют приостанавливать выполнение без блокировки потока. Под капотом компилятор Kotlin преобразует suspend-функции в state machine (машину состояний) в стиле CPS (Continuation-Passing Style), которая может приостанавливать и возобновлять выполнение.
+Suspend-функции в Kotlin позволяют приостанавливать выполнение без блокировки потока. Под капотом компилятор Kotlin преобразует suspend-функции в код в стиле CPS (Continuation-Passing Style) и генерирует state machine (машину состояний), которая отслеживает точки приостановки и локальное состояние.
 
 ### Основные Принципы Работы
 
-1. **Continuation-Passing Style (CPS)**: Каждая `suspend`-функция компилируется в обычную функцию, принимающую дополнительный параметр `Continuation<T>`, и возвращающую `Any?`, где `COROUTINE_SUSPENDED` сигнализирует о приостановке.
-2. **State Machine**: Компилятор генерирует машину состояний, где каждая точка приостановки соответствует состоянию (`label`). Локальные переменные и прогресс выполнения сохраняются в специальном continuation-классе.
-3. **Suspension**: При достижении точки приостановки (например, `delay`, другие `suspend`-функции) функция может вернуть `COROUTINE_SUSPENDED`, освободив текущий поток.
-4. **Resumption**: Когда результат готов, вызывается `resumeWith` у соответствующего `Continuation`, и выполнение продолжается с сохранённого состояния.
+1. **Continuation-Passing Style (CPS)**: Каждая `suspend`-функция компилируется в обычную функцию, принимающую дополнительный параметр `Continuation<T>` и возвращающую `Any?`. Специальное значение `COROUTINE_SUSPENDED` используется как маркер приостановки.
+2. **State Machine**: Компилятор генерирует машину состояний с полем `label`; каждая точка приостановки становится состоянием. Локальные переменные и прогресс выполнения сохраняются в сгенерированном continuation-классе.
+3. **Suspension**: При достижении точки приостановки (например, `delay` или другая `suspend`-функция) функция может вернуть `COROUTINE_SUSPENDED`, позволяя освободить текущий поток.
+4. **Resumption**: Когда асинхронная операция завершается, вызывается `resumeWith` у соответствующего `Continuation`, и выполнение продолжается с сохранённого состояния.
 
 ### Преобразование Компилятором (Концептуально)
+
+Ниже — упрощённая иллюстрация того, что делает компилятор. Это не точный декомпилированный код, а схематический пример.
 
 ```kotlin
 // Исходный код:
@@ -42,7 +46,7 @@ suspend fun fetchUserData(userId: Int): User {
     return User(profile, settings)
 }
 
-// Что делает компилятор (упрощенно и схематично):
+// Концептуально (упрощенно):
 fun fetchUserData(
     userId: Int,
     completion: Continuation<User>
@@ -53,7 +57,7 @@ fun fetchUserData(
     return sm.invokeSuspend(Unit)
 }
 
-// Сгенерированный (упрощенный) continuation/state-machine
+// Упрощённый continuation/state-machine (псевдокод)
 class FetchUserDataSM(
     private val userId: Int,
     private val completion: Continuation<User>
@@ -76,29 +80,41 @@ class FetchUserDataSM(
     }
 
     fun invokeSuspend(param: Any?): Any? {
-        when (label) {
+        return when (label) {
             0 -> {
                 label = 1
                 val r = fetchProfile(userId, this)
-                if (r == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-                profile = r as Profile
+                if (r == COROUTINE_SUSPENDED) COROUTINE_SUSPENDED else {
+                    profile = r as Profile
+                    // Падение вниз к следующему состоянию
+                    label = 2
+                    invokeSuspend(Unit)
+                }
             }
             1 -> {
+                // В реальном коде это состояние будет вызываться через resumeWith
+                // после завершения fetchProfile.
                 label = 2
-                val r = fetchSettings(userId, this)
-                if (r == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-                settings = r as Settings
+                invokeSuspend(Unit)
             }
             2 -> {
-                return User(profile!!, settings!!)
+                val r = fetchSettings(userId, this)
+                label = 3
+                if (r == COROUTINE_SUSPENDED) COROUTINE_SUSPENDED else {
+                    settings = r as Settings
+                    invokeSuspend(Unit)
+                }
             }
+            3 -> {
+                User(profile!!, settings!!)
+            }
+            else -> throw IllegalStateException("call to 'resume' before 'invoke'")
         }
-        return COROUTINE_SUSPENDED
     }
 }
 ```
 
-(В реальности используется базовый класс `ContinuationImpl`, битовые флаги для `label` и больше служебного кода; пример выше — концептуальная иллюстрация.)
+(В реальности используется базовый класс `ContinuationImpl`, битовые флаги для `label`, проверка через `throwOnFailure` и больше служебного кода; пример выше — исключительно концептуальная иллюстрация.)
 
 ### Простой Пример Преобразования
 
@@ -109,7 +125,7 @@ suspend fun simple(): String {
     return "Done"
 }
 
-// После компиляции (упрощенно, концептуально)
+// После компиляции (упрощенно, концептуально — псевдокод)
 fun simple(completion: Continuation<String>): Any? {
     val sm = if (completion is SimpleSM) completion else SimpleSM(completion)
     return sm.invokeSuspend(Unit)
@@ -136,11 +152,14 @@ class SimpleSM(
         0 -> {
             label = 1
             val r = delay(1000, this)
-            if (r == COROUTINE_SUSPENDED) COROUTINE_SUSPENDED else {
+            if (r == COROUTINE_SUSPENDED) {
+                COROUTINE_SUSPENDED
+            } else {
                 "Done"
             }
         }
         1 -> {
+            // Возобновление после delay
             "Done"
         }
         else -> throw IllegalStateException("call to 'resume' before 'invoke'")
@@ -148,7 +167,7 @@ class SimpleSM(
 }
 ```
 
-(Опять же, это схема: реальный байткод использует `ContinuationImpl.invokeSuspend`.)
+(Снова: это схема, реальный байткод опирается на `ContinuationImpl.invokeSuspend`.)
 
 ### State Machine С Локальными Переменными
 
@@ -162,7 +181,7 @@ suspend fun calculate(x: Int, y: Int): Int {
     return product + x
 }
 
-// Скомпилировано (схематично): переменные сохраняются в continuation
+// Скомпилировано (схематично, псевдокод): переменные сохраняются в continuation
 fun calculate(
     x: Int,
     y: Int,
@@ -195,24 +214,37 @@ class CalculateSM(
     }
 
     fun invokeSuspend(param: Any?): Any? {
-        when (label) {
+        return when (label) {
             0 -> {
                 sum = x + y
                 label = 1
                 if (delay(100, this) == COROUTINE_SUSPENDED)
-                    return COROUTINE_SUSPENDED
+                    COROUTINE_SUSPENDED
+                else {
+                    label = 2
+                    invokeSuspend(Unit)
+                }
             }
             1 -> {
-                product = sum * 2
+                // Возобновление после первого delay
                 label = 2
-                if (delay(100, this) == COROUTINE_SUSPENDED)
-                    return COROUTINE_SUSPENDED
+                invokeSuspend(Unit)
             }
             2 -> {
-                return product + x
+                product = sum * 2
+                label = 3
+                if (delay(100, this) == COROUTINE_SUSPENDED)
+                    COROUTINE_SUSPENDED
+                else {
+                    product + x
+                }
             }
+            3 -> {
+                // Возобновление после второго delay
+                product + x
+            }
+            else -> throw IllegalStateException("call to 'resume' before 'invoke'")
         }
-        return COROUTINE_SUSPENDED
     }
 }
 ```
@@ -247,12 +279,13 @@ suspend fun example(): String {
 }
 ```
 
-- В сгенерированной функции при вызове `delay` вызывается другая `suspend`-функция.
-- Если она возвращает `COROUTINE_SUSPENDED`, текущая функция немедленно возвращает `COROUTINE_SUSPENDED` вызывающему коду, поток освобождается.
-- Позже, когда операция завершается, вызывается `resumeWith` на соответствующем `Continuation`.
-- Машина состояний использует `label` и сохранённые поля, чтобы продолжить выполнение с нужного места.
+- В сгенерированной функции используется поле `label` для выбора следующего шага.
+- При вызове `delay` вызывается другая `suspend`-функция.
+- Если она возвращает `COROUTINE_SUSPENDED`, текущая функция сразу возвращает `COROUTINE_SUSPENDED` вызывающему коду, поток освобождается.
+- Позже планировщик/диспетчер вызывает `resumeWith` на соответствующем `Continuation` с результатом или исключением.
+- Машина состояний, используя `label` и сохранённые поля, продолжает выполнение с нужного места.
 
-### Вложенные Suspend Вызовы
+### Вложенные Suspend Вызовы (Концептуально)
 
 ```kotlin
 // Оригинал
@@ -275,9 +308,11 @@ suspend fun inner2(): String {
 // Каждая функция имеет свой state machine; continuations образуют цепочку.
 ```
 
-Высокоуровневая идея: `outer` вызывает `inner1`, передавая continuation, который при возобновлении запишет результат в поля state machine `outer` и продолжит выполнение `outer` с соответствующим `label`. Аналогично для `inner2`. Таким образом, вложенные suspend-вызовы координируются через цепочку `Continuation` и машин состояний.
+Высокоуровневая идея: `outer` вызывает `inner1`, передавая continuation, который при возобновлении запишет результат в поля state machine `outer` и продвинет его `label`. Аналогично для `inner2`. Таким образом, вложенные suspend-вызовы координируются через цепочку `Continuation` и машин состояний.
 
 ### Реальный Декомпилированный Пример (Упрощенный Шаблон)
+
+Ниже — типичный шаблон, к которому стремится реальный байткод (схематично, детали могут отличаться между версиями компилятора):
 
 ```kotlin
 // Оригинальный Kotlin
@@ -397,16 +432,14 @@ suspend fun manySteps(): Int {
     delay(1)
     return 42
 }
-// Компилятор создаст state machine с несколькими состояниями для этой функции.
 
 suspend fun optimized(): Int {
     delay(5)
     return 42
 }
-// Здесь state machine проще (меньше состояний) для этой функции.
 ```
 
-Меньше точек приостановки в конкретной функции — проще её state machine и немного меньше накладных расходов, но общая стоимость также зависит от числа создаваемых корутин, логики внутри них и планировщика.
+Меньше точек приостановки в конкретной функции — проще её state machine и немного меньше накладных расходов. Однако основная стоимость зависит также от числа создаваемых корутин, логики внутри них и планировщика, а не только от количества состояний.
 
 ### Inline Suspend Функции
 
@@ -421,9 +454,10 @@ suspend inline fun <T> measureTime(
     return result to time
 }
 
-// После inlining сама оболочка практически исчезает,
-// но если block содержит точки приостановки,
-// для него (его тела) всё равно будет сгенерирована соответствующая state machine.
+// После inlining сама оболочка встраивается в место вызова.
+// Если переданный block содержит точки приостановки, для его тела
+// по-прежнему генерируется собственная state machine; inlining убирает
+// лишний уровень вызова, но не отменяет механизм приостановки.
 suspend fun example() {
     val (data, time) = measureTime {
         fetchData()  // используется state machine suspend-вызовов внутри
@@ -431,28 +465,30 @@ suspend fun example() {
 }
 ```
 
-### Ключевые Концепции (RU)
+### Ключевые Концепции (RU/EN Summary)
 
-1. CPS-трансформация: каждая `suspend fun foo(): T` компилируется в `fun foo(Continuation<T>): Any?` плюс сгенерированный continuation-класс.
+1. CPS-трансформация: каждая `suspend fun foo(): T` компилируется в `fun foo(Continuation<T>): Any?` плюс сгенерированный continuation/машину состояний.
 2. State machine: тело функции разбивается на состояния в точках приостановки (`label`).
 3. Continuation: хранит состояние, локальные переменные и ссылку на completion-`Continuation`.
 4. `COROUTINE_SUSPENDED`: маркер, сигнализирующий о приостановке.
 5. Без блокировки потока: при возврате `COROUTINE_SUSPENDED` поток можно использовать для другой работы.
 6. Resumption: `resumeWith` продолжает выполнение с нужного состояния.
-7. Stack unwinding: при приостановке стек вызовов обычных функций не удерживается; состояние корутины хранится в объектах на куче.
+7. `Stack` unwinding: при приостановке стек вызовов обычных функций не удерживается; состояние корутины хранится в объектах на куче.
 
-**Резюме**: Suspend-функции в Kotlin компилируются в код в стиле CPS с использованием машин состояний и `Continuation`. Каждая точка приостановки приводит к сохранению состояния в continuation-объекте и возможному возврату `COROUTINE_SUSPENDED`. Позже, через `resumeWith`, выполнение продолжается с сохранённого места без блокировки потоков.
+**Резюме**: Suspend-функции в Kotlin компилируются в CPS-код с использованием машин состояний и `Continuation`. Каждая точка приостановки приводит к сохранению состояния в continuation-объекте и возможному возврату `COROUTINE_SUSPENDED`. Позже, через `resumeWith`, выполнение продолжается с сохранённого места без блокировки потоков.
 
 ## Answer (EN)
 
 Suspend functions in Kotlin allow pausing execution without blocking the underlying thread. Under the hood, the Kotlin compiler lowers suspend functions to CPS-style code plus a state machine that tracks suspension points and local state.
 
-1. **Continuation-Passing Style (CPS)**: Each `suspend` function is compiled to a function that takes an extra `Continuation<T>` parameter and returns `Any?`, where `COROUTINE_SUSPENDED` is used as a special marker.
-2. **State Machine**: The compiler generates a state machine with a `label` field; each suspension point becomes a state. Locals and progress are stored in a generated continuation class.
-3. **Suspension**: At a suspension point (e.g., `delay`, another `suspend` call), the function may return `COROUTINE_SUSPENDED`, releasing the thread.
-4. **Resumption**: When the async operation completes, `resumeWith` is invoked on the captured `Continuation`, and execution continues from the saved state.
+1. **Continuation-Passing Style (CPS)**: Each `suspend` function is compiled to a function that takes an extra `Continuation<T>` parameter and returns `Any?`. A special `COROUTINE_SUSPENDED` marker value is used to indicate suspension.
+2. **State Machine**: The compiler generates a state machine driven by a `label` field; each suspension point becomes a state. Locals and progress are stored in a generated continuation class.
+3. **Suspension**: At a suspension point (e.g., `delay`, another `suspend` call), the function may return `COROUTINE_SUSPENDED`, releasing the current thread.
+4. **Resumption**: When the async operation completes, `resumeWith` is invoked on the stored `Continuation`, and execution continues from the saved state.
 
 ### Compiler Transformation Overview (Conceptual)
+
+The following is a schematic illustration, not exact decompiled output.
 
 ```kotlin
 // Source code you write:
@@ -473,6 +509,7 @@ fun fetchUserData(
     return sm.invokeSuspend(Unit)
 }
 
+// Simplified continuation/state-machine (pseudocode)
 class FetchUserDataSM(
     private val userId: Int,
     private val completion: Continuation<User>
@@ -495,29 +532,39 @@ class FetchUserDataSM(
     }
 
     fun invokeSuspend(param: Any?): Any? {
-        when (label) {
+        return when (label) {
             0 -> {
                 label = 1
                 val r = fetchProfile(userId, this)
-                if (r == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-                profile = r as Profile
+                if (r == COROUTINE_SUSPENDED) COROUTINE_SUSPENDED else {
+                    profile = r as Profile
+                    label = 2
+                    invokeSuspend(Unit)
+                }
             }
             1 -> {
+                // Resume after fetchProfile
                 label = 2
-                val r = fetchSettings(userId, this)
-                if (r == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-                settings = r as Settings
+                invokeSuspend(Unit)
             }
             2 -> {
-                return User(profile!!, settings!!)
+                val r = fetchSettings(userId, this)
+                label = 3
+                if (r == COROUTINE_SUSPENDED) COROUTINE_SUSPENDED else {
+                    settings = r as Settings
+                    invokeSuspend(Unit)
+                }
             }
+            3 -> {
+                User(profile!!, settings!!)
+            }
+            else -> throw IllegalStateException("call to 'resume' before 'invoke'")
         }
-        return COROUTINE_SUSPENDED
     }
 }
 ```
 
-(Real code uses `ContinuationImpl`, bit-masked labels, and additional runtime helpers; this is intentionally simplified.)
+(Real code uses `ContinuationImpl`, bit-masked labels, Result/throwOnFailure utilities, and other helpers. This is intentionally simplified pseudocode.)
 
 ### Simple Example: Transformation
 
@@ -528,7 +575,7 @@ suspend fun simple(): String {
     return "Done"
 }
 
-// Simplified compiled shape
+// Simplified compiled shape (pseudocode)
 fun simple(completion: Continuation<String>): Any? {
     val sm = if (completion is SimpleSM) completion else SimpleSM(completion)
     return sm.invokeSuspend(Unit)
@@ -555,11 +602,14 @@ class SimpleSM(
         0 -> {
             label = 1
             val r = delay(1000, this)
-            if (r == COROUTINE_SUSPENDED) COROUTINE_SUSPENDED else {
+            if (r == COROUTINE_SUSPENDED) {
+                COROUTINE_SUSPENDED
+            } else {
                 "Done"
             }
         }
         1 -> {
+            // Resume after delay
             "Done"
         }
         else -> throw IllegalStateException("call to 'resume' before 'invoke'")
@@ -579,6 +629,7 @@ suspend fun calculate(x: Int, y: Int): Int {
     return product + x
 }
 
+// Conceptual lowered form: locals stored in continuation
 fun calculate(
     x: Int,
     y: Int,
@@ -611,24 +662,37 @@ class CalculateSM(
     }
 
     fun invokeSuspend(param: Any?): Any? {
-        when (label) {
+        return when (label) {
             0 -> {
                 sum = x + y
                 label = 1
                 if (delay(100, this) == COROUTINE_SUSPENDED)
-                    return COROUTINE_SUSPENDED
+                    COROUTINE_SUSPENDED
+                else {
+                    label = 2
+                    invokeSuspend(Unit)
+                }
             }
             1 -> {
-                product = sum * 2
+                // Resume after first delay
                 label = 2
-                if (delay(100, this) == COROUTINE_SUSPENDED)
-                    return COROUTINE_SUSPENDED
+                invokeSuspend(Unit)
             }
             2 -> {
-                return product + x
+                product = sum * 2
+                label = 3
+                if (delay(100, this) == COROUTINE_SUSPENDED)
+                    COROUTINE_SUSPENDED
+                else {
+                    product + x
+                }
             }
+            3 -> {
+                // Resume after second delay
+                product + x
+            }
+            else -> throw IllegalStateException("call to 'resume' before 'invoke'")
         }
-        return COROUTINE_SUSPENDED
     }
 }
 ```
@@ -661,13 +725,37 @@ suspend fun example(): String {
 }
 ```
 
-- The compiled function starts at `label = 0`.
-- When it reaches `delay`, it calls another suspend function.
-- If that call returns `COROUTINE_SUSPENDED`, it returns `COROUTINE_SUSPENDED` to its caller, and the thread is free.
-- Later, the scheduler/dispatcher calls `resumeWith` on the stored `Continuation` with either success or failure.
-- The state machine uses the `label` and stored locals to continue from where it left off.
+- The compiled function uses a `label`-driven state machine.
+- At `delay`, it calls another suspend function.
+- If that call returns `COROUTINE_SUSPENDED`, it immediately returns `COROUTINE_SUSPENDED` to its caller; the thread is free.
+- Later, the dispatcher/scheduler calls `resumeWith` on the stored `Continuation`.
+- The state machine uses `label` and stored locals to resume from where it left off.
 
-### Real Decompiled Example (Corrected Pattern)
+### Nested Suspend Calls (Conceptual)
+
+```kotlin
+suspend fun outer(): String {
+    val result1 = inner1()
+    val result2 = inner2()
+    return "$result1 $result2"
+}
+
+suspend fun inner1(): String {
+    delay(100)
+    return "First"
+}
+
+suspend fun inner2(): String {
+    delay(100)
+    return "Second"
+}
+
+// Each suspend function has its own state machine.
+// Continuations are wired so that when inner1/inner2 resume,
+// their results are fed back into outer's state and its label advances.
+```
+
+### Real Decompiled Example (Schematic Pattern)
 
 ```kotlin
 // Original Kotlin
@@ -676,7 +764,7 @@ suspend fun fetchData(): String {
     return "Data"
 }
 
-// Typical decompiled shape (simplified)
+// Typical decompiled shape (simplified, schematic)
 @Nullable
 public static final Object fetchData(@NotNull Continuation<? super String> completion) {
     if (completion instanceof FetchDataContinuation) {
@@ -727,6 +815,8 @@ static final class FetchDataContinuation extends ContinuationImpl {
 }
 ```
 
+(Details such as constructor body are determined by the real compiler; pattern is what matters.)
+
 ### Exception Handling Transformation (Conceptual)
 
 ```kotlin
@@ -740,23 +830,9 @@ suspend fun safeFetch(): String {
     }
 }
 
-// Conceptually: try/catch wraps the relevant parts of the state machine.
-// Real code uses Result/throwOnFailure and catches exceptions around invokeSuspend,
-// storing them in result and handling them in the appropriate state.
-```
-
-### Nested Suspend Calls (Conceptual)
-
-```kotlin
-suspend fun outer(): String {
-    val result1 = inner1()
-    val result2 = inner2()
-    return "$result1 $result2"
-}
-
-// Each suspend function has its own state machine.
-// The compiler wires continuations so that when inner1/inner2 resume,
-// they feed their results back into outer's state machine and advance its label.
+// Conceptually: try/catch is represented as states spanning multiple suspension points.
+// Real code uses Result/throwOnFailure and propagates exceptions via resumeWith,
+// so they are observed in the appropriate state of the state machine.
 ```
 
 ### suspendCoroutine Implementation (Conceptual)
@@ -807,8 +883,8 @@ suspend fun optimized(): Int {
 }
 ```
 
-- Each suspension point in a given function contributes additional states and bookkeeping in that function's state machine.
-- Fewer suspension points in the same function generally mean a simpler state machine and slightly lower overhead, but the main cost also comes from coroutine creation and scheduling, not only labels.
+- Each suspension point in a function contributes additional states and bookkeeping to that function's state machine.
+- Fewer suspension points mean a slightly simpler state machine and lower per-call overhead, but the dominant costs often come from coroutine creation, scheduling, and the work done inside, not just the number of labels.
 
 ### Inline Suspend Functions
 
@@ -822,9 +898,9 @@ suspend inline fun <T> measureTime(
     return result to time
 }
 
-// After inlining, the wrapper body is inlined at call site.
-// Suspend lambdas that actually suspend still compile to state machines;
-// inlining removes extra indirection rather than suspension itself.
+// After inlining, the wrapper body is inlined at the call site.
+// Suspend lambdas that actually suspend still compile into their own state machines;
+// inlining removes extra indirection but not the suspension mechanism itself.
 suspend fun example() {
     val (data, time) = measureTime {
         fetchData()
@@ -834,15 +910,21 @@ suspend fun example() {
 
 ### Key Concepts Summary (EN)
 
-1. CPS transformation: every `suspend fun foo(): T` is compiled to `fun foo(Continuation<T>): Any?` plus a generated continuation/state-machine.
+1. CPS transformation: every `suspend fun foo(): T` is compiled to `fun foo(Continuation<T>): Any?` plus a generated continuation/state-machine class.
 2. State machine: the body is split into states at suspension points (`label`).
-3. Continuation: stores current state, locals, and reference to completion continuation.
+3. Continuation: stores the current state, locals, and a reference to the completion continuation.
 4. `COROUTINE_SUSPENDED`: marker object indicating suspension.
-5. No thread blocking: on suspension, the function returns and the thread is free.
+5. No thread blocking: on suspension, the function returns, and the thread is free.
 6. Resumption: `resumeWith` is used to continue from the saved state.
-7. Stack unwinding: the JVM call stack is not kept for suspended calls; state lives in heap objects.
+7. `Stack` unwinding: suspended calls do not keep the JVM call stack; coroutine state lives in heap objects.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого механизма от подхода в Java без корутин?
+- Когда на практике стоит учитывать детали работы suspend-функций под капотом?
+- Какие распространенные ошибки и подводные камни связаны с использованием suspend-функций?
 
 ## Follow-ups
 
@@ -850,11 +932,22 @@ suspend fun example() {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- [[c-coroutines]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 - [[c-coroutines]]
+
+## Связанные вопросы (RU)
+
+- [[q-suspend-function-return-type-after-compilation--programming-languages--hard]]
+- [[q-synchronized-blocks-with-coroutines--programming-languages--medium]]
 
 ## Related Questions
 

@@ -10,38 +10,41 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-backend
-related: [c-okhttp, c-retrofit, c-coroutines]
+related: [c-coroutines]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-11
 sources: []
 tags: [authentication, caching, difficulty/medium, interceptors, networking, okhttp, retry]
+
 ---
 
 # Вопрос (RU)
 
-> Реализовать пользовательские интерцепторы OkHttp для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки application vs network интерцепторов.
+> Реализовать пользовательские интерцепторы OkHttp для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки `application` vs `network` интерцепторов.
 
 # Question (EN)
 
-> Implement custom OkHttp interceptors for authentication refresh, request retry, and response caching. Explain application vs network interceptor chain order.
+> Implement custom OkHttp interceptors for authentication refresh, request retry, and response caching. Explain `application` vs `network` interceptor chain order.
 
 ## Ответ (RU)
 
-**Интерцепторы OkHttp** - механизмы для перехвата, модификации и обработки HTTP-запросов/ответов без загрязнения бизнес-логики.
+**Интерцепторы OkHttp** — механизмы для перехвата, модификации и обработки HTTP-запросов/ответов без загрязнения бизнес-логики.
+
+См. также: [[c-coroutines]]
 
 ### Типы Интерцепторов
 
-**Application Interceptors**:
+**`Application` Interceptors**:
 - Выполняются первыми, ближе к коду приложения
 - Вызываются один раз на запрос (даже для кешированных)
 - Видят оригинальный запрос до редиректов/повторов
-- Могут прервать цепочку без вызова сети
+- Могут прервать цепочку без вызова сети (вернув собственный `Response`)
 
-**Network Interceptors**:
+**`Network` Interceptors**:
 - Выполняются последними перед сетевым вызовом
 - Вызываются для каждого сетевого запроса + повторов
 - Видят реальный запрос с добавленными заголовками
-- Не могут прервать без сетевого вызова
+- Обычно используются для работы с сетью и логирования низкого уровня; могут вернуть собственный `Response` вместо вызова `proceed()`, но при этом обязаны соблюдать контракт `chain`
 
 ### Порядок Выполнения
 
@@ -55,7 +58,7 @@ Application Code
 
 ### 1. Authentication Interceptor
 
-Обновление токена при 401 с mutex для синхронизации:
+Обновление токена при `401` с `Mutex` для синхронизации:
 
 ```kotlin
 class AuthenticationInterceptor(
@@ -84,16 +87,20 @@ class AuthenticationInterceptor(
     }
 
     private fun refreshAndRetry(chain: Interceptor.Chain, request: Request): Response {
+        // ⚠️ intercept вызывается в синхронном потоке OkHttp, поэтому runBlocking здесь допустим,
+        // но важно не вызывать его из основного UI-потока.
         return runBlocking {
             refreshMutex.withLock {  // ✅ Prevent concurrent refresh
                 val newToken = tokenProvider.refreshToken()
                 if (newToken != null) {
-                    chain.proceed(request.newBuilder()
-                        .header("Authorization", "Bearer $newToken")
-                        .build())
+                    chain.proceed(
+                        request.newBuilder()
+                            .header("Authorization", "Bearer $newToken")
+                            .build()
+                    )
                 } else {
                     tokenProvider.clearTokens()
-                    chain.proceed(request)  // ❌ Will fail, trigger re-auth
+                    chain.proceed(request)  // ❌ Ожидаемо приведет к ошибке и триггернет re-auth на уровне приложения
                 }
             }
         }
@@ -132,7 +139,7 @@ class RetryInterceptor(
                     return response  // ✅ Success or non-retryable
                 }
 
-                if (retryCount >= maxRetries) return response  // ❌ Max retries
+                if (retryCount >= maxRetries) return response  // ❌ Max retries reached
 
                 // ✅ Check server-provided delay
                 val retryAfter = response.header("Retry-After")?.toLongOrNull()
@@ -151,13 +158,13 @@ class RetryInterceptor(
     }
 
     private fun calculateDelay(count: Int): Long =
-        (initialDelayMs * factor.pow(count).toLong()).coerceAtMost(10000L)
+        (initialDelayMs * factor.pow(count)).toLong().coerceAtMost(10000L)
 }
 ```
 
 ### 3. Cache Interceptor
 
-Адаптивное кеширование в зависимости от связи:
+Адаптивное кеширование в зависимости от состояния сети:
 
 ```kotlin
 class CacheInterceptor(
@@ -171,11 +178,14 @@ class CacheInterceptor(
         val isOnline = isNetworkAvailable()
 
         if (!isOnline) {
-            // ✅ Offline: accept stale cache
+            // ✅ Offline: accept stale cache, не ходим в сеть
             request = request.newBuilder()
-                .cacheControl(CacheControl.Builder()
-                    .maxStale(offlineMaxStale, TimeUnit.SECONDS)
-                    .build())
+                .cacheControl(
+                    CacheControl.Builder()
+                        .onlyIfCached()
+                        .maxStale(offlineMaxStale, TimeUnit.SECONDS)
+                        .build()
+                )
                 .build()
         }
 
@@ -184,11 +194,14 @@ class CacheInterceptor(
         return response.newBuilder()
             .removeHeader("Pragma")
             .removeHeader("Cache-Control")
-            .header("Cache-Control", if (isOnline) {
-                "public, max-age=$onlineMaxAge"  // ✅ Fresh data online
-            } else {
-                "public, max-stale=$offlineMaxStale"  // ✅ Stale data offline
-            })
+            .header(
+                "Cache-Control",
+                if (isOnline) {
+                    "public, max-age=$onlineMaxAge"  // ✅ Fresh data online
+                } else {
+                    "public, only-if-cached, max-stale=$offlineMaxStale"  // ✅ Stale data offline from cache
+                }
+            )
             .build()
     }
 
@@ -201,7 +214,7 @@ class CacheInterceptor(
 }
 ```
 
-### 4. OkHttpClient Configuration
+### 4. Конфигурация OkHttpClient
 
 ```kotlin
 class OkHttpClientFactory(
@@ -227,33 +240,33 @@ class OkHttpClientFactory(
 }
 ```
 
-### Best Practices
+### Лучшие практики
 
-1. **Порядок важен**: Application (Logging → Auth → Cache → Retry) → Network
-2. **Закрывайте ответы**: `response.close()` перед повторами
-3. **Потокобезопасность**: Используйте Mutex для refresh
-4. **Избегайте циклов**: Отдельный auth client без auth interceptor
-5. **Редактируйте чувствительные данные**: Не логируйте токены в production
+1. Порядок важен: `Application` (Logging → Auth → Cache → Retry) → `Network`
+2. Закрывайте ответы: вызывайте `response.close()` перед повторами
+3. Потокобезопасность: используйте `Mutex` для обновления токена
+4. Избегайте циклов: выделяйте отдельный клиент для auth без auth-interceptor
+5. Маскируйте чувствительные данные: не логируйте токены в production
 
 ### Распространённые Ошибки
 
 ```kotlin
 // ❌ Auth loop: auth interceptor вызывает защищённый endpoint
-authApi.refreshToken()  // → adds auth header → 401 → refresh → loop
+authApi.refreshToken()  // → добавляет auth header → 401 → refresh → loop
 
 // ✅ Separate auth client
-val authClient = OkHttpClient.Builder().build()  // No auth interceptor
+val authClient = OkHttpClient.Builder().build()  // Нет auth interceptor
 
 // ❌ Memory leak: не закрыт response
 val resp = chain.proceed(req)
-return chain.proceed(modified)  // resp leaked
+return chain.proceed(modified)  // resp утечет
 
 // ✅ Always close
 resp.close()
 return chain.proceed(modified)
 
 // ❌ Concurrent token refresh
-val token = refresh()  // Multiple threads
+val token = refresh()  // Несколько потоков
 
 // ✅ Synchronized with Mutex
 refreshMutex.withLock { refresh() }
@@ -265,19 +278,21 @@ refreshMutex.withLock { refresh() }
 
 **OkHttp Interceptors** intercept, modify, and handle HTTP requests/responses without polluting business logic.
 
+See also: [[c-coroutines]]
+
 ### Interceptor Types
 
-**Application Interceptors**:
+**`Application` Interceptors**:
 - Execute first, closer to app code
 - Called once per request (even for cached)
 - See original request before redirects/retries
-- Can short-circuit without network call
+- Can short-circuit without network call by returning a custom `Response`
 
-**Network Interceptors**:
+**`Network` Interceptors**:
 - Execute last, just before network call
 - Called for every network request + retries
 - See actual request with added headers
-- Cannot short-circuit without network call
+- Typically used for low-level concerns (network logging, caching). They may return a synthetic `Response` instead of calling `proceed()`, but must respect the `chain` contract.
 
 ### Execution Order
 
@@ -291,7 +306,7 @@ Application Code
 
 ### 1. Authentication Interceptor
 
-Token refresh on 401 with mutex for thread safety:
+Token refresh on `401` with `Mutex` for thread safety:
 
 ```kotlin
 class AuthenticationInterceptor(
@@ -320,16 +335,20 @@ class AuthenticationInterceptor(
     }
 
     private fun refreshAndRetry(chain: Interceptor.Chain, request: Request): Response {
+        // ⚠️ intercept runs on an OkHttp worker thread, so runBlocking is acceptable here
+        // as long as this interceptor is not invoked from the main/UI thread.
         return runBlocking {
             refreshMutex.withLock {  // ✅ Prevent concurrent refresh
                 val newToken = tokenProvider.refreshToken()
                 if (newToken != null) {
-                    chain.proceed(request.newBuilder()
-                        .header("Authorization", "Bearer $newToken")
-                        .build())
+                    chain.proceed(
+                        request.newBuilder()
+                            .header("Authorization", "Bearer $newToken")
+                            .build()
+                    )
                 } else {
                     tokenProvider.clearTokens()
-                    chain.proceed(request)  // ❌ Will fail, trigger re-auth
+                    chain.proceed(request)  // ❌ Expected to fail; lets app trigger re-auth flow
                 }
             }
         }
@@ -368,7 +387,7 @@ class RetryInterceptor(
                     return response  // ✅ Success or non-retryable
                 }
 
-                if (retryCount >= maxRetries) return response  // ❌ Max retries
+                if (retryCount >= maxRetries) return response  // ❌ Max retries reached
 
                 // ✅ Check server-provided delay
                 val retryAfter = response.header("Retry-After")?.toLongOrNull()
@@ -387,13 +406,13 @@ class RetryInterceptor(
     }
 
     private fun calculateDelay(count: Int): Long =
-        (initialDelayMs * factor.pow(count).toLong()).coerceAtMost(10000L)
+        (initialDelayMs * factor.pow(count)).toLong().coerceAtMost(10000L)
 }
 ```
 
 ### 3. Cache Interceptor
 
-Adaptive caching based on network:
+Adaptive caching based on network state:
 
 ```kotlin
 class CacheInterceptor(
@@ -407,11 +426,14 @@ class CacheInterceptor(
         val isOnline = isNetworkAvailable()
 
         if (!isOnline) {
-            // ✅ Offline: accept stale cache
+            // ✅ Offline: accept stale cache only, do not hit network
             request = request.newBuilder()
-                .cacheControl(CacheControl.Builder()
-                    .maxStale(offlineMaxStale, TimeUnit.SECONDS)
-                    .build())
+                .cacheControl(
+                    CacheControl.Builder()
+                        .onlyIfCached()
+                        .maxStale(offlineMaxStale, TimeUnit.SECONDS)
+                        .build()
+                )
                 .build()
         }
 
@@ -420,11 +442,14 @@ class CacheInterceptor(
         return response.newBuilder()
             .removeHeader("Pragma")
             .removeHeader("Cache-Control")
-            .header("Cache-Control", if (isOnline) {
-                "public, max-age=$onlineMaxAge"  // ✅ Fresh data online
-            } else {
-                "public, max-stale=$offlineMaxStale"  // ✅ Stale data offline
-            })
+            .header(
+                "Cache-Control",
+                if (isOnline) {
+                    "public, max-age=$onlineMaxAge"  // ✅ Fresh data online
+                } else {
+                    "public, only-if-cached, max-stale=$offlineMaxStale"  // ✅ Stale data offline from cache
+                }
+            )
             .build()
     }
 
@@ -465,11 +490,11 @@ class OkHttpClientFactory(
 
 ### Best Practices
 
-1. **Order matters**: Application (Logging → Auth → Cache → Retry) → Network
-2. **Close responses**: `response.close()` before retries
-3. **Thread safety**: Use Mutex for token refresh
-4. **Avoid loops**: Separate auth client without auth interceptor
-5. **Redact sensitive data**: Don't log tokens in production
+1. Order matters: `Application` (Logging → Auth → Cache → Retry) → `Network`
+2. Close responses: call `response.close()` before retries
+3. Thread safety: use `Mutex` for token refresh
+4. Avoid loops: separate auth client without auth interceptor
+5. Redact sensitive data: don't log tokens in production
 
 ### Common Pitfalls
 
@@ -497,6 +522,14 @@ refreshMutex.withLock { refresh() }
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как бы вы реализовали дедупликацию запросов для параллельных идентичных запросов?
+- Каковы последствия использования `runBlocking` в auth-interceptor-е для не-UI-потоков?
+- Как обрабатывать обновление токена, когда несколько запросов одновременно получают `401`?
+- Какие стратегии вы бы использовали для приоритизации запросов при перегрузке сети?
+- Как реализовать условное кеширование на основе заголовков запроса или шаблонов URL?
+
 ## Follow-ups
 
 - How would you implement request deduplication for concurrent identical requests?
@@ -505,11 +538,34 @@ refreshMutex.withLock { refresh() }
 - What strategies would you use to prioritize requests during network congestion?
 - How would you implement conditional caching based on request headers or URL patterns?
 
+## Ссылки (RU)
+
+- Документация по OkHttp Interceptors: https://square.github.io/okhttp/features/interceptors/
+- Документация по Retrofit: https://square.github.io/retrofit/
+- Android Network Security: https://developer.android.com/training/articles/security-config
+
 ## References
 
 - OkHttp Interceptors Documentation: https://square.github.io/okhttp/features/interceptors/
 - Retrofit Documentation: https://square.github.io/retrofit/
 - Android Network Security: https://developer.android.com/training/articles/security-config
+
+## Связанные вопросы (RU)
+
+### Предварительные знания
+- Базовая настройка HTTP-клиента с Retrofit
+- Понимание корутин для асинхронного обновления токена
+- Основы конфигурации OkHttp-клиента
+
+### Связанные
+- Продвинутые call adapters и конвертеры в Retrofit
+- Стратегии обработки сетевых ошибок и политики повторных попыток
+- Архитектурные паттерны API-клиентов (Repository, DataSource)
+
+### Продвинуто
+- Дедупликация запросов для параллельных идентичных запросов
+- Certificate pinning и security-interceptors
+- Тестирование сетевого слоя с MockWebServer
 
 ## Related Questions
 

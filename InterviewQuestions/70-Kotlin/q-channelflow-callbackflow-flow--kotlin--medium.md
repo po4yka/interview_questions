@@ -38,7 +38,7 @@ Kotlin `Flow` предоставляет несколько билдеров (`f
 | `channelFlow{}` | Холодный `Flow` с внутренним `Channel` | Поддерживает конкурентных продюсеров внутри блока | Буферизованный канал (можно настраивать) | Объединение/координация нескольких конкурентных источников |
 | `callbackFlow{}` | Холодный `Flow` с внутренним `Channel` | Безопасная обертка над callback + корутинами | Буфер + требуются корректные `awaitClose`-очистки | Обертка над callback/listener API |
 
-Важно: все три билдера создают холодные `Flow`. Для `channelFlow{}` и `callbackFlow{}` продюсер запускается на каждую коллекцию, но внутри используется `Channel`, что делает поведение ближе к «горячему» источнику, ограниченному жизненным циклом коллектора.
+Важно: все три билдера создают холодные `Flow`. Для `channelFlow{}` и `callbackFlow{}` продюсер запускается для каждой новой коллекции, и внутри используется `Channel`. Это может делать поведение похожим на «горячий» источник (несколько конкурентных продюсеров, буфер), но жизненный цикл по-прежнему строго ограничен коллекцией (они не становятся глобально горячими потоками сами по себе).
 
 ### `flow{}` — холодный, последовательный Flow
 
@@ -114,7 +114,7 @@ fun concurrentFlow(): Flow<Int> = flow {
 Характеристики:
 - Холодный `Flow`, блок выполняется в `ProducerScope`, основанном на `Channel`.
 - Можно запускать несколько корутин внутри блока и вызывать `send`/`emit` из любой из них.
-- По умолчанию используется буферизованный `Channel` (например, `Channel.BUFFERED`), емкость можно конфигурировать.
+- По умолчанию используется буферизованный `Channel` (обычно `Channel.BUFFERED`), емкость можно конфигурировать.
 - Back-pressure: через приостановку `send`/`emit`, когда буфер заполнен.
 
 Базовый пример:
@@ -291,7 +291,7 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :userId")
     fun getUserFlow(userId: String): Flow<User>
 
-    // Упрощенная ручная реализация через callbackFlow
+    // Упрощенная ручная реализация через callbackFlow (концептуальный пример)
     fun getUserFlowManual(userId: String): Flow<User> = callbackFlow {
         val observer = object : InvalidationTracker.Observer("users") {
             override fun onInvalidated(tables: Set<String>) {
@@ -370,7 +370,7 @@ flow {
     emit(1)
 }
 
-// channelFlow{} — можно send() или emit() (emit делегирует в send)
+// channelFlow{} — можно send() или emit() (emit в этом scope делегирует в send)
 channelFlow {
     send(1)
     emit(2)
@@ -419,8 +419,8 @@ fun channelFlowWithError(): Flow<Int> = channelFlow {
     }
 }
 
-// Ошибки в дочерних корутинах могут отменить scope; явно обрабатывайте их
-// (try/catch, CoroutineExceptionHandler, структурированная конкуррентность).
+// Исключения в дочерних корутинах по умолчанию отменяют ProducerScope и тем самым всю Flow-коллекцию.
+// Если нужно особое поведение, оборачивайте send/emit в try/catch и/или используйте отдельные обработчики.
 ```
 
 `callbackFlow{}`:
@@ -724,7 +724,7 @@ Kotlin `Flow` provides multiple builders (`flow{}`, `channelFlow{}`, `callbackFl
 | `channelFlow{}` | Cold Flow using a Channel internally | Concurrent producers inside the builder | Buffered channel (configurable) | Merge/coordinate multiple concurrent sources |
 | `callbackFlow{}` | Cold Flow using a Channel internally | Safe from callbacks + coroutines | Buffered + requires proper `awaitClose` cleanup | Wrapping callback/listener-style APIs |
 
-Note: All three builders create cold Flows. For `channelFlow{}` and `callbackFlow{}`, the producer logic is started per collection, but internally they use a Channel which can make their behavior resemble a hot source while being scoped to the collector.
+Note: All three builders create cold Flows. For `channelFlow{}` and `callbackFlow{}`, the producer logic is started per collection and uses an internal Channel. This can make them resemble hot sources (concurrent producers, buffering), but their lifecycle is still scoped to the collector; they do not become globally hot on their own.
 
 ### flow{} - Cold, Sequential Flow
 
@@ -800,7 +800,7 @@ fun concurrentFlow(): Flow<Int> = flow {
 Characteristics:
 - Cold Flow whose block runs in a `ProducerScope` backed by a Channel.
 - Concurrent: You can launch multiple coroutines inside the block and `send`/`emit` from any of them.
-- Buffered: Uses a Channel; default capacity is `Channel.BUFFERED` (e.g. 64) unless changed.
+- Buffered: Uses a Channel; default capacity is `Channel.BUFFERED` (typically 64) unless changed.
 - Backpressure: Achieved via suspending `send`/`emit` when the buffer is full.
 
 Basic usage:
@@ -822,8 +822,7 @@ fun concurrentFlow(): Flow<Int> = channelFlow {
     }
 }
 
-// Output example (order not guaranteed, interleaved from both coroutines):
-// 0, 10, 1, 2, 11, 3, 4, 12, 13, 14
+// Output order is not guaranteed due to concurrency
 ```
 
 When to use:
@@ -1110,9 +1109,8 @@ fun channelFlowWithError(): Flow<Int> = channelFlow {
     }
 }
 
-// Errors in child coroutines do not automatically turn into Flow emissions.
-// Depending on the CoroutineScope and exception handling, they may cancel the scope.
-// Use structured concurrency, try/catch, or a CoroutineExceptionHandler as appropriate.
+// Exceptions in child coroutines by default cancel the ProducerScope and thus the whole Flow collection.
+// If you need custom behavior, wrap send/emit in try/catch and/or use dedicated exception handling strategies.
 ```
 
 `callbackFlow{}`:
@@ -1397,11 +1395,11 @@ fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
 ### Key Takeaways
 
 1. `flow{}` — default choice, cold, sequential, minimal overhead.
-2. `channelFlow{}` — cold Flow backed by Channel; supports concurrent producers and buffering.
+2. `channelFlow{}` — cold Flow backed by Channel; supports concurrent producers and configurable buffering.
 3. `callbackFlow{}` — cold Flow backed by Channel; ideal for callback/listener APIs; requires `awaitClose {}` for proper cleanup.
 4. Use `emit()` in regular `flow{}` and in producer scopes when appropriate; use `send()` for suspending channel sends; use `trySend()` for non-suspending callbacks.
 5. Remember that backpressure is handled by suspension; buffering strategies affect behavior for fast producers.
-6. All three builders are cold; to get truly shared hot behavior, use `shareIn`, `stateIn`, or explicit shared scopes (`StateFlow`, `SharedFlow`).
+6. All three builders are cold; to get truly shared hot behavior, use `shareIn`, `stateIn`, or explicit shared sources (`StateFlow`, `SharedFlow`).
 7. Always test cancellation and cleanup, especially when integrating with external resources.
 8. Prefer `flow{}` for simplicity and performance unless you specifically need channel- or callback-based behavior.
 

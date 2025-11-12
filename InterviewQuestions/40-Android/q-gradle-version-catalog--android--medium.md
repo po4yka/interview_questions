@@ -29,7 +29,7 @@ sources: ["https://developer.android.com/build/migrate-to-catalogs", "https://do
 
 ## Ответ (RU)
 
-**Gradle Version Catalog** — это механизм для централизованного управления зависимостями и плагинами в Gradle-проектах через файл `libs.versions.toml` (или несколько каталогов). Вместо дублирования версий в каждом модуле создается единый каталог, на основе которого Gradle генерирует удобные, структурированные аксессоры ("типизированные"/type-safe-style) с поддержкой автодополнения в IDE.
+**Gradle Version Catalog** — это механизм для централизованного управления зависимостями и плагинами в Gradle-проектах через файл `libs.versions.toml` (или несколько каталогов). Вместо дублирования версий в каждом модуле создается единый каталог, на основе которого Gradle генерирует удобные, структурированные аксессоры ("типизированные"/type-safe-style) для Kotlin DSL и Groovy DSL с поддержкой автодополнения в IDE.
 
 См. также: [[c-gradle]]
 
@@ -77,13 +77,13 @@ dependencies {
 
 ### Правила именования алиасов
 
-Gradle на основе ключей в TOML генерирует Kotlin/Java аксессоры. Важно понимать, как символы преобразуются:
+Gradle на основе ключей в TOML генерирует Kotlin/Groovy аксессоры. Важно понимать, как символы преобразуются:
 
 - Дефис `-` в алиасе библиотеки (`retrofit-core`) приводит к вложенному аксессору: `libs.retrofit.core`.
 - Точка `.` используется как уже вложенная структура: `androidx.core.ktx` → `libs.androidx.core.ktx`.
-- Подчёркивание `_` в ключах (`room_runtime`) также транслируется в допустимые имена аксессоров и часто превращается в точку/разделитель: `room_runtime` → `libs.room.runtime`.
+- Подчёркивание `_` в ключах (`room_runtime`) допускается и транслируется в валидные имена аксессоров (например, `libs.room_runtime` или эквивалентный camelCase в Groovy); его не следует воспринимать как гарантированное преобразование в точку.
 
-**Валидные алиасы**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`.
+**Валидные алиасы**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`, `room_runtime`.
 
 **Невалидные**: `this.#invalid` (спецсимволы запрещены).
 
@@ -124,16 +124,16 @@ dependencies {
 
 ### Стратегия миграции
 
-1. Создайте `gradle/libs.versions.toml`.
+1. Создайте `gradle/libs.versions.toml` (при этом стандартный каталог `libs` поддерживается Gradle без дополнительной конфигурации).
 2. Вынесите версии из `build.gradle` файлов в секцию `[versions]`.
 3. Объявите библиотеки в `[libraries]` с `version.ref`.
 4. Сгруппируйте связанные зависимости в `[bundles]`.
 5. Замените `implementation("group:artifact:version")` на `implementation(libs.<alias>)`.
-6. Убедитесь, что проект собирается (и при необходимости включена поддержка каталогов версий в `settings.gradle` для старых версий Gradle).
+6. Убедитесь, что проект собирается. При использовании дополнительных каталогов (помимо стандартного `libs`) объявите их в `settings.gradle` через `dependencyResolutionManagement.versionCatalogs`.
 
 ## Answer (EN)
 
-**Gradle Version Catalog** is a mechanism for centralized dependency and plugin management via the `libs.versions.toml` file (or multiple catalogs). Instead of hardcoding versions in each module, you define a shared catalog from which Gradle generates convenient, structured accessors (type-safe-style accessors) with IDE autocompletion support.
+**Gradle Version Catalog** is a mechanism for centralized dependency and plugin management via the `libs.versions.toml` file (or multiple catalogs). Instead of hardcoding versions in each module, you define a shared catalog from which Gradle generates convenient, structured type-safe-style accessors for both Kotlin DSL and Groovy DSL with IDE autocompletion support.
 
 See also: [[c-gradle]]
 
@@ -181,13 +181,13 @@ dependencies {
 
 ### Alias Naming Rules
 
-Gradle generates Kotlin/Java accessors based on TOML keys. Key transformation rules:
+Gradle generates Kotlin/Groovy accessors based on TOML keys. Key transformation rules:
 
 - Dash `-` in library aliases (`retrofit-core`) becomes a nested accessor: `libs.retrofit.core`.
 - Dot `.` represents nested structure directly: `androidx.core.ktx` → `libs.androidx.core.ktx`.
-- Underscore `_` in keys (`room_runtime`) is converted into a valid accessor name and typically treated as a separator: `room_runtime` → `libs.room.runtime`.
+- Underscore `_` in keys (`room_runtime`) is allowed and mapped to a valid accessor name (for example, `libs.room_runtime` or an equivalent camelCase accessor in Groovy); it should not be assumed to always turn into a dot.
 
-**Valid aliases**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`.
+**Valid aliases**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`, `room_runtime`.
 
 **Invalid**: `this.#invalid` (special characters are forbidden).
 
@@ -228,12 +228,12 @@ dependencies {
 
 ### Migration Strategy
 
-1. Create `gradle/libs.versions.toml`.
+1. Create `gradle/libs.versions.toml` (the default `libs` catalog is recognized by Gradle without additional configuration).
 2. Extract versions from existing `build.gradle` files into the `[versions]` section.
 3. Declare libraries in `[libraries]` using `version.ref` where appropriate.
 4. Group related dependencies in `[bundles]`.
 5. Replace `implementation("group:artifact:version")` with `implementation(libs.<alias>)`.
-6. Verify the build (and for older Gradle versions, ensure version catalogs are enabled/configured in `settings.gradle`).
+6. Verify the build. When using additional catalogs (beyond the default `libs`), declare them in `settings.gradle` via `dependencyResolutionManagement.versionCatalogs`.
 
 ---
 

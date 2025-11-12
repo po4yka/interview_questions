@@ -18,6 +18,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android
 - q-android-security-best-practices--android--medium
 created: 2025-11-02
 updated: 2025-11-10
@@ -42,12 +43,10 @@ sources:
 
 ## Ответ (RU)
 
-## Краткий вариант
+## Краткая Версия
+Спроектируйте решение вокруг DPC как profile/device owner, стандартных режимов управления (Work Profile, Fully Managed, COPE, Dedicated), Managed Provisioning (QR, zero-touch, `afw#`), применения политик через `DevicePolicyManager` и managed configurations, с backend-сервером, который хранит политики, статусы соответствия, сертификаты и управляет взаимодействием с Managed Google Play и Android Management API. Обеспечьте чёткое разделение личных/рабочих данных, подробный аудит и использование современных механизмов проверки целостности устройства.
 
-Спроектируйте решение вокруг DPC как profile/device owner, стандартных режимов управления (Work Profile, Fully Managed, COPE, Dedicated), Managed Provisioning (QR, zero-touch, `afw#`), применения политик через `DevicePolicyManager` и managed configurations, с backend-сервером, который хранит политики, статусы соответствия, сертификаты и управляет взаимодействием с Managed Google Play и Android Management API. Обеспечьте чёткое разделение личных/рабочих данных, подробный аудит и использование современных механизмов целостности устройства.
-
-## Подробный вариант
-
+## Подробная Версия
 ### Требования
 
 - Функциональные:
@@ -67,19 +66,19 @@ sources:
 
 ### 1. Архитектура
 
-- **Device Policy Controller (DPC)**: приложение, регистрируемое как профайл- или владелец устройства через Managed Provisioning (`DevicePolicyManager`), использующее соответствующие API для применения политик. Поддержка только `DeviceAdminReceiver` как основного механизма управления считается легаси для Android Enterprise, поэтому фокус на owner-режимах.
+- **Device Policy Controller (DPC)**: приложение, регистрируемое как владелец профиля или устройства через Managed Provisioning, использующее `DevicePolicyManager` для применения политик. Поддержка только `DeviceAdminReceiver` как основного механизма управления считается легаси для Android Enterprise, поэтому фокус на owner-режимах.
 - **Backend**: хранит политики, устройства, сертификаты, статусы соответствия; управляет привязкой устройств и параметрами zero-touch / QR-провижининга.
 - **Play EMM API / Android Management API**:
-  - управление публикацией приватных приложений и каналами распространения;
+  - управление публикацией приватных приложений и каналами распространения через Managed Google Play;
   - управление managed configurations;
-  - тихая установка/обновление через Managed Google Play.
-  - Отметить, что Play EMM API устаревает в пользу Android Management API.
+  - тихая установка/обновление через Managed Google Play там, где это разрешено политикой;
+  - отметить, что Play EMM API считается устаревающим и заменяется Android Management API для новых реализаций.
 
 ### 2. Режимы управления
 
-- **Work Profile (BYOD)**: личное устройство, управляемый рабочий профиль. DPC выступает профайл-владельцем (profile owner) только в рабочем профиле; доступ к личным данным ограничен.
+- **Work Profile (BYOD)**: личное устройство, управляемый рабочий профиль. DPC выступает владельцем профиля (profile owner) только в рабочем профиле; доступ к личным данным запрещён платформой.
 - **Fully Managed**: корпоративное устройство, DPC — владелец устройства (device owner), полный контроль над системными политиками и приложениями.
-- **COPE**: корпоративное устройство с личным профилем. DPC — владелец устройства + управляет рабочим профилем; ограничения и сбор данных на личном профиле ограничены согласно требованиям Android Enterprise (нельзя читать личные данные/приложения).
+- **COPE**: корпоративное устройство с личным профилем. DPC — владелец устройства и владелец рабочего профиля; при этом доступ к данным и приложениям личного профиля строго ограничен требованиями Android Enterprise (нельзя читать личные данные/приложения или ослаблять их защиту).
 - **Dedicated**: киоски и single-purpose; device owner с Lock Task Mode, ограниченный набор приложений.
 
 ### 3. Provisioning
@@ -88,13 +87,16 @@ sources:
   - QR-код (Android 9+), содержащий extras для установки DPC / регистрации в EMM;
   - NFC bump (legacy) для старых устройств;
   - zero-touch provisioning через партнёров: привязка DPC / EMM-профиля на уровне поставщика;
-  - `afw#dpc` / идентификатор для загрузки DPC из Managed Google Play.
+  - использование идентификатора `afw#<dpc-id>` на экране первичной настройки для загрузки DPC из Managed Google Play.
 - В provisioning-интент передаются параметры: идентификатор DPC, токен регистрации, URL/endpoint бэкенда, начальная конфигурация; не полагаться только на прямой APK URL вне управляемого сценария.
 
 ### 4. Политики
 
 ```kotlin
 val dpm = context.getSystemService(DevicePolicyManager::class.java)
+
+// Требуется корректно зарегистрированный компонент администратора (DeviceAdminReceiver)
+// и соответствующие права владельца профиля или устройства.
 
 dpm.setPasswordQuality(adminComponent, DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX)
 dpm.addUserRestriction(adminComponent, UserManager.DISALLOW_CONFIG_WIFI)
@@ -103,25 +105,25 @@ dpm.setLockTaskPackages(adminComponent, arrayOf("com.company.app"))
 
 - Используйте managed configurations для настройки приложений через Managed Google Play (на уровне EMM), а на устройстве — через соответствующие API (`RestrictionsManager`/app restrictions) для чтения значений.
 - Сертификаты и ключи:
-  - установка клиентских сертификатов через `installKeyPair`/KeyChain в зависимость от режима управления;
+  - установка клиентских сертификатов через `installKeyPair` / KeyChain в зависимости от режима управления и наличия прав владельца;
   - ограничение функций локскрина через `setKeyguardDisabledFeatures` и другие политики.
 
 ### 5. Compliance & Telemetry
 
 - События: `DeviceAdminReceiver.onPasswordFailed`, `ACTION_MANAGED_PROFILE_PROVISIONED`, события смены политики и т.п.
-- Backend должен фиксировать состояние compliance (root/jailbreak сигналы, версии ОС, применённые политики), инициировать ремедиацию и уведомления.
-- Для проверки целостности устройства и анти-рут/эмуляция проверок использовать **Play Integrity API** (SafetyNet Attestation считается легаси и не рекомендован для новых реализаций).
+- Backend должен фиксировать состояние compliance (сигналы рутования/компрометации устройства, версии ОС, применённые политики), инициировать ремедиацию и уведомления.
+- Для проверки целостности устройства и анти-root/эмуляция проверок использовать Play Integrity API (SafetyNet Attestation считается легаси и не рекомендован для новых реализаций).
 
 ### 6. Play EMM API интеграция
 
-- Регистрация enterprise и получение `enterpriseId` (для существующих интеграций); для новых решений — рассмотреть Android Management API как рекомендуемый путь.
-- Управление приватным каналом приложений, rollout версий через Managed Google Play.
-- Управление managed configurations (app restrictions) для поддерживаемых приложений через соответствующие API/консоль, на устройстве — через `ManagedConfigurationsSettings`/чтение конфигураций приложением.
+- Для существующих интеграций: регистрация enterprise и получение `enterpriseId` в рамках Play EMM API; для новых решений — предпочтительно использовать Android Management API как рекомендуемый путь.
+- Управление приватным каналом приложений и rollout версий через Managed Google Play.
+- Управление managed configurations (app restrictions) для поддерживаемых приложений через соответствующие API/консоль; на устройстве приложения читают значения через `RestrictionsManager` / app restrictions (системный UI «Managed configurations» выступает только как точка просмотра/изменения, если включён).
 
 ### 7. Безопасность и UX
 
 - Чётко объясняйте пользователю границы контроля (иконка Work Profile, уведомления, политика конфиденциальности).
-- В режиме Work Profile личные данные и приложения остаются вне доступа DPC (sandbox профиля); на COPE-устройствах соблюдайте ограничения доступа к личному профилю.
+- В режиме Work Profile личные данные и приложения остаются вне доступа DPC (sandbox профиля); на COPE-устройствах соблюдайте ограничения доступа к личному профилю и не пытайтесь обходить платформенные механизмы разделения.
 - Аудит: логируйте действия администраторов и критичные операции (wipe, reset, изменение политик), обеспечьте экспорт журналов и контроль доступа.
 
 ---
@@ -129,11 +131,9 @@ dpm.setLockTaskPackages(adminComponent, arrayOf("com.company.app"))
 ## Answer (EN)
 
 ## Short Version
-
 Center the solution around a DPC acting as profile/device owner, standard Android Enterprise modes (Work Profile, Fully Managed, COPE, Dedicated), Managed Provisioning (QR, zero-touch, `afw#`), and policy enforcement via `DevicePolicyManager` plus managed configurations, backed by a server that stores policies, compliance state, certificates, and integrates with Managed Google Play and Android Management API. Ensure strict work/personal separation, strong integrity checks, and comprehensive auditing.
 
 ## Detailed Version
-
 ### Requirements
 
 - Functional:
@@ -158,14 +158,14 @@ Center the solution around a DPC acting as profile/device owner, standard Androi
 - Integrate with **Play EMM API / Android Management API** to:
   - distribute private apps via Managed Google Play;
   - control managed configurations;
-  - perform silent installs/updates where allowed.
-  - Note: Play EMM API is being superseded by Android Management API.
+  - perform silent installs/updates where allowed by policy and mode;
+  - note that Play EMM API is effectively deprecated and superseded by Android Management API for new implementations.
 
 ### 2. Management modes
 
-- **Work Profile (BYOD)**: personal device, managed work profile. DPC is profile owner only inside the work profile; personal data remains isolated.
+- **Work Profile (BYOD)**: personal device, managed work profile. DPC is profile owner only inside the work profile; personal data is isolated by the platform.
 - **Fully Managed**: corporate-only device; DPC is device owner with full policy and app control.
-- **COPE**: corporate-owned with personal profile; DPC is device owner and controls the work profile while respecting strict limits on access to personal side data.
+- **COPE**: corporate-owned with personal profile; DPC is device owner and work profile owner, but access to personal profile data/apps is strictly constrained by Android Enterprise (cannot read or weaken protection of personal data/apps).
 - **Dedicated**: kiosk / single-purpose devices using device owner and Lock Task Mode.
 
 ### 3. Provisioning
@@ -174,7 +174,7 @@ Center the solution around a DPC acting as profile/device owner, standard Androi
   - QR code (Android 9+) with provisioning extras to install/configure the DPC and register with your backend;
   - NFC bump (legacy) for older devices;
   - zero-touch provisioning via resellers to auto-assign the DPC/EMM configuration;
-  - `afw#<dpc-id>` identifier to fetch the DPC from Managed Google Play.
+  - entering an `afw#<dpc-id>` identifier during initial setup to fetch the DPC from Managed Google Play.
 - Pass provisioning parameters such as DPC identifier, enrollment token, backend endpoint, and initial policies; do not rely solely on raw APK URLs outside the managed flow.
 
 ### 4. Policies
@@ -182,32 +182,35 @@ Center the solution around a DPC acting as profile/device owner, standard Androi
 ```kotlin
 val dpm = context.getSystemService(DevicePolicyManager::class.java)
 
+// Requires a properly registered DeviceAdminReceiver component
+// and appropriate profile/device owner privileges.
+
 dpm.setPasswordQuality(adminComponent, DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX)
 dpm.addUserRestriction(adminComponent, UserManager.DISALLOW_CONFIG_WIFI)
 dpm.setLockTaskPackages(adminComponent, arrayOf("com.company.app"))
 ```
 
-- Use managed configurations via Managed Google Play/EMM to configure apps; on-device apps consume these via `RestrictionsManager`/app restrictions.
+- Use managed configurations via Managed Google Play/EMM to configure apps; on-device apps consume these via `RestrictionsManager` / app restrictions.
 - Certificates and keys:
-  - install client certificates using `installKeyPair` / KeyChain as applicable to the ownership mode;
-  - adjust lockscreen/security UX via `setKeyguardDisabledFeatures` and related policies.
+  - install client certificates using `installKeyPair` / KeyChain as applicable to the ownership mode and granted privileges;
+  - tune lockscreen/security behavior via `setKeyguardDisabledFeatures` and related policies.
 
 ### 5. Compliance & Telemetry
 
-- Listen to events such as `DeviceAdminReceiver.onPasswordFailed`, `ACTION_MANAGED_PROFILE_PROVISIONED`, and policy change signals.
-- Backend should evaluate compliance (OS version, policy status, signals of compromise), trigger remediation, and send alerts.
-- Prefer **Play Integrity API** for device integrity and tamper checks; treat SafetyNet Attestation as legacy.
+- Listen to events such as `DeviceAdminReceiver.onPasswordFailed`, `ACTION_MANAGED_PROFILE_PROVISIONED`, and policy change broadcasts.
+- Backend should evaluate compliance (OS version, applied policies, rooting/compromise signals), trigger remediation, and send alerts.
+- Prefer Play Integrity API for device integrity and tamper checks; treat SafetyNet Attestation as legacy.
 
 ### 6. Play EMM API integration
 
-- Register an enterprise and obtain `enterpriseId` for existing Play EMM API-based flows; for new implementations, favor Android Management API.
+- For existing Play EMM API-based flows, register an enterprise and obtain `enterpriseId`; for new implementations, favor Android Management API as the recommended approach.
 - Manage private app channels and staged rollouts via Managed Google Play.
-- Configure managed app settings (managed configurations) via the appropriate EMM / Play APIs, surfaced on-device as `ManagedConfigurationsSettings`/app restrictions.
+- Configure managed app settings (managed configurations) via the appropriate EMM / Play APIs; on-device, applications read these values via `RestrictionsManager` / app restrictions (the system "Managed configurations" UI, where present, is just a surface for these values).
 
 ### 7. Security and UX
 
 - Be transparent about control boundaries (Work Profile badge, notifications, clear privacy documentation).
-- In Work Profile mode, ensure personal data/apps remain inaccessible to the DPC; on COPE devices, respect platform-imposed separation and do not over-collect from the personal profile.
+- In Work Profile mode, ensure personal data/apps remain inaccessible to the DPC; on COPE devices, respect platform separation and do not attempt to circumvent it.
 - Implement administrative audit logging for sensitive actions (remote wipe, reset, policy changes) and provide secure export/access to these logs.
 
 ---
@@ -236,3 +239,4 @@ dpm.setLockTaskPackages(adminComponent, arrayOf("com.company.app"))
 
 ## Concepts
 
+- [[c-android]]

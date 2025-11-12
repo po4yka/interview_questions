@@ -18,6 +18,9 @@ related: [c-kotlin, c-collections, q-kotlin-property-delegates--programming-lang
 # Вопрос (RU)
 > Расскажи про коллекцию `Map`
 
+# Question (EN)
+> Tell me about the `Map` collection
+
 ## Ответ (RU)
 
 `Map` в Kotlin — это коллекция пар ключ-значение.
@@ -85,25 +88,6 @@ val idToGreeting = users.map { (id, name) -> "$id: Hello, $name" }
 // List<String>: ["1: Hello, Alice", "2: Hello, Bob"]
 ```
 
-## Дополнительные вопросы (RU)
-
-- Чем отличаются `Map` в Kotlin и `Map` в Java (nullability, read-only интерфейсы, функции-расширения и т.д.)?
-- Когда стоит выбирать `Map` вместо `List` или других коллекций?
-- Каковы распространённые ошибки при использовании `Map` (например, отсутствие ключей, неверные ожидания по поводу порядка)?
-
-## Ссылки (RU)
-
-- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-
-## Связанные вопросы (RU)
-
-- [[q-kotlin-immutable-collections--programming-languages--easy]]
-- [[q-kotlin-collections--kotlin--medium]]
-- [[q-kotlin-map-flatmap--kotlin--medium]]
-
-# Question (EN)
-> Tell me about the `Map` collection
-
 ## Answer (EN)
 
 In Kotlin, `Map` is a key-value collection.
@@ -170,6 +154,22 @@ val nameLengths = users.mapValues { (_, name) -> name.length }
 val idToGreeting = users.map { (id, name) -> "$id: Hello, $name" }
 // List<String>: ["1: Hello, Alice", "2: Hello, Bob"]
 ```
+
+## Дополнительные вопросы (RU)
+
+- Чем отличаются `Map` в Kotlin и `Map` в Java (nullability, read-only интерфейсы, функции-расширения и т.д.)?
+- Когда стоит выбирать `Map` вместо `List` или других коллекций?
+- Каковы распространённые ошибки при использовании `Map` (например, отсутствие ключей, неверные ожидания по поводу порядка)?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-immutable-collections--programming-languages--easy]]
+- [[q-kotlin-collections--kotlin--medium]]
+- [[q-kotlin-map-flatmap--kotlin--medium]]
 
 ## Follow-ups
 

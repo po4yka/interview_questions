@@ -30,18 +30,20 @@ sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", 
 `StateFlow` и `SharedFlow` являются горячими потоками поверх Kotlin `Flow`, а `LiveData` — компонент архитектуры Android, ориентированный на жизненный цикл. Выбор зависит от типа данных, требуемой семантики подписки, поддержки жизненного цикла и совместимости со стеками (Compose, XML, Java).
 
 ### `StateFlow`
-- Реплицирует семантику поведения `BehaviorSubject`: всегда хранит последнее значение, моментально выдает его новым подписчикам.
+- Семантика, похожая на `BehaviorSubject`: всегда хранит последнее значение и немедленно выдает его новым подписчикам, при этом требует ненулевого начального значения и консолидирует быстрые обновления (конфлюентный).
 - Идеален для UI-состояния в `ViewModel`, когда нужно одно актуальное значение и последовательность обновлений.
 - Поддерживает неизменяемость (экспонируется как `StateFlow<T>`, изменяется через `MutableStateFlow`).
+- Сам по себе не привязан к жизненному циклу: в UI (View/Compose) нужно управлять сбором с учетом `Lifecycle` (`repeatOnLifecycle`, `collectAsStateWithLifecycle`).
 
 ### `SharedFlow`
-- Горячий поток без обязательного начального значения, может буферизовать несколько последних эмиссий.
-- Подходит для одноразовых событий (навигация, сообщения об ошибках) и широковещательных обновлений нескольким подписчикам при корректной конфигурации (`replay = 0`, подходящий буфер и стратегия переполнения, чтобы избежать повторной доставки старых событий).
-- Гибко настраивается по буферу, стратегиям при переполнении и количеству повторяемых значений.
+- Горячий поток без обязательного начального значения, с настраиваемыми `replay` и буфером.
+- Подходит для одноразовых событий (навигация, сообщения об ошибках) и широковещательных обновлений нескольким подписчикам при корректной конфигурации (`replay = 0`, подходящий буфер и стратегия переполнения, чтобы не переизлучать старые событий и явно понимать риск потери событий для поздних подписчиков).
+- Гибко настраивается по буферу, стратегиям при переполнении и количеству повторяемых значений, но не реализует классический механизм backpressure.
+- Не является жизненно-цикло-осведомленным: сбор в UI также нужно привязывать к `Lifecycle`.
 
 ### `Flow`
 - Холодный поток: каждый сбор запускает новый upstream.
-- Используйте для запросов к репозиторию, обратимых последовательностей, ленивых вычислений, где каждый наблюдатель должен выполнить работу заново.
+- Используйте для запросов к репозиторию, повторяемых последовательностей, ленивых вычислений, где каждый наблюдатель должен выполнить работу заново.
 - Подходит для одноразового чтения данных и трансформаций, но не для долгого хранения состояния UI.
 
 ### `LiveData`
@@ -50,8 +52,8 @@ sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", 
 - API ориентирован на основной поток: `setValue` вызывается с main-потока, а `postValue` позволяет публиковать из фоновых потоков; по выразительности операторов уступает `Flow`.
 
 #### Правила Выбора
-- Нужен последний слепок состояния + поддержка Compose → `StateFlow`.
-- Нужны множественные получатели событий или одноразовые триггеры → `SharedFlow` с `replay = 0` и корректной настройкой буфера, чтобы не переизлучать старые события.
+- Нужен последний слепок состояния + поддержка Compose → `StateFlow` (с коллекцией через lifecycle-aware API).
+- Нужны множественные получатели событий или одноразовые триггеры → `SharedFlow` с `replay = 0` и корректной настройкой буфера, осознавая, что поздние подписчики не получат уже отправленные события.
 - Данные вычисляются по требованию, каждый сбор независим → холодный `Flow`.
 - Наследие на Java/XML или требуется жизненный цикл без корутин → `LiveData`.
 
@@ -64,14 +66,16 @@ sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", 
 `StateFlow` and `SharedFlow` are hot flows built on Kotlin `Flow`, while `LiveData` is an Android Architecture Component that is lifecycle-aware. The decision rests on data shape, subscription semantics, lifecycle awareness, and compatibility with Compose, XML, or Java.
 
 ### `StateFlow`
-- Mirrors a `BehaviorSubject`: always keeps the latest value and replays it to new collectors.
+- Semantics similar to `BehaviorSubject`: always holds the latest value and instantly replays it to new collectors, but requires a non-null initial value and conflates rapid updates.
 - Ideal for `ViewModel` UI state where a single source of truth must emit sequential updates.
 - Promotes immutability by exposing `StateFlow<T>` and mutating through an internal `MutableStateFlow`.
+- Not lifecycle-aware by itself: in the UI you should collect it with lifecycle-aware APIs (e.g., `repeatOnLifecycle`, `collectAsStateWithLifecycle`).
 
 ### `SharedFlow`
 - Hot stream with no mandatory initial value and configurable replay and buffer.
-- Suits one-off events (navigation, snackbars) and broadcasting updates to multiple collectors when configured correctly (`replay = 0` plus appropriate buffer/overflow strategy to avoid replaying stale events).
-- Provides configuration for buffer size, overflow behavior, and replay count (but does not implement classic reactive backpressure).
+- Suits one-off events (navigation, snackbars) and broadcasting updates to multiple collectors when configured correctly (`replay = 0` plus appropriate buffer/overflow strategy to avoid replaying stale events and with clear understanding that late collectors will miss past emissions).
+- Provides configuration for buffer size, overflow behavior, and replay count, but does not implement classic reactive backpressure.
+- Not lifecycle-aware: UI code must tie collection to the `Lifecycle`.
 
 ### `Flow`
 - Cold stream: every collection restarts the upstream work.
@@ -84,8 +88,8 @@ sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", 
 - Designed for main-thread interaction: `setValue` must be called on the main thread, while `postValue` can be called from background threads; has a smaller operator surface compared with `Flow`.
 
 #### Decision Rules
-- Need the latest UI snapshot with Compose-first UI → `StateFlow`.
-- Need multi-consumer events or fire-and-forget signals → `SharedFlow` with `replay = 0` and proper buffering to avoid re-emitting old events.
+- Need the latest UI snapshot with Compose-first UI → `StateFlow` (collected via lifecycle-aware APIs).
+- Need multi-consumer events or fire-and-forget signals → `SharedFlow` with `replay = 0` and proper buffering, being aware that late collectors will not receive past events.
 - Need on-demand, independent computations → cold `Flow`.
 - Legacy Java/XML or lifecycle handling without coroutines → `LiveData`.
 

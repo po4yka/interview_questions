@@ -28,6 +28,8 @@ tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, threa
 
 Используйте **Atomic** переменные (`AtomicInteger`, `AtomicReference` и т.п.) для одиночных операций с одной переменной (счетчики, флаги) и простых read-modify-write операций. Они основаны на CAS (Compare-And-Swap) циклах, не требуют явных пользовательских блокировок и обычно быстрее для простых сценариев. Однако реальная производительность зависит от JVM/платформы, уровня конкуренции (contention) и профиля нагрузки.
 
+Важно: атомарные переменные обеспечивают атомарность и видимость только для СВОЕГО значения и не защищают инварианты между несколькими переменными.
+
 Используйте **`synchronized`** для сложных операций или работы с несколькими переменными/объектами (кеши, коллекции, переводы между счетами, поддержание инвариантов), когда требуется взаимное исключение и единая критическая секция. Подходит для произвольной сложной логики внутри блока.
 
 Ниже приведены примеры и детали, полностью соответствующие английской секции.
@@ -100,13 +102,12 @@ class BankAccount(
     val id: Long
 ) {
     // Поле используется только под синхронизацией на this
-    @Volatile
     private var _balance = 0
 
     val balance: Int
         get() = synchronized(this) { _balance }
 
-    // Операция с ОДНОЙ переменной, но в НЕСКОЛЬКО шагов
+    // Операция с ОДНОЙ переменной, но в НЕСКОЛЬКО шагов — нужна единая критическая секция
     fun deposit(amount: Int) = synchronized(this) {
         if (amount > 0) {
             _balance += amount
@@ -171,7 +172,7 @@ class Cache<K, V>(private val ttlMs: Long) {
         val timestamp: Long
     )
 
-    private val cache = mutableMapOf<K, Entry<V>>()
+    private val cache = mutableMapOf<K, Entry<V>>()\
     private val lock = Any()
 
     fun put(key: K, value: V) = synchronized(lock) {
@@ -409,7 +410,7 @@ sealed class CacheCommand {
 
 ### Рекомендации (Best Practices)
 
-1. Предпочитайте Atomic для простых независимых значений
+1. Предпочитайте Atomic для простых независимых значений (счётчиков/флагов), не завязанных на общие инварианты с другими полями.
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicLong
@@ -501,14 +502,16 @@ class DataRepository {
 | Производительность | Часто быстрее для простых операций | Дороже из-за входа/выхода из монитора |
 | Сложность логики | Простая | Любая |
 | Lock-free (API) | Да (CAS, без явных lock-объектов) | Нет (монитор/lock) |
-| Риск deadlock | Нет (возможен livelock/reties) | Есть при неверном порядке lock'ов |
+| Риск deadlock | Нет (возможен livelock/ретраи) | Есть при неверном порядке lock'ов |
 | Типичные случаи | Счетчики, флаги, простые ссылки | Кеши, коллекции, координированные обновления |
 
-Кратко: Atomic — просто и эффективно для изолированных значений. `synchronized` — гибко и безопасно для сложного совместно используемого состояния.
+Кратко: Atomic — просто и эффективно для изолированных значений. `synchronized` — гибко и безопасно для сложного совместно используемого состояния и поддержания инвариантов.
 
 ## Answer (EN)
 
 Use **Atomic** variables (`AtomicInteger`, `AtomicReference`, etc.) for single-variable, simple read-modify-write operations (counters, flags). They are CAS (Compare-And-Swap) based, lock-free at the API level, and typically faster for simple cases, but real performance depends on JVM/platform, contention, and workload.
+
+Important: atomic variables only guarantee atomicity/visibility for THEIR OWN value; they do not protect invariants spanning multiple fields or objects.
 
 Use **`synchronized`** for complex operations or when coordinating multiple variables/objects (caches, collections, transfers between accounts, invariants) where you need a single critical section and mutual exclusion. Suitable for arbitrary complex logic.
 
@@ -521,7 +524,7 @@ Use when:
 - read-modify-write on ONE variable;
 - compare-and-swap style updates.
 
-Based on CAS instructions, no explicit user locks.
+Based on CAS instructions; no explicit user-managed lock objects.
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicInteger
@@ -574,12 +577,13 @@ Use when:
 class BankAccount(
     val id: Long
 ) {
-    @Volatile
+    // Field is accessed only under synchronization on this
     private var _balance = 0
 
     val balance: Int
         get() = synchronized(this) { _balance }
 
+    // Multi-step operation on the same variable — needs one critical section
     fun deposit(amount: Int) = synchronized(this) {
         if (amount > 0) {
             _balance += amount
@@ -745,8 +749,9 @@ class BenchmarkCounter {
         syncCount++
     }
 
+    // @Volatile alone: not thread-safe for increment!
     fun incrementVolatile() {
-        volatileCount++  // not thread-safe
+        volatileCount++  // Race condition!
     }
 }
 ```
@@ -862,7 +867,7 @@ sealed class CacheCommand {
 
 ### Best Practices
 
-1) Prefer Atomic for simple independent state
+1) Prefer Atomic for simple independent state (counters/flags not tied to shared invariants)
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicLong
@@ -881,7 +886,7 @@ class Statistics {
 }
 ```
 
-2) Use `synchronized` for complex/compound state
+2) Use `synchronized` for complex/compound state and invariants
 
 ```kotlin
 class ResourcePool<T>(private val factory: () -> T) {
@@ -953,7 +958,7 @@ class DataRepository {
 | Deadlock risk | None (but possible livelock/retries) | Yes if locks ordered incorrectly |
 | Use case | Counters, flags, simple references | Caches, collections, coordinated updates |
 
-In short: Atomic is simple and efficient for isolated values. `synchronized` is flexible and safe for complex shared state.
+In short: Atomic is simple and efficient for isolated values. `synchronized` is flexible and safe for complex shared state and invariants.
 
 ## Дополнительные вопросы (RU)
 

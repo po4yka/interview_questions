@@ -26,15 +26,19 @@ tags: [classes, design-patterns, difficulty/easy, kotlin, object-keyword, single
 
 ## Ответ (RU)
 
-Ключевое слово `object` используется для создания синглтонов в Kotlin.
+Ключевое слово `object` используется для создания синглтонов в Kotlin (через объявления `object` на уровне файла, внутри классов или объектов).
 
-**Основные характеристики:**
-- Создаёт единственный экземпляр, который существует в течение всего времени работы приложения (в рамках соответствующего classloader / модуля)
-- Гарантирует потокобезопасную инициализацию объявления `object`
-- Ленивая инициализация при первом обращении к объявлению `object`
-- Не имеет публичного конструктора (создание экземпляра выполняется компилятором/Runtime)
-- Может содержать свойства, методы и `init`-блоки
-- Может реализовывать интерфейсы и наследовать классы
+Важно отличать:
+- объявление `object` (singleton-объект, один экземпляр на classloader);
+- выражение `object` (анонимный объект, не является глобальным синглтоном).
+
+**Основные характеристики объявлений `object`:**
+- Создают один общий экземпляр для данного объявления в пределах соответствующего classloader
+- Инициализация объявления `object` потокобезопасна по умолчанию
+- Инициализируются лениво при первом обращении к объявлению `object`
+- Не имеют публичного конструктора (экземпляр создаётся и управляется рантаймом целевой платформы)
+- Могут содержать свойства, методы и `init`-блоки
+- Могут реализовывать интерфейсы и наследовать классы
 
 ### Примеры кода
 
@@ -200,14 +204,18 @@ fun main() {
 
 ## Answer (EN)
 
-The `object` keyword is used to create singleton objects in Kotlin.
+The `object` keyword is used to create singleton objects in Kotlin (via `object` declarations at file level, inside classes, or inside other objects).
 
-**Key characteristics:**
-- Creates a single instance that exists throughout the application lifetime (per classloader / module where it is declared)
+It's important to distinguish between:
+- `object` declarations (singleton objects: one shared instance per classloader);
+- `object` expressions (anonymous objects: not global singletons).
+
+**Key characteristics of `object` declarations:**
+- Create a single shared instance for the declaration within the corresponding classloader
 - Thread-safe initialization by default for object declarations
 - Lazily initialized on first access for object declarations
-- No public constructor needed or available (instantiation is handled by the compiler/Runtime)
-- Can contain properties, methods, and init blocks
+- No public constructor is needed or available (the instance is created and managed by the target platform runtime)
+- Can contain properties, functions, and `init` blocks
 - Can implement interfaces and inherit from classes
 
 ### Code Examples

@@ -2,32 +2,28 @@
 id: kotlin-006
 title: "Functional Interfaces vs Type Aliases / Функциональные интерфейсы vs псевдонимы типов"
 aliases: ["Functional Interfaces vs Type Aliases", "Функциональные интерфейсы vs псевдонимы типов"]
-
-# Classification
 topic: kotlin
-subtopics: [functional-interfaces, sam]
+subtopics: [functions]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-sam-interfaces--kotlin--medium, q-type-aliases--kotlin--medium]
-
-# Timestamps
+related: [c-concepts--kotlin--medium, c-kotlin, q-kotlin-sam-interfaces--kotlin--medium, q-type-aliases--kotlin--medium]
 created: 2025-10-05
-updated: 2025-11-09
+updated: 2025-11-11
+tags: [difficulty/medium, kotlin, type-aliases]
 
-tags: [difficulty/medium, functional-interfaces, kotlin, sam, type-aliases]
 ---
+
 # Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?
+
+# Question (EN)
+> What is the difference between functional interfaces and type aliases in Kotlin?
 
 ## Ответ (RU)
 
@@ -134,27 +130,6 @@ typealias JsonMap = Map<String, Any>
 
 См. также: [[c-kotlin]]
 
-## Последующие вопросы (RU)
-
-- В чем ключевые отличия по сравнению с Java?
-- В каких практических сценариях вы бы использовали каждый подход?
-- Какие типичные ошибки и подводные камни стоит учитывать?
-
-## Ссылки (RU)
-
-- [Функциональные (SAM) интерфейсы — Kotlin](https://kotlinlang.org/docs/fun-interfaces.html)
-- [Псевдонимы типов — Kotlin](https://kotlinlang.org/docs/type-aliases.html)
-
-## Связанные вопросы (RU)
-
-- [[q-kotlin-sam-interfaces--kotlin--medium]]
-- [[q-type-aliases--kotlin--medium]]
-
----
-
-# Question (EN)
-> What is the difference between functional interfaces and type aliases in Kotlin?
-
 ## Answer (EN)
 
 ### Functional Interface (SAM)
@@ -247,3 +222,13 @@ fun ((View) -> Unit).withLogging(): (View) -> Unit = { view ->
 ## Related Questions
 - [[q-kotlin-sam-interfaces--kotlin--medium]]
 - [[q-type-aliases--kotlin--medium]]
+
+## Последующие вопросы (RU)
+- В чем ключевые отличия по сравнению с Java?
+- В каких практических сценариях вы бы использовали каждый подход?
+- Какие типичные ошибки и подводные камни стоит учитывать?
+## Ссылки (RU)
+- [Функциональные (SAM) интерфейсы — Kotlin](https://kotlinlang.org/docs/fun-interfaces.html)
+- [Псевдонимы типов — Kotlin](https://kotlinlang.org/docs/type-aliases.html)
+## Связанные вопросы (RU)
+---

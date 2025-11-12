@@ -23,7 +23,7 @@ subtopics: [sealed-classes, enums, when-expression]
 > What is special about sealed classes in Kotlin?
 
 ## Ответ (RU)
-Особенность запечатанных (sealed) классов заключается в том, что они задают ограниченную (закрытую) иерархию типов: компилятор знает полный набор допустимых подтипов и может проверять их исчерпывающим образом. В современных версиях Kotlin их прямые наследники должны находиться в том же модуле и пакете (изначально требовалось объявление в одном файле), что сохраняет строгий контроль над иерархией.
+Особенность запечатанных (sealed) классов заключается в том, что они задают ограниченную (закрытую) иерархию типов: компилятор знает полный набор допустимых подтипов и может проверять их исчерпывающим образом (при соблюдении правил видимости и размещения). В современных версиях Kotlin их прямые наследники должны находиться в том же модуле (ранее — в одном файле; затем — в том же пакете и модуле), с возможностью объявления в разных файлах, что сохраняет строгий контроль над иерархией.
 
 ### Основная идея
 
@@ -40,7 +40,7 @@ sealed class UiState {
 
 ### Преимущества при использовании `when`
 
-Так как компилятор может знать все допустимые подтипы sealed-класса (видимые в текущем модуле), он может проверять `when` на исчерпываемость, и ветка `else` может быть не нужна.
+Так как компилятор может знать все допустимые подтипы sealed-класса (когда вся иерархия видима в текущем модуле), он может проверять `when` на исчерпываемость, и ветка `else` может быть не нужна.
 
 ```kotlin
 fun handleState(state: UiState) {
@@ -190,7 +190,7 @@ sealed class Status {
 
 ### Sealed Interface (Kotlin 1.5+)
 
-Sealed-интерфейсы работают аналогично sealed-классам: они ограничивают набор реализаций, которые должны находиться в том же модуле и пакете, что позволяет компилятору выполнять исчерпывающую проверку `when`, когда все реализации видимы.
+Sealed-интерфейсы работают аналогично sealed-классам: они ограничивают набор реализаций в рамках модуля (ранее также действовало требование к размещению в том же пакете/файле), что позволяет компилятору выполнять исчерпывающую проверку `when`, когда все реализации видимы.
 
 ```kotlin
 sealed interface Action {
@@ -207,7 +207,7 @@ class MyAction : Action, AnotherInterface {
 
 ## Answer (EN)
 
-The key feature of sealed classes is the restriction of the inheritance hierarchy: they define a closed set of subclasses that the compiler can know about and check exhaustively. In modern Kotlin, their direct subclasses must be declared in the same package and module (originally: same file; now relaxed), which still provides strong control over the type hierarchy.
+The key feature of sealed classes is the restricted inheritance hierarchy: they define a closed set of subclasses that the compiler can be aware of and check exhaustively (subject to visibility and placement rules). In modern Kotlin, their direct subclasses must be declared in the same module (originally: same file; later: same package and module), potentially in different files, which still provides strong control over the type hierarchy.
 
 ### Main idea
 
@@ -224,7 +224,7 @@ sealed class UiState {
 
 ### Advantages with `when`
 
-Because the compiler can know all permitted subtypes of a sealed class (that are visible in the current module), `when` expressions over them can be exhaustiveness-checked and may not require an `else` branch.
+Because the compiler can know all permitted subtypes of a sealed class (when the whole hierarchy is visible within the current module), `when` expressions over them can be exhaustiveness-checked and may not require an `else` branch.
 
 ```kotlin
 fun handleState(state: UiState) {
@@ -374,7 +374,7 @@ sealed class Status {
 
 ### Sealed Interface (Kotlin 1.5+)
 
-Sealed interfaces work similarly to sealed classes: they declare a restricted set of implementations that must reside in the same module and package, enabling exhaustiveness checks with `when` when all implementations are visible.
+Sealed interfaces work similarly to sealed classes: they declare a restricted set of implementations within the same module (historically also constrained to the same package/file), enabling exhaustiveness checks with `when` when all implementations are visible.
 
 ```kotlin
 sealed interface Action {

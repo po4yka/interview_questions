@@ -28,12 +28,13 @@ sources: ["https://kotlinlang.org/docs/delegation.html"]
 ## Ответ (RU)
 
 **Теория делегирования:**
-Ключевое слово `by` в Kotlin используется для реализации паттерна делегирования. Вместо наследования класс может реализовать интерфейс путём делегирования реализации всех его членов указанному объекту-делегату. Это позволяет использовать композицию вместо наследования и избежать проблем множественного наследования. Делегирование через `by` для классов в Kotlin возможно только для интерфейсов, а не для конкретных (неинтерфейсных) базовых классов.
+Ключевое слово `by` в Kotlin используется для реализации паттерна делегирования. Вместо наследования класс может объявить реализацию интерфейса, делегируя реализацию всех его членов указанному объекту-делегату. Компилятор генерирует за вас методы, которые просто перенаправляют вызовы делегату. Это позволяет использовать композицию вместо наследования и избежать проблем множественного наследования. Делегирование через `by` для классов в Kotlin возможно только для интерфейсов, а не для конкретных (неинтерфейсных) базовых классов.
 
 **Основные концепции:**
 - **Делегирование интерфейса**: Реализация интерфейса через делегирование всех его методов (и свойств интерфейса) другому объекту
-- **Использование `by`**: Автоматическая генерация делегированных методов компилятором
+- **Использование `by`**: Автоматическая генерация делегированных методов компилятором, которые перенаправляют вызовы объекту-делегату
 - **Сокращение boilerplate**: Код для делегирования генерируется компилятором автоматически
+- Класс может переопределить любые делегированные методы при необходимости (они имеют приоритет над сгенерированными).
 - См. также: [[c-kotlin]]
 
 **Базовое делегирование:**
@@ -135,6 +136,7 @@ fun main() {
 
 **Использование для ограничения API (read-only обёртка):**
 ```kotlin
+// Пример с пользовательскими типами, не связанными со стандартными коллекциями Kotlin
 interface ReadOnlyCollection {
     fun size(): Int
     fun isEmpty(): Boolean
@@ -177,12 +179,13 @@ class ReadOnlyWrapper(private val collection: MutableCollection) :
 ## Answer (EN)
 
 **Delegation Theory:**
-The `by` keyword in Kotlin implements the delegation pattern. Instead of inheritance, a class can implement an interface by delegating the implementation of all its members to a specified delegate object. This enables composition over inheritance and avoids multiple inheritance problems. Class delegation with `by` in Kotlin applies to interfaces only (you cannot delegate to a concrete superclass type using `by`).
+The `by` keyword in Kotlin implements the delegation pattern. Instead of inheritance, a class can declare that it implements an interface by delegating the implementation of all its members to a specified delegate object. The compiler generates the forwarding members for you, which simply call the corresponding members on the delegate. This enables composition over inheritance and avoids multiple inheritance problems. Class delegation with `by` in Kotlin applies to interfaces only (you cannot delegate to a concrete superclass type using `by`).
 
 **Core Concepts:**
 - **Interface Delegation**: Implementing an interface by delegating all its methods (and properties declared in the interface) to another object
-- **Using `by`**: Automatic generation of delegated methods by the compiler
+- **Using `by`**: Automatic generation of delegated methods by the compiler that forward calls to the delegate object
 - **Boilerplate Reduction**: Delegation code is generated automatically by the compiler
+- The delegating class can override any delegated members if needed (its own implementations take precedence over generated ones).
 - See also: [[c-kotlin]]
 
 **Basic Delegation:**
@@ -284,6 +287,7 @@ fun main() {
 
 **Use Case - Restricting Public API via Read-Only Wrapper:**
 ```kotlin
+// Example with custom types, not related to Kotlin standard collection types
 interface ReadOnlyCollection {
     fun size(): Int
     fun isEmpty(): Boolean

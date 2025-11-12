@@ -13,8 +13,9 @@ moc: moc-android
 related: [c-jetpack-compose, c-mvvm, q-recyclerview-explained--android--medium, q-what-does-viewgroup-inherit-from--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-11
 tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, difficulty/medium, jetpack-compose, migration, xml-to-compose]
+
 ---
 
 # Вопрос (RU)
@@ -128,9 +129,9 @@ fun HeavyList(items: List<Item>) {
 ```
 
 **Риск 2: Увеличение APK**
-Включите R8/ProGuard оптимизации: `minifyEnabled = true`, `shrinkResources = true`. По мере миграции удаляйте дублирующиеся XML-ресурсы и старые View-библиотеки, чтобы избежать роста размера.
+Включите R8/ProGuard оптимизации: `minifyEnabled = true`, `shrinkResources = true`. По мере миграции удаляйте дублирующиеся XML-ресурсы и старые `View`-библиотеки, чтобы избежать роста размера.
 
-**Риск 3: Сложные кастомные View**
+**Риск 3: Сложные кастомные `View`**
 Используйте Canvas API в Compose для полного контроля над отрисовкой.
 
 ### План Миграции (50+ экранов)
@@ -245,9 +246,9 @@ fun HeavyList(items: List<Item>) {
 ```
 
 **Risk 2: APK Size Increase**
-Enable R8/ProGuard optimizations: `minifyEnabled = true`, `shrinkResources = true`. As you migrate, remove duplicate XML resources and old View-based libraries to avoid unnecessary size growth.
+Enable R8/ProGuard optimizations: `minifyEnabled = true`, `shrinkResources = true`. As you migrate, remove duplicate XML resources and old `View`-based libraries to avoid unnecessary size growth.
 
-**Risk 3: Complex Custom Views**
+**Risk 3: Complex Custom `Views`**
 Use Canvas API in Compose for full drawing control.
 
 ### Migration Plan (50+ screens)
@@ -261,26 +262,57 @@ Use Canvas API in Compose for full drawing control.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать deep link-навигацию в гибридной Compose/XML архитектуре?
+- Какие стратегии тестирования использовать во время миграции (UI-тесты для обоих стеков)?
+- Как шарить состояние `ViewModel` между XML и Compose-экранами?
+- Какие существуют инструменты для автоматизированной миграции XML в Compose?
+- Как измерять и профилировать производительность во время миграции?
+
 ## Follow-ups
 
 - How to handle deep link navigation in hybrid Compose/XML setup?
 - What are the testing strategies during migration (UI tests for both stacks)?
-- How to share ViewModel state between XML and Compose screens?
+- How to share `ViewModel` state between XML and Compose screens?
 - What tools exist for automated XML-to-Compose conversion?
 - How to measure and profile performance during migration?
+
+## Ссылки (RU)
+
+- [[c-jetpack-compose]] - основы Jetpack Compose
+- [[c-mvvm]] - архитектурный паттерн MVVM
+- [Compose и совместимость с `View`](https://developer.android.com/jetpack/compose/interop/interop-apis)
+- [Гайд по стратегии миграции](https://developer.android.com/jetpack/compose/migrate/strategy)
 
 ## References
 
 - [[c-jetpack-compose]] - Jetpack Compose fundamentals
 - [[c-mvvm]] - MVVM architecture pattern
-- [Compose and Views interoperability](https://developer.android.com/jetpack/compose/interop/interop-apis)
+- [Compose and `Views` interoperability](https://developer.android.com/jetpack/compose/interop/interop-apis)
 - [Migration strategy guide](https://developer.android.com/jetpack/compose/migrate/strategy)
+
+## Связанные вопросы (RU)
+
+### Предпосылки
+- [[q-jetpack-compose-basics--android--medium]] - основы Compose и ключевые концепции
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - основы отрисовки `View`
+
+### Похожие
+- [[q-how-does-jetpack-compose-work--android--medium]] - внутреннее устройство Compose
+- [[q-recyclerview-explained--android--medium]] - паттерны использования RecyclerView
+- [[q-mutable-state-compose--android--medium]] - управление состоянием в Compose
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - сохранение состояния
+
+### Продвинутое
+- [[q-compose-stability-skippability--android--hard]] - оптимизация производительности
+- [[q-stable-classes-compose--android--hard]] - аннотации стабильности
 
 ## Related Questions
 
 ### Prerequisites
 - [[q-jetpack-compose-basics--android--medium]] - Compose basics and core concepts
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering fundamentals
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering fundamentals
 
 ### Related
 - [[q-how-does-jetpack-compose-work--android--medium]] - Compose internals

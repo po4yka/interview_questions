@@ -17,12 +17,11 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-globalization
+- c-android
 - c-android-components
 created: 2025-11-02
 updated: 2025-11-10
 tags:
-- accessibility
 - android/i18n-l10n
 - android/ui-theming
 - difficulty/hard
@@ -30,42 +29,37 @@ sources:
 - "https://developer.android.com/guide/topics/resources/font-resource"
 - "https://developer.android.com/guide/topics/text/downloadable-fonts"
 - "https://material.io/design/typography/international-typography.html"
-
 ---
 
 # Вопрос (RU)
 
-> Как обеспечить корректное отображение сложных скриптов (CJK, арабский, индийские письменности) в Android: настройте font fallback цепочки с Noto шрифтами, downloadable fonts для dynamic loading, корректно учитывайте ligatures и complex shaping. Тестируйте на real устройствах с accessibility scaling.
+> Как обеспечить корректное отображение сложных скриптов (CJK, арабский, индийские письменности) в Android: настройте font fallback цепочки с Noto шрифтами, используйте downloadable fonts для динамической загрузки, корректно учитывайте ligatures и complex shaping. Тестируйте на реальных устройствах с accessibility scaling.
 
 # Question (EN)
 
 > How to ensure proper rendering of complex scripts (CJK, Arabic, Indic) in Android: configure font fallback chains with Noto fonts, use downloadable fonts for dynamic loading, correctly handle ligatures and complex shaping. Test on real devices with accessibility scaling enabled.
 
----
-
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткая Версия
+Используйте системные шрифты и Noto как надёжную основу, на бренд-шрифт опирайтесь только там, где подтверждено покрытие glyph и корректное shaping. Для сложных скриптов держитесь системных семейств (`sans-serif`, `serif`) и/или `FontFamily` с Noto для соответствующих скриптов. Добавляйте downloadable fonts через `FontsContractCompat`/`FontRequest`. Обязательно тестируйте CJK, арабский, индийские скрипты, RTL и масштабирование шрифта на реальных устройствах.
 
-Используйте системные шрифты и Noto как надёжную основу, на бренд-шрифт опирайтесь только там, где подтверждено покрытие glyph и корректное shaping. Для сложных скриптов держитесь системных семейств (`sans-serif`, `serif`) и/или `FontFamily` с Noto, добавляйте downloadable fonts через FontsContractCompat. Обязательно тестируйте CJK, арабский, индийские скрипты, RTL и масштабирование шрифта на реальных устройствах.
-
-### Подробный вариант
-
+### Подробная Версия
 ### Теоретические Основы
 
 **Сложные скрипты** — письменности, требующие advanced text shaping: CJK (Chinese/Japanese/Korean), Arabic с contextual forms, Indic скрипты с combining marks, Thai/Lao с complex clusters.
 
 **Проблемы отображения:**
-- **Glyph coverage** — многие брендовые шрифты поддерживают только Latin glyphs
-- **Text shaping** — complex scripts требуют ligatures, contextual forms, reordering
-- **Baseline alignment** — разные скрипты имеют разные baseline requirements
-- **Line breaking** — script-specific правила переноса слов
+- **Glyph coverage** — многие брендовые шрифты поддерживают только Latin glyphs.
+- **Text shaping** — complex scripts требуют ligatures, contextual forms, reordering.
+- **Baseline alignment** — разные скрипты имеют разные baseline requirements.
+- **Line breaking** — script-specific правила переноса слов.
 
 **Android font system:**
-- **System fonts** — Roboto (Latin), Noto (international) как часть системного набора и fallback
-- **Downloadable fonts** — Google Fonts API / FontsContract для dynamic loading
-- **Font resources** — XML-конфигурация шрифтов и указание fallback семейств
-- **Font synthesis** — fake bold/italic для unsupported styles
+- **System fonts** — Roboto (Latin), Noto (international) как часть системного набора и fallback-цепочек.
+- **Downloadable fonts** — Google Fonts API / `FontsContract` для dynamic loading.
+- **Font resources** — XML-конфигурация семейств шрифтов и расширение generic-семейств через `android:fallbackFor` (поведение и порядок зависят от реализации OEM).
+- **Font synthesis** — fake bold/italic для unsupported styles.
 
 ### Требования
 
@@ -83,10 +77,10 @@ sources:
 ### Архитектура
 
 - **Слой шрифтов и ресурсов:**
-  - Определение базовых семей (`sans-serif`, `serif`) и расширенных `font-family` с Noto для целевых скриптов.
+  - Определение базовых семейств (`sans-serif`, `serif`) и расширенных `font-family` с Noto для целевых скриптов.
   - Использование ресурсных XML и `FontFamily` в Compose для единообразной конфигурации.
 - **Runtime-логика выбора шрифта:**
-  - Определение скрипта текста (через `UnicodeScript`) и выбор подходящего `Typeface`/`FontFamily`.
+  - Определение скрипта текста (через `UnicodeScript`) и выбор подходящего `Typeface`/`FontFamily` для конкретного текста или его подстрок.
   - Использование системных fallbacks, если кастомный шрифт не покрывает символ.
 - **Downloadable fonts сервис:**
   - Обёртка над `FontsContractCompat` с кешированием в памяти/на диске.
@@ -98,16 +92,16 @@ sources:
 ### 1. Анализ Требований И Аудит
 
 **Выявление целевых скриптов:**
-- Анализируйте market requirements: CJK для Asian markets, Arabic для Middle East, Indic для South Asia
-- Проверяйте app content: user-generated text, translations, proper names
-- Оценивайте scope: UI labels vs user content vs mixed text
+- Анализируйте market requirements: CJK для Asian markets, Arabic для Middle East, Indic для South Asia.
+- Проверяйте app content: user-generated text, translations, proper names.
+- Оценивайте scope: UI labels vs user content vs mixed text.
 
 **Аудит бренд-шрифта (упрощённая проверка покрытия):**
 ```kotlin
 fun hasGlyph(font: Typeface, ch: Char): Boolean {
     val paint = Paint().apply { typeface = font }
-    // Важно: isGlyphMissing / hasGlyph доступен только на новых API;
-    // measureText даёт лишь приблизительную эвристику и может считать tofu-глиф валидным.
+    // Важно: hasGlyph на новых API даёт более надёжный результат;
+    // measureText — лишь эвристика и может считать tofu-глиф валидным.
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         paint.hasGlyph(ch.toString())
     } else {
@@ -124,13 +118,13 @@ testCases.forEach { (script, text) ->
 ```
 
 **Приоритизация:**
-- **UI chrome** (buttons, navigation) — critical, может требовать custom fonts и строгий контроль покрытия
-- **Content text** (articles, messages) — flexible, системные fallback допустимы
-- **User-generated content** — unpredictable, необходимы надёжные системные fallbacks / downloadable fonts
+- **UI chrome** (buttons, navigation) — critical, может требовать custom fonts и строгий контроль покрытия.
+- **Content text** (articles, messages) — flexible, системные fallback допустимы.
+- **User-generated content** — unpredictable, необходимы надёжные системные fallbacks / downloadable fonts.
 
 ### 2. Font Fallback Цепочки
 
-Ключевая идея: вы не «вкручиваете» fallback внутрь кастомного семейства, а корректно комбинируете бренд-шрифт с системными семействами и Noto.
+Ключевая идея: вы не «вкручиваете» произвольную fallback-цепочку внутрь одного кастомного семейства; вы комбинируете бренд-шрифт с системными семействами и Noto так, чтобы движок мог применять свои fallbacks.
 
 **Simple XML font-family:**
 ```xml
@@ -162,7 +156,7 @@ testCases.forEach { (script, text) ->
 </font-family>
 ```
 
-Эта конфигурация расширяет fallback для системного `sans-serif` (доступность и поведение зависят от OEM), а не связывает напрямую бренд-шрифт и Noto.
+Эта конфигурация добавляет шрифты в fallback-набор для `sans-serif`, но точный порядок и использование остаются за реализацией системы/OEM — это не строгая, полностью контролируемая цепочка.
 
 **Programmatic combo (API 28+):**
 ```kotlin
@@ -170,8 +164,8 @@ val brand = ResourcesCompat.getFont(context, R.font.brand_regular)
 val cjk = ResourcesCompat.getFont(context, R.font.noto_sans_cjk_jp)
 val arabic = ResourcesCompat.getFont(context, R.font.noto_sans_arabic)
 
-// Используем системный fallback для смешанного контента,
-// а для критичного UI — бренд, при необходимости подменяем typeface по скрипту.
+// Пример: выбираем шрифт для доминирующего скрипта текста.
+// Для строк с несколькими скриптами лучше разбивать на подстроки и применять разные Typeface.
 val typefaceForText = when {
     text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC } -> arabic
     text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN } -> cjk
@@ -181,7 +175,7 @@ val typefaceForText = when {
 textView.typeface = typefaceForText
 ```
 
-Обратите внимание: единого официального API для задания произвольной цепочки fallback шрифтов через `Typeface.Builder.setFallback(...)` не существует; используется сочетание системных семейств, ресурсов и выбора typeface в коде.
+Обратите внимание: публичного API вида `Typeface.Builder.setFallback(…)` для произвольного задания цепочки нет; вы опираетесь на системные generic-семейства, XML-ресурсы и выбор typeface в коде.
 
 **Compose FontFamily:**
 ```kotlin
@@ -197,7 +191,7 @@ Text(
 )
 ```
 
-Важно: `Font(...)` принимает ресурсы или Typeface, а не строковые имена семейств.
+Важно: `Font(...)` принимает ресурсы или Typeface, а не строковые имена семейств. Наличие нескольких `Font` в `FontFamily` задаёт варианты по весу/стилю и даёт системе пространство для fallback внутри этого семейства, но не реализует «умный» выбор по скрипту — для сложных сценариев смешанных скриптов всё равно учитывайте системные fallbacks или деление текста на части.
 
 ### 3. Downloadable Fonts
 
@@ -233,7 +227,7 @@ fun DownloadableFontText(text: String) {
 }
 ```
 
-Реализация `downloadTypeface` опускается, но должна корректно оборачивать FontsContractCompat; прямого `await()` в SDK нет.
+Реализация `downloadTypeface` опускается, но должна корректно оборачивать `FontsContractCompat`; прямого `await()` в SDK нет.
 
 **Font caching (идея):**
 ```kotlin
@@ -248,7 +242,7 @@ class FontCache {
 }
 ```
 
-Подробнее: кешируйте в памяти и (при необходимости) на диске, корректно обрабатывая ошибки.
+Подробнее: кешируйте в памяти и (при необходимости) на диске, корректно обрабатывая ошибки и отсутствие сети.
 
 ### 4. Rendering Настройки
 
@@ -280,10 +274,11 @@ fun ComplexScriptText(text: String) {
         else -> FontFamily.Default
     }
 
+    // Для строк, содержащих несколько скриптов, при необходимости делите на подстроки
+    // с отдельными Text-компонентами; иначе полагайтесь на системные fallbacks.
     Text(
         text = text,
         fontFamily = fontFamily
-        // Arabic shaping и большинство ligatures обрабатываются движком автоматически.
     )
 }
 ```
@@ -305,7 +300,7 @@ fun ArabicText(text: String) {
 
 ### 5. Тестирование
 
-**Glyph coverage test (с учётом ограничений):**
+**Glyph coverage test (диагностический пример):**
 ```kotlin
 @Test
 fun testComplexScriptCoverage() {
@@ -317,7 +312,8 @@ fun testComplexScriptCoverage() {
 
     tests.forEach { (script, text) ->
         val ok = text.all { hasGlyph(brandFont, it) }
-        assertTrue("$script coverage (approx)", ok)
+        // Это приблизительная проверка; результат зависит от ограничений hasGlyph/measureText.
+        println("$script coverage (approx): $ok")
     }
 }
 
@@ -330,6 +326,8 @@ private fun hasGlyph(font: Typeface, ch: Char): Boolean {
     }
 }
 ```
+
+Используйте такие проверки как помощник в аудите и сопровождать их визуальной валидацией, а не как строгие unit-тесты с `assertTrue`.
 
 **Screenshot testing:**
 ```kotlin
@@ -358,7 +356,7 @@ fun analyzeFontImpact() {
 
 **Selective inclusion (концепт):**
 
-Избегайте включения полноразмерных CJK-шрифтов, если это не критично; опирайтесь на встроенные системные Noto, downloadable fonts или split APK / on-demand modules вместо несуществующего `bundle { font { include ... } }` DSL.
+Избегайте включения полноразмерных CJK-шрифтов, если это не критично; опирайтесь на встроенные системные Noto, downloadable fonts или split APK / on-demand modules.
 
 **On-demand delivery (концепт):**
 ```kotlin
@@ -404,49 +402,45 @@ val config = BundledEmojiCompatConfig(context)
 val emojiCompat = EmojiCompat.init(config)
 ```
 
-Для downloadable emoji используйте официальные EmojiCompat FontRequest-примеры вместо произвольного `"Noto Color Emoji Compat"` без контекста.
+Для downloadable emoji используйте официальные EmojiCompat FontRequest-примеры вместо произвольных имен; опирайтесь на документацию AndroidX Emoji2.
 
 ### Лучшие Практики
 
-- **Комплексный аудит** — проверяйте бренд-шрифты на всех целевых скриптах (`hasGlyph`/аналоги + визуальная проверка)
-- **Прогрессивное улучшение** — начинайте с системных шрифтов и встроенных fallbacks, добавляйте кастомные и downloadable fonts по необходимости
-- **Мониторинг производительности** — измеряйте время загрузки шрифтов и влияние на размер бандла / модулей
-- **Доступность прежде всего** — проверяйте complex scripts при увеличенном шрифте, high contrast, RTL и с экранными дикторами
-- **Оффлайн устойчивость** — кешируйте скачанные шрифты и всегда предоставляйте системные fallback'ы
+- **Комплексный аудит** — проверяйте бренд-шрифты на всех целевых скриптах (`hasGlyph`/аналоги + визуальная проверка).
+- **Прогрессивное улучшение** — начинайте с системных шрифтов и встроенных fallbacks, добавляйте кастомные и downloadable fonts по необходимости.
+- **Мониторинг производительности** — измеряйте время загрузки шрифтов и влияние на размер бандла / модулей.
+- **Доступность прежде всего** — проверяйте complex scripts при увеличенном шрифте, high contrast, RTL и с экранными дикторами.
+- **Оффлайн устойчивость** — кешируйте скачанные шрифты и всегда предоставляйте системные fallback'ы.
 
 ### Типичные Ошибки
 
-- **Предположение, что Latin coverage = universal** — большинство шрифтов не имеют CJK/Arabic/Indic glyphs
-- **Игнорирование text shaping** — complex scripts требуют автоматического применения contextual forms и ligatures
-- **Плохое выравнивание mixed scripts** — разные скрипты имеют разные baseline
-- **Отсутствие тестирования доступности** — крупные размеры шрифта и RTL могут ломать верстку без корректных fallbacks
-- **Невнимание к размеру бандла** — CJK шрифты могут добавить 20+ MB к APK, используйте downloadable/модули
-
----
+- **Предположение, что Latin coverage = universal** — большинство шрифтов не имеют CJK/Arabic/Indic glyphs.
+- **Игнорирование text shaping** — complex scripts требуют автоматического применения contextual forms и ligatures.
+- **Плохое выравнивание mixed scripts** — разные скрипты имеют разные baseline.
+- **Отсутствие тестирования доступности** — крупные размеры шрифта и RTL могут ломать верстку без корректных fallbacks.
+- **Невнимание к размеру бандла** — CJK шрифты могут добавить 20+ MB к APK, используйте downloadable/модули.
 
 ## Answer (EN)
 
 ### Short Version
-
-Use system fonts and Noto as the reliable base; only apply the brand font where glyph coverage and shaping are verified. For complex scripts keep text on system families (`sans-serif`, `serif`) and/or `FontFamily` with Noto, add downloadable fonts via FontsContractCompat. Always test CJK, Arabic, Indic, RTL, and font scaling on real devices.
+Use system fonts and Noto as the reliable base; only apply the brand font where glyph coverage and shaping are verified. For complex scripts keep text on system families (`sans-serif`, `serif`) and/or `FontFamily` configured with Noto for relevant scripts. Add downloadable fonts via `FontsContractCompat`/`FontRequest`. Always test CJK, Arabic, Indic, RTL, and font scaling on real devices.
 
 ### Detailed Version
-
 ### Theoretical Foundations
 
 **Complex scripts** — writing systems requiring advanced text shaping: CJK (Chinese/Japanese/Korean), Arabic with contextual forms, Indic scripts with combining marks, Thai/Lao with complex clusters.
 
 **Rendering challenges:**
-- **Glyph coverage** — many brand fonts support only Latin glyphs
-- **Text shaping** — complex scripts require ligatures, contextual forms, reordering
-- **Baseline alignment** — different scripts have different baseline requirements
-- **Line breaking** — script-specific word wrapping rules
+- **Glyph coverage** — many brand fonts support only Latin glyphs.
+- **Text shaping** — complex scripts require ligatures, contextual forms, reordering.
+- **Baseline alignment** — different scripts have different baseline requirements.
+- **Line breaking** — script-specific word wrapping rules.
 
 **Android font system:**
-- **System fonts** — Roboto (Latin), Noto (international) as part of the system set and fallbacks
-- **Downloadable fonts** — Google Fonts API / FontsContract for dynamic loading
-- **Font resources** — XML configuration of font families and fallback for generic families
-- **Font synthesis** — fake bold/italic for unsupported styles
+- **System fonts** — Roboto (Latin), Noto (international) as part of the system set and fallback chains.
+- **Downloadable fonts** — Google Fonts API / `FontsContract` for dynamic loading.
+- **Font resources** — XML configuration of font families and extension of generic families via `android:fallbackFor` (behavior and ordering are OEM-dependent).
+- **Font synthesis** — fake bold/italic for unsupported styles.
 
 ### Requirements
 
@@ -467,7 +461,7 @@ Use system fonts and Noto as the reliable base; only apply the brand font where 
   - Define base families (`sans-serif`, `serif`) and extended `font-family` configs with Noto for target scripts.
   - Use XML font resources and Compose `FontFamily` for consistent configuration.
 - **Runtime font selection:**
-  - Detect script via `UnicodeScript` and choose the appropriate `Typeface`/`FontFamily`.
+  - Detect script via `UnicodeScript` and choose the appropriate `Typeface`/`FontFamily` for a specific text or substrings.
   - Fall back to system fonts when the brand font lacks coverage.
 - **Downloadable fonts service:**
   - Wrapper over `FontsContractCompat` with in-memory/disk caching.
@@ -479,16 +473,16 @@ Use system fonts and Noto as the reliable base; only apply the brand font where 
 ### 1. Requirements Analysis and Audit
 
 **Identifying target scripts:**
-- Analyze market requirements: CJK for Asian markets, Arabic for Middle East, Indic for South Asia
-- Check app content: user-generated text, translations, proper names
-- Evaluate scope: UI labels vs user content vs mixed text
+- Analyze market requirements: CJK for Asian markets, Arabic for Middle East, Indic for South Asia.
+- Check app content: user-generated text, translations, proper names.
+- Evaluate scope: UI labels vs user content vs mixed text.
 
 **Brand font audit (approximate coverage check):**
 ```kotlin
 fun hasGlyph(font: Typeface, ch: Char): Boolean {
     val paint = Paint().apply { typeface = font }
-    // Note: hasGlyph is reliable on newer API; measureText is only a heuristic and
-    // may count tofu as a valid glyph.
+    // Note: hasGlyph is more reliable on newer API; measureText is only a heuristic
+    // and may treat tofu as a valid glyph.
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         paint.hasGlyph(ch.toString())
     } else {
@@ -505,13 +499,13 @@ testCases.forEach { (script, text) ->
 ```
 
 **Prioritization:**
-- **UI chrome** (buttons, navigation) — critical, may require custom fonts with verified coverage
-- **Content text** (articles, messages) — flexible, system fallbacks acceptable
-- **User-generated content** — unpredictable, robust fallbacks/downloadable fonts essential
+- **UI chrome** (buttons, navigation) — critical, may require custom fonts with verified coverage.
+- **Content text** (articles, messages) — flexible, system fallbacks acceptable.
+- **User-generated content** — unpredictable, robust fallbacks/downloadable fonts essential.
 
 ### 2. Font Fallback Chains
 
-Key idea: you usually do not hard-wire all fallbacks into a single custom family; instead, you combine a brand font with system families and Noto in a controlled way.
+Key idea: you typically do not hard-wire a fully custom fallback chain into a single family; instead, you combine brand fonts with system families and Noto in ways that let the engine apply its built-in fallbacks.
 
 **Simple XML font-family:**
 ```xml
@@ -543,7 +537,7 @@ Use this for branded UI; keep content on `sans-serif`/system families so built-i
 </font-family>
 ```
 
-This extends the fallback options for the generic `sans-serif` family (OEM behavior may vary) rather than chaining directly after the brand font.
+This configuration adds these fonts into the fallback set for the generic `sans-serif` family, but exact ordering/usage is up to the system/OEM; it is not a fully deterministic chain you control.
 
 **Programmatic combo (API 28+):**
 ```kotlin
@@ -551,6 +545,9 @@ val brand = ResourcesCompat.getFont(context, R.font.brand_regular)
 val cjk = ResourcesCompat.getFont(context, R.font.noto_sans_cjk_jp)
 val arabic = ResourcesCompat.getFont(context, R.font.noto_sans_arabic)
 
+// Example: choose font for the dominant script of this text.
+// For mixed-script strings, consider splitting into substrings with different typefaces
+// instead of forcing one typeface for all characters.
 val typefaceForText = when {
     text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC } -> arabic
     text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN } -> cjk
@@ -560,7 +557,7 @@ val typefaceForText = when {
 textView.typeface = typefaceForText
 ```
 
-Note: there is no official `Typeface.Builder.setFallback("Noto Sans CJK JP", "Noto Sans Arabic")` API; combining fallbacks is done via resources, system families, and runtime selection.
+Note: there is no public API like `Typeface.Builder.setFallback(...)` to define an arbitrary ordered fallback chain. Use system generic families, XML resources, and runtime selection.
 
 **Compose FontFamily:**
 ```kotlin
@@ -576,7 +573,7 @@ Text(
 )
 ```
 
-Important: `Font(...)` uses resource IDs or Typeface, not raw family name strings.
+Important: `Font(...)` takes resource IDs or a Typeface, not raw family name strings. Multiple Font entries primarily express variants (weight/style/etc.) and allow Compose/runtime to fall back within this family; they do not create a magical script-aware chain. For truly fine-grained control with mixed scripts, split text into runs or rely on system-level fallbacks.
 
 ### 3. Downloadable Fonts
 
@@ -611,7 +608,7 @@ fun DownloadableFontText(text: String) {
 }
 ```
 
-`downloadTypeface` should wrap FontsContractCompat + callbacks into a suspend function; there is no built-in `requestFont(...).await()`.
+`downloadTypeface` should wrap `FontsContractCompat` and callbacks into a suspend function; there is no built-in `await()` helper.
 
 **Font caching (idea):**
 ```kotlin
@@ -637,7 +634,7 @@ class OptimizedTextView(context: Context, attrs: AttributeSet? = null) : AppComp
             hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NORMAL
         }
         // OpenType features like 'liga' and 'kern' are usually enabled by default;
-        // only set fontFeatureSettings when you need specific optional features.
+        // set fontFeatureSettings only when you need specific optional features.
     }
 }
 ```
@@ -656,6 +653,8 @@ fun ComplexScriptText(text: String) {
         else -> FontFamily.Default
     }
 
+    // For strings containing multiple scripts, consider splitting into multiple Text
+    // composables; otherwise rely on system fallbacks.
     Text(
         text = text,
         fontFamily = fontFamily
@@ -672,7 +671,7 @@ fun ArabicText(text: String) {
             text = text,
             textAlign = TextAlign.Start,
             fontFamily = FontFamily(Font(R.font.noto_sans_arabic))
-            // Let the engine handle joining/shaping; don't try to toggle 'isol/init/medi/fina' manually.
+            // Let the shaping engine handle joining; don't manually manage 'isol/init/medi/fina'.
         )
     }
 }
@@ -680,7 +679,7 @@ fun ArabicText(text: String) {
 
 ### 5. Testing
 
-**Glyph coverage test (with caveats):**
+**Glyph coverage test (diagnostic example):**
 ```kotlin
 @Test
 fun testComplexScriptCoverage() {
@@ -692,7 +691,8 @@ fun testComplexScriptCoverage() {
 
     tests.forEach { (script, text) ->
         val ok = text.all { hasGlyph(brandFont, it) }
-        assertTrue("$script coverage (approx)", ok)
+        // Approximate check; interpret as diagnostic signal, not a strict pass/fail.
+        println("$script coverage (approx): $ok")
     }
 }
 
@@ -731,7 +731,7 @@ fun analyzeFontImpact() {
 
 **Selective inclusion (concept):**
 
-Avoid bundling full CJK fonts unless absolutely necessary; rely on system Noto fonts, downloadable fonts, and/or Play Feature Delivery instead of a fictional `bundle { font { include ... } }` DSL.
+Avoid bundling full CJK fonts unless absolutely necessary; rely on system Noto fonts, downloadable fonts, and/or Play Feature Delivery / split APKs.
 
 **On-demand delivery (concept):**
 ```kotlin
@@ -742,27 +742,26 @@ suspend fun loadScriptFont(script: String): Typeface {
         else -> "Noto Sans"
     }
 
+    // Implement downloadFont via FontsContractCompat or Play Feature Delivery.
     return fontCache.get(fontName) ?: downloadFont(fontName).also { fontCache.put(fontName, it) }
 }
 ```
 
 ### Best Practices
 
-- **Comprehensive audit** — validate brand fonts for all target scripts (hasGlyph/hasGlyph-like APIs plus visual review)
-- **Progressive enhancement** — start with system fonts and built-in fallbacks; add custom and downloadable fonts as needed
-- **Performance monitoring** — measure font loading times and bundle/module size impact
-- **Accessibility first** — test complex scripts with large font scales, high contrast, RTL, and screen readers
-- **Offline resilience** — cache downloaded fonts and always provide system font fallbacks
+- **Comprehensive audit** — validate brand fonts for all target scripts (`hasGlyph`-like APIs plus visual review).
+- **Progressive enhancement** — start with system fonts and built-in fallbacks; add custom and downloadable fonts as needed.
+- **Performance monitoring** — measure font loading times and bundle/module size impact.
+- **Accessibility first** — test complex scripts with large font scales, high contrast, RTL, and screen readers.
+- **Offline resilience** — cache downloaded fonts and always provide system fallbacks.
 
 ### Common Pitfalls
 
-- **Assuming Latin coverage is universal** — most fonts lack CJK/Arabic/Indic glyphs
-- **Ignoring text shaping** — complex scripts rely on automatic contextual forms and ligatures
-- **Poor mixed-script alignment** — different scripts have different baselines
-- **No accessibility testing** — large font sizes and RTL can break layout without proper fallbacks
-- **Ignoring bundle size** — CJK fonts can add 20+ MB; prefer downloadable fonts or modularization
-
----
+- **Assuming Latin coverage is universal** — most fonts lack CJK/Arabic/Indic glyphs.
+- **Ignoring text shaping** — complex scripts rely on automatic contextual forms and ligatures.
+- **Poor mixed-script alignment** — different scripts have different baselines.
+- **No accessibility testing** — large font sizes and RTL can break layout without proper fallbacks.
+- **Ignoring bundle size** — CJK fonts can add 20+ MB; prefer downloadable fonts or modularization.
 
 ## Follow-ups (RU)
 - Как комбинировать латинский бренд-шрифт и Noto для контента без визуальных конфликтов?
@@ -775,14 +774,14 @@ suspend fun loadScriptFont(script: String): Typeface {
 - Which tools can be used to automatically verify glyph coverage?
 
 ## References (RU)
-- [[c-globalization]]
+- [[c-android]]
 - https://developer.android.com/guide/topics/text/downloadable-fonts
 
 ## References (EN)
-- [[c-globalization]]
+- [[c-android]]
 - https://developer.android.com/guide/topics/text/downloadable-fonts
 
 ## Related Questions
 
-- [[c-globalization]]
+- [[c-android]]
 - [[c-android-components]]

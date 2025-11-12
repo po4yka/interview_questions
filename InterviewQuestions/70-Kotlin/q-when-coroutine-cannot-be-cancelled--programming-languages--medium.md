@@ -14,7 +14,9 @@ related: [c-kotlin, c-coroutines, q-how-suspend-function-detects-suspension--pro
 created: 2025-10-15
 updated: 2025-11-10
 tags: [cancellation, coroutines, difficulty/medium, kotlin, programming-languages]
+
 ---
+
 # Вопрос (RU)
 > Когда корутина не может быть отменена?
 
@@ -73,7 +75,7 @@ fun cooperativeExample() = runBlocking {
 }
 ```
 
-### Случай 2: Контекст NonCancellable
+### Случай 2: Контекст `NonCancellable`
 
 Если корутина или блок кода запускается в контексте `NonCancellable`, он игнорирует сигнал отмены по дизайну (частый кейс — защищённая очистка в `finally`).
 
@@ -440,37 +442,37 @@ class CancellationTest {
 }
 ```
 
-### Рекомендации (Best Practices)
+### Лучшие практики
 
 ```kotlin
 import kotlinx.coroutines.*
 
 class CancellationBestPractices {
-    // - ИСПОЛЬЗУЙТЕ: delay вместо Thread.sleep в корутинах
+    // - DO: использовать delay вместо Thread.sleep в корутинах
     suspend fun good1() {
-        delay(1000)
+        delay(1000)  // Проверяет отмену
     }
 
-    // - НЕ ИСПОЛЬЗУЙТЕ: блокирующий sleep в suspend-контексте без выделенного потока
+    // - DON'T: использовать блокирующий sleep в suspend-контекстах без выделенных потоков
     suspend fun bad1() {
-        Thread.sleep(1000)
+        Thread.sleep(1000)  // Игнорирует отмену корутины
     }
 
-    // - ИСПОЛЬЗУЙТЕ: isActive в длительных циклах
+    // - DO: проверять isActive в долгих циклах
     suspend fun good2() = coroutineScope {
         while (isActive) {
             doWork()
         }
     }
 
-    // - НЕ ИГНОРИРУЙТЕ отмену в бесконечных циклах
+    // - DON'T: игнорировать отмену в бесконечных циклах
     suspend fun bad2() {
-        while (true) {
+        while (true) {  // Нет проверок отмены
             doWork()
         }
     }
 
-    // - ИСПОЛЬЗУЙТЕ: yield() или ensureActive() в CPU-интенсивной работе
+    // - DO: вызывать yield() (или ensureActive()) в CPU-интенсивной работе
     suspend fun good3() {
         repeat(1_000_000) { i ->
             if (i % 1000 == 0) yield()
@@ -478,45 +480,45 @@ class CancellationBestPractices {
         }
     }
 
-    // - НЕ ДЕЛАЙТЕ: длительные вычисления без кооперации
+    // - DON'T: длительные CPU-задачи без кооперации
     suspend fun bad3() {
         repeat(1_000_000) {
-            compute()
+            compute()  // Без проверок отмены
         }
     }
 
-    // - ИСПОЛЬЗУЙТЕ: NonCancellable только для необходимой очистки
+    // - DO: использовать NonCancellable только для необходимой очистки
     suspend fun good4() {
         try {
             doWork()
         } finally {
             withContext(NonCancellable) {
-                cleanup()
+                cleanup()  // Должно завершиться
             }
         }
     }
 
-    // - НЕ ИСПОЛЬЗУЙТЕ: NonCancellable для обычной бизнес-логики
+    // - DON'T: использовать NonCancellable для обычной бизнес-логики
     suspend fun bad4() {
         withContext(NonCancellable) {
-            doWork()
+            doWork()  // Не может быть кооперативно отменена
         }
     }
 }
 ```
 
-### Итог (Summary)
+### Рекомендации (Summary)
 
-| Сценарий                      | Отменяемый? | Комментарий / решение                                   |
-|------------------------------|------------|---------------------------------------------------------|
-| `delay()`                    | Да         | Встроенная кооперативная отмена                         |
-| `Thread.sleep()`             | Нет        | Использовать `delay()` или отдельные потоки             |
-| `while(isActive)`            | Да         | Явная проверка отмены                                   |
-| `while(true)` (без проверок) | Нет        | Добавить `isActive`, `yield()` или `ensureActive()`     |
-| `NonCancellable` контекст    | Нет        | По дизайну; только для критичных секций/очистки         |
-| CPU-интенсивный с проверками | Да         | `yield()` / `ensureActive()` / отменяемые вызовы        |
-| CPU-интенсивный без проверок | Нет        | Добавить точки приостановки / проверки отмены           |
-| Блокирующий I/O (без проверок)| Нет       | Использовать suspend/I/O + периодические проверки       |
+| Сценарий                       | Отменяемый? | Комментарий / решение                                   |
+|--------------------------------|------------|---------------------------------------------------------|
+| `delay()`                      | Да         | Встроенная кооперативная отмена                         |
+| `Thread.sleep()`               | Нет        | Использовать `delay()` или отдельные потоки             |
+| `while(isActive)`              | Да         | Явная проверка отмены                                   |
+| `while(true)` (без проверок)   | Нет        | Добавить `isActive`, `yield()` или `ensureActive()`     |
+| `NonCancellable` контекст      | Нет        | По дизайну; только для критичных секций/очистки         |
+| CPU-интенсивный с проверками  | Да         | `yield()` / `ensureActive()` / отменяемые вызовы        |
+| CPU-интенсивный без проверок  | Нет        | Добавить точки приостановки / проверки отмены           |
+| Блокирующий I/O (без проверок)| Нет        | Использовать suspend/I/O + периодические проверки       |
 
 Также см. [[c-kotlin]] и [[c-coroutines]] для общей теории корутин и отмены.
 
@@ -611,7 +613,7 @@ suspend fun performCleanup() {
 
 ### Case 3: No Cooperation - CPU-Intensive Loop
 
-Long-running CPU-intensive loops without suspension points or cancellation checks (`isActive`, `yield()`, `ensureActive()`, or other cancellable suspending calls) effectively do not respond to cancellation.
+`Long`-running CPU-intensive loops without suspension points or cancellation checks (`isActive`, `yield()`, `ensureActive()`, or other cancellable suspending calls) effectively do not respond to cancellation.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -795,7 +797,6 @@ suspend fun cooperativeWork4() {
 // Pattern 5: Cancellable suspend functions (including many from kotlinx.coroutines)
 suspend fun cooperativeWork5() {
     repeat(1000) {
-        // Using cancellable suspending calls or contexts that check Job state
         withContext(Dispatchers.Default) {
             performTask()
         }
@@ -1024,9 +1025,9 @@ Also see [[c-kotlin]] and [[c-coroutines]] for coroutine and cancellation basics
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between coroutine cancellation and Java thread interruption?
+- When would you use these cooperative cancellation patterns in practice?
+- What are common pitfalls with coroutine cancellation to avoid?
 
 ## Ссылки (RU)
 

@@ -1,6 +1,6 @@
 ---
 id: lang-072
-title: "Equals Hashcode Contracts"
+title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 aliases: [Equals Hashcode Contracts, Контракты equals и hashCode]
 topic: kotlin
 subtopics: [collections, equality, object-methods]
@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-equality, q-equals-hashcode-purpose--programming-languages--hard]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [collections, contracts, difficulty/medium, equality, object-methods, kotlin]
 ---
 # Вопрос (RU)
@@ -225,21 +225,15 @@ class User(val id: Int, val name: String) {
 
 4. Для ручных реализаций используйте стабильную комбинацию хешей полей (часто умножение на 31, как в примерах выше). На JVM также можно использовать `java.util.Objects.hash(...)`, но в идиоматичном Kotlin обычно достаточно `data class` или явных комбинаций.
 
-### Краткое резюме (RU)
-
-- Если `a.equals(b) == true`, то их `hashCode()` обязаны совпадать.
-- Обратное неверно: одинаковый `hashCode()` не гарантирует `equals()`.
-- Нарушение этих правил ломает поведение хеш-структур данных.
-
 ### Summary (RU)
 
-- Контракт `equals()`:
+- equals():
   - Рефлексивность: `a.equals(a) == true`.
   - Симметричность: `a.equals(b) == b.equals(a)`.
   - Транзитивность: `a == b` и `b == c` ⇒ `a == c`.
   - Согласованность: результат стабилен при неизменных значимых полях.
   - Сравнение с `null`: всегда `false`.
-- Контракт `hashCode()`:
+- hashCode():
   - Стабильность: один и тот же объект → тот же `hashCode` при неизменных значимых полях.
   - Из равенства следует равенство хешей: `a == b` ⇒ `hash(a) == hash(b)` (обязательное правило).
   - Обратное не требуется: одинаковый `hashCode` не гарантирует равенство объектов.
@@ -467,13 +461,13 @@ override fun hashCode(): Int {
 
 ### Summary (EN)
 
-- equals() contract:
+- equals():
   - Reflexivity: `a.equals(a) == true`.
   - Symmetry: `a.equals(b) == b.equals(a)`.
   - Transitivity: `a == b` and `b == c` ⇒ `a == c`.
   - Consistency: stable result while significant fields do not change.
   - Null comparison: always `false`.
-- hashCode() contract:
+- hashCode():
   - Consistency: same object → same hash code while significant fields unchanged.
   - Equality implies hash equality: `a == b` ⇒ `hash(a) == hash(b)` (must hold).
   - Hash equality does not imply object equality.

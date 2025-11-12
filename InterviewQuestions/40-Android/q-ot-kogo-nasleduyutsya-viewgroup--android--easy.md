@@ -58,9 +58,9 @@ ViewGroup (контейнер для других View)
 Конкретные Layout классы (LinearLayout, RelativeLayout, и т.д.)
 ```
 
-### Ключевые Методы `View`
+### Ключевые Методы и Ответственности `View`
 
-**Правильно** — ниже упрощённый псевдокод, иллюстрирующий базовую функциональность `View` (не точные сигнатуры исходного API):
+Ниже упрощённый псевдокод, иллюстрирующий базовую функциональность `View` (не точные сигнатуры исходного API):
 
 ```kotlin
 open class View {
@@ -69,21 +69,25 @@ open class View {
     var isEnabled: Boolean
     var isClickable: Boolean
 
-    // Измерение и позиционирование
+    // Измерение
     protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
-    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {}
 
     // Рисование
     protected open fun onDraw(canvas: Canvas) {}
 
-    // События
+    // Обработка событий
     open fun onTouchEvent(event: MotionEvent): Boolean = false
 }
 ```
 
+`View` отвечает за:
+- собственные размеры и измерение;
+- отрисовку содержимого;
+- обработку событий для одного элемента.
+
 ### Дополнительная Функциональность `ViewGroup`
 
-`ViewGroup` расширяет `View` и добавляет управление дочерними элементами (также показано в виде упрощённого псевдокода):
+`ViewGroup` расширяет `View` и добавляет управление дочерними элементами (упрощённый псевдокод):
 
 ```kotlin
 abstract class ViewGroup(context: Context, attrs: AttributeSet? = null) : View(/* ... */) {
@@ -93,11 +97,14 @@ abstract class ViewGroup(context: Context, attrs: AttributeSet? = null) : View(/
     fun getChildAt(index: Int): View = TODO()
     fun getChildCount(): Int = TODO()
 
-    // Измерение дочерних элементов
+    // Измерение дочерних элементов (вспомогательный метод)
     fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
 
     // Перехват и распределение событий касания
     open fun onInterceptTouchEvent(ev: MotionEvent): Boolean = false
+
+    // Размещение дочерних View — ДОЛЖЕН быть реализован наследниками
+    protected abstract fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
 }
 ```
 
@@ -113,6 +120,7 @@ class CustomLayout @JvmOverloads constructor(
         var maxWidth = 0
         var maxHeight = 0
 
+        // Измеряем всех дочерних
         measureChildren(widthMeasureSpec, heightMeasureSpec)
 
         for (i in 0 until childCount) {
@@ -128,21 +136,25 @@ class CustomLayout @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        // Упрощённо: размещаем всех детей в (0,0)
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             child.layout(0, 0, child.measuredWidth, child.measuredHeight)
         }
     }
+
+    // Для полноценных кастомных ViewGroup обычно также переопределяют generateLayoutParams(...),
+    // но это опущено здесь для простоты.
 }
 ```
 
 ### Почему Это Важно
 
 1. Полиморфизм — `ViewGroup` можно использовать везде, где ожидается `View`.
-2. Единый API — все UI элементы имеют общие методы.
-3. Гибкость — можно переопределять методы `View` в `ViewGroup`.
+2. Единый API — все UI элементы имеют общие базовые методы.
+3. Гибкость — можно расширять и переопределять поведение `View` в `ViewGroup` и его наследниках.
 
-**Правильно** — `ViewGroup` как `View`:
+**Пример** — `ViewGroup` как `View`:
 
 ```kotlin
 fun setViewProperties(view: View) {
@@ -172,9 +184,9 @@ ViewGroup (container for other Views)
 Specific Layout Classes (LinearLayout, RelativeLayout, etc.)
 ```
 
-### Key `View` Methods
+### Key `View` Methods and Responsibilities
 
-**Correct** — below is simplified pseudo-code illustrating `View`'s base functionality (not the exact framework signatures):
+Below is simplified pseudo-code illustrating `View`'s base responsibilities (not the exact framework signatures):
 
 ```kotlin
 open class View {
@@ -183,21 +195,25 @@ open class View {
     var isEnabled: Boolean
     var isClickable: Boolean
 
-    // Measurement and positioning
+    // Measurement
     protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
-    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {}
 
     // Drawing
     protected open fun onDraw(canvas: Canvas) {}
 
-    // Events
+    // Event handling
     open fun onTouchEvent(event: MotionEvent): Boolean = false
 }
 ```
 
+`View` is responsible for:
+- its own size and measurement;
+- drawing its content;
+- handling events for a single element.
+
 ### `ViewGroup` Additional Functionality
 
-`ViewGroup` extends `View` and adds child management (also shown as simplified pseudo-code):
+`ViewGroup` extends `View` and adds child management (simplified pseudo-code):
 
 ```kotlin
 abstract class ViewGroup(context: Context, attrs: AttributeSet? = null) : View(/* ... */) {
@@ -207,11 +223,14 @@ abstract class ViewGroup(context: Context, attrs: AttributeSet? = null) : View(/
     fun getChildAt(index: Int): View = TODO()
     fun getChildCount(): Int = TODO()
 
-    // Child measurement
+    // Helper for measuring child views
     fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
 
     // Touch event interception and distribution
     open fun onInterceptTouchEvent(ev: MotionEvent): Boolean = false
+
+    // Lays out child views — MUST be implemented by subclasses
+    protected abstract fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
 }
 ```
 
@@ -227,6 +246,7 @@ class CustomLayout @JvmOverloads constructor(
         var maxWidth = 0
         var maxHeight = 0
 
+        // Measure all children
         measureChildren(widthMeasureSpec, heightMeasureSpec)
 
         for (i in 0 until childCount) {
@@ -242,21 +262,25 @@ class CustomLayout @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        // Simplified: position all children at (0,0)
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             child.layout(0, 0, child.measuredWidth, child.measuredHeight)
         }
     }
+
+    // In real-world custom ViewGroups you typically also override generateLayoutParams(...),
+    // but it's omitted here for brevity.
 }
 ```
 
 ### Why This Matters
 
-1. Polymorphism — `ViewGroup` can be used anywhere `View` is expected.
-2. Unified API — all UI elements share common methods.
-3. Flexibility — `ViewGroup` can override and extend `View` behavior.
+1. Polymorphism — `ViewGroup` can be used anywhere a `View` is expected.
+2. Unified API — all UI elements share common base methods.
+3. Flexibility — `ViewGroup` and its subclasses can extend and override `View` behavior.
 
-**Correct** — `ViewGroup` as `View`:
+**Example** — `ViewGroup` as `View`:
 
 ```kotlin
 fun setViewProperties(view: View) {
@@ -280,7 +304,7 @@ setViewProperties(linearLayout) // Works because LinearLayout : ViewGroup : View
 ## Follow-ups
 
 - What are the key differences between `View` and `ViewGroup`?
-- Why is onLayout() declared abstract in `ViewGroup`, and what must subclasses implement there?
+- Why is `onLayout()` declared abstract in `ViewGroup`, and what must subclasses implement there?
 - How does touch event handling differ between `View` and `ViewGroup`?
 - What common `ViewGroup` subclasses are used in Android?
 

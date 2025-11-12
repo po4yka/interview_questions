@@ -47,14 +47,18 @@ Android определяет четыре основных компонента 
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ✅ Работа в фоне независимо от UI
+        // ✅ Работа в фоне, не привязана к UI-компоненту
         playMusic(intent?.getStringExtra("trackId"))
-        return START_STICKY // ✅ Перезапуск после завершения системой (когда это возможно)
+        return START_STICKY // ✅ Запросить перезапуск после убийства системой (подходит не для всех сценариев)
     }
 }
 ```
 
-**Применение**: Воспроизведение музыки, загрузка файлов, синхронизация данных.
+Важно:
+- Для долгих пользовательски-заметных задач (например, музыка) обычно используется foreground service с уведомлением.
+- Для отложенной/гарантированной работы (сеть, ограничения по заряду и т.п.) предпочтительнее `WorkManager`, а не обычный `Service`.
+
+**Применение**: Воспроизведение музыки, загрузка файлов, синхронизация данных (с учётом современных ограничений и часто в связке с WorkManager).
 
 ### 2. `BroadcastReceiver` (Приёмник событий)
 Реагирует на системные и кастомные broadcast-сообщения.
@@ -62,30 +66,46 @@ class MusicService : Service() {
 ```kotlin
 class NetworkReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // ✅ Обработка системных событий
+        // ✅ Обработка события должна быть быстрой
         val isOnline = isNetworkAvailable(context)
+        // При необходимости долгих операций — запустить отложенную работу (например, через WorkManager)
     }
 }
 ```
 
-**Сценарии**: Изменение подключения, уровень батареи, загрузка завершена, кастомные события.
+Важно:
+- `onReceive` должен завершиться быстро; длительные операции необходимо выносить в отдельные механизмы фоновой работы.
+- В современных версиях Android существуют ограничения для фоновых ресиверов (особенно для implicit broadcasts).
+
+**Сценарии**: Изменение подключения, уровень батареи, завершение загрузки, кастомные события.
 
 ### 3. `ContentProvider` (Поставщик контента)
 Управляет доступом к структурированным данным между приложениями.
 
 ```kotlin
 class ContactsProvider : ContentProvider() {
-    override fun query(uri: Uri, projection: Array<String>?, ...): Cursor? {
+    override fun onCreate(): Boolean {
+        // Инициализация ресурсов
+        return true
+    }
+
+    override fun query(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
         // ✅ Безопасный доступ к данным через URI
-        return database.query(parseTable(uri), projection, ...)
+        return database.query(parseTable(uri), projection, selection, selectionArgs, null, null, sortOrder)
     }
 }
 ```
 
-**Назначение**: Межприложенский доступ к контактам, медиафайлам, календарю.
+**Назначение**: Межприложенский доступ к контактам, медиафайлам, календарю или другим структурированным данным.
 
 ### 4. `Fragment` (Фрагмент)
-НЕ является одним из четырёх основных компонентов, но является важной модульной частью UI с собственным жизненным циклом, привязанной к `Activity`.
+НЕ является одним из четырёх основных компонентов, но является важной модульной частью UI с собственным жизненным циклом, управляемым `FragmentManager` и привязанным к `Activity`.
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -104,10 +124,10 @@ class DetailsFragment : Fragment() {
 
 | Компонент | Назначение | UI | Жизненный цикл |
 |-----------|------------|----|----------------|
-| `Service` | Фоновые операции | ❌ | Независим от `Activity` |
-| `BroadcastReceiver` | Обработка событий | ❌ | Кратковременный, должен завершить работу быстро |
-| `ContentProvider` | Обмен данными | ❌ | Создаётся по требованию процессом приложения |
-| `Fragment` | UI-модули (не основной компонент) | ✅ | Привязан к `Activity` |
+| `Service` | Фоновые операции | ❌ | Управляется системой; может работать независимо от `Activity`, с учётом ограничений ОС |
+| `BroadcastReceiver` | Обработка событий | ❌ | Кратковременный; `onReceive` должен завершиться быстро |
+| `ContentProvider` | Обмен данными | ❌ | Создаётся по требованию и живёт в процессе приложения |
+| `Fragment` | UI-модули (не основной компонент) | ✅ | Управляется `FragmentManager`, привязан к жизненному циклу `Activity` |
 
 ---
 
@@ -121,14 +141,18 @@ Executes long-running operations in the background without a user interface.
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ✅ Background work independent of UI
+        // ✅ Background work not tied to a specific UI component
         playMusic(intent?.getStringExtra("trackId"))
-        return START_STICKY // ✅ Request restart if killed by the system when possible
+        return START_STICKY // ✅ Request restart if killed by the system (not appropriate for all use cases)
     }
 }
 ```
 
-**Use cases**: Music playback, file downloads, data synchronization.
+Important:
+- For long-running, user-visible tasks (e.g., music playback) you typically use a foreground service with a notification.
+- For deferrable/guaranteed background work (network, battery constraints, etc.), prefer `WorkManager` instead of a plain `Service`.
+
+**Use cases**: Music playback, file downloads, data synchronization (respecting modern background execution limits, often via WorkManager).
 
 ### 2. `BroadcastReceiver`
 Responds to system-wide and custom broadcast announcements.
@@ -136,11 +160,16 @@ Responds to system-wide and custom broadcast announcements.
 ```kotlin
 class NetworkReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // ✅ Handle system events
+        // ✅ Handling must be quick
         val isOnline = isNetworkAvailable(context)
+        // For long work, offload to a separate background mechanism (e.g., WorkManager)
     }
 }
 ```
+
+Important:
+- `onReceive` must finish quickly; long-running tasks should be delegated.
+- Modern Android versions impose restrictions on background receivers (especially for implicit broadcasts).
 
 **Use cases**: Network connectivity changes, battery level, download completed, custom events.
 
@@ -149,17 +178,28 @@ Manages access to structured data shared between applications.
 
 ```kotlin
 class ContactsProvider : ContentProvider() {
-    override fun query(uri: Uri, projection: Array<String>?, ...): Cursor? {
+    override fun onCreate(): Boolean {
+        // Initialize resources
+        return true
+    }
+
+    override fun query(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
         // ✅ Secure data access via URI
-        return database.query(parseTable(uri), projection, ...)
+        return database.query(parseTable(uri), projection, selection, selectionArgs, null, null, sortOrder)
     }
 }
 ```
 
-**Purpose**: Inter-app access to contacts, media files, calendar.
+**Purpose**: Inter-app access to contacts, media files, calendar, or other structured data.
 
 ### 4. `Fragment`
-NOT one of the four main app components, but an important modular UI unit with its own lifecycle, attached to an `Activity`.
+NOT one of the four main app components, but an important modular UI unit with its own lifecycle, managed by `FragmentManager` and attached to an `Activity`.
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -178,10 +218,10 @@ class DetailsFragment : Fragment() {
 
 | Component | Purpose | UI | Lifecycle |
 |-----------|---------|----|-----------|
-| `Service` | Background operations | ❌ | Independent from `Activity` |
-| `BroadcastReceiver` | Event handling | ❌ | `Short`-lived, must finish quickly |
-| `ContentProvider` | Data sharing | ❌ | Created on demand within the app process |
-| `Fragment` | UI modules (not a core app component) | ✅ | Tied to `Activity` |
+| `Service` | Background operations | ❌ | Managed by the system; can run independently of an `Activity`, subject to OS limits |
+| `BroadcastReceiver` | Event handling | ❌ | Short-lived; `onReceive` must complete quickly |
+| `ContentProvider` | Data sharing | ❌ | Created on demand and runs in the app's process |
+| `Fragment` | UI modules (not a core app component) | ✅ | Managed by `FragmentManager`, tied to the `Activity` lifecycle |
 
 ---
 

@@ -47,7 +47,7 @@ tags: [android/performance-memory, android/profiling, android/testing-benchmark,
 
 **2. Автоматизированные микробенчмарки (Jetpack Benchmark)**
 
-Jetpack Benchmark Library обеспечивает точные, воспроизводимые измерения. Данные и окружение готовятся отдельно от измеряемого блока.
+Jetpack Benchmark Library обеспечивает точные, воспроизводимые измерения. Данные и окружение готовятся отдельно от измеряемого блока. Пример ниже упрощён и иллюстрирует идею; для реальных тестов используйте официальные шаблоны и Gradle-конфигурацию.
 
 ```kotlin
 // Microbenchmark - производительность отдельного метода (упрощённый пример)
@@ -56,24 +56,26 @@ class SortBenchmark {
     @get:Rule
     val benchmarkRule = BenchmarkRule()
 
-    private lateinit var data: List<Int>
+    private lateinit var data: MutableList<Int>
 
     @Before
     fun setup() {
-        data = List(10_000) { Random.nextInt() }
+        data = MutableList(10_000) { Random.nextInt() }
     }
 
     @Test
     fun sortLargeList() {
         benchmarkRule.measureRepeated {
-            // Measure only sorting, avoiding extra allocation overhead in the block
-            data.sorted()
+            // Измеряем только сортировку, избегая аллокации списка внутри блока
+            data.sort()
         }
     }
 }
 ```
 
 **3. Macrobenchmark - UI сценарии и запуск приложения**
+
+Пример ниже демонстрирует общий подход и не включает всю необходимую инфраструктуру (отдельный macrobenchmark-модуль, манифест и т.п.).
 
 ```kotlin
 @get:Rule
@@ -89,7 +91,7 @@ fun appStartup() = macrobenchmarkRule.measureRepeated(
     pressHome()
     startActivityAndWait()
 }
-// Measures cold startup explicitly via StartupMode.COLD; real setups may also use Baseline Profiles / compilation configuration
+// Явно измеряет cold start через StartupMode.COLD; в реальных проектах обычно также используют Baseline Profiles / настройки компиляции
 ```
 
 **4. StrictMode - детекция блокировок главного потока**
@@ -98,19 +100,19 @@ fun appStartup() = macrobenchmarkRule.measureRepeated(
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
-            .detectDiskReads()   // Detects file operations on the main thread
+            .detectDiskReads()   // Детектирует файловые операции в главном потоке
             .detectDiskWrites()
-            .detectNetwork()     // Detects network calls on the main thread
+            .detectNetwork()     // Детектирует сетевые вызовы в главном потоке
             .penaltyLog()
             .build()
     )
 }
-// DO NOT enable in production builds
+// Не включайте в production-сборках
 ```
 
 **5. Perfetto - системная трассировка**
 
-Анализирует низкоуровневые события: планирование CPU, кадры, binder calls, выделения памяти. Запускается через System Tracing / Record trace (в Android Studio или на устройстве) или из CLI, затем анализируется в Perfetto UI.
+Анализирует низкоуровневые события: планирование CPU, кадры, binder-вызовы, выделения памяти. Запускается через System Tracing / Record trace (в Android Studio или на устройстве) или из CLI, затем анализируется в Perfetto UI.
 
 ### Выбор Инструмента
 
@@ -156,7 +158,7 @@ val trimmedMean = times.sorted()
 
 **2. Automated Microbenchmarks (Jetpack Benchmark)**
 
-Jetpack Benchmark Library provides precise, reproducible measurements. Test data and environment should be prepared outside the measured block.
+Jetpack Benchmark Library provides precise, reproducible measurements. Test data and environment should be prepared outside the measured block. The example below is simplified; for real usage follow official templates and Gradle configuration.
 
 ```kotlin
 // Microbenchmark - isolated method performance (simplified example)
@@ -165,24 +167,26 @@ class SortBenchmark {
     @get:Rule
     val benchmarkRule = BenchmarkRule()
 
-    private lateinit var data: List<Int>
+    private lateinit var data: MutableList<Int>
 
     @Before
     fun setup() {
-        data = List(10_000) { Random.nextInt() }
+        data = MutableList(10_000) { Random.nextInt() }
     }
 
     @Test
     fun sortLargeList() {
         benchmarkRule.measureRepeated {
-            // Measure only sorting, avoiding extra allocation overhead in the block
-            data.sorted()
+            // Measure only sorting, avoiding list allocation inside the measured block
+            data.sort()
         }
     }
 }
 ```
 
 **3. Macrobenchmark - UI scenarios and app startup**
+
+The snippet below shows the general pattern and omits full setup (separate macrobenchmark module, manifest, etc.).
 
 ```kotlin
 @get:Rule
@@ -198,7 +202,7 @@ fun appStartup() = macrobenchmarkRule.measureRepeated(
     pressHome()
     startActivityAndWait()
 }
-// Measures cold startup explicitly via StartupMode.COLD; real setups may also use Baseline Profiles / compilation configuration
+// Measures cold startup explicitly via StartupMode.COLD; real setups commonly also use Baseline Profiles / compilation configuration
 ```
 
 **4. StrictMode - main thread blocking detection**

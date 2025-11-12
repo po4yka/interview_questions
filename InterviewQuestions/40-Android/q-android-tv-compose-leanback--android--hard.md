@@ -20,16 +20,14 @@ related:
 - c-android-tv
 - q-android-auto-guidelines--android--hard
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/tv
 - android/ui-compose
 - difficulty/hard
 sources:
-- url: "https://developer.android.com/training/tv/start"
-  note: Android TV developer guide
-- url: "https://developer.android.com/jetpack/compose/tv"
-  note: Compose for TV docs
+- "https://developer.android.com/training/tv/start"
+- "https://developer.android.com/jetpack/compose/tv"
 
 ---
 
@@ -43,16 +41,14 @@ sources:
 
 ## Ответ (RU)
 
-### Краткая версия
-
+## Краткая Версия
 - Используйте Leanback для проверенных экранов и контролов, Compose for TV — для новых и кастомных интерфейсов.
 - Обеспечьте корректную DPAD-навигацию и фокус между Leanback и Compose.
 - Настройте рекомендации/каналы и Watch Next согласно актуальным политикам Google TV.
 - Используйте надёжный стек воспроизведения (Media3/ExoPlayer), тестируйте на реальных TV-устройствах.
 - Ориентируйтесь на официальные чек-листы Google TV/Android TV для сертификации.
 
-### Подробная версия
-
+## Подробная Версия
 ### 1. Архитектура UI
 
 - **Leanback** для существующих стабильных компонентов (`BrowseSupportFragment`, `PlaybackSupportFragment`).
@@ -139,16 +135,14 @@ channelManager.addProgram(
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Use Leanback for proven TV components, Compose for TV for new/custom UI.
 - Ensure robust DPAD focus navigation across Leanback and Compose.
 - Implement recommendations/channels and Watch Next per Google TV policies.
 - Use a solid playback stack (Media3/ExoPlayer) and test on real TV devices.
 - Follow official Google TV/Android TV checklists for certification readiness.
 
-### Detailed Version
-
+## Detailed Version
 ### 1. UI architecture
 
 - Use **Leanback** for existing stable components (`BrowseSupportFragment`, `PlaybackSupportFragment`).

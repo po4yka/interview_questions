@@ -43,6 +43,8 @@ tags:
 
 Метрики покрытия тестами помогают найти непротестированный код, но высокий процент не гарантирует качество. Важно понимать типы метрик, правильно настраивать инструменты (например, JaCoCo) и следить за тем, чтобы тесты реально проверяли поведение.
 
+Ниже приведены примеры и шаблоны конфигурации. Они могут отличаться в зависимости от версии Android Gradle Plugin (AGP), Gradle и JaCoCo. Не воспринимайте их как готовое решение «из коробки» — проверяйте задачи и пути под свой проект.
+
 ### Настройка JaCoCo (Android пример)
 
 Пример (упрощённый) конфигурации JaCoCo для Android; конкретные пути и задачи зависят от версии Android Gradle Plugin и структуры проекта:
@@ -57,13 +59,14 @@ plugins {
 android {
     buildTypes {
         debug {
-            // Для инструментального покрытия в старых версиях AGP; в новых может быть недоступно
+            // Для инструментального покрытия в старых версиях AGP; в новых может быть недоступно/удалено
             testCoverageEnabled true
         }
     }
 }
 
 // Отчёт по unit-тестам (+ опционально инструментальным тестам)
+// Шаблон: проверьте, что задачи и директории соответствуют вашей версии AGP/Gradle.
 tasks.register('jacocoTestReport', JacocoReport) {
     dependsOn 'testDebugUnitTest'
 
@@ -104,15 +107,15 @@ tasks.register('jacocoTestReport', JacocoReport) {
     ))
 }
 
-// Сводный отчёт по unit + инструментальным тестам (эскиз)
+// Сводный отчёт по unit + инструментальным тестам (эскиз, задачи версии-зависимы)
 tasks.register('jacocoFullReport', JacocoReport) {
     dependsOn 'testDebugUnitTest'
-    dependsOn 'createDebugCoverageReport'
+    dependsOn 'createDebugCoverageReport' // убедитесь, что задача существует в вашем проекте
 
     // sourceDirectories, classDirectories, executionData настраиваются аналогично jacocoTestReport
 }
 
-// Проверка минимального покрытия
+// Проверка минимального покрытия (пример; конфигурация плагина/типа задачи может отличаться)
 
 tasks.register('jacocoVerification', JacocoCoverageVerification) {
     dependsOn 'jacocoTestReport'
@@ -120,7 +123,7 @@ tasks.register('jacocoVerification', JacocoCoverageVerification) {
     violationRules {
         rule {
             limit {
-                minimum = 0.80 // минимум 80% общего покрытия
+                minimum = 0.80 // пример: минимум 80% общего покрытия
             }
         }
 
@@ -142,7 +145,7 @@ tasks.register('jacocoVerification', JacocoCoverageVerification) {
 }
 ```
 
-Примечание: используйте это как шаблон; точная интеграция зависит от версии AGP.
+Примечание: используйте это как шаблон; точная интеграция (task names, директории, поддержка `testCoverageEnabled`) зависит от версии AGP и используемого Gradle-плагина JaCoCo.
 
 ### Понимание метрик покрытия (с примером)
 
@@ -152,7 +155,7 @@ tasks.register('jacocoVerification', JacocoCoverageVerification) {
 - Class Coverage: доля классов, где выполнен хотя бы один метод.
 
 ```kotlin
-// Пример для иллюстрации метрик
+// Пример для иллюстрации метрик (валидный Kotlin-код)
 class Calculator {
     fun divide(a: Int, b: Int): Int {  // Влияет на line и branch coverage
         if (b == 0) {                  // Две ветви для branch coverage
@@ -236,11 +239,11 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     }
 }
 
-// Отчёт до добавления тестов:
+// Отчёт до добавления тестов (примерная оценка):
 // loadUser: ~66% (строки 1 и 2 покрыты, строка 3 нет)
 // refresh: 0% (никогда не вызывается в тестах)
 
-// Добавляем недостающие тесты (эскиз)
+// Добавляем недостающие тесты (эскиз, псевдокод поведения double/mocking опущен)
 @Test
 fun loadUser_error() = runTest {
     repository.shouldReturnError = true
@@ -259,15 +262,17 @@ fun refresh_reloadsUser() = runTest {
 
 ```kotlin
 val coverageTargets = mapOf(
-    "ViewModel" to 85,       // Высокое покрытие презентационной/бизнес-логики
-    "Repository" to 80,      // Большинство путей покрыто
-    "UseCase" to 90,         // Критичная бизнес-логика
-    "UI/Composables" to 50,  // Ниже приоритет для чистого UI
-    "DataSource" to 75,      // Важно для целостности данных
-    "Mapper" to 95,          // Простая логика — почти полностью покрыта
-    "Utility" to 90          // Общие утилиты должны быть хорошо протестированы
+    "ViewModel" to 85,       // Пример целевых значений
+    "Repository" to 80,
+    "UseCase" to 90,
+    "UI/Composables" to 50,
+    "DataSource" to 75,
+    "Mapper" to 95,
+    "Utility" to 90
 )
 ```
+
+Значения выше — ориентиры, а не жёсткий стандарт; выбирайте под контекст проекта.
 
 ### Баланс качества и процента покрытия
 
@@ -293,7 +298,7 @@ fun goodTest() {
 
 ### Mutation testing (для оценки качества тестов)
 
-Пример для JVM-модулей (для Android app-модулей потребуется дополнительная настройка):
+Пример для JVM-модулей (для Android app-модулей потребуется дополнительная настройка; конфигурация может меняться с версиями плагина):
 
 ```gradle
 plugins {
@@ -312,11 +317,11 @@ pitest {
 ### Исключения из покрытия
 
 ```kotlin
-// Пример: исключаем сгенерированный код
+// Пример: исключаем сгенерированный код (аннотация условна; используйте реальную @Generated из нужного пакета)
 @Generated
 class User_Impl : User
 
-// Пример: исключаем только отладочный код
+// Пример: исключаем только отладочный код (аннотация DebugOnly условна, может быть кастомной)
 @DebugOnly
 fun debugPrint(message: String) {
     Log.d("DEBUG", message)
@@ -330,8 +335,8 @@ jacocoTestReport {
         fileTree(dir: it, excludes: [
             '**/*_Impl.*',          // Сгенерированные реализации
             '**/*DebugOnly*.*',     // Отладочные утилиты
-            '**/*Module*.class',    // DI-модули
-            '**/*Component*.class'  // DI-компоненты
+            '**/*Module*.class',    // DI-модули (по необходимости)
+            '**/*Component*.class'  // DI-компоненты (по необходимости)
             // Не исключайте всё подряд, чтобы не скрыть реальную логику
         ])
     }))
@@ -381,10 +386,10 @@ jobs:
 ### Пример дашборда покрытия
 
 ```kotlin
-// Концептуальный пример кастомного репортера покрытия
+// Концептуальный пример кастомного репортера покрытия (псевдокод для иллюстрации идей)
 class CoverageReporter {
     fun generateReport(jacocoReport: File): CoverageReport {
-        val doc = parseXml(jacocoReport)
+        val doc = parseXml(jacocoReport) // предположим, что есть утилита для парсинга XML
 
         val packages = doc.selectNodes("//package").map { pkg ->
             val name = pkg.getAttribute("name")
@@ -409,7 +414,7 @@ class CoverageReporter {
 
 ### Best Practices (RU)
 
-1. Устанавливайте реалистичные цели покрытия (часто 70–85%+ для ключевой логики) по слоям.
+1. Устанавливайте реалистичные цели покрытия (часто 70–85%+ для ключевой логики) по слоям — как ориентир, а не жёсткое требование.
 2. Фокусируйтесь на критичных путях и обработке ошибок, а не только на общей цифре.
 3. Исключайте из метрик сгенерированный/фреймворк/boilerplate-код, чтобы не искажать картину.
 4. Следите за branch coverage для сложных условий.
@@ -417,7 +422,7 @@ class CoverageReporter {
 6. Отслеживайте тренд покрытия по модулям/слоям во времени.
 7. Просматривайте отчёты покрытия на code review.
 8. Не жертвуйте качеством и скоростью тестов ради красивого процента.
-9. Покрывайте edge cases, null/error-флоу, конкуррентные сценарии (если актуально).
+9. Покрывайте edge cases, null/error-флоу, конкурентные сценарии (если актуально).
 10. Встраивайте проверки покрытия в CI/CD, чтобы не допускать регрессии.
 
 ---
@@ -425,6 +430,8 @@ class CoverageReporter {
 ## Answer (EN)
 
 Test coverage metrics help identify untested code, but high coverage doesn't guarantee quality. Understanding metrics and balancing coverage with meaningful tests is crucial.
+
+The snippets below are examples/templates. Exact configuration depends on your Android Gradle Plugin (AGP), Gradle, and JaCoCo versions. Verify task names and paths in your project instead of assuming they exist as-is.
 
 ### JaCoCo Setup
 
@@ -440,13 +447,14 @@ plugins {
 android {
     buildTypes {
         debug {
-            // For Android instrumented coverage with older AGP; may be deprecated in newer versions
+            // For Android instrumented coverage with older AGP; may be removed or unsupported in newer versions
             testCoverageEnabled true
         }
     }
 }
 
 // Unit test + (optionally) instrumentation coverage report
+// Template: ensure tasks/directories match your AGP/Gradle setup.
 tasks.register('jacocoTestReport', JacocoReport) {
     dependsOn 'testDebugUnitTest'
 
@@ -487,15 +495,15 @@ tasks.register('jacocoTestReport', JacocoReport) {
     ))
 }
 
-// Combined report for unit + instrumentation tests (sketch)
+// Combined report for unit + instrumentation tests (sketch; version-dependent tasks)
 tasks.register('jacocoFullReport', JacocoReport) {
     dependsOn 'testDebugUnitTest'
-    dependsOn 'createDebugCoverageReport'
+    dependsOn 'createDebugCoverageReport' // ensure this task exists in your project
 
     // Configure sourceDirectories, classDirectories, executionData similar to jacocoTestReport
 }
 
-// Coverage verification
+// Coverage verification (example; exact configuration depends on the JaCoCo Gradle plugin setup)
 
 tasks.register('jacocoVerification', JacocoCoverageVerification) {
     dependsOn 'jacocoTestReport'
@@ -503,7 +511,7 @@ tasks.register('jacocoVerification', JacocoCoverageVerification) {
     violationRules {
         rule {
             limit {
-                minimum = 0.80 // 80% coverage minimum overall
+                minimum = 0.80 // example: 80% minimum overall coverage
             }
         }
 
@@ -525,7 +533,7 @@ tasks.register('jacocoVerification', JacocoCoverageVerification) {
 }
 ```
 
-Note: Exact integration (task names, directories, testCoverageEnabled support) depends on the Android Gradle Plugin version; treat this as an illustrative template.
+Note: Treat this as an illustrative template. Actual task names, directories, and `testCoverageEnabled` availability vary with AGP/Gradle versions.
 
 ### Understanding Coverage Metrics
 
@@ -535,7 +543,7 @@ Note: Exact integration (task names, directories, testCoverageEnabled support) d
 - Class Coverage: percentage of classes with at least one executed method.
 
 ```kotlin
-// Example with coverage analysis
+// Example with coverage analysis (valid Kotlin code)
 class Calculator {
     fun divide(a: Int, b: Int): Int {  // Affects line and branch coverage
         if (b == 0) {                  // Branch coverage - 2 branches
@@ -548,7 +556,7 @@ class Calculator {
         return a + b
     }
 
-    fun isPositive(n: Int): Boolean {  // Method coverage
+    fun isPositive(n: Int): Boolean {  // Method coverage example
         return n > 0
     }
 }
@@ -619,11 +627,11 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     }
 }
 
-// Coverage report shows (before extra tests):
+// Coverage report (before extra tests, approximate illustration):
 // loadUser: ~66% (Lines 1,2 covered, Line 3 not covered)
 // refresh: 0% (never called in tests)
 
-// Add missing tests (sketch)
+// Add missing tests (sketch; mocking/dispatcher details omitted)
 @Test
 fun loadUser_error() = runTest {
     repository.shouldReturnError = true
@@ -642,15 +650,17 @@ fun refresh_reloadsUser() = runTest {
 
 ```kotlin
 val coverageTargets = mapOf(
-    "ViewModel" to 85,       // High coverage for presentation/business logic
-    "Repository" to 80,      // Most paths tested
-    "UseCase" to 90,         // Critical business logic
-    "UI/Composables" to 50,  // Lower priority for pure UI rendering
-    "DataSource" to 75,      // Data integrity important
-    "Mapper" to 95,          // Simple, should be almost fully covered
-    "Utility" to 90          // Reusable helpers should be well-tested
+    "ViewModel" to 85,       // Example target values
+    "Repository" to 80,
+    "UseCase" to 90,
+    "UI/Composables" to 50,
+    "DataSource" to 75,
+    "Mapper" to 95,
+    "Utility" to 90
 )
 ```
+
+These numbers are guidelines, not strict rules; adjust to your project's context.
 
 ### Quality Vs Coverage Balance
 
@@ -676,7 +686,7 @@ fun goodTest() {
 
 ### Mutation Testing (for Quality)
 
-Example (for JVM modules; Android app modules may require extra setup):
+Example (for JVM modules; Android app modules may require extra setup; plugin versions may change):
 
 ```gradle
 plugins {
@@ -695,11 +705,11 @@ pitest {
 ### Coverage Exclusions
 
 ```kotlin
-// Exclude generated code
+// Exclude generated code (annotation is illustrative; use the appropriate @Generated import for your toolchain)
 @Generated
 class User_Impl : User
 
-// Exclude debug-only code
+// Exclude debug-only code (DebugOnly is illustrative; could be a custom annotation)
 @DebugOnly
 fun debugPrint(message: String) {
     Log.d("DEBUG", message)
@@ -713,9 +723,9 @@ jacocoTestReport {
         fileTree(dir: it, excludes: [
             '**/*_Impl.*',          // Generated implementations
             '**/*DebugOnly*.*',     // Debug utilities
-            '**/*Module*.class',    // DI modules
-            '**/*Component*.class'  // DI components
-            // Avoid blanket exclusion of all inner classes unless intentional
+            '**/*Module*.class',    // DI modules (if appropriate)
+            '**/*Component*.class'  // DI components (if appropriate)
+            // Avoid blanket exclusion of all inner/anonymous classes unless intentional
         ])
     }))
 }
@@ -764,10 +774,10 @@ jobs:
 ### Coverage Dashboard Example
 
 ```kotlin
-// Custom coverage reporter (conceptual example)
+// Custom coverage reporter (conceptual; uses pseudo-APIs for brevity)
 class CoverageReporter {
     fun generateReport(jacocoReport: File): CoverageReport {
-        val doc = parseXml(jacocoReport)
+        val doc = parseXml(jacocoReport) // assume a helper for XML parsing exists
 
         val packages = doc.selectNodes("//package").map { pkg ->
             val name = pkg.getAttribute("name")
@@ -792,16 +802,16 @@ class CoverageReporter {
 
 ### Best Practices
 
-1. `Set` realistic coverage goals (commonly 70–85%+ for core logic).
-2. Focus on critical paths and error handling, not just the percentage.
-3. Exclude generated/framework/boilerplate code where appropriate.
-4. Pay attention to branch coverage for complex conditions.
-5. Combine coverage with mutation testing or similar techniques.
+1. Set realistic coverage goals (commonly 70–85%+ for core logic) per layer; treat them as guidance, not dogma.
+2. Focus on critical paths and error handling, not just the headline percentage.
+3. Exclude generated/framework/boilerplate code where appropriate to avoid skewing metrics.
+4. Pay attention to branch coverage for complex conditionals.
+5. Combine coverage metrics with mutation testing or similar techniques.
 6. Track coverage trends over time per module/layer.
 7. Review coverage reports during code reviews.
 8. Do not sacrifice test quality or speed for coverage numbers.
-9. Include edge cases, null/error flows, and concurrency where relevant.
-10. Integrate coverage checks into the CI/CD pipeline.
+9. Include edge cases, null/error flows, and concurrency scenarios where relevant.
+10. Integrate coverage checks into the CI/CD pipeline to catch regressions.
 
 ---
 

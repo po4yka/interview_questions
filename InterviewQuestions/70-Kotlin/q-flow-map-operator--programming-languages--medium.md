@@ -1,6 +1,6 @@
 ---
 id: lang-065
-title: "Flow map operator"
+title: "Flow map operator / Оператор map для Flow"
 aliases: [Flow Map Operator, Оператор map для Flow]
 topic: kotlin
 subtopics: [flow, coroutines, operators]
@@ -313,16 +313,32 @@ flowOf(1, 2, 3, 4)
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные подводные камни стоит учитывать?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-flow]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-flow]]
+
+## Связанные вопросы (RU)
+
+- [[q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]]
+- [[q-suspend-functions-under-the-hood--programming-languages--hard]]
 
 ## Related Questions
 

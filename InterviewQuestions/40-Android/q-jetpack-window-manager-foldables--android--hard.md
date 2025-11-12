@@ -18,6 +18,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android
 - q-adaptive-layouts-compose--kotlin--hard
 created: 2025-11-02
 updated: 2025-11-10
@@ -44,16 +45,14 @@ sources:
 
 ## Ответ (RU)
 
-### Краткая версия
-
-- Используйте `calculateWindowSizeClass(activity)` для определения компактных/средних/расширенных раскладок.
+## Краткая Версия
+- Используйте `calculateWindowSizeClass(activity)` из `material3-window-size-class` в `Activity` для определения compact/medium/expanded и пробрасывайте в UI.
 - Применяйте Jetpack Window Manager (`androidx.window`) для чтения `WindowLayoutInfo` и `FoldingFeature` (posture, hinge, `isSeparating`, `bounds`).
-- Для `View`-интерфейсов используйте `Activity` Embedding (`androidx.window.embedding`) и правила split-view.
-- В Compose применяйте адаптивные скэффолды (`NavigationSuiteScaffold`, list-detail), учитывая шарнир и системные Insets.
-- Тестируйте на эмуляторах складных устройств и оптимизируйте recomposition при изменении размера и posture.
+- Для `View`-интерфейсов используйте `ActivityEmbedding` (`androidx.window.embedding`) и правила split-view.
+- В Compose применяйте адаптивные скэффолды (`NavigationSuiteScaffold`, list-detail), учитывая шарнир и системные insets.
+- Тестируйте на эмуляторах складных устройств, эмулируйте posture/hinge через тестовые утилиты и оптимизируйте recomposition при изменении размера и posture.
 
-### Подробная версия
-
+## Подробная Версия
 #### Требования
 
 - Функциональные:
@@ -86,9 +85,9 @@ fun AdaptiveApp(windowSizeClass: WindowSizeClass) {
 }
 ```
 
-- Рассчитывайте `WindowSizeClass` через `calculateWindowSizeClass(activity)` (Material 3 / large-screen guidance).
+- Рассчитывайте `WindowSizeClass` через `calculateWindowSizeClass(activity)` (из `androidx.compose.material3.windowsizeclass`) в `Activity` и передавайте его в корневой composable.
 - Используйте Jetpack Window Manager (`androidx.window`) для получения `WindowMetrics`, если нужен более низкоуровневый контроль.
-- Сохраняйте класс размера в `ViewModel` или `remember` state.
+- Сохраняйте класс размера в `ViewModel` или локальном состоянии (`remember`) на уровне навигационного хоста для переиспользования.
 
 #### 2. Posture и FoldingFeature
 
@@ -96,15 +95,19 @@ fun AdaptiveApp(windowSizeClass: WindowSizeClass) {
 val windowInfoTracker = WindowInfoTracker.getOrCreate(context)
 val layoutInfoFlow = windowInfoTracker.windowLayoutInfo(activity)
 
-layoutInfoFlow.collect { info ->
-    val foldingFeature = info.displayFeatures
-        .filterIsInstance<FoldingFeature>()
-        .firstOrNull()
+lifecycleScope.launch {
+    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        layoutInfoFlow.collect { info ->
+            val foldingFeature = info.displayFeatures
+                .filterIsInstance<FoldingFeature>()
+                .firstOrNull()
 
-    when (foldingFeature?.state) {
-        FoldingFeature.State.FLAT -> renderFlat()
-        FoldingFeature.State.HALF_OPENED -> renderFolded()
-        null -> renderFlat()
+            when (foldingFeature?.state) {
+                FoldingFeature.State.FLAT -> renderFlat()
+                FoldingFeature.State.HALF_OPENED -> renderFolded()
+                null -> renderFlat() // нет FoldingFeature — обычное "плоское" устройство или отсутствие шарнира
+            }
+        }
     }
 }
 ```
@@ -112,6 +115,7 @@ layoutInfoFlow.collect { info ->
 - `FoldingFeature.orientation` (HORIZONTAL/VERTICAL) используется, чтобы определить безопасные зоны (safe areas) и расположение панелей.
 - `isSeparating` указывает, делит ли шарнир (hinge) экран на логически независимые области.
 - Для расчета области шарнира используйте `foldingFeature.bounds`; не путайте её с display cutout.
+- Отсутствие `FoldingFeature` трактуется как обычное устройство без шарнира (flat, цельный экран).
 
 #### 3. ActivityEmbedding (Views)
 
@@ -128,12 +132,12 @@ RuleController.getInstance(context).setRules(
 
 - Позволяет запускать master-detail / list-detail в двух панелях для планшетов и складных устройств.
 - Работает поверх Jetpack Window Manager (`androidx.window.embedding`).
-- Пример носит схемный характер: в реальном коде необходимо настроить пары `Activity` и другие параметры (split ratio, layout direction и т.п.).
+- Пример носит схемный характер: в реальном коде необходимо настроить пары `Activity`, пороги размеров, split ratio, ориентацию/направление раскладки и учитывать актуальную версию Window API (XML-правила или программная конфигурация).
 
 #### 4. Compose адаптация
 
 - Используйте `NavigationSuiteScaffold` (Material 3) для адаптивной навигации (bottom bar / navigation rail / navigation drawer в зависимости от `WindowSizeClass`).
-- Используйте паттерн `ListDetailPaneScaffold` (Accompanist Adaptive) или аналогичную двухпанельную компоновку.
+- Используйте адаптивные двухпанельные компоненты: `ListDetailPaneScaffold` и аналогичные из актуальных adaptive-библиотек (`material3-adaptive`), либо их эквиваленты (Accompanist/legacy — с осознанием статуса библиотек).
 - Для учета области шарнира используйте `FoldingFeature.bounds` и `isSeparating` из Jetpack Window Manager; системные insets (`WindowInsets` / `WindowInsetsCompat`, включая `displayCutout`) учитывайте отдельно для вырезов и системных жестов.
 
 #### 5. Тестирование
@@ -152,16 +156,14 @@ RuleController.getInstance(context).setRules(
 
 ## Answer (EN)
 
-### Short Version
-
-- Use `calculateWindowSizeClass(activity)` to decide between compact/medium/expanded layouts.
+## Short Version
+- Use `calculateWindowSizeClass(activity)` from `material3-window-size-class` in the `Activity` to decide between compact/medium/expanded layouts and pass it down.
 - Use Jetpack Window Manager (`androidx.window`) to read `WindowLayoutInfo` and `FoldingFeature` (posture, hinge, `isSeparating`, `bounds`).
-- For `View`-based UIs, configure `Activity` Embedding (`androidx.window.embedding`) split rules.
+- For `View`-based UIs, configure `ActivityEmbedding` (`androidx.window.embedding`) split rules.
 - In Compose, use adaptive scaffolds (`NavigationSuiteScaffold`, list-detail patterns) and honor hinge plus regular insets.
-- Test on foldable/large-screen profiles and optimize recomposition when posture/size changes.
+- Test on foldable/large-screen profiles, simulate posture/hinge in tests, and optimize recomposition when posture/size changes.
 
-### Detailed Version
-
+## Detailed Version
 #### Requirements
 
 - Functional:
@@ -194,9 +196,9 @@ fun AdaptiveApp(windowSizeClass: WindowSizeClass) {
 }
 ```
 
-- Compute `WindowSizeClass` per activity using `calculateWindowSizeClass(activity)` (Material 3 / large-screen guidance).
+- Compute `WindowSizeClass` per activity using `calculateWindowSizeClass(activity)` (from `androidx.compose.material3.windowsizeclass`) in the `Activity` and pass it to the root composable.
 - Use Jetpack Window Manager (`androidx.window`) to obtain `WindowMetrics` when lower-level control is needed.
-- Store the size class in a `ViewModel` or `remember` state.
+- Keep the size class in a `ViewModel` or local state (`remember`) at the navigation host level for reuse.
 
 #### 2. Posture and FoldingFeature
 
@@ -204,22 +206,27 @@ fun AdaptiveApp(windowSizeClass: WindowSizeClass) {
 val windowInfoTracker = WindowInfoTracker.getOrCreate(context)
 val layoutInfoFlow = windowInfoTracker.windowLayoutInfo(activity)
 
-layoutInfoFlow.collect { info ->
-    val foldingFeature = info.displayFeatures
-        .filterIsInstance<FoldingFeature>()
-        .firstOrNull()
+lifecycleScope.launch {
+    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        layoutInfoFlow.collect { info ->
+            val foldingFeature = info.displayFeatures
+                .filterIsInstance<FoldingFeature>()
+                .firstOrNull()
 
-    when (foldingFeature?.state) {
-        FoldingFeature.State.FLAT -> renderFlat()
-        FoldingFeature.State.HALF_OPENED -> renderFolded()
-        null -> renderFlat()
+            when (foldingFeature?.state) {
+                FoldingFeature.State.FLAT -> renderFlat()
+                FoldingFeature.State.HALF_OPENED -> renderFolded()
+                null -> renderFlat() // no FoldingFeature = regular flat device or no hinge
+            }
+        }
     }
 }
 ```
 
 - Use `FoldingFeature.orientation` (HORIZONTAL/VERTICAL) to derive safe areas and pane placement.
 - `isSeparating` indicates whether the hinge splits the screen into logically independent regions.
-- Use `foldingFeature.bounds` for hinge area; do not confuse it with display cutouts.
+- Use `foldingFeature.bounds` for the hinge area; do not confuse it with display cutouts.
+- If there is no `FoldingFeature`, treat the device as a regular flat screen without a hinge.
 
 #### 3. ActivityEmbedding (Views)
 
@@ -236,23 +243,23 @@ RuleController.getInstance(context).setRules(
 
 - Enables master-detail / list-detail two-pane layouts for tablets and foldables.
 - Built on top of Jetpack Window Manager (`androidx.window.embedding`).
-- Example is schematic: real code configures activity pairs and attributes (split ratio, layout direction, etc.).
+- Example is schematic: in real code you configure activity pairs, size thresholds, split ratio, layout direction, and align with the current Window/Embedding API (XML rules or programmatic).
 
 #### 4. Compose Adaptation
 
 - Use `NavigationSuiteScaffold` (Material 3) for adaptive navigation (bottom bar / navigation rail / navigation drawer based on `WindowSizeClass`).
-- Use `ListDetailPaneScaffold` (Accompanist Adaptive) or similar dual-pane patterns.
-- Respect hinge area via `FoldingFeature.bounds` and `isSeparating`; handle system insets (`WindowInsets` / `WindowInsetsCompat`, including `displayCutout`) separately.
+- Use adaptive dual-pane components such as `ListDetailPaneScaffold` and related layouts from current adaptive libraries (`material3-adaptive`), or their equivalents (including Accompanist where appropriate, noting library status).
+- Respect hinge area via `FoldingFeature.bounds` and `isSeparating`; handle system insets (`WindowInsets` / `WindowInsetsCompat`, including `displayCutout`) separately for cutouts/gestures.
 
 #### 5. Testing
 
 - Use emulator profiles for foldables (e.g., Pixel Fold, Surface Duo) and vary posture/fold state.
-- For UI tests, use `WindowLayoutInfoPublisherRule` from the Jetpack Window Manager test artifact to emulate different `FoldingFeature` configurations.
+- For UI tests with Jetpack Window Manager, use `WindowLayoutInfoPublisherRule` from the test artifact to emulate different `FoldingFeature` configurations.
 - Perform screenshot/snapshot tests across `WindowSizeClass` values and postures.
 
 #### 6. Performance
 
-- Avoid heavy recomposition and expensive work on every posture/size change: move logic outside composables and cache with `remember`/`derivedStateOf`.
+- Avoid heavy recomposition and expensive work on every posture/size change: move computations outside composables and cache with `remember`/`derivedStateOf`.
 - Use `rememberSaveable` to preserve pane state (e.g., selected item) across configuration and orientation changes.
 - On ChromeOS and large screens, verify behavior in multi-window and resizable modes.
 

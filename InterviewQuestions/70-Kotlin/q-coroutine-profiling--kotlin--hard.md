@@ -2,35 +2,28 @@
 id: kotlin-077
 title: "Coroutine Profiling and Debugging / Профилирование и отладка корутин"
 aliases: ["Coroutine Profiling and Debugging", "Профилирование и отладка корутин"]
-
-# Classification
 topic: kotlin
-subtopics: [coroutines, patterns]
+subtopics: [coroutines]
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140025
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
-
-# Timestamps
 created: 2025-10-12
-updated: 2025-11-09
-
+updated: 2025-11-11
 tags: [coroutines, difficulty/hard, kotlin]
+
 ---
+
 # Вопрос (RU)
 > Профилирование и отладка корутин в Kotlin: какие инструменты и подходы использовать для эффективной диагностики, поиска утечек и оптимизации производительности?
 
 # Question (EN)
-> Coroutine profiling and debugging in Kotlin: which tools and approaches should you use to effectively diagnose issues, detect leaks, and optimize performance?
+> `Coroutine` profiling and debugging in Kotlin: which tools and approaches should you use to effectively diagnose issues, detect leaks, and optimize performance?
 
 ## Ответ (RU)
 
@@ -41,8 +34,8 @@ tags: [coroutines, difficulty/hard, kotlin]
 **1. Отладчик корутин IntelliJ IDEA**
 
 IntelliJ предоставляет встроенную поддержку отладки корутин:
-- **Вкладка Coroutines**: Показывает все активные корутины с их состояниями
-- **Stack traces**: Просмотр объединённых стеков вызовов корутин, а не только потоков
+- **Вкладка `Coroutines`**: Показывает все активные корутины с их состояниями
+- **`Stack` traces**: Просмотр объединённых стеков вызовов корутин, а не только потоков
 - **Точки приостановки**: Видно, где корутины приостановлены
 
 ```kotlin
@@ -277,15 +270,15 @@ fun getCoroutinePoolStats(): PoolStats {
 
 ## Answer (EN)
 
-Coroutine profiling and debugging require specialized tools and techniques because coroutines can jump between threads and have complex execution flows. Understanding how to profile and debug them effectively is crucial for production applications. See also [[c-kotlin]] and [[c-coroutines]].
+`Coroutine` profiling and debugging require specialized tools and techniques because coroutines can jump between threads and have complex execution flows. Understanding how to profile and debug them effectively is crucial for production applications. See also [[c-kotlin]] and [[c-coroutines]].
 
 ### Debugging Tools
 
-**1. IntelliJ IDEA Coroutine Debugger**
+**1. IntelliJ IDEA `Coroutine` Debugger**
 
 IntelliJ provides built-in coroutine debugging support:
-- **Coroutines tab**: Shows active coroutines with their states
-- **Stack traces**: View combined coroutine call stacks, not just thread stacks
+- **`Coroutines` tab**: Shows active coroutines with their states
+- **`Stack` traces**: `View` combined coroutine call stacks, not just thread stacks
 - **Suspend points**: See where coroutines are suspended
 
 ```kotlin
@@ -538,11 +531,11 @@ fun getCoroutinePoolStats(): PoolStats {
 
 ## Ссылки (RU)
 
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [Kotlin `Coroutines` Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ## References
 
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [Kotlin `Coroutines` Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ---
 
@@ -564,14 +557,14 @@ fun getCoroutinePoolStats(): PoolStats {
 ## Related Questions
 
 ### Related (Hard)
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
-- [[q-advanced-coroutine-patterns--kotlin--hard]] - Coroutines
-- [[q-select-expression-channels--kotlin--hard]] - Coroutines
+- [[q-coroutine-performance-optimization--kotlin--hard]] - `Coroutines`
+- [[q-coroutine-memory-leaks--kotlin--hard]] - `Coroutines`
+- [[q-advanced-coroutine-patterns--kotlin--hard]] - `Coroutines`
+- [[q-select-expression-channels--kotlin--hard]] - `Coroutines`
 
 ### Prerequisites (Easier)
-- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+- [[q-flow-combining-zip-combine--kotlin--medium]] - `Coroutines`
+- [[q-what-is-coroutine--kotlin--easy]] - `Coroutines`
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction

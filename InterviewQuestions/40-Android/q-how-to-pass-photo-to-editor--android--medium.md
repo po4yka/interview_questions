@@ -55,6 +55,7 @@ tags:
 fun openExternalEditor(context: Context, photoUri: Uri) {
     val intent = Intent(Intent.ACTION_EDIT).apply {
         setDataAndType(photoUri, "image/*")
+        // Обычно достаточно READ; WRITE даём, только если ожидаем, что редактор изменит этот Uri
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 
@@ -62,10 +63,14 @@ fun openExternalEditor(context: Context, photoUri: Uri) {
     try {
         context.startActivity(Intent.createChooser(intent, "Выберите редактор"))
     } catch (e: ActivityNotFoundException) {
-        // ❌ Редактор не найден
+        // ❌ Редактор не найден (обработайте ошибку в UI)
     }
 }
 ```
+
+Важно:
+- `photoUri` должен быть `content://`-URI (например, от `FileProvider` или `MediaStore`), а не `file://`.
+- Если ожидается, что внешний редактор сохранит изменения по этому же URI, убедитесь, что URI ссылается на доступное для записи местоположение и вы выдали `FLAG_GRANT_WRITE_URI_PERMISSION`.
 
 ### 2. Внутренний Редактор
 
@@ -125,11 +130,15 @@ if (bytes.size < 500_000) { // используем консервативный
 **res/xml/file_paths.xml:**
 ```xml
 <paths>
-    <!-- Убедитесь, что используете реальные директории, где сохраняете изображения -->
+    <!-- Используйте реальные директории, где вы фактически сохраняете изображения -->
     <cache-path name="shared_images" path="images/" />
     <files-path name="app_images" path="images/" />
 </paths>
 ```
+
+Убедитесь, что:
+- `authorities` точно совпадает со значением, используемым в `FileProvider.getUriForFile`.
+- Путь файла (`photoFile`) попадает в один из объявленных в `file_paths.xml` путей.
 
 ### 4. PhotoEditorActivity
 
@@ -197,10 +206,12 @@ fun PhotoEditorScreen(photoUri: Uri) {
 }
 ```
 
+(Требуется зависимость coroutines и `kotlinx-coroutines-android` для использования `Dispatchers.IO` в Compose.)
+
 ### Лучшие Практики
 
 1. Используйте FileProvider для Android 7.0+ (обязательно для передачи файлов между приложениями).
-2. Предоставляйте URI-разрешения для внешних приложений через `FLAG_GRANT_READ_URI_PERMISSION` / `FLAG_GRANT_WRITE_URI_PERMISSION`.
+2. Предоставляйте URI-разрешения для внешних приложений через `FLAG_GRANT_READ_URI_PERMISSION` / `FLAG_GRANT_WRITE_URI_PERMISSION` только при необходимости записи.
 3. Не передавайте большие bitmap через `Intent` extras — Binder-транзакции ограничены (~1MB), используйте безопасный запас и отдавайте предпочтение URI.
 4. Управляйте памятью аккуратно — масштабируйте большие изображения, при необходимости очищайте ссылки; явный `recycle()` нужен редко.
 5. Используйте временные файлы в `cacheDir` или аналогичных путях для файлов, которые не должны долго храниться.
@@ -218,6 +229,7 @@ Use `Intent` with `ACTION_EDIT`:
 fun openExternalEditor(context: Context, photoUri: Uri) {
     val intent = Intent(Intent.ACTION_EDIT).apply {
         setDataAndType(photoUri, "image/*")
+        // Usually READ is enough; grant WRITE only if you expect the editor to modify that Uri
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 
@@ -225,10 +237,14 @@ fun openExternalEditor(context: Context, photoUri: Uri) {
     try {
         context.startActivity(Intent.createChooser(intent, "Choose editor"))
     } catch (e: ActivityNotFoundException) {
-        // ❌ No editor found
+        // ❌ No editor found (handle gracefully in UI)
     }
 }
 ```
+
+Important:
+- `photoUri` should be a `content://` URI (e.g., from `FileProvider` or `MediaStore`), not `file://`.
+- If you expect the external editor to save changes back to the same URI, ensure the URI points to a writable location and that you grant `FLAG_GRANT_WRITE_URI_PERMISSION`.
 
 ### 2. Internal Editor
 
@@ -293,6 +309,10 @@ if (bytes.size < 500_000) { // conservative threshold
     <files-path name="app_images" path="images/" />
 </paths>
 ```
+
+Make sure that:
+- The `authorities` value exactly matches what you use in `FileProvider.getUriForFile`.
+- The file path (`photoFile`) is inside one of the paths declared in `file_paths.xml`.
 
 ### 4. PhotoEditorActivity
 
@@ -360,14 +380,16 @@ fun PhotoEditorScreen(photoUri: Uri) {
 }
 ```
 
+(Requires coroutines and `kotlinx-coroutines-android` for `Dispatchers.IO` in Compose.)
+
 ### Best Practices
 
 1. Use FileProvider for Android 7.0+ when sharing files between apps.
-2. Grant URI permissions to external apps via `FLAG_GRANT_READ_URI_PERMISSION` / `FLAG_GRANT_WRITE_URI_PERMISSION`.
+2. Grant URI permissions to external apps via `FLAG_GRANT_READ_URI_PERMISSION` / `FLAG_GRANT_WRITE_URI_PERMISSION` (WRITE only when needed).
 3. Avoid passing large bitmaps via `Intent` extras — Binder transactions are limited (~1MB); use a conservative payload size and prefer URIs.
 4. Manage memory carefully — scale/downsample large images; explicit `recycle()` is generally unnecessary with managed Bitmaps.
 5. Store temporary files under `cacheDir` or similar for non-persistent images.
-6. Handle errors — check that an editor exists and that your FileProvider authority/paths and URIs are valid.
+6. Handle errors — ensure a suitable editor exists and that your FileProvider authority/paths and URIs are valid.
 
 ## Follow-ups
 

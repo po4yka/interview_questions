@@ -67,8 +67,9 @@ val serviceIntent = Intent(this, DownloadService::class.java).apply {
     putExtra("file_url", "https://example.com/file.zip")
 }
 
-// ✅ Для кратковременных операций из фонового контекста учитывайте ограничения Android 8.0+
-// и при необходимости используйте startForegroundService() + foreground notification
+// ✅ Для кратковременных операций учитывайте ограничения Android 8.0+
+// и при необходимости используйте startForegroundService() + foreground notification.
+// Для отложенной/гарантированной работы предпочитайте WorkManager.
 startService(serviceIntent)
 
 // Привязка к Service
@@ -131,11 +132,13 @@ fun safeStartActivity(intent: Intent) {
 ```kotlin
 val intent = Intent().apply {
     action = Intent.ACTION_VIEW              // 1. Действие
-    data = Uri.parse("https://example.com") // 2. Данные
+    data = Uri.parse("https://example.com") // 2. Данные (Uri)
     addCategory(Intent.CATEGORY_BROWSABLE)  // 3. Категория
+    // Примечание: отдельные присваивания data и type перезаписывают предыдущее значение.
+    // Для одновременной установки используйте setDataAndType().
     type = "text/plain"                     // 4. MIME-тип
     putExtra("key", "value")                // 5. Дополнительные данные
-    flags = Intent.FLAG_ACTIVITY_NEW_TASK   // 6. Флаги поведения
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK   // 6. Флаги поведения (перезаписывают предыдущие)
 }
 ```
 
@@ -150,11 +153,14 @@ intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
 // ✅ Комбинация: сбросить задачу и начать новую (для логаута)
 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
+// Примечание: intent.flags = ... перезаписывает существующие флаги.
+// Чтобы добавить флаг к уже установленным, используйте addFlags() или побитовое OR с intent.flags.
 ```
 
 ### PendingIntent
 
-`Intent`, который может быть выполнен другим приложением или системой (для уведомлений, алармов и т.п.). На Android 12 (API 31)+ требуется явно указать, может ли PendingIntent изменяться.
+`Intent`, который может быть выполнен другим приложением или системой (для уведомлений, алармов и т.п.). Начиная с Android 12 (API 31)+ (фактически рекомендуется с Android 11), нужно явно указать, может ли PendingIntent изменяться (FLAG_IMMUTABLE или FLAG_MUTABLE).
 
 ```kotlin
 val notificationIntent = Intent(this, MainActivity::class.java)
@@ -217,8 +223,9 @@ val serviceIntent = Intent(this, DownloadService::class.java).apply {
     putExtra("file_url", "https://example.com/file.zip")
 }
 
-// ✅ For short-lived work be aware of Android 8.0+ background execution limits;
-// use startForegroundService() + foreground notification when required.
+// ✅ For short-lived work, be aware of Android 8.0+ background execution limits.
+// Use startForegroundService() + foreground notification when required.
+// For deferrable/guaranteed background work prefer WorkManager.
 startService(serviceIntent)
 
 // Bind to Service
@@ -281,11 +288,13 @@ fun safeStartActivity(intent: Intent) {
 ```kotlin
 val intent = Intent().apply {
     action = Intent.ACTION_VIEW              // 1. Action
-    data = Uri.parse("https://example.com") // 2. Data
+    data = Uri.parse("https://example.com") // 2. Data (Uri)
     addCategory(Intent.CATEGORY_BROWSABLE)  // 3. Category
+    // Note: separate assignments to data and type overwrite previous values.
+    // Use setDataAndType() when you need both.
     type = "text/plain"                     // 4. MIME type
     putExtra("key", "value")                // 5. Extra data
-    flags = Intent.FLAG_ACTIVITY_NEW_TASK   // 6. Behavior flags
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK   // 6. Behavior flags (overwrite previous)
 }
 ```
 
@@ -300,11 +309,14 @@ intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
 // ✅ Combination: clear task and start new (for logout)
 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
+// Note: intent.flags = ... overwrites existing flags.
+// To add a flag, use addFlags() or bitwise OR with intent.flags.
 ```
 
 ### PendingIntent
 
-`Intent` that can be executed by another app or by the system (for notifications, alarms, etc.). On Android 12 (API 31)+ you must explicitly declare whether the PendingIntent is mutable or immutable.
+`Intent` that can be executed by another app or by the system (for notifications, alarms, etc.). Starting from Android 12 (API 31)+ (and recommended since Android 11), you must explicitly declare whether the PendingIntent is mutable or immutable using FLAG_IMMUTABLE or FLAG_MUTABLE.
 
 ```kotlin
 val notificationIntent = Intent(this, MainActivity::class.java)
@@ -357,3 +369,4 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### Advanced (Harder)
 - [[q-how-application-priority-is-determined-by-the-system--android--hard]] - System component management
+```

@@ -2,17 +2,17 @@
 id: lang-004
 title: "Primitive Vs Reference Types / Примитивные типы против ссылочных типов"
 aliases: [Primitive Vs Reference Types, Примитивные типы против ссылочных типов]
-topic: kotlin
-subtopics: [c-kotlin, c-memory-management, c-garbage-collection]
+topic: programming-languages
+subtopics: [memory, primitive-types, reference-types]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-garbage-collection, q-what-is-job-object--programming-languages--medium]
+related: [c-algorithms, c-computer-science, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-13
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/easy, java, kotlin, memory, primitive-types, programming-languages, reference-types]
 ---
 # Вопрос (RU)
@@ -43,16 +43,17 @@ char c = 'A';         // Хранит символ напрямую
 int value = null;  // Ошибка компиляции!
 
 // Нет методов у самого типа
-// x.toString();   // Ошибка! У примитивов нет методов
+// x.toString();   // Ошибка! У примитивов нет методов как у объектов
 ```
 
-**Характеристики (Java, концептуально):**
-- Могут располагаться в стеке или inline в полях объектов; важнее то, что переменная хранит само значение, а не ссылку
+**Характеристики (Java, концептуально, упрощённо):**
+- Переменная примитивного типа хранит само значение, а не ссылку на объект
+- Размещение (стек/heap/inline в объекте) определяется JVM и оптимизациями; важна именно модель "значение, а не ссылка"
 - Фиксированный размер: `int` = 4 байта, `double` = 8 байт
 - Быстрый доступ
 - Значения по умолчанию для полей/элементов массивов: `0`, `false`, `\0`
 - Не могут быть null
-- Не имеют методов (операции реализованы на уровне языка/байткода)
+- Не имеют собственных методов (операции реализованы на уровне языка/байткода)
 
 ### Ссылочные Типы
 
@@ -62,9 +63,9 @@ int value = null;  // Ошибка компиляции!
 ```java
 // Ссылочные типы
 String text = "Hello";        // Хранит ссылку на объект String
-Integer num = 10;             // Wrapper класс (ссылочный тип)
-int[] array = {1, 2, 3};      // Массив (ссылочный тип)
-MyClass obj = new MyClass();  // Пользовательский класс (ссылочный тип)
+Integer num = 10;              // Wrapper класс (ссылочный тип)
+int[] array = {1, 2, 3};       // Массив (ссылочный тип)
+MyClass obj = new MyClass();   // Пользовательский класс (ссылочный тип)
 
 // Могут быть null
 String nullText = null;  // OK
@@ -76,16 +77,16 @@ text.toUpperCase();      // OK
 ```
 
 **Характеристики (Java, концептуально):**
-- Объекты размещаются в heap; переменные содержат ссылку (сама ссылка обычно хранится в стеке или в поле объекта)
+- Объекты размещаются в heap; переменные содержат ссылку (сама ссылка обычно хранится в стеке или в поле объекта, но точное размещение зависит от JVM)
 - Переменный размер объектов
-- Доступ через косвенность (по ссылке)
+- Доступ к данным через косвенность (по ссылке)
 - Значение по умолчанию для полей/элементов массивов ссылочного типа: `null`
 - Могут быть null
 - Имеют методы/поведение
 
 ### Представление В Памяти
 
-(Упрощённая схема, для понимания модели)
+(Упрощённая схема, для интуитивного понимания модели, не буквальное расположение байтов)
 
 **Примитивный тип:**
 ```
@@ -98,16 +99,16 @@ text.toUpperCase();      // OK
 ```
 Стек:              Heap:
 
- ref: →  "Hello"       (реальный объект)
+ ref: e  "Hello"       (реальный объект)
 ```
 
 ### Контекст Kotlin
 
-**Kotlin не вводит отдельный синтаксис для примитивов** (как `int`/`Integer`), но использует JVM-примитивы под капотом, когда это возможно:
+**Kotlin не вводит отдельный синтаксис для примитивов** (как `int`/`Integer`), но на JVM использует примитивные типы под капотом, когда это возможно:
 
 ```kotlin
 // Выглядят как объекты в Kotlin, но отображаются в байткоде эффективно
-val x: Int = 10           // Обычно компилируется в int (примитив)
+val x: Int = 10           // Обычно компилируется в int (примитив), если не используется в контексте, требующем ссылку
 val y: Int? = 10          // Компилируется в Integer (ссылочный)
 
 val text: String = "Hi"   // `String` (ссылочный тип)
@@ -118,36 +119,36 @@ val abs = (-5).absoluteValue   // 5
 
 // Nullable-типы для чисел всегда представляются ссылочными типами (wrapper)
 val nullable: Int? = null  // Integer (ссылочный)
-val notNull: Int = 10      // int (примитив в байткоде при стандартных условиях)
+val notNull: Int = 10      // int (примитив в байткоде при стандартных условиях, если не попадает в generic/Any и т.п.)
 ```
 
 ### Таблица Сравнения
 
 | Аспект | Примитивные Типы (Java) | Ссылочные Типы (Java) |
 |--------|------------------------|------------------------|
-| **Хранение** | Значение в переменной (часто стек/inline) | В переменной хранится ссылка на объект в heap |
+| **Хранение** | Значение в переменной (модель "значение напрямую") | В переменной хранится ссылка на объект в heap |
 | **Память** | Фиксированный размер | Переменный размер объектов |
 | **По умолчанию** | 0, false, \0 (для полей/массивов) | null |
 | **Nullable** | Нет | Да |
 | **Методы** | Нет (у самих примитивов) | Да |
 | **Скорость** | Обычно быстрее | Обычно медленнее (косвенность, GC) |
 | **Примеры (Java)** | `int`, `double`, `boolean` | `String`, `Integer`, массивы, объекты |
-| **Примеры (Kotlin)** | `Int`, `Long` и др. компилируются в примитивы, если non-null и не в generic | Nullable числовые типы и объекты (`String`, классы) как ссылочные |
+| **Примеры (Kotlin/JVM)** | `Int`, `Long` и др. компилируются в примитивы, если non-null и не используются в generic/Any и т.п. | Nullable числовые типы и объекты (`String`, классы) как ссылочные |
 
 ### Boxing И Unboxing (Java)
 
 **Конвертация между примитивными и ссылочными:**
 
 ```java
-// Boxing: примитив → wrapper
+// Boxing: примитив e wrapper
 int primitive = 10;
 Integer wrapped = Integer.valueOf(primitive);  // Ручной boxing
 Integer autoBoxed = primitive;                 // Auto-boxing
 
-// Unboxing: wrapper → примитив
+// Unboxing: wrapper e примитив
 Integer wrapped2 = 10;
 int primitive2 = wrapped2.intValue();  // Ручной unboxing
-int autoUnboxed = wrapped2;           // Auto-unboxing
+int autoUnboxed = wrapped2;            // Auto-unboxing
 
 // Влияние на производительность
 Integer sum = 0;
@@ -170,7 +171,7 @@ for (int i = 0; i < 1000; i++) {
 List<Integer> numbers = new ArrayList<>();  // Integer, не int
 numbers.add(10);  // Auto-boxing
 
-// Kotlin
+// Kotlin (на JVM)
 val numbers = listOf(1, 2, 3)  // List<Int> (использует Integer под капотом на JVM)
 ```
 
@@ -227,10 +228,10 @@ val wrappedK = Array<Int>(1000) { 0 }        // Integer[] (менее эффек
 | **Имеет методы** | Нет (Java-примитивы) | Да |
 | **Память** | Эффективно | Больше overhead |
 | **Скорость** | Обычно быстрее | Обычно медленнее |
-| **Видимость в Kotlin** | `Int`/`Long` и др. как value-тип, отображаемый в примитивы, если возможно | Nullable/объектные типы и объекты (`String` и др.) как ссылочные |
+| **Видимость в Kotlin (JVM)** | `Int`/`Long` и др. как value-тип, отображаемый в примитивы, когда это возможно | Nullable/объектные типы и объекты (`String` и др.) как ссылочные |
 
 В **Java**: примитивы и ссылочные типы чётко разделены.
-В **Kotlin**: синтаксически всё выглядит как объекты, но под капотом используются примитивы, когда это возможно.
+В **Kotlin** (на JVM): синтаксически всё выглядит как обычные типы, но под капотом используются примитивы, когда это возможно для эффективности.
 
 ---
 
@@ -240,7 +241,7 @@ val wrappedK = Array<Int>(1000) { 0 }        // Integer[] (менее эффек
 
 ### Primitive Types
 
-**Store values directly** (for Java primitives), cannot be null, and have no methods on the primitive type itself (in Java):
+**Store values directly** (for Java primitives), cannot be null, and have no instance methods on the primitive type itself (in Java):
 
 **Java primitives:**
 ```java
@@ -254,17 +255,17 @@ char c = 'A';         // Stores character directly
 int value = null;  // Compilation error!
 
 // No methods on the primitive itself
-// x.toString();   // Error! Primitives have no methods
+// x.toString();   // Error! Primitives do not have methods like objects
 ```
 
-**Characteristics (Java, conceptual model):**
-- Variables hold the value itself, not a reference
-- May be stored on the stack or inline in objects; exact placement is JVM-specific
+**Characteristics (Java, conceptual/simplified model):**
+- A primitive-typed variable holds the value itself, not a reference to an object
+- Actual placement (stack/heap/inline in an object) is JVM/implementation dependent; conceptually it's "value, not reference"
 - Fixed size: `int` = 4 bytes, `double` = 8 bytes
 - Fast access
 - Default values for fields/array elements: `0`, `false`, `\0`
 - Cannot be null
-- No instance methods (operations supported by language/bytecode)
+- No instance methods (operations are implemented by the language/bytecode)
 
 ### Reference Types
 
@@ -288,16 +289,16 @@ text.toUpperCase();      // OK
 ```
 
 **Characteristics (Java, conceptual model):**
-- Objects are allocated on the heap; variables hold a reference (reference itself typically lives on the stack or in an object field)
+- Objects are allocated on the heap; variables hold a reference (the reference itself typically lives on the stack or in an object field, but exact details are JVM-specific)
 - Variable-size objects
-- Access via indirection
+- Access via indirection through the reference
 - Default value for fields/array elements of reference type: `null`
 - Can be null
 - Have methods/behavior
 
 ### Memory Representation
 
-(Simplified diagrams to illustrate the model)
+(Simplified diagrams to illustrate the model; not a literal layout guarantee)
 
 **Primitive type:**
 ```
@@ -310,17 +311,17 @@ Stack:
 ```
 Stack:              Heap:
         
- ref: →  "Hello"       (actual object)
+ ref: e  "Hello"       (actual object)
         
 ```
 
 ### Kotlin Context
 
-**Kotlin does not have separate syntax for primitives vs wrappers** (like `int` vs `Integer`), but uses JVM primitives under the hood when possible:
+**Kotlin does not have separate syntax for primitives vs wrappers** (like `int` vs `Integer`), but on the JVM it uses primitive types under the hood when possible:
 
 ```kotlin
 // All look like regular types in Kotlin, but compiled efficiently
-val x: Int = 10           // Typically compiles to int (primitive)
+val x: Int = 10           // Typically compiles to int (primitive) when not used in a context requiring a reference
 val y: Int? = 10          // Compiles to Integer (reference)
 
 val text: String = "Hi"   // `String` (reference type)
@@ -331,33 +332,33 @@ val abs = (-5).absoluteValue   // 5
 
 // Nullable numeric types are always represented as reference types (wrappers)
 val nullable: Int? = null  // Integer (reference)
-val notNull: Int = 10      // int (primitive in bytecode under typical conditions)
+val notNull: Int = 10      // int (primitive in bytecode under typical conditions, if not forced into a reference context such as generics/Any)
 ```
 
 ### Comparison Table
 
 | Aspect | Primitive Types (Java) | Reference Types (Java) |
 |--------|------------------------|------------------------|
-| **Storage** | Value in the variable (often stack/inline) | Variable holds reference to object on heap |
+| **Storage** | Value in the variable ("direct value" model) | Variable holds reference to object on heap |
 | **Memory** | Fixed size | Variable-size objects |
 | **Default** | 0, false, \0 (for fields/arrays) | null |
 | **Nullable** | No | Yes |
 | **Methods** | No (on primitive itself) | Yes |
 | **Speed** | Usually faster | Usually slower (indirection, GC) |
 | **Examples (Java)** | `int`, `double`, `boolean` | `String`, `Integer`, arrays, objects |
-| **Examples (Kotlin)** | `Int`, `Long`, etc. compiled to primitives when non-null and not in generics | Nullable numeric types and objects (`String`, classes) as references |
+| **Examples (Kotlin/JVM)** | `Int`, `Long`, etc. compiled to primitives when non-null and not used in generic/Any contexts | Nullable numeric types and objects (`String`, classes) as references |
 
 ### Boxing and Unboxing (Java)
 
 **Converting between primitive and reference:**
 
 ```java
-// Boxing: primitive → wrapper
+// Boxing: primitive e wrapper
 int primitive = 10;
 Integer wrapped = Integer.valueOf(primitive);  // Manual boxing
 Integer autoBoxed = primitive;                 // Auto-boxing
 
-// Unboxing: wrapper → primitive
+// Unboxing: wrapper e primitive
 Integer wrapped2 = 10;
 int primitive2 = wrapped2.intValue();  // Manual unboxing
 int autoUnboxed = wrapped2;            // Auto-unboxing
@@ -383,7 +384,7 @@ for (int i = 0; i < 1000; i++) {
 List<Integer> numbers = new ArrayList<>();  // Integer, not int
 numbers.add(10);  // Auto-boxing
 
-// Kotlin
+// Kotlin (on JVM)
 val numbers = listOf(1, 2, 3)  // List<Int> (uses Integer under the hood on JVM)
 ```
 
@@ -440,7 +441,7 @@ val wrappedK = Array<Int>(1000) { 0 }        // Integer[] (less efficient)
 | **Has methods** | No (Java primitives) | Yes |
 | **Memory** | Efficient | More overhead |
 | **Speed** | Usually fast | Usually slower |
-| **Kotlin visibility** | `Int`/`Long` etc. as value types compiled to primitives when possible | Nullable/object types (`String` etc.) as references |
+| **Kotlin visibility (JVM)** | `Int`/`Long` etc. as value types compiled to primitives when possible | Nullable/object types (`String` etc.) as references |
 
 In **Java**: primitives and reference types are clearly separated.
 In **Kotlin** (on JVM): everything looks like regular types, but primitives are used internally when possible for efficiency.
@@ -463,7 +464,6 @@ In **Kotlin** (on JVM): everything looks like regular types, but primitives are 
 - [[q-sharedpreferences-definition--android--easy]] - Memory Management
 - [[q-leakcanary-library--android--easy]] - Memory Management
 - [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Memory Management
-- [[q-optimize-memory-usage-android--android--medium]] - Memory Management
 - [[q-stack-heap-memory-multiple-threads--android--medium]] - Memory Management
 - [[q-tasks-back-stack--android--medium]] - Memory Management
 - [[q-memory-leak-vs-oom-android--android--medium]] - Memory Management

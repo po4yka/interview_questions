@@ -40,27 +40,27 @@ tags:
 
 `Bundle` — это контейнер «ключ-значение» для передачи данных между компонентами Android (например, аргументы `Activity`/`Fragment`, `savedInstanceState`, extras `Intent`, IPC). Он построен поверх `Parcel` и предоставляет типизированные методы `put*/get*`.
 
-**Основные поддерживаемые типы** (API 34+, не исчерпывающий список, но ключевые категории):
+**Основные устойчиво поддерживаемые типы** (API 34+, не исчерпывающий список, но ключевые категории для безопасного использования, особенно при IPC):
 - Примитивы и массивы:
   - `boolean`, `byte`, `char`, `short`, `int`, `long`, `float`, `double`
   - `boolean[]`, `byte[]`, `char[]`, `short[]`, `int[]`, `long[]`, `float[]`, `double[]`
-- Строки:
+- Строки и текст:
   - `String`, `String[]`
   - `CharSequence`, `CharSequence[]`
 - Коллекции (для отдельных поддерживаемых типов элементов):
-  - `ArrayList<`String`>`
+  - `ArrayList<String>`
   - `ArrayList<CharSequence>`
   - `ArrayList<Integer>` (через `putIntegerArrayList`)
-  - `ArrayList<`Parcelable`>` (через `putParcelableArrayList`)
+  - `ArrayList<Parcelable>` (через `putParcelableArrayList`)
 - Объекты:
   - `Parcelable`
   - `Parcelable[]`
-  - `Serializable` (включая массивы/коллекции, если их элементы реализуют `Serializable`)
+  - `Serializable` (включая массивы/коллекции, если сами объекты реализуют `Serializable`; используется, но менее предпочтителен по производительности)
 - Специальные типы:
   - вложенный `Bundle`
-  - `SparseArray<`Parcelable`>` (через `putSparseParcelableArray`)
+  - `SparseArray<Parcelable>` (через `putSparseParcelableArray`)
 
-(Другие типы нужно конвертировать в поддерживаемую форму или реализовать `Parcelable`/`Serializable`, чтобы корректно сохранять в `Bundle`.)
+(Другие типы нужно конвертировать в поддерживаемую форму или реализовать `Parcelable`/`Serializable`, чтобы корректно сохранять в `Bundle`, особенно если данные должны пережить процесс или пройти через IPC.)
 
 **Базовое использование**:
 ```kotlin
@@ -85,7 +85,8 @@ data class Profile(val id: String, val name: String) : Parcelable
 // ✅ Parcelable: оптимизирован под Android, без рефлексии, обычно заметно быстрее Serializable
 bundle.putParcelable("profile", Profile("1", "Alice"))
 
-// ⚠️ Serializable: использует рефлексию, обычно медленнее и менее эффективен по памяти; оставлен в основном для совместимости
+// ⚠️ Serializable: использует рефлексию, обычно медленнее и менее эффективен по памяти;
+// поддерживается, но считается менее предпочтительным и может быть менее предсказуем при IPC
 bundle.putSerializable("data", hashMapOf("key" to "value"))
 ```
 
@@ -104,7 +105,7 @@ bundle.putSparseParcelableArray("sparse_profiles", sparse)
 ```
 
 **Критические ограничения**:
-- Размер: около 1MB для данных, передающихся через транзакции `Binder` (риск `TransactionTooLargeException`).
+- Размер: ориентировочно около 1MB на одну транзакцию `Binder` (включая служебные данные); превышение может привести к `TransactionTooLargeException`.
 - Нельзя класть объекты, не являющиеся `Parcelable` или `Serializable`, такие как `Context`, `View`, `Thread`, `Handler`, `Socket` и т.п. Это приводит к ошибкам выполнения или утечкам/некорректному поведению.
 - Альтернативы для больших данных: `Uri`, файлы, `ViewModel`, `WorkManager`, `ContentProvider`.
 - `Bundle` не является потокобезопасным без явной синхронизации.
@@ -123,29 +124,29 @@ val url = intent.getStringExtra("url")
 
 ## Answer (EN)
 
-`Bundle` is a key-value container for passing data between Android components (e.g., `Activity`/`Fragment` arguments, savedInstanceState, `Intent` extras, and IPC). It is built on top of `Parcel` and exposes typed `put*/get*` methods.
+`Bundle` is a key-value container for passing data between Android components (e.g., `Activity`/`Fragment` arguments, `savedInstanceState`, `Intent` extras, and IPC). It is built on top of `Parcel` and exposes typed `put*/get*` methods.
 
-**Key supported types** (API 34+, not exhaustive, but main categories):
+**Main reliably supported types** (API 34+, not exhaustive, but key categories recommended for safe use, especially across IPC):
 - Primitives and arrays:
   - `boolean`, `byte`, `char`, `short`, `int`, `long`, `float`, `double`
   - `boolean[]`, `byte[]`, `char[]`, `short[]`, `int[]`, `long[]`, `float[]`, `double[]`
-- Strings:
+- Strings and text:
   - `String`, `String[]`
   - `CharSequence`, `CharSequence[]`
 - Collections (for specific element types):
-  - `ArrayList<`String`>`
+  - `ArrayList<String>`
   - `ArrayList<CharSequence>`
   - `ArrayList<Integer>` (via `putIntegerArrayList`)
-  - `ArrayList<`Parcelable`>` (via `putParcelableArrayList`)
+  - `ArrayList<Parcelable>` (via `putParcelableArrayList`)
 - Objects:
   - `Parcelable`
   - `Parcelable[]`
-  - `Serializable` (including arrays/collections when they implement `Serializable`)
+  - `Serializable` (including arrays/collections when elements implement `Serializable`; supported but less preferred due to performance)
 - Special:
   - nested `Bundle`
-  - `SparseArray<`Parcelable`>` (via `putSparseParcelableArray`)
+  - `SparseArray<Parcelable>` (via `putSparseParcelableArray`)
 
-(Other types must be converted to one of the supported forms or implement `Parcelable`/`Serializable` to be stored correctly.)
+(Other types must be converted to supported forms or implement `Parcelable`/`Serializable` to be stored correctly, especially if data must survive process death or cross-process boundaries.)
 
 **Basic usage**:
 ```kotlin
@@ -170,7 +171,8 @@ data class Profile(val id: String, val name: String) : Parcelable
 // ✅ Parcelable: Android-optimized, no reflection, typically significantly faster than Serializable
 bundle.putParcelable("profile", Profile("1", "Alice"))
 
-// ⚠️ Serializable: uses reflection, often noticeably slower and less memory-efficient; kept mainly for compatibility
+// ⚠️ Serializable: uses reflection, often slower and less memory-efficient;
+// supported but generally discouraged in performance-sensitive or IPC-heavy paths
 bundle.putSerializable("data", hashMapOf("key" to "value"))
 ```
 
@@ -189,7 +191,7 @@ bundle.putSparseParcelableArray("sparse_profiles", sparse)
 ```
 
 **Critical limitations**:
-- Size: around 1MB limit for data sent via `Binder` transactions (`TransactionTooLargeException`).
+- Size: approximately 1 MB per `Binder` transaction (including overhead); going beyond this can cause `TransactionTooLargeException`.
 - Do not put objects that are not `Parcelable` or `Serializable`, such as `Context`, `View`, `Thread`, `Handler`, `Socket`, etc. Doing so either fails at runtime or leads to leaks/incorrect behavior.
 - Alternatives for large payloads: `Uri`, files, `ViewModel`, `WorkManager`, `ContentProvider`.
 - `Bundle` is not thread-safe without explicit synchronization.

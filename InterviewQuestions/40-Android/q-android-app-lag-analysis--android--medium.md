@@ -18,6 +18,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-profiling
 - q-android-performance-measurement-tools--android--medium
 created: 2025-10-13
 updated: 2025-11-10
@@ -49,7 +50,9 @@ tags:
 
 ### Причина Лагов
 
-Лаги возникают когда рендеринг кадра превышает ~16ms (для 60 FPS) или UI-поток блокирован. Основные причины: блокировка главного потока, утечки памяти (приводящие к GC-паузам и фризам), сложная иерархия `View`, неоптимизированные списки и тяжелые операции при рендеринге.
+Лаги возникают, когда время рендеринга кадра превышает бюджет времени, зависящий от частоты обновления экрана (≈16.6ms для 60 Гц, ≈11.1ms для 90 Гц, ≈8.3ms для 120 Гц), или когда UI-поток блокирован и не может обработать input/рендеринг вовремя. Основные причины: блокировка главного потока, утечки памяти (приводящие к частым/долгим GC-паузам и фризам), слишком сложная иерархия `View`, неоптимизированные списки и тяжёлые операции при рендеринге.
+
+См. также: [[c-android-profiling]].
 
 ### Блокировка Главного Потока
 
@@ -61,7 +64,7 @@ fun loadData() {
     updateUI(result)
 }
 
-// ✅ Асинхронное выполнение
+// ✅ Асинхронное выполнение (без блокировки UI-потока)
 fun loadData() {
     viewModelScope.launch {
         val users = withContext(Dispatchers.IO) {
@@ -78,12 +81,12 @@ fun loadData() {
 ### Утечки Памяти
 
 ```kotlin
-// ❌ Статическая ссылка на listener удерживает контекст/вью и может вызвать утечку
+// ❌ Статическая/долгоживущая ссылка удерживает Activity/Context/View и может вызвать утечку
 companion object {
-    private var listener: OnDataListener? = null
+    private var listener: OnDataListener? = null // если listener ссылается на View/Activity
 }
 
-// ✅ Привязка к жизненному циклу
+// ✅ Привязка к жизненному циклу и отсутствие статических ссылок на UI-объекты
 lifecycleScope.launch {
     repeatOnLifecycle(Lifecycle.State.STARTED) {
         viewModel.data.collect { updateUI(it) }
@@ -94,9 +97,11 @@ lifecycleScope.launch {
 ### Оптимизация Списков
 
 ```kotlin
-// ✅ RecyclerView с DiffUtil для инкрементальных обновлений
+// ✅ RecyclerView с DiffUtil для инкрементальных обновлений (уменьшение перерисовок)
 recyclerView.apply {
+    // Использовать setHasFixedSize(true), только если размер элементов не зависит от содержимого
     setHasFixedSize(true)
+    // Настроить кэш размера в зависимости от сценария; не завышать без необходимости
     setItemViewCacheSize(20)
 }
 
@@ -106,9 +111,9 @@ diff.dispatchUpdatesTo(adapter)
 
 ### Инструменты Диагностики
 
-**1. Android Profiler** - CPU/Memory/Network анализ в реальном времени.
+**1. Android Profiler** - CPU/Memory/Network анализ в реальном времени, запись профилей.
 
-**2. GPU Overdraw** - визуализация перерисовок (Settings → Developer Options).
+**2. GPU Overdraw** - визуализация перерисовок (Settings → Developer Options → Debug GPU Overdraw).
 
 **3. StrictMode** - обнаружение блокировок главного потока и медленных операций (использовать в debug-сборках):
 
@@ -121,20 +126,29 @@ StrictMode.setThreadPolicy(
         .penaltyLog()
         .build()
 )
+
+StrictMode.setVmPolicy(
+    StrictMode.VmPolicy.Builder()
+        .detectLeakedClosableObjects()
+        .detectLeakedSqlLiteObjects()
+        .penaltyLog()
+        .build()
+)
 ```
 
 **4. LeakCanary** - автоматическое обнаружение утечек памяти.
 
-**5. Systrace/Perfetto** - детальный анализ системных трасс и jank.
+**5. Systrace/Perfetto** - детальный анализ системных трасс и jank (Frame Timeline, scheduler, GC и т.д.).
 
 ### Алгоритм Диагностики
 
-1. Включить GPU Profiling (Settings → Profile GPU Rendering).
-2. Запустить Android Profiler и записать сессию.
-3. Включить StrictMode в debug-сборке.
-4. Проверить overdraw через Debug GPU Overdraw.
-5. Использовать Layout Inspector для анализа иерархии.
-6. Измерить startup time через Macrobenchmark.
+1. Включить Profile GPU Rendering для оценки времени рендеринга кадров.
+2. Запустить Android Profiler и записать сессию (CPU/Memory/Network) вокруг проблемных сценариев.
+3. Включить StrictMode в debug-сборке для выявления операций ввода-вывода и сети в главном потоке.
+4. Проверить overdraw через Debug GPU Overdraw и упростить layout-ы при необходимости.
+5. Использовать Layout Inspector для анализа глубины иерархии и "тяжёлых" вью.
+6. Использовать Perfetto/Systrace или Frame Timeline в Android Studio для анализа jank и долгих кадров.
+7. Измерить startup time через Macrobenchmark и устранить тяжёлые операции на пути запуска.
 
 ---
 
@@ -142,7 +156,9 @@ StrictMode.setThreadPolicy(
 
 ### Root Cause
 
-Lag occurs when frame rendering exceeds ~16ms (for 60 FPS) or the UI thread is blocked. Main causes: main thread blocking, memory leaks (leading to GC pauses and freezes), complex view hierarchies, unoptimized lists, and heavy work during rendering.
+Lag occurs when frame rendering exceeds the time budget defined by the display refresh rate (~16.6ms for 60Hz, ~11.1ms for 90Hz, ~8.3ms for 120Hz), or when the UI thread is blocked and cannot handle input/rendering on time. Main causes: main thread blocking, memory leaks (leading to frequent/long GC pauses and freezes), overly complex view hierarchies, unoptimized lists, and heavy work done on the critical rendering path.
+
+See also: [[c-android-profiling]].
 
 ### Main Thread Blocking
 
@@ -154,7 +170,7 @@ fun loadData() {
     updateUI(result)
 }
 
-// ✅ Async execution
+// ✅ Async execution (keeps UI thread responsive)
 fun loadData() {
     viewModelScope.launch {
         val users = withContext(Dispatchers.IO) {
@@ -171,12 +187,12 @@ fun loadData() {
 ### Memory Leaks
 
 ```kotlin
-// ❌ Static reference to listener holds onto context/view and may cause leak
+// ❌ Static/long-lived reference holds Activity/Context/View and may cause leak
 companion object {
-    private var listener: OnDataListener? = null
+    private var listener: OnDataListener? = null // if listener captures View/Activity/Context
 }
 
-// ✅ Lifecycle-aware collection
+// ✅ Lifecycle-aware collection and no static references to UI objects
 lifecycleScope.launch {
     repeatOnLifecycle(Lifecycle.State.STARTED) {
         viewModel.data.collect { updateUI(it) }
@@ -187,9 +203,11 @@ lifecycleScope.launch {
 ### `List` Optimization
 
 ```kotlin
-// ✅ RecyclerView with DiffUtil for incremental updates
+// ✅ RecyclerView with DiffUtil for incremental updates to reduce unnecessary redraws
 recyclerView.apply {
+    // Use setHasFixedSize(true) only when item sizes are stable and not data-dependent
     setHasFixedSize(true)
+    // Tune item view cache size based on scenario; avoid oversizing without reason
     setItemViewCacheSize(20)
 }
 
@@ -199,9 +217,9 @@ diff.dispatchUpdatesTo(adapter)
 
 ### Diagnostic Tools
 
-**1. Android Profiler** - Real-time CPU/Memory/Network analysis.
+**1. Android Profiler** - Real-time CPU/Memory/Network analysis and profiling.
 
-**2. GPU Overdraw** - Visualize overdraw (Settings → Developer Options).
+**2. GPU Overdraw** - Visualize overdraw (Settings → Developer Options → Debug GPU Overdraw).
 
 **3. StrictMode** - Detect main thread violations and slow operations (use in debug builds):
 
@@ -214,20 +232,29 @@ StrictMode.setThreadPolicy(
         .penaltyLog()
         .build()
 )
+
+StrictMode.setVmPolicy(
+    StrictMode.VmPolicy.Builder()
+        .detectLeakedClosableObjects()
+        .detectLeakedSqlLiteObjects()
+        .penaltyLog()
+        .build()
+)
 ```
 
 **4. LeakCanary** - Automatic memory leak detection.
 
-**5. Systrace/Perfetto** - Detailed system trace and jank analysis.
+**5. Systrace/Perfetto** - Detailed system trace and jank analysis (Frame Timeline, GC, scheduling, etc.).
 
 ### Diagnostic Workflow
 
-1. Enable GPU Profiling (Settings → Profile GPU Rendering).
-2. Run Android Profiler and record a session.
-3. Enable StrictMode in debug builds.
-4. Check overdraw via Debug GPU Overdraw.
-5. Use Layout Inspector for hierarchy analysis.
-6. Measure startup time with Macrobenchmark.
+1. Enable Profile GPU Rendering to inspect frame rendering times.
+2. Run Android Profiler and record CPU/Memory/Network around problematic flows.
+3. Enable StrictMode in debug builds to catch disk/network operations on the main thread.
+4. Check overdraw via Debug GPU Overdraw and simplify layouts where needed.
+5. Use Layout Inspector to analyze hierarchy depth and heavy views.
+6. Use Perfetto/Systrace or Frame Timeline in Android Studio to analyze jank and long frames.
+7. Measure startup time with Macrobenchmark and remove heavy work from the startup path.
 
 ---
 

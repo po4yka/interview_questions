@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+related: [c--kotlin--medium, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
 created: 2025-10-05
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [abstract-class, difficulty/medium, inheritance, interface, kotlin, kotlin-features, oop]
 sources: ["https://kotlinlang.org/docs/interfaces.html"]
-date created: Monday, November 10th 2025, 7:48:48 am
-date modified: Tuesday, November 11th 2025, 10:05:02 am
 ---
 
 # Вопрос (RU)
@@ -124,7 +122,7 @@ interface Test {
 
 ## Ссылки (RU)
 
-- [[c-kotlin]]
+- [[c--kotlin--medium]]
 - https://kotlinlang.org/docs/interfaces.html
 
 ## Связанные Вопросы (RU)
@@ -238,7 +236,7 @@ interface Test {
 
 ## References
 
-- [[c-kotlin]]
+- [[c--kotlin--medium]]
 - https://kotlinlang.org/docs/interfaces.html
 
 ## Related Questions

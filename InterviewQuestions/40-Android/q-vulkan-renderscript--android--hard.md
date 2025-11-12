@@ -206,7 +206,7 @@ class OpenGLES31ComputeProcessor : ImageProcessor {
 - для устройств без `Vulkan`/`OpenGL ES 3.1`;
 - для небольших изображений, где накладные расходы GPU не окупаются.
 
-Пример CPU-реализации (упрощённый blur и 3x3 convolution):
+Пример CPU-реализации (упрощённый, наивный blur и 3x3 convolution — демонстрационные, не оптимизированы под продакшн):
 
 ```kotlin
 class CPUImageProcessor : ImageProcessor {
@@ -318,12 +318,14 @@ class GPUComputeProcessor(private val context: Context) {
         processor.convolve(input, kernel)
 
     private fun isVulkanSupported(): Boolean {
-        // Проверка через PackageManager и/или реальные Vulkan API.
+        // Упрощённая проверка: наличие Vulkan-уровня.
+        // В реальном коде дополнительно проверяйте версии, feature level и нужные queue families/расширения.
         return context.packageManager.hasSystemFeature("android.hardware.vulkan.level")
     }
 
     private fun isOpenGLES31Supported(): Boolean {
         val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        // Минимальная проверка на поддержку ES 3.1; для точной информации учитывайте фактическую конфигурацию устройства.
         return am.deviceConfigurationInfo.reqGlEsVersion >= 0x00030001
     }
 
@@ -334,7 +336,7 @@ class GPUComputeProcessor(private val context: Context) {
 ```
 
 Ключевые моменты:
-- Проверять поддержку `Vulkan` (level/version) и версии `OpenGL ES` в рантайме.
+- Проверять поддержку `Vulkan` (level/version/фичи) и версии `OpenGL ES` в рантайме; наличие feature-флага не гарантирует, что устройство подходит под все требования конкретного пайплайна.
 - Инкапсулировать реализацию за интерфейсом `ImageProcessor` для удобства fallback.
 
 ### Лучшие практики (RU)
@@ -659,12 +661,14 @@ class GPUComputeProcessor(private val context: Context) {
         processor.convolve(input, kernel)
 
     private fun isVulkanSupported(): Boolean {
-        // Check Vulkan support via PackageManager and/or Vulkan APIs.
+        // Simplified check: presence of a Vulkan level feature.
+        // In real-world code, also verify supported versions, feature levels, queue families, and required extensions.
         return context.packageManager.hasSystemFeature("android.hardware.vulkan.level")
     }
 
     private fun isOpenGLES31Supported(): Boolean {
         val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        // Minimal check for ES 3.1 support; actual supported version depends on device configuration.
         return am.deviceConfigurationInfo.reqGlEsVersion >= 0x00030001
     }
 
@@ -675,7 +679,7 @@ class GPUComputeProcessor(private val context: Context) {
 ```
 
 Key notes:
-- Always check device capabilities for `Vulkan` and `OpenGL ES`.
+- Always check device capabilities for `Vulkan` and `OpenGL ES` (including versions and required features); a feature flag alone does not guarantee suitability for your specific pipeline.
 - Hide backend details behind an `ImageProcessor` interface to simplify fallbacks.
 
 ### Best Practices (EN)

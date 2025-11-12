@@ -13,13 +13,18 @@ updated: "2025-11-10"
 tags: ["coroutines", "difficulty/medium", "dispatchers", "kotlin", "unconfined"]
 description: "Comprehensive guide to What is Dispatchers.Unconfined and when to use it? in Kotlin coroutines"
 moc: moc-kotlin
-related: [c-kotlin-coroutines-basics, c-coroutines, q-parallel-network-calls-coroutines--kotlin--medium]
+related: [c-coroutines, c-kotlin-coroutines-basics, q-coroutine-dispatchers--kotlin--medium]
 subtopics: [coroutines, dispatchers]
+
 ---
 
 # Вопрос (RU)
 
 > Что такое `Dispatchers.Unconfined` в корутинах Kotlin и когда его следует использовать?
+
+# Question (EN)
+
+> What is `Dispatchers.Unconfined` in Kotlin coroutines, and when should you use it?
 
 ## Ответ (RU)
 
@@ -119,30 +124,6 @@ scope.launch(Dispatchers.Main) {
 
 Краткий ответ для собеседования:
 - `Dispatchers.Unconfined` запускает корутину в текущем потоке и после приостановок возобновляет её на том потоке, который выбирают `suspend`-функции. Он не привязан к конкретному потоку, что делает его непредсказуемым и потому почти всегда непригодным для прикладного/UI-кода. Предназначен в основном для низкоуровневых и тестовых сценариев.
-
-## Дополнительные вопросы (RU)
-
-1. В чем разница между `Dispatchers.Unconfined` и `Dispatchers.Main` с точки зрения привязки к потоку?
-2. Как `Dispatchers.Unconfined` взаимодействует с `suspend`-функциями, такими как `delay` или `withContext`?
-3. Почему `Dispatchers.Unconfined` обычно не рекомендуют для продакшен Android-приложений?
-4. Как вы бы продемонстрировали поведение `Dispatchers.Unconfined` на небольшом примере кода?
-5. В каком низкоуровневом коде библиотеки/фреймворка корутин `Dispatchers.Unconfined` может быть уместен?
-
-## Ссылки (RU)
-
-- Раздел "Coroutines" в официальной документации Kotlin
-- API-справочник kotlinx.coroutines для диспетчеров
-- Статьи и материалы, разбирающие подводные камни и устройство `Dispatchers.Unconfined`
-
-## Связанные вопросы (RU)
-
-- [[q-coroutine-job-lifecycle--kotlin--medium]]
-- [[q-structured-concurrency--kotlin--hard]]
-- [[q-coroutine-dispatchers--kotlin--medium]]
-
-# Question (EN)
-
-> What is `Dispatchers.Unconfined` in Kotlin coroutines, and when should you use it?
 
 ## Answer (EN)
 

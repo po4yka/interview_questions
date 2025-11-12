@@ -13,15 +13,15 @@ original_language: en
 language_tags:
 - en
 - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
 - c-android
-- c-views
+- c-android-views
 - q-viewmodel-pattern--android--easy
 - q-what-does-viewgroup-inherit-from--android--easy
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/ui-views
 - difficulty/easy
@@ -50,9 +50,9 @@ tags:
 ### Иерархия `View`
 
 ```
-View (базовый класс)
+`View` (базовый класс)
   ↓
-ViewGroup (контейнер)
+`ViewGroup` (контейнер)
   ↓
    LinearLayout
    RelativeLayout
@@ -60,6 +60,8 @@ ViewGroup (контейнер)
    FrameLayout
    ... другие layouts
 ```
+
+![Иерархия `View`](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
 
 ### Популярные `ViewGroup`
 
@@ -91,14 +93,14 @@ ViewGroup (контейнер)
 - Назначение: представляет прямоугольную область, может рисовать содержимое и обрабатывать пользовательские события
 - Иерархия: базовый UI-класс
 - Дочерние элементы: не может содержать другие `View`
-- Примеры: TextView, Button, ImageView, EditText
+- Примеры: `TextView`, `Button`, `ImageView`, `EditText`
 
 #### `ViewGroup`
 - Определение: `View`, выступающий контейнером и содержащий объекты `View` и `ViewGroup`
 - Назначение: базовый класс для layout-ов; организует и позиционирует дочерние элементы
 - Иерархия: наследуется от `android.view.View`
 - Дочерние элементы: может содержать несколько дочерних `View` и `ViewGroup`
-- Примеры: LinearLayout, RelativeLayout, ConstraintLayout, FrameLayout
+- Примеры: `LinearLayout`, `RelativeLayout`, `ConstraintLayout`, `FrameLayout`
 
 ### Пример сравнения
 
@@ -217,7 +219,7 @@ class CustomContainer @JvmOverloads constructor(
 | Может иметь дочерние элементы? | Нет | Да |
 | Наследование | Базовый UI-класс (`android.view.View`) | Наследуется от `View` |
 | Визуальное поведение | Обычно рисует свое содержимое | Часто служит структурным контейнером; может рисовать фон/foreground и т.п. |
-| Примеры | TextView, Button, ImageView, EditText | LinearLayout, RelativeLayout, FrameLayout, ConstraintLayout |
+| Примеры | `TextView`, `Button`, `ImageView`, `EditText` | `LinearLayout`, `RelativeLayout`, `FrameLayout`, `ConstraintLayout` |
 | Основная ответственность | Отрисовка и обработка событий | Измерение, размещение и управление дочерними `View` |
 | Кастомные реализации | Часто переопределяют `onDraw()`, `onMeasure()` | Обязателен `onLayout()`, часто переопределяют `onMeasure()` |
 
@@ -235,16 +237,16 @@ class CustomContainer @JvmOverloads constructor(
 
 ### What is `ViewGroup`?
 
-A **`ViewGroup`** is a special `View` that can **contain other views** (called children). The `ViewGroup` class is the base class for layouts and view containers. This class also defines `ViewGroup.LayoutParams`, which serves as the base class for layout parameters of its children.
+A **`ViewGroup`** is a special `View` that can **contain other `View` instances** (called children). The `ViewGroup` class is the base class for layouts and view containers. This class also defines `ViewGroup.LayoutParams`, which serves as the base class for layout parameters of its children.
 
-ViewGroups are containers in which other Views can be placed. The class `ViewGroup` extends the class `View` and adds APIs for managing children (adding, removing, measuring, and laying them out). Many ViewGroups are visually minimal, but they can draw (e.g., background, foreground, dividers, elevation shadows).
+`ViewGroup` is a container in which other `View` elements can be placed. The class `ViewGroup` extends the class `View` and adds APIs for managing children (adding, removing, measuring, and laying them out). Many `ViewGroup` instances are visually minimal, but they can draw (e.g., background, foreground, dividers, elevation shadows).
 
 ### `View` Hierarchy
 
 ```
-View (base class)
+`View` (base class)
   ↓
-ViewGroup (container)
+`ViewGroup` (container)
   ↓
    LinearLayout
    RelativeLayout
@@ -255,7 +257,7 @@ ViewGroup (container)
 
 ![`View` hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
 
-### Popular ViewGroups
+### Popular `ViewGroup` Implementations
 
 Common layout containers that extend `ViewGroup`:
 
@@ -270,7 +272,7 @@ Common layout containers that extend `ViewGroup`:
 
 A **`View`** represents the basic building block for user interface components. A `View` occupies a rectangular area on the screen and is responsible for drawing and handling events (such as clicks and touches).
 
-### Popular Views
+### Popular `View` Implementations
 
 Common UI components that extend `View`:
 
@@ -285,18 +287,18 @@ Common UI components that extend `View`:
 ### `View` vs `ViewGroup`: Key Differences
 
 #### `View`
-- **Definition**: Basic building block of User Interface (UI) elements in Android
+- **Definition**: Basic building block of User Interface (UI) elements in Android (`android.view.View`)
 - **Purpose**: Represents a rectangular area that can draw content and respond to user actions
-- **Hierarchy**: Base UI class (`android.view.View`)
-- **Children**: Cannot contain other views
-- **Examples**: TextView, Button, ImageView, EditText
+- **Hierarchy**: Base UI class
+- **Children**: Cannot contain other `View` instances
+- **Examples**: `TextView`, `Button`, `ImageView`, `EditText`
 
 #### `ViewGroup`
 - **Definition**: A `View` that acts as a container and holds `View` and `ViewGroup` objects
 - **Purpose**: Base class for layouts; organizes and positions child views
 - **Hierarchy**: Extends `android.view.View`
 - **Children**: Can contain multiple `View` and `ViewGroup` children
-- **Examples**: LinearLayout, RelativeLayout, ConstraintLayout, FrameLayout
+- **Examples**: `LinearLayout`, `RelativeLayout`, `ConstraintLayout`, `FrameLayout`
 
 ### Example Comparison
 
@@ -415,17 +417,17 @@ class CustomContainer @JvmOverloads constructor(
 | **Can have children?** | No | Yes |
 | **Inheritance** | Base UI class (`android.view.View`) | Extends `View` |
 | **Visibility** | Typically draws its own content | Often used as a structural container; may draw background/foreground, etc. |
-| **Examples** | TextView, Button, ImageView, EditText | LinearLayout, RelativeLayout, FrameLayout, ConstraintLayout |
+| **Examples** | `TextView`, `Button`, `ImageView`, `EditText` | `LinearLayout`, `RelativeLayout`, `FrameLayout`, `ConstraintLayout` |
 | **Main responsibility** | Drawing and event handling | Measuring, laying out, and managing child views |
 | **Required methods for custom implementations** | Commonly override `onDraw()`, `onMeasure()` | Must implement `onLayout()`; often override `onMeasure()` |
 
 ### Key Points to Remember
 
 1. **`ViewGroup` IS a `View`** - `ViewGroup` inherits from `View`, so it has all `View` capabilities plus child management.
-2. **Nested containers** - ViewGroups can contain other ViewGroups, creating complex layouts.
-3. **Drawing** - Many ViewGroups do minimal drawing, but they can draw backgrounds, dividers, foregrounds, and elevation.
-4. **Layout responsibility** - ViewGroups are responsible for measuring and positioning their children.
-5. **Event distribution** - ViewGroups participate in event dispatch and can intercept or delegate touch events to children.
+2. **Nested containers** - `ViewGroup` can contain other `ViewGroup` instances, creating complex layouts.
+3. **Drawing** - Many `ViewGroup` implementations do minimal drawing, but they can draw backgrounds, dividers, foregrounds, and elevation.
+4. **Layout responsibility** - `ViewGroup` is responsible for measuring and positioning its children.
+5. **Event distribution** - `ViewGroup` participates in event dispatch and can intercept or delegate touch events to children.
 
 ---
 
@@ -443,12 +445,12 @@ class CustomContainer @JvmOverloads constructor(
 ## Follow-ups
 
 - [[c-android]] — связь иерархии `View`/`ViewGroup` с композицией UI
-- [[c-views]] — обзор стандартных `View` и их ролей в UI
+- [[c-android-views]] — обзор стандартных `View` и их ролей в UI
 - [[q-viewmodel-pattern--android--easy]] — разделение UI и логики состояния поверх иерархии `View`/`ViewGroup`
 
 ## References
 
-- [Views](https://developer.android.com/develop/ui/views)
+- [`Views`](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
 ## Related Questions
@@ -460,4 +462,3 @@ class CustomContainer @JvmOverloads constructor(
 ### Advanced (Harder)
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
 - [[q-testing-viewmodels-turbine--android--medium]] - `View`
-- q-rxjava-pagination-recyclerview--android--medium - `View`

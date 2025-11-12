@@ -32,6 +32,7 @@ tags:
 - en
 - ru
 
+
 ---
 
 # Вопрос (RU)
@@ -54,18 +55,16 @@ class ProductRepository(
     private val dao: ProductDao
 ) {
     // База данных — единый источник истины; сеть только обновляет её
-    fun getProducts(): Flow<List<Product>> = flow {
-        // 1. Немедленно эмитить данные из БД (кэш/оффлайн)
-        emitAll(dao.observeProducts())
-
-        // 2. В фоне получить свежие данные и обновить БД
-        try {
-            val freshProducts = api.getProducts()
-            dao.insertProducts(freshProducts)  // Обновит flow выше
-        } catch (e: Exception) {
-            // При ошибке продолжаем использовать данные из БД
+    fun getProducts(): Flow<List<Product>> = dao.observeProducts()
+        .onStart {
+            // При первом сборе пробуем обновить данные из сети в фоне
+            try {
+                val freshProducts = api.getProducts()
+                dao.insertProducts(freshProducts) // Обновит flow выше
+            } catch (e: Exception) {
+                // При ошибке остаёмся на локальных данных
+            }
         }
-    }
 }
 ```
 
@@ -201,7 +200,7 @@ class ProfileRepository(
         // 1. Быстрый источник — preferences (последний использованный профиль и т.п.)
         preferences.getProfile()?.let { emit(it) }
 
-        // 2. Затем данные из БД
+        // 2. Затем данные из БД (одноразовое чтение перед запросом к сети)
         dao.getProfile(userId)?.let { emit(it) }
 
         // 3. Наконец, сеть: обновляем все слои
@@ -217,7 +216,7 @@ class ProfileRepository(
 }
 ```
 
-**Краткое содержание (RU)**: Repository координирует несколько источников данных. Основные стратегии: (1) Единый источник истины (наблюдаем БД через `Flow`, сеть только обновляет её). (2) Cache-first (in-memory → сеть → обновить кэш). (3) Network-first с fallback к БД. (4) Stale-while-revalidate (показать кэш, параллельно обновить). (5) Кэширование по времени (TTL). (6) Комбинация уровней (preferences → БД → сеть) за единым API, с использованием `Flow` для реактивных обновлений.
+**Краткое содержание (RU)**: Repository координирует несколько источников данных. Основные стратегии: (1) Единый источник истины (наблюдаем БД через `Flow`, сеть только обновляет её, например через `onStart`). (2) Cache-first (in-memory → сеть → обновить кэш). (3) Network-first с fallback к БД. (4) Stale-while-revalidate (показать кэш, параллельно обновить). (5) Кэширование по времени (TTL). (6) Комбинация уровней (preferences → БД → сеть) за единым API, с использованием `Flow` для реактивных обновлений.
 
 ---
 
@@ -233,18 +232,16 @@ class ProductRepository(
     private val dao: ProductDao
 ) {
     // Database is the single source of truth; network only updates it
-    fun getProducts(): Flow<List<Product>> = flow {
-        // 1. Emit DB data immediately (cached/offline data)
-        emitAll(dao.observeProducts())
-
-        // 2. Fetch fresh data in background and update DB
-        try {
-            val freshProducts = api.getProducts()
-            dao.insertProducts(freshProducts)  // Updates the flow above
-        } catch (e: Exception) {
-            // Keep using existing DB data on failure
+    fun getProducts(): Flow<List<Product>> = dao.observeProducts()
+        .onStart {
+            // On first collection, try to refresh from network in the background
+            try {
+                val freshProducts = api.getProducts()
+                dao.insertProducts(freshProducts) // Will update the flow above
+            } catch (e: Exception) {
+                // Stay with local data on failure
+            }
         }
-    }
 }
 ```
 
@@ -380,7 +377,7 @@ class ProfileRepository(
         // 1. Emit from preferences (fastest, e.g., last used profile)
         preferences.getProfile()?.let { emit(it) }
 
-        // 2. Emit from database
+        // 2. Emit from database (one-shot read before network request)
         dao.getProfile(userId)?.let { emit(it) }
 
         // 3. Fetch from network and update all layers
@@ -396,13 +393,9 @@ class ProfileRepository(
 }
 ```
 
-**English Summary**: Repository coordinates multiple data sources. Typical strategies: (1) Single source of truth (DB observed via `Flow`, network updates it). (2) Cache-first (in-memory → network → update cache). (3) Network-first with DB fallback. (4) Stale-while-revalidate (show cached, refresh in background). (5) Time-based caching (validate TTL before network). (6) Combining multiple layers (preferences → DB → network) behind a single API, using `Flow` for reactive updates.
+**English Summary**: Repository coordinates multiple data sources. Typical strategies: (1) Single source of truth (DB observed via `Flow`, network updates it, e.g., using `onStart`). (2) Cache-first (in-memory → network → update cache). (3) Network-first with DB fallback. (4) Stale-while-revalidate (show cached, refresh in background). (5) Time-based caching (validate TTL before network). (6) Combining multiple layers (preferences → DB → network) behind a single API, using `Flow` for reactive updates.
 
 ---
-
-## References
-- [Data layer - Android](https://developer.android.com/topic/architecture/data-layer)
-
 
 ## Follow-ups
 
@@ -411,6 +404,10 @@ class ProfileRepository(
 - Как организовать `Repository` и `UseCase` взаимодействие при сложных правилах выборки данных?
 - Как реализовать стратегию синхронизации, когда локальные изменения пользователя должны отправляться на сервер и объединяться с удалёнными данными?
 - Как тестировать `Repository` с несколькими источниками данных (моки для API/БД/кэша, фейковые реализация и т.д.)?
+
+
+## References
+- [Data layer - Android](https://developer.android.com/topic/architecture/data-layer)
 
 
 ## Related Questions

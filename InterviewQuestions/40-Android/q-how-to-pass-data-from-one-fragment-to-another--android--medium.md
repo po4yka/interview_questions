@@ -97,16 +97,32 @@ class FragmentB : Fragment() {
 
 **3. FragmentResult API (Рекомендуется для одноразовой передачи результата)**
 
-Подходит для передачи результата от одного фрагмента другому без shared `ViewModel` и без жёсткой связанности:
+Подходит для передачи результата от одного фрагмента другому без shared `ViewModel` и без жёсткой связанности. Работает между фрагментами, которые используют один и тот же `FragmentManager`.
 
 ```kotlin
 // Fragment A — отправляет результат
-setFragmentResult("requestKey", bundleOf("KEY_DATA" to "Data from Fragment A"))
+class FragmentA : Fragment() {
+    fun sendResult() {
+        parentFragmentManager.setFragmentResult(
+            "requestKey",
+            bundleOf("KEY_DATA" to "Data from Fragment A")
+        )
+    }
+}
 
 // Fragment B — подписывается на результат
-setFragmentResultListener("requestKey") { _, bundle ->
-    val data = bundle.getString("KEY_DATA")
-    // ✅ Обрабатываем результат
+class FragmentB : Fragment() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        parentFragmentManager.setFragmentResultListener(
+            "requestKey",
+            this
+        ) { _, bundle ->
+            val data = bundle.getString("KEY_DATA")
+            // ✅ Обрабатываем результат
+        }
+    }
 }
 ```
 
@@ -124,6 +140,12 @@ class MainActivity : AppCompatActivity(), OnDataPassListener {
     override fun onDataPass(data: String) {
         val fragmentB = supportFragmentManager.findFragmentByTag("B") as? FragmentB
         fragmentB?.receiveData(data)  // ⚠️ Прямая связь Activity → Fragment
+    }
+}
+
+class FragmentB : Fragment() {
+    fun receiveData(data: String) {
+        // ✅ Обработка полученных данных
     }
 }
 ```
@@ -237,16 +259,32 @@ class FragmentB : Fragment() {
 
 **3. FragmentResult API (Recommended for one-time results)**
 
-Good for passing a result from one fragment to another without a shared `ViewModel` and without tight coupling:
+Good for passing a result from one fragment to another without a shared `ViewModel` and without tight coupling. Works between fragments that use the same `FragmentManager`.
 
 ```kotlin
 // Fragment A - send result
-setFragmentResult("requestKey", bundleOf("KEY_DATA" to "Data from Fragment A"))
+class FragmentA : Fragment() {
+    fun sendResult() {
+        parentFragmentManager.setFragmentResult(
+            "requestKey",
+            bundleOf("KEY_DATA" to "Data from Fragment A")
+        )
+    }
+}
 
 // Fragment B - listen for result
-setFragmentResultListener("requestKey") { _, bundle ->
-    val data = bundle.getString("KEY_DATA")
-    // ✅ Handle result
+class FragmentB : Fragment() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        parentFragmentManager.setFragmentResultListener(
+            "requestKey",
+            this
+        ) { _, bundle ->
+            val data = bundle.getString("KEY_DATA")
+            // ✅ Handle result
+        }
+    }
 }
 ```
 
@@ -264,6 +302,12 @@ class MainActivity : AppCompatActivity(), OnDataPassListener {
     override fun onDataPass(data: String) {
         val fragmentB = supportFragmentManager.findFragmentByTag("B") as? FragmentB
         fragmentB?.receiveData(data)  // ⚠️ Direct coupling Activity → Fragment
+    }
+}
+
+class FragmentB : Fragment() {
+    fun receiveData(data: String) {
+        // ✅ Handle received data
     }
 }
 ```

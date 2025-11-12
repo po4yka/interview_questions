@@ -1,6 +1,6 @@
 ---
 id: android-491
-title: Testing ViewModels with Turbine
+title: Тестирование ViewModel с Turbine / Testing ViewModels with Turbine
 aliases:
 - Testing ViewModels
 - Turbine
@@ -38,13 +38,13 @@ tags:
 > Как тестировать `ViewModel`, которые отдают `Flow`/`StateFlow`, с помощью библиотеки Turbine?
 
 # Question (EN)
-> How do you test ViewModels that emit `Flow`/`StateFlow` using the Turbine library?
+> How do you test `ViewModels` that emit `Flow`/`StateFlow` using the Turbine library?
 
 ---
 
 ## Ответ (RU)
 
-Подход: Turbine — это библиотека для тестирования, которая упрощает проверку Kotlin `Flow`, предоставляя читаемый API для проверки эмиссий во времени. При тестировании `ViewModel`, которые отдают `StateFlow`/`Flow`, Turbine используют вместе с тестовыми API корутин, чтобы корутины `ViewModel` выполнялись в контролируемой среде.
+Подход: Turbine — это библиотека для тестирования, которая упрощает проверку Kotlin `Flow`, предоставляя читаемый API для пошаговой проверки эмиссий. При тестировании `ViewModel`, которые отдают `StateFlow`/`Flow`, Turbine используют вместе с тестовыми API корутин, чтобы корутины `ViewModel` выполнялись в контролируемой среде.
 
 Ключевые концепции:
 - Turbine позволяет последовательно проверять эмиссии `Flow`.
@@ -99,23 +99,15 @@ class UserViewModel(
     }
 }
 
-// Пример использует переопределение Main-диспетчера из kotlinx-coroutines-test.
-// В реальных проектах предпочтительно использовать JUnit4 Rule / JUnit5 Extension (MainDispatcherRule).
+// Тест с Turbine + runTest.
+// В реальных проектах предпочтительно использовать JUnit4 Rule / JUnit5 Extension (MainDispatcherRule),
+// который переназначает Dispatchers.Main на тестовый диспетчер.
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserViewModelTest {
 
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `loadUser emits Loading then Success states`() = runTest {
@@ -125,16 +117,13 @@ class UserViewModelTest {
         val viewModel = UserViewModel(repository)
 
         viewModel.uiState.test {
-            // Начальное состояние из StateFlow
+            // Первым элементом для StateFlow будет текущее значение (Loading)
             assertEquals(UiState.Loading, awaitItem())
 
             // When
             viewModel.loadUser("123")
 
-            // Продвигаем выполнение до завершения корутин во viewModelScope
-            testDispatcher.scheduler.advanceUntilIdle()
-
-            // Затем: повторная эмиссия Loading перед Success
+            // Затем: Loading перед Success (из вызова loadUser)
             assertEquals(UiState.Loading, awaitItem())
 
             val successItem = awaitItem()
@@ -159,8 +148,6 @@ class UserViewModelTest {
             // When
             viewModel.loadUser("123")
 
-            testDispatcher.scheduler.advanceUntilIdle()
-
             // Затем: Loading, затем Error
             assertEquals(UiState.Loading, awaitItem())
 
@@ -178,7 +165,7 @@ class UserViewModelTest {
 2. `awaitItem()` — приостанавливается до следующей эмиссии и возвращает её.
 3. `expectNoEvents()` — проверяет, что в течение заданного таймаута не произошло новых событий; больше подходит для конечных `Flow`. Для `StateFlow` (горячего источника с всегда актуальным значением) обычно вместо этого явно завершают сбор с помощью `cancelAndIgnoreRemainingEvents()`.
 4. `cancelAndIgnoreRemainingEvents()` — отменяет сбор, когда оставшиеся/будущие эмиссии не важны; рекомендуется вызывать в конце тестов `StateFlow` с Turbine.
-5. `runTest` + тестовый диспетчер — обеспечивают контролируемое окружение для корутин. Для `ViewModel` с `viewModelScope` нужно переопределить `Dispatchers.Main` (например, через `Dispatchers.setMain(testDispatcher)` или `MainDispatcherRule`), чтобы их корутины выполнялись на тестовом шедулере.
+5. `runTest` (совместно с `MainDispatcherRule` или другим тестовым маппингом `Dispatchers.Main`) обеспечивает контролируемое окружение для корутин `ViewModel`.
 
 Преимущества:
 - Более читаемо, чем ручной сбор `Flow`.
@@ -188,13 +175,13 @@ class UserViewModelTest {
 
 ## Answer (EN)
 
-Approach: Turbine is a testing library that simplifies testing Kotlin Flows by providing a readable API for asserting `Flow` emissions over time. When testing ViewModels that expose `StateFlow`/`Flow`, you combine Turbine with the coroutine test APIs so that the `ViewModel`'s coroutines run in a controlled environment.
+Approach: Turbine is a testing library that simplifies testing Kotlin `Flows` by providing a readable API for asserting emissions step by step. When testing `ViewModels` that expose `StateFlow`/`Flow`, you use Turbine together with the coroutine test APIs so that the `ViewModel`'s coroutines run in a controlled environment.
 
 Key Concepts:
-- Turbine allows you to test `Flow` emissions sequentially.
-- Provides `test {}` extension function for Flows.
+- Turbine allows you to assert `Flow` emissions sequentially.
+- Provides the `test {}` extension function for `Flows`.
 - Supports testing multiple emissions, errors, and completion.
-- Works with coroutine test dispatchers (e.g., `runTest`, `MainDispatcherRule`) so you can control time and execution.
+- Works well with coroutine test dispatchers (e.g., `runTest`, `MainDispatcherRule`) so you can control time and execution.
 
 Code:
 
@@ -243,23 +230,15 @@ class UserViewModel(
     }
 }
 
-// Example uses kotlinx-coroutines-test's Main dispatcher override.
-// In real projects prefer a JUnit4 Rule / JUnit5 Extension (MainDispatcherRule).
+// Test using Turbine + runTest.
+// In real projects, prefer a JUnit4 Rule / JUnit5 Extension (MainDispatcherRule)
+// that maps Dispatchers.Main to a test dispatcher.
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserViewModelTest {
 
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `loadUser emits Loading then Success states`() = runTest {
@@ -269,16 +248,13 @@ class UserViewModelTest {
         val viewModel = UserViewModel(repository)
 
         viewModel.uiState.test {
-            // Initial state from StateFlow
+            // For StateFlow, the first item is the current value (Loading)
             assertEquals(UiState.Loading, awaitItem())
 
             // When
             viewModel.loadUser("123")
 
-            // Advance until coroutines launched in viewModelScope complete
-            testDispatcher.scheduler.advanceUntilIdle()
-
-            // Then: Loading emitted again before Success
+            // Then: Loading emitted again before Success (from loadUser)
             assertEquals(UiState.Loading, awaitItem())
 
             val successItem = awaitItem()
@@ -303,8 +279,6 @@ class UserViewModelTest {
             // When
             viewModel.loadUser("123")
 
-            testDispatcher.scheduler.advanceUntilIdle()
-
             // Then: Loading followed by Error
             assertEquals(UiState.Loading, awaitItem())
 
@@ -318,17 +292,17 @@ class UserViewModelTest {
 ```
 
 Explanation:
-1. `test {}`  Turbine's main extension function that collects `Flow` emissions in a suspendable test scope.
+1. `test {}`  Turbine's main extension function that collects `Flow` emissions within a suspendable test scope.
 2. `awaitItem()`  Suspends until the next emission and returns it.
-3. `expectNoEvents()`  Asserts that no events occur within the timeout window; better suited for finite Flows. With `StateFlow` (which is hot and always has a current value), you usually stop collection with `cancelAndIgnoreRemainingEvents()` instead of expecting "no more" events.
-4. `cancelAndIgnoreRemainingEvents()`  Cancels collection when you don't care about remaining or future emissions  recommended at the end of Turbine-based `StateFlow` tests.
-5. `runTest` + test dispatcher  Provide a controlled coroutine environment. For ViewModels using `viewModelScope`, override the main dispatcher (e.g., `Dispatchers.setMain(testDispatcher)` or `MainDispatcherRule`) so their coroutines run on the test scheduler.
+3. `expectNoEvents()`  Asserts that no events occur within a timeout; best suited for finite `Flows`. With `StateFlow` (hot with an always-available current value), it's usually better to end collection explicitly using `cancelAndIgnoreRemainingEvents()`.
+4. `cancelAndIgnoreRemainingEvents()`  Cancels collection when you don't care about remaining or future emissions; recommended at the end of Turbine-based `StateFlow` tests.
+5. `runTest` (together with `MainDispatcherRule` or another test mapping for `Dispatchers.Main`) provides a controlled environment for `ViewModel` coroutines.
 
 Benefits:
 - More readable than manual `Flow` collection.
 - Built-in timeout handling.
 - Clear assertion API.
-- Works with `StateFlow`, `SharedFlow`, and regular Flows.
+- Works with `StateFlow`, `SharedFlow`, and regular `Flows`.
 
 ---
 
@@ -341,10 +315,10 @@ Benefits:
 
 ## Follow-ups
 
-- How do you test multiple Flows simultaneously with Turbine?
+- How do you test multiple `Flows` simultaneously with Turbine?
 - What's the difference between `awaitItem()` and `expectMostRecentItem()`?
 - How do you handle timeouts in Turbine tests?
-- Can Turbine be used with `SharedFlow` and hot Flows?
+- Can Turbine be used with `SharedFlow` and hot `Flows`?
 
 ## Ссылки (RU)
 

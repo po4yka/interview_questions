@@ -23,13 +23,14 @@ related:
 - q-how-animations-work-in-recyclerview--android--medium
 - q-transaction-too-large-exception--android--medium
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-11-11
 tags:
 - android/ui-compose
 - android/ui-state
 - difficulty/medium
 - en
 - ru
+
 
 ---
 
@@ -269,9 +270,6 @@ English Summary: `remember` keeps state only for the current composition lifecyc
 
 ---
 
-## References
-- [State in Compose](https://developer.android.com/jetpack/compose/state)
-
 ## Follow-ups
 
 - [[q-how-animations-work-in-recyclerview--android--medium]]
@@ -279,6 +277,9 @@ English Summary: `remember` keeps state only for the current composition lifecyc
 - Как вы объясните различия между `remember`/`rememberSaveable` и управлением состоянием на уровне `ViewModel`?
 - В каких случаях вы бы отказались от `rememberSaveable` в пользу хранения состояния вне Compose-иерархии?
 - Как бы вы реализовали сохранение сложного пользовательского объекта с помощью `Saver` и `rememberSaveable`?
+
+## References
+- [State in Compose](https://developer.android.com/jetpack/compose/state)
 
 ## Related Questions
 

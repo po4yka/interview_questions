@@ -6,7 +6,7 @@ aliases:
 - Screenshot и Snapshot тестирование
 topic: android
 subtopics:
-- testing-ui
+- testing-screenshot
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -16,14 +16,15 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-testing
+- c-android-testing
 - q-testing-viewmodels-turbine--android--medium
 - q-testing-compose-ui--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 tags:
-- android/testing-ui
+- android/testing-screenshot
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -40,6 +41,8 @@ tags:
 
 **Screenshot тестирование** (визуальное регрессионное тестирование) делает снимки UI и сравнивает их с базовыми эталонными изображениями, чтобы выявлять непреднамеренные визуальные изменения. Для Android популярны библиотеки **Paparazzi** и **Shot**.
 
+(Версии артефактов в примерах условны; в реальном проекте нужно использовать актуальные версии из документации.)
+
 ---
 
 ### Paparazzi
@@ -52,11 +55,11 @@ tags:
 plugins {
     id("com.android.library") // или com.android.application
     id("org.jetbrains.kotlin.android")
-    id("app.cash.paparazzi") version "1.3.1"
+    id("app.cash.paparazzi") version "1.3.1" // пример; используйте актуальную версию
 }
 
 dependencies {
-    testImplementation("app.cash.paparazzi:paparazzi:1.3.1")
+    testImplementation("app.cash.paparazzi:paparazzi:1.3.1") // пример; используйте актуальную версию
 }
 ```
 
@@ -107,56 +110,50 @@ class ButtonScreenshotTest {
 class ResponsiveScreenshotTest {
 
     @get:Rule
-    val defaultPaparazzi = Paparazzi()
+    val paparazzi = Paparazzi()
 
     @Test
     fun userProfile_phone() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5
-        )
+        paparazzi.unsafeUpdateConfig(deviceConfig = DeviceConfig.PIXEL_5)
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("userProfile_phone") {
             UserProfileScreen()
         }
     }
 
     @Test
     fun userProfile_tablet() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_C
-        )
+        paparazzi.unsafeUpdateConfig(deviceConfig = DeviceConfig.PIXEL_C)
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("userProfile_tablet") {
             UserProfileScreen()
         }
     }
 
     @Test
     fun userProfile_customSize() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig(
-                screenHeight = 1920,
-                screenWidth = 1080,
-                xdpi = 420,
-                ydpi = 420,
-                orientation = ScreenOrientation.PORTRAIT,
-                uiMode = Configuration.UI_MODE_NIGHT_NO,
-                locale = "en-rUS",
-                fontScale = 1f,
-                screenRound = ScreenRound.NOTROUND,
-                softButtons = true,
-                navigation = Navigation.NAV_BAR
-            )
+        val customConfig = DeviceConfig.PIXEL_5.copy(
+            // Параметры приведены как концептуальный пример,
+            // используйте фактические поля DeviceConfig из текущей версии Paparazzi
+            screenHeight = 1920,
+            screenWidth = 1080,
+            xdpi = 420f,
+            ydpi = 420f,
+            orientation = ScreenOrientation.PORTRAIT,
+            uiMode = Configuration.UI_MODE_NIGHT_NO,
+            fontScale = 1f
         )
 
-        paparazzi.snapshot("custom_device") {
+        paparazzi.unsafeUpdateConfig(deviceConfig = customConfig)
+
+        paparazzi.snapshot("userProfile_custom_device") {
             UserProfileScreen()
         }
     }
 }
 ```
 
-(В реальных проектах обычно используется один `@get:Rule` на класс или параметризованные тесты; отдельные инстансы `Paparazzi` в примерах нужны только для демонстрации разных конфигураций.)
+(В реальных проектах обычно используется один `@get:Rule` на класс и фиксированный или параметризуемый `DeviceConfig`. Конфигурации и поля выше показаны концептуально — следует сверяться с актуальным API Paparazzi.)
 
 ---
 
@@ -167,15 +164,20 @@ class ResponsiveScreenshotTest {
 ```kotlin
 class ThemeScreenshotTest {
 
+    @get:Rule
+    val paparazzi = Paparazzi(
+        deviceConfig = DeviceConfig.PIXEL_5
+    )
+
     @Test
     fun button_lightTheme() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5.copy(
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = paparazzi.deviceConfig.copy(
                 uiMode = Configuration.UI_MODE_NIGHT_NO
             )
         )
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("button_light") {
             MaterialTheme(
                 colorScheme = lightColorScheme()
             ) {
@@ -190,13 +192,13 @@ class ThemeScreenshotTest {
 
     @Test
     fun button_darkTheme() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5.copy(
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = paparazzi.deviceConfig.copy(
                 uiMode = Configuration.UI_MODE_NIGHT_YES
             )
         )
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("button_dark") {
             MaterialTheme(
                 colorScheme = darkColorScheme()
             ) {
@@ -211,11 +213,13 @@ class ThemeScreenshotTest {
 }
 ```
 
+(Названия полей `uiMode` и способы смены конфигурации зависят от версии Paparazzi; концепция остаётся той же.)
+
 ---
 
 ### Параметризованные screenshot-тесты
 
-Можно итерироваться по наборам устройств и тем, чтобы покрыть все комбинации размеров и тем.
+Можно итерироваться по наборам устройств и тем, чтобы покрыть все комбинации размеров и тем. Ниже пример, концептуально демонстрирующий идею (конкретные поля `DeviceConfig` следует брать из текущего API):
 
 ```kotlin
 class ParameterizedScreenshotTest {
@@ -238,7 +242,9 @@ class ParameterizedScreenshotTest {
                     deviceConfig = device.copy(uiMode = uiMode)
                 )
 
-                paparazzi.snapshot("${device.name}_${themeName}") {
+                val testName = "${device}_${themeName}" // концептуальное имя
+
+                paparazzi.snapshot(testName) {
                     UserProfileScreen()
                 }
             }
@@ -246,6 +252,8 @@ class ParameterizedScreenshotTest {
     }
 }
 ```
+
+(В реальных проектах лучше использовать JUnit параметризованные тесты и один `Paparazzi` rule, чем создавать инстансы внутри цикла.)
 
 ---
 
@@ -314,31 +322,39 @@ class StateScreenshotTest {
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.karumi.shot") version "6.1.0"
+    id("com.karumi.shot") version "6.1.0" // пример; используйте актуальную версию
 }
 ```
 
-Базовый пример (`Activity` / `View`):
+Для корректной работы Shot обычно используются:
+
+- плагин `com.karumi.shot` в Gradle;
+- базовый тестовый класс или JUnit Rule/extension, предоставляемый Shot, который инициализирует библиотеку.
+
+Базовый пример (`Activity` / `View`), схематично:
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
-class MainActivityScreenshotTest {
+class MainActivityScreenshotTest : ShotTest { // интерфейс/базовый класс зависит от версии Shot
+
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun mainActivity_screenshot() {
+        // Конкретный API (ShotTest, compareScreenshot и т.п.) зависит от версии Shot.
+        // Здесь показана концепция: передать activity/вью в compareScreenshot.
         compareScreenshot(activityRule.scenario)
     }
 }
 ```
 
-Для Jetpack Compose Shot предоставляет вспомогательные API, обычно через хостинг `Composable` внутри `Activity`/`Fragment` и вызов `compareScreenshot` для этого хоста (конкретные API зависят от версии Shot, см. документацию).
+Для Jetpack Compose Shot также предоставляет вспомогательные API для снятия скриншотов `Composable`-ов. Конкретные сигнатуры и базовые классы регулярно обновляются, поэтому всегда нужно сверяться с официальной документацией Shot.
 
 Запуск Shot:
 
 ```bash
-./gradlew executeScreenshotTests -Precord   # записать эталоны
+./gradlew executeScreenshotTests -Precord   # записать эталоны (baseline)
 ./gradlew executeScreenshotTests            # сравнить с эталонами
 ```
 
@@ -352,7 +368,7 @@ class MainActivityScreenshotTest {
 - Управляете ориентацией в тестах (тесты на базе `Activity`).
 - Запускаете `executeScreenshotTests` для каждой конфигурации при необходимости.
 
-Конкретная реализация зависит от ваших test rules и инфраструктуры; избегайте обращения к несуществующим API.
+Конкретная реализация зависит от используемой версии Shot, ваших test rules и инфраструктуры CI; не полагайтесь на несуществующие API.
 
 ---
 
@@ -372,6 +388,8 @@ class MainActivityScreenshotTest {
 ---
 
 ### Реалистичный пример полного набора тестов
+
+Ниже пример, иллюстрирующий стратегию покрытия разных конфигураций. Конфигурации и сигнатуры Paparazzi/DeviceConfig могут отличаться в зависимости от версии, поэтому рассматривайте это как шаблон.
 
 ```kotlin
 @RunWith(JUnit4::class)
@@ -420,7 +438,7 @@ class UserProfileScreenshotSuite {
                 )
             )
 
-            val testName = "${config.device.name}_${config.themeName}"
+            val testName = "${config.device}_${config.themeName}" // имя снапшота, построенное из конфигурации
 
             // Loading
             paparazzi.snapshot("${testName}_loading") {
@@ -482,7 +500,7 @@ fun animatedButton() {
     }
 }
 
-// Хороший пример: анимации отключены
+// Хороший пример: анимации отключены (концептуально)
 @Test
 fun animatedButton_static() {
     paparazzi.snapshot {
@@ -518,6 +536,8 @@ fun messageView_deterministic() {
     }
 }
 ```
+
+(В примерах с анимациями и временем используются условные API; важно донести идею стабилизации входных данных.)
 
 ---
 
@@ -569,28 +589,30 @@ Shot в CI потребует настроенного эмулятора или
 
 ## Answer (EN)
 
-**Screenshot testing** (visual regression testing) captures UI renders and compares them against baseline images to detect unintended visual changes. **Paparazzi** and **Shot** are popular libraries for Android.
+Screenshot testing (visual regression testing) captures UI renders and compares them against baseline images to detect unintended visual changes. Paparazzi and Shot are popular libraries for Android.
+
+(Versions used in snippets are examples; in real projects always use the latest versions from official docs.)
 
 ---
 
 ### Paparazzi
 
-**Paparazzi** renders Compose/`View`-based UIs on the JVM without requiring an emulator or device.
+Paparazzi renders Compose/`View`-based UIs on the JVM without requiring an emulator or device.
 
 ```gradle
 // build.gradle.kts (app module)
 plugins {
     id("com.android.library") // or com.android.application
     id("org.jetbrains.kotlin.android")
-    id("app.cash.paparazzi") version "1.3.1"
+    id("app.cash.paparazzi") version "1.3.1" // example; use the latest version
 }
 
 dependencies {
-    testImplementation("app.cash.paparazzi:paparazzi:1.3.1")
+    testImplementation("app.cash.paparazzi:paparazzi:1.3.1") // example; use the latest version
 }
 ```
 
-**Basic usage (Compose):**
+Basic usage (Compose):
 
 ```kotlin
 class ButtonScreenshotTest {
@@ -620,7 +642,7 @@ class ButtonScreenshotTest {
 }
 ```
 
-**Running tests:**
+Running tests:
 
 ```bash
 # Record baseline screenshots
@@ -640,56 +662,49 @@ Use `deviceConfig` to test multiple screen sizes and characteristics.
 class ResponsiveScreenshotTest {
 
     @get:Rule
-    val defaultPaparazzi = Paparazzi()
+    val paparazzi = Paparazzi()
 
     @Test
     fun userProfile_phone() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5
-        )
+        paparazzi.unsafeUpdateConfig(deviceConfig = DeviceConfig.PIXEL_5)
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("userProfile_phone") {
             UserProfileScreen()
         }
     }
 
     @Test
     fun userProfile_tablet() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_C
-        )
+        paparazzi.unsafeUpdateConfig(deviceConfig = DeviceConfig.PIXEL_C)
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("userProfile_tablet") {
             UserProfileScreen()
         }
     }
 
     @Test
     fun userProfile_customSize() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig(
-                screenHeight = 1920,
-                screenWidth = 1080,
-                xdpi = 420,
-                ydpi = 420,
-                orientation = ScreenOrientation.PORTRAIT,
-                uiMode = Configuration.UI_MODE_NIGHT_NO,
-                locale = "en-rUS",
-                fontScale = 1f,
-                screenRound = ScreenRound.NOTROUND,
-                softButtons = true,
-                navigation = Navigation.NAV_BAR
-            )
+        val customConfig = DeviceConfig.PIXEL_5.copy(
+            // These fields are illustrative; use the actual fields from your Paparazzi version
+            screenHeight = 1920,
+            screenWidth = 1080,
+            xdpi = 420f,
+            ydpi = 420f,
+            orientation = ScreenOrientation.PORTRAIT,
+            uiMode = Configuration.UI_MODE_NIGHT_NO,
+            fontScale = 1f
         )
 
-        paparazzi.snapshot("custom_device") {
+        paparazzi.unsafeUpdateConfig(deviceConfig = customConfig)
+
+        paparazzi.snapshot("userProfile_custom_device") {
             UserProfileScreen()
         }
     }
 }
 ```
 
-(For production code, prefer a single `@get:Rule` per class or parameterized tests; instantiating `Paparazzi` inside each test is shown here only to illustrate different configs.)
+(In production, prefer a single `@get:Rule` per class and parameterized tests or predefined `DeviceConfig`s. The configs and fields above are conceptual—always check the current Paparazzi API.)
 
 ---
 
@@ -700,15 +715,20 @@ Use `uiMode` and theme composition to validate light/dark themes.
 ```kotlin
 class ThemeScreenshotTest {
 
+    @get:Rule
+    val paparazzi = Paparazzi(
+        deviceConfig = DeviceConfig.PIXEL_5
+    )
+
     @Test
     fun button_lightTheme() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5.copy(
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = paparazzi.deviceConfig.copy(
                 uiMode = Configuration.UI_MODE_NIGHT_NO
             )
         )
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("button_light") {
             MaterialTheme(
                 colorScheme = lightColorScheme()
             ) {
@@ -723,13 +743,13 @@ class ThemeScreenshotTest {
 
     @Test
     fun button_darkTheme() {
-        val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5.copy(
+        paparazzi.unsafeUpdateConfig(
+            deviceConfig = paparazzi.deviceConfig.copy(
                 uiMode = Configuration.UI_MODE_NIGHT_YES
             )
         )
 
-        paparazzi.snapshot {
+        paparazzi.snapshot("button_dark") {
             MaterialTheme(
                 colorScheme = darkColorScheme()
             ) {
@@ -744,11 +764,13 @@ class ThemeScreenshotTest {
 }
 ```
 
+(The exact way to update `uiMode` depends on the Paparazzi version; conceptually, you parameterize device configuration.)
+
 ---
 
 ### Parameterized Screenshot Tests
 
-Iterate over devices and themes to ensure coverage of screen sizes and themes.
+Iterate over devices and themes to ensure coverage of screen sizes and themes. The snippet below is conceptual; adjust to your Paparazzi API and testing style.
 
 ```kotlin
 class ParameterizedScreenshotTest {
@@ -771,7 +793,9 @@ class ParameterizedScreenshotTest {
                     deviceConfig = device.copy(uiMode = uiMode)
                 )
 
-                paparazzi.snapshot("${device.name}_${themeName}") {
+                val testName = "${device}_${themeName}"
+
+                paparazzi.snapshot(testName) {
                     UserProfileScreen()
                 }
             }
@@ -779,6 +803,8 @@ class ParameterizedScreenshotTest {
     }
 }
 ```
+
+(For real-world use prefer JUnit parameterized tests and a single rule.)
 
 ---
 
@@ -838,35 +864,42 @@ class StateScreenshotTest {
 
 ### Shot Library
 
-**Shot** uses instrumented tests (running on an emulator or device) for screenshot comparison.
+Shot uses instrumented tests (running on an emulator or device) for screenshot comparison.
 
 ```gradle
 // build.gradle.kts (app module)
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.karumi.shot") version "6.1.0"
+    id("com.karumi.shot") version "6.1.0" // example; use the latest version
 }
 ```
 
-**Basic usage (`Activity` / `View`):**
+For correct integration, Shot typically relies on:
+
+- the `com.karumi.shot` Gradle plugin;
+- a base test class or JUnit Rule/extension provided by Shot to initialize the library.
+
+Basic usage (`Activity` / `View`), schematically:
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
-class MainActivityScreenshotTest {
+class MainActivityScreenshotTest : ShotTest { // actual base type depends on Shot version
+
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun mainActivity_screenshot() {
+        // The exact compareScreenshot overload depends on the Shot version.
         compareScreenshot(activityRule.scenario)
     }
 }
 ```
 
-For Jetpack Compose, Shot provides helpers to capture Composables. A typical pattern is to host the Composable in an `Activity`/`Fragment` and use `compareScreenshot` on that host, or the dedicated Shot Compose APIs. The exact call signature may vary by Shot version, so always check the Shot documentation.
+For Jetpack Compose, Shot exposes helpers to capture Composables (for example by hosting the Composable in an Activity/Fragment and invoking `compareScreenshot`). Always refer to the Shot documentation for the current, correct APIs.
 
-**Running Shot:**
+Running Shot:
 
 ```bash
 # Record baseline
@@ -880,13 +913,13 @@ For Jetpack Compose, Shot provides helpers to capture Composables. A typical pat
 
 ### Shot with Multiple Configurations (Conceptual)
 
-You can run Shot tests on different emulators / devices (e.g., phone vs tablet, different orientations) by configuring your instrumented test environment:
+You can run Shot tests on different emulators/devices (phone vs tablet, different orientations) by configuring your instrumented test environment:
 
-- Start emulator with required resolution / density.
-- Set orientation in the test (for `Activity`-based tests).
-- Run `executeScreenshotTests` per configuration if needed.
+- Start emulator with desired resolution/density.
+- Control orientation in your tests (for Activity-based tests).
+- Run `executeScreenshotTests` for each configuration as needed.
 
-(Concrete API usage depends on your test rule / host setup; avoid relying on non-existent properties.)
+Concrete API usage depends on your Shot version, test rules, and CI setup; avoid relying on undocumented APIs.
 
 ---
 
@@ -906,6 +939,8 @@ You can run Shot tests on different emulators / devices (e.g., phone vs tablet, 
 ---
 
 ### Real-World Example: Complete Test Suite
+
+The following example illustrates a coverage strategy; adjust the types and configuration to your Paparazzi version.
 
 ```kotlin
 @RunWith(JUnit4::class)
@@ -954,7 +989,7 @@ class UserProfileScreenshotSuite {
                 )
             )
 
-            val testName = "${config.device.name}_${config.themeName}"
+            val testName = "${config.device}_${config.themeName}"
 
             // Loading state
             paparazzi.snapshot("${testName}_loading") {
@@ -1005,7 +1040,7 @@ class UserProfileScreenshotSuite {
 
 - Disable or control animations.
 - Fix timestamps and random data.
-- Use stable test data.
+- Use stable, deterministic test data.
 
 ```kotlin
 // BAD: Animations cause different screenshots
@@ -1016,7 +1051,7 @@ fun animatedButton() {
     }
 }
 
-// GOOD: Disable or control animations explicitly
+// GOOD: Disable or control animations explicitly (conceptual)
 @Test
 fun animatedButton_static() {
     paparazzi.snapshot {
@@ -1053,11 +1088,13 @@ fun messageView_deterministic() {
 }
 ```
 
+(The above uses hypothetical APIs for controlling animations; the key idea is to make screenshots reproducible.)
+
 ---
 
 ### CI Integration
 
-**GitHub Actions with Paparazzi:**
+GitHub Actions with Paparazzi:
 
 ```yaml
 name: Screenshot Tests
@@ -1086,6 +1123,8 @@ jobs:
           name: paparazzi-failures
           path: app/build/paparazzi/failures
 ```
+
+Shot in CI requires a configured emulator or device and running `executeScreenshotTests` in the appropriate job.
 
 ---
 
@@ -1127,7 +1166,7 @@ jobs:
 
 ### Предпосылки / Концепции
 
-- [[c-testing]]
+- [[c-android-testing]]
 
 ### Связанные (Medium)
 
@@ -1138,16 +1177,9 @@ jobs:
 
 ### Prerequisites / Concepts
 
-- [[c-testing]]
+- [[c-android-testing]]
 
 ### Related (Medium)
 
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing
 - [[q-testing-compose-ui--android--medium]] - Testing
-- [[q-compose-testing--android--medium]] - Testing
-- [[q-robolectric-vs-instrumented--android--medium]] - Testing
-- [[q-fakes-vs-mocks-testing--android--medium]] - Testing
-
-### Advanced (Harder)
-
-- [[q-testing-coroutines-flow--android--hard]] - Testing

@@ -22,7 +22,7 @@ related:
 - c-perfetto
 - c-performance
 created: 2025-10-11
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/performance-rendering
 - android/monitoring-slo
@@ -37,8 +37,6 @@ tags:
 
 # Question (EN)
 > Implement frame metrics monitoring to detect and fix jank. Use FrameMetricsAggregator, OnFrameMetricsAvailableListener, and Perfetto/System Trace tools to identify rendering issues.
-
----
 
 ## Ответ (RU)
 
@@ -62,7 +60,7 @@ Jank (рывки) возникает, когда приложение не ус�
 
 ### Реализация FrameMetricsAggregator
 
-Примечание: `FrameMetricsAggregator` агрегирует длительности по миллисекундным "бакетам". Порог >16 мс актуален для 60 Гц; для дисплеев с 90/120 Гц порог должен быть ниже.
+Примечание: `FrameMetricsAggregator` агрегирует длительности по миллисекундным "бакетам". Порог >16 мс актуален для 60 Гц; для дисплеев с 90/120 Гц порог должен быть ниже. Доступен начиная с API 24.
 
 app/build.gradle.kts:
 ```kotlin
@@ -82,21 +80,22 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Запуск сбора метрик кадров
+        // Запуск сбора метрик кадров для этого Activity
         frameMetricsAggregator = FrameMetricsAggregator()
         frameMetricsAggregator?.add(this)
     }
 
     override fun onResume() {
         super.onResume()
-        // Сброс статистики при возврате экрана
+        // Опционально: сброс статистики при возврате экрана,
+        // агрегатор остаётся добавленным, повторно add() не требуется
         frameMetricsAggregator?.reset()
     }
 
     override fun onPause() {
         super.onPause()
 
-        // Анализ метрик для текущего экрана
+        // Анализ метрик для текущего экрана перед тем, как он станет невидимым
         frameMetricsAggregator?.let { aggregator ->
             val metricsArrays = aggregator.metrics
             val totalMetrics = metricsArrays?.get(FrameMetricsAggregator.TOTAL_INDEX)
@@ -109,6 +108,7 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // Останавливаем сбор, чтобы избежать утечек Activity
         frameMetricsAggregator?.stop()
         frameMetricsAggregator = null
     }
@@ -144,8 +144,8 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
             "FrameMetrics",
             """
             Всего кадров: $totalFrames
-            Медленных кадров: $slowFrames (${"%.2f".format(slowFramePercentage)}%)
-            Замороженных кадров: $frozenFrames (${"%.2f".format(frozenFramePercentage)}%)
+            Медленных кадров: $slowFrames (${ "%.2f".format(slowFramePercentage)}%)
+            Замороженных кадров: $frozenFrames (${ "%.2f".format(frozenFramePercentage)}%)
             """.trimIndent()
         )
 
@@ -174,6 +174,7 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
 class RealTimeFrameMonitor : AppCompatActivity() {
 
     private val frameMetricsListener = Window.OnFrameMetricsAvailableListener { _, frameMetrics, _ ->
+        // FrameMetrics в колбэке уже содержит снимок для этого кадра
         val metrics = FrameMetrics(frameMetrics)
 
         val totalDurationNs = metrics.getMetric(FrameMetrics.TOTAL_DURATION)
@@ -295,6 +296,7 @@ class ModernJankMonitor : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // Отключаем сбор при уничтожении Activity, чтобы не собирать лишние метрики
         jankStats.isTrackingEnabled = false
     }
 }
@@ -469,7 +471,7 @@ button.setOnClickListener {
 
 ### Анализ с помощью Systrace / Perfetto
 
-Рекомендуется использовать System Trace / Perfetto (в Android Studio) или `perfetto` CLI вместо устаревшего `systrace.py`. Если используется Systrace, общая логика работы аналогична.
+Используйте System Trace / Perfetto (в Android Studio) или `perfetto` CLI вместо устаревшего `systrace.py`. Если используется Systrace, общая логика работы аналогична.
 
 Пример захвата (устаревший Systrace):
 
@@ -626,8 +628,6 @@ class FrameMetricsMonitor {
 8. Блокировка анимаций неаппаратно-ускоренными свойствами.
 9. Тестирование только на флагманских устройствах.
 
----
-
 ## Answer (EN)
 
 ### Overview
@@ -644,13 +644,13 @@ Common causes of jank:
 2. Layout complexity (deep hierarchies, heavy measure/layout)
 3. Expensive `onDraw()` operations
 4. Main thread blocking (I/O, heavy computation)
-5. Inefficient `RecyclerView` binding and diffing
+5. Inefficient `RecyclerView` binding
 6. Large `Bitmap` loading / decoding on UI thread
 7. GC pauses and memory churn
 
 ### FrameMetricsAggregator Implementation
 
-Note: `FrameMetricsAggregator` buckets durations in milliseconds. Thresholds below assume a 60Hz budget; for higher refresh rates, adjust accordingly.
+Note: `FrameMetricsAggregator` buckets durations in milliseconds. Thresholds below assume a 60Hz budget; for higher refresh rates, adjust accordingly. Available on API 24+.
 
 app/build.gradle.kts:
 ```kotlin
@@ -670,14 +670,15 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Start frame metrics collection
+        // Start frame metrics collection for this Activity
         frameMetricsAggregator = FrameMetricsAggregator()
         frameMetricsAggregator?.add(this)
     }
 
     override fun onResume() {
         super.onResume()
-        // Reset stats when screen becomes visible
+        // Optional: reset stats when screen becomes visible again.
+        // Aggregator remains added; no need to call add() again.
         frameMetricsAggregator?.reset()
     }
 
@@ -697,6 +698,7 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // Stop collecting to avoid leaking Activity
         frameMetricsAggregator?.stop()
         frameMetricsAggregator = null
     }
@@ -732,8 +734,8 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
             "FrameMetrics",
             """
             Total Frames: $totalFrames
-            Slow Frames: $slowFrames (${"%.2f".format(slowFramePercentage)}%)
-            Frozen Frames: $frozenFrames (${"%.2f".format(frozenFramePercentage)}%)
+            Slow Frames: $slowFrames (${ "%.2f".format(slowFramePercentage)}%)
+            Frozen Frames: $frozenFrames (${ "%.2f".format(frozenFramePercentage)}%)
             """.trimIndent()
         )
 
@@ -762,7 +764,7 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
 class RealTimeFrameMonitor : AppCompatActivity() {
 
     private val frameMetricsListener = Window.OnFrameMetricsAvailableListener { _, frameMetrics, _ ->
-        // Copy metrics (must be done inside callback)
+        // FrameMetrics provided here is the snapshot for this frame
         val metrics = FrameMetrics(frameMetrics)
 
         // Analyze individual frame
@@ -885,6 +887,7 @@ class ModernJankMonitor : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // Disable tracking when Activity is destroyed
         jankStats.isTrackingEnabled = false
     }
 }
@@ -1075,10 +1078,10 @@ chrome trace.html
 
 What to look for:
 1. Missed frame deadlines (red/yellow frames)
-2. `Long` `measure/layout` (> ~8 ms) → complex hierarchy
+2. Long `measure/layout` (> ~8 ms) → complex hierarchy
 3. Expensive `draw` (> ~8 ms) → heavy custom rendering/overdraw
 4. GC pauses during rendering
-5. `Long`-running work on main thread
+5. Long-running work on main thread
 
 Example snippet:
 
@@ -1216,22 +1219,6 @@ class FrameMetricsMonitor {
 8. Blocking animations with non-accelerated properties.
 9. Testing only on flagship devices.
 
----
-
-## Ссылки (RU)
-
-- https://developer.android.com/jetpack/androidx/releases/metrics
-- https://developer.android.com/reference/android/view/FrameMetrics
-- https://developer.android.com/topic/performance/vitals/render
-- https://developer.android.com/topic/performance/tracing
-
-## References
-
-- https://developer.android.com/jetpack/androidx/releases/metrics
-- https://developer.android.com/reference/android/view/FrameMetrics
-- https://developer.android.com/topic/performance/vitals/render
-- https://developer.android.com/topic/performance/tracing
-
 ## Дополнительные вопросы (RU)
 
 1. Как интегрировать Perfetto/System Trace в CI-пайплайн для регулярного анализа jank?
@@ -1247,6 +1234,39 @@ class FrameMetricsMonitor {
 3. How can Firebase Performance or similar tools be used to track slow/frozen frames in production?
 4. What techniques help reduce GC-induced jank during animations and intensive scrolling?
 5. How should detection thresholds be tuned for devices with different refresh rates (60/90/120Hz)?
+
+## Ссылки (RU)
+
+- https://developer.android.com/jetpack/androidx/releases/metrics
+- https://developer.android.com/reference/android/view/FrameMetrics
+- https://developer.android.com/topic/performance/vitals/render
+- https://developer.android.com/topic/performance/tracing
+
+## References
+
+- https://developer.android.com/jetpack/androidx/releases/metrics
+- https://developer.android.com/reference/android/view/FrameMetrics
+- https://developer.android.com/topic/performance/vitals/render
+- https://developer.android.com/topic/performance/tracing
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-perfetto]]
+- [[c-performance]]
+
+### Предпосылки (проще)
+
+- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView
+
+### Связанные (средний уровень)
+
+- [[q-memory-leak-detection--android--medium]] - Performance
+
+### Продвинутые (сложнее)
+
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 
 ## Related Questions
 

@@ -6,9 +6,7 @@ aliases: ["Channel Buffering Strategies", "Стратегии буферизац
 # Classification
 topic: kotlin
 subtopics:
-  - channels
   - coroutines
-  - buffering
 question_kind: theory
 difficulty: hard
 
@@ -25,21 +23,21 @@ related: [c-kotlin, c-coroutines, q-flow-backpressure--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
 
 tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, performance, rendezvous, unlimited]
 ---
 # Вопрос (RU)
 > Что такое стратегии буферизации каналов в Kotlin? Объясните каналы RENDEZVOUS, BUFFERED, UNLIMITED и CONFLATED и когда использовать каждый.
 
----
-
 # Question (EN)
 > What are channel buffering strategies in Kotlin? Explain RENDEZVOUS, BUFFERED, UNLIMITED, and CONFLATED channels and when to use each.
 
 ## Ответ (RU)
 
-Стратегии буферизации каналов определяют, как каналы управляют потоком данных между производителями и потребителями. Kotlin предоставляет четыре основные стратегии с разными компромиссами производительности и памяти.
+Стратегии буферизации каналов определяют, как каналы управляют потоком данных между производителями и потребителями. Kotlin (`kotlinx.coroutines.channels.Channel`) предоставляет четыре основные стратегии емкости с разными компромиссами производительности и памяти.
+
+См. также: [[c-kotlin]], [[c-coroutines]]
 
 ### Типы ёмкости канала
 
@@ -47,10 +45,10 @@ tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, perf
 // Rendezvous (0 buffer)
 val channel1 = Channel<Int>(Channel.RENDEZVOUS)
 val channel2 = Channel<Int>(0)
-val channel3 = Channel<Int>() // Default is BUFFERED with default capacity
+val channel3 = Channel<Int>() // В актуальных версиях kotlinx.coroutines по умолчанию BUFFERED с capacity = defaultBuffer
 
 // Buffered (specific size)
-val channel4 = Channel<Int>(Channel.BUFFERED) // Default capacity (e.g. 64, configurable)
+val channel4 = Channel<Int>(Channel.BUFFERED) // Default capacity (обычно 64, задаётся системным свойством)
 val channel5 = Channel<Int>(10) // Custom fixed size
 
 // Unlimited
@@ -73,7 +71,7 @@ suspend fun rendezvousExample() = coroutineScope {
 
     launch {
         println("Sending 1...")
-        channel.send(1) // Приостанавливается, пока не готов получатель
+        channel.send(1) // Приостанавливается, пока не будет готов получатель
         println("Sent 1")
 
         println("Sending 2...")
@@ -96,11 +94,11 @@ suspend fun rendezvousExample() = coroutineScope {
 
 **Характеристики:**
 - Нулевая ёмкость буфера
-- `send` приостанавливается до `receive`
-- Гарантирует точную синхронизацию
-- Нет потери данных
+- `send` приостанавливается, пока не появится получатель
+- Гарантирует строгую синхронизацию точка-в-точку
+- Нет потери данных самим каналом
 - Малое использование памяти
-- Может приводить к взаимоблокировкам, если нет доступного получателя
+- Может приводить к зависаниям/взаимоблокировкам, если нет доступного получателя
 
 ### BUFFERED (Фиксированный размер)
 
@@ -138,7 +136,7 @@ suspend fun bufferedExample() = coroutineScope {
 
 ```kotlin
 // Системное свойство: kotlinx.coroutines.channels.defaultBuffer
-// Реализация по умолчанию обычно 64, если не переопределено.
+// Типичное значение по умолчанию — 64, если не переопределено.
 
 val channel = Channel<Int>(Channel.BUFFERED)
 // Эквивалентно Channel<Int>(<defaultBuffer>)
@@ -173,7 +171,7 @@ suspend fun unlimitedExample() = coroutineScope {
 - Логически неограниченная ёмкость буфера (ограничена только доступной памятью)
 - `send` не приостанавливается из-за размера; нет встроенного `backpressure`
 - Высокий риск OutOfMemoryError и нагрузки на GC при медленном потребителе
-- Использовать крайне осторожно и обычно только там, где допустимы потери/внешние лимиты
+- Использовать крайне осторожно; если допустим дроп, он должен быть реализован внешней логикой или параметром `onBufferOverflow`
 
 **Опасный пример:**
 
@@ -255,7 +253,7 @@ suspend fun conflatedExample() = coroutineScope {
         }
     }
 }
-// На практике наблюдается только последнее доступное значение(я);
+// На практике наблюдаются только последние доступные значения;
 // многие промежуточные значения будут отброшены.
 ```
 
@@ -324,10 +322,10 @@ suspend fun testChannel(capacity: Int, count: Int) = coroutineScope {
 
 | Стратегия | Память | Скорость | Потеря данных | Случай использования |
 |-----------|--------|----------|---------------|----------------------|
-| RENDEZVOUS | Минимальная | Ниже (жёсткая синхронизация) | Никогда | Запрос-ответ, строгий порядок |
-| BUFFERED | Предсказуемая | Выше (декуплинг) | Никогда | Очереди задач, пакетная обработка |
-| UNLIMITED | Риск OOM | Высокая скорость отправки, но возможна деградация | Никогда (только рост задержки) | Логирование/метрики с внешними ограничителями или допустимым дропом |
-| CONFLATED | Постоянная | Высокая (за счёт дропа промежуточных) | Да | Обновления UI, данные сенсоров, "важно только последнее" |
+| RENDEZVOUS | Минимальная | Ниже (жёсткая синхронизация) | Никогда (нет дропа самим каналом) | Запрос-ответ, строгий порядок |
+| BUFFERED | Предсказуемая | Выше (декуплинг) | Никогда (нет дропа самим каналом при SUSPEND) | Очереди задач, пакетная обработка |
+| UNLIMITED | Риск OOM | Высокая скорость отправки, но возможна деградация | Никогда (канал не дропает, растёт задержка/память) | Логирование/метрики с внешними ограничителями |
+| CONFLATED | Постоянная | Высокая (за счёт дропа промежуточных) | Да (отбрасывает промежуточные) | Обновления UI, данные сенсоров, "важно только последнее" |
 
 ### Стратегии при переполнении буфера
 
@@ -374,6 +372,7 @@ class EventBus {
         criticalEvents.send(event)
     }
 
+    // Важно: возвращаем только ReceiveChannel, чтобы не давать внешнему коду возможность отправлять/закрывать
     fun subscribeToUserEvents(): ReceiveChannel<UserEvent> = userEvents
     fun subscribeToSystemEvents(): ReceiveChannel<SystemEvent> = systemEvents
     fun subscribeToCriticalEvents(): ReceiveChannel<CriticalEvent> = criticalEvents
@@ -439,7 +438,9 @@ val hugeBuffer = Channel<Int>(capacity = 1_000_000) // может тратить
 
 ## Answer (EN)
 
-Channel buffering strategies determine how channels handle the flow of data between producers and consumers. Kotlin provides four main strategies with different performance and memory trade-offs.
+Channel buffering strategies determine how channels handle the flow of data between producers and consumers. Kotlin (`kotlinx.coroutines.channels.Channel`) provides four main capacity strategies with different performance and memory trade-offs.
+
+See also: [[c-kotlin]], [[c-coroutines]]
 
 ### Channel Capacity Types
 
@@ -447,10 +448,10 @@ Channel buffering strategies determine how channels handle the flow of data betw
 // Rendezvous (0 buffer)
 val channel1 = Channel<Int>(Channel.RENDEZVOUS)
 val channel2 = Channel<Int>(0)
-val channel3 = Channel<Int>() // Default is BUFFERED with default capacity
+val channel3 = Channel<Int>() // In recent kotlinx.coroutines versions default is BUFFERED with capacity = defaultBuffer
 
 // Buffered (specific size)
-val channel4 = Channel<Int>(Channel.BUFFERED) // Default capacity (e.g. 64, configurable)
+val channel4 = Channel<Int>(Channel.BUFFERED) // Default capacity (typically 64, via system property)
 val channel5 = Channel<Int>(10) // Custom fixed size
 
 // Unlimited
@@ -462,7 +463,7 @@ val channel7 = Channel<Int>(Channel.CONFLATED)
 
 ### RENDEZVOUS (Capacity = 0)
 
-**Rendezvous** channels have no buffer — send and receive must meet:
+Rendezvous channels have no buffer — send and receive must meet:
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -473,7 +474,7 @@ suspend fun rendezvousExample() = coroutineScope {
 
     launch {
         println("Sending 1...")
-        channel.send(1) // Suspends until receiver ready
+        channel.send(1) // Suspends until a receiver is ready
         println("Sent 1")
 
         println("Sending 2...")
@@ -496,15 +497,15 @@ suspend fun rendezvousExample() = coroutineScope {
 
 **Characteristics:**
 - Zero buffer capacity
-- send suspends until a receiver is ready
-- Provides precise synchronization
-- No data loss
-- Lower memory usage
-- Can cause deadlocks if no receiver is available
+- `send` suspends until a receiver is available
+- Provides strict point-to-point synchronization
+- No data loss by the channel itself
+- Low memory usage
+- Can cause hangs/deadlocks if no receiver is available
 
 ### BUFFERED (Fixed Size)
 
-**Buffered** channels have a fixed buffer size:
+Buffered channels have a fixed buffer size:
 
 ```kotlin
 suspend fun bufferedExample() = coroutineScope {
@@ -519,7 +520,7 @@ suspend fun bufferedExample() = coroutineScope {
         channel.close()
     }
 
-    delay(1000) // Let sender fill buffer
+    delay(1000) // Let sender fill the buffer
     launch {
         for (value in channel) {
             println("Received: $value")
@@ -531,8 +532,8 @@ suspend fun bufferedExample() = coroutineScope {
 
 **Characteristics:**
 - Fixed buffer size
-- send suspends when the buffer is full (backpressure)
-- Allows burst handling
+- `send` suspends when the buffer is full (`backpressure`)
+- Handles bursts
 - Predictable memory usage
 - Decouples producer/consumer speeds
 
@@ -540,7 +541,7 @@ suspend fun bufferedExample() = coroutineScope {
 
 ```kotlin
 // System property: kotlinx.coroutines.channels.defaultBuffer
-// Implementation default is typically 64 unless overridden.
+// Typical default is 64 unless overridden.
 
 val channel = Channel<Int>(Channel.BUFFERED)
 // Equivalent to Channel<Int>(<defaultBuffer>)
@@ -548,7 +549,7 @@ val channel = Channel<Int>(Channel.BUFFERED)
 
 ### UNLIMITED (Infinite Buffer)
 
-**Unlimited** channels never suspend due to buffer capacity:
+Unlimited channels never suspend due to buffer capacity:
 
 ```kotlin
 suspend fun unlimitedExample() = coroutineScope {
@@ -575,9 +576,9 @@ suspend fun unlimitedExample() = coroutineScope {
 
 **Characteristics:**
 - Logically unbounded buffer (limited only by available memory)
-- send does not suspend due to size; there is no built-in backpressure
+- `send` does not suspend due to size; no built-in backpressure
 - High risk of OutOfMemoryError and GC pressure with slow consumers
-- Use extremely carefully and usually only for cases like logging/telemetry where drops or external limits are acceptable
+- Use extremely carefully; if drops are acceptable, they should be implemented externally (e.g., `onBufferOverflow`) rather than relying on UNLIMITED itself
 
 **Danger example:**
 
@@ -639,7 +640,7 @@ class RateLimitedChannel<T>(
 
 ### CONFLATED (Size 1, Drop Old)
 
-**Conflated** channels keep only the latest value:
+Conflated channels keep only the latest value:
 
 ```kotlin
 suspend fun conflatedExample() = coroutineScope {
@@ -661,13 +662,14 @@ suspend fun conflatedExample() = coroutineScope {
         }
     }
 }
-// In practice, only the latest available value(s) are observed; many intermediate values are dropped.
+// In practice, only the latest available values are observed;
+// many intermediate values are dropped.
 ```
 
 **Characteristics:**
 - Effective buffer size of 1
 - Overwrites the previous value with the new one; intermediate values are lost
-- send does not suspend due to buffer being full
+- `send` does not suspend due to the buffer being full
 - Only the latest value matters
 - Constant memory usage
 
@@ -723,16 +725,16 @@ suspend fun testChannel(capacity: Int, count: Int) = coroutineScope {
 }
 ```
 
-(Note: actual timings depend on environment; UNLIMITED and CONFLATED are fast primarily because they avoid suspensions/deliver fewer elements, but may increase memory/GC costs.)
+(Note: actual timings depend on environment; UNLIMITED and CONFLATED are often faster because they avoid suspensions/deliver fewer elements, but may increase memory/GC costs.)
 
 ### Choosing Buffer Strategy
 
 | Strategy | Memory | Speed | Data Loss | Use Case |
 |----------|--------|-------|-----------|----------|
-| RENDEZVOUS | Minimal | Lower (strict sync) | Never | Request-response, strict ordering |
-| BUFFERED | Predictable | Higher (decoupled) | Never | Task queues, batch processing |
-| UNLIMITED | Risk OOM | High send rate, but can hurt overall perf | Never (only delay) | Logging/metrics with external safeguards |
-| CONFLATED | Constant | High (drops intermediates) | Yes | UI updates, sensor data, "latest only" semantics |
+| RENDEZVOUS | Minimal | Lower (strict sync) | Never (no drop by channel) | Request-response, strict ordering |
+| BUFFERED | Predictable | Higher (decoupled) | Never (with SUSPEND overflow) | Task queues, batch processing |
+| UNLIMITED | Risk OOM | High send rate, but can hurt overall perf | Never (channel doesn't drop; latency/memory grows) | Logging/metrics with external safeguards |
+| CONFLATED | Constant | High (drops intermediates) | Yes | UI updates, sensor data, "latest only" |
 
 ### Buffer Overflow Strategies
 
@@ -779,6 +781,7 @@ class EventBus {
         criticalEvents.send(event)
     }
 
+    // Important: expose only ReceiveChannel to prevent external send/close
     fun subscribeToUserEvents(): ReceiveChannel<UserEvent> = userEvents
     fun subscribeToSystemEvents(): ReceiveChannel<SystemEvent> = systemEvents
     fun subscribeToCriticalEvents(): ReceiveChannel<CriticalEvent> = criticalEvents
@@ -799,7 +802,7 @@ val syncChannel = Channel<Int>(Channel.RENDEZVOUS)
 // Use CONFLATED when only the latest state matters (e.g., UI)
 val uiChannel = Channel<State>(Channel.CONFLATED)
 
-// Observe emptiness/closedness when debugging channel state
+// Inspect channel state when debugging
 println("Empty: ${channel.isEmpty}, closedForSend: ${channel.isClosedForSend}")
 
 // Close channels when you are done producing
@@ -842,24 +845,45 @@ val hugeBuffer = Channel<Int>(capacity = 1_000_000) // May waste memory
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этих стратегий от примитивов конкурентности в Java?
+- Когда вы бы использовали каждую стратегию на практике для реальных нагрузок?
+- Каковы типичные ошибки (deadlock, утечки, неограниченный рост буфера), которых следует избегать?
+
 ## Follow-ups
 
 - What are the key differences between this and Java concurrency primitives?
 - When would you use each strategy in practice for real workloads?
 - What are common pitfalls (deadlocks, leaks, unbounded growth) to avoid?
 
-## References
+## Ссылки (RU)
 
 - [Kotlin Channels](https://kotlinlang.org/docs/channels.html)
 - [Channel Capacity](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
 - [Buffering Strategies](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-buffer-overflow/)
 
+## References
+
+- [Kotlin Channels](https://kotlinlang.org/docs/channels.html)
+- [Channel Capacity](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
+- [Buffering Strategies](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines.channels/-buffer-overflow/)
+
+## Связанные вопросы (RU)
+
+- [[q-flow-backpressure--kotlin--hard]]
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+
 ## Related Questions
 
 - [[q-flow-backpressure--kotlin--hard]]
 - [[q-actor-pattern--kotlin--hard]]
-- [[q-fan-in-fan-out--kotlin--hard]]
 - [[q-advanced-coroutine-patterns--kotlin--hard]]
+
+## MOC-ссылки (RU)
+
+- [[moc-kotlin]]
 
 ## MOC Links
 

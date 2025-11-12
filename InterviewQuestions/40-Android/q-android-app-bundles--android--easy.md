@@ -40,6 +40,8 @@ tags: [android/app-bundle, difficulty/easy]
 
 **Android App `Bundle` (AAB)** — это формат публикации для Google Play, который заменяет загрузку одного универсального APK. Пользователь по-прежнему получает APK, но Google Play генерирует оптимизированные APK под конкретную конфигурацию устройства, что обычно уменьшает размер загрузки примерно на 15–35%.
 
+С 2021 года новые приложения, публикуемые в Google Play, должны использовать формат AAB (за редкими исключениями, например, для некоторых устройств/каналов распространения).
+
 **Архитектура AAB:**
 
 AAB содержит:
@@ -60,8 +62,8 @@ Google Play генерирует Split APK по измерениям:
 android {
     bundle {
         // Языковые сплиты по умолчанию включены для app bundle.
-        // Используйте enableSplit = false, если нужно их отключить.
-        language { enableSplit = false }
+        // Установите enableSplit = false, если хотите их отключить.
+        language { enableSplit = true }
         density { enableSplit = true }
         abi { enableSplit = true }
     }
@@ -97,18 +99,20 @@ AAB подписывается локально upload-ключом разраб
 
 **Android App `Bundle` (AAB)** is a publishing format for Google Play that replaces a single universal APK upload. Users still receive APKs generated from the bundle: Google Play builds optimized APKs for each device configuration, typically reducing download size by about 15-35%.
 
+Since 2021, new apps published on Google Play are required to use the AAB format (with limited exceptions, e.g., for specific device types/distribution channels).
+
 **AAB Architecture:**
 
 AAB contains:
-- **Base module**  core app code
-- **Feature modules**  optional modules with dynamic delivery
-- **Asset packs**  large resources (games, ML models)
+- **Base module** — core app code
+- **Feature modules** — optional modules with dynamic delivery
+- **Asset packs** — large resources (e.g., games, ML models)
 - Metadata for generating split APKs
 
 Google Play generates Split APKs by dimensions:
-- **Language resources**  only the locales needed for the user
-- **Screen density**  drawables for the specific dpi
-- **ABI**  native libraries for the device CPU architecture (e.g., arm64-v8a, x86)
+- **Language resources** — only the locales needed for the user
+- **Screen density** — only drawables for the specific dpi
+- **ABI** — only the native libraries needed for the device CPU architecture (e.g., arm64-v8a, x86)
 
 **Benefits:**
 
@@ -117,8 +121,8 @@ Google Play generates Split APKs by dimensions:
 android {
     bundle {
         // Language splits are enabled by default for app bundles.
-        // Use enableSplit = false when you explicitly want to disable them.
-        language { enableSplit = false }
+        // Set enableSplit = false if you explicitly want to disable them.
+        language { enableSplit = true }
         density { enableSplit = true }
         abi { enableSplit = true }
     }
@@ -146,7 +150,7 @@ bundletool install-apks --apks=app.apks
 
 **Signing:**
 
-The AAB is signed locally with the developer's upload key. For apps distributed via Google Play using AAB, **Google Play App Signing** is used to generate and sign the actual APKs delivered to users with Google-managed signing keys. In practice, when uploading an AAB to Google Play, Play App Signing is required.
+The AAB is signed locally with the developer's upload key. For apps distributed via Google Play using AAB, **Google Play App Signing** is used: Google manages the signing keys and uses them to generate and sign the actual APKs delivered to users. In practice, when uploading an AAB to Google Play, Play App Signing is required.
 
 ---
 

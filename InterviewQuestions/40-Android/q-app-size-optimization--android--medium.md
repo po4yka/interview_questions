@@ -60,19 +60,25 @@ android {
 }
 ```
 
+Важно: для кода, использующего reflection/JNI/аннотации, нужны корректные правила сохранения (keep rules), иначе возможны runtime-ошибки.
+
 **Результат**: во многих проектах с зависимостями возможно значительное уменьшение размера кода (часто десятки процентов, точное значение зависит от проекта).
 
 ### Оптимизация Ресурсов
 
-**Фильтрация конфигураций**:
+**Фильтрация конфигураций (избирательно)**:
 ```kotlin
 android {
     defaultConfig {
-        resourceConfigurations += listOf("en", "ru")          // ✅ Только нужные языки
-        resourceConfigurations += listOf("xxhdpi", "xxxhdpi") // ✅ Целевые плотности (если оправдано)
+        resourceConfigurations += listOf("en", "ru")          // ✅ Оставлять только действительно поддерживаемые языки
+        // Важно: при использовании App Bundle и управляемых Google Play language splits
+        // чрезмерное ограничение языков здесь лишит пользователей возможности загрузить отсутствующие локали.
+        // Обычно ужесточают только если заведомо не планируются другие языки.
     }
 }
 ```
+
+Осторожно с фильтрацией по плотностям: для универсальных APK или специфичных каналов дистрибуции можно ограничить плотности, но для AAB Google Play и так делает split по плотностям.
 
 **Сжатие изображений**:
 - PNG/JPG → WebP: часто 20-80% экономии в зависимости от контента
@@ -81,19 +87,21 @@ android {
 
 ### Android App `Bundle` (AAB)
 
-Google Play генерирует APK под конкретное устройство (split APKs: language, density, ABI и др.). Типичная конфигурация может включать явное включение сплитов:
+Google Play для AAB автоматически генерирует device-specific split APKs (языки, плотности, ABI и др.), уменьшая размер загружаемого пакета без необходимости собирать один универсальный APK.
+
+Для проектов, которые по-прежнему распространяют APK напрямую или используют кастомные каналы, можно явно настраивать split-конфигурации:
 
 ```kotlin
 android {
     bundle {
         language {
-            enableSplit = true    // ✅ Разделение по языкам
+            enableSplit = true    // ✅ Разделение по языкам при генерации сплитов
         }
         density {
             enableSplit = true    // ✅ Разделение по плотности
         }
         abi {
-            enableSplit = true    // ✅ Разделение по ABI (arm64, armeabi-v7a, x86 и т.д.), если необходимо
+            enableSplit = true    // ✅ Разделение по ABI (arm64, armeabi-v7a, x86 и т.д., по необходимости)
         }
     }
 }
@@ -119,14 +127,16 @@ implementation("com.google.android.gms:play-services-maps")
 android {
     defaultConfig {
         ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a") // ✅ Оставлять только необходимые ABI (например, ARM для подавляющего большинства устройств)
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a") // ✅ Ограничить APK требуемыми ABI (например, ARM для большинства устройств)
             // ❌ Не включайте x86/x86_64 без необходимости (эмуляторы, специфические девайсы)
         }
     }
 }
 ```
 
-Ограничение списка ABI уменьшает размер пакета, но требует учитывать целевые устройства.
+Для Android App Bundle Google Play сам использует ABI splits; агрессивное ограничение `abiFilters` имеет смысл в первую очередь для прямой поставки APK или когда вы осознанно исключаете часть устройств.
+
+Ограничение списка ABI уменьшает размер пакета, но требует учитывать целевые устройства и каналы дистрибуции.
 
 ---
 
@@ -154,46 +164,54 @@ android {
 }
 ```
 
+Note: for code using reflection/JNI/annotation processing, proper keep rules are required; otherwise you risk runtime issues in release builds.
+
 **Result**: many projects with multiple dependencies see substantial size reduction (often tens of percent; exact savings are project-specific).
 
 ### Resource Optimization
 
-**Configuration Filtering**:
+**Configuration Filtering (selective)**:
 ```kotlin
 android {
     defaultConfig {
-        resourceConfigurations += listOf("en", "ru")          // ✅ Only required languages
-        resourceConfigurations += listOf("xxhdpi", "xxxhdpi") // ✅ Target densities (when appropriate)
+        resourceConfigurations += listOf("en", "ru")          // ✅ Keep only truly supported languages
+        // Important: with App Bundles and Play-managed language splits,
+        // over-restricting languages here will prevent users from downloading missing locales.
+        // Typically tightened only when other languages are definitively not planned.
     }
 }
 ```
 
+Be careful with density filtering: for universal APKs or specific distribution channels it can be used, but for AAB Google Play already creates density-specific splits, so manual restriction is usually unnecessary.
+
 **Image Compression**:
 - PNG/JPG → WebP: often 20-80% savings depending on content
-- Vector drawables for icons and simple illustrations: significant savings vs. multiple bitmap densities
+- Vector drawables for icons and simple illustrations: significant savings vs. multiple bitmap density variants
 - Remove unused resources (including redundant density variants) via resource shrinking (`isShrinkResources = true`) and resource audits
 
 ### Android App `Bundle` (AAB)
 
-Google Play generates device-specific APKs (split APKs for language, density, ABI, etc.). A typical configuration can explicitly enable splits:
+For AABs, Google Play automatically generates device-specific split APKs (language, density, ABI, etc.), reducing download/install size without requiring a single universal APK.
+
+For apps still distributing APKs directly or via custom channels, you can explicitly configure splits:
 
 ```kotlin
 android {
     bundle {
         language {
-            enableSplit = true    // ✅ Language splits
+            enableSplit = true    // ✅ Language splits when generating splits
         }
         density {
             enableSplit = true    // ✅ Density splits
         }
         abi {
-            enableSplit = true    // ✅ ABI splits (arm64, armeabi-v7a, x86, etc. as needed)
+            enableSplit = true    // ✅ ABI splits (arm64, armeabi-v7a, x86, etc. as appropriate)
         }
     }
 }
 ```
 
-**Result**: due to split APKs, the on-device download/install size is significantly smaller than a universal APK (savings can reach tens of percent depending on resources/ABIs).
+**Result**: with split APKs, the on-device download size is significantly smaller than a universal APK (savings can reach tens of percent depending on resources/ABIs).
 
 ### Dependency Management
 
@@ -213,14 +231,16 @@ implementation("com.google.android.gms:play-services-maps")
 android {
     defaultConfig {
         ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a") // ✅ Keep only required ABIs (e.g., ARM for the vast majority of devices)
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a") // ✅ Limit APK to required ABIs (e.g., ARM for the majority of devices)
             // ❌ Don't include x86/x86_64 unless specifically needed (emulators, certain devices)
         }
     }
 }
 ```
 
-Limiting ABIs reduces package size but must be aligned with your target device set.
+For Android App Bundles, Play already applies ABI splits; aggressive `abiFilters` are mainly relevant for direct APK distribution or when you intentionally drop support for certain device classes.
+
+Limiting ABIs reduces package size but must be aligned with your target device set and distribution channels.
 
 ---
 

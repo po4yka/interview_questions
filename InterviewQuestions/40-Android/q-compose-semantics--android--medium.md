@@ -38,7 +38,7 @@ sources:
 ## Ответ (RU)
 
 ### Концепция
-Semantics — механизм в Compose для передачи смысла UI элементов сервисам доступности (TalkBack, Switch Access) и тестовым фреймворкам. Создаёт параллельное дерево узлов с метаданными, описывающими *назначение* компонентов независимо от визуального представления.
+Semantics — механизм в Compose для передачи смысла UI элементов сервисам доступности (TalkBack, Switch Access), тестовым фреймворкам и другим инструментам. Создаёт параллельное дерево узлов с метаданными, описывающими *назначение* компонентов независимо от визуального представления.
 
 **Ключевые свойства**: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`, `onClick`.
 
@@ -51,7 +51,8 @@ Box(
     .clickable(onClick = onClick)
     .semantics {
       contentDescription = "Отправить форму"
-      role = Role.Button // ✅ Явно указываем роль
+      // clickable уже задаёт роль кнопки по умолчанию; здесь role = Role.Button только делает это явно
+      role = Role.Button
     }
 ) { Icon(Icons.Default.Send) }
 ```
@@ -96,7 +97,8 @@ Row(
   Text("$age лет", style = MaterialTheme.typography.bodyMedium)
 }
 
-// ❌ Без merge TalkBack прочитает дважды с паузой
+// ❗ mergeDescendants = true объединяет семантику детей в один узел;
+// используйте его, когда логически нужен единый элемент, а не всегда автоматически
 ```
 
 **Тестовые селекторы**
@@ -115,15 +117,15 @@ composeTestRule
 ```
 
 ### Критические Правила
-- **Информативный контент**: всегда `contentDescription` для изображений/иконок с данными
-- **Декоративные элементы**: явно `contentDescription = null`, чтобы TalkBack пропускал
-- **Составные компоненты**: используйте `mergeDescendants = true` для предотвращения повторяющихся объявлений
+- **Информативный контент**: всегда задавайте `contentDescription` для изображений/иконок с полезной информацией
+- **Декоративные элементы**: явно указывайте `contentDescription = null`, чтобы TalkBack пропускал их
+- **Составные компоненты**: используйте `mergeDescendants = true`, когда несколько визуальных элементов логически образуют один доступный элемент, чтобы избежать лишних и дублирующих объявлений
 - **Тестирование**: применяйте `testTag` вместо текстовых селекторов для устойчивости к локализации
 
 ## Answer (EN)
 
 ### Concept
-Semantics is Compose's mechanism for conveying UI element meaning to accessibility services (TalkBack, Switch Access) and test frameworks. Creates a parallel tree of nodes with metadata describing component *purpose* independently of visual representation.
+Semantics is Compose's mechanism for conveying UI element meaning to accessibility services (TalkBack, Switch Access), test frameworks, and other tooling. It creates a parallel tree of nodes with metadata describing component *purpose* independently of visual representation.
 
 **Key properties**: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`, `onClick`.
 
@@ -136,7 +138,8 @@ Box(
     .clickable(onClick = onClick)
     .semantics {
       contentDescription = "Submit form"
-      role = Role.Button // ✅ Explicitly declare role
+      // clickable already sets the button role by default; role = Role.Button here is only making it explicit
+      role = Role.Button
     }
 ) { Icon(Icons.Default.Send) }
 ```
@@ -171,7 +174,7 @@ Box(
 
 **Merging child semantics**
 ```kotlin
-// ✅ TalkBack reads "John Doe, 25 years old" as single announcement
+// ✅ TalkBack reads "John Doe, 25 years old" as a single announcement
 Row(
   Modifier.semantics(mergeDescendants = true) {
     contentDescription = "$name, $age years old"
@@ -181,7 +184,8 @@ Row(
   Text("$age years old", style = MaterialTheme.typography.bodyMedium)
 }
 
-// ❌ Without merge TalkBack reads twice with pause
+// ❗ mergeDescendants = true merges children semantics into a single node;
+// use it when they should logically form one accessible element, not blindly in all composites
 ```
 
 **Test selectors**
@@ -200,10 +204,10 @@ composeTestRule
 ```
 
 ### Critical Rules
-- **Informative content**: always provide `contentDescription` for images/icons conveying data
+- **Informative content**: always provide `contentDescription` for images/icons that convey meaningful information
 - **Decorative elements**: explicitly set `contentDescription = null` so TalkBack skips them
-- **Compound components**: use `mergeDescendants = true` to prevent duplicate announcements
-- **Testing**: apply `testTag` instead of text selectors for localization resilience
+- **Compound components**: use `mergeDescendants = true` when multiple visual elements logically represent a single accessible element, to avoid redundant or noisy announcements
+- **Testing**: apply `testTag` instead of text selectors to remain resilient to localization
 
 ## Follow-ups
 

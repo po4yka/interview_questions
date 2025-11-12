@@ -27,37 +27,38 @@ tags: [android/architecture-mvi, android/coroutines, android/ui-state, architect
 
 ## Ответ (RU)
 
-**MVI (Model-`View`-`Intent`)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (`Intent`).
+**MVI (Model-`View`-`Intent`)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (`Intent`), обрабатываемые предсказуемым слоем (ViewModel / Store / Processor), который вычисляет новый `Model`.
 
 ### Компоненты MVI
 
-**Циклический поток данных**:
+**Циклический поток данных** (упрощенно):
 ```
-Intent → Processor → Model → View → Intent
+Intent → Processor/ViewModel → Model (State) → View → Intent
 ```
 
-1. **`Intent`** - намерения пользователя (клик, ввод текста, загрузка данных)
-2. **Model** - иммутабельное состояние UI (data class)
-3. **`View`** - отрисовывает UI на основе Model
-4. **Processor** - обрабатывает `Intent` → создает новый Model (Reducer / UseCase / Middleware)
+1. **`Intent`** - намерения пользователя или внешние события (клик, ввод текста, загрузка данных)
+2. **Model** - единое иммутабельное состояние UI (data class)
+3. **`View`** - отрисовывает UI на основе Model и отправляет `Intent`
+4. **Processor / ViewModel / Store** - обрабатывает `Intent` → создает новый Model (Reducer / UseCase / Middleware)
 
 ### Базовая Реализация
 
 ```kotlin
 // Model - единое иммутабельное состояние
+
 data class UserScreenState(
     val isLoading: Boolean = false,
     val user: User? = null,
     val error: String? = null
 )
 
-// Intent - действия пользователя
+// Intent - действия пользователя и события
 sealed class UserIntent {
     data class LoadUser(val userId: Int) : UserIntent()
     object RetryLoading : UserIntent()
 }
 
-// ViewModel - обрабатывает Intent
+// ViewModel - обрабатывает Intent (Processor/Store слой)
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -121,18 +122,19 @@ fun UserScreen(
 | Аспект | MVVM | MVI |
 |--------|------|-----|
 | **State** | Множественные `LiveData`/`StateFlow` | Единое иммутабельное состояние |
-| **Updates** | Прямые вызовы методов | `Intent`-based |
-| **Data flow** | Bi-directional | Unidirectional |
-| **Testability** | Хорошая | Отличная (pure functions) |
-| **Boilerplate** | Меньше | Больше |
+| **Updates** | Прямые вызовы методов | Через `Intent` |
+| **Data flow** | Потенциально двунаправленный (View ↔ ViewModel) | Строго однонаправленный |
+| **Testability** | Хорошая | Отличная (чистые функции для reducer'ов) |
+| **Boilerplate** | Обычно меньше | Обычно больше |
 | **Predictability** | Средняя | Высокая |
 
-**MVVM**: `viewModel.loadUser()`, `viewModel.retry()`, `viewModel.clearError()`
-**MVI**: `viewModel.processIntent(UserIntent.LoadUser(id))`
+Примеры:
+- **MVVM**: `viewModel.loadUser()`, `viewModel.retry()`, `viewModel.clearError()`
+- **MVI**: `viewModel.processIntent(UserIntent.LoadUser(id))`
 
 ### Side Effects - Одноразовые События
 
-✅ **Правильно**: State для UI, отдельный поток для событий (`Channel`/`SharedFlow`)
+✅ **Правильно**: State для UI, отдельный поток для одноразовых событий (`Channel`/`SharedFlow`).
 
 ```kotlin
 // State - для постоянного UI
@@ -149,6 +151,15 @@ sealed class LoginSideEffect {
     data class ShowToast(val message: String) : LoginSideEffect()
 }
 
+// Intents, включая события для reducer'а и side effects
+sealed class LoginIntent {
+    data class EmailChanged(val email: String) : LoginIntent()
+    object LoginClicked : LoginIntent()
+    object LoginStarted : LoginIntent()
+    data class LoginSuccess(val userId: Int) : LoginIntent()
+    data class LoginFailed(val error: String) : LoginIntent()
+}
+
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -160,9 +171,12 @@ class LoginViewModel(
 
     fun processIntent(intent: LoginIntent) {
         when (intent) {
-            is LoginIntent.LoginClicked -> login()
             is LoginIntent.EmailChanged ->
                 _state.value = _state.value.copy(email = intent.email, emailError = null)
+            is LoginIntent.LoginClicked -> login()
+            // LoginStarted/LoginSuccess/LoginFailed в этом примере
+            // могут генерироваться внутри login() и обрабатываться reducer'ом
+            else -> Unit
         }
     }
 
@@ -214,14 +228,14 @@ fun LoginScreen(
 data class LoginState(
     val email: String = "",
     val isLoading: Boolean = false,
-    val navigateToHome: Boolean = false  // Проблема: не сбросится автоматически, переиспользуется при recreate
+    val navigateToHome: Boolean = false  // Проблема: флаг может переиспользоваться при recreate
 )
 ```
 
 ### Reducer Pattern - Чистые Функции
 
 ```kotlin
-// Reducer - pure function: (State, Intent) -> State
+// Reducer - чистая функция: (State, Intent) -> State
 object LoginReducer {
     fun reduce(state: LoginState, intent: LoginIntent): LoginState {
         return when (intent) {
@@ -248,7 +262,7 @@ class LoginReducerViewModel(
         // ✅ Применяем чистую функцию
         _state.value = LoginReducer.reduce(_state.value, intent)
 
-        // Side effects отдельно
+        // Side effects отдельно (не внутри reducer)
         when (intent) {
             is LoginIntent.LoginClicked -> performLogin()
             else -> Unit
@@ -272,7 +286,7 @@ fun `reducer is pure function`() {
     val result2 = LoginReducer.reduce(state, intent)
 
     assertEquals(result1, result2)  // Всегда одинаковый результат
-    assertEquals("old@test.com", state.email)  // Original не изменился
+    assertEquals("old@test.com", state.email)  // Оригинал не изменился
 }
 ```
 
@@ -343,10 +357,18 @@ class LoginWithMiddlewareViewModel(
 
     fun processIntent(intent: LoginIntent) {
         viewModelScope.launch {
-            // ✅ Выполняем middleware (side effects)
-            middlewares.forEach { it.process(intent, _state.value, ::processIntent) }
+            // ✅ Выполняем middleware (side effects). Важно избегать бесконечных циклов,
+            // поэтому dispatch в middleware должен использовать контролируемый путь
+            // (например, добавление в очередь), а не прямой рекурсивный вызов.
+            middlewares.forEach { middleware ->
+                middleware.process(intent, _state.value) { nextIntent ->
+                    // здесь можно отправить nextIntent в отдельный поток/очередь;
+                    // для простоты вызываем reducer напрямую:
+                    _state.value = reducer(_state.value, nextIntent)
+                }
+            }
 
-            // Применяем reducer (pure)
+            // Применяем reducer для исходного intent (pure)
             _state.value = reducer(_state.value, intent)
         }
     }
@@ -364,6 +386,7 @@ class DebuggableViewModel<I, S>(
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> = _state.asStateFlow()
 
+    // Храним последовательность (Intent, State) начиная с первого перехода
     private val stateHistory = mutableListOf<Pair<I, S>>()
 
     fun processIntent(intent: I) {
@@ -372,7 +395,7 @@ class DebuggableViewModel<I, S>(
         _state.value = newState
     }
 
-    // Time travel
+    // Time travel к состоянию после применения intent по индексу
     fun replayTo(index: Int) {
         if (index in stateHistory.indices) {
             _state.value = stateHistory[index].second
@@ -380,9 +403,9 @@ class DebuggableViewModel<I, S>(
     }
 
     fun undo() {
-        if (stateHistory.size > 1) {
+        if (stateHistory.isNotEmpty()) {
             stateHistory.removeLast()
-            _state.value = stateHistory.last().second
+            _state.value = stateHistory.lastOrNull()?.second ?: initialState
         }
     }
 }
@@ -401,43 +424,44 @@ class DebuggableViewModel<I, S>(
 - Мутация state: `_state.value.items.add(item)`
 - События в State: `navigateToHome: Boolean`
 - Прямые вызовы методов вместо `Intent` (в MVI-контексте)
-- Множественные источники состояния
+- Множественные независимые источники состояния
 
 ---
 
 ## Answer (EN)
 
-**MVI (Model-`View`-`Intent`)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit `Intent`s.
+**MVI (Model-`View`-`Intent`)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and updated only through explicit `Intents` handled by a predictable layer (ViewModel / Store / Processor) that computes the next `Model`.
 
 ### MVI Components
 
-**Cyclic data flow**:
+**Cyclic data flow** (simplified):
 ```
-Intent → Processor → Model → View → Intent
+Intent → Processor/ViewModel → Model (State) → View → Intent
 ```
 
-1. **`Intent`** - user actions/events
+1. **`Intent`** - user actions or external events
 2. **Model** - single immutable UI state
-3. **`View`** - renders UI from Model
-4. **Processor** - processes `Intent` → creates new Model (Reducer / UseCase / Middleware)
+3. **`View`** - renders UI from Model and emits `Intent`s
+4. **Processor / ViewModel / Store** - processes `Intent` → produces new Model (Reducer / UseCase / Middleware)
 
 ### Basic Implementation
 
 ```kotlin
 // Model - single immutable state
+
 data class UserScreenState(
     val isLoading: Boolean = false,
     val user: User? = null,
     val error: String? = null
 )
 
-// Intent - user actions
+// Intent - user actions and events
 sealed class UserIntent {
     data class LoadUser(val userId: Int) : UserIntent()
     object RetryLoading : UserIntent()
 }
 
-// ViewModel - processes Intent
+// ViewModel - processes Intents (acts as Processor/Store)
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -502,17 +526,18 @@ fun UserScreen(
 |--------|------|-----|
 | **State** | Multiple `LiveData`/`StateFlow` | Single immutable state |
 | **Updates** | Direct method calls | `Intent`-based |
-| **Data flow** | Bi-directional | Unidirectional |
-| **Testability** | Good | Excellent (pure functions) |
-| **Boilerplate** | Less | More |
+| **Data flow** | Potentially bi-directional (View ↔ ViewModel) | Strictly unidirectional |
+| **Testability** | Good | Excellent (pure reducers) |
+| **Boilerplate** | Usually less | Usually more |
 | **Predictability** | Medium | High |
 
-**MVVM**: `viewModel.loadUser()`, `viewModel.retry()`
-**MVI**: `viewModel.processIntent(UserIntent.LoadUser(id))`
+Examples:
+- **MVVM**: `viewModel.loadUser()`, `viewModel.retry()`, `viewModel.clearError()`
+- **MVI**: `viewModel.processIntent(UserIntent.LoadUser(id))`
 
 ### Side Effects - One-time Events
 
-✅ **Correct**: State for UI, separate stream for events (`Channel`/`SharedFlow`)
+✅ **Correct**: use State for persistent UI, a separate stream for one-off events (`Channel`/`SharedFlow`).
 
 ```kotlin
 // State - for persistent UI
@@ -529,6 +554,15 @@ sealed class LoginSideEffect {
     data class ShowToast(val message: String) : LoginSideEffect()
 }
 
+// Intents, including those for reducer and side effects
+sealed class LoginIntent {
+    data class EmailChanged(val email: String) : LoginIntent()
+    object LoginClicked : LoginIntent()
+    object LoginStarted : LoginIntent()
+    data class LoginSuccess(val userId: Int) : LoginIntent()
+    data class LoginFailed(val error: String) : LoginIntent()
+}
+
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -540,9 +574,11 @@ class LoginViewModel(
 
     fun processIntent(intent: LoginIntent) {
         when (intent) {
-            is LoginIntent.LoginClicked -> login()
             is LoginIntent.EmailChanged ->
                 _state.value = _state.value.copy(email = intent.email, emailError = null)
+            is LoginIntent.LoginClicked -> login()
+            // LoginStarted/LoginSuccess/LoginFailed can be dispatched inside login() if desired
+            else -> Unit
         }
     }
 
@@ -594,7 +630,7 @@ fun LoginScreen(
 data class LoginState(
     val email: String = "",
     val isLoading: Boolean = false,
-    val navigateToHome: Boolean = false  // Won't reset automatically, may retrigger on recreate
+    val navigateToHome: Boolean = false  // May retrigger on recreate, hard to manage as one-off
 )
 ```
 
@@ -628,7 +664,7 @@ class LoginReducerViewModel(
         // ✅ Apply pure function
         _state.value = LoginReducer.reduce(_state.value, intent)
 
-        // Side effects separately
+        // Side effects separately (not inside reducer)
         when (intent) {
             is LoginIntent.LoginClicked -> performLogin()
             else -> Unit
@@ -723,10 +759,15 @@ class LoginWithMiddlewareViewModel(
 
     fun processIntent(intent: LoginIntent) {
         viewModelScope.launch {
-            // ✅ Run middleware (side effects)
-            middlewares.forEach { it.process(intent, _state.value, ::processIntent) }
+            // ✅ Run middleware (side effects). Avoid infinite loops by ensuring
+            // that dispatch() does not immediately call processIntent recursively.
+            middlewares.forEach { middleware ->
+                middleware.process(intent, _state.value) { nextIntent ->
+                    _state.value = reducer(_state.value, nextIntent)
+                }
+            }
 
-            // Apply reducer (pure)
+            // Apply reducer (pure) for the original intent
             _state.value = reducer(_state.value, intent)
         }
     }
@@ -738,12 +779,13 @@ class LoginWithMiddlewareViewModel(
 ```kotlin
 // Keep history of states for debugging
 class DebuggableViewModel<I, S>(
-    initialState: S,
+    private val initialState: S,
     private val reducer: (S, I) -> S
 ) : ViewModel() {
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<S> = _state.asStateFlow()
 
+    // Store (Intent, State) sequence starting from first transition
     private val stateHistory = mutableListOf<Pair<I, S>>()
 
     fun processIntent(intent: I) {
@@ -752,7 +794,7 @@ class DebuggableViewModel<I, S>(
         _state.value = newState
     }
 
-    // Time travel
+    // Time travel to state after applying intent at index
     fun replayTo(index: Int) {
         if (index in stateHistory.indices) {
             _state.value = stateHistory[index].second
@@ -760,9 +802,9 @@ class DebuggableViewModel<I, S>(
     }
 
     fun undo() {
-        if (stateHistory.size > 1) {
+        if (stateHistory.isNotEmpty()) {
             stateHistory.removeLast()
-            _state.value = stateHistory.last().second
+            _state.value = stateHistory.lastOrNull()?.second ?: initialState
         }
     }
 }
@@ -772,9 +814,9 @@ class DebuggableViewModel<I, S>(
 
 ✅ **Correct**:
 - Single immutable state (data class)
-- All actions through `Intent`
+- All actions via `Intent`
 - Side effects via `Channel` (BUFFERED)/`SharedFlow`
-- Reducer - pure functions
+- Reducers as pure functions
 - Use `state.copy()` for state changes
 
 ❌ **Wrong**:

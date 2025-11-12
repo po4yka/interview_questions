@@ -14,6 +14,7 @@ related: [c-kotlin, c-structured-concurrency, q-kotlin-advantages-for-android--k
 created: 2025-10-12
 updated: 2025-11-09
 tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard, kotlin, lifecycle, scope, structured-concurrency, violations]
+
 ---
 
 # Вопрос (RU)
@@ -32,7 +33,7 @@ tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard,
 
 Это руководство рассматривает:
 - что такое структурная конкурентность;
-- распространённые нарушения (GlobalScope, неуправляемые `Job`, фабричные `CoroutineScope`, запуск корутин в неправильных слоях);
+- распространённые нарушения (GlobalScope, неуправляемые `Job`, фабричные `CoroutineScope`, утечки через архитектурные границы);
 - когда нарушение правил допустимо (редко);
 - легитимные escape hatches с явным временем жизни;
 - способы обнаружения нарушений и тестирования структурной конкурентности.
@@ -45,7 +46,7 @@ tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard,
 3. Родитель ждёт завершения всех дочерних корутин.
 4. Отмена распространяется от родителя к детям.
 5. Исключения распространяются от детей к родителю.
-6. Ни одна корутина не переживает свой scope.
+6. Ни одна корутина не переживает свой scope (за исключением явно выделенных корутин с документированным временем жизни, см. escape hatches ниже).
 
 #### Основной принцип
 
@@ -702,7 +703,7 @@ fun setupAnalyticsRu(app: android.app.Application): AnalyticsTrackerRu {
 import kotlinx.coroutines.*
 
 class CrashReporterRu {
-    // Допустимо: выделенный scope, переживающий отмену
+    // Допустимо: выделенный scope, переживающий обычную отмену
     private val crashScope = CoroutineScope(
         NonCancellable +
             Dispatchers.IO +
@@ -831,30 +832,26 @@ fun demonstrateSupervisorScopeRu() = runBlocking {
 import kotlinx.coroutines.*
 
 class DetachedCoroutinePatternRu {
-    fun performDetachedWork(scope: CoroutineScope, work: suspend () -> Unit) {
-        // ESCAPE HATCH: логически отделённая корутина.
-        scope.launch(start = CoroutineStart.UNDISPATCHED) {
-            withContext(Job()) {
-                work()
-            }
+    fun performDetachedWork(work: suspend () -> Unit) {
+        // ESCAPE HATCH: логически отделённая корутина с собственным Job.
+        // Важно: такой подход осознанно нарушает структурную конкурентность.
+        CoroutineScope(Job() + Dispatchers.Default).launch {
+            work()
         }
     }
 }
 
 fun demonstrateDetachedRu() = runBlocking {
-    val scope = CoroutineScope(Job() + Dispatchers.Default)
     val pattern = DetachedCoroutinePatternRu()
 
-    pattern.performDetachedWork(scope) {
+    pattern.performDetachedWork {
         repeat(10) {
             delay(100)
             println("Отделённая работа $it")
         }
     }
 
-    delay(300)
-    scope.cancel()
-    println("Родитель отменён, но отделённая работа продолжается")
+    println("Родительский runBlocking завершён, отделённая работа может продолжаться")
     delay(1000)
 }
 ```
@@ -1294,6 +1291,24 @@ class LeakDetectionTestRu {
 
 6. Регулярно проверяйте код (линтеры, чеклисты) на наличие `GlobalScope`, неотменяемых `CoroutineScope(Job())` и корутин в неправильных слоях.
 
+## Дополнительные вопросы (RU)
+
+- Как вы рефакторите существующий код с активным использованием `GlobalScope` к структурированной модели?
+- Как проектировать API библиотек так, чтобы вызывать код с контролируемым жизненным циклом корутин?
+- Как вы будете обеспечивать соблюдение этих правил в большой команде (инструменты, code review, архитектурные гайдлайны)?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-structured-concurrency]]
+- Официальная документация по Kotlin Coroutines: раздел "Structured concurrency"
+
+## Связанные вопросы (RU)
+
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-android-async-primitives--android--easy]]
+
 ---
 
 ## Answer (EN)
@@ -1317,7 +1332,7 @@ Key ideas:
 3. Parents wait for all children.
 4. Cancellation flows from parent to children.
 5. Exceptions propagate from children to parent.
-6. No coroutine outlives its scope.
+6. No coroutine outlives its scope (except intentionally scoped, well-documented escape hatches; see below).
 
 #### Core Principle
 
@@ -2083,30 +2098,26 @@ fun demonstrateSupervisorScopeEn() = runBlocking {
 import kotlinx.coroutines.*
 
 class DetachedCoroutinePatternEn {
-    fun performDetachedWork(scope: CoroutineScope, work: suspend () -> Unit) {
-        // ESCAPE HATCH: logically detached coroutine
-        scope.launch(start = CoroutineStart.UNDISPATCHED) {
-            withContext(Job()) {
-                work()
-            }
+    fun performDetachedWork(work: suspend () -> Unit) {
+        // ESCAPE HATCH: logically detached coroutine with its own Job.
+        // Important: this intentionally breaks structured concurrency.
+        CoroutineScope(Job() + Dispatchers.Default).launch {
+            work()
         }
     }
 }
 
 fun demonstrateDetachedEn() = runBlocking {
-    val scope = CoroutineScope(Job() + Dispatchers.Default)
     val pattern = DetachedCoroutinePatternEn()
 
-    pattern.performDetachedWork(scope) {
+    pattern.performDetachedWork {
         repeat(10) {
             delay(100)
             println("Detached work $it")
         }
     }
 
-    delay(300)
-    scope.cancel()
-    println("Parent cancelled, but detached work continues")
+    println("Parent runBlocking completed, detached work may continue")
     delay(1000)
 }
 ```
@@ -2545,24 +2556,6 @@ class LeakDetectionTestEn {
 5. Any deviation from structured concurrency must be justified in comments and covered by tests.
 
 6. Continuously scan code (linters, checklists) for `GlobalScope`, unmanaged `CoroutineScope(Job())`, and coroutines in the wrong architectural layer.
-
-## Дополнительные вопросы (RU)
-
-- Как вы рефакторите существующий код с активным использованием `GlobalScope` к структурированной модели?
-- Как проектировать API библиотек так, чтобы вызывать код с контролируемым жизненным циклом корутин?
-- Как вы будете обеспечивать соблюдение этих правил в большой команде (инструменты, code review, архитектурные гайдлайны)?
-
-## Ссылки (RU)
-
-- [[c-kotlin]]
-- [[c-structured-concurrency]]
-- Официальная документация по Kotlin Coroutines: раздел "Structured concurrency"
-
-## Связанные вопросы (RU)
-
-- [[q-advanced-coroutine-patterns--kotlin--hard]]
-- [[q-actor-pattern--kotlin--hard]]
-- [[q-android-async-primitives--android--easy]]
 
 ## Follow-ups
 

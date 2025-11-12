@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [concurrency, coroutines, difficulty/hard, kotlin, suspension]
 ---
 # Вопрос (RU)
@@ -50,7 +50,7 @@ suspend fun example(): String {
     return "Done"
 }
 
-// Концептуальная трансформация компилятором (упрощено)
+// Концептуальная трансформация компилятором (упрощено; не буквальный код stdlib/composer)
 fun example(continuation: Continuation<String>): Any? {
     val sm = continuation as? ExampleStateMachine
         ?: ExampleStateMachine(continuation)
@@ -64,7 +64,7 @@ fun example(continuation: Continuation<String>): Any? {
             if (result === COROUTINE_SUSPENDED) {
                 return COROUTINE_SUSPENDED  // Сигнал приостановки вызывающему коду
             }
-            // Если не приостановилось, продолжаем к следующему состоянию
+            // Если не приостановилось (результат пришёл синхронно), двигаемся к следующему состоянию
         }
         1 -> {
             // Возобновление после delay
@@ -120,7 +120,7 @@ suspend fun multiStep(): String {
     return "${'$'}r1, ${'$'}r2"
 }
 
-// Концептуальный держатель состояния
+// Концептуальный держатель состояния (схематично)
 class MultiStepContinuation(
     val completion: Continuation<String>
 ) : Continuation<Any?> {
@@ -131,8 +131,8 @@ class MultiStepContinuation(
         get() = completion.context
 
     override fun resumeWith(result: Result<Any?>) {
-        // Реально сгенерированный код проверяет label и result
-        // и вызывает multiStep(this), чтобы продолжить выполнение.
+        // Реальный сгенерированный код использует label и result
+        // и вызывает multiStep(this) (или соответствующую функцию), чтобы продолжить выполнение.
         multiStep(this as Continuation<String>)
     }
 }
@@ -151,7 +151,7 @@ suspend fun complexOperation(): Int {
     return a + b + c
 }
 
-// Упрощённый концептуальный автомат состояний
+// Упрощённый концептуальный автомат состояний (схематично)
 fun complexOperation(cont: Continuation<Int>): Any? {
     val sm = cont as ComplexOperationSM
 
@@ -192,7 +192,7 @@ import kotlin.coroutines.intrinsics.*
 
 // Низкоуровневая приостановка с помощью suspendCoroutine
 suspend fun customSuspend(): String = suspendCoroutine { continuation ->
-    // Этот лямбда-блок выполняется сразу в текущем continuation
+    // Этот лямбда-блок выполняется сразу в текущем контексте
 
     Thread {
         Thread.sleep(1000)
@@ -201,10 +201,10 @@ suspend fun customSuspend(): String = suspendCoroutine { continuation ->
     }.start()
 
     // Возврат из блока без немедленного resume
-    // приводит к тому, что suspendCoroutine возвращает COROUTINE_SUSPENDED.
+    // приводит к тому, что suspendCoroutine логически возвращает COROUTINE_SUSPENDED вызывающему коду.
 }
 
-// Приблизительная реализация (упрощено)
+// Приблизительная реализация (упрощено; детали зависят от версии stdlib)
 inline suspend fun <T> suspendCoroutine(
     crossinline block: (Continuation<T>) -> Unit
 ): T = suspendCoroutineUninterceptedOrReturn { uCont ->
@@ -214,7 +214,7 @@ inline suspend fun <T> suspendCoroutine(
 }
 ```
 
-На практике используется `SafeContinuation`, который возвращает либо значение, либо `COROUTINE_SUSPENDED` в зависимости от того, был ли вызван `resume` синхронно.
+На практике реализация использует дополнительную обёртку (например, `SafeContinuation` в некоторых версиях), которая возвращает либо значение, либо `COROUTINE_SUSPENDED` в зависимости от того, был ли вызван `resume` синхронно. Это деталь реализации; концептуальный протокол остаётся тем же.
 
 ### 5. Практический взгляд: может приостановиться vs действительно приостанавливается
 
@@ -246,15 +246,15 @@ suspend fun demonstrateDispatcherSwitch() = coroutineScope {
 
     withContext(Dispatchers.IO) {
         println("Inside IO, thread: ${'$'}{Thread.currentThread().name}")
-        // Здесь происходит приостановка при входе/выходе из withContext
-        // и continuation возобновляется на целевом диспетчере.
+        // Здесь withContext может приостановить выполнение при переключении контекста;
+        // продолжение возобновляется на целевом диспетчере.
     }
 
     println("After withContext, thread: ${'$'}{Thread.currentThread().name}")
 }
 ```
 
-Важно: `withContext` реализован через низкоуровневые API continuation и диспетчера. Для этой темы главное: приостановка представлена через `COROUTINE_SUSPENDED` и возобновление через `resumeWith` на нужном диспетчере.
+Важно: `withContext` реализован через низкоуровневые API continuation и диспетчера. Для этой темы главное: приостановка представлена через протокол `COROUTINE_SUSPENDED` и возобновление через `resumeWith` на нужном диспетчере.
 
 ### 7. Идентификация точек приостановки (концептуально)
 
@@ -267,7 +267,7 @@ suspend fun identifySuspensionPoints() = coroutineScope {
     delay(100)  // ТОЧКА ПРИОСТАНОВКИ: может вернуть COROUTINE_SUSPENDED
     println("Resumed after delay")
 
-    withContext(Dispatchers.IO) {  // ТОЧКА ПРИОСТАНОВКИ: переключение контекста
+    withContext(Dispatchers.IO) {  // ТОЧКА ПРИОСТАНОВКИ: возможное переключение контекста
         println("On IO thread")
     }
 
@@ -411,7 +411,7 @@ fun example(continuation: Continuation<String>): Any? {
             if (result === COROUTINE_SUSPENDED) {
                 return COROUTINE_SUSPENDED  // Signal suspension to caller
             }
-            // If not suspended, fall through to next state logic
+            // If not suspended (completed synchronously), proceed to the next-state logic
         }
         1 -> {
             // Resumed after delay
@@ -467,7 +467,7 @@ suspend fun multiStep(): String {
     return "${'$'}r1, ${'$'}r2"
 }
 
-// Conceptual state machine holder
+// Conceptual state machine holder (schematic)
 class MultiStepContinuation(
     val completion: Continuation<String>
 ) : Continuation<Any?> {
@@ -479,7 +479,7 @@ class MultiStepContinuation(
 
     override fun resumeWith(result: Result<Any?>) {
         // In reality the compiler-generated code inspects label and result
-        // and calls back into multiStep(this) to continue execution.
+        // and calls back into multiStep(this) (or its compiled body) to continue execution.
         multiStep(this as Continuation<String>)
     }
 }
@@ -498,7 +498,7 @@ suspend fun complexOperation(): Int {
     return a + b + c
 }
 
-// Simplified conceptual state machine
+// Simplified conceptual state machine (schematic)
 fun complexOperation(cont: Continuation<Int>): Any? {
     val sm = cont as ComplexOperationSM
 
@@ -539,7 +539,7 @@ import kotlin.coroutines.intrinsics.*
 
 // Low-level suspension using suspendCoroutine
 suspend fun customSuspend(): String = suspendCoroutine { continuation ->
-    // This lambda runs immediately on the current continuation
+    // This lambda runs immediately in the current context
 
     Thread {
         Thread.sleep(1000)
@@ -548,10 +548,10 @@ suspend fun customSuspend(): String = suspendCoroutine { continuation ->
     }.start()
 
     // Returning from this block without resuming immediately
-    // makes suspendCoroutine return COROUTINE_SUSPENDED to its caller.
+    // means suspendCoroutine logically returns COROUTINE_SUSPENDED to its caller.
 }
 
-// Rough idea of implementation (simplified)
+// Rough idea of implementation (simplified; concrete stdlib code may vary)
 inline suspend fun <T> suspendCoroutine(
     crossinline block: (Continuation<T>) -> Unit
 ): T = suspendCoroutineUninterceptedOrReturn { uCont ->
@@ -561,7 +561,7 @@ inline suspend fun <T> suspendCoroutine(
 }
 ```
 
-In reality it uses `SafeContinuation` and returns either a value or `COROUTINE_SUSPENDED` depending on whether `resume` was called synchronously.
+In practice the implementation uses an extra wrapper (e.g. `SafeContinuation` in some versions) that returns either a value or `COROUTINE_SUSPENDED` depending on whether `resume` was called synchronously. This is an implementation detail; the conceptual protocol is stable.
 
 ### 5. Practical View: May Suspend vs Does Suspend
 
@@ -593,15 +593,15 @@ suspend fun demonstrateDispatcherSwitch() = coroutineScope {
 
     withContext(Dispatchers.IO) {
         println("Inside IO, thread: ${'$'}{Thread.currentThread().name}")
-        // There is a suspension when entering/exiting withContext
-        // and the continuation is resumed on the target dispatcher.
+        // withContext may suspend when switching context; the continuation
+        // is resumed on the target dispatcher.
     }
 
     println("After withContext, thread: ${'$'}{Thread.currentThread().name}")
 }
 ```
 
-Important: `withContext` is implemented using low-level continuation and dispatcher APIs. The key idea for this note: suspension is still represented via `COROUTINE_SUSPENDED` and resuming via `resumeWith` on the appropriate dispatcher.
+Important: `withContext` is implemented using low-level continuation and dispatcher APIs. The key idea for this note: suspension is represented using the `COROUTINE_SUSPENDED` protocol and resumption via `resumeWith` on the appropriate dispatcher.
 
 ### 7. Identifying Suspension Points (Conceptually)
 
@@ -614,7 +614,7 @@ suspend fun identifySuspensionPoints() = coroutineScope {
     delay(100)  // SUSPENSION POINT: may return COROUTINE_SUSPENDED
     println("Resumed after delay")
 
-    withContext(Dispatchers.IO) {  // SUSPENSION POINT: context switch
+    withContext(Dispatchers.IO) {  // SUSPENSION POINT: possible context switch
         println("On IO thread")
     }
 
@@ -694,7 +694,7 @@ Note: This illustrates that you can intercept resume events; it does not reliabl
 3. `Continuation` holds state and is resumed with `resumeWith` once the result is ready.
 4. Developers usually do not need to manually detect or compare with `COROUTINE_SUSPENDED`; this is handled by compiler-generated code and coroutine builders.
 5. Suspension releases the current thread while the coroutine is waiting, allowing other work to run.
-6. At a call site, “detecting” suspension means checking if the callee returned `COROUTINE_SUSPENDED` (using `===`) and, if so, propagating it and saving state.
+6. At a call site, "detecting" suspension means checking if the callee returned `COROUTINE_SUSPENDED` (using `===`) and, if so, propagating it and saving state.
 
 ### What Causes Suspension (Conceptually)
 

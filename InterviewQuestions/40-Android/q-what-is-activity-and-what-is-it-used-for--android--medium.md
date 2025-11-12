@@ -36,15 +36,15 @@ tags:
 ---
 
 ## Ответ (RU)
-Активность (`Activity`) — это базовый компонент Android-приложения, который обычно представляет один экран, с которым пользователь может взаимодействовать. `Activity`:
+Активность (`Activity`) — это базовый компонент Android-приложения, который обычно представляет один логически целостный экран или точку входа, с которой пользователь может взаимодействовать. `Activity`:
 - отображает и управляет пользовательским интерфейсом,
 - обрабатывает действия и ввод пользователя,
 - участвует в жизненном цикле, управляемом системой,
-- обеспечивает переходы между экранами и взаимодействие с другими компонентами.
+- инициирует навигацию между экранами через `Intent` и взаимодействует с другими компонентами.
 
 ### `Activity` как страница книги
 
-Если представить приложение как книгу, то `Activity` — это одна "страница" этой книги. Каждая страница (`Activity`) имеет собственный контент и назначение, а пользователь может переходить между такими страницами.
+Если представить приложение как книгу, то `Activity` — это одна "страница" этой книги. Каждая страница (`Activity`) имеет собственный контент и назначение, а пользователь может переходить между такими страницами. При этом в современных архитектурах (например, single-activity) несколько экранов могут жить внутри одной `Activity` (через `Fragment` или composable-экраны).
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -139,9 +139,10 @@ class EmailComposeActivity : AppCompatActivity() {
         val subject = subjectEditText.text.toString()
         val message = messageEditText.text.toString()
 
-        // Отправка письма через почтовое приложение
+        // Упрощенный пример отправки письма через почтовое приложение
+        // На практике часто используют ACTION_SENDTO с mailto: URI
         val emailIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "message/rfc822"
+            type = "message/*"
             putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
             putExtra(Intent.EXTRA_SUBJECT, subject)
             putExtra(Intent.EXTRA_TEXT, message)
@@ -216,7 +217,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
 #### 4. Переходы между экранами
 
-`Activity` обеспечивает навигацию между экранами с помощью `Intent`:
+`Activity` инициирует навигацию между экранами с помощью `Intent`:
 
 ```kotlin
 class ProductListActivity : AppCompatActivity() {
@@ -282,7 +283,7 @@ class MainDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        // Запуск Service для фоновой загрузки (упрощенный пример)
+        // Запуск Service для фоновой загрузки (упрощенный пример — для длительных задач предпочтительнее WorkManager или foreground service)
         findViewById<Button>(R.id.downloadButton).setOnClickListener {
             val serviceIntent = Intent(this, DownloadService::class.java).apply {
                 putExtra("file_url", "https://example.com/file.zip")
@@ -411,7 +412,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 - Жизненным циклом управляет фреймворк Android.
 - Может обрабатывать конкретные `Intent` при наличии соответствующих фильтров.
 - Управляет собственным UI и связанными ресурсами.
-- Является `Context`; для контекста приложения используется `applicationContext`.
+- Является `Context`: используется для работы с UI и привязанных к нему ресурсов; для долгоживущих объектов и контекста приложения используют `applicationContext`.
 
 ### Когда использовать `Activity`
 
@@ -428,17 +429,17 @@ class PhotoViewerActivity : AppCompatActivity() {
 ---
 
 ## Answer (EN)
-`Activity` is a core component of an Android application that typically represents a single screen with which users can interact. It:
+`Activity` is a core component of an Android application that typically represents a single logical screen or entry point with which users can interact. It:
 - provides a visual user interface,
 - handles user input,
 - participates in a well-defined lifecycle managed by the system,
-- coordinates navigation and interaction with other components.
+- initiates navigation to other screens via `Intent` and coordinates interaction with other components.
 
-Activities are usually the entry points into an app or into distinct user flows (e.g., dialing a phone number, viewing photos, composing an email).
+Activities are commonly used as entry points into an app or into distinct user flows (e.g., dialing a phone number, viewing photos, composing an email), but modern architectures may use a single `Activity` hosting multiple screens (Fragments or composable destinations).
 
 ### `Activity` as a Page in a Book
 
-If you imagine an application as a book, then an `Activity` is one "page" of that book. Each page (`Activity`) has its own content and purpose, and users can navigate between pages.
+If you imagine an application as a book, then an `Activity` is one "page" of that book. Each page (`Activity`) has its own content and purpose, and users can navigate between pages. In modern single-activity setups, multiple UI "pages" can exist within one `Activity` (e.g., via `Fragment` or composable screens).
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -533,9 +534,10 @@ class EmailComposeActivity : AppCompatActivity() {
         val subject = subjectEditText.text.toString()
         val message = messageEditText.text.toString()
 
-        // Send email via email app
+        // Simplified example of sending email via an email app
+        // In real apps, ACTION_SENDTO with mailto: URI is commonly preferred
         val emailIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "message/rfc822"
+            type = "message/*"
             putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
             putExtra(Intent.EXTRA_SUBJECT, subject)
             putExtra(Intent.EXTRA_TEXT, message)
@@ -610,7 +612,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
 #### 4. Screen Transitions
 
-`Activity` enables navigation between different screens (Activities) using intents:
+`Activity` initiates navigation between different screens (Activities) using intents:
 
 ```kotlin
 class ProductListActivity : AppCompatActivity() {
@@ -676,7 +678,7 @@ class MainDashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        // Start a Service for background download (simplified example)
+        // Start a Service for background download (simplified example — for long-running work, prefer WorkManager or a properly declared foreground service)
         findViewById<Button>(R.id.downloadButton).setOnClickListener {
             val serviceIntent = Intent(this, DownloadService::class.java).apply {
                 putExtra("file_url", "https://example.com/file.zip")
@@ -800,24 +802,24 @@ class PhotoViewerActivity : AppCompatActivity() {
 
 ### `Activity` Properties
 
-- Single Screen: typically represents one focused screen or entry point.
-- Independent: can be started by other apps (if exported via manifest).
-- Managed by System: lifecycle is controlled by the Android framework.
-- Has `Intent` Filter: can respond to specific intents when intent filters are declared.
-- Resource Owner: manages its own UI and related resources.
-- Is a `Context`: `Activity` is a `Context`; for application-wide context use `applicationContext`.
+- Single screen or entry point: typically represents one focused screen or logical entry point.
+- Can be started by other apps (if exported via manifest and with appropriate intent filters).
+- Lifecycle managed by the Android framework.
+- Can handle specific `Intent`s when matching intent filters are declared.
+- Manages its own UI and related resources.
+- Is a `Context`: used for UI-related operations; for application-wide or long-lived usage, prefer `applicationContext` instead of holding an `Activity` reference.
 
 ### When to Use `Activity`
 
 - Use an `Activity` for:
   - Distinct screens or flows in your app.
-  - Entry points from other apps (deep links, implicit intents, launchers).
+  - Entry points from other apps (deep links, implicit intents, launcher icons).
   - Full-screen or major user experiences.
 
 - Prefer other components instead of a new `Activity` for:
   - Sub-sections of a screen (use Fragments or composable destinations).
   - Temporary UI overlays (use DialogFragment, dialogs, or in-view UI).
-  - Background operations (use `Service`, WorkManager, coroutines, etc.).
+  - Background operations (use `Service`, WorkManager, coroutines, etc., instead of keeping an `Activity` alive).
 
 ---
 

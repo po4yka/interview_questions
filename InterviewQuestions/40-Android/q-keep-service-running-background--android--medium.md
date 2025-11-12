@@ -63,9 +63,9 @@ tags:
 
 **Ключевые характеристики:**
 - Требует постоянного уведомления (обязательно с Android 8.0+)
-- Высокий приоритет — сервис значительно менее вероятно будет убит системой, но это не абсолютная гарантия
+- Высокий приоритет — сервис значительно менее вероятно будет убит системой, но это не абсолютная гарантия непрерывной работы
 - Должен вызвать `startForeground()` в течение 5 секунд после запуска через `startForegroundService()`
-- Требует разрешения `FOREGROUND_SERVICE` в манифесте
+- Требует разрешения `FOREGROUND_SERVICE` в манифесте (Android 9+), а также корректных `foregroundServiceType` для соответствующих сценариев на Android 10+/14+
 
 ```kotlin
 class DownloadService : Service() {
@@ -87,6 +87,7 @@ class DownloadService : Service() {
                 stopSelf()
             }
         }
+        // START_STICKY is acceptable here to let system recreate service if killed while work is ongoing
         return START_STICKY
     }
 
@@ -124,7 +125,7 @@ class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker
     override suspend fun doWork(): Result {
         return try {
             val fileUrl = inputData.getString("file_url") ?: return Result.failure()
-            // ✅ For long-running work that must run in a foreground context
+            // ✅ For long-running work that must run in a foreground context (e.g. user-initiated upload)
             setForeground(createForegroundInfo())
             uploadFile(fileUrl)
             Result.success()
@@ -165,7 +166,7 @@ WorkManager.getInstance(this).enqueue(uploadRequest)
 class SyncJobService : JobService() {
     private var job: Job? = null
 
-    override fun onStartJob(params: JobParameters?): Boolean {
+    override fun onStartJob(params: JobParameters): Boolean {
         job = CoroutineScope(Dispatchers.IO).launch {
             try {
                 performSync()
@@ -177,7 +178,7 @@ class SyncJobService : JobService() {
         return true // Work is ongoing
     }
 
-    override fun onStopJob(params: JobParameters?): Boolean {
+    override fun onStopJob(params: JobParameters): Boolean {
         job?.cancel()
         return true // Request reschedule; реальное поведение зависит от системы
     }
@@ -216,7 +217,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 **2. Учитывайте различия версий Android:**
 - Android 12+ имеет дополнительные ограничения на запуск foreground service из фона
 - Android 8+ требует `startForegroundService()` для запуска foreground service
-- Android 14+ требует `foregroundServiceType` в манифесте для соответствующих сценариев
+- Android 14+ требует корректного `foregroundServiceType` в манифесте для соответствующих сценариев
 
 **3. Всегда останавливайте сервисы:**
 ```kotlin
@@ -231,6 +232,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
             scope.cancel()
         }
     }
+    // NOT_STICKY: система не будет перезапускать сервис автоматически после успешного завершения
     return START_NOT_STICKY
 }
 ```
@@ -263,7 +265,7 @@ To keep a service running in the background, choose the right approach:
 - Requires a persistent notification (mandatory on Android 8.0+)
 - High priority — much less likely to be killed by the system, but not guaranteed to run forever
 - Must call `startForeground()` within 5 seconds after starting via `startForegroundService()`
-- Requires `FOREGROUND_SERVICE` permission in manifest
+- Requires `FOREGROUND_SERVICE` permission in manifest (Android 9+), and appropriate `foregroundServiceType` values for the given use case on Android 10+/14+
 
 ```kotlin
 class DownloadService : Service() {
@@ -285,6 +287,7 @@ class DownloadService : Service() {
                 stopSelf()
             }
         }
+        // START_STICKY is acceptable here to let the system recreate the service if killed while work is still relevant
         return START_STICKY
     }
 
@@ -322,7 +325,7 @@ class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker
     override suspend fun doWork(): Result {
         return try {
             val fileUrl = inputData.getString("file_url") ?: return Result.failure()
-            // ✅ For long-running work that must run in a foreground context
+            // ✅ For long-running work that must run in a foreground context (e.g. user-initiated upload)
             setForeground(createForegroundInfo())
             uploadFile(fileUrl)
             Result.success()
@@ -363,7 +366,7 @@ WorkManager.getInstance(this).enqueue(uploadRequest)
 class SyncJobService : JobService() {
     private var job: Job? = null
 
-    override fun onStartJob(params: JobParameters?): Boolean {
+    override fun onStartJob(params: JobParameters): Boolean {
         job = CoroutineScope(Dispatchers.IO).launch {
             try {
                 performSync()
@@ -375,7 +378,7 @@ class SyncJobService : JobService() {
         return true // Work is ongoing
     }
 
-    override fun onStopJob(params: JobParameters?): Boolean {
+    override fun onStopJob(params: JobParameters): Boolean {
         job?.cancel()
         return true // Request reschedule; actual behavior depends on the system
     }
@@ -414,7 +417,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 **2. Handle Android version differences:**
 - Android 12+ has additional restrictions on starting foreground services from the background
 - Android 8+ requires `startForegroundService()` to start a foreground service
-- Android 14+ requires `foregroundServiceType` in manifest for relevant use cases
+- Android 14+ requires appropriate `foregroundServiceType` entries in the manifest for relevant use cases
 
 **3. Always stop services:**
 ```kotlin
@@ -429,6 +432,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
             scope.cancel()
         }
     }
+    // NOT_STICKY: system won't restart the service automatically after successful completion
     return START_NOT_STICKY
 }
 ```

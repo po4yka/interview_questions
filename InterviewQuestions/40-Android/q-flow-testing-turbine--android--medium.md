@@ -53,7 +53,7 @@ Turbine — библиотека для тестирования Kotlin `Flow` �
 - Декларативные методы для проверки эмиссий (`awaitItem`, `awaitComplete`, `awaitError`)
 - Интеграция с `kotlinx-coroutines-test` для контроля виртуального времени
 - Поддержка `StateFlow`, `SharedFlow` и холодных `Flow`
-- Автоматическая очистка ресурсов и корректная обработка отмены
+- Автоматическая очистка ресурсов и корректная обработка отмены внутри `test {}` / `testIn()`
 
 **Основной API:**
 
@@ -64,7 +64,7 @@ fun `test flow emissions`() = runTest {
     val flow = flowOf(1, 2, 3)
 
     flow.test {
-        assertEquals(1, awaitItem())  // ждем первую эмиссию
+        assertEquals(1, awaitItem())  // ждём первую эмиссию
         assertEquals(2, awaitItem())
         assertEquals(3, awaitItem())
         awaitComplete()               // проверяем завершение
@@ -86,22 +86,22 @@ fun `test flow error`() = runTest {
     }
 }
 
-// ✅ Проверка отложенной эмиссии и отсутствия событий
+// ✅ Проверка отложенной эмиссии с виртуальным временем (всё в одном тест-блоке)
 @Test
 fun `test delayed emission`() = runTest {
     val flow = flow {
         delay(100)
         emit(42)
+        emit(43)
     }
 
     flow.test {
         expectNoEvents()              // на старте нет эмиссий
-    }
 
-    advanceTimeBy(100)                // управление виртуальным временем в runTest
+        advanceTimeBy(100)            // управление виртуальным временем в runTest
 
-    flow.test {
         assertEquals(42, awaitItem())
+        assertEquals(43, awaitItem())
         awaitComplete()
     }
 }
@@ -119,19 +119,25 @@ class CounterViewModel : ViewModel() {
 
 @Test
 fun `increment updates state correctly`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
-    val viewModel = CounterViewModel()
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
+    try {
+        val viewModel = CounterViewModel()
 
-    viewModel.count.test {
-        assertEquals(0, awaitItem())  // ✅ StateFlow всегда имеет начальное значение
+        viewModel.count.test {
+            assertEquals(0, awaitItem())  // ✅ StateFlow всегда имеет начальное значение
 
-        viewModel.increment()
-        assertEquals(1, awaitItem())
+            viewModel.increment()
+            // при необходимости продвигаем виртуальное время:
+            advanceUntilIdle()
 
-        cancelAndIgnoreRemainingEvents()  // ✅ завершаем тест без ожидания
+            assertEquals(1, awaitItem())
+
+            cancelAndIgnoreRemainingEvents()  // ✅ завершаем тест без ожидания
+        }
+    } finally {
+        Dispatchers.resetMain()
     }
-
-    Dispatchers.resetMain()
 }
 ```
 
@@ -160,23 +166,29 @@ class DataViewModel(private val repo: Repository) : ViewModel() {
 
 @Test
 fun `load transitions through states correctly`() = runTest {
-    val mockRepo = mockk<Repository>()
-    coEvery { mockRepo.getData() } returns flowOf("result")
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
+    try {
+        val mockRepo = mockk<Repository>()
+        coEvery { mockRepo.getData() } returns flowOf("result")
 
-    val viewModel = DataViewModel(mockRepo)
+        val viewModel = DataViewModel(mockRepo)
 
-    viewModel.state.test {
-        assertTrue(awaitItem() is UiState.Loading)  // начальное состояние
-    }
+        viewModel.state.test {
+            // начальное состояние
+            assertTrue(awaitItem() is UiState.Loading)
 
-    viewModel.load()
-    advanceUntilIdle()  // ✅ пропускаем виртуальное время до завершения корутин
+            viewModel.load()
+            advanceUntilIdle()  // ✅ пропускаем виртуальное время до завершения корутин
 
-    viewModel.state.test {
-        val final = awaitItem()
-        assertTrue(final is UiState.Success)
-        assertEquals("result", (final as UiState.Success).data)
-        cancelAndIgnoreRemainingEvents()
+            val final = awaitItem()
+            assertTrue(final is UiState.Success)
+            assertEquals("result", (final as UiState.Success).data)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    } finally {
+        Dispatchers.resetMain()
     }
 }
 ```
@@ -187,10 +199,10 @@ fun `load transitions through states correctly`() = runTest {
 // ❌ Забыли awaitComplete/cancelAndIgnoreRemainingEvents
 flow.test {
     assertEquals(1, awaitItem())
-    // тест зависнет, ожидая завершения Flow
+    // тест зависнет, ожидая завершения Flow или дополнительных элементов
 }
 
-// ✅ Всегда явно завершаете ожидание
+// ✅ Всегда явно завершайте ожидание
 flow.test {
     assertEquals(1, awaitItem())
     awaitComplete()  // или cancelAndIgnoreRemainingEvents()
@@ -202,7 +214,7 @@ stateFlow.test {
     assertEquals(newValue, awaitItem())  // пропустили начальное!
 }
 
-// ✅ Обрабатываем начальную эмиссию
+// ✅ Обрабатывайте начальную эмиссию
 stateFlow.test {
     awaitItem()  // пропускаем начальное
     viewModel.update()
@@ -219,7 +231,7 @@ Turbine is a Kotlin `Flow` testing library by Cash App that provides a declarati
 - Declarative methods for emission verification (`awaitItem`, `awaitComplete`, `awaitError`)
 - Integration with `kotlinx-coroutines-test` for virtual time control
 - Support for `StateFlow`, `SharedFlow`, and cold Flows
-- Automatic resource cleanup and proper cancellation handling
+- Automatic resource cleanup and proper cancellation handling inside `test {}` / `testIn()`
 
 **Core API:**
 
@@ -252,22 +264,22 @@ fun `test flow error`() = runTest {
     }
 }
 
-// ✅ Verifying delayed emission and no events
+// ✅ Verifying delayed emission with virtual time (single test block)
 @Test
 fun `test delayed emission`() = runTest {
     val flow = flow {
         delay(100)
         emit(42)
+        emit(43)
     }
 
     flow.test {
         expectNoEvents()              // no emissions at the beginning
-    }
 
-    advanceTimeBy(100)                // virtual time control in runTest
+        advanceTimeBy(100)            // virtual time control in runTest
 
-    flow.test {
         assertEquals(42, awaitItem())
+        assertEquals(43, awaitItem())
         awaitComplete()
     }
 }
@@ -285,19 +297,25 @@ class CounterViewModel : ViewModel() {
 
 @Test
 fun `increment updates state correctly`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
-    val viewModel = CounterViewModel()
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
+    try {
+        val viewModel = CounterViewModel()
 
-    viewModel.count.test {
-        assertEquals(0, awaitItem())  // ✅ StateFlow always has initial value
+        viewModel.count.test {
+            assertEquals(0, awaitItem())  // ✅ StateFlow always has initial value
 
-        viewModel.increment()
-        assertEquals(1, awaitItem())
+            viewModel.increment()
+            // advance virtual time if needed
+            advanceUntilIdle()
 
-        cancelAndIgnoreRemainingEvents()  // ✅ finish test without waiting
+            assertEquals(1, awaitItem())
+
+            cancelAndIgnoreRemainingEvents()  // ✅ finish test without waiting
+        }
+    } finally {
+        Dispatchers.resetMain()
     }
-
-    Dispatchers.resetMain()
 }
 ```
 
@@ -326,23 +344,29 @@ class DataViewModel(private val repo: Repository) : ViewModel() {
 
 @Test
 fun `load transitions through states correctly`() = runTest {
-    val mockRepo = mockk<Repository>()
-    coEvery { mockRepo.getData() } returns flowOf("result")
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    Dispatchers.setMain(dispatcher)
+    try {
+        val mockRepo = mockk<Repository>()
+        coEvery { mockRepo.getData() } returns flowOf("result")
 
-    val viewModel = DataViewModel(mockRepo)
+        val viewModel = DataViewModel(mockRepo)
 
-    viewModel.state.test {
-        assertTrue(awaitItem() is UiState.Loading)  // initial state
-    }
+        viewModel.state.test {
+            // initial state
+            assertTrue(awaitItem() is UiState.Loading)
 
-    viewModel.load()
-    advanceUntilIdle()  // ✅ advance virtual time until coroutines complete
+            viewModel.load()
+            advanceUntilIdle()  // ✅ advance virtual time until coroutines complete
 
-    viewModel.state.test {
-        val final = awaitItem()
-        assertTrue(final is UiState.Success)
-        assertEquals("result", (final as UiState.Success).data)
-        cancelAndIgnoreRemainingEvents()
+            val final = awaitItem()
+            assertTrue(final is UiState.Success)
+            assertEquals("result", (final as UiState.Success).data)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    } finally {
+        Dispatchers.resetMain()
     }
 }
 ```
@@ -353,7 +377,7 @@ fun `load transitions through states correctly`() = runTest {
 // ❌ Forgot awaitComplete/cancelAndIgnoreRemainingEvents
 flow.test {
     assertEquals(1, awaitItem())
-    // test will hang waiting for Flow completion
+    // test will hang waiting for Flow completion or further items
 }
 
 // ✅ Always explicitly finish waiting
@@ -380,7 +404,7 @@ stateFlow.test {
 
 ## Дополнительные вопросы (RU)
 
-- Как Turbine обрабатывает backpressure при тестировании высокочастотных эмиссий?
+- Как Turbine ведёт себя при тестировании высокочастотных эмиссий и буферизации событий (учитывая, что backpressure в терминах Flow реализуется самим Flow/операторами)?
 - В чем разница между методами `test()` и `testIn()`, и когда какой использовать?
 - Как тестировать холодные и горячие Flows с помощью Turbine?
 - Когда использовать `expectNoEvents()` vs `expectMostRecentItem()`?
@@ -389,7 +413,7 @@ stateFlow.test {
 
 ## Follow-ups
 
-- How does Turbine handle backpressure when testing high-frequency emissions?
+- How does Turbine behave when testing high-frequency emissions and event buffering (given that backpressure semantics are defined by Flows/operators themselves)?
 - What's the difference between `test()` and `testIn()` methods, and when to use each?
 - How to test cold vs hot Flows with Turbine?
 - When should you use `expectNoEvents()` vs `expectMostRecentItem()`?

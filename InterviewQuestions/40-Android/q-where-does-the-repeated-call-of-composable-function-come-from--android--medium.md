@@ -118,6 +118,8 @@ fun OptimizedExample() {
 }
 ```
 
+См. также: [[c-compose-recomposition]]
+
 ## Answer (EN)
 
 The repeated call of a composable function comes from the **recomposition** mechanism. During composition, Compose tracks state reads inside composables; when that state changes, it marks the corresponding parts of the composition as invalid and schedules them for re-execution.
@@ -209,6 +211,8 @@ fun OptimizedExample() {
 }
 ```
 
+See also: [[c-compose-recomposition]]
+
 ---
 
 ## Дополнительные вопросы (RU)
@@ -247,7 +251,6 @@ fun OptimizedExample() {
 ### Похожие (средний уровень)
 - [[q-how-does-jetpackcompose-work--android--medium]] - Архитектура Compose
 - [[q-compose-modifier-order-performance--android--medium]] - Система модификаторов
-- [[q-compositionlocal-advanced--android--medium]] - Распространение состояния
 
 ### Продвинутые (сложнее)
 - [[q-compose-stability-skippability--android--hard]] - Оптимизация пропусков (skipping)
@@ -262,7 +265,6 @@ fun OptimizedExample() {
 ### Related (Same Level)
 - [[q-how-does-jetpackcompose-work--android--medium]] - Compose architecture
 - [[q-compose-modifier-order-performance--android--medium]] - Modifier system
-- [[q-compositionlocal-advanced--android--medium]] - State propagation
 
 ### Advanced (Harder)
 - [[q-compose-stability-skippability--android--hard]] - Skipping optimization

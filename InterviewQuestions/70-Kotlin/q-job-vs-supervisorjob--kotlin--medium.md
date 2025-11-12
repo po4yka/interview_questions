@@ -3,7 +3,7 @@ id: kotlin-189
 title: "Job Vs Supervisorjob / Job против Supervisorjob"
 aliases: ["Job Vs SupervisorJob", "Job против SupervisorJob"]
 topic: kotlin
-subtopics: [c-coroutines, c-structured-concurrency]
+subtopics: [coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/medium]
 ---
 
@@ -80,8 +80,10 @@ Key differences:
 
 ## Связанные вопросы (RU)
 
-- [[q-job-vs-supervisorjob--kotlin--medium]]
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-android-async-primitives--android--easy]]
 
 ## Related Questions
 
-- [[q-job-vs-supervisorjob--kotlin--medium]]
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-android-async-primitives--android--easy]]

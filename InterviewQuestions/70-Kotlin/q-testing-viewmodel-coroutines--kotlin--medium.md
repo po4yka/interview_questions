@@ -67,13 +67,13 @@ dependencies {
 
 ### MainDispatcherRule
 
-Создаём правило, подменяющее `Dispatchers.Main` тестовым диспетчером, чтобы `viewModelScope` и код, использующий Main, работали в контролируемом окружении:
+Создаём правило, подменяющее `Dispatchers.Main` тестовым диспетчером, чтобы `viewModelScope` и код, использующий Main, работали в контролируемом окружении. Для детерминированности обычно используют `StandardTestDispatcher`.
 
 ```kotlin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
@@ -81,7 +81,7 @@ import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
 class MainDispatcherRule(
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    val testDispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
 
     override fun starting(description: Description) {
@@ -97,6 +97,13 @@ class MainDispatcherRule(
 ### Базовый пример `ViewModel` и теста
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -118,6 +125,18 @@ class UserViewModel(
         }
     }
 }
+```
+
+```kotlin
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class UserViewModelTest {
@@ -156,6 +175,14 @@ class UserViewModelTest {
 ### Тестирование `StateFlow` (флаги загрузки)
 
 ```kotlin
+import io.mockk.coEvery
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
 @Test
 fun `verify loading states`() = runTest {
     // Given: эмулируем работу с задержкой, используя виртуальное время
@@ -166,7 +193,7 @@ fun `verify loading states`() = runTest {
 
     val loadingStates = mutableListOf<Boolean>()
 
-    // Коллектим с использованием тестового шедулера
+    // Коллектим используя планировщик runTest
     val job = launch {
         viewModel.isLoading.collect { loadingStates.add(it) }
     }
@@ -187,6 +214,12 @@ fun `verify loading states`() = runTest {
 Turbine упрощает тестирование `Flow`/`StateFlow`/`SharedFlow`:
 
 ```kotlin
+import app.cash.turbine.test
+import io.mockk.coEvery
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
 @Test
 fun `loadUsers эмитит корректные значения через Turbine`() = runTest {
     // Given
@@ -226,6 +259,13 @@ fun `isLoading эмитит корректную последовательно�
 ### Тестирование сценариев ошибок
 
 ```kotlin
+import io.mockk.coEvery
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import java.io.IOException
+
 @Test
 fun `loadUsers корректно обрабатывает ошибку`() = runTest {
     // Given
@@ -241,8 +281,18 @@ fun `loadUsers корректно обрабатывает ошибку`() = run
     assertEquals(false, viewModel.isLoading.value)
     // Опционально: проверить отдельное состояние ошибки, если оно есть
 }
+```
 
-// Расширенная `ViewModel` с `UiState`
+Расширенный пример `ViewModel` с `UiState` (как отдельный вариант реализации):
+
+```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -290,6 +340,13 @@ fun `loadUsers обрабатывает сетевую ошибку`() = runTest
 ### Тестирование `SharedFlow` событий
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -312,11 +369,22 @@ sealed class Event {
     object NavigateToHome : Event()
     data class ShowError(val message: String) : Event()
 }
+```
+
+```kotlin
+import app.cash.turbine.test
+import io.mockk.coEvery
+import io.mockk.just
+import io.mockk.runs
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 @Test
 fun `успешный логин эмитит NavigateToHome`() = runTest {
     // Given
-    coEvery { authRepository.login(any(), any()) } just Runs
+    coEvery { authRepository.login(any(), any()) } just runs
 
     // When/Then
     viewModel.events.test {
@@ -356,6 +424,19 @@ class UserRepository {
         TODO()
     }
 }
+```
+
+```kotlin
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.currentTime
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 @Test
 fun `мокирование suspend функции с возвращаемым значением`() = runTest {
@@ -375,7 +456,7 @@ fun `мокирование suspend функции с Unit`() = runTest {
     val repository = mockk<UserRepository>()
     val user = User(1, "Alice")
 
-    coEvery { repository.saveUser(user) } just Runs
+    coEvery { repository.saveUser(user) } just runs
 
     repository.saveUser(user)
 
@@ -403,6 +484,12 @@ fun `мокирование suspend функции с delay и виртуаль�
 ### Тестирование конкурентных операций
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+
 class DataViewModel(private val repository: DataRepository) : ViewModel() {
     fun loadMultipleSources() {
         viewModelScope.launch {
@@ -415,6 +502,14 @@ class DataViewModel(private val repository: DataRepository) : ViewModel() {
         }
     }
 }
+```
+
+```kotlin
+import io.mockk.coEvery
+import io.mockk.coVerify
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 @Test
 fun `loadMultipleSources вызывает все источники`() = runTest {
@@ -437,6 +532,13 @@ fun `loadMultipleSources вызывает все источники`() = runTest
 ### Тестирование коллекции `Flow`
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+
 class ObservingViewModel(
     private val repository: DataRepository
 ) : ViewModel() {
@@ -447,6 +549,15 @@ class ObservingViewModel(
             initialValue = emptyList()
         )
 }
+```
+
+```kotlin
+import io.mockk.every
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 @Test
 fun `data коллектит значения из репозитория`() = runTest {
@@ -531,7 +642,7 @@ fun test() = runTest {
 
 ## Answer (EN)
 
-Testing coroutines in `ViewModel`s requires special handling to make tests deterministic, fast, and reliable. Use `kotlinx-coroutines-test` utilities (`runTest`, `TestDispatcher` implementations, and a rule to override `Dispatchers.Main`). Note: `TestCoroutineDispatcher` from the old API is deprecated; prefer `StandardTestDispatcher`/`UnconfinedTestDispatcher`.
+Testing coroutines in `ViewModel`s requires special handling to make tests deterministic, fast, and reliable. Use `kotlinx-coroutines-test` utilities (`runTest`, `TestDispatcher` implementations, and a rule to override `Dispatchers.Main`). Note: `TestCoroutineDispatcher` from the old API is deprecated; prefer `StandardTestDispatcher`/`UnconfinedTestDispatcher`, with `StandardTestDispatcher` as the default choice for deterministic behavior.
 
 See also: [[c-kotlin]], [[c-coroutines]], [[c-viewmodel]], [[c-testing]], [[c-unit-testing]].
 
@@ -559,13 +670,13 @@ dependencies {
 
 ### MainDispatcherRule
 
-Create a test rule to replace `Dispatchers.Main` so that `viewModelScope` (which uses `Dispatchers.Main.immediate`) runs on a controllable test dispatcher:
+Create a test rule to replace `Dispatchers.Main` so that `viewModelScope` (which uses `Dispatchers.Main.immediate`) runs on a controllable test dispatcher. Prefer `StandardTestDispatcher` for deterministic scheduling.
 
 ```kotlin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
@@ -573,7 +684,7 @@ import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
 class MainDispatcherRule(
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    val testDispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
 
     override fun starting(description: Description) {
@@ -589,6 +700,13 @@ class MainDispatcherRule(
 ### Basic `ViewModel` Test
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -610,6 +728,18 @@ class UserViewModel(
         }
     }
 }
+```
+
+```kotlin
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class UserViewModelTest {
@@ -648,6 +778,14 @@ class UserViewModelTest {
 ### Testing `StateFlow`
 
 ```kotlin
+import io.mockk.coEvery
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
 @Test
 fun `verify loading states`() = runTest {
     // Given: simulate some work to exercise loading flags with virtual time
@@ -658,8 +796,8 @@ fun `verify loading states`() = runTest {
 
     val loadingStates = mutableListOf<Boolean>()
 
-    // Collect using the test scheduler (via the rule's dispatcher)
-    val job = launch { // uses runTest's scheduler
+    // Collect using runTest's scheduler
+    val job = launch {
         viewModel.isLoading.collect { loadingStates.add(it) }
     }
 
@@ -679,6 +817,12 @@ fun `verify loading states`() = runTest {
 Turbine makes testing `Flow`s and `StateFlow`/`SharedFlow` easier:
 
 ```kotlin
+import app.cash.turbine.test
+import io.mockk.coEvery
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
 @Test
 fun `loadUsers emits correct states using Turbine`() = runTest {
     // Given
@@ -718,6 +862,13 @@ fun `isLoading emits correct sequence`() = runTest {
 ### Testing Error Scenarios
 
 ```kotlin
+import io.mockk.coEvery
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import java.io.IOException
+
 @Test
 fun `loadUsers handles error correctly`() = runTest {
     // Given
@@ -733,8 +884,18 @@ fun `loadUsers handles error correctly`() = runTest {
     assertEquals(false, viewModel.isLoading.value)
     // Optionally assert error state if exposed
 }
+```
 
-// Enhanced `ViewModel` with error state
+Enhanced `ViewModel` with `UiState` (separate variant):
+
+```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -760,8 +921,17 @@ sealed class UiState {
     data class Success(val users: List<User>) : UiState()
     data class Error(val message: String) : UiState()
 }
+```
 
-// Test
+```kotlin
+import app.cash.turbine.test
+import io.mockk.coEvery
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import java.io.IOException
+
 @Test
 fun `loadUsers handles network error`() = runTest {
     // Given
@@ -783,6 +953,13 @@ fun `loadUsers handles network error`() = runTest {
 ### Testing `SharedFlow` Events
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+
 class LoginViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -805,12 +982,22 @@ sealed class Event {
     object NavigateToHome : Event()
     data class ShowError(val message: String) : Event()
 }
+```
 
-// Test
+```kotlin
+import app.cash.turbine.test
+import io.mockk.coEvery
+import io.mockk.just
+import io.mockk.runs
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
 @Test
 fun `login success emits NavigateToHome event`() = runTest {
     // Given
-    coEvery { authRepository.login(any(), any()) } just Runs
+    coEvery { authRepository.login(any(), any()) } just runs
 
     // When/Then
     viewModel.events.test {
@@ -850,6 +1037,19 @@ class UserRepository {
         TODO()
     }
 }
+```
+
+```kotlin
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.currentTime
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 @Test
 fun `mock suspend function with return value`() = runTest {
@@ -869,7 +1069,7 @@ fun `mock suspend function with Unit return`() = runTest {
     val repository = mockk<UserRepository>()
     val user = User(1, "Alice")
 
-    coEvery { repository.saveUser(user) } just Runs
+    coEvery { repository.saveUser(user) } just runs
 
     repository.saveUser(user)
 
@@ -897,6 +1097,12 @@ fun `mock suspend function with delay uses virtual time`() = runTest {
 ### Testing Concurrent Operations
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+
 class DataViewModel(private val repository: DataRepository) : ViewModel() {
     fun loadMultipleSources() {
         viewModelScope.launch {
@@ -909,6 +1115,14 @@ class DataViewModel(private val repository: DataRepository) : ViewModel() {
         }
     }
 }
+```
+
+```kotlin
+import io.mockk.coEvery
+import io.mockk.coVerify
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 @Test
 fun `loadMultipleSources calls all repositories`() = runTest {
@@ -931,6 +1145,13 @@ fun `loadMultipleSources calls all repositories`() = runTest {
 ### Testing `Flow` Collection
 
 ```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+
 class ObservingViewModel(
     private val repository: DataRepository
 ) : ViewModel() {
@@ -941,6 +1162,15 @@ class ObservingViewModel(
             initialValue = emptyList()
         )
 }
+```
+
+```kotlin
+import io.mockk.every
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 @Test
 fun `data collects from repository flow`() = runTest {

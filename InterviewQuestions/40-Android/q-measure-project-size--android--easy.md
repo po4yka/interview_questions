@@ -29,6 +29,7 @@ tags:
 - codebase-analysis
 - difficulty/easy
 - project-metrics
+
 ---
 
 # Вопрос (RU)
@@ -345,6 +346,13 @@ Build Time:       ~2 min (incremental)
 3. **Regular cleanup** — remove unused dependencies, resources, and dead code.
 4. **Optimize** — use R8/ProGuard shrinking, resource shrinking, ABI/language splits, and optimize images/native libs.
 
+## Дополнительные вопросы (RU)
+
+- Как уменьшить размер APK, если он превышает допустимые значения?
+- В чем разница между MultiDex и App `Bundle` при работе с лимитом методов?
+- Как измерять технический долг и сложность кода помимо LOC?
+- Какие метрики должны служить триггером для рефакторинга или модуляризации проекта?
+
 ## Follow-ups
 
 - How to reduce APK size if it exceeds acceptable limits?
@@ -352,11 +360,40 @@ Build Time:       ~2 min (incremental)
 - How to measure technical debt and code complexity beyond LOC?
 - What metrics should trigger project refactoring or modularization?
 
+## Ссылки (RU)
+
+- Android Developer Guide: APK Analyzer
+- Gradle User Manual: Build Scans
+- SonarQube documentation for Android projects
+
 ## References
 
 - Android Developer Guide: APK Analyzer
 - Gradle User Manual: Build Scans
 - SonarQube documentation for Android projects
+
+## Связанные вопросы (RU)
+
+### Предварительные знания / Концепции
+
+- [[c-gradle]]
+
+### Предварительные (проще)
+
+- Базовая структура проекта
+- Основы системы сборки Gradle
+- Состав и структура APK
+
+### Связанные (того же уровня)
+
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]]
+- [[q-how-navigation-is-implemented-in-android--android--medium]]
+
+### Продвинутые (сложнее)
+
+- Стратегии оптимизации сборки
+- Архитектурные паттерны модуляризации
+- Динамические feature-модули и поставка по запросу
 
 ## Related Questions
 

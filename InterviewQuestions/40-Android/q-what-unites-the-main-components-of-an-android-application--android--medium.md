@@ -57,7 +57,7 @@ tags:
 
 #### 1. Объявление в AndroidManifest.xml
 
-Все четыре типа компонентов могут быть объявлены в манифесте; для `Activity`, `Service`, `ContentProvider` и статически зарегистрированных `BroadcastReceiver` это обычно обязательно, чтобы система могла их создавать.
+Все четыре типа компонентов могут быть объявлены в манифесте; для `Activity`, `Service`, `ContentProvider` и статически зарегистрированных `BroadcastReceiver` это обычно необходимо, чтобы система могла их обнаруживать и создавать, особенно если они должны быть доступны системе или другим приложениям.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -110,7 +110,7 @@ activity.onCreate() // Неверно
 
 // Вместо этого вызываете API фреймворка:
 startActivity(Intent(this, MainActivity::class.java))
-// Система создаёт Activity и вызывает его методы жизненного цикла.
+// Система создаёт Activity и вызывает её методы жизненного цикла.
 ```
 
 Обязанности системы:
@@ -121,14 +121,14 @@ startActivity(Intent(this, MainActivity::class.java))
 
 #### 3. Взаимодействие через `Intent`
 
-Компоненты взаимодействуют в основном через **`Intent`** (для `ContentProvider` — через `ContentResolver`):
+Компоненты взаимодействуют в основном через **`Intent`** (для `ContentProvider` — через `ContentResolver`); адресуемость и фильтрация обеспечиваются через intent-filters.
 
 ```kotlin
 // Запуск Activity
 val activityIntent = Intent(this, DetailActivity::class.java)
 startActivity(activityIntent)
 
-// Запуск Service (упрощённо; на современных версиях действуют ограничения фонового выполнения)
+// Запуск Service (упрощённо; на современных версиях действуют ограничения фонового выполнения и требования к foreground services)
 val serviceIntent = Intent(this, DownloadService::class.java)
 startService(serviceIntent)
 
@@ -210,7 +210,7 @@ class MyService : Service() {
 // Жизненный цикл BroadcastReceiver
 class MyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // Короткоживущий: должен завершиться быстро (обычно до ~10 секунд)
+        // Короткоживущий: должен завершиться быстро; при длительной работе система может выдать ANR или завершить процесс.
     }
 }
 
@@ -287,7 +287,7 @@ class MyProvider : ContentProvider() {
 2. Наследование от базовых классов фреймворка
 3. Переопределение методов жизненного цикла
 4. Доступ к `Context`
-5. Взаимодействие через `Intent`/`PendingIntent`/`ContentResolver`
+5. Взаимодействие через `Intent`/`PendingIntent`/`ContentResolver` и intent-filters
 
 ```kotlin
 // Пример Service
@@ -314,7 +314,7 @@ class DownloadService : Service() {
 ```kotlin
 // Activity → Service
 val serviceIntent = Intent(this, MyService::class.java)
-startService(serviceIntent)
+startService(serviceIntent) // упрощённо; для фоновой работы учитывайте ограничения и foreground service при необходимости
 
 // Activity → BroadcastReceiver
 val brIntent = Intent("com.example.ACTION")
@@ -340,7 +340,7 @@ override fun onReceive(context: Context, intent: Intent) {
 Основные компоненты Android объединены:
 1. Тем, что они известны системе (объявлены в манифесте или зарегистрированы кодом)
 2. Управлением жизненного цикла со стороны системы
-3. Стандартными механизмами взаимодействия (`Intent`, PendingIntent, ContentResolver)
+3. Стандартными механизмами взаимодействия (`Intent`, `PendingIntent`, `ContentResolver`, intent-filters)
 4. Доступом к `Context`
 5. Наличием определённых колбеков жизненного цикла
 6. Выполнением по умолчанию в процессе приложения (с возможностью вынести в отдельный процесс)
@@ -357,7 +357,7 @@ override fun onReceive(context: Context, intent: Intent) {
 1. Четыре основных компонента: `Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`
 2. Объявление в манифесте (и/или регистрация в коде для динамических Receiver)
 3. Управление со стороны системы, а не ручное создание
-4. Взаимодействие через `Intent` (для `ContentProvider` — через ContentResolver)
+4. Взаимодействие через `Intent` (для `ContentProvider` — через `ContentResolver` и URI)
 5. Доступ к `Context`
 6. Чётко определённые жизненные циклы
 7. Выполнение в процессе приложения по умолчанию и единую систему разрешений
@@ -381,7 +381,7 @@ Android Application Components
 
 #### 1. AndroidManifest.xml Declaration
 
-All four component types can be declared in the manifest; for Activities, Services, ContentProviders, and statically registered BroadcastReceivers this is normally required so the system can instantiate them.
+All four component types can be declared in the manifest; for Activities, Services, ContentProviders, and statically registered BroadcastReceivers this is normally required so the system can discover and instantiate them, especially when they must be visible to the system or other apps.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -440,19 +440,19 @@ startActivity(Intent(this, MainActivity::class.java))
 System responsibilities include:
 - Component instantiation based on manifest/registration and Intents
 - Lifecycle callback dispatch
-- Process allocation
+- Process allocation and management
 - Memory management and component teardown
 
 #### 3. `Intent`-Based Interaction
 
-Components interact primarily through **Intents** (and for `ContentProvider`, via `ContentResolver`):
+Components interact primarily through **Intents** (and for `ContentProvider`, via `ContentResolver`); addressing and matching are handled through intent filters.
 
 ```kotlin
 // Start Activity
 val activityIntent = Intent(this, DetailActivity::class.java)
 startActivity(activityIntent)
 
-// Start Service (simplified; background limits apply on modern Android)
+// Start Service (simplified; background execution limits and foreground service requirements apply on modern Android)
 val serviceIntent = Intent(this, DownloadService::class.java)
 startService(serviceIntent)
 
@@ -460,7 +460,7 @@ startService(serviceIntent)
 val broadcastIntent = Intent("com.example.CUSTOM_ACTION")
 sendBroadcast(broadcastIntent)
 
-// Query ContentProvider (Uses ContentResolver, not a direct Intent)
+// Query ContentProvider (uses ContentResolver, not a direct Intent)
 val uri = Uri.parse("content://com.example.app.provider/users")
 contentResolver.query(uri, null, null, null, null)
 ```
@@ -534,14 +534,14 @@ class MyService : Service() {
 // BroadcastReceiver lifecycle
 class MyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // Short-lived: must complete quickly (on modern Android, typically within ~10 seconds)
+        // Short-lived: must complete quickly; if it runs too long, the system may ANR or kill the process.
     }
 }
 
 // ContentProvider lifecycle
 class MyProvider : ContentProvider() {
     override fun onCreate(): Boolean { return true }
-    // No explicit destroy callback; tied to application process lifecycle.
+    // No explicit destroy callback; tied to the application process lifecycle.
 }
 ```
 
@@ -611,7 +611,7 @@ All four component types follow similar patterns:
 2. Extend framework base classes
 3. Override lifecycle callbacks
 4. Access `Context`
-5. Interact via `Intent`/`PendingIntent`/`ContentResolver`
+5. Interact via `Intent`/`PendingIntent`/`ContentResolver` and intent filters
 
 ```kotlin
 // Example Service
@@ -639,7 +639,7 @@ class DownloadService : Service() {
 ```kotlin
 // Activity → Service
 val serviceIntent = Intent(this, MyService::class.java)
-startService(serviceIntent)
+startService(serviceIntent) // simplified; consider background limits and foreground service requirements
 
 // Activity → BroadcastReceiver
 val brIntent = Intent("com.example.ACTION")
@@ -653,7 +653,7 @@ val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, Pendi
 val uri = Uri.parse("content://authority/path")
 contentResolver.query(uri, null, null, null, null)
 
-// BroadcastReceiver → Service (simplified; bg limits apply)
+// BroadcastReceiver → Service (simplified; bg limits apply on modern Android)
 override fun onReceive(context: Context, intent: Intent) {
     val serviceIntent = Intent(context, MyService::class.java)
     context.startService(serviceIntent)
@@ -665,7 +665,7 @@ override fun onReceive(context: Context, intent: Intent) {
 Main Android components are united by:
 1. Being known to the system (manifest declaration or code registration)
 2. System-controlled instantiation and lifecycle
-3. Standard communication mechanisms (Intents, PendingIntent, ContentResolver)
+3. Standard communication mechanisms (Intents, PendingIntent, ContentResolver, intent filters)
 4. Access to `Context`
 5. Defined lifecycle callbacks
 6. Execution within the app's process by default (with configurable processes)
@@ -682,7 +682,7 @@ A good answer should include:
 1. Four main components: `Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`
 2. Manifest declaration (and/or code registration for dynamic receivers)
 3. System-managed lifecycle and instantiation (not manual construction)
-4. Interaction via `Intent` (and via `ContentResolver` for `ContentProvider`)
+4. Interaction via `Intent` (and via `ContentResolver` and URIs for `ContentProvider`)
 5. Access to `Context`
 6. Well-defined lifecycles
 7. Default execution in the app process and a shared permission-based security model

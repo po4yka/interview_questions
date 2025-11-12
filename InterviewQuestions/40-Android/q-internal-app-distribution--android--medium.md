@@ -36,6 +36,8 @@ tags: [android/ci-cd, android/play-console, beta-testing, difficulty/medium, fir
 
 **Setup и Gradle Configuration**
 
+(Нижеупомянутый пример носит демонстрационный характер. Для актуальной конфигурации следует использовать официальную документацию Firebase App Distribution Gradle Plugin: обычно блок `firebaseAppDistribution { ... }` настраивается на уровне модуля/вариантов сборки, либо используется CLI/fastlane.)
+
 ```kotlin
 // build.gradle.kts (app level)
 plugins {
@@ -45,26 +47,23 @@ plugins {
 android {
     buildTypes {
         getByName("debug") {
-            // Для примера: реальных секретов и service account файлов в app-модуле быть не должно
-            firebaseAppDistribution {
-                artifactType = "APK" // или "AAB" в зависимости от артефакта сборки
-                releaseNotesFile = "release-notes/debug.txt"
-                groups = "qa-team, internal-testers"
-            }
+            // Для примера: реальные секреты и service account файлы не должны быть в app-модуле
+            // Конкретный способ привязки к buildType зависит от версии плагина и официальной документации
         }
 
         create("qa") {
             initWith(getByName("debug"))
             applicationIdSuffix = ".qa"
             versionNameSuffix = "-qa"
-
-            firebaseAppDistribution {
-                groups = "qa-team"
-                // В реальном CI release notes обычно передаются параметром или из файла
-                releaseNotes = generateReleaseNotes()
-            }
         }
     }
+}
+
+firebaseAppDistribution {
+    // Примерная схема: реальные поля и синтаксис уточнять по докам плагина
+    artifactType = "APK" // или "AAB" в зависимости от артефакта сборки
+    releaseNotesFile = "release-notes/debug.txt"
+    groups = "qa-team, internal-testers"
 }
 
 fun generateReleaseNotes(): String = buildString {
@@ -77,7 +76,8 @@ fun generateReleaseNotes(): String = buildString {
 (Для полноты на собеседовании кандидат должен упомянуть, что:
 - загрузка в Firebase App Distribution обычно выполняется из CI, используя service account через секреты;
 - артефакты: APK или AAB в зависимости от стратегии;
-- не допускается включать service account JSON в репозиторий или APK.)
+- не допускается включать service account JSON в репозиторий или APK;
+- тестировщики добавляются по email/группам, получают приглашения и устанавливают сборки через App Distribution.)
 
 **CI/CD Integration (GitHub Actions)**
 
@@ -185,7 +185,7 @@ enum class FeedbackType {
 
 ### Google Play Internal Testing
 
-**Play Console API Integration (упрощённый пример)**
+**Play Console API Integration (упрощённый, устаревший пример)**
 
 ```kotlin
 class PlayConsoleUploader @Inject constructor(
@@ -196,7 +196,7 @@ class PlayConsoleUploader @Inject constructor(
         apkFile: File,
         releaseNotes: String
     ) {
-        // В реальном проекте следует использовать актуальную версию Google API Client / REST
+        // Упрощённый/legacy пример. В реальном проекте использовать актуальные Google Play Developer API и библиотеки.
         val credential = GoogleCredential.fromStream(
             serviceAccountKey.byteInputStream()
         ).createScoped(AndroidPublisherScopes.all())
@@ -250,7 +250,8 @@ class PlayConsoleUploader @Inject constructor(
 
 (Важно: Internal Testing в Play Console:
 - распространяет приложение через Play Store с соблюдением политик и подписи через Play;
-- подходит для быстрого распространения среди доверенных тестировщиков.)
+- подходит для быстрого распространения среди доверенных тестировщиков;
+- требует добавления тестировщиков (email/группы или ссылку-подписку) в трек, иначе билд не будет доступен.)
 
 ### Enterprise Distribution (MDM)
 
@@ -337,6 +338,7 @@ data class ComplianceResult(
 - Ротация тестировщиков для избежания feedback bias
 - Чёткие guidelines для каждой группы
 - Контролируемый размер групп (например, 10–50 человек на сценарий)
+- В Google Play треках и Firebase App Distribution явно управлять списками email/групп
 
 **2. Release Notes Automation**
 - Автоматическая генерация из git commits или changelog
@@ -388,6 +390,8 @@ Internal app distribution enables rapid iteration with beta testers and QA teams
 
 **Setup and Gradle Configuration**
 
+(The snippet below is illustrative. For the actual configuration, follow the official Firebase App Distribution Gradle Plugin docs: typically a `firebaseAppDistribution { ... }` block is configured at module/variant level, or CLI/fastlane is used.)
+
 ```kotlin
 // build.gradle.kts (app level)
 plugins {
@@ -398,25 +402,22 @@ android {
     buildTypes {
         getByName("debug") {
             // Example only: do not keep real secrets or service account files in the app module
-            firebaseAppDistribution {
-                artifactType = "APK" // or "AAB" depending on your artifact
-                releaseNotesFile = "release-notes/debug.txt"
-                groups = "qa-team, internal-testers"
-            }
+            // The exact per-buildType linkage depends on the plugin version and official docs
         }
 
         create("qa") {
             initWith(getByName("debug"))
             applicationIdSuffix = ".qa"
             versionNameSuffix = "-qa"
-
-            firebaseAppDistribution {
-                groups = "qa-team"
-                // In real CI pipelines, release notes are usually provided via params or file
-                releaseNotes = generateReleaseNotes()
-            }
         }
     }
+}
+
+firebaseAppDistribution {
+    // Conceptual example: check plugin docs for exact fields and syntax
+    artifactType = "APK" // or "AAB" depending on your artifact
+    releaseNotesFile = "release-notes/debug.txt"
+    groups = "qa-team, internal-testers"
 }
 
 fun generateReleaseNotes(): String = buildString {
@@ -429,7 +430,8 @@ fun generateReleaseNotes(): String = buildString {
 (For interviews, the candidate should note that:
 - Firebase App Distribution upload is typically done from CI using a service account injected via secrets;
 - artifacts can be APK or AAB depending on distribution strategy;
-- service account JSON must not be committed to repo or packaged into the app.)
+- service account JSON must not be committed to repo or packaged into the app;
+- testers are added via email/groups and receive invitations or links to install builds through App Distribution.)
 
 **CI/CD Integration (GitHub Actions)**
 
@@ -537,7 +539,7 @@ enum class FeedbackType {
 
 ### Google Play Internal Testing
 
-**Play Console API Integration (simplified example)**
+**Play Console API Integration (simplified, legacy example)**
 
 ```kotlin
 class PlayConsoleUploader @Inject constructor(
@@ -548,7 +550,7 @@ class PlayConsoleUploader @Inject constructor(
         apkFile: File,
         releaseNotes: String
     ) {
-        // In a real project use the current Google API Client / REST approach
+        // Simplified/legacy example. In real projects, use the current Google Play Developer API and client libraries.
         val credential = GoogleCredential.fromStream(
             serviceAccountKey.byteInputStream()
         ).createScoped(AndroidPublisherScopes.all())
@@ -602,7 +604,8 @@ class PlayConsoleUploader @Inject constructor(
 
 (Key points about Play Console Internal Testing:
 - installs via Google Play, enforcing Play policies and app signing;
-- suitable for fast distribution to trusted testers.)
+- suitable for fast distribution to trusted testers;
+- requires configuring testers (emails/groups or opt-in link) on the corresponding testing track.)
 
 ### Enterprise Distribution (MDM)
 
@@ -688,6 +691,7 @@ data class ComplianceResult(
 - Rotate testers to avoid feedback bias
 - Clear guidelines for each group
 - Controlled group sizes (e.g., 10–50 people per scenario)
+- Explicitly manage tester lists (emails/groups) in Play testing tracks and Firebase App Distribution
 
 **2. Release Notes Automation**
 - Auto-generate from git commits or changelog

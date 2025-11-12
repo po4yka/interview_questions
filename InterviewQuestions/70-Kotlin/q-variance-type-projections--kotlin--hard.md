@@ -96,7 +96,7 @@ class Person(val name: String) : Comparable<Person> {
 }
 
 fun useComparable(persons: List<Person>, cmp: Comparable<in Person>) {
-    // Можно передать, например, Comparator/Comparable, который "умеет" сравнивать Person или его супертипы
+    // cmp может быть реализован так, чтобы уметь сравнивать Person с Person или с его супертипами
 }
 ```
 
@@ -124,16 +124,18 @@ fun exampleInvariance() {
 
 Use-site variance позволяет "спроецировать" тип, когда объявление инвариантно, но в конкретном контексте мы используем его только как производителя или только как потребителя.
 
+Корректный пример копирования (аналог `Collections.copy`), показывающий отношения подтипов:
+
 ```kotlin
-fun copy(from: MutableList<out Any>, to: MutableList<in Any>) {
+fun <T> copy(from: MutableList<out T>, to: MutableList<in T>) {
     for (item in from) {
         to.add(item)
     }
 }
 ```
 
-- `MutableList<out Any>` на месте использования означает: мы читаем элементы как `Any`, но не можем безопасно добавлять произвольные `Any`.
-- `MutableList<in Any>` означает: мы можем добавлять `Any`, но элементы, которые читаем, имеют тип `Any?`.
+- `MutableList<out T>` на месте использования означает: источник предоставляет значения типа `T` (или его подтипов), которые мы можем безопасно читать, но не можем добавлять произвольные значения типа `T`.
+- `MutableList<in T>` означает: приёмник принимает значения типа `T` (или его подтипов), которые мы можем безопасно записывать, но при чтении элементы видны как `Any?` или более общий тип.
 
 ### Star Projection (`*`)
 
@@ -230,7 +232,7 @@ class Person(val name: String) : Comparable<Person> {
 }
 
 fun useComparable(persons: List<Person>, cmp: Comparable<in Person>) {
-    // cmp can handle Person or its supertypes
+    // cmp can compare Person with Person or its supertypes, consistent with contravariant T
 }
 ```
 
@@ -262,20 +264,18 @@ fun exampleInvariance() {
 
 Use-site variance lets you project variance when using an invariant type.
 
-Example similar to `java.util.Collections.copy`:
+A correct copy function (similar in spirit to `Collections.copy`) that expresses the relation between source and destination element types:
 
 ```kotlin
-fun copy(from: MutableList<out Any>, to: MutableList<in Any>) {
+fun <T> copy(from: MutableList<out T>, to: MutableList<in T>) {
     for (item in from) {
         to.add(item)
     }
 }
 ```
 
-- `MutableList<out Any>`: we treat `from` as a producer of `Any`. We cannot safely add arbitrary `Any` to it.
-- `MutableList<in Any>`: we treat `to` as a consumer of `Any`. Elements read from it are of type `Any?`.
-
-(Real-world analogues: `Array<out T>`, `MutableList<out T>`, etc., when used with projections in APIs.)
+- `MutableList<out T>`: `from` is treated as a producer of `T` (or its subtypes). We cannot safely add arbitrary `T` values to it.
+- `MutableList<in T>`: `to` is treated as a consumer of `T`. We can safely add `T` values, but items read from it have type `Any?` or another supertype.
 
 ---
 
@@ -291,7 +291,7 @@ fun printList(list: List<*>) {
 }
 ```
 
-`List<*>` means "a list of elements of some unknown type". You can safely read elements as `Any?`, but you cannot (in general) add arbitrary elements to it.
+`List<*>` means "a list of elements of some unknown type". You can safely read elements as `Any?`, but in general you cannot add arbitrary elements to it (except `null` where allowed).
 
 ---
 

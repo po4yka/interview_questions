@@ -51,7 +51,7 @@ tags:
 **R8** — современный компилятор/шринкер, встроенный в Android Gradle Plugin и являющийся shrinker'ом по умолчанию (заменяет ProGuard в стандартном Android-пайплайне, но использует совместимый синтаксис правил). Выполняет четыре ключевые задачи во время сборки:
 
 1. **Сжатие кода (code shrinking / tree-shaking)** — удаляет неиспользуемые классы, методы, поля
-2. (Совместно с AGP) **Сжатие ресурсов (resource shrinking)** — на основе результатов анализа R8 удаляет неиспользуемые ресурсы из APK / AAB
+2. (Совместно с AGP) **Сжатие ресурсов (resource shrinking)** — Android Gradle Plugin на основе результатов анализа R8 удаляет неиспользуемые ресурсы из APK / AAB
 3. **Обфускация** — переименовывает классы/методы короткими именами
 4. **Оптимизация** — применяет оптимизации байткода/Dex и уменьшает размер DEX
 
@@ -62,7 +62,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true           // включает R8 (или другой shrinker) для сжатия и обфускации
-            shrinkResources true         // включает shrinker ресурсов (AGP, опирается на результаты R8)
+            shrinkResources true         // включает shrinker ресурсов (AGP, опирается на анализ R8)
             proguardFiles getDefaultProguardFile(
                 'proguard-android-optimize.txt'),
                 'proguard-rules.pro'     // файлы с правилами в формате ProGuard, которые также использует R8
@@ -73,7 +73,7 @@ android {
 
 ### Сохранение кода с помощью правил `-keep`
 
-R8 (как и ProGuard) может удалить код, который используется неявно, например через:
+R8 (как и ProGuard) может удалить код, который используется только неявно, например через:
 - reflection — динамическое создание экземпляров, доступ к методам/полям
 - JNI — вызовы из нативного кода
 - фреймворки сериализации (Gson, Moshi и т.п.)
@@ -81,7 +81,7 @@ R8 (как и ProGuard) может удалить код, который исп�
 ```proguard
 -keep public class com.example.MyClass  # сохраняет класс целиком
 -keepclassmembers class * {
-    @com.example.Keep *;               # пример сохранения элементов, помеченных аннотацией
+    @com.example.Keep *;               # пример сохранения членов, помеченных пользовательской аннотацией Keep
 }
 ```
 
@@ -90,7 +90,7 @@ R8 (как и ProGuard) может удалить код, который исп�
 ### Преимущества и недостатки R8/обфускации
 
 **Преимущества:**
-- Уменьшение размера APK/AAB (часто на 20-40% в зависимости от проекта)
+- Уменьшение размера APK/AAB (часто заметное, в ряде проектов может достигать десятков процентов)
 - Усложнение обратной разработки
 - Удаление мёртвого кода
 
@@ -109,7 +109,7 @@ R8 (как и ProGuard) может удалить код, который исп�
 **R8** is the modern compiler/shrinker integrated into the Android Gradle Plugin and used as the default shrinker (it replaces ProGuard in the standard Android build pipeline while using ProGuard-compatible rule syntax). It performs four key build-time tasks:
 
 1. **Code shrinking (tree-shaking)** — removes unused classes, methods, fields
-2. (Together with AGP) **Resource shrinking** — based on R8’s analysis, unused resources are removed from the APK/AAB
+2. (Together with AGP) **Resource shrinking** — the Android Gradle Plugin, based on R8’s analysis, removes unused resources from the APK/AAB
 3. **Obfuscation** — renames classes/methods with short names
 4. **Optimization** — applies bytecode/Dex optimizations and reduces DEX size
 
@@ -120,7 +120,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true           // enables R8 (or another shrinker) for code shrinking and obfuscation
-            shrinkResources true         // enables resource shrinking (AGP, depends on R8 analysis)
+            shrinkResources true         // enables resource shrinking (AGP, relies on R8 analysis)
             proguardFiles getDefaultProguardFile(
                 'proguard-android-optimize.txt'),
                 'proguard-rules.pro'     // rule files in ProGuard format, also consumed by R8
@@ -139,7 +139,7 @@ R8 (like ProGuard) can remove code that is only accessed indirectly, for example
 ```proguard
 -keep public class com.example.MyClass  # preserves the entire class
 -keepclassmembers class * {
-    @com.example.Keep *;               # example of preserving members annotated with a custom annotation
+    @com.example.Keep *;               # example of preserving members annotated with a custom Keep annotation
 }
 ```
 
@@ -148,7 +148,7 @@ For typical Android projects you can use the `@Keep` annotation from AndroidX (`
 ### Trade-offs (R8/obfuscation)
 
 **Benefits:**
-- Reduces APK/AAB size (often by 20-40%, depending on the project)
+- Reduces APK/AAB size (often significantly; in some projects can reach tens of percent)
 - Makes reverse engineering harder
 - Removes dead code
 

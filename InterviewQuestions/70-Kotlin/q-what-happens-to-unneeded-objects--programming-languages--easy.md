@@ -1,6 +1,6 @@
 ---
 id: lang-050
-title: "What Happens To Unneeded Objects"
+title: "What Happens To Unneeded Objects / Что происходит с ненужными объектами"
 aliases: [What Happens To Unneeded Objects, Что происходит с ненужными объектами]
 topic: kotlin
 subtopics: [memory-management, jvm]
@@ -14,10 +14,16 @@ related: [c-kotlin, c-garbage-collection, q-java-lambda-type--programming-langua
 created: 2025-10-15
 updated: 2025-11-09
 tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memory-management]
+
 ---
+
 # Вопрос (RU)
 
 > Что происходит с объектами, которые больше не нужны?
+
+# Question (EN)
+
+> What happens to objects that are no longer needed?
 
 ## Ответ (RU)
 
@@ -153,11 +159,6 @@ fun main() {
 ```
 
 Итого: ненужные объекты (недостижимые) на JVM автоматически собираются сборщиком мусора; их память освобождается и переиспользуется, а время сборки недетерминировано.
-
----
-
-# Question (EN)
-> What happens to objects that are no longer needed?
 
 ## Answer (EN)
 

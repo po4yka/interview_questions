@@ -3,22 +3,22 @@ id: lang-019
 title: "SharedFlow Vs StateFlow / SharedFlow против StateFlow"
 aliases: [SharedFlow Vs StateFlow, SharedFlow против StateFlow]
 topic: kotlin
-subtopics: [c-coroutines, c-flow, c-kotlin]
+subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-launch-vs-async-error-handling--programming-languages--medium]
+related: [c-concurrency, c-concepts--kotlin--medium, q-launch-vs-async-error-handling--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-11-09
-tags: [coroutines, difficulty/easy, flow, kotlin, programming-languages, sharedflow, stateflow]
----
-# Вопрос (RU)
-> Какие различия между `SharedFlow` и `StateFlow`?
+updated: 2025-11-11
+tags: [coroutines, difficulty/easy, flow, kotlin, sharedflow, stateflow]
 
 ---
+
+# Вопрос (RU)
+> Какие различия между `SharedFlow` и `StateFlow`?
 
 # Question (EN)
 > What are the differences between `SharedFlow` and `StateFlow`?
@@ -31,21 +31,19 @@ tags: [coroutines, difficulty/easy, flow, kotlin, programming-languages, sharedf
 
 ### Сравнение ключевых характеристик
 
-| Характеристика | SharedFlow | StateFlow |
+| Характеристика | `SharedFlow` | `StateFlow` |
 |----------------|------------|-----------|
 | Тип | Горячий `Flow` | Горячий `Flow` (специализированный `SharedFlow`) |
 | Начальное значение | Необязательно | Обязательно |
 | Хранение значений | Может буферизировать несколько значений | Всегда хранит ровно одно текущее значение |
 | Реплей | Настраиваемый (от 0 до n) | Всегда реплеит 1 (текущее значение) |
-| Конфлюация | Настраиваемая | Всегда конфлюирует до последнего значения |
+| Конфлуация | Настраиваемая | Всегда конфлюирует до последнего значения |
 | Уникальность значений | Может эмитить дубликаты | Пропускает эмит, если новое значение == текущему (по equals) |
 | Основной кейс | События, широковещательные уведомления, потоки событий | Управление состоянием (всегда доступное текущее состояние) |
 
 ### Пример SharedFlow
 
 ```kotlin
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.delay
@@ -118,6 +116,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.collect
 
 data class UiState(val count: Int, val isLoading: Boolean)
 
@@ -282,6 +281,8 @@ class MessageEvents {
 }
 
 // 3. Частых эмиссий подряд
+import kotlinx.coroutines.channels.BufferOverflow
+
 class SearchQuery {
     private val _searchEvents = MutableSharedFlow<String>(
         replay = 0,
@@ -299,6 +300,10 @@ class SearchQuery {
 ### Когда использовать StateFlow
 
 ```kotlin
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 // Используйте StateFlow для:
 
 // 1. Управления UI-состоянием
@@ -348,7 +353,7 @@ val sharedFlow1 = MutableSharedFlow<Int>(
 val sharedFlow2 = MutableSharedFlow<Int>(
     replay = 0,
     extraBufferCapacity = 5,
-    onBufferOverflow = BufferOverflow.DROP_OLDEST  // Отбрасывать самые старые значения
+    onBufferOverflow = BufferOverflow.DROP_OLDEST  // Отбрасывать самые старые значения из дополнительного буфера (сохраняя replay)
 )
 
 val sharedFlow3 = MutableSharedFlow<Int>(
@@ -369,12 +374,13 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 
 // StateFlow — специализированный SharedFlow (реализует SharedFlow с ограничениями)
 val stateFlow: StateFlow<Int> = MutableStateFlow(0)
 val asShared: SharedFlow<Int> = stateFlow  // Допустимо: upcast к SharedFlow
 
-// Создание StateFlow из SharedFlow/Flow с помощью stateIn
+// Создание StateFlow из SharedFlow/Flow с помощью stateIn: оборачиваем исходный Flow
 val sharedFlow = MutableSharedFlow<Int>(replay = 1)
 val converted: StateFlow<Int> = sharedFlow.stateIn(
     scope = CoroutineScope(Dispatchers.Default),
@@ -406,7 +412,7 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 
 ### Key Characteristics Comparison
 
-| Feature | SharedFlow | StateFlow |
+| Feature | `SharedFlow` | `StateFlow` |
 |---------|------------|-----------|
 | Type | Hot `Flow` | Hot `Flow` (specialized `SharedFlow`) |
 | Initial Value | Optional | Required |
@@ -419,8 +425,6 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 ### SharedFlow Example
 
 ```kotlin
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.delay
@@ -493,6 +497,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.collect
 
 data class UiState(val count: Int, val isLoading: Boolean)
 
@@ -634,6 +639,10 @@ fun main() = runBlocking {
 ### When to Use SharedFlow
 
 ```kotlin
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.BufferOverflow
+
 // Use SharedFlow for:
 
 // 1. Event broadcasting (button clicks, navigation)
@@ -674,6 +683,10 @@ class SearchQuery {
 ### When to Use StateFlow
 
 ```kotlin
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 // Use StateFlow for:
 
 // 1. UI State management
@@ -723,13 +736,13 @@ val sharedFlow1 = MutableSharedFlow<Int>(
 val sharedFlow2 = MutableSharedFlow<Int>(
     replay = 0,
     extraBufferCapacity = 5,
-    onBufferOverflow = BufferOverflow.DROP_OLDEST  // Drop oldest value beyond replay
+    onBufferOverflow = BufferOverflow.DROP_OLDEST  // Drop oldest values from extra buffer (while preserving replay)
 )
 
 val sharedFlow3 = MutableSharedFlow<Int>(
     replay = 0,
     extraBufferCapacity = 5,
-    onBufferOverflow = BufferOverflow.DROP_LATEST  // Drop newest value when buffer full
+    onBufferOverflow = BufferOverflow.DROP_LATEST  // Drop newest values when buffer is full
 )
 ```
 
@@ -744,12 +757,13 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 
 // StateFlow IS a specialized SharedFlow (it implements SharedFlow with constraints)
 val stateFlow: StateFlow<Int> = MutableStateFlow(0)
 val asShared: SharedFlow<Int> = stateFlow  // Valid: upcast to SharedFlow
 
-// Creating a StateFlow from a SharedFlow/Flow by wrapping it
+// Creating a StateFlow from a SharedFlow/Flow using stateIn: wrapping the source Flow
 val sharedFlow = MutableSharedFlow<Int>(replay = 1)
 val converted: StateFlow<Int> = sharedFlow.stateIn(
     scope = CoroutineScope(Dispatchers.Default),
@@ -789,22 +803,20 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 
 ## Ссылки (RU)
 
-- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-- [[c-kotlin]]
-- [[c-flow]]
+- [Документация Kotlin]("https://kotlinlang.org/docs/home.html")
+- [[c-concurrency]]
+- [[c-concepts--kotlin--medium]]
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
-- [[c-kotlin]]
-- [[c-flow]]
+- [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
+- [[c-concurrency]]
+- [[c-concepts--kotlin--medium]]
 
 ## Связанные вопросы (RU)
 
 - [[q-launch-vs-async-error-handling--programming-languages--medium]]
-- [[q-class-composition--oop--medium]]
 
 ## Related Questions
 
 - [[q-launch-vs-async-error-handling--programming-languages--medium]]
-- [[q-class-composition--oop--medium]]

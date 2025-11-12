@@ -32,9 +32,9 @@ tags: [android/lifecycle, android/ui-views, difficulty/medium]
 
 ### Ключевые стадии
 
-**Constructor → onAttachedToWindow() → onMeasure() → onLayout() → onDraw() → onDetachedFromWindow()**
+**Constructor → onFinishInflate() (если из XML) → onAttachedToWindow() → onMeasure() → onLayout() → onDraw() → onDetachedFromWindow()**
 
-(Это упрощенная схема: есть дополнительные колбэки, такие как `onFinishInflate()`, `onSizeChanged()`, и возможны несколько проходов `measure`/`layout`/`draw`.)
+(Это упрощенная схема: есть дополнительные колбэки, такие как `onFinishInflate()`, `onSizeChanged()`, `onWindowVisibilityChanged()`, возможны несколько проходов `measure`/`layout`/`draw`, а также повторные attach/detach.)
 
 ### 1. Constructor и инициализация
 
@@ -62,7 +62,7 @@ class CustomView @JvmOverloads constructor(
 
 ### 2. onAttachedToWindow() – старт ресурсов
 
-Вызывается, когда `View` прикрепляется к окну. Здесь запускают анимации, регистрируют слушатели и т.п.
+Вызывается, когда `View` прикрепляется к окну. Здесь обычно запускают анимации, регистрируют слушатели и т.п., которые должны существовать только пока `View` реально прикреплена.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -76,7 +76,7 @@ override fun onAttachedToWindow() {
 
 ### 3. onMeasure() – определение размера
 
-Определяет размер `View`. Обязательно вызвать `setMeasuredDimension()`.
+Определяет размер `View`. Обязательно вызвать `setMeasuredDimension()` (напрямую или через `super.onMeasure()` / вспомогательные методы).
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -139,7 +139,7 @@ override fun onDraw(canvas: Canvas) {
 
 ### 6. onDetachedFromWindow() – освобождение ресурсов
 
-Вызывается при отсоединении от окна. Останавливаем анимации, отписываем слушатели, чистим ресурсы.
+Вызывается при отсоединении от окна. Останавливаем анимации, отписываем слушатели, чистим ресурсы, которые завязаны на attach.
 
 ```kotlin
 override fun onDetachedFromWindow() {
@@ -173,7 +173,7 @@ fun updateColor() {
 }
 ```
 
-Важно: и `requestLayout()`, и `invalidate()` должны вызываться с UI-потока.
+Важно: `requestLayout()` и `invalidate()` должны вызываться с UI-потока; для фоновых потоков используйте `post { ... }` / `postInvalidate()` / `postInvalidateOnAnimation()`.
 
 ### Сохранение состояния
 
@@ -183,8 +183,8 @@ fun updateColor() {
 class CustomView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+    defSizeAttr: Int = 0
+) : View(context, attrs, defSizeAttr) {
 
     private var customValue: Int = 0
 
@@ -204,7 +204,7 @@ class CustomView @JvmOverloads constructor(
         }
     }
 
-    internal class SavedState : BaseSavedState {
+    class SavedState : BaseSavedState {
         var customValue: Int = 0
 
         constructor(superState: Parcelable?) : super(superState)
@@ -226,26 +226,28 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
+(Важно: вложенный класс состояния должен быть статическим в Java / не удерживать неявную ссылку на внешний класс, чтобы избежать утечек.)
+
 ### Ключевые принципы
 
 1. Инициализировать тяжелые/статичные объекты в конструкторе или `init` (например, `Paint`, значения по умолчанию).
-2. Запускать внешние ресурсы в `onAttachedToWindow()` (анимации, слушатели, сенсоры).
+2. Запускать внешние ресурсы в `onAttachedToWindow()` (анимации, слушатели, сенсоры), а при необходимости реагировать на изменения видимости через `onWindowVisibilityChanged()` / `onVisibilityAggregated()`.
 3. Освобождать ресурсы в `onDetachedFromWindow()` во избежание утечек.
 4. Избегать аллокаций в `onDraw()`, переиспользовать объекты.
-5. Корректно использовать `requestLayout()` и `invalidate()` (разметка/размер vs внешний вид), вызывая их с UI-потока.
+5. Корректно использовать `requestLayout()` и `invalidate()` (разметка/размер vs внешний вид), вызывая их с UI-потока или через `post*`-методы.
 6. Правильно реализовывать `onSaveInstanceState()` / `onRestoreInstanceState()` для состояния `View`.
 
 ## Answer (EN)
 
-The `View` lifecycle describes how a `View` is created, attached to a window, measured, laid out, drawn, and eventually detached. Understanding this lifecycle is critical for resource management, handling configuration changes correctly, and optimizing performance.
+The `View` lifecycle describes how a `View` is created, attached to a window, measured, laid out, drawn, and eventually detached. Understanding this lifecycle is critical for resource management, correct handling of configuration changes, and performance.
 
 ### Key Stages
 
-**Constructor → onAttachedToWindow() → onMeasure() → onLayout() → onDraw() → onDetachedFromWindow()**
+**Constructor → onFinishInflate() (if from XML) → onAttachedToWindow() → onMeasure() → onLayout() → onDraw() → onDetachedFromWindow()**
 
-(Note: this is a simplified view; there are additional callbacks like `onFinishInflate()`, `onSizeChanged()`, and multiple measure/layout/draw passes.)
+(Note: this is simplified; there are additional callbacks such as `onFinishInflate()`, `onSizeChanged()`, `onWindowVisibilityChanged()`, multiple measure/layout/draw passes, and possible re-attach/detach cycles.)
 
-### 1. Constructor  Initialization
+### 1. Constructor and Initialization
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -254,7 +256,7 @@ class CustomView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    // Correct: initialize Paint objects here
+    // Correct: initialize Paint and other heavy objects here
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.BLUE
     }
@@ -263,15 +265,15 @@ class CustomView @JvmOverloads constructor(
         attrs?.let {
             val ta = context.obtainStyledAttributes(it, R.styleable.CustomView)
             // Read attributes
-            ta.recycle() // Must recycle()
+            ta.recycle() // Must recycle
         }
     }
 }
 ```
 
-### 2. onAttachedToWindow()  Start Resources
+### 2. onAttachedToWindow() – Start Resources
 
-Called when the view is attached to a window. Start animations and register listeners here.
+Called when the view is attached to a window. Typically start animations, register listeners, and acquire resources that should exist only while the view is attached.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -283,9 +285,9 @@ override fun onAttachedToWindow() {
 }
 ```
 
-### 3. onMeasure()  Determine Size
+### 3. onMeasure() – Determine Size
 
-Determines view size. Must call `setMeasuredDimension()`.
+Determines the view size. You must call `setMeasuredDimension()` (directly or via `super.onMeasure()` / helper methods).
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -299,13 +301,13 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 ```
 
 **MeasureSpec modes:**
-- `EXACTLY` – parent has determined an exact size: e.g., `match_parent` or an exact dp value; a parent may also pass `EXACTLY` for `wrap_content` depending on its logic.
-- `AT_MOST` – maximum size: commonly used for `wrap_content`, where the `View` must not exceed the given size (`size <= specSize`).
-- `UNSPECIFIED` – no constraint; the `View` can be any size (used in special cases like within `ScrollView`).
+- `EXACTLY` – parent has determined an exact size (e.g., `match_parent` or an exact dp value); a parent may also pass `EXACTLY` for `wrap_content` depending on its own logic.
+- `AT_MOST` – maximum size: commonly for `wrap_content`; the `View` must not exceed the given size (`size <= specSize`).
+- `UNSPECIFIED` – no constraint; the `View` can choose any size (special cases, e.g., inside `ScrollView`).
 
-### 4. onLayout()  Positioning
+### 4. onLayout() – Positioning
 
-For `ViewGroup`, positions child views. For simple `View`s, you typically do not override `onLayout`; instead, you often use `onSizeChanged()` (or `onLayout` if needed) to recalculate internal drawing coordinates.
+For `ViewGroup`, responsible for positioning child views. For simple `View`s you usually do not override `onLayout`; instead, you often use `onSizeChanged()` (or `onLayout` if needed) to recalculate internal coordinates.
 
 ```kotlin
 // ViewGroup
@@ -327,9 +329,9 @@ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 }
 ```
 
-### 5. onDraw()  Rendering
+### 5. onDraw() – Rendering
 
-Renders view content. Called frequently – avoid allocations inside.
+Renders the view's content. It can be called frequently, so avoid allocations inside.
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
@@ -341,25 +343,25 @@ override fun onDraw(canvas: Canvas) {
 
 // Wrong: creating objects in onDraw
 // override fun onDraw(canvas: Canvas) {
-//     val paint = Paint() // Creates garbage every frame!
+//     val paint = Paint() // Allocates every frame
 //     canvas.drawCircle(x, y, r, paint)
 // }
 ```
 
-### 6. onDetachedFromWindow()  Release Resources
+### 6. onDetachedFromWindow() – Release Resources
 
-Called when detached from window. Stop animations, unregister listeners.
+Called when detached from the window. Stop animations, unregister listeners, and release resources tied to the attachment.
 
 ```kotlin
 override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
 
-    // Correct: clean up all resources
+    // Correct: clean up resources
     sensorManager.unregisterListener(this)
     handler.removeCallbacks(updateRunnable)
 }
 
-// Wrong: not unregistering listeners → memory leak
+// Wrong: forgetting to unregister leads to leaks
 ```
 
 ### Update Methods
@@ -378,15 +380,15 @@ fun updateSize() {
 ```kotlin
 fun updateColor() {
     paint.color = Color.RED
-    invalidate() // Triggers onDraw() (faster)
+    invalidate() // Triggers onDraw() only
 }
 ```
 
-(Note: both `requestLayout()` and `invalidate()` must be called from the UI thread.)
+Note: `requestLayout()` and `invalidate()` should be called from the UI thread; from background threads, use `post { ... }`, `postInvalidate()`, or `postInvalidateOnAnimation()`.
 
 ### State Preservation
 
-Views can save and restore their own instance state so that values persist across `Activity` recreation when the same `View` hierarchy is restored.
+Views can save and restore their own instance state so that values persist across `Activity` recreation when the same view hierarchy is restored.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -413,7 +415,7 @@ class CustomView @JvmOverloads constructor(
         }
     }
 
-    internal class SavedState : BaseSavedState {
+    class SavedState : BaseSavedState {
         var customValue: Int = 0
 
         constructor(superState: Parcelable?) : super(superState)
@@ -435,14 +437,16 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
+(Important: the saved state class must not hold an implicit reference to the outer view in Java; use a static nested class or equivalent.)
+
 ### Core Principles
 
 1. Initialize heavy/static objects in the constructor or `init` block (e.g., `Paint`, default values).
-2. Start external resources in `onAttachedToWindow()` (animations, listeners, sensors).
-3. Stop and clean up in `onDetachedFromWindow()` to prevent leaks.
+2. Start external resources in `onAttachedToWindow()` (animations, listeners, sensors) and, when needed, react to visibility via `onWindowVisibilityChanged()` / `onVisibilityAggregated()`.
+3. Clean up resources in `onDetachedFromWindow()` to avoid leaks.
 4. Avoid allocations in `onDraw()`; reuse objects.
-5. Use `requestLayout()` vs `invalidate()` appropriately (layout/size vs appearance) and from the UI thread.
-6. Implement `onSaveInstanceState()` / `onRestoreInstanceState()` correctly (e.g., via `BaseSavedState`) for `View`-specific state.
+5. Use `requestLayout()` vs `invalidate()` appropriately (layout/size vs appearance), from the UI thread or via the `post*` methods.
+6. Implement `onSaveInstanceState()` / `onRestoreInstanceState()` correctly (e.g., with `BaseSavedState`) for view-specific state.
 
 ## Дополнительные вопросы (RU)
 

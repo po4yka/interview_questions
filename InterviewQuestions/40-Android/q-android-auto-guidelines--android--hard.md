@@ -19,7 +19,7 @@ related:
 - c-android-auto
 - q-android-auto-guidelines--android--hard
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/auto
 - difficulty/hard
@@ -39,16 +39,14 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
+## Краткая Версия
 - Выбрать поддерживаемую категорию и использовать только шаблоны Car App Library.
 - Соблюдать правила снижения отвлечения водителя, опираться на ограничения платформы.
 - Интегрировать голос / Assistant и поддерживаемые API вместо кастомного UI.
 - Учитывать различия Android Auto (phone-based) и Android Automotive OS (standalone).
 - Пройти чек-листы, self-review и ревью Google, затем мониторить качество и соблюдение политик.
 
-### Подробный вариант
-
+## Подробная Версия
 #### Требования
 
 - Функциональные:
@@ -115,16 +113,14 @@ sources:
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Pick a supported category and use only Car App Library templates.
 - Rely on platform driver distraction rules and avoid complex flows while driving.
 - Integrate voice/Assistant and supported APIs instead of custom in-car UI.
 - Distinguish between Android Auto (phone-based) and Android Automotive OS (standalone).
 - Pass checklists, self-review, Google review, and then monitor quality and policy compliance.
 
-### Detailed Version
-
+## Detailed Version
 #### Requirements
 
 - Functional:

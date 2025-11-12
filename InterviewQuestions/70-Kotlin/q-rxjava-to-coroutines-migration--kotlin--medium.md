@@ -6,7 +6,7 @@ topic: kotlin
 subtopics: [coroutines, reactive-programming, functions]
 question_kind: theory
 difficulty: medium
-original_language: multi
+original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
@@ -14,6 +14,7 @@ related: [c-kotlin, c-coroutines, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, migration, reactive-programming, refactoring, rxjava]
+
 ---
 
 # Вопрос (RU)
@@ -44,15 +45,15 @@ Below is a detailed guide for migrating from RxJava to Kotlin Coroutines/`Flow`,
 
 - [Обзор](#обзор)
 - [Почему мигрировать](#почему-мигрировать)
-- [Observable → Flow](#observable--flow)
+- [`Observable` → `Flow`](#observable--flow)
 - [Single → suspend-функция](#single--suspend-функция)
 - [Completable → suspend Unit](#completable--suspend-unit)
 - [Maybe → nullable suspend](#maybe--nullable-suspend)
-- [Flowable → Flow](#flowable--flow)
+- [Flowable → `Flow`](#flowable--flow)
 - [Горячие источники и Subjects](#горячие-источники-и-subjects)
 - [Таблица операторов (RU)](#таблица-операторов-ru)
 - [Комбинирующие операторы: combineLatest и zip](#комбинирующие-операторы-combinelatest-и-zip)
-- [Subjects → Flow (подробно)](#subjects--flow-подробно)
+- [Subjects → `Flow` (подробно)](#subjects--flow-подробно)
 - [Обработка ошибок](#обработка-ошибок)
 - [Потоки выполнения](#потоки-выполнения)
 - [Backpressure](#backpressure)
@@ -1019,11 +1020,11 @@ class UserRepositoryMigrated(private val api: UserApi) {
 
 ## Дополнительные вопросы (RU)
 
-1. В чем основное преимущество миграции с RxJava на корутины с точки зрения сопровождения кода?
-2. Как безопасно поддерживать период, когда в проекте одновременно используются RxJava и корутины?
-3. Какой эквивалент `BehaviorSubject` в экосистеме корутин и когда лучше использовать `StateFlow`, а когда `SharedFlow`?
-4. Как правильно мигрировать `Observable.combineLatest` и `zip` на `Flow` с учетом различий в семантике?
-5. Чем отличаются `subscribeOn`/`observeOn` от `flowOn` и контекста коллектора при работе с `Flow`?
+1. В чем основное преимущество миграции с RxJava на корутины с точки зрения долгосрочного сопровождения и снижения когнитивной сложности кода?
+2. Как безопасно поддерживать период, когда в проекте одновременно используются RxJava и корутины, и какие паттерны interop для этого предпочтительнее?
+3. Какой эквивалент `BehaviorSubject` в экосистеме корутин и в каких сценариях выбирать `StateFlow`, а в каких — `SharedFlow`?
+4. Как правильно мигрировать `Observable.combineLatest` и `zip` на `Flow`, учитывая различия в семантике и инициализации значений?
+5. Чем конкретно отличаются `subscribeOn`/`observeOn` от `flowOn` и контекста коллектора при работе с `Flow` в сложных пайплайнах?
 
 ---
 
@@ -1052,15 +1053,15 @@ class UserRepositoryMigrated(private val api: UserApi) {
 
 - [Overview](#overview)
 - [Why Migrate](#why-migrate)
-- [Observable to Flow](#observable-to-flow)
+- [`Observable` to `Flow`](#observable-to-flow)
 - [Single to Suspend Function](#single-to-suspend-function)
 - [Completable to Suspend Unit](#completable-to-suspend-unit)
 - [Maybe to Nullable Suspend Function](#maybe-to-nullable-suspend-function)
-- [Flowable to Flow](#flowable-to-flow)
-- [Hot Observables to `SharedFlow`/`StateFlow`](#hot-observables-to-sharedflowstateflow)
+- [Flowable to `Flow`](#flowable-to-flow)
+- [Hot `Observables` to `SharedFlow`/`StateFlow`](#hot-observables-to-sharedflowstateflow)
 - [Operator Mapping Table](#operator-mapping-table)
 - [combineLatest and zip](#combinelatest-and-zip-1)
-- [Subjects to Flow](#subjects-to-flow)
+- [Subjects to `Flow`](#subjects-to-flow)
 - [Error Handling Migration](#error-handling-migration)
 - [Threading Migration](#threading-migration)
 - [Backpressure Strategies](#backpressure-strategies)
@@ -1409,7 +1410,7 @@ Approximate mapping of common operators from RxJava to `Flow`/coroutines:
 | RxJava | `Flow` | Description |
 |--------|-------|-------------|
 | `map` | `map` | Transform each item |
-| `flatMap` | `flatMapConcat` | Map + sequentially flatten |
+| `flatMap` | `flatMapConcat` | `Map` + sequentially flatten |
 | `flatMap` (parallel) | `flatMapMerge` | Concurrent flattening |
 | `switchMap` | `flatMapLatest` | Cancel previous on new emission |
 | `concatMap` | `flatMapConcat` | Sequential concatenation |
@@ -1898,11 +1899,11 @@ Key steps:
 
 ## Follow-ups
 
-1. What is the main benefit of migrating from RxJava to Coroutines for long-term maintainability?
-2. How can you safely support a period where both RxJava and Coroutines coexist in the same codebase?
-3. What is the appropriate `StateFlow`/`SharedFlow`-based replacement for `BehaviorSubject`, and when would you choose each?
-4. How do you migrate `Observable.combineLatest` and `zip` to `Flow` while accounting for semantic differences?
-5. How do `subscribeOn`/`observeOn` differ from `flowOn` and the collector context when working with `Flow`?
+1. What is the main benefit of migrating from RxJava to Coroutines for long-term maintainability and reduced cognitive complexity?
+2. How can you safely support a period where both RxJava and Coroutines coexist in the same codebase, and which interop patterns are recommended?
+3. What is the correct `StateFlow`/`SharedFlow`-based replacement for `BehaviorSubject`, and in which scenarios would you choose each?
+4. How should you migrate `Observable.combineLatest` and `zip` to `Flow` while accounting for initialization and semantic differences?
+5. How do `subscribeOn`/`observeOn` differ from `flowOn` and the collector context when building complex `Flow` pipelines?
 
 ---
 

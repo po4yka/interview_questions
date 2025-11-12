@@ -25,7 +25,7 @@ tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, sco
 
 ## Ответ (RU)
 
-**Context Receivers** — это (начиная с Kotlin 2.x) стабильная языковая функция, которая позволяет функциям и свойствам объявлять явные контексты и, в частности, требовать несколько типов получателей одновременно. Это позволяет строить более выразительные DSL и более чисто передавать зависимости без параметров в сигнатуре.
+**Context Receivers** — это (начиная с Kotlin 2.0) стабильная языковая функция, которая позволяет функциям и свойствам объявлять явные контексты и, в частности, требовать несколько типов получателей одновременно. Это позволяет строить более выразительные DSL и более чисто передавать зависимости без параметров в сигнатуре.
 
 Ниже — подробные примеры и сравнение, параллельные EN-версии.
 
@@ -85,7 +85,7 @@ fun useLogMessage() {
 }
 ```
 
-Также можно использовать функции с типами `context`-функций вместо вложенных `with` — вложенные `with` выше лишь один из идиоматичных вариантов.
+Также можно использовать функции с типами `context`-функций вместо вложенных `with` — вложенные `with` выше лишь один из возможных стилей.
 
 ---
 
@@ -142,7 +142,7 @@ fun demoFetchAndLog() {
 
 ### DSL-пример: HTML Builder (упрощенный)
 
-Ниже пример того, как context receivers помогают структурировать HTML-DSL. Код параллелен EN-версии.
+Ниже пример того, как context receivers помогают структурировать HTML-DSL. Код параллелен EN-версии и демонстрирует один из возможных стилей использования (не единственный идиоматический).
 
 ```kotlin
 @DslMarker
@@ -456,7 +456,7 @@ Context receivers — мощный инструмент для создания 
 
 ## Answer (EN)
 
-**Context Receivers** are (as of Kotlin 2.x) a stable language feature that allows functions and properties to declare explicit contexts and, in particular, require multiple receiver-like types simultaneously. This enables more expressive DSLs and cleaner dependency handling without threading parameters through every call.
+Context receivers are (as of Kotlin 2.0) a stable language feature that allows functions and properties to declare explicit contexts and, in particular, require multiple receiver-like types simultaneously. This enables more expressive DSLs and cleaner dependency handling without threading parameters through every call.
 
 ---
 
@@ -501,7 +501,7 @@ fun logMessage(message: String) {
     log("$prefix $message")
 }
 
-// Usage with explicit contexts (one of possible styles)
+// Usage with explicit contexts (one possible style)
 fun useLogMessage() {
     val logger = Logger()
     val config = Config("[APP]")
@@ -514,7 +514,7 @@ fun useLogMessage() {
 }
 ```
 
-Note: You can also use functions that take context function types instead of nesting `with` blocks; nested `with` is only one idiomatic option.
+Note: You can also use functions that take context function types instead of nesting `with` blocks; nested `with` is just one possible style.
 
 ---
 
@@ -569,7 +569,9 @@ fun demoFetchAndLog() {
 
 ---
 
-### DSL Example: HTML Builder (Simplified, Corrected)
+### DSL Example: HTML Builder (Simplified)
+
+Below is an example of how context receivers can structure an HTML DSL. It mirrors the RU version and demonstrates one possible usage style (not the only idiomatic one).
 
 ```kotlin
 @DslMarker

@@ -20,8 +20,8 @@ related:
 - c-room
 - c-android-components
 sources: []
-created: 2025-10-15
-updated: 2025-11-10
+created: 2024-10-15
+updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
 
 ---

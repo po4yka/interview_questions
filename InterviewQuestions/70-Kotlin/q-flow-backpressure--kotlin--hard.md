@@ -39,18 +39,18 @@ tags: [backpressure, buffer, collectlatest, conflate, difficulty/hard, flow, kot
 
 ## Ответ (RU)
 
-**Противодавление** (backpressure) возникает, когда производитель создаёт значения быстрее, чем потребитель может их обработать. `Flow` предоставляет несколько операторов и настроек буферизации для управления этим несоответствием скоростей: `buffer()`, `conflate()`, `collectLatest()`, а также расширенные конфигурации `buffer` и использование `Channel`.
+**Противодавление** (backpressure) возникает, когда производитель создаёт значения быстрее, чем потребитель может их обработать. В `Flow` это управляется кооперативно через приостановки: медленный потребитель замедляет быстрый источник. `Flow` предоставляет несколько операторов и настроек буферизации для управления стратегией этого несоответствия скоростей: `buffer()`, `conflate()`, `collectLatest()`, расширенные конфигурации `buffer` и использование `Channel`.
 
 ### Понимание Противодавления
 
-Без специальных стратегий противодавление реализуется через приостановку производителя: эмиттер ждёт, пока медленный потребитель закончит обработку.
+Без специальных стратегий поведение по умолчанию такое: противодавление реализуется через приостановку производителя — `emit` приостанавливается, пока медленный потребитель не закончит обработку предыдущего элемента.
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.system.measureTimeMillis
 
-// Без buffer - производитель ждёт потребителя
+// Без buffer/conflate/collectLatest - производитель ждёт потребителя
 suspend fun withoutBuffer() {
     val time = measureTimeMillis {
         flow {
@@ -68,9 +68,9 @@ suspend fun withoutBuffer() {
 }
 ```
 
-### buffer() — Параллельная Обработка
+### buffer() — Параллельная обработка
 
-`buffer()` позволяет производителю и потребителю выполняться конкурентно, частично развязывая их скорости.
+`buffer()` позволяет производителю и потребителю выполняться конкурентно, частично развязывая их скорости, при этом при заполнении буфера по умолчанию используется стратегия `BufferOverflow.SUSPEND`.
 
 ```kotlin
 suspend fun withBuffer() {
@@ -82,7 +82,7 @@ suspend fun withBuffer() {
                 println("Emitted $it at ${System.currentTimeMillis()}")
             }
         }
-        .buffer() // Производитель и потребитель работают параллельно
+        .buffer() // Производитель и потребитель могут работать конкурентно
         .collect {
             delay(300)
             println("Collected $it at ${System.currentTimeMillis()}")
@@ -106,28 +106,28 @@ flow {
     delay(100)
     println("Collected $it")
 }
-// Если буфер заполнен, производитель будет suspend до освобождения места.
+// Если буфер заполнен, производитель будет suspend до освобождения места (стратегия по умолчанию).
 ```
 
 #### Стратегии буфера
 
 ```kotlin
-// Буфер по умолчанию (дефолтная емкость и BufferOverflow.SUSPEND)
+// Буфер по умолчанию (DEFAULT_CAPACITY и BufferOverflow.SUSPEND)
 .buffer()
 
 // Явная емкость
 .buffer(capacity = 10)
 
-// Неограниченный буфер (использовать с осторожностью)
+// Неограниченный буфер (использовать с крайней осторожностью)
 .buffer(capacity = Channel.UNLIMITED)
 
-// Конфлирующий буфер (хранит только последнее значение)
-.buffer(capacity = Channel.CONFLATED)
+// Эквивалент конфлирующего буфера (по сути хранит только последнее значение)
+.buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 ```
 
-### conflate() — Только Актуальное Значение
+### conflate() — Только актуальное значение
 
-`conflate()` пропускает промежуточные значения при медленном потребителе, сохраняя только самое новое при возобновлении обработки.
+`conflate()` пропускает промежуточные значения при медленном потребителе, сохраняя только самое новое значение. Фактически эквивалентно `buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)`.
 
 ```kotlin
 suspend fun withConflate() {
@@ -182,9 +182,9 @@ suspend fun trackLocation() {
 suspend fun updateMapUI(location: Location) { /* ... */ }
 ```
 
-### collectLatest() — Отмена и Перезапуск
+### collectLatest() — Отмена и перезапуск
 
-`collectLatest()` отменяет выполнение блока коллекции для предыдущего значения при поступлении нового и начинает обработку заново для последнего.
+`collectLatest()` отменяет выполнение тела коллекции для предыдущего значения при поступлении нового и начинает обработку заново для последнего. Элементы не теряются на входе, но незавершённая обработка старых значений может быть прервана.
 
 ```kotlin
 suspend fun withCollectLatest() {
@@ -233,11 +233,11 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-### Сравнение Стратегий
+### Сравнение стратегий
 
 ```kotlin
 suspend fun compareStrategies() {
-    println("=== Without backpressure handling ===")
+    println("=== Default (suspending producer) ===")
     testStrategy(null)
 
     println("\n=== With buffer() ===")
@@ -277,7 +277,7 @@ suspend fun processItem(item: Int) {
 }
 ```
 
-### Продвинутая Конфигурация buffer
+### Продвинутая конфигурация buffer
 
 ```kotlin
 flow<Int> {
@@ -290,31 +290,23 @@ flow<Int> {
 .collect { /* обработка */ }
 
 // Стратегии:
-// - BufferOverflow.SUSPEND (по умолчанию): приостановить производителя
-// - BufferOverflow.DROP_OLDEST: удалить старый элемент в буфере
-// - BufferOverflow.DROP_LATEST: отбросить только что эмиттируемый элемент
+// - BufferOverflow.SUSPEND (по умолчанию): приостановить производителя при полном буфере
+// - BufferOverflow.DROP_OLDEST: удалить самый старый элемент в буфере
+// - BufferOverflow.DROP_LATEST: отбросить элемент, который пытаются эмиттить
 ```
 
 ### Кастомная буферизация через Channel
 
 ```kotlin
 fun <T> Flow<T>.customBuffer(size: Int): Flow<T> = channelFlow {
-    val channel = Channel<T>(capacity = size)
-
-    launch {
-        collect { value ->
-            channel.send(value)
-        }
-        channel.close()
+    // channelFlow уже предоставляет канал-приёмник; просто перенаправляем значения
+    collect { value ->
+        send(value) // при превышении размера size отправитель будет приостановлен в соответствии с политикой
     }
-
-    for (value in channel) {
-        send(value)
-    }
-}
+}.buffer(size)
 ```
 
-### Реальные Примеры
+### Реальные примеры
 
 #### Пример 1: Батчинг аналитики
 
@@ -330,6 +322,8 @@ class AnalyticsManager {
     init {
         CoroutineScope(Dispatchers.IO).launch {
             events
+                // Отдельный буфер потребителя для более редких отправок батчей;
+                // не влияет на то, как tryEmit работает в SharedFlow
                 .buffer(capacity = 50)
                 .chunked(10, timeout = 5000)
                 .collect { batch ->
@@ -371,6 +365,7 @@ fun <T> Flow<T>.chunked(size: Int, timeout: Long): Flow<List<T>> = flow {
         emit(batch.toList())
     }
 }
+// Примечание: для продакшена лучше использовать монотонное время/таймауты корутин; здесь упрощённый пример.
 ```
 
 #### Пример 2: Обработка данных сенсоров
@@ -445,7 +440,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-### Производительность и Выбор Стратегии
+### Производительность и выбор стратегии
 
 | Сценарий | Стратегия | Причина |
 |----------|-----------|---------|
@@ -456,7 +451,7 @@ class DataViewModel : ViewModel() {
 | Нужен прогресс по шагам | `buffer()` | Не терять промежуточные состояния |
 | Нужен только финальный/последний стейт | `conflate()` | Отброс промежуточных состояний |
 
-### Рекомендуемые Практики (Best Practices)
+### Рекомендуемые практики (Best Practices)
 
 DO:
 
@@ -494,7 +489,7 @@ importantData.conflate()
 // Не добавляйте buffer без причины к тривиальным потокам
 flow { emit(1) }.buffer().collect { }
 
-// Не игнорируйте противодавление при быстрых источниках
+// Не игнорируйте стратегию противодавления при быстрых источниках
 fastSensor
     .collect { slowProcessing(it) } // Рассмотрите buffer/conflate/collectLatest
 ```
@@ -503,18 +498,18 @@ fastSensor
 
 ## Answer (EN)
 
-Backpressure occurs when a producer emits values faster than a consumer can process them. `Flow` provides several operators and buffering configurations to control this mismatch: `buffer()`, `conflate()`, `collectLatest()`, advanced `buffer` options, and `Channel`-based buffering. Below is the full detailed explanation mirroring the Russian section.
+Backpressure occurs when a producer emits values faster than a consumer can process them. In Kotlin `Flow`, this is handled cooperatively via suspension: a slow collector naturally slows down the producer. `Flow` provides several operators and buffering configurations to choose different backpressure strategies: `buffer()`, `conflate()`, `collectLatest()`, advanced `buffer` options, and `Channel`-based buffering.
 
 ### Understanding Backpressure
 
-Without any special operators, backpressure in `Flow` is handled by suspending the producer: the emitter waits until the slow collector finishes processing.
+Without special operators, the default behavior is that the producer is suspended: `emit` suspends until the slow consumer finishes processing the previous element.
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.system.measureTimeMillis
 
-// Without buffer - producer waits for consumer
+// Default: producer waits for consumer (no extra buffering/backpressure operator)
 suspend fun withoutBuffer() {
     val time = measureTimeMillis {
         flow {
@@ -534,7 +529,7 @@ suspend fun withoutBuffer() {
 
 ### buffer() — Parallelizing producer and consumer
 
-`buffer()` lets producer and consumer run concurrently, partially decoupling their speeds.
+`buffer()` lets the producer and consumer run concurrently, partially decoupling their speeds. By default it uses `BufferOverflow.SUSPEND` when the buffer is full.
 
 ```kotlin
 suspend fun withBuffer() {
@@ -546,7 +541,7 @@ suspend fun withBuffer() {
                 println("Emitted $it at ${System.currentTimeMillis()}")
             }
         }
-        .buffer() // Producer and consumer run in parallel
+        .buffer() // Producer and consumer can run concurrently
         .collect {
             delay(300)
             println("Collected $it at ${System.currentTimeMillis()}")
@@ -565,7 +560,7 @@ flow {
         println("Emitted $it")
     }
 }
-.buffer(capacity = 5) // Up to 5 elements stored; producer suspends when buffer is full
+.buffer(capacity = 5) // Up to 5 elements stored; when full, producer suspends (default behavior)
 .collect {
     delay(100)
     println("Collected $it")
@@ -576,22 +571,22 @@ flow {
 #### Buffer strategies
 
 ```kotlin
-// Default buffer (default capacity and BufferOverflow.SUSPEND)
+// Default buffer (DEFAULT_CAPACITY and BufferOverflow.SUSPEND)
 .buffer()
 
 // Explicit capacity
 .buffer(capacity = 10)
 
-// Unlimited buffer (use with care)
+// Unlimited buffer (use with extreme caution)
 .buffer(capacity = Channel.UNLIMITED)
 
-// Conflated buffer (keeps only the latest value)
-.buffer(capacity = Channel.CONFLATED)
+// Conflation-like buffer (effectively keeps only the latest value)
+.buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 ```
 
 ### conflate() — Keep only the latest value
 
-`conflate()` skips intermediate values when the consumer is slow, delivering only the most recent value once the collector is ready again.
+`conflate()` skips intermediate values when the consumer is slow and only delivers the most recent value once the collector is ready again. It is effectively equivalent to `buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)`.
 
 ```kotlin
 suspend fun withConflate() {
@@ -648,7 +643,7 @@ suspend fun updateMapUI(location: Location) { /* ... */ }
 
 ### collectLatest() — Cancel and restart on new value
 
-`collectLatest()` cancels the body of the collector for the previous value when a new value is emitted, and restarts for the newest value.
+`collectLatest()` cancels the body of the collector for the previous value when a new value is emitted and restarts processing for the newest value. Values are received, but ongoing work for older values can be cancelled.
 
 ```kotlin
 suspend fun withCollectLatest() {
@@ -678,7 +673,7 @@ class SearchViewModel : ViewModel() {
         .filter { it.length >= 3 }
         .distinctUntilChanged()
         .mapLatest { query ->
-            searchApi(query) // Previous request is cancelled when query changes
+            searchApi(query) // Previous request is cancelled on new query
         }
         .stateIn(
             scope = viewModelScope,
@@ -701,7 +696,7 @@ class SearchViewModel : ViewModel() {
 
 ```kotlin
 suspend fun compareStrategies() {
-    println("=== Without backpressure handling ===")
+    println("=== Default (suspending producer) ===")
     testStrategy(null)
 
     println("\n=== With buffer() ===")
@@ -763,19 +758,11 @@ flow<Int> {
 
 ```kotlin
 fun <T> Flow<T>.customBuffer(size: Int): Flow<T> = channelFlow {
-    val channel = Channel<T>(capacity = size)
-
-    launch {
-        collect { value ->
-            channel.send(value)
-        }
-        channel.close()
-    }
-
-    for (value in channel) {
+    // channelFlow already provides a channel; just forward values into it
+    collect { value ->
         send(value)
     }
-}
+}.buffer(size)
 ```
 
 ### Real-world Examples
@@ -794,6 +781,7 @@ class AnalyticsManager {
     init {
         CoroutineScope(Dispatchers.IO).launch {
             events
+                // Downstream buffer for batching; does not change how tryEmit behaves on SharedFlow
                 .buffer(capacity = 50)
                 .chunked(10, timeout = 5000)
                 .collect { batch ->
@@ -835,6 +823,7 @@ fun <T> Flow<T>.chunked(size: Int, timeout: Long): Flow<List<T>> = flow {
         emit(batch.toList())
     }
 }
+// Note: for production code prefer monotonic time or coroutine timeouts; this is a simplified example.
 ```
 
 #### Example 2: Sensor data processing
@@ -914,9 +903,9 @@ class DataViewModel : ViewModel() {
 - All values are important: use `buffer()` to process every value while decoupling producer and consumer.
 - Only the latest value matters: use `conflate()` (e.g., UI or sensor updates).
 - Need to cancel previous work when new data arrives: use `collectLatest()` (e.g., search/autocomplete).
-- Fast producer, slow consumer: `buffer()` to absorb bursts without immediately blocking the producer.
+- Fast producer, slow consumer: `buffer()` to absorb bursts instead of immediately blocking the producer.
 - Need step-by-step progress tracking: `buffer()` so you do not lose intermediate states.
-- Only final/latest state is needed: `conflate()`.
+- Only final/latest state is needed: `conflate()` to drop intermediate states.
 
 ### Recommended Practices (Best Practices)
 
@@ -939,7 +928,7 @@ searchQuery
         searchDatabase(query)
     }
 
-// Always bound your buffers
+// Always bound your buffers (when possible)
 flow
     .buffer(capacity = 100)
 ```
@@ -956,7 +945,7 @@ importantData.conflate()
 // Don't add buffer blindly to trivial flows
 flow { emit(1) }.buffer().collect { }
 
-// Don't ignore backpressure for fast sources
+// Don't ignore backpressure strategy for fast sources
 fastSensor
     .collect { slowProcessing(it) } // Consider buffer/conflate/collectLatest
 ```

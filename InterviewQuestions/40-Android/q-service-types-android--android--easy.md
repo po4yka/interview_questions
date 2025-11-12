@@ -11,7 +11,7 @@ language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy]
+related: [c-android-components, q-android-app-components--android--easy]
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/background-execution, android/service, background-tasks, difficulty/easy]
@@ -81,7 +81,7 @@ class LocalService : Service() {
 - WorkManager / JobScheduler — для отложенных и гарантированных задач;
 - обычный `Service` (или Foreground `Service`) с потоками/корутинами — если нужен прямой контроль выполнения.
 
-См. также: [[q-android-app-components--android--easy]].
+См. также: [[c-android-components]], [[q-android-app-components--android--easy]].
 
 ## Answer (EN)
 
@@ -136,7 +136,7 @@ class LocalService : Service() {
 - WorkManager / JobScheduler for deferred and guaranteed tasks;
 - a regular `Service` (or Foreground `Service`) with threads/coroutines when you need direct execution control.
 
-See also: [[q-android-app-components--android--easy]].
+See also: [[c-android-components]], [[q-android-app-components--android--easy]].
 
 ---
 

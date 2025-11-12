@@ -57,36 +57,40 @@ app/
 └── build.gradle.kts             # Конфигурация сборки модуля
 ```
 
-(На уровне корня проекта также есть общий settings.gradle(.kts) и build.gradle(.kts), а в реальных проектах часто используется несколько модулей.)
+(На уровне корня проекта также есть общий `settings.gradle(.kts)`, верхнеуровневый `build.gradle(.kts)` и Gradle wrapper (`gradlew`, `gradlew.bat`, папка `gradle/`); в реальных проектах часто используется несколько модулей.)
 
 **Организация кода и ресурсов:**
 
 ```kotlin
-// Resource access via R class with compile-time checks for identifiers and resource types
+// Доступ к ресурсам через класс R с проверкой идентификаторов и типов на этапе компиляции
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val appName = getString(R.string.app_name)
-        val color = getColor(R.color.primary_color)
+        val color = getColor(R.color.primaryColor)
     }
 }
 ```
 
 ```kotlin
-// String-based assets access (no type-safe wrapper, but this is the standard way)
+// Доступ к файлам в assets по строковому пути (без type-safe обёртки; стандартный способ)
 val json = assets.open("config.json").bufferedReader().use { it.readText() }
 ```
 
 **AndroidManifest.xml** - декларация компонентов и метаданных:
 
 ```xml
-<manifest package="com.example.app">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.app">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:label="@string/app_name">
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -116,7 +120,7 @@ android {
 |-----------|-----------|--------|
 | **res/** | Компилируемые ресурсы | Через `R.*` (компилятор проверяет наличие и тип ресурса) |
 | **assets/** | Сырые файлы | `assets.open("file.json")` (строковый путь, без type-safe) |
-| **src/** | Исходный код | Компилируется в байткод JVM и затем в DEX |
+| **src/main/java**, **src/main/kotlin** | Исходный код | Компилируется в байткод JVM и затем в DEX |
 | **AndroidManifest.xml** | Метаданные, permissions, компоненты | Используется системой при установке и запуске |
 
 ## Answer (EN)
@@ -140,7 +144,7 @@ app/
 └── build.gradle.kts             # Module-level build configuration
 ```
 
-(At the project root there are also settings.gradle(.kts) and a top-level build.gradle(.kts), and real projects often contain multiple modules.)
+(At the project root there are also `settings.gradle(.kts)`, a top-level `build.gradle(.kts)`, and the Gradle wrapper (`gradlew`, `gradlew.bat`, `gradle/` directory); real projects often contain multiple modules.)
 
 **Code and resource organization:**
 
@@ -152,24 +156,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val appName = getString(R.string.app_name)
-        val color = getColor(R.color.primary_color)
+        val color = getColor(R.color.primaryColor)
     }
 }
 ```
 
 ```kotlin
-// String-based assets access (no type-safe wrapper, but this is the standard way)
+// String-based assets access (no type-safe wrapper, this is the standard way)
 val json = assets.open("config.json").bufferedReader().use { it.readText() }
 ```
 
 **AndroidManifest.xml** - component and metadata declarations:
 
 ```xml
-<manifest package="com.example.app">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.app">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:label="@string/app_name">
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -199,7 +207,7 @@ android {
 |-----------|---------|--------|
 | **res/** | Compiled resources | via `R.*` (compiler validates presence and type) |
 | **assets/** | Raw files | `assets.open("file.json")` (string path, not type-safe) |
-| **src/** | Source code | Compiled to JVM bytecode and then to DEX |
+| **src/main/java**, **src/main/kotlin** | Source code | Compiled to JVM bytecode and then to DEX |
 | **AndroidManifest.xml** | Metadata, permissions, components | Used by the system during install and runtime |
 
 ## Дополнительные вопросы (RU)

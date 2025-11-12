@@ -17,9 +17,10 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android
 - q-android-auto-guidelines--android--hard
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/wear
 - android/sensors
@@ -40,14 +41,13 @@ sources:
 
 ## Ответ (RU)
 
-## Краткий вариант
+## Краткая Версия
 - Health Services на часах для получения метрик (passive/exercise), с использованием batching и точных временных меток.
 - Health Connect как единая точка хранения и шаринга данных на устройстве.
 - Companion-приложение для визуализации и синхронизации с сервером через Health Connect и/или Data Layer / BLE.
 - Строгий контроль разрешений и уровней частоты измерений для соблюдения энергобюджета и политик.
 
-## Подробный вариант
-
+## Подробная Версия
 ### Требования
 - Функциональные:
   - Сбор ключевых метрик (например, пульс, шаги, калории, тренировки) на Wear OS.
@@ -65,6 +65,8 @@ sources:
 1. **Health Services** — работа с сенсорами и метриками здоровья на часах (passive + exercise), минимизируя прямую работу с низкоуровневыми сенсорами.
 2. **Health Connect** — централизованное хранилище/шина данных здоровья на устройстве, шаринг данных между приложениями и (при наличии) телефоном.
 3. **Companion App** — отображение аналитики, агрегация и синхронизация с бекендом; взаимодействует через Health Connect и/или собственный канал связи (Wearable Data Layer / BLE).
+
+См. также [[c-android]].
 
 ### Health Services Setup
 
@@ -143,7 +145,6 @@ suspend fun ensurePermissionsGranted() {
 - Carefully manage permissions and sampling levels to respect power budgets and policies.
 
 ## Detailed Version
-
 ### Requirements
 - Functional:
   - Collect key metrics (e.g., heart rate, steps, calories, workouts) on Wear OS.
@@ -163,6 +164,8 @@ suspend fun ensurePermissionsGranted() {
   - `ExerciseClient` for workouts with higher sampling and allowed foreground service.
 - Use Health Connect as the on-device health data hub for structured records and cross-app sharing.
 - Use a companion app for rich analytics and backend sync; communicate via Health Connect where available and/or a dedicated channel (Wearable Data Layer / BLE).
+
+See also [[c-android]].
 
 ### Health Services Setup
 

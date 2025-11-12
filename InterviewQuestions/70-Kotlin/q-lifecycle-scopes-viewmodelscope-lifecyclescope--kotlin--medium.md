@@ -6,7 +6,7 @@ topic: kotlin
 subtopics: [coroutines, lifecycle]
 question_kind: theory
 difficulty: medium
-original_language: en
+original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
@@ -14,7 +14,9 @@ related: [c-kotlin, c-coroutines, q-coroutine-context-detailed--kotlin--hard, q-
 created: 2023-10-15
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
+
 ---
+
 # Вопрос (RU)
 > В чём разница между viewModelScope и lifecycleScope? Когда использовать каждый из них?
 
@@ -66,7 +68,9 @@ class UserViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val users = repository.getUsers()
+                val users = withContext(Dispatchers.IO) {
+                    repository.getUsers()
+                }
                 _users.value = users
             } catch (e: Exception) {
                 _error.value = e.message
@@ -89,6 +93,8 @@ class UserViewModel(
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
+
+    private val viewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,7 +139,7 @@ class MyViewModel : ViewModel() {
             }
         }
     }
-    // При rotation корутина ПРОДОЛЖАЕТ работать
+    // При rotation корутина ПРОДОЛЖАЕТ работать (пока ViewModel не очищена)
 }
 
 // Activity
@@ -185,7 +191,10 @@ class ProductsViewModel(
     // 1. Загрузка данных
     fun loadProducts() {
         viewModelScope.launch {
-            _products.value = repository.getProducts()
+            val products = withContext(Dispatchers.IO) {
+                repository.getProducts()
+            }
+            _products.value = products
         }
     }
 
@@ -201,7 +210,7 @@ class ProductsViewModel(
 
     // 3. Долгие операции
     fun syncData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             while (isActive) {
                 repository.sync()
                 delay(60_000) // Каждую минуту
@@ -212,7 +221,9 @@ class ProductsViewModel(
     // 4. Business logic
     fun checkout(cart: Cart) {
         viewModelScope.launch {
-            val orderId = repository.createOrder(cart)
+            val orderId = withContext(Dispatchers.IO) {
+                repository.createOrder(cart)
+            }
             val payment = processPayment(orderId)
             if (payment.isSuccessful) {
                 _checkoutComplete.emit(orderId)
@@ -389,7 +400,9 @@ class LoginViewModel(
             _loginState.value = LoginState.Loading
 
             try {
-                val user = authRepository.login(email, password)
+                val user = withContext(Dispatchers.IO) {
+                    authRepository.login(email, password)
+                }
                 _loginState.value = LoginState.Success(user)
             } catch (e: Exception) {
                 _loginState.value = LoginState.Error(e.message ?: "Unknown error")
@@ -399,7 +412,7 @@ class LoginViewModel(
 
     // viewModelScope - long-running work
     fun keepSessionAlive() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             while (isActive) {
                 authRepository.refreshToken()
                 delay(15 * 60 * 1000) // Every 15 minutes
@@ -514,14 +527,16 @@ class BadViewModel : ViewModel() {
 class GoodViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
-            val data = repository.getData()
+            val data = withContext(Dispatchers.IO) {
+                repository.getData()
+            }
             _data.value = data
         }
     }
 }
 ```
 
-**`GlobalScope` - допустим только для редких application-level задач, строго НЕ привязанных к компонентам UI.**
+**`GlobalScope` даже для application-level задач, как правило, стоит избегать. Предпочитайте явные application-level scopes (например, управляемые из `Application` или DI) и структурированную конкуррентность.**
 
 ### Сравнение Всех Scopes
 
@@ -555,13 +570,11 @@ class MyService : Service() {
     }
 }
 
-// 4. GlobalScope - application lifetime (избегайте!)
+// 4. GlobalScope - живет весь lifetime процесса (избегайте!)
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        GlobalScope.launch {
-            // Живет весь lifetime процесса приложения
-        }
+        // Вместо GlobalScope лучше использовать явно управляемый scope, если нужен app-level scope.
     }
 }
 ```
@@ -574,7 +587,9 @@ class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
             try {
-                val data = repository.getData()
+                val data = withContext(Dispatchers.IO) {
+                    repository.getData()
+                }
                 _data.value = data
             } catch (e: Exception) {
                 _error.value = e.message
@@ -606,7 +621,7 @@ class MyViewModelWithHandler : ViewModel() {
         _error.value = exception.message
     }
 
-    // Расширяем контекст viewModelScope handler'ом
+    // Расширяем контекст viewModelScope handler'ом (используем + для добавления handler'а)
     private val customScope = CoroutineScope(
         viewModelScope.coroutineContext + exceptionHandler
     )
@@ -634,11 +649,9 @@ class ViewModelTest {
         viewModel.loadData()
         advanceUntilIdle()
 
-        // Симулируем onCleared()
-        viewModel.onCleared()
-
-        // Проверяем, что корутины отменены
-        // (в реальности отменяются автоматически внутри ViewModel)
+        // В реальных тестах обычно проверяют, что job завершена/отменена,
+        // вызывая публичные API или освобождая ViewModel через владельца.
+        // Напрямую вызывать onCleared() снаружи нельзя, так как метод protected.
     }
 }
 
@@ -709,7 +722,7 @@ viewModelScope and lifecycleScope are both lifecycle-aware coroutine scopes that
 - viewModelScope:
   - Bound to `ViewModel`.
   - Cancelled in `onCleared()`.
-  - Survives configuration changes (e.g., rotation).
+  - Survives configuration changes (e.g., rotation) as long as the `ViewModel` is retained.
   - Use for:
     - Business logic and domain operations.
     - Data loading from repositories.
@@ -730,9 +743,9 @@ viewModelScope and lifecycleScope are both lifecycle-aware coroutine scopes that
 ### Rotation Behavior Example
 
 - `viewModelScope`:
-  - A coroutine started in `viewModelScope` continues across configuration changes because the `ViewModel` is retained.
+  - A coroutine started in `viewModelScope` continues across configuration changes because the `ViewModel` is retained until its owner is finished.
 - `lifecycleScope` in an `Activity`:
-  - A coroutine started in `lifecycleScope` is cancelled when that `Activity` is destroyed on rotation and will be restarted only if you launch it again in the new instance.
+  - A coroutine started in `lifecycleScope` is cancelled when that `Activity` is destroyed on rotation and will run again only if you launch it in the new instance.
 
 This corresponds to the RU example where:
 - `ViewModel` prints continue across rotation.
@@ -741,7 +754,7 @@ This corresponds to the RU example where:
 ### When to Use viewModelScope
 
 Use `viewModelScope` for:
-- Loading data from repositories.
+- Loading data from repositories (switching to `Dispatchers.IO` as needed).
 - Continuous data streams (`Flow`) from data sources.
 - `Long`-running sync/refresh loops while the feature is alive.
 - Business logic like checkout, login, or other workflows that should survive configuration changes.
@@ -755,7 +768,7 @@ Use `lifecycleScope` for:
 
 ### repeatOnLifecycle (Advanced lifecycleScope Usage)
 
-Use `repeatOnLifecycle(minActiveState)` inside `lifecycleScope` to:
+Use `repeatOnLifecycle(minActiveState)` inside a `lifecycleScope` (or `viewLifecycleOwner.lifecycleScope` in fragments) to:
 - Start collecting when the lifecycle reaches `minActiveState`.
 - Stop collecting when going below that state.
 
@@ -766,7 +779,7 @@ This mirrors the RU examples and prevents work while the UI is not visible.
 Typical patterns (matching RU examples):
 - `STARTED`: collect visible UI state.
 - `RESUMED`: handle foreground input.
-- `CREATED`: run initialization collections.
+- `CREATED`: run initialization collections when needed.
 
 ### Fragment: lifecycleScope vs viewLifecycleOwner.lifecycleScope
 
@@ -780,7 +793,7 @@ Typical patterns (matching RU examples):
 ### Practical Example: Login Screen
 
 The EN LoginViewModel/LoginActivity example matches the RU section:
-- `viewModelScope` for login and session maintenance.
+- `viewModelScope` for login and session maintenance (with appropriate dispatcher switching).
 - `lifecycleScope` + `repeatOnLifecycle` for observing state and reacting in UI.
 
 ### Custom Scope (When Neither Fits)
@@ -793,24 +806,24 @@ Avoid `GlobalScope` for UI-related or lifecycle-bound work because it:
 - Is not cancelled with component destruction.
 - Risks memory leaks and updating dead UI.
 
-Use `viewModelScope`, `lifecycleScope`, or explicit custom scopes instead.
+Even for application-level/background tasks, prefer explicit, structured application-level scopes instead of `GlobalScope`.
 
 ### Scope Comparison Summary
 
 - `viewModelScope`: `ViewModel`-bound, survives configuration changes.
 - `lifecycleScope`: `LifecycleOwner`-bound, per-instance UI work.
 - Custom scopes: for custom-lifetime components.
-- `GlobalScope`: effectively app-process-wide; generally avoid.
+- `GlobalScope`: process-wide; generally avoid.
 
 ### Error Handling
 
 - Handle exceptions inside coroutines in both `viewModelScope` and `lifecycleScope`.
-- For centralized handling, extend a scope with `CoroutineExceptionHandler` (as in RU `MyViewModelWithHandler`).
+- For centralized handling, extend a scope with `CoroutineExceptionHandler` (e.g., `CoroutineScope(viewModelScope.coroutineContext + handler)`).
 
 ### Testing
 
 - Use rules/utilities (`MainDispatcherRule`, `runTest`) to control dispatchers.
-- For `viewModelScope`, trigger work, advance time, and (optionally) simulate `onCleared()`.
+- For `viewModelScope`, trigger work, advance time, and assert via public API or owner disposal that jobs complete/cancel; do not call `onCleared()` directly from tests since it is protected.
 - For `lifecycleScope`, use `ActivityScenario`/`FragmentScenario` to drive lifecycle and assert cancellation.
 
 ### Best Practices
@@ -819,7 +832,7 @@ Use `viewModelScope`, `lifecycleScope`, or explicit custom scopes instead.
 - Prefer `lifecycleScope` + `repeatOnLifecycle` (and `viewLifecycleOwner.lifecycleScope` in `Fragment`) for UI.
 - Use custom scopes for services/managers; cancel explicitly.
 - Do not misuse scopes across ownership boundaries.
-- Avoid `GlobalScope` for lifecycle-bound logic.
+- Avoid `GlobalScope` for lifecycle-bound or UI-related logic.
 
 ## Дополнительные вопросы (RU)
 

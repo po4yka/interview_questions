@@ -1,22 +1,20 @@
 ---
 id: lang-086
-title: "How System Knows Weakreference Can Be Cleared / Как система знает что WeakReference можно очистить"
-aliases: [How System Knows Weakreference Can Be Cleared, Как система знает что WeakReference можно очистить]
+title: "How System Knows WeakReference Can Be Cleared"
+aliases: [How System Knows WeakReference Can Be Cleared, Как система знает что WeakReference можно очистить]
 topic: kotlin
-subtopics: [garbage-collection, memory-management, references]
+subtopics: [references]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium]
+related: [c-concepts--kotlin--medium, c-collections, q-garbage-collector-basics--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [difficulty/medium, garbage-collection, kotlin, memory-management, programming-languages, weak-references]
+tags: [difficulty/medium, kotlin, references]
 ---
-# Как Система Понимает, Что WeakReference Можно Очистить?
-
 # Вопрос (RU)
 > Как система понимает, что WeakReference можно очистить?
 
@@ -158,7 +156,7 @@ class ImageCache {
             println("Cache hit!")
         } ?: run {
             println("Cache miss (возможно, GC очистил ссылку)")
-            null
+            return null
         }
     }
 
@@ -195,12 +193,12 @@ How it works:
 
 2. Weak reference processing:
    - For each WeakReference, the GC checks whether its referent is strongly reachable.
-   - If the referent is not strongly reachable, the GC clears the referent inside the WeakReference (its get() will later return null) and may enqueue the WeakReference into an associated ReferenceQueue.
+   - If the referent is not strongly reachable, the GC clears the referent inside the WeakReference (its `get()` will later return `null`) and may enqueue the WeakReference into an associated ReferenceQueue.
 
 3. Sweep phase:
    - Unmarked (unreachable) objects are reclaimed.
 
-Note: System.gc() only suggests that the GC may run; it does not guarantee immediate collection or clearing.
+Note: `System.gc()` only suggests that the GC may run; it does not guarantee immediate collection or clearing.
 
 ### Example 1: Basic behavior
 
@@ -296,7 +294,7 @@ val weakRef2 = WeakReference(Data())
   - Action: during GC, the referent is eligible for reclamation; WeakReferences to it are cleared (and may be enqueued); after that it is collected.
 
 - Unreachable:
-  - No strong or weak references keep it; purely garbage.
+  - No references keep it; purely garbage.
   - Action: collected.
 
 ### Practical example
@@ -310,7 +308,7 @@ class ImageCache {
             println("Cache hit!")
         } ?: run {
             println("Cache miss (possibly GC cleared referent)")
-            null
+            return null
         }
     }
 

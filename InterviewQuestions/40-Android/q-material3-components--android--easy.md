@@ -48,46 +48,46 @@ sources: []
 
 | Функция | Material 2 | Material 3 |
 |---------|------------|------------|
-| **Цвета** | Фиксированная палитра | Динамическая система (25+ ролей) |
-| **Персонализация** | Статические темы | Темы из обоев пользователя |
+| **Цвета** | Фиксированная палитра | Динамическая система (расширенные семантические роли, поддержка dynamic color) |
+| **Персонализация** | Статические темы | Темы из обоев пользователя (dynamic color) |
 | **Elevation** | На основе теней | Тональные поверхности + обновлённые elevation-токены |
 
 ### Основные Компоненты Material 3
 
 **1. Кнопки (основные варианты):**
 ```kotlin
-// ✅ Filled — основное действие
+// ✅ Filled — основное приоритетное действие
 Button(onClick = {}) { Text("Save") }
 
-// ✅ FilledTonalButton — вторичное действие
+// ✅ FilledTonalButton — важное действие с меньшим акцентом (альтернатива Filled в некоторых сценариях)
 FilledTonalButton(onClick = {}) { Text("Cancel") }
 
 // ✅ OutlinedButton — второстепенные / менее заметные действия
 OutlinedButton(onClick = {}) { Text("Secondary") }
 
-// ✅ TextButton — контекстные/микро-действия без акцента
+// ✅ TextButton — контекстные/inline-действия без сильного акцента
 TextButton(onClick = {}) { Text("More") }
 
-// ✅ ElevatedButton — акцент при необходимости отделить от фона
+// ✅ ElevatedButton — акцент, когда нужно визуально отделить от фона
 ElevatedButton(onClick = {}) { Text("Action") }
 
-// ❌ Не используйте Filled для всех кнопок
+// ❌ Не используйте Filled для всех действий подряд
 ```
 
 **2. Навигация:**
-- `NavigationBar` — нижняя навигация (ранее `BottomNavigation`)
+- `NavigationBar` — нижняя навигация (современная замена `BottomNavigation` из Material 2)
 - `NavigationBarItem` — элементы нижней навигации
 - `NavigationRail` — боковая навигация для больших экранов
 - `ModalNavigationDrawer` — выдвижное меню
 
 **3. App Bar:**
-- `TopAppBar` — стандартный
-- `MediumTopAppBar` — средний с прокруткой
-- `LargeTopAppBar` — большой
+- `TopAppBar` / `CenterAlignedTopAppBar` — стандартные апп-бары
+- `MediumTopAppBar` — средний с поддержкой поведения при прокрутке
+- `LargeTopAppBar` — большой, для экранов с расширенным заголовком
 
 **4. Карточки:**
 ```kotlin
-// ✅ Используйте семантические цвета
+// ✅ Используйте семантические роли из MaterialTheme.colorScheme
 Card(
     colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceVariant // ✅
@@ -95,7 +95,7 @@ Card(
     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
 )
 
-// ❌ Не хардкодьте цвета
+// ❌ Не хардкодьте цвета вместо использования colorScheme
 Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8DEF8)))
 ```
 
@@ -113,14 +113,22 @@ implementation("androidx.compose.material3:material3")
 ```
 (версия указывается через BOM или явно в зависимости от конфигурации проекта)
 
-**2. Обновить theme:**
+Material 2 (`androidx.compose.material:*`) и Material 3 можно использовать параллельно для постепенной миграции.
+
+**2. Обновить theme (M3):**
 ```kotlin
 // До: Material 2
 MaterialTheme(colors = lightColors())
 
-// После: Material 3
-MaterialTheme(colorScheme = lightColorScheme())
+// После: Material 3 (упрощённый пример)
+MaterialTheme(
+    colorScheme = lightColorScheme(),
+    typography = Typography(),
+    shapes = Shapes()
+)
 ```
+На практике обычно создают свой composable-тему (например, AppTheme),
+которая внутри настраивает `MaterialTheme` c `colorScheme`, `typography` и `shapes`.
 
 **3. Обновить imports:**
 ```kotlin
@@ -134,6 +142,7 @@ import androidx.compose.material3.Button
 **4. Обновить компоненты:**
 - `BottomNavigation` → `NavigationBar`
 - `BottomNavigationItem` → `NavigationBarItem`
+- Аналогично — использовать M3-версии компонентов (`Card`, `TopAppBar`, `TextField` и др.)
 
 **5. Учесть breaking changes:**
 ```kotlin
@@ -149,22 +158,31 @@ Card(elevation = CardDefaults.cardElevation(defaultElevation = 4.dp))
 ```kotlin
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
+    val context = LocalContext.current
     val colorScheme = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            dynamicLightColorScheme(LocalContext.current) // ✅ Из обоев
+            dynamicLightColorScheme(context) // ✅ Цвета из обоев (пример для светлой темы)
         }
-        else -> lightColorScheme() // ✅ Корректный fallback для старых устройств
+        else -> lightColorScheme() // ✅ Корректный fallback для устройств без dynamic color
     }
-    MaterialTheme(colorScheme = colorScheme, content = content)
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography(),
+        shapes = Shapes(),
+        content = content
+    )
 }
 ```
+(В реальном приложении обычно поддерживают и темную тему через `dynamicDarkColorScheme` / `darkColorScheme`.)
 
 ### Best Practices
 
-1. **Используйте семантические цветовые роли** (`primary`, `surfaceVariant`) вместо хардкода
-2. **Включайте динамические цвета** на Android 12+, с корректным fallback для более старых версий
+1. **Используйте семантические цветовые роли из MaterialTheme.colorScheme** (`primary`, `surfaceVariant` и др.) вместо хардкода
+2. **Включайте dynamic color** на Android 12+ с корректным fallback для более старых версий
 3. **Соблюдайте иерархию кнопок:** Filled → FilledTonal → Elevated → Outlined → Text
-4. **Учитывайте обновлённую модель elevation:** уровни для фона, контейнеров, навигации и модальных элементов, опираясь на токены M3
+4. **Учитывайте обновлённую модель elevation:** используйте токены/уровни M3 для фона, контейнеров, навигации и модальных элементов
+5. **Планируйте миграцию:** при необходимости используйте параллельно Material 2 и Material 3 для постепенной замены компонентов
 
 ---
 
@@ -176,18 +194,18 @@ fun AppTheme(content: @Composable () -> Unit) {
 
 | Feature | Material 2 | Material 3 |
 |---------|------------|------------|
-| **Colors** | Fixed palette | Dynamic system (25+ roles) |
-| **Personalization** | Static themes | Themes from user wallpaper |
+| **Colors** | Fixed palette | Extended semantic roles + support for dynamic color |
+| **Personalization** | Static themes | Themes derived from user wallpaper (dynamic color) |
 | **Elevation** | Shadow-based | Tonal surfaces + updated elevation tokens |
 
 ### Main Material 3 Components
 
 **1. Buttons (core variants):**
 ```kotlin
-// ✅ Filled — primary action
+// ✅ Filled — high-emphasis primary action
 Button(onClick = {}) { Text("Save") }
 
-// ✅ FilledTonalButton — secondary / alternative primary
+// ✅ FilledTonalButton — important action with lower emphasis (alternative to Filled in some contexts)
 FilledTonalButton(onClick = {}) { Text("Cancel") }
 
 // ✅ OutlinedButton — less prominent secondary actions
@@ -196,26 +214,26 @@ OutlinedButton(onClick = {}) { Text("Secondary") }
 // ✅ TextButton — inline / contextual actions
 TextButton(onClick = {}) { Text("More") }
 
-// ✅ ElevatedButton — when emphasis is needed against the background
+// ✅ ElevatedButton — when emphasis is needed to separate from the background
 ElevatedButton(onClick = {}) { Text("Action") }
 
-// ❌ Don't use Filled for all buttons
+// ❌ Don't use Filled for every action
 ```
 
 **2. Navigation:**
-- `NavigationBar` — bottom navigation (previously `BottomNavigation`)
+- `NavigationBar` — bottom navigation (modern replacement for `BottomNavigation` from Material 2)
 - `NavigationBarItem` — bottom navigation items
 - `NavigationRail` — side navigation for larger screens
-- `ModalNavigationDrawer` — drawer menu
+- `ModalNavigationDrawer` — navigation drawer
 
 **3. App Bar:**
-- `TopAppBar` — standard
-- `MediumTopAppBar` — medium with scroll behavior
-- `LargeTopAppBar` — large
+- `TopAppBar` / `CenterAlignedTopAppBar` — standard top app bars
+- `MediumTopAppBar` — medium bar with scroll behavior
+- `LargeTopAppBar` — large bar for expanded title layouts
 
 **4. Cards:**
 ```kotlin
-// ✅ Use semantic colors
+// ✅ Use semantic roles from MaterialTheme.colorScheme
 Card(
     colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceVariant // ✅
@@ -223,7 +241,7 @@ Card(
     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
 )
 
-// ❌ Don't hardcode colors
+// ❌ Don't hardcode colors instead of using colorScheme
 Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8DEF8)))
 ```
 
@@ -241,14 +259,21 @@ implementation("androidx.compose.material3:material3")
 ```
 (version is provided via BOM or explicitly, depending on your project setup)
 
-**2. Update theme:**
+Material 2 (`androidx.compose.material:*`) and Material 3 can be used side-by-side to support gradual migration.
+
+**2. Update theme (M3):**
 ```kotlin
 // Before: Material 2
 MaterialTheme(colors = lightColors())
 
-// After: Material 3
-MaterialTheme(colorScheme = lightColorScheme())
+// After: Material 3 (simplified example)
+MaterialTheme(
+    colorScheme = lightColorScheme(),
+    typography = Typography(),
+    shapes = Shapes()
+)
 ```
+In practice, define your own AppTheme composable that configures `MaterialTheme` with `colorScheme`, `typography`, and `shapes`.
 
 **3. Update imports:**
 ```kotlin
@@ -262,6 +287,7 @@ import androidx.compose.material3.Button
 **4. Update components:**
 - `BottomNavigation` → `NavigationBar`
 - `BottomNavigationItem` → `NavigationBarItem`
+- Similarly, adopt M3 versions of components (`Card`, `TopAppBar`, `TextField`, etc.)
 
 **5. Handle breaking changes:**
 ```kotlin
@@ -277,22 +303,31 @@ Card(elevation = CardDefaults.cardElevation(defaultElevation = 4.dp))
 ```kotlin
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
+    val context = LocalContext.current
     val colorScheme = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            dynamicLightColorScheme(LocalContext.current) // ✅ From wallpaper
+            dynamicLightColorScheme(context) // ✅ From wallpaper (example for light theme)
         }
-        else -> lightColorScheme() // ✅ Correct fallback when dynamic color is unavailable
+        else -> lightColorScheme() // ✅ Fallback when dynamic color is unavailable
     }
-    MaterialTheme(colorScheme = colorScheme, content = content)
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography(),
+        shapes = Shapes(),
+        content = content
+    )
 }
 ```
+(In a real app you'd typically support dark theme as well with `dynamicDarkColorScheme` / `darkColorScheme`.)
 
 ### Best Practices
 
-1. **Use semantic color roles** (`primary`, `surfaceVariant`) instead of hardcoding
-2. **Enable dynamic colors** on Android 12+ with a proper fallback on lower versions
+1. **Use semantic color roles from MaterialTheme.colorScheme** (`primary`, `surfaceVariant`, etc.) instead of hardcoded colors
+2. **Enable dynamic color** on Android 12+ with a proper fallback on lower versions
 3. **Follow button hierarchy:** Filled → FilledTonal → Elevated → Outlined → Text
-4. **Align with the updated elevation model:** use appropriate levels/tokens for background, containers, navigation, and modal elements
+4. **Align with the updated elevation model:** use M3 elevation tokens/levels for background, containers, navigation, and modal elements
+5. **Plan migration:** use Material 2 and Material 3 side-by-side when needed to migrate gradually
 
 ---
 

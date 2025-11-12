@@ -2,38 +2,32 @@
 id: kotlin-057
 title: "CoroutineContext Composition / Композиция CoroutineContext"
 aliases: ["CoroutineContext Composition", "Композиция CoroutineContext"]
-
-# Classification
 topic: kotlin
-subtopics: [coroutines, flow, context]
+subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, q-coroutine-context-detailed--kotlin--hard, q-kotlin-coroutines-introduction--kotlin--medium]
-
-# Timestamps
+related: [c-concurrency, q-coroutine-context-detailed--kotlin--hard, q-kotlin-coroutines-introduction--kotlin--medium]
 created: 2025-10-11
-updated: 2025-11-10
+updated: 2025-11-11
+tags: [kotlin, coroutines, flow, difficulty/hard]
 
-tags: [advanced, composition, context, coroutines, difficulty/hard, kotlin]
 ---
+
 # Вопрос (RU)
 > Объясните как элементы `CoroutineContext` комбинируются и наследуются. Создайте пользовательский элемент `CoroutineContext` для отслеживания ID запроса в асинхронных операциях.
 
----
+# Question (EN)
+> Explain how `CoroutineContext` elements combine and inherit. Create a custom `CoroutineContext` element for request ID tracking across async operations.
 
 ## Ответ (RU)
 
-`CoroutineContext` - это индексированный набор элементов, определяющий поведение корутин. Понимание композиции контекста необходимо для продвинутого использования корутин. См. также [[c-coroutines]].
+`CoroutineContext` - это индексированный набор элементов, определяющий поведение корутин. Понимание композиции контекста необходимо для продвинутого использования корутин. См. также [[c-concurrency]].
 
 ### Структура CoroutineContext
 
@@ -115,7 +109,7 @@ fun main() = runBlocking(CoroutineName("Parent") + Dispatchers.Default) {
 Важно различать композицию контекстов и поведение `Job` при создании корутины.
 
 - Оператор `+` всегда заменяет элемент с тем же ключом (включая `Job`).
-- При создании новой корутины в scope (например, `launch`/`async`) ей автоматически создаётся новый `Job`, который ссылается на `Job` родителя как на родительский, формируя иерархию отмены.
+- При создании новой корутины в scope (например, `launch`/`async`) ей автоматически создаётся новый `Job`, который ссылается на `Job` родителя как на родительский, формируя иерархию отмены (это поведение определено реализацией `kotlinx.coroutines`, а не интерфейсом `CoroutineContext`).
 
 ```kotlin
 val parentJob = Job()
@@ -125,7 +119,9 @@ val scope = CoroutineScope(parentJob + CoroutineName("Scope"))
 scope.launch {
     // У этой корутины НОВЫЙ Job, являющийся дочерним по отношению к parentJob
     val job = coroutineContext[Job]
-    println(job?.parent === parentJob) // true
+    // Здесь мы полагаемся на гарантии structured concurrency библиотеки:
+    // job отменяется вместе с parentJob, хотя parent напрямую не доступен из API
+    println(job != null) // true
 }
 ```
 
@@ -199,18 +195,6 @@ fun main() = runBlocking {
         processRequest(456)
     }
 }
-
-/*
-Возможный вывод:
-[a1b2c3d4] Обработка запроса для пользователя 123
-[a1b2c3d4] Получение данных пользователя
-[a1b2c3d4] Получение предпочтений
-[a1b2c3d4] Запрос завершен
-[custom-req-456] Обработка запроса для пользователя 456
-[custom-req-456] Получение данных пользователя
-[custom-req-456] Получение предпочтений
-[custom-req-456] Запрос завершен
-*/
 ```
 
 ### Продвинутый Пример: Мультитенантный Контекст
@@ -423,13 +407,13 @@ fun main() = runBlocking {
 
 #### Паттерн 1: Изоляция Контекста
 
-Иногда нужно разорвать наследование контекста:
+Иногда нужно разорвать наследование части контекста (например, убрать имя или RequestId):
 
 ```kotlin
-// Создание нового изолированного контекста
+// Создание нового изолированного контекста (без дополнительных элементов родителя)
 suspend fun isolatedOperation() {
     withContext(EmptyCoroutineContext) {
-        // Эта корутина выполняется с "чистым" контекстом
+        // Эта корутина выполняется с "чистым" контекстом относительно пользовательских элементов:
         println(coroutineContext[CoroutineName]) // null
     }
 }
@@ -491,10 +475,14 @@ suspend fun logInfo(message: String) {
 1. Делайте элементы контекста неизменяемыми:
    ```kotlin
    // Неизменяемый data class
-   data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId)
+   data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId) {
+       companion object Key : CoroutineContext.Key<RequestId>
+   }
 
    // Изменяемые свойства (пример плохой практики)
-   class RequestId(var id: String) : AbstractCoroutineContextElement(RequestId)
+   class MutableRequestId(var id: String) : AbstractCoroutineContextElement(MutableRequestId) {
+       companion object Key : CoroutineContext.Key<MutableRequestId>
+   }
    ```
 
 2. Предоставляйте `companion object Key`:
@@ -568,12 +556,9 @@ suspend fun logInfo(message: String) {
    val requestId = coroutineContext.requestId ?: generateRequestId()
    ```
 
-**Краткое содержание**: `CoroutineContext` - это индексированный набор элементов, комбинируемых оператором `+`. Дочерние корутины наследуют родительский контекст, но могут переопределять элементы. Оператор `+` всегда заменяет элемент с тем же ключом; при создании корутины в scope ей создаётся новый `Job`, являющийся дочерним по отношению к родительскому, что формирует иерархию отмены. Пользовательские элементы обычно расширяют `AbstractCoroutineContextElement` и должны предоставлять `companion Key`. Типичные применения: отслеживание запросов, мультитенантная изоляция, распределенная трассировка. Элементы должны быть неизменяемыми, иметь понятные имена и аккуратно обрабатывать отсутствие значений.
+**Краткое содержание**: `CoroutineContext` - это индексированный набор элементов, комбинируемых оператором `+`. Дочерние корутины наследуют родительский контекст, но могут переопределять элементы. Оператор `+` всегда заменяет элемент с тем же ключом; при создании корутины в scope ей создаётся новый `Job`, являющийся дочерним по отношению к родительскому (как определено реализацией библиотеки), что формирует иерархию отмены. Пользовательские элементы обычно расширяют `AbstractCoroutineContextElement` и должны предоставлять `companion Key`. Типичные применения: отслеживание запросов, мультитенантная изоляция, распределенная трассировка. Элементы должны быть неизменяемыми, иметь понятные имена и аккуратно обрабатывать отсутствие значений.
 
 ---
-
-# Question (EN)
-> Explain how `CoroutineContext` elements combine and inherit. Create a custom `CoroutineContext` element for request ID tracking across async operations.
 
 ## Answer (EN)
 
@@ -641,17 +626,14 @@ Child coroutines inherit context from their parent, but can override specific el
 ```kotlin
 fun main() = runBlocking(CoroutineName("Parent") + Dispatchers.Default) {
     println("Parent context: $coroutineContext")
-    // Parent context: [CoroutineName(Parent), Dispatchers.Default, ...]
 
     launch(CoroutineName("Child")) {
         println("Child context: $coroutineContext")
-        // Child context: [CoroutineName(Child), Dispatchers.Default, ...]
         // Name overridden, Dispatcher inherited
     }
 
     launch(Dispatchers.IO) {
         println("Child2 context: $coroutineContext")
-        // Child2 context: [CoroutineName(Parent), Dispatchers.IO, ...]
         // Dispatcher overridden, Name inherited
     }
 }
@@ -662,7 +644,7 @@ fun main() = runBlocking(CoroutineName("Parent") + Dispatchers.Default) {
 It's important to distinguish between context combination and how `Job`s behave when launching coroutines:
 
 - The `+` operator always replaces an element with the same key (including `Job`).
-- When you launch a new coroutine in a scope, it gets a NEW `Job` whose parent is the `Job` from the scope's context, forming a structured concurrency hierarchy.
+- When you launch a new coroutine in a scope, it gets a NEW `Job` whose parent is the `Job` from the scope's context, forming a structured concurrency hierarchy (this is defined by the `kotlinx.coroutines` implementation, not by the `CoroutineContext` interface itself).
 
 ```kotlin
 val parentJob = Job()
@@ -671,7 +653,8 @@ val scope = CoroutineScope(parentJob + CoroutineName("Scope"))
 scope.launch {
     // This coroutine gets a new Job that is a child of parentJob
     val job = coroutineContext[Job]
-    println(job?.parent === parentJob) // true
+    // We rely on structured concurrency guarantees: this job is cancelled with parentJob
+    println(job != null) // true
 }
 ```
 
@@ -746,18 +729,6 @@ fun main() = runBlocking {
         processRequest(456)
     }
 }
-
-/*
-Sample output:
-[a1b2c3d4] Processing request for user 123
-[a1b2c3d4] Fetching user data
-[a1b2c3d4] Fetching user preferences
-[a1b2c3d4] Request completed
-[custom-req-456] Processing request for user 456
-[custom-req-456] Fetching user data
-[custom-req-456] Fetching user preferences
-[custom-req-456] Request completed
-*/
 ```
 
 ### Advanced: Multi-Tenant Context
@@ -978,13 +949,13 @@ fun main() = runBlocking {
 
 #### Pattern 1: Context Isolation
 
-Sometimes you want to break inheritance:
+Sometimes you want to break inheritance of custom elements (e.g., remove name or RequestId):
 
 ```kotlin
-// Create new isolated context
+// Create new isolated context (without parent's additional elements)
 suspend fun isolatedOperation() {
     withContext(EmptyCoroutineContext) {
-        // This coroutine runs with a fresh context (its own Job, no Name/Dispatcher overrides)
+        // This coroutine runs with a "clean" context relative to custom elements
         println(coroutineContext[CoroutineName]) // null
     }
 }
@@ -1046,10 +1017,14 @@ suspend fun logInfo(message: String) {
 1. Make context elements immutable:
    ```kotlin
    // Immutable data class
-   data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId)
+   data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId) {
+       companion object Key : CoroutineContext.Key<RequestId>
+   }
 
    // Mutable properties (avoid)
-   class RequestId(var id: String) : AbstractCoroutineContextElement(RequestId)
+   class MutableRequestId(var id: String) : AbstractCoroutineContextElement(MutableRequestId) {
+       companion object Key : CoroutineContext.Key<MutableRequestId>
+   }
    ```
 
 2. Provide a `companion object Key`:
@@ -1065,14 +1040,7 @@ suspend fun logInfo(message: String) {
    val CoroutineContext.id: String?       // unclear
    ```
 
-4. Document thread safety and nullability:
-   ```kotlin
-   /**
-    * Thread-safe context element for request tracking.
-    * Immutable by design.
-    */
-   data class RequestId(val id: String) : ...
-   ```
+4. Document thread safety and nullability.
 
 5. Handle missing context gracefully:
    ```kotlin
@@ -1104,7 +1072,7 @@ suspend fun logInfo(message: String) {
    }
    ```
 
-3. Context leaks with `GlobalScope`:
+3. `Context` leaks with `GlobalScope`:
    ```kotlin
    // Context lost when using GlobalScope
    withContext(RequestId("123")) {
@@ -1133,7 +1101,7 @@ suspend fun logInfo(message: String) {
    val requestId = coroutineContext.requestId ?: generateRequestId()
    ```
 
-**English Summary**: `CoroutineContext` is an indexed set of elements that combine using the `+` operator. Child coroutines inherit parent context but can override specific elements. The `+` operator always replaces elements with the same key; when launching coroutines within a scope, a new child `Job` is created to maintain structured concurrency. Custom context elements typically extend `AbstractCoroutineContextElement` and must provide a companion `Key`. Common uses include request tracking, multi-tenant isolation, and distributed tracing. Context elements should be immutable, well-named, thread-safe, and handle missing values gracefully.
+**English Summary**: `CoroutineContext` is an indexed set of elements that combine using the `+` operator. Child coroutines inherit parent context but can override specific elements. The `+` operator always replaces elements with the same key; when launching coroutines within a scope, a new child `Job` is created by the library to maintain structured concurrency. Custom context elements typically extend `AbstractCoroutineContextElement` and must provide a companion `Key`. Common uses include request tracking, multi-tenant isolation, and distributed tracing. `Context` elements should be immutable, well-named, thread-safe, and handle missing values gracefully.
 
 ## Follow-ups
 
@@ -1142,9 +1110,9 @@ suspend fun logInfo(message: String) {
 - What are common pitfalls to avoid?
 
 ## References
-- [Coroutine context and dispatchers - Kotlin](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [CoroutineContext - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
-- [Custom CoroutineContext elements](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/)
+- ["Coroutine" context and dispatchers - Kotlin]("https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html")
+- [CoroutineContext - API Reference]("https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/")
+- [Custom CoroutineContext elements]("https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/")
 
 ## Related Questions
 - [[q-coroutine-context-detailed--kotlin--hard]]

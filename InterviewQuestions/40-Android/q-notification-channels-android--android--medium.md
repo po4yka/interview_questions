@@ -47,10 +47,11 @@ sources:
 Каналы уведомлений (Android 8.0+, API 26+) позволяют группировать уведомления по типам и дают пользователям тонкий контроль над поведением каждого типа (звук, вибрация, важность, блокировка и т.п.). На Android 8.0+ каждое уведомление должно быть привязано к каналу.
 
 **Основные концепции:**
-- Каждый канал имеет уникальный ID и уровень важности.
+- Каждый канал имеет уникальный ID и уровень важности при создании.
 - Пользователи могут изменять настройки каналов в системных настройках.
-- Приложение может создавать и удалять каналы программно (через `NotificationManager.createNotificationChannel()` и `deleteNotificationChannel()`), но не может изменить важность уже существующего канала после того, как он был создан и/или изменён пользователем.
-- Если канал был удалён пользователем, приложение не может "тихо" вернуть его с теми же параметрами без явного участия пользователя.
+- Приложение может создавать и удалять каналы программно (через `NotificationManager.createNotificationChannel()` и `deleteNotificationChannel()`), но не может изменить уровень важности уже существующего канала после его создания (это ограничение действует для защиты пользовательских настроек).
+- Если канал существует и его параметры были изменены пользователем, приложение не может "переписать" эти настройки или повысить важность канала поверх выбора пользователя.
+- Если канал был удалён пользователем, приложение технически может попытаться создать канал с тем же ID снова, но не может использовать это для обхода пользовательских предпочтений: поведение контролируется системой и пользовательскими настройками; нельзя надёжно и "тихо" восстановить исходную важность/поведение против воли пользователя.
 
 **Код:**
 ```kotlin
@@ -83,8 +84,9 @@ fun showNotification(title: String, content: String) {
     NotificationManagerCompat.from(this).notify(1, notification)
 }
 
-// ❌ Для приложений с targetSdkVersion 26+ на Android 8.0+ уведомление без канала не отобразится
-val notification = NotificationCompat.Builder(this) // ❌ Нет ID канала
+// ❌ Пример (концептуально): для приложений с targetSdkVersion 26+ на Android 8.0+
+// уведомление без канала не отобразится.
+val notification = NotificationCompat.Builder(this) // ❌ Нет ID канала на API 26+
     .setContentTitle("Test")
     .build()
 ```
@@ -101,10 +103,11 @@ val notification = NotificationCompat.Builder(this) // ❌ Нет ID канал�
 Notification channels (Android 8.0+, API 26+) allow grouping notifications by type and give users fine-grained control over each type (sound, vibration, importance, blocking, etc.). On Android 8.0+ every notification must be associated with a channel.
 
 **Main concepts:**
-- Each channel has a unique ID and an importance level.
+- Each channel has a unique ID and an importance level defined at creation time.
 - Users can modify channel settings in system settings.
-- The app can create and delete channels programmatically (via `NotificationManager.createNotificationChannel()` and `deleteNotificationChannel()`), but cannot change the importance of an existing channel once it has been created and/or modified by the user.
-- If a channel is deleted by the user, the app cannot silently recreate it with the same behavior without explicit user involvement.
+- The app can create and delete channels programmatically (via `NotificationManager.createNotificationChannel()` and `deleteNotificationChannel()`), but it cannot change the importance level of an existing channel after it has been created (this restriction exists to protect user choices).
+- If a channel exists and its settings were adjusted by the user, the app cannot override those settings or silently increase its importance above the user's choice.
+- If a channel has been deleted by the user, the app can technically attempt to create a channel with the same ID again, but it must not rely on this as a way to bypass user preferences: behavior is enforced by the system and user settings; you cannot reliably and silently restore the original importance/behavior against the user's intent.
 
 **Code:**
 ```kotlin
@@ -137,8 +140,9 @@ fun showNotification(title: String, content: String) {
     NotificationManagerCompat.from(this).notify(1, notification)
 }
 
-// ❌ For apps with targetSdkVersion 26+ on Android 8.0+ a notification without a channel will not be shown
-val notification = NotificationCompat.Builder(this) // ❌ No channel ID
+// ❌ Example (conceptual): for apps with targetSdkVersion 26+ on Android 8.0+
+// a notification without a channel ID will not be shown.
+val notification = NotificationCompat.Builder(this) // ❌ No channel ID on API 26+
     .setContentTitle("Test")
     .build()
 ```

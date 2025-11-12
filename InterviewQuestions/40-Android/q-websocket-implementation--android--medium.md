@@ -100,20 +100,22 @@ tags:
 - Closed — нет активного соединения
 - Connecting — идёт установление соединения
 - Connected — можно отправлять/принимать сообщения
-- Disconnected — соединение потеряно, можно запускать логику переподключения
+- Disconnected — соединение потеряно, может запускаться логика переподключения в зависимости от конфигурации
 
 ### Полная реализация WebSocket-клиента (RU)
 
 Ниже — устойчивый клиент на базе `OkHttp` и `coroutines` с:
 - явными состояниями
 - потоком событий
-- переподключением (экспоненциальный backoff с jitter)
-- heartbeat
+- переподключением (экспоненциальный backoff с jitter, управляется `Config`)
+- heartbeat (использует ping/pong на уровне протокола и пример app-level ping)
 - опциональной очередью сообщений
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.sync.withLock
 import okhttp3.*
 import okio.ByteString
 import java.util.concurrent.atomic.AtomicInteger
@@ -167,7 +169,7 @@ class WebSocketClient(
     private var reconnectJob: Job? = null
     private var heartbeatJob: Job? = null
 
-    // Очередь сообщений для офлайн-буфера
+    // Очередь сообщений для офлайн-буфера (асинхронная)
     private val messageQueue = mutableListOf<QueuedMessage>()
     private val queueMutex = kotlinx.coroutines.sync.Mutex()
 
@@ -176,7 +178,7 @@ class WebSocketClient(
         val timestamp: Long = System.currentTimeMillis()
     )
 
-    // Отслеживание heartbeat (на уровне приложения)
+    // Отслеживание heartbeat (на уровне приложения поверх ping/pong)
     private var lastPongReceived = System.currentTimeMillis()
     private var heartbeatMissCount = 0
 
@@ -208,6 +210,7 @@ class WebSocketClient(
             currentState.webSocket.send(message)
         } else {
             if (config.enableMessageQueue) {
+                // добавляем в очередь асинхронно; используется как best-effort офлайн-буфер
                 queueMessage(message)
                 true
             } else {
@@ -263,7 +266,7 @@ class WebSocketClient(
             scope.launch {
                 _events.emit(Event.MessageReceived(text))
 
-                // Простой app-level pong
+                // Пример примитивного app-level pong по тексту "pong"
                 if (text == "pong") {
                     onPongReceived()
                 }
@@ -327,7 +330,9 @@ class WebSocketClient(
                     heartbeatMissCount++
 
                     if (heartbeatMissCount >= 3) {
-                        currentWebSocket?.close(1001, "Heartbeat timeout")
+                        // Закрываем соединение из-за отсутствия heartbeat;
+                        // в реальном приложении выбирайте подходящий код/ reason.
+                        currentWebSocket?.close(1000, "Heartbeat timeout")
                         break
                     }
                 }
@@ -413,7 +418,15 @@ class WebSocketClient(
 
 Над `WebSocketClient` строим чатовый клиент с моделями сообщений, состояниями и обработкой событий.
 
+Примечание: вспомогательные функции и компоненты UI (например, `getCurrentUserId`, `formatTimestamp`, `SystemMessage`, `ChatViewModel`) считаются псевдо-кодом / плейсхолдерами для интервью.
+
 ```kotlin
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
 @Serializable
 sealed class ChatMessage {
     abstract val id: String
@@ -625,7 +638,7 @@ class ChatClient(
     }
 
     private fun generateMessageId(): String {
-        return "${'$'}{userId}_${'$'}{System.currentTimeMillis()}_${'$'}{(0..999).random()}"
+        return "${userId}_${System.currentTimeMillis()}_${(0..999).random()}"
     }
 
     fun close() {
@@ -640,6 +653,21 @@ class ChatClient(
 Экран чата, использующий `ChatClient` и отображающий состояние соединения и список сообщений.
 
 ```kotlin
+import androidx.compose.runtime.*
+import androidx.compose.material3.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+
 @Composable
 fun ChatScreen(
     chatClient: ChatClient,
@@ -649,6 +677,8 @@ fun ChatScreen(
     val connectionState by chatClient.connectionState.collectAsState()
     val messageText by viewModel.messageText.collectAsState()
 
+    // Для простоты: привязка к жизненному циклу Composable.
+    // В продакшене чаще используют уровень ViewModel/Screen.
     LaunchedEffect(Unit) {
         chatClient.connect()
     }
@@ -708,7 +738,7 @@ private fun ChatTopBar(connectionState: ChatClient.ConnectionState) {
                         is ChatClient.ConnectionState.Connected -> "Connected"
                         is ChatClient.ConnectionState.Connecting -> "Connecting..."
                         is ChatClient.ConnectionState.Disconnected -> "Disconnected"
-                        is ChatClient.ConnectionState.Error -> "Error: ${'$'}{connectionState.message}"
+                        is ChatClient.ConnectionState.Error -> "Error: ${connectionState.message}"
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = when (connectionState) {
@@ -782,11 +812,11 @@ private fun ChatMessageItem(message: ChatMessage) {
         }
 
         is ChatMessage.UserJoined -> {
-            SystemMessage("${'$'}{message.userName} joined")
+            SystemMessage("${message.userName} joined")
         }
 
         is ChatMessage.UserLeft -> {
-            SystemMessage("${'$'}{message.userName} left")
+            SystemMessage("${message.userName} left")
         }
 
         else -> {}
@@ -871,26 +901,26 @@ private fun ChatInput(
 
 ### Лучшие практики (RU)
 
-1. Автопереподключение с экспоненциальным backoff и jitter
-2. Heartbeat (app-level или ping/pong) для обнаружения мёртвых соединений
-3. Очередь сообщений с лимитами для офлайн-буфера
-4. Явное управление состояниями для UI (Connected/Connecting/Disconnected/Error)
-5. Надёжная обработка ошибок и логирование
-6. Корректное освобождение ресурсов (корутины, закрытие WebSocket)
-7. Обработка backpressure и, при необходимости, батчинг
-8. Использование WSS (TLS) в продакшене
-9. Тестирование сценариев отказов и переподключений
+1. Автопереподключение с экспоненциальным backoff и jitter (через конфигurable `Config`).
+2. Heartbeat (app-level или ping/pong) для обнаружения мёртвых соединений.
+3. Очередь сообщений с лимитами для офлайн-буфера.
+4. Явное управление состояниями для UI (Connected/Connecting/Disconnected/Error).
+5. Надёжная обработка ошибок и логирование.
+6. Корректное освобождение ресурсов (корутины, закрытие WebSocket).
+7. Обработка backpressure и, при необходимости, батчинг.
+8. Использование WSS (TLS) в продакшене.
+9. Тестирование сценариев отказов и переподключений.
 
 ### Типичные ошибки (RU)
 
-1. Отсутствие heartbeat и, как следствие, "висящие" соединения
-2. Бесконечные переподключения без ограничений
-3. Утечки памяти из-за незакрытых WebSocket/корутин
-4. Отсутствие очереди сообщений и потеря данных
-5. Фиксированная задержка между попытками, перегружающая сервер
-6. Неконсистентное управление состоянием, запутанный UI
-7. Блокирующие операции внутри колбэков WebSocket
-8. Отсутствие таймаутов для начального подключения
+1. Отсутствие heartbeat и, как следствие, "висящие" соединения.
+2. Бесконечные переподключения без ограничений.
+3. Утечки памяти из-за незакрытых WebSocket/корутин.
+4. Отсутствие очереди сообщений и потеря данных.
+5. Фиксированная задержка между попытками, перегружающая сервер.
+6. Неконсистентное управление состоянием, запутанный UI.
+7. Блокирующие операции внутри колбэков WebSocket.
+8. Отсутствие таймаутов для начального подключения.
 
 ### Производительность (RU)
 
@@ -930,7 +960,7 @@ Client: "Any updates?"  Server: "Yes, here's data"
 ```
 - Wasteful: Many empty responses
 - High latency: Delays between polls
-- Resource intensive: Constant connections
+- Resource intensive: Constant requests
 
 **WebSocket:**
 ```text
@@ -975,20 +1005,22 @@ Key client states:
 - Closed: no active connection
 - Connecting: establishing connection
 - Connected: can send/receive messages
-- Disconnected: connection lost, reconnection logic may run
+- Disconnected: connection lost; reconnection logic may run depending on configuration
 
 ### Complete WebSocket Client Implementation (EN)
 
 Below is the same resilient `WebSocketClient` as in the RU section (OkHttp + coroutines) with:
 - explicit states
 - event stream
-- reconnection using exponential backoff with jitter
-- heartbeat
+- reconnection using exponential backoff with jitter (configured via `Config`)
+- heartbeat (uses protocol ping/pong and an example app-level ping)
 - optional message queue
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.sync.withLock
 import okhttp3.*
 import okio.ByteString
 import java.util.concurrent.atomic.AtomicInteger
@@ -1042,6 +1074,7 @@ class WebSocketClient(
     private var reconnectJob: Job? = null
     private var heartbeatJob: Job? = null
 
+    // Message queue for offline buffering (asynchronous)
     private val messageQueue = mutableListOf<QueuedMessage>()
     private val queueMutex = kotlinx.coroutines.sync.Mutex()
 
@@ -1050,6 +1083,7 @@ class WebSocketClient(
         val timestamp: Long = System.currentTimeMillis()
     )
 
+    // Heartbeat tracking (app-level on top of protocol ping/pong)
     private var lastPongReceived = System.currentTimeMillis()
     private var heartbeatMissCount = 0
 
@@ -1081,6 +1115,7 @@ class WebSocketClient(
             currentState.webSocket.send(message)
         } else {
             if (config.enableMessageQueue) {
+                // enqueue asynchronously; used as best-effort offline buffer
                 queueMessage(message)
                 true
             } else {
@@ -1107,6 +1142,7 @@ class WebSocketClient(
             val webSocket = okHttpClient.newWebSocket(request, createWebSocketListener())
             currentWebSocket = webSocket
 
+            // Wait for connection establishment with timeout
             withTimeout(config.connectionTimeoutMs) {
                 _state.first { it !is State.Connecting }
             }
@@ -1135,6 +1171,7 @@ class WebSocketClient(
             scope.launch {
                 _events.emit(Event.MessageReceived(text))
 
+                // Example of simple app-level pong reaction on "pong" text
                 if (text == "pong") {
                     onPongReceived()
                 }
@@ -1197,7 +1234,8 @@ class WebSocketClient(
                     heartbeatMissCount++
 
                     if (heartbeatMissCount >= 3) {
-                        currentWebSocket?.close(1001, "Heartbeat timeout")
+                        // Close due to missing heartbeat; choose appropriate code/reason in real apps
+                        currentWebSocket?.close(1000, "Heartbeat timeout")
                         break
                     }
                 }
@@ -1238,6 +1276,7 @@ class WebSocketClient(
 
         val delayWithCap = exponentialDelay.coerceAtMost(config.maxReconnectDelayMs)
 
+        // Jitter (~10%) to avoid thundering herd on reconnect
         val jitter = (delayWithCap * 0.1 * (Math.random() - 0.5)).toLong()
 
         return (delayWithCap + jitter).coerceAtLeast(0L)
@@ -1280,9 +1319,17 @@ class WebSocketClient(
 
 ### Chat Client Example (`Application` Level) (EN)
 
-Same as in the RU section, the `ChatClient` wraps `WebSocketClient` and models messages and connection state:
+Same as in the RU section, the `ChatClient` wraps `WebSocketClient` and models messages and connection state.
+
+Note: helpers like `getCurrentUserId`, `formatTimestamp`, `SystemMessage`, and `ChatViewModel` are placeholders/pseudo-code for interview purposes.
 
 ```kotlin
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
 @Serializable
 sealed class ChatMessage {
     abstract val id: String
@@ -1494,7 +1541,7 @@ class ChatClient(
     }
 
     private fun generateMessageId(): String {
-        return "${'$'}{userId}_${'$'}{System.currentTimeMillis()}_${'$'}{(0..999).random()}"
+        return "${userId}_${System.currentTimeMillis()}_${(0..999).random()}"
     }
 
     fun close() {
@@ -1509,6 +1556,21 @@ class ChatClient(
 Mirrors the RU section: chat screen using `ChatClient`, showing connection state and messages.
 
 ```kotlin
+import androidx.compose.runtime.*
+import androidx.compose.material3.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+
 @Composable
 fun ChatScreen(
     chatClient: ChatClient,
@@ -1518,6 +1580,7 @@ fun ChatScreen(
     val connectionState by chatClient.connectionState.collectAsState()
     val messageText by viewModel.messageText.collectAsState()
 
+    // Simpler lifecycle binding for the example; production apps often use ViewModel scope
     LaunchedEffect(Unit) {
         chatClient.connect()
     }
@@ -1577,7 +1640,7 @@ private fun ChatTopBar(connectionState: ChatClient.ConnectionState) {
                         is ChatClient.ConnectionState.Connected -> "Connected"
                         is ChatClient.ConnectionState.Connecting -> "Connecting..."
                         is ChatClient.ConnectionState.Disconnected -> "Disconnected"
-                        is ChatClient.ConnectionState.Error -> "Error: ${'$'}{connectionState.message}"
+                        is ChatClient.ConnectionState.Error -> "Error: ${connectionState.message}"
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = when (connectionState) {
@@ -1651,11 +1714,11 @@ private fun ChatMessageItem(message: ChatMessage) {
         }
 
         is ChatMessage.UserJoined -> {
-            SystemMessage("${'$'}{message.userName} joined")
+            SystemMessage("${message.userName} joined")
         }
 
         is ChatMessage.UserLeft -> {
-            SystemMessage("${'$'}{message.userName} left")
+            SystemMessage("${message.userName} left")
         }
 
         else -> {}
@@ -1740,26 +1803,26 @@ private fun ChatInput(
 
 ### Best Practices (EN)
 
-1. Automatic reconnection with exponential backoff and jitter
-2. Heartbeat mechanism (app-level or protocol ping/pong) to detect stale connections
-3. Message queue with limits for offline buffering
-4. Explicit state management for UI (Connected/Connecting/Disconnected/Error)
-5. Robust error handling and logging
-6. Proper resource cleanup (cancel coroutines, close WebSocket)
-7. Backpressure handling and batching where needed
-8. Use WSS (TLS) in production
-9. Test failure and reconnection scenarios thoroughly
+1. Automatic reconnection with exponential backoff and jitter (via configurable `Config`).
+2. Heartbeat mechanism (app-level or protocol ping/pong) to detect stale connections.
+3. Message queue with limits for offline buffering.
+4. Explicit state management for UI (Connected/Connecting/Disconnected/Error).
+5. Robust error handling and logging.
+6. Proper resource cleanup (cancel coroutines, close WebSocket).
+7. Backpressure handling and batching where needed.
+8. Use WSS (TLS) in production.
+9. Test failure and reconnection scenarios thoroughly.
 
 ### Common Pitfalls (EN)
 
-1. Missing heartbeat, leading to hanging connections
-2. Infinite reconnection without limits
-3. Memory leaks from not closing WebSocket/coroutines
-4. No message queue, causing message loss
-5. Fixed reconnect delays that overload the server
-6. Inconsistent state management and confusing UI
-7. Blocking work inside WebSocket callbacks
-8. Missing timeouts for initial connection
+1. Missing heartbeat, leading to hanging connections.
+2. Infinite reconnection without limits.
+3. Memory leaks from not closing WebSocket/coroutines.
+4. No message queue, causing message loss.
+5. Fixed reconnect delays that overload the server.
+6. Inconsistent state management and confusing UI.
+7. Blocking work inside WebSocket callbacks.
+8. Missing timeouts for initial connection.
 
 ### Performance Considerations (EN)
 

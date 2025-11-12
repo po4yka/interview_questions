@@ -2,17 +2,17 @@
 id: lang-013
 title: "Java Access Modifiers / Модификаторы доступа Java"
 aliases: [Java Access Modifiers, Модификаторы доступа Java]
-topic: kotlin
+topic: programming-languages
 subtopics: [java, oop]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-kotlin
-related: [c-java-features, q-interface-vs-abstract-class--programming-languages--medium]
+moc: moc-architecture-patterns
+related: [c-architecture-patterns, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programming-languages]
 ---
 # Вопрос (RU)
@@ -245,7 +245,7 @@ class TransactionLogger {
 - **Принцип**: выбирать **максимально ограничивающий** уровень доступа, который всё ещё позволяет требуемое использование.
 - **Инкапсуляция**: не раскрывать изменяемые поля напрямую; использовать методы (геттеры/сеттеры или API, основанный на поведении).
 
-[[c-java-features]]
+Также см. [[c-architecture-patterns]] для контекста проектирования API и инкапсуляции.
 
 ## Answer (EN)
 
@@ -474,6 +474,8 @@ class TransactionLogger {
   - `public` for stable, documented, external API.
 - **Principle**: Choose the **most restrictive** access level that still supports required usage.
 - **Encapsulation**: Avoid exposing mutable fields directly; prefer methods (getters/setters, behavior-rich APIs).
+
+Also see [[c-architecture-patterns]] for API and encapsulation design context.
 
 ## Дополнительные вопросы (RU)
 

@@ -3,24 +3,29 @@ topic: kotlin
 id: kotlin-063
 title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"
 aliases: [Deferred Async Patterns, Deferred и async паттерны]
-subtopics: [async, coroutines]
+subtopics: [coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
 category: "coroutines-advanced"
-tags: ["async", "await", "concurrency", "deferred", "difficulty/medium", "parallel-execution", "performance"]
+tags: ["coroutines", "async", "await", "concurrency", "deferred", "difficulty/medium", "parallel-execution", "performance"]
 description: "Complete guide to `Deferred<T>`, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related: [c--kotlin--medium, c-concurrency, q-lifecyclescope-viewmodelscope--kotlin--medium]
+
 ---
 
 # Вопрос (RU)
 
 > Что такое `Deferred<T>` в корутинах Kotlin? Чем он отличается от `Job`? Объясните билдер `async`, функцию `await()` и различные паттерны параллельного выполнения с реальными примерами.
+
+# Question (EN)
+
+> What is `Deferred<T>` in Kotlin coroutines? How does it differ from `Job`? Explain the `async` builder, `await()` function, and various patterns for parallel execution with real-world examples.
 
 ## Ответ (RU)
 
@@ -39,12 +44,12 @@ public interface Deferred<out T> : Job {
 
 **Ключевые характеристики:**
 - **Расширяет Job**: наследует все свойства и функции `Job`
-- **Возвращает значение**: в отличие от `Job`, `Deferred` может вернуть результат
+- **Возвращает значение**: в отличие от `Job`, `Deferred<T>` может вернуть результат
 - **Одно значение**: возвращает ровно одно значение при завершении
 - **Неблокирующий**: `await()` — приостанавливающая функция, не блокирует потоки
 - **Отменяемый**: можно отменить как любой `Job`
 
-#### Сравнение `Deferred` И `Job`
+#### Сравнение `Deferred<T>` И `Job`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -80,7 +85,7 @@ fun demonstrateDeferredVsJob() = runBlocking {
 
 #### Билдер `async`
 
-`async` - это билдер корутин, который запускает корутину и возвращает объект `Deferred`:
+`async` - это билдер корутин, который запускает корутину и возвращает объект `Deferred<T>`:
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -495,6 +500,19 @@ class MultiStepProcess {
         println("Все шаги завершены!")
     }
 }
+
+fun main() = runBlocking {
+    val process = MultiStepProcess()
+
+    launch {
+        delay(100)
+        process.onStep1Complete()
+        delay(100)
+        process.onStep2Complete()
+    }
+
+    process.waitForAllSteps()
+}
 ```
 
 **Типичные случаи использования `CompletableDeferred`:**
@@ -879,9 +897,9 @@ class AsyncTests {
 }
 ```
 
-#### Типичные Подводные Камни И Ошибки
+### Частые ошибки и подводные камни (RU)
 
-1. **Отсутствие `coroutineScope` (нарушение structured concurrency)**
+1. Неиспользование `coroutineScope` и нарушение structured concurrency:
 
 ```kotlin
 // Плохо - нарушает structured concurrency
@@ -890,10 +908,10 @@ suspend fun loadDataBad(): String {
         delay(1000)
         "Data"
     }
-    return deferred.await() // Scope может утечь; обработка исключений зависит от глобального scope
+    return deferred.await() // Scope может протечь; обработка исключений зависит от этого глобального scope
 }
 
-// Хорошо - корректно ограниченный scope
+// Хорошо - корректный scope
 suspend fun loadDataGood(): String = coroutineScope {
     val deferred = async {
         delay(1000)
@@ -903,18 +921,17 @@ suspend fun loadDataGood(): String = coroutineScope {
 }
 ```
 
-2. **Игнорирование исключений в `async`**
+2. Игнорирование исключений в `async`:
 
 ```kotlin
-// Плохо - исключение может потеряться, если не вызывать await()
+// Плохо - исключение может потеряться, если не вызывать await() и использовать неструктурированный scope
 suspend fun loadDataBad() = coroutineScope {
     async {
         throw Exception("Error")
     }
-    // Без await() исключение остаётся необработанным
 }
 
-// Хорошо - всегда await или обрабатывайте
+// Хорошо - всегда await или обрабатывать
 suspend fun loadDataGood() = coroutineScope {
     val deferred = async {
         throw Exception("Error")
@@ -927,7 +944,7 @@ suspend fun loadDataGood() = coroutineScope {
 }
 ```
 
-3. **Последовательные await вместо параллельного выполнения**
+3. Последовательные вызовы `await()` вместо параллелизма:
 
 ```kotlin
 // Плохо - последовательное выполнение
@@ -937,28 +954,13 @@ suspend fun loadDataBad() = coroutineScope {
     result1 to result2
 }
 
-// Хорошо - настоящая параллельность
+// Хорошо - параллельное выполнение
 suspend fun loadDataGood() = coroutineScope {
     val deferred1 = async { fetchData1() }
     val deferred2 = async { fetchData2() }
     deferred1.await() to deferred2.await()
 }
 ```
-
-### Резюме
-
-`Deferred<T>` — это `Job`, который возвращает результат. Используйте `async` для создания `Deferred<T>` для параллельных вычислений, `await()` для получения результатов и `awaitAll()` для работы с несколькими `Deferred<T>`. Ключевые паттерны:
-- Параллельное выполнение: запуск нескольких `async` и ожидание всех
-- Ленивый async: вычисление только при необходимости
-- `CompletableDeferred`: ручное завершение
-- Обработка ошибок: try-catch вокруг `await()` или использование `supervisorScope`
-- Осознанный выбор: `async` для результатов, `launch` для побочных эффектов
-
----
-
-# Question (EN)
-
-> What is `Deferred<T>` in Kotlin coroutines? How does it differ from `Job`? Explain the `async` builder, `await()` function, and various patterns for parallel execution with real-world examples.
 
 ## Answer (EN)
 
@@ -1055,7 +1057,7 @@ fun main() = runBlocking {
 
 **async parameters:**
 - `context`: Additional coroutine context
-- `start`: Coroutine start option (`CoroutineStart.DEFAULT`, `CoroutineStart.LAZY`, `CoroutineStart.ATOMIC`, `CoroutineStart.UNDISPATCHED`)
+- `start`: `Coroutine` start option (`CoroutineStart.DEFAULT`, `CoroutineStart.LAZY`, `CoroutineStart.ATOMIC`, `CoroutineStart.UNDISPATCHED`)
 
 #### Deferred States
 
@@ -1952,23 +1954,23 @@ suspend fun loadDataGood() = coroutineScope {
 
 ## Ссылки (RU)
 
-- [[c-kotlin]]
-- [[c-coroutines]]
-- [Kotlin Coroutines Guide - Composing Suspending Functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
+- [[c--kotlin--medium]]
+- [[c-concurrency]]
+- [Kotlin `Coroutines` Guide - Composing Suspending Functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
 - [Deferred API Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-deferred/)
-- [async Coroutine Builder](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)
+- [async `Coroutine` Builder](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)
 - [Roman Elizarov - Structured Concurrency](https://medium.com/@elizarov/structured-concurrency-722d765aa952)
-- [Kotlin Coroutines Performance Best Practices](https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/topics/performance.md)
+- [Kotlin `Coroutines` Performance Best Practices](https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/topics/performance.md)
 
 ## References
 
-- [[c-kotlin]]
-- [[c-coroutines]]
-- [Kotlin Coroutines Guide - Composing Suspending Functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
+- [[c--kotlin--medium]]
+- [[c-concurrency]]
+- [Kotlin `Coroutines` Guide - Composing Suspending Functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
 - [Deferred API Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-deferred/)
-- [async Coroutine Builder](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)
+- [async `Coroutine` Builder](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)
 - [Roman Elizarov - Structured Concurrency](https://medium.com/@elizarov/structured-concurrency-722d765aa952)
-- [Kotlin Coroutines Performance Best Practices](https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/topics/performance.md)
+- [Kotlin `Coroutines` Performance Best Practices](https://github.com/Kotlin/kotlinx.coroutines/blob/master/docs/topics/performance.md)
 
 ## Связанные Вопросы (RU)
 

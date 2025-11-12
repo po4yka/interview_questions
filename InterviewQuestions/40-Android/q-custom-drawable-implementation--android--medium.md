@@ -48,7 +48,7 @@ sources: []
 
 **setBounds()** — устанавливает область рисования (координаты и размер).
 
-**getOpacity()** — возвращает прозрачность (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT).
+**getOpacity()** — возвращает прозрачность (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT). В современных реализациях чаще используется для совместимости и оптимизаций, может игнорироваться рендерером.
 
 **setAlpha(alpha: `Int`)** — устанавливает альфа-канал.
 
@@ -118,8 +118,8 @@ class StatefulDrawable : Drawable() {
 
     override fun setState(stateSet: IntArray): Boolean {
         val wasPressed = isPressed
-        // Используем стандартный state spec для нажатого состояния
-        isPressed = stateSet.contains(android.R.attr.state_pressed)
+        // Проверяем наличие стандартного флага "нажат" (state_pressed)
+        isPressed = stateSet.any { it == android.R.attr.state_pressed }
 
         return if (wasPressed != isPressed) {
             invalidateSelf()
@@ -180,15 +180,15 @@ class PulsingDrawable : Drawable() {
 3. Реализуйте intrinsic размеры для корректной работы с `wrap_content`.
 4. Избегайте тяжелых вычислений в `draw()` — по возможности предварительно вычисляйте в `setBounds()`.
 5. Правильно обрабатывайте `bounds` — система может их изменить.
-6. Для анимаций управляйте жизненным циклом (останавливайте аниматоры, когда `Drawable` больше не используется).
+6. Для анимаций управляйте жизненным циклом: останавливайте аниматоры, когда `Drawable` больше не используется, и учитывайте, что `Drawable` перерисовывается через свой `Callback` (например, `View`).
 
 ### Подводные Камни
 
 - Аллокации в `draw()` — критично для производительности, вызывается каждый фрейм.
 - Забытый `invalidateSelf()` — изменения не отрисуются.
 - Игнорирование `bounds` — неверный размер/позиция.
-- Неверный `getOpacity()` — влияет на оптимизацию рендеринга.
-- Бесконтрольные анимации внутри `Drawable` — могут привести к утечкам и лишним перерисовкам.
+- Неверный `getOpacity()` — влияет на оптимизацию рендеринга (хотя метод устаревший, лучше возвращать максимально корректное значение).
+- Бесконтрольные анимации внутри `Drawable` — могут привести к утечкам и лишним перерисовкам; учитывайте `Callback` и жизненный цикл владельца.
 
 ## Answer (EN)
 
@@ -205,7 +205,7 @@ Lightweight reusable graphic primitive for display in multiple `View`s. More eff
 
 **setBounds()** — sets drawing area (coordinates and size).
 
-**getOpacity()** — returns transparency (`PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT`).
+**getOpacity()** — returns transparency (`PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT`). In modern rendering it is mostly used for compatibility/optimizations and may be ignored by the renderer.
 
 **setAlpha(alpha: `Int`)** — sets alpha channel.
 
@@ -257,7 +257,7 @@ class CircleDrawable : Drawable() {
 
 **Critical points**:
 - `Paint` created once, not in `draw()` — otherwise allocations every frame.
-- `invalidateSelf()` requests redraw on state change.
+- `invalidateSelf()` requests redraw on appearance change.
 - Intrinsic sizes define default dimensions for `wrap_content`.
 
 ### State Management
@@ -275,8 +275,8 @@ class StatefulDrawable : Drawable() {
 
     override fun setState(stateSet: IntArray): Boolean {
         val wasPressed = isPressed
-        // Use standard pressed state spec
-        isPressed = stateSet.contains(android.R.attr.state_pressed)
+        // Check for standard "pressed" state flag (state_pressed)
+        isPressed = stateSet.any { it == android.R.attr.state_pressed }
 
         return if (wasPressed != isPressed) {
             invalidateSelf()
@@ -337,15 +337,15 @@ class PulsingDrawable : Drawable() {
 3. Implement intrinsic sizes for correct `wrap_content` behavior.
 4. Avoid heavy calculations in `draw()` — precompute in `setBounds()` when possible.
 5. Handle `bounds` correctly — system may change them.
-6. For animations, manage lifecycle (stop animators when `Drawable` is no longer used).
+6. For animations, manage lifecycle: stop animators when the `Drawable` is no longer used, and remember that invalidation goes through its `Callback` (e.g., owning `View`).
 
 ### Pitfalls
 
 - Allocations in `draw()` — critical for performance, called every frame.
 - Forgot `invalidateSelf()` — changes won't render.
 - Ignoring `bounds` — wrong size/position.
-- Wrong `getOpacity()` — affects rendering optimization.
-- Uncontrolled animations inside `Drawable` — may cause leaks and unnecessary redraws.
+- Wrong `getOpacity()` — affects rendering optimization (even though deprecated, still better to return correct value).
+- Uncontrolled animations inside `Drawable` — may cause leaks and unnecessary redraws; be aware of `Callback` and owner lifecycle.
 
 ---
 

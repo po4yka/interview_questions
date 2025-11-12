@@ -48,7 +48,7 @@ tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplat
 3. **C interop**: прямая интеграция с C-библиотеками через `cinterop`.
 4. **Objective-C/Swift interop**: взаимодействие с кодом и фреймворками iOS/macOS.
 5. **Мультиплатформа**: разделение бизнес-логики между платформами (через KMP).
-6. **Управление памятью**: автоматическое управление памятью (современный единый менеджер памяти; ручное управление только для interop с нативными API).
+6. **Управление памятью**: автоматическое управление памятью (современный единый менеджер памяти); явное управление (nativeHeap/memScoped и т.п.) используется в основном для interop и низкоуровневых сценариев.
 
 ### Архитектура Kotlin/Native
 
@@ -209,7 +209,7 @@ fun useObjCClass() {
 }
 ```
 
-Экспорт Kotlin в Swift (схематично):
+Экспорт Kotlin в Swift (схематично; требуется обёртка над suspend):
 
 ```kotlin
 class UserRepository {
@@ -225,6 +225,7 @@ data class User(val id: Int, val name: String)
 fun iosGetUsers(callback: (List<User>) -> Unit) {
     val repository = UserRepository()
 
+    // В реальном коде используйте общий scope с контролируемым жизненным циклом.
     MainScope().launch {
         val users = repository.getUsers()
         callback(users)
@@ -312,20 +313,18 @@ fun scopedMemory() {
 
 ### Корутины в Kotlin/Native
 
-Корутины поддерживаются, но для iOS/Swift обычно предоставляют обёртки (callback- или `Flow`-wrapper), чтобы сделать API удобным для потребления.
+Корутины поддерживаются; для iOS/Swift обычно предоставляют обёртки (callback- или Flow-wrapper), чтобы сделать API удобным для потребления, и важно контролировать жизненный цикл scope.
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
-class FlowWrapper<T>(private val flow: Flow<T>) {
+class FlowWrapper<T>(private val flow: Flow<T>, private val scope: CoroutineScope) {
     fun subscribe(
         onEach: (T) -> Unit,
         onComplete: () -> Unit,
         onThrow: (Throwable) -> Unit
     ): Cancellable {
-        val scope = MainScope()
-
         val job = scope.launch {
             try {
                 flow.collect { value -> onEach(value) }
@@ -385,7 +384,7 @@ actual class PlatformFile actual constructor(private val path: String) {
         memScoped {
             val errorPtr = alloc<ObjCObjectVar<NSError?>>()
             val url = NSURL.fileURLWithPath(path)
-            val nsText: NSString = text as NSString
+            val nsText: NSString = NSString.create(string = text)
             nsText.writeToURL(url, true, NSUTF8StringEncoding, errorPtr.ptr)
             val error = errorPtr.value
             if (error != null) throw Exception(error.localizedDescription)
@@ -397,7 +396,7 @@ actual class PlatformFile actual constructor(private val path: String) {
 ### Конфигурация сборки
 
 ```kotlin
-// build.gradle.kts (KMP-фрагмент)
+// build.gradle.kts (KMP-фрагмент, версии и зависимости приведены как пример)
 kotlin {
     iosArm64()
     iosX64()
@@ -516,14 +515,14 @@ class UserRepository {
 // Используйте expect/actual для платформенных API
 expect fun getCurrentTimestamp(): Long
 
-// Используйте memScoped/nativeHeap только для interop-буферов
+// Используйте memScoped/nativeHeap в основном для interop-буферов и низкоуровневых задач
 memScoped {
     val buffer = allocArray<ByteVar>(1024)
     // Автоматическое освобождение по выходу из scope
 }
 
-// Оборачивайте корутины/Flow для удобного потребления на iOS
-class FlowWrapper<T>(private val flow: Flow<T>)
+// Оборачивайте корутины/Flow для удобного и безопасного потребления на iOS
+class FlowWrapper<T>(private val flow: Flow<T>, private val scope: CoroutineScope)
 ```
 
 #### Не делайте (DON'T)
@@ -536,7 +535,7 @@ val buffer = nativeHeap.allocArray<ByteVar>(1024)
 // Не экспортируйте suspend напрямую в Swift без обёртки
 suspend fun getData(): List<User>
 
-// Не пытайтесь полностью шарить UI между iOS и Android
+// Не пытайтесь полностью шарить UI между iOS и Android через Kotlin/Native
 
 // Не полагайтесь на устаревшие freeze-паттерны с новой моделью памяти
 ```
@@ -556,7 +555,7 @@ See also: [[c-kotlin]].
 3. **C Interop**: Direct integration with C libraries via `cinterop`.
 4. **Objective-C/Swift Interop**: Interoperability with iOS/macOS code and frameworks.
 5. **Multiplatform**: Share business logic across platforms (via KMP).
-6. **Memory Management**: Automatic memory management with the new memory manager; manual allocation only for interop with native APIs (e.g., C).
+6. **Memory Management**: Automatic memory management with the unified memory manager; manual allocation (nativeHeap/memScoped, etc.) is primarily used for interop and low-level use cases.
 
 ### Kotlin/Native Architecture
 
@@ -717,7 +716,7 @@ fun useObjCClass() {
 }
 ```
 
-Exposing Kotlin to Swift (schematic):
+Exposing Kotlin to Swift (schematic; requires a wrapper around suspend):
 
 ```kotlin
 class UserRepository {
@@ -733,6 +732,7 @@ data class User(val id: Int, val name: String)
 fun iosGetUsers(callback: (List<User>) -> Unit) {
     val repository = UserRepository()
 
+    // In real code, use a shared scope with well-defined lifecycle.
     MainScope().launch {
         val users = repository.getUsers()
         callback(users)
@@ -822,18 +822,18 @@ fun scopedMemory() {
 
 ### Coroutines in Kotlin/Native
 
+Coroutines are supported; for iOS/Swift interop you typically expose callback- or Flow-based wrappers and must manage coroutine scope lifecycle explicitly.
+
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
-class FlowWrapper<T>(private val flow: Flow<T>) {
+class FlowWrapper<T>(private val flow: Flow<T>, private val scope: CoroutineScope) {
     fun subscribe(
         onEach: (T) -> Unit,
         onComplete: () -> Unit,
         onThrow: (Throwable) -> Unit
     ): Cancellable {
-        val scope = MainScope()
-
         val job = scope.launch {
             try {
                 flow.collect { value -> onEach(value) }
@@ -893,7 +893,7 @@ actual class PlatformFile actual constructor(private val path: String) {
         memScoped {
             val errorPtr = alloc<ObjCObjectVar<NSError?>>()
             val url = NSURL.fileURLWithPath(path)
-            val nsText: NSString = text as NSString
+            val nsText: NSString = NSString.create(string = text)
             nsText.writeToURL(url, true, NSUTF8StringEncoding, errorPtr.ptr)
             val error = errorPtr.value
             if (error != null) throw Exception(error.localizedDescription)
@@ -905,7 +905,7 @@ actual class PlatformFile actual constructor(private val path: String) {
 ### Build Configuration
 
 ```kotlin
-// build.gradle.kts (KMP snippet)
+// build.gradle.kts (KMP snippet; versions shown as example)
 kotlin {
     iosArm64()
     iosX64()
@@ -1027,14 +1027,14 @@ class UserRepository {
 // Use expect/actual for platform APIs
 expect fun getCurrentTimestamp(): Long
 
-// Use memScoped/nativeHeap only for interop buffers
+// Use memScoped/nativeHeap primarily for interop buffers and low-level tasks
 memScoped {
     val buffer = allocArray<ByteVar>(1024)
     // Auto-freed on scope exit
 }
 
-// Wrap coroutines/Flow for idiomatic iOS consumption
-class FlowWrapper<T>(private val flow: Flow<T>)
+// Wrap coroutines/Flow for idiomatic and safe iOS consumption
+class FlowWrapper<T>(private val flow: Flow<T>, private val scope: CoroutineScope)
 ```
 
 #### DON'T:
@@ -1047,7 +1047,7 @@ val buffer = nativeHeap.allocArray<ByteVar>(1024)
 // Don't expose suspend directly to Swift without a wrapper
 suspend fun getData(): List<User>
 
-// Don't try to share full UI across iOS/Android with Kotlin/Native
+// Don't try to share full UI across iOS/Android purely via Kotlin/Native
 
 // Don't rely on deprecated freezing patterns with the new memory manager
 ```

@@ -2,30 +2,23 @@
 id: kotlin-059
 title: "Cold vs Hot Flows / Холодные и горячие потоки"
 aliases: ["Cold vs Hot Flows", "Холодные и горячие потоки"]
-
-# Classification
 topic: kotlin
 subtopics: [flow]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-coroutines, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
-
-# Timestamps
+related: [c-concepts--kotlin--medium, c-concurrency, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-11
-updated: 2025-11-10
-
+updated: 2025-11-11
 tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
+
 ---
+
 # Вопрос (RU)
 > Объясните холодные и горячие потоки. Как `shareIn` и `stateIn` конвертируют холодные в горячие? Как правильно настроить параметры `replay` и `started`?
 
@@ -36,7 +29,7 @@ tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
 
 ## Ответ (RU)
 
-Понимание холодных и горячих потоков фундаментально для построения эффективных и ресурс-эффективных реактивных приложений с Kotlin `Flow` и корутинами (`Coroutine`, [[c-coroutines]]).
+Понимание холодных и горячих потоков фундаментально для построения эффективных и ресурс-эффективных реактивных приложений с Kotlin `Flow` и корутинами (`Coroutine`, [[c-concurrency]]).
 
 ### Холодные Потоки
 
@@ -765,7 +758,7 @@ class DataViewModel : ViewModel() {
 
 ### Comparison Table: Cold Vs Hot Flows
 
-| Aspect | Cold Flow | Hot Flow |
+| Aspect | Cold `Flow` | Hot `Flow` |
 |--------|-----------|----------|
 | **Activation** | On collection | Active independently of individual collectors (per strategy) |
 | **Execution** | Per collector | Shared execution |
@@ -898,13 +891,13 @@ val users2 = repository.users
 
 ## Ссылки (RU)
 
-- [StateFlow и SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`StateFlow` и `SharedFlow` - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Холодные и горячие потоки - Документация Kotlin](https://kotlinlang.org/docs/flow.html#flows-are-cold)
 - [Операторы `shareIn` и `stateIn` - Kotlinx Coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
 
 ## References
 
-- [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`StateFlow` and `SharedFlow` - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Cold flows, hot flows - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flows-are-cold)
 - [shareIn and stateIn operators - Kotlinx Coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
 

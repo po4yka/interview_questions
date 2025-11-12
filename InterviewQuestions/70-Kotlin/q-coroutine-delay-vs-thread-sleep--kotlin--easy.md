@@ -127,7 +127,7 @@ fun visualizeTheorem() = runBlocking {
         }
     }
 
-    delay(3000) // Ждём достаточно для завершения
+    delay(3000) // Ждём достаточно для завершения (демонстрационный код)
 
     // С delay: поток свободен для другой работы, пока корутина приостановлена
     println("\n\nС delay:")
@@ -191,7 +191,7 @@ import kotlinx.coroutines.*
 fun threadPoolExhaustion() {
     println("=== Истощение пула потоков ===")
 
-    // Плохо: Использование Thread.sleep блокирует потоки и может исчерпать пул
+    // Плохо: Использование Thread.sleep блокирует потоки и может исчерпать общий пул Dispatchers.Default
     runBlocking(Dispatchers.Default) {
         println("Доступно процессоров: ${Runtime.getRuntime().availableProcessors()}")
 
@@ -206,7 +206,7 @@ fun threadPoolExhaustion() {
         jobs.forEach { it.join() }
     }
 
-    // Хорошо: Использование delay не удерживает потоки во время ожидания
+    // Лучше: Использование delay не удерживает потоки во время ожидания
     runBlocking(Dispatchers.Default) {
         val jobs = List(1000) { index ->
             launch {
@@ -230,19 +230,19 @@ fun cancellationSupport() = runBlocking {
     println("=== Поддержка отмены ===")
 
     // Thread.sleep не кооперативен с отменой корутин:
-    // во время сна не проверяет состояние Job.
+    // он не проверяет состояние Job, а реагирует только на прерывание потока.
     val job1 = launch {
         try {
             println("Запуск Thread.sleep")
             Thread.sleep(10000)
-            println("Thread.sleep завершён (обычно это выполнится, если поток не прервали)")
-        } catch (e: Exception) {
-            println("Поймано: ${e::class.simpleName}")
+            println("Thread.sleep завершён (это выполнится только если поток не был прерван)")
+        } catch (e: InterruptedException) {
+            println("Thread.sleep прерван через interruption (корутинная отмена здесь работает только потому, что прерывает поток)")
         }
     }
 
     delay(1000)
-    job1.cancel() // Отмена не прервёт Thread.sleep, если не прерван базовый поток
+    job1.cancel() // Отмена пытается прервать поток, но Thread.sleep сам по себе не знает о Job
     println("Job1 отменён: ${job1.isCancelled}")
     job1.join()
 
@@ -277,7 +277,7 @@ suspend fun periodicTask() {
     }
 }
 
-// Пример 2: Тестирование с задержками
+// Пример 2: Тестирование с задержками (демонстрационный; в реальных тестах лучше избегать реального ожидания)
 suspend fun testWithDelay() {
     val result = loadData()
     delay(100) // Даём время асинхронным операциям (или используем структурную конкуррентность)
@@ -508,19 +508,19 @@ class DelayVsSleepTest {
         assertEquals(true, executed)
     }
 
-    // Thread.sleep не управляется TestCoroutineScheduler
+    // Thread.sleep не управляется TestCoroutineScheduler и блокирует реальный поток;
+    // такой код приведён как анти-пример и в реальных тестах использоваться не должен.
     @Test
     fun testWithSleep() = runTest {
         var executed = false
 
         launch {
-            Thread.sleep(5000) // Реальное время! Блокирует поток
+            Thread.sleep(5000) // Реальное время! Блокирует поток и может "подвесить" тест
             executed = true
         }
 
         // Нельзя перемотать Thread.sleep виртуальным временем;
-        // использование delay(5000) здесь лишь сдвигает виртуальное время.
-        // В реальных тестах такой подход не рекомендуется.
+        // использование delay(5000) здесь лишь сдвигает виртуальное время и не завершит sleep быстрее.
         delay(5000)
         assertEquals(true, executed)
     }
@@ -571,6 +571,7 @@ fun commonMistakes() = runBlocking {
     }
 
     // Ошибка 3: Смешивание блокирующего и приостанавливающего подходов без необходимости
+    // (ниже функции показаны как иллюстрация; в реальном коде определяйте их на верхнем уровне и не используйте Thread.sleep без нужды)
     suspend fun mixedApproach() {
         delay(1000)
         Thread.sleep(1000) // ПЛОХО: Блокирует после приостановки без причины
@@ -646,7 +647,7 @@ fun legacyCode() {
 | Аспект | delay() | Thread.sleep() |
 |--------|---------|----------------|
 | Использование потока | Приостанавливает, освобождает поток | Блокирует поток |
-| Возможность отмены | Да (кооперативно) | Нет (некооперативно) |
+| Возможность отмены | Да (кооперативно) | Нет (некооперативно, только через interrupt потока) |
 | Поддержка тестирования | Возможна перемотка с виртуальным временем | Реальное ожидание, не зависит от виртуального времени |
 | Эффективность ресурсов | Да | Нет (удерживает потоки во время сна) |
 | Совместимость с корутинами | Да | Нет |
@@ -756,7 +757,7 @@ fun visualizeTheorem() = runBlocking {
         }
     }
 
-    delay(3000) // Wait long enough for completion
+    delay(3000) // Wait long enough for completion (demo code)
 
     // With delay: thread is free for other work while coroutine is suspended
     println("\n\nWith delay:")
@@ -820,7 +821,7 @@ import kotlinx.coroutines.*
 fun threadPoolExhaustion() {
     println("=== Thread Pool Exhaustion ===")
 
-    // Bad: Using Thread.sleep blocks threads and can exhaust the pool
+    // Bad: Using Thread.sleep blocks threads and can exhaust shared Dispatchers.Default threads
     runBlocking(Dispatchers.Default) {
         println("Available processors: ${Runtime.getRuntime().availableProcessors()}")
 
@@ -835,7 +836,7 @@ fun threadPoolExhaustion() {
         jobs.forEach { it.join() }
     }
 
-    // Good: Using delay doesn't hold threads while waiting
+    // Better: Using delay doesn't hold threads while waiting
     runBlocking(Dispatchers.Default) {
         val jobs = List(1000) { index ->
             launch {
@@ -859,19 +860,19 @@ fun cancellationSupport() = runBlocking {
     println("=== Cancellation Support ===")
 
     // Thread.sleep is non-cooperative with coroutine cancellation:
-    // it does not check for Job cancellation while sleeping.
+    // it does not observe Job state, only reacts to thread interruption.
     val job1 = launch {
         try {
             println("Starting Thread.sleep")
             Thread.sleep(10000)
-            println("Thread.sleep completed (this will usually print if not interrupted)")
-        } catch (e: Exception) {
-            println("Caught: ${e::class.simpleName}")
+            println("Thread.sleep completed (this prints only if the thread was not interrupted)")
+        } catch (e: InterruptedException) {
+            println("Thread.sleep interrupted via thread interruption (cancellation only works here because it interrupts the thread)")
         }
     }
 
     delay(1000)
-    job1.cancel() // Cancellation won't stop Thread.sleep() unless the underlying thread is interrupted
+    job1.cancel() // Cancellation attempts to interrupt the thread, but Thread.sleep itself is unaware of the Job
     println("Job1 cancelled: ${job1.isCancelled}")
     job1.join()
 
@@ -906,7 +907,7 @@ suspend fun periodicTask() {
     }
 }
 
-// Use Case 2: Testing with delays
+// Use Case 2: Testing with delays (demo; avoid real-time sleeps in proper tests)
 suspend fun testWithDelay() {
     val result = loadData()
     delay(100) // Give time for async operations (or use structured concurrency)
@@ -1137,19 +1138,19 @@ class DelayVsSleepTest {
         assertEquals(true, executed)
     }
 
-    // Thread.sleep cannot be controlled by TestCoroutineScheduler
+    // Thread.sleep is NOT controlled by TestCoroutineScheduler and blocks the real thread;
+    // this example is an ANTI-PATTERN and should not be used in real tests.
     @Test
     fun testWithSleep() = runTest {
         var executed = false
 
         launch {
-            Thread.sleep(5000) // Real time! Blocks thread
+            Thread.sleep(5000) // Real time! Blocks thread and may hang the test
             executed = true
         }
 
         // Cannot fast-forward Thread.sleep with virtual time;
-        // using delay(5000) here still only advances virtual time.
-        // In a real test, relying on Thread.sleep like this is discouraged.
+        // using delay(5000) here only advances virtual time and will not complete the sleep sooner.
         delay(5000)
         assertEquals(true, executed)
     }
@@ -1200,6 +1201,7 @@ fun commonMistakes() = runBlocking {
     }
 
     // Mistake 3: Mixing blocking and suspending without intent
+    // (functions below are illustrative; define them at top level in real code)
     suspend fun mixedApproach() {
         delay(1000)
         Thread.sleep(1000) // BAD: Blocks after suspending, unnecessary
@@ -1275,7 +1277,7 @@ fun legacyCode() {
 | Aspect | delay() | Thread.sleep() |
 |--------|---------|----------------|
 | Thread Usage | Suspends, frees thread | Blocks thread |
-| Cancellable | Yes (cooperative) | No (non-cooperative) |
+| Cancellable | Yes (cooperative) | No (non-cooperative, only via thread interrupt) |
 | Test Support | Fast-forward possible with virtual time | Real-time/blocking, not virtual-time aware |
 | Resource Efficient | Yes | No (wastes threads while sleeping) |
 | Coroutine-friendly | Yes | No |

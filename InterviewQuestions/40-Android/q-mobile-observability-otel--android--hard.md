@@ -9,7 +9,7 @@ subtopics:
 - logging-tracing
 - monitoring-slo
 - performance-battery
-question_kind: conceptual
+question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
@@ -19,9 +19,10 @@ status: draft
 moc: moc-android
 related:
 - moc-android
+- c-android
 - q-android-performance-measurement-tools--android--medium
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/logging-tracing
 - android/monitoring-slo
@@ -29,11 +30,8 @@ tags:
 - opentelemetry
 - difficulty/hard
 sources:
-- url: "https://opentelemetry.io/docs/instrumentation/android/"
-  note: OpenTelemetry Android docs
-- url: "https://developer.android.com/topic/performance/monitoring"
-  note: Monitoring best practices
-
+- "https://opentelemetry.io/docs/instrumentation/android/"
+- "https://developer.android.com/topic/performance/monitoring"
 ---
 
 # Вопрос (RU)
@@ -46,15 +44,13 @@ sources:
 
 ## Ответ (RU)
 
-## Краткий ответ
-
+## Краткая Версия
 - Используем OpenTelemetry SDK на Android для трёх сигналов: логи, метрики, трассы.
 - Централизованная инициализация провайдеров/экспортеров, буферизация и batching.
 - Экспорт через `WorkManager`/фоновые задачи с `Constraints`, sampling и privacy-фильтрами.
 - Учитываем батарею, сеть, офлайн-режим и требования приватности.
 
-## Подробный ответ
-
+## Подробная Версия
 ### Требования
 
 - Функциональные:
@@ -140,20 +136,19 @@ OpenTelemetrySdk.builder()
 - Локально используйте `InMemorySpanExporter` / консольные экспортеры для отладки.
 - Добавьте переключатели в developer settings для verbose-телеметрии и включения детализированных трасс.
 - Интегрируйте с Crashlytics/Sentry: используйте OpenTelemetry-данные как breadcrumbs и для корреляции с трассами/метриками.
+- См. также [[c-android]].
 
 ---
 
 ## Answer (EN)
 
 ## Short Version
-
 - Use OpenTelemetry SDK on Android for logs, metrics, and traces.
 - Centralized initialization of providers/exporters with buffering and batching.
 - Export via `WorkManager`/background jobs with `Constraints`, plus sampling and privacy filters.
 - Respect battery, network, offline behavior, and privacy requirements.
 
 ## Detailed Version
-
 ### Requirements
 
 - Functional:
@@ -239,6 +234,7 @@ OpenTelemetrySdk.builder()
 - For local debugging, use `InMemorySpanExporter` / console exporters.
 - Provide developer settings toggles for verbose telemetry and detailed traces.
 - Integrate with Crashlytics/Sentry and use OpenTelemetry signals as breadcrumbs and for correlating with traces/metrics.
+- See also [[c-android]].
 
 ---
 
@@ -259,8 +255,8 @@ OpenTelemetrySdk.builder()
 
 ## References (EN)
 - [[moc-android]]
-- https://opentelemetry.io/docs/instrumentation/android/
-- https://developer.android.com/topic/performance/monitoring
+- "https://opentelemetry.io/docs/instrumentation/android/"
+- "https://developer.android.com/topic/performance/monitoring"
 
 ## Related Questions
 

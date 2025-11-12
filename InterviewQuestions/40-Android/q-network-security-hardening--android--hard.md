@@ -21,7 +21,7 @@ related:
 - c-android-keystore
 - moc-android
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/network-security-config
 - android/keystore-crypto
@@ -45,18 +45,16 @@ sources:
 
 ## Ответ (RU)
 
-### Краткая версия
-
+## Краткая Версия
 - Network Security Config как обязательная база: запрет cleartext, явные домены, строгие trust anchors и пины.
 - Certificate pinning: минимум два пина, ротация через CI/CD, телеметрия при несоответствиях.
 - mTLS: краткоживущие клиентские сертификаты, приватные ключи в аппаратно защищенном Keystore.
-- Key attestation: ключи только из `AndroidKeyStore` с hardware-backed, серверная проверка аттестации.
+- Key attestation: ключи только из `AndroidKeyStore` с hardware-backed при доступности, серверная проверка аттестации.
 - Мониторинг и реакция: логирование критичных сбоев, алерты, fail-close для подозрительных условий на критичных endpoint и план экстренного обновления.
 - CI/CD и тесты: автопроверки на небезопасный TLS/TrustManager, интеграционные тесты с MockWebServer.
 - Экосистема: контроль SDK и WebView, документированный incident response.
 
-### Подробная версия
-
+## Подробная Версия
 ### 1. Network Security Config как база
 
 ```xml
@@ -81,6 +79,7 @@ sources:
 - Явно перечислите разрешённые домены в `domain-config`.
 - Разместите `pin-set` внутри соответствующего `domain-config`.
 - Пины: минимум два разных пина (основной и резервный), `expiration` и план ротации.
+- При использовании своих trust anchors (`@raw/app_certs`) по возможности ограничивайте их конкретными доменами через `domain-config`, чтобы не расширять доверие глобально без необходимости.
 
 ### 2. Certificate pinning (runtime)
 
@@ -90,13 +89,13 @@ sources:
 
 ### 3. Взаимная аутентификация TLS (mTLS)
 
-- Создавайте краткоживущие клиентские сертификаты и храните приватные ключи в аппаратно защищенном (`hardware-backed`) Keystore.
+- Создавайте краткоживущие клиентские сертификаты и храните приватные ключи в аппаратно защищенном (`hardware-backed`) Keystore, где он доступен.
 - Используйте `KeyChain.choosePrivateKeyAlias` или собственный `SSLSocketFactory`/`X509KeyManager` для выбора ключа.
 - На бэкенде включите отзыв и короткий срок жизни (например, ≤ 7 дней) для клиентских сертификатов.
 
 ### 4. Key attestation
 
-- Генерируйте ключи только в `AndroidKeyStore` с `KeyGenParameterSpec`, требующим аппаратно защищённое (`hardware-backed`) хранилище и аутентификацию где нужно.
+- Генерируйте ключи только в `AndroidKeyStore` с `KeyGenParameterSpec`, запрашивая аппаратно защищённое (`hardware-backed`) хранилище и аутентификацию пользователя там, где это релевантно, учитывая, что не на всех устройствах доступны такие гарантии.
 - Запрашивайте attestation chain при создании ключа и отправляйте её на сервер.
 - На сервере проверяйте, что ключ создан в доверенном окружении и не импортирован; используйте SafetyNet/Play Integrity как отдельные дополнительные сигналы.
 - Настройте ротацию ключей при подозрении компрометации или изменении политик.
@@ -141,7 +140,7 @@ sources:
 ### Архитектура (RU)
 
 - Клиент:
-  - `OkHttp`/`HttPClient` сконфигурирован через `network-security-config` и `CertificatePinner`.
+  - `OkHttp`/HTTP client сконфигурирован через `network-security-config` и `CertificatePinner`.
   - Использование `AndroidKeyStore` для хранения ключей, аппаратная защита где доступна.
   - Компонент для key attestation и отправки результатов на сервер.
   - Модуль мониторинга: сбор и отправка телеметрии по сбоям TLS/pinning.
@@ -157,67 +156,84 @@ sources:
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Use Network Security Config as a mandatory baseline: no cleartext, explicit domains, strict trust anchors and pins.
 - Certificate pinning: at least two pins, rotation via CI/CD, telemetry for mismatches.
 - mTLS: short-lived client certs, private keys in hardware-backed Keystore.
-- Key attestation: keys only from `AndroidKeyStore` with hardware-backed storage; backend verifies attestation.
+- Key attestation: keys only from `AndroidKeyStore` with hardware-backed storage where available; backend verifies attestation.
 - Monitoring/response: log critical failures, alerts, fail-close on suspicious conditions for critical endpoints, emergency update plan.
 - CI/CD and tests: automated checks for insecure TLS/TrustManagers, integration tests with MockWebServer.
 - Ecosystem: control SDKs and WebView, documented incident response.
 
-### Detailed Version
-
+## Detailed Version
 ### 1. Network Security Config as the baseline
 
-- Define a strict `network-security-config`:
-  - Disable cleartext traffic in `base-config`.
-  - Explicitly enumerate allowed domains in `domain-config`.
-  - Put `pin-set` inside the relevant `domain-config` with at least two pins (primary + backup) and an `expiration` plus a rotation plan.
+```xml
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="@raw/app_certs" />
+        </trust-anchors>
+    </base-config>
+    <domain-config includeSubdomains="true">
+        <domain>api.example.com</domain>
+        <pin-set expiration="2025-12-31">
+            <pin digest="SHA-256">kO1Cc9Y...</pin>
+            <pin digest="SHA-256">Gru4sDf...</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>
+```
+
+- Disable cleartext HTTP in `base-config`.
+- Explicitly list allowed domains in `domain-config`.
+- Place `pin-set` inside the corresponding `domain-config`.
+- Pins: at least two different pins (primary and backup), `expiration`, and a rotation plan.
+- When using custom trust anchors (`@raw/app_certs`), scope them to specific `domain-config` entries where possible to avoid unnecessarily broad trust.
 
 ### 2. Certificate pinning (runtime)
 
-- With OkHttp, use `CertificatePinner` and, if needed, still rely on system CAs while pinning specific public keys.
-- Report pin mismatches to telemetry (without logging keys or raw pins) and investigate anomalies.
-- Use CI/CD to update bundled certs / pins (`@raw` resources and XML config) in sync with server certificate rotation.
+- With OkHttp, use `CertificatePinner`; when necessary, still rely on system CAs while pinning specific public keys.
+- Enable reporting: on pin mismatch, send a telemetry event (without logging keys or pins).
+- Rotation: use CI/CD to update `@raw/app_certs` and config in sync with server certificate changes.
 
 ### 3. Mutual TLS (mTLS)
 
-- Issue short-lived client certificates and keep private keys in the hardware-backed Android Keystore.
-- Use `KeyChain.choosePrivateKeyAlias` or a custom `SSLSocketFactory`/`X509KeyManager` to select the client cert.
-- On the backend, enforce revocation and short lifetimes (e.g., ≤ 7 days) for client certs.
+- Issue short-lived client certificates and store private keys in a hardware-backed Keystore when available.
+- Use `KeyChain.choosePrivateKeyAlias` or a custom `SSLSocketFactory`/`X509KeyManager` to select the key.
+- On the backend, use revocation and short lifetimes (e.g., ≤ 7 days) for client certs.
 
 ### 4. Key attestation
 
-- Generate keys in `AndroidKeyStore` with `KeyGenParameterSpec`, requiring hardware-backed storage and auth where appropriate.
-- Request an attestation certificate chain when creating the key and send it to the backend.
-- On the backend, verify that the key is bound to genuine device hardware and not imported; treat SafetyNet/Play Integrity as separate, additional signals.
-- Rotate keys on suspected compromise or when policies change.
+- Generate keys only in `AndroidKeyStore` with `KeyGenParameterSpec`, requesting hardware-backed storage and user auth where appropriate, acknowledging that not all devices provide the same guarantees.
+- Request the attestation chain when creating the key and send it to the backend.
+- On the backend, verify that the key is created in a trusted environment and not imported; use SafetyNet/Play Integrity as additional signals.
+- Configure key rotation on suspected compromise or policy changes.
 
 ### 5. Monitoring and response
 
-- Monitor and log (privacy-aware):
-  - Pin mismatches
-  - Trust manager / certificate validation failures
-  - mTLS handshake failures
-- Build dashboards and alerts (e.g., Grafana/Looker) for these events.
-- For critical endpoints, prefer fail-close behavior on suspicious conditions and have an emergency config/pin update playbook.
+- Log (with privacy safeguards):
+  - pin mismatches;
+  - `TrustManager` / certificate validation failures;
+  - mTLS handshake errors.
+- Build dashboards and alerts (e.g., Grafana/Looker).
+- For critical endpoints, use fail-close behavior on suspicious conditions, notify SecOps, and maintain an emergency config/pin update plan.
 
 ### 6. CI/CD and testing
 
-- Use instrumentation/integration tests with mock servers to cover pin mismatch, expired/rotated certs, and mTLS errors.
-- Run static analysis to detect:
-  - plain HTTP or TLS disabled;
+- Instrumentation and integration tests with `MockWebServer` for pin mismatch, expired/rotated certs, and mTLS failures.
+- Static analysis to detect:
+  - plain HTTP or disabled TLS;
   - disabled hostname verification;
-  - permissive trust managers that trust all certs.
-- Require security review for new domains/APIs and changes to security config.
+  - permissive `TrustManager` implementations.
+- Security review required when adding new APIs/domains or changing security configuration.
 
 ### 7. Ecosystem
 
-- Maintain a mapping of SDK → domains → expected security config; block SDKs that bypass or weaken your policies.
-- For WebView content, enable Safe Browsing, block mixed content, and enforce HTTPS for your own origins.
-- Document incident response for pin/config updates (including out-of-band updates in case of CA or key compromise).
+- Maintain a list of SDKs → domains → expected security configuration; block SDKs that weaken your policies.
+- For WebView: enable Safe Browsing, block mixed content, and enforce HTTPS for your own resources.
+- Document incident response (including out-of-band pin/config updates in case of CA or key compromise).
 
 ### Requirements
 
@@ -225,26 +241,26 @@ sources:
   - Secure all critical endpoints with TLS 1.2+.
   - Apply certificate pinning and, where needed, mTLS for sensitive operations.
   - Verify device and key authenticity via key attestation.
-  - Log and surface security violations (pin mismatches, cert validation failures, mTLS issues).
+  - Log and surface security violations (pin mismatches, certificate validation failures, mTLS issues).
 - Non-functional:
-  - Support maintainable key/pin rotation without weakening security.
-  - Minimize performance overhead on network calls.
-  - Remain compatible with common Android devices and OS versions.
-  - Provide high reliability with predictable fail-close behavior.
+  - Maintainable key/pin rotation without reducing security.
+  - Minimal performance overhead on network calls.
+  - Compatibility with common Android devices and OS versions.
+  - High reliability with predictable fail-close behavior.
 
 ### Architecture
 
 - Client:
   - `OkHttp`/HTTP client configured via `network-security-config` and `CertificatePinner`.
-  - Use Android Keystore for key storage with hardware-backed protection where available.
-  - Component for key attestation and sending attestation results to the backend.
-  - Monitoring module to collect and send TLS/pinning failure telemetry.
+  - Use `AndroidKeyStore` for key storage with hardware-backed protection where available.
+  - Component for key attestation and sending results to the backend.
+  - Monitoring module for collecting and sending TLS/pinning failure telemetry.
 - Server:
-  - TLS termination with support for pinning/mTLS policies.
+  - TLS termination with pinning/mTLS policies.
   - Key attestation verification service.
   - Centralized logging, alerting, and dashboards for security events.
 - Data flow:
-  - App requests pass through the hardened TLS layer.
+  - Requests pass through the hardened TLS layer.
   - On anomalies, requests fail closed and emit events into the monitoring pipeline.
 
 ---

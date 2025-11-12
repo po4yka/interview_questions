@@ -128,6 +128,22 @@ fun initialize() {
 
 См. также: [[c-kotlin]]
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого поведения от Java?
+- Когда бы вы использовали это на практике?
+- Какие распространенные ошибки стоит избегать?
+
+## Ссылки (RU)
+
+- [Delegated Properties - Kotlin](https://kotlinlang.org/docs/delegated-properties.html)
+- [Kotlin: lateinit vs lazy](https://rommansabbir.com/kotlin-lateinit-vs-lazy)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-lateinit--kotlin--medium]]
+- [[q-property-delegates--kotlin--medium]]
+
 ---
 
 ## Answer (EN)

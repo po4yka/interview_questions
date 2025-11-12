@@ -75,7 +75,7 @@ class MyWorker(context: Context, params: WorkerParameters)
 ```kotlin
 WorkManager.getInstance(context)
     .getWorkInfoByIdLiveData(workRequest.id)
-    .observe(this) { workInfo ->
+    .observe(this /* LifecycleOwner */) { workInfo ->
         when (workInfo.state) {
             WorkInfo.State.SUCCEEDED -> {
                 // ✅ Извлекаем выходные данные
@@ -99,14 +99,14 @@ WorkManager.getInstance(context)
 
 ```kotlin
 val data = workDataOf(
-    "string" to "value",                // ✅ String
-    "int" to 42,                        // ✅ Int
-    "long" to 123L,                     // ✅ Long
-    "double" to 2.718,                  // ✅ Double (используется и для Float)
-    "boolean" to true,                  // ✅ Boolean
+    "string" to "value",                 // ✅ String
+    "int" to 42,                         // ✅ Int
+    "long" to 123L,                      // ✅ Long
+    "double" to 2.718,                   // ✅ Double (Float напрямую не поддерживается, приводите к Double)
+    "boolean" to true,                   // ✅ Boolean
     "string_array" to arrayOf("a", "b"), // ✅ Array<String>
-    "int_array" to intArrayOf(1, 2),    // ✅ IntArray
-    "long_array" to longArrayOf(1L, 2L),// ✅ LongArray
+    "int_array" to intArrayOf(1, 2),     // ✅ IntArray
+    "long_array" to longArrayOf(1L, 2L), // ✅ LongArray
     "double_array" to doubleArrayOf(1.0, 2.0), // ✅ DoubleArray
     "boolean_array" to booleanArrayOf(true, false) // ✅ BooleanArray
 )
@@ -148,7 +148,7 @@ class UserWorker(context: Context, params: WorkerParameters)
 
 ### Ограничения По Размеру Данных
 
-**Максимум ~10KB** (10,240 байт) на все Data — при превышении будет `IllegalStateException`.
+**Максимум ~10KB** (10,240 байт) на все Data — при превышении будет `IllegalStateException` при построении/использовании запроса.
 
 ```kotlin
 // ❌ ПЛОХО: превышает лимит
@@ -191,8 +191,8 @@ class MyWorker(context: Context, params: WorkerParameters)
 ### Дополнительные вопросы (RU)
 
 - Как WorkManager гарантирует доставку данных при гибели процесса?
-- Что происходит с выходными данными, если приложение завершится до их получения наблюдателем?
-- Можно ли связывать несколько Worker и передавать данные между ними?
+- Что происходит с выходными данными, если приложение завершится до их получения наблюдателем (данные остаются в WorkInfo до очистки истории)?
+- Можно ли связывать несколько Worker и передавать данные между ними (через `WorkContinuation` и `InputMerger`)?
 
 ### Ссылки (RU)
 
@@ -264,7 +264,7 @@ class MyWorker(context: Context, params: WorkerParameters)
 ```kotlin
 WorkManager.getInstance(context)
     .getWorkInfoByIdLiveData(workRequest.id)
-    .observe(this) { workInfo ->
+    .observe(this /* LifecycleOwner */) { workInfo ->
         when (workInfo.state) {
             WorkInfo.State.SUCCEEDED -> {
                 // ✅ Extract output
@@ -288,14 +288,14 @@ WorkManager.getInstance(context)
 
 ```kotlin
 val data = workDataOf(
-    "string" to "value",                // ✅ String
-    "int" to 42,                        // ✅ Int
-    "long" to 123L,                     // ✅ Long
-    "double" to 2.718,                  // ✅ Double (also used to represent Floats)
-    "boolean" to true,                  // ✅ Boolean
+    "string" to "value",                 // ✅ String
+    "int" to 42,                         // ✅ Int
+    "long" to 123L,                      // ✅ Long
+    "double" to 2.718,                   // ✅ Double (Float is not directly supported; convert to Double)
+    "boolean" to true,                   // ✅ Boolean
     "string_array" to arrayOf("a", "b"), // ✅ Array<String>
-    "int_array" to intArrayOf(1, 2),    // ✅ IntArray
-    "long_array" to longArrayOf(1L, 2L),// ✅ LongArray
+    "int_array" to intArrayOf(1, 2),     // ✅ IntArray
+    "long_array" to longArrayOf(1L, 2L), // ✅ LongArray
     "double_array" to doubleArrayOf(1.0, 2.0), // ✅ DoubleArray
     "boolean_array" to booleanArrayOf(true, false) // ✅ BooleanArray
 )
@@ -337,7 +337,7 @@ class UserWorker(context: Context, params: WorkerParameters)
 
 ### Data Size Limitations
 
-**Maximum ~10KB** (10,240 bytes) for the entire Data payload — exceeding this will throw `IllegalStateException`.
+**Maximum ~10KB** (10,240 bytes) for the entire Data payload — exceeding this will throw an `IllegalStateException` when building or using the request.
 
 ```kotlin
 // ❌ BAD: exceeds limit
@@ -381,8 +381,8 @@ class MyWorker(context: Context, params: WorkerParameters)
 ## Follow-ups
 
 - How does WorkManager guarantee data delivery across process death?
-- What happens to output data if the app is killed before observation?
-- Can you chain workers and pass data between them?
+- What happens to output data if the app is killed before observation (it remains in WorkInfo until history is pruned)?
+- Can you chain workers and pass data between them (via `WorkContinuation` and `InputMerger`)?
 
 ## References
 

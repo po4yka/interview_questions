@@ -35,7 +35,7 @@ sources:
 
 ## Ответ (RU)
 
-Jetpack Compose состоит из восьми ключевых компонентов, работающих вместе для создания декларативного UI-фреймворка.
+Jetpack Compose в контексте архитектуры и разработки UI можно рассматривать как набор из восьми ключевых концепций, которые работают вместе для создания декларативного UI-фреймворка (это не официальная каноническая классификация, а практическое разбиение для собеседований).
 
 ### Основные Компоненты
 
@@ -87,24 +87,24 @@ Column(
 }
 ```
 
-**5. Recomposition** — умное обновление UI при изменении состояния (только зависимые composable перерисовываются).
+**5. Recomposition** — механизм интеллектуального обновления UI при изменении состояния (переотрисовываются только composable, зависящие от изменившегося состояния).
 
-**6. Effect Handlers** — управление побочными эффектами и lifecycle:
-- `LaunchedEffect` — suspending код
-- `DisposableEffect` — cleanup ресурсов
-- `SideEffect` — синхронизация с внешним состоянием
+**6. Effect Handlers** — управление побочными эффектами и lifecycle с помощью специальных API Compose (примеры, не исчерпывающий список):
+- `LaunchedEffect` — запуск suspend-кода, привязанного к жизненному циклу composable
+- `DisposableEffect` — освобождение ресурсов при выходе composable из композиции
+- `SideEffect` — синхронизация с внешним (non-Compose) состоянием
 
-**7. Material Components** — готовые UI-компоненты по Material Design: `Button`, `TextField`, `Card` и др.
+**7. Material Components** — готовые UI-компоненты по Material Design (`Button`, `TextField`, `Card` и др.), построенные поверх базовых возможностей Compose.
 
-**8. Theme System** — централизованная стилизация через `MaterialTheme`.
+**8. Theme System** — централизованная стилизация через систему тем (`MaterialTheme` и связанные CompositionLocal), обеспечивающая единый дизайн.
 
 ## Answer (EN)
 
-Jetpack Compose consists of eight core components that work together to create a declarative UI framework.
+From a practical architecture and UI-development perspective, Jetpack Compose can be viewed as eight key concepts that work together to form the declarative UI framework (this is an interview-oriented breakdown, not an official canonical list).
 
 ### Core Components
 
-**1. Composable Functions** — building blocks of UI annotated with ``@Composable``:
+**1. Composable Functions** — the basic building blocks of UI annotated with ``@Composable``:
 ```kotlin
 @Composable
 fun UserProfile(user: User) {
@@ -117,7 +117,7 @@ fun UserProfile(user: User) {
 }
 ```
 
-**2. State Management** — manages UI updates through `remember` and `mutableStateOf`, drives updates via [[c-compose-recomposition]]:
+**2. State Management** — manages UI updates through `remember` and `mutableStateOf`, driving changes via [[c-compose-recomposition]]:
 ```kotlin
 @Composable
 fun Counter() {
@@ -152,16 +152,16 @@ Column(
 }
 ```
 
-**5. Recomposition** — smart UI update mechanism when state changes (only dependent composables recompose).
+**5. Recomposition** — the smart UI update mechanism when state changes (only composables that depend on the changed state are recomposed).
 
-**6. Effect Handlers** — manage side effects and lifecycle:
-- `LaunchedEffect` — suspending code
-- `DisposableEffect` — resource cleanup
-- `SideEffect` — synchronization with external state
+**6. Effect Handlers** — APIs for managing side effects and lifecycle-related work (examples, not exhaustive):
+- `LaunchedEffect` — runs suspend code tied to the composable's lifecycle
+- `DisposableEffect` — performs resource cleanup when the composable leaves the composition
+- `SideEffect` — synchronizes with external (non-Compose) state
 
-**7. Material Components** — pre-built UI components following Material Design: `Button`, `TextField`, `Card`, etc.
+**7. Material Components** — pre-built UI components following Material Design (`Button`, `TextField`, `Card`, etc.), built on top of core Compose.
 
-**8. Theme System** — centralized styling through `MaterialTheme`.
+**8. Theme System** — centralized styling through the theming system (`MaterialTheme` and related CompositionLocals) to provide a consistent design.
 
 ## Дополнительные вопросы (RU)
 

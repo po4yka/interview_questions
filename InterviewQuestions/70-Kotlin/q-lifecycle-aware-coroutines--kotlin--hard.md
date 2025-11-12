@@ -73,7 +73,7 @@ Android предоставляет основные возможности дл�
 |----------|----------|------------|--------|
 | **viewModelScope** | К жизненному циклу `ViewModel` | Вызовы репозитория, бизнес-логика | При `onCleared()` `ViewModel` |
 | **lifecycleScope** | К `LifecycleOwner` (`Activity`/`Fragment` и т.п.) | UI-обновления, одноразовые операции в рамках владельца | При уничтожении `LifecycleOwner` |
-| **repeatOnLifecycle** | К конкретному состоянию `Lifecycle` | Безопасный сбор `Flow`/подписок в нужных состояниях | Блок отменяется при выходе из состояния |
+| **repeatOnLifecycle** | К конкретному состоянию `Lifecycle` | Безопасный сбор `Flow`/подписок в нужных состояниях | Блок и вложенные корутины отменяются при выходе из состояния |
 
 `repeatOnLifecycle` — это не отдельная область видимости, а suspending-функция, которая запускает и отменяет вложенные корутины в зависимости от состояния жизненного цикла.
 
@@ -227,7 +227,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //  Отменяется когда жизненный цикл view уничтожен
+        //  Используем область жизненного цикла view; корутина отменяется при уничтожении viewLifecycleOwner
         viewLifecycleOwner.lifecycleScope.launch {
             val userData = loadUserData()
             updateUI(userData)
@@ -303,7 +303,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         lifecycleScope.launch {
-            // Выполняется пока `Activity` жива; будет отменено при уничтожении `Activity`
+            // Выполняется, пока `Activity` не будет уничтожена; отменяется в onDestroy
             startLocationUpdates()
         }
     }
@@ -612,7 +612,7 @@ class LoginFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                navigationEvents.collect { event ->
+                viewModel.navigationEvents.collect { event ->
                     when (event) {
                         is NavigationEvent.NavigateToHome -> navigateToHome()
                         is NavigationEvent.ShowError -> showError(event.message)
@@ -892,7 +892,7 @@ Android provides core mechanisms to bind coroutines to lifecycle:
 |----------|-------------------|----------|--------------|
 | **viewModelScope** | `ViewModel` lifecycle | Repository calls, business logic | When `ViewModel.onCleared()` is called |
 | **lifecycleScope** | `LifecycleOwner` (`Activity`/`Fragment`/`Service`) | UI updates, one-off work tied to owner | When `LifecycleOwner` is destroyed |
-| **repeatOnLifecycle** | Specific `Lifecycle` state | Safe `Flow` collection / subscriptions | Block cancelled when leaving the state |
+| **repeatOnLifecycle** | Specific `Lifecycle` state | Safe `Flow` collection / subscriptions | Block and child coroutines cancelled when leaving the state |
 
 Note: `repeatOnLifecycle` is a suspending function, not a separate scope. It launches and cancels child coroutines according to the `Lifecycle` state.
 
@@ -1046,7 +1046,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //  Cancelled when the view's lifecycle is destroyed
+        //  Using the view's lifecycle scope; cancelled when viewLifecycleOwner is destroyed
         viewLifecycleOwner.lifecycleScope.launch {
             val userData = loadUserData()
             updateUI(userData)
@@ -1084,8 +1084,8 @@ class ImportantFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            //  Lives as long as Fragment instance
-            // Not cancelled when view is destroyed/recreated
+            //  Lives as long as the Fragment instance
+            // Not cancelled when the view is destroyed/recreated
         }
     }
 
@@ -1093,8 +1093,8 @@ class ImportantFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            //  Cancelled when view is destroyed
-            // Can be recreated when view is recreated
+            //  Cancelled when the view is destroyed
+            // Can be recreated when the view is recreated
         }
     }
 }
@@ -1122,7 +1122,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         lifecycleScope.launch {
-            // Runs while `Activity` is started; cancelled when `Activity` is destroyed
+            // Runs until the Activity is destroyed; cancelled in onDestroy
             startLocationUpdates()
         }
     }
@@ -1144,7 +1144,7 @@ class NewsFragment : Fragment() {
         //  BEST PRACTICE: Use repeatOnLifecycle for `Flow` collection
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // This block runs when STARTED+ and is cancelled below STARTED
+                // This block runs when in STARTED+ and is cancelled below STARTED
                 viewModel.newsFlow.collect { news ->
                     updateUI(news)
                 }

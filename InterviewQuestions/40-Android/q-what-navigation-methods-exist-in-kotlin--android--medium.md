@@ -30,6 +30,7 @@ tags:
 - navigation
 - startActivity
 
+
 ---
 
 # Вопрос (RU)
@@ -50,7 +51,7 @@ tags:
 
 Современный рекомендуемый подход, основанный на графах навигации и (опционально) типобезопасной передаче аргументов.
 
-```kotlin
+```xml
 // XML-граф навигации (res/navigation/nav_graph.xml)
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -103,7 +104,7 @@ class HomeFragment : Fragment() {
 }
 ```
 
-```kotlin
+```xml
 // NavHostFragment в разметке (activity_main.xml)
 <androidx.fragment.app.FragmentContainerView
     android:id="@+id/nav_host_fragment"
@@ -112,7 +113,9 @@ class HomeFragment : Fragment() {
     android:layout_height="match_parent"
     app:defaultNavHost="true"
     app:navGraph="@navigation/nav_graph" />
+```
 
+```kotlin
 // Примеры программной навигации во фрагменте
 class HomeFragment : Fragment() {
     private fun navigate() {
@@ -263,7 +266,7 @@ fun sendEmail(email: String, subject: String, body: String) {
 
 Deep links позволяют открывать конкретные экраны из уведомлений, браузера или других приложений. В связке с Navigation Component:
 
-```kotlin
+```xml
 // Deep link в навигационном графе
 <fragment
     android:id="@+id/detailsFragment"
@@ -335,7 +338,7 @@ Navigation in Android/Kotlin applications can be implemented using several appro
 
 The modern, recommended approach based on navigation graphs and (optionally) type-safe arguments.
 
-```kotlin
+```xml
 // Define navigation graph in XML (res/navigation/nav_graph.xml)
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -388,7 +391,7 @@ class HomeFragment : Fragment() {
 }
 ```
 
-```kotlin
+```xml
 // Setup NavHostFragment in Activity layout (activity_main.xml)
 <androidx.fragment.app.FragmentContainerView
     android:id="@+id/nav_host_fragment"
@@ -397,7 +400,9 @@ class HomeFragment : Fragment() {
     android:layout_height="match_parent"
     app:defaultNavHost="true"
     app:navGraph="@navigation/nav_graph" />
+```
 
+```kotlin
 // Programmatic navigation examples in Fragment
 class HomeFragment : Fragment() {
     private fun navigate() {
@@ -548,7 +553,7 @@ fun sendEmail(email: String, subject: String, body: String) {
 
 Deep links allow navigation to a specific screen from outside or inside the app. With the Navigation Component, you declare them in the navigation graph and configure intent-filters in the manifest.
 
-```kotlin
+```xml
 // Define deep link in navigation graph
 <fragment
     android:id="@+id/detailsFragment"
@@ -618,11 +623,11 @@ fun createDeepLink(itemId: Int): PendingIntent {
 - When would you choose FragmentTransactions over the Navigation Component?
 - How do you handle up navigation vs back navigation in a multi-activity app?
 
+## References
+
+- [[c-activity]]
+
 ## Related Questions
 
 - [[q-tasks-back-stack--android--medium]]
 - [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
-
-## References
-
-- [[c-activity]]

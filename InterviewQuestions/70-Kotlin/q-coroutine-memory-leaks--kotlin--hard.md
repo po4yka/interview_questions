@@ -36,7 +36,7 @@ tags: [coroutines, difficulty/hard, kotlin]
 
 ## Ответ (RU)
 
-Утечки памяти в корутинах обычно происходят, когда корутины не привязаны к корректному жизненному циклу или не отменяются должным образом, из-за чего удерживаются ссылки и продолжается расход ресурсов.
+Утечки памяти в корутинах обычно происходят, когда корутины не привязаны к корректному жизненному циклу или не отменяются должным образом, из-за чего удерживаются ссылки и продолжается расход ресурсов. Также утечки возможны, если долгие операции внутри корутин не учитывают отмену (игнорируют `isActive`/`ensureActive()` и выполняют блокирующий код), из-за чего корутины продолжают работать и сохранять ссылки дольше необходимого.
 
 ### Распространенные Причины Утечек
 
@@ -72,11 +72,11 @@ class MyViewModel : ViewModel() {
 
 **2. Использование GlobalScope без учета жизненного цикла**
 ```kotlin
-// Потенциальная утечка: корутина живет дольше `Activity`/`Fragment`,
+// Потенциальная утечка: корутина может жить дольше `Activity`/`Fragment`,
 // пока не завершится или пока жив процесс приложения.
 GlobalScope.launch {
     // Это может выполняться даже после уничтожения Activity,
-    // удерживая её ссылки.
+    // удерживая её ссылки при их захвате внутри корутины.
 }
 
 // Исправление (Android): использовать lifecycleScope для компонентов,
@@ -92,15 +92,24 @@ lifecycleScope.launch {
 class MyActivity : Activity() {
     fun startWork() {
         GlobalScope.launch {
-            // Если эта корутина переживет Activity,
-            // она удержит ссылку на MyActivity.
-            updateUI()  // Захватывает this@MyActivity
+            // Если эта корутина переживет Activity и внутри используются
+            // this@MyActivity, её поля или ссылки на View,
+            // она будет удерживать MyActivity в памяти.
+            updateUI()  // Может неявно захватывать this@MyActivity
         }
     }
 }
 ```
 
-Проблема не в самом вызове `updateUI()`, а в том, что корутина запущена в `GlobalScope` и может жить дольше `Activity`.
+Проблема не в самом вызове `updateUI()`, а в том, что корутина запущена в `GlobalScope` и может жить дольше `Activity`, удерживая её через захваченные ссылки.
+
+**4. Игнорирование отмены и блокирующие операции внутри корутин**
+
+Даже при правильной привязке scope к жизненному циклу утечки возможны, если:
+- используются блокирующие вызовы (например, долгие операции ввода-вывода или `Thread.sleep`) без `withContext(Dispatchers.IO)`,
+- выполняются длительные циклы без проверки `isActive` или `ensureActive()`.
+
+В таких случаях корутина продолжает выполняться после отмены scope, удерживая ссылки и ресурсы.
 
 ### Инструменты Обнаружения
 - LeakCanary для Android
@@ -111,13 +120,13 @@ class MyActivity : Activity() {
 1. Используйте структурированную конкурентность (`coroutineScope`, `supervisorScope`) и scopes, привязанные к жизненному циклу.
 2. Отменяйте scopes в методах жизненного цикла или полагайтесь на `viewModelScope`/`lifecycleScope` там, где это доступно.
 3. Избегайте `GlobalScope`, кроме действительно операций уровня приложения (и тщательно управляйте ими).
-4. Проверяйте, что долгие операции выполняются не на `Dispatchers.Main` и что `suspend`-функции корректно реагируют на отмену.
+4. Следите, чтобы долгие операции выполнялись не на `Dispatchers.Main`, и чтобы `suspend`-функции и циклы корректно реагировали на отмену (используйте кооперативную отмену и не блокируйте поток).
 
 ---
 
 ## Answer (EN)
 
-Memory leaks in coroutines typically occur when coroutines are not bound to the correct lifecycle or not properly cancelled, causing references to be retained and resources to be consumed longer than necessary.
+Memory leaks in coroutines typically occur when coroutines are not bound to the correct lifecycle or not properly cancelled, causing references to be retained and resources to be consumed longer than necessary. Leaks can also occur when long-running work inside coroutines does not cooperate with cancellation (ignoring `isActive`/`ensureActive()` or using blocking calls), so coroutines continue to run and hold references even after their scope is cancelled.
 
 ### Common Leak Causes
 
@@ -157,7 +166,7 @@ class MyViewModel : ViewModel() {
 // until it finishes or the app process is killed.
 GlobalScope.launch {
     // This may keep running after the Activity is destroyed,
-    // retaining its references.
+    // retaining its references if they are captured.
 }
 
 // Fix (Android): use lifecycleScope on LifecycleOwners.
@@ -172,15 +181,24 @@ lifecycleScope.launch {
 class MyActivity : Activity() {
     fun startWork() {
         GlobalScope.launch {
-            // If this coroutine outlives the Activity,
-            // it keeps a reference to MyActivity.
-            updateUI()  // Captures this@MyActivity
+            // If this coroutine outlives the Activity and uses
+            // this@MyActivity, its fields or View references,
+            // it will keep MyActivity in memory.
+            updateUI()  // May implicitly capture this@MyActivity
         }
     }
 }
 ```
 
-The issue is not `updateUI()` itself but launching in `GlobalScope`, which is not tied to the `Activity` lifecycle.
+The issue is not `updateUI()` itself but launching in `GlobalScope` without lifecycle binding, allowing the coroutine to outlive the `Activity` while holding captured references.
+
+**4. Ignoring cancellation and blocking inside coroutines**
+
+Even with proper lifecycle binding, leaks can occur if:
+- blocking calls (e.g. long I/O or `Thread.sleep`) are used instead of suspending APIs / `withContext(Dispatchers.IO)`,
+- long-running loops do not check `isActive` or call `ensureActive()`.
+
+In such cases, the coroutine keeps running after the scope is cancelled, holding references and resources.
 
 ### Detection Tools
 - LeakCanary for Android
@@ -191,7 +209,7 @@ The issue is not `updateUI()` itself but launching in `GlobalScope`, which is no
 1. Use structured concurrency (`coroutineScope`, `supervisorScope`) and lifecycle-aware scopes.
 2. Cancel scopes in lifecycle callbacks or rely on `viewModelScope`/`lifecycleScope` where available.
 3. Avoid `GlobalScope` except for true app-wide operations, and manage them carefully.
-4. Ensure long-running work is not done on `Dispatchers.Main` and that suspend functions cooperate with cancellation.
+4. Ensure long-running work is not done on `Dispatchers.Main` and that suspend functions and loops cooperate with cancellation (use cooperative cancellation and avoid blocking threads).
 
 ---
 
@@ -217,7 +235,7 @@ The issue is not `updateUI()` itself but launching in `GlobalScope`, which is no
 
 ## Ссылки (RU)
 
-- [Документация по Kotlin Coroutines]("https://kotlinlang.org/docs/coroutines-overview.html")
+- [Документация по Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 - [[c-kotlin]]
 - [[c-coroutines]]
 
@@ -225,7 +243,7 @@ The issue is not `updateUI()` itself but launching in `GlobalScope`, which is no
 
 ## References
 
-- [Kotlin Coroutines Documentation]("https://kotlinlang.org/docs/coroutines-overview.html")
+- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 - [[c-kotlin]]
 - [[c-coroutines]]
 

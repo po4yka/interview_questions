@@ -81,7 +81,7 @@ alarmManager.setExactAndAllowWhileIdle(
 )
 ```
 
-Используйте AlarmManager, когда важно срабатывание около указанного времени (например, будильник, напоминание), и задача сама по себе краткосрочная. На современных версиях Android точные будильники ограничены (Doze, политика точных будильников), поэтому применять их следует только при обоснованной необходимости.
+Используйте AlarmManager, когда важно срабатывание около указанного времени (например, будильник, напоминание), и последующая работа краткосрочная и запускается из приёмника/сервиса с учётом актуальных ограничений фонового выполнения. На современных версиях Android точные будильники ограничены (Doze, политика точных будильников), поэтому применять их следует только при обоснованной необходимости.
 
 **Foreground `Service` — видимая, долгоживущая работа:**
 
@@ -99,7 +99,7 @@ class MusicService : Service() {
 // ❌ Неправильно: использовать для быстрых/разовых фоновых операций (используй WorkManager или другие механизмы)
 ```
 
-Foreground `Service` подходит для задач, о которых пользователь должен знать и которые активны продолжительное время. Сервис всё равно может быть убит системой при нехватке ресурсов, поэтому "защита от kill" не абсолютна.
+Foreground `Service` подходит для задач, о которых пользователь должен знать и которые активны продолжительное время. Сервис должен быть запущен как foreground-сервис (для API 26+ — через `startForegroundService()`), и всё равно может быть убит системой при нехватке ресурсов, поэтому "защита от kill" не абсолютна.
 
 ---
 
@@ -158,7 +158,7 @@ alarmManager.setExactAndAllowWhileIdle(
 )
 ```
 
-Use AlarmManager when you need execution around a specific clock time (e.g., alarm clock, reminder) and the resulting work is short-lived. On modern Android versions, exact alarms are restricted (Doze, exact alarm policies), so use them only when strictly justified.
+Use AlarmManager when you need execution around a specific clock time (e.g., alarm clock, reminder), and ensure the actual follow-up work is short-lived and launched from the receiver/service in compliance with current background execution limits. On modern Android versions, exact alarms are restricted (Doze, exact alarm policies), so use them only when strictly justified.
 
 **Foreground `Service` — visible, long-running work:**
 
@@ -176,7 +176,7 @@ class MusicService : Service() {
 // ❌ Wrong: using for quick/one-off background operations (use WorkManager or other mechanisms instead)
 ```
 
-Foreground `Service` is appropriate for tasks the user expects and that run for a noticeable duration. The service can still be killed under memory pressure; "kill protection" is not absolute.
+Foreground `Service` is appropriate for tasks the user expects and that run for a noticeable duration. The service must run as a foreground service (for API 26+ typically started via `startForegroundService()`), and it still can be killed under memory pressure; "kill protection" is not absolute.
 
 ---
 

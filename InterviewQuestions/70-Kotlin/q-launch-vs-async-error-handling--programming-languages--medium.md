@@ -1,19 +1,19 @@
 ---
 id: lang-031
-title: "Launch Vs Async Error Handling / Launch против Async Обработка"
-aliases: ["Launch Vs Async Error Handling", "Launch против Async Error Обработка"]
+title: "Launch Vs Async Error Handling / Launch против Async: обработка ошибок"
+aliases: ["Launch Vs Async Error Handling", "Launch против Async Обработка"]
 topic: kotlin
-subtopics: [c-coroutines, c-structured-concurrency, c-kotlin]
+subtopics: [coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
-created: 2025-10-15
-updated: 2025-11-09
-tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
+related: [c-kotlin, c-concurrency, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
+created: 2024-10-15
+updated: 2025-11-11
+tags: [kotlin, coroutines, difficulty/medium, error-handling, exception-handling]
 ---
 
 # Вопрос (RU)
@@ -29,31 +29,31 @@ tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin
 Да, ошибки (exceptions) в `launch` и `async` ведут себя по-разному с точки зрения:
 - когда исключение наблюдается;
 - как оно распространяется по иерархии корутин;
-- как это связано со структурированной конкуррентностью ([[c-structured-concurrency]]).
+- как это связано со структурированной конкуррентностью ([[c-concurrency]]).
 
 Ключевые моменты:
-- В `launch` неперехваченные исключения считаются сбоем корутины и по умолчанию являются "unhandled" (если не перехвачены внутри корутины или через `CoroutineExceptionHandler`). В дочерних корутинах `launch` исключение обычно отменяет родительский scope (если это не supervisor).
-- В `async` исключения сохраняются внутри `Deferred<T>` и повторно выбрасываются только при вызове `await()`. Если `await()` никогда не вызывается, исключение может остаться необработанным.
+- В `launch` неперехваченные исключения считаются сбоем корутины и по умолчанию являются "unhandled" (если не перехвачены внутри корутины или через `CoroutineExceptionHandler`). У дочерних корутин `launch` исключение по умолчанию отменяет родительский scope и всех "соседей" (если это не supervisor).
+- В `async` исключения сохраняются внутри `Deferred<T>` и повторно выбрасываются только при вызове `await()`. В составе структурированной иерархии, если родитель отменяется из-за других ошибок, соответствующие `async` также отменяются, и их исключения могут проявиться как `CancellationException` при `await()`. Для корневых `async` (например, созданных в `GlobalScope`) ситуация другая: непойманное исключение ведет себя как в root-корутинах `launch` и обрабатывается как "unhandled" через `CoroutineExceptionHandler`.
 
 ### Launch - распространение исключений
 
 ```kotlin
 import kotlinx.coroutines.*
 
-// launch: исключение сообщается, когда корутина завершается с ошибкой
+// launch: неперехваченные исключения в корутине считаются её сбоем
+// и передаются вверх по иерархии (отменяя родителя, если это обычный Job)
 fun launchErrorExample() = runBlocking {
-    try {
-        val job = launch {
-            delay(100)
-            throw RuntimeException("Error in launch")
-        }
-        job.join()
-    } catch (e: Exception) {
-        // Здесь для дочернего launch не поймаем:
-        // исключение обрабатывается механизмом родительского контекста
-        println("Caught: ${e.message}")
+    val job = launch {
+        delay(100)
+        throw RuntimeException("Error in launch")
     }
-    // Сбой дочернего launch репортится в родительский scope
+
+    try {
+        job.join() // join() пробрасывает CancellationException, если родительский scope отменён
+    } catch (e: CancellationException) {
+        println("Parent cancelled due to child failure: ${e.message}")
+    }
+    // Само исключение логируется/обрабатывается механизмом родительского контекста
 }
 
 // Исключение в дочернем launch отменяет родительский scope (если это не supervisor)
@@ -63,7 +63,7 @@ fun launchCrash() = runBlocking {
     }
 
     delay(1000)
-    println("This won't print")  // Не будет выполнено из-за отмены
+    println("This won't print")  // Не будет выполнено из-за отмены runBlocking
 }
 ```
 
@@ -72,7 +72,8 @@ fun launchCrash() = runBlocking {
 ```kotlin
 import kotlinx.coroutines.*
 
-// async сохраняет исключение в Deferred и выбрасывает его при await()
+// async в рамках структурированной конкуррентности сохраняет исключение в Deferred
+// и повторно выбрасывает его при await() для наблюдающей стороны
 fun asyncErrorExample() = runBlocking {
     val deferred = async {
         delay(100)
@@ -80,12 +81,12 @@ fun asyncErrorExample() = runBlocking {
     }
 
     try {
-        deferred.await()  // Исключение выбрасывается здесь
+        deferred.await()  // Исключение выбрасывается здесь для наблюдателя
     } catch (e: Exception) {
-        println("Caught: ${e.message}")  // Обрабатывается здесь
+        println("Caught: ${e.message}")
     }
 
-    println("Program continues")  // Продолжаем выполнение
+    println("Program continues")
 }
 
 // Несколько async с выборочной обработкой ошибок
@@ -116,12 +117,14 @@ import kotlinx.coroutines.*
 fun compareErrorHandling() = runBlocking {
     println("=== launch error ===")
     try {
-        launch {
+        val job = launch {
             throw Exception("Launch error")
-        }.join()
-    } catch (e: Exception) {
-        // Для дочернего launch внешний try-catch НЕ видит исключение.
-        println("Outer catch: ${e.message}")  // Не будет достигнуто, исключение обрабатывается контекстом родителя
+        }
+        job.join()
+    } catch (e: CancellationException) {
+        // Для дочерних launch- корутин ошибка обычно проявляется как отмена родителя,
+        // и эту отмену (CancellationException) можно наблюдать через join().
+        println("Observed cancellation from child failure: ${e.message}")
     }
 
     println("\n=== async error ===")
@@ -130,8 +133,8 @@ fun compareErrorHandling() = runBlocking {
             throw Exception("Async error")
         }.await()
     } catch (e: Exception) {
-        // Для async исключение перекидывается на await() и может быть поймано здесь.
-        println("Outer catch: ${e.message}")  // Будет поймано
+        // Для async исключение напрямую перекидывается на await() и обрабатывается здесь.
+        println("Outer catch: ${e.message}")
     }
 }
 ```
@@ -147,27 +150,28 @@ fun launchWithHandler() = runBlocking {
         println("Caught by handler: ${exception.message}")
     }
 
-    // Установим handler в контекст корутины
+    // Важно: CoroutineExceptionHandler срабатывает только для неперехваченных исключений
+    // в корутинах верхнего уровня (root coroutines) для данного контекста
     val scope = CoroutineScope(Job() + handler)
 
     scope.launch {
-        throw RuntimeException("Error")  // Будет перехвачено handler
+        throw RuntimeException("Error")  // Будет перехвачено handler как root coroutine
     }
 
     delay(100)
     println("Scope still alive")
 }
 
-// Пример с несколькими корутинами и handler на родительском launch
+// Пример с несколькими корутинами и handler на корневом launch
 fun multipleWithHandler() = runBlocking {
     val handler = CoroutineExceptionHandler { _, exception ->
         println("Handler caught: ${exception.message}")
     }
 
-    // Handler должен быть в контексте корутины, где исключение остаётся неперехваченным
+    // Handler должен быть в контексте корневой корутины, где исключение остаётся неперехваченным
     launch(handler) {
         launch {
-            throw Exception("Error 1")  // Поднимется и будет пойман handler родительского launch
+            throw Exception("Error 1")  // Поднимется и будет пойман handler корневого launch
         }
     }
 
@@ -323,7 +327,7 @@ suspend fun supervisorAsync() = supervisorScope {
 import kotlinx.coroutines.*
 
 class ErrorHandlingBestPractices {
-    // Делайте: оборачивайте async.await() в try-catch
+    // Делайте: оборачивайте async.await() в try-catch (в этом же scope или уровнем выше)
     suspend fun good1() = coroutineScope {
         try {
             val result = async { riskyOperation() }.await()
@@ -333,7 +337,8 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // Делайте: используйте CoroutineExceptionHandler с launch в контексте корутины
+    // Делайте: используйте CoroutineExceptionHandler с launch в контексте корневых корутин,
+    // где исключение может остаться неперехваченным
     fun good2() = runBlocking {
         val handler = CoroutineExceptionHandler { _, exception ->
             handleError(exception)
@@ -350,20 +355,25 @@ class ErrorHandlingBestPractices {
         launch { task2() }
     }
 
-    // Не делайте: не рассчитывайте поймать ошибки дочернего launch внешним try-catch вот так
+    // Не делайте: игнорировать тот факт, что ошибки дочерних launch проявляются как отмена родителя;
+    // полагайтесь на обработку через CancellationException, внутренние try-catch или handler там,
+    // где это уместно.
     suspend fun bad1() = coroutineScope {
         try {
-            launch {
+            val job = launch {
                 throw Exception("Error")
-            }.join()
+            }
+            job.join()
         } catch (e: Exception) {
-            // Не будет поймано: исключение репортится в родительский контекст
+            // В реальных сценариях предпочтительнее обрабатывать ошибку внутри корутины
+            // или через CoroutineExceptionHandler для root-coroutines.
         }
     }
 
-    // Не делайте: не используйте async без обработки ошибок await()
+    // Не делайте: не создавайте async без осознанной обработки исключений при await()
+    // (либо в этом scope, либо у вызывающего кода); и не используйте async там, где не нужна конкуррентность.
     suspend fun bad2() = coroutineScope {
-        val result = async { riskyOperation() }.await()  // Если бросает, это должно быть обработано вызывающим кодом или этим scope
+        val result = async { riskyOperation() }.await()  // Если бросает, это должно быть обработано этим или внешним scope
         process(result)
     }
 
@@ -380,44 +390,44 @@ class ErrorHandlingBestPractices {
 
 | Feature | launch | async |
 |---------|--------|-------|
-| Error timing | Reported when coroutine fails (for unhandled exceptions) | Rethrown on await() |
-| Propagation | To parent scope; cancels parent/siblings (non-supervisor) | Stored in Deferred; observed on await() |
-| Catch with try-catch | Not around launch(...) for child failures; must catch inside the coroutine | Yes, around await() |
-| Exception handler | Use CoroutineExceptionHandler in context | Usually handled via await()/try-catch; handler applies if installed in context |
-| Scope cancellation | Failure cancels parent and siblings (non-supervisor) | Cancellation depends on how parent handles the failure from await() |
-| Selective handling | Limited | Yes, per Deferred via await() |
-| Best for | Fire-and-forget / structured side effects | Operations with results, fine-grained error handling |
+| Error timing | Неперехваченное исключение немедленно завершает корутину и инициирует отмену родителя/handler | Исключение хранится в Deferred и наблюдается при await(); в root-async без await ведет себя как unhandled |
+| Propagation | К родителю; отменяет родителя/"соседей" (non-supervisor) | Вверх по цепочке при await(); в supervisorScope не отменяет соседей автоматически |
+| Catch with try-catch | Обычно: внутри корутины или через наблюдаемую отмену (CancellationException) и CoroutineExceptionHandler | Да, вокруг await() |
+| Exception handler | Используется для root-coroutines launch | Обычно не нужен: ошибки обрабатываются через await(); для root-async без await применяется handler |
+| Scope cancellation | Сбой отменяет родителя и детей (non-supervisor) | Зависит от того, как родитель обрабатывает исключения из await() |
+| Selective handling | Ограничена структурой | Да, по каждому Deferred отдельно |
+| Best for | Fire-and-forget / структурированные сайд-эффекты | Операции с результатом, тонкая настройка обработки ошибок |
 
 ## Answer (EN)
 
-Yes, errors (exceptions) behave differently in launch and async, especially regarding:
+Yes, errors (exceptions) behave differently in `launch` and `async`, especially regarding:
 - when the exception is observed;
 - how it propagates through the coroutine hierarchy;
-- how it interacts with structured concurrency ([[c-structured-concurrency]]).
+- how it interacts with structured concurrency ([[c-concurrency]]).
 
 Key points:
-- In `launch`, uncaught exceptions are treated as failures of the coroutine and, by default, are "unhandled" (unless caught inside the coroutine or handled via `CoroutineExceptionHandler`). For child coroutines, the exception cancels the parent scope (unless it's a supervisor).
-- In `async`, exceptions are captured in the `Deferred<T>` and are rethrown only when `await()` is called. If `await()` is never called, the exception may effectively remain unobserved.
+- In `launch`, uncaught exceptions are treated as failures of the coroutine and, by default, are "unhandled" (unless caught inside the coroutine or handled via `CoroutineExceptionHandler`). For child `launch` coroutines, the exception typically cancels the parent scope and siblings (unless it's a supervisor).
+- In `async`, exceptions are captured in the `Deferred<T>` and are rethrown when `await()` is called by the observing code. Within structured concurrency, if the parent is cancelled due to other failures, the corresponding `async` are cancelled and their failures may surface as `CancellationException` on `await()`. For root `async` coroutines (e.g., in `GlobalScope`), an unobserved exception behaves like in root `launch` coroutines and is handled as "unhandled" via `CoroutineExceptionHandler`.
 
 ### Launch - Exception Propagation
 
 ```kotlin
 import kotlinx.coroutines.*
 
-// launch: exception is reported when the coroutine fails
+// launch: uncaught exceptions in a coroutine are treated as its failure
+// and propagate up, cancelling the parent if it's a regular Job
 fun launchErrorExample() = runBlocking {
-    try {
-        val job = launch {
-            delay(100)
-            throw RuntimeException("Error in launch")
-        }
-        job.join()
-    } catch (e: Exception) {
-        // Won't catch here for this child launch:
-        // the exception is handled by the parent context's machinery
-        println("Caught: ${e.message}")
+    val job = launch {
+        delay(100)
+        throw RuntimeException("Error in launch")
     }
-    // The failure of the child launch is reported to the parent scope
+
+    try {
+        job.join() // join() can throw CancellationException if parent scope is cancelled
+    } catch (e: CancellationException) {
+        println("Parent cancelled due to child failure: ${e.message}")
+    }
+    // The original exception is logged/handled by the parent context machinery
 }
 
 // Exception in a child launch cancels the parent scope (non-supervisor)
@@ -427,7 +437,7 @@ fun launchCrash() = runBlocking {
     }
 
     delay(1000)
-    println("This won't print")  // Not reached due to cancellation
+    println("This won't print")  // Not reached due to runBlocking cancellation
 }
 ```
 
@@ -436,7 +446,8 @@ fun launchCrash() = runBlocking {
 ```kotlin
 import kotlinx.coroutines.*
 
-// async stores exception in Deferred and rethrows on await()
+// async within structured concurrency stores the exception in Deferred
+// and rethrows it on await() for the observer
 fun asyncErrorExample() = runBlocking {
     val deferred = async {
         delay(100)
@@ -444,12 +455,12 @@ fun asyncErrorExample() = runBlocking {
     }
 
     try {
-        deferred.await()  // Exception is thrown here
+        deferred.await()  // Exception is thrown here for the observer
     } catch (e: Exception) {
-        println("Caught: ${e.message}")  // Caught here
+        println("Caught: ${e.message}")
     }
 
-    println("Program continues")  // Continues execution
+    println("Program continues")
 }
 
 // Multiple async with selective error handling
@@ -480,12 +491,14 @@ import kotlinx.coroutines.*
 fun compareErrorHandling() = runBlocking {
     println("=== launch error ===")
     try {
-        launch {
+        val job = launch {
             throw Exception("Launch error")
-        }.join()
-    } catch (e: Exception) {
-        // For a child launch, this outer try-catch does NOT see the exception.
-        println("Outer catch: ${e.message}")  // Not reached because exception is handled by parent context
+        }
+        job.join()
+    } catch (e: CancellationException) {
+        // For child launch coroutines, the failure usually manifests as parent cancellation,
+        // which you can observe as CancellationException when joining.
+        println("Observed cancellation from child failure: ${e.message}")
     }
 
     println("\n=== async error ===")
@@ -494,8 +507,8 @@ fun compareErrorHandling() = runBlocking {
             throw Exception("Async error")
         }.await()
     } catch (e: Exception) {
-        // For async, exception is rethrown on await() and can be caught here.
-        println("Outer catch: ${e.message}")  // Caught
+        // For async, the exception is rethrown on await() and can be caught here.
+        println("Outer catch: ${e.message}")
     }
 }
 ```
@@ -511,33 +524,34 @@ fun launchWithHandler() = runBlocking {
         println("Caught by handler: ${exception.message}")
     }
 
-    // Install handler in the context of the launched coroutine
+    // CoroutineExceptionHandler is invoked only for uncaught exceptions in
+    // root coroutines of this context
     val scope = CoroutineScope(Job() + handler)
 
     scope.launch {
-        throw RuntimeException("Error")  // Caught by handler
+        throw RuntimeException("Error")  // Caught by handler as a root coroutine
     }
 
     delay(100)
     println("Scope still alive")
 }
 
-// Example with multiple coroutines using a handler on the parent launch
+// Example with multiple coroutines using a handler on the root launch
 fun multipleWithHandler() = runBlocking {
     val handler = CoroutineExceptionHandler { _, exception ->
         println("Handler caught: ${exception.message}")
     }
 
-    // Handler must be in the context of the coroutine where the exception is unhandled
+    // Handler must be installed in the context of the root coroutine
     launch(handler) {
         launch {
-            throw Exception("Error 1")  // Propagates up and is caught by handler on parent launch
+            throw Exception("Error 1")  // Propagates and is caught by handler on root launch
         }
     }
 
     launch(handler) {
         launch {
-            throw Exception("Error 2")  // Propagates up and is caught by handler on parent launch
+            throw Exception("Error 2")  // Same behavior
         }
     }
 
@@ -555,7 +569,7 @@ class DataViewModel {
     private val _data = MutableStateFlow<Data?>(null)
     private val _error = MutableStateFlow<String?>(null)
 
-    // Using launch - use CoroutineExceptionHandler or try-catch inside
+    // Using launch - handle errors via CoroutineExceptionHandler or try-catch inside
     fun loadDataWithLaunch() {
         val handler = CoroutineExceptionHandler { _, exception ->
             _error.value = exception.message
@@ -625,17 +639,17 @@ fun launchParallel() = runBlocking {
     launch {
         launch {
             delay(100)
-            throw Exception("Error")  // Cancels parent of these children and thus siblings
+            throw Exception("Error")  // Cancels this parent and thus its children
         }
 
         launch {
             delay(200)
-            println("Task 2")  // Won't print due to cancellation
+            println("Task 2")  // Won't print
         }
 
         launch {
             delay(300)
-            println("Task 3")  // Won't print due to cancellation
+            println("Task 3")  // Won't print
         }
     }
 }
@@ -646,7 +660,7 @@ fun launchParallel() = runBlocking {
 ```kotlin
 import kotlinx.coroutines.*
 
-// supervisorScope: child failures don't cancel siblings
+// supervisorScope: a failing child does not cancel its siblings
 suspend fun supervisorExample() = supervisorScope {
     launch {
         throw Exception("Error 1")  // Only this child fails
@@ -687,7 +701,7 @@ suspend fun supervisorAsync() = supervisorScope {
 import kotlinx.coroutines.*
 
 class ErrorHandlingBestPractices {
-    // DO: Use try-catch around async.await()
+    // DO: Wrap async.await() in try-catch (either here or at the appropriate caller level)
     suspend fun good1() = coroutineScope {
         try {
             val result = async { riskyOperation() }.await()
@@ -697,7 +711,7 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // DO: Use CoroutineExceptionHandler with launch by installing it in the coroutine context
+    // DO: Use CoroutineExceptionHandler with launch in the context of root coroutines
     fun good2() = runBlocking {
         val handler = CoroutineExceptionHandler { _, exception ->
             handleError(exception)
@@ -714,20 +728,24 @@ class ErrorHandlingBestPractices {
         launch { task2() }
     }
 
-    // DON'T: Expect to catch child launch errors with outer try-catch like this
+    // DON'T: Ignore that child launch failures surface as parent cancellation;
+    // handle via CancellationException observation, internal try-catch, or a handler where appropriate.
     suspend fun bad1() = coroutineScope {
         try {
-            launch {
+            val job = launch {
                 throw Exception("Error")
-            }.join()
+            }
+            job.join()
         } catch (e: Exception) {
-            // Won't catch: exception is reported to parent context instead
+            // In real code, prefer handling inside the coroutine or via CoroutineExceptionHandler
+            // for root coroutines rather than relying solely on this pattern.
         }
     }
 
-    // DON'T: Use async without handling await() errors
+    // DON'T: Create async without a clear plan for handling await() exceptions
+    // (either in this scope or by the caller); and avoid async when you don't need concurrency.
     suspend fun bad2() = coroutineScope {
-        val result = async { riskyOperation() }.await()  // If it throws, must be caught by caller or this scope
+        val result = async { riskyOperation() }.await()  // If this throws, it must be handled here or above
         process(result)
     }
 
@@ -744,13 +762,13 @@ class ErrorHandlingBestPractices {
 
 | Feature | launch | async |
 |---------|--------|-------|
-| Error timing | Reported when coroutine fails (for unhandled exceptions) | Rethrown on await() |
-| Propagation | To parent scope; cancels parent/siblings (non-supervisor) | Stored in Deferred; observed on await() |
-| Catch with try-catch | Not around launch(...) for child failures; must catch inside the coroutine | Yes, around await() |
-| Exception handler | Use CoroutineExceptionHandler in context | Usually handled via await()/try-catch; handler applies if installed in context |
-| Scope cancellation | Failure cancels parent and siblings (non-supervisor) | Cancellation depends on how parent handles the failure from await() |
-| Selective handling | Limited | Yes, per Deferred via await() |
-| Best for | Fire-and-forget / structured side effects | Operations with results, fine-grained error handling |
+| Error timing | Uncaught exception immediately fails the coroutine and triggers parent cancellation/handler | Exception stored in Deferred and observed on await(); root async without await behaves as unhandled |
+| Propagation | To parent; cancels parent/siblings (non-supervisor) | Via await() up the call chain; in supervisorScope doesn't auto-cancel siblings |
+| Catch with try-catch | Commonly inside coroutine or via observing CancellationException/handler | Yes, around await() |
+| Exception handler | Use CoroutineExceptionHandler for root launch coroutines | Typically handle via await(); handler applies for root async with unobserved failures |
+| Scope cancellation | Failure cancels parent and children (non-supervisor) | Depends on how parent handles exceptions from await() |
+| Selective handling | Limited by structure | Yes, per Deferred |
+| Best for | Fire-and-forget / structured side effects | Result-returning operations with fine-grained error handling |
 
 ## Дополнительные вопросы (RU)
 

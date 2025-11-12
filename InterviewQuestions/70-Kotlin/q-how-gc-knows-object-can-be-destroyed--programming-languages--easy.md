@@ -1,20 +1,22 @@
 ---
 id: lang-046
-title: "How Gc Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
-aliases: [How Gc Knows Object Can Be Destroyed, Как GC знает что объект можно уничтожить]
-topic: kotlin
+title: "How GC Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
+aliases: [How GC Knows Object Can Be Destroyed, Как GC знает что объект можно уничтожить]
+topic: programming-languages
 subtopics: [garbage-collection, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-kotlin
-related: [c-garbage-collection, c-kotlin, q-garbage-collector-basics--programming-languages--medium]
+moc: moc-programming-languages
+related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-what-is-job-object--programming-languages--medium, q-mediator-pattern--design-patterns--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
+
 ---
+
 # Вопрос (RU)
 > Как сборщик мусора понимает что объект можно уничтожить?
 
@@ -25,19 +27,21 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, prog
 
 ## Ответ (RU)
 
+(Контекст: ниже речь про Kotlin/JVM и типичный трассирующий GC JVM. Для Kotlin/Native и Kotlin/JS механизмы управления памятью отличаются.)
+
 Сборщик мусора использует анализ достижимости (`reachability analysis`) от корневых объектов (`GC Roots`). Объект может быть уничтожен (становится кандидатом на сборку), если он недостижим ни из одного `GC Root`.
 
 Типичный алгоритм (например, в JVM) — `Mark and Sweep`:
 
 1. Находятся `GC Roots` (стековые ссылки локальных переменных, активные потоки, статические поля, некоторые нативные ссылки и т.п.).
 2. Помечаются все объекты, достижимые по цепочкам ссылок от `GC Roots`.
-3. Все непомеченные (недостижимые) объекты считаются мусором и могут быть удалены.
+3. Все непомеченные (недостижимые) объекты считаются мусором и становятся кандидатами на освобождение памяти.
 
 Круговые ссылки не мешают сборке мусора: если вся группа объектов недостижима от `GC Roots`, она будет собрана, даже если объекты ссылаются друг на друга.
 
 Ядро условия:
 
-- Объект может быть уничтожен, если он недостижим из любых `GC Roots`.
+- Объект может быть уничтожен, если он недостижим из любых `GC Roots` (то есть только становится кандидатом на сборку; фактический момент освобождения памяти определяется GC).
 
 Примеры:
 
@@ -51,7 +55,7 @@ fun example() {
 
     // Когда temp выходит из области видимости или присваивается null,
     // ссылка удаляется. Если других ссылок нет,
-    // User("Charlie") становится недостижимым → МОЖЕТ БЫТЬ УНИЧТОЖЕН.
+    // User("Charlie") становится недостижимым → МОЖЕТ БЫТЬ СОБРАН GC.
 }
 ```
 
@@ -71,7 +75,7 @@ fun main() {
 
     root.next = null
     // Теперь пути от GC Roots к Node(2) и Node(3) нет
-    // Node(2) и Node(3) НЕДОСТИЖИМЫ → МОГУТ БЫТЬ УНИЧТОЖЕНЫ
+    // Node(2) и Node(3) НЕДОСТИЖИМЫ → МОГУТ БЫТЬ СОБРАНЫ GC
 }
 ```
 
@@ -120,28 +124,34 @@ fun circularExample() {
 
     // После выхода из функции ссылки со стека исчезают.
     // Цикл {node1, node2} недостижим от любых GC Roots
-    // → МОЖЕТ БЫТЬ УНИЧТОЖЕН, несмотря на взаимные ссылки.
+    // → МОЖЕТ БЫТЬ СОБРАН, несмотря на взаимные ссылки.
 }
 ```
 
 Ключевые моменты:
 
 - Достижим от `GC Root` → сохранить (не кандидат на GC).
-- Недостижим от `GC Root` → можно удалить (кандидат на GC).
-- Есть ссылки, но объект недостижим от корней → можно удалить.
-- Циклические ссылки, недостижимые от корней → можно удалить (трассирующий GC умеет работать с циклами).
+- Недостижим от `GC Root` → кандидат на сборку (GC может освободить память).
+- Есть ссылки, но объект недостижим от корней → кандидат на сборку.
+- Циклические ссылки, недостижимые от корней → кандидат на сборку (трассирующий GC умеет работать с циклами).
+
+**Вывод:**
+
+GC использует анализ достижимости от GC Roots. Если объект недостижим по цепочке ссылок, начиная с любого GC Root, он считается мусором и становится кандидатом на сборку. Фактический момент сборки недетерминирован.
 
 ## Answer (EN)
 
-The garbage collector uses reachability analysis to determine if an object can be destroyed.
+(`Context`: below we’re talking about Kotlin/JVM and the typical tracing GC used by the JVM. Kotlin/Native and Kotlin/JS use different memory management mechanisms.)
+
+The garbage collector uses reachability analysis to determine if an object can be destroyed (more precisely: becomes eligible for collection).
 
 Typical algorithm (e.g., on the JVM): Mark and Sweep
 
 1. Find GC Roots (starting points: references in stack frames of active methods, active threads, static fields, some native references, etc.).
 2. Mark all objects reachable by following references from GC Roots.
-3. Sweep (reclaim) all unmarked (unreachable) objects.
+3. Sweep (reclaim) all unmarked (unreachable) objects — these are considered garbage and are eligible for memory reclamation.
 
-An object can be destroyed (is eligible for GC) if it is unreachable from any GC Root.
+An object can be destroyed (is eligible for GC) if it is unreachable from any GC Root. Actual reclamation happens at the GC’s discretion, not immediately.
 
 **Example:**
 
@@ -155,7 +165,7 @@ fun example() {
 
     // When temp goes out of scope or is set to null,
     // the reference is removed. If no other references exist,
-    // User("Charlie") becomes unreachable → CAN BE DESTROYED.
+    // User("Charlie") becomes unreachable → ELIGIBLE FOR GC.
 }
 ```
 
@@ -175,7 +185,7 @@ fun main() {
 
     root.next = null
     // Now there is no path from GC Roots to Node(2) and Node(3)
-    // Node(2) and Node(3) are UNREACHABLE → CAN BE DESTROYED
+    // Node(2) and Node(3) are UNREACHABLE → ELIGIBLE FOR GC
 }
 ```
 
@@ -224,20 +234,20 @@ fun circularExample() {
 
     // When the function ends, references from the stack frame disappear.
     // The cycle {node1, node2} is no longer reachable from any GC Root
-    // → CAN BE DESTROYED, despite the circular references.
+    // → ELIGIBLE FOR GC, despite the circular references.
 }
 ```
 
 **Key Points:**
 
 - Reachable from GC Root → KEEP (not eligible for GC).
-- Unreachable from GC Root → DESTROY (eligible for GC).
-- Has references but unreachable → DESTROY (eligibility depends on reachability, not count).
-- Circular references but unreachable → DESTROY (traced GC handles cycles).
+- Unreachable from GC Root → ELIGIBLE FOR GC (GC may reclaim memory).
+- Has references but unreachable from roots → ELIGIBLE FOR GC (eligibility depends on reachability, not reference count).
+- Circular references but unreachable from roots → ELIGIBLE FOR GC (tracing GC correctly collects cycles).
 
 **Summary:**
 
-GC uses reachability analysis from GC Roots. If an object cannot be reached through any chain of references starting from a GC Root, it is considered dead (garbage) and becomes eligible for collection.
+GC uses reachability analysis from GC Roots. If an object cannot be reached through any chain of references starting from a GC Root, it is considered garbage and becomes eligible for collection. The actual time of collection is non-deterministic.
 
 ---
 
@@ -260,6 +270,7 @@ GC uses reachability analysis from GC Roots. If an object cannot be reached thro
 
 ## References
 
+- [[c-garbage-collection]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Связанные вопросы (RU)
@@ -270,5 +281,6 @@ GC uses reachability analysis from GC Roots. If an object cannot be reached thro
 
 ## Related Questions
 
+- [[q-garbage-collector-basics--programming-languages--medium]]
 - [[q-what-is-job-object--programming-languages--medium]]
 - [[q-mediator-pattern--design-patterns--medium]]

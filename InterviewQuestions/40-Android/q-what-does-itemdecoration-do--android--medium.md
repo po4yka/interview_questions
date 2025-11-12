@@ -54,7 +54,7 @@ abstract class RecyclerView.ItemDecoration {
     // Рисование НАД элементами
     open fun onDrawOver(c: Canvas, parent: RecyclerView, state: State)
 
-    // Определение отступов/spacing
+    // Определение отступов/spacing (изменяет offsets элемента для layout, а не padding view)
     open fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -65,9 +65,9 @@ abstract class RecyclerView.ItemDecoration {
 ```
 
 **Назначение методов**:
-- `getItemOffsets` — создаёт пространство (padding) вокруг элементов (меняет границы элемента до отрисовки)
-- `onDraw` — рисует под элементами (фон, разделители), обычно для недиалоговых/неперекрывающих декораций
-- `onDrawOver` — рисует над элементами (overlay, sticky headers, эффекты, перекрывающие контент)
+- `getItemOffsets` — создаёт пространство вокруг элементов, изменяя offsets элемента до измерения/отрисовки (это не изменение `padding` view, а корректировка границ для layout).
+- `onDraw` — рисует под элементами (фон, разделители), обычно для недиалоговых/неперекрывающих декораций.
+- `onDrawOver` — рисует над элементами (overlay, sticky headers, эффекты, перекрывающие контент).
 
 ### Примеры Реализации
 
@@ -210,7 +210,7 @@ class SectionHeaderDecoration(
 1. **Кешируйте Paint/Drawable** — создавайте их в конструкторе, не в onDraw/onDrawOver.
 2. **Переиспользуйте декорации аккуратно** — один ItemDecoration можно использовать повторно в пределах одного RecyclerView или для списков с одинаковой конфигурацией; не шарьте состояние между несвязанными списками, если оно зависит от их параметров.
 3. **Учитывайте LayoutManager** — проверяйте тип (Linear/Grid/Staggered) при расчёте позиций и отступов.
-4. **Не меняйте ViewHolder** — ItemDecoration изолирована от адаптера и не должна модифицировать содержимое ViewHolder.
+4. **Не меняйте ViewHolder и бизнес-логику** — ItemDecoration предназначен для визуального оформления и не должен модифицировать содержимое ViewHolder или управлять данными.
 5. **Множественные декорации** — можно комбинировать (порядок важен: первая добавленная рисуется снизу, последняя — сверху).
 
 ### Удаление Декораций
@@ -237,7 +237,7 @@ abstract class RecyclerView.ItemDecoration {
     // Draw ABOVE items
     open fun onDrawOver(c: Canvas, parent: RecyclerView, state: State)
 
-    // Define offset/spacing around items
+    // Define offset/spacing around items (adjusts item offsets for layout, not the view's padding)
     open fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -248,7 +248,7 @@ abstract class RecyclerView.ItemDecoration {
 ```
 
 **Method purposes**:
-- `getItemOffsets` — creates space (padding) around items by adjusting item bounds before drawing.
+- `getItemOffsets` — creates space around items by adjusting item offsets before layout/drawing (this is not changing the view's `padding`, but its layout bounds).
 - `onDraw` — draws below items (backgrounds, dividers), typically for non-overlay decorations.
 - `onDrawOver` — draws above items (overlays, sticky headers, effects that may cover content).
 
@@ -362,7 +362,7 @@ class SectionHeaderDecoration(
         outRect: Rect,
         view: View,
         parent: RecyclerView,
-        state: State
+        state: RecyclerView.State
     ) {
         val position = parent.getChildAdapterPosition(view)
         if (position == RecyclerView.NO_POSITION) return
@@ -392,7 +392,7 @@ class SectionHeaderDecoration(
 1. **Cache Paint/Drawable objects** — create them in the constructor, not in onDraw/onDrawOver.
 2. **Reuse decorations carefully** — you can reuse an ItemDecoration within a RecyclerView or across lists with matching configuration; avoid sharing stateful decorations across unrelated RecyclerViews.
 3. **Account for LayoutManager** — check type (Linear/Grid/Staggered) when computing positions and offsets.
-4. **Don't modify ViewHolder** — ItemDecoration is isolated from the adapter and should not mutate ViewHolder contents.
+4. **Don't modify ViewHolder or business logic** — ItemDecoration is for visual concerns only; it should not alter ViewHolder contents or control data.
 5. **Multiple decorations** — you can combine multiple decorations (order matters: the first added draws at the bottom, the last added on top).
 
 ### Removing Decorations

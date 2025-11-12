@@ -59,8 +59,11 @@ val retrofit = Retrofit.Builder()
 // Создание ApiService
 val apiService = retrofit.create(ApiService::class.java)
 
-// ✅ Использование с корутинами (suspend-вызовы Retrofit не блокируют главный поток,
-// но синхронные/blocking вызовы никогда нельзя выполнять на главном потоке.)
+// ✅ Использование с корутинами.
+// suspend-вызовы Retrofit/Ktor не блокируют поток напрямую (они "блокируют" корутину),
+// но по умолчанию вызываются на том диспетчере, с которого были вызваны.
+// Поэтому синхронные/blocking вызовы execute() и другие блокирующие операции
+// никогда нельзя выполнять на главном потоке — выносите их на Dispatchers.IO.
 lifecycleScope.launch {
     try {
         val user = apiService.getUser(123)
@@ -96,7 +99,7 @@ button.setOnClickListener {
 }
 ```
 
-Suspend-API `Retrofit`/`Ktor` спроектированы так, чтобы не блокировать главный поток, но если используются синхронные вызовы `execute()` или другие блокирующие клиенты, нужно выполнять их на `Dispatchers.IO`.
+Suspend-API `Retrofit`/`Ktor` спроектированы так, чтобы не блокировать главный поток (они работают через неблокирующую модель ввода-вывода и корутины), но если используются синхронные вызовы `execute()` или другие блокирующие клиенты, нужно выполнять их на `Dispatchers.IO`.
 
 **Разрешения в манифесте**
 
@@ -113,8 +116,9 @@ Suspend-API `Retrofit`/`Ktor` спроектированы так, чтобы н
 // ✅ Рекомендуется использовать HTTPS
 const val BASE_URL = "https://api.example.com/"
 
-// ⚠️ На Android 9+ HTTP по умолчанию запрещён (cleartextTrafficPermitted=false),
-// его можно явно разрешить через networkSecurityConfig или конфигурацию домена.
+// ⚠️ На Android 9+ cleartext HTTP (http://) по умолчанию ограничен политикой безопасности
+// (используется cleartextTrafficPermitted=false), и его нужно явно разрешать
+// через usesCleartextTraffic или networkSecurityConfig при необходимости.
 const val BASE_URL_HTTP = "http://api.example.com/"
 ```
 
@@ -143,10 +147,10 @@ fun isNetworkAvailable(context: Context): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val network = cm.activeNetwork ?: return false
         val capabilities = cm.getNetworkCapabilities(network) ?: return false
-        // Предпочтительно наличие INTERNET; VALIDATED (если есть) говорит, что сеть проверена
+        // Предпочтительно наличие INTERNET; при наличии также VALIDATED сеть прошла проверку.
+        // Здесь мы требуем INTERNET и, если доступно, VALIDATED.
         capabilities.hasCapability(NET_CAPABILITY_INTERNET) &&
-            (!capabilities.hasCapability(NET_CAPABILITY_VALIDATED) ||
-             capabilities.hasCapability(NET_CAPABILITY_VALIDATED))
+            capabilities.hasCapability(NET_CAPABILITY_VALIDATED)
     } else {
         cm.activeNetworkInfo?.isConnected == true
     }
@@ -197,8 +201,11 @@ val retrofit = Retrofit.Builder()
 // Create ApiService
 val apiService = retrofit.create(ApiService::class.java)
 
-// ✅ Usage with coroutines (Retrofit suspend calls are non-blocking for the main thread,
-// but synchronous/blocking calls must never run on the main thread.)
+// ✅ Usage with coroutines.
+// Retrofit/Ktor suspend calls do not block the thread directly (they "block" the coroutine),
+// but by default run on the dispatcher from which they are invoked.
+// Therefore, synchronous/blocking execute() calls and other blocking operations
+// must never run on the main thread — move them to Dispatchers.IO.
 lifecycleScope.launch {
     try {
         val user = apiService.getUser(123)
@@ -234,7 +241,7 @@ button.setOnClickListener {
 }
 ```
 
-Suspend-based APIs of Retrofit/Ktor are designed to avoid blocking the main thread, but if you use synchronous execute() or other blocking clients, always switch to Dispatchers.IO.
+Suspend-based APIs of Retrofit/Ktor are designed to avoid blocking the main thread (using non-blocking I/O and coroutines), but if you use synchronous execute() or other blocking clients, always switch to Dispatchers.IO.
 
 **Manifest permissions**
 
@@ -251,8 +258,9 @@ Suspend-based APIs of Retrofit/Ktor are designed to avoid blocking the main thre
 // ✅ Recommended: use HTTPS
 const val BASE_URL = "https://api.example.com/"
 
-// ⚠️ Note: Cleartext HTTP on Android 9+ is disallowed by default (cleartextTrafficPermitted=false),
-// but can be explicitly allowed via networkSecurityConfig or domain configuration.
+// ⚠️ Note: On Android 9+, cleartext HTTP (http://) is restricted by default
+// (cleartextTrafficPermitted=false) and must be explicitly allowed via
+// usesCleartextTraffic or a networkSecurityConfig when needed.
 const val BASE_URL_HTTP = "http://api.example.com/"
 ```
 
@@ -281,10 +289,10 @@ fun isNetworkAvailable(context: Context): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val network = cm.activeNetwork ?: return false
         val capabilities = cm.getNetworkCapabilities(network) ?: return false
-        // Prefer a network that has INTERNET capability, and when available also VALIDATED
+        // Prefer a network that has INTERNET, and when available also VALIDATED.
+        // Here we require INTERNET and VALIDATED for a "usable" connection.
         capabilities.hasCapability(NET_CAPABILITY_INTERNET) &&
-            (!capabilities.hasCapability(NET_CAPABILITY_VALIDATED) ||
-             capabilities.hasCapability(NET_CAPABILITY_VALIDATED))
+            capabilities.hasCapability(NET_CAPABILITY_VALIDATED)
     } else {
         cm.activeNetworkInfo?.isConnected == true
     }

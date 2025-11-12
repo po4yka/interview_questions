@@ -25,7 +25,7 @@ tags: [difficulty/easy, extension-functions, extensions, kotlin]
 
 ## Ответ (RU)
 
-**Extensions** в Kotlin позволяют добавлять новую функциональность к уже существующим классам, не изменяя их исходный код и не используя наследование. Это включает extension functions и extension properties. Расширения компилируются в статические функции, разрешаются статически (не полиморфно) и не имеют доступа к приватным и protected-членам расширяемого типа.
+**Extensions** в Kotlin позволяют добавлять новую функциональность к уже существующим классам, не изменяя их исходный код и не используя наследование. Это включает extension functions и extension properties. Расширения компилируются в статические функции (в сгенерированном классе вида `FileNameKt`), разрешаются статически (не полиморфно, выбор основан на статическом типе выражения, а не на runtime-типе) и не имеют доступа к приватным и protected-членам расширяемого типа.
 
 ### Extension Functions (Функции-расширения)
 
@@ -118,9 +118,9 @@ public static String reverse(String receiver) {
 
 Ключевые моменты:
 - Класс фактически не модифицируется
-- В байткоде это статические функции
+- В байткоде это статические функции в сгенерированном классе-файле
 - `this` указывает на объект-получатель
-- Разрешаются статически (не полиморфно)
+- Разрешаются статически (не полиморфно, зависит от статического типа)
 
 ### Benefits (Преимущества)
 
@@ -136,15 +136,21 @@ fun String.isPalindrome() = this == this.reversed()
 // Было: утилитный класс
 StringUtils.capitalize(text)
 
-// Стало: extension
-text.capitalize()
+// Стало: extension (пример иллюстративный)
+fun String.capitalizeFirstChar(): String =
+    replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+
+val text = "kotlin"
+println(text.capitalizeFirstChar())
 ```
 
 **3. Контроль области видимости:**
 ```kotlin
-// Можно ограничить доступность расширений областью видимости
+// Можно объявлять функции-расширения с разной видимостью
+internal fun String.internalExt() = this.length
+
 class MyClass {
-    // Доступно только внутри MyClass
+    // Приватная функция с получателем String, используемая только внутри MyClass
     private fun String.myExtension() = this.uppercase()
 }
 ```
@@ -239,7 +245,7 @@ fun MyClass.tryAccess() {
 
 ## Answer (EN)
 
-**Extensions** in Kotlin allow you to **add new functionality to existing classes** without modifying their source code or using inheritance. This includes both extension functions and extension properties. Extensions are compiled to static functions, are resolved statically (not polymorphically), and cannot access private or protected members of the extended type.
+**Extensions** in Kotlin allow you to **add new functionality to existing classes** without modifying their source code or using inheritance. This includes both extension functions and extension properties. Extensions are compiled to static functions (in a generated `FileNameKt` class), are resolved statically (not polymorphically; resolution is based on the static type of the expression, not its runtime type), and cannot access private or protected members of the extended type.
 
 ### Extension Functions
 
@@ -332,9 +338,9 @@ public static String reverse(String receiver) {
 
 **Key points:**
 - Not actually modifying the class
-- Static functions in bytecode
-- `this` refers to receiver object
-- Resolved statically (not polymorphic)
+- Compiled as static functions in a generated file-class (e.g. `FileNameKt`)
+- `this` refers to the receiver object
+- Resolved statically (not polymorphic; based on static type)
 
 ### Benefits
 
@@ -350,15 +356,21 @@ fun String.isPalindrome() = this == this.reversed()
 // Before: utility class
 StringUtils.capitalize(text)
 
-// After: extension
-text.capitalize()
+// After: extension (illustrative example)
+fun String.capitalizeFirstChar(): String =
+    replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+
+val text = "kotlin"
+println(text.capitalizeFirstChar())
 ```
 
 **3. Scope control:**
 ```kotlin
-// Can limit extensions to specific scope
+// Extensions can be declared with different visibilities
+internal fun String.internalExt() = this.length
+
 class MyClass {
-    // Only available inside MyClass's scope
+    // Private function with String receiver, used only inside MyClass
     private fun String.myExtension() = this.uppercase()
 }
 ```

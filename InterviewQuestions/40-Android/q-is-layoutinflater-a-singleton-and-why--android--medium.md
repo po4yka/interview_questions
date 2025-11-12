@@ -17,7 +17,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-mvvm
 - q-home-screen-widgets--android--medium
 - q-what-design-systems-in-android-have-you-worked-with--android--medium
 created: 2025-10-15
@@ -29,8 +28,6 @@ tags:
 - context
 - difficulty/medium
 - system-services
-sources: []
-
 ---
 
 # Вопрос (RU)
@@ -174,8 +171,6 @@ class OkAdapter : RecyclerView.Adapter<ViewHolder>() {
 ## Related Questions
 
 ### Prerequisites / Concepts
-
-- [[c-mvvm]]
 
 ### Prerequisites
 - [[q-viewmodel-pattern--android--easy]]

@@ -19,6 +19,7 @@ status: draft
 moc: moc-android
 related:
 - c-arcore
+- q-android-tv-compose-leanback--android--hard
 created: 2025-11-02
 updated: 2025-11-10
 tags:
@@ -27,13 +28,9 @@ tags:
 - android/networking-http
 - difficulty/hard
 sources:
-- url: "https://developers.google.com/ar/develop/java/cloud-anchors/overview"
-  note: Cloud Anchors overview
-- url: "https://developers.google.com/ar/develop/depth"
-  note: Depth API documentation
-- url: "https://developers.google.com/ar/reference/java"
-  note: ARCore Java API reference
-
+- "https://developers.google.com/ar/develop/java/cloud-anchors/overview"
+- "https://developers.google.com/ar/develop/depth"
+- "https://developers.google.com/ar/reference/java"
 ---
 
 # Вопрос (RU)
@@ -46,16 +43,16 @@ sources:
 
 ## Ответ (RU)
 
-### Краткая версия
-
+## Краткая Версия
 - ARCore-сессия с `Config` (Plane + Depth + Augmented Images, `cloudAnchorMode = ENABLED`) и корректной обработкой lifecycle.
 - Backend (например, Firebase/Cloud Functions/WebRTC-сигналинг) для обмена Cloud Anchor ID и состоянием объектов.
 - Рендеринг через Sceneform / Filament / кастомный GL с использованием Depth API и Light Estimation.
-- Жесткие требования к трекингу, UI-обратная связь, визуализация `Trackable`, логирование метрик (FPS, CPU/GPU, память).
+- Жесткие требования к трекингу, UI-обратная связь, визуализация плоскостей/feature points (`Trackable`), логирование метрик (FPS, CPU/GPU, память).
 
-### Подробная версия
-
+## Подробная Версия
 ### 1. Требования
+
+### Requirements
 
 - Функциональные:
   - Совместная AR-сцена для нескольких пользователей с общими объектами.
@@ -68,18 +65,23 @@ sources:
 
 ### 2. Архитектура
 
-- **Client AR pipeline**: `Session` + `Config` (Plane + Depth + Augmented Images) с проверкой поддержки нужных фич.
+### Architecture
+
+- **Client AR pipeline**: `Session` + `Config` (Plane + Depth + Augmented Images) с проверкой поддержки нужных фич и корректной инициализацией (ARCore availability, разрешения на камеру).
 - **Networking**: backend (Firebase/Cloud Functions/WebRTC) для обмена Cloud Anchor ID и состояния объектов.
 - **Rendering**: Sceneform / Filament / custom GL renderer.
 
 ### 3. Инициализация сессии
 
 ```kotlin
+// Предполагается, что уже проверены доступность ARCore и установлены
+// Google Play Services for AR, а также получено разрешение на камеру.
+
 val session = Session(context)
 
 val config = Config(session).apply {
     planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
-    if (isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
+    if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
         depthMode = Config.DepthMode.AUTOMATIC
     }
     lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
@@ -89,9 +91,10 @@ val config = Config(session).apply {
 session.configure(config)
 ```
 
-- Проверьте установку Google Play Services for AR перед созданием `Session`.
+- Проверьте доступность ARCore (Availability API) и установку Google Play Services for AR до создания `Session`.
+- Запросите и проверьте разрешение на камеру перед запуском AR-сессии.
 - Обрабатывайте `session.resume()`/`pause()` в lifecycle.
-- Проверяйте поддержку Depth/Cloud Anchors/ Augmented Images на устройстве и отключайте соответствующие фичи при отсутствии.
+- Проверяйте поддержку Depth/Cloud Anchors/Augmented Images на устройстве и отключайте соответствующие фичи при отсутствии.
 
 ### 4. Создание и обмен Cloud Anchor
 
@@ -106,7 +109,7 @@ if (cloudAnchor.cloudAnchorState == CloudAnchorState.SUCCESS) {
 ```
 
 - Клиенты слушают backend и вызывают `session.resolveCloudAnchor(anchorId)` для привязки к общей сцене.
-- Управляйте временем жизни: стандартные Cloud Anchors краткосрочные (до 24 ч), для длительного хранения используются дополнительные API/TTL (до 365+ д) — учитывайте выбранный режим в архитектуре.
+- Управляйте временем жизни: у Cloud Anchors есть ограниченный срок действия (типично до 24 ч по умолчанию); для длительного хранения используйте режимы с увеличенным TTL (до ~365 д) и отражайте выбранный режим в архитектуре backend и данных.
 
 ### 5. Depth API и окклюзия
 
@@ -115,14 +118,19 @@ val frame = session.update()
 
 if (frame.camera.trackingState == TrackingState.TRACKING &&
     session.config.depthMode != Config.DepthMode.DISABLED) {
-    val depthImage = frame.acquireDepthImage16Bits()
-    renderer.updateDepth(depthImage)
-    depthImage.close()
+    try {
+        val depthImage = frame.acquireDepthImage16Bits()
+        renderer.updateDepth(depthImage)
+        depthImage.close()
+    } catch (e: NotYetAvailableException) {
+        // Depth данные ещё не готовы в этом кадре
+    }
 }
 ```
 
-- Используйте Raw Depth для собственных шейдеров окклюзии; не забывайте освобождать ресурсы.
-- На устройствах без поддерживаемого Depth API fallback на plane-based occlusion или простые эвристики.
+- Используйте raw depth для собственных шейдеров окклюзии; всегда освобождайте ресурсы.
+- Учитывайте, что глубина доступна только при включённом поддерживаемом режиме Depth (`AUTOMATIC` или `RAW_DEPTH_ONLY`).
+- На устройствах без поддерживаемого Depth API используйте резервный вариант: окклюзия на основе плоскостей или простые эвристики.
 
 ### 6. Рендеринг
 
@@ -132,29 +140,29 @@ if (frame.camera.trackingState == TrackingState.TRACKING &&
 
 ### 7. Трекинг и устойчивость
 
-- Обновляйте анкерные объекты только при `TrackingState.TRACKING`; при `PAUSED` показывайте пользователю подсказки (освещение, текстура, движение устройства).
-- Используйте `Trackable` для визуализации плоскостей и явной обратной связи, где можно разместить якорь.
-- Анализируйте `Camera.getTrackingFailureReason()` и предлагайте корректирующие действия; перезапускайте сессию только если состояние явно не восстанавливается.
+- Обновляйте анкерные объекты только при `TrackingState.TRACKING`; при `PAUSED`/ограниченном трекинге показывайте пользователю подсказки (освещение, текстура, движение устройства).
+- Визуализируйте `Trackable` (плоскости, point cloud), чтобы явно показать, где можно разместить якоря.
+- Анализируйте `Camera.getTrackingFailureReason()` и предлагайте корректирующие действия; пересоздавайте сессию только если состояние явно не восстанавливается.
 
 ### 8. Тестирование
 
 - Тестовые устройства: разные сенсоры и производители (Pixel, Samsung, Xiaomi и др.).
-- Темные/перегруженные сценари; тестируйте окклюзию, latency/надёжность Cloud Anchor обмена.
-- Интегрируйте instrumentation/логирование: FPS, CPU/GPU usage, memory (AR сильно нагружает устройство).
+- Темные/перегруженные/слаботекстурированные/зеркальные сцены; тестируйте окклюзию, задержку и надёжность обмена Cloud Anchors.
+- Интегрируйте instrumentation/логирование: FPS, CPU/GPU usage, memory, сетевые метрики (AR сильно нагружает устройство и сеть).
 
 ---
 
 ## Answer (EN)
 
-### Short Version
-
-- Configure `Session`/`Config` with Plane + Depth + Augmented Images and `cloudAnchorMode = ENABLED`, handle lifecycle correctly, and check feature support per device.
+## Short Version
+- Configure `Session`/`Config` with Plane + Depth + Augmented Images and `cloudAnchorMode = ENABLED`, handle lifecycle correctly, check ARCore availability and camera permissions, and validate feature support per device.
 - Use a backend (e.g., Firebase/Cloud Functions/WebRTC signaling) to share Cloud Anchor IDs and synchronize object state.
 - Render via Sceneform / Filament / custom GL with Depth-based occlusion and Light Estimation, and enforce robust tracking with clear UI feedback and performance instrumentation.
 
-### Detailed Version
-
+## Detailed Version
 ### 1. Requirements
+
+### Requirements
 
 - Functional:
   - Multi-user shared AR scene with common virtual objects.
@@ -167,18 +175,23 @@ if (frame.camera.trackingState == TrackingState.TRACKING &&
 
 ### 2. Architecture
 
-- **Client AR pipeline**: `Session` + `Config` (Plane + Depth + Augmented Images), validating device support for required capabilities.
+### Architecture
+
+- **Client AR pipeline**: `Session` + `Config` (Plane + Depth + Augmented Images), validating device support for required capabilities and doing proper ARCore/permission initialization.
 - **Networking**: backend (Firebase/Cloud Functions/WebRTC) used to exchange Cloud Anchor IDs and shared object state between clients.
 - **Rendering**: Sceneform / Filament / custom GL renderer to draw shared virtual content consistently.
 
 ### 3. Session initialization
 
 ```kotlin
+// Assumes ARCore availability and Google Play Services for AR are verified
+// and camera permission is granted before creating the Session.
+
 val session = Session(context)
 
 val config = Config(session).apply {
     planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
-    if (isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
+    if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
         depthMode = Config.DepthMode.AUTOMATIC
     }
     lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
@@ -188,7 +201,8 @@ val config = Config(session).apply {
 session.configure(config)
 ```
 
-- Ensure Google Play Services for AR is installed before creating the `Session`.
+- Ensure ARCore is supported (Availability API) and Google Play Services for AR is installed before creating the `Session`.
+- Request and confirm camera permission before starting the AR session.
 - Properly handle `session.resume()` / `pause()` in the lifecycle.
 - Check support for Depth, Cloud Anchors, and Augmented Images per device and disable unsupported features.
 
@@ -205,7 +219,7 @@ if (cloudAnchor.cloudAnchorState == CloudAnchorState.SUCCESS) {
 ```
 
 - Other clients subscribe to the backend and call `session.resolveCloudAnchor(anchorId)` to join the shared coordinate frame.
-- Manage anchor lifetime: default Cloud Anchors are short-lived (up to 24 hours); for long-term persistence use extended TTL APIs (up to 365+ days) and reflect that choice in your backend and data model.
+- Manage anchor lifetime: Cloud Anchors have limited TTL (commonly up to 24 hours by default); for long-term persistence use extended TTL/persistent modes (up to ~365 days) and reflect that choice in your backend and data model.
 
 ### 5. Depth API and occlusion
 
@@ -214,43 +228,48 @@ val frame = session.update()
 
 if (frame.camera.trackingState == TrackingState.TRACKING &&
     session.config.depthMode != Config.DepthMode.DISABLED) {
-    val depthImage = frame.acquireDepthImage16Bits()
-    renderer.updateDepth(depthImage)
-    depthImage.close()
+    try {
+        val depthImage = frame.acquireDepthImage16Bits()
+        renderer.updateDepth(depthImage)
+        depthImage.close()
+    } catch (e: NotYetAvailableException) {
+        // Depth data is not yet available for this frame
+    }
 }
 ```
 
 - Use raw depth data in custom occlusion shaders; always release images promptly.
+- Depth is only available with supported depth modes (`AUTOMATIC` or `RAW_DEPTH_ONLY`).
 - On devices without supported Depth API, fall back to plane-based occlusion or simpler heuristics.
 
 ### 6. Rendering
 
 - Use Sceneform (community 1.20+) or Filament for PBR and HDR lighting.
 - Feed ARCore camera `getViewMatrix()` and `getProjectionMatrix()` into your renderer for proper alignment.
-- Apply Light Estimation: spherical harmonics and main directional light to match real-world lighting.
+- Apply Light Estimation: use spherical harmonics and main directional light to match real-world lighting.
 
 ### 7. Tracking and stability
 
 - Update anchors/virtual objects only while `TrackingState.TRACKING`; when tracking is `PAUSED`/limited, show clear guidance (move device, improve lighting, look at textured surfaces).
-- Use `Trackable` visualization (planes, feature points) to give precise feedback where anchors can be placed.
+- Visualize `Trackable` data (planes, point cloud) to give precise feedback where anchors can be placed.
 - Inspect `Camera.getTrackingFailureReason()` and suggest corrective actions; recreate the session only if recovery is not possible.
 
 ### 8. Testing
 
-- Test on multiple OEMs and devices with different sensors.
-- Cover dark/texture-poor/reflective/overloaded scenes; validate occlusion quality and Cloud Anchor sync latency/reliability.
+- Test on multiple OEMs and devices with different sensors (Pixel, Samsung, Xiaomi, etc.).
+- Cover dark/texture-poor/reflective/cluttered scenes; validate occlusion quality and Cloud Anchor sync latency/reliability.
 - Add instrumentation/logging: FPS, CPU/GPU usage, memory, and networking stats to ensure the multi-user experience stays responsive.
 
 ---
 
 ## Дополнительные вопросы (RU)
 - Как синхронизировать состояние объектов (physics/animations) между клиентами?
-- Как хранить и обновлять Cloud Anchors дольше 24 часов?
+- Как хранить и обновлять Cloud Anchors дольше 24 часов (персистентные/расширенный TTL-якоря)?
 - Как адаптировать pipeline под ARCore Geospatial Anchors (outdoor AR)?
 
 ## Follow-ups
 - How to synchronize object state (physics/animations) between clients?
-- How to store and update Cloud Anchors for more than 24 hours?
+- How to store and update Cloud Anchors for more than 24 hours (persistent/extended TTL anchors)?
 - How to adapt the pipeline for ARCore Geospatial Anchors (outdoor AR)?
 
 ## Ссылки (RU)

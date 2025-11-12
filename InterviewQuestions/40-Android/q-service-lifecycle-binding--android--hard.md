@@ -21,7 +21,7 @@ related:
 - q-migration-to-compose--android--medium
 - q-viewmodel-pattern--android--easy
 created: 2025-10-10
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/service
 - difficulty/hard
@@ -31,6 +31,10 @@ tags:
 # Вопрос (RU)
 >
 Объясните жизненный цикл `Service`, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между `startService()` и `bindService()`? Как управлять жизненным циклом сервисов в современном Android (12+)?
+
+# Question (EN)
+>
+Explain the `Service` lifecycle, binding mechanisms, and communication patterns. How do you implement bound services with AIDL? What are the differences between `startService()` and `bindService()`? How do you handle service lifecycle in modern Android (12+)?
 
 ## Ответ (RU)
 `Service` — фундаментальный Android-компонент для фоновых операций со сложным управлением жизненным циклом и несколькими паттернами binding для IPC.
@@ -68,8 +72,9 @@ class DataSyncService : Service() {
 
         // Семантика возвращаемых значений:
         // START_STICKY - перезапустить сервис при убийстве, Intent будет null (для долгоживущих задач)
-        // START_NOT_STICKY - не перезапускать (для некритичных задач)
+        // START_NOT_STICKY - не перезапускать (для некритичных задач или одноразовой работы)
         // START_REDELIVER_INTENT - перезапустить и повторно доставить последний Intent
+        // Для задач синхронизации часто логичен START_NOT_STICKY или START_REDELIVER_INTENT.
         return START_STICKY
     }
 
@@ -109,7 +114,7 @@ class DataSyncService : Service() {
     companion object {
         private const val TAG = "DataSyncService"
         private const val ACTION_START_SYNC = "START_SYNC"
-        private const val ACTION_STOP_SYNC = "STOP_STOP_SYNC"
+        private const val ACTION_STOP_SYNC = "STOP_SYNC"
         private const val ACTION_PAUSE_SYNC = "PAUSE_SYNC"
     }
 }
@@ -445,7 +450,7 @@ class MusicPlayerAidlService : Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder {
-        // IPC-bound-only сервис, возвращаем AIDL Stub
+        // IPC-bound-only сервис (bound-only IPC service), возвращаем AIDL Stub
         return binder
     }
 
@@ -728,6 +733,8 @@ class DownloadForegroundService : Service() {
         when (intent?.action) {
             ACTION_START_DOWNLOAD -> {
                 // Android 12+: startForeground() нужно вызвать в течение 5 секунд
+                // после startForegroundService(), объявить foregroundServiceType и
+                // учитывать ограничения на запуск foreground service из background.
                 startForeground(NOTIFICATION_ID, createNotification())
                 startDownload(intent.getStringExtra(EXTRA_URL))
             }
@@ -843,15 +850,11 @@ class DownloadForegroundService : Service() {
 
 ---
 
-# Question (EN)
->
-Explain the `Service` lifecycle, binding mechanisms, and communication patterns. How do you implement bound services with AIDL? What are the differences between `startService()` and `bindService()`? How do you handle service lifecycle in modern Android (12+)?
-
 ## Answer (EN)
 Services are fundamental Android components for background operations, with complex lifecycle management and multiple binding patterns for inter-process communication.
 
 Key distinction (core to the question):
-- `startService()` / `Context`.startService(): start a started service. It runs independently of the caller; the system keeps it alive until it calls `stopSelf()` / `stopService()` or is killed. On modern Android it is heavily restricted/obsolete for most background work; use foreground services, WorkManager, or job APIs instead.
+- `startService()` / `Context.startService()`: start a started service. It runs independently of the caller; the system keeps it alive until it calls `stopSelf()` / `stopService()` or is killed. On modern Android it is heavily restricted/obsolete for most background work; use foreground services, WorkManager, or job APIs instead.
 - `bindService()`: establish a bound service connection. The service lifecycle is tied to bound clients. It is created on first bind (with `BIND_AUTO_CREATE`) and destroyed when no clients remain (unless also started).
 
 Hybrid services may be both started and bound; they are destroyed only when `stopSelf()` / `stopService()` has been called AND no clients remain.
@@ -884,8 +887,9 @@ class DataSyncService : Service() {
 
         // Return values semantics:
         // START_STICKY - Restart service if killed, with null intent (for ongoing work)
-        // START_NOT_STICKY - Don't restart if killed (for non-critical work)
+        // START_NOT_STICKY - Don't restart if killed (for non-critical or one-off work)
         // START_REDELIVER_INTENT - Restart and redeliver last Intent(s)
+        // For sync-style tasks, START_NOT_STICKY or START_REDELIVER_INTENT is often preferable.
         return START_STICKY
     }
 
@@ -925,7 +929,7 @@ class DataSyncService : Service() {
     companion object {
         private const val TAG = "DataSyncService"
         private const val ACTION_START_SYNC = "START_SYNC"
-        private const val ACTION_STOP_SYNC = "STOP_STOP_SYNC"
+        private const val ACTION_STOP_SYNC = "STOP_SYNC"
         private const val ACTION_PAUSE_SYNC = "PAUSE_SYNC"
     }
 }
@@ -1543,7 +1547,8 @@ class DownloadForegroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START_DOWNLOAD -> {
-                // Android 12+ requires startForeground within 5 seconds of startForegroundService()
+                // Android 12+ requires startForeground within 5 seconds of startForegroundService(),
+                // declare foregroundServiceType, and respect background start restrictions.
                 startForeground(NOTIFICATION_ID, createNotification())
                 startDownload(intent.getStringExtra(EXTRA_URL))
             }

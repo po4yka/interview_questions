@@ -29,6 +29,7 @@ tags:
 - difficulty/medium
 - en
 - ru
+
 ---
 
 # Вопрос (RU)
@@ -297,36 +298,15 @@ In most modern Android Gradle Plugin / KSP setups, these paths are wired automat
 
 ---
 
-## Ссылки (RU)
-- [Документация KSP](https://kotlinlang.org/docs/ksp-overview.html)
-
-## References
-
-- [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
-
-## Дополнительные вопросы (RU)
-
-- [[q-fix-slow-app-startup-legacy--android--hard]]
-- [[q-looper-thread-connection--android--medium]]
-- [[q-macrobenchmark-startup--android--medium]]
-
 ## Follow-ups
 
 - [[q-fix-slow-app-startup-legacy--android--hard]]
 - [[q-looper-thread-connection--android--medium]]
 - [[q-macrobenchmark-startup--android--medium]]
 
-## Связанные вопросы (RU)
+## References
 
-### Предпосылки / Концепции
-
-- [[c-gradle]]
-
-### Связанные (Medium)
-- [[q-kapt-ksp-migration--android--medium]] - Миграция с kapt на KSP
-- [[q-annotation-processing-android--android--medium]] - Аннотации в Android
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-- [[q-build-optimization-gradle--android--medium]] - Оптимизация Gradle-сборки
+- [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 
 ## Related Questions
 
@@ -339,3 +319,13 @@ In most modern Android Gradle Plugin / KSP setups, these paths are wired automat
 - [[q-annotation-processing-android--android--medium]] - Annotations in Android
 - [[q-annotation-processing--android--medium]] - Annotation Processing
 - [[q-build-optimization-gradle--android--medium]] - Gradle build optimization
+
+## Ссылки (RU)
+- [Документация KSP](https://kotlinlang.org/docs/ksp-overview.html)
+## Дополнительные вопросы (RU)
+## Связанные вопросы (RU)
+### Предпосылки / Концепции
+### Связанные (Medium)
+- [[q-kapt-ksp-migration--android--medium]] - Миграция с kapt на KSP
+- [[q-annotation-processing-android--android--medium]] - Аннотации в Android
+- [[q-build-optimization-gradle--android--medium]] - Оптимизация Gradle-сборки

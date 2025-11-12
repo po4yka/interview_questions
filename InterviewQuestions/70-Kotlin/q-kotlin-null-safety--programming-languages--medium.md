@@ -40,12 +40,12 @@ val length = nullable?.length // Возвращает null, если nullable р
 
 3. **Оператор Элвис** `?:`: Предоставляет значение по умолчанию:
 ```kotlin
-val length = nullable?.length ?: 0 // Возвращает 0, если null
+val length = nullable?.length ?: 0 // Возвращает 0, если результат или nullable равны null
 ```
 
 4. **Утверждение not-null** `!!`: Принудительно вызывает NPE (не рекомендуется):
 ```kotlin
-val length = nullable!!.length // Выбрасывает NPE, если null
+val length = nullable!!.length // Выбрасывает NPE, если nullable == null
 ```
 
 5. **Безопасные приведения** `as?`: Безопасное приведение типов без исключения:
@@ -74,12 +74,12 @@ val length = nullable?.length // Returns null if nullable is null
 
 3. **Elvis operator** `?:`: Provide default value:
 ```kotlin
-val length = nullable?.length ?: 0 // Returns 0 if null
+val length = nullable?.length ?: 0 // Returns 0 if the result or nullable is null
 ```
 
 4. **Not-null assertion** `!!`: Force NPE (not recommended):
 ```kotlin
-val length = nullable!!.length // Throws NPE if null
+val length = nullable!!.length // Throws NPE if nullable == null
 ```
 
 5. **Safe casts** `as?`: Cast safely without exception:

@@ -3,7 +3,7 @@ id: lang-036
 title: "Regular Vs Extension Method / Обычный метод против Extension метода"
 aliases: [Regular Vs Extension Method, Обычный метод против Extension метода]
 topic: kotlin
-subtopics: [functions, language-features, extension-functions]
+subtopics: [functions, extension-functions]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -12,12 +12,12 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-hot-vs-cold-flows--programming-languages--medium, q-reference-types-protect-from-deletion--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/easy, extension-functions, functions, kotlin, programming-languages, static-methods]
 ---
 
 # Вопрос (RU)
-> В чём отличие обычного метода от extension метода в Kotlin
+> В чём отличие обычного метода от extension метода в Kotlin?
 
 ---
 
@@ -218,7 +218,7 @@ animal.sound()  // "Какой-то звук" (НЕ "Гав"!)
 // Разрешается на основе объявленного типа (Animal), а не реального (Dog)
 
 val dog: Dog = Dog()
-dog.sound()  // "Гав" (тип Dog)
+dog.sound()  // "Гав"
 
 // Extension функции не полиморфны!
 ```
@@ -1042,16 +1042,33 @@ Choose:
 - Member for core behavior, encapsulation, and polymorphism
 - Extension for utilities, DSLs, and extending existing APIs without modifying them
 
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия этого подхода от Java?
+- Когда бы вы использовали extension функции на практике?
+- Каковы типичные ошибки и подводные камни при использовании extension функций?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Kotlin Документация](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-reference-types-protect-from-deletion--programming-languages--easy]]
+- [[q-solid-principles--software-design--medium]]
+- [[q-hot-vs-cold-flows--programming-languages--medium]]
 
 ## Related Questions
 

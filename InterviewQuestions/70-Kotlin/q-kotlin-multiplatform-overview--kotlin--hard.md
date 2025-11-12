@@ -95,7 +95,7 @@ class UserRepository(
 **2. Платформо-специфичный код**
 
 ```kotlin
-// expect/actual для платформенных API
+// expect/actual для платформенных API (концептуальный пример)
 // commonMain
 expect class DatabaseDriver {
     fun createDatabase(): SqlDriver
@@ -192,7 +192,7 @@ project/
 - **kotlinx.datetime** — дата/время
 
 ```kotlin
-// commonMain - пример использования Ktor
+// commonMain - пример использования Ktor (концептуально)
 class ApiClient {
     private val client = HttpClient {
         install(ContentNegotiation) {
@@ -210,10 +210,10 @@ class ApiClient {
 
 Версии библиотек в примерах условные и могут отличаться от актуальных.
 
-### Конфигурация Gradle (пример)
+### Конфигурация Gradle (пример, зависит от версии Kotlin)
 
 ```kotlin
-// shared/build.gradle.kts
+// shared/build.gradle.kts (упрощённый пример)
 kotlin {
     androidTarget {
         compilations.all {
@@ -291,7 +291,7 @@ kotlin {
 ./gradlew :shared:assembleXCFramework
 ```
 
-**Использование в Swift (концептуально):**
+**Использование в Swift (концептуально)**
 
 ```swift
 import shared
@@ -300,6 +300,8 @@ class ViewController: UIViewController {
     private let repository: LoginRepository = LoginRepository(/* deps */)
 
     func login() {
+        // Конкретный способ вызова suspend-функции зависит от сгенерированных bridge-ов.
+        // Здесь показан упрощённый концептуальный пример.
         repository.login(email: "user@example.com", password: "password") { result, error in
             if let result = result {
                 // Обработка успеха
@@ -309,7 +311,7 @@ class ViewController: UIViewController {
 }
 ```
 
-Suspend-функции из общего кода при экспорте в Swift доступны как функции с completion handler или как async/await (в зависимости от версии Kotlin/Native и настроек interop).
+Suspend-функции из общего кода при экспорте в Swift доступны через сгенерированные bridge-функции: либо как функции с completion handler, либо как async/await (в зависимости от версии Kotlin/Native и настроек interop). Приведённый пример носит концептуальный характер.
 
 ### Обработка платформенных различий
 
@@ -344,13 +346,16 @@ class AppModule {
 
 ### Модель потоков
 
-KMP и корутины предоставляют единый API; конкретные диспетчеры реализуются для каждой платформы.
+KMP и корутины предоставляют единый API; конкретные диспетчеры реализуются для каждой платформы. В общем коде обычно используют абстракции или инъекцию нужных диспетчеров, чтобы не полагаться на платформо-специфичные детали напрямую.
 
 ```kotlin
-// Общий код
-class DataRepository(private val api: ApiClient) {
+// Общий код (концептуальный пример)
+class DataRepository(
+    private val api: ApiClient,
+    private val backgroundDispatcher: CoroutineDispatcher
+) {
     suspend fun fetchData(): Data {
-        return withContext(Dispatchers.IO) {
+        return withContext(backgroundDispatcher) {
             api.getData()
         }
     }
@@ -382,7 +387,7 @@ class ViewModel {
 
 ### Преимущества
 
-1. Переиспользование кода: 60–90% общей логики
+1. Переиспользование кода: значительная доля общей логики (часто 60–90%)
 2. Типобезопасность: проверки на этапе компиляции для всех платформ
 3. Производительность: близкая к нативной за счёт JVM/Native/JS таргетов
 4. Постепенное внедрение: можно интегрировать KMP в существующие проекты
@@ -415,13 +420,16 @@ class LoginRepository(
             analytics.logEvent("login_success")
             Result.success(response.user)
         } catch (e: Exception) {
-            analytics.logEvent("login_failure", mapOf("error" to (e.message ?: "unknown")))
+            analytics.logEvent(
+                "login_failure",
+                mapOf("error" to (e.message ?: "unknown"))
+            )
             Result.failure(e)
         }
     }
 }
 
-// expect/actual для хранения токена
+// expect/actual для хранения токена (концептуально)
 expect class TokenStorage {
     suspend fun saveToken(token: String)
     suspend fun getToken(): String?
@@ -429,7 +437,7 @@ expect class TokenStorage {
 
 // Android
 actual class TokenStorage(private val context: Context) {
-    private val dataStore = context.dataStore
+    private val dataStore = context.dataStore // предполагается предварительное определение delegate
 
     actual suspend fun saveToken(token: String) {
         dataStore.edit { it[TOKEN_KEY] = token }
@@ -452,7 +460,7 @@ actual class TokenStorage {
 }
 ```
 
-**Краткое содержание**: Kotlin Multiplatform позволяет разделять код между платформами с помощью механизма `expect` / `actual`. Общий код компилируется в платформо-специфичные таргеты (JVM для Android, Native для iOS, JS и др.). Обычно делят бизнес-логику, слой данных и модели, а UI оставляют нативным. Поддерживается постепенное внедрение при сохранении производительности, близкой к нативной.
+**Краткое содержание**: Kotlin Multiplatform позволяет разделять код между платформами с помощью механизма `expect` / `actual`. Общий код компилируется в платформо-специфичные таргеты (JVM для Android, Native для iOS, JS и др.). Обычно делят бизнес-логику, слой данных и модели, а UI оставляют нативным. Примеры конфигурации Gradle и interop носят концептуальный характер и зависят от версии Kotlin и настроек проекта.
 
 ---
 
@@ -517,7 +525,7 @@ Shared code holds business logic, data access, and models.
 **2. Platform-Specific Code**
 
 ```kotlin
-// expect/actual for platform APIs
+// expect/actual for platform APIs (conceptual example)
 // commonMain
 expect class DatabaseDriver {
     fun createDatabase(): SqlDriver
@@ -614,7 +622,7 @@ Popular KMP libraries:
 - **kotlinx.datetime** — Date/time
 
 ```kotlin
-// commonMain - Ktor usage
+// commonMain - Ktor usage (conceptual)
 class ApiClient {
     private val client = HttpClient {
         install(ContentNegotiation) {
@@ -630,12 +638,12 @@ class ApiClient {
 }
 ```
 
-(Dependency versions omitted intentionally; use current stable versions.)
+(Dependency versions are intentionally omitted; use current stable versions.)
 
-### Gradle Configuration (Example)
+### Gradle Configuration (Example, version-dependent)
 
 ```kotlin
-// shared/build.gradle.kts
+// shared/build.gradle.kts (simplified example)
 kotlin {
     androidTarget {
         compilations.all {
@@ -722,6 +730,8 @@ class ViewController: UIViewController {
     private let repository: LoginRepository = LoginRepository(/* deps */)
 
     func login() {
+        // The exact way to call the suspend function depends on generated bridges.
+        // This is a simplified conceptual example.
         repository.login(email: "user@example.com", password: "password") { result, error in
             if let result = result {
                 // Handle success
@@ -731,7 +741,7 @@ class ViewController: UIViewController {
 }
 ```
 
-Suspend functions from Kotlin are exposed to Swift as completion-based APIs or async/await functions depending on interop configuration.
+Suspend functions from Kotlin are exposed to Swift via generated bridge functions as completion-based APIs or async/await functions, depending on Kotlin/Native version and interop configuration. The example above is conceptual.
 
 ### Handling Platform Differences
 
@@ -762,31 +772,34 @@ class AppModule {
 }
 ```
 
-(Helper functions like `createDatabase` are expected/actual or platform-provided; shown conceptually.)
+(Helper functions like `createDatabase` are implemented via expect/actual or provided per platform; conceptual example.)
 
 ### Threading Model
 
-KMP coroutines provide a unified API; underlying dispatchers are implemented per platform.
+KMP coroutines provide a unified API; concrete dispatchers are implemented per platform. In shared code you typically inject or abstract dispatchers instead of relying directly on platform-specific ones.
 
 ```kotlin
-// Common code
-class DataRepository(private val api: ApiClient) {
+// Common code (conceptual example)
+class DataRepository(
+    private val api: ApiClient,
+    private val backgroundDispatcher: CoroutineDispatcher
+) {
     suspend fun fetchData(): Data {
-        return withContext(Dispatchers.IO) {
+        return withContext(backgroundDispatcher) {
             api.getData()
         }
     }
 }
 ```
 
-On iOS, Kotlin/Native generates appropriate bridge functions so that suspend functions can be called from Swift via callbacks or async/await. The coroutine model itself is not "different" on iOS, but you must respect the threading rules of Kotlin/Native and the platform UI thread.
+On iOS, Kotlin/Native generates appropriate bridge functions so that suspend functions can be called from Swift via callbacks or async/await. You must respect each platform's threading and UI-thread rules.
 
 ### Memory Management
 
-Kotlin/JVM uses GC; Kotlin/Native (including iOS) has its own memory management (new memory manager in recent versions). General guidelines for shared code:
+Kotlin/JVM uses GC; Kotlin/Native (including iOS) has its own memory management (with a new memory manager in recent versions). General guidelines for shared code:
 
 - Avoid unnecessary long-lived references to platform objects or callbacks.
-- Clear callbacks/listeners when they are no longer needed to prevent leaks across all platforms.
+- Clear callbacks/listeners when they are no longer needed to prevent leaks.
 
 ```kotlin
 class ViewModel {
@@ -804,18 +817,18 @@ class ViewModel {
 
 ### Advantages
 
-1. Code Reuse: 60–90% of shared logic
-2. Type Safety: Compile-time checks across platforms
-3. Performance: Close-to-native performance via proper backends (JVM/Native/JS)
-4. Gradual Adoption: Can be integrated incrementally into existing apps
-5. Kotlin Ecosystem: Leverage common libraries across platforms
+1. Code Reuse: significant shared logic (often 60–90%)
+2. Type Safety: compile-time checks across platforms
+3. Performance: close-to-native performance via JVM/Native/JS backends
+4. Gradual Adoption: can be integrated incrementally into existing apps
+5. Kotlin Ecosystem: reuse Kotlin libraries across platforms
 
 ### Limitations
 
-1. iOS Framework Size: May be larger than a purely native implementation
-2. Learning Curve: Requires understanding Kotlin and multiple platforms
-3. Debugging: Cross-platform debugging can be more complex
-4. Library Support: Not all libraries are KMP-ready
+1. iOS Framework Size: framework/xcframework may be larger than a purely native implementation
+2. Learning Curve: requires understanding Kotlin and multiple platform targets
+3. Debugging: cross-platform debugging can be more complex
+4. Library Support: not all libraries are KMP-ready
 5. UI Sharing: UI is typically platform-specific (unless using separate multiplatform UI solutions)
 
 ### Real-World Example: Login Flow (Conceptual)
@@ -837,13 +850,16 @@ class LoginRepository(
             analytics.logEvent("login_success")
             Result.success(response.user)
         } catch (e: Exception) {
-            analytics.logEvent("login_failure", mapOf("error" to (e.message ?: "unknown")))
+            analytics.logEvent(
+                "login_failure",
+                mapOf("error" to (e.message ?: "unknown"))
+            )
             Result.failure(e)
         }
     }
 }
 
-// expect/actual for token storage
+// expect/actual for token storage (conceptual)
 expect class TokenStorage {
     suspend fun saveToken(token: String)
     suspend fun getToken(): String?
@@ -851,7 +867,7 @@ expect class TokenStorage {
 
 // Android
 actual class TokenStorage(private val context: Context) {
-    private val dataStore = context.dataStore
+    private val dataStore = context.dataStore // assumes delegated property is defined elsewhere
 
     actual suspend fun saveToken(token: String) {
         dataStore.edit { it[TOKEN_KEY] = token }
@@ -865,7 +881,7 @@ actual class TokenStorage(private val context: Context) {
 // iOS
 actual class TokenStorage {
     actual suspend fun saveToken(token: String) {
-        NSUserDefaults.standardUserDefaults.setObject(token, forKey = "auth_token")
+        NSUserDefaults.standardUserDefaults.setObject(token, forKey: "auth_token")
     }
 
     actual suspend fun getToken(): String? {
@@ -874,7 +890,7 @@ actual class TokenStorage {
 }
 ```
 
-**English Summary**: Kotlin Multiplatform enables sharing code across platforms using the `expect` / `actual` mechanism. Common code compiles to platform-specific targets (JVM for Android, Native for iOS, JS, etc.). You typically share business logic, data layer, and models while keeping UI platform-specific. It uses Kotlin/JVM, Kotlin/Native, and Kotlin/JS backends, supports gradual adoption, and maintains near-native performance.
+**English Summary**: Kotlin Multiplatform enables sharing code across platforms using the `expect` / `actual` mechanism. Common code compiles to platform-specific targets (JVM for Android, Native for iOS, JS, etc.). You typically share business logic, data layer, and models while keeping UI platform-specific. The Gradle and interop examples are conceptual and depend on Kotlin version and project configuration.
 
 ## Follow-ups
 

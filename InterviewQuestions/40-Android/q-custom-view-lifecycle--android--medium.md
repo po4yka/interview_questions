@@ -16,16 +16,17 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-custom-views
+- c-android-view-system
+- q-custom-view-state-saving--android--medium
 created: 2025-10-21
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/lifecycle, android/ui-graphics, android/ui-views, custom-views, difficulty/medium]
 sources: []
 
 ---
 
 # Вопрос (RU)
-> Каков жизненный цикл Custom `View` в Android? Какие методы вызываются при создании, отрисовке и удалении view?
+> Каков жизненный цикл Custom `View` в Android? Какие методы вызываются при создании, отрисовке и удалении `View`?
 
 # Question (EN)
 > What is the Custom `View` lifecycle in Android? Which methods are called during view creation, drawing, and removal?
@@ -34,13 +35,13 @@ sources: []
 
 ## Ответ (RU)
 
-**`View` Lifecycle** описывает ключевые этапы от создания до удаления view. Упрощенная типичная последовательность для уже добавленной в иерархию view выглядит так:
+**`View` Lifecycle** описывает ключевые этапы от создания до удаления `View`. Упрощенная типичная последовательность для уже добавленной в иерархию `View` выглядит так:
 
 ```
 Constructor → onAttachedToWindow → onMeasure → onLayout → onSizeChanged (при изменении размеров) → onDraw → onDetachedFromWindow
 ```
 
-Важно: `onMeasure`, `onLayout` и `onDraw` могут вызываться многократно в течение жизни view. `onAttachedToWindow`/`onDetachedFromWindow` связаны с присоединением к окну, а не с каждым циклом измерения/отрисовки.
+Важно: `onMeasure`, `onLayout` и `onDraw` могут вызываться многократно в течение жизни `View`. `onAttachedToWindow`/`onDetachedFromWindow` связаны с присоединением к окну, а не с каждым циклом измерения/отрисовки.
 
 ### Фазы Жизненного Цикла
 
@@ -112,7 +113,7 @@ override fun onMeasure(widthSpec: Int, heightSpec: Int) {
 
 #### 5. onSizeChanged — Реакция на изменение размеров
 
-Вызывается после того, как размер view был вычислен или изменился. Удобное место для пересчета геометрии, кэшированных путей, шейдеров и т.п., если они зависят от ширины/высоты.
+Вызывается после того, как размер `View` был вычислен или изменился. Удобное место для пересчета геометрии, кэшированных путей, шейдеров и т.п., если они зависят от ширины/высоты.
 
 #### 6. onDraw — Отрисовка
 
@@ -135,10 +136,10 @@ override fun onDraw(canvas: Canvas) {
 
 ### Ключевые правила
 
-1. **Constructor**: инициализация `Paint`, атрибутов и ресурсов; не использовать размеры view.
+1. **Constructor**: инициализация `Paint`, атрибутов и ресурсов; не использовать размеры `View`.
 2. **onAttachedToWindow**: запуск анимаций, регистрация listeners/подписок.
 3. **onMeasure**: всегда корректно задавать размеры (`setMeasuredDimension()` или super-реализация).
-4. **onLayout** (для `ViewGroup`): размещать дочерние view.
+4. **onLayout** (для `ViewGroup`): размещать дочерние `View`.
 5. **onSizeChanged**: пересчет зависящей от размеров геометрии и данных.
 6. **onDraw**: минимизировать создание объектов и тяжелые операции в hot path.
 7. **onDetachedFromWindow**: остановить анимации, отписаться от listeners, освободить ресурсы.
@@ -162,13 +163,13 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 
 ## Answer (EN)
 
-**`View` Lifecycle** describes the key stages from creation to removal of a view. A simplified typical sequence for a view already added to a hierarchy looks like:
+**`View` Lifecycle** describes the key stages from creation to removal of a `View`. A simplified typical sequence for a `View` already added to a hierarchy looks like:
 
 ```
 Constructor → onAttachedToWindow → onMeasure → onLayout → onSizeChanged (when size changes) → onDraw → onDetachedFromWindow
 ```
 
-Note: `onMeasure`, `onLayout`, and `onDraw` can be called many times during the view's lifetime. `onAttachedToWindow` / `onDetachedFromWindow` are tied to window attachment, not to each measure/draw pass.
+Note: `onMeasure`, `onLayout`, and `onDraw` can be called many times during the `View`'s lifetime. `onAttachedToWindow` / `onDetachedFromWindow` are tied to window attachment, not to each measure/draw pass.
 
 ### Lifecycle Phases
 
@@ -240,7 +241,7 @@ Not required for simple `View` subclasses. `ViewGroup` uses it to position child
 
 #### 5. onSizeChanged — Size Change Handling
 
-Called after the view's size has been determined or changed. A good place to recompute geometry, paths, shaders, etc., that depend on `width`/`height`.
+Called after the `View`'s size has been determined or changed. A good place to recompute geometry, paths, shaders, etc., that depend on `width`/`height`.
 
 #### 6. onDraw — Drawing
 
@@ -263,7 +264,7 @@ override fun onDraw(canvas: Canvas) {
 
 ### Key Rules
 
-1. **Constructor**: initialize `Paint`, attributes, and resources; do not rely on view dimensions.
+1. **Constructor**: initialize `Paint`, attributes, and resources; do not rely on `View` dimensions.
 2. **onAttachedToWindow**: start animations, register listeners/subscriptions.
 3. **onMeasure**: always provide correct dimensions (`setMeasuredDimension()` or super implementation).
 4. **onLayout** (for `ViewGroup`): position child views.
@@ -295,7 +296,7 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 - Что произойдет, если забыть вызвать `setMeasuredDimension()` в `onMeasure`?
 - Чем `invalidate()` отличается от `requestLayout()` и когда использовать каждый из них?
 - Почему выделение объектов в `onDraw` проблематично, даже с современными сборщиками мусора?
-- Как сохранять и восстанавливать состояние кастомной view при изменении конфигурации?
+- Как сохранять и восстанавливать состояние кастомной `View` при изменении конфигурации?
 - Какова роль `onSizeChanged()` и когда он вызывается относительно `onMeasure`/`onLayout`?
 
 ## Follow-ups
@@ -308,13 +309,13 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 
 ## Ссылки (RU)
 
-- [[c-custom-views]]
+- [[c-android-view-system]]
 - https://developer.android.com/guide/topics/ui/custom-components
 - https://developer.android.com/reference/android/view/View
 
 ## References
 
-- [[c-custom-views]]
+- [[c-android-view-system]]
 - https://developer.android.com/guide/topics/ui/custom-components
 - https://developer.android.com/reference/android/view/View
 

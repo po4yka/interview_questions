@@ -2,30 +2,23 @@
 id: kotlin-039
 title: Coroutine Context Explained / CoroutineContext объяснение
 aliases: [Coroutine Context Explained, CoroutineContext объяснение]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines, coroutine-context]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: ru
 language_tags: [en, ru]
 source: ""
 source_note: ""
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-inline-value-classes-performance--kotlin--medium, q-kotlin-channels--kotlin--medium]
-
-# Timestamps
 created: 2025-10-06
-updated: 2025-11-09
-
+updated: 2025-11-11
 tags: [async-programming, concurrency, coroutine-context, coroutines, difficulty/medium, kotlin]
+
 ---
+
 # Вопрос (RU)
 > Что такое CoroutineContext и какие у него основные элементы?
 
@@ -185,7 +178,7 @@ scope.launch {
 }
 ```
 
-Важно: `CoroutineExceptionHandler` участвует в обработке неперехваченных исключений корней корутин в его контексте, включая дочерние корутины, согласно правилам структурированной конкурентности.
+Важно: `CoroutineExceptionHandler` участвует в обработке неперехваченных исключений корневых корутин в его контексте, включая дочерние корутины, согласно правилам структурированной конкурентности.
 
 **4. CoroutineName** — Назначает имя корутине для отладки.
 
@@ -207,6 +200,8 @@ scope.launch(CoroutineName("NetworkCall")) {
     // Пример: DefaultDispatcher-worker-1 @NetworkCall#1
 }
 ```
+
+Примечание: помимо этих часто используемых элементов, в контекст также входят стандартные элементы вроде `ContinuationInterceptor` и других `CoroutineContext.Element` в библиотеке.
 
 ### Композиция Контекста
 
@@ -427,10 +422,10 @@ val newContext = context.minusKey(CoroutineName)
 ### Ключевые Моменты
 
 1. `CoroutineContext` неизменяем — операции возвращают новые контексты.
-2. Элементы индексируются по `Key` — по одному элементу на ключ.
+2. Элементы индексируются по `Key` — по одному элементу на каждый ключ.
 3. Композиция через `+` — поздние элементы переопределяют ранние.
 4. Наследование от родителя — дочерние корутины получают новый `Job` как дочерний, если родительский `Job` присутствует.
-5. Четыре часто используемых элемента: `Job`, `CoroutineDispatcher`, `CoroutineExceptionHandler`, `CoroutineName`.
+5. Часто используемые элементы: `Job`, `CoroutineDispatcher`, `CoroutineExceptionHandler`, `CoroutineName` (этот список не исчерпывающий).
 6. Структурированная конкурентность — обеспечивается иерархией `Job` и наследованием контекста.
 
 ---
@@ -582,7 +577,7 @@ scope.launch(CoroutineName("Root")) {
 }
 
 val deferred = scope.async(CoroutineName("AsyncChild")) {
-    throw RuntimeException("Async failure")  // Not handled by handler; will surface on await()
+    throw RuntimeException("Async failure")  // Not handled by handler directly
 }
 
 scope.launch {
@@ -594,7 +589,7 @@ scope.launch {
 }
 ```
 
-Important: `CoroutineExceptionHandler` participates in handling uncaught exceptions of a root coroutine in its context, including exceptions from its child coroutines, according to structured concurrency rules.
+Important: `CoroutineExceptionHandler` participates in handling uncaught exceptions of root coroutines in its context, including exceptions from their child coroutines, according to structured concurrency rules.
 
 #### 4. CoroutineName - Debugging
 
@@ -619,6 +614,8 @@ scope.launch(CoroutineName("NetworkCall")) {
     // Example: DefaultDispatcher-worker-1 @NetworkCall#1
 }
 ```
+
+Note: besides these commonly used elements, the context also includes standard elements such as `ContinuationInterceptor` and other `CoroutineContext.Element` implementations in the library.
 
 ### Context Composition
 
@@ -665,7 +662,7 @@ scope.launch {
 }
 ```
 
-New `Job` is created for each `launch`/`async`, as a child of the parent `Job` if present:
+A new `Job` is created for each `launch`/`async`, as a child of the parent `Job` if present:
 
 ```kotlin
 val scope = CoroutineScope(Job())
@@ -801,7 +798,7 @@ class UserRepository(
 
 ### Common Patterns
 
-1. Context switching:
+1. `Context` switching:
 
 ```kotlin
 val scope = CoroutineScope(Dispatchers.Main)
@@ -839,10 +836,10 @@ val newContext = context.minusKey(CoroutineName)
 ### Key Takeaways
 
 1. `CoroutineContext` is immutable — operations return new contexts.
-2. Elements are indexed by `Key` — unique per element type.
+2. Elements are indexed by `Key` — one element per key.
 3. Composition via `+` — later elements override earlier ones with the same key.
 4. Inheritance from parent — each child gets a new `Job` as a child of the parent `Job` if present.
-5. Four commonly used elements: `Job`, `CoroutineDispatcher`, `CoroutineExceptionHandler`, `CoroutineName`.
+5. Commonly used elements: `Job`, `CoroutineDispatcher`, `CoroutineExceptionHandler`, `CoroutineName` (this list is not exhaustive).
 6. Structured concurrency — enforced through `Job` hierarchy and context inheritance.
 
 ---
@@ -861,15 +858,15 @@ val newContext = context.minusKey(CoroutineName)
 
 ## Ссылки (RU)
 
-- [Kotlin Coroutines Guide - Coroutine Context](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [CoroutineContext API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
+- [Kotlin `Coroutines` Guide - `Coroutine` `Context`](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [CoroutineContext (stdlib) API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/)
 - [[c-kotlin]]
 - [[c-coroutines]]
 
 ## References
 
-- [Kotlin Coroutines Guide - Coroutine Context](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [CoroutineContext API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
+- [Kotlin `Coroutines` Guide - `Coroutine` `Context`](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [CoroutineContext (stdlib) API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/)
 - [[c-kotlin]]
 - [[c-coroutines]]
 
@@ -893,14 +890,14 @@ val newContext = context.minusKey(CoroutineName)
 ## Related Questions
 
 ### Related (Medium)
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutines
-- [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutines
-- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
-- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutines`
+- [[q-coroutine-builders-comparison--kotlin--medium]] - `Coroutines`
+- [[q-callback-to-coroutine-conversion--kotlin--medium]] - `Coroutines`
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - `Coroutines`
 
 ### Advanced (Harder)
-- [[q-actor-pattern--kotlin--hard]] - Coroutines
-- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
+- [[q-actor-pattern--kotlin--hard]] - `Coroutines`
+- [[q-fan-in-fan-out--kotlin--hard]] - `Coroutines`
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction

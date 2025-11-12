@@ -18,6 +18,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+  - c-android-profiling
   - q-android-performance-measurement-tools--android--medium
 created: 2025-10-20
 updated: 2025-11-10
@@ -73,6 +74,8 @@ sources:
 - Внедрите runtime метрики по энергопотреблению: длительность wakelock, частота задач, сетевые паттерны, собственные логи.
 - Настройте regression-тесты (например, macrobenchmark с оценкой косвенных energy-показателей).
 - Периодически анализируйте `dumpsys batterystats` и новые bugreport для отслеживания изменений во времени.
+
+Также см. [[c-android-profiling]].
 
 ---
 

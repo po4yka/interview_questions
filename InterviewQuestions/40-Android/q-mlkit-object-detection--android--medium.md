@@ -48,13 +48,13 @@ tags:
 
 ML Kit предоставляет предобученные модели для визуального распознавания без необходимости ML-экспертизы.
 
-(Примечание: численные значения для количества меток и задержек являются ориентировочными и могут меняться в зависимости от версии ML Kit и устройства.)
+(Примечание: численные значения для количества меток и задержек являются ориентировочными и могут меняться в зависимости от версии ML Kit и устройства. Облачные API и их статус (поддерживаются/устарели/перенесены) необходимо всегда уточнять в актуальной документации Google.)
 
 ### Маркировка Изображений
 
 **On-Device vs Cloud:**
 - **On-Device**: порядка сотен стандартных меток, офлайн-работа, низкая задержка (десятки-сотни мс), лучше для приватности
-- **Cloud**: значительно больше меток и выше точность, требует интернет, больше задержка (сотни-тысячи мс); некоторые облачные API могли быть изменены или устареть, необходимо проверять актуальную документацию
+- **Cloud**: значительно больше меток и выше точность, требует интернет, больше задержка (сотни-тысячи мс); часть облачных ML Kit / Cloud Vision API была изменена или устарела, поэтому перед использованием гибридного подхода обязательно проверяйте актуальные рекомендации и доступность API
 
 ✅ **Лучшая практика - On-Device маркировка:**
 ```kotlin
@@ -98,6 +98,8 @@ suspend fun labelImageHybrid(
 }
 ```
 
+(Примечание: пример гибридного подхода предполагает, что вы используете поддерживаемые на момент реализации облачные API.)
+
 ### Обнаружение Объектов
 
 **Режимы:**
@@ -132,7 +134,8 @@ data class ObjectInfo(
 
 ✅ **Отслеживание движения (упрощённый пример, вспомогательные типы опущены):**
 ```kotlin
-// TrackedHistory должен содержать историю позиций и время последнего появления объекта.
+// TrackedHistory - ваш собственный тип: должен содержать историю позиций
+// и timestamp последнего появления объекта. Это не часть ML Kit API.
 class ObjectTracker {
     private val tracked = mutableMapOf<Int, TrackedHistory>()
 
@@ -199,13 +202,15 @@ class BarcodeScanningManager {
 
 ### Интеграция Камеры В Реальном Времени
 
-✅ **CameraX + ML Kit:**
+✅ **CameraX + ML Kit (пример для on-device Image Labeling):**
 ```kotlin
 class MLKitCameraAnalyzer(
     private val context: Context,
     private val lifecycleOwner: LifecycleOwner,
     private val previewView: PreviewView
 ) {
+    // В этом примере используется ImageLabeler; для Object Detection или Barcode Scanning
+    // создайте и передайте соответствующий detector.
     private var detector: ImageLabeler? = null
     private val cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -261,7 +266,7 @@ class MLKitCameraAnalyzer(
 }
 ```
 
-✅ **Compose UI с ML Kit:**
+✅ **Compose UI с ML Kit (упрощённый пример взаимодействия ViewModel и CameraX):**
 ```kotlin
 @Composable
 fun MLKitScannerScreen(viewModel: MLKitScannerViewModel = viewModel()) {
@@ -281,6 +286,8 @@ fun MLKitScannerScreen(viewModel: MLKitScannerViewModel = viewModel()) {
         AndroidView(
             factory = { ctx ->
                 PreviewView(ctx).apply {
+                    // Предполагается, что setupCamera внутри ViewModel вызывает
+                    // логику, аналогичную MLKitCameraAnalyzer / bindToLifecycle.
                     viewModel.setupCamera(ctx, lifecycleOwner, this)
                 }
             },
@@ -319,8 +326,8 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 
 **Выбор модели:**
 - ✅ On-device для реального времени, офлайн и приватности
-- ✅ Cloud для более высокой точности и большего покрытия меток (при наличии и актуальности соответствующих API)
-- ✅ Гибридный подход с fallback на on-device
+- ✅ Cloud для более высокой точности и большего покрытия меток (при условии актуальной поддержки соответствующих API)
+- ✅ Гибридный подход с fallback на on-device (после проверки статуса облачных сервисов)
 
 **Оптимизация производительности:**
 - ✅ `STRATEGY_KEEP_ONLY_LATEST` для backpressure
@@ -329,7 +336,7 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 - ✅ Всегда вызывать `imageProxy.close()`
 
 **Управление ресурсами:**
-- ✅ Вызывать `detector.close()` при уничтожении
+- ✅ Вызывать `detector.close()` при уничтожении (реализует Closeable и освобождает внутренние ресурсы)
 - ✅ Использовать `ExecutorService` для фоновой обработки
 - ✅ Останавливать камеру при неактивности
 
@@ -339,7 +346,7 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 - ✅ Санитизировать URL перед открытием и относиться к данным из штрих-кодов как к недоверенным
 
 ❌ **Распространённые ошибки:**
-- ❌ Не закрывать детекторы → утечки памяти
+- ❌ Не закрывать детекторы → утечки ресурсов и памяти
 - ❌ Обрабатывать каждый кадр → низкая производительность
 - ❌ Неправильно выбирать режим детектора (STREAM vs SINGLE_IMAGE)
 - ❌ Не обрабатывать разрешения камеры → краши
@@ -351,13 +358,13 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 
 ML Kit provides pre-trained models for visual recognition tasks without requiring ML expertise.
 
-(Note: label counts and latency ranges below are approximate and may change with ML Kit version and device.)
+(Note: label counts and latency ranges below are approximate and may change with ML Kit version and device. Always verify current Google documentation for the latest status of ML Kit and any cloud-based APIs.)
 
 ### Image Labeling
 
 **On-Device vs Cloud:**
 - **On-Device**: on the order of hundreds of standard labels, works offline, low latency (tens-hundreds of ms), better for privacy
-- **Cloud**: significantly more labels and higher accuracy, requires internet, higher latency (hundreds-thousands of ms); some cloud APIs may have changed or been deprecated, always check current documentation
+- **Cloud**: significantly more labels and often higher accuracy, requires internet, higher latency (hundreds-thousands of ms); parts of the legacy ML Kit / Cloud Vision APIs have changed or been deprecated, so verify current recommendations and API availability before adopting a hybrid architecture
 
 ✅ **Best Practice - On-Device labeling:**
 ```kotlin
@@ -401,6 +408,8 @@ suspend fun labelImageHybrid(
 }
 ```
 
+(Note: this hybrid example assumes that the cloud-based API you integrate is currently supported.)
+
 ### Object Detection
 
 **Modes:**
@@ -435,7 +444,8 @@ data class ObjectInfo(
 
 ✅ **Motion tracking (simplified, helper types omitted):**
 ```kotlin
-// TrackedHistory should keep position history and last-seen timestamp for an object.
+// TrackedHistory is your own type: it should track position history
+// and last-seen timestamp for an object. It is not part of ML Kit API.
 class ObjectTracker {
     private val tracked = mutableMapOf<Int, TrackedHistory>()
 
@@ -502,13 +512,15 @@ class BarcodeScanningManager {
 
 ### Real-Time Camera Integration
 
-✅ **CameraX + ML Kit:**
+✅ **CameraX + ML Kit (example for on-device Image Labeling):**
 ```kotlin
 class MLKitCameraAnalyzer(
     private val context: Context,
     private val lifecycleOwner: LifecycleOwner,
     private val previewView: PreviewView
 ) {
+    // This example uses an ImageLabeler; for Object Detection or Barcode Scanning
+    // instantiate and use the corresponding detector instead.
     private var detector: ImageLabeler? = null
     private val cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -564,7 +576,7 @@ class MLKitCameraAnalyzer(
 }
 ```
 
-✅ **Compose UI with ML Kit:**
+✅ **Compose UI with ML Kit (simplified example of ViewModel + CameraX coordination):**
 ```kotlin
 @Composable
 fun MLKitScannerScreen(viewModel: MLKitScannerViewModel = viewModel()) {
@@ -584,6 +596,8 @@ fun MLKitScannerScreen(viewModel: MLKitScannerViewModel = viewModel()) {
         AndroidView(
             factory = { ctx ->
                 PreviewView(ctx).apply {
+                    // Assumes setupCamera in ViewModel wires CameraX + ML Kit,
+                    // similar to MLKitCameraAnalyzer / bindToLifecycle.
                     viewModel.setupCamera(ctx, lifecycleOwner, this)
                 }
             },
@@ -622,8 +636,8 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 
 **Model selection:**
 - ✅ On-device for real-time, offline usage, and privacy
-- ✅ Cloud for higher accuracy and broader label coverage (subject to current API availability)
-- ✅ Hybrid approach with on-device fallback
+- ✅ Cloud for higher accuracy and broader label coverage (subject to current API support)
+- ✅ Hybrid approach with on-device fallback (after confirming cloud service status)
 
 **Performance optimization:**
 - ✅ `STRATEGY_KEEP_ONLY_LATEST` for backpressure
@@ -632,7 +646,7 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 - ✅ Always call `imageProxy.close()`
 
 **Resource management:**
-- ✅ Call `detector.close()` on destroy
+- ✅ Call `detector.close()` on destroy (it implements Closeable and releases internal resources)
 - ✅ Use `ExecutorService` for background processing
 - ✅ Stop camera when inactive
 
@@ -642,9 +656,9 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 - ✅ Sanitize URLs before opening; treat all barcode-derived data as untrusted
 
 ❌ **Common pitfalls:**
-- ❌ Not closing detectors → memory leaks
+- ❌ Not closing detectors → resource and memory leaks
 - ❌ Processing every frame → poor performance
-- ❌ Wrong detector mode (STREAM vs SINGLE_IMAGE)
+- ❌ Using wrong detector mode (STREAM vs SINGLE_IMAGE)
 - ❌ Not handling camera permissions → crashes
 - ❌ Not releasing ImageProxy → camera freeze
 

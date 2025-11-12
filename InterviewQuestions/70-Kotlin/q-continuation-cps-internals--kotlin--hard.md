@@ -7,17 +7,19 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [advanced, continuation, coroutines, cps, difficulty/hard, internals, kotlin, state-machine]
 aliases: ["Continuation and CPS internals in Kotlin", "Continuation и CPS: внутренняя работа suspend-функций"]
 question_kind: theory
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 subtopics:
-  - continuation
-  - coroutines
-  - state-machine
+- continuation
+- coroutines
+- state-machine
+
 ---
+
 # Вопрос (RU)
 > Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?
 
@@ -1166,7 +1168,7 @@ fun blockingEntryPoint() {
 **Benefits of the state machine model:**
 
 1. No callback hell: sequential-looking code compiled to non-blocking state machine.
-2. Stack-less coroutines: no dedicated OS thread stack per coroutine; state is in continuation object.
+2. `Stack`-less coroutines: no dedicated OS thread stack per coroutine; state is in continuation object.
 3. Generally efficient: main overhead is allocation of a small continuation/state-machine object and a few field reads/writes.
 
 **Costs:**
@@ -1370,9 +1372,9 @@ Complete
 2. В чем разница между `ContinuationImpl` и `BaseContinuationImpl` во внутренней реализации корутин?
 3. Как inline `suspend`-функции влияют на генерацию конечных автоматов?
 4. Что происходит со стек-трейсом исключений при прохождении через несколько точек приостановки?
-5. Как реализовать собственный `ContinuationInterceptor` для логирования или отладки?
-6. Как конечный автомат обрабатывает циклы с точками приостановки внутри?
-7. Как использование разных `Dispatcher` влияет на схему возобновления continuation?
+5. Как компилятор обрабатывает хвостоподобные (tail-call-like) паттерны в `suspend`-функциях?
+6. Как реализовать собственный `ContinuationInterceptor` для логирования или отладки?
+7. Как конечный автомат обрабатывает циклы с точками приостановки внутри?
 
 ## Follow-ups
 

@@ -9,15 +9,17 @@ status: draft
 created: 2025-10-12
 updated: 2025-11-09
 aliases: []
-question_kind: conceptual
+question_kind: theory
 tags: [anti-patterns, best-practices, code-review, coroutines, difficulty/medium, gotchas, kotlin, mistakes]
 moc: moc-kotlin
 related: [c-coroutines, q-coroutine-exception-handler--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
 subtopics:
-  - coroutines
-  - anti-patterns
-  - best-practices
+- coroutines
+- anti-patterns
+- best-practices
+
 ---
+
 # Вопрос (RU)
 > Какие самые распространенные ошибки при использовании Kotlin корутин, и как их исправить?
 
@@ -218,15 +220,15 @@ See also: [[c-coroutines]].
 
 ## Ссылки (RU)
 
-- [Kotlin Coroutines Best Practices](https://kotlinlang.org/docs/coroutines-guide.html)
-- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-- [Common Coroutine Mistakes](https://elizarov.medium.com/top-10-coroutines-mistakes-42b19c2a25b2)
+- [Kotlin `Coroutines` Best Practices](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Android `Coroutines` Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Common `Coroutine` Mistakes](https://elizarov.medium.com/top-10-coroutines-mistakes-42b19c2a25b2)
 
 ## References
 
-- [Kotlin Coroutines Best Practices](https://kotlinlang.org/docs/coroutines-guide.html)
-- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-- [Common Coroutine Mistakes](https://elizarov.medium.com/top-10-coroutines-mistakes-42b19c2a25b2)
+- [Kotlin `Coroutines` Best Practices](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Android `Coroutines` Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Common `Coroutine` Mistakes](https://elizarov.medium.com/top-10-coroutines-mistakes-42b19c2a25b2)
 
 ## Связанные вопросы (RU)
 

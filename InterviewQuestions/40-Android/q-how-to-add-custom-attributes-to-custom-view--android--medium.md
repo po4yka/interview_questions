@@ -377,6 +377,8 @@ class MainActivity : AppCompatActivity() {
             <enum name="filled" value="0" />
             <enum name="outlined" value="1" />
         </attr>
+
+        <!-- Разрешаем использовать атрибуты темы как значения по умолчанию -->
         <attr name="circularProgressColor" />
         <attr name="circularBackgroundColor" />
     </declare-styleable>
@@ -394,7 +396,7 @@ class CircularProgressView @JvmOverloads constructor(
     private var bgColor: Int
 
     init {
-        val a = context.obtainStyledAttributes(
+        val ta = context.obtainStyledAttributes(
             attrs,
             R.styleable.CircularProgressView,
             defStyleAttr,
@@ -402,27 +404,38 @@ class CircularProgressView @JvmOverloads constructor(
         )
         try {
             // Сначала читаем явные значения, затем fallback на атрибуты темы
+
             val theme = context.theme
 
-            val defaultProgressColor = theme.obtainStyledAttributes(
+            val themeProgressTa = theme.obtainStyledAttributes(
                 intArrayOf(R.attr.circularProgressColor)
-            ).use { it.getColor(0, Color.BLUE) }
+            )
+            val defaultProgressColor = try {
+                themeProgressTa.getColor(0, Color.BLUE)
+            } finally {
+                themeProgressTa.recycle()
+            }
 
-            val defaultBgColor = theme.obtainStyledAttributes(
+            val themeBgTa = theme.obtainStyledAttributes(
                 intArrayOf(R.attr.circularBackgroundColor)
-            ).use { it.getColor(0, Color.LTGRAY) }
+            )
+            val defaultBgColor = try {
+                themeBgTa.getColor(0, Color.LTGRAY)
+            } finally {
+                themeBgTa.recycle()
+            }
 
-            progressColor = a.getColor(
+            progressColor = ta.getColor(
                 R.styleable.CircularProgressView_progressColor,
                 defaultProgressColor
             )
 
-            bgColor = a.getColor(
+            bgColor = ta.getColor(
                 R.styleable.CircularProgressView_backgroundColor,
                 defaultBgColor
             )
         } finally {
-            a.recycle()
+            ta.recycle()
         }
     }
 }
@@ -496,7 +509,7 @@ class CustomButton @JvmOverloads constructor(
 ---
 
 ## Answer (EN)
-To add custom attributes to a Custom `View`, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to a `declare-styleable`, (3) retrieve values in the Custom `View` constructor using `obtainStyledAttributes`, (4) use attributes in XML or Kotlin.
+To add custom attributes to a Custom `View`, you need to: (1) create `attrs.xml` and define attributes, (2) add them to a `declare-styleable`, (3) retrieve values in the Custom `View` constructor using `obtainStyledAttributes`, (4) use attributes in XML or Kotlin.
 
 ### 1. Define Attributes in attrs.xml
 
@@ -856,7 +869,7 @@ class CircularProgressView @JvmOverloads constructor(
     private var bgColor: Int
 
     init {
-        val typedArray = context.obtainStyledAttributes(
+        val ta = context.obtainStyledAttributes(
             attrs,
             R.styleable.CircularProgressView,
             defStyleAttr,
@@ -864,19 +877,38 @@ class CircularProgressView @JvmOverloads constructor(
         )
         try {
             // Resolve from XML first, then fall back to theme attributes
-            progressColor = typedArray.getColor(
+
+            val theme = context.theme
+
+            val themeProgressTa = theme.obtainStyledAttributes(
+                intArrayOf(R.attr.circularProgressColor)
+            )
+            val defaultProgressColor = try {
+                themeProgressTa.getColor(0, Color.BLUE)
+            } finally {
+                themeProgressTa.recycle()
+            }
+
+            val themeBgTa = theme.obtainStyledAttributes(
+                intArrayOf(R.attr.circularBackgroundColor)
+            )
+            val defaultBgColor = try {
+                themeBgTa.getColor(0, Color.LTGRAY)
+            } finally {
+                themeBgTa.recycle()
+            }
+
+            progressColor = ta.getColor(
                 R.styleable.CircularProgressView_progressColor,
-                context.obtainStyledAttributes(intArrayOf(R.attr.circularProgressColor))
-                    .getColor(0, Color.BLUE)
+                defaultProgressColor
             )
 
-            bgColor = typedArray.getColor(
+            bgColor = ta.getColor(
                 R.styleable.CircularProgressView_backgroundColor,
-                context.obtainStyledAttributes(intArrayOf(R.attr.circularBackgroundColor))
-                    .getColor(0, Color.LTGRAY)
+                defaultBgColor
             )
         } finally {
-            typedArray.recycle()
+            ta.recycle()
         }
     }
 }

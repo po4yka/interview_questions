@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, c-kotlin]
+related: [c-kotlin, c-concepts--kotlin--medium]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [by-keyword, delegation, difficulty/easy, programming-languages]
+
 ---
+
 # Вопрос (RU)
 > Можно ли вызывать функцию или конструктор после ключевого слова `by` в Kotlin?
 
@@ -515,7 +517,7 @@ fun main() {
 }
 ```
 
-**Observable and Vetoable delegates:**
+**`Observable` and Vetoable delegates:**
 
 ```kotlin
 import kotlin.properties.Delegates
@@ -554,7 +556,7 @@ fun main() {
 }
 ```
 
-**Map delegation:**
+**`Map` delegation:**
 
 ```kotlin
 class UserFromMap(map: Map<String, Any>) {
@@ -639,7 +641,7 @@ class DelegationSummary {
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
 - [[c-kotlin]]
 
 ## Related Questions

@@ -25,12 +25,15 @@ updated: 2025-11-10
 tags:
 - android/ui-views
 - difficulty/hard
-
 ---
 
 # Вопрос (RU)
 
 > Как в runtime делать динамические экраны которые не были предусмотрены
+
+# Question (EN)
+
+> How To Create Dynamic Screens At Runtime
 
 ## Ответ (RU)
 
@@ -42,10 +45,13 @@ tags:
 
 Ниже представлены основные подходы.
 
+Важно: ниже приведены упрощённые примеры, ориентированные на идею. В продакшене нужно уделить внимание безопасной десериализации, схемам, валидации и безопасности.
+
 ### 1. Server-Driven UI с JSON-конфигурацией
 
 ```kotlin
-// Модели, совместимые с JSON
+// Упрощённые модели. Для реального JSON лучше использовать строго типизированные поля,
+// а не Map<String, Any?>, чтобы избежать проблем с типами при десериализации.
 data class ScreenConfig(
     val type: String?,
     val title: String?,
@@ -73,6 +79,7 @@ class DynamicScreenBuilder {
         return when (component.type) {
             "text" -> TextView(context).apply {
                 text = component.properties["text"] as? String ?: ""
+                // Учтите, что число из JSON может прийти как Int/Double и т.п.
                 val size = (component.properties["size"] as? Number)?.toFloat()
                 textSize = size ?: 14f
             }
@@ -86,7 +93,7 @@ class DynamicScreenBuilder {
 
             "image" -> ImageView(context).apply {
                 val url = component.properties["url"] as? String
-                // Загрузка изображения через Coil/Glide
+                // Загрузка изображения через Coil/Glide по url
             }
 
             else -> TextView(context).apply { text = "Unknown component: ${component.type}" }
@@ -97,16 +104,19 @@ class DynamicScreenBuilder {
 
 Важные моменты:
 - Использовать Moshi/Gson/kotlinx.serialization вместо ручных кастов.
-- Валидировать конфигурацию перед рендерингом, чтобы избежать падений.
+- Предпочитать более строгие модели (sealed-классы/enum + конкретные поля вместо `Map<String, Any?>`) для типобезопасности.
+- Валидировать конфигурацию перед рендерингом, логировать ошибки и не падать на некорректном конфиге.
 
 ### 2. Jetpack Compose для динамического UI
 
 ```kotlin
 @Composable
 fun DynamicScreen(config: ScreenConfig) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         config.components.forEach { component ->
             DynamicComponent(component)
         }
@@ -180,7 +190,12 @@ class DynamicAdapter(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
-                    setPadding(dpToPx(context, 16), dpToPx(context, 8), dpToPx(context, 16), dpToPx(context, 8))
+                    setPadding(
+                        dpToPx(context, 16),
+                        dpToPx(context, 8),
+                        dpToPx(context, 16),
+                        dpToPx(context, 8)
+                    )
                 }
             )
 
@@ -237,14 +252,14 @@ class DynamicAdapter(
     class ButtonViewHolder(private val button: Button) : RecyclerView.ViewHolder(button) {
         fun bind(component: Component) {
             button.text = component.properties["text"] as? String ?: "Button"
-            // Опционально: привязка динамических действий
+            // Опционально: привязка динамических действий по properties
         }
     }
 
     class ImageViewHolder(private val imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
         fun bind(component: Component) {
             val url = component.properties["url"] as? String
-            // Загрузка через Coil/Glide
+            // Загрузка через Coil/Glide по url
         }
     }
 
@@ -267,6 +282,8 @@ class DynamicFragmentFactory(
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+        // Упрощённый пример: на практике обычно ветвление по className,
+        // а config используется для инициализации конкретного фрагмента.
         return when (config["type"]) {
             "list" -> ListFragment.newInstance(config)
             "detail" -> DetailFragment.newInstance(config)
@@ -408,7 +425,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 
     private suspend fun fetchScreenConfig(): ScreenConfig =
         withContext(Dispatchers.IO) {
-            // Вызов API и парсинг JSON в ScreenConfig
+            // Вызов API и парсинг JSON в ScreenConfig (через Moshi/Gson/kotlinx.serialization)
             ScreenConfig(
                 type = "scroll",
                 title = "Dynamic",
@@ -441,6 +458,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 3. Ограничения — не все фичи и компоненты удобно делать конфигурируемыми
 4. Тестирование — больше состояний и конфигураций
 5. Зависимость от сети — нужна стратегия кэширования и fallback
+6. Безопасность — конфигурация с сервера не должна позволять выполнять произвольный код или приводить к небезопасным переходам
 
 ### Best Practices
 
@@ -448,7 +466,9 @@ class DynamicScreenActivity : AppCompatActivity() {
 2. Версионировать схемы и API конфигурации
 3. Делать fallback-экраны и поведение по умолчанию
 4. Валидировать конфиг перед применением, логировать ошибки
-5. Повышать типобезопасность (sealed-классы/enum для типов компонентов)
+5. Повышать типобезопасность (sealed-классы/enum для типов компонентов, избегать сырого `Map<String, Any?>` где возможно)
+6. Проектировать схему с учётом forward/backward совместимости
+7. Ограничивать доверие к серверу: whitelists для действий/дестинаций, валидация ссылок/переходов
 
 ### Использование в продакшене
 
@@ -458,10 +478,6 @@ class DynamicScreenActivity : AppCompatActivity() {
 - Uber — RIBs для модульной динамической навигации
 - Instagram — IGListKit для сложных списков
 - Netflix — конфигурационные системы для витрин
-
-# Question (EN)
-
-> How To Create Dynamic Screens At Runtime
 
 ## Answer (EN)
 
@@ -473,10 +489,13 @@ To create truly dynamic screens at runtime in Android you typically:
 
 Below are core implementation patterns.
 
+Note: examples are simplified to illustrate patterns. In production, pay attention to safe deserialization, schema design, validation, and security.
+
 ### 1. Server-Driven UI with JSON
 
 ```kotlin
-// JSON-mapped models (keep them JSON-friendly)
+// Simplified models. For real JSON it's safer to use strongly typed fields
+// instead of Map<String, Any?> to avoid ambiguous runtime types.
 data class ScreenConfig(
     val type: String?,
     val title: String?,
@@ -504,7 +523,7 @@ class DynamicScreenBuilder {
         return when (component.type) {
             "text" -> TextView(context).apply {
                 text = component.properties["text"] as? String ?: ""
-                // Be careful with numeric types from JSON (may arrive as Int/Double)
+                // Be careful: numeric values from JSON may be Int/Double/etc.
                 val size = (component.properties["size"] as? Number)?.toFloat()
                 textSize = size ?: 14f
             }
@@ -528,17 +547,20 @@ class DynamicScreenBuilder {
 ```
 
 Key considerations:
-- `Map` JSON via a real JSON library (Moshi/Gson/Kotlinx Serialization) to avoid unsafe casts.
-- Validate config before rendering to avoid crashes.
+- Use a real JSON library (Moshi/Gson/kotlinx.serialization) instead of manual casts.
+- Prefer stricter models (sealed classes/enums + explicit fields) over raw `Map<String, Any?>` where possible.
+- Validate configuration before rendering; log issues and avoid crashes on bad payloads.
 
 ### 2. Jetpack Compose Dynamic UI
 
 ```kotlin
 @Composable
 fun DynamicScreen(config: ScreenConfig) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         config.components.forEach { component ->
             DynamicComponent(component)
         }
@@ -612,7 +634,12 @@ class DynamicAdapter(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
-                    setPadding(dpToPx(context, 16), dpToPx(context, 8), dpToPx(context, 16), dpToPx(context, 8))
+                    setPadding(
+                        dpToPx(context, 16),
+                        dpToPx(context, 8),
+                        dpToPx(context, 16),
+                        dpToPx(context, 8)
+                    )
                 }
             )
 
@@ -669,7 +696,7 @@ class DynamicAdapter(
     class ButtonViewHolder(private val button: Button) : RecyclerView.ViewHolder(button) {
         fun bind(component: Component) {
             button.text = component.properties["text"] as? String ?: "Button"
-            // Optionally wire dynamic actions here
+            // Optionally wire dynamic actions based on properties
         }
     }
 
@@ -699,6 +726,8 @@ class DynamicFragmentFactory(
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+        // Simplified example: in real usage you usually branch on className
+        // and use config to construct/init specific fragment types.
         return when (config["type"]) {
             "list" -> ListFragment.newInstance(config)
             "detail" -> DetailFragment.newInstance(config)
@@ -841,7 +870,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 
     private suspend fun fetchScreenConfig(): ScreenConfig =
         withContext(Dispatchers.IO) {
-            // TODO: real API call that parses JSON into ScreenConfig
+            // Real API call that parses JSON into ScreenConfig (Moshi/Gson/kotlinx.serialization)
             ScreenConfig(
                 type = "scroll",
                 title = "Dynamic",
@@ -870,18 +899,21 @@ class DynamicScreenActivity : AppCompatActivity() {
 ### Disadvantages of dynamic screens
 
 1. Complexity — requires infrastructure and protocols on both server and client
-2. Performance — parsing and building UI at runtime
+2. Performance — runtime parsing and view/composable construction
 3. Limitations — not all features/components are easy to make configurable
 4. Testing — many more states and configurations to cover
 5. Network dependency — must have caching and fallback strategies
+6. Security — configuration must not allow arbitrary code execution or unsafe navigation
 
 ### Best Practices
 
 1. Cache the last valid configuration locally
 2. Version configuration schemas and APIs
 3. Provide fallback screens and default behavior
-4. Validate configuration before applying, log errors
-5. Increase type safety (sealed classes/enums for component types)
+4. Validate configuration before applying; log errors
+5. Increase type safety (sealed classes/enums instead of raw `Map<String, Any?>` where possible)
+6. Design schemas for forward/backward compatibility
+7. Restrict what server configs can do (whitelists for actions/destinations, validate URLs/navigation)
 
 ### Production usage
 

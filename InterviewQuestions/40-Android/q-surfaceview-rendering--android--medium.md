@@ -21,13 +21,14 @@ related:
 - q-viewgroup-vs-view-differences--android--easy
 - q-what-methods-redraw-views--android--medium
 created: 2023-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/performance-rendering
 - android/ui-views
 - difficulty/medium
 - rendering
 - surfaceview
+
 
 ---
 
@@ -36,8 +37,6 @@ tags:
 
 # Question (EN)
 > SurfaceView Rendering
-
----
 
 ## Ответ (RU)
 `SurfaceView` — это специальное представление, которое предоставляет выделенную поверхность (`Surface`) для рисования, встроенную в иерархию `View`. В отличие от обычных `View`, `SurfaceView` предоставляет доступ к своей поверхности, так что рисование можно выполнять из отдельного потока, что полезно для тяжёлого или высокочастотного рендеринга.
@@ -183,8 +182,6 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
    - `TextureView` — когда важны анимации, трансформации, прозрачность и интеграция в сложную UI-иерархию.
    - Рассматривайте современные подходы (например, комбинирование с Jetpack Compose), если не требуется ручной низкоуровневый рендеринг.
 
----
-
 ## Answer (EN)
 `SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` exposes its `Surface` so it can be drawn to from a separate thread, which is useful for high-frequency or heavy rendering workloads.
 
@@ -314,79 +311,47 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 
 **Modern Alternatives:**
 
-- `TextureView`: A view whose content is rendered into a `SurfaceTexture`, supports transformations and participates in view hierarchy composition; may use more memory and has different behavior characteristics.
-- `SurfaceView` with OpenGL/Vulkan or media decoders for advanced rendering.
-- Jetpack Compose + regular views for most standard UI (not a drop-in replacement for `SurfaceView`, but relevant for where you do not need a separate surface).
+- `TextureView`: A view whose content is rendered into a `SurfaceTexture`, supports transformations and participates in view hierarchy composition; may use more memory and behaves differently.
+- `SurfaceView` with OpenGL/Vulkan or media decoders for advanced, low-latency rendering.
+- Jetpack Compose plus regular views for most standard UI, where a separate low-level surface is not required.
 
 **Best Practices:**
 
 1. Always implement `SurfaceHolder.Callback` to handle lifecycle events.
-2. Properly synchronize access to the `Surface`/`Canvas` between threads; avoid holding locks longer than needed.
-3. Stop the rendering thread in `surfaceDestroyed` and ensure it finishes to avoid leaks or crashes.
+2. Properly synchronize access to the `Surface`/`Canvas` between threads; avoid holding locks longer than necessary.
+3. Stop the rendering thread in `surfaceDestroyed` and wait for it to finish to avoid leaks or crashes.
 4. Always pair `lockCanvas()` with `unlockCanvasAndPost()` in a `try/finally` block.
-5. Choose consciously between `SurfaceView` and `TextureView` based on requirements:
-   - `SurfaceView` when you need a separate surface, low latency, or a direct producer (media decoder / GL / Vulkan).
-   - `TextureView` when you need transformations, animations, transparency, and seamless integration in complex layouts.
-   - Consider modern UI approaches (e.g., Jetpack Compose) when low-level control is not required.
+5. Consciously choose between `SurfaceView` and `TextureView` based on your requirements:
+   - `SurfaceView` when you need a separate surface, low latency, or direct output from decoders/renderers.
+   - `TextureView` when you need transformations, animations, transparency, and complex layout integration.
+   - Consider modern UI approaches (e.g., Jetpack Compose) when low-level manual rendering is not required.
 
----
+## Follow-ups
+
+- Как вы бы организовали измерение и оптимизацию задержки рендеринга при использовании `SurfaceView` в игровом движке?
+- Как бы вы реализовали переключение между `SurfaceView` и `TextureView` в зависимости от возможностей устройства и требований к анимациям, не ломая архитектуру экрана?
+- Как вы бы отладили проблему, когда содержимое `SurfaceView` не обновляется или «застывает», несмотря на работающий поток рендеринга?
+- Какие подходы вы бы использовали для безопасной интеграции `SurfaceView` с Jetpack Compose или сложной иерархией `View`?
+- Как бы вы спроектировали API/обёртку вокруг `SurfaceView`, чтобы упростить повторное использование и управление жизненным циклом в разных модулях приложения?
+
+## References
+
+- [[c-android-surfaces]]
+
+## Related Questions
+
+- [[q-viewgroup-vs-view-differences--android--easy]]
+- [[q-what-methods-redraw-views--android--medium]]
 
 ## Дополнительные вопросы (RU)
-
 - Объясните, почему для интенсивного рендеринга (`игры`, `камера`, `видео`) предпочтительно использовать отдельный поток с `SurfaceView`, а не перегружать UI-поток.
 - Когда на практике стоит предпочесть `TextureView` вместо `SurfaceView` (учитывая требования к трансформациям, прозрачности и вложенности в сложный layout)?
 - Как бы вы реализовали безопасное завершение потока рендеринга при уничтожении `Surface` в условиях частых изменений конфигурации?
 - Как обеспечить согласованность частоты кадров рендеринга в `SurfaceView` с VSYNC, чтобы избежать артефактов и избыточной нагрузки на систему?
 - Какие проблемы с композицией и наложением других `View` вокруг `SurfaceView` вы можете ожидать и как их минимизировать?
-
-## Follow-ups
-
-- [[c-android-surfaces]]
-- [[q-viewgroup-vs-view-differences--android--easy]]
-- [[q-what-methods-redraw-views--android--medium]]
-- In which scenarios would you prefer `SurfaceView` over `TextureView` when building a complex UI?
-- How would you profile `SurfaceView` rendering performance (tools and approaches)?
-
----
-
-## Ссылки (RU)
-
-- [Views](https://developer.android.com/develop/ui/views)
-- [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
-
-## References
-
-- [Views](https://developer.android.com/develop/ui/views)
-- [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
-
----
-
-## Связанные вопросы (RU)
-
-### База (проще)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
-- [[q-viewmodel-pattern--android--easy]] - `View`
-
-### Средний уровень
-- [[q-testing-viewmodels-turbine--android--medium]] - `View`
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
-- [[q-what-is-viewmodel--android--medium]] - `View`
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
-
-### Продвинутый (сложнее)
-- [[q-compose-custom-layout--android--hard]] - `View`
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
-- [[q-viewmodel-pattern--android--easy]] - `View`
-
-### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - `View`
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
-- [[q-what-is-viewmodel--android--medium]] - `View`
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
-
-### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - `View`
+## Additional Questions (EN)
+- Explain why, for intensive rendering (games, camera, video), it is preferable to use a separate thread with `SurfaceView` instead of overloading the UI thread.
+- In practice, when would you choose `TextureView` over `SurfaceView`, considering requirements for transformations, transparency, and nesting in complex layouts?
+- How would you implement safe termination of the rendering thread when the `Surface` is destroyed, especially under frequent configuration changes?
+- How would you align the `SurfaceView` render loop frame rate with VSYNC to avoid artifacts and unnecessary system load?
+- What composition/overlay issues can you expect when placing other `View`s around a `SurfaceView`, and how can you mitigate them?

@@ -14,6 +14,7 @@ related: [c-kotlin, q-coroutine-job-lifecycle--kotlin--medium, q-testing-viewmod
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, filtering, kotlin, pair, partition]
+
 ---
 
 # Вопрос (RU)
@@ -117,18 +118,20 @@ sealed class ApiResult<out T> {
     data class Error(val message: String) : ApiResult<Nothing>()
 }
 
+data class ApiUser(val id: Int, val name: String)
+
 val results = listOf(
-    ApiResult.Success(User(1, "Alice")),
+    ApiResult.Success(ApiUser(1, "Alice")),
     ApiResult.Error("Network timeout"),
-    ApiResult.Success(User(2, "Bob")),
+    ApiResult.Success(ApiUser(2, "Bob")),
     ApiResult.Error("404 Not Found"),
-    ApiResult.Success(User(3, "Charlie"))
+    ApiResult.Success(ApiUser(3, "Charlie"))
 )
 
 // Разделяем на успешные и ошибочные результаты
 val (successes, errors) = results.partition { it is ApiResult.Success }
 
-val usersFromSuccess = successes.filterIsInstance<ApiResult.Success<User>>()
+val usersFromSuccess = successes.filterIsInstance<ApiResult.Success<ApiUser>>()
     .map { it.data }
 
 val errorMessages = errors.filterIsInstance<ApiResult.Error>()
@@ -335,7 +338,7 @@ val byPriority = items.groupBy {
 
 ## Answer (EN)
 
-`partition()` splits a collection into **two lists** based on a predicate: the first contains elements for which the predicate returns `true`, the second contains elements for which it returns `false`. Returns `Pair<List<T>, List<T>>`. Convenient when you need to filter while keeping both groups.
+`partition()` splits a collection into **two lists** based on a predicate: the first contains elements for which the predicate returns `true`, the second contains elements for which it returns `false`. Returns `Pair<List<T>, List<T>>`. It is eager and always materializes both result lists. Convenient when you need to filter while keeping both groups.
 
 ### Basic Usage
 
@@ -427,18 +430,20 @@ sealed class ApiResult<out T> {
     data class Error(val message: String) : ApiResult<Nothing>()
 }
 
+data class ApiUser(val id: Int, val name: String)
+
 val results = listOf(
-    ApiResult.Success(User(1, "Alice")),
+    ApiResult.Success(ApiUser(1, "Alice")),
     ApiResult.Error("Network timeout"),
-    ApiResult.Success(User(2, "Bob")),
+    ApiResult.Success(ApiUser(2, "Bob")),
     ApiResult.Error("404 Not Found"),
-    ApiResult.Success(User(3, "Charlie"))
+    ApiResult.Success(ApiUser(3, "Charlie"))
 )
 
 // Split into successes and errors
 val (successes, errors) = results.partition { it is ApiResult.Success }
 
-val usersFromSuccess = successes.filterIsInstance<ApiResult.Success<User>>()
+val usersFromSuccess = successes.filterIsInstance<ApiResult.Success<ApiUser>>()
     .map { it.data }
 
 val errorMessages = errors.filterIsInstance<ApiResult.Error>()
@@ -469,7 +474,10 @@ val (images, others) = files.partition {
 }
 
 println("Images: ${images.map { it.name }}")
+// Images: [image.jpg, photo.png]
+
 println("Other files: ${others.map { it.name }}")
+// Other files: [document.pdf, data.json, config.xml, archive.zip]
 ```
 
 #### Example 4: Tasks by Priority
@@ -555,22 +563,27 @@ println("Good: ${good.map { it.name }}")
 println("Failing: ${failing.map { it.name }}")
 ```
 
-### Performance
+### Performance / Eager vs lazy
 
 ```kotlin
 val largeList = (1..1_000_000).toList()
 
+// Two filters = two passes
 val time1 = measureTimeMillis {
     val positive = largeList.filter { it > 500_000 }
     val negative = largeList.filter { it <= 500_000 }
 }
 println("filter x2: $time1 ms")
 
+// partition = one pass
 val time2 = measureTimeMillis {
     val (positive, negative) = largeList.partition { it > 500_000 }
 }
 println("partition: $time2 ms")
 ```
+
+- `partition()` is always eager and returns `List`s.
+- For a `Sequence`, `partition()` also eagerly materializes both result lists (unlike other lazy `Sequence` operations).
 
 ### With other collections
 

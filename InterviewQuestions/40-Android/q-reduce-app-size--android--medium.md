@@ -26,7 +26,7 @@ related:
 - q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium
 - q-memory-leak-vs-oom-android--android--medium
 created: 2025-10-05
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/app-bundle
 - android/performance-memory
@@ -34,6 +34,7 @@ tags:
 - difficulty/medium
 - en
 - ru
+
 
 ---
 
@@ -377,14 +378,6 @@ You may recognize `&lt;` and `&gt;` as escape characters for `<` and `>`. They'r
 
 ---
 
-## References
-- [Reduce your app size](https://developer.android.com/topic/performance/reduce-apk-size)
-- [Reduce app size](https://developer.android.com/guide/topics/androidgo/optimize-size)
-- [8 Ways to Reduce Android App Size During Development Phase?](https://www.elluminatiinc.com/reduce-android-app-size/)
-- [8 Best Ways to Reduce Android App Size](https://www.mantralabsglobal.com/blog/reduce-android-app-size/)
-- [Minimizing APK Size: Techniques for Shrinking Android App Size](https://diegomarcher.medium.com/minimizing-apk-size-techniques-for-shrinking-android-app-size-7a4c5eefbd46)
-
-
 ## Follow-ups
 
 - [[q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium]]
@@ -392,6 +385,14 @@ You may recognize `&lt;` and `&gt;` as escape characters for `<` and `>`. They'r
 - Which parts of the app (code, resources, or libraries) typically contribute most to size in your projects, and how would you measure them?
 - How would you integrate R8 configuration and `shrinkResources` into a CI pipeline to ensure size regressions are detected early?
 - When would you choose dynamic feature modules over a monolithic app in terms of size, and what trade-offs does this introduce?
+
+
+## References
+- [Reduce your app size](https://developer.android.com/topic/performance/reduce-apk-size)
+- [Reduce app size](https://developer.android.com/guide/topics/androidgo/optimize-size)
+- [8 Ways to Reduce Android App Size During Development Phase?](https://www.elluminatiinc.com/reduce-android-app-size/)
+- [8 Best Ways to Reduce Android App Size](https://www.mantralabsglobal.com/blog/reduce-android-app-size/)
+- [Minimizing APK Size: Techniques for Shrinking Android App Size](https://diegomarcher.medium.com/minimizing-apk-size-techniques-for-shrinking-android-app-size-7a4c5eefbd46)
 
 
 ## Related Questions

@@ -30,7 +30,7 @@ sources: []
 
 ## Ответ (RU)
 
-Dialog — это UI-компонент, который отображается поверх текущего экрана как временный оверлей и концептуально отличается от экранов-назнаечений (navigation destinations):
+Dialog — это UI-компонент, который отображается поверх текущего экрана как временный оверлей и концептуально отличается от экранов-назначений (navigation destinations):
 
 **Ключевые отличия:**
 
@@ -55,7 +55,7 @@ fun MyScreen() {
 
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = { showDialog = false }, // ✅ Обновляем состояние при закрытии
+            onDismissRequest = { showDialog = false }, // ✅ Обновляем состояние при закрытии (back/тап вовне/gesture)
             title = { Text("Confirm") },
             text = { Text("Delete item?") },
             confirmButton = {
@@ -79,7 +79,10 @@ fun MyScreen() {
 @Composable
 fun BadExample() {
     AlertDialog(
-        onDismissRequest = { /* нет обновления состояния */ }, // ❌ Диалог не будет закрыт по dismiss
+        onDismissRequest = {
+            // ❌ Состояние не обновляется: пользовательские жесты закрытия (back, тап вне) лишь вызовут этот колбэк,
+            // но сам диалог останется на экране, если вы не измените состояние.
+        },
         // ...
     )
 }
@@ -100,14 +103,15 @@ class ConfirmDialogFragment : DialogFragment() {
 }
 
 // ⚠️ Ограничение: прямой AlertDialog не привязан к FragmentManager/NavController
-// и не будет автоматически пересоздан при конфигурационных изменениях,
-// если вы не обработаете это вручную.
+// и не будет автоматически пересоздан при конфигурационных изменениях.
+// При смене конфигурации такой диалог обычно будет закрыт, и если нужно восстановление,
+// это требуется делать вручную.
 AlertDialog.Builder(context)
     .setMessage("Confirm?")
     .show() // ⚠️ Потеряется при повороте экрана без доп. логики
 ```
 
-**Связь с [[c-compose-navigation]]:** По умолчанию обычные диалоги (например, `AlertDialog` в Compose) не считаются отдельными навигационными destination и напрямую не управляют back stack `NavController`. Отдельные dialog-destinations в навигации — это явный механизм, когда вы хотите, чтобы диалог был частью навигационного графа.
+**Связь с [[c-compose-navigation]]:** По умолчанию обычные диалоги (например, `AlertDialog` в Compose) не считаются отдельными навигационными destinations и напрямую не управляют back stack `NavController`. Отдельные dialog-destinations в навигации — это явный механизм, когда вы хотите, чтобы диалог был частью навигационного графа.
 
 ---
 
@@ -138,7 +142,7 @@ fun MyScreen() {
 
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = { showDialog = false }, // ✅ Update state on dismiss
+            onDismissRequest = { showDialog = false }, // ✅ Update state on dismiss (back/outside tap/gesture)
             title = { Text("Confirm") },
             text = { Text("Delete item?") },
             confirmButton = {
@@ -162,7 +166,10 @@ fun MyScreen() {
 @Composable
 fun BadExample() {
     AlertDialog(
-        onDismissRequest = { /* no state update */ }, // ❌ Dialog won't close on dismiss
+        onDismissRequest = {
+            // ❌ If you don't update state here, user dismiss gestures (back, outside tap)
+            // will invoke this callback, but the dialog will remain visible.
+        },
         // ...
     )
 }
@@ -183,8 +190,9 @@ class ConfirmDialogFragment : DialogFragment() {
 }
 
 // ⚠️ Limitation: Direct AlertDialog is not tied to FragmentManager/NavController
-// and will not be automatically recreated across configuration changes
-// unless you handle it manually.
+// and will not be automatically recreated across configuration changes.
+// On configuration change, such a dialog is typically dismissed; if you need it back,
+// you must handle recreation manually.
 AlertDialog.Builder(context)
     .setMessage("Confirm?")
     .show() // ⚠️ Lost on rotation without additional handling

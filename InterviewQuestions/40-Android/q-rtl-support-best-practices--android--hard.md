@@ -20,7 +20,7 @@ related:
 - c-android
 - c-android-resources
 created: 2025-10-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/i18n-l10n
 - android/ui-views
@@ -153,7 +153,7 @@ sources:
 ## Ссылки (RU)
 - [[c-android]] — общий обзор основных аспектов Android.
 - [[c-android-resources]] — управление ресурсами (включая alternative ресурсы для RTL).
-- "Layout direction guide": https://developer.android.com/guide/topics/resources/layout-direction — руководство по направлению макета и поддержке RTL.
+- Layout direction guide: https://developer.android.com/guide/topics/resources/layout-direction — руководство по направлению макета и поддержке RTL.
 
 ## References
 - [[c-android]]

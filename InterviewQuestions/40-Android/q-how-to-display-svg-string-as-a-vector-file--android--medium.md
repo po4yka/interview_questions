@@ -28,7 +28,7 @@ tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, diffi
 
 ## Ответ (RU)
 
-На Android нет нативной поддержки произвольных SVG-файлов во время выполнения (runtime) напрямую из строки. VectorDrawable поддерживает лишь ограниченное подмножество SVG и обычно генерируется на этапе сборки. Поэтому для работы с полной SVG-строкой на рантайме обычно используют сторонние библиотеки. Основные подходы:
+На Android нет нативной поддержки произвольных SVG-файлов во время выполнения (runtime) напрямую из строки. VectorDrawable поддерживает лишь ограниченное подмножество SVG и обычно создаётся и подключается из XML на этапе разработки/сборки (а не генерируется динамически из произвольной SVG-строки). Поэтому для работы с полной SVG-строкой на рантайме обычно используют сторонние библиотеки. Основные подходы:
 
 ### 1. AndroidSVG (Рекомендуется для простых случаев)
 
@@ -42,7 +42,7 @@ private fun displaySvgFromString(svgString: String, imageView: ImageView) {
         val picture = svg.renderToPicture()
         val drawable = PictureDrawable(picture)
 
-        // ✅ Для корректного отображения PictureDrawable
+        // ✅ Для корректного отображения PictureDrawable (особенно на старых версиях)
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         imageView.setImageDrawable(drawable)
     } catch (e: SVGParseException) {
@@ -58,27 +58,31 @@ private fun displaySvgWithSize(
     width: Int,
     height: Int
 ) {
-    val svg = SVG.getFromString(svgString)
+    try {
+        val svg = SVG.getFromString(svgString)
 
-    // Если в SVG нет размеров, можно задать явно.
-    // Следите за сохранением пропорций, если это важно для дизайна.
-    svg.documentWidth = width.toFloat()
-    svg.documentHeight = height.toFloat()
+        // Если в SVG нет размеров, можно задать явно.
+        // Следите за сохранением пропорций, если это важно для дизайна.
+        svg.documentWidth = width.toFloat()
+        svg.documentHeight = height.toFloat()
 
-    val picture = svg.renderToPicture(width, height)
-    val drawable = PictureDrawable(picture)
+        val picture = svg.renderToPicture(width, height)
+        val drawable = PictureDrawable(picture)
 
-    imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-    imageView.setImageDrawable(drawable)
+        imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        imageView.setImageDrawable(drawable)
+    } catch (e: SVGParseException) {
+        Log.e("SVG", "Parse error", e)
+    }
 }
 ```
 
 ### 2. Coil с SVG декодером (современный подход)
 
-Интеграция с популярной библиотекой загрузки изображений:
+Интеграция с популярной библиотекой загрузки изображений (пример для Coil 2.x с `SvgDecoder`):
 
 ```kotlin
-// ✅ Настройка ImageLoader с поддержкой SVG
+// ✅ Настройка ImageLoader с поддержкой SVG (Coil 2.x)
 val imageLoader = ImageLoader.Builder(context)
     .components {
         add(SvgDecoder.Factory())
@@ -95,7 +99,9 @@ val request = ImageRequest.Builder(context)
 imageLoader.enqueue(request)
 ```
 
-Примечание: при передаче "сырых" байтов кеширование будет ограниченным. Для лучшего кеширования используйте стабильный data (например, URL или file/uri), либо собственный ключ.
+Примечания:
+- При передаче ByteArray Coil может использовать байты для вычисления ключа, но если содержимое часто меняется, кэш не будет эффективно переиспользоваться.
+- Для предсказуемого кеширования используйте стабильный data (например, URL или file/uri) либо задайте свой cacheKey.
 
 ### 3. Jetpack Compose
 
@@ -104,7 +110,7 @@ imageLoader.enqueue(request)
 fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    // ✅ Создание ImageLoader в remember для избежания пересоздания
+    // ✅ Создание ImageLoader в remember для избежания пересоздания (Coil 2.x)
     val imageLoader = remember {
         ImageLoader.Builder(context)
             .components { add(SvgDecoder.Factory()) }
@@ -122,7 +128,7 @@ fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-Замечание: при использовании ByteArray в качестве model кеширование будет ограниченным; при частом переиспользовании имеет смысл задать стабильный ключ (memory/disk cache key) или использовать источник с постоянным идентификатором.
+Замечание: при использовании ByteArray в качестве model Coil всё ещё может кэшировать по содержимому, но при частых изменениях строки практическая выгода от кеша снижается. Для повторного использования лучше задать стабильный ключ или источник с постоянным идентификатором.
 
 ### 4. Пользовательский Drawable
 
@@ -138,6 +144,11 @@ class SvgDrawable(private val svgString: String) : Drawable() {
         } catch (e: SVGParseException) {
             Log.e("SvgDrawable", "Parse error", e)
         }
+    }
+
+    override fun onBoundsChange(bounds: Rect) {
+        super.onBoundsChange(bounds)
+        // При необходимости можно пересчитать параметры под новые границы.
     }
 
     override fun draw(canvas: Canvas) {
@@ -182,7 +193,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 | Подход | Преимущества | Недостатки | Использовать когда |
 |--------|--------------|------------|-------------------|
 | AndroidSVG | Простота, прямой парсинг строки, контроль | Нет поддержки всех SVG-фич, требуется ручная настройка `View` | Простые случаи, локальные SVG-строки |
-| Coil + SVG | Кеширование, современный API, интеграция с сетью | Доп. зависимость, нюансы с model/кешем для сырой строки | Загрузка из сети, повторное использование и кеширование |
+| Coil + SVG | Кеширование, современный API, интеграция с сетью | Доп. зависимость, нюансы с model/кешем для сырых строк | Загрузка из сети, повторное использование и кеширование |
 | Custom Drawable | Полный контроль рендеринга | Больше кода, нужно самому учитывать размеры/аспект-ратио | Специфичные требования, сложные UIs |
 | Compose | Декларативный UI, единый подход с Coil | Требуется Compose, те же нюансы с моделью/кешем | Приложения на Compose UI |
 
@@ -211,7 +222,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 
 ## Answer (EN)
 
-Android does not natively support rendering arbitrary SVG files from a runtime string. VectorDrawable supports only a constrained subset of SVG and is usually generated at build time. To render a full SVG string at runtime you typically rely on third-party libraries. Main approaches:
+Android does not natively support rendering arbitrary SVG files from a runtime string. VectorDrawable supports only a constrained subset of SVG and is typically defined in XML at development/build time rather than generated from arbitrary SVG strings at runtime. To render a full SVG string at runtime you usually rely on third-party libraries. Main approaches:
 
 ### 1. AndroidSVG (Recommended for simple cases)
 
@@ -225,7 +236,7 @@ private fun displaySvgFromString(svgString: String, imageView: ImageView) {
         val picture = svg.renderToPicture()
         val drawable = PictureDrawable(picture)
 
-        // ✅ Ensure correct rendering with PictureDrawable
+        // ✅ Ensure correct rendering with PictureDrawable (especially on older APIs)
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         imageView.setImageDrawable(drawable)
     } catch (e: SVGParseException) {
@@ -241,27 +252,31 @@ private fun displaySvgWithSize(
     width: Int,
     height: Int
 ) {
-    val svg = SVG.getFromString(svgString)
+    try {
+        val svg = SVG.getFromString(svgString)
 
-    // If SVG has no explicit size, you can set one.
-    // Be careful not to break the original aspect ratio if it matters.
-    svg.documentWidth = width.toFloat()
-    svg.documentHeight = height.toFloat()
+        // If SVG has no explicit size, you can set one.
+        // Be careful not to break the original aspect ratio if it matters.
+        svg.documentWidth = width.toFloat()
+        svg.documentHeight = height.toFloat()
 
-    val picture = svg.renderToPicture(width, height)
-    val drawable = PictureDrawable(picture)
+        val picture = svg.renderToPicture(width, height)
+        val drawable = PictureDrawable(picture)
 
-    imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-    imageView.setImageDrawable(drawable)
+        imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        imageView.setImageDrawable(drawable)
+    } catch (e: SVGParseException) {
+        Log.e("SVG", "Parse error", e)
+    }
 }
 ```
 
 ### 2. Coil with SVG Decoder (modern approach)
 
-Integration with a popular image loading library:
+Integration with a popular image loading library (example for Coil 2.x using `SvgDecoder`):
 
 ```kotlin
-// ✅ Configure ImageLoader with SVG support
+// ✅ Configure ImageLoader with SVG support (Coil 2.x)
 val imageLoader = ImageLoader.Builder(context)
     .components {
         add(SvgDecoder.Factory())
@@ -278,7 +293,9 @@ val request = ImageRequest.Builder(context)
 imageLoader.enqueue(request)
 ```
 
-Note: when using raw bytes as the model, caching will be limited. For better caching, use a stable data source (e.g., URL or file/uri) or provide a custom cache key.
+Notes:
+- When using a ByteArray as the model, Coil can still derive a cache key from the data, but if the content changes frequently, practical cache reuse is low.
+- For robust caching, prefer stable data (e.g., URL or file/uri) or provide a custom cacheKey.
 
 ### 3. Jetpack Compose
 
@@ -287,7 +304,7 @@ Note: when using raw bytes as the model, caching will be limited. For better cac
 fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    // ✅ Create ImageLoader in remember to avoid recreation
+    // ✅ Create ImageLoader in remember to avoid recreation (Coil 2.x)
     val imageLoader = remember {
         ImageLoader.Builder(context)
             .components { add(SvgDecoder.Factory()) }
@@ -305,7 +322,7 @@ fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-Note: using a ByteArray as model limits cache reuse; for frequent reuse consider providing a stable key or a source with a consistent identifier.
+Note: using a ByteArray as model allows Coil to cache by content, but if the SVG string is dynamic, effective cache hits will be low. For frequent reuse, provide a stable key or a source with a consistent identifier.
 
 ### 4. Custom Drawable
 
@@ -321,6 +338,11 @@ class SvgDrawable(private val svgString: String) : Drawable() {
         } catch (e: SVGParseException) {
             Log.e("SvgDrawable", "Parse error", e)
         }
+    }
+
+    override fun onBoundsChange(bounds: Rect) {
+        super.onBoundsChange(bounds)
+        // Optionally recompute any cached values based on new bounds.
     }
 
     override fun draw(canvas: Canvas) {
@@ -358,7 +380,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 }
 ```
 
-Note: leaving setAlpha/setColorFilter empty means system-driven alpha/tint will not affect this Drawable unless you add explicit support.
+Note: leaving setAlpha/setColorFilter empty means framework-driven alpha/tint will not affect this Drawable unless you add explicit support.
 
 ### Approach Comparison
 
@@ -372,11 +394,11 @@ Note: leaving setAlpha/setColorFilter empty means system-driven alpha/tint will 
 ### Key Considerations
 
 **Format support**:
-- AndroidSVG and SVG decoders do not support the full SVG spec (e.g., scripts, advanced filters, complex animations).
-- Complex SVGs may not render identically to browsers.
+- AndroidSVG and SVG decoders do not implement the full SVG spec (e.g., scripts, advanced filters, complex animations).
+- Complex SVGs may render differently than in browsers.
 
 **Memory**:
-- Converting large SVGs to Bitmap may cause OutOfMemoryError.
+- Converting large SVGs to Bitmaps may cause OutOfMemoryError.
 - Prefer PictureDrawable or vector-style rendering when possible.
 
 **Error handling**:
@@ -390,7 +412,7 @@ Note: leaving setAlpha/setColorFilter empty means system-driven alpha/tint will 
 **Sizing and scaling**:
 - Many SVGs rely on viewBox without explicit sizes — define or compute sizes deliberately.
 - Preserve aspect ratio when scaling unless distortion is acceptable.
-- For ImageView, choose an appropriate scaleType per design.
+- For ImageView, choose an appropriate scaleType according to design.
 
 ## Follow-ups
 

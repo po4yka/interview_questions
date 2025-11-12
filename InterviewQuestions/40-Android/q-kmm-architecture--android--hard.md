@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-clean-architecture-android--android--hard, q-mvi-architecture--android--hard]
+related: [c-android, q-clean-architecture-android--android--hard, q-mvi-architecture--android--hard]
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 sources: []
 tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, kotlin, multiplatform]
 
@@ -32,15 +32,13 @@ tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, k
 
 KMM позволяет делиться бизнес-логикой, сетью и data слоями между Android и iOS, сохраняя UI platform-specific и обычно достигая порядка 60-80% переиспользования кода (в зависимости от проекта).
 
-## Краткий вариант
-
+## Краткая Версия (RU)
 - Общая бизнес-логика, сеть, кэш и доменная модель в `commonMain`.
 - UI, DI-фреймворки и интеграция с платформой остаются нативными (`androidMain`, `iosMain`).
 - Используйте `expect/actual` для тонких адаптеров к платформенным API.
 - Стройте архитектуру вокруг Clean Architecture (Domain/Data/Presentation) и избегайте избыточного шаринга UI.
 
-## Подробный вариант
-
+## Подробная Версия (RU)
 ### Требования
 
 - Функциональные:
@@ -58,7 +56,7 @@ KMM позволяет делиться бизнес-логикой, сетью 
 Высокоуровневая схема:
 - `shared` модуль (KMM): домен, дата-слой, use-case, кросс-платформенные сервисы.
 - `androidApp`: Android UI (Compose/Views), DI (Hilt и т.п.), навигация, интеграция с `shared`.
-- `iosApp`: iOS UI (SwiftUI/UIKit), DI/композиция зависимостей, интеграция с `shared` фреймворком.
+- `iosApp`: iOS UI (SwiftUI/UIKit), DI/композиция зависимостей на стороне iOS, интеграция с экспортируемым `shared` фреймворком.
 - Тонкие `expect/actual` адаптеры для платформенных API.
 
 ### Структура Проекта
@@ -73,7 +71,7 @@ androidApp/      # Android приложение
 iosApp/          # iOS Xcode проект
 ```
 
-**Build Configuration (упрощенный пример):**
+**Build Configuration (упрощенный пример, классический стиль):**
 ```kotlin
 // shared/build.gradle.kts
 kotlin {
@@ -118,7 +116,7 @@ kotlin {
 }
 ```
 
-(В реальных проектах используется актуальный стиль конфигурации Multiplatform-плагина; важно правильно связать `iosMain` с конкретными таргетами.)
+(В реальных проектах используйте актуальный стиль конфигурации Multiplatform-плагина и иерархические source sets; важно правильно связать `iosMain` с конкретными таргетами.)
 
 ### Expect/Actual Механизм
 
@@ -151,7 +149,7 @@ actual fun generateUUID(): String = platform.Foundation.NSUUID().UUIDString()
 ```
 
 **Применение:**
-- Database drivers (SQLDelight)
+- Database drivers (например, SQLDelight)
 - Логирование (Logcat vs NSLog)
 - Доступ к файловой системе
 - Доступ к системным API, недоступным в `commonMain`
@@ -271,7 +269,7 @@ object SharedModule {
 
 **iOS (SwiftUI, упрощенный пример):**
 ```swift
-// ✅ Wrapper for observing a Kotlin StateFlow/Flow
+// ✅ Wrapper for observing a Kotlin StateFlow/Flow (псевдокод)
 class TaskListViewModelWrapper: ObservableObject {
     private let viewModel: TaskListViewModel
     @Published var tasks: [Task] = []
@@ -283,8 +281,8 @@ class TaskListViewModelWrapper: ObservableObject {
     }
 
     private func observeTasks() {
-        // Здесь предполагается helper для конвертации Flow в callback / Combine.
-        // Например, extension на Kotlin Flow, генерируемый KMP Native Coroutines.
+        // Здесь должен использоваться реальный bridge Flow -> Swift,
+        // например, через KMP-NativeCoroutines или другой helper из проекта.
         viewModel.tasks.collectIn { [weak self] tasks in
             self?.tasks = tasks
         }
@@ -304,7 +302,7 @@ struct TaskListView: View {
 }
 ```
 
-(Важно иметь реальный helper/bridge для `Flow` → Swift (например, `KMP-NativeCoroutines`) вместо несуществующего `watch`.)
+(Важно использовать реальный helper/bridge для `Flow` → Swift (например, `KMP-NativeCoroutines`), а приведённый `collectIn` рассматривать как иллюстрацию паттерна.)
 
 ### Dependency Injection (Koin на shared уровне)
 
@@ -329,14 +327,16 @@ val iosModule = module {
 }
 
 object SharedDi {
-    // Инициализация Koin в platform code и методы для получения зависимостей
+    // Инициализация Koin выполняется в platform-коде (Android/iOS)
+    // с использованием multiplatform-совместимых артефактов Koin.
+    // Здесь только пример доступа к зависимостям:
     fun taskListViewModel(): TaskListViewModel = getKoin().get()
 }
 ```
 
-Здесь Koin используется в shared коде как multiplatform-friendly DI, а Hilt — только в Android-слое для интеграции Android-компонентов (`ViewModel`, `Activity` и т.п.). Не стоит полагаться на `KoinJavaComponent` или другие JVM-only API на iOS.
+Здесь Koin используется в shared коде через multiplatform-совместимые артефакты и инициализируется в платформенных entry points, а Hilt — только в Android-слое для интеграции Android-компонентов (`ViewModel`, `Activity` и т.п.). Не стоит использовать JVM-only API (например, `KoinJavaComponent`) в iOS-коде.
 
-### Best Practices
+### Best Practices (RU)
 
 **Code Organization:**
 - Бизнес-логика в `commonMain`.
@@ -354,15 +354,15 @@ object SharedDi {
 - Минимизировать количество cross-boundary вызовов между Kotlin и Swift/Objective-C.
 - Кэшировать platform-specific экземпляры, когда это оправдано.
 - Профилировать использование памяти и потоков на обеих платформах.
-- Следить за freeze/конкурентностью в Kotlin/Native при работе с потоками.
+- Учитывать особенности конкуренции и memory model Kotlin/Native при работе с потоками.
 
-### Common Pitfalls
+### Common Pitfalls (RU)
 
-❌ **Over-sharing:** Попытка шарить UI приводит к ухудшению UX и усложняет интеграцию native-паттернов.
-❌ **Complex Generics:** Сложные generics (`Flow<Result<List<T>>>`) плохо мапятся в Swift и усложняют API.
-❌ **Incorrect error mapping:** Отсутствие `@Throws` или понятной схемы ошибок делает обработку в Swift неудобной; непойманные исключения приводят к крэшу, как и на Android.
-❌ **Memory Leaks:** Неверное управление жизненным циклом shared `ViewModel`/Flows и сильные reference cycles между Kotlin и Swift.
-❌ **Build Configuration:** Ошибки в настройке targets, Podfile или экспорте зависимостей во фреймворк.
+- Over-sharing: попытка шарить UI приводит к ухудшению UX и усложняет интеграцию native-паттернов.
+- Complex Generics: сложные дженерики (`Flow<Result<List<T>>>`) плохо мапятся в Swift и усложняют API.
+- Incorrect error mapping: отсутствие `@Throws` или понятной схемы ошибок делает обработку в Swift неудобной; непойманные исключения приводят к крэшу, как и на Android.
+- Memory Leaks: неверное управление жизненным циклом shared `ViewModel`/Flows и сильные reference cycles между Kotlin и Swift.
+- Build Configuration: ошибки в настройке targets, Podfile или экспорте зависимостей во фреймворк.
 
 ---
 
@@ -370,15 +370,13 @@ object SharedDi {
 
 KMM lets you share business logic, networking, and data layers between Android and iOS while keeping UI platform-specific, typically achieving around 60-80% code reuse (project-dependent).
 
-## Short Version
-
+## Short Version (EN)
 - Put shared business logic, networking, caching, and domain models in `commonMain`.
 - Keep UI, DI frameworks, and platform integrations native (`androidMain`, `iosMain`).
 - Use `expect/actual` for thin adapters to platform APIs.
 - Organize around Clean Architecture (Domain/Data/Presentation) and avoid over-sharing UI.
 
-## Detailed Version
-
+## Detailed Version (EN)
 ### Requirements
 
 - Functional:
@@ -396,7 +394,7 @@ KMM lets you share business logic, networking, and data layers between Android a
 High-level design:
 - `shared` module (KMM): domain, data, use cases, cross-platform services.
 - `androidApp`: Android UI (Compose/Views), DI (Hilt etc.), navigation, integration with `shared`.
-- `iosApp`: iOS UI (SwiftUI/UIKit), dependency composition, integration with the exported `shared` framework.
+- `iosApp`: iOS UI (SwiftUI/UIKit), dependency composition on the iOS side, integration with the exported `shared` framework.
 - Thin `expect/actual` adapters for platform APIs.
 
 ### Project Structure
@@ -411,7 +409,7 @@ androidApp/      # Android application
 iosApp/          # iOS Xcode project
 ```
 
-**Build Configuration (simplified example):**
+**Build Configuration (simplified, classic style):**
 ```kotlin
 // shared/build.gradle.kts
 kotlin {
@@ -456,7 +454,7 @@ kotlin {
 }
 ```
 
-(In real projects, use the currently recommended Multiplatform plugin style; the key point is wiring `iosMain` correctly to iOS targets.)
+(In real projects, prefer the up-to-date Multiplatform plugin style and hierarchical source sets; the key point is wiring `iosMain` correctly to the iOS targets.)
 
 ### Expect/Actual Mechanism
 
@@ -489,7 +487,7 @@ actual fun generateUUID(): String = platform.Foundation.NSUUID().UUIDString()
 ```
 
 **Use Cases:**
-- Database drivers (SQLDelight)
+- Database drivers (e.g., SQLDelight)
 - Logging (Logcat vs NSLog)
 - File system access
 - Access to system APIs unavailable in `commonMain`
@@ -609,7 +607,7 @@ object SharedModule {
 
 **iOS (SwiftUI, simplified):**
 ```swift
-// ✅ Wrapper for observing a Kotlin StateFlow/Flow
+// ✅ Wrapper for observing a Kotlin StateFlow/Flow (pseudo-code)
 class TaskListViewModelWrapper: ObservableObject {
     private let viewModel: TaskListViewModel
     @Published var tasks: [Task] = []
@@ -621,7 +619,8 @@ class TaskListViewModelWrapper: ObservableObject {
     }
 
     private func observeTasks() {
-        // Expect a real helper to bridge Kotlin Flow to Swift (e.g., via KMP-NativeCoroutines)
+        // Use a real Flow -> Swift bridge here, for example via KMP-NativeCoroutines
+        // or another helper defined in your project.
         viewModel.tasks.collectIn { [weak self] tasks in
             self?.tasks = tasks
         }
@@ -641,7 +640,7 @@ struct TaskListView: View {
 }
 ```
 
-(Use an actual `Flow`→Swift bridge instead of the non-standard `watch` function.)
+(Use an actual `Flow` → Swift bridge instead of the non-standard `collectIn`; the snippet shows the pattern, not a concrete library API.)
 
 ### Dependency Injection (Koin in shared, Hilt on Android)
 
@@ -666,44 +665,54 @@ val iosModule = module {
 }
 
 object SharedDi {
-    // Initialize Koin in platform code and expose helpers
+    // Koin is initialized from platform code (Android/iOS)
+    // using its multiplatform-compatible artifacts.
+    // This is an example of exposing dependencies:
     fun taskListViewModel(): TaskListViewModel = getKoin().get()
 }
 ```
 
-Koin (or similar) is used in shared code as a multiplatform-friendly DI, while Hilt remains an Android-only DI framework.
+Koin (or a similar library) is used in shared code via multiplatform-compatible artifacts and initialized from platform entry points, while Hilt remains an Android-only DI framework. JVM-only APIs (e.g., `KoinJavaComponent`) must not be used in iOS code.
 
-### Best Practices
+### Best Practices (EN)
 
 **Code Organization:**
 - Put business logic in `commonMain`.
 - Keep UI layers platform-specific.
-- Minimize `expect/actual` usage and isolate platform details behind small interfaces.
+- Minimize `expect/actual` usage and isolate platform details behind small adapters.
 - Follow Clean Architecture (Domain → Data → Presentation).
 
 **Swift-Friendly APIs:**
 - Avoid overly complex generics (especially nested `Result<List<T>>`) in the exported framework API.
 - Use `@Throws` for functions that should map to `throws` in Swift for predictable error handling.
 - Export only the necessary types to the iOS framework.
-- Provide adapters/wrappers for `Flow`/`StateFlow` to integrate cleanly with SwiftUI/Combine.
+- Provide adapters/wrappers over `Flow`/`StateFlow` to integrate cleanly with SwiftUI/Combine.
 
 **Performance:**
 - Minimize cross-boundary calls between Kotlin and Swift/Objective-C.
 - Cache platform-specific instances when it makes sense.
 - Profile memory and threading behavior on both platforms.
-- Be mindful of Kotlin/Native concurrency semantics.
+- Be mindful of Kotlin/Native concurrency and memory model.
 
-### Common Pitfalls
+### Common Pitfalls (EN)
 
-❌ **Over-sharing:** Trying to share UI code hurts UX and complicates native integration.
-❌ **Complex Generics:** Complicated generics (`Flow<Result<List<T>>>`) do not map nicely to Swift and make APIs harder to use.
-❌ **Incorrect error mapping:** Missing `@Throws`/clear error contracts leads to awkward Swift error handling; uncaught exceptions crash as on Android.
-❌ **Memory Leaks:** Incorrect lifecycle handling of shared ViewModels/Flows and strong reference cycles across the Kotlin ↔ Swift boundary.
-❌ **Build Configuration:** Misconfigured targets, Podfile, or framework exports causing integration issues.
+- Over-sharing: trying to share UI code hurts UX and complicates native integration.
+- Complex Generics: complicated generics (`Flow<Result<List<T>>>`) do not map nicely to Swift and make APIs harder to use.
+- Incorrect error mapping: missing `@Throws`/clear error contracts leads to awkward Swift error handling; uncaught exceptions crash just like on Android.
+- Memory Leaks: incorrect lifecycle handling of shared ViewModels/Flows and strong reference cycles across the Kotlin ↔ Swift boundary.
+- Build Configuration: misconfigured targets, Podfile, or framework exports causing integration issues.
 
 ---
 
-## Follow-ups
+## Follow-ups (RU)
+
+- Как вы обрабатываете отмену корутин в shared ViewModel, к которой обращается iOS?
+- Какие стратегии вы используете для отладки shared-кода на iOS-устройствах?
+- Как вы эффективно тестируете платформенно-специфичные реализации (`expect/actual`)?
+- Каковы последствия для памяти при удержании ссылок на Kotlin-объекты из Swift?
+- Как вы версионируете и поставляете shared-фреймворк для использования на iOS?
+
+## Follow-ups (EN)
 
 - How do you handle coroutine cancellation in shared ViewModels accessed from iOS?
 - What strategies exist for debugging shared code on iOS devices?
@@ -711,7 +720,11 @@ Koin (or similar) is used in shared code as a multiplatform-friendly DI, while H
 - What are the memory implications of keeping references to Kotlin objects from Swift?
 - How do you version and publish the shared framework for iOS consumption?
 
-## References
+## References (RU)
+
+- [[c-android]]
+
+## References (EN)
 
 - [[c-android]]
 

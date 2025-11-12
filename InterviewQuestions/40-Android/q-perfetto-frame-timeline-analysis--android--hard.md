@@ -18,6 +18,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-profiling
 - q-android-performance-measurement-tools--android--medium
 created: 2025-10-02
 updated: 2025-11-10
@@ -70,22 +71,22 @@ EOF
 adb pull /data/misc/perfetto-traces/app.perfetto-trace
 ```
 
-- Обязательно включите источники Frame Timeline: `android.app_frame_timeline` и `android.surfaceflinger.frame_timeline` (названия могут отличаться в зависимости от версии, сверяйтесь с документацией Perfetto/Android).
+- Обязательно включите источники Frame Timeline: `android.app_frame_timeline` и `android.surfaceflinger.frame_timeline` (конкретные названия и доступность зависят от версии Android/Perfetto; сверяйтесь с документацией и `perfetto --query`).
 - Добавьте `android.packages_list`, чтобы связывать фреймы с нужным пакетом.
-- По необходимости добавляйте дополнительные источники (CPU scheduler, Binder, GPU), но помните, что они не заменяют frame timeline.
-- Для Jetpack Compose и современных приложений опирайтесь на Frame Timeline; дополнительные источники (`traceEvents`, latency/CPU/GPU треки) используйте для детализации, а не вместо Frame Timeline.
+- По необходимости добавляйте дополнительные источники (CPU scheduler, Binder, GPU), но помните, что они дополняют Frame Timeline, а не заменяют её.
+- Для Jetpack Compose и современных приложений опирайтесь на Frame Timeline как на основной источник правды о кадрах; дополнительные источники (`traceEvents`, latency/CPU/GPU треки) используйте для детализации.
 
 ### 2. Интерпретация Frame Timeline
 
-- **AppFrame**: фрейм на стороне приложения (когда приложение завершило подготовку/отрисовку кадра).
-- **DisplayFrame**: фрейм на стороне SurfaceFlinger/дисплея (когда кадр был представлен на дисплей).
-- Jank определяется по тому, успевает ли AppFrame попасть в соответствующий DisplayFrame (deadline) и по полям `jank_type` / причинам jank в таблицах Frame Timeline.
+- **AppFrame**: фрейм на стороне приложения — момент, когда приложение завершило подготовку кадра (рендеринг на `RenderThread` / запись в Surface) и передало результат системе.
+- **DisplayFrame**: фрейм на стороне SurfaceFlinger/дисплея — момент, когда системный композитор выбрал и показал кадр на экране.
+- Jank определяется по тому, успевает ли AppFrame попасть в соответствующий DisplayFrame (до дедлайна VSync) и по полям `jank_type` / причинам jank в таблицах Frame Timeline.
 - В Perfetto UI используется цветовая подсветка состояний фреймов (успешные, с задержкой, дропнутые и др.); воспринимайте зелёный/жёлтый/красный как концептуальное обозначение нормальных, пограничных и проблемных кадров, а за точной семантикой цветов и легендой обращайтесь к конкретной версии UI.
-- Свяжите события Frame Timeline с `Choreographer#doFrame`, работой `RenderThread`, GPU queue и SurfaceFlinger, чтобы понять, на каком этапе возникает задержка.
+- Свяжите события Frame Timeline с `Choreographer#doFrame`, работой `RenderThread`, GPU queue и SurfaceFlinger, используя идентификаторы App/Display фреймов, чтобы точно понять, на каком этапе возникает задержка.
 
 ### 3. Корреляция потоков
 
-- Используйте `Slice`/`Tracks` view в Perfetto, чтобы находить `AppFrame`/`DisplayFrame` и соответствующие им срезы.
+- Используйте `Slice`/`Tracks` view и специализированные Frame Timeline треки в Perfetto, чтобы находить `AppFrame`/`DisplayFrame` и соответствующие им срезы.
 - Фильтруйте по `Choreographer#doFrame` и смежным событиям, сопоставляйте:
   - `Main Thread` → обработка input/measure/layout.
   - `RenderThread` → генерация команд для GPU.
@@ -94,18 +95,18 @@ adb pull /data/misc/perfetto-traces/app.perfetto-trace
 
 ### 4. Автоматизация
 
-- Используйте `trace_processor_shell` для извлечения метрик:
+- Используйте `trace_processor_shell` для изучения доступных таблиц и извлечения метрик. Обратите внимание, что структура таблиц зависит от версии Perfetto/Android; используйте `.tables` и `.schema` для проверки.
 
 ```bash
 trace_processor_shell app.perfetto-trace <<'SQL'
 SELECT ts, dur, jank_type
-FROM frame_timeline_slice
+FROM frame_timeline_slice -- используйте актуальное имя таблицы/представления для вашей версии
 WHERE jank_type != 0;
 SQL
 ```
 
-- Таблица `frame_timeline_slice` (или её аналог в вашей версии) содержит информацию по App/Display фреймам, длительности и типам jank.
-- Встроенные метрики Perfetto (например, `android_frame_timeline` в trace processor metrics) позволяют получать агрегаты: количество дропнутых кадров, долю janky-фреймов, FPS и т.п. Уточняйте точные имена метрик по актуальной версии Perfetto.
+- Таблицы, связанные с Frame Timeline (например, `frame_timeline`, `actual_frame_timeline` или их аналоги в вашей версии), содержат информацию по App/Display фреймам, длительности и типам jank. Уточняйте точные имена по актуальной схеме trace processor.
+- Встроенные метрики Perfetto (например, метрики на основе Frame Timeline в trace processor metrics) позволяют получать агрегаты: количество дропнутых кадров, долю janky-фреймов, FPS и т.п. Уточняйте точные имена метрик по актуальной версии Perfetto.
 - В CI:
   - фиксируйте baseline по ключевым метрикам (например, доля janky-фреймов, p95/p99 времени подготовки фрейма);
   - сравнивайте с порогами (thresholds) и фейлите сборку или отправляйте отчёты при регрессии;
@@ -117,43 +118,45 @@ SQL
 - Совмещайте Perfetto с `Macrobenchmark` (`FrameTimingMetric` / FrameTimelineMetric) для автоматизированных тестов производительности.
 - Анализируйте GPU и память (соответствующие data sources Perfetto) как дополнительный контекст при поиске причин jank.
 
+См. также: [[c-android-profiling]]
+
 ---
 
 ## Answer (EN)
 
 ### 1. Trace capture
 
-- Capture a Perfetto trace including frame timeline data sources, e.g. `android.app_frame_timeline` and `android.surfaceflinger.frame_timeline`, plus `android.packages_list` and, if needed, CPU/Binder/GPU sources.
+- Capture a Perfetto trace including frame timeline data sources, e.g. `android.app_frame_timeline` and `android.surfaceflinger.frame_timeline`, plus `android.packages_list` and, if needed, CPU/Binder/GPU sources (exact names and availability depend on your Android/Perfetto version; confirm via docs and `perfetto --query`).
 - Use an `adb shell perfetto` command similar to the RU example, then `adb pull` and open the trace in the Perfetto UI.
 
 ### 2. Frame timeline interpretation
 
-- AppFrame: when the app finishes producing a frame.
-- DisplayFrame: when SurfaceFlinger/compositor presents a frame to the display.
-- Jank is detected by checking whether AppFrames make their deadlines for the corresponding DisplayFrames and by inspecting `jank_type` / jank reasons in frame timeline tables.
-- Treat green/yellow/red as a conceptual shorthand for good/borderline/bad frames; rely on the actual Perfetto UI legend for the precise color semantics in your version.
-- Correlate AppFrame/DisplayFrame slices with `Choreographer#doFrame`, RenderThread, GPU/compositor tracks to locate where time is spent.
+- AppFrame: the application-side frame — when the app has finished producing the frame (RenderThread/GPU command submission / writing into its Surface) and hands it off to the system.
+- DisplayFrame: the system compositor/SurfaceFlinger-side frame — when the compositor selects and presents a frame on screen.
+- Jank is detected by checking whether AppFrames meet the deadlines for their corresponding DisplayFrames (vsync deadline) and by inspecting `jank_type` / jank reasons in frame timeline tables.
+- Treat green/yellow/red in the Perfetto UI as conceptual shorthand for good/borderline/bad frames; rely on the legend of your Perfetto UI version for exact semantics.
+- Correlate AppFrame/DisplayFrame slices with `Choreographer#doFrame`, RenderThread, GPU/compositor tracks and frame ids/tokens to locate where time is spent and where delays appear.
 
 ### 3. Thread correlation
 
-- In Perfetto, use Slice/Tracks views to:
+- In Perfetto, use the Slice/Tracks views and dedicated Frame Timeline tracks to:
   - Filter for `Choreographer#doFrame` and frame-related slices.
   - Map Main thread → RenderThread → GPU/compositor work.
-  - Inspect Binder calls to SurfaceFlinger/ViewRootImpl to see where delays occur between the app and system compositor.
+  - Inspect Binder calls to SurfaceFlinger/ViewRootImpl to see where delays occur between the app and the system compositor.
 
 ### 4. Automation
 
-- Use `trace_processor_shell` to query frame timeline data, for example:
+- Use `trace_processor_shell` to inspect available tables and query frame timeline-related data. Note that exact table names depend on the Perfetto/Android version; use `.tables` and `.schema` for discovery.
 
 ```bash
 trace_processor_shell app.perfetto-trace <<'SQL'
 SELECT ts, dur, jank_type
-FROM frame_timeline_slice
+FROM frame_timeline_slice -- replace with the actual frame timeline table/view name for your version
 WHERE jank_type != 0;
 SQL
 ```
 
-- Use Perfetto's built-in metrics (e.g. `android_frame_timeline` metric proto, depending on your version) to compute aggregates such as dropped/janky frame counts and FPS; always confirm exact metric names against the current Perfetto docs.
+- Use Perfetto's built-in metrics (for example, frame-timeline-based metrics like `android_frame_timeline` or version-specific equivalents) to compute aggregates such as dropped/janky frame counts and FPS; always confirm exact metric names against the current Perfetto docs and `trace_processor_shell --run-metrics` output.
 - Integrate this into CI:
   - collect traces via Macrobenchmark or scripted runs;
   - compute frame-timeline-based metrics;
@@ -164,6 +167,8 @@ SQL
 - Capture traces on builds close to production (release-like, minimal extra instrumentation).
 - Combine Perfetto with Macrobenchmark FrameTiming/FrameTimeline metrics to detect regressions.
 - Use GPU and memory tracks as supporting context for diagnosing jank rather than as primary frame correctness signals.
+
+See also: [[c-android-profiling]]
 
 ---
 

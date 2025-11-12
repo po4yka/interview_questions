@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-activity-lifecycle, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/activity, android/ui-views, difficulty/medium]
 
 ---
@@ -146,11 +146,13 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        // Укажите актуальную версию kotlinCompilerExtensionVersion
+        kotlinCompilerExtensionVersion = "1.5.3" // пример значения
     }
 }
 
 dependencies {
+    // Используйте актуальную версию BOM; значение ниже приведено как пример
     implementation(platform("androidx.compose:compose-bom:2024.01.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
@@ -225,9 +227,16 @@ fun PreviewMyApp() {
 class CustomView(context: Context, attrs: AttributeSet? = null) :
     View(context, attrs) {
 
-    private val paint = Paint().apply {
+    private val circlePaint = Paint().apply {
         color = Color.BLUE
         style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+
+    private val textPaint = Paint().apply {
+        color = Color.BLACK
+        textSize = 48f
+        textAlign = Paint.Align.CENTER
         isAntiAlias = true
     }
 
@@ -242,20 +251,15 @@ class CustomView(context: Context, attrs: AttributeSet? = null) :
             width / 2f,
             height / 2f,
             200f,
-            paint
+            circlePaint
         )
 
         // Текст
-        paint.apply {
-            color = Color.BLACK
-            textSize = 48f
-            textAlign = Paint.Align.CENTER
-        }
         canvas.drawText(
             "Custom Drawing",
             width / 2f,
             height / 2f + 300f,
-            paint
+            textPaint
         )
     }
 }
@@ -287,7 +291,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Выбираем ОДИН подход для экрана.
+        // Выбираем ОДИН основной подход для данного экрана.
         // Ниже пример полностью программного создания UI.
 
         val layout = LinearLayout(this).apply {
@@ -363,6 +367,8 @@ class MainActivity : AppCompatActivity() {
   2. Переопределить `onDraw(Canvas)`.
   3. Использовать этот `View` через `setContentView()` или в XML.
 
+Примечание: Для сложных экранов можно комбинировать подходы (например, встраивать Compose в `View`-иерархию и наоборот), но в типичном случае для одного экрана выбирают один основной способ описания UI.
+
 ### 9. Жизненный цикл `Activity` (основы)
 
 ```kotlin
@@ -390,7 +396,7 @@ class MainActivity : AppCompatActivity() {
 2. Нужно задать содержимое окна: через `setContentView(...)` для `View`/XML, через `setContent { ... }` для Compose или добавить кастомные `View`.
 3. Разметка может быть описана в XML, на Compose или создана программно.
 4. Корректная запись в манифесте и запуск на устройстве/эмуляторе обязательны, чтобы UI появился.
-5. Для одного экрана обычно выбирают один основной подход (XML + `View` Binding, программные `View` или Compose).
+5. Для одного экрана обычно выбирают один основной подход (XML + `View` Binding, программные `View` или Compose), при необходимости комбинируя их осознанно.
 
 ---
 
@@ -515,11 +521,13 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        // Specify an up-to-date kotlinCompilerExtensionVersion
+        kotlinCompilerExtensionVersion = "1.5.3" // example value
     }
 }
 
 dependencies {
+    // Use the latest stable Compose BOM; the version below is an example
     implementation(platform("androidx.compose:compose-bom:2024.01.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
@@ -594,9 +602,16 @@ For custom graphics, create a custom view:
 class CustomView(context: Context, attrs: AttributeSet? = null) :
     View(context, attrs) {
 
-    private val paint = Paint().apply {
+    private val circlePaint = Paint().apply {
         color = Color.BLUE
         style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+
+    private val textPaint = Paint().apply {
+        color = Color.BLACK
+        textSize = 48f
+        textAlign = Paint.Align.CENTER
         isAntiAlias = true
     }
 
@@ -611,20 +626,15 @@ class CustomView(context: Context, attrs: AttributeSet? = null) :
             width / 2f,
             height / 2f,
             200f,
-            paint
+            circlePaint
         )
 
         // Draw text
-        paint.apply {
-            color = Color.BLACK
-            textSize = 48f
-            textAlign = Paint.Align.CENTER
-        }
         canvas.drawText(
             "Custom Drawing",
             width / 2f,
             height / 2f + 300f,
-            paint
+            textPaint
         )
     }
 }
@@ -656,8 +666,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Choose ONE approach per activity instance.
-        // Example below: programmatic views.
+        // Choose ONE primary approach for this screen.
+        // Example below: fully programmatic views.
 
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -732,6 +742,8 @@ Ensure your activity is declared and has the correct MAIN action to be launchabl
   2. Override `onDraw(canvas: Canvas)`.
   3. Use this view via `setContentView()` or in an XML layout.
 
+Note: For more advanced cases you can combine approaches (e.g., host Compose inside a `View`-based screen and vice versa), but typically you choose one primary UI approach per screen.
+
 ### 9. Essential `Activity` Lifecycle
 
 ```kotlin
@@ -756,11 +768,11 @@ class MainActivity : AppCompatActivity() {
 ```
 
 Key points:
-1. An `Activity` (or other appropriate entry point, e.g. Compose host activity) provides the window where UI is drawn.
-2. You must set the UI content: via `setContentView(...)` for Views/XML or by calling `setContent { ... }` for Compose, or by attaching custom views.
+1. An `Activity` (or other appropriate entry point, e.g. a Compose host activity) provides the window where UI is drawn.
+2. You must set the UI content: via `setContentView(...)` for `Views`/XML, by calling `setContent { ... }` for Compose, or by attaching custom views.
 3. Layout can be defined in XML, in Compose, or created programmatically.
-4. A proper manifest declaration and launching configuration are required to show the UI on device/emulator.
-5. Use one primary approach per screen (XML + `View` Binding, programmatic Views, or Compose).
+4. A proper manifest declaration and launch configuration are required to show the UI on device/emulator.
+5. Use one primary approach per screen (XML + `View` Binding, programmatic `Views`, or Compose), combining them consciously when needed.
 
 ---
 
@@ -778,10 +790,10 @@ Key points:
 
 ## Ссылки (RU)
 
-- [Views](https://developer.android.com/develop/ui/views)
+- [`Views`](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
 ## References
 
-- [Views](https://developer.android.com/develop/ui/views)
+- [`Views`](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)

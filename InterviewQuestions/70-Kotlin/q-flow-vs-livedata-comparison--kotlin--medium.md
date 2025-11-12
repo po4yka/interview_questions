@@ -1,24 +1,27 @@
 ---
 id: kotlin-144
 title: "Flow vs LiveData Comparison / Сравнение Flow и LiveData"
-aliases: [Comparison, Flow, Livedata, Vs]
+aliases: [Flow vs LiveData Comparison, Kotlin Flow vs LiveData]
 topic: kotlin
-subtopics: [c-flow]
+subtopics: [coroutines, flow, types]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-kotlin, c-concepts--kotlin--medium, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/medium]
+
 ---
+
 # Вопрос (RU)
 > В чем разница между Kotlin `Flow` и `LiveData`? Когда следует использовать каждый из них?
 
----
+# Question (EN)
+> What are the differences between Kotlin `Flow` and `LiveData`? When should you use each?
 
 ## Ответ (RU)
 
@@ -30,7 +33,7 @@ tags: [difficulty/medium]
 |---------|------------|-----------------------------------|
 | **Тип** | Горячий поток (хранит состояние и доставляет активным наблюдателям) | Холодный поток (`Flow`) / Горячий поток (`StateFlow`/`SharedFlow`) |
 | **Учет Жизненного Цикла** | Да, встроенный | Нет, требует явного учета (например, `repeatOnLifecycle`) |
-| **Платформа** | Специфичен для Android | Платформо-независимый (Kotlin) |
+| **Платформа** | Специфичен для Android (AndroidX) | Платформо-независимый (часть Kotlin coroutines) |
 | **Операторы** | Ограниченные (map, switchMap и т.д.) | Богатые (много операторов трансформации и комбинирования) |
 | **Потоки** | Обновления наблюдаются на Main потоке | Настраиваемый через dispatchers |
 | **Backpressure** | Нет специальных операторов | Есть операторы для управления скоростью (buffer, conflate и т.д.) |
@@ -48,7 +51,7 @@ class UserViewModel : ViewModel() {
     val currentTime = MutableLiveData<Long>()
 
     init {
-        // Стартует сразу, работает даже с 0 наблюдателями
+        // Стартует сразу, работает пока жив ViewModelScope, даже с 0 наблюдателями
         viewModelScope.launch {
             while (true) {
                 delay(1000)
@@ -70,25 +73,26 @@ class UserViewModel : ViewModel() {
         }
     } // Еще не запущен!
 
-    // Стартует ТОЛЬКО при сборе
+    // Стартует ТОЛЬКО при сборе в каком-либо CoroutineScope
 }
 
 // В Activity
 lifecycleScope.launch {
     viewModel.currentTime.collect { time ->
-        // Flow начинает производить значения СЕЙЧАС
+        // Flow начинает производить значения СЕЙЧАС, пока активен этот scope
     }
 }
 ```
 
 **`StateFlow` (Горячий Поток)**:
 ```kotlin
-// StateFlow горячий - хранит текущее значение и продолжает эмитить независимо от подписчиков
+// StateFlow горячий для потребителей - хранит текущее значение и немедленно раздает его подписчикам
 class UserViewModel : ViewModel() {
     private val _currentTime = MutableStateFlow(0L)
     val currentTime: StateFlow<Long> = _currentTime
 
     init {
+        // Производитель значений контролируется scope (viewModelScope)
         viewModelScope.launch {
             while (true) {
                 delay(1000)
@@ -472,9 +476,6 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ---
 
-# Question (EN)
-> What are the differences between Kotlin `Flow` and `LiveData`? When should you use each?
-
 ## Answer (EN)
 
 **`Flow` and `LiveData`** are both reactive data holders, but they differ fundamentally in design, capabilities, and use cases. `Flow` is more powerful and flexible, while `LiveData` is simpler and lifecycle-aware by default.
@@ -485,7 +486,7 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 |---------|------------|-----------------------------------|
 | **Type** | Hot stream (holds state, delivers to active observers) | Cold stream (`Flow`) / Hot stream (`StateFlow`/`SharedFlow`) |
 | **Lifecycle Aware** | Yes, built-in | No, requires explicit handling (e.g., `repeatOnLifecycle`) |
-| **Platform** | Android-specific | Platform-agnostic (Kotlin) |
+| **Platform** | Android-specific (AndroidX library, primarily for Android) | Platform-agnostic (part of Kotlin coroutines) |
 | **Operators** | Limited (map, switchMap, etc.) | Rich set of transformation/combination operators |
 | **Threading** | Observers receive updates on Main thread | Configurable with dispatchers |
 | **Backpressure** | No dedicated operators | Has tools for rate handling (buffer, conflate, etc.) |
@@ -503,7 +504,7 @@ class UserViewModel : ViewModel() {
     val currentTime = MutableLiveData<Long>()
 
     init {
-        // Starts immediately, runs even with 0 observers
+        // Starts immediately and runs while ViewModelScope is active, even with 0 observers
         viewModelScope.launch {
             while (true) {
                 delay(1000)
@@ -525,25 +526,26 @@ class UserViewModel : ViewModel() {
         }
     } // Not running yet!
 
-    // Starts ONLY when collected
+    // Starts ONLY when collected in some CoroutineScope
 }
 
 // In Activity
 lifecycleScope.launch {
     viewModel.currentTime.collect { time ->
-        // Flow starts producing values NOW
+        // Flow starts producing values NOW while this scope is active
     }
 }
 ```
 
 **`StateFlow` (Hot Stream)**:
 ```kotlin
-// StateFlow is hot - holds the current value and keeps updating irrespective of collectors
+// StateFlow is hot for consumers - it holds the latest value and immediately replays it to new collectors
 class UserViewModel : ViewModel() {
     private val _currentTime = MutableStateFlow(0L)
     val currentTime: StateFlow<Long> = _currentTime
 
     init {
+        // The producer is controlled by viewModelScope
         viewModelScope.launch {
             while (true) {
                 delay(1000)
@@ -630,7 +632,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-**`Flow` - Rich Operator Set**:
+**`Flow` - Rich Operator `Set`**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userId = MutableStateFlow("")
@@ -927,19 +929,31 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java-подходов к реактивности?
+- Когда бы вы использовали это на практике в реальном Android-приложении?
+- Какие распространенные ошибки и подводные камни стоит избегать?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [`StateFlow` и `SharedFlow` - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Миграция с `LiveData` на Kotlin `Flow` - Android Developers](https://developer.android.com/codelabs/android-flow)
+- [Обзор `LiveData` - Android Developers](https://developer.android.com/topic/libraries/architecture/livedata)
+- [[c-kotlin]]
+
 ## References
 
-- [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
-- [Migrate from LiveData to Kotlin Flow - Android Developers](https://developer.android.com/codelabs/android-flow)
-- [LiveData Overview - Android Developers](https://developer.android.com/topic/libraries/architecture/livedata)
+- [`StateFlow` and `SharedFlow` - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Migrate from `LiveData` to Kotlin `Flow` - Android Developers](https://developer.android.com/codelabs/android-flow)
+- [`LiveData` Overview - Android Developers](https://developer.android.com/topic/libraries/architecture/livedata)
 - [[c-kotlin]]
-- [[c-flow]]
 
 ---
 
@@ -947,17 +961,33 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ---
 
+## Связанные вопросы (RU)
+
+### Хаб
+- [[q-kotlin-flow-basics--kotlin--medium]] - Обзор и введение в Kotlin `Flow`
+
+### Похожие (Medium)
+- [[q-hot-cold-flows--kotlin--medium]] - Горячие и холодные потоки
+- [[q-cold-vs-hot-flows--kotlin--medium]] - Сравнение холодных и горячих потоков
+- [[q-channels-vs-flow--kotlin--medium]] - Сравнение каналов и `Flow`
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` против `StateFlow`
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Отличия `StateFlow` и `SharedFlow`
+
+### Продвинутые (Сложнее)
+- [[q-flowon-operator-context-switching--kotlin--hard]] - `flowOn` и переключение контекстов
+- [[q-flow-backpressure-strategies--kotlin--hard]] - Стратегии backpressure в `Flow`
+
 ## Related Questions
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction
 
 ### Related (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow & SharedFlow differences
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow`
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - `StateFlow` & `SharedFlow` differences
 
 ### Advanced (Harder)
 - [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching

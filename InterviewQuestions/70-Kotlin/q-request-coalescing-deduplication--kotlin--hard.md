@@ -48,7 +48,7 @@ tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, 
 - [Тестирование объединения](#тестирование-объединения)
 - [Продакшн-сценарии](#продакшн-сценарии)
 - [Паттерны интеграции](#паттерны-интеграции)
-- [Лучшие практики](#лучшие-практики)
+- [Лучшие практики](#лучшие-лучшие-практики)
 - [Мониторинг и метрики](#мониторинг-и-метрики)
 - [Типичные ошибки](#типичные-ошибки)
 - [Дополнительные вопросы](#дополнительные-вопросы)
@@ -230,6 +230,7 @@ class RequestCoalescer<K, V> {
             try {
                 operation()
             } finally {
+                // Здесь "this" — это сам Deferred внутри async-блока
                 inFlightRequests.remove(key, this)
             }
         }
@@ -284,7 +285,7 @@ class ResilientRequestCoalescer<K, V> {
 }
 ```
 
-Важно: не выполнять долгие или подвешивающие операции внутри `ConcurrentHashMap.compute`; используйте `putIfAbsent`-паттерн.
+Важно: не выполнять долгие или подвешивающие операции внутри `ConcurrentHashMap.compute` или других map-операций; в приведённых примерах внутри них мы только создаём `Deferred` (операция синхронная), а `await` вызывается снаружи.
 
 ---
 
@@ -463,7 +464,7 @@ class CoalescerMetrics {
 }
 ```
 
-Замечание: при использовании `compute` не выполняйте внутри него длительных подвесных операций; здесь `async {}` только создаёт `Deferred`, а ожидание происходит позже.
+Замечание: при использовании `compute` не выполняйте внутри него длительных или подвешивающих операций; в данном примере внутри `compute` только создаётся `RequestEntry` с `Deferred`, а ожидание (`await`) и тяжёлая работа происходят вне `compute`.
 
 ---
 
@@ -559,6 +560,7 @@ class ExpiringRequestCoalescer<K, V>(
 
 ```kotlin
 class RequestBatcher<K, V>(
+    private val scope: CoroutineScope,
     private val batchSize: Int = 10,
     private val batchTimeout: Long = 100
 ) {
@@ -571,30 +573,32 @@ class RequestBatcher<K, V>(
     ): V {
         val deferred = CompletableDeferred<V>()
 
-        val shouldLaunch = mutex.withLock {
-            if (pending.containsKey(key)) {
-                val existing = pending[key]!!
-                return@withLock existing.also { deferred.completeWith(it) }
+        val existing = mutex.withLock {
+            val existingDeferred = pending[key]
+            if (existingDeferred != null) {
+                // Уже есть запрос для этого ключа — просто возвращаем его
+                return@withLock existingDeferred
             }
 
             pending[key] = deferred
-            pending.size >= batchSize || pending.size == 1
+            if (pending.size >= batchSize || pending.size == 1) {
+                // Запускаем батч, если достигли размера или это первый элемент
+                scope.launch { launchBatch(batchOperation) }
+            }
+
+            deferred
         }
 
-        if (shouldLaunch) {
-            launchBatch(batchOperation)
-        }
-
-        return deferred.await()
+        return existing.await()
     }
 
-    private fun CoroutineScope.launchBatch(
+    private suspend fun launchBatch(
         batchOperation: suspend (List<K>) -> Map<K, V>
-    ) = launch {
+    ) {
         delay(batchTimeout)
 
         val batch: Map<K, CompletableDeferred<V>> = mutex.withLock {
-            if (pending.isEmpty()) return@launch
+            if (pending.isEmpty()) return
             val copy = LinkedHashMap(pending)
             pending.clear()
             copy
@@ -657,7 +661,7 @@ class SharedFlowCoalescer<K, V>(
 }
 ```
 
-Здесь `SharedFlow` используется для разделения одного источника данных по ключу между несколькими подписчиками. Важно использовать корректный `CoroutineScope`, чтобы избежать утечек.
+Здесь `SharedFlow` используется для разделения одного источника данных по ключу между несколькими подписчиками. Важно использовать корректный долгоживущий `CoroutineScope`, чтобы избежать утечек.
 
 ---
 
@@ -747,13 +751,13 @@ class GraphQLRepository(
 @Test
 fun benchmarkCoalescing() = runBlocking {
     val api = MockApi(latency = 100)
-    val coalescedRepository = UserRepository(api, coalescer = RequestCoalescer())
-    val regularRepository = UserRepository(api, coalescer = RequestCoalescer())
+    val coalescedRepository = UserRepository(api, cache = InMemoryCache(), coalescer = RequestCoalescer())
+    val regularRepository = UserRepository(api, cache = InMemoryCache(), coalescer = object : RequestCoalescer<String, User>({}) {}) // псевдо-пример без коалесинга
 
     val concurrentRequests = 100
     val userId = "test-user"
 
-    // БЕЗ объединения (симулируем обход коалесера)
+    // БЕЗ объединения (логика без использования коалесера должна вызывать API каждый раз)
     val withoutTime = measureTimeMillis {
         val jobs = List(concurrentRequests) {
             launch {
@@ -780,7 +784,7 @@ fun benchmarkCoalescing() = runBlocking {
 }
 ```
 
-Идея: при большом числе параллельных идентичных запросов стоимость должна приближаться к одному вызову.
+Идея: при большом числе параллельных идентичных запросов стоимость должна приближаться к одному вызову. В реальном коде важно явно разделить варианты с/без коалесинга, чтобы сравнение было корректным.
 
 ---
 
@@ -920,7 +924,7 @@ class RequestCoalescerTest {
 1. Не объединять неидемпотентные операции (платежи, записи и т.п.).
 2. Не забывать про очистку, чтобы избежать утечек.
 3. Не использовать слишком широкие ключи.
-4. Не выполнять тяжёлую работу внутри структурных операций `ConcurrentHashMap`.
+4. Не выполнять тяжёлую работу внутри операций `ConcurrentHashMap`.
 
 ---
 
@@ -1089,7 +1093,7 @@ class UserProfileScreen : Fragment() {
         // Component 2: Avatar loads user
         userRepository.getUser(userId) // API call 2
 
-        // Component 3: Stats loads user
+        // Component 3: Stats load user
         userRepository.getUser(userId) // API call 3
 
         // Component 4: Actions load user
@@ -1179,6 +1183,7 @@ class RequestCoalescer<K, V> {
             try {
                 operation()
             } finally {
+                // Inside async, "this" refers to the Deferred instance
                 inFlightRequests.remove(key, this)
             }
         }
@@ -1207,7 +1212,7 @@ class ResilientRequestCoalescer<K, V> {
         key: K,
         operation: suspend () -> V
     ): Result<V> = coroutineScope {
-        // Try to reuse
+        // Try to reuse existing
         inFlightRequests[key]?.takeIf { it.isActive }?.let { existing ->
             return@coroutineScope existing.await()
         }
@@ -1234,7 +1239,7 @@ class ResilientRequestCoalescer<K, V> {
 }
 ```
 
-Note: Avoid running long/suspending work inside `ConcurrentHashMap.compute` lambdas; use `putIfAbsent` patterns instead.
+Note: Do not run long or suspending work inside `ConcurrentHashMap.compute`/`putIfAbsent` lambdas; here we only create `Deferred` synchronously, and `await` happens outside.
 
 ---
 
@@ -1288,19 +1293,89 @@ class MutexRequestCoalescer<K, V> {
 
 ## Complete RequestCoalescer Class
 
-(Production-style implementation with metrics as mirrored above.)
+(Production-style implementation as in RU section.)
 
 ---
 
 ## Time-Based Expiration
 
-(ExpiringRequestCoalescer implementation mirrored from RU.)
+(Time-based expiration implementation mirrored from RU section.)
 
 ---
 
 ## Request Batching vs Coalescing
 
-(Concept and RequestBatcher example mirrored from RU.)
+```kotlin
+// Coalescing: multiple identical (by key) requests -> single execution
+// Batching: multiple different keys -> single batched backend call
+```
+
+### Request Batching (simplified example)
+
+```kotlin
+class RequestBatcher<K, V>(
+    private val scope: CoroutineScope,
+    private val batchSize: Int = 10,
+    private val batchTimeout: Long = 100
+) {
+    private val mutex = Mutex()
+    private val pending = LinkedHashMap<K, CompletableDeferred<V>>()
+
+    suspend fun execute(
+        key: K,
+        batchOperation: suspend (List<K>) -> Map<K, V>
+    ): V {
+        val deferred = CompletableDeferred<V>()
+
+        val existing = mutex.withLock {
+            val existingDeferred = pending[key]
+            if (existingDeferred != null) {
+                // Already have an entry for this key; reuse it
+                return@withLock existingDeferred
+            }
+
+            pending[key] = deferred
+            if (pending.size >= batchSize || pending.size == 1) {
+                // Start a batch when first item arrives or limit reached
+                scope.launch { launchBatch(batchOperation) }
+            }
+
+            deferred
+        }
+
+        return existing.await()
+    }
+
+    private suspend fun launchBatch(
+        batchOperation: suspend (List<K>) -> Map<K, V>
+    ) {
+        delay(batchTimeout)
+
+        val batch: Map<K, CompletableDeferred<V>> = mutex.withLock {
+            if (pending.isEmpty()) return
+            val copy = LinkedHashMap(pending)
+            pending.clear()
+            copy
+        }
+
+        try {
+            val result = batchOperation(batch.keys.toList())
+            batch.forEach { (key, deferred) ->
+                val value = result[key]
+                if (value != null) {
+                    deferred.complete(value)
+                } else {
+                    deferred.completeExceptionally(
+                        IllegalStateException("No result for key: $key")
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            batch.values.forEach { it.completeExceptionally(e) }
+        }
+    }
+}
+```
 
 ---
 
@@ -1338,31 +1413,29 @@ class SharedFlowCoalescer<K, V>(
 }
 ```
 
-Note: Use an appropriate long-lived `CoroutineScope` to avoid leaks.
-
 ---
 
 ## Real Examples
 
-(Examples of UserRepository, ImageLoader, GraphQLRepository mirrored from RU.)
+(Examples of UserRepository, ImageLoader, GraphQLRepository as in RU section.)
 
 ---
 
 ## Performance Benefits
 
-(Benchmark sketch mirrored from RU.)
+(Benchmark sketch aligned with RU explanation; ensure real implementation clearly separates with/without coalescing.)
 
 ---
 
 ## Combining with Memory Cache
 
-(OptimizedRepository and CacheEntry mirrored from RU.)
+(OptimizedRepository and CacheEntry as in RU section.)
 
 ---
 
 ## Testing Coalescing
 
-(RequestCoalescerTest mirrored from RU.)
+(Tests as in RU section.)
 
 ---
 
@@ -1376,9 +1449,7 @@ Note: Use an appropriate long-lived `CoroutineScope` to avoid leaks.
 
 ## Integration Patterns
 
-When integrating with data loading libraries (Glide, Coil, etc.), use a coalescer inside loaders/fetchers to avoid duplicate network work. Ensure:
-- You use a long-lived `CoroutineScope`.
-- You avoid coupling to short-lived UI scopes.
+When integrating with loaders/fetchers (e.g., Glide, Coil), use a coalescer internally to avoid duplicate network work. Use an appropriate long-lived scope and avoid leaking UI scopes.
 
 ---
 
@@ -1386,13 +1457,13 @@ When integrating with data loading libraries (Glide, Coil, etc.), use a coalesce
 
 Do:
 1. Use for expensive, idempotent, side-effect-free operations.
-2. Build precise keys capturing all relevant parameters.
+2. Build precise keys including all parameters.
 3. Handle errors explicitly; all coalesced callers see a consistent outcome.
 4. Track metrics: coalescing ratio, savings, latency.
-5. Use appropriate timeouts.
+5. Use reasonable timeouts.
 
 Don't:
-1. Coalesce non-idempotent operations (payments, writes).
+1. Coalesce non-idempotent operations (payments, writes, etc.).
 2. Forget to clean up completed entries.
 3. Use overly broad keys.
 4. Run blocking work inside concurrent map operations.
@@ -1418,9 +1489,9 @@ data class CoalescerStats(
 ## Common Pitfalls
 
 - Coalescing non-idempotent operations.
-- Not removing completed entries → memory leaks.
+- Not removing completed entries (memory leaks).
 - Ignoring coroutine cancellation.
-- Doing heavy work inside `ConcurrentHashMap` operations.
+- Doing heavy or blocking work inside `ConcurrentHashMap` operations.
 
 ---
 

@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy]
+related: [c-android-navigation, c-bundle, q-android-app-components--android--easy]
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 sources: []
 tags: [android/fragment, difficulty/easy]
 
@@ -45,6 +45,8 @@ tags: [android/fragment, difficulty/easy]
 
 4. **Извлечение в `onCreate()`**
    Получайте аргументы в методе `onCreate()` через `requireArguments()` или `arguments?.let {}`.
+
+См. также: [[c-android-navigation]], [[c-bundle]]
 
 ### Пример 1: Передача Примитивных Типов
 
@@ -215,6 +217,8 @@ The recommended and safe way to pass parameters to a `Fragment` in Android is us
 
 4. **Extract in `onCreate()`**
    Retrieve arguments in `onCreate()` using `requireArguments()` or `arguments?.let {}`.
+
+See also: [[c-android-navigation]], [[c-bundle]]
 
 ### Example 1: Passing Primitive Types
 
@@ -389,12 +393,12 @@ class CorrectFragment : Fragment() {
 ## Ссылки (RU)
 
 - [Android Developer Guide: Fragments](https://developer.android.com/guide/fragments)
-- [Android Developer Guide: Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+- [Android Developer Guide: `Parcelable`](https://developer.android.com/reference/android/os/Parcelable)
 
 ## References
 
 - [Android Developer Guide: Fragments](https://developer.android.com/guide/fragments)
-- [Android Developer Guide: Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+- [Android Developer Guide: `Parcelable`](https://developer.android.com/reference/android/os/Parcelable)
 
 ## Связанные вопросы (RU)
 

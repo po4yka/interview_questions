@@ -2,32 +2,28 @@
 id: kotlin-106
 title: "Testing Coroutines with runTest and TestDispatcher / Тестирование корутин с runTest и TestDispatcher"
 aliases: ["Testing Coroutines with runTest and TestDispatcher", "Тестирование корутин с runTest и TestDispatcher"]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines, runtest, test-dispatcher]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Coroutines Testing Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-testing-coroutine-cancellation--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
-
-# Timestamps
 created: 2025-10-12
-updated: 2025-11-09
-
+updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
+
 ---
+
 # Вопрос (RU)
 > Как тестировать корутины с `runTest` и `TestDispatcher`? Объясните виртуальное время, `StandardTestDispatcher` vs `UnconfinedTestDispatcher` и практические паттерны тестирования для `ViewModel`.
+
+## Question (EN)
+> How to test coroutines with `runTest` and `TestDispatcher`? Explain virtual time, `StandardTestDispatcher` vs `UnconfinedTestDispatcher`, and practical testing patterns for `ViewModel`s.
 
 ---
 
@@ -735,9 +731,14 @@ fun `loadDashboard падает при ошибке репозитория`() = 
 
     val viewModel = DashboardViewModel(userRepo, statsRepo, notificationsRepo)
 
-    assertThrows<Exception> {
-        runTest { viewModel.loadDashboard() }
+    var thrown: Throwable? = null
+    try {
+        viewModel.loadDashboard()
+    } catch (e: Throwable) {
+        thrown = e
     }
+
+    assertTrue(thrown is Exception)
 }
 ```
 
@@ -968,7 +969,8 @@ fun pitfall1() = runTest {
 @Test
 fun pitfall2() = runTest {
     withContext(Dispatchers.IO) {
-        // Не использует виртуальное время
+        // Не использует виртуальное время; лучше внедрять диспетчер через абстракцию
+        // и подменять его на TestDispatcher в тестах.
     }
 }
 
@@ -993,20 +995,6 @@ fun pitfall4() = runTest {
 }
 ```
 
-### Зависимости
-
-```gradle
-// build.gradle.kts
-dependencies {
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("junit:junit:4.13.2")
-
-    // Для тестирования ViewModel
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
-}
-```
-
 ### Резюме
 
 - `runTest` предоставляет `TestScope` с управляемым виртуальным временем.
@@ -1020,9 +1008,6 @@ dependencies {
 - Отменяйте долгоживущие `collect`-job'ы.
 
 ---
-
-# Question (EN)
-> How to test coroutines with `runTest` and `TestDispatcher`? Explain virtual time, `StandardTestDispatcher` vs `UnconfinedTestDispatcher`, and practical testing patterns for `ViewModel`s.
 
 ## Answer (EN)
 
@@ -1562,10 +1547,6 @@ class ConfigurableFakeUserRepository : UserRepository {
 
 ### Testing Delays and Timeouts
 
-```gradle
-// build.gradle.kts
-```
-
 ```kotlin
 class TimerViewModel : ViewModel() {
     private val _seconds = MutableStateFlow(0)
@@ -1728,9 +1709,14 @@ fun `loadDashboard fails if any repo fails`() = runTest {
 
     val viewModel = DashboardViewModel(userRepo, statsRepo, notificationsRepo)
 
-    assertThrows<Exception> {
-        runTest { viewModel.loadDashboard() }
+    var thrown: Throwable? = null
+    try {
+        viewModel.loadDashboard()
+    } catch (e: Throwable) {
+        thrown = e
     }
+
+    assertTrue(thrown is Exception)
 }
 ```
 
@@ -1961,7 +1947,8 @@ fun pitfall1() = runTest {
 @Test
 fun pitfall2() = runTest {
     withContext(Dispatchers.IO) {
-        // This won't use virtual time; avoid in unit tests or inject dispatcher
+        // This won't use virtual time. Prefer injecting dispatcher (e.g., via constructor)
+        // and substituting it with a TestDispatcher in tests.
     }
 }
 
@@ -1981,23 +1968,8 @@ fun pitfall3() = runTest {
 @Test
 fun pitfall4() = runTest {
     launch {
-        Thread.sleep(1000) // Actual sleep, NOT virtual
-        // Test will really wait 1 second
+        Thread.sleep(1000) // Actual sleep, NOT virtual; avoid in tests using runTest
     }
-}
-```
-
-### Dependencies
-
-```gradle
-// build.gradle.kts
-dependencies {
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("junit:junit:4.13.2")
-
-    // For ViewModel testing
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
 }
 ```
 
@@ -2059,8 +2031,8 @@ Summary:
 
 ## Related Questions
 
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing StateFlow and SharedFlow
-- [[q-testing-flow-operators--kotlin--hard]] - Testing Flow operators
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing `StateFlow` and `SharedFlow`
+- [[q-testing-flow-operators--kotlin--hard]] - Testing `Flow` operators
 - [[q-testing-coroutine-cancellation--kotlin--medium]] - Testing cancellation
 - [[q-coroutine-virtual-time--kotlin--medium]] - Virtual time deep dive
-- [[q-testing-viewmodels-coroutines--kotlin--medium]] - ViewModel testing patterns
+- [[q-testing-viewmodels-coroutines--kotlin--medium]] - `ViewModel` testing patterns

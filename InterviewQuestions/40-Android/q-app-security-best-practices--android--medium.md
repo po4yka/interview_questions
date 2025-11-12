@@ -1,27 +1,21 @@
 ---
 id: android-277
-title: App Security Best Practices / Лучшие практики безопасности приложения
-aliases: [App Security Best Practices, Лучшие практики безопасности приложения]
+title: App Security Best Practices / 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f
+aliases: [App Security Best Practices, 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f]
 topic: android
-subtopics:
-  - keystore-crypto
-  - network-security-config
-  - permissions
+subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-keystore
-  - c-encryption
+related: [c-android-keystore, c-encryption, q-android-security-best-practices--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
+
 ---
 
 # Вопрос (RU)
@@ -38,7 +32,7 @@ tags: [android/keystore-crypto, android/network-security-config, android/permiss
 
 ## Ответ (RU)
 
-**Концепция**: Безопасность Android требует defense-in-depth — многоуровневой защиты сети, данных, кода и runtime. Если один слой скомпрометирован, остальные продолжают защищать приложение.
+**Концепция**: Безопасность Android требует многоуровневой защиты (defense-in-depth) сети, данных, кода и runtime. Если один слой скомпрометирован, остальные продолжают защищать приложение.
 
 ### 1. Защита Сетевых Соединений
 
@@ -54,12 +48,14 @@ val client = OkHttpClient.Builder()
     .build()
 ```
 
-**Network Security Config** запрещает HTTP:
+**Network Security Config** запрещает HTTP и может:
+- отключать нешифрованный HTTP для доменов (cleartextTrafficPermitted="false"), принуждая HTTPS; и
+- опционально настраивать certificate pinning на уровне платформы.
 
 ```xml
 <!-- Фрагмент network-security-config.xml -->
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="false">  <!-- ✅ Только HTTPS -->
+    <domain-config cleartextTrafficPermitted="false">  <!-- ✅ Только HTTPS для этого домена -->
         <domain includeSubdomains="true">api.example.com</domain>
         <pin-set>
             <pin digest="SHA-256">ABC123...</pin>
@@ -68,7 +64,7 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
-(Этот конфиг должен быть подключен в `AndroidManifest.xml` через атрибут `android:networkSecurityConfig` для применения.)
+(Этот конфиг должен быть подключен в `AndroidManifest.xml` через атрибут `android:networkSecurityConfig` для применения. Будьте осторожны при одновременном использовании pinning в OkHttp и в XML, чтобы не дублировать пины без продуманной стратегии ротации.)
 
 ### 2. Защита Данных
 
@@ -87,9 +83,9 @@ val prefs = EncryptedSharedPreferences.create(
 prefs.edit().putString("token", authToken).apply()
 ```
 
-Ключи генерируются и хранятся через Android Keystore и недоступны напрямую приложению; на устройствах с аппаратной поддержкой это существенно усложняет их извлечение.
+Ключи генерируются и хранятся через Android Keystore и недоступны напрямую для экспорта; на устройствах с аппаратной поддержкой это существенно усложняет их извлечение. Однако вредоносный код, выполняющийся в том же контексте приложения, всё ещё может запрашивать криптооперации с этими ключами, поэтому это элемент defense-in-depth, а не абсолютная защита.
 
-Не хардкодить секреты (API-ключи, приватные токены) в коде/ресурсах; для чувствительных значений использовать серверную выдачу, Keystore и минимизацию чувствительных данных на клиенте.
+Не хардкодить секреты (API-ключи, приватные токены) в коде/ресурсах; для чувствительных значений использовать серверную выдачу, хранение с использованием Keystore при необходимости и минимизацию чувствительных данных на клиенте.
 
 ### 3. Обфускация Кода
 
@@ -114,7 +110,7 @@ android {
 ### 4. Защита От SQL-инъекций
 
 ```kotlin
-// ✅ Параметризованные запросы
+// ✅ Параметризованный запрос через Room @Query
 @Query("SELECT * FROM users WHERE email = :email")
 suspend fun findUser(email: String): User?
 
@@ -126,15 +122,15 @@ suspend fun findUser(email: String): User?
 
 - **Permissions**: Запрашивать минимально необходимый набор, проверять во время выполнения, обосновывать пользователю.
 - **Logging**: Никогда не логировать токены, пароли, PII и другие секреты, особенно в релизных сборках.
-- **Biometric Auth**: Использовать BiometricPrompt / Biometric APIs для критичных операций, не хранить PIN/пароли в явном виде.
-- **Root Detection**: Использовать как эвристический сигнал (может быть обойдён); при необходимости ограничивать особо чувствительные функции.
-- **Dependencies**: Регулярно обновлять библиотеки и SDK, использовать сканирование уязвимостей.
+- **Biometric Auth**: Использовать BiometricPrompt / Biometric APIs для критичных операций, обычно для разблокировки ключей из Keystore (`setUserAuthenticationRequired`); не считать одну только биометрию полноценной заменой аутентификации и авторизации на сервере.
+- **Root Detection**: Использовать только как эвристический сигнал (может быть обойдён); не полагаться на него как на единственный контроль. В особо чувствительных приложениях можно ограничивать отдельные функции при обнаружении высокорискованных сигналов (например, root).
+- **Dependencies**: Регулярно обновлять библиотеки и SDK, использовать инструменты сканирования уязвимостей зависимостей.
 
 ---
 
 ## Answer (EN)
 
-**Concept**: Android security requires defense-in-depth — layered protection of network, data, code, and runtime. If one layer is compromised, others continue to protect the app.
+**Concept**: Android security requires defense-in-depth layered protection of network, data, code, and runtime. If one layer is compromised, others continue to protect the app.
 
 ### 1. Network Security
 
@@ -142,7 +138,7 @@ suspend fun findUser(email: String): User?
 
 ```kotlin
 val pinner = CertificatePinner.Builder()
-    .add("api.example.com", "sha256/ABC123...")  // ✅ Pin to certificate
+    .add("api.example.com", "sha256/ABC123...")  //  Pin to certificate
     .build()
 
 val client = OkHttpClient.Builder()
@@ -150,12 +146,14 @@ val client = OkHttpClient.Builder()
     .build()
 ```
 
-**Network Security Config** disables HTTP for pinned domains:
+**Network Security Config** can:
+- disable cleartext HTTP for specific domains (cleartextTrafficPermitted="false"), enforcing HTTPS; and
+- optionally configure certificate pinning at the platform level.
 
 ```xml
 <!-- Fragment of network-security-config.xml -->
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="false">  <!-- ✅ HTTPS only -->
+    <domain-config cleartextTrafficPermitted="false">  <!--  HTTPS only for this domain -->
         <domain includeSubdomains="true">api.example.com</domain>
         <pin-set>
             <pin digest="SHA-256">ABC123...</pin>
@@ -164,7 +162,7 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
-(This config must be referenced from `AndroidManifest.xml` via the `android:networkSecurityConfig` attribute to take effect.)
+(This config must be referenced from `AndroidManifest.xml` via the `android:networkSecurityConfig` attribute to take effect. Be careful when combining OkHttp pinning and XML pinning to avoid duplicated pins without a rotation strategy.)
 
 ### 2. Data Protection
 
@@ -172,7 +170,7 @@ val client = OkHttpClient.Builder()
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
-    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)  // ✅ AES-256-GCM
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)  //  AES-256-GCM
     .build()
 
 val prefs = EncryptedSharedPreferences.create(
@@ -183,9 +181,9 @@ val prefs = EncryptedSharedPreferences.create(
 prefs.edit().putString("token", authToken).apply()
 ```
 
-Keys are generated and stored via Android Keystore and are not directly accessible to the app; on devices with hardware-backed support this significantly raises the bar for extraction.
+Keys are generated and stored via Android Keystore and are not directly exportable; on devices with hardware-backed support this significantly increases resistance to key extraction. However, malware running in the same app context can still request crypto operations, so this is defense-in-depth, not absolute protection.
 
-Avoid hardcoding secrets (API keys, private tokens) in code/resources; use server-side issuance, Keystore, and minimize sensitive data on the client.
+Avoid hardcoding secrets (API keys, private tokens) in code/resources; prefer server-side issuance, Keystore-backed storage where necessary, and minimize sensitive data on the client.
 
 ### 3. Code Obfuscation
 
@@ -195,7 +193,7 @@ Avoid hardcoding secrets (API keys, private tokens) in code/resources; use serve
 android {
     buildTypes {
         release {
-            minifyEnabled true  // ✅ Obfuscation + dead code removal
+            minifyEnabled true  //  Obfuscation + dead code removal
             proguardFiles(
                 getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.pro'
@@ -210,63 +208,61 @@ Obfuscation does not replace proper cryptography and should not be treated as th
 ### 4. SQL Injection Prevention
 
 ```kotlin
-// ✅ Parameterized queries
+//  Parameterized query via Room @Query
 @Query("SELECT * FROM users WHERE email = :email")
 suspend fun findUser(email: String): User?
 
-// ❌ String concatenation — vulnerability
+//  String concatenation in raw queries is vulnerable
 // db.rawQuery("SELECT * FROM users WHERE email = '$email'")
 ```
 
 ### 5. Critical Rules
 
-- **Permissions**: Request minimal required set, validate at runtime, provide clear justification to users.
+- **Permissions**: Request minimal required set, validate at runtime, and clearly justify to users.
 - **Logging**: Never log tokens, passwords, PII, or other secrets, especially in release builds.
-- **Biometric Auth**: Use BiometricPrompt / Biometric APIs for sensitive operations; do not store PIN/passwords in plaintext.
-- **Root Detection**: Use as a heuristic signal only (bypassable); restrict especially sensitive capabilities if needed.
-- **Dependencies**: Update libraries and SDKs regularly; use vulnerability scanning.
+- **Biometric Auth**: Use BiometricPrompt / Biometric APIs for sensitive operations, typically to unlock Keystore-backed keys (`setUserAuthenticationRequired`); do not treat biometrics alone as a full replacement for proper authentication and authorization on the server.
+- **Root Detection**: Use only as a heuristic signal (easily bypassed); do not rely on it as a sole control. For highly sensitive apps, you may restrict certain capabilities when high-risk signals (e.g., root) are detected.
+- **Dependencies**: Update libraries and SDKs regularly; use dependency and vulnerability scanning tools.
 
-## Дополнительные вопросы (RU)
+## Follow-ups (RU)
 
-- Как безопасно обновлять (ротировать) пины сертификатов, не ломая старые версии приложения?
+- Как вы будете реализовывать ротацию сертификатных пинов, чтобы не "сломать" старые версии приложения?
 - В чем разница между обфускацией R8 и защитой нативного кода?
-- Когда стоит отклонять использование приложения на рутованных устройствах, а когда ограничиться предупреждением?
-- Как реализовать безопасную ротацию ключей для EncryptedSharedPreferences?
-- Каковы компромиссы между SafetyNet и Play Integrity API?
+- В каких случаях стоит не пускать пользователей с root, а в каких достаточно предупредить?
+- Как реализовать безопасную ротацию ключей для `EncryptedSharedPreferences`?
+- Каковы trade-off'ы между SafetyNet и Play Integrity API?
 
 ## Follow-ups
 
 - How do you rotate certificate pins without breaking existing app versions?
 - What's the difference between R8 obfuscation and native code protection?
 - When should you reject rooted devices vs. warning users?
-- How to implement secure key rotation for EncryptedSharedPreferences?
+- How to implement secure key rotation for `EncryptedSharedPreferences`?
 - What are the trade-offs between SafetyNet and Play Integrity API?
 
-## Ссылки (RU)
+## References (RU)
 
-- [[c-encryption]] — Основы шифрования
-- [[c-android-keystore]] — Система Android Keystore
-- "OWASP Mobile Security" — https://owasp.org/www-project-mobile-top-10/
-- "Android Security Best Practices" — https://developer.android.com/topic/security/best-practices
+- [[c-encryption]]
+- [[c-android-keystore]]  Android Keystore
+- "OWASP Mobile Security"  https://owasp.org/www-project-mobile-top-10/
+- "Android Security Best Practices"  https://developer.android.com/topic/security/best-practices
 
 ## References
 
-- [[c-encryption]] — Encryption fundamentals
-- [[c-android-keystore]] — Android Keystore system
+- [[c-encryption]]  Encryption fundamentals
+- [[c-android-keystore]]  Android Keystore system
 - [OWASP Mobile Security](https://owasp.org/www-project-mobile-top-10/)
 - [Android Security Best Practices](https://developer.android.com/topic/security/best-practices)
 
-## Связанные вопросы (RU)
+## Related Questions (RU)
 
 ### Предпосылки
-
-- Основы runtime-разрешений
-- Конфигурация безопасности манифеста
+- Базовые принципы runtime-разрешений
+- Настройка безопасности в `AndroidManifest` и Network Security Config
 
 ### Связанные
-
-- Шаблоны обработки разрешений
-- Конфигурация сетевой безопасности
+- Подходы к обработке разрешений
+- Настройка Network Security Config
 
 ## Related Questions
 

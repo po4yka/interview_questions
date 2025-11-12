@@ -2,30 +2,23 @@
 id: kotlin-038
 title: "Back Pressure в Kotlin Flow / Back Pressure in Kotlin Flow"
 aliases: ["Back Pressure в Kotlin Flow", "Back Pressure in Kotlin Flow"]
-
-# Classification
 topic: kotlin
 subtopics: [backpressure, buffer, conflate]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-flow, c-kotlin, q-debounce-throttle-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
-
-# Timestamps
 created: 2025-10-06
-updated: 2025-11-09
-
+updated: 2025-11-11
 tags: [backpressure, buffer, conflate, difficulty/medium, flow, kotlin, operators]
+
 ---
+
 # Вопрос (RU)
 > Что такое Back Pressure в Kotlin `Flow`? Какие стратегии существуют для его обработки?
 
@@ -933,7 +926,7 @@ class BackPressureBestPractices {
 
 | Strategy | Behavior | Use Case | Memory Impact |
 |----------|----------|----------|---------------|
-| **buffer()** | Queue elements | High throughput | Medium (bounded) |
+| **buffer()** | `Queue` elements | High throughput | Medium (bounded) |
 | **conflate()** | Keep latest only | State updates | Low |
 | **collectLatest()** | Cancel previous work | Cancellable work | Low |
 | **sample()** | Periodic emission | High-frequency events | Low |
@@ -959,15 +952,15 @@ class BackPressureBestPractices {
 
 ## Ссылки (RU)
 
-- [Flow - документация Kotlin](https://kotlinlang.org/docs/flow.html)
-- [Buffering in Flows - Kotlin Docs](https://kotlinlang.org/docs/flow.html#buffering)
-- [SharedFlow и StateFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`Flow` - документация Kotlin](https://kotlinlang.org/docs/flow.html)
+- [Buffering in `Flows` - Kotlin Docs](https://kotlinlang.org/docs/flow.html#buffering)
+- [`SharedFlow` и `StateFlow` - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ## References
 
-- [Flow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
-- [Buffering in Flows - Kotlin Docs](https://kotlinlang.org/docs/flow.html#buffering)
-- [SharedFlow and StateFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`Flow` - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
+- [Buffering in `Flows` - Kotlin Docs](https://kotlinlang.org/docs/flow.html#buffering)
+- [`SharedFlow` and `StateFlow` - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ---
 
@@ -987,12 +980,12 @@ class BackPressureBestPractices {
 ## Related Questions
 
 ### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - `Flow`
 
 ### Advanced (Harder)
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-- [[q-flow-backpressure--kotlin--hard]] - Flow
+- [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
+- [[q-flow-backpressure--kotlin--hard]] - `Flow`
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines

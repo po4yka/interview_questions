@@ -12,7 +12,7 @@ status: draft
 moc: moc-kotlin
 related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium]
 created: "2025-10-12"
-updated: "2025-11-09"
+updated: "2025-11-11"
 tags: [classes, difficulty/medium, initialization, kotlin, kotlin-features]
 sources: ["https://kotlinlang.org/docs/inheritance.html"]
 ---

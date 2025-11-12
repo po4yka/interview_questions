@@ -27,7 +27,7 @@ tags: [android/performance-rendering, android/ui-views, difficulty/medium, perfo
 
 ## Ответ (RU)
 
-Базовая метрика производительности layout и рендеринга в Android измеряется во **времени кадра в миллисекундах (мс)**: сколько времени тратится на фазы **measure** (измерение), **layout** (размещение) и **draw** (отрисовка) в рамках одного кадра относительно бюджета времени под целевую частоту кадров. Дополнительно оцениваются **потерянные кадры (jank)** и, для Compose, **количество перекомпоновок**.
+Базовая метрика производительности layout и рендеринга в Android измеряется во **времени кадра в миллисекундах (мс)**: сколько времени тратится на фазы **measure** (измерение), **layout** (размещение) и **draw** (отрисовка), а также связанную работу рендеринга в рамках одного кадра относительно бюджета времени под целевую частоту кадров. Дополнительно оцениваются **потерянные кадры (jank)** и, для Compose, **количество перекомпоновок**.
 
 ### Ключевые Метрики
 
@@ -36,16 +36,16 @@ tags: [android/performance-rendering, android/ui-views, difficulty/medium, perfo
 - 90 FPS = 11.11мс на кадр
 - 120 FPS = 8.33мс на кадр
 
-**Примерное распределение времени (для 60fps):**
+**Примерное распределение времени (для 60fps, только как ориентир):**
 - Measure phase ≲ 5мс
 - Layout phase ≲ 5мс
 - Draw phase ≲ 6.67мс
 
-(Значения являются ориентировочными и зависят от устройства и сложности UI.)
+(Значения являются эвристиками и зависят от устройства, частоты обновления, нагрузки на GPU/CPU и сложности UI.)
 
 ### Инструменты Измерения
 
-**1. `Choreographer` API** — измерение времени между кадрами:
+**1. `Choreographer` API** — измерение времени между кадрами (эвристика для оценки jank):
 
 ```kotlin
 class FrameMonitor {
@@ -56,12 +56,12 @@ class FrameMonitor {
         override fun doFrame(frameTimeNanos: Long) {
             if (lastFrameTime != 0L) {
                 val frameTimeMs = (frameTimeNanos - lastFrameTime) / 1_000_000.0
-                // ✅ Измерение времени между кадрами
+                // ✅ Эвристическое измерение времени между кадрами
                 val budgetMs = 16.67
                 if (frameTimeMs > budgetMs) {
                     val dropped = (frameTimeMs / budgetMs).toInt() - 1
                     if (dropped > 0) {
-                        Log.w("Perf", "Possible dropped frames: $dropped (frame=${frameTimeMs}ms)")
+                        Log.w("Perf", "Possible dropped frames (approx): $dropped (frame=${frameTimeMs}ms)")
                     }
                 }
             }
@@ -77,7 +77,7 @@ class FrameMonitor {
 }
 ```
 
-**2. `FrameMetrics` API** (API 24+) — детальные метрики по кадрам:
+**2. `FrameMetrics` API** (API 24+) — детальные метрики по кадрам (значения в наносекундах для окон верхнего уровня):
 
 ```kotlin
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -85,14 +85,14 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
         val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
         val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-        // Анализ фаз рендеринга относительно бюджета кадра
+        // Анализ фаз measure/layout/draw относительно бюджета кадра
     }, Handler(Looper.getMainLooper()))
 }
 ```
 
-(На практике слушатель следует снимать при уничтожении окна, чтобы избежать утечек.)
+(На практике слушатель нужно удалять при уничтожении окна, чтобы избежать утечек.)
 
-**3. Systrace/Perfetto** — системное профилирование:
+**3. Systrace/Perfetto** — системное профилирование и трассировка рендеринга:
 
 ```kotlin
 Trace.beginSection("complexOperation")
@@ -104,7 +104,7 @@ try {
 }
 ```
 
-**4. Compose Compiler Metrics** — анализ перекомпоновок и стабильности параметров (build-time отчеты, а не runtime таймер):
+**4. Compose Compiler Metrics** — анализ перекомпоновок и стабильности параметров (build-time отчёты, а не runtime-таймер):
 
 ```kotlin
 // build.gradle (модуль с Compose UI)
@@ -149,7 +149,7 @@ fun analyzeComplexity(view: View): Metrics {
     return Metrics(viewCount, maxDepth)
 }
 
-// ✅ Ориентиры (а не жёсткие лимиты): views ≲ 80, depth ≲ 10
+// ✅ Эвристические ориентиры (не официальные лимиты): views ≲ 80, depth ≲ 10
 // ❗ Реальные допустимые значения зависят от устройства и содержимого
 ```
 
@@ -158,14 +158,14 @@ fun analyzeComplexity(view: View): Metrics {
 | Техника | Цель | Инструмент |
 |---------|------|-----------|
 | Frame timing | Укладываться в бюджет кадра (< 16.67мс при 60fps) | Choreographer, FrameMetrics |
-| Layout depth | Сдерживать глубину иерархии (≈ < 10 уровней как ориентир) | Layout Inspector |
+| Layout depth | Сдерживать глубину иерархии (~< 10 уровней как эвристика) | Layout Inspector |
 | Recomposition (Compose) | Минимизировать лишние перекомпоновки | Compose metrics |
 | Overdraw | Стремиться к < 2x | GPU Overdraw tool |
-| Jank detection | Минимизировать/избегать потерь кадров | Systrace/Perfetto |
+| Jank detection | Минимизировать/избегать потерь кадров | Perfetto, Systrace |
 
 ## Answer (EN)
 
-The primary unit for layout and rendering performance in Android is **frame time in milliseconds (ms)**: how long the **measure**, **layout**, and **draw** phases take within a single frame relative to the time budget for the target refresh rate. Additionally, we track **jank/dropped frames** and, for Compose, **recomposition count**.
+The primary unit for layout and rendering performance in Android is **frame time in milliseconds (ms)**: how long the **measure**, **layout**, and **draw** phases, plus associated rendering work, take within a single frame relative to the time budget for the target refresh rate. Additionally, we track **jank/dropped frames** and, for Compose, **recomposition count**.
 
 ### Key Metrics
 
@@ -174,16 +174,16 @@ The primary unit for layout and rendering performance in Android is **frame time
 - 90 FPS = 11.11ms per frame
 - 120 FPS = 8.33ms per frame
 
-**Example time distribution (for 60fps):**
+**Example time distribution (for 60fps, for guidance only):**
 - Measure phase ≲ 5ms
 - Layout phase ≲ 5ms
 - Draw phase ≲ 6.67ms
 
-(These are heuristics and depend on device capabilities and UI complexity.)
+(These are heuristics and depend on device capabilities, refresh rate, overall CPU/GPU load, and UI complexity.)
 
 ### Measurement Tools
 
-**1. `Choreographer` API** — frame interval timing:
+**1. `Choreographer` API** — frame interval timing (heuristic for jank estimation):
 
 ```kotlin
 class FrameMonitor {
@@ -194,12 +194,12 @@ class FrameMonitor {
         override fun doFrame(frameTimeNanos: Long) {
             if (lastFrameTime != 0L) {
                 val frameTimeMs = (frameTimeNanos - lastFrameTime) / 1_000_000.0
-                // ✅ Measure frame interval
+                // ✅ Heuristic measurement of frame interval
                 val budgetMs = 16.67
                 if (frameTimeMs > budgetMs) {
                     val dropped = (frameTimeMs / budgetMs).toInt() - 1
                     if (dropped > 0) {
-                        Log.w("Perf", "Possible dropped frames: $dropped (frame=${frameTimeMs}ms)")
+                        Log.w("Perf", "Possible dropped frames (approx): $dropped (frame=${frameTimeMs}ms)")
                     }
                 }
             }
@@ -215,7 +215,7 @@ class FrameMonitor {
 }
 ```
 
-**2. `FrameMetrics` API** (API 24+) — detailed per-frame metrics:
+**2. `FrameMetrics` API** (API 24+) — detailed per-frame metrics (values in nanoseconds for top-level window frames):
 
 ```kotlin
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -223,14 +223,14 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
         val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
         val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-        // Analyze rendering phases against the frame budget
+        // Analyze measure/layout/draw phases against the frame budget
     }, Handler(Looper.getMainLooper()))
 }
 ```
 
-(In real code, remove the listener appropriately to avoid leaks.)
+(In real code, remove the listener when the window is destroyed to avoid leaks.)
 
-**3. Systrace/Perfetto** — system-level tracing:
+**3. Systrace/Perfetto** — system-level tracing and rendering analysis:
 
 ```kotlin
 Trace.beginSection("complexOperation")
@@ -287,7 +287,7 @@ fun analyzeComplexity(view: View): Metrics {
     return Metrics(viewCount, maxDepth)
 }
 
-// ✅ Guidelines (not hard limits): views ≲ 80, depth ≲ 10
+// ✅ Heuristic guidelines (not official limits): views ≲ 80, depth ≲ 10
 // ❗ Actual safe limits depend on device performance and content
 ```
 
@@ -296,10 +296,10 @@ fun analyzeComplexity(view: View): Metrics {
 | Technique | Target | Tool |
 |-----------|--------|------|
 | Frame timing | Stay within frame budget (< 16.67ms at 60fps) | Choreographer, FrameMetrics |
-| Layout depth | Keep hierarchy reasonably shallow (~< 10 levels as a guideline) | Layout Inspector |
+| Layout depth | Keep hierarchy reasonably shallow (~< 10 levels as a heuristic) | Layout Inspector |
 | Recomposition (Compose) | Minimize unnecessary recompositions | Compose metrics |
 | Overdraw | Aim for < 2x | GPU Overdraw tool |
-| Jank detection | Minimize / avoid dropped frames | Systrace/Perfetto |
+| Jank detection | Minimize / avoid dropped frames | Perfetto, Systrace |
 
 ---
 

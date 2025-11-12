@@ -95,20 +95,25 @@ class WebSocketManager(
 ### 2. Server-Sent Events (SSE) — Односторонние Обновления
 
 ```kotlin
-fun connectSSE(url: String): Flow<ServerEvent> = flow {
+fun connectSSE(
+    client: OkHttpClient,
+    url: String
+): Flow<ServerEvent> = flow {
     val request = Request.Builder()
         .url(url)
         .addHeader("Accept", "text/event-stream")
         .build()
 
-    client.newCall(request).execute().use { response ->
-        val source = response.body?.source() ?: return@use
+    withContext(Dispatchers.IO) {
+        client.newCall(request).execute().use { response ->
+            val source = response.body?.source() ?: return@use
 
-        while (currentCoroutineContext().isActive && !source.exhausted()) {
-            val line = source.readUtf8Line() ?: continue
-            if (line.startsWith("data:")) {
-                val data = line.substring(5).trim()
-                emit(Json.decodeFromString<ServerEvent>(data))
+            while (currentCoroutineContext().isActive && !source.exhausted()) {
+                val line = source.readUtf8Line() ?: continue
+                if (line.startsWith("data:")) {
+                    val data = line.substring(5).trim()
+                    emit(Json.decodeFromString<ServerEvent>(data))
+                }
             }
         }
     }
@@ -174,14 +179,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 }
 ```
 
-**Плюсы**: надежная доставка, кроссплатформенность
+**Плюсы**: надежная доставка push-сообщений, кроссплатформенность; подходит как триггер для синхронизации данных, но не гарантирует жёстко детерминированную задержку доставки для всех сценариев "real-time".
 
 **Минусы**: требует Google Play Services / FCM-инфраструктуру, ограничения частоты/объёма
 
-### 5. Polling / `Long` Polling — Fallback Стратегия
+### 5. Polling / Long Polling — Fallback Стратегии
 
 ```kotlin
 fun startPolling(
+    scope: CoroutineScope,
     interval: Long,
     onUpdate: (List<Message>) -> Unit
 ) {
@@ -203,7 +209,7 @@ fun startPolling(
 
 **Плюсы**: простота реализации, работает везде
 
-**Минусы**: высокая нагрузка на сервер, лишний трафик и задержки, особенно при коротких интервалах
+**Минусы**: высокая нагрузка на сервер, лишний трафик и задержки, особенно при коротких интервалах; "long polling" обычно подразумевает удержание соединения сервером до появления данных, а не только частый периодический запрос
 
 ### Lifecycle-aware Подключение
 
@@ -231,7 +237,7 @@ class ChatViewModel @Inject constructor(
 }
 ```
 
-Для production-кода также важно учитывать жизненный цикл UI (например, отключать WebSocket, когда экран не активен, если постоянное соединение не требуется).
+Для production-кода также важно учитывать жизненный цикл UI (например, отключать WebSocket, когда экран не активен, если постоянное соединение не требуется) и использовать жизненно устойчивые скоупы (ViewModel / foreground service) для длительных соединений.
 
 ### Сравнение Технологий
 
@@ -240,7 +246,7 @@ class ChatViewModel @Inject constructor(
 | WebSockets | Чаты, игры, коллаборация | Двусторонний обмен, низкая задержка |
 | SSE | Live-ленты, уведомления | Односторонний поток событий |
 | Firebase Realtime | MVP, быстрый старт | Готовое решение, масштабируемость |
-| FCM | Push-уведомления | Надежная доставка |
+| FCM | Push-уведомления | Надежная доставка push-сообщений, триггер синхронизации |
 | Polling | Fallback | Простота, ценой эффективности |
 
 ### Best Practices
@@ -333,20 +339,25 @@ class WebSocketManager(
 ### 2. Server-Sent Events (SSE) — One-Way Updates
 
 ```kotlin
-fun connectSSE(url: String): Flow<ServerEvent> = flow {
+fun connectSSE(
+    client: OkHttpClient,
+    url: String
+): Flow<ServerEvent> = flow {
     val request = Request.Builder()
         .url(url)
         .addHeader("Accept", "text/event-stream")
         .build()
 
-    client.newCall(request).execute().use { response ->
-        val source = response.body?.source() ?: return@use
+    withContext(Dispatchers.IO) {
+        client.newCall(request).execute().use { response ->
+            val source = response.body?.source() ?: return@use
 
-        while (currentCoroutineContext().isActive && !source.exhausted()) {
-            val line = source.readUtf8Line() ?: continue
-            if (line.startsWith("data:")) {
-                val data = line.substring(5).trim()
-                emit(Json.decodeFromString<ServerEvent>(data))
+            while (currentCoroutineContext().isActive && !source.exhausted()) {
+                val line = source.readUtf8Line() ?: continue
+                if (line.startsWith("data:")) {
+                    val data = line.substring(5).trim()
+                    emit(Json.decodeFromString<ServerEvent>(data))
+                }
             }
         }
     }
@@ -412,14 +423,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 }
 ```
 
-**Pros**: Reliable delivery, cross-platform
+**Pros**: Reliable push delivery, cross-platform; good trigger for sync but not a strict hard real-time transport.
 
 **Cons**: Requires Google Play Services / FCM backend and has rate/size limits
 
-### 5. Polling / `Long` Polling — Fallback Strategy
+### 5. Polling / Long Polling — Fallback Strategies
 
 ```kotlin
 fun startPolling(
+    scope: CoroutineScope,
     interval: Long,
     onUpdate: (List<Message>) -> Unit
 ) {
@@ -441,7 +453,7 @@ fun startPolling(
 
 **Pros**: Easy to implement, universally supported
 
-**Cons**: Higher server load, extra traffic, potential delays (especially with small intervals)
+**Cons**: Higher server load, extra traffic, potential delays (especially with small intervals); "long polling" usually implies the server holds the request open until data is available
 
 ### Lifecycle-Aware Connection
 
@@ -469,7 +481,7 @@ class ChatViewModel @Inject constructor(
 }
 ```
 
-For production code, also tie the connection to UI/lifecycle needs (e.g., disconnect when the screen is not visible if a permanent connection is unnecessary).
+For production code, also tie the connection to UI/lifecycle needs (e.g., disconnect when the screen is not visible if a permanent connection is unnecessary) and use lifecycle-resilient scopes (ViewModel / foreground service) for long-lived connections.
 
 ### Technology Comparison
 
@@ -478,7 +490,7 @@ For production code, also tie the connection to UI/lifecycle needs (e.g., discon
 | WebSockets | Chat, gaming, collaboration | Bidirectional, low latency |
 | SSE | Live feeds, notifications | One-way event stream |
 | Firebase Realtime | MVP, rapid development | Managed, scalable solution |
-| FCM | Push notifications | Reliable delivery |
+| FCM | Push notifications | Reliable push trigger for sync |
 | Polling | Fallback | Simplicity at the cost of efficiency |
 
 ### Best Practices

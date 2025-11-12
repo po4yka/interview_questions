@@ -36,7 +36,8 @@ question_kind: coding
 
 ```kotlin
 suspend fun basicSuspend() = suspendCoroutine<String> { cont ->
-    // Нельзя структурированно отреагировать на отмену корутины
+    // Нельзя структурированно отреагировать на отмену корутины для внешнего API,
+    // если оно само не предоставляет средств отмены.
     someAsyncOperation { result ->
         cont.resume(result)
     }
@@ -51,7 +52,7 @@ suspend fun cancellableSuspend() = suspendCancellableCoroutine<String> { cont ->
         cont.resume(result)
     }
 
-    // Очистка при отмене
+    // Очистка при отмене корутины: отменяем внешнюю операцию, если возможно
     cont.invokeOnCancellation {
         operation.cancel()
     }
@@ -70,7 +71,7 @@ interface DataCallback {
 }
 
 fun fetchDataAsync(callback: DataCallback) {
-    thread {
+    kotlin.concurrent.thread {
         Thread.sleep(1000)
         callback.onSuccess("Data")
     }
@@ -98,13 +99,13 @@ suspend fun fetchData(): String = suspendCancellableCoroutine { cont ->
 
 ### `invokeOnCancellation` для очистки ресурсов
 
-Критично всегда освобождать ресурсы, если корутина отменена и нижележащий API поддерживает отмену:
+Критично освобождать ресурсы, если корутина отменена и нижележащий API поддерживает отмену:
 
 ```kotlin
 suspend fun fetchWithCancellation(): String = suspendCancellableCoroutine { cont ->
     val request = api.createRequest()
 
-    request.enqueue(object : `Callback` {
+    request.enqueue(object : DataCallback {
         override fun onSuccess(data: String) {
             if (cont.isActive) {
                 cont.resume(data)
@@ -125,13 +126,13 @@ suspend fun fetchWithCancellation(): String = suspendCancellableCoroutine { cont
 }
 ```
 
+Здесь `DataCallback` — условный интерфейс API. Для конкретных библиотек используйте их реальные типы callback.
+
 ### Реальный пример: преобразование OkHttp `Call`
 
 ```kotlin
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import kotlin.coroutines.resume
@@ -151,6 +152,7 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
             if (cont.isActive) {
                 cont.resume(response)
             } else {
+                // Корутина уже отменена/завершена — освобождаем ресурсы
                 response.close()
             }
         }
@@ -159,6 +161,7 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
             if (cont.isActive) {
                 cont.resumeWithException(e)
             }
+            // Если не активен — корутина уже завершилась, ничего не делаем
         }
     })
 }
@@ -166,7 +169,7 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
 
 ### Обработка гонок: «возобновить ровно один раз»
 
-Продолжение должно быть возобновлено ровно один раз. При возможных гонках между callback и отменой защищайтесь атомарным флагом или проверками `isActive`:
+Продолжение должно быть возобновлено ровно один раз. Проверка `cont.isActive` полезна, но не делает `resume` идемпотентным при гонках. При возможных гонках между callback и отменой защищайтесь атомарным флагом:
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicBoolean
@@ -181,15 +184,15 @@ suspend fun safeOperation(): String = suspendCancellableCoroutine { cont ->
     }
 
     cont.invokeOnCancellation {
+        // Отменяем внешнюю операцию только если ещё не возобновили продолжение
         if (resumed.compareAndSet(false, true)) {
             operation.cancel()
-            // Опционально: cont.resumeWithException(CancellationException())
         }
     }
 }
 ```
 
-Для API с одиночным вызовом callback часто достаточно `if (cont.isActive)`.
+Для API с гарантированным одиночным вызовом callback без гонок часто достаточно `if (cont.isActive)`.
 
 ### Пример: Firebase Realtime Database
 
@@ -222,6 +225,8 @@ suspend fun DatabaseReference.awaitValue(): DataSnapshot =
         }
     }
 ```
+
+Важно: callbacks должны проверять `cont.isActive` и не вызывать `resume` / `resumeWithException`, если корутина уже отменена.
 
 ### Пример: Android Location
 
@@ -275,7 +280,7 @@ suspend fun LocationManager.awaitLocation(provider: String): Location =
 
 ```kotlin
 suspend fun fetchDataWithErrors(): String = suspendCancellableCoroutine { cont ->
-    api.getData(object : `Callback` {
+    api.getData(object : ApiCallback {
         override fun onSuccess(data: String) {
             if (cont.isActive) cont.resume(data)
         }
@@ -294,7 +299,7 @@ suspend fun fetchDataWithErrors(): String = suspendCancellableCoroutine { cont -
 
 ```kotlin
 suspend fun fetchDataSafe(): Result<String> = suspendCancellableCoroutine { cont ->
-    api.getData(object : `Callback` {
+    api.getData(object : ApiCallback {
         override fun onSuccess(data: String) {
             cont.resume(Result.success(data))
         }
@@ -313,9 +318,10 @@ suspend fun fetchDataSafe(): Result<String> = suspendCancellableCoroutine { cont
 
 ```kotlin
 suspend fun threadSafeOperation(): String = suspendCancellableCoroutine { cont ->
-    someLegacyApi.asyncCall(object : `Callback` {
+    someLegacyApi.asyncCall(object : ApiCallbackSingleResult {
         override fun onComplete(result: String) {
-            // CancellableContinuation потокобезопасен — можно вызывать с любого потока
+            // CancellableContinuation потокобезопасен — можно вызывать с любого потока,
+            // но вы должны гарантировать отсутствие двойного resume.
             cont.resume(result)
         }
     })
@@ -379,6 +385,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.test.runTest
 import kotlin.coroutines.resume
+import kotlin.concurrent.thread
 
 class SuspendTest {
     @Test
@@ -442,7 +449,7 @@ class SuspendTest {
 
 ### Частые ошибки и подводные камни
 
-- Двойной `resume` (при гонке между успехом, ошибкой и отменой) — защищайтесь `isActive` или атомарным флагом.
+- Двойной `resume` (при гонке между успехом, ошибкой и отменой) — защищайтесь `isActive` и/или атомарным флагом.
 - Отсутствие `invokeOnCancellation`, когда нижележащий API поддерживает отмену или требует очистки.
 - Вызов `resume` / `resumeWithException` после отмены — всегда проверяйте `cont.isActive` или используйте флаг.
 - Игнорирование ошибок и проброс «сырых» кодов вместо понятных исключений.
@@ -485,18 +492,18 @@ See also [[c-coroutines]].
 
 ### suspendCoroutine Vs suspendCancellableCoroutine
 
-`suspendCoroutine`: Basic suspension, no structured cancellation support for the underlying callback operation.
+`suspendCoroutine`: Basic suspension, no built-in structured cancellation for the underlying operation (unless the API itself exposes cancellation and you wire it manually).
 
 ```kotlin
 suspend fun basicSuspend() = suspendCoroutine<String> { cont ->
-    // Cannot react to coroutine cancellation here in a structured way
+    // Cannot automatically integrate coroutine cancellation with this async call
     someAsyncOperation { result ->
         cont.resume(result)
     }
 }
 ```
 
-`suspendCancellableCoroutine`: Cancellation-aware, should be used in production.
+`suspendCancellableCoroutine`: Cancellation-aware continuation; should be the default choice in production integrations.
 
 ```kotlin
 suspend fun cancellableSuspend() = suspendCancellableCoroutine<String> { cont ->
@@ -504,14 +511,14 @@ suspend fun cancellableSuspend() = suspendCancellableCoroutine<String> { cont ->
         cont.resume(result)
     }
 
-    // Clean up on cancellation
+    // Clean up / cancel underlying work on coroutine cancellation
     cont.invokeOnCancellation {
         operation.cancel()
     }
 }
 ```
 
-Rule: Prefer `suspendCancellableCoroutine` for integrating with external async APIs, unless you have a specific reason not to.
+Rule: Prefer `suspendCancellableCoroutine` for integrating with external async APIs unless you have a specific reason not to.
 
 ### Basic Pattern: Single Callback
 
@@ -523,7 +530,7 @@ interface DataCallback {
 }
 
 fun fetchDataAsync(callback: DataCallback) {
-    thread {
+    kotlin.concurrent.thread {
         Thread.sleep(1000)
         callback.onSuccess("Data")
     }
@@ -545,7 +552,7 @@ suspend fun fetchData(): String = suspendCancellableCoroutine { cont ->
         }
     })
 
-    // If fetchDataAsync supported cancellation, you'd call it here from invokeOnCancellation
+    // If fetchDataAsync supported cancellation, you'd call its cancel from invokeOnCancellation
 }
 ```
 
@@ -555,7 +562,7 @@ suspend fun fetchData(): String = suspendCancellableCoroutine { cont ->
 suspend fun fetchWithCancellation(): String = suspendCancellableCoroutine { cont ->
     val request = api.createRequest()
 
-    request.enqueue(object : Callback {
+    request.enqueue(object : DataCallback {
         override fun onSuccess(data: String) {
             if (cont.isActive) {
                 cont.resume(data)
@@ -576,13 +583,13 @@ suspend fun fetchWithCancellation(): String = suspendCancellableCoroutine { cont
 }
 ```
 
+Here `DataCallback` is a placeholder API interface; replace with the real callback types for your library.
+
 ### Real Example: OkHttp Call Conversion
 
 ```kotlin
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import kotlin.coroutines.resume
@@ -602,7 +609,8 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
             if (cont.isActive) {
                 cont.resume(response)
             } else {
-                response.close() // Clean up if completed after cancellation
+                // Coroutine was cancelled/completed, close the response to avoid leaks
+                response.close()
             }
         }
 
@@ -610,6 +618,7 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
             if (cont.isActive) {
                 cont.resumeWithException(e)
             }
+            // If not active, coroutine is already completed; do nothing
         }
     })
 }
@@ -617,10 +626,12 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
 
 ### Handling Race Conditions: Resume Exactly Once
 
+The continuation must be resumed exactly once. `cont.isActive` is helpful, but not sufficient for inherently racy scenarios; use an atomic guard when both callbacks and cancellation may race:
+
 ```kotlin
 import java.util.concurrent.atomic.AtomicBoolean
 
-//  CORRECT: Guard against double resume
+// CORRECT: Guard against double resume in presence of races
 suspend fun safeOperation(): String = suspendCancellableCoroutine { cont ->
     val resumed = AtomicBoolean(false)
 
@@ -631,13 +642,15 @@ suspend fun safeOperation(): String = suspendCancellableCoroutine { cont ->
     }
 
     cont.invokeOnCancellation {
+        // Cancel underlying operation only if we haven't resumed yet
         if (resumed.compareAndSet(false, true)) {
             operation.cancel()
-            // Optionally: cont.resumeWithException(CancellationException())
         }
     }
 }
 ```
+
+For well-behaved one-shot callbacks that guarantee a single terminal event, `if (cont.isActive)` is often enough.
 
 ### Real Example: Firebase Realtime Database
 
@@ -674,6 +687,8 @@ suspend fun DatabaseReference.awaitValue(): DataSnapshot =
     }
 ```
 
+Callbacks must check `cont.isActive` and avoid resuming after cancellation.
+
 ### Real Example: Android Location Updates
 
 ```kotlin
@@ -681,9 +696,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -732,7 +744,7 @@ suspend fun LocationManager.awaitLocation(provider: String): Location =
 
 ```kotlin
 suspend fun fetchDataWithErrors(): String = suspendCancellableCoroutine { cont ->
-    api.getData(object : Callback {
+    api.getData(object : ApiCallback {
         override fun onSuccess(data: String) {
             if (cont.isActive) cont.resume(data)
         }
@@ -751,7 +763,7 @@ suspend fun fetchDataWithErrors(): String = suspendCancellableCoroutine { cont -
 
 ```kotlin
 suspend fun fetchDataSafe(): Result<String> = suspendCancellableCoroutine { cont ->
-    api.getData(object : Callback {
+    api.getData(object : ApiCallback {
         override fun onSuccess(data: String) {
             cont.resume(Result.success(data))
         }
@@ -767,14 +779,17 @@ suspend fun fetchDataSafe(): Result<String> = suspendCancellableCoroutine { cont
 
 ```kotlin
 suspend fun threadSafeOperation(): String = suspendCancellableCoroutine { cont ->
-    someLegacyApi.asyncCall(object : Callback {
+    someLegacyApi.asyncCall(object : ApiCallbackSingleResult {
         override fun onComplete(result: String) {
-            // CancellableContinuation is thread-safe
-            cont.resume(result) // Safe to call from any thread
+            // CancellableContinuation is thread-safe: can be resumed from any thread,
+            // but you must still prevent double resume.
+            cont.resume(result)
         }
     })
 }
 ```
+
+`CancellableContinuation` is thread-safe: `resume` / `resumeWithException` can be called from any thread, but you must ensure it is only resumed once.
 
 ### Real Example: Retrofit Call Conversion (Manual)
 
@@ -831,6 +846,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.test.runTest
 import kotlin.coroutines.resume
+import kotlin.concurrent.thread
 
 class SuspendTest {
     @Test
@@ -894,38 +910,38 @@ class SuspendTest {
 
 ### Common Mistakes and Pitfalls
 
-- Double resume due to racing callbacks and cancellation.
-- Forgetting to cancel/cleanup underlying operations in `invokeOnCancellation`.
-- Resuming after cancellation (not checking `isActive`).
-- Poor error mapping from callback error codes to meaningful exceptions or `Result`.
+- Double resume due to racing callbacks and cancellation — guard with `isActive` and/or an atomic flag.
+- Forgetting to cancel/cleanup underlying operations in `invokeOnCancellation` when possible.
+- Resuming after cancellation — always check `cont.isActive` or use an atomic guard.
+- Poor error mapping from callback errors to meaningful exceptions or `Result`.
 
 ### Best Practices
 
-- Prefer `suspendCancellableCoroutine` over `suspendCoroutine` for cancellable work.
-- Always install `invokeOnCancellation` when underlying API supports cancel or requires cleanup.
+- Prefer `suspendCancellableCoroutine` over `suspendCoroutine` for cancellable external work.
+- Always add `invokeOnCancellation` when underlying API supports cancel/dispose or requires cleanup.
 - Model success, error, and cancellation explicitly.
-- Use `callbackFlow` for multi-value or streaming callbacks instead of ad-hoc loops.
+- Use `callbackFlow` for multi-value or streaming callbacks instead of ad-hoc infinite suspensions.
 - Write tests that verify cancellation, cleanup, and no double resume.
 
 ### When to Use This Pattern
 
 - For one-shot callbacks that produce a single result or error.
 - When wrapping Java/legacy async APIs into idiomatic suspend functions.
-- When underlying API exposes cancel/dispose semantics you can hook into.
-- When you must integrate with structured concurrency and cooperative cancellation.
+- When underlying APIs expose cancel/dispose semantics you can hook into.
+- When integrating with structured concurrency and cooperative cancellation.
 
 ### Key Takeaways
 
 1. `suspendCancellableCoroutine` is essential for production-grade callback conversion.
 2. `invokeOnCancellation` is critical for releasing resources and propagating cancellation.
 3. Resume exactly once; guard against races when necessary.
-4. Thread-safe by default: `CancellableContinuation` handles concurrent callbacks.
+4. `CancellableContinuation` is thread-safe but does not make `resume` idempotent — you must prevent double resume.
 5. Handle success, error, and cancellation paths explicitly.
-6. Test cancellation to ensure cleanup.
-7. Don't resume after cancellation; use `isActive` and/or guards.
-8. Clean up eagerly (in `invokeOnCancellation` and terminal callbacks).
-9. Convert errors properly (exceptions or `Result`).
-10. Document behavior so callers understand suspension and cancellation.
+6. Test cancellation behaviour and cleanup.
+7. Do not call `resume`/`resumeWithException` after cancellation; use `isActive` and/or guards.
+8. Perform cleanup both in `invokeOnCancellation` and in terminal callbacks where appropriate.
+9. Map errors properly (domain exceptions or `Result`).
+10. Document suspend function behaviour: cancellation, timeouts, and error semantics.
 
 ---
 

@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-ui-composition
 - q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-12
 updated: 2025-11-10
@@ -51,6 +52,10 @@ sources:
 - `LazyVerticalStaggeredGrid` — вертикальная сетка с переменной высотой элементов
 - `LazyHorizontalStaggeredGrid` — горизонтальная сетка с переменным размером по поперечной оси
 
+Все эти компоненты работают лениво: они создают и размещают только видимые элементы. Staggered-варианты позволяют элементам иметь разную высоту/ширину, формируя "водопадную" сетку.
+
+См. также: [[c-android-ui-composition]]
+
 **Типы колонок:**
 ```kotlin
 // Фиксированные колонки
@@ -64,7 +69,7 @@ LazyVerticalGrid(
 ) { /* items */ }
 ```
 
-**Span элементов:**
+**Span элементов (только для LazyGrid):**
 ```kotlin
 // Элемент занимает несколько колонок
 LazyVerticalGrid(
@@ -117,7 +122,7 @@ LazyVerticalGrid(
     items(
         count = items.size,
         key = { items[it].id }, // Рекомендуется для стабильной идентичности и переиспользования
-        contentType = { items[it]::class } // Помогает переиспользовать слоты для схожих типов
+        contentType = { /* Группируйте элементы с одинаковой структурой содержимого */ "item" }
     ) { index ->
         ItemCard(items[index])
     }
@@ -135,6 +140,10 @@ In Jetpack Compose, "LazyGrid" typically refers to the lazy grid composables `La
 - `LazyVerticalStaggeredGrid` - vertical grid with variable item heights
 - `LazyHorizontalStaggeredGrid` - horizontal grid with variable size along the cross axis
 
+All of these are lazy layouts: they only create and measure visible items. The staggered variants allow items to have varying heights/widths, forming a "waterfall"-style grid.
+
+See also: [[c-android-ui-composition]]
+
 **Column types:**
 ```kotlin
 // Fixed columns
@@ -148,7 +157,7 @@ LazyVerticalGrid(
 ) { /* items */ }
 ```
 
-**Item spans:**
+**Item spans (LazyGrid only):**
 ```kotlin
 // Item spans multiple columns
 LazyVerticalGrid(
@@ -201,7 +210,7 @@ LazyVerticalGrid(
     items(
         count = items.size,
         key = { items[it].id }, // Recommended for stable item identity and reuse
-        contentType = { items[it]::class } // Helps reuse slots for similar item types
+        contentType = { /* Group items with the same content structure */ "item" }
     ) { index ->
         ItemCard(items[index])
     }

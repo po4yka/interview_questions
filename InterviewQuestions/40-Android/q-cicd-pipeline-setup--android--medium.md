@@ -14,10 +14,10 @@ language_tags:
   - ru
 status: draft
 moc: moc-android
-related: [c-gradle, q-android-build-optimization--android--medium]
+related: [c-ci-cd, q-android-build-optimization--android--medium]
 sources: []
 created: 2025-10-11
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/ci-cd, android/testing-unit, automation, devops-ci-cd, difficulty/medium]
 ---
 
@@ -37,17 +37,17 @@ GitHub Actions (облачные раннеры + бесплатный лими�
 ### Базовая Конфигурация Окружения
 - **JDK**: указать точную версию через `setup-java` (обычно LTS-релиз)
 - **Android SDK**: использовать cmdline-tools или готовые Docker-образы типа `cimg/android`
-- **Gradle**: полагаться на wrapper в репозитории, активировать build cache и configuration cache
+- **Gradle**: полагаться на wrapper в репозитории, активировать build cache и (опционально, если сборка совместима) configuration cache
 
 ### Секреты И Подписывание
-Хранить keystores, service account JSON, API-ключи в защищенных переменных CI. Никогда не коммитить credential файлы. По возможности использовать OIDC для доступа к облачным ресурсам. Использовать отдельные ключи и учетные данные для прод и non-prod окружений; подписывать релизные сборки только в защищенных job'ах с ограниченным доступом.
+Хранить keystores, service account JSON, API-ключи в защищенных переменных CI. Никогда не коммитить credential файлы. По возможности использовать OIDC для доступа к облачным ресурсам. Использовать отдельные ключи и учетные данные для prod и non-prod окружений; подписывать релизные сборки только в защищенных job'ах с ограниченным доступом.
 
 ### Стратегия Кеширования
 Кешировать `~/.gradle/caches`, `~/.gradle/wrapper`, зависимости и Build Cache. На self-hosted раннерах можно кешировать emulator system images для ускорения инструментальных тестов.
 
 ### Типичный Пайплайн
 ```yaml
-# ✅ Минимальная GitHub Actions конфигурация (CI для PR)
+# Minimal GitHub Actions configuration (CI for PR)
 name: Android CI
 on: [pull_request]
 jobs:
@@ -65,10 +65,10 @@ jobs:
       - name: Lint & Test
         run: |
           ./gradlew lintDebug testDebugUnitTest \
-            --parallel --build-cache --configuration-cache
+            --parallel --build-cache
       - name: Build APK
         run: ./gradlew :app:assembleDebug
-      - name: Upload artifacts
+      - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -96,7 +96,7 @@ GitHub Actions (cloud runners + free minutes quota depending on plan), GitLab CI
 ### Basic Environment Setup
 - **JDK**: specify exact version via `setup-java` (usually an LTS release)
 - **Android SDK**: use cmdline-tools or prebuilt Docker images like `cimg/android`
-- **Gradle**: rely on wrapper in repository, enable build cache and configuration cache
+- **Gradle**: rely on wrapper in repository, enable build cache and (optionally, when build is compatible) configuration cache
 
 ### Secrets and Signing
 Store keystores, service account JSON, API keys in CI secret variables. Never commit credential files. Use OIDC for cloud resource access when possible. Use separate keys/credentials for prod vs non-prod; perform release signing only in protected jobs with restricted access.
@@ -106,7 +106,7 @@ Cache `~/.gradle/caches`, `~/.gradle/wrapper`, dependencies and Build Cache. On 
 
 ### Typical Pipeline
 ```yaml
-# ✅ Minimal GitHub Actions configuration (CI for PRs)
+# Minimal GitHub Actions configuration (CI for PRs)
 name: Android CI
 on: [pull_request]
 jobs:
@@ -124,10 +124,10 @@ jobs:
       - name: Lint & Test
         run: |
           ./gradlew lintDebug testDebugUnitTest \
-            --parallel --build-cache --configuration-cache
+            --parallel --build-cache
       - name: Build APK
         run: ./gradlew :app:assembleDebug
-      - name: Upload artifacts
+      - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -155,7 +155,7 @@ Save JUnit XML, lint results, code coverage (Jacoco/Kover). Annotate PRs with co
 - How do you set up incremental builds in monorepo CI configurations?
 
 ## References
-- [[c-gradle]]
+- [[c-ci-cd]]
 - https://developer.android.com/studio/build
 - https://docs.gradle.org/current/userguide/build_cache.html
 - https://docs.github.com/en/actions

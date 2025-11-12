@@ -3,18 +3,20 @@ id: lang-002
 title: "Kotlin Collections Overview / Обзор коллекций Kotlin"
 aliases: ["Kotlin Collections Overview", "Обзор коллекций Kotlin"]
 topic: kotlin
-subtopics: [functions, java-interop]
+subtopics: [functions]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
+related: [c-concepts--kotlin--medium, c-collections, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-13
-updated: 2025-11-09
+updated: 2025-11-11
 tags: [difficulty/easy]
+
 ---
+
 # Вопрос (RU)
 > Какие коллекции знаешь?
 
@@ -42,10 +44,10 @@ tags: [difficulty/easy]
 - `HashSet` — реализация `MutableSet` на основе хеш-таблицы (на JVM обычно `java.util.HashSet`)
 - `HashMap` — реализация `MutableMap` на основе хеш-таблицы (на JVM обычно `java.util.HashMap`)
 
-> `LinkedList` как отдельная коллекция доступна через Java interop (`java.util.LinkedList`), но не является частью базовых Kotlin-специфичных коллекций стандартной библиотеки.
+> `LinkedList` как отдельная коллекция доступна через Java interop (`java.util.LinkedList`) и в Kotlin для нее есть расширения, но она не является отдельным Kotlin-специфичным типом коллекции стандартной библиотеки.
 
 Также стоит учитывать, что:
-- Функции `listOf`, `setOf`, `mapOf` по умолчанию возвращают реализации, которые не предполагается структурно изменять через возвращаемый интерфейс.
+- Функции `listOf`, `setOf`, `mapOf` по умолчанию возвращают коллекции, которые через полученный read-only интерфейс нельзя модифицировать (попытки обойти это через небезопасные касты не гарантированы и могут привести к ошибкам).
 - Например, на JVM `setOf` обычно возвращает `LinkedHashSet`, который сохраняет порядок вставки, хотя сам интерфейс `Set` порядок не обещает.
 
 **Примеры создания:**
@@ -61,7 +63,7 @@ val mutableSet: MutableSet<String> = mutableSetOf("a", "b")
 val mutableMap: MutableMap<String, String> = mutableMapOf("key" to "value")
 ```
 
-**Примечание**: "Только для чтения" в Kotlin означает, что через данный тип (интерфейс) нельзя вызывать методы изменения коллекции. Это не то же самое, что гарантированная неизменяемость данных или "read-only ссылка" — источник коллекции всё ещё может быть изменяемым.
+**Примечание**: "Только для чтения" в Kotlin означает, что через данный тип (интерфейс) нельзя вызывать методы изменения коллекции. Это не то же самое, что гарантированная неизменяемость данных или "read-only ссылка" — исходная коллекция может изменяться через другие ссылки или API.
 
 См. также: [[c-kotlin]], [[c-collections]]
 
@@ -88,10 +90,10 @@ In Kotlin there are collections with **read-only interfaces** and **mutable** co
 - `HashSet` - hash table implementation of `MutableSet` (on JVM typically `java.util.HashSet`)
 - `HashMap` - hash table implementation of `MutableMap` (on JVM typically `java.util.HashMap`)
 
-> `LinkedList` is available via Java interop (`java.util.LinkedList`) but is not a core Kotlin-specific collection type from the standard library.
+> `LinkedList` is available via Java interop (`java.util.LinkedList`), and Kotlin provides extension functions for it, but it is not a separate Kotlin-specific collection type defined by the standard library.
 
 Also note that:
-- `listOf`, `setOf`, `mapOf` return implementations that are not intended to be structurally modified via the returned interface.
+- `listOf`, `setOf`, `mapOf` return collections that cannot be modified via the returned read-only interface (attempts to bypass this via unsafe casts are unsupported and may fail).
 - On JVM, for example, `setOf` usually returns a `LinkedHashSet` that preserves insertion order, even though the `Set` interface itself does not promise ordering.
 
 **Creation examples:**
@@ -107,7 +109,7 @@ val mutableSet: MutableSet<String> = mutableSetOf("a", "b")
 val mutableMap: MutableMap<String, String> = mutableMapOf("key" to "value")
 ```
 
-**Note**: In Kotlin, "read-only" means that via the given type (interface) you cannot call mutating operations. It does not guarantee that the underlying data is truly immutable or that the reference is special; the same backing collection may still be modified elsewhere.
+**Note**: In Kotlin, "read-only" means that via the given type (interface) you cannot call mutating operations. It does not guarantee that the underlying data is truly immutable or that the reference is special; the same backing collection may still be modified through other references or APIs.
 
 See also: [[c-kotlin]], [[c-collections]]
 
@@ -125,14 +127,18 @@ See also: [[c-kotlin]], [[c-collections]]
 - When would you use Kotlin collections in practice?
 - What are common pitfalls to avoid when working with Kotlin collections?
 
-## Related Questions
-
-- [[q-abstract-class-vs-interface--kotlin--medium]]
-
 ## Ссылки (RU)
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-abstract-class-vs-interface--kotlin--medium]]
+
+## Related Questions
+
+- [[q-abstract-class-vs-interface--kotlin--medium]]

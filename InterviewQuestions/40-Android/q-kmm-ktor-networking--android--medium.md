@@ -74,7 +74,7 @@ object HttpClientFactory {
 **Bearer tokens** (пример для общей конфигурации клиента):
 ```kotlin
 // ✅ Auth plugin с auto-refresh
-val client = HttpClient { 
+val client = HttpClient {
     install(Auth) {
         bearer {
             loadTokens {
@@ -90,10 +90,12 @@ val client = HttpClient {
                 val refresh = tokenProvider.getRefreshToken()
                     ?: throw IllegalStateException("No refresh token")
 
-                val response = client.post("auth/refresh") {
+                // В реальном коде используйте относительный путь или отдельный клиент,
+                // а не ссылку на client внутри его же инициализации.
+                val response: TokenResponse = client.post("auth/refresh") {
                     markAsRefreshTokenRequest()
                     setBody(RefreshTokenRequest(refresh))
-                }.body<TokenResponse>()
+                }.body()
 
                 tokenProvider.saveTokens(response.accessToken, response.refreshToken)
                 BearerTokens(response.accessToken, response.refreshToken)
@@ -116,13 +118,14 @@ client.plugin(HttpSend).intercept { request ->
         attempt++
         try {
             val response = execute(request)
-            // ✅ Retry на 5xx, 429, timeout (если включено в retryableStatusCodes)
+            // ✅ Retry на 5xx, 429 (и другие retryableStatusCodes, если заданы)
             if (response.status in retryableStatusCodes && attempt < maxRetries) {
                 delay((1000L * (1 shl (attempt - 1))).coerceAtMost(30_000L))
                 continue
             }
             return@intercept response
         } catch (e: Exception) {
+            // Таймауты и сетевые ошибки приходят как исключения
             if (isRetryableException(e) && attempt < maxRetries) {
                 delay(delayMillis(attempt))
                 continue
@@ -133,7 +136,9 @@ client.plugin(HttpSend).intercept { request ->
 }
 ```
 
-**Retryable условия**: timeout errors, сетевые ошибки (например, отсутствие хоста или подключения) и временные статусы сервера: 5xx коды, 429 (с учётом `Retry-After` header). В `commonMain` избегайте прямой зависимости от JVM-специфичных исключений: обрабатывайте их либо через общие типы (`IOException` в JVM-модуле), либо через абстракции/обёртки.
+Здесь `retryableStatusCodes`, `maxRetries`, `isRetryableException` и `delayMillis` — это ваши вспомогательные настройки и функции, определённые в общем слое.
+
+**Retryable условия**: timeout errors, сетевые ошибки (например, отсутствие хоста или подключения) и временные статусы сервера: 5xx коды, 429 (с учётом `Retry-After` header). В `commonMain` избегайте прямой зависимости от JVM-специфичных исключений: обрабатывайте их в платформенных модулях или через свои абстракции/обёртки.
 
 ### Обработка Ошибок
 
@@ -146,17 +151,17 @@ sealed class NetworkError(message: String? = null) : Exception(message) {
     data class UnknownError(val reason: String) : NetworkError(reason)
 }
 
-// ✅ Маппинг исключений (пример для JVM, адаптируйте под платформы)
+// ✅ Маппинг исключений (пример для JVM; для других платформ используйте actual-реализации)
 fun mapException(e: Throwable): NetworkError = when (e) {
     is HttpRequestTimeoutException -> NetworkError.TimeoutError
-    is UnresolvedAddressException, // Ktor/JVM для проблем DNS/сети
+    is UnresolvedAddressException, // JVM: проблемы DNS/сети
     is UnknownHostException -> NetworkError.NoInternetError
     is ClientRequestException -> NetworkError.HttpError(e.response.status, null)
     else -> NetworkError.UnknownError(e.message ?: "Unknown")
 }
 ```
 
-В multiplatform-коде избегайте использования JVM-специфичных типов напрямую: вынесите детали в платформенные реализации или оборачивайте в свои error-типы.
+В multiplatform-коде избегайте использования JVM-специфичных типов напрямую: вынесите детали в платформенные реализации (`actual` функции) или оборачивайте в свои error-типы.
 
 **Network monitoring**: используйте platform-specific APIs (`ConnectivityManager` / `NetworkCallback` на Android, `NWPathMonitor` на iOS) для отслеживания доступности сети и информирования слоя данных/UI. Это дополняет, но не заменяет обработку исключений.
 
@@ -169,7 +174,7 @@ fun mapException(e: Throwable): NetworkError = when (e) {
 
 **File upload/download**: используйте `MultiPartFormDataContent` для upload; для прогресса реализуйте чтение/запись потоков блоками и коллбеки/flows, так как универсальные `onUpload`/`onDownload` коллбеки зависят от конкретной версии и реализации клиента.
 
-**GraphQL**: оборачивайте запросы в свою модель `GraphQLRequest(query, variables)` и парсьте `GraphQLResponse<T>` с обработкой `errors` — это логический слой поверх Ktor.
+**GraphQL**: оборачивайте запросы в свою модель `GraphQLRequest(query, variables)` и парсите `GraphQLResponse<T>` с обработкой `errors` — это логический слой поверх Ktor.
 
 ### Тестирование
 
@@ -187,7 +192,7 @@ val client = HttpClient(MockEngine) {
 }
 ```
 
-**Резюме**: Ktor обеспечивает единый multiplatform HTTP-клиент с platform-optimized движками, плагинами для аутентификации, ретраев и обработки ошибок. Ключевые моменты: корректная стратегия retry с exponential backoff, безопасное управление токенами, platform-specific оптимизации и единый слой маппинга ошибок между Android и iOS.
+**Резюме**: Ktor обеспечивает единый multiplatform HTTP-клиент с platform-optimized движками и плагинами для аутентификации, ретраев и обработки ошибок. Ключевые моменты: корректная стратегия retry с exponential backoff, безопасное управление токенами, platform-specific оптимизации и единый слой маппинга ошибок между Android и iOS.
 
 ## Answer (EN)
 
@@ -240,10 +245,12 @@ val client = HttpClient {
                 val refresh = tokenProvider.getRefreshToken()
                     ?: throw IllegalStateException("No refresh token")
 
-                val response = client.post("auth/refresh") {
+                // In real code, use a relative URL or a separate client,
+                // not a reference to `client` from inside its own initialization.
+                val response: TokenResponse = client.post("auth/refresh") {
                     markAsRefreshTokenRequest()
                     setBody(RefreshTokenRequest(refresh))
-                }.body<TokenResponse>()
+                }.body()
 
                 tokenProvider.saveTokens(response.accessToken, response.refreshToken)
                 BearerTokens(response.accessToken, response.refreshToken)
@@ -266,13 +273,14 @@ client.plugin(HttpSend).intercept { request ->
         attempt++
         try {
             val response = execute(request)
-            // ✅ Retry on 5xx, 429, timeout (if included in retryableStatusCodes)
+            // ✅ Retry on 5xx, 429 (and other retryableStatusCodes, if defined)
             if (response.status in retryableStatusCodes && attempt < maxRetries) {
                 delay((1000L * (1 shl (attempt - 1))).coerceAtMost(30_000L))
                 continue
             }
             return@intercept response
         } catch (e: Exception) {
+            // Timeouts and network issues are thrown as exceptions
             if (isRetryableException(e) && attempt < maxRetries) {
                 delay(delayMillis(attempt))
                 continue
@@ -282,6 +290,8 @@ client.plugin(HttpSend).intercept { request ->
     }
 }
 ```
+
+Here `retryableStatusCodes`, `maxRetries`, `isRetryableException`, and `delayMillis` are your own helpers/configuration defined in the shared layer.
 
 **Retryable conditions**: timeout errors, network connectivity errors, and transient server statuses: 5xx codes, 429 (respecting the `Retry-After` header). In `commonMain`, avoid direct use of JVM-specific exceptions like `UnknownHostException`; handle such details in platform modules or via your own abstraction.
 
@@ -296,30 +306,30 @@ sealed class NetworkError(message: String? = null) : Exception(message) {
     data class UnknownError(val reason: String) : NetworkError(reason)
 }
 
-// ✅ Exception mapping (example for JVM; adapt to each platform)
+// ✅ Exception mapping (JVM example; use actual implementations per platform)
 fun mapException(e: Throwable): NetworkError = when (e) {
     is HttpRequestTimeoutException -> NetworkError.TimeoutError
-    is UnresolvedAddressException,
+    is UnresolvedAddressException, // JVM: DNS/network issues
     is UnknownHostException -> NetworkError.NoInternetError
     is ClientRequestException -> NetworkError.HttpError(e.response.status, null)
     else -> NetworkError.UnknownError(e.message ?: "Unknown")
 }
 ```
 
-In multiplatform code, avoid tying yourself to platform-specific exception types; surface them as `NetworkError` (or similar) using platform-specific implementations.
+In multiplatform code, avoid binding to JVM-specific exceptions directly; expose them via platform-specific `actual` implementations or map them into `NetworkError` (or similar) at the platform boundary.
 
-**Network monitoring**: Use platform-specific APIs (`ConnectivityManager` / `NetworkCallback` on Android, `NWPathMonitor` on iOS) to track connectivity and inform your data/UI layer. This complements, but does not replace, proper exception handling on requests.
+**Network monitoring**: Use platform-specific APIs (`ConnectivityManager` / `NetworkCallback` on Android, `NWPathMonitor` on iOS) to track connectivity and inform your data/UI layer. This complements, but does not replace, exception-based handling.
 
 ### Advanced Features
 
-**Interceptors / plugins**: Use `HttpSend.intercept` and custom plugins for:
-- analytics and logging,
+**Interceptors / plugins**: Use `HttpSend.intercept` and/or custom Ktor plugins for:
+- logging and analytics,
 - common headers,
 - integration with your caching/offline layer.
 
-**File upload/download**: Use `MultiPartFormDataContent` for uploads. For progress reporting, read/write content in chunks and invoke callbacks/Flows; Ktor's built-in hooks vary by version and engine, so rely on explicit streaming logic for portable progress tracking.
+**File upload/download**: Use `MultiPartFormDataContent` for uploads. For progress reporting, stream content in chunks and expose callbacks/Flows; Ktor's built-in hooks differ by version and engine, so explicit streaming gives consistent behavior.
 
-**GraphQL**: Wrap HTTP calls with your own `GraphQLRequest(query, variables)` and parse `GraphQLResponse<T>` with `errors` handling; this is a layer built on top of Ktor.
+**GraphQL**: Wrap HTTP calls with your own `GraphQLRequest(query, variables)` and parse `GraphQLResponse<T>` with `errors` handling; this is a logical layer built on top of Ktor.
 
 ### Testing
 
@@ -337,7 +347,7 @@ val client = HttpClient(MockEngine) {
 }
 ```
 
-**Summary**: Ktor provides a unified multiplatform HTTP client with platform-optimized engines and plugins for authentication, retries, and error handling. Key considerations: robust error mapping, retry strategies with exponential backoff, secure token management, and platform-specific optimizations while keeping a shared API across Android and iOS.
+**Summary**: Ktor provides a unified multiplatform HTTP client with platform-optimized engines and plugins for authentication, retries, and error handling. Key considerations: robust error mapping, retry strategies with exponential backoff, secure token management, platform-specific optimizations, and a shared API between Android and iOS.
 
 ---
 

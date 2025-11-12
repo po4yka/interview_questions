@@ -95,14 +95,14 @@ coldFlow.collect { println(it) }  // Запускает снова
 #### Горячие Потоки (`SharedFlow` / `StateFlow`)
 
 ```kotlin
-val hotFlow = MutableSharedFlow<Int>()
+val hotFlow = MutableSharedFlow<Int>() // по умолчанию replay = 0
 
 launch {
     hotFlow.emit(1)
     hotFlow.emit(2)
 }
 
-// Коллекция начинается позже и может пропустить значения
+// Коллекция начинается позже и из-за replay = 0, скорее всего пропустит эти значения
 hotFlow.collect { println(it) }
 ```
 
@@ -131,6 +131,7 @@ val flow4 = listOf(1, 2, 3).asFlow()
 val flow5 = channelFlow {
     send(1)
     send(2)
+    // не забывайте вызывать awaitClose { ... } при использовании колбэков/ресурсов
 }
 ```
 
@@ -158,7 +159,7 @@ val sum = flow.reduce { acc, value ->
     acc + value
 }
 
-// fold - reduce с начальными значением
+// fold - reduce с начальным значением
 val result = flow.fold(0) { acc, value ->
     acc + value
 }
@@ -211,7 +212,7 @@ class UserRepository(private val api: ApiService) {
         while (true) {
             val users = api.fetchUsers()
             emit(users)
-            delay(30_000) // Обновлять каждые 30 секунд
+            delay(30_000) // Обновлять каждые 30 секунд; цикл прекратится при отмене коллекции
         }
     }
 }
@@ -296,7 +297,11 @@ viewModelScope.launch { logEvent() }  // Использовать корутин
 ```kotlin
 // Используйте Flow для потоков данных
 fun observeData(): Flow<Data> = callbackFlow {
-    // Стримим данные
+    // Стримим данные из колбеков / слушателей
+    // ...
+    awaitClose {
+        // Освободить ресурсы/отписаться от колбеков
+    }
 }
 
 // Стройте цепочки операторов
@@ -318,12 +323,13 @@ flow {
 
 #### НЕ ДЕЛАЙТЕ:
 ```kotlin
-// Не собирайте без корректного scope/жизненного цикла
+// Избегайте бесконтрольной коллекции без учёта жизненного цикла потребителя
 class BadViewModel : ViewModel() {
     init {
-        // Ошибка: сбор без привязки к viewModelScope или жизненному циклу
         viewModelScope.launch {
             repository.data.collect { }
+            // Такой сбор, начатый в init, будет жить всё время жизни ViewModel,
+            // даже если UI больше не нуждается в данных.
         }
     }
 }
@@ -413,14 +419,14 @@ coldFlow.collect { println(it) }  // Starts again
 #### Hot Streams (`SharedFlow` / `StateFlow`)
 
 ```kotlin
-val hotFlow = MutableSharedFlow<Int>()
+val hotFlow = MutableSharedFlow<Int>() // default replay = 0
 
 launch {
     hotFlow.emit(1)
     hotFlow.emit(2)
 }
 
-// Collection starts later, might miss values
+// Collection starts later and, because replay = 0, will likely miss these values
 hotFlow.collect { println(it) }
 ```
 
@@ -449,6 +455,7 @@ val flow4 = listOf(1, 2, 3).asFlow()
 val flow5 = channelFlow {
     send(1)
     send(2)
+    // remember to call awaitClose { ... } when using callbacks/resources
 }
 ```
 
@@ -529,7 +536,7 @@ class UserRepository(private val api: ApiService) {
         while (true) {
             val users = api.fetchUsers()
             emit(users)
-            delay(30_000) // Refresh every 30 seconds
+            delay(30_000) // Refresh every 30 seconds; loop stops when collection is cancelled
         }
     }
 }
@@ -589,7 +596,7 @@ fun countDown(from: Int): Flow<Int> = flow {
 fun processData(input: Flow<Data>): Flow<ProcessedData> =
     input.map { processAsync(it) }
 
-// 4. Error handling
+// 4. Error handling with retry
 fun loadWithRetry(): Flow<Data> = flow {
     emit(fetchData())
 }.retry(3) { it is IOException }
@@ -614,7 +621,11 @@ viewModelScope.launch { logEvent() }  // Use a coroutine, not Flow
 ```kotlin
 // Use Flow for streams
 fun observeData(): Flow<Data> = callbackFlow {
-    // Stream data
+    // Stream data from callbacks / listeners
+    // ...
+    awaitClose {
+        // Clean up resources / unsubscribe from callbacks
+    }
 }
 
 // Chain operators
@@ -636,12 +647,13 @@ flow {
 
 #### DON'T:
 ```kotlin
-// Don't collect without a proper scope/lifecycle
+// Avoid unbounded collection without considering the consumer lifecycle
 class BadViewModel : ViewModel() {
     init {
-        // Wrong: collecting without tying to viewModelScope or lifecycle
         viewModelScope.launch {
             repository.data.collect { }
+            // This collection started in init will live for the whole ViewModel lifetime,
+            // even if the UI no longer needs these updates.
         }
     }
 }

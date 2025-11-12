@@ -44,13 +44,13 @@ tags:
 
 ## Ответ (RU)
 
-Фрагменты появились в **Android 3.0 (Honeycomb) в 2011 году** для решения проблемы поддержки планшетов с большими экранами (10 дюймов). Google нужно было решение для адаптивного UI: планшеты могли показывать несколько панелей одновременно (master-detail), а телефоны — по одной.
+Фрагменты были представлены в **Android 3.0 (Honeycomb) в 2011 году** (первая версия для планшетов) как часть решения для построения **гибких, многоразовых, адаптивных UI**, в первую очередь для больших экранов (multi-pane), но с возможностью использования и на телефонах. Google нужно было официально поддерживаемое решение для адаптивного UI: планшеты могли показывать несколько панелей одновременно (master-detail), а телефоны — по одной.
 
 ### Основные Причины Появления
 
 **1. Multi-Pane Layouts (Master-Detail Pattern)**
 
-До фрагментов на телефонах использовалось две `Activity` (список → детали). На планшетах это выглядело неэффективно. Фрагменты позволили показывать обе панели одновременно:
+До фрагментов типичный сценарий master-detail реализовывался через две `Activity` (список → детали). На планшетах это выглядело неэффективно и неудобно. Фрагменты позволили показывать обе панели в одной `Activity` и переиспользовать тот же UI-компонент:
 
 ```kotlin
 // ✅ Телефон: один контейнер, фрагменты заменяют друг друга
@@ -89,12 +89,12 @@ class UserListFragment : Fragment() {
     }
 }
 
-// ✅ Используется в MainActivity, SettingsActivity, AdminActivity
+// ✅ Может использоваться в MainActivity, SettingsActivity, AdminActivity (общий UI-модуль)
 ```
 
 **3. Независимый Lifecycle**
 
-Фрагменты имеют собственный жизненный цикл, отдельный от `Activity`. Это позволяет управлять состоянием UI компонентов независимо:
+Фрагменты имеют собственный жизненный цикл (вложенный в lifecycle `Activity`), что позволяет управлять состоянием UI-компонентов более локально и модульно:
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -110,7 +110,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**4. Back `Stack` Management**
+**4. Back Stack Management**
 
 ```kotlin
 // ✅ Навигация: Fragment3 → Fragment2 → Fragment1 → Exit
@@ -122,11 +122,11 @@ supportFragmentManager.beginTransaction()
 
 ### Эволюция
 
-- **2011** — Android 3.0 (Honeycomb): первый релиз для планшетов
-- **2013** — `Support Library`: обратная совместимость
+- **2011** — Android 3.0 (Honeycomb): первый релиз с фрагментами для планшетов
+- **2011+** — `Support Library v4`: фрагменты с обратной совместимостью для старых версий Android
 - **2018** — AndroidX migration
 - **2019-2020** — современные API: `by viewModels()`, `Fragment Result API`
-- **2021+** — интеграция с `Jetpack Navigation`
+- **2021+** — интеграция с `Jetpack Navigation` и экосистемой Jetpack
 
 ### Современные Практики
 
@@ -147,7 +147,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
         }
 
         // ✅ Fragment Result API (замена setTargetFragment)
-        setFragmentResultListener("requestKey") { _, bundle ->
+        parentFragmentManager.setFragmentResultListener("requestKey", viewLifecycleOwner) { _, bundle ->
             handleResult(bundle.getString("result"))
         }
     }
@@ -161,23 +161,23 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 
 ### Какие Проблемы Решили
 
-- Адаптивные макеты для разных размеров экранов
-- Переиспользование UI компонентов
-- Модульная архитектура
-- Встроенная навигация с back stack
-- Независимый lifecycle от `Activity`
+- Адаптивные макеты для разных размеров экранов (multi-pane, reusable layouts)
+- Переиспользование UI-компонентов между разными `Activity`
+- Более модульная архитектура экранов
+- Управление навигацией и back stack на уровне `FragmentManager`
+- Более детализированный (компонентный) lifecycle по сравнению с монолитной `Activity`
 
 ### Основные Вызовы
 
-- Сложный lifecycle (много методов)
-- Configuration changes требуют управления состоянием
-- `IllegalStateException` при неправильном тайминге транзакций
+- Сложный lifecycle (много состояний и коллбеков)
+- Необходимость правильного управления состоянием при configuration changes
+- `IllegalStateException` при неправильном тайминге транзакций (например, после `onSaveInstanceState()`)
 - Необходимость очистки view references (утечки памяти)
-- Сложность при вложенных фрагментах
+- Сложность при вложенных фрагментах и childFragmentManager
 
 ### Альтернативы
 
-Jetpack Compose снижает необходимость фрагментов в новых проектах, но они остаются важной частью Android-разработки в существующих приложениях.
+Jetpack Compose снижает необходимость фрагментов в новых проектах (навигация и многоразовые компоненты реализуются через Composables), но фрагменты остаются важной частью Android-разработки в существующих приложениях и при интеграции с legacy-кодом.
 
 ### Лучшие Практики
 
@@ -189,21 +189,21 @@ Jetpack Compose снижает необходимость фрагментов �
 
 ### Типичные Ошибки
 
-- Утечки памяти из-за неправильного использования lifecycle для подписок
+- Утечки памяти из-за неправильного использования lifecycle для подписок и ссылок на View
 - `IllegalStateException` из-за транзакций после `onSaveInstanceState()`
-- Ошибки с back stack из-за пропуска `addToBackStack()`
+- Ошибки с back stack из-за пропуска `addToBackStack()` (где ожидается возврат)
 - Неправильная коммуникация через устаревший `setTargetFragment()`
-- Переусложнение там, где достаточно простого `View`
+- Переусложнение там, где достаточно простого `View` или одного `Activity`
 
 ## Answer (EN)
 
-Fragments were introduced in **Android 3.0 (Honeycomb) in 2011** to support tablets with large screens (10 inches). Google needed a solution for adaptive UI: tablets could show multiple panes simultaneously (master-detail), while phones would show one pane at a time.
+Fragments were introduced in **Android 3.0 (Honeycomb) in 2011** (the first tablet-focused release) as part of the solution for building **flexible, reusable, adaptive UIs**, primarily for larger screens (multi-pane), but designed so they could also be used on phones. Google needed an officially supported way to implement adaptive UI: tablets could show multiple panes simultaneously (master-detail), while phones would show one pane at a time.
 
 ### Main Reasons for Creation
 
 **1. Multi-Pane Layouts (Master-Detail Pattern)**
 
-Before fragments, phones used two Activities (list → details). This looked inefficient on tablets. Fragments enabled showing both panes simultaneously:
+Before fragments, a typical master-detail flow was implemented using two `Activity` instances (list → details). On tablets this was inefficient and inconvenient. Fragments enabled showing both panes inside a single `Activity` and reusing the same UI component:
 
 ```kotlin
 // ✅ Phone: single container, fragments replace each other
@@ -229,7 +229,7 @@ class TabletActivity : AppCompatActivity() {
 
 **2. Code Reusability**
 
-Same fragment can be used in different Activities:
+The same fragment can be used in different Activities:
 
 ```kotlin
 class UserListFragment : Fragment() {
@@ -242,18 +242,18 @@ class UserListFragment : Fragment() {
     }
 }
 
-// ✅ Used in MainActivity, SettingsActivity, AdminActivity
+// ✅ Can be used in MainActivity, SettingsActivity, AdminActivity as a shared UI module
 ```
 
 **3. Independent Lifecycle**
 
-Fragments have their own lifecycle, separate from `Activity`. This allows managing UI component state independently:
+Fragments have their own lifecycle (nested within the `Activity` lifecycle), which allows more localized and modular management of UI component state:
 
 ```kotlin
 class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // ✅ View ready for work
+        // ✅ View is ready to use
     }
 
     override fun onDestroyView() {
@@ -263,7 +263,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**4. Back `Stack` Management**
+**4. Back Stack Management**
 
 ```kotlin
 // ✅ Navigation: Fragment3 → Fragment2 → Fragment1 → Exit
@@ -275,11 +275,11 @@ supportFragmentManager.beginTransaction()
 
 ### Evolution
 
-- **2011** — Android 3.0 (Honeycomb): initial release for tablets
-- **2013** — `Support Library`: backward compatibility
+- **2011** — Android 3.0 (Honeycomb): initial release with fragments for tablets
+- **2011+** — `Support Library v4`: fragments with backward compatibility for older Android versions
 - **2018** — AndroidX migration
 - **2019-2020** — modern APIs: `by viewModels()`, `Fragment Result API`
-- **2021+** — integration with `Jetpack Navigation`
+- **2021+** — integration with `Jetpack Navigation` and broader Jetpack ecosystem
 
 ### Modern Best Practices
 
@@ -300,7 +300,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
         }
 
         // ✅ Fragment Result API (replaces setTargetFragment)
-        setFragmentResultListener("requestKey") { _, bundle ->
+        parentFragmentManager.setFragmentResultListener("requestKey", viewLifecycleOwner) { _, bundle ->
             handleResult(bundle.getString("result"))
         }
     }
@@ -314,39 +314,39 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 
 ### Problems Fragments Solved
 
-- Adaptive layouts for different screen sizes
-- UI component reusability
-- Modular architecture
-- Built-in navigation with back stack
-- Independent lifecycle from `Activity`
+- Adaptive layouts for different screen sizes (multi-pane, reusable layouts)
+- UI component reusability across multiple `Activity` instances
+- More modular screen architecture
+- Navigation and back stack handling via `FragmentManager`
+- More granular (component-level) lifecycle compared to a monolithic `Activity`
 
 ### Main Challenges
 
-- Complex lifecycle (many methods)
-- Configuration changes require state management
-- `IllegalStateException` with incorrect transaction timing
-- Need to clear view references (memory leaks)
-- Complexity with nested fragments
+- Complex lifecycle (many states and callbacks)
+- Need to manage state properly across configuration changes
+- `IllegalStateException` caused by incorrect transaction timing (e.g., after `onSaveInstanceState()`)
+- Need to clear view references to avoid memory leaks
+- Complexity with nested fragments and `childFragmentManager`
 
 ### Alternatives Today
 
-Jetpack Compose reduces the need for fragments in new projects, but they remain an important part of Android development in existing applications.
+Jetpack Compose reduces the need for fragments in new projects (navigation and reusable components are built with composables), but fragments remain an important part of Android development in existing apps and for interoperability with legacy code.
 
 ### Best Practices
 
 - Use modern APIs: `viewModels()`, `viewLifecycleOwner`, `Fragment Result API`
-- Manage binding correctly: clear references in `onDestroyView()` to prevent leaks
+- Manage view binding correctly: clear references in `onDestroyView()` to prevent leaks
 - Avoid deep nesting of fragments
-- Use shared `ViewModel` for communication between sibling fragments
+- Use a shared `ViewModel` for communication between sibling fragments
 - Test configuration changes: verify state preservation during screen rotation
 
 ### Common Pitfalls
 
-- Memory leaks due to incorrect lifecycle usage for subscriptions
+- Memory leaks due to incorrect lifecycle usage for subscriptions and View references
 - `IllegalStateException` due to transactions after `onSaveInstanceState()`
-- Back stack issues due to missing `addToBackStack()` during navigation
+- Back stack issues due to missing `addToBackStack()` where back navigation is expected
 - Incorrect communication via deprecated `setTargetFragment()`
-- Over-complication where a simple `View` would be enough
+- Over-complication where a simple `View` or a single `Activity` would be sufficient
 
 ---
 

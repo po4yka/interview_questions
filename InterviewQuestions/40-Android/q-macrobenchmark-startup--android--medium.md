@@ -86,9 +86,8 @@ android {
 
     buildTypes {
         create("benchmark") {  // ✅ Отдельный build type для бенчмарков в test-модуле
-            // Этот build type относится к test-модулю и может быть debuggable
+            // Этот build type относится к test-модулю и конфигурации тестового APK.
             isDebuggable = true
-            signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
         }
     }
@@ -149,6 +148,13 @@ class StartupBenchmark {
     fun warmStartup() = benchmarkStartup(
         compilationMode = CompilationMode.Partial(),
         startupMode = StartupMode.WARM
+    )
+
+    // ✅ Горячий запуск — возврат приложения на передний план
+    @Test
+    fun hotStartup() = benchmarkStartup(
+        compilationMode = CompilationMode.Partial(),
+        startupMode = StartupMode.HOT
     )
 
     private fun benchmarkStartup(
@@ -271,7 +277,8 @@ LIMIT 10;
 class DatabaseInitializer : Initializer<DatabaseManager> {
     override fun create(context: Context): DatabaseManager =
         DatabaseManager(context).apply {
-            initializeInBackground()  // ✅ Асинхронная/отложенная инициализация
+            // ✅ Не блокировать create() тяжелой работой; запускать длительную инициализацию в фоне
+            initializeInBackground()  // Асинхронная/отложенная инициализация
         }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
@@ -283,7 +290,7 @@ class DatabaseInitializer : Initializer<DatabaseManager> {
 @Composable
 fun MainContent() {
     val data by produceState<UserData?>(initialValue = null) {
-        // Блок produceState является suspend-контекстом
+        // Блок produceState выполняется в suspend-контексте
         value = loadUserData() // Сделайте loadUserData() suspend и переключайте dispatcher внутри
     }
 
@@ -325,7 +332,7 @@ fun MainContent() {
 
 1. Запускать на реальных устройствах — эмуляторы дают менее надежные результаты
 2. Использовать 10+ итераций для стабильной статистики
-3. Тестировать все типы запуска — холодный/тёплый/горячий (при необходимости добавлять отдельные тесты для HOT)
+3. Тестировать все типы запуска — холодный/тёплый/горячий (добавляя отдельные тесты для HOT)
 4. Измерять с Baseline Profiles — соответствует реальному сценарию Play Store
 5. Профилировать перед оптимизацией — не оптимизировать вслепую
 6. Интегрировать в CI (по возможности с реальными девайсами) для отслеживания регрессий
@@ -376,9 +383,8 @@ android {
 
     buildTypes {
         create("benchmark") {  // ✅ Dedicated build type for the test module
-            // This build type is for the test APK; it can be debuggable
+            // This build type configures the test APK; it can be debuggable.
             isDebuggable = true
-            signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
         }
     }
@@ -441,6 +447,13 @@ class StartupBenchmark {
         startupMode = StartupMode.WARM
     )
 
+    // ✅ Hot startup - bringing app back to foreground
+    @Test
+    fun hotStartup() = benchmarkStartup(
+        compilationMode = CompilationMode.Partial(),
+        startupMode = StartupMode.HOT
+    )
+
     private fun benchmarkStartup(
         compilationMode: CompilationMode,
         startupMode: StartupMode
@@ -449,7 +462,7 @@ class StartupBenchmark {
             packageName = "com.example.myapp",
             metrics = listOf(StartupTimingMetric()),
             compilationMode = compilationMode,
-            iterations = 10,  // ✅ At least 5–10 iterations for stability
+            iterations = 10,  // ✅ At least 5–10 iterations for stable results
             startupMode = startupMode,
             setupBlock = {
                 // pressHome() and device are provided via MacrobenchmarkRule / UiAutomator
@@ -562,7 +575,8 @@ Bottlenecks:
 class DatabaseInitializer : Initializer<DatabaseManager> {
     override fun create(context: Context): DatabaseManager =
         DatabaseManager(context).apply {
-            initializeInBackground()  // ✅ Async / deferred initialization
+            // ✅ Avoid heavy blocking work in create(); start long-running init in background
+            initializeInBackground()  // Async / deferred initialization
         }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
@@ -574,7 +588,7 @@ class DatabaseInitializer : Initializer<DatabaseManager> {
 @Composable
 fun MainContent() {
     val data by produceState<UserData?>(initialValue = null) {
-        // This block is a suspend context
+        // This block runs in a suspend context
         value = loadUserData() // Make loadUserData() suspend and switch dispatcher inside it
     }
 
@@ -616,7 +630,7 @@ Warm startup: 180ms
 
 1. Run on real devices where possible — emulators produce less stable results
 2. Use 10+ iterations for statistically meaningful numbers
-3. Cover all relevant startup types — cold/warm/hot (add dedicated HOT tests if needed)
+3. Cover all relevant startup types — cold/warm/hot (add dedicated HOT tests)
 4. Measure with Baseline Profiles — aligns with real Play Store behavior
 5. Always profile before optimizing — avoid blind micro-optimizations
 6. Integrate into CI (ideally with real devices) to catch regressions early

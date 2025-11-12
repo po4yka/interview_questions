@@ -13,7 +13,7 @@ moc: moc-kotlin
 related: [c-kotlin, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, inline-classes, kotlin, performance, type-aliases, type-safety]
+tags: [difficulty/medium, inline-classes, kotlin, performance, type-safety, type-aliases]
 ---
 
 # Вопрос (RU)
@@ -100,7 +100,7 @@ getUser(email)     // Ошибка компиляции: несоответст�
 **Характеристики**:
 - Более строгая type safety на уровне компиляции (отдельный тип)
 - Во многих контекстах представляются без дополнительного объекта (зависит от backend и контекста)
-- Должны оборачивать одно значение
+- Должны оборачивать одно значение в primary-конструкторе
 - Могут иметь методы и свойства
 
 **Продвинутое использование**:
@@ -456,7 +456,7 @@ getUser(email)     //  Compile error: type mismatch
 **Characteristics**:
 - Stronger type safety at compile time (distinct type)
 - Can be represented without an extra object in many usages (inlined representation is backend- and context-dependent)
-- Must wrap a single underlying value
+- Must wrap a single underlying value in the primary constructor
 - Can have methods and properties
 
 **Advanced usage**:

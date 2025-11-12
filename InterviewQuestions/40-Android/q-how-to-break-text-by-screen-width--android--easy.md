@@ -34,6 +34,8 @@ tags: [android, android/ui-graphics, android/ui-views, difficulty/easy]
 
 Важно понимать: разбиение происходит по измеренной ширине текста, а не по заранее заданному количеству символов. Разные символы имеют разную ширину.
 
+Также важно: `breakText()`/ручное разбиение — это низкоуровневый инструмент для кастомного рисования текста на `Canvas`. Для обычного UI (TextView/Compose) предпочтительно полагаться на встроенные механизмы переноса строк.
+
 ### Основной Подход
 
 ```kotlin
@@ -57,7 +59,7 @@ fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String
 
     while (remaining.isNotEmpty()) {
         val charsFit = paint.breakText(remaining, true, maxWidth, null)
-        if (charsFit == 0) break // ❌ Ширина слишком мала для даже одного символа
+        if (charsFit == 0) break // ожидаемое поведение: ширина слишком мала даже для одного символа
 
         lines.add(remaining.substring(0, charsFit))
         remaining = remaining.substring(charsFit)
@@ -66,7 +68,12 @@ fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String
 }
 ```
 
-Этот упрощенный вариант также не учитывает перенос по словам. На собеседовании стоит упомянуть, что для продакшена нужно доработать алгоритм (поиск последних пробелов, обработка переносов строк, RTL и т.п.) или использовать готовые текстовые компоненты.
+Этот упрощенный вариант:
+- не учитывает перенос по словам;
+- не учитывает уже существующие символы перевода строки;
+- не поддерживает сложные сценарии (RTL, bidirectional, спаны, fallback-шрифты и т.п.).
+
+На собеседовании стоит явно сказать, что это демонстрация принципа измерения ширины, а для продакшена алгоритм нужно доработать или использовать готовые текстовые компоненты / `StaticLayout`.
 
 ### В Кастомном `View`
 
@@ -84,7 +91,7 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
         // ✅ Пересчитываем разбиение при изменении размера
         while (remaining.isNotEmpty()) {
             val charsFit = paint.breakText(remaining, true, w.toFloat(), null)
-            if (charsFit == 0) break
+            if (charsFit == 0) break // ожидаемое поведение при слишком маленькой ширине
             lines.add(remaining.substring(0, charsFit))
             remaining = remaining.substring(charsFit)
         }
@@ -109,7 +116,7 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 - Метод `breakText()` учитывает настройки `Paint` (размер шрифта, `Typeface`, стиль), работая в пикселях.
 - Косвенно это отражает плотность экрана через правильно заданный `textSize` (например, сконвертированный из `sp`), но сам метод не оперирует `dp/sp` напрямую.
 - Показывайте в ответе понимание того, что разбиение должно быть основано на реальной ширине текста, а не просто на числе символов.
-- Для сложного форматирования, переносов по словам, RTL и спанов чаще используют `StaticLayout`/`StaticLayout.Builder` и `TextPaint`.
+- Для сложного форматирования, переносов по словам, RTL и спанов используют `StaticLayout`/`StaticLayout.Builder` c `TextPaint` или более высокоуровневые компоненты.
 
 ---
 
@@ -118,6 +125,8 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 Use the `Paint` class and its `breakText()` method to determine how many characters fit into a line for a given width in pixels and the current font configuration.
 
 Key idea: wrapping is based on measured text width, not on a fixed character count. Different characters have different widths.
+
+Also important: `breakText()`/manual splitting is a low-level tool for custom text rendering on a `Canvas`. For regular app UI (`TextView`, Compose text), you usually rely on built-in line breaking instead of reimplementing it.
 
 ### Basic Approach
 
@@ -142,7 +151,7 @@ fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String
 
     while (remaining.isNotEmpty()) {
         val charsFit = paint.breakText(remaining, true, maxWidth, null)
-        if (charsFit == 0) break // ❌ Width too small for even a single character
+        if (charsFit == 0) break // expected behavior: width too small for even a single character
 
         lines.add(remaining.substring(0, charsFit))
         remaining = remaining.substring(charsFit)
@@ -151,7 +160,12 @@ fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String
 }
 ```
 
-This simplified version also ignores word boundaries. In an interview, mention that a production-ready solution should refine this (respect spaces, existing line breaks, RTL, etc.) or use higher-level text layout APIs.
+This simplified version:
+- does not respect word boundaries;
+- ignores existing newline characters in the input;
+- does not cover complex cases (RTL, bidirectional text, spans, fallback fonts, etc.).
+
+In an interview, explicitly state this is a demonstration of width-based splitting; a production-ready solution should refine the algorithm or use higher-level text layout APIs / `StaticLayout`.
 
 ### In Custom `View`
 
@@ -169,7 +183,7 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
         // ✅ Recalculate breaking on size change
         while (remaining.isNotEmpty()) {
             val charsFit = paint.breakText(remaining, true, w.toFloat(), null)
-            if (charsFit == 0) break
+            if (charsFit == 0) break // expected behavior for an extremely narrow width
             lines.add(remaining.substring(0, charsFit))
             remaining = remaining.substring(charsFit)
         }
@@ -191,10 +205,10 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 ```
 
 **Important**:
-- `breakText()` respects the `Paint` configuration (textSize, typeface, style) and works in pixel units.
-- Screen density is taken into account indirectly through how you configure `textSize` (e.g., converting from `sp`), not directly inside `breakText()`.
-- Emphasize that line breaking should be based on actual measured width, not a naive "N characters per line".
-- For complex layouts, word wrapping, spans, and bidirectional text, prefer `StaticLayout`/`StaticLayout.Builder` with `TextPaint`.
+- `breakText()` respects the `Paint` configuration (textSize, typeface, style) and operates in pixels.
+- Screen density is accounted for indirectly via how you set `textSize` (e.g., converting from `sp`); `breakText()` itself does not work in `dp/sp`.
+- Emphasize that line breaking should be based on actual measured width, not a naive "N characters per line" approach.
+- For complex layouts, word wrapping, spans, and bidirectional text, use `StaticLayout`/`StaticLayout.Builder` with `TextPaint` or higher-level components.
 
 ---
 

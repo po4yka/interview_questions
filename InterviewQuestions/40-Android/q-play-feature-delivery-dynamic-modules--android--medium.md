@@ -20,7 +20,7 @@ related:
 - c-app-bundle
 - q-android-app-bundles--android--easy
 created: 2025-10-05
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/app-bundle
 - android/architecture-modularization
@@ -133,14 +133,6 @@ val isInstalled = "dynamic_feature" in installedModules
 
 ---
 
-## Follow-ups (RU)
-
-- Как вы обрабатываете зависимости между feature-модулями?
-- Каковы производительные последствия использования динамических модулей?
-- Как вы тестируете доставку динамических модулей?
-
----
-
 ## Answer (EN)
 
 **Play Feature Delivery theory:**
@@ -229,6 +221,14 @@ val isInstalled = "dynamic_feature" in installedModules
 - Requires minSdkVersion >= 21.
 - On devices before Android 10 (API < 29), SplitCompat may be required to access code/resources from dynamic modules in some contexts.
 - There are practical limits on the number of dynamic feature modules/asset packs (e.g., around 50) and removable modules; these are defined by current Play policies and may change, so always consult up-to-date documentation.
+
+---
+
+## Follow-ups (RU)
+
+- Как вы обрабатываете зависимости между feature-модулями?
+- Каковы производительные последствия использования динамических модулей?
+- Как вы тестируете доставку динамических модулей?
 
 ---
 

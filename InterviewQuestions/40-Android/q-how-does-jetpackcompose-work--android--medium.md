@@ -50,14 +50,14 @@ tags:
 
 ### Основные Принципы
 
-**Declarative UI**: описываете, что должно быть, а не как по шагам построить UI
-**Reactive**: UI автоматически обновляется при изменении наблюдаемого состояния
-**Component-based**: UI собирается из переиспользуемых composable-функций
+**Declarative UI**: описываете, что должно быть, а не как по шагам построить UI  
+**Reactive**: UI автоматически обновляется при изменении наблюдаемого состояния  
+**Component-based**: UI собирается из переиспользуемых composable-функций  
 **Kotlin-first**: тесная интеграция с Kotlin (включая корутины и `Flow` через специализированные API)
 
 ### Как Работает Composition
 
-Compose создаёт дерево вызовов composable-функций — **Composition**. Внутри используется структура данных **slot table**, которая отслеживает группы (composable-блоки), их позиции, состояния (включая `remember`) и ключи, необходимые для корректной перекомпозиции.
+Compose создаёт дерево вызовов composable-функций — **Composition**. Внутри используется структура данных **slot table**, которая отслеживает группы (composable-блоки), их позиции, состояния (включая `remember`) и ключи, необходимые для корректной перекомпозиции. Во время композиции Compose отслеживает чтения состояния и знает, какие группы зависят от каких значений.
 
 ```kotlin
 @Composable
@@ -67,7 +67,7 @@ fun Counter() {
     Column {
         Text("Count: $count") // ✅ Перекомпонуется при изменении count
         Button(onClick = { count++ }) {
-            Text("Increment") // ✅ Содержимое может участвовать в рекомпозиции, но Compose может оптимизировать повторное выполнение
+            Text("Increment") // ✅ Участвует в перекомпозиции; стабильные части могут быть пропущены при повторном выполнении
         }
     }
 }
@@ -78,9 +78,9 @@ fun Counter() {
 При изменении данных Compose интеллектуально повторно выполняет только затронутые части UI:
 
 1. Меняется состояние (`count++`).
-2. Compose помечает связанные с этим состоянием группы (composable) как невалидные.
-3. При следующем проходе выполняются только невалидные участки Composition; стабильные/неизменившиеся участки могут быть пропущены.
-4. UI обновляется на основе новых значений.
+2. Compose помечает связанные с этим состоянием группы (composable, которые читали это состояние) как невалидные.
+3. При следующем проходе выполняются только невалидные участки Composition; стабильные/неизменившиеся участки могут быть пропущены или переиспользованы.
+4. Результат сопоставляется с существующей структурой, и обновляются только изменённые части UI.
 
 ### State Hoisting (Поднятие Состояния)
 
@@ -119,7 +119,7 @@ fun EffectsExample(userId: String, locationManager: LocationManager) {
 
     // ✅ DisposableEffect: для инициализации и освобождения ресурсов
     DisposableEffect(Unit) {
-        val listener = LocationListener()
+        val listener = LocationListener() // иллюстративный пример; конкретное API зависит от реализации
         locationManager.addListener(listener)
         onDispose { locationManager.removeListener(listener) }
     }
@@ -143,7 +143,7 @@ Box(Modifier.background(Color.Blue).padding(16.dp))
 ```kotlin
 @Composable
 fun OptimizedList(items: List<Item>) {
-    // ✅ LazyColumn для больших списков (аналогично RecyclerView по идее ленивой загрузки)
+    // ✅ LazyColumn для больших списков: элементы создаются лениво и удаляются при уходе с экрана (по концепции похоже на эффективную работу RecyclerView, но без прямого переиспользования view)
     LazyColumn {
         items(items) { item -> ItemRow(item) }
     }
@@ -155,7 +155,7 @@ fun ItemRow(item: Item) {
     val isExpensive by remember(item) {
         derivedStateOf { expensiveCalculation(item) }
     }
-    // ✅ remember: кэширует дорогостоящие объекты по ключу
+    // ✅ remember: кэширует дорогостоящие объекты по ключу на время жизни соответствующей части Composition
     val obj = remember(item.id) { createExpensiveObject(item) }
 
     // используйте isExpensive и obj в UI
@@ -188,14 +188,14 @@ Compose работает через:
 
 ### Core Principles
 
-**Declarative UI**: describe what the UI should be, not step-by-step how to mutate it
-**Reactive**: UI automatically updates when observable state changes
-**Component-based**: build UIs from reusable composable functions
+**Declarative UI**: describe what the UI should be, not step-by-step how to mutate it  
+**Reactive**: UI automatically updates when observable state changes  
+**Component-based**: build UIs from reusable composable functions  
 **Kotlin-first**: designed for Kotlin, with coroutine/`Flow`-aware APIs and seamless Kotlin integration
 
 ### How Composition Works
 
-Compose builds a tree of composable function calls called the **Composition**. Internally, it uses a **slot table** data structure that tracks groups (composable regions), their positions, state (including `remember`), and keys required for correct recomposition.
+Compose builds a tree of composable function calls called the **Composition**. Internally, it uses a **slot table** data structure that tracks groups (composable regions), their positions, state (including `remember`), and keys required for correct recomposition. During composition, Compose tracks state reads to know which groups depend on which state values.
 
 ```kotlin
 @Composable
@@ -205,7 +205,7 @@ fun Counter() {
     Column {
         Text("Count: $count") // ✅ Re-executes / updates when count changes
         Button(onClick = { count++ }) {
-            Text("Increment") // ✅ Participates in recomposition; Compose may skip if inputs are stable
+            Text("Increment") // ✅ Participates in recomposition; stable parts may be skipped when re-running
         }
     }
 }
@@ -217,8 +217,8 @@ When data changes, Compose intelligently re-executes only affected parts of the 
 
 1. State changes (`count++`).
 2. Compose marks the corresponding groups (composables that read that state) as invalid.
-3. On the next pass, only invalid regions of the Composition are re-executed; stable/unchanged regions may be skipped.
-4. The rendered UI is updated with the new values.
+3. On the next pass, only invalid regions of the Composition are re-executed; stable/unchanged regions may be skipped or reused.
+4. The result is reconciled with the existing structure, and only the changed parts of the UI get updated.
 
 ### State Hoisting
 
@@ -257,7 +257,7 @@ fun EffectsExample(userId: String, locationManager: LocationManager) {
 
     // ✅ DisposableEffect: acquire and clean up resources
     DisposableEffect(Unit) {
-        val listener = LocationListener()
+        val listener = LocationListener() // illustrative; concrete API depends on your implementation
         locationManager.addListener(listener)
         onDispose { locationManager.removeListener(listener) }
     }
@@ -281,7 +281,7 @@ Box(Modifier.background(Color.Blue).padding(16.dp))
 ```kotlin
 @Composable
 fun OptimizedList(items: List<Item>) {
-    // ✅ Use LazyColumn for large lists (lazy item composition similar in concept to RecyclerView)
+    // ✅ Use LazyColumn for large lists: items are composed lazily and disposed when off-screen (conceptually similar to efficient lists like RecyclerView, but without direct view recycling)
     LazyColumn {
         items(items) { item -> ItemRow(item) }
     }
@@ -293,7 +293,7 @@ fun ItemRow(item: Item) {
     val isExpensive by remember(item) {
         derivedStateOf { expensiveCalculation(item) }
     }
-    // ✅ remember: cache expensive objects by key
+    // ✅ remember: cache expensive objects by key for the lifetime of the corresponding composition scope
     val obj = remember(item.id) { createExpensiveObject(item) }
 
     // use isExpensive and obj in the UI

@@ -27,13 +27,15 @@ tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed
 
 Основные ограничения sealed классов (и интерфейсов) в Kotlin:
 
-- Ограниченный контроль наследования: наследниками sealed класса/интерфейса могут быть только типы, явно объявленные как его подтипы в разрешённых местах (в том же файле — для ранних версий Kotlin; в современных версиях — в том же модуле и в том же пакете, либо в том же файле, в зависимости от синтаксиса объявления).
-- Нельзя свободно расширять иерархию извне: вы не можете сделать произвольный наследник sealed типа в другом ("чужом") модуле/пакете/файле, поэтому иерархия жёстко фиксирована.
-- Sealed класс сам по себе не может быть final (по смыслу он задаёт закрытую, но расширяемую внутри ограниченной области иерархию) и используется именно для контролируемого полиморфизма.
+- Ограниченный контроль наследования: непосредственными наследниками sealed класса/интерфейса могут быть только типы, объявленные в явно разрешённых местах.
+  - Для классического `sealed class` / `sealed interface`: в том же модуле и в том же пакете (или в том же файле для старого формата, если вся иерархия объявлена вместе).
+  - Нельзя вынести новый наследник в другой модуль или в пакет вне этой области.
+- Нельзя свободно расширять иерархию извне: вы не можете сделать произвольный наследник sealed-типа в другом ("чужом") модуле/пакете/файле, поэтому иерархия жёстко фиксирована и контролируется.
+- Sealed класс задаёт закрытую, но расширяемую только в ограниченной области иерархию: он по смыслу не сочетается с идеей "полностью final" (запретить всех наследников), так как использование `sealed` уже описывает контролируемый набор подтипов. Одновременно объявить один и тот же класс и `sealed`, и `final` нельзя.
 - Подтипы должны удовлетворять правилам видимости и места объявления для sealed типов; это делает архитектуру более жёсткой и иногда усложняет рефакторинг или разделение по модулям.
 
 Важно:
-- Sealed классы по сути абстрактны (нельзя создать экземпляр sealed класса напрямую без конкретного подтипа).
+- Sealed классы не обязаны быть помечены `abstract`, но они нефинализируемы для создания экземпляров: нельзя создать экземпляр непосредственно sealed класса без конкретного подтипа.
 - В Kotlin также существуют sealed интерфейсы; утверждение, что sealed можно использовать только для классов и объектов и не для интерфейсов, неверно.
 - Sealed типы не запрещают наследование от других классов или реализацию интерфейсов; ограничение относится к тому, кто может наследовать sealed тип.
 
@@ -43,14 +45,16 @@ tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed
 
 Key limitations of sealed classes (and interfaces) in Kotlin:
 
-- Restricted inheritance scope: only types explicitly declared as their subtypes in allowed locations may extend/implement a sealed class/interface (in the same file for early Kotlin versions; in modern Kotlin, within the same module and package or same file, depending on declaration syntax).
+- Restricted inheritance scope: direct subtypes of a sealed class/interface can only be declared in explicitly allowed locations.
+  - For the classic `sealed class` / `sealed interface`: in the same module and the same package (or in the same file for the older style where the whole hierarchy lives together).
+  - You cannot place a new subtype in another module or in a package outside this scope.
 - You cannot arbitrarily extend a sealed type from another ("foreign") module/package/file, so the hierarchy is tightly controlled and closed to uncontrolled extension.
-- A sealed class is inherently non-final in the sense that it is designed to define a closed but controlled hierarchy; it exists specifically for constrained polymorphism, not for free extension everywhere.
-- Subtypes must follow visibility and placement rules for sealed types; this can make architecture more rigid and sometimes complicates refactoring or module splitting.
+- A sealed class defines a closed hierarchy that is only extendable within a restricted scope; conceptually this conflicts with the idea of making it completely `final` (disallowing all inheritance). You cannot mark the same class as both `sealed` and `final`.
+- Subtypes must follow visibility and placement rules for sealed types; this can make the architecture more rigid and sometimes complicates refactoring or splitting across modules.
 
 Important clarifications:
-- Sealed classes are effectively abstract (you cannot instantiate a sealed class itself directly without a concrete subtype).
-- Kotlin also has sealed interfaces; the claim that sealed can be used only for classes/objects and not interfaces is incorrect.
+- Sealed classes do not have to be declared with `abstract`, but they are not directly instantiable: you cannot create an instance of a sealed class itself, only of its concrete subclasses.
+- Kotlin also has sealed interfaces; the claim that `sealed` applies only to classes/objects and not interfaces is incorrect.
 - Sealed types are not forbidden from inheriting from other classes or implementing interfaces; the restriction is on who may inherit from a sealed type, not what a sealed type may inherit from.
 
 (Do not confuse these with advantages: exhaustive `when` expressions, controlled hierarchies, and pattern-matching-like usage are benefits, not limitations.)

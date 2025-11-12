@@ -34,7 +34,7 @@ tags: [difficulty/medium, inline, lambdas, optimization, performance, kotlin]
 
 Также обычно **не следует** делать `inline`:
 - для функций с большими телами (прирост размера кода, минимальный профит),
-- когда функция часто вызывается из Java-кода, где преимущества inlining на стороне Kotlin-вызывателей несущественны.
+- когда функция часто вызывается из Java-кода: inlining произойдёт только в Kotlin-коде, а для Java-вызовов метод останется обычным.
 
 ## Answer (EN)
 
@@ -47,7 +47,7 @@ Technically, `inline` is disallowed for:
 
 It is also usually a bad idea to mark as `inline`:
 - functions with large bodies (code size increase, negligible benefit),
-- APIs called predominantly from Java, where inlining benefits at Kotlin call sites are less relevant.
+- APIs called predominantly from Java: inlining happens only at Kotlin call sites; for Java callers the method is just a regular one.
 
 ## Когда Inline НЕ Следует Использовать
 
@@ -57,7 +57,7 @@ It is also usually a bad idea to mark as `inline`:
 
 ```kotlin
 // НЕЖЕЛАТЕЛЬНО - Большое тело функции
-inline fun processLargeData(data: List<Int>) {
+inline fun processLargeDataInline(data: List<Int>) {
     // 100+ строк сложной логики
     val step1 = data.map { it * 2 }
     val step2 = step1.filter { it > 10 }
@@ -69,7 +69,7 @@ inline fun processLargeData(data: List<Int>) {
 
 // Вызывается 10 раз = раздувание кода (100+ строк × 10 = 1000+ строк)
 repeat(10) {
-    processLargeData(listOf(1, 2, 3))
+    processLargeDataInline(listOf(1, 2, 3))
 }
 
 // ЛУЧШЕ - Обычная функция
@@ -224,30 +224,30 @@ inline fun <reified T> isInstanceOf(value: Any): Boolean = value is T
 ```
 
 Ограничения:
-- `reified` работает только в `inline`-функциях,
-- использование `reified`-типов в лямбдах, которые утекают (`noinline`/возвращаемые), не даёт преимуществ, так как эти лямбды не будут заинлайнены в вызывающем месте.
+- `reified` работает только в `inline`-функциях.
+- Если лямбда с использованием `reified T` утекает (например, возвращается как значение), тип `T` фиксируется в момент inlining и вшивается в сгенерированный объект-лямбду; это корректно, но не даёт возможности менять `T` для каждого последующего вызова через тот же экземпляр.
 
-Пример, который не даёт ожидаемого эффекта (но компилируется):
+Пример, где поведение корректно, но менее гибко, чем ожидают некоторые разработчики:
 
 ```kotlin
 inline fun <reified T> createChecker(): (Any) -> Boolean {
-    // Лямбда возвращается и больше не может быть заинлайнена в вызывающем коде,
-    // поэтому преимущества reified-типа ограничены и могут быть не тем, что вы ожидаете.
+    // T будет подставлен при вызове createChecker<T>(),
+    // а затем конкретная проверка `it is T` будет зафиксирована внутри возвращённой лямбды.
     return { it is T }
 }
 ```
 
-Главная идея: `reified` полезен, когда проверка типа выполняется непосредственно в месте вызова, а не в «утекшей» лямбде.
+Главная идея: `reified` наиболее прозрачен и предсказуем, когда проверка типа выполняется непосредственно в месте вызова или внутри не утекающих лямбд.
 
 ---
 
 ### 7. Функции, Вызываемые Из Java
 
-**Проблема формулировки:** Java как язык не имеет ключевого слова `inline`, и вызовы из Java исходного кода не могут быть дополнительно заинлайнены на уровне Java-компилятора.
+**Контекст:** Java как язык не имеет ключевого слова `inline`; Kotlin делает разматывание `inline`-функций на этапе компиляции Kotlin-кода, который их вызывает.
 
-Как это работает в JVM-контексте:
-- Kotlin-компилятор разворачивает `inline` при компиляции Kotlin-кода, который вызывает `inline`-функцию.
-- Для Java-кода, который вызывает уже скомпилированный Kotlin-класс, этот вызов выглядит как обычный метод: для Java нет специального механизма повторного inlining на уровне исходников.
+Для Java-кода, который вызывает уже скомпилированный Kotlin-класс:
+- такой вызов выглядит как обычный метод,
+- дополнительного inlining на стороне Java-исходников не происходит.
 
 ```kotlin
 // Kotlin
@@ -258,13 +258,13 @@ inline fun process(action: () -> Unit) {
 
 ```java
 // Java
-// В уже скомпилированном байткоде Java видит обычный статический метод.
-// Дополнительного source-level inlining на стороне Java не происходит.
+// В байткоде Java видит обычный (static/final/etc.) метод.
+// Inlining уже произошёл или не произошёл на стадии Kotlin-компиляции вызывающей стороны.
 ```
 
 **Вывод:** Если функция предназначена в основном для вызова из Java,
-- `inline` не принесёт выгод на уровне Java-исходников,
-- но может быть полезен для Kotlin-вызывающих сторон.
+- `inline` принесёт выгоду только Kotlin-вызывающим сторонам,
+- для Java-клиентов это будет обычный вызов метода.
 
 ---
 
@@ -275,7 +275,8 @@ inline fun process(action: () -> Unit) {
 Inlining copies the function body into each call site. For large functions this leads to code bloat.
 
 ```kotlin
-inline fun processLargeData(data: List<Int>) {
+// NOT RECOMMENDED - Large function body
+inline fun processLargeDataInline(data: List<Int>) {
     val step1 = data.map { it * 2 }
     val step2 = step1.filter { it > 10 }
     val step3 = step2.groupBy { it % 3 }
@@ -285,10 +286,11 @@ inline fun processLargeData(data: List<Int>) {
 
 fun useLarge() {
     repeat(10) {
-        processLargeData(listOf(1, 2, 3))
+        processLargeDataInline(listOf(1, 2, 3))
     }
 }
 
+// BETTER - Regular function
 fun processLargeData(data: List<Int>) {
     // Large implementation in one place
 }
@@ -371,27 +373,28 @@ inline fun <reified T> isInstanceOf(value: Any): Boolean = value is T
 
 Constraints:
 - `reified` only works in `inline` functions.
-- Using `reified` types inside escaping lambdas (`noinline`/returned) does not provide the expected benefits because those lambdas are not inlined at the call site.
+- If you use `reified T` inside an escaping lambda (e.g., a returned function), the concrete `T` is baked into the generated lambda at the call site; this is correct but fixed for that lambda instance and may not match expectations of per-call-site variability.
 
-Example with limited effect:
+Example (semantically correct but sometimes misunderstood):
 
 ```kotlin
 inline fun <reified T> createChecker(): (Any) -> Boolean {
-    // Returned lambda is no longer inlined at each call site,
-    // so the advantages of reified are limited here.
+    // When inlined, `T` is substituted and the check is fixed in the resulting lambda.
     return { it is T }
 }
 ```
 
-Key idea: `reified` is most useful when the type check happens directly at the call site, not in an escaped lambda.
+Key idea: `reified` is most straightforward and flexible when the type check happens directly at the call site or within non-escaping lambdas.
 
 ---
 
 ### 7. Functions Mainly Called from Java
 
-From Java's perspective, inline functions are just regular methods in bytecode; there is no extra source-level inlining done by the Java compiler.
+From Java's perspective, inline functions are just regular methods in bytecode; there is no additional source-level inlining done by the Java compiler.
 
-So if an API is primarily used from Java, `inline` usually gives little benefit, though it can still help Kotlin callers.
+So if an API is primarily used from Java:
+- `inline` provides benefits only for Kotlin callers,
+- for Java callers it's an ordinary method invocation.
 
 ---
 
@@ -453,7 +456,7 @@ Conceptually after inlining:
 ```kotlin
 fun main() {
     repeat(100) {
-        println("[LOG] Message $it")
+        println("[LOG] $message")
     }
 }
 ```
@@ -474,7 +477,7 @@ Use `inline` mainly for small, frequently called functions, especially higher-or
 | **Рекурсивные функции** | Технически запрещено компилятором | Обычная рекурсивная функция |
 | **Сохранённые/возвращаемые лямбды без noinline** | Запрещено: escape inline-параметров | Пометить параметр как `noinline` или изменить дизайн |
 | **Абстрактные / полиморфные API** | Нет стабильного тела для inlining | Обычные (не inline) функции |
-| **Преимущественно вызовы из Java** | Нет доп. inlining на стороне Java | Оценить, нужен ли inline вообще |
+| **Преимущественно вызовы из Java** | Выгода только для Kotlin-вызовов | Оценить, нужен ли inline вообще |
 
 ---
 
@@ -485,7 +488,7 @@ Avoid marking a function as `inline` when:
 - it is recursive (forbidden),
 - it stores/returns lambda parameters without `noinline`,
 - it is abstract/virtual or part of a polymorphic API,
-- it is primarily called from Java.
+- it is primarily called from Java (benefit only for Kotlin callers).
 
 ---
 
@@ -537,7 +540,7 @@ inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
 
 Good use cases:
 
-1. Small higher-order functions with lambdas, to:
+1. Small higher-order functions with lambdas, to avoid lambda allocations and enable non-local returns.
 
 ```kotlin
 inline fun <T> measureTime(block: () -> T): T {
@@ -589,7 +592,7 @@ inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
 
 1. Функции имеют большие тела → раздувание кода.
 2. Функция предназначена для полиморфного/виртуального использования.
-3. Функция в основном вызывается из Java, и выигрыш от inline минимален.
+3. Функция в основном вызывается из Java, и выигрыш от inline минимален (ограничен Kotlin-клиентами).
 
 **Следует использовать inline, когда:**
 
@@ -617,7 +620,7 @@ Technically, you cannot use `inline` when:
 Usually you should avoid `inline` when:
 - the function body is large (code bloat),
 - the function is meant to be polymorphic/virtual,
-- the function is mainly called from Java.
+- the function is mainly called from Java (benefit limited to Kotlin callers).
 
 You should use `inline` when:
 - you have small higher-order functions with lambdas,

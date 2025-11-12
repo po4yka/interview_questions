@@ -30,25 +30,18 @@ tags:
 - launch-mode
 - tasks
 
+
 ---
 
 # Вопрос (RU)
-> Задачи и стек возврата
+> Что вы знаете о задачах и стеке возврата?
 
 # Question (EN)
-> Tasks and Back `Stack`
-
----
-
-**Русский**: Что вы знаете о задачах и стеке возврата?
-
-**English**: What do you know about tasks and the back stack?
+> What do you know about tasks and the back stack?
 
 ---
 
 ## Ответ (RU)
-**Русский**:
-
 **Задача (task)** — это коллекция `Activity`, с которыми взаимодействует пользователь при выполнении некоторого сценария в вашем приложении. Эти `Activity` организованы в стек, называемый **стеком возврата (back stack)**, в том порядке, в котором каждая `Activity` была открыта.
 
 Например, почтовое приложение может иметь одну `Activity` для отображения списка новых сообщений. Когда пользователь выбирает сообщение, открывается новая `Activity` для просмотра этого сообщения. Эта новая `Activity` добавляется в стек возврата. Когда пользователь нажимает кнопку или использует жест "Назад", новая `Activity` завершается и удаляется из стека.
@@ -104,13 +97,11 @@ tags:
 - `finishOnTaskLaunch`
 
 ## Answer (EN)
-**English**:
-
 A **task** is a collection of activities that users interact with when trying to do something in your app. These activities are arranged in a stack called the **back stack** in the order in which each activity is opened.
 
 For example, an email app might have one activity to show a list of new messages. When the user selects a message, a new activity opens to view that message. This new activity is added to the back stack. Then, when the user taps or gestures Back, that new activity finishes and is popped off the stack.
 
-### Lifecycle of a Task and Its Back `Stack`
+### Lifecycle of a Task and Its Back Stack
 
 The device Home screen is the starting place for most tasks. When a user touches the icon for an app or shortcut in the app launcher or on the Home screen, that app's task comes to the foreground. If no task exists for the app, then a new task is created and the main activity for that app opens as the root activity in the stack.
 
@@ -137,7 +128,7 @@ When a user taps or gestures Back from a root launcher activity of your task, th
 - System behavior on Android 11 and lower: the system finishes the activity (and thus the task) by default.
 - System behavior on Android 12 and higher: the system moves the activity and its task to the background instead of finishing the activity. This behavior matches the default system behavior when navigating out of an app using the Home button or gesture. In most cases, this means that users can more quickly resume your app from a warm state, instead of having to restart it from a cold state.
 
-Custom back handling (for example, intercepting `onBackPressedDispatcher` or using `OnBackInvokedCallback`) or navigation libraries can modify the effective behavior, but should be used carefully to keep expectations consistent with the platform.
+Custom back handling (for example, using `OnBackPressedDispatcher` or `OnBackInvokedCallback`) or navigation libraries can modify the effective behavior, but should be used carefully to keep expectations consistent with the platform.
 
 ### Manage Tasks
 
@@ -158,20 +149,27 @@ These are the principal `<activity>` attributes that you can use to manage tasks
 - `alwaysRetainTaskState`
 - `finishOnTaskLaunch`
 
-## References
-
-- [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
-
 ## Follow-ups
 
 - [[c-activity-lifecycle]]
 - [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
-- Как `launchMode` (`standard`, `singleTop`, `singleTask`, `singleInstance`) влияет на формирование задач и стека возврата?
-- Как флаги `Intent` (`FLAG_ACTIVITY_NEW_TASK`, `FLAG_ACTIVITY_CLEAR_TOP` и др.) влияют на существующие задачи и их back stack?
-- Чем поведение кнопки/жеста "Назад" в системе навигации отличается от логики навигации внутри `NavController`/`Navigation Component`?
+- How does `launchMode` (`standard`, `singleTop`, `singleTask`, `singleInstance`) affect task and back stack behavior?
+- How do `Intent` flags (`FLAG_ACTIVITY_NEW_TASK`, `FLAG_ACTIVITY_CLEAR_TOP`, etc.) affect existing tasks and their back stacks?
+- How does Back behavior at the system level differ from navigation logic handled inside `NavController` / Navigation Component?
+
+## References
+
+- [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 
 ## Related Questions
 
 - [[q-recyclerview-itemdecoration-advanced--android--medium]]
 - [[q-database-encryption-android--android--medium]]
 - [[q-what-to-put-in-state-for-initial-list--android--easy]]
+
+## Ссылки (RU)
+- [Задачи и стек возврата](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+## Дополнительные вопросы (RU)
+- Как `launchMode` (`standard`, `singleTop`, `singleTask`, `singleInstance`) влияет на формирование задач и стека возврата?
+- Как флаги `Intent` (`FLAG_ACTIVITY_NEW_TASK`, `FLAG_ACTIVITY_CLEAR_TOP` и др.) влияют на существующие задачи и их back stack?
+- Чем поведение кнопки/жеста "Назад" в системе навигации отличается от логики навигации внутри `NavController`/`Navigation Component`?

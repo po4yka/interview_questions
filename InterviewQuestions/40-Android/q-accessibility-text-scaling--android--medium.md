@@ -39,7 +39,7 @@ tags:
 
 ## Ответ (RU)
 
-Масштабирование текста позволяет пользователям настраивать размер текста на уровне системы. Рекомендации по доступности (например, WCAG и Android Accessibility) предполагают корректную работу интерфейса как минимум до 200% (и лучше выше, если это поддерживается устройством).
+Масштабирование текста позволяет пользователям настраивать размер текста на уровне системы. Рекомендации по доступности (например, WCAG и Android Accessibility) требуют, чтобы интерфейс корректно работал как минимум до 200% увеличения текста (без использования вспомогательных технологий); в Android системные настройки могут позволять и более высокие значения, которые также следует по возможности поддерживать.
 
 **Основные правила:**
 
@@ -57,7 +57,7 @@ Text(fontSize = 16.dp)
 
 **2. Используйте Material Type Scale**
 
-Используйте предопределенные стили типографики вместо явных размеров: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, или `?attr/textAppearanceHeadlineLarge` в XML, чтобы автоматически наследовать масштабирование и единый стиль.
+Используйте предопределенные стили типографики (которые основаны на `sp`) вместо явных размеров: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, или `?attr/textAppearanceHeadlineLarge` в XML, чтобы автоматически наследовать масштабирование шрифта и единый стиль.
 
 **3. Избегайте фиксированных высот**
 
@@ -67,11 +67,13 @@ Column(modifier = Modifier.height(48.dp)) {
     Text("Длинный текст")
 }
 
-// ✅ Расширится автоматически
+// ✅ Позволяет контейнеру подстраиваться под содержимое
 Column(modifier = Modifier.wrapContentHeight()) {
     Text("Длинный текст")
 }
 ```
+
+Ключевая идея — не задавать жесткую высоту там, где текст может расти.
 
 **4. Адаптивные макеты для больших масштабов**
 
@@ -91,12 +93,12 @@ fun TextScalingPreview() {
 **Основные ошибки:**
 - Использование `dp` вместо `sp` для текста
 - Фиксированные высоты контейнеров, из-за которых текст обрезается при увеличении
-- Игнорирование минимальных размеров области касания (обычно не менее 48dp), особенно при увеличенном тексте
+- Игнорирование минимальных размеров области касания (обычно не менее 48dp, задавать в `dp`, не в `sp`), особенно при увеличенном тексте
 - Отсутствие тестирования при экстремальных значениях масштабирования
 
 ## Answer (EN)
 
-Text scaling allows users to adjust text size system-wide. Accessibility guidance (e.g., WCAG and Android Accessibility) expects UIs to work correctly at least up to 200% (and preferably higher where supported by the device).
+Text scaling allows users to adjust text size system-wide. Accessibility guidance (e.g., WCAG and Android Accessibility) requires UIs to remain usable at least up to 200% text size (without assistive technologies). On Android, system settings may allow scaling beyond 200%; apps should handle these larger scales as well where practical.
 
 **Key Principles:**
 
@@ -114,7 +116,7 @@ Text(fontSize = 16.dp)
 
 **2. Use Material Type Scale**
 
-Use predefined typography styles instead of hardcoded sizes: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, or `?attr/textAppearanceHeadlineLarge` in XML so they inherit scaling and stay consistent.
+Use predefined typography styles (which are based on `sp`) instead of hardcoded sizes: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, or `?attr/textAppearanceHeadlineLarge` in XML so they inherit font scaling and stay consistent.
 
 **3. Avoid Fixed Heights**
 
@@ -124,11 +126,13 @@ Column(modifier = Modifier.height(48.dp)) {
     Text("Long text")
 }
 
-// ✅ Expands automatically
+// ✅ Allows the container to grow with content
 Column(modifier = Modifier.wrapContentHeight()) {
     Text("Long text")
 }
 ```
+
+The key idea is to avoid strict fixed heights where text can grow.
 
 **4. Adaptive Layouts for Large Scales**
 
@@ -148,7 +152,7 @@ fun TextScalingPreview() {
 **Common Pitfalls:**
 - Using `dp` instead of `sp` for text
 - Fixed container heights that cause clipping when text is scaled
-- Ignoring minimum touch target sizes (typically at least 48dp), especially when text becomes larger
+- Ignoring minimum touch target sizes (typically at least 48dp, specified in `dp`, not `sp`), especially when text becomes larger
 - Not testing at extreme scale factors
 
 ---
@@ -193,3 +197,5 @@ fun TextScalingPreview() {
 - [[q-accessibility-testing--android--medium]] - Accessibility testing
 
 ### Advanced
+
+```

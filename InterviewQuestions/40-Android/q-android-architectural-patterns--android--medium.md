@@ -109,7 +109,7 @@ class UserViewModel(private val repo: UserRepository) : ViewModel() {
             val user = repo.getUser(id)
             _state.value.copy(loading = false, user = user, error = null)
         } catch (e: Exception) {
-            _state.value.copy(loading = false, error = e.message)
+            _state.value = _state.value.copy(loading = false, error = e.message)
         }
     }
 }
@@ -205,7 +205,7 @@ class UserViewModel(private val repo: UserRepository) : ViewModel() {
             val user = repo.getUser(id)
             _state.value.copy(loading = false, user = user, error = null)
         } catch (e: Exception) {
-            _state.value.copy(loading = false, error = e.message)
+            _state.value = _state.value.copy(loading = false, error = e.message)
         }
     }
 }

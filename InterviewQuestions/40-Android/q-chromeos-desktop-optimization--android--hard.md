@@ -43,16 +43,14 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
-- Разрешите изменяемые окна и multi-window (`android:resizeableActivity="true"`, корректная работа PiP, multi-instance).
+### Краткая Версия
+- Разрешите изменяемые окна и multi-window (`android:resizeableActivity="true"` на уровне приложения/`Activity`), корректную работу PiP и multi-instance.
 - Реализуйте полноценную поддержку клавиатуры, мыши, трекпада и геймпада.
 - Добавьте drag-and-drop, работу с буфером обмена и SAF-файловые диалоги.
-- Оптимизируйте UI под большие экраны и ChromeOS (адаптивные макеты, multi-pane, master/detail).
-- Для игр соблюдайте требования Play Games on PC (x86-64, производительность, контроллеры, сервисы).
+- Оптимизируйте UI под большие экраны и ChromeOS (адаптивные макеты, multi-pane, master/detail, `Activity` Embedding через Jetpack WindowManager).
+- Для игр соблюдайте требования Play Games on PC (x86-64, производительность, поддержка контроллеров, совместимость с Play Games Services, где требуется).
 
-### Подробный вариант
-
+### Подробная Версия
 #### Требования
 
 - Функциональные:
@@ -60,30 +58,30 @@ sources:
   - Корректный ввод с клавиатуры, мыши, трекпада, геймпада.
   - Поддержка drag-and-drop и буфера обмена между окнами.
   - Работа с файлами через системные диалоги и SAF.
-  - Для игр: соответствие требованиям Play Games on PC.
+  - Для игр: соответствие требованиям Play Games on PC (архитектура, ввод, производительность, сервисы по чеклисту).
 - Нефункциональные:
   - Производительность и стабильность на больших экранах и десктопных GPU.
-  - Предсказуемое поведение навигации (включая Back) и окон.
+  - Предсказуемое поведение навигации (включая Back и predictive back) и окон.
   - Соответствие UX-ожиданиям desktop/ChromeOS.
 
 #### Архитектура
 
 - Используйте адаптивный UI-слой (responsive layouts), основанный на `WindowMetrics`/`WindowSizeClass`.
-- Стройте layout как набор панелей/фрагментов, чтобы легко поддерживать одиночное окно, multi-pane и embedding.
+- Стройте layout как набор панелей/фрагментов, чтобы легко поддерживать одиночное окно, multi-pane и `Activity` Embedding (Jetpack WindowManager).
 - Изолируйте работу с вводом, файлами и drag-and-drop в отдельные слои/сервисы, чтобы переиспользовать их между phone/ChromeOS.
 - Для игр/графических приложений учитывайте разные ABI и устройства ввода в абстрактном input-слое.
 
 #### 1. Окна и макеты
 
-- Убедитесь, что `android:resizeableActivity="true"` на нужных `activity`.
+- Убедитесь, что `android:resizeableActivity="true"` задано для приложения или нужных `activity`, чтобы разрешить изменение размера окна на ChromeOS.
 - При необходимости включите PiP: `android:supportsPictureInPicture="true"` + корректно обрабатывайте жизненный цикл.
 - Используйте `WindowMetrics` и `WindowSizeClass` для адаптивного UI под разные размеры и ориентации окон.
-- Используйте `Activity` Embedding (Jetpack WindowManager) для мастер/деталь и multi-pane UI на больших экранах/desktop.
-- Поддержите multi-window и multi-instance: не запрещайте многократные инстансы (используйте стандартный `launchMode`/значение по умолчанию) и убедитесь, что состояние корректно обрабатывается при нескольких окнах.
+- Используйте Embedding правил `Activity` (Jetpack WindowManager `Activity` Embedding) для мастер/деталь и multi-pane UI на больших экранах/desktop.
+- Поддержите multi-window и multi-instance: не запрещайте многократные инстансы (используйте стандартный `launchMode`/значение по умолчанию) и убедитесь, что состояние корректно обрабатывается при нескольких окнах/тасках.
 
 #### 2. Ввод
 
-- Клавиатура: обрабатывайте `KeyEvent` (включая стрелки, PageUp/PageDown, Delete, Enter), добавляйте сочетания клавиш (например, Ctrl+N, Ctrl+S) через обработку key events; для ярлыков лаунчера используйте `ShortcutManager` (static/dynamic shortcuts).
+- Клавиатура: обрабатывайте `KeyEvent` (включая стрелки, PageUp/PageDown, Delete, Enter), добавляйте сочетания клавиш (например, Ctrl+N, Ctrl+S) через обработку key events; избегайте перехвата системных шорткатов и следуйте desktop-конвенциям. Для ярлыков лаунчера используйте `ShortcutManager` (static/dynamic shortcuts).
 - Мышь/trackpad: используйте `onGenericMotionEvent` для скролла, `onHoverEvent` для hover-состояний, поддерживайте right-click (context menu) через `showContextMenuForChild`/`onCreateContextMenu` и соответствующие обработчики.
 - Touchpad / pointer gestures: полагайтесь на стандартные события скролла и мыши; `ViewConfiguration.getScaledTouchSlop` используйте только для чувствительности drag/scroll, а не как API жестов.
 
@@ -93,8 +91,12 @@ sources:
 view.setOnDragListener { _, event ->
     when (event.action) {
         DragEvent.ACTION_DROP -> {
-            val item = event.clipData?.getItemAt(0)
-            item?.uri?.let { handleUri(it) }
+            val clipData = event.clipData
+            for (i in 0 until (clipData?.itemCount ?: 0)) {
+                val item = clipData?.getItemAt(i)
+                item?.uri?.let { handleUri(it) }
+                item?.text?.let { handleText(it) }
+            }
             true
         }
         DragEvent.ACTION_DRAG_STARTED,
@@ -107,9 +109,9 @@ view.setOnDragListener { _, event ->
 }
 ```
 
-- Поддержите drag & drop из/в другие окна через `ClipData`/URI и проверку пермишенов.
+- Поддержите drag & drop из/в другие окна через `ClipData` (URI, текст и др.) и корректную проверку/предоставление пермишенов.
 - Используйте `ClipboardManager` для copy/paste.
-- Для rich content используйте соответствующие API ввода, такие как `InputConnection.commitContent`/`InputContentInfo` (или совместимые методы), вместо прямой передачи файлов.
+- Для rich content используйте соответствующие API ввода, такие как `InputConnection.commitContent`/`InputContentInfo` (или совместимые методы), вместо прямой передачи файловых путей.
 
 #### 4. Файлы и SAF
 
@@ -121,9 +123,9 @@ view.setOnDragListener { _, event ->
 
 - Соберите бинарь с поддержкой x86-64 ABI (в соответствии с актуальными требованиями Play Games on PC).
 - Поддержите gamepad/контроллеры: корректно обрабатывайте `InputDevice`, `KeyEvent` и оси (`MotionEvent`) согласно рекомендациям.
-- Обеспечьте стабильную производительность (например, 60+ FPS, адаптация под Desktop GPU и различные DPI), корректную работу в окнах и при смене размера.
-- Интегрируйте Play Games Services и следуйте официальным требованиям Play Games on PC (авторизация, достижения, сохранения и т.д.); избегайте неофициальных или нестабильных PC-specific overlay решений.
-- Для новых версий Android поддержите предсказуемое поведение кнопки "Назад" (например, `android:enableOnBackInvokedCallback="true"` и обработку back-invoked callbacks), как часть общих требований к современным билдам.
+- Обеспечьте стабильную производительность (например, 60+ FPS при возможности, адаптацию под Desktop GPU и различные DPI/частоты), корректную работу в окнах и при смене размера.
+- Интегрируйте необходимые компоненты Google Play Games Services (sign-in, achievements, cloud saves и др.) и следуйте официальным требованиям Play Games on PC и их чеклисту совместимости; избегайте неофициальных или нестабильных PC-specific overlay решений.
+- Для современных targetSdk обеспечьте предсказуемое поведение кнопки "Назад" (например, `android:enableOnBackInvokedCallback="true"` и обработку on-back-invoked callbacks) и адаптацию под predictive back как часть общих требований, не только для игр.
 
 #### 6. QA & дистрибуция
 
@@ -136,15 +138,13 @@ view.setOnDragListener { _, event ->
 ## Answer (EN)
 
 ### Short Version
-
-- Enable resizable windows and multi-window (`android:resizeableActivity="true"`, proper PiP and multi-instance behavior).
+- Enable resizable windows and multi-window (`android:resizeableActivity="true"` at app/activity level), and ensure correct PiP and multi-instance behavior.
 - Implement full keyboard, mouse, trackpad, and gamepad support.
 - Add drag-and-drop, clipboard integration, and SAF-based file dialogs.
-- Optimize UI for large screens and ChromeOS with adaptive, multi-pane layouts.
-- For games, comply with Play Games on PC requirements (x86-64, performance, controllers, services).
+- Optimize UI for large screens and ChromeOS with adaptive, multi-pane layouts and `Activity` Embedding (Jetpack WindowManager).
+- For games, comply with Play Games on PC requirements (x86-64, performance, controller support, and required Play Games Services integration).
 
 ### Detailed Version
-
 #### Requirements
 
 - Functional:
@@ -152,32 +152,32 @@ view.setOnDragListener { _, event ->
   - Proper handling of keyboard, mouse, trackpad, and gamepad input.
   - Drag-and-drop and clipboard operations across windows.
   - File handling via system file pickers and SAF.
-  - For games: full compliance with Play Games on PC requirements.
+  - For games: compliance with Play Games on PC requirements (ABI, input, performance, and services per their checklist).
 - Non-functional:
   - Good performance and stability on large screens and desktop-class GPUs.
-  - Predictable navigation (including Back) and window behavior.
+  - Predictable navigation (including Back and predictive back) and window behavior.
   - Desktop/ChromeOS-friendly UX.
 
 #### Architecture
 
 - Use an adaptive UI layer driven by `WindowMetrics`/`WindowSizeClass`.
-- Structure UI as reusable panes/fragments to support single-pane, multi-pane, and activity embedding layouts.
+- Structure UI as reusable panes/fragments to support single-pane, multi-pane, and `Activity` Embedding (Jetpack WindowManager) layouts.
 - Isolate input, file access, and drag-and-drop into dedicated modules/services shared between phone and ChromeOS builds.
 - For games/graphics apps, abstract input handling to support multiple device types and ABIs cleanly.
 
 ### 1. Windows and layouts
 
-- Ensure relevant activities declare `android:resizeableActivity="true"`.
+- Ensure `android:resizeableActivity="true"` is set for the app or relevant activities so windows can be resized on ChromeOS.
 - Enable Picture-in-Picture where appropriate via `android:supportsPictureInPicture="true"` and handle PiP lifecycle correctly.
 - Use `WindowMetrics` and `WindowSizeClass` to build adaptive layouts for different window sizes and orientations.
-- Use `Activity` Embedding (Jetpack WindowManager) to implement master-detail and multi-pane UI on large screens/desktop.
-- Support multi-window and multi-instance by allowing multiple task instances (keep the default `launchMode`/standard) and ensuring state handling works correctly with multiple windows.
+- Use `Activity` Embedding rules (Jetpack WindowManager `Activity` Embedding) to implement master-detail and multi-pane UIs on large screens/desktop.
+- Support multi-window and multi-instance by allowing multiple task instances (keep the default `launchMode`/standard) and ensuring state handling works correctly with multiple windows/tasks.
 
 ### 2. Input
 
-- Keyboard: handle `KeyEvent`s for navigation and editing keys; implement keyboard shortcuts (e.g., Ctrl+N, Ctrl+S) via key event handling. Use `ShortcutManager` for launcher/app shortcuts where appropriate.
-- Mouse/trackpad: use `onGenericMotionEvent` for scroll, `onHoverEvent` for hover states, and support right-click context menus via `onCreateContextMenu`/`showContextMenuForChild` and related APIs.
-- Touchpad/pointer gestures: rely on the translated scroll and mouse events; use `ViewConfiguration.getScaledTouchSlop` only for tuning drag/scroll sensitivity, not as a generic gesture API.
+- Keyboard: handle `KeyEvent`s for navigation and editing keys; implement keyboard shortcuts (e.g., Ctrl+N, Ctrl+S) via key event handling; avoid overriding system-level shortcuts and follow desktop conventions. Use `ShortcutManager` for launcher/app shortcuts where appropriate.
+- Mouse/trackpad: use `onGenericMotionEvent` for scrolling, `onHoverEvent` for hover states, and support right-click context menus via `onCreateContextMenu`/`showContextMenuForChild` and related APIs.
+- Touchpad/pointer gestures: rely on translated scroll and mouse events; use `ViewConfiguration.getScaledTouchSlop` only for tuning drag/scroll sensitivity, not as a generic gesture API.
 
 ### 3. Drag-and-drop, Clipboard
 
@@ -185,8 +185,12 @@ view.setOnDragListener { _, event ->
 view.setOnDragListener { _, event ->
     when (event.action) {
         DragEvent.ACTION_DROP -> {
-            val item = event.clipData?.getItemAt(0)
-            item?.uri?.let { handleUri(it) }
+            val clipData = event.clipData
+            for (i in 0 until (clipData?.itemCount ?: 0)) {
+                val item = clipData?.getItemAt(i)
+                item?.uri?.let { handleUri(it) }
+                item?.text?.let { handleText(it) }
+            }
             true
         }
         DragEvent.ACTION_DRAG_STARTED,
@@ -199,7 +203,7 @@ view.setOnDragListener { _, event ->
 }
 ```
 
-- Support drag & drop to/from other windows by working with `ClipData`/URIs and correct permission handling.
+- Support drag & drop to/from other windows using `ClipData` (URIs, text, etc.) with correct permission granting and validation.
 - Use `ClipboardManager` for copy/paste.
 - For rich content, use input APIs such as `InputConnection.commitContent`/`InputContentInfo` (or compat equivalents) instead of relying on raw file paths.
 
@@ -213,9 +217,9 @@ view.setOnDragListener { _, event ->
 
 - Ship builds with x86-64 ABI support according to current Play Games on PC requirements.
 - Fully support controllers: handle `InputDevice`, `KeyEvent`, and `MotionEvent` axes per official guidelines.
-- Optimize performance for desktop-class GPUs and various DPI/refresh rates; ensure stable frame rates (e.g., 60+ FPS) and correct behavior in resizable windows.
-- Integrate Google Play Games Services (sign-in, achievements, cloud saves, etc.) and follow the official Play Games on PC compatibility checklist; avoid relying on undocumented PC-only overlays.
-- For modern Android targets, properly support the predictive/back-invoked behavior (e.g., `android:enableOnBackInvokedCallback="true"` and callback handling) as part of general compliance.
+- Optimize performance for desktop-class GPUs and various DPI/refresh rates; ensure stable frame rates (e.g., 60+ FPS when feasible) and correct behavior in resizable windows.
+- Integrate the required Google Play Games Services components (sign-in, achievements, cloud saves, etc., as applicable) and follow the official Play Games on PC compatibility checklist; avoid undocumented PC-only overlays.
+- For modern targetSdk, correctly support predictive/back-invoked behavior (e.g., `android:enableOnBackInvokedCallback="true"` and callback handling) as a general requirement, not only for games.
 
 ### 6. QA & distribution
 

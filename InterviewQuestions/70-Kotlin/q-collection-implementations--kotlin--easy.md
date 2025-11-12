@@ -18,25 +18,27 @@ tags: [collections, difficulty/easy, implementations, kotlin, list, map, program
 # Какие Есть Реализации Коллекций?
 
 # Вопрос (RU)
-> Какие реализации коллекций доступны в Kotlin?
+> Какие реализации коллекций доступны в Kotlin (на JVM)?
 
 ---
 
 # Question (EN)
-> What collection implementations are available in Kotlin?
+> What collection implementations are available in Kotlin (on the JVM)?
 
 ## Ответ (RU)
 
-Kotlin использует реализации коллекций Java под капотом. Основные реализации:
+Kotlin (на JVM) использует реализации коллекций Java (`java.util`) под капотом для стандартных коллекций `List` / `Set` / `Map`. Основные реализации:
+
+(На других платформах Kotlin (JS/Native) конкретные реализации могут отличаться, но API коллекций остаётся единым.)
 
 ### `List` (Списки)
 
-- `ArrayList` - динамический массив (реализация по умолчанию для `mutableListOf`)
+- `ArrayList` - динамический массив (реализация по умолчанию для `mutableListOf` на JVM)
   - Быстрый доступ по индексу: O(1)
   - Быстрое добавление в конец (амортизированно O(1))
   - Медленная вставка/удаление в середине: O(n)
 
-- `LinkedList` - двусвязный список
+- `LinkedList` - двусвязный список (редко нужен в Kotlin-коде)
   - Вставка/удаление по уже известной ссылке/итератору: O(1)
   - Быстрая работа с началом/концом как очередью/деком
   - Медленный доступ по индексу и поиск элемента: O(n)
@@ -45,11 +47,11 @@ Kotlin использует реализации коллекций Java под 
 ### `Set` (Множества)
 
 - `HashSet` - хеш-таблица, без гарантий порядка
-  - Ожидаемые операции add/remove/contains по элементу: O(1)
+  - Ожидаемые (средние) операции add/remove/contains по элементу: O(1), в худшем случае O(n)
   - Требуется корректная реализация `hashCode`/`equals` для элементов
 
-- `LinkedHashSet` - хеш-таблица + связный список (реализация по умолчанию для `mutableSetOf`)
-  - Ожидаемые операции O(1)
+- `LinkedHashSet` - хеш-таблица + связный список (реализация по умолчанию для `mutableSetOf` на JVM)
+  - Ожидаемые (средние) операции O(1), в худшем случае O(n)
   - Сохраняет порядок вставки
 
 - `TreeSet` - на базе сбалансированного дерева (обычно красно-черного), отсортированное
@@ -59,12 +61,12 @@ Kotlin использует реализации коллекций Java под 
 ### `Map` (Словари)
 
 - `HashMap` - хеш-таблица для пар ключ-значение
-  - Ожидаемые операции get/put/remove по ключу: O(1)
+  - Ожидаемые (средние) операции get/put/remove по ключу: O(1), в худшем случае O(n)
   - Нет гарантий порядка
   - Требуется корректная реализация `hashCode`/`equals` для ключей
 
-- `LinkedHashMap` - хеш-таблица + связный список (реализация по умолчанию для `mutableMapOf`)
-  - Ожидаемые операции O(1)
+- `LinkedHashMap` - хеш-таблица + связный список (реализация по умолчанию для `mutableMapOf` на JVM)
+  - Ожидаемые (средние) операции O(1), в худшем случае O(n)
   - Сохраняет порядок вставки
 
 - `TreeMap` - на базе сбалансированного дерева (обычно красно-черного), отсортированного по ключам
@@ -75,11 +77,11 @@ Kotlin использует реализации коллекций Java под 
 
 **Списки (`List`):**
 - `ArrayList` — выбор по умолчанию для списков, когда важны быстрый доступ по индексу и эффективная итерация.
-- `LinkedList` — нишевый вариант: использовать, если вы работаете через итераторы/деки и вам нужны дешевые структурные изменения на концах или по уже известным ссылкам.
+- `LinkedList` — нишевый вариант; в идиоматичном Kotlin почти не используется, применять только если реально нужны операции очереди/дека с особыми требованиями.
 
 **Множества (`Set`):**
 - `HashSet` — по умолчанию, когда порядок не важен; требует хорошей реализации `hashCode`/`equals`.
-- `LinkedHashSet` — когда нужен порядок вставки при тех же ожидаемых O(1) операциях.
+- `LinkedHashSet` — когда нужен порядок вставки при тех же ожидаемых O(1) средних операциях.
 - `TreeSet` — когда нужны отсортированные уникальные элементы; элементы должны быть `Comparable` или нужен `Comparator`.
 
 **Отображения (`Map`):**
@@ -92,12 +94,12 @@ Kotlin использует реализации коллекций Java под 
 | Интерфейс | Реализация      | Порядок           | Скорость (типично) | Когда использовать |
 |----------|-----------------|-------------------|--------------------|--------------------|
 | `List`   | `ArrayList`     | Порядок вставки   | Быстрый доступ по индексу | Список по умолчанию |
-|          | `LinkedList`    | Порядок вставки   | Быстрые вставки/удаления через итератор/на концах | Очереди/деки, частые структурные изменения по ссылкам |
-| `Set`    | `HashSet`       | Нет               | Ожидаемое O(1)     | Множество по умолчанию |
-|          | `LinkedHashSet` | Порядок вставки   | Ожидаемое O(1)     | Нужен порядок вставки |
+|          | `LinkedList`    | Порядок вставки   | Быстрые вставки/удаления через итератор/на концах | Очереди/деки, редкие специфичные случаи |
+| `Set`    | `HashSet`       | Нет               | Ожидаемое O(1), худший O(n) | Множество по умолчанию |
+|          | `LinkedHashSet` | Порядок вставки   | Ожидаемое O(1), худший O(n) | Нужен порядок вставки |
 |          | `TreeSet`       | Отсортирован      | O(log n)           | Отсортированные уникальные элементы |
-| `Map`    | `HashMap`       | Нет               | Ожидаемое O(1)     | `Map` по умолчанию |
-|          | `LinkedHashMap` | Порядок вставки   | Ожидаемое O(1)     | Нужен порядок вставки |
+| `Map`    | `HashMap`       | Нет               | Ожидаемое O(1), худший O(n) | `Map` по умолчанию |
+|          | `LinkedHashMap` | Порядок вставки   | Ожидаемое O(1), худший O(n) | Нужен порядок вставки |
 |          | `TreeMap`       | Отсортированные ключи | O(log n)       | Поиск по отсортированным ключам |
 
 ### Фабричные функции Kotlin (RU)
@@ -108,12 +110,12 @@ val list = listOf(1, 2, 3)
 val set = setOf("a", "b")
 val map = mapOf("key" to "value")
 
-// Mutable (изменяемые коллекции)
-val mutableList = mutableListOf(1, 2)      // ArrayList под капотом
-val mutableSet = mutableSetOf("a")        // LinkedHashSet под капотом
-val mutableMap = mutableMapOf("k" to "v") // LinkedHashMap под капотом
+// Mutable (изменяемые коллекции) — описание для JVM
+val mutableList = mutableListOf(1, 2)      // ArrayList под капотом на JVM
+val mutableSet = mutableSetOf("a")        // LinkedHashSet под капотом на JVM
+val mutableMap = mutableMapOf("k" to "v") // LinkedHashMap под капотом на JVM
 
-// Прямое создание конкретных реализаций
+// Прямое создание конкретных реализаций (JVM)
 val arrayList = ArrayList<Int>()
 val hashSet = HashSet<String>()
 val hashMap = HashMap<String, Int>()
@@ -124,15 +126,15 @@ val treeMap = TreeMap<Int, String>()
 
 ### Сравнение производительности (RU)
 
-(Сложности относятся к типичным операциям над отдельными элементами.)
+(Сложности относятся к типичным средним операциям над отдельными элементами для этих реализаций.)
 
-| Операция                | `ArrayList` | `LinkedList`              | `HashSet` | `TreeSet` |
-|-------------------------|------------|---------------------------|-----------|-----------|
-| Добавление в конец      | O(1)*      | O(1)                      | O(1)      | O(log n)  |
-| Добавление в начало     | O(n)       | O(1)                      | O(1)      | O(log n)  |
-| Доступ по индексу       | O(1)       | O(n)                      | Н/Д       | Н/Д       |
-| Проверка contains       | O(n)       | O(n)                      | O(1)      | O(log n)  |
-| Удаление по элементу    | O(n)       | O(1)** при удалении по итератору/узлу | O(1)      | O(log n)  |
+| Операция                | `ArrayList` | `LinkedList`              | `HashSet`          | `TreeSet` |
+|-------------------------|------------|---------------------------|--------------------|-----------|
+| Добавление в конец      | O(1)*      | O(1)                      | O(1) ожидаемо      | O(log n)  |
+| Добавление в начало     | O(n)       | O(1)                      | O(1) ожидаемо      | O(log n)  |
+| Доступ по индексу       | O(1)       | O(n)                      | Н/Д                | Н/Д       |
+| Проверка contains       | O(n)       | O(n)                      | O(1) ожидаемо      | O(log n)  |
+| Удаление по элементу    | O(n)       | O(1)** при удалении по итератору/узлу | O(1) ожидаемо | O(log n)  |
 
 * Амортизированная сложность для добавления в конец `ArrayList`.
 
@@ -140,14 +142,16 @@ val treeMap = TreeMap<Int, String>()
 
 ## Answer (EN)
 
-Kotlin uses Java collection implementations under the hood. Here are the main implementations:
+On the JVM, Kotlin standard `List` / `Set` / `Map` collections are backed by Java `java.util` implementations. Here are the main implementations:
+
+(On other Kotlin targets like JS/Native, concrete implementations differ, but the collection APIs are consistent.)
 
 ### `List` Interface
 
-**`ArrayList`** - Resizable array implementation:
+**`ArrayList`** - Resizable array implementation (default for `mutableListOf` on JVM):
 ```kotlin
-val list = ArrayList<String>()  // Explicit
-val list2 = mutableListOf("a", "b")  // Uses ArrayList under the hood
+val list = ArrayList<String>()      // Explicit
+val list2 = mutableListOf("a", "b")  // Uses ArrayList under the hood on JVM
 
 // Properties:
 // + Fast random access: O(1)
@@ -157,7 +161,7 @@ val list2 = mutableListOf("a", "b")  // Uses ArrayList under the hood
 // - Occasional resize/reallocation when growing
 ```
 
-**`LinkedList`** - Doubly-linked list:
+**`LinkedList`** - Doubly-linked list (rarely needed in idiomatic Kotlin):
 ```kotlin
 val list = LinkedList<String>()
 
@@ -171,7 +175,7 @@ val list = LinkedList<String>()
 
 **When to use:**
 - `ArrayList`: Default choice, frequent index access and iteration.
-- `LinkedList`: Niche; when you specifically work via iterators/deques and need cheap structural changes at ends or via existing references.
+- `LinkedList`: Niche; mainly when specifically using it as a deque/queue with special constraints.
 
 ### `Set` Interface
 
@@ -180,18 +184,18 @@ val list = LinkedList<String>()
 val set = HashSet<String>()      // Explicit
 
 // Properties:
-// + Expected O(1) add/remove/contains by element
+// + Expected O(1) add/remove/contains by element; worst-case O(n)
 // - No ordering guarantee
 // - Requires a good hashCode/equals implementation
 ```
 
-**`LinkedHashSet`** - Hash table + linked list:
+**`LinkedHashSet`** - Hash table + linked list (default backing for `mutableSetOf` on JVM):
 ```kotlin
 val set = LinkedHashSet<String>()
-val set2 = mutableSetOf("a", "b")  // Uses LinkedHashSet under the hood
+val set2 = mutableSetOf("a", "b")  // Uses LinkedHashSet under the hood on JVM
 
 // Properties:
-// + Expected O(1) operations
+// + Expected O(1) operations; worst-case O(n)
 // + Maintains insertion order
 // - Slightly more memory than HashSet
 ```
@@ -219,18 +223,18 @@ val set = TreeSet<Int>()
 val map = HashMap<String, Int>()
 
 // Properties:
-// + Expected O(1) get/put/remove by key
+// + Expected O(1) get/put/remove by key; worst-case O(n)
 // - No ordering guarantee
 // - Requires good hashCode/equals for keys
 ```
 
-**`LinkedHashMap`** - Hash table + linked list:
+**`LinkedHashMap`** - Hash table + linked list (default backing for `mutableMapOf` on JVM):
 ```kotlin
-val map = LinkedHashMap<String, Int>()   // Explicit
-val map2 = mutableMapOf("a" to 1)       // Uses LinkedHashMap under the hood
+val map = LinkedHashMap<String, Int>()    // Explicit
+val map2 = mutableMapOf("a" to 1)        // Uses LinkedHashMap under the hood on JVM
 
 // Properties:
-// + Expected O(1) operations
+// + Expected O(1) operations; worst-case O(n)
 // + Maintains insertion order
 // - Slightly more memory overhead
 ```
@@ -256,12 +260,12 @@ val map = TreeMap<Int, String>()
 | Interface | Implementation | Ordering | Speed (typical) | Use Case |
 |-----------|----------------|----------|-----------------|----------|
 | `List` | `ArrayList` | Insertion order | Fast random access | Default list |
-|  | `LinkedList` | Insertion order | Fast insert/delete via iterator/ends | Queues/deques, structural changes via references |
-| `Set` | `HashSet` | None | Expected O(1) | Default set |
-|  | `LinkedHashSet` | Insertion order | Expected O(1) | Preserve insertion order |
+|  | `LinkedList` | Insertion order | Fast insert/delete via iterator/ends | Queues/deques, rare specific cases |
+| `Set` | `HashSet` | None | Expected O(1), worst-case O(n) | Default set |
+|  | `LinkedHashSet` | Insertion order | Expected O(1), worst-case O(n) | Preserve insertion order |
 |  | `TreeSet` | Sorted | O(log n) | Sorted unique elements |
-| `Map` | `HashMap` | None | Expected O(1) | Default map |
-|  | `LinkedHashMap` | Insertion order | Expected O(1) | Preserve insertion order |
+| `Map` | `HashMap` | None | Expected O(1), worst-case O(n) | Default map |
+|  | `LinkedHashMap` | Insertion order | Expected O(1), worst-case O(n) | Preserve insertion order |
 |  | `TreeMap` | Sorted keys | O(log n) | Sorted key lookups |
 
 ### Kotlin Factory Functions
@@ -273,12 +277,12 @@ val list = listOf(1, 2, 3)
 val set = setOf("a", "b")
 val map = mapOf("key" to "value")
 
-// Mutable collections (backed by specific Java implementations)
-val mutableList = mutableListOf(1, 2)       // Backed by ArrayList
-val mutableSet = mutableSetOf("a")         // Backed by LinkedHashSet
-val mutableMap = mutableMapOf("k" to "v")  // Backed by LinkedHashMap
+// Mutable collections (backed by specific implementations on JVM)
+val mutableList = mutableListOf(1, 2)       // Backed by ArrayList on JVM
+val mutableSet = mutableSetOf("a")         // Backed by LinkedHashSet on JVM
+val mutableMap = mutableMapOf("k" to "v")  // Backed by LinkedHashMap on JVM
 
-// Specific implementations
+// Specific implementations (JVM)
 val arrayList = ArrayList<Int>()
 val hashSet = HashSet<String>()
 val hashMap = HashMap<String, Int>()
@@ -289,15 +293,15 @@ val treeMap = TreeMap<Int, String>()
 
 ### Performance Comparison (EN)
 
-(Complexities refer to typical per-element operations on individual elements.)
+(Complexities refer to typical average-case per-element operations for these implementations.)
 
 | Operation | `ArrayList` | `LinkedList` | `HashSet` | `TreeSet` |
 |-----------|-----------|------------|---------|---------|
-| Add at end | O(1)* | O(1) | O(1) | O(log n) |
-| Add at beginning | O(n) | O(1) | O(1) | O(log n) |
+| Add at end | O(1)* | O(1) | O(1) expected | O(log n) |
+| Add at beginning | O(n) | O(1) | O(1) expected | O(log n) |
 | Get by index | O(1) | O(n) | N/A | N/A |
-| Contains (by element) | O(n) | O(n) | O(1) | O(log n) |
-| Remove (by element) | O(n) | O(1)** | O(1) | O(log n) |
+| Contains (by element) | O(n) | O(n) | O(1) expected | O(log n) |
+| Remove (by element) | O(n) | O(1)** | O(1) expected | O(log n) |
 
 * Amortized for `ArrayList` append.
 
@@ -307,14 +311,14 @@ val treeMap = TreeMap<Int, String>()
 
 ## Дополнительные вопросы (RU)
 
-- В чем ключевые отличия реализаций коллекций в Kotlin и Java на практике?
+- В чем ключевые отличия реализаций коллекций в Kotlin и Java на практике (особенно с учетом мультиплатформенности)?
 - Когда вы бы выбрали конкретную реализацию в реальных задачах?
 - Какие типичные ошибки при выборе и использовании реализаций коллекций?
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
+- What are the key differences between this and Java (including multiplatform nuances)?
+- When would you use specific implementations in practice?
 - What are common pitfalls to avoid?
 
 ## Ссылки (RU)

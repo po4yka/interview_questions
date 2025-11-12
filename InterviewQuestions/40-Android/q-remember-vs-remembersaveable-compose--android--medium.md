@@ -20,8 +20,8 @@ related:
 - c-compose-state
 - q-handler-looper-main-thread--android--medium
 - q-what-are-the-most-important-components-of-compose--android--medium
-created: 2025-10-15
-updated: 2025-11-10
+created: 2023-10-15
+updated: 2025-11-11
 tags:
 - android/ui-compose
 - android/ui-state
@@ -1014,11 +1014,14 @@ fun TabScreen(initialTab: Int) {
 ## Follow-ups
 
 - [[q-handler-looper-main-thread--android--medium]]
+- Как бы вы реализовали собственный Saver для сложного объекта, связанного с `rememberSaveable`?
+- В каких случаях вы предпочли бы использовать только `ViewModel` вместо `rememberSaveable`?
+- Как бы вы отладили проблему, когда состояние, сохраненное через `rememberSaveable`, не восстанавливается после поворота экрана?
 
 ## References
 
-- [Android Documentation](https://developer.android.com/docs)
-- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+- [Android Documentation]("https://developer.android.com/docs")
+- [Jetpack Compose]("https://developer.android.com/develop/ui/compose")
 
 ## Related Questions
 

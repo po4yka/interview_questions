@@ -18,6 +18,9 @@ tags: [access-modifiers, difficulty/medium, internal, module, programming-langua
 # Вопрос (RU)
 > Что известно про `internal`?
 
+# Question (EN)
+> What is known about `internal`?
+
 ## Ответ (RU)
 
 `internal` — это модификатор видимости с областью для всего модуля.
@@ -200,9 +203,10 @@ internal fun processData() = "Data"
 ```
 
 ```java
-// В Java это выглядит как public-метод со "смешанным" именем в сгенерированном классе
-// (упрощённый пример; точное имя зависит от файла/модуля)
-UtilsKt.processData$internal();
+// В Java это будет public-метод со специальным (mangled) именем в сгенерированном классе.
+// Конкретное имя является деталями реализации компилятора и не должно полагаться как стабильное API.
+// Например (упрощённо):
+// UtilsKt.processData$internal();
 ```
 
 Поэтому `internal` не следует рассматривать как надёжный механизм инкапсуляции на уровне байткода для Java-клиентов; это, в первую очередь, языковая конструкция видимости в Kotlin.
@@ -226,11 +230,6 @@ UtilsKt.processData$internal();
 - модуль = набор файлов, компилируемых вместе (часто модуль Gradle/Maven/IntelliJ);
 - полезен в многомодульной архитектуре;
 - помогает инкапсулировать детали реализации.
-
----
-
-# Question (EN)
-> What is known about `internal`?
 
 ## Answer (EN)
 
@@ -313,12 +312,12 @@ class MainActivity {
 
 **Comparison with Other Modifiers:**
 
-| Modifier | Visibility           | Example                    |
-|----------|----------------------|----------------------------|
-| private  | Same file/class only | Implementation details     |
-| protected| Class + subclasses   | Inheritance API            |
-| internal | Same module only     | Module implementation      |
-| public   | Everywhere           | Public API                 |
+| Modifier  | Visibility           | Example                    |
+|-----------|----------------------|----------------------------|
+| private   | Same file/class only | Implementation details     |
+| protected | Class + subclasses   | Inheritance API            |
+| internal  | Same module only     | Module implementation      |
+| public    | Everywhere           | Public API                 |
 
 **Use Cases:**
 
@@ -406,7 +405,7 @@ class MyClass {
 
 **Java Interoperability:**
 
-In Java, Kotlin `internal` declarations are compiled as `public` with mangled names to reduce the chance of accidental use, but the JVM itself does not enforce Kotlin module boundaries.
+In Java, Kotlin `internal` declarations are compiled as `public` members with mangled names. The JVM does not know about Kotlin module boundaries and cannot enforce them.
 
 ```kotlin
 // Kotlin (file: Utils.kt)
@@ -414,9 +413,11 @@ internal fun processData() = "Data"
 ```
 
 ```java
-// Java - appears as a public static method with a mangled name in the generated class
-// (simplified example; exact name depends on file/module)
-UtilsKt.processData$internal();
+// In Java this appears as a public method with a compiler-generated (mangled) name
+// in the corresponding generated class. The exact name is an implementation detail
+// and must not be relied upon as a stable API.
+// For example (simplified):
+// UtilsKt.processData$internal();
 ```
 
 Because of this, `internal` should not be relied upon as a strict encapsulation mechanism for Java consumers at the bytecode level; it is primarily a Kotlin-language visibility construct.

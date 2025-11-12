@@ -9,7 +9,7 @@ subtopics:
 - play-console
 - permissions
 - privacy-sdks
-question_kind: interview
+question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
@@ -46,14 +46,12 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
+## Краткая Версия
 - Централизованная модель данных и ответственный privacy owner.
 - Автоматизация проверок (CI, статический анализ, проверки конфигов/SDK).
 - Жесткая привязка обновления формы к релизному процессу и аудит-трейл.
 
-### Подробный вариант
-
+## Подробная Версия
 ### 1. Инвентаризация и моделирование данных
 
 - Составьте каталог данных: что собираем, зачем, где хранится, как долго.
@@ -120,14 +118,12 @@ sources:
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 - Centralized data model with a clear privacy owner.
 - Automated checks (CI, static analysis, config/SDK checks).
 - Strict coupling of form updates to the release process with an audit trail.
 
-### Detailed Version
-
+## Detailed Version
 ### 1. Data inventory and modeling
 
 - Build a data catalog: what is collected, why, where it is stored, and for how long.

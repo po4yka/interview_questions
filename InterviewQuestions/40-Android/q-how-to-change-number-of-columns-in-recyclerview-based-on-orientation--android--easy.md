@@ -224,6 +224,13 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как `GridLayoutManager` обрабатывает span sizes для элементов с разной шириной?
+- Как изменение `spanCount` влияет на производительность `RecyclerView` при изменении ориентации?
+- Как сохранить позицию прокрутки при изменении `spanCount`?
+- Когда стоит использовать `StaggeredGridLayoutManager` вместо `GridLayoutManager`?
+
 ## Follow-ups
 
 - How does `GridLayoutManager` handle span sizes for items with different widths?
@@ -231,9 +238,25 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 - How do you preserve scroll position when `spanCount` changes?
 - When should you use `StaggeredGridLayoutManager` vs `GridLayoutManager`?
 
+## Ссылки (RU)
+
+- [[c-recyclerview]]
+
 ## References
 
 - [[c-recyclerview]]
+
+## Связанные вопросы (RU)
+
+### Предварительные знания
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Базовые концепции RecyclerView
+
+### Связанные
+- [[q-looper-empty-queue-behavior--android--medium]] - Обработка конфигурационных изменений
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Альтернатива на Compose
+
+### Продвинутые
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Продвинутые паттерны RecyclerView
 
 ## Related Questions
 

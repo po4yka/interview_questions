@@ -1,6 +1,6 @@
 ---
 id: android-284
-title: "Where Is Composition Created"
+title: "Где создается композиция / Where Is Composition Created"
 aliases: [ComposeView, Composition Creation, setContent]
 topic: android
 subtopics: [ui-compose, ui-views]
@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-is-layoutinflater-a-singleton-and-why--android--medium, q-network-error-handling-strategies--networking--medium]
+related: [c-android-ui-composition, q-is-layoutinflater-a-singleton-and-why--android--medium, q-network-error-handling-strategies--networking--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, difficulty/medium]
@@ -29,7 +29,9 @@ tags: [android/ui-compose, android/ui-views, difficulty/medium]
 
 ## Ответ (RU)
 
-**Композиция** создается и управляется средой Compose, когда вы задаете содержимое через **`setContent`** у `ComponentActivity` / `ComponentDialog` или через `setContent` у `ComposeView` (например, во `Fragment` или обычном `View`). Эти вызовы создают корень композиции и подключают его к жизненному циклу соответствующего владельца.
+**Композиция (Composition)** создается и управляется **runtime-средой Jetpack Compose**, когда вы задаете содержимое через **`setContent`** у `ComponentActivity` / `ComponentDialog` или через `setContent` у `ComposeView` (например, во `Fragment` или обычном `View`). Каждый вызов `setContent` создает корневую Composition для данного хоста и привязывает ее к соответствующим жизненному циклу и владельцам состояния.
+
+См. также: [[c-android-ui-composition]]
 
 ### setContent в `Activity`
 
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Здесь создается корневая Composition для этого окна
+        // Здесь создается корневая Composition, связанная с этим Activity и окном
         setContent {
             MyApp()
         }
@@ -62,7 +64,7 @@ class MyFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Composition создается, когда для ComposeView вызывается setContent
+        // Composition создается, когда для данного ComposeView вызывается setContent
         return ComposeView(requireContext()).apply {
             setContent { MyComposable() }
         }
@@ -84,11 +86,13 @@ val layout = LinearLayout(this).apply {
 }
 ```
 
-**Резюме**: Каждый отдельный корень, заданный через `setContent` в `ComponentActivity`/`ComposeView`, формирует собственную Composition. Ее жизненный цикл привязан к соответствующему владельцу (`Activity`, `Fragment` или `View`), а сам Compose управляет первоначальной композицией и последующими рекомпозициями.
+**Резюме**: Каждый отдельный корень, заданный через `setContent` в `ComponentActivity`, `ComponentDialog` или `ComposeView`, формирует собственную Composition. Композиция привязана к жизненному циклу конкретного хоста (окна/`Activity` и соответствующих владельцев жизненного цикла для `ComposeView`), а runtime Jetpack Compose управляет первоначальной композицией, сохранением состояния и последующими рекомпозициями.
 
 ## Answer (EN)
 
-A **Composition** is created and managed by the Compose runtime when you provide UI content via **`setContent`** on a `ComponentActivity` / `ComponentDialog` or via `setContent` on a `ComposeView` (e.g., inside a `Fragment` or a regular `View`). These calls create a composition root and attach it to the lifecycle of the corresponding host.
+A **Composition** is created and managed by the **Jetpack Compose runtime** when you provide UI content via **`setContent`** on a `ComponentActivity` / `ComponentDialog` or via `setContent` on a `ComposeView` (e.g., inside a `Fragment` or a regular `View`). Each `setContent` call creates a composition root for that host and attaches it to the appropriate lifecycle and state owners.
+
+See also: [[c-android-ui-composition]]
 
 ### setContent in `Activity`
 
@@ -97,7 +101,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // The root Composition for this window is created here
+        // The root Composition associated with this Activity and window is created here
         setContent {
             MyApp()
         }
@@ -121,7 +125,7 @@ class MyFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Composition is created when setContent is called on this ComposeView
+        // A Composition is created when setContent is called on this ComposeView
         return ComposeView(requireContext()).apply {
             setContent { MyComposable() }
         }
@@ -143,7 +147,7 @@ val layout = LinearLayout(this).apply {
 }
 ```
 
-**Summary**: Every separate root defined via `setContent` on a `ComponentActivity` or `ComposeView` forms its own Composition. Its lifecycle is tied to the corresponding host (`Activity`, `Fragment`, or `View`), while the Compose runtime handles the initial composition and any subsequent recompositions.
+**Summary**: Every separate root defined via `setContent` on a `ComponentActivity`, `ComponentDialog`, or `ComposeView` forms its own Composition. The Composition is tied to the lifecycle of its specific host (the window/`Activity` and the relevant lifecycle owners for the `ComposeView`), while the Jetpack Compose runtime is responsible for the initial composition, state handling, and subsequent recompositions.
 
 ---
 

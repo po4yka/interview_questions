@@ -34,18 +34,18 @@ sources:
 
 ## Ответ (RU)
 
-**Scope** в Dagger — это механизм управления временем жизни зависимостей. Scope гарантирует, что в рамках одного компонента создается только один экземпляр объекта. Это позволяет переиспользовать дорогие в создании объекты и контролировать их жизненный цикл.
+**Scope** в Dagger — это механизм управления временем жизни зависимостей. Scope гарантирует, что в рамках одного компонента создается только один экземпляр объекта для данного scope. Это позволяет переиспользовать дорогие в создании объекты и контролировать их жизненный цикл.
 
 ### Принцип Работы
 
-Scope привязывает зависимость к жизненному циклу Dagger-компонента:
-- Компонент создан → создается scoped-зависимость
-- Компонент жив → переиспользуется один экземпляр (кэшируется в компоненте)
-- Компонент уничтожен → зависимость освобождается (может быть GC)
+Scope привязывает зависимость к жизненному циклу Dagger-/Hilt-компонента:
+- Компонент создан → создается scoped-зависимость (при первом запросе)
+- Компонент жив → переиспользуется один и тот же экземпляр (кэшируется внутри компонента)
+- Компонент уничтожен → зависимости становятся неиспользуемыми и могут быть собраны GC
 
-**Проверка на этапе компиляции**: Dagger проверяет, что scoped-зависимости используются только в компонентах с соответствующим scope. Нарушение правил иерархии вызывает ошибку компиляции.
+**Проверка на этапе компиляции**: Dagger проверяет, что scoped-зависимости объявлены и используются в компонентах с совместимыми scope. Нарушение правил (например, долгоживущий scope зависит от краткоживущего) приводит к ошибке компиляции.
 
-### Иерархия Hilt Scopes (упрощенно)
+### Иерархия Hilt Scopes (упрощенно, концептуально)
 
 ```kotlin
 @Singleton                    // Application (SingletonComponent) lifetime
@@ -58,7 +58,7 @@ Scope привязывает зависимость к жизненному ци
   └─ @ServiceScoped           // ServiceComponent: жизненный цикл Service
 ```
 
-(Диаграмма отражает основные отношения долгоживущих и краткоживущих скоупов, а не все технические детали реализации.)
+(Диаграмма передает относительную "долгоживущесть" и типичные отношения использования, а не точную структуру всех Hilt-компонентов. Например, `ActivityRetainedComponent` и `ActivityComponent` — разные компоненты, но зависимости из более долгоживущих scope могут использоваться в более краткоживущих.)
 
 ### Типичные Кейсы
 
@@ -67,7 +67,7 @@ Scope привязывает зависимость к жизненному ци
 @Singleton
 class NetworkClient @Inject constructor()
 
-// ✅ ActivityRetainedScoped для данных, переживающих configuration changes
+// ✅ ActivityRetainedScoped для зависимостей, переживающих configuration changes
 @ActivityRetainedScoped
 class UserSessionManager @Inject constructor()
 
@@ -85,7 +85,7 @@ class ProfileRepository @Inject constructor(
 
 ### Правила Использования
 
-**Scope Hierarchy Rule**: дочерний компонент может использовать зависимости из родительского scope, но не наоборот. Это предотвращает ситуации, когда долгоживущий объект удерживает ссылку на краткоживущую зависимость и мешает её сборке мусора.
+**Scope Hierarchy Rule**: зависимости из более долгоживущего scope могут использоваться в более краткоживущих компонентах, но не наоборот. Это предотвращает ситуации, когда долгоживущий объект удерживает ссылку на краткоживущую зависимость и мешает её сборке мусора.
 
 ```kotlin
 // ✅ Правильно: Activity-скоуп использует Singleton
@@ -103,24 +103,24 @@ class GlobalService @Inject constructor(
 
 **Правильный выбор scope**:
 - Тяжелые объекты (DB, Network) → `@Singleton` — дорогие в создании, нужны глобально
-- Данные UI, переживающие rotation → `@ActivityRetainedScoped` или `@ViewModelScoped` — сохранение состояния при пересоздании
-- UI-адаптеры, презентеры → `@ActivityScoped` или `@FragmentScoped` — привязка к UI-жизненному циклу
+- Данные/логика, переживающие rotation (например, сессия пользователя, кэш, бизнесс-логика) → `@ActivityRetainedScoped` или зависимости `@ViewModelScoped` — сохраняют состояние при пересоздании Activity
+- Объекты, привязанные к конкретному UI-экрану (адаптеры, презентеры и т.п.) → `@ActivityScoped` или `@FragmentScoped` — живут столько же, сколько экран
 - Легкие утилиты → unscoped (создаются каждый раз) — нет смысла кэшировать дешёвые объекты
 
 ## Answer (EN)
 
-**Scope** in Dagger is a mechanism for managing dependency lifetimes. A scope guarantees that only one instance of a given type is created within a single component. This allows reusing expensive-to-create objects and controlling their lifecycle.
+**Scope** in Dagger is a mechanism for managing dependency lifetimes. A scope guarantees that within a given component, only one instance of a scoped binding is created and reused. This enables reuse of expensive objects and precise lifecycle control.
 
 ### How it Works
 
 Scope binds a dependency to the lifecycle of a Dagger/Hilt component:
-- Component created → scoped dependency instantiated
-- Component alive → same instance reused (cached in the component)
-- Component destroyed → dependency released (eligible for GC)
+- Component created → scoped dependency is created on first request
+- Component alive → same instance is reused (cached inside the component)
+- Component destroyed → dependencies become unreachable and are eligible for GC
 
-**Compile-time validation**: Dagger verifies that scoped dependencies are only used in components with compatible scopes. Hierarchy violations cause compilation errors.
+**Compile-time validation**: Dagger verifies that scoped bindings are declared and used only in components with compatible scopes. Violations (e.g., a longer-lived scope depending on a shorter-lived scoped binding) result in compilation errors.
 
-### Hilt Scope Hierarchy (simplified)
+### Hilt Scope Hierarchy (simplified, conceptual)
 
 ```kotlin
 @Singleton                    // Application (SingletonComponent) lifetime
@@ -133,7 +133,7 @@ Scope binds a dependency to the lifecycle of a Dagger/Hilt component:
   └─ @ServiceScoped           // ServiceComponent: Service lifecycle
 ```
 
-(The diagram shows the main long-lived vs short-lived relationships, not every implementation detail.)
+(This diagram expresses relative lifetimes and typical usage relationships, not the exact internal Hilt component graph. For example, `ActivityRetainedComponent` and `ActivityComponent` are separate components; longer-lived scoped dependencies can be used in shorter-lived components, but not the other way around.)
 
 ### Typical Use Cases
 
@@ -142,7 +142,7 @@ Scope binds a dependency to the lifecycle of a Dagger/Hilt component:
 @Singleton
 class NetworkClient @Inject constructor()
 
-// ✅ ActivityRetainedScoped for data surviving configuration changes
+// ✅ ActivityRetainedScoped for dependencies that survive configuration changes
 @ActivityRetainedScoped
 class UserSessionManager @Inject constructor()
 
@@ -160,7 +160,7 @@ class ProfileRepository @Inject constructor(
 
 ### Usage Rules
 
-**Scope Hierarchy Rule**: child components can use dependencies from parent scopes, but not vice versa. This prevents long-lived objects from depending on shorter-lived scoped objects and accidentally keeping them in memory.
+**Scope Hierarchy Rule**: shorter-lived components can depend on longer-lived scoped dependencies, but longer-lived components must not depend on shorter-lived scoped dependencies. This prevents long-lived objects from keeping references to short-lived objects and leaking them.
 
 ```kotlin
 // ✅ Correct: Activity scope uses Singleton
@@ -178,9 +178,9 @@ class GlobalService @Inject constructor(
 
 **Choosing the right scope**:
 - Heavy objects (DB, Network) → `@Singleton` — expensive to create, needed globally
-- UI data surviving rotation → `@ActivityRetainedScoped` or `@ViewModelScoped` — preserve state across recreation
-- UI adapters, presenters → `@ActivityScoped` or `@FragmentScoped` — tied to UI lifecycle
-- Lightweight utilities → unscoped (created each time) — no benefit in caching
+- Logic/state that must survive configuration changes (e.g., user session, cached data, domain logic) → `@ActivityRetainedScoped` or `@ViewModelScoped` dependencies — preserved across Activity recreation
+- Objects tied to a specific UI screen (adapters, presenters, etc.) → `@ActivityScoped` or `@FragmentScoped` — live as long as the screen
+- Lightweight utilities → unscoped (new instance each time) — no real benefit from scoping
 
 ## Дополнительные вопросы (RU)
 

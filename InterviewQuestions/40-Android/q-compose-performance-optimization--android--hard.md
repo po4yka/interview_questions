@@ -4,27 +4,28 @@ title: Compose Performance Optimization / Оптимизация произво�
 aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
 topic: android
 subtopics:
-  - performance-memory
-  - ui-compose
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - c-compose-recomposition
-  - q-android-performance-measurement-tools--android--medium
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-lazy-layout-optimization--android--hard
+- c-compose-recomposition
+- q-android-performance-measurement-tools--android--medium
+- q-compose-compiler-plugin--android--hard
+- q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources:
-  - "https://developer.android.com/jetpack/compose/mental-model"
-  - "https://developer.android.com/jetpack/compose/performance"
+- "https://developer.android.com/jetpack/compose/mental-model"
+- "https://developer.android.com/jetpack/compose/performance"
+
 ---
 
 # Вопрос (RU)
@@ -39,16 +40,14 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
+### Краткая Версия
 - Минимизируйте область рекомпозиции за счет декомпозиции UI и гранулярного состояния.
 - Обеспечьте стабильность входных данных (`@Immutable`, `@Stable`, стабильные колбэки).
 - Используйте `remember` и `derivedStateOf` для кэширования и производных вычислений.
 - Оптимизируйте lazy-списки (ключи, `contentType`, prefetch).
 - Сокращайте аллокации и измеряйте эффект с помощью инструментов профилирования.
 
-### Подробный вариант
-
+### Подробная Версия
 ### Принципы Оптимизации
 
 1. **Минимизация области рекомпозиции** — разбивать UI на мелкие компоненты, наблюдать за гранулярным состоянием; следить, чтобы каждый composable получал только реально необходимые ему данные.
@@ -159,7 +158,6 @@ LazyColumn {
 ## Answer (EN)
 
 ### Short Version
-
 - Minimize recomposition scope via decomposition and granular state.
 - Ensure stable inputs (`@Immutable`, `@Stable`, stable callbacks).
 - Use `remember` and `derivedStateOf` for caching and derived calculations.
@@ -167,7 +165,6 @@ LazyColumn {
 - Reduce allocations and validate changes with profiling tools.
 
 ### Detailed Version
-
 ### Optimization Principles
 
 1. **Minimize recomposition scope** — split UI into small composables, expose and observe only the specific state each composable needs.
@@ -275,13 +272,29 @@ LazyColumn {
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
 - Когда использовать `derivedStateOf` vs `remember { calculated }`?
 - Как интерпретировать compiler metrics для проверки stability/skippability?
 - Стратегии для больших lazy-списков — paging, prefetch, item prefetch?
 - Как предотвратить рекомпозиции в глубоко вложенных иерархиях?
 - Трейдоффы между микрооптимизациями и читаемостью кода?
+
+## Follow-ups
+
+- When to use `derivedStateOf` vs `remember { calculated }`?
+- How to interpret compiler metrics for checking stability/skippability?
+- Strategies for large lazy lists — paging, prefetch, item prefetch?
+- How to prevent recompositions in deeply nested hierarchies?
+- Trade-offs between micro-optimizations and code readability?
+
+## Ссылки (RU)
+
+- [[c-compose-recomposition]]
+- [[moc-android]]
+- https://developer.android.com/jetpack/compose/performance
+- https://developer.android.com/jetpack/compose/mental-model
+- https://developer.android.com/jetpack/compose/performance/stability
 
 ## References
 

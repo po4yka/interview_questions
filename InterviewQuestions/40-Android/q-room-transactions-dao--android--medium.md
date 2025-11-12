@@ -31,6 +31,8 @@ tags: [android/coroutines, android/room, dao, database, difficulty/medium, trans
 
 **Транзакции Room** гарантируют атомарность набора операций с базой данных через аннотацию `@Transaction` в DAO-методах и метод `withTransaction` у `RoomDatabase`. Это критично для поддержания целостности связанных данных.
 
+Важно: транзакция будет откатена только если из аннотированного `@Transaction` метода или блока `withTransaction` выйдет неперехваченное исключение. Простое возвращение `Result.failure(...)` или логирование ошибки без выброса исключения не приводит к откату.
+
 ### Зачем Нужны Транзакции?
 
 Без транзакций при сбое в середине серии операций возникают:
@@ -49,17 +51,18 @@ interface UserDao {
     @Insert
     suspend fun insertPosts(posts: List<Post>)
 
-    // ✅ Атомарная операция - обе успешны или обе откатятся
+    // ✅ Атомарная операция - либо все изменения будут зафиксированы, либо при исключении всё откатится
     @Transaction
     suspend fun insertUserWithPosts(user: User, posts: List<Post>) {
         val userId = insertUser(user)
         val postsWithUserId = posts.map { it.copy(authorId = userId) }
         insertPosts(postsWithUserId)
+        // Если здесь или выше будет выброшено исключение, транзакция откатится
     }
 
     // ✅ Используется для комплексных чтений (например, с @Relation), чтобы все связанные запросы
     // были выполнены в одной транзакции и дали согласованное состояние.
-    // Для одного SELECT наличие @Transaction не меняет семантику.
+    // Для одного простого SELECT наличие @Transaction обычно не меняет семантику.
     @Transaction
     @Query("SELECT * FROM users WHERE userId = :userId")
     suspend fun getUserWithPosts(userId: Long): UserWithPosts?
@@ -68,7 +71,7 @@ interface UserDao {
 
 ### Ручные Транзакции Через withTransaction
 
-Для сложной логики, выходящей за пределы одного метода DAO, используйте `RoomDatabase.withTransaction` и возвращайте результат из блока:
+Для сложной логики, выходящей за пределы одного метода DAO, используйте `RoomDatabase.withTransaction` и возвращайте результат из блока. Не перехватывайте исключения внутри блока, если хотите откатить транзакцию.
 
 ```kotlin
 class UserRepository(
@@ -79,8 +82,8 @@ class UserRepository(
         name: String,
         email: String
     ): Result<Long> = withContext(Dispatchers.IO) {
-        try {
-            val userId = database.withTransaction {
+        runCatching {
+            database.withTransaction {
                 // ✅ Многошаговая логика в ручной транзакции
                 val existingUser = userDao.findByEmail(email)
                 if (existingUser != null) {
@@ -90,10 +93,6 @@ class UserRepository(
                 database.statsDao().incrementUserCount()
                 newUserId
             }
-            Result.success(userId)
-        } catch (e: Exception) {
-            // Любое выброшенное в блоке withTransaction исключение приведёт к откату транзакции
-            Result.failure(e)
         }
     }
 }
@@ -116,29 +115,25 @@ interface AccountDao {
         fromAccountId: String,
         toAccountId: String,
         amount: BigDecimal
-    ): Result<Unit> {
-        return try {
-            val fromAccount = getAccount(fromAccountId)
-                ?: throw IllegalArgumentException("Исходный счёт не найден")
-            val toAccount = getAccount(toAccountId)
-                ?: throw IllegalArgumentException("Целевой счёт не найден")
+    ) {
+        val fromAccount = getAccount(fromAccountId)
+            ?: throw IllegalArgumentException("Исходный счёт не найден")
+        val toAccount = getAccount(toAccountId)
+            ?: throw IllegalArgumentException("Целевой счёт не найден")
 
-            if (fromAccount.balance < amount) {
-                throw IllegalStateException("Недостаточно средств")
-            }
-
-            // Оба обновления выполняются в пределах одной транзакции
-            updateBalance(fromAccountId, fromAccount.balance - amount)
-            updateBalance(toAccountId, toAccount.balance + amount)
-
-            Result.success(Unit)
-        } catch (e: Exception) {
-            // Бросок исключения внутри @Transaction приведёт к откату транзакции
-            Result.failure(e)
+        if (fromAccount.balance < amount) {
+            throw IllegalStateException("Недостаточно средств")
         }
+
+        // Оба обновления выполняются в пределах одной транзакции
+        updateBalance(fromAccountId, fromAccount.balance - amount)
+        updateBalance(toAccountId, toAccount.balance + amount)
+        // Если исключение выброшено до конца метода, транзакция откатится
     }
 }
 ```
+
+Если требуется вернуть `Result`, оборачивайте вызов `transferMoney` снаружи в `runCatching { ... }`, а не глушите исключения внутри `@Transaction` метода.
 
 ### Оптимизация Производительности
 
@@ -162,7 +157,7 @@ suspend fun insertUsersGood(users: List<User>) {
 
 1. **Держать транзакции короткими** - не включать сетевые вызовы и долгие операции
 2. **Использовать batch-операции** вместо циклов с отдельными вызовами DAO
-3. **Обрабатывать исключения** - понимать, что выброшенное исключение внутри транзакции приводит к откату
+3. **Понимать модель отката** - исключение внутри `@Transaction`/`withTransaction` приводит к откату; если вы перехватываете исключение и не пробрасываете его, транзакция будет зафиксирована
 4. **Тестировать сценарии отката** - проверять согласованность данных после ошибок
 
 ### Распространённые Ошибки
@@ -188,6 +183,8 @@ suspend fun transferMoney(from: String, to: String, amount: BigDecimal) {
 
 **Room Transactions** ensure atomic groups of operations via the `@Transaction` annotation on DAO methods and the `withTransaction` extension on `RoomDatabase`. This is critical for maintaining data integrity across related entities.
 
+Important: a transaction is rolled back only if an exception escapes the `@Transaction` method or the `withTransaction` block. Simply returning `Result.failure(...)` or swallowing/logging an exception without rethrowing does NOT trigger rollback.
+
 ### Why Transactions?
 
 Without transactions, mid-operation failures cause:
@@ -206,17 +203,18 @@ interface UserDao {
     @Insert
     suspend fun insertPosts(posts: List<Post>)
 
-    // ✅ Atomic operation - both succeed or both rollback together
+    // ✅ Atomic operation - all changes are committed together, or rolled back if an exception occurs
     @Transaction
     suspend fun insertUserWithPosts(user: User, posts: List<Post>) {
         val userId = insertUser(user)
         val postsWithUserId = posts.map { it.copy(authorId = userId) }
         insertPosts(postsWithUserId)
+        // If an exception is thrown here or above, the transaction is rolled back
     }
 
     // ✅ Used for composite reads (e.g., with @Relation) so that all related queries
     // run in a single transaction with a consistent view.
-    // For a single SELECT, @Transaction does not change behavior.
+    // For a single simple SELECT, @Transaction usually does not change semantics.
     @Transaction
     @Query("SELECT * FROM users WHERE userId = :userId")
     suspend fun getUserWithPosts(userId: Long): UserWithPosts?
@@ -225,7 +223,7 @@ interface UserDao {
 
 ### Manual Transactions with withTransaction
 
-For complex logic that spans beyond a single DAO method, use `RoomDatabase.withTransaction` and return a value from its block:
+For complex logic that spans beyond a single DAO method, use `RoomDatabase.withTransaction` and return a value from its block. Do not swallow exceptions inside the block if you want rollback.
 
 ```kotlin
 class UserRepository(
@@ -236,8 +234,8 @@ class UserRepository(
         name: String,
         email: String
     ): Result<Long> = withContext(Dispatchers.IO) {
-        try {
-            val userId = database.withTransaction {
+        runCatching {
+            database.withTransaction {
                 // ✅ Multi-step logic in a manual transaction
                 val existingUser = userDao.findByEmail(email)
                 if (existingUser != null) {
@@ -247,10 +245,6 @@ class UserRepository(
                 database.statsDao().incrementUserCount()
                 newUserId
             }
-            Result.success(userId)
-        } catch (e: Exception) {
-            // Any exception thrown inside withTransaction will cause a rollback
-            Result.failure(e)
         }
     }
 }
@@ -273,29 +267,25 @@ interface AccountDao {
         fromAccountId: String,
         toAccountId: String,
         amount: BigDecimal
-    ): Result<Unit> {
-        return try {
-            val fromAccount = getAccount(fromAccountId)
-                ?: throw IllegalArgumentException("Source not found")
-            val toAccount = getAccount(toAccountId)
-                ?: throw IllegalArgumentException("Destination not found")
+    ) {
+        val fromAccount = getAccount(fromAccountId)
+            ?: throw IllegalArgumentException("Source not found")
+        val toAccount = getAccount(toAccountId)
+            ?: throw IllegalArgumentException("Destination not found")
 
-            if (fromAccount.balance < amount) {
-                throw IllegalStateException("Insufficient balance")
-            }
-
-            // Both updates are executed within a single transaction
-            updateBalance(fromAccountId, fromAccount.balance - amount)
-            updateBalance(toAccountId, toAccount.balance + amount)
-
-            Result.success(Unit)
-        } catch (e: Exception) {
-            // Throwing inside @Transaction will cause rollback
-            Result.failure(e)
+        if (fromAccount.balance < amount) {
+            throw IllegalStateException("Insufficient balance")
         }
+
+        // Both updates are executed within a single transaction
+        updateBalance(fromAccountId, fromAccount.balance - amount)
+        updateBalance(toAccountId, toAccount.balance + amount)
+        // If an exception is thrown before method completes, the transaction is rolled back
     }
 }
 ```
+
+If you need a `Result` wrapper, wrap the call to `transferMoney` in `runCatching { ... }` (outside the `@Transaction` method) instead of catching exceptions inside it.
 
 ### Performance Optimization
 
@@ -319,7 +309,7 @@ suspend fun insertUsersGood(users: List<User>) {
 
 1. **Keep transactions short** - avoid network calls and long-running work inside
 2. **Use batch operations** instead of loops with many individual DAO calls
-3. **Handle exceptions correctly** - understand that exceptions inside a transaction cause rollback
+3. **Understand rollback semantics** - exceptions inside `@Transaction`/`withTransaction` cause rollback; if you catch and do not rethrow, changes will be committed
 4. **Test rollback scenarios** - verify data consistency after failures
 
 ### Common Mistakes

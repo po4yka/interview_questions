@@ -10,7 +10,7 @@ subtopics:
 - performance-memory
 question_kind: theory
 difficulty: easy
-original_language: en
+original_language: ru
 language_tags:
 - en
 - ru
@@ -45,7 +45,7 @@ related:
 
 ## Ответ (RU)
 
-**Утечка памяти** в Android возникает, когда объект больше не нужен для корректной работы приложения, но остаётся достижимым (есть ссылки), из-за чего сборщик мусора не может его освободить.
+**Утечка памяти** в Android возникает, когда объект больше не нужен для корректной работы приложения, но остаётся достижимым через сильные ссылки, из-за чего сборщик мусора не может его освободить.
 
 **Основные причины:**
 
@@ -60,7 +60,7 @@ class MyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        instance = this  // Пока есть ссылка, Activity не может быть собрана
+        instance = this  // Пока есть сильная ссылка, Activity не может быть собрана
     }
 }
 ```
@@ -143,48 +143,9 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 ---
 
-## Follow-ups (RU)
-
-- Как обнаруживать утечки памяти с помощью Android Profiler?
-- В чем разница между утечкой памяти и избыточным потреблением памяти (memory bloat)?
-- Как слабые ссылки (`WeakReference`) помогают предотвращать утечки памяти?
-- Какие распространенные утечки памяти возникают в `ViewModel` и `LiveData`?
-- Как корутины могут как предотвращать, так и вызывать утечки памяти?
-
-## Ссылки (RU)
-
-- Документация Android Memory Profiler
-- Официальное руководство LeakCanary
-- "Android Performance: Memory" на developer.android.com
-
-## Связанные вопросы (RU)
-
-### Предпосылки / Концепции (RU)
-
-- [[c-android]]
-- [[c-activity-lifecycle]]
-
-### Предпосылки (RU)
-
-- [[q-primitive-vs-reference-types--programming-languages--easy]] - Понимание ссылочных типов
-- [[q-reference-types-criteria--programming-languages--medium]] - Детали ссылочных типов
-
-### Похожие (RU)
-
-- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Обнаружение утечек в корутинах
-- Жизненный цикл `Activity` и корректная очистка ресурсов
-- Паттерны эффективного использования памяти в RecyclerView
-
-### Продвинутые (RU)
-
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Утечки памяти, связанные с `Coroutine`
-- [[q-find-object-without-references--programming-languages--medium]] - Продвинутое поведение GC
-
----
-
 ## Answer (EN)
 
-A **memory leak** in Android occurs when an object is no longer needed for the correct functioning of the app but remains reachable (strongly referenced), so the garbage collector cannot reclaim it.
+A **memory leak** in Android occurs when an object is no longer needed for the correct functioning of the app but remains reachable through strong references, so the garbage collector cannot reclaim it.
 
 **Common causes:**
 
@@ -199,7 +160,7 @@ class MyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        instance = this  // As long as this reference exists, Activity can't be collected
+        instance = this  // As long as this strong reference exists, Activity can't be collected
     }
 }
 ```
@@ -279,6 +240,45 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 // - Leaked/retained object
 // - Retention path (leak trace)
 ```
+
+---
+
+## Follow-ups (RU)
+
+- Как обнаруживать утечки памяти с помощью Android Profiler?
+- В чем разница между утечкой памяти и избыточным потреблением памяти (memory bloat)?
+- Как слабые ссылки (`WeakReference`) помогают предотвращать утечки памяти?
+- Какие распространенные утечки памяти возникают в `ViewModel` и `LiveData`?
+- Как корутины могут как предотвращать, так и вызывать утечки памяти?
+
+## Ссылки (RU)
+
+- Документация Android Memory Profiler
+- Официальное руководство LeakCanary
+- "Android Performance: Memory" на developer.android.com
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции (RU)
+
+- [[c-android]]
+- [[c-activity-lifecycle]]
+
+### Предпосылки (RU)
+
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Понимание ссылочных типов
+- [[q-reference-types-criteria--programming-languages--medium]] - Детали ссылочных типов
+
+### Похожие (RU)
+
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Обнаружение утечек в корутинах
+- Жизненный цикл `Activity` и корректная очистка ресурсов
+- Паттерны эффективного использования памяти в RecyclerView
+
+### Продвинутые (RU)
+
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Утечки памяти, связанные с `Coroutine`
+- [[q-find-object-without-references--programming-languages--medium]] - Продвинутое поведение GC
 
 ---
 

@@ -9,31 +9,84 @@ language_tags: [en, ru]
 question_kind: theory
 status: draft
 created: "2025-10-12"
-updated: "2025-11-09"
+updated: "2025-11-11"
 tags: ["coroutines", "difficulty/medium", "error-handling", "job", "kotlin", "supervisorjob"]
 description: "Key use cases for SupervisorJob in Kotlin coroutines: independent failures, differences from Job, and Android patterns"
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-structured-concurrency--kotlin--hard]
 subtopics: [coroutines, supervisorjob]
+
 ---
 
 # Вопрос (RU)
 
 > Когда и почему следует использовать `SupervisorJob` в Kotlin-корутинах (в том числе в Android), чем он отличается от обычного `Job`, и какие реальные кейсы его применения?
 
-## Ответ (RU)
-
-(См. подробные разделы ниже в русской и английской части. Кратко: `SupervisorJob` используют, когда нужно, чтобы сбой одной дочерней корутины не отменял остальных, например, при независимых операциях в `ViewModel`, фоновой синхронизации или загрузке виджетов.)
-
 # Question (EN)
 
 > When and why should you use `SupervisorJob` in Kotlin coroutines (including Android), how does it differ from a regular `Job`, and what are the real-world use cases?
+
+## Ответ (RU)
+
+(См. подробные разделы ниже в русской и английской части. Кратко: `SupervisorJob` используют, когда нужно, чтобы сбой одной дочерней корутины не отменял остальных, например, при независимых операциях в `ViewModel`, фоновой синхронизации или загрузке виджетов.)
 
 ## Answer (EN)
 
 (See detailed explanation in the English and Russian sections below. In short: use `SupervisorJob` when you want one child coroutine failure not to cancel its siblings, e.g., independent operations in `ViewModel`, background sync, or widget loading.)
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Можно ли использовать одновременно обычный `Job` и `SupervisorJob` в одной иерархии корутин и как это влияет на отмену?
+2. Что произойдет, если в родительском scope с `SupervisorJob` дочерняя корутина создаст собственный scope с обычным `Job`?
+3. Как `SupervisorJob` влияет на распространение исключений во вложенных `supervisorScope`/`coroutineScope`?
+4. В чем разница между `SupervisorJob()` и `Job()` с точки зрения поведения завершения и отмены дочерних корутин?
+5. Может ли `supervisorScope` пробрасывать исключения вызывающему коду и в каких случаях?
+6. Как эффективно тестировать код, использующий `SupervisorJob` (включая использование `kotlinx-coroutines-test`)?
+7. Каков потенциальный performance-overhead при использовании `SupervisorJob` по сравнению с обычным `Job`?
+8. В каких ситуациях предпочтительнее `supervisorScope` вместо создания отдельного `CoroutineScope` с `SupervisorJob`?
+
+## Follow-ups
+
+1. Can you use both regular `Job` and `SupervisorJob` in the same coroutine hierarchy, and how does that affect cancellation?
+2. What happens if the parent scope has `SupervisorJob` but a child creates a scope with a regular `Job`?
+3. How does `SupervisorJob` affect exception propagation in nested `supervisorScope`/`coroutineScope` structures?
+4. What's the difference between `SupervisorJob()` and `Job()` in terms of child completion and cancellation behavior?
+5. Can `supervisorScope` throw exceptions to its caller, and when?
+6. How do you effectively test code that uses `SupervisorJob` (including `kotlinx-coroutines-test`)?
+7. What's the potential performance impact of using `SupervisorJob` vs a regular `Job`?
+8. When should you use `supervisorScope` vs creating a dedicated `CoroutineScope` with `SupervisorJob`?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-coroutines]]
+- [Руководство по Kotlin Coroutines - обработка исключений](https://kotlinlang.org/docs/exception-handling.html)
+- [SupervisorJob - kotlinx.coroutines API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines/-supervisor-job.html)
+- [Android Developers - viewModelScope](https://developer.android.com/topic/libraries/architecture/coroutines)
+- [Roman Elizarov - Exceptions in coroutines](https://medium.com/@elizarov/exceptions-in-coroutines-ce8da1ec060c)
+
+## References
+
+- [[c-kotlin]]
+- [[c-coroutines]]
+- [Kotlin Coroutines Guide - Exception Handling](https://kotlinlang.org/docs/exception-handling.html)
+- [SupervisorJob - kotlinx.coroutines API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines/-supervisor-job.html)
+- [Android Developers - viewModelScope](https://developer.android.com/topic/libraries/architecture/coroutines)
+- [Roman Elizarov - Exceptions in coroutines](https://medium.com/@elizarov/exceptions-in-coroutines-ce8da1ec060c)
+
+## Связанные вопросы (RU)
+
+- [[q-structured-concurrency--kotlin--hard]]
+- [[q-coroutine-job-lifecycle--kotlin--medium]]
+- [[q-coroutine-context-elements--kotlin--hard]]
+
+## Related Questions
+
+- [[q-structured-concurrency--kotlin--hard]]
+- [[q-coroutine-job-lifecycle--kotlin--medium]]
+- [[q-coroutine-context-elements--kotlin--hard]]
 
 ## Русский
 
@@ -49,58 +102,46 @@ subtopics: [coroutines, supervisorjob]
 
 ```kotlin
 import kotlinx.coroutines.*
-
 fun compareJobTypes() = runBlocking {
     println("=== Обычный Job ===")
-
     // Обычный Job: сбой потомка отменяет родителя и соседей
     val regularJob = launch {
         launch {
             delay(500)
             println("Regular: Потомок 1 завершен")
         }
-
         launch {
             delay(200)
             throw RuntimeException("Regular: Потомок 2 упал!")
         }
-
         launch {
             delay(1000)
             println("Regular: Потомок 3 завершен") // Никогда не выполнится
         }
-
         delay(2000)
         println("Regular: Родитель завершен") // Никогда не выполнится
     }
-
     delay(1500)
     println("Regular job отменен: ${regularJob.isCancelled}")
 
     println("\n=== SupervisorJob ===")
-
     // SupervisorJob: сбой потомка независим (не отменяет других потомков)
     val supervisorJob = SupervisorJob()
     val scope = CoroutineScope(supervisorJob + Dispatchers.Default)
-
     scope.launch {
         delay(500)
         println("Supervisor: Потомок 1 завершен")
     }
-
     scope.launch {
         delay(200)
         throw RuntimeException("Supervisor: Потомок 2 упал!")
     }
-
     scope.launch {
         delay(1000)
         println("Supervisor: Потомок 3 завершен") // Успешно выполнится
     }
-
     delay(1500)
     println("Supervisor job отменен: ${supervisorJob.isCancelled}")
-
     scope.cancel()
 }
 ```
@@ -109,20 +150,16 @@ fun compareJobTypes() = runBlocking {
 
 ```kotlin
 import kotlinx.coroutines.*
-
 fun supervisorJobCreation() = runBlocking {
     // Способ 1: Отдельный SupervisorJob
     val supervisorJob = SupervisorJob()
     val scope = CoroutineScope(Dispatchers.Default + supervisorJob)
-
     scope.launch {
         println("Потомок 1")
     }
-
     scope.launch {
         println("Потомок 2")
     }
-
     delay(100)
     scope.cancel()
 
@@ -132,26 +169,21 @@ fun supervisorJobCreation() = runBlocking {
             delay(500)
             println("supervisorScope: Потомок 1")
         }
-
         launch {
             throw RuntimeException("supervisorScope: Потомок 2 упал")
         }
-
         launch {
             delay(1000)
             println("supervisorScope: Потомок 3") // Все равно выполнится
         }
-
         delay(1500)
     }
 
     // Способ 3: CoroutineScope с SupervisorJob
     val customScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
     customScope.launch {
         println("Потомок custom scope")
     }
-
     delay(100)
     customScope.cancel()
 }
@@ -161,15 +193,12 @@ fun supervisorJobCreation() = runBlocking {
 
 ```kotlin
 import kotlinx.coroutines.*
-
 fun supervisorExceptionHandling() = runBlocking {
     println("=== Обработка исключений ===")
-
     // SupervisorJob + CoroutineExceptionHandler
     val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         println("Перехвачено исключение: ${exception.message}")
     }
-
     val supervisorJob = SupervisorJob()
     val scope = CoroutineScope(
         supervisorJob + Dispatchers.Default + exceptionHandler
@@ -197,16 +226,13 @@ fun supervisorExceptionHandling() = runBlocking {
     scope.cancel()
 
     println("\n=== Без Exception Handler ===")
-
     // Без handler'а: необработанные исключения из root launch-корутин
     // попадают в uncaught exception handler потока (обычно вывод в stderr)
     val supervisorJob2 = SupervisorJob()
     val scope2 = CoroutineScope(supervisorJob2 + Dispatchers.Default)
-
     scope2.launch {
         throw RuntimeException("Необработанное исключение!")
     }
-
     delay(500)
     scope2.cancel()
 }
@@ -218,22 +244,18 @@ fun supervisorExceptionHandling() = runBlocking {
 
 ```kotlin
 import kotlinx.coroutines.*
-
 suspend fun compareScopeBuilders() {
     println("=== coroutineScope ===")
-
     try {
         coroutineScope {
             launch {
                 delay(500)
                 println("coroutineScope: Потомок 1")
             }
-
             launch {
                 delay(200)
                 throw RuntimeException("coroutineScope: Упал")
             }
-
             launch {
                 delay(1000)
                 println("coroutineScope: Потомок 3") // Никогда не выполнится
@@ -244,24 +266,20 @@ suspend fun compareScopeBuilders() {
     }
 
     println("\n=== supervisorScope ===")
-
     try {
         supervisorScope {
             launch {
                 delay(500)
                 println("supervisorScope: Потомок 1")
             }
-
             launch {
                 delay(200)
                 throw RuntimeException("supervisorScope: Упал")
             }
-
             launch {
                 delay(1000)
                 println("supervisorScope: Потомок 3") // Все равно выполнится
             }
-
             delay(1500) // Ждем потомков
         }
     } catch (e: RuntimeException) {
@@ -280,7 +298,6 @@ import androidx.lifecycle.viewModelScope
 // Случай 1: ViewModel с независимыми операциями
 class UserProfileViewModel : ViewModel() {
     // Используем viewModelScope, который по умолчанию построен на SupervisorJob
-
     fun loadUserProfile(userId: String) {
         // Загружаем информацию о пользователе
         viewModelScope.launch {
@@ -395,15 +412,12 @@ class DashboardViewModel : ViewModel() {
         viewModelScope.launch(exceptionHandler) {
             loadWeatherWidget()
         }
-
         viewModelScope.launch(exceptionHandler) {
             loadNewsWidget()
         }
-
         viewModelScope.launch(exceptionHandler) {
             loadStocksWidget()
         }
-
         viewModelScope.launch(exceptionHandler) {
             loadCalendarWidget()
         }
@@ -450,7 +464,6 @@ class RetryableScope {
     ): Job {
         return scope.launch {
             var lastException: Exception? = null
-
             repeat(maxRetries) { attempt ->
                 try {
                     block()
@@ -461,7 +474,6 @@ class RetryableScope {
                     delay(1000L * (attempt + 1))
                 }
             }
-
             // Все попытки не удались
             throw lastException ?: Exception("Все попытки не удались")
         }
@@ -509,7 +521,6 @@ class DataLoader {
         val primaryJob = scope.async {
             loadFromPrimarySource()
         }
-
         val fallbackJob = scope.async {
             delay(2000) // Ждем перед попыткой запасного варианта
             loadFromFallbackSource()
@@ -620,14 +631,12 @@ class ManagedSupervisorScope {
 
 fun demonstrateLifecycleManagement() = runBlocking {
     val managedScope = ManagedSupervisorScope()
-
     managedScope.start()
 
     managedScope.launchTask {
         delay(500)
         println("Задача 1 завершена")
     }
-
     managedScope.launchTask {
         delay(1000)
         println("Задача 2 завершена")
@@ -635,14 +644,12 @@ fun demonstrateLifecycleManagement() = runBlocking {
 
     delay(1500)
     managedScope.stop()
-
     println("Scope остановлен, перезапускаем...")
-    managedScope.start()
 
+    managedScope.start()
     managedScope.launchTask {
         println("Новая задача после перезапуска")
     }
-
     delay(500)
     managedScope.stop()
 }
@@ -670,20 +677,17 @@ class SupervisorJobTest {
             delay(500)
             job1Completed = true
         }
-
         scope.launch {
             delay(200)
             job2Failed = true
             throw RuntimeException("Job 2 упал")
         }
-
         scope.launch {
             delay(1000)
             job3Completed = true
         }
 
         advanceTimeBy(1500)
-
         assertTrue(job1Completed)
         assertTrue(job2Failed)
         assertTrue(job3Completed)
@@ -702,7 +706,6 @@ class SupervisorJobTest {
             delay(500)
             supervisorCompleted = true
         }
-
         assertTrue(supervisorCompleted)
 
         // coroutineScope падает, если падает потомок
@@ -718,7 +721,6 @@ class SupervisorJobTest {
         } catch (e: RuntimeException) {
             // Ожидаемо
         }
-
         assertFalse(coroutineCompleted)
     }
 
@@ -728,7 +730,6 @@ class SupervisorJobTest {
         val handler = CoroutineExceptionHandler { _, exception ->
             exceptions.add(exception)
         }
-
         val supervisorJob = SupervisorJob()
         val scope = CoroutineScope(
             supervisorJob + StandardTestDispatcher(testScheduler) + handler
@@ -737,16 +738,13 @@ class SupervisorJobTest {
         scope.launch {
             throw RuntimeException("Ошибка 1")
         }
-
         scope.launch {
             delay(100)
             throw RuntimeException("Ошибка 2")
         }
 
         advanceTimeBy(500)
-
         assertEquals(2, exceptions.size)
-
         scope.cancel()
     }
 }
@@ -767,8 +765,6 @@ class SupervisorJobTest {
 3. Не отменять долгоживущие supervisor-scope'ы, что ведет к утечкам.
 4. Ожидать автоматического распространения ошибок между supervised-потомками.
 
----
-
 ## English
 
 ### Problem Statement
@@ -783,58 +779,46 @@ In structured concurrency, when a child coroutine fails, it normally cancels its
 
 ```kotlin
 import kotlinx.coroutines.*
-
 fun compareJobTypes() = runBlocking {
     println("=== Regular Job ===")
-
     // Regular Job: child failure cancels parent and siblings
     val regularJob = launch {
         launch {
             delay(500)
             println("Regular: Child 1 completed")
         }
-
         launch {
             delay(200)
             throw RuntimeException("Regular: Child 2 failed!")
         }
-
         launch {
             delay(1000)
             println("Regular: Child 3 completed") // Never executes
         }
-
         delay(2000)
         println("Regular: Parent completed") // Never executes
     }
-
     delay(1500)
     println("Regular job cancelled: ${regularJob.isCancelled}")
 
     println("\n=== SupervisorJob ===")
-
     // SupervisorJob: child failure is independent (does not cancel siblings)
     val supervisorJob = SupervisorJob()
     val scope = CoroutineScope(supervisorJob + Dispatchers.Default)
-
     scope.launch {
         delay(500)
         println("Supervisor: Child 1 completed")
     }
-
     scope.launch {
         delay(200)
         throw RuntimeException("Supervisor: Child 2 failed!")
     }
-
     scope.launch {
         delay(1000)
         println("Supervisor: Child 3 completed") // Executes successfully
     }
-
     delay(1500)
     println("Supervisor job cancelled: ${supervisorJob.isCancelled}")
-
     scope.cancel()
 }
 ```
@@ -843,20 +827,16 @@ fun compareJobTypes() = runBlocking {
 
 ```kotlin
 import kotlinx.coroutines.*
-
 fun supervisorJobCreation() = runBlocking {
     // Method 1: Standalone SupervisorJob
     val supervisorJob = SupervisorJob()
     val scope = CoroutineScope(Dispatchers.Default + supervisorJob)
-
     scope.launch {
         println("Child 1")
     }
-
     scope.launch {
         println("Child 2")
     }
-
     delay(100)
     scope.cancel()
 
@@ -866,26 +846,21 @@ fun supervisorJobCreation() = runBlocking {
             delay(500)
             println("supervisorScope: Child 1")
         }
-
         launch {
             throw RuntimeException("supervisorScope: Child 2 failed")
         }
-
         launch {
             delay(1000)
             println("supervisorScope: Child 3") // Still executes
         }
-
         delay(1500)
     }
 
     // Method 3: CoroutineScope with SupervisorJob
     val customScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
     customScope.launch {
         println("Custom scope child")
     }
-
     delay(100)
     customScope.cancel()
 }
@@ -895,15 +870,12 @@ fun supervisorJobCreation() = runBlocking {
 
 ```kotlin
 import kotlinx.coroutines.*
-
 fun supervisorExceptionHandling() = runBlocking {
     println("=== Exception Handling ===")
-
     // SupervisorJob + CoroutineExceptionHandler
     val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         println("Caught exception: ${exception.message}")
     }
-
     val supervisorJob = SupervisorJob()
     val scope = CoroutineScope(
         supervisorJob + Dispatchers.Default + exceptionHandler
@@ -931,16 +903,13 @@ fun supervisorExceptionHandling() = runBlocking {
     scope.cancel()
 
     println("\n=== Without Exception Handler ===")
-
     // Without handler: unhandled exceptions from root launch coroutines
     // are reported to the thread's uncaught exception handler (commonly printed to stderr)
     val supervisorJob2 = SupervisorJob()
     val scope2 = CoroutineScope(supervisorJob2 + Dispatchers.Default)
-
     scope2.launch {
         throw RuntimeException("Unhandled exception!")
     }
-
     delay(500)
     scope2.cancel()
 }
@@ -952,22 +921,18 @@ Note: For `async` coroutines, exceptions are thrown when awaiting the result; th
 
 ```kotlin
 import kotlinx.coroutines.*
-
 suspend fun compareScopeBuilders() {
     println("=== coroutineScope ===")
-
     try {
         coroutineScope {
             launch {
                 delay(500)
                 println("coroutineScope: Child 1")
             }
-
             launch {
                 delay(200)
                 throw RuntimeException("coroutineScope: Failed")
             }
-
             launch {
                 delay(1000)
                 println("coroutineScope: Child 3") // Never executes
@@ -978,24 +943,20 @@ suspend fun compareScopeBuilders() {
     }
 
     println("\n=== supervisorScope ===")
-
     try {
         supervisorScope {
             launch {
                 delay(500)
                 println("supervisorScope: Child 1")
             }
-
             launch {
                 delay(200)
                 throw RuntimeException("supervisorScope: Failed")
             }
-
             launch {
                 delay(1000)
                 println("supervisorScope: Child 3") // Still executes
             }
-
             delay(1500) // Wait for children
         }
     } catch (e: RuntimeException) {
@@ -1014,7 +975,6 @@ import androidx.lifecycle.viewModelScope
 // Use Case 1: ViewModel with independent operations
 class UserProfileViewModel : ViewModel() {
     // Using viewModelScope which has SupervisorJob by default
-
     fun loadUserProfile(userId: String) {
         // Load user info
         viewModelScope.launch {
@@ -1129,15 +1089,12 @@ class DashboardViewModel : ViewModel() {
         viewModelScope.launch(exceptionHandler) {
             loadWeatherWidget()
         }
-
         viewModelScope.launch(exceptionHandler) {
             loadNewsWidget()
         }
-
         viewModelScope.launch(exceptionHandler) {
             loadStocksWidget()
         }
-
         viewModelScope.launch(exceptionHandler) {
             loadCalendarWidget()
         }
@@ -1184,7 +1141,6 @@ class RetryableScope {
     ): Job {
         return scope.launch {
             var lastException: Exception? = null
-
             repeat(maxRetries) { attempt ->
                 try {
                     block()
@@ -1195,7 +1151,6 @@ class RetryableScope {
                     delay(1000L * (attempt + 1))
                 }
             }
-
             // All retries failed
             throw lastException ?: Exception("All retries failed")
         }
@@ -1243,7 +1198,6 @@ class DataLoader {
         val primaryJob = scope.async {
             loadFromPrimarySource()
         }
-
         val fallbackJob = scope.async {
             delay(2000) // Wait before trying fallback
             loadFromFallbackSource()
@@ -1354,14 +1308,12 @@ class ManagedSupervisorScope {
 
 fun demonstrateLifecycleManagement() = runBlocking {
     val managedScope = ManagedSupervisorScope()
-
     managedScope.start()
 
     managedScope.launchTask {
         delay(500)
         println("Task 1 completed")
     }
-
     managedScope.launchTask {
         delay(1000)
         println("Task 2 completed")
@@ -1369,14 +1321,12 @@ fun demonstrateLifecycleManagement() = runBlocking {
 
     delay(1500)
     managedScope.stop()
-
     println("Scope stopped, restarting...")
-    managedScope.start()
 
+    managedScope.start()
     managedScope.launchTask {
         println("New task after restart")
     }
-
     delay(500)
     managedScope.stop()
 }
@@ -1404,20 +1354,17 @@ class SupervisorJobTest {
             delay(500)
             job1Completed = true
         }
-
         scope.launch {
             delay(200)
             job2Failed = true
             throw RuntimeException("Job 2 failed")
         }
-
         scope.launch {
             delay(1000)
             job3Completed = true
         }
 
         advanceTimeBy(1500)
-
         assertTrue(job1Completed)
         assertTrue(job2Failed)
         assertTrue(job3Completed)
@@ -1436,7 +1383,6 @@ class SupervisorJobTest {
             delay(500)
             supervisorCompleted = true
         }
-
         assertTrue(supervisorCompleted)
 
         // coroutineScope fails if child fails
@@ -1452,7 +1398,6 @@ class SupervisorJobTest {
         } catch (e: RuntimeException) {
             // Expected
         }
-
         assertFalse(coroutineCompleted)
     }
 
@@ -1462,7 +1407,6 @@ class SupervisorJobTest {
         val handler = CoroutineExceptionHandler { _, exception ->
             exceptions.add(exception)
         }
-
         val supervisorJob = SupervisorJob()
         val scope = CoroutineScope(
             supervisorJob + StandardTestDispatcher(testScheduler) + handler
@@ -1471,16 +1415,13 @@ class SupervisorJobTest {
         scope.launch {
             throw RuntimeException("Error 1")
         }
-
         scope.launch {
             delay(100)
             throw RuntimeException("Error 2")
         }
 
         advanceTimeBy(500)
-
         assertEquals(2, exceptions.size)
-
         scope.cancel()
     }
 }
@@ -1500,57 +1441,3 @@ class SupervisorJobTest {
 2. Using `SupervisorJob` for sequential dependent operations.
 3. Forgetting to cancel long-lived supervisor scopes, leading to leaks.
 4. Expecting automatic error propagation between supervised children.
-
----
-
-## Дополнительные вопросы
-
-1. Можно ли использовать одновременно обычный `Job` и `SupervisorJob` в одной иерархии корутин и как это влияет на отмену?
-2. Что произойдет, если в родительском scope с `SupervisorJob` дочерняя корутина создаст собственный scope с обычным `Job`?
-3. Как `SupervisorJob` влияет на распространение исключений во вложенных `supervisorScope`/`coroutineScope`?
-4. В чем разница между `SupervisorJob()` и `Job()` с точки зрения поведения завершения и отмены дочерних корутин?
-5. Может ли `supervisorScope` пробрасывать исключения вызывающему коду и в каких случаях?
-6. Как эффективно тестировать код, использующий `SupervisorJob` (включая использование `kotlinx-coroutines-test`)?
-7. Каков потенциальный performance-overhead при использовании `SupervisorJob` по сравнению с обычным `Job`?
-8. В каких ситуациях предпочтительнее `supervisorScope` вместо создания отдельного `CoroutineScope` с `SupervisorJob`?
-
-## Follow-ups
-
-1. Can you use both regular `Job` and `SupervisorJob` in the same coroutine hierarchy, and how does that affect cancellation?
-2. What happens if the parent scope has `SupervisorJob` but a child creates a scope with a regular `Job`?
-3. How does `SupervisorJob` affect exception propagation in nested `supervisorScope`/`coroutineScope` structures?
-4. What's the difference between `SupervisorJob()` and `Job()` in terms of child completion and cancellation behavior?
-5. Can `supervisorScope` throw exceptions to its caller, and when?
-6. How do you effectively test code that uses `SupervisorJob` (including `kotlinx-coroutines-test`)?
-7. What's the potential performance impact of using `SupervisorJob` vs a regular `Job`?
-8. When should you use `supervisorScope` vs creating a dedicated `CoroutineScope` with `SupervisorJob`?
-
-## Ссылки
-
-- [[c-kotlin]]
-- [[c-coroutines]]
-- [Kotlin Coroutines Guide - Exception Handling](https://kotlinlang.org/docs/exception-handling.html)
-- [SupervisorJob - kotlinx.coroutines API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-supervisor-job.html)
-- [Android Developers - viewModelScope](https://developer.android.com/topic/libraries/architecture/coroutines)
-- [Roman Elizarov - Exceptions in coroutines](https://medium.com/@elizarov/exceptions-in-coroutines-ce8da1ec060c)
-
-## References
-
-- [[c-kotlin]]
-- [[c-coroutines]]
-- [Kotlin Coroutines Guide - Exception Handling](https://kotlinlang.org/docs/exception-handling.html)
-- [SupervisorJob - kotlinx.coroutines API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-supervisor-job.html)
-- [Android Developers - viewModelScope](https://developer.android.com/topic/libraries/architecture/coroutines)
-- [Roman Elizarov - Exceptions in coroutines](https://medium.com/@elizarov/exceptions-in-coroutines-ce8da1ec060c)
-
-## Связанные вопросы
-
-- [[q-structured-concurrency--kotlin--hard]]
-- [[q-coroutine-job-lifecycle--kotlin--medium]]
-- [[q-coroutine-context-elements--kotlin--hard]]
-
-## Related Questions
-
-- [[q-structured-concurrency--kotlin--hard]]
-- [[q-coroutine-job-lifecycle--kotlin--medium]]
-- [[q-coroutine-context-elements--kotlin--hard]]

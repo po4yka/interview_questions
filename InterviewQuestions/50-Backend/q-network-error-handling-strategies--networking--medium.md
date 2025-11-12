@@ -3,18 +3,19 @@ id: net-003
 title: Network Error Handling Strategies / Стратегии обработки сетевых ошибок
 aliases: [Network Error Handling Strategies, Стратегии обработки сетевых ошибок]
 topic: networking
-subtopics: [error-handling, http, resilience]
+subtopics: [http]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-android
-related: [q-leakcanary-detection-mechanism--android--medium, q-presenter-notify-view--android--medium]
+moc: moc-backend
+related: [c-http-protocol, q-leakcanary-detection-mechanism--android--medium, q-presenter-notify-view--android--medium]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-11
 sources: []
 tags: [architecture, difficulty/medium, error-handling, strategy, ux]
+
 ---
 
 # Вопрос (RU)
@@ -30,6 +31,8 @@ tags: [architecture, difficulty/medium, error-handling, strategy, ux]
 ## Ответ (RU)
 
 **Комплексная обработка ошибок** критична для хорошего UX. Пользователи должны понимать проблему и знать, что делать. Стратегия включает классификацию ошибок, интеллектуальные повторы и понятные сообщения.
+
+См. также: [[c-http-protocol]]
 
 ### Классификация Ошибок
 
@@ -63,7 +66,10 @@ val NetworkError.isRetryable: Boolean
         is NetworkError.Timeout,
         is NetworkError.ServerError,
         is NetworkError.NoInternet -> true
-        else -> false
+        is NetworkError.ClientError.Unauthorized,
+        is NetworkError.ClientError.NotFound,
+        is NetworkError.ClientError.Validation,
+        is NetworkError.Unknown -> false
     }
 ```
 
@@ -109,9 +115,20 @@ class NetworkErrorMapper {
 }
 ```
 
+### Результат
+
+Для краткости используется простой Result-тип-обертка:
+
+```kotlin
+sealed class Result<out T, out E> {
+    data class Success<out T>(val value: T) : Result<T, Nothing>()
+    data class Failure<out E>(val error: E) : Result<Nothing, E>()
+}
+```
+
 ### Стратегия Повторов
 
-Exponential backoff с jitter:
+Exponential backoff с jitter и уважением Retry-After для 503:
 
 ```kotlin
 class RetryStrategy(
@@ -128,31 +145,36 @@ class RetryStrategy(
         while (attempt < maxAttempts) {
             val result = operation()
 
-            when {
-                result is Result.Success -> return result
-                // ✅ Не повторять невосстанавливаемые ошибки
-                result is Result.Failure && !result.error.isRetryable -> return result
-                // ✅ Повторить с задержкой
-                result is Result.Failure -> {
+            when (result) {
+                is Result.Success -> return result
+                is Result.Failure -> {
+                    val error = result.error
+
+                    // ✅ Не повторять невосстанавливаемые ошибки
+                    if (!error.isRetryable) return result
+
                     attempt++
-                    if (attempt < maxAttempts) {
-                        delay(calculateDelay(attempt, result.error))
-                    }
+                    if (attempt >= maxAttempts) return result
+
+                    delay(calculateDelay(attempt, error))
                 }
             }
         }
 
+        // Сюда не дойдём из-за возвратов выше
         return Result.Failure(NetworkError.Unknown(
             IllegalStateException("Max retries exceeded")
         ))
     }
 
     private fun calculateDelay(attempt: Int, error: NetworkError): Long {
-        // ✅ Уважаем Retry-After header
-        error.retryAfterMs?.let { return it }
+        // ✅ Уважаем Retry-After для ServiceUnavailable
+        if (error is NetworkError.ServerError.ServiceUnavailable && error.retryAfterSeconds != null) {
+            return error.retryAfterSeconds * 1000
+        }
 
         // ✅ Exponential backoff с jitter для предотвращения thundering herd
-        val exponential = (initialDelayMs * factor.pow(attempt - 1)).toLong()
+        val exponential = (initialDelayMs * factor.pow((attempt - 1).toDouble())).toLong()
         val jitter = (exponential * jitterFactor * Random.nextDouble()).toLong()
         return exponential + jitter
     }
@@ -181,6 +203,7 @@ class UserRepository(
             if (response.isSuccessful && response.body() != null) {
                 Result.Success(response.body()!!)
             } else {
+                // Оборачиваем неуспешный код в HttpException для унифицированного парсинга
                 Result.Failure(errorMapper.mapError(HttpException(response)))
             }
         } catch (e: Exception) {
@@ -197,7 +220,7 @@ class UserRepository(
 
 ### UI С Обработкой Ошибок
 
-ViewModel и Compose UI:
+`ViewModel` и Compose UI:
 
 ```kotlin
 class UserViewModel(
@@ -259,8 +282,9 @@ fun NetworkError.toUserFriendlyMessage(): String {
         is NetworkError.Timeout -> "Превышено время ожидания. Попробуйте позже."
         is NetworkError.ClientError.Unauthorized -> "Войдите в систему."
         is NetworkError.ClientError.NotFound -> "Ресурс не найден."
+        is NetworkError.ClientError.Validation -> "Проверьте корректность введённых данных."
         is NetworkError.ServerError -> "Ошибка сервера. Попробуйте позже."
-        else -> "Произошла ошибка."
+        is NetworkError.Unknown -> "Произошла непредвиденная ошибка. Попробуйте позже."
     }
 }
 ```
@@ -270,8 +294,8 @@ fun NetworkError.toUserFriendlyMessage(): String {
 1. **Классифицируйте ошибки** - разные типы требуют разной обработки
 2. **Понятные сообщения** - переводите технические ошибки на язык пользователя
 3. **Интеллектуальные повторы** - exponential backoff с jitter
-4. **Уважайте сервер** - соблюдайте Retry-After headers
-5. **Не повторяйте бессмысленно** - 401/404 не нужно ретраить
+4. **Уважайте сервер** - соблюдайте Retry-After headers (например, для 503)
+5. **Не повторяйте бессмысленно** - 401/404/Validation не нужно ретраить без действий пользователя
 6. **Мониторьте сеть** - проверяйте подключение перед запросами
 7. **Кешируйте** - graceful degradation при отсутствии сети
 
@@ -280,6 +304,8 @@ fun NetworkError.toUserFriendlyMessage(): String {
 ## Answer (EN)
 
 **Comprehensive error handling** is critical for good UX. Users must understand the problem and know what to do. The strategy includes error classification, intelligent retries, and user-friendly messages.
+
+See also: [[c-http-protocol]]
 
 ### Error Classification
 
@@ -313,7 +339,10 @@ val NetworkError.isRetryable: Boolean
         is NetworkError.Timeout,
         is NetworkError.ServerError,
         is NetworkError.NoInternet -> true
-        else -> false
+        is NetworkError.ClientError.Unauthorized,
+        is NetworkError.ClientError.NotFound,
+        is NetworkError.ClientError.Validation,
+        is NetworkError.Unknown -> false
     }
 ```
 
@@ -359,9 +388,20 @@ class NetworkErrorMapper {
 }
 ```
 
+### Result Wrapper
+
+For brevity, use a simple Result wrapper type:
+
+```kotlin
+sealed class Result<out T, out E> {
+    data class Success<out T>(val value: T) : Result<T, Nothing>()
+    data class Failure<out E>(val error: E) : Result<Nothing, E>()
+}
+```
+
 ### Retry Strategy
 
-Exponential backoff with jitter:
+Exponential backoff with jitter and honoring Retry-After for 503:
 
 ```kotlin
 class RetryStrategy(
@@ -378,31 +418,36 @@ class RetryStrategy(
         while (attempt < maxAttempts) {
             val result = operation()
 
-            when {
-                result is Result.Success -> return result
-                // ✅ Don't retry unrecoverable errors
-                result is Result.Failure && !result.error.isRetryable -> return result
-                // ✅ Retry with delay
-                result is Result.Failure -> {
+            when (result) {
+                is Result.Success -> return result
+                is Result.Failure -> {
+                    val error = result.error
+
+                    // ✅ Don't retry unrecoverable errors
+                    if (!error.isRetryable) return result
+
                     attempt++
-                    if (attempt < maxAttempts) {
-                        delay(calculateDelay(attempt, result.error))
-                    }
+                    if (attempt >= maxAttempts) return result
+
+                    delay(calculateDelay(attempt, error))
                 }
             }
         }
 
+        // Unreachable due to returns above
         return Result.Failure(NetworkError.Unknown(
             IllegalStateException("Max retries exceeded")
         ))
     }
 
     private fun calculateDelay(attempt: Int, error: NetworkError): Long {
-        // ✅ Respect Retry-After header
-        error.retryAfterMs?.let { return it }
+        // ✅ Respect Retry-After for ServiceUnavailable
+        if (error is NetworkError.ServerError.ServiceUnavailable && error.retryAfterSeconds != null) {
+            return error.retryAfterSeconds * 1000
+        }
 
         // ✅ Exponential backoff with jitter to prevent thundering herd
-        val exponential = (initialDelayMs * factor.pow(attempt - 1)).toLong()
+        val exponential = (initialDelayMs * factor.pow((attempt - 1).toDouble())).toLong()
         val jitter = (exponential * jitterFactor * Random.nextDouble()).toLong()
         return exponential + jitter
     }
@@ -431,6 +476,7 @@ class UserRepository(
             if (response.isSuccessful && response.body() != null) {
                 Result.Success(response.body()!!)
             } else {
+                // Wrap non-successful code into HttpException for unified parsing
                 Result.Failure(errorMapper.mapError(HttpException(response)))
             }
         } catch (e: Exception) {
@@ -447,7 +493,7 @@ class UserRepository(
 
 ### UI with Error Handling
 
-ViewModel and Compose UI:
+`ViewModel` and Compose UI:
 
 ```kotlin
 class UserViewModel(
@@ -509,8 +555,9 @@ fun NetworkError.toUserFriendlyMessage(): String {
         is NetworkError.Timeout -> "Request timed out. Please try later."
         is NetworkError.ClientError.Unauthorized -> "Please log in."
         is NetworkError.ClientError.NotFound -> "Resource not found."
+        is NetworkError.ClientError.Validation -> "Please check the entered data."
         is NetworkError.ServerError -> "Server error. Try again later."
-        else -> "An error occurred."
+        is NetworkError.Unknown -> "An unexpected error occurred. Please try again later."
     }
 }
 ```
@@ -520,8 +567,8 @@ fun NetworkError.toUserFriendlyMessage(): String {
 1. **Classify errors** - different types require different handling
 2. **User-friendly messages** - translate technical errors to user language
 3. **Intelligent retries** - exponential backoff with jitter
-4. **Respect server** - honor Retry-After headers
-5. **Don't retry blindly** - 401/404 shouldn't be retried
+4. **Respect server** - honor Retry-After headers (e.g., for 503)
+5. **Don't retry blindly** - 401/404/Validation shouldn't be retried without user action
 6. **Monitor network** - check connectivity before requests
 7. **Cache** - graceful degradation when offline
 

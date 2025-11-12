@@ -42,13 +42,16 @@ tags:
 
 ## Ответ (RU)
 
-**Подход**: Использование WebRTC для peer-to-peer аудио/видео связи с низкой задержкой (при необходимости с ретрансляцией через TURN)
+**Подход**: Использование WebRTC для peer-to-peer аудио/видео связи с низкой задержкой (при необходимости с ретрансляцией через TURN). WebRTC требует:
+- сигнального канала (обычно WebSocket/HTTP),
+- STUN/TURN серверов для обхода NAT,
+- корректной интеграции с Android-аудио/жизненным циклом.
 
 **Ключевые компоненты**:
 - **PeerConnection** — управление P2P соединением и медиа-треками
 - **MediaStream/MediaTracks** — обработка аудио/видео (в современном API упор на треки)
 - **ICE/STUN/TURN** — проход через NAT/файрволы
-- **Signaling Server** — обмен SDP и ICE-кандидатами (обычно WebSocket)
+- **Signaling Server** — обмен SDP и ICE-кандидатами (обычно WebSocket, с идентификацией пиров)
 
 **Архитектура**:
 ```
@@ -63,7 +66,7 @@ STUN/TURN Server (NAT traversal)
 
 ### Основная Реализация
 
-(Упрощённый пример, фокус на идее, а не на полном продакшн-коде.)
+(Упрощённый пример, фокус на идее сигнального обмена и WebRTC, а не на полном продакшн-коде.)
 
 **Менеджер WebRTC**:
 ```kotlin
@@ -82,7 +85,7 @@ class WebRTCManager(
     val callState = _callState.asStateFlow()
 
     fun startCall(isVideoCall: Boolean, remotePeerId: String) {
-        createPeerConnection()
+        createPeerConnection(remotePeerId)
         createMediaTracks(isVideoCall)
 
         val constraints = MediaConstraints()
@@ -104,7 +107,7 @@ class WebRTCManager(
         }, constraints)
     }
 
-    private fun createPeerConnection() {
+    private fun createPeerConnection(remotePeerId: String) {
         val iceServers = listOf(
             // STUN для определения публичного IP
             PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer(),
@@ -119,30 +122,34 @@ class WebRTCManager(
             sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
         }
 
-        peerConnection = peerConnectionFactory.createPeerConnection(rtcConfig, object : PeerConnection.Observer {
-            override fun onIceCandidate(candidate: IceCandidate) {
-                // Отправка кандидата удалённому пиру
-                signalingClient.sendIceCandidate(candidate)
-            }
-            override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
-                when (newState) {
-                    PeerConnection.IceConnectionState.CONNECTED ->
-                        _callState.value = _callState.value.copy(isConnected = true)
-
-                    PeerConnection.IceConnectionState.FAILED,
-                    PeerConnection.IceConnectionState.DISCONNECTED -> {
-                        _callState.value = _callState.value.copy(isConnected = false)
-                        endCall()
-                    }
-
-                    else -> Unit
+        peerConnection = peerConnectionFactory.createPeerConnection(
+            rtcConfig,
+            object : PeerConnection.Observer {
+                override fun onIceCandidate(candidate: IceCandidate) {
+                    // Отправка кандидата удалённому пиру (упрощённо)
+                    signalingClient.sendIceCandidate(remotePeerId, candidate)
                 }
+                override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
+                    when (newState) {
+                        PeerConnection.IceConnectionState.CONNECTED ->
+                            _callState.value = _callState.value.copy(isConnected = true)
+
+                        PeerConnection.IceConnectionState.FAILED,
+                        PeerConnection.IceConnectionState.DISCONNECTED -> {
+                            _callState.value = _callState.value.copy(isConnected = false)
+                            endCall()
+                        }
+
+                        else -> Unit
+                    }
+                }
+                override fun onTrack(transceiver: RtpTransceiver?) {
+                    // Здесь получаем remoteVideoTrack/remoteAudioTrack из transceiver.receiver.track
+                    // и пробрасываем их в UI-слой
+                }
+                // Остальные методы опущены для краткости
             }
-            override fun onTrack(transceiver: RtpTransceiver?) {
-                // Здесь подключаем remoteVideoTrack/remoteAudioTrack к UI
-            }
-            // Остальные методы опущены для краткости
-        })
+        )
     }
 
     private fun createMediaTracks(isVideoCall: Boolean) {
@@ -154,7 +161,7 @@ class WebRTCManager(
 
         // Видео трек (опционально)
         if (isVideoCall) {
-            videoCapturer = createVideoCapturer()
+            videoCapturer = createVideoCapturer() // реализация зависит от требований (Camera1/2); опущено
             val videoSource = peerConnectionFactory.createVideoSource(false)
             videoCapturer?.initialize(
                 SurfaceTextureHelper.create("CaptureThread", eglBase.eglBaseContext),
@@ -202,7 +209,7 @@ class WebRTCManager(
 }
 ```
 
-**Signaling через WebSocket** (упрощённо):
+**Signaling через WebSocket** (упрощённо; структура сообщений зависит от сервера):
 ```kotlin
 class SignalingClient(
     private val okHttpClient: OkHttpClient,
@@ -227,17 +234,18 @@ class SignalingClient(
     }
 
     fun sendOffer(remotePeerId: String, sdp: SessionDescription) {
-        val msg = SignalingMessage.Offer(remotePeerId, sdp.description)
+        val msg = SignalingMessage.Offer(to = remotePeerId, sdp = sdp.description)
         send(msg)
     }
 
     fun sendAnswer(remotePeerId: String, sdp: SessionDescription) {
-        val msg = SignalingMessage.Answer(remotePeerId, sdp.description)
+        val msg = SignalingMessage.Answer(to = remotePeerId, sdp = sdp.description)
         send(msg)
     }
 
-    fun sendIceCandidate(candidate: IceCandidate) {
+    fun sendIceCandidate(remotePeerId: String, candidate: IceCandidate) {
         val msg = SignalingMessage.IceCandidate(
+            to = remotePeerId,
             sdpMid = candidate.sdpMid ?: "",
             sdpMLineIndex = candidate.sdpMLineIndex,
             sdp = candidate.sdp
@@ -261,6 +269,7 @@ sealed class SignalingMessage {
 
     @Serializable
     data class IceCandidate(
+        val to: String,
         val sdpMid: String,
         val sdpMLineIndex: Int,
         val sdp: String
@@ -341,12 +350,13 @@ fun VideoCallScreen(viewModel: CallViewModel) {
 **1. Серверная инфраструктура**:
 - STUN серверы для определения публичного IP
 - TURN серверы для прохода через строгие NAT (критично для реальных условий)
-- Signaling сервер для обмена SDP и ICE-кандидатами (WebSocket/HTTP + auth)
+- Signaling сервер для обмена SDP и ICE-кандидатами (WebSocket/HTTP + аутентификация и адресация получателей)
 
-**2. Управление ресурсами**:
-- Остановка/приостановка видео при переходе в фон
+**2. Управление ресурсами и интеграция с Android**:
+- Остановка/приостановка видео при переходе в фон (или по требованиям продукта)
 - Корректное освобождение треков, источников, capturer и PeerConnection
-- Управление audio focus через AudioManager / AudioAttributes
+- Управление audio focus и режимами через AudioManager / AudioAttributes / AudioFocusRequest
+- Использование foreground service + постоянного уведомления для активного звонка (особенно при работе в фоне)
 
 **3. Производительность**:
 - Адаптивный битрейт и разрешение в зависимости от сети
@@ -371,20 +381,27 @@ override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
 }
 ```
 
+**5. Разрешения (упрощённый пример)**:
+```kotlin
+val permissions = arrayOf(
+    Manifest.permission.CAMERA,
+    Manifest.permission.RECORD_AUDIO
+)
+// В продакшене использовать Activity Result API; здесь вызов requestPermissions приведён как упрощённый вариант
+requestPermissions(permissions, REQUEST_CODE)
+```
+
 ### Типичные Ошибки
 
 **❌ Нет TURN сервера**:
 - Звонки не работают за NAT/файрволом
 - Решение: всегда настраивать TURN в дополнение к STUN
 
-**❌ Не запрошены runtime-разрешения**:
-```kotlin
-val permissions = arrayOf(
-    Manifest.permission.CAMERA,
-    Manifest.permission.RECORD_AUDIO
-)
-requestPermissions(permissions, REQUEST_CODE)
-```
+**❌ Неполный/неадресованный signaling**:
+- Отправка ICE/SDP без указания целевого peerId
+- Решение: в сообщениях signaling всегда указывать от кого и кому
+
+**❌ Не запрошены runtime-разрешения или игнорирование результатов**
 
 **❌ Утечки ресурсов**:
 ```kotlin
@@ -406,17 +423,25 @@ fun endCall() {
 }
 ```
 
+**❌ Игнорирование интеграции с платформой**:
+- Нет foreground service/уведомления для активного звонка
+- Не настроен audio focus/route (динамик/гарнитура/Bluetooth)
+- Нет обработки входящих звонков (push + звонковый экран)
+
 ---
 
 ## Answer (EN)
 
-**Approach**: Use WebRTC for low-latency peer-to-peer audio/video communication (with TURN relay when direct P2P is not possible).
+**Approach**: Use WebRTC for low-latency peer-to-peer audio/video communication (with TURN relay when direct P2P is not possible). A realistic solution needs:
+- a signaling channel (WebSocket/HTTP) to exchange SDP and ICE,
+- STUN/TURN infrastructure for NAT traversal,
+- proper integration with Android audio, permissions, lifecycle, and foreground services.
 
 **Core Components**:
 - **PeerConnection** - manages the peer connection and media tracks
 - **MediaStream/MediaTracks** - handle audio/video (modern APIs focus on tracks)
 - **ICE/STUN/TURN** - NAT traversal
-- **Signaling Server** - exchanges SDP and ICE candidates (typically via WebSocket)
+- **Signaling Server** - exchanges SDP and ICE candidates (typically via WebSocket, with peer addressing)
 
 **Architecture**:
 ```
@@ -450,7 +475,7 @@ class WebRTCManager(
     val callState = _callState.asStateFlow()
 
     fun startCall(isVideoCall: Boolean, remotePeerId: String) {
-        createPeerConnection()
+        createPeerConnection(remotePeerId)
         createMediaTracks(isVideoCall)
 
         val constraints = MediaConstraints()
@@ -472,7 +497,7 @@ class WebRTCManager(
         }, constraints)
     }
 
-    private fun createPeerConnection() {
+    private fun createPeerConnection(remotePeerId: String) {
         val iceServers = listOf(
             // STUN for public IP discovery
             PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer(),
@@ -487,29 +512,34 @@ class WebRTCManager(
             sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
         }
 
-        peerConnection = peerConnectionFactory.createPeerConnection(rtcConfig, object : PeerConnection.Observer {
-            override fun onIceCandidate(candidate: IceCandidate) {
-                signalingClient.sendIceCandidate(candidate)
-            }
-            override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
-                when (newState) {
-                    PeerConnection.IceConnectionState.CONNECTED ->
-                        _callState.value = _callState.value.copy(isConnected = true)
-
-                    PeerConnection.IceConnectionState.FAILED,
-                    PeerConnection.IceConnectionState.DISCONNECTED -> {
-                        _callState.value = _callState.value.copy(isConnected = false)
-                        endCall()
-                    }
-
-                    else -> Unit
+        peerConnection = peerConnectionFactory.createPeerConnection(
+            rtcConfig,
+            object : PeerConnection.Observer {
+                override fun onIceCandidate(candidate: IceCandidate) {
+                    // Send candidate to remote peer (simplified)
+                    signalingClient.sendIceCandidate(remotePeerId, candidate)
                 }
+                override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
+                    when (newState) {
+                        PeerConnection.IceConnectionState.CONNECTED ->
+                            _callState.value = _callState.value.copy(isConnected = true)
+
+                        PeerConnection.IceConnectionState.FAILED,
+                        PeerConnection.IceConnectionState.DISCONNECTED -> {
+                            _callState.value = _callState.value.copy(isConnected = false)
+                            endCall()
+                        }
+
+                        else -> Unit
+                    }
+                }
+                override fun onTrack(transceiver: RtpTransceiver?) {
+                    // Obtain remote tracks from transceiver.receiver.track
+                    // and expose them to the UI layer
+                }
+                // Other callbacks omitted for brevity
             }
-            override fun onTrack(transceiver: RtpTransceiver?) {
-                // Attach remote video/audio tracks to UI here
-            }
-            // Other callbacks omitted for brevity
-        })
+        )
     }
 
     private fun createMediaTracks(isVideoCall: Boolean) {
@@ -521,7 +551,7 @@ class WebRTCManager(
 
         // Video track (optional)
         if (isVideoCall) {
-            videoCapturer = createVideoCapturer()
+            videoCapturer = createVideoCapturer() // implementation (Camera1/Camera2/etc.) is omitted for brevity
             val videoSource = peerConnectionFactory.createVideoSource(false)
             videoCapturer?.initialize(
                 SurfaceTextureHelper.create("CaptureThread", eglBase.eglBaseContext),
@@ -569,7 +599,7 @@ class WebRTCManager(
 }
 ```
 
-**Signaling via WebSocket** (simplified):
+**Signaling via WebSocket** (simplified; actual schema depends on your backend):
 ```kotlin
 class SignalingClient(
     private val okHttpClient: OkHttpClient,
@@ -594,16 +624,17 @@ class SignalingClient(
     }
 
     fun sendOffer(remotePeerId: String, sdp: SessionDescription) {
-        send(SignalingMessage.Offer(remotePeerId, sdp.description))
+        send(SignalingMessage.Offer(to = remotePeerId, sdp = sdp.description))
     }
 
     fun sendAnswer(remotePeerId: String, sdp: SessionDescription) {
-        send(SignalingMessage.Answer(remotePeerId, sdp.description))
+        send(SignalingMessage.Answer(to = remotePeerId, sdp = sdp.description))
     }
 
-    fun sendIceCandidate(candidate: IceCandidate) {
+    fun sendIceCandidate(remotePeerId: String, candidate: IceCandidate) {
         send(
             SignalingMessage.IceCandidate(
+                to = remotePeerId,
                 sdpMid = candidate.sdpMid ?: "",
                 sdpMLineIndex = candidate.sdpMLineIndex,
                 sdp = candidate.sdp
@@ -627,6 +658,7 @@ sealed class SignalingMessage {
 
     @Serializable
     data class IceCandidate(
+        val to: String,
         val sdpMid: String,
         val sdpMLineIndex: Int,
         val sdp: String
@@ -707,12 +739,13 @@ fun VideoCallScreen(viewModel: CallViewModel) {
 **1. Server Infrastructure**:
 - STUN servers for public IP discovery
 - TURN servers for strict NAT traversal (critical in real-world scenarios)
-- Signaling server for exchanging SDP and ICE candidates (WebSocket/HTTP with auth)
+- Signaling server for exchanging SDP and ICE candidates (WebSocket/HTTP with authentication and proper peer routing)
 
-**2. Resource Management**:
-- Pause/stop video when app goes to background (or follow product requirements)
+**2. Resource Management and Android Integration**:
+- Pause/stop video when app goes to background (per product requirements)
 - Properly release tracks, sources, capturer, and PeerConnection
-- Manage audio focus via AudioManager / AudioAttributes
+- Manage audio focus and routing with AudioManager / AudioAttributes / AudioFocusRequest
+- Use a foreground service + persistent notification for active calls (especially when running in background)
 
 **3. Performance**:
 - Adaptive bitrate and resolution based on network conditions
@@ -737,20 +770,27 @@ override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
 }
 ```
 
-### Common Pitfalls
-
-**❌ No TURN server configured**:
-- Calls fail behind NAT/firewall
-- Solution: always configure TURN in addition to STUN
-
-**❌ Missing runtime permissions**:
+**5. Permissions (simplified snippet)**:
 ```kotlin
 val permissions = arrayOf(
     Manifest.permission.CAMERA,
     Manifest.permission.RECORD_AUDIO
 )
+// For modern apps prefer Activity Result APIs; requestPermissions is shown here as a minimal example
 requestPermissions(permissions, REQUEST_CODE)
 ```
+
+### Common Pitfalls
+
+**❌ No TURN server configured**:
+- Calls fail behind many NAT/firewall setups
+- Solution: always configure TURN in addition to STUN
+
+**❌ Incomplete/undirected signaling**:
+- Sending ICE/SDP without target peer identification
+- Solution: include from/to routing information in all signaling messages
+
+**❌ Missing or mishandled runtime permissions**
 
 **❌ Resource leaks**:
 ```kotlin
@@ -771,6 +811,11 @@ fun endCall() {
     peerConnection = null
 }
 ```
+
+**❌ Ignoring Android platform integration**:
+- No foreground service/notification for ongoing calls
+- No proper audio focus/route handling (speaker/headset/Bluetooth)
+- No proper handling of incoming calls (e.g., via push + dedicated call UI)
 
 ---
 
@@ -841,3 +886,4 @@ fun endCall() {
 ### Advanced (Harder)
 - Design a scalable video conferencing system
 - Implement end-to-end encryption for video calls
+```

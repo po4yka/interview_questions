@@ -34,17 +34,19 @@ sources: []
 
 ## Ответ (RU)
 
-**Пропускаемость (skippability)** — механизм оптимизации, позволяющий компилятору/рантайму пропустить рекомпозицию `@Composable`-функции, если её параметры (и другие отслеживаемые входы) не изменились.
+**Пропускаемость (skippability)** — механизм оптимизации, позволяющий рантайму Compose пропустить рекомпозицию `@Composable`-функции, если для данного вызова можно надёжно определить, что отслеживаемые входы (включая параметры стабильных типов) не изменились.
 
 ### Условия Пропускаемости
 
-Composable-функция может быть помечена как пропускаемая, если:
+Composable-функция (конкретный вызов) может быть помечена как пропускаемая, если выполняются, в упрощённом виде:
 
-1. **Все параметры стабильны** — каждый параметр имеет стабильный тип.
-2. **Функция возвращает `Unit`** или является нерестартуема (не требует перезапуска звонка).
-3. **Не помечена `@NonSkippableComposable`**.
+1. **Все параметры имеют стабильные типы** — для каждого параметра компилятор может применить проверку «изменилось / не изменилось».
+2. **Функция возвращает `Unit`** (не влияет на последующую композицию своим возвращаемым значением).
+3. **Функция не помечена `@NonSkippableComposable`.**
 
-Если функция не пропускаема, то при её достижении в дереве при рекомпозиции она будет пересчитываться, даже когда значения параметров не изменились.
+Стабильность типов прямо влияет на пункт (1): если тип нестабилен, компилятор не может безопасно сделать вывод об отсутствии изменений и вынужден рекомпозировать при обходе этого узла.
+
+Если функция помечена как непропускаемая, то при достижении соответствующего узла в дереве во время рекомпозиции она будет выполняться снова, даже при логически тех же значениях параметров (с точки зрения разработчика).
 
 ```kotlin
 // ✅ Высокий потенциал пропуска — примитивные параметры стабильны
@@ -68,17 +70,18 @@ fun UserProfile(user: User) {
 
 ### Критерии Стабильности
 
-Тип считается **стабильным**, если (упрощённо для практики):
+Тип считается **стабильным** (упрощённо для практики), если:
 
-1. Для него можно надёжно определить, изменилось ли значение между рекомпозициями (по ссылке и/или по значению).
-2. При изменении значимых для UI данных это изменение не будет "скрыто" от системы (например, изменение идёт через отслеживаемое состояние, а не через незаметный для Compose сайд-эффект).
+1. Для него можно надёжно определить, изменилось ли значение между рекомпозициями (по ссылке и/или по значимым полям).
+2. При изменении значимых для UI данных это изменение не будет скрыто от Compose (идёт через отслеживаемое состояние, снапшоты и т.п., а не через незаметный сайд-эффект).
 3. Все его публичные свойства также стабильны или корректно управляются.
 
 Compose-компилятор знает о наборе типов и шаблонов, которые по этим правилам можно считать стабильными.
 
 **Автоматически стабильные (примеры):**
 - Примитивы: `Int`, `Long`, `Float`, `Boolean`.
-- `String`, лямбды.
+- `String`.
+- Некоторые лямбды и функциональные типы, когда компилятор может доказать их неизменяемость и безопасное переиспользование (особенно в режиме Strong Skipping). В общем случае функции не считаются стабильными по умолчанию.
 - Иммутабельные коллекции из `kotlinx.collections.immutable`.
 
 **Типично нестабильные:**
@@ -87,7 +90,7 @@ Compose-компилятор знает о наборе типов и шабло
 - Интерфейсы (компилятор не может доказать их стабильность без аннотаций).
 
 ```kotlin
-// ✅ STABLE (при условии, что поля не меняются за пределами контролируемого состояния)
+// ✅ STABLE (при условии, что поля не меняются способами, невидимыми для Compose)
 data class StableUser(val id: Int, val name: String)
 
 // ❌ UNSTABLE — var-свойство, изменение может не быть отслежено
@@ -129,13 +132,12 @@ data class LyingUser(var name: String)
 @Composable
 fun BuggyDisplay(user: LyingUser) {
     Text(user.name)
-    // Из-за лживой аннотации компилятор может оптимистично
-    // пропускать рекомпозиции, что потенциально приведёт к
-    // устаревшему UI. Поведение становится неопределённым.
+    // Из-за некорректной аннотации компилятор может агрессивнее пропускать
+    // рекомпозиции, что приведёт к потенциально несвоевременному обновлению UI.
 }
 ```
 
-Важно: `@Stable` не запрещает Compose отслеживать чтения состояния. Проблема в том, что неверное использование аннотации даёт компилятору право делать агрессивные оптимизации, которые могут скрыть реальные изменения.
+Важно: `@Stable` не отключает механизм отслеживания чтений состояния. Проблема в том, что неверное использование аннотации даёт компилятору право делать более агрессивные оптимизации пропуска, из-за чего реальные изменения могут быть не отображены.
 
 ### Отладка Стабильности
 
@@ -147,16 +149,16 @@ freeCompilerArgs += listOf(
 )
 ```
 
-Отчёт покажет стабильность параметров, например: `stable count: Int` и `unstable user: User`.
+Отчёт покажет, как компилятор классифицирует стабильность параметров и пропускаемость вызовов, например: `stable count: Int` и `unstable user: User`.
 
 ### Практические Решения
 
 **Проблема: `ViewModel` как параметр**
 
 ```kotlin
-// ⚠️ ViewModel по умолчанию не считается стабильным
+// ⚠️ ViewModel по умолчанию не считается стабильным типом
 @Composable
-fun UserScreen(viewModel: UserViewModel) { // Узел, скорее всего, непропускаем
+fun UserScreen(viewModel: UserViewModel) { // Узел с меньшим потенциалом пропускаемости
     val user by viewModel.userState
     Text(user.name)
 }
@@ -198,21 +200,23 @@ fun UserList(users: ImmutableList<User>) { // Лучше для стабильн
 - Без эффективного пропуска: 10 000 composable → изменение одного элемента → может пересчитаться значительная часть дерева.
 - С корректной стабильностью и пропуском: 10 000 composable → изменение одного элемента → пере-компонуется только затронутая ветка.
 
-Это может давать порядки улучшения производительности на больших списках.
+Это может давать кратные улучшения производительности на больших списках.
 
 ## Answer (EN)
 
-**Skippability** is Compose's optimization mechanism that allows the compiler/runtime to skip recomposing a `@Composable` function when its parameters (and other tracked inputs) have not changed.
+"Skippability" is Compose's optimization mechanism that allows the runtime to skip recomposing a `@Composable` function call when, for that call, it can reliably determine that tracked inputs (including parameters of stable types) have not changed.
 
 ### Skippability Requirements
 
-A composable can be treated as **skippable** when:
+A composable call can be treated as **skippable** when, in simplified form:
 
-1. **All parameters are stable** — each parameter is of a stable type.
-2. **It returns `Unit`** or is non-restartable (does not require restarting the call).
-3. **It is not annotated with `@NonSkippableComposable`**.
+1. **All parameters are of stable types** — for each parameter the compiler can apply an efficient "changed / not changed" check.
+2. **It returns `Unit`** (its return value does not affect subsequent composition nodes).
+3. **It is not annotated with `@NonSkippableComposable`.**
 
-If a function is non-skippable, then whenever recomposition reaches that node in the tree, it will recompose even if the parameter values are equal to previous ones.
+Type stability directly affects (1): if a parameter type is unstable, the compiler cannot safely infer "unchanged" and must conservatively recompose when visiting that node.
+
+If a function (or specific call site) is non-skippable, then whenever recomposition reaches that node, it will run again even when, logically, the values seem equal from the developer's point of view.
 
 ```kotlin
 // ✅ High skippability potential — primitive params are stable
@@ -238,15 +242,16 @@ fun UserProfile(user: User) {
 
 A type is considered **stable** (practically speaking) if:
 
-1. The runtime/compiler can reliably tell whether its value has changed between recompositions (via reference and/or value semantics).
-2. Changes to meaningful UI data are not "hidden" from Compose (they go through tracked state mechanisms instead of invisible side effects).
+1. The runtime/compiler can reliably tell whether its value has changed between recompositions (via reference and/or relevant field comparisons).
+2. Changes to UI-relevant data are not hidden from Compose (they go through tracked state / snapshot mechanisms instead of invisible side effects).
 3. All its public properties are also stable types or are properly managed.
 
 The Compose compiler has built-in knowledge of certain types and patterns that satisfy these rules.
 
 **Automatically stable (examples):**
 - Primitives: `Int`, `Long`, `Float`, `Boolean`.
-- `String`, lambdas.
+- `String`.
+- Some lambdas / function types when the compiler can prove they are stable to reuse (especially with Strong Skipping enabled). In general, function types are not assumed stable by default.
 - Immutable collections from `kotlinx.collections.immutable`.
 
 **Typically unstable:**
@@ -299,11 +304,10 @@ fun BuggyDisplay(user: LyingUser) {
     Text(user.name)
     // Because of the incorrect @Stable, the compiler is allowed
     // to apply more aggressive skipping, which can lead to stale UI.
-    // Behavior becomes undefined/bug-prone, not a guaranteed "no update".
 }
 ```
 
-Important: `@Stable` does not turn off Compose's state read tracking. The risk is that lying about stability lets the compiler assume fewer changes and over-skip recompositions.
+Important: `@Stable` does not disable Compose's state read tracking. The issue with misuse is that by lying about stability you allow the compiler to assume fewer changes and skip recompositions more aggressively, which can result in incorrect, stale UI.
 
 ### Debugging Stability
 
@@ -315,16 +319,16 @@ freeCompilerArgs += listOf(
 )
 ```
 
-The report will show parameter stability, e.g.: `stable count: Int` and `unstable user: User`.
+The report shows how the compiler classifies parameter stability and call-site skippability, e.g.: `stable count: Int` and `unstable user: User`.
 
 ### Practical Solutions
 
 **Problem: `ViewModel` as parameter**
 
 ```kotlin
-// ⚠️ ViewModel is not inherently stable
+// ⚠️ ViewModel is not considered a stable type by default
 @Composable
-fun UserScreen(viewModel: UserViewModel) { // Likely non-skippable node
+fun UserScreen(viewModel: UserViewModel) { // Node with lower skippability potential
     val user by viewModel.userState
     Text(user.name)
 }
@@ -363,7 +367,7 @@ fun UserList(users: ImmutableList<User>) { // Better for stability
 
 Illustrative example:
 
-- Without effective skipping: 10,000 composables → when 1 item changes, a large portion of the tree may be recomposed.
+- Without effective skipping: 10,000 composables → when 1 item changes, a large portion of the tree may recompose.
 - With correct stability and skipping: 10,000 composables → when 1 item changes, only the affected branch recomposes.
 
 This can yield order-of-magnitude performance improvements for large lists.

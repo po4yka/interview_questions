@@ -16,10 +16,11 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-view-system
 - q-view-methods-and-their-purpose--android--medium
 - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/ui-views
 - difficulty/medium
@@ -32,7 +33,7 @@ tags:
 
 # Вопрос (RU)
 
-> Какое событие вызывается при нажатии юзера по экрану?
+> Какое событие вызывается при нажатии пользователя на экран?
 
 # Question (EN)
 
@@ -50,6 +51,8 @@ tags:
 Ключевые моменты:
 - Само «нажатие» (первое прикосновение) соответствует **`ACTION_DOWN`**.
 - Цепочка доставки реализуется через `dispatchTouchEvent()` и `onTouchEvent()`; `onClick()` — это производное высокоуровневое событие.
+
+См. также: [[c-android-view-system]]
 
 ### Поток событий касания
 
@@ -418,6 +421,8 @@ When a user presses the screen in Android, the system generates a touch event wi
 
 Key idea: the physical press corresponds to **`ACTION_DOWN`**; higher-level callbacks (`onClick`) are derived from the full gesture (DOWN → UP without cancel/too much movement, etc.).
 
+See also: [[c-android-view-system]]
+
 ### Touch Event `Flow`
 
 ```kotlin
@@ -779,23 +784,19 @@ Key points:
 - `onClick()` is a high-level abstraction invoked only for a valid click gesture, not for every `ACTION_DOWN`/`ACTION_UP` pair.
 - `ViewGroup` can control whether children receive events via `onInterceptTouchEvent()`.
 
----
+## Follow-ups
 
-## Дополнительные вопросы (RU)
+### Дополнительные вопросы (RU)
 
 - [[q-view-methods-and-their-purpose--android--medium]]
 - [[q-what-layout-allows-overlapping-objects--android--easy]]
 - Как обрабатываются последовательные события `ACTION_DOWN`, `ACTION_MOVE`, `ACTION_UP` в сложной иерархии `ViewGroup`?
-- В каких случаях `ViewGroup` должен перехватывать события в `onInterceptTouchEvent()` вместо делегирования детям?
-- Как `GestureDetector` взаимодействует с низкоуровневыми событиями `MotionEvent`?
 
-## Follow-ups
+### Additional Questions (EN)
 
 - [[q-view-methods-and-their-purpose--android--medium]]
 - [[q-what-layout-allows-overlapping-objects--android--easy]]
 - How are `ACTION_DOWN`, `ACTION_MOVE`, and `ACTION_UP` sequences handled in a complex `ViewGroup` hierarchy?
-- When should a `ViewGroup` intercept events in `onInterceptTouchEvent()` instead of letting children handle them?
-- How does `GestureDetector` relate to low-level `MotionEvent` handling?
 
 ## Ссылки (RU)
 

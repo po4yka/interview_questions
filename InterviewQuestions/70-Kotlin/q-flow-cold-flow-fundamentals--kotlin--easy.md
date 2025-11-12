@@ -96,7 +96,7 @@ runBlocking {
 
 4. Контекст выполнения
 - По умолчанию `Flow` выполняется в контексте корутины коллектора, если не переопределён с помощью `flowOn` и других операторов.
-- Это подчёркивает связь выполнения производителя с актом коллекции.
+- Это подчёркивает, что выполнение производителя привязано к акту коллекции.
 
 5. Сравнение с «горячими» потоками (для интуиции)
 - Горячие потоки (например, `SharedFlow`, `StateFlow`, внешние источники событий) производят значения независимо от наличия коллекторов.
@@ -178,9 +178,9 @@ runBlocking {
 - `Flow` represents a description of how to produce values, not the values themselves.
 - Until collected, it is just a pipeline of operators.
 
-4. Threading and context respect
-- `Flow` executes in the coroutine context of the collector by default, unless changed with operators like `flowOn`.
-- This reinforces the idea that the producer is tied to the act of collection.
+4. Execution context
+- By default, `Flow` runs in the coroutine context of the collector, unless modified with operators like `flowOn`.
+- This reinforces that the producer's execution is tied to the act of collection.
 
 5. Contrast with hot streams (for intuition)
 - Hot streams (e.g., `SharedFlow`, `StateFlow`, external event sources) produce values independently of having collectors.
@@ -264,18 +264,18 @@ Practical implications:
 - [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
 
 ### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+- [[q-testing-flow-operators--kotlin--hard]] - Testing Flow operators
+- [[q-flow-backpressure--kotlin--hard]] - Backpressure and flow control in `Flow`
+- [[q-flow-testing-advanced--kotlin--hard]] - Advanced Flow testing
 
 ### Prerequisites (Easier)
 - [[q-flow-basics--kotlin--easy]] - Flow
 
 ### Related (Same Level)
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
-- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
+- [[q-catch-operator-flow--kotlin--medium]] - `catch` operator in `Flow`
+- [[q-flow-operators-map-filter--kotlin--medium]] - `map`/`filter` operators in `Flow`
+- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows overview
+- [[q-channel-flow-comparison--kotlin--medium]] - Channels vs `Flow`
 
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction

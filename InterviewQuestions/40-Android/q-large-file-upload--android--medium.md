@@ -65,9 +65,9 @@ interface FileUploadApi {
         @Part("description") description: RequestBody
     ): Response<UploadResponse>
 
-    // Пример endpoint для chunked upload очень больших файлов
+    // Пример endpoint для chunked upload очень больших файлов.
     // Обратите внимание: @Streaming применяется к ответу, а не к телу запроса,
-    // здесь он обычно не нужен и приведён только как иллюстрация.
+    // здесь он обычно не нужен и упомянут только как контекст.
     @PUT("upload/{fileId}/chunk")
     suspend fun uploadChunk(
         @Path("fileId") fileId: String,
@@ -112,9 +112,10 @@ class FileUploadWorker(
             val response = RetrofitClient.api.uploadFile(filePart, descriptionBody)
 
             if (response.isSuccessful && response.body()?.success == true) {
-                Result.success(workDataOf(KEY_FILE_URL to response.body()?.fileUrl))
+                return Result.success(workDataOf(KEY_FILE_URL to response.body()?.fileUrl))
             } else {
-                Result.retry() // Автоматический retry (с учётом политики WorkManager)
+                // Для некоторых кодов ошибок (например, 4xx) уместнее вернуть failure.
+                return Result.retry() // Автоматический retry (с учётом политики WorkManager)
             }
         } catch (e: Exception) {
             return if (runAttemptCount < MAX_RETRIES) {
@@ -164,7 +165,7 @@ class ChunkedFileUploadWorker(
         if (!file.exists()) return Result.failure()
 
         val fileId = inputData.getString(KEY_FILE_ID) ?: return Result.failure()
-        val chunkSize = 1024 * 1024 * 5  // 5 MB на chunk (пример)
+        val chunkSize = 1024 * 1024 * 5  // 5 MB на chunk (пример, согласовать с сервером)
 
         file.inputStream().use { inputStream ->
             var uploadedBytes = 0L
@@ -198,7 +199,9 @@ class ChunkedFileUploadWorker(
 ### 3. Progress Tracking
 
 ```kotlin
-// Отслеживание прогресса через обёртку над RequestBody
+// Отслеживание прогресса через обёртку над RequestBody.
+// Важно: реально прогресс считает не Interceptor сам по себе,
+// а кастомный ProgressRequestBody, который вызывает onProgress при записи байтов.
 class UploadProgressInterceptor(
     private val onProgress: (bytesUploaded: Long, totalBytes: Long) -> Unit
 ) : Interceptor {
@@ -220,6 +223,7 @@ class UploadProgressInterceptor(
 ### 4. Resumable Upload
 
 ```kotlin
+// Псевдокод. Требует поддержки на стороне сервера (идемпотентные чанки, валидация диапазонов и т.п.).
 suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
     // `getUploadProgress` / `saveUploadProgress` — абстракции над хранилищем (SharedPreferences/БД)
     val uploadedBytes = getUploadProgress(fileId)
@@ -229,7 +233,7 @@ suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
 
         // Продолжить загрузку с последней позиции чанками,
         // после каждого успешного chunk сохранять прогресс.
-        // Конкретная реализация зависит от серверного API.
+        // Конкретная реализация зависит от серверного API (например, Content-Range / session id).
     }
 
     return Result.success("ok") // заглушка
@@ -238,11 +242,11 @@ suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
 
 ### Best Practices
 
-1. **WorkManager** для надёжной фоновой загрузки.
+1. **WorkManager** для надёжной фоновой загрузки (особенно для задач, которые должны выживать перезапуск устройства).
 2. **Chunked upload** для очень больших файлов (например, > 50 MB) с размером чанков, согласованным с сервером.
-3. **Progress tracking** для лучшего UX (обёртка над `RequestBody` или OkHttp `Interceptor`).
-4. **Retry logic** с exponential backoff (через конфигурацию WorkManager и обработку ошибок).
-5. Foreground `Service` с уведомлением для долгих/критичных загрузок.
+3. **Progress tracking** для лучшего UX (обёртка над `RequestBody`/`ProgressRequestBody` или OkHttp `Interceptor`, подменяющий body).
+4. **Retry logic** с exponential backoff (через конфигурацию WorkManager и обработку ошибок; учитывать, что не все ошибки нужно ретраить).
+5. Foreground `Service`/foreground-`Worker` с уведомлением для долгих/критичных загрузок, чтобы избежать ограничений фона.
 6. Ограничение только WiFi (`NetworkType.UNMETERED`) для больших файлов — по требованиям продукта и UX.
 7. **Resumable uploads** — сохранение прогресса (`SharedPreferences`/БД) и поддержка продолжения на уровне серверного API.
 
@@ -279,8 +283,9 @@ interface FileUploadApi {
         @Part("description") description: RequestBody
     ): Response<UploadResponse>
 
-    // Example endpoint for chunked upload of very large files
-    // Note: @Streaming is for response streaming; it's usually not needed here.
+    // Example endpoint for chunked upload of very large files.
+    // Note: @Streaming is for response streaming; it's usually not needed on the request body
+    // and is mentioned only as contextual information.
     @PUT("upload/{fileId}/chunk")
     suspend fun uploadChunk(
         @Path("fileId") fileId: String,
@@ -325,9 +330,10 @@ class FileUploadWorker(
             val response = RetrofitClient.api.uploadFile(filePart, descriptionBody)
 
             if (response.isSuccessful && response.body()?.success == true) {
-                Result.success(workDataOf(KEY_FILE_URL to response.body()?.fileUrl))
+                return Result.success(workDataOf(KEY_FILE_URL to response.body()?.fileUrl))
             } else {
-                Result.retry() // Automatic retry based on WorkManager policy
+                // For some error codes (e.g., 4xx) it may be more appropriate to return failure.
+                return Result.retry() // Automatic retry based on WorkManager policy
             }
         } catch (e: Exception) {
             return if (runAttemptCount < MAX_RETRIES) {
@@ -377,7 +383,7 @@ class ChunkedFileUploadWorker(
         if (!file.exists()) return Result.failure()
 
         val fileId = inputData.getString(KEY_FILE_ID) ?: return Result.failure()
-        val chunkSize = 1024 * 1024 * 5  // 5 MB per chunk (example)
+        val chunkSize = 1024 * 1024 * 5  // 5 MB per chunk (example; must be aligned with server expectations)
 
         file.inputStream().use { inputStream ->
             var uploadedBytes = 0L
@@ -411,7 +417,9 @@ class ChunkedFileUploadWorker(
 ### 3. Progress Tracking
 
 ```kotlin
-// Track progress via a wrapper around RequestBody
+// Track progress via a wrapper around RequestBody.
+// Important: the actual progress calculation is done by a custom ProgressRequestBody,
+// which calls onProgress as bytes are written; the interceptor alone just swaps the body.
 class UploadProgressInterceptor(
     private val onProgress: (bytesUploaded: Long, totalBytes: Long) -> Unit
 ) : Interceptor {
@@ -433,6 +441,7 @@ class UploadProgressInterceptor(
 ### 4. Resumable Upload
 
 ```kotlin
+// Pseudocode. Requires server-side support (idempotent chunks, range validation, etc.).
 suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
     // `getUploadProgress` / `saveUploadProgress` are abstractions over storage (SharedPreferences/DB)
     val uploadedBytes = getUploadProgress(fileId)
@@ -442,7 +451,7 @@ suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
 
         // Continue uploading from the last position in chunks,
         // persisting progress after each successful chunk.
-        // Exact implementation depends on the server API.
+        // Exact implementation depends on the server API (e.g., Content-Range / session id).
     }
 
     return Result.success("ok") // placeholder
@@ -451,11 +460,11 @@ suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
 
 ### Best Practices
 
-1. **WorkManager** for reliable background uploads.
-2. **Chunked upload** for very large files (e.g., > 50 MB), with chunk size coordinated with the server.
-3. **Progress tracking** for better UX (`RequestBody` wrapper / OkHttp `Interceptor`).
-4. **Retry logic** with exponential backoff (via WorkManager configuration and error handling).
-5. Foreground `Service` with a notification for long-running/critical uploads.
+1. **WorkManager** for reliable background uploads (especially for work that should survive device restarts).
+2. **Chunked upload** for very large files (e.g., > 50 MB), with chunk size aligned with server capabilities.
+3. **Progress tracking** for better UX (`RequestBody`/`ProgressRequestBody` wrapper or OkHttp `Interceptor` that swaps in such a body).
+4. **Retry logic** with exponential backoff (via WorkManager configuration and error handling; avoid retrying non-retryable errors).
+5. Foreground `Service`/foreground `Worker` with a notification for long-running/critical uploads to avoid background limitations.
 6. WiFi-only constraint (`NetworkType.UNMETERED`) for large files when appropriate.
 7. **Resumable uploads** — persist progress (`SharedPreferences`/DB) and rely on server-side support for partial uploads.
 
@@ -477,7 +486,7 @@ val largeFileConstraints = Constraints.Builder()
 
 - Как реализовать сжатие файла перед загрузкой?
 - Каковы trade-off'ы между chunked upload и multipart upload?
-- Как обрабатывать отмену загрузки и очистку частично загруженных данных?
+- Как обрабатывть отмену загрузки и очистку частично загруженных данных?
 - Какие меры безопасности важны для endpoint'ов загрузки файлов?
 - Как реализовать очередь приоритезации загрузок для нескольких файлов?
 

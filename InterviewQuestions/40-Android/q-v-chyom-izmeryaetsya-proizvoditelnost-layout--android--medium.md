@@ -30,7 +30,7 @@ tags: [android/performance-rendering, android/ui-views, difficulty/medium, perfo
 
 ## Ответ (RU)
 
-Производительность layout и отрисовки измеряется в **миллисекундах (ms)** на каждый кадр и на выполнение фаз **measure**, **layout**, **draw** внутри кадра. Основной ориентир — укладываться в бюджет времени кадра (примерно 16.67ms для 60fps, 11.11ms для 90fps, 8.33ms для 120fps). Если суммарное время measure/layout/draw выходит за этот бюджет, появляются задержки и jank.
+Производительность layout и отрисовки измеряется в **миллисекундах (ms)** на каждый кадр и на выполнение фаз **measure**, **layout**, **draw** внутри кадра. Основной ориентир — укладываться в бюджет времени кадра (примерно 16.67ms для 60fps, 11.11ms для 90fps, 8.33ms для 120fps). Если суммарное время measure/layout/draw (вместе с остальной работой на UI-потоке) выходит за этот бюджет, появляются задержки и jank.
 
 См. также: [[c-android]].
 
@@ -46,11 +46,11 @@ tags: [android/performance-rendering, android/ui-views, difficulty/medium, perfo
 - Layout: желательно до ~5ms
 - Draw: желательно до ~6.67ms
 
-Эти значения — практические ориентиры, а не жёсткие правила платформы: важен суммарный бюджет кадра и стабильность FPS.
+Эти значения — практические ориентиры, а не жёсткие правила платформы: важен суммарный бюджет кадра, стабильность FPS и отсутствие пропусков кадров.
 
 ### 1. Измерение Через `Choreographer`
 
-`Choreographer` синхронизирует анимации с частотой обновления экрана и позволяет измерять интервал между кадрами:
+`Choreographer` синхронизирует анимации с частотой обновления экрана и позволяет измерять интервал между кадрами (общую длительность кадра), но не даёт по отдельности времена measure/layout/draw:
 
 ```kotlin
 class FrameMonitor {
@@ -93,11 +93,12 @@ class DetailedFrameMonitor(activity: Activity) {
                     val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
                     val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
 
-                    // Детальная статистика по фазам
-                    Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
+                    // Детальная статистика по фазам рендеринга
+                    Log.d("Metrics", "Total: ${total}ms, Layout+Measure: ${layout}ms, Draw: ${draw}ms")
                 },
                 Handler(Looper.getMainLooper())
             )
+            // В реальном коде важно удалить listener при уничтожении Activity
         }
     }
 }
@@ -158,12 +159,12 @@ fun analyzeHierarchy(view: View): LayoutComplexity {
 
     return LayoutComplexity(viewCount, maxDepth).also {
         if (it.maxDepth > 10) {
-            // Ориентир: слишком глубокая иерархия, возможны накладные расходы
-            Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
+            // Эвристика: слишком глубокая иерархия может давать накладные расходы
+            Log.w("Layout", "Deep hierarchy (heuristic): ${it.maxDepth} levels")
         }
         if (it.viewCount > 80) {
-            // Ориентир: слишком много view, проверьте необходимость
-            Log.w("Layout", "Too many views: ${it.viewCount}")
+            // Эвристика: слишком много view, проверьте необходимость
+            Log.w("Layout", "Too many views (heuristic): ${it.viewCount}")
         }
     }
 }
@@ -173,25 +174,25 @@ fun analyzeHierarchy(view: View): LayoutComplexity {
 
 ### 5. Recomposition в Jetpack Compose
 
-В Compose также важен бюджет кадра, но дополнительно анализируют, как часто и зачем происходят recomposition. Количество перекомпозиций само по себе не является основной метрикой, но помогает выявить неэффективные участки.
+В Compose также важен бюджет кадра, но дополнительно анализируют, как часто и почему происходят recomposition. Количество перекомпозиций само по себе не является основной метрикой, но помогает выявить неэффективные участки.
 
-Пример безопасного учета количества recomposition для отладки (без зацикливания):
+Важно: измерять количество recomposition нужно так, чтобы не создавать новых состояний, которые сами вызывают дополнительные recomposition. Пример (диагностический, упрощённый):
 
 ```kotlin
 @Composable
 fun MonitoredComposable() {
     var recompositions by remember { mutableStateOf(0) }
 
-    DisposableEffect(Unit) {
-        recompositions++ // Счётчик увеличится при первой композиции
-        onDispose { }
+    // Этот блок будет вызываться при каждой композиции/перекомпозиции
+    SideEffect {
+        recompositions++
     }
 
     Text("Recompositions (approx): ${recompositions}")
 }
 ```
 
-Для реального анализа используйте инструменты профилирования Compose и отчеты компилятора. Пример включения вывода отчётов (флаг как иллюстрация):
+В реальных проектах лучше использовать инструменты профилирования Compose и отчёты компилятора, а не ручные счётчики. Пример включения вывода отчётов (флаг как иллюстрация):
 
 ```kotlin
 kotlinOptions {
@@ -218,7 +219,7 @@ kotlinOptions {
 
 ## Answer (EN)
 
-Layout and rendering performance is measured in **milliseconds (ms)** per frame and by how long the **measure**, **layout**, and **draw** phases take within each frame. The key goal is to stay within the frame time budget (about 16.67ms for 60fps, 11.11ms for 90fps, 8.33ms for 120fps). If total measure/layout/draw time exceeds this budget, you get delays and jank.
+Layout and rendering performance is measured in **milliseconds (ms)** per frame and by how long the **measure**, **layout**, and **draw** phases take within each frame. The key goal is to stay within the frame time budget (about 16.67ms for 60fps, 11.11ms for 90fps, 8.33ms for 120fps). If total measure/layout/draw time (plus other UI thread work) exceeds this budget, you get delays and jank.
 
 See also: [[c-android]].
 
@@ -234,11 +235,11 @@ See also: [[c-android]].
 - Layout: ideally up to ~5ms
 - Draw: ideally up to ~6.67ms
 
-These are practical guidelines, not strict platform rules; what matters is the total frame budget and stable FPS.
+These are practical guidelines, not strict platform rules; what matters is total frame budget, stable FPS, and avoiding dropped frames.
 
 ### 1. Measuring with `Choreographer`
 
-`Choreographer` synchronizes animations with the display refresh rate and can be used to measure frame intervals:
+`Choreographer` synchronizes animations with the display refresh rate and can be used to measure the time between frames (overall frame duration). It does not by itself break down measure/layout/draw durations:
 
 ```kotlin
 class FrameMonitor {
@@ -281,11 +282,12 @@ class DetailedFrameMonitor(activity: Activity) {
                     val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
                     val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
 
-                    // Detailed phase statistics
-                    Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
+                    // Detailed rendering phase statistics
+                    Log.d("Metrics", "Total: ${total}ms, Layout+Measure: ${layout}ms, Draw: ${draw}ms")
                 },
                 Handler(Looper.getMainLooper())
             )
+            // In real code, remove the listener when the Activity is destroyed
         }
     }
 }
@@ -346,40 +348,40 @@ fun analyzeHierarchy(view: View): LayoutComplexity {
 
     return LayoutComplexity(viewCount, maxDepth).also {
         if (it.maxDepth > 10) {
-            // Guideline: deep hierarchy may add overhead
-            Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
+            // Heuristic: deep hierarchy may add overhead
+            Log.w("Layout", "Deep hierarchy (heuristic): ${it.maxDepth} levels")
         }
         if (it.viewCount > 80) {
-            // Guideline: many views, verify necessity
-            Log.w("Layout", "Too many views: ${it.viewCount}")
+            // Heuristic: many views, verify necessity
+            Log.w("Layout", "Too many views (heuristic): ${it.viewCount}")
         }
     }
 }
 ```
 
-These thresholds are heuristics; actual limits depend on device performance, screen, and UI complexity.
+These thresholds are heuristics; actual limits depend on device performance, screen size, and UI complexity.
 
 ### 5. Recomposition in Jetpack Compose
 
-In Compose, you still care about frame time, but you also look at how often and why recompositions occur. Recomposition count is a diagnostic signal, not the primary performance metric by itself.
+In Compose, you still care about frame time, and you also look at how often and why recompositions occur. Recomposition count is a diagnostic signal, not the primary performance metric by itself.
 
-A safe example to observe recompositions for debugging (without creating a feedback loop):
+It is important to track recompositions without introducing extra state writes that themselves cause additional recompositions. Example (simplified for diagnostics):
 
 ```kotlin
 @Composable
 fun MonitoredComposable() {
     var recompositions by remember { mutableStateOf(0) }
 
-    DisposableEffect(Unit) {
-        recompositions++ // Will increment on initial composition
-        onDispose { }
+    // This block runs after every successful composition/recomposition
+    SideEffect {
+        recompositions++
     }
 
     Text("Recompositions (approx): ${recompositions}")
 }
 ```
 
-For real-world analysis, use Compose profiling tools and compiler metrics. Example flag (illustrative):
+For real-world analysis, prefer Compose profiling tools and compiler metrics instead of manual counters. Example flag (illustrative):
 
 ```kotlin
 kotlinOptions {

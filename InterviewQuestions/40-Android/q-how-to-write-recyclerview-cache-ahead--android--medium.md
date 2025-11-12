@@ -1,7 +1,6 @@
 ---
 id: android-314
-title: How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием
-  вперед
+title: How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед
 aliases:
 - RecyclerView Cache Ahead
 - RecyclerView Prefetching
@@ -28,7 +27,7 @@ related:
 - q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-11
 tags:
 - android/cache-offline
 - android/performance-rendering
@@ -145,7 +144,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 Общий `RecycledViewPool` полезен для множества вложенных RecyclerView с одинаковыми viewType'ами (например, карусели в списке). Это уменьшает количество инфляций и создает эффект "cache ahead" на уровне переиспользуемых view. Для разных макетов или сильно различающихся списков общий пул может не дать эффекта или навредить.
 
-**Рекомендации** (ориентиры, требующие профилирования):
+**Лучшие практики** (ориентиры, требующие профилирования):
 - увеличивать `setItemViewCacheSize()` только при наличии фризов из-за частого пересоздания view и с учетом памяти устройства;
 - для вложенных RecyclerView `initialPrefetchItemCount` часто выбирают в диапазоне 4–6, чтобы элементы были готовы при скролле;
 - использовать `OnScrollListener` (или Paging 3) для предзагрузки данных с порогом (например, 5–10 элементов) до конца списка;
@@ -255,6 +254,13 @@ A shared `RecycledViewPool` is beneficial when you have many nested RecyclerView
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем разница между кешем view и `RecycledViewPool`?
+- Как предзагрузка влияет на потребление памяти?
+- Когда использовать кастомный `LayoutManager` вместо `OnScrollListener`?
+- Как измерять эффективность кеширования/предзагрузки в продакшене?
+
 ## Follow-ups
 
 - What's the difference between view cache and RecycledViewPool?
@@ -262,10 +268,38 @@ A shared `RecycledViewPool` is beneficial when you have many nested RecyclerView
 - When to use custom LayoutManager vs OnScrollListener?
 - How to measure cache hit rate in production?
 
+## Ссылки (RU)
+
+- [Руководство по оптимизации производительности RecyclerView](https://developer.android.com/develop/ui/views/layout/recyclerview)
+- [Понимание кеширования в RecyclerView](https://proandroiddev.com/recyclerview-caching-8f3c5c6b4e92)
+
 ## References
 
 - [RecyclerView Performance Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
 - [Understanding RecyclerView Caching](https://proandroiddev.com/recyclerview-caching-8f3c5c6b4e92)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-database-design]]
+- [[c-performance]]
+
+### Предпосылки (проще)
+
+- [[q-recyclerview-sethasfixedsize--android--easy]]
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]]
+
+### Похожие (средний уровень)
+
+- [[q-recyclerview-async-list-differ--android--medium]]
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+- [[q-recyclerview-itemdecoration-advanced--android--medium]]
+
+### Продвинутое (сложнее)
+
+- Продвинутая оптимизация RecyclerView с кастомным `ItemAnimator`
+- Построение бесконечного скролла с предзагрузкой и обработкой ошибок
 
 ## Related Questions
 
@@ -273,7 +307,6 @@ A shared `RecycledViewPool` is beneficial when you have many nested RecyclerView
 
 - [[c-database-design]]
 - [[c-performance]]
-
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]]

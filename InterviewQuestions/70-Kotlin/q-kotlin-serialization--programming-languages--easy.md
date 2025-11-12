@@ -14,9 +14,14 @@ related: [c-kotlin, q-functional-interfaces-vs-type-aliases--kotlin--medium, q-k
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-persistence, difficulty/easy, json, kotlin, serialization]
+
 ---
+
 # Вопрос (RU)
 > Что такое сериализация?
+
+# Question (EN)
+> What is serialization?
 
 ## Ответ (RU)
 
@@ -192,26 +197,6 @@ dependencies {
 - **Назначение**: Сохранение, передача, кеширование объектов
 - **Распространённые форматы/механизмы**: JSON, бинарные форматы, `Parcelable`, Protocol Buffers
 - **В Kotlin**: чаще используйте `kotlinx.serialization` с аннотацией `@Serializable`
-
-## Дополнительные вопросы (RU)
-
-- Каковы ключевые отличия этого подхода от Java?
-- Когда вы бы использовали это на практике?
-- Какие распространённые подводные камни следует избегать?
-
-## Ссылки (RU)
-
-- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-- [[c-kotlin]]
-
-## Связанные вопросы (RU)
-
-- [[q-kotlin-non-inheritable-class--programming-languages--easy]]
-- [[q-kotlin-singleton-creation--programming-languages--easy]]
-- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]]
-
-# Question (EN)
-> What is serialization?
 
 ## Answer (EN)
 
@@ -406,3 +391,11 @@ dependencies {
 - [[q-kotlin-non-inheritable-class--programming-languages--easy]]
 - [[q-kotlin-singleton-creation--programming-languages--easy]]
 - [[q-functional-interfaces-vs-type-aliases--kotlin--medium]]
+
+## Дополнительные вопросы (RU)
+- Каковы ключевые отличия этого подхода от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространённые подводные камни следует избегать?
+## Ссылки (RU)
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+## Связанные вопросы (RU)

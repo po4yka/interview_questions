@@ -9,13 +9,14 @@ subtopics:
 - ui-views
 question_kind: theory
 difficulty: medium
-original_language: en
+original_language: ru
 language_tags:
 - en
 - ru
 status: draft
 moc: moc-android
 related:
+- c-android-view-system-basics
 - q-viewgroup-vs-view-differences--android--easy
 - q-what-methods-redraw-views--android--medium
 created: 2025-10-15
@@ -39,13 +40,13 @@ tags:
 
 ## Ответ (RU)
 
-Класс **`View`** в Android предоставляет множество методов для управления внешним видом, поведением и аспектами жизненного цикла элементов UI. Понимание этих методов критически важно для разработки пользовательских `View` и `ViewGroup` и оптимизации интерфейса.
+Класс **`View`** в Android предоставляет множество методов для управления внешним видом, поведением и аспектами жизненного цикла элементов UI. Понимание этих методов критически важно для разработки пользовательских `View` и `ViewGroup` и оптимизации интерфейса. См. также [[c-android-view-system-basics]].
 
 ### Методы Измерения И Макетирования
 
 #### onMeasure()
 
-Определяет требования к размеру для самой `View`. В `ViewGroup` также отвечает за измерение дочерних элементов.
+Определяет требования к размеру для самой `View`. Для `ViewGroup` именно переопределение `onMeasure()` используется для измерения дочерних элементов (через `measureChild*` / `measureChildren()`), а не происходит "автоматического" измерения.
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -64,7 +65,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### onLayout()
 
-Позиционирует дочерние `View` внутри `ViewGroup`.
+Позиционирует дочерние `View` внутри `ViewGroup`. Обычные `View` обычно не переопределяют этот метод.
 
 ```kotlin
 // Пример для пользовательского ViewGroup
@@ -186,7 +187,7 @@ view.visibility = if (view.visibility == View.VISIBLE) View.GONE else View.VISIB
 
 ```kotlin
 if (view.isShown) {
-    // View считается видимой с учётом собственной видимости и видимости предков
+    // View считается видимой с учётом собственной видимости, предков и присоединения к окну
 }
 ```
 
@@ -246,7 +247,7 @@ view.setOnClickListener(null)
 ```kotlin
 view.setOnLongClickListener {
     // Обработать длительное нажатие
-    true // Вернуть true, если событие обработано
+    true // Вернуть true, если событие обработано и не должно передаваться дальше
 }
 ```
 
@@ -259,15 +260,15 @@ view.setOnTouchListener { v, event ->
     when (event.action) {
         MotionEvent.ACTION_DOWN -> {
             // Касание началось
-            true
+            false // вернуть true, если полностью перехватываете событие и не хотите стандартных onClick/onLongClick
         }
         MotionEvent.ACTION_MOVE -> {
             // Касание переместилось
-            true
+            false
         }
         MotionEvent.ACTION_UP -> {
             // Касание завершилось
-            true
+            false
         }
         else -> false
     }
@@ -391,11 +392,11 @@ view.setPaddingRelative(16, 16, 16, 16) // start, top, end, bottom
 
 #### setLayoutParams()
 
-Устанавливает параметры макета, включая поля.
+Устанавливает параметры макета, включая поля (если используется `MarginLayoutParams`).
 
 ```kotlin
-val params = view.layoutParams as ViewGroup.MarginLayoutParams
-params.setMargins(16, 16, 16, 16)
+val params = view.layoutParams as? ViewGroup.MarginLayoutParams
+params?.setMargins(16, 16, 16, 16)
 view.layoutParams = params
 ```
 
@@ -440,7 +441,7 @@ override fun onDetachedFromWindow() {
 
 ### Резюме Ключевых Методов
 
-- onMeasure() — определить требования к размеру.
+- onMeasure() — определить требования к размеру (и в `ViewGroup` — измерить детей).
 - onLayout() — позиционировать дочерние представления в `ViewGroup`.
 - onDraw() — нарисовать визуальное содержимое.
 - invalidate() — запросить перерисовку.
@@ -452,13 +453,13 @@ override fun onDetachedFromWindow() {
 - requestFocus() — запросить фокус клавиатуры.
 
 ## Answer (EN)
-The Android **`View`** class provides numerous methods for controlling appearance, behavior, and lifecycle-related aspects of UI elements. Understanding these methods is crucial for custom view and `ViewGroup` development and UI optimization.
+The Android **`View`** class provides numerous methods for controlling appearance, behavior, and lifecycle-related aspects of UI elements. Understanding these methods is crucial for custom view and `ViewGroup` development and UI optimization. See also [[c-android-view-system-basics]].
 
 ### Measurement and Layout Methods
 
 #### onMeasure()
 
-Determines the size requirements for the `View`. In a `ViewGroup`, this method is also responsible for measuring its children.
+Determines the size requirements for the `View` itself. For a `ViewGroup`, overriding `onMeasure()` is where you measure child views explicitly (via `measureChild*` / `measureChildren()`); there is no implicit automatic measuring logic without doing this.
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -477,7 +478,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### onLayout()
 
-Positions child Views within a `ViewGroup`.
+Positions child Views within a `ViewGroup`. Regular leaf `View`s typically do not override this method.
 
 ```kotlin
 // Example for a custom ViewGroup
@@ -599,7 +600,7 @@ Checks whether the `View` and all its ancestors are visible and attached to a wi
 
 ```kotlin
 if (view.isShown) {
-    // View is visible considering its own visibility and that of its ancestors
+    // View is visible considering its own visibility, its ancestors, and window attachment
 }
 ```
 
@@ -659,7 +660,7 @@ Sets a long-press listener.
 ```kotlin
 view.setOnLongClickListener {
     // Handle long click
-    true // Return true if consumed
+    true // Return true if consumed and should not propagate further
 }
 ```
 
@@ -672,15 +673,15 @@ view.setOnTouchListener { v, event ->
     when (event.action) {
         MotionEvent.ACTION_DOWN -> {
             // Touch started
-            true
+            false // return true only if you fully handle and consume the event
         }
         MotionEvent.ACTION_MOVE -> {
             // Touch moved
-            true
+            false
         }
         MotionEvent.ACTION_UP -> {
             // Touch ended
-            true
+            false
         }
         else -> false
     }
@@ -804,11 +805,11 @@ view.setPaddingRelative(16, 16, 16, 16) // start, top, end, bottom
 
 #### setLayoutParams()
 
-Sets layout parameters, including margins.
+Sets layout parameters, including margins (when using `MarginLayoutParams`).
 
 ```kotlin
-val params = view.layoutParams as ViewGroup.MarginLayoutParams
-params.setMargins(16, 16, 16, 16)
+val params = view.layoutParams as? ViewGroup.MarginLayoutParams
+params?.setMargins(16, 16, 16, 16)
 view.layoutParams = params
 ```
 
@@ -853,7 +854,7 @@ override fun onDetachedFromWindow() {
 
 ### Summary of Key Methods
 
-- onMeasure() — determine size requirements.
+- onMeasure() — determine size requirements (and in a `ViewGroup` — measure children).
 - onLayout() — position child views in `ViewGroup`.
 - onDraw() — draw visual content.
 - invalidate() — request redraw.

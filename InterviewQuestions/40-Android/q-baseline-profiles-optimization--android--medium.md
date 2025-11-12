@@ -6,28 +6,28 @@ aliases:
 - Оптимизация с Baseline Profiles
 topic: android
 subtopics:
-- gradle
 - performance-startup
 - profiling
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - c-performance-optimization
 - c-performance
 - c-modularization
 sources: []
-created: 2025-10-11
-updated: 2025-10-30
+created: 2024-10-11
+updated: 2025-11-11
 tags:
-- android/gradle
 - android/performance-startup
 - android/profiling
+- android/gradle
 - difficulty/medium
 ---
 
@@ -107,7 +107,7 @@ when (status.profileInstallResultCode) {
 ### Критерии Качества
 
 - **Размер профиля**: по возможности держать компактным (ориентир < ~200KB), чтобы не замедлять установку и не перегружать компиляцию.
-- **Покрытие**: запуск → первый рендер → основной user flow (часто используемые экраны/действия).
+- **Покрытие**: запуск → первый рендер → основной пользовательский сценарий (часто используемые экраны/действия).
 - **Регенерация**: после рефакторинга, изменения навигации или горячих путей.
 - **CI/CD**: автоматическая генерация и проверка актуальности и размера профиля.
 
@@ -183,6 +183,14 @@ when (status.profileInstallResultCode) {
 - **Regeneration**: After refactoring, navigation changes, or hot path modifications.
 - **CI/CD**: Automated generation and validation of profile size and freshness.
 
+## Дополнительные вопросы (RU)
+
+- Как размер профиля влияет на время компиляции и увеличение размера приложения?
+- Что происходит, если профиль ссылается на методы, удалённые при шринкинге R8?
+- Можно ли комбинировать baseline-профили с полной оптимизацией R8 (full mode)?
+- Как проверять эффективность профиля на разных API уровнях и классах устройств?
+- Какие есть стратегии для профилирования модульных приложений с dynamic feature модулями?
+
 ## Follow-ups
 
 - How does profile size correlate with compile time and app size increase?
@@ -191,12 +199,41 @@ when (status.profileInstallResultCode) {
 - How do you validate profile effectiveness across different API levels and device tiers?
 - What strategies exist for profiling modularized apps with dynamic feature modules?
 
+## Ссылки (RU)
+
+- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-app-startup-optimization--android--medium]]
+- https://developer.android.com/topic/performance/baselineprofiles
+- https://developer.android.com/studio/profile/baselineprofiles
+
 ## References
 
 - [[q-android-performance-measurement-tools--android--medium]]
 - [[q-app-startup-optimization--android--medium]]
 - https://developer.android.com/topic/performance/baselineprofiles
 - https://developer.android.com/studio/profile/baselineprofiles
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-performance-optimization]]
+- [[c-performance]]
+- [[c-modularization]]
+
+### Предпосылки (Проще)
+
+- [[q-app-startup-optimization--android--medium]] - Базовая оптимизация старта до AOT-компиляции
+
+### Связанные (Тот же уровень)
+
+- [[q-android-performance-measurement-tools--android--medium]] - Macrobenchmark для проверки профилей
+- Взаимодействие R8 с baseline-профилями
+
+### Продвинутое (Сложнее)
+
+- Внутреннее устройство ART: dex2oat, JIT, AOT трейд-оффы
+- Генерация профилей для мультимодульных приложений
 
 ## Related Questions
 
@@ -206,14 +243,16 @@ when (status.profileInstallResultCode) {
 - [[c-performance]]
 - [[c-modularization]]
 
-
 ### Prerequisites (Easier)
+
 - [[q-app-startup-optimization--android--medium]] - Startup optimization fundamentals before AOT compilation
 
 ### Related (Same Level)
+
 - [[q-android-performance-measurement-tools--android--medium]] - Macrobenchmark for profile validation
- - R8 interaction with baseline profiles
+- R8 interaction with baseline profiles
 
 ### Advanced (Harder)
- - ART internals: dex2oat, JIT, AOT trade-offs
- - Profile generation for multi-module apps
+
+- ART internals: dex2oat, JIT, AOT trade-offs
+- Profile generation for multi-module apps

@@ -20,7 +20,7 @@ related:
 - c-dependency-injection
 sources: []
 created: 2025-10-11
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/architecture-clean, android/architecture-modularization, android/di-hilt, difficulty/hard]
 
 ---
@@ -35,12 +35,10 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 
 ## Ответ (RU)
 
-### Краткий Вариант
-
+## Краткая Версия
 Строго разделите слои (`presentation`, `domain`, `data`), направьте зависимости внутрь (только к `domain`), держите бизнес-логику в чистом Kotlin без Android SDK и фреймворков, используйте интерфейсы репозиториев как порты, реализуйте их во внешних модулях, и связывайте всё через DI (например, Hilt).
 
-### Подробный Вариант
-
+## Подробная Версия
 #### Ключевые Принципы
 
 **Правило зависимостей**: код зависит от внутренних слоев (UI → domain ← data). Domain определяет интерфейсы (порты), data реализует адаптеры.
@@ -185,12 +183,10 @@ fun User.toUiModel() = UserUiModel(name, email)
 
 ## Answer (EN)
 
-### Short Version
-
+## Short Version
 Strictly separate layers (`presentation`, `domain`, `data`), direct dependencies inward (only towards `domain`), keep business logic in pure Kotlin without Android SDK/frameworks, expose repository interfaces as ports, implement them in outer modules, and wire everything via DI (e.g., Hilt).
 
-### Detailed Version
-
+## Detailed Version
 #### Core Principles
 
 **Dependency Rule**: code depends on inner layers (UI → domain ← data). Domain defines interfaces (ports), data implements adapters.

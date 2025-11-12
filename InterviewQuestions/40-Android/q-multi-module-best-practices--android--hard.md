@@ -28,12 +28,12 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 
 ## Ответ (RU)
 
-[[c-modularization|Мульти-модульная архитектура]] разделяет приложение на независимые модули для масштабируемости, быстрой сборки и параллельной разработки.
+[[c-modularization|Мульти-модульная архитектура]] разделяет приложение на независимые модули для масштабируемости, более быстрых сборок и параллельной разработки.
 
 ### Типы Модулей
 
-**1. app** - Главный модуль приложения (`:app`), связывает feature-модули
-**2. feature** - Изолированные функции (auth, profile, settings)
+**1. app** - Главный модуль приложения (`:app`), связывает feature-модули и навигацию
+**2. feature** - Изолированные фичи (auth, profile, settings)
 **3. core** - Переиспользуемые утилиты (ui, network, database)
 **4. data** - Слой данных с [[c-repository-pattern|repository pattern]]
 
@@ -83,7 +83,7 @@ class LoginViewModel(private val navigator: Navigator) {
 }
 
 // app - реализует интерфейс
-class AppNavigator : Navigator {
+class AppNavigator(private val navController: NavController) : Navigator {
     override fun navigateToProfile(userId: String) {
         // Связывает features (детали NavController опущены)
         navController.navigate("profile/$userId")
@@ -139,7 +139,7 @@ dependencies {
     // ✅ implementation - скрывает транзитивные зависимости
     implementation(project(":core:ui"))
 
-    // ❌ api - экспонирует транзитивные зависимости всем потребителям
+    // ❌ api - экспонирует транзитивные зависимости всем потребителям, используйте осознанно
     api(project(":core:network"))
 }
 ```
@@ -150,7 +150,7 @@ dependencies {
 
 **Используйте, когда:**
 - Команда 5+ разработчиков
-- Кодовая база около 50 000+ строк
+- Кодовая база около 50 000+ строк или активно растёт
 - Несколько приложений с общим кодом
 - Долгие сборки (например, > 5 минут) мешают развитию
 
@@ -183,7 +183,7 @@ dependencies {
 
 ### Module Types
 
-**1. app** - Main application module (`:app`), wires feature modules together
+**1. app** - Main application module (`:app`), wires feature modules and navigation
 **2. feature** - Isolated features (auth, profile, settings)
 **3. core** - Reusable utilities (ui, network, database)
 **4. data** - Data layer with [[c-repository-pattern|repository pattern]]
@@ -234,7 +234,7 @@ class LoginViewModel(private val navigator: Navigator) {
 }
 
 // app - implements interface
-class AppNavigator : Navigator {
+class AppNavigator(private val navController: NavController) : Navigator {
     override fun navigateToProfile(userId: String) {
         // Wires features (NavController wiring omitted)
         navController.navigate("profile/$userId")
@@ -290,7 +290,7 @@ dependencies {
     // ✅ implementation - hides transitive deps
     implementation(project(":core:ui"))
 
-    // ❌ api - exposes transitive deps to all consumers
+    // ❌ api - exposes transitive deps to all consumers; use intentionally
     api(project(":core:network"))
 }
 ```
@@ -301,7 +301,7 @@ dependencies {
 
 **Use when:**
 - Team of ~5+ developers
-- Codebase around 50,000+ LOC or growing
+- Codebase around 50,000+ LOC or actively growing
 - Multiple apps share code
 - Long build times (e.g., > 5 minutes) slow down development
 

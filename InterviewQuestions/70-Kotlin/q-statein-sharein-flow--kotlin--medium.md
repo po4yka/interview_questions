@@ -2,30 +2,23 @@
 id: kotlin-041
 title: "stateIn and shareIn operators in Flow / Операторы stateIn и shareIn во Flow"
 aliases: ["stateIn and shareIn operators in Flow", "Операторы stateIn и shareIn во Flow"]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines, flow, hot-flow]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-flow, q-kotlin-type-aliases-inline--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
-
-# Timestamps
 created: 2025-10-06
-updated: 2025-11-09
-
+updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharein, statein]
+
 ---
+
 # Вопрос (RU)
 > Что такое операторы `stateIn` и `shareIn` в Kotlin `Flow`? Когда использовать каждый?
 
@@ -870,11 +863,6 @@ class ViewModel : ViewModel() {
 
 **English Summary**: `stateIn` converts a cold `Flow` to a `StateFlow` (always has current value, replays latest to new collectors). `shareIn` converts a cold `Flow` to a `SharedFlow` (configurable replay, no initial value required). Use `stateIn` for state/data that has current value, caching, combining sources. Use `shareIn` for events and broadcasting from cold sources, multiple recent values, broadcasting to many collectors. `SharingStarted` strategies: `WhileSubscribed` (stops after timeout), `Eagerly` (never stops), `Lazily` (starts on first subscriber). `StateFlow` effectively conflates by keeping only the latest value; `SharedFlow` can buffer or drop depending on configuration.
 
-## Related Questions
-
-- [[q-shareflow-vs-stateflow--kotlin--medium]]
-- [[q-hot-vs-cold-flows--kotlin--medium]]
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -882,6 +870,10 @@ class ViewModel : ViewModel() {
 - What are common pitfalls to avoid?
 
 ## References
-- [StateFlow and SharedFlow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#stateflow-and-sharedflow)
-- [SharedFlow vs StateFlow](https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c)
+- [`StateFlow` and `SharedFlow` - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#stateflow-and-sharedflow)
+- [`SharedFlow` vs `StateFlow`](https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c)
 - See also: [[c-kotlin]], [[c-flow]]
+
+## Related Questions
+
+- [[q-shareflow-vs-stateflow--kotlin--medium]]

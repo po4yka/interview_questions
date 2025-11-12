@@ -51,7 +51,9 @@ tags:
 
 ## Ответ (RU)
 
-Android не поддерживает SVG нативно, и строку SVG нельзя напрямую интерпретировать как `VectorDrawable` ресурс. Но существует несколько проверенных подходов для рендеринга SVG-строк как векторной (масштабируемой) графики во время выполнения: библиотека AndroidSVG, Coil с SVG декодером, конвертация в `Bitmap` или `Custom Drawable`.
+Android не поддерживает SVG нативно, и строку SVG нельзя напрямую интерпретировать как `VectorDrawable` ресурс. Но существует несколько проверенных подходов для рендеринга SVG-строк как векторной (масштабируемой) графики во время выполнения: библиотека AndroidSVG, Coil с SVG декодером (для URL/файлов), конвертация в `Bitmap` или `Custom Drawable`.
+
+Важно: строку SVG в рантайме нельзя «превратить» в настоящий ресурс `VectorDrawable` без оффлайн-конвертации в формát VectorDrawable XML.
 
 ### 1. AndroidSVG Библиотека — Прямая Работа Со Строками
 
@@ -66,7 +68,8 @@ fun displaySvgFromString(svgString: String, imageView: ImageView) {
         val picture = svg.renderToPicture()
         val drawable = PictureDrawable(picture)
 
-        // ВАЖНО: отключаем аппаратное ускорение для корректного рендеринга PictureDrawable
+        // ВАЖНО: для PictureDrawable возможны артефакты с аппаратным ускорением.
+        // При проблемах можно отключить аппаратное ускорение ТОЛЬКО для этого ImageView.
         imageView.setLayerType(ImageView.LAYER_TYPE_SOFTWARE, null)
         imageView.setImageDrawable(drawable)
     } catch (e: SVGParseException) {
@@ -95,13 +98,17 @@ fun displaySvgWithSize(svgString: String, imageView: ImageView, width: Int, heig
 ```
 
 Преимущества: легковесность, простота, хорошая производительность.
-Недостатки: нет кэширования из коробки, ручное управление, нужен контроль `LayerType`.
+Недостатки: нет кэширования из коробки, ручное управление, возможна необходимость управления `LayerType`.
 
 ### 2. Coil С SVG Декодером — Современный Подход
 
 Хороший выбор для приложений с загрузкой из сети или при использовании унифицированного image loader.
 
-Важно: Coil ожидает указание типа данных, чтобы применить `SvgDecoder`. При работе со строкой SVG нужно использовать `data` с `Decoder.Factory` и при необходимости установить MIME-тип.
+Важно: Coil ожидает корректный источник данных (URL, файл, Content URI или кастомный fetcher), чтобы применить `SvgDecoder`. Для произвольной SVG строки рекомендуется либо:
+- использовать AndroidSVG напрямую (см. п.1);
+- либо написать кастомный `Fetcher`/`Decoder`, который будет передавать строку как SVG-контент в Coil.
+
+Пример базовой настройки для URL/файлов:
 
 ```kotlin
 // implementation "io.coil-kt:coil:2.5.0"
@@ -113,11 +120,9 @@ val imageLoader = ImageLoader.Builder(context)
     }
     .build()
 
-fun loadSvgString(svgString: String, imageView: ImageView) {
+fun loadSvgFromUrl(url: String, imageView: ImageView) {
     val request = ImageRequest.Builder(context)
-        // Передаем SVG как ByteArray с явным MIME-типом
-        .data(svgString.toByteArray())
-        .mimeType("image/svg+xml")
+        .data(url)
         .target(imageView)
         .build()
 
@@ -125,10 +130,8 @@ fun loadSvgString(svgString: String, imageView: ImageView) {
 }
 ```
 
-Альтернатива: если SVG доступен по URL/файлу, достаточно передать URI/URL, и `SvgDecoder` будет выбран автоматически.
-
 Преимущества: кэширование, поддержка coroutines, современный API.
-Недостатки: дополнительная зависимость, для "сырой" строки нужна аккуратная настройка `data`/`mimeType`.
+Недостатки: дополнительная зависимость; для «сырой» строки требуется дополнительная интеграция (кастомный `Fetcher`/`Decoder`), а не просто передача `ByteArray`.
 
 ### 3. Custom Drawable — Полный Контроль
 
@@ -137,13 +140,24 @@ class SvgDrawable(private val svgString: String) : Drawable() {
     private val svg: SVG = SVG.getFromString(svgString)
 
     override fun draw(canvas: Canvas) {
-        // Подгоняем содержимое под bounds Drawable
-        svg.documentWidth = bounds.width().toFloat()
-        svg.documentHeight = bounds.height().toFloat()
-        svg.renderToCanvas(canvas)
+        // Масштабируем содержимое под bounds Drawable с учетом исходного viewBox
+        val viewBox = svg.documentViewBox
+        if (viewBox != null) {
+            val scaleX = bounds.width() / viewBox.width()
+            val scaleY = bounds.height() / viewBox.height()
+            val saveCount = canvas.save()
+            canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
+            canvas.scale(scaleX, scaleY)
+            svg.renderToCanvas(canvas)
+            canvas.restoreToCount(saveCount)
+        } else {
+            svg.documentWidth = bounds.width().toFloat()
+            svg.documentHeight = bounds.height().toFloat()
+            svg.renderToCanvas(canvas)
+        }
     }
 
-    override fun setAlpha(alpha: Int) { /* NOP: управляется самим SVG */ }
+    override fun setAlpha(alpha: Int) { /* NOP: управляется самим SVG или краской */ }
     override fun setColorFilter(colorFilter: ColorFilter?) { /* Реализовать при необходимости */ }
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
@@ -178,6 +192,8 @@ fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
         val d = drawable ?: return@Canvas
         d.setBounds(0, 0, size.width.toInt(), size.height.toInt())
         drawIntoCanvas { canvas ->
+            // При использовании PictureDrawable возможны проблемы с аппаратным ускорением.
+            // При артефактах рассмотрите отрисовку Picture напрямую или отключение HW для host view.
             d.draw(canvas.nativeCanvas)
         }
     }
@@ -281,13 +297,13 @@ class SvgViewModel : ViewModel() {
 | Подход | Производительность | Кэширование | Сложность | Сценарий |
 |--------|-------------------|-------------|-----------|----------|
 | AndroidSVG | Высокая | Ручное | Низкая | Простые случаи, прямой рендеринг из строки |
-| Coil | Высокая | Автоматическое | Средняя | Сеть, кэш, унифицированная загрузка |
+| Coil | Высокая | Автоматическое | Средняя | Сеть, кэш, унифицированная загрузка (URL/файлы) |
 | Custom Drawable | Высокая | Ручное | Средняя | Особые требования, кастомный рендеринг |
 | Bitmap | Ниже | Ручное | Низкая | Спец. случаи, когда нужен Bitmap (не как основной способ) |
 
 Рекомендации по выбору:
 - Прямой рендер из SVG строки → AndroidSVG или Custom Drawable.
-- Сетевые или кэшируемые SVG → Coil с SVG декодером.
+- Сетевые или кэшируемые SVG → Coil с SVG декодером (для URL/файлов или с кастомным fetcher/decoder для строк).
 - Compose UI → рендер через Canvas/Drawable + парсинг вне главного потока.
 - Особая логика отрисовки → Custom Drawable.
 
@@ -295,7 +311,9 @@ class SvgViewModel : ViewModel() {
 
 ## Answer (EN)
 
-Android doesn't support SVG natively, and an SVG string cannot be directly used as a `VectorDrawable` resource. However, there are several proven approaches to render SVG strings as scalable vector graphics at runtime: AndroidSVG library, Coil with SVG decoder, Bitmap conversion, or a custom `Drawable`.
+Android doesn't support SVG natively, and an SVG string cannot be directly used as a `VectorDrawable` resource. However, there are several proven approaches to render SVG strings as scalable vector graphics at runtime: AndroidSVG library, Coil with SVG decoder (for URLs/files), Bitmap conversion, or a custom `Drawable`.
+
+Important: you cannot "convert" an in-memory SVG string into a real `VectorDrawable` resource at runtime without offline conversion to VectorDrawable XML.
 
 ### 1. AndroidSVG Library — Direct `String` Handling
 
@@ -310,7 +328,8 @@ fun displaySvgFromString(svgString: String, imageView: ImageView) {
         val picture = svg.renderToPicture()
         val drawable = PictureDrawable(picture)
 
-        // IMPORTANT: disable hardware acceleration for proper PictureDrawable rendering
+        // IMPORTANT: PictureDrawable may have issues with hardware acceleration.
+        // If you see artifacts, disable HW only for this ImageView.
         imageView.setLayerType(ImageView.LAYER_TYPE_SOFTWARE, null)
         imageView.setImageDrawable(drawable)
     } catch (e: SVGParseException) {
@@ -339,13 +358,17 @@ fun displaySvgWithSize(svgString: String, imageView: ImageView, width: Int, heig
 ```
 
 Pros: lightweight, simple, good performance.
-Cons: no built-in caching, manual management, must handle layer type.
+Cons: no built-in caching, manual management, may require layer type adjustments.
 
 ### 2. Coil with SVG Decoder — Modern Approach
 
 A solid choice for apps loading images from the network or using a common image loader.
 
-Important: Coil needs to know it's dealing with SVG to apply `SvgDecoder`. With an in-memory SVG string, configure `data` and MIME type appropriately.
+Important: Coil selects `SvgDecoder` based on the data source (URL/file/URI, etc.) and content; for an arbitrary in-memory SVG string you should either:
+- use AndroidSVG directly (see #1), or
+- implement a custom `Fetcher`/`Decoder` that provides SVG content to Coil correctly.
+
+Basic setup for URL/file sources:
 
 ```kotlin
 // implementation "io.coil-kt:coil:2.5.0"
@@ -357,11 +380,9 @@ val imageLoader = ImageLoader.Builder(context)
     }
     .build()
 
-fun loadSvgString(svgString: String, imageView: ImageView) {
+fun loadSvgFromUrl(url: String, imageView: ImageView) {
     val request = ImageRequest.Builder(context)
-        // Pass raw SVG bytes with explicit MIME type so SvgDecoder is used
-        .data(svgString.toByteArray())
-        .mimeType("image/svg+xml")
+        .data(url)
         .target(imageView)
         .build()
 
@@ -369,10 +390,8 @@ fun loadSvgString(svgString: String, imageView: ImageView) {
 }
 ```
 
-Alternatively, when SVG is available via URL/file, simply pass the URI/URL and `SvgDecoder` will be picked automatically.
-
 Pros: caching, coroutines support, modern API.
-Cons: extra dependency, raw string input requires correct configuration.
+Cons: extra dependency; raw SVG strings require custom integration (not just `ByteArray`).
 
 ### 3. Custom Drawable — Full Control
 
@@ -381,13 +400,24 @@ class SvgDrawable(private val svgString: String) : Drawable() {
     private val svg: SVG = SVG.getFromString(svgString)
 
     override fun draw(canvas: Canvas) {
-        // Fit SVG content into this drawable's bounds
-        svg.documentWidth = bounds.width().toFloat()
-        svg.documentHeight = bounds.height().toFloat()
-        svg.renderToCanvas(canvas)
+        // Fit SVG content into this drawable's bounds while respecting the original viewBox
+        val viewBox = svg.documentViewBox
+        if (viewBox != null) {
+            val scaleX = bounds.width() / viewBox.width()
+            val scaleY = bounds.height() / viewBox.height()
+            val saveCount = canvas.save()
+            canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
+            canvas.scale(scaleX, scaleY)
+            svg.renderToCanvas(canvas)
+            canvas.restoreToCount(saveCount)
+        } else {
+            svg.documentWidth = bounds.width().toFloat()
+            svg.documentHeight = bounds.height().toFloat()
+            svg.renderToCanvas(canvas)
+        }
     }
 
-    override fun setAlpha(alpha: Int) { /* NOP: let SVG define alpha */ }
+    override fun setAlpha(alpha: Int) { /* NOP: let SVG or paint handle alpha */ }
     override fun setColorFilter(colorFilter: ColorFilter?) { /* Implement if needed */ }
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
@@ -422,6 +452,8 @@ fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
         val d = drawable ?: return@Canvas
         d.setBounds(0, 0, size.width.toInt(), size.height.toInt())
         drawIntoCanvas { canvas ->
+            // When using PictureDrawable with HW acceleration there may be artifacts.
+            // If that happens, consider drawing the Picture directly or disabling HW for the host view.
             d.draw(canvas.nativeCanvas)
         }
     }
@@ -525,13 +557,13 @@ class SvgViewModel : ViewModel() {
 | Approach | Performance | Caching | Complexity | Scenario |
 |----------|------------|---------|------------|----------|
 | AndroidSVG | High | Manual | Low | Simple cases, direct rendering from string |
-| Coil | High | Automatic | Medium | Network + cache, unified loading |
+| Coil | High | Automatic | Medium | Network + cache, unified loading (URLs/files; strings via custom integration) |
 | Custom Drawable | High | Manual | Medium | Special requirements, custom rendering |
 | Bitmap | Lower | Manual | Low | Special cases requiring Bitmap (not primary) |
 
 Selection recommendations:
 - Direct rendering from SVG string → AndroidSVG or Custom Drawable.
-- Network / cached SVG → Coil with SVG decoder.
+- Network / cached SVG → Coil with SVG decoder (for URLs/files or via custom fetcher/decoder for strings).
 - Compose UI → Canvas/Drawable rendering with off-main-thread parsing.
 - Custom rendering logic → Custom Drawable.
 

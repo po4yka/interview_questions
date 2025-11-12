@@ -117,7 +117,7 @@ object RetrofitClient {
 class UserRepository {
     private val api = RetrofitClient.apiService
 
-    // suspend-функции Retrofit выбрасывают HttpException для кодов 4xx/5xx
+    // suspend-функции Retrofit выбрасывают HttpException для неуспешных HTTP ответов (не 2xx)
     suspend fun getUsers(): Result<List<User>> = try {
         Result.Success(api.getUsers())
     } catch (e: HttpException) {
@@ -297,7 +297,7 @@ object RetrofitClient {
 class UserRepository {
     private val api = RetrofitClient.apiService
 
-    // Retrofit suspend functions throw HttpException for non-2xx HTTP responses
+    // Retrofit suspend functions throw HttpException for non-successful HTTP responses (non-2xx)
     suspend fun getUsers(): Result<List<User>> = try {
         Result.Success(api.getUsers())
     } catch (e: HttpException) {
@@ -433,4 +433,3 @@ suspend fun getPostsRequired(
 
 ### Related (Medium)
 - [[q-flow-testing-turbine--android--medium]] - Testing with `Flow`
-

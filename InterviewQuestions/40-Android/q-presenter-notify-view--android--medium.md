@@ -71,6 +71,7 @@ class UserPresenter(
     override fun loadUser(userId: String) {
         view?.showLoading()
         repository.getUser(userId) { result ->
+            // Важно: callback может прийти после detachView(), поэтому всегда обращаемся к view как к nullable
             view?.hideLoading()
             when (result) {
                 is Success -> view?.showUser(result.data)
@@ -111,7 +112,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 **Недостатки**:
 - Много boilerplate кода для интерфейсов
-- Нужно явно отвязывать `View`, чтобы избежать утечек памяти
+- Нужно явно отвязывать `View`, чтобы избежать утечек памяти и обновлений после уничтожения
 
 ### 2. `Callback`-функции ✅
 
@@ -155,7 +156,9 @@ val presenter = DataPresenter(
 Если команда постепенно переходит к MVVM, можно использовать `LiveData`/`StateFlow` для уведомления `View` о состояниях. Важно понимать, что это уже не классический MVP, а `ViewModel`-подобный слой.
 
 ```kotlin
-class UserPresenterLikeViewModel {
+class UserPresenterLikeViewModel(
+    private val repository: UserRepository
+) {
     private val _userState = MutableLiveData<UserState>()
     val userState: LiveData<UserState> = _userState
 
@@ -188,11 +191,11 @@ userPresenterLikeViewModel.userState.observe(this) { state ->
 
 **Недостатки**:
 - Это уже не чистый MVP, а гибрид/переход к MVVM
-- Требует аккуратного управления временем жизни holder-а `LiveData`/`StateFlow`
+- Требует аккуратного выбора владельца `LiveData`/`StateFlow` (обычно `ViewModel`)
 
 ### Важные Моменты (Best Practices)
 
-**Проверка жизненного цикла** — Presenter должен учитывать, что `View` может быть уничтожена, и не держать на неё долгоживущих сильных ссылок:
+**Проверка жизненного цикла** — Presenter должен учитывать, что `View` может быть уничтожена, и не держать на неё долгоживущих сильных ссылок. При асинхронных операциях всегда работать с `view?` и быть готовым к тому, что к моменту callback-а `View` уже отвязана.
 
 ```kotlin
 interface BaseView
@@ -217,7 +220,7 @@ open class BasePresenter<V : BaseView> {
 
 **WeakReference** — использование `WeakReference<`View`>` внутри Presenter, как правило, не требуется при правильно реализованных `attachView()/detachView()` и может усложнять код или приводить к неожиданным обнулениям. Если и использовать, то осознанно и с пониманием последствий.
 
-**Thread safety** — всегда выполняйте UI-операции на главном потоке:
+**Thread safety** — репозиторий и другие источники данных часто вызывают callback из фоновых потоков, поэтому все операции обновления UI должны выполняться на главном потоке:
 
 ```kotlin
 // ✅ Пример (псевдокод): обновление View через Handler главного потока
@@ -278,6 +281,7 @@ class UserPresenter(
     override fun loadUser(userId: String) {
         view?.showLoading()
         repository.getUser(userId) { result ->
+            // Important: callback may arrive after detachView(), always treat view as nullable
             view?.hideLoading()
             when (result) {
                 is Success -> view?.showUser(result.data)
@@ -318,7 +322,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 **Disadvantages**:
 - Boilerplate for contracts
-- Must detach `View` explicitly to avoid memory leaks
+- Must detach `View` explicitly to avoid memory leaks and updates after destruction
 
 ### 2. `Callback` Functions ✅
 
@@ -362,7 +366,9 @@ val presenter = DataPresenter(
 If transitioning towards MVVM, you can use `LiveData` or `StateFlow` to expose UI state. This effectively becomes a `ViewModel`-like layer rather than classic MVP.
 
 ```kotlin
-class UserPresenterLikeViewModel {
+class UserPresenterLikeViewModel(
+    private val repository: UserRepository
+) {
     private val _userState = MutableLiveData<UserState>()
     val userState: LiveData<UserState> = _userState
 
@@ -395,11 +401,11 @@ userPresenterLikeViewModel.userState.observe(this) { state ->
 
 **Disadvantages**:
 - Not pure MVP; hybrid / closer to MVVM
-- Must ensure the holder of `LiveData`/`StateFlow` has appropriate lifecycle (e.g., actual `ViewModel`)
+- Must ensure the holder of `LiveData`/`StateFlow` has appropriate lifecycle (typically a `ViewModel`)
 
 ### Important Considerations (Best Practices)
 
-**Lifecycle awareness** — Presenter should handle the fact that the `View` can be destroyed and must not keep a long-lived strong reference to it:
+**Lifecycle awareness** — Presenter should handle the fact that the `View` can be destroyed and must not keep a long-lived strong reference to it. For async operations, always work with `view?` and be prepared that by the time the callback fires, the `View` is detached.
 
 ```kotlin
 interface BaseView
@@ -422,9 +428,9 @@ open class BasePresenter<V : BaseView> {
 }
 ```
 
-**WeakReference** — using `WeakReference<`View`>` inside Presenter is usually unnecessary when `attachView()/detachView()` are implemented correctly, and can overcomplicate logic or lead to unexpected nulls. If used, it should be a deliberate choice with clear reasoning.
+**WeakReference** — using `WeakReference<`View`>` inside Presenter is usually unnecessary when `attachView()/detachView()` are implemented correctly and may complicate code or introduce unexpected nulls. Use only deliberately and with understanding.
 
-**Thread safety** — always update UI on the Main thread:
+**Thread safety** — repositories and other data sources often invoke callbacks on background threads, so all UI updates must be executed on the Main thread:
 
 ```kotlin
 // ✅ Example (pseudo-code): post work to main thread handler
@@ -440,7 +446,7 @@ fun notifyViewWrong(data: Data) {
 }
 ```
 
-Where `mainThreadHandler` is created with `Looper.getMainLooper()`, or you can use `runOnUiThread`, `lifecycleScope`, `Dispatchers.Main`, etc.
+Where `mainThreadHandler` is created with `Looper.getMainLooper()`, or use `runOnUiThread`, `lifecycleScope`, `Dispatchers.Main`, etc.
 
 ---
 

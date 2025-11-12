@@ -5,7 +5,7 @@ aliases: [Dagger Component Dependencies, Зависимости компонен
 topic: android
 subtopics:
 - di-hilt
-question_kind: qa
+question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
@@ -19,7 +19,7 @@ related:
 - q-dagger-framework-overview--android--hard
 - q-hilt-components-scope--android--medium
 created: 2025-10-20
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/di-hilt, difficulty/hard]
 sources:
 - "https://dagger.dev/api/latest/dagger/Component.html"
@@ -36,13 +36,11 @@ sources:
 
 Component Dependencies и Subcomponents — два способа композиции Dagger-компонентов с различными характеристиками.
 
-### Краткий ответ
-
+## Краткая Версия
 - Используйте Component Dependencies для модульности и явного контроля того, что экспортируется между независимыми компонентами.
 - Используйте Subcomponents для иерархий, соответствующих жизненным циклам (`Activity`/`Fragment`), с общим базовым графом и удобным доступом ко всем зависимостям родителя.
 
-### Подробный ответ
-
+## Подробная Версия
 #### Ключевые различия
 
 | Аспект | Component Dependencies | Subcomponents |
@@ -154,13 +152,11 @@ object AppModule {
 
 Component Dependencies and Subcomponents are two ways to compose [[c-dagger]] components with different characteristics.
 
-### Short Version
-
+## Short Version
 - Use Component Dependencies for modularization and explicit control over what is exposed between independent components.
 - Use Subcomponents for lifecycle-aligned hierarchies (`Activity`/`Fragment`) with a shared base graph and convenient access to all parent bindings.
 
-### Detailed Version
-
+## Detailed Version
 #### Key Differences
 
 | Aspect | Component Dependencies | Subcomponents |
@@ -268,6 +264,14 @@ object AppModule {
 }
 ```
 
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать циклические зависимости между компонентами?
+- Каковы производительные последствия каждого подхода?
+- Как Hilt автоматически управляет жизненными циклами компонентов?
+- Когда следует предпочесть Subcomponents вместо Component Dependencies?
+- Как тестировать компоненты с зависимостями?
+
 ## Follow-ups
 
 - How do you handle circular dependencies between components?
@@ -276,12 +280,28 @@ object AppModule {
 - When should you prefer Subcomponents over Component Dependencies?
 - How do you test components with dependencies?
 
+## Ссылки (RU)
+
+- [[c-dagger]]
+- [[c-hilt]]
+- [[c-dependency-injection]]
+- https://dagger.dev/api/latest/dagger/Component.html
+
 ## References
 
 - [[c-dagger]]
 - [[c-hilt]]
 - [[c-dependency-injection]]
 - https://dagger.dev/api/latest/dagger/Component.html
+
+## Связанные вопросы (RU)
+
+### Предпосылки
+- [[q-hilt-components-scope--android--medium]] - Scope'ы компонентов Hilt
+- [[q-dagger-build-time-optimization--android--medium]] - Оптимизация Dagger
+
+### Продвинутое
+- [[q-dagger-framework-overview--android--hard]] - Архитектура Dagger
 
 ## Related Questions
 

@@ -55,7 +55,7 @@ class ConcertPagingSource(
                 nextKey = if (response.hasMore) page + 1 else null
             )
         } catch (e: Exception) {
-            return LoadResult.Error(e)
+            LoadResult.Error(e)
         }
     }
 
@@ -110,7 +110,7 @@ interface ConcertDao {
 }
 ```
 
-✅ Room автоматически генерирует реализацию `PagingSource` (или `PagingSource.Factory`) для таких запросов.
+✅ Room автоматически генерирует реализацию `PagingSource` для таких запросов; ключ используется для индексации страниц и управляется Paging.
 
 ### Обработка Состояний Загрузки
 
@@ -126,8 +126,8 @@ adapter.addLoadStateListener { loadState ->
 
 ### Преимущества
 
-- **Автоматическая дедупликация запросов**: предотвращает дублирование загрузок.
-- **Кэширование страниц в памяти** во время работы Paging-пайплайна; для долгоживущего кэша используйте подходы вроде `cachedIn` или локальную БД.
+- **Управление запросами и отсутствием дубликатов в рамках одного Paging-потока**: библиотека сериализует и координирует загрузки страниц, избегая лишних повторных вызовов для уже инициированных запросов.
+- **Кэширование страниц в памяти** во время работы Paging-пайплайна; для долгоживущего кэша используйте такие подходы, как `cachedIn` или локальную БД.
 - **Retry/Refresh API**: встроенная поддержка повторных запросов и обновления данных.
 - **Prefetching**: предзагрузка данных до прокрутки.
 - **Поддержка Kotlin `Flow`/`LiveData`**: нативная реактивность.
@@ -165,7 +165,7 @@ class ConcertPagingSource(
                 nextKey = if (response.hasMore) page + 1 else null
             )
         } catch (e: Exception) {
-            return LoadResult.Error(e)
+            LoadResult.Error(e)
         }
     }
 
@@ -220,7 +220,7 @@ interface ConcertDao {
 }
 ```
 
-✅ Room automatically generates a `PagingSource` (or `PagingSource.Factory`) implementation for such queries.
+✅ Room automatically generates a `PagingSource` implementation for such queries; the key type is used for page indexing and managed by the Paging library.
 
 ### Load State Handling
 
@@ -236,7 +236,7 @@ adapter.addLoadStateListener { loadState ->
 
 ### Benefits
 
-- **Automatic request deduplication**: prevents duplicate loads.
+- **Managed requests without duplicate loads within a Paging stream**: the library serializes and coordinates page loads, so already requested pages aren't redundantly loaded.
 - **In-memory page caching** while the Paging pipeline is active; for longer-lived caching use patterns like `cachedIn` or a local DB.
 - **Retry/Refresh API**: built-in support for retrying failed loads and refreshing data.
 - **Prefetching**: data preloading before scrolling.
@@ -250,12 +250,13 @@ adapter.addLoadStateListener { loadState ->
 
 - Как `RemoteMediator` координирует источники сети и базы данных?
 - В чём разница между типами загрузки `refresh`, `prepend` и `append`?
-- Каковы последствия для памяти при использовании `cachedIn()` по сравнению с не кэшированным `Flow`?
+- Каковы последствия для памяти при использовании `cachedIn()` по сравнению с некэшированным `Flow`?
 
 ## Follow-ups (EN)
 
 - How does `RemoteMediator` coordinate network and database sources?
 - What's the difference between `refresh`, `prepend`, and `append` load types?
+- What are the memory implications of using `cachedIn()` compared to a non-cached `Flow`?
 
 ## References
 

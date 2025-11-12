@@ -77,7 +77,7 @@ fun channelStates() = runBlocking {
 Ключевые идеи:
 - close(): мягкое (graceful) завершение, сигнал "значений больше не будет"; уже отправленные элементы остаются доступны для чтения.
 - cancel(cause): немедленная отмена с причиной; операции send/receive возобновляются с исключением; на сохранность буфера полагаться нельзя.
-- close(cause): как close(), но дополнительно фиксирует причину завершения для диагностики/проброса.
+- close(cause): как close(), но дополнительно фиксирует причину завершения для диагностики/проброса; эту причину можно получить через getCompletionExceptionOrNull().
 
 ```kotlin
 class ChannelClosingMethodsRu(private val scope: CoroutineScope) {
@@ -153,8 +153,8 @@ class ChannelClosingMethodsRu(private val scope: CoroutineScope) {
 
         producer.join()
 
-        // ВАЖНО: причину берем через getCompletionExceptionOrNull(), а не из ClosedReceiveChannelException
-        val cause = channel.getCompletionExceptionOrNull()?.cause
+        // ВАЖНО: причину берем через getCompletionExceptionOrNull()
+        val cause = channel.getCompletionExceptionOrNull()
         if (cause != null) {
             println("Channel closed due to: ${cause.message}")
         }
@@ -220,7 +220,7 @@ class ChannelExceptionsRu(private val scope: CoroutineScope) {
         }
     }
 
-    // Обработка причины закрытия (НЕ использовать cause из ClosedReceiveChannelException)
+    // Обработка причины закрытия (не полагаться на e.cause, использовать состояние канала)
     suspend fun closeCauseExample() = coroutineScope {
         val channel = Channel<String>()
 
@@ -239,10 +239,9 @@ class ChannelExceptionsRu(private val scope: CoroutineScope) {
 
         producer.join()
 
-        val completion = channel.getCompletionExceptionOrNull()
-        val cause = completion?.cause
-        if (cause is java.io.IOException) {
-            println("Channel closed due to network error: ${cause.message}")
+        val completionCause = channel.getCompletionExceptionOrNull()
+        if (completionCause is java.io.IOException) {
+            println("Channel closed due to network error: ${completionCause.message}")
         }
     }
 }
@@ -397,8 +396,8 @@ class ProduceBuilderPatternRu {
                 println(num)
             }
         } catch (e: ClosedReceiveChannelException) {
-            // Само исключение не несет полезной cause — берем причину из канала
-            val cause = numbers.getCompletionExceptionOrNull()?.cause
+            // Исключение при receive() сигнализирует о закрытии; причину читаем из канала
+            val cause = numbers.getCompletionExceptionOrNull()
             println("Channel closed due to: ${cause?.message}")
         }
     }
@@ -522,7 +521,7 @@ class AdvancedCleanupRu(private val scope: CoroutineScope) {
                 }
                 channel2.close()
             } catch (e: Exception) {
-                val cause = channel1.getCompletionExceptionOrNull()?.cause ?: e
+                val cause = channel1.getCompletionExceptionOrNull() ?: e
                 channel2.close(cause)
             }
         }
@@ -532,7 +531,7 @@ class AdvancedCleanupRu(private val scope: CoroutineScope) {
                 println(result)
             }
         } catch (e: ClosedReceiveChannelException) {
-            val cause = channel2.getCompletionExceptionOrNull()?.cause
+            val cause = channel2.getCompletionExceptionOrNull()
             println("Consumer received error: ${cause?.message}")
         }
 
@@ -599,11 +598,11 @@ class ChannelClosureTestsRu {
 
         channel.close(error)
 
-        val ex = assertFailsWith<ClosedReceiveChannelException> {
+        assertFailsWith<ClosedReceiveChannelException> {
             channel.receive()
         }
 
-        val completionCause = channel.getCompletionExceptionOrNull()?.cause
+        val completionCause = channel.getCompletionExceptionOrNull()
         assertEquals(error, completionCause)
     }
 
@@ -773,7 +772,7 @@ fun channelStates() = runBlocking {
 Key ideas:
 - close(): graceful, signals "no more elements"; buffered elements remain available for receive.
 - cancel(cause): closes the channel with a (cancellation) cause; suspending send/receive operations are resumed with an exception; buffered elements may be discarded and should not be relied upon.
-- close(cause): similar to close(), but records a completion cause (e.g., an error) for diagnostic/propagation purposes.
+- close(cause): similar to close(), but records a completion cause (e.g., an error) that can be inspected via getCompletionExceptionOrNull().
 
 ```kotlin
 class ChannelClosingMethods(private val scope: CoroutineScope) {
@@ -850,7 +849,7 @@ class ChannelClosingMethods(private val scope: CoroutineScope) {
         producer.join()
 
         // Access completion cause explicitly if needed
-        val cause = channel.getCompletionExceptionOrNull()?.cause
+        val cause = channel.getCompletionExceptionOrNull()
         if (cause != null) {
             println("Channel closed due to: ${cause.message}")
         }
@@ -916,7 +915,7 @@ class ChannelExceptions(private val scope: CoroutineScope) {
         }
     }
 
-    // Handling close cause (do NOT rely on ClosedReceiveChannelException.cause)
+    // Handling close cause (prefer inspecting the channel's completion state)
     suspend fun closeCauseExample() = coroutineScope {
         val channel = Channel<String>()
 
@@ -935,10 +934,9 @@ class ChannelExceptions(private val scope: CoroutineScope) {
 
         producer.join()
 
-        val completion = channel.getCompletionExceptionOrNull()
-        val cause = completion?.cause
-        if (cause is java.io.IOException) {
-            println("Channel closed due to network error: ${cause.message}")
+        val completionCause = channel.getCompletionExceptionOrNull()
+        if (completionCause is java.io.IOException) {
+            println("Channel closed due to network error: ${completionCause.message}")
         }
     }
 }
@@ -1103,8 +1101,8 @@ class ProduceBuilderPattern {
                 println(num)
             }
         } catch (e: ClosedReceiveChannelException) {
-            // ClosedReceiveChannelException itself has no useful cause; inspect the channel
-            val cause = numbers.getCompletionExceptionOrNull()?.cause
+            // ClosedReceiveChannelException indicates closure; inspect channel for cause
+            val cause = numbers.getCompletionExceptionOrNull()
             println("Channel closed due to: ${cause?.message}")
         }
     }
@@ -1233,7 +1231,7 @@ class AdvancedCleanup(private val scope: CoroutineScope) {
                 channel2.close()
             } catch (e: Exception) {
                 // On error or upstream close with cause, close downstream with same cause
-                val cause = channel1.getCompletionExceptionOrNull()?.cause ?: e
+                val cause = channel1.getCompletionExceptionOrNull() ?: e
                 channel2.close(cause)
             }
         }
@@ -1243,7 +1241,7 @@ class AdvancedCleanup(private val scope: CoroutineScope) {
                 println(result)
             }
         } catch (e: ClosedReceiveChannelException) {
-            val cause = channel2.getCompletionExceptionOrNull()?.cause
+            val cause = channel2.getCompletionExceptionOrNull()
             println("Consumer received error: ${cause?.message}")
         }
 
@@ -1310,12 +1308,12 @@ class ChannelClosureTests {
 
         channel.close(error)
 
-        val ex = assertFailsWith<ClosedReceiveChannelException> {
+        assertFailsWith<ClosedReceiveChannelException> {
             channel.receive()
         }
 
         // Completion cause is available from the channel
-        val completionCause = channel.getCompletionExceptionOrNull()?.cause
+        val completionCause = channel.getCompletionExceptionOrNull()
         assertEquals(error, completionCause)
     }
 

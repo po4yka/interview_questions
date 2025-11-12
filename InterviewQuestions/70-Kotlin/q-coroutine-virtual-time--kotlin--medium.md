@@ -58,17 +58,17 @@ fun `таймер считает до 10 - быстрая версия`() = runT
     val timer = Timer()
     timer.start()
 
-    advanceTimeBy(10000) // Явно "продвигаем" 10 секунд виртуального времени
+    advanceTimeBy(10000) // Явно "продвигаем" 10 секунд виртуального времени (для delay под TestDispatcher)
 
     assertEquals(10, timer.seconds)
 }
 ```
 
-(Класс Timer предполагается использовать delay внутри и запускаться в контексте тестового диспетчера.)
+(Класс Timer предполагается использовать delay внутри и запускаться в контексте тестового диспетчера runTest.)
 
 ### Основы Виртуального Времени
 
-При использовании `runTest`, он устанавливает специальный тестовый диспетчер/планировщик, который оперирует виртуальным временем вместо реального для операций, основанных на `delay`/`kotlinx.coroutines`.
+При использовании `runTest`, он устанавливает специальный тестовый диспетчер/планировщик (TestDispatcher/TestScheduler), который оперирует виртуальным временем для операций, основанных на `delay`/`kotlinx.coroutines`, если корутины выполняются на этом диспетчере.
 
 ```kotlin
 @Test
@@ -81,12 +81,12 @@ fun `демонстрация виртуального времени`() = runTe
     delay(2000)
     println("После 3с: $currentTime") // 3000
 
-    // Тест завершается мгновенно с точки зрения реального времени, 
+    // Тест завершается мгновенно с точки зрения реального времени,
     // потому что виртуальное время продвигается планировщиком теста.
 }
 ```
 
-**Ключевой момент**: `delay()` под тестовым диспетчером не блокирует поток и не использует реальное время. Виртуальное время продвигается, когда вы явно двигаете его (`advanceTimeBy`, `advanceUntilIdle`, `runCurrent`) или когда планировщик обрабатывает запланированные задачи в рамках `runTest`.
+**Ключевой момент**: `delay()` под тестовым диспетчером не блокирует поток и не использует реальное время. Виртуальное время продвигается, когда вы явно двигаете его (`advanceTimeBy`, `advanceUntilIdle`, `runCurrent`) или когда планировщик обрабатывает запланированные задачи в рамках `runTest`. Если корутина использует другой реальный диспетчер, она не подчиняется виртуальному времени.
 
 ### currentTime
 
@@ -201,9 +201,11 @@ fun `advanceUntilIdle запускает всё`() = runTest {
 
     // Все события обработаны
     assertEquals(listOf(1, 3, 2, 4), events)
-    assertEquals(500, currentTime) // Продвинуто до последнего запланированного времени
+    assertEquals(400, currentTime) // Продвинуто до времени последнего события (400мс)
 }
+```
 
+```kotlin
 @Test
 fun `advanceUntilIdle с конечным циклом`() = runTest {
     var count = 0
@@ -323,7 +325,9 @@ fun `таймер обратного отсчёта с виртуальным в
     // Тест завершён мгновенно, без реального ожидания!
     assertEquals(10000, currentTime)
 }
+```
 
+```kotlin
 @Test
 fun `тест нескольких задержек подряд`() = runTest {
     suspend fun operation() {
@@ -565,6 +569,7 @@ class TestableRateLimiter(
 @Test
 fun `ограничитель частоты с виртуальным временем`() = runTest {
     var executionCount = 0
+    // Связываем timeProvider с виртуальным временем планировщика runTest
     val limiter = TestableRateLimiter(1000) { currentTime }
 
     launch {
@@ -730,8 +735,8 @@ fun `правильно - suspending API`() = runTest {
 1. `delay()` под тестовым диспетчером не использует реальное время.
 2. Виртуальное время продвигается контролируемо: через `advanceTimeBy`, `advanceUntilIdle`, `runCurrent` и логику `runTest`.
 3. Реальное время и блокирующие вызовы (`Thread.sleep`, `System.currentTimeMillis`, блокирующий IO) не контролируются виртуальным временем, их следует избегать или абстрагировать.
-4. Тесты могут выполняться мгновенно независимо от количества задержек, если не используют блокирующие API.
-5. Тайминг детерминирован и управляем, если всё основано на корутинных примитивах.
+4. Тесты могут выполняться мгновенно независимо от количества задержек, если не используют блокирующие API и работают на тестовом диспетчере.
+5. Тайминг детерминирован и управляем, если всё основано на корутинных примитивах и тестовом планировщике.
 
 **Используйте advanceTimeBy когда**:
 - Тестируете конкретные временные сценарии.
@@ -773,17 +778,17 @@ fun `timer counts to 10 - fast version`() = runTest {
     val timer = Timer()
     timer.start()
 
-    advanceTimeBy(10000) // Explicitly "advance" 10 seconds of virtual time
+    advanceTimeBy(10000) // Explicitly "advance" 10 seconds of virtual time (for delay under the TestDispatcher)
 
     assertEquals(10, timer.seconds)
 }
 ```
 
-(The Timer class is assumed to use delay under the test dispatcher.)
+(The Timer class is assumed to use delay internally and run on runTest's test dispatcher.)
 
 ### Virtual Time Basics
 
-When using `runTest`, it installs a special test dispatcher/scheduler that operates on virtual time for coroutine-based delays instead of real wall-clock time.
+When using `runTest`, it installs a special test dispatcher/scheduler (TestDispatcher/TestScheduler) that operates on virtual time for coroutine-based delays, as long as coroutines run on that dispatcher.
 
 ```kotlin
 @Test
@@ -800,7 +805,7 @@ fun `virtual time demonstration`() = runTest {
 }
 ```
 
-**Key insight**: `delay()` under the test dispatcher does not block a thread or use real time. Virtual time is advanced when you drive the scheduler (`advanceTimeBy`, `advanceUntilIdle`, `runCurrent`) or when `runTest` processes scheduled tasks.
+**Key insight**: `delay()` under the test dispatcher does not block a thread or use real time. Virtual time is advanced when you drive the scheduler (`advanceTimeBy`, `advanceUntilIdle`, `runCurrent`) or when `runTest` processes scheduled tasks. If a coroutine uses another real dispatcher, it is not controlled by virtual time.
 
 ### currentTime
 
@@ -915,9 +920,11 @@ fun `advanceUntilIdle runs everything`() = runTest {
 
     // All events processed
     assertEquals(listOf(1, 3, 2, 4), events)
-    assertEquals(500, currentTime) // Advanced to last scheduled time
+    assertEquals(400, currentTime) // Advanced to the time of the last event (400ms)
 }
+```
 
+```kotlin
 @Test
 fun `advanceUntilIdle with finite loop`() = runTest {
     var count = 0
@@ -1037,7 +1044,9 @@ fun `countdown timer with virtual time`() = runTest {
     // Test completed instantly, no actual waiting!
     assertEquals(10000, currentTime)
 }
+```
 
+```kotlin
 @Test
 fun `test multiple delays in sequence`() = runTest {
     suspend fun operation() {
@@ -1279,6 +1288,7 @@ class TestableRateLimiter(
 @Test
 fun `rate limiter with virtual time`() = runTest {
     var executionCount = 0
+    // Bind timeProvider to runTest's virtual scheduler clock
     val limiter = TestableRateLimiter(1000) { currentTime }
 
     launch {
@@ -1444,7 +1454,7 @@ fun `correct - suspending API`() = runTest {
 1. `delay()` under the test dispatcher uses virtual time and is non-blocking.
 2. Virtual time is advanced in a controlled way: via `advanceTimeBy`, `advanceUntilIdle`, `runCurrent`, and `runTest`'s scheduler.
 3. Real-time based APIs (`Thread.sleep`, `System.currentTimeMillis`, blocking IO) are not controlled by virtual time and should be avoided or abstracted.
-4. Tests can run instantly regardless of logical delays when they rely on coroutine primitives.
+4. Tests can run instantly regardless of logical delays when they rely on coroutine primitives and run on the test dispatcher.
 5. Timing is deterministic and controllable when all time-dependent code is expressed via the test scheduler.
 
 **Use advanceTimeBy when**:

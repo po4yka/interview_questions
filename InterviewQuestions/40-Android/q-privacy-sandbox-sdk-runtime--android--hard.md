@@ -1,6 +1,6 @@
 ---
 id: android-430
-title: Privacy Sandbox SDK Runtime / Privacy Sandbox SDK Runtime
+title: Privacy Sandbox SDK Runtime / SDK Runtime в Privacy Sandbox
 aliases:
 - Privacy Sandbox
 - Privacy Sandbox SDK Runtime
@@ -9,7 +9,7 @@ topic: android
 subtopics:
 - permissions
 - privacy-sdks
-question_kind: android
+question_kind: system-design
 difficulty: hard
 original_language: en
 language_tags:
@@ -18,16 +18,19 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android
 - c-permissions
+- q-android-security-best-practices--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/permissions
 - android/privacy-sdks
 - difficulty/hard
 - security/privacy
 - android
+
 ---
 
 # Вопрос (RU)
@@ -44,31 +47,53 @@ tags:
 
 ## Ответ (RU)
 
-**SDK Runtime** — компонент Privacy Sandbox (Android 13+ и совместимых билдах), запускающий сторонние SDK в изолированных процессах (SDK sandbox), чтобы ограничить их доступ к данным приложения и пользователя. SDK получает доступ только к разрешённому подмножеству платформенных API и данным, явно предоставленным приложением. Коммуникация с хост-приложением и другими компонентами идёт через Binder IPC с ограниченными возможностями.
+**SDK Runtime** — компонент Privacy Sandbox (Android 13+ и совместимых билдах), запускающий сторонние SDK в отдельном sandbox-процессе, который управляется системой и логически отделён от процесса приложения. В этом процессе SDK выполняются изолированно и получают доступ только к разрешённому подмножеству платформенных API и данным, явно предоставленным приложением. Коммуникация с хост-приложением и другими компонентами идёт через Binder IPC с ограниченными возможностями.
 
+## Краткая Версия
+- Изоляция сторонних SDK в выделенном sandbox-процессе.
+- Ограниченный доступ к данным и API: только явно предоставленные данные и Privacy Sandbox API.
+- Взаимодействие через контролируемый Binder IPC.
+- Жёсткие гарантии приватности и квоты ресурсов.
+- При миграции: переход на IPC-контракты, учёт ограничений storage/permissions и поддержка fallback.
+
+## Подробная Версия
 ### Архитектура SDK Runtime
 
 **Ключевые концепции:**
-- **Process Isolation** — каждый SDK (или группа SDK) работает в отдельном sandbox-процессе, логически отделённом от процесса приложения.
-- **Limited Access** — прямого доступа к внутренним данным приложения (SharedPreferences, internal storage), его runtime permissions и device identifiers нет; SDK оперирует тем, что предоставляет хост и разрешённые системные API.
-- **Binder IPC** — вся коммуникация SDK с приложением и обратно идёт через Binder-интерфейсы, предоставленные SDK Runtime.
-- **Resource Quotas** — ограничения на CPU, память, сеть и др. для снижения влияния SDK на приложение и систему.
-- **Privacy Protection** — SDK не видит стабильные device IDs и чувствительные данные, если их явно не проксирует приложение в допустимой форме.
+- **Process Isolation** — SDK выполняются в отдельном sandbox-процессе, управляемом ОС и логически отделённом от процесса приложения. Один sandbox-процесс на приложение может обслуживать несколько SDK, при этом SDK изолированы логически и через предоставленные интерфейсы.
+- **Limited Access** — прямого доступа к внутренним данным приложения (`SharedPreferences`, internal storage), его runtime permissions и стабильным идентификаторам устройства нет; SDK оперирует тем, что предоставляет хост и разрешённые системные API/Privacy Sandbox API.
+- **Binder IPC** — вся коммуникация SDK с приложением и обратно идёт через Binder-интерфейсы, предоставленные SDK Runtime (например, через `SdkSandboxManager` и `SandboxedSdk` интерфейсы).
+- **Resource Quotas** — система ограничивает использование CPU, памяти, сети и др. sandbox-процессом, чтобы снизить влияние SDK на приложение и систему.
+- **Privacy Protection** — SDK не видит стабильные device IDs и чувствительные данные, если они не переданы явно и в соответствии с политиками; идентификаторы и сигналы медиируются Privacy Sandbox API.
 
 ```
-App Process <-> SDK Runtime Process <-> Network/Services
-     |                 |
-  App Code        SDK Code (isolated)
+App Process <-> SDK Runtime (Sandbox Process) <-> Network/Services
+     |                      |
+  App Code             SDK Code (isolated)
 ```
 
 **Ограничения SDK (упрощённо):**
-- Нет прямого доступа к хранилищу приложения (SharedPreferences, internal files) — данные должны приходить от хост-приложения или использовать разрешённые механизмы.
-- Нет доступа к device identifiers и сигналы обрабатываются в соответствии с Privacy Sandbox (ID ограничены / проксируются).
+- Нет прямого доступа к хранилищу приложения (`SharedPreferences`, internal files) — данные должны приходить от хост-приложения или использовать разрешённые механизмы (например, специфичные API Privacy Sandbox).
+- Нет прямого доступа к device identifiers; сигналы и идентификаторы ограничены или проксируются в соответствии с Privacy Sandbox.
 - Нет доступа к runtime permissions приложения и их результатам напрямую — права проверяет приложение и при необходимости передаёт данные SDK.
 - Нельзя напрямую управлять компонентами приложения (activities/services/broadcast receivers) из sandbox без участия хоста; взаимодействие делается через согласованные IPC-протоколы.
 - Нет произвольного доступа к другим приложениям.
 
-### Загрузка SDK В Sandbox
+### Требования
+
+**Функциональные:**
+- Изолировать выполнение сторонних SDK от хост-приложения.
+- Обеспечить контролируемое взаимодействие через стандартизированные IPC-интерфейсы.
+- Сохранить возможность SDK выполнять ключевые задачи (например, медиация рекламы, аналитика) без прямого доступа к чувствительным данным.
+- Поддерживать плавную миграцию существующих SDK с fallback на традиционную модель.
+
+**Нефункциональные:**
+- Гарантировать приватность пользователя (минимизация доступа к данным, отсутствие стабильных идентификаторов).
+- Обеспечить стабильность и предсказуемость: сбой SDK не должен ломать приложение.
+- Ограничить использование ресурсов SDK (CPU, память, сеть).
+- Свести к минимуму overhead IPC и влияния изоляции на UX.
+
+### Загрузка SDK в Sandbox
 
 ```kotlin
 class SdkRuntimeManager(private val context: Context) {
@@ -113,11 +138,11 @@ class SdkRuntimeManager(private val context: Context) {
 }
 ```
 
-Асинхронная загрузка через coroutines (поверх async API `loadSdk`)
-Корректное использование `Executor` и проверка доступности `SdkSandboxManager`
-`IBinder` как точка входа для IPC с SDK
+- Асинхронная загрузка через coroutines поверх async API `loadSdk`.
+- Корректное использование `Executor` и проверка доступности `SdkSandboxManager`.
+- `IBinder` как точка входа для IPC с SDK.
 
-### SDK Provider Implementation
+### Реализация SDK Provider
 
 ```kotlin
 // Sandbox SDK должен наследовать SandboxedSdkProvider
@@ -144,11 +169,11 @@ abstract class BaseSandboxedSdkProvider : SandboxedSdkProvider() {
 }
 ```
 
-Точка входа — `onLoadSdk()`
-IBinder-интерфейс (`ISdkApi`) для IPC с приложением
-Освобождение ресурсов в `beforeUnloadSdk()`
+- Точка входа — `onLoadSdk()`.
+- `IBinder`-интерфейс (`ISdkApi`) для IPC с приложением (AIDL-интерфейс условный и задаётся SDK-провайдером).
+- Освобождение ресурсов в `beforeUnloadSdk()`.
 
-### App-Side Integration
+### Интеграция на стороне приложения
 
 ```kotlin
 class SandboxedAdClient(
@@ -166,6 +191,7 @@ class SandboxedAdClient(
 
         sdkInterface = ISdkApi.Stub.asInterface(binder)
 
+        // Предполагается, что ISdkApi определяет метод initialize(Bundle): Bundle.
         val result = sdkInterface?.initialize(Bundle.EMPTY)
             ?: return Result.failure(IllegalStateException("SDK initialization failed"))
 
@@ -191,16 +217,17 @@ class SandboxedAdClient(
 }
 ```
 
-Использование AIDL-интерфейса через `Stub.asInterface()`
-`Bundle` как транспорт для данных через Binder
-Обработка ошибок и null-случаев через `Result`
+- Использование AIDL-интерфейса через `Stub.asInterface()`.
+- `Bundle` как транспорт для данных через Binder.
+- Обработка ошибок и null-случаев через `Result`.
+- Пример носит иллюстративный характер; конкретные методы AIDL-интерфейса определяются SDK.
 
-### Вызовы Миграции SDK
+### Вызовы миграции SDK
 
 **1. Архитектурные изменения:**
-- Переход на Binder IPC (вместо прямых in-process вызовов).
-- Сериализация данных через `Bundle`/parcelables.
-- Асинхронная модель взаимодействия практически обязательна на практике из-за IPC/latency и асинхронных API загрузки SDK.
+- Переход с прямых in-process вызовов на Binder IPC между приложением и SDK.
+- Сериализация данных через `Bundle`/`Parcelable` для IPC.
+- Асинхронная модель взаимодействия практически обязательна из-за IPC/latency и асинхронных API загрузки SDK.
 
 **2. Функциональные ограничения:**
 - Persistent storage — SDK не может самостоятельно писать в хранилище приложения; хост-приложение передаёт конфигурацию/кеш по согласованному протоколу.
@@ -219,6 +246,7 @@ class SdkMigrationManager(private val context: Context) {
     suspend fun initializeSdk(apiKey: String): SdkClient {
         return if (shouldUseSandboxedSdk()) {
             val runtimeManager = SdkRuntimeManager(context)
+            // Предполагается, что SandboxedAdClient и TraditionalAdClient реализуют общий интерфейс SdkClient.
             SandboxedAdClient(runtimeManager).apply { initialize(apiKey) }
         } else {
             TraditionalAdClient(context).apply { initialize(apiKey) }
@@ -227,11 +255,11 @@ class SdkMigrationManager(private val context: Context) {
 }
 ```
 
-Проверка наличия SDK Runtime перед использованием
-Fallback к традиционному in-app SDK при отсутствии Sandbox
-Единый интерфейс (adapter) для хост-приложения
+- Проверка наличия SDK Runtime перед использованием.
+- Fallback к традиционному in-app SDK при отсутствии Sandbox.
+- Единый интерфейс (adapter) для хост-приложения предполагается и должен быть явно определён в реальной реализации.
 
-### Лучшие Практики
+### Лучшие практики
 
 **Миграция:**
 - Постепенная стратегия с fallback на традиционный SDK.
@@ -250,11 +278,11 @@ Fallback к традиционному in-app SDK при отсутствии Sa
 - Не передавать стабильные device identifiers и персональные данные без строгой необходимости и соответствия политике.
 
 **Ресурсы:**
-- Мониторинг использования CPU/memory/network SDK в sandbox (по доступным метрикам).
+- Понимать, что квоты и ограничения sandbox-процесса контролируются системой; учитывать их при проектировании SDK.
 - Освобождение ресурсов в `beforeUnloadSdk()` и при ошибках.
 - Тестирование на low-end устройствах и при ограничениях сети.
 
-### Распространённые Ошибки
+### Распространённые ошибки
 
 1. Передача чувствительных данных → нарушения приватности и политик.
    - Решение: минимизация и анонимизация данных, проверка против требований Privacy Sandbox.
@@ -275,29 +303,51 @@ Fallback к традиционному in-app SDK при отсутствии Sa
 
 ## Answer (EN)
 
-**SDK Runtime** is a Privacy Sandbox component (on Android 13+ and supported builds) that runs third-party SDKs in an isolated SDK sandbox process to restrict their access to app and user data. The SDK can use only a constrained subset of platform APIs and data explicitly provided by the host app. Communication with the host app and other components occurs through Binder IPC under strict controls.
+**SDK Runtime** is a Privacy Sandbox component (on Android 13+ and supported builds) that runs third-party SDKs inside a dedicated sandbox process managed by the OS and logically separated from the host app process. Within this process, SDKs execute in an isolated environment and can use only a constrained subset of platform APIs and data explicitly provided by the host app. Communication with the host app and other components occurs through Binder IPC under strict controls.
 
+## Short Version
+- Isolates third-party SDKs into a dedicated sandbox process.
+- Restricts access to app data and device identifiers; SDK sees only host-provided data and Privacy Sandbox APIs.
+- All interactions go through controlled Binder IPC.
+- Provides strong privacy guarantees and resource quotas.
+- Migration requires IPC-based contracts, handling storage/permission constraints, and supporting fallbacks.
+
+## Detailed Version
 ### SDK Runtime Architecture
 
 **Key Concepts:**
-- **Process Isolation** — each SDK (or group of SDKs) runs in a separate sandbox process, logically separated from the app process.
-- **Limited Access** — no direct access to the host app's internal data (SharedPreferences, internal storage), its runtime permissions, or stable device identifiers; the SDK relies on host-provided data and allowed system APIs.
-- **Binder IPC** — all communication between the SDK and the app uses Binder interfaces exposed through the SDK Runtime.
-- **Resource Quotas** — CPU, memory, and network usage are constrained to limit the SDK's impact on the app and system.
-- **Privacy Protection** — SDKs do not see stable device IDs or sensitive data unless explicitly (and compliantly) proxied by the host.
+- **Process Isolation** — SDKs run in a dedicated sandbox process managed by the system and logically separated from the app process. A single sandbox process per app can host multiple SDKs, with isolation enforced via runtime boundaries and IPC.
+- **Limited Access** — no direct access to the host app's internal data (`SharedPreferences`, internal storage), its runtime permissions, or stable device identifiers; the SDK relies on host-provided data, allowed system APIs, and Privacy Sandbox APIs.
+- **Binder IPC** — all communication between the SDK and the host app uses Binder interfaces exposed through SDK Runtime (for example via `SdkSandboxManager` and `SandboxedSdk` interfaces).
+- **Resource Quotas** — the system constrains CPU, memory, and network usage of the sandbox process to limit the SDKs' impact on the app and system.
+- **Privacy Protection** — SDKs do not see stable device IDs or sensitive data unless explicitly (and compliantly) proxied by the host; identifiers and signals are mediated by Privacy Sandbox mechanisms.
 
 ```
-App Process <-> SDK Runtime Process <-> Network/Services
-     |                 |
-  App Code        SDK Code (isolated)
+App Process <-> SDK Runtime (Sandbox Process) <-> Network/Services
+     |                      |
+  App Code             SDK Code (isolated)
 ```
 
 **SDK Limitations (simplified):**
-- No direct access to the host app's storage (SharedPreferences, internal files); data must come from the host app or allowed mechanisms.
-- No direct access to device identifiers; signals and identifiers are mediated/limited under Privacy Sandbox policies.
-- No direct access to the app's runtime permissions state; the app performs checks and passes only necessary data.
-- Cannot directly control app components (activities/services/broadcast receivers) from the sandbox without cooperation from the host; interactions are via explicit IPC contracts.
+- No direct access to the host app's storage (`SharedPreferences`, internal files); data must come from the host app or approved mechanisms (e.g., Privacy Sandbox APIs).
+- No direct access to device identifiers; identifiers and signals are scoped/mediated per Privacy Sandbox policies.
+- No direct access to the app's runtime permission state; the app performs checks and passes only necessary derived data.
+- Cannot directly control app components (activities/services/broadcast receivers) from the sandbox without host cooperation; interactions are via explicit IPC contracts.
 - No arbitrary access to other apps.
+
+### Requirements
+
+**Functional:**
+- Isolate third-party SDK execution from the host app.
+- Provide standardized IPC interfaces for host-SDK communication.
+- Allow SDKs to perform core tasks (e.g., ads, analytics) without direct access to sensitive data.
+- Support smooth migration of existing SDKs, including fallback to the legacy in-app model.
+
+**Non-functional:**
+- Strong user privacy guarantees (data minimization, scoped identifiers).
+- Stability: SDK crashes must not crash the host app.
+- Resource control for SDKs (CPU, memory, network).
+- Keep IPC overhead and UX impact minimal.
 
 ### Loading SDK in Sandbox
 
@@ -343,9 +393,9 @@ class SdkRuntimeManager(private val context: Context) {
 }
 ```
 
-Async loading using coroutines over the async `loadSdk` API
-Proper `Executor` usage and `SdkSandboxManager` availability check
-`IBinder` as the IPC entry point to the SDK
+- Async loading using coroutines over the async `loadSdk` API.
+- Proper `Executor` usage and `SdkSandboxManager` availability check.
+- `IBinder` as the IPC entry point to the SDK.
 
 ### SDK Provider Implementation
 
@@ -374,9 +424,9 @@ abstract class BaseSandboxedSdkProvider : SandboxedSdkProvider() {
 }
 ```
 
-Entry point via `onLoadSdk()`
-IBinder-based `ISdkApi` interface for IPC with the host app
-Cleanup in `beforeUnloadSdk()`
+- Entry point via `onLoadSdk()`.
+- IBinder-based `ISdkApi` interface for IPC with the host app (AIDL is illustrative and defined by the SDK provider).
+- Resource cleanup in `beforeUnloadSdk()`.
 
 ### App-Side Integration
 
@@ -396,6 +446,7 @@ class SandboxedAdClient(
 
         sdkInterface = ISdkApi.Stub.asInterface(binder)
 
+        // Assumes ISdkApi defines initialize(Bundle): Bundle.
         val result = sdkInterface?.initialize(Bundle.EMPTY)
             ?: return Result.failure(IllegalStateException("SDK initialization failed"))
 
@@ -421,21 +472,22 @@ class SandboxedAdClient(
 }
 ```
 
-Uses AIDL-generated interface via `Stub.asInterface()`
-Uses `Bundle` for cross-process data transfer
-Handles errors and nulls via `Result`
+- Uses an AIDL-generated interface via `Stub.asInterface()`.
+- Uses `Bundle` for cross-process data transfer.
+- Handles errors and nulls via `Result`.
+- Illustrative example; concrete AIDL methods are SDK-specific.
 
 ### SDK Migration Challenges
 
 **1. Architectural Changes:**
 - Switch from in-process calls to Binder IPC between app and SDK.
-- Serialize data via `Bundle`/parcelables for IPC.
-- Adopt an asynchronous interaction model in practice due to IPC latency and async `loadSdk`.
+- Serialize data via `Bundle`/`Parcelable` for IPC.
+- Adopt an asynchronous interaction model due to IPC latency and async `loadSdk` API.
 
 **2. Functional Limitations:**
-- Persistent storage — SDK cannot write directly to the app's storage; the app provides configuration/cache via agreed protocol.
+- Persistent storage — SDK cannot write directly to the app's storage; the host app provides configuration/cache via an explicit protocol.
 - Background execution — SDK work is constrained by the sandbox process; long-running/background tasks require coordination with the host app.
-- Direct permissions — SDK cannot request/use runtime permissions directly; the host app validates permissions and passes derived data only.
+- Direct permissions — SDK cannot request/use runtime permissions directly; the host app validates permissions and passes only derived/aggregated data.
 
 **3. Workarounds (via explicit host-SDK contracts):**
 
@@ -449,6 +501,7 @@ class SdkMigrationManager(private val context: Context) {
     suspend fun initializeSdk(apiKey: String): SdkClient {
         return if (shouldUseSandboxedSdk()) {
             val runtimeManager = SdkRuntimeManager(context)
+            // Assumes SandboxedAdClient and TraditionalAdClient implement a common SdkClient interface.
             SandboxedAdClient(runtimeManager).apply { initialize(apiKey) }
         } else {
             TraditionalAdClient(context).apply { initialize(apiKey) }
@@ -457,22 +510,22 @@ class SdkMigrationManager(private val context: Context) {
 }
 ```
 
-Feature detection before using SDK Runtime
-Fallback to traditional SDK when sandbox is unavailable
-Adapter-style unified interface for the app
+- Feature detection before using SDK Runtime.
+- Fallback to a traditional in-app SDK when sandbox is unavailable.
+- Unified adapter-style interface for the host app is implied and should be defined in real implementations.
 
 ### Best Practices
 
 **Migration:**
 - Use a gradual rollout strategy with a fallback to the traditional SDK.
-- Support both SDK variants during transition.
+- Support both SDK variants during the transition period.
 - Test across Android versions and Privacy Sandbox configurations.
 
 **Communication:**
 - Prefer lightweight, batched Binder calls.
-- Use efficient `Bundle` payloads (avoid large data transfers).
+- Optimize `Bundle` payloads (avoid large transfers).
 - Implement timeouts and robust error handling for IPC.
-- Avoid frequent synchronous calls that block the UI.
+- Avoid frequent synchronous calls that block the UI thread.
 
 **Privacy:**
 - Send only necessary, aggregated data.
@@ -480,20 +533,20 @@ Adapter-style unified interface for the app
 - Do not send stable device identifiers or personal data without strict necessity and policy compliance.
 
 **Resources:**
-- Monitor SDK CPU/memory/network usage where possible.
+- Understand that sandbox process quotas and limits are enforced by the system; design SDK behavior with these constraints in mind.
 - Release resources in `beforeUnloadSdk()` and on failure paths.
-- Test behavior on low-end devices and under constrained conditions.
+- Test behavior on low-end devices and under constrained network conditions.
 
 ### Common Pitfalls
 
 1. Passing sensitive data → privacy/policy violations.
    - Solution: minimize/anonymize data; align with Privacy Sandbox requirements.
 
-2. Ignoring `loadSdk` failures → crashes or silent SDK breakage.
+2. Ignoring `loadSdk` failures → crashes or silent SDK malfunction.
    - Solution: use `Result`, explicit error handling, and fallbacks.
 
 3. Overly chatty or heavy Binder calls → performance issues.
-   - Solution: async patterns, batching, lightweight payloads.
+   - Solution: batching, async patterns, lightweight payloads.
 
 4. No fallback path → broken behavior on devices without SDK Runtime.
    - Solution: feature detection and traditional SDK fallback.
@@ -523,18 +576,19 @@ Adapter-style unified interface for the app
 
 ## Ссылки (RU)
 
-- [Android Privacy Sandbox](https://developer.android.com/design-for-safety/privacy-sandbox)
-- [SDK Runtime Overview](https://developer.android.com/design-for-safety/privacy-sandbox/sdk-runtime)
-- [SdkSandboxManager API](https://developer.android.com/reference/android/app/sdksandbox/SdkSandboxManager)
+- https://developer.android.com/design-for-safety/privacy-sandbox
+- https://developer.android.com/design-for-safety/privacy-sandbox/sdk-runtime
+- https://developer.android.com/reference/android/app/sdksandbox/SdkSandboxManager
 
 ## References
 
-- [Android Privacy Sandbox](https://developer.android.com/design-for-safety/privacy-sandbox)
-- [SDK Runtime Overview](https://developer.android.com/design-for-safety/privacy-sandbox/sdk-runtime)
-- [SdkSandboxManager API](https://developer.android.com/reference/android/app/sdksandbox/SdkSandboxManager)
+- https://developer.android.com/design-for-safety/privacy-sandbox
+- https://developer.android.com/design-for-safety/privacy-sandbox/sdk-runtime
+- https://developer.android.com/reference/android/app/sdksandbox/SdkSandboxManager
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
+- [[c-android]]
 - [[c-permissions]]

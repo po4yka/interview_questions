@@ -15,11 +15,16 @@ tags: ["async", "builders", "coroutines", "difficulty/medium", "kotlin", "launch
 description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-dispatcher-performance--kotlin--hard]
+
 ---
 
 # Вопрос (RU)
 
 > Сравните основные builders корутин в Kotlin: `launch`, `async`, `runBlocking`, `withContext`, `coroutineScope`, `supervisorScope` — по возвращаемым типам, блокирующему/приостанавливающему поведению, обработке исключений, структурной конкуррентности и основным вариантам использования.
+
+# Question (EN)
+
+> Compare the main Kotlin coroutine builders: `launch`, `async`, `runBlocking`, `withContext`, `coroutineScope`, and `supervisorScope` in terms of return types, blocking vs suspending behavior, exception handling, structured concurrency semantics, and typical use cases.
 
 ## Ответ (RU)
 
@@ -144,6 +149,7 @@ fun asyncExamples() = runBlocking {
         async { fastOperation() }.onAwait { "Fast: $it" }
     }
     println("Fastest: $fastest")
+    // Обратите внимание: "проигравшую" async-корутину нужно при необходимости отменить явно.
 }
 
 suspend fun computeValue1(): Int {
@@ -191,6 +197,7 @@ suspend fun fastOperation(): String {
 - Используйте `async` для конкурентных задач, от которых нужен результат.
 - Исключения всплывают только при `await()`, поэтому важно не забывать вызывать `await()`.
 - При множественных `Deferred` порядок вызова `await()` влияет на то, где и когда вы увидите ошибку/блокировку.
+- В шаблонах гонки помните про отмену несостоявшихся задач.
 
 ### `runBlocking` — блокирующий мост
 
@@ -216,7 +223,7 @@ fun runBlockingExamples() {
     //     println("Hello,")
     // }
 
-    // Кейc 2: юнит-тесты
+    // Кейc 2: юнит-тесты (для реальных проектов предпочтителен runTest из kotlinx-coroutines-test)
     @Test
     fun testCoroutine() = runBlocking {
         val result = async {
@@ -286,43 +293,45 @@ fun withContextExamples() = runBlocking {
         "withContext result"
     }
     println("Result: $result")
+}
 
-    // Кейc 1: I/O операции
-    suspend fun loadUser(id: String): User = withContext(Dispatchers.IO) {
-        delay(500)
-        User(id, "John")
+// Кейc 1: I/O операции
+suspend fun loadUser(id: String): User = withContext(Dispatchers.IO) {
+    delay(500)
+    User(id, "John")
+}
+
+// Кейc 2: CPU-bound операции
+suspend fun processImage(image: ByteArray): ByteArray =
+    withContext(Dispatchers.Default) {
+        delay(1000)
+        image
     }
 
-    // Кейc 2: CPU-bound операции
-    suspend fun processImage(image: ByteArray): ByteArray =
-        withContext(Dispatchers.Default) {
-            delay(1000)
-            image
-        }
-
-    // Кейc 3: последовательные шаги с переключением dispatcher
-    suspend fun loadAndProcess(id: String): ProcessedUser {
-        val user = withContext(Dispatchers.IO) {
-            loadUserFromDb(id)
-        }
-
-        val processed = withContext(Dispatchers.Default) {
-            processUser(user)
-        }
-
-        withContext(Dispatchers.IO) {
-            saveProcessedUser(processed)
-        }
-
-        return processed
+// Кейc 3: последовательные шаги с переключением dispatcher
+suspend fun loadAndProcess(id: String): ProcessedUser {
+    val user = withContext(Dispatchers.IO) {
+        loadUserFromDb(id)
     }
 
-    // Кейc 4: изменение контекста
-    withContext(CoroutineName("MyCoroutine")) {
-        println("Name: ${coroutineContext[CoroutineName]}")
+    val processed = withContext(Dispatchers.Default) {
+        processUser(user)
     }
 
-    // Предпочтительнее, чем `async`+`await` для одиночной операции с результатом
+    withContext(Dispatchers.IO) {
+        saveProcessedUser(processed)
+    }
+
+    return processed
+}
+
+// Кейc 4: изменение контекста
+suspend fun withNamedContext() = withContext(CoroutineName("MyCoroutine")) {
+    println("Name: ${'$'}{coroutineContext[CoroutineName]}")
+}
+
+// Предпочтительнее, чем `async`+`await` для одиночной операции с результатом
+suspend fun loadTwo() {
     val data1 = withContext(Dispatchers.IO) { fetchData1() }
     val data2 = withContext(Dispatchers.IO) { fetchData2() }
 }
@@ -332,7 +341,7 @@ data class ProcessedUser(val id: String, val name: String, val processed: Boolea
 
 suspend fun loadUserFromDb(id: String): User {
     delay(300)
-    return User(id, "User $id")
+    return User(id, "User ${'$'}id")
 }
 
 suspend fun processUser(user: User): ProcessedUser {
@@ -375,24 +384,26 @@ fun coroutineScopeExamples() = runBlocking {
         deferred1.await() + deferred2.await()
     }
     println("Result: $result")
+}
 
-    // Кейc 1: параллельная работа внутри suspend-функции
-    suspend fun loadUserData(userId: String): UserData = coroutineScope {
-        val user = async { loadUser(userId) }
-        val posts = async { loadPosts(userId) }
-        val friends = async { loadFriends(userId) }
+// Кейc 1: параллельная работа внутри suspend-функции
+suspend fun loadUserData(userId: String): UserData = coroutineScope {
+    val user = async { loadUser(userId) }
+    val posts = async { loadPosts(userId) }
+    val friends = async { loadFriends(userId) }
 
-        UserData(user.await(), posts.await(), friends.await())
-    }
+    UserData(user.await(), posts.await(), friends.await())
+}
 
-    // Кейc 2: все задачи либо завершаются успешно, либо вся группа падает
-    suspend fun processAllItems(items: List<String>) = coroutineScope {
-        items.map { item ->
-            async { processItem(item) }
-        }.awaitAll()
-    }
+// Кейc 2: все задачи либо завершаются успешно, либо вся группа падает
+suspend fun processAllItems(items: List<String>) = coroutineScope {
+    items.map { item ->
+        async { processItem(item) }
+    }.awaitAll()
+}
 
-    // Кейc 3: обработка исключений — сбой одного отменяет остальных
+// Кейc 3: обработка исключений — сбой одного отменяет остальных
+suspend fun failingScopeExample() {
     try {
         coroutineScope {
             launch {
@@ -406,23 +417,26 @@ fun coroutineScopeExamples() = runBlocking {
             }
         }
     } catch (e: RuntimeException) {
-        println("Caught exception: ${e.message}")
+        println("Caught exception: ${'$'}{e.message}")
     }
+}
 
-    // Кейc 4: распространение отмены
-    suspend fun cancellableOperation() = coroutineScope {
-        launch {
-            repeat(5) {
-                println("Working $it")
-                delay(500)
-            }
-        }
-        // scope ждёт всех детей или отмены
-    }
-
-    // Сравнение с launch
+// Кейc 4: распространение отмены
+suspend fun cancellableOperation() = coroutineScope {
     launch {
-        // Родитель (runBlocking) не ждёт завершения тела автоматически
+        repeat(5) {
+            println("Working ${'$'}it")
+            delay(500)
+        }
+    }
+    // scope ждёт всех детей или отмены
+}
+
+// Сравнение с launch
+suspend fun compareLaunchAndScope() = runBlocking {
+    launch {
+        // Родитель (runBlocking) не ждёт завершения тела автоматически,
+        // он продолжит после запуска этой корутины.
         async { delay(1000) }
         println("Parent continues")
     }
@@ -442,11 +456,6 @@ data class UserData(
     val friends: List<String>
 )
 
-suspend fun loadUser(userId: String): User {
-    delay(300)
-    return User(userId, "User $userId")
-}
-
 suspend fun loadPosts(userId: String): List<String> {
     delay(400)
     return listOf("Post1", "Post2")
@@ -459,7 +468,7 @@ suspend fun loadFriends(userId: String): List<String> {
 
 suspend fun processItem(item: String): String {
     delay(100)
-    return "processed: $item"
+    return "processed: ${'$'}item"
 }
 ```
 
@@ -492,76 +501,78 @@ fun supervisorScopeExamples() = runBlocking {
             println("Child 3 completed") // всё ещё выполнится
         }
 
+        // Если исключение ребёнка не перехвачено, оно будет репортиться через handler,
+        // но supervisorScope не отменит остальных детей по этой причине.
         delay(1500)
     }
+}
 
-    // Кейc 1: независимые виджеты дашборда
-    suspend fun loadDashboard(): Dashboard = supervisorScope {
-        val weather = async {
-            try {
-                loadWeatherWidget()
-            } catch (e: Exception) {
-                null
-            }
-        }
-
-        val news = async {
-            try {
-                loadNewsWidget()
-            } catch (e: Exception) {
-                null
-            }
-        }
-
-        val stocks = async {
-            try {
-                loadStocksWidget()
-            } catch (e: Exception) {
-                null
-            }
-        }
-
-        Dashboard(weather.await(), news.await(), stocks.await())
-    }
-
-    // Кейc 2: частичный сбор результатов
-    suspend fun fetchPartialResults(): List<String> = supervisorScope {
-        val jobs = List(5) { index ->
-            async {
-                if (index == 2) throw Exception("Failed")
-                "Result $index"
-            }
-        }
-
-        jobs.mapNotNull { job ->
-            try {
-                job.await()
-            } catch (e: Exception) {
-                null
-            }
+// Кейc 1: независимые виджеты дашборда
+suspend fun loadDashboard(): Dashboard = supervisorScope {
+    val weather = async {
+        try {
+            loadWeatherWidget()
+        } catch (e: Exception) {
+            null
         }
     }
 
-    // Кейc 3: независимые фоновые задачи
-    suspend fun startBackgroundTasks() = supervisorScope {
-        launch {
-            try {
-                syncUsers()
-            } catch (e: Exception) {
-                logError("User sync failed", e)
-            }
+    val news = async {
+        try {
+            loadNewsWidget()
+        } catch (e: Exception) {
+            null
         }
-
-        launch {
-            try {
-                syncPosts()
-            } catch (e: Exception) {
-                logError("Post sync failed", e)
-            }
-        }
-
-        delay(5000)
     }
+
+    val stocks = async {
+        try {
+            loadStocksWidget()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    Dashboard(weather.await(), news.await(), stocks.await())
+}
+
+// Кейc 2: частичный сбор результатов
+suspend fun fetchPartialResults(): List<String> = supervisorScope {
+    val jobs = List(5) { index ->
+        async {
+            if (index == 2) throw Exception("Failed")
+            "Result ${'$'}index"
+        }
+    }
+
+    jobs.mapNotNull { job ->
+        try {
+            job.await()
+        } catch (e: Exception) {
+            null
+        }
+    }
+}
+
+// Кейc 3: независимые фоновые задачи
+suspend fun startBackgroundTasks() = supervisorScope {
+    launch {
+        try {
+            syncUsers()
+        } catch (e: Exception) {
+            logError("User sync failed", e)
+        }
+    }
+
+    launch {
+        try {
+            syncPosts()
+        } catch (e: Exception) {
+            logError("Post sync failed", e)
+        }
+    }
+
+    delay(5000)
 }
 
 data class Dashboard(
@@ -582,7 +593,7 @@ suspend fun loadNewsWidget(): String {
 
 suspend fun loadStocksWidget(): String {
     delay(200)
-    return "AAPL: $150"
+    return "AAPL: ${'$'}150"
 }
 
 suspend fun syncUsers() {
@@ -596,13 +607,13 @@ suspend fun syncPosts() {
 }
 
 fun logError(message: String, error: Exception) {
-    println("ERROR: $message - ${error.message}")
+    println("ERROR: ${'$'}message - ${'$'}{error.message}")
 }
 ```
 
 Ключевые моменты:
 - Используйте, когда сбой одной задачи не должен срывать остальные.
-- Тело `supervisorScope` по-прежнему подчиняется обычным правилам: необработанное исключение в теле завершает scope.
+- Тело `supervisorScope` по-прежнему подчиняется обычным правилам: необработанное исключение в теле завершает scope; необработанные исключения детей не приводят к отмене других детей.
 
 ### Комплексные примеры сравнения
 
@@ -645,7 +656,7 @@ fun comprehensiveComparison() = runBlocking {
 
     // `launch`: необработанное исключение идёт в родителя/handler
     val exceptionHandler = CoroutineExceptionHandler { _, e ->
-        println("Caught in handler: ${e.message}")
+        println("Caught in handler: ${'$'}{e.message}")
     }
 
     CoroutineScope(Dispatchers.Default + exceptionHandler).launch {
@@ -658,7 +669,7 @@ fun comprehensiveComparison() = runBlocking {
             throw RuntimeException("async exception")
         }.await()
     } catch (e: RuntimeException) {
-        println("Caught on await: ${e.message}")
+        println("Caught on await: ${'$'}{e.message}")
     }
 
     // `withContext`: исключение сразу возвращается вызывающему
@@ -667,7 +678,7 @@ fun comprehensiveComparison() = runBlocking {
             throw RuntimeException("withContext exception")
         }
     } catch (e: RuntimeException) {
-        println("Caught from withContext: ${e.message}")
+        println("Caught from withContext: ${'$'}{e.message}")
     }
 
     // `coroutineScope`: отменяет всех детей и пробрасывает исключение
@@ -679,13 +690,14 @@ fun comprehensiveComparison() = runBlocking {
             delay(1000)
         }
     } catch (e: RuntimeException) {
-        println("Caught from coroutineScope: ${e.message}")
+        println("Caught from coroutineScope: ${'$'}{e.message}")
     }
 
-    // `supervisorScope`: дети независимы; ошибка в теле завершает scope
+    // `supervisorScope`: дети независимы; ошибка в теле завершает scope,
+    // ошибки детей не отменяют остальных детей, но будут репортиться.
     supervisorScope {
         launch {
-            throw RuntimeException("supervisorScope exception")
+            throw RuntimeException("supervisorScope child exception")
         }
         delay(500)
         println("supervisorScope continues")
@@ -698,18 +710,18 @@ fun comprehensiveComparison() = runBlocking {
         coroutineScope {
             val a = async { delay(1000); 1 }
             val b = async { delay(1000); 2 }
-            println("Sum: ${a.await() + b.await()}")
+            println("Sum: ${'$'}{a.await() + b.await()}")
         }
     }
-    println("Parallel: $parallelTime ms")
+    println("Parallel: ${'$'}parallelTime ms")
 
     // Последовательно с `withContext`
     val sequentialTime = measureTimeMillis {
         val a = withContext(Dispatchers.Default) { delay(1000); 1 }
         val b = withContext(Dispatchers.Default) { delay(1000); 2 }
-        println("Sum: ${a + b}")
+        println("Sum: ${'$'}{a + b}")
     }
-    println("Sequential: $sequentialTime ms")
+    println("Sequential: ${'$'}sequentialTime ms")
 
     delay(2000)
 }
@@ -725,14 +737,14 @@ fun performanceComparison() = runBlocking {
 
     val iterations = 10000
 
-    // `launch` overhead
+    // `launch` overhead (количественно зависит от среды)
     val launchTime = measureTimeMillis {
         val jobs = List(iterations) {
             launch { }
         }
         jobs.forEach { it.join() }
     }
-    println("launch x$iterations: $launchTime ms")
+    println("launch x${'$'}iterations: ${'$'}launchTime ms")
 
     // `async` overhead
     val asyncTime = measureTimeMillis {
@@ -741,7 +753,7 @@ fun performanceComparison() = runBlocking {
         }
         deferreds.forEach { it.await() }
     }
-    println("async x$iterations: $asyncTime ms")
+    println("async x${'$'}iterations: ${'$'}asyncTime ms")
 
     // `withContext` overhead
     val withContextTime = measureTimeMillis {
@@ -749,7 +761,7 @@ fun performanceComparison() = runBlocking {
             withContext(Dispatchers.Default) { 42 }
         }
     }
-    println("withContext x$iterations: $withContextTime ms")
+    println("withContext x${'$'}iterations: ${'$'}withContextTime ms")
 
     // `coroutineScope` overhead
     val coroutineScopeTime = measureTimeMillis {
@@ -757,73 +769,17 @@ fun performanceComparison() = runBlocking {
             coroutineScope { 42 }
         }
     }
-    println("coroutineScope x$iterations: $coroutineScopeTime ms")
+    println("coroutineScope x${'$'}iterations: ${'$'}coroutineScopeTime ms")
 
     println("\n=== Memory Allocation (qualitative) ===")
 
     // `launch`: выделяет `Job`
     // `async`: выделяет `Deferred` + хранение результата
     // `withContext`: использует существующий scope, не возвращает `Job`
-    // `coroutineScope`: минимальные дополнительные аллокации
+    // `coroutineScope`: использует structured concurrency; накладные расходы обычно малы
+    // Все измерения зависят от конкретной среды и носят иллюстративный характер.
 }
 ```
-
-### Матрица принятия решений
-
-```kotlin
-// `launch`:
-// - fire-and-forget
-// - результат не нужен
-// - старт без ожидания
-launch { updateCache() }
-
-// `async`:
-// - нужен результат конкурентной операции
-// - несколько параллельных задач
-// - можно дождаться позже
-val result = async { fetchData() }.await()
-
-// `runBlocking`:
-// - main-функция
-// - юнит-тесты
-// - мост между блокирующим и suspend-кодом
-// - НЕ внутри активных корутин в продакшене
-fun main() = runBlocking { }
-
-// `withContext`:
-// - переключение dispatcher
-// - последовательная операция с результатом
-// - эффективнее, чем `async` + `await` для одной задачи
-val data = withContext(Dispatchers.IO) { loadFromDb() }
-
-// `coroutineScope`:
-// - структурная конкуррентность
-// - все дочерние задачи должны завершиться или упасть вместе
-suspend fun loadAll() = coroutineScope {
-    // все дочерние корутины либо успешны, либо отменены
-}
-
-// `supervisorScope`:
-// - независимые дочерние задачи
-// - частичные результаты приемлемы
-suspend fun loadPartial() = supervisorScope {
-    // сбой одной задачи не отменяет остальные
-}
-```
-
-### Лучшие практики
-
-1. Выбирайте строитель, соответствующий задаче (`launch` для побочных эффектов, `async` для результатов, `withContext` для смены контекста).
-2. Избегайте `runBlocking` в асинхронном/UI коде; используйте только на границе систем.
-3. Для одиночных операций с результатом предпочитайте `withContext` вместо `async`.
-4. Используйте `coroutineScope` для строгой структурной конкуррентности.
-5. Используйте `supervisorScope` там, где допустим частичный успех и независимые сбои.
-
----
-
-# Question (EN)
-
-> Compare the main Kotlin coroutine builders: `launch`, `async`, `runBlocking`, `withContext`, `coroutineScope`, and `supervisorScope` in terms of return types, blocking vs suspending behavior, exception handling, structured concurrency semantics, and typical use cases.
 
 ## Answer (EN)
 
@@ -856,8 +812,7 @@ fun launchExamples() = runBlocking {
 
     println("launch returned immediately")
 
-    // Does not suspend parent automatically
-    // Must explicitly join if waiting is needed
+    // Does not suspend parent automatically; join explicitly when needed
     job.join()
 
     // Use case 1: Fire-and-forget operations
@@ -943,12 +898,13 @@ fun asyncExamples() = runBlocking {
         comments.await()
     )
 
-    // Use case 3: Race condition (first to complete)
+    // Use case 3: Race (first to complete wins)
     val fastest = select<String> {
         async { slowOperation() }.onAwait { "Slow: $it" }
         async { fastOperation() }.onAwait { "Fast: $it" }
     }
     println("Fastest: $fastest")
+    // Note: the "losing" async should be cancelled if you no longer need it.
 }
 
 suspend fun computeValue1(): Int {
@@ -994,8 +950,9 @@ suspend fun fastOperation(): String {
 
 Key points:
 - Use `async` for concurrent tasks that produce a result.
-- Exceptions surface when you call `await()`.
-- Ordering of `await()` affects where/when failures or suspensions occur.
+- Exceptions surface when you call `await()`; don’t forget to await.
+- Ordering of `await()` calls controls where/when suspension and failures appear.
+- In race patterns, remember to cancel the losers.
 
 ### runBlocking - Blocking Bridge
 
@@ -1021,7 +978,7 @@ fun runBlockingExamples() {
     //     println("Hello,")
     // }
 
-    // Use case 2: Unit tests
+    // Use case 2: Unit tests (in modern code prefer runTest from kotlinx-coroutines-test)
     @Test
     fun testCoroutine() = runBlocking {
         val result = async {
@@ -1074,8 +1031,8 @@ fun assertEquals(expected: Int, actual: Int) {}
 ```
 
 Key points:
-- Blocks the thread; only for boundaries (main, tests, legacy interop).
-- Never nest `runBlocking` inside coroutines in production code.
+- Blocks the thread; use only at boundaries (main, tests, legacy interop).
+- Do not nest `runBlocking` inside existing coroutines in production code.
 
 ### withContext - Dispatcher Switching
 
@@ -1091,43 +1048,45 @@ fun withContextExamples() = runBlocking {
         "withContext result"
     }
     println("Result: $result")
+}
 
-    // Use case 1: I/O operations
-    suspend fun loadUser(id: String): User = withContext(Dispatchers.IO) {
-        delay(500)
-        User(id, "John")
+// Use case 1: I/O operations
+suspend fun loadUser(id: String): User = withContext(Dispatchers.IO) {
+    delay(500)
+    User(id, "John")
+}
+
+// Use case 2: CPU-intensive operations
+suspend fun processImage(image: ByteArray): ByteArray =
+    withContext(Dispatchers.Default) {
+        delay(1000)
+        image
     }
 
-    // Use case 2: CPU-intensive operations
-    suspend fun processImage(image: ByteArray): ByteArray =
-        withContext(Dispatchers.Default) {
-            delay(1000)
-            image
-        }
-
-    // Use case 3: Sequential operations with dispatcher switching
-    suspend fun loadAndProcess(id: String): ProcessedUser {
-        val user = withContext(Dispatchers.IO) {
-            loadUserFromDb(id)
-        }
-
-        val processed = withContext(Dispatchers.Default) {
-            processUser(user)
-        }
-
-        withContext(Dispatchers.IO) {
-            saveProcessedUser(processed)
-        }
-
-        return processed
+// Use case 3: Sequential operations with dispatcher switching
+suspend fun loadAndProcess(id: String): ProcessedUser {
+    val user = withContext(Dispatchers.IO) {
+        loadUserFromDb(id)
     }
 
-    // Use case 4: Context modification
-    withContext(CoroutineName("MyCoroutine")) {
-        println("Name: ${coroutineContext[CoroutineName]}")
+    val processed = withContext(Dispatchers.Default) {
+        processUser(user)
     }
 
-    // Prefer over async + await for a single operation that returns a result
+    withContext(Dispatchers.IO) {
+        saveProcessedUser(processed)
+    }
+
+    return processed
+}
+
+// Use case 4: Context modification
+suspend fun withNamedContext() = withContext(CoroutineName("MyCoroutine")) {
+    println("Name: ${'$'}{coroutineContext[CoroutineName]}")
+}
+
+// Prefer over async + await for a single operation that returns a result
+suspend fun loadTwo() {
     val data1 = withContext(Dispatchers.IO) { fetchData1() }
     val data2 = withContext(Dispatchers.IO) { fetchData2() }
 }
@@ -1137,7 +1096,7 @@ data class ProcessedUser(val id: String, val name: String, val processed: Boolea
 
 suspend fun loadUserFromDb(id: String): User {
     delay(300)
-    return User(id, "User $id")
+    return User(id, "User ${'$'}id")
 }
 
 suspend fun processUser(user: User): ProcessedUser {
@@ -1180,24 +1139,26 @@ fun coroutineScopeExamples() = runBlocking {
         deferred1.await() + deferred2.await()
     }
     println("Result: $result")
+}
 
-    // Use case 1: Creating parallel operations within suspend function
-    suspend fun loadUserData(userId: String): UserData = coroutineScope {
-        val user = async { loadUser(userId) }
-        val posts = async { loadPosts(userId) }
-        val friends = async { loadFriends(userId) }
+// Use case 1: Creating parallel operations within a suspend function
+suspend fun loadUserData(userId: String): UserData = coroutineScope {
+    val user = async { loadUser(userId) }
+    val posts = async { loadPosts(userId) }
+    val friends = async { loadFriends(userId) }
 
-        UserData(user.await(), posts.await(), friends.await())
-    }
+    UserData(user.await(), posts.await(), friends.await())
+}
 
-    // Use case 2: All children must succeed or fail as a group
-    suspend fun processAllItems(items: List<String>) = coroutineScope {
-        items.map { item ->
-            async { processItem(item) }
-        }.awaitAll()
-    }
+// Use case 2: All children must succeed or fail as a group
+suspend fun processAllItems(items: List<String>) = coroutineScope {
+    items.map { item ->
+        async { processItem(item) }
+    }.awaitAll()
+}
 
-    // Use case 3: Exception handling - failure cancels siblings
+// Use case 3: Exception handling - failure cancels siblings
+suspend fun failingScopeExample() {
     try {
         coroutineScope {
             launch {
@@ -1211,29 +1172,31 @@ fun coroutineScopeExamples() = runBlocking {
             }
         }
     } catch (e: RuntimeException) {
-        println("Caught exception: ${e.message}")
+        println("Caught exception: ${'$'}{e.message}")
     }
+}
 
-    // Use case 4: Cancellation propagation
-    suspend fun cancellableOperation() = coroutineScope {
-        launch {
-            repeat(5) {
-                println("Working $it")
-                delay(500)
-            }
-        }
-        // Scope waits for all children or cancellation
-    }
-
-    // Comparison with launch
+// Use case 4: Cancellation propagation
+suspend fun cancellableOperation() = coroutineScope {
     launch {
-        // Parent (runBlocking) doesn't wait for this coroutine body to finish
+        repeat(5) {
+            println("Working ${'$'}it")
+            delay(500)
+        }
+    }
+    // Scope waits for all children or cancellation
+}
+
+// Comparison with launch
+suspend fun compareLaunchAndScope() = runBlocking {
+    launch {
+        // Parent (runBlocking) does not wait for this body to finish.
         async { delay(1000) }
         println("Parent continues")
     }
 
     coroutineScope {
-        // Parent suspends until children complete
+        // Parent suspends until children complete.
         async { delay(1000) }
         println("After child completes")
     }
@@ -1247,11 +1210,6 @@ data class UserData(
     val friends: List<String>
 )
 
-suspend fun loadUser(userId: String): User {
-    delay(300)
-    return User(userId, "User $userId")
-}
-
 suspend fun loadPosts(userId: String): List<String> {
     delay(400)
     return listOf("Post1", "Post2")
@@ -1264,7 +1222,7 @@ suspend fun loadFriends(userId: String): List<String> {
 
 suspend fun processItem(item: String): String {
     delay(100)
-    return "processed: $item"
+    return "processed: ${'$'}item"
 }
 ```
 
@@ -1280,7 +1238,7 @@ import kotlinx.coroutines.*
 fun supervisorScopeExamples() = runBlocking {
     println("=== supervisorScope ===")
 
-    // Children fail independently: failure of one child does not cancel others
+    // Children are independent: failure of one does not cancel others
     supervisorScope {
         launch {
             delay(500)
@@ -1297,76 +1255,77 @@ fun supervisorScopeExamples() = runBlocking {
             println("Child 3 completed") // Still executes
         }
 
+        // Unhandled child exception is reported via handler, but does not cancel siblings.
         delay(1500)
     }
+}
 
-    // Use case 1: Loading independent dashboard widgets
-    suspend fun loadDashboard(): Dashboard = supervisorScope {
-        val weather = async {
-            try {
-                loadWeatherWidget()
-            } catch (e: Exception) {
-                null // Widget failed, return null
-            }
-        }
-
-        val news = async {
-            try {
-                loadNewsWidget()
-            } catch (e: Exception) {
-                null
-            }
-        }
-
-        val stocks = async {
-            try {
-                loadStocksWidget()
-            } catch (e: Exception) {
-                null
-            }
-        }
-
-        Dashboard(weather.await(), news.await(), stocks.await())
-    }
-
-    // Use case 2: Partial results collection
-    suspend fun fetchPartialResults(): List<String> = supervisorScope {
-        val jobs = List(5) { index ->
-            async {
-                if (index == 2) throw Exception("Failed")
-                "Result $index"
-            }
-        }
-
-        jobs.mapNotNull { job ->
-            try {
-                job.await()
-            } catch (e: Exception) {
-                null
-            }
+// Use case 1: Loading independent dashboard widgets
+suspend fun loadDashboard(): Dashboard = supervisorScope {
+    val weather = async {
+        try {
+            loadWeatherWidget()
+        } catch (e: Exception) {
+            null // Widget failed, return null
         }
     }
 
-    // Use case 3: Independent background tasks
-    suspend fun startBackgroundTasks() = supervisorScope {
-        launch {
-            try {
-                syncUsers()
-            } catch (e: Exception) {
-                logError("User sync failed", e)
-            }
+    val news = async {
+        try {
+            loadNewsWidget()
+        } catch (e: Exception) {
+            null
         }
-
-        launch {
-            try {
-                syncPosts()
-            } catch (e: Exception) {
-                logError("Post sync failed", e)
-            }
-        }
-
-        delay(5000) // Let tasks run
     }
+
+    val stocks = async {
+        try {
+            loadStocksWidget()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    Dashboard(weather.await(), news.await(), stocks.await())
+}
+
+// Use case 2: Partial results collection
+suspend fun fetchPartialResults(): List<String> = supervisorScope {
+    val jobs = List(5) { index ->
+        async {
+            if (index == 2) throw Exception("Failed")
+            "Result ${'$'}index"
+        }
+    }
+
+    jobs.mapNotNull { job ->
+        try {
+            job.await()
+        } catch (e: Exception) {
+            null
+        }
+    }
+}
+
+// Use case 3: Independent background tasks
+suspend fun startBackgroundTasks() = supervisorScope {
+    launch {
+        try {
+            syncUsers()
+        } catch (e: Exception) {
+            logError("User sync failed", e)
+        }
+    }
+
+    launch {
+        try {
+            syncPosts()
+        } catch (e: Exception) {
+            logError("Post sync failed", e)
+        }
+    }
+
+    delay(5000) // Let tasks run
 }
 
 data class Dashboard(
@@ -1387,7 +1346,7 @@ suspend fun loadNewsWidget(): String {
 
 suspend fun loadStocksWidget(): String {
     delay(200)
-    return "AAPL: $150"
+    return "AAPL: ${'$'}150"
 }
 
 suspend fun syncUsers() {
@@ -1401,13 +1360,13 @@ suspend fun syncPosts() {
 }
 
 fun logError(message: String, error: Exception) {
-    println("ERROR: $message - ${error.message}")
+    println("ERROR: ${'$'}message - ${'$'}{error.message}")
 }
 ```
 
 Key points:
-- Use for independent tasks where one failure must not cancel others.
-- Body failure still terminates the scope.
+- Use when failure of one child must not cancel others.
+- Body failure still terminates the scope; child failures do not cancel siblings.
 
 ### Comprehensive Comparison Examples
 
@@ -1449,10 +1408,10 @@ fun comprehensiveComparison() = runBlocking {
     println("\n=== Exception Handling ===")
 
     val exceptionHandler = CoroutineExceptionHandler { _, e ->
-        println("Caught in handler: ${e.message}")
+        println("Caught in handler: ${'$'}{e.message}")
     }
 
-    // launch: unhandled exception is reported and propagates
+    // launch: unhandled exception is reported and propagates according to handler
     CoroutineScope(Dispatchers.Default + exceptionHandler).launch {
         throw RuntimeException("launch exception")
     }
@@ -1463,7 +1422,7 @@ fun comprehensiveComparison() = runBlocking {
             throw RuntimeException("async exception")
         }.await()
     } catch (e: RuntimeException) {
-        println("Caught on await: ${e.message}")
+        println("Caught on await: ${'$'}{e.message}")
     }
 
     // withContext: throws immediately to caller
@@ -1472,7 +1431,7 @@ fun comprehensiveComparison() = runBlocking {
             throw RuntimeException("withContext exception")
         }
     } catch (e: RuntimeException) {
-        println("Caught from withContext: ${e.message}")
+        println("Caught from withContext: ${'$'}{e.message}")
     }
 
     // coroutineScope: cancels all children and throws
@@ -1484,13 +1443,14 @@ fun comprehensiveComparison() = runBlocking {
             delay(1000)
         }
     } catch (e: RuntimeException) {
-        println("Caught from coroutineScope: ${e.message}")
+        println("Caught from coroutineScope: ${'$'}{e.message}")
     }
 
-    // supervisorScope: continues despite child failure; body failure fails scope
+    // supervisorScope: children independent; failure in body fails scope;
+    // unhandled child failures are reported but don't cancel siblings.
     supervisorScope {
         launch {
-            throw RuntimeException("supervisorScope exception")
+            throw RuntimeException("supervisorScope child exception")
         }
         delay(500)
         println("supervisorScope continues")
@@ -1502,17 +1462,17 @@ fun comprehensiveComparison() = runBlocking {
         coroutineScope {
             val a = async { delay(1000); 1 }
             val b = async { delay(1000); 2 }
-            println("Sum: ${a.await() + b.await()}")
+            println("Sum: ${'$'}{a.await() + b.await()}")
         }
     }
-    println("Parallel: $parallelTime ms")
+    println("Parallel: ${'$'}parallelTime ms")
 
     val sequentialTime = measureTimeMillis {
         val a = withContext(Dispatchers.Default) { delay(1000); 1 }
         val b = withContext(Dispatchers.Default) { delay(1000); 2 }
-        println("Sum: ${a + b}")
+        println("Sum: ${'$'}{a + b}")
     }
-    println("Sequential: $sequentialTime ms")
+    println("Sequential: ${'$'}sequentialTime ms")
 
     delay(2000)
 }
@@ -1528,14 +1488,14 @@ fun performanceComparison() = runBlocking {
 
     val iterations = 10000
 
-    // launch overhead
+    // launch overhead (environment-dependent)
     val launchTime = measureTimeMillis {
         val jobs = List(iterations) {
             launch { }
         }
         jobs.forEach { it.join() }
     }
-    println("launch x$iterations: $launchTime ms")
+    println("launch x${'$'}iterations: ${'$'}launchTime ms")
 
     // async overhead
     val asyncTime = measureTimeMillis {
@@ -1544,7 +1504,7 @@ fun performanceComparison() = runBlocking {
         }
         deferreds.forEach { it.await() }
     }
-    println("async x$iterations: $asyncTime ms")
+    println("async x${'$'}iterations: ${'$'}asyncTime ms")
 
     // withContext overhead
     val withContextTime = measureTimeMillis {
@@ -1552,7 +1512,7 @@ fun performanceComparison() = runBlocking {
             withContext(Dispatchers.Default) { 42 }
         }
     }
-    println("withContext x$iterations: $withContextTime ms")
+    println("withContext x${'$'}iterations: ${'$'}withContextTime ms")
 
     // coroutineScope overhead
     val coroutineScopeTime = measureTimeMillis {
@@ -1560,14 +1520,15 @@ fun performanceComparison() = runBlocking {
             coroutineScope { 42 }
         }
     }
-    println("coroutineScope x$iterations: $coroutineScopeTime ms")
+    println("coroutineScope x${'$'}iterations: ${'$'}coroutineScopeTime ms")
 
     println("\n=== Memory Allocation (qualitative) ===")
 
     // launch: allocates Job
     // async: allocates Deferred + result storage
     // withContext: uses existing scope; no separate Job returned
-    // coroutineScope: uses structured concurrency; minimal extra allocations
+    // coroutineScope: uses structured concurrency; overhead is usually small
+    // All numbers are illustrative and depend on environment.
 }
 ```
 
@@ -1577,7 +1538,7 @@ fun performanceComparison() = runBlocking {
 // Use launch when:
 // - Fire-and-forget operation
 // - Don't need result
-// - Want to start coroutine without waiting
+// - Want to start coroutine without waiting immediately
 launch { updateCache() }
 
 // Use async when:
@@ -1588,7 +1549,7 @@ val result = async { fetchData() }.await()
 
 // Use runBlocking when:
 // - In main function (top-level)
-// - In unit tests
+// - In unit tests / bridging code (modern tests usually use runTest)
 // - Bridging blocking and suspending code
 // - NEVER inside existing coroutines in production code
 fun main() = runBlocking { }
@@ -1597,12 +1558,12 @@ fun main() = runBlocking { }
 // - Need to switch dispatcher
 // - Sequential operation with result
 // - More efficient than async + await for a single operation
-val data = withContext(Dispatchers.IO) { loadFromDb() }
+suspend fun loadFromDbSafely() = withContext(Dispatchers.IO) { loadFromDb() }
 
 // Use coroutineScope when:
 // - Creating structured concurrency
 // - Need all children to complete (or fail as a group)
-// - Want exception in a child to cancel siblings
+// - Want child failure to cancel siblings
 suspend fun loadAll() = coroutineScope {
     // all children must succeed or the scope fails
 }
@@ -1618,11 +1579,12 @@ suspend fun loadPartial() = supervisorScope {
 
 ### Best Practices
 
-1. Choose the right builder for each scenario.
-2. Avoid `runBlocking` in coroutine-based production code.
+1. Choose the right builder for each scenario (`launch` for side effects, `async` for results, `withContext` for context switching).
+2. Avoid `runBlocking` in coroutine-based production code; keep it at system boundaries.
 3. Prefer `withContext` over `async` + `await` for single operations.
 4. Use `coroutineScope` to enforce structured concurrency.
 5. Use `supervisorScope` when partial success and independent failures are acceptable.
+6. In tests, consider `runTest` (kotlinx-coroutines-test) as the modern alternative to raw `runBlocking`.
 
 ---
 
@@ -1644,10 +1606,10 @@ suspend fun loadPartial() = supervisorScope {
 
 ## References
 
-- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
-- [Coroutine Builders - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/)
+- [Kotlin `Coroutines` Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [`Coroutine` Builders - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/)
 - [Roman Elizarov - Structured Concurrency](https://medium.com/@elizarov/structured-concurrency-722d765aa952)
-- [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Kotlin `Coroutines` Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
 ## Related Questions
 

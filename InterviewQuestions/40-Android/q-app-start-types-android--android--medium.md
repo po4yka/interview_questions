@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-performance-measurement-tools--android--medium]
+related: [c-app-startup, q-android-performance-measurement-tools--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
@@ -28,32 +28,41 @@ tags: [android/performance-startup, difficulty/medium, performance, startup]
 
 ## Ответ (RU)
 
-Три типа запуска Android-приложения определяются состоянием процесса:
-- **Cold старт (холодный)**: процесс приложения отсутствует; системе нужно создать процесс и инициализировать приложение.
-- **Warm старт (тёплый)**: процесс жив, но приложение не на экране; `Activity` и/или её состояние нужно пересоздать или реинициализировать.
-- **Hot старт (горячий)**: процесс жив, та же `Activity` остаётся в памяти; требуется только возобновить UI.
+Три типа запуска Android-приложения определяются состоянием процесса и активити:
+- **Cold старт (холодный)**: процесс приложения отсутствует; системе нужно создать процесс и инициализировать приложение (`Application`, первый `Activity`/Entry point).
+- **Warm старт (тёплый)**: процесс жив, но UI приложения не на экране; `Activity` может быть пересоздана или восстановлена из сохранённого состояния.
+- **Hot старт (горячий)**: процесс жив, и `Activity` (или стек активити) остаётся в памяти; требуется только вернуть приложение на экран (выполнить лёгкий путь `onRestart`/`onStart`/`onResume` без тяжёлой инициализации).
 
-Каждый тип требует своей стратегии оптимизации и измерения метрик.
+Каждый тип требует своей стратегии оптимизации и измерения метрик (см. также [[c-app-startup]]).
 
 ### Метрики запуска
 
-- **TTID (Time To Initial Display)**: время до отображения первого кадра UI.
-- **TTFD (Time To Full Display)**: время до полного отображения `Activity` и готовности к взаимодействию; сигнализируется через `reportFullyDrawn()`.
+- **TTID (Time To Initial Display)**: время до отображения первого кадра стартовой `Activity`, видимого пользователю.
+- **TTFD (Time To Full Display)**: время до полного отображения `Activity` и готовности к взаимодействию; сигнализируется через однократный вызов `reportFullyDrawn()` после того, как критический UI действительно готов.
 - **Инструменты**: Android Vitals (прод), Macrobenchmark (CI), Perfetto (локальный профилинг).
 
 ```kotlin
 // Сигнализируем готовность полностью отрисованного экрана
 class MainActivity : AppCompatActivity() {
+    private var fullyDrawnReported = false
+
     override fun onResume() {
         super.onResume()
-        window.decorView.post { reportFullyDrawn() }
+        if (!fullyDrawnReported) {
+            window.decorView.post {
+                if (!fullyDrawnReported) {
+                    reportFullyDrawn()
+                    fullyDrawnReported = true
+                }
+            }
+        }
     }
 }
 ```
 
 ### Cold Start (холодный запуск)
 
-**Цель**: минимизировать критический путь (старт процесса → первый кадр).
+**Цель**: минимизировать критический путь (старт процесса → первый кадр стартовой `Activity`).
 
 ```kotlin
 // Контролируем инициализацию + откладываем тяжёлые операции
@@ -78,7 +87,7 @@ class App : Application() {
 }
 ```
 
-**Baseline profiles**: предварительная компиляция горячих путей для снижения зависимости от прогрева JIT.
+**Baseline profiles**: предварительная компиляция горячих путей для снижения зависимости от прогрева JIT и ускорения холодного и тёплого запусков.
 
 ### Warm Start (тёплый запуск)
 
@@ -103,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Hot Start (горячий запуск)
 
-**Цель**: минимальная работа в `onResume`, батчинг обновлений.
+**Цель**: минимальная работа в `onRestart`/`onStart`/`onResume`, батчинг обновлений.
 
 ```kotlin
 // Lifecycle-aware возобновление работы только в нужных состояниях
@@ -121,40 +130,49 @@ class MainActivity : AppCompatActivity() {
 
 ### Бюджеты и ограничения
 
-- **Рекомендуемые целевые бюджеты** (не официальные гарантии): Cold < 500ms, Warm < 300ms, Hot < 100ms (зависят от устройства и категории приложения).
-- **Запрещено**: выполнять диск/сеть на главном потоке во время запуска.
+- **Иллюстративные целевые бюджеты** (не официальные гарантии; на практике калибруются под устройство и категорию приложения): Cold ≈ до 500ms, Warm ≈ до 300ms, Hot ≈ до 100ms.
+- **Запрещено**: выполнять блокирующие диск/сетевые операции на главном потоке во время запуска.
 - **CI**: сценарии с Macrobenchmark с порогами и алертами на регрессии.
 
 ---
 
 ## Answer (EN)
 
-**Three Android app start types** are defined by process state:
-- **Cold** start: no app process exists; the system must create the process and initialize the app.
-- **Warm** start: process is alive but app is not currently visible; the `Activity` and/or its state must be recreated or re-initialized.
-- **Hot** start: process is alive and the same `Activity` remains in memory; only UI resume is needed.
+The three Android app start types are defined by process and activity state:
+- **Cold** start: no app process exists; the system must create the process and initialize the app (`Application` and entry `Activity`).
+- **Warm** start: process is alive but the app UI is not visible; the `Activity` may need to be recreated or restored from saved state.
+- **Hot** start: process is alive and the `Activity` (or activity stack) remains in memory; the app just needs to be brought to the foreground following the light `onRestart`/`onStart`/`onResume` path without heavy re-initialization.
 
-Each type requires specific optimization with measurable metrics.
+Each type requires specific optimization with measurable metrics (see also [[c-app-startup]]).
 
 ### Startup Metrics
 
-- **TTID (Time To Initial Display)**: time to the first UI frame.
-- **TTFD (Time To Full Display)**: time until the `Activity` is fully drawn and ready for user interaction; signaled via `reportFullyDrawn()`.
+- **TTID (Time To Initial Display)**: time until the first frame of the starting `Activity` is drawn and visible to the user.
+- **TTFD (Time To Full Display)**: time until the `Activity` is fully drawn and ready for interaction; indicated by a single `reportFullyDrawn()` call once critical UI work is actually complete.
 - **Tools**: Android Vitals (prod), Macrobenchmark (CI), Perfetto (local profiling).
 
 ```kotlin
 // Signal full display readiness
 class MainActivity : AppCompatActivity() {
+    private var fullyDrawnReported = false
+
     override fun onResume() {
         super.onResume()
-        window.decorView.post { reportFullyDrawn() }
+        if (!fullyDrawnReported) {
+            window.decorView.post {
+                if (!fullyDrawnReported) {
+                    reportFullyDrawn()
+                    fullyDrawnReported = true
+                }
+            }
+        }
     }
 }
 ```
 
 ### Cold Start
 
-**Goal**: minimize the critical path (process start → first frame).
+**Goal**: minimize the critical path (process start → first frame of the launch `Activity`).
 
 ```kotlin
 // Initialization control + deferred loading
@@ -170,7 +188,7 @@ class App : Application() {
             )
         }
         initCrashReporting()  // critical only
-        // Heavy SDKs deferred until after the critical path
+        // Heavy SDKs deferred until after the critical startup path
         Handler(Looper.getMainLooper()).post {
             initAnalytics()
             initAds()
@@ -179,7 +197,7 @@ class App : Application() {
 }
 ```
 
-**Baseline profiles**: precompile hot paths to reduce reliance on JIT warmup.
+**Baseline profiles**: precompile hot paths to reduce reliance on JIT warmup and improve cold and warm starts.
 
 ### Warm Start
 
@@ -204,10 +222,10 @@ class MainActivity : AppCompatActivity() {
 
 ### Hot Start
 
-**Goal**: minimal `onResume` work, batched updates.
+**Goal**: minimal work in `onRestart`/`onStart`/`onResume`, batched updates.
 
 ```kotlin
-// Lifecycle-aware flow resumption
+// Lifecycle-aware flow resumption in the right states
 class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
@@ -222,8 +240,8 @@ class MainActivity : AppCompatActivity() {
 
 ### Budgets and Guardrails
 
-- **Suggested target budgets** (not official guarantees): Cold < 500ms, Warm < 300ms, Hot < 100ms (vary by device and app category).
-- **Prohibitions**: no disk/network operations on the main thread during startup.
+- **Illustrative target budgets** (not official guarantees; should be tuned for device and app category): Cold ≈ up to 500ms, Warm ≈ up to 300ms, Hot ≈ up to 100ms.
+- **Prohibitions**: avoid blocking disk/network operations on the main thread during startup.
 - **CI**: Macrobenchmark library scenarios with thresholds and regression alerts.
 
 ---

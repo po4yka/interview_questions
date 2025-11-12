@@ -136,12 +136,11 @@ class StatsTileService : TileService() {
 - UI-тесты: `ComposeTestRule` + `createAndroidComposeRule` для экранов на Wear Compose.
 - Accessibility: проверяйте touch target ≥ 48dp, поддержку TalkBack, контрастность и читаемость на небольшом экране.
 
-### Краткая версия
-
+## Краткая версия
 - Используйте `SwipeDismissableNavHost` и `SwipeToDismissBox` для нативной навигации со swipe-to-dismiss.
 - Применяйте `ScalingLazyColumn`, `TimeText`, `Vignette`, `PositionIndicator`, `CurvedText` для адаптации под круглые экраны.
 - Обрабатывайте rotary input через `onRotaryScrollEvent` или Horologist, обеспечивая фокус.
-- Виносите данные и бизнес-логику в отдельные слои для экранов, Tiles и Complications.
+- Выносите данные и бизнес-логику в отдельные слои для экранов, Tiles и Complications.
 - Оптимизируйте производительность и энергопотребление, минимизируя тяжёлый UI и фоновую работу.
 
 ### Детальная версия
@@ -262,15 +261,14 @@ class StatsTileService : TileService() {
 - Use Compose UI testing (`ComposeTestRule`, `createAndroidComposeRule`) for Wear Compose screens.
 - Verify accessibility: touch targets ≥ 48dp, proper TalkBack support, and sufficient contrast and legibility.
 
-### Short Version
-
+## Short Version
 - Use `SwipeDismissableNavHost` and `SwipeToDismissBox` for native navigation with swipe-to-dismiss.
 - Use `ScalingLazyColumn`, `TimeText`, `Vignette`, `PositionIndicator`, `CurvedText` to adapt to round screens.
 - Handle rotary input via `onRotaryScrollEvent` or Horologist with correct focus.
 - Share data and business logic across screens, Tiles, and complications via repositories.
 - Optimize for performance and battery by minimizing heavy UI and background work.
 
-### Detailed Version
+## Detailed Version
 
 #### Requirements
 

@@ -50,12 +50,12 @@ tags: [android/performance-memory, android/ui-compose, compiler, compose, diffic
 - Типы с `@Immutable` / `@Stable` (при корректной семантике неизменяемости/стабильности)
 - Объекты, для которых композиционный анализ может опираться на сравнение по ссылке (referential equality), если они считаются стабильными
 
-**Нестабильные типы** → не позволяют использовать автоматический skip на основе стабильности, функция помечается как не skippable:
+**Нестабильные типы** → не позволяют использовать автоматический skip, основанный только на стабильности аргументов; такие функции не считаются skippable по критерию стабильности и чаще будут выполняться при перекомпозиции соответствующей области:
 - Изменяемые коллекции (`MutableList`, `MutableMap`, и т.п.)
 - Классы без явных маркеров стабильности и/или с семантикой мутабельности
 - Типы с `var` полями, нарушающими гарантию стабильности
 
-Важно: "нестабильный" не означает, что функция всегда будет перекомпозироваться при любом изменении родителя. Это означает, что компилятор не может безопасно пропустить ее выполнение, поэтому при триггере перекомпозиции соответствующей области функция будет выполняться.
+Важно: "нестабильный" не означает, что функция гарантированно перекомпозируется при любом изменении родителя. Это означает, что компилятор не может безопасно пропустить ее выполнение, опираясь на информацию о стабильности, и поэтому при триггере перекомпозиции соответствующей области она, как правило, будет вызвана.
 
 ### Примеры Оптимизации
 
@@ -66,7 +66,7 @@ data class User(val id: String, val name: String)
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Перекомпозиция только при изменении user или при триггере области, если ключи/входы изменились
+    Text(text = user.name) // Перекомпозиция только при изменении user или соответствующих входов в пределах ее области перекомпозиции
 }
 ```
 
@@ -76,19 +76,21 @@ data class User(val id: String, var name: String) // var делает тип н�
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Не может быть эффективно пропущена: при перекомпозиции родительского scope будет выполняться снова
+    Text(text = user.name) // Не может быть эффективно пропущена по стабильности; при перекомпозиции родительского scope, как правило, будет выполняться снова
 }
 ```
 
 ✅ **Неизменяемые интерфейсы**:
 ```kotlin
 @Composable
-fun ItemList(items: List<Item>) { // List вместо MutableList, при условии неизменяемого контракта
+fun ItemList(items: List<Item>) { // List вместо MutableList; важно соблюдать неизменяемый контракт использования
     LazyColumn {
         items(items) { ItemRow(it) }
     }
 }
 ```
+
+(Список будет считаться стабильным только при эффективной неизменяемости: если реализация и контракт гарантируют отсутствие мутаций "за кадром".)
 
 ### Диагностика Компилятора
 
@@ -125,7 +127,7 @@ kotlin {
 ### Рекомендации По Оптимизации
 
 1. **Используйте @Immutable/@Stable** для доменных моделей при корректной семантике
-2. **По возможности передавайте ID вместо тяжелых объектов** для снижения нагрузки и упрощения сравнения
+2. **По возможности для коллекций и списков передавайте стабильные и эффективно неизменяемые структуры (или идентификаторы элементов)**, если это уменьшает количество изменений с точки зрения компилятора
 3. **Выносите вычисления** в `remember` и `derivedStateOf` для предотвращения лишних вычислений при перекомпозиции
 4. **Декомпозируйте UI** на мелкие composable функции для локализации областей перекомпозиции
 5. **Используйте `key()`** для контроля области и идентичности элементов при перекомпозиции
@@ -147,12 +149,12 @@ The compiler transforms `@Composable` functions into state machines:
 - Types annotated with `@Immutable` / `@Stable` (assuming semantics are correct)
 - Objects where the stability analysis can rely on referential equality when they are classified as stable
 
-**Unstable types** → prevent the compiler from using automatic skipping based solely on stability; such functions are treated as not skippable:
+**Unstable types** → prevent the compiler from using automatic skipping based solely on stability; such functions are not considered skippable based on stability and are more likely to be re-executed when their recomposition scope is invalidated:
 - Mutable collections (`MutableList`, `MutableMap`, etc.)
 - Classes without explicit stability markers and/or with mutable semantics
 - Types with `var` properties that break stability guarantees
 
-Important: "unstable" does not mean the function "always recomposes" on every parent change. It means the compiler cannot safely skip it based on stability, so when recomposition is triggered for that scope, the function will be re-invoked.
+Important: "unstable" does not mean the function will "always recompose" on every parent change. It means the compiler cannot safely skip it based on stability information, so when recomposition is triggered for that scope, it will generally be invoked.
 
 ### Optimization Examples
 
@@ -163,7 +165,7 @@ data class User(val id: String, val name: String)
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Recomposes only when user (or relevant inputs/keys) change within its recomposition scope
+    Text(text = user.name) // Recomposes only when user or relevant inputs/keys change within its recomposition scope
 }
 ```
 
@@ -173,19 +175,21 @@ data class User(val id: String, var name: String) // var makes the type unstable
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Cannot be efficiently skipped; it will run whenever its parent scope recomposes
+    Text(text = user.name) // Cannot be efficiently skipped based on stability; it will generally run whenever its parent scope recomposes
 }
 ```
 
 ✅ **Immutable interfaces**:
 ```kotlin
 @Composable
-fun ItemList(items: List<Item>) { // List instead of MutableList, assuming an immutable usage contract
+fun ItemList(items: List<Item>) { // List instead of MutableList; relies on an effectively immutable usage contract
     LazyColumn {
         items(items) { ItemRow(it) }
     }
 }
 ```
+
+(A List is treated as stable only when the implementation and contract ensure it is not mutated in a way that violates the compiler's assumptions.)
 
 ### Compiler Diagnostics
 
@@ -222,7 +226,7 @@ Reports show:
 ### Optimization Recommendations
 
 1. **Use @Immutable/@Stable** for domain models when semantics are correct
-2. **Prefer passing IDs instead of heavy objects** to reduce payload and simplify comparisons
+2. **For collections and lists, prefer stable and effectively immutable structures (or item IDs) where it reduces perceived changes for the compiler**
 3. **Move expensive calculations** into `remember` and `derivedStateOf` to avoid redundant work during recomposition
 4. **Decompose UI** into small composable functions to localize recomposition scopes
 5. **Use `key()`** to control identity and recomposition scope for items

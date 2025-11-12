@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-repository-pattern, c-viewmodel, q-fragment-vs-activity-lifecycle--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
+related: [c-android, c-android-lifecycle, q-fragment-vs-activity-lifecycle--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
@@ -37,7 +37,7 @@ tags: [android, android/architecture-mvvm, android/datastore, android/lifecycle,
 `ViewModel` переживает изменения конфигурации и привязана к жизненному циклу `Activity` или `Fragment`.
 
 ```kotlin
-// ✅ Fragment-scoped ViewModel
+// ✅ Fragment-scoped ViewModel: живёт, пока Fragment присутствует в Activity
 class MyFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
 
@@ -48,18 +48,19 @@ class MyFragment : Fragment() {
     }
 }
 
-// ✅ Activity-scoped ViewModel (shared между fragments)
+// ✅ Activity-scoped ViewModel (shared между fragments):
+// данные переживают пересоздание отдельных Fragment в пределах этой Activity
 class MyFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 }
 ```
 
-**Время жизни**: До завершения `Activity` или окончательного удаления `Fragment`; состояние теряется при смерти процесса
+**Время жизни**: До завершения `Activity` или окончательного удаления соответствующего owner (`Fragment` или `Activity`); состояние теряется при смерти процесса
 **Потеря данных**: ❌ Смерть процесса (in-memory состояние не восстанавливается автоматически)
 
 ### 2. SavedStateHandle
 
-Сохранение небольшого объёма данных, которое автоматически восстанавливается системой из сохранённого состояния (аналогично `onSaveInstanceState`) после смерти процесса, при условии что значения были сохранены в `SavedStateHandle`.
+Сохранение небольшого объёма данных, которое автоматически восстанавливается системой из сохранённого состояния (аналогично `onSaveInstanceState`) после смерти процесса, при условии что значения были сохранены в `SavedStateHandle`, а владелец (`ViewModel`/`NavBackStackEntry`) был корректно восстановлен.
 
 ```kotlin
 class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -68,7 +69,7 @@ class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() 
         set(value) = savedStateHandle.set("user_name", value)
 }
 
-// ✅ На практике MyViewModel должен создаваться через SavedStateViewModelFactory/DI,
+// ✅ На практике MyViewModel должен создаваться через SavedState-aware фабрику или DI,
 // чтобы SavedStateHandle был передан корректно.
 class MyFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels() // подразумевается корректная фабрика
@@ -79,7 +80,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Время жизни**: ✅ Значения восстанавливаются после смерти процесса, если были сохранены в SavedState и не превышают ограничения
+**Время жизни**: ✅ Значения могут быть восстановлены после смерти процесса, если сохранены в `SavedState` и система воссоздаёт тот же scope (например, тот же `NavBackStackEntry`/`Fragment`)
 **Ограничение**: Ограниченный размер данных (ограничения `Bundle`); не предназначен для больших структур или кэша
 
 ### 3. Repository + Database
@@ -154,7 +155,7 @@ class MyApplication : Application() {
 ```
 
 **Предупреждение**: Не рекомендуется для хранения состояния UI или бизнес-данных:
-- состояние теряется при смерти процесса
+- состояние теряется при смерти процесса (данные в памяти `Application` не являются надёжным persistent-слоем)
 - легко создать сильную связность и утечки памяти
 - плохо масштабируется для больших или конфиденциальных данных
 
@@ -186,7 +187,7 @@ There are 5 main approaches to save data beyond `Fragment` scope, each with diff
 `ViewModel` survives configuration changes and is scoped to `Activity` or `Fragment` lifecycle.
 
 ```kotlin
-// ✅ Fragment-scoped ViewModel
+// ✅ Fragment-scoped ViewModel: lives while the Fragment is present in the Activity
 class MyFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
 
@@ -197,18 +198,19 @@ class MyFragment : Fragment() {
     }
 }
 
-// ✅ Activity-scoped ViewModel (shared across fragments)
+// ✅ Activity-scoped ViewModel (shared across fragments):
+// data survives individual Fragment recreation within this Activity
 class MyFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 }
 ```
 
-**Lifetime**: Until `Activity` finishes or `Fragment` is permanently removed; state is lost on process death
+**Lifetime**: Until the `Activity` finishes or the corresponding owner (`Fragment` or `Activity`) is permanently removed; state is lost on process death
 **Data loss**: ❌ Process death (in-memory state is not restored automatically)
 
 ### 2. SavedStateHandle
 
-Save a small amount of data that the system can restore from saved instance state (similar to `onSaveInstanceState`) after process death, as long as you put it into `SavedStateHandle`.
+Save a small amount of data that the system can restore from saved instance state (similar to `onSaveInstanceState`) after process death, as long as you put it into `SavedStateHandle` and the owner (`ViewModel`/`NavBackStackEntry`) is recreated from that saved state.
 
 ```kotlin
 class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -217,7 +219,7 @@ class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() 
         set(value) = savedStateHandle.set("user_name", value)
 }
 
-// ✅ In real usage MyViewModel must be created via a SavedState-aware factory/DI
+// ✅ In real usage MyViewModel must be created via a SavedState-aware factory or DI
 // so that SavedStateHandle is provided correctly.
 class MyFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels() // assumes proper factory is set up
@@ -228,7 +230,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Lifetime**: ✅ Values are restored after process death if stored in SavedState and within limits
+**Lifetime**: ✅ Values can be restored after process death if stored in `SavedState` and the same scope (e.g. `NavBackStackEntry`/`Fragment`) is recreated
 **Limitation**: Limited data size (`Bundle`-like constraints); not for large objects or caches
 
 ### 3. Repository + Database
@@ -303,7 +305,7 @@ class MyApplication : Application() {
 ```
 
 **Warning**: Not recommended for UI or business state:
-- state is lost on process death
+- state is lost on process death (`Application` in-memory data is not reliable persistence)
 - easy to create tight coupling and memory leaks
 - not suitable for large or sensitive data
 
@@ -336,9 +338,8 @@ class MyApplication : Application() {
 
 ## References
 
-- [[c-viewmodel]]
-- [[c-repository-pattern]]
-- [[c-fragment-lifecycle]]
+- [[c-android-lifecycle]]
+- [[c-android]]
 - [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - https://developer.android.com/topic/libraries/architecture/saving-states
 

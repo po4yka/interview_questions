@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-build-optimization--android--medium]
+related: [c-android, q-android-build-optimization--android--medium]
 created: 2025-10-05
-updated: 2025-11-10
+updated: 2025-11-11
 tags: [android/performance-memory, android/profiling, difficulty/medium, memory-optimization, sparsearray]
 sources: []
 
@@ -29,7 +29,7 @@ sources: []
 ## Ответ (RU)
 
 **Концепция:**
-SparseArray — оптимизированная структура данных для отображения int → Object. Избегает автоупаковки ключей (Integer boxing) и использует два массива: int[] для ключей и Object[] для значений. Ключи хранятся отсортированными, для поиска используется бинарный поиск (`Arrays.binarySearch`) вместо хеширования.
+SparseArray — оптимизированная структура данных для отображения int → Object. Избегает автоупаковки ключей (Integer boxing) и использует два массива: int[] для ключей и Object[] для значений. Ключи хранятся отсортированными, для поиска используется бинарный поиск (`Arrays.binarySearch`) вместо хеширования. См. также [[c-android]].
 
 **Компромиссы:**
 - Экономия памяти: обычно заметно меньше overhead по сравнению с `HashMap<Integer, V>`, за счёт отсутствия Integer-объектов и хеш-таблицы.
@@ -80,7 +80,7 @@ sparseArray.put(key, value)  // Может переиспользовать сл
 ## Answer (EN)
 
 **Concept:**
-SparseArray is an optimized data structure for int → Object mapping. It avoids Integer boxing by using two arrays: int[] for keys and Object[] for values. Keys are kept sorted and lookups use binary search (`Arrays.binarySearch`) instead of hashing.
+SparseArray is an optimized data structure for int → Object mapping. It avoids Integer boxing by using two arrays: int[] for keys and Object[] for values. Keys are kept sorted and lookups use binary search (`Arrays.binarySearch`) instead of hashing. See also [[c-android]].
 
 **Trade-offs:**
 - Memory: typically significantly less overhead than `HashMap<Integer, V>` due to no Integer objects and no hash table.

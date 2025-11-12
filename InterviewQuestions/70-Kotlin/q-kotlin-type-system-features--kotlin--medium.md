@@ -24,7 +24,7 @@ tags: [difficulty/medium, kotlin, null-safety, type-inference, type-system]
 
 ## Ответ (RU)
 
-Ниже перечислены ключевые особенности системы типов Kotlin (см. также [[c-kotlin]], [[c-kotlin-features]]):
+Ниже перечислены ключевые особенности системы типов Kotlin (см. также [[c-kotlin]], [[c-kotlin-features]]). Некоторые из них относятся непосредственно к системе типов, другие тесно с ней связаны и опираются на неё:
 
 ### 1. Null Safety (Безопасность null)
 По умолчанию переменные не могут содержать `null`, что помогает предотвращать `NullPointerException`. Чтобы значение могло быть `null`, тип нужно явно пометить `?`:
@@ -41,7 +41,7 @@ val mutableList: MutableList<String> = mutableListOf("a", "b")
 ```
 
 ### 3. Data Classes (Классы данных)
-Для `data class` компилятор автоматически генерирует `equals()`, `hashCode()`, `toString()`, `componentN()` и `copy()` на основе первичного конструктора:
+`data class` используют возможности системы типов и позволяют компилятору автоматически генерировать `equals()`, `hashCode()`, `toString()`, `componentN()` и `copy()` на основе свойств первичного конструктора:
 ```kotlin
 data class User(val name: String, val age: Int)
 ```
@@ -56,8 +56,8 @@ fun demo(x: Any) {
 }
 ```
 
-### 5. Sealed Classes (Закрытые иерархии)
-`sealed class` иерархии ограничивают набор допустимых подтипов, что упрощает исчерпывающую обработку в `when` без ветки `else`:
+### 5. Sealed Иерархии (Закрытые иерархии типов)
+`sealed`-иерархии ограничивают набор допустимых подтипов, что упрощает исчерпывающую обработку в `when` без ветки `else` при покрытии всех вариантов:
 ```kotlin
 sealed class Result {
     data class Success(val data: String) : Result()
@@ -72,11 +72,11 @@ val x = 10        // Тип выведен как Int
 val name = "John" // Тип выведен как String
 ```
 
-Эти возможности делают код на Kotlin более безопасным, выразительным и компактным.
+Эти возможности (null-safety, умные приведения, sealed-иерархии, разделение коллекций, data-классы и выведение типов) делают код на Kotlin более безопасным, выразительным и компактным.
 
 ## Answer (EN)
 
-Kotlin's type system has several powerful features:
+Kotlin's type system has several powerful features. Some are core type system constructs, others are language features that build on and leverage the type system:
 
 ### 1. Null Safety
 By default, variables cannot hold `null`, helping to avoid `NullPointerException`. To allow `null`, you must explicitly mark the type as nullable with `?`:
@@ -93,7 +93,7 @@ val mutableList: MutableList<String> = mutableListOf("a", "b")
 ```
 
 ### 3. Data Classes
-For a `data class`, the compiler automatically generates `equals()`, `hashCode()`, `toString()`, `componentN()`, and `copy()` based on the primary constructor properties:
+`data class` leverages the type system and instructs the compiler to automatically generate `equals()`, `hashCode()`, `toString()`, `componentN()`, and `copy()` based on the primary constructor properties:
 ```kotlin
 data class User(val name: String, val age: Int)
 ```
@@ -108,8 +108,8 @@ fun demo(x: Any) {
 }
 ```
 
-### 5. Sealed Classes
-Sealed classes define restricted class hierarchies, making exhaustive `when` expressions easier and safer (no `else` needed when all subclasses are covered):
+### 5. Sealed Hierarchies
+`sealed` hierarchies define restricted subtype sets, making exhaustive `when` expressions easier and safer (no `else` needed when all variants are covered):
 ```kotlin
 sealed class Result {
     data class Success(val data: String) : Result()
@@ -124,12 +124,12 @@ val x = 10        // Inferred as Int
 val name = "John" // Inferred as String
 ```
 
-These features make Kotlin code safer, more concise, and more expressive.
+These features (null safety, smart casts, sealed hierarchies, collection APIs, data classes, and type inference) make Kotlin code safer, more concise, and more expressive.
 
 ## Дополнительные вопросы (RU)
 
 - В чем ключевые отличия системы типов Kotlin от Java?
-- Когда на практике особенно важно использовать эти возможности системы типов Kotlin (null-safety, умные приведения, sealed классы, разделение коллекций)?
+- Когда на практике особенно важно использовать эти возможности системы типов Kotlin (null-safety, умные приведения, sealed-иерархии, разделение коллекций)?
 - Каковы распространенные ошибки и подводные камни при использовании этих особенностей, и как их избежать?
 
 ## Ссылки (RU)
@@ -143,7 +143,7 @@ These features make Kotlin code safer, more concise, and more expressive.
 ## Follow-ups
 
 - What are the key differences between Kotlin's type system and Java's?
-- When are these Kotlin type system features (null safety, smart casts, sealed classes, collection variance) particularly important in practice?
+- When are these Kotlin type system features (null safety, smart casts, sealed hierarchies, read-only vs mutable collections) particularly important in practice?
 - What are common mistakes and pitfalls when using these features, and how can they be avoided?
 
 ## References

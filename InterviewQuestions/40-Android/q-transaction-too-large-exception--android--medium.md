@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-intent--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
-created: 2025-10-15
-updated: 2025-11-10
+related: [c-android, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-intent--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
+created: 2024-10-15
+updated: 2025-11-11
 sources: []
 tags: [android/intents-deeplinks, android/lifecycle, android/performance-memory, binder, difficulty/medium, exceptions, intent, savedinstancestate]
 
@@ -176,11 +176,11 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 ## Ссылки (RU)
 
-- [[c-intent]]
+- [[c-android]]
 
 ## References
 
-- [[c-intent]]
+- [[c-android]]
 
 ## Связанные вопросы (RU)
 

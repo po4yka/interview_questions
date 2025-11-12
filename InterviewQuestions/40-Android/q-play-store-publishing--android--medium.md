@@ -74,6 +74,7 @@ android {
 
 ```kotlin
 android {
+    // Пример конфигурации сплитов для App Bundle (синтаксис может отличаться в новых версиях AGP)
     bundle {
         language { enableSplit = true }
         density { enableSplit = true }
@@ -98,6 +99,8 @@ class FeatureManager(context: Context) {
             .build()
 
         splitInstallManager.registerListener { state ->
+            if (!state.moduleNames().contains(moduleName)) return@registerListener
+
             when (state.status()) {
                 SplitInstallSessionStatus.DOWNLOADING -> {
                     val totalBytes = state.totalBytesToDownload()
@@ -110,8 +113,21 @@ class FeatureManager(context: Context) {
                 SplitInstallSessionStatus.INSTALLED -> {
                     // Готово к использованию
                 }
+                SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> {
+                    // Требуется запросить согласие пользователя через startConfirmationDialogForResult / соответствующий API
+                }
+                SplitInstallSessionStatus.FAILED -> {
+                    // Обработать ошибку state.errorCode()
+                }
+                SplitInstallSessionStatus.CANCELED -> {
+                    // Обработать отмену установки
+                }
+                else -> {
+                    // Обработка прочих статусов при необходимости
+                }
             }
         }
+
         splitInstallManager.startInstall(request)
     }
 }
@@ -157,14 +173,14 @@ lane :production do
   upload_to_play_store(
     track: 'production',
     aab: 'app/build/outputs/bundle/release/app-release.aab',
-    rollout: '0.05' # Начать с 5% (пример)
+    rollout: 0.05 # Начать с 5% (пример)
   )
 end
 
 lane :increase_rollout do |options|
   upload_to_play_store(
     track: 'production',
-    rollout: options[:percentage].to_s,
+    rollout: options[:percentage],
     skip_upload_aab: true
   )
 end
@@ -339,6 +355,7 @@ android {
 
 ```kotlin
 android {
+    // Example split configuration for App Bundle (syntax may differ in newer AGP versions)
     bundle {
         language { enableSplit = true }
         density { enableSplit = true }
@@ -363,6 +380,8 @@ class FeatureManager(context: Context) {
             .build()
 
         splitInstallManager.registerListener { state ->
+            if (!state.moduleNames().contains(moduleName)) return@registerListener
+
             when (state.status()) {
                 SplitInstallSessionStatus.DOWNLOADING -> {
                     val totalBytes = state.totalBytesToDownload()
@@ -375,8 +394,21 @@ class FeatureManager(context: Context) {
                 SplitInstallSessionStatus.INSTALLED -> {
                     // Ready to use
                 }
+                SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> {
+                    // Request user confirmation via startConfirmationDialogForResult / relevant API
+                }
+                SplitInstallSessionStatus.FAILED -> {
+                    // Handle error via state.errorCode()
+                }
+                SplitInstallSessionStatus.CANCELED -> {
+                    // Handle cancellation
+                }
+                else -> {
+                    // Handle other statuses as needed
+                }
             }
         }
+
         splitInstallManager.startInstall(request)
     }
 }
@@ -422,14 +454,14 @@ lane :production do
   upload_to_play_store(
     track: 'production',
     aab: 'app/build/outputs/bundle/release/app-release.aab',
-    rollout: '0.05' # Start with 5% (example)
+    rollout: 0.05 # Start with 5% (example)
   )
 end
 
 lane :increase_rollout do |options|
   upload_to_play_store(
     track: 'production',
-    rollout: options[:percentage].to_s,
+    rollout: options[:percentage],
     skip_upload_aab: true
   )
 end

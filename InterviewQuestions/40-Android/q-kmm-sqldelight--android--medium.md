@@ -55,6 +55,8 @@ SQLDelight генерирует type-safe Kotlin API из SQL-запросов, 
 
 #### Настройка и конфигурация
 
+(Версии артефактов приведены как пример; в реальном проекте фиксируйте конкретные версии SQLDelight.)
+
 **Gradle Configuration**:
 ```kotlin
 // shared/build.gradle.kts
@@ -75,18 +77,19 @@ sqldelight {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("app.cash.sqldelight:runtime:2.0+")
-            implementation("app.cash.sqldelight:coroutines-extensions:2.0+")
+            implementation("app.cash.sqldelight:runtime:2.0.0")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
         }
         androidMain.dependencies {
             // ✅ Platform-specific driver
-            implementation("app.cash.sqldelight:android-driver:2.0+")
+            implementation("app.cash.sqldelight:android-driver:2.0.0")
         }
         iosMain.dependencies {
-            implementation("app.cash.sqldelight:native-driver:2.0+")
+            implementation("app.cash.sqldelight:native-driver:2.0.0")
         }
-        commonTest.dependencies {
-            implementation("app.cash.sqldelight:sqlite-driver:2.0+") // для in-memory/JVM тестов
+        // Для JVM unit-тестов можно использовать sqlite / JDBC драйвер.
+        jvmTest.dependencies {
+            implementation("app.cash.sqldelight:sqlite-driver:2.0.0")
         }
     }
 }
@@ -141,6 +144,8 @@ UPDATE Task SET
 WHERE id = :id;
 ```
 
+(Таблица `User` в примере внешнего ключа предполагается существующей в схеме и опущена для краткости.)
+
 #### Platform-Specific Drivers
 
 **Android Driver**:
@@ -148,18 +153,14 @@ WHERE id = :id;
 // androidMain
 actual class DatabaseDriverFactory(private val context: Context) {
     actual fun createDriver(): SqlDriver {
-        return AndroidSqliteDriver(
+        val driver = AndroidSqliteDriver(
             schema = TaskDatabase.Schema,
             context = context,
-            name = "task.db",
-            callback = object : AndroidSqliteDriver.Callback(TaskDatabase.Schema) {
-                override fun onOpen(db: SupportSQLiteDatabase) {
-                    super.onOpen(db)
-                    // ✅ Дополнительная настройка по необходимости
-                    db.execSQL("PRAGMA foreign_keys=ON;")
-                }
-            }
+            name = "task.db"
         )
+        // ✅ В современных сборках SQLDelight foreign_keys обычно включены;
+        // при необходимости дополнительные PRAGMA можно настроить через rawQuery.
+        return driver
     }
 }
 ```
@@ -242,7 +243,7 @@ CREATE INDEX task_priority ON Task(priority);
 ALTER TABLE Task ADD COLUMN dueDate INTEGER;
 ```
 
-При включённом `verifyMigrations = true` SQLDelight проверяет согласованность схемы и миграций. Ручная реализация `onUpgrade` в драйвере при этом обычно не требуется и может конфликтовать с auto-generated миграциями.
+При включённом `verifyMigrations = true` SQLDelight проверяет согласованность схемы и миграций. Ручная реализация `onUpgrade` в драйвере при этом обычно не требуется и может конфликтовать с SQLDelight-управляемыми миграциями.
 
 #### Оптимизация
 
@@ -295,18 +296,27 @@ val database = TaskDatabase(
 #### Testing
 
 ```kotlin
+// commonMain
+expect class DatabaseDriverFactory {
+    fun createDriver(): SqlDriver
+}
+```
+
+```kotlin
+// jvmTest
 class TaskRepositoryTest {
     private lateinit var repository: TaskRepository
 
     @BeforeTest
     fun setup() {
-        // ✅ In-memory database для unit-тестов (JVM)
+        // ✅ In-memory database для JVM unit-тестов
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         TaskDatabase.Schema.create(driver)
+        val testDriverFactory = object : DatabaseDriverFactory() {
+            override fun createDriver(): SqlDriver = driver
+        }
         repository = TaskRepository(
-            driverFactory = object : DatabaseDriverFactory(/* platform stub if needed */) {
-                fun createDriver(): SqlDriver = driver
-            },
+            driverFactory = testDriverFactory,
             dispatchers = TestDispatchers
         )
     }
@@ -321,7 +331,7 @@ class TaskRepositoryTest {
 }
 ```
 
-(Тестовый пример концептуальный; в реальном KMM-проекте `DatabaseDriverFactory` обычно объявляется как `expect`/`actual`, и для JVM-тестов можно использовать отдельную реализацию.)
+(Тестовый пример остаётся концептуальным; конкретная сигнатура `DatabaseDriverFactory` должна соответствовать объявлению `expect`/`actual` в вашем проекте.)
 
 #### Best Practices
 
@@ -337,6 +347,8 @@ class TaskRepositoryTest {
 SQLDelight generates type-safe Kotlin APIs from SQL statements, providing compile-time verification and platform-specific drivers (AndroidSqliteDriver on Android, NativeSqliteDriver on iOS) while sharing database logic across platforms.
 
 #### Setup and Configuration
+
+(Versions below are illustrative; in a real project pin concrete SQLDelight versions.)
 
 **Gradle Configuration**:
 ```kotlin
@@ -358,18 +370,19 @@ sqldelight {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("app.cash.sqldelight:runtime:2.0+")
-            implementation("app.cash.sqldelight:coroutines-extensions:2.0+")
+            implementation("app.cash.sqldelight:runtime:2.0.0")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
         }
         androidMain.dependencies {
             // ✅ Platform-specific driver
-            implementation("app.cash.sqldelight:android-driver:2.0+")
+            implementation("app.cash.sqldelight:android-driver:2.0.0")
         }
         iosMain.dependencies {
-            implementation("app.cash.sqldelight:native-driver:2.0+")
+            implementation("app.cash.sqldelight:native-driver:2.0.0")
         }
-        commonTest.dependencies {
-            implementation("app.cash.sqldelight:sqlite-driver:2.0+") // for in-memory/JVM tests
+        // For JVM unit tests you can use sqlite / JDBC driver.
+        jvmTest.dependencies {
+            implementation("app.cash.sqldelight:sqlite-driver:2.0.0")
         }
     }
 }
@@ -424,6 +437,8 @@ UPDATE Task SET
 WHERE id = :id;
 ```
 
+(The `User` table referenced by the foreign key is assumed to exist and is omitted for brevity.)
+
 #### Platform-Specific Drivers
 
 **Android Driver**:
@@ -431,18 +446,14 @@ WHERE id = :id;
 // androidMain
 actual class DatabaseDriverFactory(private val context: Context) {
     actual fun createDriver(): SqlDriver {
-        return AndroidSqliteDriver(
+        val driver = AndroidSqliteDriver(
             schema = TaskDatabase.Schema,
             context = context,
-            name = "task.db",
-            callback = object : AndroidSqliteDriver.Callback(TaskDatabase.Schema) {
-                override fun onOpen(db: SupportSQLiteDatabase) {
-                    super.onOpen(db)
-                    // ✅ Additional tuning if needed
-                    db.execSQL("PRAGMA foreign_keys=ON;")
-                }
-            }
+            name = "task.db"
         )
+        // ✅ In recent SQLDelight versions foreign_keys are typically enabled;
+        // if needed, extra PRAGMA settings can be applied via raw queries.
+        return driver
     }
 }
 ```
@@ -578,6 +589,14 @@ val database = TaskDatabase(
 #### Testing
 
 ```kotlin
+// commonMain
+expect class DatabaseDriverFactory {
+    fun createDriver(): SqlDriver
+}
+```
+
+```kotlin
+// jvmTest
 class TaskRepositoryTest {
     private lateinit var repository: TaskRepository
 
@@ -586,10 +605,11 @@ class TaskRepositoryTest {
         // ✅ In-memory database for JVM unit tests
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         TaskDatabase.Schema.create(driver)
+        val testDriverFactory = object : DatabaseDriverFactory() {
+            override fun createDriver(): SqlDriver = driver
+        }
         repository = TaskRepository(
-            driverFactory = object : DatabaseDriverFactory(/* platform stub if needed */) {
-                fun createDriver(): SqlDriver = driver
-            },
+            driverFactory = testDriverFactory,
             dispatchers = TestDispatchers
         )
     }
@@ -604,12 +624,12 @@ class TaskRepositoryTest {
 }
 ```
 
-(This test snippet is conceptual; in a real KMM setup, `DatabaseDriverFactory` is usually declared as `expect`/`actual`, and tests use a dedicated test driver implementation.)
+(This test snippet is still conceptual; the concrete `DatabaseDriverFactory` signature should match your project's `expect`/`actual` declarations.)
 
 #### Best Practices
 
 1. **Schema Design**: use foreign keys, indexes for frequently queried columns, partial indexes for filtered queries.
-2. **Transactions**: group related operations, keep transactions short, handle errors; avoid `suspend` calls inside `transaction {}` blocks.
+2. **Transactions**: group related operations, keep transactions short, handle errors; avoid `suspend` inside `transaction {}` blocks.
 3. **Performance**: use batching for bulk operations, pagination for large datasets; apply extra PRAGMA tuning only when appropriate.
 4. **Migrations**: test migrations, use `verifyMigrations`, and avoid duplicating migration logic between `.sqm` files and manual `onUpgrade`.
 

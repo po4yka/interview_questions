@@ -36,7 +36,7 @@ Android предоставляет несколько механизмов дл�
 
 Базовый механизм для сохранения легковесного UI-состояния.
 
-**Основное использование:**
+**Основное использование (через onCreate или onRestoreInstanceState):**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // ✅ Восстановление состояния
+        // ✅ Восстановление состояния (если есть сохранённый Bundle)
         counter = savedInstanceState?.getInt("COUNTER", 0) ?: 0
     }
 
@@ -54,6 +54,12 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         // ✅ Сохранение критичных данных UI
         outState.putInt("COUNTER", counter)
+    }
+
+    // Опционально: onRestoreInstanceState вызывается после onStart, только если состояние было сохранено
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        counter = savedInstanceState.getInt("COUNTER", 0)
     }
 }
 ```
@@ -88,15 +94,15 @@ class ProfileActivity : AppCompatActivity() {
 **Ограничения:**
 - Практический лимит около 1 МБ на `Bundle` (данные сериализуются через Binder)
 - Только примитивы и `Parcelable`/`Serializable` объекты
-- Восстановление возможно только если система решила пересоздать `Activity` (например, после изменения конфигурации или контролируемой смерти процесса); в произвольных сценариях убийства процесса состояние может быть утеряно
+- Восстановление происходит только когда система пересоздаёт `Activity` в рамках существующей задачи (например, после изменения конфигурации или управляемой смерти процесса); при ручном перезапуске приложения или иных сценариях убийства процесса сохранённое состояние может не быть восстановлено
 
 ### 2. `ViewModel` с SavedStateHandle (рекомендуется для UI-состояния)
 
-Современный подход для хранения UI-состояния: 
+Современный подход для хранения UI-состояния:
 - обычный `ViewModel` переживает только изменения конфигурации;
-- значения, сохранённые в SavedStateHandle, могут быть восстановлены после смерти процесса, если они были корректно записаны и помещаются в допустимый объём сохранённого состояния (аналогично onSaveInstanceState).
+- значения, сохранённые в `SavedStateHandle`, могут быть восстановлены после смерти процесса, если они явно записаны и укладываются в допустимый объём сохранённого состояния (аналогично `onSaveInstanceState`).
 
-**Базовое использование:**
+**Базовое использование (упрощённый пример):**
 
 ```kotlin
 class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -117,8 +123,8 @@ class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() 
 
 class MainActivity : AppCompatActivity() {
     // На практике нужен ViewModelProvider.Factory (или Hilt/другой DI),
-    // чтобы MyViewModel корректно получал SavedStateHandle
-    private val viewModel: MyViewModel by viewModels()
+    // чтобы MyViewModel с SavedStateHandle корректно создавался.
+    private val viewModel: MyViewModel by viewModels { /* SavedStateViewModelFactory / Hilt */ }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,7 +159,9 @@ class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewMode
 }
 ```
 
-### 3. Постоянное Хранилище
+Важно: `ViewModel` сам по себе не переживает смерть процесса. После убийства процесса при пересоздании `Activity` будет создан новый экземпляр `ViewModel`, и только данные, сохранённые через `SavedStateHandle` (т.е. прошедшие через механизм сохранённого состояния, аналогичный `onSaveInstanceState`), могут быть восстановлены.
+
+### 3. Постоянное хранилище
 
 Для данных, которые должны пережить закрытие приложения и не зависят от жизненного цикла отдельной `Activity`.
 
@@ -178,7 +186,7 @@ class SettingsRepository(private val context: Context) {
 }
 ```
 
-**Room (для больших объемов данных):**
+**Room (для больших объёмов данных):**
 
 ```kotlin
 @Entity(tableName = "user_state")
@@ -198,17 +206,19 @@ interface UserStateDao {
 }
 ```
 
-### 4. Сравнение Подходов
+Здесь DataStore и Room выступают как примеры устойчивого хранилища. Аналогичные свойства (переживают закрытие приложения и смерть процесса) имеют и другие постоянные механизмы (например, SharedPreferences, файлы), при условии, что данные были записаны на диск.
+
+### 4. Сравнение подходов
 
 | Подход | Поворот экрана | Смерть процесса | Закрытие приложения | Применение |
 |--------|----------------|-----------------|---------------------|------------|
 | **onSaveInstanceState** | ✅ | ⚠️ зависит от сценария, лимит по размеру | ❌ | Легковесное UI-состояние |
 | **`ViewModel` (без SavedState)** | ✅ | ❌ | ❌ | UI-данные во время сессии |
-| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI-состояние, важное для восстановления; *только для явно сохранённых ключей в рамках лимитов |
-| **DataStore** | ✅ | ✅ | ✅ | Настройки, preferences |
-| **Room** | ✅ | ✅ | ✅ | Большие наборы данных |
+| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI-состояние, важное для восстановления; *только для явно сохранённых ключей в рамках Bundle-лимитов |
+| **DataStore** | ✅ | ✅ | ✅ | Настройки, preferences (как один из вариантов постоянного хранилища) |
+| **Room** | ✅ | ✅ | ✅ | Большие наборы данных, сложные структуры |
 
-### 5. Лучшие Практики
+### 5. Лучшие практики
 
 **Комбинирование подходов:**
 
@@ -240,10 +250,10 @@ class UserActivity : AppCompatActivity() {
 ```
 
 **Рекомендации:**
-- `ViewModel` + SavedStateHandle для большинства важного UI-состояния, которое должно восстановиться после поворота и потенциальной смерти процесса
-- DataStore или Room для данных, которые должны переживать закрытие приложения
-- Избегайте хранения больших объектов в onSaveInstanceState (лимит по размеру `Bundle` ~1 МБ)
-- Не сохраняйте `Context`, `View`, `Activity` в `ViewModel`
+- Используйте `ViewModel` + `SavedStateHandle` для большинства важного UI-состояния, которое должно восстановиться после поворота и потенциальной смерти процесса (через механизм сохранённого состояния).
+- Используйте DataStore, Room или другие постоянные механизмы для данных, которые должны переживать закрытие приложения.
+- Избегайте хранения больших объектов в `onSaveInstanceState` (лимит по размеру `Bundle` ~1 МБ).
+- Не сохраняйте `Context`, `View`, `Activity` в `ViewModel`.
 
 ## Answer (EN)
 
@@ -253,7 +263,7 @@ Android provides multiple mechanisms to save and restore `Activity` state across
 
 Basic mechanism for saving lightweight UI state.
 
-**Basic usage:**
+**Basic usage (via onCreate or onRestoreInstanceState):**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -263,7 +273,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // ✅ Restore state
+        // ✅ Restore state if a saved Bundle is available
         counter = savedInstanceState?.getInt("COUNTER", 0) ?: 0
     }
 
@@ -271,6 +281,12 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         // ✅ Save critical UI data
         outState.putInt("COUNTER", counter)
+    }
+
+    // Optional: onRestoreInstanceState is called after onStart only if there is saved state
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        counter = savedInstanceState.getInt("COUNTER", 0)
     }
 }
 ```
@@ -305,15 +321,15 @@ class ProfileActivity : AppCompatActivity() {
 **Limitations:**
 - Practical limit of about 1 MB per `Bundle` (data goes through Binder)
 - Only primitives and `Parcelable`/`Serializable` objects
-- State is restored only if the system decides to recreate the `Activity` (e.g., after configuration change or managed process death); in other kill scenarios the state may be lost
+- State is restored only when the system recreates the `Activity` as part of the same task/flow (e.g., configuration change or managed process recreation); on manual app relaunch or other kill scenarios the previously saved instance state may not be restored
 
 ### 2. `ViewModel` with SavedStateHandle (recommended for UI state)
 
 Modern approach for holding UI state:
-- regular `ViewModel` survives only configuration changes;
-- values written into SavedStateHandle can be restored after process death if they are correctly saved and fit into the allowed saved-state size (similar to onSaveInstanceState).
+- a regular `ViewModel` survives only configuration changes;
+- values written into `SavedStateHandle` can be restored after process death if they are explicitly saved and fit into the allowed saved-state size (similar to `onSaveInstanceState`).
 
-**Basic usage:**
+**Basic usage (simplified example):**
 
 ```kotlin
 class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -334,8 +350,8 @@ class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() 
 
 class MainActivity : AppCompatActivity() {
     // In practice you need a ViewModelProvider.Factory (or Hilt/other DI)
-    // so that MyViewModel properly receives SavedStateHandle
-    private val viewModel: MyViewModel by viewModels()
+    // so that MyViewModel with SavedStateHandle is created correctly.
+    private val viewModel: MyViewModel by viewModels { /* SavedStateViewModelFactory / Hilt */ }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -369,6 +385,8 @@ class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewMode
     }
 }
 ```
+
+Important: a `ViewModel` itself does not survive process death. After the process is killed and the `Activity` is recreated, a new `ViewModel` instance is created; only data persisted via `SavedStateHandle` (i.e., written into the saved-state mechanism similar to `onSaveInstanceState`) can be restored.
 
 ### 3. Persistent Storage
 
@@ -415,15 +433,17 @@ interface UserStateDao {
 }
 ```
 
+Here DataStore and Room are examples of persistent storage. Other mechanisms (e.g., SharedPreferences, files) also survive app close and process death as long as data is written to disk.
+
 ### 4. Comparison of Approaches
 
 | Approach | Survives Rotation | Survives Process Death | Survives App Close | Use Case |
-|----------|------------------|------------------------|-------------------|----------|
+|----------|------------------|------------------------|--------------------|----------|
 | **onSaveInstanceState** | ✅ | ⚠️ scenario-dependent, size-limited | ❌ | Lightweight UI state |
 | **`ViewModel` (no SavedState)** | ✅ | ❌ | ❌ | UI-related data during session |
-| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI state important for restoration; *only for explicitly saved keys within limits |
-| **DataStore** | ✅ | ✅ | ✅ | Settings, preferences |
-| **Room** | ✅ | ✅ | ✅ | Large datasets |
+| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI state important for restoration; *only for explicitly saved keys within Bundle limits |
+| **DataStore** | ✅ | ✅ | ✅ | Settings, preferences (one of persistent options) |
+| **Room** | ✅ | ✅ | ✅ | Large datasets, complex data |
 
 ### 5. Best Practices
 
@@ -457,10 +477,10 @@ class UserActivity : AppCompatActivity() {
 ```
 
 **Recommendations:**
-- Use `ViewModel` + SavedStateHandle for most important UI state that should be restored after rotation and potential process death
-- Use DataStore or Room for data that must survive app closure
-- Avoid storing large objects in onSaveInstanceState (`Bundle` size is limited to about 1 MB)
-- Never store `Context`, `View`, `Activity` in `ViewModel`
+- Use `ViewModel` + `SavedStateHandle` for most important UI state that should be restored after rotation and potential process death (via the saved-state mechanism).
+- Use DataStore, Room, or other persistent mechanisms for data that must survive app closure.
+- Avoid storing large objects in `onSaveInstanceState` (`Bundle` size is limited to about 1 MB).
+- Never store `Context`, `View`, `Activity` in `ViewModel`.
 
 ---
 

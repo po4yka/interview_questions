@@ -46,7 +46,7 @@ tags:
 
 **1. Потоковый парсинг (Streaming)**
 
-Используйте XmlPullParser вместо DOM для обработки XML. Потоковый парсинг обрабатывает документ последовательно, не загружая всё в память.
+Используйте XmlPullParser вместо DOM для обработки XML. Потоковый парсинг обрабатывает документ последовательно, не загружая всё в память целиком.
 
 ```kotlin
 // ❌ Плохо - DOM загружает весь документ в память
@@ -68,7 +68,7 @@ while (parser.next() != XmlPullParser.END_DOCUMENT) {
 
 ```kotlin
 // ❌ Плохо - несколько преобразований и аллокаций
-val jsonString = response.body?.string() // читает всё в память
+val jsonString = response.body?.string() // читает всё тело в память
 val data = JSONObject(jsonString)
 
 // ✅ Лучше - используем Reader/stream с поддерживающей библиотекой (пример с Gson)
@@ -87,10 +87,10 @@ val user = gson.fromJson(reader, User::class.java)
 
 Чем современнее и менее рефлексивна библиотека, тем лучше с точки зрения производительности и аллокаций.
 
-Иллюстративное сравнение (1000 объектов, значения зависят от окружения):
+Иллюстративное сравнение (1000 объектов, условные значения, зависят от окружения и конфигурации):
 - **Moshi**: ~15ms (часто одна из самых быстрых)
-- **kotlinx.serialization**: ~18ms (нативная для Kotlin, без рефлексии)
-- **Gson**: ~25ms (универсальная, рефлексия)
+- **kotlinx.serialization**: ~18ms (нативная для Kotlin; особенно эффективна с сгенерированными сериализаторами)
+- **Gson**: ~25ms (универсальная, основана на рефлексии по умолчанию)
 - **org.json**: ~45ms (стандартная Android API, без оптимизаций под большие объёмы)
 
 **Moshi** - хороший выбор для производительности:
@@ -102,7 +102,7 @@ val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 val user = moshi.adapter(User::class.java).fromJson(jsonString)
 ```
 
-**kotlinx.serialization** - для Kotlin-first проектов:
+**kotlinx.serialization** - для Kotlin-first проектов (с генерацией сериализаторов для максимальной эффективности):
 ```kotlin
 @Serializable
 data class User(val id: Int, val name: String)
@@ -130,7 +130,7 @@ fun parseLazy(json: String): Sequence<User> = sequence {
 parseLazy(json).take(10).toList()  // Создаёт только первые 10 объектов
 ```
 
-(Обратите внимание: JSONArray всё равно требует иметь весь JSON в памяти; для настоящего стриминга используйте потоковые API: JsonReader, Moshi, Gson streaming и т.п.)
+(Обратите внимание: JSONArray всё равно требует иметь весь JSON в памяти; для настоящего стриминга используйте потоковые API: JsonReader (Gson), Moshi streaming, kotlinx.serialization JSON-streaming и т.п.)
 
 **6. Фоновые потоки**
 
@@ -145,11 +145,11 @@ viewModelScope.launch(Dispatchers.Default) {
 
 **7. Инкрементальный парсинг**
 
-Для больших JSON-потоков используйте потоковые API, например JsonReader (из Gson) или аналогичные механизмы в Moshi/kotlinx.serialization.
+Для больших JSON-потоков используйте потоковые API, например JsonReader из Gson или аналогичные механизмы в Moshi/kotlinx.serialization.
 
 ```kotlin
 fun parseStream(stream: InputStream) = flow {
-    JsonReader(InputStreamReader(stream, Charsets.UTF_8)).use { reader ->
+    com.google.gson.stream.JsonReader(InputStreamReader(stream, Charsets.UTF_8)).use { reader ->
         reader.beginArray()
         while (reader.hasNext()) emit(parseItem(reader))  // ✅ По элементу за раз
         reader.endArray()
@@ -175,7 +175,7 @@ fun parseStream(stream: InputStream) = flow {
 
 **1. Streaming Processing**
 
-Use XmlPullParser instead of DOM for XML parsing. Streaming parsers process documents sequentially without loading everything into memory.
+Use XmlPullParser instead of DOM for XML parsing. Streaming parsers process documents sequentially without loading the entire document into memory.
 
 ```kotlin
 // ❌ Bad - DOM loads entire document in memory
@@ -216,10 +216,10 @@ Cache parsed data for reuse, especially for frequently accessed data.
 
 Prefer modern libraries that minimize reflection and allocations.
 
-Illustrative comparison (1000 objects; actual numbers depend on environment):
+Illustrative comparison (1000 objects; rough values, highly environment- and configuration-dependent):
 - **Moshi**: ~15ms (often among the fastest)
-- **kotlinx.serialization**: ~18ms (Kotlin-native, no reflection)
-- **Gson**: ~25ms (flexible, reflection-based)
+- **kotlinx.serialization**: ~18ms (Kotlin-native; especially efficient with generated serializers)
+- **Gson**: ~25ms (flexible, reflection-based by default)
 - **org.json**: ~45ms (standard Android API, not optimized for large payloads)
 
 **Moshi** - strong choice for performance:
@@ -231,7 +231,7 @@ val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 val user = moshi.adapter(User::class.java).fromJson(jsonString)
 ```
 
-**kotlinx.serialization** - ideal for Kotlin-first projects:
+**kotlinx.serialization** - ideal for Kotlin-first projects (with generated serializers for best performance):
 ```kotlin
 @Serializable
 data class User(val id: Int, val name: String)
@@ -259,7 +259,7 @@ fun parseLazy(json: String): Sequence<User> = sequence {
 parseLazy(json).take(10).toList()  // Only creates first 10 objects
 ```
 
-(Note: JSONArray still requires the full JSON string in memory; for true streaming use streaming APIs such as JsonReader, Moshi/Gson streaming adapters, etc.)
+(Note: JSONArray still requires the full JSON string in memory; for true streaming use streaming APIs such as JsonReader (Gson), Moshi streaming adapters, or kotlinx.serialization streaming.)
 
 **6. Background Threads**
 
@@ -274,11 +274,11 @@ viewModelScope.launch(Dispatchers.Default) {
 
 **7. Incremental Parsing**
 
-For large JSON streams, use streaming APIs such as JsonReader (from Gson) or equivalent mechanisms in Moshi/kotlinx.serialization.
+For large JSON streams, use streaming APIs such as JsonReader from Gson or equivalent mechanisms in Moshi/kotlinx.serialization.
 
 ```kotlin
 fun parseStream(stream: InputStream) = flow {
-    JsonReader(InputStreamReader(stream, Charsets.UTF_8)).use { reader ->
+    com.google.gson.stream.JsonReader(InputStreamReader(stream, Charsets.UTF_8)).use { reader ->
         reader.beginArray()
         while (reader.hasNext()) emit(parseItem(reader))  // ✅ Item by item
         reader.endArray()
@@ -303,14 +303,14 @@ fun parseStream(stream: InputStream) = flow {
 ## Дополнительные вопросы (RU)
 
 - Как бы вы измеряли производительность парсинга для разных JSON-библиотек в боевом приложении?
-- Какие трейд-оффы существуют между компиляционной генерацией кода в Moshi и рефлексивным подходом Gson?
+- Какие трейд-оффы существуют между компиляционной генерацией кода в Moshi/kotlinx.serialization и рефлексивным подходом Gson?
 - Как вы обрабатываете ошибки парсинга и частичные данные при потоковом парсинге?
 - В каких случаях стоит использовать JsonReader напрямую вместо более высокоуровневых библиотек вроде Moshi или Gson?
 
 ## Follow-ups
 
 - How would you benchmark parsing performance for different JSON libraries in your production app?
-- What trade-offs exist between Moshi's compile-time code generation and Gson's reflection-based approach?
+- What trade-offs exist between Moshi's/kotlinx.serialization's compile-time code generation and Gson's reflection-based approach?
 - How do you handle parsing errors and partial data in streaming parsers?
 - When should you use JsonReader directly instead of higher-level libraries like Moshi or Gson?
 

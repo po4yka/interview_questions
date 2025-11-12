@@ -12,15 +12,16 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
-  - c-encryption
+  - c-android-keystore
+  - q-android-security-best-practices--android--medium
 created: 2025-10-20
-updated: 2025-11-02
+updated: 2025-11-11
 tags: [android/keystore-crypto, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
 sources:
-  - https://developer.android.com/topic/security/data
+  - "https://developer.android.com/topic/security/data"
 ---
 
 # Вопрос (RU)
@@ -291,7 +292,7 @@ class DatabaseProvider @Inject constructor(private val context: Context) {
 
 ## References
 
-- [[c-encryption]]
+- [[c-android-keystore]]
 - [Android Data Security Guide](https://developer.android.com/topic/security/data)
 - [Android Keystore Guide](https://developer.android.com/privacy-and-security/keystore)
 

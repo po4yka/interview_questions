@@ -21,7 +21,7 @@ related:
   - c-glance
   - c-jetpack-compose
 created: 2025-11-02
-updated: 2025-11-02
+updated: 2025-11-11
 tags:
   - android/shortcuts-widgets
   - android/ui-compose
@@ -29,7 +29,7 @@ tags:
   - android/glance
   - difficulty/medium
 sources:
-  - url: https://developer.android.com/jetpack/compose/glance/appwidget
+  - url: "https://developer.android.com/jetpack/compose/glance/appwidget"
     note: Glance app widget guide
 ---
 
@@ -46,7 +46,11 @@ sources:
 ### 1. Структура Glance
 
 ```kotlin
+object WeatherStateDefinition : PreferencesGlanceStateDefinition // или ProtoGlanceStateDefinition / кастомная реализация
+
 class WeatherWidget : GlanceAppWidget() {
+    override val stateDefinition: GlanceStateDefinition<*> = WeatherStateDefinition
+
     @Composable
     override fun Content() {
         val uiState = currentState<WeatherState>()
@@ -56,37 +60,29 @@ class WeatherWidget : GlanceAppWidget() {
 ```
 
 - Наследуемся от `GlanceAppWidget`, реализуем `Content`.
-- Состояние обычно хранится через `GlanceStateDefinition` (Preferences/DataStore/Proto) или прокидывается через `update`.
+- Привязываем `stateDefinition` к виджету, чтобы `currentState`/`updateAppWidgetState` работали корректно.
+- Состояние обычно хранится через `GlanceStateDefinition` (Preferences/DataStore/Proto) или прокидывается через `update`/`updateAppWidgetState`.
 
 ### 2. Состояние и обновления
 
 ```kotlin
-object WeatherStateDefinition : GlanceStateDefinition<WeatherState> {
-    override suspend fun getDataStore(context: Context, fileKey: String): DataStore<WeatherState> =
-        DataStoreFactory.create(
-            serializer = WeatherStateSerializer,
-            produceFile = { context.dataStoreFile("$fileKey.preferences_pb") }
-        )
-
-    override suspend fun getDataStoreKey(context: Context, glanceId: GlanceId): String =
-        glanceId.toString()
-}
+// Пример использования готового PreferencesGlanceStateDefinition:
+object WeatherStateDefinition : PreferencesGlanceStateDefinition
 
 class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = WeatherWidget()
 
-    override suspend fun onUpdate(
-        context: Context,
-        glanceId: GlanceId
-    ) {
-        WeatherUpdateWorker.enqueue(context, glanceId)
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        // Триггерим фоновые обновления, если нужно
+        WeatherUpdateWorker.enqueueForAll(context)
     }
 }
 ```
 
-- Можно использовать `GlanceStateDefinition` (или готовые `PreferencesGlanceStateDefinition`/`ProtoGlanceStateDefinition`) для персистентного состояния.
-- Для периодических обновлений обычно используют WorkManager + `GlanceAppWidgetManager.getGlanceIds()`.
-- Учитывайте ограничения по обновлениям: для периодических обновлений действуют минимальные интервалы (около 30 минут) и квоты на частоту; ручные/событийные обновления возможны чаще, но тоже подчиняются системным лимитам по энергопотреблению.
+- Можно использовать `GlanceStateDefinition` (или готовые `PreferencesGlanceStateDefinition`/`ProtoGlanceStateDefinition`) для персистентного состояния; при кастомной реализации обязательно реализуйте все требуемые методы (`getData`, `updateData`, `getLocation`/`getDataStore` в зависимости от версии API) с устойчивыми ключами.
+- Для периодических обновлений обычно используют WorkManager + `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)`.
+- Учитывайте ограничения по обновлениям: для периодических обновлений действуют минимальные интервалы и квоты на частоту; ручные/событийные обновления возможны чаще, но также подчиняются системным лимитам по энергопотреблению.
 
 ### 3. Actions и интерактивность
 
@@ -114,7 +110,7 @@ class RefreshAction : ActionCallback {
 }
 ```
 
-- Используйте `actionRunCallback` для фоновых действий, `actionStartActivity`/`actionStartActivityForResult` для открытия экранов.
+- Используйте `actionRunCallback` для фоновых действий и обновления виджета; `actionStartActivity` — для открытия экранов из виджета.
 - Ограничения: нельзя использовать произвольные Compose-компоненты; доступны только Glance-компоненты и модификаторы, которые маппятся в `RemoteViews`.
 
 ### 4. Dynamic Color & Размеры
@@ -124,8 +120,8 @@ class RefreshAction : ActionCallback {
 
 ### 5. Тестирование
 
-- Используйте `GlanceAppWidgetTestRule` (Robolectric/инструментальные тесты) для рендеринга и проверки контента виджета.
-- Делайте снапшоты с помощью `GlanceAppWidgetTestRule.snapshot` и сравнивайте выходной `RemoteViews`/layout.
+- Используйте `GlanceAppWidgetTestRule` (Robolectric/инструментальные тесты) для рендеринга и проверки содержимого виджета.
+- Делайте снапшоты с помощью `GlanceAppWidgetTestRule.snapshot` и сравнивайте получившиеся `RemoteViews`/layout с ожидаемыми.
 - Пишите юнит-тесты для сериализаторов и логики обновления состояния.
 
 ---
@@ -135,7 +131,11 @@ class RefreshAction : ActionCallback {
 ### 1. Glance structure
 
 ```kotlin
+object WeatherStateDefinition : PreferencesGlanceStateDefinition // or ProtoGlanceStateDefinition / custom implementation
+
 class WeatherWidget : GlanceAppWidget() {
+    override val stateDefinition: GlanceStateDefinition<*> = WeatherStateDefinition
+
     @Composable
     override fun Content() {
         val uiState = currentState<WeatherState>()
@@ -145,37 +145,29 @@ class WeatherWidget : GlanceAppWidget() {
 ```
 
 - Extend `GlanceAppWidget` and implement `Content`.
-- Store widget state via a `GlanceStateDefinition` (Preferences/DataStore/Proto) or pass data via `update`.
+- Attach a `stateDefinition` to the widget so `currentState`/`updateAppWidgetState` can resolve state correctly.
+- Store widget state via a `GlanceStateDefinition` (Preferences/DataStore/Proto) or pass/update data using `update`/`updateAppWidgetState`.
 
 ### 2. State and updates
 
 ```kotlin
-object WeatherStateDefinition : GlanceStateDefinition<WeatherState> {
-    override suspend fun getDataStore(context: Context, fileKey: String): DataStore<WeatherState> =
-        DataStoreFactory.create(
-            serializer = WeatherStateSerializer,
-            produceFile = { context.dataStoreFile("$fileKey.preferences_pb") }
-        )
-
-    override suspend fun getDataStoreKey(context: Context, glanceId: GlanceId): String =
-        glanceId.toString()
-}
+// Example using built-in PreferencesGlanceStateDefinition:
+object WeatherStateDefinition : PreferencesGlanceStateDefinition
 
 class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = WeatherWidget()
 
-    override suspend fun onUpdate(
-        context: Context,
-        glanceId: GlanceId
-    ) {
-        WeatherUpdateWorker.enqueue(context, glanceId)
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        // Trigger background updates if needed
+        WeatherUpdateWorker.enqueueForAll(context)
     }
 }
 ```
 
-- Use a `GlanceStateDefinition` (or built-ins like `PreferencesGlanceStateDefinition`/`ProtoGlanceStateDefinition`) for persistent state.
-- Use WorkManager plus `GlanceAppWidgetManager.getGlanceIds()` for periodic/background updates.
-- Respect update quotas: periodic updates have a minimum interval (around 30 minutes) and system-enforced limits; event-driven/manual updates can be more frequent but are still constrained by system policies.
+- Use a `GlanceStateDefinition` (or built-ins like `PreferencesGlanceStateDefinition`/`ProtoGlanceStateDefinition`) for persistent state; for custom definitions you must implement all required methods (`getData`, `updateData`, `getLocation`/`getDataStore` depending on API version) with stable keys.
+- Use WorkManager plus `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)` for periodic/background updates.
+- Respect update quotas: periodic updates have minimum intervals and system-enforced limits; event-driven/manual updates can be more frequent but are still constrained by system power/abuse policies.
 
 ### 3. Actions and interactivity
 
@@ -203,29 +195,29 @@ class RefreshAction : ActionCallback {
 }
 ```
 
-- Use `actionRunCallback` for background logic and `actionStartActivity`/`actionStartActivityForResult` to launch activities from the widget.
+- Use `actionRunCallback` for background work and widget refresh; use `actionStartActivity` to launch activities from the widget.
 - Glance does not allow arbitrary Compose UI; you must use the provided Glance composables and modifiers that map to `RemoteViews`.
 
 ### 4. Dynamic color & sizes
 
 - Use `GlanceTheme` (with dynamic color when supported by the host/Android version) for consistent styling.
-- Use `LocalSize.current` to adapt the layout to the widget size.
+- Use `LocalSize.current` to adapt the layout to different widget sizes.
 
 ### 5. Testing
 
-- Use `GlanceAppWidgetTestRule` with Robolectric/instrumentation to render and assert on widget content.
-- Capture snapshots via `GlanceAppWidgetTestRule.snapshot` for layout/RemoteViews comparison.
+- Use `GlanceAppWidgetTestRule` with Robolectric/instrumentation tests to render and assert on widget content.
+- Capture snapshots via `GlanceAppWidgetTestRule.snapshot` and compare the resulting `RemoteViews`/layout against expectations.
 - Add unit tests for state serializers and update logic.
 
 ---
 
 ## Дополнительные вопросы (RU)
-- Как организовать списки (`GlanceList`) и диффы данных?
+- Как организовать списки (например, через поддерживаемые Glance-компоненты) и диффы данных?
 - Как обновлять виджет из push-уведомлений?
 - Какие ограничения у Glance на Android < 12 (dynamic color fallback)?
 
-## Follow-ups
-- How to implement lists (`GlanceList`) and data diffing?
+## Follow-ups (EN)
+- How to implement lists (e.g., via supported Glance list components) and data diffing?
 - How to update the widget from push notifications?
 - What Glance limitations exist on Android < 12 (dynamic color fallback)?
 

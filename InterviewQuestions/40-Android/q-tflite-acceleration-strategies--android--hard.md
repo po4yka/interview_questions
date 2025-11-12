@@ -18,10 +18,10 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-ondevice-ml
+- c-android-profiling
 - q-android-performance-measurement-tools--android--medium
 created: 2025-11-02
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/performance-battery
 - android/performance-memory
@@ -44,7 +44,7 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий ответ
+## Краткая Версия
 - Оптимизировать модель под TFLite (квантование, упрощение графа).
 - Memory-map'ить модель и переиспользовать один/несколько интерпретаторов.
 - Динамически выбирать NNAPI/GPU/CPU delegate с надёжным fallback.
@@ -52,7 +52,26 @@ sources:
 - Обновлять модель OTA с проверкой целостности и безопасным rollback.
 - Мониторить latency/ошибки/делегаты, адаптируя конфигурацию.
 
-### Детальный ответ
+## Подробная Версия
+
+### Требования (RU)
+- Функциональные:
+  - Он-дивайс inference без сетевой зависимости.
+  - Поддержка нескольких делегатов (CPU/NNAPI/GPU) с fallback.
+  - OTA-обновления модели без остановки приложения.
+  - Поддержка real-time/near-real-time use-case'ов (камера, стримы).
+- Нефункциональные:
+  - Низкая латентность и вариативность задержек.
+  - Контролируемое потребление батареи и памяти.
+  - Надёжность (fallback при сбоях делегатов/модели).
+  - Наблюдаемость: метрики, логи, краши.
+
+### Архитектура (RU)
+- Отдельный модуль/слой для ML pipeline (загрузка модели, делегаты, очередь запросов).
+- Одна или несколько long-lived копий `Interpreter`, управляемые через пул.
+- Компонент для выбора делегата (feature detection + конфигурация с сервера).
+- Компонент OTA-обновлений модели (Downloader + верификация + hot-swap с fallback).
+- Интеграция с системой телеметрии (логирование делегатов, версий моделей, латентности).
 
 #### 1. Подготовка модели
 
@@ -120,13 +139,13 @@ val interpreter = Interpreter(mapped, options)
 
 #### 7. Ссылки на концепции
 
-- См. также: [[c-ondevice-ml]]
+- См. также: [[c-android-profiling]]
 
 ---
 
 ## Answer (EN)
 
-### Short Version
+## Short Version
 - Optimize the model for TFLite (quantization, pruning/simplified graph).
 - Memory-map the model and reuse a small number of interpreters.
 - Dynamically choose NNAPI/GPU/CPU delegate with robust fallback.
@@ -134,7 +153,26 @@ val interpreter = Interpreter(mapped, options)
 - Update models OTA with integrity checks and safe rollback.
 - Monitor latency/errors/delegate usage and adapt configuration.
 
-### Detailed Version
+## Detailed Version
+
+### Requirements
+- Functional:
+  - On-device inference without hard dependency on network.
+  - Support for multiple delegates (CPU/NNAPI/GPU) with fallback.
+  - OTA model updates without breaking running flows.
+  - Support for real-time/near-real-time use cases (camera, streaming).
+- Non-functional:
+  - Low latency and predictable performance.
+  - Controlled battery and memory usage.
+  - High reliability (fallback on delegate/model failures).
+  - Observability via metrics, logs, crash reports.
+
+### Architecture
+- Dedicated ML pipeline module/layer (model loading, delegates, request queue).
+- One or more long-lived `Interpreter` instances managed via a pool.
+- Delegate selection component (feature detection + remote configuration).
+- OTA model update component (downloader + verification + hot-swap with fallback).
+- Telemetry integration (log delegates, model versions, latencies).
 
 #### 1. Model preparation
 
@@ -194,7 +232,7 @@ val interpreter = Interpreter(mapped, options)
 
 #### 7. Concept references
 
-- See also: [[c-ondevice-ml]]
+- See also: [[c-android-profiling]]
 
 ---
 

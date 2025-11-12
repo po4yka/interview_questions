@@ -36,14 +36,21 @@ tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animatio
 ```kotlin
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun Root() {
+fun Root(isDetailScreen: Boolean) {
     SharedTransitionLayout { sharedTransitionScope ->
-        // AnimatedContent или другой контейнер, создающий AnimatedContentScope/AnimatedVisibilityScope
+        // AnimatedContent предоставляет AnimatedContentScope, который является AnimatedVisibilityScope
         AnimatedContent(targetState = isDetailScreen, label = "shared_transition") { isDetail ->
+            val animatedVisibilityScope = this
             if (isDetail) {
-                DetailScreen(sharedTransitionScope = sharedTransitionScope, animatedContentScope = this)
+                DetailScreen(
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
             } else {
-                ListScreen(sharedTransitionScope = sharedTransitionScope, animatedContentScope = this)
+                ListScreen(
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
             }
         }
     }
@@ -57,7 +64,7 @@ fun Root() {
 fun ListItem(
     item: Item,
     sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     with(sharedTransitionScope) {
         Image(
@@ -65,7 +72,7 @@ fun ListItem(
             contentDescription = null,
             modifier = Modifier.sharedElement(
                 state = rememberSharedContentState(key = "image-${item.id}"), // ✅ Уникальный стабильный ключ
-                animatedVisibilityScope = animatedContentScope
+                animatedVisibilityScope = animatedVisibilityScope
             )
         )
     }
@@ -75,9 +82,11 @@ fun ListItem(
 ### Интеграция с Navigation Compose
 
 Ключевые моменты:
-- `SharedTransitionLayout` должен оборачивать NavHost, чтобы оба экрана находились в одном `SharedTransitionScope`.
-- Для анимаций навигации используйте `AnimatedContentTransitionScope` / `AnimatedVisibilityScope`, предоставленные Navigation.
-- Экземпляр `SharedTransitionScope` передаётся вниз через параметры.
+- `SharedTransitionLayout` должен оборачивать NavHost, чтобы все целевые composable находились в одном `SharedTransitionScope`.
+- Для shared elements каждая сторона анимации должна находиться внутри `AnimatedVisibilityScope` (или совместимого scope), который создаётся навигационными анимациями (например, `AnimatedContent`/`AnimatedNavHost` в зависимости от версии Navigation Compose).
+- Экземпляр `SharedTransitionScope` и соответствующий `AnimatedVisibilityScope` передаются вниз через параметры.
+
+Пример структуры (упрощённо — конкретный API Navigation может отличаться):
 
 ```kotlin
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -86,11 +95,13 @@ fun AppNavigation() {
     val navController = rememberNavController()
 
     SharedTransitionLayout { sharedTransitionScope ->
+        // В реальном проекте используйте AnimatedNavHost / NavHost с анимациями,
+        // которые предоставляют AnimatedVisibilityScope для экранов.
         NavHost(navController, startDestination = "list") {
             composable("list") { backStackEntry ->
-                // `this` здесь - NavBackStackEntry scope, а не AnimatedContentScope.
-                // Для shared elements достаточно передать sharedTransitionScope вниз и
-                // использовать навигационные анимации как AnimatedVisibilityScope.
+                // Здесь показана только передача sharedTransitionScope.
+                // Для sharedElement/sharedBounds также нужен animatedVisibilityScope
+                // от используемого анимационного контейнера.
                 ListScreen(
                     onItemClick = { id -> navController.navigate("detail/$id") },
                     sharedTransitionScope = sharedTransitionScope,
@@ -110,7 +121,7 @@ fun AppNavigation() {
 }
 ```
 
-(Конкретная интеграция с Nav animations может отличаться в зависимости от версии Navigation Compose; важно, что все shared elements используют один и тот же `SharedTransitionScope` и соответствующий `AnimatedVisibilityScope`.)
+(Конкретная интеграция с Nav анимациями зависит от версии Navigation Compose. Важно: все shared elements должны использовать один и тот же `SharedTransitionScope` и корректный `AnimatedVisibilityScope`, предоставленный анимационным контейнером. Сам NavHost без анимаций такого scope не даёт.)
 
 ### Настройка анимации
 
@@ -246,6 +257,7 @@ fun NonClippingBox(
 **Навигация:**
 - Оборачивайте NavHost в `SharedTransitionLayout`.
 - Передавайте `SharedTransitionScope` через параметры вниз по иерархии.
+- Убедитесь, что элементы, использующие sharedElement/sharedBounds, находятся внутри актуального `AnimatedVisibilityScope`, предоставленного анимационным контейнером навигации.
 - Тестируйте быстрые переходы вперёд/назад и поворот экрана, чтобы убедиться, что состояние ключей и scope-ов сохраняется.
 
 Подробнее: [[c-jetpack-compose]]
@@ -261,14 +273,21 @@ Basic pattern:
 ```kotlin
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun Root() {
+fun Root(isDetailScreen: Boolean) {
     SharedTransitionLayout { sharedTransitionScope ->
-        // Use AnimatedContent or another container that creates an AnimatedContentScope/AnimatedVisibilityScope
+        // AnimatedContent provides AnimatedContentScope, which is an AnimatedVisibilityScope
         AnimatedContent(targetState = isDetailScreen, label = "shared_transition") { isDetail ->
+            val animatedVisibilityScope = this
             if (isDetail) {
-                DetailScreen(sharedTransitionScope = sharedTransitionScope, animatedContentScope = this)
+                DetailScreen(
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
             } else {
-                ListScreen(sharedTransitionScope = sharedTransitionScope, animatedContentScope = this)
+                ListScreen(
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
             }
         }
     }
@@ -282,7 +301,7 @@ fun Root() {
 fun ListItem(
     item: Item,
     sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     with(sharedTransitionScope) {
         Image(
@@ -290,7 +309,7 @@ fun ListItem(
             contentDescription = null,
             modifier = Modifier.sharedElement(
                 state = rememberSharedContentState(key = "image-${item.id}"), // ✅ Unique stable key
-                animatedVisibilityScope = animatedContentScope
+                animatedVisibilityScope = animatedVisibilityScope
             )
         )
     }
@@ -300,9 +319,11 @@ fun ListItem(
 ### Navigation Compose Integration
 
 Key points:
-- Wrap NavHost with `SharedTransitionLayout` so both screens share the same `SharedTransitionScope`.
-- Use the `AnimatedContentTransitionScope` / `AnimatedVisibilityScope` provided by Navigation for transitions.
-- Pass the `SharedTransitionScope` down via parameters.
+- Wrap NavHost with `SharedTransitionLayout` so all destinations share the same `SharedTransitionScope`.
+- For shared elements, each side of the transition must be inside an `AnimatedVisibilityScope` (or compatible scope) created by your navigation animations (e.g., `AnimatedContent` / `AnimatedNavHost`, depending on the Navigation Compose version).
+- Pass both `SharedTransitionScope` and the appropriate `AnimatedVisibilityScope` down via parameters.
+
+Structural example (simplified — exact Navigation APIs vary):
 
 ```kotlin
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -311,8 +332,13 @@ fun AppNavigation() {
     val navController = rememberNavController()
 
     SharedTransitionLayout { sharedTransitionScope ->
+        // In a real app, use AnimatedNavHost / NavHost with transitions
+        // that provide an AnimatedVisibilityScope for each destination.
         NavHost(navController, startDestination = "list") {
             composable("list") { backStackEntry ->
+                // Here we only show passing sharedTransitionScope.
+                // To use sharedElement/sharedBounds, also obtain/pass
+                // the AnimatedVisibilityScope from your animation container.
                 ListScreen(
                     onItemClick = { id -> navController.navigate("detail/$id") },
                     sharedTransitionScope = sharedTransitionScope,
@@ -332,7 +358,7 @@ fun AppNavigation() {
 }
 ```
 
-(Exact wiring with Navigation animations may differ by Navigation Compose version; the core requirement is that all shared elements use the same `SharedTransitionScope` plus the appropriate `AnimatedVisibilityScope`.)
+(Exact wiring with Navigation animations depends on the Navigation Compose version. The critical requirement: all shared elements use the same `SharedTransitionScope` and a valid `AnimatedVisibilityScope` from the transition container. A plain NavHost without transitions does not provide this scope.)
 
 ### Animation Customization
 
@@ -400,7 +426,7 @@ fun ItemCard(
                 )
             )
 
-            // ❌ Not marked as shared element — will appear/disappear abruptly
+            // ❌ Not marked as shared element — will appear/disappear without shared animation
             Text(text = item.description)
         }
     }
@@ -433,7 +459,7 @@ fun ConditionalElement(
     }
 }
 
-// ✅ Prevent clipping / layout artifacts when size changes during transition
+// ✅ Prevent clipping / size artifacts using lookahead-based measurement
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun NonClippingBox(
@@ -457,18 +483,19 @@ fun NonClippingBox(
 
 **Performance:**
 - Use `skipToLookaheadSize()` for complex layouts where intermediate measurements cause artifacts.
-- Avoid heavy work inside `boundsTransform` and animation lambdas.
-- Profile with Layout Inspector / Compose performance tools.
+- Avoid heavy work inside `boundsTransform` and other animation lambdas.
+- Profile using Layout Inspector / Compose performance tools.
 
 **Keys:**
-- Keys must be unique and stable on both screens.
+- Keys must be unique and stable across screens.
 - Prefer item IDs over list indices.
 - Matching keys are mandatory; elements without a counterpart will not participate in shared transitions.
 
 **Navigation:**
 - Wrap NavHost in `SharedTransitionLayout`.
-- Pass `SharedTransitionScope` through parameters down the tree.
-- Test rapid back/forward navigation and configuration changes to ensure scopes and keys remain consistent.
+- Pass `SharedTransitionScope` down the tree.
+- Ensure elements using sharedElement/sharedBounds are placed inside a valid `AnimatedVisibilityScope` provided by your navigation transition container.
+- Test rapid forward/back navigation and configuration changes to ensure scopes and keys remain consistent.
 
 See: [[c-jetpack-compose]]
 

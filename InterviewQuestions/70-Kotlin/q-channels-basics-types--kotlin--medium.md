@@ -2,29 +2,21 @@
 id: kotlin-124
 title: "Channels Basics and Types / Основы и типы каналов"
 aliases: ["Channels Basics and Types", "Основы и типы каналов"]
-
-# Classification
 topic: kotlin
-subtopics: [channels, c-kotlin-coroutines-basics, c-coroutines]
+subtopics: [channels]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Comprehensive Kotlin Coroutines Channel Guide
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-kotlin, c-coroutines, q-channel-buffering-strategies--kotlin--hard]
-
-# Timestamps
 created: 2025-10-12
 updated: 2025-11-09
+tags: [kotlin, channels, coroutines, channel-types, rendezvous, buffered, difficulty/medium]
 
-tags: [buffered, channel-types, channels, coroutines, difficulty/medium, kotlin, rendezvous]
 ---
 
 # Вопрос (RU)
@@ -73,7 +65,7 @@ suspend fun basicChannelExample() = coroutineScope {
 **Ключевые характеристики**:
 - **Примитив для очереди между корутинами**: Пригоден для асинхронного обмена.
 - **Однократная доставка**: Каждый отправленный элемент может быть получен не более одного раза.
-- **Приостанавливаемые операции**: `send`/`receive` приостанавливаются, если канал не готов (нет места / нет элементов).
+- **Приостанавливаемые операции**: `send`/`receive` приостанавливаются, если канал не готов (нет места / нет элементов) или если операция выполняется с учётом отмены.
 - **Закрываемый**: Канал можно закрыть для сигнала завершения; буферизированные элементы всё ещё можно дочитать.
 
 ### Сравнение Типов Каналов
@@ -130,7 +122,7 @@ suspend fun unlimitedChannel() = coroutineScope {
 
     launch {
         for (i in 1..10000) {
-            channel.send(i) // Не приостанавливается из-за лимита буфера, но возможны ошибки при закрытом/отменённом канале
+            channel.send(i) // Не ограничен вместимостью буфера; всё ещё может завершиться ошибкой при закрытом/отменённом канале
         }
         println("Все отправлено!")
         channel.close()
@@ -151,7 +143,7 @@ suspend fun conflatedChannel() = coroutineScope {
 
     launch {
         for (i in 1..10) {
-            channel.send(i) // Новое значение перезаписывает предыдущее в буфере
+            channel.send(i) // Новое значение перезаписывает предыдущее в буфере, если оно ещё не прочитано
             println("Отправлено $i")
         }
         channel.close()
@@ -159,7 +151,7 @@ suspend fun conflatedChannel() = coroutineScope {
 
     delay(500)
 
-    // Получатель увидит последнее не прочитанное значение
+    // Получатель увидит последнее не прочитанное значение, если оно есть
     if (!channel.isEmpty) {
         println("Получено: ${channel.receive()}")
     }
@@ -220,7 +212,7 @@ class ChannelTypesDemoRu {
 
         launch {
             repeat(1_000_000) {
-                channel.send(it)
+                channel.send(it) // Не ограничен по capacity; всё ещё зависит от отмены/закрытия
             }
             channel.close()
         }
@@ -240,7 +232,7 @@ class ChannelTypesDemoRu {
 
         launch {
             repeat(5) { i ->
-                channel.send(i)
+                channel.send(i) // Перезаписывает предыдущее не прочитанное значение
                 println("Отправлено $i (перезаписывает предыдущее)")
                 delay(10)
             }
@@ -261,7 +253,7 @@ class ChannelTypesDemoRu {
 ### Когда Использовать Каждый Тип (с примерами)
 
 ```kotlin
-// Пример 1: RENDEZVOUS — запрос-ответ
+// Пример 1: RENDEZVOUS — простой запрос-ответ (один обработчик, по одному запросу за раз)
 class RequestResponseServiceRu {
     private val requestChannel = Channel<Request>()
     private val responseChannel = Channel<Response>()
@@ -276,6 +268,7 @@ class RequestResponseServiceRu {
         }
     }
 
+    // Предполагается один активный запрос; для конкурентных запросов нужна иная схема сопоставления
     suspend fun sendRequest(request: Request): Response {
         requestChannel.send(request)
         return responseChannel.receive()
@@ -327,7 +320,7 @@ class LoggingServiceRu {
     }
 }
 
-// Пример 4: CONFLATED — обновления UI
+// Пример 4: CONFLATED — обновления UI (важно только последнее значение)
 class TemperatureSensorRu {
     private val temperatureChannel = Channel<Double>(Channel.CONFLATED)
 
@@ -378,7 +371,7 @@ class ChannelOperationsRu {
         println("Канал закрыт для отправки: ${channel.isClosedForSend}")
     }
 
-    // Продюсер-потребитель с корректным завершением
+    // Продюсер-потребитель с корректным завершением (один продюсер, один потребитель)
     suspend fun producerConsumerPattern() = coroutineScope {
         val channel = Channel<Int>(capacity = 10)
 
@@ -415,7 +408,7 @@ class ChannelOperationsRu {
         println("Обработано: $item")
     }
 
-    // Несколько продюсеров, один потребитель
+    // Несколько продюсеров, один потребитель (cancel как явный сигнал остановки, возможны CancellationException у отправителей)
     suspend fun multipleProducers() = coroutineScope {
         val channel = Channel<String>(capacity = 50)
 
@@ -435,7 +428,7 @@ class ChannelOperationsRu {
                 count++
                 if (count == 30) break
             }
-            channel.cancel()
+            channel.cancel() // Явный сигнал остановки, прерывает ожидающие операции
         }
 
         producers.forEach { it.join() }
@@ -645,9 +638,9 @@ suspend fun basicChannelExample() = coroutineScope {
 ```
 
 **Key characteristics**:
-- **Coroutine-friendly queue**: A suspendable primitive for communication between coroutines.
+- **`Coroutine`-friendly queue**: A suspendable primitive for communication between coroutines.
 - **Single delivery**: Each sent element is received at most once.
-- **Suspending operations**: `send`/`receive` suspend when the channel is not ready (e.g., no buffer / no elements).
+- **Suspending operations**: `send`/`receive` suspend when the channel is not ready (e.g., no buffer / no elements) or when affected by cancellation.
 - **Closeable**: Can be closed to signal completion; remaining buffered elements can still be received.
 
 ### Channel Types Comparison
@@ -704,7 +697,7 @@ suspend fun unlimitedChannel() = coroutineScope {
 
     launch {
         for (i in 1..10000) {
-            channel.send(i) // Does not suspend due to buffer limit; may still fail if channel closed/cancelled
+            channel.send(i) // Not limited by buffer capacity; may still fail or be cancelled if channel is closed/cancelled
         }
         println("All sent!")
         channel.close()
@@ -719,13 +712,13 @@ suspend fun unlimitedChannel() = coroutineScope {
     println("Received $count items")
 }
 
-// 4. CONFLATED Channel (keeps only latest)
+// 4. CONFLATED Channel (keeps only latest when buffered)
 suspend fun conflatedChannel() = coroutineScope {
     val channel = Channel<Int>(Channel.CONFLATED)
 
     launch {
         for (i in 1..10) {
-            channel.send(i) // Does not suspend due to buffer limit; overwrites previous buffered value
+            channel.send(i) // Overwrites previous buffered value if it wasn't received yet
             println("Sent $i")
         }
         channel.close()
@@ -733,7 +726,7 @@ suspend fun conflatedChannel() = coroutineScope {
 
     delay(500) // Let all sends complete
 
-    // Receiving gets the latest value that was not yet received.
+    // Receiving gets the latest value that was not yet received, if any
     if (!channel.isEmpty) {
         println("Received: ${channel.receive()}")
     }
@@ -785,11 +778,6 @@ class ChannelTypesDemo {
         delay(100)
 
         // First 2 succeed (buffer), next 2 fail (buffer full)
-        // Output:
-        // trySend(0): true
-        // trySend(1): true
-        // trySend(2): false
-        // trySend(3): false
     }
 
     // UNLIMITED: No backpressure from capacity
@@ -797,11 +785,11 @@ class ChannelTypesDemo {
         val channel = Channel<Int>(Channel.UNLIMITED)
 
         println("\n=== Unlimited Channel ===")
-        println("Capacity: ${channel.capacity}") // Int.MAX_VALUE (effectively unbounded)
+        println("Capacity: ${channel.capacity}") // Effectively very large (Int.MAX_VALUE)
 
         launch {
             repeat(1_000_000) {
-                channel.send(it) // Does not suspend due to capacity, but can still fail if channel closed/cancelled
+                channel.send(it) // Not limited by capacity; still subject to closure/cancellation
             }
             channel.close()
         }
@@ -821,7 +809,7 @@ class ChannelTypesDemo {
 
         launch {
             repeat(5) { i ->
-                channel.send(i) // Overwrites previous buffered value
+                channel.send(i) // Overwrites previous buffered value that has not yet been received
                 println("Sent $i (overwrites previous)")
                 delay(10)
             }
@@ -842,7 +830,7 @@ class ChannelTypesDemo {
 ### When to Use Each Type
 
 ```kotlin
-// Use Case 1: RENDEZVOUS - Request-Response Pattern
+// Use Case 1: RENDEZVOUS - simple request-response (single handler, one request at a time)
 class RequestResponseService {
     private val requestChannel = Channel<Request>()
     private val responseChannel = Channel<Response>()
@@ -858,6 +846,7 @@ class RequestResponseService {
         }
     }
 
+    // Assumes a single in-flight request; concurrent request/reply needs a more robust mapping strategy
     suspend fun sendRequest(request: Request): Response {
         requestChannel.send(request) // May suspend until handler ready
         return responseChannel.receive() // Suspends until response ready
@@ -914,7 +903,7 @@ class LoggingService {
     }
 }
 
-// Use Case 4: CONFLATED - UI State Updates
+// Use Case 4: CONFLATED - UI State Updates (only latest value matters)
 class TemperatureSensor {
     // Only care about the latest reading
     private val temperatureChannel = Channel<Double>(Channel.CONFLATED)
@@ -924,7 +913,7 @@ class TemperatureSensor {
         launch {
             while (isActive) {
                 val temp = readTemperature()
-                temperatureChannel.send(temp) // Overwrites old buffered value
+                temperatureChannel.send(temp) // Overwrites old buffered value if not yet received
                 delay(100) // Read every 100ms
             }
         }
@@ -969,7 +958,7 @@ class ChannelOperations {
         println("Channel closed for send: ${channel.isClosedForSend}") // true
     }
 
-    // Producer-Consumer with proper cleanup
+    // Producer-Consumer with proper cleanup (single producer/consumer)
     suspend fun producerConsumerPattern() = coroutineScope {
         val channel = Channel<Int>(capacity = 10)
 
@@ -1009,7 +998,7 @@ class ChannelOperations {
         println("Processed: $item")
     }
 
-    // Multiple producers, single consumer
+    // Multiple producers, single consumer (cancel used as explicit stop signal; may cancel senders)
     suspend fun multipleProducers() = coroutineScope {
         val channel = Channel<String>(capacity = 50)
 
@@ -1029,9 +1018,9 @@ class ChannelOperations {
             for (msg in channel) {
                 println(msg)
                 count++
-                if (count == 30) break // All items received
+                if (count == 30) break // All expected items received
             }
-            channel.cancel() // Cancel the channel and wake up senders
+            channel.cancel() // Explicitly cancels channel and wakes up senders
         }
 
         producers.forEach { it.join() }
@@ -1216,43 +1205,24 @@ class ChannelPatterns {
 ## Follow-ups
 
 1. How do you handle backpressure with channels?
-   - Buffer sizing strategies
-   - Conflated channels for dropping old values
-   - Custom flow control mechanisms
-
 2. What's the difference between `Channel` and `Flow`?
-   - Hot vs cold streams
-   - Single vs multiple collectors
-   - Backpressure handling
-
 3. How to implement fan-out and fan-in patterns?
-   - Multiple producers, single consumer
-   - Single producer, multiple consumers
-   - Load balancing between workers
-
 4. When should you use `Channel` instead of `Flow`?
-   - When you need hot stream behavior
-   - When multiple coroutines produce values
-   - When you need precise control over buffering
-
 5. How to test code using channels?
-   - Using `TestScope`
-   - Mocking channel behavior
-   - Testing producer-consumer patterns
 
 ---
 
 ## References (Ссылки)
 
 ### Official Documentation
-- [Kotlin Coroutines Guide - Channels](https://kotlinlang.org/docs/channels.html)
+- [Kotlin `Coroutines` Guide - Channels](https://kotlinlang.org/docs/channels.html)
 - [Channel API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
 - [Channel Capacity](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/-factory/)
 
 ### Learning Resources
-- "Kotlin Coroutines" by Marcin Moskała - Chapter on Channels
+- "Kotlin `Coroutines`" by Marcin Moskała - Chapter on Channels
 - [Roman Elizarov's Medium Articles on Channels](https://medium.com/@elizarov)
-- [Kotlin Coroutines Patterns](https://www.youtube.com/watch?v=BOHK_w09pVA)
+- [Kotlin `Coroutines` Patterns](https://www.youtube.com/watch?v=BOHK_w09pVA)
 
 ### Related Topics
 - [[c-coroutines]]
@@ -1265,7 +1235,7 @@ class ChannelPatterns {
 
 ## Related Questions (Связанные вопросы)
 
-- [[q-channel-flow-comparison--kotlin--medium]] - Channel vs Flow comparison
+- [[q-channel-flow-comparison--kotlin--medium]] - Channel vs `Flow` comparison
 - [[q-channel-closing-completion--kotlin--medium]] - Channel closing and completion
 - [[q-channel-buffering-strategies--kotlin--hard]] - Advanced buffering strategies
 - [[q-produce-actor-builders--kotlin--medium]] - produce and actor builders

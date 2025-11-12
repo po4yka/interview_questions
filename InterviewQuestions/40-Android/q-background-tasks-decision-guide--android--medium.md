@@ -51,8 +51,8 @@ flowchart TD
     Deferrable -->|НЕТ| SpecializedAPI[Есть специализированный API?]
     SpecializedAPI -->|ДА| Specialized[MediaSession / Location API]
     SpecializedAPI -->|НЕТ| ShortTask[Короткая задача <3 мин?]
-    ShortTask -->|ДА| ShortService[ShortService]
-    ShortTask -->|НЕТ| ForegroundService[Regular Foreground Service]
+    ShortTask -->|ДА| ShortService[Foreground service с типом SHORT_SERVICE]
+    ShortTask -->|НЕТ| ForegroundService[Foreground service с подходящим типом]
 ```
 
 **Категории**:
@@ -62,12 +62,12 @@ flowchart TD
 - Применение: загрузка данных UI, вычисления для экрана
 
 **2. WorkManager (отложенные задачи)**
-- Гарантированное выполнение с учетом ограничений системы (сеть, батарея, Doze Mode)
+- Надёжное (best-effort) выполнение с учётом ограничений системы (сеть, батарея, Doze Mode), с возможностью пережить перезагрузку устройства
 - Применение: синхронизация, периодические загрузки, очистка кэша
 
-**3. Foreground Services (немедленное выполнение)**
-- Обязательное уведомление и строгие ограничения типов
-- Применение: медиа, навигация, отслеживание активности
+**3. Foreground Services (немедленное / длительное выполнение)**
+- Обязательное уведомление и строгие ограничения типов foreground-сервиса
+- Применение: медиа, навигация, отслеживание активности, краткосрочные критичные задачи через `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` на поддерживаемых API-уровнях
 
 **Код**:
 
@@ -93,7 +93,7 @@ val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
     .build()
 WorkManager.getInstance(context).enqueue(syncWork)
 
-// ✅ ShortService: критичная задача <3 мин (на поддерживаемых API)
+// ✅ ShortService: критичная задача <3 мин (на поддерживаемых API-уровнях)
 class FileTransferService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ServiceCompat.startForeground(
@@ -113,9 +113,9 @@ class FileTransferService : LifecycleService() {
 
 **Ключевые моменты**:
 - **Coroutines**: используйте структурированные scope (`viewModelScope`, `lifecycleScope`) для автоотмены
-- **WorkManager**: гарантирует выполнение даже после перезагрузки устройства, соблюдает Doze Mode
-- **ShortService**: требует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, доступный на современных версиях Android, и завершение в пределах лимита (~3 минут)
-- **Избегайте**: обычных Service без foreground режима для продолжительных задач; они нестабильны и подвержены убийству системой
+- **WorkManager**: обеспечивает устойчивое выполнение даже после перезагрузки устройства и учитывает Doze Mode; точное время запуска контролируется системой
+- **ShortService**: использует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, доступный только на поддерживаемых версиях Android и предназначенный для задач с жёстким лимитом выполнения (~3 минут)
+- **Избегайте**: обычных Service без foreground-режима для продолжительных задач; они нестабильны и подвержены убийству системой
 
 ---
 
@@ -133,8 +133,8 @@ flowchart TD
     Deferrable -->|NO| SpecializedAPI[Specialized API available?]
     SpecializedAPI -->|YES| Specialized[MediaSession / Location API]
     SpecializedAPI -->|NO| ShortTask[Short task <3 min?]
-    ShortTask -->|YES| ShortService[ShortService]
-    ShortTask -->|NO| ForegroundService[Regular Foreground Service]
+    ShortTask -->|YES| ShortService[Foreground service with SHORT_SERVICE type]
+    ShortTask -->|NO| ForegroundService[Foreground service with appropriate type]
 ```
 
 **Categories**:
@@ -144,12 +144,12 @@ flowchart TD
 - Use cases: UI data loading, screen computations
 
 **2. WorkManager (deferred tasks)**
-- Guaranteed execution respecting system constraints (network, battery, Doze Mode)
+- Best-effort reliable execution respecting system constraints (network, battery, Doze Mode), with ability to survive device reboot
 - Use cases: synchronization, periodic downloads, cache cleanup
 
-**3. Foreground Services (immediate execution)**
-- Mandatory notification and strict type restrictions
-- Use cases: media playback, navigation, activity tracking
+**3. Foreground Services (immediate / long-running work)**
+- Mandatory notification and strict foreground service type requirements
+- Use cases: media playback, navigation, activity tracking, and short critical tasks via `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` on supported API levels
 
 **Code**:
 
@@ -195,8 +195,8 @@ class FileTransferService : LifecycleService() {
 
 **Key points**:
 - **Coroutines**: use structured scopes (`viewModelScope`, `lifecycleScope`) for auto-cancellation
-- **WorkManager**: guarantees execution even after device reboot, respects Doze Mode
-- **ShortService**: requires `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, available on modern Android versions, and must finish within the enforced time limit (~3 minutes)
+- **WorkManager**: provides robust execution even after device reboot and respects Doze Mode; exact timing is controlled by the system
+- **ShortService**: uses `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, only available on supported Android versions, and is intended for work that must complete within the enforced time limit (~3 minutes)
 - **Avoid**: using regular Services without foreground mode for long-running tasks; they are unstable and likely to be killed by the system
 
 ---
@@ -234,4 +234,3 @@ class FileTransferService : LifecycleService() {
 ### Advanced (Harder)
 - [[q-service-lifecycle-binding--android--hard]]
 - [[q-workmanager-chaining--android--hard]]
-```

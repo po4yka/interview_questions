@@ -27,8 +27,9 @@ related:
 created: 2025-10-15
 updated: 2025-11-10
 sources:
-- Android Content Provider Documentation
-- Android Developers
+- "https://developer.android.com/reference/androidx/core/content/FileProvider"
+- "https://developer.android.com/guide/topics/providers/content-providers"
+- "https://developer.android.com/training/secure-file-sharing"
 tags:
 - android/activity
 - android/content-provider
@@ -52,15 +53,13 @@ tags:
 
 ## Ответ (RU)
 
-### Краткий вариант
-
-Крупные данные нельзя передавать напрямую через `Intent` из-за лимита Binder (около 1 МБ на транзакцию). Вместо этого:
+### Краткая Версия
+Крупные данные нельзя передавать напрямую через `Intent` из-за лимита `Binder` (около 1 МБ на транзакцию). Вместо этого:
 - сохраняем данные во внешний носитель (файл/БД/кэш),
 - передаем только ссылку (`URI`/ID/путь),
 - предоставляем доступ через `FileProvider`/`ContentProvider` или другой безопасный механизм.
 
-### Подробный вариант
-
+### Подробная Версия
 ### Проблема: Ограничение размера `Intent`
 
 **❌ Неправильно** - передавать большие данные напрямую (особенно `Bitmap`/`ByteArray`):
@@ -71,7 +70,7 @@ val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
 intent.putExtra("image", bitmap)  // Риск ошибки при большом размере, зависит от общего Binder буфера
 ```
 
-**Причина:** `Intent` использует Binder IPC с лимитом порядка **1MB** на буфер транзакции для процесса. Передача крупных объектов может переполнить буфер и вызвать `TransactionTooLargeException`.
+**Причина:** `Intent` использует `Binder IPC` с лимитом порядка **1MB** на буфер транзакции для процесса. Передача крупных объектов может переполнить буфер и вызвать `TransactionTooLargeException`.
 
 **✅ Правильно** - для больших данных передавать только ссылку:
 1. Сохранить данные (файл/БД/кэш)
@@ -352,14 +351,12 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 ## Answer (EN)
 
 ### Short Version
-
-You must not put large payloads (e.g., `Bitmap`/`ByteArray`) directly into `Intent` extras because of the Binder transaction buffer limit (~1 MB). Instead:
+You must not put large payloads (e.g., `Bitmap`/`ByteArray`) directly into `Intent` extras because of the `Binder` transaction buffer limit (~1 MB). Instead:
 - persist data (file/DB/cache),
 - pass only a reference (`URI`/ID/path),
 - expose it securely via `FileProvider`/`ContentProvider` or similar.
 
 ### Detailed Version
-
 ### Problem: `Intent` Size Limit
 
 **❌ Wrong** - passing large data directly (especially `Bitmap`/`ByteArray`):
@@ -370,7 +367,7 @@ val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
 intent.putExtra("image", bitmap)  // Risky for large size; depends on total Binder buffer usage
 ```
 
-**Reason:** `Intent` extras are sent over Binder IPC with an approximate **1MB** transaction buffer limit per process. Large objects can overflow this buffer and trigger `TransactionTooLargeException`.
+**Reason:** `Intent` extras are sent over `Binder IPC` with an approximate **1MB** transaction buffer limit per process. Large objects can overflow this buffer and trigger `TransactionTooLargeException`.
 
 **✅ Correct** - for large data, pass a reference only:
 1. Save data (file/database/cache)
@@ -656,6 +653,8 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ## References
 
+- [[c-android]]
+- [[c-binder]]
 - Android Developers: FileProvider
 - Android Developers: Content Provider Basics
 - Android Developers: Share Files
@@ -670,12 +669,6 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - [[c-android]]
 - [[c-binder]]
 
-### Prerequisites (Medium)
-
-- [[q-how-to-pass-data-from-one-activity-to-another--android--medium]] - Basic data passing
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` lifecycle
-
 ### Related (Hard)
 
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Component architecture
 - [[q-android-security-best-practices--android--medium]] - Secure file sharing

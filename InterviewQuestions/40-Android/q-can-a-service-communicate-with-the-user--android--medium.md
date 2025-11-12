@@ -33,7 +33,7 @@ tags: [android/service, difficulty/medium]
 
 ## Ответ (RU)
 
-**Прямой UI**: Нет. `Service` не имеет собственного UI и обычно выполняется в фоновом режиме.
+**Прямой UI**: Напрямую — нет. `Service` не является UI-компонентом, не имеет собственного интерфейса и обычно выполняется в фоновом режиме, но может инициировать взаимодействие с пользователем через системные механизмы.
 
 **Способы коммуникации** (от приоритетных к более редким):
 
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity(), DataListener {
 ```kotlin
 // ❌ Legacy: LocalBroadcastManager.getInstance(this).sendBroadcast(...)
 
-// ✅ Modern: SharedFlow
+// ✅ Modern: SharedFlow (вынесен в process-wide область, чтобы UI мог подписаться)
 class ModernService : Service() {
   companion object {
     private val _updates = MutableSharedFlow<String>()
@@ -131,6 +131,7 @@ class ModernService : Service() {
   }
 
   private suspend fun notifyUI(data: String) {
+    // Должно вызываться из корутины (например, через serviceScope.launch { notifyUI(...) })
     _updates.emit(data)
   }
 }
@@ -151,7 +152,7 @@ lifecycleScope.launch {
 
 ## Answer (EN)
 
-**Direct UI**: No. `Service` has no UI and typically runs in the background.
+**Direct UI**: Directly — no. `Service` is not a UI component, has no own interface, and typically runs in the background, but it can initiate interaction with the user through system mechanisms.
 
 **Communication mechanisms** (from preferred to less common):
 
@@ -241,7 +242,7 @@ class MainActivity : AppCompatActivity(), DataListener {
 ```kotlin
 // ❌ Legacy: LocalBroadcastManager.getInstance(this).sendBroadcast(...)
 
-// ✅ Modern: SharedFlow
+// ✅ Modern: SharedFlow (exposed from a process-wide scope so UI can subscribe)
 class ModernService : Service() {
   companion object {
     private val _updates = MutableSharedFlow<String>()
@@ -249,6 +250,7 @@ class ModernService : Service() {
   }
 
   private suspend fun notifyUI(data: String) {
+    // Must be called from a coroutine (e.g., via serviceScope.launch { notifyUI(...) })
     _updates.emit(data)
   }
 }

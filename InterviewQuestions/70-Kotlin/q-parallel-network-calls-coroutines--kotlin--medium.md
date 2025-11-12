@@ -38,7 +38,7 @@ tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, perfo
 
 ## Ответ (RU)
 
-Выполнение параллельных сетевых запросов — распространенное требование в Android-приложениях для улучшения производительности и сокращения времени загрузки. Kotlin coroutines позволяют элегантно выполнять такие запросы конкурентно.
+Выполнение параллельных сетевых запросов — распространенное требование в Android-приложениях для улучшения производительности и сокращения времени загрузки. Kotlin coroutines позволяют элегантно выполнять такие запросы конкурентно (обычно на `Dispatchers.IO`).
 
 ### 1. Использование `async` и `await`
 
@@ -49,7 +49,7 @@ import kotlinx.coroutines.*
 interface ApiService {
     suspend fun getUser(userId: String): User
     suspend fun getPosts(userId: String): List<Post>
-    suspend fun getComments(postId: String): List<Comment>
+    suspend fun getComments(userId: String): List<Comment>
 }
 
 lateinit var apiService: ApiService
@@ -59,7 +59,7 @@ suspend fun fetchUserData(userId: String): UserData = coroutineScope {
     // Запускаем все запросы конкурентно (логически параллельно)
     val userDeferred = async { apiService.getUser(userId) }
     val postsDeferred = async { apiService.getPosts(userId) }
-    val commentsDeferred = async { apiService.getComments("post1") }
+    val commentsDeferred = async { apiService.getComments(userId) }
 
     // Ожидаем все результаты
     UserData(
@@ -77,15 +77,15 @@ class UserViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun loadUserData(userId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 _loading.value = true
                 val userData = repository.fetchUserData(userId)
-                _userData.value = userData
+                _userData.postValue(userData)
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.postValue(e.message)
             } finally {
-                _loading.value = false
+                _loading.postValue(false)
             }
         }
     }
@@ -101,6 +101,8 @@ data class ParallelResult<T>(
     val data: T? = null,
     val error: Exception? = null
 )
+
+// Предполагаем, что ApiService также объявляет suspend fun getSettings(userId: String): Settings
 
 suspend fun fetchUserDataWithErrorHandling(userId: String): UserScreenData = coroutineScope {
     val userDeferred = async {
@@ -217,7 +219,7 @@ suspend fun <T> raceForFirst(
         }
     }
 
-    while (isActive && deferreds.isNotEmpty()) {
+    while (isActive) {
         val completed = deferreds.firstOrNull { it.isCompleted }
         if (completed != null) {
             val result = completed.await()
@@ -311,7 +313,6 @@ suspend fun fetchWithProgress(
 
 ```kotlin
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.channelFlow
 
 fun fetchUsersFlow(userIds: List<String>): Flow<User> = channelFlow {
@@ -443,7 +444,7 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 
 ## Answer (EN)
 
-Making parallel network calls is a common requirement in Android apps to improve performance and reduce loading time. Kotlin coroutines provide elegant ways to execute multiple network requests concurrently.
+Making parallel network calls is a common requirement in Android apps to improve performance and reduce loading time. Kotlin coroutines provide elegant ways to execute multiple network requests concurrently (typically on `Dispatchers.IO`).
 
 ### 1. Using `async` and `await`
 
@@ -456,7 +457,7 @@ import kotlinx.coroutines.*
 interface ApiService {
     suspend fun getUser(userId: String): User
     suspend fun getPosts(userId: String): List<Post>
-    suspend fun getComments(postId: String): List<Comment>
+    suspend fun getComments(userId: String): List<Comment>
 }
 
 lateinit var apiService: ApiService
@@ -466,7 +467,7 @@ suspend fun fetchUserData(userId: String): UserData = coroutineScope {
     // Launch all requests concurrently (logically in parallel)
     val userDeferred = async { apiService.getUser(userId) }
     val postsDeferred = async { apiService.getPosts(userId) }
-    val commentsDeferred = async { apiService.getComments("post1") }
+    val commentsDeferred = async { apiService.getComments(userId) }
 
     // Wait for all results
     UserData(
@@ -485,15 +486,15 @@ class UserViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun loadUserData(userId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 _loading.value = true
                 val userData = repository.fetchUserData(userId)
-                _userData.value = userData
+                _userData.postValue(userData)
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.postValue(e.message)
             } finally {
-                _loading.value = false
+                _loading.postValue(false)
             }
         }
     }
@@ -509,6 +510,8 @@ data class ParallelResult<T>(
     val data: T? = null,
     val error: Exception? = null
 )
+
+// Assume ApiService also declares suspend fun getSettings(userId: String): Settings
 
 suspend fun fetchUserDataWithErrorHandling(userId: String): UserScreenData = coroutineScope {
     // Launch all requests
@@ -619,7 +622,7 @@ suspend fun fetchDashboardData(): DashboardData = supervisorScope {
 
 ### 5. Race Pattern - First Successful Result
 
-Get the first successful result from multiple sources. Implementation must truly race and not be blocked by slower failures.
+Get the first successful result from multiple sources, cancelling the rest:
 
 ```kotlin
 suspend fun <T> raceForFirst(
@@ -631,7 +634,7 @@ suspend fun <T> raceForFirst(
         }
     }
 
-    while (isActive && deferreds.isNotEmpty()) {
+    while (isActive) {
         val completed = deferreds.firstOrNull { it.isCompleted }
         if (completed != null) {
             val result = completed.await()
@@ -640,7 +643,6 @@ suspend fun <T> raceForFirst(
                 return@coroutineScope result.getOrThrow()
             }
         }
-        // If only failures complete, loop continues until all done
         if (deferreds.all { it.isCompleted }) break
         yield()
     }

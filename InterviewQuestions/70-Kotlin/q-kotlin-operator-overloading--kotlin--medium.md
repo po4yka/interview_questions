@@ -44,7 +44,7 @@ interface IndexedContainer {
 }
 ```
 
-При переопределении перегрузок операторов вы можете опустить `operator`:
+При переопределении методов, помеченных `operator`, в подклассах модификатор `operator` можно опустить:
 
 ```kotlin
 class OrdersList: IndexedContainer {
@@ -54,15 +54,16 @@ class OrdersList: IndexedContainer {
 
 Следующие группы операторов могут быть перегружены (строго из предопределенного списка Kotlin):
 - Унарные префиксные операторы
-- Инкременты и декременты
+- Инкременты и декременты (`++`, `--`)
 - Арифметические операторы
 - Оператор индексированного доступа
 - Оператор invoke
 - Дополненные присваивания
 - Операторы равенства и неравенства
 - Операторы сравнения
+- Операторы принадлежности (`in` / `!in`)
 
-(Операторы `&&`, `||`, `?:`, `is`, `in` и другие не могут быть произвольно перегружены за пределами этих правил.)
+(Операторы `&&`, `||`, `?:`, `is` и другие логические/структурные операторы не могут быть произвольно перегружены.)
 
 ### Унарные Префиксные Операторы
 
@@ -74,7 +75,7 @@ class OrdersList: IndexedContainer {
 
 Эта таблица говорит, что когда компилятор обрабатывает, например, выражение `+a`, он выполняет следующие шаги:
 - Определяет тип `a`, пусть это будет `T`;
-- Ищет функцию `unaryPlus()` с модификатором `operator` и без параметров для получателя `T`, что означает функцию-член или функцию-расширение;
+- Ищет функцию `unaryPlus()` с модификатором `operator` и без параметров для получателя `T` (функция-член или функция-расширение);
 - Если функция отсутствует или неоднозначна, это ошибка компиляции;
 - Если функция присутствует и её тип возврата `R`, выражение `+a` имеет тип `R`.
 
@@ -186,11 +187,20 @@ fun main() {
 | `a %= b`   | `a.remAssign(b)`    |
 
 Для операций присваивания, например `a += b`, компилятор выполняет следующие шаги:
-- Если функция из правого столбца доступна:
-  - Если соответствующая бинарная функция (это означает `plus()` для `plusAssign()`) также доступна, `a` является изменяемой переменной, и тип возврата `plus` является подтипом типа `a`, сообщить об ошибке (неоднозначность);
+- Если доступна функция из правого столбца (например, `plusAssign`):
   - Убедиться, что её тип возврата `Unit`, и сообщить об ошибке в противном случае;
   - Сгенерировать код для `a.plusAssign(b)`.
-- В противном случае попытаться сгенерировать код для `a = a + b` (это включает проверку типа: тип `a + b` должен быть подтипом `a`).
+- В противном случае:
+  - Попытаться использовать соответствующую бинарную функцию (`plus` для `+=`) и сгенерировать код `a = a + b` (тип `a + b` должен быть совместим с типом `a`).
+
+### Операторы Принадлежности (`in` / `!in`)
+
+| Выражение | Переводится в       |
+|-----------|---------------------|
+| `a in b`  | `b.contains(a)`     |
+| `a !in b` | `!b.contains(a)`    |
+
+Эти операторы можно перегружать, определяя функцию `operator fun contains(element: T): Boolean` у соответствующего типа.
 
 ### Операторы Равенства И Неравенства
 
@@ -241,7 +251,7 @@ interface IndexedContainer {
 }
 ```
 
-When overriding your operator overloads, you can omit `operator`:
+When overriding functions that were marked with `operator` in a supertype, you may omit the `operator` modifier in the override:
 
 ```kotlin
 class OrdersList: IndexedContainer {
@@ -251,15 +261,16 @@ class OrdersList: IndexedContainer {
 
 The following groups of operators can be overloaded (from Kotlin's predefined set only):
 - Unary prefix operators
-- Increments and decrements
+- Increments and decrements (`++`, `--`)
 - Arithmetic operators
 - Indexed access operator
 - Invoke operator
 - Augmented assignments
 - Equality and inequality operators
 - Comparison operators
+- Containment operators (`in` / `!in`)
 
-(Operators like `&&`, `||`, `?:`, `is`, `in`, etc. cannot be arbitrarily overloaded beyond these rules.)
+(Operators like `&&`, `||`, `?:`, `is`, and other logical/structural operators cannot be arbitrarily overloaded.)
 
 ### Unary Prefix Operators
 
@@ -271,7 +282,7 @@ The following groups of operators can be overloaded (from Kotlin's predefined se
 
 This table says that when the compiler processes, for example, an expression `+a`, it performs the following steps:
 - Determines the type of `a`, let it be `T`;
-- Looks up a function `unaryPlus()` with the `operator` modifier and no parameters for the receiver `T`, that means a member function or an extension function;
+- Looks up a function `unaryPlus()` with the `operator` modifier and no parameters for the receiver `T` (a member function or an extension function);
 - If the function is absent or ambiguous, it is a compilation error;
 - If the function is present and its return type is `R`, the expression `+a` has type `R`.
 
@@ -301,7 +312,7 @@ fun main() {
 | `a..b`     | `a.rangeTo(b)`    |
 | `a..<b`    | `a.rangeUntil(b)` |
 
-For the operations in this table, the compiler just resolves the expression in the "Translated to" column.
+For the operations in this table, the compiler just resolves the expression to the call shown in the "Translated to" column.
 
 Example:
 
@@ -383,11 +394,20 @@ fun main() {
 | `a %= b`   | `a.remAssign(b)`    |
 
 For the assignment operations, for example `a += b`, the compiler performs the following steps:
-- If the function from the right column is available:
-  - If the corresponding binary function (that means `plus()` for `plusAssign()`) is available too, `a` is a mutable variable, and the return type of `plus` is a subtype of the type of `a`, report an error (ambiguity);
-  - Make sure its return type is `Unit`, and report an error otherwise;
+- If the function from the right column is available (for example, `plusAssign`):
+  - Ensure its return type is `Unit`, and report an error otherwise;
   - Generate code for `a.plusAssign(b)`.
-- Otherwise, try to generate code for `a = a + b` (this includes a type check: the type of `a + b` must be a subtype of `a`).
+- Otherwise:
+  - Try to use the corresponding binary function (`plus` for `+=`) and generate code `a = a + b` (the type of `a + b` must be compatible with the type of `a`).
+
+### Containment Operators (`in` / `!in`)
+
+| Expression | Translated to       |
+|------------|---------------------|
+| `a in b`   | `b.contains(a)`     |
+| `a !in b`  | `!b.contains(a)`    |
+
+These operators can be overloaded by defining `operator fun contains(element: T): Boolean` on the relevant type.
 
 ### Equality and Inequality Operators
 
@@ -396,7 +416,7 @@ For the assignment operations, for example `a += b`, the compiler performs the f
 | `a == b`   | `a?.equals(b) ?: (b === null)`     |
 | `a != b`   | `!(a?.equals(b) ?: (b === null))`  |
 
-These operators only work with the function `equals(other: Any?): Boolean`, which can be overridden to provide custom equality check implementation. Any other function with the same name (like `equals(other: Foo)`) will not be called.
+These operators only work with the function `equals(other: Any?): Boolean`, which can be overridden to provide a custom equality check. Any other function with the same name (like `equals(other: Foo)`) will not be called.
 
 ### Comparison Operators
 

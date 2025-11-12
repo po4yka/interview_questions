@@ -52,7 +52,7 @@ tags:
 
 **Scope в Koin** — это контейнеры для зависимостей с ограниченным временем жизни, которые можно привязать к Android-компонентам (`Activity`, `Fragment`) или пользовательским логическим границам. Они помогают избежать утечек памяти и делают поведение зависимостей согласованным с жизненным циклом.
 
-Важно: Koin не "угадывает" жизненный цикл — вы создаёте и закрываете scope явно или через привязку к владельцу жизненного цикла (`LifecycleOwner`). Примеры ниже показывают типичный паттерн для Koin 3.x с Android.
+Важно: Koin не "угадывает" жизненный цикл — вы создаёте и закрываете scope явно или через привязку к владельцу жизненного цикла (`LifecycleOwner`). Примеры ниже показывают типичный паттерн низкоуровневого явного управления scope для Koin 3.x с Android (без использования дополнительных Android-обёрток).
 
 ### Основные Концепции
 
@@ -86,12 +86,13 @@ val shoppingModule = module {
 class ShoppingActivity : AppCompatActivity() {
 
     // Создаём scope при создании Activity.
-    // В реальном проекте используйте стабильно формируемый scopeId
-    // (например, сохранённый в savedInstanceState), здесь — упрощённо.
+    // В реальном проекте используйте стабильно формируемый scopeId,
+    // здесь для простоты используем фиксированное значение.
     private val activityScope: Scope by lazy {
         getKoin().createScope(
-            scopeId = "ShoppingActivity_${hashCode()}",
-            qualifier = named<ShoppingActivity>()
+            scopeId = "ShoppingActivity_scope",
+            // qualifier соответствует scope<ShoppingActivity> в модуле
+            qualifier = scopeQualifier<ShoppingActivity>()
         )
     }
 
@@ -111,10 +112,11 @@ class ShoppingActivity : AppCompatActivity() {
 ```
 
 **Объяснение**:
-- `scope<ShoppingActivity> { ... }` в модуле описывает, какие зависимости доступны в scope, связанном с этим qualifier-ом.
+- `scope<ShoppingActivity> { ... }` в модуле описывает, какие зависимости доступны в scope, связанном с этим qualifier-ом (typed qualifier для `ShoppingActivity`).
 - `createScope(scopeId, qualifier)` создаёт новый экземпляр scope.
 - `scoped` создаёт один экземпляр на scope.
 - При `close()` все scoped-зависимости освобождаются; вы решаете, когда звать `close()` (обычно в `onDestroy`).
+- В Android-проектах `getKoin()` предоставляется через Koin Android-расширения.
 
 ### `Fragment` Scoped Dependencies
 
@@ -134,8 +136,9 @@ class ProfileFragment : Fragment() {
 
     private val fragmentScope: Scope by lazy {
         getKoin().createScope(
-            scopeId = "ProfileFragment_${hashCode()}",
-            qualifier = named<ProfileFragment>()
+            scopeId = "ProfileFragment_scope",
+            // qualifier соответствует scope<ProfileFragment> в модуле
+            qualifier = scopeQualifier<ProfileFragment>()
         )
     }
 
@@ -173,8 +176,8 @@ class MainActivity : AppCompatActivity() {
 
     val activityScope: Scope by lazy {
         getKoin().createScope(
-            scopeId = "MainActivity_${hashCode()}",
-            qualifier = named<MainActivity>()
+            scopeId = "MainActivity_scope",
+            qualifier = scopeQualifier<MainActivity>()
         )
     }
 
@@ -197,8 +200,8 @@ class HomeFragment : Fragment() {
 ```
 
 **Комментарий**:
-- Используем явный и стабильный способ получения `Activity` scope, без недетерминированных `toString()`.
-- Пока `Activity` жива, её scope доступен всем дочерним `Fragment`-ам.
+- Используем явный и стабильный способ получения `Activity` scope.
+- Пока `Activity` жива и вы не закрыли её scope, он доступен всем дочерним `Fragment`-ам.
 
 ### Custom Named Scopes
 
@@ -244,7 +247,7 @@ class SessionManager(private val koin: Koin) {
 | Подход | Использование | Автоматическая очистка |
 |--------|---------------|------------------------|
 | `Application` / `single` | Глобальные зависимости | Пока живёт Koin app context |
-| Component scope (`Activity`/`Fragment`) | Привязка к жизненному циклу компонента через явное создание/close | Да, если корректно закрываете в onDestroy |
+| Component scope (`Activity`/`Fragment`) | Привязка к жизненному циклу компонента через явное создание/close | Нет, требуется вызвать `close()` в нужном месте |
 | Named scope | Пользовательская логика (сессия, фича) | Нет, требуется ручное управление |
 
 ### Best Practices
@@ -260,14 +263,14 @@ class SessionManager(private val koin: Koin) {
 
 Koin Scopes provide lifecycle-aware dependency management by creating containers for dependencies with limited lifetimes that you explicitly tie to Android components (`Activity`, `Fragment`) or custom logical boundaries. They help avoid memory leaks and keep dependency lifetimes aligned with owners.
 
-Important: Koin does not automatically infer Android lifecycle. You create and close scopes explicitly or via lifecycle-aware bindings. The examples below illustrate typical patterns for Koin 3.x with Android.
+Important: Koin does not automatically infer the Android lifecycle. You create and close scopes explicitly or via lifecycle-aware bindings. The examples below illustrate low-level explicit scope management patterns for Koin 3.x on Android (without using additional Android-specific helpers).
 
 ### Core Concepts
 
 **Scope Types**:
 1. **`Application` / Root Scope** – `single { ... }`, lives as long as the Koin application context.
-2. **Component Scope** – scope explicitly created for an `Activity`/`Fragment` and closed when that component is destroyed.
-3. **Named Scope** – scope with a qualifier (`named("..."`) for custom logical boundaries (session, feature, etc.).
+2. **Component Scope** – a scope explicitly created for an `Activity`/`Fragment` and closed when that component is destroyed.
+3. **Named Scope** – a scope with a qualifier (`named("...")`) for custom logical boundaries (session, feature, etc.).
 
 **Benefits**:
 - Controlled resource cleanup.
@@ -294,11 +297,12 @@ val shoppingModule = module {
 class ShoppingActivity : AppCompatActivity() {
 
     // Create scope when Activity is created.
-    // In production, use a stable scopeId (e.g., saved in savedInstanceState).
+    // In real projects, prefer a stable scopeId; here we use a fixed value for clarity.
     private val activityScope: Scope by lazy {
         getKoin().createScope(
-            scopeId = "ShoppingActivity_${hashCode()}",
-            qualifier = named<ShoppingActivity>()
+            scopeId = "ShoppingActivity_scope",
+            // qualifier matches scope<ShoppingActivity> defined in the module
+            qualifier = scopeQualifier<ShoppingActivity>()
         )
     }
 
@@ -318,10 +322,11 @@ class ShoppingActivity : AppCompatActivity() {
 ```
 
 **Explanation**:
-- `scope<ShoppingActivity> { ... }` in the module declares which dependencies exist in that qualified scope.
+- `scope<ShoppingActivity> { ... }` in the module declares which dependencies exist in that typed scope.
 - `createScope(scopeId, qualifier)` creates a new scope instance.
 - `scoped` provides one instance per scope.
 - Calling `close()` releases scoped dependencies; you decide when (typically in `onDestroy`).
+- In Android projects, `getKoin()` is provided via Koin Android extensions.
 
 ### `Fragment` Scoped Dependencies
 
@@ -341,8 +346,9 @@ class ProfileFragment : Fragment() {
 
     private val fragmentScope: Scope by lazy {
         getKoin().createScope(
-            scopeId = "ProfileFragment_${hashCode()}",
-            qualifier = named<ProfileFragment>()
+            scopeId = "ProfileFragment_scope",
+            // qualifier matches scope<ProfileFragment> defined in the module
+            qualifier = scopeQualifier<ProfileFragment>()
         )
     }
 
@@ -365,9 +371,9 @@ class ProfileFragment : Fragment() {
 ```
 
 **Key Points**:
-- `scope<ProfileFragment> { ... }` declares dependencies for the `Fragment` scope.
+- `scope<ProfileFragment> { ... }` declares dependencies for the Fragment scope.
 - `parametersOf()` passes runtime parameters to scoped definitions.
-- Close the scope when the `Fragment` is no longer needed (commonly `onDestroy()`), not merely on `onDestroyView()` if the `Fragment` instance continues to live.
+- Close the scope when the Fragment is no longer needed (commonly `onDestroy()`), not merely in `onDestroyView()` if the Fragment instance is still retained.
 
 ### Sharing Scopes Between Components
 
@@ -379,8 +385,8 @@ class MainActivity : AppCompatActivity() {
 
     val activityScope: Scope by lazy {
         getKoin().createScope(
-            scopeId = "MainActivity_${hashCode()}",
-            qualifier = named<MainActivity>()
+            scopeId = "MainActivity_scope",
+            qualifier = scopeQualifier<MainActivity>()
         )
     }
 
@@ -403,8 +409,8 @@ class HomeFragment : Fragment() {
 ```
 
 **Notes**:
-- Use an explicit, stable way to obtain the `Activity` scope rather than relying on `toString()` or other non-deterministic IDs.
-- As long as the `Activity` lives, its scope is available to child Fragments.
+- Use an explicit, stable way to obtain the `Activity` scope.
+- As long as the `Activity` is alive and you haven't closed its scope, it remains available to child Fragments.
 
 ### Custom Named Scopes
 
@@ -450,14 +456,14 @@ class SessionManager(private val koin: Koin) {
 | Approach | Use Case | Automatic Cleanup |
 |----------|----------|-------------------|
 | `Application` / `single` | Global dependencies | While Koin app context is alive |
-| Component scope (`Activity`/`Fragment`) | Tied to component lifecycle via explicit create/close | Yes, if you close in `onDestroy` |
+| Component scope (`Activity`/`Fragment`) | Tied to component lifecycle via explicit create/close | No, you must call `close()` manually |
 | Named scope | Custom logical boundaries (session/feature) | No, manual management required |
 
 ### Best Practices
 
-1. **Match lifecycle**: Create/close scopes in lifecycle callbacks (`onCreate`/`onDestroy`, etc.) or via lifecycle-aware helpers.
+1. **Match lifecycle**: Create/close scopes in lifecycle callbacks (`onCreate`/`onDestroy`, `onStart`/`onStop`) or via lifecycle-aware helpers.
 2. **Prevent leaks**: Always close custom/named scopes when their logical lifetime ends.
-3. **Shared state**: Use a shared `Activity` scope to share state between Fragments safely.
+3. **Shared state**: Use a shared `Activity` scope to safely share state between Fragments.
 4. **Lazy injection**: Prefer `by inject()` and lazy delegates to avoid premature creation.
 
 ---

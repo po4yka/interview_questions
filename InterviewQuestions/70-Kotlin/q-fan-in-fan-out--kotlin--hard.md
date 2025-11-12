@@ -24,7 +24,7 @@ related: [c-kotlin, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-11-09
+updated: 2025-11-11
 
 aliases: []
 
@@ -134,7 +134,7 @@ class WorkerPool(private val scope: CoroutineScope, private val workerCount: Int
 
 ### Паттерн Fan-in
 
-Агрегация результатов от множества производителей в один канал-приёмник:
+Агрегация результатов от множества производителей в один канал-приёмник. Канал, возвращаемый `fanIn`, автоматически будет закрыт, когда все исходные каналы завершатся и вспомогательные корутины дочитают их данные:
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -173,6 +173,8 @@ suspend fun main() = coroutineScope {
     }
 }
 ```
+
+Примечание: канал `consumer` завершится, когда все исходные каналы завершатся, вспомогательные корутины закончат работу, и builder `produce` завершится, автоматически закрыв результирующий канал.
 
 **Практический Fan-in: агрегация логов**
 
@@ -275,7 +277,7 @@ class ImageProcessingPipeline(
 }
 ```
 
-### Продвинутый Fan-out: Work Stealing (упрощённый, с определённым shutdown)
+### Продвинутый Fan-out: Work Stealing (упрощённый)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -306,6 +308,7 @@ class WorkStealingPool<T, R>(
                 val result = processor(task)
                 resultChannel.send(result)
             } else {
+                // Упрощённая логика завершения: возможны гонки, не для продакшена
                 if (taskChannels.all { it.isClosedForReceive && it.isEmpty }) break
                 delay(10)
             }
@@ -369,11 +372,17 @@ fun <T> CoroutineScope.mergeWithSelect(vararg channels: ReceiveChannel<T>): Rece
         select<Unit> {
             channelList.forEach { channel ->
                 channel.onReceiveCatching { result ->
-                    result.getOrNull()?.let { send(it) }
-                        ?: channelList.remove(channel)
+                    val value = result.getOrNull()
+                    if (value != null) {
+                        send(value)
+                    } else {
+                        // без изменения коллекции в момент итерации
+                    }
                 }
             }
         }
+        // удалить закрытые каналы вне select, после итерации
+        channelList.removeAll { it.isClosedForReceive }
     }
 }
 ```
@@ -438,8 +447,8 @@ class WebScraperPool(
 #### ДЕЛАТЬ:
 
 ```kotlin
-// Использовать fan-out для параллельной обработки (processChannel — helper)
-val workers = List(5) { workerId -> processChannel(workerId = workerId, input) }
+// Использовать fan-out для параллельной обработки (workerFn — определённый helper)
+val workers = List(5) { workerId -> workerFn(workerId = workerId, input) }
 
 // Использовать fan-in для агрегации результатов (merge определён как helper выше)
 val merged = merge(channel1, channel2, channel3)
@@ -576,7 +585,7 @@ class WorkerPool(private val scope: CoroutineScope, private val workerCount: Int
 
 ### Fan-in Pattern
 
-Aggregating results from multiple producers into a single channel:
+Aggregating results from multiple producers into a single channel. The channel returned by `fanIn` will be closed automatically when all source channels complete and the producer's body finishes:
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -612,7 +621,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-Note: `consumer` completes when all source channels complete and the merging coroutine closes the produced channel.
+Note: `consumer` completes when all source channels complete, helper coroutines finish reading, and the `produce` builder completes, closing the resulting channel.
 
 **Real-World Fan-in: Log Aggregation**
 
@@ -716,7 +725,7 @@ class ImageProcessingPipeline(
 }
 ```
 
-### Advanced Fan-out: Work Stealing (simplified, with defined shutdown)
+### Advanced Fan-out: Work Stealing (simplified)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -747,7 +756,7 @@ class WorkStealingPool<T, R>(
                 val result = processor(task)
                 resultChannel.send(result)
             } else {
-                // Check for global shutdown: if all channels closed and empty, exit
+                // Simplified shutdown logic; races are possible, not production-grade
                 if (taskChannels.all { it.isClosedForReceive && it.isEmpty }) break
                 delay(10)
             }
@@ -812,11 +821,17 @@ fun <T> CoroutineScope.mergeWithSelect(vararg channels: ReceiveChannel<T>): Rece
         select<Unit> {
             channelList.forEach { channel ->
                 channel.onReceiveCatching { result ->
-                    result.getOrNull()?.let { send(it) }
-                        ?: channelList.remove(channel)
+                    val value = result.getOrNull()
+                    if (value != null) {
+                        send(value)
+                    } else {
+                        // do not mutate channelList here
+                    }
                 }
             }
         }
+        // Safely remove closed channels after select iteration
+        channelList.removeAll { it.isClosedForReceive }
     }
 }
 ```
@@ -881,8 +896,8 @@ class WebScraperPool(
 #### DO:
 
 ```kotlin
-// Use fan-out for parallel processing (processChannel is a user-defined helper)
-val workers = List(5) { workerId -> processChannel(workerId = workerId, input) }
+// Use fan-out for parallel processing (workerFn is a user-defined helper)
+val workers = List(5) { workerId -> workerFn(workerId = workerId, input) }
 
 // Use fan-in for result aggregation (merge defined above)
 val merged = merge(channel1, channel2, channel3)

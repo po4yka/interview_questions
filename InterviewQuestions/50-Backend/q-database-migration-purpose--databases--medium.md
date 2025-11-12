@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: databases
-subtopics: [databases, migration]
+subtopics: [migration]
 question_kind: theory
 difficulty: medium
 
@@ -16,71 +16,88 @@ source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
 status: draft
-moc: moc-system-design
+moc: moc-backend
 related: [
-  q-virtual-tables-disadvantages--backend--medium,
-  q-sql-join-algorithms-complexity--backend--hard,
   c-database-design,
   c-migrations
 ]
 
 # Timestamps
 created: 2025-10-03
-updated: 2025-10-03
+updated: 2025-11-11
 
 # Tags
 tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
 ---
 
+# Вопрос (RU)
+> Что такое миграция баз данных и для чего она нужна
+
 # Question (EN)
 > What is database migration and what is it used for
-# Вопрос (RU)
-> Что такое миграция и для чего она нужна
 
 ---
-
-## Answer (EN)
-
-Migration in the context of software and databases refers to the process of moving data, applications, or other elements from one environment to another, or to changes in database structure, code, or technology without loss of data or functionality.
-
-**Why migrations are needed:**
-- Performance improvement
-- Scaling
-- System upgrades
-- Integration of new features
-
-**Migration goals include:**
-- **Infrastructure updates**: Moving to newer database systems or cloud platforms
-- **Data consolidation**: Combining data from multiple sources
-- **Standards compliance**: Adapting to new regulatory or technical requirements
-- **Cost reduction**: Optimizing infrastructure and operational costs
-
-Migrations ensure smooth transitions while preserving data integrity and application functionality.
 
 ## Ответ (RU)
 
-Миграция в контексте программного обеспечения и баз данных относится к процессу переноса данных, приложений или других элементов из одной среды в другую, или к изменениям в структуре баз данных, кода или технологии без потери данных или функциональности.
+Миграция баз данных — это контролируемый, повторяемый процесс изменения структуры или данных базы данных (например, добавление или изменение таблиц, столбцов, индексов, ограничений, трансформация данных) с сохранением целостности данных и корректной работы приложений при переходе между версиями.
 
-**Зачем нужны миграции:**
-- Улучшение производительности
-- Масштабирование системы
-- Обновление систем
-- Интеграция новых функций
+Миграции, как правило, версионируются и применяются последовательно, чтобы:
+- любое окружение (dev, staging, production) можно было привести к нужной версии схемы,
+- изменения были отслеживаемыми, тестируемыми и часто обратимыми.
 
-**Цели миграций включают:**
-- **Обновление инфраструктуры**: Переход на новые системы баз данных или облачные платформы
-- **Консолидация данных**: Объединение данных из нескольких источников
-- **Соответствие стандартам**: Адаптация к новым нормативным или техническим требованиям
-- **Снижение затрат**: Оптимизация инфраструктуры и операционных расходов
+Зачем нужны миграции:
+- Улучшение производительности (например, добавление индексов, оптимизация схемы)
+- Масштабирование и повышение надежности (например, шардинг, партиционирование, рефакторинг схемы)
+- Обновление систем и схемы (поддержка новых версий СУБД или новых возможностей)
+- Интеграция новых функций приложения, требующих изменений схемы или данных
+- Соответствие требованиям регуляторов и корпоративным стандартам (добавление обязательных полей и т.п.)
 
-Миграции обеспечивают плавный переход при сохранении целостности данных и функциональности приложений.
+Цели миграций включают:
+- Обеспечение безопасной эволюции схемы без потери данных
+- Сохранение обратной совместимости при развертывании, когда это необходимо
+- Поддержание согласованности и воспроизводимости всех окружений
+
+Миграции обеспечивают плавную и предсказуемую эволюцию схемы и данных при сохранении целостности и функциональности приложений.
+
+## Answer (EN)
+
+Database migration is a controlled, repeatable process of changing the structure or data of a database (for example, adding or modifying tables, columns, indexes, constraints, or transforming data) while preserving data integrity and keeping applications working correctly across versions.
+
+Migrations are usually versioned and applied sequentially so that:
+- any environment (dev, staging, production) can be brought to a specific schema version,
+- changes are traceable, testable, and often reversible.
+
+Why migrations are needed:
+- Performance improvements (e.g., adding indexes, optimizing schemas)
+- Scaling and reliability (e.g., sharding, partitioning, refactoring schemas)
+- System and schema upgrades (e.g., adapting to new features or database versions)
+- Integration of new application features that require schema or data changes
+- Compliance and governance (e.g., storing additional fields required by regulations)
+
+Migration goals include:
+- Ensuring safe schema evolution without data loss
+- Maintaining backward compatibility during deployments when needed
+- Keeping all environments consistent and reproducible
+
+Migrations ensure smooth, predictable schema and data evolution while preserving data integrity and application functionality.
 
 ---
+
+## Дополнительные вопросы (RU)
+- Какие существуют стратегии миграции (big bang vs incremental)?
+- Как обрабатывать откаты миграций?
+- Какие инструменты доступны для миграций баз данных?
 
 ## Follow-ups
 - What are migration strategies (big bang vs incremental)?
 - How to handle migration rollbacks?
 - What tools are available for database migrations?
+
+## Ссылки (RU)
+- [[c-database-design]]
+- [[c-migrations]]
+- [[moc-backend]]
 
 ## References
 - [[c-database-design]]

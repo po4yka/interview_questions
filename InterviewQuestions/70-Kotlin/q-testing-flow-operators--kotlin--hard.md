@@ -36,7 +36,7 @@ tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
 
 ## Ответ (RU)
 
-Тестирование операторов `Flow` требует глубокого понимания их семантики: холодность и ленивость потоков, асинхронность, реактивность, отмена, обработка ошибок и то, как отдельные операторы трансформируют поток данных и взаимодействуют друг с другом. Для операторов, зависящих от времени (`debounce`, `sample`, пользовательские throttle-операторы, `retry` с задержками), критично использовать виртуальное время (`runTest`, `advanceTimeBy`, `currentTime`) и не полагаться на реальные часы (`System.currentTimeMillis()`), иначе тесты будут медленными и нестабильными.
+Тестирование операторов `Flow` требует глубокого понимания их семантики: холодность и ленивость потоков, асинхронность, реактивность, отмена, обработка ошибок и то, как отдельные операторы трансформируют поток данных и взаимодействуют друг с другом. Для операторов, зависящих от времени (`debounce`, `sample`, пользовательские throttle-операторы, `retry` с задержками), критично использовать виртуальное время (`runTest`, `advanceTimeBy`, `currentTime` тестового скоупа или шедулера) и не полагаться на реальные часы (`System.currentTimeMillis()`), иначе тесты будут медленными и нестабильными.
 
 Ниже приведены ключевые шаблоны тестирования операторов `Flow` с использованием библиотеки Turbine и виртуального времени. Примеры кода идентичны английской версии; комментарии и пояснения локализованы.
 
@@ -231,14 +231,17 @@ fun `sample emits latest value at intervals with virtual time`() = runTest {
 
 #### Пользовательский throttle (`throttleFirst`)
 
-Для собственных операторов, зависящих от времени, используйте виртуальное время тест-диспетчера, а не реальные часы.
+Для собственных операторов, зависящих от времени, используйте виртуальное время тест-диспетчера, а не реальные часы. При этом логика оператора не должна напрямую ссылаться на тестовые API — вместо этого прокидывайте абстракцию времени при необходимости.
 
 ```kotlin
-// Custom throttleFirst using virtual time
+// Пример throttleFirst, опирающийся на виртуальное время TestScope
 fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
+    require(windowDuration > 0)
     var lastEmissionTime = Long.MIN_VALUE
     collect { value ->
-        val time = kotlinx.coroutines.test.currentTime
+        // В тестах этот flow должен запускаться внутри runTest,
+        // текущие значения времени контролируются тестовым шедулером.
+        val time = coroutineContext[TestCoroutineScheduler]?.currentTime ?: 0L
         if (time - lastEmissionTime >= windowDuration) {
             lastEmissionTime = time
             emit(value)
@@ -1029,6 +1032,8 @@ fun `emitBatches handles partial batch`() = runTest {
 }
 
 // Пользовательский оператор: timeoutEach
+// Оборачивает обработку каждого элемента во временное ограничение;
+// если обработка следующего элемента (или send в канал) выходит за таймаут, выбрасывается TimeoutCancellationException.
 fun <T> Flow<T>.timeoutEach(timeoutMs: Long): Flow<T> = channelFlow {
     require(timeoutMs > 0)
     collect { value ->
@@ -1060,7 +1065,7 @@ fun `timeoutEach fails on slow emissions`() = runTest {
 ### Лучшие практики
 
 ```kotlin
-// DO: используйте Turbine для тестирования Flow
+// DO: используйте Turbine для декларативных и детерминированных проверок Flow
 @Test
 fun goodTest_turbine() = runTest {
     val flow = flowOf(1)
@@ -1070,7 +1075,7 @@ fun goodTest_turbine() = runTest {
     }
 }
 
-// DON'T: вручную собирать и затем проверять, когда доступен Turbine
+// ВОЗМОЖНО, НО НЕ РЕКОМЕНДУЕТСЯ: вручную собирать и затем проверять, когда доступен Turbine
 @Test
 fun badTest_manualCollect() = runTest {
     val flow = flowOf(1)
@@ -1156,7 +1161,7 @@ fun goodTest_cancellation() = runTest {
 
 Кратко, лучшие практики:
 - Использовать Turbine для декларативных проверок операторов.
-- Использовать `runTest`, `advanceTimeBy`, `currentTime` для контроля виртуального времени.
+- Использовать `runTest`, управление виртуальным временем и `currentTime` тестового шедулера вместо реальных часов.
 - Тестировать операторы как по отдельности, так и в комбинациях.
 - Явно покрывать обработку ошибок (`catch`, `retry`, `retryWhen`).
 - Тестировать сценарии отмены и взаимодействие с холодной природой `Flow`.
@@ -1180,7 +1185,7 @@ fun goodTest_cancellation() = runTest {
 
 ## Answer (EN)
 
-Testing `Flow` operators requires a deep understanding of their semantics: flow coldness and laziness, asynchrony, reactivity, cancellation, error handling, and how individual operators transform and combine data streams. For time-based operators such as `debounce`, `sample`, custom throttle operators, or `retry` with delays, always rely on virtual time with `runTest`, `advanceTimeBy`, and `currentTime` instead of real-time APIs like `System.currentTimeMillis()` to keep tests fast and deterministic.
+Testing `Flow` operators requires a deep understanding of their semantics: flow coldness and laziness, asynchrony, reactivity, cancellation, error handling, and how individual operators transform and compose data streams. For time-based operators such as `debounce`, `sample`, custom throttles, or `retry` with delays, it is critical to use virtual time via `runTest`, `advanceTimeBy`, and the test scope or scheduler `currentTime` instead of real-time APIs like `System.currentTimeMillis()` to keep tests fast and deterministic.
 
 Below are key patterns for testing `Flow` operators using the Turbine library and virtual time. Code examples mirror the RU section; comments and explanations are in English.
 
@@ -1375,12 +1380,15 @@ fun `sample emits latest value at intervals with virtual time`() = runTest {
 
 #### Custom throttle (`throttleFirst`)
 
+For custom time-based operators, prefer using the test dispatcher and virtual time in tests, but avoid coupling the operator implementation directly to test-only APIs. If timing needs to be injectable, pass an abstraction.
+
 ```kotlin
-// Custom throttleFirst using virtual time
+// Example throttleFirst that relies on the coroutine context's test scheduler when present.
 fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
+    require(windowDuration > 0)
     var lastEmissionTime = Long.MIN_VALUE
     collect { value ->
-        val time = kotlinx.coroutines.test.currentTime
+        val time = coroutineContext[TestCoroutineScheduler]?.currentTime ?: 0L
         if (time - lastEmissionTime >= windowDuration) {
             lastEmissionTime = time
             emit(value)
@@ -2171,6 +2179,8 @@ fun `emitBatches handles partial batch`() = runTest {
 }
 
 // Custom operator: timeoutEach
+// Wraps handling of each element with a timeout; if processing/sending exceeds the timeout,
+// a TimeoutCancellationException is thrown.
 fun <T> Flow<T>.timeoutEach(timeoutMs: Long): Flow<T> = channelFlow {
     require(timeoutMs > 0)
     collect { value ->
@@ -2202,7 +2212,7 @@ fun `timeoutEach fails on slow emissions`() = runTest {
 ### Best practices
 
 ```kotlin
-// DO: use Turbine for Flow testing
+// DO: use Turbine for concise and deterministic Flow assertions
 @Test
 fun goodTest_turbine() = runTest {
     val flow = flowOf(1)
@@ -2212,7 +2222,7 @@ fun goodTest_turbine() = runTest {
     }
 }
 
-// DON'T: manually collect and then assert when Turbine is available
+// VALID BUT LESS IDEAL: manual collect-and-assert when Turbine is available
 @Test
 fun badTest_manualCollect() = runTest {
     val flow = flowOf(1)
@@ -2297,8 +2307,8 @@ fun goodTest_cancellation() = runTest {
 ```
 
 In summary, core strategies when testing `Flow` operators and transformations:
-- Use Turbine for concise, deterministic assertions.
-- Use `runTest`, `advanceTimeBy`, and `currentTime` to control virtual time; avoid real timers.
+- Prefer Turbine for concise, deterministic assertions.
+- Use `runTest`, virtual time control, and the test scheduler's `currentTime`; avoid real timers.
 - Verify behavior of key operator groups: transformations (`map`, `filter`, `transform`),
   time-based (`debounce`, `sample`, custom throttling),
   flattening (`flatMapConcat`, `flatMapMerge`, `flatMapLatest`),

@@ -25,7 +25,7 @@ related:
 - q-compose-modifier-system--android--medium
 - q-compose-remember-derived-state--android--medium
 created: 2025-10-12
-updated: 2025-11-10
+updated: 2025-11-11
 tags:
 - android/ui-compose
 - android/ui-state
@@ -33,7 +33,6 @@ tags:
 - difficulty/medium
 - en
 - ru
-
 ---
 
 # Вопрос (RU)
@@ -41,8 +40,6 @@ tags:
 
 # Question (EN)
 > What is Jetpack Compose? Explain core concepts: composable functions, state management, recomposition, modifiers, layouts, and lifecycle. Provide comprehensive examples for building UIs.
-
----
 
 ## Ответ (RU)
 
@@ -937,8 +934,6 @@ fun ThemedText() {
 5. Не выполняйте тяжёлые операции и долгие задачи непосредственно в composition; используйте `remember`, корутины или эффекты.
 6. Для производных значений используйте `derivedStateOf`.
 7. Отдавайте предпочтение stateless-компонентам, принимающим состояние и события через параметры (стейт хранится снаружи).
-
----
 
 ## Answer (EN)
 
@@ -1842,8 +1837,6 @@ fun ThemedText() {
 6. Use `derivedStateOf` for derived/expensive computations based on other state.
 7. Prefer stateless, UI-only composables for reusability; pass in state and events from the caller.
 
----
-
 ## Дополнительные вопросы (RU)
 
 - [[q-compose-remember-derived-state--android--medium]]
@@ -1856,6 +1849,20 @@ fun ThemedText() {
 - [[q-compose-side-effects-advanced--android--hard]]
 - [[q-compose-stability-skippability--android--hard]]
 
+## Ссылки (RU)
+
+- [Документация Jetpack Compose](https://developer.android.com/jetpack/compose)
+- [Основы Compose](https://developer.android.com/jetpack/compose/tutorial)
+- [Состояние и Jetpack Compose](https://developer.android.com/jetpack/compose/state)
+- [Основы макетов в Compose](https://developer.android.com/jetpack/compose/layouts/basics)
+
+## References
+
+- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
+- [Compose Basics](https://developer.android.com/jetpack/compose/tutorial)
+- [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)
+- [Compose Layout Basics](https://developer.android.com/jetpack/compose/layouts/basics)
+
 ## Связанные вопросы (RU)
 
 ### Предпосылки / Концепции
@@ -1863,12 +1870,14 @@ fun ThemedText() {
 - [[c-compose-state]]
 
 ### Связанные (Medium)
+
 - [[q-jetpack-compose-lazy-column--android--easy]]
 - [[q-recomposition-compose--android--medium]]
 - [[q-compose-modifier-system--android--medium]]
 - [[q-remember-remembersaveable--android--medium]]
 
 ### Основы Compose (Medium)
+
 - [[q-how-does-jetpack-compose-work--android--medium]]
 - [[q-what-are-the-most-important-components-of-compose--android--medium]]
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
@@ -1877,6 +1886,7 @@ fun ThemedText() {
 - [[q-state-hoisting-compose--android--medium]]
 
 ### Продвинутое (Harder)
+
 - [[q-compose-stability-skippability--android--hard]]
 - [[q-compose-slot-table-recomposition--android--hard]]
 - [[q-compose-performance-optimization--android--hard]]
@@ -1888,12 +1898,14 @@ fun ThemedText() {
 - [[c-compose-state]]
 
 ### Related (Medium)
+
 - [[q-jetpack-compose-lazy-column--android--easy]]
 - [[q-recomposition-compose--android--medium]]
 - [[q-compose-modifier-system--android--medium]]
 - [[q-remember-remembersaveable--android--medium]]
 
 ### Compose Fundamentals (Medium)
+
 - [[q-how-does-jetpack-compose-work--android--medium]]
 - [[q-what-are-the-most-important-components-of-compose--android--medium]]
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
@@ -1902,20 +1914,7 @@ fun ThemedText() {
 - [[q-state-hoisting-compose--android--medium]]
 
 ### Advanced (Harder)
+
 - [[q-compose-stability-skippability--android--hard]]
 - [[q-compose-slot-table-recomposition--android--hard]]
 - [[q-compose-performance-optimization--android--hard]]
-
-## Ссылки (RU)
-
-- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
-- [Compose Basics](https://developer.android.com/jetpack/compose/tutorial)
-- [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)
-- [Compose Layout Basics](https://developer.android.com/jetpack/compose/layouts/basics)
-
-## References
-
-- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
-- [Compose Basics](https://developer.android.com/jetpack/compose/tutorial)
-- [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)
-- [Compose Layout Basics](https://developer.android.com/jetpack/compose/layouts/basics)

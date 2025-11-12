@@ -70,7 +70,7 @@ sealed class UiState {
     data class Error(val error: Throwable) : UiState()
 }
 ```
-Все допустимые подтипы определяются в той же иерархии (тот же файл/пакет в зависимости от версии Kotlin), поэтому компилятор знает полный набор состояний.
+Все допустимые подтипы должны находиться в той же модуле и, начиная с новых версий Kotlin, в том же пакете (раньше — в одном файле), поэтому компилятор знает полный набор состояний.
 
 **2. Исчерпывающие when-выражения**
 ```kotlin
@@ -83,18 +83,19 @@ val message = when (state) {
 ```
 Это делает рефакторинг безопаснее: при добавлении нового подтипа UiState будут подсвечены неохваченные ветки.
 
-**3. Выразительнее, чем Enum, когда нужны данные**
+**3. Выразительнее, чем Enum, когда нужны разные данные и формы состояний**
 ```kotlin
-// Enum: фиксированный набор констант, без разных payload-типов
+// Enum: фиксированный набор констант; можно иметь общие поля и конструкторы,
+// но все элементы следуют одной общей форме.
 enum class Status { SUCCESS, ERROR }
 
-// Sealed: варианты с ассоциированными данными
+// Sealed: варианты могут иметь различную структуру и разные наборы полей
 sealed class Status {
     data class Success(val data: String) : Status()
     data class Error(val code: Int, val message: String) : Status()
 }
 ```
-Sealed-иерархии лучше подходят для моделирования доменных состояний и результатов с структурированными данными.
+Sealed-иерархии лучше подходят для моделирования доменных состояний и результатов со структурированными и разнородными данными.
 
 См. также: [[c-kotlin]], [[c-sealed-classes]].
 
@@ -144,7 +145,7 @@ sealed class UiState {
     data class Error(val error: Throwable) : UiState()
 }
 ```
-All subclasses must be declared in the same package/file hierarchy (depending on Kotlin version), so the compiler knows all possible variants.
+All subclasses must reside in the same module and, in recent Kotlin versions, in the same package (previously a single file), so the compiler knows all possible variants.
 
 **2. Exhaustive when Expressions**
 ```kotlin
@@ -153,22 +154,23 @@ val message = when (state) {
     is UiState.Success -> "Loaded ${state.data.size} items"
     is UiState.Error -> "Error: ${state.error.message}"
 }
-// No else needed when all UiState subclasses are covered; compiler can check exhaustiveness for when used as an expression.
+// No else needed when all UiState subclasses are covered; the compiler can check exhaustiveness for when used as an expression.
 ```
 This makes refactoring safer: adding a new UiState subtype will surface missing branches.
 
-**3. More Expressive Than Enum When Data Is Needed**
+**3. More Expressive Than Enum When You Need Different Data/Shapes per Case**
 ```kotlin
-// Enum: fixed constants, cannot attach distinct payload per constant type
+// Enum: fixed set of constants; you can define common properties/constructors,
+// but all entries share the same general shape.
 enum class Status { SUCCESS, ERROR }
 
-// Sealed: can model variants with associated data
+// Sealed: variants can have different structure and distinct sets of fields
 sealed class Status {
     data class Success(val data: String) : Status()
     data class Error(val code: Int, val message: String) : Status()
 }
 ```
-Sealed hierarchies are better suited for representing domain-specific states and results with structured data.
+Sealed hierarchies are better suited for representing domain-specific states and results with structured and heterogeneous data.
 
 ---
 

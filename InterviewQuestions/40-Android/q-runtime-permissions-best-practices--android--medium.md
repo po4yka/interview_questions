@@ -47,10 +47,12 @@ tags:
 
 ### Состояния Разрешений
 
-1. **Не запрошено**: разрешение никогда не запрашивалось
-2. **Предоставлено**: пользователь одобрил
-3. **Отклонено**: пользователь отказал (можно запросить снова)
-4. **Навсегда отклонено**: пользователь отметил "Больше не спрашивать" (или система больше не показывает диалог)
+1. **Не запрошено**: разрешение никогда не запрашивалось.
+2. **Предоставлено**: пользователь одобрил.
+3. **Отклонено**: пользователь отказал (можно запросить снова).
+4. **Навсегда отклонено**: пользователь отметил "Больше не спрашивать" (или система больше не показывает диалог, например при политике устройства).
+
+Важно: `shouldShowRequestPermissionRationale()` возвращает `false` как при первом запросе, так и после выбора "Больше не спрашивать", поэтому для определения "навсегда отклонено" нужно помнить, что разрешение уже запрашивалось ранее.
 
 ### Реализация с ActivityResultContracts
 
@@ -103,7 +105,7 @@ class PermissionManager(private val activity: AppCompatActivity) {
                 // Был отказ без "Больше не спрашивать", можно показать rationale
                 PermissionState.Denied
 
-            // Для определения "навсегда отклонено" требуется помнить, что мы уже запрашивали
+            // Для определения "навсегда отклонено" требуется помнить, что мы уже запрашивали.
             wasPermissionRequested(permission) &&
                 !activity.shouldShowRequestPermissionRationale(permission) ->
                 PermissionState.PermanentlyDenied
@@ -113,7 +115,7 @@ class PermissionManager(private val activity: AppCompatActivity) {
     }
 
     // Реализации handlePermissionResult / proceedWithFeature / showRationaleDialog /
-    // showSettingsDialog / wasPermissionRequested опущены для краткости.
+    // showSettingsDialog / wasPermissionRequested (например, через SharedPreferences) опущены для краткости.
 }
 ```
 
@@ -169,7 +171,7 @@ fun CameraPermissionScreen() {
         }
 
         cameraState.status.shouldShowRationale -> {
-            // ✅ Показать обоснование
+            // ✅ Показать обоснование при повторном запросе
             RationaleDialog(
                 message = "Камера нужна для сканирования QR-кодов",
                 onRequest = { cameraState.launchPermissionRequest() }
@@ -177,7 +179,9 @@ fun CameraPermissionScreen() {
         }
 
         else -> {
-            // ✅ Первый запрос или постоянный отказ
+            // ✅ Первый запрос. Для обработки постоянного отказа следует
+            // дополнительно хранить состояние, что запрос уже выполнялся,
+            // и в таком случае вместо повторного запроса показывать диалог с переходом в настройки.
             Button(onClick = { cameraState.launchPermissionRequest() }) {
                 Text("Разрешить доступ к камере")
             }
@@ -234,7 +238,9 @@ if (isPermanentlyDenied) {
 1. **Not Requested**: permission never asked.
 2. **Granted**: user approved.
 3. **Denied**: user rejected (can ask again).
-4. **Permanently Denied**: user checked "Don't ask again" (or the system no longer shows the dialog).
+4. **Permanently Denied**: user checked "Don't ask again" (or the system no longer shows the dialog, e.g. due to device policy).
+
+Important: `shouldShowRequestPermissionRationale()` returns `false` both for the first request and after the user selects "Don't ask again", so to detect "permanently denied" you must store whether the permission has been requested before.
 
 ### Implementation with ActivityResultContracts
 
@@ -297,7 +303,8 @@ class PermissionManager(private val activity: AppCompatActivity) {
     }
 
     // Implementations of handlePermissionResult / proceedWithFeature /
-    // showRationaleDialog / showSettingsDialog / wasPermissionRequested are omitted for brevity.
+    // showRationaleDialog / showSettingsDialog / wasPermissionRequested
+    // (e.g., backed by SharedPreferences) are omitted for brevity.
 }
 ```
 
@@ -353,7 +360,7 @@ fun CameraPermissionScreen() {
         }
 
         cameraState.status.shouldShowRationale -> {
-            // ✅ Show rationale
+            // ✅ Show rationale when re-requesting
             RationaleDialog(
                 message = "Camera is needed to scan QR codes",
                 onRequest = { cameraState.launchPermissionRequest() }
@@ -361,7 +368,9 @@ fun CameraPermissionScreen() {
         }
 
         else -> {
-            // ✅ First request or permanently denied
+            // ✅ First request. To properly handle "permanently denied",
+            // you should additionally track that a request has already been made and,
+            // in that case, show a Settings dialog instead of blindly re-requesting.
             Button(onClick = { cameraState.launchPermissionRequest() }) {
                 Text("Allow Camera Access")
             }

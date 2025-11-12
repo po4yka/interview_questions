@@ -13,7 +13,7 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, difficulty/medium, leakcanary, memory-leaks, weakreference]
 moc: moc-android
-related: [q-android-performance-measurement-tools--android--medium]
+related: [c-android-profiler, q-android-performance-measurement-tools--android--medium]
 sources: ["https://square.github.io/leakcanary/"]
 
 ---
@@ -30,7 +30,7 @@ sources: ["https://square.github.io/leakcanary/"]
 
 ## Ответ (RU)
 
-LeakCanary обнаруживает утечки памяти с помощью отслеживания жизненного цикла и механизма слабых ссылок (`WeakReference`) для контроля «удаляемости» объектов, а затем анализа heap dump библиотекой Shark.
+LeakCanary обнаруживает утечки памяти с помощью отслеживания жизненного цикла и механизма слабых ссылок (`WeakReference`) для контроля «удаляемости» объектов, а затем анализа heap dump библиотекой Shark. Он тесно связан с инструментами профилирования и анализом памяти в Android ([[c-android-profiler]]).
 
 **Процесс обнаружения (упрощенно):**
 
@@ -141,7 +141,7 @@ class MyViewModel : ViewModel() {
 
 ## Answer (EN)
 
-LeakCanary detects memory leaks by observing lifecycle events, tracking objects via `WeakReference`, and then analyzing a heap dump with the Shark library.
+LeakCanary detects memory leaks by observing lifecycle events, tracking objects via `WeakReference`, and then analyzing a heap dump with the Shark library. It is closely related to memory profiling and analysis tools on Android ([[c-android-profiler]]).
 
 **Detection Process (simplified):**
 

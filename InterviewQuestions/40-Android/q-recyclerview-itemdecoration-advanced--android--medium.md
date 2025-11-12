@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-graphics
 - q-android-app-components--android--easy
 created: 2025-10-13
 updated: 2025-11-10
@@ -42,7 +43,7 @@ sources:
 ## Ответ (RU)
 
 **Теория ItemDecoration:**
-ItemDecoration позволяет добавлять пользовательскую отрисовку и отступы к элементам RecyclerView без изменения самих элементов. Подходит для разделителей, отступов, sticky headers и визуальных эффектов.
+ItemDecoration позволяет добавлять пользовательскую отрисовку и отступы к элементам RecyclerView без изменения самих элементов. Подходит для разделителей, отступов, sticky headers и визуальных эффектов. См. также [[c-android-graphics]] для понимания основ отрисовки.
 
 **Фазы отрисовки (хуки декораций):**
 RecyclerView вызывает декорации вокруг собственной отрисовки элементов:
@@ -188,7 +189,7 @@ recyclerView.addItemDecoration(
 ## Answer (EN)
 
 **ItemDecoration Theory:**
-ItemDecoration allows adding custom drawing and layout offsets to RecyclerView items without modifying the item views themselves. It is commonly used for dividers, spacing, sticky headers, and visual effects.
+ItemDecoration allows adding custom drawing and layout offsets to RecyclerView items without modifying the item views themselves. It is commonly used for dividers, spacing, sticky headers, and visual effects. See also [[c-android-graphics]] for drawing fundamentals.
 
 **Drawing phases (decoration hooks):**
 RecyclerView calls decorations around its own item drawing:

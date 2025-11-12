@@ -1,6 +1,6 @@
 ---
 id: android-389
-title: ViewModel vs OnSavedInstanceState / ViewModel vs OnSavedInstanceState
+title: ViewModel vs OnSavedInstanceState
 aliases:
 - ViewModel vs OnSavedInstanceState
 - ViewModel fefdfb OnSavedInstanceState
@@ -19,8 +19,8 @@ moc: moc-android
 related:
 - c-activity-lifecycle
 - q-activity-lifecycle-methods--android--medium
-created: 2025-10-15
-updated: 2025-11-10
+created: 2024-10-15
+updated: 2025-11-11
 tags:
 - android/architecture-mvvm
 - android/lifecycle

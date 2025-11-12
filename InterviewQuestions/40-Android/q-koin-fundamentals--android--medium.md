@@ -53,13 +53,13 @@ tags:
 
 ## Ответ (RU)
 
-**Koin** — легковесный DI-фреймворк для Kotlin, использующий контейнер зависимостей с DSL и runtime-резолвингом, без code generation. Часто описывается как реализация паттерна `Service` Locator поверх DI-контейнера. Разрешает зависимости в runtime через простой DSL.
+**Koin** — легковесный DI-фреймворк для Kotlin, использующий контейнер зависимостей с DSL и runtime-резолвингом, без code generation. Часто описывается как DI-контейнер с `Service Locator`-стилем API (получение зависимостей по типу/имени), но в типичном использовании остаётся DI через конструктор и модули. Разрешает зависимости в runtime через простой DSL.
 
 ### Koin Vs Dagger/Hilt
 
 | Aspect | Koin | Dagger/Hilt |
 |--------|------|-------------|
-| **Подход** | DI-контейнер с `Service` Locator-стилем API, runtime-резолвинг | DI c compile-time графом и генерацией кода |
+| **Подход** | DI-контейнер с `Service Locator`-стилем API, runtime-резолвинг | DI c compile-time графом и генерацией кода |
 | **Разрешение** | Runtime | Compile-time |
 | **Code Generation** | ❌ Нет | ✅ kapt/ksp |
 | **Скорость сборки** | ✅ Быстрее (нет генерации кода) | ❌ Медленнее (генерация кода) |
@@ -74,7 +74,7 @@ tags:
 **Module** - контейнер зависимостей  
 **Factory** - новый экземпляр при каждом запросе  
 **Single** - singleton (один экземпляр на контейнер)  
-**`ViewModel`** - интеграция с Android `ViewModel` и её lifecycle
+**`ViewModel`** - интеграция с Android `ViewModel` и её lifecycle (через артефакты `koin-androidx-viewmodel` / `koin-androidx-navigation` / `koin-androidx-compose`)
 
 ### Полная Настройка Koin
 
@@ -200,7 +200,7 @@ class MyApplication : Application() {
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
-    // ✅ Lazy injection ViewModel Koin-расширением
+    // ✅ Lazy injection ViewModel Koin-расширением (из koin-androidx-viewmodel)
     private val viewModel: UserViewModel by viewModel()
     private val logger: Logger by inject()
 
@@ -215,7 +215,7 @@ class UserActivity : AppCompatActivity() {
 
 ```kotlin
 class UserFragment : Fragment() {
-    // ✅ Activity scope ViewModel
+    // ✅ Activity scope ViewModel (из koin-androidx-viewmodel)
     private val viewModel: UserViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -238,11 +238,11 @@ class UserFragment : Fragment() {
 
 ```kotlin
 @Composable
-fun UserScreen(userId: String) {
-    val viewModel: UserViewModel = koinViewModel()
+fun UserScreen() {
+    val viewModel: UserViewModel = koinViewModel() // из koin-androidx-compose
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(userId) { viewModel.loadUser(userId) }
+    LaunchedEffect(Unit) { viewModel.loadUser("default") }
 
     when (val s = state) {
         UiState.Loading -> CircularProgressIndicator()
@@ -271,7 +271,7 @@ val db1: MyDatabase by inject()
 val db2: MyDatabase by inject()
 // db1 === db2
 
-// ViewModel - управляется Android ViewModelStoreOwner
+// ViewModel - управляется Android ViewModelStoreOwner (через koin-androidx-viewmodel)
 module {
     viewModel { MyViewModel(get()) }
 }
@@ -352,13 +352,13 @@ class UserRepositoryTest : KoinTest {
 
 ## Answer (EN)
 
-**Koin** is a lightweight DI framework for Kotlin that uses a dependency container with a Kotlin DSL and runtime resolution instead of code generation. It is often described as using a `Service` Locator-style registry on top of a DI container. Dependencies are resolved at runtime via a simple DSL.
+**Koin** is a lightweight DI framework for Kotlin that uses a dependency container with a Kotlin DSL and runtime resolution instead of code generation. It is often described as a DI container with a `Service Locator`-style API (retrieving by type/name), but in typical usage it is still constructor-injection driven via modules. Dependencies are resolved at runtime via a simple DSL.
 
 ### Koin Vs Dagger/Hilt
 
 | Aspect | Koin | Dagger/Hilt |
 |--------|------|-------------|
-| **Approach** | DI container with `Service` Locator-style API, runtime resolution | DI with compile-time graph and code generation |
+| **Approach** | DI container with `Service Locator`-style API, runtime resolution | DI with compile-time graph and code generation |
 | **Resolution** | Runtime | Compile-time |
 | **Code Generation** | ❌ None | ✅ kapt/ksp |
 | **Build Speed** | ✅ Faster (no codegen) | ❌ Slower (codegen) |
@@ -373,7 +373,7 @@ class UserRepositoryTest : KoinTest {
 **Module** - dependency container  
 **Factory** - new instance on each request  
 **Single** - singleton instance per Koin container  
-**`ViewModel`** - Android `ViewModel` integration with lifecycle awareness
+**`ViewModel`** - Android `ViewModel` integration with lifecycle awareness (via `koin-androidx-viewmodel` / `koin-androidx-navigation` / `koin-androidx-compose` artifacts)
 
 ### Complete Koin Setup
 
@@ -499,7 +499,7 @@ class MyApplication : Application() {
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
-    // ✅ Lazy injection via Koin ViewModel extension
+    // ✅ Lazy injection via Koin ViewModel extension (from koin-androidx-viewmodel)
     private val viewModel: UserViewModel by viewModel()
     private val logger: Logger by inject()
 
@@ -514,7 +514,7 @@ class UserActivity : AppCompatActivity() {
 
 ```kotlin
 class UserFragment : Fragment() {
-    // ✅ Activity scope ViewModel
+    // ✅ Activity scope ViewModel (from koin-androidx-viewmodel)
     private val viewModel: UserViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -537,11 +537,11 @@ class UserFragment : Fragment() {
 
 ```kotlin
 @Composable
-fun UserScreen(userId: String) {
-    val viewModel: UserViewModel = koinViewModel()
+fun UserScreen() {
+    val viewModel: UserViewModel = koinViewModel() // from koin-androidx-compose
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(userId) { viewModel.loadUser(userId) }
+    LaunchedEffect(Unit) { viewModel.loadUser("default") }
 
     when (val s = state) {
         UiState.Loading -> CircularProgressIndicator()
@@ -570,7 +570,7 @@ val db1: MyDatabase by inject()
 val db2: MyDatabase by inject()
 // db1 === db2
 
-// ViewModel - managed by Android ViewModelStoreOwner
+// ViewModel - managed by Android ViewModelStoreOwner (via koin-androidx-viewmodel)
 module {
     viewModel { MyViewModel(get()) }
 }

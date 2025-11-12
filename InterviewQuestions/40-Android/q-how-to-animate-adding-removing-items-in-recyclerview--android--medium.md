@@ -46,7 +46,7 @@ tags:
 Кратко:
 - `DefaultItemAnimator` уже анимирует вставки/удаления/перемещения, если вы используете точечные `notifyItem*` вместо `notifyDataSetChanged()`.
 - `DiffUtil` и `ListAdapter` вычисляют различия между списками и сами вызывают нужные `notifyItem*`, обеспечивая корректные анимации.
-- Для более сложных эффектов можно настроить `DefaultItemAnimator` (длительности) или реализовать свой `ItemAnimator`/`SimpleItemAnimator`, аккуратно вызывая `dispatch*`-методы и обрабатывая состояния анимаций.
+- Для более сложных эффектов можно настроить `DefaultItemAnimator` (длительности) или реализовать свой `ItemAnimator`/`SimpleItemAnimator`, аккуратно вызывая `dispatch*`-методы и корректно управляя жизненным циклом анимаций.
 
 ## Answer (EN)
 
@@ -57,7 +57,7 @@ To animate adding and removing items in a RecyclerView you typically rely on:
 In short:
 - `DefaultItemAnimator` already animates insert/remove/move if you use specific `notifyItem*` calls instead of `notifyDataSetChanged()`.
 - `DiffUtil` and `ListAdapter` compute list differences and dispatch proper `notifyItem*` calls for you, resulting in smooth, correct animations.
-- For advanced visuals, tune `DefaultItemAnimator` (durations) or implement a custom `ItemAnimator`/`SimpleItemAnimator`, making sure to correctly call `dispatch*` methods and manage animation lifecycle.
+- For advanced visuals, tune `DefaultItemAnimator` (durations) or implement a custom `ItemAnimator`/`SimpleItemAnimator`, making sure to correctly call `dispatch*` methods and manage the animation lifecycle.
 
 ## EN (expanded)
 
@@ -219,6 +219,8 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
+Note: ListAdapter can be configured with stable IDs, but in typical usage rely on ItemCallback for identity and avoid mixing identity strategies unless you understand the implications.
+
 ### 5. Custom ItemAnimator (Simple Example)
 
 If you only need to tweak durations and rely on DefaultItemAnimator behavior, prefer configuration over overriding animate*.
@@ -234,11 +236,11 @@ val animator = DefaultItemAnimator().apply {
 recyclerView.itemAnimator = animator
 ```
 
-For fully custom effects, extend SimpleItemAnimator and manage dispatch* calls properly (see below).
+For fully custom effects, extend SimpleItemAnimator and manage dispatch* calls and running state properly (see below).
 
 ### 6. Advanced Custom Animator (Skeleton)
 
-Example of a custom animator based on SimpleItemAnimator. This is a conceptual skeleton – a production implementation must track pending/running animations and call the dispatch* methods correctly.
+Example of a custom animator based on SimpleItemAnimator. This is a conceptual skeleton – a production implementation must track pending/running animations and correctly implement dispatch* calls and isRunning/endAnimation/endAnimations.
 
 ```kotlin
 class SlideInItemAnimator : SimpleItemAnimator() {
@@ -261,10 +263,14 @@ class SlideInItemAnimator : SimpleItemAnimator() {
                     view.translationX = 0f
                     view.alpha = 1f
                     dispatchAddFinished(holder)
+                    // In a real implementation you would also update internal tracking here
                 }
             })
             .start()
 
+        // Returning true indicates that an animation was started.
+        // For correctness, a real implementation must track this animation
+        // so that isRunning()/endAnimations() work properly.
         return true
     }
 
@@ -284,6 +290,7 @@ class SlideInItemAnimator : SimpleItemAnimator() {
                     view.translationX = 0f
                     view.alpha = 1f
                     dispatchRemoveFinished(holder)
+                    // In a real implementation you would also update internal tracking here
                 }
             })
             .start()
@@ -296,7 +303,7 @@ class SlideInItemAnimator : SimpleItemAnimator() {
         fromX: Int, fromY: Int,
         toX: Int, toY: Int
     ): Boolean {
-        // Implement if needed; otherwise return false
+        // Implement if needed; otherwise return false to indicate no custom move animation
         return false
     }
 
@@ -311,29 +318,30 @@ class SlideInItemAnimator : SimpleItemAnimator() {
     }
 
     override fun runPendingAnimations() {
-        // For a simple implementation that starts animations immediately,
-        // nothing special is required here.
+        // In a complete implementation, start any queued animations here.
     }
 
     override fun endAnimation(item: RecyclerView.ViewHolder) {
+        // Cancel animations specific to this ViewHolder and update tracking.
         item.itemView.animate().cancel()
     }
 
     override fun endAnimations() {
-        // Cancel all running animations if you track them
+        // Cancel all running animations and clear tracking in a real implementation.
     }
 
     override fun isRunning(): Boolean {
-        // Return true if any animations are running
+        // Return true if any animations are currently running.
+        // This skeleton always returns false and is NOT production-ready.
         return false
     }
 }
 
-// Usage
+// Usage (demo only)
 recyclerView.itemAnimator = SlideInItemAnimator()
 ```
 
-Note: For real projects, use an implementation that correctly tracks pending/running animations.
+Note: This SlideInItemAnimator is intentionally incomplete and for conceptual demonstration only. A real ItemAnimator must correctly track pending and running animations to comply with RecyclerView's expectations.
 
 ### 7. Complete Example with Swipe to Delete (with ListAdapter)
 
@@ -450,11 +458,11 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 
 - Prefer fine-grained notifyItem* calls or DiffUtil/ListAdapter.
 - Avoid notifyDataSetChanged() when you want animations.
-- With ListAdapter, do NOT rely on setHasStableIds/getItemId; identity is defined by ItemCallback.
+- With ListAdapter, typically rely on ItemCallback for identity; use stable IDs only if you fully understand how they interact.
 - If implementing a custom ItemAnimator:
   - Use SimpleItemAnimator when you need full control.
   - Call dispatchAdd/Remove/Move/ChangeStarting/Finished appropriately.
-  - Implement isRunning/endAnimation/endAnimations correctly.
+  - Implement isRunning/endAnimation/endAnimations correctly with real tracking.
 - Disable change animations if you see blinking with partial updates.
 - Test animations on low-end devices to ensure performance.
 
@@ -620,6 +628,8 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
+Примечание: ListAdapter можно настроить для работы со стабильными ID, но в типичном случае опирайтесь на ItemCallback для идентичности и не смешивайте стратегии, если не уверены в последствиях.
+
 ### 5. Кастомный ItemAnimator (простая настройка)
 
 Если нужно только изменить скорость/длительность анимаций, обычно достаточно настроить DefaultItemAnimator, не переопределяя animate*.
@@ -636,7 +646,7 @@ recyclerView.itemAnimator = animator
 
 ### 6. Продвинутый кастомный аниматор (скелет)
 
-Пример на базе SimpleItemAnimator. Это демонстрационный скелет — реальная реализация должна отслеживать pending/running анимации и корректно вызывать dispatch*.
+Пример на базе SimpleItemAnimator. Это демонстрационный скелет — реальная реализация должна отслеживать pending/running анимации, корректно вызывать dispatch* и правильно реализовывать isRunning/endAnimation/endAnimations.
 
 ```kotlin
 class SlideInItemAnimator : SimpleItemAnimator() {
@@ -659,10 +669,14 @@ class SlideInItemAnimator : SimpleItemAnimator() {
                     view.translationX = 0f
                     view.alpha = 1f
                     dispatchAddFinished(holder)
+                    // В реальной реализации здесь также нужно обновлять состояние трекинга
                 }
             })
             .start()
 
+        // true означает, что анимация запущена.
+        // Для корректности реальная реализация должна отслеживать эту анимацию,
+        // чтобы isRunning()/endAnimations() работали правильно.
         return true
     }
 
@@ -682,6 +696,7 @@ class SlideInItemAnimator : SimpleItemAnimator() {
                     view.translationX = 0f
                     view.alpha = 1f
                     dispatchRemoveFinished(holder)
+                    // В реальной реализации здесь также нужно обновлять состояние трекинга
                 }
             })
             .start()
@@ -694,7 +709,7 @@ class SlideInItemAnimator : SimpleItemAnimator() {
         fromX: Int, fromY: Int,
         toX: Int, toY: Int
     ): Boolean {
-        // Реализуйте при необходимости; иначе верните false
+        // Реализуйте при необходимости; иначе верните false, если нет собственной анимации перемещения
         return false
     }
 
@@ -709,28 +724,30 @@ class SlideInItemAnimator : SimpleItemAnimator() {
     }
 
     override fun runPendingAnimations() {
-        // Для простого варианта, когда анимации стартуют сразу, можно оставить пустым
+        // В полной реализации здесь должны запускаться отложенные анимации.
     }
 
     override fun endAnimation(item: RecyclerView.ViewHolder) {
+        // Отмените анимации для конкретного ViewHolder и обновите трекинг.
         item.itemView.animate().cancel()
     }
 
     override fun endAnimations() {
-        // Отмените все анимации, если вы их отслеживаете
+        // В полной реализации отмените все анимации и очистите трекинг.
     }
 
     override fun isRunning(): Boolean {
-        // Верните true, если какие-либо анимации выполняются
+        // Верните true, если какие-либо анимации реально выполняются.
+        // В текущем скелете всегда false — это НЕ готовое решение.
         return false
     }
 }
 
-// Использование
+// Использование (только для демонстрации)
 recyclerView.itemAnimator = SlideInItemAnimator()
 ```
 
-Важно: в реальном проекте используйте полностью реализованный ItemAnimator с корректным управлением состоянием.
+Важно: этот SlideInItemAnimator намеренно неполный и подходит только как концептуальный пример. В реальном проекте необходимо корректно отслеживать состояние анимаций.
 
 ### 7. Пример со swipe-to-delete (ListAdapter)
 
@@ -845,11 +862,11 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 ### 9. Лучшие практики (RU)
 
 1. Используйте точечные методы notifyItem* или DiffUtil/ListAdapter вместо notifyDataSetChanged(), если нужны анимации.
-2. С ListAdapter не полагайтесь на setHasStableIds/getItemId для идентификации — используйте ItemCallback.
+2. В случае ListAdapter обычно опирайтесь на ItemCallback для идентификации; стабильные ID используйте только если понимаете их взаимодействие.
 3. При написании кастомного ItemAnimator:
    - Предпочитайте SimpleItemAnimator для полного контроля.
    - Корректно вызывайте dispatchAdd/Remove/Move/ChangeStarting/Finished.
-   - Реализуйте isRunning/endAnimation/endAnimations так, чтобы отражать реальные анимации.
+   - Реализуйте isRunning/endAnimation/endAnimations с реальным трекингом анимаций.
 4. Отключайте change-анимации при мерцаниях/частичных обновлениях.
 5. Тестируйте анимации на медленных устройствах, следите за производительностью.
 

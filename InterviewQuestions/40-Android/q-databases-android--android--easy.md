@@ -34,21 +34,21 @@ sources:
 
 ## Ответ (RU)
 
-В Android на практике часто используют следующие решения для персистентности структурированных данных в приложении: SQLite (нативная), [[c-room]] (рекомендуемая надстройка над SQLite от Google), и Realm/MongoDB (альтернативная объектная NoSQL-БД).
+В Android на практике для персистентности данных используют несколько подходов. Для структурированных/реляционных данных чаще всего применяют: SQLite (встроенная), [[c-room]] (рекомендуемая надстройка над SQLite от Google), и Realm/MongoDB (альтернативная объектная NoSQL-БД). Для простых ключ-значение и настроек обычно используют DataStore (современная замена SharedPreferences), но это не реляционная БД.
 
 ### Основные Концепции
 
 **SQLite** — встроенная реляционная БД без внешних зависимостей, требует ручного SQL и работы с Cursor API.
 
-**Room** — типобезопасная обёртка над SQLite (ORM/DAO слой) с compile-time валидацией запросов, генерацией кода и нативной поддержкой корутин/`Flow`.
+**Room** — типобезопасная обёртка над SQLite (ORM/DAO слой) с compile-time валидацией запросов, генерацией кода, нативной поддержкой корутин/`Flow` и проверками, что долгие операции не выполняются на главном потоке.
 
 **Realm/MongoDB** — объектная БД с собственным движком (не SQL), поддерживает реактивные запросы и (в некоторых конфигурациях) синхронизацию с облаком, но увеличивает размер APK.
 
-> Примечание: Для ключ-значение/настроек Google рекомендует использовать DataStore, но это не полноценная реляционная БД и обычно упоминается отдельно.
+> Примечание: Для ключ-значение/настроек Google рекомендует использовать DataStore (Preferences/Proto), но это не полноценная реляционная БД и обычно упоминается отдельно от SQLite/Room/Realm.
 
 ### 1. SQLite — Низкоуровневый API
 
-Прямой доступ через SQLiteOpenHelper и Cursor API. **Недостатки**: boilerplate, ручное управление ресурсами Cursor, runtime SQL-ошибки.
+Прямой доступ через SQLiteOpenHelper и Cursor API. **Недостатки**: boilerplate, ручное управление ресурсами Cursor, runtime SQL-ошибки, ответственность за выполнение тяжелых операций не на главном потоке лежит на разработчике.
 
 ```kotlin
 class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
@@ -66,7 +66,7 @@ class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
 
 ### 2. Room — Официальный абстракционный слой над SQLite (рекомендуется)
 
-Генерирует имплементации DAO на этапе компиляции через annotation processing. Предоставляет безопасные suspend-функции и `Flow` для реактивных обновлений.
+Генерирует имплементации DAO на этапе компиляции через annotation processing. Предоставляет безопасные suspend-функции и `Flow` для реактивных обновлений. По умолчанию запрещает блокирующие операции с БД на главном потоке.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -93,18 +93,17 @@ abstract class AppDb : RoomDatabase() {
 Объектная БД с zero-copy архитектурой (live objects), встроенной поддержкой реактивных данных и опциональной синхронизацией с MongoDB Atlas. **Минусы**: +3–5 MB к APK, проприетарный формат данных, миграции и переход на другие решения требуют аккуратной ручной настройки.
 
 ```kotlin
-// Пример с классическим Realm Java API (для Kotlin/Multiplatform используется современный Realm Kotlin API).
+// Пример модели для классического Realm Java API. Для Kotlin/Multiplatform используется современный Realm Kotlin API,
+// который предоставляет интеграцию с корутинами и Flow.
 class User : RealmObject() {
     @PrimaryKey var id: String = UUID.randomUUID().toString()
     var name: String = ""
 }
 
-// ✅ Реактивные запросы без дополнительных библиотек
-realm.where<User>().findAllAsync().asFlow().collect { users ->
-    // Автообновление при изменениях в БД
-}
+// ✅ Реактивные запросы доступны в зависимости от используемого SDK (Rx, Kotlin Flow и т.п.).
+// Конкретный API отличается между classic Realm Java и Realm Kotlin.
 
-// ❌ Объекты привязаны к Realm-треду, для передачи между потоками нужен copyFromRealm()/менеджмент по API
+// ❌ Объекты привязаны к Realm-треду; для передачи между потоками требуется copyFromRealm()/или соответствующий API выбранного SDK.
 ```
 
 ### Критерии Выбора
@@ -124,21 +123,21 @@ realm.where<User>().findAllAsync().asFlow().collect { users ->
 
 ## Answer (EN)
 
-In Android, the following options are commonly used for persisting structured app data: SQLite (native), [[c-room]] (recommended abstraction over SQLite by Google), and Realm/MongoDB (alternative object NoSQL database).
+In Android, several options are used in practice for data persistence. For structured/relational data, the most common ones are: SQLite (built-in), [[c-room]] (recommended abstraction over SQLite by Google), and Realm/MongoDB (alternative object NoSQL database). For simple key-value / preferences-like data, DataStore (the modern replacement for SharedPreferences) is typically used, but it is not a relational database.
 
 ### Core Concepts
 
 **SQLite** — built-in relational database with no external dependencies, requires manual SQL and Cursor API handling.
 
-**Room** — type-safe abstraction layer over SQLite (ORM/DAO style) with compile-time query validation, code generation, and native coroutines/`Flow` support.
+**Room** — type-safe abstraction layer over SQLite (ORM/DAO style) with compile-time query validation, code generation, native coroutines/`Flow` support, and safeguards ensuring long-running operations are not performed on the main thread.
 
 **Realm/MongoDB** — object database with its own engine (not SQL), supports reactive queries and (in some setups) cloud sync, but increases APK size.
 
-> Note: For key-value / preferences-like data Google recommends DataStore, but it is not a full relational database and is usually discussed separately.
+> Note: For key-value / preferences-like data Google recommends DataStore (Preferences/Proto), but it is not a full relational database and is usually discussed separately from SQLite/Room/Realm.
 
 ### 1. SQLite — Low-Level API
 
-Direct access via SQLiteOpenHelper and Cursor API. **Drawbacks**: boilerplate, manual Cursor/resource management, runtime SQL errors.
+Direct access via SQLiteOpenHelper and Cursor API. **Drawbacks**: boilerplate, manual Cursor/resource management, runtime SQL errors, and you are responsible for keeping heavy operations off the main thread.
 
 ```kotlin
 class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
@@ -156,7 +155,7 @@ class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
 
 ### 2. Room — Official Abstraction over SQLite (Recommended)
 
-Generates DAO implementations at compile time via annotation processing. Provides safe suspend functions and `Flow` for reactive updates.
+Generates DAO implementations at compile time via annotation processing. Provides safe suspend functions and `Flow` for reactive updates. By default, disallows blocking database operations on the main thread.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -180,21 +179,20 @@ abstract class AppDb : RoomDatabase() {
 
 ### 3. Realm (MongoDB Mobile) — NoSQL Alternative
 
-Object database with zero-copy architecture (live objects), built-in reactive data support and optional sync with MongoDB Atlas. **Cons**: +3–5 MB to APK, proprietary data format, migrations and migration to other solutions require explicit handling.
+Object database with zero-copy architecture (live objects), built-in reactive data support, and optional sync with MongoDB Atlas. **Cons**: +3–5 MB to APK, proprietary data format, migrations and migration to other solutions require explicit handling.
 
 ```kotlin
-// Example with classic Realm Java API (for Kotlin/Multiplatform use the modern Realm Kotlin API).
+// Example model for the classic Realm Java API. For Kotlin/Multiplatform, use the modern Realm Kotlin API,
+// which provides integration with coroutines and Flow.
 class User : RealmObject() {
     @PrimaryKey var id: String = UUID.randomUUID().toString()
     var name: String = ""
 }
 
-// ✅ Reactive queries without additional libraries
-realm.where<User>().findAllAsync().asFlow().collect { users ->
-    // Auto-updates on DB changes
-}
+// ✅ Reactive queries are available depending on the SDK in use (Rx, Kotlin Flow, etc.).
+// The exact APIs differ between classic Realm Java and Realm Kotlin.
 
-// ❌ Objects are tied to the Realm thread; use copyFromRealm()/appropriate API when passing across threads
+// ❌ Objects are thread-confined; use copyFromRealm()/or the appropriate API when passing across threads.
 ```
 
 ### Selection Criteria

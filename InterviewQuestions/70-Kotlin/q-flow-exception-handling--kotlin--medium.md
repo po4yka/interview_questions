@@ -180,8 +180,13 @@ fun <T> Flow<T>.retryWithDelay(
     retries: Long,
     delayMillis: Long
 ): Flow<T> = retry(retries) { cause ->
-    delay(delayMillis)
-    true
+    // Выполнять повтор только для временных ошибок
+    if (cause is IOException) {
+        delay(delayMillis)
+        true
+    } else {
+        false
+    }
 }
 
 // Использование
@@ -218,6 +223,9 @@ flow {
 Экспоненциальная задержка — стандартная стратегия обработки ошибок, где задержки повтора растут экспоненциально.
 
 ```kotlin
+import kotlin.math.pow
+import kotlin.random.Random
+
 /**
  * Повтор с экспоненциальной задержкой.
  */
@@ -235,7 +243,7 @@ fun <T> Flow<T>.retryWithExponentialBackoff(
         val exponentialDelay = (initialDelayMs * factor.pow(attempt.toInt())).toLong()
         val cappedDelay = exponentialDelay.coerceAtMost(maxDelayMs)
 
-        // Добавить jitter
+        // Добавить jitter (случайный сдвиг) для избежания "стада"
         val jitterMs = (cappedDelay * jitter * Random.nextDouble()).toLong()
         val finalDelay = cappedDelay + jitterMs
 
@@ -330,6 +338,7 @@ fun <T> Flow<T>.withCircuitBreaker(
     circuitBreaker: CircuitBreaker
 ): Flow<T> = flow {
     circuitBreaker.execute {
+        // collect из исходного Flow внутри circuit breaker
         collect { value ->
             emit(value)
         }
@@ -409,8 +418,10 @@ class UserViewModel : ViewModel() {
 
 1. **Для важных потоков явно обрабатывайте ошибки с помощью catch**:
    ```kotlin
+   // Необработанное исключение отменит корутину
    flow { emit(api.getData()) }.collect()
 
+   // Явная обработка ошибки
    flow { emit(api.getData()) }
        .catch { emit(defaultData) }
        .collect()
@@ -427,9 +438,11 @@ class UserViewModel : ViewModel() {
 
 3. **Не рассчитывайте, что catch обработает исключения в collect** (переносите броски в onEach/операторы выше, чтобы catch мог их перехватить):
    ```kotlin
+   // Неверно: исключение в collect не поймается
    .catch { emit(default) }
    .collect { throw Exception() }
 
+   // Верно: бросаем выше по цепочке
    .onEach { if (error) throw Exception() }
    .catch { emit(default) }
    .collect()
@@ -453,9 +466,11 @@ class UserViewModel : ViewModel() {
 
 1. **Обработка исключений только внутри collect**:
    ```kotlin
+   // catch не перехватит это исключение
    .catch { emit(default) }
    .collect { throw Exception() }
 
+   // Нужно переносить в onEach
    .onEach { if (error) throw Exception() }
    .catch { emit(default) }
    .collect()
@@ -463,22 +478,28 @@ class UserViewModel : ViewModel() {
 
 2. **Бесконечный retry без условий**:
    ```kotlin
+   // Будет повторять бесконечно, даже для неустранимых ошибок
    .retry { true }
 
+   // Ограничиваем и фильтруем по типу
    .retry(3) { it is IOException }
    ```
 
 3. **Игнорирование типов ошибок**:
    ```kotlin
+   // Повторяет в том числе на логических/авторизационных ошибках
    .retry(5)
 
+   // Повторяем только для восстанавливаемых ошибок
    .retry(5) { it is IOException }
    ```
 
 4. **Отсутствие timeout**:
    ```kotlin
+   // Поток может "висеть" бесконечно
    .retry(3)
 
+   // Добавляем timeout
    .timeout(30.seconds)
    .retry(3)
    ```
@@ -564,7 +585,7 @@ flow {
 }
 .collect { value ->
     println("Received: $value")
-    // Exception here NOT caught by catch above
+    // Exceptions here are NOT caught by catch above
 }
 ```
 
@@ -640,15 +661,17 @@ flow {
 #### Retry with Delay
 
 ```kotlin
-// Simple retry with fixed delay
+// Simple retry with fixed delay for transient errors
 fun <T> Flow<T>.retryWithDelay(
     retries: Long,
     delayMillis: Long
 ): Flow<T> = retry(retries) { cause ->
-    // This predicate is invoked before each retry attempt
-    delay(delayMillis)
-    // Continue retrying until retry() has reached the max attempts
-    true
+    if (cause is IOException) {
+        delay(delayMillis)
+        true
+    } else {
+        false
+    }
 }
 
 // Usage
@@ -691,6 +714,9 @@ flow {
 Exponential backoff is a standard error-handling strategy where retry delays increase exponentially.
 
 ```kotlin
+import kotlin.math.pow
+import kotlin.random.Random
+
 fun <T> Flow<T>.retryWithExponentialBackoff(
     maxRetries: Int = 3,
     initialDelayMs: Long = 1000,
@@ -795,6 +821,7 @@ fun <T> Flow<T>.withCircuitBreaker(
     circuitBreaker: CircuitBreaker
 ): Flow<T> = flow {
     circuitBreaker.execute {
+        // Collect from the original Flow inside the circuit breaker
         collect { value ->
             emit(value)
         }
@@ -902,12 +929,12 @@ class UserViewModel : ViewModel() {
 3. Don't expect `catch` to handle exceptions in `collect`:
    ```kotlin
    //  Wrong: catch doesn't handle this
-   .catch { }
+   .catch { emit(default) }
    .collect { throw Exception() }
 
    //  Correct: handle in onEach so catch can see it
-   .onEach { if (invalid) throw Exception() }
-   .catch { }
+   .onEach { if (error) throw Exception() }
+   .catch { emit(default) }
    .collect()
    ```
 
@@ -942,16 +969,16 @@ class UserViewModel : ViewModel() {
 
 2. Infinite `retry`:
    ```kotlin
-   //  Will retry forever
+   //  Will retry forever, even on non-recoverable errors
    .retry { true }
 
-   //  Limit retries
+   //  Limit retries and filter by error type
    .retry(3) { it is IOException }
    ```
 
 3. Not considering error types:
    ```kotlin
-   //  Retries even on auth errors
+   //  Retries on all errors, including auth/business logic
    .retry(5)
 
    //  Only retry recoverable errors

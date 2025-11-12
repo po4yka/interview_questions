@@ -2,39 +2,32 @@
 id: kotlin-056
 title: "Advanced Flow Testing / Продвинутое тестирование Flow"
 aliases: ["Advanced Flow Testing", "Продвинутое тестирование Flow"]
-
-# Classification
 topic: kotlin
 subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [c-flow, q-kotlin-flow-basics--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
-
-# Timestamps
 created: 2025-10-11
-updated: 2025-11-10
-
+updated: 2025-11-11
 tags: [async, difficulty/hard, flow, kotlin, testing, testscope]
+
 ---
+
 # Вопрос (RU)
-> Протестируйте сложные цепочки `Flow` с задержками, ошибками и множественными испусканиями. Используйте `TestScope`, `TestDispatcher` и виртуальное время для детерминистического тестирования.
+> Протестируйте сложные цепочки `Flow` с задержками и множественными испусканиями. Используйте `TestScope`, `TestDispatcher` и виртуальное время для детерминированного тестирования.
 
 # Question (EN)
-> Test complex `Flow` chains with delays, errors, and multiple emissions. Use `TestScope`, `TestDispatcher`, and virtual time for deterministic testing.
+> Test complex `Flow` chains with delays and multiple emissions. Use `TestScope`, `TestDispatcher`, and virtual time for deterministic testing.
 
 ## Ответ (RU)
 
-Тестирование `Flow` требует специальных инструментов для детерминированного контроля асинхронного поведения, задержек и ошибок. Используются `runTest` (который создаёт `TestScope` и `TestDispatcher`), а также такие утилиты как `advanceTimeBy` и `advanceUntilIdle`. Для проверки значений удобно применять библиотеку Turbine.
+Тестирование `Flow` требует специальных инструментов для детерминированного контроля асинхронного поведения, задержек и тайминг-зависимой логики. Используются `runTest` (который создаёт `TestScope` и `TestDispatcher`), а также такие утилиты как `advanceTimeBy` и `advanceUntilIdle`. Для проверки значений удобно применять библиотеку Turbine.
 
 > См. также: [[c-flow]]
 
@@ -80,7 +73,7 @@ fun `test flow with delays using virtual time`() = runTest {
 }
 ```
 
-Важно: `advanceTimeBy` / `advanceUntilIdle` доступны в контексте `runTest` / `TestScope` и могут использоваться совместно с `flow.test {}` для управления виртуальным временем при тестировании операторов, зависящих от времени.
+Важно: `advanceTimeBy` / `advanceUntilIdle` доступны в контексте `runTest` / `TestScope` и применяются для управления виртуальным временем в самих тестах. При использовании Turbine (`flow.test { ... }`) виртуальное время также контролируется через `runTest`, но функции продвижения времени вызываются снаружи `test {}` или через отдельный `TestScope`, так как `test` использует свой собственный scope.
 
 ### Тестирование с Turbine
 
@@ -95,6 +88,9 @@ fun `test flow emissions with turbine`() = runTest {
         emit(3)
     }
 
+    // Продвигаем виртуальное время перед проверкой, если есть задержки
+    advanceUntilIdle()
+
     flow.test {
         assertEquals(1, awaitItem())
         assertEquals(2, awaitItem())
@@ -104,7 +100,7 @@ fun `test flow emissions with turbine`() = runTest {
 }
 ```
 
-`flow.test {}` выполняется в окружающем `runTest`, поэтому можно использовать `advanceTimeBy` / `advanceUntilIdle` для контроля виртуального времени при тестировании операторов, зависящих от времени.
+`flow.test {}` запускается с использованием тестового диспетчера (например, из `runTest`), однако управление виртуальным временем делайте на уровне окружения (`runTest` / `TestScope`), а не через вызов `advanceTimeBy` / `advanceUntilIdle` внутри лямбды Turbine.
 
 ### Тестирование преобразований `Flow`
 
@@ -414,6 +410,7 @@ fun `test buffer strategy`() = runTest {
         delay(50) // Медленный потребитель (виртуальное время)
     }
 
+    // Благодаря виртуальному времени тест завершается быстро и мы получаем все элементы
     assertEquals((0..9).toList(), results)
 }
 
@@ -446,7 +443,7 @@ fun `test conflate drops intermediate values`() = runTest {
 1. Используйте `runTest` для тестов корутин, чтобы получить `TestScope`, `TestDispatcher` и виртуальное время.
 2. Используйте Turbine (`flow.test { ... }`) для проверки всех испусканий, ошибок и завершения.
 3. Всегда проверяйте все ожидаемые элементы и завершение (`awaitComplete()`), а также ошибки (`awaitError()`) там, где это важно.
-4. Используйте виртуальное время (`advanceTimeBy`, `advanceUntilIdle`) для тестов с `delay` и операторами времени (`debounce`, `timeout`), вместо реальных задержек.
+4. Используйте виртуальное время (`advanceTimeBy`, `advanceUntilIdle`) для тестов с `delay` и операторами времени (`debounce`, `timeout`), вместо реальных задержек, управляя им из `runTest` / `TestScope`.
 5. Тестируйте сложные сценарии: последовательные операторы, отмену (`flatMapLatest`), поведение холодных и горячих потоков (`StateFlow`, `SharedFlow`), backpressure (`buffer`, `conflate`).
 6. Явно покрывайте сценарии с повторными попытками (`retry`), обработкой ошибок (`catch`), распространением необработанных исключений и конкурирующими подписками.
 
@@ -457,7 +454,7 @@ fun `test conflate drops intermediate values`() = runTest {
 3. Не проверяют завершение или ошибку (`awaitComplete()` / `awaitError()`), оставляя возможные подвисания или некорректное поведение незамеченными.
 4. Смешивают `runBlocking` и тестовые диспетчеры, что приводит к неконсистентному поведению.
 
-**Краткое содержание (RU)**: Продвинутое тестирование `Flow` опирается на `runTest` / `TestScope`, `TestDispatcher` и виртуальное время для детерминированных и быстрых тестов. Turbine упрощает проверку испусканий, ошибок и завершения. Следует покрывать сценарии с задержками, ошибками, отменой, backpressure и различием холодных / горячих потоков.
+**Краткое содержание (RU)**: Продвинутое тестирование `Flow` опирается на `runTest` / `TestScope`, `TestDispatcher` и виртуальное время для детерминированных и быстрых тестов. Turbine упрощает проверку испусканий, ошибок и завершения. Следует покрывать сценарии с задержками, отменой, backpressure и различием холодных / горячих потоков.
 
 ---
 
@@ -507,6 +504,8 @@ fun `test flow with delays using virtual time`() = runTest {
 }
 ```
 
+Important: `advanceTimeBy` / `advanceUntilIdle` are available in the `runTest` / `TestScope` context and are used to control virtual time in your tests. When using Turbine (`flow.test { ... }`), virtual time is still driven by the surrounding `runTest`, but you typically advance time outside the `test {}` block or via a separate `TestScope`, because `test` runs in its own scope.
+
 ### Testing with Turbine
 
 ```kotlin
@@ -520,6 +519,9 @@ fun `test flow emissions with turbine`() = runTest {
         emit(3)
     }
 
+    // Advance virtual time before assertions when delays are involved
+    advanceUntilIdle()
+
     flow.test {
         assertEquals(1, awaitItem())
         assertEquals(2, awaitItem())
@@ -529,7 +531,7 @@ fun `test flow emissions with turbine`() = runTest {
 }
 ```
 
-Note: `flow.test {}` runs in the surrounding `runTest` scope, so you can use `advanceTimeBy` / `advanceUntilIdle` to control virtual time when testing time-based operators.
+`flow.test {}` uses the test dispatcher (e.g., from `runTest`), but time control remains external: call `advanceTimeBy` / `advanceUntilIdle` on the surrounding test scope rather than from inside the Turbine lambda.
 
 ### Testing `Flow` Transformations
 
@@ -840,6 +842,7 @@ fun `test buffer strategy`() = runTest {
         delay(50) // Simulate slow collector (virtual time)
     }
 
+    // With virtual time, the test remains fast and all items are received
     assertEquals((0..9).toList(), results)
 }
 
@@ -872,7 +875,7 @@ fun `test conflate drops intermediate values`() = runTest {
 1. Use `runTest` for coroutine tests to get `TestScope`, `TestDispatcher` and virtual time.
 2. Use Turbine (`flow.test { ... }`) for checking all emissions, errors, and completion.
 3. Always assert all expected items and completion (`awaitComplete()`), and use `awaitError()` where relevant.
-4. Use virtual time (`advanceTimeBy`, `advanceUntilIdle`) for `delay` and time-based operators (`debounce`, `timeout`) instead of real delays.
+4. Use virtual time (`advanceTimeBy`, `advanceUntilIdle`) for `delay` and time-based operators (`debounce`, `timeout`) instead of real delays, driving it from `runTest` / `TestScope`.
 5. Test complex scenarios: chained operators, cancellation (`flatMapLatest`), cold vs hot `Flow`s (`StateFlow`, `SharedFlow`), and backpressure (`buffer`, `conflate`).
 6. Explicitly cover retries (`retry`), error handling (`catch`), uncaught exception propagation, and competing subscriptions.
 
@@ -883,7 +886,7 @@ fun `test conflate drops intermediate values`() = runTest {
 3. Not verifying completion or error (`awaitComplete()` / `awaitError()`), leaving hangs or incorrect behavior undetected.
 4. Mixing `runBlocking` with test dispatchers, causing inconsistent behavior.
 
-**English Summary**: Advanced `Flow` testing uses `runTest` / `TestScope`, `TestDispatcher`, and virtual time to make tests deterministic and fast. Turbine simplifies checking emissions, errors, and completion. Cover scenarios with delays, errors, cancellation, backpressure, and cold vs hot flows.
+**English Summary**: Advanced `Flow` testing uses `runTest` / `TestScope`, `TestDispatcher`, and virtual time to make tests deterministic and fast. Turbine simplifies checking emissions, errors, and completion. Cover scenarios with delays, cancellation, backpressure, and cold vs hot flows.
 
 ---
 
@@ -893,23 +896,23 @@ fun `test conflate drops intermediate values`() = runTest {
 - Когда вы бы использовали этот подход на практике?
 - Какие распространенные ошибки следует избегать?
 
-## Ссылки (RU)
-
-- [Testing Kotlin coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
-- [Turbine - Flow testing library](https://github.com/cashapp/turbine)
-- [Testing Flows - Android Developers](https://developer.android.com/kotlin/flow/test)
-
-## Follow-ups
+## Follow-ups (EN)
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
-## References
+## Ссылки (RU)
 
 - [Testing Kotlin coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
-- [Turbine - Flow testing library](https://github.com/cashapp/turbine)
-- [Testing Flows - Android Developers](https://developer.android.com/kotlin/flow/test)
+- [Turbine - `Flow` testing library](https://github.com/cashapp/turbine)
+- [Testing `Flows` - Android Developers](https://developer.android.com/kotlin/flow/test)
+
+## References (EN)
+
+- [Testing Kotlin coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
+- [Turbine - `Flow` testing library](https://github.com/cashapp/turbine)
+- [Testing `Flows` - Android Developers](https://developer.android.com/kotlin/flow/test)
 
 ## Related Questions
 

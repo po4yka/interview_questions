@@ -82,7 +82,7 @@ fun loadData() {
 ### Реальные примеры
 
 ```kotlin
-// Сетевой запрос (apiService — условный пример)
+// Сетевой запрос (apiService — упрощённый пример)
 suspend fun getUserProfile(userId: Int): UserProfile {
     return withContext(Dispatchers.IO) {
         val response = apiService.getUser(userId)
@@ -90,7 +90,7 @@ suspend fun getUserProfile(userId: Int): UserProfile {
     }
 }
 
-// Операция с базой данных (database — условный пример)
+// Операция с базой данных (database — упрощённый пример)
 suspend fun saveToDatabase(user: User): Long {
     return withContext(Dispatchers.IO) {
         database.userDao().insert(user)
@@ -117,11 +117,11 @@ suspend fun loadUserData(userId: Int): UserData {
 ### Suspend-функции и коллбеки
 
 ```kotlin
-// Преобразование callback-API в suspend-функцию
+// Преобразование callback-API в suspend-функцию (DownloadCallback — упрощённый интерфейс)
 suspend fun downloadFile(url: String): File = suspendCoroutine { continuation ->
     fileDownloader.download(url, object : DownloadCallback {
-        override fun onSuccess(file: File) {
-            continuation.resume(file)
+        override fun onSuccess(result: File) {
+            continuation.resume(result)
         }
 
         override fun onError(error: Exception) {
@@ -130,13 +130,13 @@ suspend fun downloadFile(url: String): File = suspendCoroutine { continuation ->
     })
 }
 
-// Использование suspendCancellableCoroutine для поддержки отмены
+// Использование suspendCancellableCoroutine для поддержки отмены (Callback — упрощённый интерфейс)
 suspend fun fetchDataWithCancellation(): String = suspendCancellableCoroutine { continuation ->
     val call = apiClient.getData()
 
     call.enqueue(object : Callback<String> {
-        override fun onResponse(response: String) {
-            continuation.resume(response)
+        override fun onResponse(result: String) {
+            continuation.resume(result)
         }
 
         override fun onFailure(error: Throwable) {
@@ -313,13 +313,13 @@ suspend fun fetchDataSafely(): Result<String> {
     }
 }
 
-// Suspend-функция, которая выбрасывает исключение
+// Suspend-функция, которая выбрасывает исключение (response — упрощённый тип)
 suspend fun fetchDataOrThrow(): String {
     val response = withContext(Dispatchers.IO) {
         api.getData()
     }
 
-    if (response.isSuccessful) {
+    if (response.isSuccessful && response.body != null) {
         return response.body
     } else {
         throw ApiException("Failed to fetch data")
@@ -422,7 +422,7 @@ suspend fun longRunningTask() {
 
 ## Answer (EN)
 
-Create a suspend function by adding the `suspend` modifier before `fun`. The body of a suspend function may call other suspend functions. You cannot call a suspend function directly (as a regular call) from a non-suspend function — you must start a coroutine (via builders like `launch`, `async`, `runBlocking`, etc.) or use lower-level continuation APIs.
+Create a suspend function by adding the `suspend` modifier before `fun`. The body of a suspend function may call other suspend functions. You cannot call a suspend function directly (as a regular call) from a non-suspend function — you must start a coroutine (via builders like `launch`, `async`, `runBlocking`, etc.) or, in rare cases, use lower-level continuation APIs (`Continuation`, `suspendCoroutine`, `suspendCancellableCoroutine`).
 
 ### Basic Syntax
 
@@ -479,7 +479,7 @@ fun loadData() {
 ### Real-World Examples
 
 ```kotlin
-// Network request (apiService is a placeholder)
+// Network request (apiService is a simplified placeholder)
 suspend fun getUserProfile(userId: Int): UserProfile {
     return withContext(Dispatchers.IO) {
         val response = apiService.getUser(userId)
@@ -487,7 +487,7 @@ suspend fun getUserProfile(userId: Int): UserProfile {
     }
 }
 
-// Database operation (database is a placeholder)
+// Database operation (database is a simplified placeholder)
 suspend fun saveToDatabase(user: User): Long {
     return withContext(Dispatchers.IO) {
         database.userDao().insert(user)
@@ -514,11 +514,11 @@ suspend fun loadUserData(userId: Int): UserData {
 ### Suspend Functions with Callbacks
 
 ```kotlin
-// Converting callback-based API to suspend function
+// Converting callback-based API to suspend function (DownloadCallback is a simplified interface)
 suspend fun downloadFile(url: String): File = suspendCoroutine { continuation ->
     fileDownloader.download(url, object : DownloadCallback {
-        override fun onSuccess(file: File) {
-            continuation.resume(file)
+        override fun onSuccess(result: File) {
+            continuation.resume(result)
         }
 
         override fun onError(error: Exception) {
@@ -527,13 +527,13 @@ suspend fun downloadFile(url: String): File = suspendCoroutine { continuation ->
     })
 }
 
-// Using suspendCancellableCoroutine for cancellation support
+// Using suspendCancellableCoroutine for cancellation support (Callback is a simplified interface)
 suspend fun fetchDataWithCancellation(): String = suspendCancellableCoroutine { continuation ->
     val call = apiClient.getData()
 
     call.enqueue(object : Callback<String> {
-        override fun onResponse(response: String) {
-            continuation.resume(response)
+        override fun onResponse(result: String) {
+            continuation.resume(result)
         }
 
         override fun onFailure(error: Throwable) {
@@ -565,7 +565,7 @@ class UserRepository {
         return user.email.isNotEmpty()
     }
 
-    // Public suspend function using private suspend
+    // Public suspend function using private suspend function
     suspend fun saveUser(user: User): Result<Unit> {
         return if (validateUser(user)) {
             withContext(Dispatchers.IO) {
@@ -658,7 +658,7 @@ processInBackground {
 ### Inline Suspend Functions
 
 ```kotlin
-// Inline suspend function for better performance in some cases
+// Inline suspend function for measuring execution time
 suspend inline fun <T> measureTime(
     block: suspend () -> T
 ): Pair<T, Long> {
@@ -710,13 +710,13 @@ suspend fun fetchDataSafely(): Result<String> {
     }
 }
 
-// Suspend function that throws
+// Suspend function that throws (response is a simplified placeholder type)
 suspend fun fetchDataOrThrow(): String {
     val response = withContext(Dispatchers.IO) {
         api.getData()
     }
 
-    if (response.isSuccessful) {
+    if (response.isSuccessful && response.body != null) {
         return response.body
     } else {
         throw ApiException("Failed to fetch data")
@@ -766,7 +766,7 @@ class UserRepositoryTest {
 ### Common Patterns
 
 ```kotlin
-// 1. Suspend function with default dispatcher
+// 1. CPU-intensive task using Dispatchers.Default
 suspend fun cpuIntensiveTask(): Int = withContext(Dispatchers.Default) {
     // Heavy computation
     (1..1000000).sum()
@@ -796,7 +796,6 @@ suspend fun loadAllData(): AppData = coroutineScope {
 suspend fun longRunningTask() {
     repeat(1000) { i ->
         ensureActive()  // Throws if cancelled
-        // or check manually:
         if (!isActive) return
 
         // Do work
@@ -813,7 +812,7 @@ suspend fun longRunningTask() {
    - From other suspend functions
    - From within coroutine bodies started by builders (`launch`, `async`, `runBlocking`, etc.)
    - Via low-level continuation APIs (rarely used in application code)
-3. They cannot be invoked as plain synchronous calls from regular functions without starting a coroutine or using continuations.
+3. They cannot be invoked as plain synchronous calls from regular functions without starting a coroutine or using continuation APIs.
 4. Suspend functions can use all regular Kotlin features (generics, extensions, inline, etc.).
 5. Under the hood, the compiler transforms suspend functions to state machines with an extra `Continuation` parameter.
 

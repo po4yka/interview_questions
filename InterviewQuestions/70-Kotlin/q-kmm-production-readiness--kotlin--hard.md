@@ -46,7 +46,9 @@ kotlin {
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.framework {
             baseName = "Shared"
-            isStatic = true  // ✅ Рекомендуется для production во многих сценариях, уменьшает runtime-issues
+            // Стратегия выбора static/dynamic зависит от интеграции; для многих production-кейсов
+            // статический фреймворк уменьшает runtime-проблемы, но требует осознанного выбора.
+            isStatic = true
 
             export("org.jetbrains.kotlinx:kotlinx-datetime")
             export("io.ktor:ktor-client-core")
@@ -64,7 +66,7 @@ kotlin {
 
 ```kotlin
 class TaskRepository {
-    // ❌ Старый метод - deprecated, но не удален (сохраняем для совместимости)
+    // ❌ Старый метод - deprecated, но не удалён (сохраняем для совместимости)
     @Deprecated("Use getTasks()", ReplaceWith("getTasks()"))
     suspend fun fetchTasks(): List<Task> = getTasks().getOrThrow()
 
@@ -136,6 +138,8 @@ class GlobalExceptionHandler(private val crashReporter: CrashReporter) {
 }
 ```
 
+(Для компиляции примера требуется импорт `kotlinx.datetime.Clock`.)
+
 ### Performance Monitoring
 
 ```kotlin
@@ -179,14 +183,17 @@ class TaskRepository(
 
 ```kotlin
 class ThreadSafeRepository {
-    // ✅ StateFlow thread-safe с новой моделью памяти (при корректном использовании)
+    // ✅ При использовании Kotlin/Native с новой memory model StateFlow/MutableStateFlow
+    // поддерживают многопоточность (при корректном использовании в поддерживаемых версиях).
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
 
-    // ✅ AtomicReference (из kotlin.concurrent или аналогичных) для безопасных обновлений
+    // ✅ AtomicReference для безопасных обновлений общего состояния
     private val cachedData = AtomicReference<CachedData?>(null)
 }
 ```
+
+(Для компиляции примера потребуются соответствующие импорты, например `kotlinx.coroutines.flow.*` и `kotlin.concurrent.AtomicReference` или выбранная atomic-библиотека.)
 
 **Background Safety**:
 
@@ -255,12 +262,12 @@ class ViewModel {
     }
 }
 
-// ✅ Правильный lifecycle management
+// ✅ Правильный lifecycle management (упрощённый пример)
 class ViewModel {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     fun onCleared() {
-        scope.cancel()  // ✅ Отменяем все корутины
+        scope.cancel()  // ✅ Отменяем все корутины, требуется привязка к конкретному lifecycle на платформе
     }
 }
 ```
@@ -268,17 +275,17 @@ class ViewModel {
 **4. Excessive Platform Calls**:
 
 ```kotlin
-// ❌ Частые platform calls
+// ❌ Частые platform calls через границу KMM/host-платформы
 fun processItems(items: List<Item>) {
     items.forEach { item ->
-        platformSpecificLogging(item.id)  // Called 1000 times
+        platformSpecificLogging(item.id)  // Вызывается 1000 раз, растёт overhead
     }
 }
 
-// ✅ Batch platform calls
+// ✅ Batch platform calls, минимизация переходов через границу
 fun processItems(items: List<Item>) {
     val itemIds = items.map { it.id }
-    platformSpecificLogging(itemIds.joinToString())  // Called once
+    platformSpecificLogging(itemIds.joinToString())  // Один вызов вместо множества
 }
 ```
 
@@ -314,7 +321,9 @@ kotlin {
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries.framework {
             baseName = "Shared"
-            isStatic = true  // ✅ Recommended for many production setups; reduces runtime issues
+            // Choosing static vs dynamic is integration-specific; for many production setups
+            // a static framework can reduce certain runtime issues but must be a deliberate choice.
+            isStatic = true
 
             export("org.jetbrains.kotlinx:kotlinx-datetime")
             export("io.ktor:ktor-client-core")
@@ -404,6 +413,8 @@ class GlobalExceptionHandler(private val crashReporter: CrashReporter) {
 }
 ```
 
+(For compilation, this example requires `kotlinx.datetime.Clock` import.)
+
 ### Performance Monitoring
 
 ```kotlin
@@ -447,14 +458,17 @@ Concrete `PerformanceMonitor` implementations will differ per platform (Firebase
 
 ```kotlin
 class ThreadSafeRepository {
-    // ✅ StateFlow is thread-safe with the new memory model (when used correctly)
+    // ✅ With Kotlin/Native new memory model, StateFlow/MutableStateFlow support multithreading
+    // when used correctly on supported versions.
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
 
-    // ✅ AtomicReference (from kotlin.concurrent or similar) for safe updates
+    // ✅ AtomicReference for safe updates of shared state
     private val cachedData = AtomicReference<CachedData?>(null)
 }
 ```
+
+(For compilation, appropriate imports are required, e.g. `kotlinx.coroutines.flow.*` and `kotlin.concurrent.AtomicReference` or a chosen atomic library.)
 
 **Background Safety**:
 
@@ -523,12 +537,12 @@ class ViewModel {
     }
 }
 
-// ✅ Proper lifecycle management
+// ✅ Proper lifecycle management (simplified example)
 class ViewModel {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     fun onCleared() {
-        scope.cancel()  // ✅ Cancel all coroutines
+        scope.cancel()  // ✅ Cancel all coroutines; should be wired to concrete platform lifecycle
     }
 }
 ```
@@ -536,17 +550,17 @@ class ViewModel {
 **4. Excessive Platform Calls**:
 
 ```kotlin
-// ❌ Frequent platform calls
+// ❌ Frequent platform calls across KMM/host boundary
 fun processItems(items: List<Item>) {
     items.forEach { item ->
-        platformSpecificLogging(item.id)  // Called 1000 times
+        platformSpecificLogging(item.id)  // Called 1000 times; overhead accumulates
     }
 }
 
-// ✅ Batch platform calls
+// ✅ Batch platform calls, minimize boundary crossings
 fun processItems(items: List<Item>) {
     val itemIds = items.map { it.id }
-    platformSpecificLogging(itemIds.joinToString())  // Called once
+    platformSpecificLogging(itemIds.joinToString())  // Single call instead of many
 }
 ```
 
