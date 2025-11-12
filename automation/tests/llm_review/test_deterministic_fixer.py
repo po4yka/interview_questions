@@ -206,3 +206,61 @@ We convert Retrofit responses into Result<T> for better ergonomics.
 
     assert result.changes_made
     assert "`Result<T>`" in result.revised_text
+
+
+def test_nested_generic_type_backticks_are_balanced():
+    """Nested generics missing closing brackets from lint messages are wrapped."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+We propagate Result<List<T>> across layers.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="ERROR",
+            message=(
+                "ERROR:Generic type 'Result<List<T>' not wrapped in backticks "
+                "(will be interpreted as HTML tag). Use: `Result<List<T>`"
+            ),
+            field="content",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`Result<List<T>>`" in result.revised_text
+
+
+def test_simple_generic_backticks_from_message():
+    """Simple generic type mentions are wrapped when validators flag them."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+List<T> collections should be immutable.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="ERROR",
+            message=(
+                "ERROR:Generic type 'List<T>' not wrapped in backticks (will be "
+                "interpreted as HTML tag). Use: `List<T>`"
+            ),
+            field="content",
+        )
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`List<T>`" in result.revised_text

@@ -220,7 +220,12 @@ class DeterministicFixer:
             if not match:
                 continue
 
-            type_name = match.group(1)
+            type_name = self._sanitize_type_name(match.group(1))
+            if not type_name:
+                logger.debug(
+                    "Skipping deterministic wrapping because sanitized type name was empty",
+                )
+                continue
             if type_name in processed_type_names:
                 continue
 
@@ -616,6 +621,27 @@ class DeterministicFixer:
             return body, False
 
         return "".join(updated_segments), True
+
+    def _sanitize_type_name(self, type_name: str) -> str:
+        """Clean up a type name extracted from validator messages."""
+
+        cleaned = type_name.strip().rstrip(".;:,")
+        if not cleaned:
+            return ""
+
+        opens = cleaned.count("<")
+        closes = cleaned.count(">")
+
+        if opens > closes:
+            cleaned = f"{cleaned}{'>' * (opens - closes)}"
+        elif closes > opens:
+            # Trim surplus trailing '>' characters so we don't over-wrap variants.
+            excess = closes - opens
+            while excess and cleaned.endswith(">"):
+                cleaned = cleaned[:-1]
+                excess -= 1
+
+        return cleaned
 
     def _build_type_variants(self, type_name: str) -> list[str]:
         """Return simple variants (plural forms) for a given type name."""
