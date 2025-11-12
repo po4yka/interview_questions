@@ -19,6 +19,7 @@ Benefits:
 from __future__ import annotations
 
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -62,7 +63,11 @@ class DeterministicFixer:
                 r"in the future", re.IGNORECASE
             ),
             "type_name_backticks": re.compile(
-                r"Type name '([^']+)' found without backticks", re.IGNORECASE
+                r"(?:Type|Generic)[^']*'([^']+)'[^']*backticks", re.IGNORECASE
+            ),
+            "aliases_type": re.compile(r"aliases must be a list", re.IGNORECASE),
+            "unresolved_related": re.compile(
+                r"related link '([^']+)' cannot be resolved", re.IGNORECASE
             ),
         }
 
@@ -123,6 +128,31 @@ class DeterministicFixer:
                     fixes_applied.append("Quoted URLs in sources array")
                     issues_fixed.append(issue.message)
                     changes_made = True
+
+        # Fix 1b: Ensure aliases field is always a list of strings
+        for issue in issues:
+            if self.fix_patterns["aliases_type"].search(issue.message):
+                alias_changed, alias_description = self._coerce_aliases_to_list(yaml_data)
+                if alias_changed:
+                    fixes_applied.append(alias_description)
+                    issues_fixed.append(issue.message)
+                    changes_made = True
+                break
+
+        # Fix 1c: Remove unresolved related links reported by validators
+        for issue in issues:
+            match = self.fix_patterns["unresolved_related"].search(issue.message)
+            if not match:
+                continue
+
+            unresolved_link = match.group(1)
+            if self._remove_unresolved_related_link(yaml_data, unresolved_link):
+                fixes_applied.append(
+                    f"Removed unresolved related link '{unresolved_link}'"
+                )
+                issues_fixed.append(issue.message)
+                changes_made = True
+
 
         # Fix 2: Timestamp ordering violations (created > updated)
         for issue in issues:
@@ -229,6 +259,143 @@ class DeterministicFixer:
             fixes_applied=fixes_applied,
             issues_fixed=issues_fixed,
         )
+
+    def _coerce_aliases_to_list(self, yaml_data: dict[str, Any]) -> tuple[bool, str]:
+        """Normalize aliases field into a list of cleaned strings."""
+
+        if "aliases" not in yaml_data:
+            logger.debug("Aliases field missing from YAML; skipping coercion")
+            return False, ""
+
+        raw_value = yaml_data["aliases"]
+
+        # Already a well-formed list of strings
+        if isinstance(raw_value, list) and all(
+            isinstance(item, str) for item in raw_value if item is not None
+        ):
+            cleaned_list = [self._clean_alias_entry(item) for item in raw_value]
+            cleaned_list = [item for item in cleaned_list if item is not None]
+            if cleaned_list != raw_value:
+                yaml_data["aliases"] = cleaned_list
+                logger.debug(
+                    "Normalized aliases list entries from %s to %s", raw_value, cleaned_list
+                )
+                return True, "Normalized aliases list entries"
+            logger.debug("Aliases already a list of strings; no changes required")
+            return False, ""
+
+        normalized_list: list[str] = []
+
+        if isinstance(raw_value, str):
+            normalized_list = self._split_alias_string(raw_value)
+        elif isinstance(raw_value, Iterable) and not isinstance(raw_value, (str, bytes)):
+            normalized_list = [
+                item
+                for item in (
+                    self._clean_alias_entry(element)
+                    for element in raw_value  # type: ignore[arg-type]
+                )
+                if item is not None
+            ]
+        elif raw_value is None:
+            normalized_list = []
+        else:
+            cleaned_entry = self._clean_alias_entry(raw_value)
+            normalized_list = [cleaned_entry] if cleaned_entry else []
+
+        yaml_data["aliases"] = normalized_list
+        logger.debug(
+            "Coerced aliases value %s into list %s", raw_value, normalized_list
+        )
+
+        description = (
+            "Converted aliases to list of strings"
+            if normalized_list
+            else "Reset aliases to empty list"
+        )
+        return True, description
+
+    def _split_alias_string(self, raw_value: str) -> list[str]:
+        """Split a string alias field into individual aliases using safe delimiters."""
+
+        trimmed_value = raw_value.strip()
+        if not trimmed_value:
+            return []
+
+        delimiter_pattern = r"\s*(?:/|\||;)\s*"
+        parts = [part.strip() for part in re.split(delimiter_pattern, trimmed_value) if part.strip()]
+        if parts:
+            return parts
+
+        return [trimmed_value]
+
+    def _clean_alias_entry(self, entry: Any) -> str | None:
+        """Convert a raw alias entry to a trimmed string or None."""
+
+        if entry is None:
+            return None
+
+        if isinstance(entry, str):
+            cleaned = entry.strip()
+            return cleaned if cleaned else None
+
+        cleaned = str(entry).strip()
+        return cleaned if cleaned else None
+
+    def _remove_unresolved_related_link(
+        self, yaml_data: dict[str, Any], unresolved_link: str
+    ) -> bool:
+        """Remove a related link entry that validators report as unresolved."""
+
+        if "related" not in yaml_data:
+            logger.debug(
+                "Received unresolved related link '%s' but no related field present",
+                unresolved_link,
+            )
+            return False
+
+        raw_related = yaml_data["related"]
+        related_items: list[str]
+
+        if isinstance(raw_related, list):
+            related_items = [
+                item
+                for item in (
+                    self._clean_alias_entry(element) for element in raw_related
+                )
+                if item is not None
+            ]
+        elif isinstance(raw_related, str):
+            related_items = [item for item in self._split_alias_string(raw_related)]
+        else:
+            cleaned_entry = self._clean_alias_entry(raw_related)
+            related_items = [cleaned_entry] if cleaned_entry else []
+
+        if not related_items:
+            if raw_related != related_items:
+                yaml_data["related"] = related_items
+            return False
+
+        normalized_target = unresolved_link.strip()
+        filtered_items = [
+            item for item in related_items if item != normalized_target
+        ]
+
+        if filtered_items == related_items:
+            logger.debug(
+                "Unresolved related link '%s' not found in YAML list %s",
+                unresolved_link,
+                related_items,
+            )
+            return False
+
+        yaml_data["related"] = filtered_items
+        logger.debug(
+            "Removed unresolved related link '%s' from related list %s",
+            unresolved_link,
+            related_items,
+        )
+        return True
 
     def _fix_unquoted_urls(self, yaml_data: dict[str, Any]) -> bool:
         """Quote all URLs in the sources array.
@@ -401,7 +568,9 @@ class DeterministicFixer:
             return body, False
 
         joined_variants = "|".join(re.escape(variant) for variant in variants)
-        pattern = re.compile(rf"(?<!`)\b(?:{joined_variants})\b(?!`)")
+        pattern = re.compile(
+            rf"(?<![`A-Za-z0-9_])(?:{joined_variants})(?![`A-Za-z0-9_])"
+        )
         url_pattern = re.compile(r"https?://[^\s)]+")
 
         updated_segments: list[str] = []
