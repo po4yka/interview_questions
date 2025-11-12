@@ -163,12 +163,10 @@ uv run vault-app llm-review --pattern "InterviewQuestions/20-Algorithms/*--easy.
 ### Actually Modify Files
 
 ```bash
-# With backups (recommended)
-uv run vault-app llm-review --no-dry-run --backup
-
-# Without backups (use with caution)
-uv run vault-app llm-review --no-dry-run --no-backup
+uv run vault-app llm-review --no-dry-run
 ```
+
+Changes are written in place; rely on `git status`/`git diff` and revert via Git when needed.
 
 ### Generate Detailed Report
 
@@ -242,20 +240,9 @@ vault-app llm-review
 vault-app llm-review --dry-run
 ```
 
-### 2. Automatic Backups
+### 2. In-place writes
 
-When modifying files, creates `.md.backup` files:
-
-```bash
-# Original backed up to:
-InterviewQuestions/70-Kotlin/q-coroutines--kotlin--easy.md.backup
-```
-
-Restore if needed:
-
-```bash
-cp note.md.backup note.md
-```
+Modifications are saved directly; there are no automatic backup copies. Always run the dry-run first and rely on Git history (`git diff`, `git checkout -- <note>`) to inspect or revert changes before committing.
 
 ### 3. Validation Integration
 
@@ -297,8 +284,6 @@ View history in the report.
 | `--dry-run`        | -     | `true`                       | Preview without modifying |
 | `--no-dry-run`     | -     | -                            | Actually modify files     |
 | `--max-iterations` | `-m`  | `5`                          | Max fix iterations        |
-| `--backup`         | -     | `true`                       | Create backups            |
-| `--no-backup`      | -     | -                            | Don't create backups      |
 | `--report`         | `-r`  | `None`                       | Report file path          |
 
 ## Costs
@@ -371,11 +356,11 @@ Keep reports for:
 - Understanding what was changed
 - Debugging issues
 
-### 5. Backup Before Bulk Operations
+### 5. Archive Before Bulk Operations
 
 ```bash
-# Create manual backup
-tar -czf vault-backup-$(date +%Y%m%d).tar.gz InterviewQuestions/
+# Create an optional archive
+tar -czf vault-archive-$(date +%Y%m%d).tar.gz InterviewQuestions/
 
 # Then run LLM review
 vault-app llm-review --no-dry-run --pattern "..."
@@ -547,8 +532,7 @@ If you use Cursor, Claude, or other AI tools:
 **A:** Unlikely if used correctly:
 
 - Start with `--dry-run`
-- Use `--backup`
-- Review changes in PR
+- Review changes in PR or via `git diff`
 - Test on subset first
 
 ### Q: How accurate are the fixes?
@@ -575,14 +559,11 @@ Less reliable for:
 ### Q: How do I revert changes?
 
 ```bash
-# If using backups
-cp note.md.backup note.md
+# Revert a note before committing
+git checkout -- note.md
 
-# If committed to git
-git checkout HEAD~1 note.md
-
-# If PR not merged
-# Just close the PR
+# Undo an applied run (if already committed)
+git revert HEAD
 ```
 
 ## Support

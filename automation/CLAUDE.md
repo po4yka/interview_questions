@@ -33,7 +33,7 @@ vault-app validate --all
 vault-app llm-review --pattern "InterviewQuestions/**/*.md"
 
 # LLM review (apply changes)
-vault-app llm-review --no-dry-run --backup
+vault-app llm-review --no-dry-run
 
 # Graph statistics
 vault-app graph-stats --hubs 10
@@ -192,7 +192,7 @@ vault-app llm-review
 vault-app llm-review --pattern "InterviewQuestions/70-Kotlin/**/*.md"
 
 # Apply changes
-vault-app llm-review --no-dry-run --backup --max-iterations 5
+vault-app llm-review --no-dry-run --max-iterations 5
 
 # Generate report
 vault-app llm-review --report review-report.md
@@ -212,7 +212,6 @@ export LOGURU_LEVEL=DEBUG  # For verbose logging
 - `--pattern`: File glob pattern (default: `InterviewQuestions/**/*.md`)
 - `--dry-run/--no-dry-run`: Preview or apply changes (default: `--dry-run`)
 - `--max-iterations`: Max fix iterations (default: 5)
-- `--backup/--no-backup`: Create backups (default: `--backup`)
 - `--report`: Report file path
 
 ### Logging
@@ -289,10 +288,10 @@ vault-app llm-review 2>&1 | tee llm-review.log
    vault-app llm-review --pattern "InterviewQuestions/70-Kotlin/q-test-*.md"
    ```
 
-3. **Use backups**:
+3. **Inspect diffs**:
 
    ```bash
-   vault-app llm-review --no-dry-run --backup
+   git diff InterviewQuestions/<note>.md
    ```
 
 4. **Monitor costs**:

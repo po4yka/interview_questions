@@ -4,7 +4,6 @@ from .atomic_file import (
     FileWriteError,
     atomic_write,
     locked_read,
-    safe_backup_and_write,
 )
 from .error_context import (
     ErrorContext,
@@ -95,7 +94,6 @@ __all__ = [
     # Atomic file operations
     "atomic_write",
     "locked_read",
-    "safe_backup_and_write",
     "FileWriteError",
     # Error context and handling
     "ErrorContext",

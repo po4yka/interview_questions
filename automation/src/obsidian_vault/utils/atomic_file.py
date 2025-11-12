@@ -10,8 +10,6 @@ import fcntl
 import os
 import tempfile
 from pathlib import Path
-from typing import Any
-
 from loguru import logger
 
 
@@ -21,51 +19,26 @@ class FileWriteError(Exception):
     pass
 
 
-def atomic_write(path: Path, content: str, encoding: str = "utf-8", create_backup: bool = True) -> None:
-    """Write content to a file atomically with optional backup.
+def atomic_write(path: Path, content: str, encoding: str = "utf-8") -> None:
+    """Write content to a file atomically.
 
     This function ensures that:
     1. The file is never partially written (atomic operation)
     2. No concurrent writes corrupt the file (file locking)
-    3. Original content can be recovered if something goes wrong (backup)
 
     Args:
         path: Path to the file to write
         content: Content to write to the file
         encoding: Text encoding (default: utf-8)
-        create_backup: Whether to create a .backup file before writing
 
     Raises:
         FileWriteError: If the write operation fails
-
-    Example:
-        >>> atomic_write(Path("note.md"), "# Updated content", create_backup=True)
     """
     path = Path(path).resolve()
 
     # Create parent directory if it doesn't exist
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Create backup if requested and file exists
-    if create_backup and path.exists():
-        backup_path = path.with_suffix(path.suffix + ".backup")
-        try:
-            # Read original with lock
-            with open(path, "r", encoding=encoding) as f:
-                fcntl.flock(f.fileno(), fcntl.LOCK_SH)  # Shared lock for reading
-                try:
-                    original_content = f.read()
-                finally:
-                    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
-
-            # Write backup atomically
-            _write_temp_and_rename(backup_path, original_content, encoding)
-            logger.debug(f"Created backup: {backup_path.name}")
-        except Exception as e:
-            logger.warning(f"Failed to create backup for {path.name}: {e}")
-            # Continue with write even if backup fails
-
-    # Write content atomically
     try:
         _write_temp_and_rename(path, content, encoding)
         logger.debug(f"Atomically wrote {len(content)} bytes to {path.name}")
@@ -173,24 +146,3 @@ def locked_read(path: Path, encoding: str = "utf-8") -> str:
         error_msg = f"Locked read failed for {path}: {e}"
         logger.error(error_msg)
         raise FileWriteError(error_msg) from e
-
-
-def safe_backup_and_write(path: Path, new_content: str, encoding: str = "utf-8") -> bool:
-    """Create a backup and write new content atomically.
-
-    This is a convenience function that combines backup creation and atomic write.
-
-    Args:
-        path: Path to the file
-        new_content: New content to write
-        encoding: Text encoding
-
-    Returns:
-        True if successful, False otherwise
-    """
-    try:
-        atomic_write(path, new_content, encoding=encoding, create_backup=True)
-        return True
-    except FileWriteError as e:
-        logger.error(f"Failed to write {path}: {e}")
-        return False

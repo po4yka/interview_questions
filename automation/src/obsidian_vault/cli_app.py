@@ -63,6 +63,13 @@ app = typer.Typer(
 )
 console = Console()
 
+EXPORT_FORMAT_OPTION = typer.Option(
+    None,
+    "--format",
+    "-f",
+    help="Export format (auto-detected from extension if not specified)",
+)
+
 
 def _abort(exc: Exception | None = None) -> Never:
     """Exit the CLI with a consistent Typer handling."""
@@ -125,7 +132,7 @@ def _validate_output_path(output_path: str) -> Path:
             if ".." in str(relative):
                 raise ValueError(f"Output path cannot contain '..' components: {output_path}")
 
-        except ValueError:
+        except ValueError as ve:
             # Path is not under cwd - check if it's trying to write to system locations
             forbidden_prefixes = ["/etc", "/var", "/usr", "/bin", "/sbin", "/sys", "/proc"]
             path_str = str(path)
@@ -134,7 +141,7 @@ def _validate_output_path(output_path: str) -> Path:
                 raise ValueError(
                     f"Cannot write to system directories. "
                     f"Use a relative path or path within {cwd}"
-                )
+                ) from ve
 
             # Allow absolute paths but warn user
             logger.warning(f"Using absolute path outside working directory: {path}")
@@ -504,7 +511,6 @@ def graph_stats(
 
     Shows total notes, links, density, orphaned notes, and more.
     """
-
     logger.info("Analyzing vault graph statistics")
     try:
         repo_root, vault_dir = _get_vault_dir()
@@ -586,7 +592,6 @@ def orphans(
 
     Helps identify disconnected content that needs linking.
     """
-
     logger.info("Finding orphaned notes")
     try:
         repo_root, vault_dir = _get_vault_dir()
@@ -631,7 +636,6 @@ def broken_links(
 
     Helps maintain vault integrity by identifying missing link targets.
     """
-
     logger.info("Finding broken links")
     try:
         repo_root, vault_dir = _get_vault_dir()
@@ -683,7 +687,6 @@ def link_report(
 
     Creates a detailed report with statistics, orphans, hubs, and authorities.
     """
-
     logger.info("Generating link health report")
     try:
         repo_root, vault_dir = _get_vault_dir()
@@ -710,12 +713,7 @@ def link_report(
 @app.command()
 def graph_export(
     output: str = typer.Argument(..., help="Output file path"),
-    export_format: ExportFormat | None = typer.Option(
-        None,
-        "--format",
-        "-f",
-        help="Export format (auto-detected from extension if not specified)",
-    ),
+    export_format: ExportFormat | None = EXPORT_FORMAT_OPTION,
 ):
     """Export vault graph to various formats for external analysis.
 
@@ -936,7 +934,6 @@ def suggest_links(
     that should be linked but currently aren't. Based on TF-IDF vectorization
     and cosine similarity.
     """
-
     logger.info("Analyzing notes for link suggestions using ML")
     try:
         repo_root, vault_dir = _get_vault_dir()
@@ -1074,11 +1071,6 @@ def llm_review(
         "--max-concurrent",
         help="Maximum number of notes to process concurrently",
     ),
-    backup: bool = typer.Option(
-        True,
-        "--backup/--no-backup",
-        help="Create backups before modifying files",
-    ),
     report: str | None = typer.Option(
         None,
         "--report",
@@ -1180,19 +1172,14 @@ def llm_review(
                                     f"invalid character(s) from {note_path.name}"
                                 )
 
-                            # Use atomic write with optional backup
+                            # Use atomic write for safe save
                             try:
                                 atomic_write(
                                     note_path,
                                     sanitized_text,
                                     encoding="utf-8",
-                                    create_backup=backup,
                                 )
                                 console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
-                                if backup:
-                                    console.print(
-                                        f"  [dim]Backup created: {note_path.name}.backup[/dim]"
-                                    )
                             except Exception as e:  # pragma: no cover - disk errors
                                 console.print(
                                     f"  [red]✗[/red] Failed to save {note_path.name}: {e}"

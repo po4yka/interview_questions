@@ -668,7 +668,7 @@ vault-app llm-review 2>&1 | grep "ERROR\|WARNING"
 3. **Don't use print() - use logger**
 4. **Don't commit without tests**
 5. **Don't break existing validators**
-6. **Don't remove safety features (dry-run, backups)**
+6. **Don't remove safety features (dry-run guards)**
 7. **Don't hard-code configuration**
 8. **Don't skip type hints**
 9. **Don't use bare except:**

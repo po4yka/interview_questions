@@ -99,15 +99,14 @@ vault-app llm-review
 vault-app llm-review --pattern "InterviewQuestions/70-Kotlin/**/*.md"
 
 # Actually modify files
-vault-app llm-review --no-dry-run --backup
+vault-app llm-review --no-dry-run
 
 # With custom settings
 vault-app llm-review \
   --pattern "InterviewQuestions/**/*.md" \
   --no-dry-run \
   --max-iterations 10 \
-  --report review-report.md \
-  --backup
+  --report review-report.md
 ```
 
 ### Python API
@@ -178,7 +177,6 @@ export OPENROUTER_MODEL="anthropic/claude-sonnet-4"
 | `pattern`            | `InterviewQuestions/**/*.md` | File glob pattern                                     |
 | `dry_run`            | `true`                       | Preview mode (no file modifications)                  |
 | `max_iterations`     | `5`                          | Max fix iterations per note                           |
-| `backup`             | `true`                       | Create `.md.backup` files                             |
 | `report`             | `None`                       | Path for detailed report                              |
 | `processing_profile` | `balanced`                   | Choose between balanced, stability, or thorough modes |
 
@@ -259,9 +257,9 @@ Enforces all vault rules:
 
 All commands default to `--dry-run` to prevent accidental modifications.
 
-### 2. Automatic Backups
+### 2. In-place writes
 
-When `--backup` is enabled (default), creates `.md.backup` files before modification.
+LLM review writes directly without creating independent backup copies. Run the dry-run first and rely on Git history (`git diff`, `git checkout -- <note>`) if you need to inspect or undo changes.
 
 ### 3. Iteration Limits
 
