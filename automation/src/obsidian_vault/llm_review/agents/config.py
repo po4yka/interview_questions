@@ -10,7 +10,9 @@ from loguru import logger
 from pydantic_ai.models.openai import ModelSettings, OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
-DEFAULT_OPENROUTER_MODEL = "openrouter/polaris-alpha"
+# Updated 2025-11: DeepSeek V3.1 as default for excellent reasoning and cost-effectiveness
+# 671B params (37B active), 128K context, strong performance across all benchmarks
+DEFAULT_OPENROUTER_MODEL = "deepseek/deepseek-chat-v3.1"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
 

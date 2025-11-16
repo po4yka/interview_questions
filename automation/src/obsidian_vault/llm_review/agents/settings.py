@@ -6,8 +6,12 @@ from .config import AgentModelSettings
 
 # Agent-specific model settings
 # These defaults balance creativity vs determinism for each agent's role
+# Updated 2025-11: Optimized model selection based on OpenRouter benchmarks
 
 TECHNICAL_REVIEW_SETTINGS = AgentModelSettings(
+    # DeepSeek V3.1: Excellent reasoning capabilities, 671B params (37B active), 128K context
+    # Ideal for creative technical insight while maintaining high accuracy
+    model="deepseek/deepseek-chat-v3.1",
     # Slightly higher temperature for creative technical insight
     # but not too high to avoid hallucinations
     temperature=0.3,
@@ -20,6 +24,10 @@ TECHNICAL_REVIEW_SETTINGS = AgentModelSettings(
 )
 
 ISSUE_FIX_SETTINGS = AgentModelSettings(
+    # MiniMax M2: 10B activated (230B total), excellent for code generation & editing
+    # 2x faster than Claude at 8% cost, optimal for deterministic fixes
+    # Cost: $0.15/M input, $0.60/M output
+    model="minimax/minimax-m2",
     # Lower temperature for deterministic, conservative fixes
     temperature=0.1,
     # Higher penalties to discourage repetition and encourage precise, minimal changes
@@ -31,6 +39,9 @@ ISSUE_FIX_SETTINGS = AgentModelSettings(
 )
 
 METADATA_SANITY_SETTINGS = AgentModelSettings(
+    # Qwen-Turbo: Most cost-effective option for simple validation tasks
+    # 1M context, fast speed, low cost ($0.05/M input, $0.20/M output)
+    model="qwen/qwen-turbo",
     # Very low temperature for structured, deterministic metadata validation
     temperature=0.1,
     # Moderate penalties for clear, concise issue reporting
@@ -42,6 +53,9 @@ METADATA_SANITY_SETTINGS = AgentModelSettings(
 )
 
 QA_VERIFICATION_SETTINGS = AgentModelSettings(
+    # DeepSeek V3.1: Superior reasoning for critical verification and edge case discovery
+    # Supports thinking modes for comprehensive quality analysis
+    model="deepseek/deepseek-chat-v3.1",
     # Moderate temperature for thorough, creative verification
     # Needs to think critically and find edge cases
     temperature=0.3,
@@ -54,6 +68,10 @@ QA_VERIFICATION_SETTINGS = AgentModelSettings(
 )
 
 CONCEPT_ENRICHMENT_SETTINGS = AgentModelSettings(
+    # Qwen3-Max: Enhanced multilingual support, improved reasoning, and long-tail knowledge
+    # Ideal for bilingual content generation ($0.22/M input, $0.88/M output)
+    # 131K context for comprehensive technical documentation
+    model="qwen/qwen3-max",
     # Moderate-high temperature for creative, knowledge-rich content generation
     # Needs to synthesize information and provide meaningful explanations
     temperature=0.4,
@@ -66,6 +84,9 @@ CONCEPT_ENRICHMENT_SETTINGS = AgentModelSettings(
 )
 
 BILINGUAL_PARITY_SETTINGS = AgentModelSettings(
+    # Qwen-Turbo: Multilingual support at lowest cost, perfect for EN/RU parity checks
+    # Fast processing for repetitive comparison tasks
+    model="qwen/qwen-turbo",
     # Low temperature for consistent, deterministic parity checking
     # Should be precise and analytical, not creative
     temperature=0.2,
@@ -78,6 +99,9 @@ BILINGUAL_PARITY_SETTINGS = AgentModelSettings(
 )
 
 QA_FAILURE_SUMMARY_SETTINGS = AgentModelSettings(
+    # DeepSeek V3.1: Strong analytical capabilities for pattern recognition and diagnosis
+    # Excellent for providing actionable recommendations
+    model="deepseek/deepseek-chat-v3.1",
     # Moderate temperature for analytical summarization with diagnostic insight
     # Needs to analyze patterns and provide actionable recommendations
     temperature=0.3,
@@ -90,6 +114,9 @@ QA_FAILURE_SUMMARY_SETTINGS = AgentModelSettings(
 )
 
 FIX_COORDINATOR_SETTINGS = AgentModelSettings(
+    # DeepSeek V3.1: Superior reasoning for strategic planning and dependency resolution
+    # Optimized for agent capabilities and systematic task coordination
+    model="deepseek/deepseek-chat-v3.1",
     # Low-moderate temperature for strategic planning with some flexibility
     # Needs to understand issue patterns and create optimal execution plans
     temperature=0.2,
