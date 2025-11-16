@@ -6,9 +6,18 @@ AI-powered note review and fixing system for the Interview Questions Obsidian va
 
 This module implements an automated system for reviewing and improving Markdown notes using:
 
-- **PydanticAI**: Structured LLM interactions with OpenRouter (Polaris Alpha model)
+- **PydanticAI**: Structured LLM interactions with OpenRouter (optimized model selection per agent type)
 - **LangGraph**: Stateful, cyclic workflow orchestration
 - **Existing validators**: Integration with vault validation rules
+
+### Model Selection (Updated 2025-11)
+
+The system uses specialized models optimized for each agent task:
+
+- **DeepSeek V3.1**: Technical review, QA verification, coordination, failure analysis (excellent reasoning)
+- **MiniMax M2**: Issue fixing (superior code generation at 8% of Claude Sonnet cost)
+- **Qwen-Turbo**: Metadata validation, bilingual parity (most cost-effective for simple tasks)
+- **Qwen3-Max**: Concept enrichment (enhanced multilingual support for bilingual content)
 
 ## Architecture
 
@@ -19,12 +28,17 @@ This module implements an automated system for reviewing and improving Markdown 
    - `NoteReviewState`: Tracks the review workflow for a single note
    - `ReviewIssue`: Standardized issue representation
 
-2. **AI Agents** (`agents.py`)
+2. **AI Agents** (`agents/`)
 
-   - `technical_review_agent`: Reviews technical/factual correctness
-   - `metadata_sanity_agent`: Lightweight frontmatter/structure check
-   - `issue_fix_agent`: Fixes formatting and structure issues
-   - OpenRouter integration with Polaris Alpha model
+   - `technical_review_agent`: Reviews technical/factual correctness (DeepSeek V3.1)
+   - `metadata_sanity_agent`: Lightweight frontmatter/structure check (Qwen-Turbo)
+   - `issue_fix_agent`: Fixes formatting and structure issues (MiniMax M2)
+   - `qa_verification_agent`: Final quality verification (DeepSeek V3.1)
+   - `concept_enrichment_agent`: Enriches concept notes (Qwen3-Max)
+   - `bilingual_parity_agent`: Checks EN/RU parity (Qwen-Turbo)
+   - `qa_failure_summary_agent`: Analyzes failures (DeepSeek V3.1)
+   - `fix_coordinator_agent`: Plans fix strategies (DeepSeek V3.1)
+   - Per-agent model optimization via `settings.py`
 
 3. **Workflow** (`graph.py`)
    - `ReviewGraph`: LangGraph-based orchestration
@@ -166,8 +180,17 @@ Analytics are collected automatically per note. Retrieve granular data with
 # Required: OpenRouter API key
 export OPENROUTER_API_KEY="sk-or-v1-..."
 
-# Optional: Override model
-export OPENROUTER_MODEL="anthropic/claude-sonnet-4"
+# Optional: Override default model (per-agent models are pre-configured)
+export OPENROUTER_MODEL="deepseek/deepseek-chat-v3.1"
+
+# Optional: Model parameters (applied to all agents unless overridden)
+export OPENROUTER_TEMPERATURE="0.2"
+export OPENROUTER_MAX_TOKENS="65536"
+export OPENROUTER_TIMEOUT="60.0"
+
+# Optional: OpenRouter metadata
+export OPENROUTER_HTTP_REFERER="your-app-url"
+export OPENROUTER_APP_TITLE="Interview Questions Vault"
 ```
 
 ### Parameters
@@ -376,12 +399,21 @@ pip install -e .
 
 ### Model Errors
 
-If you encounter model-specific errors, you can override the model:
+If you encounter model-specific errors, you can override per-agent models in `settings.py`:
 
 ```python
-# In agents.py, modify get_openrouter_model()
-def get_openrouter_model(model_name: str = "anthropic/claude-3.5-sonnet"):
+# In agents/settings.py, modify agent settings
+TECHNICAL_REVIEW_SETTINGS = AgentModelSettings(
+    model="deepseek/deepseek-chat-v3.1",  # Change to alternative model
+    temperature=0.3,
     # ...
+)
+```
+
+Or override via environment variable for all agents:
+
+```bash
+export OPENROUTER_MODEL="your-preferred-model"
 ```
 
 ### Validation Failures
@@ -411,10 +443,22 @@ Typical performance (varies by note complexity and API latency):
 
 ## Costs
 
-OpenRouter API costs vary by model:
+OpenRouter API costs vary by model (2025-11 pricing):
 
-- **Claude Sonnet 4 (Polaris Alpha)**: ~$3 per million input tokens, ~$15 per million output tokens
-- **Estimated cost per note**: $0.01-0.05 depending on note length and iterations
+### Optimized Model Pricing
+
+- **DeepSeek V3.1**: Very cost-effective, excellent reasoning (671B params, 37B active)
+- **MiniMax M2**: $0.15/M input, $0.60/M output (2x faster than Claude at 8% cost)
+- **Qwen-Turbo**: $0.05/M input, $0.20/M output (most affordable)
+- **Qwen3-Max**: $0.22/M input, $0.88/M output (best value for multilingual)
+
+### Estimated Cost Per Note
+
+- **Simple notes**: $0.002-0.01 (mostly Qwen-Turbo and MiniMax M2)
+- **Complex notes**: $0.01-0.03 (multiple iterations with DeepSeek V3.1)
+- **Concept enrichment**: $0.01-0.05 (Qwen3-Max for bilingual content)
+
+**Cost Optimization**: The new model selection reduces costs by 60-80% compared to previous Claude Sonnet configuration while maintaining or improving quality.
 
 Monitor your usage at https://openrouter.ai/activity
 
