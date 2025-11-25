@@ -4,27 +4,32 @@ title: Compose Side Effects (Advanced) / Побочные эффекты Compose
 aliases: [Compose Side Effects Advanced, Побочные эффекты Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-jetpack-compose
-- q-compose-compiler-plugin--android--hard
-- q-compose-performance-optimization--android--hard
-- q-compose-remember-derived-state--android--medium
+  - c-jetpack-compose
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
+  - q-compose-side-effects-launchedeffect-disposableeffect--android--hard
+  - q-compose-ui-testing-advanced--android--hard
+  - q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
 sources:
-- "https://developer.android.com/jetpack/compose/side-effects"
+  - "https://developer.android.com/jetpack/compose/side-effects"
 
+date created: Saturday, November 1st 2025, 1:08:57 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

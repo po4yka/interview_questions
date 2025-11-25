@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-architecture-patterns, q-inheritance-vs-composition--oop--medium]
+related: [c-architecture-patterns, c-computer-science, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [cs/object-oriented, cs/relationships, design-patterns, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:43:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -85,7 +87,7 @@ dog.sleep()      // "Buddy is sleeping"
 
 ---
 
-### 2. Композиция (отношение HAS-A, сильная связь)
+### 2. Композиция (отношение HAS-A, Сильная связь)
 
 **Композиция** — отношение, при котором один объект включает другие как составные части. В модели предполагается, что части принадлежат целому и их жизненный цикл логически зависит от него.
 
@@ -156,7 +158,7 @@ car.start()
 
 ---
 
-### 3. Агрегация (отношение HAS-A, слабая связь)
+### 3. Агрегация (отношение HAS-A, Слабая связь)
 
 **Агрегация** — вид ассоциации, при котором объект-составляющая может существовать независимо от агрегирующего объекта. Это более слабое отношение HAS-A, без жёсткого владения.
 
@@ -247,7 +249,7 @@ designDept.addEmployee(bob)
 
 ---
 
-### Визуальное представление
+### Визуальное Представление
 
 Наследование:
 ```
@@ -277,7 +279,7 @@ Department
 
 ---
 
-### Примеры для Android
+### Примеры Для Android
 
 #### Наследование
 
@@ -380,7 +382,7 @@ class UserListFragment : Fragment() {
 
 ---
 
-### Когда что использовать (RU)
+### Когда Что Использовать (RU)
 
 Используйте наследование, когда:
 - Есть чёткое и устойчивое отношение IS-A

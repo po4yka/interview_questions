@@ -1,38 +1,33 @@
 ---
 id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
-aliases:
-- Encrypted File Storage
-- Зашифрованное хранение файлов
+aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
 topic: android
 subtopics:
-- files-media
-- permissions
+  - files-media
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-permissions
-- c-scoped-storage-security
-- q-data-encryption-at-rest--android--medium
+  - c-permissions
+  - c-scoped-storage-security
+  - q-api-file-upload-server--android--medium
+  - q-data-encryption-at-rest--android--medium
+  - q-how-to-display-svg-string-as-a-vector-file--android--medium
+  - q-large-file-upload--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-- android/files-media
-- android/permissions
-- android/security
-- difficulty/medium
-- encryption
-- file-storage
-- keystore
-- security
+tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore, security]
 sources:
-- "https://developer.android.com/topic/security/data"
+  - "https://developer.android.com/topic/security/data"
+date created: Saturday, November 1st 2025, 12:46:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -233,7 +228,7 @@ val masterKey = MasterKey.Builder(context)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает `AES-256-GCM` и в чем его преимущества перед другими режимами шифрования?
 - Что такое `HKDF` и как схема EncryptedFile изолирует данные для разных файлов?

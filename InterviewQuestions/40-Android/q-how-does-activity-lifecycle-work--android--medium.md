@@ -1,36 +1,34 @@
 ---
 id: android-102
 title: Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment и Activity
-aliases:
-- Fragment Lifecycle Connection
-- Связь жизненных циклов Fragment и Activity
+aliases: [Fragment Lifecycle Connection, Связь жизненных циклов Fragment и Activity]
 topic: android
 subtopics:
-- activity
-- fragment
-- lifecycle
+  - activity
+  - fragment
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android
-- android/activity
-- android/fragment
-- android/lifecycle
-- difficulty/medium
+tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
 moc: moc-android
 related:
-- c-activity
-- q-android-runtime-art--android--medium
-- q-view-composition-strategy-compose--android--medium
+  - c-activity
+  - q-android-runtime-art--android--medium
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-view-composition-strategy-compose--android--medium
 sources: []
 
+date created: Saturday, November 1st 2025, 1:31:34 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -402,7 +400,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит с `Fragment`, когда `Activity` уничтожается из-за изменения конфигурации?
 - Как `ViewModel` сохраняется при пересоздании `Fragment` в сценариях с BackStack?
@@ -415,7 +413,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 - Официальная документация Android: жизненный цикл `Fragment` — https://developer.android.com/guide/fragments/lifecycle
 - Официальная документация Android: `ViewLifecycleOwner` — https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner()
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -426,7 +424,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 - Основы жизненного цикла `Activity` — сначала понять состояния `Activity`
 - Основы `Fragment` — что такое `Fragment` и зачем он нужен
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 
 - [[q-android-runtime-art--android--medium]] — Понимание Android runtime
 - [[q-view-composition-strategy-compose--android--medium]] — Современный жизненный цикл UI

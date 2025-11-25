@@ -13,8 +13,10 @@ moc: moc-kotlin
 related: [c-kotlin, q-access-modifiers--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: "2025-10-12"
 updated: "2025-11-11"
-tags: [kotlin, visibility-modifiers, difficulty/medium]
+tags: [difficulty/medium, kotlin, visibility-modifiers]
 sources: ["https://kotlinlang.org/docs/visibility-modifiers.html"]
+date created: Saturday, November 1st 2025, 12:42:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -325,7 +327,7 @@ fun test() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать `internal` vs `private`?
 - Как работает видимость с `sealed` классами?
@@ -345,7 +347,7 @@ fun test() {
 
 - https://kotlinlang.org/docs/visibility-modifiers.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы

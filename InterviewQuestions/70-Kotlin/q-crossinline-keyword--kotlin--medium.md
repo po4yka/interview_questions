@@ -14,7 +14,10 @@ related: [c-concepts--kotlin--medium, c-kotlin-features, q-abstract-class-vs-int
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, inline-functions, kotlin, lambda, non-local-returns]
+date created: Saturday, November 1st 2025, 1:07:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Для чего нужно ключевое слово `crossinline` в inline-функциях Kotlin?
 
@@ -89,7 +92,7 @@ fun caller() {
 
 Общая идея: если inline-параметр-лямбда используется так, что non-local return из неё был бы небезопасен или технически невозможен, компилятор требует пометить его `crossinline` (или `noinline`). Типичные случаи ниже.
 
-#### 1. Лямбда Выполняется В Другом Потоке (через другую лямбду)
+#### 1. Лямбда Выполняется В Другом Потоке (через Другую лямбду)
 
 ```kotlin
 // БЕЗ crossinline и с возможным non-local return — ошибка компиляции
@@ -408,7 +411,7 @@ fun caller() {
 
 General rule: if an inline lambda parameter is used in a position where a non-local return would be unsafe or impossible, the compiler requires `crossinline` (or `noinline`). Typical cases:
 
-#### 1. Lambda Executed on Another Thread (via nested lambda)
+#### 1. Lambda Executed on Another Thread (via Nested lambda)
 
 ```kotlin
 inline fun runInBackground(action: () -> Unit) {
@@ -479,7 +482,7 @@ fun scheduleTask() {
 }
 ```
 
-### Comparison: Regular vs `crossinline` Lambda
+### Comparison: Regular Vs `crossinline` Lambda
 
 ```kotlin
 inline fun example(
@@ -624,7 +627,7 @@ Avoid `crossinline` when:
 
 Remember: labeled returns (e.g. `return@foo`) remain available with `crossinline`.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем отличие `crossinline` от поведения лямбд в Java?
 - Когда вы бы применили `crossinline` на практике?
@@ -644,7 +647,7 @@ Remember: labeled returns (e.g. `return@foo`) remain available with `crossinline
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/reference/inline-functions.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-abstract-class-vs-interface--kotlin--medium]]
 - [[q-star-projection-vs-any-generics--kotlin--hard]]

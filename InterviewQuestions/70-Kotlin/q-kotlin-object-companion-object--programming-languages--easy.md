@@ -14,7 +14,10 @@ related: [c-kotlin, c-kotlin-features, q-data-class-detailed--kotlin--medium, q-
 created: 2025-10-15
 updated: 2025-11-10
 tags: [companion-object, difficulty/easy, object, singleton]
+date created: Friday, October 31st 2025, 6:30:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое object / companion object?
 
@@ -82,7 +85,7 @@ val user = User.create("Alice")
 | Доступ                | ObjectName.member               | ClassName.member или ClassName.Companion.member |
 | Экземпляр             | Один экземпляр на декларацию    | Один экземпляр на каждый класс      |
 
-### Примеры использования object
+### Примеры Использования Object
 
 **Синглтон для конфигурации:**
 ```kotlin
@@ -117,7 +120,7 @@ val printer = object : Printer {
 }
 ```
 
-### Примеры использования companion object
+### Примеры Использования Companion Object
 
 **Фабричные методы:**
 ```kotlin
@@ -174,7 +177,7 @@ class UserWithSerializer(val name: String) {
 val json = UserWithSerializer.toJson()
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 
 ```kotlin
 // object declaration — отдельный синглтон
@@ -379,7 +382,7 @@ Database.connect()  // Access via class name
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия от Java (например, отсутствие настоящего `static`, использование companion object, аннотация `@JvmStatic`)?
 - Когда вы бы использовали это на практике?

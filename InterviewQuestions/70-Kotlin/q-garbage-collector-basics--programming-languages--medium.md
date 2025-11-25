@@ -14,7 +14,10 @@ related: [c-garbage-collection, q-garbage-collector-definition--programming-lang
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, garbage-collection, java, kotlin, memory-management, performance, programming-languages]
+date created: Friday, October 31st 2025, 6:29:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое сборщик мусора?
 

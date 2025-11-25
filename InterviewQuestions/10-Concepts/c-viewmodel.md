@@ -16,6 +16,8 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-components", "concept", "difficulty/medium", "jetpack", "lifecycle", "mvvm", "viewmodel"]
+date created: Saturday, October 25th 2025, 11:10:38 am
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # ViewModel / ViewModel

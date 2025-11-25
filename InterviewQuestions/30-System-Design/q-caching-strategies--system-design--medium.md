@@ -1,9 +1,9 @@
 ---
 id: sysdes-005
 title: "Caching Strategies and Patterns / 2240"
-aliases: ["Caching Strategies", "2240"]
+aliases: ["2240", "Caching Strategies"]
 topic: system-design
-subtopics: [caching, redis, memcached]
+subtopics: [caching, memcached, redis]
 question_kind: system-design
 difficulty: medium
 original_language: en
@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [caching, difficulty/medium, performance, scalability, system-design]
 sources: ["https://en.wikipedia.org/wiki/Cache_(computing)"]
 
+date created: Sunday, October 12th 2025, 8:25:32 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -349,15 +351,15 @@ cache.invalidateByTag("electronics")
 - [[q-microservices-vs-monolith--system-design--hard]] - Architecture patterns
 - [[q-database-sharding-partitioning--system-design--hard]] - Database scaling
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Что такое cache stampede и как его предотвратить?
 - Как реализовать распределённую инвалидацию кеша?
 - В чём разница между Redis и Memcached?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предварительные (Проще)
 - [[q-sql-nosql-databases--system-design--medium]] - Основы работы с базами данных
 - [[q-load-balancing-strategies--system-design--medium]] - Балансировка нагрузки
-### Связанные (Такой же уровень)
+### Связанные (Такой Же уровень)
 - [[q-horizontal-vertical-scaling--system-design--medium]] - Стратегии масштабирования
 - [[q-design-url-shortener--system-design--medium]] - Паттерны системного дизайна
 ### Продвинутые (Сложнее)

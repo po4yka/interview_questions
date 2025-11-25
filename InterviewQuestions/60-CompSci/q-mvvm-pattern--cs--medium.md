@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-android-architectural-patterns--android--medium, q-abstract-factory-pattern--cs--medium]
+related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [architecture-patterns, android-architecture, data-binding, difficulty/medium, livedata, mvvm, reactive-programming, viewmodel]
+tags: [android-architecture, architecture-patterns, data-binding, difficulty/medium, livedata, mvvm, reactive-programming, viewmodel]
 sources: ["https://developer.android.com/jetpack/guide"]
 
+date created: Saturday, November 1st 2025, 1:26:37 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -460,7 +462,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между `LiveData` и `StateFlow`?
 - Как `ViewModel` переживает конфигурационные изменения?
@@ -472,7 +474,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 - How does `ViewModel` survive configuration changes?
 - When should you use two-way data binding vs one-way?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые архитектурные концепции Android

@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [decorator, design-patterns, difficulty/medium, gof-patterns, kotlin, structural-patterns, wrapper]
 sources: ["https://refactoring.guru/design-patterns/decorator"]
+date created: Saturday, November 1st 2025, 1:25:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -355,7 +357,7 @@ class CompressionDecorator(private val wrappee: DataSource) : DataSource by wrap
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как паттерн Decorator соотносится с паттерном Adapter?
 - Можно ли удалять декораторы в runtime?
@@ -367,13 +369,13 @@ class CompressionDecorator(private val wrappee: DataSource) : DataSource by wrap
 - Can you remove decorators at runtime?
 - What's the difference between Decorator and Proxy pattern?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые знания объектно-ориентированного программирования
 - Понимание интерфейсов
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-adapter-pattern--cs--medium]] — паттерн Adapter
 
 ### Продвинутые (сложнее)

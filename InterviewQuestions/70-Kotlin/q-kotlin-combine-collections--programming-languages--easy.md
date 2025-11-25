@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-channels-vs-flow--kotlin--medium]
+related: [c-collections, c-kotlin, q-channels-vs-flow--kotlin--medium]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy]
+date created: Thursday, October 16th 2025, 4:16:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?
 
@@ -75,7 +78,7 @@ mutableList.addAll(listOf(4, 5, 6))
 - Для `Set` дубликаты автоматически удаляются, результат соответствует семантике множества.
 - Для `Map` при совпадении ключей значение из второй коллекции перезаписывает значение из первой в результирующей карте.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали это на практике?
@@ -87,12 +90,12 @@ mutableList.addAll(listOf(4, 5, 6))
 - [[c-collections]]
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Реализация в Android
+### Реализация В Android
 - [[q-kotlin-collections--kotlin--medium]] - Структуры данных
 
-### Особенности языка Kotlin
+### Особенности Языка Kotlin
 - [[q-kotlin-collections--kotlin--easy]] - Структуры данных
 
 ---

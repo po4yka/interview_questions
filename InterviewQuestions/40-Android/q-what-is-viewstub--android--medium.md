@@ -1,36 +1,33 @@
 ---
 id: android-228
 title: What Is ViewStub / Что такое ViewStub
-aliases:
-- ViewStub Android
-- ViewStub
+aliases: [ViewStub, ViewStub Android]
 topic: android
 subtopics:
-- performance-rendering
-- ui-views
+  - performance-rendering
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance
-- q-recyclerview-sethasfixedsize--android--easy
-- q-what-is-known-about-methods-that-redraw-view--android--medium
+  - c-performance
+  - q-compose-core-components--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-recyclerview-sethasfixedsize--android--easy
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags:
-- android/performance-rendering
-- android/ui-views
-- difficulty/medium
-- lazy-loading
-- optimization
-- viewstub
+tags: [android/performance-rendering, android/ui-views, difficulty/medium, lazy-loading, optimization, viewstub]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -377,7 +374,7 @@ ViewStub is a lightweight lazy inflation mechanism for performance and memory op
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что произойдет, если попытаться вызвать `inflate()` у одного и того же ViewStub дважды?
 2. Чем использование ViewStub отличается от установки `visibility="gone"` для `<include>`?
@@ -403,7 +400,7 @@ ViewStub is a lightweight lazy inflation mechanism for performance and memory op
 - [ViewStub - Android Developers](https://developer.android.com/reference/android/view/ViewStub)
 - [Improving Layout Performance - Android Documentation](https://developer.android.com/training/improving-layouts/loading-ondemand)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -414,7 +411,7 @@ ViewStub is a lightweight lazy inflation mechanism for performance and memory op
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Базовая оптимизация работы с `View`
 - Концепции жизненного цикла `View` и инфляции разметки
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - Методы отрисовки `View`
 - Оптимизация производительности инфляции разметки

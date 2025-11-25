@@ -1,9 +1,9 @@
 ---
-id: cs-060
+id: dp-008
 title: "Singleton Pattern / Singleton Паттерн"
 aliases: [Singleton Pattern, Singleton Паттерн]
 topic: cs
-subtopics: [design-patterns, creational-patterns, singleton]
+subtopics: [creational-patterns, design-patterns, singleton]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-cs
 related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [design-patterns, creational-patterns, difficulty/easy, singleton]
+tags: [creational-patterns, design-patterns, difficulty/easy, singleton]
 
+date created: Saturday, November 1st 2025, 1:27:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -419,7 +421,7 @@ Singleton is a creational design pattern that ensures a class has only one insta
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы бы рефакторили дизайн, основанный на `Singleton`, чтобы использовать Dependency Injection?
 - Когда использование `Singleton` оправдано, несмотря на его недостатки?
@@ -431,7 +433,7 @@ Singleton is a creational design pattern that ensures a class has only one insta
 - When is it acceptable to use `Singleton` despite its drawbacks?
 - How does `Singleton` differ from a simple global variable in terms of encapsulation and lifecycle?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-abstract-factory-pattern--cs--medium]]
 

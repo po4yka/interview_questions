@@ -18,11 +18,16 @@ status: reviewed
 moc: moc-android
 related:
   - c-content-provider
+  - q-android-security-practices-checklist--android--medium
   - q-android-storage-types--android--medium
+  - q-api-file-upload-server--android--medium
+  - q-how-to-display-svg-string-as-a-vector-file--android--medium
   - q-runtime-permissions-best-practices--android--medium
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/files-media, android/permissions, content-provider, difficulty/medium, file-sharing, security]
+date created: Saturday, November 1st 2025, 12:46:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)

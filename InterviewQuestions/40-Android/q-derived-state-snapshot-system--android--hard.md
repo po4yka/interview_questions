@@ -1,42 +1,36 @@
 ---
 id: android-464
 title: Derived State Snapshot System / Derived State и система Snapshot
-aliases:
-- Derived State Snapshot System
-- Derived State и система Snapshot
+aliases: [Derived State Snapshot System, Derived State и система Snapshot]
 topic: android
 subtopics:
-- performance-memory
-- ui-compose
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: reviewed
 moc: moc-android
 related:
-- c-memory-management
-- c-compose-state
-- c-jetpack-compose
-- q-compose-performance-optimization--android--hard
-- q-compose-slot-table-recomposition--android--hard
-- q-compose-stability-skippability--android--hard
+  - c-compose-state
+  - c-jetpack-compose
+  - c-memory-management
+  - q-compose-performance-optimization--android--hard
+  - q-compose-slot-table-recomposition--android--hard
+  - q-compose-stability-skippability--android--hard
+  - q-how-application-priority-is-determined-by-the-system--android--hard
+  - q-sealed-classes-state-management--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags:
-- android/performance-memory
-- android/ui-compose
-- compose
-- derived-state
-- difficulty/hard
-- optimization
-- performance
-- snapshot
-- state
+tags: [android/performance-memory, android/ui-compose, compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
 sources:
-- https://developer.android.com/jetpack/compose/state
+  - https://developer.android.com/jetpack/compose/state
+date created: Saturday, November 1st 2025, 12:46:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

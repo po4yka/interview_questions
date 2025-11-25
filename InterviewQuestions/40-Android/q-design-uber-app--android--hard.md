@@ -4,25 +4,29 @@ title: Design Uber App / Проектирование приложения Uber
 aliases: [Design Uber App, Проектирование приложения Uber]
 topic: android
 subtopics:
-- location
-- networking-http
-- service
+  - location
+  - networking-http
+  - service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-data-sync-unstable-network--android--hard
-- q-design-instagram-stories--android--hard
-- c-android-components
+  - c-android-components
+  - q-data-sync-unstable-network--android--hard
+  - q-design-instagram-stories--android--hard
+  - q-feature-flags-sdk--android--hard
+  - q-large-file-upload-app--android--hard
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/location, android/networking-http, android/service, architecture, difficulty/hard, location, maps, networking, performance, realtime, system-design, websocket]
 
+date created: Saturday, November 1st 2025, 12:46:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

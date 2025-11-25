@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/jetpack/compose/animation/overview]
 tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animations, compose, difficulty/hard, hero-animations, navigation, shared-elements, transitions]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -79,7 +81,7 @@ fun ListItem(
 }
 ```
 
-### Интеграция с Navigation Compose
+### Интеграция С Navigation Compose
 
 Ключевые моменты:
 - `SharedTransitionLayout` должен оборачивать NavHost, чтобы все целевые composable находились в одном `SharedTransitionScope`.
@@ -123,7 +125,7 @@ fun AppNavigation() {
 
 (Конкретная интеграция с Nav анимациями зависит от версии Navigation Compose. Важно: все shared elements должны использовать один и тот же `SharedTransitionScope` и корректный `AnimatedVisibilityScope`, предоставленный анимационным контейнером. Сам NavHost без анимаций такого scope не даёт.)
 
-### Настройка анимации
+### Настройка Анимации
 
 ```kotlin
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -160,7 +162,7 @@ fun Modifier.sharedBoundsFadeScale(
 }
 ```
 
-### Множественные элементы
+### Множественные Элементы
 
 ```kotlin
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -242,7 +244,7 @@ fun NonClippingBox(
 }
 ```
 
-### Критические моменты
+### Критические Моменты
 
 **Производительность:**
 - Используйте `skipToLookaheadSize()` для сложных layout-ов, где промежуточные измерения вызывают артефакты.

@@ -1,34 +1,31 @@
 ---
 id: android-461
 title: Dark Theme Android / Темная тема Android
-aliases:
-- Dark Theme Android
-- Темная тема Android
+aliases: [Dark Theme Android, Темная тема Android]
 topic: android
 subtopics:
-- ui-theming
+  - ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
+  - c-android-components
+  - q-android-lint-tool--android--medium
+  - q-main-thread-android--android--medium
+  - q-parsing-optimization-android--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-- android/ui-theming
-- dark-theme
-- daynight
-- difficulty/medium
-- material-design
-- theming
+tags: [android/ui-theming, dark-theme, daynight, difficulty/medium, material-design, theming]
 sources:
-- "https://developer.android.com/guide/topics/ui/look-and-feel/darktheme"
+  - "https://developer.android.com/guide/topics/ui/look-and-feel/darktheme"
 
+date created: Saturday, November 1st 2025, 1:27:37 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -217,7 +214,7 @@ class MainActivity : AppCompatActivity() {
 - Text: maintain sufficient contrast (minimum 4.5:1 for normal text, 3:1 for large text).
 - Accent colors: ensure they remain legible on both light and dark backgrounds.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать тонирование (tint) drawable-ресурсов для темной темы?
 - В чем разница между `MODE_NIGHT_FOLLOW_SYSTEM` и `MODE_NIGHT_AUTO_BATTERY`?
@@ -243,7 +240,7 @@ class MainActivity : AppCompatActivity() {
 - [Material Design 3 Dark Mode](https://m3.material.io/styles/color/dark-mode/overview)
 - [Android Dark Theme Guide](https://developer.android.com/develop/ui/views/theming/darktheme)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -253,7 +250,7 @@ class MainActivity : AppCompatActivity() {
 - Понимание системы ресурсов Android
 - Базовые знания о Material Design theming
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - Система цветов Material Design
 - Ресурсные квалификаторы и альтернативные ресурсы
 

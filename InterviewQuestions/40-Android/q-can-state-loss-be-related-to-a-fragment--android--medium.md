@@ -1,33 +1,33 @@
 ---
 id: android-174
 title: Can Fragment State Loss Occur? / Бывает ли потеря состояния у Fragment
-aliases:
-- Can Fragment State Loss Occur?
-- Бывает ли потеря состояния у Fragment
+aliases: [Can Fragment State Loss Occur?, Бывает ли потеря состояния у Fragment]
 topic: android
 subtopics:
-- fragment
-- processes
+  - fragment
+  - processes
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-lifecycle
-- c-android-navigation
-- q-activity-lifecycle-methods--android--medium
+  - c-android-lifecycle
+  - c-android-navigation
+  - q-activity-lifecycle-methods--android--medium
+  - q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium
+  - q-how-to-choose-layout-for-fragment--android--easy
+  - q-save-data-outside-fragment--android--medium
 sources: []
 created: 2024-10-15
 updated: 2025-11-10
-tags:
-- android/fragment
-- android/processes
-- difficulty/medium
+tags: [android/fragment, android/processes, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -220,7 +220,7 @@ fragmentManager.beginTransaction()
 - Use `viewLifecycleOwner` for subscriptions in `Fragments` to avoid leaks and view state races
 - Use `commitAllowingStateLoss()` only for non-critical UI changes where losing the transaction on restore is acceptable
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чём разница между `commit()`, `commitNow()` и `commitAllowingStateLoss()` с точки зрения времени выполнения и безопасности состояния?
 2. Как работает `isStateSaved()` внутренне и когда именно он возвращает `true`?
@@ -250,12 +250,12 @@ fragmentManager.beginTransaction()
 - Official fragment lifecycle documentation: https://developer.android.com/guide/fragments/lifecycle
 - `Fragment` transactions documentation: https://developer.android.com/guide/fragments/transactions
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-activity-lifecycle-methods--android--medium]] — Понимание жизненного цикла `Activity` важно для управления состоянием `Fragment`.
 
-### Смежные (тот же уровень)
+### Смежные (тот Же уровень)
 - Вопросы о жизненном цикле `Fragment` и механизмах восстановления состояния
 - Вопросы о `ViewModel` и работе с сохранённым состоянием
 - Вопросы о методах коммита `FragmentTransaction`

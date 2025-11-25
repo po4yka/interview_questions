@@ -1,35 +1,32 @@
 ---
 id: android-130
 title: Parsing Optimization Android / Оптимизация парсинга Android
-aliases:
-- Parsing Optimization Android
-- Оптимизация парсинга Android
+aliases: [Parsing Optimization Android, Оптимизация парсинга Android]
 topic: android
 subtopics:
-- performance-memory
-- serialization
+  - performance-memory
+  - serialization
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
+  - c-memory-management
+  - q-android-build-optimization--android--medium
+  - q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
+  - q-optimize-memory-usage-android--android--medium
+  - q-performance-optimization-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/performance-memory
-- android/serialization
-- difficulty/medium
-- json
-- optimization
-- xml
+tags: [android/performance-memory, android/serialization, difficulty/medium, json, optimization, xml]
 
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -300,7 +297,7 @@ fun parseStream(stream: InputStream) = flow {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как бы вы измеряли производительность парсинга для разных JSON-библиотек в боевом приложении?
 - Какие трейд-оффы существуют между компиляционной генерацией кода в Moshi/kotlinx.serialization и рефлексивным подходом Gson?
@@ -330,7 +327,7 @@ fun parseStream(stream: InputStream) = flow {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -340,7 +337,7 @@ fun parseStream(stream: InputStream) = flow {
 
 - [[q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium]] - Обновление UI после изменения данных
 
-### Похожие (Тот же уровень)
+### Похожие (Тот Же уровень)
 
 - Паттерны оптимизации производительности Android
 - Подходы к профилированию памяти для приложений с интенсивным использованием данных

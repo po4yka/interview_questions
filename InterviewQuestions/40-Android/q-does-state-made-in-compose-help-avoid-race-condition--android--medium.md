@@ -1,36 +1,34 @@
 ---
 id: android-444
 title: Does State in Compose Help Avoid Race Conditions / Помогает ли State в Compose избежать состояния гонки
-aliases:
-- Compose State Thread Safety
-- Does State Made In Compose Help Avoid Race Condition
-- Thread Safety в Compose State
-- Помогает ли State в Compose избежать состояния гонки
+aliases: [Compose State Thread Safety, Does State Made In Compose Help Avoid Race Condition, Thread Safety в Compose State, Помогает ли State в Compose избежать состояния гонки]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-jetpack-compose
-- q-derived-state-snapshot-system--android--hard
+  - c-compose-state
+  - c-jetpack-compose
+  - q-compose-core-components--android--medium
+  - q-derived-state-snapshot-system--android--hard
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-state-hoisting-compose--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-- android/ui-compose
-- android/ui-state
-- difficulty/medium
+tags: [android/ui-compose, android/ui-state, difficulty/medium]
 sources:
-- "https://developer.android.com/jetpack/compose/state"
+  - "https://developer.android.com/jetpack/compose/state"
 
+date created: Saturday, November 1st 2025, 1:28:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -236,7 +234,7 @@ fun ParentComponentWithFlow(viewModel: SharedViewModel = hiltViewModel()) {
 }
 ```
 
-### Решения и паттерны потокобезопасности
+### Решения И Паттерны Потокобезопасности
 
 **1. Корутины с согласованным контекстом (обычно Main/UI)**
 
@@ -337,7 +335,7 @@ fun ComponentWithMutex(viewModel: ThreadSafeCounterViewModel = hiltViewModel()) 
 }
 ```
 
-### Лучшие практики и рекомендации
+### Лучшие Практики И Рекомендации
 
 **Архитектурные решения:**
 
@@ -359,7 +357,7 @@ fun ComponentWithMutex(viewModel: ThreadSafeCounterViewModel = hiltViewModel()) 
 - `Flow` + `collectAsState()`: реактивные внешние источники (сеть, БД и т.п.);
 - `snapshotFlow`: мост между snapshot-состоянием и `Flow`.
 
-### Типичные ошибки
+### Типичные Ошибки
 
 **Проблема 1: Изменение state только в фоновом контексте внутри LaunchedEffect**
 
@@ -754,7 +752,7 @@ Button2 { viewModel.increment() }
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать `StateFlow` vs `MutableState` в архитектуре на основе Compose?
 - Как snapshot-система в Compose концептуально обрабатывает конкурентные изменения?
@@ -786,14 +784,14 @@ Button2 { viewModel.increment() }
 - [Thread Safety in Kotlin](https://kotlinlang.org/docs/thread-safety.html)
 - [Coroutines Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 
 - [[q-derived-state-snapshot-system--android--hard]]
 

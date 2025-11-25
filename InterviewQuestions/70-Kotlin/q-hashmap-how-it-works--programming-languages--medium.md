@@ -14,6 +14,8 @@ related: [c-collections, c-hash-map, q-equals-hashcode-contracts--programming-la
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, kotlin]
+date created: Friday, October 31st 2025, 6:31:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -56,7 +58,7 @@ Key points:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия реализации от Java `HashMap`?
 - Когда на практике стоит использовать `HashMap`?
@@ -76,7 +78,7 @@ Key points:
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-switch-float-double--programming-languages--easy]]
 - [[q-how-suspend-function-detects-suspension--programming-languages--hard]]

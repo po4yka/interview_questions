@@ -4,26 +4,30 @@ title: Compose Multiplatform / Compose Multiplatform
 aliases: [Compose Multiplatform, KMP Compose]
 topic: android
 subtopics:
-- compose-multiplatform
-- ui-compose
+  - compose-multiplatform
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-jetpack-compose
-- q-compose-compiler-plugin--android--hard
-- q-compose-custom-layout--android--hard
-- q-kmm-architecture--android--hard
+  - c-jetpack-compose
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-custom-layout--android--hard
+  - q-compose-side-effects-launchedeffect-disposableeffect--android--hard
+  - q-compose-stability-skippability--android--hard
+  - q-kmm-architecture--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/compose-multiplatform, android/ui-compose, compose, difficulty/hard, multiplatform]
 
+date created: Saturday, November 1st 2025, 12:46:46 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -322,7 +326,7 @@ fun main() = application {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать платформенно-специфичные паттерны навигации (например, iOS back swipe), не проталкивая детали в общий код?
 - Каковы перформанс-эффекты обёртки через `UIViewController` на iOS по сравнению с нативным `SwiftUI`?
@@ -352,13 +356,13 @@ fun main() = application {
 - https://github.com/JetBrains/compose-multiplatform
 - [Jetpack Compose](https://developer.android.com/develop/ui/compose)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-jetpack-overview--android--easy]]
 - [[q-how-jetpack-compose-works--android--medium]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-kmm-architecture--android--hard]]
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]

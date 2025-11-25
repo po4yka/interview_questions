@@ -1,7 +1,7 @@
 ---
 id: kotlin-174
 title: "Generics Types Overview / Обзор обобщенных типов"
-aliases: ["Generics Types Overview", "Обзор обобщенных типов", "Kotlin generics types overview", "Обзор дженериков Kotlin"]
+aliases: ["Generics Types Overview", "Kotlin generics types overview", "Обзор дженериков Kotlin", "Обзор обобщенных типов"]
 topic: kotlin
 subtopics: [functions, type-system]
 question_kind: theory
@@ -14,6 +14,8 @@ related: [c-kotlin, c-kotlin-features, q-coroutine-parent-child-relationship--ko
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -89,7 +91,7 @@ interface Consumer<in T> {   // Может только потреблять T
 }
 ```
 
-### 5. Звездочная Проекция и Сырые Типы
+### 5. Звездочная Проекция И Сырые Типы
 
 ```kotlin
 List<*>  // Kotlin — звездочная проекция (неизвестный тип)

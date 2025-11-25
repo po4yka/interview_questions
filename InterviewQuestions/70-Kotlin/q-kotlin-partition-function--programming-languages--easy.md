@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [collections, difficulty/easy, functions, kotlin]
 
+date created: Friday, October 31st 2025, 6:32:16 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -152,10 +154,10 @@ fun <T> Iterable<T>.partition(
 - [[q-fan-in-fan-out-channels--kotlin--hard]]
 - [[q-continuation-cps-internals--kotlin--hard]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем ключевые отличия этого подхода от аналогов в Java?
 - Когда вы бы использовали `partition()` на практике?
 - Каковы распространенные подводные камни при использовании `partition()`?
 ## Ссылки (RU)
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)

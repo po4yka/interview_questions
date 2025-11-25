@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-events]
 
+date created: Saturday, November 1st 2025, 1:26:26 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -107,7 +109,7 @@ view.setOnTouchListener { _, e ->
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем разница между `onClick` и `onTouchEvent`?
 2. Как обрабатывать мультитач (`ACTION_POINTER_DOWN`/`ACTION_POINTER_UP`)?
@@ -137,12 +139,12 @@ view.setOnTouchListener { _, e ->
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые знания
+### Базовые Знания
 - [[c-custom-views]]
 
-### Того же уровня
+### Того Же Уровня
 - [[q-custom-view-animation--android--medium]]
 - [[q-list-elements-problems--android--medium]]
 

@@ -4,15 +4,15 @@ title: AndroidManifest.xml / Файл манифеста Android
 aliases: [AndroidManifest.xml, Файл манифеста Android]
 topic: android
 subtopics:
-- app-startup
-- intents-deeplinks
-- permissions
+  - app-startup
+  - intents-deeplinks
+  - permissions
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related: [c-android, q-android-app-components--android--easy, q-intent-filters-android--android--medium]
@@ -20,7 +20,9 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/app-startup, android/intents-deeplinks, android/permissions, difficulty/easy]
 sources:
-- "https://github.com/Kirchhoff-/Android-Interview-Questions"
+  - "https://github.com/Kirchhoff-/Android-Interview-Questions"
+date created: Saturday, November 1st 2025, 1:02:44 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -183,7 +185,7 @@ See also: [[c-android]].
 </manifest>
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как разрешаются конфликты при слиянии манифестов из нескольких библиотек?
 - Какие атрибуты `<uses-feature>` влияют на видимость в Play Store?
@@ -207,9 +209,9 @@ See also: [[c-android]].
 
 - https://developer.android.com/guide/topics/manifest/manifest-intro — Official manifest guide
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые знания
+### Базовые Знания
 - [[q-android-app-components--android--easy]] — Понимание компонентов приложения
 
 ### Связанные

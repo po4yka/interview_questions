@@ -1,36 +1,35 @@
 ---
 id: android-129
 title: Why Separate UI and Business Logic / Зачем разделять UI и бизнес-логику
-aliases:
-- Why Separate UI and Business Logic
-- Зачем разделять UI и бизнес-логику
+aliases: [Why Separate UI and Business Logic, Зачем разделять UI и бизнес-логику]
 topic: android
 subtopics:
-- architecture-clean
-- architecture-mvvm
+  - architecture-clean
+  - architecture-mvvm
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-clean-architecture
-- c-mvvm
-- c-viewmodel
-- q-compose-testing--android--medium
-- q-mvvm-vs-mvp-differences--android--medium
+  - c-clean-architecture
+  - c-mvvm
+  - c-viewmodel
+  - q-compose-testing--android--medium
+  - q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy
+  - q-mvvm-vs-mvp-differences--android--medium
+  - q-separate-ui-business-logic--android--easy
+  - q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/architecture-clean
-- android/architecture-mvvm
-- difficulty/easy
-- separation-of-concerns
+tags: [android/architecture-clean, android/architecture-mvvm, difficulty/easy, separation-of-concerns]
 
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -219,7 +218,7 @@ class GetUsersUseCase(private val repository: UserRepository) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать сложную бизнес-логику, затрагивающую несколько `ViewModel`?
 - В чем компромиссы между MVVM, MVI и Clean Architecture?
@@ -230,24 +229,24 @@ class GetUsersUseCase(private val repository: UserRepository) {
 - https://developer.android.com/jetpack/guide - Руководство по архитектуре Android
 - https://developer.android.com/topic/libraries/architecture/viewmodel - Руководство по `ViewModel`
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-clean-architecture]]
 - [[c-mvvm]]
 - [[c-viewmodel]]
 
-### Предварительные знания
+### Предварительные Знания
 
 - Базовое понимание компонентов Android (`Activity`, `Fragment`)
 
-### Связанные вопросы
+### Связанные Вопросы
 
 - [[q-mvvm-vs-mvp-differences--android--medium]] - Сравнение MVVM и MVP
 - [[q-compose-testing--android--medium]] - Тестирование UI в Compose
 
-### Продвинутые темы
+### Продвинутые Темы
 
 - Реализация Clean Architecture в Android-проектах
 

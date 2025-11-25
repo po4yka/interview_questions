@@ -15,13 +15,18 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
+  - q-compose-core-components--android--medium
+  - q-compose-navigation-advanced--android--medium
   - q-compose-performance-optimization--android--hard
   - q-compose-remember-derived-state--android--medium
   - q-compose-semantics--android--medium
+  - q-what-are-the-most-important-components-of-compose--android--medium
 sources: []
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -87,7 +92,7 @@ fun App(env: AppEnv, content: @Composable () -> Unit) {
 }
 ```
 
-### Производительность и границы инвалидации
+### Производительность И Границы Инвалидации
 
 **Динамический Local:**
 - Инвалидирует только реальных читателей `.current`
@@ -121,7 +126,7 @@ fun FeedScreen(scrollY: Int) {
 }
 ```
 
-### Безопасные дефолты
+### Безопасные Дефолты
 
 ```kotlin
 // ❌ Валидный дефолт скрывает отсутствие провайдера
@@ -133,7 +138,7 @@ val LocalLogger = staticCompositionLocalOf<Logger> {
 }
 ```
 
-### Неизменяемость и стабильность
+### Неизменяемость И Стабильность
 
 ```kotlin
 // ❌ Мутация невидима для Compose
@@ -146,7 +151,7 @@ val updatedTheme = LocalTheme.current.copy(primaryColor = Color.Red)
 CompositionLocalProvider(LocalTheme provides updatedTheme) { /* ... */ }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // ⚠️ Потенциально устаревшее значение

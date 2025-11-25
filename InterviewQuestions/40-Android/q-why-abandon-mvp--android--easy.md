@@ -14,8 +14,10 @@ related: [c-android, c-architecture-patterns, q-android-architectural-patterns--
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, architecture-patterns, difficulty/easy, mvi, mvp, mvvm]
-sources: ["https://developer.android.com/topic/architecture", "https://developer.android.com/jetpack/guide"]
+sources: ["https://developer.android.com/jetpack/guide", "https://developer.android.com/topic/architecture"]
 
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -65,7 +67,7 @@ override fun onDestroy() {
 
 На практике это увеличивает риск утечек памяти, вызовов на уничтоженную `View` и дублирования логики при поворотах экрана.
 
-### 3. Неудобная Работа с Реактивностью и Асинхронщиной
+### 3. Неудобная Работа С Реактивностью И Асинхронщиной
 
 Исторически MVP массово применялся до появления современных инструментов (Lifecycle-aware компоненты, `ViewModel`, `LiveData`, `Flow`, Coroutines). Интегрировать их в MVP возможно, но:
 - нужно вручную управлять подписками и их отменой,
@@ -82,7 +84,7 @@ class UserPresenter(private val view: UserView) {
 }
 ```
 
-### 4. Современные Альтернативы Удобнее на Android
+### 4. Современные Альтернативы Удобнее На Android
 
 **MVVM с `ViewModel`:**
 - ✅ `ViewModel` переживает rotation и управляется LifecycleOwner-ами
@@ -208,7 +210,7 @@ MVP remains a valid pattern in existing codebases and specific scenarios, but th
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `ViewModel` переживает изменения конфигурации?
 - В чем основное отличие между MVVM и MVI?
@@ -234,14 +236,14 @@ MVP remains a valid pattern in existing codebases and specific scenarios, but th
 - [Android Architecture Guide](https://developer.android.com/topic/architecture)
 - [Guide to app architecture](https://developer.android.com/jetpack/guide)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-why-separate-ui-and-business-logic--android--easy]]
 - [[q-viewmodel-pattern--android--easy]]
 - [[q-architecture-components-libraries--android--easy]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-jetpack-overview--android--easy]]
 - [[q-what-is-data-binding--android--easy]]
 

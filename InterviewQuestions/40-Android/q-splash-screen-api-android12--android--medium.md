@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/app-startup, android/ui-animation, android/ui-views, android12, difficulty/medium, splash-screen]
 sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
 
+date created: Saturday, November 1st 2025, 1:24:29 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -206,7 +208,7 @@ Important: the condition in `setKeepOnScreenCondition` must become `false` as so
 - apply caching for fast content display;
 - avoid heavy work on the splash screen; move it to background threads or deferred initialization, keeping the system splash as short as possible.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `setKeepOnScreenCondition` влияет на время скрытия splash screen?
 - Каковы последствия для производительности при использовании анимированных иконок на splash screen?
@@ -234,13 +236,13 @@ Important: the condition in `setKeepOnScreenCondition` must become `false` as so
 - [Migrate to Android 12 Splash Screen](https://developer.android.com/develop/ui/views/launch/splash-screen/migrate)
 - [[c-activity-lifecycle]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-activity-lifecycle-methods--android--medium]] — Понимание жизненного цикла `Activity`
 - [[q-android-manifest-file--android--easy]] — Базовая конфигурация манифеста
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-android-app-bundles--android--easy]] — App `Bundle` и распространение
 - [[q-android-build-optimization--android--medium]] — Оптимизация запуска и сборки
 - [[q-android-performance-measurement-tools--android--medium]] — Измерение производительности запуска

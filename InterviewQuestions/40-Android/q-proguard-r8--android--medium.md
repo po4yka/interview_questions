@@ -1,36 +1,35 @@
 ---
 id: android-001
 title: ProGuard and R8 / ProGuard и R8
-aliases:
-- ProGuard and R8
-- ProGuard и R8
+aliases: [ProGuard and R8, ProGuard и R8]
 topic: android
 subtopics:
-- obfuscation
-- performance-memory
-- gradle
+  - gradle
+  - obfuscation
+  - performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources:
-- "https://github.com/Kirchhoff-Android-Interview-Questions"
+  - "https://github.com/Kirchhoff-Android-Interview-Questions"
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- c-memory-management
-- q-build-optimization-gradle--android--medium
-- q-reduce-app-size--android--medium
+  - c-gradle
+  - c-memory-management
+  - q-build-optimization-gradle--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-proguard-r8-rules--android--medium
+  - q-reduce-app-size--android--medium
 created: 2025-10-05
 updated: 2025-11-10
-tags:
-- android/obfuscation
-- android/performance-memory
-- android/gradle
-- difficulty/medium
+tags: [android/gradle, android/obfuscation, android/performance-memory, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -71,7 +70,7 @@ android {
 }
 ```
 
-### Сохранение кода с помощью правил `-keep`
+### Сохранение Кода С Помощью Правил `-keep`
 
 R8 (как и ProGuard) может удалить код, который используется только неявно, например через:
 - reflection — динамическое создание экземпляров, доступ к методам/полям
@@ -87,7 +86,7 @@ R8 (как и ProGuard) может удалить код, который исп�
 
 Для стандартного кейса можно использовать аннотацию `@Keep` из AndroidX (`androidx.annotation.Keep`), которую R8 обрабатывает напрямую.
 
-### Преимущества и недостатки R8/обфускации
+### Преимущества И Недостатки R8/обфускации
 
 **Преимущества:**
 - Уменьшение размера APK/AAB (часто заметное, в ряде проектов может достигать десятков процентов)
@@ -129,7 +128,7 @@ android {
 }
 ```
 
-### Preserving code with `-keep` rules
+### Preserving Code with `-keep` Rules
 
 R8 (like ProGuard) can remove code that is only accessed indirectly, for example via:
 - reflection — dynamic instantiation or reflective access to fields/methods
@@ -159,7 +158,7 @@ For typical Android projects you can use the `@Keep` annotation from AndroidX (`
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как декодировать обфусцированные stacktrace'ы с помощью mapping-файлов?
 - Когда стоит использовать аннотацию `@Keep` вместо правил `-keep` и наоборот?
@@ -181,9 +180,9 @@ For typical Android projects you can use the `@Keep` annotation from AndroidX (`
 
 - https://developer.android.com/studio/build/shrink-code
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-gradle]]
 - [[c-memory-management]]

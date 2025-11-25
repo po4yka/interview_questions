@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-flow-backpressure--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-flow-backpressure--kotlin--hard]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-11-10
 
 tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
+date created: Sunday, October 12th 2025, 2:24:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Что такое CoroutineContext в Kotlin? Как он работает и какие его ключевые элементы?
 
@@ -160,7 +163,7 @@ launch(handler) {
 }
 ```
 
-### Реальный пример использования
+### Реальный Пример Использования
 
 ```kotlin
 class DataViewModel : ViewModel() {
@@ -368,7 +371,7 @@ launch(parentContext) {
 
 **English Summary**: `CoroutineContext` is an indexed set of elements defining coroutine behavior. Key elements: `Job` (lifecycle), `CoroutineDispatcher` (threading), `CoroutineName` (debugging), `CoroutineExceptionHandler` (errors). Contexts combine with `+`, same-type elements replace each other. Children inherit parent context but can override individual elements. `Job` is special: each child has its own `Job` with the parent `Job` set as its parent. Use it for thread control, naming for debugging, exception handling, and lifecycle management.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия подхода к контексту по сравнению с Java-потоками?
 - Когда и как вы бы использовали `CoroutineContext` на практике?

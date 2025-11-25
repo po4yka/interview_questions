@@ -1,31 +1,32 @@
 ---
 id: android-325
 title: Service Lifecycle and Binding / Жизненный цикл и привязка Service
-aliases:
-- Service Lifecycle and Binding
-- Жизненный цикл и привязка Service
+aliases: [Service Lifecycle and Binding, Жизненный цикл и привязка Service]
 topic: android
 subtopics:
-- service
+  - service
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-how-to-add-custom-attributes-to-custom-view--android--medium
-- q-migration-to-compose--android--medium
-- q-viewmodel-pattern--android--easy
+  - c-android
+  - q-foreground-service-types--android--medium
+  - q-how-to-add-custom-attributes-to-custom-view--android--medium
+  - q-migration-to-compose--android--medium
+  - q-viewmodel-pattern--android--easy
+  - q-what-is-data-binding--android--easy
+  - q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-10
 updated: 2025-11-11
-tags:
-- android/service
-- difficulty/hard
+tags: [android/service, difficulty/hard]
 
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +46,7 @@ Explain the `Service` lifecycle, binding mechanisms, and communication patterns.
 
 Гибридный сервис может быть и started, и bound: он уничтожается только когда вызван `stopSelf()` / `stopService()` И нет привязанных клиентов.
 
-#### Основы жизненного цикла
+#### Основы Жизненного Цикла
 
 **1. Started `Service` (пример реализации)**
 ```kotlin
@@ -209,7 +210,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-#### Привязка к сервису (binding)
+#### Привязка К Сервису (binding)
 
 **1. Простой пример binding из `Activity`/`ComponentActivity`**
 ```kotlin
@@ -327,7 +328,7 @@ bindService(intent, connection, Context.BIND_IMPORTANT)
 bindService(intent, connection, Context.BIND_ADJUST_WITH_ACTIVITY)
 ```
 
-#### AIDL-основанный bound service (IPC)
+#### AIDL-основанный Bound Service (IPC)
 
 **1. Определение AIDL-интерфейсов**
 ```aidl
@@ -585,7 +586,7 @@ class MusicPlayerClient : ComponentActivity() {
 }
 ```
 
-#### Messenger-основанная коммуникация
+#### Messenger-основанная Коммуникация
 
 Упрощенная альтернатива AIDL для простого IPC на основе сообщений.
 
@@ -715,7 +716,7 @@ class MessengerClient : ComponentActivity() {
 }
 ```
 
-#### Foreground `Service` (Android 12+) — пример жизненного цикла
+#### Foreground `Service` (Android 12+) — Пример Жизненного Цикла
 
 ```kotlin
 class DownloadForegroundService : Service() {
@@ -812,7 +813,7 @@ class DownloadForegroundService : Service() {
 }
 ```
 
-#### Лучшие практики и типичные ошибки
+#### Лучшие Практики И Типичные Ошибки
 
 1. Управление жизненным циклом:
    - Строго парные `bindService()` / `unbindService()`.

@@ -1,29 +1,30 @@
 ---
 id: android-120
 title: Integration Testing Strategies / Стратегии интеграционного тестирования
-aliases:
-- Integration Testing Strategies
-- Стратегии интеграционного тестирования
+aliases: [Integration Testing Strategies, Стратегии интеграционного тестирования]
 topic: android
 subtopics:
-- testing-instrumented
+  - testing-instrumented
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-testing
-- q-android-manifest-file--android--easy
+  - c-android-testing
+  - q-android-manifest-file--android--easy
+  - q-android-testing-strategies--android--medium
+  - q-koin-testing-strategies--android--medium
+  - q-tflite-acceleration-strategies--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/testing-instrumented
-- difficulty/medium
+tags: [android/testing-instrumented, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -40,7 +41,7 @@ tags:
 
 (Для корутинных примеров ниже предполагается использование артефакта `kotlinx-coroutines-test` и корректная настройка диспетчеров как для JVM-тестов, так и для Android instrumented-тестов.)
 
-### Пирамида тестирования
+### Пирамида Тестирования
 
 ```
     E2E-тесты (UI / Full Stack)
@@ -50,7 +51,7 @@ tags:
   Юнит-тесты (отдельные компоненты)
 ```
 
-### Стратегия тестирования
+### Стратегия Тестирования
 
 1. `ViewModel` + Repository + локальная БД (Room):
    - Мокаем/фейкаем только сетевой слой.
@@ -64,7 +65,7 @@ tags:
    - Мокаем только внешние API и системные сервисы.
    - Используем реальные слои приложения (БД, репозитории, `ViewModel`, UI) — по сути высокоуровневый интеграционный / E2E-тест внутри границ приложения.
 
-### Пример: интеграционный тест UserRepository
+### Пример: Интеграционный Тест UserRepository
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -209,7 +210,7 @@ class UserViewModelIntegrationTest {
 
 (Здесь используется правило `MainDispatcherRule` для переопределения `Dispatchers.Main` тестовым диспетчером; API корутин-тестов предоставляется `kotlinx-coroutines-test`.)
 
-### Full `Stack` интеграционный / E2E-тест
+### Full `Stack` Интеграционный / E2E-тест
 
 ```kotlin
 @HiltAndroidTest
@@ -268,7 +269,7 @@ class FullStackIntegrationTest {
 
 (Это full-stack интеграционный тест внутри границ приложения, часто также рассматривается как E2E UI-тест.)
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте in-memory БД для скорости и детерминизма.
 2. Мокируйте или фейкайте только внешние зависимости (сеть, файловая система, системные сервисы, сторонние SDK).
@@ -278,7 +279,7 @@ class FullStackIntegrationTest {
 6. Покрывайте негативные сценарии: ошибки сети, парсинга, БД и корректные фоллбеки.
 7. Соблюдайте баланс между покрытием и скоростью: максимум логики — в юнит-тестах, ключевые потоки — в интеграционных тестах.
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - [[q-android-manifest-file--android--easy]]
 - Как бы вы разграничили юнит-, интеграционные и end-to-end тесты в Android-приложении и решили, что к какому уровню относится?
@@ -290,7 +291,7 @@ class FullStackIntegrationTest {
 
 - [Instrumented Tests](https://developer.android.com/training/testing/instrumented-tests)
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### Предпосылки / Концепты
 

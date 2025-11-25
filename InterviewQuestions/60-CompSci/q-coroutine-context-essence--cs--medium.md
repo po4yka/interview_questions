@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [context, coroutinecontext, coroutines, difficulty/medium, kotlin, programming-languages]
 sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 
+date created: Saturday, November 1st 2025, 1:24:36 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -316,7 +318,7 @@ suspend fun example() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает наследование контекста в корутинах?
 - В чём разница между `Job` и `SupervisorJob`?
@@ -328,7 +330,7 @@ suspend fun example() {
 - What is the difference between `Job` and `SupervisorJob`?
 - How do you create custom `CoroutineContext` elements?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - Базовые концепции Kotlin-корутин

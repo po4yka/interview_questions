@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/networking-http, android/performance-startup, difficulty/medium, networking, okhttp, performance, retrofit]
 
+date created: Saturday, November 1st 2025, 1:03:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -308,7 +310,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как тестировать rate limiting интерцепторы с MockWebServer?
 - В чем разница между алгоритмами token bucket и leaky bucket?
@@ -336,13 +338,13 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - [Kotlin `Flow` Operators](https://kotlinlang.org/docs/flow.html)
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 
 - [[q-android-app-components--android--easy]]
 
-### На том же уровне сложности
+### На Том Же Уровне Сложности
 
 - [[q-android-testing-strategies--android--medium]]
 

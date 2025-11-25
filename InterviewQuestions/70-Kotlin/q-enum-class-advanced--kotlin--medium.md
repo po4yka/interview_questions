@@ -15,6 +15,8 @@ created: "2024-10-12"
 updated: "2025-11-09"
 tags: [advanced-enums, classes, difficulty/medium, enums, kotlin, kotlin-features]
 sources: ["https://kotlinlang.org/docs/enum-classes.html"]
+date created: Sunday, October 12th 2025, 1:58:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -130,7 +132,7 @@ val color = Color.fromString("red") // RED
 val exists = Color.hasColor("purple") // false
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать `enum` vs `sealed class`?
 - Как использовать `enum` с типобезопасной сериализацией?
@@ -141,7 +143,7 @@ val exists = Color.hasColor("purple") // false
 - [[c-kotlin]]
 - https://kotlinlang.org/docs/enum-classes.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-kotlin-enum-classes--kotlin--easy]] - Базовые enum классы

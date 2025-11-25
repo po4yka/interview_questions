@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-equality, q-kotlin-favorite-features--programming-languages--easy]
+related: [c-equality, c-kotlin, q-kotlin-favorite-features--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-11-09
 
 tags: [comparison, difficulty/easy, equality, kotlin, operators]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между == и === в Kotlin?
 
@@ -69,7 +72,7 @@ println(list1 === list1)  // true - тот же объект
 
 Важно: не полагайтесь на `===` для строк или чисел как на способ проверки "одинакового значения" — он проверяет именно идентичность объекта/ссылки, а не содержимое.
 
-### Итоговая таблица
+### Итоговая Таблица
 
 | Оператор | Назначение | Эквивалент в Java | Null-safe |
 |----------|------------|-------------------|-----------|

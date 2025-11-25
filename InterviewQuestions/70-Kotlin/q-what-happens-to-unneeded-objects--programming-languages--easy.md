@@ -3,18 +3,20 @@ id: lang-050
 title: "What Happens To Unneeded Objects / Что происходит с ненужными объектами"
 aliases: [What Happens To Unneeded Objects, Что происходит с ненужными объектами]
 topic: kotlin
-subtopics: [memory-management, jvm]
+subtopics: [jvm, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-garbage-collection, q-java-lambda-type--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard]
+related: [c-garbage-collection, c-kotlin, q-java-lambda-type--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memory-management]
 
+date created: Friday, October 31st 2025, 6:32:27 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -55,7 +57,7 @@ fun example() {
 }
 ```
 
-### Автоматическое управление памятью
+### Автоматическое Управление Памятью
 
 ```kotlin
 fun createManyObjects() {
@@ -68,7 +70,7 @@ fun createManyObjects() {
 }
 ```
 
-### Сравнение с C/C++
+### Сравнение С C/C++
 
 - В Java/Kotlin на JVM память недостижимых объектов освобождается автоматически сборщиком мусора.
 - В C/C++ динамически выделенную память обычно нужно освобождать вручную.
@@ -87,7 +89,7 @@ val data = Data()
 // JVM сама решает, когда фактически освободить память.
 ```
 
-### Когда объект становится кандидатом на сборку
+### Когда Объект Становится Кандидатом На Сборку
 
 ```kotlin
 class Example {
@@ -104,7 +106,7 @@ class Example {
 }
 ```
 
-### Фоновая работа GC (упрощённо)
+### Фоновая Работа GC (упрощённо)
 
 ```kotlin
 // Код разработчика:
@@ -121,14 +123,14 @@ fun processData() {
 // Всё это происходит автоматически; разработчик не управляет точным моментом.
 ```
 
-### Плюсы и особенности
+### Плюсы И Особенности
 
 - Нет ручных `malloc/free` или `new/delete`.
 - Меньше типичных ошибок ручного управления памятью (double free, use-after-free).
 - Утечки памяти всё ещё возможны, если «держать» ненужные ссылки (GC собирает только недостижимые объекты).
 - Разработчик концентрируется на логике, а не на низкоуровневом управлении памятью.
 
-### Как это работает на высоком уровне
+### Как Это Работает На Высоком Уровне
 
 1. Приложение создаёт объекты.
 2. GC отслеживает достижимость объектов.
@@ -138,7 +140,7 @@ fun processData() {
    - Их память освобождается.
 4. Приложение продолжает выполнение.
 
-### Пример с System.gc()
+### Пример С System.gc()
 
 ```kotlin
 fun main() {
@@ -307,7 +309,7 @@ This is how automatic memory management works in Kotlin/Java on the JVM.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как могут происходить утечки памяти при наличии сборщика мусора?
 - Как достижимость объектов (strong/weak/soft ссылки) влияет на поведение GC?
@@ -327,7 +329,7 @@ This is how automatic memory management works in Kotlin/Java on the JVM.
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-suspend-function-return-type-after-compilation--programming-languages--hard]]
 - [[q-java-lambda-type--programming-languages--easy]]

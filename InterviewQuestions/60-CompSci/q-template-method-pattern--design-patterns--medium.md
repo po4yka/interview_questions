@@ -1,9 +1,9 @@
 ---
-id: cs-060
+id: dp-003
 title: "Template Method Pattern / Template Method Паттерн"
 aliases: [Template Method Pattern, Template Method Паттерн]
 topic: behavioral
-subtopics: [patterns, inheritance]
+subtopics: [inheritance, patterns]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, hook-method, template-method]
 
+date created: Saturday, November 1st 2025, 1:24:25 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -38,14 +40,14 @@ tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, ho
 
 Цель состоит в том, чтобы определить общую структуру операции, позволяя подклассам уточнять или переопределять отдельные шаги без изменения последовательности алгоритма.
 
-### Основные компоненты
+### Основные Компоненты
 
 Этот паттерн состоит из двух основных частей:
 
 1. **Template method (шаблонный метод)** — реализуется в базовом классе, содержит код для инвариантных частей алгоритма, вызывает вспомогательные методы для вариативных частей и обычно объявляется `final` (или оставляется не `open` в Kotlin), чтобы подклассы не меняли последовательность.
 2. **Подклассы** — переопределяют абстрактные, hook- или специально разрешённые методы конкретными алгоритмами. **Не должны переопределять сам шаблонный метод.**
 
-### Почему используется?
+### Почему Используется?
 
 Шаблонный метод используется во фреймворках и библиотеках по следующим причинам:
 
@@ -53,7 +55,7 @@ tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, ho
 2. **Избегает дублирования** — общий workflow реализован один раз в абстрактном классе, вариации — в подклассах.
 3. **Контролирует точки специализации** — запрет переопределения шаблонного метода сохраняет общий workflow и явно задаёт точки расширения.
 
-### Пример: Операция с файлом (File Operation)
+### Пример: Операция С Файлом (File Operation)
 
 ```java
 public abstract class Operation {
@@ -127,7 +129,7 @@ public static void main(String[] args) {
 }
 ```
 
-### Android пример: Загрузка данных (Data Loading)
+### Android Пример: Загрузка Данных (Data Loading)
 
 ```kotlin
 // Шаблонный класс
@@ -191,7 +193,7 @@ class ProductDataLoader : DataLoader<Product>() {
 }
 ```
 
-### Kotlin пример: Генерация отчета (Report Generation)
+### Kotlin Пример: Генерация Отчета (Report Generation)
 
 ```kotlin
 abstract class ReportGenerator {
@@ -233,7 +235,7 @@ abstract class ReportGenerator {
 }
 ```
 
-### Android пример: `ViewModel`
+### Android Пример: `ViewModel`
 
 ```kotlin
 abstract class BaseViewModel<T> : ViewModel() {
@@ -269,7 +271,7 @@ abstract class BaseViewModel<T> : ViewModel() {
 }
 ```
 
-### Объяснение по примерам
+### Объяснение По Примерам
 
 - **Template method** (`execute()`, `loadData()`, `generateReport()`) определяет структуру алгоритма и, как правило, не должен быть переопределяемым.
 - **Абстрактные методы** реализуются в подклассах и задают вариативные шаги.
@@ -327,7 +329,7 @@ abstract class AuthenticationFlow {
 // DON'T: иметь слишком много абстрактных методов — в таких случаях рассмотрите Strategy или композицию.
 ```
 
-### Краткое резюме (RU)
+### Краткое Резюме (RU)
 
 Паттерн Template Method относится к поведенческим. Он решает задачу: нужно зафиксировать структуру алгоритма, разрешив изменять отдельные шаги. Решение: вынести общий алгоритм в шаблонный метод базового класса, а вариативные части оформить как абстрактные или hook-методы. Использовать, когда:
 - есть несколько алгоритмов с общим скелетом;
@@ -705,7 +707,7 @@ Template Method is a behavioral pattern that defines the algorithm skeleton in a
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем Template Method концептуально и по реализации отличается от паттерна Strategy?
 - Когда предпочтительнее использовать композицию (например, Strategy), а не наследование с Template Method?

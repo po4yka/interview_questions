@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, recomposition, state-management]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -217,7 +219,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
 - Переиспользуемые stateless-компоненты
 - Простое тестирование
 
-### Интеграция с `ViewModel`
+### Интеграция С `ViewModel`
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -538,7 +540,7 @@ fun ItemList(items: List<Item>) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Когда следует использовать `rememberSaveable` вместо `remember`?
 2. Чем `derivedStateOf` отличается от вычисляемых свойств или простых геттеров?
@@ -570,12 +572,12 @@ fun ItemList(items: List<Item>) {
 - https://developer.android.com/jetpack/compose/state
 - https://developer.android.com/jetpack/compose/mental-model
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-jetpack-compose-basics--android--medium]] - основы Compose
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-state-hoisting-compose--android--medium]] - паттерны подъёма состояния
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - варианты `remember`
 - [[q-compose-remember-derived-state--android--medium]] - использование `derivedStateOf`

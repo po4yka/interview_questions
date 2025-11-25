@@ -14,7 +14,10 @@ related: [c-kotlin, q-expect-actual-kotlin--kotlin--medium, q-kotlin-static-vari
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как работают inline value классы? Когда следует использовать их для производительности? Каковы ограничения?
 
@@ -29,7 +32,7 @@ tags: [difficulty/medium]
 
 ---
 
-### Базовый пример value-класса
+### Базовый Пример Value-класса
 
 ```kotlin
 @JvmInline
@@ -48,7 +51,7 @@ fun sendEmail(userId: UserId, email: Email) {
 
 ---
 
-### Преимущество производительности (типичный случай)
+### Преимущество Производительности (типичный случай)
 
 Без value-класса:
 
@@ -81,7 +84,7 @@ process(UserId(123))
 
 ---
 
-### Когда использовать (c акцентом на производительность)
+### Когда Использовать (c Акцентом На производительность)
 
 Используйте value-классы в первую очередь для:
 
@@ -123,7 +126,7 @@ fun authenticate(apiKey: ApiKey, token: SessionToken) {
 
 ---
 
-### Ограничения и важные нюансы
+### Ограничения И Важные Нюансы
 
 **1. Ровно одно свойство:**
 
@@ -327,7 +330,7 @@ In these scenarios, the value class is actually boxed, so memory/GC savings are 
 
 When used within these constraints, value classes provide stronger type safety and can offer performance benefits (fewer allocations, smaller representations) on hot paths, but they should be introduced primarily for clearer domain modeling.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия value-классов от аналогичных подходов в Java?
 - Когда вы бы использовали value-классы на практике?
@@ -348,7 +351,7 @@ When used within these constraints, value classes provide stronger type safety a
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
 - [[q-kotlin-static-variable--programming-languages--easy]]

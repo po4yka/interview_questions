@@ -17,6 +17,8 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [constructors, difficulty/easy, init, initialization, kotlin, primary-constructor, secondary-constructor]
 
+date created: Sunday, October 12th 2025, 2:43:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -99,7 +101,7 @@ println(user.username)      // OK
 // println(user.email)      // Ошибка: email не является свойством
 ```
 
-### Блоки init
+### Блоки Init
 
 Блоки `init` выполняют код инициализации как часть первичного конструктора. Они вызываются вместе с инициализаторами свойств в порядке их объявления в классе.
 
@@ -317,7 +319,7 @@ val prodConfig = DatabaseConfig(
 val devConfig = DatabaseConfig("dev_db")
 ```
 
-### Data-классы и Конструкторы
+### Data-классы И Конструкторы
 
 ```kotlin
 data class User(
@@ -368,7 +370,7 @@ internal class InternalService internal constructor(val config: Config)
 abstract class BaseRepository protected constructor(val database: Database)
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАЙТЕ:
 
@@ -431,7 +433,7 @@ class Age(val value: Int) {
 
 ### Общие Паттерны
 
-#### Фабричный метод с приватным конструктором
+#### Фабричный Метод С Приватным Конструктором
 
 ```kotlin
 class User private constructor(
@@ -974,7 +976,7 @@ val request = HttpRequest.Builder()
 - Explain how `init` blocks interact with property initialization order in more complex class hierarchies.
 - Discuss when to prefer factory functions or builder patterns over exposing multiple constructors.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем ключевые отличия системы конструкторов Kotlin от Java?
 - Когда использовать вторичные конструкторы вместо значений по умолчанию и именованных аргументов?
 - Какие распространенные ошибки при использовании `init` и вторичных конструкторов?
@@ -990,7 +992,7 @@ val request = HttpRequest.Builder()
 - [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
 - [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
 - [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[q-kotlin-init-block--kotlin--easy]]
 - [[q-kotlin-properties--kotlin--easy]]
 - [[q-kotlin-val-vs-var--kotlin--easy]]

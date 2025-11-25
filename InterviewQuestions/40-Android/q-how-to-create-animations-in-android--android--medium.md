@@ -1,32 +1,32 @@
 ---
 id: android-394
 title: How To Create Animations In Android / Как создавать анимации в Android
-aliases:
-- How To Create Animations In Android
-- Как создавать анимации в Android
+aliases: [How To Create Animations In Android, Как создавать анимации в Android]
 topic: android
 subtopics:
-- ui-animation
+  - ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-custom-views
-- q-app-start-types-android--android--medium
-- q-data-sync-unstable-network--android--hard
-- q-stable-classes-compose--android--hard
+  - c-custom-views
+  - q-android-lint-tool--android--medium
+  - q-app-start-types-android--android--medium
+  - q-compose-custom-animations--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-parsing-optimization-android--android--medium
+  - q-stable-classes-compose--android--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-- android/ui-animation
-- animations
-- difficulty/medium
+tags: [android/ui-animation, animations, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -302,7 +302,7 @@ TransitionManager.beginDelayedTransition(root)
 view.visibility = View.GONE // Изменение будет анимировано
 ```
 
-### 7. Физические анимации (Spring/Fling)
+### 7. Физические Анимации (Spring/Fling)
 
 - Используют физическую модель для более естественных движений (DynamicAnimation, SpringAnimation, FlingAnimation).
 
@@ -321,7 +321,7 @@ flingAnim.setStartVelocity(-2000f)
 flingAnim.start()
 ```
 
-### Интерполяторы анимации
+### Интерполяторы Анимации
 
 Интерполяторы управляют тем, как изменяется скорость анимации во времени (тайминг-кривая):
 
@@ -340,7 +340,7 @@ view.animate()
 // AnticipateInterpolator() - делает небольшое движение назад перед основным
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 - Использовать Property Animations как основной инструмент.
 - Для простых анимаций `View` использовать ViewPropertyAnimator.

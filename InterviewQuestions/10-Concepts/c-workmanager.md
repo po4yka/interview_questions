@@ -16,6 +16,8 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "background-tasks", "concept", "coroutines", "difficulty/medium", "jetpack", "threading", "workmanager"]
+date created: Saturday, October 25th 2025, 11:07:27 am
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # WorkManager / WorkManager

@@ -7,8 +7,8 @@ aliases: ["Kotlin Properties", "Свойства в Kotlin"]
 topic: kotlin
 subtopics:
   - getters
-  - setters
   - lateinit
+  - setters
 question_kind: theory
 difficulty: easy
 
@@ -28,7 +28,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, lateinit, lazy, properties, setters]
+date created: Sunday, October 12th 2025, 2:44:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое свойства в Kotlin? Объясните val vs var, пользовательские геттеры и сеттеры, backing fields, lateinit и основы делегирования свойств.
 
@@ -167,7 +170,7 @@ class Circle(val radius: Double) {
 }
 ```
 
-#### Когда создаётся backing field / когда его нет
+#### Когда Создаётся Backing Field / Когда Его Нет
 
 Backing field создаётся, если:
 - У свойства есть стандартный getter/setter, ИЛИ
@@ -358,7 +361,7 @@ user.updateEmail("new@test")  // OK
 
 ### Типы Свойств
 
-#### Хранимое свойство
+#### Хранимое Свойство
 
 ```kotlin
 class User {
@@ -366,7 +369,7 @@ class User {
 }
 ```
 
-#### Вычисляемое свойство
+#### Вычисляемое Свойство
 
 ```kotlin
 class Rectangle(val width: Int, val height: Int) {
@@ -375,7 +378,7 @@ class Rectangle(val width: Int, val height: Int) {
 }
 ```
 
-#### Свойство с backing-свойством
+#### Свойство С Backing-свойством
 
 ```kotlin
 class Repository {
@@ -387,7 +390,7 @@ class Repository {
 
 ### Реальные Примеры
 
-#### Паттерн свойств во ViewModel
+#### Паттерн Свойств Во ViewModel
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -410,7 +413,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-#### Конфигурация с валидацией
+#### Конфигурация С Валидацией
 
 ```kotlin
 class ServerConfig {
@@ -436,7 +439,7 @@ config.port = 443
 println(config.url)  // http://api.example.com:443
 ```
 
-#### Кешированное свойство
+#### Кешированное Свойство
 
 ```kotlin
 class ExpensiveCalculation(val input: Int) {
@@ -453,7 +456,7 @@ println(calc.result)  // Печатает: Вычисление... затем 10
 println(calc.result)  // Печатает: 100 (из кеша)
 ```
 
-#### Свойство с побочными эффектами
+#### Свойство С Побочными Эффектами
 
 ```kotlin
 class Logger {
@@ -472,7 +475,7 @@ class Logger {
 
 ### Общие Паттерны
 
-#### Singleton с lazy
+#### Singleton С Lazy
 
 ```kotlin
 object Database {
@@ -482,7 +485,7 @@ object Database {
 }
 ```
 
-#### Цепочка делегирования свойств
+#### Цепочка Делегирования Свойств
 
 ```kotlin
 class Preferences {
@@ -1127,7 +1130,7 @@ class PreferenceDelegate<T>(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия свойств Kotlin от полей и аксессоров в Java?
 - Когда стоит использовать `lateinit`, а когда `lazy`?
@@ -1151,7 +1154,7 @@ class PreferenceDelegate<T>(
 - [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
 - [Kotlin Backing Fields](https://kotlinlang.org/docs/properties.html#backing-fields)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-val-vs-var--kotlin--easy]]
 - [[q-kotlin-constructors--kotlin--easy]]

@@ -3,17 +3,19 @@ id: kotlin-218
 title: "ExecutorService in Java: How It Works"
 aliases: [Executor, ExecutorService, Java]
 topic: kotlin
-subtopics: [c-kotlin, c-java-features, c-concepts--kotlin--medium]
+subtopics: [c-concepts--kotlin--medium, c-java-features, c-kotlin]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-java-features, q-kotlin-inline-functions--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
+related: [c-java-features, c-kotlin, q-kotlin-inline-functions--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)

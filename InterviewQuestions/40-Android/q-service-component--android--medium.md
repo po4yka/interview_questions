@@ -1,40 +1,37 @@
 ---
 id: android-008
 title: Android Service Component / Компонент Service в Android
-aliases:
-- Android Service Component
-- Компонент Service в Android
+aliases: [Android Service Component, Компонент Service в Android]
 topic: android
 subtopics:
-- background-execution
-- lifecycle
-- service
+  - background-execution
+  - lifecycle
+  - service
 question_kind: theory
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: "https://github.com/Kirchhoff-Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
 related:
-- c-service
-- c-background-tasks
-- c-lifecycle
-- q-anr-application-not-responding--android--medium
+  - c-background-tasks
+  - c-lifecycle
+  - c-service
+  - q-android-service-types--android--easy
+  - q-android-services-purpose--android--easy
+  - q-anr-application-not-responding--android--medium
+  - q-service-types-android--android--easy
 created: 2025-10-05
 updated: 2025-11-10
-tags:
-- android/background-execution
-- android/lifecycle
-- android/service
-- difficulty/medium
-- en
-- ru
+tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
 
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -53,7 +50,7 @@ tags:
 
 Замечание (современный Android): из-за ограничений фонового выполнения (начиная с Android 8.0 Oreo) приложениям запрещено свободно запускать долгоживущие фоновые сервисы из фона. Для длительных задач следует использовать сервисы переднего плана, `WorkManager` или другие подходящие API.
 
-### Типы сервисов
+### Типы Сервисов
 
 Традиционно выделяют три концептуальных типа сервисов: Foreground (передний план), Background (фоновый), Bound (привязанный).
 
@@ -61,7 +58,7 @@ tags:
 - **Bound (привязанный)**: Сервис становится привязанным, когда компонент приложения вызывает `bindService()`. Привязанный сервис предоставляет клиент-серверный интерфейс для взаимодействия: отправка запросов, получение результатов, IPC. Такой сервис работает, пока к нему привязан хотя бы один компонент. Несколько компонентов могут быть привязаны одновременно; когда все отвяжутся (и сервис не был отдельно запущен), сервис уничтожается.
 - **Foreground (передний план)**: Выполняет операции, заметные для пользователя. Например, аудиоплеер использует сервис переднего плана для воспроизведения аудио. Такой сервис обязан показать продолжающееся `Notification` вскоре после старта и может продолжать работать, даже когда пользователь не взаимодействует с приложением, но остаётся под действием политик платформы (типы foreground-сервисов, ограничения на запуск и т.п.).
 
-### Объявление сервиса
+### Объявление Сервиса
 
 Все сервисы необходимо объявить в манифесте приложения, как и активити и другие компоненты.
 
@@ -94,7 +91,7 @@ tags:
 
 Система может остановить сервис при нехватке ресурсов, при убийстве процесса или при применении ограничений фонового выполнения. Сервис переднего плана или сервис, привязанный к компоненту с фокусом, имеет меньшую вероятность быть завершённым.
 
-### Возвращаемые значения onStartCommand()
+### Возвращаемые Значения onStartCommand()
 
 `onStartCommand()` возвращает целочисленный флаг, определяющий, как система должна вести себя при убийстве сервиса:
 
@@ -102,7 +99,7 @@ tags:
 - **`START_STICKY`** – Если система убивает сервис после `onStartCommand()`, сервис пересоздаётся, `onStartCommand()` вызывается снова, но последний `Intent` не доставляется повторно. Вместо этого приходит `null` (если нет новых `Intent`). Подходит для сервисов, которые работают долго и ожидают команды (например, медиаплеер).
 - **`START_REDELIVER_INTENT`** – Если система убивает сервис после `onStartCommand()`, сервис пересоздаётся, и `onStartCommand()` вызывается с последним доставленным `Intent`; ожидающие `Intent` доставляются по очереди. Подходит для задач, которые важно продолжить с того же места (например, загрузка файла).
 
-### Жизненный цикл сервиса
+### Жизненный Цикл Сервиса
 
 Жизненный цикл сервиса проще, чем у активити, но требует аккуратной реализации, так как сервис может работать в фоне без явной индикации для пользователя.
 

@@ -25,6 +25,8 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, viewmodel, viewmodelscope]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -77,7 +79,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-### Корректное управление состоянием с `StateFlow`
+### Корректное Управление Состоянием С `StateFlow`
 
 ```kotlin
 class ProductsViewModel : ViewModel() {
@@ -140,7 +142,7 @@ class ProductsViewModel : ViewModel() {
 - Снаружи предоставляйте только `StateFlow`, внутренний `MutableStateFlow` не раскрывайте.
 - Обновляйте состояние атомарно через `update { }`.
 
-### Обработка изменений конфигурации
+### Обработка Изменений Конфигурации
 
 ```kotlin
 class ConfigurationSafeViewModel : ViewModel() {
@@ -190,7 +192,7 @@ class SearchActivity : AppCompatActivity() {
 - `ViewModel` сохраняется при повороте экрана, данные и корутины не перезапускаются без необходимости.
 - В UI слое используйте `lifecycleScope` + `repeatOnLifecycle`, чтобы избежать утечек.
 
-### Паттерны обработки ошибок
+### Паттерны Обработки Ошибок
 
 ```kotlin
 class ErrorHandlingViewModel : ViewModel() {
@@ -264,7 +266,7 @@ class ErrorHandlingViewModel : ViewModel() {
 - Не глушите `CancellationException`.
 - Любые другие ошибки переводите в явное UI-состояние.
 
-### Лучшие практики запуска корутин
+### Лучшие Практики Запуска Корутин
 
 ```kotlin
 class BestPracticesViewModel : ViewModel() {
@@ -356,7 +358,7 @@ class BestPracticesViewModel : ViewModel() {
 - Не блокируйте поток (`runBlocking`, долгие циклы без `isActive`).
 - Для событий применяйте `Channel`/`SharedFlow`, а не состояние.
 
-### Состояния загрузки и дебаунсинг
+### Состояния Загрузки И Дебаунсинг
 
 ```kotlin
 class SearchViewModel : ViewModel() {
@@ -412,7 +414,7 @@ class SearchViewModel : ViewModel() {
 - Не дёргайте сеть на каждый символ.
 - Управляйте флагом загрузки через состояние, а не через побочные эффекты.
 
-### Несколько параллельных операций
+### Несколько Параллельных Операций
 
 ```kotlin
 class ParallelOperationsViewModel : ViewModel() {
@@ -485,7 +487,7 @@ class ParallelOperationsViewModel : ViewModel() {
 - Используйте структурированную конкуренцию (`async` внутри `viewModelScope.launch`).
 - При ошибке дочерние задачи корректно отменяются.
 
-### Тестирование ViewModel с корутинами
+### Тестирование ViewModel С Корутинами
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -542,7 +544,7 @@ class MainDispatcherRule(
 - Используйте `runTest` и тестовый диспетчер для детерминированного поведения корутин.
 - Применяйте `advanceUntilIdle()` для выполнения всех задач.
 
-### Распространённые анти-паттерны
+### Распространённые Анти-паттерны
 
 ```kotlin
 class AntiPatterns : ViewModel() {

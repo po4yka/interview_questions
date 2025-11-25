@@ -17,11 +17,16 @@ status: draft
 moc: moc-android
 related:
   - c-encryption
+  - q-android-manifest-file--android--easy
+  - q-android-security-best-practices--android--medium
+  - q-android-security-practices-checklist--android--medium
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]
 sources:
   - "https://developer.android.com/training/articles/security-config"
+date created: Saturday, November 1st 2025, 1:24:15 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +51,7 @@ sources:
 
 `android:usesCleartextTraffic` — грубый (app-wide) флаг. Network Security Config даёт более тонкий (per-domain) контроль и предпочтителен для production.
 
-### Контроль через Network Security Config
+### Контроль Через Network Security Config
 
 **Для локальной разработки** (минимальные разрешения):
 ```xml

@@ -4,26 +4,31 @@ title: Compose Slot Table & Recomposition / Slot Table и рекомпозици
 aliases: [Compose Slot Table and Recomposition, Slot Table и рекомпозиция]
 topic: android
 subtopics:
-- performance-rendering
-- ui-compose
+  - performance-rendering
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-recomposition
-- q-compose-compiler-plugin--android--hard
-- q-compose-performance-optimization--android--hard
-- q-compose-stability-skippability--android--hard
+  - c-compose-recomposition
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-stability-skippability--android--hard
+  - q-recomposition-choreographer--android--hard
+  - q-recomposition-compose--android--medium
+  - q-stable-classes-compose--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-compose, difficulty/hard]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:10:06 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -36,14 +41,14 @@ sources: []
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 - `Slot Table` — линейная структура с группами и слотами, которая хранит структуру композиции.
 - Рекомпозиция работает через инвалидацию затронутых групп и выборочное выполнение только нужных composable.
 - Оптимизации достигаются за счет стабильности параметров, якорей и возможности быстро пропускать неизменённые группы.
 
-### Подробный вариант
+### Подробный Вариант
 
-### Основная идея
+### Основная Идея
 `Slot Table` — компактная линейная структура данных (линейное представление с "gap"-областью), хранящая иерархию UI-дерева композиции и оптимизирующая рекомпозицию через инвалидацию групп.
 
 **Архитектура**:
@@ -69,7 +74,7 @@ sources: []
 - `Anchors` обеспечивают сопоставление логических групп с физическими позициями в `Slot Table` при вставках/удалениях.
 - Планировщик Compose связывает инвалидации со слотами и группами и триггерит рекомпозицию в подходящий момент.
 
-### Механизм рекомпозиции
+### Механизм Рекомпозиции
 
 **Фаза инвалидации**:
 1. Запись в observable state → `snapshot`-мутация → в очередь добавляется scope/группа, зависящая от этого состояния.
@@ -93,7 +98,7 @@ fun Counter(count: Int) {  // Group start
 
 **Оптимизация: skippability** — компилятор генерирует проверки вида `if ($changed == 0 && $default == 0) composer.skipToGroupEnd()` (упрощённо: `if ($changed == 0) skip`), если параметры стабильны и не изменились, что позволяет пропустить выполнение тела composable.
 
-### Критичные паттерны
+### Критичные Паттерны
 
 **Стабильные ключи для сохранения идентичности**:
 ```kotlin
@@ -230,7 +235,7 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 
 ---
 
-## Дополнительные вопросы (Follow-ups, RU)
+## Дополнительные Вопросы (Follow-ups, RU)
 - Как якори помогают при перестановке элементов списка сохранять состояние?
 - Что вызывает нестабильность параметров и как это влияет на skippability?
 - Как рантайм Compose определяет, какие группы нуждаются в рекомпозиции?
@@ -241,13 +246,13 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 - [[c-compose-state]]
 - [[c-compose-recomposition]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Понимание базового управления состоянием в Compose
 - Базовые знания о рекомпозиции
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-compose-compiler-plugin--android--hard]] — Как компилятор генерирует код для Slot Table
 - [[q-compose-stability-skippability--android--hard]] — Детали вывода стабильности
 - [[q-compose-performance-optimization--android--hard]] — Расширенные стратегии оптимизации

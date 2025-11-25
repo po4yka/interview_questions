@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Testing Guide
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-testing-coroutine-cancellation--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-testing-coroutine-cancellation--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 
+date created: Sunday, October 12th 2025, 1:18:39 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -148,7 +150,7 @@ fun `демонстрация возможностей runTest`() = runTest {
 
 Существует два основных варианта `TestDispatcher`.
 
-#### 1. StandardTestDispatcher (диспетчер по умолчанию для runTest)
+#### 1. StandardTestDispatcher (диспетчер По Умолчанию Для runTest)
 
 Ставит корутины в очередь, не выполняет их немедленно и использует тестовый планировщик. Для кода после `delay` нужно явно управлять виртуальным временем.
 
@@ -262,7 +264,7 @@ fun `UnconfinedTestDispatcher и задержка`() = runTest {
 - Часто требует меньше явных вызовов `advance*` для простых тестов.
 - Удобен, когда нет сложных требований к таймингу.
 
-### Сравнение: Standard vs Unconfined
+### Сравнение: Standard Vs Unconfined
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -436,7 +438,7 @@ class UserViewModelTest {
 }
 ```
 
-#### Полный пример тестирования ViewModel
+#### Полный Пример Тестирования ViewModel
 
 ```kotlin
 sealed class UiState<out T> {
@@ -567,7 +569,7 @@ class ConfigurableFakeUserRepository : UserRepository {
 }
 ```
 
-### Тестирование задержек и таймаутов
+### Тестирование Задержек И Таймаутов
 
 ```kotlin
 class TimerViewModel : ViewModel() {
@@ -669,7 +671,7 @@ fun `loadWithTimeout fails when data takes too long`() = runTest {
 }
 ```
 
-### Тестирование параллельных операций
+### Тестирование Параллельных Операций
 
 ```kotlin
 class DashboardViewModel(
@@ -742,7 +744,7 @@ fun `loadDashboard падает при ошибке репозитория`() = 
 }
 ```
 
-### Тестирование отмены
+### Тестирование Отмены
 
 ```kotlin
 class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
@@ -1240,7 +1242,7 @@ fun `UnconfinedTestDispatcher suspends at delay`() = runTest {
 - Often fewer explicit time advancements for simple tests.
 - Good for tests not heavily dependent on precise timing.
 
-### Comparison: Standard vs Unconfined
+### Comparison: Standard Vs Unconfined
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -1986,7 +1988,7 @@ Summary:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как тестировать операторы `Flow` вроде `debounce`, `buffer` и `retry` с использованием виртуального времени `runTest` и `TestDispatcher`?
 2. Как библиотека Turbine упрощает тестирование холодных `Flow` и горячих `StateFlow`/`SharedFlow`?
@@ -2021,7 +2023,7 @@ Summary:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] — Тестирование `StateFlow` и `SharedFlow`
 - [[q-testing-flow-operators--kotlin--hard]] — Тестирование операторов `Flow`

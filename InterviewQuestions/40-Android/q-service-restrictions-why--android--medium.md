@@ -1,30 +1,31 @@
 ---
 id: android-205
 title: Service Restrictions / Ограничения Service
-aliases:
-- Service Restrictions
-- Ограничения Service
+aliases: [Service Restrictions, Ограничения Service]
 topic: android
 subtopics:
-- service
+  - service
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-what-is-data-binding--android--easy
-- q-android-service-types--android--easy
+  - c-android-components
+  - q-android-service-types--android--easy
+  - q-foreground-service-types--android--medium
+  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+  - q-what-is-data-binding--android--easy
+  - q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/service
-- difficulty/medium
+tags: [android/service, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +40,7 @@ tags:
 
 Ограничения на работу `Service` в Android введены для **экономии батареи**, **контроля ресурсов**, **поддержания производительности** и **повышения безопасности/приватности**. Со временем платформа существенно ужесточила правила фоновой активности.
 
-### История ограничений `Service`
+### История Ограничений `Service`
 
 ```
 Android 5.0 (Lollipop)   - Введен JobScheduler
@@ -53,7 +54,7 @@ Android 12 (S)           - Ограничения на точные (exact) бу
 Android 13 (T)           - Разрешение на уведомления
 ```
 
-### Почему появились ограничения?
+### Почему Появились Ограничения?
 
 1. **Батарея**
    
@@ -107,9 +108,9 @@ Android 13 (T)           - Разрешение на уведомления
 
 ---
 
-### Ограничения Android 8.0+ на фоновые `Service`
+### Ограничения Android 8.0+ На Фоновые `Service`
 
-#### Что изменилось в Android 8.0 (Oreo)
+#### Что Изменилось В Android 8.0 (Oreo)
 
 До Oreo можно было запускать `startService()` даже из фона.
 
@@ -165,7 +166,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 ---
 
-### Doze Mode и App Standby
+### Doze Mode И App Standby
 
 #### Doze Mode
 
@@ -198,7 +199,7 @@ Android 9 вводит «корзины» активности приложен�
 
 ---
 
-### Android 10 (Q) — Запуск `Activity` из фона
+### Android 10 (Q) — Запуск `Activity` Из Фона
 
 Android 10 существенно ограничивает старт `Activity` из фона (в том числе из сервисов). Разрешены только отдельные сценарии (пользовательское действие, системные UI, уведомление, полноэкранный интент и т.п.), в остальных случаях запуск будет заблокирован.
 
@@ -231,7 +232,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ---
 
-### Android 12 (S) — Точные будильники
+### Android 12 (S) — Точные Будильники
 
 На Android 12+ точные (exact) будильники дополнительно контролируются:
 
@@ -259,7 +260,7 @@ alarmManager.setWindow(
 
 ---
 
-### Исключения и послабления
+### Исключения И Послабления
 
 Во время Doze/Standby часть механик все же разрешена:
 
@@ -303,7 +304,7 @@ alarmManager.setWindow(
 
 ---
 
-### Современные альтернативы фоновых `Service`
+### Современные Альтернативы Фоновых `Service`
 
 1. **WorkManager (рекомендуется)** — для отложенных, гарантированных задач.
 
@@ -347,7 +348,7 @@ alarmManager.setWindow(
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбирать правильный инструмент**
 
@@ -623,7 +624,7 @@ val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
 WorkManager.getInstance(context).enqueue(uploadWork)
 ```
 
-2. Foreground services — ongoing, user-visible tasks (music, navigation, downloads, calls, screen recording).
+1. Foreground services — ongoing, user-visible tasks (music, navigation, downloads, calls, screen recording).
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -636,7 +637,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-3. FCM — server-triggered tasks; offload heavy work to WorkManager/FGS.
+1. FCM — server-triggered tasks; offload heavy work to WorkManager/FGS.
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -671,7 +672,7 @@ val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
 WorkManager.getInstance(context).enqueue(syncWork)
 ```
 
-2. Minimize background work:
+1. Minimize background work:
 
 ```kotlin
 // DON'T: infinite loop
@@ -693,7 +694,7 @@ class GoodWorker : CoroutineWorker() {
 }
 ```
 
-3. Use appropriate `Service`/scheduler:
+1. Use appropriate `Service`/scheduler:
 
 ```kotlin
 startForegroundService(Intent(this, MusicService::class.java))
@@ -726,7 +727,7 @@ Use:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-what-is-data-binding--android--easy]]
 - [[q-android-service-types--android--easy]]

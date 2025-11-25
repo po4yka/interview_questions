@@ -3,7 +3,7 @@ id: lang-065
 title: "Flow map operator / Оператор map для Flow"
 aliases: [Flow Map Operator, Оператор map для Flow]
 topic: kotlin
-subtopics: [flow, coroutines, operators]
+subtopics: [coroutines, flow, operators]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,7 +14,10 @@ related: [c-coroutines, c-flow, q-flow-flatmap-operator--programming-languages--
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, reactive]
+date created: Friday, October 31st 2025, 6:30:45 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой?
 
@@ -74,7 +77,7 @@ getUserFlow()
     }
 ```
 
-### Suspend Функция В map
+### Suspend Функция В Map
 
 ```kotlin
 suspend fun fetchUserDetails(id: Int): UserDetails {
@@ -91,7 +94,7 @@ flowOf(1, 2, 3)
     }
 ```
 
-### Цепочка Нескольких map
+### Цепочка Нескольких Map
 
 ```kotlin
 flowOf("1", "2", "3")
@@ -125,7 +128,7 @@ fetchData()
     }
 ```
 
-### map vs mapLatest vs mapNotNull
+### Map Vs mapLatest Vs mapNotNull
 
 ```kotlin
 // map: Обрабатывает все элементы по порядку
@@ -218,7 +221,7 @@ getUserFlow()
     }
 ```
 
-### Suspend Function in map
+### Suspend Function in Map
 
 ```kotlin
 suspend fun fetchUserDetails(id: Int): UserDetails {
@@ -269,7 +272,7 @@ fetchData()
     }
 ```
 
-### map vs mapLatest vs mapNotNull
+### Map Vs mapLatest Vs mapNotNull
 
 ```kotlin
 // map: Processes all elements in order
@@ -313,7 +316,7 @@ flowOf(1, 2, 3, 4)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали это на практике?
@@ -335,7 +338,7 @@ flowOf(1, 2, 3, 4)
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-flow]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]]
 - [[q-suspend-functions-under-the-hood--programming-languages--hard]]

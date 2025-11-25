@@ -14,6 +14,8 @@ related: [c-kotlin, q-associatewith-vs-associateby--kotlin--easy, q-coroutine-ca
 created: 2025-10-15
 updated: 2025-11-09
 tags: [classes, design-patterns, difficulty/easy, kotlin, object-keyword, singleton]
+date created: Friday, October 31st 2025, 6:31:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -40,7 +42,7 @@ tags: [classes, design-patterns, difficulty/easy, kotlin, object-keyword, single
 - Могут содержать свойства, методы и `init`-блоки
 - Могут реализовывать интерфейсы и наследовать классы
 
-### Примеры кода
+### Примеры Кода
 
 **Базовый синглтон:**
 ```kotlin
@@ -380,7 +382,7 @@ fun main() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java-синглтонов?
 - Когда вы бы использовали этот подход на практике?
@@ -402,7 +404,7 @@ fun main() {
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-lateinit--programming-languages--medium]]
 - [[q-coroutine-cancellation-cooperation--kotlin--medium]]

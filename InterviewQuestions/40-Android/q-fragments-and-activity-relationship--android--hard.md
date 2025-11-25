@@ -1,38 +1,35 @@
 ---
 id: android-386
 title: Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity
-aliases:
-- Fragment Lifecycle Dependency
-- Fragments And Activity Relationship
-- Взаимосвязь Фрагментов И Activity
-- Зависимость жизненного цикла фрагмента
+aliases: [Fragment Lifecycle Dependency, Fragments And Activity Relationship, Взаимосвязь Фрагментов И Activity, Зависимость жизненного цикла фрагмента]
 topic: android
 subtopics:
-- fragment
-- lifecycle
+  - fragment
+  - lifecycle
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-- q-what-are-fragments-for-if-there-is-activity--android--medium
+  - c-android-components
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-what-are-fragments-for-if-there-is-activity--android--medium
+  - q-why-are-fragments-needed-if-there-is-activity--android--hard
+  - q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources:
-- "https://developer.android.com/guide/fragments"
-- "https://developer.android.com/guide/fragments/fragmentmanager"
-- "https://developer.android.com/guide/fragments/lifecycle"
-tags:
-- android/fragment
-- android/lifecycle
-- difficulty/hard
+  - "https://developer.android.com/guide/fragments"
+  - "https://developer.android.com/guide/fragments/fragmentmanager"
+  - "https://developer.android.com/guide/fragments/lifecycle"
+tags: [android/fragment, android/lifecycle, difficulty/hard]
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +44,7 @@ tags:
 
 Фрагменты в Android существуют как модульные компоненты, обычно хостящиеся внутри `FragmentActivity`/`AppCompatActivity` и управляемые через **`FragmentManager`**. Они размещаются в **`ViewGroup`** контейнерах и имеют собственный жизненный цикл, связанный с жизненным циклом хост-`Activity` (или другого владельца, например NavHost), но не полностью автономный.
 
-### Краткий вариант
+### Краткий Вариант
 
 Фрагмент:
 - всегда привязан к host-`Activity` (или другому владельцу), не может жить дольше него;
@@ -55,7 +52,7 @@ tags:
 - использует контекст, ресурсы и lifecycle host-а;
 - общается с другими фрагментами через `Activity` или общую `ViewModel`.
 
-### Подробный вариант
+### Подробный Вариант
 
 ### Механизм Привязки
 
@@ -299,7 +296,7 @@ class DetailFragment : Fragment() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит с состоянием `Fragment`, когда `Activity` уничтожается из-за смены конфигурации?
 - Как `FragmentManager` обрабатывает back stack, когда `Activity` убита системой?

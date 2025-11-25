@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, ui]
 
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, diffi
 
 На Android нет нативной поддержки произвольных SVG-файлов во время выполнения (runtime) напрямую из строки. VectorDrawable поддерживает лишь ограниченное подмножество SVG и обычно создаётся и подключается из XML на этапе разработки/сборки (а не генерируется динамически из произвольной SVG-строки). Поэтому для работы с полной SVG-строкой на рантайме обычно используют сторонние библиотеки. Основные подходы:
 
-### 1. AndroidSVG (Рекомендуется для простых случаев)
+### 1. AndroidSVG (Рекомендуется Для Простых случаев)
 
 Легковесная библиотека для прямой работы с SVG-строками:
 
@@ -77,7 +79,7 @@ private fun displaySvgWithSize(
 }
 ```
 
-### 2. Coil с SVG декодером (современный подход)
+### 2. Coil С SVG Декодером (современный подход)
 
 Интеграция с популярной библиотекой загрузки изображений (пример для Coil 2.x с `SvgDecoder`):
 
@@ -188,7 +190,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 
 Замечание: пустые реализации setAlpha/setColorFilter означают, что системные эффекты прозрачности/тоновки к этому Drawable применяться не будут, если явно не добавить поддержку.
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Подход | Преимущества | Недостатки | Использовать когда |
 |--------|--------------|------------|-------------------|
@@ -197,7 +199,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 | Custom Drawable | Полный контроль рендеринга | Больше кода, нужно самому учитывать размеры/аспект-ратио | Специфичные требования, сложные UIs |
 | Compose | Декларативный UI, единый подход с Coil | Требуется Compose, те же нюансы с моделью/кешем | Приложения на Compose UI |
 
-### Важные моменты
+### Важные Моменты
 
 **Поддержка формата**:
 - AndroidSVG и SVG-декодеры не поддерживают все возможности SVG (скрипты, фильтры, сложные анимации и т.п.).
@@ -224,7 +226,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 
 Android does not natively support rendering arbitrary SVG files from a runtime string. VectorDrawable supports only a constrained subset of SVG and is typically defined in XML at development/build time rather than generated from arbitrary SVG strings at runtime. To render a full SVG string at runtime you usually rely on third-party libraries. Main approaches:
 
-### 1. AndroidSVG (Recommended for simple cases)
+### 1. AndroidSVG (Recommended for Simple cases)
 
 Lightweight library for direct SVG string handling:
 

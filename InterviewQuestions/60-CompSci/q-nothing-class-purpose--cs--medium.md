@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [control-flow, difficulty/medium, exceptions, kotlin, type-system, unreachable-code]
 sources: ["https://kotlinlang.org/docs/whatsnew15.html"]
+date created: Saturday, November 1st 2025, 1:26:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -549,7 +551,7 @@ fun failWithMessage(msg: String): Nothing {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между `Nothing` и `Unit`?
 - Как `Nothing` помогает реализовать smart cast в Kotlin?
@@ -561,13 +563,13 @@ fun failWithMessage(msg: String): Nothing {
 - How does `Nothing` enable smart casts in Kotlin?
 - When should you use `Nothing?` instead of `Nothing`?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые понятия системы типов Kotlin
 - Null-safety и smart cast'ы
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - Тип `Unit`
 - Smart cast'ы и их использование
 - Sealed-классы и исчерпывающие `when`

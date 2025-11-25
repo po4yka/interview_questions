@@ -1,5 +1,5 @@
 ---
-id: cs-002
+id: lang-201
 title: "Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin"
 aliases: ["Kotlin Default Access Modifier", "Модификатор доступа по умолчанию в Kotlin"]
 topic: kotlin
@@ -13,7 +13,9 @@ moc: moc-kotlin
 related: [c-concepts--kotlin--medium, q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [kotlin, kotlin/access-modifiers, difficulty/easy]
+tags: [difficulty/easy, kotlin, kotlin/access-modifiers]
+date created: Saturday, October 18th 2025, 9:34:45 am
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -116,7 +118,7 @@ val counter = 0  // public property
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Чем `internal` отличается от видимости package-private в Java?
 - В каких случаях вы бы явно использовали `private` для top-level объявлений в Kotlin?
 - Чем отличается видимость `protected` в Kotlin и Java?
@@ -136,7 +138,7 @@ val counter = 0  // public property
 ## References
 - [[c-concepts--kotlin--medium]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-dispatcher-performance--kotlin--hard]]
 - [[q-kotlin-generics--kotlin--hard]]

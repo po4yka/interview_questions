@@ -14,7 +14,10 @@ related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medi
 created: 2025-10-15
 updated: 2025-11-10
 tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languages, reactive]
+date created: Friday, October 31st 2025, 6:30:45 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Чем в Kotlin `Flow` воспользоваться, если нужно преобразовать один поток данных в другой поток данных?
 
@@ -69,7 +72,7 @@ flow {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java-подходов к работе с потоками данных?
 - Когда на практике стоит использовать `flatMap` для `Flow`?
@@ -91,7 +94,7 @@ flow {
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-what-is-flow--programming-languages--medium]]
 - [[q-singleton-pattern--design-patterns--easy]]

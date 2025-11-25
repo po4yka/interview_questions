@@ -1,7 +1,7 @@
 ---
 id: kotlin-125
 title: "Оператор flowOn и переключение контекста во Flow / flowOn operator and context switching in flows"
-aliases: [flowon-operator, flow-context-switching, kotlin-flowon, flowon-vs-withcontext]
+aliases: [flow-context-switching, flowon-operator, flowon-vs-withcontext, kotlin-flowon]
 topic: kotlin
 subtopics: [coroutines, flow, performance]
 question_kind: theory
@@ -13,8 +13,10 @@ moc: moc-kotlin
 related: [c-coroutines, c-flow, q-coroutine-context-elements--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
-tags: ["buffer", "context-switching", "dispatchers", "flow-operators", "flowon", "performance", "difficulty/hard", "kotlin", "coroutines", "flow"]
+tags: ["buffer", "context-switching", "coroutines", "difficulty/hard", "dispatchers", "flow-operators", "flow", "flowon", "kotlin", "performance"]
 
+date created: Saturday, October 18th 2025, 3:06:32 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -25,7 +27,7 @@ tags: ["buffer", "context-switching", "dispatchers", "flow-operators", "flowon",
 
 ## Ответ (RU)
 
-### Что делает `flowOn`
+### Что Делает `flowOn`
 
 `flowOn` запускает upstream-операторы потока в указанном контексте и создаёт асинхронную границу. Он влияет на то, где выполняются эмиссии и обработка выше него в цепочке, а не на контекст коллектора ниже него.
 
@@ -55,7 +57,7 @@ fun demonstrateFlowOn() = runBlocking {
 
 Ключевой принцип: `flowOn` влияет на всё, что выше него в цепочке (upstream), и не меняет то, что ниже (downstream).
 
-### Почему `withContext` ограничен в `flow`
+### Почему `withContext` Ограничен В `flow`
 
 Нельзя произвольно менять контекст вокруг `emit` внутри `flow {}`. Пример ниже некорректен:
 
@@ -82,7 +84,7 @@ fun correctFlow() = flow {
 }.flowOn(Dispatchers.IO) // Переносим выполнение upstream на IO
 ```
 
-### Сохранение контекста в потоках
+### Сохранение Контекста В Потоках
 
 По умолчанию потоки сохраняют контекст:
 
@@ -116,7 +118,7 @@ suspend fun demonstrateContextPreservation() {
 
 Без `flowOn` весь поток выполняется в контексте коллектора.
 
-### `flowOn` изменяет upstream-контекст
+### `flowOn` Изменяет Upstream-контекст
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -156,7 +158,7 @@ fun demonstrateUpstreamChange() = runBlocking {
    IO          IO                            Main              Main
 ```
 
-### Как `flowOn` добавляет буферизацию
+### Как `flowOn` Добавляет Буферизацию
 
 `flowOn` создаёт границу на основе канала между контекстами (это часть контрактного поведения: используется буферизированная передача значений между upstream и downstream):
 
@@ -194,7 +196,7 @@ fun customBufferFlow() = flow {
     .flowOn(Dispatchers.IO)
 ```
 
-### Буфер канала, создаваемый `flowOn` (концептуально)
+### Буфер Канала, Создаваемый `flowOn` (концептуально)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -225,7 +227,7 @@ fun manualFlowOnEquivalent() = flow {
   - Ёмкость: 64 (`Channel.BUFFERED`)
   - Переполнение: `SUSPEND` (backpressure)
 
-### Несколько операторов `flowOn` в цепочке
+### Несколько Операторов `flowOn` В Цепочке
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -271,7 +273,7 @@ fun demonstrateMultipleFlowOn() = runBlocking {
 - создаёт собственную границу/буфер,
 - позволяет различным частям конвейера выполняться на разных диспетчерах.
 
-### Влияние на производительность
+### Влияние На Производительность
 
 `flowOn` в первую очередь переносит тяжёлую работу с контекста коллектора и создаёт асинхронные границы; ускорение не гарантируется само по себе.
 
@@ -327,7 +329,7 @@ val flow = flow { emit(1) }
 
 Каждая граница добавляет состояние буфера; это обмен памяти и планирования на развязку этапов.
 
-### Размещение `flowOn` в цепочке операторов
+### Размещение `flowOn` В Цепочке Операторов
 
 Место размещения `flowOn` принципиально важно.
 
@@ -378,7 +380,7 @@ flow { /* сетевой или дисковый I/O */ }
     .collect { /* обновление UI */ }
 ```
 
-2. Избегайте лишних `flowOn`:
+1. Избегайте лишних `flowOn`:
 
 ```kotlin
 // Слишком много переключений
@@ -395,7 +397,7 @@ flow { emit(1) }
     .collect { }
 ```
 
-### Upstream против Downstream контекста
+### Upstream Против Downstream Контекста
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -430,7 +432,7 @@ fun demonstrateUpstreamDownstream() = runBlocking {
 
 Правило: всё выше `flowOn` — upstream (меняется), всё ниже — downstream (не меняется).
 
-### Реальный пример: сеть и база данных (скорректированный)
+### Реальный Пример: Сеть И База Данных (скорректированный)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -485,7 +487,7 @@ suspend fun demonstrateRealWorldRu() {
 
 Каждый `flowOn` сдвигает соответствующий upstream-фрагмент на указанный диспетчер.
 
-### `flowOn` с пользовательской ёмкостью буфера
+### `flowOn` С Пользовательской Ёмкостью Буфера
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -517,7 +519,7 @@ fun unboundedBuffer() = flow {
 // Предупреждение: риск неограниченного роста памяти
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 1. `flowOn` после терминального оператора:
 
@@ -531,7 +533,7 @@ flow { emit(1) }
     .collect { }
 ```
 
-2. Лишние переключения контекста:
+1. Лишние переключения контекста:
 
 ```kotlin
 flow { emit(1) }
@@ -545,7 +547,7 @@ flow {
     .map { it + 1 }
 ```
 
-3. `withContext` вокруг `emit` в `flow {}`:
+1. `withContext` вокруг `emit` в `flow {}`:
 
 ```kotlin
 flow {
@@ -559,7 +561,7 @@ flow {
 }.flowOn(Dispatchers.IO)
 ```
 
-### Отладка переключений контекста
+### Отладка Переключений Контекста
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -590,7 +592,7 @@ suspend fun debugFlowRu() {
 
 По именам потоков видно, какие стадии выполняются на каких диспетчерах и как влияют `flowOn`-границы.
 
-### Тестирование потоков с `flowOn`
+### Тестирование Потоков С `flowOn`
 
 ```kotlin
 import kotlinx.coroutines.test.*
@@ -1004,7 +1006,7 @@ flow { /* network or disk I/O */ }
     .collect { /* UI update */ }
 ```
 
-2. Avoid redundant `flowOn`:
+1. Avoid redundant `flowOn`:
 
 ```kotlin
 // Too many switches
@@ -1021,7 +1023,7 @@ flow { emit(1) }
     .collect { }
 ```
 
-### Upstream vs Downstream Context
+### Upstream Vs Downstream Context
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1112,7 +1114,7 @@ suspend fun demonstrateRealWorld() {
 
 Each `flowOn` shifts its upstream segment to the specified dispatcher.
 
-### `flowOn` with Custom Buffer Capacity
+### `flowOn` With Custom Buffer Capacity
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1158,7 +1160,7 @@ flow { emit(1) }
     .collect { }
 ```
 
-2. Excessive context switching:
+1. Excessive context switching:
 
 ```kotlin
 flow { emit(1) }
@@ -1172,7 +1174,7 @@ flow {
     .map { it + 1 }
 ```
 
-3. `withContext` around `emit` inside `flow {}`:
+1. `withContext` around `emit` inside `flow {}`:
 
 ```kotlin
 flow {
@@ -1278,7 +1280,7 @@ Key idea: `flowOn` provides controlled async boundaries and dispatcher shifts be
 
 ---
 
-## Дополнительные вопросы
+## Дополнительные Вопросы
 
 1. Как внутренний буфер `flowOn` обрабатывает backpressure, когда downstream-коллектор медленнее upstream-эмиссий?
 2. Как `flowOn` влияет на распространение исключений? Меняется ли путь, по которому исключения идут вверх по цепочке?

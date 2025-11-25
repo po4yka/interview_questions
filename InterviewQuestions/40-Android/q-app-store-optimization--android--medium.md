@@ -1,36 +1,34 @@
 ---
 id: android-399
 title: App Store Optimization / Оптимизация App Store
-aliases:
-- App Store Optimization
-- ASO
-- Оптимизация App Store
+aliases: [App Store Optimization, ASO, Оптимизация App Store]
 topic: android
 subtopics:
-- ab-testing
-- analytics
-- play-console
+  - ab-testing
+  - analytics
+  - play-console
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance
-- c-performance-optimization
-- q-android-app-bundles--android--easy
+  - c-performance
+  - c-performance-optimization
+  - q-android-app-bundles--android--easy
+  - q-app-size-optimization--android--medium
+  - q-app-startup-optimization--android--medium
+  - q-dagger-build-time-optimization--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/ab-testing
-- android/analytics
-- android/play-console
-- difficulty/medium
+tags: [android/ab-testing, android/analytics, android/play-console, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:13 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -231,7 +229,7 @@ data class ASOMetrics(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как балансировать оптимизацию ключевых слов и естественный язык в описаниях в магазине?
 - Какой минимальный размер выборки нужен для статистически значимых результатов A/B-тестов в Play Console Experiments?
@@ -271,7 +269,7 @@ data class ASOMetrics(
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -283,7 +281,7 @@ data class ASOMetrics(
 - [[q-android-app-bundles--android--easy]] - Понимание формата App `Bundle` и его преимуществ
 - Панель Play Console и метрики
 
-### Связанные (Тот же уровень)
+### Связанные (Тот Же уровень)
 
 - Реализация API In-App Review
 - [[q-alternative-distribution--android--medium]] - Распространение вне Play Store

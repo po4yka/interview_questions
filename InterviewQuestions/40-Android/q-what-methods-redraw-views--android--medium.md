@@ -1,36 +1,31 @@
 ---
 id: android-214
 title: View Redraw Methods / Методы перерисовки View
-aliases:
-- View Redraw Methods
-- Методы перерисовки View
+aliases: [View Redraw Methods, Методы перерисовки View]
 topic: android
 subtopics:
-- lifecycle
-- ui-views
+  - lifecycle
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-view-system
-- q-view-methods-and-their-purpose--android--medium
-- q-what-layout-allows-overlapping-objects--android--easy
+  - c-android-view-system
+  - q-view-methods-and-their-purpose--android--medium
+  - q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
+  - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/lifecycle
-- android/ui-views
-- difficulty/medium
-- drawing
-- invalidate
-- requestLayout
-- view-rendering
+tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, invalidate, requestLayout, view-rendering]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -71,7 +66,7 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-#### Когда использовать invalidate():
+#### Когда Использовать invalidate():
 - Изменения цвета
 - Обновления текста или содержимого Drawable
 - Изменения состояния рисования
@@ -150,7 +145,7 @@ class ExpandableView @JvmOverloads constructor(
 }
 ```
 
-#### Когда использовать requestLayout():
+#### Когда Использовать requestLayout():
 - Изменения размера
 - Изменения margin/padding
 - Изменения LayoutParams
@@ -219,7 +214,7 @@ class LoadingView @JvmOverloads constructor(
 }
 ```
 
-#### Сравнение: invalidate() vs postInvalidate()
+#### Сравнение: invalidate() Vs postInvalidate()
 
 ```kotlin
 class ComparisonExample @JvmOverloads constructor(
@@ -253,7 +248,7 @@ class ComparisonExample @JvmOverloads constructor(
 }
 ```
 
-### 4. Дополнительные методы, связанные с перерисовкой
+### 4. Дополнительные Методы, Связанные С Перерисовкой
 
 #### forceLayout()
 Помечает `View` как требующую layout на следующем проходе. Сам по себе не запускает немедленный layout; обычно используется вместе с `requestLayout()` или при родительском layout-проходе.
@@ -298,9 +293,9 @@ class DrawableView @JvmOverloads constructor(
 }
 ```
 
-### 5. Практические примеры
+### 5. Практические Примеры
 
-#### Сложное обновление `View`
+#### Сложное Обновление `View`
 
 ```kotlin
 class ComplexView @JvmOverloads constructor(
@@ -343,7 +338,7 @@ class ComplexView @JvmOverloads constructor(
 }
 ```
 
-#### Оптимизированные обновления
+#### Оптимизированные Обновления
 
 ```kotlin
 class OptimizedView @JvmOverloads constructor(
@@ -411,7 +406,7 @@ optimizedView.batchUpdates {
 } // Один проход layout + invalidate
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте `invalidate()` для только визуальных изменений, не влияющих на layout.
 2. Используйте `requestLayout()` при изменении размеров, положения или параметров, влияющих на измерение/размещение.
@@ -428,7 +423,7 @@ fun View.safeInvalidate() {
 }
 ```
 
-### Таблица резюме
+### Таблица Резюме
 
 | Метод            | Поток        | Вызывает                         | Случай использования                          |
 |------------------|-------------|----------------------------------|-----------------------------------------------|
@@ -617,7 +612,7 @@ class LoadingView @JvmOverloads constructor(
 }
 ```
 
-#### Comparison: invalidate() vs postInvalidate()
+#### Comparison: invalidate() Vs postInvalidate()
 
 ```kotlin
 class ComparisonExample @JvmOverloads constructor(

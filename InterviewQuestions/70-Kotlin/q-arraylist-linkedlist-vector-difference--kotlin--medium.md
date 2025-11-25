@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, q-kotlin-enum-classes--kotlin--easy, q-coroutine-resource-cleanup--kotlin--medium]
+related: [c-collections, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-enum-classes--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, data-structures, difficulty/medium, kotlin]
+date created: Friday, October 31st 2025, 6:29:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -112,7 +114,7 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 // Или использовать CopyOnWriteArrayList для конкурентного доступа (особенно при частых чтениях и редких изменениях)
 ```
 
-### Сравнение производительности
+### Сравнение Производительности
 
 | Операция                   | ArrayList | LinkedList      | Vector |
 |----------------------------|----------:|----------------:|-------:|
@@ -130,7 +132,7 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 
 ***Методы синхронизированы, но для композиции операций и безопасной итерации требуется внешняя синхронизация.
 
-### Когда что использовать
+### Когда Что Использовать
 
 `ArrayList`:
 - Выбор по умолчанию в большинстве случаев (через интерфейсы `List`/`MutableList`)
@@ -147,7 +149,7 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 - Только для совместимости с существующим Java-кодом
 - Вместо него — `Collections.synchronizedList()` или `CopyOnWriteArrayList` (+ другие конкурентные коллекции при необходимости)
 
-### Примеры кода
+### Примеры Кода
 
 ```kotlin
 // ArrayList — лучше для случайного доступа
@@ -171,7 +173,7 @@ legacyVector.add(2)
 // Предпочтительно: Collections.synchronizedList(ArrayList()) или другие современные коллекции
 ```
 
-### Современные альтернативы
+### Современные Альтернативы
 
 Вместо `Vector` используйте:
 - `Collections.synchronizedList(ArrayList())` — простой потокобезопасный список (с учётом необходимости внешней синхронизации при итерации)
@@ -349,7 +351,7 @@ val cowList = CopyOnWriteArrayList<String>()
 val concurrentQueue = ConcurrentLinkedQueue<String>()
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем практическая разница для кода на Kotlin по сравнению с чистой Java?
 - В каких реальных сценариях вы бы выбрали каждую из этих реализаций?
@@ -372,7 +374,7 @@ val concurrentQueue = ConcurrentLinkedQueue<String>()
 - [[c-kotlin]]
 - [[c-collections]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-enum-classes--kotlin--easy]]
 - [[q-coroutine-resource-cleanup--kotlin--medium]]

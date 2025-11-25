@@ -1,35 +1,32 @@
 ---
 id: android-486
 title: Design TikTok-style Short-Video Feed / Проектирование коротких видео (TikTok-стиль)
-aliases:
-- Design TikTok-style Short-Video Feed
-- Проектирование коротких видео (TikTok-стиль)
+aliases: [Design TikTok-style Short-Video Feed, Проектирование коротких видео (TikTok-стиль)]
 topic: android
 subtopics:
-- media
-- performance-rendering
-- service
+  - media
+  - performance-rendering
+  - service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-workmanager
-- q-design-instagram-stories--android--hard
+  - c-workmanager
+  - q-design-instagram-stories--android--hard
+  - q-design-uber-app--android--hard
+  - q-implement-voice-video-call--android--hard
 sources: []
 created: 2025-10-29
 updated: 2025-11-11
-tags:
-- difficulty/hard
-- android/media
-- android/performance-rendering
-- android/service
-- topic/android
+tags: [android/media, android/performance-rendering, android/service, difficulty/hard, topic/android]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -152,7 +149,7 @@ Short segments improve startup but add overhead; mitigate via HTTP/2 and tuned p
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать ошибки кодирования видео и стратегии повторных попыток?
 - Какая стратегия prefetch минимизирует трафик при сохранении плавного воспроизведения?
@@ -176,13 +173,13 @@ Short segments improve startup but add overhead; mitigate via HTTP/2 and tuned p
 - [[c-workmanager]]
 - https://developer.android.com/guide/topics/media/exoplayer
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 
 - [[q-design-instagram-stories--android--hard]]
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 
 - [[q-design-instagram-stories--android--hard]]
 - [[q-data-sync-unstable-network--android--hard]]

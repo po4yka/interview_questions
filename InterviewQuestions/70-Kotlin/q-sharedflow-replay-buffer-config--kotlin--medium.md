@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-channels-vs-flow--kotlin--medium]
+related: [c-flow, c-kotlin, q-channels-vs-flow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [backpressure, buffer, configuration, coroutines, difficulty/medium, flow, hot-flow, kotlin, replay, sharedflow]
 contributors: []
 
+date created: Friday, October 31st 2025, 6:30:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +38,7 @@ contributors: []
 - **Настраиваемый**: `replay`, буфер и поведение при переполнении
 - **Разделение состояния**: Может использоваться и для событий, и для состояния
 
-#### Параметры конструктора `MutableSharedFlow`
+#### Параметры Конструктора `MutableSharedFlow`
 
 ```kotlin
 public fun <T> MutableSharedFlow(
@@ -285,7 +287,7 @@ fun demonstrateDropLatestRu() = runBlocking {
 | DROP_OLDEST | Удаляет старейшее значение при полном буфере | Важно последнее состояние | Нет |
 | DROP_LATEST | Отбрасывает новое значение при полном буфере | Важны ранние события | Нет |
 
-#### Совместная работа `replay` и буфера
+#### Совместная Работа `replay` И Буфера
 
 Общий размер буфера — это `replay + extraBufferCapacity`, а выбранная стратегия `onBufferOverflow` определяет, что делать при переполнении. При этом:
 - `replay` задаёт, сколько последних значений гарантированно доступны новым коллекторам.
@@ -320,7 +322,7 @@ fun demonstrateReplayAndBufferRu() = runBlocking {
 }
 ```
 
-#### Визуализация расположения replay/buffer
+#### Визуализация Расположения replay/buffer
 
 ```
 Конфигурация: replay=2, extraBufferCapacity=3, onBufferOverflow=DROP_OLDEST
@@ -338,7 +340,7 @@ fun demonstrateReplayAndBufferRu() = runBlocking {
 - SUSPEND: приостановить эмиттера до появления свободного места
 ```
 
-#### Поведение для поздних подписчиков
+#### Поведение Для Поздних Подписчиков
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -371,7 +373,7 @@ fun demonstrateLateSubscriberRu() = runBlocking {
 // затем — новые эмиссии.
 ```
 
-#### Примеры из реального мира
+#### Примеры Из Реального Мира
 
 **Пример 1: Шина событий (без replay) с несколькими подписчиками**
 
@@ -573,7 +575,7 @@ suspend fun demonstrateMultiSubscriberRu() = coroutineScope {
 }
 ```
 
-#### Последствия для производительности
+#### Последствия Для Производительности
 
 Основные выводы:
 - Чем больше `replay` и `extraBufferCapacity`, тем выше потребление памяти.
@@ -736,7 +738,7 @@ suspend fun benchmarkOverflowRu() = coroutineScope {
 }
 ```
 
-#### Когда использовать `replay` vs `StateFlow`
+#### Когда Использовать `replay` Vs `StateFlow`
 
 **`StateFlow` стоит использовать, когда:**
 - Представляется **состояние**, а не события
@@ -1287,7 +1289,7 @@ suspend fun benchmarkOverflow() = coroutineScope {
 }
 ```
 
-### When to Use Replay vs `StateFlow`
+### When to Use Replay Vs `StateFlow`
 
 Use `StateFlow` when:
 - Representing state, not events
@@ -1406,7 +1408,7 @@ Choose based on use case:
 - History: `replay = N`, consider memory
 - Critical data: `SUSPEND` with reasonable capacity
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как `replay`-кеш `SharedFlow` взаимодействует с операторами `Flow` вроде `distinctUntilChanged()` или `filter()`? Применяются ли эти трансформации к переигрываемым значениям?
 2. Что происходит с `replay`-кешем при коллекции `SharedFlow` с `take(n)`, где `n` < размера `replay`? Влияет ли это на других коллекторов?
@@ -1446,7 +1448,7 @@ Choose based on use case:
 - [[c-kotlin]]
 - [[c-flow]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-testing-stateflow-sharedflow--kotlin--medium]]
 - [[q-stateflow-sharedflow-android--kotlin--medium]]

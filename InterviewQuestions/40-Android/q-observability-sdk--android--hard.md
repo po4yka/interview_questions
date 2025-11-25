@@ -2,35 +2,33 @@
 id: android-487
 title: Design Client Observability & Health-Gated Rollouts / Проектирование клиентской
   наблюдаемости и health-gated релизов
-aliases:
-- Design Client Observability & Health-Gated Rollouts
-- Проектирование клиентской наблюдаемости и health-gated релизов
+aliases: [Design Client Observability & Health-Gated Rollouts, Проектирование клиентской наблюдаемости и health-gated релизов]
 topic: android
 subtopics:
-- analytics
-- logging-tracing
-- performance-startup
+  - analytics
+  - logging-tracing
+  - performance-startup
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-room
-- c-workmanager
-- q-feature-flags-sdk--android--hard
+  - c-room
+  - c-workmanager
+  - q-design-instagram-stories--android--hard
+  - q-design-uber-app--android--hard
+  - q-feature-flags-sdk--android--hard
+  - q-wearos-health-connect-integration--android--hard
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags:
-- difficulty/hard
-- android/analytics
-- android/logging-tracing
-- android/performance-startup
-- topic/android
+tags: [android/analytics, android/logging-tracing, android/performance-startup, difficulty/hard, topic/android]
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)

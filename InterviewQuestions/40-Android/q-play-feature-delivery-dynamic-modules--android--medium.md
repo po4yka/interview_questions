@@ -1,37 +1,33 @@
 ---
 id: android-007
 title: Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули
-aliases:
-- Play Feature Delivery and Dynamic Modules
-- Play Feature Delivery и динамические модули
+aliases: [Play Feature Delivery and Dynamic Modules, Play Feature Delivery и динамические модули]
 topic: android
 subtopics:
-- app-bundle
-- architecture-modularization
+  - app-bundle
+  - architecture-modularization
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-app-bundle
-- q-android-app-bundles--android--easy
+  - c-app-bundle
+  - q-android-app-bundles--android--easy
+  - q-play-asset-delivery-strategy--android--hard
+  - q-play-billing-v6-architecture--android--hard
+  - q-play-feature-delivery--android--medium
 created: 2025-10-05
 updated: 2025-11-11
-tags:
-- android/app-bundle
-- android/architecture-modularization
-- app-bundle
-- difficulty/medium
-- dynamic-modules
-- modularization
-- play-feature-delivery
+tags: [android/app-bundle, android/architecture-modularization, app-bundle, difficulty/medium, dynamic-modules, modularization, play-feature-delivery]
 sources:
-- "https://developer.android.com/guide/app-bundle/dynamic-delivery"
+  - "https://developer.android.com/guide/app-bundle/dynamic-delivery"
 
+date created: Saturday, November 1st 2025, 1:03:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -250,7 +246,7 @@ val isInstalled = "dynamic_feature" in installedModules
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -260,7 +256,7 @@ val isInstalled = "dynamic_feature" in installedModules
 - [[q-android-app-components--android--easy]] - Компоненты приложения
 - [[q-gradle-basics--android--easy]] - Основы Gradle
 
-### Связанные (Такой же уровень)
+### Связанные (Такой Же уровень)
 - [[q-android-app-bundles--android--easy]] - Основы App `Bundle`
 - [[q-android-modularization--android--medium]] - Модульная архитектура
 

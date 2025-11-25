@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -142,7 +144,7 @@ if (!isMainThread()) {
 }
 ```
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Что произойдет, если вызвать `Looper.quit()` в главном потоке?
 - Чем `View.post()` отличается от `Handler.post()`?
@@ -156,14 +158,14 @@ if (!isMainThread()) {
 - [Processes and Threads](https://developer.android.com/guide/components/processes-and-threads)
 - https://developer.android.com/guide/components/handlers
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### Предварительные (проще)
 
 - [[q-which-layout-allows-views-to-overlap--android--easy]] — Базовое понимание UI
 - Базовые знания жизненного цикла Android
 
-#### Похожие (того же уровня)
+#### Похожие (того Же уровня)
 
 - [[q-how-does-jetpack-compose-work--android--medium]] — Модель потоков в Compose
 - [[q-what-is-known-about-view-lifecycles--android--medium]] — Callbacks жизненного цикла `View`

@@ -14,8 +14,10 @@ subtopics: [builders, coroutines]
 tags: ["async", "builders", "coroutines", "difficulty/medium", "kotlin", "launch", "runblocking"]
 description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-dispatcher-performance--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-dispatcher-performance--kotlin--hard]
 
+date created: Friday, October 31st 2025, 6:30:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ related: [c-kotlin, c-coroutines, q-dispatcher-performance--kotlin--hard]
 
 Ниже приведено детальное сравнение всех основных builders корутин Kotlin с примерами, фокусом на структурной конкуррентности, обработке исключений, блокирующем поведении и производительности. См. также [[c-coroutines]].
 
-### Краткая справочная таблица
+### Краткая Справочная Таблица
 
 | Строитель | Возвращает | Сам является suspend-функцией | Блокирующий | Обработка исключений | Случай использования |
 |-----------|------------|-------------------------------|-------------|----------------------|----------------------|
@@ -41,7 +43,7 @@ related: [c-kotlin, c-coroutines, q-dispatcher-performance--kotlin--hard]
 | `coroutineScope` | `T` | Да | Нет | Исключение в дочерней корутине отменяет всех и пробрасывается наружу | Структурная конкуррентность, атомарные группы задач |
 | `supervisorScope` | `T` | Да | Нет | Сбой дочернего не отменяет остальных; сбой тела scope завершает его с ошибкой | Независимые дочерние операции, частичный успех |
 
-### `launch` — «запустил и забыл»
+### `launch` — «запустил И забыл»
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -101,7 +103,7 @@ suspend fun doPeriodicWork() { println("Working...") }
 - Исключение в дочерней корутине по умолчанию отменяет родителя (structured concurrency).
 - Используйте для фоновых и побочных эффектов, когда результат не нужен.
 
-### `async` — конкурентные вычисления с результатом
+### `async` — Конкурентные Вычисления С Результатом
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -199,7 +201,7 @@ suspend fun fastOperation(): String {
 - При множественных `Deferred` порядок вызова `await()` влияет на то, где и когда вы увидите ошибку/блокировку.
 - В шаблонах гонки помните про отмену несостоявшихся задач.
 
-### `runBlocking` — блокирующий мост
+### `runBlocking` — Блокирующий Мост
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -279,7 +281,7 @@ fun assertEquals(expected: Int, actual: Int) {}
 - Блокирует поток: используйте только на границах (main, тесты, интеграция со старым кодом).
 - Не используйте внутри уже работающих корутин и продакшн-обработчиков.
 
-### `withContext` — переключение контекста/dispatcher
+### `withContext` — Переключение контекста/dispatcher
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -368,7 +370,7 @@ suspend fun fetchData2(): String {
 - Чистая семантика: «выполнить блок в другом контексте и вернуть результат».
 - Вписывается в концепцию структурной конкуррентности.
 
-### `coroutineScope` — структурная конкуррентность
+### `coroutineScope` — Структурная Конкуррентность
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -476,7 +478,7 @@ suspend fun processItem(item: String): String {
 - Гарантирует структурную конкуррентность: родитель ждёт всех детей.
 - Сбой внутри scope отменяет остальные дочерние корутины и пробрасывается наружу.
 
-### `supervisorScope` — независимые дочерние корутины
+### `supervisorScope` — Независимые Дочерние Корутины
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -615,7 +617,7 @@ fun logError(message: String, error: Exception) {
 - Используйте, когда сбой одной задачи не должен срывать остальные.
 - Тело `supervisorScope` по-прежнему подчиняется обычным правилам: необработанное исключение в теле завершает scope; необработанные исключения детей не приводят к отмене других детей.
 
-### Комплексные примеры сравнения
+### Комплексные Примеры Сравнения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -727,7 +729,7 @@ fun comprehensiveComparison() = runBlocking {
 }
 ```
 
-### Сравнение производительности (качественно)
+### Сравнение Производительности (качественно)
 
 ```kotlin
 import kotlinx.coroutines.*

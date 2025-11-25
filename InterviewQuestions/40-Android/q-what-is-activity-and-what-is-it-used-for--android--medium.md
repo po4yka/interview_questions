@@ -1,30 +1,31 @@
 ---
 id: android-187
 title: Activity / Компонент Activity
-aliases:
-- Activity
-- Компонент Activity
+aliases: [Activity, Компонент Activity]
 topic: android
 subtopics:
-- activity
+  - activity
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity-lifecycle
-- c-android-components
-- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
-- q-what-each-android-component-represents--android--easy
+  - c-activity-lifecycle
+  - c-android-components
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-single-activity-pros-cons--android--medium
+  - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+  - q-what-each-android-component-represents--android--easy
+  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- difficulty/medium
+tags: [android/activity, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +43,7 @@ tags:
 - участвует в жизненном цикле, управляемом системой,
 - инициирует навигацию между экранами через `Intent` и взаимодействует с другими компонентами.
 
-### `Activity` как страница книги
+### `Activity` Как Страница Книги
 
 Если представить приложение как книгу, то `Activity` — это одна "страница" этой книги. Каждая страница (`Activity`) имеет собственный контент и назначение, а пользователь может переходить между такими страницами. При этом в современных архитектурах (например, single-activity) несколько экранов могут жить внутри одной `Activity` (через `Fragment` или composable-экраны).
 
@@ -73,9 +74,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Основные назначения `Activity`
+### Основные Назначения `Activity`
 
-#### 1. Предоставление пользовательского интерфейса
+#### 1. Предоставление Пользовательского Интерфейса
 
 `Activity` отвечает за отображение UI и обеспечение интерактивности:
 
@@ -99,7 +100,7 @@ class PhotoGalleryActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Обработка пользовательских действий
+#### 2. Обработка Пользовательских Действий
 
 `Activity` обрабатывает ввод пользователя и реагирует на него:
 
@@ -163,7 +164,7 @@ class EmailComposeActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Управление жизненным циклом
+#### 3. Управление Жизненным Циклом
 
 `Activity` управляет ресурсами в рамках своего жизненного цикла. Пример демонстрирует привязку использования ресурсов к колбэкам жизненного цикла (класс `VideoPlayer` условный):
 
@@ -215,7 +216,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 }
 ```
 
-#### 4. Переходы между экранами
+#### 4. Переходы Между Экранами
 
 `Activity` инициирует навигацию между экранами с помощью `Intent`:
 
@@ -270,7 +271,7 @@ class ProductDetailActivity : AppCompatActivity() {
 }
 ```
 
-#### 5. Взаимодействие с другими компонентами
+#### 5. Взаимодействие С Другими Компонентами
 
 `Activity` взаимодействует с другими компонентами Android: `Service`, `BroadcastReceiver`, `ContentProvider`, WorkManager:
 
@@ -333,9 +334,9 @@ class MainDashboardActivity : AppCompatActivity() {
 }
 ```
 
-### Практические примеры
+### Практические Примеры
 
-#### Набор номера телефона
+#### Набор Номера Телефона
 
 ```kotlin
 class DialerActivity : AppCompatActivity() {
@@ -359,7 +360,7 @@ class DialerActivity : AppCompatActivity() {
 }
 ```
 
-#### Просмотр фотографий
+#### Просмотр Фотографий
 
 ```kotlin
 class PhotoViewerActivity : AppCompatActivity() {
@@ -414,7 +415,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 - Управляет собственным UI и связанными ресурсами.
 - Является `Context`: используется для работы с UI и привязанных к нему ресурсов; для долгоживущих объектов и контекста приложения используют `applicationContext`.
 
-### Когда использовать `Activity`
+### Когда Использовать `Activity`
 
 Используйте новую `Activity`, когда:
 - нужен отдельный, логически самостоятельный экран или поток взаимодействия;
@@ -437,7 +438,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 
 Activities are commonly used as entry points into an app or into distinct user flows (e.g., dialing a phone number, viewing photos, composing an email), but modern architectures may use a single `Activity` hosting multiple screens (Fragments or composable destinations).
 
-### `Activity` as a Page in a Book
+### `Activity` As a Page in a Book
 
 If you imagine an application as a book, then an `Activity` is one "page" of that book. Each page (`Activity`) has its own content and purpose, and users can navigate between pages. In modern single-activity setups, multiple UI "pages" can exist within one `Activity` (e.g., via `Fragment` or composable screens).
 

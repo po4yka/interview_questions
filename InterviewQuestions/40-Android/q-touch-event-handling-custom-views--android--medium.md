@@ -1,37 +1,34 @@
 ---
 id: android-378
 title: Touch Event Handling Custom Views / Обработка касаний в пользовательских View
-aliases:
-- Touch Event Handling Custom Views
-- Обработка касаний в пользовательских View
+aliases: [Touch Event Handling Custom Views, Обработка касаний в пользовательских View]
 topic: android
 subtopics:
-- ui-state
-- ui-views
+  - ui-state
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-viewmodel
-- q-modularization-patterns--android--hard
-- q-what-does-itemdecoration-do--android--medium
+  - c-compose-state
+  - c-viewmodel
+  - q-custom-view-accessibility--android--medium
+  - q-custom-view-attributes--android--medium
+  - q-custom-view-lifecycle--android--medium
+  - q-modularization-patterns--android--hard
+  - q-what-does-itemdecoration-do--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags:
-- android/ui-state
-- android/ui-views
-- difficulty/medium
-- gestures
-- touch-events
-- views
+tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events, views]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -172,7 +169,7 @@ class GestureView @JvmOverloads constructor(
 }
 ```
 
-### Перехват Событий в `ViewGroup`
+### Перехват Событий В `ViewGroup`
 
 `onInterceptTouchEvent()` позволяет родителю перехватывать события до того, как они дойдут до детей:
 
@@ -245,7 +242,7 @@ class SwipeToDeleteLayout @JvmOverloads constructor(
 }
 ```
 
-### Мультитач и `ScaleGestureDetector`
+### Мультитач И `ScaleGestureDetector`
 
 ```kotlin
 class ZoomableView @JvmOverloads constructor(
@@ -337,7 +334,7 @@ class FlingView @JvmOverloads constructor(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Возвращайте `true` из `ACTION_DOWN`, когда `View` намерена обрабатывать жест — иначе система не закрепит за ней последующие события этого жеста.
 2. Переопределяйте `performClick()` — для поддержки accessibility-сервисов и единообразной обработки кликов.
@@ -658,7 +655,7 @@ class FlingView @JvmOverloads constructor(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать события касания во вложенных скроллируемых `View` (например, `RecyclerView` внутри `ScrollView`)?
 - Как можно реализовать пользовательский жест pinch-to-zoom с поворотом?
@@ -686,7 +683,7 @@ class FlingView @JvmOverloads constructor(
 - [ViewConfiguration Reference](https://developer.android.com/reference/android/view/ViewConfiguration)
 - [MotionEvent Reference](https://developer.android.com/reference/android/view/MotionEvent)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 
@@ -698,7 +695,7 @@ class FlingView @JvmOverloads constructor(
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Базовые концепции `View`
 - [[q-viewmodel-pattern--android--easy]] - Паттерны слоя UI
 
-### Похожие (того же уровня)
+### Похожие (того Же уровня)
 
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - Инвалидация `View`
 - [[q-what-does-itemdecoration-do--android--medium]] - Кастомный рисунок в `RecyclerView`

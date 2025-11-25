@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]
 sources: ["https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)"]
 
+date created: Saturday, November 1st 2025, 1:26:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -336,7 +338,7 @@ class Player(private var attackStrategy: AttackStrategy) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что такое принцип подстановки Барбары Лисков (LSP)?
 - Когда следует использовать интерфейсы, а когда абстрактные классы?
@@ -348,12 +350,12 @@ class Player(private var attackStrategy: AttackStrategy) {
 - When should you use interfaces vs abstract classes?
 - How does composition provide more flexibility than inheritance?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-java-all-classes-inherit-from-object--programming-languages--easy]] — основы наследования
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-inheritance-vs-composition--oop--medium]] — Наследование vs композиция
 - [[q-interface-vs-abstract-class--programming-languages--medium]] — Интерфейсы
 

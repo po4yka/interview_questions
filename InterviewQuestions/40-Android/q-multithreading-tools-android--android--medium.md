@@ -15,6 +15,8 @@ created: 2024-10-15
 updated: 2025-11-10
 sources: ["https://developer.android.com/kotlin/coroutines", "https://developer.android.com/topic/libraries/architecture/workmanager"]
 tags: [android/background-execution, android/coroutines, android/performance-startup, concurrency, difficulty/medium, rxjava, workmanager]
+date created: Saturday, November 1st 2025, 1:25:23 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -195,7 +197,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 
 **Альтернатива:** Kotlin Coroutines, `Executor`/`ThreadPoolExecutor`, `WorkManager` (для отложенных задач)
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Инструмент | Статус | Лучше всего для | Сложность |
 |------------|--------|-----------------|-----------|
@@ -204,7 +206,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 | **RxJava** | Зрелый | Сложные реактивные потоки событий | Высокая |
 | **AsyncTask** | ❌ Устарел | Ничего (используйте альтернативы) | Низкая |
 
-### Современные рекомендации
+### Современные Рекомендации
 
 Для новой разработки Android:
 1. **Kotlin Coroutines** — для асинхронных операций, сетевых вызовов, доступа к БД, работы с UI
@@ -291,7 +293,7 @@ viewModelScope.launch {
 }
 ```
 
-### 2. Core Android primitives: Thread, Handler/Looper, Executor
+### 2. Core Android Primitives: Thread, Handler/Looper, Executor
 
 To reason about multithreading on Android, you should know the platform primitives:
 
@@ -401,7 +403,7 @@ For new Android development:
 4. **Core primitives (`Executor`, `HandlerThread`)** — when you need fine-grained control over threads/queues
 5. **❌ `AsyncTask`** — never use (deprecated)
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как структурированная конкурентность в корутинах помогает избежать утечек памяти?
 - Когда стоит выбрать `WorkManager` вместо фонового `Service`?

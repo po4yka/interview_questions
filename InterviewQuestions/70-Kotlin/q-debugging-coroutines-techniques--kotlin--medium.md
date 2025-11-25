@@ -14,10 +14,12 @@ aliases: []
 question_kind: coding
 related: [c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-coroutine-exception-handler--kotlin--medium, q-kotlin-null-safety--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 subtopics:
-- coroutines
-- debugging
-- profiling
+  - coroutines
+  - debugging
+  - profiling
 
+date created: Saturday, November 1st 2025, 12:10:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +34,7 @@ subtopics:
 
 Отладка корутин сложна, потому что традиционные инструменты отладки разработаны для потоков, а не для `suspend`-функций. Корутины могут приостанавливаться, возобновляться на разных потоках и иметь сложные иерархии. Понимание эффективной отладки корутин критично для production-готовности. См. также [[c-coroutines]].
 
-### 1. Включение режима отладки
+### 1. Включение Режима Отладки
 
 **Первый шаг:** включите режим отладки `kotlinx.coroutines`, чтобы добавить информацию о корутинах в имена потоков.
 
@@ -73,7 +75,7 @@ fun main() {
 // Running on: main @coroutine#2
 ```
 
-### 2. CoroutineName для отладки
+### 2. CoroutineName Для Отладки
 
 Используйте `CoroutineName` для идентификации корутин в логах и отладчике:
 
@@ -116,7 +118,7 @@ class UserRepository {
 // Loading user 123 on DefaultDispatcher-worker-2 @LoadUser-123#5
 ```
 
-### 3. Чтение стек-трейсов корутин
+### 3. Чтение Стек-трейсов Корутин
 
 Стек-трейсы корутин показывают цепочку вызовов через точки приостановки. Включенный debug-режим и `CoroutineName` помогают понять, в каком контексте произошла ошибка.
 
@@ -152,7 +154,7 @@ fun main() = runBlocking {
 2. Запустите приложение в debug-режиме.
 3. Откройте панель `Coroutines` в окне Debug.
 
-### 5. DebugProbes и дамп корутин
+### 5. DebugProbes И Дамп Корутин
 
 Модуль `kotlinx-coroutines-debug` предоставляет `DebugProbes` для инспекции корутин во время выполнения.
 
@@ -183,7 +185,7 @@ fun main() {
 
 Это помогает увидеть, какие корутины активны, приостановлены или потенциально "зависли".
 
-### 6. Поиск "зависших" корутин и псевдо-deadlock
+### 6. Поиск "зависших" Корутин И Псевдо-deadlock
 
 Если корутина "застыла", важно отличать нормальную приостановку от взаимной блокировки:
 - Используйте логирование и debug-режим, чтобы увидеть, на чём она приостановлена (`delay`, канал, `Mutex`).
@@ -198,7 +200,7 @@ suspend fun <T> withTimeoutCheck(name: String, timeoutMs: Long, block: suspend (
 
 Если таймаут стабильно срабатывает, проанализируйте `DebugProbes.dumpCoroutines()` и панель `Coroutines`, чтобы увидеть точку ожидания.
 
-### 7. Deadlock с Mutex и его выявление
+### 7. Deadlock С Mutex И Его Выявление
 
 Классический пример взаимной блокировки с `Mutex`:
 
@@ -237,7 +239,7 @@ fun main() = runBlocking {
 - Соблюдайте единый порядок захвата ресурсов.
 - Используйте таймауты вокруг последовательного захвата.
 
-### 8. Выявление утечек корутин
+### 8. Выявление Утечек Корутин
 
 Утечки корутин возникают, когда корутины продолжают работать после окончания их жизненного цикла (например, использование `GlobalScope` в Android `ViewModel`/`Activity`).
 
@@ -268,7 +270,7 @@ object CoroutineTracker {
 
 В Android `LeakCanary` помогает находить утечки объектов (`Activity`, `Fragment` и т.п.), которые могут утекать из-за долгоживущих корутин, но он не отслеживает `Job` напрямую — он сигнализирует, что объект удерживается дольше, чем должен.
 
-### 9. Логирование и контекст корутины
+### 9. Логирование И Контекст Корутины
 
 Структурированное логирование с использованием контекста корутины помогает сопоставлять события:
 
@@ -288,7 +290,7 @@ suspend fun logWithContext(message: String) {
 
 Это облегчает отслеживание конкретной корутины по логам.
 
-### 10. Производительность и профилирование
+### 10. Производительность И Профилирование
 
 - Используйте профайлеры (CPU/Memory) в Android Studio/IntelliJ, чтобы увидеть активность потоков, allocation-спайки и косвенно связать их с корутинами.
 - Используйте инспекторы БД/сети для корреляции запросов, инициированных из корутин.
@@ -462,7 +464,7 @@ fun main() {
 
 This is useful to see which coroutines are active, suspended, or potentially stuck.
 
-### 6. Finding Stuck Coroutines vs Deadlocks
+### 6. Finding Stuck Coroutines Vs Deadlocks
 
 When a coroutine seems "stuck":
 
@@ -621,7 +623,7 @@ Thread dumps can help when the app is stuck in production or under load:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как отлаживать корутины, которые приостанавливаются и продолжаются на разных потоках, сохраняя понятный контекст вызовов?
 2. Какой оверхед и риски у включения debug-режима корутин в production-среде, и когда его стоит отключать?
@@ -659,7 +661,7 @@ Thread dumps can help when the app is stuck in production or under load:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-exception-handler--kotlin--medium|Использование CoroutineExceptionHandler]]
 - [[q-common-coroutine-mistakes--kotlin--medium|Типичные ошибки при работе с корутинами]]

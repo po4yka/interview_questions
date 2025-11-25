@@ -16,6 +16,8 @@ updated: 2025-11-11
 sources: []
 tags: [android/background-execution, android/coroutines, difficulty/medium, workmanager]
 
+date created: Saturday, November 1st 2025, 1:26:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -70,7 +72,7 @@ class DataWorker(
 
 (В этом примере `result` имеет тип `String`, поддерживаемый `Data`. Метод чтения должен совпадать с типом записи, например `getString("result")`.)
 
-### Наблюдение в `ViewModel` (рекомендуемый способ)
+### Наблюдение В `ViewModel` (рекомендуемый способ)
 
 ```kotlin
 class DataViewModel(
@@ -118,7 +120,7 @@ sealed class WorkResult {
 
 Важно: в реальном коде избегайте `observeForever` без явного вызова `removeObserver` (например, в `onCleared()`), чтобы не создавать утечки. В проде предпочтительнее наблюдать из UI-слоя с `observe(owner, ...)`.
 
-### Современный подход с `Flow`
+### Современный Подход С `Flow`
 
 ```kotlin
 class DataRepository(
@@ -152,7 +154,7 @@ class DataRepository(
 }
 ```
 
-### Передача сложных данных через JSON
+### Передача Сложных Данных Через JSON
 
 ```kotlin
 @Serializable
@@ -185,7 +187,7 @@ val json = workInfo.outputData.getString("result_json")
 val result = json?.let { Json.decodeFromString<ProcessingResult>(it) }
 ```
 
-### Наблюдение по тегу или уникальному имени
+### Наблюдение По Тегу Или Уникальному Имени
 
 ```kotlin
 // По тегу
@@ -424,7 +426,7 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как реализовать обновление прогресса для долгих задач WorkManager с помощью `setProgress`/`setProgressAsync`, как наблюдать `WorkInfo.progress` и какие паттерны использовать для стабильных обновлений UI после изменения конфигурации?
 2. Каковы ограничения по размеру и типам данных `Data`/`outputData` в WorkManager, как они влияют на максимальный размер возвращаемого результата и когда следует использовать только идентификаторы с последующим чтением из БД или файлов?
@@ -462,13 +464,13 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - Основы WorkManager — см. более простые вопросы по WorkManager в этом хранилище
 - Введение в корутины — см. базовые вопросы по корутинам в этом хранилище
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - Настройка ограничений WorkManager и их влияние на выполнение работ
 - Цепочки WorkRequests и передача данных между ними
 - Сравнение `LiveData` и `Flow` для наблюдения за результатами фоновых задач

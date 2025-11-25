@@ -5,7 +5,7 @@ aliases: ["Type Aliases in Kotlin", "Псевдонимы типов в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [type-aliases, dsl, readability]
+subtopics: [dsl, readability, type-aliases]
 question_kind: theory
 difficulty: medium
 
@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, kotlin, type-aliases, types]
+date created: Saturday, October 18th 2025, 3:06:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?
 
@@ -38,16 +41,16 @@ tags: [difficulty/medium, kotlin, type-aliases, types]
 
 Псевдонимы типов (type aliases) предоставляют альтернативные имена для существующих типов. Если имя типа слишком длинное, можно ввести другое, более короткое имя и использовать его.
 
-### Базовый синтаксис
+### Базовый Синтаксис
 
 ```kotlin
 typealias NodeSet = Set<Network.Node>
 typealias FileTable<K> = MutableMap<K, MutableList<File>>
 ```
 
-### Частые случаи использования
+### Частые Случаи Использования
 
-#### 1. Сокращение длинных обобщенных типов
+#### 1. Сокращение Длинных Обобщенных Типов
 
 ```kotlin
 // До
@@ -58,7 +61,7 @@ typealias UserCache = MutableMap<String, MutableList<User>>
 val userCache: UserCache = mutableMapOf()
 ```
 
-#### 2. Псевдонимы функциональных типов
+#### 2. Псевдонимы Функциональных Типов
 
 ```kotlin
 typealias MyHandler = (Int, String, Any) -> Unit
@@ -71,7 +74,7 @@ fun setOnClickListener(listener: ClickListener) {
 }
 ```
 
-#### 3. Псевдонимы для внутренних и вложенных классов
+#### 3. Псевдонимы Для Внутренних И Вложенных Классов
 
 ```kotlin
 class A {
@@ -86,7 +89,7 @@ typealias AInner = A.Inner
 typealias BInner = B.Inner
 ```
 
-#### 4. Семантические имена типов
+#### 4. Семантические Имена Типов
 
 ```kotlin
 typealias UserId = String
@@ -102,7 +105,7 @@ fun validateEmail(email: Email): Boolean {
 }
 ```
 
-### Важно: псевдонимы не создают новые типы
+### Важно: Псевдонимы Не Создают Новые Типы
 
 Псевдонимы типов **не являются новыми типами** - они эквивалентны соответствующим базовым типам. Компилятор всегда разворачивает их в исходный тип.
 
@@ -122,7 +125,7 @@ fun main() {
 }
 ```
 
-### Зачем использовать псевдонимы типов?
+### Зачем Использовать Псевдонимы Типов?
 
 1. Улучшенная читаемость — делает код понятнее за счет осмысленных имен.
 2. Абстракция и инкапсуляция — может скрывать детали реализации.
@@ -131,7 +134,7 @@ fun main() {
 
 ### Примеры
 
-#### Пример 1: улучшение сигнатур функций
+#### Пример 1: Улучшение Сигнатур Функций
 
 ```kotlin
 // Без псевдонима типа
@@ -156,7 +159,7 @@ val p2: Point = 6.0 to 8.0
 val dist = distance(p1, p2)
 ```
 
-#### Пример 2: DSL-подобный синтаксис
+#### Пример 2: DSL-подобный Синтаксис
 
 ```kotlin
 typealias Tag = StringBuilder.() -> Unit
@@ -196,7 +199,7 @@ val page = html {
 }
 ```
 
-#### Пример 3: семантические имена типов
+#### Пример 3: Семантические Имена Типов
 
 ```kotlin
 typealias UserId = String
@@ -212,7 +215,7 @@ fun validateEmail(email: Email): Boolean {
 }
 ```
 
-### Ограничения псевдонимов типов
+### Ограничения Псевдонимов Типов
 
 1. Не создают новые типы — это только альтернативные имена.
 2. Нет усиленной типобезопасности — любая строка может быть присвоена `typealias Email = String`.
@@ -236,7 +239,7 @@ val email2 = Email("user@example.com")
 val phone2: PhoneNumber = email2  // - Ошибка компиляции! Реальная типобезопасность
 ```
 
-### Рекомендации по использованию (Best Practices)
+### Рекомендации По Использованию (Best Practices)
 
 1. Используйте для читаемости — когда имена типов слишком длинные или неочевидные.
 2. Используйте для моделирования домена — `UserId`, `ProductId` и т.п.
@@ -246,7 +249,7 @@ val phone2: PhoneNumber = email2  // - Ошибка компиляции! Реа
 
 **Краткое резюме**: Псевдонимы типов предоставляют альтернативные имена для существующих типов, улучшая читаемость кода без создания новых типов. Полезны для сокращения длинных обобщенных типов, именования функциональных типов и создания DSL. Однако не обеспечивают типобезопасность — для этого используйте value-классы.
 
-## Дополнительные вопросы (Follow-ups, RU)
+## Дополнительные Вопросы (Follow-ups, RU)
 
 - В чем ключевые отличия по сравнению с Java?
 - Когда вы бы использовали это на практике?
@@ -257,7 +260,7 @@ val phone2: PhoneNumber = email2  // - Ошибка компиляции! Реа
 - [[c-kotlin]]
 - [Type Aliases - Kotlin Documentation](https://kotlinlang.org/docs/type-aliases.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-generics--kotlin--hard]]
 - [[q-inline-classes-value-classes--kotlin--medium]]

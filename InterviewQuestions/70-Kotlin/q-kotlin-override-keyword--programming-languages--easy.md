@@ -13,7 +13,9 @@ moc: moc-kotlin
 related: [c-kotlin, q-coroutine-job-lifecycle--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [abstract, difficulty/easy, inheritance, keywords, open, override, polymorphism, kotlin]
+tags: [abstract, difficulty/easy, inheritance, keywords, kotlin, open, override, polymorphism]
+date created: Friday, October 31st 2025, 6:30:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -132,7 +134,7 @@ class Derived : Base() {
 - Kotlin: `override` is mandatory (keyword)
 - Kotlin requires parent methods to be `open` or `abstract` for overriding
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали это на практике?
@@ -152,7 +154,7 @@ class Derived : Base() {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-contracts-smart-casts--kotlin--hard]]
 - [[q-equality-operators-kotlin--kotlin--easy]]

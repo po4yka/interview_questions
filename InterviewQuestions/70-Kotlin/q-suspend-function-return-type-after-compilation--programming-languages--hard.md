@@ -1,7 +1,7 @@
 ---
 id: lang-023
 title: "Suspend Function Return Type After Compilation / suspend"
-aliases: [Suspend Function Return Type After Compilation, suspend]
+aliases: [suspend, Suspend Function Return Type After Compilation]
 topic: kotlin
 subtopics: [coroutines]
 question_kind: theory
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-how-to-create-suspend-function--programming-languages--medium]
+related: [c-coroutines, c-kotlin, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, kotlin]
 
+date created: Friday, October 31st 2025, 6:31:23 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -40,7 +42,7 @@ suspend fun fetchUserName(userId: Int): String {
 }
 ```
 
-### После Компиляции (концептуальная декомпилированная версия)
+### После Компиляции (концептуальная Декомпилированная версия)
 
 ```kotlin
 // Упрощённое представление того, что генерирует компилятор (Kotlin/JVM)
@@ -75,7 +77,7 @@ fun fetchUserName(userId: Int, continuation: Continuation<in String>): Any? {
 // Такая форма специфична для текущей реализации Kotlin/JVM.
 ```
 
-### Понимание трансформации
+### Понимание Трансформации
 
 ```kotlin
 // Оригинальная suspend-функция
@@ -115,7 +117,7 @@ fun example(cont: Continuation<in String>): Any? {
 }
 ```
 
-### Реальный пример: машина состояний
+### Реальный Пример: Машина Состояний
 
 ```kotlin
 // Оригинальный код
@@ -169,7 +171,7 @@ class MultiStepStateMachine(
 }
 ```
 
-### Проверка с декомпилированным кодом
+### Проверка С Декомпилированным Кодом
 
 ```kotlin
 // Оригинальный Kotlin-код
@@ -212,7 +214,7 @@ public static final Object simpleFunction(Continuation<? super String> $completi
 }
 ```
 
-### Почему Any?, а не String?
+### Почему Any?, А Не String?
 
 ```kotlin
 // Так работать не может:
@@ -255,7 +257,7 @@ public interface Continuation<in T> {
 fun getName(continuation: Continuation<in String>): Any?
 ```
 
-### Пример: немедленный возврат vs приостановка
+### Пример: Немедленный Возврат Vs Приостановка
 
 ```kotlin
 suspend fun smartFunction(needDelay: Boolean): String {
@@ -276,7 +278,7 @@ fun smartFunction(needDelay: Boolean, cont: Continuation<in String>): Any? {
 }
 ```
 
-### Тестирование возвращаемого типа
+### Тестирование Возвращаемого Типа
 
 ```kotlin
 // Нельзя напрямую полагаться на внутренний тип возврата (Any?/Object) при обычном вызове suspend-функции;
@@ -304,7 +306,7 @@ when (internalResult) {
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. Оригинальная сигнатура: `suspend fun foo(): String`.
 2. На уровне реализации Kotlin/JVM компилятор превращает её в форму вида: `fun foo(continuation: Continuation<in String>): Any?` (в байткоде: `Object`).
@@ -313,7 +315,7 @@ when (internalResult) {
 5. Тело `suspend`-функции трансформируется в машину состояний, которая управляет переходами между точками приостановки.
 6. Это — деталь реализации конкретного бэкенда (прежде всего Kotlin/JVM) и может эволюционировать; на уровне исходного кода контракт `suspend fun foo(): String` остаётся неизменным.
 
-### Дополнительные детали трансформации
+### Дополнительные Детали Трансформации
 
 ```kotlin
 // Модификатор suspend приводит к тому, что компилятор:
@@ -564,7 +566,7 @@ public interface Continuation<in T> {
 fun getName(continuation: Continuation<in String>): Any?
 ```
 
-### Example: Immediate Return vs Suspension
+### Example: Immediate Return Vs Suspension
 
 ```kotlin
 suspend fun smartFunction(needDelay: Boolean): String {
@@ -649,7 +651,7 @@ fun <T> func(completion: Continuation<? super T>): Object
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этой модели от Java-подхода без `suspend`?
 - Когда на практике важно понимать внутреннюю форму с `Continuation` и `Any?`?
@@ -669,7 +671,7 @@ fun <T> func(completion: Continuation<? super T>): Object
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-how-to-create-suspend-function--programming-languages--medium]]
 - [[q-java-all-classes-inherit-from-object--programming-languages--easy]]

@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-views, difficulty/medium, performance/rendering]
 
+date created: Saturday, November 1st 2025, 1:24:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -172,7 +174,7 @@ fun analyzeHierarchy(view: View): LayoutComplexity {
 
 Пороговые значения для глубины и количества `View` — эвристики: они зависят от устройства, экрана и конкретного UI.
 
-### 5. Recomposition в Jetpack Compose
+### 5. Recomposition В Jetpack Compose
 
 В Compose также важен бюджет кадра, но дополнительно анализируют, как часто и почему происходят recomposition. Количество перекомпозиций само по себе не является основной метрикой, но помогает выявить неэффективные участки.
 

@@ -16,6 +16,8 @@ created: 2025-10-11
 updated: 2025-11-10
 tags: [android/lifecycle, android/performance-memory, android/profiling, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -836,7 +838,7 @@ Use with care: this is expensive and not for normal production use.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обнаруживать утечки в продакшн-сборках?
 - В чем разница между дампом кучи (heap dump) и отслеживанием выделений (allocation tracking)?
@@ -864,7 +866,7 @@ Use with care: this is expensive and not for normal production use.
 - [Memory Profiler Guide](https://developer.android.com/studio/profile/memory-profiler)
 - [Android Memory Management](https://developer.android.com/topic/performance/memory)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-recyclerview-sethasfixedsize--android--easy]]

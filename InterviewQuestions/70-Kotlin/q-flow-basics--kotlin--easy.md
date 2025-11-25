@@ -5,7 +5,7 @@ aliases: ["Flow Basics in Kotlin", "Основы Flow в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, cold-flow]
+subtopics: [cold-flow, coroutines, flow]
 question_kind: theory
 difficulty: easy
 
@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [cold-flow, coroutines, difficulty/easy, flow, kotlin, reactive, streams]
+date created: Sunday, October 12th 2025, 2:53:50 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое Kotlin `Flow`? Объясните холодные vs горячие потоки, базовые операторы и когда использовать `Flow`.
 
@@ -227,7 +230,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-#### Поиск с Debounce
+#### Поиск С Debounce
 
 ```kotlin
 class SearchViewModel : ViewModel() {
@@ -254,7 +257,7 @@ class SearchViewModel : ViewModel() {
 
 ### Когда Использовать Flow
 
-#### Использовать Flow для:
+#### Использовать Flow Для:
 
 ```kotlin
 // 1. Потоковые данные
@@ -278,7 +281,7 @@ fun loadWithRetry(): Flow<Data> = flow {
 }.retry(3) { it is IOException }
 ```
 
-#### Не использовать Flow для:
+#### Не Использовать Flow Для:
 
 ```kotlin
 // Одно значение - использовать suspend-функцию
@@ -669,7 +672,7 @@ suspend fun getUser(): User  // Prefer this
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия `Flow` от Java-подходов к асинхронности?
 - Когда вы бы использовали `Flow` на практике?
@@ -693,12 +696,12 @@ suspend fun getUser(): User  // Prefer this
 - [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
 - [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Тот же уровень (Easy)
+### Тот Же Уровень (Easy)
 - [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Основы холодных потоков
 
-### Следующие шаги (Medium)
+### Следующие Шаги (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold Flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Объяснение Cold vs Hot Flows
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`

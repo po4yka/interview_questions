@@ -1,20 +1,22 @@
 ---
 id: kotlin-177
 title: "Heap Pollution Generics / Heap Pollution (Загрязнение кучи)"
-aliases: [Heap Pollution Generics, Heap Pollution, Heap Pollution (Загрязнение кучи)]
+aliases: [Heap Pollution, Heap Pollution (Загрязнение кучи), Heap Pollution Generics]
 topic: kotlin
-subtopics: [functions, types, collections]
+subtopics: [collections, functions, types]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-suspend-functions-basics--kotlin--easy]
+related: [c-collections, c-kotlin, q-suspend-functions-basics--kotlin--easy]
 created: 2023-10-15
 updated: 2025-11-11
-tags: [kotlin/functions, kotlin/types, kotlin/collections, difficulty/hard]
+tags: [difficulty/hard, kotlin/collections, kotlin/functions, kotlin/types]
 
+date created: Thursday, October 16th 2025, 12:35:35 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +43,7 @@ val list: List<*> = listOf("A", "B", "C")  // Информация о <String> �
 
 Это приводит к тому, что во время выполнения невозможно проверить фактический параметр типа дженерика, и небезопасные приведения могут загрязнить кучу.
 
-### Пример 1: Базовый случай heap pollution
+### Пример 1: Базовый Случай Heap Pollution
 
 ```kotlin
 fun heapPollutionExample() {
@@ -67,7 +69,7 @@ fun heapPollutionExample() {
 }
 ```
 
-### Пример 2: Varargs и небезопасные массивы (концепт)
+### Пример 2: Varargs И Небезопасные Массивы (концепт)
 
 Kotlin `vararg`-параметры представляются как массивы (`Array<out T>`), и при неправильных небезопасных приведениях можно получить heap pollution.
 
@@ -95,7 +97,7 @@ fun testDangerousVarargs() {
 
 Важно: в Kotlin `@SafeVarargs` обычно не используется напрямую для Kotlin-функций и применим в основном к Java-коду или специальным случаям. Он не делает небезопасный код безопасным и не исправляет логически ошибочные тела методов.
 
-### Пример 3: Проблема с `Array<T>` в Kotlin
+### Пример 3: Проблема С `Array<T>` В Kotlin
 
 ```kotlin
 fun <T> unsafeArrayCreation(size: Int): Array<T> {
@@ -119,9 +121,9 @@ fun testUnsafeArray() {
 }
 ```
 
-### Как избежать heap pollution
+### Как Избежать Heap Pollution
 
-#### Решение 1: Использовать reified в inline-функциях
+#### Решение 1: Использовать Reified В Inline-функциях
 
 ```kotlin
 // Более безопасно: reified позволяет корректно создавать массив нужного типа
@@ -140,7 +142,7 @@ fun testSafeArray() {
 }
 ```
 
-#### Решение 2: Использовать `List` вместо `Array`, когда это возможно
+#### Решение 2: Использовать `List` Вместо `Array`, Когда Это Возможно
 
 ```kotlin
 // БЕЗОПАСНЕЕ: List<T> в Kotlin неизменяемый по интерфейсу
@@ -158,7 +160,7 @@ fun testSafeList() {
 }
 ```
 
-#### Решение 3: Передавать `KClass<T>` для создания типизированных массивов
+#### Решение 3: Передавать `KClass<T>` Для Создания Типизированных Массивов
 
 ```kotlin
 // БЕЗОПАСНО: явная передача информации о типе
@@ -180,7 +182,7 @@ fun testSafeTypedArray() {
 }
 ```
 
-### Пример 4: Коллекции в Android (риск небезопасных приводов)
+### Пример 4: Коллекции В Android (риск Небезопасных приводов)
 
 ```kotlin
 // ПЛОХО: несогласованный контракт типов в RecyclerView Adapter
@@ -250,7 +252,7 @@ class GoodAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 Этот пример показывает, как нарушение контракта типов (использование `Any` и небезопасных cast'ов) может приводить к ошибкам, аналогичным heap pollution.
 
-### Пример 5: `Bundle` в Android
+### Пример 5: `Bundle` В Android
 
 ```kotlin
 // Опасность: несогласованное использование ключей и типов
@@ -299,7 +301,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-### Предупреждения компилятора
+### Предупреждения Компилятора
 
 Kotlin/Java выдают предупреждения при потенциальном heap pollution (непроверяемые приведения, массивы дженериков и т.п.). Их нельзя игнорировать без понимания.
 
@@ -317,7 +319,7 @@ fun <T> varargsMethod(vararg items: T): Array<T> {
 }
 ```
 
-### Аннотации для подавления предупреждений
+### Аннотации Для Подавления Предупреждений
 
 ```kotlin
 // В Kotlin используйте специальные подавления очень осторожно.
@@ -333,7 +335,7 @@ fun <T> unsafeCast(obj: Any): T {
 
 ### Best Practices (RU)
 
-#### 1. Используйте неизменяемые коллекции, когда можно
+#### 1. Используйте Неизменяемые Коллекции, Когда Можно
 
 ```kotlin
 // ХОРОШО
@@ -347,7 +349,7 @@ fun createMutableList(): MutableList<String> {
 }
 ```
 
-#### 2. Избегайте raw types / слишком общих типов без необходимости
+#### 2. Избегайте Raw Types / Слишком Общих Типов Без Необходимости
 
 ```kotlin
 // ПЛОХО
@@ -357,7 +359,7 @@ val listRaw: MutableList<*> = mutableListOf<String>()  // или без указ
 val list: MutableList<String> = mutableListOf()
 ```
 
-#### 3. Используйте sealed-классы для разнородных данных
+#### 3. Используйте Sealed-классы Для Разнородных Данных
 
 ```kotlin
 // ХОРОШО
@@ -370,7 +372,7 @@ sealed class Result<out T> {
 data class MixedResult(val data: Any?, val error: Exception?)  // Any? затрудняет типобезопасность
 ```
 
-#### 4. Используйте inline + reified для типобезопасности там, где нужно знать реальный тип
+#### 4. Используйте Inline + Reified Для Типобезопасности Там, Где Нужно Знать Реальный Тип
 
 ```kotlin
 inline fun <reified T> fromJson(json: String): T {
@@ -381,12 +383,12 @@ inline fun <reified T> fromJson(json: String): T {
 val user: User = fromJson<User>(jsonString)
 ```
 
-#### 5. Относитесь к непроверяемым операциям как к потенциальным ошибкам
+#### 5. Относитесь К Непроверяемым Операциям Как К Потенциальным Ошибкам
 
 - Минимизируйте область действия `@Suppress("UNCHECKED_CAST")`.
 - Явно документируйте инварианты, на которых основан небезопасный код.
 
-#### 6. Проверяйте инварианты в критичных местах
+#### 6. Проверяйте Инварианты В Критичных Местах
 
 ```kotlin
 fun <T> checkHeapPollution(array: Array<T>, expectedClass: KClass<*>): Unit {
@@ -401,7 +403,7 @@ fun <T> checkHeapPollution(array: Array<T>, expectedClass: KClass<*>): Unit {
 }
 ```
 
-### Проверка на heap pollution в runtime
+### Проверка На Heap Pollution В Runtime
 
 ```kotlin
 fun testHeapPollutionCheck() {
@@ -445,7 +447,7 @@ Heap pollution is a type-safety violation where a variable of a parameterized ty
 Core mechanism:
 - At runtime, generic type arguments are erased, so the JVM cannot distinguish `List<String>` from `List<Any?>`. If you mutate through a less specific view, you can corrupt the heap so that a supposedly typed reference points to values of the wrong type, causing `ClassCastException` and violating contracts.
 
-### Example 1: Basic heap pollution with collections
+### Example 1: Basic Heap Pollution with Collections
 
 ```kotlin
 fun heapPollutionExample() {
@@ -467,7 +469,7 @@ fun heapPollutionExample() {
 }
 ```
 
-### Example 2: Varargs and generic arrays
+### Example 2: Varargs and Generic Arrays
 
 ```kotlin
 fun <T> dangerousMethod(vararg elements: T): Array<T> {
@@ -491,7 +493,7 @@ fun testDangerousVarargs() {
 
 Important: in Kotlin, `@SafeVarargs` is typically relevant for Java methods or very specific interop cases. It does not make inherently unsafe code safe and does not fix logically unsafe method bodies.
 
-### Example 3: Unsafe `Array<T>` construction
+### Example 3: Unsafe `Array<T>` Construction
 
 ```kotlin
 fun <T> unsafeArrayCreation(size: Int): Array<T> {
@@ -513,7 +515,7 @@ fun testUnsafeArray() {
 }
 ```
 
-### Example 4: Android RecyclerView adapter
+### Example 4: Android RecyclerView Adapter
 
 ```kotlin
 // BAD: uses MutableList<Any> and unsafe casts
@@ -583,7 +585,7 @@ class GoodAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 }
 ```
 
-### Example 5: Android `Bundle`/`Intent` extras
+### Example 5: Android `Bundle`/`Intent` Extras
 
 ```kotlin
 // RISKY: inconsistent use of key/type
@@ -631,7 +633,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-### Compiler warnings (EN)
+### Compiler Warnings (EN)
 
 ```kotlin
 @Suppress("UNCHECKED_CAST")
@@ -648,13 +650,13 @@ fun <T> varargsMethod(vararg items: T): Array<T> {
 
 Treat such warnings as indicators of potential heap pollution; suppress only with strict reasoning.
 
-### Annotations and suppression (EN)
+### Annotations and Suppression (EN)
 
 - `@Suppress("UNCHECKED_CAST")` or Java's `@SuppressWarnings("unchecked")` only hide warnings.
 - `@SafeVarargs` is primarily relevant for certain Java methods and does not make unsafe code safe or fix logically unsafe bodies.
 - Confine these annotations to narrow, well-justified helpers and never suppress warnings without understanding the cause.
 
-### Runtime heap pollution check (EN)
+### Runtime Heap Pollution Check (EN)
 
 ```kotlin
 fun <T> checkHeapPollution(array: Array<T>, expectedClass: KClass<*>): Unit {

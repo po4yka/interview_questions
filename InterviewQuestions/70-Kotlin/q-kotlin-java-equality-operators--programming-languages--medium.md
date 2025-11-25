@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-equality, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy]
+related: [c-equality, c-kotlin, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [comparison, difficulty/medium, equality, java, operators, kotlin]
+tags: [comparison, difficulty/medium, equality, java, kotlin, operators]
+date created: Friday, October 31st 2025, 6:30:29 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Чем отличаются двойное равно в Java и Kotlin?
 
@@ -177,7 +180,7 @@ a == "text"  // false (null-safe, doesn't throw NPE)
 - For collections, `==` compares contents.
 - Data classes provide structural equality automatically.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого поведения от Java?
 - Когда вы бы использовали это на практике?
@@ -197,7 +200,7 @@ a == "text"  // false (null-safe, doesn't throw NPE)
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-partition-function--programming-languages--easy]]
 - [[q-kotlin-null-checks-methods--programming-languages--easy]]

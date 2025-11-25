@@ -1,37 +1,32 @@
 ---
 id: android-178
 title: Intent Filters / Intent Фильтры
-aliases:
-- Intent Filters
-- Intent Фильтры
-- Фильтры намерений
+aliases: [Intent Filters, Intent Фильтры, Фильтры намерений]
 topic: android
 subtopics:
-- activity
-- intents-deeplinks
+  - activity
+  - intents-deeplinks
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-intent
-- c-activity
-- q-what-are-intents-for--android--medium
-- q-what-is-intent--android--easy
+  - c-activity
+  - c-intent
+  - q-dagger-build-time-optimization--android--medium
+  - q-what-are-intents-for--android--medium
+  - q-what-is-intent--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/intents-deeplinks
-- deep-linking
-- difficulty/medium
-- intent-filter
+tags: [android/activity, android/intents-deeplinks, deep-linking, difficulty/medium, intent-filter]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -198,7 +193,7 @@ A filter consists of three elements:
 3. `android:autoVerify="true"` for App Links (HTTPS URLs)
 4. One component can have multiple filters, each describing a separate capability
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Android разрешает конфликты, когда несколько приложений объявляют фильтры намерений для одного и того же действия?
 - В чем разница между неявными и явными интентами с точки зрения безопасности?
@@ -222,7 +217,7 @@ A filter consists of three elements:
 - Android Developer Documentation: `Intent` Filters
 - Android Developer Documentation: App Links verification
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 
@@ -234,7 +229,7 @@ A filter consists of three elements:
 - [[q-what-is-intent--android--easy]] — Базовые концепции `Intent`
 - Основы `Activity` и ее жизненного цикла
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 
 - [[q-what-are-intents-for--android--medium]] — Сценарии использования `Intent`
 - Сравнение неявных и явных интентов

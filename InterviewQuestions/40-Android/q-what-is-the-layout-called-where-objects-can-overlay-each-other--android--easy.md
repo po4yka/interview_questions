@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-known-about-methods-that-redraw-view--android--medium, c-android-ui-composition]
+related: [c-android-ui-composition, q-what-is-known-about-methods-that-redraw-view--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, layouts]
+date created: Saturday, November 1st 2025, 1:25:40 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -329,7 +331,7 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 - FrameLayout — for legacy `View`-based UIs
 - Box — for new Compose UIs
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как управлять порядком наложения (z-index) во `FrameLayout`, не изменяя порядок добавления дочерних вью?
 2. Что произойдет, если у нескольких дочерних composable в `Box` одинаковое значение `zIndex()`?
@@ -355,13 +357,13 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 - https://developer.android.com/reference/android/widget/FrameLayout
 - https://developer.android.com/jetpack/compose/layouts/basics
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Пререквизиты (проще)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - основы `View`
 - [[q-viewmodel-pattern--android--easy]] - основы архитектуры
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - отрисовка `View`
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - layout-ы в Compose
 

@@ -11,11 +11,13 @@ language_tags: [en, ru]
 sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
 status: draft
 moc: moc-android
-related: [c-modularization, c-gradle, q-android-jetpack-overview--android--easy, q-how-compose-draws-on-screen--android--hard]
+related: [c-gradle, c-modularization, q-android-jetpack-overview--android--easy, q-how-compose-draws-on-screen--android--hard]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)

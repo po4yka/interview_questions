@@ -1,34 +1,31 @@
 ---
 id: android-164
 title: KMM Ktor Networking / Сетевое взаимодействие с Ktor в KMM
-aliases:
-- KMM Ktor Networking
-- Сетевое взаимодействие с Ktor в KMM
+aliases: [KMM Ktor Networking, Сетевое взаимодействие с Ktor в KMM]
 topic: android
 subtopics:
-- coroutines
-- networking-http
+  - coroutines
+  - networking-http
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-coroutines
-- c-retrofit
+  - c-coroutines
+  - c-retrofit
+  - q-flutter-comparison--android--medium
+  - q-kmm-dependency-injection--android--medium
+  - q-react-native-comparison--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/coroutines
-- android/networking-http
-- difficulty/medium
-- kmm
-- ktor
-- multiplatform
+tags: [android/coroutines, android/networking-http, difficulty/medium, kmm, ktor, multiplatform]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)

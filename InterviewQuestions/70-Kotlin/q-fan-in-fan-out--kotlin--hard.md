@@ -6,8 +6,8 @@ title: "Fan-in Fan-out Pattern / Паттерн Fan-in Fan-out"
 topic: kotlin
 subtopics:
   - channels
-  - coroutines
   - concurrency
+  - coroutines
 question_kind: theory
 difficulty: hard
 
@@ -29,7 +29,10 @@ updated: 2025-11-11
 aliases: []
 
 tags: [channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, load-balancing, parallel-processing]
+date created: Sunday, October 12th 2025, 3:13:16 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое паттерны Fan-in и Fan-out в корутинах Kotlin? Объясните как распределять работу между несколькими воркерами и агрегировать результаты из множества источников.
 
@@ -219,7 +222,7 @@ class LogAggregator(private val scope: CoroutineScope) {
 }
 ```
 
-### Комбинированный Fan-out и Fan-in
+### Комбинированный Fan-out И Fan-in
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -348,7 +351,7 @@ class WorkStealingPool<T, R>(
 }
 ```
 
-### Объединение нескольких каналов (Fan-in helper)
+### Объединение Нескольких Каналов (Fan-in helper)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -387,7 +390,7 @@ fun <T> CoroutineScope.mergeWithSelect(vararg channels: ReceiveChannel<T>): Rece
 }
 ```
 
-### Реальный пример: Web Scraper
+### Реальный Пример: Web Scraper
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -442,7 +445,7 @@ class WebScraperPool(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 
@@ -935,7 +938,7 @@ launch {
 // Don't send into a closed channel (will throw ClosedSendChannelException)
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем это отличается от решений на Java без корутин?
 - Когда вы бы использовали эти паттерны на практике?
@@ -959,7 +962,7 @@ launch {
 - [Fan-in Fan-out Pattern](https://kotlinlang.org/docs/channels.html#fan-out)
 - [Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-actor-pattern--kotlin--hard]]
 - [[q-advanced-coroutine-patterns--kotlin--hard]]

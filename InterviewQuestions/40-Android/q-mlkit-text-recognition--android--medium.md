@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-async-primitives--android--easy, c-coroutines]
+related: [c-coroutines, q-android-async-primitives--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit, ocr, text-recognition]
 
+date created: Saturday, November 1st 2025, 1:25:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -555,7 +557,7 @@ class ModelDownloadManager(private val context: Context) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как ML Kit обрабатывает повёрнутый или перспективно искажённый текст на изображении?
 2. Каковы практические trade-off'ы между on-device и облачным распознаванием текста в проде?
@@ -583,7 +585,7 @@ class ModelDownloadManager(private val context: Context) {
 - [ML Kit Text Recognition Guide](https://developers.google.com/ml-kit/vision/text-recognition)
 - [CameraX Image Analysis](https://developer.android.com/training/camerax/analyze)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-async-primitives--android--easy]]

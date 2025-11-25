@@ -1,5 +1,5 @@
 ---
-id: cs-017
+id: lang-216
 title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
 aliases: ["Kotlin Any methods", "Методы Any в Kotlin"]
 topic: kotlin
@@ -13,8 +13,10 @@ moc: moc-kotlin
 related: [c--kotlin--medium, c-computer-science, q-debugging-coroutines-techniques--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
-tags: [kotlin/classes, kotlin/functions, kotlin/types, difficulty/medium]
+tags: [difficulty/medium, kotlin/classes, kotlin/functions, kotlin/types]
 
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)

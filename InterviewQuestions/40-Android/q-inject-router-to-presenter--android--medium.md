@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, dependency-injection, difficulty/medium, navigation, router]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +41,7 @@ tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, depend
 2. **Dagger 2** — compile-time DI, больше контроля
 3. **Koin** — runtime DI, Kotlin DSL, простая настройка
 
-### Ключевой паттерн: Router через интерфейс
+### Ключевой Паттерн: Router Через Интерфейс
 
 ```kotlin
 // ✅ Интерфейс роутера — абстрагирует детали реализации навигации
@@ -50,7 +52,7 @@ interface Router {
 }
 ```
 
-### Пример с Hilt (Рекомендуется)
+### Пример С Hilt (Рекомендуется)
 
 Важно: `NavController` привязан к `NavHostFragment` и обычно не инжектится напрямую как долгоживущая зависимость на уровне `ActivityComponent`/`SingletonComponent`. Вместо этого инжектируйте абстракцию `Router` в презентер, а `Router` реализуйте так, чтобы он получал актуальный `NavController` через переданные зависимости, события или коллбеки, не нарушая жизненный цикл.
 
@@ -109,7 +111,7 @@ class ProductListFragment : Fragment() {
 
 Этот пример демонстрирует идею: презентер получает `Router` по интерфейсу, а конкретная реализация `Router` знает, как работать с навигацией. Важно спроектировать `Router` так, чтобы он не держал долгоживущих ссылок на `NavController` или `Fragment` и уважал scope компонентов Hilt.
 
-### Пример с Koin
+### Пример С Koin
 
 ```kotlin
 // Модуль Koin
@@ -140,7 +142,7 @@ class ProductListFragment : Fragment() {
 
 Здесь ключевая идея сохраняется: презентер получает `Router` по интерфейсу, а детали получения `NavController` инкапсулируются в реализации роутера и согласованы с областью жизни (scope). Можно выбрать и другие варианты (например, события навигации), главное — не передавать во внутренние слои долгоживущие ссылки на UI.
 
-### Тестирование с mock Router
+### Тестирование С Mock Router
 
 ```kotlin
 class ProductListPresenterTest {
@@ -162,7 +164,7 @@ class ProductListPresenterTest {
 }
 ```
 
-### Преимущества DI для роутеров
+### Преимущества DI Для Роутеров
 
 1. **Слабая связанность** — презентер зависит только от интерфейса `Router`, а не от `NavController`
 2. **Легкое тестирование** — можно подменить роутер на mock/stub в unit-тестах
@@ -349,7 +351,7 @@ class Presenter @Inject constructor(private val navController: NavController)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как обрабатывать результаты навигации (например, выбор способа оплаты и возврат результата вызывающему экрану), сохраняя презентер независимым от конкретных навигационных API?
 2. Как спроектировать абстракцию `Router`, которая одинаково хорошо работает и с навигацией на базе `Activity`, и с навигацией на базе `Fragment`?
@@ -379,12 +381,12 @@ class Presenter @Inject constructor(private val navController: NavController)
 - [Koin Documentation](https://insert-koin.io/)
 - [Navigation Component Guide](https://developer.android.com/guide/navigation)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (Проще)
 - [[q-play-feature-delivery--android--medium]] — Фиче-модули и навигация
 
-### Похожие (Тот же уровень)
+### Похожие (Тот Же уровень)
 - [[q-state-hoisting-compose--android--medium]] — Паттерны управления состоянием
 
 ### Продвинутые (Сложнее)

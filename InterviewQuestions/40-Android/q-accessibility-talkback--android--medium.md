@@ -16,6 +16,7 @@ status: draft
 moc: moc-android
 related:
   - c-accessibility
+  - q-accessibility-color-contrast--android--medium
   - q-accessibility-compose--android--medium
   - q-accessibility-testing--android--medium
   - q-custom-view-accessibility--android--medium
@@ -25,6 +26,8 @@ tags: [accessibility, android/ui-accessibility, android/ui-navigation, difficult
 sources:
   - "https://developer.android.com/guide/topics/ui/accessibility"
   - "https://developer.android.com/jetpack/compose/accessibility"
+date created: Saturday, November 1st 2025, 12:46:42 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -281,7 +284,7 @@ Text(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как автоматизировать тестирование поддержки TalkBack?
 - Что происходит с вложенными интерактивными элементами в Compose?
@@ -315,9 +318,9 @@ Text(
 - https://developer.android.com/guide/topics/ui/accessibility/testing
 - https://support.google.com/accessibility/android/answer/6283677
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-accessibility-compose--android--medium]]
 - [[q-accessibility-testing--android--medium]]
 - [[q-custom-view-accessibility--android--medium]]

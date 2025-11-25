@@ -16,6 +16,8 @@ updated: 2025-11-11
 sources: []
 tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, kotlin, multiplatform]
 
+date created: Saturday, November 1st 2025, 1:01:27 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -304,7 +306,7 @@ struct TaskListView: View {
 
 (Важно использовать реальный helper/bridge для `Flow` → Swift (например, `KMP-NativeCoroutines`), а приведённый `collectIn` рассматривать как иллюстрацию паттерна.)
 
-### Dependency Injection (Koin на shared уровне)
+### Dependency Injection (Koin На Shared уровне)
 
 ```kotlin
 // ✅ commonMain - shared DI module (пример с Koin)
@@ -642,7 +644,7 @@ struct TaskListView: View {
 
 (Use an actual `Flow` → Swift bridge instead of the non-standard `collectIn`; the snippet shows the pattern, not a concrete library API.)
 
-### Dependency Injection (Koin in shared, Hilt on Android)
+### Dependency Injection (Koin in Shared, Hilt on Android)
 
 ```kotlin
 // ✅ commonMain - shared DI module (Koin example)

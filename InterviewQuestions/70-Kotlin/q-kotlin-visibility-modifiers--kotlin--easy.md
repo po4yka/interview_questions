@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-11
 
 tags: [access-control, difficulty/easy, encapsulation, kotlin, modifiers, visibility]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое модификаторы видимости в Kotlin?
 
@@ -58,7 +61,7 @@ Kotlin позволяет контролировать видимость объ
 
 Если вы не указываете модификатор видимости, вы получаете уровень видимости по умолчанию: для top-level объявлений и членов классов он **public** (если не ограничен областью видимости контейнера), а для локальных объявлений (внутри функций) модификаторы видимости вообще не применяются.
 
-### Java vs Kotlin
+### Java Vs Kotlin
 
 - В Java для классов и членов без явного модификатора, объявленных в пакете, используется уровень доступа по умолчанию (часто называемый **package-private**): он основан на пакете. В Kotlin по умолчанию для таких объявлений используется **public**, и доступ не привязан к пакету.
 - **package-private** в Java не имеет прямого эквивалента в Kotlin; ближайшая по смыслу (но основанная на модуле, а не пакете) — **internal**.
@@ -91,7 +94,7 @@ General behavior:
 
 If you don't specify a visibility modifier, you get the default visibility: for top-level declarations and class members, it is **public** (subject to the containing scope), and visibility modifiers are not applicable to local declarations inside functions.
 
-### Java vs Kotlin
+### Java Vs Kotlin
 
 - In Java, classes and members declared without an explicit modifier in a package use the default ("package-private") visibility, which is package-based. In Kotlin, such declarations are **public** by default, and visibility is not based on packages.
 - Java's **package-private** has no direct equivalent in Kotlin; the closest conceptually (but module-based, not package-based) is **internal**.
@@ -102,7 +105,7 @@ See also [[c-kotlin]].
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия модификаторов видимости Kotlin от Java?
 - Когда на практике использовать каждый модификатор видимости?
@@ -130,7 +133,7 @@ See also [[c-kotlin]].
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Продвинутые (сложнее)
 - [[q-visibility-modifiers-kotlin--kotlin--medium]] — более детальное рассмотрение модификаторов видимости в контексте классов.

@@ -1,39 +1,33 @@
 ---
 id: android-305
 title: Push Notification Navigation / Навигация из push уведомлений
-aliases:
-- FCM Navigation
-- Navigation from Notifications
-- Push Notification Navigation
-- Навигация из push уведомлений
+aliases: [FCM Navigation, Navigation from Notifications, Push Notification Navigation, Навигация из push уведомлений]
 topic: android
 subtopics:
-- notifications
-- ui-navigation
+  - notifications
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- q-activity-navigation-how-it-works--android--medium
-- q-compose-navigation-advanced--android--medium
+  - c-compose-navigation
+  - q-activity-navigation-how-it-works--android--medium
+  - q-compose-navigation-advanced--android--medium
+  - q-how-dialog-differs-from-other-navigation--android--medium
+  - q-how-navigation-is-implemented-in-android--android--medium
+  - q-what-navigation-methods-do-you-know--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/notifications
-- android/ui-navigation
-- deeplink
-- difficulty/medium
-- fcm
-- navigation
-- notifications
+tags: [android/notifications, android/ui-navigation, deeplink, difficulty/medium, fcm, navigation, notifications]
 
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -381,7 +375,7 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать уведомления в случаях: приложение убито, в фоне, на переднем плане?
 - В чем разница между notification payload и data-only payload?
@@ -411,7 +405,7 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 - [Navigation Component Deep Links](https://developer.android.com/guide/navigation/navigation-deep-link)
 - [TaskStackBuilder Documentation](https://developer.android.com/reference/androidx/core/app/TaskStackBuilder)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -421,7 +415,7 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 
 - [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]]
 
-### Связанные (Тот же уровень)
+### Связанные (Тот Же уровень)
 
 - [[q-compose-navigation-advanced--android--medium]]
 - [[q-activity-navigation-how-it-works--android--medium]]

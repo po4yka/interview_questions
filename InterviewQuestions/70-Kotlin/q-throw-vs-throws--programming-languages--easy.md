@@ -14,8 +14,11 @@ related: [c-kotlin, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, exceptions, java, kotlin, programming-languages, throw, throws]
+date created: Friday, October 31st 2025, 6:32:26 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-# Throw Vs Throws / Throw против Throws
+
+# Throw Vs Throws / Throw Против Throws
 
 # Вопрос (RU)
 > Разница между throw и throws
@@ -517,7 +520,7 @@ if (age < 0) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как это связано с проверяемыми (`checked`) и непроверяемыми (`unchecked`) исключениями в Java?
 - В каких случаях стоит использовать `throws` в Java вместо того, чтобы полагаться только на непроверяемые исключения?
@@ -537,7 +540,7 @@ if (age < 0) {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-sealed-vs-enum-classes--programming-languages--medium]]
 

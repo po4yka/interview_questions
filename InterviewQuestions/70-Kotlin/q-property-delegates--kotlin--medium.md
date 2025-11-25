@@ -14,6 +14,8 @@ related: [c-kotlin, q-coroutine-memory-leak-detection--kotlin--hard, q-dispatche
 created: 2025-10-15
 updated: 2025-11-09
 tags: [delegates, difficulty/medium, kotlin, properties]
+date created: Friday, October 31st 2025, 6:30:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [delegates, difficulty/medium, kotlin, properties]
 
 Свойство с `by` не обязано хранить значение само — оно делегирует доступ объекту-делегату, который реализует контракт через оператор-функции `getValue`/`setValue` (часто через интерфейсы `ReadOnlyProperty` / `ReadWriteProperty`).
 
-### Основная идея
+### Основная Идея
 
 Вместо того чтобы каждое свойство само хранило значение и реализовывало логику геттеров/сеттеров, оно делегирует эти операции отдельному объекту-делегату, который повторно используется в разных местах.
 
@@ -44,9 +46,9 @@ class Example {
 }
 ```
 
-### Встроенные делегаты
+### Встроенные Делегаты
 
-#### 1. lazy — ленивая инициализация
+#### 1. Lazy — Ленивая Инициализация
 
 Значение вычисляется только при первом обращении.
 
@@ -70,7 +72,7 @@ connection.query()  // Теперь инициализация и вывод
 connection.query()  // Повторной инициализации нет
 ```
 
-#### 2. observable — наблюдение за изменениями
+#### 2. Observable — Наблюдение За Изменениями
 
 ```kotlin
 class User {
@@ -85,7 +87,7 @@ user.name = "Alice"  // name changed from Initial Name to Alice
 user.name = "Bob"    // name changed from Alice to Bob
 ```
 
-#### 3. vetoable — валидация перед изменением
+#### 3. Vetoable — Валидация Перед Изменением
 
 ```kotlin
 class Product {
@@ -101,7 +103,7 @@ product.price = -50   // Отклонено, значение остается 1
 println(product.price)  // 100
 ```
 
-#### 4. notNull — отложенная инициализация с проверкой
+#### 4. notNull — Отложенная Инициализация С Проверкой
 
 ```kotlin
 class Configuration {
@@ -118,7 +120,7 @@ class Configuration {
 }
 ```
 
-### Пользовательские делегаты
+### Пользовательские Делегаты
 
 ```kotlin
 // Делегат для логирования доступа к свойству
@@ -144,7 +146,7 @@ exampleLogging.data              // Getting data = initial
 exampleLogging.data = "new value"  // Setting data from initial to new value
 ```
 
-### Делегат для SharedPreferences
+### Делегат Для SharedPreferences
 
 ```kotlin
 class SharedPreferencesDelegate<T : Any>(
@@ -197,7 +199,7 @@ settings.username = "Alice"  // Автоматически сохраняетс�
 println(settings.username)   // Автоматически читается из SharedPreferences
 ```
 
-### Делегаты для `Map`
+### Делегаты Для `Map`
 
 ```kotlin
 class User(map: Map<String, Any?>) {
@@ -218,9 +220,9 @@ println(user.name)   // Alice
 println(user.age)    // 30
 ```
 
-### Ключевые особенности и преимущества
+### Ключевые Особенности И Преимущества
 
-#### 1. Изоляция логики
+#### 1. Изоляция Логики
 
 Логика геттеров/сеттеров выносится в отдельный класс.
 
@@ -241,7 +243,7 @@ class Form {
 }
 ```
 
-#### 2. Переиспользование кода
+#### 2. Переиспользование Кода
 
 Один делегат можно использовать для множества свойств.
 
@@ -268,7 +270,7 @@ class GameCharacter {
 
 Легко создавать новые делегаты под конкретные сценарии: кеширование, логирование, доступ к конфигурации, валидацию и т. д.
 
-#### 4. Поддержка на уровне языка
+#### 4. Поддержка На Уровне Языка
 
 Kotlin предоставляет синтаксис `by` и механизм делегирования, что делает делегаты свойств удобным и безопасным инструментом.
 
@@ -296,7 +298,7 @@ class Example {
 
 ### Standard Delegates
 
-#### 1. lazy - Lazy Initialization
+#### 1. Lazy - Lazy Initialization
 
 Value is computed only on first access.
 
@@ -320,7 +322,7 @@ connection.query()  // Initialization and print happen here
 connection.query()  // No re-initialization
 ```
 
-#### 2. observable - Change Observation
+#### 2. Observable - Change Observation
 
 ```kotlin
 class User {
@@ -335,7 +337,7 @@ user.name = "Alice"  // name changed from Initial Name to Alice
 user.name = "Bob"    // name changed from Alice to Bob
 ```
 
-#### 3. vetoable - Validation before Change
+#### 3. Vetoable - Validation before Change
 
 ```kotlin
 class Product {
@@ -460,7 +462,7 @@ println(user.age)    // 30
 
 In summary, property delegates allow you to extract repetitive property-related logic into reusable components, making code cleaner and more declarative.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия делегатов свойств в Kotlin от подходов в Java?
 - Когда на практике стоит использовать делегаты свойств?
@@ -471,7 +473,7 @@ In summary, property delegates allow you to extract repetitive property-related 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-memory-leak-detection--kotlin--hard]]
 - [[q-dispatchers-unconfined--kotlin--medium]]

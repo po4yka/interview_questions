@@ -1,37 +1,35 @@
 ---
 id: android-627
 title: Mobile Observability with OpenTelemetry / Наблюдаемость на Android с OpenTelemetry
-aliases:
-- Mobile Observability with OpenTelemetry
-- Наблюдаемость на Android с OpenTelemetry
+aliases: [Mobile Observability with OpenTelemetry, Наблюдаемость на Android с OpenTelemetry]
 topic: android
 subtopics:
-- logging-tracing
-- monitoring-slo
-- performance-battery
+  - logging-tracing
+  - monitoring-slo
+  - performance-battery
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- moc-android
-- c-android
-- q-android-performance-measurement-tools--android--medium
+  - c-android
+  - moc-android
+  - q-android-lint-tool--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-main-thread-android--android--medium
+  - q-parsing-optimization-android--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/logging-tracing
-- android/monitoring-slo
-- android/performance-battery
-- opentelemetry
-- difficulty/hard
+tags: [android/logging-tracing, android/monitoring-slo, android/performance-battery, difficulty/hard, opentelemetry]
 sources:
-- "https://opentelemetry.io/docs/instrumentation/android/"
-- "https://developer.android.com/topic/performance/monitoring"
+  - "https://developer.android.com/topic/performance/monitoring"
+  - "https://opentelemetry.io/docs/instrumentation/android/"
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -118,7 +116,7 @@ OpenTelemetrySdk.builder()
 - **Трейсы**: `Tracer.spanBuilder("login.request")` + атрибуты (network type, feature flag/experiment, result). Пропагируйте контекст через слои.
 - Интегрируйте с gRPC/OkHttp interceptors, WorkManager listeners, ключевыми use-cases и критичными UI-флоу.
 
-### Сбор и отправка
+### Сбор И Отправка
 
 - Используйте `BatchSpanProcessor` / `BatchLogRecordProcessor` (max queue size, export interval) для снижения накладных расходов.
 - Offline storage: буферизация (например, через DataStore/SQLite/файлы) с eviction-политикой (drop oldest) для ограничения диска.
@@ -131,7 +129,7 @@ OpenTelemetrySdk.builder()
 - Battery-aware: передавайте ограничения в `WorkManager` через `Constraints` и учитывайте системные сигналы (Doze, background restrictions), а не поллинг `BatteryManager` в рантайме.
 - Privacy: удаляйте/маскируйте PII, хэшируйте идентификаторы, уважайте настройки пользователя (opt-out из аналитики/треккинга) и требования Google Play/OS.
 
-### Наблюдение и отладка
+### Наблюдение И Отладка
 
 - Локально используйте `InMemorySpanExporter` / консольные экспортеры для отладки.
 - Добавьте переключатели в developer settings для verbose-телеметрии и включения детализированных трасс.

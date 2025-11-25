@@ -7,7 +7,9 @@ summary: Mechanisms for comparing objects for equality, including structural equ
 links: []
 created: 2025-11-05
 updated: 2025-11-05
-tags: [concept, oop, java, kotlin, equality]
+tags: [concept, equality, java, kotlin, oop]
+date created: Wednesday, November 5th 2025, 6:30:35 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

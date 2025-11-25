@@ -14,7 +14,10 @@ related: [c-collections, q-iterator-order-guarantee--programming-languages--medi
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, design-patterns, difficulty/easy, iterator, kotlin]
+date created: Friday, October 31st 2025, 6:32:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое итератор?
 
@@ -89,7 +92,7 @@ while (iterator.hasNext()) {
 println(list)  // [1, 3, 5]
 ```
 
-### Пользовательский итератор
+### Пользовательский Итератор
 
 Можно реализовать собственный итератор, например, через `Iterable`:
 
@@ -116,7 +119,7 @@ for (num in range) {
 }
 ```
 
-### Итераторы и стандартная библиотека Kotlin
+### Итераторы И Стандартная Библиотека Kotlin
 
 Во многих случаях в Kotlin удобнее работать не с `Iterator` напрямую, а с:
 - `Iterable` и коллекциями, у которых есть `iterator()`;
@@ -140,7 +143,7 @@ list.asSequence()
     .forEach { println(it) }
 ```
 
-### Преимущества итератора
+### Преимущества Итератора
 
 1. Абстракция: не нужно знать внутреннее устройство коллекции.
 2. Унифицированность: единый подход для разных коллекций.
@@ -148,7 +151,7 @@ list.asSequence()
 4. Гибкость: можно задать произвольную логику обхода.
 5. Модификация: `MutableIterator` позволяет безопасно удалять элементы при обходе.
 
-### Итератор против индексного цикла
+### Итератор Против Индексного Цикла
 
 ```kotlin
 val iterator = list.iterator()
@@ -176,7 +179,7 @@ for (i in list.indices) {
 - используется `Array` или `ArrayList` (быстрый случайный доступ);
 - нужно легко обращаться к элементам по позициям.
 
-### Распространённая ошибка
+### Распространённая Ошибка
 
 `ConcurrentModificationException` при изменении коллекции во время обхода:
 
@@ -376,7 +379,7 @@ val filtered = list.filter { it % 2 != 0 }
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия реализации итераторов в Kotlin и Java?
 - В каких практических случаях особенно полезно явно использовать итератор?
@@ -397,7 +400,7 @@ val filtered = list.filter { it % 2 != 0 }
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-what-happens-to-unneeded-objects--programming-languages--easy]]
 - [[q-interface-vs-abstract-class--programming-languages--medium]]

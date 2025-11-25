@@ -3,7 +3,7 @@ id: sysdes-001
 title: "Microservices vs Monolith Architecture / Микросервисы vs Монолитная архитектура"
 aliases: ["Microservices vs Monolith", "Микросервисы vs Монолит"]
 topic: system-design
-subtopics: [distributed-systems, scalability, microservices]
+subtopics: [distributed-systems, microservices, scalability]
 question_kind: system-design
 difficulty: hard
 original_language: en
@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [architecture, difficulty/hard, distributed-systems, microservices, system-design]
 sources: ["https://en.wikipedia.org/wiki/Microservices"]
 
+date created: Sunday, October 12th 2025, 8:31:16 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +38,7 @@ sources: ["https://en.wikipedia.org/wiki/Microservices"]
 **Architectural Approaches Theory:**
 Choosing between monolith and microservices is a fundamental architectural decision affecting development speed, scalability, team organization, and operational complexity. Each approach has its advantages and challenges.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать распределённые транзакции в микросервисной архитектуре?
 - В чём разница между хореографией и оркестрацией в паттерне Saga?
@@ -60,13 +62,13 @@ Choosing between monolith and microservices is a fundamental architectural decis
 - [[c-ci-cd]]
 - "https://en.wikipedia.org/wiki/Microservices"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-rest-api-design-best-practices--system-design--medium]] - Проектирование API
 - [[q-message-queues-event-driven--system-design--medium]] - Асинхронное взаимодействие
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-load-balancing-strategies--system-design--medium]] - Стратегии балансировки нагрузки
 - [[q-horizontal-vertical-scaling--system-design--medium]] - Горизонтальное и вертикальное масштабирование
 

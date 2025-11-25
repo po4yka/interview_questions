@@ -18,13 +18,15 @@ source_note: Comprehensive Kotlin Coroutines select Expression Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-concurrency, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-concurrency, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-11
 
-tags: [kotlin, channels, coroutines, difficulty/hard]
+tags: [channels, coroutines, difficulty/hard, kotlin]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +45,7 @@ tags: [kotlin, channels, coroutines, difficulty/hard]
 
 Также важно: обычный `select` не гарантирует честность или приоритет между ветками. При необходимости приоритета его нужно реализовывать явно (например, сначала пробовать `tryReceive` для высокоприоритетного канала).
 
-### Базовый select с каналами
+### Базовый Select С Каналами
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -110,7 +112,7 @@ fun CoroutineScope.multipleSelects() = launch {
 }
 ```
 
-### Операции select
+### Операции Select
 
 ```kotlin
 class SelectOperations {
@@ -188,7 +190,7 @@ class SelectOperations {
 }
 ```
 
-### Fan-in: несколько источников, один потребитель
+### Fan-in: Несколько Источников, Один Потребитель
 
 ```kotlin
 class FanInPattern {
@@ -252,7 +254,7 @@ class FanInPattern {
 }
 ```
 
-### Fan-out: один источник, несколько потребителей
+### Fan-out: Один Источник, Несколько Потребителей
 
 ```kotlin
 class FanOutPattern {
@@ -332,7 +334,7 @@ class FanOutPattern {
 }
 ```
 
-### Приоритетный выбор
+### Приоритетный Выбор
 
 ```kotlin
 class PrioritySelection {
@@ -385,7 +387,7 @@ class PrioritySelection {
 }
 ```
 
-### Паттерны с таймаутами
+### Паттерны С Таймаутами
 
 ```kotlin
 class TimeoutPatterns {
@@ -450,7 +452,7 @@ class TimeoutPatterns {
 }
 ```
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
 ```kotlin
 class AdvancedSelectPatterns {
@@ -589,7 +591,7 @@ class AdvancedSelectPatterns {
 }
 ```
 
-### Реальный пример: агрегатор данных из нескольких источников
+### Реальный Пример: Агрегатор Данных Из Нескольких Источников
 
 ```kotlin
 class DataAggregator {
@@ -654,7 +656,7 @@ class DataAggregator {
 }
 ```
 
-### Тестирование select-выражений
+### Тестирование Select-выражений
 
 ```kotlin
 class SelectTests {
@@ -1421,7 +1423,7 @@ class SelectTests {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `select` взаимодействует со структурированной конкуренцией и отменой, когда одна ветка завершилась, а другие ещё выполняются?
 - В каких случаях вы предпочли бы использовать `select` вместо `Flow` или композиции `Deferred` для мультиплексирования результатов?

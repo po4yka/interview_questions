@@ -1,35 +1,33 @@
 ---
 id: android-019
 title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок в Android?
-aliases:
-- Voice Video Call Android
-- WebRTC Android
-- Голосовой видеозвонок Android
+aliases: [Voice Video Call Android, WebRTC Android, Голосовой видеозвонок Android]
 topic: android
 subtopics:
-- media
-- networking-http
-- websockets
+  - media
+  - networking-http
+  - websockets
 question_kind: coding
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources:
-- "https://github.com/amitshekhariitbhu/android-interview-questions"
+  - "https://github.com/amitshekhariitbhu/android-interview-questions"
 status: draft
 moc: moc-android
 related:
-- q-http-protocols-comparison--android--medium
-- q-parallel-network-calls-coroutines--kotlin--medium
+  - q-android-lint-tool--android--medium
+  - q-http-protocols-comparison--android--medium
+  - q-main-thread-android--android--medium
+  - q-parallel-network-calls-coroutines--kotlin--medium
+  - q-parsing-optimization-android--android--medium
 created: 2025-10-06
 updated: 2025-10-31
-tags:
-- android/media
-- android/networking-http
-- android/websockets
-- difficulty/hard
+tags: [android/media, android/networking-http, android/websockets, difficulty/hard]
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -819,7 +817,7 @@ fun endCall() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать шаринг экрана во время видеозвонка?
 - Как обрабатывать переподключение сети во время активного звонка?
@@ -849,7 +847,7 @@ fun endCall() {
 - [Google Codelabs - WebRTC](https://codelabs.developers.google.com/codelabs/webrtc-web)
 - [STUN/TURN Server Setup](https://www.metered.ca/tools/openrelay/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 
@@ -859,7 +857,7 @@ fun endCall() {
 - [[q-http-protocols-comparison--android--medium]] - Понимание протоколов HTTP/WebSocket
 - [[q-parallel-network-calls-coroutines--kotlin--medium]] - Асинхронные сетевые операции
 
-### Родственные (Такой же уровень)
+### Родственные (Такой Же уровень)
 - [[q-design-instagram-stories--android--hard]] - Работа с медиа
 - [[q-data-sync-unstable-network--android--hard]] - Надежность сети
 - [[q-design-whatsapp-app--android--hard]] - Реал-тайм обмен сообщениями

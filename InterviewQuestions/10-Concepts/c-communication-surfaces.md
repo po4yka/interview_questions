@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-025
 title: Communication Surfaces / Поверхности коммуникации
-aliases:
-  - Communication Surfaces
-  - Поверхности коммуникации Android
+aliases: [Communication Surfaces, Поверхности коммуникации Android]
 kind: concept
 summary: Android system surfaces for conversations, calls, and sharing including notifications, bubbles, CallStyle, and ShareSheet integrations
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - communication
-  - notifications
-  - sharing
+tags: [android, communication, concept, notifications, sharing]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

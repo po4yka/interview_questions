@@ -16,6 +16,8 @@ updated: 2025-11-11
 sources: []
 tags: [android/intents-deeplinks, android/lifecycle, android/performance-memory, binder, difficulty/medium, exceptions, intent, savedinstancestate]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -160,7 +162,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает буфер Binder-транзакций при нескольких одновременных IPC-вызовах?
 - В чем разница между смертью процесса и изменением конфигурации с точки зрения восстановления состояния?
@@ -182,7 +184,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 - [[c-android]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные
 - [[q-what-is-intent--android--easy]]

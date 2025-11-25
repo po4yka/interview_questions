@@ -16,6 +16,7 @@ moc: moc-android
 related:
   - c-dagger
   - c-dependency-injection
+  - q-dagger-custom-scopes--android--hard
   - q-dagger-framework-overview--android--hard
   - q-dagger-inject-annotation--android--easy
   - q-dagger-main-elements--android--medium
@@ -24,6 +25,8 @@ updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources:
   - "https://dagger.dev/"
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -138,7 +141,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между Dagger и Hilt?
 - Как работает compile-time валидация в Dagger?
@@ -166,12 +169,12 @@ class MainActivity : AppCompatActivity() {
 - Official Dagger documentation: https://dagger.dev/
 - Hilt guide: https://developer.android.com/training/dependency-injection/hilt-android
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые знания
+### Базовые Знания
 - Что такое dependency injection и зачем он нужен?
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-dagger-inject-annotation--android--easy]]
 
 ### Продвинутые (сложнее)

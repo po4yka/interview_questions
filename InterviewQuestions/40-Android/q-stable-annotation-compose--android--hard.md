@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-compose, difficulty/hard, jetpack-compose, recomposition, stable-annotation]
 
+date created: Saturday, November 1st 2025, 1:24:29 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +36,7 @@ tags: [android/performance-rendering, android/ui-compose, difficulty/hard, jetpa
 
 Ключевая идея: `@Stable` — это обещание разработчика компилятору. Если вы нарушаете контракт, поведение не определено: вы можете получить устаревший UI или пропущенные рекомпозиции.
 
-### Контракт стабильности
+### Контракт Стабильности
 
 Тип считается стабильным, если выполняются условия:
 
@@ -70,7 +72,7 @@ class UnstableCounter {
 - отслеживать, какие поля читаются,
 - и пропускать рекомпозицию, когда известно, что прочитанные стабильные поля не менялись между вызовами.
 
-### Когда использовать @Stable
+### Когда Использовать @Stable
 
 Используйте `@Stable` в основном тогда, когда компилятор не может вывести стабильность автоматически, но вы можете строго гарантировать контракт:
 
@@ -102,7 +104,7 @@ class StableThirdPartyData(private val data: ThirdPartyData) {
 
 Не помечайте произвольные классы `ViewModel` и вообще сложные, активно изменяемые объекты как `@Stable`, если вы не можете строго выполнить контракт. Вместо этого экспонируйте из них стабильное/immutable/observable-состояние.
 
-### @Stable vs @Immutable
+### @Stable Vs @Immutable
 
 - `@Immutable`:
   - Более строгий контракт.
@@ -119,7 +121,7 @@ class StableThirdPartyData(private val data: ThirdPartyData) {
 - `@Immutable`: чистые value-объекты / DTO / state-холдеры, которые не мутируют.
 - `@Stable`: контролируемые изменяемые state-холдеры / обёртки, где вы гарантируете наблюдаемые изменения.
 
-### Влияние на производительность (уточнение)
+### Влияние На Производительность (уточнение)
 
 ```kotlin
 @Stable
@@ -147,7 +149,7 @@ ProductCard(Product("1", "Laptop", 999.99))
 - `@Stable` улучшает способность компилятора пропускать рекомпозиции, когда стабильные параметры не меняются в релевантных частях.
 - Это НЕ означает "`equals()` вернул true ⇒ рекомпозиция всегда будет пропущена"; решение принимается по модели стабильности, отслеживанию чтений и известным изменениям.
 
-### Частые ошибки
+### Частые Ошибки
 
 ```kotlin
 // ❌ Потенциальная ошибка: @Stable на типе, чьё наблюдаемое поведение
@@ -164,7 +166,7 @@ data class User(val id: String, val name: String)
 - Помечайте тип `@Stable` / `@Immutable` только если вы полностью понимаете и соблюдаете контракт.
 - Неверная аннотация может привести к пропущенным рекомпозициям и "застывшему" UI.
 
-### Проверка стабильности
+### Проверка Стабильности
 
 Включите метрики/отчёты компилятора Compose в `build.gradle.kts`:
 
@@ -264,7 +266,7 @@ class StableThirdPartyData(private val data: ThirdPartyData) {
 
 Do NOT annotate arbitrary `ViewModel` classes or generally mutable, complex objects with `@Stable` unless you can strictly uphold the contract. Instead, expose stable/immutable/observable state from them.
 
-### @Stable vs @Immutable
+### @Stable Vs @Immutable
 
 - `@Immutable`:
   - Stronger contract.
@@ -352,7 +354,7 @@ stable class User {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если пометить нестабильный класс как `@Stable`?
 - Чем `@Stable` отличается от `@Immutable` в практических сценариях?
@@ -390,7 +392,7 @@ stable class User {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (Medium)
 - [[q-compose-testing--android--medium]] - Понимание рекомпозиции в тестах

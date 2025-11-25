@@ -10,11 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
 created: 2023-10-15
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
 
+date created: Friday, October 31st 2025, 6:29:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -781,7 +783,7 @@ Typical patterns (matching RU examples):
 - `RESUMED`: handle foreground input.
 - `CREATED`: run initialization collections when needed.
 
-### Fragment: lifecycleScope vs viewLifecycleOwner.lifecycleScope
+### Fragment: lifecycleScope Vs viewLifecycleOwner.lifecycleScope
 
 - `Fragment`'s `lifecycleScope`:
   - Tied to `Fragment` lifecycle; outlives its view.
@@ -834,7 +836,7 @@ Even for application-level/background tasks, prefer explicit, structured applica
 - Do not misuse scopes across ownership boundaries.
 - Avoid `GlobalScope` for lifecycle-bound or UI-related logic.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём преимущества этих scope по сравнению с классическими async-подходами в Java (callbacks, Executors)?
 - Как бы вы выбрали подходящий scope в реальном проекте для разных типов задач?
@@ -858,7 +860,7 @@ Even for application-level/background tasks, prefer explicit, structured applica
 - [[c-kotlin]]
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-context-detailed--kotlin--hard]]
 - [[q-race-conditions-coroutines--kotlin--hard]]

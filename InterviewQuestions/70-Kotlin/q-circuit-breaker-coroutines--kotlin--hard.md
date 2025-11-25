@@ -13,8 +13,10 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, microservices, patterns, production, resilience]
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 
+date created: Saturday, November 1st 2025, 12:10:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -1435,13 +1437,13 @@ This ensures:
 
 ---
 
-## Определение и мотивация паттерна
+## Определение И Мотивация Паттерна
 
-### Что такое circuit breaker?
+### Что Такое Circuit Breaker?
 
 Паттерн circuit breaker вдохновлён электрическими автоматическими выключателями, которые автоматически останавливают ток при обнаружении неисправности.
 
-### Зачем использовать circuit breaker?
+### Зачем Использовать Circuit Breaker?
 
 Проблема без circuit breaker:
 
@@ -1485,11 +1487,11 @@ class PaymentService(
 
 ---
 
-## Три состояния
+## Три Состояния
 
 (Фрагменты иллюстрируют поведение; полную реализацию см. в разделе «Полная реализация».)
 
-### Состояние: Closed (закрыто, нормальная работа)
+### Состояние: Closed (закрыто, Нормальная работа)
 
 ```kotlin
 sealed class CircuitBreakerState {
@@ -1506,7 +1508,7 @@ sealed class CircuitBreakerState {
 - Успешный вызов сбрасывает счётчик ошибок
 - При превышении порога → переход в OPEN
 
-### Состояние: Open (открыто, сервис не работает)
+### Состояние: Open (открыто, Сервис Не работает)
 
 ```kotlin
 sealed class CircuitBreakerState {
@@ -1545,7 +1547,7 @@ sealed class CircuitBreakerState {
 
 ---
 
-## Диаграмма переходов состояний {#диаграмма-переходов-состояний-ru}
+## Диаграмма Переходов Состояний {#диаграмма-переходов-состояний-ru}
 
 1. CLOSED → OPEN: превышен порог ошибок.
 2. OPEN → HALF_OPEN: истёк период тайм-аута.
@@ -1554,9 +1556,9 @@ sealed class CircuitBreakerState {
 
 ---
 
-## Конфигурация порога ошибок
+## Конфигурация Порога Ошибок
 
-### Базовая конфигурация
+### Базовая Конфигурация
 
 ```kotlin
 data class CircuitBreakerConfig(
@@ -1588,7 +1590,7 @@ data class CircuitBreakerConfig(
 
 Примечание: пример одновременно упоминает «последовательные ошибки» и окно времени. В реальной реализации нужно явно выбрать модель (последовательные ошибки, скользящее окно и т.п.) и согласованно её реализовать.
 
-### Продвинутая конфигурация со sliding window
+### Продвинутая Конфигурация Со Sliding Window
 
 ```kotlin
 data class AdvancedCircuitBreakerConfig(
@@ -1623,7 +1625,7 @@ enum class SlidingWindowType {
 }
 ```
 
-### Разные конфигурации для разных сервисов
+### Разные Конфигурации Для Разных Сервисов
 
 ```kotlin
 object CircuitBreakerConfigs {
@@ -1655,9 +1657,9 @@ object CircuitBreakerConfigs {
 
 ---
 
-## Тайм-ауты и период восстановления
+## Тайм-ауты И Период Восстановления
 
-### Конфигурация тайм-аута
+### Конфигурация Тайм-аута
 
 ```kotlin
 class CircuitBreaker(
@@ -1686,7 +1688,7 @@ class CircuitBreaker(
 }
 ```
 
-### Стратегии периода восстановления
+### Стратегии Периода Восстановления
 
 Примеры ниже концептуальные и не подключены напрямую к классу CircuitBreaker выше.
 
@@ -1728,7 +1730,7 @@ interface RecoveryStrategy {
 
 ---
 
-## Механизм полуоткрытого состояния
+## Механизм Полуоткрытого Состояния
 
 ### Реализация (фрагмент)
 
@@ -1787,9 +1789,9 @@ class CircuitBreaker(
 
 ---
 
-## Полная реализация {#полная-реализация-ru}
+## Полная Реализация {#полная-реализация-ru}
 
-### Полный класс CircuitBreaker
+### Полный Класс CircuitBreaker
 
 ```kotlin
 class CircuitBreaker(
@@ -1990,9 +1992,9 @@ class CircuitBreakerOpenException(
 
 ---
 
-## Потокобезопасные переходы состояний
+## Потокобезопасные Переходы Состояний
 
-### Использование AtomicReference и Mutex
+### Использование AtomicReference И Mutex
 
 ```kotlin
 class ThreadSafeCircuitBreaker(
@@ -2075,9 +2077,9 @@ class ThreadSafeCircuitBreaker(
 
 ---
 
-## Полный API клиент с Circuit Breaker
+## Полный API Клиент С Circuit Breaker
 
-### Retrofit API с обёрткой circuit breaker
+### Retrofit API С Обёрткой Circuit Breaker
 
 ```kotlin
 interface PaymentApi {
@@ -2135,7 +2137,7 @@ class PaymentService(
 
 ---
 
-## Комбинирование с Retry и Timeout
+## Комбинирование С Retry И Timeout
 
 ### Circuit Breaker + Retry + Timeout (RU)
 
@@ -2208,9 +2210,9 @@ data class RetryConfig(
 
 ---
 
-## Мониторинг состояния Circuit Breaker
+## Мониторинг Состояния Circuit Breaker
 
-### Онлайн-мониторинг состояния (RU)
+### Онлайн-мониторинг Состояния (RU)
 
 ```kotlin
 class CircuitBreakerMonitor(
@@ -2250,7 +2252,7 @@ class CircuitBreakerMonitor(
 }
 ```
 
-### Дэшборд метрик (RU)
+### Дэшборд Метрик (RU)
 
 ```kotlin
 @Composable
@@ -2279,7 +2281,7 @@ fun CircuitBreakerDashboard(monitor: CircuitBreakerMonitor) {
 
 ---
 
-## Production метрики {#production-метрики-ru}
+## Production Метрики {#production-метрики-ru}
 
 Рекомендуемые метрики:
 - Общее число вызовов, успешных, неуспешных, отклонённых
@@ -2292,7 +2294,7 @@ fun CircuitBreakerDashboard(monitor: CircuitBreakerMonitor) {
 
 ---
 
-## Тестирование с симуляцией сбоев {#тестирование-с-симуляцией-сбоев}
+## Тестирование С Симуляцией Сбоев {#тестирование-с-симуляцией-сбоев}
 
 Подходы:
 - Unit-тесты с заглушками, которые всегда падают, чтобы проверить переход в OPEN и HALF_OPEN.
@@ -2302,7 +2304,7 @@ fun CircuitBreakerDashboard(monitor: CircuitBreakerMonitor) {
 
 ---
 
-## Сравнение с Resilience4j {#сравнение-с-resilience4j}
+## Сравнение С Resilience4j {#сравнение-с-resilience4j}
 
 Resilience4j предоставляет готовые реализации circuit breaker, retry, bulkhead и rate limiter.
 Сравнение с собственной реализацией на корутинах:
@@ -2314,7 +2316,7 @@ Resilience4j предоставляет готовые реализации circ
 
 ---
 
-## Реальный пример: Payment Service {#реальный-пример-payment-service}
+## Реальный Пример: Payment Service {#реальный-пример-payment-service}
 
 Типичный сценарий:
 - Оборачиваем вызовы внешнего платёжного провайдера в circuit breaker.
@@ -2332,7 +2334,7 @@ Resilience4j предоставляет готовые реализации circ
 
 ---
 
-## Лучшие практики {#лучшие-практики-ru}
+## Лучшие Практики {#лучшие-практики-ru}
 
 - Отдельный circuit breaker на каждую внешнюю зависимость или группу похожих операций.
 - Комбинация с retry, timeout, bulkhead и rate limiting.
@@ -2342,7 +2344,7 @@ Resilience4j предоставляет готовые реализации circ
 
 ---
 
-## Когда НЕ использовать {#когда-не-использовать}
+## Когда НЕ Использовать {#когда-не-использовать}
 
 - Для дешёвых, идемпотентных операций, где повторы безопасны.
 - Для локальных вызовов в пределах одного процесса.
@@ -2350,7 +2352,7 @@ Resilience4j предоставляет готовые реализации circ
 
 ---
 
-## Распространённые ошибки {#распространённые-ошибки-ru}
+## Распространённые Ошибки {#распространённые-ошибки-ru}
 
 - Слишком низкий порог ошибок → частые ложные срабатывания.
 - Игнорирование `CircuitBreakerOpenException` без fallback.
@@ -2359,7 +2361,7 @@ Resilience4j предоставляет готовые реализации circ
 
 ---
 
-## Дополнительные вопросы {#дополнительные-вопросы-ru}
+## Дополнительные Вопросы {#дополнительные-вопросы-ru}
 
 1. В чём разница между circuit breaker и retry паттерном?
 2. Как подобрать `failureThreshold` и `resetTimeout` для разных сервисов?
@@ -2377,7 +2379,7 @@ Resilience4j предоставляет готовые реализации circ
 
 ---
 
-## Связанные вопросы {#связанные-вопросы-ru}
+## Связанные Вопросы {#связанные-вопросы-ru}
 
 - [[q-advanced-coroutine-patterns--kotlin--hard]]
 - [[q-request-coalescing-deduplication--kotlin--hard]]

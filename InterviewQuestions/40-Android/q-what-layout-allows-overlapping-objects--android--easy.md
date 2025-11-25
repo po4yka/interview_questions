@@ -1,34 +1,31 @@
 ---
 id: android-186
 title: Layout Overlapping Objects / Макет для перекрывающихся объектов
-aliases:
-- Overlapping Layout
-- Макет для перекрывания
+aliases: [Overlapping Layout, Макет для перекрывания]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-layouts
-- q-viewgroup-vs-view-differences--android--easy
-- q-what-methods-redraw-views--android--medium
+  - c-layouts
+  - q-how-to-choose-layout-for-fragment--android--easy
+  - q-viewgroup-vs-view-differences--android--easy
+  - q-what-is-layout-types-and-when-to-use--android--easy
+  - q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy
+  - q-what-methods-redraw-views--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/easy
-- framelayout
-- layouts
-- ui
-- view-positioning
+tags: [android/ui-views, difficulty/easy, framelayout, layouts, ui, view-positioning]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -127,9 +124,9 @@ fun OverlayExample() {
 }
 ```
 
-### Типичные случаи использования
+### Типичные Случаи Использования
 
-#### 1. Изображение с полупрозрачным оверлеем
+#### 1. Изображение С Полупрозрачным Оверлеем
 ```kotlin
 @Composable
 fun ImageWithOverlay() {
@@ -160,7 +157,7 @@ fun ImageWithOverlay() {
 }
 ```
 
-#### 2. Оверлей загрузки поверх контента
+#### 2. Оверлей Загрузки Поверх Контента
 ```kotlin
 @Composable
 fun ContentWithLoading(isLoading: Boolean) {
@@ -185,7 +182,7 @@ fun ContentWithLoading(isLoading: Boolean) {
 }
 ```
 
-#### 3. Бейдж на иконке
+#### 3. Бейдж На Иконке
 ```kotlin
 @Composable
 fun IconWithBadge(badgeCount: Int) {
@@ -216,7 +213,7 @@ fun IconWithBadge(badgeCount: Int) {
 }
 ```
 
-#### 4. Плавающая кнопка действия над контентом
+#### 4. Плавающая Кнопка Действия Над Контентом
 ```kotlin
 @Composable
 fun ScreenWithFAB() {
@@ -241,7 +238,7 @@ fun ScreenWithFAB() {
 }
 ```
 
-### Z-Index и порядок отрисовки
+### Z-Index И Порядок Отрисовки
 
 В `Box` слои располагаются в порядке объявления:
 

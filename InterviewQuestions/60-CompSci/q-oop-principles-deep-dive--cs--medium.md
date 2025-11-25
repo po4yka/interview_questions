@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [abstraction, composition, difficulty/medium, encapsulation, inheritance, oop, polymorphism]
 sources: ["https://en.wikipedia.org/wiki/Object-oriented_programming"]
+date created: Saturday, November 1st 2025, 1:26:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)

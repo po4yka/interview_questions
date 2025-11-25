@@ -4,28 +4,33 @@ title: Custom View Accessibility / Доступность Custom View
 aliases: [Custom View Accessibility, Доступность Custom View]
 topic: android
 subtopics:
-- ui-accessibility
-- ui-views
+  - ui-accessibility
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-accessibility
-- c-custom-views
-- q-accessibility-compose--android--medium
-- q-accessibility-talkback--android--medium
-- q-compose-semantics--android--medium
+  - c-accessibility
+  - c-custom-views
+  - q-accessibility-compose--android--medium
+  - q-accessibility-talkback--android--medium
+  - q-compose-semantics--android--medium
+  - q-custom-view-attributes--android--medium
+  - q-custom-view-lifecycle--android--medium
+  - q-custom-view-state-saving--android--medium
 sources:
-- "https://developer.android.com/guide/topics/ui/accessibility"
+  - "https://developer.android.com/guide/topics/ui/accessibility"
 created: 2025-10-21
 updated: 2025-11-10
 tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:26:41 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -345,7 +350,7 @@ class ProgressView @JvmOverloads constructor(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как тестировать доступность custom view с помощью Accessibility Scanner и Espresso?
 - В чем разница между `contentDescription` и `stateDescription`?
@@ -375,13 +380,13 @@ class ProgressView @JvmOverloads constructor(
 - [AccessibilityNodeInfo API](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo)
 - [Custom `View` Accessibility](https://developer.android.com/guide/topics/ui/accessibility/custom-views)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - Понимание базовых принципов системы `View` в Android
 - Базовые знания концепций доступности
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-compose-semantics--android--medium]] — семантика доступности в Compose
 - [[q-accessibility-talkback--android--medium]] — паттерны интеграции с `TalkBack`
 - [[q-accessibility-compose--android--medium]] — реализация доступности в Compose

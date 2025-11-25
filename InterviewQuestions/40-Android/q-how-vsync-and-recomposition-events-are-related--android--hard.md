@@ -1,32 +1,31 @@
 ---
 id: android-110
 title: How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события рекомпозиции
-aliases:
-- VSYNC Recomposition
-- VSYNC и рекомпозиция
+aliases: [VSYNC Recomposition, VSYNC и рекомпозиция]
 topic: android
 subtopics:
-- performance-rendering
-- ui-compose
+  - performance-rendering
+  - ui-compose
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+  - c-compose-state
+  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
+  - q-mvi-one-time-events--android--medium
+  - q-recomposition-choreographer--android--hard
+  - q-recomposition-compose--android--medium
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags:
-- android
-- android/performance-rendering
-- android/ui-compose
-- difficulty/hard
+tags: [android, android/performance-rendering, android/ui-compose, difficulty/hard]
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +42,7 @@ tags:
 
 **VSYNC (Vertical Synchronization)** — это сигнал синхронизации, который привязывает отрисовку UI к частоте обновления экрана (обычно 60Hz, 90Hz, 120Hz). На Android отрисовка кадров синхронизируется с VSYNC через `Choreographer`. Jetpack Compose использует этот механизм: рекомпозиции и измерение/рисование планируются в рамках коллбеков кадра (frame callbacks), которые синхронизированы с VSYNC, но изменение состояния само по себе не блокируется до VSYNC.
 
-### Ключевой механизм
+### Ключевой Механизм
 
 1. **Изменение состояния** помечает затронутые composable как требующие рекомпозиции.
 2. **Рекомпозиция планируется** на ближайший tick frame clock (коллбек `Choreographer`), а не выполняется синхронно с записью состояния.
@@ -64,7 +63,7 @@ fun VSyncDemo() {
 }
 ```
 
-### Бюджет кадра (60Hz ≈ 16.6ms)
+### Бюджет Кадра (60Hz ≈ 16.6ms)
 
 Ниже — иллюстративный пример распределения времени внутри одного кадра, а не жестко гарантированные значения:
 
@@ -79,7 +78,7 @@ Total:           ~16.6ms
 
 Если суммарная CPU+GPU-работа стабильно не укладывается в интервал между VSYNC-сигналами, кадры пропускаются (dropped frames), появляется jank.
 
-### Батчинг состояний
+### Батчинг Состояний
 
 Compose старается объединять множественные изменения состояния, произошедшие в одном цикле обработки событий, в одну рекомпозицию кадра:
 
@@ -101,7 +100,7 @@ fun BatchedUpdates() {
 
 Это уменьшает количество лишних проходов и помогает лучше использовать бюджет кадра, но не является строгой гарантией "ровно одна рекомпозиция только на следующем VSYNC" — решения принимает планировщик Compose/Choreographer.
 
-### Пропуск промежуточных состояний
+### Пропуск Промежуточных Состояний
 
 Если состояние обновляется чаще, чем приходят кадры, UI может отобразить только последние доступные значения к моменту следующего VSYNC. Промежуточные значения фактически "перескакиваются":
 
@@ -126,7 +125,7 @@ LaunchedEffect(Unit) {
 
 Важно понимать: привязка к VSYNC означает, что визуально имеют значение только значения состояния, "зафиксированные" к моменту подготовки следующего кадра.
 
-### Оптимизация под VSYNC
+### Оптимизация Под VSYNC
 
 **`derivedStateOf`** — позволяет пересчитывать производные значения только при реальном изменении зависимостей, уменьшая работу в кадре:
 
@@ -157,7 +156,7 @@ Box(
 
 Это помогает переносить часть работы в фазу рисования и лучше использовать каждый VSYNC-синхронизированный кадр.
 
-### Автоматическая адаптация к частоте обновления
+### Автоматическая Адаптация К Частоте Обновления
 
 Compose использует `Choreographer`/frame clock, который синхронизирован с частотой обновления устройства:
 
@@ -298,7 +297,7 @@ No special app-side configuration is usually needed: Compose runs on the frame c
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит, если рекомпозиция занимает больше времени, чем интервал между VSYNC-сигналами?
 - Как Compose обрабатывает быстрые изменения состояния, которые происходят чаще, чем обновляется дисплей?
@@ -326,17 +325,17 @@ No special app-side configuration is usually needed: Compose runs on the frame c
 - [Compose Performance Best Practices](https://developer.android.com/jetpack/compose/performance)
 - [Choreographer Documentation](https://developer.android.com/reference/android/view/Choreographer)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые концепции
+### Базовые Концепции
 
 - [[c-compose-state]]
 
-### Связанные вопросы
+### Связанные Вопросы
 
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
 
-### Продвинутые темы
+### Продвинутые Темы
 
 - Использование `Choreographer` и коллбеков кадров в Android
 - Оптимизация рендеринга и снижение overdraw

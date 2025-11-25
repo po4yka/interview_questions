@@ -1,7 +1,7 @@
 ---
 id: android-233
 title: "View Lifecycle in Android / View lifecycle in Android"
-aliases: ["View Lifecycle", "View lifecycle in Android"]
+aliases: ["View lifecycle in Android", "View Lifecycle"]
 topic: android
 subtopics: [lifecycle, ui-views]
 question_kind: android
@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:25:39 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -30,13 +32,13 @@ tags: [android/lifecycle, android/ui-views, difficulty/medium]
 
 Жизненный цикл `View` описывает, как `View` создается, прикрепляется к окну, измеряется, раскладывается, рисуется и в итоге отсоединяется. Понимание этого цикла важно для корректного управления ресурсами, обработки смены конфигурации и оптимизации производительности.
 
-### Ключевые стадии
+### Ключевые Стадии
 
 **Constructor → onFinishInflate() (если из XML) → onAttachedToWindow() → onMeasure() → onLayout() → onDraw() → onDetachedFromWindow()**
 
 (Это упрощенная схема: есть дополнительные колбэки, такие как `onFinishInflate()`, `onSizeChanged()`, `onWindowVisibilityChanged()`, возможны несколько проходов `measure`/`layout`/`draw`, а также повторные attach/detach.)
 
-### 1. Constructor и инициализация
+### 1. Constructor И Инициализация
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -60,7 +62,7 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-### 2. onAttachedToWindow() – старт ресурсов
+### 2. onAttachedToWindow() – Старт Ресурсов
 
 Вызывается, когда `View` прикрепляется к окну. Здесь обычно запускают анимации, регистрируют слушатели и т.п., которые должны существовать только пока `View` реально прикреплена.
 
@@ -74,7 +76,7 @@ override fun onAttachedToWindow() {
 }
 ```
 
-### 3. onMeasure() – определение размера
+### 3. onMeasure() – Определение Размера
 
 Определяет размер `View`. Обязательно вызвать `setMeasuredDimension()` (напрямую или через `super.onMeasure()` / вспомогательные методы).
 
@@ -94,7 +96,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 - `AT_MOST` – максимум: обычно для `wrap_content`, `View` не должен превышать заданный размер (`size <= specSize`).
 - `UNSPECIFIED` – нет ограничений; `View` может выбрать любой размер (особые случаи, например внутри `ScrollView`).
 
-### 4. onLayout() – позиционирование
+### 4. onLayout() – Позиционирование
 
 Для `ViewGroup` отвечает за размещение дочерних `View`. Для простых `View` обычно `onLayout()` не переопределяют; вместо этого используют `onSizeChanged()` (или при необходимости `onLayout()`) для перерасчета внутренних координат для рисования.
 
@@ -118,7 +120,7 @@ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 }
 ```
 
-### 5. onDraw() – отрисовка
+### 5. onDraw() – Отрисовка
 
 Отвечает за рисование содержимого `View`. Вызывается часто, поэтому нужно избегать аллокаций внутри.
 
@@ -137,7 +139,7 @@ override fun onDraw(canvas: Canvas) {
 // }
 ```
 
-### 6. onDetachedFromWindow() – освобождение ресурсов
+### 6. onDetachedFromWindow() – Освобождение Ресурсов
 
 Вызывается при отсоединении от окна. Останавливаем анимации, отписываем слушатели, чистим ресурсы, которые завязаны на attach.
 
@@ -153,7 +155,7 @@ override fun onDetachedFromWindow() {
 // Неправильно: не отписываться от слушателей приводит к утечкам памяти
 ```
 
-### Методы обновления
+### Методы Обновления
 
 **`requestLayout()`** – при изменении размеров/позиционирования:
 
@@ -175,7 +177,7 @@ fun updateColor() {
 
 Важно: `requestLayout()` и `invalidate()` должны вызываться с UI-потока; для фоновых потоков используйте `post { ... }` / `postInvalidate()` / `postInvalidateOnAnimation()`.
 
-### Сохранение состояния
+### Сохранение Состояния
 
 `View` может сохранять и восстанавливать собственное состояние, чтобы значения переживали пересоздание `Activity`, когда восстанавливается та же иерархия `View`.
 
@@ -228,7 +230,7 @@ class CustomView @JvmOverloads constructor(
 
 (Важно: вложенный класс состояния должен быть статическим в Java / не удерживать неявную ссылку на внешний класс, чтобы избежать утечек.)
 
-### Ключевые принципы
+### Ключевые Принципы
 
 1. Инициализировать тяжелые/статичные объекты в конструкторе или `init` (например, `Paint`, значения по умолчанию).
 2. Запускать внешние ресурсы в `onAttachedToWindow()` (анимации, слушатели, сенсоры), а при необходимости реагировать на изменения видимости через `onWindowVisibilityChanged()` / `onVisibilityAggregated()`.
@@ -448,7 +450,7 @@ class CustomView @JvmOverloads constructor(
 5. Use `requestLayout()` vs `invalidate()` appropriately (layout/size vs appearance), from the UI thread or via the `post*` methods.
 6. Implement `onSaveInstanceState()` / `onRestoreInstanceState()` correctly (e.g., with `BaseSavedState`) for view-specific state.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем разница между `invalidate()` и `postInvalidate()`?
 2. Когда лучше переопределять `onSizeChanged()`, а когда `onLayout()`?
@@ -476,13 +478,13 @@ class CustomView @JvmOverloads constructor(
 - Custom `View` Components Guide: https://developer.android.com/develop/ui/views/layout/custom-views/custom-components
 - Related lifecycle concepts: [[c-activity-lifecycle]], [[c-fragment-lifecycle]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые
 - [[q-activity-lifecycle-methods--android--medium]] — базовые принципы жизненного цикла `Activity`
 - [[q-android-app-components--android--easy]] — компоненты Android-приложения
 
-### На том же уровне
+### На Том Же Уровне
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] — подходы к сохранению состояния
 - [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] — обновление `View` в `RecyclerView`
 

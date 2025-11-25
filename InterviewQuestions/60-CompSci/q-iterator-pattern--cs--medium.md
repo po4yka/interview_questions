@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, collection-traversal, design-patterns, difficulty/medium, iterator]
 sources: ["https://refactoring.guru/design-patterns/iterator"]
+date created: Saturday, November 1st 2025, 1:03:21 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -421,7 +423,7 @@ You might avoid explicit Iterator pattern when:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как паттерн Итератор соотносится с паттерном Компоновщик (Composite)?
 - В чем разница между паттернами Итератор и Посетитель (Visitor)?
@@ -433,13 +435,13 @@ You might avoid explicit Iterator pattern when:
 - What is the difference between Iterator and Visitor pattern?
 - How does Kotlin's for-in loop work under the hood?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые коллекции в Kotlin
 - Понимание интерфейса `Iterable`
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-facade-pattern--design-patterns--medium]] - Паттерн Фасад
 - [[q-visitor-pattern--design-patterns--hard]] - Паттерн Посетитель
 

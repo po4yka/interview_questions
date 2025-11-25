@@ -1,43 +1,34 @@
 ---
 id: android-247
 title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент
-aliases:
-- Photo Editor Component
-- Separate Photo Editor
-- Отдельный компонент редактора
-- Фоторедактор как компонент
+aliases: [Photo Editor Component, Separate Photo Editor, Отдельный компонент редактора, Фоторедактор как компонент]
 topic: android
 subtopics:
-- fragment
-- ui-graphics
-- ui-views
+  - fragment
+  - ui-graphics
+  - ui-views
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity
-- q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium
-- q-workmanager-vs-alternatives--android--medium
+  - c-activity
+  - q-how-to-pass-photo-to-editor--android--medium
+  - q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium
+  - q-implement-voice-video-call--android--hard
+  - q-why-separate-ui-and-business-logic--android--easy
+  - q-workmanager-vs-alternatives--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android
-- android/fragment
-- android/ui-graphics
-- android/ui-views
-- bitmap
-- canvas
-- difficulty/easy
-- fragments
-- imageview
-- views
+tags: [android, android/fragment, android/ui-graphics, android/ui-views, bitmap, canvas, difficulty/easy, fragments, imageview, views]
 
+date created: Saturday, November 1st 2025, 1:30:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -54,7 +45,7 @@ tags:
 
 Фоторедактор можно реализовать как переиспользуемый `Fragment` с `ImageView` для отображения и методами обработки `Bitmap` внутри фрагмента. Для трансформаций используйте `Matrix`, для базовых цветовых эффектов — `ColorMatrix`. Важно чётко определить API фрагмента (например, `newInstance` для передачи URI и callback/интерфейс или `FragmentResult` для возврата результата), чтобы компонент был изолирован от конкретной `Activity`.
 
-### Основной компонент
+### Основной Компонент
 
 ```kotlin
 // Fragment-based photo editor (упрощённый пример)
@@ -128,7 +119,7 @@ class PhotoEditorFragment : Fragment() {
 }
 ```
 
-### Базовые операции
+### Базовые Операции
 
 ```kotlin
 // Поворот изображения (пример трансформации)
@@ -188,7 +179,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Сохранение изменений
+### Сохранение Изменений
 
 ```kotlin
 // Сохранение в MediaStore (подход Android 10+; на старых API некоторые поля, как RELATIVE_PATH, игнорируются)
@@ -408,7 +399,7 @@ private fun saveImage() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать функцию обрезки изображения (crop)?
 - Как применять кастомные фильтры с использованием `ColorMatrix`?
@@ -436,7 +427,7 @@ private fun saveImage() {
 - [ColorMatrix Filters](https://developer.android.com/reference/android/graphics/ColorMatrix)
 - [MediaStore API](https://developer.android.com/training/data-storage/shared/media)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -444,7 +435,7 @@ private fun saveImage() {
 
 ### Предпосылки (проще)
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium]]
 

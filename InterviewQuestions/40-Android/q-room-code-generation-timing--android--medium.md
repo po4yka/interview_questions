@@ -1,31 +1,32 @@
 ---
 id: android-122
 title: Room Code Generation Timing / Время генерации кода Room
-aliases:
-- Room Code Generation Timing
-- Время генерации кода Room
+aliases: [Room Code Generation Timing, Время генерации кода Room]
 topic: android
 subtopics:
-- room
+  - room
 question_kind: theory
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-room
-- q-dagger-framework-overview--android--hard
-- q-kapt-ksp-migration--android--medium
-- q-kapt-vs-ksp--android--medium
+  - c-room
+  - q-dagger-framework-overview--android--hard
+  - q-kapt-ksp-migration--android--medium
+  - q-kapt-vs-ksp--android--medium
+  - q-room-database-migrations--android--medium
+  - q-room-relations-embedded--android--medium
+  - q-room-type-converters-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/room
-- difficulty/medium
+tags: [android/room, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +45,7 @@ tags:
 
 Room как слой абстракции над SQLite использует annotation processing для генерации реализаций DAO и Database классов и для compile-time валидации сущностей и запросов на основе известных ему моделей.
 
-### Процесс генерации
+### Процесс Генерации
 
 1. **Аннотированный код**
 ```kotlin
@@ -79,7 +80,7 @@ dependencies {
 
 > На практике KSP для Room обычно быстрее и лучше интегрируется с Kotlin и инкрементальной компиляцией, но выигрыш в производительности зависит от проекта и не является гарантированным фиксированным "2x".
 
-3. **Генерируемая реализация** (примерно, в `build/generated/`) — упрощённый псевдокод
+1. **Генерируемая реализация** (примерно, в `build/generated/`) — упрощённый псевдокод
 ```kotlin
 class UserDao_Impl : UserDao {
     override fun getAll(): List<User> {
@@ -96,7 +97,7 @@ class UserDao_Impl : UserDao {
 }
 ```
 
-### Kapt vs KSP
+### Kapt Vs KSP
 
 | Аспект | kapt | KSP |
 |--------|------|-----|
@@ -106,7 +107,7 @@ class UserDao_Impl : UserDao {
 
 **Рекомендация:** использовать KSP для новых проектов и при миграции, если это поддерживается версиями Room и Gradle.
 
-### Валидация на этапе компиляции
+### Валидация На Этапе Компиляции
 
 ```kotlin
 @Query("SELECT * FROM usres") // ❌ Ошибка: таблица не существует (по данным Room о сущностях)
@@ -166,7 +167,7 @@ dependencies {
 
 > In practice, Room with KSP is typically faster and integrates better with Kotlin and incremental builds, but the "2x faster" figure is project-dependent and not a guaranteed constant.
 
-3. **Generated Implementation** (roughly, in `build/generated/`) — simplified pseudocode
+1. **Generated Implementation** (roughly, in `build/generated/`) — simplified pseudocode
 ```kotlin
 class UserDao_Impl : UserDao {
     override fun getAll(): List<User> {
@@ -183,7 +184,7 @@ class UserDao_Impl : UserDao {
 }
 ```
 
-### Kapt vs KSP
+### Kapt Vs KSP
 
 | Aspect | kapt | KSP |
 |--------|------|-----|
@@ -212,7 +213,7 @@ fun getAll(): List<User>
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Room обрабатывает миграции схемы с использованием сгенерированного кода?
 - Каковы компромиссы между инкрементальной компиляцией `kapt` и `KSP`?
@@ -238,7 +239,7 @@ fun getAll(): List<User>
 - [[c-room]]
 - Official Android Room documentation (developer.android.com)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

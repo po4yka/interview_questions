@@ -1,40 +1,35 @@
 ---
 id: android-335
 title: In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service
-aliases:
-- Main Thread Service
-- Service Thread
-- Поток Service
-- Сервис в главном потоке
+aliases: [Main Thread Service, Service Thread, Поток Service, Сервис в главном потоке]
 topic: android
 subtopics:
-- lifecycle
-- service
-- threads-sync
+  - lifecycle
+  - service
+  - threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-coroutines
-- c-service
-- c-lifecycle
-- q-android-service-types--android--easy
-- q-foreground-service-types--android--medium
+  - c-coroutines
+  - c-lifecycle
+  - c-service
+  - q-android-service-types--android--easy
+  - q-foreground-service-types--android--medium
+  - q-main-thread-android--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android
-- android/lifecycle
-- android/service
-- android/threads-sync
-- difficulty/medium
+tags: [android, android/lifecycle, android/service, android/threads-sync, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -97,7 +92,7 @@ class DataSyncService : Service() {
 }
 ```
 
-#### 2. Foreground `Service` С Корутинами (рекомендуемый подход для длительной видимой работы)
+#### 2. Foreground `Service` С Корутинами (рекомендуемый Подход Для Длительной Видимой работы)
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -128,7 +123,7 @@ class MusicPlayerService : Service() {
 
 (Здесь `Service` по-прежнему получает колбэки в главном потоке, а тяжёлая работа выполняется в отдельном пуле потоков/корутин.)
 
-#### 3. WorkManager (современная альтернатива для отложенных задач)
+#### 3. WorkManager (современная Альтернатива Для Отложенных задач)
 
 ```kotlin
 class SyncWorker(
@@ -229,7 +224,7 @@ class DataSyncService : Service() {
 }
 ```
 
-#### 2. Foreground `Service` with Coroutines (recommended for long-running visible work)
+#### 2. Foreground `Service` with Coroutines (recommended for Long-running Visible work)
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -260,7 +255,7 @@ class MusicPlayerService : Service() {
 
 (Here the `Service` still receives callbacks on the main thread; the heavy work runs on a background dispatcher.)
 
-#### 3. WorkManager (modern alternative for deferred work)
+#### 3. WorkManager (modern Alternative for Deferred work)
 
 ```kotlin
 class SyncWorker(
@@ -311,7 +306,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если заблокировать главный поток внутри `Service`?
 - Когда следует использовать Foreground `Service` вместо WorkManager?
@@ -339,7 +334,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 - Android Docs: [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - Android Docs: [Foreground Services](https://developer.android.com/guide/components/foreground-services)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 
@@ -351,7 +346,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 - [[q-android-service-types--android--easy]]
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 
 - [[q-service-component--android--medium]]
 - [[q-foreground-service-types--android--medium]]

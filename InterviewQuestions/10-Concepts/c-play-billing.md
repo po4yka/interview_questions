@@ -1,19 +1,15 @@
 ---
 id: ivc-20251102-005
 title: Google Play Billing / Платежи Google Play
-aliases:
-  - Play Billing
-  - Google Play Billing v6
+aliases: [Google Play Billing v6, Play Billing]
 kind: concept
 summary: Google Play Billing client and server flow for in-app purchases and subscriptions
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - billing
-  - monetization
+tags: [android, billing, concept, monetization]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

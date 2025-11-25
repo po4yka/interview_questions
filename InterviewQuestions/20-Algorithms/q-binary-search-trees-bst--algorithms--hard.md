@@ -3,7 +3,7 @@ id: algo-007
 title: "Binary Search Trees and AVL Trees / Бинарные деревья поиска и AVL деревья"
 aliases: ["AVL Trees", "AVL деревья", "Binary Search Trees", "Бинарные деревья поиска"]
 topic: algorithms
-subtopics: [bst, avl, trees]
+subtopics: [avl, bst, trees]
 question_kind: coding
 difficulty: hard
 original_language: en
@@ -13,9 +13,11 @@ moc: moc-algorithms
 related: [c-algorithms, q-binary-search-variants--algorithms--medium]
 created: 2025-10-12
 updated: 2025-11-11
-tags: [algorithms, bst, avl, data-structures, difficulty/hard, trees]
+tags: [algorithms, avl, bst, data-structures, difficulty/hard, trees]
 sources: ["https://en.wikipedia.org/wiki/AVL_tree", "https://en.wikipedia.org/wiki/Binary_search_tree"]
 
+date created: Saturday, November 1st 2025, 1:01:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)
@@ -604,15 +606,15 @@ class AVLTree {
 
 ### Advanced (Harder)
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем разница между BST и бинарным деревом?
 - Как AVL деревья сравниваются с красно-черными деревьями?
 - Каковы четыре типа вращений в AVL деревьях?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предпосылки (проще)
 - [[q-data-structures-overview--algorithms--easy]] - Базовые структуры данных
 - [[q-binary-search-variants--algorithms--medium]] - Концепции бинарного поиска
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Обходы графов
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - Основы динамического программирования
 ### Продвинутые (сложнее)

@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ab-testing, android/app-bundle, android/play-console, difficulty/medium, distribution, release-management]
 
+date created: Saturday, November 1st 2025, 1:03:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -208,7 +210,7 @@ end
 - Появились критические баги (платежи, логин, потеря данных)
 - Наблюдается значимый (>~20%) рост негативных отзывов, связанных с новым релизом
 
-### 6. A/B Testing с Firebase
+### 6. A/B Testing С Firebase
 
 Для A/B тестов обычно используют Firebase Remote Config совместно с Firebase A/B Testing (эксперименты настраиваются в консоли, а приложение читает значения флагов).
 
@@ -589,7 +591,7 @@ jobs:
    - ✅ Monitor user reviews
    - ✅ Use analytics/Firebase to measure A/B test impact and key behaviors
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как вы обрабатываете сценарии отката, если во время staged rollout обнаруживаются критические проблемы?
 2. Как организовать управление файлами ProGuard mapping между несколькими релизами?
@@ -619,7 +621,7 @@ jobs:
 - App `Bundle` Guide: https://developer.android.com/guide/app-bundle
 - Play App Signing: https://support.google.com/googleplay/android-developer/answer/9842756
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (Easy)
 - [[q-android-app-bundles--android--easy]] - Основы и преимущества App `Bundle`

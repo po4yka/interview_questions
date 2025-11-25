@@ -1,32 +1,32 @@
 ---
 id: android-219
 title: How To Create Chat Lists From A UI Perspective / Как создать списки чатов с точки зрения UI
-aliases:
-- How To Create Chat Lists From A UI Perspective
-- Как создать списки чатов с точки зрения UI
+aliases: [How To Create Chat Lists From A UI Perspective, Как создать списки чатов с точки зрения UI]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-recyclerview
-- q-network-error-handling-strategies--networking--medium
-- q-what-are-px-dp-sp--android--easy
-- q-what-is-known-about-recyclerview--android--easy
+  - c-recyclerview
+  - q-how-dialog-differs-from-other-navigation--android--medium
+  - q-how-to-create-dynamic-screens-at-runtime--android--hard
+  - q-network-error-handling-strategies--networking--medium
+  - q-what-are-px-dp-sp--android--easy
+  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+  - q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/hard
-- recyclerview
+tags: [android/ui-views, difficulty/hard, recyclerview]
 
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -40,7 +40,7 @@ tags:
 ## Ответ (RU)
 Создание списков чатов с точки зрения UI требует учёта нескольких ключевых аспектов: как представить список диалогов так, чтобы он был наглядным, отзывчивым, быстро работал и корректно масштабировался на большие активные чаты.
 
-### Основные шаги
+### Основные Шаги
 
 1. Определить модель данных для элемента списка (чат/диалог).
 2. Создать UI-макет элемента списка (аватар, имя, последний текст, время, индикаторы online/typing, бейдж непрочитанного, пин).
@@ -49,7 +49,7 @@ tags:
 5. Обеспечить сортировку (сначала закреплённые, затем по времени последнего сообщения).
 6. Оптимизировать производительность (`DiffUtil`, пагинация, кеширование изображений).
 
-### 1. Модели данных
+### 1. Модели Данных
 
 Важно разделять модель для списка чатов и модели для сообщений: список оперирует сущностью "чат/диалог", а пузырьки сообщений относятся к экрану деталей чата. Ниже модели сообщений приведены как контекст: они не обязательны для реализации списка, но демонстрируют согласованный подход к данным UI.
 
@@ -104,9 +104,9 @@ enum class MessageStatus {
 }
 ```
 
-### 2. Макеты элементов
+### 2. Макеты Элементов
 
-#### Макет элемента списка чатов
+#### Макет Элемента Списка Чатов
 
 ```xml
 <!-- item_chat_room.xml -->
@@ -238,7 +238,7 @@ enum class MessageStatus {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-#### Макет сообщения (для экрана деталей чата, контекст)
+#### Макет Сообщения (для Экрана Деталей Чата, контекст)
 
 ```xml
 <!-- item_message_sent.xml -->
@@ -303,7 +303,7 @@ enum class MessageStatus {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### 3. Адаптер и ViewHolder
+### 3. Адаптер И ViewHolder
 
 ```kotlin
 class ChatRoomAdapter(
@@ -515,7 +515,7 @@ class ChatListFragment : Fragment() {
 }
 ```
 
-### 5. Оптимизация производительности
+### 5. Оптимизация Производительности
 
 #### Использование DiffUtil
 
@@ -546,7 +546,7 @@ class ChatListViewModel : ViewModel() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Использовать `RecyclerView` для эффективного скролла списка чатов.
 2. Применять библиотеку загрузки изображений (`Glide`/`Coil`) с кешированием и плейсхолдерами.
@@ -763,7 +763,7 @@ enum class MessageStatus {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-#### Message Item Layouts (for detail screen, context)
+#### Message Item Layouts (for Detail Screen, context)
 
 ```xml
 <!-- item_message_sent.xml -->
@@ -1085,7 +1085,7 @@ class ChatListViewModel : ViewModel() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-network-error-handling-strategies--networking--medium]]
 - [[q-what-are-px-dp-sp--android--easy]]
@@ -1109,7 +1109,7 @@ class ChatListViewModel : ViewModel() {
 - [Android Documentation](https://developer.android.com/docs)
 
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 

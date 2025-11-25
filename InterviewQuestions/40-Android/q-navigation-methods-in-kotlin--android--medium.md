@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navigation]
 
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -206,7 +208,7 @@ supportFragmentManager.beginTransaction()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать deep links с помощью Navigation Component?
 - В чем разница между `popBackStack()` и `popUpTo`?
@@ -236,12 +238,12 @@ supportFragmentManager.beginTransaction()
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-how-does-activity-lifecycle-work--android--medium]] - Базовые сведения о жизненном цикле `Activity`
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-activity-navigation-how-it-works--android--medium]] - Детали навигации между `Activity`
 - [[q-compose-navigation-advanced--android--medium]] - Паттерны навигации в Compose
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Обработка deep link

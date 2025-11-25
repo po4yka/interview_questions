@@ -1,7 +1,7 @@
 ---
 id: kotlin-207
 title: "Inline функции / Inline functions"
-aliases: [Inline функции, Inline functions]
+aliases: [Inline functions, Inline функции]
 topic: kotlin
 subtopics: [coroutines, inline-functions]
 question_kind: theory
@@ -14,6 +14,8 @@ related: [c-kotlin, q-channels-basics-types--kotlin--medium, q-coroutine-timeout
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -53,7 +55,7 @@ println("Time: ${end - start}ms")
 
 ### Для Чего Нужны
 
-#### 1. Уменьшение Накладных Расходов На Вызов Функций (особенно с лямбдами)
+#### 1. Уменьшение Накладных Расходов На Вызов Функций (особенно С лямбдами)
 
 Inline функции уменьшают накладные расходы на вызов высокоуровневых функций с лямбдой, так как вместо создания отдельных объектов-лямбд и косвенных вызовов их код подставляется напрямую. При этом важно понимать, что JVM JIT может инлайнить и обычные функции, поэтому эффект зависит от конкретного сценария.
 
@@ -185,7 +187,7 @@ Note: Excessive use of `inline` can increase bytecode size and potentially hurt 
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия inline-функций от реализации в Java?
 - Когда целесообразно использовать inline-функции на практике?

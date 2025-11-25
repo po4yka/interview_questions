@@ -1,9 +1,9 @@
 ---
-id: cs-060
+id: dp-011
 title: "State Pattern / Паттерн State"
 aliases: [State Pattern, State Паттерн]
 topic: behavioral
-subtopics: [state-machine, polymorphism]
+subtopics: [polymorphism, state-machine]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-cs
 related: [c-architecture-patterns, c-computer-science, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [behavioral, state-machine, difficulty/medium]
+tags: [behavioral, difficulty/medium, state-machine]
 
+date created: Saturday, November 1st 2025, 1:27:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -31,14 +33,14 @@ tags: [behavioral, state-machine, difficulty/medium]
 
 Паттерн State (Состояние) - это поведенческий паттерн проектирования, который **позволяет объекту изменять свое поведение при изменении внутреннего состояния**. Этот паттерн инкапсулирует различное поведение одного и того же объекта на основе его внутреннего состояния и предоставляет более чистый способ изменения поведения объекта во время выполнения за счет полиморфизма вместо длинных цепочек условных операторов.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн State решает две основные проблемы:
 
 1. **Объект должен изменять свое поведение при изменении внутреннего состояния**.
 2. **Поведение, специфичное для состояния, должно быть определено независимо** — добавление новых состояний не должно влиять на поведение существующих состояний.
 
-### Почему это проблема?
+### Почему Это Проблема?
 
 Реализация поведения, специфичного для состояния, непосредственно в классе через условные операторы негибка, так как жестко привязывает класс ко всем возможным вариантам поведения и усложняет добавление новых состояний или изменение существующих без изменения этого класса.
 
@@ -51,13 +53,13 @@ tags: [behavioral, state-machine, difficulty/medium]
 
 Это делает контекст независимым от конкретной реализации поведения состояний. Новые состояния добавляются путем создания новых классов состояний. Контекст может изменять свое поведение во время выполнения, переключая текущий объект состояния.
 
-### Ключевые особенности
+### Ключевые Особенности
 
 1. **Инкапсуляция состояния** — каждое состояние выделено в собственный класс или вариант.
 2. **Динамическое изменение поведения** — поведение объекта меняется при смене состояния за счет полиморфизма.
 3. **Меньше условной логики** — длинные цепочки if-else/when заменяются делегированием состояниям (при этом переходы между состояниями могут содержать простые проверки).
 
-### Пример: базовый конечный автомат
+### Пример: Базовый Конечный Автомат
 
 (Код идентичен английскому примеру; изменены только комментарии.)
 
@@ -107,7 +109,7 @@ fun main() {
 
 Этот пример отражает классический GoF-подход: `Context` хранит ссылку на `State` и меняет поведение, переключая объекты состояний.
 
-### Пример для Android: состояния медиаплеера
+### Пример Для Android: Состояния Медиаплеера
 
 ```kotlin
 // Интерфейс состояния
@@ -240,7 +242,7 @@ class DataViewModel(
 }
 ```
 
-### Kotlin-пример: обработка заказа
+### Kotlin-пример: Обработка Заказа
 
 Тот же подход с `sealed class`, как в английском примере:
 
@@ -331,7 +333,7 @@ class Order(private var state: OrderState = OrderState.Pending) {
 3. **Обработка заказа** — Pending → Processing → Shipped → Delivered.
 4. **Медиаплееры** — Playing, Paused, Stopped.
 
-### Когда использовать
+### Когда Использовать
 
 Используйте State, когда:
 
@@ -339,14 +341,14 @@ class Order(private var state: OrderState = OrderState.Pending) {
 - Есть несколько состояний с разным поведением.
 - Хотите избежать разрастания условных операторов и "божественных" классов.
 
-### Лучшие практики
+### Лучшие Практики
 
 - Ясно определяйте возможные состояния и допустимые переходы.
 - Держите логику, специфичную для состояния, внутри соответствующего состояния.
 - Для Kotlin/Android UI удобно использовать `sealed class` + потоки (`StateFlow`) для реактивных обновлений.
 - Не применяйте тяжеловесную реализацию State там, где достаточно простого булева флага.
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как вы бы отрефакторили сложную цепочку `when`/`if` в дизайн на основе State?
 - Сравните классический паттерн State (GoF) с моделированием на основе `sealed class` + `when` в Kotlin.
@@ -372,12 +374,12 @@ State is a behavioral design pattern that allows an object to change its behavio
 
 The State pattern is a behavioral software design pattern that **allows an object to alter its behavior when its internal state changes**. This pattern encapsulates varying behavior for the same object based on its internal state, providing a cleaner way for an object to change its behavior at runtime by using polymorphism instead of long conditional statements.
 
-### Problems it solves
+### Problems it Solves
 
 1. An object should change its behavior when its internal state changes.
 2. State-specific behavior should be defined independently so that adding new states does not break existing behavior.
 
-### Why is this a problem?
+### Why is This a Problem?
 
 Implementing state-specific behavior directly within a class via conditionals is inflexible because it tightly couples the class to all possible behaviors and makes it hard to add a new state or change existing behavior later without modifying that class.
 
@@ -651,7 +653,7 @@ class Order(private var state: OrderState = OrderState.Pending) {
 3. Order workflow.
 4. Media player states.
 
-### When to use
+### When to Use
 
 Use State when:
 

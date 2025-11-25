@@ -25,7 +25,10 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [by-keyword, delegates, delegation, difficulty/medium, kotlin, patterns]
+date created: Sunday, October 12th 2025, 1:56:16 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Объясните паттерн делегирования в Kotlin детально. Что такое делегирование классов и делегирование свойств?
 
@@ -524,7 +527,7 @@ class UserValidated {
 
 **English Summary**: Kotlin delegation: **Class delegation** (`by` keyword) — delegates interface implementation to another object, eliminating boilerplate. **Property delegation** — delegates getter/setter logic. Built-in: `lazy` (lazy init), `observable` (observe changes), `vetoable` (veto changes), `notNull` (late init). Custom delegates: implement `ReadOnlyProperty` / `ReadWriteProperty`. Use cases: SharedPreferences, validation, caching, composition over inheritance.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия делегирования в Kotlin от подхода в Java?
 - Когда вы бы использовали делегирование на практике?
@@ -536,7 +539,7 @@ class UserValidated {
 - [Delegation - Kotlin Documentation](https://kotlinlang.org/docs/delegation.html)
 - [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-delegation--programming-languages--easy]]
 - [[q-lazy-vs-lateinit--kotlin--medium]]

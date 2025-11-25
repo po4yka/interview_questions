@@ -1,36 +1,32 @@
 ---
 id: android-071
 title: LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid
-aliases:
-- LazyGrid & LazyStaggeredGrid
-- LazyGrid и LazyStaggeredGrid
+aliases: [LazyGrid & LazyStaggeredGrid, LazyGrid и LazyStaggeredGrid]
 topic: android
 subtopics:
-- performance-rendering
-- ui-compose
+  - performance-rendering
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-ui-composition
-- q-compose-lazy-layout-optimization--android--hard
+  - c-android-ui-composition
+  - q-compose-core-components--android--medium
+  - q-compose-lazy-layout-optimization--android--hard
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
 created: 2025-10-12
 updated: 2025-11-10
-tags:
-- android/performance-rendering
-- android/ui-compose
-- difficulty/medium
-- grid
-- jetpack-compose
-- lazy-layout
-- performance
+tags: [android/performance-rendering, android/ui-compose, difficulty/medium, grid, jetpack-compose, lazy-layout, performance]
 sources:
-- "https://developer.android.com/jetpack/compose/lists"
+  - "https://developer.android.com/jetpack/compose/lists"
+date created: Saturday, November 1st 2025, 1:24:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)

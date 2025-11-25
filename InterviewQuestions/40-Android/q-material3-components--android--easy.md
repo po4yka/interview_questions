@@ -1,35 +1,32 @@
 ---
 id: android-078
 title: Material3 Components / Компоненты Material3
-aliases:
-- Material3 Components
-- Компоненты Material3
+aliases: [Material3 Components, Компоненты Material3]
 topic: android
 subtopics:
-- ui-compose
-- ui-theming
+  - ui-compose
+  - ui-theming
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-jetpack-compose
+  - c-compose-state
+  - c-jetpack-compose
+  - q-compose-core-components--android--medium
+  - q-material3-dynamic-color-theming--android--medium
+  - q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android
-- android/ui-compose
-- android/ui-theming
-- design-system
-- difficulty/easy
-- material3
+tags: [android, android/ui-compose, android/ui-theming, design-system, difficulty/easy, material3]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -331,7 +328,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как технически работает извлечение динамических цветов из обоев?
 - В чём плюсы и минусы стратегий миграции с M2 на M3 (постепенная vs одномоментная)?
@@ -357,7 +354,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 - Material Design 3 Guidelines: https://m3.material.io/
 - Compose Material 3 docs: https://developer.android.com/jetpack/compose/designsystems/material3
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

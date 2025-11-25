@@ -16,6 +16,8 @@ updated: 2025-10-15
 sources: []
 tags: [android/room, difficulty/hard]
 
+date created: Saturday, November 1st 2025, 1:04:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +52,7 @@ tags: [android/room, difficulty/hard]
 - Функции `highlight()` и `snippet()`
 - Булевы операторы (AND, OR, NOT) и префиксный поиск в MATCH-выражениях
 
-### Базовая Реализация (пример с FTS5)
+### Базовая Реализация (пример С FTS5)
 
 Пример ниже показывает FTS-таблицу с внешним содержимым (external content) для FTS5, управляемую Room через `contentEntity`.
 
@@ -86,7 +88,7 @@ data class ArticleFts(
 
 Для них механика синхронизации различается.
 
-1) External content через `contentEntity` (рекомендуемый способ в Room)
+1. External content через `contentEntity` (рекомендуемый способ в Room)
 
 - Room генерирует FTS-таблицу, привязанную к `articles` по `id`.
 - Для корректной синхронизации в SQLite требуются специальные FTS-команды (`INSERT`, `DELETE`, `UPDATE`) в FTS-таблицу, а не обычные UPDATE/DELETE строк:
@@ -95,7 +97,7 @@ data class ArticleFts(
   - `INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);` + `INSERT INTO articles_fts(articles_fts, 'insert', new.id, new.title, new.content);` для UPDATE.
 - Room может управлять этим автоматически в зависимости от конфигурации; если вы создаёте триггеры вручную, их нужно писать в соответствии с документацией SQLite FTS, а не делать обычные `UPDATE articles_fts ...`.
 
-2) Contentless или дублирующая FTS-таблица
+1. Contentless или дублирующая FTS-таблица
 
 - Вы храните данные как в основной таблице, так и в FTS-таблице.
 - В этом случае вы можете реализовать триггеры, которые используют FTS-специфические команды (например, через управляющий столбец) или инкапсулировать операции в DAO так, чтобы все изменения проходили через один путь и обновляли обе таблицы атомарно.
@@ -385,7 +387,7 @@ Two conceptual modes matter here:
 
 They require different sync strategies.
 
-1) External content via `contentEntity` (preferred with Room)
+1. External content via `contentEntity` (preferred with Room)
 
 - Room creates the FTS table bound to `articles` by `id`.
 - In SQLite FTS, keeping such a table in sync requires special maintenance statements that target the FTS table:
@@ -394,7 +396,7 @@ They require different sync strategies.
   - For UPDATE: a `'delete'` for `old.*` followed by an `'insert'` for `new.*`.
 - If you define triggers manually, they must use these FTS-specific forms; doing `UPDATE articles_fts SET ... WHERE rowid = new.id;` or plain `DELETE FROM articles_fts WHERE rowid = old.id;` is not the correct pattern for external content FTS maintenance.
 
-2) Contentless / duplicated FTS table
+1. Contentless / duplicated FTS table
 
 - You store search text both in the base table and in the FTS table.
 - You can:
@@ -627,7 +629,7 @@ data class ArticleFtsNarrow(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как FTS5 обрабатывает многоязычный контент (например, английский и русский текст в одном документе), и как выбирать подходящие токенизаторы?
 2. Каковы накладные расходы по хранилищу и последствия для миграций при добавлении FTS-таблиц в существующую схему Room?
@@ -643,7 +645,7 @@ data class ArticleFtsNarrow(
 - SQLite FTS5 Extension: https://www.sqlite.org/fts5.html
 - Рекомендации по производительности Room: https://developer.android.com/topic/performance/sqlite-performance-best-practices
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-android-storage-types--android--medium]]
 

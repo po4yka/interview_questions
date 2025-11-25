@@ -14,7 +14,10 @@ related: [c-kotlin, q-coroutine-scope-basics--kotlin--easy, q-kotlin-channels--k
 created: 2025-10-15
 updated: 2025-11-09
 tags: [delegates, difficulty/medium, kotlin, property-delegates]
+date created: Friday, October 31st 2025, 6:32:16 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > В чем особенность делегатов свойств?
 
@@ -63,7 +66,7 @@ class Example {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого механизма от Java?
 - Когда целесообразно использовать делегаты свойств на практике?
@@ -85,7 +88,7 @@ class Example {
 - [Kotlin Documentation](https://kotlinlang.org/docs/delegated-properties.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-map-flatmap--kotlin--medium]]
 - [[q-coroutine-scope-basics--kotlin--easy]]

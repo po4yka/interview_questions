@@ -1,21 +1,15 @@
 ---
 id: ivc-20251102-024
 title: Globalization & Localization / Глобализация и локализация
-aliases:
-  - Globalization
-  - Localization
-  - Internationalization
+aliases: [Globalization, Internationalization, Localization]
 kind: concept
 summary: Strategies for building Android apps that adapt to languages, regions, scripts, and cultural conventions
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - globalization
-  - localization
-  - accessibility
+tags: [accessibility, android, concept, globalization, localization]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

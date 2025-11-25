@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [coroutines, difficulty/easy, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140027
 
@@ -36,7 +39,7 @@ tags: [coroutines, difficulty/easy, kotlin]
 
 `launch` и `async` оба являются coroutine builders, но различаются способом работы с результатами и обработкой исключений.
 
-### launch
+### Launch
 Стиль "запустить и не ждать результата" для побочных эффектов, возвращает `Job`:
 ```kotlin
 val job = launch {
@@ -47,7 +50,7 @@ job.join()  // Явно ждем завершения, если нужно
 ```
 - Если не вызвать `join()` или не сохранить `Job`, корутина выполнится в своем scope, а необработанные исключения будут репортиться через механизм обработки исключений корутин (например, в scope или глобальный handler).
 
-### async
+### Async
 Возвращает `Deferred<T>` для вычисления значения:
 ```kotlin
 val deferred = async {
@@ -59,7 +62,7 @@ println(result)  // "Result"
 ```
 - `async` следует использовать, когда вы рассчитываете получить значение и обязательно вызывать `await()` (или иным образом потребить `Deferred`); использовать `async` как "fire-and-forget" без `await()` считается антипаттерном.
 
-### Ключевые отличия
+### Ключевые Отличия
 | Функция | launch | async |
 |---------|--------|-------|
 | Возвращает | `Job` | `Deferred<T>` |
@@ -67,7 +70,7 @@ println(result)  // "Result"
 | Основное использование | Побочные эффекты | Параллельные вычисления значения |
 | Исключения | Пробрасываются в `CoroutineExceptionHandler`/родительский scope при завершении, нет значения для чтения | Исключение откладывается до `await()`: при вызове `await()` оно будет выброшено (и также участвует в иерархии Job'ов) |
 
-### Выбор между ними
+### Выбор Между Ними
 ```kotlin
 // Используйте launch для побочных эффектов
 launch {
@@ -91,7 +94,7 @@ combine(r1.await(), r2.await())
 
 `launch` and `async` are both coroutine builders but differ in how they work with results and exceptions.
 
-### launch
+### Launch
 "Fire-and-don't-wait-for-a-value" style for side effects, returns a `Job`:
 ```kotlin
 val job = launch {
@@ -102,7 +105,7 @@ job.join()  // Explicitly wait for completion when needed
 ```
 - If you don't call `join()` or keep the `Job`, the coroutine will run in its scope; unhandled exceptions are reported via the coroutine exception mechanism (e.g., scope or global handler).
 
-### async
+### Async
 Returns a `Deferred<T>` for computing a value:
 ```kotlin
 val deferred = async {
@@ -142,7 +145,7 @@ combine(r1.await(), r2.await())
 
 See also: [[c-kotlin]], [[c-coroutines]], [[c-kotlin-coroutines-basics]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Когда уместно использовать `launch` внутри `supervisorScope` и как это влияет на обработку исключений?
 2. В каких случаях вы предпочтете несколько `async` с `awaitAll` вместо последовательного вызова `suspend`-функций?

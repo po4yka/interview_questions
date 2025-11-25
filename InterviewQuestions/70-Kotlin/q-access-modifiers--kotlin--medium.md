@@ -16,7 +16,10 @@ related: [c-kotlin, q-kotlin-visibility-modifiers--kotlin--easy]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibility]
+date created: Sunday, October 5th 2025, 6:51:27 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?
 
@@ -42,7 +45,7 @@ tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibili
 - **protected** члены не видны в пакете (в Java видны в том же пакете).
 - На верхнем уровне нельзя использовать **protected**.
 
-### Примеры кода (RU)
+### Примеры Кода (RU)
 
 Все приведённые ниже примеры кода идентичны английской версии; комментарии и пояснения адаптированы на русском.
 
@@ -754,7 +757,7 @@ fun main() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает модификатор `internal` при разделении проекта на несколько модулей?
 - Что происходит при переопределении `protected`-члена в Kotlin?
@@ -774,7 +777,7 @@ fun main() {
 
 - [Kotlin Visibility Modifiers](https://kotlinlang.org/docs/visibility-modifiers.html) - Official Kotlin documentation
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-kotlin-visibility-modifiers--kotlin--easy]] - Видимость

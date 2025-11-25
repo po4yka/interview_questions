@@ -1,38 +1,36 @@
 ---
 id: android-030
 title: Repository Pattern with Multiple Data Sources / Паттерн Repository с несколькими источниками данных
-aliases:
-- Repository Pattern with Multiple Data Sources
-- Паттерн Repository с несколькими источниками данных
+aliases: [Repository Pattern with Multiple Data Sources, Паттерн Repository с несколькими источниками данных]
 topic: android
 subtopics:
-- architecture-clean
-- cache-offline
+  - architecture-clean
+  - cache-offline
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
 related:
-- c-database-design
-- c-clean-architecture
-- q-dagger-field-injection--android--medium
-- q-does-state-made-in-compose-help-avoid-race-condition--android--medium
+  - c-clean-architecture
+  - c-database-design
+  - q-dagger-field-injection--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-does-state-made-in-compose-help-avoid-race-condition--android--medium
+  - q-mvvm-pattern--android--medium
+  - q-repository-pattern--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags:
-- android/architecture-clean
-- android/cache-offline
-- difficulty/medium
-- en
-- ru
+tags: [android/architecture-clean, android/cache-offline, difficulty/medium, en, ru]
 
 
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -90,7 +88,7 @@ class UserRepository(
 }
 ```
 
-### Network-First с Fallback
+### Network-First С Fallback
 
 ```kotlin
 class NewsRepository(
@@ -116,7 +114,7 @@ class NewsRepository(
 }
 ```
 
-### Stale-While-Revalidate (устаревшие данные + фоновое обновление)
+### Stale-While-Revalidate (устаревшие Данные + Фоновое обновление)
 
 ```kotlin
 class ArticleRepository(
@@ -154,7 +152,7 @@ sealed class Resource<T> {
 }
 ```
 
-### Кэширование с ограничением по времени (Time-Based)
+### Кэширование С Ограничением По Времени (Time-Based)
 
 ```kotlin
 import kotlin.time.Duration
@@ -188,7 +186,7 @@ class WeatherRepository(
 }
 ```
 
-### Комбинирование нескольких источников
+### Комбинирование Нескольких Источников
 
 ```kotlin
 class ProfileRepository(

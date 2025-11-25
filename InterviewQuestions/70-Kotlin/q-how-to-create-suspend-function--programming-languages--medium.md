@@ -14,7 +14,10 @@ related: [c-coroutines, c-kotlin, q-how-suspend-function-detects-suspension--pro
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, functions, kotlin]
+date created: Friday, October 31st 2025, 6:31:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как создать suspend функцию?
 
@@ -27,7 +30,7 @@ tags: [coroutines, difficulty/medium, functions, kotlin]
 
 Создать suspend-функцию в Kotlin можно, добавив модификатор `suspend` перед `fun`. Тело такой функции может содержать вызовы других suspend-функций. Напрямую (обычным вызовом) вызвать suspend-функцию из несуспендящейся функции нельзя — нужно запустить корутину (через билдеры `launch`, `async`, `runBlocking` и т.п.) или, в редких случаях, использовать низкоуровневые continuation API (`Continuation`, `suspendCoroutine`, `suspendCancellableCoroutine`).
 
-### Базовый синтаксис
+### Базовый Синтаксис
 
 ```kotlin
 // Простая suspend-функция
@@ -50,7 +53,7 @@ suspend fun logEvent(event: String) {
 }
 ```
 
-### Вызов suspend-функций
+### Вызов Suspend-функций
 
 ```kotlin
 // - НЕВЕРНО: нельзя вызвать напрямую из обычной функции
@@ -79,7 +82,7 @@ fun loadData() {
 }
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
 ```kotlin
 // Сетевой запрос (apiService — упрощённый пример)
@@ -114,7 +117,7 @@ suspend fun loadUserData(userId: Int): UserData {
 }
 ```
 
-### Suspend-функции и коллбеки
+### Suspend-функции И Коллбеки
 
 ```kotlin
 // Преобразование callback-API в suspend-функцию (DownloadCallback — упрощённый интерфейс)
@@ -151,7 +154,7 @@ suspend fun fetchDataWithCancellation(): String = suspendCancellableCoroutine { 
 }
 ```
 
-### Suspend-функции в классах
+### Suspend-функции В Классах
 
 ```kotlin
 class UserRepository {
@@ -258,7 +261,7 @@ processInBackground {
 }
 ```
 
-### Inline suspend-функции
+### Inline Suspend-функции
 
 ```kotlin
 // Inline suspend-функция для измерения времени выполнения
@@ -280,7 +283,7 @@ suspend fun exampleMeasure() {
 }
 ```
 
-### Suspend-функции и `Flow`
+### Suspend-функции И `Flow`
 
 ```kotlin
 // Функция, возвращающая Flow (сама не suspend)
@@ -300,7 +303,7 @@ suspend fun processUpdates(userId: Int) {
 }
 ```
 
-### Обработка ошибок в suspend-функциях
+### Обработка Ошибок В Suspend-функциях
 
 ```kotlin
 // Suspend-функция с try-catch
@@ -341,7 +344,7 @@ suspend fun handleErrors() {
 }
 ```
 
-### Тестирование suspend-функций
+### Тестирование Suspend-функций
 
 ```kotlin
 class UserRepositoryTest {
@@ -366,7 +369,7 @@ class UserRepositoryTest {
 }
 ```
 
-### Распространённые паттерны
+### Распространённые Паттерны
 
 ```kotlin
 // 1. CPU-интенсивная задача с использованием Dispatchers.Default
@@ -407,7 +410,7 @@ suspend fun longRunningTask() {
 }
 ```
 
-### Ключевые правила
+### Ключевые Правила
 
 1. Добавьте модификатор `suspend` перед `fun`, чтобы объявить suspend-функцию.
 2. Suspend-функции можно вызывать:
@@ -818,7 +821,7 @@ suspend fun longRunningTask() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали suspend-функции на практике?
@@ -839,7 +842,7 @@ suspend fun longRunningTask() {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-java-access-modifiers--programming-languages--medium]]
 - [[q-iterator-order-guarantee--programming-languages--medium]]

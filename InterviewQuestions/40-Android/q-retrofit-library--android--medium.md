@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, rest-api, retrofit]
+date created: Saturday, November 1st 2025, 1:04:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -96,7 +98,7 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
-### Пример с Repository-паттерном
+### Пример С Repository-паттерном
 
 ```kotlin
 // API definition
@@ -128,7 +130,7 @@ class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
 }
 ```
 
-### HTTP Методы и Формы
+### HTTP Методы И Формы
 
 ```kotlin
 interface ApiService {

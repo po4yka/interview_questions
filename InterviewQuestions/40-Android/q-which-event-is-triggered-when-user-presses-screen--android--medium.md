@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-views, difficulty/medium, gesture-detection, motion-event, touch-events]
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -515,7 +517,7 @@ class ParentView(context: Context) : ViewGroup(context) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем разница между `event.action` и `event.actionMasked`?
 2. Как различить жест свайпа и жест прокрутки при обработке касаний?
@@ -543,13 +545,13 @@ class ParentView(context: Context) : ViewGroup(context) {
 - [Android Developers: Input Events](https://developer.android.com/develop/ui/views/touch-and-input/input-events)
 - [Compose: Pointer Input](https://developer.android.com/jetpack/compose/touch-input)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - Понимание жизненного цикла `View` в Android
 - Базовые знания о паттернах обработки событий
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]]
 - Пользовательская отрисовка во `View` и `invalidate()`
 - Распознавание жестов и тактильная/визуальная обратная связь

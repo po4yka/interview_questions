@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-dagger]
+related: [c-dagger, c-dependency-injection]
 created: 2025-10-13
 updated: 2025-11-10
 sources: []
 tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/medium, hilt, koin]
 
+date created: Saturday, November 1st 2025, 1:24:30 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)

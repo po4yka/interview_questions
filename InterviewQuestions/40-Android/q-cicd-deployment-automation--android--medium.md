@@ -4,9 +4,9 @@ title: CI/CD Deployment Automation / Автоматизация деплоя в 
 aliases: [CI/CD Deployment Automation, Автоматизация деплоя в CI/CD]
 topic: android
 subtopics:
+  - build-variants
   - ci-cd
   - play-console
-  - build-variants
 question_kind: android
 difficulty: medium
 original_language: en
@@ -16,12 +16,16 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+  - q-android-build-optimization--android--medium
   - q-android-lint-tool--android--medium
   - q-android-release-pipeline-cicd--android--hard
+  - q-internal-app-distribution--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ci-cd, android/play-console, android/build-variants, ci-cd, deployment, difficulty/medium]
+tags: [android/build-variants, android/ci-cd, android/play-console, ci-cd, deployment, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -256,7 +260,7 @@ Keep the last stable AAB + mapping.txt and versionCode history.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать безопасное управление keystore с использованием Cloud KMS или HashiCorp Vault?
 - Какие стратегии использовать для отката при несовместимых миграциях базы данных?
@@ -284,7 +288,7 @@ Keep the last stable AAB + mapping.txt and versionCode history.
 - https://developer.android.com/studio/publish/app-signing
 - https://github.com/Triple-T/gradle-play-publisher
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (Prerequisites)
 - [[q-build-optimization-gradle--android--medium]]

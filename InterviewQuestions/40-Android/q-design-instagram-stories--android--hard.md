@@ -4,27 +4,31 @@ title: Design Instagram Stories / Проектирование Instagram Stories
 aliases: [Design Instagram Stories, Проектирование Instagram Stories]
 topic: android
 subtopics:
-- architecture-clean
-- media
-- service
+  - architecture-clean
+  - media
+  - service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources:
-- "https://developer.android.com/guide/topics/media"
+  - "https://developer.android.com/guide/topics/media"
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-data-sync-unstable-network--android--hard
-- q-database-optimization-android--android--medium
+  - c-android
+  - q-data-sync-unstable-network--android--hard
+  - q-database-optimization-android--android--medium
+  - q-design-uber-app--android--hard
+  - q-feature-flags-sdk--android--hard
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/architecture-clean, android/media, android/service, architecture, difficulty/hard, exoplayer, mediacodec, performance, system-design, workmanager]
 
+date created: Tuesday, November 25th 2025, 3:45:29 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -661,7 +665,7 @@ MVP → Hardening → Scale:
 -   **Larger tap targets**: Minimum 48dp tap target size for easier tapping — support for users with limited motor skills
 -   **Retry flows**: Clear UI messages and retry buttons on network interruption or upload errors — improved UX on failures
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать неудачи транскодирования видео и стратегию повторных попыток?
 - Какую стратегию кеширования выбрать, чтобы минимизировать трафик и обеспечить плавное воспроизведение?
@@ -697,9 +701,9 @@ MVP → Hardening → Scale:
 -   [MediaCodec API](https://developer.android.com/reference/android/media/MediaCodec)
 -   [[c-android]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания
+### Предварительные Знания
 
 - Понимание политик повторных попыток и ограничений `WorkManager`
 - Базовые знания `ExoPlayer` для видео-воспроизведения

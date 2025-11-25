@@ -1,36 +1,34 @@
 ---
 id: android-306
 title: FragmentManager vs FragmentTransaction / FragmentManager против FragmentTransaction
-aliases:
-- FragmentManager vs FragmentTransaction
-- FragmentManager против FragmentTransaction
+aliases: [FragmentManager vs FragmentTransaction, FragmentManager против FragmentTransaction]
 topic: android
 subtopics:
-- fragment
-- lifecycle
+  - fragment
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-android-lifecycle
-- q-activity-lifecycle-methods--android--medium
+  - c-android
+  - c-android-lifecycle
+  - q-activity-lifecycle-methods--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/fragment
-- android/lifecycle
-- difficulty/medium
-- fragmentmanager
-- fragmenttransaction
+tags: [android/fragment, android/lifecycle, difficulty/medium, fragmentmanager, fragmenttransaction]
 sources:
-- "https://developer.android.com/guide/fragments/fragmentmanager"
+  - "https://developer.android.com/guide/fragments/fragmentmanager"
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -117,7 +115,7 @@ tx.replace(R.id.container, MyFragment())
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если не вызвать `commit()` у транзакции?
 - Когда использовать `commitNow()` вместо `commit()`?
@@ -143,7 +141,7 @@ tx.replace(R.id.container, MyFragment())
 - [Android Developers: FragmentManager](https://developer.android.com/guide/fragments/fragmentmanager)
 - [Android Developers: `Fragment` Transactions](https://developer.android.com/guide/fragments/transactions)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -154,7 +152,7 @@ tx.replace(R.id.container, MyFragment())
 - Базовые понятия и жизненный цикл `Fragment`
 - Основы жизненного цикла `Activity`
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - Состояния и колбэки жизненного цикла `Fragment`
 - Сценарии потери состояния `Fragment` и способы их избежать
 - Паттерны навигации с использованием back stack фрагментов

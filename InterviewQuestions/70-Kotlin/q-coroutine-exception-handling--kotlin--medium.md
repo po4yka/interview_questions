@@ -15,8 +15,10 @@ moc: moc-kotlin
 related: [c--kotlin--medium, c-concurrency, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-06
 updated: 2025-11-11
-tags: [kotlin, coroutines, difficulty/medium, error-handling]
+tags: [coroutines, difficulty/medium, error-handling, kotlin]
 
+date created: Sunday, October 12th 2025, 1:56:16 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [kotlin, coroutines, difficulty/medium, error-handling]
 
 Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа. См. также [[c--kotlin--medium]] и [[c-concurrency]].
 
-### Правила распространения исключений
+### Правила Распространения Исключений
 
 **1. `launch` - Исключение немедленно завершает родительский scope**
 
@@ -61,7 +63,7 @@ viewModelScope.launch {
 }
 ```
 
-### try-catch в корутинах
+### Try-catch В Корутинах
 
 **Работает для прямого (suspending) кода в той же корутине:**
 
@@ -89,7 +91,7 @@ viewModelScope.launch {
 }
 ```
 
-### coroutineScope vs supervisorScope
+### coroutineScope Vs supervisorScope
 
 **`coroutineScope` - Отменяет всех братьев при сбое**
 
@@ -150,7 +152,7 @@ viewModelScope.async(handler) {
 }
 ```
 
-### Примеры из реальной практики
+### Примеры Из Реальной Практики
 
 **Пример 1: Параллельные запросы с `supervisorScope`**
 
@@ -241,7 +243,7 @@ fun loadDashboard() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте `supervisorScope` для независимых параллельных задач**
 
@@ -345,7 +347,7 @@ viewModelScope.launch {
 }
 ```
 
-### coroutineScope vs supervisorScope
+### coroutineScope Vs supervisorScope
 
 **`coroutineScope` - Cancels all siblings on failure**
 

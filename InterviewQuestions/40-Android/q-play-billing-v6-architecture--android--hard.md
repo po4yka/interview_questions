@@ -1,34 +1,35 @@
 ---
 id: android-618
 title: Play Billing v6 Architecture / Архитектура Play Billing v6
-aliases:
-- Play Billing v6 Architecture
-- Архитектура Play Billing v6
+aliases: [Play Billing v6 Architecture, Архитектура Play Billing v6]
 topic: android
 subtopics:
-- billing
+  - billing
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-play-billing
-- q-android-release-pipeline-cicd--android--hard
+  - c-play-billing
+  - q-android-release-pipeline-cicd--android--hard
+  - q-multi-module-best-practices--android--hard
+  - q-play-feature-delivery--android--medium
+  - q-quick-settings-tiles-architecture--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags:
-- android/billing
-- difficulty/hard
+tags: [android/billing, difficulty/hard]
 sources:
 - url: "https://developer.android.com/google/play/billing/integrate"
   note: Google Play Billing integration guide
 - url: "https://developer.android.com/google/play/billing/migrate-gpblv6"
   note: Billing v6 migration
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +42,7 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 
 - `BillingClient` v6 с `enablePendingPurchases`, кэш `ProductDetails`, явное управление base plans и offers.
 - Сервер с Play Developer API, RTDN (Pub/Sub), хранением `purchaseToken` + связки с пользователем.
@@ -49,7 +50,7 @@ sources:
 - Отказоустойчивая обработка ошибок (`SERVICE_DISCONNECTED`), отложенных покупок и смен/отзывов подписок.
 - Соблюдение UI/правовых требований Google Play.
 
-### Подробная версия
+### Подробная Версия
 
 #### Требования
 
@@ -65,14 +66,14 @@ sources:
 
 #### Архитектура
 
-##### 1. Архитектура компонентов
+##### 1. Архитектура Компонентов
 
 - **Client**: `BillingClient` (v6), `PurchasesUpdatedListener`, `BillingClientStateListener`.
 - **Server**: Play Developer API v3, RTDN через Pub/Sub (Cloud Functions/Cloud Run или аналогичная обработка уведомлений).
 - **Storage**: локальный кэш (Room/Proto DataStore) для `ProductDetails` и статуса подписок; бэкенд-БД как источник истины по правам доступа.
 - **UI**: использование `BillingFlowParams.ProductDetailsParams` для выбора base plan и offer по `offerToken`.
 
-##### 2. Каталог и подписки
+##### 2. Каталог И Подписки
 
 ```kotlin
 val params = QueryProductDetailsParams.newBuilder()
@@ -93,7 +94,7 @@ billingClient.queryProductDetailsAsync(params) { billingResult, detailsList ->
 - Подписки: используйте base plans и subscription offers, pricing phases (free trial, intro price, recurring).
 - Сохраняйте и учитывайте `ProductDetails.subscriptionOfferDetails` при выборе подходящего `offerToken` согласно бизнес-логике (регион, промо, eligibility).
 
-##### 3. Запуск покупки
+##### 3. Запуск Покупки
 
 ```kotlin
 val offerToken = product.subscriptionOfferDetails!!
@@ -117,7 +118,7 @@ billingClient.launchBillingFlow(activity, billingParams)
 - Для multi-quantity покупок (только для INAPP в v6) используйте `BillingFlowParams.ProductDetailsParams.setQuantity(quantity)`.
 - `setIsOfferPersonalized` относится к маркировке персонализированных предложений, а не к количеству.
 
-##### 4. Обработка покупок
+##### 4. Обработка Покупок
 
 ```kotlin
 override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Purchase>?) {
@@ -146,7 +147,7 @@ override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Pu
 - После успешной проверки на сервере всегда вызывайте `acknowledgePurchase`; иначе транзакция будет автоматически возвращена через короткий период.
 - Для consumable-товаров используйте `consumeAsync` (также после серверной проверки).
 
-##### 5. Серверная валидация
+##### 5. Серверная Валидация
 
 - Используйте Play Developer API: `purchases.subscriptionsv2.get` для подписок и `purchases.products.get` для разовых покупок.
 - RTDN (Real-time developer notifications): подпишитесь через Pub/Sub; обрабатывайте события (renewal, expiration, revoke, pause, restart и т.п.) и синхронизируйте состояние подписок с вашей БД и выдачей прав.
@@ -190,14 +191,14 @@ override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Pu
 
 #### Architecture
 
-##### 1. Architecture components
+##### 1. Architecture Components
 
 - Client: `BillingClient` v6, `PurchasesUpdatedListener`, `BillingClientStateListener`.
 - Server: services using Play Developer API v3 and Pub/Sub RTDN handlers.
 - Storage: local cache (Room/Proto DataStore) for `ProductDetails` and local subscription/payment state; persistent backend DB as source of truth for entitlements.
 - UI: flows built around `BillingFlowParams.ProductDetailsParams` to pick appropriate base plan and offer via `offerToken`.
 
-##### 2. Catalog and subscriptions
+##### 2. Catalog and Subscriptions
 
 Use `queryProductDetailsAsync` to fetch products and cache them:
 
@@ -220,7 +221,7 @@ billingClient.queryProductDetailsAsync(params) { billingResult, detailsList ->
 - Use base plans and subscription offers with pricing phases (free trial, intro, recurring).
 - Read `subscriptionOfferDetails` and choose `offerToken` according to business rules (region, promos, eligibility).
 
-##### 3. Purchase flow
+##### 3. Purchase Flow
 
 ```kotlin
 val offerToken = product.subscriptionOfferDetails!!
@@ -244,7 +245,7 @@ billingClient.launchBillingFlow(activity, billingParams)
 - For multi-quantity purchases (INAPP only in v6), use `setQuantity(quantity)` on `ProductDetailsParams`.
 - `setIsOfferPersonalized` is only for marking personalized offers, not quantity.
 
-##### 4. Purchase handling
+##### 4. Purchase Handling
 
 ```kotlin
 override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Purchase>?) {
@@ -273,13 +274,13 @@ override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Pu
 - After successful server-side validation, always call `acknowledgePurchase`; otherwise Play will auto-refund after a short period.
 - For consumables, call `consumeAsync` after server validation.
 
-##### 5. Server-side validation
+##### 5. Server-side Validation
 
 - Use Play Developer API: `purchases.subscriptionsv2.get` for subscriptions and `purchases.products.get` for one-time products.
 - Subscribe to RTDN via Pub/Sub and handle event types: renewals, expirations, revocations, pauses, resumes, etc.; update entitlements and transaction history accordingly.
 - Store `purchaseToken` and optionally `obfuscatedAccountId` / `obfuscatedProfileId` to map Play purchases to your internal user accounts.
 
-##### 6. Edge cases
+##### 6. Edge Cases
 
 - On `SERVICE_DISCONNECTED` and similar errors, re-establish the `BillingClient` connection (`startConnection`) and retry catalog/purchase queries with appropriate backoff.
 - For pending purchases, periodically or on app start call `queryPurchasesAsync` and grant entitlements only after state becomes `PURCHASED` and the backend confirms.

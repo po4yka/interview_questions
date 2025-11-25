@@ -1,33 +1,30 @@
 ---
 id: android-232
 title: DiffUtil / Компонент DiffUtil
-aliases:
-- DiffUtil
-- Компонент DiffUtil
+aliases: [DiffUtil, Компонент DiffUtil]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-what-is-known-about-recyclerview--android--easy
-- q-what-layout-allows-overlapping-objects--android--easy
+  - q-recyclerview-diffutil-advanced--android--medium
+  - q-what-is-known-about-recyclerview--android--easy
+  - q-what-layout-allows-overlapping-objects--android--easy
+  - q-why-diffutil-needed--android--medium
+  - q-why-use-diffutil--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/medium
-- diffutil
-- optimization
-- performance
-- recyclerview
+tags: [android/ui-views, difficulty/medium, diffutil, optimization, performance, recyclerview]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -42,14 +39,14 @@ tags:
 
 **DiffUtil** — это утилитарный класс в Android, который вычисляет разницу между двумя списками и возвращает набор операций обновления для преобразования первого списка во второй. Чаще всего используется с RecyclerView для эффективного обновления только изменившихся элементов вместо перерисовки всего списка.
 
-### Зачем нужен DiffUtil?
+### Зачем Нужен DiffUtil?
 
 1. **Производительность** — Обновляет только изменившиеся элементы, а не весь список.
 2. **Анимации** — Позволяет автоматически применять корректные анимации добавления, удаления и перемещения.
 3. **Эффективность** — Основан на алгоритме поиска минимальной разницы (Eugene W. Myers diff), что обычно даёт хорошую производительность для UI-списков.
 4. **Меньше шаблонного кода** — Уменьшает количество ручных вызовов `notifyItem...` и `notifyDataSetChanged()`.
 
-### 1. Базовая реализация `DiffUtil.Callback`
+### 1. Базовая Реализация `DiffUtil.Callback`
 
 ```kotlin
 data class User(
@@ -110,7 +107,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 }
 ```
 
-### 2. ListAdapter с DiffUtil (рекомендуемый подход)
+### 2. ListAdapter С DiffUtil (рекомендуемый подход)
 
 `ListAdapter` и `AsyncListDiffer` под капотом используют `DiffUtil` и выполняют вычисления diff вне главного потока, упрощая код.
 
@@ -153,7 +150,7 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(UserDiffCa
 adapter.submitList(newUserList)
 ```
 
-### 3. AsyncListDiffer для кастомных адаптеров
+### 3. AsyncListDiffer Для Кастомных Адаптеров
 
 Используйте `AsyncListDiffer`, когда нужен свой `RecyclerView.Adapter`, но вы хотите асинхронный diff.
 
@@ -197,7 +194,7 @@ class AsyncUserAdapter : RecyclerView.Adapter<AsyncUserAdapter.ViewHolder>() {
 }
 ```
 
-### 4. Частичные обновления (payloads)
+### 4. Частичные Обновления (payloads)
 
 Использование `payload` позволяет обновлять только изменившиеся поля элемента.
 
@@ -269,7 +266,7 @@ class PayloadUserAdapter : ListAdapter<User, PayloadUserAdapter.ViewHolder>(User
 }
 ```
 
-### 5. DiffUtil со сложными объектами
+### 5. DiffUtil Со Сложными Объектами
 
 ```kotlin
 data class Post(
@@ -379,7 +376,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 }
 ```
 
-### 6. Замечания по производительности
+### 6. Замечания По Производительности
 
 - `DiffUtil.calculateDiff` можно вызывать в фоновом потоке, но применение результата (`dispatchUpdatesTo`) и любые изменения, влияющие на UI, должны происходить на главном потоке.
 - `ListAdapter` и `AsyncListDiffer` уже обрабатывают diff асинхронно, поэтому чаще всего нет необходимости вручную переносить вычисление в корутину.
@@ -419,7 +416,7 @@ class LargeListAdapter : RecyclerView.Adapter<LargeListAdapter.ViewHolder>() {
 }
 ```
 
-### Сравнение: без DiffUtil vs с DiffUtil
+### Сравнение: Без DiffUtil Vs С DiffUtil
 
 ```kotlin
 class BadAdapter : RecyclerView.Adapter<BadAdapter.ViewHolder>() {
@@ -446,7 +443,7 @@ class GoodAdapter : ListAdapter<Item, GoodAdapter.ViewHolder>(ItemDiffCallback()
 }
 ```
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Используйте `ListAdapter`, когда это возможно — он уже интегрирован с `DiffUtil`.
 2. Используйте `AsyncListDiffer`, если нужен свой `RecyclerView.Adapter`.
@@ -794,7 +791,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 - `ListAdapter` / `AsyncListDiffer` already handle async diffing; prefer them unless you have specific needs.
 - Avoid `notifyDataSetChanged()` when granular updates via `DiffUtil` are possible.
 
-### Comparison: Without vs With DiffUtil
+### Comparison: Without Vs With DiffUtil
 
 ```kotlin
 class BadAdapter : RecyclerView.Adapter<BadAdapter.ViewHolder>() {

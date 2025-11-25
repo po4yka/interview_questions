@@ -19,6 +19,8 @@ sources: []
 created: 2025-10-11
 updated: 2025-11-11
 tags: [android/ci-cd, android/testing-unit, automation, devops-ci-cd, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:05:17 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -79,7 +81,7 @@ jobs:
 ### Инструментальное Тестирование
 Для UI-тестов использовать матрицу эмуляторов (разные API levels / ABI). Применять test sharding для параллелизации, настроить retry при flaky tests. Полный набор тестов запускать nightly, на PR — smoke subset.
 
-### CD (Сборка и Доставка)
+### CD (Сборка И Доставка)
 Добавить отдельный workflow/job для релизных веток или тегов, который:
 - собирает релизный билд (`assembleRelease` или bundle),
 - подписывает его с использованием секретов CI,

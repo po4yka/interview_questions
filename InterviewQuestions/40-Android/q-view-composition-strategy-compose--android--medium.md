@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, c-compose-ui-basics, q-custom-view-lifecycle--android--medium, q-compose-performance-optimization--android--hard]
+related: [c-android, c-compose-ui-basics, q-compose-performance-optimization--android--hard, q-custom-view-lifecycle--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/lifecycle, android/ui-compose, compose, difficulty/medium, interop, lifecycle, viewcompositionstrategy]
 sources: ["https://developer.android.com/jetpack/compose/interop/view-composition-strategy"]
 
+date created: Saturday, November 1st 2025, 1:24:45 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +46,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-2. **DisposeOnLifecycleDestroyed**
+1. **DisposeOnLifecycleDestroyed**
    - Привязывает Composition к заданному Lifecycle (например, `Fragment` или `Activity`)
    - Composition освобождается только при onDestroy этого Lifecycle
    - Полезно, когда нужно, чтобы Composition переживал пересоздание `View` (например, при работе с viewLifecycleOwner или полевым ComposeView)
@@ -56,7 +58,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-3. **DisposeOnViewTreeLifecycleDestroyed**
+1. **DisposeOnViewTreeLifecycleDestroyed**
    - Использует Lifecycle из ViewTreeLifecycleOwner
    - Удобно, когда Lifecycle явно недоступен, но установлен через ViewTreeLifecycleOwner
 
@@ -131,7 +133,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-2. **DisposeOnLifecycleDestroyed**
+1. **DisposeOnLifecycleDestroyed**
    - Binds the Composition to a given Lifecycle (e.g., `Fragment` or `Activity`)
    - Composition is disposed only when that Lifecycle reaches onDestroy
    - Useful when you want the Composition to outlive a single `View` instance (e.g., tied to viewLifecycleOwner or a field-held ComposeView)
@@ -143,7 +145,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-3. **DisposeOnViewTreeLifecycleDestroyed**
+1. **DisposeOnViewTreeLifecycleDestroyed**
    - Uses the Lifecycle from ViewTreeLifecycleOwner
    - Handy when Lifecycle isn't passed directly but is provided via ViewTreeLifecycleOwner
 
@@ -202,7 +204,7 @@ class MyFragment : Fragment() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет при повороте `Fragment` с неверно выбранной ViewCompositionStrategy?
 - Как DisposeOnDetachedFromWindowOrReleasedFromPool по-разному обрабатывает RecyclerView pooling и detach?
@@ -226,12 +228,12 @@ class MyFragment : Fragment() {
 
 - Official docs: https://developer.android.com/jetpack/compose/interop/view-composition-strategy
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-custom-view-lifecycle--android--medium]] - детали жизненного цикла ComposeView
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-custom-view-lifecycle--android--medium]] - детали жизненного цикла ComposeView
 - [[q-compose-performance-optimization--android--hard]] - оптимизация производительности
 

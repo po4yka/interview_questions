@@ -28,7 +28,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, message-passing, state-encapsulation]
+date created: Sunday, October 12th 2025, 3:04:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Что такое паттерн Actor в корутинах Kotlin? Объясните передачу сообщений через каналы, инкапсуляцию состояния и приведите реальные примеры акторов.
 
@@ -76,7 +79,7 @@ tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, messag
           внешних отправителей
 ```
 
-### Базовая Реализация Актора (через actor builder)
+### Базовая Реализация Актора (через Actor builder)
 
 Пример ниже использует `actor`-builder из `kotlinx.coroutines`. В актуальных версиях библиотеки он помечен как устаревший; в новых проектах лучше реализовывать акторы вручную (см. пояснение в ответе).
 
@@ -138,7 +141,7 @@ fun <T> CoroutineScope.actor(
 
 Замечание: в новых версиях `kotlinx.coroutines` этот builder помечен как obsolete; идиоматичный подход — явно создавать `Channel` и запускать корутину, читающую из него.
 
-### Актор-счётчик с улучшенным API
+### Актор-счётчик С Улучшенным API
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -183,7 +186,7 @@ class CounterActor(scope: CoroutineScope) {
 }
 ```
 
-### Реальный пример: Актор банковского счёта
+### Реальный Пример: Актор Банковского Счёта
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -291,7 +294,7 @@ class BankAccount(
 }
 ```
 
-### Актор кэша (Cache Actor)
+### Актор Кэша (Cache Actor)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -349,7 +352,7 @@ class CacheActor<K, V>(
 }
 ```
 
-### Актор ограничения частоты (Rate Limiter Actor)
+### Актор Ограничения Частоты (Rate Limiter Actor)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -401,7 +404,7 @@ class RateLimiterActor(
 }
 ```
 
-### Актор очереди задач (Task Queue Actor)
+### Актор Очереди Задач (Task Queue Actor)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -470,7 +473,7 @@ class TaskQueueActor(
 }
 ```
 
-### Обработка ошибок в акторах
+### Обработка Ошибок В Акторах
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -526,7 +529,7 @@ class SafeBankAccount(scope: CoroutineScope) {
 }
 ```
 
-### Сравнение Actor и Mutex
+### Сравнение Actor И Mutex
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -715,7 +718,7 @@ An actor prevents data races by processing messages one-by-one in its coroutine.
           external senders
 ```
 
-### Basic Actor Implementation (using actor builder)
+### Basic Actor Implementation (using Actor builder)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1316,7 +1319,7 @@ Also ensure actors are bound to an appropriate `CoroutineScope` and are cancelle
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от классической многопоточности в Java?
 - Когда на практике вы бы выбрали акторы вместо других примитивов синхронизации?
@@ -1342,7 +1345,7 @@ Also ensure actors are bound to an appropriate `CoroutineScope` and are cancelle
 - [Kotlinx Coroutines Channels](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/)
 - [Actor Pattern Guide](https://elizarov.medium.com/shared-mutable-state-and-concurrency-in-kotlin-f0f6b8c5c5d8)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-advanced-coroutine-patterns--kotlin--hard]]
 - [[q-fan-in-fan-out--kotlin--hard]]

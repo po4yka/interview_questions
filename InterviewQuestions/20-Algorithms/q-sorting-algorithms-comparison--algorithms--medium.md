@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [algorithms, complexity, difficulty/medium, mergesort, quicksort, sorting]
 sources: ["https://en.wikipedia.org/wiki/Sorting_algorithm"]
 
+date created: Saturday, November 1st 2025, 1:24:14 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)
@@ -397,14 +399,14 @@ fun countingSort(arr: IntArray): IntArray {
 ### Advanced (Harder)
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP algorithms
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем разница между стабильной и нестабильной сортировкой?
 - Почему на практике часто предпочитают QuickSort вместо MergeSort?
 - Каков теоретический нижний предел для сравнивающих алгоритмов сортировки?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предварительные (проще)
 - [[q-data-structures-overview--algorithms--easy]] - Основы структур данных
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-binary-search-variants--algorithms--medium]] - Алгоритмы поиска
 - [[q-two-pointers-sliding-window--algorithms--medium]] - Техника двух указателей
 ### Продвинутые (сложнее)

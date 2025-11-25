@@ -1,38 +1,35 @@
 ---
 id: android-610
 title: Koin Testing Strategies / Стратегии тестирования Koin
-aliases:
-  - Koin Testing Strategies
-  - Тестирование модулей Koin
+aliases: [Koin Testing Strategies, Тестирование модулей Koin]
 topic: android
 subtopics:
+  - architecture-clean
   - di-koin
   - testing-unit
-  - architecture-clean
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - ru
   - en
+  - ru
 status: draft
 moc: moc-android
 related:
   - c-dependency-injection
+  - q-android-testing-strategies--android--medium
+  - q-integration-testing-strategies--android--medium
   - q-koin-fundamentals--android--medium
   - q-koin-scope-management--android--medium
+  - q-tflite-acceleration-strategies--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-  - android/di-koin
-  - android/testing-unit
-  - android/architecture-clean
-  - dependency-injection
-  - koin
-  - difficulty/medium
+tags: [android/architecture-clean, android/di-koin, android/testing-unit, dependency-injection, difficulty/medium, koin]
 sources:
-  - "https://insert-koin.io/docs/reference/koin-test/testing"
   - "https://insert-koin.io/docs/reference/koin-android/check-modules"
+  - "https://insert-koin.io/docs/reference/koin-test/testing"
+date created: Sunday, November 2nd 2025, 5:37:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +42,7 @@ sources:
 
 Тестирование Koin строится вокруг трёх задач: **валидация графа зависимостей**, **подмена зависимостей** и **контроль жизненного цикла**. Koin предоставляет утилиты `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules` и возможность переопределения модулей, которые позволяют тестам оставаться изолированными и быстрыми.
 
-### 1. Валидация графа модулей (checkModules)
+### 1. Валидация Графа Модулей (checkModules)
 
 ```kotlin
 class AppModulesTest {
@@ -67,7 +64,7 @@ class AppModulesTest {
 - `checkModules` разворачивает граф и проверяет, что все зависимости могут быть разрешены.
 - `withInstance` добавляет runtime-артефакты (например, `Context`), без которых проверка упадёт.
 
-### 2. Юнит-тесты с KoinTestRule
+### 2. Юнит-тесты С KoinTestRule
 
 ```kotlin
 class UserRepositoryTest : KoinTest {
@@ -106,7 +103,7 @@ class UserRepositoryTest : KoinTest {
 - `inject()` даёт ленивый доступ к зависимостям.
 - Для корутин используйте `runTest` и мокайте зависимости (например, через MockK `coEvery`) вместо мокания тестируемого класса.
 
-### 3. Подмена зависимостей во время теста (override-модули)
+### 3. Подмена Зависимостей Во Время Теста (override-модули)
 
 ```kotlin
 class DashboardViewModelTest : KoinTest {
@@ -150,7 +147,7 @@ class DashboardViewModelTest : KoinTest {
 - Используйте `module(override = true)` или соответствующий механизм переопределения (в зависимости от версии Koin) для замены production-зависимостей.
 - Не дублируйте управление жизненным циклом: если используете `KoinTestRule` или общий `startKoin` в тестовом раннере, не вызывайте `stopKoin()` точечно в каждом таком тесте без необходимости.
 
-### 4. Инструментальные тесты с KoinTestRule
+### 4. Инструментальные Тесты С KoinTestRule
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -176,7 +173,7 @@ class SettingsFragmentTest : KoinTest {
 - Отдельный `testingModule` содержит фейковые/фиктивные зависимости.
 - `KoinTestRule` автоматически управляет запуском и остановкой Koin.
 
-### 5. Практики для стабильных тестов
+### 5. Практики Для Стабильных Тестов
 
 - **Изоляция**: каждый тест (или suite) должен стартовать Koin с минимальным набором модулей.
 - **Явный lifecycle**: используйте либо `KoinTestRule`, либо явный `startKoin/stopKoin` для всего набора тестов; избегайте конфликтов.
@@ -189,7 +186,7 @@ class SettingsFragmentTest : KoinTest {
 
 Testing Koin spans three goals: **validating the graph**, **overriding dependencies**, and **controlling lifecycle**. Koin ships helpers such as `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules`, and module overrides to keep tests isolated and deterministic.
 
-### 1. Validate modules with checkModules
+### 1. Validate Modules with checkModules
 
 ```kotlin
 class AppModulesTest {
@@ -211,7 +208,7 @@ class AppModulesTest {
 - `checkModules` resolves the graph and ensures every dependency can be created.
 - `withInstance` supplies runtime artifacts (like `Context`) that Koin cannot instantiate itself.
 
-### 2. Unit tests with KoinTestRule
+### 2. Unit Tests with KoinTestRule
 
 ```kotlin
 class UserRepositoryTest : KoinTest {
@@ -249,7 +246,7 @@ class UserRepositoryTest : KoinTest {
 - `inject()` gives lazy access to dependencies.
 - Use `runTest` and mock lower-level dependencies (e.g., via MockK `coEvery`) instead of mocking the class under test.
 
-### 3. Override definitions with test modules
+### 3. Override Definitions with Test Modules
 
 ```kotlin
 class DashboardViewModelTest : KoinTest {
@@ -293,7 +290,7 @@ class DashboardViewModelTest : KoinTest {
 - Use `module(override = true)` (or the appropriate override mechanism for your Koin version) to replace production dependencies.
 - Avoid conflicting lifecycle control: if `KoinTestRule` or a global `startKoin` manages the container, don't call `stopKoin()` for individual tests unless you own that instance.
 
-### 4. Instrumented tests with KoinTestRule
+### 4. Instrumented Tests with KoinTestRule
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -319,7 +316,7 @@ class SettingsFragmentTest : KoinTest {
 - Keep a dedicated `testingModule` with fakes/stubs.
 - `KoinTestRule` tears Koin down automatically.
 
-### 5. Practices for stable tests
+### 5. Practices for Stable Tests
 
 - **Isolation**: start Koin with the smallest set of modules per test or test suite.
 - **Explicit lifecycle**: choose either `KoinTestRule` or manual `startKoin/stopKoin` for the whole test run; avoid mixing patterns that fight each other.

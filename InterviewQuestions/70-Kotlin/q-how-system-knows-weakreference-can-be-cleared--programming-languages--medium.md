@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-collections, q-garbage-collector-basics--programming-languages--medium]
+related: [c-collections, c-concepts--kotlin--medium, q-garbage-collector-basics--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/medium, kotlin, references]
+date created: Friday, October 31st 2025, 6:31:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как система понимает, что WeakReference можно очистить?
 
@@ -46,7 +49,7 @@ tags: [difficulty/medium, kotlin, references]
 - Очистка слабых ссылок и сборка объекта происходят только при выполнении GC; вызов `System.gc()` лишь даёт подсказку, но не гарантирует немедленный запуск.
 - После того как GC очистил слабую ссылку, вызов `weakRef.get()` для неё будет возвращать `null`, что сигнализирует об удалении объекта.
 
-### Пример 1: Базовое поведение
+### Пример 1: Базовое Поведение
 
 ```kotlin
 import java.lang.ref.WeakReference
@@ -72,7 +75,7 @@ System.gc()  // Подсказка: может вызвать GC
 // если объект был собран
 ```
 
-### Пример 2: Простой кэш
+### Пример 2: Простой Кэш
 
 ```kotlin
 class Cache {
@@ -111,7 +114,7 @@ fun example() {
 }
 ```
 
-### Сильные vs слабые ссылки
+### Сильные Vs Слабые Ссылки
 
 ```kotlin
 // Сценарий 1: Есть сильная ссылка
@@ -131,7 +134,7 @@ val weakRef2 = WeakReference(Data())
 // - После сборки weakRef2.get() возвращает null
 ```
 
-### Состояния достижимости (упрощённо)
+### Состояния Достижимости (упрощённо)
 
 - Сильно достижимый:
   - Есть хотя бы одна цепочка сильных ссылок от GC root.
@@ -145,7 +148,7 @@ val weakRef2 = WeakReference(Data())
   - Нет ссылок, удерживающих объект.
   - Действие: объект собирается.
 
-### Практический пример
+### Практический Пример
 
 ```kotlin
 class ImageCache {
@@ -200,7 +203,7 @@ How it works:
 
 Note: `System.gc()` only suggests that the GC may run; it does not guarantee immediate collection or clearing.
 
-### Example 1: Basic behavior
+### Example 1: Basic Behavior
 
 ```kotlin
 import java.lang.ref.WeakReference
@@ -224,7 +227,7 @@ System.gc()  // Hint: may trigger GC
 // After GC, weakRef.get() may return null if the referent was collected
 ```
 
-### Example 2: Simple cache
+### Example 2: Simple Cache
 
 ```kotlin
 class Cache {
@@ -263,7 +266,7 @@ fun example() {
 }
 ```
 
-### Strong vs Weak References
+### Strong Vs Weak References
 
 ```kotlin
 // Scenario 1: Strong reference exists
@@ -283,7 +286,7 @@ val weakRef2 = WeakReference(Data())
 // - After collection, weakRef2.get() returns null
 ```
 
-### Reachability states (simplified)
+### Reachability States (simplified)
 
 - Strongly reachable:
   - Has at least one chain of strong references from GC roots.
@@ -297,7 +300,7 @@ val weakRef2 = WeakReference(Data())
   - No references keep it; purely garbage.
   - Action: collected.
 
-### Practical example
+### Practical Example
 
 ```kotlin
 class ImageCache {
@@ -340,7 +343,7 @@ The GC determines a WeakReference's referent can be cleared when:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как это связано с Kotlin на JVM по сравнению с другими таргетами Kotlin (например, Native)?
 - Когда на практике стоит использовать `WeakReference`?
@@ -361,7 +364,7 @@ The GC determines a WeakReference's referent can be cleared when:
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-garbage-collection]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-garbage-collector-basics--programming-languages--medium]]
 

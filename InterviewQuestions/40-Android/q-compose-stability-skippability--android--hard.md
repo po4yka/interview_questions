@@ -4,24 +4,28 @@ title: Compose Stability Skippability / Стабильность и пропус
 aliases: [Compose Stability Skippability, Стабильность и пропускаемость Compose]
 topic: android
 subtopics:
-- performance-memory
-- ui-compose
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-recomposition
-- q-compose-performance-optimization--android--hard
+  - c-compose-recomposition
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-lazy-layout-optimization--android--hard
+  - q-compose-performance-optimization--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:25:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -374,7 +378,7 @@ This can yield order-of-magnitude performance improvements for large lists.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между аннотациями `@Stable` и `@Immutable` в Compose?
 - Как режим Strong Skipping Mode влияет на поведение стабильности лямбд?

@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-java-equals-default-behavior--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [collections, contracts, difficulty/hard, equality, object-methods, kotlin]
+tags: [collections, contracts, difficulty/hard, equality, kotlin, object-methods]
+date created: Friday, October 31st 2025, 6:29:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Зачем нужны методы `equals()` и `hashCode()` в Kotlin и Java?
 
@@ -38,7 +41,7 @@ tags: [collections, contracts, difficulty/hard, equality, object-methods, kotlin
 3. Если переопределяется `equals()`, почти всегда необходимо переопределить и `hashCode()` таким образом, чтобы оба метода были согласованы.
 4. Значение `hashCode()` должно оставаться постоянным в рамках одного запуска программы, пока остаются неизменными значения полей, участвующих в `equals()`/`hashCode()`. Изменение таких полей для объекта, находящегося в хеш-коллекции, приводит к некорректной работе операций поиска и удаления.
 
-### Примеры кода (RU)
+### Примеры Кода (RU)
 
 Ручная реализация:
 ```kotlin
@@ -221,7 +224,7 @@ fun main() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия реализации и использования `equals()`/`hashCode()` в Kotlin и Java?
 - Когда на практике важно правильно переопределять эти методы и учитывать контракт `equals()`/`hashCode()`?
@@ -243,7 +246,7 @@ fun main() {
 - [[c-equality]]
 - [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-detect-unused-object--programming-languages--easy]]
 - [[q-java-object-comparison--programming-languages--easy]]

@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium, kotlin, multiplatform, testing]
 
+date created: Saturday, November 1st 2025, 1:01:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -72,7 +74,7 @@ shared/src/
   iosTest/kotlin/            # iOS-специфичные тесты
 ```
 
-### Unit-тестирование в commonTest
+### Unit-тестирование В commonTest
 
 Общий код (репозитории, use-case, бизнес-логика) тестируется в `commonTest`, чтобы один и тот же тест запускался на разных таргетах.
 

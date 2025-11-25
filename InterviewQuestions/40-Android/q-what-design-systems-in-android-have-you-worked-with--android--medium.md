@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-ui-composition, c-android-themes, q-android-jetpack-overview--android--easy]
+related: [c-android-themes, c-android-ui-composition, q-android-jetpack-overview--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium, material-design, ui]
+date created: Saturday, November 1st 2025, 1:25:38 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -108,7 +110,7 @@ object DesignTokens {
 - Поддержка темной темы и accessibility
 - Сокращение дублирования кода
 
-### Fluent Design (Microsoft) и HIG (Apple)
+### Fluent Design (Microsoft) И HIG (Apple)
 
 **Fluent** и **HIG** — системы для экосистем Microsoft и Apple (Windows, iOS, iPadOS, macOS и др.), редко используются напрямую в Android, но их принципы полезны для кросс-платформенных приложений.
 
@@ -211,7 +213,7 @@ object DesignTokens {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы реализуете кастомную дизайн-систему в крупной Android-кодовой базе?
 - В чем ключевые отличия между Material 2 и Material 3?
@@ -237,14 +239,14 @@ object DesignTokens {
 - [Material Design Guidelines](https://m3.material.io/)
 - [Material Components for Android](https://github.com/material-components/material-components-android)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 
 - [[q-android-jetpack-overview--android--easy]]
 - [[q-android-app-components--android--easy]]
 
-### Похожие (такой же уровень)
+### Похожие (такой Же уровень)
 
 - [[q-accessibility-color-contrast--android--medium]]
 

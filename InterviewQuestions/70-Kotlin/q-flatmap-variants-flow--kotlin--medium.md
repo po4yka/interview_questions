@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-kotlin-inline-functions--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
+related: [c-flow, c-kotlin, q-kotlin-inline-functions--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-11-10
 
 tags: [coroutines, difficulty/medium, flatmap, flow, kotlin, operators]
+date created: Thursday, October 16th 2025, 4:18:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между `flatMapConcat`, `flatMapMerge` и `flatMapLatest` в Kotlin `Flow`?
 
@@ -636,7 +639,7 @@ urls.asFlow()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этих операторов от подходов в Java?
 - Когда вы бы использовали каждый из этих операторов на практике?

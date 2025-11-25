@@ -10,11 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, c-fragment-lifecycle, q-where-is-composition-created--android--medium]
+related: [c-fragment-lifecycle, c-fragments, q-where-is-composition-created--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/fragment, android/lifecycle, architecture, difficulty/hard, fragment, ui]
 
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android, android/fragment, android/lifecycle, architecture, difficulty/ha
 
 Фрагменты — это модульные компоненты UI внутри `Activity` с собственным жизненным циклом, которые можно добавлять/удалять во время выполнения.
 
-### Краткий вариант
+### Краткий Вариант
 
 Фрагменты нужны для:
 - модульного построения интерфейса внутри одной `Activity`;
@@ -39,7 +41,7 @@ tags: [android, android/fragment, android/lifecycle, architecture, difficulty/ha
 - адаптивных и динамических интерфейсов (телефон/планшет, multi-pane);
 - более тонкого контроля жизненного цикла частей UI и навигации.
 
-### Подробный вариант
+### Подробный Вариант
 
 ### Ключевые Преимущества
 
@@ -134,7 +136,7 @@ Navigation Component позволяет выносить навигационн�
     app:navGraph="@navigation/feature_graph" />
 ```
 
-### Архитектурные паттерны
+### Архитектурные Паттерны
 
 **Single `Activity` Architecture**
 
@@ -159,7 +161,7 @@ class MainActivity : AppCompatActivity() {
 // но не отменяет необходимости понимать lifecycle, state management и навигацию.
 ```
 
-### Современная альтернатива
+### Современная Альтернатива
 
 Jetpack Compose предлагает декларативный подход и навигацию без обязательного использования фрагментов:
 

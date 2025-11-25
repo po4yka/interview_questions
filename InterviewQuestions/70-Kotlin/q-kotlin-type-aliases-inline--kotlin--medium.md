@@ -13,7 +13,9 @@ moc: moc-kotlin
 related: [c-kotlin, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, inline-classes, kotlin, performance, type-safety, type-aliases]
+tags: [difficulty/medium, inline-classes, kotlin, performance, type-aliases, type-safety]
+date created: Friday, October 31st 2025, 6:28:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -72,7 +74,7 @@ typealias UserList = List<User>
 typealias ErrorHandler = (Exception) -> Unit
 ```
 
-### Inline Classes (Value Classes) - Type Safety с (часто) нулевым overhead
+### Inline Classes (Value Classes) - Type Safety С (часто) Нулевым overhead
 
 **Назначение**: Обернуть одно значение, получив отдельный тип и позволяя компилятору/рантайму представлять его без дополнительного объекта во многих случаях.
 
@@ -161,7 +163,7 @@ val list: List<UserId> = listOf()  // Элементы UserId, как прави
 val any: Any = UserId("123")       // Boxing для хранения как Any
 ```
 
-### Wrapper Classes - Полный OOP с overhead
+### Wrapper Classes - Полный OOP С overhead
 
 **Назначение**: Создание отдельных типов с полными OOP-возможностями, которые всегда существуют как обычные объекты.
 
@@ -736,7 +738,7 @@ data class Address(
 
 **Summary**: Kotlin provides three mechanisms for type abstractions with different trade-offs. Type aliases give zero overhead but don't create new types and don't prevent mixing aliases with the same underlying type. Inline/value classes provide distinct types and can be compiled without extra allocations except when boxing is required. Wrapper classes offer full OOP capabilities at the cost of constant runtime overhead. Choose type aliases for complex types and readability, inline/value classes for safe, low-overhead wrappers, and wrapper classes when you need multiple properties, inheritance, or more complex behavior.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этих механизмов от Java-подходов?
 - Когда бы вы использовали каждый из этих вариантов на практике?
@@ -758,7 +760,7 @@ data class Address(
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-actor-pattern--kotlin--hard]]
 - [[q-coroutine-resource-cleanup--kotlin--medium]]

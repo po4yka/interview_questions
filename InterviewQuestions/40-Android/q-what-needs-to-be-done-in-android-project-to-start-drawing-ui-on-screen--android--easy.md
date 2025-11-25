@@ -1,36 +1,33 @@
 ---
 id: android-113
 title: UI Setup in Android Project / Настройка UI в проекте Android
-aliases:
-- UI Setup
-- Настройка UI
+aliases: [UI Setup, Настройка UI]
 topic: android
 subtopics:
-- activity
-- ui-views
+  - activity
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity-lifecycle
-- c-android-view-system-basics
-- q-what-is-activity-and-what-is-it-used-for--android--medium
-- q-what-layout-allows-overlapping-objects--android--easy
+  - c-activity-lifecycle
+  - c-android-view-system-basics
+  - q-android-project-parts--android--easy
+  - q-cicd-pipeline-setup--android--medium
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
+  - q-what-layout-allows-overlapping-objects--android--easy
+  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/activity
-- android/ui-views
-- difficulty/easy
-- layout
-- manifest
-- ui
+tags: [android/activity, android/ui-views, difficulty/easy, layout, manifest, ui]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -86,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 </LinearLayout>
 ```
 
-### 3. Регистрация в `AndroidManifest.xml`
+### 3. Регистрация В `AndroidManifest.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -115,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
 Примечание: любая `Activity` может отображать UI, если она запущена (например, через явный `Intent`); настройка `MAIN/LAUNCHER` нужна именно для запуска приложения с домашнего экрана.
 
-### Альтернатива: программный UI (без XML)
+### Альтернатива: Программный UI (без XML)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -134,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Подход с Jetpack Compose
+### Подход С Jetpack Compose
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -165,7 +162,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Пример структуры проекта
+### Пример Структуры Проекта
 
 ```
 app/
@@ -185,7 +182,7 @@ app/
  build.gradle
 ```
 
-### Жизненный цикл UI
+### Жизненный Цикл UI
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -208,7 +205,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые моменты
+### Ключевые Моменты
 
 - `Activity` — типичная точка входа для UI.
 - `setContentView()` (или `setContent {}` в Compose) привязывает UI к окну `Activity`.

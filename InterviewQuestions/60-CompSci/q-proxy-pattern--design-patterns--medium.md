@@ -1,5 +1,5 @@
 ---
-id: cs-060
+id: dp-007
 title: "Proxy Pattern / Proxy Паттерн"
 aliases: [Proxy Pattern, Proxy Паттерн]
 topic: cs
@@ -14,6 +14,8 @@ related: [c-architecture-patterns, q-adapter-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [cs, design-patterns, difficulty/medium, gof-patterns, proxy, structural-patterns, surrogate]
+date created: Saturday, November 1st 2025, 1:27:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +34,7 @@ tags: [cs, design-patterns, difficulty/medium, gof-patterns, proxy, structural-p
 
 Паттерн проектирования Proxy (Заместитель) использует **объект-заместитель для контроля доступа к другому объекту**. Вместо прямого взаимодействия с основным объектом клиент обращается к прокси, который затем управляет взаимодействием. Это полезно для контроля доступа, ленивой инициализации, логирования, кэширования или добавления проверок безопасности.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Какие проблемы решает паттерн Proxy:
 
@@ -60,7 +62,7 @@ tags: [cs, design-patterns, difficulty/medium, gof-patterns, proxy, structural-p
 4. **Логирование и мониторинг (Logging Proxy)** - записывает операции над объектом
 5. **Кэширование (Cache Proxy)** - сохраняет результаты операций, возвращает закэшированные данные для повторных запросов
 
-### Пример: Контроль доступа к базе данных
+### Пример: Контроль Доступа К Базе Данных
 
 ```kotlin
 // Шаг 1: Интерфейс
@@ -106,7 +108,7 @@ fun main() {
 }
 ```
 
-### Android пример: Ленивая загрузка изображения
+### Android Пример: Ленивая Загрузка Изображения
 
 ```kotlin
 // Интерфейс Subject
@@ -157,7 +159,7 @@ fun main() {
 }
 ```
 
-### Kotlin пример: Кэширующий Proxy
+### Kotlin Пример: Кэширующий Proxy
 
 ```kotlin
 import kotlinx.coroutines.delay
@@ -211,7 +213,7 @@ class CachingApiProxy(
 // }
 ```
 
-### Android Retrofit пример: Логирующий/мониторящий Proxy
+### Android Retrofit Пример: Логирующий/мониторящий Proxy
 
 ```kotlin
 // OkHttp Interceptor как прокси-подобная обёртка вокруг запросов
@@ -269,7 +271,7 @@ val retrofit = Retrofit.Builder()
 4. **Накладные расходы на тестирование** - больше компонентов для тестирования.
 5. **Проблемы с памятью** - кэширующие прокси могут вызывать перерасход памяти при отсутствии политики очистки.
 
-### Примеры в Android
+### Примеры В Android
 
 Паттерн Proxy активно используется в следующих сценариях:
 
@@ -278,7 +280,7 @@ val retrofit = Retrofit.Builder()
 - **Кэширование сетевых ответов** - прокси оборачивает сетевой слой и повторно использует результаты.
 - **Контроль доступа к базе данных или файловой системе** - прокси ограничивает операции в зависимости от прав.
 
-### Лучшие практики (Best Practices)
+### Лучшие Практики (Best Practices)
 
 ```kotlin
 // DO: использовать для ленивой инициализации дорогих объектов
@@ -353,7 +355,7 @@ class AsyncCacheProxy(
 // DON'T: хранить большие объёмы данных в кэширующих прокси без политики очистки
 ```
 
-### Краткое резюме
+### Краткое Резюме
 
 Паттерн **Proxy** предоставляет заместитель (placeholder) для управления доступом к другому объекту. 
 
@@ -690,7 +692,7 @@ Proxy is a structural pattern that provides a placeholder to control access to a
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-adapter-pattern--cs--medium]]
 

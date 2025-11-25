@@ -1,37 +1,33 @@
 ---
 id: android-105
 title: Анализ тормозов приложения Android / Android App Lag Analysis
-aliases:
-- Android App Lag Analysis
-- Анализ тормозов приложения Android
+aliases: [Android App Lag Analysis, Анализ тормозов приложения Android]
 topic: android
 subtopics:
-- performance-memory
-- performance-rendering
-- profiling
+  - performance-memory
+  - performance-rendering
+  - profiling
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-profiling
-- q-android-performance-measurement-tools--android--medium
+  - c-android-profiling
+  - q-android-app-components--android--easy
+  - q-android-performance-measurement-tools--android--medium
+  - q-app-start-types-android--android--medium
+  - q-reduce-app-size--android--medium
 created: 2025-10-13
 updated: 2025-11-10
 sources: []
-tags:
-- android/performance-memory
-- android/performance-rendering
-- android/profiling
-- difficulty/medium
-- fps
-- lag
-- ui-thread
+tags: [android/performance-memory, android/performance-rendering, android/profiling, difficulty/medium, fps, lag, ui-thread]
 
+date created: Saturday, November 1st 2025, 1:24:37 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -258,7 +254,7 @@ StrictMode.setVmPolicy(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как измерять jank в продакшене с помощью кастомных метрик?
 - Какие инструменты помогают находить узкие места при инфлейте layout-ов?
@@ -273,7 +269,7 @@ StrictMode.setVmPolicy(
 - [Performance](https://developer.android.com/topic/performance)
 - [Profiling](https://developer.android.com/studio/profile)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 

@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Guide
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutine-scope-basics--kotlin--easy, q-suspend-functions-basics--kotlin--easy]
+related: [c-coroutines, c-kotlin, q-coroutine-scope-basics--kotlin--easy, q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
 
+date created: Saturday, November 1st 2025, 1:01:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -135,7 +137,7 @@ In this example, `delay()` is a `suspend` function. When the coroutine calls `de
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия корутин от потоков в Java?
 - Когда на практике вы бы использовали корутины?
@@ -145,7 +147,7 @@ In this example, `delay()` is a `suspend` function. When the coroutine calls `de
 
 - [Документация по Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-suspend-functions-basics--kotlin--easy]]
 - [[q-coroutine-scope-basics--kotlin--easy]]

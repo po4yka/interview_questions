@@ -690,6 +690,6 @@ launch {
 
 ## Related Questions
 
-- [[q-data-class-requirements--programming-languages--medium]]
+- [[q-data-class-requirements--kotlin--medium]]
 - [[q-channel-buffer-strategies-comparison--kotlin--hard]]
 - [[q-statein-sharein-flow--kotlin--medium]]

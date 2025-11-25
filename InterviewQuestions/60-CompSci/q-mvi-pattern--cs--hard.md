@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]
 sources: ["https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a"]
+date created: Saturday, November 1st 2025, 1:26:37 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -91,11 +93,11 @@ class MviViewModel(
 **MVI Workflow:**
 
 *Теория:* MVI workflow цикличен по взаимодействию, но поток данных остаётся односторонним:
-1) User interaction во `View` создаёт `Intent`.
-2) `Intent` передаётся в слой Model (`ViewModel`/Reducer/Store).
-3) Model обрабатывает `Intent`, запрашивает данные при необходимости и эмитит новый State.
-4) `View` подписана на поток State, получает новый State и отображает его.
-5) Пользователь видит обновлённый UI и совершает новые действия.
+1. User interaction во `View` создаёт `Intent`.
+2. `Intent` передаётся в слой Model (`ViewModel`/Reducer/Store).
+3. Model обрабатывает `Intent`, запрашивает данные при необходимости и эмитит новый State.
+4. `View` подписана на поток State, получает новый State и отображает его.
+5. Пользователь видит обновлённый UI и совершает новые действия.
 
 ```kotlin
 // ✅ MVI Workflow (наблюдение state + отправка intents)
@@ -332,11 +334,11 @@ class MviViewModel(
 **MVI Workflow:**
 
 *Theory:* The MVI workflow is cyclical in interaction, but the data flow remains one-way:
-1) User interaction in the `View` creates an `Intent`.
-2) `Intent` is passed to the Model layer (`ViewModel`/Reducer/Store).
-3) Model processes the `Intent`, performs data requests if needed, and emits a new State.
-4) `View` subscribes to the State stream, receives the new State, and renders it.
-5) User sees updated UI and performs new actions.
+1. User interaction in the `View` creates an `Intent`.
+2. `Intent` is passed to the Model layer (`ViewModel`/Reducer/Store).
+3. Model processes the `Intent`, performs data requests if needed, and emits a new State.
+4. `View` subscribes to the State stream, receives the new State, and renders it.
+5. User sees updated UI and performs new actions.
 
 ```kotlin
 // ✅ MVI Workflow (observe state + send intents)

@@ -5,7 +5,7 @@ aliases: ["Dispatcher Performance and Selection", "Производительн�
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, performance, dispatchers]
+subtopics: [coroutines, dispatchers, performance]
 question_kind: theory
 difficulty: hard
 
@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [coroutines, difficulty/hard, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140022
 
@@ -178,7 +181,7 @@ withContext(Dispatchers.IO) {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Объясните, когда вы предпочтете `Dispatchers.Default` вместо `Dispatchers.IO` для смешанной нагрузки.
 2. Как использование `Dispatchers.IO.limitedParallelism(n)` помогает защитить внешний ресурс (БД, API) от перегрузки?
@@ -202,7 +205,7 @@ withContext(Dispatchers.IO) {
 
 - Kotlin Coroutines Documentation: https://kotlinlang.org/docs/coroutines-overview.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Связанные (Сложные)
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Коррутины

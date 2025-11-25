@@ -1,33 +1,33 @@
 ---
 id: android-182
 title: View Binding / Привязка View
-aliases:
-- View Binding
-- Привязка View
+aliases: [View Binding, Привязка View]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources:
-- "https://developer.android.com/topic/libraries/view-binding"
+  - "https://developer.android.com/topic/libraries/view-binding"
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- q-reduce-apk-size-techniques--android--medium
-- q-what-is-viewmodel--android--medium
+  - c-gradle
+  - q-reduce-apk-size-techniques--android--medium
+  - q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
+  - q-what-is-data-binding--android--easy
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
+  - q-what-is-viewmodel--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/medium
-- view-binding
+tags: [android/ui-views, difficulty/medium, view-binding]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -188,7 +188,7 @@ The `Fragment` binding is only valid between `onCreateView` and `onDestroyView`;
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `View` Binding сравнивается с Data Binding по возможностям и накладным расходам?
 - Что произойдет, если забыть очистить binding в `onDestroyView` `Fragment`?
@@ -214,9 +214,9 @@ The `Fragment` binding is only valid between `onCreateView` and `onDestroyView`;
 - [Official `View` Binding Guide](https://developer.android.com/topic/libraries/view-binding)
 - [Migrating from findViewById](https://medium.com/androiddevelopers/use-view-binding-to-replace-findviewbyid-c83942471fc)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-gradle]]
 

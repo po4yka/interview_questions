@@ -7,14 +7,16 @@ subtopics: [testing-instrumented, testing-unit]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [ru, en]
-sources: ["https://robolectric.org/", "https://developer.android.com/training/testing/instrumented-tests", "https://developer.android.com/training/testing/fundamentals"]
+language_tags: [en, ru]
+sources: ["https://developer.android.com/training/testing/fundamentals", "https://developer.android.com/training/testing/instrumented-tests", "https://robolectric.org/"]
 status: draft
 moc: moc-android
-related: [c-android, q-testing-viewmodels-turbine--android--medium, q-testing-compose-ui--android--medium]
+related: [c-android, q-testing-compose-ui--android--medium, q-testing-viewmodels-turbine--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-unit, comparison, difficulty/medium, robolectric, strategy]
+date created: Saturday, November 1st 2025, 1:04:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -331,7 +333,7 @@ class UserProfileE2ETest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как настроить CI/CD, чтобы эффективно запускать оба типа тестов?
 - Какие стратегии помогают уменьшить нестабильность (flakiness) инструментальных тестов?
@@ -361,7 +363,7 @@ class UserProfileE2ETest {
 - https://developer.android.com/training/testing/instrumented-tests - Instrumented testing guide
 - https://developer.android.com/training/testing/fundamentals - Android testing fundamentals
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-testing-viewmodels-turbine--android--medium]] - Тестирование `ViewModel`

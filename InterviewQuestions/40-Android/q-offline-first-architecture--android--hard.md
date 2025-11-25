@@ -1,39 +1,33 @@
 ---
 id: android-097
 title: Offline First Architecture / Архитектура Offline First
-aliases:
-- Offline First Architecture
-- Архитектура Offline First
+aliases: [Offline First Architecture, Архитектура Offline First]
 topic: android
 subtopics:
-- architecture-clean
-- cache-offline
-- room
+  - architecture-clean
+  - cache-offline
+  - room
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android
-- android/architecture-clean
-- android/cache-offline
-- android/room
-- architecture
-- difficulty/hard
-- offline-first
-- sync
-- workmanager
+tags: [android, android/architecture-clean, android/cache-offline, android/room, architecture, difficulty/hard, offline-first, sync, workmanager]
 moc: moc-android
 related:
-- c-database-design
-- c-clean-architecture
-- q-clean-architecture-android--android--hard
-- q-how-to-create-dynamic-screens-at-runtime--android--hard
+  - c-clean-architecture
+  - c-database-design
+  - q-clean-architecture-android--android--hard
+  - q-how-to-create-dynamic-screens-at-runtime--android--hard
+  - q-multi-module-best-practices--android--hard
+  - q-play-billing-v6-architecture--android--hard
+  - q-quick-settings-tiles-architecture--android--medium
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -50,14 +44,14 @@ related:
 
 offline-first архитектура обеспечивает работу приложения без сети, синхронизируя данные при восстановлении подключения.
 
-### Краткий вариант
+### Краткий Вариант
 
 - Локальная БД (Room) как единственный источник истины.
 - Все операции сначала пишут в локальное хранилище, затем синхронизируются с сервером.
 - WorkManager и сетевой монитор обеспечивают надежную фоновую синхронизацию.
 - Явная стратегия разрешения конфликтов и понятный UX для offline/online состояний.
 
-### Подробный вариант
+### Подробный Вариант
 
 ### Требования
 
@@ -680,7 +674,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать частичные ошибки синхронизации (часть элементов успешно, часть нет)?
 - Какую стратегию использовать для больших бинарных данных (изображения, файлы) в offline-first?
@@ -710,7 +704,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 - Room database best practices
 - [[moc-android]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -728,7 +722,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 - [[q-clean-architecture-android--android--hard]] — Clean Architecture в Android
 - [[q-how-to-create-dynamic-screens-at-runtime--android--hard]] — динамические UI-паттерны
 
-### Продвинутые темы
+### Продвинутые Темы
 
 - Распределенная синхронизация с использованием CRDT (Conflict-free Replicated Data Types)
 - Event sourcing для offline-first приложений

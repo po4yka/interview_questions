@@ -3,7 +3,7 @@ id: android-023
 title: "React Native vs Flutter comparison / Сравнение React Native и Flutter"
 aliases: ["React Native vs Flutter", "Сравнение React Native и Flutter"]
 topic: android
-subtopics: [ui-views, ui-compose]
+subtopics: [ui-compose, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,8 +14,10 @@ moc: moc-android
 related: [c-android, q-android-app-components--android--easy]
 created: 2025-10-06
 updated: 2025-11-10
-tags: [android/ui-views, android/ui-compose, difficulty/medium]
+tags: [android/ui-compose, android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)

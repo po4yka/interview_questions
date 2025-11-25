@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/coroutines, android/lifecycle, architecture-patterns, difficulty/medium, mvvm, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -208,7 +210,7 @@ See also [[c-viewmodel]] and [[c-mvvm-pattern]].
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать одноразовые события (навигация, toasts) в MVVM, не нарушая unidirectional data flow?
 - В чём отличия и trade-offs между использованием `MutableStateFlow.update {}` и прямым присваиванием в `value`?
@@ -222,7 +224,7 @@ See also [[c-viewmodel]] and [[c-mvvm-pattern]].
 - Официальная документация: https://developer.android.com/topic/architecture
 - Руководство по архитектуре приложений Android: https://developer.android.com/topic/libraries/architecture
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые/предпосылки
 

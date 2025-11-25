@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [builder, creational-patterns, design-patterns, difficulty/medium, gof-patterns]
 sources: ["https://refactoring.guru/design-patterns/builder"]
 
+date created: Saturday, November 1st 2025, 1:24:17 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)

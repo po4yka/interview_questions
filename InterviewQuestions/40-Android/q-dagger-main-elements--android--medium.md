@@ -14,15 +14,19 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - c-dependency-injection
   - c-dagger
+  - c-dependency-injection
+  - q-dagger-custom-scopes--android--hard
   - q-dagger-field-injection--android--medium
   - q-dagger-framework-overview--android--hard
   - q-dagger-inject-annotation--android--easy
+  - q-dagger-purpose--android--easy
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -89,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
 **Правило (best practice):** по возможности использовать constructor injection; field injection — валидный механизм, особенно для Android framework классов, где нельзя контролировать конструктор.
 
-### 4. @Binds vs @Provides
+### 4. @Binds Vs @Provides
 
 ```kotlin
 @Module
@@ -159,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 
 **Rule (best practice):** prefer constructor injection when possible; field injection is a valid mechanism, especially for Android framework types where you cannot control the constructor.
 
-### 4. @Binds vs @Provides
+### 4. @Binds Vs @Provides
 
 ```kotlin
 @Module
@@ -171,7 +175,7 @@ abstract class RepositoryModule {
 
 `@Binds` is preferred for simple interface-to-implementation bindings (less generated code and clearer semantics), while `@Provides` is used when you need arbitrary creation logic.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Dagger решает проблему циклических зависимостей?
 - В чем разница жизненных циклов между `@Singleton` и `@ActivityScoped`?
@@ -201,7 +205,7 @@ abstract class RepositoryModule {
 - [[c-hilt]]
 - https://dagger.dev/dev-guide/
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-dagger-inject-annotation--android--easy]] — Понимание `@Inject`

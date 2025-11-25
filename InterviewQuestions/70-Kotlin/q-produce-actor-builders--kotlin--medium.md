@@ -18,13 +18,15 @@ source_note: Comprehensive Kotlin Coroutines Channel Builders Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-actor-pattern--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-channels-basics-types--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-actor-pattern--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-channels-basics-types--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [actor, builders, channels, coroutines, difficulty/medium, kotlin, produce]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +45,7 @@ tags: [actor, builders, channels, coroutines, difficulty/medium, kotlin, produce
 
 > См. также: [[c-kotlin]], [[c-coroutines]], [[c-structured-concurrency]] (если доступен в хранилище; в противном случае используйте документацию kotlinx.coroutines).
 
-### Produce: Паттерн производителя (Builder)
+### Produce: Паттерн Производителя (Builder)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -97,7 +99,7 @@ class ProduceComparisonRu {
 }
 ```
 
-### Возможности и преимущества Produce
+### Возможности И Преимущества Produce
 
 ```kotlin
 class ProduceFeaturesRu {
@@ -172,7 +174,7 @@ class ProduceFeaturesRu {
 }
 ```
 
-### Типичные случаи использования Produce
+### Типичные Случаи Использования Produce
 
 ```kotlin
 class ProduceUseCasesRu {
@@ -215,7 +217,7 @@ class ProduceUseCasesRu {
 
 Примечание: для callback-источников событий с управляемым освобождением ресурсов чаще лучше подходят `callbackFlow` + `awaitClose`, чем `produce`.
 
-### Actor: Паттерн актора (Builder)
+### Actor: Паттерн Актора (Builder)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -292,7 +294,7 @@ class ActorComparisonRu {
 }
 ```
 
-### Возможности и преимущества Actor
+### Возможности И Преимущества Actor
 
 ```kotlin
 class ActorFeaturesRu {
@@ -390,7 +392,7 @@ class ActorFeaturesRu {
 }
 ```
 
-### Типичные случаи использования Actor
+### Типичные Случаи Использования Actor
 
 ```kotlin
 class ActorUseCasesRu {
@@ -530,7 +532,7 @@ class ActorUseCasesRu {
 }
 ```
 
-### Сравнение Produce и Actor
+### Сравнение Produce И Actor
 
 ```kotlin
 /**
@@ -577,7 +579,7 @@ class ProduceVsActorExamplesRu {
 }
 ```
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
 ```kotlin
 class AdvancedPatternsRu {
@@ -684,7 +686,7 @@ class AdvancedPatternsRu {
 }
 ```
 
-### Тестирование Produce и Actor
+### Тестирование Produce И Actor
 
 ```kotlin
 import kotlinx.coroutines.test.runTest
@@ -754,7 +756,7 @@ class BuilderTestsRu {
 }
 ```
 
-### Когда использовать (итог по-русски)
+### Когда Использовать (итог по-русски)
 
 - `produce`:
   - когда нужен источник/поток данных (one-to-many, пайплайны, генераторы);
@@ -1487,7 +1489,7 @@ class BuilderTests {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как `produce` и `actor` обрабатывают исключения?
    - Проброс исключений от продьюсера/актора к потребителям/вызывающим сторонам

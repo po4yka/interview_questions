@@ -1,34 +1,32 @@
 ---
 id: android-401
 title: Activity Lifecycle on New Activity / Жизненный цикл при запуске новой Activity
-aliases:
-- Activity Lifecycle on New Activity
-- Жизненный цикл при запуске новой Activity
+aliases: [Activity Lifecycle on New Activity, Жизненный цикл при запуске новой Activity]
 topic: android
 subtopics:
-- activity
-- lifecycle
+  - activity
+  - lifecycle
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity-lifecycle
-- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-activity-lifecycle
+  - q-activity-lifecycle-methods--android--medium
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/lifecycle
-- difficulty/hard
-- lifecycle
-- memory
+tags: [android/activity, android/lifecycle, difficulty/hard, lifecycle, memory]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +40,7 @@ tags:
 ## Ответ (RU)
 Когда система запускает новое `Activity` в Android, поведение предыдущего ("старого") `Activity` зависит от нескольких факторов: стандартных правил жизненного цикла, флагов `Intent`, конфигурации task/affinity и состояния памяти.
 
-### Поведение по умолчанию (без специальных флагов)
+### Поведение По Умолчанию (без Специальных флагов)
 
 Предположим, `Activity` A видно на экране и запускает `Activity` B в том же task без специальных флагов.
 
@@ -91,7 +89,7 @@ tags:
 
 Сценарии использования: предотвращение дублирования `Activity`, когда оно уже отображается (например, при повторных переходах с уведомлений или deep link на тот же экран).
 
-### Сценарии при давлении на память
+### Сценарии При Давлении На Память
 
 При дефиците памяти система может завершать процессы и уничтожать `Activity`, находящиеся в фоне (обычно в состоянии `stopped`, иногда даже `paused`). Важно:
 

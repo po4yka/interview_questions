@@ -5,7 +5,7 @@ aliases: ["CoroutineScope vs CoroutineContext", "CoroutineScope против Cor
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, coroutinecontext, coroutinescope]
+subtopics: [coroutinecontext, coroutines, coroutinescope]
 question_kind: theory
 difficulty: medium
 
@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-10
 
 tags: [coroutinecontext, coroutines, coroutinescope, difficulty/medium, kotlin, structured-concurrency]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое CoroutineScope и чем он отличается от CoroutineContext?
 
@@ -50,7 +53,7 @@ public interface CoroutineContext
 
 Элементом может быть все, что нужно корутине для корректной работы: информация о жизненном цикле, диспетчер потоков, имя, обработчик исключений и т.д.
 
-#### Типичные элементы CoroutineContext
+#### Типичные Элементы CoroutineContext
 
 - **Job** - отменяемый дескриптор корутины с жизненным циклом
 - **CoroutineDispatcher** - диспетчер для выполнения корутины
@@ -59,7 +62,7 @@ public interface CoroutineContext
 - **CoroutineExceptionHandler** - обработчик необработанных исключений
 - **ContinuationInterceptor** - определяет перехват продолжений (используется, в частности, диспетчерами)
 
-#### Пример (композиция и поиск элементов в CoroutineContext)
+#### Пример (композиция И Поиск Элементов В CoroutineContext)
 
 ```kotlin
 val context = Job() + Dispatchers.IO + CoroutineName("MyCoroutine")
@@ -82,14 +85,14 @@ public interface CoroutineScope {
 приемником (`receiver`) для стандартных extension-функций (`launch`, `async` и др.),
 которые используют его `coroutineContext`.
 
-#### Что предоставляет CoroutineScope
+#### Что Предоставляет CoroutineScope
 
 1. **Абстракцию для связывания контекста и задач** - помогает организовывать и контролировать корутины, используя общий `CoroutineContext`.
 2. **Основание для иерархии задач** - если в `coroutineContext` области есть `Job`, то корутины, запущенные из этой области, становятся дочерними по отношению к этому `Job`, что позволяет управлять их отменой и завершением.
 3. **Точка применения утилитарных функций** - extension-функции `launch`, `async`, `withContext` и др. определены так, чтобы работать с `CoroutineScope` и его `coroutineContext`.
 4. **Поддержка структурированной конкуррентности** - области с родительским `Job` позволяют гарантировать корректную иерархию, отмену и завершение связанных корутин.
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Аспект | CoroutineContext | CoroutineScope |
 |--------|------------------|----------------|
@@ -99,7 +102,7 @@ public interface CoroutineScope {
 | **Прямое использование** | Часто используется: комбинирование, изменение и чтение элементов | Часто используется (например, `viewModelScope`, `lifecycleScope`) для запуска корутин |
 | **Ответственность** | Данные и поведение элементов контекста | Определяет границы/владельца для корутин, использующих его контекст |
 
-### Визуальное представление
+### Визуальное Представление
 
 ```
 
@@ -117,9 +120,9 @@ public interface CoroutineScope {
 
 ```
 
-### Практические примеры
+### Практические Примеры
 
-#### Создание CoroutineScope из CoroutineContext
+#### Создание CoroutineScope Из CoroutineContext
 
 ```kotlin
 // CoroutineContext с элементами
@@ -134,7 +137,7 @@ scope.launch {
 }
 ```
 
-#### Использование предопределенных областей
+#### Использование Предопределенных Областей
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -148,7 +151,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-#### Доступ к контексту из области
+#### Доступ К Контексту Из Области
 
 ```kotlin
 val scope = CoroutineScope(Job() + Dispatchers.IO)
@@ -163,7 +166,7 @@ scope.launch {
 }
 ```
 
-### Почему два концепта?
+### Почему Два Концепта?
 
 **CoroutineContext** — это **данные**: он хранит элементы конфигурации (`Job`, `Dispatcher` и т.д.).
 
@@ -338,7 +341,7 @@ scope.launch {
 
 **English Summary**: `CoroutineContext` is a `Map`-like collection of coroutine elements (`Job`, `Dispatcher`, `Name`, `ExceptionHandler`, etc.). `CoroutineScope` is an interface exposing a `coroutineContext` that acts as a scope/owner for coroutines and is the receiver for builder extensions (`launch`, `async`, etc.), enabling lifecycle management and structured concurrency.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java-потоков при использовании корутин?
 - Когда бы вы использовали `CoroutineScope` и `CoroutineContext` на практике?
@@ -363,15 +366,15 @@ scope.launch {
 - [Things every Kotlin Developer should know about Coroutines. Part 1: CoroutineContext](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-1-coroutinecontext)
 - [Things every Kotlin Developer should know about Coroutines. Part 2: CoroutineScope](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-2-coroutinescope)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Корутины
 - [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Корутины
 - [[q-coroutine-parent-child-relationship--kotlin--medium]] - Корутины
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Корутины
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-structured-concurrency-patterns--kotlin--hard]] - Корутины
 - [[q-coroutine-context-detailed--kotlin--hard]] - Корутины
 - [[q-structured-concurrency--kotlin--hard]] - Корутины

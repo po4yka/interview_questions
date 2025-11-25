@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [android/performance-memory, android/profiling, difficulty/medium, memory-optimization, sparsearray]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:24:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -128,7 +130,7 @@ sparseArray.put(key, value)  // May reuse the slot or trigger compaction
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем количественная разница в накладных расходах памяти между SparseArray и `HashMap`?
 - В какой момент стоимость поиска O(log n) перевешивает выигрыш по памяти?
@@ -156,12 +158,12 @@ sparseArray.put(key, value)  // May reuse the slot or trigger compaction
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-app-components--android--easy]] - Обзор компонентов Android-приложения
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-build-optimization--android--medium]] - Стратегии оптимизации памяти
 
 ### Продвинутые (сложнее)

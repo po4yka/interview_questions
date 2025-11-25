@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [difficulty/easy, let, null-safety, kotlin, scope-functions]
+tags: [difficulty/easy, kotlin, let, null-safety, scope-functions]
+date created: Friday, October 31st 2025, 6:30:30 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Для чего нужна функция `let` в Kotlin?
 
@@ -111,7 +114,7 @@ value
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем использование `let` отличается от типичных Java-подходов к проверке на null и fluent API?
 - Когда вы бы использовали `let` на практике?

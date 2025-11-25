@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-002
 title: Media3 / Media3
-aliases:
-  - Media3
-  - Android Media3
+aliases: [Android Media3, Media3]
 kind: concept
 summary: Unified Jetpack media stack replacing ExoPlayer and legacy media components
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - media
-  - exoplayer
-  - media3
+tags: [android, concept, exoplayer, media, media3]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

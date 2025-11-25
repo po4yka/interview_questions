@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-compose-state, c-viewmodel, c-mvvm]
+related: [c-compose-state, c-jetpack-compose, c-mvvm, c-viewmodel]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium, jetpack-compose]
 
+date created: Saturday, November 1st 2025, 1:32:08 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -488,7 +490,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Compose определяет, какие composable-функции нужно рекомпозировать?
 - В чем разница между `remember` и `rememberSaveable`?
@@ -520,7 +522,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 - https://developer.android.com/jetpack/compose/mental-model
 - https://developer.android.com/jetpack/compose/lifecycle
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 

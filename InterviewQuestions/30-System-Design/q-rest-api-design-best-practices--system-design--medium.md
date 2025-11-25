@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [api-design, difficulty/medium, http, rest-api, system-design]
 sources: ["https://en.wikipedia.org/wiki/Representational_state_transfer"]
 
+date created: Sunday, October 12th 2025, 8:38:24 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -683,13 +685,13 @@ fun getUser(@PathVariable id: Long): User
 - [[q-microservices-vs-monolith--system-design--hard]] - Architecture patterns
 - [[q-cap-theorem-distributed-systems--system-design--hard]] - Distributed systems theory
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать rate limiting в API?
 - В чем разница между PUT и PATCH?
 - Как правильно организовать процесс деприкации и удаления старых версий API?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-caching-strategies--system-design--medium]] - Паттерны кеширования

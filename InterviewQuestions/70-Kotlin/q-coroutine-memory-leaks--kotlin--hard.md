@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140024
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-kotlin-sam-interfaces--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-kotlin-sam-interfaces--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/hard, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140024
 
@@ -213,7 +216,7 @@ In such cases, the coroutine keeps running after the scope is cancelled, holding
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как структурированная конкурентность помогает предотвращать утечки памяти, связанные с корутинами, в крупных Android-приложениях?
 2. В каких сценариях, если вообще, допустимо использовать `GlobalScope`, и как минимизировать риск утечек при его использовании?
@@ -249,7 +252,7 @@ In such cases, the coroutine keeps running after the scope is cancelled, holding
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Сложные (Hard)
 - [[q-coroutine-profiling--kotlin--hard]] - Coroutines

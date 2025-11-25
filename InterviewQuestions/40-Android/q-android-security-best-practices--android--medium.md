@@ -4,25 +4,30 @@ title: Android Security Best Practices / Лучшие практики безо�
 aliases: [Android Security Best Practices, Лучшие практики безопасности Android]
 topic: android
 subtopics:
-- keystore-crypto
-- network-security-config
-- permissions
+  - keystore-crypto
+  - network-security-config
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-encryption
-- c-permissions
+  - c-encryption
+  - c-permissions
+  - q-android-security-practices-checklist--android--medium
+  - q-app-security-best-practices--android--medium
+  - q-database-encryption-android--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, encryption, security]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:03:08 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -143,7 +148,7 @@ webView.addJavascriptInterface(object {
 - Используйте Android Lint/StrictMode для выявления потенциальных уязвимостей и неправильного использования API
 - Выполняйте анализ зависимостей (например, OWASP Dependency-Check) для поиска известных уязвимостей
 
-## Ответы / Дополнительные вопросы (RU)
+## Ответы / Дополнительные Вопросы (RU)
 
 - Как реализовать certificate pinning для разных build variant (dev/staging/prod)?
 - Каковы риски использования рефлексии и динамической загрузки кода с точки зрения безопасности?
@@ -158,13 +163,13 @@ webView.addJavascriptInterface(object {
 - https://developer.android.com/topic/security/best-practices
 - https://owasp.org/www-project-mobile-app-security/
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (Проще)
 - [[q-android-manifest-file--android--easy]] - Конфигурация Manifest
 - [[q-android-app-components--android--easy]] - Базовые компоненты приложения
 
-### Связанные (Того же уровня)
+### Связанные (Того Же уровня)
 - Runtime permissions
 - [[q-android-lint-tool--android--medium]] - Инструменты анализа кода
 - [[q-biometric-authentication--android--medium]] - Биометрическая аутентификация

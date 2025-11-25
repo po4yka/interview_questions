@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-hot-vs-cold-flows--programming-languages--medium]
+related: [c-coroutines, c-kotlin, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [coroutines, difficulty/medium, kotlin, scope]
+date created: Saturday, November 1st 2025, 1:01:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Что такое CoroutineScope?
 
@@ -32,7 +35,7 @@ tags: [coroutines, difficulty/medium, kotlin, scope]
 - `viewModelScope` — в `ViewModel` (Android), все корутины отменяются при уничтожении `ViewModel`.
 - `lifecycleScope` — в `Activity`/`Fragment` (Android), все корутины отменяются при уничтожении соответствующего владельца жизненного цикла.
 
-### Базовая концепция
+### Базовая Концепция
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -53,7 +56,7 @@ fun main() = runBlocking {  // Создает scope и блокирует тек
 }
 ```
 
-### Создание пользовательского scope
+### Создание Пользовательского Scope
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -77,7 +80,7 @@ class MyManager {
 }
 ```
 
-### Распространенные scope
+### Распространенные Scope
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -125,7 +128,7 @@ suspend fun performTask() = coroutineScope {
 }
 ```
 
-### Иерархия scope
+### Иерархия Scope
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -147,7 +150,7 @@ fun scopeHierarchy() = runBlocking {  // Родительский scope
 }
 ```
 
-### Структурированная конкуррентность
+### Структурированная Конкуррентность
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -172,7 +175,7 @@ suspend fun structuredConcurrency() = coroutineScope {
 }
 ```
 
-### Практические примеры
+### Практические Примеры
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -237,7 +240,7 @@ class DataSyncService : Service() {
 }
 ```
 
-### Отмена scope
+### Отмена Scope
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -268,7 +271,7 @@ fun cancelScope() {
 }
 ```
 
-### Обработка исключений в scope
+### Обработка Исключений В Scope
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -357,7 +360,7 @@ class ScopeBestPractices {
 }
 ```
 
-### Контекст scope
+### Контекст Scope
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -384,7 +387,7 @@ scopeWithHandler.launch {
 }
 ```
 
-### Тестирование с использованием scope
+### Тестирование С Использованием Scope
 
 ```kotlin
 import kotlinx.coroutines.test.runTest
@@ -819,7 +822,7 @@ Key Points:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия корутинного подхода от Java-потоков?
 - Когда на практике стоит использовать `CoroutineScope` и какие scopes выбирать?
@@ -839,7 +842,7 @@ Key Points:
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-hot-vs-cold-flows--programming-languages--medium]]
 

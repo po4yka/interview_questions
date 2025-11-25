@@ -20,10 +20,13 @@ related:
   - q-android-app-lag-analysis--android--medium
   - q-android-performance-measurement-tools--android--medium
   - q-android-runtime-art--android--medium
+  - q-optimize-memory-usage-android--android--medium
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/processes, android/profiling, difficulty/hard]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:43 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -251,7 +254,7 @@ fun calculateDistance(x: Int, y: Int): Int {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как ART решает, какие методы компилировать JIT на основе профилирования?
 - В чем компромиссы между фильтрами компиляции SPEED_PROFILE и SPEED?
@@ -277,13 +280,13 @@ fun calculateDistance(x: Int, y: Int): Int {
 - https://source.android.com/docs/core/runtime
 - https://developer.android.com/topic/performance/memory-overview
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-runtime-art--android--medium]] - Основы ART и режимы компиляции
 - [[q-android-performance-measurement-tools--android--medium]] - Инструменты профилирования
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-app-lag-analysis--android--medium]] - Техники анализа производительности
 
 ### Продвинутое (сложнее)

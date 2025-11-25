@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-001
 title: CameraX / CameraX
-aliases:
-  - CameraX
-  - Android CameraX
+aliases: [Android CameraX, CameraX]
 kind: concept
 summary: Jetpack camera library simplifying camera development with backward compatibility and Camera2 interoperability
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - camera
-  - camerax
-  - imaging
+tags: [android, camera, camerax, concept, imaging]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

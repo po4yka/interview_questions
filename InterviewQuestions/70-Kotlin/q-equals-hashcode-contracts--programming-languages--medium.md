@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-equality, q-equals-hashcode-purpose--programming-languages--hard]
+related: [c-equality, c-kotlin, q-equals-hashcode-purpose--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [collections, contracts, difficulty/medium, equality, object-methods, kotlin]
+tags: [collections, contracts, difficulty/medium, equality, kotlin, object-methods]
+date created: Friday, October 31st 2025, 6:29:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Расскажи о контрактах `equals` и `hashCode`
 
@@ -80,7 +83,7 @@ u1.name = "Jane"  // изменилось поле, влияющее на рав
 u1.equals(u2)      // теперь может быть false
 ```
 
-#### 5. Сравнение с null
+#### 5. Сравнение С Null
 Для любого ненулевого объекта сравнение с `null` должно возвращать `false`:
 ```kotlin
 data class User(val name: String)
@@ -93,7 +96,7 @@ user.equals(null)  // Должно быть false
 
 Метод `hashCode()` должен удовлетворять:
 
-#### 1. Стабильность хеша
+#### 1. Стабильность Хеша
 Пока объект не меняет поля, участвующие в `equals()`, значение `hashCode()` должно оставаться тем же:
 ```kotlin
 data class User(val name: String)
@@ -105,7 +108,7 @@ val hash2 = user.hashCode()
 hash1 == hash2  // Должно быть true
 ```
 
-#### 2. Равные объекты → равные hashCode
+#### 2. Равные Объекты → Равные hashCode
 Если `a.equals(b) == true`, то `a.hashCode() == b.hashCode()` (обязательное требование):
 ```kotlin
 class User(val name: String, val age: Int) {
@@ -130,7 +133,7 @@ if (u1.equals(u2)) {
 }
 ```
 
-#### 3. Неравные объекты могут иметь одинаковый hashCode (коллизии)
+#### 3. Неравные Объекты Могут Иметь Одинаковый hashCode (коллизии)
 `a.hashCode() == b.hashCode()` не означает `a.equals(b)`:
 ```kotlin
 class User(val name: String, val age: Int)
@@ -141,7 +144,7 @@ val u2 = User("Jane", 30)
 // Теоретически они могут иметь одинаковый hashCode, но при этом не быть равными
 ```
 
-### Примеры реализации
+### Примеры Реализации
 
 Ручная реализация (обычный класс):
 ```kotlin
@@ -167,7 +170,7 @@ data class Person(val name: String, val age: Int)
 // В расчёт берутся свойства из primary constructor
 ```
 
-### Почему это важно для коллекций
+### Почему Это Важно Для Коллекций
 
 Хеш-коллекции (`HashSet`, `HashMap`) полагаются на корректность `equals()` и `hashCode()`:
 ```kotlin
@@ -201,7 +204,7 @@ val set = hashSetOf(u1)
 set.contains(u2)  // Может вернуть false из-за разных hashCode()
 ```
 
-### Рекомендации по реализации
+### Рекомендации По Реализации
 
 1. Всегда переопределяйте `equals()` и `hashCode()` вместе, когда определяете логическое равенство.
 ```kotlin
@@ -474,7 +477,7 @@ override fun hashCode(): Int {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия контрактов в контексте Java и Kotlin?
 - Где на практике особенно важно корректно реализовывать `equals()` и `hashCode()`?
@@ -498,7 +501,7 @@ override fun hashCode(): Int {
 - [[c-kotlin]]
 - [[c-equality]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-equals-hashcode-purpose--programming-languages--hard]]
 

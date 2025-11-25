@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback, difficulty/medium, lifecycle, mvp, platform/android, presenter, view]
 
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -450,7 +452,7 @@ Where `mainThreadHandler` is created with `Looper.getMainLooper()`, or use `runO
 
 ---
 
-## Дополнительные вопросы (Follow-ups, RU)
+## Дополнительные Вопросы (Follow-ups, RU)
 
 - Как обрабатывать изменения конфигурации (например, поворот экрана) в MVP, не теряя состояние Presenter?
 - В чем различия между паттернами MVP и MVVM в Android?
@@ -474,14 +476,14 @@ Where `mainThreadHandler` is created with `Looper.getMainLooper()`, or use `runO
 
 - [Android Architecture Guide](https://developer.android.com/topic/architecture)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 
 - [[q-viewmodel-pattern--android--easy]] — Понимание `ViewModel`
 - [[q-recyclerview-sethasfixedsize--android--easy]] — Оптимизация `View`
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-what-is-viewmodel--android--medium]] — Подробности о `ViewModel`
 - [[q-testing-viewmodels-turbine--android--medium]] — Паттерны тестирования

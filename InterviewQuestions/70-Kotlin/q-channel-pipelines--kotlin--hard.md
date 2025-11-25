@@ -21,14 +21,17 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-flow-backpressure-strategies--kotlin--hard, q-kotlin-channels--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-flow-backpressure-strategies--kotlin--hard, q-kotlin-channels--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [backpressure, channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, pipelines]
+date created: Sunday, October 12th 2025, 2:05:38 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Объясните конвейеры каналов в корутинах Kotlin. Как реализовать паттерны производитель-потребитель, fan-out, fan-in и стратегии буферизации? Приведите примеры реальных архитектур конвейеров.
 
@@ -97,7 +100,7 @@ fun main() = runBlocking {
 }
 ```
 
-### Многостадийный Конвейер с Обработкой Ошибок
+### Многостадийный Конвейер С Обработкой Ошибок
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -178,7 +181,7 @@ fun main() = runBlocking {
 }
 ```
 
-### Fan-Out: Множественные Потребители от Одного Канала
+### Fan-Out: Множественные Потребители От Одного Канала
 
 Fan-out распределяет работу от одного производителя нескольким потребителям для параллельной обработки.
 
@@ -218,7 +221,7 @@ class FanOutProcessor {
 }
 ```
 
-### Fan-Out с Балансировкой Нагрузки
+### Fan-Out С Балансировкой Нагрузки
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -274,7 +277,7 @@ class LoadBalancedProcessor {
 }
 ```
 
-### Fan-In: Множественные Производители в Один Канал
+### Fan-In: Множественные Производители В Один Канал
 
 Fan-in объединяет вывод от нескольких производителей в один канал.
 
@@ -313,7 +316,7 @@ class FanInProcessor {
 }
 ```
 
-### Fan-In с `PriorityQueue`
+### Fan-In С `PriorityQueue`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -801,7 +804,7 @@ class BackpressureExample {
 }
 ```
 
-### Мониторинг Конвейера и Метрики
+### Мониторинг Конвейера И Метрики
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1969,7 +1972,7 @@ suspend fun processAsync(item: Int): Int {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия такого подхода от Java без корутин?
 - Когда вы бы использовали такие конвейеры на практике?
@@ -1991,7 +1994,7 @@ suspend fun processAsync(item: Int): Int {
 - [Channel Pipelines](https://kotlinlang.org/docs/channels.html#pipelines)
 - [Fan-out and Fan-in](https://kotlinlang.org/docs/channels.html#fan-out)
 
-## Похожие вопросы (RU)
+## Похожие Вопросы (RU)
 - [[q-kotlin-channels--kotlin--medium]]
 - [[q-produce-actor-builders--kotlin--medium]]
 - [[q-flow-backpressure-strategies--kotlin--hard]]

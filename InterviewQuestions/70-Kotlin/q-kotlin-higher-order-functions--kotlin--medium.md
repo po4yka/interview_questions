@@ -5,7 +5,7 @@ aliases: ["Higher-Order Functions in Kotlin", "Функции высшего п�
 
 # Classification
 topic: kotlin
-subtopics: [higher-order-functions, functional-programming, inline-functions]
+subtopics: [functional-programming, higher-order-functions, inline-functions]
 question_kind: theory
 difficulty: medium
 
@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, functional-programming, higher-order-functions, kotlin, lambda-expressions]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое функции высшего порядка в Kotlin?
 
@@ -650,7 +653,7 @@ val page = html {
 
 **English Summary**: Higher-order functions take functions as parameters or return functions as results. They enable functional programming patterns, code reusability, and abstraction. Kotlin's standard library (map, filter, reduce) extensively uses them. The `inline` keyword helps reduce performance overhead by inlining function and lambda bodies at compile time where applicable.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали функции высшего порядка на практике?
@@ -675,7 +678,7 @@ val page = html {
 - [A Practical Guide to Kotlin's inline Modifier](https://maxkim.eu/a-practical-guide-to-kotlins-inline-modifier)
 - [Inline function: Kotlin](https://agrawalsuneet.medium.com/inline-function-kotlin-3f05d2ea1b59)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-lambda-expressions--kotlin--medium]]
 - [[q-kotlin-inline-functions--kotlin--medium]]

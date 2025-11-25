@@ -14,8 +14,10 @@ related: [c-algorithms, q-data-sync-unstable-network--android--hard, q-retrofit-
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [networking, concurrency, deduplication, difficulty/hard, performance]
+tags: [concurrency, deduplication, difficulty/hard, networking, performance]
 
+date created: Tuesday, October 28th 2025, 9:50:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +49,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 ### Стратегии Дедупликации
 
-#### 1. Дедупликация на основе Mutex (ограничение)
+#### 1. Дедупликация На Основе Mutex (ограничение)
 
 Простой подход: только одна корутина может выполнять критическую секцию для конкретного ключа.
 
@@ -66,7 +68,7 @@ class MutexDeduplicator {
 }
 ```
 
-#### 2. Дедупликация на основе Deferred
+#### 2. Дедупликация На Основе Deferred
 
 Более подходящий подход для множества одновременных вызывающих: все конкурирующие запросы получают один и тот же `Deferred` и ждут общего результата.
 
@@ -104,7 +106,7 @@ class DeferredDeduplicator(private val scope: CoroutineScope) : RequestDeduplica
 
 Важно: отмена одного из ожидающих не должна бездумно вызывать `cancel()` у общего `Deferred`, иначе вы отмените запрос и для остальных. Обычно инициатор, создавший `Deferred`, контролирует его отмену, а остальные только `await()`.
 
-### Паттерн Cache-Aside с дедупликацией
+### Паттерн Cache-Aside С Дедупликацией
 
 ```kotlin
 class CacheAsideRepository<K, V>(
@@ -129,7 +131,7 @@ class CacheAsideRepository<K, V>(
 }
 ```
 
-### Debouncing и Throttling (связанные, но отдельные техники)
+### Debouncing И Throttling (связанные, Но Отдельные техники)
 
 Эти техники не являются дедупликацией в строгом смысле, но полезны для снижения числа запросов (например, при вводе текста).
 
@@ -165,7 +167,7 @@ class Throttler {
 }
 ```
 
-### Полный Repository с дедупликацией
+### Полный Repository С Дедупликацией
 
 ```kotlin
 class OptimizedUserRepository(
@@ -223,7 +225,7 @@ class OptimizedUserRepository(
    searchDebouncer.debounce(300L) { searchUsers(query) }
    ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Нет очистки состояния при ошибках
@@ -526,7 +528,7 @@ val cache = MemoryCache(maxSize = 100)
 ### Предпосылки (проще)
 - [[q-retrofit-call-adapter-advanced--networking--medium]] - Основы сетевого взаимодействия
 
-### Похожие (тот же уровень)
+### Похожие (тот Же уровень)
 - [[q-data-sync-unstable-network--android--hard]] - Паттерны надёжности сети
 
 ## Related Questions

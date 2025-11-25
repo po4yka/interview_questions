@@ -3,18 +3,21 @@ id: kotlin-162
 title: "Launch Vs Async Vs Runblocking / Launch против Async против Runblocking"
 aliases: [Async, Coroutine Builders, Launch, RunBlocking]
 topic: kotlin
-subtopics: [coroutines, concurrency]
+subtopics: [concurrency, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutine-memory-leak-detection--kotlin--hard, q-executor-service-java--kotlin--medium, q-list-vs-sequence--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-coroutine-memory-leak-detection--kotlin--hard, q-executor-service-java--kotlin--medium, q-list-vs-sequence--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblocking]
+date created: Saturday, November 1st 2025, 12:42:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > В чём разница между корутинными билдерами `launch`, `async` и `runBlocking`?
 
@@ -31,7 +34,7 @@ tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblo
 | **async** | `Deferred<T>` | Нет | Да, через `await()` | Параллельные вычисления с результатом |
 | **runBlocking** | `T` | **ДА** | Да, напрямую | Тесты, `main` функция, блокирующий мост к suspend-коду |
 
-### launch — fire-and-forget
+### Launch — Fire-and-forget
 
 ```kotlin
 fun loadUserInBackground() {
@@ -51,7 +54,7 @@ fun loadUserInBackground() {
 - Необработанные исключения по умолчанию отменяют родительский scope и обрабатываются его `CoroutineExceptionHandler`
 - Используется для фоновой работы, обновления UI и других сайд-эффектов
 
-#### Примеры использования launch
+#### Примеры Использования Launch
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -96,7 +99,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-#### Управление Job с launch
+#### Управление Job С Launch
 
 ```kotlin
 class DownloadManager(private val scope: CoroutineScope) {
@@ -136,7 +139,7 @@ class DownloadManager(private val scope: CoroutineScope) {
 }
 ```
 
-### async — параллельные вычисления с результатом
+### Async — Параллельные Вычисления С Результатом
 
 ```kotlin
 suspend fun loadDashboard(): DashboardData = coroutineScope {
@@ -161,7 +164,7 @@ suspend fun loadDashboard(): DashboardData = coroutineScope {
   в структурированном scope необработанное исключение дочернего `async` также приведёт к отмене родителя при завершении scope
 - Используется для параллельных вычислений, где нужен результат
 
-#### Примеры использования async
+#### Примеры Использования Async
 
 ```kotlin
 // 1. Параллельная загрузка нескольких ресурсов
@@ -201,7 +204,7 @@ suspend fun loadFromMultipleSources(): Data = coroutineScope {
 }
 ```
 
-#### async с обработкой ошибок
+#### Async С Обработкой Ошибок
 
 ```kotlin
 suspend fun loadWithFallback(cachedData: UserData): UserData = coroutineScope {
@@ -225,7 +228,7 @@ suspend fun loadWithFallback(cachedData: UserData): UserData = coroutineScope {
 }
 ```
 
-### runBlocking — блокирующий мост
+### runBlocking — Блокирующий Мост
 
 ```kotlin
 fun main() = runBlocking { // Блокирует main-поток
@@ -243,7 +246,7 @@ fun main() = runBlocking { // Блокирует main-поток
   - точечных блокирующих мостов к suspend-коду
 - В обычном production-коде, особенно на Android main thread, следует избегать
 
-#### Когда использовать runBlocking
+#### Когда Использовать runBlocking
 
 ```kotlin
 // 1. Main-функция
@@ -278,7 +281,7 @@ class BadViewModel : ViewModel() {
 }
 ```
 
-### Сравнение на реальном примере
+### Сравнение На Реальном Примере
 
 ```kotlin
 class DataLoader(
@@ -341,7 +344,7 @@ class ExampleViewModel(
 }
 ```
 
-### launch vs async — когда что использовать
+### Launch Vs Async — Когда Что Использовать
 
 ```kotlin
 // НЕПРАВИЛЬНО — async без await()
@@ -372,7 +375,7 @@ viewModelScope.launch {
 }
 ```
 
-### Structured concurrency
+### Structured Concurrency
 
 ```kotlin
 suspend fun loadAllData() = coroutineScope {
@@ -397,7 +400,7 @@ suspend fun computeResults() = coroutineScope {
 }
 ```
 
-### Обработка исключений
+### Обработка Исключений
 
 ```kotlin
 // launch — исключения можно обрабатывать внутри корутины
@@ -437,7 +440,7 @@ try {
 - Для `launch` необработанное исключение пробрасывается в родительский scope/handler.
 - Для `async` важно всегда «потреблять» `Deferred` через `await`/`awaitAll`, иначе ошибка может быть замечена только при завершении scope; как правило, `async` без `await` — запах.
 
-### supervisorScope — независимые дочерние корутины
+### supervisorScope — Независимые Дочерние Корутины
 
 ```kotlin
 // coroutineScope — одна ошибка отменяет все
@@ -467,9 +470,9 @@ suspend fun loadDataResilient() = supervisorScope {
 }
 ```
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
-#### 1. Timeout для async
+#### 1. Timeout Для Async
 
 ```kotlin
 suspend fun loadWithTimeout(): Data? = coroutineScope {
@@ -486,7 +489,7 @@ suspend fun loadWithTimeout(): Data? = coroutineScope {
 }
 ```
 
-#### 2. Retry для launch
+#### 2. Retry Для Launch
 
 ```kotlin
 fun loadUserWithRetry(id: Int) {
@@ -505,7 +508,7 @@ fun loadUserWithRetry(id: Int) {
 }
 ```
 
-#### 3. Отменяемая работа с async
+#### 3. Отменяемая Работа С Async
 
 ```kotlin
 class ImageProcessor(private val scope: CoroutineScope) {
@@ -537,7 +540,7 @@ class ImageProcessor(private val scope: CoroutineScope) {
 }
 ```
 
-### Сравнение производительности
+### Сравнение Производительности
 
 ```kotlin
 // Последовательное выполнение
@@ -573,7 +576,7 @@ fun loadWithLaunch(scope: CoroutineScope) {
 }
 ```
 
-### Best practices (RU)
+### Best Practices (RU)
 
 1. Используйте `launch` для сайд-эффектов.
 2. Используйте `async` для параллельных вычислений, когда результат нужен.
@@ -634,7 +637,7 @@ class DataLoaderTest {
 | **async** | `Deferred<T>` | No | Yes via `await()` | Parallel computations with results |
 | **runBlocking** | `T` | **YES** | Yes directly | Tests, `main` function, blocking bridge to suspending code |
 
-### launch — fire-and-forget
+### Launch — Fire-and-forget
 
 ```kotlin
 fun loadUserInBackground() {
@@ -691,7 +694,7 @@ class DownloadManager(private val scope: CoroutineScope) {
 }
 ```
 
-### async — parallel computations with a result
+### Async — Parallel Computations with a Result
 
 ```kotlin
 suspend fun loadDashboard(): DashboardData = coroutineScope {
@@ -778,7 +781,7 @@ Important:
 - Always `await`/`awaitAll` on `Deferred`s you create (or otherwise handle them), or you risk effectively ignoring failures.
 - If you only need fire-and-forget semantics, prefer `launch` over `async`.
 
-### runBlocking — blocking bridge
+### runBlocking — Blocking Bridge
 
 ```kotlin
 fun main() = runBlocking {
@@ -828,7 +831,7 @@ class BadViewModel : ViewModel() {
 }
 ```
 
-### Practical comparison
+### Practical Comparison
 
 ```kotlin
 class DataLoader(
@@ -882,7 +885,7 @@ Usage summary:
 - `runBlocking`: blocks caller; only for controlled boundaries.
 - Preferred: expose `suspend` APIs and call them from coroutines.
 
-### launch vs async — when to use what
+### Launch Vs Async — when to Use what
 
 Misuse:
 
@@ -919,7 +922,7 @@ Guidelines:
 - Need only side effects: `launch`.
 - Don't use `async` as fire-and-forget.
 
-### Structured concurrency
+### Structured Concurrency
 
 ```kotlin
 suspend fun loadAllData() = coroutineScope {
@@ -938,7 +941,7 @@ Key points:
 - `coroutineScope` waits for all children to complete or throws on first failure.
 - Child failures cancel the scope (unless using supervisor-style scopes).
 
-### Exception handling
+### Exception Handling
 
 ```kotlin
 // launch: handle inside the coroutine
@@ -973,7 +976,7 @@ Notes:
 - For `launch`, unhandled exceptions go to the parent/supervisor/handler.
 - For `async`, if you never `await`, failures can be effectively ignored or only surface when the scope completes.
 
-### supervisorScope — independent children
+### supervisorScope — Independent Children
 
 ```kotlin
 suspend fun loadDataStrict() = coroutineScope {
@@ -1004,9 +1007,9 @@ suspend fun loadDataResilient() = supervisorScope {
 - `coroutineScope`: one child failure cancels all children.
 - `supervisorScope`: children fail independently; good for UI/partial-failure scenarios.
 
-### Advanced patterns
+### Advanced Patterns
 
-1) Timeout with async:
+1. Timeout with async:
 
 ```kotlin
 suspend fun loadWithTimeout(): Data? = coroutineScope {
@@ -1020,7 +1023,7 @@ suspend fun loadWithTimeout(): Data? = coroutineScope {
 }
 ```
 
-2) Retry with launch:
+1. Retry with launch:
 
 ```kotlin
 fun loadUserWithRetry(id: Int) {
@@ -1039,7 +1042,7 @@ fun loadUserWithRetry(id: Int) {
 }
 ```
 
-3) Cancellable async work:
+1. Cancellable async work:
 
 ```kotlin
 class ImageProcessor(private val scope: CoroutineScope) {
@@ -1066,7 +1069,7 @@ class ImageProcessor(private val scope: CoroutineScope) {
 }
 ```
 
-### Performance comparison
+### Performance Comparison
 
 ```kotlin
 suspend fun loadSequentially() {
@@ -1103,15 +1106,15 @@ Observations:
 
 ### Best Practices (EN)
 
-1) Use `launch` for side effects.
-2) Use `async` for parallel computations when you need the results.
-3) Avoid `runBlocking` on production hot paths; prefer `suspend` APIs and coroutine scopes.
-4) Always consume `Deferred` results (`await`/`awaitAll`), or use `launch` instead when no result is needed.
-5) Handle cancellation explicitly when needed and rethrow `CancellationException` after cleanup.
+1. Use `launch` for side effects.
+2. Use `async` for parallel computations when you need the results.
+3. Avoid `runBlocking` on production hot paths; prefer `suspend` APIs and coroutine scopes.
+4. Always consume `Deferred` results (`await`/`awaitAll`), or use `launch` instead when no result is needed.
+5. Handle cancellation explicitly when needed and rethrow `CancellationException` after cleanup.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этих билдров от Java executors/futures?
 - Когда бы вы использовали каждый из билдров на практике в реальном проекте?
@@ -1135,7 +1138,7 @@ Observations:
 - [[c-kotlin]]
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-executor-service-java--kotlin--medium]]
 - [[q-coroutine-memory-leak-detection--kotlin--hard]]

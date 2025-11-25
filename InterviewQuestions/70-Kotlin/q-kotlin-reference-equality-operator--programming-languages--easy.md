@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-equality, q-data-class-detailed--kotlin--medium]
+related: [c-equality, c-kotlin, q-data-class-detailed--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, equality, operators, programming-languages, reference-equality, structural-equality]
+date created: Friday, October 31st 2025, 6:32:17 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Какой оператор используется для проверки равенства ссылок в Kotlin?
 
@@ -133,7 +136,7 @@ user1 === user3  // true (same reference)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия оператора `===` от оператора `==` в Java?
 - В каких случаях на практике следует использовать `===`?
@@ -153,7 +156,7 @@ user1 === user3  // true (same reference)
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-data-class-detailed--kotlin--medium]]
 - [[q-destructuring-declarations--kotlin--medium]]

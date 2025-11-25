@@ -1,43 +1,39 @@
 ---
 id: android-612
 title: Koin vs Dagger/Hilt Philosophy / Философия Koin против Dagger/Hilt
-aliases:
-- Koin vs Dagger Philosophy
-- Философия Koin и Dagger
-- Runtime vs Compile-Time DI Philosophy
+aliases: [Koin vs Dagger Philosophy, Runtime vs Compile-Time DI Philosophy, Философия Koin и Dagger]
 topic: android
 subtopics:
-- di-koin
-- di-hilt
-- architecture-clean
+  - architecture-clean
+  - di-hilt
+  - di-koin
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dependency-injection
-- c-dagger
-- c-hilt
-- q-koin-fundamentals--android--medium
-- q-dagger-framework-overview--android--hard
+  - c-dagger
+  - c-dependency-injection
+  - c-hilt
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-hilt-entry-points--android--medium
+  - q-koin-fundamentals--android--medium
+  - q-koin-vs-hilt-comparison--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/di-koin
-- android/di-hilt
-- android/architecture-clean
-- dependency-injection
-- architecture/philosophy
-- difficulty/hard
+tags: [android/architecture-clean, android/di-hilt, android/di-koin, architecture/philosophy, dependency-injection, difficulty/hard]
 sources:
-- "https://github.com/InsertKoinIO/koin/blob/master/README.md#koin-philosophy"
-- "https://dagger.dev/dev-guide/"
-- "https://developer.android.com/training/dependency-injection/hilt-android"
+  - "https://dagger.dev/dev-guide/"
+  - "https://developer.android.com/training/dependency-injection/hilt-android"
+  - "https://github.com/InsertKoinIO/koin/blob/master/README.md#koin-philosophy"
 
+date created: Wednesday, November 5th 2025, 11:24:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -96,7 +92,7 @@ These differences impact:
 - Dagger/Hilt: compile-time DI, строгий контракт и масштабируемость ценой сложности и ceremony.
 
 ## Подробная Версия
-### 1. Цели и философия
+### 1. Цели И Философия
 | Критерий | Koin (runtime DI / registry-style) | Dagger/Hilt (compile-time DI) |
 |----------|------------------------------------|-------------------------------|
 | **Цель** | Ускорить delivery и облегчить bootstrap | Гарантировать типобезопасный граф до запуска |
@@ -105,7 +101,7 @@ These differences impact:
 | **Философия** | «Простой DI для Kotlin, минимальный ceremony» | «Чёткие границы компонентов и scope» |
 - Koin принимает компромисс «меньше правил → выше риск». Его философия — низкий порог, конфигурируемость в runtime и возможность динамически загружать/перегружать модули. Граф создаётся лениво при разрешении зависимостей; риски ловятся тестами (в том числе через `checkModules`) и рантаймом.
 - Dagger/Hilt следует принципу «правильность важнее скорости»: декларативная модель, compile-time proof и строгие компоненты.
-### 2. Формализация графа
+### 2. Формализация Графа
 **Koin:**
 - Граф описывается DSL и хранится как набор `BeanDefinition`.
 - Связи выявляются при вызове `get()` (или инъекциях), что позволяет частичную конфигурацию и динамическую загрузку модулей.
@@ -114,7 +110,7 @@ These differences impact:
 - Граф строится аннотациями `@Module`, `@Component`, `@InstallIn`.
 - Нужна полная (или достаточно полная) информация для генерации кода при компиляции; при отсутствии binding-ов kapt/ksp оборвёт сборку.
 - Scope жёстко привязан к компонентам (`SingletonComponent`, `ActivityRetainedComponent` и т.д.).
-### 3. Архитектурные компромиссы
+### 3. Архитектурные Компромиссы
 - **Koin**:
   - ✅ Быстрый onboarding команды, можно прототипировать без обширной схемы.
   - ✅ Легче экспериментировать: `loadKoinModules`, `declare` для override.
@@ -126,7 +122,7 @@ These differences impact:
   - ✅ Структурирует архитектуру через компоненты и scope — дисциплинирует команду.
   - ❌ Высокая стоимость обучения, особенно для middle/джун разработчиков.
   - ❌ Overhead на аннотации/генерацию, более медленная сборка.
-### 4. Влияние на тестирование
+### 4. Влияние На Тестирование
 - **Koin**:
   - Проще мокать через `declare`, `loadKoinModules` и тестовые модули.
   - Рекомендуется использовать `checkModules` в тестах, чтобы валидировать наличие всех зависимостей и не полагаться только на runtime-обнаружение.
@@ -135,14 +131,14 @@ These differences impact:
   - Тесты используют `@TestInstallIn`, `@BindValue` и альтернативные модули.
   - Ошибка wiring проявится до запуска тестов (на этапе генерации/компиляции).
   - Нужно больше boilerplate для динамических override; тестовые компоненты могут быть тяжеловесны.
-### 5. Эволюция продукта и команда
+### 5. Эволюция Продукта И Команда
 - Команда с быстрыми итерациями и пилотами чаще выбирает Koin: легко добавить временный binding или feature-toggle-модуль.
 - Enterprise/large scale предпочитает Dagger/Hilt:
   - Кодовая база переживает ротации команды.
   - Dependency graph служит документацией.
   - Возможен tooling: визуализация графа, `dagger.spi`.
 - Смешанные команды иногда стартуют с Koin, затем мигрируют на Hilt, когда граф стабилизируется.
-### 6. Философские выводы
+### 6. Философские Выводы
 - Runtime registry / `Service` Locator-подход против жёсткого compile-time DI: Koin использует runtime-реестр определений и ленивое разрешение, смещая часть гарантий на разработчика и тесты; Dagger/Hilt обеспечивают строгие compile-time гарантии графа.
 - Declarative vs Imperative: Hilt описывает граф декларативно (аннотации), Koin — исполняемым DSL.
 - Переопределение зависимостей: Koin считает override частью философии (для тестов и фич-флагов); Dagger/Hilt требуют явных модулей/компонентов для подмен.
@@ -152,7 +148,7 @@ These differences impact:
 - Dagger/Hilt: compile-time DI focused on correctness, explicit structure, and scalability at the cost of complexity and ceremony.
 
 ## Detailed Version
-### 1. Goals and philosophy
+### 1. Goals and Philosophy
 | Dimension | Koin (runtime DI / registry-style) | Dagger/Hilt (compile-time DI) |
 |-----------|------------------------------------|-------------------------------|
 | **Primary goal** | Reduce ceremony, speed up delivery | Guarantee a type-safe graph pre-runtime |
@@ -161,7 +157,7 @@ These differences impact:
 | **Philosophy** | "Simple, pragmatic DI for Kotlin with minimal ceremony" | "Graph correctness and explicit component/scope boundaries" |
 - Koin embraces "fewer rules, more agility": low entry barrier, runtime configurability, dynamic module loading/overrides. The graph materializes lazily on resolution; risks are mitigated via tests (including `checkModules`) and runtime behavior.
 - Dagger/Hilt favors "correctness over convenience", with declarative components and compile-time guarantees.
-### 2. Graph formalization
+### 2. Graph Formalization
 - **Koin**:
   - Describes the graph via a DSL and stores definitions as `BeanDefinition` objects.
   - Resolves dependencies on demand (`get()` / injections), enabling partial configuration and dynamic module loading.
@@ -170,7 +166,7 @@ These differences impact:
   - Builds the graph at compile time from `@Module`, `@Component`, `@InstallIn`.
   - Missing or inconsistent bindings fail code generation/compilation.
   - Scopes map directly to generated components (e.g., `SingletonComponent`, `ActivityRetainedComponent`).
-### 3. Architectural trade-offs
+### 3. Architectural Trade-offs
 - **Koin**
   - ✅ Fast onboarding, easy prototyping, hot-swappable modules.
   - ✅ Flexible runtime scopes and overrides.
@@ -181,7 +177,7 @@ These differences impact:
   - ✅ Component/scope structure enforces architectural boundaries.
   - ❌ Steeper learning curve, especially for less experienced developers.
   - ❌ Annotation/codegen overhead, slower builds; dynamic overrides are more involved.
-### 4. Testing impact
+### 4. Testing Impact
 - **Koin**
   - Simplifies overrides via `declare`, `loadKoinModules`, and dedicated test modules.
   - `checkModules` is recommended in test suites to validate the graph and catch missing bindings early.
@@ -190,13 +186,13 @@ These differences impact:
   - Uses `@TestInstallIn`, `@BindValue`, and alternative modules to wire test graphs.
   - Misconfigurations are caught during generation/compilation before tests run.
   - Requires more boilerplate and explicit configuration for overrides; test components can become heavy.
-### 5. Product evolution & team dynamics
+### 5. Product Evolution & Team Dynamics
 - Fast-moving teams or feature spikes can benefit from Koin's runtime flexibility and lower initial overhead.
 - Large/long-lived products tend to rely on Dagger/Hilt for maintainability and resilience to team changes:
   - The dependency graph acts as living documentation.
   - Tooling (e.g., graph visualization, SPI integrations) supports deeper analysis.
 - Some teams start with Koin and later migrate to Hilt once the architecture and dependency graph stabilize.
-### 6. Philosophical takeaways
+### 6. Philosophical Takeaways
 - Runtime registry / `Service`-Locator-style vs strict compile-time DI: Koin's runtime registry and lazy resolution trade strict compile-time guarantees for simplicity and flexibility. Dagger/Hilt enforce dependency inversion contracts and graph safety at compile time.
 - Declarative vs Imperative: Hilt uses declarative annotations; Koin uses an imperative, executable DSL.
 - Override semantics: Koin treats overrides as first-class (including for tests and experiments). Dagger/Hilt requires explicit, structured modules/components for substitutions to avoid ambiguous overrides.

@@ -10,12 +10,14 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fragments-vs-activity--android--medium, q-which-class-to-catch-gestures--android--easy, c-custom-views]
+related: [c-custom-views, q-fragments-vs-activity--android--medium, q-which-class-to-catch-gestures--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
 
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -336,7 +338,7 @@ fun GestureExample() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как комбинировать несколько детекторов жестов на одном `View`?
 - В чем разница между `onSingleTapUp` и `onSingleTapConfirmed`?
@@ -360,9 +362,9 @@ fun GestureExample() {
 - [[c-custom-views]]
 - [Android Developer: Handle Touch and Input](https://developer.android.com/develop/ui/views/touch-and-input)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Необходимые знания
+### Необходимые Знания
 - [[q-which-class-to-catch-gestures--android--easy]] - Базовая обработка touch-событий
 
 ### Связанные

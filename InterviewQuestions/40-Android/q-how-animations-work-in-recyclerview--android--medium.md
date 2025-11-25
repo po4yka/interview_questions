@@ -1,33 +1,32 @@
 ---
 id: android-201
 title: How Animations Work In RecyclerView / Как работают анимации в RecyclerView
-aliases:
-- How Animations Work In RecyclerView
-- Как работают анимации в RecyclerView
+aliases: [How Animations Work In RecyclerView, Как работают анимации в RecyclerView]
 topic: android
 subtopics:
-- ui-animation
+  - ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-custom-views
-- q-broadcastreceiver-contentprovider--android--easy
-- q-save-data-outside-fragment--android--medium
-- q-spannable-text-styling--android--medium
+  - c-custom-views
+  - q-broadcastreceiver-contentprovider--android--easy
+  - q-compose-custom-animations--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-save-data-outside-fragment--android--medium
+  - q-spannable-text-styling--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-animation
-- animations
-- difficulty/medium
-- recyclerview
+tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -106,7 +105,7 @@ class FadeInItemAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 3. Анимации в адаптере (onBindViewHolder)
+### 3. Анимации В Адаптере (onBindViewHolder)
 
 Можно анимировать элементы напрямую при биндинге, но важно учитывать переиспользование `View`, чтобы не оставлять некорректные состояния.
 
@@ -140,7 +139,7 @@ class MyAdapter(private val items: List<String>) :
 }
 ```
 
-### 4. Анимация масштабирования через ItemAnimator
+### 4. Анимация Масштабирования Через ItemAnimator
 
 ```kotlin
 class ScaleItemAnimator : DefaultItemAnimator() {
@@ -179,7 +178,7 @@ class ScaleItemAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 5. Анимация слайдом через ItemAnimator
+### 5. Анимация Слайдом Через ItemAnimator
 
 ```kotlin
 class SlideInLeftAnimator : DefaultItemAnimator() {
@@ -241,7 +240,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 
 (Полная реализация должна также корректно обрабатывать pending/running анимации и вызывать соответствующие методы завершения.)
 
-### 6. Использование сторонних библиотек
+### 6. Использование Сторонних Библиотек
 
 Можно использовать библиотеки (например, RecyclerView Animators) для готовых анимаций элементов:
 
@@ -254,7 +253,7 @@ recyclerView.itemAnimator = FadeInAnimator()
 recyclerView.itemAnimator = ScaleInAnimator()
 ```
 
-### 7. Специфичные анимации элементов в адаптере
+### 7. Специфичные Анимации Элементов В Адаптере
 
 Анимирование только впервые появляющихся элементов:
 
@@ -356,7 +355,7 @@ class MyAdapter(private val items: List<Item>) :
 }
 ```
 
-### 9. Анимация свайпа с ItemTouchHelper
+### 9. Анимация Свайпа С ItemTouchHelper
 
 `ItemTouchHelper` даёт свайп и drag-жесты; можно анимировать `alpha`/`translation` во время свайпа:
 
@@ -398,7 +397,7 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
 itemTouchHelper.attachToRecyclerView(recyclerView)
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Избегайте тяжёлых анимаций для каждого элемента при прокрутке: это может вызвать лаги.
 2. Всегда сбрасывайте состояние: очищайте анимации и возвращайте свойства в `onViewRecycled`.

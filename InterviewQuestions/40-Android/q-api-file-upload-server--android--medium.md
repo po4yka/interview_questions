@@ -4,26 +4,31 @@ title: API File Upload Server / Загрузка файлов на сервер 
 aliases: [API File Upload Server, Загрузка файлов на сервер через API]
 topic: android
 subtopics:
-- background-execution
-- files-media
-- networking-http
+  - background-execution
+  - files-media
+  - networking-http
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources: []
 status: draft
 moc: moc-android
 related:
-- c-okhttp
-- c-workmanager
-- q-android-storage-types--android--medium
+  - c-okhttp
+  - c-workmanager
+  - q-android-storage-types--android--medium
+  - q-api-rate-limiting-throttling--android--medium
+  - q-large-file-upload--android--medium
+  - q-large-file-upload-app--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
 
+date created: Tuesday, November 25th 2025, 4:56:25 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -551,4 +556,3 @@ sealed class UploadState {
 - Resumable upload implementation with chunked transfer
 - Multi-file upload orchestration with priority
 - Network request deduplication for retry scenarios
-```

@@ -14,7 +14,10 @@ related: [c-garbage-collection, q-garbage-collector-basics--programming-language
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, java, jvm, kotlin, memory-management, programming-languages]
+date created: Friday, October 31st 2025, 6:31:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое сборщик мусора?
 
@@ -200,7 +203,7 @@ object Cache {
 
 Разделяет heap на два пространства, копирует живые объекты в одно пространство, затем меняет их местами.
 
-### Reference Counting (не в JVM)
+### Reference Counting (не В JVM)
 
 Считает ссылки на каждый объект, освобождает, когда счётчик достигает нуля. В чистом виде не используется в JVM; в CPython применяется reference counting в комбинации с отдельным сборщиком циклических ссылок, в Swift — ARC (автоматическое управление счётчиками ссылок).
 
@@ -511,7 +514,7 @@ There is also some memory overhead for GC bookkeeping structures (e.g., card tab
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как отличаются реализации сборки мусора между JVM (Java/Kotlin) и другими рантаймами (например, Kotlin/Native)?
 - Как вы бы анализировали и настраивали поведение GC в реальных приложениях?
@@ -531,7 +534,7 @@ There is also some memory overhead for GC bookkeeping structures (e.g., card tab
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-garbage-collector-basics--programming-languages--medium]]
 - [[q-garbage-collector-roots--programming-languages--medium]]

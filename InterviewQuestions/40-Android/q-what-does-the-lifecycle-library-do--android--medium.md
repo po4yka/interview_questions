@@ -1,37 +1,34 @@
 ---
 id: android-370
 title: What Does The Lifecycle Library Do / Что делает библиотека Lifecycle
-aliases:
-- What Does The Lifecycle Library Do
-- Что делает библиотека Lifecycle
+aliases: [What Does The Lifecycle Library Do, Что делает библиотека Lifecycle]
 topic: android
 subtopics:
-- architecture-mvvm
-- lifecycle
+  - architecture-mvvm
+  - lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources: []
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-service-lifecycle-binding--android--hard
-- q-what-is-viewmodel--android--medium
-- q-why-was-the-lifecycle-library-created--android--hard
+  - c-android
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-leakcanary-library--android--easy
+  - q-service-lifecycle-binding--android--hard
+  - q-what-is-viewmodel--android--medium
+  - q-why-was-the-lifecycle-library-created--android--hard
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android
-- android/architecture-mvvm
-- android/lifecycle
-- difficulty/medium
-- lifecycle-aware
+tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium, lifecycle-aware]
 
 
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -128,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### ProcessLifecycleOwner (жизненный цикл приложения)
+### ProcessLifecycleOwner (жизненный Цикл приложения)
 
 ```kotlin
 class MyApp : Application() {
@@ -361,14 +358,14 @@ class GoodActivity : AppCompatActivity() {
 - [[q-why-was-the-lifecycle-library-created--android--hard]] - Design rationale
 - [[q-service-lifecycle-binding--android--hard]] - Advanced lifecycle management
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как библиотека Lifecycle обрабатывает изменения конфигурации?
 - В чем разница между `LifecycleObserver` и `DefaultLifecycleObserver`?
 - Могут ли кастомные компоненты реализовывать `LifecycleOwner`?
 - Чем отличается `ProcessLifecycleOwner` от жизненного цикла конкретного компонента?
 - Что произойдет, если обратиться к UI в неактивном состоянии жизненного цикла?
 ## Ссылки (RU)
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предпосылки / Концепции
 ### Предпосылки (проще)
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Базовые Android-концепции

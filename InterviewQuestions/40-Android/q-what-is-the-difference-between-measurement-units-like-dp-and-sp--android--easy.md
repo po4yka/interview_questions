@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [accessibility, android/ui-accessibility, android/ui-widgets, difficulty/easy, dp, sp, ui]
 sources: ["https://developer.android.com/guide/topics/resources/more-resources#Dimension"]
+date created: Saturday, November 1st 2025, 1:25:40 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -111,7 +113,7 @@ Box(
 
 ---
 
-## Последующие вопросы (RU)
+## Последующие Вопросы (RU)
 
 - Как dp и sp конвертируются в физические пиксели на экранах с разной плотностью (mdpi, hdpi, xxhdpi)?
 - Что происходит с макетом UI, когда пользователь меняет размер шрифта в настройках системы?
@@ -139,12 +141,12 @@ Box(
 - [Material Design Metrics](https://m2.material.io/design/layout/spacing-methods.html) - Layout metrics and keylines
 - [Compose Units](https://developer.android.com/jetpack/compose/designsystems/custom#unit-types) - Dp and Sp in Compose
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-app-components--android--easy]] - Понимание компонентов Android
 
-### Похожие (того же уровня)
+### Похожие (того Же уровня)
 - [[q-accessibility-color-contrast--android--medium]] - Практики доступности
 - [[q-compose-navigation-advanced--android--medium]] - Паттерны навигации в Compose
 

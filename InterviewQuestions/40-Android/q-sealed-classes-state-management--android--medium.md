@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/architecture-mvi, android/ui-state, difficulty/medium, mvi, sealed-classes, state-management]
 sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -168,7 +170,7 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда следует использовать `sealed class` против `sealed interface`?
 - Как sealed классы взаимодействуют с `SavedStateHandle` при убийстве процесса?
@@ -194,7 +196,7 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 - [[c-mvvm-pattern]] - MVVM architecture pattern
 - https://kotlinlang.org/docs/sealed-classes.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовое понимание data классов Kotlin и when выражений

@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-views, difficulty/easy, recyclerview]
 
+date created: Saturday, November 1st 2025, 1:26:26 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -100,7 +102,7 @@ LinearLayoutManager(context, HORIZONTAL, false)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что такое паттерн ViewHolder и почему он обязателен в RecyclerView?
 - Каковы основные отличия между RecyclerView и ListView?
@@ -113,14 +115,14 @@ LinearLayoutManager(context, HORIZONTAL, false)
 - [[c-recyclerview]] — концепт RecyclerView
 - https://developer.android.com/guide/topics/ui/layout/recyclerview — руководство по RecyclerView
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 
 - [[q-recyclerview-sethasfixedsize--android--easy]] — оптимизация RecyclerView
 - [[q-what-is-intent--android--easy]] — основы `View`
 
-### На том же уровне сложности
+### На Том Же Уровне Сложности
 
 - [[q-android-app-components--android--easy]] — обзор компонентов Android-приложения
 

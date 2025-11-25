@@ -1,31 +1,32 @@
 ---
 id: android-641
 title: Global Localization Strategy / Стратегия глобальной локализации
-aliases:
-- Global Localization Strategy
-- Стратегия глобальной локализации
+aliases: [Global Localization Strategy, Стратегия глобальной локализации]
 topic: android
 subtopics:
-- i18n-l10n
+  - i18n-l10n
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-android-architectural-patterns--android--medium
+  - c-android
+  - q-android-architectural-patterns--android--medium
+  - q-media3-migration-strategy--android--hard
+  - q-play-asset-delivery-strategy--android--hard
+  - q-scoped-storage-migration-strategy--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/i18n-l10n
-- difficulty/hard
+tags: [android/i18n-l10n, difficulty/hard]
 sources:
-- "https://developer.android.com/guide/topics/resources/localization"
-- "https://developer.android.com/guide/topics/resources/pseudolocales"
+  - "https://developer.android.com/guide/topics/resources/localization"
+  - "https://developer.android.com/guide/topics/resources/pseudolocales"
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -47,45 +48,45 @@ sources:
 - Осознанное использование per-app/per-activity локалей.
 - QA-матрица и мониторинг по локалям.
 
-### Детальный вариант
+### Детальный Вариант
 
-#### 1. Каталог ресурсов и структура
+#### 1. Каталог Ресурсов И Структура
 
 - Используйте `res/values-<locale>` + `res/xml/locales_config` для декларации поддерживаемых локалей (и интеграции с per-app locales API).
 - Устанавливайте `tools:ignore="MissingTranslation"` только временно; CI должен падать при отсутствии перевода для обязательных локалей.
 - Разделяйте ключи по доменам (`auth_`, `billing_`) и избегайте конкатенаций.
 
-#### 2. Псевдолокализация и проверка длины
+#### 2. Псевдолокализация И Проверка Длины
 
 - Включите псевдолокали (`en-XA`, `ar-XB`) в `locales_config`.
 - Отдельная CI job (кастомная) запускает Espresso/UI тесты с псевдолокалью → ловит обрезания, hard-coded строки, проблемы c RTL.
 - При дизайне учитывайте увеличение длины строк (закладывайте минимум +30%).
 
-#### 3. Процесс перевода
+#### 3. Процесс Перевода
 
 - Ведите master strings в репозитории (`strings.xml`) и экспортируйте/импортируйте их в TMS (Smartling, Lokalise и т.п.) через кастомные `gradle`-tasks.
 - Используйте translation memory и контекстные скриншоты для снижения ошибок перевода.
 - Включайте reviewer loop: локальные носители языка/маркетинговые команды проверяют критичные рынки.
 
-#### 4. Форматирование и pluralization
+#### 4. Форматирование И Pluralization
 
 - Используйте `getString(R.string.key, formatArgs)` и форматные плейсхолдеры; избегайте ручной конкатенации форматированных строк.
 - Для множественных форм → `<plurals>` с корректными `quantity` (например, `one`, `other`; учитывайте, что набор форм зависит от языка).
 - Числа/валюты: `NumberFormat.getCurrencyInstance(locale)`, `NumberFormat.getInstance(locale)` для общего форматирования чисел, `MeasureFormat` для единиц.
 
-#### 5. Автоматизация в CI/CD
+#### 5. Автоматизация В CI/CD
 
 - Статический анализ: Android Lint → правила `HardcodedText`, `MissingTranslation`, `UnusedResources`.
 - Добавьте кастомные CI-стадии, например `./gradlew lintPseudoLocales` и `verifyTranslations` (имена условные), для проверки псевдолокалей и консистентности переводов.
 - Перед релизом: генерируйте diff переводов и отправляйте на review владельцам контента/локальных рынков.
 
-#### 6. Запросы от runtime
+#### 6. Запросы От Runtime
 
 - Уважайте пользовательский выбор: используйте `AppCompatDelegate.setApplicationLocales` / per-app locale API (Android 13+).
 - При необходимости учитывайте per-activity локали (API Android 13 Locale Manager и связанные API), но избегайте избыточной сложности, если достаточно per-app.
 - Позвольте пользователю менять язык in-app для поддерживаемых локалей и при необходимости синхронизируйте выбор с сервером.
 
-#### 7. QA и мониторинг
+#### 7. QA И Мониторинг
 
 - QA-матрица: топ-рынки, псевдолокали, RTL, разные плотности и экраны.
 - Собирайте фидбек в приложении по языку/региону (ошибки перевода, некорректные форматы).
@@ -93,14 +94,14 @@ sources:
 
 ### Требования
 
-#### Функциональные требования
+#### Функциональные Требования
 
 - Поддержка нескольких локалей с централизованным управлением строками.
 - Интеграция с TMS и автоматизированный импорт/экспорт переводов.
 - Возможность выбора языка пользователем (per-app/per-activity где нужно).
 - Поддержка псевдолокалей для тестирования.
 
-#### Нефункциональные требования
+#### Нефункциональные Требования
 
 - Минимальное дублирование строк и стабильные ключи.
 - Высокое покрытие тестами для локализации (UI, e2e, lint).
@@ -128,43 +129,43 @@ sources:
 - QA matrix and per-locale monitoring.
 
 ## Detailed Version
-#### 1. Resource catalog and structure
+#### 1. Resource Catalog and Structure
 
 - Use `res/values-<locale>` plus `res/xml/locales_config` to declare supported locales and integrate with per-app locale APIs.
 - Apply `tools:ignore="MissingTranslation"` only temporarily; CI should fail on missing translations for required locales.
 - Use domain-based keys (`auth_`, `billing_`) and avoid concatenating translatable segments.
 
-#### 2. Pseudo-localization and length verification
+#### 2. Pseudo-localization and Length Verification
 
 - Enable pseudo-locales (`en-XA`, `ar-XB`) in `locales_config`.
 - Run a dedicated CI job with Espresso/UI tests under pseudo-locales to catch truncation, hard-coded text, and RTL issues.
 - Design layouts with at least a +30% text length buffer to avoid clipping in longer languages.
 
-#### 3. Translation workflow
+#### 3. Translation Workflow
 
 - Keep master strings (e.g., `strings.xml`) in the repository and integrate with a TMS (Smartling, Lokalise, etc.) via custom Gradle tasks for export/import.
 - Use translation memory and contextual screenshots to reduce translation errors.
 - Include a reviewer loop: native speakers/local market owners review critical-market content.
 
-#### 4. Formatting and pluralization
+#### 4. Formatting and Pluralization
 
 - Use `getString(R.string.key, formatArgs)` with format placeholders; avoid manual concatenation of formatted segments.
 - Use `<plurals>` with correct `quantity` rules for each language (`one`, `other`, etc., according to language-specific rules).
 - Use `NumberFormat.getCurrencyInstance(locale)`, `NumberFormat.getInstance(locale)`, and `MeasureFormat` for locale-aware currencies, numbers, and measurement units.
 
-#### 5. CI/CD automation
+#### 5. CI/CD Automation
 
 - Enable Android Lint checks such as `HardcodedText`, `MissingTranslation`, and `UnusedResources`.
 - Add custom CI stages (e.g., `./gradlew lintPseudoLocales`, `verifyTranslations`) to validate pseudo-locales and translation consistency.
 - Before release, generate translation diffs and require review/approval from content and local market owners.
 
-#### 6. Runtime locale handling
+#### 6. Runtime Locale Handling
 
 - Respect user choice via per-app locale APIs (e.g., `AppCompatDelegate.setApplicationLocales`, Android 13+ APIs).
 - Consider per-activity locales (Android 13 Locale Manager and related APIs) only when truly needed; avoid excessive complexity if a per-app locale suffices.
 - Allow in-app language switching for supported locales and, when relevant, sync this preference with your backend.
 
-#### 7. QA and monitoring
+#### 7. QA and Monitoring
 
 - Maintain a QA matrix covering key locales, pseudo-locales, RTL, and diverse screen densities/devices.
 - Collect feedback in-app by language/region (translation issues, incorrect formats).
@@ -195,7 +196,7 @@ sources:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как синхронизировать переводы для dynamic feature modules и PAD?
 - Как управлять юридическими текстами (ToS, Privacy) в разных странах?

@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-004
 title: Wear OS Health Stack / Стек здоровья Wear OS
-aliases:
-  - Wear OS Health Services
-  - Health Connect Wear
+aliases: [Health Connect Wear, Wear OS Health Services]
 kind: concept
 summary: APIs for collecting health data on Wear OS including Health Services, Health Connect and permissions
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - wear
-  - health
-  - sensors
+tags: [android, concept, health, sensors, wear]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Summary (EN)

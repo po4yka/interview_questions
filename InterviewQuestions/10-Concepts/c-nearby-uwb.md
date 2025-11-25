@@ -1,21 +1,15 @@
 ---
 id: ivc-20251102-007
 title: Nearby, NFC & UWB / Nearby, NFC & UWB
-aliases:
-  - Nearby API
-  - Ultra Wideband Android
-  - NFC on Android
+aliases: [Nearby API, NFC on Android, Ultra Wideband Android]
 kind: concept
 summary: Short-range communication APIs on Android including NFC, Nearby Connections, and Ultra Wideband
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - connectivity
-  - nfc
-  - uwb
+tags: [android, concept, connectivity, nfc, uwb]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [coroutines, deterministic, difficulty/medium, kotlin, runtest, test-dispatcher, testing, timing, virtual-time]
 
+date created: Saturday, November 1st 2025, 1:29:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -31,11 +33,11 @@ tags: [coroutines, deterministic, difficulty/medium, kotlin, runtest, test-dispa
 
 Все примеры ниже соответствуют поведению `kotlinx-coroutines-test` 1.6+: виртуальное время управляется планировщиком тестового диспетчера и меняется, когда вы явно двигаете его через `advanceTimeBy`, `advanceUntilIdle`, `runCurrent` или когда `runTest` внутри себя продвигает время при выполнении запланированных задач. Сам по себе `delay` не вызывает реального ожидания.
 
-### Концепция виртуального времени
+### Концепция Виртуального Времени
 
 Виртуальное время позволяет "перематывать" ход времени без реального ожидания. `delay(1000)` лишь планирует продолжение на времени 1000; пока вы не продвинете виртуальное время (или оно не будет продвинуто планировщиком через тестовые примитивы), корутина не продолжит выполнение.
 
-#### Реальное vs виртуальное время
+#### Реальное Vs Виртуальное Время
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -73,7 +75,7 @@ class VirtualTimeDemo {
 }
 ```
 
-### TestScope и TestDispatcher
+### TestScope И TestDispatcher
 
 `runTest` создаёт `TestScope` с `TestDispatcher`, который управляет виртуальным временем.
 
@@ -110,11 +112,11 @@ class TestScopeBasics {
 }
 ```
 
-### `advanceTimeBy(delayMillis)` — точное продвижение времени
+### `advanceTimeBy(delayMillis)` — Точное Продвижение Времени
 
 `advanceTimeBy(millis)` продвигает виртуальное время ровно на указанное значение и выполняет все задачи, срок которых наступил до или в этот момент.
 
-#### Базовое использование
+#### Базовое Использование
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -183,7 +185,7 @@ class AdvanceTimeByBasics {
 }
 ```
 
-#### Пример точного контроля
+#### Пример Точного Контроля
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -245,11 +247,11 @@ class PreciseTimingControl {
 }
 ```
 
-### `advanceUntilIdle()` — выполнение всей отложенной работы
+### `advanceUntilIdle()` — Выполнение Всей Отложенной Работы
 
 `advanceUntilIdle()` многократно выполняет задачи и продвигает виртуальное время к следующему событию, пока не останется задач. Не эквивалентен `advanceTimeBy(`Long`.MAX_VALUE)` при бесконечной генерации работы.
 
-#### Базовое использование
+#### Базовое Использование
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -301,7 +303,7 @@ class AdvanceUntilIdleBasics {
 }
 ```
 
-#### Пример с динамической работой
+#### Пример С Динамической Работой
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -359,7 +361,7 @@ class DynamicWorkTesting {
 }
 ```
 
-### `runCurrent()` — только задачи на текущем времени
+### `runCurrent()` — Только Задачи На Текущем Времени
 
 `runCurrent()` выполняет задачи, запланированные на текущее `currentTime`, не продвигая время.
 
@@ -410,7 +412,7 @@ class RunCurrentBasics {
 }
 ```
 
-### `currentTime` — счётчик виртуального времени
+### `currentTime` — Счётчик Виртуального Времени
 
 `currentTime` возвращает текущее виртуальное время тестового диспетчера в миллисекундах.
 
@@ -458,7 +460,7 @@ class CurrentTimeUsage {
 }
 ```
 
-### Тестирование операций `delay()`
+### Тестирование Операций `delay()`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -608,7 +610,7 @@ class TimeoutTesting {
 }
 ```
 
-### Тестирование периодических операций
+### Тестирование Периодических Операций
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -682,7 +684,7 @@ class PeriodicOperationsTesting {
 }
 ```
 
-### Тестирование debounce/throttle в `Flow`
+### Тестирование debounce/throttle В `Flow`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -766,7 +768,7 @@ class FlowTimingTesting {
 }
 ```
 
-### Реальный пример: тестирование `ViewModel`
+### Реальный Пример: Тестирование `ViewModel`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -919,7 +921,7 @@ class UserProfileViewModelTest {
 }
 ```
 
-### Тестирование гонок детерминированно
+### Тестирование Гонок Детерминированно
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1005,7 +1007,7 @@ class RaceConditionTesting {
 }
 ```
 
-### Частые ошибки
+### Частые Ошибки
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1096,7 +1098,7 @@ class CommonMistakes {
 }
 ```
 
-### Немедленное vs отложенное выполнение
+### Немедленное Vs Отложенное Выполнение
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1147,7 +1149,7 @@ class ImmediateVsDelayedExecution {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте `runTest` для тестов корутин.
 2. Используйте `advanceUntilIdle()` для выполнения всей конечной запланированной работы.
@@ -1164,12 +1166,12 @@ Testing time-dependent coroutine code without virtual time requires real delays,
 
 All examples below assume `kotlinx-coroutines-test` 1.6+: virtual time is managed by the test scheduler and changes when you drive it using `advanceTimeBy`, `advanceUntilIdle`, `runCurrent`, or when `runTest` internally advances time while executing scheduled tasks. The `delay` call itself does not sleep real time.
 
-### Virtual time concept
+### Virtual time Concept
 
 - Virtual time lets you fast-forward coroutine delays without real waiting.
 - `delay(1000)` only schedules continuation at time `1000`; until you move the virtual clock (or it is moved by the scheduler via test primitives), the coroutine does not resume.
 
-### `TestScope` and `TestDispatcher`
+### `TestScope` And `TestDispatcher`
 
 - `runTest { ... }` creates a `TestScope` with a `TestDispatcher` (by default `StandardTestDispatcher`).
 - All coroutines launched in this scope are controlled by the virtual-time scheduler.
@@ -1177,7 +1179,7 @@ All examples below assume `kotlinx-coroutines-test` 1.6+: virtual time is manage
   - Use `delay` in the code under test.
   - In tests, call `advanceTimeBy` / `advanceUntilIdle` / `runCurrent` to drive execution instead of real sleeping.
 
-### `advanceTimeBy(millis)` — precise stepwise control
+### `advanceTimeBy(millis)` — Precise Stepwise Control
 
 Use `advanceTimeBy` when you need fine-grained control and intermediate assertions.
 
@@ -1198,7 +1200,7 @@ Typical uses (matching RU examples):
 
 Key property: only tasks scheduled at or before the new virtual time are executed.
 
-### `advanceUntilIdle()` — run all finite work
+### `advanceUntilIdle()` — Run All Finite Work
 
 Use `advanceUntilIdle()` when:
 
@@ -1213,7 +1215,7 @@ Scenarios:
 
 Important: For infinite or open-ended loops, `advanceUntilIdle()` may never finish; in such cases, prefer bounded loops, manual `advanceTimeBy` steps, and explicit cancellation.
 
-### `runCurrent()` — only tasks at current time
+### `runCurrent()` — Only Tasks at Current time
 
 Use `runCurrent()` to:
 
@@ -1227,14 +1229,14 @@ Examples:
 - Launch immediate work and delayed work; `runCurrent()` runs only immediate work.
 - Create more tasks at the same time; another `runCurrent()` flushes them, `currentTime` unchanged.
 
-### `currentTime` — observable virtual clock
+### `currentTime` — Observable Virtual Clock
 
 - `currentTime` reflects the test scheduler clock in milliseconds.
 - Use it to:
   - Assert when events happen relative to each other.
   - Store timestamps in domain events and verify ordering and spacing.
 
-### Testing `delay()` semantics
+### Testing `delay()` Semantics
 
 Use `advanceTimeBy`, `advanceUntilIdle`, and `runCurrent` to express clear expectations:
 
@@ -1256,7 +1258,7 @@ Mirror RU examples:
   - Shorter work: advance below timeout and expect result.
   - Longer work: advance to timeout and assert result is `null`.
 
-### Testing periodic operations
+### Testing Periodic Operations
 
 You can deterministically verify periodic behavior:
 
@@ -1267,7 +1269,7 @@ You can deterministically verify periodic behavior:
 - Repeating tasks with `repeat` + `delay`:
   - Use partial `advanceTimeBy` followed by `advanceUntilIdle()` to assert both timing and completion.
 
-### Testing `Flow` timing (`debounce`, `sample`, `onEach` delays)
+### Testing `Flow` Timing (`debounce`, `sample`, `onEach` delays)
 
 Aligning with RU examples:
 
@@ -1293,7 +1295,7 @@ Parallel to RU `ViewModel` example:
   - Drive virtual time with `advanceTimeBy` / `advanceUntilIdle`.
   - Assert the sequence and timing of states (e.g., Idle → Loading → Success/Error → retries).
 
-### Deterministic race/ordering tests
+### Deterministic race/ordering Tests
 
 Use virtual time to remove nondeterminism:
 
@@ -1303,7 +1305,7 @@ Use virtual time to remove nondeterminism:
   - Start multiple async operations with different delays.
   - Advance until the earliest completion; cancel others and assert the correct winner.
 
-### Common pitfalls
+### Common Pitfalls
 
 Aligned with RU "Частые ошибки":
 
@@ -1316,13 +1318,13 @@ Aligned with RU "Частые ошибки":
 - Assuming immediate execution:
   - Launching on the test dispatcher may queue work; call `runCurrent()` to flush.
 
-### Immediate vs delayed execution
+### Immediate Vs Delayed Execution
 
 - `CoroutineStart.UNDISPATCHED` runs the coroutine body immediately up to the first suspension.
 - Regular launched coroutines on the test dispatcher are queued and require `runCurrent()` or time advancement to execute.
 - Combine with virtual-time primitives so expectations match actual scheduling.
 
-### Best practices (EN)
+### Best Practices (EN)
 
 1. Use `runTest` with `kotlinx-coroutines-test` for coroutine tests.
 2. Use `advanceUntilIdle()` to run all finite scheduled work to completion.
@@ -1333,7 +1335,7 @@ Aligned with RU "Частые ошибки":
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 1. В чём разница между `advanceUntilIdle()` и `advanceTimeBy(`Long`.MAX_VALUE)` при наличии бесконечной или лениво создаваемой работы?
 2. Как протестировать бесконечный цикл с `delay()`, не зависая в `advanceUntilIdle()`?
 3. Когда стоит использовать `backgroundScope` вместо основного `TestScope` в `runTest`?
@@ -1363,7 +1365,7 @@ Aligned with RU "Частые ошибки":
 - [Virtual Time in Tests](https://github.com/Kotlin/kotlinx.coroutines/blob/master/kotlinx-coroutines-test/README.md)
 - [[c-coroutines]]
 - [[c-testing]]
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[q-structured-concurrency-violations--kotlin--hard|Нарушения структурированной конкуренции]]
 ## Related Questions (EN)
 - [[q-structured-concurrency-violations--kotlin--hard|Structured concurrency violations]]

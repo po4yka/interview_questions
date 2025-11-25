@@ -1,35 +1,33 @@
 ---
 id: android-236
 title: Gradle Basics / Gradle Основы
-aliases:
-- Gradle Basics
-- Gradle Основы
+aliases: [Gradle Basics, Gradle Основы]
 topic: android
 subtopics:
-- build-variants
-- gradle
+  - build-variants
+  - gradle
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- q-android-runtime-art--android--medium
-- q-large-file-upload--android--medium
-- q-room-transactions-dao--android--medium
+  - c-gradle
+  - q-android-runtime-art--android--medium
+  - q-build-optimization-gradle--android--medium
+  - q-gradle-version-catalog--android--medium
+  - q-jetpack-compose-basics--android--medium
+  - q-large-file-upload--android--medium
+  - q-room-transactions-dao--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/build-variants
-- android/gradle
-- build-system
-- dependencies
-- difficulty/easy
+tags: [android/build-variants, android/gradle, build-system, dependencies, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +42,7 @@ tags:
 
 Gradle — это универсальный инструмент автоматизации сборки. В Android-проектах он используется вместе с Android Gradle Plugin для компиляции кода, управления зависимостями и создания APK/AAB артефактов.
 
-### Структура проекта
+### Структура Проекта
 
 ```
 MyApp/
@@ -54,7 +52,7 @@ MyApp/
     build.gradle.kts      (уровень модуля: модуль app)
 ```
 
-### Файл build.gradle.kts на уровне проекта
+### Файл build.gradle.kts На Уровне Проекта
 
 ```kotlin
 plugins {
@@ -64,7 +62,7 @@ plugins {
 }
 ```
 
-### Файл build.gradle.kts на уровне модуля (модуль приложения)
+### Файл build.gradle.kts На Уровне Модуля (модуль приложения)
 
 ```kotlin
 plugins {
@@ -123,7 +121,7 @@ testImplementation("junit:junit:4.13.2")
 androidTestImplementation("androidx.test:core:1.5.0")
 ```
 
-### Варианты сборки (Build Types)
+### Варианты Сборки (Build Types)
 
 ```kotlin
 buildTypes {
@@ -159,7 +157,7 @@ productFlavors {
 // Генерируются варианты: freeDebug, freeRelease, paidDebug, paidRelease
 ```
 
-### Основные задачи Gradle
+### Основные Задачи Gradle
 
 ```bash
 # Сборка APK (debug / release)

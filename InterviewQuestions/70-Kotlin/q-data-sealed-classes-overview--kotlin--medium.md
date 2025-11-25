@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-15
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 
+date created: Friday, October 31st 2025, 6:33:15 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -202,7 +204,7 @@ fun main() {
 }
 ```
 
-### Комбинирование Data и Sealed Классов
+### Комбинирование Data И Sealed Классов
 
 Очень распространённый паттерн — sealed класс с data подклассами. Это позволяет одновременно:
 - Иметь удобные value-объекты с автогенерируемыми методами
@@ -605,7 +607,7 @@ fun main() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия от подхода в Java?
 - Когда вы бы использовали такие конструкции на практике?
@@ -627,7 +629,7 @@ fun main() {
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-sealed-classes]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-job-state-machine-transitions--kotlin--medium]]
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]

@@ -1,38 +1,36 @@
 ---
 id: android-407
 title: What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin
-aliases:
-- Navigation Methods in Kotlin
-- Методы навигации в Kotlin
+aliases: [Navigation Methods in Kotlin, Методы навигации в Kotlin]
 topic: android
 subtopics:
-- activity
-- fragment
-- ui-navigation
+  - activity
+  - fragment
+  - ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- c-activity
-- c-fragments
-- q-android-modularization--android--medium
-- q-dagger-purpose--android--easy
-- q-inject-router-to-presenter--android--medium
+  - c-activity
+  - c-compose-navigation
+  - c-fragments
+  - q-android-modularization--android--medium
+  - q-dagger-purpose--android--easy
+  - q-inject-router-to-presenter--android--medium
+  - q-navigation-methods-in-kotlin--android--medium
+  - q-what-navigation-methods-do-you-know--android--medium
+  - q-what-navigation-methods-exist-in-kotlin--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags:
-- android/activity
-- android/fragment
-- android/ui-navigation
-- difficulty/medium
-- navigation
+tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)

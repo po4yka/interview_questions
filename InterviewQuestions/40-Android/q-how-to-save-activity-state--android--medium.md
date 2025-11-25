@@ -3,7 +3,7 @@ id: android-413
 title: "How To Save Activity State / Как сохранить состояние Activity"
 aliases: ["How To Save Activity State", "Save Activity State", "Как сохранить состояние Activity", "Сохранение состояния Activity"]
 topic: android
-subtopics: [activity, lifecycle, datastore]
+subtopics: [activity, datastore, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,9 +13,11 @@ moc: moc-android
 related: [c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/activity, android/lifecycle, android/datastore, difficulty/medium, state-management]
+tags: [android, android/activity, android/datastore, android/lifecycle, difficulty/medium, state-management]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -96,7 +98,7 @@ class ProfileActivity : AppCompatActivity() {
 - Только примитивы и `Parcelable`/`Serializable` объекты
 - Восстановление происходит только когда система пересоздаёт `Activity` в рамках существующей задачи (например, после изменения конфигурации или управляемой смерти процесса); при ручном перезапуске приложения или иных сценариях убийства процесса сохранённое состояние может не быть восстановлено
 
-### 2. `ViewModel` с SavedStateHandle (рекомендуется для UI-состояния)
+### 2. `ViewModel` С SavedStateHandle (рекомендуется Для UI-состояния)
 
 Современный подход для хранения UI-состояния:
 - обычный `ViewModel` переживает только изменения конфигурации;
@@ -161,7 +163,7 @@ class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewMode
 
 Важно: `ViewModel` сам по себе не переживает смерть процесса. После убийства процесса при пересоздании `Activity` будет создан новый экземпляр `ViewModel`, и только данные, сохранённые через `SavedStateHandle` (т.е. прошедшие через механизм сохранённого состояния, аналогичный `onSaveInstanceState`), могут быть восстановлены.
 
-### 3. Постоянное хранилище
+### 3. Постоянное Хранилище
 
 Для данных, которые должны пережить закрытие приложения и не зависят от жизненного цикла отдельной `Activity`.
 
@@ -208,7 +210,7 @@ interface UserStateDao {
 
 Здесь DataStore и Room выступают как примеры устойчивого хранилища. Аналогичные свойства (переживают закрытие приложения и смерть процесса) имеют и другие постоянные механизмы (например, SharedPreferences, файлы), при условии, что данные были записаны на диск.
 
-### 4. Сравнение подходов
+### 4. Сравнение Подходов
 
 | Подход | Поворот экрана | Смерть процесса | Закрытие приложения | Применение |
 |--------|----------------|-----------------|---------------------|------------|
@@ -218,7 +220,7 @@ interface UserStateDao {
 | **DataStore** | ✅ | ✅ | ✅ | Настройки, preferences (как один из вариантов постоянного хранилища) |
 | **Room** | ✅ | ✅ | ✅ | Большие наборы данных, сложные структуры |
 
-### 5. Лучшие практики
+### 5. Лучшие Практики
 
 **Комбинирование подходов:**
 
@@ -323,7 +325,7 @@ class ProfileActivity : AppCompatActivity() {
 - Only primitives and `Parcelable`/`Serializable` objects
 - State is restored only when the system recreates the `Activity` as part of the same task/flow (e.g., configuration change or managed process recreation); on manual app relaunch or other kill scenarios the previously saved instance state may not be restored
 
-### 2. `ViewModel` with SavedStateHandle (recommended for UI state)
+### 2. `ViewModel` With SavedStateHandle (recommended for UI state)
 
 Modern approach for holding UI state:
 - a regular `ViewModel` survives only configuration changes;
@@ -484,7 +486,7 @@ class UserActivity : AppCompatActivity() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Каков практический лимит по размеру данных, сохраняемых в `Bundle` через `onSaveInstanceState`?
 2. Чем `SavedStateHandle` отличается от обычного состояния во `ViewModel` при убийстве процесса?

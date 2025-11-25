@@ -13,13 +13,18 @@ tags: [collections, data-structures, difficulty/easy, kotlin]
 moc: moc-kotlin
 question_kind: theory
 related:
-  - c-kotlin
   - c-collections
+  - c-kotlin
+  - q-kotlin-collections--kotlin--easy
+  - q-kotlin-map-collection--programming-languages--easy
+  - q-list-set-map-differences--kotlin--easy
   - q-list-vs-sequence--kotlin--medium
 subtopics:
   - array
   - collections
   - list
+date created: Saturday, November 1st 2025, 12:09:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +42,7 @@ subtopics:
 
 ### Основные Различия
 
-#### 1. Размер и изменяемость
+#### 1. Размер И Изменяемость
 
 **Array**: Имеет фиксированный размер после создания; можно изменять элементы, но не длину.
 
@@ -58,7 +63,7 @@ mutableList.add(4)        // Размер стал 4
 mutableList.removeAt(0)   // Размер стал 3
 ```
 
-#### 2. Типизация и представление
+#### 2. Типизация И Представление
 
 **Array**: `Array<T>` хранит ссылки на элементы типа `T`. Для примитивов есть специализированные массивы (`IntArray`, `LongArray` и т.п.), чтобы избежать упаковки (boxing) и лишних накладных расходов (на JVM отображаются в `int[]` и т.п.).
 
@@ -282,7 +287,7 @@ shoppingList.remove("Milk")
 
 **Summary**: Arrays have fixed length and are good for low-level, index-based and primitive-heavy operations. Kotlin lists are collection interfaces; `List` is read-only, `MutableList` is resizable and mutable, backed typically by an array. Both provide O(1) index access, but arrays (especially primitive arrays) can be more efficient; lists are generally more expressive and convenient for typical application code.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия работы с массивами и списками в Kotlin по сравнению с Java?
 - Когда вы бы использовали `Array` или `List`/`MutableList` на практике?
@@ -306,7 +311,7 @@ shoppingList.remove("Milk")
 - [[c-kotlin]]
 - [[c-collections]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-equals-hashcode-purpose--kotlin--medium]]
 - [[q-visibility-modifiers-kotlin--kotlin--medium]]

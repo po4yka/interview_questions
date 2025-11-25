@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-concurrency, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
+related: [c-concurrency, c-kotlin, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
 created: 2024-10-15
 updated: 2025-11-11
-tags: [kotlin, coroutines, difficulty/medium, error-handling, exception-handling]
+tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
+date created: Friday, October 31st 2025, 6:29:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +37,7 @@ tags: [kotlin, coroutines, difficulty/medium, error-handling, exception-handling
 - В `launch` неперехваченные исключения считаются сбоем корутины и по умолчанию являются "unhandled" (если не перехвачены внутри корутины или через `CoroutineExceptionHandler`). У дочерних корутин `launch` исключение по умолчанию отменяет родительский scope и всех "соседей" (если это не supervisor).
 - В `async` исключения сохраняются внутри `Deferred<T>` и повторно выбрасываются только при вызове `await()`. В составе структурированной иерархии, если родитель отменяется из-за других ошибок, соответствующие `async` также отменяются, и их исключения могут проявиться как `CancellationException` при `await()`. Для корневых `async` (например, созданных в `GlobalScope`) ситуация другая: непойманное исключение ведет себя как в root-корутинах `launch` и обрабатывается как "unhandled" через `CoroutineExceptionHandler`.
 
-### Launch - распространение исключений
+### Launch - Распространение Исключений
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -67,7 +69,7 @@ fun launchCrash() = runBlocking {
 }
 ```
 
-### Async - исключения в Deferred
+### Async - Исключения В Deferred
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -109,7 +111,7 @@ suspend fun selectiveErrorHandling() = coroutineScope {
 }
 ```
 
-### Сравнение обработки ошибок
+### Сравнение Обработки Ошибок
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -139,7 +141,7 @@ fun compareErrorHandling() = runBlocking {
 }
 ```
 
-### Launch с CoroutineExceptionHandler
+### Launch С CoroutineExceptionHandler
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -185,7 +187,7 @@ fun multipleWithHandler() = runBlocking {
 }
 ```
 
-### Практический пример: загрузка данных
+### Практический Пример: Загрузка Данных
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -228,7 +230,7 @@ class DataViewModel {
 }
 ```
 
-### Параллельная обработка ошибок
+### Параллельная Обработка Ошибок
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -281,7 +283,7 @@ fun launchParallel() = runBlocking {
 }
 ```
 
-### supervisorScope для независимых ошибок
+### supervisorScope Для Независимых Ошибок
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -386,7 +388,7 @@ class ErrorHandlingBestPractices {
 }
 ```
 
-### Сводная таблица
+### Сводная Таблица
 
 | Feature | launch | async |
 |---------|--------|-------|
@@ -770,7 +772,7 @@ class ErrorHandlingBestPractices {
 | Selective handling | Limited by structure | Yes, per Deferred |
 | Best for | Fire-and-forget / structured side effects | Result-returning operations with fine-grained error handling |
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия по сравнению с обработкой исключений в Java?
 - Когда на практике стоит предпочесть `launch` или `async` для обработки ошибок?
@@ -790,7 +792,7 @@ class ErrorHandlingBestPractices {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-suspend-function-suspension-mechanism--programming-languages--hard]]
 - [[q-what-is-job-object--programming-languages--medium]]

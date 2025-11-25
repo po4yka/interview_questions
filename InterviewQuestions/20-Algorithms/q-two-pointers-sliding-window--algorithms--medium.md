@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, array, difficulty/medium, optimization, sliding-window, two-pointers]
 sources: [https://en.wikipedia.org/wiki/Two_pointer_technique]
+date created: Saturday, November 1st 2025, 1:24:14 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)

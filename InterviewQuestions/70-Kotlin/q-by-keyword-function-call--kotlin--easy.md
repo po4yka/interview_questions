@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-concepts--kotlin--medium]
+related: [c-concepts--kotlin--medium, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [by-keyword, delegation, difficulty/easy, programming-languages]
 
+date created: Saturday, November 1st 2025, 1:26:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +38,7 @@ tags: [by-keyword, delegation, difficulty/easy, programming-languages]
 - Можно использовать свойства, параметры или любое выражение, возвращающее подходящий делегат
 - Ключевое требование: выражение должно возвращать объект с правильным контрактом делегирования (`getValue` / `setValue` или реализации нужных интерфейсов)
 
-### Примеры кода
+### Примеры Кода
 
 **Делегирование свойств — КОРРЕКТНО:**
 
@@ -61,7 +63,7 @@ class Example {
 }
 ```
 
-### Делегирование интерфейса — все КОРРЕКТНЫЕ варианты
+### Делегирование Интерфейса — Все КОРРЕКТНЫЕ Варианты
 
 ```kotlin
 interface Printer {
@@ -101,7 +103,7 @@ fun main() {
 }
 ```
 
-### Примеры с lazy-делегированием
+### Примеры С Lazy-делегированием
 
 ```kotlin
 class LazyExample {
@@ -129,7 +131,7 @@ fun main() {
 }
 ```
 
-### Делегирование классов подробнее
+### Делегирование Классов Подробнее
 
 ```kotlin
 interface Repository<T> {
@@ -174,7 +176,7 @@ fun main() {
 }
 ```
 
-### Пользовательские делегаты свойств
+### Пользовательские Делегаты Свойств
 
 ```kotlin
 import kotlin.properties.ReadWriteProperty
@@ -214,7 +216,7 @@ fun main() {
 }
 ```
 
-### Observable и Vetoable делегаты
+### Observable И Vetoable Делегаты
 
 ```kotlin
 import kotlin.properties.Delegates
@@ -253,7 +255,7 @@ fun main() {
 }
 ```
 
-### Делегирование на `Map`
+### Делегирование На `Map`
 
 ```kotlin
 class UserFromMap(map: Map<String, Any>) {
@@ -297,7 +299,7 @@ fun main() {
 }
 ```
 
-### Итог — что работает с `by`
+### Итог — Что Работает С `by`
 
 ```kotlin
 import kotlin.properties.Delegates

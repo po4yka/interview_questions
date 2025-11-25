@@ -2,7 +2,7 @@
 id: lang-080
 title: "Garbage Collector Roots / Корни Garbage Collector"
 aliases: [Garbage Collector Roots, Корни Garbage Collector]
-topic: programming-languages
+topic: kotlin
 subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: medium
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, garbage-collection, jvm, memory-management, programming-languages]
 
+date created: Tuesday, November 25th 2025, 12:55:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -222,7 +224,7 @@ GC Roots are the **runtime root references** from which a tracing garbage collec
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда GC Roots особенно важны для понимания утечек памяти?
 - Как можно диагностировать объекты, удерживаемые через GC Roots?
@@ -244,7 +246,7 @@ GC Roots are the **runtime root references** from which a tracing garbage collec
 - [[c-garbage-collection]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-garbage-collector-basics--programming-languages--medium]]
 - [[q-garbage-collector-definition--programming-languages--easy]]

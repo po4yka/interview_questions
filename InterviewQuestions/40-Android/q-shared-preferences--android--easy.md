@@ -15,6 +15,8 @@ created: 2023-10-15
 updated: 2025-11-10
 tags: [android, android/datastore, android/files-media, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 1:05:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -243,7 +245,7 @@ securePrefs.edit {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит с данными SharedPreferences при удалении приложения?
 - Как выполнить миграцию с SharedPreferences на DataStore?
@@ -269,7 +271,7 @@ securePrefs.edit {
 - https://developer.android.com/training/data-storage/shared-preferences
 - https://developer.android.com/reference/android/content/SharedPreferences
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 

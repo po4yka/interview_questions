@@ -4,25 +4,30 @@ title: Background vs Foreground Service / Фоновый vs Foreground-серв�
 aliases: [Background vs Foreground Service, Фоновый vs Foreground-сервис]
 topic: android
 subtopics:
-- background-execution
-- service
+  - background-execution
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-background-tasks
-- q-android-service-types--android--easy
-- q-android-services-purpose--android--easy
+  - c-background-tasks
+  - q-android-service-types--android--easy
+  - q-android-services-purpose--android--easy
+  - q-background-tasks-decision-guide--android--medium
+  - q-foreground-service-types--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 sources: []
 created: 2023-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:15 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +42,7 @@ tags: [android/background-execution, android/service, difficulty/medium]
 
 ## Ответ (RU)
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Характеристика | Background `Service` | Foreground `Service` |
 |----------------|----------------------|----------------------|
@@ -101,7 +106,7 @@ WorkManager (см. [[c-background-tasks]]):
 - учитывает условия (Wi‑Fi, зарядка и т.п.);
 - обеспечивает повторные попытки при сбоях.
 
-### Платформенные ограничения
+### Платформенные Ограничения
 
 **API 26+** (Android 8.0)
 - Вызов `startService()` из фонового состояния может привести к `IllegalStateException` ("Not allowed to start service `Intent`").
@@ -121,7 +126,7 @@ WorkManager (см. [[c-background-tasks]]):
 3. `Service` (процесс с background-сервисами) — ниже, чем foreground/visible; может быть убит при нехватке памяти.
 4. Cached — нет активных компонентов; убивается первым.
 
-### Выбор подхода
+### Выбор Подхода
 
 **Foreground `Service`:**
 - Пользовательская, заметная операция (музыка, навигация, трекинг тренировок и т.п.).
@@ -237,7 +242,7 @@ WorkManager (see [[c-background-tasks]]):
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если `startForeground()` не будет вызван в течение 5 секунд после `startForegroundService()`?
 - Как корректно остановить foreground-сервис и убрать его уведомление?
@@ -271,13 +276,13 @@ WorkManager (see [[c-background-tasks]]):
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-service-types--android--easy]] - Типы сервисов в Android
 - [[q-android-services-purpose--android--easy]] - Зачем нужны сервисы
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-background-tasks-decision-guide--android--medium]] - Выбор подхода для фоновых задач
 
 ### Продвинутые (сложнее)

@@ -3,7 +3,7 @@ id: lang-017
 title: "Kotlin Run Operator / Оператор run в Kotlin"
 aliases: [Kotlin Run Operator, Оператор run в Kotlin]
 topic: kotlin
-subtopics: [scope-functions, functions]
+subtopics: [functions, scope-functions]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, c-kotlin-features, q-compose-side-effects-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [also, apply, difficulty/easy, let, kotlin, run, scope-functions, with]
+tags: [also, apply, difficulty/easy, kotlin, let, run, scope-functions, with]
+date created: Friday, October 31st 2025, 6:32:17 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
 
@@ -165,7 +168,7 @@ println(result)  // 60
 
 ---
 
-## Usage Variants of run
+## Usage Variants of Run
 
 ### 1. Object.run (Extension function)
 
@@ -189,7 +192,7 @@ println(user.age)  // 26 (modified)
 - Returns: Lambda result
 - Usage: Transform object and return a value
 
-### 2. Top-level run (Standalone function)
+### 2. Top-level Run (Standalone function)
 
 ```kotlin
 val result = run {
@@ -278,7 +281,7 @@ val price = product.run {
 
 ---
 
-## Examples of Using run
+## Examples of Using Run
 
 ### 1. Compute and Return a Result
 
@@ -290,7 +293,7 @@ val result = user.run {
 }
 ```
 
-### 2. Null Safety with run
+### 2. Null Safety with Run
 
 ```kotlin
 val length = str?.run {
@@ -396,9 +399,9 @@ val result2 = with(user) {
 
 ---
 
-## Run vs Other Scope Functions
+## Run Vs Other Scope Functions
 
-### run vs let
+### Run Vs Let
 
 ```kotlin
 val result1 = user.run {
@@ -420,7 +423,7 @@ Use `let` when:
 - You use null-safe chains with `?.let`.
 - You want an explicit lambda parameter.
 
-### run vs apply
+### Run Vs Apply
 
 ```kotlin
 val length = StringBuilder().run {
@@ -441,7 +444,7 @@ Use `run` when:
 Use `apply` when:
 - You need the configured object itself.
 
-### run vs with
+### Run Vs with
 
 ```kotlin
 val result1 = user.run {
@@ -688,7 +691,7 @@ val request = HttpRequest().run {
 
 ---
 
-## When to Use run
+## When to Use Run
 
 Use `run` when:
 - You need to execute a block and return its result.
@@ -760,7 +763,7 @@ Compared to other scope functions:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между `run` и другими scope-функциями (`let`, `apply`, `also`, `with`)?
 - Когда вы бы использовали `run` на практике?

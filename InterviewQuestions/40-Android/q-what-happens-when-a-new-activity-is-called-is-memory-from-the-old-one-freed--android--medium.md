@@ -1,38 +1,35 @@
 ---
 id: android-151
 title: What Happens When A New Activity Is Called Is Memory From The Old One Freed / Что происходит когда вызывается новая Activity освобождается ли память от старой
-aliases:
-- What Happens When A New Activity Is Called Is Memory From The Old One Freed
-- Что происходит когда вызывается новая Activity освобождается ли память от старой
+aliases: [What Happens When A New Activity Is Called Is Memory From The Old One Freed, Что происходит когда вызывается новая Activity освобождается ли память от старой]
 topic: android
 subtopics:
-- lifecycle
-- performance-memory
+  - lifecycle
+  - performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- c-lifecycle
-- q-activity-lifecycle-methods--android--medium
-- q-activity-navigation-how-it-works--android--medium
-- q-how-does-activity-lifecycle-work--android--medium
+  - c-lifecycle
+  - c-memory-management
+  - q-activity-lifecycle-methods--android--medium
+  - q-activity-navigation-how-it-works--android--medium
+  - q-how-does-activity-lifecycle-work--android--medium
+  - q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+  - q-how-to-pass-data-from-one-activity-to-another--android--medium
+  - q-how-to-pass-data-from-one-fragment-to-another--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android
-- android/lifecycle
-- android/performance-memory
-- difficulty/medium
-- lifecycle
-- performance-memory
+tags: [android, android/lifecycle, android/performance-memory, difficulty/medium, lifecycle, performance-memory]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -124,7 +121,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
 }
 ```
 
-### `ViewModel` и Жизненный Цикл
+### `ViewModel` И Жизненный Цикл
 
 ```kotlin
 class DataViewModel : ViewModel() {
@@ -232,7 +229,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
 }
 ```
 
-### `ViewModel` and Lifecycle
+### `ViewModel` And Lifecycle
 
 ```kotlin
 class DataViewModel : ViewModel() {

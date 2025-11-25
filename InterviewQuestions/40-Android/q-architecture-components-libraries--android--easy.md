@@ -4,26 +4,31 @@ title: Architecture Components Libraries / Библиотеки Architecture Com
 aliases: [Architecture Components Libraries, Библиотеки Architecture Components]
 topic: android
 subtopics:
-- architecture-mvvm
-- lifecycle
-- room
+  - architecture-mvvm
+  - lifecycle
+  - room
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-lifecycle
-- c-room
-- c-android-components
+  - c-android-components
+  - c-lifecycle
+  - c-room
+  - q-android-jetpack-overview--android--easy
+  - q-compose-core-components--android--medium
+  - q-what-are-the-most-important-components-of-compose--android--medium
 sources: []
 created: 2024-10-15
 updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
 
+date created: Saturday, November 1st 2025, 1:04:14 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -302,7 +307,7 @@ UI Layer (Compose / Views)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда стоит использовать `StateFlow` вместо `LiveData` в современном Android?
 - Как `ViewModel` переживает конфигурационные изменения без сохранения в state bundle?
@@ -340,12 +345,12 @@ UI Layer (Compose / Views)
 - https://developer.android.com/training/data-storage/room
 - https://developer.android.com/topic/libraries/architecture/workmanager
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-jetpack-overview--android--easy]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-architectural-patterns--android--medium]]
 
 ### Продвинутое (сложнее)

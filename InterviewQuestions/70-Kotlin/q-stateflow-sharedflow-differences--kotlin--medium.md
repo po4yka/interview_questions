@@ -12,11 +12,13 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-concurrency, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
+related: [c-concurrency, c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
 created: 2025-10-05
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
 
+date created: Saturday, October 18th 2025, 3:12:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +37,7 @@ tags: [coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
 
 `StateFlow` — это наблюдаемый поток-держатель состояния, который испускает текущее состояние и новые обновления состояния своим подписчикам. Текущее значение состояния также доступно через свойство `value`.
 
-#### Ключевые характеристики
+#### Ключевые Характеристики
 
 1. **Всегда имеет значение** — требуется начальное состояние при создании.
 2. **Держатель состояния** — всегда представляет актуальное состояние.
@@ -43,7 +45,7 @@ tags: [coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
 4. **Горячий поток** — активен независимо от наличия подписчиков.
 5. **Потокобезопасный** — можно безопасно обновлять из любого потока.
 
-#### Пример использования
+#### Пример Использования
 
 ```kotlin
 class LatestNewsViewModel(
@@ -72,7 +74,7 @@ sealed class LatestNewsUiState {
 }
 ```
 
-#### StateFlow vs `LiveData`
+#### StateFlow Vs `LiveData`
 
 | Функция | `StateFlow` | `LiveData` |
 |---------|------------|-----------|
@@ -87,7 +89,7 @@ sealed class LatestNewsUiState {
 
 `SharedFlow` — это горячий поток, который испускает значения всем подписчикам. Это высоко настраиваемое обобщение `StateFlow` (сам `StateFlow` реализован поверх `SharedFlow`). Значения `SharedFlow` могут производиться из разных источников, включая `MutableSharedFlow`, `shareIn` и `stateIn`.
 
-#### Ключевые характеристики
+#### Ключевые Характеристики
 
 1. **Начальное значение не требуется** — может быть создан без стартового значения.
 2. **Широковещательная рассылка нескольким коллекторам** — все активные коллектора получают одинаковые эмиссии.
@@ -95,7 +97,7 @@ sealed class LatestNewsUiState {
 4. **Настраиваемый буфер** — управление переполнением через `replay`, `extraBufferCapacity` и `onBufferOverflow`.
 5. **Гибкая семантика** — может представлять события, общие потоки или даже состояние при соответствующей конфигурации.
 
-#### Опции конфигурации
+#### Опции Конфигурации
 
 ```kotlin
 private val _tickFlow = MutableSharedFlow<Unit>(
@@ -110,7 +112,7 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 - `DROP_LATEST` — отбрасывает последнее новое значение при переполнении.
 - `DROP_OLDEST` — отбрасывает самое старое значение при переполнении.
 
-#### Пример использования
+#### Пример Использования
 
 ```kotlin
 // Класс, который централизует моменты, когда нужно обновить контент приложения
@@ -149,7 +151,7 @@ class NewsRepository(
 }
 ```
 
-### Сравнение `StateFlow` vs `SharedFlow`
+### Сравнение `StateFlow` Vs `SharedFlow`
 
 | Функция | `StateFlow` | `SharedFlow` |
 |---------|------------|-------------|
@@ -160,7 +162,7 @@ class NewsRepository(
 | **Повтор (replay)** | 1 (последнее значение) | Настраиваемый (0...∞) |
 | **subscriptionCount** | Доступен | Доступен |
 
-### Когда что использовать
+### Когда Что Использовать
 
 **Используйте `StateFlow`, когда**:
 - Нужно представить текущее состояние (например, UI-состояние, состояние загрузки).
@@ -174,7 +176,7 @@ class NewsRepository(
 - Нужно транслировать значения нескольким коллекторам.
 - Нужен контроль над переполнением буфера или более гибкие неконфлюирующие семантики.
 
-### Пример: счетчик с использованием `StateFlow`
+### Пример: Счетчик С Использованием `StateFlow`
 
 ```kotlin
 class CounterModel {
@@ -192,7 +194,7 @@ val bModel = CounterModel()
 val sumFlow: Flow<Int> = aModel.counter.combine(bModel.counter) { a, b -> a + b }
 ```
 
-### Дополнительные возможности `MutableSharedFlow`
+### Дополнительные Возможности `MutableSharedFlow`
 
 ```kotlin
 val sharedFlow = MutableSharedFlow<String>(replay = 3)
@@ -251,7 +253,7 @@ sealed class LatestNewsUiState {
 }
 ```
 
-#### `StateFlow` vs `LiveData`
+#### `StateFlow` Vs `LiveData`
 
 Both are observable data holder classes with similar patterns:
 
@@ -330,7 +332,7 @@ class NewsRepository(
 }
 ```
 
-### `StateFlow` vs `SharedFlow` Comparison
+### `StateFlow` Vs `SharedFlow` Comparison
 
 | Feature | `StateFlow` | `SharedFlow` |
 |---------|------------|------------|

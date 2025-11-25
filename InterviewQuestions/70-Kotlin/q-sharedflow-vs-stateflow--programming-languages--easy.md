@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-concepts--kotlin--medium, q-launch-vs-async-error-handling--programming-languages--medium]
+related: [c-concepts--kotlin--medium, c-concurrency, q-launch-vs-async-error-handling--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/easy, flow, kotlin, sharedflow, stateflow]
 
+date created: Friday, October 31st 2025, 6:30:48 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ tags: [coroutines, difficulty/easy, flow, kotlin, sharedflow, stateflow]
 
 `StateFlow` — это специализированный `SharedFlow`, который всегда хранит ровно одно последнее значение, сразу отдаёт его новым подписчикам и эмитит новое только если оно отличается от текущего по `equals`, то есть повторная установка того же значения не приведёт к новому эмиту.
 
-### Сравнение ключевых характеристик
+### Сравнение Ключевых Характеристик
 
 | Характеристика | `SharedFlow` | `StateFlow` |
 |----------------|------------|-----------|
@@ -170,7 +172,7 @@ fun main() = runBlocking {
 // Subscriber 2 (late): count=2, loading=true
 ```
 
-### SharedFlow с реплей-буфером
+### SharedFlow С Реплей-буфером
 
 ```kotlin
 import kotlinx.coroutines.runBlocking
@@ -221,7 +223,7 @@ fun main() = runBlocking {
 // Late subscriber: Notification 4
 ```
 
-### StateFlow: только различные значения
+### StateFlow: Только Различные Значения
 
 ```kotlin
 import kotlinx.coroutines.runBlocking
@@ -255,7 +257,7 @@ fun main() = runBlocking {
 // Collected: Different
 ```
 
-### Когда использовать SharedFlow
+### Когда Использовать SharedFlow
 
 ```kotlin
 // Используйте SharedFlow для:
@@ -297,7 +299,7 @@ class SearchQuery {
 }
 ```
 
-### Когда использовать StateFlow
+### Когда Использовать StateFlow
 
 ```kotlin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -337,7 +339,7 @@ class UserRepository {
 }
 ```
 
-### Стратегии буфера SharedFlow
+### Стратегии Буфера SharedFlow
 
 ```kotlin
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -363,7 +365,7 @@ val sharedFlow3 = MutableSharedFlow<Int>(
 )
 ```
 
-### Конвертация между StateFlow и SharedFlow
+### Конвертация Между StateFlow И SharedFlow
 
 ```kotlin
 import kotlinx.coroutines.CoroutineScope
@@ -789,7 +791,7 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java-подходов к реактивности/наблюдаемости?
 - Когда вы бы использовали эти примитивы на практике?
@@ -813,7 +815,7 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 - [[c-concurrency]]
 - [[c-concepts--kotlin--medium]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-launch-vs-async-error-handling--programming-languages--medium]]
 

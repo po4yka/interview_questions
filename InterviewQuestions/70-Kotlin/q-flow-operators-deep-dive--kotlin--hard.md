@@ -5,7 +5,7 @@ aliases: ["Flow Operators Deep Dive", "Глубокое погружение в 
 
 # Classification
 topic: kotlin
-subtopics: [flow, coroutines, operators]
+subtopics: [coroutines, flow, operators]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related: [c-flow, c-kotlin, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-11-09
 
 tags: [async, difficulty/hard, flow, kotlin, operators, transformation]
+date created: Friday, October 17th 2025, 11:26:31 am
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Реализуйте пользовательские операторы `Flow`. Объясните `flatMapConcat` vs `flatMapMerge` vs `flatMapLatest` с практическими примерами и характеристиками производительности.
 
@@ -266,7 +269,7 @@ class SearchViewModel : ViewModel() {
 
 ### Создание Пользовательских Операторов Flow
 
-#### Пример 1: Повтор с экспоненциальной задержкой
+#### Пример 1: Повтор С Экспоненциальной Задержкой
 
 ```kotlin
 fun <T> Flow<T>.retryWithExponentialBackoff(
@@ -289,7 +292,7 @@ fun <T> Flow<T>.retryWithExponentialBackoff(
     }
 ```
 
-#### Пример 2: Оператор окна (фиксированный размер и шаг)
+#### Пример 2: Оператор Окна (фиксированный Размер И шаг)
 
 Ниже исправленный вариант для фиксированного окна с шагом `windowSlide`, поддерживающий как перекрывающиеся, так и неперекрывающиеся окна.
 
@@ -348,7 +351,7 @@ flowOf(1, 2, 3, 4, 5, 6, 7, 8)
 
 (Этот оператор показан как учебный пример. В продакшене имеет смысл дополнительно аккуратно определить поведение на границах и для всех комбинаций windowSize/windowSlide.)
 
-#### Пример 3: Ограничение частоты
+#### Пример 3: Ограничение Частоты
 
 ```kotlin
 fun <T> Flow<T>.rateLimit(
@@ -778,7 +781,7 @@ val resultFlow = unstableFlow()
     )
 ```
 
-#### Example 2: Custom Window Operator (fixed size and slide)
+#### Example 2: Custom Window Operator (fixed Size and slide)
 
 This variant supports fixed-size windows with a configurable slide. It is illustrative and can be refined for production.
 

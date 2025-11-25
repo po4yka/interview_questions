@@ -1,36 +1,33 @@
 ---
 id: android-117
 title: Canvas Drawing Optimization / Оптимизация отрисовки Canvas
-aliases:
-- Canvas Drawing Optimization
-- Оптимизация отрисовки Canvas
+aliases: [Canvas Drawing Optimization, Оптимизация отрисовки Canvas]
 topic: android
 subtopics:
-- performance-rendering
-- ui-views
+  - performance-rendering
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: reviewed
 moc: moc-android
 related:
-- c-performance
-- c-performance-optimization
-- q-android-app-lag-analysis--android--medium
-- q-android-performance-measurement-tools--android--medium
+  - c-performance
+  - c-performance-optimization
+  - q-android-app-lag-analysis--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-canvas-optimization--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-parsing-optimization-android--android--medium
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags:
-- android/performance-rendering
-- android/ui-views
-- canvas
-- custom-views
-- difficulty/hard
-- performance
+tags: [android/performance-rendering, android/ui-views, canvas, custom-views, difficulty/hard, performance]
+date created: Saturday, November 1st 2025, 12:46:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

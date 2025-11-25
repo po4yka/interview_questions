@@ -14,7 +14,9 @@ related: [c-android-components, q-android-components-besides-activity--android--
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/datastore, difficulty/easy, datastore, key-value, persistence, sharedpreferences]
+tags: [android/datastore, datastore, difficulty/easy, key-value, persistence, sharedpreferences]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -225,7 +227,7 @@ encryptedPrefs.edit {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда следует использовать `SharedPreferences`, а когда [[c-room]] для хранения данных?
 - В чём различия между методами `apply()` и `commit()` в `SharedPreferences`?
@@ -249,7 +251,7 @@ encryptedPrefs.edit {
 - https://developer.android.com/training/data-storage/shared-preferences
 - https://developer.android.com/topic/security/data
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 

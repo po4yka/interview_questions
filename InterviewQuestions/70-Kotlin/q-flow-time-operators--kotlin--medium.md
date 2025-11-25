@@ -6,8 +6,8 @@ aliases: ["Flow Time Operators: debounce, sample, throttle", "Временные
 # Classification
 topic: kotlin
 subtopics:
-  - flow
   - coroutines
+  - flow
   - time-operators
 question_kind: theory
 difficulty: medium
@@ -21,14 +21,17 @@ source_note: Guide to time-based Flow operators
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-coroutines, q-flow-basics--kotlin--easy]
+related: [c-coroutines, c-flow, q-flow-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-10
 
 tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, time-operators]
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое операторы `debounce`, `sample` и throttle в Kotlin `Flow`? В чём различия и случаи использования?
 
@@ -203,7 +206,7 @@ init {
 
 ### Реальные Примеры
 
-#### 1. Мгновенный поиск
+#### 1. Мгновенный Поиск
 
 ```kotlin
 class SearchActivity : AppCompatActivity() {
@@ -224,7 +227,7 @@ class SearchActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Отслеживание местоположения
+#### 2. Отслеживание Местоположения
 
 ```kotlin
 class MapViewModel : ViewModel() {
@@ -248,7 +251,7 @@ class MapViewModel : ViewModel() {
 }
 ```
 
-#### 3. Защита от двойных кликов
+#### 3. Защита От Двойных Кликов
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -275,7 +278,7 @@ class FormViewModel : ViewModel() {
 }
 ```
 
-#### 4. Валидация формы
+#### 4. Валидация Формы
 
 ```kotlin
 class RegistrationViewModel : ViewModel() {
@@ -309,7 +312,7 @@ sealed class ValidationResult {
 }
 ```
 
-### Соображения по Производительности
+### Соображения По Производительности
 
 ```kotlin
 // ПЛОХО: без debounce для поиска

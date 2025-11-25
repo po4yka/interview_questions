@@ -1,19 +1,21 @@
 ---
 id: kotlin-148
 title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
-aliases: [Completion, `Flow`, onCompletion]
+aliases: [Completion, Flow, onCompletion]
 topic: kotlin
-subtopics: [c-flow, c-coroutines, c-kotlin]
+subtopics: [c-coroutines, c-flow, c-kotlin]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-kotlin-extension-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
+related: [c-flow, c-kotlin, q-kotlin-extension-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
+date created: Tuesday, November 25th 2025, 8:11:35 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -26,7 +28,7 @@ tags: [difficulty/medium]
 - получает причину завершения через параметр `cause`;
 - вызывается один раз на каждый запуск коллекции.
 
-#### 1. Базовое использование onCompletion
+#### 1. Базовое Использование onCompletion
 
 **Простое уведомление о завершении:**
 
@@ -86,7 +88,7 @@ suspend fun completionWithCauseExample() {
 // Поймано исключение: Произошла ошибка
 ```
 
-#### 2. Сценарии завершения
+#### 2. Сценарии Завершения
 
 **Три случая завершения:**
 
@@ -145,7 +147,7 @@ suspend fun demonstrateCompletionCases(type: CompletionType) {
 }
 ```
 
-#### 3. onCompletion vs finally
+#### 3. onCompletion Vs Finally
 
 **Сравнение:**
 
@@ -223,7 +225,7 @@ suspend fun placementMatters() {
 // 3. onCompletion после catch: cause = null
 ```
 
-#### 4. Жизненный цикл Flow с onStart и onCompletion
+#### 4. Жизненный Цикл Flow С onStart И onCompletion
 
 **Полный жизненный цикл Flow:**
 
@@ -263,7 +265,7 @@ suspend fun flowLifecycle() {
 // ← onCompletion: Flow завершен (cause: null)
 ```
 
-#### 5. Production-пример: очистка ресурсов
+#### 5. Production-пример: Очистка Ресурсов
 
 Внешние зависимости (например, `Database`) считаются внедренными.
 
@@ -360,7 +362,7 @@ class NetworkStream(
 }
 ```
 
-#### 6. Production-пример: логирование и аналитика
+#### 6. Production-пример: Логирование И Аналитика
 
 ```kotlin
 class LoggingRepository(
@@ -461,7 +463,7 @@ suspend fun monitoredDataFetch(
 }
 ```
 
-#### 7. Production-пример: обновления состояния UI
+#### 7. Production-пример: Обновления Состояния UI
 
 **Управление состоянием загрузки:**
 
@@ -541,7 +543,7 @@ sealed class DownloadState {
 }
 ```
 
-#### 8. Комбинирование onCompletion с обработкой ошибок
+#### 8. Комбинирование onCompletion С Обработкой Ошибок
 
 ```kotlin
 suspend fun completeErrorHandlingExample() {
@@ -609,7 +611,7 @@ suspend fun declarativeErrorHandling(repository: Repository) {
 }
 ```
 
-#### 9. onCompletion не может выпускать значения
+#### 9. onCompletion Не Может Выпускать Значения
 
 ```kotlin
 // Это НЕ работает - onCompletion не может emit
@@ -755,7 +757,7 @@ class OnCompletionTest {
 }
 ```
 
-#### 11. Общие паттерны и лучшие практики
+#### 11. Общие Паттерны И Лучшие Практики
 
 **Паттерн: управление ресурсами:**
 
@@ -808,13 +810,13 @@ class StateMachine {
 | Комбинировать с catch для обработки ошибок | Использовать как замену catch |
 | Использовать для аналитики/логирования/метрик | Использовать для трансформации данных |
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 - [[q-flow-operators--kotlin--medium]] - Операторы Flow
 - [[q-flow-exception-handling--kotlin--medium]] - Обработка исключений в Flow
 - [[q-flow-basics--kotlin--easy]] - Основы Flow
 - [[q-structured-concurrency--kotlin--hard]] - Структурированная конкурентность
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 1. В чем разница между onCompletion до и после оператора catch в цепочке Flow?
 2. Почему onCompletion не может emit значения? Чем это отличается от catch?
 3. Как реализовать Flow-оператор, который гарантирует очистку даже если collector бросает исключение?
@@ -963,7 +965,7 @@ suspend fun demonstrateCompletionCases(type: CompletionType) {
 // demonstrateCompletionCases(CompletionType.CANCELLATION)
 ```
 
-#### 3. onCompletion Vs finally
+#### 3. onCompletion Vs Finally
 
 ```kotlin
 // Using finally

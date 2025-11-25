@@ -14,7 +14,9 @@ related: [c-architecture-patterns, q-http-protocols-comparison--android--medium,
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [networking/http, difficulty/easy, graphql, rest]
+tags: [difficulty/easy, graphql, networking/http, rest]
+date created: Monday, October 27th 2025, 3:57:25 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -291,7 +293,7 @@ apolloClient.query(GetPostQuery(id = "456")).execute()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать пагинацию в GraphQL по сравнению с REST?
 - В чем заключается проблема N+1 запросов в GraphQL и как решает ее DataLoader?
@@ -321,7 +323,7 @@ apolloClient.query(GetPostQuery(id = "456")).execute()
 - REST API Best Practices
 - GraphQL specification
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - Основы протокола HTTP

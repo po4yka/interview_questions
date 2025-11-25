@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/hard, expression-evaluation, interpreter, language-processing]
 sources: ["https://refactoring.guru/design-patterns/interpreter"]
+date created: Saturday, November 1st 2025, 1:03:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -361,7 +363,7 @@ Don't use it when:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как паттерн Interpreter соотносится с паттерном Composite (см. также [[c-architecture-patterns]])?
 - В чем разница между паттернами Interpreter и Visitor?
@@ -373,13 +375,13 @@ Don't use it when:
 - What is the difference between Interpreter and Visitor pattern?
 - When would you use a parser generator instead of Interpreter?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые знания паттернов проектирования
 - Понимание деревьев
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - Паттерн Composite (похожая структура)
 - Паттерн Visitor (альтернативный подход)
 

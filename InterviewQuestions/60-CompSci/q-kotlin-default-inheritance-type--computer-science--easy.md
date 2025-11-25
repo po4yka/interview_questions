@@ -1,5 +1,5 @@
 ---
-id: cs-016
+id: lang-215
 title: "Kotlin Default Inheritance Type / Тип наследования по умолчанию в Kotlin"
 aliases: []
 topic: kotlin
@@ -14,6 +14,8 @@ related: [c-concepts--kotlin--medium, q-abstract-class-vs-interface--kotlin--med
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes]
+date created: Saturday, November 1st 2025, 1:26:21 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -162,7 +164,7 @@ class Error : Result()
 - Consider `sealed` for controlled, closed hierarchies.
 - Use `abstract` when subclasses must implement behavior.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём разница между `abstract` и `interface` в Kotlin?
 - Почему `sealed`-иерархии помогают делать исчерпывающие `when`-выражения?

@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-class-composition--oop--medium]
+related: [c-collections, c-kotlin, q-class-composition--oop--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [collections, deque, difficulty/easy, kotlin, priority-queue, queue]
 
+date created: Friday, October 31st 2025, 6:29:43 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -51,7 +53,7 @@ Key differences:
 - Use cases: `PriorityQueue` is used for task scheduling, event processing, and algorithms where priority matters; `Deque` is used to implement queues, stacks, sliding window algorithms, and double-ended buffers.
 - In the Kotlin/JVM context: the Kotlin standard library does not define its own concrete `PriorityQueue`/`Deque` types; you typically use the underlying Java implementations (such as `java.util.PriorityQueue` and `java.util.ArrayDeque`), which follow this behavior.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем ключевые отличия между этими структурами и Java-реализациями, которые вы используете из Kotlin?
 - Когда вы бы использовали каждую из этих структур на практике?
 - Какие распространенные подводные камни нужно учитывать?
@@ -71,7 +73,7 @@ Key differences:
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[q-class-composition--oop--medium]]
 
 ## Related Questions

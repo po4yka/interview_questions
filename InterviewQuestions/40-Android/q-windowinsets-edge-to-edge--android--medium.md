@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, difficulty/medium, edge-to-edge, immersive, system-ui, windowinsets]
 sources: ["https://developer.android.com/develop/ui/views/layout/edge-to-edge"]
+date created: Saturday, November 1st 2025, 1:26:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -257,7 +259,7 @@ See also: [[c-jetpack-compose]].
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы обрабатываете WindowInsets в ландшафтной ориентации и на устройствах с разными соотношениями сторон?
 - В чем разница между `windowInsetsPadding()` и `systemBarsPadding()`?
@@ -283,7 +285,7 @@ See also: [[c-jetpack-compose]].
 - [Edge-to-Edge Guide](https://developer.android.com/develop/ui/views/layout/edge-to-edge)
 - [WindowInsets API Reference](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/WindowInsets)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-app-components--android--easy]] - Компоненты Android-приложения

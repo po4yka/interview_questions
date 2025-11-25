@@ -1,7 +1,7 @@
 ---
 id: cs-036
 title: "Database Fundamentals / 4fdff04121"
-aliases: ["Database Fundamentals", "04fdff04121"]
+aliases: ["04fdff04121", "Database Fundamentals"]
 topic: cs
 subtopics: [databases, indexing, transactions]
 question_kind: theory
@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-relational-databases, c-database-design, q-sql-nosql-databases--system-design--medium]
+related: [c-database-design, c-relational-databases, q-sql-nosql-databases--system-design--medium]
 created: "2025-10-13"
 updated: "2025-11-11"
 tags: [acid, database, difficulty/hard, indexing, normalization, nosql, sql, transactions]
 sources: ["https://en.wikipedia.org/wiki/Database"]
 
+date created: Monday, October 13th 2025, 8:07:02 am
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -659,7 +661,7 @@ abstract class AppDatabaseV2 : RoomDatabase() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы управляете миграциями базы данных в продакшене?
 - В чем разница между оптимистичной и пессимистичной блокировкой?
@@ -671,13 +673,13 @@ abstract class AppDatabaseV2 : RoomDatabase() {
 - What is the difference between optimistic and pessimistic locking?
 - When should you denormalize a database?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые концепции баз данных
 - Основы SQL
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-sql-nosql-databases--system-design--medium]] — подробное сравнение SQL vs NoSQL
 - [[c-relational-databases]] — реляционные базы данных
 

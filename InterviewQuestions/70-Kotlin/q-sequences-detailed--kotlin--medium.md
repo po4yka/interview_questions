@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, sequences]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Что такое последовательности в Kotlin и чем они отличаются от Iterable?
 
@@ -38,7 +41,7 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, seq
 
 Важно: `Sequence` и `Iterable` — разные интерфейсы. Коллекции в стандартной библиотеке реализуют `Iterable`, а не `Sequence`. Для использования ленивых операций коллекции нужно явно преобразовать в последовательность через `asSequence()` или создать её с помощью `sequenceOf()` и других фабричных функций.
 
-### Жадное vs ленивое вычисление
+### Жадное Vs Ленивое Вычисление
 
 **Iterable (жадное):**
 - Операции над коллекциями (например, `map`, `filter`) выполняются над всей коллекцией и создают промежуточные коллекции на каждом шаге.
@@ -49,7 +52,7 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, seq
 - Обработка элементов откладывается до вызова терминальной операции.
 - При терминальной операции все этапы применяются к элементам по цепочке, **элемент за элементом**.
 
-### Порядок выполнения
+### Порядок Выполнения
 
 **Iterable:** сначала выполняется, например, `filter` для всех элементов, создаётся список отфильтрованных элементов, затем `map` или `forEach` проходят по нему и т.д.
 
@@ -76,7 +79,7 @@ sequenceOf("A", "B", "C")
 // forEach: C
 ```
 
-### Пример (жадное выполнение через коллекцию / Iterable)
+### Пример (жадное Выполнение Через Коллекцию / Iterable)
 
 ```kotlin
 listOf("A", "B", "C")
@@ -97,7 +100,7 @@ listOf("A", "B", "C")
 // forEach: C
 ```
 
-### Промежуточные и терминальные операции
+### Промежуточные И Терминальные Операции
 
 - Промежуточные операции (`map`, `filter`, `take`, `drop`, `distinct`, `sorted` и т.д.):
   - Для последовательностей возвращают новый `Sequence`.
@@ -108,7 +111,7 @@ listOf("A", "B", "C")
   - Запускают вычисление цепочки операций над `Sequence`.
   - Возвращают конечный результат и не возвращают новый `Sequence`.
 
-### Когда использовать
+### Когда Использовать
 
 **Используйте `Sequence`, когда:**
 - Обрабатываете большие коллекции.
@@ -131,7 +134,7 @@ Sequences in Kotlin provide a similar set of operations as collections/Iterables
 
 Important: `Sequence` and `Iterable` are different interfaces. Standard Kotlin collection types implement `Iterable`, not `Sequence`. To use lazy operations you either build a sequence directly (e.g. `sequenceOf(...)`) or convert a collection with `asSequence()`.
 
-### Eager vs Lazy Evaluation
+### Eager Vs Lazy Evaluation
 
 **Iterable / collections (eager):**
 - Operations like `map` and `filter` process the entire collection eagerly.
@@ -170,7 +173,7 @@ sequenceOf("A", "B", "C")
 // forEach: C
 ```
 
-### Example (eager via collection / Iterable)
+### Example (eager via Collection / Iterable)
 
 ```kotlin
 // Iterable (via List) - eager evaluation

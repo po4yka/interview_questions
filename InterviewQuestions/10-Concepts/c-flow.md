@@ -1,13 +1,15 @@
 ---
 id: concept-004
 title: Kotlin Flow / Kotlin Flow
-aliases: [Flow, Kotlin Flow, Cold Flow, Reactive Streams]
+aliases: [Cold Flow, Flow, Kotlin Flow, Reactive Streams]
 kind: concept
-summary: Kotlin Flow is a cold asynchronous data stream that sequentially emits values and completes normally or with an exception. It's part of Kotlin Coroutines and provides a declarative way to work with asynchronous data sequences.
+summary: "Kotlin Flow is a cold asynchronous data stream that sequentially emits values and completes normally or with an exception. It's part of Kotlin Coroutines and provides a declarative way to work with asynchronous data sequences."
 links: []
 created: 2025-11-05
 updated: 2025-11-05
-tags: [concept, kotlin, coroutines, flow, reactive-programming]
+tags: [concept, coroutines, flow, kotlin, reactive-programming]
+date created: Wednesday, November 5th 2025, 6:30:35 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

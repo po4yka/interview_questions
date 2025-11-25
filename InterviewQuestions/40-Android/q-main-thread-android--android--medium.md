@@ -1,37 +1,33 @@
 ---
 id: android-132
 title: Main Thread Android / Главный поток Android
-aliases:
-- Main Thread Android
-- UI Thread
-- Главный поток Android
-- Поток UI
+aliases: [Main Thread Android, UI Thread, Главный поток Android, Поток UI]
 topic: android
 subtopics:
-- lifecycle
-- threads-sync
+  - lifecycle
+  - threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-coroutines
-- c-lifecycle
-- q-room-code-generation-timing--android--medium
+  - c-coroutines
+  - c-lifecycle
+  - q-handler-looper-main-thread--android--medium
+  - q-how-does-the-main-thread-work--android--medium
+  - q-room-code-generation-timing--android--medium
+  - q-what-is-the-main-application-execution-thread--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/lifecycle
-- android/threads-sync
-- difficulty/medium
-- threading
-- ui-thread
+tags: [android/lifecycle, android/threads-sync, difficulty/medium, threading, ui-thread]
 
+date created: Saturday, November 1st 2025, 12:46:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)

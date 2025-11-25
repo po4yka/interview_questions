@@ -17,7 +17,10 @@ subtopics:
   - ceh
   - coroutines
   - error-handling
+date created: Saturday, November 1st 2025, 12:10:38 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
 
@@ -46,11 +49,11 @@ fun main() = runBlocking {
 // Упрощённый вывод: Поймано исключение: java.lang.RuntimeException: Тестовое исключение
 ```
 
-### Что такое CoroutineExceptionHandler?
+### Что Такое CoroutineExceptionHandler?
 
 **CoroutineExceptionHandler** — это `CoroutineContext.Element`, который участвует в обработке необработанных исключений в корутинах. Он действует как **обработчик последней инстанции**, аналог `Thread.UncaughtExceptionHandler` для потоков: используется, когда исключение не перехвачено внутри корутины и не обработано вызывающей стороной.
 
-### Ключевые принципы
+### Ключевые Принципы
 
 Обработка исключений в корутинах подчиняется правилам структурированной конкурентности:
 
@@ -71,7 +74,7 @@ fun main() = runBlocking {
 
 По цепочке контекста ищется ближайший `CoroutineExceptionHandler`: если у дочерней корутины есть свой CEH, он имеет приоритет; иначе используется ближайший выше по иерархии.
 
-### CEH с launch (Работает)
+### CEH С Launch (Работает)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -95,7 +98,7 @@ fun main() = runBlocking {
 // Программа продолжается
 ```
 
-### CEH с async (Поведение)
+### CEH С Async (Поведение)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -123,7 +126,7 @@ fun main() = runBlocking {
 
 Почему так? `async` по контракту передаёт результат/ошибку через `await()`. Пока вызывающая сторона может и действительно получает исключение через `await()`, `CoroutineExceptionHandler` не используется. Если корневой `Deferred` никогда не ожидается, его ошибка может быть репортнута глобальному обработчику при сборке мусора, но это недетерминированно и не должно использоваться для бизнес-логики.
 
-### Иерархия распространения исключений
+### Иерархия Распространения Исключений
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -157,7 +160,7 @@ fun main() = runBlocking {
 
 Практически: исключения детей поднимаются ВВЕРХ к родителю. Необработанные исключения корневых корутин обрабатываются ближайшим CEH по цепочке контекста.
 
-### Установка CEH в CoroutineScope
+### Установка CEH В CoroutineScope
 
 Паттерн 1: CEH на уровне scope
 
@@ -202,7 +205,7 @@ fun fetchDataWithCustomHandler() = viewModelScope.launch {
 }
 ```
 
-### Обработчик по умолчанию
+### Обработчик По Умолчанию
 
 Если для необработанного исключения корневой корутины CEH не установлен, используется платформенный обработчик по умолчанию:
 
@@ -226,7 +229,7 @@ fun main() = runBlocking {
 //   at ...
 ```
 
-### CEH в Android Application
+### CEH В Android Application
 
 Глобальный обработчик на уровне `Application`:
 
@@ -290,7 +293,7 @@ fun Exception.toUserFriendlyMessage(): String {
 }
 ```
 
-### Почему CEH обычно не ловит исключения в async
+### Почему CEH Обычно Не Ловит Исключения В Async
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -319,7 +322,7 @@ fun main() = runBlocking {
 
 Итог: всегда явно вызывайте `await()` (или иным образом потребляйте `Deferred`) и обрабатывайте ошибки; CEH предназначен для необработанных исключений, а не замены `await()`.
 
-### Взаимодействие supervisorScope и CEH
+### Взаимодействие supervisorScope И CEH
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -356,7 +359,7 @@ fun main() = runBlocking {
 
 Если CEH навешан только на родительский `launch`, он обработает необработанные исключения дочерних корутин внутри `supervisorScope`, сохраняя их независимость. Для отдельной политики по детям добавляйте CEH на каждый нужный `launch`.
 
-### Реальный пример: логирование и аналитика
+### Реальный Пример: Логирование И Аналитика
 
 ```kotlin
 class ProductionCoroutineExceptionHandler(
@@ -412,7 +415,7 @@ class MyViewModel(
 }
 ```
 
-### Ограничения CEH и альтернативы
+### Ограничения CEH И Альтернативы
 
 Ограничения:
 
@@ -462,7 +465,7 @@ repository.dataFlow
     }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 Ошибка 1: Считать, что CEH заменяет структурированную обработку исключений.
 
@@ -493,7 +496,7 @@ async(handler) {
 val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 ```
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Используйте CEH для неожиданных исключений и централизованного логирования:
 
@@ -506,7 +509,7 @@ val handler = CoroutineExceptionHandler { _, exception ->
 }
 ```
 
-2. Комбинируйте CEH с явной обработкой ожидаемых ошибок:
+1. Комбинируйте CEH с явной обработкой ожидаемых ошибок:
 
 ```kotlin
 launch(handler) {
@@ -520,7 +523,7 @@ launch(handler) {
 }
 ```
 
-3. Используйте `SupervisorJob` вместе с CEH для независимых дочерних задач:
+1. Используйте `SupervisorJob` вместе с CEH для независимых дочерних задач:
 
 ```kotlin
 val scope = CoroutineScope(
@@ -528,7 +531,7 @@ val scope = CoroutineScope(
 )
 ```
 
-4. Именуйте корутины (`CoroutineName`) для улучшения диагностики:
+1. Именуйте корутины (`CoroutineName`) для улучшения диагностики:
 
 ```kotlin
 launch(handler + CoroutineName("FetchUser")) {
@@ -536,7 +539,7 @@ launch(handler + CoroutineName("FetchUser")) {
 }
 ```
 
-5. Не полагайтесь только на CEH:
+1. Не полагайтесь только на CEH:
 
 ```kotlin
 // ПЛОХО: только CEH
@@ -630,7 +633,7 @@ class CEHTest {
 }
 ```
 
-### Ключевые выводы (RU)
+### Ключевые Выводы (RU)
 
 1. CEH — обработчик последней инстанции для необработанных исключений.
 2. Надёжно применяется к корневым `launch`/`actor`; дочерние корутины прокидывают исключения к ближайшему CEH в цепочке родителей.
@@ -1090,7 +1093,7 @@ val handler = CoroutineExceptionHandler { _, exception ->
 }
 ```
 
-2. Combine CEH with explicit handling for expected errors:
+1. Combine CEH with explicit handling for expected errors:
 
 ```kotlin
 launch(handler) {
@@ -1104,7 +1107,7 @@ launch(handler) {
 }
 ```
 
-3. Use `SupervisorJob` with CEH for independent children:
+1. Use `SupervisorJob` with CEH for independent children:
 
 ```kotlin
 val scope = CoroutineScope(
@@ -1112,7 +1115,7 @@ val scope = CoroutineScope(
 )
 ```
 
-4. Name coroutines for debugging:
+1. Name coroutines for debugging:
 
 ```kotlin
 launch(handler + CoroutineName("FetchUser")) {
@@ -1120,7 +1123,7 @@ launch(handler + CoroutineName("FetchUser")) {
 }
 ```
 
-5. Do not rely solely on CEH:
+1. Do not rely solely on CEH:
 
 ```kotlin
 // BAD: relying only on CEH

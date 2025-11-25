@@ -1,35 +1,33 @@
 ---
 id: android-209
 title: Unified Android Components / Объединение компонентов Android
-aliases:
-- Unified Components
-- Объединение компонентов
+aliases: [Unified Components, Объединение компонентов]
 topic: android
 subtopics:
-- activity
-- fragment
-- service
+  - activity
+  - fragment
+  - service
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- c-intent
-- c-lifecycle
+  - c-android-components
+  - c-intent
+  - c-lifecycle
+  - q-android-components-besides-activity--android--easy
+  - q-main-android-components--android--easy
+  - q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/fragment
-- android/service
-- android/intent
-- difficulty/easy
+tags: [android/activity, android/fragment, android/intent, android/service, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 1:26:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -43,9 +41,9 @@ tags:
 ## Ответ (RU)
 Основные компоненты Android-приложения объединяют несколько общих принципов (с нюансами):
 
-1) `Context` — доступ к ресурсам и системным сервисам.
-2) Манифест — объявление и управление жизненным циклом (для четырёх основных компонентов).
-3) `Intent` — единый механизм запуска и обмена сообщениями (там, где применимо).
+1. `Context` — доступ к ресурсам и системным сервисам.
+2. Манифест — объявление и управление жизненным циклом (для четырёх основных компонентов).
+3. `Intent` — единый механизм запуска и обмена сообщениями (там, где применимо).
 
 **1. `Context` — доступ к ресурсам**
 
@@ -212,9 +210,9 @@ contentResolver.query(
 ## Answer (EN)
 Main Android application components are unified by three recurring aspects (with some nuances):
 
-1) `Context` — resource and system access
-2) Manifest — lifecycle ownership and visibility (for the four core components)
-3) `Intent` — messaging and activation (where applicable)
+1. `Context` — resource and system access
+2. Manifest — lifecycle ownership and visibility (for the four core components)
+3. `Intent` — messaging and activation (where applicable)
 
 **1. `Context` — Resource Access**
 
@@ -372,7 +370,7 @@ What unifies the main Android components:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[c-android-components]] — Уточнить роли и взаимодействие отдельных компонентов.
 - [[c-intent]] — Подробнее об типах `Intent`, фильтрах и разрешении.
@@ -398,15 +396,15 @@ What unifies the main Android components:
 - [Services](https://developer.android.com/develop/background-work/services)
 - [Activities](https://developer.android.com/guide/components/activities)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовый уровень (Easy)
+### Базовый Уровень (Easy)
 - [[q-architecture-components-libraries--android--easy]] - Основы
 - [[q-android-components-besides-activity--android--easy]] - Основы
 - [[q-main-android-components--android--easy]] - Основы
 - [[q-android-app-components--android--easy]] - Основы
 
-### Продвинутый уровень (Harder)
+### Продвинутый Уровень (Harder)
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Основы
 - [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Основы
 - [[q-hilt-components-scope--android--medium]] - Основы

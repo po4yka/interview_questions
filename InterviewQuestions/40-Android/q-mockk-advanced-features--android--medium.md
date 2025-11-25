@@ -1,30 +1,31 @@
 ---
 id: android-351
 title: MockK Advanced Features / Продвинутые возможности MockK
-aliases:
-- MockK Advanced Features
-- Продвинутые возможности MockK
+aliases: [MockK Advanced Features, Продвинутые возможности MockK]
 topic: android
 subtopics:
-- testing-mocks
+  - testing-mocks
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-testing
-- q-android-testing-strategies--android--medium
-- q-why-use-diffutil--android--medium
+  - c-android-testing
+  - q-android-testing-strategies--android--medium
+  - q-camerax-advanced-pipeline--android--hard
+  - q-recyclerview-itemdecoration-advanced--android--medium
+  - q-room-type-converters-advanced--android--medium
+  - q-why-use-diffutil--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/testing-mocks
-- difficulty/medium
+tags: [android/testing-mocks, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +44,7 @@ MockK — это ориентированная на Kotlin библиотека
 
 ---
 
-### Базовое сравнение MockK и Mockito
+### Базовое Сравнение MockK И Mockito
 
 Этот пример показывает разницу стиля синтаксиса.
 
@@ -134,7 +135,7 @@ fun testAllMethods() {
 
 ---
 
-### Spy — частичное мокирование
+### Spy — Частичное Мокирование
 
 Spies делегируют к реальной реализации по умолчанию, но позволяют выборочно переопределять поведение.
 
@@ -293,7 +294,7 @@ class UserViewModelTest {
 
 ---
 
-### Моккирование корутин
+### Моккирование Корутин
 
 MockK имеет полноценную поддержку suspend-функций через `coEvery` / `coVerify`.
 
@@ -362,7 +363,7 @@ fun testSuspendException() = runTest {
 
 ---
 
-### Продвинутые возможности
+### Продвинутые Возможности
 
 1. Ответы через лямбда (`answers`):
 
@@ -382,7 +383,7 @@ fun testAnswers() {
 }
 ```
 
-2. Захват аргументов (`slot`):
+1. Захват аргументов (`slot`):
 
 ```kotlin
 @Test
@@ -400,7 +401,7 @@ fun testSlotCapture() {
 }
 ```
 
-3. Множественный захват:
+1. Множественный захват:
 
 ```kotlin
 @Test
@@ -426,7 +427,7 @@ fun testMultipleCaptures() {
 }
 ```
 
-4. Проверка порядка вызовов:
+1. Проверка порядка вызовов:
 
 ```kotlin
 @Test
@@ -459,7 +460,7 @@ fun testVerifySequence() {
 }
 ```
 
-5. Проверка количества вызовов:
+1. Проверка количества вызовов:
 
 ```kotlin
 @Test
@@ -476,7 +477,7 @@ fun testVerifyCount() {
 }
 ```
 
-6. Моккирование `object`:
+1. Моккирование `object`:
 
 ```kotlin
 object NetworkClient {
@@ -497,7 +498,7 @@ fun testObjectMock() {
 }
 ```
 
-7. Моккирование статических / top-level функций:
+1. Моккирование статических / top-level функций:
 
 ```kotlin
 @Test
@@ -515,7 +516,7 @@ fun testStaticMock() {
 }
 ```
 
-8. Моккирование конструкторов:
+1. Моккирование конструкторов:
 
 ```kotlin
 class ExpensiveClass(val value: String) {
@@ -541,7 +542,7 @@ fun testConstructorMock() {
 
 ---
 
-### Сравнение MockK и Mockito
+### Сравнение MockK И Mockito
 
 Ключевые различия (для Kotlin + Android):
 
@@ -557,7 +558,7 @@ fun testConstructorMock() {
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Осторожно используйте relaxed mocks:
 
@@ -571,7 +572,7 @@ lateinit var logger: Logger
 lateinit var repository: UserRepository
 ```
 
-2. Предпочитайте чистые моки spy-объектам:
+1. Предпочитайте чистые моки spy-объектам:
 
 ```kotlin
 // Предпочтительно
@@ -581,14 +582,14 @@ val mock = mockk<UserRepository>()
 val spy = spyk(UserRepository())
 ```
 
-3. Используйте аннотации для более чистых тестов:
+1. Используйте аннотации для более чистых тестов:
 
 ```kotlin
 @MockK lateinit var repository: UserRepository
 @InjectMockKs lateinit var viewModel: UserViewModel
 ```
 
-4. Очищайте состояние между тестами при использовании глобальных моков:
+1. Очищайте состояние между тестами при использовании глобальных моков:
 
 ```kotlin
 @After
@@ -947,7 +948,7 @@ fun testAnswers() {
 }
 ```
 
-2. Slot capturing (capture arguments):
+1. Slot capturing (capture arguments):
 
 ```kotlin
 @Test
@@ -965,7 +966,7 @@ fun testSlotCapture() {
 }
 ```
 
-3. Multiple captures:
+1. Multiple captures:
 
 ```kotlin
 @Test
@@ -991,7 +992,7 @@ fun testMultipleCaptures() {
 }
 ```
 
-4. Verification ordering:
+1. Verification ordering:
 
 ```kotlin
 @Test
@@ -1024,7 +1025,7 @@ fun testVerifySequence() {
 }
 ```
 
-5. Verification count:
+1. Verification count:
 
 ```kotlin
 @Test
@@ -1041,7 +1042,7 @@ fun testVerifyCount() {
 }
 ```
 
-6. Object mocking:
+1. Object mocking:
 
 ```kotlin
 object NetworkClient {
@@ -1062,7 +1063,7 @@ fun testObjectMock() {
 }
 ```
 
-7. Static/top-level function mocking:
+1. Static/top-level function mocking:
 
 ```kotlin
 @Test
@@ -1080,7 +1081,7 @@ fun testStaticMock() {
 }
 ```
 
-8. Constructor mocking:
+1. Constructor mocking:
 
 ```kotlin
 class ExpensiveClass(val value: String) {
@@ -1137,7 +1138,7 @@ lateinit var logger: Logger
 lateinit var repository: UserRepository
 ```
 
-2. Prefer pure mocks over spies when possible:
+1. Prefer pure mocks over spies when possible:
 
 ```kotlin
 // Prefer
@@ -1147,14 +1148,14 @@ val mock = mockk<UserRepository>()
 val spy = spyk(UserRepository())
 ```
 
-3. Use annotations for cleaner tests:
+1. Use annotations for cleaner tests:
 
 ```kotlin
 @MockK lateinit var repository: UserRepository
 @InjectMockKs lateinit var viewModel: UserViewModel
 ```
 
-4. Clear state between tests when using global mocking helpers:
+1. Clear state between tests when using global mocking helpers:
 
 ```kotlin
 @After
@@ -1166,7 +1167,7 @@ fun tearDown() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-android-testing-strategies--android--medium]]
 - [[q-why-use-diffutil--android--medium]]
@@ -1192,7 +1193,7 @@ fun tearDown() {
 - [Local Unit Tests](https://developer.android.com/training/testing/local-tests)
 - [Android Documentation](https://developer.android.com/docs)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

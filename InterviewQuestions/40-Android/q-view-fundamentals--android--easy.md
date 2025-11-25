@@ -11,11 +11,13 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [c-android-views, q-fragments-and-activity-relationship--android--hard, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
-sources: ["https://developer.android.com/reference/android/view/View", "https://developer.android.com/develop/ui/views/layout/custom-views/custom-components"]
+sources: ["https://developer.android.com/develop/ui/views/layout/custom-views/custom-components", "https://developer.android.com/reference/android/view/View"]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/ui-views, android/ui-widgets, difficulty/easy, view, view-hierarchy]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -382,7 +384,7 @@ class CustomView @JvmOverloads constructor(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем разница между `invalidate()` и `requestLayout()`?
 2. Как работает процесс отрисовки `View` (фазы measure, layout, draw)?
@@ -408,12 +410,12 @@ class CustomView @JvmOverloads constructor(
 - [`View` API Reference](https://developer.android.com/reference/android/view/View)
 - [Custom `Views` Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] — основы UI-потока
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-recyclerview-sethasfixedsize--android--easy]] — оптимизация RecyclerView
 - [[q-viewmodel-pattern--android--easy]] — паттерн `ViewModel`
 

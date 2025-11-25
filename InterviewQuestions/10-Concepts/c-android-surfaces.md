@@ -1,21 +1,15 @@
 ---
 id: ivc-20251102-018
 title: Android Surfaces (Tiles, Shortcuts, QS) / Поверхности Android (Tiles, Shortcuts, QS)
-aliases:
-  - Android Surface Integrations
-  - Quick Settings Tiles
-  - App Shortcuts
+aliases: [Android Surface Integrations, App Shortcuts, Quick Settings Tiles]
 kind: concept
 summary: System surfaces outside the main app UI including Quick Settings tiles, App Shortcuts, Bubbles, and ambient surfaces
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - surfaces
-  - quick-settings
-  - shortcuts
+tags: [android, concept, quick-settings, shortcuts, surfaces]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

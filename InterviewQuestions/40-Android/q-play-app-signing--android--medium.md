@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-keystore, c-app-bundle, q-android-app-bundles--android--easy, q-android-security-best-practices--android--medium, q-android-release-pipeline-cicd--android--hard]
+related: [c-android-keystore, c-app-bundle, q-android-app-bundles--android--easy, q-android-release-pipeline-cicd--android--hard, q-android-security-best-practices--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/app-bundle, android/keystore-crypto, android/play-console, difficulty/medium, play-app-signing, security, signing]
 sources: ["https://developer.android.com/studio/publish/app-signing#app-signing-google-play", "https://support.google.com/googleplay/android-developer/answer/9842756"]
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -116,7 +118,7 @@ keytool -export -rfc -keystore existing.jks \
 - Используется для миграции на более сильный криптографический ключ
 - Требует обновления интеграций, зависящих от сертификата подписи (App Links, некоторые Google APIs/Firebase конфигурации) на новый сертификат
 
-### Интеграция с Сервисами
+### Интеграция С Сервисами
 
 **Google APIs / Firebase:**
 ```bash
@@ -293,7 +295,7 @@ keytool -list -v -keystore upload.jks -alias upload
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как сбросить upload key, если он был скомпрометирован?
 - Что произойдёт, если вы потеряете app signing key до подключения к Play App Signing?
@@ -323,12 +325,12 @@ keytool -list -v -keystore upload.jks -alias upload
 - [Play App Signing documentation](https://developer.android.com/studio/publish/app-signing#app-signing-google-play)
 - [Use Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-app-bundles--android--easy|Что такое Android App `Bundle`?]]
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-android-release-pipeline-cicd--android--hard|Пайплайн релизов Android и лучшие практики CI/CD]]
 - [[q-android-security-best-practices--android--medium|Лучшие практики безопасности Android]]
 - [[q-alternative-distribution--android--medium|Альтернативные способы дистрибуции приложений]]

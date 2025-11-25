@@ -10,12 +10,14 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, q-reduce-apk-size-techniques--android--medium, q-where-is-composition-created--android--medium, q-recyclerview-explained--android--medium]
+related: [c-android, q-recyclerview-explained--android--medium, q-reduce-apk-size-techniques--android--medium, q-where-is-composition-created--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, collections, difficulty/medium, memory-optimization, performance]
 
+date created: Saturday, November 1st 2025, 1:03:50 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -169,7 +171,7 @@ class StateManager {
 - Коллекция очень большая и критично среднее время доступа O(1).
 - Требуется потокобезопасный доступ (например, `ConcurrentHashMap`), или проще масштабировать через стандартные concurrent-структуры.
 
-### Миграция с `HashMap`
+### Миграция С `HashMap`
 
 ```kotlin
 // ❌ До: HashMap с boxing для ключей Int
@@ -346,7 +348,7 @@ val exists = cache2.indexOfKey(id) >= 0
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит, когда `SparseArray` исчерпывает ёмкость? Масштабируется ли она автоматически, как `ArrayList`?
 - Как `SparseArray` ведёт себя при конкурентных модификациях? Какие исключения могут возникать?
@@ -372,7 +374,7 @@ val exists = cache2.indexOfKey(id) >= 0
 - Android SDK Documentation: [SparseArray](https://developer.android.com/reference/android/util/SparseArray)
 - Android Performance Patterns: [Memory Churn and Performance](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-reduce-apk-size-techniques--android--medium]] — Подходы к оптимизации размера и косвенно памяти

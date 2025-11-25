@@ -1,31 +1,32 @@
 ---
 id: android-331
 title: StrictMode Debugging / Отладка StrictMode
-aliases:
-- StrictMode Debugging
-- Отладка StrictMode
+aliases: [StrictMode Debugging, Отладка StrictMode]
 topic: android
 subtopics:
-- performance-rendering
+  - performance-rendering
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance
-- q-migration-to-compose--android--medium
-- q-real-time-updates-android--android--medium
-- q-what-are-fragments-for-if-there-is-activity--android--medium
+  - c-performance
+  - q-compose-core-components--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-migration-to-compose--android--medium
+  - q-real-time-updates-android--android--medium
+  - q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/performance-rendering
-- difficulty/medium
+tags: [android/performance-rendering, difficulty/medium]
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md"
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +42,7 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 `StrictMode` чаще всего используется для обнаружения случайного доступа к диску или сети в основном потоке приложения, где выполняются UI-операции и анимации. Вынос дисковых и сетевых операций из основного потока делает приложения более плавными и отзывчивыми и снижает вероятность появления ANR.
 
-## Пример использования
+## Пример Использования
 
 Пример кода для включения `StrictMode` на ранней стадии в `Activity` или `Application` (в их методах `onCreate()`). В реальных проектах такие настройки обычно оборачивают в проверку `BuildConfig.DEBUG` и используют строгие политики только в debug-сборках:
 
@@ -91,7 +92,7 @@ class MyApp : Application() {
 
 Вы можете настроить, что должно происходить при обнаружении нарушения. Например, используя `StrictMode.ThreadPolicy.Builder().penaltyLog()`, можно отслеживать нарушения в выводе `adb logcat` во время работы приложения.
 
-## Типы наказаний
+## Типы Наказаний
 
 `StrictMode` использует «penalty» для сигнализации о нарушениях:
 
@@ -140,7 +141,7 @@ StrictMode.setThreadPolicy(
 
 Thread policy описывает правила для конкретного потока (обычно основного), фиксируя опасные операции:
 
-### Общие обнаружения
+### Общие Обнаружения
 
 - **detectDiskReads()** — Обнаруживает чтение с диска в потоке с этой политикой (обычно основной поток).
 - **detectDiskWrites()** — Обнаруживает запись на диск в этом потоке.
@@ -169,7 +170,7 @@ file.writeText("Hello World") // Запись на диск в основном 
 
 VM policy описывает проверки на уровне всего процесса приложения:
 
-### Общие обнаружения
+### Общие Обнаружения
 
 - **detectActivityLeaks()** — Обнаруживает утечки экземпляров `Activity`.
 - **detectLeakedClosableObjects()** — Обнаруживает незакрытые `Closeable`-объекты (потоки, курсоры и т.п.).
@@ -195,9 +196,9 @@ StrictMode.setVmPolicy(
 val cursor = database.query(...) // Не закрытый курсор может привести к утечке
 ```
 
-## Лучшие практики
+## Лучшие Практики
 
-### 1. Включайте только в debug-сборках
+### 1. Включайте Только В Debug-сборках
 
 ```kotlin
 if (BuildConfig.DEBUG) {
@@ -216,7 +217,7 @@ if (BuildConfig.DEBUG) {
 }
 ```
 
-### 2. Используйте penaltyLog() при разработке
+### 2. Используйте penaltyLog() При Разработке
 
 Используйте `penaltyLog()` во время разработки, чтобы фиксировать нарушения без немедленных падений приложения.
 
@@ -229,7 +230,7 @@ StrictMode.setThreadPolicy(
 )
 ```
 
-### 3. Используйте penaltyDeath() для критических проблем
+### 3. Используйте penaltyDeath() Для Критических Проблем
 
 Для нарушений, которые категорически недопустимы, можно использовать `penaltyDeath()`, чтобы немедленно их выявлять во время разработки.
 
@@ -242,7 +243,7 @@ StrictMode.setThreadPolicy(
 )
 ```
 
-### 4. Настройка под разные сценарии
+### 4. Настройка Под Разные Сценарии
 
 ```kotlin
 // Строгая политика для разработки
@@ -264,9 +265,9 @@ if (BuildConfig.DEBUG) {
 }
 ```
 
-## Распространённые нарушения и их исправления
+## Распространённые Нарушения И Их Исправления
 
-### 1. Сетевые вызовы в основном потоке
+### 1. Сетевые Вызовы В Основном Потоке
 
 **Проблема:**
 ```kotlin
@@ -284,7 +285,7 @@ suspend fun loadData() = withContext(Dispatchers.IO) {
 }
 ```
 
-### 2. Дисковый I/O в основном потоке
+### 2. Дисковый I/O В Основном Потоке
 
 **Проблема:**
 ```kotlin
@@ -302,7 +303,7 @@ suspend fun loadConfig(): String = withContext(Dispatchers.IO) {
 }
 ```
 
-### 3. Утечки закрываемых объектов
+### 3. Утечки Закрываемых Объектов
 
 **Проблема:**
 ```kotlin

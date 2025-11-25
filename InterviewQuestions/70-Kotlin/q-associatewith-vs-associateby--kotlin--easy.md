@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-inline-function-limitations--kotlin--medium]
+related: [c-collections, c-kotlin, q-inline-function-limitations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, kotlin, map, transformation]
 
+date created: Saturday, November 1st 2025, 1:26:23 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [collections, difficulty/easy, kotlin, map, transformation]
 
 Обе функции работают с коллекциями/итерируемыми типами Kotlin (например, `Iterable<T>`, `Array<T>`, `List<T>`); ниже для простоты используется `List<T>`.
 
-### associateBy - элемент становится значением
+### associateBy - Элемент Становится Значением
 
 ```kotlin
 data class User(val id: Int, val name: String)
@@ -53,7 +55,7 @@ println(usersById[2])  // User(id=2, name=Bob)
 
 Формула (упрощенно): `Iterable<T>.associateBy { key } → Map<Key, T>`
 
-### associateWith - элемент становится ключом
+### associateWith - Элемент Становится Ключом
 
 ```kotlin
 val users = listOf("Alice", "Bob", "Charlie")
@@ -87,7 +89,7 @@ println(numberToSquare)
 // Ключ: число, Значение: квадрат
 ```
 
-### associateBy с двумя параметрами
+### associateBy С Двумя Параметрами
 
 Можно задать отдельно и ключ, и значение:
 
@@ -112,9 +114,9 @@ println(productNames)
 println(productNames[1])  // "Laptop"
 ```
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: Кэш объектов по ID
+#### Пример 1: Кэш Объектов По ID
 
 ```kotlin
 data class Article(val id: Int, val title: String, val content: String)
@@ -135,7 +137,7 @@ class ArticleRepository {
 }
 ```
 
-#### Пример 2: Индексация строк
+#### Пример 2: Индексация Строк
 
 ```kotlin
 val words = listOf("apple", "banana", "cherry", "apricot", "blueberry")
@@ -152,7 +154,7 @@ println(groupedByFirstLetter)
 // {a=[apple, apricot], b=[banana, blueberry], c=[cherry]}
 ```
 
-#### Пример 3: Настройки с значениями по умолчанию
+#### Пример 3: Настройки С Значениями По Умолчанию
 
 ```kotlin
 enum class Setting { THEME, LANGUAGE, FONT_SIZE }
@@ -175,7 +177,7 @@ fun getSetting(key: Setting): String {
 }
 ```
 
-#### Пример 4: Кэширование вычислений
+#### Пример 4: Кэширование Вычислений
 
 ```kotlin
 fun fibonacci(n: Int): Long {
@@ -193,7 +195,7 @@ println(fibCache)
 fun getFib(n: Int): Long = fibCache[n] ?: fibonacci(n)
 ```
 
-### Коллизии ключей
+### Коллизии Ключей
 
 ```kotlin
 data class Person(val name: String, val age: Int)
@@ -216,7 +218,7 @@ println(groupedByName)
 // {Alice=[Person(name=Alice, age=25), Person(name=Alice, age=28)], Bob=[Person(name=Bob, age=30)]}
 ```
 
-### associate - максимальная гибкость
+### Associate - Максимальная Гибкость
 
 Создает и ключ, и значение через `Pair`:
 
@@ -236,7 +238,7 @@ println(numberMap)
 - `associateBy { key }` ≈ `associate { element -> key(element) to element }`
 - `associateWith { value }` ≈ `associate { element -> element to value(element) }`
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Function | Key | Value | Formula | Use Case |
 |---------|------|----------|---------|----------|
@@ -273,7 +275,7 @@ val user = usersById[userId]
 val userSlow = users.find { it.id == userId }
 ```
 
-2. Используйте `associateWith` для конфигураций и значений по умолчанию:
+1. Используйте `associateWith` для конфигураций и значений по умолчанию:
 
 ```kotlin
 val permissions = listOf("READ", "WRITE", "DELETE")
@@ -282,7 +284,7 @@ val permissions = listOf("READ", "WRITE", "DELETE")
 // {READ=false, WRITE=false, DELETE=false}
 ```
 
-3. Учитывайте коллизии ключей:
+1. Учитывайте коллизии ключей:
 
 ```kotlin
 // Если возможны дубликаты — используйте groupBy
@@ -485,7 +487,7 @@ println(groupedByName)
 // {Alice=[Person(name=Alice, age=25), Person(name=Alice, age=28)], Bob=[Person(name=Bob, age=30)]}
 ```
 
-### associate - Maximum Flexibility
+### Associate - Maximum Flexibility
 
 Creates both key and value via `Pair`:
 
@@ -542,7 +544,7 @@ val user = usersById[userId]
 val userSlow = users.find { it.id == userId }
 ```
 
-2. Use `associateWith` for creating configurations
+1. Use `associateWith` for creating configurations
 
 ```kotlin
 val permissions = listOf("READ", "WRITE", "DELETE")
@@ -551,7 +553,7 @@ val permissions = listOf("READ", "WRITE", "DELETE")
 // {READ=false, WRITE=false, DELETE=false}
 ```
 
-3. Account for key collisions
+1. Account for key collisions
 
 ```kotlin
 // If duplicates are possible - use groupBy

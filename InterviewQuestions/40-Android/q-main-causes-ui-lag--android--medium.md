@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-10-28
 tags: [android/performance-memory, android/performance-rendering, android/threads-sync, difficulty/medium, performance, threading, ui]
 
+date created: Saturday, November 1st 2025, 12:46:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -322,7 +324,7 @@ AnimatedVisibility(visible = isVisible) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как измерять производительность UI? (Systrace/Perfetto, Profile GPU Rendering, Layout Inspector, StrictMode)
 - Что такое бюджет кадра 16 мс для 60fps?
@@ -352,12 +354,12 @@ AnimatedVisibility(visible = isVisible) {
 - [ConstraintLayout Guide](https://developer.android.com/develop/ui/views/layout/constraint-layout)
 - [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-graphql-vs-rest--networking--easy]] - Основы сетевого взаимодействия
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-reduce-apk-size-techniques--android--medium]] - Оптимизация производительности
 - [[q-mvvm-pattern--android--medium]] - Архитектурные паттерны
 - [[q-build-optimization-gradle--android--medium]] - Производительность сборки

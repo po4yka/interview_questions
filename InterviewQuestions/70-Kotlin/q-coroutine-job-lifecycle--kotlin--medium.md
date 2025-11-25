@@ -13,8 +13,10 @@ updated: "2025-11-09"
 tags: ["cancellation", "coroutines", "difficulty/medium", "job", "kotlin", "lifecycle"]
 description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines]
+related: [c-coroutines, c-kotlin]
 subtopics: [coroutines, lifecycle]
+date created: Saturday, November 1st 2025, 1:28:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -151,7 +153,7 @@ fun Job.getDetailedState(): String {
 }
 ```
 
-#### Создание и Управление Job
+#### Создание И Управление Job
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -331,7 +333,7 @@ fun cancellationPropagation() = runBlocking {
 }
 ```
 
-#### Завершение Job и Ожидание
+#### Завершение Job И Ожидание
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -392,7 +394,7 @@ fun jobCompletionExamples() = runBlocking {
 }
 ```
 
-#### Иерархия Job и Инспекция
+#### Иерархия Job И Инспекция
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -425,7 +427,7 @@ fun jobHierarchyInspection() = runBlocking {
 }
 ```
 
-#### Практические Паттерны Работы с Job
+#### Практические Паттерны Работы С Job
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -493,7 +495,7 @@ fun demonstrateJobPatterns() = runBlocking {
 }
 ```
 
-#### Исключения и Обработка Ошибок в Job
+#### Исключения И Обработка Ошибок В Job
 
 ```kotlin
 import kotlinx.coroutines.*

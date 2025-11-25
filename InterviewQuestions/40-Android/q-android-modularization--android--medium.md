@@ -20,11 +20,15 @@ related:
   - c-dependency-injection
   - c-gradle
   - q-android-build-optimization--android--medium
+  - q-annotation-processing-android--android--medium
   - q-gradle-build-system--android--medium
+  - q-module-types-android--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:42 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

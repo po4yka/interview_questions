@@ -1,32 +1,32 @@
 ---
 id: android-167
 title: GraphQL with Apollo Android / GraphQL с Apollo Android
-aliases:
-- GraphQL with Apollo Android
-- GraphQL с Apollo Android
+aliases: [GraphQL with Apollo Android, GraphQL с Apollo Android]
 topic: android
 subtopics:
-- graphql
+  - graphql
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-retrofit
-- q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
-- q-play-app-signing--android--medium
-- q-sharedpreferences-definition--android--easy
+  - c-retrofit
+  - q-android-lint-tool--android--medium
+  - q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
+  - q-main-thread-android--android--medium
+  - q-parsing-optimization-android--android--medium
+  - q-play-app-signing--android--medium
+  - q-sharedpreferences-definition--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/graphql
-- difficulty/medium
-- graphql
+tags: [android/graphql, difficulty/medium, graphql]
 
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +46,7 @@ Apollo Android — это строго типизированный GraphQL-кл
 
 Ниже — краткий, технически корректный обзор для интервью.
 
-### Базовые концепции GraphQL
+### Базовые Концепции GraphQL
 
 Ключевые отличия от REST:
 - Как правило, один HTTP-эндпоинт для всех операций
@@ -93,7 +93,7 @@ subscription OnPostCreated {
 }
 ```
 
-### Базовая настройка Apollo Android
+### Базовая Настройка Apollo Android
 
 Gradle-конфигурация (Apollo 3.x, версии примерные):
 
@@ -127,7 +127,7 @@ apollo {
 }
 ```
 
-### Настройка клиента Apollo (HTTP + кеш + авторизация)
+### Настройка Клиента Apollo (HTTP + Кеш + авторизация)
 
 ```kotlin
 import android.content.Context
@@ -198,7 +198,7 @@ class ApolloClientProvider(
 - Используйте OkHttp через `OkHttpEngine` (или актуальный движок из документации Apollo для используемой версии).
 - Зависимость `apollo-websocket-network-transport` используется для реализации подписок через WebSocket.
 
-### Пример запроса
+### Пример Запроса
 
 ```graphql
 # src/main/graphql/GetUser.graphql
@@ -238,7 +238,7 @@ class UserRepository(private val apolloClient: ApolloClient) {
 }
 ```
 
-### Мутации и оптимистичные обновления
+### Мутации И Оптимистичные Обновления
 
 ```graphql
 # src/main/graphql/LikePost.graphql
@@ -308,7 +308,7 @@ fun subscribeToNewPosts(client: ApolloClient): Flow<OnPostCreatedSubscription.Po
 }
 ```
 
-### Нормализованный кеш и политики выборки
+### Нормализованный Кеш И Политики Выборки
 
 Apollo нормализует объекты по ключам (например, `User:123`) и переиспользует их во всех связанных запросах. Обновление одной сущности автоматически отражается во всех запросах, которые на неё ссылаются.
 
@@ -327,7 +327,7 @@ suspend fun getUserCacheFirst(client: ApolloClient, userId: String): GetUserQuer
 }
 ```
 
-### Обработка ошибок (паттерн)
+### Обработка Ошибок (паттерн)
 
 ```kotlin
 import com.apollographql.apollo3.api.ApolloResponse
@@ -372,7 +372,7 @@ suspend fun <T> executeApollo(
 }
 ```
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 - Использовать фрагменты для переиспользуемых наборов полей.
 - Использовать нормализованный кеш; обеспечить стабильные ID.
@@ -731,7 +731,7 @@ suspend fun <T> executeApollo(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]]
 - [[q-play-app-signing--android--medium]]
@@ -751,7 +751,7 @@ suspend fun <T> executeApollo(
 
 - [Connecting to the Network](https://developer.android.com/training/basics/network-ops/connecting)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

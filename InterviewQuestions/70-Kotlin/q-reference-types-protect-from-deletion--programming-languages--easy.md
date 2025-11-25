@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-garbage-collection, q-detect-unused-object--programming-languages--easy]
+related: [c-garbage-collection, c-kotlin, q-detect-unused-object--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, phantom-reference, programming-languages, references, soft-reference, strong-reference, weak-reference]
+date created: Friday, October 31st 2025, 6:29:43 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Все ли виды ссылок защищают объект от удаления (сборки мусора)?
 
@@ -35,7 +38,7 @@ val user = User("John")  // Сильная ссылка
 // он НЕ будет собран сборщиком мусора.
 ```
 
-2. Weak reference — не защищает объект.
+1. Weak reference — не защищает объект.
 
 ```kotlin
 import java.lang.ref.WeakReference
@@ -47,7 +50,7 @@ val weakRef = WeakReference(user)
 // объект МОЖЕТ быть собран, даже если weakRef все еще существует.
 ```
 
-3. Soft reference — не дает жесткой гарантии сохранения объекта (эвристика GC).
+1. Soft reference — не дает жесткой гарантии сохранения объекта (эвристика GC).
 
 ```kotlin
 import java.lang.ref.SoftReference
@@ -59,7 +62,7 @@ val softRef = SoftReference(Data())
 // Это НЕ жесткая гарантия и зависит от реализации JVM и настроек сборщика мусора.
 ```
 
-4. Phantom reference — не защищает объект.
+1. Phantom reference — не защищает объект.
 
 ```kotlin
 import java.lang.ref.PhantomReference
@@ -170,7 +173,7 @@ val user = User("John")  // Strong reference
 // the object will NOT be garbage collected.
 ```
 
-2. Weak Reference — does NOT protect
+1. Weak Reference — does NOT protect
 
 ```kotlin
 import java.lang.ref.WeakReference
@@ -182,7 +185,7 @@ val weakRef = WeakReference(user)
 // the object CAN be garbage collected even though weakRef exists.
 ```
 
-3. Soft Reference — does NOT strictly protect (hinted retention)
+1. Soft Reference — does NOT strictly protect (hinted retention)
 
 ```kotlin
 import java.lang.ref.SoftReference
@@ -194,7 +197,7 @@ val softRef = SoftReference(Data())
 // dependent on the specific JVM and GC configuration.
 ```
 
-4. Phantom Reference — does NOT protect
+1. Phantom Reference — does NOT protect
 
 ```kotlin
 import java.lang.ref.PhantomReference
@@ -284,7 +287,7 @@ Summary:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как эти типы ссылок ведут себя на JVM, и как Kotlin использует те же механизмы, что и Java? 
 - Когда на практике стоит использовать weak/soft/phantom ссылки?
@@ -307,7 +310,7 @@ Summary:
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - Java SE documentation: java.lang.ref package (for reference semantics)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-detect-unused-object--programming-languages--easy]]
 

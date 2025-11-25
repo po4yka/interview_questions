@@ -14,7 +14,10 @@ related: [c-kotlin, q-coroutine-cancellation-cooperation--kotlin--medium, q-flow
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/hard]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое контракты Kotlin? Как они обеспечивают умные приведения типов (smart casts)? Реализуйте пользовательский контракт для функции валидации.
 
@@ -27,7 +30,7 @@ tags: [difficulty/hard]
 
 ---
 
-### Что такое умные приведения типов?
+### Что Такое Умные Приведения Типов?
 
 Умные приведения позволяют компилятору автоматически использовать более конкретный тип, когда он может формально вывести безопасность такого приведения:
 
@@ -49,7 +52,7 @@ fun printUser(user: User?) {
 
 ---
 
-### Проблема без контрактов
+### Проблема Без Контрактов
 
 Пользовательские функции валидации по умолчанию не обеспечивают умные приведения — компилятор не знает, какие гарантии они дают:
 
@@ -68,7 +71,7 @@ fun example(name: String?) {
 
 ---
 
-### Решение: контракты
+### Решение: Контракты
 
 Контракты сообщают компилятору о гарантиях функции через блок `contract { ... }`:
 
@@ -93,7 +96,7 @@ fun example(name: String?) {
 
 ---
 
-### Типы контрактов
+### Типы Контрактов
 
 1. `returns(value) implies (condition)` — гарантирует, что `condition == true`, если функция вернула указанное значение.
 
@@ -114,7 +117,7 @@ fun process(user: User?) {
 }
 ```
 
-2. `returns() implies (condition)` — гарантирует условие при нормальном возврате (без исключений).
+1. `returns() implies (condition)` — гарантирует условие при нормальном возврате (без исключений).
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -134,7 +137,7 @@ fun example(name: String?) {
 }
 ```
 
-3. `returnsNotNull()` — гарантирует, что возвращаемое значение самой функции не равно `null`.
+1. `returnsNotNull()` — гарантирует, что возвращаемое значение самой функции не равно `null`.
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -154,7 +157,7 @@ fun example(text: String?) {
 }
 ```
 
-4. `callsInPlace(lambda, InvocationKind)` — описывает количество вызовов лямбды-аргумента.
+1. `callsInPlace(lambda, InvocationKind)` — описывает количество вызовов лямбды-аргумента.
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -196,7 +199,7 @@ callsInPlace(block, InvocationKind.UNKNOWN)
 
 ---
 
-### Контракты в стандартной библиотеке
+### Контракты В Стандартной Библиотеке
 
 (упрощённые схемы; реальные реализации и сигнатуры в stdlib используют контракты похожим образом, но могут отличаться по деталям.)
 
@@ -262,7 +265,7 @@ fun example() {
 
 ---
 
-### Пользовательские контракты для валидации
+### Пользовательские Контракты Для Валидации
 
 **Валидация email:**
 
@@ -323,7 +326,7 @@ fun processItems(items: List<String>?) {
 
 ---
 
-### Продвинутый пример: несколько импликаций
+### Продвинутый Пример: Несколько Импликаций
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -339,7 +342,7 @@ fun isValidUser(user: User?, requireActive: Boolean): Boolean {
 
 ---
 
-### Реальный пример: валидация формы
+### Реальный Пример: Валидация Формы
 
 ```kotlin
 data class RegistrationForm(
@@ -398,7 +401,7 @@ fun register(form: RegistrationForm) {
 
 ---
 
-### Контракт с `callsInPlace`
+### Контракт С `callsInPlace`
 
 **Безопасная работа с ресурсами:**
 
@@ -465,7 +468,7 @@ fun isNotNull(value: Any?): Boolean {
 }
 ```
 
-2. Контракты не должны описывать поведение, которое функция не гарантирует. Они могут ссылаться на параметры / свойства, но не на произвольную недетерминированную логику.
+1. Контракты не должны описывать поведение, которое функция не гарантирует. Они могут ссылаться на параметры / свойства, но не на произвольную недетерминированную логику.
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -477,7 +480,7 @@ fun isValid(value: Int?, threshold: Int): Boolean {
 }
 ```
 
-3. Контракты не проверяются компилятором на корректность — ответственность на разработчике. Неправдивые ("лживые") контракты опасны и могут приводить к NPE и некорректному поведению.
+1. Контракты не проверяются компилятором на корректность — ответственность на разработчике. Неправдивые ("лживые") контракты опасны и могут приводить к NPE и некорректному поведению.
 
 ```kotlin
 // ПЛОХОЙ ПРИМЕР: контракт "лжёт"
@@ -499,7 +502,7 @@ fun example(name: String?) {
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте контракты только там, где это даёт реальную пользу (умные приведения, анализ инициализации, читабельность управления потоком).
 
@@ -519,7 +522,7 @@ fun add(a: Int, b: Int): Int {
 }
 ```
 
-2. Контракты должны быть правдивыми; "лживые" контракты ломают анализ и могут привести к ошибкам во время выполнения.
+1. Контракты должны быть правдивыми; "лживые" контракты ломают анализ и могут привести к ошибкам во время выполнения.
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -539,7 +542,7 @@ fun isPositiveBad(value: Int?): Boolean {
 }
 ```
 
-3. Хорошие сценарии использования — функции валидации и вспомогательные функции управления потоком исполнения.
+1. Хорошие сценарии использования — функции валидации и вспомогательные функции управления потоком исполнения.
 
 ```kotlin
 // Примеры хороших сценариев:
@@ -970,7 +973,7 @@ fun isNotNull(value: Any?): Boolean {
 }
 ```
 
-2. Contracts must not describe behavior the function does not actually guarantee. They should be based on parameters / properties, not arbitrary nondeterministic logic.
+1. Contracts must not describe behavior the function does not actually guarantee. They should be based on parameters / properties, not arbitrary nondeterministic logic.
 
 ```kotlin
 @OptIn(ExperimentalContracts::class)
@@ -982,7 +985,7 @@ fun isValid(value: Int?, threshold: Int): Boolean {
 }
 ```
 
-3. Contracts are not verified by the compiler; correctness is the developer's responsibility. Lying contracts are dangerous and can break type/flow analysis and lead to runtime issues such as NPE.
+1. Contracts are not verified by the compiler; correctness is the developer's responsibility. Lying contracts are dangerous and can break type/flow analysis and lead to runtime issues such as NPE.
 
 ```kotlin
 // BAD EXAMPLE: lying contract
@@ -1051,7 +1054,7 @@ fun isPositiveBad(value: Int?): Boolean {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия контрактов Kotlin от подходов в Java (assertions, аннотации и т.п.)?
 - В каких практических сценариях вы бы стали использовать контракты в продакшене?

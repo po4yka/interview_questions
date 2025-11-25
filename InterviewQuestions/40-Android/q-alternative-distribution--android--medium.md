@@ -4,26 +4,31 @@ title: Alternative Distribution / Альтернативное распрост�
 aliases: [Alternative Distribution, Альтернативное распространение]
 topic: android
 subtopics:
-- app-bundle
-- billing
-- play-console
+  - app-bundle
+  - billing
+  - play-console
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-app-bundle
-- q-android-app-bundles--android--easy
-- q-app-store-optimization--android--medium
+  - c-app-bundle
+  - q-android-app-bundles--android--easy
+  - q-app-store-optimization--android--medium
+  - q-internal-app-distribution--android--medium
+  - q-play-app-signing--android--medium
+  - q-play-store-publishing--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/app-bundle, android/billing, android/play-console, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:42 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -232,7 +237,7 @@ object StoreFactory {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как абстрагировать разные системы In-App Purchases, чтобы избежать привязки к конкретному вендору?
 - Какие меры безопасности нужны при прямом распространении APK?
@@ -272,7 +277,7 @@ object StoreFactory {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-android-app-bundles--android--easy|App Bundles]]

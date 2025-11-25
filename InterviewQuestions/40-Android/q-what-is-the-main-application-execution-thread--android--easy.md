@@ -2,34 +2,31 @@
 id: android-207
 title: What Is The Main Application Execution Thread / Что такое главный поток выполнения
   приложения
-aliases:
-- Main Thread
-- UI Thread
-- Главный поток
-- Поток UI
+aliases: [Main Thread, UI Thread, Главный поток, Поток UI]
 topic: android
 subtopics:
-- lifecycle
-- performance-rendering
-- threads-sync
+  - lifecycle
+  - performance-rendering
+  - threads-sync
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources: []
 status: draft
 moc: moc-android
 related:
-- c-android-components
+  - c-android-components
+  - q-handler-looper-main-thread--android--medium
+  - q-how-does-the-main-thread-work--android--medium
+  - q-main-thread-android--android--medium
 created: 2024-10-15
 updated: 2025-11-10
-tags:
-- android/lifecycle
-- android/performance-rendering
-- android/threads-sync
-- difficulty/easy
+tags: [android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/easy]
+date created: Saturday, November 1st 2025, 1:26:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -180,7 +177,7 @@ fun isMainThread(): Boolean =
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если заблокировать Main Thread более чем на 5 секунд (например, ANR)?
 - Как `Looper.loop()` поддерживает отзывчивость Main Thread, оставаясь блокирующим вызовом?
@@ -208,7 +205,7 @@ fun isMainThread(): Boolean =
 - [Looper and Handler](https://developer.android.com/reference/android/os/Looper)
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -217,7 +214,7 @@ fun isMainThread(): Boolean =
 ### Предпосылки (проще)
 - [[q-main-android-components--android--easy]] — Базовые компоненты Android
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-what-unifies-android-components--android--easy]] — Основы компонентов
 
 ### Продвинутые (сложнее)

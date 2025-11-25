@@ -1,30 +1,31 @@
 ---
 id: android-188
 title: How To Change The Number Of Columns In RecyclerView Depending On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации
-aliases:
-- How To Change The Number Of Columns In RecyclerView Depending On Orientation
-- Как изменить количество колонок в RecyclerView в зависимости от ориентации
+aliases: [How To Change The Number Of Columns In RecyclerView Depending On Orientation, Как изменить количество колонок в RecyclerView в зависимости от ориентации]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-broadcastreceiver-contentprovider--android--easy
-- q-compose-ui-testing-advanced--android--hard
+  - c-android
+  - q-broadcastreceiver-contentprovider--android--easy
+  - q-compose-ui-testing-advanced--android--hard
+  - q-how-animations-work-in-recyclerview--android--medium
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-recyclerview-itemdecoration-advanced--android--medium
 created: 2024-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/easy
+tags: [android/ui-views, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +38,7 @@ tags:
 
 Вы можете использовать `GridLayoutManager` и динамически задавать количество колонок в зависимости от ориентации экрана.
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -116,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Динамический span в зависимости от ширины экрана (опционально)
+### Динамический Span В Зависимости От Ширины Экрана (опционально)
 
 ```kotlin
 class AdaptiveGridLayoutManager(
@@ -156,7 +157,7 @@ val columnWidthPx = (columnWidthDp * resources.displayMetrics.density).toInt()
 recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-broadcastreceiver-contentprovider--android--easy]]
 - [[q-compose-ui-testing-advanced--android--hard]]
@@ -170,7 +171,7 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 - https://developer.android.com/docs
 - [[c-android]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции (RU)
 

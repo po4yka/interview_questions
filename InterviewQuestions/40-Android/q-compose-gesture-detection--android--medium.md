@@ -15,12 +15,17 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - c-jetpack-compose
   - c-compose-state
+  - c-jetpack-compose
+  - q-compose-semantics--android--medium
+  - q-mutable-state-compose--android--medium
+  - q-recomposition-compose--android--medium
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gestures]
+date created: Saturday, November 1st 2025, 1:24:40 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -231,7 +236,7 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 - Account for touch slop — the system ignores very small movements (around 8dp) to prevent accidental triggers
 - Call `change.consume()` (or appropriate consume method) in `detectDragGestures` when you want to mark the event as handled by that gesture
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как предотвратить конфликты жестов при комбинировании обработки нажатий и перетаскиваний в одном composable?
 - Какова роль `change.consume()` в кастомной обработке жестов?
@@ -259,7 +264,7 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 - https://developer.android.com/develop/ui/compose/touch-input/pointer-input
 - https://developer.android.com/develop/ui/compose/touch-input/gestures
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 

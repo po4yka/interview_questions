@@ -1,39 +1,35 @@
 ---
 id: android-298
 title: Compose Modifiers / Модификаторы в Compose
-aliases:
-- Compose Modifiers
-- Jetpack Compose Modifiers
-- Модификаторы в Compose
+aliases: [Compose Modifiers, Jetpack Compose Modifiers, Модификаторы в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources: []
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-jetpack-compose
-- c-viewmodel
-- q-api-file-upload-server--android--medium
-- q-reduce-app-size--android--medium
-- q-where-is-composition-created-for-calling-composable-function--android--medium
+  - c-compose-state
+  - c-jetpack-compose
+  - c-viewmodel
+  - q-api-file-upload-server--android--medium
+  - q-compose-core-components--android--medium
+  - q-compose-custom-animations--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-reduce-app-size--android--medium
+  - q-where-is-composition-created-for-calling-composable-function--android--medium
 created: 2025-10-15
 updated: 2025-10-28
-tags:
-- android/ui-compose
-- android/ui-state
-- compose
-- difficulty/medium
-- jetpack-compose
-- modifiers
+tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, jetpack-compose, modifiers]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)

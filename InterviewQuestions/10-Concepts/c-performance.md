@@ -1,16 +1,15 @@
 ---
 id: concept-performance
 title: Performance Optimization / Оптимизация производительности
-aliases:
-  - Performance Optimization
-  - Оптимизация производительности
-  - Android Performance
+aliases: [Android Performance, Performance Optimization, Оптимизация производительности]
 kind: concept
 summary: Principles and techniques for optimizing Android app performance across various dimensions
 links: []
 created: 2025-11-06
 updated: 2025-11-06
-tags: [concept, android, performance, optimization]
+tags: [android, concept, optimization, performance]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

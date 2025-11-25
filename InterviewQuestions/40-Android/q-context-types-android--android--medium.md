@@ -1,38 +1,37 @@
 ---
 id: android-482
 title: Context Types in Android / 2b3f4b Context 32 Android
-aliases:
-- Context Types in Android
-- 22383f4b Context 32 Android
+aliases: [22383f4b Context 32 Android, Context Types in Android]
 topic: android
 subtopics:
-- activity
-- app-startup
-- lifecycle
+  - activity
+  - app-startup
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity
-- c-activity-lifecycle
-- q-activity-lifecycle-methods--android--medium
-- q-memory-leaks-definition--android--easy
-- q-usecase-pattern-android--android--medium
+  - c-activity
+  - c-activity-lifecycle
+  - q-activity-lifecycle-methods--android--medium
+  - q-android-service-types--android--easy
+  - q-android-storage-types--android--medium
+  - q-app-start-types-android--android--medium
+  - q-memory-leaks-definition--android--easy
+  - q-usecase-pattern-android--android--medium
 created: 2025-10-21
 updated: 2025-11-10
-tags:
-- android/activity
-- android/app-startup
-- android/lifecycle
-- difficulty/medium
+tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
 sources:
-- "https://developer.android.com/reference/android/content/Context"
+  - "https://developer.android.com/reference/android/content/Context"
 
+date created: Saturday, November 1st 2025, 12:46:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -201,7 +200,7 @@ AlertDialog.Builder(this@MyActivity)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между `ContextWrapper` и `ContextThemeWrapper`?
 - Что произойдет, если попытаться заинфлейтить тематизированный layout, используя `Application` `Context`?
@@ -231,7 +230,7 @@ AlertDialog.Builder(this@MyActivity)
 - [[q-usecase-pattern-android--android--medium]]
 - https://developer.android.com/reference/android/content/Context
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Пререквизиты / Концепции
 
@@ -247,7 +246,7 @@ AlertDialog.Builder(this@MyActivity)
 - Жизненный цикл `Service` и использование `Context`
 - Особенности `Context` у `Fragment`
 
-### Продвинутые темы
+### Продвинутые Темы
 - Использование WeakReference и lifecycle-aware подходов при работе с `Context`
 - Тестирование кода, зависящего от `Context`
 - Использование `Context` в многомодульной архитектуре

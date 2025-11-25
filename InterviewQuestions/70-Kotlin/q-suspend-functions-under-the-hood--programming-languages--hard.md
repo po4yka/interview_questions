@@ -3,18 +3,20 @@ id: lang-089
 title: "Suspend Functions Under The Hood / Suspend функции в подробностях"
 aliases: [Suspend Functions Under The Hood, Suspend функции в подробностях]
 topic: kotlin
-subtopics: [coroutines, compiler, implementation]
+subtopics: [compiler, coroutines, implementation]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-synchronized-blocks-with-coroutines--programming-languages--medium]
+related: [c-coroutines, c-kotlin, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-synchronized-blocks-with-coroutines--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [compiler, coroutines, difficulty/hard, kotlin]
 
+date created: Friday, October 31st 2025, 6:31:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -920,7 +922,7 @@ suspend fun example() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого механизма от подхода в Java без корутин?
 - Когда на практике стоит учитывать детали работы suspend-функций под капотом?
@@ -944,7 +946,7 @@ suspend fun example() {
 - [[c-kotlin]]
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-suspend-function-return-type-after-compilation--programming-languages--hard]]
 - [[q-synchronized-blocks-with-coroutines--programming-languages--medium]]

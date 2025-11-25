@@ -13,7 +13,9 @@ moc: moc-kotlin
 related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [collections, contracts, difficulty/medium, equality, object-methods, kotlin]
+tags: [collections, contracts, difficulty/medium, equality, kotlin, object-methods]
+date created: Friday, October 31st 2025, 6:29:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -62,7 +64,7 @@ Methods `equals()` and `hashCode()` define how objects are compared and are crit
 
 **Practical rule**: when you override `equals()`, you should almost always override `hashCode()` as well, and both must be based on the same set of significant fields.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого контракта от Java?
 - Когда это используется на практике?
@@ -82,7 +84,7 @@ Methods `equals()` and `hashCode()` define how objects are compared and are crit
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 -
 -

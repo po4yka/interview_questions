@@ -1,34 +1,31 @@
 ---
 id: android-087
 title: Test Coverage Quality Metrics / Метрики покрытия и качества тестов
-aliases:
-- Test Coverage Quality Metrics
-- Метрики покрытия и качества тестов
+aliases: [Test Coverage Quality Metrics, Метрики покрытия и качества тестов]
 topic: android
 subtopics:
-- testing-instrumented
-- testing-unit
+  - testing-instrumented
+  - testing-unit
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-testing
-- q-what-is-diffutil-for--android--medium
+  - c-testing
+  - q-dagger-build-time-optimization--android--medium
+  - q-jank-detection-frame-metrics--android--medium
+  - q-test-doubles-dependency-injection--android--medium
+  - q-what-is-diffutil-for--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/testing-instrumented
-- android/testing-unit
-- coverage
-- difficulty/medium
-- jacoco
-- metrics
+tags: [android/testing-instrumented, android/testing-unit, coverage, difficulty/medium, jacoco, metrics]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -147,7 +144,7 @@ tasks.register('jacocoVerification', JacocoCoverageVerification) {
 
 Примечание: используйте это как шаблон; точная интеграция (task names, директории, поддержка `testCoverageEnabled`) зависит от версии AGP и используемого Gradle-плагина JaCoCo.
 
-### Понимание метрик покрытия (с примером)
+### Понимание Метрик Покрытия (с примером)
 
 - Line Coverage: доля выполненных строк кода.
 - Branch Coverage: доля выполненных ветвей (if/else, switch и т.п.).
@@ -195,7 +192,7 @@ class CalculatorTest {
 }
 ```
 
-### Анализ отчётов покрытия
+### Анализ Отчётов Покрытия
 
 ```bash
 # Генерация отчёта
@@ -215,7 +212,7 @@ Package: com.example.data
    deleteUser() - 0%   (не тестируется)
 ```
 
-### Поиск «дыр» в покрытии (пример)
+### Поиск «дыр» В Покрытии (пример)
 
 ```kotlin
 // Оригинальный код
@@ -258,7 +255,7 @@ fun refresh_reloadsUser() = runTest {
 }
 ```
 
-### Покрытие по слоям (пример целей)
+### Покрытие По Слоям (пример целей)
 
 ```kotlin
 val coverageTargets = mapOf(
@@ -274,7 +271,7 @@ val coverageTargets = mapOf(
 
 Значения выше — ориентиры, а не жёсткий стандарт; выбирайте под контекст проекта.
 
-### Баланс качества и процента покрытия
+### Баланс Качества И Процента Покрытия
 
 Высокое покрытие само по себе не гарантирует хорошие тесты.
 
@@ -296,7 +293,7 @@ fun goodTest() {
 }
 ```
 
-### Mutation testing (для оценки качества тестов)
+### Mutation Testing (для Оценки Качества тестов)
 
 Пример для JVM-модулей (для Android app-модулей потребуется дополнительная настройка; конфигурация может меняться с версиями плагина):
 
@@ -314,7 +311,7 @@ pitest {
 }
 ```
 
-### Исключения из покрытия
+### Исключения Из Покрытия
 
 ```kotlin
 // Пример: исключаем сгенерированный код (аннотация условна; используйте реальную @Generated из нужного пакета)
@@ -343,7 +340,7 @@ jacocoTestReport {
 }
 ```
 
-### Интеграция с CI/CD
+### Интеграция С CI/CD
 
 ```yaml
 # GitHub Actions (пример)
@@ -383,7 +380,7 @@ jobs:
           min-coverage-changed-files: 80
 ```
 
-### Пример дашборда покрытия
+### Пример Дашборда Покрытия
 
 ```kotlin
 // Концептуальный пример кастомного репортера покрытия (псевдокод для иллюстрации идей)

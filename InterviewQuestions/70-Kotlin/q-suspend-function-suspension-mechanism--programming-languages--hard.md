@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-list-vs-sequence--programming-languages--medium]
+related: [c-coroutines, c-kotlin, q-list-vs-sequence--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/hard, kotlin, programming-languages, suspension]
+date created: Friday, October 31st 2025, 6:31:50 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Как работает механизм приостановки в suspend-функциях?
 
@@ -50,7 +53,7 @@ interface Continuation<in T> {
 // (Фактически компилятор генерирует state machine-класс, который использует этот continuation.)
 ```
 
-### Пример state machine (иллюстративный)
+### Пример State Machine (иллюстративный)
 
 ```kotlin
 // Исходный код:
@@ -108,7 +111,7 @@ class ExampleStateMachine(
 }
 ```
 
-### Как работает приостановка
+### Как Работает Приостановка
 
 ```kotlin
 // Пошаговое выполнение
@@ -134,7 +137,7 @@ suspend fun fetchData(): String {
 //    - В итоге возвращает "Data"
 ```
 
-### Реальный пример с локальными переменными (иллюстративный)
+### Реальный Пример С Локальными Переменными (иллюстративный)
 
 ```kotlin
 // Исходный код
@@ -166,7 +169,7 @@ class CalculateSM(
 }
 ```
 
-### Механизм освобождения потока
+### Механизм Освобождения Потока
 
 ```kotlin
 fun demonstrateThreadRelease() = runBlocking {
@@ -185,7 +188,7 @@ fun demonstrateThreadRelease() = runBlocking {
 }
 ```
 
-### Процесс возобновления
+### Процесс Возобновления
 
 ```kotlin
 // Когда корутина готова к возобновлению:
@@ -429,7 +432,7 @@ Key points:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этого механизма от подхода в Java без `suspend`/корутин?
 - Когда практически стоит использовать `suspend`-функции и корутины?
@@ -453,7 +456,7 @@ Key points:
 - [[c-coroutines]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-list-vs-sequence--programming-languages--medium]]
 

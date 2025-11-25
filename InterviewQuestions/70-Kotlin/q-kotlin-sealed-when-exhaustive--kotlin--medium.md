@@ -14,6 +14,8 @@ related: [c-kotlin, c-sealed-classes, q-flow-combining-zip-combine--kotlin--medi
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-expression]
+date created: Friday, October 31st 2025, 6:32:40 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -28,7 +30,7 @@ tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-ex
 
 Sealed-классы ограничивают наследование фиксированным набором подклассов и в связке с when-выражениями позволяют компилятору проверять исчерпывающий разбор вариантов и строить типобезопасные конечные автоматы (state machines). Для исчерпывающей проверки when должен использоваться как выражение (возвращать значение), либо следует полагаться на соответствующие инспекции.
 
-### Базовый sealed-класс (Result)
+### Базовый Sealed-класс (Result)
 
 ```kotlin
 sealed class Result<out T> {
@@ -69,7 +71,7 @@ fun UserListScreen(state: UiState) {
 }
 ```
 
-### Результат сетевого запроса (NetworkResult)
+### Результат Сетевого Запроса (NetworkResult)
 
 ```kotlin
 sealed class NetworkResult<out T> {
@@ -109,7 +111,7 @@ fun <T> handleNetworkResult(result: NetworkResult<T>) = when (result) {
 }
 ```
 
-### Навигационное состояние (NavigationEvent)
+### Навигационное Состояние (NavigationEvent)
 
 ```kotlin
 sealed class NavigationEvent {
@@ -133,7 +135,7 @@ fun handleNavigation(event: NavigationEvent) = when (event) {
 // navController и activity предполагаются доступными во внешнем скоупе (или переданными как параметры)
 ```
 
-### Состояние асинхронной операции (AsyncState)
+### Состояние Асинхронной Операции (AsyncState)
 
 ```kotlin
 sealed class AsyncState<out T> {
@@ -165,7 +167,7 @@ sealed class AsyncState<out T> {
 }
 ```
 
-### Состояние валидации формы (ValidationResult)
+### Состояние Валидации Формы (ValidationResult)
 
 ```kotlin
 sealed class ValidationResult {
@@ -198,7 +200,7 @@ fun showValidationError(result: ValidationResult) = when (result) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте sealed interface для "чистых" контрактов (Kotlin 1.5+).
 2. Стройте вложенные sealed-иерархии для сложных состояний.

@@ -1,33 +1,32 @@
 ---
 id: android-309
 title: What Does ItemDecoration Do / Что делает ItemDecoration
-aliases:
-- ItemDecoration
-- Что делает ItemDecoration
+aliases: [ItemDecoration, Что делает ItemDecoration]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-view-system
-- c-android-ui-composition
-- c-recyclerview
-- q-android-app-components--android--easy
+  - c-android-ui-composition
+  - c-android-view-system
+  - c-recyclerview
+  - q-android-app-components--android--easy
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-recyclerview-itemdecoration-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/ui-views
-- difficulty/medium
-- itemdecoration
-- recyclerview
+tags: [android/ui-views, difficulty/medium, itemdecoration, recyclerview]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -405,7 +404,7 @@ val count = recyclerView.itemDecorationCount      // Get count
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем разница между `onDraw` и `onDrawOver`?
 2. Как реализовать sticky header с помощью ItemDecoration?
@@ -431,7 +430,7 @@ val count = recyclerView.itemDecorationCount      // Get count
 - [RecyclerView.ItemDecoration Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration)
 - [Android Canvas and Drawing Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

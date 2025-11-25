@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, kotlin, null-safety, nullability, safe-calls, types]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Опишите nullability и null-безопасность в Kotlin
 
@@ -398,7 +401,7 @@ newString?.let { c = it }.also { println("Logging the value: $it") }
 
 Also see [[c-kotlin]].
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия подхода к null-безопасности в Kotlin по сравнению с Java?
 - Когда на практике вы будете использовать механизмы null-безопасности Kotlin?
@@ -421,7 +424,7 @@ Also see [[c-kotlin]].
 - [Null safety](https://kotlinlang.org/docs/null-safety.html)
 - [Null safety tutorial](https://kotlinlang.org/docs/tutorials/kotlin-for-py/null-safety.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-lateinit--kotlin--medium]]
 - [[q-kotlin-type-system--kotlin--medium]]

@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140025
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, kotlin]
 
+date created: Saturday, October 18th 2025, 12:38:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -511,7 +513,7 @@ fun getCoroutinePoolStats(): PoolStats {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как использовать `kotlinx.coroutines.debug` совместно с JVM-профайлерами (`Async Profiler`, `YourKit`, `JProfiler`) для анализа сложных асинхронных сценариев?
 2. Какие признаки в профайлерах указывают на утечки корутин или неправильно управляемый жизненный цикл (например, в `ViewModel` или `Activity`)?
@@ -539,7 +541,7 @@ fun getCoroutinePoolStats(): PoolStats {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Сложные (Hard)
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Коррутины

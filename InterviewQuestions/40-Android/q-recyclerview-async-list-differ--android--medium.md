@@ -1,29 +1,30 @@
 ---
 id: android-224
 title: RecyclerView AsyncListDiffer / RecyclerView AsyncListDiffer
-aliases:
-- AsyncListDiffer
-- RecyclerView AsyncListDiffer
+aliases: [AsyncListDiffer, RecyclerView AsyncListDiffer]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-recyclerview
-- q-what-are-services-used-for--android--medium
+  - c-recyclerview
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+  - q-recyclerview-itemdecoration-advanced--android--medium
+  - q-what-are-services-used-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/medium
+tags: [android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -117,7 +118,7 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
 ---
 
-### Как AsyncListDiffer работает внутри
+### Как AsyncListDiffer Работает Внутри
 
 **Поток выполнения (схематично):**
 
@@ -145,7 +146,7 @@ dispatchUpdatesTo(adapter)
 
 ---
 
-### AsyncListDiffer vs ListAdapter
+### AsyncListDiffer Vs ListAdapter
 
 | Функция | AsyncListDiffer | ListAdapter |
 |--------|-----------------|------------|
@@ -194,7 +195,7 @@ adapter.submitList(items)
 
 ---
 
-### Потокобезопасность и submitList()
+### Потокобезопасность И submitList()
 
 Основные правила:
 - `submitList` и все вызовы адаптера должны выполняться на главном потоке.
@@ -237,7 +238,7 @@ adapter.submitList(newItems)
 
 ---
 
-### Безопасная обработка мутаций списка
+### Безопасная Обработка Мутаций Списка
 
 **Проблема: изменение списка во время diff или после submitList.**
 
@@ -297,7 +298,7 @@ lifecycleScope.launch {
 
 ---
 
-### `Callback` завершения
+### `Callback` Завершения
 
 **Уведомление, когда diff применён:**
 
@@ -345,7 +346,7 @@ val testDiffer = AsyncListDiffer(
 
 ---
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 **1. Debounce частых обновлений:**
 
@@ -410,7 +411,7 @@ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Неизменяемые списки**
 ```kotlin

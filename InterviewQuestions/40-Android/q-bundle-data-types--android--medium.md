@@ -1,31 +1,32 @@
 ---
 id: android-387
 title: Типы данных Bundle / Bundle Data Types
-aliases:
-- Типы данных Bundle
-- Bundle Data Types
+aliases: [Bundle Data Types, Типы данных Bundle]
 topic: android
 subtopics:
-- serialization
+  - serialization
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity
-- q-android-app-components--android--easy
-- q-parcelable-implementation--android--medium
+  - c-activity
+  - q-android-app-components--android--easy
+  - q-data-sync-unstable-network--android--hard
+  - q-foreground-service-types--android--medium
+  - q-parcelable-implementation--android--medium
+  - q-what-is-layout-types-and-when-to-use--android--easy
 created: 2024-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/serialization
-- difficulty/medium
+tags: [android/serialization, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -208,7 +209,7 @@ val url = intent.getStringExtra("url")
     ?: return
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как оценить размер `Bundle` и риск `TransactionTooLargeException` при IPC?
 - В чем внутренние различия между сериализацией в `Parcel` и хранением данных в `Bundle`?
@@ -236,7 +237,7 @@ val url = intent.getStringExtra("url")
 - https://developer.android.com/reference/android/os/Parcelable
 - https://developer.android.com/guide/components/intents-filters
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -245,7 +246,7 @@ val url = intent.getStringExtra("url")
 ### Предпосылки (проще)
 - [[q-android-app-components--android--easy]] — понимание компонентов приложения и их связи
 
-### Похожие (того же уровня)
+### Похожие (того Же уровня)
 - [[q-parcelable-implementation--android--medium]] — реализация собственных `Parcelable` объектов
 
 ### Продвинутые (сложнее)

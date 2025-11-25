@@ -1,9 +1,7 @@
 ---
 id: android-009
 title: Fragment Basics / Основы Fragment
-aliases:
-- Fragment Basics
-- Основы Fragment
+aliases: [Fragment Basics, Основы Fragment]
 topic: android
 status: draft
 created: 2025-10-05
@@ -12,25 +10,26 @@ difficulty: easy
 question_kind: android
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 subtopics:
-- fragment
-- ui-navigation
+  - fragment
+  - ui-navigation
 sources:
-- "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md"
-tags:
-- android/fragment
-- android/ui-navigation
-- difficulty/easy
-- ui-component
+  - "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md"
+tags: [android/fragment, android/ui-navigation, difficulty/easy, ui-component]
 moc: moc-android
 related:
-- c-compose-navigation
-- c-fragments
-- q-android-build-optimization--android--medium
-- q-what-each-android-component-represents--android--easy
+  - c-compose-navigation
+  - c-fragments
+  - q-android-build-optimization--android--medium
+  - q-how-to-choose-layout-for-fragment--android--easy
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-save-data-outside-fragment--android--medium
+  - q-what-each-android-component-represents--android--easy
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)

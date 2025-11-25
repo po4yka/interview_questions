@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-sealed-class-sealed-interface--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-sealed-class-sealed-interface--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancellable, resource-management]
+date created: Friday, October 31st 2025, 6:29:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос
@@ -62,7 +64,7 @@ public object NonCancellable : AbstractCoroutineContextElement(Job), Job {
 - операций, которые по смыслу должны быть отменяемыми,
 - оборачивания больших участков «на всякий случай».
 
-#### Использование `NonCancellable` в блоках `finally`
+#### Использование `NonCancellable` В Блоках `finally`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -91,7 +93,7 @@ suspend fun demonstrateNonCancellable() = coroutineScope {
 
 **Почему нужно**: После отмены `Job` корутины находится в состоянии отмены, и обычные отменяемые suspend-функции выбросят `CancellationException`. `withContext(NonCancellable)` выполняет очистку в контексте, игнорирующем эту отмену, чтобы короткая критичная suspend-очистка могла завершиться.
 
-#### Реальный пример: Закрытие ресурсов
+#### Реальный Пример: Закрытие Ресурсов
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -128,7 +130,7 @@ suspend fun demonstrateFileCleanup() {
 }
 ```
 
-#### Реальный пример: Сохранение состояния
+#### Реальный Пример: Сохранение Состояния
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -173,7 +175,7 @@ suspend fun demonstrateStateSave() {
 }
 ```
 
-#### Реальный пример: Коммит/откат транзакции базы данных
+#### Реальный Пример: Коммит/откат Транзакции Базы Данных
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -237,7 +239,7 @@ suspend fun demonstrateTransaction() {
 }
 ```
 
-#### Реальный пример: Аналитика при отмене
+#### Реальный Пример: Аналитика При Отмене
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -286,19 +288,19 @@ suspend fun demonstrateAnalytics() {
 }
 ```
 
-#### Риски использования `NonCancellable`
+#### Риски Использования `NonCancellable`
 
-1) Блокирование отмены слишком долго
+1. Блокирование отмены слишком долго
 
-2) Сокрытие багов (использование для бизнес-логики вместо исправления отменяемости)
+2. Сокрытие багов (использование для бизнес-логики вместо исправления отменяемости)
 
-3) Потенциальное истощение ресурсов при зависании операций без таймаутов
+3. Потенциальное истощение ресурсов при зависании операций без таймаутов
 
-#### `NonCancellable` не предотвращает отмену
+#### `NonCancellable` Не Предотвращает Отмену
 
 `NonCancellable` не предотвращает отмену исходного `Job`; он позволяет suspend-функциям в своём контексте выполниться несмотря на отмену. Родительская корутина остаётся отменённой.
 
-#### Лучшая практика
+#### Лучшая Практика
 
 - Использовать только для короткой, критичной очистки.
 - При необходимости добавлять явные таймауты внутри `NonCancellable`.
@@ -325,7 +327,7 @@ Key characteristics:
 - Does not auto-enforce time limits: It ignores cancellation, but if you explicitly wrap work in `withTimeout` or similar inside it, those timeouts still apply.
 - Use sparingly: Only for critical, short, and bounded cleanup.
 
-#### When to use `NonCancellable`
+#### When to Use `NonCancellable`
 
 Use `NonCancellable` only for critical cleanup operations where:
 - the work is short and bounded, and
@@ -344,7 +346,7 @@ Do NOT use for:
 - operations that should be cancellable,
 - large blocks "just in case".
 
-#### Using `NonCancellable` in `finally` blocks
+#### Using `NonCancellable` in `finally` Blocks
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -372,7 +374,7 @@ suspend fun demonstrateNonCancellable() = coroutineScope {
 
 Why needed: After cancellation, the coroutine's `Job` is in a cancelled state. Normally, cancellable suspend functions will throw `CancellationException`. `withContext(NonCancellable)` runs cleanup in a context that ignores that cancellation so that short, critical suspend-based cleanup can complete.
 
-#### Real example: Closing resources
+#### Real Example: Closing Resources
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -408,7 +410,7 @@ suspend fun demonstrateFileCleanup() {
 }
 ```
 
-#### Real example: Saving state
+#### Real Example: Saving State
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -453,7 +455,7 @@ suspend fun demonstrateStateSave() {
 }
 ```
 
-#### Real example: Database transaction commit/rollback
+#### Real Example: Database Transaction commit/rollback
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -517,7 +519,7 @@ suspend fun demonstrateTransaction() {
 }
 ```
 
-#### Real example: Analytics event on cancellation
+#### Real Example: Analytics Event on Cancellation
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -566,23 +568,23 @@ suspend fun demonstrateAnalytics() {
 }
 ```
 
-#### Risks of using `NonCancellable`
+#### Risks of Using `NonCancellable`
 
-1) Blocking cancellation for too long.
-2) Hiding bugs by wrapping business logic instead of fixing cancellation.
-3) Resource exhaustion if long or hanging operations run without additional timeouts.
+1. Blocking cancellation for too long.
+2. Hiding bugs by wrapping business logic instead of fixing cancellation.
+3. Resource exhaustion if long or hanging operations run without additional timeouts.
 
-#### `NonCancellable` does not prevent cancellation
+#### `NonCancellable` Does not Prevent Cancellation
 
 `NonCancellable` does not prevent cancellation of the original `Job`; it allows suspend functions in its context to run despite that cancellation.
 
-#### Best practices
+#### Best Practices
 
 - Use for short, critical cleanup only.
 - Add explicit timeouts inside `NonCancellable` if cleanup might hang.
 - For simple synchronous cleanup, rely on regular `finally` without suspend.
 
-## Дополнительные вопросы
+## Дополнительные Вопросы
 
 1. Как `NonCancellable` взаимодействует с `CoroutineExceptionHandler`? Отличается ли обработка исключений внутри таких блоков?
 2. Можно ли вкладывать несколько блоков `withContext(NonCancellable)`? Каковы последствия?
@@ -622,7 +624,7 @@ suspend fun demonstrateAnalytics() {
 - [Roman Elizarov - Cancellation in Coroutines](https://medium.com/@elizarov/cancellation-in-coroutines-aa6b90163629)
 - [Exception Handling in Coroutines](https://kotlinlang.org/docs/exception-handling.html)
 
-## Связанные вопросы
+## Связанные Вопросы
 
 - [[q-job-state-machine-transitions--kotlin--medium]]
 - [[q-structured-concurrency-violations--kotlin--hard]]

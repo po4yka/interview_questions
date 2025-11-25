@@ -1,9 +1,7 @@
 ---
 id: android-646
 title: Advanced ShareSheet & Shortcuts / Расширенный ShareSheet и ярлыки
-aliases:
-  - Advanced ShareSheet & Shortcuts
-  - Расширенный ShareSheet и ярлыки
+aliases: [Advanced ShareSheet & Shortcuts, Расширенный ShareSheet и ярлыки]
 topic: android
 subtopics:
   - shortcuts-widgets
@@ -13,20 +11,19 @@ question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
   - en
+  - ru
 status: draft
 moc: moc-android
 related:
   - c-communication-surfaces
   - q-advanced-share-sheet-shortcuts--android--hard
+  - q-camerax-advanced-pipeline--android--hard
+  - q-recyclerview-itemdecoration-advanced--android--medium
+  - q-room-type-converters-advanced--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-  - android/shortcuts-widgets
-  - android/ui-navigation
-  - android/ui-views
-  - difficulty/hard
+tags: [android/shortcuts-widgets, android/ui-navigation, android/ui-views, difficulty/hard]
 sources:
   - url: "https://developer.android.com/develop/ui/views/sharing/send"
     note: ShareSheet user experience
@@ -34,6 +31,8 @@ sources:
     note: Shortcuts guide
   - url: "https://developer.android.com/about/versions/13/features/predictive-back"
     note: Predictive back integration
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +45,7 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Direct share (через Shortcuts)
+### 1. Direct Share (через Shortcuts)
 
 - На современных версиях Android direct share основан на статических/динамических ярлыках (`ShortcutInfo`/`ShortcutInfoCompat`), а не на `ChooserTargetService` (он устарел и удалён в новых API).
 - Используйте `ShortcutManager` / `ShortcutManagerCompat` для создания ярлыков под конкретные диалоги/контакты (conversation shortcuts), чтобы система могла предлагать их в системном ShareSheet.
@@ -89,7 +88,7 @@ ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
 - Анимации выхода/возврата должны быть согласованы с общим навигационным паттерном приложения и не конфликтовать с системным ShareSheet.
 - При использовании `Intent.createChooser` уважайте выбор пользователя и не навязывайте дефолтное приложение в обход системного диалога.
 
-### 5. Privacy & policy
+### 5. Privacy & Policy
 
 - Не отправляйте контактные данные, историю шаринга или список targets на сервер без явного opt-in.
 - Фильтруйте типы контента: корректно задавайте MIME-типы, избегайте утечки чувствительных данных в другие приложения.
@@ -111,7 +110,7 @@ ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
 
 ## Answer (EN)
 
-### 1. Direct share (via Shortcuts)
+### 1. Direct Share (via Shortcuts)
 
 - On modern Android, direct share is based on static/dynamic shortcuts (`ShortcutInfo`/`ShortcutInfoCompat`), not `ChooserTargetService` (deprecated and removed in newer APIs).
 - Use `ShortcutManager` / `ShortcutManagerCompat` to create conversation shortcuts for specific chats/contacts so the system can surface them in the system ShareSheet.
@@ -154,7 +153,7 @@ ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
 - Coordinate exit/return animations of your custom share UI with the app navigation pattern and ensure they do not conflict with the system ShareSheet.
 - When using `Intent.createChooser`, respect the chooser UX and do not force a default app that bypasses the system dialog.
 
-### 5. Privacy & policy
+### 5. Privacy & Policy
 
 - Do not send contact data, share history, or target lists to your servers without explicit opt-in.
 - Filter and declare content types correctly with MIME types; avoid leaking sensitive data to other apps.

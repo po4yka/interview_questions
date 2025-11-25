@@ -1,16 +1,15 @@
 ---
 id: concept-intent
 title: Intent / Intent (намерение)
-aliases:
-  - Intent
-  - Android Intent
-  - Intent (намерение)
+aliases: [Android Intent, Intent, Intent (намерение)]
 kind: concept
 summary: Messaging objects used to request actions from Android components
 links: []
 created: 2025-11-06
 updated: 2025-11-06
-tags: [concept, android, intent, ipc]
+tags: [android, concept, intent, ipc]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

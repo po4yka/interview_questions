@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/easy, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Базовая тема корутин Kotlin 140029 (билдеры `launch`, `async`, `runBlocking`)
 
@@ -188,7 +191,7 @@ fun main() = runBlocking {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Объясните, когда вы выберете `launch` вместо `async` и почему (учитывая тип возвращаемого значения и характер задачи).
 2. Почему `runBlocking` не рекомендуется использовать в продакшн-коде Android или серверных приложений (обсудите блокировку потоков и влияние на масштабируемость)?
@@ -222,7 +225,7 @@ fun main() = runBlocking {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Похожие (Easy)
 - [[q-coroutine-scope-basics--kotlin--easy]] - Основы CoroutineScope
@@ -230,13 +233,13 @@ fun main() = runBlocking {
 - [[q-suspend-functions-basics--kotlin--easy]] - Основы suspend-функций
 - [[q-launch-vs-async--kotlin--easy]] - Разница между launch и async
 
-### Того же уровня (Easy)
+### Того Же Уровня (Easy)
 - [[q-what-is-coroutine--kotlin--easy]] - Базовые концепции корутин
 - [[q-coroutine-scope-basics--kotlin--easy]] - Основы CoroutineScope
 - [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - `delay()` vs `Thread.sleep()`
 - [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads в Android
 
-### Следующие шаги (Medium)
+### Следующие Шаги (Medium)
 - [[q-suspend-functions-basics--kotlin--easy]] - Понимание suspend-функций
 - [[q-coroutine-dispatchers--kotlin--medium]] - Обзор диспетчеров корутин
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Сравнение Scope и `CoroutineContext`

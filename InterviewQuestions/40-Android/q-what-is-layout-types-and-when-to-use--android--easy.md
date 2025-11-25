@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -372,7 +374,7 @@ Arranges children in a grid structure.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как ConstraintLayout улучшает производительность по сравнению с вложенными LinearLayout?
 - Каковы последствия для производительности при глубокой иерархии view?
@@ -396,12 +398,12 @@ Arranges children in a grid structure.
 - Official Layout Guide: https://developer.android.com/guide/topics/ui/declaring-layout
 - ConstraintLayout Guide: https://developer.android.com/training/constraint-layout
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Понимание основ иерархии view
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - Доставка динамических фич
 - Аннотационная обработка (annotation processing)
 

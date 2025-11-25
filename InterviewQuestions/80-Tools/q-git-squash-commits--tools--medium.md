@@ -6,7 +6,7 @@ aliases: []
 # Classification
 topic: tools
 subtopics: [git, version-control]
-question_kind: practical
+question_kind: theory
 difficulty: medium
 
 # Language & provenance
@@ -25,6 +25,8 @@ updated: 2025-10-03
 
 # Tags
 tags: [difficulty/medium, easy_kotlin, git, lang/ru, rebase, squash, tools, version-control]
+date created: Tuesday, November 25th 2025, 8:13:30 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Question (EN)

@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [by-keyword, classes, delegation, difficulty/medium, kotlin, kotlin-features]
 sources: ["https://kotlinlang.org/docs/delegation.html"]
+date created: Sunday, October 12th 2025, 1:58:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -155,7 +157,7 @@ class ReadOnlyWrapper(private val collection: MutableCollection) :
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать делегирование вместо наследования?
 - Как делегирование помогает реализовать композицию вместо наследования?
@@ -165,7 +167,7 @@ class ReadOnlyWrapper(private val collection: MutableCollection) :
 
 - https://kotlinlang.org/docs/delegation.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-inheritance-open-final--kotlin--medium]] - Основы наследования

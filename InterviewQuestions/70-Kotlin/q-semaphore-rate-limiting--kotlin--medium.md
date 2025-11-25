@@ -12,12 +12,15 @@ tags: [concurrency, coroutines, difficulty/medium, kotlin, rate-limiting, resour
 aliases: ["Semaphore rate limiting and resource pooling in Kotlin", "Semaphore для ограничения скорости и пулов ресурсов в Kotlin"]
 moc: moc-kotlin
 question_kind: coding
-related: [c-kotlin, c-coroutines, q-channelflow-callbackflow-flow--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-channelflow-callbackflow-flow--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
 subtopics:
   - concurrency
   - coroutines
   - semaphore
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?
 
@@ -63,7 +66,7 @@ suspend fun limitedOperation() {
 - `tryAcquire()` - попытаться получить без приостановки
 - `availablePermits` - количество доступных разрешений
 
-### Semaphore vs Mutex (RU)
+### Semaphore Vs Mutex (RU)
 
 - Mutex предназначен для взаимного исключения (N = 1) и отслеживает владельца; `unlock` должен вызывать тот, кто успешно `lock`.
 - Semaphore управляет счетчиком разрешений и не отслеживает владельца; любая корутина может вызвать `release`.
@@ -352,7 +355,7 @@ class DownloadViewModel : ViewModel() {
 }
 ```
 
-### Честные и Нечестные Semaphore
+### Честные И Нечестные Semaphore
 
 По умолчанию `Semaphore` в `kotlinx.coroutines` **нечестный** — нет строгой FIFO-гарантии порядка получения разрешений, возможна относительная "несправедливость" и даже голодание при высоких нагрузках.
 
@@ -395,7 +398,7 @@ fun tryAcquireNonBlocking(): Boolean {
 }
 ```
 
-### Реальный Мир: Совмещение Конкурентности и Лимита По Времени
+### Реальный Мир: Совмещение Конкурентности И Лимита По Времени
 
 Ниже упрощенный пример, где семафор ограничивает параллелизм, а отдельный тайм-бэйз лимитер — число запросов в секунду. Детали реализации иллюстративны.
 
@@ -454,7 +457,7 @@ class SimpleTokenBucketRateLimiter(private val tokensPerSecond: Int) {
 }
 ```
 
-### Обработка Ошибок и Корректное Освобождение Разрешений
+### Обработка Ошибок И Корректное Освобождение Разрешений
 
 Критично: всегда гарантировать освобождение разрешений при исключениях и отмене.
 
@@ -564,7 +567,7 @@ class SemaphoreTest {
 }
 ```
 
-### Типичные Ошибки и Лучшие Практики
+### Типичные Ошибки И Лучшие Практики
 
 #### Ошибки
 
@@ -1204,7 +1207,7 @@ Avoid Semaphore when:
 6. When would you use Semaphore vs `Flow`.flatMapMerge with a concurrency limit?
 7. How do you test that semaphore limits are correctly enforced?
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как реализовать token bucket-лимитер, комбинирующий ограничение по времени с ограничением конкурентности на основе Semaphore?
 2. В чем разница между честными и нечестными семафорами с точки зрения производительности и риска голодания?
@@ -1236,7 +1239,7 @@ Avoid Semaphore when:
 - [[q-channelflow-callbackflow-flow--kotlin--medium|channelFlow vs callbackFlow vs flow]]
 - [[q-race-conditions-coroutines--kotlin--hard|Race conditions in Kotlin coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-mutex-synchronized-coroutines--kotlin--medium|Mutex против synchronized в корутинах Kotlin]]
 - [[q-channelflow-callbackflow-flow--kotlin--medium|channelFlow против callbackFlow против flow]]

@@ -16,6 +16,8 @@ moc: moc-android
 related: [c-android-profiler, q-android-performance-measurement-tools--android--medium]
 sources: ["https://square.github.io/leakcanary/"]
 
+date created: Saturday, November 1st 2025, 1:24:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -252,7 +254,7 @@ This pattern can be used for any objects that are expected to be cleared after a
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что произойдет, если сборщик мусора не запустится после вызова `System.gc()`?
 2. Как LeakCanary различает допустимые удерживаемые объекты и реальные утечки?
@@ -276,14 +278,14 @@ This pattern can be used for any objects that are expected to be cleared after a
 
 - https://square.github.io/leakcanary/ - Official LeakCanary documentation
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-leakcanary-library--android--easy]] - Введение в библиотеку LeakCanary
 - [[q-memory-leaks-definition--android--easy]] - Основы утечек памяти
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Основы потоков выполнения
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-leakcanary-heap-dump-analysis--android--medium]] - Анализ heap dump с помощью LeakCanary
 - [[q-memory-leak-detection--android--medium]] - Стратегии обнаружения утечек памяти
 - [[q-android-performance-measurement-tools--android--medium]] - Инструменты профилирования

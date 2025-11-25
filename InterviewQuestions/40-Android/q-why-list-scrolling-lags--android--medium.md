@@ -3,7 +3,7 @@ id: android-104
 title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
 aliases: ["RecyclerView Performance", "Why List Scrolling Lags", "Почему тормозит скроллинг списка"]
 topic: android
-subtopics: [performance-rendering, ui-views, threads-sync]
+subtopics: [performance-rendering, threads-sync, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,11 +11,13 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/performance-rendering, android/ui-views, android/threads-sync, difficulty/medium, optimization, performance, recyclerview]
+tags: [android/performance-rendering, android/threads-sync, android/ui-views, difficulty/medium, optimization, performance, recyclerview]
 moc: moc-android
 related: [c-android-profiler, q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -380,7 +382,7 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как внутренне работает механизм переиспользования ViewHolder в RecyclerView?
 - В чем разница между RecycledViewPool и ViewCacheExtension?
@@ -404,7 +406,7 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 - https://developer.android.com/topic/performance
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (Easy)
 

@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, intent, navigation]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -144,7 +146,7 @@ intent.putExtra(Keys.USER_NAME, name)
 
 Android provides several methods for passing data between Activities:
 
-### 1. `Intent` Extras (Recommended for simple data)
+### 1. `Intent` Extras (Recommended for Simple data)
 
 For simple data types:
 
@@ -161,7 +163,7 @@ val name = intent.getStringExtra("user_name")
 val age = intent.getIntExtra("user_age", 0)
 ```
 
-### 2. `Parcelable` (Recommended for objects)
+### 2. `Parcelable` (Recommended For objects)
 
 Efficient complex object transfer:
 
@@ -254,7 +256,7 @@ intent.putExtra(Keys.USER_NAME, name)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каков лимит размера буфера транзакции `Intent`?
 - Когда следует использовать `Parcelable` против `Serializable`?
@@ -279,7 +281,7 @@ intent.putExtra(Keys.USER_NAME, name)
 - [[c-activity]]
 - Official Android documentation: `Intent` and `Intent` Filters
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (Проще)
 - [[q-android-components-besides-activity--android--easy]]

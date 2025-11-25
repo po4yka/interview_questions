@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, flatMap, kotlin, ranges]
 
+date created: Friday, October 31st 2025, 6:29:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -49,10 +51,10 @@ The result of executing the expression will be the list `[1, 2, 2, 4, 3, 6]`.
 - [[q-inline-function-limitations--kotlin--medium]]
 - [[q-retry-exponential-backoff-flow--kotlin--medium]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем ключевые отличия этого подхода от Java?
 - Когда бы вы использовали этот прием на практике?
 - Каковы распространенные ошибки, которых следует избегать?
 ## Ссылки (RU)
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)

@@ -1,36 +1,35 @@
 ---
 id: android-633
 title: ChromeOS Desktop Optimization / Оптимизация Android-приложения под ChromeOS
-aliases:
-- ChromeOS Desktop Optimization
-- Оптимизация Android-приложения под ChromeOS
+aliases: [ChromeOS Desktop Optimization, Оптимизация Android-приложения под ChromeOS]
 topic: android
 subtopics:
-- foldables-chromeos
-- ui-state
-- ui-views
+  - foldables-chromeos
+  - ui-state
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-chromeos-desktop
-- moc-android
+  - c-chromeos-desktop
+  - moc-android
+  - q-optimize-memory-usage-android--android--medium
+  - q-parsing-optimization-android--android--medium
+  - q-performance-optimization-android--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags:
-- android/foldables-chromeos
-- android/ui-state
-- android/ui-views
-- difficulty/hard
+tags: [android/foldables-chromeos, android/ui-state, android/ui-views, difficulty/hard]
 sources:
-- "https://developer.android.com/large-screens/chromeos"
-- "https://developer.android.com/games/playgamespc"
+  - "https://developer.android.com/games/playgamespc"
+  - "https://developer.android.com/large-screens/chromeos"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -71,7 +70,7 @@ sources:
 - Изолируйте работу с вводом, файлами и drag-and-drop в отдельные слои/сервисы, чтобы переиспользовать их между phone/ChromeOS.
 - Для игр/графических приложений учитывайте разные ABI и устройства ввода в абстрактном input-слое.
 
-#### 1. Окна и макеты
+#### 1. Окна И Макеты
 
 - Убедитесь, что `android:resizeableActivity="true"` задано для приложения или нужных `activity`, чтобы разрешить изменение размера окна на ChromeOS.
 - При необходимости включите PiP: `android:supportsPictureInPicture="true"` + корректно обрабатывайте жизненный цикл.
@@ -113,7 +112,7 @@ view.setOnDragListener { _, event ->
 - Используйте `ClipboardManager` для copy/paste.
 - Для rich content используйте соответствующие API ввода, такие как `InputConnection.commitContent`/`InputContentInfo` (или совместимые методы), вместо прямой передачи файловых путей.
 
-#### 4. Файлы и SAF
+#### 4. Файлы И SAF
 
 - Применяйте `ACTION_OPEN_DOCUMENT` / `ACTION_CREATE_DOCUMENT` / `ACTION_OPEN_DOCUMENT_TREE`; пользователи ChromeOS ожидают полнофункциональные системные диалоги.
 - Используйте `DocumentFile` для операций над файлами/директориями, полученными через SAF.
@@ -127,7 +126,7 @@ view.setOnDragListener { _, event ->
 - Интегрируйте необходимые компоненты Google Play Games Services (sign-in, achievements, cloud saves и др.) и следуйте официальным требованиям Play Games on PC и их чеклисту совместимости; избегайте неофициальных или нестабильных PC-specific overlay решений.
 - Для современных targetSdk обеспечьте предсказуемое поведение кнопки "Назад" (например, `android:enableOnBackInvokedCallback="true"` и обработку on-back-invoked callbacks) и адаптацию под predictive back как часть общих требований, не только для игр.
 
-#### 6. QA & дистрибуция
+#### 6. QA & Дистрибуция
 
 - Тестируйте на ChromeOS emulator и на физических Chromebook-устройствах, включая различные форм-факторы.
 - В Play Console используйте ChromeOS-специфичные скриншоты и указывайте поддержку больших экранов/desktop где требуется.
@@ -165,7 +164,7 @@ view.setOnDragListener { _, event ->
 - Isolate input, file access, and drag-and-drop into dedicated modules/services shared between phone and ChromeOS builds.
 - For games/graphics apps, abstract input handling to support multiple device types and ABIs cleanly.
 
-### 1. Windows and layouts
+### 1. Windows and Layouts
 
 - Ensure `android:resizeableActivity="true"` is set for the app or relevant activities so windows can be resized on ChromeOS.
 - Enable Picture-in-Picture where appropriate via `android:supportsPictureInPicture="true"` and handle PiP lifecycle correctly.
@@ -221,7 +220,7 @@ view.setOnDragListener { _, event ->
 - Integrate the required Google Play Games Services components (sign-in, achievements, cloud saves, etc., as applicable) and follow the official Play Games on PC compatibility checklist; avoid undocumented PC-only overlays.
 - For modern targetSdk, correctly support predictive/back-invoked behavior (e.g., `android:enableOnBackInvokedCallback="true"` and callback handling) as a general requirement, not only for games.
 
-### 6. QA & distribution
+### 6. QA & Distribution
 
 - Test on the ChromeOS emulator and on physical Chromebooks across multiple form factors.
 - In Play Console, provide ChromeOS-specific screenshots and declare support for large screens/desktop form factors where applicable.

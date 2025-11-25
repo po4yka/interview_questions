@@ -1,36 +1,30 @@
 ---
 id: android-442
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
-aliases:
-- Dalvik vs ART Runtime
-- Dalvik против ART Runtime
+aliases: [Dalvik vs ART Runtime, Dalvik против ART Runtime]
 topic: android
 subtopics:
-- performance-memory
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-android-runtime-art--android--medium
+  - c-android-components
+  - q-android-runtime-art--android--medium
+  - q-how-to-create-dynamic-screens-at-runtime--android--hard
+  - q-runtime-permissions-best-practices--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-- android/performance-memory
-- aot
-- art
-- compilation
-- dalvik
-- difficulty/medium
-- jit
-- runtime
+tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
 sources:
-- "https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime"
+  - "https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime"
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -139,7 +133,7 @@ APK → .dex bytecode → Baseline AOT compilation + JIT at runtime → Executio
 - Full backward compatibility with DEX bytecode; most apps required no source changes
 - Migration was largely transparent to developers, with differences mainly in tooling and optimization behavior
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как в современных версиях Android работает гибридная компиляция ART (AOT + JIT + profile-guided)?
 - Каковы компромиссы между местом на диске, временем установки и производительностью во время выполнения?
@@ -161,7 +155,7 @@ APK → .dex bytecode → Baseline AOT compilation + JIT at runtime → Executio
 
 - https://source.android.com/docs/core/runtime
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

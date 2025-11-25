@@ -18,12 +18,17 @@ related:
   - c-app-bundle
   - c-gradle
   - q-android-app-bundles--android--easy
+  - q-app-size-optimization--android--medium
   - q-build-optimization-gradle--android--medium
+  - q-dagger-build-time-optimization--android--medium
   - q-proguard-r8--android--medium
+  - q-reduce-apk-size-techniques--android--medium
 created: 2025-10-25
 updated: 2025-10-29
 sources: []
 tags: [android/gradle, android/performance-memory, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:41 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

@@ -12,11 +12,13 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-kotlin-type-aliases-inline--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
+related: [c-flow, c-kotlin, q-kotlin-type-aliases-inline--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharein, statein]
 
+date created: Tuesday, November 25th 2025, 12:55:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -66,7 +68,7 @@ scope.launch {
 // "Hot flow started" печатается один раз для общего upstream
 ```
 
-### `stateIn` — конвертация в `StateFlow`
+### `stateIn` — Конвертация В `StateFlow`
 
 **`stateIn`** создаёт `StateFlow`, который всегда имеет текущее значение и воспроизводит последнее значение новым коллекторам.
 
@@ -91,7 +93,7 @@ class UserViewModel : ViewModel() {
 2. **`started`**: когда запускать/останавливать upstream `Flow`
 3. **`initialValue`**: начальное значение до первой эмиссии
 
-### `stateIn` — стратегии `SharingStarted`
+### `stateIn` — Стратегии `SharingStarted`
 
 ```kotlin
 // 1. WhileSubscribed — старт при первом подписчике, стоп после ухода последнего (с таймаутом)
@@ -116,7 +118,7 @@ val state3 = flow.stateIn(
 )
 ```
 
-### `shareIn` — конвертация в `SharedFlow`
+### `shareIn` — Конвертация В `SharedFlow`
 
 **`shareIn`** создаёт `SharedFlow`, который может воспроизводить несколько значений и не требует начального значения.
 
@@ -140,7 +142,7 @@ class EventViewModel : ViewModel() {
 2. **`started`**: когда запускать/останавливать
 3. **`replay`**: количество значений для воспроизведения новым коллекторам
 
-### Сравнение: `stateIn` vs `shareIn`
+### Сравнение: `stateIn` Vs `shareIn`
 
 | Функция | `stateIn` (`StateFlow`) | `shareIn` (`SharedFlow`) |
 |--------|-------------------------|--------------------------|
@@ -150,7 +152,7 @@ class EventViewModel : ViewModel() {
 | **Конфлюация** | Хранит только последнее значение (быстрые эмиссии могут сливаться) | Может буферизовать или отбрасывать |
 | **Применение** | Текущее состояние/данные | События, несколько последних значений |
 
-### Когда использовать `stateIn`
+### Когда Использовать `stateIn`
 
 **1. Представление текущего состояния**
 
@@ -219,7 +221,7 @@ class DashboardViewModel : ViewModel() {
 }
 ```
 
-### Когда использовать `shareIn`
+### Когда Использовать `shareIn`
 
 **1. Широковещание значений из холодного источника нескольким подписчикам**
 
@@ -325,7 +327,7 @@ val expensiveData = computeExpensiveData()
     )
 ```
 
-### Реальный пример: экран поиска
+### Реальный Пример: Экран Поиска
 
 ```kotlin
 class SearchViewModel : ViewModel() {
@@ -405,7 +407,7 @@ val events = eventFlow
     )
 ```
 
-### Общие паттерны
+### Общие Паттерны
 
 **Паттерн 1: Один `StateFlow` на состояние экрана**
 
@@ -876,4 +878,4 @@ class ViewModel : ViewModel() {
 
 ## Related Questions
 
-- [[q-shareflow-vs-stateflow--kotlin--medium]]
+- [[q-sharedflow-vs-stateflow--programming-languages--easy]]

@@ -16,6 +16,8 @@ updated: 2025-11-11
 sources: []
 tags: [architecture, difficulty/medium, error-handling, strategy, ux]
 
+date created: Monday, October 27th 2025, 4:02:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)

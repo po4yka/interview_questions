@@ -10,12 +10,14 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-activity, c-content-provider, c-compose-navigation]
+related: [c-activity, c-compose-navigation, c-content-provider]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-modularization, android/intents-deeplinks, android/ui-navigation, difficulty/medium, navigation, ui]
 
+date created: Saturday, November 1st 2025, 1:25:26 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -261,7 +263,7 @@ binding.drawerLayout.addDrawerListener(
 
 ---
 
-## Ответ: Дополнительные вопросы (RU)
+## Ответ: Дополнительные Вопросы (RU)
 
 - Как Navigation Component обрабатывает изменения конфигурации и убийство процесса?
 - В чем преимущества и недостатки single-activity по сравнению с multi-activity архитектурой?
@@ -278,7 +280,7 @@ binding.drawerLayout.addDrawerListener(
 - [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/guide/navigation/navigation-deep-link
 
-## Ответ: Связанные вопросы (RU)
+## Ответ: Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-what-is-intent--android--easy]] - Базовые понятия `Intent`
@@ -286,7 +288,7 @@ binding.drawerLayout.addDrawerListener(
 - [[q-main-android-components--android--easy]] - Обзор компонентов Android
 - [[q-android-app-components--android--easy]] - Типы основных компонентов приложения
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-navigation-methods-android--android--medium]] - Альтернативные паттерны навигации
 - [[q-deep-link-vs-app-link--android--medium]] - Стратегии deep linking
 - [[q-single-activity-approach--android--medium]] - Архитектура с одной `Activity`

@@ -11,11 +11,13 @@ language_tags: [en, ru]
 status: draft
 created: "2025-10-12"
 updated: "2025-11-11"
-tags: [kotlin, coroutines, difficulty/hard]
+tags: [coroutines, difficulty/hard, kotlin]
 description: "Comprehensive guide to CoroutineContext elements and how they combine in Kotlin coroutines"
 moc: moc-kotlin
-related: [c-concurrency, c-concepts--kotlin--medium, q-coroutine-job-lifecycle--kotlin--medium]
+related: [c-concepts--kotlin--medium, c-concurrency, q-coroutine-job-lifecycle--kotlin--medium]
 
+date created: Saturday, November 1st 2025, 5:31:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +34,7 @@ related: [c-concurrency, c-concepts--kotlin--medium, q-coroutine-job-lifecycle--
 
 **CoroutineContext** — это постоянный индексированный набор элементов `Element`, которые предоставляют конфигурацию и поведение для корутин. Это фундаментальная концепция в Kotlin-корутинах, управляющая контекстом выполнения, иерархией задач, обработкой ошибок и отладкой.
 
-### Основная концепция
+### Основная Концепция
 
 `CoroutineContext` работает как отображение, где:
 - Ключи — это singleton-объекты `CoroutineContext.Key`
@@ -56,9 +58,9 @@ interface CoroutineContext {
 
 ---
 
-### Четыре стандартных элемента
+### Четыре Стандартных Элемента
 
-#### 1. Job — Жизненный цикл и отмена
+#### 1. Job — Жизненный Цикл И Отмена
 
 Назначение: Управляет жизненным циклом корутины, отношениями родитель–потомок и отменой.
 
@@ -150,7 +152,7 @@ fun main() = runBlocking {
 
 ---
 
-#### 2. CoroutineDispatcher — Поток выполнения
+#### 2. CoroutineDispatcher — Поток Выполнения
 
 Назначение: Определяет, на каких потоках выполняется корутина.
 
@@ -228,7 +230,7 @@ fun main() = runBlocking {
 
 ---
 
-#### 4. CoroutineExceptionHandler — Обработка ошибок
+#### 4. CoroutineExceptionHandler — Обработка Ошибок
 
 Назначение: Обрабатывает неперехваченные исключения в корутинах (как правило, в корневых корутинах с `launch`, чьи исключения не наблюдаются через `join`).
 
@@ -277,9 +279,9 @@ fun main() = runBlocking {
 }
 ```
 
-2. Handler должен находиться в контексте той корутины, чьи неперехваченные исключения вы хотите обрабатывать.
+1. Handler должен находиться в контексте той корутины, чьи неперехваченные исключения вы хотите обрабатывать.
 
-3. SupervisorJob влияет на распространение исключений: падение одного потомка не отменяет остальных, но неперехваченные исключения по-прежнему могут быть направлены в `CoroutineExceptionHandler`.
+2. SupervisorJob влияет на распространение исключений: падение одного потомка не отменяет остальных, но неперехваченные исключения по-прежнему могут быть направлены в `CoroutineExceptionHandler`.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -307,7 +309,7 @@ fun main() = runBlocking {
 
 ---
 
-### Как комбинируются элементы: оператор +
+### Как Комбинируются Элементы: Оператор +
 
 Фундаментальное правило: при комбинировании контекстов элементы с одинаковым ключом справа замещают элементы слева ("правая сторона выигрывает").
 
@@ -374,7 +376,7 @@ fun main() = runBlocking {
 
 ---
 
-### Наследование контекста
+### Наследование Контекста
 
 Дочерние корутины наследуют родительский контекст:
 
@@ -427,7 +429,7 @@ fun main() = runBlocking {
 
 ---
 
-### Практические паттерны
+### Практические Паттерны
 
 Паттерн 1: Репозиторий с контекстом
 
@@ -533,7 +535,7 @@ class RepositoryTest {
 
 ---
 
-### Правила распространения контекста
+### Правила Распространения Контекста
 
 Правило 1: Явный контекст переопределяет унаследованный
 
@@ -591,7 +593,7 @@ fun main() = runBlocking(Dispatchers.Default) {
 
 ---
 
-### Расширенные: Пользовательские элементы контекста
+### Расширенные: Пользовательские Элементы Контекста
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -630,7 +632,7 @@ fun main() = runBlocking {
 
 ---
 
-### Распространенные анти-паттерны
+### Распространенные Анти-паттерны
 
 Анти-паттерн 1: Игнорирование диспетчера
 
@@ -695,7 +697,7 @@ fun goodExample(scope: CoroutineScope) {
 
 ---
 
-### Соображения производительности
+### Соображения Производительности
 
 1. Накладные расходы переключения контекста
 
@@ -719,7 +721,7 @@ suspend fun processItemsBetter(items: List<Int>) = withContext(Dispatchers.IO) {
 suspend fun processItem(i: Int) { /* ... */ }
 ```
 
-2. Размер пулов диспетчеров
+1. Размер пулов диспетчеров
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -730,7 +732,7 @@ val cpuDispatcher = Dispatchers.Default
 val ioDispatcher = Dispatchers.IO
 ```
 
-3. Выделение элементов контекста
+1. Выделение элементов контекста
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -755,7 +757,7 @@ fun processManyReused() = runBlocking {
 
 ---
 
-### Стратегии тестирования
+### Стратегии Тестирования
 
 Стратегия 1: Инъекция диспетчеров
 
@@ -1515,7 +1517,7 @@ suspend fun processItemsBetter(items: List<Int>) = withContext(Dispatchers.IO) {
 suspend fun processItem(i: Int) { /* ... */ }
 ```
 
-2. Dispatcher pool sizing
+1. Dispatcher pool sizing
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1526,7 +1528,7 @@ val cpuDispatcher = Dispatchers.Default
 val ioDispatcher = Dispatchers.IO
 ```
 
-3. `Context` element allocation
+1. `Context` element allocation
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1639,7 +1641,7 @@ fun testExceptionHandlerUsage() = runTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как работает `CoroutineContext.Element.Key` и как он обеспечивает типобезопасность?
 2. Что произойдёт при комбинировании двух `Job` оператором `+`?
@@ -1674,14 +1676,14 @@ fun testExceptionHandlerUsage() = runTest {
 - https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/
 - https://kotlinlang.org/docs/exception-handling.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-what-is-job-object--programming-languages--medium]]
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
 - Базовые концепции корутин
 
-### На том же уровне
+### На Том Же Уровне
 - [[q-coroutine-context-explained--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]
 - [[q-coroutine-supervisorjob-use-cases--kotlin--medium]]

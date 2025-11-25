@@ -1,33 +1,32 @@
 ---
 id: android-310
 title: Baseline Profiles Android / Базовые профили Android
-aliases:
-- Baseline Profiles Android
-- Базовые профили Android
+aliases: [Baseline Profiles Android, Базовые профили Android]
 topic: android
 subtopics:
-- performance-startup
-- profiling
-- gradle
+  - gradle
+  - performance-startup
+  - profiling
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-measurement-tools--android--medium
-- c-android-basics
+  - c-android-basics
+  - q-android-lint-tool--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-baseline-profiles-optimization--android--medium
+  - q-parsing-optimization-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/performance-startup
-- android/profiling
-- android/gradle
-- difficulty/medium
+tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:04:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -128,7 +127,7 @@ when (status.profileInstallResultCode) {
 - **Первая отрисовка UI**: до ~30–50% быстрее (Compose-приложения часто выигрывают больше)
 - **Стабильность**: заметно меньше пропущенных кадров в первых сессиях
 
-### Лучшие практики
+### Лучшие Практики
 
 - Профилируйте только **критичные пути** (запуск, первая навигация, ключевые действия)
 - Избегайте чрезмерно больших профилей (слишком крупные профили могут замедлять установку и оптимизацию)
@@ -234,7 +233,7 @@ when (status.profileInstallResultCode) {
 - **Test on real devices** (emulators do not accurately reflect real runtime and `AOT`/`JIT` behavior)
 - **Monitor installation and impact** in production via `ProfileVerifier`, startup metrics, and frame metrics
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как измерять эффективность baseline profiles в продакшене (статус компиляции, метрики старта)?
 - Когда следует регенерировать baseline profiles (крупные рефакторинги, новые критичные сценарии)?
@@ -260,7 +259,7 @@ when (status.profileInstallResultCode) {
 - https://developer.android.com/topic/performance/baselineprofiles — Official Android baseline profiles guide
 - [[c-android-basics]] — Core Android concepts relevant for performance optimizations
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -269,7 +268,7 @@ when (status.profileInstallResultCode) {
 - [[q-app-startup-optimization--android--medium]] — Общие техники оптимизации старта
 - [[q-android-build-optimization--android--medium]] — Оптимизация Gradle-сборки для производительности
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-android-performance-measurement-tools--android--medium]] — Профайлеры и инструменты измерения
 

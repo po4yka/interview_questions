@@ -4,26 +4,31 @@ title: Android Storage Types / Типы хранилища Android
 aliases: [Android Storage Types, Типы хранилища Android]
 topic: android
 subtopics:
-- datastore
-- files-media
-- room
+  - datastore
+  - files-media
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-storage-options
-- q-android-manifest-file--android--easy
-- q-android-security-best-practices--android--medium
+  - c-android-storage-options
+  - q-android-manifest-file--android--easy
+  - q-android-security-best-practices--android--medium
+  - q-android-service-types--android--easy
+  - q-app-start-types-android--android--medium
+  - q-module-types-android--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/datastore, android/files-media, android/room, difficulty/medium, persistence, storage]
 
+date created: Saturday, November 1st 2025, 12:46:43 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -247,13 +252,13 @@ See also: [[c-android-storage-options]]
 - Implementing custom `ContentProvider` for inter-app data sharing
 - Optimizing Room performance with indices and query optimization
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем различия между Proto DataStore и Preferences DataStore и когда выбирать каждый из них?
 - Что происходит с данными во внутреннем хранилище при обновлении приложения и при удалении?
 - Как реализовать шифрованное хранилище для чувствительных данных (например, токенов авторизации)?
 - Каковы производственные компромиссы между Room и "чистым" SQLite?
 - Как обрабатывать изменения разрешений на хранилище при миграции с до-Scoped Storage на Android 10+?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предпосылки
 - [[q-android-manifest-file--android--easy]] - Конфигурация разрешений для доступа к хранилищу
 ### Связано

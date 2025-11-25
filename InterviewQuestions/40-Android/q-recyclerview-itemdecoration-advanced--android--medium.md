@@ -1,35 +1,32 @@
 ---
 id: android-081
 title: RecyclerView ItemDecoration Advanced / Продвинутый ItemDecoration для RecyclerView
-aliases:
-- RecyclerView ItemDecoration Advanced
-- Продвинутый ItemDecoration для RecyclerView
+aliases: [RecyclerView ItemDecoration Advanced, Продвинутый ItemDecoration для RecyclerView]
 topic: android
 subtopics:
-- ui-graphics
-- ui-views
+  - ui-graphics
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-graphics
-- q-android-app-components--android--easy
+  - c-android-graphics
+  - q-android-app-components--android--easy
+  - q-camerax-advanced-pipeline--android--hard
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-recyclerview-diffutil-advanced--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/ui-graphics
-- android/ui-views
-- custom-drawing
-- difficulty/medium
-- itemdecoration
-- ui
+tags: [android/ui-graphics, android/ui-views, custom-drawing, difficulty/medium, itemdecoration, ui]
 sources:
-- "https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration"
+  - "https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration"
+date created: Saturday, November 1st 2025, 1:04:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -334,7 +331,7 @@ recyclerView.addItemDecoration(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между `onDraw` и `onDrawOver`?
 - Как оптимизировать производительность `ItemDecoration`?
@@ -356,7 +353,7 @@ recyclerView.addItemDecoration(
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -365,7 +362,7 @@ recyclerView.addItemDecoration(
 ### Предпосылки (проще)
 - [[q-android-app-components--android--easy]] - Базовые компоненты приложения
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-canvas-drawing-optimization--android--hard]] - Оптимизация рисования на Canvas (сложнее, но по теме отрисовки)
 
 ## Related Questions

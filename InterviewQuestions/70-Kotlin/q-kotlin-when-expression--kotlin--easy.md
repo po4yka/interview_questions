@@ -14,7 +14,10 @@ related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium, q-reifi
 created: 2025-10-15
 updated: 2025-11-09
 tags: [control-flow, difficulty/easy, kotlin, pattern-matching, syntax, when]
+date created: Friday, October 31st 2025, 6:29:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Как использовать `when` в Kotlin вместо `switch`?
 
@@ -183,7 +186,7 @@ val result = when (val x = getValue()) {
 
 ---
 
-## Последующие вопросы (RU)
+## Последующие Вопросы (RU)
 
 - В чем ключевые отличия `when` от `switch` в Java?
 - В каких практических случаях вы бы использовали `when`?
@@ -203,7 +206,7 @@ val result = when (val x = getValue()) {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-reified-type-parameters--kotlin--medium]]
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

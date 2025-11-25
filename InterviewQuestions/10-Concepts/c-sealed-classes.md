@@ -8,6 +8,8 @@ links: []
 created: 2025-10-30
 updated: 2025-10-30
 tags: [adt, concept, exhaustive-when, kotlin, sealed-classes, type-safety]
+date created: Thursday, October 30th 2025, 12:30:04 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

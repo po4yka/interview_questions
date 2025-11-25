@@ -2,7 +2,7 @@
 id: lang-046
 title: "How GC Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
 aliases: [How GC Knows Object Can Be Destroyed, Как GC знает что объект можно уничтожить]
-topic: programming-languages
+topic: kotlin
 subtopics: [garbage-collection, memory-management]
 question_kind: theory
 difficulty: easy
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-what-is-job-object--programming-languages--medium, q-mediator-pattern--design-patterns--medium]
+related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-mediator-pattern--design-patterns--medium, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
 
+date created: Tuesday, November 25th 2025, 12:55:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -251,7 +253,7 @@ GC uses reachability analysis from GC Roots. If an object cannot be reached thro
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как определяются `GC Roots` в JVM, и как Kotlin/JVM опирается на них?
 - Чем это отличается от управления памятью на основе подсчёта ссылок?
@@ -273,7 +275,7 @@ GC uses reachability analysis from GC Roots. If an object cannot be reached thro
 - [[c-garbage-collection]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-garbage-collector-basics--programming-languages--medium]]
 - [[q-what-is-job-object--programming-languages--medium]]

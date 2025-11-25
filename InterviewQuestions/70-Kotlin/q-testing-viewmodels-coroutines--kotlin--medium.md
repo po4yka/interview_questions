@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
+related: [c-coroutines, c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, kotlin, testing, unit-testing, viewmodel]
+date created: Friday, October 31st 2025, 6:32:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -28,7 +30,7 @@ tags: [android, coroutines, difficulty/medium, kotlin, testing, unit-testing, vi
 
 Тестирование **`ViewModel` с корутинами** требует специальной настройки: управления выполнением корутин, подмены `Dispatchers.Main`, контроля виртуального времени и корректного тестирования `Flow`, `StateFlow` и `SharedFlow`.
 
-### Основная проблема
+### Основная Проблема
 
 ```kotlin
 // ViewModel
@@ -60,7 +62,7 @@ fun `load user updates state`() {
 
 **Проблема**: корутина запускается асинхронно во `viewModelScope` (на `Dispatchers.Main`), тест завершает выполнение или читает состояние до окончания работы и без управления диспетчером.
 
-### Решение: runTest и MainDispatcherRule
+### Решение: runTest И MainDispatcherRule
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -107,7 +109,7 @@ class UserViewModelTest {
 - Перескакивает `delay()` через виртуальное время.
 - Корректно работает совместно с `TestDispatcher` при подмене `Dispatchers.Main`.
 
-### MainDispatcherRule для viewModelScope
+### MainDispatcherRule Для viewModelScope
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -151,7 +153,7 @@ class UserViewModelTest {
 - Обеспечивает выполнение `viewModelScope` на контролируемом диспетчере.
 - Использует `TestWatcher` для автоматической установки/сброса в жизненном цикле JUnit.
 
-### StandardTestDispatcher vs UnconfinedTestDispatcher
+### StandardTestDispatcher Vs UnconfinedTestDispatcher
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -247,7 +249,7 @@ fun `users flow emits repository data - with turbine`() = runTest {
 }
 ```
 
-### Тестирование delay() и виртуального времени
+### Тестирование delay() И Виртуального Времени
 
 ```kotlin
 class TimerViewModel : ViewModel() {
@@ -295,7 +297,7 @@ fun `timer increments every second`() = runTest {
 - `advanceUntilIdle()` — выполняет все отложенные задачи, пока очередь не станет пустой.
 - `runCurrent()` — выполняет текущие запланированные задачи без изменения времени.
 
-### Тестирование обработки ошибок и последовательностей состояний
+### Тестирование Обработки Ошибок И Последовательностей Состояний
 
 ```kotlin
 class UserViewModel(
@@ -356,7 +358,7 @@ fun `load user failure updates state with error`() = runTest {
 }
 ```
 
-### Фейковый репозиторий (Fake Repository)
+### Фейковый Репозиторий (Fake Repository)
 
 ```kotlin
 class FakeUserRepository : UserRepository {
@@ -380,7 +382,7 @@ class FakeUserRepository : UserRepository {
 }
 ```
 
-### Тестирование параллельных операций
+### Тестирование Параллельных Операций
 
 ```kotlin
 class DashboardViewModel(
@@ -434,7 +436,7 @@ fun `loadDashboard loads all data in parallel`() = runTest {
 }
 ```
 
-### Тестирование отмены и debounce
+### Тестирование Отмены И Debounce
 
 ```kotlin
 class SearchViewModel(
@@ -591,7 +593,7 @@ fun `processImage updates state after processing`() = runTest {
 }
 ```
 
-### Частые ошибки (Common Pitfalls)
+### Частые Ошибки (Common Pitfalls)
 
 ```kotlin
 // 1. Плохой тест — без runTest и управления корутинами

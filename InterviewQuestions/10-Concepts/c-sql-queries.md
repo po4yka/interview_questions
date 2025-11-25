@@ -16,6 +16,8 @@ related: []
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "ctes", "difficulty/medium", "joins", "queries", "sql", "subqueries"]
+date created: Sunday, October 12th 2025, 2:31:41 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

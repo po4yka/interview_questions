@@ -14,6 +14,8 @@ related: [c-kotlin, q-kotlin-property-delegates--programming-languages--medium]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management, stateflow]
+date created: Friday, October 31st 2025, 6:31:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -56,7 +58,7 @@ Key properties:
 - Mutable state via `MutableStateFlow.value` (synchronous) or `emit()` (suspending) when using the mutable variant.
 - Suitable replacement for many `LiveData` use cases in Kotlin-only code; unlike `LiveData`, it is not lifecycle-aware by itself.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем `StateFlow` отличается от `MutableStateFlow`, `SharedFlow` и `LiveData`?
 - Когда вы бы использовали `StateFlow` на практике (например, UI state, конфигурация, кэширование)?
@@ -78,7 +80,7 @@ Key properties:
 - [[c-kotlin]]
 - [Kotlin StateFlow Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-property-delegates--programming-languages--medium]]
 

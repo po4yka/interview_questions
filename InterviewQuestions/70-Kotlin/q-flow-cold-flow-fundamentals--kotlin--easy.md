@@ -3,17 +3,19 @@ id: kotlin-089
 title: "Что делает Flow холодным потоком? / What makes Flow a cold stream?"
 aliases: [Cold, Flow, Fundamentals]
 topic: kotlin
-subtopics: ["cold-streams", "coroutines", "basics"]
+subtopics: ["basics", "cold-streams", "coroutines"]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-flow-basics--kotlin--easy]
+related: [c-flow, c-kotlin, q-flow-basics--kotlin--easy]
 created: 2025-10-12
 updated: 2025-11-09
 tags: ["coroutines", "difficulty/easy", "kotlin"]
+date created: Saturday, October 18th 2025, 3:07:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -58,7 +60,7 @@ runBlocking {
 ```
 - "Flow started" выводится только при вызове `collect`, что показывает отсутствие жадного выполнения.
 
-2. Выполнение заново для каждого коллектора
+1. Выполнение заново для каждого коллектора
 - Каждый новый коллектор запускает исходный `Flow` с начала.
 - Эмиссии не разделяются автоматически между коллекторами.
 
@@ -90,15 +92,15 @@ runBlocking {
 ```
 - Строка "Producing values" появляется для каждого `collect`, подтверждая, что источник выполняется отдельно для каждого подписчика.
 
-3. Декларативное описание потока
+1. Декларативное описание потока
 - `Flow` описывает, как производить значения, а не хранит сами значения.
 - Пока `Flow` не собран, это только декларация и цепочка операторов.
 
-4. Контекст выполнения
+1. Контекст выполнения
 - По умолчанию `Flow` выполняется в контексте корутины коллектора, если не переопределён с помощью `flowOn` и других операторов.
 - Это подчёркивает, что выполнение производителя привязано к акту коллекции.
 
-5. Сравнение с «горячими» потоками (для интуиции)
+1. Сравнение с «горячими» потоками (для интуиции)
 - Горячие потоки (например, `SharedFlow`, `StateFlow`, внешние источники событий) производят значения независимо от наличия коллекторов.
 - Холодный `Flow`: производство привязано к `collect`.
 - Поэтому `Flow` удобен для одноразовых операций, сетевых запросов и последовательностей, которые должны быть полностью воспроизведены для каждого потребителя.
@@ -142,7 +144,7 @@ runBlocking {
 ```
 - "Flow started" is printed only when `collect` is invoked, showing that the `Flow` does not execute eagerly.
 
-2. Per-collector execution
+1. Per-collector execution
 - Each new collector triggers the upstream `Flow` to run from the beginning.
 - Emissions are not shared automatically between collectors.
 
@@ -174,15 +176,15 @@ runBlocking {
 ```
 - The "Producing values" line appears for each collector, confirming that the source is re-executed per subscription.
 
-3. Declarative description of the stream
+1. Declarative description of the stream
 - `Flow` represents a description of how to produce values, not the values themselves.
 - Until collected, it is just a pipeline of operators.
 
-4. Execution context
+1. Execution context
 - By default, `Flow` runs in the coroutine context of the collector, unless modified with operators like `flowOn`.
 - This reinforces that the producer's execution is tied to the act of collection.
 
-5. Contrast with hot streams (for intuition)
+1. Contrast with hot streams (for intuition)
 - Hot streams (e.g., `SharedFlow`, `StateFlow`, external event sources) produce values independently of having collectors.
 - Cold `Flow`: production is bound to collection.
 - This distinction explains why `Flow` is suitable for one-off computations, network calls, and sequences of values tied to specific collectors.
@@ -194,7 +196,7 @@ Practical implications:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чём различия между горячими потоками (`SharedFlow`, `StateFlow`) и холодным `Flow` с точки зрения жизненного цикла и подписчиков?
 2. Как преобразовать холодный `Flow` в горячий поток с помощью `shareIn` или `stateIn`?
@@ -224,18 +226,18 @@ Practical implications:
 - "Kotlin Coroutines" official documentation on `Flow`
 - kotlinx.coroutines `Flow` API reference
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Тот же уровень (Easy)
+### Тот Же Уровень (Easy)
 - [[q-flow-basics--kotlin--easy]] - основы и создание `Flow`
 
-### Следующие шаги (Medium)
+### Следующие Шаги (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - горячие vs холодные потоки
 - [[q-cold-vs-hot-flows--kotlin--medium]] - различия холодных и горячих потоков
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - сравнение `Flow` и `LiveData`
 - [[q-channels-vs-flow--kotlin--medium]] - каналы против `Flow`
 
-### Продвинутый уровень (Harder)
+### Продвинутый Уровень (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - тестирование операторов `Flow`
 - [[q-flow-backpressure--kotlin--hard]] - управление потоком данных в `Flow`
 - [[q-flow-testing-advanced--kotlin--hard]] - продвинутое тестирование `Flow`
@@ -243,7 +245,7 @@ Practical implications:
 ### Предпосылки (Easier)
 - [[q-flow-basics--kotlin--easy]] - основы `Flow`
 
-### Похожие вопросы (Same Level)
+### Похожие Вопросы (Same Level)
 - [[q-catch-operator-flow--kotlin--medium]] - оператор `catch` в `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - операторы `map`/`filter` в `Flow`
 - [[q-hot-cold-flows--kotlin--medium]] - горячие и холодные потоки

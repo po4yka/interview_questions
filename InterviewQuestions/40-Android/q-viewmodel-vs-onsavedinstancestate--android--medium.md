@@ -1,33 +1,31 @@
 ---
 id: android-389
 title: ViewModel vs OnSavedInstanceState
-aliases:
-- ViewModel vs OnSavedInstanceState
-- ViewModel fefdfb OnSavedInstanceState
+aliases: [ViewModel fefdfb OnSavedInstanceState, ViewModel vs OnSavedInstanceState]
 topic: android
 subtopics:
-- architecture-mvvm
-- lifecycle
+  - architecture-mvvm
+  - lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity-lifecycle
-- q-activity-lifecycle-methods--android--medium
+  - c-activity-lifecycle
+  - q-activity-lifecycle-methods--android--medium
+  - q-testing-viewmodels-turbine--android--medium
+  - q-what-is-viewmodel--android--medium
+  - q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium
 created: 2024-10-15
 updated: 2025-11-11
-tags:
-- android/architecture-mvvm
-- android/lifecycle
-- difficulty/medium
-- state-management
-- viewmodel
+tags: [android/architecture-mvvm, android/lifecycle, difficulty/medium, state-management, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +41,7 @@ tags:
 ## Ответ (RU)
 `ViewModel` и `onSaveInstanceState` оба помогают сохранять состояние при изменениях жизненного цикла `Activity`/`Fragment`, но решают разные задачи и имеют разные гарантии сохранения.
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Аспект | `ViewModel` | `onSaveInstanceState` |
 |--------|-------------|------------------------|
@@ -56,7 +54,7 @@ tags:
 | Назначение | UI-состояние и логика между конфигурационными изменениями | Минимальное критичное UI-состояние для восстановления после пересоздания, включая смерть процесса |
 | Потоки | Можно держать фоновые операции (`coroutines`, `Flow` и др.) | Только снимок состояния; не для долгих операций |
 
-### `ViewModel` — выживание при изменениях конфигурации
+### `ViewModel` — Выживание При Изменениях Конфигурации
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -129,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 // - Приложение принудительно остановлено
 ```
 
-### `onSaveInstanceState` — выживание после убийства процесса
+### `onSaveInstanceState` — Выживание После Убийства Процесса
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -185,7 +183,7 @@ class MainActivity : AppCompatActivity() {
 //   когда Activity удаляется навсегда
 ```
 
-### Комбинирование обоих подходов (рекомендуется)
+### Комбинирование Обоих Подходов (рекомендуется)
 
 ```kotlin
 // ViewModel с SavedStateHandle
@@ -253,7 +251,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Ограничения по размеру данных
+### Ограничения По Размеру Данных
 
 ```kotlin
 // ПЛОХО: сохранять большие данные в onSaveInstanceState
@@ -279,7 +277,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 }
 ```
 
-### Полный пример: лучшие практики
+### Полный Пример: Лучшие Практики
 
 ```kotlin
 // ViewModel с SavedStateHandle
@@ -361,7 +359,7 @@ class ProductActivity : AppCompatActivity() {
 }
 ```
 
-### Матрица выбора
+### Матрица Выбора
 
 ```
 Выбирайте ViewModel, когда:
@@ -384,7 +382,7 @@ class ProductActivity : AppCompatActivity() {
 - Строите production-навигацию и сложные сценарии восстановления
 ```
 
-### Распространенные паттерны
+### Распространенные Паттерны
 
 ```kotlin
 // Паттерн 1: форма, ввод должен пережить поворот и пересоздание

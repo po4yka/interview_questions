@@ -1,35 +1,33 @@
 ---
 id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
-aliases:
-- Compose Custom Layout
-- Custom Layout Jetpack Compose
-- Кастомная разметка Compose
-- Кастомный layout в Compose
+aliases: [Compose Custom Layout, Custom Layout Jetpack Compose, Кастомная разметка Compose, Кастомный layout в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-graphics
+  - ui-compose
+  - ui-graphics
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- q-compose-canvas-graphics--android--hard
-- q-compose-compiler-plugin--android--hard
+  - c-compose-state
+  - q-compose-canvas-graphics--android--hard
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-custom-animations--android--medium
+  - q-compose-lazy-layout-optimization--android--hard
+  - q-custom-viewgroup-layout--android--hard
 sources: []
 created: 2023-10-11
 updated: 2025-11-10
-tags:
-- android/ui-compose
-- android/ui-graphics
-- difficulty/hard
+tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 
+date created: Saturday, November 1st 2025, 1:02:38 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -42,16 +40,16 @@ tags:
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 
 Создать кастомный layout в Compose можно через `Layout` или собственный `MeasurePolicy`:
 - На этапе измерения передаем детям `Constraints` и получаем `Placeable`.
 - На этапе вычисления определяем размер layout на основе результатов измерения и своих `Constraints`.
 - На этапе размещения вызываем `place`/`placeRelative` для `Placeable` с нужными координатами, учитывая RTL.
 
-### Подробный вариант
+### Подробный Вариант
 
-#### Основные концепции
+#### Основные Концепции
 
 `Layout` в Compose использует `MeasurePolicy` — контракт из трех шагов:
 1. Measurement — каждый дочерний элемент измеряется с переданными `Constraints` (min/max width/height).
@@ -63,7 +61,7 @@ tags:
 - Минимизируйте аллокации в `measure`/`place` (горячий путь, влияет на производительность).
 - Используйте `placeRelative` для корректной RTL-поддержки: он интерпретирует горизонтальные координаты относительно "начала" (`start`), а не фиксированного `left`.
 
-#### Архитектура (пример кастомного layout)
+#### Архитектура (пример Кастомного layout)
 
 Высокоуровневая схема для кастомного layout на примере `TwoColumn`:
 - Компонент-обертка `@Composable` → вызывает `Layout`.
@@ -73,7 +71,7 @@ tags:
   - Вычисляем итоговую ширину/высоту layout.
   - Размещаем `Placeable` в нужных координатах.
 
-#### Минимальный пример: TwoColumn
+#### Минимальный Пример: TwoColumn
 
 ```kotlin
 @Composable
@@ -188,7 +186,7 @@ val policy = object : MeasurePolicy {
 
 Здесь переопределен только один intrinsic-метод; остальные используют реализации по умолчанию. Если кастомный `Layout` участвует в вычислениях intrinsic-типов у родителя, имеет смысл реализовать все четыре intrinsic-метода.
 
-#### Рекомендации по производительности
+#### Рекомендации По Производительности
 
 - Использовать стабильные параметры и иммутабельные типы.
 - Минимизировать временные аллокации в `measure`/`place`.
@@ -234,7 +232,7 @@ Key rules:
 - Minimize allocations in `measure`/`place` (they are hot paths and affect performance).
 - Use `placeRelative` for correct RTL support: it interprets horizontal coordinates relative to "start" instead of always using left.
 
-#### Architecture (example custom layout)
+#### Architecture (example Custom layout)
 
 High-level structure for a custom layout like `TwoColumn`:
 - Wrapper `@Composable` → calls `Layout`.

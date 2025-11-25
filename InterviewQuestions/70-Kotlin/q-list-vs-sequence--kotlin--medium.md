@@ -14,7 +14,10 @@ related: [c-kotlin, q-sealed-class-sealed-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, sequence]
+date created: Friday, October 31st 2025, 6:29:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # List Vs Sequence: Жадные И Ленивые Коллекции
 
 # Вопрос (RU)
@@ -199,7 +202,7 @@ val users = listOf(user1, user2, user3)
 // Для небольших коллекций накладные расходы Sequence обычно не оправданы
 ```
 
-2. **Нужны промежуточные результаты**
+1. **Нужны промежуточные результаты**
 
 ```kotlin
 val doubled = numbers.map { it * 2 }
@@ -209,7 +212,7 @@ val filtered = doubled.filter { it > 10 }
 println("Filtered: $filtered")  // Можно напечатать
 ```
 
-3. **Операции требуют размера коллекции или индексации**
+1. **Операции требуют размера коллекции или индексации**
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
@@ -222,7 +225,7 @@ val seq = numbers.asSequence()
 // seq[2] - НЕТ прямого доступа по индексу
 ```
 
-4. **Нет длинной цепочки операций**
+1. **Нет длинной цепочки операций**
 
 ```kotlin
 val result = numbers.map { it * 2 }  // Одна-две операции - List OK
@@ -243,7 +246,7 @@ val largeData = (1..1_000_000).asSequence()
 // Будут обработаны только элементы до получения 10 подходящих
 ```
 
-2. **Длинные цепочки операций** (несколько последовательных шагов трансформации)
+1. **Длинные цепочки операций** (несколько последовательных шагов трансформации)
 
 ```kotlin
 val result = users.asSequence()
@@ -255,7 +258,7 @@ val result = users.asSequence()
     .toList()
 ```
 
-3. **Ранняя остановка** (`first`, `take`, `any`, и т.п.)
+1. **Ранняя остановка** (`first`, `take`, `any`, и т.п.)
 
 ```kotlin
 // List-цепочка: map/filter проходят по всем элементам
@@ -269,7 +272,7 @@ val firstEvenFromSeq = (1..1_000_000).asSequence()
     .first { it > 1000 }
 ```
 
-4. **Бесконечные последовательности**
+1. **Бесконечные последовательности**
 
 ```kotlin
 val fibonacci = generateSequence(1 to 1) { (a, b) -> b to (a + b) }
@@ -638,7 +641,7 @@ val users = listOf(user1, user2, user3)
     .map { it.name }
 ```
 
-2. You need intermediate results:
+1. You need intermediate results:
 
 ```kotlin
 val doubled = numbers.map { it * 2 }
@@ -648,7 +651,7 @@ val filtered = doubled.filter { it > 10 }
 println("Filtered: $filtered")
 ```
 
-3. You require indexing / `size` / `lastIndex`:
+1. You require indexing / `size` / `lastIndex`:
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
@@ -657,7 +660,7 @@ println(numbers.lastIndex)
 println(numbers[2])
 ```
 
-4. You have 1–2 simple operations; `Sequence` overhead is not justified.
+1. You have 1–2 simple operations; `Sequence` overhead is not justified.
 
 ### When To Use Sequence
 
@@ -673,7 +676,7 @@ val largeData = (1..1_000_000).asSequence()
     .toList()
 ```
 
-2. Long transformation chains:
+1. Long transformation chains:
 
 ```kotlin
 val result = users.asSequence()
@@ -685,7 +688,7 @@ val result = users.asSequence()
     .toList()
 ```
 
-3. Early termination with `first`/`take`/`any`/etc.:
+1. Early termination with `first`/`take`/`any`/etc.:
 
 ```kotlin
 val firstEvenFromSeq = (1..1_000_000).asSequence()
@@ -693,7 +696,7 @@ val firstEvenFromSeq = (1..1_000_000).asSequence()
     .first { it > 1000 }
 ```
 
-4. Potentially infinite/streaming sources (e.g. `generateSequence`, `lineSequence`).
+1. Potentially infinite/streaming sources (e.g. `generateSequence`, `lineSequence`).
 
 ### Comparison Table
 
@@ -709,7 +712,7 @@ val firstEvenFromSeq = (1..1_000_000).asSequence()
 | `size`, `lastIndex` | Direct | Require materialization |
 | Infinite data | Not suitable | Supported |
 
-### Terminal vs Intermediate Operations
+### Terminal Vs Intermediate Operations
 
 Intermediate (lazy, return `Sequence`): `map`, `filter`, `flatMap`, `distinct`, `sorted`, `drop`, `take`, etc.
 
@@ -728,7 +731,7 @@ val first = seq.first()   // would re-run pipeline
 
 ### Practical Examples
 
-1) File processing:
+1. File processing:
 
 ```kotlin
 fun processFileEager(file: File): List<String> =
@@ -746,7 +749,7 @@ fun processFileLazy(file: File): List<String> =
         .toList()
 ```
 
-2) API pagination (non-suspending wrapper over page fetch):
+1. API pagination (non-suspending wrapper over page fetch):
 
 ```kotlin
 fun getAllUsersLazy(fetchPage: (Int) -> List<User>): Sequence<User> =
@@ -757,7 +760,7 @@ fun getAllUsersLazy(fetchPage: (Int) -> List<User>): Sequence<User> =
         .filter { it.isActive }
 ```
 
-3) Large collection search:
+1. Large collection search:
 
 ```kotlin
 data class Product(val id: Int, val name: String, val price: Double)
@@ -789,7 +792,7 @@ val map = sequence.associateWith { it * 2 }
 
 ### Common Mistakes
 
-1) Premature `toList`:
+1. Premature `toList`:
 
 ```kotlin
 val wrong = largeList.asSequence()
@@ -803,9 +806,9 @@ val right = largeList.asSequence()
     .toList()
 ```
 
-2) Using `Sequence` for tiny collections (iterator overhead, less readable).
+1. Using `Sequence` for tiny collections (iterator overhead, less readable).
 
-3) Assuming `Sequence` caches results:
+2. Assuming `Sequence` caches results:
 
 ```kotlin
 val seq = (1..5).asSequence()

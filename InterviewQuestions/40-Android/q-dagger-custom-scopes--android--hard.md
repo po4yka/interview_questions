@@ -4,26 +4,31 @@ title: Dagger Custom Scopes / Кастомные скоупы Dagger
 aliases: [Dagger Custom Scopes, Кастомные скоупы Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dagger
-- c-dependency-injection
-- q-dagger-build-time-optimization--android--medium
-- q-dagger-component-dependencies--android--hard
-- q-hilt-components-scope--android--medium
+  - c-dagger
+  - c-dependency-injection
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-component-dependencies--android--hard
+  - q-dagger-framework-overview--android--hard
+  - q-dagger-multibinding--android--hard
+  - q-dagger-purpose--android--easy
+  - q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
-- "https://dagger.dev/hilt/components.html"
+  - "https://dagger.dev/hilt/components.html"
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +41,7 @@ sources:
 
 Кастомные скоупы в обычном Dagger позволяют управлять временем жизни зависимостей за пределами стандартных Android-компонентов (`Activity`, `Fragment`) и изолировать состояние для конкретных фич или сущностей (например, пользовательская сессия). В отличие от `@Singleton` и встроенных Hilt-скоупов (таких как `@ActivityScoped`), кастомный скоуп в Dagger реализуется через отдельный компонент со своим `@Scope`, время жизни которого вы создаёте и уничтожаете явно.
 
-### Типы скоупов
+### Типы Скоупов
 
 - `@Singleton` (Dagger/Hilt)
   - Привязан к корневому (singleton) компоненту.
@@ -55,7 +60,7 @@ sources:
   - Время жизни скоупа = время жизни соответствующего компонента, которым вы управляете явно (создание/очистка ссылки).
   - Полезен для пользовательских сессий, навигационных flows/feature-скоупов и любых жизненных циклов, которые не совпадают 1:1 со стандартными скоупами.
 
-### Создание кастомного скоупа (Dagger)
+### Создание Кастомного Скоупа (Dagger)
 
 ```kotlin
 // 1. Определяем аннотацию-скоуп
@@ -83,7 +88,7 @@ class UserManager @Inject constructor(
 )
 ```
 
-### Управление жизненным циклом (Dagger)
+### Управление Жизненным Циклом (Dagger)
 
 ```kotlin
 object UserSessionHolder {
@@ -103,7 +108,7 @@ object UserSessionHolder {
 }
 ```
 
-### Когда использовать кастомный скоуп (Dagger)
+### Когда Использовать Кастомный Скоуп (Dagger)
 
 Создавайте кастомный скоуп, когда:
 - нужен пер-пользовательский скоуп (multi-user / user session), чтобы изолировать состояние между сессиями;
@@ -114,7 +119,7 @@ object UserSessionHolder {
 - жизненный цикл зависимости естественно совпадает с `Activity`/`Fragment`/`ViewModel` (обычно достаточно Hilt-скоупов);
 - состояние простое и не требует отдельного графа и явного управления временем жизни.
 
-### Сравнение с Hilt
+### Сравнение С Hilt
 
 В Hilt жизненные циклы компонентов и скоупов фиксированы и управляются фреймворком. Добавлять произвольные новые скоупы для Hilt-компонентов нельзя.
 
@@ -223,7 +228,7 @@ For lifecycles that don't align with these (e.g., a user session):
 
 `@EntryPoint` in Hilt is used to access existing Hilt components from framework types that Hilt can't inject into directly; it is not a mechanism for defining new scopes.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как избежать утечек памяти при использовании кастомных скоупов?
 - Может ли один кастомный скоуп зависеть от другого кастомного скоупа?
@@ -255,14 +260,14 @@ For lifecycles that don't align with these (e.g., a user session):
 - [Dagger Scopes Documentation](https://dagger.dev/api/latest/dagger/Scope.html)
 - [Hilt Components and Scopes](https://dagger.dev/hilt/components.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-hilt-components-scope--android--medium]] — стандартные скоупы Hilt
 - [[c-dependency-injection]] — основы DI
 - Базовое понимание компонентов Dagger
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-dagger-component-dependencies--android--hard]] — связи и зависимости компонентов
 - [[q-dagger-build-time-optimization--android--medium]] — влияние конфигурации графа и скоупов на сборку
 

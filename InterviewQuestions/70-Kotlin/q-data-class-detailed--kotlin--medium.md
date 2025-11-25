@@ -1,7 +1,7 @@
 ---
 id: kotlin-245
 title: "Data classes in Kotlin: features, limitations, and best practices / Data classes в Kotlin"
-aliases: [Data Classes Kotlin, Data classes Kotlin]
+aliases: [Data classes Kotlin, Data Classes Kotlin]
 topic: kotlin
 difficulty: medium
 original_language: en
@@ -13,8 +13,10 @@ updated: "2025-11-09"
 tags: ["classes", "data-class", "difficulty/medium", "kotlin-features", "kotlin"]
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
 moc: moc-kotlin
-related: [c-kotlin-features, c-equality, q-sealed-class-sealed-interface--kotlin--medium]
+related: [c-equality, c-kotlin-features, q-sealed-class-sealed-interface--kotlin--medium]
 subtopics: [data-classes]
+date created: Saturday, November 1st 2025, 1:29:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос

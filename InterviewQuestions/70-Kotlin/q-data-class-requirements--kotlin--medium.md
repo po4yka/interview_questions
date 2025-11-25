@@ -14,7 +14,10 @@ related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-actor-patte
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-classes, difficulty/medium, programming-languages]
+date created: Friday, October 31st 2025, 6:33:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Какие требования при создании data class в Kotlin?
 
@@ -39,7 +42,7 @@ tags: [data-classes, difficulty/medium, programming-languages]
 - Можно иметь вторичные конструкторы, но они должны делегировать к первичному конструктору.
 - Можно переопределять автоматически генерируемые функции вручную.
 
-### Примеры кода
+### Примеры Кода
 
 **Валидный `data class`:**
 
@@ -134,7 +137,7 @@ fun main() {
 }
 ```
 
-### Data class и наследование
+### Data Class И Наследование
 
 ```kotlin
 // Базовый класс (должен быть open)
@@ -169,7 +172,7 @@ fun main() {
 }
 ```
 
-### Data class с вторичным конструктором
+### Data Class С Вторичным Конструктором
 
 ```kotlin
 data class Rectangle(
@@ -192,7 +195,7 @@ fun main() {
 }
 ```
 
-### Демонстрация авто-сгенерированных функций
+### Демонстрация Авто-сгенерированных Функций
 
 ```kotlin
 data class Book(
@@ -228,7 +231,7 @@ fun main() {
 }
 ```
 
-### Переопределение авто-сгенерированных функций
+### Переопределение Авто-сгенерированных Функций
 
 ```kotlin
 data class Point(val x: Int, val y: Int) {
@@ -263,7 +266,7 @@ fun main() {
 }
 ```
 
-### Data class в коллекциях
+### Data Class В Коллекциях
 
 ```kotlin
 data class Student(
@@ -294,7 +297,7 @@ fun main() {
 }
 ```
 
-### Data class с валидацией
+### Data Class С Валидацией
 
 ```kotlin
 data class Email(val address: String) {
@@ -640,7 +643,7 @@ fun main() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия `data class` в Kotlin от аналогичных возможностей в Java?
 - Когда на практике стоит использовать `data class`?
@@ -662,7 +665,7 @@ fun main() {
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-actor-pattern--kotlin--hard]]
 - [[q-abstract-class-vs-interface--kotlin--medium]]

@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [collections, data-structures, difficulty/easy, kotlin, list, map, set]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о коллекциях в Kotlin?
 
@@ -58,7 +61,7 @@ tags: [collections, data-structures, difficulty/easy, kotlin, list, map, set]
 
 ![Диаграмма коллекций Kotlin](https://raw.githubusercontent.com/swayangjit/Android-Interview-Questions/master/Kotlin/res/collections-diagram.png)
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия коллекций Kotlin от коллекций Java?
 - Когда вы бы использовали эти коллекции на практике?
@@ -68,7 +71,7 @@ tags: [collections, data-structures, difficulty/easy, kotlin, list, map, set]
 - [[c-collections]]
 - [Обзор коллекций Kotlin](https://kotlinlang.org/docs/reference/collections-overview.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Связанные (Простые)
 - [[q-data-structures-overview--algorithms--easy]] - Структуры данных

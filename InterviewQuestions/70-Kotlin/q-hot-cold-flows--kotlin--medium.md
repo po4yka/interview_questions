@@ -21,14 +21,17 @@ source_note: Comprehensive Kotlin Hot Cold Flows Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-kotlin-flow-basics--kotlin--medium]
+related: [c-flow, c-kotlin, q-kotlin-flow-basics--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [cold-flows, coroutines, difficulty/medium, flow, hot-flows, kotlin]
+date created: Saturday, October 18th 2025, 9:34:33 am
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между горячими и холодными потоками? Объясните `Flow` (холодный), `SharedFlow`, `StateFlow` (горячие), когда использовать каждый и как конвертировать между ними.
 
@@ -83,7 +86,7 @@ val hotFlow = MutableSharedFlow<Int>()
   - долгоживущее состояние UI, которое должно быть всегда доступно как последнее актуальное значение
   - связь `ViewModel` → UI (Compose/Views)
 
-### Как конвертировать холодный в горячий (кратко)
+### Как Конвертировать Холодный В Горячий (кратко)
 
 - Используйте `shareIn` для преобразования `Flow` в `SharedFlow`.
 - Используйте `stateIn` для получения `StateFlow` из холодного `Flow`.
@@ -135,14 +138,14 @@ val hotFlow = MutableSharedFlow<Int>()
   - UI state that should expose the latest value at any time
   - `ViewModel` → UI data streams
 
-### How to convert cold to hot (brief)
+### How to Convert Cold to Hot (brief)
 
 - Use `shareIn` to convert a cold `Flow` into a `SharedFlow`.
 - Use `stateIn` to obtain a `StateFlow` from a cold `Flow`.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что такое стратегия `SharingStarted` и как она влияет на поведение `shareIn`/`stateIn`?
 2. Как выбрать между `SharedFlow` и `StateFlow` в конкретном сценарии (события vs состояние)?
@@ -178,15 +181,15 @@ val hotFlow = MutableSharedFlow<Int>()
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-cold-vs-hot-flows--kotlin--medium]]
 - [[q-flow-cold-flow-fundamentals--kotlin--easy]]
 - [[q-testing-stateflow-sharedflow--kotlin--medium]]
 - [[q-testing-viewmodel-coroutines--kotlin--medium]]
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-testing-flow-operators--kotlin--hard]]
 
 ### Хаб

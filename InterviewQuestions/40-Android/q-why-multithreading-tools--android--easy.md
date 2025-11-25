@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/easy]
 sources: ["https://developer.android.com/guide/background", "https://developer.android.com/kotlin/coroutines"]
 
+date created: Saturday, November 1st 2025, 1:26:27 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -346,7 +348,7 @@ Dispatchers.Main
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что произойдёт, если выполнить сетевой запрос в главном потоке?
 2. В чём разница между `Dispatchers.IO` и `Dispatchers.Default`?
@@ -380,12 +382,12 @@ Dispatchers.Main
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
 - [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - (нет соответствующей локализованной ссылки)
 
-### Похожие (тот же уровень)
+### Похожие (тот Же уровень)
 - [[q-repository-multiple-sources--android--medium]]
 
 ### Продвинутые (сложнее)

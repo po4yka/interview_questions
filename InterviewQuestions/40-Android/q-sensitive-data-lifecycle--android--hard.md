@@ -1,31 +1,28 @@
 ---
 id: android-637
 title: Sensitive Data Lifecycle / Жизненный цикл чувствительных данных
-aliases:
-- Sensitive Data Lifecycle
-- Жизненный цикл чувствительных данных
+aliases: [Sensitive Data Lifecycle, Жизненный цикл чувствительных данных]
 topic: android
 subtopics:
-- keystore-crypto
-- privacy-sdks
+  - keystore-crypto
+  - privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-keystore
-- q-android-security-best-practices--android--medium
+  - c-android-keystore
+  - q-android-security-best-practices--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-save-data-outside-fragment--android--medium
+  - q-what-is-data-binding--android--easy
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/keystore-crypto
-- android/privacy-sdks
-- data-lifecycle
-- difficulty/hard
+tags: [android/keystore-crypto, android/privacy-sdks, data-lifecycle, difficulty/hard]
 sources:
 - url: "https://developer.android.com/topic/security/data"
   note: Protecting user data guide
@@ -34,6 +31,8 @@ sources:
 - url: "https://owasp.org/www-project-mobile-security-testing-guide/"
   note: OWASP MSTG data storage/testing guidance
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -46,16 +45,16 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 - Классифицируйте данные, минимизируйте сбор и храните только необходимое.
 - Используйте шифрование at rest и in transit, ключи — в аппаратно-защищённом Keystore.
 - Ограничьте кеширование чувствительных данных.
 - Введите явные политики ретенции, безопасное удаление (crypto-shredding).
 - Обеспечьте аудит, мониторинг и проверку через тесты и статический анализ.
 
-### Подробный вариант
+### Подробный Вариант
 
-### 1. Классификация и минимизация
+### 1. Классификация И Минимизация
 
 - Разбейте данные на уровни (PII, финансовые, биометрические данные, телеметрия).
 - Принцип минимизации: не собирайте данные без явной, задокументированной цели.
@@ -73,25 +72,25 @@ sources:
 - Учитывайте offline-сценарии: шифруйте payload перед сохранением в локальную очередь отправки.
 - Добавьте криптографическую подпись/механизм целостности (например, HMAC) для защиты от модификации.
 
-### 4. Контролируемое кеширование
+### 4. Контролируемое Кеширование
 
 - На сетевом уровне для содержимого с PII используйте заголовки `Cache-Control: no-store`/`no-cache` по необходимости, чтобы предотвратить кеширование на клиенте/прокси.
 - Для загрузчиков изображений (Glide/Picasso и др.) отключайте диск-кеш для изображений, содержащих чувствительные данные (например, персональные документы, медицинские снимки), через `DiskCacheStrategy.NONE`/аналогичные настройки.
 - В хранилище (Room и др.) разделяйте таблицы с PII и прочими данными, используйте шифрование на уровне таблиц/колонок, когда необходимо, чтобы минимизировать объём чувствительных данных в кеше/индексах.
 
-### 5. Удаление и ретенция
+### 5. Удаление И Ретенция
 
 - Имплементируйте явную retention policy (например, в днях) для каждого типа данных. Используйте `WorkManager` или аналог для периодической очистки.
 - Безопасное удаление: для зашифрованных данных предпочитайте crypto-shredding (удаление ключа, делая данные необратимо нечитаемыми); попытки перезаписи файлов могут не гарантировать полное удаление на уровне ФС/носителя.
 - Учитывайте бэкапы: исключите чувствительные файлы из Auto Backup (`android:allowBackup="false"` или настройка `fullBackupContent`) и из собственных механизмов резервного копирования.
 
-### 6. Аудит и мониторинг
+### 6. Аудит И Мониторинг
 
 - Ведите audit log действий с данными: какие операции выполнены, каким техническим идентификатором (используйте псевдонимизацию/анонимизацию, не логируйте сами чувствительные значения).
 - Настройте риск-алерты (аномальное количество запросов, нетипичные IP/устройства/гео при наличии серверной поддержки).
 - Храните необходимые доказательства (evidence) для compliance review, не нарушая принцип минимизации и не дублируя PII в логах.
 
-### 7. Инструменты и тестирование
+### 7. Инструменты И Тестирование
 
 - Unit/-интеграционные тесты безопасности: проверяют, что чувствительные данные не попадают в intents, `logcat`, уведомления и незашифрованные файлы.
 - Статический анализ: настройте правила (например, Checkstyle/Detekt/Lint) для запрета `Log.*` с PII и для контроля использования безопасных API.
@@ -164,7 +163,7 @@ sources:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как реализовать пользовательское "забыть меня" (GDPR) с полным удалением и отчетом?
 - Как обеспечить безопасную передачу данных между приложением и Wear/IoT устройствами?
 - Какие подходы для secret management в рантайме (remote config, key rotation)?
@@ -182,7 +181,7 @@ sources:
 - [[c-android-keystore]]
 - "https://developer.android.com/topic/security/data"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-android-security-best-practices--android--medium]]
 

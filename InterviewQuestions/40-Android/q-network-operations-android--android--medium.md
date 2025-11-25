@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/networking-http, difficulty/medium, http, networking]
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android/networking-http, difficulty/medium, http, networking]
 
 В Android для сетевых операций используются как встроенные средства, так и популярные библиотеки: от низкоуровневого `HttpURLConnection` до современных решений вроде `OkHttp`, `Retrofit` и `Ktor` (см. также [[c-android-components]]).
 
-### Основные инструменты
+### Основные Инструменты
 
 **HttpURLConnection** — встроенный низкоуровневый HTTP-клиент. Требует много шаблонного кода, не имеет встроенного маппинга JSON и выполняет блокирующие вызовы, которые нельзя делать на главном потоке.
 
@@ -78,7 +80,7 @@ lifecycleScope.launch {
 
 **Ktor Client** — асинхронный Kotlin-first клиент для Kotlin Multiplatform. Из коробки использует корутины, расширяется через плагины.
 
-### Критически важные правила
+### Критически Важные Правила
 
 **Не блокировать главный поток сетевыми операциями**
 
@@ -138,7 +140,7 @@ suspend fun safeApiCall(): Result<User> {
 }
 ```
 
-### Проверка доступности сети
+### Проверка Доступности Сети
 
 ```kotlin
 fun isNetworkAvailable(context: Context): Boolean {
@@ -311,7 +313,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать retry-логику с экспоненциальной задержкой?
 - В чем разница между интерсепторами OkHttp и конвертерами Retrofit?
@@ -339,12 +341,12 @@ fun isNetworkAvailable(context: Context): Boolean {
 - [Retrofit documentation](https://square.github.io/retrofit/)
 - [OkHttp documentation](https://square.github.io/okhttp/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-app-components--android--easy]] — компоненты Android
 
-### Средний уровень
+### Средний Уровень
 - [[q-what-does-the-lifecycle-library-do--android--medium]] — использование Lifecycle для сетевых операций
 
 ## Related Questions

@@ -1,39 +1,35 @@
 ---
 id: android-066
 title: Flow Testing with Turbine / Тестирование Flow с Turbine
-aliases:
-- Flow Testing with Turbine
-- Тестирование Flow с Turbine
+aliases: [Flow Testing with Turbine, Тестирование Flow с Turbine]
 topic: android
 subtopics:
-- coroutines
-- flow
-- testing-unit
+  - coroutines
+  - flow
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-flow
-- q-compose-testing--android--medium
-- q-unit-testing-coroutines-flow--android--medium
+  - c-flow
+  - q-compose-testing--android--medium
+  - q-testing-coroutines-flow--android--hard
+  - q-testing-viewmodels-turbine--android--medium
+  - q-unit-testing-coroutines-flow--android--medium
 created: 2025-10-12
 updated: 2025-11-10
-tags:
-- android/coroutines
-- android/flow
-- android/testing-unit
-- difficulty/medium
-- turbine
-- unit-testing
+tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, turbine, unit-testing]
 sources:
-- "https://github.com/cashapp/turbine"
+  - "https://github.com/cashapp/turbine"
 
 
+date created: Saturday, November 1st 2025, 1:30:02 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -402,7 +398,7 @@ stateFlow.test {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Turbine ведёт себя при тестировании высокочастотных эмиссий и буферизации событий (учитывая, что backpressure в терминах Flow реализуется самим Flow/операторами)?
 - В чем разница между методами `test()` и `testIn()`, и когда какой использовать?
@@ -432,7 +428,7 @@ stateFlow.test {
 - kotlinx-coroutines-test guide: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
 - [[c-flow]] — Flow basics and operators
 
-## Похожие вопросы (RU)
+## Похожие Вопросы (RU)
 
 ### Предпосылки / Концепты
 

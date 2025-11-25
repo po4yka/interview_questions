@@ -1,31 +1,31 @@
 ---
 id: android-145
 title: What Is A View And What Is Responsible For Its Visual Part / Что такое View и что отвечает за её визуальную часть
-aliases:
-- What Is A View And What Is Responsible For Its Visual Part
-- Что такое View и что отвечает за её визуальную часть
+aliases: [What Is A View And What Is Responsible For Its Visual Part, Что такое View и что отвечает за её визуальную часть]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-what-is-known-about-methods-that-redraw-view--android--medium
-- q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium
+  - c-android-components
+  - q-custom-view-attributes--android--medium
+  - q-view-binding--android--medium
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
+  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/medium
+tags: [android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -53,7 +53,7 @@ class CustomTextView(context: Context) : TextView(context)
 class CustomLayout(context: Context) : LinearLayout(context)
 ```
 
-### Отрисовка, Измерения и Компоновка
+### Отрисовка, Измерения И Компоновка
 
 Каждая `View` участвует в трёх основных этапах:
 
@@ -112,7 +112,7 @@ class CustomView(context: Context) : View(context) {
 </style>
 ```
 
-5. Программные изменения — динамическое управление внешним видом и состоянием:
+1. Программные изменения — динамическое управление внешним видом и состоянием:
 
 ```kotlin
 textView.apply {
@@ -123,7 +123,7 @@ textView.apply {
 }
 ```
 
-6. Canvas API — используется внутри `onDraw()` для кастомной отрисовки (например, `drawCircle`, `drawPath`, `drawText`).
+1. Canvas API — используется внутри `onDraw()` для кастомной отрисовки (например, `drawCircle`, `drawPath`, `drawText`).
 
 В конечном итоге визуальная часть `View` формируется комбинацией:
 - параметров компоновки от родителя (где и какого размера `View`),
@@ -207,7 +207,7 @@ Several layers affect a `View`'s visual appearance:
 </style>
 ```
 
-5. Programmatic Changes — dynamic control via code:
+1. Programmatic Changes — dynamic control via code:
 
 ```kotlin
 textView.apply {
@@ -218,7 +218,7 @@ textView.apply {
 }
 ```
 
-6. Canvas API — used inside `onDraw()` for custom drawing (e.g., `drawCircle`, `drawPath`, `drawText`).
+1. Canvas API — used inside `onDraw()` for custom drawing (e.g., `drawCircle`, `drawPath`, `drawText`).
 
 Ultimately, the `View`'s visual part is defined by the combination of:
 - layout parameters from its parent (where it is placed and how big it is),
@@ -228,7 +228,7 @@ Ultimately, the `View`'s visual part is defined by the combination of:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `onMeasure`, `onLayout` и `onDraw` взаимодействуют в процессе рендеринга?
 - Когда стоит переопределять `dispatchDraw`, а когда `onDraw`?
@@ -252,7 +252,7 @@ Ultimately, the `View`'s visual part is defined by the combination of:
 - https://developer.android.com/guide/topics/ui/custom-components — Custom components
 - https://developer.android.com/guide/topics/ui/how-android-draws — How Android draws views
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 

@@ -10,11 +10,14 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, c-kotlin]
+related: [c-kotlin, c-kotlin-features]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [code-generation, data-classes, difficulty/easy, kotlin]
+date created: Saturday, November 1st 2025, 1:29:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое data class в Kotlin и для чего он нужен?
 
@@ -33,7 +36,7 @@ tags: [code-generation, data-classes, difficulty/easy, kotlin]
 data class User(val name: String, val age: Int)
 ```
 
-### Особенности и преимущества
+### Особенности И Преимущества
 
 **Автоматическая генерация функций (по свойствам первичного конструктора):**
 - `equals()` — сравнение объектов по содержимому (используются только свойства из первичного конструктора)
@@ -51,7 +54,7 @@ val (name, age) = user1
 println("$name is $age years old")
 ```
 
-### Ограничения data class
+### Ограничения Data Class
 
 - Должен иметь как минимум один параметр в первичном конструкторе.
 - Все параметры, которые должны участвовать в `equals`/`hashCode`/`copy`/`componentN`, должны быть объявлены как `val` или `var` в первичном конструкторе.
@@ -75,7 +78,7 @@ To declare a data class, add the `data` keyword before the class declaration:
 data class User(val name: String, val age: Int)
 ```
 
-### Features and benefits
+### Features and Benefits
 
 **Automatically generated functions (based on primary constructor properties):**
 - `equals()` — compares objects by content (only properties from the primary constructor are used)
@@ -93,7 +96,7 @@ val (name, age) = user1
 println("$name is $age years old")
 ```
 
-### Data class constraints
+### Data Class Constraints
 
 - Must have at least one parameter in the primary constructor.
 - All parameters that should participate in `equals`/`hashCode`/`copy`/`componentN` must be declared as `val` or `var` in the primary constructor.
@@ -107,7 +110,7 @@ println("$name is $age years old")
 - Improves code readability.
 - Provides predictable behavior when used in collections and data structures that rely on `equals()`/`hashCode()` (e.g., `Set`, `Map`).
 
-## Дополнительные вопросы
+## Дополнительные Вопросы
 
 - В чем ключевые отличия от Java-классов с ручной реализацией методов?
 - Когда вы бы использовали `data class` на практике?
@@ -129,7 +132,7 @@ println("$name is $age years old")
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
 - [[q-kotlin-lateinit--programming-languages--medium]]

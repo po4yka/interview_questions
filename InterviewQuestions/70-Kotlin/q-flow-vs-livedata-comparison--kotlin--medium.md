@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-concepts--kotlin--medium, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-concepts--kotlin--medium, c-kotlin, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
 
+date created: Friday, November 7th 2025, 2:49:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -929,7 +931,7 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java-подходов к реактивности?
 - Когда бы вы использовали это на практике в реальном Android-приложении?
@@ -961,7 +963,7 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Хаб
 - [[q-kotlin-flow-basics--kotlin--medium]] - Обзор и введение в Kotlin `Flow`

@@ -18,13 +18,17 @@ related:
   - c-dependency-injection
   - c-gradle
   - q-android-build-optimization--android--medium
+  - q-build-optimization-gradle--android--medium
   - q-dagger-framework-overview--android--hard
+  - q-dagger-problems--android--medium
   - q-kapt-ksp-migration--android--medium
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, android/gradle, difficulty/medium]
 sources:
   - "https://dagger.dev/hilt/"
+date created: Saturday, November 1st 2025, 12:46:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -165,7 +169,7 @@ kapt {
 
 Use Android Studio Build Analyzer or `./gradlew build --scan` to profile kapt/ksp tasks. In real projects, migration to KSP and better graph/modular design often yields noticeable reductions (e.g., tens of percent) in annotation processing time, but exact numbers are project-specific.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Какова конкретная разница в производительности между KAPT и KSP для Dagger/Hilt?
 - В каких случаях не стоит использовать Singleton scope с точки зрения оптимизации времени сборки?
@@ -191,7 +195,7 @@ Use Android Studio Build Analyzer or `./gradlew build --scan` to profile kapt/ks
 - https://dagger.dev/hilt/
 - https://developer.android.com/training/dependency-injection/hilt-android
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-project-parts--android--easy]]

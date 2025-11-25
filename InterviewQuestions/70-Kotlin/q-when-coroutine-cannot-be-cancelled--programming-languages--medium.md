@@ -3,18 +3,20 @@ id: lang-084
 title: "When Coroutine Cannot Be Cancelled / Когда корутина не может быть отменена"
 aliases: [When Coroutine Cannot Be Cancelled, Когда корутина не может быть отменена]
 topic: kotlin
-subtopics: [coroutines, cancellation]
+subtopics: [cancellation, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-how-suspend-function-detects-suspension--programming-languages--hard]
+related: [c-coroutines, c-kotlin, q-how-suspend-function-detects-suspension--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [cancellation, coroutines, difficulty/medium, kotlin, programming-languages]
 
+date created: Friday, October 31st 2025, 6:32:43 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ tags: [cancellation, coroutines, difficulty/medium, kotlin, programming-language
 
 Да, есть несколько типичных случаев, когда обычная кооперативная отмена в `kotlinx.coroutines` фактически не срабатывает (корутина не завершается вовремя или вовсе):
 
-### Случай 1: Блокирующий код
+### Случай 1: Блокирующий Код
 
 Если внутри корутины используется блокирующая операция (например, `Thread.sleep()`, длительный синхронный вызов, бесконечный `while (true) {}` без проверок), выполнение не возвращается в диспетчер корутин, и сигнал отмены не обрабатывается, пока блокирующий участок не завершится.
 
@@ -114,7 +116,7 @@ suspend fun performCleanup() {
 }
 ```
 
-### Случай 3: Нет кооперации — CPU-интенсивный цикл
+### Случай 3: Нет Кооперации — CPU-интенсивный Цикл
 
 Если длительные вычисления выполняются без точек приостановки и без проверок отмены (`isActive`, `yield()`, `ensureActive()` или других отменяемых `suspend`-функций), корутина не реагирует на отмену, пока цикл не завершится.
 
@@ -194,7 +196,7 @@ fun cpuIntensiveCooperative3() = runBlocking {
 }
 ```
 
-### Случай 4: Бесконечный цикл без проверок
+### Случай 4: Бесконечный Цикл Без Проверок
 
 Бесконечный цикл без точек приостановки и без проверок отмены (`isActive` и т.п.) не завершится при отмене `Job`.
 
@@ -265,7 +267,7 @@ fun interruptibleIO() = runBlocking {
 }
 ```
 
-### Паттерны кооперации с отменой
+### Паттерны Кооперации С Отменой
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -311,7 +313,7 @@ suspend fun cooperativeWork5() {
 }
 ```
 
-### Реальный пример: обработка изображений
+### Реальный Пример: Обработка Изображений
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -353,7 +355,7 @@ suspend fun processImageCooperative(image: Bitmap): Bitmap = withContext(Dispatc
 }
 ```
 
-### try-finally и отмена
+### Try-finally И Отмена
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -379,7 +381,7 @@ suspend fun withCleanup() = coroutineScope {
 }
 ```
 
-### NonCancellable для критичной очистки
+### NonCancellable Для Критичной Очистки
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -407,7 +409,7 @@ suspend fun withCriticalCleanup() = coroutineScope {
 }
 ```
 
-### Тестирование отмены
+### Тестирование Отмены
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -442,7 +444,7 @@ class CancellationTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1017,7 +1019,7 @@ Also see [[c-kotlin]] and [[c-coroutines]] for coroutine and cancellation basics
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия механизма отмены корутин от потоков в Java?
 - Когда на практике вы бы использовали эти паттерны кооперативной отмены?
@@ -1041,7 +1043,7 @@ Also see [[c-kotlin]] and [[c-coroutines]] for coroutine and cancellation basics
 - [[c-kotlin]]
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
 

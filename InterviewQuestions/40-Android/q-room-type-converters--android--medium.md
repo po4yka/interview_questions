@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/room, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -317,7 +319,7 @@ Reasons for this approach:
 - Predictable queries without hidden lazy loading
 - Better control over resources and entity relationships
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как реализовать конвертер для сложных вложенных объектов (например, `List<Address>`)?
 2. Что произойдет, если `TypeConverter` выбросит исключение во время чтения значения?
@@ -341,7 +343,7 @@ Reasons for this approach:
 
 - [Room Referencing Complex Data](https://developer.android.com/training/data-storage/room/referencing-data) - Official docs
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-room-library-definition--android--easy]] — Что такое Room?

@@ -1,34 +1,32 @@
 ---
 id: android-085
 title: RecyclerView ViewTypes Delegation / Делегирование ViewTypes в RecyclerView
-aliases:
-- RecyclerView ViewTypes Delegation
-- Делегирование ViewTypes в RecyclerView
+aliases: [RecyclerView ViewTypes Delegation, Делегирование ViewTypes в RecyclerView]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-recyclerview-explained--android--medium
-- c-android
+  - c-android
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+  - q-recyclerview-explained--android--medium
+  - q-recyclerview-itemdecoration-advanced--android--medium
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- adapter
-- android/ui-views
-- design-patterns
-- difficulty/medium
-- view-types
+tags: [adapter, android/ui-views, design-patterns, difficulty/medium, view-types]
 sources:
-- "https://developer.android.com/guide/topics/ui/layout/recyclerview"
+  - "https://developer.android.com/guide/topics/ui/layout/recyclerview"
 
+date created: Saturday, November 1st 2025, 1:04:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -243,7 +241,7 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как оптимизировать производительность при использовании нескольких типов `View`?
 - В чем преимущества использования делегирования адаптера?
@@ -265,7 +263,7 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 - [Views](https://developer.android.com/develop/ui/views)
 - [RecyclerView documentation](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -273,7 +271,7 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 ### Предпосылки (Проще)
 - [[q-android-app-components--android--easy]] - Компоненты приложения
 
-### Связанные (Того же уровня)
+### Связанные (Того Же уровня)
 - [[q-recyclerview-explained--android--medium]] - Объяснение RecyclerView
 
 ### Продвинутые (Сложнее)

@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Structured Concurrency Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-structured-concurrency, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-coroutines, c-structured-concurrency, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [advanced, coroutines, coroutinescope, difficulty/hard, kotlin, structured-concurrency, supervision]
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Что такое структурированная конкурентность? Объясните различия coroutineScope и supervisorScope, отношения родитель-потомок, распространение отмены и продвинутые паттерны, включая withContext и координацию async/await.
 
@@ -38,7 +41,7 @@ tags: [advanced, coroutines, coroutinescope, difficulty/hard, kotlin, structured
 
 Структурированная конкурентность гарантирует, что все дочерние корутины завершаются в рамках своей области, прежде чем завершится родитель, что предотвращает утечки и обеспечивает корректную очистку ресурсов.
 
-### Базовые принципы
+### Базовые Принципы
 
 ```kotlin
 // Структурированная конкурентность гарантирует:
@@ -67,7 +70,7 @@ suspend fun structuredExample() = coroutineScope {
 // (после этого функция возвращается)
 ```
 
-### coroutineScope vs supervisorScope
+### coroutineScope Vs supervisorScope
 
 ```kotlin
 // coroutineScope: ошибка одной дочерней корутины → отменяются все дети и область
@@ -106,7 +109,7 @@ suspend fun supervisorScopeExample() {
 }
 ```
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
 ```kotlin
 // Паттерн 1: Параллельная декомпозиция с async
@@ -274,7 +277,7 @@ You also commonly use `withContext` to switch dispatchers while preserving struc
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как именно распространяется отмена в иерархии корутин при использовании структурированной конкурентности?
 2. В каких случаях следует предпочесть `supervisorScope` вместо `coroutineScope`?
@@ -308,7 +311,7 @@ You also commonly use `withContext` to switch dispatchers while preserving struc
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]
 - [[q-coroutine-exception-handling--kotlin--medium]]

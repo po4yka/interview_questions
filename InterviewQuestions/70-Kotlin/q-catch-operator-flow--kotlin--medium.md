@@ -1,11 +1,9 @@
 ---
 id: kotlin-070
 title: "Catch Operator in Kotlin Flow / Оператор catch в Kotlin Flow"
-aliases:
-    - Catch Operator in Kotlin Flow
-    - Оператор catch в Kotlin Flow
+aliases: [Catch Operator in Kotlin Flow, Оператор catch в Kotlin Flow]
 topic: kotlin
-subtopics: [flow, coroutines, error-handling]
+subtopics: [coroutines, error-handling, flow]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -15,19 +13,16 @@ source_note: Deep dive into catch operator in Kotlin Flow
 status: draft
 moc: moc-kotlin
 related:
-    - c-flow
-    - q-flow-basics--kotlin--easy
-    - q-flow-exception-handling--kotlin--medium
-    - q-retry-operators-flow--kotlin--medium
+  - c-flow
+  - q-flow-basics--kotlin--easy
+  - q-flow-exception-handling--kotlin--medium
+  - q-flow-map-operator--programming-languages--medium
+  - q-retry-operators-flow--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09
-tags:
-    - difficulty/medium
-    - lang/kotlin
-    - topic/kotlin
-    - flow
-    - coroutines
-    - error-handling
+tags: [coroutines, difficulty/medium, error-handling, flow, lang/kotlin, topic/kotlin]
+date created: Sunday, October 12th 2025, 2:49:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +45,7 @@ tags:
 -   `catch` не видит ошибки, возникшие после него (включая `collect`, терминальные операторы, `onEach`, `stateIn` и т. п.).
 -   Внутри `catch` используйте `emit`, преобразование ошибок в доменные типы или явный `throw`; избегайте молчаливого "проглатывания" исключений.
 
-### Прозрачность исключений
+### Прозрачность Исключений
 
 Прозрачность исключений в Kotlin Flow означает, что промежуточные операторы не должны скрывать исключения `downstream` и должны явно управлять `upstream`-ошибками. `catch` следует этому принципу: он
 - перехватывает только исключения, выброшенные в предыдущих (upstream) операторах/блоках,
@@ -69,7 +64,7 @@ val usersFlow = flow {
 
 Дополнительно см. [[c-flow]] и [[c-coroutines]] для базовых понятий.
 
-### Где располагать `catch`
+### Где Располагать `catch`
 
 -   Размещайте `catch` сразу после части конвейера, которая может бросать исключения (`flow {}`, `map`, `transform` и др.), чтобы явно ограничить область перехвата.
 -   Используйте отдельные `catch` для независимых участков конвейера с разной политикой восстановления.
@@ -86,7 +81,7 @@ repository.getUsers()
     )
 ```
 
-### Типовые шаблоны
+### Типовые Шаблоны
 
 -   **Восстановление**: излучайте кеш/дефолт или переводите в доменный тип ошибки (например, `Result.Error`).
 -   **Повторные попытки**: комбинируйте с `retry` / `retryWhen` до `catch`, чтобы `catch` обрабатывал финальный провал после всех ретраев.
@@ -99,13 +94,13 @@ fun loadProduct(id: String): Flow<Result<Product>> = flow {
  .catch { emit(Result.Error(it.message ?: "Unknown error")) }
 ```
 
-### Отличия от `try-catch`
+### Отличия От `try-catch`
 
 -   `try-catch` внутри `flow {}` локален и императивен; `catch` — декларативный оператор, который охватывает весь upstream-участок конвейера.
 -   `catch` облегчает повторное использование и компоновку операторов, так как политика обработки ошибок задаётся как часть цепочки.
 -   Комбинируйте оба подхода для блоков с явным ресурс-менеджментом, но сохраняйте прозрачность исключений: не перехватывайте чужие ошибки так, чтобы их невозможно было наблюдать.
 
-### Практические советы
+### Практические Советы
 
 -   Используйте специализированные типы ошибок или обёртки (`Result`, `Either`) там, где важно явно кодировать результат.
 -   Поддерживайте согласованный доменный тип значений: излучайте во `Flow` однородные по типу элементы.
@@ -124,7 +119,7 @@ fun loadProduct(id: String): Flow<Result<Product>> = flow {
 -   `catch` does not see exceptions that happen after it (including inside `collect`, terminal operators, `onEach`, `stateIn`, etc.).
 -   Inside `catch`, prefer emitting domain-safe values or mapping to domain error types, or explicitly rethrowing; avoid silently swallowing failures.
 
-### Exception transparency
+### Exception Transparency
 
 Exception transparency in Kotlin Flow means intermediate operators must not catch and hide exceptions from downstream operators, and should manage upstream errors explicitly. `catch` follows this rule:
 - it intercepts only exceptions from preceding (upstream) operators/blocks,
@@ -160,7 +155,7 @@ repository.getUsers()
     )
 ```
 
-### Common patterns
+### Common Patterns
 
 -   **Recovery**: emit cached/default data or map failures to a domain `Result.Error`.
 -   **Retry combo**: place `retry` / `retryWhen` before `catch` so `catch` handles only the terminal failure after retries are exhausted.
@@ -173,13 +168,13 @@ fun loadProduct(id: String): Flow<Result<Product>> = flow {
  .catch { emit(Result.Error(it.message ?: "Unknown error")) }
 ```
 
-### How it differs from `try-catch`
+### How it Differs from `try-catch`
 
 -   A `try-catch` inside `flow {}` is local and imperative; `catch` is a declarative operator that covers the upstream chain.
 -   `catch` keeps pipelines composable by centralizing error-handling policy in the flow chain.
 -   Combine both where scoped resource management or cleanup is clearer, but preserve exception transparency: do not hide errors that downstream code expects to observe.
 
-### Practical guidance
+### Practical Guidance
 
 -   Use domain-specific wrappers (`Result`, `Either`) when explicit success/failure modeling is desired.
 -   Emit consistent element types to keep collectors simple and type-safe.

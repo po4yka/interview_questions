@@ -1,30 +1,30 @@
 ---
 id: android-080
 title: Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких потоков
-aliases:
-- Stack vs Heap Memory In Multithreading
-- Stack и Heap память для нескольких потоков
+aliases: [Stack vs Heap Memory In Multithreading, Stack и Heap память для нескольких потоков]
 topic: android
 subtopics:
-- performance-memory
-- threads-sync
+  - performance-memory
+  - threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/performance-memory
-- android/threads-sync
-- difficulty/medium
+tags: [android/performance-memory, android/threads-sync, difficulty/medium]
 moc: moc-android
 related:
-- c-android
-- c-concurrency
+  - c-android
+  - c-concurrency
+  - q-optimize-memory-usage-android--android--medium
+  - q-tasks-back-stack--android--medium
+  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+date created: Saturday, November 1st 2025, 1:24:35 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -191,7 +191,7 @@ This shows:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как использование большого числа потоков влияет на частоту и паузы GC в Android-приложении?
 - Какова роль пулинга потоков при оптимизации памяти?

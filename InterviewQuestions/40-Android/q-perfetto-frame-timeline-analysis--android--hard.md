@@ -1,36 +1,35 @@
 ---
 id: android-625
 title: Perfetto Frame Timeline Analysis / Анализ Frame Timeline в Perfetto
-aliases:
-- Perfetto Frame Timeline Analysis
-- Анализ Frame Timeline в Perfetto
+aliases: [Perfetto Frame Timeline Analysis, Анализ Frame Timeline в Perfetto]
 topic: android
 subtopics:
-- logging-tracing
-- performance-rendering
-- monitoring-slo
+  - logging-tracing
+  - monitoring-slo
+  - performance-rendering
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-profiling
-- q-android-performance-measurement-tools--android--medium
+  - c-android-profiling
+  - q-android-performance-measurement-tools--android--medium
+  - q-frame-time-120ms-meaning--android--easy
+  - q-jank-detection-frame-metrics--android--medium
+  - q-leakcanary-heap-dump-analysis--android--medium
 created: 2025-10-02
 updated: 2025-11-10
-tags:
-- android/logging-tracing
-- android/performance-rendering
-- android/monitoring-slo
-- difficulty/hard
+tags: [android/logging-tracing, android/monitoring-slo, android/performance-rendering, difficulty/hard]
 sources:
-- "https://perfetto.dev/docs/concepts/frame-timeline"
-- "https://developer.android.com/topic/performance/tracing/perfetto"
+  - "https://developer.android.com/topic/performance/tracing/perfetto"
+  - "https://perfetto.dev/docs/concepts/frame-timeline"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +42,7 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Сбор трассы
+### 1. Сбор Трассы
 
 ```bash
 adb shell perfetto -o /data/misc/perfetto-traces/app.perfetto-trace -c - <<'EOF'
@@ -84,7 +83,7 @@ adb pull /data/misc/perfetto-traces/app.perfetto-trace
 - В Perfetto UI используется цветовая подсветка состояний фреймов (успешные, с задержкой, дропнутые и др.); воспринимайте зелёный/жёлтый/красный как концептуальное обозначение нормальных, пограничных и проблемных кадров, а за точной семантикой цветов и легендой обращайтесь к конкретной версии UI.
 - Свяжите события Frame Timeline с `Choreographer#doFrame`, работой `RenderThread`, GPU queue и SurfaceFlinger, используя идентификаторы App/Display фреймов, чтобы точно понять, на каком этапе возникает задержка.
 
-### 3. Корреляция потоков
+### 3. Корреляция Потоков
 
 - Используйте `Slice`/`Tracks` view и специализированные Frame Timeline треки в Perfetto, чтобы находить `AppFrame`/`DisplayFrame` и соответствующие им срезы.
 - Фильтруйте по `Choreographer#doFrame` и смежным событиям, сопоставляйте:
@@ -112,7 +111,7 @@ SQL
   - сравнивайте с порогами (thresholds) и фейлите сборку или отправляйте отчёты при регрессии;
   - интегрируйте с Macrobenchmark/Benchmark для автоматического снятия трасс.
 
-### 5. Практические советы
+### 5. Практические Советы
 
 - Снимайте трассы максимально близко к релизному окружению (release build / minified / без лишней отладочной инструментализации), чтобы не искажать тайминги.
 - Совмещайте Perfetto с `Macrobenchmark` (`FrameTimingMetric` / FrameTimelineMetric) для автоматизированных тестов производительности.
@@ -124,12 +123,12 @@ SQL
 
 ## Answer (EN)
 
-### 1. Trace capture
+### 1. Trace Capture
 
 - Capture a Perfetto trace including frame timeline data sources, e.g. `android.app_frame_timeline` and `android.surfaceflinger.frame_timeline`, plus `android.packages_list` and, if needed, CPU/Binder/GPU sources (exact names and availability depend on your Android/Perfetto version; confirm via docs and `perfetto --query`).
 - Use an `adb shell perfetto` command similar to the RU example, then `adb pull` and open the trace in the Perfetto UI.
 
-### 2. Frame timeline interpretation
+### 2. Frame Timeline Interpretation
 
 - AppFrame: the application-side frame — when the app has finished producing the frame (RenderThread/GPU command submission / writing into its Surface) and hands it off to the system.
 - DisplayFrame: the system compositor/SurfaceFlinger-side frame — when the compositor selects and presents a frame on screen.
@@ -137,7 +136,7 @@ SQL
 - Treat green/yellow/red in the Perfetto UI as conceptual shorthand for good/borderline/bad frames; rely on the legend of your Perfetto UI version for exact semantics.
 - Correlate AppFrame/DisplayFrame slices with `Choreographer#doFrame`, RenderThread, GPU/compositor tracks and frame ids/tokens to locate where time is spent and where delays appear.
 
-### 3. Thread correlation
+### 3. Thread Correlation
 
 - In Perfetto, use the Slice/Tracks views and dedicated Frame Timeline tracks to:
   - Filter for `Choreographer#doFrame` and frame-related slices.
@@ -162,7 +161,7 @@ SQL
   - compute frame-timeline-based metrics;
   - compare against stored baselines/thresholds and fail or report on regression.
 
-### 5. Practical tips
+### 5. Practical Tips
 
 - Capture traces on builds close to production (release-like, minimal extra instrumentation).
 - Combine Perfetto with Macrobenchmark FrameTiming/FrameTimeline metrics to detect regressions.
@@ -172,7 +171,7 @@ See also: [[c-android-profiling]]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как интерпретировать prediction error и present latency?
 - Как комбинировать Perfetto и Systrace для старых устройств?
 - Какие thresholds для dropped frames использовать в SLA?

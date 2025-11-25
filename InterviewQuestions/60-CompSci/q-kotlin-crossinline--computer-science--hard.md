@@ -1,7 +1,7 @@
 ---
-id: cs-006
+id: lang-205
 title: "Kotlin crossinline / crossinline в Kotlin"
-aliases: ["Kotlin crossinline", "crossinline в Kotlin"]
+aliases: ["crossinline в Kotlin", "Kotlin crossinline"]
 topic: kotlin
 subtopics: [functions]
 question_kind: theory
@@ -14,6 +14,8 @@ related: [c-concepts--kotlin--medium, q-data-class-detailed--kotlin--medium, q-o
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard, kotlin/functions]
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -54,7 +56,7 @@ Therefore, `crossinline` is used to:
 - guarantee that the argument lambda cannot use non-local returns, and
 - let the compiler safely inline this lambda in contexts where non-local returns would otherwise break correctness or be disallowed.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-semaphore-rate-limiting--kotlin--medium]]
 - [[q-object-singleton-companion--kotlin--medium]]

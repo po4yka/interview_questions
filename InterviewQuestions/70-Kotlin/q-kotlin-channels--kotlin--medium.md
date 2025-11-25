@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutine-dispatchers--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-coroutine-dispatchers--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-11-09
 
 tags: [async, channels, concurrency, coroutines, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о каналах (Channels) в Kotlin?
 
@@ -40,7 +43,7 @@ tags: [async, channels, concurrency, coroutines, difficulty/medium, kotlin]
 
 Отложенные значения (`Deferred`) предоставляют удобный способ передачи одного значения между корутинами. Каналы (`Channel`) предоставляют способ передачи потока значений. **Channel** — это примитив для асинхронного взаимодействия и передачи данных между отправителем (через `SendChannel`) и получателем (через `ReceiveChannel`), основанный на приостанавливающих операциях (без блокировки потоков). См. также [[c-kotlin]] и [[c-coroutines]].
 
-### Основы работы с каналами
+### Основы Работы С Каналами
 
 [Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) концептуально очень похож на `BlockingQueue`. Одно ключевое отличие заключается в том, что вместо блокирующей операции `put` он имеет приостанавливающую операцию [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/send.html), а вместо блокирующей операции `take` — приостанавливающую операцию [receive](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-receive-channel/receive.html).
 
@@ -68,7 +71,7 @@ runBlocking {
 Done!
 ```
 
-### Закрытие и итерация по каналам
+### Закрытие И Итерация По Каналам
 
 В отличие от очереди, канал может быть закрыт, чтобы указать, что больше элементов не будет. На стороне получателя удобно использовать обычный цикл `for` для получения элементов из канала.
 
@@ -88,7 +91,7 @@ runBlocking {
 }
 ```
 
-### Создание производителей каналов
+### Создание Производителей Каналов
 
 Паттерн, когда корутина производит последовательность элементов, довольно распространен. Это часть паттерна **производитель-потребитель**, который часто встречается в параллельном коде. Вы можете абстрагировать такого производителя в функцию, которая принимает канал в качестве параметра, но это противоречит здравому смыслу, что результаты должны возвращаться из функций.
 
@@ -139,7 +142,7 @@ runBlocking {
 }
 ```
 
-### Буферизованные каналы
+### Буферизованные Каналы
 
 Показанные до сих пор каналы не имели буфера. Небуферизованные каналы передают элементы, когда отправитель и получатель встречаются друг с другом (aka rendezvous). Если `send` вызван первым, то он приостанавливается до вызова `receive`, если `receive` вызван первым, он приостанавливается до вызова `send`.
 
@@ -173,7 +176,7 @@ Sending 4
 
 Первые четыре элемента добавляются в буфер, и отправитель приостанавливается при попытке отправить пятый.
 
-### Создание каналов
+### Создание Каналов
 
 Фабричная функция `Channel(capacity)` используется для создания каналов различных типов в зависимости от значения целочисленного параметра `capacity`:
 
@@ -348,7 +351,7 @@ Buffered channels can be configured with an additional `onBufferOverflow` parame
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия каналов от подхода в Java?
 - Когда вы бы использовали каналы на практике?
@@ -370,7 +373,7 @@ Buffered channels can be configured with an additional `onBufferOverflow` parame
 - [Kotlin Coroutines Channels Documentation](https://kotlinlang.org/docs/coroutines-channels.html)
 - [Channel API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-flow-basics--kotlin--medium]]
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]

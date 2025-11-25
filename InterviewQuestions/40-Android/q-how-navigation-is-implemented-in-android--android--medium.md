@@ -1,41 +1,36 @@
 ---
 id: android-282
 title: How Navigation Is Implemented In Android / Как реализована навигация в Android
-aliases:
-- How Navigation Is Implemented In Android
-- Navigation Implementation
-- Как реализована навигация в Android
-- Реализация навигации
+aliases: [How Navigation Is Implemented In Android, Navigation Implementation, Как реализована навигация в Android, Реализация навигации]
 topic: android
 subtopics:
-- activity
-- fragment
-- ui-navigation
+  - activity
+  - fragment
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- c-activity
-- q-activity-navigation-how-it-works--android--medium
-- q-compose-navigation-advanced--android--medium
-- q-what-navigation-methods-do-you-know--android--medium
+  - c-activity
+  - c-compose-navigation
+  - q-activity-navigation-how-it-works--android--medium
+  - q-compose-navigation-advanced--android--medium
+  - q-how-is-navigation-implemented--android--medium
+  - q-navigation-methods-in-android--android--medium
+  - q-what-navigation-methods-do-you-know--android--medium
+  - q-what-navigation-methods-exist-in-kotlin--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/fragment
-- android/ui-navigation
-- difficulty/medium
-- navigation
-- ui
+tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation, ui]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -294,7 +289,7 @@ onBackPressedDispatcher.addCallback(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы обрабатываете восстановление состояния навигации после убийства процесса?
 - В чем различия между флагами `launchMode` и как они влияют на back stack?
@@ -308,7 +303,7 @@ onBackPressedDispatcher.addCallback(
 - [Gesture Navigation](https://developer.android.com/develop/ui/views/layout/edge-to-edge)
 - [Predictive Back](https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

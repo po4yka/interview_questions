@@ -14,7 +14,10 @@ related: [c-kotlin, q-flow-backpressure--kotlin--hard, q-kotlin-delegation-detai
 created: 2025-10-15
 updated: 2025-11-09
 tags: [advanced, bytecode, compilation, delegates, difficulty/hard, kotlin]
+date created: Friday, October 31st 2025, 6:33:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Как делегаты Kotlin работают на уровне компиляции? Какой bytecode и вспомогательные структуры генерируются?
 
@@ -511,7 +514,7 @@ public final class User {
 
 (На практике используются соответствующие `getValue` extensions, выполняющие доступ по ключу `property.name`.)
 
-### Оптимизации Компилятора и Особенности
+### Оптимизации Компилятора И Особенности
 
 ```kotlin
 // 1. inline-делегаты
@@ -560,7 +563,7 @@ Kotlin property delegates use the `by` keyword to delegate getter/setter logic t
 
 All code below is simplified Java-like pseudocode illustrating the compilation pattern, not exact stdlib or bytecode.
 
-### Basic delegate example
+### Basic Delegate Example
 
 ```kotlin
 // Kotlin
@@ -609,9 +612,9 @@ public final class Example {
 }
 ```
 
-### Delegate compilation components
+### Delegate Compilation Components
 
-#### 1. Hidden `$delegate` field
+#### 1. Hidden `$delegate` Field
 
 For a property declared with `by`, the compiler generates a hidden field to store the delegate instance.
 
@@ -639,7 +642,7 @@ public final class User {
 
 (Names/types are illustrative; real stdlib implementations differ.)
 
-#### 2. Property metadata (`KProperty`)
+#### 2. Property Metadata (`KProperty`)
 
 The compiler creates `KProperty` references (commonly via a `$$delegatedProperties` array) describing delegated properties.
 
@@ -656,7 +659,7 @@ static final KProperty<?>[] $$delegatedProperties = new KProperty<?>[]{
 
 This metadata is passed into `getValue` / `setValue` so delegates can know which property they serve and support reflection.
 
-#### 3. Accessor methods
+#### 3. Accessor Methods
 
 Accessors are rewritten to call the delegate's operators with `thisRef` and the corresponding `KProperty`.
 
@@ -676,7 +679,7 @@ public final void setValue(String value) {
 
 (Here `delegate` conceptually stands for the hidden `$delegate` field; exact names follow Kotlin compiler conventions.)
 
-### Built-in delegates
+### Built-in Delegates
 
 #### `lazy`
 
@@ -814,7 +817,7 @@ private final ReadWriteProperty<Object, Integer> age$delegate =
 
 Again, this is schematic; real internal classes differ.
 
-### Custom delegate example (LoggingDelegate)
+### Custom Delegate Example (LoggingDelegate)
 
 ```kotlin
 class LoggingDelegate<T>(private var value: T) {
@@ -860,7 +863,7 @@ public final class Example {
 
 This matches the delegate compilation protocol: hidden field, `KProperty` metadata, accessor forwarding.
 
-### `provideDelegate` – delegate creation hook
+### `provideDelegate` – Delegate Creation Hook
 
 If a type defines `operator fun provideDelegate(thisRef, prop)`, the compiler uses it during initialization instead of constructing the delegate directly. Conceptually, the Kotlin:
 
@@ -914,7 +917,7 @@ public final class Example {
 
 So `provideDelegate` controls how the delegate instance is constructed and allows validation based on `KProperty` at binding time.
 
-### `Map` delegates
+### `Map` Delegates
 
 For `Map`-backed delegates, the map itself is the delegate; the compiler wires calls to extension functions like `MapsKt.getValue(map, property)` which typically use `property.name` as the key.
 
@@ -954,7 +957,7 @@ public final class User {
 }
 ```
 
-### Optimizations and supported use-cases
+### Optimizations and Supported Use-cases
 
 - Inline delegates: `inline` `getValue`/`setValue` bodies can be inlined, reducing call overhead.
 - Local variable delegates: `var x by SomeDelegate()` in a function compiles to helper calls; layout differs from fields, but the protocol is analogous.
@@ -964,7 +967,7 @@ public final class User {
   - properties in `object` / `companion object`.
 - Extension properties use the delegate protocol, but storage is determined by where the extension property is declared; no backing field is added to the receiver type itself.
 
-### Performance comparison
+### Performance Comparison
 
 Illustratively (order-of-magnitude only):
 - A normal field-backed property access is very cheap (single field read/write plus a trivial accessor).
@@ -975,7 +978,7 @@ Illustratively (order-of-magnitude only):
 
 This often makes delegated accesses measurably slower in microbenchmarks, but actual numbers depend on platform, JIT, and optimizations.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем это принципиально отличается от подхода в Java (ручные геттеры/сеттеры, Lombok)?
 - В каких случаях уместно использовать делегаты, а в каких лучше обойтись обычными свойствами?
@@ -997,7 +1000,7 @@ This often makes delegated accesses measurably slower in microbenchmarks, but ac
 - https://kotlinlang.org/docs/delegated-properties.html
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-backpressure--kotlin--hard]]
 - [[q-kotlin-delegation-detailed--kotlin--medium]]

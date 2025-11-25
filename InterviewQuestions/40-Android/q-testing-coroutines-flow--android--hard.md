@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines, difficulty/hard, flow, test-dispatcher, turbine]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -32,14 +34,14 @@ tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines
 
 Тестирование корутин и потоков требует специальных утилит для контроля виртуального времени и планирования. **TestDispatcher**, **runTest** и **Turbine** — ключевые инструменты для детерминированного асинхронного тестирования.
 
-### Краткий ответ
+### Краткий Ответ
 
 - Используйте `runTest` и тестовые диспетчеры (`StandardTestDispatcher`, `UnconfinedTestDispatcher`) для управления выполнением и виртуальным временем.
 - Для `StateFlow` читайте `value` напрямую или используйте Turbine; учитывайте начальное значение.
 - Для `SharedFlow` начинайте сбор до эмиссий и используйте один и тот же тестовый планировщик.
 - Для `Flow`/горутин применяйте Turbine для удобного ожидания элементов, завершения и ошибок.
 
-### Подробный ответ
+### Подробный Ответ
 
 ### TestDispatcher Типы
 
@@ -70,7 +72,7 @@ fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher(testScheduler)
 }
 ```
 
-### Контроль времени
+### Контроль Времени
 
 ```kotlin
 @Test
@@ -254,7 +256,7 @@ fun testViewModel() = runTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте `runTest`:**
 
@@ -580,7 +582,7 @@ job.cancel()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как по-разному тестировать холодные и горячие `Flow`?
 - В чем разница между `advanceTimeBy` и `advanceUntilIdle`?

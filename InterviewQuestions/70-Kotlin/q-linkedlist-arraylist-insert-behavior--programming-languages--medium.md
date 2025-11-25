@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-flow-map-operator--programming-languages--medium, q-what-is-flow--programming-languages--medium]
+related: [c-collections, c-kotlin, q-flow-map-operator--programming-languages--medium, q-what-is-flow--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [arraylist, collections, data-structures, difficulty/medium, kotlin, linkedlist, programming-languages]
+date created: Friday, October 31st 2025, 6:29:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Как будут вести себя `LinkedList` и `ArrayList`, если вставить в них элемент?
 
@@ -53,7 +56,7 @@ Important: in Kotlin, the `List`/`MutableList` interfaces do not guarantee a spe
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия между поведением в Kotlin и Java в этом контексте?
 - Когда на практике вы бы предпочли `ArrayList` вместо `LinkedList` и наоборот?
@@ -73,9 +76,9 @@ Important: in Kotlin, the `List`/`MutableList` interfaces do not guarantee a spe
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Реализации и структуры данных
+### Реализации И Структуры Данных
 - [[q-kotlin-immutable-collections--programming-languages--easy]]
 
 ## Related Questions

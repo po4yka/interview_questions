@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, functions, generics, kotlin, syntax, type-parameters]
 
+date created: Friday, October 31st 2025, 6:29:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -117,10 +119,10 @@ val name = identity("Hello")     // T inferred as String
 - [[q-kotlin-sealed-classes-features--programming-languages--medium]]
 - [[q-retrofit-coroutines-best-practices--kotlin--medium]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем ключевые отличия этого синтаксиса от Java?
 - Когда вы бы использовали обобщенные функции на практике?
 - Каковы распространенные ошибки и подводные камни при использовании обобщений?
 ## Ссылки (RU)
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)

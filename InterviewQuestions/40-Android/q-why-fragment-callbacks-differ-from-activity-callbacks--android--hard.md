@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard]
 
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +40,7 @@ tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard]
 - Это позволяет переиспользовать фрагменты, держать их в back stack без `View` и эффективнее управлять памятью.
 
 ### Подробная Версия
-### Ключевые различия
+### Ключевые Различия
 
 **`Activity`**: автономный компонент с более линейным жизненным циклом
 ```
@@ -52,7 +54,7 @@ View lifecycle:     onCreateView → ... → onDestroyView
 Host lifecycle:     onAttach → ... → onDetach
 ```
 
-### Дополнительные колбэки `Fragment`
+### Дополнительные Колбэки `Fragment`
 
 ```kotlin
 // Присоединение к хосту
@@ -69,7 +71,7 @@ onCreate()                       // Fragment создан (без View)
 onDestroy()                      // Fragment уничтожен
 ```
 
-### Зачем нужны дополнительные колбэки
+### Зачем Нужны Дополнительные Колбэки
 
 **1. `View` может быть уничтожена без уничтожения `Fragment`**
 
@@ -139,7 +141,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
 ```
 
-### Сравнение полного lifecycle
+### Сравнение Полного Lifecycle
 
 **`Activity`**:
 ```kotlin
@@ -204,7 +206,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Реальные сценарии (RU)
+### Реальные Сценарии (RU)
 
 **Жизненный цикл `Fragment` во ViewPager**:
 ```kotlin
@@ -245,7 +247,7 @@ FragmentA: onDestroyView() → onDestroy() → onDetach()
 FragmentA: onAttach() → onCreate() → onCreateView()
 ```
 
-### Выгоды для управления памятью (RU)
+### Выгоды Для Управления Памятью (RU)
 
 ```kotlin
 class OptimizedFragment : Fragment() {
@@ -277,7 +279,7 @@ class OptimizedFragment : Fragment() {
 - Данные остаются в `Fragment`/`ViewModel` → нет дорогого повторного запроса.
 - Быстрое восстановление UI при возврате пользователя или пересоздании `View`.
 
-### Архитектурные причины
+### Архитектурные Причины
 
 `Fragment` был создан для **модульности UI** и должен:
 1. Переиспользоваться в разных `Activity`.

@@ -1,34 +1,34 @@
 ---
 id: android-617
 title: Wear OS Health Integration / Интеграция Health Services и Health Connect
-aliases:
-- Wear OS Health Integration
-- Интеграция Health Services и Health Connect
+aliases: [Wear OS Health Integration, Интеграция Health Services и Health Connect]
 topic: android
 subtopics:
-- wear
-- sensors
+  - sensors
+  - wear
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-android-auto-guidelines--android--hard
+  - c-android
+  - q-android-auto-guidelines--android--hard
+  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+  - q-integration-testing-strategies--android--medium
+  - q-nearby-nfc-uwb-integration--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/wear
-- android/sensors
-- difficulty/hard
+tags: [android/sensors, android/wear, difficulty/hard]
 sources:
-- "https://developer.android.com/training/wearables/health-services"
-- "https://developer.android.com/guide/health-and-fitness/health-connect"
+  - "https://developer.android.com/guide/health-and-fitness/health-connect"
+  - "https://developer.android.com/training/wearables/health-services"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -120,7 +120,7 @@ suspend fun ensurePermissionsGranted() {
   - Health Connect на каждом устройстве (если поддерживается) и согласованный слой синхронизации в companion app;
   - или Data Layer / собственный API companion app, если Health Connect недоступен или требуется near real-time.
 
-### Политики и тестирование
+### Политики И Тестирование
 
 - Запрашивайте только те разрешения на здоровье и активность, которые реально нужны; обосновывайте их использование для Google Play review.
 - Обрабатывайте потерю связи: данные, записанные в Health Connect на часах, должны быть локально консистентны и синхронизироваться при появлении телефона/сети согласно выбранной архитектуре.
@@ -201,7 +201,7 @@ See also [[c-android]].
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как передавать данные в real-time на телефон (BLE/Companion) при отсутствии Health Connect?
 - Какие ограничения вводит Health Connect на историю данных и ревокацию разрешений?
 - Как использовать Tiles/Complications для отображения данных без запуска `Activity`?

@@ -13,8 +13,10 @@ updated: "2025-11-09"
 tags: ["cancellation", "coroutines", "difficulty/medium", "error-handling", "kotlin", "timeout"]
 description: "Comprehensive guide to timeout handling in Kotlin coroutines, covering withTimeout, withTimeoutOrNull, TimeoutCancellationException, and practical patterns"
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, c-structured-concurrency]
+related: [c-coroutines, c-kotlin, c-structured-concurrency]
 subtopics: [coroutines, timeout]
+date created: Saturday, November 1st 2025, 1:07:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -507,7 +509,7 @@ suspend fun fetchStocks(): String {
 6. Timeouts are cooperative and checked at suspension points; long CPU-bound work without suspension will not be interrupted unless you make it cancellable.
 7. `withTimeout`/`withTimeoutOrNull` do not change dispatcher; they inherit the parent coroutine context.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что происходит с корутиной после срабатывания таймаута? (Тело и дочерние корутины отменяются через `TimeoutCancellationException`, родитель может продолжить работу, если не рассматривает это как фатальную ошибку.)
 2. Можно ли получить частичные результаты до таймаута?
@@ -543,7 +545,7 @@ suspend fun fetchStocks(): String {
 - [TimeoutCancellationException](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-timeout-cancellation-exception/)
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-exception-handling--kotlin--medium]]
 - [[q-withcontext-use-cases--kotlin--medium]]

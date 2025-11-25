@@ -1,40 +1,35 @@
 ---
 id: android-197
 title: What Is Viewmodel / Что такое ViewModel
-aliases:
-- What Is ViewModel
-- Что такое ViewModel
+aliases: [What Is ViewModel, Что такое ViewModel]
 topic: android
 subtopics:
-- architecture-mvvm
-- lifecycle
-- ui-state
+  - architecture-mvvm
+  - lifecycle
+  - ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-lifecycle
-- c-mvvm
-- q-mvvm-pattern--android--medium
-- q-viewmodel-vs-onsavedinstancestate--android--medium
+  - c-lifecycle
+  - c-mvvm
+  - q-mvvm-pattern--android--medium
+  - q-testing-viewmodels-turbine--android--medium
+  - q-viewmodel-pattern--android--easy
+  - q-viewmodel-vs-onsavedinstancestate--android--medium
+  - q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/architecture-mvvm
-- android/lifecycle
-- android/ui-state
-- architecture
-- difficulty/medium
-- mvvm
-- state-management
-- viewmodel
+tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, architecture, difficulty/medium, mvvm, state-management, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)

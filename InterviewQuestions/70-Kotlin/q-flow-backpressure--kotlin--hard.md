@@ -6,9 +6,9 @@ aliases: ["Flow Backpressure", "Противодавление в Flow"]
 # Classification
 topic: kotlin
 subtopics:
-  - flow
-  - buffer
   - backpressure
+  - buffer
+  - flow
 question_kind: theory
 difficulty: hard
 
@@ -21,14 +21,17 @@ source_note: Comprehensive guide on Flow backpressure handling
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-coroutines, c-flow, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [backpressure, buffer, collectlatest, conflate, difficulty/hard, flow, kotlin, performance]
+date created: Sunday, October 12th 2025, 3:14:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое противодавление в Kotlin `Flow`? Объясните операторы `buffer()`, `conflate()` и `collectLatest()` и когда использовать каждую стратегию.
 
@@ -68,7 +71,7 @@ suspend fun withoutBuffer() {
 }
 ```
 
-### buffer() — Параллельная обработка
+### buffer() — Параллельная Обработка
 
 `buffer()` позволяет производителю и потребителю выполняться конкурентно, частично развязывая их скорости, при этом при заполнении буфера по умолчанию используется стратегия `BufferOverflow.SUSPEND`.
 
@@ -92,7 +95,7 @@ suspend fun withBuffer() {
 }
 ```
 
-#### buffer с capacity
+#### Buffer С Capacity
 
 ```kotlin
 flow {
@@ -109,7 +112,7 @@ flow {
 // Если буфер заполнен, производитель будет suspend до освобождения места (стратегия по умолчанию).
 ```
 
-#### Стратегии буфера
+#### Стратегии Буфера
 
 ```kotlin
 // Буфер по умолчанию (DEFAULT_CAPACITY и BufferOverflow.SUSPEND)
@@ -125,7 +128,7 @@ flow {
 .buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 ```
 
-### conflate() — Только актуальное значение
+### conflate() — Только Актуальное Значение
 
 `conflate()` пропускает промежуточные значения при медленном потребителе, сохраняя только самое новое значение. Фактически эквивалентно `buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)`.
 
@@ -146,7 +149,7 @@ suspend fun withConflate() {
 }
 ```
 
-#### Реальный пример: Обновления локации
+#### Реальный Пример: Обновления Локации
 
 ```kotlin
 import kotlin.random.Random
@@ -182,7 +185,7 @@ suspend fun trackLocation() {
 suspend fun updateMapUI(location: Location) { /* ... */ }
 ```
 
-### collectLatest() — Отмена и перезапуск
+### collectLatest() — Отмена И Перезапуск
 
 `collectLatest()` отменяет выполнение тела коллекции для предыдущего значения при поступлении нового и начинает обработку заново для последнего. Элементы не теряются на входе, но незавершённая обработка старых значений может быть прервана.
 
@@ -203,7 +206,7 @@ suspend fun withCollectLatest() {
 }
 ```
 
-#### Реальный пример: Поиск
+#### Реальный Пример: Поиск
 
 ```kotlin
 class SearchViewModel : ViewModel() {
@@ -233,7 +236,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-### Сравнение стратегий
+### Сравнение Стратегий
 
 ```kotlin
 suspend fun compareStrategies() {
@@ -277,7 +280,7 @@ suspend fun processItem(item: Int) {
 }
 ```
 
-### Продвинутая конфигурация buffer
+### Продвинутая Конфигурация Buffer
 
 ```kotlin
 flow<Int> {
@@ -295,7 +298,7 @@ flow<Int> {
 // - BufferOverflow.DROP_LATEST: отбросить элемент, который пытаются эмиттить
 ```
 
-### Кастомная буферизация через Channel
+### Кастомная Буферизация Через Channel
 
 ```kotlin
 fun <T> Flow<T>.customBuffer(size: Int): Flow<T> = channelFlow {
@@ -306,9 +309,9 @@ fun <T> Flow<T>.customBuffer(size: Int): Flow<T> = channelFlow {
 }.buffer(size)
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
-#### Пример 1: Батчинг аналитики
+#### Пример 1: Батчинг Аналитики
 
 ```kotlin
 data class AnalyticsEvent(val name: String, val timestamp: Long)
@@ -368,7 +371,7 @@ fun <T> Flow<T>.chunked(size: Int, timeout: Long): Flow<List<T>> = flow {
 // Примечание: для продакшена лучше использовать монотонное время/таймауты корутин; здесь упрощённый пример.
 ```
 
-#### Пример 2: Обработка данных сенсоров
+#### Пример 2: Обработка Данных Сенсоров
 
 ```kotlin
 data class SensorData(val value: Double, val timestamp: Long)
@@ -440,7 +443,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-### Производительность и выбор стратегии
+### Производительность И Выбор Стратегии
 
 | Сценарий | Стратегия | Причина |
 |----------|-----------|---------|
@@ -451,7 +454,7 @@ class DataViewModel : ViewModel() {
 | Нужен прогресс по шагам | `buffer()` | Не терять промежуточные состояния |
 | Нужен только финальный/последний стейт | `conflate()` | Отброс промежуточных состояний |
 
-### Рекомендуемые практики (Best Practices)
+### Рекомендуемые Практики (Best Practices)
 
 DO:
 
@@ -527,7 +530,7 @@ suspend fun withoutBuffer() {
 }
 ```
 
-### buffer() — Parallelizing producer and consumer
+### buffer() — Parallelizing Producer and Consumer
 
 `buffer()` lets the producer and consumer run concurrently, partially decoupling their speeds. By default it uses `BufferOverflow.SUSPEND` when the buffer is full.
 
@@ -551,7 +554,7 @@ suspend fun withBuffer() {
 }
 ```
 
-#### buffer with capacity
+#### Buffer with Capacity
 
 ```kotlin
 flow {
@@ -568,7 +571,7 @@ flow {
 // When the buffer is full, the producer suspends until there is free space.
 ```
 
-#### Buffer strategies
+#### Buffer Strategies
 
 ```kotlin
 // Default buffer (DEFAULT_CAPACITY and BufferOverflow.SUSPEND)
@@ -584,7 +587,7 @@ flow {
 .buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 ```
 
-### conflate() — Keep only the latest value
+### conflate() — Keep only the Latest Value
 
 `conflate()` skips intermediate values when the consumer is slow and only delivers the most recent value once the collector is ready again. It is effectively equivalent to `buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)`.
 
@@ -605,7 +608,7 @@ suspend fun withConflate() {
 }
 ```
 
-#### Real-world example: Location updates
+#### Real-world Example: Location Updates
 
 ```kotlin
 import kotlin.random.Random
@@ -641,7 +644,7 @@ suspend fun trackLocation() {
 suspend fun updateMapUI(location: Location) { /* ... */ }
 ```
 
-### collectLatest() — Cancel and restart on new value
+### collectLatest() — Cancel and Restart on New Value
 
 `collectLatest()` cancels the body of the collector for the previous value when a new value is emitted and restarts processing for the newest value. Values are received, but ongoing work for older values can be cancelled.
 
@@ -662,7 +665,7 @@ suspend fun withCollectLatest() {
 }
 ```
 
-#### Real-world example: Search
+#### Real-world Example: Search
 
 ```kotlin
 class SearchViewModel : ViewModel() {
@@ -736,7 +739,7 @@ suspend fun processItem(item: Int) {
 }
 ```
 
-### Advanced buffer configuration
+### Advanced Buffer Configuration
 
 ```kotlin
 flow<Int> {
@@ -754,7 +757,7 @@ flow<Int> {
 // - BufferOverflow.DROP_LATEST: drop the element being emitted
 ```
 
-### Custom buffering via Channel
+### Custom Buffering via Channel
 
 ```kotlin
 fun <T> Flow<T>.customBuffer(size: Int): Flow<T> = channelFlow {
@@ -767,7 +770,7 @@ fun <T> Flow<T>.customBuffer(size: Int): Flow<T> = channelFlow {
 
 ### Real-world Examples
 
-#### Example 1: Analytics batching
+#### Example 1: Analytics Batching
 
 ```kotlin
 data class AnalyticsEvent(val name: String, val timestamp: Long)
@@ -826,7 +829,7 @@ fun <T> Flow<T>.chunked(size: Int, timeout: Long): Flow<List<T>> = flow {
 // Note: for production code prefer monotonic time or coroutine timeouts; this is a simplified example.
 ```
 
-#### Example 2: Sensor data processing
+#### Example 2: Sensor Data Processing
 
 ```kotlin
 data class SensorData(val value: Double, val timestamp: Long)
@@ -855,7 +858,7 @@ class SensorDataProcessor {
 }
 ```
 
-#### Example 3: UI updates
+#### Example 3: UI Updates
 
 ```kotlin
 class DataViewModel : ViewModel() {
@@ -952,7 +955,7 @@ fastSensor
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия стратегий противодавления в `Flow` по сравнению с Java Reactive Streams?
 - Когда на практике вы выберете `buffer()`, `conflate()` или `collectLatest()`?
@@ -975,7 +978,7 @@ fastSensor
 - [Flow buffer](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html)
 - [Flow conflate](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/conflate.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Сложные
 - [[q-flow-backpressure-strategies--kotlin--hard]]

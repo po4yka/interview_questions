@@ -1,36 +1,35 @@
 ---
 id: android-404
 title: Fragments Vs Activity / Fragments против Activity
-aliases:
-- Fragments Vs Activity
-- Fragments против Activity
+aliases: [Fragments Vs Activity, Fragments против Activity]
 topic: android
 subtopics:
-- fragment
-- ui-navigation
-- lifecycle
+  - fragment
+  - lifecycle
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- c-fragments
-- c-lifecycle
-- q-fragment-vs-activity-lifecycle--android--medium
-- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - c-compose-navigation
+  - c-fragments
+  - c-lifecycle
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-fragments-and-activity-relationship--android--hard
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-what-are-fragments-for-if-there-is-activity--android--medium
+  - q-why-are-fragments-needed-if-there-is-activity--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/fragment
-- android/ui-navigation
-- android/lifecycle
-- difficulty/medium
+tags: [android/fragment, android/lifecycle, android/ui-navigation, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +44,7 @@ tags:
 
 Фрагменты (Fragments) — модульные компоненты пользовательского интерфейса с собственным жизненным циклом, которые можно встраивать в `Activity`. Они позволяют создавать переиспользуемые, гибкие UI-компоненты для сложных и адаптивных интерфейсов.
 
-### Основные преимущества
+### Основные Преимущества
 
 **1. Модульность и переиспользование**
 
@@ -207,7 +206,7 @@ findNavController().navigate(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В каких случаях стоит использовать несколько `Activity` вместо фрагментов?
 - Как Jetpack Compose влияет на выбор между `Fragment` и `Activity`?
@@ -237,7 +236,7 @@ findNavController().navigate(
 - [Android Developers: `Fragment` Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
 - [Android Developers: `Activity` Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

@@ -1,33 +1,28 @@
 ---
 id: android-490
 title: Design Mobile Banking Auth & Transaction Signing
-aliases:
-- Design Mobile Banking Auth & Transaction Signing
-- Проектирование аутентификации и подписания транзакций
+aliases: [Design Mobile Banking Auth & Transaction Signing, Проектирование аутентификации и подписания транзакций]
 topic: android
 subtopics:
-- keystore-crypto
-- networking-http
-- permissions
+  - keystore-crypto
+  - networking-http
+  - permissions
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related: [c-android-keystore]
 sources: []
 created: 2025-10-29
 updated: 2025-11-10
-tags:
-- difficulty/hard
-- android/keystore-crypto
-- android/networking-http
-- android/permissions
-- topic/android
+tags: [android/keystore-crypto, android/networking-http, android/permissions, difficulty/hard, topic/android]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -144,7 +139,7 @@ Aggressive pinning/attestation and strict policies can block some legitimate use
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать отказы биометрии и fallback-флоу?
 - Какая стратегия помогает против SIM-swap атак (почему SMS не должно быть единственным сильным фактором)?
@@ -170,13 +165,13 @@ Aggressive pinning/attestation and strict policies can block some legitimate use
 - [[c-android-keystore]]
 - [Android Keystore](https://developer.android.com/training/articles/keystore)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 
 - [[q-database-encryption-android--android--medium]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-feature-flags-sdk--android--hard]]
 

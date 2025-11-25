@@ -20,11 +20,16 @@ related:
   - c-mvvm-pattern
   - q-compose-modifier-order-performance--android--medium
   - q-compose-stability-skippability--android--hard
+  - q-how-jetpack-compose-works--android--medium
+  - q-migration-to-compose--android--medium
+  - q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, jetpack-compose]
 sources:
   - "https://developer.android.com/jetpack/compose/architecture"
+date created: Saturday, November 1st 2025, 1:01:25 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -163,7 +168,7 @@ Column(
 
 **8. Theme System** — centralized styling through the theming system (`MaterialTheme` and related CompositionLocals) to provide a consistent design.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как recomposition в Compose отличается от традиционных обновлений `View`?
 - Каковы последствия для производительности при подъёме состояния (state hoisting)?
@@ -195,13 +200,13 @@ Column(
 - https://developer.android.com/jetpack/compose/architecture
 - https://developer.android.com/jetpack/compose/mental-model
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (Проще)
 - Понимание декларативных UI-паттернов
 - Базовые знания Kotlin
 
-### Связанные (Тот же уровень)
+### Связанные (Тот Же уровень)
 - [[q-compose-modifier-order-performance--android--medium]] — Оптимизация порядка `Modifier`
 - Паттерны и лучшие практики управления состоянием
 

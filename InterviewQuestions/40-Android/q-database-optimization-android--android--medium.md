@@ -1,41 +1,35 @@
 ---
 id: android-452
 title: Database Optimization Android / Оптимизация базы данных Android
-aliases:
-- Database Optimization Android
-- Оптимизация базы данных Android
+aliases: [Database Optimization Android, Оптимизация базы данных Android]
 topic: android
 subtopics:
-- performance-memory
-- room
+  - performance-memory
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-room-database
-- c-database-design
-- q-performance-optimization-android--android--medium
-- q-room-library-definition--android--easy
-- q-room-vs-sqlite--android--medium
+  - c-database-design
+  - c-room-database
+  - q-optimize-memory-usage-android--android--medium
+  - q-parsing-optimization-android--android--medium
+  - q-performance-optimization-android--android--medium
+  - q-room-library-definition--android--easy
+  - q-room-vs-sqlite--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags:
-- android/performance-memory
-- android/room
-- database
-- difficulty/medium
-- indexing
-- optimization
-- performance
-- sql
+tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, sql]
 sources:
-- "https://developer.android.com/training/data-storage/room"
+  - "https://developer.android.com/training/data-storage/room"
 
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -73,7 +67,7 @@ data class User(
 
 Тонкости: индексы занимают дополнительную память и замедляют `INSERT`/`UPDATE`, так как при каждой записи нужно обновлять структуру индекса. В типичных сценариях накладные расходы могут быть заметны (например, рост размера таблицы и замедление вставок), поэтому индексы имеет смысл добавлять только для часто используемых колонок и избегать избыточной индексации. Конкретные цифры зависят от данных и нагрузки, их нужно проверять профилированием.
 
-### 2. Пакетные операции
+### 2. Пакетные Операции
 
 Группируйте операции в транзакции для снижения overhead:
 
@@ -108,7 +102,7 @@ dao.insertUsers(users)
 
 Производительность: пакетная вставка большого количества записей обычно на порядок быстрее поштучной (меньше открытий транзакций и fsync). Точный выигрыш зависит от устройства и размера данных, поэтому его нужно измерять на целевой среде.
 
-### 3. Асинхронность и реактивность
+### 3. Асинхронность И Реактивность
 
 Используйте `suspend`-функции и `Flow` (Room KTX), чтобы не выполнять операции с БД на главном потоке и предотвращать `ANR`:
 
@@ -125,7 +119,7 @@ interface UserDao {
 
 Room для `suspend`- и `Flow`-методов DAO по умолчанию использует собственные executors (query/transaction executors) и запрещает доступ к БД с главного потока (если явно не разрешено). Однако Room не переключает корутины автоматически на `Dispatchers.IO` — корректный контекст (`Dispatchers.IO` или `viewModelScope` с off-main dispatcher) должен быть обеспечен вызывающим кодом. При необходимости контроля для потоков `Flow` используйте `flowOn(...)`.
 
-### 4. Оптимизация запросов
+### 4. Оптимизация Запросов
 
 Минимизируйте объем считываемых и обрабатываемых данных:
 
@@ -175,7 +169,7 @@ class UserRepository @Inject constructor(
 
 Особенности: кэш использует память (объем зависит от размера объектов). Регулируйте размер кэша под доступную память устройства. `LruCache` автоматически удаляет наименее используемые элементы при достижении лимита.
 
-### 6. Дополнительные практики
+### 6. Дополнительные Практики
 
 Кратко о других важных техниках:
 
@@ -324,7 +318,7 @@ Other important techniques (briefly):
 - Use constraints (`UNIQUE`, `CHECK`, foreign keys when needed) to enforce data integrity, mindful of their write-time cost.
 - Avoid long-running transactions as they may block other operations.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы будете профилировать производительность базы данных `Room` для поиска медленных запросов?
 - В каких случаях вы выберете `DataStore` вместо `Room` для хранения данных?
@@ -352,9 +346,9 @@ Other important techniques (briefly):
 - [Android Room Documentation](https://developer.android.com/training/data-storage/room)
 - [SQLite Performance Best Practices](https://sqlite.org/performance.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-room-database]]
 - [[c-database-design]]
@@ -364,7 +358,7 @@ Other important techniques (briefly):
 - [[q-room-library-definition--android--easy]] — Понимание основ `Room`
 - Базовые знания SQL и принципов реляционных баз данных
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 
 - [[q-room-vs-sqlite--android--medium]] — Сравнение `Room` и чистого SQLite
 - [[q-performance-optimization-android--android--medium]] — Общая оптимизация производительности Android

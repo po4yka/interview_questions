@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/activity, android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +38,7 @@ tags: [android/activity, android/ui-views, difficulty/medium]
 - Выберите шаблон "Empty `Activity`" или "Empty Compose `Activity`"
 - Укажите имя проекта, пакет и минимальный SDK
 
-### 2. Метод A: Классический UI на XML
+### 2. Метод A: Классический UI На XML
 
 #### Шаг 1: Создать XML-разметку
 
@@ -68,7 +70,7 @@ tags: [android/activity, android/ui-views, difficulty/medium]
 </LinearLayout>
 ```
 
-#### Шаг 2: Подключить разметку к `Activity`
+#### Шаг 2: Подключить Разметку К `Activity`
 
 В `MainActivity.kt`:
 
@@ -91,13 +93,13 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### Шаг 3: Запустить приложение
+#### Шаг 3: Запустить Приложение
 
 - Подключить устройство или запустить эмулятор
 - Нажать "Run" (зелёный треугольник) в Android Studio
 - UI отобразится на экране
 
-### 3. Метод B: `View` Binding (удобный доступ к `View`)
+### 3. Метод B: `View` Binding (удобный Доступ К `View`)
 
 #### Шаг 1: Включить `View` Binding
 
@@ -111,7 +113,7 @@ android {
 }
 ```
 
-#### Шаг 2: Использовать `View` Binding в `Activity`
+#### Шаг 2: Использовать `View` Binding В `Activity`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -161,7 +163,7 @@ dependencies {
 }
 ```
 
-#### Шаг 2: Создать UI на Compose
+#### Шаг 2: Создать UI На Compose
 
 В `MainActivity.kt`:
 
@@ -219,7 +221,7 @@ fun PreviewMyApp() {
 }
 ```
 
-### 5. Кастомное рисование (Canvas)
+### 5. Кастомное Рисование (Canvas)
 
 Для собственного рисования создайте кастомный `View`:
 
@@ -350,7 +352,7 @@ class MainActivity : AppCompatActivity() {
 </manifest>
 ```
 
-### 8. Краткое резюме шагов
+### 8. Краткое Резюме Шагов
 
 - Для XML UI:
   1. Создать XML-разметку.
@@ -369,7 +371,7 @@ class MainActivity : AppCompatActivity() {
 
 Примечание: Для сложных экранов можно комбинировать подходы (например, встраивать Compose в `View`-иерархию и наоборот), но в типичном случае для одного экрана выбирают один основной способ описания UI.
 
-### 9. Жизненный цикл `Activity` (основы)
+### 9. Жизненный Цикл `Activity` (основы)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -776,7 +778,7 @@ Key points:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[c-activity-lifecycle]]
 - [[q-what-is-activity-and-what-is-it-used-for--android--medium]]

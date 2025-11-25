@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android, android/app-bundle, android/build-variants, android/gradle, app-bundle, difficulty/medium, dynamic-modules]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:03:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -131,7 +133,7 @@ private val listener = SplitInstallStateUpdatedListener { state ->
 }
 ```
 
-### SplitCompat — Доступ к Загруженным Модулям
+### SplitCompat — Доступ К Загруженным Модулям
 
 ```kotlin
 // Вариант 1: Наследование от SplitCompatApplication
@@ -354,7 +356,7 @@ if (isModuleInstalled("ar_preview")) {
 
 ---
 
-## Следующие вопросы / Follow-ups (RU)
+## Следующие Вопросы / Follow-ups (RU)
 
 1. Как вы обрабатываете жизненный цикл динамически загружаемых `Activity` из feature-модулей?
 2. Что происходит, если пользователь пытается открыть функциональность модуля, который не удалось загрузить?
@@ -368,7 +370,7 @@ if (isModuleInstalled("ar_preview")) {
 - [[c-gradle]]
 - https://developer.android.com/guide/playcore/feature-delivery
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 

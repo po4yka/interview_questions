@@ -14,6 +14,8 @@ related: [c-algorithms, c-data-structures, q-binary-search-variants--algorithms-
 created: 2025-10-03
 updated: 2025-01-25
 tags: [algorithms, data-structures, difficulty/easy, fundamentals, overview]
+date created: Friday, October 3rd 2025, 4:43:25 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)

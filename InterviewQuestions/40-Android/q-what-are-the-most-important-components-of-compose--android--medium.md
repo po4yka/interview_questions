@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/coroutines, android/ui-compose, difficulty/medium, jetpack-compose]
 
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -374,7 +376,7 @@ MaterialTheme(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает область действия (scope) рекомпозиции и как её оптимизировать с помощью аннотаций `@Stable` и `@Immutable`?
 - Каковы trade-off'ы использования `LaunchedEffect`, `DisposableEffect` и `SideEffect` для управления побочными эффектами?
@@ -398,7 +400,7 @@ MaterialTheme(
 - [[c-jetpack-compose]] — Jetpack Compose fundamentals
 - [[c-viewmodel]] — `ViewModel` architecture
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 

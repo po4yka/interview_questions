@@ -5,7 +5,7 @@ aliases: ["Coroutine Cancellation Cooperation", "Кооперативная от
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, cancellation, structured-concurrency]
+subtopics: [cancellation, coroutines, structured-concurrency]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutine-cancellation-mechanisms--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-11-09
 
 tags: [cancellation, cooperation, coroutines, difficulty/medium, ensureActive, kotlin, yield]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Реализуйте долгоиграющие операции с поддержкой отмены. Правильно используйте `yield()`, `ensureActive()` и `isActive`. Корректно обрабатывайте `CancellationException`.
 
@@ -38,7 +41,7 @@ tags: [cancellation, cooperation, coroutines, difficulty/medium, ensureActive, k
 
 Отмена корутин **кооперативная** — корутины должны периодически проверять отмену (через `isActive`, `ensureActive()`, `yield()`, точки приостановки) и корректно завершаться.
 
-### Почему отмена кооперативная
+### Почему Отмена Кооперативная
 
 ```kotlin
 // Некорректно: корутина не проверяет отмену и продолжит выполняться до конца
@@ -68,7 +71,7 @@ job2.cancel()
 job2.join()
 ```
 
-### Методы проверки отмены
+### Методы Проверки Отмены
 
 (Предполагается, что код выполняется внутри корутины / `CoroutineScope`, где доступны `isActive`, `ensureActive()` и `yield()` из `kotlinx.coroutines`.)
 
@@ -114,7 +117,7 @@ launch {
 }
 ```
 
-### `yield()` vs `ensureActive()` (RU)
+### `yield()` Vs `ensureActive()` (RU)
 
 - `yield()` — приостанавливает выполнение, проверяет отмену и отдаёт управление другим корутинам.
 - `ensureActive()` — только проверяет отмену и бросает `CancellationException`, не приостанавливаясь.
@@ -163,7 +166,7 @@ try {
 }
 ```
 
-#### Пример: загрузка файла с временным файлом
+#### Пример: Загрузка Файла С Временным Файлом
 
 ```kotlin
 suspend fun downloadFile(url: String): File = coroutineScope {
@@ -184,7 +187,7 @@ suspend fun downloadFile(url: String): File = coroutineScope {
 }
 ```
 
-### NonCancellable контекст
+### NonCancellable Контекст
 
 Используется для критичной очистки, которая должна завершиться даже при отмене, с возможностью вызывать suspend-функции.
 
@@ -200,9 +203,9 @@ try {
 }
 ```
 
-### Реальные примеры (RU)
+### Реальные Примеры (RU)
 
-#### Пример 1: Обработка изображений
+#### Пример 1: Обработка Изображений
 
 ```kotlin
 class ImageProcessor {
@@ -235,7 +238,7 @@ class ImageProcessor {
 }
 ```
 
-#### Пример 2: Сетевой запрос с таймаутом и очисткой
+#### Пример 2: Сетевой Запрос С Таймаутом И Очисткой
 
 ```kotlin
 class ApiClient {
@@ -269,7 +272,7 @@ class ApiClient {
 }
 ```
 
-#### Пример 3: Миграция базы данных
+#### Пример 3: Миграция Базы Данных
 
 ```kotlin
 class DatabaseMigrator {
@@ -316,7 +319,7 @@ class DatabaseMigrator {
 }
 ```
 
-#### Пример 4: Периодическая фоновая синхронизация
+#### Пример 4: Периодическая Фоновая Синхронизация
 
 ```kotlin
 class BackgroundSync {
@@ -348,7 +351,7 @@ class BackgroundSync {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Проверяйте отмену в долгих/бесконечных циклах:
    ```kotlin
@@ -387,7 +390,7 @@ class BackgroundSync {
    }
    ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. Нет проверки отмены:
    ```kotlin

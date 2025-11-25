@@ -1,34 +1,15 @@
 ---
+date created: Tuesday, November 25th 2025, 8:19:30 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Validation System
 
-Automated validation for Interview Questions vault notes.
+This documentation has been consolidated into **[[VALIDATION-QUICKSTART]]**.
 
-## Setup
-```bash
-uv sync --project utils
-uv run --project utils python -m utils.validate_note --help
-```
-
-## Usage
-```bash
-# Single file
-uv run --project utils python -m utils.validate_note <file>
-
-# Directory
-uv run --project utils python -m utils.validate_note <directory>/
-
-# All files
-uv run --project utils python -m utils.validate_note --all
-
-# With report
-uv run --project utils python -m utils.validate_note --all --report report.md
-```
-
-## Validation Checks
-- **YAML frontmatter**: Required fields, formats, enums, taxonomy validation
-- **Content structure**: Bilingual sections, code formatting, wikilinks
-- **File organization**: Correct folders, naming conventions
-- **Cross-references**: MOC links, related fields, broken links
-
+See **[[VALIDATION-QUICKSTART]]** for:
+- Setup instructions
+- Common commands
+- What gets validated
+- Severity levels and exit codes
+- Common issues and fixes

@@ -1,21 +1,15 @@
 ---
 id: ivc-20251102-012
 title: Perfetto & Frame Timeline / Perfetto и Frame Timeline
-aliases:
-  - Perfetto
-  - Frame Timeline
-  - Android Performance Tracing
+aliases: [Android Performance Tracing, Frame Timeline, Perfetto]
 kind: concept
 summary: Perfetto-based tracing framework and frame timeline metrics for jank analysis on Android
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - performance
-  - perfetto
-  - tracing
+tags: [android, concept, perfetto, performance, tracing]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

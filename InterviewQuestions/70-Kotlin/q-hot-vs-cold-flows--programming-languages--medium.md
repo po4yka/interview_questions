@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-flow-map-operator--programming-languages--medium]
+related: [c-flow, c-kotlin, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive]
+date created: Friday, October 31st 2025, 6:31:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между Hot и Cold Flows?
 
@@ -31,7 +34,7 @@ tags: [coroutines, difficulty/medium, flow, kotlin, reactive]
 Горячие потоки (hot) существуют независимо от подписчиков — источник данных активен в своем жизненном цикле и эмитит значения независимо от того, есть ли текущие коллекторы.
 Примеры: `SharedFlow`, `StateFlow`, `LiveData`, широковещательные источники (Broadcast-like).
 
-### Характеристики холодных потоков
+### Характеристики Холодных Потоков
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -68,7 +71,7 @@ fun main() = runBlocking {
 // Received: 2
 ```
 
-### Характеристики горячих потоков
+### Характеристики Горячих Потоков
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -110,7 +113,7 @@ fun hotFlowExample() = runBlocking {
 // Subscriber 1: 4
 ```
 
-### Холодный поток — отдельное выполнение на коллектора
+### Холодный Поток — Отдельное Выполнение На Коллектора
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -143,7 +146,7 @@ fun multipleColdCollectors() = runBlocking {
 // Каждый коллектор получает независимое выполнение upstream-а
 ```
 
-### Горячий поток — общее выполнение
+### Горячий Поток — Общее Выполнение
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -187,7 +190,7 @@ fun multipleHotCollectors() = runBlocking {
 // Один продюсер, несколько коллекторов разделяют его эмиссии; поздние подписчики пропускают прошлые значения без replay
 ```
 
-### Конвертация холодного потока в горячий
+### Конвертация Холодного Потока В Горячий
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -217,7 +220,7 @@ fun coldToHot() = runBlocking {
 }
 ```
 
-### Использование горячего потока (общий источник)
+### Использование Горячего Потока (общий источник)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -241,7 +244,7 @@ fun hotFlowUsage() = runBlocking {
 }
 ```
 
-### StateFlow — горячий поток с состоянием
+### StateFlow — Горячий Поток С Состоянием
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -278,7 +281,7 @@ fun stateFlowExample() = runBlocking {
 // Subscriber: 5
 ```
 
-### Практические примеры
+### Практические Примеры
 
 ```kotlin
 // Cold Flow: API вызовы (каждый collect запускает свой запрос)
@@ -311,7 +314,7 @@ class ViewModel {
 }
 ```
 
-### Сводная таблица
+### Сводная Таблица
 
 | Характеристика | Холодный поток | Горячий поток |
 |----------------|----------------|---------------|
@@ -623,7 +626,7 @@ class ViewModel {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия по сравнению с Java-подходами к реактивности?
 - Когда на практике стоит использовать `hot` vs `cold` потоки?
@@ -647,7 +650,7 @@ class ViewModel {
 - [[c-flow]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
 - [[q-inheritance-vs-composition--oop--medium]]

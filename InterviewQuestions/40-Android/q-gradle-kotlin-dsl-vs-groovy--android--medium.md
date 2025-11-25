@@ -1,35 +1,33 @@
 ---
 id: android-028
 title: Gradle Kotlin DSL vs Groovy / Gradle Kotlin DSL против Groovy
-aliases:
-- Gradle Kotlin DSL vs Groovy
-- Gradle Kotlin DSL vs Groovy differences
-- Gradle Kotlin DSL против Groovy
+aliases: [Gradle Kotlin DSL vs Groovy, Gradle Kotlin DSL vs Groovy differences, Gradle Kotlin DSL против Groovy]
 topic: android
 subtopics:
-- gradle
+  - gradle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- q-how-does-jetpackcompose-work--android--medium
-- q-what-is-workmanager--android--medium
+  - c-gradle
+  - q-build-optimization-gradle--android--medium
+  - q-gradle-version-catalog--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-kotlin-dsl-builders--android--hard
+  - q-what-is-workmanager--android--medium
 created: 2025-10-06
 updated: 2025-11-11
-tags:
-- android/gradle
-- difficulty/medium
-- en
-- ru
+tags: [android/gradle, difficulty/medium, en, ru]
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +42,7 @@ tags:
 
 Gradle Kotlin DSL (.gradle.kts) даёт типобезопасные (на этапе компиляции) build-скрипты и более точную поддержку IDE для Gradle и Android Gradle Plugin (AGP) API. Скрипты на Groovy (.gradle) динамически типизированы: более гибкие и часто более лаконичные, но ошибки в использовании DSL чаще выявляются только во время конфигурации/выполнения.
 
-### Сравнение синтаксиса
+### Сравнение Синтаксиса
 
 Groovy:
 
@@ -98,7 +96,7 @@ dependencies {
 }
 ```
 
-### Ключевые различия
+### Ключевые Различия
 
 | Характеристика | Kotlin DSL | Groovy |
 |----------------|-----------|--------|
@@ -130,13 +128,13 @@ android {
 }
 ```
 
-2. Лучшее автодополнение в IDE
+1. Лучшее автодополнение в IDE
 - Более точные подсказки и переход к определениям для Gradle и плагинов Android.
 
-3. Безопасный рефакторинг
+1. Безопасный рефакторинг
 - Переименование свойств/функций в build-логике проще и надёжнее за счёт статических типов.
 
-### Version Catalogs (для обоих DSL)
+### Version Catalogs (для Обоих DSL)
 
 Version Catalogs позволяют вынести версии и координаты зависимостей в отдельный файл `gradle/libs.versions.toml` и затем ссылаться на них из `dependencies` в Groovy или Kotlin DSL.
 
@@ -175,7 +173,7 @@ dependencies {
 
 Оба варианта полностью поддерживают Version Catalogs; отличается только синтаксис обращения.
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 Используйте Kotlin DSL, когда:
 - Начинаете новый Android-проект.
@@ -281,10 +279,10 @@ android {
 }
 ```
 
-2. Better IDE assistance
+1. Better IDE assistance
 - More accurate autocomplete and navigation for Gradle and Android Gradle Plugin APIs.
 
-3. Safer refactoring
+1. Safer refactoring
 - Renaming properties/functions used in build logic is better supported because of static typing.
 
 ### Version Catalogs (Recommended for both)
@@ -342,7 +340,7 @@ English Summary: Kotlin DSL (.gradle.kts) gives statically typed, IDE-friendly, 
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-how-does-jetpackcompose-work--android--medium]]
 - [[q-what-is-workmanager--android--medium]]
@@ -370,7 +368,7 @@ English Summary: Kotlin DSL (.gradle.kts) gives statically typed, IDE-friendly, 
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 

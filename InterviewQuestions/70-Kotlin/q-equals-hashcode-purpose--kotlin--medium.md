@@ -14,7 +14,10 @@ related: [c-kotlin, q-kotlin-map-flatmap--kotlin--medium, q-kotlin-sealed-classe
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, equality, hashmap, kotlin, object-comparison]
+date created: Friday, October 31st 2025, 6:29:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Зачем нужны методы equals() и hashCode() в Kotlin/Java?
 
@@ -202,7 +205,7 @@ users[User("Alice", 30)] = "Engineer"
 println(users[User("Alice", 30)])  // "Engineer"
 ```
 
-### Key contract
+### Key Contract
 
 1. If `a.equals(b)` is `true`, then `a.hashCode()` must be equal to `b.hashCode()`.
 2. If `a.equals(b)` is `false`, their hash codes may be the same or different (collisions are allowed).
@@ -220,7 +223,7 @@ if (user1 == user2) {
 
 Violating these rules breaks the behavior of hash-based collections.
 
-### Problems when the contract is violated
+### Problems when the Contract is Violated
 
 **Broken implementation**:
 
@@ -258,7 +261,7 @@ class CorrectUser(val name: String, val age: Int) {
 data class User(val name: String, val age: Int)
 ```
 
-### Usage in collections
+### Usage in Collections
 
 ```kotlin
 data class User(val name: String, val age: Int)
@@ -277,7 +280,7 @@ println(userRoles[User("Alice", 30)])  // "Engineer"
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия контракта equals()/hashCode() в Kotlin и Java?
 - Когда на практике необходимо явно переопределять эти методы?
@@ -297,7 +300,7 @@ println(userRoles[User("Alice", 30)])  // "Engineer"
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]
 - [[q-kotlin-map-flatmap--kotlin--medium]]

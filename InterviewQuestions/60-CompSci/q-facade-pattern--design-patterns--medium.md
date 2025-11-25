@@ -1,19 +1,21 @@
 ---
-id: cs-060
+id: dp-009
 title: "Facade Pattern / Паттерн фасад"
 aliases: [Facade Pattern, Паттерн фасад]
 topic: cs
-subtopics: [design-patterns, structural-patterns, abstraction]
+subtopics: [abstraction, design-patterns, structural-patterns]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-architecture-patterns, q-adapter-pattern--cs--medium]
+related: [c-architecture-patterns, c-computer-science, q-adapter-pattern--cs--medium]
 created: 2023-10-15
 updated: 2025-11-11
 tags: [cs, difficulty/medium, facade, gof-patterns, structural-patterns]
+date created: Saturday, November 1st 2025, 1:02:32 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -30,14 +32,14 @@ tags: [cs, difficulty/medium, facade, gof-patterns, structural-patterns]
 
 Паттерн Facade — это структурный паттерн проектирования, целью которого является **сокрытие внутренней сложности за единым интерфейсом, который выглядит простым снаружи**. Он предоставляет упрощенный интерфейс к сложной подсистеме или набору подсистем.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Какие проблемы может решить паттерн проектирования Facade?
 
 1. **Сделать сложную подсистему проще в использовании** — предоставить единый простой интерфейс к набору интерфейсов в подсистеме.
 2. **Минимизировать зависимости от подсистемы** — клиентский код зависит от фасада, а не от деталей реализации.
 
-### Ключевые моменты
+### Ключевые Моменты
 
 Ключевые моменты паттерна Facade:
 
@@ -45,7 +47,7 @@ tags: [cs, difficulty/medium, facade, gof-patterns, structural-patterns]
 2. **Ослабление связности** — отделяет клиентский код от внутренней реализации подсистем.
 3. **Облегчение поддержки** — изменения в подсистемах не требуют изменений клиентского кода при сохранении контракта фасада.
 
-### Пример: Домашний кинотеатр (Home Theater)
+### Пример: Домашний Кинотеатр (Home Theater)
 
 ```kotlin
 // Подсистемы
@@ -138,7 +140,7 @@ Blinds raised.
 Lights turned on.
 ```
 
-### Пример: Android — фасад над Retrofit и кэшем
+### Пример: Android — Фасад Над Retrofit И Кэшем
 
 ```kotlin
 // Сложные подсистемы
@@ -227,7 +229,7 @@ class UserRepository(context: Context) {
 }
 ```
 
-### Пример: Kotlin — фасад над базой данных
+### Пример: Kotlin — Фасад Над Базой Данных
 
 ```kotlin
 // Сложные подсистемы
@@ -305,7 +307,7 @@ Use Cases паттерна Facade:
 4. **Потенциальные накладные расходы** — дополнительный уровень косвенности.
 5. **Риск God Object** — фасад может «раздуться» и взять на себя слишком много ответственности.
 
-### Рекомендации по использованию (Best Practices)
+### Рекомендации По Использованию (Best Practices)
 
 ```kotlin
 // DO: Используйте фасад для сложных подсистем
@@ -338,7 +340,7 @@ class SystemFacade(private val subsystem: AdvancedSubsystem) {
 // DON'T: Не используйте фасад для чрезмерно простых систем
 ```
 
-### Краткое резюме (RU)
+### Краткое Резюме (RU)
 
 Паттерн **Facade** предоставляет упрощенный интерфейс к сложным подсистемам. Применяется, когда нужно упростить использование сложной системы, уменьшить количество зависимостей и выделить стабильный слой между клиентом и подсистемами. Частые примеры: фасад для домашнего кинотеатра, API-фасад (сеть + кэш + ошибки), фасад над базой данных.
 
@@ -662,7 +664,7 @@ Use it when:
 
 Common examples: home theater system, API facade (network + cache + error handling), database facade.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем паттерн Facade отличается от паттернов Adapter и Proxy?
 - Когда использование Facade может стать вредным (например, god object, чрезмерное сокрытие деталей)?

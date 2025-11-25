@@ -1,36 +1,33 @@
 ---
 id: android-149
 title: Which Class To Catch Gestures / Какой класс для ловли жестов
-aliases:
-- Which Class To Catch Gestures
-- Какой класс для ловли жестов
+aliases: [Which Class To Catch Gestures, Какой класс для ловли жестов]
 topic: android
 subtopics:
-- ui-views
-- ui-widgets
+  - ui-views
+  - ui-widgets
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 question_kind: android
 moc: moc-android
 related:
-- c-android-components
-- q-compose-side-effects-launchedeffect-disposableeffect--android--hard
-- q-how-does-jetpack-compose-work--android--medium
+  - c-android-components
+  - q-compose-side-effects-launchedeffect-disposableeffect--android--hard
+  - q-how-does-jetpack-compose-work--android--medium
+  - q-which-class-can-be-used-to-detect-different-gestures--android--easy
+  - q-which-class-to-use-for-detecting-gestures--android--medium
+  - q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/ui-views
-- android/ui-widgets
-- difficulty/easy
-- gesture-detector
-- gestures
-- ui
+tags: [android/ui-views, android/ui-widgets, difficulty/easy, gesture-detector, gestures, ui]
 
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -205,7 +202,7 @@ class GestureView(context: Context) : View(context) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает `ScaleGestureDetector` для жестов pinch-to-zoom?
 - Как решать конфликты жестов во вложенных скроллируемых контейнерах?
@@ -229,7 +226,7 @@ class GestureView(context: Context) : View(context) {
 - https://developer.android.com/reference/android/view/GestureDetector
 - https://developer.android.com/jetpack/compose/gestures
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

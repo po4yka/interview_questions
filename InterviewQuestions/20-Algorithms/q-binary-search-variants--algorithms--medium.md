@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [algorithms, binary-search, difficulty/medium, log-n, searching]
 sources: ["https://en.wikipedia.org/wiki/Binary_search_algorithm"]
 
+date created: Saturday, November 1st 2025, 1:01:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)
@@ -354,7 +356,7 @@ fun minEatingSpeed(piles: IntArray, h: Int): Int {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать бинарный поиск рекурсивно?
 - В чём разница между `lower_bound` и `upper_bound`?
@@ -376,13 +378,13 @@ fun minEatingSpeed(piles: IntArray, h: Int): Int {
 - [[c-algorithms]]
 - "https://en.wikipedia.org/wiki/Binary_search_algorithm"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-data-structures-overview--algorithms--easy]] - Базовые структуры данных
 - [[q-sorting-algorithms-comparison--algorithms--medium]] - Концепции сортировки
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-two-pointers-sliding-window--algorithms--medium]] - Техника двух указателей
 - [[q-backtracking-algorithms--algorithms--hard]] - Алгоритмы с возвратом (backtracking)
 

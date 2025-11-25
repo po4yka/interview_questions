@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-10
 
 tags: [componentN, data-classes, destructuring, difficulty/medium, kotlin]
+date created: Saturday, October 18th 2025, 3:06:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое деструктурирующие объявления в Kotlin?
 
@@ -77,7 +80,7 @@ for ((key, value) in map) {
 val (_, status) = getResult()  // Игнорируем первый компонент
 ```
 
-### Деструктуризация в лямбдах
+### Деструктуризация В Лямбдах
 
 ```kotlin
 // Пример с Map.Entry
@@ -220,7 +223,7 @@ val (a, b) = MyClass("test", 42)  // Works!
 
 See also: [[c-kotlin]].
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого механизма от Java?
 - Когда вы бы использовали деструктуризацию на практике?
@@ -240,7 +243,7 @@ See also: [[c-kotlin]].
 - [Destructuring Declarations - Kotlin Documentation](https://kotlinlang.org/docs/destructuring-declarations.html)
 - [Kotlin Destructuring Declarations](https://www.kotlindevelopment.com/destructuring-declarations/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Связанные (Medium)
 - [[q-infix-functions--kotlin--medium]] - Infix

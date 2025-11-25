@@ -5,7 +5,7 @@ aliases: ["Coroutine Performance Optimization", "Оптимизация прои
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, patterns, advanced]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140021
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-delegates-compilation--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-delegates-compilation--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/hard, kotlin]
+date created: Saturday, October 18th 2025, 12:40:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140021
 
@@ -286,7 +289,7 @@ suspend fun measurePerformance() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как вы будете профилировать корутины в крупном приложении и какие инструменты использовать для поиска узких мест?
 2. В каких случаях стоит ограничивать параллелизм через `limitedParallelism`, и как выбрать оптимальное значение?
@@ -318,7 +321,7 @@ suspend fun measurePerformance() {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Сложные (Hard)
 - [[q-coroutine-profiling--kotlin--hard]] - Корутины

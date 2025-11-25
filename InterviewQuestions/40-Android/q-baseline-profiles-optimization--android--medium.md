@@ -1,34 +1,33 @@
 ---
 id: android-037
 title: Baseline Profiles Optimization / Оптимизация с Baseline Profiles
-aliases:
-- Baseline Profiles Optimization
-- Оптимизация с Baseline Profiles
+aliases: [Baseline Profiles Optimization, Оптимизация с Baseline Profiles]
 topic: android
 subtopics:
-- performance-startup
-- profiling
-- gradle
+  - gradle
+  - performance-startup
+  - profiling
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance-optimization
-- c-performance
-- c-modularization
+  - c-modularization
+  - c-performance
+  - c-performance-optimization
+  - q-baseline-profiles-android--android--medium
+  - q-canvas-drawing-optimization--android--hard
+  - q-dagger-build-time-optimization--android--medium
 sources: []
 created: 2024-10-11
 updated: 2025-11-11
-tags:
-- android/performance-startup
-- android/profiling
-- android/gradle
-- difficulty/medium
+tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:04:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -183,7 +182,7 @@ when (status.profileInstallResultCode) {
 - **Regeneration**: After refactoring, navigation changes, or hot path modifications.
 - **CI/CD**: Automated generation and validation of profile size and freshness.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как размер профиля влияет на время компиляции и увеличение размера приложения?
 - Что происходит, если профиль ссылается на методы, удалённые при шринкинге R8?
@@ -213,7 +212,7 @@ when (status.profileInstallResultCode) {
 - https://developer.android.com/topic/performance/baselineprofiles
 - https://developer.android.com/studio/profile/baselineprofiles
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -225,7 +224,7 @@ when (status.profileInstallResultCode) {
 
 - [[q-app-startup-optimization--android--medium]] - Базовая оптимизация старта до AOT-компиляции
 
-### Связанные (Тот же уровень)
+### Связанные (Тот Же уровень)
 
 - [[q-android-performance-measurement-tools--android--medium]] - Macrobenchmark для проверки профилей
 - Взаимодействие R8 с baseline-профилями

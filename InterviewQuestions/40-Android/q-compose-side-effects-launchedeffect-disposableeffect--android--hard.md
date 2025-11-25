@@ -4,25 +4,30 @@ title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочн�
 aliases: [Compose LaunchedEffect vs DisposableEffect, Compose Side Effects, DisposableEffect, LaunchedEffect, Побочные эффекты Compose]
 topic: android
 subtopics:
-- ui-compose
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-performance-optimization--android--hard
-- q-compose-remember-derived-state--android--medium
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
+  - q-compose-side-effects-advanced--android--hard
+  - q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-compose, compose, difficulty/hard, side-effects]
 sources:
-- "https://developer.android.com/jetpack/compose/lifecycle"
-- "https://developer.android.com/jetpack/compose/side-effects"
+  - "https://developer.android.com/jetpack/compose/lifecycle"
+  - "https://developer.android.com/jetpack/compose/side-effects"
 
+date created: Saturday, November 1st 2025, 1:09:10 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -133,7 +138,7 @@ DisposableEffect(Unit) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `rememberUpdatedState` предотвращает ненужные перезапуски эффектов?
 - Когда эффекты должны жить во `ViewModel`, а когда в Composable?
@@ -148,13 +153,13 @@ DisposableEffect(Unit) {
 - "https://developer.android.com/jetpack/compose/lifecycle"
 - "https://developer.android.com/jetpack/compose/mental-model"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-jetpack-overview--android--easy]]
 - [[q-compose-remember-derived-state--android--medium]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-compose-performance-optimization--android--hard]]
 
 ---

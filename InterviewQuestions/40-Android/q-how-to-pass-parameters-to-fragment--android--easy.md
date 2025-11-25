@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, difficulty/medium, fragment]
 
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -296,7 +298,7 @@ class CorrectFragment : Fragment() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если не использовать `Bundle` и передавать данные через конструктор?
 - Как `Bundle` переживает изменения конфигурации, например поворот экрана?
@@ -310,12 +312,12 @@ class CorrectFragment : Fragment() {
 - [Navigation Component Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
 - См. также: [[c-android-components]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-fragment-basics--android--easy]] — основы `Fragment`
 
-### Похожие (тот же уровень)
+### Похожие (тот Же уровень)
 - [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] — передача данных между `Fragment`
 - [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] — жизненный цикл `Fragment`
 

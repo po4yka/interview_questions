@@ -3,7 +3,7 @@ id: kotlin-039
 title: Coroutine Context Explained / CoroutineContext объяснение
 aliases: [Coroutine Context Explained, CoroutineContext объяснение]
 topic: kotlin
-subtopics: [coroutines, coroutine-context]
+subtopics: [coroutine-context, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: ru
@@ -12,11 +12,13 @@ source: ""
 source_note: ""
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-inline-value-classes-performance--kotlin--medium, q-kotlin-channels--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-inline-value-classes-performance--kotlin--medium, q-kotlin-channels--kotlin--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [async-programming, concurrency, coroutine-context, coroutines, difficulty/medium, kotlin]
 
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -262,7 +264,7 @@ scope.launch {
 }
 ```
 
-### Доступ к элементам контекста
+### Доступ К Элементам Контекста
 
 Внутри корутины:
 
@@ -294,7 +296,7 @@ class MyRepository : CoroutineScope {
 }
 ```
 
-### Структурированная конкурентность
+### Структурированная Конкурентность
 
 `CoroutineContext` и иерархия `Job` обеспечивают структурированную конкурентность:
 
@@ -332,7 +334,7 @@ scope.launch {
 }
 ```
 
-### Реальные примеры в Android
+### Реальные Примеры В Android
 
 `ViewModel` с корректным использованием контекста:
 
@@ -382,7 +384,7 @@ class UserRepository(
 }
 ```
 
-### Частые паттерны
+### Частые Паттерны
 
 1. Переключение контекста:
 
@@ -399,7 +401,7 @@ scope.launch {
 }
 ```
 
-2. Комбинация контекстов:
+1. Комбинация контекстов:
 
 ```kotlin
 val baseContext = Dispatchers.IO + CoroutineName("Worker")
@@ -411,7 +413,7 @@ scope.launch(Job()) {
 }
 ```
 
-3. Удаление элементов:
+1. Удаление элементов:
 
 ```kotlin
 val context = Dispatchers.IO + CoroutineName("Test") + Job()
@@ -813,7 +815,7 @@ scope.launch {
 }
 ```
 
-2. Combining contexts:
+1. Combining contexts:
 
 ```kotlin
 val baseContext = Dispatchers.IO + CoroutineName("Worker")
@@ -825,7 +827,7 @@ scope.launch(Job()) {
 }
 ```
 
-3. Removing elements:
+1. Removing elements:
 
 ```kotlin
 val context = Dispatchers.IO + CoroutineName("Test") + Job()
@@ -844,7 +846,7 @@ val newContext = context.minusKey(CoroutineName)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия подхода Kotlin coroutines от традиционного Java-подхода к потокам?
 - Когда на практике вы будете явно задавать или менять `CoroutineContext`?
@@ -872,15 +874,15 @@ val newContext = context.minusKey(CoroutineName)
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-coroutine-dispatchers--kotlin--medium]] — Коррутины
 - [[q-coroutine-builders-comparison--kotlin--medium]] — Коррутины
 - [[q-callback-to-coroutine-conversion--kotlin--medium]] — Коррутины
 - [[q-parallel-network-calls-coroutines--kotlin--medium]] — Коррутины
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-actor-pattern--kotlin--hard]] — Коррутины
 - [[q-fan-in-fan-out--kotlin--hard]] — Коррутины
 

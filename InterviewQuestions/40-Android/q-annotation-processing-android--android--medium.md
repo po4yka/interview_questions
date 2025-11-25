@@ -19,12 +19,17 @@ related:
   - c-dagger
   - c-gradle
   - c-room
+  - q-android-build-optimization--android--medium
+  - q-android-modularization--android--medium
+  - q-annotation-processing--android--medium
   - q-build-optimization-gradle--android--medium
   - q-gradle-build-system--android--medium
 sources: []
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:44 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -151,7 +156,7 @@ dependencies { ksp("androidx.room:room-compiler") }
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как отлаживать ошибки процессоров KSP, когда сгенерированный код не компилируется?
 - Каково влияние нескольких процессоров аннотаций на время сборки и как его измерить?
@@ -183,12 +188,12 @@ dependencies { ksp("androidx.room:room-compiler") }
 - [KSP Official Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [Android KSP Migration Guide](https://developer.android.com/build/migrate-to-ksp)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-gradle-build-system--android--medium]] — Фазы сборки и выполнение задач
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-kapt-vs-ksp--android--medium]] — Подробное сравнение KAPT и KSP
 - [[q-build-optimization-gradle--android--medium]] — Стратегии оптимизации сборки
 

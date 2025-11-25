@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-widgets, difficulty/easy, jetpack-compose, lazy-list]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -154,7 +156,7 @@ LazyColumn {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как добавить разделители между элементами `LazyColumn`?
 - Что такое параметр `key` в `items()` и почему он важен?
@@ -182,12 +184,12 @@ LazyColumn {
 - [[c-recyclerview]] - RecyclerView concept for comparison
 - [Compose Lists Documentation](https://developer.android.com/jetpack/compose/lists)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-what-is-known-about-recyclerview--android--easy]] - основы RecyclerView
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-which-layout-for-large-list--android--easy]] - когда использовать разные варианты списков
 - [[q-android-jetpack-overview--android--easy]] - обзор компонентов Jetpack
 

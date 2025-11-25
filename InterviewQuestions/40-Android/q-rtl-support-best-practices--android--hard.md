@@ -1,35 +1,34 @@
 ---
 id: android-642
 title: RTL Support Best Practices / 1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL
-aliases:
-- RTL Support Best Practices
-- 1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL
+aliases: [1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL, RTL Support Best Practices]
 topic: android
 subtopics:
-- i18n-l10n
-- ui-views
+  - i18n-l10n
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-android-resources
+  - c-android
+  - c-android-resources
+  - q-app-security-best-practices--android--medium
+  - q-multi-module-best-practices--android--hard
+  - q-runtime-permissions-best-practices--android--medium
 created: 2025-10-02
 updated: 2025-11-11
-tags:
-- android/i18n-l10n
-- android/ui-views
-- accessibility
-- difficulty/hard
+tags: [accessibility, android/i18n-l10n, android/ui-views, difficulty/hard]
 sources:
-- "https://developer.android.com/guide/topics/resources/layout-direction"
-- "https://material.io/design/usability/bidirectionality.html"
+  - "https://developer.android.com/guide/topics/resources/layout-direction"
+  - "https://material.io/design/usability/bidirectionality.html"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -42,21 +41,21 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Включение поддержки RTL
+### 1. Включение Поддержки RTL
 
 - В `AndroidManifest` → `android:supportsRtl="true"` (для API 17+).
 - Полагайтесь на системное направление разметки: оно задаётся локалью устройства или локалью приложения.
 - Для установки локалей приложения используйте `AppCompatDelegate.setApplicationLocales` (AndroidX AppCompat 1.6+), учитывая влияние на направление макета.
 - В Compose: обычно доверяйте `LocalLayoutDirection`, который предоставляется системой/Material-темой. Явное `CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl)` применяйте точечно для отдельных компонентов, а не всего приложения.
 
-### 2. Layout и ресурсы
+### 2. Layout И Ресурсы
 
 - `View` system: используйте `start`/`end` вместо `left`/`right` (`layout_marginStart`, `paddingStart`, `Gravity.START`, `layout_alignParentStart` и т.п.).
 - Compose: `Arrangement.Start`/`Alignment.Start` и `Modifier.padding(start = ...)` учитывают `LayoutDirection` и автоматически инвертируются в RTL.
 - Автоматическое зеркалирование: используйте `android:autoMirrored="true"` для подходящих векторных/drawable-ресурсов (иконки стрелок и т.п.) в API 17+.
 - Специальные ресурсы: при сложных случаях, когда простое авто-зеркалирование неверно, можно использовать RTL-специфичные ресурсы с квалификатором `-ldrtl` (например, `drawable-ldrtl`). Для layout предпочтительнее добиваться корректного поведения через `start`/`end` и `layoutDirection`, а не дублировать разметку.
 
-### 3. BiDi текст и форматирование
+### 3. BiDi Текст И Форматирование
 
 - Для смешанных направлений используйте `BidiFormatter` (или `androidx.core.text.BidiFormatter`) для корректного оборачивания LTR-текста внутри RTL-контекста и наоборот.
 - `TextUtils.getLayoutDirectionFromLocale(locale)` помогает определить направление для выбранной локали; не подменяет работу `BidiFormatter`.
@@ -70,19 +69,19 @@ sources:
 - В инженерной практике используйте UI-тесты (Espresso/Compose UI), которые устанавливают нужную локаль (через настройки устройства, тестовый раннер или прикладной API). Если используете `LocaleTestRule`, явно оформляйте её как кастомный утилитарный класс.
 - Используйте screenshot-тесты/визуальные диффы для сравнения LTR и RTL экранов, чтобы выявлять неверные выравнивания, незеркальные иконки и обрезанный текст.
 
-### 5. Интерактивные элементы
+### 5. Интерактивные Элементы
 
 - Жесты: учитывайте, что "leading edge" и "trailing edge" зависят от направления. Например, жест "swipe-to-go-back" или edge-swipe логично располагать с ведущей стороны: слева в LTR и справа в RTL.
 - Иконки: используйте авто-зеркалирование или отдельные RTL-варианты для направленных иконок (стрелки "назад", "вперёд" и т.п.), чтобы семантика сохранялась.
 - Compose Navigation / анимации навигации: убедитесь, что анимации, основанные на "start"/"end" (slide in/out), зависят от `LayoutDirection`, чтобы направление анимации корректно менялось для RTL.
 
-### 6. Edge cases
+### 6. Edge Cases
 
 - Смешанный контент (LTR-текст в RTL UI и наоборот): применяйте `BidiFormatter.unicodeWrap` или явные Unicode-символы направления для email/URL/идентификаторов.
 - Диаграммы и графики: локализуйте подписи осей и легенды, учитывайте направление подписи и порядок серий, если он зависит от чтения слева-направо/справа-налево.
 - Анимации: для слайдов/перелистываний используйте start/end-ориентированные API, чтобы направление автоматически инвертировалось в RTL, а не жёстко кодируйте left/right.
 
-### 7. Pipeline и контроль
+### 7. Pipeline И Контроль
 
 - Включите RTL-проверки в CI: автозапуск UI-тестов/скриншот-тестов под RTL-локалью.
 - Подготовьте checklist для дизайнеров и разработчиков: проверка иконок, типографики, отступов, навигации и жестов в RTL.
@@ -92,21 +91,21 @@ sources:
 
 ## Answer (EN)
 
-### 1. Enabling RTL support
+### 1. Enabling RTL Support
 
 - In `AndroidManifest`: set `android:supportsRtl="true"` (API 17+).
 - Rely on system/app locale to drive layout direction.
 - To set app-specific locales, use `AppCompatDelegate.setApplicationLocales` (AndroidX AppCompat 1.6+), understanding it affects layout direction.
 - In Compose, rely on `LocalLayoutDirection` provided by the system/Material theme. Use `CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl)` only for targeted components, not as a global override.
 
-### 2. Layouts and resources
+### 2. Layouts and Resources
 
 - `View` system: use `start`/`end` instead of `left`/`right` (`layout_marginStart`, `paddingStart`, `Gravity.START`, `layout_alignParentStart`, etc.).
 - Compose: `Arrangement.Start`/`Alignment.Start` and `Modifier.padding(start = ...)` are aware of `LayoutDirection` and flip automatically in RTL.
 - Automatic mirroring: use `android:autoMirrored="true"` for appropriate vector/drawable resources (e.g., arrows) on API 17+.
 - Specialized resources: for complex cases where auto-mirroring is wrong, use RTL-specific resources with the `-ldrtl` qualifier (e.g., `drawable-ldrtl`). For layouts, prefer correct use of `start`/`end` and `layoutDirection` rather than duplicating XML layouts.
 
-### 3. BiDi text and formatting
+### 3. BiDi Text and Formatting
 
 - For mixed-direction content, use `BidiFormatter` (or `androidx.core.text.BidiFormatter`) to wrap LTR text in RTL context and vice versa.
 - `TextUtils.getLayoutDirectionFromLocale(locale)` derives layout direction; it does not replace `BidiFormatter`.
@@ -120,19 +119,19 @@ sources:
 - Use UI tests (Espresso/Compose UI) that set the desired locale via device/emulator settings, test runner, or app-level APIs. If you use a `LocaleTestRule`, keep it as a clearly defined custom utility.
 - Use screenshot/visual diff tests to compare LTR vs RTL screens and catch misaligned elements, non-mirrored icons, and clipped text.
 
-### 5. Interactive elements
+### 5. Interactive Elements
 
 - Gestures: ensure "leading/trailing edge" interactions (swipe-to-go-back, edge swipes, drawers) adapt to layout direction: leading edge is left in LTR and right in RTL.
 - Icons: use auto-mirroring or dedicated RTL variants for directional icons (back/forward arrows, chevrons) so their meaning stays correct.
 - Compose Navigation / navigation animations: ensure slide/transition directions are based on `start`/`end` and `LayoutDirection` so they reverse appropriately for RTL.
 
-### 6. Edge cases
+### 6. Edge Cases
 
 - Mixed content (LTR text in RTL UI and vice versa): use `BidiFormatter.unicodeWrap` or Unicode direction marks for emails/URLs/IDs.
 - Charts/graphs: localize axis labels and legends; consider whether logical order/read direction should be reversed for RTL.
 - Animations: implement horizontal slides/pages using start/end-based APIs instead of hardcoded left/right so they invert naturally for RTL.
 
-### 7. Pipeline and quality control
+### 7. Pipeline and Quality Control
 
 - Integrate RTL checks into CI: run UI/screenshot tests under RTL locales.
 - Maintain an RTL checklist for designers and engineers (icons, typography, spacing, navigation, gestures).
@@ -140,7 +139,7 @@ sources:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как адаптировать Compose Navigation анимации под RTL?
 - Как обрабатывать смешанный ввод (латиница + арабский) в поисковых полях?
 - Какие UX-паттерны специфичны для RTL (tab bar, pagination и т.п.)?

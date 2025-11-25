@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [adapter, design-patterns, difficulty/medium, gof-patterns, structural-patterns, wrapper]
 sources: ["https://refactoring.guru/design-patterns/adapter"]
 
+date created: Saturday, November 1st 2025, 1:26:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -100,7 +102,7 @@ class UserAdapter(private val users: List<User>) :
 - Сложности поддержки при большом количестве адаптеров
 - Риск избыточной инженерии при слишком агрессивном применении
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Отличия между Adapter и Decorator?
 - Когда использовать extension-функции, а когда адаптеры?
@@ -112,7 +114,7 @@ class UserAdapter(private val users: List<User>) :
 - [[c-adapter-pattern]]
 - https://refactoring.guru/design-patterns/adapter
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-abstract-factory-pattern--cs--medium]] - Паттерн Abstract Factory

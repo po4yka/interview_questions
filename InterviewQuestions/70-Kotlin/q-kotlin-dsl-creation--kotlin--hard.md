@@ -14,7 +14,10 @@ related: [c-kotlin, q-array-vs-list-kotlin--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/hard]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Разработайте и реализуйте типобезопасный DSL для построения UI компонентов. Используйте контроль области видимости, extension-лямбды и `@DslMarker`.
 
@@ -25,7 +28,7 @@ tags: [difficulty/hard]
 
 **DSL (Domain-Specific Language)** в Kotlin строится на возможностях языка: лямбдах с получателем, extension-функциях, инфиксных и операторных перегрузках. Это позволяет создавать выразительные и типобезопасные API, в том числе для UI.
 
-### Базовая структура DSL
+### Базовая Структура DSL
 
 Используем лямбды с получателем: `block: HtmlTag.() -> Unit` — это позволяет внутри блока вызывать методы `HtmlTag` без явного указания объекта.
 
@@ -89,13 +92,13 @@ fun buildPage() = HtmlBuilder().html {
 }
 ```
 
-### `@DslMarker` для контроля области
+### `@DslMarker` Для Контроля Области
 
 `@DslMarker` используется для ограничения выбора неявных получателей и предотвращения случайного обращения к внешнему builder'у из вложенного.
 
 Типичный приём: помечаем все классы и функции одного DSL одной и той же аннотацией. Тогда при наличии нескольких помеченных получателей внутри лямбды компилятор запрещает неявные обращения к внешнему получателю, делая вложенный DSL более безопасным.
 
-### Полный типобезопасный UI DSL
+### Полный Типобезопасный UI DSL
 
 Ниже пример DSL для UI-компонентов с `@UiDsl`, компонентами `Container`, `Button`, `Text` и функциями `button`, `text`, `column`.
 
@@ -254,7 +257,7 @@ val sql = query {
 
 Здесь `@SqlDsl` помечает классы DSL; для данного упрощённого примера он в основном демонстрационный: настоящая type-safe модель потребовала бы типов для колонок и таблиц, а не операций со строками.
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Используйте `@DslMarker` для всех сущностей одного DSL, чтобы избежать утечки и смешивания областей:
 
@@ -266,7 +269,7 @@ annotation class BuilderDsl
 class Builder { /* ... */ }
 ```
 
-2. Предпочитайте лямбды с получателем (`Receiver.() -> Unit`) обычным лямбдам — это делает DSL более декларативным и типобезопасным:
+1. Предпочитайте лямбды с получателем (`Receiver.() -> Unit`) обычным лямбдам — это делает DSL более декларативным и типобезопасным:
 
 ```kotlin
 // DO: лямбда с получателем
@@ -276,7 +279,7 @@ fun tag(name: String, block: Tag.() -> Unit)
 fun tag(name: String, block: (Tag) -> Unit)
 ```
 
-3. Стройте type-safe builders: работайте с конкретными типами компонентов, не используйте `Any` или сырые структуры, если важна корректность дерева:
+1. Стройте type-safe builders: работайте с конкретными типами компонентов, не используйте `Any` или сырые структуры, если важна корректность дерева:
 
 ```kotlin
 // DO: ограничения на известные типы компонентов
@@ -535,7 +538,7 @@ class Builder { /* ... */ }
 
 Apply it consistently to all core DSL builder classes and functions to prevent leaking outer receivers.
 
-2. Prefer extension lambdas with receivers:
+1. Prefer extension lambdas with receivers:
 
 ```kotlin
 // DO: Lambda with receiver
@@ -547,7 +550,7 @@ fun tag(name: String, block: (Tag) -> Unit)
 
 Receiver lambdas make the DSL more readable and closer to natural language while staying type-safe.
 
-3. Type-safe builders:
+1. Type-safe builders:
 
 ```kotlin
 // DO: Constrained to known component types
@@ -561,7 +564,7 @@ fun Container.add(component: Any) { /* ... */ }
 
 Ensure your builder functions accept and produce well-defined domain types.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия подхода к DSL в Kotlin по сравнению с Java?
 - В каких практических сценариях вы бы использовали такой DSL (например, описание UI, конфигурации, Gradle-подобные скрипты)?
@@ -572,7 +575,7 @@ Ensure your builder functions accept and produce well-defined domain types.
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-array-vs-list-kotlin--kotlin--easy]]
 

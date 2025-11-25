@@ -1,36 +1,33 @@
 ---
 id: android-157
 title: Material3 Dynamic Color Theming / Динамические цвета Material3
-aliases:
-- Material3 Dynamic Color Theming
-- Динамические цвета Material3
+aliases: [Material3 Dynamic Color Theming, Динамические цвета Material3]
 topic: android
 subtopics:
-- ui-compose
-- ui-theming
+  - ui-compose
+  - ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-jetpack-compose
-- q-compose-semantics--android--medium
-- q-single-activity-approach--android--medium
+  - c-compose-state
+  - c-jetpack-compose
+  - q-accessibility-color-contrast--android--medium
+  - q-compose-semantics--android--medium
+  - q-how-to-create-dynamic-screens-at-runtime--android--hard
+  - q-material3-components--android--easy
+  - q-single-activity-approach--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/ui-compose
-- android/ui-theming
-- design
-- difficulty/medium
-- dynamic-color
-- material3
+tags: [android/ui-compose, android/ui-theming, design, difficulty/medium, dynamic-color, material3]
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -505,7 +502,7 @@ Snackbar(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Material 3 генерирует дополнительные (secondary, tertiary) цвета из одного seed color?
 - Какие аспекты доступности важно учитывать при использовании динамических цветов, зависящих от обоев пользователя?
@@ -531,7 +528,7 @@ Snackbar(
 - [Material Design 3 - Dynamic Color](https://m3.material.io/styles/color/dynamic-color/overview)
 - [Material Theme Builder](https://m3.material.io/theme-builder)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -542,7 +539,7 @@ Snackbar(
 
 - [[q-single-activity-approach--android--medium]] — Архитектура приложения для настройки темизации
 
-### Похожие вопросы
+### Похожие Вопросы
 
 - [[q-compose-semantics--android--medium]] — Доступность при использовании динамических тем
 

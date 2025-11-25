@@ -1,31 +1,31 @@
 ---
 id: android-403
 title: Hilt Components Scope / Компоненты и скоупы Hilt
-aliases:
-- Hilt Components Scope
-- Компоненты и скоупы Hilt
+aliases: [Hilt Components Scope, Компоненты и скоупы Hilt]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-hilt
-- q-android-security-best-practices--android--medium
-- q-room-library-definition--android--easy
+  - c-hilt
+  - q-android-security-best-practices--android--medium
+  - q-compose-core-components--android--medium
+  - q-hilt-entry-points--android--medium
+  - q-room-library-definition--android--easy
+  - q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/di-hilt
-- dependency-injection
-- difficulty/medium
+tags: [android/di-hilt, dependency-injection, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +43,7 @@ Hilt предоставляет готовые компоненты для ос�
 
 ---
 
-### Компоненты и скоупы Hilt (RU)
+### Компоненты И Скоупы Hilt (RU)
 
 | Компонент | Scope | Время жизни | Android-уровень |
 |-----------|-------|-------------|-----------------|
@@ -244,7 +244,7 @@ class MusicService : Service() {
 
 ---
 
-### Полный пример: мульти-компонентная конфигурация (RU)
+### Полный Пример: Мульти-компонентная Конфигурация (RU)
 
 #### 1. Модули `Application` (Singleton)
 
@@ -376,7 +376,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-### Связывание интерфейсов (RU)
+### Связывание Интерфейсов (RU)
 
 #### Использование `@Binds`
 
@@ -408,7 +408,7 @@ abstract class RepositoryModule {
 
 ---
 
-### Квалификаторы для нескольких биндингов (RU)
+### Квалификаторы Для Нескольких Биндингов (RU)
 
 ```kotlin
 @Qualifier
@@ -458,7 +458,7 @@ object InterceptorModule {
 
 ---
 
-### Иерархия компонентов (RU)
+### Иерархия Компонентов (RU)
 
 ```text
 SingletonComponent (Application)
@@ -995,7 +995,7 @@ Key points:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-android-security-best-practices--android--medium]]
 - [[q-room-library-definition--android--easy]]
@@ -1017,9 +1017,9 @@ Key points:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые концепции / предпосылки
+### Базовые Концепции / Предпосылки
 
 - [[c-hilt]]
 

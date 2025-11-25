@@ -1,36 +1,35 @@
 ---
 id: android-624
 title: Android Enterprise MDM Architecture / Архитектура Android Enterprise MDM
-aliases:
-- Android Enterprise MDM Architecture
-- Архитектура Android Enterprise MDM
+aliases: [Android Enterprise MDM Architecture, Архитектура Android Enterprise MDM]
 topic: android
 subtopics:
-- permissions
-- keystore-crypto
-- processes
+  - keystore-crypto
+  - permissions
+  - processes
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-android-security-best-practices--android--medium
+  - c-android
+  - q-android-lint-tool--android--medium
+  - q-android-security-best-practices--android--medium
+  - q-clean-architecture-android--android--hard
+  - q-quick-settings-tiles-architecture--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/permissions
-- android/keystore-crypto
-- android/processes
-- difficulty/hard
+tags: [android/keystore-crypto, android/permissions, android/processes, difficulty/hard]
 sources:
-- "https://developer.android.com/work/overview"
-- "https://developer.android.com/work/managed-configurations"
+  - "https://developer.android.com/work/managed-configurations"
+  - "https://developer.android.com/work/overview"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -74,7 +73,7 @@ sources:
   - тихая установка/обновление через Managed Google Play там, где это разрешено политикой;
   - отметить, что Play EMM API считается устаревающим и заменяется Android Management API для новых реализаций.
 
-### 2. Режимы управления
+### 2. Режимы Управления
 
 - **Work Profile (BYOD)**: личное устройство, управляемый рабочий профиль. DPC выступает владельцем профиля (profile owner) только в рабочем профиле; доступ к личным данным запрещён платформой.
 - **Fully Managed**: корпоративное устройство, DPC — владелец устройства (device owner), полный контроль над системными политиками и приложениями.
@@ -114,13 +113,13 @@ dpm.setLockTaskPackages(adminComponent, arrayOf("com.company.app"))
 - Backend должен фиксировать состояние compliance (сигналы рутования/компрометации устройства, версии ОС, применённые политики), инициировать ремедиацию и уведомления.
 - Для проверки целостности устройства и анти-root/эмуляция проверок использовать Play Integrity API (SafetyNet Attestation считается легаси и не рекомендован для новых реализаций).
 
-### 6. Play EMM API интеграция
+### 6. Play EMM API Интеграция
 
 - Для существующих интеграций: регистрация enterprise и получение `enterpriseId` в рамках Play EMM API; для новых решений — предпочтительно использовать Android Management API как рекомендуемый путь.
 - Управление приватным каналом приложений и rollout версий через Managed Google Play.
 - Управление managed configurations (app restrictions) для поддерживаемых приложений через соответствующие API/консоль; на устройстве приложения читают значения через `RestrictionsManager` / app restrictions (системный UI «Managed configurations» выступает только как точка просмотра/изменения, если включён).
 
-### 7. Безопасность и UX
+### 7. Безопасность И UX
 
 - Чётко объясняйте пользователю границы контроля (иконка Work Profile, уведомления, политика конфиденциальности).
 - В режиме Work Profile личные данные и приложения остаются вне доступа DPC (sandbox профиля); на COPE-устройствах соблюдайте ограничения доступа к личному профилю и не пытайтесь обходить платформенные механизмы разделения.
@@ -161,7 +160,7 @@ Center the solution around a DPC acting as profile/device owner, standard Androi
   - perform silent installs/updates where allowed by policy and mode;
   - note that Play EMM API is effectively deprecated and superseded by Android Management API for new implementations.
 
-### 2. Management modes
+### 2. Management Modes
 
 - **Work Profile (BYOD)**: personal device, managed work profile. DPC is profile owner only inside the work profile; personal data is isolated by the platform.
 - **Fully Managed**: corporate-only device; DPC is device owner with full policy and app control.
@@ -201,7 +200,7 @@ dpm.setLockTaskPackages(adminComponent, arrayOf("com.company.app"))
 - Backend should evaluate compliance (OS version, applied policies, rooting/compromise signals), trigger remediation, and send alerts.
 - Prefer Play Integrity API for device integrity and tamper checks; treat SafetyNet Attestation as legacy.
 
-### 6. Play EMM API integration
+### 6. Play EMM API Integration
 
 - For existing Play EMM API-based flows, register an enterprise and obtain `enterpriseId`; for new implementations, favor Android Management API as the recommended approach.
 - Manage private app channels and staged rollouts via Managed Google Play.

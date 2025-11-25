@@ -14,7 +14,10 @@ related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/medium, java, primitives, types, wrappers]
+date created: Friday, October 31st 2025, 6:30:30 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Какие примитивы есть в Kotlin, а какие в Java?
 
@@ -599,7 +602,7 @@ String text = boxed.toString();
 
 Kotlin exposes methods and extensions on these types directly; Java requires wrappers or utility methods for similar behavior.
 
-#### 4. When Kotlin Uses Primitives vs Wrappers
+#### 4. When Kotlin Uses Primitives Vs Wrappers
 
 Kotlin compiles to JVM primitives when:
 - Types are non-nullable (`Int`, `Double`, etc.).

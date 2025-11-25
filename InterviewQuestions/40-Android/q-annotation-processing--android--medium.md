@@ -16,10 +16,15 @@ moc: moc-android
 related:
   - c-hilt
   - c-room
+  - q-android-build-optimization--android--medium
+  - q-annotation-processing-android--android--medium
+  - q-module-types-android--android--medium
 sources: []
 created: 2025-10-12
 updated: 2025-10-30
 tags: [android/build-variants, android/gradle, annotation-processing, code-generation, difficulty/medium, kapt, ksp]
+date created: Saturday, November 1st 2025, 1:03:46 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

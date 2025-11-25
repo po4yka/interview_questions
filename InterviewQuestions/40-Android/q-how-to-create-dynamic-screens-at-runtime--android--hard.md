@@ -1,30 +1,31 @@
 ---
 id: android-184
 title: How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения
-aliases:
-- How To Create Dynamic Screens At Runtime
-- Как создавать динамические экраны во время выполнения
+aliases: [How To Create Dynamic Screens At Runtime, Как создавать динамические экраны во время выполнения]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-fragments-history-and-purpose--android--hard
-- q-how-is-navigation-implemented--android--medium
-- q-how-to-add-fragment-synchronously-asynchronously--android--medium
+  - c-android-components
+  - q-dalvik-vs-art-runtime--android--medium
+  - q-fragments-history-and-purpose--android--hard
+  - q-how-is-navigation-implemented--android--medium
+  - q-how-to-add-fragment-synchronously-asynchronously--android--medium
+  - q-material3-dynamic-color-theming--android--medium
+  - q-runtime-permissions-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/hard
+tags: [android/ui-views, difficulty/hard]
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +48,7 @@ tags:
 
 Важно: ниже приведены упрощённые примеры, ориентированные на идею. В продакшене нужно уделить внимание безопасной десериализации, схемам, валидации и безопасности.
 
-### 1. Server-Driven UI с JSON-конфигурацией
+### 1. Server-Driven UI С JSON-конфигурацией
 
 ```kotlin
 // Упрощённые модели. Для реального JSON лучше использовать строго типизированные поля,
@@ -107,7 +108,7 @@ class DynamicScreenBuilder {
 - Предпочитать более строгие модели (sealed-классы/enum + конкретные поля вместо `Map<String, Any?>`) для типобезопасности.
 - Валидировать конфигурацию перед рендерингом, логировать ошибки и не падать на некорректном конфиге.
 
-### 2. Jetpack Compose для динамического UI
+### 2. Jetpack Compose Для Динамического UI
 
 ```kotlin
 @Composable
@@ -159,7 +160,7 @@ fun DynamicComponent(component: Component) {
 }
 ```
 
-### 3. RecyclerView с несколькими ViewType
+### 3. RecyclerView С Несколькими ViewType
 
 ```kotlin
 class DynamicAdapter(
@@ -303,7 +304,7 @@ class HostActivity : AppCompatActivity() {
 }
 ```
 
-### 5. DSL для построения UI
+### 5. DSL Для Построения UI
 
 ```kotlin
 class UiBuilder(private val context: Context) {
@@ -355,7 +356,7 @@ val view = UiBuilder(context).build {
 }
 ```
 
-### 6. Пример JSON-ответа от сервера
+### 6. Пример JSON-ответа От Сервера
 
 ```json
 {
@@ -390,7 +391,7 @@ val view = UiBuilder(context).build {
 }
 ```
 
-### 7. Полный пример с загрузкой из сети
+### 7. Полный Пример С Загрузкой Из Сети
 
 ```kotlin
 class DynamicScreenActivity : AppCompatActivity() {
@@ -443,7 +444,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 }
 ```
 
-### Преимущества динамических экранов
+### Преимущества Динамических Экранов
 
 1. Гибкость — изменение UI без обновления приложения
 2. A/B-тесты — разные варианты экранов для разных сегментов
@@ -470,7 +471,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 6. Проектировать схему с учётом forward/backward совместимости
 7. Ограничивать доверие к серверу: whitelists для действий/дестинаций, валидация ссылок/переходов
 
-### Использование в продакшене
+### Использование В Продакшене
 
 Многие крупные приложения используют server-driven UI / динамический UI-подход:
 - Airbnb — Epoxy для динамических списков
@@ -888,7 +889,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 }
 ```
 
-### Advantages of dynamic screens
+### Advantages of Dynamic Screens
 
 1. Flexibility — change UI without updating the app
 2. A/B testing — different variants for different user segments
@@ -896,7 +897,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 4. Personalization — adapt UI to user or region
 5. Rapid fixes — adjust problematic screens via configuration
 
-### Disadvantages of dynamic screens
+### Disadvantages of Dynamic Screens
 
 1. Complexity — requires infrastructure and protocols on both server and client
 2. Performance — runtime parsing and view/composable construction
@@ -915,7 +916,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 6. Design schemas for forward/backward compatibility
 7. Restrict what server configs can do (whitelists for actions/destinations, validate URLs/navigation)
 
-### Production usage
+### Production Usage
 
 Many large apps use server-driven / dynamic UI approaches:
 - Airbnb — Epoxy for dynamic lists

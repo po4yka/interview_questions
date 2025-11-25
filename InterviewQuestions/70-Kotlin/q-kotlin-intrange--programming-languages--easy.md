@@ -14,7 +14,10 @@ related: [c-kotlin, q-kotlin-constructors--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, intrange, iteration, programming-languages, ranges]
+date created: Friday, October 31st 2025, 6:29:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое `IntRange`?
 
@@ -43,7 +46,7 @@ val range: IntRange = 1..10      // 1, 2, 3, ..., 10
 val range = IntRange(1, 10)      // 1, 2, 3, ..., 10
 ```
 
-### Другие диапазоны и прогрессии
+### Другие Диапазоны И Прогрессии
 
 **Диапазон символов (`CharRange`):**
 ```kotlin
@@ -94,7 +97,7 @@ println(range.last)   // 10
 println(range.step)   // 1
 ```
 
-### Распространённые операции
+### Распространённые Операции
 
 ```kotlin
 val range = 1..10
@@ -131,7 +134,7 @@ val range: IntRange = 1..10      // 1, 2, 3, ..., 10
 val range = IntRange(1, 10)      // 1, 2, 3, ..., 10
 ```
 
-### Other ranges and progressions
+### Other Ranges and Progressions
 
 **Character range (`CharRange`):**
 ```kotlin
@@ -182,7 +185,7 @@ println(range.last)   // 10
 println(range.step)   // 1
 ```
 
-### Common operations
+### Common Operations
 
 ```kotlin
 val range = 1..10
@@ -201,7 +204,7 @@ val evens = range.filter { it % 2 == 0 }  // [2, 4, 6, 8, 10]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия `IntRange` от аналогичных конструкций в Java?
 - Когда на практике стоит использовать `IntRange`?
@@ -211,7 +214,7 @@ val evens = range.filter { it % 2 == 0 }  // [2, 4, 6, 8, 10]
 
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-constructors--kotlin--easy]]
 - [[q-coroutine-context-elements--kotlin--hard]]

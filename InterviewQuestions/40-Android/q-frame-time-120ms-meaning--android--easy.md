@@ -15,6 +15,8 @@ tags: [android/performance-rendering, android/profiling, difficulty/easy, fps, f
 moc: moc-android
 related: [c-android-basics, c-android-profiling, q-android-performance-measurement-tools--android--medium]
 sources: []
+date created: Saturday, November 1st 2025, 1:30:15 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -191,7 +193,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между временем кадра и временем рендеринга?
 - Как `Choreographer` связан с `vsync`?
@@ -215,7 +217,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - Android Developer Guide: [Performance & Rendering](https://developer.android.com/topic/performance/rendering)
 - Systrace/Perfetto for detailed frame analysis
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - Понимание конвейера рендеринга UI в Android

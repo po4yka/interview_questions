@@ -4,25 +4,29 @@ title: Biometric Authentication / Биометрическая аутентиф�
 aliases: [Biometric Authentication, Биометрическая аутентификация]
 topic: android
 subtopics:
-- keystore-crypto
-- permissions
+  - keystore-crypto
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-keystore
-- q-android-security-best-practices--android--medium
+  - c-android-keystore
+  - q-android-security-best-practices--android--medium
+  - q-android-security-practices-checklist--android--medium
+  - q-app-security-best-practices--android--medium
 sources:
-- "https://developer.android.com/training/sign-in/biometric-auth"
+  - "https://developer.android.com/training/sign-in/biometric-auth"
 created: 2024-10-12
 updated: 2025-11-11
 tags: [android/keystore-crypto, android/permissions, authentication, biometric, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -100,7 +104,7 @@ when (manager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG))
 }
 ```
 
-### 3. Интеграция с Keystore
+### 3. Интеграция С Keystore
 
 **Для критичных операций** (шифрование токенов, паролей):
 
@@ -310,7 +314,7 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит с зашифрованными данными при изменении набора биометрии, если используется `setInvalidatedByBiometricEnrollment(true)`?
 - Как различия между `BIOMETRIC_STRONG` и `BIOMETRIC_WEAK` влияют на гарантии безопасности и использование `CryptoObject`/ключей?
@@ -336,12 +340,12 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 - https://developer.android.com/training/sign-in/biometric-auth
 - https://developer.android.com/reference/androidx/biometric/BiometricPrompt
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-android-security-best-practices--android--medium]] — Базовые принципы безопасности
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-keystore-system--security--medium]] — Keystore API и генерация ключей
 - [[q-app-security-best-practices--android--medium]] — Подходы к безопасности приложения
 

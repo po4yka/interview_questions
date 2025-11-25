@@ -1,35 +1,28 @@
 ---
 id: android-153
 title: ProGuard/R8 Rules / Правила ProGuard и R8
-aliases:
-- ProGuard/R8 Rules
-- Правила ProGuard и R8
+aliases: [ProGuard/R8 Rules, Правила ProGuard и R8]
 topic: android
 subtopics:
-- build-variants
-- obfuscation
-- static-analysis
+  - build-variants
+  - obfuscation
+  - static-analysis
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related: [c-gradle, q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium, q-encrypted-file-storage--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/build-variants
-- android/obfuscation
-- android/static-analysis
-- difficulty/medium
-- proguard
-- r8
-- security
+tags: [android/build-variants, android/obfuscation, android/static-analysis, difficulty/medium, proguard, r8, security]
 
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -153,7 +146,7 @@ tags:
 }
 ```
 
-### Android Компоненты (если библиотека их предоставляет)
+### Android Компоненты (если Библиотека Их предоставляет)
 
 ```proguard
 # Activities, Services, BroadcastReceivers, ContentProviders — нужны приложению/манифесту
@@ -193,7 +186,7 @@ tags:
 }
 ```
 
-### Сторонние Библиотеки (примеры — уточняются под конкретную интеграцию)
+### Сторонние Библиотеки (примеры — Уточняются Под Конкретную интеграцию)
 
 ```proguard
 # Retrofit — сохраняем только интерфейсы с HTTP-аннотациями
@@ -445,7 +438,7 @@ class ProguardRulesTest {
 }
 ```
 
-### Android Components (if the library provides them)
+### Android Components (if the Library Provides them)
 
 ```proguard
 # Activities, Services, BroadcastReceivers, ContentProviders referenced from manifest
@@ -485,7 +478,7 @@ class ProguardRulesTest {
 }
 ```
 
-### Third-Party Libraries (examples; refine per actual usage)
+### Third-Party Libraries (examples; Refine per Actual usage)
 
 ```proguard
 # Retrofit — keep only interfaces with Retrofit HTTP annotations
@@ -625,7 +618,7 @@ class ProguardRulesTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как отлаживать крэши в обфусцированных production-сборках?
 - В чем разница в подходах к оптимизации между ProGuard и R8?
@@ -651,7 +644,7 @@ class ProguardRulesTest {
 - https://r8.googlesource.com/r8
 - https://www.guardsquare.com/manual/configuration
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

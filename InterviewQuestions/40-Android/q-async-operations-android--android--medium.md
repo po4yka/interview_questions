@@ -4,26 +4,30 @@ title: Async Operations in Android / Асинхронные операции в 
 aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android
 subtopics:
-- background-execution
-- coroutines
-- threads-sync
+  - background-execution
+  - coroutines
+  - threads-sync
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-coroutines
-- c-lifecycle
-- q-android-async-primitives--android--easy
+  - c-coroutines
+  - c-lifecycle
+  - q-android-async-primitives--android--easy
+  - q-multithreading-tools-android--android--medium
+  - q-network-operations-android--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:14 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -280,7 +284,7 @@ disposables.add(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как выбрать между WorkManager и ForegroundService для долгих задач?
 - Каковы компромиссы между разными типами `Dispatchers` в корутинах?
@@ -310,12 +314,12 @@ disposables.add(
 - [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines)
 - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-async-primitives--android--easy]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-performance-measurement-tools--android--medium]]
 
 ### Продвинутое (сложнее)

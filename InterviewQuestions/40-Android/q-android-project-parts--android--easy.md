@@ -1,33 +1,31 @@
 ---
 id: android-216
 title: Android Project Parts / Части Android проекта
-aliases:
-- Android Project Parts
-- Части Android проекта
+aliases: [Android Project Parts, Части Android проекта]
 topic: android
 subtopics:
-- build-variants
-- gradle
+  - build-variants
+  - gradle
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- q-android-manifest-file--android--easy
+  - c-gradle
+  - q-android-lint-tool--android--medium
+  - q-android-manifest-file--android--easy
+  - q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy
+  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/build-variants
-- android/gradle
-- build-system
-- difficulty/easy
-- project-structure
+tags: [android/build-variants, android/gradle, build-system, difficulty/easy, project-structure]
 sources: []
+date created: Saturday, November 1st 2025, 1:02:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -210,7 +208,7 @@ android {
 | **src/main/java**, **src/main/kotlin** | Source code | Compiled to JVM bytecode and then to DEX |
 | **AndroidManifest.xml** | Metadata, permissions, components | Used by the system during install and runtime |
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Какова разница между каталогами res/ и assets/ с точки зрения доступа к файлам?
 - Как происходит генерация класса R и на каком этапе сборки она выполняется?
@@ -238,14 +236,14 @@ android {
 - https://developer.android.com/guide/topics/resources/providing-resources
 - https://developer.android.com/build
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
 - [[c-gradle]]
 - [[q-android-manifest-file--android--easy]]
 
-### Связанные вопросы
+### Связанные Вопросы
 - [[q-android-modularization--android--medium]]
 
 ## Related Questions

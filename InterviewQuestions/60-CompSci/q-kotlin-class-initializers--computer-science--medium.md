@@ -1,5 +1,5 @@
 ---
-id: cs-003
+id: lang-202
 title: "Kotlin Class Initializers / Инициализаторы классов Kotlin"
 aliases: ["Kotlin Class Initializers", "Инициализаторы классов Kotlin"]
 topic: kotlin
@@ -14,6 +14,8 @@ related: [c-concepts--kotlin--medium, q-actor-pattern--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin]
+date created: Tuesday, November 25th 2025, 12:56:20 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +40,7 @@ class Person(val name: String, val age: Int) {
 }
 ```
 
-### 2. Блоки init
+### 2. Блоки Init
 
 Выполняются как часть инициализации при вызове первичного конструктора. В классе может быть несколько блоков init.
 
@@ -207,7 +209,7 @@ class Example(val param: String) {
 - Init blocks and property initializers are executed in the order they appear in the class body, before the body of a secondary constructor.
 - Properties can be initialized directly at declaration or inside init blocks.
 
-## Дополнительные вопросы (Follow-ups, RU)
+## Дополнительные Вопросы (Follow-ups, RU)
 
 - Как взаимодействуют делегированные свойства и ленивые инициализаторы с порядком инициализации в классах Kotlin?
 - Как ведет себя порядок инициализации в `open` классах и при переопределении свойств?
@@ -219,7 +221,7 @@ class Example(val param: String) {
 - How does initialization order behave with `open` classes and overridden properties?
 - How do class initializers interact with `companion object` initialization?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-actor-pattern--kotlin--hard]]
 

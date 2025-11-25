@@ -1,36 +1,33 @@
 ---
 id: android-430
 title: Privacy Sandbox SDK Runtime / SDK Runtime в Privacy Sandbox
-aliases:
-- Privacy Sandbox
-- Privacy Sandbox SDK Runtime
-- SDK Runtime
+aliases: [Privacy Sandbox, Privacy Sandbox SDK Runtime, SDK Runtime]
 topic: android
 subtopics:
-- permissions
-- privacy-sdks
+  - permissions
+  - privacy-sdks
 question_kind: system-design
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-permissions
-- q-android-security-best-practices--android--medium
+  - c-android
+  - c-permissions
+  - q-android-security-best-practices--android--medium
+  - q-privacy-sandbox-attribution--android--medium
+  - q-privacy-sandbox-fledge--android--hard
+  - q-privacy-sandbox-topics-api--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/permissions
-- android/privacy-sdks
-- difficulty/hard
-- security/privacy
-- android
+tags: [android, android/permissions, android/privacy-sdks, difficulty/hard, security/privacy]
 
+date created: Saturday, November 1st 2025, 1:03:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -93,7 +90,7 @@ App Process <-> SDK Runtime (Sandbox Process) <-> Network/Services
 - Ограничить использование ресурсов SDK (CPU, память, сеть).
 - Свести к минимуму overhead IPC и влияния изоляции на UX.
 
-### Загрузка SDK в Sandbox
+### Загрузка SDK В Sandbox
 
 ```kotlin
 class SdkRuntimeManager(private val context: Context) {
@@ -173,7 +170,7 @@ abstract class BaseSandboxedSdkProvider : SandboxedSdkProvider() {
 - `IBinder`-интерфейс (`ISdkApi`) для IPC с приложением (AIDL-интерфейс условный и задаётся SDK-провайдером).
 - Освобождение ресурсов в `beforeUnloadSdk()`.
 
-### Интеграция на стороне приложения
+### Интеграция На Стороне Приложения
 
 ```kotlin
 class SandboxedAdClient(
@@ -222,7 +219,7 @@ class SandboxedAdClient(
 - Обработка ошибок и null-случаев через `Result`.
 - Пример носит иллюстративный характер; конкретные методы AIDL-интерфейса определяются SDK.
 
-### Вызовы миграции SDK
+### Вызовы Миграции SDK
 
 **1. Архитектурные изменения:**
 - Переход с прямых in-process вызовов на Binder IPC между приложением и SDK.
@@ -259,7 +256,7 @@ class SdkMigrationManager(private val context: Context) {
 - Fallback к традиционному in-app SDK при отсутствии Sandbox.
 - Единый интерфейс (adapter) для хост-приложения предполагается и должен быть явно определён в реальной реализации.
 
-### Лучшие практики
+### Лучшие Практики
 
 **Миграция:**
 - Постепенная стратегия с fallback на традиционный SDK.
@@ -282,7 +279,7 @@ class SdkMigrationManager(private val context: Context) {
 - Освобождение ресурсов в `beforeUnloadSdk()` и при ошибках.
 - Тестирование на low-end устройствах и при ограничениях сети.
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. Передача чувствительных данных → нарушения приватности и политик.
    - Решение: минимизация и анонимизация данных, проверка против требований Privacy Sandbox.
@@ -556,7 +553,7 @@ class SdkMigrationManager(private val context: Context) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит, если SDK превышает квоты ресурсов?
 - Как обрабатывать падения SDK в sandbox?

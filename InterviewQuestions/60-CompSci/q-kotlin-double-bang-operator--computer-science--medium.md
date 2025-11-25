@@ -1,5 +1,5 @@
 ---
-id: cs-013
+id: lang-212
 title: "Kotlin Double Bang Operator / Оператор !! в Kotlin"
 aliases: ["Kotlin Double Bang Operator", "Оператор !! в Kotlin"]
 topic: kotlin
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/null-safety]
 
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -203,7 +205,7 @@ These alternatives preserve the spirit of null-safety by making expectations exp
 - In rare cases where using a nullable backing field plus `!!` for a read-only `val` closely models initialization semantics better than `lateinit`, and the invariant is strictly controlled.
 
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как соотносятся `!!`, safe calls и оператор `?:` в контексте null-безопасности в Kotlin?
 - В каких случаях `requireNotNull` предпочтительнее `!!`?

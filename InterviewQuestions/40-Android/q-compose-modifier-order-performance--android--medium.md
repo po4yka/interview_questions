@@ -16,9 +16,14 @@ status: draft
 moc: moc-android
 related:
   - c-compose-recomposition
+  - q-compose-modifier-system--android--medium
+  - q-compose-performance-optimization--android--hard
+  - q-performance-monitoring-jank-compose--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, compose, difficulty/medium, optimization]
+date created: Saturday, November 1st 2025, 1:24:56 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +36,7 @@ tags: [android/performance-memory, android/ui-compose, compose, difficulty/mediu
 
 ## Ответ (RU)
 
-### Направление обработки и фазы
+### Направление Обработки И Фазы
 
 Модификаторы участвуют в нескольких фазах:
 - **Измерение (measurement)**: ограничения (constraints) передаются сверху вниз, каждый модификатор может изменить их для дочернего.
@@ -42,7 +47,7 @@ tags: [android/performance-memory, android/ui-compose, compose, difficulty/mediu
 
 **Оптимизация (общее правило)**: размещайте модификаторы, влияющие на размер/constraints (size/width/height/fillMaxSize и т.п.), достаточно рано в цепочке, чтобы downstream модификаторы работали с уже определёнными ограничениями и не вводили лишнюю сложность измерений. Но при этом не ломайте нужную семантику.
 
-### Критические паттерны
+### Критические Паттерны
 
 **1. Padding + Background (семантика и перформанс)**
 ```kotlin
@@ -127,7 +132,7 @@ fun Modifier.debugBorder() = border(2.dp, Color.Red)
 
 `border` — это draw-модификатор, но он может участвовать в измерении с учётом ширины границы и формы. Для лёгких диагностических эффектов иногда дешевле использовать `drawBehind`/`drawWithContent`, чтобы не влиять на layout. Главное: различать модификаторы, которые влияют на измерение/расположение (`LayoutModifier`), и те, что влияют только на рисование.
 
-### Ключевые принципы
+### Ключевые Принципы
 
 - **Draw-only обычно дешевле layout-изменяющих**: для декораций предпочитайте `drawBehind` / `drawWithContent`, если не нужно менять размер/constraints.
 - **Переиспользуйте объекты**: `Brush`, `Shape`, `Painter` выносите в константы или `remember`, чтобы не аллоцировать на каждый recomposition/layout.
@@ -149,7 +154,7 @@ fun Modifier.debugBorder() = border(2.dp, Color.Red)
 
 ## Answer (EN)
 
-### Processing order and phases
+### Processing order and Phases
 
 Modifiers participate in multiple phases:
 - **Measurement**: constraints flow top-down; each modifier can transform constraints for its child.
@@ -160,7 +165,7 @@ Modifier order defines how each modifier transforms constraints, size, position,
 
 **Optimization (general rule)**: place modifiers that affect constraints/size (`size`, `width`, `height`, `fillMaxSize`, etc.) early enough in the chain so that downstream modifiers work with well-defined constraints, but do not break the intended semantics just to "optimize".
 
-### Critical patterns
+### Critical Patterns
 
 **1. Padding + Background (semantics and performance)**
 ```kotlin
@@ -245,7 +250,7 @@ fun Modifier.debugBorder() = border(2.dp, Color.Red)
 
 `border` is implemented as a draw modifier but may consult its stroke width/shape for sizing. For lightweight debug visuals, `drawBehind`/`drawWithContent` can be cheaper if you don't want to affect measurement. Key idea: distinguish modifiers that alter measurement/layout (`LayoutModifier`) from those that only draw.
 
-### Key principles
+### Key Principles
 
 - **Draw-only usually cheaper than layout-affecting**: prefer `drawBehind` / `drawWithContent` for purely visual effects when you don't need to change constraints.
 - **Reuse heavy objects**: `Brush`, `Shape`, `Painter` should be stored in constants or `remember` to avoid allocating on every recomposition/layout.
@@ -267,7 +272,7 @@ Use official Android/Compose tooling to validate modifier chain cost:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `Modifier.composed()` влияет на производительность и когда его следует избегать?
 - Какова стоимость условных модификаторов по сравнению с использованием `Modifier.then()` в горячих путях?

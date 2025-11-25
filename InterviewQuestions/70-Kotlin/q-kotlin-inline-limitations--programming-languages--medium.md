@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, q-context-receivers--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, inline, lambdas, optimization, performance, kotlin]
+tags: [difficulty/medium, inline, kotlin, lambdas, optimization, performance]
+date created: Friday, October 31st 2025, 6:29:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Бывают ли случаи, когда нельзя использовать inline?
 
@@ -400,7 +403,7 @@ So if an API is primarily used from Java:
 
 ## Влияние На Размер Кода
 
-### Пример: Inline vs Обычная
+### Пример: Inline Vs Обычная
 
 ```kotlin
 // Inline функция
@@ -508,21 +511,21 @@ inline fun <T> measureTime(block: () -> T): T {
 }
 ```
 
-2. **Функции с reified type parameters** — когда нужно работать с типом в рантайме без явной передачи `Class`/`KClass`.
+1. **Функции с reified type parameters** — когда нужно работать с типом в рантайме без явной передачи `Class`/`KClass`.
 
 ```kotlin
 inline fun <reified T> Gson.fromJson(json: String): T =
     fromJson(json, T::class.java)
 ```
 
-3. **Маленькие утилитные функции**, вызываемые очень часто, когда стоимость вызова существенна.
+1. **Маленькие утилитные функции**, вызываемые очень часто, когда стоимость вызова существенна.
 
 ```kotlin
 inline fun Int.isEven() = this % 2 == 0
 inline fun String.isEmail() = contains("@")
 ```
 
-4. **Производительно-критичные higher-order функции**, где хочется избежать объектов-лямбд.
+1. **Производительно-критичные higher-order функции**, где хочется избежать объектов-лямбд.
 
 ```kotlin
 inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
@@ -552,21 +555,21 @@ inline fun <T> measureTime(block: () -> T): T {
 }
 ```
 
-2. Functions with `reified` type parameters that need runtime type information without passing `Class`/`KClass` explicitly.
+1. Functions with `reified` type parameters that need runtime type information without passing `Class`/`KClass` explicitly.
 
 ```kotlin
 inline fun <reified T> Gson.fromJson(json: String): T =
     fromJson(json, T::class.java)
 ```
 
-3. Small, frequently called utility functions where call overhead is significant.
+1. Small, frequently called utility functions where call overhead is significant.
 
 ```kotlin
 inline fun Int.isEven() = this % 2 == 0
 inline fun String.isEmail() = contains("@")
 ```
 
-4. Performance-critical higher-order functions where avoiding lambda objects matters.
+1. Performance-critical higher-order functions where avoiding lambda objects matters.
 
 ```kotlin
 inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
@@ -634,7 +637,7 @@ Memory impact: lambdas without `inline` create objects and may box captured muta
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия поведения inline по сравнению с Java?
 - Когда вы бы применили inline на практике?
@@ -656,7 +659,7 @@ Memory impact: lambdas without `inline` create objects and may box captured muta
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-context-receivers--kotlin--hard]]
 

@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard, kotlin, lifecycle, scope, structured-concurrency, violations]
 
+date created: Saturday, November 1st 2025, 1:29:39 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +40,7 @@ tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard,
 - легитимные escape hatches с явным временем жизни;
 - способы обнаружения нарушений и тестирования структурной конкурентности.
 
-### Что такое структурная конкурентность
+### Что Такое Структурная Конкурентность
 
 **Структурная конкурентность** — это парадигма, где:
 1. Каждая корутина принадлежит некоторому `CoroutineScope`.
@@ -48,7 +50,7 @@ tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard,
 5. Исключения распространяются от детей к родителю.
 6. Ни одна корутина не переживает свой scope (за исключением явно выделенных корутин с документированным временем жизни, см. escape hatches ниже).
 
-#### Основной принцип
+#### Основной Принцип
 
 ```
 Scope
@@ -61,7 +63,7 @@ Scope
    Все завершаются вместе
 ```
 
-#### Пример: структурированная vs неструктурированная
+#### Пример: Структурированная Vs Неструктурированная
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -112,9 +114,9 @@ fun demonstrateStructuredRu() = runBlocking {
 (Корутина GlobalScope может никогда не завершиться)
 ```
 
-### Преимущества структурной конкурентности
+### Преимущества Структурной Конкурентности
 
-#### 1. Автоматическая отмена
+#### 1. Автоматическая Отмена
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -146,7 +148,7 @@ class AutomaticCancellationDemo {
 }
 ```
 
-#### 2. Распространение исключений
+#### 2. Распространение Исключений
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -180,7 +182,7 @@ class ExceptionPropagationDemo {
 }
 ```
 
-#### 3. Гарантии завершения
+#### 3. Гарантии Завершения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -210,7 +212,7 @@ class CompletionGuaranteesDemo {
 }
 ```
 
-#### 4. Управление ресурсами
+#### 4. Управление Ресурсами
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -289,7 +291,7 @@ class GlobalScopeViolation {
 }
 ```
 
-#### Почему это нарушает структурную конкурентность
+#### Почему Это Нарушает Структурную Конкурентность
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -372,7 +374,7 @@ fun demonstrateStructuredFixRu() = runBlocking {
 }
 ```
 
-### Нарушение #2: создание Job() без жизненного цикла
+### Нарушение #2: Создание Job() Без Жизненного Цикла
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -399,7 +401,7 @@ class UnmanagedJobViolationRu {
 3. Держит ссылки → утечки памяти.
 4. Нет родителя — нельзя отменить извне.
 
-#### Исправление: явный жизненный цикл
+#### Исправление: Явный Жизненный Цикл
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -434,7 +436,7 @@ fun demonstrateExplicitLifecycleRu() = runBlocking {
 }
 ```
 
-### Нарушение #3: CoroutineScope() как фабрика без жизненного цикла
+### Нарушение #3: CoroutineScope() Как Фабрика Без Жизненного Цикла
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -453,7 +455,7 @@ class FactoryScopeViolationRu {
 }
 ```
 
-#### Почему это проблемно
+#### Почему Это Проблемно
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -483,7 +485,7 @@ fun demonstrateFactoryProblemRu() = runBlocking {
 }
 ```
 
-#### Исправление: принимать scope параметром
+#### Исправление: Принимать Scope Параметром
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -513,7 +515,7 @@ fun demonstrateFactoryFixRu() = runBlocking {
 }
 ```
 
-### Нарушение #4: утечка корутин через архитектурные границы
+### Нарушение #4: Утечка Корутин Через Архитектурные Границы
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -549,14 +551,14 @@ class LeakyViewModelRu {
 }
 ```
 
-#### Почему это нарушает архитектуру
+#### Почему Это Нарушает Архитектуру
 
 1. Нарушение границ слоёв: репозиторий управляет конкурентностью вместо уровня вызова.
 2. Нет отмены: `LeakyViewModelRu` не может остановить работу.
 3. Жёсткая связность: поведение репозитория скрыто.
 4. Сложно тестировать и контролировать.
 
-#### Исправление: `suspend`-функции и управление из слоя вызова
+#### Исправление: `suspend`-функции И Управление Из Слоя Вызова
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -599,7 +601,7 @@ class StructuredViewModelRu {
 }
 ```
 
-### Когда нарушение структуры допустимо (редко)
+### Когда Нарушение Структуры Допустимо (редко)
 
 Некоторые случаи допускают осмысленное нарушение строгой структуры, если:
 - время жизни явно определено;
@@ -607,7 +609,7 @@ class StructuredViewModelRu {
 - решение документировано;
 - используется отдельный управляемый `CoroutineScope`.
 
-#### Законный кейс 1: фоновая работа уровня приложения
+#### Законный Кейс 1: Фоновая Работа Уровня Приложения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -656,7 +658,7 @@ class MyApplicationRu : android.app.Application() {
 - Работа действительно уровня приложения.
 - Есть возможность остановки и документированное поведение.
 
-#### Законный кейс 2: fire-and-forget аналитика
+#### Законный Кейс 2: Fire-and-forget Аналитика
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -697,7 +699,7 @@ fun setupAnalyticsRu(app: android.app.Application): AnalyticsTrackerRu {
 - Fire-and-forget намеренный.
 - Выделенный scope с `SupervisorJob`.
 
-#### Законный кейс 3: отчёты о падениях
+#### Законный Кейс 3: Отчёты О Падениях
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -745,9 +747,9 @@ class MyApplicationCrashRu : android.app.Application() {
 - Явно используется `NonCancellable`.
 - Короткоживущая, целенаправленная операция.
 
-### Паттерны escape hatch
+### Паттерны Escape Hatch
 
-#### Паттерн 1: явный scope уровня приложения
+#### Паттерн 1: Явный Scope Уровня Приложения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -782,7 +784,7 @@ class LongRunningServiceRu(
 }
 ```
 
-#### Паттерн 2: supervisorScope для независимых задач
+#### Паттерн 2: supervisorScope Для Независимых Задач
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -826,7 +828,7 @@ fun demonstrateSupervisorScopeRu() = runBlocking {
 }
 ```
 
-#### Паттерн 3: отделённая корутина (использовать крайне осторожно)
+#### Паттерн 3: Отделённая Корутина (использовать Крайне осторожно)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -856,9 +858,9 @@ fun demonstrateDetachedRu() = runBlocking {
 }
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
-#### Пример 1: фоновая синхронизация данных
+#### Пример 1: Фоновая Синхронизация Данных
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -910,7 +912,7 @@ fun setupBackgroundSyncRu() {
 }
 ```
 
-#### Пример 2: SDK аналитики
+#### Пример 2: SDK Аналитики
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -975,7 +977,7 @@ class AnalyticsSDK_Ru private constructor() {
 }
 ```
 
-#### Пример 3: отчёт о падениях
+#### Пример 3: Отчёт О Падениях
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1021,7 +1023,7 @@ class CrashReportingSDK_Ru {
 }
 ```
 
-#### Пример 4: кэш уровня приложения
+#### Пример 4: Кэш Уровня Приложения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1081,9 +1083,9 @@ class ApplicationCacheRu(
 }
 ```
 
-### Обнаружение нарушений
+### Обнаружение Нарушений
 
-#### Инструмент 1: правило Detekt (упрощённый пример)
+#### Инструмент 1: Правило Detekt (упрощённый пример)
 
 ```kotlin
 // Упрощённое правило Detekt для поиска GlobalScope.
@@ -1111,7 +1113,7 @@ class GlobalScopeUsageRuleRu : Rule() {
 }
 ```
 
-#### Инструмент 2: правило Android Lint (упрощённый пример)
+#### Инструмент 2: Правило Android Lint (упрощённый пример)
 
 ```kotlin
 // Упрощённое правило Lint для обнаружения CoroutineScope без явной отмены.
@@ -1152,7 +1154,7 @@ class UncancelledScopeDetectorRu : Detector(), SourceCodeScanner {
 }
 ```
 
-#### Инструмент 3: чеклист code review
+#### Инструмент 3: Чеклист Code Review
 
 ```kotlin
 /**
@@ -1175,9 +1177,9 @@ class UncancelledScopeDetectorRu : Detector(), SourceCodeScanner {
  */
 ```
 
-### Тестирование структурной конкурентности
+### Тестирование Структурной Конкурентности
 
-#### Тест 1: проверка отмены и распространения исключений
+#### Тест 1: Проверка Отмены И Распространения Исключений
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1242,7 +1244,7 @@ class StructuredConcurrencyTestRu {
 }
 ```
 
-#### Тест 2: проверка отсутствия утечек корутин
+#### Тест 2: Проверка Отсутствия Утечек Корутин
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1270,7 +1272,7 @@ class LeakDetectionTestRu {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Отдавайте предпочтение структурной конкурентности:
    ```kotlin
@@ -1291,7 +1293,7 @@ class LeakDetectionTestRu {
 
 6. Регулярно проверяйте код (линтеры, чеклисты) на наличие `GlobalScope`, неотменяемых `CoroutineScope(Job())` и корутин в неправильных слоях.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы рефакторите существующий код с активным использованием `GlobalScope` к структурированной модели?
 - Как проектировать API библиотек так, чтобы вызывать код с контролируемым жизненным циклом корутин?
@@ -1303,7 +1305,7 @@ class LeakDetectionTestRu {
 - [[c-structured-concurrency]]
 - Официальная документация по Kotlin Coroutines: раздел "Structured concurrency"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-advanced-coroutine-patterns--kotlin--hard]]
 - [[q-actor-pattern--kotlin--hard]]
@@ -1347,7 +1349,7 @@ Scope
    All complete together
 ```
 
-#### Example: Structured vs Unstructured
+#### Example: Structured Vs Unstructured
 
 ```kotlin
 import kotlinx.coroutines.*

@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [composite, design-patterns, difficulty/medium, gof-patterns, structural-patterns, tree-structure]
 sources: ["https://en.wikipedia.org/wiki/Composite_pattern"]
 
+date created: Saturday, November 1st 2025, 1:24:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -484,7 +486,7 @@ class Manager(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между паттернами Composite и Decorator?
 - Как реализовать обход дерева в паттерне Composite?
@@ -496,9 +498,9 @@ class Manager(
 - How do you implement tree traversal in Composite pattern?
 - What is the transparency vs safety trade-off?
 
-## Связанные вопросы / Предпосылки (RU)
+## Связанные Вопросы / Предпосылки (RU)
 
-### Базовые знания (проще)
+### Базовые Знания (проще)
 - Базовые знания ООП и рекурсии
 
 ## Related Questions

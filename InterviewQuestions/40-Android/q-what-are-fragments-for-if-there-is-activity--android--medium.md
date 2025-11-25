@@ -1,34 +1,33 @@
 ---
 id: android-291
 title: Fragments vs Activity / Фрагменты vs Activity
-aliases:
-- Fragments vs Activity
-- Фрагменты vs Activity
+aliases: [Fragments vs Activity, Фрагменты vs Activity]
 topic: android
 subtopics:
-- activity
-- fragment
-- ui-navigation
+  - activity
+  - fragment
+  - ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity-lifecycle
-- c-fragments
-- q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-activity-lifecycle
+  - c-fragments
+  - q-fragments-and-activity-relationship--android--hard
+  - q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
+  - q-why-are-fragments-needed-if-there-is-activity--android--hard
+  - q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/fragment
-- android/ui-navigation
-- difficulty/medium
+tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -105,7 +104,7 @@ class DashboardActivity : AppCompatActivity() {
 }
 ```
 
-### 3. Жизненный цикл и управление состоянием
+### 3. Жизненный Цикл И Управление Состоянием
 
 Фрагменты имеют собственные колбэки жизненного цикла, при этом они связаны с `Activity`, но позволяют инкапсулировать логику и состояние на уровне подкомпонента.
 
@@ -133,7 +132,7 @@ class DataFragment : Fragment() {
 
 Фрагменты разрушаются вместе с `Activity`, но внутри этого жизненного цикла позволяют локально управлять своим состоянием и логикой.
 
-### 4. Навигация и back stack
+### 4. Навигация И back Stack
 
 Фрагменты позволяют организовать навигацию в рамках одной `Activity`, управляя внутренним back stack через `FragmentManager`.
 
@@ -149,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 5. Адаптивные макеты для телефона/планшета
+### 5. Адаптивные Макеты Для телефона/планшета
 
 Те же фрагменты могут использоваться и для одноэкранной, и для двухпанельной раскладки.
 
@@ -206,7 +205,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 6. Память и ресурсы
+### 6. Память И Ресурсы
 
 Фрагменты:
 - разделяют окно и ресурсы хост-`Activity`;
@@ -214,7 +213,7 @@ class MainActivity : AppCompatActivity() {
 
 Важно: нет фиксированных «5MB на `Activity`» или подобных цифр, это зависит от реализации и устройства. Фрагменты не являются «просто `View`» — это UI плюс собственный жизненный цикл и логика в рамках `Activity`.
 
-### 7. Взаимодействие между компонентами
+### 7. Взаимодействие Между Компонентами
 
 Фрагменты удобно связывать через общий `ViewModel`, интерфейсы, реализуемые `Activity`, или Navigation Component.
 
@@ -250,7 +249,7 @@ class DetailsFragment : Fragment() {
 }
 ```
 
-### 8. Пример с Bottom Navigation
+### 8. Пример С Bottom Navigation
 
 Для нижней навигации обычно не создают отдельную `Activity` на каждый таб, а переключают фрагменты в рамках одной `Activity`.
 
@@ -287,7 +286,7 @@ class MainActivity : AppCompatActivity() {
 
 В продакшене обычно сохраняют экземпляры фрагментов или используют Navigation Component, чтобы не пересоздавать их при каждом переключении.
 
-### Ключевые преимущества фрагментов (сравнение)
+### Ключевые Преимущества Фрагментов (сравнение)
 
 | Возможность           | Activities                                   | Fragments                                                         |
 |-----------------------|----------------------------------------------|-------------------------------------------------------------------|
@@ -300,7 +299,7 @@ class MainActivity : AppCompatActivity() {
 | Взаимодействие        | Intents/результаты                          | Общие `ViewModel`, интерфейсы, аргументы навигации                |
 | Адаптация макетов     | Часто отдельные `Activity` и макеты         | Те же фрагменты для разных конфигураций (телефон/планшет и т.п.) |
 
-### Когда использовать фрагменты
+### Когда Использовать Фрагменты
 
 Используйте фрагменты для:
 - нижней/таба навигации внутри одной секции;
@@ -316,7 +315,7 @@ class MainActivity : AppCompatActivity() {
 - внешних точек входа (deep links, лаунчеры);
 - полностью разных контекстов (например, авторизация vs основное приложение).
 
-### Современный подход: Single-`Activity` архитектура
+### Современный Подход: Single-`Activity` Архитектура
 
 Распространённая модель: одна главная `Activity` + набор фрагментов в `NavHostFragment`, навигация через Navigation Component.
 

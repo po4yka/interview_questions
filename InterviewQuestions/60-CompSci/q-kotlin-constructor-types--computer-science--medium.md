@@ -1,5 +1,5 @@
 ---
-id: cs-012
+id: lang-211
 title: "Kotlin Constructor Types / Типы конструкторов Kotlin"
 aliases: ["Kotlin constructor types", "Типы конструкторов Kotlin"]
 topic: kotlin
@@ -14,6 +14,8 @@ related: [c--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium, q-ad
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/type-system]
+date created: Saturday, November 1st 2025, 1:26:20 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -275,7 +277,7 @@ val user = User("Alice", 30)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `init`-блоки взаимодействуют с первичными и вторичными конструкторами в более сложных сценариях наследования?
 - Когда стоит предпочесть фабричные функции или методы `companion object` вторичным конструкторам в Kotlin?

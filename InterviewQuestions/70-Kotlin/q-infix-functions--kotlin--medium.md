@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, functions, infix, kotlin, operators, syntax]
+date created: Saturday, October 18th 2025, 3:06:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое инфиксные функции в Kotlin?
 
@@ -56,16 +59,16 @@ infix fun Int.shl(x: Int): Int { /*...*/ }
 1.shl(2)
 ```
 
-### Частые примеры
+### Частые Примеры
 
-#### 1. Создание пар с `to`
+#### 1. Создание Пар С `to`
 
 ```kotlin
 val pair1 = 1 to "apple"   // Инфиксный вызов
 val pair2 = 1.to("apple")  // Обычный вызов
 ```
 
-#### 2. Побитовые операции
+#### 2. Побитовые Операции
 
 ```kotlin
 val color = 0x123456
@@ -74,7 +77,7 @@ val green = (color and 0x00ff00) shr 8
 val blue = color and 0x0000ff
 ```
 
-#### 3. Булевы / битовые операции с инфиксными функциями
+#### 3. Булевы / Битовые Операции С Инфиксными Функциями
 
 ```kotlin
 if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.isAdmin) {
@@ -84,15 +87,15 @@ if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.isAdmin) {
 
 Здесь используются инфиксные функции `and` и `or` (как функции для `Boolean`/`Int`), а не логические операторы `&&` и `||`.
 
-#### 4. Сопоставление строк (regex)
+#### 4. Сопоставление Строк (regex)
 
 ```kotlin
 val matches = "Hello, World" matches "^Hello".toRegex()  // Инфиксный вызов
 ```
 
-### Важные правила
+### Важные Правила
 
-#### Вызовы внутри класса
+#### Вызовы Внутри Класса
 
 ```kotlin
 class MyStringCollection {
@@ -110,7 +113,7 @@ class MyStringCollection {
 
 Инфиксный вызов требует явного приёмника только когда без него возникает неоднозначность.
 
-#### Приоритет операций
+#### Приоритет Операций
 
 Инфиксные вызовы имеют **меньший приоритет**, чем:
 - Арифметические операторы (`+`, `-`, `*`, `/`, `%`)
@@ -131,7 +134,7 @@ a && b xor c   // То же, что a && (b xor c)
 a xor b in c   // То же, что (a xor b) in c
 ```
 
-### Пользовательские инфиксные функции
+### Пользовательские Инфиксные Функции
 
 ```kotlin
 data class Point(val x: Double, val y: Double)
@@ -192,7 +195,7 @@ val green = (color and 0x00ff00) shr 8
 val blue = color and 0x0000ff
 ```
 
-#### 3. Boolean / bitwise operations using infix functions
+#### 3. Boolean / Bitwise Operations Using Infix Functions
 
 ```kotlin
 if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.isAdmin) {

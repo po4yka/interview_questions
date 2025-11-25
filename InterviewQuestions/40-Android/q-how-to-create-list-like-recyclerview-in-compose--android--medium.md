@@ -1,31 +1,32 @@
 ---
 id: android-248
 title: How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView в Compose
-aliases:
-- How To Create List Like RecyclerView In Compose
-- Как создать список как RecyclerView в Compose
+aliases: [How To Create List Like RecyclerView In Compose, Как создать список как RecyclerView в Compose]
 topic: android
 subtopics:
-- ui-compose
+  - ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-jetpack-compose
-- q-compose-testing--android--medium
-- q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+  - c-compose-state
+  - c-jetpack-compose
+  - q-compose-core-components--android--medium
+  - q-compose-custom-animations--android--medium
+  - q-compose-testing--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/ui-compose
-- difficulty/medium
+tags: [android/ui-compose, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +45,7 @@ tags:
 - Цель та же, что и у `RecyclerView` (эффективная работа с памятью и производительностью), но вместо ручного ресайклинга `View` используется декларативная композиция и состояние.
 - Идентичность элементов поддерживается с помощью стабильных ключей, а управление отображением выполняется декларативно, без адаптеров и `ViewHolder`.
 
-### Базовый пример LazyColumn
+### Базовый Пример LazyColumn
 
 ```kotlin
 @Composable
@@ -62,7 +63,7 @@ fun SimpleList() {
 }
 ```
 
-### Кастомные элементы и ключи
+### Кастомные Элементы И Ключи
 
 ```kotlin
 data class User(
@@ -127,7 +128,7 @@ fun UserItem(user: User) {
 }
 ```
 
-### Разные типы элементов
+### Разные Типы Элементов
 
 ```kotlin
 sealed class ListItem {
@@ -181,7 +182,7 @@ fun DividerItem() {
 }
 ```
 
-### Секции в списке
+### Секции В Списке
 
 ```kotlin
 @Composable
@@ -211,7 +212,7 @@ fun SectionedList(sections: Map<String, List<User>>) {
 }
 ```
 
-### Пагинация (загрузка при прокрутке к концу)
+### Пагинация (загрузка При Прокрутке К концу)
 
 Упрощенный пример, который отслеживает позицию прокрутки и вызывает `loadMore()`, когда пользователь приближается к концу списка.
 
@@ -371,7 +372,7 @@ fun AdaptiveGrid(items: List<Item>) {
 }
 ```
 
-### Список с анимациями элементов
+### Список С Анимациями Элементов
 
 ```kotlin
 @Composable
@@ -404,7 +405,7 @@ fun AnimatedItemRow(item: Item) {
 }
 ```
 
-### Свайп для удаления (Material 2 пример)
+### Свайп Для Удаления (Material 2 пример)
 
 Ниже используется `SwipeToDismiss` из Material 2 (`androidx.compose.material`). При использовании Material 3 следует применять соответствующие API из Material 3.
 
@@ -459,7 +460,7 @@ fun SwipeableList(
 }
 ```
 
-### Управление состоянием прокрутки
+### Управление Состоянием Прокрутки
 
 ```kotlin
 @Composable
@@ -478,7 +479,7 @@ fun RememberScrollStateExample(items: List<Item>) {
 }
 ```
 
-### Рекомендации по производительности
+### Рекомендации По Производительности
 
 ```kotlin
 @Composable
@@ -511,7 +512,7 @@ fun ItemRow(item: Item) {
 - Используйте стабильные `key`, когда элементы могут переставляться/вставляться/удаляться.
 - Избегайте тяжелой логики и побочных эффектов внутри лямбд `items {}`, контролируйте работу со стейтом.
 
-### Сравнение: RecyclerView vs LazyColumn (в Compose UI)
+### Сравнение: RecyclerView Vs LazyColumn (в Compose UI)
 
 | Возможность | RecyclerView | LazyColumn |
 |------------|-------------|-----------|
@@ -701,7 +702,7 @@ fun SectionedList(sections: Map<String, List<User>>) {
 }
 ```
 
-### LazyColumn with "Load More" (pagination trigger simplified)
+### LazyColumn with "Load More" (pagination Trigger simplified)
 
 Below is a simplified pattern that triggers loading more when the user scrolls near the end. It observes scroll position via `snapshotFlow`.
 
@@ -1001,7 +1002,7 @@ fun ItemRow(item: Item) {
 - Use stable `key` values when items can be reordered/inserted/removed.
 - Avoid heavy work and uncontrolled side effects inside `items {}` lambdas; keep state handling explicit.
 
-### Comparison: RecyclerView vs LazyColumn (in Compose UIs)
+### Comparison: RecyclerView Vs LazyColumn (in Compose UIs)
 
 | Feature | RecyclerView | LazyColumn |
 |---------|-------------|------------|
@@ -1016,7 +1017,7 @@ fun ItemRow(item: Item) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-animated-visibility-vs-content--android--medium]]
 - [[q-compose-testing--android--medium]]
@@ -1027,7 +1028,7 @@ fun ItemRow(item: Item) {
 - [Документация Android](https://developer.android.com/docs)
 - [Jetpack Compose](https://developer.android.com/develop/ui/compose)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

@@ -4,26 +4,31 @@ title: App Size Optimization / Оптимизация размера прило�
 aliases: [App Size Optimization, Оптимизация размера приложения]
 topic: android
 subtopics:
-- app-bundle
-- performance-memory
-- obfuscation
+  - app-bundle
+  - obfuscation
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-app-bundle
-- q-android-app-bundles--android--easy
-- q-android-build-optimization--android--medium
+  - c-app-bundle
+  - q-android-app-bundles--android--easy
+  - q-android-build-optimization--android--medium
+  - q-app-startup-optimization--android--medium
+  - q-optimize-memory-usage-android--android--medium
+  - q-reduce-apk-size-techniques--android--medium
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
-tags: [android/app-bundle, android/performance-memory, android/obfuscation, difficulty/medium]
+tags: [android/app-bundle, android/obfuscation, android/performance-memory, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:03:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -244,7 +249,7 @@ Limiting ABIs reduces package size but must be aligned with your target device s
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы измеряете влияние размера приложения на конверсию и удержание в продакшене?
 - Когда стоит использовать динамические feature-модули по сравнению с instant apps?
@@ -278,9 +283,9 @@ Limiting ABIs reduces package size but must be aligned with your target device s
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания
+### Предварительные Знания
 - [[q-android-app-bundles--android--easy]] — понимание формата AAB и его преимуществ
 - Базовые основы конфигурации Gradle и сборки Android-проекта
 
@@ -288,7 +293,7 @@ Limiting ABIs reduces package size but must be aligned with your target device s
 - [[q-android-build-optimization--android--medium]] — оптимизация процесса сборки
 - [[q-android-performance-measurement-tools--android--medium]] — инструменты профилирования и анализа производительности
 
-### Продвинутые темы
+### Продвинутые Темы
 - Поставляемые по требованию модули (on-demand feature delivery)
 - Стратегии защиты кода и артефактов при минимизации и обфускации
 

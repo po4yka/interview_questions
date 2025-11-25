@@ -1,36 +1,33 @@
 ---
 id: android-396
 title: Fragments and Multiple Activities / Фрагменты и несколько Activity
-aliases:
-- Fragments and Activities
-- Фрагменты и Activities
+aliases: [Fragments and Activities, Фрагменты и Activities]
 topic: android
 subtopics:
-- activity
-- fragment
-- ui-navigation
+  - activity
+  - fragment
+  - ui-navigation
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity
-- q-what-are-fragments-for-if-there-is-activity--android--medium
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-activity
+  - q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
+  - q-what-are-fragments-for-if-there-is-activity--android--medium
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
+  - q-why-are-fragments-needed-if-there-is-activity--android--hard
+  - q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/fragment
-- android/ui-navigation
-- difficulty/hard
-- fragments
-- ui-navigation
+tags: [android/activity, android/fragment, android/ui-navigation, difficulty/hard, fragments, ui-navigation]
 
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -51,7 +48,7 @@ tags:
 - упрощают реализацию навигации в рамках single-activity подхода,
 - в ряде сценариев снижают накладные расходы по сравнению с постоянным созданием новых `Activity`.
 
-### Почему фрагменты могут быть удобнее, чем несколько `Activity`
+### Почему Фрагменты Могут Быть Удобнее, Чем Несколько `Activity`
 
 #### 1. Модульность
 
@@ -182,7 +179,7 @@ class MainActivity : AppCompatActivity() {
 </LinearLayout>
 ```
 
-#### 3. Управление жизненным циклом
+#### 3. Управление Жизненным Циклом
 
 Фрагменты позволяют независимо управлять своим состоянием и поведением в рамках жизненного цикла родительской `Activity`, что упрощает работу со сложными интерфейсами.
 
@@ -205,7 +202,7 @@ class VideoPlayerFragment : Fragment() {
 }
 ```
 
-#### 4. Переиспользование кода
+#### 4. Переиспользование Кода
 
 Фрагменты повышают эффективность разработки и сопровождения за счет переиспользования логики и интерфейса в разных частях приложения.
 
@@ -238,7 +235,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 5. Использование ресурсов по сравнению с несколькими `Activity`
+#### 5. Использование Ресурсов По Сравнению С Несколькими `Activity`
 
 Навигация внутри одной `Activity` с помощью фрагментов может уменьшать накладные расходы по сравнению с частым запуском новых `Activity` (создание нового экземпляра, полный цикл callbacks, отдельное раздувание layout). Замена фрагментов в существующей `Activity`, как правило, требует меньше работы от системы.
 
@@ -268,7 +265,7 @@ fun navigateToDetailFragment(itemId: String) {
 - Можно переиспользовать одно окно/Surface.
 - Можно управлять back stack на уровне фрагментов внутри одной `Activity`.
 
-#### 6. Переходы и анимации
+#### 6. Переходы И Анимации
 
 Фрагменты предоставляют API для настройки анимаций и shared element-переходов между фрагментами, что помогает делать навигацию более плавной.
 
@@ -300,7 +297,7 @@ fun navigateWithSharedElement(imageView: ImageView) {
 
 Замечание: фрагменты сами по себе добавляют сложность (FragmentManager, вложенные жизненные циклы, управление back stack). В современных приложениях их обычно используют вместе с single-activity архитектурой и Jetpack Navigation, а в Compose-интерфейсах их роль может уменьшаться.
 
-### Пример реализации
+### Пример Реализации
 
 ```kotlin
 // Определение фрагмента

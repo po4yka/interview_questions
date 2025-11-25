@@ -1,40 +1,36 @@
 ---
 id: android-244
 title: Чем Жизненный Цикл Fragment Отличается От Activity / Fragment vs Activity Lifecycle
-aliases:
-- Fragment vs Activity Lifecycle
-- Чем отличается жизненный цикл Fragment от Activity
+aliases: [Fragment vs Activity Lifecycle, Чем отличается жизненный цикл Fragment от Activity]
 topic: android
 subtopics:
-- activity
-- fragment
-- lifecycle
+  - activity
+  - fragment
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity
-- q-activity-lifecycle-methods--android--medium
-- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-- q-what-are-fragments-for-if-there-is-activity--android--medium
+  - c-activity
+  - q-activity-lifecycle-methods--android--medium
+  - q-how-does-activity-lifecycle-work--android--medium
+  - q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources:
-- "https://developer.android.com/guide/fragments/lifecycle"
-- "https://developer.android.com/topic/libraries/architecture/lifecycle"
-tags:
-- android/activity
-- android/fragment
-- android/lifecycle
-- difficulty/medium
-- fragments
-- lifecycle
+  - "https://developer.android.com/guide/fragments/lifecycle"
+  - "https://developer.android.com/topic/libraries/architecture/lifecycle"
+tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium, fragments, lifecycle]
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -317,7 +313,7 @@ This back stack:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если наблюдать `LiveData`, используя `Fragment` вместо `viewLifecycleOwner`?
 - Как вложенные фрагменты влияют на порядок вызовов lifecycle?
@@ -345,13 +341,13 @@ This back stack:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
 - [[c-activity]]
 
-### Базовые вопросы
+### Базовые Вопросы
 
 - [[q-activity-lifecycle-methods--android--medium]] — основы жизненного цикла `Activity`
 - [[q-what-are-fragments-for-if-there-is-activity--android--medium]] — назначение `Fragment`

@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, retrofit]
 
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -390,7 +392,7 @@ suspend fun getPostsRequired(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать токены аутентификации с помощью интерсепторов Retrofit?
 - В чем разница между suspend-функциями и `Call<T>` в Retrofit?
@@ -403,7 +405,7 @@ suspend fun getPostsRequired(
 - Официальная документация Retrofit: https://square.github.io/retrofit/
 - Документация по OkHttp Interceptors: https://square.github.io/okhttp/interceptors/
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-what-is-data-binding--android--easy]] - Базовые концепции data binding в Android

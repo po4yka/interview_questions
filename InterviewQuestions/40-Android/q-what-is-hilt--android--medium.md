@@ -1,35 +1,32 @@
 ---
 id: android-199
 title: Hilt / Фреймворк Hilt
-aliases:
-- Hilt
-- Фреймворк Hilt
+aliases: [Hilt, Фреймворк Hilt]
 topic: android
 subtopics:
-- architecture-mvvm
-- di-hilt
+  - architecture-mvvm
+  - di-hilt
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dependency-injection
-- c-hilt
-- q-what-is-known-about-recyclerview--android--easy
+  - c-dependency-injection
+  - c-hilt
+  - q-hilt-assisted-injection--android--medium
+  - q-hilt-entry-points--android--medium
+  - q-koin-vs-dagger-philosophy--android--hard
+  - q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/architecture-mvvm
-- android/di-hilt
-- dependency-injection
-- di
-- difficulty/medium
-- hilt
+tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, difficulty/medium, hilt]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +40,7 @@ tags:
 ## Ответ (RU)
 **Hilt** — это фреймворк для внедрения зависимостей (Dependency Injection, DI), разработанный Google специально для Android. Он построен поверх **Dagger** и упрощает настройку DI в Android-приложениях за счёт уменьшения шаблонного кода и стандартных паттернов для Android-компонентов.
 
-### Что такое Dependency Injection
+### Что Такое Dependency Injection
 
 Dependency Injection — это шаблон проектирования, при котором объект получает свои зависимости извне, а не создаёт их самостоятельно.
 
@@ -63,7 +60,7 @@ class UserViewModel(
 }
 ```
 
-### Зачем нужен Hilt
+### Зачем Нужен Hilt
 
 До появления Hilt использование Dagger в Android требовало:
 - Ручного объявления и связывания компонентов
@@ -81,7 +78,7 @@ Hilt решает это за счёт:
 
 ### Настройка Hilt
 
-#### 1. Добавление зависимостей
+#### 1. Добавление Зависимостей
 
 ```gradle
 // Project-level build.gradle (Groovy DSL)
@@ -108,7 +105,7 @@ dependencies {
 
 > Примечание: устаревший артефакт `androidx.hilt:hilt-lifecycle-viewmodel` больше не рекомендуется; используется `@HiltViewModel` из `com.google.dagger:hilt-android`.
 
-#### 2. Аннотация класса Application
+#### 2. Аннотация Класса Application
 
 ```kotlin
 @HiltAndroidApp
@@ -136,7 +133,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-### Основные концепции
+### Основные Концепции
 
 #### 1. Компоненты Hilt
 
@@ -158,7 +155,7 @@ ViewWithFragmentComponent (View, привязанное к Fragment)
 ServiceComponent (уровень Service)
 ```
 
-#### 2. Области видимости (Scopes)
+#### 2. Области Видимости (Scopes)
 
 Scope-аннотации связывают время жизни объекта со временем жизни компонента:
 
@@ -173,9 +170,9 @@ Scope-аннотации связывают время жизни объекта
 
 ---
 
-### Базовое использование
+### Базовое Использование
 
-#### 1. Инъекция в ViewModel
+#### 1. Инъекция В ViewModel
 
 ```kotlin
 @HiltViewModel
@@ -210,7 +207,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Предоставление зависимостей через модули
+#### 2. Предоставление Зависимостей Через Модули
 
 ```kotlin
 @Module
@@ -234,7 +231,7 @@ object AppModule {
 }
 ```
 
-#### 3. Привязка интерфейсов
+#### 3. Привязка Интерфейсов
 
 ```kotlin
 interface UserRepository {
@@ -263,7 +260,7 @@ abstract class RepositoryModule {
 
 ---
 
-### Продвинутые возможности
+### Продвинутые Возможности
 
 #### 1. Qualifier-аннотации
 
@@ -315,7 +312,7 @@ object NetworkModule {
 }
 ```
 
-#### 2. EntryPoint для нестандартных классов
+#### 2. EntryPoint Для Нестандартных Классов
 
 Для классов, которые нельзя пометить `@AndroidEntryPoint` (например, некоторые коллбэки библиотек), можно использовать EntryPoint:
 
@@ -371,9 +368,9 @@ class UserDetailViewModel @AssistedInject constructor(
 
 ---
 
-### Тестирование с Hilt
+### Тестирование С Hilt
 
-#### Unit-тесты с Hilt
+#### Unit-тесты С Hilt
 
 ```kotlin
 @HiltAndroidTest
@@ -472,7 +469,7 @@ class MainActivityTest {
 
 ---
 
-### Типичные сценарии использования
+### Типичные Сценарии Использования
 
 #### 1. Repository-паттерн
 
@@ -497,7 +494,7 @@ class UserRepository @Inject constructor(
 }
 ```
 
-#### 2. Сетевой слой
+#### 2. Сетевой Слой
 
 ```kotlin
 @Module
@@ -525,7 +522,7 @@ object NetworkModule {
 }
 ```
 
-#### 3. Работа с базой данных
+#### 3. Работа С Базой Данных
 
 ```kotlin
 @Module
@@ -887,7 +884,7 @@ class MyWorker(
 
 (Note: Hilt also provides dedicated integration for WorkManager via `androidx.hilt:hilt-work`.)
 
-### 3. Assisted Injection (for runtime parameters)
+### 3. Assisted Injection (for Runtime parameters)
 
 For runtime parameters that Hilt can't provide directly, you can use assisted injection patterns. One option (for non-`@HiltViewModel` classes) is:
 
@@ -913,7 +910,7 @@ For ViewModels in Hilt-based apps, the recommended modern approach is to use `@H
 
 ## Testing with Hilt
 
-### Unit Tests (using Hilt test components)
+### Unit Tests (using Hilt Test components)
 
 ```kotlin
 @HiltAndroidTest

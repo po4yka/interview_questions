@@ -1,5 +1,5 @@
 ---
-id: cs-015
+id: lang-214
 title: "Kotlin Any Inheritance / Наследование от Any в Kotlin"
 aliases: []
 topic: kotlin
@@ -13,7 +13,9 @@ moc: moc-kotlin
 related: [c-concepts--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [kotlin/type-system, difficulty/easy]
+tags: [difficulty/easy, kotlin/type-system]
+date created: Saturday, November 1st 2025, 1:26:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -108,7 +110,7 @@ Any (root)
 
 **Note**: For nullable types, the corresponding root supertype is `Any?`.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-abstract-class-vs-interface--kotlin--medium]]
 - Объясните отличие `Any` от `Any?` в контексте иерархии типов.

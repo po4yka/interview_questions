@@ -2,33 +2,31 @@
 id: android-374
 title: How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру
   перерисовать список когда элемент удален
-aliases:
-- How To Tell Adapter To Redraw List
-- Как сказать адаптеру перерисовать список
+aliases: [How To Tell Adapter To Redraw List, Как сказать адаптеру перерисовать список]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-custom-views
-- q-how-to-create-list-like-recyclerview-in-compose--android--medium
-- q-recyclerview-sethasfixedsize--android--easy
+  - c-custom-views
+  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
+  - q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium
+  - q-recyclerview-sethasfixedsize--android--easy
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
+  - q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- adapter
-- android/ui-views
-- difficulty/medium
-- diffutil
-- recyclerview
+tags: [adapter, android/ui-views, difficulty/medium, diffutil, recyclerview]
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -329,7 +327,7 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если вызвать `notifyItemRemoved()` до удаления элемента из списка данных?
 - Как `DiffUtil` вычисляет различия между списками?
@@ -357,7 +355,7 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 - [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [ListAdapter Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, compose, difficulty/easy, ui, views]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:32:21 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -200,7 +202,7 @@ linearLayout.addView(composeView)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы особенности производительности Compose по сравнению с программными `View`?
 - Как обрабатывать сложные макеты при программном создании UI?
@@ -232,12 +234,12 @@ linearLayout.addView(composeView)
 - [Compose documentation](https://developer.android.com/jetpack/compose)
 - [`View` system guide](https://developer.android.com/develop/ui/views)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-what-each-android-component-represents--android--easy]] - Обзор компонентов Android
 
-### Похожие (такой же уровень)
+### Похожие (такой Же уровень)
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Архитектура UI
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - Базовые сведения о UI
 

@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Room Coroutines Flow Guide
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-sharedflow-stateflow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related: [c--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
-tags: [kotlin, coroutines, flow, room, difficulty/medium]
+tags: [coroutines, difficulty/medium, flow, kotlin, room]
 
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [kotlin, coroutines, flow, room, difficulty/medium]
 
 Room предоставляет первоклассную поддержку корутин и `Flow` для асинхронной и реактивной работы с БД в Android.
 
-### Базовая работа с suspend-функциями Room
+### Базовая Работа С Suspend-функциями Room
 
 ```kotlin
 // Entity
@@ -88,7 +90,7 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
 Примечание: suspend-вызовы DAO Room выполняет вне главного потока с помощью своих внутренних исполнителей (при использовании соответствующих зависимостей Room), поэтому обычно не требуется оборачивать их в `withContext(Dispatchers.IO)`.
 
-### Реактивные запросы с `Flow`
+### Реактивные Запросы С `Flow`
 
 ```kotlin
 // DAO с Flow
@@ -134,7 +136,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-### Обработка транзакций (Transaction Handling)
+### Обработка Транзакций (Transaction Handling)
 
 ```kotlin
 @Dao
@@ -190,7 +192,7 @@ data class UserWithDetails(
 )
 ```
 
-### Лучшие практики (Best Practices)
+### Лучшие Практики (Best Practices)
 
 ```kotlin
 // Repository pattern
@@ -500,7 +502,7 @@ In short:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как безопасно выполнять миграции Room с использованием корутин, чтобы операции чтения/записи оставались неблокирующими?
 2. В каких случаях предпочтительнее использовать `Flow` в DAO, а в каких — только suspend-функции для одноразовых запросов?
@@ -534,7 +536,7 @@ In short:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-kotlin-flow-basics--kotlin--medium]] - Введение в `Flow`

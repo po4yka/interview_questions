@@ -14,7 +14,10 @@ related: [c-memory-management, q-garbage-collector-basics--programming-languages
 created: 2025-10-15
 updated: 2025-11-09
 tags: [debugging, difficulty/medium, memory-management, memory-profiler, profiling, programming-languages]
+date created: Friday, October 31st 2025, 6:30:13 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как найти объект, если на него нет ссылок?
 
@@ -99,7 +102,7 @@ Key idea: you cannot retrieve an object that truly has no references; you instea
 - Confirm that it's gone (no instances in the heap dump), or
 - Find why it's still there by examining reference chains from GC roots in profiling tools.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этого процесса в обычной Java и в Kotlin на Android?
 - Чем отличаются GC roots в JVM (desktop/server) и Android Runtime (ART)?
@@ -121,7 +124,7 @@ Key idea: you cannot retrieve an object that truly has no references; you instea
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - q-garbage-collector-basics--programming-languages--medium
 

@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140020
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-kotlin-collections--kotlin--easy]
+related: [c-flow, c-kotlin, q-kotlin-collections--kotlin--easy]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin]
 
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -71,7 +73,7 @@ merge(flow1, flow2).collect { println(it) }
 // Пример возможного вывода: 1, 4, 2, 3, 5, 6 (фактический порядок может отличаться)
 ```
 
-### Практические примеры
+### Практические Примеры
 ```kotlin
 // Комбинировать ввод пользователя с данными API
 searchQuery.combine(apiResults) { query, results ->
@@ -153,7 +155,7 @@ merge(cacheFlow, networkFlow, databaseFlow)
 
 See also: [[c-flow]], [[c-coroutines]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Объясните, как механизм backpressure и буферизация взаимодействуют с `zip`, `combine` и `merge` при работе с медленными и быстрыми источниками `Flow`.
 2. Сравните `merge` с паттернами fan-in на основе каналов: когда в реальном приложении вы предпочтёте один подход другому?
@@ -177,9 +179,9 @@ See also: [[c-flow]], [[c-coroutines]]
 
 - [Kotlin `Coroutines` Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительная подготовка (проще)
+### Предварительная Подготовка (проще)
 - [[q-what-is-coroutine--kotlin--easy]] - Корутины
 - [[q-suspend-functions-basics--kotlin--easy]] - Базовые `suspend`-функции
 - [[q-coroutine-builders-basics--kotlin--easy]] - Базовые билдеры корутин

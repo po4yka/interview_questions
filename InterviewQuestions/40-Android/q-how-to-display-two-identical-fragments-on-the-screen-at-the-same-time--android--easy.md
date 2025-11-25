@@ -1,39 +1,35 @@
 ---
 id: android-245
 title: How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно
-aliases:
-- Display Two Identical Fragments
-- Multiple Fragment Instances
-- Два одинаковых фрагмента
-- Несколько экземпляров Fragment
+aliases: [Display Two Identical Fragments, Multiple Fragment Instances, Два одинаковых фрагмента, Несколько экземпляров Fragment]
 topic: android
 subtopics:
-- fragment
-- ui-views
+  - fragment
+  - ui-views
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-fragments
-- c-lifecycle
-- q-fragment-basics--android--easy
-- q-how-to-choose-layout-for-fragment--android--easy
-- q-save-data-outside-fragment--android--medium
+  - c-fragments
+  - c-lifecycle
+  - q-dagger-build-time-optimization--android--medium
+  - q-fragment-basics--android--easy
+  - q-how-to-choose-layout-for-fragment--android--easy
+  - q-save-data-outside-fragment--android--medium
+  - q-why-are-fragments-needed-if-there-is-activity--android--hard
+  - q-why-use-fragments-when-we-have-activities--android--medium
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags:
-- android/fragment
-- android/ui-views
-- difficulty/easy
-- fragments
-- ui
+tags: [android/fragment, android/ui-views, difficulty/easy, fragments, ui]
 
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +46,7 @@ tags:
 
 Добавьте два независимых экземпляра одного и того же класса `Fragment` в разные контейнеры макета `Activity`. Класс и разметка могут быть одинаковыми, но каждый `Fragment` — это отдельный объект со своим состоянием. Нельзя добавлять один и тот же экземпляр `Fragment` (один и тот же объект) в несколько контейнеров — для каждого контейнера нужен свой экземпляр.
 
-### Основной подход
+### Основной Подход
 
 **1. Макет `Activity` с двумя контейнерами**
 
@@ -142,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые принципы
+### Ключевые Принципы
 
 - Отдельный экземпляр на контейнер: один и тот же объект `Fragment` нельзя добавить в несколько контейнеров.
 - Используйте уникальные теги (при необходимости): помогают идентифицировать экземпляры через FragmentManager.
@@ -270,7 +266,7 @@ Anti-patterns:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдёт, если не проверять `savedInstanceState` перед добавлением фрагментов?
 - Как фрагменты могут взаимодействовать друг с другом через родительскую `Activity`?
@@ -300,19 +296,19 @@ Anti-patterns:
 - [`Fragment` Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
 - [Best Practices for `Fragments`](https://developer.android.com/guide/fragments/best-practices)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-fragments]]
 - [[c-lifecycle]]
 
-### Предварительные вопросы (проще)
+### Предварительные Вопросы (проще)
 
 - [[q-fragment-basics--android--easy]] — основы `Fragment`
 - [[q-how-to-choose-layout-for-fragment--android--easy]] — выбор разметки для `Fragment`
 
-### Похожие вопросы (тот же уровень)
+### Похожие Вопросы (тот Же уровень)
 
 - [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] — жизненный цикл `View`
 - [[q-which-class-to-catch-gestures--android--easy]] — обработка касаний

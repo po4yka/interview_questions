@@ -16,6 +16,8 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
 
+date created: Saturday, November 1st 2025, 1:24:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -58,7 +60,7 @@ if (success) {
 }
 ```
 
-### Пример 2: apply() - Асинхронная запись на диск
+### Пример 2: apply() - Асинхронная Запись На Диск
 
 ```kotlin
 // ✅ apply() синхронно обновляет память и сразу возвращается
@@ -113,7 +115,7 @@ fun onSliderChanged(value: Int) {
 }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // ❌ НЕ ДЕЛАЙТЕ: commit() на главном потоке для некритичных данных
@@ -143,7 +145,7 @@ fun saveWithValidation(): Boolean {
 }
 ```
 
-### Современная альтернатива: DataStore
+### Современная Альтернатива: DataStore
 
 ```kotlin
 // Для нового кода используйте DataStore вместо SharedPreferences
@@ -349,7 +351,7 @@ suspend fun savePreference(value: String) {
 ### Предпосылки (Проще)
 - [[q-android-storage-types--android--medium]] - Обзор вариантов хранения данных на Android
 
-### Связанные (Тот же уровень)
+### Связанные (Тот Же уровень)
 - [[q-android-app-bundles--android--easy]] - Основы `App Bundle`
 
 ### Продвинутые (Сложнее)

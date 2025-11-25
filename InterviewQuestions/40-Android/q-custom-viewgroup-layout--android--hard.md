@@ -1,34 +1,33 @@
 ---
 id: android-454
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
-aliases:
-- Custom ViewGroup Layout
-- Layout кастомных ViewGroup
+aliases: [Custom ViewGroup Layout, Layout кастомных ViewGroup]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-custom-views
-- q-custom-drawable-implementation--android--medium
-- q-custom-view-attributes--android--medium
-- q-custom-view-lifecycle--android--medium
+  - c-custom-views
+  - q-compose-custom-animations--android--medium
+  - q-compose-custom-layout--android--hard
+  - q-custom-drawable-implementation--android--medium
+  - q-custom-view-attributes--android--medium
+  - q-custom-view-lifecycle--android--medium
+  - q-mlkit-custom-models--android--hard
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-- android/ui-views
-- custom-views
-- difficulty/hard
-- layout
+tags: [android/ui-views, custom-views, difficulty/hard, layout]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -453,7 +452,7 @@ val isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_R
 val startX = if (isRtl) width - paddingRight else paddingLeft
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать динамическое добавление/удаление дочерних элементов без полного переизмерения?
 - В чем разница между `measureChild()` и `measureChildWithMargins()` и когда использовать каждый?
@@ -481,7 +480,7 @@ val startX = if (isRtl) width - paddingRight else paddingLeft
 - Custom Views Guide: https://developer.android.com/guide/topics/ui/custom-components
 - `View` Measurement Process: https://developer.android.com/guide/topics/ui/how-android-draws
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -492,7 +491,7 @@ val startX = if (isRtl) width - paddingRight else paddingLeft
 - [[q-custom-view-lifecycle--android--medium]] — Жизненный цикл и порядок отрисовки `View`
 - [[q-custom-view-attributes--android--medium]] — Кастомные XML-атрибуты
 
-### Связанные (Такой же уровень)
+### Связанные (Такой Же уровень)
 
 - [[q-custom-drawable-implementation--android--medium]] — Кастомный рисунок во `View`
 - Техники оптимизации layout-прохода

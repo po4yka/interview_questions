@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immutability, jetpack-compose, recomposition, stability]
 
+date created: Saturday, November 1st 2025, 1:24:29 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immut
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 
 Тип автоматически считается stable в Jetpack Compose, когда компилятор может формально доказать, что:
 - он относится к известным стабильным типам (примитивы Kotlin, `String` и часть стандартных value-типов/платформенных типов, которые не меняют состояние скрытно);
@@ -40,7 +42,7 @@ tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immut
 
 Такие типы позволяют Compose безопасно сокращать количество рекомпозиций при неизменных параметрах.
 
-### Подробный вариант
+### Подробный Вариант
 
 В Jetpack Compose тип может быть выведен как **stable**, если для него компилятор Compose может формально доказать стабильность. Упрощённо это означает, что:
 - он относится к известным компилятору стабильным типам (примитивные типы Kotlin, `String`, `Boolean`, беззнаковые типы `U*` и т.п. — значения, которые не меняются скрытно);

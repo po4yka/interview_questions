@@ -13,8 +13,10 @@ moc: moc-kotlin
 related: [c-kotlin, c-sealed-classes, q-kotlin-channels--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [sealed-classes, difficulty/hard, programming-languages]
+tags: [difficulty/hard, programming-languages, sealed-classes]
 
+date created: Friday, October 31st 2025, 6:33:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -624,7 +626,7 @@ fun displayArticles(response: ApiResponse<List<Article>>) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия от реализации похожих концепций в Java?
 - Когда на практике стоит использовать data и sealed классы?
@@ -644,7 +646,7 @@ fun displayArticles(response: ApiResponse<List<Article>>) {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-sam-conversions--programming-languages--medium]]
 - [[q-sequences-vs-collections-performance--kotlin--medium]]

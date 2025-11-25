@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 
+date created: Friday, October 31st 2025, 6:33:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -751,7 +753,7 @@ fun handleValidation(result: ValidationResult) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия data и sealed классов от аналогичных конструкций в Java?
 - Когда вы бы использовали эти конструкции на практике?
@@ -775,7 +777,7 @@ fun handleValidation(result: ValidationResult) {
 - [[c-kotlin]]
 - [[c-sealed-classes]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-immutable-collections--programming-languages--easy]]
 - [[q-kotlin-sam-interfaces--kotlin--medium]]

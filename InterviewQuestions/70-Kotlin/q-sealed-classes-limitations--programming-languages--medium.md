@@ -3,7 +3,7 @@ id: lang-025
 title: "Sealed Classes Limitations"
 aliases: [Sealed Classes Limitations, Ограничения Sealed Классов]
 topic: kotlin
-subtopics: [sealed-classes, oop, class-hierarchy]
+subtopics: [class-hierarchy, oop, sealed-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,7 +14,10 @@ related: [c-kotlin, c-sealed-classes, q-what-is-flow--programming-languages--med
 created: 2025-10-15
 updated: 2025-11-09
 tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed-classes]
+date created: Friday, October 31st 2025, 6:30:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Какие есть ограничения у sealed классов?
 
@@ -61,7 +64,7 @@ Important clarifications:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали sealed классы на практике?
@@ -85,7 +88,7 @@ Important clarifications:
 - [[c-kotlin]]
 - [[c-sealed-classes]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-what-is-flow--programming-languages--medium]]
 

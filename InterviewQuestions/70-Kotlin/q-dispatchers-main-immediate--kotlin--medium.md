@@ -13,8 +13,11 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, dispatchers, immediate, kotlin, main, optimization, performance, ui-thread]
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-flowon-operator-context-switching--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-flowon-operator-context-switching--kotlin--hard]
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое `Dispatchers.Main.immediate`, чем он отличается от `Dispatchers.Main`? В каких случаях `Main.immediate` избегает дополнительной диспетчеризации и как это влияет на производительность? Приведите примеры из практики: обновление UI, изменение состояния представления, измерение производительности и стратегии тестирования.
 
@@ -38,7 +41,7 @@ related: [c-kotlin, c-coroutines, q-flowon-operator-context-switching--kotlin--h
 - Более предсказуемый порядок выполнения в некоторых сценариях.
 - Микро-оптимизацию горячих путей с частыми мелкими UI/State-обновлениями (но не про магическое ускорение на порядки).
 
-### 1. Разница между Main и Main.immediate
+### 1. Разница Между Main И Main.immediate
 
 Точнее:
 
@@ -68,7 +71,7 @@ withContext(Dispatchers.Main) { /* ... */ }
 withContext(Dispatchers.Main.immediate) { /* то же самое */ }
 ```
 
-### 2. Базовый пример
+### 2. Базовый Пример
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -115,7 +118,7 @@ suspend fun timingDifference() = withContext(Dispatchers.Main) {
 
 Ключ: `Main.immediate` может быть заметно быстрее в плотных циклах, когда вы уже на `Main`, но это микро-выигрыш.
 
-### 3. Когда Main.immediate избегает диспетчеризации
+### 3. Когда Main.immediate Избегает Диспетчеризации
 
 ```kotlin
 withContext(Dispatchers.Main.immediate) {
@@ -151,7 +154,7 @@ lifecycleScope.launch(Dispatchers.Main) {
 }
 ```
 
-### 4. Продакшн пример: паттерн Repository / `ViewModel`
+### 4. Продакшн Пример: Паттерн Repository / `ViewModel`
 
 ```kotlin
 class UserRepository(
@@ -194,7 +197,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-### 5. Продакшн пример: обновление UI
+### 5. Продакшн Пример: Обновление UI
 
 ```kotlin
 class ProductListViewModel(
@@ -234,7 +237,7 @@ fun ProductScreen(viewModel: ProductListViewModel) {
 }
 ```
 
-### 6. `Flow` с `flowOn` и Main.immediate
+### 6. `Flow` С `flowOn` И Main.immediate
 
 ```kotlin
 class DataRepository {
@@ -267,7 +270,7 @@ fun collectDataBetter(repository: DataRepository) {
 
 Идея: код один и тот же, `Main.immediate` полезен, когда путь вызова может быть из разных контекстов, и вы хотите избежать лишнего dispatch при уже активном `Main`.
 
-### 7. Измерения производительности
+### 7. Измерения Производительности
 
 ```kotlin
 suspend fun compareMainVsImmediate() = withContext(Dispatchers.Main) {
@@ -297,7 +300,7 @@ suspend fun compareMainVsImmediate() = withContext(Dispatchers.Main) {
 - Не блокировать главный поток (никакого `Thread.sleep`).
 - Оценивать в реалистичных сценариях и профилировщиках (Android Studio, трассировка и т.п.).
 
-### 8. Типичные случаи использования
+### 8. Типичные Случаи Использования
 
 Когда `Dispatchers.Main.immediate` уместен:
 - Обновление UI/состояния в `ViewModel` или презентационном слое, уже работающем на `Main`.
@@ -308,7 +311,7 @@ suspend fun compareMainVsImmediate() = withContext(Dispatchers.Main) {
 - Для стартовых `launch` из UI-событий/жизненного цикла.
 - Когда вы специально хотите отложить выполнение до следующей итерации цикла сообщений.
 
-### 9. Тестирование Main vs Main.immediate
+### 9. Тестирование Main Vs Main.immediate
 
 ```kotlin
 import kotlinx.coroutines.Dispatchers
@@ -355,7 +358,7 @@ class MainImmediateTest {
 Комментарии:
 - С `StandardTestDispatcher` оба (`Main` и `Main.immediate`) управляются планировщиком теста; разница видна в порядке внутри одного логического тика.
 
-### 10. Рекомендуемые практики
+### 10. Рекомендуемые Практики
 
 - Использовать `Dispatchers.Main` для:
   - Запуска корутин из UI/жизненного цикла.
@@ -637,7 +640,7 @@ Use Dispatchers.Main for:
 - Initial launches from UI/lifecycle.
 - When you want to defer to the next event-loop iteration.
 
-#### 9. Testing Main vs Main.immediate
+#### 9. Testing Main Vs Main.immediate
 
 ```kotlin
 import kotlinx.coroutines.Dispatchers
@@ -696,7 +699,7 @@ Notes:
   - Blocking/heavy work on Main or Main.immediate.
   - Unnecessary `withContext(Main/Main.immediate)` when already on Main.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 1. Как `Main.immediate` определяет, что выполнение уже находится в соответствующем контексте главного потока?
 2. Какое реальное улучшение можно ожидать от `Main.immediate` в горячих точках с частыми небольшими UI-обновлениями?
 3. В каких случаях использование `Main.immediate` может сделать порядок выполнения менее очевидным по сравнению с явным шагом через event loop?

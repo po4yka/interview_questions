@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/easy, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Базовый вопрос по `CoroutineScope` в Kotlin (на основе темы 140030)
 
@@ -120,7 +123,7 @@ suspend fun fetchData() = coroutineScope {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Объясните разницу между `CoroutineScope` и `coroutineScope` и приведите пример, когда использовать каждый из них в реальном коде.
 2. Какие проблемы могут возникнуть при использовании `GlobalScope`, и почему его следует избегать в продакшене?
@@ -154,7 +157,7 @@ suspend fun fetchData() = coroutineScope {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Похожие (Easy)
 - [[q-coroutine-builders-basics--kotlin--easy]] - Основы корутин
@@ -162,13 +165,13 @@ suspend fun fetchData() = coroutineScope {
 - [[q-suspend-functions-basics--kotlin--easy]] - Базовые `suspend` функции
 - [[q-launch-vs-async--kotlin--easy]] - `launch` vs `async`
 
-### Того же уровня (Easy)
+### Того Же Уровня (Easy)
 - [[q-what-is-coroutine--kotlin--easy]] - Базовые концепции корутин
 - [[q-coroutine-builders-basics--kotlin--easy]] - `launch`, `async`, `runBlocking`
 - [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - `delay()` vs `Thread.sleep()`
 - [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads на Android
 
-### Следующие шаги (Medium)
+### Следующие Шаги (Medium)
 - [[q-suspend-functions-basics--kotlin--easy]] - Понимание `suspend` функций
 - [[q-coroutine-dispatchers--kotlin--medium]] - Обзор диспетчеров корутин
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Сравнение Scope и Context

@@ -1,35 +1,34 @@
 ---
 id: android-020
 title: kapt vs KSP comparison / Сравнение kapt и KSP
-aliases:
-- kapt vs KSP comparison
-- Сравнение kapt и KSP
+aliases: [kapt vs KSP comparison, Сравнение kapt и KSP]
 topic: android
 subtopics:
-- gradle
+  - gradle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- q-fix-slow-app-startup-legacy--android--hard
-- q-looper-thread-connection--android--medium
-- q-macrobenchmark-startup--android--medium
+  - c-gradle
+  - q-fix-slow-app-startup-legacy--android--hard
+  - q-flutter-comparison--android--medium
+  - q-kapt-ksp-migration--android--medium
+  - q-looper-thread-connection--android--medium
+  - q-macrobenchmark-startup--android--medium
+  - q-react-native-vs-flutter--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags:
-- android/gradle
-- difficulty/medium
-- en
-- ru
+tags: [android/gradle, difficulty/medium, en, ru]
 
+date created: Saturday, November 1st 2025, 12:46:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -54,7 +53,7 @@ tags:
 | **Поддержка библиотек** | Любые процессоры, реализованные как Java annotation processors (напр. legacy Dagger 2, Glide, старые процессоры) | Растущая нативная поддержка (Room, Moshi, Hilt 2.44+, Dagger через KSP-артефакты и др.) |
 | **Инкрементальность** | Ограниченная, возможны проблемы из-за stubs | Из коробки лучше интегрирован с инкрементальной сборкой |
 
-### Пример использования kapt
+### Пример Использования Kapt
 
 ```kotlin
 // build.gradle.kts
@@ -68,7 +67,7 @@ dependencies {
 }
 ```
 
-### Пример использования KSP
+### Пример Использования KSP
 
 ```kotlin
 // build.gradle.kts
@@ -82,7 +81,7 @@ dependencies {
 }
 ```
 
-### Разница в производительности
+### Разница В Производительности
 
 KSP, как правило, уменьшает время сборки по сравнению с kapt, так как не генерирует Java stubs и лучше интегрируется с инкрементальной компиляцией. На реальных проектах ускорение может быть значительным (часто вплоть до примерно 2x для модулей с тяжёлой аннотационной генерацией), но точные числа зависят от конкретного кода.
 
@@ -93,7 +92,7 @@ KSP, как правило, уменьшает время сборки по ср
 Сборка с KSP:     23 секунды
 ```
 
-### Поддержка библиотек
+### Поддержка Библиотек
 
 **Часто имеют поддержку KSP (уточняйте версии в документации):**
 - Room
@@ -109,7 +108,7 @@ KSP, как правило, уменьшает время сборки по ср
 
 Всегда проверяйте документацию конкретной библиотеки: если есть артефакт для KSP, предпочтителен KSP.
 
-### Миграция с kapt на KSP (по процессорам)
+### Миграция С Kapt На KSP (по процессорам)
 
 Базовый пример миграции для библиотеки с поддержкой KSP (например, Room):
 
@@ -155,7 +154,7 @@ kotlin {
 
 В большинстве современных конфигураций AGP+KSP эти пути настраиваются автоматически; вручную их добавляют только при специфических требованиях.
 
-### Когда что использовать
+### Когда Что Использовать
 
 **Используйте KSP, когда:**
 - Библиотека предоставляет официальный KSP-артефакт (Room, Moshi, Hilt с KSP, Dagger с KSP и т.п.).
@@ -237,7 +236,7 @@ Build with KSP:     23 seconds
 
 Always check each library's documentation: if it provides a KSP artifact, prefer KSP for that library.
 
-### Migration from kapt to KSP (per-processor)
+### Migration from Kapt to KSP (per-processor)
 
 Basic migration for a library that supports KSP (e.g. Room):
 
@@ -322,8 +321,8 @@ In most modern Android Gradle Plugin / KSP setups, these paths are wired automat
 
 ## Ссылки (RU)
 - [Документация KSP](https://kotlinlang.org/docs/ksp-overview.html)
-## Дополнительные вопросы (RU)
-## Связанные вопросы (RU)
+## Дополнительные Вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предпосылки / Концепции
 ### Связанные (Medium)
 - [[q-kapt-ksp-migration--android--medium]] - Миграция с kapt на KSP

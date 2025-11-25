@@ -4,26 +4,30 @@ title: Dagger Component Dependencies / Зависимости компонент
 aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dagger
-- q-dagger-build-time-optimization--android--medium
-- q-dagger-framework-overview--android--hard
-- q-hilt-components-scope--android--medium
+  - c-dagger
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-custom-scopes--android--hard
+  - q-dagger-framework-overview--android--hard
+  - q-dagger-multibinding--android--hard
+  - q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-11-11
 tags: [android/di-hilt, difficulty/hard]
 sources:
-- "https://dagger.dev/api/latest/dagger/Component.html"
+  - "https://dagger.dev/api/latest/dagger/Component.html"
 
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +45,7 @@ Component Dependencies и Subcomponents — два способа компози
 - Используйте Subcomponents для иерархий, соответствующих жизненным циклам (`Activity`/`Fragment`), с общим базовым графом и удобным доступом ко всем зависимостям родителя.
 
 ## Подробная Версия
-#### Ключевые различия
+#### Ключевые Различия
 
 | Аспект | Component Dependencies | Subcomponents |
 |--------|-----------------------|---------------|
@@ -115,7 +119,7 @@ val activityComponent = appComponent
 - Имеет доступ ко всем binding'ам родителя (например, `@Singleton`-объекты), плюс своим binding'ам.
 - Может вводить более узкий scope (например, `@ActivityScope`) поверх родительского (например, `@Singleton`).
 
-#### Когда использовать
+#### Когда Использовать
 
 Component Dependencies:
 - Модульная архитектура с четкой изоляцией: каждый модуль имеет свой компонент.
@@ -129,7 +133,7 @@ Subcomponents:
 - Подходят, когда фича логически вложена в приложение и разделяет общий базовый граф (`@Singleton`).
 - Менее строгая модульная изоляция.
 
-#### Hilt: автоматическое управление
+#### Hilt: Автоматическое Управление
 
 [[c-hilt]] упрощает управление компонентами, автоматически создавая и связывая иерархии компонентов (по сути, subcomponents/entry points), привязанные к жизненным циклам Android.
 
@@ -264,7 +268,7 @@ object AppModule {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать циклические зависимости между компонентами?
 - Каковы производительные последствия каждого подхода?
@@ -294,7 +298,7 @@ object AppModule {
 - [[c-dependency-injection]]
 - https://dagger.dev/api/latest/dagger/Component.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-hilt-components-scope--android--medium]] - Scope'ы компонентов Hilt

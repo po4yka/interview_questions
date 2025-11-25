@@ -1,13 +1,15 @@
 ---
 id: concept-006
 title: Collections / Коллекции
-aliases: [Collections, Java Collections, Kotlin Collections, Коллекции, Collection Framework]
+aliases: [Collection Framework, Collections, Java Collections, Kotlin Collections, Коллекции]
 kind: concept
 summary: Data structures for storing and manipulating groups of objects, including List, Set, Map, and their implementations in Java and Kotlin.
 links: []
 created: 2025-11-05
 updated: 2025-11-05
-tags: [concept, collections, data-structures, java, kotlin]
+tags: [collections, concept, data-structures, java, kotlin]
+date created: Wednesday, November 5th 2025, 6:30:35 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

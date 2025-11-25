@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, c-structured-concurrency]
+related: [c-coroutines, c-kotlin, c-structured-concurrency]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, job, kotlin]
+date created: Saturday, November 1st 2025, 1:01:37 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Для чего нужен объект Job?
 
@@ -31,7 +34,7 @@ Job — это дескриптор (handle) корутины и элемент 
 
 Ниже — ключевые сценарии использования, соответствующие приведённым EN-примерам.
 
-### Базовое использование Job (Basic Job Usage)
+### Базовое Использование Job (Basic Job Usage)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -69,7 +72,7 @@ val deferred = CoroutineScope(Dispatchers.Default).async {
 val job3: Job = deferred  // Deferred является Job
 ```
 
-### Отмена с помощью Job (Cancelling with Job)
+### Отмена С Помощью Job (Cancelling with Job)
 
 ```kotlin
 fun cancellationExample() = runBlocking {
@@ -93,7 +96,7 @@ fun cancellationExample() = runBlocking {
 }
 ```
 
-### Ожидание завершения (Waiting for Completion)
+### Ожидание Завершения (Waiting for Completion)
 
 ```kotlin
 fun joinExample() = runBlocking {
@@ -212,7 +215,7 @@ fun supervisorJobExample() = runBlocking {
 }
 ```
 
-### Job и CoroutineScope (Job with CoroutineScope)
+### Job И CoroutineScope (Job with CoroutineScope)
 
 ```kotlin
 class MyManager {
@@ -258,7 +261,7 @@ fun cancelAllJobs() = runBlocking {
 }
 ```
 
-### Колбэки Job и обработка исключений (Job Callbacks)
+### Колбэки Job И Обработка Исключений (Job Callbacks)
 
 ```kotlin
 fun jobCallbacks() = runBlocking {
@@ -297,7 +300,7 @@ fun cancellationCallback() = runBlocking {
 }
 ```
 
-### Реальный пример: менеджер загрузок (Real-World Example: Download Manager)
+### Реальный Пример: Менеджер Загрузок (Real-World Example: Download Manager)
 
 ```kotlin
 class DownloadManager {
@@ -808,7 +811,7 @@ Common operations:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия Job от Java-подходов к управлению потоками?
 - Когда вы бы использовали Job на практике?
@@ -828,7 +831,7 @@ Common operations:
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - (см. другие вопросы по корутинам и структурированной конкуррентности в этом разделе)
 

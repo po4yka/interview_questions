@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
+date created: Sunday, October 12th 2025, 1:23:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Как тестировать операторы и трансформации `Flow` такие как `flatMap`, `debounce`, `retry` и `combine`? Покрыть тестирование виртуального времени, использование Turbine и стратегии тестирования сложных цепочек `Flow`.
 
@@ -40,9 +43,9 @@ tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
 
 Ниже приведены ключевые шаблоны тестирования операторов `Flow` с использованием библиотеки Turbine и виртуального времени. Примеры кода идентичны английской версии; комментарии и пояснения локализованы.
 
-### Тестирование базовых трансформаций
+### Тестирование Базовых Трансформаций
 
-#### `map` и `filter`
+#### `map` И `filter`
 
 ```kotlin
 class DataProcessor {
@@ -121,7 +124,7 @@ fun `splitWords emits each word separately`() = runTest {
 }
 ```
 
-### Тестирование операторов времени
+### Тестирование Операторов Времени
 
 #### `debounce`
 
@@ -229,7 +232,7 @@ fun `sample emits latest value at intervals with virtual time`() = runTest {
 }
 ```
 
-#### Пользовательский throttle (`throttleFirst`)
+#### Пользовательский Throttle (`throttleFirst`)
 
 Для собственных операторов, зависящих от времени, используйте виртуальное время тест-диспетчера, а не реальные часы. При этом логика оператора не должна напрямую ссылаться на тестовые API — вместо этого прокидывайте абстракцию времени при необходимости.
 
@@ -424,7 +427,7 @@ fun `flatMapLatest for search`() = runTest {
 }
 ```
 
-### Тестирование `combine` и `zip`
+### Тестирование `combine` И `zip`
 
 #### `combine`
 
@@ -519,7 +522,7 @@ fun `zip waits for both flows`() = runTest {
 }
 ```
 
-### Тестирование операторов обработки ошибок
+### Тестирование Операторов Обработки Ошибок
 
 #### `catch`
 
@@ -580,7 +583,7 @@ fun `catch does not handle downstream exceptions`() = runTest {
 }
 ```
 
-#### `retry` и `retryWhen`
+#### `retry` И `retryWhen`
 
 ```kotlin
 @Test
@@ -675,7 +678,7 @@ fun `retryWhen with exponential backoff tracked via delays list`() = runTest {
 }
 ```
 
-### Тестирование `onEach` и `onStart`/`onCompletion`
+### Тестирование `onEach` И `onStart`/`onCompletion`
 
 ```kotlin
 @Test
@@ -742,7 +745,7 @@ fun `onCompletion with exception`() = runTest {
 }
 ```
 
-### Тестирование `buffer` и `conflate`
+### Тестирование `buffer` И `conflate`
 
 ```kotlin
 @Test
@@ -832,7 +835,7 @@ fun `distinctUntilChanged with selector`() = runTest {
 }
 ```
 
-### Тестирование `takeWhile` и `take`
+### Тестирование `takeWhile` И `take`
 
 ```kotlin
 @Test
@@ -865,7 +868,7 @@ fun `take limits number of emissions`() = runTest {
 }
 ```
 
-### Тестирование сложных цепочек `Flow`
+### Тестирование Сложных Цепочек `Flow`
 
 ```kotlin
 interface SearchApi {
@@ -987,7 +990,7 @@ fun `search service retries on failure`() = runTest {
 }
 ```
 
-### Тестирование пользовательских операторов
+### Тестирование Пользовательских Операторов
 
 ```kotlin
 // Пользовательский оператор: emitBatches
@@ -1062,7 +1065,7 @@ fun `timeoutEach fails on slow emissions`() = runTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 // DO: используйте Turbine для декларативных и детерминированных проверок Flow
@@ -1189,9 +1192,9 @@ Testing `Flow` operators requires a deep understanding of their semantics: flow 
 
 Below are key patterns for testing `Flow` operators using the Turbine library and virtual time. Code examples mirror the RU section; comments and explanations are in English.
 
-### Testing basic transformations
+### Testing Basic Transformations
 
-#### `map` and `filter`
+#### `map` And `filter`
 
 ```kotlin
 class DataProcessor {
@@ -1270,7 +1273,7 @@ fun `splitWords emits each word separately`() = runTest {
 }
 ```
 
-### Testing time-based operators
+### Testing Time-based Operators
 
 #### `debounce`
 
@@ -1378,7 +1381,7 @@ fun `sample emits latest value at intervals with virtual time`() = runTest {
 }
 ```
 
-#### Custom throttle (`throttleFirst`)
+#### Custom Throttle (`throttleFirst`)
 
 For custom time-based operators, prefer using the test dispatcher and virtual time in tests, but avoid coupling the operator implementation directly to test-only APIs. If timing needs to be injectable, pass an abstraction.
 
@@ -1418,7 +1421,7 @@ fun `throttleFirst emits first value in window`() = runTest {
 }
 ```
 
-### Testing flatMap variants
+### Testing flatMap Variants
 
 #### `flatMapConcat`
 
@@ -1666,7 +1669,7 @@ fun `zip waits for both flows`() = runTest {
 }
 ```
 
-### Testing error-handling operators
+### Testing Error-handling Operators
 
 #### `catch`
 
@@ -1727,7 +1730,7 @@ fun `catch does not handle downstream exceptions`() = runTest {
 }
 ```
 
-#### `retry` and `retryWhen`
+#### `retry` And `retryWhen`
 
 ```kotlin
 @Test
@@ -2012,7 +2015,7 @@ fun `take limits number of emissions`() = runTest {
 }
 ```
 
-### Testing complex `Flow` chains
+### Testing Complex `Flow` Chains
 
 ```kotlin
 interface SearchApi {
@@ -2134,7 +2137,7 @@ fun `search service retries on failure`() = runTest {
 }
 ```
 
-### Testing custom operators
+### Testing Custom Operators
 
 ```kotlin
 // Custom operator: emitBatches
@@ -2209,7 +2212,7 @@ fun `timeoutEach fails on slow emissions`() = runTest {
 }
 ```
 
-### Best practices
+### Best Practices
 
 ```kotlin
 // DO: use Turbine for concise and deterministic Flow assertions
@@ -2320,7 +2323,7 @@ In summary, core strategies when testing `Flow` operators and transformations:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как тестировать операторы `StateFlow` и `SharedFlow` и их особенности (replay, буфер, горячая природа)?
 2. В чём разница между `conflate` и `collectLatest` при тестировании и как проверять их корректность?
@@ -2360,7 +2363,7 @@ In summary, core strategies when testing `Flow` operators and transformations:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Сложные (Hard)
 - [[q-flow-operators-deep-dive--kotlin--hard]]

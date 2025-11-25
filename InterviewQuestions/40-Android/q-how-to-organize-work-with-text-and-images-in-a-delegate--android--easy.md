@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +40,7 @@ tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
 **Подход**: Создать sealed class для типов данных, отдельные `ViewHolder` и делегаты для каждого типа.
 **Преимущества**: Разделение ответственности, переиспользование, масштабируемость.
 
-### Базовая реализация (multi-view-type)
+### Базовая Реализация (multi-view-type)
 
 **Модели данных**:
 
@@ -149,7 +151,7 @@ You can either:
 **Approach**: Create a sealed class for data types and separate `ViewHolder`s/delegates for each type.
 **Benefits**: Separation of concerns, reusability, scalability.
 
-### Basic implementation (multi-view-type)
+### Basic Implementation (multi-view-type)
 
 **Data models**:
 
@@ -210,7 +212,7 @@ class ImageViewHolder(private val binding: ItemImageBinding) :
 }
 ```
 
-### AdapterDelegates library
+### AdapterDelegates Library
 
 For a more explicit delegates pattern, you can use the AdapterDelegates library:
 
@@ -251,7 +253,7 @@ class DelegateAdapter : ListDelegationAdapter<List<ListItem>>() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать клики для разных типов делегатов?
 - Когда использовать `DiffUtil` с делегатами адаптера?
@@ -277,12 +279,12 @@ class DelegateAdapter : ListDelegationAdapter<List<ListItem>>() {
 - [[q-which-layout-for-large-list--android--easy]]
 - Android RecyclerView documentation
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-which-layout-for-large-list--android--easy]]
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-room-code-generation-timing--android--medium]]
 
 ### Продвинутые (сложнее)

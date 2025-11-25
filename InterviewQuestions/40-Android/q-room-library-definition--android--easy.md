@@ -14,8 +14,10 @@ related: [c-database-design, q-android-jetpack-overview--android--easy]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/room, difficulty/easy]
-sources: ["https://developer.android.com/training/data-storage/room", "https://developer.android.com/codelabs/android-room-with-a-view-kotlin"]
+sources: ["https://developer.android.com/codelabs/android-room-with-a-view-kotlin", "https://developer.android.com/training/data-storage/room"]
 
+date created: Saturday, November 1st 2025, 1:04:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -142,7 +144,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Room обрабатывает миграции базы данных между версиями схемы?
 - Каковы правила работы с потоками (threading rules) для операций Room?
@@ -168,13 +170,13 @@ abstract class AppDatabase : RoomDatabase() {
 - https://developer.android.com/training/data-storage/room - Official Room documentation
 - https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Room codelab
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - Android варианты хранения данных (см. вопрос об общих вариантах хранения данных в Android)
 - Основы SQLite (см. вопрос об основах SQLite в Android)
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - Базовые операции Room
 - Определение сущностей (Entity) в Room
 - Паттерны реализации DAO в Room

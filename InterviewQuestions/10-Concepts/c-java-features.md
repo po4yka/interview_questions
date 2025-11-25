@@ -1,13 +1,15 @@
 ---
 id: concept-005
 title: Java Language Features / Особенности языка Java
-aliases: [Java Features, Java язык, Особенности Java, JVM]
+aliases: [Java Features, Java язык, JVM, Особенности Java]
 kind: concept
 summary: Overview of key Java language features including object-oriented programming, platform independence, garbage collection, strong typing, and the extensive standard library.
 links: []
 created: 2025-11-05
 updated: 2025-11-05
-tags: [concept, java, language-features, jvm, programming-languages]
+tags: [concept, java, jvm, language-features, programming-languages]
+date created: Wednesday, November 5th 2025, 6:30:35 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

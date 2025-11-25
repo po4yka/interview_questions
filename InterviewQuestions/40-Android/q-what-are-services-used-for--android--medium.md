@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:24:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -382,7 +384,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если не вызвать `startForeground()` в течение 5 секунд для Foreground `Service`?
 - Как `START_STICKY` и `START_NOT_STICKY` влияют на поведение при перезапуске сервиса?
@@ -412,7 +414,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - [Services](https://developer.android.com/develop/background-work/services)
 - https://developer.android.com/develop/background-work/background-tasks
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-app-components--android--easy]] — основы компонентов Android

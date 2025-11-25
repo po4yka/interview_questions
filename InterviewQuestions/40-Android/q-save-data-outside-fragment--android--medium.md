@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/lifecycle, android/room, data-persistence, datastore, difficulty/medium, fragments, sharedpreferences, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -272,7 +274,7 @@ Also see [[c-android-components]] for broader Android architecture context.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем отличие SavedStateHandle от `ViewModel` в контексте обработки смерти процесса?
 - Каковы компромиссы между DataStore Preferences и Proto DataStore?

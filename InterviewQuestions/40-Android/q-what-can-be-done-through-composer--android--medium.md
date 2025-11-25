@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/performance-rendering, android/ui-compose, difficulty/medium, jetpack-compose, recomposition]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)

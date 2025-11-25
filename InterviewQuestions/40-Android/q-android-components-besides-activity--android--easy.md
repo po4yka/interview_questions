@@ -4,25 +4,29 @@ title: Android Components Besides Activity / Компоненты Android кро
 aliases: [Android Components Besides Activity, Компоненты Android кроме Activity]
 topic: android
 subtopics:
-- broadcast-receiver
-- content-provider
-- service
+  - broadcast-receiver
+  - content-provider
+  - service
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-android-app-components--android--easy
+  - c-android-components
+  - q-android-app-components--android--easy
+  - q-what-unifies-android-components--android--easy
+  - q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, android/content-provider, android/service, difficulty/easy]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:02:18 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -225,7 +229,7 @@ class DetailsFragment : Fragment() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между запущенным (`started`) `Service` и привязанным (`bound`) `Service`?
 - Когда следует использовать WorkManager вместо `Service`?
@@ -249,7 +253,7 @@ class DetailsFragment : Fragment() {
 
 - https://developer.android.com/guide/components/fundamentals
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предусловия
 - [[q-android-app-components--android--easy]] - Обзор всех компонентов приложения

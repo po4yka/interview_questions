@@ -1,35 +1,33 @@
 ---
 id: android-485
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
-aliases:
-- Design Offline Maps & Navigation
-- Проектирование офлайн карт и навигации
+aliases: [Design Offline Maps & Navigation, Проектирование офлайн карт и навигации]
 topic: android
 subtopics:
-- files-media
-- location
-- service
+  - files-media
+  - location
+  - service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-background-tasks
-- q-design-uber-app--android--hard
+  - c-background-tasks
+  - q-design-instagram-stories--android--hard
+  - q-design-uber-app--android--hard
+  - q-how-dialog-differs-from-other-navigation--android--medium
+  - q-what-navigation-methods-do-you-know--android--medium
 sources: []
 created: 2025-10-29
 updated: 2025-11-10
-tags:
-- difficulty/hard
-- android/files-media
-- android/location
-- android/service
-- topic/android
+tags: [android/files-media, android/location, android/service, difficulty/hard, topic/android]
 
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -54,11 +52,11 @@ Build offline‑first maps & navigation. Requirements: no network for 24h, GPS d
 
 Офлайн карты и навигация требуют векторных тайлов, локального графа маршрутизации, обработки GPS и голосовых подсказок.
 
-### Краткая версия
+### Краткая Версия
 
 Используем векторные тайлы с офлайн‑кешем, локальный граф дорог для маршрутизации, энергоэффективное получение локации и голосовые подсказки. Проектируем систему так, чтобы она работала 24 часа без сети, поддерживала быстрый reroute и контролируемое потребление батареи.
 
-### Подробная версия
+### Подробная Версия
 
 ### Требования
 
@@ -178,7 +176,7 @@ Larger local graphs reduce reroute time but cost storage; tune by region popular
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать GPS drift в туннелях и городских каньонах?
 - Какую стратегию сжатия использовать, чтобы минимизировать размер тайлов без потери качества?
@@ -202,13 +200,13 @@ Larger local graphs reduce reroute time but cost storage; tune by region popular
 - [[c-background-tasks]]
 - https://developer.android.com/training/location
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 
 - [[q-design-uber-app--android--hard]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-design-uber-app--android--hard]]
 - [[q-data-sync-unstable-network--android--hard]]

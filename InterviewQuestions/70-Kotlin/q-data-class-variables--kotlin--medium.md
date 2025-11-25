@@ -14,7 +14,10 @@ related: [c-kotlin, q-stateflow-sharedflow-differences--kotlin--medium, q-suspen
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-classes, difficulty/medium, programming-languages]
+date created: Friday, October 31st 2025, 6:33:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Какие переменные можно использовать в data class в Kotlin?
 
@@ -33,7 +36,7 @@ tags: [data-classes, difficulty/medium, programming-languages]
 - Свойства в теле класса исключаются из `equals()`, `hashCode()`, `toString()`, `copy()`.
 - Требуется хотя бы один параметр в первичном конструкторе.
 
-### Примеры кода
+### Примеры Кода
 
 **Базовый data class:**
 
@@ -529,7 +532,7 @@ data class UserProfile(
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия поведения `data class` по сравнению с Java-классами?
 - В каких практических сценариях особенно полезны `data class` и их автогенерируемые методы?
@@ -551,7 +554,7 @@ data class UserProfile(
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 - [[q-suspend-functions-basics--kotlin--easy]]

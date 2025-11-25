@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-017
 title: Wear OS Compose UI / Compose UI для Wear OS
-aliases:
-  - Wear OS Compose
-  - Compose for Wearables
+aliases: [Compose for Wearables, Wear OS Compose]
 kind: concept
 summary: Compose toolkit tailored for Wear OS including scaffolds, scaling layouts, rotary input, and Tiles
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - wear
-  - compose
-  - ui
+tags: [android, compose, concept, ui, wear]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Summary (EN)

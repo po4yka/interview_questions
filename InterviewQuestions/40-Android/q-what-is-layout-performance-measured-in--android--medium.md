@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-views, difficulty/medium, performance, rendering]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -303,7 +305,7 @@ fun analyzeComplexity(view: View): Metrics {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как оптимизировать производительность layout, если глубина иерархии превышает 10 уровней?
 - В чем разница между Systrace и Perfetto для анализа производительности?
@@ -331,7 +333,7 @@ fun analyzeComplexity(view: View): Metrics {
 - [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/studio/profile/inspect-traces
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-separate-ui-business-logic--android--easy]] - Базовые принципы архитектуры UI

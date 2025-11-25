@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-adapter-pattern--cs--medium, q-abstract-factory-pattern--cs--medium]
+related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium, q-adapter-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, difficulty/medium, mvi, mvp, mvvm, separation-of-concerns, testability]
 sources: ["https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter"]
 
+date created: Saturday, November 1st 2025, 1:26:37 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -583,18 +585,18 @@ All three can be highly testable if implemented correctly. MVP is not inherently
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как паттерн MVP обеспечивает тестируемость?
 - В чём разница между MVP и MVVM?
 - Как предотвращать утечки памяти в Presenter при использовании MVP?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - Базовые концепции архитектуры Android и разделения ответственностей
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - Вопрос о паттерне MVVM (MVVM pattern)
 - Вопрос о паттерне MVI (MVI pattern)
 

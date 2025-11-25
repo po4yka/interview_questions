@@ -1,30 +1,31 @@
 ---
 id: android-352
 title: How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение
-aliases:
-- How To Catch The Earliest Entry Point Into The Application
-- Как поймать самую раннюю точку входа в приложение
+aliases: [How To Catch The Earliest Entry Point Into The Application, Как поймать самую раннюю точку входа в приложение]
 topic: android
 subtopics:
-- lifecycle
+  - lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-lifecycle
-- q-jetpack-compose-lazy-column--android--easy
-- q-retrofit-modify-all-requests--android--hard
+  - c-lifecycle
+  - q-hilt-entry-points--android--medium
+  - q-how-application-priority-is-determined-by-the-system--android--hard
+  - q-jetpack-compose-lazy-column--android--easy
+  - q-retrofit-modify-all-requests--android--hard
+  - q-which-class-to-catch-gestures--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/lifecycle
-- difficulty/medium
+tags: [android/lifecycle, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +45,7 @@ tags:
 
 Ниже — практические варианты.
 
-### `Application`.onCreate() — стандартная точка входа
+### `Application`.onCreate() — Стандартная Точка Входа
 
 ```kotlin
 class MyApplication : Application() {
@@ -78,7 +79,7 @@ class MyApplication : Application() {
 </application>
 ```
 
-### Порядок выполнения (упрощённо, в одном процессе)
+### Порядок Выполнения (упрощённо, В Одном процессе)
 
 ```
 1. Создание процесса
@@ -94,7 +95,7 @@ class MyApplication : Application() {
 
 Важно: `ContentProvider` вашего приложения или библиотек создаётся до `Application.onCreate()` в этом процессе. Jetpack App Startup использует тот же механизм.
 
-### `ContentProvider` — раньше, чем `Application`.onCreate()
+### `ContentProvider` — Раньше, Чем `Application`.onCreate()
 
 ```kotlin
 class InitializationProvider : ContentProvider() {
@@ -153,7 +154,7 @@ class InitializationProvider : ContentProvider() {
 - `onCreate()` провайдера выполняется на main-потоке при старте — не делайте там тяжёлую работу.
 - Инициализация происходит для каждого процесса, где загружается провайдер.
 
-### `Application`.attachBaseContext() — ранняя настройка контекста
+### `Application`.attachBaseContext() — Ранняя Настройка Контекста
 
 Метод вызывается до `onCreate()` и подходит для MultiDex и обёрток контекста. При этом `ContentProvider` уже могли быть инициализированы.
 
@@ -176,7 +177,7 @@ class MyApplication : Application() {
 }
 ```
 
-### App Startup (Jetpack) — рекомендованный способ (на базе `ContentProvider`)
+### App Startup (Jetpack) — Рекомендованный Способ (на Базе `ContentProvider`)
 
 Jetpack App Startup регистрирует `InitializationProvider` (`ContentProvider`), который вызывается до `Application.onCreate()` и последовательно запускает ваши `Initializer`-ы.
 
@@ -219,7 +220,7 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 </provider>
 ```
 
-### ActivityLifecycleCallbacks — отслеживание foreground/background
+### ActivityLifecycleCallbacks — Отслеживание foreground/background
 
 Не самая ранняя точка входа, но полезно для мониторинга состояния приложения.
 
@@ -258,7 +259,7 @@ class MyApplication : Application() {
 }
 ```
 
-### ProcessLifecycleOwner — более высокий уровень
+### ProcessLifecycleOwner — Более Высокий Уровень
 
 ```kotlin
 class MyApplication : Application() {
@@ -278,7 +279,7 @@ class MyApplication : Application() {
 }
 ```
 
-### Типичные инициализации в `Application`.onCreate()
+### Типичные Инициализации В `Application`.onCreate()
 
 ```kotlin
 class MyApplication : Application() {
@@ -332,7 +333,7 @@ class MyApplication : Application() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. В `ContentProvider`/App Startup — только минимальный критичный синхронный код.
 2. `Application.onCreate()` — основная точка глобальной инициализации, держите её максимально лёгкой.
@@ -385,7 +386,7 @@ Register in AndroidManifest.xml:
 </application>
 ```
 
-### Execution Order (simplified, same process)
+### Execution Order (simplified, Same process)
 
 ```
 1. Process creation
@@ -484,7 +485,7 @@ class MyApplication : Application() {
 }
 ```
 
-### App Startup Library (Recommended, uses `ContentProvider` internally)
+### App Startup Library (Recommended, Uses `ContentProvider` internally)
 
 Jetpack App Startup defines an `InitializationProvider` (a `ContentProvider`) that runs before `Application.onCreate()` and calls your `Initializer`s in a defined order.
 

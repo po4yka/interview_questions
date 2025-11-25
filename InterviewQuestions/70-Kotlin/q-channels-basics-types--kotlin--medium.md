@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Channel Guide
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-channel-buffering-strategies--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-channel-buffering-strategies--kotlin--hard]
 created: 2025-10-12
 updated: 2025-11-09
-tags: [kotlin, channels, coroutines, channel-types, rendezvous, buffered, difficulty/medium]
+tags: [buffered, channel-types, channels, coroutines, difficulty/medium, kotlin, rendezvous]
 
+date created: Sunday, October 12th 2025, 3:43:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -349,7 +351,7 @@ class TemperatureSensorRu {
 }
 ```
 
-### Операции с Каналами и Обработка Ошибок
+### Операции С Каналами И Обработка Ошибок
 
 ```kotlin
 class ChannelOperationsRu {
@@ -527,7 +529,7 @@ class ChannelPerformanceRu {
 }
 ```
 
-### Распространённые Паттерны и Антипаттерны
+### Распространённые Паттерны И Антипаттерны
 
 ```kotlin
 class ChannelPatternsRu {

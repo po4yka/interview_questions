@@ -7,8 +7,8 @@ aliases: ["Kotlin Collections", "Коллекции в Kotlin"]
 topic: kotlin
 subtopics:
   - collections
-  - sequences
   - list
+  - sequences
 question_kind: theory
 difficulty: medium
 
@@ -28,7 +28,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, operators, sequences, set]
+date created: Sunday, October 12th 2025, 3:02:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое коллекции в Kotlin? Объясните `List`, `Set`, `Map`, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.
 
@@ -41,7 +44,7 @@ tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, opera
 
 Kotlin предоставляет богатый набор типов коллекций и операций, которые делают манипуляцию данными элегантной и лаконичной. Коллекции в Kotlin разделены на **интерфейсы только для чтения** (read-only) и **изменяемые** варианты. Read-only коллекция не гарантирует глубокой неизменяемости данных — она лишь не предоставляет методов модификации через данный тип.
 
-### Обзор типов коллекций
+### Обзор Типов Коллекций
 
 Упрощенная иерархия коллекций:
 
@@ -65,7 +68,7 @@ Map<K, V>
 - `Map<K, V>`: коллекция пар ключ-значение только для чтения (ключи уникальны).
 - `MutableMap<K, V>`: изменяемая коллекция пар ключ-значение.
 
-### `List` и `MutableList` — упорядоченные коллекции
+### `List` И `MutableList` — Упорядоченные Коллекции
 
 ```kotlin
 // Создание списков
@@ -122,7 +125,7 @@ mutableNumbers.sort()             // [1, 2, 3]
 mutableNumbers.reverse()          // [3, 2, 1]
 ```
 
-### `Set`, `MutableSet` и `LinkedHashSet` — уникальные элементы
+### `Set`, `MutableSet` И `LinkedHashSet` — Уникальные Элементы
 
 ```kotlin
 // Создание `Set`
@@ -170,7 +173,7 @@ val hashSet = hashSetOf(3, 1, 2)
 println(hashSet)    // порядок зависит от hash, не гарантирован
 ```
 
-### `Map` и `MutableMap` — пары ключ-значение
+### `Map` И `MutableMap` — Пары Ключ-значение
 
 ```kotlin
 // Создание `Map`
@@ -229,9 +232,9 @@ val age = mutableAges.getOrPut("Grace") { 30 } // получить или доб
 mutableAges.clear()                      // очистить всё
 ```
 
-### Операторы коллекций
+### Операторы Коллекций
 
-#### Операции преобразования (Transformation)
+#### Операции Преобразования (Transformation)
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
@@ -282,7 +285,7 @@ val allTags = posts.flatMap { it.tags }.distinct()
 // [kotlin, tutorial, android, ios, swift]
 ```
 
-#### Операции фильтрации (Filtering)
+#### Операции Фильтрации (Filtering)
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -306,7 +309,7 @@ val onlyStrings = mixed.filterIsInstance<String>()
 val (evenPart, oddPart) = numbers.partition { it % 2 == 0 }
 ```
 
-#### Группировка и associate
+#### Группировка И Associate
 
 ```kotlin
 val words = listOf("apple", "apricot", "banana", "blueberry", "cherry")
@@ -390,7 +393,7 @@ val byAgeDesc = people.sortedByDescending { it.age }
 val complex = people.sortedWith(compareBy({ it.age }, { it.name }))
 ```
 
-#### Выборка и поиск (Selection & Search)
+#### Выборка И Поиск (Selection & Search)
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -421,7 +424,7 @@ println(numbers.single { it == 3 })
 println(numbers.singleOrNull { it > 10 })
 ```
 
-### Коллекции vs Sequences
+### Коллекции Vs Sequences
 
 **Коллекции** вычисляются жадно (eager): каждая операция создает новую коллекцию, все элементы проходят через каждую стадию.
 
@@ -491,9 +494,9 @@ val found = (1..1_000_000).asSequence()
 
 Замечание: для маленьких коллекций или одной-двух операций `Sequence` часто избыточен и медленнее.
 
-### Реальные примеры
+### Реальные Примеры
 
-#### Пример 1: Обработка заказов (E-commerce)
+#### Пример 1: Обработка Заказов (E-commerce)
 
 ```kotlin
 data class Order(
@@ -547,7 +550,7 @@ class OrderAnalytics(private val orders: List<Order>) {
 }
 ```
 
-#### Пример 2: Анализ логов
+#### Пример 2: Анализ Логов
 
 ```kotlin
 data class LogEntry(
@@ -591,7 +594,7 @@ class LogAnalyzer(private val logs: List<LogEntry>) {
 }
 ```
 
-#### Пример 3: Конвейер трансформации данных
+#### Пример 3: Конвейер Трансформации Данных
 
 ```kotlin
 data class RawUser(
@@ -634,7 +637,7 @@ fun processUsers(rawUsers: List<RawUser>): List<User> {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 
@@ -1082,7 +1085,7 @@ println(numbers.single { it == 3 })
 println(numbers.singleOrNull { it > 10 })
 ```
 
-### Collections vs Sequences
+### Collections Vs Sequences
 
 Collections evaluate eagerly (immediately) — each intermediate step creates a new collection, all elements flow through each step.
 
@@ -1353,7 +1356,7 @@ Also see [[c-collections]] for conceptual overview.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия коллекций Kotlin от Java-коллекций?
 - Когда вы будете применять те или иные типы коллекций и `Sequence` на практике?
@@ -1379,7 +1382,7 @@ Also see [[c-collections]] for conceptual overview.
 - [Sequences](https://kotlinlang.org/docs/sequences.html)
 - [List Operations](https://kotlinlang.org/docs/list-operations.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-val-vs-var--kotlin--easy]]
 - [[q-flow-basics--kotlin--easy]]

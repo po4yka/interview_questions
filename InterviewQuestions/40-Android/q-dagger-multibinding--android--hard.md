@@ -18,10 +18,13 @@ related:
   - q-dagger-component-dependencies--android--hard
   - q-dagger-custom-scopes--android--hard
   - q-dagger-framework-overview--android--hard
+  - q-dagger-purpose--android--easy
 created: 2025-10-20
 updated: 2025-11-02
 tags: [android/architecture-modularization, android/di-hilt, dagger, dependency-injection, difficulty/hard, multibinding]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

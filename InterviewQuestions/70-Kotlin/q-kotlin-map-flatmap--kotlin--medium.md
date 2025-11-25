@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-kotlin-immutable-collections--programming-languages--easy]
+related: [c-collections, c-kotlin, q-kotlin-immutable-collections--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-11-10
 
 tags: [collections, difficulty/medium, flatmap, higher-order-functions, kotlin, map]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между `map()` и `flatMap()` в Kotlin?
 
@@ -54,11 +57,11 @@ println(list.flatMap { it.toList() })
 // Вывод: [1, 2, 3, 4, 5]
 ```
 
-### Ключевое различие: выравнивание вложенных коллекций
+### Ключевое Различие: Выравнивание Вложенных Коллекций
 
 Основное различие становится ясным при работе с вложенными коллекциями. `map()` преобразует элементы и сохраняет вложенную структуру (вы получаете коллекцию коллекций), в то время как `flatMap()` сначала делает преобразование в коллекцию для каждого элемента, а затем объединяет вложенные коллекции в один плоский список.
 
-#### Подробный пример
+#### Подробный Пример
 
 Рассмотрим этот пример с командами и игроками:
 
@@ -103,9 +106,9 @@ fun main() {
  [Player(name=Team2 first player), Player(name=Team2 second player)]]
 ```
 
-### Когда использовать каждую функцию
+### Когда Использовать Каждую Функцию
 
-#### Используйте `map()` когда:
+#### Используйте `map()` Когда:
 - Вы хотите преобразовать каждый элемент, но сохранить структуру коллекции
 - Каждый элемент преобразуется ровно в одно значение
 - Вам не нужно выравнивать вложенные коллекции
@@ -120,7 +123,7 @@ val emails = users.map { "$it@example.com" }
 // [alice@example.com, bob@example.com, charlie@example.com]
 ```
 
-#### Используйте `flatMap()` когда:
+#### Используйте `flatMap()` Когда:
 - Ваша функция преобразования возвращает коллекцию для каждого элемента
 - Вы хотите выровнять вложенные коллекции в один список
 - Вам нужно "расширить" элементы (один элемент становится несколькими)
@@ -146,7 +149,7 @@ val allTags = posts.flatMap { it.tags }
 // [kotlin, android, java, kotlin]
 ```
 
-### Визуальное сравнение
+### Визуальное Сравнение
 
 ```kotlin
 val data = listOf(listOf(1, 2), listOf(3, 4))
@@ -160,13 +163,13 @@ val flattened = data.flatMap { it }
 // Результат: [1, 2, 3, 4] - выровнен в один список
 ```
 
-### Соображения производительности
+### Соображения Производительности
 
 `flatMap()` выполняет те же операции преобразования, что и `map()`, но дополнительно объединяет (конкатенирует) результаты, поэтому при прочих равных имеет немного больше накладных расходов. Это не критично в большинстве случаев, но используйте `flatMap()` по назначению — когда действительно нужно выравнивание/объединение коллекций.
 
 **Краткое содержание**: `map()` преобразует каждый элемент один-к-одному и сохраняет структуру коллекции. `flatMap()` ожидает, что каждый элемент будет преобразован в коллекцию, и выравнивает все результаты в один список. Используйте `map()` для простых преобразований, `flatMap()` — когда нужно выровнять вложенные коллекции или расширить элементы.
 
-## Ответы на дополнительные вопросы (RU)
+## Ответы На Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия реализации и использования по сравнению с Java Streams?
 - В каких практических сценариях в Kotlin-коде вы чаще всего используете `flatMap()`?
@@ -250,7 +253,7 @@ fun main() {
 
 ### When to Use Each
 
-#### Use `map()` when:
+#### Use `map()` When:
 - You want to transform each element but keep the collection structure
 - Each element transforms to exactly one value
 - You don't need to flatten nested collections
@@ -265,7 +268,7 @@ val emails = users.map { "$it@example.com" }
 // [alice@example.com, bob@example.com, charlie@example.com]
 ```
 
-#### Use `flatMap()` when:
+#### Use `flatMap()` When:
 - Your transform returns a collection for each element
 - You want to flatten nested collections into a single list
 - You need to "expand" elements (one element becomes multiple)

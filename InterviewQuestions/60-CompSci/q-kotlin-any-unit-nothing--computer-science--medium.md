@@ -1,5 +1,5 @@
 ---
-id: cs-004
+id: lang-203
 title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 aliases: []
 topic: kotlin
@@ -14,6 +14,8 @@ related: [c--kotlin--medium, q-coroutine-supervisorjob-use-cases--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
+date created: Tuesday, November 25th 2025, 12:56:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)

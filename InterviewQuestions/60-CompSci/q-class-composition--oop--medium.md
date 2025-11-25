@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-composition, q-inheritance-vs-composition--oop--medium]
+related: [c-composition, c-computer-science, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [code-reuse, composition, difficulty/medium, encapsulation, inheritance, oop, relationships]
+date created: Saturday, November 1st 2025, 12:43:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -27,7 +29,7 @@ tags: [code-reuse, composition, difficulty/medium, encapsulation, inheritance, o
 ## Ответ (RU)
 Композиция классов — один из фундаментальных принципов объектно-ориентированного программирования, который используется для моделирования отношений между объектами. В композиции один класс включает в себя объекты других классов в качестве своих полей, тем самым достигая более сложной функциональности за счет комбинирования поведения и состояний этих объектов.
 
-### Ключевые аспекты композиции
+### Ключевые Аспекты Композиции
 
 1. **Сильная связь и владение (ownership):**
    В композиции объекты-части концептуально принадлежат объекту-целому, их жизненный цикл зависит от жизненного цикла владельца: вне контекста «целого» такие части обычно не имеют самостоятельного смысла.
@@ -273,7 +275,7 @@ tags: [code-reuse, composition, difficulty/medium, encapsulation, inheritance, o
    paypalOrder.placeOrder(200.0)
    ```
 
-### Композиция vs Наследование
+### Композиция Vs Наследование
 
 1. **Наследование (жёсткая иерархия):**
    ```kotlin
@@ -404,7 +406,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-### Рекомендуемые практики (DO)
+### Рекомендуемые Практики (DO)
 
 1. **Отдавайте предпочтение композиции перед наследованием:**
    ```kotlin

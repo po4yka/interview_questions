@@ -21,14 +21,17 @@ source_note: Comprehensive guide to Kotlin Coroutine Dispatchers
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutine-context-explained--kotlin--medium, q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-coroutine-context-explained--kotlin--medium, q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, threading, unconfined]
+date created: Thursday, October 16th 2025, 4:31:25 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое диспетчеры корутин в Kotlin? Объясните диспетчеры Main, IO, Default и Unconfined и когда использовать каждый.
 

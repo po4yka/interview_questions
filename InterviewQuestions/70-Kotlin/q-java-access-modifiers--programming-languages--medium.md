@@ -2,7 +2,7 @@
 id: lang-013
 title: "Java Access Modifiers / Модификаторы доступа Java"
 aliases: [Java Access Modifiers, Модификаторы доступа Java]
-topic: programming-languages
+topic: kotlin
 subtopics: [java, oop]
 question_kind: theory
 difficulty: medium
@@ -14,7 +14,10 @@ related: [c-architecture-patterns, q-interface-vs-abstract-class--programming-la
 created: 2025-10-13
 updated: 2025-11-11
 tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programming-languages]
+date created: Tuesday, November 25th 2025, 12:55:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как лучше всего использовать модификаторы доступа в Java?
 
@@ -27,7 +30,7 @@ tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programmin
 
 **Принцип:** использовать **максимально строгий** уровень доступа, который всё ещё позволяет нужное использование.
 
-### 1. `private` — инкапсуляция (наиболее часто для полей)
+### 1. `private` — Инкапсуляция (наиболее Часто Для полей)
 
 Используйте для **почти всех полей** и для вспомогательных методов, которые не нужны извне класса.
 
@@ -68,7 +71,7 @@ class Calculator {
 }
 ```
 
-### 2. package-private (без модификатора) — доступ внутри пакета
+### 2. Package-private (без модификатора) — Доступ Внутри Пакета
 
 Используется для **классов и членов**, предназначенных только для использования внутри одного пакета.
 
@@ -92,7 +95,7 @@ public class UserRepository {
 }
 ```
 
-### 3. `protected` — наследование + доступ внутри пакета
+### 3. `protected` — Наследование + Доступ Внутри Пакета
 
 Применяйте, когда член:
 - должен быть доступен наследникам (в том числе в других пакетаx), и
@@ -148,7 +151,7 @@ class Base2 {
 }
 ```
 
-### 4. `public` — публичный API
+### 4. `public` — Публичный API
 
 Используйте **только** для классов и методов, которые являются частью публичного API и должны вызываться из других пакетов/модулей.
 
@@ -166,7 +169,7 @@ public class UserService {
 }
 ```
 
-### Сводка уровней доступа
+### Сводка Уровней Доступа
 
 | Модификатор      | Тот же класс | Тот же пакет | Подкласс (другой пакет) | Везде | Типичное применение                     |
 |------------------|-------------|-------------|--------------------------|-------|-----------------------------------------|
@@ -175,7 +178,7 @@ public class UserService {
 | protected        | Да          | Да          | Да                       | Нет   | Наследование + доступ в пределах пакета |
 | public           | Да          | Да          | Да                       | Да    | Публичный/стабильный API                |
 
-### Решающее правило (Decision Tree)
+### Решающее Правило (Decision Tree)
 
 ```
 Нужно ли вне класса?
@@ -189,7 +192,7 @@ public class UserService {
                Нет → public
 ```
 
-### Полный пример
+### Полный Пример
 
 ```java
 // Публичный API-класс
@@ -234,7 +237,7 @@ class TransactionLogger {
 }
 ```
 
-### Краткая сводка
+### Краткая Сводка
 
 - **Поля**: почти всегда `private`.
 - **Методы**:
@@ -477,7 +480,7 @@ class TransactionLogger {
 
 Also see [[c-architecture-patterns]] for API and encapsulation design context.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем модификаторы доступа в Java отличаются от модификаторов видимости в Kotlin в аналогичных сценариях?
 - В каких случаях вы выберете `protected` vs package-private vs `public` в реальном проекте?
@@ -497,7 +500,7 @@ Also see [[c-architecture-patterns]] for API and encapsulation design context.
 
 - [Java Language Specification - 6.6. Access Control](https://docs.oracle.com/javase/specs/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-java-equals-default-behavior--programming-languages--easy]] - Java

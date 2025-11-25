@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-11-11
 
 tags: [cancellation, coroutines, difficulty/medium, kotlin, testing]
+date created: Sunday, October 12th 2025, 1:24:38 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Как тестировать сценарии отмены корутин? Покрыть тестирование кооперативной отмены, timeout, ensureActive, CancellationException и очистки ресурсов с NonCancellable.
 
@@ -617,7 +620,7 @@ fun `invokeOnCancellation не вызывается при завершении`
 }
 ```
 
-### Тестирование Job.join и cancelAndJoin
+### Тестирование Job.join И cancelAndJoin
 
 ```kotlin
 @Test
@@ -729,7 +732,7 @@ fun `supervisorScope не отменяет сиблингов при сбое о
 }
 ```
 
-### Тестирование Cancellation в `Flow`
+### Тестирование Cancellation В `Flow`
 
 ```kotlin
 @Test
@@ -1751,7 +1754,7 @@ Typical mistakes:
 - Not using `NonCancellable` for critical cleanup.
 - Not testing resource cleanup and cancellation scenarios thoroughly.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как протестировать взаимодействие `withTimeout` с несколькими вложенными корутинами?
 - Как убедиться, что пользовательские операции на основе `suspendCancellableCoroutine` корректно обрабатывают отмену?
@@ -1771,7 +1774,7 @@ Typical mistakes:
 
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-cancellation-cooperation--kotlin--medium]]
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

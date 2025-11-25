@@ -14,7 +14,10 @@ related: [c-collections, q-fan-in-fan-out-channels--kotlin--hard, q-globalscope-
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, implementations, kotlin, list, map, programming-languages, set]
+date created: Friday, October 31st 2025, 6:30:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Какие Есть Реализации Коллекций?
 
 # Вопрос (RU)
@@ -89,7 +92,7 @@ Kotlin (на JVM) использует реализации коллекций J
 - `LinkedHashMap` — когда нужен стабильный порядок вставки ключей.
 - `TreeMap` — когда нужны отсортированные ключи; ключи должны быть `Comparable` или должен быть предоставлен `Comparator`.
 
-### Сводная таблица (RU)
+### Сводная Таблица (RU)
 
 | Интерфейс | Реализация      | Порядок           | Скорость (типично) | Когда использовать |
 |----------|-----------------|-------------------|--------------------|--------------------|
@@ -102,7 +105,7 @@ Kotlin (на JVM) использует реализации коллекций J
 |          | `LinkedHashMap` | Порядок вставки   | Ожидаемое O(1), худший O(n) | Нужен порядок вставки |
 |          | `TreeMap`       | Отсортированные ключи | O(log n)       | Поиск по отсортированным ключам |
 
-### Фабричные функции Kotlin (RU)
+### Фабричные Функции Kotlin (RU)
 
 ```kotlin
 // Read-only view (интерфейсы только для чтения; не гарантируют глубокой неизменяемости)
@@ -124,7 +127,7 @@ val treeSet = TreeSet<Int>()
 val treeMap = TreeMap<Int, String>()
 ```
 
-### Сравнение производительности (RU)
+### Сравнение Производительности (RU)
 
 (Сложности относятся к типичным средним операциям над отдельными элементами для этих реализаций.)
 
@@ -309,7 +312,7 @@ val treeMap = TreeMap<Int, String>()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия реализаций коллекций в Kotlin и Java на практике (особенно с учетом мультиплатформенности)?
 - Когда вы бы выбрали конкретную реализацию в реальных задачах?
@@ -331,7 +334,7 @@ val treeMap = TreeMap<Int, String>()
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-collections]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-globalscope-antipattern--kotlin--easy]]
 - [[q-fan-in-fan-out-channels--kotlin--hard]]

@@ -14,6 +14,8 @@ related: [c-kotlin, c-sealed-classes, q-flow-operators-map-filter--kotlin--mediu
 created: 2025-10-15
 updated: 2025-11-09
 tags: [abstract-classes, classes, difficulty/medium, kotlin, polymorphism, sealed-classes]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -56,7 +58,7 @@ Key differences:
   - Restrict where direct subclasses may be defined (same package and module; historically same file), so all variants are known to the compiler.
   - Integrate with `when` for exhaustive pattern matching: if all direct subclasses are covered, no `else` branch is required.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия по сравнению с Java?
 - Когда вы бы использовали это на практике?
@@ -80,7 +82,7 @@ Key differences:
 - [[c-sealed-classes]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-native--kotlin--hard]]
 - [[q-flow-operators-map-filter--kotlin--medium]]

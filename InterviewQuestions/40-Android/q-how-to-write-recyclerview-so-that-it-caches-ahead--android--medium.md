@@ -1,42 +1,35 @@
 ---
 id: android-267
 title: How To Write RecyclerView So That It Caches Ahead
-aliases:
-- RecyclerView caching
-- RecyclerView prefetching
-- Кеширование RecyclerView
-- Предзагрузка RecyclerView
+aliases: [RecyclerView caching, RecyclerView prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
 topic: android
 subtopics:
-- performance-memory
-- performance-rendering
-- ui-views
+  - performance-memory
+  - performance-rendering
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-how-animations-work-in-recyclerview--android--medium
-- q-recyclerview-async-list-differ--android--medium
-- q-recyclerview-sethasfixedsize--android--easy
+  - c-android-components
+  - q-how-animations-work-in-recyclerview--android--medium
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-how-to-write-recyclerview-cache-ahead--android--medium
+  - q-recyclerview-async-list-differ--android--medium
+  - q-recyclerview-sethasfixedsize--android--easy
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android
-- android/performance-memory
-- android/performance-rendering
-- android/ui-views
-- caching
-- difficulty/medium
-- prefetching
-- recyclerview
+tags: [android, android/performance-memory, android/performance-rendering, android/ui-views, caching, difficulty/medium, prefetching, recyclerview]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -58,7 +51,7 @@ RecyclerView предоставляет несколько механизмов 
 - предзагрузку layout/bind (layout prefetch из `LayoutManager`),
 - предзагрузку данных (pagination, предварительная загрузка контента).
 
-### 1. Кэширование `View` через `setItemViewCacheSize()`
+### 1. Кэширование `View` Через `setItemViewCacheSize()`
 
 Кэш хранит недавно скрытые `View` в привязанном состоянии (без повторного биндинга данных), чтобы ускорить повторное появление этих же позиций в пределах небольшого диапазона.
 
@@ -73,7 +66,7 @@ recyclerView.setItemViewCacheSize(itemsPerScreen * 2)
 
 Это не «загружает вперёд» новые элементы, а уменьшает количество пересозданий/ребиндинга для недавно использованных `View`. Слишком большой cache size увеличивает использование памяти и может навредить.
 
-### 2. Предзагрузка через `LinearLayoutManager`
+### 2. Предзагрузка Через `LinearLayoutManager`
 
 ```kotlin
 val layoutManager = LinearLayoutManager(context).apply {
@@ -85,7 +78,7 @@ recyclerView.layoutManager = layoutManager
 
 `LayoutManager` с включённым item prefetch может заранее создавать и байндить `View` для позиций рядом с видимой областью, снижая jank при скролле.
 
-### 3. Загрузка данных через `OnScrollListener` (или paging library)
+### 3. Загрузка Данных Через `OnScrollListener` (или Paging library)
 
 ```kotlin
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -105,7 +98,7 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
 Это предзагрузка данных (pagination), а не только кэширование `View`, и она должна учитывать состояние загрузки и возможный повторный вызов. В продакшене часто удобнее использовать paging library, чтобы получать автоматическое подгружание и кэширование страниц.
 
-### 4. Кастомный `LayoutManager` для продвинутой предзагрузки
+### 4. Кастомный `LayoutManager` Для Продвинутой Предзагрузки
 
 ```kotlin
 class PrefetchLayoutManager(
@@ -135,7 +128,7 @@ class PrefetchLayoutManager(
 
 Здесь явно предзагружаются позиции вперёд по направлению скролла. Аналогично можно добавить логику для скролла вверх.
 
-### 5. Предзагрузка изображений (Glide/Coil)
+### 5. Предзагрузка Изображений (Glide/Coil)
 
 ```kotlin
 // Упрощённый пример: предзагружаем следующие изображения
@@ -154,7 +147,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 На практике стоит учитывать направление скролла, сетевые ограничения и уметь отменять больше не нужные запросы, чтобы не перегружать сеть и память.
 
-### 6. `SharedPool` для вложенных `RecyclerView`
+### 6. `SharedPool` Для Вложенных `RecyclerView`
 
 ```kotlin
 private val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -171,7 +164,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 Общий пул уменьшает количество пересозданий `ViewHolder` во вложенных списках.
 
-### Полная оптимизация
+### Полная Оптимизация
 
 ```kotlin
 fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
@@ -239,7 +232,7 @@ recyclerView.layoutManager = layoutManager
 
 With item prefetch enabled, the `LayoutManager` can pre-create and bind views for positions adjacent to the viewport to reduce jank.
 
-### 3. Data Loading via `OnScrollListener` (or paging library)
+### 3. Data Loading via `OnScrollListener` (or Paging library)
 
 ```kotlin
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -308,7 +301,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 In real apps you should take scroll direction, network constraints, and cancellation into account to avoid unnecessary work.
 
-### 6. `SharedPool` for Nested RecyclerViews
+### 6. `SharedPool` For Nested RecyclerViews
 
 ```kotlin
 private val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -359,7 +352,7 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как внутренне работает механизм ресайклинга `RecyclerView`?
 - В чём разница между `ViewCache` и `RecycledViewPool`?
@@ -395,9 +388,9 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### База / концепты
+### База / Концепты
 
 - [[c-android-components]]
 
@@ -405,7 +398,7 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
 
 - [[q-recyclerview-sethasfixedsize--android--easy]]
 
-### Похожие (тот же уровень)
+### Похожие (тот Же уровень)
 
 - [[q-how-animations-work-in-recyclerview--android--medium]]
 - [[q-recyclerview-async-list-differ--android--medium]]

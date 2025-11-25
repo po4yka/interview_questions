@@ -1,35 +1,34 @@
 ---
 id: android-150
 title: What Navigation Methods Do You Know / Какие методы навигации вы знаете
-aliases:
-- What Navigation Methods Do You Know
-- Какие методы навигации вы знаете
+aliases: [What Navigation Methods Do You Know, Какие методы навигации вы знаете]
 topic: android
 subtopics:
-- ui-navigation
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- c-fragments
-- q-activity-navigation-how-it-works--android--medium
-- q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
-- q-how-navigation-is-implemented-in-android--android--medium
+  - c-compose-navigation
+  - c-fragments
+  - q-activity-navigation-how-it-works--android--medium
+  - q-how-navigation-is-implemented-in-android--android--medium
+  - q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
+  - q-navigation-methods-in-kotlin--android--medium
+  - q-what-do-you-know-about-modifiers--android--medium
+  - q-what-navigation-methods-exist-in-kotlin--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android
-- android/ui-navigation
-- difficulty/medium
-- navigation
+tags: [android, android/ui-navigation, difficulty/medium, navigation]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -304,7 +303,7 @@ URL-based navigation from external sources.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Navigation Component обрабатывает уничтожение процесса и восстановление состояния?
 - В чём плюсы и минусы архитектуры с одной `Activity` по сравнению с многими `Activity`?
@@ -330,19 +329,19 @@ URL-based navigation from external sources.
 - Android Developer Documentation: Navigation Component
 - Android Developer Guide: Single-`Activity` Architecture
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-compose-navigation]]
 - [[c-fragments]]
 
-### Предварительные требования
+### Предварительные Требования
 
 - Понимание жизненного цикла `Activity` и `Fragment`
 - Базовые знания `Intent` и `Bundle`
 
-### Связанные материалы
+### Связанные Материалы
 
 - [[q-activity-navigation-how-it-works--android--medium]] — подробности работы навигации между `Activity`
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] — управление стеком задач при deep links

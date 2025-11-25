@@ -17,7 +17,10 @@ subtopics:
   - cancellation
   - coroutines
 question_kind: coding
+date created: Saturday, November 1st 2025, 12:10:13 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
 
@@ -30,7 +33,7 @@ question_kind: coding
 
 Многие Android и Java библиотеки используют callback-ориентированные API (Retrofit callbacks, Firebase listeners, Location updates, OkHttp calls). Чтобы идиоматично использовать их с корутинами, нужно преобразовать callback в `suspend`-функции с помощью `suspendCancellableCoroutine`. Это критический навык для интеграции легаси-кода с корутинами с корректной обработкой отмены, ошибок и гонок. См. также [[c-coroutines]].
 
-### `suspendCoroutine` против `suspendCancellableCoroutine`
+### `suspendCoroutine` Против `suspendCancellableCoroutine`
 
 `suspendCoroutine` — базовая приостановка без встроенной поддержки структурированной отмены для внешней операции.
 
@@ -61,7 +64,7 @@ suspend fun cancellableSuspend() = suspendCancellableCoroutine<String> { cont ->
 
 Правило: для интеграции с внешними асинхронными API почти всегда предпочтительнее `suspendCancellableCoroutine`.
 
-### Базовый шаблон: одиночный callback
+### Базовый Шаблон: Одиночный Callback
 
 ```kotlin
 // Callback-ориентированный API
@@ -97,7 +100,7 @@ suspend fun fetchData(): String = suspendCancellableCoroutine { cont ->
 }
 ```
 
-### `invokeOnCancellation` для очистки ресурсов
+### `invokeOnCancellation` Для Очистки Ресурсов
 
 Критично освобождать ресурсы, если корутина отменена и нижележащий API поддерживает отмену:
 
@@ -128,7 +131,7 @@ suspend fun fetchWithCancellation(): String = suspendCancellableCoroutine { cont
 
 Здесь `DataCallback` — условный интерфейс API. Для конкретных библиотек используйте их реальные типы callback.
 
-### Реальный пример: преобразование OkHttp `Call`
+### Реальный Пример: Преобразование OkHttp `Call`
 
 ```kotlin
 import okhttp3.Call
@@ -167,7 +170,7 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
 }
 ```
 
-### Обработка гонок: «возобновить ровно один раз»
+### Обработка Гонок: «возобновить Ровно Один раз»
 
 Продолжение должно быть возобновлено ровно один раз. Проверка `cont.isActive` полезна, но не делает `resume` идемпотентным при гонках. При возможных гонках между callback и отменой защищайтесь атомарным флагом:
 
@@ -276,7 +279,7 @@ suspend fun LocationManager.awaitLocation(provider: String): Location =
     }
 ```
 
-### Шаблоны обработки ошибок
+### Шаблоны Обработки Ошибок
 
 ```kotlin
 suspend fun fetchDataWithErrors(): String = suspendCancellableCoroutine { cont ->
@@ -330,7 +333,7 @@ suspend fun threadSafeOperation(): String = suspendCancellableCoroutine { cont -
 
 `CancellableContinuation` потокобезопасен: `resume` / `resumeWithException` можно вызывать с любого потока, но всё равно нужно гарантировать отсутствие двойного `resume`.
 
-### Реальный пример: ручное преобразование Retrofit Call
+### Реальный Пример: Ручное Преобразование Retrofit Call
 
 ```kotlin
 import retrofit2.Call
@@ -447,14 +450,14 @@ class SuspendTest {
 }
 ```
 
-### Частые ошибки и подводные камни
+### Частые Ошибки И Подводные Камни
 
 - Двойной `resume` (при гонке между успехом, ошибкой и отменой) — защищайтесь `isActive` и/или атомарным флагом.
 - Отсутствие `invokeOnCancellation`, когда нижележащий API поддерживает отмену или требует очистки.
 - Вызов `resume` / `resumeWithException` после отмены — всегда проверяйте `cont.isActive` или используйте флаг.
 - Игнорирование ошибок и проброс «сырых» кодов вместо понятных исключений.
 
-### Рекомендуемые практики
+### Рекомендуемые Практики
 
 - По умолчанию использовать `suspendCancellableCoroutine` вместо `suspendCoroutine` для интеграции с внешними API.
 - Всегда добавлять `invokeOnCancellation`, если есть что отменить или освободить.
@@ -462,14 +465,14 @@ class SuspendTest {
 - Для многократных значений использовать `callbackFlow`, а не бесконечный `suspendCancellableCoroutine`.
 - Писать тесты, которые проверяют отмену, очистку и отсутствие двойного `resume`.
 
-### Когда использовать этот шаблон
+### Когда Использовать Этот Шаблон
 
 - Когда у вас одноразовый callback (один результат или ошибка).
 - Когда внешний API предоставляет ручку отмены (`cancel()`, `dispose()` и т.п.).
 - Когда нужно обернуть легаси/Java API в идиоматичный `suspend`-интерфейс.
 - Когда важно корректно интегрироваться со структурированной отменой корутин.
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. `suspendCancellableCoroutine` — основной инструмент для production-интеграций с callback API.
 2. `invokeOnCancellation` критичен для освобождения ресурсов и прокидывания отмены во внешний API.

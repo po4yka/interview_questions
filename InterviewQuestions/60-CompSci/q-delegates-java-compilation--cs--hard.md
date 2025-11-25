@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-compiler-optimization]
+related: [c-compiler-optimization, c-computer-science]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [compilation, delegates, delegation, difficulty/hard, kotlin, kotlin-compiler, programming-languages]
 sources: ["https://kotlinlang.org/docs/delegated-properties.html"]
 
+date created: Saturday, November 1st 2025, 1:25:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -473,7 +475,7 @@ class Example {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает ленившая инициализация (`lazy`) с точки зрения синхронизации?
 - Можно ли создавать делегаты не только для свойств, но и для других конструкций?
@@ -485,13 +487,13 @@ class Example {
 - Can you create delegates for functions, not just properties?
 - What is the performance impact of property delegation?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые свойства в Kotlin
 - Перегрузка операторов в Kotlin
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - Обзор делегатов в Kotlin
 - Ленивая инициализация через `lazy`
 

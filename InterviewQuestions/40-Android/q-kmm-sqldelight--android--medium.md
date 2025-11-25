@@ -1,40 +1,33 @@
 ---
 id: android-416
 title: SQLDelight в KMM / SQLDelight in KMM
-aliases:
-- SQLDelight in KMM
-- SQLDelight в KMM
-- SQLDelight для мультиплатформы
+aliases: [SQLDelight in KMM, SQLDelight в KMM, SQLDelight для мультиплатформы]
 topic: android
 subtopics:
-- kmp
-- room
-- sqldelight
+  - kmp
+  - room
+  - sqldelight
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-room
-- q-annotation-processing-android--android--medium
-- q-gradle-kotlin-dsl-vs-groovy--android--medium
+  - c-room
+  - q-annotation-processing-android--android--medium
+  - q-gradle-kotlin-dsl-vs-groovy--android--medium
+  - q-kmm-dependency-injection--android--medium
+  - q-kmm-ktor-networking--android--medium
+  - q-react-native-comparison--android--medium
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags:
-- android/kmp
-- android/room
-- android/sqldelight
-- Database
-- difficulty/medium
-- KMM
-- Kotlin
-- multiplatform
-- SQLDelight
+tags: [android/kmp, android/room, android/sqldelight, Database, difficulty/medium, KMM, Kotlin, multiplatform, SQLDelight]
+date created: Saturday, November 1st 2025, 1:32:40 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -53,7 +46,7 @@ tags:
 
 SQLDelight генерирует type-safe Kotlin API из SQL-запросов, обеспечивая compile-time верификацию и использование platform-specific драйверов (AndroidSqliteDriver на Android, NativeSqliteDriver на iOS) при шаринге общей database-логики.
 
-#### Настройка и конфигурация
+#### Настройка И Конфигурация
 
 (Версии артефактов приведены как пример; в реальном проекте фиксируйте конкретные версии SQLDelight.)
 
@@ -95,7 +88,7 @@ kotlin {
 }
 ```
 
-#### Определение схемы
+#### Определение Схемы
 
 **SQL Schema** (`Task.sq`):
 ```sql
@@ -178,7 +171,7 @@ actual class DatabaseDriverFactory {
 }
 ```
 
-#### Использование type-safe API
+#### Использование Type-safe API
 
 ```kotlin
 // commonMain

@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, kotlin, list, map, set]
 
+date created: Friday, October 31st 2025, 6:29:30 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -202,7 +204,7 @@ val data = cache[userId] ?: fetchData(userId).also { cache[userId] = it }
 
 Kotlin has three main collection types with distinct characteristics ([[c-collections]], [[c-kotlin]]):
 
-### List — Ordered list
+### List — Ordered List
 
 - Elements are ordered and index-based.
 - Duplicates are allowed.
@@ -221,7 +223,7 @@ println(tasks[0])      // "Write code"
 println(tasks.size)    // 4 (duplicates are preserved)
 ```
 
-### Set — Collection of unique elements
+### Set — Collection of Unique Elements
 
 - Elements are unique (repeated values are not stored).
 - Order is not guaranteed by the `Set` interface; specific implementations (e.g., `LinkedHashSet`) can preserve insertion order.
@@ -244,7 +246,7 @@ val list = listOf(1, 2, 2, 3, 3, 3)
 val unique = list.toSet()  // [1, 2, 3]
 ```
 
-### Map — Key-value pairs
+### Map — Key-value Pairs
 
 - Each key is unique.
 - Each key maps to exactly one value; assigning the same key again replaces the previous value.
@@ -311,7 +313,7 @@ val configMap = mapOf(
 println(configMap["timeout"])  // "30"
 ```
 
-### Mutable vs read-only
+### Mutable Vs Read-only
 
 ```kotlin
 // Read-only views
@@ -373,7 +375,7 @@ Use `Map` when:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия коллекций Kotlin от коллекций Java?
 - В каких реальных сценариях вы бы использовали каждый из этих типов коллекций?
@@ -393,7 +395,7 @@ Use `Map` when:
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-object-companion-object--programming-languages--easy]]
 - [[q-dispatchers-unconfined--kotlin--medium]]

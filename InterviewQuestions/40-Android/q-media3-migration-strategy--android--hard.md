@@ -1,32 +1,33 @@
 ---
 id: android-615
 title: Media3 Migration Strategy / Стратегия миграции на Media3
-aliases:
-- Media3 Migration Strategy
-- Стратегия миграции на Media3
+aliases: [Media3 Migration Strategy, Стратегия миграции на Media3]
 topic: android
 subtopics:
-- media
+  - media
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-tv
-- c-android-surfaces
+  - c-android-surfaces
+  - c-android-tv
+  - q-global-localization-strategy--android--hard
+  - q-media3-transformer-workflows--android--hard
+  - q-scoped-storage-migration-strategy--android--hard
 created: 2024-11-02
 updated: 2025-11-10
-tags:
-- android/media
-- difficulty/hard
+tags: [android/media, difficulty/hard]
 sources:
-- "https://developer.android.com/guide/topics/media/media3/getting-started"
-- "https://medium.com/androiddevelopers/media3-from-exoplayer-migration"
+  - "https://developer.android.com/guide/topics/media/media3/getting-started"
+  - "https://medium.com/androiddevelopers/media3-from-exoplayer-migration"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +40,7 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 
 - Последовательно перенесите зависимости на Media3.
 - Постройте единый `MediaSession`/`MediaLibrarySession`-центричный слой.
@@ -47,7 +48,7 @@ sources:
 - Мигрируйте offline/DRM на `MediaItem` + Media3 `DownloadService`/`DownloadManager`.
 - Проведите поэтапную валидацию Auto/TV/Assistant интеграций за feature flag.
 
-### Подробный вариант
+### Подробный Вариант
 
 #### Требования
 
@@ -67,13 +68,13 @@ sources:
 - Для UI использовать общий компонент (`StyledPlayerView` или Compose-обёртку), подключённый к одному `MediaSession`.
 - Вынести offline/DRM в отдельный модуль, использующий Media3 `DownloadService`, `DownloadManager` и `MediaItem.DrmConfiguration`.
 
-#### 1. Переезд зависимостей
+#### 1. Переезд Зависимостей
 
 - Замените `com.google.android.exoplayer:exoplayer` на `androidx.media3:media3-exoplayer`.
 - Добавьте при необходимости: `media3-ui`, `media3-session`, `media3-cast`, `media3-datasource`, `media3-extractor` (в зависимости от используемых функций).
 - Обновите namespace (`com.google.android.exoplayer2.*` → `androidx.media3.*`).
 
-#### 2. Перестройка Player слоя
+#### 2. Перестройка Player Слоя
 
 ```kotlin
 val player = ExoPlayer.Builder(context)
@@ -107,13 +108,13 @@ class PlaybackService : MediaSessionService() {
 - Для Android Auto/Assistant опирайтесь на корректно настроенный `MediaSession`/`MediaLibrarySession` и совместимый браузерный контракт (`MediaBrowser` API); уведомления реализуйте через `MediaNotification.Provider`.
 - Авто и TV клиенты используют единый contract поверх Media3 session API.
 
-#### 4. UI миграция
+#### 4. UI Миграция
 
 - `StyledPlayerView` живёт в `media3-ui`; замените XML namespace и класс, если раньше использовался `PlayerView` из ExoPlayer.
 - Для Compose: оборачивайте `StyledPlayerView` через `AndroidView` или используйте проверенные сторонние Compose-обёртки.
 - Для управления видимостью контроллеров используйте `StyledPlayerView.ControllerVisibilityListener`.
 
-#### 5. Offline и DRM
+#### 5. Offline И DRM
 
 - Offline — `DownloadService` + `DownloadManager` из `media3-exoplayer`/`media3-datasource`, перенесите существующую логику скачиваний на Media3 API.
 - DRM — через `MediaItem.DrmConfiguration` (Widevine, PlayReady и др.): конфигурация DRM привязывается к `MediaItem`, но обработка key rotation и политики истечения лицензий остаётся на уровне DRM session/лицензионного сервера.
@@ -124,7 +125,7 @@ class PlaybackService : MediaSessionService() {
 - Instrumented: `MediaControllerTestRule` и связанные утилиты для проверки session layer.
 - Нагрузочные сценарии реализуйте поверх Media3 тест-утилит или собственного обёрнутого плеера; не используйте экспериментальные тестовые классы как runtime API.
 
-#### 7. План миграции
+#### 7. План Миграции
 
 1. Параллельно держите старый и новый player за Feature Flag.
 2. Сначала перенесите session/service слой (`MediaSession`/`MediaLibrarySession`), затем UI.
@@ -169,7 +170,7 @@ class PlaybackService : MediaSessionService() {
 - Add required Media3 modules: `media3-ui`, `media3-session`, `media3-cast`, `media3-datasource`, `media3-extractor` depending on used features.
 - Update imports/namespaces from `com.google.android.exoplayer2.*` to `androidx.media3.*`.
 
-### 2. Player layer
+### 2. Player Layer
 
 ```kotlin
 val player = ExoPlayer.Builder(context)
@@ -220,7 +221,7 @@ class PlaybackService : MediaSessionService() {
 - For instrumented/session tests, use `MediaControllerTestRule` and related utilities.
 - Build load tests around Media3 test utilities or your wrapped player; do not use experimental test classes as runtime APIs.
 
-### 7. Migration plan
+### 7. Migration Plan
 
 1. Run old and new players in parallel behind a feature flag.
 2. First migrate the session/service layer (`MediaSession`/`MediaLibrarySession`), then UI.
@@ -229,7 +230,7 @@ class PlaybackService : MediaSessionService() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как мигрировать кастомный `RenderersFactory` или `DataSource.Factory`?
 - Какие изменения требуются для интеграции с Chromecast (MediaRouter → `media3-cast`)?
 - Как обеспечить совместимость с Android Auto 6+ и Media3 session API (включая `MediaLibraryService`)?
@@ -247,7 +248,7 @@ class PlaybackService : MediaSessionService() {
 - https://developer.android.com/guide/topics/media/media3/getting-started
 - https://medium.com/androiddevelopers/media3-from-exoplayer-migration
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[c-android-surfaces]]
 
 ## Related Questions (EN)

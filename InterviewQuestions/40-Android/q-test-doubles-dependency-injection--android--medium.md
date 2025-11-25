@@ -1,34 +1,31 @@
 ---
 id: android-128
 title: Test Doubles Dependency Injection / Тестовые двойники Dependency Injection
-aliases:
-- Test Doubles
-- Тестовые двойники
+aliases: [Test Doubles, Тестовые двойники]
 topic: android
 subtopics:
-- di-hilt
-- testing-unit
+  - di-hilt
+  - testing-unit
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dependency-injection
-- q-what-is-hilt--android--medium
+  - c-dependency-injection
+  - q-hilt-assisted-injection--android--medium
+  - q-kmm-dependency-injection--android--medium
+  - q-test-coverage-quality-metrics--android--medium
+  - q-what-is-hilt--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/di-hilt
-- android/testing-unit
-- dependency-injection
-- difficulty/medium
-- hilt
-- test-doubles
+tags: [android/di-hilt, android/testing-unit, dependency-injection, difficulty/medium, hilt, test-doubles]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +40,7 @@ tags:
 
 Hilt предоставляет мощные возможности для тестирования с dependency injection, позволяя легко заменять production-зависимости на test doubles (mock-и, fake-и, stub-ы) как в инструментальных тестах, так и в локальных unit-тестах.
 
-### Настройка тестов с Hilt
+### Настройка Тестов С Hilt
 
 ```kotlin
 dependencies {
@@ -83,7 +80,7 @@ class RepositoryTest {
 }
 ```
 
-### `@TestInstallIn` для замены модулей
+### `@TestInstallIn` Для Замены Модулей
 
 Позволяет глобально заменить production-модуль тестовым модулем в тестовом рантайме.
 
@@ -117,7 +114,7 @@ object FakeNetworkModule {
 }
 ```
 
-### Создание fakes
+### Создание Fakes
 
 Fake — это рабочая реализация интерфейса с упрощённым и детерминированным поведением для тестов.
 
@@ -175,7 +172,7 @@ class FakeUserRepository : UserRepository {
 
 В локальных coroutine/`Flow`-тестах используйте тестовый диспетчер (`runTest`, `StandardTestDispatcher`), чтобы избежать нестабильного поведения.
 
-### Использование fakes в тестах
+### Использование Fakes В Тестах
 
 ```kotlin
 @Module
@@ -237,7 +234,7 @@ class UserScreenTest {
 }
 ```
 
-### Несколько конфигураций тестовых double-ов
+### Несколько Конфигураций Тестовых Double-ов
 
 ```kotlin
 // Конфигурация 1: быстрый fake
@@ -310,7 +307,7 @@ class SlowNetworkTest {
 }
 ```
 
-### Использование MockK с Hilt
+### Использование MockK С Hilt
 
 ```kotlin
 dependencies {
@@ -343,7 +340,7 @@ class MockTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Предпочитайте fakes вместо mocks для сложных взаимодействий
 2. Используйте `@TestInstallIn` для глобальной замены модулей в тестах
@@ -667,7 +664,7 @@ class MockTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[c-dependency-injection]]
 - [[q-what-is-hilt--android--medium]]
@@ -693,7 +690,7 @@ class MockTest {
 - [Local Unit Tests](https://developer.android.com/training/testing/local-tests)
 - [Android Documentation](https://developer.android.com/docs)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Medium
 - [[q-testing-viewmodels-turbine--android--medium]]

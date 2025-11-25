@@ -1,39 +1,35 @@
 ---
 id: android-259
 title: What Is Dp / Что такое dp
-aliases:
-- Density-independent Pixels
-- Dp
-- Плотность-независимые пиксели
+aliases: [Density-independent Pixels, Dp, Плотность-независимые пиксели]
 topic: android
 subtopics:
-- ui-compose
-- ui-theming
-- ui-views
+  - ui-compose
+  - ui-theming
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-jetpack-compose
-- q-what-are-px-dp-sp--android--easy
-- q-what-are-the-most-important-components-of-compose--android--medium
+  - c-compose-state
+  - c-jetpack-compose
+  - q-compose-core-components--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-what-are-px-dp-sp--android--easy
+  - q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-15
 updated: 2025-10-27
 sources:
-- https://developer.android.com/training/multiscreen/screendensities
-tags:
-- android/ui-compose
-- android/ui-theming
-- android/ui-views
-- density
-- difficulty/easy
-- material-design
+  - https://developer.android.com/training/multiscreen/screendensities
+tags: [android/ui-compose, android/ui-theming, android/ui-views, density, difficulty/easy, material-design]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)

@@ -10,11 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-await--kotlin--medium, q-channel-pipelines--kotlin--hard]
+related: [c-await--kotlin--medium, c-concurrency, q-channel-pipelines--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [kotlin, coroutines, scope, error-handling, difficulty/medium]
+tags: [coroutines, difficulty/medium, error-handling, kotlin, scope]
 
+date created: Friday, October 31st 2025, 6:32:26 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ tags: [kotlin, coroutines, scope, error-handling, difficulty/medium]
 
 Важно: в `supervisorScope` ошибка дочерней корутины не отменяет сиблингов, но если её не обработать локально внутри scope (например, в самой дочерней корутине или при `await()`), весь `supervisorScope` в итоге завершится с ошибкой.
 
-### coroutineScope — Fail-fast стратегия
+### coroutineScope — Fail-fast Стратегия
 
 Если любая дочерняя корутина бросает неперехваченное исключение, все остальные дочерние корутины в этом scope отменяются.
 
@@ -64,7 +66,7 @@ suspend fun useFetchUserData() {
 3. Исключение пробрасывается наверх.
 4. Вся функция `fetchUserData()` завершается с ошибкой.
 
-### supervisorScope — Fail-tolerant стратегия
+### supervisorScope — Fail-tolerant Стратегия
 
 Если одна дочерняя корутина падает, остальные продолжают работу: отмена не распространяется на сиблингов. Однако:
 - упавшая дочерняя корутина завершится с исключением;
@@ -99,7 +101,7 @@ suspend fun useFetchUserDataTolerant() {
 3. `settings.await()` бросит исключение; если оно перехвачено, scope может завершиться успешно.
 4. Если все критичные ошибки обработаны локально, функция может вернуть частичные данные.
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Аспект | `coroutineScope` | `supervisorScope` |
 |--------|------------------|-------------------|
@@ -108,9 +110,9 @@ suspend fun useFetchUserDataTolerant() {
 | Use case | Все или ничего (all-or-nothing) | Частичный успех допустим |
 | Примеры | Транзакции, критичные операции | Загрузка виджетов, метрики |
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: Загрузка экрана профиля (`coroutineScope`)
+#### Пример 1: Загрузка Экрана Профиля (`coroutineScope`)
 
 Требование: если какая-то критичная часть упала, показываем ошибку.
 
@@ -156,7 +158,7 @@ sealed class ProfileUiState {
 }
 ```
 
-#### Пример 2: Дашборд с виджетами (`supervisorScope`)
+#### Пример 2: Дашборд С Виджетами (`supervisorScope`)
 
 Требование: если один виджет упал, показываем остальные.
 
@@ -217,7 +219,7 @@ class DashboardViewModel @Inject constructor(
 }
 ```
 
-#### Пример 3: Загрузка с fallback (`supervisorScope` + `async`)
+#### Пример 3: Загрузка С Fallback (`supervisorScope` + `async`)
 
 ```kotlin
 suspend fun loadUserWithFallback(userId: Int): User = supervisorScope {
@@ -242,7 +244,7 @@ suspend fun loadUserWithFallback(userId: Int): User = supervisorScope {
 }
 ```
 
-### Вложенные scope
+### Вложенные Scope
 
 ```kotlin
 suspend fun complexOperation() = coroutineScope {
@@ -281,7 +283,7 @@ suspend fun <T> Deferred<T>.getOrNull(): T? = try {
 }
 ```
 
-### SupervisorJob vs `supervisorScope`
+### SupervisorJob Vs `supervisorScope`
 
 Похожие, но разные концепции:
 
@@ -328,7 +330,7 @@ suspend fun correct() = supervisorScope {
 - Необработанное исключение дочерней корутины внутри `supervisorScope` приведёт к ошибочному завершению scope при выходе из него, если не перехвачено внутри.
 - Семантика одинакова для `launch` и `async`; важно корректно обрабатывать исключения (например, через `await()` внутри try-catch).
 
-### `withContext` vs `coroutineScope` / `supervisorScope`
+### `withContext` Vs `coroutineScope` / `supervisorScope`
 
 ```kotlin
 // withContext - для смены контекста (Dispatcher, например) + структурное ожидание, как у coroutineScope
@@ -351,7 +353,7 @@ suspend fun loadIndependent() = supervisorScope {
 }
 ```
 
-### Обработка ошибок
+### Обработка Ошибок
 
 ```kotlin
 // coroutineScope: один try-catch на всю операцию
@@ -440,7 +442,7 @@ fun `supervisorScope continues siblings on failure when errors handled`() = runT
 - In `coroutineScope`, if any child coroutine fails with an unhandled exception, the scope is cancelled, all siblings are cancelled, and the exception is rethrown (fail-fast, all-or-nothing).
 - In `supervisorScope`, a failure of one child does not automatically cancel its siblings. Siblings can continue; failed children complete exceptionally and must be observed/handled (for example, via `await()` in `try/catch` or local handling inside the child) if you want partial success. An unhandled child exception inside the `supervisorScope` block will still cause the scope to complete exceptionally when the block finishes.
 
-### Comparative table
+### Comparative Table
 
 | Aspect | `coroutineScope` | `supervisorScope` |
 |--------|------------------|-------------------|
@@ -449,9 +451,9 @@ fun `supervisorScope continues siblings on failure when errors handled`() = runT
 | Typical use case | All-or-nothing operations | Partial success, independent tasks |
 | Examples | Transactions, critical data loading | Dashboard widgets, metrics, best-effort tasks |
 
-### Practical examples
+### Practical Examples
 
-#### Example 1: Profile screen loading (`coroutineScope`)
+#### Example 1: Profile Screen Loading (`coroutineScope`)
 
 Requirement: if any critical part fails, show an error.
 
@@ -496,7 +498,7 @@ sealed class ProfileUiState {
 }
 ```
 
-#### Example 2: Dashboard widgets (`supervisorScope`)
+#### Example 2: Dashboard Widgets (`supervisorScope`)
 
 Requirement: if one widget fails, show the others.
 
@@ -552,7 +554,7 @@ class DashboardViewModel @Inject constructor(
 }
 ```
 
-#### Example 3: Fallback loading (`supervisorScope` + `async`)
+#### Example 3: Fallback Loading (`supervisorScope` + `async`)
 
 ```kotlin
 suspend fun loadUserWithFallback(userId: Int): User = supervisorScope {
@@ -577,7 +579,7 @@ suspend fun loadUserWithFallback(userId: Int): User = supervisorScope {
 }
 ```
 
-### Nested scopes
+### Nested Scopes
 
 ```kotlin
 suspend fun complexOperation() = coroutineScope {
@@ -612,7 +614,7 @@ suspend fun <T> Deferred<T>.getOrNull(): T? = try {
 }
 ```
 
-### SupervisorJob vs `supervisorScope`
+### SupervisorJob Vs `supervisorScope`
 
 ```kotlin
 val scope = CoroutineScope(SupervisorJob())
@@ -651,7 +653,7 @@ Key points:
 - An unhandled child exception inside a `supervisorScope` will cause the scope to complete exceptionally when the block ends, unless it is caught inside the scope.
 - Semantics are consistent for both `launch` and `async`; make sure to observe and handle exceptions properly (for example, via `await()` in `try/catch`).
 
-### `withContext` vs `coroutineScope` / `supervisorScope`
+### `withContext` Vs `coroutineScope` / `supervisorScope`
 
 ```kotlin
 // withContext: switch context (for example, dispatcher) and run a block, structurally similar to coroutineScope
@@ -674,7 +676,7 @@ suspend fun loadIndependent() = supervisorScope {
 }
 ```
 
-### Error handling
+### Error Handling
 
 ```kotlin
 // coroutineScope: one try-catch for the whole group
@@ -772,10 +774,10 @@ fun `supervisorScope continues siblings on failure when errors handled`() = runT
 - [[q-inline-value-classes-performance--kotlin--medium]]
 - [[q-kotlin-inline-functions--kotlin--medium]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чём ключевые отличия такого подхода от Java-подходов к конкурентности?
 - В каких практических сценариях вы бы использовали `coroutineScope` и `supervisorScope`?
 - Как избежать распространённых ошибок при использовании этих scope?
 ## Ссылки (RU)
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)

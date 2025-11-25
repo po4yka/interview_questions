@@ -1,33 +1,32 @@
 ---
 id: android-395
 title: BroadcastReceiver / Компонент BroadcastReceiver
-aliases:
-- BroadcastReceiver
-- Компонент BroadcastReceiver
+aliases: [BroadcastReceiver, Компонент BroadcastReceiver]
 topic: android
 subtopics:
-- broadcast-receiver
+  - broadcast-receiver
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-broadcast-receiver
-- c-intent
-- q-what-each-android-component-represents--android--easy
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-broadcast-receiver
+  - c-intent
+  - q-broadcastreceiver-contentprovider--android--easy
+  - q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium
+  - q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
+  - q-what-each-android-component-represents--android--easy
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/broadcast-receiver
-- difficulty/easy
-- intent
-- system-events
+tags: [android/broadcast-receiver, difficulty/easy, intent, system-events]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +49,7 @@ tags:
 - `BroadcastReceiver` обрабатывает только те `Intent`-ы, чьи `action`/`data`/`category` соответствуют его `intent-filter`.
 - `onReceive()` вызывается в главном потоке — обработка должна быть быстрой.
 
-### Основная концепция
+### Основная Концепция
 
 `BroadcastReceiver` реализует шаблон publish-subscribe:
 
@@ -72,9 +71,9 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 }
 ```
 
-### Типы широковещательных сообщений по источнику
+### Типы Широковещательных Сообщений По Источнику
 
-#### 1. Системные broadcast-ы
+#### 1. Системные Broadcast-ы
 
 Android отправляет broadcast-ы при различных системных событиях. Пример ресивера:
 
@@ -112,7 +111,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
 
 Всегда проверяйте актуальную документацию, чтобы убедиться, что нужный `action` можно получать (особенно из манифеста).
 
-#### 2. Пользовательские (кастомные) broadcast-ы
+#### 2. Пользовательские (кастомные) Broadcast-ы
 
 Приложение может отправлять собственные broadcast-ы, в том числе обычные и упорядоченные:
 
@@ -145,9 +144,9 @@ class CustomBroadcastReceiver : BroadcastReceiver() {
 
 ---
 
-### Методы регистрации
+### Методы Регистрации
 
-#### 1. Статическая регистрация (в манифесте)
+#### 1. Статическая Регистрация (в манифесте)
 
 Объявление в `AndroidManifest.xml` позволяет системе запускать процесс приложения при получении подходящего broadcast-а.
 
@@ -179,7 +178,7 @@ class CustomBroadcastReceiver : BroadcastReceiver() {
 - работает даже когда процесс приложения не запущен (для разрешенных действий);
 - ограничен для многих неявных broadcast-ов, начиная с API 26.
 
-#### 2. Динамическая регистрация (во время выполнения)
+#### 2. Динамическая Регистрация (во Время выполнения)
 
 Регистрация в коде через `Context.registerReceiver`. Ресивер активен только пока жив компонент (например, `Activity` или `Service`), который его зарегистрировал.
 
@@ -224,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-### Типы доставки broadcast-ов
+### Типы Доставки Broadcast-ов
 
 #### Обычные (normal)
 
@@ -271,7 +270,7 @@ class HighPriorityReceiver : BroadcastReceiver() {
 
 Примечание: упорядоченные broadcast-ы и `abortBroadcast()` существенно ограничены в современных версиях Android; перед использованием проверяйте документацию.
 
-#### Локальные broadcast-ы (legacy)
+#### Локальные Broadcast-ы (legacy)
 
 Ранее использовались через `LocalBroadcastManager`:
 
@@ -284,7 +283,7 @@ LocalBroadcastManager.getInstance(context)
 
 ---
 
-### Пример: отслеживание изменений сети (legacy-подход)
+### Пример: Отслеживание Изменений Сети (legacy-подход)
 
 Исторически приложения слушали `ConnectivityManager.CONNECTIVITY_ACTION` через `BroadcastReceiver`:
 
@@ -310,7 +309,7 @@ class NetworkChangeReceiver : BroadcastReceiver() {
 
 ---
 
-### Ограничения фонового выполнения (Android 8.0+)
+### Ограничения Фонового Выполнения (Android 8.0+)
 
 Начиная с Android 8.0 (API 26), введены ограничения фонового выполнения и implicit broadcast-ов:
 
@@ -340,7 +339,7 @@ WorkManager.getInstance(context).enqueue(work)
 
 ---
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Держите `onReceive()` максимально коротким:
 
@@ -355,7 +354,7 @@ class MyReceiver : BroadcastReceiver() {
 }
 ```
 
-2. Всегда корректно снимайте регистрацию динамических ресиверов:
+1. Всегда корректно снимайте регистрацию динамических ресиверов:
 
 ```kotlin
 override fun onDestroy() {
@@ -368,9 +367,9 @@ override fun onDestroy() {
 }
 ```
 
-3. По возможности предпочитайте внутриприложечные механизмы (колбэки, shared `ViewModel`, корутины и т.п.) вместо глобальных широковещательных сообщений.
+1. По возможности предпочитайте внутриприложечные механизмы (колбэки, shared `ViewModel`, корутины и т.п.) вместо глобальных широковещательных сообщений.
 
-4. Правильно задавайте `android:exported`:
+2. Правильно задавайте `android:exported`:
 
 ```xml
 <!-- Не доступен другим приложениям -->
@@ -385,7 +384,7 @@ override fun onDestroy() {
     android:permission="com.example.MY_PERMISSION" />
 ```
 
-5. Не полагайтесь на устаревшие или ограниченные broadcast-ы без проверки документации для целевой API-версии.
+1. Не полагайтесь на устаревшие или ограниченные broadcast-ы без проверки документации для целевой API-версии.
 
 ---
 
@@ -698,7 +697,7 @@ class MyReceiver : BroadcastReceiver() {
 }
 ```
 
-2. Always unregister dynamic receivers:
+1. Always unregister dynamic receivers:
 
 ```kotlin
 override fun onDestroy() {
@@ -711,9 +710,9 @@ override fun onDestroy() {
 }
 ```
 
-3. Use in-app mechanisms (callbacks, shared ViewModels, coroutines, etc.) instead of global broadcasts when possible. Only use broadcasts when you truly need the decoupled, system-level pattern.
+1. Use in-app mechanisms (callbacks, shared ViewModels, coroutines, etc.) instead of global broadcasts when possible. Only use broadcasts when you truly need the decoupled, system-level pattern.
 
-4. Set `android:exported` correctly:
+2. Set `android:exported` correctly:
 
 ```xml
 <!-- Not accessible by other apps -->
@@ -728,7 +727,7 @@ override fun onDestroy() {
     android:permission="com.example.MY_PERMISSION" />
 ```
 
-5. Do not rely on deprecated or restricted broadcasts without checking the documentation for your target API level.
+1. Do not rely on deprecated or restricted broadcasts without checking the documentation for your target API level.
 
 ---
 
@@ -762,7 +761,7 @@ while following modern best practices and avoiding reliance on deprecated or res
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как ограничения фонового выполнения Android 8.0+ влияют на использование `BroadcastReceiver`?
 - Когда стоит использовать broadcast вместо внутриприложечных механизмов коммуникации?
@@ -788,7 +787,7 @@ while following modern best practices and avoiding reliance on deprecated or res
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

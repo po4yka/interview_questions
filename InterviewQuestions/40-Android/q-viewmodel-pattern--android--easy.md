@@ -1,36 +1,33 @@
 ---
 id: android-384
 title: ViewModel Pattern / Паттерн ViewModel
-aliases:
-- ViewModel Pattern
-- Паттерн ViewModel
+aliases: [ViewModel Pattern, Паттерн ViewModel]
 topic: android
 subtopics:
-- architecture-mvvm
-- lifecycle
+  - architecture-mvvm
+  - lifecycle
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-android-lifecycle
-- q-viewmodel-vs-onsavedinstancestate--android--medium
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-android
+  - c-android-lifecycle
+  - q-mvp-pattern--android--medium
+  - q-mvvm-pattern--android--medium
+  - q-viewmodel-vs-onsavedinstancestate--android--medium
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
+  - q-what-is-viewmodel--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/architecture-mvvm
-- android/lifecycle
-- architecture-mvvm
-- difficulty/easy
-- mvvm
-- viewmodel
+tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, difficulty/easy, mvvm, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -48,7 +45,7 @@ tags:
 - Учитывает жизненный цикл в том смысле, что AndroidX `ViewModel` сохраняется при изменениях конфигурации, пока жив её scope (`Activity`, `Fragment` или другой владелец), и очищается через `onCleared()` когда scope уничтожается.
 - Обеспечивает разделение ответственности и повышает тестируемость, так как не должен напрямую зависеть от UI-компонентов Android.
 
-### Основные Характеристики Паттерна MVVM с `ViewModel`
+### Основные Характеристики Паттерна MVVM С `ViewModel`
 
 **Model-`View`-`ViewModel` (MVVM):**
 - **Model**: Данные и бизнес-логика приложения.
@@ -60,7 +57,7 @@ tags:
 - **`View`**: UI-компоненты, отвечающие только за рендеринг и ввод.
 - **`ViewModel`**: Хранит состояние, предоставляет его как observable-данные и вызывает Model; не хранит ссылки на конкретные классы `View`.
 
-### Преимущества использования `ViewModel` / Benefits
+### Преимущества Использования `ViewModel` / Benefits
 
 1. **Разделение ответственности (Separation of Concerns):**
    - `View` отвечает за отображение и ввод пользователя.
@@ -160,7 +157,7 @@ sealed class UiState<out T> {
 }
 ```
 
-### Ключевые Принципы MVVM в Android / Key MVVM Principles in Android
+### Ключевые Принципы MVVM В Android / Key MVVM Principles in Android
 
 1. **Однонаправленный поток данных (Unidirectional data flow):**
    - `View` наблюдает за данными из `ViewModel`.
@@ -175,7 +172,7 @@ sealed class UiState<out T> {
 4. **Тестируемость (Testability):**
    - `ViewModel` легко тестировать изолированно от UI и Android framework.
 
-### Сравнение с другими паттернами / Comparison with other patterns
+### Сравнение С Другими Паттернами / Comparison with other Patterns
 
 **MVVM vs MVP:**
 - MVP: Presenter знает о `View` и управляет ею через интерфейс.
@@ -210,7 +207,7 @@ In Android MVVM, the `ViewModel` represents the "`ViewModel`" layer of the archi
 - **`View`**: UI components responsible only for rendering and user interaction.
 - **`ViewModel`**: Holds UI state, exposes it as observable data, and coordinates calls to the Model, without knowing concrete `View` implementations.
 
-### Benefits of using `ViewModel`
+### Benefits of Using `ViewModel`
 
 1. **Separation of Concerns:**
    - `View` handles rendering and user input only.
@@ -325,7 +322,7 @@ sealed class UiState<out T> {
 4. **Testability:**
    - `ViewModel` is easy to test in isolation from UI and the Android framework.
 
-### Comparison with other patterns
+### Comparison with other Patterns
 
 **MVVM vs MVP:**
 - MVP: Presenter knows about the `View` and controls it through an interface.

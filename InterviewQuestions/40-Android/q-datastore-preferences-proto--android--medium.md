@@ -16,11 +16,15 @@ moc: moc-android
 related:
   - c-coroutines
   - q-android-storage-types--android--medium
+  - q-save-data-outside-fragment--android--medium
+  - q-sharedpreferences-definition--android--easy
 created: 2025-10-20
 updated: 2025-11-02
 tags: [android/datastore, datastore, difficulty/medium, preferences, proto-datastore, storage]
 sources:
   - https://developer.android.com/topic/libraries/architecture/datastore
+date created: Saturday, November 1st 2025, 12:46:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

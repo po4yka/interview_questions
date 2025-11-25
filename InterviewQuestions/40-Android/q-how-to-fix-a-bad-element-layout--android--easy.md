@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts, performance]
 
+date created: Saturday, November 1st 2025, 12:46:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -154,7 +156,7 @@ class OptimizedView(context: Context) : View(context) {
 }
 ```
 
-### Инструменты диагностики
+### Инструменты Диагностики
 
 - Layout Inspector: `View` > Tool Windows > Layout Inspector
 - GPU Overdraw: Developer Options > Debug GPU overdraw
@@ -286,7 +288,7 @@ class OptimizedView(context: Context) : View(context) {
 }
 ```
 
-### Diagnostic tools
+### Diagnostic Tools
 
 - Layout Inspector: `View` > Tool Windows > Layout Inspector
 - GPU Overdraw: Developer Options > Debug GPU overdraw
@@ -294,7 +296,7 @@ class OptimizedView(context: Context) : View(context) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как профилировать время инфлейта layout в `RecyclerView`?
 - Когда стоит использовать `ConstraintLayout` вместо `LinearLayout`?
@@ -318,13 +320,13 @@ class OptimizedView(context: Context) : View(context) {
 
 - Android Developer Documentation: Layout optimization best practices
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (Проще)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Базовая оптимизация RecyclerView
 - [[q-viewmodel-pattern--android--easy]] - Разделение ответственности в UI
 
-### Связанные (Такой же уровень)
+### Связанные (Такой Же уровень)
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - Методы перерисовки `View`
 - [[q-performance-optimization-android--android--medium]] - Общие стратегии оптимизации производительности
 

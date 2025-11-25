@@ -15,13 +15,18 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - c-jetpack-compose
   - c-compose-recomposition
+  - c-jetpack-compose
   - q-android-jetpack-overview--android--easy
+  - q-compose-custom-animations--android--medium
+  - q-compose-gesture-detection--android--medium
+  - q-compose-semantics--android--medium
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-animation, android/ui-compose, animation, compose, difficulty/medium]
 sources: []
+date created: Saturday, November 1st 2025, 1:03:10 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -86,7 +91,7 @@ Crossfade(targetState = screen) { currentScreen ->
 
 **Применение**: прототипирование, простые переключения экранов.
 
-### Ключевые различия
+### Ключевые Различия
 
 - AnimatedVisibility: управляет добавлением/удалением из композиции, освобождает ресурсы после завершения hide-анимации.
 - AnimatedContent: анимированное переключение состояний с гибкими переходами, старое и новое содержимое участвуют в композиции во время анимации.
@@ -146,7 +151,7 @@ Crossfade(targetState = screen) { currentScreen ->
 
 **Use case**: prototyping, simple screen switching.
 
-### Key differences
+### Key Differences
 
 - AnimatedVisibility: controls appearance/disappearance and removes content from composition after the hide animation.
 - AnimatedContent: animates transitions between states with flexible specs; old and new content coexist during the transition.
@@ -154,7 +159,7 @@ Crossfade(targetState = screen) { currentScreen ->
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `AnimatedVisibility` обрабатывает прерывания, когда видимость меняется во время анимации?
 - Каковы последствия для производительности, когда старое и новое содержимое одновременно участвуют в композиции в `AnimatedContent` / `Crossfade`?
@@ -190,7 +195,7 @@ Crossfade(targetState = screen) { currentScreen ->
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-jetpack-overview--android--easy]]

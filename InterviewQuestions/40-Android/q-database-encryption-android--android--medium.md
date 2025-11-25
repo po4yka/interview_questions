@@ -17,11 +17,15 @@ moc: moc-android
 related:
   - c-android-keystore
   - q-android-security-best-practices--android--medium
+  - q-android-security-practices-checklist--android--medium
+  - q-data-encryption-at-rest--android--medium
 created: 2025-10-20
 updated: 2025-11-11
 tags: [android/keystore-crypto, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
 sources:
   - "https://developer.android.com/topic/security/data"
+date created: Saturday, November 1st 2025, 1:27:53 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

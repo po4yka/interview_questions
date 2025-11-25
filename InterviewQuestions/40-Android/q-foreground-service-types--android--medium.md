@@ -1,29 +1,33 @@
 ---
 id: android-057
 title: Foreground Service Types / Foreground Service
-aliases: [Foreground Service Types, Foreground Service]
+aliases: [Foreground Service, Foreground Service Types]
 topic: android
 subtopics:
-- background-execution
-- service
+  - background-execution
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-background-tasks
-- q-android-service-types--android--easy
-- q-workmanager-vs-alternatives--android--medium
+  - c-background-tasks
+  - q-android-service-types--android--easy
+  - q-background-vs-foreground-service--android--medium
+  - q-service-types-android--android--easy
+  - q-workmanager-vs-alternatives--android--medium
 created: 2025-10-12
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/medium, foreground-service, notifications]
 sources:
-- "https://developer.android.com/guide/components/foreground-services"
+  - "https://developer.android.com/guide/components/foreground-services"
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +40,7 @@ sources:
 
 ## Ответ (RU)
 
-### Теоретические основы
+### Теоретические Основы
 
 **Foreground `Services`** — это сервисы, которые выполняются с постоянным уведомлением, позволяющим долгим и важным операциям продолжаться в фоне. Они снижают вероятность того, что система выгрузит процесс во время критически важной работы, но не дают абсолютной гарантии.
 
@@ -178,7 +182,7 @@ class QuickUploadService : Service() {
 
 Замечание: API `Service` не предоставляет `onTimeout()` для SHORT_SERVICE; таймауты применяются системой. Если нужен пользовательский таймаут, реализуйте его самостоятельно (корутины/handlers) и вызывайте `stopSelf()`.
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 - Минимизируйте время работы foreground-сервиса; используйте `SHORT_SERVICE`, когда это уместно, и завершайте работу как можно быстрее
 - Обосновывайте использование; `SPECIAL_USE` требует серьёзного обоснования и декларации в Play Console
@@ -186,7 +190,7 @@ class QuickUploadService : Service() {
 - Комбинируйте типы при необходимости через побитовое OR во флагах `startForeground` и указывайте несколько типов в манифесте через пробел
 - Тестируйте на реальных устройствах разных API-уровней; эмуляторы могут не отражать все ограничения FGS
 
-### Частые ошибки (RU)
+### Частые Ошибки (RU)
 
 - Несвоевременный вызов `startForeground()`: отсутствие вызова в течение 5 секунд после `startForegroundService()` приводит к ANR
 - Отсутствие постоянного уведомления: сервис теряет foreground-статус и может быть остановлен системой
@@ -356,7 +360,7 @@ Note: Android's `Service` API does not provide an `onTimeout()` callback; SHORT_
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдёт, если не вызвать `startForeground()` в течение 5 секунд?
 - Как обрабатывать изменение типов сервиса во время выполнения?
@@ -380,13 +384,13 @@ Note: Android's `Service` API does not provide an `onTimeout()` callback; SHORT_
 - https://developer.android.com/guide/components/foreground-services
 - https://developer.android.com/about/versions/14/changes/fgs-types-required
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-service-types--android--easy]] - Типы `Service` и их жизненный цикл
 - Базовое понимание уведомлений и notification channels в Android
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-workmanager-vs-alternatives--android--medium]] - Сравнение подходов к фоновой работе
 - Разбор trade-off между `Service` и WorkManager
 

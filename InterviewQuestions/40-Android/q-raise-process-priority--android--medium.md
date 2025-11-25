@@ -1,40 +1,35 @@
 ---
 id: android-147
 title: Raise Process Priority / Повышение приоритета процесса
-aliases:
-- Raise Process Priority
-- Повышение приоритета процесса
+aliases: [Raise Process Priority, Повышение приоритета процесса]
 topic: android
 subtopics:
-- lifecycle
-- processes
-- service
+  - lifecycle
+  - processes
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- c-lifecycle
-- q-network-operations-android--android--medium
-- q-what-events-are-activity-methods-tied-to--android--medium
+  - c-android-components
+  - c-lifecycle
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-how-application-priority-is-determined-by-the-system--android--hard
+  - q-network-operations-android--android--medium
+  - q-what-events-are-activity-methods-tied-to--android--medium
 created: 2024-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/lifecycle
-- android/processes
-- android/service
-- difficulty/medium
-- foreground-service
-- lifecycle
-- process-priority
-- services
+tags: [android/lifecycle, android/processes, android/service, difficulty/medium, foreground-service, lifecycle, process-priority, services]
 
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -291,7 +286,7 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если не вызвать `startForeground()` в течение 5 секунд на Android 8.0+?
 - Чем приоритет bound service отличается от foreground service?
@@ -315,17 +310,17 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 - Android Documentation: Services and Foreground Services
 - Android Documentation: Process and `Application` Lifecycle
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-android-components]]
 - [[c-lifecycle]]
 
-### Предварительные вопросы
+### Предварительные Вопросы
 - [[q-what-events-are-activity-methods-tied-to--android--medium]] — понимание жизненного цикла `Activity` помогает при работе с сервисами
 
-### Связанные вопросы
+### Связанные Вопросы
 - [[q-network-operations-android--android--medium]] — типичный кейс фоновых сервисов
 
 ### Продвинутое

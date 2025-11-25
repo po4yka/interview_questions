@@ -16,6 +16,8 @@ updated: 2025-11-11
 sources: []
 tags: [android/fragment, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 1:31:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -374,7 +376,7 @@ class CorrectFragment : Fragment() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что происходит с аргументами фрагмента при изменении конфигурации?
 2. Почему `Parcelable` предпочтительнее `Serializable` в Android?
@@ -400,12 +402,12 @@ class CorrectFragment : Fragment() {
 - [Android Developer Guide: Fragments](https://developer.android.com/guide/fragments)
 - [Android Developer Guide: `Parcelable`](https://developer.android.com/reference/android/os/Parcelable)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-app-components--android--easy]]
 
-### Того же уровня сложности
+### Того Же Уровня Сложности
 
 ### Продвинутые (сложнее)
 

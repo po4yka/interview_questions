@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-006
 title: Play Integrity API / Play Integrity API
-aliases:
-  - Play Integrity
-  - Play Integrity Attestation
+aliases: [Play Integrity, Play Integrity Attestation]
 kind: concept
 summary: Google Play service providing device and account integrity verdicts replacing SafetyNet
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - security
-  - integrity
-  - attestation
+tags: [android, attestation, concept, integrity, security]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

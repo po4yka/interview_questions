@@ -1,34 +1,33 @@
 ---
 id: android-156
 title: Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный цикл Fragment с Activity или независим
-aliases:
-- Fragment Lifecycle Connection
-- Связь жизненного цикла Fragment
+aliases: [Fragment Lifecycle Connection, Связь жизненного цикла Fragment]
 topic: android
 subtopics:
-- fragment
-- lifecycle
+  - fragment
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-fragments
-- c-lifecycle
-- q-how-to-add-fragment-synchronously-asynchronously--android--medium
+  - c-fragments
+  - c-lifecycle
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-how-does-activity-lifecycle-work--android--medium
+  - q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
+  - q-how-to-add-fragment-synchronously-asynchronously--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android
-- android/fragment
-- android/lifecycle
-- difficulty/medium
+tags: [android, android/fragment, android/lifecycle, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -331,7 +330,7 @@ supportFragmentManager.beginTransaction()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как ведет себя жизненный цикл `Fragment` при изменениях конфигурации?
 - В чем разница между `lifecycle` и `viewLifecycleOwner`?
@@ -357,7 +356,7 @@ supportFragmentManager.beginTransaction()
 - Android Developer Docs: `Fragment` Lifecycle
 - Android Developer Docs: ViewLifecycleOwner
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

@@ -15,6 +15,8 @@ tags: [android/performance-memory, android/profiling, difficulty/medium, perform
 moc: moc-android
 related: [c-memory-management, q-how-to-fix-a-bad-element-layout--android--easy, q-list-to-detail-navigation--android--medium]
 sources: []
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -211,7 +213,7 @@ override fun onTrimMemory(level: Int) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как диагностировать утечки памяти с помощью Android Studio Profiler, heap dump-ов и отслеживания аллокаций?
 - Когда следует использовать `LruCache` по сравнению с `DiskLruCache` для разных типов данных?
@@ -235,7 +237,7 @@ override fun onTrimMemory(level: Int) {
 - https://developer.android.com/topic/performance/memory
 - https://developer.android.com/topic/performance/graphics/manage-memory
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-how-to-fix-a-bad-element-layout--android--easy]]

@@ -2,8 +2,8 @@
 id: lang-003
 title: "Java Marker Interfaces / Маркерные интерфейсы Java"
 aliases: [Java Marker Interfaces, Маркерные интерфейсы Java]
-topic: programming-languages
-subtopics: [java, interfaces]
+topic: kotlin
+subtopics: [interfaces, java]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-backend
 related: [c-kotlin, q-java-all-classes-inherit-from-object--programming-languages--easy]
 created: 2024-10-13
 updated: 2025-11-11
-tags: [java, interfaces, marker-interface, serializable, cloneable, randomaccess, difficulty/medium]
+tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, randomaccess, serializable]
 
+date created: Tuesday, November 25th 2025, 12:55:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -383,7 +385,7 @@ At runtime or in frameworks, you can then check for the presence of `@AuditableM
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия маркерных интерфейсов и аннотаций как механизмов метаданных в Java?
 - Когда уместнее использовать маркерные интерфейсы, а когда — аннотации?
@@ -403,7 +405,7 @@ At runtime or in frameworks, you can then check for the presence of `@AuditableM
 
 - Official Java SE documentation for `Serializable`, `Cloneable`, `Remote`, and `RandomAccess`.
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-java-all-classes-inherit-from-object--programming-languages--easy]] — Наследование от `Object` в Java.
 

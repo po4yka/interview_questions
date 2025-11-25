@@ -1,34 +1,31 @@
 ---
 id: android-043
 title: Gradle Build Optimization / Оптимизация сборки Gradle
-aliases:
-- Gradle Build Optimization
-- Оптимизация сборки Gradle
+aliases: [Gradle Build Optimization, Оптимизация сборки Gradle]
 topic: android
 subtopics:
-- build-variants
-- dependency-management
-- gradle
+  - build-variants
+  - dependency-management
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-app-bundle
-- q-android-build-optimization--android--medium
+  - c-app-bundle
+  - q-android-build-optimization--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-gradle-build-system--android--medium
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
-tags:
-- android/build-variants
-- android/dependency-management
-- android/gradle
-- android/ci-cd
-- difficulty/medium
+tags: [android/build-variants, android/ci-cd, android/dependency-management, android/gradle, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:04:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +38,7 @@ tags:
 
 ## Ответ (RU)
 
-### Ключевые стратегии
+### Ключевые Стратегии
 
 **1. Configuration Cache** — один из крупнейших выигрышей для чистых сборок
 - Кэширует фазу конфигурации; последующие сборки пропускают повторную конфигурацию
@@ -117,7 +114,7 @@ compose = "<version>"
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 ```
 
-### Профилирование и измерение
+### Профилирование И Измерение
 
 Используйте build scans для измерения и поиска узких мест:
 ```bash
@@ -143,7 +140,7 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
       --no-daemon  # ✅ Типично для короткоживущих CI-агентов; адаптируйте, если ваш CI эффективно переиспользует daemon
 ```
 
-### Частые ошибки
+### Частые Ошибки
 
 - Динамические версии (`1.+`) ухудшают эффективность кэшей
 - I/O во время конфигурации и изменяемое глобальное состояние ломают configuration cache

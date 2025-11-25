@@ -14,7 +14,10 @@ related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [android, backward-compatibility, compilation, difficulty/medium, java, kotlin]
+date created: Friday, October 31st 2025, 6:34:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое desugaring в Android и как он работает?
 
@@ -40,7 +43,7 @@ Kotlin-компилятор сам по себе компилирует Kotlin-�
 - language desugaring (языковые конструкции Java 8+) — работает для низких `minSdk` (ниже 21 тоже),
 - Core Library Desugaring (Java 8+ API) — официально поддерживается для проектов с `minSdk 21+`.
 
-### Зачем нужен Desugaring?
+### Зачем Нужен Desugaring?
 
 Android-устройства используют разные версии Android Runtime (ART или старую Dalvik VM). Исторически часть устройств не имела поддержки многих Java 8+ языковых конструкций и стандартных API.
 
@@ -139,7 +142,7 @@ fun printOptional() {
 
 `desugar_jdk_libs` поставляет реализации нужных API, а D8/R8 переписывает байткод так, чтобы вызовы шли на них.
 
-### Как работает Desugaring?
+### Как Работает Desugaring?
 
 Упрощённо для Kotlin/Java-проекта под Android:
 
@@ -164,7 +167,7 @@ JVM bytecode → D8/R8:
 DEX bytecode + desugar_jdk_libs → APK/AAB
 ```
 
-### Какие API поддерживаются через Core Library Desugaring?
+### Какие API Поддерживаются Через Core Library Desugaring?
 
 (актуальные диапазоны зависят от версии `desugar_jdk_libs`, ниже типичный пример для minSdk 21+):
 
@@ -177,7 +180,7 @@ DEX bytecode + desugar_jdk_libs → APK/AAB
 
 Важно: ограничение по `minSdk 21+` относится именно к Core Library Desugaring (API), а не к language desugaring Java.
 
-### Пример: работа с датами без desugaring
+### Пример: Работа С Датами Без Desugaring
 
 **Без Core Library Desugaring (старый способ, подходит и для очень низких minSdk):**
 
@@ -249,7 +252,7 @@ fun filterUsersWithDesugaring(users: java.util.List<User>) {
 
 ### Альтернативы Desugaring
 
-#### 1. Использование ThreeTenABP (для `java.time`, особенно при очень низком minSdk)
+#### 1. Использование ThreeTenABP (для `java.time`, Особенно При Очень Низком minSdk)
 
 ```gradle
 dependencies {
@@ -280,7 +283,7 @@ android {
 }
 ```
 
-### Проверка работы Desugaring
+### Проверка Работы Desugaring
 
 ```kotlin
 import java.time.LocalDate
@@ -310,7 +313,7 @@ class DesugaringExample {
 }
 ```
 
-### Как включить Desugaring: полная конфигурация
+### Как Включить Desugaring: Полная Конфигурация
 
 ```gradle
 // build.gradle (Module: app)
@@ -343,7 +346,7 @@ dependencies {
 }
 ```
 
-### Практический пример: до и после Desugaring
+### Практический Пример: До И После Desugaring
 
 **До (без Core Library Desugaring, Java 6/7 стиль):**
 
@@ -563,7 +566,7 @@ fun printOptional() {
 
 Remember: the `minSdk 21+` constraint is specific to Core Library Desugaring for these APIs; language desugaring is more broadly applicable.
 
-### Example: Working with Dates Without vs With Desugaring
+### Example: Working with Dates Without Vs With Desugaring
 
 Without Core Library Desugaring (legacy style, also fine for very low `minSdk`):
 
@@ -636,7 +639,7 @@ fun filterUsersWithDesugaring(users: java.util.List<User>) {
 
 ### Alternatives to Desugaring
 
-#### 1. Using ThreeTenABP (for `java.time`, especially with very low `minSdk`)
+#### 1. Using ThreeTenABP (for `java.time`, Especially with Very Low `minSdk`)
 
 ```gradle
 dependencies {
@@ -800,7 +803,7 @@ It is less critical or may be unnecessary when:
 - Every kilobyte of APK size matters and you are not using those APIs.
 - You rely on alternatives such as ThreeTenABP for very low `minSdk`.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между language desugaring и Core Library Desugaring?
 - Как взаимодействует Java/Kotlin desugaring с Kotlin-компилятором и `jvmTarget`?
@@ -820,7 +823,7 @@ It is less critical or may be unnecessary when:
 
 - https://kotlinlang.org/docs/home.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
 

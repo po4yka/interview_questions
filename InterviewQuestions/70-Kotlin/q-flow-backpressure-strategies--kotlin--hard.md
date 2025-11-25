@@ -12,11 +12,13 @@ source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-concurrency, q-kotlin-flow-basics--kotlin--medium]
+related: [c-concurrency, c-kotlin, q-kotlin-flow-basics--kotlin--medium]
 created: 2023-10-11
 updated: 2025-11-09
-tags: [kotlin, flow, concurrency, performance, difficulty/hard]
+tags: [concurrency, difficulty/hard, flow, kotlin, performance]
 
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [kotlin, flow, concurrency, performance, difficulty/hard]
 
 Противодавление возникает, когда producer эмитит значения быстрее, чем consumer может их обработать. По умолчанию в холодном `Flow` producer и consumer связаны: `emit` приостанавливается, пока `collect` не обработает значение. `Flow` предоставляет несколько операторов для изменения этого поведения.
 
-### Понимание противодавления
+### Понимание Противодавления
 
 ```kotlin
 // Проблема: медленный collector заставляет producer ждать каждый emit
@@ -48,7 +50,7 @@ flow {
 // Producer приостанавливается на каждом emit, ожидая collector
 ```
 
-### Стратегия 1: buffer() - Буферизованная обработка
+### Стратегия 1: buffer() - Буферизованная Обработка
 
 Оператор `buffer` добавляет буфер между producer и consumer, позволяя им выполняться параллельно в разных корутинах.
 
@@ -59,7 +61,7 @@ public fun <T> Flow<T>.buffer(
 ): Flow<T>
 ```
 
-#### Базовое использование buffer
+#### Базовое Использование Buffer
 
 ```kotlin
 fun demonstrateBuffer() = runBlocking {
@@ -103,7 +105,7 @@ fun demonstrateBuffer() = runBlocking {
 fun timestamp(start: Long) = System.currentTimeMillis() - start
 ```
 
-#### Стратегии переполнения буфера (пример)
+#### Стратегии Переполнения Буфера (пример)
 
 ```kotlin
 // 1. SUSPEND (по умолчанию) - при переполнении буфера приостанавливаем producer, значения не теряются
@@ -130,7 +132,7 @@ flow {
 // Некоторые из последних эмиссий будут отброшены при полном буфере.
 ```
 
-### Стратегия 2: conflate() - Только последнее значение
+### Стратегия 2: conflate() - Только Последнее Значение
 
 Оператор `conflate` при медленном collector сохраняет только последнее значение, пропуская промежуточные. Концептуально это похоже на отдельную корутину, которая "переписывает" значение в буфере, и до медленного collector-а доходит только актуальное значение.
 
@@ -159,7 +161,7 @@ fun demonstrateConflate() = runBlocking {
 */
 ```
 
-### Стратегия 3: collectLatest() - Отмена предыдущей обработки
+### Стратегия 3: collectLatest() - Отмена Предыдущей Обработки
 
 Оператор `collectLatest` отменяет блок обработки предыдущего значения при поступлении нового. Значения по-прежнему эмитятся, но их обработка может быть отменена.
 
@@ -188,7 +190,7 @@ fun demonstrateCollectLatest() = runBlocking {
 */
 ```
 
-### Сравнение стратегий (концептуально)
+### Сравнение Стратегий (концептуально)
 
 | Стратегия | Конкурентность | Потерянные значения / отмена | Применение | Производительность |
 |-----------|----------------|------------------------------|------------|--------------------|
@@ -197,7 +199,7 @@ fun demonstrateCollectLatest() = runBlocking {
 | **conflate()** | Да | Пропускает промежуточные | Важно только последнее состояние | Высокая пропускная способность |
 | **collectLatest()** | Да | Отменяет обработку старых | Отмена устаревшей работы | Меньше бесполезной работы |
 
-### Сравнение производительности (иллюстративный бенчмарк)
+### Сравнение Производительности (иллюстративный бенчмарк)
 
 Ниже приведён иллюстративный пример бенчмарка. Конкретные числа зависят от окружения и таймингов; важно относительное поведение стратегий. Эти функции — `suspend`, их нужно вызывать из корутинного контекста (например, `runBlocking` в `main`/тесте).
 
@@ -272,9 +274,9 @@ suspend fun benchmarkStrategies(): List<BenchmarkResult> {
 }
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
-#### Пример 1: Поиск с collectLatest / flatMapLatest
+#### Пример 1: Поиск С collectLatest / flatMapLatest
 
 ```kotlin
 class SearchViewModel : ViewModel() {
@@ -301,7 +303,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-#### Пример 2: Данные датчика с conflate
+#### Пример 2: Данные Датчика С Conflate
 
 ```kotlin
 class TemperatureSensor {
@@ -324,7 +326,7 @@ class TemperatureSensor {
 }
 ```
 
-#### Пример 3: Обработка файла с buffer
+#### Пример 3: Обработка Файла С Buffer
 
 ```kotlin
 suspend fun processLargeFile(file: File) {
@@ -336,7 +338,7 @@ suspend fun processLargeFile(file: File) {
 }
 ```
 
-### Пользовательские стратегии противодавления
+### Пользовательские Стратегии Противодавления
 
 ```kotlin
 /**
@@ -384,7 +386,7 @@ highFrequencyData()
     .collect { updateUI(it) }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбирайте стратегию по семантике**:
    ```kotlin
@@ -431,7 +433,7 @@ highFrequencyData()
    }
    ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Использование conflate, когда нужны все значения**:
    ```kotlin

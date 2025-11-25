@@ -1,34 +1,31 @@
 ---
 id: android-290
 title: Activity Methods and Events / Методы Activity и события
-aliases:
-- Activity Methods Events
-- Методы Activity
+aliases: [Activity Methods Events, Методы Activity]
 topic: android
 subtopics:
-- activity
-- lifecycle
+  - activity
+  - lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity-lifecycle
-- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-activity-lifecycle
+  - q-activity-lifecycle-methods--android--medium
+  - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/lifecycle
-- difficulty/medium
-- events
-- lifecycle
+tags: [android/activity, android/lifecycle, difficulty/medium, events, lifecycle]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +38,7 @@ tags:
 
 Методы жизненного цикла `Activity` привязаны к конкретным системным событиям, которые происходят в течение жизни `Activity`. Эти методы позволяют реагировать на изменения состояния и корректно управлять ресурсами.
 
-### Основные события и методы жизненного цикла
+### Основные События И Методы Жизненного Цикла
 
 ```
          Activity Lifecycle Events
@@ -62,7 +59,7 @@ onStop()    Activity больше не видна
 onDestroy() Activity уничтожена
 ```
 
-#### 1. onCreate() — событие создания `Activity`
+#### 1. onCreate() — Событие Создания `Activity`
 
 Вызывается когда:
 - `Activity` создаётся впервые;
@@ -98,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-#### 2. onStart() — событие появления на экране
+#### 2. onStart() — Событие Появления На Экране
 
 Вызывается когда:
 - `Activity` вот-вот станет видимой пользователю;
@@ -124,7 +121,7 @@ override fun onStart() {
 
 ---
 
-#### 3. onResume() — событие получения фокуса
+#### 3. onResume() — Событие Получения Фокуса
 
 Вызывается когда:
 - `Activity` готова к взаимодействию с пользователем;
@@ -150,7 +147,7 @@ override fun onResume() {
 
 ---
 
-#### 4. onPause() — событие потери фокуса
+#### 4. onPause() — Событие Потери Фокуса
 
 Вызывается когда:
 - другая `Activity` появляется на переднем плане (полностью или частично);
@@ -184,7 +181,7 @@ override fun onPause() {
 
 ---
 
-#### 5. onStop() — событие потери видимости
+#### 5. onStop() — Событие Потери Видимости
 
 Вызывается когда:
 - `Activity` больше не видна пользователю;
@@ -212,7 +209,7 @@ override fun onStop() {
 
 ---
 
-#### 6. onDestroy() — событие уничтожения `Activity`
+#### 6. onDestroy() — Событие Уничтожения `Activity`
 
 Вызывается когда:
 - `Activity` завершает работу (`finish()` или пользователь нажал Back);
@@ -246,7 +243,7 @@ override fun onDestroy() {
 
 ---
 
-#### 7. onRestart() — событие возврата к остановленной `Activity`
+#### 7. onRestart() — Событие Возврата К Остановленной `Activity`
 
 Вызывается когда:
 - `Activity` была остановлена (`onStop()`), но не уничтожена,
@@ -269,7 +266,7 @@ override fun onRestart() {
 
 ---
 
-### Пример полного жизненного цикла (упрощённо)
+### Пример Полного Жизненного Цикла (упрощённо)
 
 ```kotlin
 class DetailActivity : AppCompatActivity() {
@@ -382,7 +379,7 @@ class DetailActivity : AppCompatActivity() {
 
 ---
 
-### Конфигурационные изменения
+### Конфигурационные Изменения
 
 Типичные события:
 - поворот экрана;
@@ -431,7 +428,7 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
 ---
 
-### Многооконный режим (Android 7.0+)
+### Многооконный Режим (Android 7.0+)
 
 `onMultiWindowModeChanged(isInMultiWindowMode: `Boolean`)` вызывается при входе/выходе из многооконного режима и дополняет основные методы жизненного цикла.
 
@@ -474,7 +471,7 @@ override fun onPictureInPictureModeChanged(
 
 ---
 
-### Типичные сценарии
+### Типичные Сценарии
 
 - Сценарий 1: Открытие приложения
   - `onCreate()` → `onStart()` → `onResume()`
@@ -498,7 +495,7 @@ override fun onPictureInPictureModeChanged(
 
 ---
 
-### Рекомендуемые практики (Best Practices)
+### Рекомендуемые Практики (Best Practices)
 
 1. Держите `onPause()` быстрым
 
@@ -518,7 +515,7 @@ override fun onPause() {
 }
 ```
 
-2. Используйте `ViewModel` для данных UI, переживающих поворот
+1. Используйте `ViewModel` для данных UI, переживающих поворот
 
 ```kotlin
 // ПЛОХО — данные теряются / всё перезагружается при каждом повороте
@@ -544,7 +541,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-3. Освобождайте ресурсы в `onStop()` / `onDestroy()`
+1. Освобождайте ресурсы в `onStop()` / `onDestroy()`
 
 ```kotlin
 override fun onStop() {
@@ -1036,7 +1033,7 @@ override fun onPause() {
 }
 ```
 
-2. Use `ViewModel` for UI Data
+1. Use `ViewModel` for UI Data
 
 ```kotlin
 // BAD - reloads data on every rotation
@@ -1062,7 +1059,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-3. Release Resources in onStop() / onDestroy()
+1. Release Resources in onStop() / onDestroy()
 
 ```kotlin
 override fun onStop() {

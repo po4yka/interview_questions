@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-testing-viewmodels-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [difficulty/medium, elvis, null-safety, nullable, operators, kotlin, safe-call]
+tags: [difficulty/medium, elvis, kotlin, null-safety, nullable, operators, safe-call]
+date created: Friday, October 31st 2025, 6:30:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое null safety и как это пишется?
 
@@ -89,7 +92,7 @@ val result = value as? String // Returns null if cast fails
 
 Kotlin's null safety prevents most null-related crashes at compile time.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия null safety в Kotlin и Java?
 - Когда вы бы использовали эти механизмы на практике?
@@ -99,7 +102,7 @@ Kotlin's null safety prevents most null-related crashes at compile time.
 
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]
 - [[q-testing-viewmodels-coroutines--kotlin--medium]]

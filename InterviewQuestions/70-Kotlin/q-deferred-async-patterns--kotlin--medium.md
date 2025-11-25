@@ -12,11 +12,13 @@ status: draft
 created: 2025-10-12
 updated: 2025-11-11
 category: "coroutines-advanced"
-tags: ["coroutines", "async", "await", "concurrency", "deferred", "difficulty/medium", "parallel-execution", "performance"]
+tags: ["async", "await", "concurrency", "coroutines", "deferred", "difficulty/medium", "parallel-execution", "performance"]
 description: "Complete guide to `Deferred<T>`, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
 moc: moc-kotlin
 related: [c--kotlin--medium, c-concurrency, q-lifecyclescope-viewmodelscope--kotlin--medium]
 
+date created: Friday, October 31st 2025, 6:33:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -897,7 +899,7 @@ class AsyncTests {
 }
 ```
 
-### Частые ошибки и подводные камни (RU)
+### Частые Ошибки И Подводные Камни (RU)
 
 1. Неиспользование `coroutineScope` и нарушение structured concurrency:
 
@@ -921,7 +923,7 @@ suspend fun loadDataGood(): String = coroutineScope {
 }
 ```
 
-2. Игнорирование исключений в `async`:
+1. Игнорирование исключений в `async`:
 
 ```kotlin
 // Плохо - исключение может потеряться, если не вызывать await() и использовать неструктурированный scope
@@ -944,7 +946,7 @@ suspend fun loadDataGood() = coroutineScope {
 }
 ```
 
-3. Последовательные вызовы `await()` вместо параллелизма:
+1. Последовательные вызовы `await()` вместо параллелизма:
 
 ```kotlin
 // Плохо - последовательное выполнение
@@ -1365,7 +1367,7 @@ fun main() = runBlocking {
 - Useful for conditional/on-demand work
 - More efficient when the work is often skipped
 
-#### `CompletableDeferred` for Manual Completion
+#### `CompletableDeferred` For Manual Completion
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1879,7 +1881,7 @@ suspend fun loadDataGood(): String = coroutineScope {
 }
 ```
 
-2. **Ignoring exceptions in `async`**
+1. **Ignoring exceptions in `async`**
 
 ```kotlin
 // Bad - exception may be effectively lost if never awaited and scope is unstructured
@@ -1903,7 +1905,7 @@ suspend fun loadDataGood() = coroutineScope {
 }
 ```
 
-3. **Sequential awaits**
+1. **Sequential awaits**
 
 ```kotlin
 // Bad - sequential execution
@@ -1932,7 +1934,7 @@ suspend fun loadDataGood() = coroutineScope {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как `Deferred<T>` обрабатывает отмену по сравнению с обычным `Job`? Что происходит с корутинами, вызывающими `await()`, при отмене `Deferred<T>`?
 2. Объясните различия в производительности между использованием `awaitAll()` и индивидуального ожидания нескольких `Deferred<T>`. Когда стоит выбрать каждый вариант?

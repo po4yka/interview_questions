@@ -19,11 +19,16 @@ related:
   - q-dagger-custom-scopes--android--hard
   - q-dagger-framework-overview--android--hard
   - q-dagger-main-elements--android--medium
+  - q-dagger-problems--android--medium
+  - q-dagger-purpose--android--easy
+  - q-singleton-scope-binding--android--medium
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
 sources:
   - "https://dagger.dev/api/latest/dagger/Scope.html"
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -182,7 +187,7 @@ class GlobalService @Inject constructor(
 - Objects tied to a specific UI screen (adapters, presenters, etc.) → `@ActivityScoped` or `@FragmentScoped` — live as long as the screen
 - Lightweight utilities → unscoped (new instance each time) — no real benefit from scoping
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как создавать кастомные scope в Dagger?
 - Что произойдет, если внедрить зависимость с `@ActivityScoped` в компонент с `@Singleton`?
@@ -210,13 +215,13 @@ class GlobalService @Inject constructor(
 - [Dagger Scope Documentation](https://dagger.dev/api/latest/dagger/Scope.html)
 - [Hilt Component Hierarchy](https://developer.android.com/training/dependency-injection/hilt-android#component-hierarchy)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-dagger-inject-annotation--android--easy]] — понимание аннотации `@Inject`
 - Базовое понимание концепций dependency injection
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-dagger-main-elements--android--medium]] — основные концепции Dagger
 - Понимание жизненного цикла компонентов
 - Отличия Hilt от классического Dagger

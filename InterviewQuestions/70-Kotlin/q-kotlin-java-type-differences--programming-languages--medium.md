@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, q-executor-service-java--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-09
-tags: [collections, comparison, difficulty/medium, java, null-safety, kotlin, type-inference, type-system]
+tags: [collections, comparison, difficulty/medium, java, kotlin, null-safety, type-inference, type-system]
+date created: Saturday, November 1st 2025, 12:42:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Чем типы в Kotlin отличаются от типов в Java?
 
@@ -479,7 +482,7 @@ MyFunction multiply = (a, b) -> a * b;
 6. **Упрощенная модель примитивных типов**: Примитивы и объекты объединены на уровне языка; детали представления для JVM скрыты.
 7. **Функциональные типы**: Встроенная поддержка функциональных типов, функций высшего порядка и типов с receiver.
 
-### Практический пример
+### Практический Пример
 
 ```kotlin
 // Kotlin - краткий и типобезопасный
@@ -586,7 +589,7 @@ String nullable = null;
 
 Kotlin encodes nullability in the type system and enforces checks at compile time for non-nullable types; Java mostly relies on discipline, static analysis, and annotations.
 
-### 2. Collections: Mutable vs Read-Only
+### 2. Collections: Mutable Vs Read-Only
 
 ```kotlin
 val list: List<Int> = listOf(1, 2, 3)          // Read-only interface via this reference
@@ -757,7 +760,7 @@ Kotlin has native function types and extension functions; Java uses functional i
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем практические преимущества null safety в Kotlin по сравнению с Java?
 - Как различие в работе с коллекциями влияет на дизайн API?

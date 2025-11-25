@@ -1,35 +1,30 @@
 ---
 id: android-289
 title: Retrofit Path Parameter / Path параметр Retrofit
-aliases:
-- Path параметр Retrofit
-- Retrofit Path Parameter
+aliases: [Path параметр Retrofit, Retrofit Path Parameter]
 topic: android
 subtopics:
-- networking-http
+  - networking-http
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-retrofit
-- q-http-protocols-comparison--android--medium
-- q-retrofit-library--android--medium
-- q-retrofit-usage-tutorial--android--medium
+  - c-retrofit
+  - q-http-protocols-comparison--android--medium
+  - q-retrofit-library--android--medium
+  - q-retrofit-modify-all-requests--android--hard
+  - q-retrofit-usage-tutorial--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/networking-http
-- difficulty/medium
-- networking
-- path-parameters
-- rest-api
-- retrofit
+tags: [android/networking-http, difficulty/medium, networking, path-parameters, rest-api, retrofit]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -117,7 +112,7 @@ api.getFile("folder/subfolder/file.txt")
 // URL: /files/folder/subfolder/file.txt
 ```
 
-### Повторное использование плейсхолдера
+### Повторное Использование Плейсхолдера
 
 В одном URL можно несколько раз использовать один и тот же плейсхолдер имени, если он соответствует одному параметру метода:
 
@@ -232,7 +227,7 @@ api.getFile("folder/subfolder/file.txt")
 // URL: /files/folder/subfolder/file.txt
 ```
 
-### Reusing placeholders
+### Reusing Placeholders
 
 You can use the same placeholder name multiple times in the URL as long as it maps to a single method parameter:
 

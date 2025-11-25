@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, c-kotlin, q-extension-properties--programming-languages--medium]
+related: [c-kotlin, c-kotlin-features, q-extension-properties--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, extension-functions, extensions, kotlin]
+date created: Friday, October 31st 2025, 6:30:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое Extensions?
 
@@ -99,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### How Extensions Work (Как работают расширения)
+### How Extensions Work (Как Работают расширения)
 
 ```kotlin
 // Kotlin-расширение
@@ -155,7 +158,7 @@ class MyClass {
 }
 ```
 
-### Nullable Receiver Extensions (Расширения для nullable-типов)
+### Nullable Receiver Extensions (Расширения Для nullable-типов)
 
 ```kotlin
 fun String?.orDefault(default: String = ""): String {
@@ -169,7 +172,7 @@ val text2: String? = "Hello"
 println(text2.orDefault("N/A"))  // "Hello"
 ```
 
-### Member Vs Extension (Метод-член vs функция-расширение)
+### Member Vs Extension (Метод-член Vs функция-расширение)
 
 ```kotlin
 class MyClass {
@@ -187,7 +190,7 @@ MyClass().foo()  // Выведет: "Member"
 
 Методы-члены всегда имеют приоритет над функциями-расширениями с той же сигнатурой.
 
-### Common Use Cases (Типичные случаи использования)
+### Common Use Cases (Типичные Случаи использования)
 
 **1. Расширения для `View` в Android:**
 ```kotlin
@@ -465,7 +468,7 @@ fun MyClass.tryAccess() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия extensions от аналогичных возможностей в Java?
 - Когда имеет смысл использовать extensions на практике?
@@ -487,7 +490,7 @@ fun MyClass.tryAccess() {
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-inheritance-composition-aggregation--oop--medium]]
 - [[q-sealed-classes-limitations--programming-languages--medium]]

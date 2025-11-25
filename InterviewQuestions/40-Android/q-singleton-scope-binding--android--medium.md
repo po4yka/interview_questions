@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium, hilt, scope]
 
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -186,7 +188,7 @@ class ActivityPresenter
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если создать несколько Dagger-компонентов с @Singleton-биндингами?
 - Чем @ActivityRetainedScoped отличается от @Singleton при конфигурационных изменениях?
@@ -214,12 +216,12 @@ class ActivityPresenter
 - [Hilt Component Scopes](https://developer.android.com/training/dependency-injection/hilt-android#component-scopes)
 - [Dagger Scopes](https://dagger.dev/dev-guide/custom-scopes)
 
-## Похожие вопросы (RU)
+## Похожие Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[c-dependency-injection]] - Понимание основ DI
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]]
 
 ### Продвинутые (сложнее)

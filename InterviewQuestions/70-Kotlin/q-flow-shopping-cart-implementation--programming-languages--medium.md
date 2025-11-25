@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-flow-map-operator--programming-languages--medium]
+related: [c-flow, c-kotlin, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management]
+date created: Friday, October 31st 2025, 6:30:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать работу `Flow` в приложении, когда нужно самостоятельно управлять всей корзиной на устройстве?
 
@@ -27,7 +30,7 @@ tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management]
 
 `StateFlow` идеально подходит для управления корзиной, так как всегда хранит актуальное состояние и уведомляет всех наблюдателей при его изменении.
 
-### Полная реализация корзины покупок
+### Полная Реализация Корзины Покупок
 
 ```kotlin
 import kotlinx.coroutines.flow.*
@@ -182,7 +185,7 @@ class ShoppingCartManager {
 }
 ```
 
-### Интеграция с `ViewModel` (Android)
+### Интеграция С `ViewModel` (Android)
 
 Ниже приводится пример использования в Android-контексте с `ViewModel` и `viewModelScope` для связи слоя данных корзины с UI.
 
@@ -227,7 +230,7 @@ class CartViewModel : ViewModel() {
 }
 ```
 
-### Интеграция с UI (Jetpack Compose)
+### Интеграция С UI (Jetpack Compose)
 
 Этот пример показывает упрощенную интеграцию `StateFlow` с Jetpack Compose для отображения корзины и управления товарами.
 
@@ -335,7 +338,7 @@ fun CartItemRow(
 }
 ```
 
-### Интеграция с постоянным хранилищем
+### Интеграция С Постоянным Хранилищем
 
 Ниже пример менеджера корзины, который сохраняет состояние в `DataStore` в формате JSON и автоматически синхронизирует изменения.
 
@@ -411,7 +414,7 @@ class PersistentShoppingCartManager(
 }
 ```
 
-### Тестирование работы `Flow` корзины
+### Тестирование Работы `Flow` Корзины
 
 Пример модульных тестов для проверки логики `ShoppingCartManager` и корректных обновлений `StateFlow`.
 
@@ -933,7 +936,7 @@ class ShoppingCartManagerTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия такого подхода от реализации на Java без `Flow`?
 - Когда на практике стоит использовать такое решение для корзины?
@@ -957,7 +960,7 @@ class ShoppingCartManagerTest {
 - [[c-flow]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-map-operator--programming-languages--medium]]
 

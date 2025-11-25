@@ -19,12 +19,16 @@ related:
   - c-coroutines
   - c-service
   - q-async-operations-android--android--medium
+  - q-background-vs-foreground-service--android--medium
   - q-foreground-service-types--android--medium
   - q-what-is-workmanager--android--medium
+  - q-workmanager-decision-guide--android--medium
 sources: []
 created: 2025-10-05
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:44 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

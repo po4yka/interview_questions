@@ -3,7 +3,7 @@ id: cs-035
 title: "Data Structures and Algorithms Fundamentals / Фундаментальные структуры данных и алгоритмы"
 aliases: ["Data Structures and Algorithms Fundamentals", "Фундаментальные структуры данных и алгоритмы"]
 topic: cs
-subtopics: [algorithms, data-structures, complexity-analysis]
+subtopics: [algorithms, complexity-analysis, data-structures]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -16,6 +16,8 @@ updated: "2025-01-25"
 tags: [algorithms, big-o, complexity, data-structures, difficulty/hard, dynamic-programming, graphs, recursion, searching, sorting, trees]
 sources: ["https://en.wikipedia.org/wiki/Data_structure"]
 
+date created: Monday, October 13th 2025, 8:01:06 am
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -719,7 +721,7 @@ Choice depends on stability, space, and worst-case guarantees.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы выбираете между массивом и связным списком для конкретной задачи?
 - В чем разница между разрешением коллизий в хеш-таблицах через chaining и open addressing?
@@ -731,13 +733,13 @@ Choice depends on stability, space, and worst-case guarantees.
 - What is the difference between hash table chaining and open addressing?
 - When would you use BFS vs DFS for graph traversal?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые программные концепции
 - Анализ сложности
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[c-data-structures]] — Концепции структур данных
 - [[c-algorithms]] — Концепции алгоритмов
 

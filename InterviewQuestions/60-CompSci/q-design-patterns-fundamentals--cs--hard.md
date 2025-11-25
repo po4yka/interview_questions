@@ -13,9 +13,11 @@ moc: moc-cs
 related: [c-architecture-patterns, c-clean-architecture, c-computer-science]
 created: "2025-10-13"
 updated: "2025-11-11"
-tags: [design-patterns, gof, difficulty/hard]
+tags: [design-patterns, difficulty/hard, gof]
 sources: ["https://refactoring.guru/design-patterns"]
 
+date created: Saturday, November 1st 2025, 1:25:48 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -414,7 +416,7 @@ class Item
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда следует предпочесть композицию наследованию?
 - Каковы современные альтернативы классическим GoF-паттернам?
@@ -426,15 +428,15 @@ class Item
 - What are the modern alternatives to classic GoF patterns?
 - How do `StateFlow`/`SharedFlow` relate to the Observer pattern?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Обзор
 - [[q-design-patterns-types--design-patterns--medium]] — Категории паттернов
 
-### Порождающие паттерны
+### Порождающие Паттерны
 - [[q-singleton-pattern--design-patterns--easy]] — Singleton
 
-### Поведенческие паттерны
+### Поведенческие Паттерны
 - [[q-strategy-pattern--design-patterns--medium]] — Strategy
 - [[q-state-pattern--design-patterns--medium]] — State
 - [[q-template-method-pattern--design-patterns--medium]] — Template Method

@@ -1,7 +1,7 @@
 ---
 id: android-222
 title: "KMM Dependency Injection"
-aliases: ["Dependency Injection в KMM", "KMM Dependency Injection", "KMM DI", "Koin", "Koin для KMM"]
+aliases: ["Dependency Injection в KMM", "KMM Dependency Injection", "KMM DI", "Koin для KMM", "Koin"]
 topic: android
 subtopics: [di-koin, kmp]
 question_kind: theory
@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/di-koin, android/kmp, di, difficulty/medium, koin, kotlin]
 
+date created: Saturday, November 1st 2025, 1:01:27 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -292,7 +294,7 @@ actual class DatabaseDriverFactory {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как тестировать модули Koin в KMM?
 - Каковы лучшие практики внедрения `ViewModel` в KMM?
@@ -322,7 +324,7 @@ actual class DatabaseDriverFactory {
 - https://insert-koin.io/docs/reference/koin-mp/kmp
 - https://kotlinlang.org/docs/multiplatform.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Продвинутые (сложнее)
 

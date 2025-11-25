@@ -1,37 +1,33 @@
 ---
 id: android-040
 title: Macrobenchmark for App Startup / Macrobenchmark для запуска приложения
-aliases:
-- Macrobenchmark for App Startup
-- Macrobenchmark для запуска приложения
+aliases: [Macrobenchmark for App Startup, Macrobenchmark для запуска приложения]
 topic: android
 subtopics:
-- testing-benchmark
+  - testing-benchmark
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources: []
 status: draft
 moc: moc-android
 related:
-- c-perfetto
-- q-android-performance-measurement-tools--android--medium
-- q-baseline-profiles-optimization--android--medium
-- q-performance-optimization-android--android--medium
+  - c-perfetto
+  - q-android-performance-measurement-tools--android--medium
+  - q-app-startup-library--android--medium
+  - q-app-startup-optimization--android--medium
+  - q-baseline-profiles-optimization--android--medium
+  - q-fix-slow-app-startup-legacy--android--hard
+  - q-performance-optimization-android--android--medium
 created: 2025-10-11
 updated: 2025-11-10
-tags:
-- android/profiling
-- android/testing-benchmark
-- difficulty/medium
-- macrobenchmark
-- perfetto
-- performance
-- startup
+tags: [android/profiling, android/testing-benchmark, difficulty/medium, macrobenchmark, perfetto, performance, startup]
 
+date created: Saturday, November 1st 2025, 12:46:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -58,7 +54,7 @@ tags:
 - Тестирование режимов компиляции (None, Partial, Full)
 - Интеграция [[q-baseline-profiles-android--android--medium|Baseline Profiles]]
 
-### Настройка модуля
+### Настройка Модуля
 
 **settings.gradle.kts:**
 ```kotlin
@@ -117,7 +113,7 @@ android {
 }
 ```
 
-### Реализация бенчмарков
+### Реализация Бенчмарков
 
 **StartupBenchmark.kt:**
 ```kotlin
@@ -179,7 +175,7 @@ class StartupBenchmark {
 }
 ```
 
-### Инструментация кода
+### Инструментация Кода
 
 **MainActivity.kt:**
 ```kotlin
@@ -256,7 +252,7 @@ ORDER BY ms DESC
 LIMIT 10;
 ```
 
-### Оптимизация на основе результатов
+### Оптимизация На Основе Результатов
 
 **До оптимизации (пример):**
 ```text
@@ -328,7 +324,7 @@ fun MainContent() {
     path: macrobenchmark/build/outputs/
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Запускать на реальных устройствах — эмуляторы дают менее надежные результаты
 2. Использовать 10+ итераций для стабильной статистики

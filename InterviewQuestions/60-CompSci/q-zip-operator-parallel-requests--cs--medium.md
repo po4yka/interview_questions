@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-hot-vs-cold-flows--programming-languages--medium, q-launch-vs-async-await--programming-languages--medium, q-what-is-flow--programming-languages--medium, c-concurrency]
+related: [c-concurrency, q-hot-vs-cold-flows--programming-languages--medium, q-launch-vs-async-await--programming-languages--medium, q-what-is-flow--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [concurrency, coroutines, difficulty/medium, flow, kotlin, parallel-requests, zip-operator]
 sources: ["https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/zip.html"]
 
+date created: Saturday, October 4th 2025, 10:39:32 am
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -182,7 +184,7 @@ flowOf(1, 2, 3).combine(flowOf("A", "B")) { num, letter ->
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между операторами `zip` и `combine`?
 - Когда стоит использовать `async`/`await` вместо `Flow`.zip?
@@ -194,13 +196,13 @@ flowOf(1, 2, 3).combine(flowOf("A", "B")) { num, letter ->
 - When should you use async/await vs `Flow`.zip?
 - How to handle errors with parallel requests?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (Проще)
 - Базовые понятия корутин и `Flow`
 - Понимание асинхронных операций
 
-### Связанные (Тот же уровень)
+### Связанные (Тот Же уровень)
 - [[q-what-is-flow--programming-languages--medium]] — Что такое `Flow`
 - [[q-launch-vs-async-await--programming-languages--medium]] — launch vs async
 - [[q-hot-vs-cold-flows--programming-languages--medium]] — hot vs cold flows

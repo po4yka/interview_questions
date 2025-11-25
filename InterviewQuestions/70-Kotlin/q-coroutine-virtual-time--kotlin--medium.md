@@ -18,14 +18,17 @@ source_note: Virtual Time Testing Deep Dive
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, kotlin, testing, virtual-time]
+date created: Friday, October 17th 2025, 11:23:08 am
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Как работает виртуальное время в тестировании корутин? Объясните advanceTimeBy, runCurrent, advanceUntilIdle, currentTime, тестирование delay и как TestDispatcher контролирует время выполнения.
 
@@ -1473,7 +1476,7 @@ fun `correct - suspending API`() = runTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как виртуальное время взаимодействует с `Dispatchers.IO` и другими реальными диспетчерами?
 2. Можно ли сочетать виртуальное время и реальные задержки в одном тесте, и чем это чревато?
@@ -1511,7 +1514,7 @@ fun `correct - suspending API`() = runTest {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-testing-coroutines-runtest--kotlin--medium]] — основы `runTest`
 - [[q-testing-flow-operators--kotlin--hard]] — тестирование операторов `Flow`

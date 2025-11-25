@@ -14,7 +14,10 @@ related: [c-kotlin, c-kotlin-features, q-kotlin-delegation-detailed--kotlin--med
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Как применяются расширения (Extensions) в Java? Поддерживает ли Java extension-функции как в Kotlin?
 
@@ -655,7 +658,7 @@ public class Main {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия подхода с утилитными методами в Java и extension-функциями в Kotlin?
 - Когда на практике стоит использовать утилитные методы вместо расширений?
@@ -666,7 +669,7 @@ public class Main {
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-property-delegates--programming-languages--medium]]
 - [[q-kotlin-delegation-detailed--kotlin--medium]]

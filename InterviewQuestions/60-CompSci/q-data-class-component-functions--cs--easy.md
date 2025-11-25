@@ -13,8 +13,10 @@ moc: moc-kotlin
 related: [c-concepts--kotlin--medium, q-abstract-class-purpose--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [kotlin, data-classes, destructuring, component-functions, difficulty/easy]
+tags: [component-functions, data-classes, destructuring, difficulty/easy, kotlin]
 sources: ["https://kotlinlang.org/docs/data-classes.html"]
+date created: Saturday, November 1st 2025, 1:25:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -409,7 +411,7 @@ fun processCoordinate(coord: Coordinate) = when (coord) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Можно ли определить component functions для обычных (не `data`) классов?
 - Что произойдет, если попытаться сделать destructuring с большим количеством переменных, чем есть component functions?
@@ -421,13 +423,13 @@ fun processCoordinate(coord: Coordinate) = when (coord) {
 - What happens if you destructure with more variables than component functions?
 - How does destructuring work with nullable data classes?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - Базовые `data class` в Kotlin
 - Свойства и конструкторы в Kotlin
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - Основы `data class` в Kotlin
 - Детали destructuring declarations
 

@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-inheritance, c-computer-science]
+related: [c-computer-science, c-inheritance]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [abstract-class, difficulty/medium, inheritance, oop, template-method]
 sources: ["https://en.wikipedia.org/wiki/Abstract_type"]
 
+date created: Saturday, November 1st 2025, 1:26:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -62,7 +64,7 @@ class Rectangle(val width: Double, val height: Double) : Shape() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать абстрактный класс, а когда интерфейс?
 - Паттерн Template Method с абстрактными классами?
@@ -73,7 +75,7 @@ class Rectangle(val width: Double, val height: Double) : Shape() {
 - [[c-data-structures]]
 - [[c-computer-science]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-inheritance-vs-composition--oop--medium]] - концепции наследования

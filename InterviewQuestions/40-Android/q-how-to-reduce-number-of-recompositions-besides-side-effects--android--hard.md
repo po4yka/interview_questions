@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/hard, recomposition]
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -77,7 +79,7 @@ fun SearchScreen() {
 }
 ```
 
-### 3. Стабильные Модели Данных и Аннотации
+### 3. Стабильные Модели Данных И Аннотации
 
 (Альтернативные варианты, не компилируются вместе, показаны для иллюстрации.)
 
@@ -495,7 +497,7 @@ fun RecompositionCounter() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Compose определяет, когда можно пропустить рекомпозицию?
 - В чем разница между аннотациями `@Stable` и `@Immutable`?
@@ -529,14 +531,14 @@ fun RecompositionCounter() {
 - [Jetpack Compose Performance](https://developer.android.com/jetpack/compose/performance)
 - [Compose Stability](https://developer.android.com/jetpack/compose/performance/stability)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 
 - [[q-recomposition-compose--android--medium]] - Понимание основ рекомпозиции
 - [[q-compose-remember-derived-state--android--medium]] - Базовые подходы к управлению состоянием
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-compose-performance-optimization--android--hard]] - Стратегии оптимизации производительности
 - [[q-compose-stability-skippability--android--hard]] - Детали стабильности и skippability

@@ -1,34 +1,33 @@
 ---
 id: android-481
 title: Custom View Animation / Анимация Custom View
-aliases:
-- Custom View Animation
-- Анимация Custom View
+aliases: [Custom View Animation, Анимация Custom View]
 topic: android
 subtopics:
-- ui-animation
-- ui-views
+  - ui-animation
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-surfaces
-- q-canvas-drawing-optimization--android--hard
-- q-custom-view-lifecycle--android--medium
+  - c-android-surfaces
+  - q-canvas-drawing-optimization--android--hard
+  - q-custom-view-accessibility--android--medium
+  - q-custom-view-attributes--android--medium
+  - q-custom-view-lifecycle--android--medium
 sources:
-- "https://developer.android.com/guide/topics/graphics/prop-animation"
+  - "https://developer.android.com/guide/topics/graphics/prop-animation"
 created: 2025-10-21
 updated: 2025-11-10
-tags:
-- android/ui-animation
-- android/ui-views
-- difficulty/medium
+tags: [android/ui-animation, android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -419,7 +418,7 @@ class LifecycleAwareAnimatedView @JvmOverloads constructor(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как создать сложные path-анимации с `PathInterpolator`?
 - В чем разница производительности между `ValueAnimator` и `ObjectAnimator`?

@@ -1,33 +1,30 @@
 ---
 id: android-620
 title: Nearby, NFC & UWB Integration / Интеграция Nearby, NFC и UWB
-aliases:
-- Nearby NFC UWB Integration
-- Интеграция Nearby, NFC и UWB
+aliases: [Nearby NFC UWB Integration, NFC и UWB, Интеграция Nearby]
 topic: android
 subtopics:
-- networking-http
-- nfc
-- sensors
+  - networking-http
+  - nfc
+  - sensors
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-android-ipc
-- q-android-auto-guidelines--android--hard
+  - c-android
+  - c-android-ipc
+  - q-android-auto-guidelines--android--hard
+  - q-integration-testing-strategies--android--medium
+  - q-room-paging3-integration--android--medium
+  - q-wearos-health-connect-integration--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/networking-http
-- android/nfc
-- android/sensors
-- difficulty/hard
+tags: [android/networking-http, android/nfc, android/sensors, difficulty/hard]
 sources:
 - url: "https://developer.android.com/guide/topics/connectivity/nfc"
   note: NFC developer guide
@@ -36,6 +33,8 @@ sources:
 - url: "https://developers.google.com/nearby/connections/overview"
   note: Nearby Connections docs
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -72,13 +71,13 @@ sources:
 
 ### Архитектура
 
-#### 1. Архитектура потока
+#### 1. Архитектура Потока
 
 1. NFC tap — обмен первичным payload (например, session key, peer ID, nonce, идентификатор сервиса).
 2. Nearby Connections — создание зашифрованного канала для данных (TLS/Noise/доп. шифрование поверх встроенной защиты Nearby).
 3. UWB ranging — запуск точного позиционирования/дистанции при наличии поддержки.
 
-#### 2. NFC bootstrapping
+#### 2. NFC Bootstrapping
 
 ```kotlin
 nfcAdapter.enableReaderMode(
@@ -136,7 +135,7 @@ session.start(params)
 - На уровне Nearby выполняйте взаимную аутентификацию, не полагайтесь только на имя endpoint.
 - UWB доступ ограничен; минимизируйте данные и привязывайте измерения к сессии.
 
-#### 6. Аппаратная совместимость
+#### 6. Аппаратная Совместимость
 
 - Проверяйте `PackageManager.hasSystemFeature(PackageManager.FEATURE_NFC)` и `PackageManager.hasSystemFeature(PackageManager.FEATURE_UWB)`.
 - Для устройств без UWB используйте BLE как более грубую оценку расстояния.
@@ -176,13 +175,13 @@ session.start(params)
 
 ### Architecture
 
-#### 1. Flow architecture
+#### 1. Flow Architecture
 
 1. Use an NFC tap to exchange an initial payload (e.g., session key material, peer ID, nonce, service identifier).
 2. Use Nearby Connections to establish a secure data channel.
 3. Start UWB ranging for precise distance/angle when supported; otherwise rely on BLE-based proximity or stay with NFC + Nearby.
 
-#### 2. NFC bootstrapping
+#### 2. NFC Bootstrapping
 
 - Use `NfcAdapter.enableReaderMode` (or foreground dispatch) in a foreground `Activity` to read an NDEF record and extract the signed bootstrap payload.
 - For payments/HCE flows, use `HostApduService` and `IsoDep` following ISO-7816 instead of generic NDEF.
@@ -206,7 +205,7 @@ session.start(params)
 - Perform mutual authentication over Nearby; do not rely solely on endpoint names.
 - Bind UWB ranging sessions to the authenticated session established via NFC + Nearby.
 
-#### 6. Hardware compatibility & fallbacks
+#### 6. Hardware Compatibility & Fallbacks
 
 - Check `FEATURE_NFC` and `FEATURE_UWB` (and required Bluetooth features) at runtime.
 - Provide fallbacks: NFC + Nearby without UWB; Nearby-only when NFC/UWB are missing; BLE-based proximity where UWB is unavailable.

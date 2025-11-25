@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-020
 title: Android on ChromeOS / Android на ChromeOS
-aliases:
-  - Android ChromeOS
-  - Desktop Android Patterns
+aliases: [Android ChromeOS, Desktop Android Patterns]
 kind: concept
 summary: Patterns for running Android apps on ChromeOS and desktop-class environments, including mouse/keyboard, windowing, and Play Games on PC
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - chromeos
-  - desktop
-  - adaptive-ui
+tags: [adaptive-ui, android, chromeos, concept, desktop]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

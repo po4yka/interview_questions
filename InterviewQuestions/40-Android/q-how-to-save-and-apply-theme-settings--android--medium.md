@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/datastore, android/ui-compose, android/ui-theming, android/ui-views, dark-mode, difficulty/medium, sharedpreferences, themes]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -366,7 +368,7 @@ class MainActivity : ComponentActivity() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если вызвать `setTheme()` после `setContentView()`?
 - Как обрабатывать динамическую смену темы без перезапуска `Activity`?
@@ -398,13 +400,13 @@ class MainActivity : ComponentActivity() {
 - [Material Design 3 theming](https://m3.material.io/styles/color/dynamic-color/overview)
 - [AppCompatDelegate documentation](https://developer.android.com/reference/androidx/appcompat/app/AppCompatDelegate)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-sharedpreferences-definition--android--easy]]
 - [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-datastore-preferences-proto--android--medium]]
 - [[q-dark-theme-android--android--medium]]
 - [[q-how-to-save-activity-state--android--medium]]

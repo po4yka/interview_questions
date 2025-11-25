@@ -4,14 +4,14 @@ title: App Startup Library / Библиотека App Startup
 aliases: [App Startup Library, Библиотека App Startup]
 topic: android
 subtopics:
-- app-startup
-- performance-startup
+  - app-startup
+  - performance-startup
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related: [q-android-app-components--android--easy]
@@ -20,6 +20,8 @@ updated: 2024-11-10
 sources: []
 tags: [android/app-startup, android/performance-startup, difficulty/medium, jetpack]
 
+date created: Saturday, November 1st 2025, 1:04:12 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -228,7 +230,7 @@ if (userLoggedIn) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как App Startup обнаруживает и обрабатывает циклические зависимости?
 - В каких случаях лучше использовать `Application.onCreate()` вместо App Startup?
@@ -254,13 +256,13 @@ if (userLoggedIn) {
 - [[c-content-provider]] — `ContentProvider` lifecycle and performance
 - [App Startup Library](https://developer.android.com/topic/libraries/app-startup)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-app-components--android--easy]] — основы `ContentProvider`
 - [[q-android-project-parts--android--easy]] — структура AndroidManifest
 
-### Похожие (того же уровня)
+### Похожие (того Же уровня)
 - [[q-app-start-types-android--android--medium]] — холодный, тёплый и горячий старт
 - [[q-android-performance-measurement-tools--android--medium]] — профилирование времени запуска
 - [[q-android-build-optimization--android--medium]] — оптимизации сборки

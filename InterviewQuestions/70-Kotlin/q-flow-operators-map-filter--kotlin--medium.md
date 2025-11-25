@@ -18,14 +18,17 @@ source_note: "Comprehensive Kotlin Coroutines Guide - Question 140018"
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-coroutines, q-flow-operators--kotlin--medium]
+related: [c-coroutines, c-flow, q-flow-operators--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-11
 
 tags: [coroutines, difficulty/medium, kotlin]
+date created: Saturday, October 18th 2025, 12:37:18 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как использовать операторы `Flow` `map`, `filter`, `transform`? Объясните цепочки операторов и практические паттерны.
 
@@ -320,7 +323,7 @@ flow.onEach { updateDatabase(it) }
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как отличить использование `map`, `mapLatest`, `flatMapLatest` и `transform` для асинхронных операций в `Flow`?
 2. В каких случаях стоит использовать `buffer`, `conflate` или `flowOn` вместе с операторами `map`/`filter`/`transform` для оптимизации производительности?
@@ -356,14 +359,14 @@ flow.onEach { updateDatabase(it) }
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-flow-operators--kotlin--medium]] — Базовые операторы `Flow`
 - [[q-retry-operators-flow--kotlin--medium]] — Повтор и обработка ошибок в `Flow`
 - [[q-flow-time-operators--kotlin--medium]] — Временные операторы в `Flow`
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-testing-flow-operators--kotlin--hard]] — Тестирование операторов `Flow`
 
 ### Хаб

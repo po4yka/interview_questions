@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, q-noncancellable-context-cleanup--kotlin--medium, q-room-coroutines-flow--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-09
-tags: [constructors, difficulty/easy, init, initialization, oop, kotlin]
+tags: [constructors, difficulty/easy, init, initialization, kotlin, oop]
+date created: Friday, October 31st 2025, 6:29:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Есть какие-то особенности использования `init` блока?
 
@@ -92,7 +95,7 @@ class Service {
 }
 ```
 
-### Множественные Init Блоки и Подводные Камни
+### Множественные Init Блоки И Подводные Камни
 ```kotlin
 class Complex {
     init { step1() }
@@ -194,7 +197,7 @@ class Complex {
 // rely in an init block on properties whose initialization has not run yet.
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия от подхода в Java?
 - Когда вы бы использовали `init` блок на практике?
@@ -214,7 +217,7 @@ class Complex {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-noncancellable-context-cleanup--kotlin--medium]]
 - [[q-room-coroutines-flow--kotlin--medium]]

@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [advertising, android/privacy-sdks, attribution-reporting, difficulty/medium, privacy, privacy-sandbox]
+date created: Saturday, November 1st 2025, 1:03:50 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -51,7 +53,7 @@ Attribution Reporting API обеспечивает измерение конве
 - Отчёты отправляются на reporting endpoint с задержкой, батчированием и добавлением шума для предотвращения идентификации пользователей.
 - Rate limits ограничивают количество источников/триггеров и предотвращают злоупотребления.
 
-### Регистрация Source и Trigger (web-to-app пример)
+### Регистрация Source И Trigger (web-to-app пример)
 
 ```kotlin
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -479,7 +481,7 @@ class ConversionTracker(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает атрибуция, если пользователь меняет устройство?
 - Что происходит, если attribution window истекает до конверсии?
@@ -492,13 +494,13 @@ class ConversionTracker(
 
 - [Privacy Sandbox Attribution Reporting](https://developer.android.com/design-for-safety/privacy-sandbox/attribution)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные материалы
+### Предварительные Материалы
 
 - [[q-privacy-sandbox-topics-api--android--medium]] - Основы Topics API
 
-### Похожие вопросы
+### Похожие Вопросы
 
 - [[q-privacy-sandbox-fledge--android--hard]] - FLEDGE API для ремаркетинга
 - [[q-privacy-sandbox-sdk-runtime--android--hard]] - Изоляция SDK Runtime

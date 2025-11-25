@@ -14,8 +14,10 @@ related: [c-testing, q-robolectric-vs-instrumented--android--medium, q-testing-c
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags: [testing/best-practices, testing/flaky-tests, stability, difficulty/medium]
+tags: [difficulty/medium, stability, testing/best-practices, testing/flaky-tests]
 
+date created: Monday, October 27th 2025, 3:58:21 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -346,7 +348,7 @@ tasks.withType(Test) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы бы реализовали собственный инструмент выявления нестабильных тестов в CI/CD?
 - Какие метрики вы бы отслеживали для измерения стабильности тестового набора со временем?
@@ -374,7 +376,7 @@ tasks.withType(Test) {
 - Gradle Test Retry Plugin documentation
 - JUnit TestRule and Extension documentation
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (Prerequisites)
 

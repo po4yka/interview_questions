@@ -1,7 +1,7 @@
 ---
 id: android-212
 title: "Why Fragment Needs Separate Callback For Ui Creation / Почему Fragment нужен отдельный колбэк для создания UI"
-aliases: ["Fragment UI lifecycle separation", "onCreateView vs onCreate", "Fragment view lifecycle", "Разделение UI lifecycle во Fragment", "onCreateView против onCreate", "Жизненный цикл view фрагмента"]
+aliases: ["Fragment UI lifecycle separation", "Fragment view lifecycle", "onCreateView vs onCreate", "onCreateView против onCreate", "Жизненный цикл view фрагмента", "Разделение UI lifecycle во Fragment"]
 topic: android
 subtopics: [fragment, lifecycle]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-lifecycle, c-android, q-save-data-outside-fragment--android--medium]
+related: [c-android, c-android-lifecycle, q-save-data-outside-fragment--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/fragment, android/lifecycle, fragments, lifecycle, viewmodel, memory-management, difficulty/hard]
+tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle, memory-management, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -63,7 +65,7 @@ Fragment INSTANCE ALIVE, view DESTROYED → swipe/back → onCreateView() AGAIN
 // будут пересозданы, то есть создаётся новый instance с новым onCreate().
 ```
 
-### Правильная Работа с `View` References
+### Правильная Работа С `View` References
 
 ✅ **Правильно — ViewBinding**:
 ```kotlin

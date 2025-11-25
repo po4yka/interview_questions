@@ -1,9 +1,9 @@
 ---
-id: cs-007
+id: lang-206
 title: "Kotlin Conversion Functions"
 aliases: ["Kotlin Conversion Функции"]
 topic: kotlin
-subtopics: [functions, types, null-safety]
+subtopics: [functions, null-safety, types]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
 
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -33,9 +35,9 @@ tags: [difficulty/medium]
 
 Дополнительно иногда используется соглашение именования `asTargetType()` для дешевых или "view"-адаптаций (когда не происходит тяжелого копирования, а создается легкое представление над существующими данными). Это соглашение библиотек, а не правило языка.
 
-### Шаблоны функций преобразования
+### Шаблоны Функций Преобразования
 
-#### 1. Встроенные функции `toXxx()`
+#### 1. Встроенные Функции `toXxx()`
 
 Стандартная библиотека Kotlin предоставляет множество функций `toXxx()`:
 
@@ -59,7 +61,7 @@ val array = list.toTypedArray()         // List → Array
 val mutableList = list.toMutableList()  // List → MutableList
 ```
 
-#### 2. Функции-расширения для кастомных преобразований
+#### 2. Функции-расширения Для Кастомных Преобразований
 
 Вы можете определять собственные функции-расширения для преобразований:
 
@@ -97,7 +99,7 @@ val userString = "1,Alice,alice@example.com"
 val user = userString.toUser()
 ```
 
-#### 3. Явное приведение типов (casting)
+#### 3. Явное Приведение Типов (casting)
 
 Важно отличать функции преобразования данных (`toXxx()`) от приведения типа ссылки (`as`, `as?`):
 
@@ -117,9 +119,9 @@ if (obj is String) {
 
 Приведение влияет на то, как компилятор рассматривает ссылку, но не создает новое преобразованное значение, как это делают `toXxx()`.
 
-### Распространенные паттерны преобразований
+### Распространенные Паттерны Преобразований
 
-#### Преобразования чисел
+#### Преобразования Чисел
 
 ```kotlin
 val byte: Byte = 10
@@ -156,7 +158,7 @@ val num1 = invalid.toIntOrNull() // null (без исключения)
 val num2 = invalid.toInt()       // NumberFormatException
 ```
 
-#### Преобразования коллекций
+#### Преобразования Коллекций
 
 ```kotlin
 val listNums = listOf(1, 2, 3, 2, 1)
@@ -189,7 +191,7 @@ val listPairs = map.toList()               // List<Pair<Int, String>>
 val entries = map.entries.toList()         // List<Map.Entry<Int, String>>
 ```
 
-#### Кастомные доменные преобразования
+#### Кастомные Доменные Преобразования
 
 ```kotlin
 data class UserEntity(
@@ -251,7 +253,7 @@ fun User.convert(): UserDto
 fun transform(user: User): UserDto
 ```
 
-2. Учитывайте null-безопасность:
+1. Учитывайте null-безопасность:
 
 ```kotlin
 val age = ageString.toIntOrNull() ?: 0
@@ -259,7 +261,7 @@ val age = ageString.toIntOrNull() ?: 0
 // val age2 = ageString.toInt()
 ```
 
-3. Используйте функции-расширения для доменных преобразований, чтобы вызовы читались естественно:
+1. Используйте функции-расширения для доменных преобразований, чтобы вызовы читались естественно:
 
 ```kotlin
 fun Order.toOrderResponse(): OrderResponse {
@@ -269,7 +271,7 @@ fun Order.toOrderResponse(): OrderResponse {
 val responseOrder = order.toOrderResponse()
 ```
 
-4. Для коллекций используйте пакетные преобразования:
+1. Для коллекций используйте пакетные преобразования:
 
 ```kotlin
 val usersListEn: List<User> = /* ... */
@@ -621,7 +623,7 @@ Best practice: Use clear `toXxx()` naming and extension functions where it impro
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
 - [[q-kotlin-property-delegates--programming-languages--medium]]
@@ -633,7 +635,7 @@ Best practice: Use clear `toXxx()` naming and extension functions where it impro
 - [[q-kotlin-property-delegates--programming-languages--medium]]
 - [[q-coroutine-dispatchers--kotlin--medium]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
 - [[q-kotlin-property-delegates--programming-languages--medium]]

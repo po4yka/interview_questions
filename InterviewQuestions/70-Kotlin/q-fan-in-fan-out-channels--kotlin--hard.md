@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-delegation-by-keyword--kotlin--medium, q-kotlin-nullable-string-declaration--programming-languages--easy]
+related: [c-coroutines, c-kotlin, q-delegation-by-keyword--kotlin--medium, q-kotlin-nullable-string-declaration--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard]
 
+date created: Sunday, October 12th 2025, 3:43:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [difficulty/hard]
 - Fan-out на каналах обычно означает конкурентное потребление из общего канала (очередь задач).
 - Fan-out в режиме широковещания (например, `shareIn` / `SharedFlow`) отдает каждый элемент всем подписчикам — это другой паттерн; ниже явно разводим эти случаи как канал-based competitive fan-out и `Flow`-based broadcast fan-out.
 
-#### 1. Основные концепции
+#### 1. Основные Концепции
 
 **Паттерн Fan-out:**
 - **Один производитель** → **Несколько потребителей**
@@ -57,7 +59,7 @@ Fan-in:
 Производитель 3 →
 ```
 
-#### 2. Базовая реализация Fan-out
+#### 2. Базовая Реализация Fan-out
 
 Используем структурированную конкурентность: не создаем глобальные scope внутри хелперов без явного lifecycle.
 
@@ -101,7 +103,7 @@ suspend fun basicFanOut(scope: CoroutineScope) {
 - Несколько потребителей конкурентно читают из одного канала.
 - Канал нужно закрыть, когда производитель завершил отправку.
 
-#### 3. Базовая реализация Fan-in
+#### 3. Базовая Реализация Fan-in
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -141,7 +143,7 @@ suspend fun basicFanIn(scope: CoroutineScope) {
 }
 ```
 
-#### 4. Продвинутое распределение работы (Work Queue)
+#### 4. Продвинутое Распределение Работы (Work Queue)
 
 Скелет очереди задач в стиле production: структурированная конкурентность, явный lifecycle, корректное завершение.
 
@@ -194,7 +196,7 @@ class WorkQueueEn(
 }
 ```
 
-#### 5. Fan-in с select для нескольких каналов
+#### 5. Fan-in С Select Для Нескольких Каналов
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -283,7 +285,7 @@ suspend fun fanInWithSelectRu(scope: CoroutineScope) {
 }
 ```
 
-#### 6. Production-пример: параллельная обработка изображений
+#### 6. Production-пример: Параллельная Обработка Изображений
 
 Структура: fan-out воркеров по `taskChannel` и fan-in результатов через `resultChannel`. Для production важно гарантировать, что все задачи обработаны и все результаты прочитаны до закрытия каналов.
 
@@ -432,7 +434,7 @@ class ImageProcessorEn(
 }
 ```
 
-#### 7. Production-пример: агрегация логов (Fan-in)
+#### 7. Production-пример: Агрегация Логов (Fan-in)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -509,7 +511,7 @@ class LogAggregatorEn(
 }
 ```
 
-#### 8. Паттерн Actor для Fan-out/Fan-in
+#### 8. Паттерн Actor Для Fan-out/Fan-in
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -583,7 +585,7 @@ fun CoroutineScope.coordinatorActorEn(
 }
 ```
 
-#### 9. Fan-out/Fan-in на основе Flow
+#### 9. Fan-out/Fan-in На Основе Flow
 
 - Fan-out (broadcast): `shareIn`, чтобы каждый потребитель видел все элементы.
 - Fan-in: `merge`, чтобы объединить несколько `Flow` в один.
@@ -649,7 +651,7 @@ fun logChannelState(channel: Channel<*>) {
 }
 ```
 
-#### 11. Обработка ошибок в Fan-out/Fan-in
+#### 11. Обработка Ошибок В Fan-out/Fan-in
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -752,7 +754,7 @@ class FanOutFanInTestEn {
 }
 ```
 
-#### 13. Итоги production use cases
+#### 13. Итоги Production Use Cases
 
 - Fan-out (каналы, конкурентное потребление): очереди задач, параллельная обработка.
 - Fan-in (каналы): агрегация логов, метрик, результатов.
@@ -760,7 +762,7 @@ class FanOutFanInTestEn {
 - Fan-in (`merge` для `Flow`): объединение нескольких асинхронных источников.
 - Actor-подход: состояние и протоколы на воркерах.
 
-#### 14. Частые ошибки
+#### 14. Частые Ошибки
 
 ```kotlin
 // ПЛОХО: забыли закрыть канал
@@ -794,7 +796,7 @@ We distinguish two related but different patterns throughout the answer:
 
 Below is an English mirror of the key production-style patterns and examples.
 
-#### 1. Core concepts
+#### 1. Core Concepts
 
 **Fan-out:**
 - One producer → multiple consumers.
@@ -821,7 +823,7 @@ Producer 2 → [Channel] → Aggregator
 Producer 3 →
 ```
 
-#### 2. Basic fan-out implementation
+#### 2. Basic Fan-out Implementation
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -858,7 +860,7 @@ suspend fun basicFanOutEn(scope: CoroutineScope) {
 }
 ```
 
-#### 3. Basic fan-in implementation
+#### 3. Basic Fan-in Implementation
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -898,7 +900,7 @@ suspend fun basicFanInEn(scope: CoroutineScope) {
 }
 ```
 
-#### 4. Advanced work queue (production-style)
+#### 4. Advanced Work Queue (production-style)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -948,7 +950,7 @@ class WorkQueueEn(
 }
 ```
 
-#### 5. Fan-in with select over multiple channels
+#### 5. Fan-in with Select over Multiple Channels
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1037,7 +1039,7 @@ suspend fun fanInWithSelectEn(scope: CoroutineScope) {
 }
 ```
 
-#### 6. Production example: parallel image processing
+#### 6. Production Example: Parallel Image Processing
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1183,7 +1185,7 @@ class ImageProcessorEn(
 }
 ```
 
-#### 7. Production example: log aggregation (fan-in)
+#### 7. Production Example: Log Aggregation (fan-in)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1260,7 +1262,7 @@ class LogAggregatorEn(
 }
 ```
 
-#### 8. Actor pattern for fan-out/fan-in
+#### 8. Actor Pattern for fan-out/fan-in
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1383,7 +1385,7 @@ suspend fun flowFanInExampleEn() = coroutineScope {
 }
 ```
 
-#### 10. Performance considerations
+#### 10. Performance Considerations
 
 ```kotlin
 val bufferedChannelEn = Channel<WorkItemEn>(capacity = Channel.BUFFERED)
@@ -1400,7 +1402,7 @@ fun logChannelStateEn(channel: Channel<*>) {
 }
 ```
 
-#### 11. Error handling in fan-out/fan-in
+#### 11. Error Handling in fan-out/fan-in
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1503,7 +1505,7 @@ class FanOutFanInTestEn {
 }
 ```
 
-#### 13. Production use-case summary
+#### 13. Production Use-case Summary
 
 - Fan-out with channels (competitive consumption): task queues, parallel processing.
 - Fan-in with channels: aggregation of logs, metrics, results.
@@ -1511,7 +1513,7 @@ class FanOutFanInTestEn {
 - Fan-in with `merge` over `Flow`: combine several asynchronous sources.
 - Actor-based design: encapsulate state and protocols per worker.
 
-#### 14. Common pitfalls
+#### 14. Common Pitfalls
 
 ```kotlin
 // BAD: forgetting to close the channel
@@ -1537,7 +1539,7 @@ val goodScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
 ## Follow-ups
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 1. Как реализовать priority queue с fan-out паттерном, где задачи с высоким приоритетом обрабатываются первыми?
 2. Какие различия в производительности между fan-out на каналах и `shareIn` на `Flow`? Когда выбирать каждый подход?
 3. Как реализовать backpressure в fan-out сценарии, когда обработчики медленнее производителя?

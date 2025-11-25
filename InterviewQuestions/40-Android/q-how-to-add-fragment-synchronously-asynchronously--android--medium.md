@@ -1,31 +1,32 @@
 ---
 id: android-337
 title: How To Add Fragment Synchronously/Asynchronously / Как добавить Fragment синхронно и асинхронно
-aliases:
-- How To Add Fragment Synchronously Asynchronously
-- Как добавить Fragment синхронно и асинхронно
+aliases: [How To Add Fragment Synchronously Asynchronously, Как добавить Fragment синхронно и асинхронно]
 topic: android
 subtopics:
-- fragment
+  - fragment
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-fragments
-- q-how-does-jetpackcompose-work--android--medium
-- q-play-app-signing--android--medium
-- q-what-unites-the-main-components-of-an-android-application--android--medium
+  - c-fragments
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-how-to-choose-layout-for-fragment--android--easy
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-play-app-signing--android--medium
+  - q-save-data-outside-fragment--android--medium
+  - q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/fragment
-- difficulty/medium
+tags: [android/fragment, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -432,7 +433,7 @@ Need to add fragment?
 
 ## RU (расширенный)
 
-### Асинхронно (по умолчанию и чаще всего правильно)
+### Асинхронно (по Умолчанию И Чаще Всего правильно)
 
 Стандартный способ добавить фрагмент — асинхронный через `commit()`:
 
@@ -505,9 +506,9 @@ class FragmentTransactionExample : AppCompatActivity() {
 }
 ```
 
-### Асинхронные методы
+### Асинхронные Методы
 
-#### 1. `commit()` — стандартный асинхронный
+#### 1. `commit()` — Стандартный Асинхронный
 
 ```kotlin
 supportFragmentManager.beginTransaction()
@@ -519,7 +520,7 @@ supportFragmentManager.beginTransaction()
 // Может вызвать IllegalStateException, если состояние уже сохранено
 ```
 
-#### 2. `commitAllowingStateLoss()` — асинхронно, с допущением потери состояния
+#### 2. `commitAllowingStateLoss()` — Асинхронно, С Допущением Потери Состояния
 
 ```kotlin
 supportFragmentManager.beginTransaction()
@@ -530,7 +531,7 @@ supportFragmentManager.beginTransaction()
 // Использовать только если допустима потеря состояния
 ```
 
-#### 3. `commitNowAllowingStateLoss()` — синхронно, с допущением потери состояния
+#### 3. `commitNowAllowingStateLoss()` — Синхронно, С Допущением Потери Состояния
 
 ```kotlin
 supportFragmentManager.beginTransaction()
@@ -542,9 +543,9 @@ supportFragmentManager.beginTransaction()
 // Нельзя использовать с back stack
 ```
 
-### Полные примеры
+### Полные Примеры
 
-#### Асинхронное добавление `Fragment`
+#### Асинхронное Добавление `Fragment`
 
 ```kotlin
 class AsyncFragmentActivity : AppCompatActivity() {
@@ -577,7 +578,7 @@ class AsyncFragmentActivity : AppCompatActivity() {
 }
 ```
 
-#### Синхронное добавление `Fragment`
+#### Синхронное Добавление `Fragment`
 
 ```kotlin
 class SyncFragmentActivity : AppCompatActivity() {
@@ -618,7 +619,7 @@ class SyncFragmentActivity : AppCompatActivity() {
 }
 ```
 
-### Учет потери состояния
+### Учет Потери Состояния
 
 ```kotlin
 class StateAwareActivity : AppCompatActivity() {
@@ -642,7 +643,7 @@ class StateAwareActivity : AppCompatActivity() {
 }
 ```
 
-### Выполнение отложенных транзакций
+### Выполнение Отложенных Транзакций
 
 ```kotlin
 fun forceExecution() {
@@ -661,7 +662,7 @@ fun forceExecution() {
 
 ### Рекомендации (Best Practices)
 
-#### Используйте `commit()` в большинстве случаев
+#### Используйте `commit()` В Большинстве Случаев
 
 ```kotlin
 // РЕКОМЕНДУЕТСЯ: асинхронный commit, пока состояние еще не сохранено
@@ -673,7 +674,7 @@ fun addFragment() {
 }
 ```
 
-#### Используйте `commitNow()` для начальной настройки
+#### Используйте `commitNow()` Для Начальной Настройки
 
 ```kotlin
 // Синхронно для первичной инициализации без back stack
@@ -689,7 +690,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-#### Правильно обрабатывайте возможную потерю состояния
+#### Правильно Обрабатывайте Возможную Потерю Состояния
 
 ```kotlin
 override fun onResume() {
@@ -749,7 +750,7 @@ supportFragmentManager.commitTransaction(now = true) {
 }
 ```
 
-### Частые ошибки (Common Pitfalls)
+### Частые Ошибки (Common Pitfalls)
 
 ```kotlin
 // ПЛОХО: использование back stack с commitNow()
@@ -780,7 +781,7 @@ val fragment2 = supportFragmentManager
     .findFragmentById(R.id.container) // Теперь доступен
 ```
 
-### Дерево решений (Decision Tree)
+### Дерево Решений (Decision Tree)
 
 ```
 Нужно добавить фрагмент?

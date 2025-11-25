@@ -5,7 +5,7 @@ aliases: ["Retry and RetryWhen operators in Flow", "Операторы Retry и 
 
 # Classification
 topic: kotlin
-subtopics: [flow, error-handling]
+subtopics: [error-handling, flow]
 question_kind: theory
 difficulty: medium
 
@@ -25,7 +25,10 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [difficulty/medium, error-handling, flow, kotlin, operators, retry]
+date created: Sunday, October 12th 2025, 2:24:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Что такое операторы `retry` и `retryWhen` в Kotlin `Flow`? Как они работают?
 
@@ -69,7 +72,7 @@ fun <T> Flow<T>.retry(
 - **Предикат** определяет, при каких исключениях выполнять повтор.
 - **Просто** — хорошо для базовой логики повтора.
 
-### Реальные примеры использования Retry
+### Реальные Примеры Использования Retry
 
 **Пример 1: Сетевой запрос с повтором**
 
@@ -198,7 +201,7 @@ fun syncData(): Flow<SyncResult> = flow {
 }
 ```
 
-### Сравнение: Retry vs retryWhen
+### Сравнение: Retry Vs retryWhen
 
 | Функция | retry | retryWhen |
 |---------|-------|-----------|
@@ -311,7 +314,7 @@ fun makeApiCall(): Flow<Response> = flow {
 }
 ```
 
-### Интеграция с `ViewModel`
+### Интеграция С `ViewModel`
 
 ```kotlin
 class ProductViewModel : ViewModel() {
@@ -354,7 +357,7 @@ sealed class UiState {
 }
 ```
 
-### Тестирование логики повтора
+### Тестирование Логики Повтора
 
 ```kotlin
 @Test
@@ -595,7 +598,7 @@ fun syncData(): Flow<SyncResult> = flow {
 }
 ```
 
-### Comparison: Retry vs retryWhen
+### Comparison: Retry Vs retryWhen
 
 | Feature | retry | retryWhen |
 |---------|-------|-----------|
@@ -824,7 +827,7 @@ fun `retry should retry 3 times on IOException`() = runTest {
 
 **English Summary**: `retry` immediately retries the `Flow` on exception (number of retries controlled by `retries`, default effectively infinite for retries; use predicate to filter which errors are retried). `retryWhen` provides advanced control (attempt number, custom delays, different strategies per error type, ability to emit progress states). Use `retry` for simple retry logic; use `retryWhen` for exponential backoff, differentiated strategies, and progress updates. Always filter exceptions, add delays for network retries, and set maximum attempts. See also [[c-flow]] for foundational concepts.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этих операторов от подходов в Java?
 - Когда вы бы применили эти операторы на практике?
@@ -846,15 +849,15 @@ fun `retry should retry 3 times on IOException`() = runTest {
 - [Flow Error Handling - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#exception-handling)
 - [Retry Operators](https://elizarov.medium.com/kotlin-flows-and-coroutines-256260fb3bdb)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-flow-operators--kotlin--medium]] - Flow
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Flow

@@ -1,7 +1,7 @@
 ---
 id: android-336
 title: Типы запуска приложения в Android / App Start Types Android
-aliases: ["Типы запуска приложения в Android", "App Start Types Android"]
+aliases: ["App Start Types Android", "Типы запуска приложения в Android"]
 topic: android
 subtopics: [performance-startup]
 question_kind: android
@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-startup, difficulty/medium, performance, startup]
 
+date created: Saturday, November 1st 2025, 1:03:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +37,7 @@ tags: [android/performance-startup, difficulty/medium, performance, startup]
 
 Каждый тип требует своей стратегии оптимизации и измерения метрик (см. также [[c-app-startup]]).
 
-### Метрики запуска
+### Метрики Запуска
 
 - **TTID (Time To Initial Display)**: время до отображения первого кадра стартовой `Activity`, видимого пользователю.
 - **TTFD (Time To Full Display)**: время до полного отображения `Activity` и готовности к взаимодействию; сигнализируется через однократный вызов `reportFullyDrawn()` после того, как критический UI действительно готов.
@@ -128,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Бюджеты и ограничения
+### Бюджеты И Ограничения
 
 - **Иллюстративные целевые бюджеты** (не официальные гарантии; на практике калибруются под устройство и категорию приложения): Cold ≈ до 500ms, Warm ≈ до 300ms, Hot ≈ до 100ms.
 - **Запрещено**: выполнять блокирующие диск/сетевые операции на главном потоке во время запуска.

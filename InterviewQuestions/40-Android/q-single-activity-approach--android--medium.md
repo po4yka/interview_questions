@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, fragment, jetpack-navigation]
 
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -232,7 +234,7 @@ Despite Single `Activity` advantages, there are valid cases for multiple Activit
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как подход Single `Activity` влияет на обработку изменений конфигурации по сравнению с Multi-`Activity` архитектурой?
 - Каковы последствия для области видимости Dependency Injection (Hilt/Koin) (`Activity` vs `Fragment` vs scope навигационного графа)?
@@ -262,7 +264,7 @@ Despite Single `Activity` advantages, there are valid cases for multiple Activit
 - [Single `Activity` Architecture](https://www.youtube.com/watch?v=2k8x8V77CrU)
 - [Fragments Guide](https://developer.android.com/guide/fragments)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-components-besides-activity--android--easy]] - понимание основ `Activity`

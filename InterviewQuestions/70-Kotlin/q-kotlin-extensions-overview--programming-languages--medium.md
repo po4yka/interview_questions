@@ -14,7 +14,10 @@ related: [c-kotlin, q-channel-pipelines--kotlin--hard, q-supervisor-scope-vs-cor
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, extension-functions, extension-properties, extensions, kotlin]
+date created: Friday, October 31st 2025, 6:29:14 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что известно про extension?
 
@@ -81,7 +84,7 @@ Benefits: improved readability and expressiveness, better organization of utilit
 
 Common pitfalls: overusing extensions or placing them in inappropriate packages/scopes can hurt readability and discoverability, cause name clashes, and lead to surprising resolution behavior when imports or scopes change.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия расширений в Kotlin от подходов в Java (utility-классы, static methods)?
 - Когда вы бы использовали расширения на практике?
@@ -102,7 +105,7 @@ Common pitfalls: overusing extensions or placing them in inappropriate packages/
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]]
 - [[q-testing-viewmodel-coroutines--kotlin--medium]]

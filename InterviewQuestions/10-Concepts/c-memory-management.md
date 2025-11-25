@@ -16,6 +16,8 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["concept", "difficulty/medium", "garbage-collection", "jvm", "memory", "performance"]
+date created: Saturday, October 25th 2025, 11:05:40 am
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Memory Management / Управление Памятью

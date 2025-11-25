@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [copy, data-class, difficulty/easy, equals, hashcode, kotlin, programming-languages, tostring]
 sources: ["https://kotlinlang.org/docs/data-classes.html"]
+date created: Saturday, November 1st 2025, 1:25:20 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -481,7 +483,7 @@ data class UiState(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если переопределить `equals()` без переопределения `hashCode()` в data class?
 - Могут ли data classes наследоваться от других классов?
@@ -493,13 +495,13 @@ data class UiState(
 - Can data classes inherit from other classes?
 - How does `copy()` work with nested data classes?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые Kotlin-классы
 - Свойства и конструкторы в Kotlin
 
-### Похожие (тот же уровень)
+### Похожие (тот Же уровень)
 - Компонентные функции data classes
 - Базовые операции с data classes
 

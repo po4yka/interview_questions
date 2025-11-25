@@ -1,9 +1,9 @@
 ---
-id: kotlin-070
+id: kotlin-301
 title: "Interface Vs Abstract Class / Интерфейс против абстрактного класса"
 aliases: [Interface Vs Abstract Class, Интерфейс против абстрактного класса]
 topic: kotlin
-subtopics: [interfaces, abstract-classes, inheritance]
+subtopics: [abstract-classes, inheritance, interfaces]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,7 +14,10 @@ related: [c-kotlin, q-class-composition--oop--medium]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, oop, programming-languages]
+date created: Tuesday, November 25th 2025, 12:59:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое interface и чем он отличается от абстрактного класса?
 
@@ -455,7 +458,7 @@ class Duck : Animal(), Flyable, Swimmable {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия реализации интерфейсов и абстрактных классов в Java и Kotlin?
 - Приведите практический сценарий на Kotlin (например, проект с разными источниками данных), где вы выберете interface вместо abstract class, и объясните почему.
@@ -479,7 +482,7 @@ class Duck : Animal(), Flyable, Swimmable {
 - https://kotlinlang.org/docs/interfaces.html
 - https://kotlinlang.org/docs/inheritance.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-abstract-class-vs-interface--kotlin--medium]]
 

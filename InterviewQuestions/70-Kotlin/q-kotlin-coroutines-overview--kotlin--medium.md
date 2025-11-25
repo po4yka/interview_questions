@@ -14,7 +14,10 @@ related: [c-coroutines, q-debounce-throttle-flow--kotlin--medium, q-flow-perform
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о корутинах в Kotlin?
 
@@ -61,7 +64,7 @@ Key components:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия корутин от подхода в Java?
 - Когда вы бы применили корутины на практике?
@@ -83,7 +86,7 @@ Key components:
 - [[c-coroutines]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-performance--kotlin--hard]]
 - [[q-debounce-throttle-flow--kotlin--medium]]

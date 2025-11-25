@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
 
+date created: Friday, October 31st 2025, 6:29:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +44,7 @@ tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
 - Выражения, которые никогда не производят значение
 - Как параметр типа для пустых коллекций
 
-### Примеры кода
+### Примеры Кода
 
 **Функции, возвращающие Nothing (нормально не завершаются):**
 
@@ -222,7 +224,7 @@ Nothing? может иметь только одно значение: `null`.
 - Expressions that never produce a value
 - As a type parameter for empty collections
 
-### Code examples
+### Code Examples
 
 **Functions that return Nothing (do not complete normally):**
 
@@ -378,7 +380,7 @@ class UserRepositoryImpl : UserRepository {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этого подхода от Java?
 - Когда вы бы использовали Nothing на практике?
@@ -400,7 +402,7 @@ class UserRepositoryImpl : UserRepository {
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-circuit-breaker-coroutines--kotlin--hard]]
 - [[q-stateflow-sharedflow-android--kotlin--medium]]

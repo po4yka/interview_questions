@@ -1,34 +1,30 @@
 ---
 id: android-255
 title: ViewGroup Inheritance / Наследование ViewGroup
-aliases:
-- ViewGroup Inheritance
-- Наследование ViewGroup
+aliases: [ViewGroup Inheritance, Наследование ViewGroup]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-views
-- q-viewgroup-vs-view-differences--android--easy
-- q-what-layout-allows-overlapping-objects--android--easy
+  - c-views
+  - q-custom-viewgroup-layout--android--hard
+  - q-ot-kogo-nasleduyutsya-viewgroup--android--easy
+  - q-viewgroup-vs-view-differences--android--easy
+  - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-- android/ui-views
-- difficulty/easy
-- inheritance
-- ui
-- viewgroup
-- views
+tags: [android/ui-views, difficulty/easy, inheritance, ui, viewgroup, views]
 
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -157,7 +153,7 @@ Key takeaway:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[c-views]]
 - [[q-viewgroup-vs-view-differences--android--easy]]
@@ -185,7 +181,7 @@ Key takeaway:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-recyclerview-sethasfixedsize--android--easy]]

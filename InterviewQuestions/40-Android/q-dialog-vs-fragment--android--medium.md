@@ -1,37 +1,34 @@
 ---
 id: android-357
 title: Dialog vs Fragment / Диалог против Фрагмента
-aliases:
-- Dialog vs Fragment
-- Диалог против Фрагмента
+aliases: [Dialog vs Fragment, Диалог против Фрагмента]
 topic: android
 subtopics:
-- fragment
-- ui-views
+  - fragment
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-activity-lifecycle-methods--android--medium
+  - c-android-components
+  - q-activity-lifecycle-methods--android--medium
+  - q-how-dialog-differs-from-other-navigation--android--medium
+  - q-how-to-choose-layout-for-fragment--android--easy
+  - q-save-data-outside-fragment--android--medium
 created: 2025-01-10
 updated: 2025-02-10
-tags:
-- android/fragment
-- android/ui-views
-- dialog
-- difficulty/medium
-- fragment
-- ui
+tags: [android/fragment, android/ui-views, dialog, difficulty/medium, fragment, ui]
 sources:
-- "https://developer.android.com/develop/ui/views/components/dialogs"
-- "https://developer.android.com/guide/fragments"
+  - "https://developer.android.com/develop/ui/views/components/dialogs"
+  - "https://developer.android.com/guide/fragments"
 
+date created: Saturday, November 1st 2025, 1:28:24 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

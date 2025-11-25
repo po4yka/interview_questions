@@ -17,7 +17,10 @@ subtopics:
   - coroutines
   - runtest
   - testing
+date created: Friday, November 7th 2025, 6:45:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
 
@@ -30,7 +33,7 @@ subtopics:
 
 Тестирование корутин требует специальных тестовых диспетчеров и планировщика, которые позволяют контролировать виртуальное время и порядок выполнения. В `kotlinx-coroutines-test` есть `StandardTestDispatcher` и `UnconfinedTestDispatcher`, которые работают поверх общего `TestCoroutineScheduler`, но ведут себя по-разному. Неправильный выбор или неверные ожидания их поведения могут привести к нестабильным тестам, тайм-аутам или некорректным результатам. См. также [[c-coroutines]].
 
-### Обзор тестовых диспетчеров
+### Обзор Тестовых Диспетчеров
 
 Ключевая идея: оба диспетчера используют виртуальное время `TestCoroutineScheduler` и не продвигают его «магическим образом» — время сдвигается `runTest` и/или явными вызовами `advanceTimeBy` / `advanceUntilIdle`.
 
@@ -87,7 +90,7 @@ fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher(testScheduler)
 }
 ```
 
-### Поведение runTest по умолчанию
+### Поведение runTest По Умолчанию
 
 `runTest` по умолчанию использует `StandardTestDispatcher` с общим `TestCoroutineScheduler`:
 
@@ -108,7 +111,7 @@ fun explicitStandardDispatcher() = runTest(StandardTestDispatcher(testScheduler)
 - Автоматически выполняет задачи, необходимые для завершения тела теста.
 - Требует явного ожидания (`join`/`await`) или продвижения времени, когда вы тестируете отложенное/асинхронное поведение.
 
-### advanceUntilIdle с StandardTestDispatcher
+### advanceUntilIdle С StandardTestDispatcher
 
 `advanceUntilIdle()` выполняет все задачи, запланированные в `TestCoroutineScheduler`, включая те, что следуют за задержками, пока не останется работы.
 
@@ -134,7 +137,7 @@ fun testAdvanceUntilIdle() = runTest {
 }
 ```
 
-### advanceTimeBy — точный контроль времени
+### advanceTimeBy — Точный Контроль Времени
 
 `advanceTimeBy(millis)` сдвигает виртуальное время и выполняет задачи, запланированные до этого момента:
 
@@ -160,7 +163,7 @@ fun testAdvanceTimeBy() = runTest {
 }
 ```
 
-### TestScope и виртуальное время
+### TestScope И Виртуальное Время
 
 `runTest` предоставляет `TestScope` с:
 - `currentTime` для проверки виртуального времени;
@@ -179,7 +182,7 @@ fun testVirtualTime() = runTest {
 }
 ```
 
-### Тестирование задержек и таймаутов
+### Тестирование Задержек И Таймаутов
 
 Длинные задержки выполняются мгновенно за счет виртуального времени:
 
@@ -214,7 +217,7 @@ fun testTimeout() = runTest {
 }
 ```
 
-### Тестирование немедленного выполнения с UnconfinedTestDispatcher
+### Тестирование Немедленного Выполнения С UnconfinedTestDispatcher
 
 `UnconfinedTestDispatcher` полезен, когда нужно проверить побочные эффекты, происходящие до первой приостановки.
 
@@ -265,7 +268,7 @@ fun testWithStandardDispatcher() = runTest {
 }
 ```
 
-### Типичные паттерны тестирования
+### Типичные Паттерны Тестирования
 
 Паттерн 1: тестирование обновлений `StateFlow` с `backgroundScope`:
 
@@ -336,7 +339,7 @@ fun testCancellation() = runTest {
 }
 ```
 
-### Смешивание диспетчеров в тестах
+### Смешивание Диспетчеров В Тестах
 
 Используйте экземпляры диспетчеров, привязанные к одному `testScheduler`, для согласованного виртуального времени.
 
@@ -379,7 +382,7 @@ fun testMixedDispatchers() = runTest {
 }
 ```
 
-### Примеры тестирования реальных `ViewModel`
+### Примеры Тестирования Реальных `ViewModel`
 
 Пример: тестирование состояний загрузки с внедренным диспетчером:
 
@@ -483,7 +486,7 @@ fun `test search debounce`() = runTest {
 }
 ```
 
-### Миграция со старого тестового API
+### Миграция Со Старого Тестового API
 
 Старый (устаревший) подход:
 
@@ -509,7 +512,7 @@ fun newTest() = runTest {
 - `TestCoroutineDispatcher` / `TestCoroutineScope` → `StandardTestDispatcher` / `UnconfinedTestDispatcher` + `TestScope`.
 - Виртуальное время управляется `runTest` и `TestCoroutineScheduler`; при необходимости вы явно продвигаете его.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте `StandardTestDispatcher` по умолчанию.
 2. Применяйте `UnconfinedTestDispatcher` только когда осознанно полагаетесь на его нетерпеливое, незафиксированное поведение.
@@ -519,7 +522,7 @@ fun newTest() = runTest {
 4. Собирайте `Flow` / `StateFlow` в `backgroundScope`, чтобы не блокировать основной поток теста.
 5. Предпочитайте виртуальное время (`runTest`) реальным задержкам (`runBlocking`, `Thread.sleep`).
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 Ошибка 1: отсутствие кооперации с планировщиком:
 
@@ -597,7 +600,7 @@ fun goodTest() = runTest {
 }
 ```
 
-### Когда использовать каждый диспетчер
+### Когда Использовать Каждый Диспетчер
 
 Используйте `StandardTestDispatcher`, когда:
 - Нужна детерминированность и полный контроль порядка выполнения.
@@ -608,7 +611,7 @@ fun goodTest() = runTest {
 - Важно немедленное выполнение до первой приостановки.
 - Осознанно зависите от его поведения и понимаете последствия.
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. `StandardTestDispatcher` (по умолчанию в `runTest`) — детерминированное, управляемое выполнение.
 2. `UnconfinedTestDispatcher` — нетерпеливое выполнение до первой приостановки, далее под управлением того же планировщика.
@@ -1222,7 +1225,7 @@ Use `UnconfinedTestDispatcher` when:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как тестировать код, использующий несколько диспетчеров (`IO`, `Main`, `Default`)?
 2. Как связаны `TestScope` и тестовые диспетчеры (`StandardTestDispatcher` / `UnconfinedTestDispatcher`)?
@@ -1254,7 +1257,7 @@ Use `UnconfinedTestDispatcher` when:
 - https://developer.android.com/kotlin/coroutines/test
 - https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/-test-dispatcher.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-debugging-coroutines-techniques--kotlin--medium|Отладка корутин]]
 - [[q-common-coroutine-mistakes--kotlin--medium|Типичные ошибки при работе с корутинами]]

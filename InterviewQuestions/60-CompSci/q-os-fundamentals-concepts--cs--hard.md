@@ -3,7 +3,7 @@ id: cs-004
 title: "Operating System Fundamentals / Основы операционных систем"
 aliases: ["OS Fundamentals", "Основы ОС"]
 topic: cs
-subtopics: [operating-systems, processes, memory-management]
+subtopics: [memory-management, operating-systems, processes]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [cpu-scheduling, difficulty/hard, memory, os, processes, threads, virtual-memory]
 sources: ["https://en.wikipedia.org/wiki/Operating_system"]
 
+date created: Saturday, November 1st 2025, 1:26:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -388,7 +390,7 @@ thread {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём разница между вытесняющим и невытесняющим планированием?
 - Как работает механизм Low Memory Killer в Android?
@@ -404,13 +406,13 @@ thread {
 - How do semaphores differ from mutexes?
 - What is the Producer-Consumer problem?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые концепции компьютерных наук
 - Понимание архитектуры вычислительных систем
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - Основы конкурентности
 - Принципы ООП
 

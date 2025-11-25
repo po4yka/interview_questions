@@ -1,36 +1,33 @@
 ---
 id: android-141
 title: What Is Data Binding / Что такое Data Binding
-aliases:
-- Android Data Binding
-- Data Binding
-- Что такое Data Binding
+aliases: [Android Data Binding, Data Binding, Что такое Data Binding]
 topic: android
 subtopics:
-- architecture-mvvm
-- ui-views
+  - architecture-mvvm
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-mvvm
-- q-what-is-known-about-recyclerview--android--easy
-- q-which-event-is-called-when-user-touches-screen--android--medium
+  - c-mvvm
+  - q-data-sync-unstable-network--android--hard
+  - q-save-data-outside-fragment--android--medium
+  - q-view-binding--android--medium
+  - q-what-is-known-about-recyclerview--android--easy
+  - q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/architecture-mvvm
-- android/ui-views
-- data-binding
-- difficulty/easy
-- ui
+tags: [android/architecture-mvvm, android/ui-views, data-binding, difficulty/easy, ui]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)

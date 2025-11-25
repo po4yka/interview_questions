@@ -14,6 +14,8 @@ related: [c-kotlin, q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifier
 created: 2025-10-15
 updated: 2025-11-10
 tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
+date created: Saturday, November 1st 2025, 1:01:37 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -112,7 +114,7 @@ fun handle(result: Result) = when (result) {
 - Better than enum when states have data
 - ADTs (Algebraic Data Types)
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия от Java?
 - Когда вы бы использовали это на практике?
@@ -132,7 +134,7 @@ fun handle(result: Result) = when (result) {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-visibility-modifiers--kotlin--easy]]
 - [[q-fan-in-fan-out--kotlin--hard]]

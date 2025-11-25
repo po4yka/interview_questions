@@ -1,33 +1,33 @@
 ---
 id: android-638
 title: Play Console Automation / Автоматизация Play Console
-aliases:
-- Play Console Automation
-- Автоматизация Play Console
+aliases: [Play Console Automation, Автоматизация Play Console]
 topic: android
 subtopics:
-- play-console
+  - play-console
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-android-release-pipeline-cicd--android--hard
+  - c-android
+  - q-android-release-pipeline-cicd--android--hard
+  - q-play-billing-v6-architecture--android--hard
+  - q-play-feature-delivery--android--medium
+  - q-play-integrity-attestation--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/play-console
-- automation
-- difficulty/hard
+tags: [android/play-console, automation, difficulty/hard]
 sources:
-- "https://developer.android.com/distribute/google-play/developer-api"
-- "https://support.google.com/googleplay/android-developer/answer/9842756"
-- "https://support.google.com/googleplay/android-developer/answer/9844778"
+  - "https://developer.android.com/distribute/google-play/developer-api"
+  - "https://support.google.com/googleplay/android-developer/answer/9842756"
+  - "https://support.google.com/googleplay/android-developer/answer/9844778"
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -72,7 +72,7 @@ sources:
 - Feature flags / remote config на стороне приложения для точечных откатов функциональности.
 
 ## Подробная Версия
-#### 1. Publishing API как источник правды
+#### 1. Publishing API Как Источник Правды
 
 - Используйте Google Play Developer API (Publishing) с сервисным аккаунтом (`Service` Account + JSON-ключ).
 - CI/CD pipeline:
@@ -81,7 +81,7 @@ sources:
   3. Настройка выката (`tracks.update`, использование актуальных треков: `internal`, `closed`, `open`, `production`).
 - Храните release notes в репозитории (Markdown/JSON), скрипт подтягивает их перед загрузкой.
 
-#### 2. Play Vitals и алерты
+#### 2. Play Vitals И Алерты
 
 - Подключите Play Developer Reporting API и/или BigQuery экспорт для получения метрик (ANR rate, crash rate, excessive wakeups, и др.).
 - Создайте дашборды (BigQuery + Looker Studio) и alert-правила (PagerDuty/Slack).
@@ -93,7 +93,7 @@ sources:
 - Парсите доступные результаты (например, ключевые ошибки, security issues) через поддерживаемые эндпоинты или выгрузку отчётов.
 - CI блокирует прод-выкат, если критические проблемы (severity HIGH) не закрыты.
 
-#### 4. Staged Rollout и Rollback
+#### 4. Staged Rollout И Rollback
 
 - Стратегия rollout: 5% → 20% → 50% → 100%.
 - Скрипт автоматизации проверяет метрики (Play Vitals, Firebase Crashlytics, бизнес-KPI).
@@ -153,7 +153,7 @@ sources:
 - `Application`-side feature flags/remote config for fine-grained fallbacks.
 
 ## Detailed Version
-#### 1. Publishing API as source of truth
+#### 1. Publishing API as Source of Truth
 
 - Use the Google Play Developer API (Publishing) with a service account (`Service` Account + JSON key).
 - CI/CD pipeline:
@@ -162,7 +162,7 @@ sources:
   3. Configure rollout via `tracks.update`, using current tracks (`internal`, `closed`, `open`, `production`).
 - Store release notes in the repository (Markdown/JSON), and let scripts pull them before upload.
 
-#### 2. Play Vitals and alerts
+#### 2. Play Vitals and Alerts
 
 - Use the Play Developer Reporting API and/or BigQuery export to retrieve metrics (ANR rate, crash rate, excessive wakeups, etc.).
 - Build dashboards (BigQuery + Looker Studio) and alert rules (PagerDuty/Slack).
@@ -198,7 +198,7 @@ sources:
 - Notify users on critical rollbacks (updated release notes + in-app messaging when appropriate).
 - Log all changes and decisions in a release journal (commit hash, responsible engineer).
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как объединить Play Vitals с внутренними бизнес-метриками (BigQuery + Looker Studio)?
 - Как автоматизировать многошаговые approvals в CI перед публикацией?
 - Какие стратегии использовать для canary-пользователей (internal sharing, кастомные install-группы)?
@@ -216,7 +216,7 @@ sources:
 - [[c-android]]
 - https://developer.android.com/distribute/google-play/developer-api
 
-## Связанные вопросы
+## Связанные Вопросы
 - [[q-android-release-pipeline-cicd--android--hard]]
 
 ## Related Questions

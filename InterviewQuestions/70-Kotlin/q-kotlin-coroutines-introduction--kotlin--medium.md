@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-kotlin-flatmap-ranges--programming-languages--easy]
+related: [c-coroutines, c-kotlin, q-kotlin-flatmap-ranges--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-11-09
 
 tags: [async, concurrency, coroutines, difficulty/medium, kotlin, structured-concurrency]
+date created: Sunday, October 12th 2025, 8:44:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Что такое корутины в Kotlin?
 
@@ -92,7 +95,7 @@ suspend fun preparePost(): Token {
 - Модель программирования и многие знакомые конструкции остаются теми же. Мы можем продолжать использовать циклы, обработку исключений и т.д., и нет необходимости изучать полный набор новых API.
 - Подход платформенно-независим. Нацелены ли мы на JVM, JavaScript или другую платформу, высокоуровневый код, который мы пишем, может быть одинаковым. Под капотом компилятор заботится об адаптации реализации к каждой платформе.
 
-### Структурированный параллелизм
+### Структурированный Параллелизм
 
 Все еще есть что желать для практического использования корутин. Когда мы используем `GlobalScope.launch`, мы создаем корутину верхнего уровня. Хотя она легковесна, она все еще потребляет некоторые ресурсы памяти пока работает. Если мы забудем сохранить ссылку на вновь запущенную корутину, она все еще выполняется. Что если код в корутине зависнет (например, мы ошибочно задержались слишком долго), что если мы запустили слишком много корутин и исчерпали память? Необходимость вручную хранить ссылки на все запущенные корутины и присоединять их подвержена ошибкам.
 
@@ -164,7 +167,7 @@ There is still something to be desired for practical usage of coroutines. When w
 
 There is a better solution. We can use structured concurrency in our code. Instead of launching coroutines in the `GlobalScope`, just like we usually do with threads (threads are always global), we can launch coroutines in the specific scope of the operation we are performing.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия корутин от подхода в Java?
 - Когда вы бы использовали корутины на практике?
@@ -190,7 +193,7 @@ There is a better solution. We can use structured concurrency in our code. Inste
 - [Android Coroutines Guide](https://developer.android.com/kotlin/coroutines)
 - [Async Programming](https://kotlinlang.org/docs/tutorials/coroutines/async-programming.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Связанные (Средний уровень)
 - [[q-parallel-network-calls-coroutines--kotlin--medium]] - Корутины
@@ -210,7 +213,7 @@ There is a better solution. We can use structured concurrency in our code. Inste
 - [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() против Thread.sleep()
 - [[q-coroutines-threads-android-differences--kotlin--easy]] - Корутины против потоков на Android
 
-### Связанные (Тот же уровень)
+### Связанные (Тот Же уровень)
 - [[q-suspend-functions-basics--kotlin--easy]] - Понимание suspend-функций
 - [[q-coroutine-dispatchers--kotlin--medium]] - Обзор диспетчеров корутин
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope против `CoroutineContext`
@@ -220,7 +223,7 @@ There is a better solution. We can use structured concurrency in our code. Inste
 - [[q-lifecyclescope-viewmodelscope--kotlin--medium]] - Области корутин и жизненный цикл Android
 - [[q-parallel-network-calls-coroutines--kotlin--medium]] - Параллельные API-запросы
 
-### Связанные темы
+### Связанные Темы
 - [[q-kotlin-channels--kotlin--medium]] - Каналы для коммуникации
 - [[q-kotlin-flow-basics--kotlin--medium]] - `Flow` и реактивные потоки
 

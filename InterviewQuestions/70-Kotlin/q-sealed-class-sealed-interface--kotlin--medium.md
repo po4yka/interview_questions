@@ -3,17 +3,19 @@ id: kotlin-113
 title: "Sealed classes vs sealed interfaces in Kotlin / Sealed классы vs интерфейсы"
 aliases: [Polymorphism, Sealed Classes, Sealed Interfaces, Sealed v Kotlin]
 topic: kotlin
-subtopics: [sealed-classes, classes, polymorphism]
+subtopics: [classes, polymorphism, sealed-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-sealed-classes, c-kotlin, q-kotlin-enum-classes--kotlin--easy]
+related: [c-kotlin, c-sealed-classes, q-kotlin-enum-classes--kotlin--easy]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, polymorphism, sealed-classes, sealed-interfaces, when-expression]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -376,7 +378,7 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 - Command/Event patterns
 - Navigation states
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Могут ли sealed классы иметь `protected` конструкторы?
 2. Как работают sealed классы при разделении иерархии по разным модулям?
@@ -404,7 +406,7 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 - [Kotlin 1.5 Release - Sealed Interfaces](https://kotlinlang.org/docs/whatsnew15.html#sealed-interfaces)
 - [[c-sealed-classes]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-enum-class-advanced--kotlin--medium]]
 - [[q-data-class-detailed--kotlin--medium]]

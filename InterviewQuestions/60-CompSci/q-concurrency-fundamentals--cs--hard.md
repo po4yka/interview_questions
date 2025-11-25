@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [concurrency, difficulty/hard]
 sources: ["https://en.wikipedia.org/wiki/Concurrency_(computer_science)"]
+date created: Saturday, November 1st 2025, 1:24:32 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -617,7 +619,7 @@ class SafeTask {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между `volatile` и `synchronized`?
 - Как реализуются lock-free структуры данных?
@@ -629,7 +631,7 @@ class SafeTask {
 - How do you implement lock-free data structures?
 - What are compare-and-swap (CAS) operations?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - Базовые концепции потоков

@@ -13,8 +13,10 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, coroutines, difficulty/medium, jetpack-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-await--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium]
+related: [c-await--kotlin--medium, c-concepts--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium]
 
+date created: Saturday, November 1st 2025, 1:28:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -27,7 +29,7 @@ related: [c-concepts--kotlin--medium, c-await--kotlin--medium, q-testing-statefl
 
 Side effects в Compose — это операции, которые выходят за рамки composable-функции и влияют на состояние приложения вне самой композиции. Корутины являются ключевым механизмом управления асинхронными side effects в Compose.
 
-#### 1. Что такое Side Effects?
+#### 1. Что Такое Side Effects?
 
 **Определение:**
 - Side effects — это операции, происходящие **вне** чистой композиции (pure функции, которая только описывает UI).
@@ -61,7 +63,7 @@ fun GoodExample() {
 
 Примечание: `LaunchedEffect(Unit)` гарантирует один запуск на каждый цикл «вхождения в композицию / выхода из неё» данного composable, но не "один раз за всё время жизни приложения".
 
-#### 2. `LaunchedEffect` — корутины, привязанные к композиции
+#### 2. `LaunchedEffect` — Корутины, Привязанные К Композиции
 
 **Назначение:** Запускает корутину, привязанную к жизненному циклу composable.
 
@@ -143,7 +145,7 @@ fun AnalyticsScreen() {
 }
 ```
 
-#### 3. `rememberCoroutineScope` — ручной запуск корутин
+#### 3. `rememberCoroutineScope` — Ручной Запуск Корутин
 
 **Назначение:** Предоставляет `CoroutineScope`, привязанный к композиции, для запуска корутин из обработчиков событий.
 
@@ -191,7 +193,7 @@ fun RefreshableList() {
 - `LaunchedEffect` — автоматический запуск на вход/изменение ключей.
 - `rememberCoroutineScope` — ручной запуск из событий UI.
 
-#### 4. `DisposableEffect` — очистка ресурсов
+#### 4. `DisposableEffect` — Очистка Ресурсов
 
 **Назначение:** Регистрировать слушателей/ресурсы и корректно освобождать их при выходе из композиции.
 
@@ -218,7 +220,7 @@ fun LocationScreen() {
 }
 ```
 
-#### 5. `produceState` — из `suspend` / `Flow` в `State`
+#### 5. `produceState` — Из `suspend` / `Flow` В `State`
 
 **Назначение:** Обернуть `suspend`-функции или `Flow` в Compose `State`.
 
@@ -269,7 +271,7 @@ fun MessagesScreen() {
 }
 ```
 
-#### 6. `SideEffect` — несуспендящиеся эффекты
+#### 6. `SideEffect` — Несуспендящиеся Эффекты
 
 **Назначение:** Выполнить несуспендящийся побочный эффект после успешной рекомпозиции.
 
@@ -297,7 +299,7 @@ fun VideoPlayer(isPlaying: Boolean, player: MediaPlayer) {
 
 Используйте для синхронизации с внешними объектами, когда не нужны `suspend`-операции.
 
-#### 7. `derivedStateOf` — вычисляемое состояние (не side effect)
+#### 7. `derivedStateOf` — Вычисляемое Состояние (не Side effect)
 
 **Назначение:** Эффективно вычислять значения на основе других состояний, избегая лишних пересчетов. Это инструмент оптимизации состояния, а не обработчик побочных эффектов.
 
@@ -351,7 +353,7 @@ fun SearchWithDebounce() {
 }
 ```
 
-#### 9. Production-пример: загрузка данных и `Flow`
+#### 9. Production-пример: Загрузка Данных И `Flow`
 
 ```kotlin
 @Composable
@@ -375,7 +377,7 @@ fun ArticleScreen(
 }
 ```
 
-#### 10. Коллекция `Flow` с учетом жизненного цикла
+#### 10. Коллекция `Flow` С Учетом Жизненного Цикла
 
 ```kotlin
 @Composable
@@ -418,7 +420,7 @@ fun ManualFlowCollection(viewModel: MyViewModel) {
 }
 ```
 
-#### 11. Side effects для анимаций
+#### 11. Side Effects Для Анимаций
 
 ```kotlin
 @Composable
@@ -465,7 +467,7 @@ fun PulsingCircle() {
 }
 ```
 
-#### 12. Side effects для обработки событий
+#### 12. Side Effects Для Обработки Событий
 
 ```kotlin
 @Composable
@@ -493,7 +495,7 @@ fun EventHandlingScreen(viewModel: EventViewModel = hiltViewModel()) {
 }
 ```
 
-#### 13. Частые ошибки и best practices
+#### 13. Частые Ошибки И Best Practices
 
 ```kotlin
 @Composable
@@ -556,7 +558,7 @@ fun GoodExample4() {
 }
 ```
 
-#### 14. Тестирование side effects
+#### 14. Тестирование Side Effects
 
 ```kotlin
 @Test

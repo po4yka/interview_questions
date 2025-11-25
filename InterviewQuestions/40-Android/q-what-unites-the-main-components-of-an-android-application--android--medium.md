@@ -1,34 +1,32 @@
 ---
 id: android-206
 title: Android Components Unity / Объединение основных компонентов
-aliases:
-- Android Components Unity
-- Объединение компонентов
+aliases: [Android Components Unity, Объединение компонентов]
 topic: android
 subtopics:
-- activity
-- service
-- lifecycle
+  - activity
+  - lifecycle
+  - service
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-what-each-android-component-represents--android--easy
-- q-what-unifies-android-components--android--easy
+  - c-android-components
+  - q-android-components-besides-activity--android--easy
+  - q-main-android-components--android--easy
+  - q-what-each-android-component-represents--android--easy
+  - q-what-unifies-android-components--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/service
-- android/lifecycle
-- difficulty/medium
+tags: [android/activity, android/lifecycle, android/service, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -55,7 +53,7 @@ tags:
 
 ### Общие Характеристики
 
-#### 1. Объявление в AndroidManifest.xml
+#### 1. Объявление В AndroidManifest.xml
 
 Все четыре типа компонентов могут быть объявлены в манифесте; для `Activity`, `Service`, `ContentProvider` и статически зарегистрированных `BroadcastReceiver` это обычно необходимо, чтобы система могла их обнаруживать и создавать, особенно если они должны быть доступны системе или другим приложениям.
 
@@ -119,7 +117,7 @@ startActivity(Intent(this, MainActivity::class.java))
 - Выделение и управление процессами
 - Управление памятью и уничтожение компонентов
 
-#### 3. Взаимодействие через `Intent`
+#### 3. Взаимодействие Через `Intent`
 
 Компоненты взаимодействуют в основном через **`Intent`** (для `ContentProvider` — через `ContentResolver`); адресуемость и фильтрация обеспечиваются через intent-filters.
 
@@ -141,7 +139,7 @@ val uri = Uri.parse("content://com.example.app.provider/users")
 contentResolver.query(uri, null, null, null, null)
 ```
 
-#### 4. Доступ к `Context`
+#### 4. Доступ К `Context`
 
 Все компоненты имеют доступ к **`Context`**:
 
@@ -221,7 +219,7 @@ class MyProvider : ContentProvider() {
 }
 ```
 
-#### 6. Выполнение в Процессе Приложения
+#### 6. Выполнение В Процессе Приложения
 
 По умолчанию все компоненты выполняются в **том же процессе, что и приложение** (процесс с именем пакета). Это можно изменить с помощью `android:process`:
 

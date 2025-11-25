@@ -1,7 +1,7 @@
 ---
 id: kotlin-225
 title: "Kotlin Advantages For Android / Преимущества Kotlin для Android"
-aliases: [Kotlin advantages for Android, Advantages of Kotlin for Android]
+aliases: [Advantages of Kotlin for Android, Kotlin advantages for Android]
 topic: kotlin
 subtopics: [extensions, null-safety]
 question_kind: theory
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/easy]
 
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -72,7 +74,7 @@ data class User(val name: String, val age: Int)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия Kotlin от Java в контексте Android?
 - Когда на практике стоит выбирать Kotlin в Android-проектах?
@@ -94,7 +96,7 @@ data class User(val name: String, val age: Int)
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-inline-functions--kotlin--medium]]
 - [[q-delegates-compilation--kotlin--hard]]

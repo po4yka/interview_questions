@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: ["https://developer.android.com/topic/libraries/architecture/workmanager", "https://developer.android.com/topic/libraries/architecture/workmanager/advanced"]
 tags: [android/background-execution, background-tasks, difficulty/medium, reliability, workmanager]
 
+date created: Saturday, November 1st 2025, 12:47:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +34,7 @@ WorkManager предоставляет надежный, максимально 
 
 См. также [[c-background-tasks]].
 
-### Ключевые Гарантии (в рамках ограничений ОС)
+### Ключевые Гарантии (в Рамках Ограничений ОС)
 
 1. **Персистентность** — все запросы работы сохраняются в SQLite и переживают перезапуски приложения/устройства
 2. **Constraint-based выполнение** — работа запускается только при выполнении всех условий (сеть, батарея, хранилище)
@@ -306,7 +308,7 @@ WorkManager ensures high reliability for deferrable background work via:
 - Periodic work does not guarantee exact execution time (minimum interval ~15 minutes; execution may be delayed).
 - Doze Mode, App Standby, OEM restrictions, force stop, app uninstall, or data wipe can prevent completion.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что происходит с задачами WorkManager во время Doze Mode?
 2. Как отслеживать прогресс WorkManager в `ViewModel`?
@@ -332,7 +334,7 @@ WorkManager ensures high reliability for deferrable background work via:
 - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - https://developer.android.com/topic/libraries/architecture/workmanager/advanced
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 

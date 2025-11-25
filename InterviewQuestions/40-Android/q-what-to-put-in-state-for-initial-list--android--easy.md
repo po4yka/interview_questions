@@ -1,32 +1,31 @@
 ---
 id: android-082
 title: State for Initial List / Состояние для начального списка
-aliases:
-- State for Initial List
-- Состояние для начального списка
+aliases: [State for Initial List, Состояние для начального списка]
 topic: android
 subtopics:
-- architecture-mvvm
-- ui-state
+  - architecture-mvvm
+  - ui-state
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- c-jetpack-compose
-- q-android-architectural-patterns--android--medium
+  - c-android-components
+  - c-jetpack-compose
+  - q-android-architectural-patterns--android--medium
+  - q-can-state-loss-be-related-to-a-fragment--android--medium
+  - q-sealed-classes-state-management--android--medium
+  - q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/architecture-mvvm
-- android/ui-state
-- ui-state
-- difficulty/easy
+tags: [android/architecture-mvvm, android/ui-state, difficulty/easy, ui-state]
+date created: Saturday, November 1st 2025, 1:26:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +45,7 @@ tags:
 
 Важно явно моделировать состояние загрузки, чтобы не путать «нет данных» и «данные ещё загружаются».
 
-### Подход с асинхронной загрузкой (без отдельного состояния загрузки)
+### Подход С Асинхронной Загрузкой (без Отдельного Состояния загрузки)
 
 ```kotlin
 class ListViewModel : ViewModel() {
@@ -69,7 +68,7 @@ class ListViewModel : ViewModel() {
 
 Недостаток: UI не отличает «загружаемся» от «получили пустой список».
 
-### Подход с явными состояниями загрузки
+### Подход С Явными Состояниями Загрузки
 
 ```kotlin
 sealed class UiState<out T> {
@@ -101,7 +100,7 @@ class ListViewModel : ViewModel() {
 
 Здесь начальному состоянию однозначно соответствует `UiState.Loading`.
 
-### Подход со статическими начальными данными
+### Подход Со Статическими Начальными Данными
 
 ```kotlin
 class ListViewModel : ViewModel() {
@@ -131,7 +130,7 @@ For the initial list state you typically use:
 
 It is important to explicitly model loading state so you don’t confuse “no data yet” with “loaded empty list”.
 
-### Async loading approach (no explicit loading state)
+### Async Loading Approach (no Explicit Loading state)
 
 ```kotlin
 class ListViewModel : ViewModel() {
@@ -154,7 +153,7 @@ class ListViewModel : ViewModel() {
 
 Limitation: the UI cannot distinguish “loading” from “loaded empty list”.
 
-### With explicit loading states
+### With Explicit Loading States
 
 ```kotlin
 sealed class UiState<out T> {
@@ -186,7 +185,7 @@ class ListViewModel : ViewModel() {
 
 Here the initial state is clearly `UiState.Loading`.
 
-### Static data approach
+### Static Data Approach
 
 ```kotlin
 class ListViewModel : ViewModel() {
@@ -207,7 +206,7 @@ This is suitable for hints, placeholders, or otherwise known local data.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[c-android-components]]
 - [[c-jetpack-compose]]
@@ -235,20 +234,20 @@ This is suitable for hints, placeholders, or otherwise known local data.
 - [Android Documentation](https://developer.android.com/docs)
 
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые концепции информатики
+### Базовые Концепции Информатики
 - [[q-list-vs-sequence--programming-languages--medium]] - Структуры данных
 
-### Особенности языка Kotlin
+### Особенности Языка Kotlin
 - [[q-array-vs-list-kotlin--kotlin--easy]] - Структуры данных
 - [[q-kotlin-collections--kotlin--medium]] - Структуры данных
 - [[q-list-vs-sequence--kotlin--medium]] - Структуры данных
 
-### Связанные алгоритмы
+### Связанные Алгоритмы
 - [[q-sorting-algorithms-comparison--algorithms--medium]] - Структуры данных
 
-### Концепции системного дизайна
+### Концепции Системного Дизайна
 - [[q-message-queues-event-driven--system-design--medium]] - Структуры данных
 
 ## Related Questions

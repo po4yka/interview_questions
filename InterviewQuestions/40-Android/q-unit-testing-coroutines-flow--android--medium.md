@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, mockk, testing, turbine, unit-testing]
 
+date created: Saturday, November 1st 2025, 1:24:35 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -394,7 +396,7 @@ fun test() = runTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как протестировать поведение `SharedFlow` с `replay` буфером и различными подписчиками?
 2. В чём практическая разница между `StandardTestDispatcher` и `UnconfinedTestDispatcher` при написании тестов?
@@ -432,7 +434,7 @@ fun test() = runTest {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-what-is-coroutine--kotlin--easy]] — основы `Coroutine`

@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/background-execution, difficulty/medium]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:26:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -200,7 +202,7 @@ Foreground `Service` is appropriate for tasks the user expects and that run for 
 ### База (проще)
 - [[q-android-app-components--android--easy]] — Компоненты приложения
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-workmanager-return-result--android--medium]] — Результаты WorkManager
 - [[q-foreground-service-types--android--medium]] — Типы foreground-сервисов
 

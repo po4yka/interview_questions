@@ -1,38 +1,35 @@
 ---
 id: android-011
 title: Gradle Build System / Система сборки Gradle
-aliases:
-- Gradle Build System
-- Система сборки Gradle
+aliases: [Gradle Build System, Система сборки Gradle]
 topic: android
 status: draft
 created: 2025-10-05
 updated: 2025-11-11
 difficulty: medium
 subtopics:
-- build-variants
-- dependency-management
-- gradle
+  - build-variants
+  - dependency-management
+  - gradle
 question_kind: theory
 original_language: en
 language_tags:
-- en
-- ru
-tags:
-- android/build-variants
-- android/dependency-management
-- android/gradle
-- build-system
-- dependency-management
-- difficulty/medium
+  - en
+  - ru
+tags: [android/build-variants, android/dependency-management, android/gradle, build-system, dependency-management, difficulty/medium]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Gradle.md
 related:
-- c-gradle
-- q-cache-implementation-strategies--android--medium
-- q-kapt-vs-ksp--android--medium
-- q-what-unites-the-main-components-of-an-android-application--android--medium
+  - c-gradle
+  - q-build-optimization-gradle--android--medium
+  - q-cache-implementation-strategies--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-how-application-priority-is-determined-by-the-system--android--hard
+  - q-kapt-vs-ksp--android--medium
+  - q-what-unites-the-main-components-of-an-android-application--android--medium
 moc: moc-android
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -44,11 +41,11 @@ moc: moc-android
 ---
 
 ## Ответ (RU)
-### Что такое Gradle?
+### Что Такое Gradle?
 
 Gradle — это инструмент автоматизации сборки с открытым исходным кодом, достаточно гибкий для сборки почти любого типа программного обеспечения. Gradle делает мало предположений о том, что вы собираете и как вы это делаете, что делает его особенно гибким.
 
-### Gradle в Android
+### Gradle В Android
 
 Android Studio использует Gradle для автоматизации и управления процессом сборки, позволяя определять гибкие, настраиваемые конфигурации сборки.
 
@@ -61,17 +58,17 @@ Android Studio использует Gradle для автоматизации и 
 - Общие части кода и ресурсов могут использоваться совместно между вариантами.
 - Сборка может выполняться независимо от Android Studio (командная строка, CI/CD-серверы).
 
-### Поддержка языков
+### Поддержка Языков
 
 Gradle использует скрипты на:
 - **Groovy DSL** (Domain Specific Language) — традиционный синтаксис.
 - **Kotlin DSL** — современная, типобезопасная альтернатива.
 
-### Глоссарий сборки Android
+### Глоссарий Сборки Android
 
 Gradle и плагин Android Gradle помогают настраивать следующие аспекты сборки:
 
-#### 1. Типы сборки (Build Types)
+#### 1. Типы Сборки (Build Types)
 
 **Определение**: типы сборки определяют свойства, которые Gradle использует при сборке и упаковке приложения.
 
@@ -103,7 +100,7 @@ android {
 }
 ```
 
-#### 2. Варианты продукта (Product Flavors)
+#### 2. Варианты Продукта (Product Flavors)
 
 **Определение**: варианты продукта представляют разные версии приложения, которые можно выпускать для пользователей.
 
@@ -134,7 +131,7 @@ android {
 }
 ```
 
-#### 3. Варианты сборки (Build Variants)
+#### 3. Варианты Сборки (Build Variants)
 
 **Определение**: вариант сборки — это декартово произведение типа сборки и по одному варианту продукта из каждого измерения.
 
@@ -152,7 +149,7 @@ android {
   - `paidDebug`
   - `paidRelease`
 
-#### 4. Записи манифеста (Manifest Entries)
+#### 4. Записи Манифеста (Manifest Entries)
 
 **Определение**: некоторые свойства манифеста (например, `applicationId`, `versionName`, плейсхолдеры) могут настраиваться для разных типов сборки и вариантов продукта, чтобы итоговый манифест варианта получал нужные значения.
 
@@ -221,7 +218,7 @@ android {
 }
 ```
 
-#### 7. Сжатие кода и ресурсов
+#### 7. Сжатие Кода И Ресурсов
 
 **Определение**: система сборки позволяет включать сжатие кода и ресурсов для отдельных типов/вариантов сборки и задавать отдельные файлы правил.
 
@@ -247,7 +244,7 @@ android {
 }
 ```
 
-#### 8. Поддержка нескольких APK
+#### 8. Поддержка Нескольких APK
 
 **Определение**: система сборки может автоматически собирать разные APK из одного модуля для разных конфигураций устройств.
 
@@ -270,11 +267,11 @@ android {
 }
 ```
 
-### Файлы конфигурации сборки
+### Файлы Конфигурации Сборки
 
 При создании нового проекта Android Studio автоматически создаёт Gradle-файлы на основе разумных значений по умолчанию.
 
-#### Структура файлов проекта
+#### Структура Файлов Проекта
 
 ```
  MyApp/                    # Проект
@@ -294,7 +291,7 @@ android {
                  AndroidManifest.xml
 ```
 
-#### 1. Файл настроек Gradle
+#### 1. Файл Настроек Gradle
 
 **Файл**: `settings.gradle.kts` (Kotlin DSL) или `settings.gradle` (Groovy DSL)
 
@@ -327,7 +324,7 @@ rootProject.name = "MyApp"
 include(":app")
 ```
 
-#### 2. Файл сборки верхнего уровня
+#### 2. Файл Сборки Верхнего Уровня
 
 **Файл**: `build.gradle.kts` (Kotlin DSL) или `build.gradle` (Groovy DSL)
 
@@ -351,7 +348,7 @@ tasks.register("clean", Delete::class) {
 }
 ```
 
-#### 3. Файл сборки уровня модуля
+#### 3. Файл Сборки Уровня Модуля
 
 **Файл**: `build.gradle.kts` (Kotlin DSL) или `build.gradle` (Groovy DSL)
 
@@ -399,7 +396,7 @@ dependencies {
 }
 ```
 
-#### 4. Файлы свойств Gradle
+#### 4. Файлы Свойств Gradle
 
 Два файла свойств в корневой директории проекта задают настройки для инструментария сборки Gradle:
 
@@ -854,8 +851,8 @@ sdk.dir=/Users/username/Library/Android/sdk
 - [[q-kotlin-dsl-builders--android--hard]] - Build, UI
 
 ## Ссылки (RU)
-## Дополнительные вопросы (RU)
-## Связанные вопросы (RU)
+## Дополнительные Вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предпосылки / Концепты
 ### Предпосылки (проще)
 ### Связанные (Medium)

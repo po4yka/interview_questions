@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-navigation, dialog, difficulty/medium, navigation]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:30:38 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -202,7 +204,7 @@ AlertDialog.Builder(context)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как состояние диалога переживает изменения конфигурации в Compose и во вьюшном подходе?
 - Что происходит с диалогом при уничтожении родительской activity/компоновки?
@@ -232,7 +234,7 @@ AlertDialog.Builder(context)
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 

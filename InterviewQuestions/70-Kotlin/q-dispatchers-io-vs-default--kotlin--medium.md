@@ -15,6 +15,8 @@ created: 2024-10-15
 updated: 2025-11-09
 tags: [concurrency, coroutines, difficulty/medium, dispatchers, kotlin, threading]
 
+date created: Friday, October 31st 2025, 6:34:14 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -127,7 +129,7 @@ suspend fun computeResult() = withContext(Dispatchers.Default) {
 
 ### Практические Примеры
 
-#### `ViewModel` с разными диспетчерами
+#### `ViewModel` С Разными Диспетчерами
 
 ```kotlin
 class UserViewModel(
@@ -210,7 +212,7 @@ class UserRepository(
 }
 ```
 
-### Ошибки и Антипаттерны
+### Ошибки И Антипаттерны
 
 - Использование IO для CPU работы:
 
@@ -416,7 +418,7 @@ suspend fun complexWorkflow() = coroutineScope {
 }
 ```
 
-### Dispatchers и `Flow`
+### Dispatchers И `Flow`
 
 ```kotlin
 flow {
@@ -526,7 +528,7 @@ class RepositoryTest {
 
 Dispatchers.IO and Dispatchers.Default are two built-in coroutine dispatchers backed by different thread pool configurations and optimized for different types of work.
 
-### Key differences
+### Key Differences
 
 - Dispatchers.IO:
   - Target: I/O-bound operations (network, disk, database, blocking system calls).
@@ -542,7 +544,7 @@ Summary:
 - Use IO when threads may block or wait on slow I/O.
 - Use Default when work is CPU-heavy and non-blocking.
 
-### Dispatchers.IO – for I/O operations
+### Dispatchers.IO – For I/O Operations
 
 Examples of correct usage:
 
@@ -572,7 +574,7 @@ Use IO for:
 - SharedPreferences commit.
 - Other blocking or slow system calls (examples using `Thread.sleep` are for demonstration; prefer suspend-friendly APIs).
 
-### Dispatchers.Default – for CPU-bound work
+### Dispatchers.Default – For CPU-bound Work
 
 Examples of correct usage:
 
@@ -604,7 +606,7 @@ Use Default for:
 - Encryption / decryption.
 - Numerical and other CPU-intensive algorithms.
 
-### Why are pool sizes different?
+### Why Are Pool Sizes Different?
 
 ```kotlin
 // I/O: threads mostly WAIT
@@ -621,9 +623,9 @@ suspend fun computeResult() = withContext(Dispatchers.Default) {
 - IO can safely use many threads because they are often blocked and not consuming CPU.
 - Default keeps threads near the CPU core count to avoid contention and context switching.
 
-### Practical patterns
+### Practical Patterns
 
-#### `ViewModel` with multiple dispatchers
+#### `ViewModel` With Multiple Dispatchers
 
 ```kotlin
 class UserViewModel(
@@ -664,7 +666,7 @@ class UserViewModel(
 
 Note: when you start in `viewModelScope` or `lifecycleScope` on `Dispatchers.Main`, after inner `withContext(Dispatchers.IO/Default)` blocks complete, execution automatically returns to the original Main dispatcher, so you can safely update UI state without manually switching back.
 
-#### Repository pattern
+#### Repository Pattern
 
 ```kotlin
 class UserRepository(
@@ -692,7 +694,7 @@ class UserRepository(
 }
 ```
 
-### Common mistakes and anti-patterns
+### Common Mistakes and Anti-patterns
 
 - Using IO for CPU-heavy work:
 
@@ -750,7 +752,7 @@ class MainActivity : AppCompatActivity() {
 - Main is for quick UI work only; delegate heavy tasks to IO/Default.
 - When started on Main (e.g., `viewModelScope`, `lifecycleScope`), code after `withContext(Dispatchers.IO/Default)` resumes on Main automatically.
 
-### Thread pool exhaustion
+### Thread Pool Exhaustion
 
 Key idea: blocking calls in Default (or Main) can starve the limited pool.
 
@@ -770,13 +772,13 @@ Better approaches:
 - Prefer suspend-friendly APIs (`delay` instead of `Thread.sleep`) so threads are not blocked.
 - Limit concurrency explicitly (e.g., chunking, semaphores, or `limitedParallelism`).
 
-### Pool configuration
+### Pool Configuration
 
 Defaults (high-level, implementation may change):
 - IO: uses a shared pool with an upper bound on threads; more than CPU cores.
 - Default: about number of CPU cores.
 
-### limitedParallelism – creating constrained dispatchers
+### limitedParallelism – Creating Constrained Dispatchers
 
 ```kotlin
 // Constrain parallelism on top of IO
@@ -818,7 +820,7 @@ flow {
 }
 ```
 
-### Production-style example
+### Production-style Example
 
 ```kotlin
 class ArticleRepository(
@@ -861,7 +863,7 @@ class ArticleRepository(
 }
 ```
 
-### Testing notes
+### Testing Notes
 
 - Prefer injecting dispatchers (e.g., via constructor or provider) instead of hard-coding `Dispatchers.IO`/`Dispatchers.Default`.
 - Use `runTest` and `TestDispatcher`/`StandardTestDispatcher` to control coroutine execution.
@@ -897,7 +899,7 @@ class RepositoryTest {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем ключевые отличия по сравнению с потоками и executors в Java?
 - Когда вы бы использовали эти диспетчеры в реальных Android или backend-приложениях?
 - Какие типичные ошибки стоит избегать при переключении диспетчеров?
@@ -920,7 +922,7 @@ class RepositoryTest {
 - [[c--kotlin--medium]]
 - [[c-concurrency]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-infix-functions--kotlin--medium]]
 - [[q-coroutine-scope-basics--kotlin--easy]]

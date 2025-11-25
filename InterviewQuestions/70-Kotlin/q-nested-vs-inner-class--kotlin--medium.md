@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-10
 
 tags: [classes, difficulty/medium, inner-class, kotlin, nested-class, oop]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?
 
@@ -34,7 +37,7 @@ tags: [classes, difficulty/medium, inner-class, kotlin, nested-class, oop]
 
 ## Ответ (RU)
 
-### Вложенный класс (Nested Class)
+### Вложенный Класс (Nested Class)
 
 Класс, объявленный внутри другого класса. **Не может получить доступ к членам внешнего класса** (включая `private`). Не требует экземпляра внешнего класса для создания.
 
@@ -50,7 +53,7 @@ class Outer {
 val demo = Outer.Nested().foo()  // Не нужен экземпляр Outer!
 ```
 
-### Внутренний класс (Inner Class)
+### Внутренний Класс (Inner Class)
 
 Вложенный класс с ключевым словом `inner`. **Может получить доступ ко всем членам внешнего класса**, включая приватные. Требует экземпляр внешнего класса.
 
@@ -68,7 +71,7 @@ class Outer {
 val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Характеристика | Вложенный класс (Nested) | Внутренний класс (Inner) |
 |----------------|--------------------------|--------------------------|
@@ -79,14 +82,14 @@ val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 | **Память** | Не содержит ссылки на внешний класс | Хранит ссылку на экземпляр внешнего класса |
 | **Типичные случаи использования** | Вспомогательные/utility-классы, логическая группировка | Коллбеки, тесно связанная с внешним классом логика |
 
-### Kotlin vs Java: сравнение
+### Kotlin Vs Java: Сравнение
 
 | Kotlin | Java |
 |--------|------|
 | Вложенный класс (по умолчанию) | Static nested class |
 | Внутренний класс (`inner`) | Non-static nested class |
 
-### Лучшие практики
+### Лучшие Практики
 
 **Используйте вложенный класс (Nested), когда:**
 - Внутренний тип не нуждается в доступе к членам внешнего класса.
@@ -98,7 +101,7 @@ val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 - Логика тесно связана с состоянием внешнего класса.
 - Реализуете коллбеки/листенеры, которым нужен контекст внешнего класса.
 
-### Пример: влияние на память
+### Пример: Влияние На Память
 
 ```kotlin
 class Activity {
@@ -224,7 +227,7 @@ class Activity {
 - [Nested and Inner Classes - Kotlin](https://kotlinlang.org/docs/nested-classes.html)
 - [Understanding Nested and Inner Classes in Kotlin](https://medium.com/@sandeepkella23/understanding-nested-and-inner-classes-in-kotlin-ae1c4d699053)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Связанные (Medium)
 - [[q-inner-nested-classes--kotlin--medium]] - Классы

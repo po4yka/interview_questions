@@ -1,37 +1,32 @@
 ---
 id: android-092
 title: WebSocket Implementation / Реализация WebSocket
-aliases:
-- WebSocket Implementation
-- Реализация WebSocket
+aliases: [WebSocket Implementation, Реализация WebSocket]
 topic: android
 subtopics:
-- websockets
-- connectivity-caching
-- coroutines
+  - connectivity-caching
+  - coroutines
+  - websockets
 question_kind: coding
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-what-are-services-for--android--easy
+  - c-android
+  - q-cache-implementation-strategies--android--medium
+  - q-custom-drawable-implementation--android--medium
+  - q-http-protocols-comparison--android--medium
+  - q-what-are-services-for--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/websockets
-- android/connectivity-caching
-- android/coroutines
-- difficulty/medium
-- okhttp
-- real-time
-- resilience
-- websocket
+tags: [android/connectivity-caching, android/coroutines, android/websockets, difficulty/medium, okhttp, real-time, resilience, websocket]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +40,7 @@ tags:
 ## Ответ (RU)
 **WebSocket** — протокол, обеспечивающий дуплексную (full-duplex) связь поверх одного TCP-соединения. В отличие от HTTP с моделью запрос–ответ, WebSocket даёт двунаправленное, почти мгновенное взаимодействие между клиентом и сервером. Это делает его подходящим для чатов, лайв-обновлений, игр и любых сценариев с низкой задержкой.
 
-### Зачем нужен WebSocket? (RU)
+### Зачем Нужен WebSocket? (RU)
 
 **Классический HTTP-polling:**
 ```text
@@ -67,7 +62,7 @@ tags:
 - Низкая задержка: мгновенная двунаправленная доставка
 - Экономно: один канал для обоих направлений
 
-### Жизненный цикл WebSocket (RU)
+### Жизненный Цикл WebSocket (RU)
 
 ```text
    CLOSED      Начальное состояние
@@ -102,7 +97,7 @@ tags:
 - Connected — можно отправлять/принимать сообщения
 - Disconnected — соединение потеряно, может запускаться логика переподключения в зависимости от конфигурации
 
-### Полная реализация WebSocket-клиента (RU)
+### Полная Реализация WebSocket-клиента (RU)
 
 Ниже — устойчивый клиент на базе `OkHttp` и `coroutines` с:
 - явными состояниями
@@ -414,7 +409,7 @@ class WebSocketClient(
 }
 ```
 
-### Пример чат-клиента (`Application`-level) (RU)
+### Пример Чат-клиента (`Application`-level) (RU)
 
 Над `WebSocketClient` строим чатовый клиент с моделями сообщений, состояниями и обработкой событий.
 
@@ -648,7 +643,7 @@ class ChatClient(
 }
 ```
 
-### UI на Jetpack Compose (RU)
+### UI На Jetpack Compose (RU)
 
 Экран чата, использующий `ChatClient` и отображающий состояние соединения и список сообщений.
 
@@ -899,7 +894,7 @@ private fun ChatInput(
 }
 ```
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Автопереподключение с экспоненциальным backoff и jitter (через конфигurable `Config`).
 2. Heartbeat (app-level или ping/pong) для обнаружения мёртвых соединений.
@@ -911,7 +906,7 @@ private fun ChatInput(
 8. Использование WSS (TLS) в продакшене.
 9. Тестирование сценариев отказов и переподключений.
 
-### Типичные ошибки (RU)
+### Типичные Ошибки (RU)
 
 1. Отсутствие heartbeat и, как следствие, "висящие" соединения.
 2. Бесконечные переподключения без ограничений.
@@ -1847,7 +1842,7 @@ A production-grade WebSocket implementation on Android should provide:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-what-are-services-for--android--easy]]
 - Как адаптировать этот WebSocket-клиент для поддержки аутентификации (например, JWT, обновление токенов и переподключение)?
@@ -1875,7 +1870,7 @@ A production-grade WebSocket implementation on Android should provide:
 - [App Startup Time](https://developer.android.com/topic/performance/vitals/launch-time)
 - [[c-android]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-parcelable-implementation--android--medium]]
 - [[q-what-problems-can-there-be-with-list-items--android--easy]]

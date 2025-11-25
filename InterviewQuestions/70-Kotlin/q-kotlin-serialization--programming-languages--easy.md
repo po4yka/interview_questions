@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [data-persistence, difficulty/easy, json, kotlin, serialization]
 
+date created: Friday, October 31st 2025, 6:32:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -392,10 +394,10 @@ dependencies {
 - [[q-kotlin-singleton-creation--programming-languages--easy]]
 - [[q-functional-interfaces-vs-type-aliases--kotlin--medium]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Каковы ключевые отличия этого подхода от Java?
 - Когда вы бы использовали это на практике?
 - Какие распространённые подводные камни следует избегать?
 ## Ссылки (RU)
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)

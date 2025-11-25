@@ -14,10 +14,12 @@ tags: [anti-patterns, best-practices, code-review, coroutines, difficulty/medium
 moc: moc-kotlin
 related: [c-coroutines, q-coroutine-exception-handler--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
 subtopics:
-- coroutines
-- anti-patterns
-- best-practices
+  - anti-patterns
+  - best-practices
+  - coroutines
 
+date created: Saturday, November 1st 2025, 12:10:17 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -97,7 +99,7 @@ class MyRepository {
 
 Детектирование: найдите использования `GlobalScope` в кодовой базе и замените на области, привязанные к жизненному циклу.
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. Никогда не используйте GlobalScope без крайней необходимости — используйте области, привязанные к жизненному циклу.
 2. Всегда учитывайте отмену — проверяйте `isActive`, используйте `ensureActive()` в долгих циклах и вычислениях.
@@ -198,7 +200,7 @@ Detection: Search your codebase for `GlobalScope` and replace it with lifecycle-
 
 See also: [[c-coroutines]].
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как реализовать собственный `CoroutineScope` с корректным управлением жизненным циклом?
 2. Какие инструменты существуют для обнаружения утечек памяти, связанных с корутинами?
@@ -230,7 +232,7 @@ See also: [[c-coroutines]].
 - [Android `Coroutines` Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 - [Common `Coroutine` Mistakes](https://elizarov.medium.com/top-10-coroutines-mistakes-42b19c2a25b2)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-exception-handler--kotlin--medium|Использование CoroutineExceptionHandler]]
 - [[q-debugging-coroutines-techniques--kotlin--medium|Отладка корутин]]

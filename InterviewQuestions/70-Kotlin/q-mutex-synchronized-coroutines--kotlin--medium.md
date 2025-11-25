@@ -17,7 +17,10 @@ subtopics:
   - concurrency
   - coroutines
   - mutex
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
 
@@ -406,7 +409,7 @@ class FairMutex {
 }
 ```
 
-### Сценарии Deadlock и Как Их Избежать
+### Сценарии Deadlock И Как Их Избежать
 
 Сценарий 1: взаимная блокировка из-за порядка захвата
 
@@ -472,7 +475,7 @@ suspend fun inner() {
 
 Профилактика: не брать один и тот же `Mutex` повторно в одном пути выполнения; разделяйте обязанности на функции, которые вызываются уже под локом, и функции, которые сами захватывают лок.
 
-### tryLock и Тайм-ауты
+### tryLock И Тайм-ауты
 
 ```kotlin
 val mutex = Mutex()
@@ -535,7 +538,7 @@ class ApiClient {
 }
 ```
 
-### Тестирование Кода с Mutex
+### Тестирование Кода С Mutex
 
 ```kotlin
 import kotlinx.coroutines.launch
@@ -1300,7 +1303,7 @@ Use `Channel`/Actor when:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как `Mutex` обрабатывает отмену корутин по сравнению с блоками `synchronized`?
 2. Можно ли реализовать справедливый `Mutex` с помощью `Channel` в Kotlin корутинах и каковы издержки?
@@ -1336,7 +1339,7 @@ Use `Channel`/Actor when:
 - [Thread Safety in Kotlin](https://kotlinlang.org/docs/multiplatform-mobile-concurrency-overview.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-race-conditions-coroutines--kotlin--hard|Состояния гонки и data races в Kotlin корутинах]]
 - [[q-semaphore-rate-limiting--kotlin--medium|Semaphore для rate limiting и пула ресурсов]]

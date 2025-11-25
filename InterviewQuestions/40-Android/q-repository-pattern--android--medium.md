@@ -1,39 +1,36 @@
 ---
 id: android-070
 title: Repository Pattern in Android / Паттерн Repository в Android
-aliases:
-- Repository Pattern in Android
-- Паттерн Repository в Android
+aliases: [Repository Pattern in Android, Паттерн Repository в Android]
 topic: android
 subtopics:
-- architecture-clean
-- architecture-mvvm
+  - architecture-clean
+  - architecture-mvvm
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: internal
 source_note: Created for vault completeness
 status: draft
 moc: moc-android
 related:
-- c-clean-architecture
-- c-mvvm
-- c-viewmodel
-- q-clean-architecture-android--android--hard
-- q-repository-multiple-sources--android--medium
+  - c-clean-architecture
+  - c-mvvm
+  - c-viewmodel
+  - q-clean-architecture-android--android--hard
+  - q-factory-pattern-android--android--medium
+  - q-repository-multiple-sources--android--medium
+  - q-usecase-pattern-android--android--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags:
-- android/architecture-clean
-- android/architecture-mvvm
-- difficulty/medium
-- en
-- ru
+tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium, en, ru]
 
 
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +43,7 @@ tags:
 
 **Repository Pattern** — это архитектурный паттерн, который абстрагирует источники данных (сеть, база данных, кэш) за чистым API, предоставляя единый источник истины и разделяя бизнес-логику и логику доступа к данным.
 
-### Зачем нужен Repository Pattern?
+### Зачем Нужен Repository Pattern?
 
 **Проблемы, которые он решает:**
 1. **Связанность с источниками данных** — `ViewModel` не должна знать, откуда приходят данные: из API или БД.
@@ -95,7 +92,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### Repository в MVVM-архитектуре
+### Repository В MVVM-архитектуре
 
 ```
 View (Activity/Fragment/Composable)
@@ -199,7 +196,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 }
 ```
 
-### Единый источник истины (Single Source of Truth)
+### Единый Источник Истины (Single Source of Truth)
 
 Обычно в Android в качестве единого источника истины используют локальную БД:
 - Репозиторий записывает результаты сетевых запросов в базу данных.
@@ -237,7 +234,7 @@ class ProductRepository(
 - Автоматические обновления через `Flow`/`LiveData`.
 - Меньше состояния, управляемого на уровне UI.
 
-### Стратегии кэширования
+### Стратегии Кэширования
 
 Стратегии реализуются внутри репозиториев.
 
@@ -267,7 +264,7 @@ class ArticleRepository(
 }
 ```
 
-#### 2. Кэширование по времени
+#### 2. Кэширование По Времени
 
 ```kotlin
 class WeatherRepository(
@@ -300,7 +297,7 @@ class WeatherRepository(
 }
 ```
 
-#### 3. Stale-While-Revalidate (устаревшие данные + обновление)
+#### 3. Stale-While-Revalidate (устаревшие Данные + обновление)
 
 ```kotlin
 class NewsRepository(
@@ -338,7 +335,7 @@ sealed class Resource<T> {
 }
 ```
 
-### Dependency Injection с Hilt
+### Dependency Injection С Hilt
 
 ```kotlin
 @Module
@@ -397,7 +394,7 @@ class UserViewModel @Inject constructor(
 
 ### Тестирование Repository
 
-#### 1. Unit-тесты с фейковыми реализациями
+#### 1. Unit-тесты С Фейковыми Реализациями
 
 ```kotlin
 class FakeUserApi : UserApi {
@@ -462,7 +459,7 @@ class UserRepositoryTest {
 }
 ```
 
-#### 2. Интеграционные тесты (пример)
+#### 2. Интеграционные Тесты (пример)
 
 ```kotlin
 @HiltAndroidTest
@@ -498,7 +495,7 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
-### Реальный пример: репозиторий для e-commerce
+### Реальный Пример: Репозиторий Для E-commerce
 
 ```kotlin
 interface ProductRepository {
@@ -641,7 +638,7 @@ sealed interface ProductListUiState {
 }
 ```
 
-### Продвинутый пример: композиция нескольких репозиториев
+### Продвинутый Пример: Композиция Нескольких Репозиториев
 
 ```kotlin
 // Композиция нескольких репозиториев для сложной операции
@@ -694,7 +691,7 @@ class CheckoutRepository(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Отдельный репозиторий на сущность/фичу — `UserRepository`, `ProductRepository` и т.п., а не один огромный `DataRepository`.
 2. Для реактивных данных — `Flow`/`LiveData`, чтобы UI подписывался и автоматически обновлялся.
@@ -707,9 +704,9 @@ class CheckoutRepository(
 9. Кэшировать осознанно — там, где это даёт выигрыш.
 10. Тщательно тестировать — unit-тесты с фейками/моками, интеграционные тесты с реальной БД/DI.
 
-### Типичные ошибки
+### Типичные Ошибки
 
-#### 1. Экспонирование внутренних источников данных
+#### 1. Экспонирование Внутренних Источников Данных
 
 ```kotlin
 // ПЛОХО: раскрываем внутренний источник данных
@@ -723,7 +720,7 @@ class UserRepository(private val userDao: UserDao) {
 }
 ```
 
-#### 2. Отсутствие единого источника истины
+#### 2. Отсутствие Единого Источника Истины
 
 ```kotlin
 // ПЛОХО: два источника истины
@@ -758,7 +755,7 @@ class ProductRepository(
 }
 ```
 
-#### 3. Блокирующие операции
+#### 3. Блокирующие Операции
 
 ```kotlin
 // ПЛОХО: блокируем главный поток

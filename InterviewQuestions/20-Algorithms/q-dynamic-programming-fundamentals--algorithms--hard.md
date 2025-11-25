@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [algorithms, difficulty/hard, dp, dynamic-programming, memoization, optimization]
 sources: ["https://en.wikipedia.org/wiki/Dynamic_programming"]
 
+date created: Saturday, November 1st 2025, 1:24:13 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)
@@ -371,14 +373,14 @@ fun maxSubArray(nums: IntArray): Int {
 ### Advanced (Harder)
 - [[q-backtracking-algorithms--algorithms--hard]] - Backtracking algorithms
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чем разница между мемоизацией и табуляцией?
 - Как определить, что задачу можно решить с помощью DP?
 - Каковы основные паттерны DP и когда каждый из них применять?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предпосылки (проще)
 - [[q-data-structures-overview--algorithms--easy]] - Базовые структуры данных
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-two-pointers-sliding-window--algorithms--medium]] - Техника двух указателей
 - [[q-sorting-algorithms-comparison--algorithms--medium]] - Сравнение сортировок
 ### Продвинутые (сложнее)

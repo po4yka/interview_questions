@@ -4,25 +4,30 @@ title: Android Service Types / Типы Service в Android
 aliases: [Android Service Types, Типы Service в Android]
 topic: android
 subtopics:
-- background-execution
-- service
+  - background-execution
+  - service
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-android-app-components--android--easy
-- q-android-architectural-patterns--android--medium
-- q-android-async-primitives--android--easy
+  - c-android-components
+  - q-android-app-components--android--easy
+  - q-android-architectural-patterns--android--medium
+  - q-android-async-primitives--android--easy
+  - q-android-services-purpose--android--easy
+  - q-foreground-service-types--android--medium
+  - q-service-types-android--android--easy
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 12:46:43 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -143,7 +148,7 @@ See also: [[c-android-components]]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Какие существуют типы Foreground `Service` и когда каждый из них обязателен?
 - Чем отличается `START_STICKY` от `START_NOT_STICKY` и `START_REDELIVER_INTENT`?
@@ -169,9 +174,9 @@ See also: [[c-android-components]]
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/guide/components/foreground-services
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые знания
+### Базовые Знания
 - [[q-android-app-components--android--easy]] - Основные Android-компоненты
 
 ### Связанные

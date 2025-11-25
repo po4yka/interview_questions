@@ -1,36 +1,35 @@
 ---
 id: android-634
 title: Media3 Transformer Workflows / Пайплайны Media3 Transformer
-aliases:
-- Media3 Transformer Workflows
-- Пайплайны Media3 Transformer
+aliases: [Media3 Transformer Workflows, Пайплайны Media3 Transformer]
 topic: android
 subtopics:
-- media
-- files-media
+  - files-media
+  - media
 question_kind: theory
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-media3-migration-strategy--android--hard
-- c-android
+  - c-android
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-media3-migration-strategy--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/media
-- android/files-media
-- difficulty/hard
+tags: [android/files-media, android/media, difficulty/hard]
 sources:
 - url: "https://developer.android.com/guide/topics/media/media3/transformer"
   note: Media3 Transformer guide
 - url: "https://medium.com/androiddevelopers/media3-transformer-deep-dive"
   note: Transformer deep dive
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -134,7 +133,7 @@ transformer.start(composition, outputPath)
 - Настраивайте целевые `mimeType`, `bitrate`, `resolution`; по умолчанию Transformer старается сохранить исходные параметры.
 - Учитывайте, что конкретные доступные конфигурации зависят от `MediaCodec` на устройстве.
 
-### 5. Фоновая обработка
+### 5. Фоновая Обработка
 
 - `Transformer.start(...)` асинхронен, но сам процесс ресурсоемкий, поэтому его жизненный цикл должен быть привязан к компоненту,
   который система не уничтожит произвольно.
@@ -143,7 +142,7 @@ transformer.start(composition, outputPath)
 - Прогресс: используйте `Transformer.Listener.onProgress(progressHolder)` и/или `onCompleted`/`onError` для обновления уведомлений.
 - Обрабатывайте cancel (например, через `transformer.cancel()`) и при завершении/сбое очищайте временные файлы.
 
-### 6. Управление кодеками
+### 6. Управление Кодеками
 
 - При необходимости явно проверяйте доступность кодеков через `MediaCodecList`/`MediaCodecInfo` (поддерживаемые MIME, profile/level), чтобы выбирать между H.265 и H.264.
 - Для HDR учитывайте поддержку `ColorTransfer`, `ColorSpace`, `ColorRange`; при отсутствии поддерживающих кодеков/поверхностей используйте SDR fallback.
@@ -155,7 +154,7 @@ transformer.start(composition, outputPath)
 - Добавьте retry-логику с более консервативной конфигурацией (например, понижение разрешения до 720p или переключение на H.264).
 - Логируйте метрики (длительность обработки, процент успеха, распределение по устройствам) для диагностики и последующей оптимизации.
 
-### 8. Тестирование и перформанс
+### 8. Тестирование И Перформанс
 
 - Тестируйте на разных чипсетах и версиях Android: поддержка hardware-кодеков и стабильность заметно различаются.
 - Измеряйте время экспорта, использование памяти и влияние на температуру/троттлинг.
@@ -173,7 +172,7 @@ transformer.start(composition, outputPath)
 - Log metrics and test across devices.
 
 ## Detailed Version
-### 1. Composition structure
+### 1. Composition Structure
 
 ```kotlin
 val editedItem1 = EditedMediaItem.Builder(MediaItem.fromUri(uri1))
@@ -231,7 +230,7 @@ val composition = Composition.Builder(editedItem1)
   - Fallback logic (codec switch, downscaling/bitrate reduction).
   - Execution metrics logging.
 
-### 4. Transformer configuration
+### 4. Transformer Configuration
 
 ```kotlin
 val transformationRequest = TransformationRequest.Builder()
@@ -256,26 +255,26 @@ transformer.start(composition, outputPath)
 - Tune target `mimeType`, bitrate, and resolution; by default Transformer attempts to preserve source properties.
 - Valid configurations depend on the available `MediaCodec` implementations on the device.
 
-### 5. Background execution
+### 5. Background Execution
 
 - `Transformer.start(...)` is asynchronous, but the transformation is resource-intensive, so tie it to a component that the system will keep alive for its duration.
 - For long-running exports, prefer a `ForegroundService` with a proper foreground notification; `WorkManager` can be used when its execution and foreground constraints fit your case.
 - Use `Transformer.Listener.onProgress(progressHolder)` and `onCompleted`/`onError` to update notifications and UI.
 - Support cancellation (e.g., `transformer.cancel()`) and clean up temporary/partial files on completion or failure.
 
-### 6. Codec management
+### 6. Codec Management
 
 - When needed, probe codecs using `MediaCodecList`/`MediaCodecInfo` (supported MIME, profile/level) to choose between H.265 and H.264.
 - For HDR, consider `ColorTransfer`, `ColorSpace`, and `ColorRange`; if unsupported by codecs/surfaces, fall back to SDR.
 - For audio, choose supported MIME types (e.g., AAC, Opus where available), channels, sample rate, and bitrate; arbitrary sample bit depth control is not exposed via the high-level API.
 
-### 7. Error handling
+### 7. Error Handling
 
 - Handle `TransformationException` in `Transformer.Listener.onError` and inspect `errorCode` (decoder/encoder failures, unsupported format, file I/O issues, etc.).
 - Add retry logic with more conservative presets (e.g., downscale to 720p or switch to H.264) when errors indicate capability limits.
 - Log metrics such as processing duration, success rate, and device distribution to diagnose issues and guide optimization.
 
-### 8. Testing and performance
+### 8. Testing and Performance
 
 - Test across diverse chipsets and Android versions: hardware codec support and stability vary significantly.
 - Measure export time, memory usage, and thermal/throttling impact.

@@ -4,25 +4,30 @@ title: Compose Navigation Advanced / Продвинутая навигация C
 aliases: [Compose Navigation Advanced, Продвинутая навигация Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-navigation
+  - ui-compose
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- q-android-jetpack-overview--android--easy
+  - c-compose-navigation
+  - q-android-jetpack-overview--android--easy
+  - q-compose-side-effects-advanced--android--hard
+  - q-compose-ui-testing-advanced--android--hard
+  - q-how-dialog-differs-from-other-navigation--android--medium
 created: 2025-09-10
 updated: 2025-10-10
 tags: [android/ui-compose, android/ui-navigation, difficulty/medium]
 sources:
-- "https://developer.android.com/jetpack/compose/navigation"
+  - "https://developer.android.com/jetpack/compose/navigation"
 
+date created: Saturday, November 1st 2025, 1:25:30 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -115,7 +120,7 @@ composable(
 </intent-filter>
 ```
 
-### Контроль back stack
+### Контроль back Stack
 
 **launchSingleTop** — предотвращает дублирование верхней записи. **popUpTo** — очищает стек до указанного маршрута; `inclusive = true` удаляет и сам маршрут. Для bottom navigation и сохранения состояния используйте комбинацию `saveState` и `restoreState`.
 
@@ -160,7 +165,7 @@ nav.navigate("details")
 val data = viewModel.data.collectAsState().value
 ```
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как реализовать вложенные графы навигации для feature-модулей?
 - Как тестировать навигационные потоки с `NavController` в unit/UI-тестах?
@@ -174,7 +179,7 @@ val data = viewModel.data.collectAsState().value
 - https://developer.android.com/jetpack/compose/navigation
 - https://developer.android.com/guide/navigation/design
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### Предварительные (проще)
 - [[q-android-jetpack-overview--android--easy]]

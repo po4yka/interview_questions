@@ -3,18 +3,21 @@ id: lang-053
 title: "Launch Vs Async Await / Launch против Async Await"
 aliases: [Launch Vs Async Await, Launch против Async Await]
 topic: kotlin
-subtopics: [coroutines, c-kotlin-coroutines-basics, c-coroutines]
+subtopics: [c-coroutines, c-kotlin-coroutines-basics, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-hot-vs-cold-flows--programming-languages--medium]
+related: [c-coroutines, c-kotlin, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [async, await, coroutines, difficulty/medium, kotlin, launch, programming-languages]
+date created: Friday, October 31st 2025, 6:29:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Чем launch отличается от async/await?
 
@@ -77,7 +80,7 @@ val result = deferred.await()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этого подхода от Java?
 - Когда вы бы использовали это на практике?
@@ -101,7 +104,7 @@ val result = deferred.await()
 - [[c-coroutines]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-hot-vs-cold-flows--programming-languages--medium]]
 

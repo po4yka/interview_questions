@@ -15,8 +15,10 @@ moc: moc-kotlin
 related: [c-concurrency, q-coroutine-context-detailed--kotlin--hard, q-kotlin-coroutines-introduction--kotlin--medium]
 created: 2025-10-11
 updated: 2025-11-11
-tags: [kotlin, coroutines, flow, difficulty/hard]
+tags: [coroutines, difficulty/hard, flow, kotlin]
 
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -71,7 +73,7 @@ val context = job + dispatcher + name + handler
 
 ### Правила Композиции Контекста
 
-#### 1. Комбинирование с `+`
+#### 1. Комбинирование С `+`
 
 При комбинировании контекстов элементы с одинаковым ключом заменяют предыдущие:
 

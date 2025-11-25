@@ -5,7 +5,7 @@ aliases: ["Channel Closing and Completion", "Закрытие и заверше�
 
 # Classification
 topic: kotlin
-subtopics: [channels, coroutines, cleanup]
+subtopics: [channels, cleanup, coroutines]
 question_kind: theory
 difficulty: medium
 
@@ -18,13 +18,15 @@ source_note: Comprehensive Kotlin Coroutines Channel Lifecycle Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [channels, cleanup, closing, completion, coroutines, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:43:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +41,7 @@ tags: [channels, cleanup, closing, completion, coroutines, difficulty/medium, ko
 
 Правильное управление жизненным циклом каналов критически важно для предотвращения утечек ресурсов, корректной обработки ошибок и управляемого завершения работы корутинных систем.
 
-### Понимание состояний канала
+### Понимание Состояний Канала
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -72,7 +74,7 @@ fun channelStates() = runBlocking {
 - isClosedForSend == true: новые send/trySend недопустимы, но чтение возможно, пока есть элементы.
 - isClosedForReceive == true: канал полностью исчерпан, дальнейшие receive() приведут к ClosedReceiveChannelException.
 
-### close() vs cancel() vs close(cause)
+### close() Vs cancel() Vs close(cause)
 
 Ключевые идеи:
 - close(): мягкое (graceful) завершение, сигнал "значений больше не будет"; уже отправленные элементы остаются доступны для чтения.
@@ -162,7 +164,7 @@ class ChannelClosingMethodsRu(private val scope: CoroutineScope) {
 }
 ```
 
-### Исключения: ClosedSendChannelException vs ClosedReceiveChannelException
+### Исключения: ClosedSendChannelException Vs ClosedReceiveChannelException
 
 ```kotlin
 class ChannelExceptionsRu(private val scope: CoroutineScope) {
@@ -247,7 +249,7 @@ class ChannelExceptionsRu(private val scope: CoroutineScope) {
 }
 ```
 
-### Паттерны producer-consumer с корректной очисткой
+### Паттерны Producer-consumer С Корректной Очисткой
 
 ```kotlin
 class ProperCleanupPatternsRu(private val scope: CoroutineScope) {
@@ -363,7 +365,7 @@ class ProperCleanupPatternsRu(private val scope: CoroutineScope) {
 }
 ```
 
-### Использование produce builder (рекомендуется)
+### Использование Produce Builder (рекомендуется)
 
 ```kotlin
 class ProduceBuilderPatternRu {
@@ -425,7 +427,7 @@ class ProduceBuilderPatternRu {
 }
 ```
 
-### Продвинутые сценарии очистки
+### Продвинутые Сценарии Очистки
 
 ```kotlin
 class AdvancedCleanupRu(private val scope: CoroutineScope) {
@@ -540,7 +542,7 @@ class AdvancedCleanupRu(private val scope: CoroutineScope) {
 }
 ```
 
-### Тестирование закрытия каналов
+### Тестирование Закрытия Каналов
 
 ```kotlin
 import kotlinx.coroutines.channels.Channel
@@ -619,7 +621,7 @@ class ChannelClosureTestsRu {
 }
 ```
 
-### Лучшие практики и анти-паттерны
+### Лучшие Практики И Анти-паттерны
 
 ```kotlin
 class BestPracticesRu(private val scope: CoroutineScope) {
@@ -767,7 +769,7 @@ fun channelStates() = runBlocking {
 }
 ```
 
-### close() vs cancel() vs close(cause)
+### close() Vs cancel() Vs close(cause)
 
 Key ideas:
 - close(): graceful, signals "no more elements"; buffered elements remain available for receive.
@@ -857,7 +859,7 @@ class ChannelClosingMethods(private val scope: CoroutineScope) {
 }
 ```
 
-### Exceptions: ClosedSendChannelException vs ClosedReceiveChannelException
+### Exceptions: ClosedSendChannelException Vs ClosedReceiveChannelException
 
 ```kotlin
 class ChannelExceptions(private val scope: CoroutineScope) {
@@ -1067,7 +1069,7 @@ class ProperCleanupPatterns(private val scope: CoroutineScope) {
 }
 ```
 
-### Using produce Builder (Recommended)
+### Using Produce Builder (Recommended)
 
 ```kotlin
 class ProduceBuilderPattern {

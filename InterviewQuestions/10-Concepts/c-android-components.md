@@ -1,16 +1,15 @@
 ---
 id: concept-android-components
 title: Android Components / Компоненты Android
-aliases:
-  - Android Components
-  - Компоненты Android
-  - App Components
+aliases: [Android Components, App Components, Компоненты Android]
 kind: concept
 summary: The four fundamental building blocks of Android applications
 links: []
 created: 2025-11-06
 updated: 2025-11-06
-tags: [concept, android, components, architecture]
+tags: [android, architecture, components, concept]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

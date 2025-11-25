@@ -14,6 +14,8 @@ related: [c-kotlin, c-kotlin-features, q-kotlin-coroutines-introduction--kotlin-
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin, null-safety, type-inference, type-system]
+date created: Friday, October 31st 2025, 6:28:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +35,7 @@ var nonNull: String = "Hello"      // Не может быть null
 var nullable: String? = null        // Явно допускает null
 ```
 
-### 2. Коллекции: Read-only vs Mutable
+### 2. Коллекции: Read-only Vs Mutable
 В Kotlin чётко разделены интерфейсы для только-чтения (read-only) и изменяемых коллекций. Read-only коллекции предоставляют неизменяемый интерфейс, но не всегда гарантируют структурную неизменяемость реализации.
 ```kotlin
 val list: List<String> = listOf("a", "b")              // Интерфейс только для чтения
@@ -46,7 +48,7 @@ val mutableList: MutableList<String> = mutableListOf("a", "b")
 data class User(val name: String, val age: Int)
 ```
 
-### 4. Smart Casts (Умные приведения типов)
+### 4. Smart Casts (Умные Приведения типов)
 После проверки с помощью `is` (и при отсутствии побочных эффектов) компилятор автоматически приводит тип внутри соответствующей ветки:
 ```kotlin
 fun demo(x: Any) {
@@ -56,7 +58,7 @@ fun demo(x: Any) {
 }
 ```
 
-### 5. Sealed Иерархии (Закрытые иерархии типов)
+### 5. Sealed Иерархии (Закрытые Иерархии типов)
 `sealed`-иерархии ограничивают набор допустимых подтипов, что упрощает исчерпывающую обработку в `when` без ветки `else` при покрытии всех вариантов:
 ```kotlin
 sealed class Result {
@@ -85,7 +87,7 @@ var nonNull: String = "Hello"      // Cannot be null
 var nullable: String? = null        // Explicitly nullable
 ```
 
-### 2. Collections: Read-only vs Mutable
+### 2. Collections: Read-only Vs Mutable
 Kotlin clearly distinguishes between read-only collection interfaces and mutable ones. Read-only collections expose a non-mutating API but do not always guarantee structural immutability of the underlying collection.
 ```kotlin
 val list: List<String> = listOf("a", "b")              // Read-only view
@@ -126,7 +128,7 @@ val name = "John" // Inferred as String
 
 These features (null safety, smart casts, sealed hierarchies, collection APIs, data classes, and type inference) make Kotlin code safer, more concise, and more expressive.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия системы типов Kotlin от Java?
 - Когда на практике особенно важно использовать эти возможности системы типов Kotlin (null-safety, умные приведения, sealed-иерархии, разделение коллекций)?
@@ -136,7 +138,7 @@ These features (null safety, smart casts, sealed hierarchies, collection APIs, d
 
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]
 

@@ -21,14 +21,17 @@ source_note: Comprehensive guide on advanced Kotlin Coroutine patterns
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-actor-pattern--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-actor-pattern--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-10
 
 tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-consumer, semaphore]
+date created: Sunday, October 12th 2025, 3:06:29 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Что такое продвинутые паттерны корутин в Kotlin? Объясните паттерн pipeline, producer-consumer с несколькими стадиями, пулинг ресурсов с Mutex/Semaphore, кастомные scope builders и паттерны rate limiting.
 
@@ -93,7 +96,7 @@ suspend fun pipelineExample() = coroutineScope {
 - обязательно отменять/закрывать каналы, когда результат больше не нужен, чтобы избежать утечек;
 - стадии должны уважать отмену (`for (x in channel)` корректно завершится после `cancel`).
 
-### Producer-Consumer с несколькими стадиями
+### Producer-Consumer С Несколькими Стадиями
 
 Многостадийный producer-consumer — это частный случай pipeline, где между стадиями могут быть несколько воркеров.
 
@@ -201,7 +204,7 @@ class DataPipeline(private val scope: CoroutineScope) {
 
 Идея: использовать каналы для связывания стадий и `launch` для параллельных воркеров. Для production-кода важно корректно закрывать `out` и не допускать зависания потребителей.
 
-### Пулинг ресурсов с Semaphore
+### Пулинг Ресурсов С Semaphore
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -239,7 +242,7 @@ class ConnectionPool(private val size: Int) {
 
 Идея: `Semaphore` ограничивает одновременное количество пользователей ресурса; очередь ресурсов защищена синхронизацией (в реальных приложениях обычно используют неблокирующие структуры или отдельный мьютекс).
 
-### Пулинг ресурсов с Mutex
+### Пулинг Ресурсов С Mutex
 
 ```kotlin
 import kotlinx.coroutines.sync.Mutex
@@ -351,7 +354,7 @@ class SlidingWindowRateLimiter(
 }
 ```
 
-### Кастомные scope builders
+### Кастомные Scope Builders
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -524,7 +527,7 @@ class Bulkhead(private val maxConcurrent: Int) {
 
 Идея: разделять ресурсы по типам нагрузки и ограничивать конкуренцию для каждой группы отдельно (часто с немедленным отказом) — пример демонстрационный.
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 #### ДЕЛАТЬ:
 

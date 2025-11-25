@@ -28,7 +28,10 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, val, var]
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > В чём разница между val и var в Kotlin? Когда использовать каждый из них?
 
@@ -41,7 +44,7 @@ tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, 
 
 `val` и `var` — ключевые слова для объявления переменных/свойств в Kotlin. Понимание когда использовать каждое из них фундаментально для написания идиоматичного, безопасного Kotlin кода.
 
-### Основное различие
+### Основное Различие
 
 ```kotlin
 val name = "Alice"      // Только для чтения (неизменяемая ссылка)
@@ -54,7 +57,7 @@ age = 26                // OK: Var можно переназначить
 **val** = **value** = ссылка только для чтения (как `final` в Java)
 **var** = **variable** = изменяемая ссылка
 
-### Вывод типа (Type Inference)
+### Вывод Типа (Type Inference)
 
 `val` и `var` работают с выводом типов:
 
@@ -68,7 +71,7 @@ var text: String                // Тип нужно указать явно, е
 text = "Hello"
 ```
 
-### Val: ссылка только для чтения
+### Val: Ссылка Только Для Чтения
 
 ```kotlin
 val x = 10
@@ -86,7 +89,7 @@ list.add(4)                // OK: содержимое может менятьс
 4. НЕ означает, что объект неизменяем
 5. Предпочтительна в Kotlin (подход immutability-first)
 
-### Var: изменяемая ссылка
+### Var: Изменяемая Ссылка
 
 ```kotlin
 var counter = 0
@@ -101,7 +104,7 @@ counter += 10    // OK
 3. Использовать когда значение нужно менять со временем
 4. Менее предпочтительна чем val
 
-### Val — это не глубокая неизменяемость
+### Val — Это Не Глубокая Неизменяемость
 
 ```kotlin
 // Val означает, что неизменяема ссылка, а не объект
@@ -119,7 +122,7 @@ val immutableNumbers = listOf(1, 2, 3)
 // immutableNumbers.add(4)       // Ошибка: List<T> неизменяем
 ```
 
-### Пользовательские геттеры у val (Custom Getters with Val)
+### Пользовательские Геттеры У Val (Custom Getters with Val)
 
 `val` может иметь пользовательский геттер и вычисляться при каждом обращении:
 
@@ -135,9 +138,9 @@ println(rect.area)  // 200
 // Площадь не хранится, а пересчитывается
 ```
 
-### Когда использовать val
+### Когда Использовать Val
 
-#### ИСПОЛЬЗОВАТЬ val, когда:
+#### ИСПОЛЬЗОВАТЬ Val, Когда:
 
 ```kotlin
 // 1. Значение не нужно менять
@@ -174,9 +177,9 @@ class Circle(val radius: Double) {
 }
 ```
 
-### Когда использовать var
+### Когда Использовать Var
 
-#### ИСПОЛЬЗОВАТЬ var, когда:
+#### ИСПОЛЬЗОВАТЬ Var, Когда:
 
 ```kotlin
 // 1. Значение нужно менять со временем
@@ -209,7 +212,7 @@ class HttpRequestBuilder {
 }
 ```
 
-### Val vs var в классах
+### Val Vs Var В Классах
 
 ```kotlin
 // Основной конструктор
@@ -235,7 +238,7 @@ class User {
 }
 ```
 
-### Val vs var с nullable-типами
+### Val Vs Var С Nullable-типами
 
 ```kotlin
 val name: String? = null
@@ -263,7 +266,7 @@ if (mutableMessage != null) {
 }
 ```
 
-### Val в циклах
+### Val В Циклах
 
 ```kotlin
 // Переменная цикла — val (неявно)
@@ -286,7 +289,7 @@ while (i < 10) {
 }
 ```
 
-### Val и отложенная инициализация (lateinit / lazy)
+### Val И Отложенная Инициализация (lateinit / lazy)
 
 ```kotlin
 class MyTest {
@@ -307,7 +310,7 @@ class DatabaseManager {
 }
 ```
 
-### Соображения по производительности
+### Соображения По Производительности
 
 ```kotlin
 // Сам по себе val не гарантирует лучшую производительность
@@ -326,7 +329,7 @@ class Example {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 
@@ -378,9 +381,9 @@ class Counter {
 var PI = 3.14159  // Плохо: должно быть val или const val
 ```
 
-### Общие паттерны (Common Patterns)
+### Общие Паттерны (Common Patterns)
 
-#### Управление состоянием
+#### Управление Состоянием
 
 ```kotlin
 class ViewModel {
@@ -425,7 +428,7 @@ class HttpRequest private constructor(
 }
 ```
 
-#### Отложенная инициализация
+#### Отложенная Инициализация
 
 ```kotlin
 class ResourceManager {
@@ -439,7 +442,7 @@ class ResourceManager {
 }
 ```
 
-### Val vs const val
+### Val Vs Const Val
 
 ```kotlin
 // const val: константа времени компиляции
@@ -458,9 +461,9 @@ class Config {
 }
 ```
 
-### Реальные примеры (Real-World Examples)
+### Реальные Примеры (Real-World Examples)
 
-#### Data class
+#### Data Class
 
 ```kotlin
 data class User(
@@ -1019,7 +1022,7 @@ class AppConfig {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия подхода Kotlin от Java в контексте `val`/`var` и `final`?
 - Когда вы бы использовали `val`/`var` в реальных проектах?
@@ -1045,7 +1048,7 @@ class AppConfig {
 - [Effective Kotlin - Item 1: Limit mutability](https://kt.academy/article/ek-mutability)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-properties--kotlin--easy]]
 - [[q-kotlin-const--kotlin--easy]]

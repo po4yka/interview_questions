@@ -1,30 +1,31 @@
 ---
 id: android-270
 title: Room vs SQLite / Room против SQLite
-aliases:
-- Room vs SQLite
-- Room против SQLite
+aliases: [Room vs SQLite, Room против SQLite]
 topic: android
 subtopics:
-- room
+  - room
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-room
-- q-android-runtime-art--android--medium
-- q-room-transactions-dao--android--medium
+  - c-room
+  - q-android-runtime-art--android--medium
+  - q-room-code-generation-timing--android--medium
+  - q-room-relations-embedded--android--medium
+  - q-room-transactions-dao--android--medium
+  - q-room-type-converters-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/room
-- difficulty/medium
+tags: [android/room, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -43,9 +44,9 @@ tags:
 
 Room упрощает работу с базой данных и делает код более читаемым, но **внутри все равно использует SQLite**.
 
-### Ключевые различия
+### Ключевые Различия
 
-#### 1. Уровень абстракции
+#### 1. Уровень Абстракции
 
 **SQLite — низкоуровневый:**
 
@@ -179,7 +180,7 @@ interface UserDao {
 }
 ```
 
-#### 4. Реактивные данные
+#### 4. Реактивные Данные
 
 **SQLite — нет встроенной поддержки:**
 
@@ -333,7 +334,7 @@ fun testGetUser() = runTest {
 }
 ```
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Функция | SQLite | Room |
 |---------|--------|------|
@@ -349,7 +350,7 @@ fun testGetUser() = runTest {
 | **Производительность** | Быстро | Быстро (использует SQLite внутри) |
 | **Зависимости** | Встроено | Библиотека Jetpack |
 
-### Полный пример сравнения
+### Полный Пример Сравнения
 
 **SQLite:**
 

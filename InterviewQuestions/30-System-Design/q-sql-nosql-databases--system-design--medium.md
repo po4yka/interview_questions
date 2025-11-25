@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [databases, difficulty/medium, nosql, scalability, sql, system-design]
 sources: ["https://en.wikipedia.org/wiki/NoSQL"]
 
+date created: Sunday, October 12th 2025, 8:29:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -539,12 +541,12 @@ class OrderService(
 - [[q-database-sharding-partitioning--system-design--hard]] - Data distribution
 - [[q-cap-theorem-distributed-systems--system-design--hard]] - CAP theorem
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как обрабатывать eventual consistency в NoSQL?
 - В чём разница между нормализацией и денормализацией?
 - Как выбирать между разными типами NoSQL-хранилищ?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-caching-strategies--system-design--medium]] - Паттерны кеширования

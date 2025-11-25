@@ -21,14 +21,17 @@ source_note: Guide to testing coroutines in ViewModels
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, kotlin, stateflow, testing, turbine, unit-testing, viewmodel]
+date created: Saturday, November 1st 2025, 9:25:31 am
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Как тестировать `ViewModel` с корутинами? Объясните `TestCoroutineDispatcher`, `StandardTestDispatcher`, тестирование `StateFlow`/`SharedFlow` и мокирование suspend функций.
 
@@ -43,7 +46,7 @@ tags: [coroutines, difficulty/medium, kotlin, stateflow, testing, turbine, unit-
 
 См. также: [[c-kotlin]], [[c-coroutines]], [[c-viewmodel]], [[c-testing]], [[c-unit-testing]].
 
-### Настройка зависимостей
+### Настройка Зависимостей
 
 ```gradle
 // build.gradle.kts
@@ -94,7 +97,7 @@ class MainDispatcherRule(
 }
 ```
 
-### Базовый пример `ViewModel` и теста
+### Базовый Пример `ViewModel` И Теста
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -209,7 +212,7 @@ fun `verify loading states`() = runTest {
 }
 ```
 
-### Тестирование с Turbine
+### Тестирование С Turbine
 
 Turbine упрощает тестирование `Flow`/`StateFlow`/`SharedFlow`:
 
@@ -256,7 +259,7 @@ fun `isLoading эмитит корректную последовательно�
 }
 ```
 
-### Тестирование сценариев ошибок
+### Тестирование Сценариев Ошибок
 
 ```kotlin
 import io.mockk.coEvery
@@ -337,7 +340,7 @@ fun `loadUsers обрабатывает сетевую ошибку`() = runTest
 }
 ```
 
-### Тестирование `SharedFlow` событий
+### Тестирование `SharedFlow` Событий
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -410,7 +413,7 @@ fun `ошибка логина эмитит ShowError`() = runTest {
 }
 ```
 
-### Мокирование suspend-функций
+### Мокирование Suspend-функций
 
 ```kotlin
 class UserRepository {
@@ -481,7 +484,7 @@ fun `мокирование suspend функции с delay и виртуаль�
 }
 ```
 
-### Тестирование конкурентных операций
+### Тестирование Конкурентных Операций
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -529,7 +532,7 @@ fun `loadMultipleSources вызывает все источники`() = runTest
 }
 ```
 
-### Тестирование коллекции `Flow`
+### Тестирование Коллекции `Flow`
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -581,7 +584,7 @@ fun `data коллектит значения из репозитория`() = r
 }
 ```
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 #### ДЕЛАТЬ:
 ```kotlin
@@ -1255,7 +1258,7 @@ fun test() = runTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этого подхода от тестирования в Java?
 - Когда на практике вы будете использовать такой подход к тестированию `ViewModel` с корутинами?
@@ -1279,7 +1282,7 @@ fun test() = runTest {
 - [Testing StateFlow](https://developer.android.com/kotlin/flow/test)
 - [Turbine Documentation](https://github.com/cashapp/turbine)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-testing-viewmodels-coroutines--kotlin--medium]]
 - [[q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]]

@@ -3,18 +3,21 @@ id: lang-001
 title: "List Vs Sequence / List против Sequence"
 aliases: [List Vs Sequence, List против Sequence]
 topic: kotlin
-subtopics: [collections, performance, lazy-evaluation]
+subtopics: [collections, lazy-evaluation, performance]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-list-vs-sequence--kotlin--medium]
+related: [c-collections, c-kotlin, q-list-vs-sequence--kotlin--medium]
 created: 2024-10-13
 updated: 2025-11-11
 tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequence]
+date created: Friday, October 31st 2025, 6:29:17 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между работой с `List` и работой с `Sequence`?
 
@@ -49,7 +52,7 @@ tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequ
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали это на практике?
@@ -73,12 +76,12 @@ tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequ
 - [[c-collections]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Реализация в Android
+### Реализация В Android
 - [[q-what-problems-can-there-be-with-list-items--android--easy]] — Структуры данных
 
-### Особенности языка Kotlin
+### Особенности Языка Kotlin
 - [[q-list-vs-sequence--kotlin--medium]] — Структуры данных
 - [[q-kotlin-immutable-collections--programming-languages--easy]] — Структуры данных
 

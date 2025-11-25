@@ -15,6 +15,8 @@ related: [c-background-tasks, c-coroutines, c-workmanager]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, difficulty/medium, jetpack, scheduled-tasks, workmanager]
+date created: Saturday, November 1st 2025, 1:26:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -136,7 +138,7 @@ WorkManager.getInstance(context)
 
 Если вам нужен как гарантированный план/ретраи, так и выполнение в переднем плане (например, видимая пользователю долгая загрузка), используйте WorkManager с `setForeground()` внутри `ListenableWorker`/`CoroutineWorker` вместо ручного управления службой.
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как WorkManager обрабатывает ограничения Doze и оптимизации батареи?
 - В чем разница между `Worker`, `CoroutineWorker` и `RxWorker`?
@@ -151,7 +153,7 @@ WorkManager.getInstance(context)
 - [Документация WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) — Официальное руководство
 - [WorkManager Basics](https://medium.com/androiddevelopers/workmanager-basics-beba51e94048) — Вводная статья
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### База (проще)
 - [[q-android-service-types--android--easy]] — Понимание типов и назначения Android `Service`

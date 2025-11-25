@@ -1,35 +1,33 @@
 ---
 id: android-626
 title: Power Profiling with Battery Historian / Профилирование энергии с Battery Historian
-aliases:
-  - Power Profiling with Battery Historian
-  - Профилирование энергии с Battery Historian
+aliases: [Power Profiling with Battery Historian, Профилирование энергии с Battery Historian]
 topic: android
 subtopics:
+  - monitoring-slo
   - performance-battery
   - profiling
-  - monitoring-slo
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - ru
   - en
+  - ru
 status: draft
 moc: moc-android
 related:
   - c-android-profiling
   - q-android-performance-measurement-tools--android--medium
+  - q-compose-core-components--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-  - android/performance-battery
-  - android/profiling
-  - android/monitoring-slo
-  - battery
-  - difficulty/medium
+tags: [android/monitoring-slo, android/performance-battery, android/profiling, battery, difficulty/medium]
 sources:
   - "https://developer.android.com/topic/performance/power/battery-historian"
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -62,7 +60,7 @@ sources:
 - Захватывайте `System Events`, `Network`, `Location`, `Wakelock`.
 - Сравните с логами/метриками, чтобы локализовать проблемные участки кода, вызывающие частые пробуждения или сетевую активность.
 
-### 4. План действий
+### 4. План Действий
 
 - **Wakelock leaks**: убедитесь, что `wakeLock.release()` вызывается гарантированно (например, в `finally` или в коллбэке по завершении работы); не полагайтесь на таймауты/корутины как на автоматическое освобождение.
 - **Network batching**: объединяйте запросы, используйте эффективные протоколы (например, HTTP/2), применяйте WorkManager с `setRequiredNetworkType` для фоновой синхронизации.
@@ -88,7 +86,7 @@ sources:
 - Capture a bugreport: `adb bugreport bugreport.zip`.
 - Run the Battery Historian web UI locally (e.g., via `go run` or Docker as per the official guide) and upload the bugreport.
 
-### 2. Battery Historian analysis
+### 2. Battery Historian Analysis
 
 - **Wakelock graph**: look for long partial wakelocks where the app holds the CPU.
 - **JobScheduler/AlarmManager**: frequent triggers may violate quotas and waste power.
@@ -101,7 +99,7 @@ sources:
 - Capture `System Events`, `Network`, `Location`, `Wakelock`.
 - Correlate with logs/metrics to pinpoint code paths causing frequent wakeups or network activity.
 
-### 4. Action plan
+### 4. Action Plan
 
 - **Wakelock leaks**: ensure `wakeLock.release()` is always called (e.g., in `finally` or completion callbacks); do not rely on timeouts/coroutines as automatic release mechanisms.
 - **Network batching**: batch requests, use efficient protocols (e.g., HTTP/2), and schedule background sync via WorkManager with `setRequiredNetworkType` (or similar constraints) instead of ad-hoc background work.
@@ -116,7 +114,7 @@ sources:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как измерять энергопотребление на уровне функций (on-device power rails)?
 - Как анализировать влияние foreground services на Doze?
 - Как автоматизировать energy regression тесты в CI?
@@ -132,7 +130,7 @@ sources:
 ## References
 - https://developer.android.com/topic/performance/power/battery-historian
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[q-android-performance-measurement-tools--android--medium]]
 
 ## Related Questions

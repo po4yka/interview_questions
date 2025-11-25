@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-equality, c-hash-map]
+related: [c-equality, c-hash-map, c-kotlin]
 created: 2025-10-09
 updated: 2025-11-09
 tags: [contracts, difficulty/hard, equals, hashcode, programming-languages]
+date created: Friday, October 31st 2025, 6:34:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Расскажите о контрактах equals() и hashCode() в Kotlin. Каковы их требования и как они работают вместе?
 

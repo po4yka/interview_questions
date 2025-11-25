@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
 
+date created: Friday, October 31st 2025, 6:28:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -134,7 +136,7 @@ fun method2() { }         // Same as above (Unit inferred)
 - [[q-suspend-functions-basics--kotlin--easy]]
 - [[q-kotlin-generic-function-syntax--programming-languages--easy]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Каковы основные различия между `Unit` и `void` в Java?
 - Когда вы бы использовали `Unit` на практике (включая явное указание типа)?
 - Какие распространенные заблуждения или ошибки связаны с использованием `Unit`?

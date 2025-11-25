@@ -1,40 +1,33 @@
 ---
 id: android-169
 title: KMM vs React Native / KMM против React Native
-aliases:
-- KMM vs React Native
-- KMM против React Native
-- React Native Comparison
-- React Native Сравнение
+aliases: [KMM vs React Native, KMM против React Native, React Native Comparison, React Native Сравнение]
 topic: android
 subtopics:
-- architecture-mvvm
-- kmp
+  - architecture-mvvm
+  - kmp
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-mvvm
-- q-how-does-jetpackcompose-work--android--medium
-- q-play-app-signing--android--medium
+  - c-mvvm
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-kmm-dependency-injection--android--medium
+  - q-kmm-ktor-networking--android--medium
+  - q-play-app-signing--android--medium
+  - q-react-native-vs-flutter--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/architecture-mvvm
-- android/kmp
-- difficulty/medium
-- javascript
-- kmp
-- kotlin
-- multiplatform
-- reactnative
+tags: [android/architecture-mvvm, android/kmp, difficulty/medium, javascript, kmp, kotlin, multiplatform, reactnative]
 
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)

@@ -11,10 +11,13 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-11-09
-tags: [collections, difficulty/easy, map, kotlin]
+tags: [collections, difficulty/easy, kotlin, map]
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-kotlin-property-delegates--programming-languages--medium]
+related: [c-collections, c-kotlin, q-kotlin-property-delegates--programming-languages--medium]
+date created: Friday, October 31st 2025, 6:30:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Расскажи про коллекцию `Map`
 
@@ -54,7 +57,7 @@ ages["Bob"] = 30
 ages.remove("Bob")
 ```
 
-### Инициализация и перебор
+### Инициализация И Перебор
 ```kotlin
 val map = mapOf(
     "one" to 1,
@@ -155,7 +158,7 @@ val idToGreeting = users.map { (id, name) -> "$id: Hello, $name" }
 // List<String>: ["1: Hello, Alice", "2: Hello, Bob"]
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем отличаются `Map` в Kotlin и `Map` в Java (nullability, read-only интерфейсы, функции-расширения и т.д.)?
 - Когда стоит выбирать `Map` вместо `List` или других коллекций?
@@ -165,7 +168,7 @@ val idToGreeting = users.map { (id, name) -> "$id: Hello, $name" }
 
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-immutable-collections--programming-languages--easy]]
 - [[q-kotlin-collections--kotlin--medium]]

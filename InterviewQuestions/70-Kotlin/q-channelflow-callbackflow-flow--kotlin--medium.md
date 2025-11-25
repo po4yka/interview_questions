@@ -10,14 +10,17 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [builders, callbackflow, channelflow, coroutines, difficulty/medium, flow, kotlin]
 moc: moc-kotlin
-aliases: ["channelFlow vs callbackFlow vs flow", "channelFlow vs callbackFlow vs flow: когда использовать"]
+aliases: ["channelFlow vs callbackFlow vs flow: когда использовать", "channelFlow vs callbackFlow vs flow"]
 question_kind: coding
-related: [c-kotlin, c-flow, c-coroutines, q-kotlin-flow-basics--kotlin--medium, q-channels-vs-flow--kotlin--medium]
+related: [c-coroutines, c-flow, c-kotlin, q-channels-vs-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 subtopics:
   - builders
   - coroutines
   - flow
+date created: Friday, November 7th 2025, 6:45:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между `flow{}`, `channelFlow{}`, и `callbackFlow{}`? Когда следует использовать каждый билдер?
 
@@ -30,7 +33,7 @@ subtopics:
 
 Kotlin `Flow` предоставляет несколько билдеров (`flow{}`, `channelFlow{}`, `callbackFlow{}`), каждый с разными характеристиками. Неверный выбор билдера может привести к лишним накладным расходам, сложностям с отменой, утечкам ресурсов или некорректному поведению. Важно понимать точные семантики каждого, чтобы писать production-ready `Flow` код.
 
-### Обзор билдера Flow
+### Обзор Билдера Flow
 
 | Билдер | Тип потока | Конкурентность | Буферизация | Основной кейс |
 |--------|------------|----------------|-------------|---------------|
@@ -40,7 +43,7 @@ Kotlin `Flow` предоставляет несколько билдеров (`f
 
 Важно: все три билдера создают холодные `Flow`. Для `channelFlow{}` и `callbackFlow{}` продюсер запускается для каждой новой коллекции, и внутри используется `Channel`. Это может делать поведение похожим на «горячий» источник (несколько конкурентных продюсеров, буфер), но жизненный цикл по-прежнему строго ограничен коллекцией (они не становятся глобально горячими потоками сами по себе).
 
-### `flow{}` — холодный, последовательный Flow
+### `flow{}` — Холодный, Последовательный Flow
 
 Характеристики:
 - Холодный: выполнение начинается только при запуске терминального оператора; каждый новый коллектор заново запускает блок.
@@ -109,7 +112,7 @@ fun concurrentFlow(): Flow<Int> = flow {
 // but emission happened in [coroutine#2].
 ```
 
-### `channelFlow{}` — конкурентные продюсеры и Channel
+### `channelFlow{}` — Конкурентные Продюсеры И Channel
 
 Характеристики:
 - Холодный `Flow`, блок выполняется в `ProducerScope`, основанном на `Channel`.
@@ -177,7 +180,7 @@ fun bufferedFlow(): Flow<Int> = channelFlow {
 }.buffer(capacity = Channel.UNLIMITED) // либо CONFLATED, RENDEZVOUS и т.п.
 ```
 
-### `callbackFlow{}` — обертка над callback API
+### `callbackFlow{}` — Обертка Над Callback API
 
 Характеристики:
 - Холодный `Flow` с `ProducerScope` и `Channel`.
@@ -254,7 +257,7 @@ fun goodCallbackFlow() = callbackFlow {
 }
 ```
 
-### Реальный пример: Firebase Realtime Database
+### Реальный Пример: Firebase Realtime Database
 
 ```kotlin
 fun DatabaseReference.asFlow(): Flow<DataSnapshot> = callbackFlow {
@@ -283,7 +286,7 @@ database.child("users").asFlow()
     }
 ```
 
-### Реальный пример: Room Database
+### Реальный Пример: Room Database
 
 ```kotlin
 @Dao
@@ -312,7 +315,7 @@ interface UserDao {
 }
 ```
 
-### Реальный пример: WebSocket
+### Реальный Пример: WebSocket
 
 ```kotlin
 fun webSocketFlow(url: String): Flow<String> = callbackFlow {
@@ -348,7 +351,7 @@ webSocketFlow("wss://example.com/ws")
     }
 ```
 
-### `send()` vs `trySend()` vs `emit()`
+### `send()` Vs `trySend()` Vs `emit()`
 
 `emit()`:
 - Приостанавливающая функция, уважает back-pressure.
@@ -390,7 +393,7 @@ callbackFlow {
 }
 ```
 
-### Обработка ошибок
+### Обработка Ошибок
 
 `flow{}`:
 
@@ -449,7 +452,7 @@ callbackFlowWithError()
     .collect { data -> println(data) }
 ```
 
-### Обработка отмены
+### Обработка Отмены
 
 `flow{}`:
 - Автоматически отменяется при отмене корутины коллектора.
@@ -485,7 +488,7 @@ callbackFlow {
 }
 ```
 
-### Соображения по производительности
+### Соображения По Производительности
 
 - `flow{}`:
   - Минимальные накладные расходы, нет внутреннего `Channel`.
@@ -499,7 +502,7 @@ callbackFlow {
 
 Точные цифры зависят от окружения — при необходимости измеряйте отдельно.
 
-### Стратегии тестирования
+### Стратегии Тестирования
 
 Тестирование `flow{}`:
 
@@ -569,7 +572,7 @@ class FakeListener {
 }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 1. Использование `flow{}` для конкурентных эмиссий:
 
@@ -589,7 +592,7 @@ fun concurrentEmitFixed() = channelFlow {
 }
 ```
 
-2. Забытый `awaitClose` в `callbackFlow{}`:
+1. Забытый `awaitClose` в `callbackFlow{}`:
 
 ```kotlin
 // НЕПРАВИЛЬНО: listener-утечка
@@ -606,7 +609,7 @@ fun cleanFlow() = callbackFlow {
 }
 ```
 
-3. Использование `emit()` напрямую в callback-е:
+1. Использование `emit()` напрямую в callback-е:
 
 ```kotlin
 // НЕПРАВИЛЬНО: emit() — suspend, нельзя в обычном callback-е
@@ -624,7 +627,7 @@ fun goodFlow() = callbackFlow {
 }
 ```
 
-4. Игнорирование результата `trySend()`:
+1. Игнорирование результата `trySend()`:
 
 ```kotlin
 // Может терять данные, если буфер полон или канал закрыт
@@ -651,7 +654,7 @@ callbackFlow {
 }.buffer(Channel.CONFLATED)
 ```
 
-### Выбор правильного билдера: шпаргалка
+### Выбор Правильного Билдера: Шпаргалка
 
 - Нужно последовательно эмитить значения из suspend-кода в одной корутине?
   - Используйте `flow{}`.
@@ -699,7 +702,7 @@ fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. `flow{}` — выбор по умолчанию: холодный, последовательный, минимальные накладные расходы.
 2. `channelFlow{}` — холодный `Flow` на базе `Channel`; позволяет конкурентных продюсеров и настраиваемую буферизацию.
@@ -1036,7 +1039,7 @@ webSocketFlow("wss://example.com/ws")
     }
 ```
 
-### send() vs trySend() vs emit()
+### send() Vs trySend() Vs emit()
 
 `emit()`:
 - Suspending, respects backpressure.
@@ -1405,7 +1408,7 @@ fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как преобразовать `Flow` в `Channel` и обратно?
 2. В чем различия стратегий буферизации в `channelFlow` и как они влияют на back-pressure?
@@ -1437,7 +1440,7 @@ fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
 - channelFlow vs callbackFlow: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html
 - Callbacks and Kotlin Flows (Elizarov): https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Хаб
 - [[q-kotlin-flow-basics--kotlin--medium]] — ввод в `Flow`

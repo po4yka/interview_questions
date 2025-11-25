@@ -12,11 +12,13 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-what-is-coroutine--kotlin--easy]
+related: [c-coroutines, c-kotlin, q-what-is-coroutine--kotlin--easy]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [async, callbacks, coroutines, difficulty/medium, kotlin, migration, suspendcoroutine]
 
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -187,7 +189,7 @@ suspend fun downloadExampleRu() {
 }
 ```
 
-### 3. Преобразование простых колбэков (одно значение)
+### 3. Преобразование Простых Колбэков (одно значение)
 
 ```kotlin
 // Callback-based API
@@ -206,7 +208,7 @@ suspend fun calculate(a: Int, b: Int): Int = suspendCoroutine { continuation ->
 }
 ```
 
-### 4. Использование `Flow` для потоковых данных
+### 4. Использование `Flow` Для Потоковых Данных
 
 Для множественных значений или слушателей удобно использовать `callbackFlow`:
 
@@ -252,9 +254,9 @@ fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
 }
 ```
 
-### 5. Android-специфичные примеры
+### 5. Android-специфичные Примеры
 
-#### Конвертация `LiveData` в `Flow`
+#### Конвертация `LiveData` В `Flow`
 
 ```kotlin
 import androidx.lifecycle.LiveData
@@ -275,7 +277,7 @@ fun <T> LiveData<T>.asFlow(): Flow<T> = callbackFlow {
 }
 ```
 
-#### Конвертация `LocationCallback` в корутины/`Flow`
+#### Конвертация `LocationCallback` В корутины/`Flow`
 
 ```kotlin
 import android.location.Location
@@ -329,7 +331,7 @@ fun FusedLocationProviderClient.locationFlow(
 }
 ```
 
-### 6. Лучшие практики
+### 6. Лучшие Практики
 
 #### - ДЕЛАЙТЕ:
 
@@ -407,7 +409,7 @@ fun badStream(): Flow<Data> = callbackFlow {
 }
 ```
 
-### 7. Таблица паттернов
+### 7. Таблица Паттернов
 
 | Паттерн колбэка             | Решение с корутинами             | Случай использования                          |
 |-----------------------------|----------------------------------|-----------------------------------------------|

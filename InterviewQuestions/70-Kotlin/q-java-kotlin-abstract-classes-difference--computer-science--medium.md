@@ -1,5 +1,5 @@
 ---
-id: kotlin-070
+id: kotlin-300
 title: "Java Kotlin Abstract Classes Difference / Главное отличие абстрактных классов в Java и Kotlin"
 aliases: ["Java Kotlin Abstract Classes Difference"]
 topic: kotlin
@@ -14,7 +14,10 @@ related: [c--kotlin--medium, q-inline-function-limitations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
+date created: Tuesday, November 25th 2025, 12:59:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?
 
@@ -59,7 +62,7 @@ Key points:
    - Both languages disallow multiple inheritance of classes.
    - Differences in default access modifiers (package-private in Java vs `public` for top-level declarations in Kotlin) and richer interfaces with default implementations are important context but not the core interview-level difference.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем основное практическое преимущество абстрактных свойств в Kotlin по сравнению с абстрактными методами в Java?
 - Как политика `final` по умолчанию в Kotlin влияет на проектирование иерархий абстрактных базовых классов по сравнению с Java?
@@ -79,7 +82,7 @@ Key points:
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-inline-function-limitations--kotlin--medium]]
 

@@ -1,5 +1,5 @@
 ---
-id: cs-009
+id: lang-208
 title: "Kotlin Equality Operator / Оператор равенства в Kotlin"
 aliases: []
 topic: kotlin
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy]
 
+date created: Saturday, November 1st 2025, 1:26:21 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -216,7 +218,7 @@ p1 == p2;       // false (разные объекты)
 p1.equals(p2);  // зависит от реализации equals()
 ```
 
-### Custom equals() / Кастомная реализация equals()
+### Custom equals() / Кастомная Реализация equals()
 
 ```kotlin
 class User(val id: Int, val name: String) {
@@ -579,7 +581,7 @@ s1 == s3   // true (same content)
 s1 === s3  // false (different objects)
 ```
 
-2. Data classes
+1. Data classes
 
 ```kotlin
 data class Point(val x: Int, val y: Int)
@@ -593,7 +595,7 @@ p1 === p2  // false (different instances)
 p1 === p3  // true (same instance)
 ```
 
-3. Regular classes
+1. Regular classes
 
 ```kotlin
 class Person(val name: String)
@@ -617,7 +619,7 @@ val p2 = PersonWithEquals("John")
 p1 == p2  // true (custom equals checks content)
 ```
 
-4. Collections
+1. Collections
 
 ```kotlin
 val list1 = listOf(1, 2, 3)
@@ -629,7 +631,7 @@ list1 === list2  // false (different instances)
 list1 === list3  // true (same reference)
 ```
 
-### Kotlin vs Java Mapping
+### Kotlin Vs Java Mapping
 
 - In Kotlin, `==` corresponds to Java `.equals()` (content/structural equality).
 - In Kotlin, `===` corresponds to Java `==` (reference equality).
@@ -679,7 +681,7 @@ u1 === u2  // false (different instances)
 u1 === u3  // true (same instance)
 ```
 
-2. Regular classes require equals()
+1. Regular classes require equals()
 
 ```kotlin
 class Person2(val name: String, val age: Int)
@@ -690,7 +692,7 @@ val b = Person2("Anna", 25)
 a == b    // false (reference-based)
 ```
 
-3. Null-safety with `==`
+1. Null-safety with `==`
 
 ```kotlin
 val s1: String? = null
@@ -702,7 +704,7 @@ s1 == s3   // false
 s3 == "Hi" // true
 ```
 
-4. Collections and equality
+1. Collections and equality
 
 ```kotlin
 val listA = listOf(1, 2, 3)
@@ -714,7 +716,7 @@ listA === listB  // false
 listA === listC  // true
 ```
 
-5. Use in when expressions
+1. Use in when expressions
 
 ```kotlin
 fun handle(command: String) {
@@ -726,7 +728,7 @@ fun handle(command: String) {
 }
 ```
 
-6. Type checks combined with equality
+1. Type checks combined with equality
 
 ```kotlin
 fun inspect(value: Any) {
@@ -738,7 +740,7 @@ fun inspect(value: Any) {
 }
 ```
 
-7. Custom equals for domain-specific logic
+1. Custom equals for domain-specific logic
 
 ```kotlin
 data class Product(val id: Int, val name: String, val price: Double, val metadata: Map<String, String>) {
@@ -759,7 +761,7 @@ data class Product(val id: Int, val name: String, val price: Double, val metadat
 }
 ```
 
-8. Collections use `==`
+1. Collections use `==`
 
 ```kotlin
 data class Student(val id: Int, val name: String)
@@ -774,7 +776,7 @@ val search = Student(2, "Maria")
 students.contains(search)  // true (uses == / equals)
 ```
 
-9. Nullable comparisons helper
+1. Nullable comparisons helper
 
 ```kotlin
 fun compareNullable(a: String?, b: String?) {
@@ -788,7 +790,7 @@ fun compareNullable(a: String?, b: String?) {
 }
 ```
 
-10. Identity check in cache
+1. Identity check in cache
 
 ```kotlin
 class Cache<K, V> {
@@ -835,7 +837,7 @@ class Cache<K, V> {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает равенство для чисел с плавающей точкой в Kotlin?
 - Каковы потенциальные подводные камни при переопределении `equals()` и `hashCode()`?
@@ -857,7 +859,7 @@ class Cache<K, V> {
 - [[c-concepts--kotlin--medium]]
 - Official Kotlin docs: "Equality in Kotlin" (https://kotlinlang.org/docs/equality.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-callback-to-coroutine-conversion--kotlin--medium]]
 

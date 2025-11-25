@@ -1,34 +1,34 @@
 ---
 id: android-639
 title: Play Asset Delivery Strategy / Стратегия Play Asset Delivery
-aliases:
-- Play Asset Delivery Strategy
-- Стратегия Play Asset Delivery
+aliases: [Play Asset Delivery Strategy, Стратегия Play Asset Delivery]
 topic: android
 subtopics:
-- app-bundle
+  - app-bundle
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-app-bundle
-- q-android-app-bundles--android--easy
+  - c-app-bundle
+  - q-android-app-bundles--android--easy
+  - q-play-billing-v6-architecture--android--hard
+  - q-play-feature-delivery--android--medium
+  - q-play-feature-delivery-dynamic-modules--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/app-bundle
-- play-asset-delivery
-- difficulty/hard
+tags: [android/app-bundle, difficulty/hard, play-asset-delivery]
 sources:
 - url: "https://developer.android.com/guide/playcore/asset-delivery"
   note: Play Asset Delivery documentation
 - url: "https://developer.android.com/guide/app-bundle/asset-delivery-options"
   note: Delivery modes overview
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +41,7 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 
 - Классифицировать ассеты и сопоставить им режимы доставки: install-time (критичные), fast-follow (крупные и скоро нужные), on-demand (опциональные/редкие).
 - Настроить `App Bundle` и asset packs (plugin `com.android.asset-pack`, delivery modes, связка с динамическими фичами и `dist:`-атрибутами).
@@ -50,9 +50,9 @@ sources:
 - Мониторить доставку (Play Console, Reporting API), обеспечивать офлайн-устойчивость и деградацию качества.
 - Прогонять сценарии через internal testing, контролировать размер, документировать процессы.
 
-### Подробный вариант
+### Подробный Вариант
 
-### 1. Анализ ассетов
+### 1. Анализ Ассетов
 
 - Категоризируйте ресурсы: критичные (install-time), большие/нечасто используемые (fast-follow), опциональные (on-demand).
 - Измерьте размер пакетов, таргетируйте устройства по ABI, texture compression (ETC2/ASTC).
@@ -96,7 +96,7 @@ android {
   - логирования метрик доставки.
 - Интеграция с remote config/feature flags для включения/отключения контента и A/B-тестов.
 
-### 5. Доставка и управление
+### 5. Доставка И Управление
 
 - Используйте библиотеку Play Core для работы с ассет-паками на устройстве:
 
@@ -117,19 +117,19 @@ assetManager.registerListener { state ->
 - Fast-follow → контент загружается автоматически после установки/обновления и становится доступен без явного запроса из приложения.
 - On-demand → инициируйте `fetch` при необходимости; учитывайте отмену, нехватку памяти, Wi‑Fi only, повторные запросы.
 
-### 6. Обновления без релиза
+### 6. Обновления Без Релиза
 
 - Используйте "asset-only" updates: загрузка новых ассетов через Play Console без обновления бинаря приложения (в пределах поддерживаемых сценариев PAD).
 - Планируйте версионирование ассетов (например, semantic versioning) и fallback на ассеты, включенные в основной APK/AAB.
 - Для A/B-тестирования храните mapping версия → feature flag (remote config), чтобы управлять выбором ассет-паков.
 
-### 7. Мониторинг и отзывчивость
+### 7. Мониторинг И Отзывчивость
 
 - Используйте Play Console (Delivery insights) и Play Developer Reporting API для отслеживания успешности скачиваний и отказов.
 - Отслеживайте ошибки установок (например, insufficient storage) и показывайте пользователю понятные подсказки и варианты действий.
 - Логируйте время загрузки/готовности ассетов и проверяйте соответствие целям UX/SLI.
 
-### 8. Offline и fallback
+### 8. Offline И Fallback
 
 - Для критичных сценариев держите минимальный набор ассетов в install-time-паке.
 - Если on-demand загрузка провалилась → уведомление, retry с бэком-оффом и graceful degradation (например, более низкое качество ресурсов).
@@ -156,13 +156,13 @@ assetManager.registerListener { state ->
 
 ### Detailed Version
 
-### 1. Asset analysis
+### 1. Asset Analysis
 
 - Analyze and classify assets by criticality, size, and usage frequency to map them to install-time (critical core), fast-follow (large but commonly needed soon), or on-demand (optional/rare) asset packs.
 - Measure bundle size and use ABI/texture compression targeting (ETC2/ASTC) to avoid shipping unnecessary variants.
 - Identify dependencies between dynamic feature modules and their required asset packs.
 
-### 2. App `Bundle` configuration
+### 2. App `Bundle` Configuration
 
 - Configure splits in the base module `build.gradle`:
 
@@ -200,7 +200,7 @@ android {
   - log delivery metrics.
 - Integrate with remote config/feature flags for content toggling and A/B tests.
 
-### 5. Delivery and runtime management
+### 5. Delivery and Runtime Management
 
 - Use the Play Core library's `AssetPackManager` to request, monitor, and consume asset packs at runtime:
 
@@ -221,19 +221,19 @@ assetManager.registerListener { state ->
 - Fast-follow: content is downloaded automatically after install/update and becomes available without explicit app-initiated requests.
 - On-demand: trigger `fetch` when needed; handle cancellation, low storage, Wi‑Fi-only policies, and retries.
 
-### 6. Updates without full releases
+### 6. Updates without Full Releases
 
 - Leverage asset-only updates via Play Console to push new/updated assets without a full app release (within PAD constraints).
 - Version assets (e.g., semantic versioning) and keep safe fallbacks in base install-time assets.
 - For A/B tests, map asset versions to remote-config/feature-flag values controlling which packs to use.
 
-### 7. Monitoring and responsiveness
+### 7. Monitoring and Responsiveness
 
 - Monitor delivery health via Play Console (Delivery insights) and Play Developer Reporting API.
 - Track download success/failure reasons (e.g., insufficient storage) and show actionable messages to users.
 - Log time-to-ready metrics and validate against UX/SLO targets.
 
-### 8. Offline behavior and fallbacks
+### 8. Offline Behavior and Fallbacks
 
 - Keep a minimal critical asset set as install-time.
 - On on-demand failure, notify the user, retry with backoff, and gracefully degrade (e.g., lower-quality resources or reduced features).
@@ -247,7 +247,7 @@ assetManager.registerListener { state ->
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как совместить PAD с собственной CDN fallback (для сторонних сторов)?
 - Как распределять ассеты между device tier (low-end vs high-end)?
 - Какие стратегии для локализации ассетов (языки, региональные правовые ограничения)?

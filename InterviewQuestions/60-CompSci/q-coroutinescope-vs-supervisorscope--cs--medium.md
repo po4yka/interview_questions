@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, coroutinescope, difficulty/medium, error-handling, kotlin, programming-languages, supervisorscope]
 sources: ["https://kotlinlang.org/docs/exception-handling.html"]
+date created: Saturday, November 1st 2025, 1:24:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -491,13 +493,13 @@ suspend fun initializeApp() = supervisorScope {
 
 ---
 
-## Дополнительные вопросы (Follow-ups, RU)
+## Дополнительные Вопросы (Follow-ups, RU)
 
 - В чём разница между `SupervisorJob` и обычным `Job`?
 - Как правильно обрабатывать исключения в `supervisorScope`?
 - Можно ли вкладывать `coroutineScope` внутри `supervisorScope`?
 
-## Связанные вопросы (Related Questions, RU)
+## Связанные Вопросы (Related Questions, RU)
 
 ### Предпосылки (Lighter / Easier)
 - Базовые концепции `CoroutineContext`

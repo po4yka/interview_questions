@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-flow-flatmap-operator--programming-languages--easy]
+related: [c-flow, c-kotlin, q-flow-flatmap-operator--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages]
+date created: Saturday, November 1st 2025, 1:01:35 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +37,7 @@ tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages]
 
 `Flow` по умолчанию «холодный»: он начинает испускать значения только при коллекции и может быть преобразован с помощью богатого набора операторов.
 
-### Базовая концепция
+### Базовая Концепция
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -69,7 +71,7 @@ fun main() = runBlocking {
 // Received: 3
 ```
 
-### Flow против `List`
+### Flow Против `List`
 
 ```kotlin
 // List: жадная вычисление (все значения считаются сразу)
@@ -239,7 +241,7 @@ suspend fun terminalOperators() {
 }
 ```
 
-### Бесконечные потоки
+### Бесконечные Потоки
 
 ```kotlin
 // Бесконечный поток чисел
@@ -267,7 +269,7 @@ fun useInfiniteFlow() = runBlocking {
 }
 ```
 
-### Практические примеры
+### Практические Примеры
 
 ```kotlin
 // 1. Запросы к БД (многие DAO возвращают Flow)
@@ -363,7 +365,7 @@ fun cancellationExample() = runBlocking {
 // Done
 ```
 
-### Обработка исключений
+### Обработка Исключений
 
 ```kotlin
 // Пример Flow с ошибкой
@@ -390,7 +392,7 @@ fun handleFlowErrors() = runBlocking {
 // Value: -1
 ```
 
-### Сохранение контекста
+### Сохранение Контекста
 
 ```kotlin
 // По умолчанию Flow выполняется в контексте коллектора, если не изменён через flowOn
@@ -425,7 +427,7 @@ fun flowOnExample() = runBlocking {
 }
 ```
 
-### Flow и другие реактивные типы
+### Flow И Другие Реактивные Типы
 
 ```kotlin
 // Flow vs RxJava Observable
@@ -448,7 +450,7 @@ fun flowOnExample() = runBlocking {
 // Sequence: синхронный, блокирующий, для обычных вычислений в памяти
 ```
 
-### Рекомендации по использованию
+### Рекомендации По Использованию
 
 ```kotlin
 class FlowBestPractices {
@@ -996,7 +998,7 @@ Key advantages:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия `Flow` от подхода в Java?
 - Когда бы вы использовали `Flow` на практике?
@@ -1016,7 +1018,7 @@ Key advantages:
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-flatmap-operator--programming-languages--easy]]
 

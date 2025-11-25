@@ -10,12 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-ui-composition, q-how-does-jetpackcompose-work--android--medium, q-compositionlocal-advanced--android--medium]
+related: [c-android-ui-composition, q-compositionlocal-advanced--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, difficulty/medium, jetpack-compose, setContent]
 
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +34,7 @@ tags: [android/ui-compose, difficulty/medium, jetpack-compose, setContent]
 
 **Композиция создается не при каждом вызове composable-функции, а в точке, где хост (например, `setContent` или `ComposeView`) создает корневую композицию.** Эта точка входа инициирует построение дерева composable-функций и управление их состоянием.
 
-### Основные места создания корневой композиции
+### Основные Места Создания Корневой Композиции
 
 **1. В `Activity` через ComponentActivity.setContent():**
 
@@ -79,7 +81,7 @@ class MyCustomView(context: Context) : LinearLayout(context) {
 }
 ```
 
-### Множественные композиции
+### Множественные Композиции
 
 Каждый вызов `setContent` или `ComposeView.setContent` создает **отдельную независимую корневую композицию**:
 
@@ -98,7 +100,7 @@ layout.addView(ComposeView(context).apply {
 
 Если нужно разделять состояние между разными композициями, это делается через общие владельцы состояния (например, `ViewModel`, DI, синглтоны), а не через общий Composition tree.
 
-### Жизненный цикл композиции
+### Жизненный Цикл Композиции
 
 ```kotlin
 @Composable
@@ -124,7 +126,7 @@ fun CompositionLifecycle() {
 
 **A Composition is not created for each arbitrary composable call; it is created by a host (such as `setContent` or `ComposeView`) that creates a root composition.** This entry point initializes the tree of composable functions and their state management.
 
-### Primary root composition creation points
+### Primary Root Composition Creation Points
 
 **1. In `Activity` via ComponentActivity.setContent():**
 
@@ -171,7 +173,7 @@ class MyCustomView(context: Context) : LinearLayout(context) {
 }
 ```
 
-### Multiple compositions
+### Multiple Compositions
 
 Each call to `setContent` or `ComposeView.setContent` creates a **separate independent root composition**:
 
@@ -190,7 +192,7 @@ layout.addView(ComposeView(context).apply {
 
 If you need to share state across multiple compositions, you do it via shared state owners (e.g., ViewModels, DI, singletons), not through a single shared Composition tree.
 
-### Composition lifecycle
+### Composition Lifecycle
 
 ```kotlin
 @Composable
@@ -214,7 +216,7 @@ A composition lives as long as its host lives: the `setContent` host on an `Acti
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что происходит с композицией при изменении конфигурации?
 - Как несколько композиций могут взаимодействовать друг с другом?

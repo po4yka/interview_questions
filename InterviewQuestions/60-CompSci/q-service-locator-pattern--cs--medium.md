@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [dependency-management, design-patterns, difficulty/medium, service-discovery, service-locator]
 sources: ["https://martinfowler.com/articles/injection.html"]
 
+date created: Saturday, November 1st 2025, 1:27:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -335,7 +337,7 @@ class MyViewModel @Inject constructor(
 
 ---
 
-## Продолжение / Дополнительные вопросы (RU)
+## Продолжение / Дополнительные Вопросы (RU)
 
 - В чем разница между `Service` Locator и Dependency Injection?
 - Почему `Service` Locator считается анти-паттерном в современной Android-разработке?
@@ -347,13 +349,13 @@ class MyViewModel @Inject constructor(
 - Why is `Service` Locator considered an anti-pattern in modern Android development?
 - How to refactor from `Service` Locator to Dependency Injection?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые концепции шаблонов проектирования
 - Понимание управления зависимостями
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-abstract-factory-pattern--cs--medium]] — Паттерн Abstract Factory
 
 ### Продвинутые (сложнее)

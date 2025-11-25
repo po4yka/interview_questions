@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-003
 title: Window Size Class / Window Size Class
-aliases:
-  - Window Size Class
-  - Jetpack Window Manager
+aliases: [Jetpack Window Manager, Window Size Class]
 kind: concept
 summary: Jetpack Window Manager heuristics for adaptive layouts across large screens and foldables
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - window-manager
-  - foldable
-  - adaptive-ui
+tags: [adaptive-ui, android, concept, foldable, window-manager]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Summary (EN)

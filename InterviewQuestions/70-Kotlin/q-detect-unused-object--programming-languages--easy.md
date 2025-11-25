@@ -14,6 +14,8 @@ related: [c-garbage-collection, q-garbage-collector-basics--programming-language
 created: 2024-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, kotlin, memory-management, programming-languages, weak-references]
+date created: Friday, October 31st 2025, 6:29:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -222,7 +224,7 @@ fun testGarbageCollection() {
 - `WeakReference` can help observe when an object becomes collectable, but behavior is non-deterministic.
 - Tools like LeakCanary (Android) and memory profilers are the right way to detect leaks and unintended object retention.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия между принципами работы GC и ссылок в Kotlin/JVM и в других платформах?
 - В каких практических сценариях вы бы использовали `WeakReference` или подобные механизмы?
@@ -242,7 +244,7 @@ fun testGarbageCollection() {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-garbage-collector-basics--programming-languages--medium]]
 - [[q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]]

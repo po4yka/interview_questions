@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-destructuring-declarations--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-destructuring-declarations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [concurrency, continuation, coroutines, difficulty/medium, kotlin, suspend-functions]
+date created: Friday, October 31st 2025, 6:31:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [concurrency, continuation, coroutines, difficulty/medium, kotlin, suspend
 
 Когда в suspend функции есть точки приостановки (вызовы других suspend функций, таких как `delay`, `withContext` и т.п.), компилятор (концептуально) переписывает её в **машину состояний** на основе Continuation Passing Style (CPS), чтобы уметь приостанавливать и возобновлять выполнение.
 
-### Что делает `suspend`
+### Что Делает `suspend`
 
 ```kotlin
 // Обычная функция — блокирует поток
@@ -50,7 +52,7 @@ suspend fun loadUser(id: Int): User {
 - Обычная функция выполняется до конца на текущем потоке; блокирующие вызовы (например, `Thread.sleep()`) блокируют поток.
 - Suspend функция может останавливаться в точках приостановки, не блокируя поток, если использует корректные неблокирующие suspend-API или смену контекста. При этом внутри `suspend` функции всё ещё можно заблокировать поток, если вызвать блокирующий код напрямую, поэтому `suspend` — это не автоматическая магия.
 
-### Правила использования suspend функций
+### Правила Использования Suspend Функций
 
 ```kotlin
 class UserRepository {
@@ -78,7 +80,7 @@ class UserRepository {
 2. Из корутинных билдров (`launch`, `async` и т.д.)
 3. Из `runBlocking` на границах (например, `main`, тесты)
 
-### Как suspend работает под капотом
+### Как Suspend Работает Под Капотом
 
 Компилятор Kotlin реализует suspend функции через **CPS** и при наличии точек приостановки концептуально преобразует их в **машину состояний**.
 
@@ -128,7 +130,7 @@ fun loginUser(
 4. После завершения асинхронной операции вызывается `continuation.resumeWith(result)`, что приводит к возобновлению машины состояний в нужном месте.
 5. Конкретный сгенерированный код зависит от версии компилятора и детали следует воспринимать как модель, а не точную реализацию.
 
-### `Continuation` — что это такое?
+### `Continuation` — Что Это Такое?
 
 ```kotlin
 // Continuation представляет "оставшуюся" часть вычисления
@@ -142,7 +144,7 @@ fun <T> Continuation<T>.resume(value: T)
 fun <T> Continuation<T>.resumeWithException(exception: Throwable)
 ```
 
-### Пример использования Continuation API
+### Пример Использования Continuation API
 
 ```kotlin
 // Оборачиваем callback API в suspend функцию
@@ -170,7 +172,7 @@ suspend fun loadUser(id: Int) {
 }
 ```
 
-### `suspendCoroutine` vs `suspendCancellableCoroutine`
+### `suspendCoroutine` Vs `suspendCancellableCoroutine`
 
 ```kotlin
 // НЕОТМЕНЯЕМО: работа не отменяется при отмене корутины
@@ -212,7 +214,7 @@ suspend fun downloadFile(url: String): File = suspendCancellableCoroutine { cont
 
 Рекомендация: для отменяемых операций предпочитайте `suspendCancellableCoroutine`.
 
-### Suspend функции и потоки
+### Suspend Функции И Потоки
 
 ```kotlin
 suspend fun processData() {
@@ -238,9 +240,9 @@ suspend fun processData() {
 
 Важно: после точки приостановки корутина может возобновиться на другом потоке, в зависимости от диспетчера и контекста.
 
-### Реальные примеры suspend функций
+### Реальные Примеры Suspend Функций
 
-#### 1. Сетевые запросы (Retrofit)
+#### 1. Сетевые Запросы (Retrofit)
 
 ```kotlin
 interface UserApi {
@@ -282,7 +284,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-#### 2. Операции с базой данных (Room)
+#### 2. Операции С Базой Данных (Room)
 
 ```kotlin
 @Dao
@@ -312,7 +314,7 @@ class LocalUserRepository(private val dao: UserDao) {
 }
 ```
 
-#### 3. Последовательные операции
+#### 3. Последовательные Операции
 
 ```kotlin
 suspend fun registerUser(
@@ -338,7 +340,7 @@ suspend fun checkEmailAvailability(email: String): Boolean {
 }
 ```
 
-#### 4. Параллельные операции с `async`
+#### 4. Параллельные Операции С `async`
 
 ```kotlin
 suspend fun loadDashboardData(): DashboardData = coroutineScope {
@@ -356,7 +358,7 @@ suspend fun loadDashboardData(): DashboardData = coroutineScope {
 // Время ≈ максимум из трёх запросов, а не сумма
 ```
 
-#### 5. Timeout и Retry
+#### 5. Timeout И Retry
 
 ```kotlin
 suspend fun fetchWithTimeout(url: String): String {
@@ -378,9 +380,9 @@ suspend fun fetchWithRetry(url: String, maxAttempts: Int = 3): String {
 }
 ```
 
-### Ошибки и Best Practices
+### Ошибки И Best Practices
 
-#### Неправильно: блокирующие операции в suspend функциях
+#### Неправильно: Блокирующие Операции В Suspend Функциях
 
 ```kotlin
 suspend fun loadData(): String {
@@ -389,7 +391,7 @@ suspend fun loadData(): String {
 }
 ```
 
-#### Правильно: используйте suspend-friendly альтернативы
+#### Правильно: Используйте Suspend-friendly Альтернативы
 
 ```kotlin
 suspend fun loadData(): String {
@@ -404,7 +406,7 @@ suspend fun processImage(bitmap: Bitmap): Bitmap {
 }
 ```
 
-#### Неправильно: `runBlocking` в production
+#### Неправильно: `runBlocking` В Production
 
 ```kotlin
 fun loadUserSync(id: Int): User {
@@ -414,7 +416,7 @@ fun loadUserSync(id: Int): User {
 }
 ```
 
-#### Правильно: используйте `CoroutineScope` (а `runBlocking` — только на границах, например, в `main` или тестах)
+#### Правильно: Используйте `CoroutineScope` (а `runBlocking` — Только На Границах, Например, В `main` Или тестах)
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -427,7 +429,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-#### Неправильно: ненужный модификатор `suspend`
+#### Неправильно: Ненужный Модификатор `suspend`
 
 ```kotlin
 suspend fun calculateSum(a: Int, b: Int): Int {
@@ -435,7 +437,7 @@ suspend fun calculateSum(a: Int, b: Int): Int {
 }
 ```
 
-#### Правильно: `suspend` только при реальной приостановке / асинхронной работе
+#### Правильно: `suspend` Только При Реальной Приостановке / Асинхронной Работе
 
 ```kotlin
 fun calculateSum(a: Int, b: Int): Int {
@@ -449,7 +451,7 @@ suspend fun loadAndCalculate(): Int {
 }
 ```
 
-### Suspend функции в интерфейсах
+### Suspend Функции В Интерфейсах
 
 ```kotlin
 interface DataSource<T> {
@@ -486,7 +488,7 @@ class CachedDataSource(
 }
 ```
 
-### Suspend функции с `Flow`
+### Suspend Функции С `Flow`
 
 ```kotlin
 interface UserRepository {
@@ -531,7 +533,7 @@ class UsersViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-### Тестирование suspend функций
+### Тестирование Suspend Функций
 
 ```kotlin
 class UserRepositoryTest {
@@ -570,9 +572,9 @@ class UserRepositoryTest {
 }
 ```
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
-#### 1. Suspend-ленивая инициализация
+#### 1. Suspend-ленивая Инициализация
 
 ```kotlin
 class ExpensiveResource2 {
@@ -592,7 +594,7 @@ class ExpensiveResource2 {
 }
 ```
 
-#### 2. Suspend и делегирование свойств (предупреждение)
+#### 2. Suspend И Делегирование Свойств (предупреждение)
 
 ```kotlin
 class UserCache {
@@ -603,7 +605,7 @@ class UserCache {
 }
 ```
 
-#### 3. Освобождение ресурсов с использованием suspend
+#### 3. Освобождение Ресурсов С Использованием Suspend
 
 ```kotlin
 suspend fun <T : Closeable, R> T.useSuspending(block: suspend (T) -> R): R {
@@ -622,7 +624,7 @@ suspend fun processFile(path: String) {
 }
 ```
 
-### Производительность suspend функций
+### Производительность Suspend Функций
 
 ```kotlin
 @Benchmark
@@ -646,7 +648,7 @@ suspend fun withSuspension(): Int {
 - Оверхед появляется при реальном приостановлении (`delay`, `withContext` и т.д.).
 - Концептуально машина состояний важна при наличии точек приостановки; конкретные детали реализации зависят от компилятора.
 
-### Suspend функции и `inline`
+### Suspend Функции И `inline`
 
 ```kotlin
 inline suspend fun <T> measureTime(
@@ -666,9 +668,9 @@ suspend fun example() {
 }
 ```
 
-### Частые ошибки
+### Частые Ошибки
 
-#### 1. Игнорирование отмены
+#### 1. Игнорирование Отмены
 
 ```kotlin
 suspend fun longRunningTaskWrong() {
@@ -687,7 +689,7 @@ suspend fun longRunningTask() {
 }
 ```
 
-#### 2. Неправильная обработка исключений
+#### 2. Неправильная Обработка Исключений
 
 ```kotlin
 suspend fun fetchDataWrong() {
@@ -715,7 +717,7 @@ Suspend functions are functions that can suspend execution without necessarily b
 
 When a suspend function contains at least one suspension point (calls another suspend function such as `delay`, `withContext`, etc.), the compiler (conceptually) rewrites it into a state machine so it can be paused and resumed.
 
-### What the `suspend` keyword does
+### What the `suspend` Keyword Does
 
 ```kotlin
 // Regular function - blocks thread
@@ -735,7 +737,7 @@ Key points:
 - Regular function: runs to completion on the current thread; blocking calls like `Thread.sleep()` block the thread.
 - Suspend function: can pause at suspension points without blocking the underlying thread when using proper suspend/non-blocking APIs or appropriate dispatchers. You can still block a thread inside a suspend function if you call blocking code directly, so `suspend` is not magic by itself.
 
-### Rules for using suspend functions
+### Rules for Using Suspend Functions
 
 ```kotlin
 class UserRepository {
@@ -763,7 +765,7 @@ Ways to call suspend functions:
 2. From coroutine builders (`launch`, `async`, etc.)
 3. From `runBlocking` at boundaries (e.g., `main`, tests)
 
-### How suspend works under the hood
+### How Suspend Works under the Hood
 
 The Kotlin compiler implements suspend functions using Continuation Passing Style (CPS) and, when there are suspension points, conceptually transforms them into state machines.
 
@@ -813,7 +815,7 @@ Conceptually:
 - On completion of async work, `continuation.resumeWith(result)` resumes execution at the appropriate state.
 - The exact generated code is compiler-version-specific; treat this as a mental model, not a decompiled reality.
 
-### Continuation - what is it?
+### Continuation - what is It?
 
 ```kotlin
 public interface Continuation<in T> {
@@ -825,7 +827,7 @@ fun <T> Continuation<T>.resume(value: T)
 fun <T> Continuation<T>.resumeWithException(exception: Throwable)
 ```
 
-### Example using Continuation API
+### Example Using Continuation API
 
 ```kotlin
 suspend fun fetchUserFromCallback(id: Int): User = suspendCoroutine { continuation ->
@@ -850,7 +852,7 @@ suspend fun loadUser(id: Int) {
 }
 ```
 
-### `suspendCoroutine` vs `suspendCancellableCoroutine`
+### `suspendCoroutine` Vs `suspendCancellableCoroutine`
 
 ```kotlin
 // Non-cancellable: work continues even if coroutine is cancelled
@@ -891,7 +893,7 @@ suspend fun downloadFile(url: String): File = suspendCancellableCoroutine { cont
 
 Guideline: prefer `suspendCancellableCoroutine` for cancellable work.
 
-### Suspend functions and threads
+### Suspend Functions and Threads
 
 ```kotlin
 suspend fun processData() {
@@ -911,9 +913,9 @@ suspend fun processData() {
 
 Important: after suspension a coroutine may resume on a different thread depending on its dispatcher and context.
 
-### Real examples of suspend functions
+### Real Examples of Suspend Functions
 
-#### 1. Network requests (Retrofit)
+#### 1. Network Requests (Retrofit)
 
 ```kotlin
 interface UserApi {
@@ -953,7 +955,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-#### 2. Database operations (Room)
+#### 2. Database Operations (Room)
 
 ```kotlin
 @Dao
@@ -983,7 +985,7 @@ class LocalUserRepository(private val dao: UserDao) {
 }
 ```
 
-#### 3. Sequential operations
+#### 3. Sequential Operations
 
 ```kotlin
 suspend fun registerUser(
@@ -1009,7 +1011,7 @@ suspend fun checkEmailAvailability(email: String): Boolean {
 }
 ```
 
-#### 4. Parallel operations with `async`
+#### 4. Parallel Operations with `async`
 
 ```kotlin
 suspend fun loadDashboardData(): DashboardData = coroutineScope {
@@ -1049,9 +1051,9 @@ suspend fun fetchWithRetry(url: String, maxAttempts: Int = 3): String {
 }
 ```
 
-### Errors and best practices
+### Errors and Best Practices
 
-#### Wrong: blocking operations in suspend functions
+#### Wrong: Blocking Operations in Suspend Functions
 
 ```kotlin
 suspend fun loadData(): String {
@@ -1060,7 +1062,7 @@ suspend fun loadData(): String {
 }
 ```
 
-#### Correct: use suspend-friendly alternatives
+#### Correct: Use Suspend-friendly Alternatives
 
 ```kotlin
 suspend fun loadData(): String {
@@ -1075,7 +1077,7 @@ suspend fun processImage(bitmap: Bitmap): Bitmap {
 }
 ```
 
-#### Wrong: `runBlocking` in production
+#### Wrong: `runBlocking` in Production
 
 ```kotlin
 fun loadUserSync(id: Int): User {
@@ -1085,7 +1087,7 @@ fun loadUserSync(id: Int): User {
 }
 ```
 
-#### Correct: use `CoroutineScope` (and keep `runBlocking` for top-level boundaries, e.g., `main`, tests)
+#### Correct: Use `CoroutineScope` (and Keep `runBlocking` for Top-level Boundaries, e.g., `main`, tests)
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -1098,7 +1100,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-#### Wrong: unnecessary `suspend`
+#### Wrong: Unnecessary `suspend`
 
 ```kotlin
 suspend fun calculateSum(a: Int, b: Int): Int {
@@ -1106,7 +1108,7 @@ suspend fun calculateSum(a: Int, b: Int): Int {
 }
 ```
 
-#### Correct: `suspend` only when needed
+#### Correct: `suspend` only when Needed
 
 ```kotlin
 fun calculateSum(a: Int, b: Int): Int {
@@ -1120,7 +1122,7 @@ suspend fun loadAndCalculate(): Int {
 }
 ```
 
-#### Cancellation and exceptions
+#### Cancellation and Exceptions
 
 ```kotlin
 suspend fun longRunningTaskWrong() {
@@ -1157,9 +1159,9 @@ suspend fun fetchData() {
 }
 ```
 
-### Advanced patterns
+### Advanced Patterns
 
-#### 1. Suspend-lazy initialization
+#### 1. Suspend-lazy Initialization
 
 ```kotlin
 class ExpensiveResource2 {
@@ -1179,7 +1181,7 @@ class ExpensiveResource2 {
 }
 ```
 
-#### 2. Suspend and property delegation (warning)
+#### 2. Suspend and Property Delegation (warning)
 
 ```kotlin
 class UserCache {
@@ -1190,7 +1192,7 @@ class UserCache {
 }
 ```
 
-#### 3. Resource cleanup with suspend
+#### 3. Resource Cleanup with Suspend
 
 ```kotlin
 suspend fun <T : Closeable, R> T.useSuspending(block: suspend (T) -> R): R {
@@ -1233,7 +1235,7 @@ Key points:
 - Overhead appears at real suspension points (`delay`, `withContext`, etc.).
 - Treat the state machine transformation as the conceptual mechanism used when suspension is involved; exact details are compiler-specific.
 
-### Common mistakes
+### Common Mistakes
 
 - Blocking inside suspend functions (e.g. `Thread.sleep()` instead of `delay()` or proper dispatcher).
 - Ignoring cancellation (no `ensureActive()`, never checking `isActive`).
@@ -1241,7 +1243,7 @@ Key points:
 - Overusing `runBlocking` outside of top-level boundaries.
 - Marking trivially synchronous functions as `suspend`.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём отличие подхода с suspend функциями от традиционных callback API в Java?
 - Когда на практике стоит выносить операции в suspend функции и корутины?
@@ -1267,7 +1269,7 @@ Key points:
 - [[c-kotlin]]
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-reified-type-parameters--kotlin--medium]]
 - [[q-destructuring-declarations--kotlin--medium]]

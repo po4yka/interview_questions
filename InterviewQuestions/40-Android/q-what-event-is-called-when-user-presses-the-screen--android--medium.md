@@ -1,34 +1,31 @@
 ---
 id: android-322
 title: Touch Events / События касания
-aliases:
-- Touch Events
-- События касания
+aliases: [Touch Events, События касания]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-view-system
-- q-view-methods-and-their-purpose--android--medium
-- q-what-layout-allows-overlapping-objects--android--easy
+  - c-android-view-system
+  - q-mvi-one-time-events--android--medium
+  - q-server-sent-events-sse--android--medium
+  - q-view-methods-and-their-purpose--android--medium
+  - q-what-events-are-activity-methods-tied-to--android--medium
+  - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/ui-views
-- difficulty/medium
-- event-handling
-- interaction
-- touch-events
-- ui
+tags: [android/ui-views, difficulty/medium, event-handling, interaction, touch-events, ui]
 
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -54,7 +51,7 @@ tags:
 
 См. также: [[c-android-view-system]]
 
-### Поток событий касания
+### Поток Событий Касания
 
 ```kotlin
 // Поток распространения события (упрощенно):
@@ -66,7 +63,7 @@ tags:
 //           → View.OnClickListener.onClick()
 ```
 
-### Действия событий касания
+### Действия Событий Касания
 
 ```kotlin
 class TouchEventExample(context: Context) : View(context) {
@@ -195,7 +192,7 @@ class ClickableView(context: Context) : View(context) {
 }
 ```
 
-### Перехват касаний во `ViewGroup`
+### Перехват Касаний Во `ViewGroup`
 
 ```kotlin
 abstract class CustomViewGroup(context: Context) : ViewGroup(context) {
@@ -230,7 +227,7 @@ abstract class CustomViewGroup(context: Context) : ViewGroup(context) {
 }
 ```
 
-### Полный пример обработки касаний
+### Полный Пример Обработки Касаний
 
 ```kotlin
 class CompleteTouchExample : AppCompatActivity() {
@@ -298,7 +295,7 @@ fun MotionEvent.actionToString(): String = when (action) {
 }
 ```
 
-### Последовательность событий для одиночного тапа (упрощенно)
+### Последовательность Событий Для Одиночного Тапа (упрощенно)
 
 ```
 1. ACTION_DOWN → dispatchTouchEvent()
@@ -309,7 +306,7 @@ fun MotionEvent.actionToString(): String = when (action) {
 6. onClick() callback
 ```
 
-### Распознавание жестов
+### Распознавание Жестов
 
 ```kotlin
 class GestureView(context: Context) : View(context) {
@@ -363,7 +360,7 @@ class GestureView(context: Context) : View(context) {
 }
 ```
 
-### События касания в Jetpack Compose
+### События Касания В Jetpack Compose
 
 ```kotlin
 @Composable
@@ -786,7 +783,7 @@ Key points:
 
 ## Follow-ups
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - [[q-view-methods-and-their-purpose--android--medium]]
 - [[q-what-layout-allows-overlapping-objects--android--easy]]
@@ -808,7 +805,7 @@ Key points:
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-what-layout-allows-overlapping-objects--android--easy]]
 

@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines]
+related: [c-coroutines, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -58,7 +60,7 @@ Key differences:
   - Job: for groups of dependent tasks where one failure should cancel the rest.
   - SupervisorJob: for groups of logically independent tasks where one failure should not affect others (e.g. multiple parallel UI-related operations).
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java-потоков?
 - Когда вы бы использовали Job или SupervisorJob на практике?
@@ -78,7 +80,7 @@ Key differences:
 
 - [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-advanced-coroutine-patterns--kotlin--hard]]
 - [[q-android-async-primitives--android--easy]]

@@ -4,28 +4,32 @@ title: Canvas Optimization / Оптимизация Canvas
 aliases: [Canvas Optimization, Оптимизация Canvas]
 topic: android
 subtopics:
-- performance-rendering
-- ui-graphics
-- ui-views
+  - performance-rendering
+  - ui-graphics
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-custom-views
-- q-android-app-lag-analysis--android--medium
-- q-android-performance-measurement-tools--android--medium
-- q-canvas-drawing-optimization--android--hard
-- q-custom-view-lifecycle--android--medium
+  - c-custom-views
+  - q-android-app-lag-analysis--android--medium
+  - q-android-build-optimization--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-canvas-drawing-optimization--android--hard
+  - q-custom-view-lifecycle--android--medium
+  - q-optimize-memory-usage-android--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-graphics, android/ui-views, custom-views, difficulty/medium, performance]
 
+date created: Saturday, November 1st 2025, 12:46:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -38,10 +42,10 @@ tags: [android/performance-rendering, android/ui-graphics, android/ui-views, cus
 
 ## Ответ (RU)
 
-### Цель производительности
+### Цель Производительности
 **60 FPS = 16.67 мс/кадр**. Хорошая цель для `onDraw()`: **~3-5 мс** (остальное — измерение, компоновка, системные операции). Минимизируйте аллокации в цикле отрисовки, особенно в часто вызываемых методах; избегайте лишних объектов на каждый кадр, чтобы не провоцировать GC во время анимаций.
 
-### 1. Паттерн без аллокаций
+### 1. Паттерн Без Аллокаций
 
 Создавайте `Paint`/`Path`/`Rect`/`Matrix` как поля класса. Переиспользуйте через `reset()`/`set()`.
 
@@ -69,7 +73,7 @@ class OptimizedView(context: Context, attrs: AttributeSet? = null) : View(contex
 
 **Результат**: сниженный риск GC-пауз во время отрисовки.
 
-### 2. Аппаратное ускорение (GPU)
+### 2. Аппаратное Ускорение (GPU)
 
 ```kotlin
 // Включить аппаратную отрисовку слоя для этого View
@@ -122,7 +126,7 @@ fun invalidateCache() {
 
 **Замечание**: учитывайте расход памяти под большие `Bitmap`-ы; следите за жизненным циклом и очисткой.
 
-### 4. Клиппинг видимой области
+### 4. Клиппинг Видимой Области
 
 Рисуйте только видимые элементы.
 
@@ -304,7 +308,7 @@ Analyze via Android Studio Profiler → CPU → System Trace, and inspect render
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как овердроу влияет на производительность Canvas и как его обнаружить?
 - Когда следует использовать `LAYER_TYPE_SOFTWARE` vs `LAYER_TYPE_HARDWARE`?
@@ -332,7 +336,7 @@ Analyze via Android Studio Profiler → CPU → System Trace, and inspect render
 - [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/topic/performance/vitals/render
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-custom-view-lifecycle--android--medium]] - основы жизненного цикла кастомных `View`

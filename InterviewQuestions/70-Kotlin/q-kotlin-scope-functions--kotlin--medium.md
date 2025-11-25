@@ -28,7 +28,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое функции области видимости (scope functions) в Kotlin?
 
@@ -557,7 +560,7 @@ Here is a short guide for choosing scope functions depending on the intended pur
 - Additional effects: `also`
 - Grouping function calls on an object: `with`
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия этого подхода от Java?
 - Когда вы бы использовали это на практике?
@@ -579,7 +582,7 @@ Here is a short guide for choosing scope functions depending on the intended pur
 - [Scope functions](https://kotlinlang.org/docs/reference/scope-functions.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-extension-functions--kotlin--medium]]
 - [[q-kotlin-null-safety--kotlin--medium]]

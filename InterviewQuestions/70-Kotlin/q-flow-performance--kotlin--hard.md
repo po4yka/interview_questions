@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140023
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-flow-backpressure--kotlin--hard]
+related: [c-flow, c-kotlin, q-flow-backpressure--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/hard, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140023
 
@@ -38,7 +41,7 @@ tags: [coroutines, difficulty/hard, kotlin]
 
 Оптимизация производительности `Flow` фокусируется на эффективной обработке данных, правильной буферизации, минимизации переключений контекста и избежании ненужных операций.
 
-### Ключевые техники производительности
+### Ключевые Техники Производительности
 
 **1. Буферизация**
 ```kotlin

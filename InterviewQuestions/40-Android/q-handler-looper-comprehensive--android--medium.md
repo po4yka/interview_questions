@@ -1,31 +1,31 @@
 ---
 id: android-198
 title: Handler Looper Comprehensive / Handler и Looper подробно
-aliases:
-- Handler Looper Comprehensive
-- Handler и Looper подробно
+aliases: [Handler Looper Comprehensive, Handler и Looper подробно]
 topic: android
 subtopics:
-- threads-sync
+  - threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-coroutines
-- q-glide-image-loading-internals--android--medium
-- q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
+  - c-coroutines
+  - q-glide-image-loading-internals--android--medium
+  - q-handler-looper-main-thread--android--medium
+  - q-looper-empty-queue-behavior--android--medium
+  - q-looper-thread-connection--android--medium
+  - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/threads-sync
-- concurrency
-- difficulty/medium
+tags: [android/threads-sync, concurrency, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -78,7 +78,7 @@ class Handler(val looper: Looper) {
 - Один поток → максимум один Looper → одна MessageQueue.
 - Handler всегда привязан к конкретному Looper (а значит — к конкретному потоку).
 
-### 2. Как Looper привязывается к потоку
+### 2. Как Looper Привязывается К Потоку
 
 Looper создается и привязывается к потоку через `Looper.prepare()` и `Looper.loop()`.
 
@@ -155,7 +155,7 @@ handler.sendMessage(
 - `Looper.loop()` — бесконечный цикл чтения/диспетчеризации сообщений из очереди; блокирует поток.
 - В большинстве случаев вместо ручного `Thread + Looper` следует использовать `HandlerThread` или другие высокоуровневые механизмы.
 
-### 3. Проверка наличия Looper в потоке
+### 3. Проверка Наличия Looper В Потоке
 
 ```kotlin
 fun checkLooper() {
@@ -203,9 +203,9 @@ fun isMainThread(): Boolean {
 }
 ```
 
-### 4. Получение сообщений в главном потоке
+### 4. Получение Сообщений В Главном Потоке
 
-#### Метод 1: Handler с main Looper
+#### Метод 1: Handler С Main Looper
 
 ```kotlin
 class BackgroundTask {
@@ -325,7 +325,7 @@ class NotificationManager {
 }
 ```
 
-### 5. HandlerThread — готовое решение
+### 5. HandlerThread — Готовое Решение
 
 ```kotlin
 class ImageProcessor {
@@ -361,7 +361,7 @@ processor.processImage("https://example.com/image.jpg") { bitmap ->
 }
 ```
 
-### 6. Message и Runnable
+### 6. Message И Runnable
 
 ```kotlin
 // Runnable — простые задачи без явных полей Message
@@ -392,7 +392,7 @@ val msg3 = Message.obtain(handler, MSG_DATA, data)
 - `Runnable` — для простых задач, когда не нужны коды/аргументы.
 - `Message` — когда нужны поля `what`, `arg1/arg2/obj`, разные типы событий или эффективное переиспользование объектов.
 
-### 7. Управление очередью сообщений
+### 7. Управление Очередью Сообщений
 
 ```kotlin
 class TaskQueue {
@@ -436,7 +436,7 @@ class TaskQueue {
 }
 ```
 
-### 8. IdleHandler — выполнение, когда очередь пуста
+### 8. IdleHandler — Выполнение, Когда Очередь Пуста
 
 Важно: доступ к очереди главного Looper через `Looper.getMainLooper().queue` относится к внутренним деталям реализации и может быть недоступен или изменён; такие примеры носят концептуальный характер.
 
@@ -489,7 +489,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 9. Утечки памяти и очистка
+### 9. Утечки Памяти И Очистка
 
 ```kotlin
 // Потенциальная утечка, если задачи живут дольше Activity
@@ -569,7 +569,7 @@ class ModernActivity : AppCompatActivity() {
 }
 ```
 
-### 10. Advanced Techniques (для полноты, с пометкой об ограничениях)
+### 10. Advanced Techniques (для Полноты, С Пометкой Об ограничениях)
 
 Некоторые возможности доступны через скрытые/внутренние API и не предназначены для прямого использования в прикладном коде. Ниже — концепции, а не призыв использовать эти методы напрямую.
 
@@ -608,7 +608,7 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 (Методы sync barrier в Handler/MessageQueue — внутренние и не должны использоваться в production-коде без полной осознанности рисков и ограничений и с учётом совместимости.)
 
-### Сравнение компонентов
+### Сравнение Компонентов
 
 | Компонент | Назначение                 | Количество на поток |
 |----------|----------------------------|---------------------|
@@ -672,7 +672,7 @@ Constraints:
 - One thread → at most one Looper → one MessageQueue.
 - A Handler is always bound to a particular Looper (and thus a specific thread).
 
-### 2. How a Looper is bound to a thread
+### 2. How a Looper is Bound to a Thread
 
 A Looper is created and attached to a thread via `Looper.prepare()` and `Looper.loop()`.
 
@@ -746,7 +746,7 @@ Notes:
 - `Looper.loop()` is a blocking loop that reads/dispatches messages from the queue.
 - In practice, prefer `HandlerThread` or other high-level APIs over raw `Thread + Looper`.
 
-### 3. Checking for a Looper in the current thread
+### 3. Checking for a Looper in the Current Thread
 
 ```kotlin
 fun checkLooper() {
@@ -793,9 +793,9 @@ fun isMainThread(): Boolean {
 }
 ```
 
-### 4. Receiving and posting work on the main thread
+### 4. Receiving and Posting Work on the Main Thread
 
-#### Method 1: Handler with main Looper
+#### Method 1: Handler with Main Looper
 
 ```kotlin
 class BackgroundTask {
@@ -913,7 +913,7 @@ class NotificationManager {
 }
 ```
 
-### 5. HandlerThread — ready-made solution
+### 5. HandlerThread — Ready-made Solution
 
 ```kotlin
 class ImageProcessor {
@@ -949,7 +949,7 @@ processor.processImage("https://example.com/image.jpg") { bitmap ->
 }
 ```
 
-### 6. Message vs Runnable
+### 6. Message Vs Runnable
 
 ```kotlin
 // Runnable — simple fire-and-forget task
@@ -980,7 +980,7 @@ Use:
 - `Runnable` for simple tasks when you don't need routing or metadata.
 - `Message` when you need `what` codes, args, or pooling.
 
-### 7. Message queue operations
+### 7. Message Queue Operations
 
 ```kotlin
 class TaskQueue {
@@ -1029,7 +1029,7 @@ This shows how to:
 - Cancel callbacks/messages by `Runnable`, `what`, or all at once.
 - Inspect whether certain messages are pending.
 
-### 8. IdleHandler — run work when the queue is idle
+### 8. IdleHandler — Run Work when the Queue is Idle
 
 Important: accessing `Looper.getMainLooper().queue` touches implementation details/internal APIs; treat this as conceptual and check your target SDK.
 
@@ -1085,7 +1085,7 @@ Use IdleHandler for:
 - Low-priority work.
 - Deferred initialization when the main queue is idle.
 
-### 9. Memory leaks and cleanup
+### 9. Memory Leaks and Cleanup
 
 ```kotlin
 // Risky: tasks can outlive Activity
@@ -1170,7 +1170,7 @@ Guidelines:
 - Avoid implicit strong references from Handlers to Activities/Fragments.
 - Prefer lifecycle-aware constructs (e.g., coroutines + `lifecycleScope`).
 
-### 10. Advanced techniques (with caveats)
+### 10. Advanced Techniques (with caveats)
 
 Conceptual-only; some of this interacts with hidden/internal behavior and must be used with caution.
 
@@ -1206,7 +1206,7 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 Note: sync barriers and related internals are not for regular production use unless you fully understand the risks and compatibility implications.
 
-### Component comparison
+### Component Comparison
 
 | Component   | Purpose                        | Per thread        |
 |------------|--------------------------------|-------------------|

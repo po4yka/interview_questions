@@ -15,6 +15,8 @@ description: "Note stub: to be expanded into a guide on parent-child relationshi
 moc: moc-kotlin
 related: [c-coroutines, q-coroutine-performance-optimization--kotlin--hard, q-retry-operators-flow--kotlin--medium]
 subtopics: [coroutines]
+date created: Friday, October 31st 2025, 6:31:32 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -51,7 +53,7 @@ subtopics: [coroutines]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Опишите, как распространяется отмена в иерархии при использовании `coroutineScope` по сравнению с `supervisorScope`.
 2. Объясните разницу между `SupervisorJob` в корневом скоупе и использованием `supervisorScope` вокруг дочерних корутин.
@@ -81,7 +83,7 @@ subtopics: [coroutines]
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]

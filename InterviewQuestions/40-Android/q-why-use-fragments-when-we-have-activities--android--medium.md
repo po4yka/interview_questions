@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:26:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -289,7 +291,7 @@ class DetailFragment : Fragment() {
 ### База (проще)
 - [[q-what-is-intent--android--easy]] - основы `Intent`
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - сравнение жизненных циклов
 
 ### Продвинутые (сложнее)

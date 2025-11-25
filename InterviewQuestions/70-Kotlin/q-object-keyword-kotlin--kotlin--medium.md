@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
 
+date created: Friday, October 31st 2025, 6:29:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -697,7 +699,7 @@ fun demonstrateSingletonComparison() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия `object` от подходов в Java?
 - В каких практических сценариях вы бы использовали `object`?
@@ -719,7 +721,7 @@ fun demonstrateSingletonComparison() {
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-backpressure--kotlin--hard]]
 - [[q-kotlin-intrange--programming-languages--easy]]

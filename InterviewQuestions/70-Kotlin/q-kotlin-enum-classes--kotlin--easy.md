@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [classes, difficulty/easy, enum, kotlin, types]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое Enum в Kotlin?
 
@@ -78,7 +81,7 @@ println(redColor.description()) // Вывод: Red color
 
 См. также: [[c-kotlin]], [[c-kotlin-features]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия между этим и Java?
 - Когда вы бы использовали это на практике?
@@ -89,7 +92,7 @@ println(redColor.description()) // Вывод: Red color
 - [Kotlin Enum Classes](https://kotlinlang.org/docs/enum-classes.html)
 - [Enums in Kotlin](https://www.baeldung.com/kotlin/enum)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Продвинутое (сложнее)
 - [[q-value-classes-inline-classes--kotlin--medium]] - Классы

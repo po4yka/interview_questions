@@ -1,37 +1,32 @@
 ---
 id: android-049
 title: Hilt Assisted Injection
-aliases:
-- Hilt Assisted Injection
-- Hilt Ассистированный инжект
+aliases: [Hilt Assisted Injection, Hilt Ассистированный инжект]
 topic: android
 subtopics:
-- architecture-mvvm
-- di-hilt
+  - architecture-mvvm
+  - di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dagger
-- q-hilt-entry-points--android--medium
+  - c-dagger
+  - q-hilt-entry-points--android--medium
+  - q-koin-vs-dagger-philosophy--android--hard
+  - q-test-doubles-dependency-injection--android--medium
 created: 2025-10-11
 updated: 2025-11-10
-tags:
-- android/architecture-mvvm
-- android/di-hilt
-- assisted-inject
-- dagger
-- dependency-injection
-- difficulty/medium
-- hilt
+tags: [android/architecture-mvvm, android/di-hilt, assisted-inject, dagger, dependency-injection, difficulty/medium, hilt]
 sources:
-- "https://dagger.dev/hilt/assisted-injection.html"
+  - "https://dagger.dev/hilt/assisted-injection.html"
 
+date created: Saturday, November 1st 2025, 1:30:28 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -510,7 +505,7 @@ interface ProductViewHolderFactory {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Assisted Injection влияет на производительность по сравнению со стандартным внедрением?
 - Какие стратегии тестирования Assisted Injection вы используете?
@@ -532,7 +527,7 @@ interface ProductViewHolderFactory {
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -540,7 +535,7 @@ interface ProductViewHolderFactory {
 
 ### Предпосылки (проще)
 
-### Похожие (того же уровня)
+### Похожие (того Же уровня)
 
 - [[q-hilt-entry-points--android--medium]] - Entry Points
 - [[q-kmm-dependency-injection--android--medium]] - DI паттерны

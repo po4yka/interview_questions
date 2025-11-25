@@ -1,9 +1,7 @@
 ---
 id: android-621
 title: Glance Compose Widgets / Виджеты Glance на Compose
-aliases:
-  - Glance Compose Widgets
-  - Виджеты Glance на Compose
+aliases: [Glance Compose Widgets, Виджеты Glance на Compose]
 topic: android
 subtopics:
   - shortcuts-widgets
@@ -13,24 +11,24 @@ question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - ru
   - en
+  - ru
 status: draft
 moc: moc-android
 related:
   - c-glance
   - c-jetpack-compose
+  - q-compose-core-components--android--medium
+  - q-compose-custom-animations--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-  - android/shortcuts-widgets
-  - android/ui-compose
-  - android/ui-widgets
-  - android/glance
-  - difficulty/medium
+tags: [android/glance, android/shortcuts-widgets, android/ui-compose, android/ui-widgets, difficulty/medium]
 sources:
   - url: "https://developer.android.com/jetpack/compose/glance/appwidget"
     note: Glance app widget guide
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -63,7 +61,7 @@ class WeatherWidget : GlanceAppWidget() {
 - Привязываем `stateDefinition` к виджету, чтобы `currentState`/`updateAppWidgetState` работали корректно.
 - Состояние обычно хранится через `GlanceStateDefinition` (Preferences/DataStore/Proto) или прокидывается через `update`/`updateAppWidgetState`.
 
-### 2. Состояние и обновления
+### 2. Состояние И Обновления
 
 ```kotlin
 // Пример использования готового PreferencesGlanceStateDefinition:
@@ -84,7 +82,7 @@ class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
 - Для периодических обновлений обычно используют WorkManager + `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)`.
 - Учитывайте ограничения по обновлениям: для периодических обновлений действуют минимальные интервалы и квоты на частоту; ручные/событийные обновления возможны чаще, но также подчиняются системным лимитам по энергопотреблению.
 
-### 3. Actions и интерактивность
+### 3. Actions И Интерактивность
 
 ```kotlin
 @Composable
@@ -128,7 +126,7 @@ class RefreshAction : ActionCallback {
 
 ## Answer (EN)
 
-### 1. Glance structure
+### 1. Glance Structure
 
 ```kotlin
 object WeatherStateDefinition : PreferencesGlanceStateDefinition // or ProtoGlanceStateDefinition / custom implementation
@@ -148,7 +146,7 @@ class WeatherWidget : GlanceAppWidget() {
 - Attach a `stateDefinition` to the widget so `currentState`/`updateAppWidgetState` can resolve state correctly.
 - Store widget state via a `GlanceStateDefinition` (Preferences/DataStore/Proto) or pass/update data using `update`/`updateAppWidgetState`.
 
-### 2. State and updates
+### 2. State and Updates
 
 ```kotlin
 // Example using built-in PreferencesGlanceStateDefinition:
@@ -169,7 +167,7 @@ class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
 - Use WorkManager plus `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)` for periodic/background updates.
 - Respect update quotas: periodic updates have minimum intervals and system-enforced limits; event-driven/manual updates can be more frequent but are still constrained by system power/abuse policies.
 
-### 3. Actions and interactivity
+### 3. Actions and Interactivity
 
 ```kotlin
 @Composable
@@ -198,7 +196,7 @@ class RefreshAction : ActionCallback {
 - Use `actionRunCallback` for background work and widget refresh; use `actionStartActivity` to launch activities from the widget.
 - Glance does not allow arbitrary Compose UI; you must use the provided Glance composables and modifiers that map to `RemoteViews`.
 
-### 4. Dynamic color & sizes
+### 4. Dynamic Color & Sizes
 
 - Use `GlanceTheme` (with dynamic color when supported by the host/Android version) for consistent styling.
 - Use `LocalSize.current` to adapt the layout to different widget sizes.
@@ -211,7 +209,7 @@ class RefreshAction : ActionCallback {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как организовать списки (например, через поддерживаемые Glance-компоненты) и диффы данных?
 - Как обновлять виджет из push-уведомлений?
 - Какие ограничения у Glance на Android < 12 (dynamic color fallback)?

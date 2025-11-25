@@ -1,39 +1,35 @@
 ---
 id: android-126
 title: ML Kit Custom Models / Кастомные модели ML Kit
-aliases:
-- ML Kit Custom Models
-- Кастомные модели ML Kit
+aliases: [ML Kit Custom Models, Кастомные модели ML Kit]
 topic: android
 subtopics:
-- ab-testing
-- analytics
-- performance-memory
+  - ab-testing
+  - analytics
+  - performance-memory
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- c-mobile-observability
-- q-performance-optimization-android--android--medium
-- q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy
+  - c-memory-management
+  - c-mobile-observability
+  - q-compose-custom-animations--android--medium
+  - q-custom-view-attributes--android--medium
+  - q-mlkit-face-detection--android--medium
+  - q-performance-optimization-android--android--medium
+  - q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/ab-testing
-- android/analytics
-- android/performance-memory
-- difficulty/hard
-- machine-learning
-- ml-kit
-- tensorflow-lite
+tags: [android/ab-testing, android/analytics, android/performance-memory, difficulty/hard, machine-learning, ml-kit, tensorflow-lite]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -53,13 +49,13 @@ ML Kit поддерживает работу с пользовательским
 
 Это даёт гибкость сверх предобученных моделей ML Kit. Важно учитывать актуальность API: старый Firebase ML (например, FirebaseModelSource и т.п.) устарел; необходимо использовать современные подходы на базе TFLite, актуальных ML Kit APIs и/или собственных механизмов доставки моделей.
 
-### Краткий вариант
+### Краткий Вариант
 
 - Используйте TFLite модель (кастомную или AutoML) либо как локальную (в APK/AAB), либо как удалённую (через Firebase/Cloud Storage/CDN/ML Kit Custom Models, если доступны в текущем SDK).
 - Всегда имейте локальный fallback.
 - Для обновлений и A/B тестов управляйте выбором модели через Remote Config / feature flags и отслеживайте метрики.
 
-### Подробный вариант
+### Подробный Вариант
 
 ### Типы Моделей
 

@@ -1,39 +1,38 @@
 ---
 id: android-631
 title: Quick Settings Tiles Architecture / Quick Settings
-aliases:
-- Quick Settings Tiles Architecture
-- Quick Settings
+aliases: [Quick Settings, Quick Settings Tiles Architecture]
 topic: android
 subtopics:
-- shortcuts-widgets
-- background-execution
-- ui-state
+  - background-execution
+  - shortcuts-widgets
+  - ui-state
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- c-android-surfaces
-- q-advanced-share-sheet-shortcuts--android--hard
+  - c-android-components
+  - c-android-surfaces
+  - q-advanced-share-sheet-shortcuts--android--hard
+  - q-architecture-components-libraries--android--easy
+  - q-multi-module-best-practices--android--hard
+  - q-play-billing-v6-architecture--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/shortcuts-widgets
-- android/background-execution
-- android/ui-state
-- difficulty/medium
+tags: [android/background-execution, android/shortcuts-widgets, android/ui-state, difficulty/medium]
 sources:
 - url: "https://developer.android.com/develop/ui/views/quicksettings"
   note: Quick Settings tile guide
 - url: "https://developer.android.com/develop/shortcutmanager"
   note: App Shortcuts documentation
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -106,18 +105,18 @@ class SyncTileService : TileService() {
 - `onStopListening()` используется для отписок и очистки ресурсов; важно не держать долгоживущих ссылок на контекст `TileService`.
 - В `onClick()` реализуйте переключение; при заблокированном устройстве используйте `unlockAndRun { ... }` для действий, требующих разблокировки.
 
-### Фоновая работа
+### Фоновая Работа
 
 - Держите `onClick()`/`onStartListening()` лёгкими: долгие операции выносите в `ForegroundService` с подходящим типом или `WorkManager` (включая expedited work при необходимости), вместо прямых блокирующих вызовов.
 - Для открытия UI используйте `startActivityAndCollapse()` из `TileService`, чтобы свернуть шторку и показать нужный экран.
 
-### Состояние и синхронизация
+### Состояние И Синхронизация
 
 - Храните состояние в общем источнике (`DataStore`/`Room` или иной single source of truth), чтобы и приложение, и `TileService` работали с одним state.
 - Наблюдайте изменения через `Flow`/другие реактивные механизмы, создавая `CoroutineScope`, привязанный к жизненному циклу тайла (подписка в `onStartListening()`, отписка в `onStopListening()`), чтобы избежать утечек.
 - При изменении состояния из приложения вызывайте `TileService.requestListeningState(context, componentName)`, чтобы система триггерила `onStartListening()` и вы могли обновить `qsTile`.
 
-### App Shortcuts и виджеты
+### App Shortcuts И Виджеты
 
 - Используйте `ShortcutManager` для App Shortcuts, которые отражают те же действия/режимы, что и тайл, с явными `Intent`.
 - Обновляйте dynamic shortcuts при включении/выключении функциональности, связанной с тайлом, чтобы пользователь видел актуальные действия.
@@ -126,7 +125,7 @@ class SyncTileService : TileService() {
   - дополняйте `FLAG_UPDATE_CURRENT`, если нужно обновлять extras при переиспользовании `PendingIntent`;
   - это помогает избежать подмены данных и соответствует требованиям безопасности современных API.
 
-### Безопасность, приватность и UX
+### Безопасность, Приватность И UX
 
 - Проверяйте и запрашивайте необходимые разрешения (например, связанные с VPN/hotspot/location) через обычные механизмы приложения; сам `TileService` не даёт дополнительных привилегий.
 - Не запускайте чувствительные потоки с заблокированного экрана без необходимости; для действий, требующих взаимодействия пользователя или разблокировки, используйте `unlockAndRun { ... }` или открывайте Activity через `startActivityAndCollapse()`.
@@ -161,7 +160,7 @@ class SyncTileService : TileService() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как вы реализуете более сложные/интерактивные тайлы (например, Android 14 `setResources` и TileService resources API)?
 - Как архитектура тайла будет масштабироваться на разные устройства (телефон/планшет)?
 - Какие UX best practices вы бы применили для тайлов (анимации, подзаголовок, обратная связь)?
@@ -179,7 +178,7 @@ class SyncTileService : TileService() {
 - [[c-android-surfaces]]
 - https://developer.android.com/develop/ui/views/quicksettings
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[c-android-surfaces]]
 

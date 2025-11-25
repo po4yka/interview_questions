@@ -1,31 +1,32 @@
 ---
 id: android-220
 title: Room Advanced Type Converters / Продвинутые Type Converters в Room
-aliases:
-- Room Advanced Type Converters
-- Продвинутые Type Converters в Room
+aliases: [Room Advanced Type Converters, Продвинутые Type Converters в Room]
 topic: android
 subtopics:
-- room
+  - room
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-room
-- q-how-to-animate-adding-removing-items-in-recyclerview--android--medium
-- q-tasks-back-stack--android--medium
-- q-what-is-broadcastreceiver--android--easy
+  - c-room
+  - q-how-to-animate-adding-removing-items-in-recyclerview--android--medium
+  - q-room-code-generation-timing--android--medium
+  - q-room-relations-embedded--android--medium
+  - q-room-type-converters--android--medium
+  - q-tasks-back-stack--android--medium
+  - q-what-is-broadcastreceiver--android--easy
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/room
-- difficulty/medium
+tags: [android/room, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -39,14 +40,14 @@ tags:
 ## Ответ (RU)
 **Продвинутые Type Converters** в Room позволяют хранить сложные типы данных (пользовательские объекты, коллекции, enum-ы, UUID, BigDecimal, типы `java.time`) с сохранением типобезопасности и контролем производительности.
 
-### Базовые принципы
+### Базовые Принципы
 
 Room может напрямую хранить только ограниченный набор типов. Для остальных нужны `@TypeConverter`-ы, которые:
 
 - Определяют двунаправленное преобразование между кастомным типом и поддерживаемым типом (примитивы, `String`, `ByteArray` и т.п.).
 - Должны быть чистыми и детерминированными.
 
-### Базовые конвертеры (обзор)
+### Базовые Конвертеры (обзор)
 
 ```kotlin
 class BasicConverters {
@@ -64,7 +65,7 @@ class BasicConverters {
 }
 ```
 
-### Продвинутые конвертеры даты/времени
+### Продвинутые Конвертеры даты/времени
 
 ```kotlin
 class DateTimeConverters {
@@ -199,9 +200,9 @@ class BigDecimalConverters {
 }
 ```
 
-### Коллекции (простые и JSON)
+### Коллекции (простые И JSON)
 
-#### Простые списки
+#### Простые Списки
 
 ```kotlin
 class SimpleCollectionConverters {
@@ -235,7 +236,7 @@ class SimpleCollectionConverters {
 }
 ```
 
-#### JSON-базированные конвертеры коллекций и объектов
+#### JSON-базированные Конвертеры Коллекций И Объектов
 
 Для сложных структур удобнее использовать JSON.
 
@@ -391,7 +392,7 @@ class KotlinxSerializationConverters {
 }
 ```
 
-### @ProvidedTypeConverter и DI
+### @ProvidedTypeConverter И DI
 
 Когда конвертер зависит от внешних экземпляров (например, `Gson`, `Moshi`, `Json`), используйте `@ProvidedTypeConverter` и регистрируйте через `.addTypeConverter(...)`.
 
@@ -456,7 +457,7 @@ object DatabaseModule {
 }
 ```
 
-### Сравнение производительности (пример)
+### Сравнение Производительности (пример)
 
 Простой локальный бенчмарк для сравнения сериализаторов; результаты зависят от окружения и набора данных.
 
@@ -523,7 +524,7 @@ class TypeConverterBenchmark {
 
 (На практике производительность зависит от окружения и структуры данных; Moshi и kotlinx.serialization часто быстрее Gson, но всегда измеряйте в своём контексте.)
 
-### Стратегии оптимизации производительности
+### Стратегии Оптимизации Производительности
 
 1. Для простых данных используйте простые представления (разделённые строки, примитивы).
 2. Избегайте тяжёлого JSON там, где достаточно примитивов.
@@ -549,7 +550,7 @@ class GoodConverters {
 }
 ```
 
-#### BinaryConverters (protobuf / бинарные форматы)
+#### BinaryConverters (protobuf / Бинарные форматы)
 
 ```kotlin
 class BinaryConverters {
@@ -563,7 +564,7 @@ class BinaryConverters {
 }
 ```
 
-### Полный пример из реального проекта
+### Полный Пример Из Реального Проекта
 
 ```kotlin
 @Serializable
@@ -661,7 +662,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Выбирать формат хранения по типу данных:
    - Разделённые строки или примитивы для простых типов.
@@ -676,7 +677,7 @@ abstract class AppDatabase : RoomDatabase() {
 8. Мониторить производительность и размер БД; не злоупотреблять JSON там, где лучше нормализованные таблицы.
 9. Осторожно относиться к ordinal enum-ов и эволюции схемы.
 
-### Типичные ошибки
+### Типичные Ошибки
 
 1. Создание тяжёлых сериализаторов на каждый вызов.
 2. Игнорирование null и получение NPE.
@@ -687,7 +688,7 @@ abstract class AppDatabase : RoomDatabase() {
 7. Неконсистентные конвертеры (нет обратимости).
 8. Забытые регистрации конвертеров на нужном уровне (БД/DAO/поле).
 
-### Сравнительная таблица: варианты сериализации (высокоуровнево)
+### Сравнительная Таблица: Варианты Сериализации (высокоуровнево)
 
 | Библиотека / подход    | Плюсы                         | Минусы                               | Типичные случаи использования            |
 |------------------------|-------------------------------|--------------------------------------|------------------------------------------|
@@ -1412,7 +1413,7 @@ Choose strategies based on data model complexity, schema evolution needs, and me
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]]
 - [[q-tasks-back-stack--android--medium]]
@@ -1432,18 +1433,18 @@ Choose strategies based on data model complexity, schema evolution needs, and me
 
 - [Room Database](https://developer.android.com/training/data-storage/room)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые концепции
+### Базовые Концепции
 
 - [[c-room]]
 
-### Более простые вопросы
+### Более Простые Вопросы
 
 - [[q-sharedpreferences-commit-vs-apply--android--easy]]
 - [[q-room-library-definition--android--easy]]
 
-### Средний уровень
+### Средний Уровень
 
 - [[q-room-code-generation-timing--android--medium]]
 - [[q-room-transactions-dao--android--medium]]
@@ -1451,7 +1452,7 @@ Choose strategies based on data model complexity, schema evolution needs, and me
 - [[q-room-vs-sqlite--android--medium]]
 - [[q-room-type-converters--android--medium]]
 
-### Продвинутый уровень
+### Продвинутый Уровень
 
 - [[q-room-fts-full-text-search--android--hard]]
 

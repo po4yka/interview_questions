@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-10
 
 tags: [difficulty/medium, extensions, functions, kotlin, language-features]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о расширениях в Kotlin?
 
@@ -150,13 +153,13 @@ fun Example.printFunctionType(i: Int) { println("Extension function #$i") }
 Example().printFunctionType(1)
 ```
 
-### Примечание о видимости
+### Примечание О Видимости
 
 Расширения используют те же модификаторы видимости, что и обычные функции, объявленные в той же области видимости. Например:
 - Расширение, объявленное на верхнем уровне файла, имеет доступ к другим `private` объявлениям верхнего уровня в том же файле;
 - Если расширение объявлено вне своего типа-получателя, оно не может получить доступ к `private` или `protected` членам получателя.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия расширений в Kotlin от аналогичных возможностей или отсутствия таковых в Java?
 - Когда вы бы использовали функции-расширения на практике?
@@ -170,13 +173,13 @@ Example().printFunctionType(1)
 - [Writing clean models using extensions](https://okkotlin.com/clean-models/)
 - [Bad Kotlin Extensions](https://krossovochkin.com/posts/2021_01_25_bad_kotlin_extensions/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-infix-functions--kotlin--medium]] — инфиксные функции в Kotlin
 - [[q-kotlin-operator-overloading--kotlin--medium]] — перегрузка операторов в Kotlin
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-kotlin-extension-functions-advanced--kotlin--hard]] — продвинутые функции-расширения в Kotlin
 
 ---

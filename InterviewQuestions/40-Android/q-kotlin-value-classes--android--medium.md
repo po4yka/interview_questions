@@ -1,35 +1,32 @@
 ---
-id: kotlin-069
+id: android-647
 title: Kotlin Value Classes (Inline Classes) / Value классы в Kotlin
-aliases:
-- Kotlin Value Classes (Inline Classes)
-- Value классы в Kotlin
-topic: kotlin
+aliases: [Kotlin Value Classes (Inline Classes), Value классы в Kotlin]
+topic: android
 subtopics:
-- types
+  - types
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-kotlin
 related:
-- c-concepts--kotlin--medium
-- q-android-runtime-art--android--medium
+  - c-concepts--kotlin--medium
+  - q-android-runtime-art--android--medium
+  - q-inline-classes-value-classes--kotlin--medium
+  - q-inline-value-classes-performance--kotlin--medium
+  - q-value-classes-inline-classes--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-10
-tags:
-- kotlin/types
-- difficulty/medium
-- inline-classes
-- performance
-- type-safety
-- value-classes
+tags: [difficulty/medium, inline-classes, kotlin/types, performance, type-safety, value-classes]
 sources:
-- "https://kotlinlang.org/docs/inline-classes.html"
+  - "https://kotlinlang.org/docs/inline-classes.html"
 
+date created: Tuesday, November 25th 2025, 1:00:18 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -279,7 +276,7 @@ val nullable: UserId? = userId            // 3. Nullable types (commonly boxed)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между value классами и inline классами?
 - Когда стоит использовать value классы, а когда data классы?

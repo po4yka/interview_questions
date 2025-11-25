@@ -14,7 +14,9 @@ moc: "moc-system-design"
 related: []
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["architecture-patterns", "concept", "difficulty/medium", "auto-generated"]
+tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
+date created: Tuesday, November 11th 2025, 7:29:30 am
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

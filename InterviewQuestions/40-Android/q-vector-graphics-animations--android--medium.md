@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-animation, android/ui-graphics, animated-vector-drawable, difficulty/medium, vector-graphics]
 
+date created: Saturday, November 1st 2025, 1:24:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -496,7 +498,7 @@ fun AnimatedVectorIcon(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как реализовать кастомные path-интерполяторы для нелинейного морфинга фигур?
 2. Какие подходы используются для конвертации сложных SVG (градиенты, фильтры) в поддерживаемые VectorDrawable-ресурсы?
@@ -522,7 +524,7 @@ fun AnimatedVectorIcon(
 - [Material Design Motion](https://m3.material.io/styles/motion/overview)
 - [Android Vector Drawables Guide](https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-android-app-components--android--easy]] — Базовые компоненты Android-приложения

@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-job-vs-supervisorjob--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-job-vs-supervisorjob--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, optimization, patterns, performance]
+date created: Friday, October 31st 2025, 6:30:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -76,9 +78,9 @@ tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, 
 
 ---
 
-## Определение паттерна
+## Определение Паттерна
 
-### Что такое объединение запросов?
+### Что Такое Объединение Запросов?
 
 ```
 БЕЗ объединения:
@@ -112,7 +114,7 @@ tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, 
 Результат: 1 вызов бэкенда, 3 клиента получают общий результат
 ```
 
-### Основные концепции
+### Основные Концепции
 
 1. Отслеживание выполняющихся запросов.
 2. Совместное использование `Deferred<T>` между конкурентными запросами.
@@ -122,9 +124,9 @@ tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, 
 
 ---
 
-## Проблемный сценарий
+## Проблемный Сценарий
 
-### Сценарий: загрузка профиля пользователя
+### Сценарий: Загрузка Профиля Пользователя
 
 ```kotlin
 // ПРОБЛЕМА: несколько компонентов загружают один и тот же профиль пользователя
@@ -149,7 +151,7 @@ class UserProfileScreen : Fragment() {
 // Все вызовы конкурируют за сеть/CPU
 ```
 
-### Реальное влияние (пример метрик)
+### Реальное Влияние (пример метрик)
 
 ```kotlin
 // Иллюстративный пример:
@@ -169,7 +171,7 @@ class UserProfileScreen : Fragment() {
 
 ---
 
-## Архитектура решения (концептуально)
+## Архитектура Решения (концептуально)
 
 Минимальная реализация (упрощённая, с потенциальными гонками):
 
@@ -209,9 +211,9 @@ class RequestCoalescer<K, V> {
 
 ---
 
-## Потокобезопасная реализация с ConcurrentHashMap
+## Потокобезопасная Реализация С ConcurrentHashMap
 
-### Вариант с putIfAbsent
+### Вариант С putIfAbsent
 
 ```kotlin
 class RequestCoalescer<K, V> {
@@ -249,7 +251,7 @@ class RequestCoalescer<K, V> {
 }
 ```
 
-### Обработка ошибок с общим Result
+### Обработка Ошибок С Общим Result
 
 ```kotlin
 class ResilientRequestCoalescer<K, V> {
@@ -289,7 +291,7 @@ class ResilientRequestCoalescer<K, V> {
 
 ---
 
-## Альтернативная реализация с Mutex
+## Альтернативная Реализация С Mutex
 
 ```kotlin
 class MutexRequestCoalescer<K, V> {
@@ -340,7 +342,7 @@ class MutexRequestCoalescer<K, V> {
 
 ---
 
-## Полный класс RequestCoalescer
+## Полный Класс RequestCoalescer
 
 Ниже — более «production-style» реализация с метриками и управлением временем жизни записей.
 
@@ -468,9 +470,9 @@ class CoalescerMetrics {
 
 ---
 
-## Истечение по времени (Time-Based Expiration)
+## Истечение По Времени (Time-Based Expiration)
 
-### Автоочистка устаревших записей
+### Автоочистка Устаревших Записей
 
 Чтобы карта не росла безгранично, можно истекать записи по времени. Используем отдельный конфиг для expiring-коалесера:
 
@@ -547,7 +549,7 @@ class ExpiringRequestCoalescer<K, V>(
 
 ---
 
-## Батчинг против объединения запросов
+## Батчинг Против Объединения Запросов
 
 ### Сравнение
 
@@ -625,9 +627,9 @@ class RequestBatcher<K, V>(
 
 ---
 
-## Объединение на основе `SharedFlow`
+## Объединение На Основе `SharedFlow`
 
-### Для подписок и стримов (один процесс)
+### Для Подписок И Стримов (один процесс)
 
 ```kotlin
 class SharedFlowCoalescer<K, V>(
@@ -665,9 +667,9 @@ class SharedFlowCoalescer<K, V>(
 
 ---
 
-## Реальные примеры
+## Реальные Примеры
 
-### Пример 1: UserRepository с кэшем и coalescing
+### Пример 1: UserRepository С Кэшем И Coalescing
 
 ```kotlin
 class UserRepository(
@@ -699,7 +701,7 @@ class ProfileScreen : Fragment() {
 }
 ```
 
-### Пример 2: Дедупликация загрузки изображений
+### Пример 2: Дедупликация Загрузки Изображений
 
 ```kotlin
 class ImageLoader(
@@ -726,7 +728,7 @@ class ImageAdapter(
 }
 ```
 
-### Пример 3: GraphQLRepository с ключом-запросом
+### Пример 3: GraphQLRepository С Ключом-запросом
 
 ```kotlin
 class GraphQLRepository(
@@ -743,9 +745,9 @@ class GraphQLRepository(
 
 ---
 
-## Преимущества производительности
+## Преимущества Производительности
 
-### Набросок бенчмарка
+### Набросок Бенчмарка
 
 ```kotlin
 @Test
@@ -788,9 +790,9 @@ fun benchmarkCoalescing() = runBlocking {
 
 ---
 
-## Комбинация с in-memory кэшем
+## Комбинация С In-memory Кэшем
 
-### Двухуровневая схема: кэш + coalescer
+### Двухуровневая Схема: Кэш + Coalescer
 
 ```kotlin
 class OptimizedRepository<K, V>(
@@ -823,9 +825,9 @@ data class CacheEntry<V>(
 
 ---
 
-## Тестирование объединения
+## Тестирование Объединения
 
-### Примеры юнит-тестов
+### Примеры Юнит-тестов
 
 ```kotlin
 class RequestCoalescerTest {
@@ -903,7 +905,7 @@ class RequestCoalescerTest {
 
 ---
 
-## Паттерны интеграции
+## Паттерны Интеграции
 
 При интеграции с библиотеками загрузки данных (Glide, Coil и т.п.) используйте коалесер внутри fetcher/loader, чтобы не дублировать сетевую работу. Важно:
 - применять долгоживущий `CoroutineScope`;
@@ -911,7 +913,7 @@ class RequestCoalescerTest {
 
 ---
 
-## Лучшие практики
+## Лучшие Практики
 
 Делать:
 1. Использовать для дорогих, идемпотентных, безопасных операций.
@@ -928,7 +930,7 @@ class RequestCoalescerTest {
 
 ---
 
-## Мониторинг и метрики
+## Мониторинг И Метрики
 
 ```kotlin
 data class CoalescerStats(
@@ -946,7 +948,7 @@ data class CoalescerStats(
 
 ---
 
-## Типичные ошибки
+## Типичные Ошибки
 
 - Объединение неидемпотентных операций (например, платежей).
 - Отсутствие удаления завершённых записей → утечки памяти.
@@ -955,7 +957,7 @@ data class CoalescerStats(
 
 ---
 
-## Дополнительные вопросы
+## Дополнительные Вопросы
 
 1. В чём разница между объединением запросов и кэшированием на уровне клиента/сервера?
 2. Как правильно распространять ошибки на всех участников объединённого запроса?
@@ -973,7 +975,7 @@ data class CoalescerStats(
 
 ---
 
-## Связанные вопросы
+## Связанные Вопросы
 
 - [[q-job-vs-supervisorjob--kotlin--medium]]
 
@@ -1303,7 +1305,7 @@ class MutexRequestCoalescer<K, V> {
 
 ---
 
-## Request Batching vs Coalescing
+## Request Batching Vs Coalescing
 
 ```kotlin
 // Coalescing: multiple identical (by key) requests -> single execution

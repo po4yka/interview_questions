@@ -1,29 +1,30 @@
 ---
 id: android-350
 title: RecyclerView DiffUtil Advanced / Продвинутый DiffUtil для RecyclerView
-aliases:
-- RecyclerView DiffUtil Advanced
-- Продвинутый DiffUtil для RecyclerView
+aliases: [RecyclerView DiffUtil Advanced, Продвинутый DiffUtil для RecyclerView]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-recyclerview
-- q-android-project-parts--android--easy
+  - c-recyclerview
+  - q-android-project-parts--android--easy
+  - q-camerax-advanced-pipeline--android--hard
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-recyclerview-itemdecoration-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/ui-views
-- difficulty/medium
+tags: [android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +39,7 @@ tags:
 
 **DiffUtil** — это утилитный класс, который вычисляет разницу между двумя списками и выдаёт набор операций обновления. Он необходим для эффективных обновлений RecyclerView без полного обновления набора данных.
 
-### Зачем нужен DiffUtil?
+### Зачем Нужен DiffUtil?
 
 **Без DiffUtil:**
 ```kotlin
@@ -67,7 +68,7 @@ fun updateData(newList: List<Item>) {
 
 ---
 
-### Как работает DiffUtil (алгоритм Myers)
+### Как Работает DiffUtil (алгоритм Myers)
 
 DiffUtil основан на **алгоритме Myers diff**, который ищет (почти) минимальный набор операций вставки/удаления для преобразования одной последовательности в другую. В Android он дополнен оптимизациями и поддержкой перемещений и частичных изменений.
 
@@ -99,7 +100,7 @@ DiffUtil основан на **алгоритме Myers diff**, который �
 
 ---
 
-### Базовая реализация DiffUtil
+### Базовая Реализация DiffUtil
 
 ```kotlin
 data class Item(
@@ -188,7 +189,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ---
 
-### ListAdapter — упрощённый DiffUtil
+### ListAdapter — Упрощённый DiffUtil
 
 **ListAdapter** оборачивает `AsyncListDiffer` и `DiffUtil.ItemCallback`, выполняя вычисление diff не в главном потоке и автоматически вызывая обновления адаптера.
 
@@ -240,7 +241,7 @@ adapter.submitList(newItems) // Diff вычисляется асинхронно
 
 ---
 
-### Async DiffUtil (большие наборы данных)
+### Async DiffUtil (большие Наборы данных)
 
 Для больших списков или дорогих сравнений переносите вычисление diff с главного потока.
 
@@ -301,7 +302,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ---
 
-### Оптимизация производительности DiffUtil
+### Оптимизация Производительности DiffUtil
 
 **1. Эффективное сравнение содержимого**
 
@@ -361,7 +362,7 @@ class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()
 
 ---
 
-### Частичные обновления с payload
+### Частичные Обновления С Payload
 
 Используйте payload, чтобы не выполнять полную привязку, если изменились только отдельные поля.
 
@@ -424,7 +425,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ---
 
-### Боевое применение: лента новостей
+### Боевое Применение: Лента Новостей
 
 ```kotlin
 data class Post(
@@ -572,7 +573,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 - Предпочитайте `ListAdapter` / `AsyncListDiffer` для большинства списков.
 - Точно реализуйте `areItemsTheSame` (идентичность) и `areContentsTheSame` (визуальное равенство).

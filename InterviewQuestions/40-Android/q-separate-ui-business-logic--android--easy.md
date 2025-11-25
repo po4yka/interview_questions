@@ -1,31 +1,32 @@
 ---
 id: android-288
 title: Separate UI and Business Logic / Разделение UI и бизнес-логики
-aliases:
-- Separate UI and Business Logic
-- Разделение UI и бизнес-логики
+aliases: [Separate UI and Business Logic, Разделение UI и бизнес-логики]
 topic: android
 subtopics:
-- architecture-mvvm
+  - architecture-mvvm
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-android-ui-composition
-- q-how-to-draw-ui-without-xml--android--easy
-- q-proguard-r8--android--medium
+  - c-android
+  - c-android-ui-composition
+  - q-how-to-draw-ui-without-xml--android--easy
+  - q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy
+  - q-proguard-r8--android--medium
+  - q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
+  - q-why-separate-ui-and-business-logic--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/architecture-mvvm
-- difficulty/easy
+tags: [android/architecture-mvvm, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +42,7 @@ tags:
 
 Важно: в примерах ниже часть логики вынесена во `ViewModel` для иллюстрации разделения UI-слоя и слоя презентационной/бизнес-логики. В реальных проектах часть доменной логики обычно выносится ещё глубже — в отдельный доменный слой, независимый от Android.
 
-### Зачем разделять UI и бизнес-логику?
+### Зачем Разделять UI И Бизнес-логику?
 
 #### 1. Тестируемость
 
@@ -456,7 +457,7 @@ class ProductActivity : AppCompatActivity() {
 }
 ```
 
-#### 4. Командная работа
+#### 4. Командная Работа
 
 При разделении слоёв команды могут работать параллельно, не блокируя друг друга:
 
@@ -481,7 +482,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-#### 5. Сохранение состояния и конфигурационные изменения
+#### 5. Сохранение Состояния И Конфигурационные Изменения
 
 Если состояние хранится в `Activity`/`Fragment`, при повороте экрана оно теряется (если не сохранять его вручную).
 
@@ -537,7 +538,7 @@ class CounterActivity2 : AppCompatActivity() {
 }
 ```
 
-### Популярные архитектурные паттерны
+### Популярные Архитектурные Паттерны
 
 #### MVVM (Model-`View`-`ViewModel`)
 
@@ -657,7 +658,7 @@ class UserMviActivity : AppCompatActivity() {
 }
 ```
 
-### Резюме преимуществ
+### Резюме Преимуществ
 
 | Преимущество | Без разделения | С разделением |
 |-------------|----------------|---------------|

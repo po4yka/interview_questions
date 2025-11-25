@@ -1,32 +1,32 @@
 ---
 id: android-295
 title: Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose
-aliases:
-- Remember vs RememberSaveable in Compose
-- Remember vs RememberSaveable в Compose
+aliases: [Remember vs RememberSaveable in Compose, Remember vs RememberSaveable в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- q-handler-looper-main-thread--android--medium
-- q-what-are-the-most-important-components-of-compose--android--medium
+  - c-compose-state
+  - q-compose-core-components--android--medium
+  - q-compose-remember-derived-state--android--medium
+  - q-handler-looper-main-thread--android--medium
+  - q-remember-remembersaveable--android--medium
+  - q-what-are-the-most-important-components-of-compose--android--medium
 created: 2023-10-15
 updated: 2025-11-11
-tags:
-- android/ui-compose
-- android/ui-state
-- difficulty/medium
+tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +43,7 @@ tags:
 - remember хранит состояние только в памяти внутри текущей композиции. Оно переживает рекомпозиции, но теряется при изменении конфигурации и при смерти процесса.
 - rememberSaveable хранит состояние через SaveableStateRegistry (по умолчанию завязан на onSaveInstanceState/`Bundle` в `Activity`/`Fragment` или SavedStateHandle в навигации). Такое состояние переживает рекомпозиции и изменения конфигурации, и может быть восстановлено после смерти процесса, если хост корректно сохраняет и восстанавливает состояние.
 
-### remember — состояние в памяти
+### Remember — Состояние В Памяти
 
 ```kotlin
 @Composable
@@ -66,7 +66,7 @@ fun CounterWithRemember() {
 - Теряется при смерти процесса.
 - Нет накладных расходов на сериализацию; подходит для эфемерного или легко восстанавливаемого состояния.
 
-### rememberSaveable — сохраняемое состояние (SaveableStateRegistry/`Bundle`)
+### rememberSaveable — Сохраняемое Состояние (SaveableStateRegistry/`Bundle`)
 
 ```kotlin
 @Composable
@@ -103,9 +103,9 @@ fun CounterWithRememberSaveable() {
 
 (*) Восстановление после смерти процесса работает только при корректной интеграции с механизмом сохранения состояния.
 
-### Что можно хранить в rememberSaveable
+### Что Можно Хранить В rememberSaveable
 
-#### Автоматически поддерживаемые типы
+#### Автоматически Поддерживаемые Типы
 
 ```kotlin
 @Composable
@@ -128,7 +128,7 @@ fun AutoSupportedTypes() {
 - `Parcelable`
 - `Serializable`
 
-### Кастомные типы с `Parcelable`
+### Кастомные Типы С `Parcelable`
 
 ```kotlin
 @Parcelize
@@ -152,7 +152,7 @@ fun UserProfile() {
 }
 ```
 
-### Кастомные типы с Saver
+### Кастомные Типы С Saver
 
 Для типов, которые нельзя напрямую сохранить в `Bundle`, используйте кастомный Saver:
 
@@ -215,7 +215,7 @@ fun ProductFilter() {
 }
 ```
 
-### listSaver для списковых данных
+### listSaver Для Списковых Данных
 
 ```kotlin
 data class CartItem(val productId: Int, val quantity: Int)
@@ -240,7 +240,7 @@ fun ShoppingCart() {
 }
 ```
 
-### rememberSaveable и `ViewModel`
+### rememberSaveable И `ViewModel`
 
 ```kotlin
 @Composable
@@ -276,7 +276,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 }
 ```
 
-### Когда использовать remember
+### Когда Использовать Remember
 
 Используйте remember, когда:
 - состояние эфемерное или не критично для восстановления;
@@ -304,7 +304,7 @@ fun AnimatedButton() {
 }
 ```
 
-2. Производительно-критичные/дорогие объекты:
+1. Производительно-критичные/дорогие объекты:
 
 ```kotlin
 @Composable
@@ -317,7 +317,7 @@ fun ExpensiveComputationExample() {
 }
 ```
 
-3. Состояние/объекты, управляемые `ViewModel` и навигацией:
+1. Состояние/объекты, управляемые `ViewModel` и навигацией:
 
 ```kotlin
 @Composable
@@ -328,7 +328,7 @@ fun DataScreen(viewModel: DataViewModel) {
 }
 ```
 
-### Когда использовать rememberSaveable
+### Когда Использовать rememberSaveable
 
 Используйте rememberSaveable для состояния, которое:
 - важно для пользователя;
@@ -354,7 +354,7 @@ fun RegistrationForm() {
 }
 ```
 
-2. Позиция скролла (как альтернативный/manual подход):
+1. Позиция скролла (как альтернативный/manual подход):
 
 ```kotlin
 @Composable
@@ -379,7 +379,7 @@ fun ArticleList() {
 }
 ```
 
-3. Выбранные элементы (через saveable-представление):
+1. Выбранные элементы (через saveable-представление):
 
 ```kotlin
 @Composable
@@ -412,7 +412,7 @@ fun SelectableList(items: List<String>) {
 }
 ```
 
-4. Состояние expanded/collapsed:
+1. Состояние expanded/collapsed:
 
 ```kotlin
 @Composable
@@ -445,7 +445,7 @@ fun ExpandableCard(title: String, content: String) {
 
 ### Ограничения rememberSaveable
 
-#### 1. Лимит размера `Bundle` (~1MB)
+#### 1. Лимит Размера `Bundle` (~1MB)
 
 ```kotlin
 @Composable
@@ -461,7 +461,7 @@ fun LargeDataExample() {
 }
 ```
 
-#### 2. Несохраняемые/тяжелые типы
+#### 2. Несохраняемые/тяжелые Типы
 
 ```kotlin
 @Composable
@@ -494,7 +494,7 @@ fun PerformanceComparison() {
 }
 ```
 
-### rememberSaveable с keys
+### rememberSaveable С Keys
 
 ```kotlin
 @Composable
@@ -510,7 +510,7 @@ fun TabScreen(initialTab: Int) {
 }
 ```
 
-### Резюме / Best practices (RU)
+### Резюме / Best Practices (RU)
 
 - remember:
   - использовать для эфемерного UI-состояния, дорогих объектов, NavController и т.п.;
@@ -530,7 +530,7 @@ In Jetpack Compose:
 - remember keeps state only in memory for the current composition. It survives recomposition, but is lost on configuration changes and process death.
 - rememberSaveable keeps state in a way that is integrated with the SaveableStateRegistry (backed by onSaveInstanceState/`Bundle` in Activities/Fragments or navigation SavedStateHandle). It survives recomposition and configuration changes, and can survive process death when the hosting component correctly saves/restores state.
 
-### remember — In-memory state
+### Remember — In-memory State
 
 ```kotlin
 @Composable
@@ -553,7 +553,7 @@ Behavior:
 - Lost on process death.
 - No serialization overhead; good for lightweight/in-memory or recreation-friendly state.
 
-### rememberSaveable — Saveable state via SaveableStateRegistry/`Bundle`
+### rememberSaveable — Saveable State via SaveableStateRegistry/`Bundle`
 
 ```kotlin
 @Composable
@@ -592,7 +592,7 @@ Behavior:
 
 ### What rememberSaveable Can Store
 
-#### Automatically supported types (by default)
+#### Automatically Supported Types (by default)
 
 ```kotlin
 @Composable
@@ -615,7 +615,7 @@ Supported (by default) include:
 - `Parcelable`
 - `Serializable`
 
-### Custom types with `Parcelable`
+### Custom Types with `Parcelable`
 
 ```kotlin
 @Parcelize
@@ -639,7 +639,7 @@ fun UserProfile() {
 }
 ```
 
-### Custom types with Saver
+### Custom Types with Saver
 
 For types that are not directly saveable, use a custom Saver:
 
@@ -703,7 +703,7 @@ fun ProductFilter() {
 }
 ```
 
-### listSaver for list-based data
+### listSaver for List-based Data
 
 ```kotlin
 data class CartItem(val productId: Int, val quantity: Int)
@@ -764,7 +764,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 }
 ```
 
-### When to use remember
+### When to Use Remember
 
 Use remember for:
 - Ephemeral UI state (safe to lose):
@@ -813,7 +813,7 @@ fun DataScreen(viewModel: DataViewModel) {
 }
 ```
 
-### When to use rememberSaveable
+### When to Use rememberSaveable
 
 Use rememberSaveable for state that:
 - Is user-visible/meaningful to restore.
@@ -839,7 +839,7 @@ fun RegistrationForm() {
 }
 ```
 
-2. Scroll position (demonstrated as an alternative/manual approach):
+1. Scroll position (demonstrated as an alternative/manual approach):
 
 ```kotlin
 @Composable
@@ -865,7 +865,7 @@ fun ArticleList() {
 }
 ```
 
-3. Selected items, using a saveable representation:
+1. Selected items, using a saveable representation:
 
 ```kotlin
 @Composable
@@ -899,7 +899,7 @@ fun SelectableList(items: List<String>) {
 }
 ```
 
-4. Expanded/collapsed state of UI elements:
+1. Expanded/collapsed state of UI elements:
 
 ```kotlin
 @Composable
@@ -930,9 +930,9 @@ fun ExpandableCard(title: String, content: String) {
 }
 ```
 
-### rememberSaveable limitations
+### rememberSaveable Limitations
 
-#### 1. `Bundle` size limit (~1MB)
+#### 1. `Bundle` Size Limit (~1MB)
 
 ```kotlin
 @Composable
@@ -948,7 +948,7 @@ fun LargeDataExample() {
 }
 ```
 
-#### 2. Non-saveable / heavy types
+#### 2. Non-saveable / Heavy Types
 
 ```kotlin
 @Composable
@@ -981,7 +981,7 @@ fun PerformanceComparison() {
 }
 ```
 
-### rememberSaveable with keys
+### rememberSaveable with Keys
 
 ```kotlin
 @Composable

@@ -5,7 +5,7 @@ aliases: ["Kotlin SAM Interfaces", "SAM интерфейсы в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [interfaces, functions, lambdas]
+subtopics: [functions, interfaces, lambdas]
 question_kind: theory
 difficulty: medium
 
@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, functional-programming, interfaces, kotlin, lambdas, sam]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о функциональных (SAM) интерфейсах в Kotlin?
 
@@ -116,7 +119,7 @@ public interface MyFunctionalInterface {
 val action = MyFunctionalInterface { name -> println("Hello, $name") }
 ```
 
-### Функциональные интерфейсы с методами по умолчанию
+### Функциональные Интерфейсы С Методами По Умолчанию
 
 Функциональные интерфейсы могут иметь методы по умолчанию, которые предоставляют дополнительную функциональность без нарушения правила единственного абстрактного метода:
 
@@ -150,7 +153,7 @@ fun main() {
 - Методы по умолчанию: Разрешены и не нарушают ограничение единственного абстрактного метода;
 - Функции высшего порядка и лямбды: Часто функциональные интерфейсы конкурируют с типами функций; выбор зависит от требований к читаемости, бинарной совместимости и Java-интеропу.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия функциональных интерфейсов в Kotlin от Java?
 - Когда вы бы выбрали `fun interface` вместо типа функции на практике?
@@ -163,7 +166,7 @@ fun main() {
 - [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Связанные (Medium)
 - [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] — Функциональные интерфейсы vs typealias

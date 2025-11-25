@@ -1,5 +1,5 @@
 ---
-id: cs-011
+id: lang-210
 title: "Kotlin Data Sealed Classes Combined / Kotlin Data и Sealed классы вместе"
 aliases: []
 topic: cs
@@ -14,6 +14,8 @@ related: [c-computer-science, c-concepts--kotlin--medium, q-channels-basics-type
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -130,7 +132,7 @@ Benefits of combination:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 - [[q-channels-basics-types--kotlin--medium]]

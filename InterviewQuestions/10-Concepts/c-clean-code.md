@@ -14,7 +14,9 @@ moc: "moc-kotlin"
 related: []
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["programming-languages", "concept", "difficulty/medium", "auto-generated"]
+tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+date created: Tuesday, November 11th 2025, 7:30:32 am
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

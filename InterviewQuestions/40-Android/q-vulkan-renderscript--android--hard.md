@@ -1,7 +1,7 @@
 ---
 id: android-380
 title: "Vulkan RenderScript / Vulkan и RenderScript"
-aliases: ["Vulkan RenderScript", "Vulkan RenderScript / Vulkan и RenderScript"]
+aliases: ["Vulkan RenderScript / Vulkan и RenderScript", "Vulkan RenderScript"]
 topic: android
 subtopics: [performance-rendering]
 question_kind: theory
@@ -14,6 +14,8 @@ related: [c-performance, q-surfaceview-rendering--android--medium]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/performance-rendering, difficulty/hard]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -25,7 +27,7 @@ tags: [android/performance-rendering, difficulty/hard]
 ## Ответ (RU)
 С устареванием RenderScript в Android 12 нужны современные подходы к вычислениям на GPU. На Android для этого применяют `Vulkan` (низкоуровневый доступ), compute-шейдеры в `OpenGL ES 3.1+` и высокооптимизированные CPU/NDK решения. Примеры ниже концептуальны и опускают детали продакшн-кода (жизненный цикл, обработка ошибок, полный пайплайн). См. также [[c-performance]].
 
-#### 1. Базовые шаги Vulkan для Android (концептуально)
+#### 1. Базовые Шаги Vulkan Для Android (концептуально)
 
 Для вычислений или обработки изображений с помощью `Vulkan`:
 
@@ -151,7 +153,7 @@ class RenderScriptProcessor(private val context: Context) {
 }
 ```
 
-#### 3. Compute-шейдеры в OpenGL ES 3.1
+#### 3. Compute-шейдеры В OpenGL ES 3.1
 
 `OpenGL ES 3.1+` даёт compute-шейдеры и обычно проще в интеграции, чем `Vulkan`:
 
@@ -298,7 +300,7 @@ class CPUImageProcessor : ImageProcessor {
 }
 ```
 
-#### 5. Выбор между Vulkan, OpenGL ES и CPU / NDK
+#### 5. Выбор Между Vulkan, OpenGL ES И CPU / NDK
 
 Рекомендации при миграции с RenderScript:
 
@@ -339,7 +341,7 @@ class GPUComputeProcessor(private val context: Context) {
 - Проверять поддержку `Vulkan` (level/version/фичи) и версии `OpenGL ES` в рантайме; наличие feature-флага не гарантирует, что устройство подходит под все требования конкретного пайплайна.
 - Инкапсулировать реализацию за интерфейсом `ImageProcessor` для удобства fallback.
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Правильный выбор API:
    - `Vulkan` — максимум контроля и минимальные накладные расходы, но высокая сложность.
@@ -357,7 +359,7 @@ class GPUComputeProcessor(private val context: Context) {
 5. Синхронизация:
    - Использовать барьеры и fence'ы, корректно ждать завершения GPU.
 
-### Распространённые ошибки (RU)
+### Распространённые Ошибки (RU)
 
 1. Не проверять поддержку `Vulkan`/`OpenGL ES` → падения на устройствах без нужных фич.
 2. Использовать desktop-only API (LWJGL, `glGetTexImage`) на Android → некорректная работа.
@@ -713,7 +715,7 @@ Key notes:
 
 After RenderScript deprecation, practical GPU compute on Android is built on `Vulkan` compute pipelines, `OpenGL ES 3.1+` compute shaders, and efficient CPU/NDK implementations. `Vulkan` offers maximum flexibility but is complex; `OpenGL ES` is easier and often sufficient; CPU remains essential as a fallback. Understanding the pipeline architecture, capability checks, synchronization, and resource management is critical for robust solutions.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как спроектировать абстракцию (например, интерфейс `ImageProcessor`), чтобы можно было прозрачно переключаться между реализациями на Vulkan, OpenGL ES и CPU без изменения кода вызова?
 - Как профилировать и сравнивать end-to-end задержку (включая копирование данных) между Vulkan, OpenGL ES compute и CPU для реального пайплайна обработки изображений на целевых классах устройств?
@@ -733,7 +735,7 @@ After RenderScript deprecation, practical GPU compute on Android is built on `Vu
 
 - [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-dagger-field-injection--android--medium]]
 - [[q-accessibility-compose--android--medium]]

@@ -11,11 +11,13 @@ language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy, q-accessibility-text-scaling--android--medium]
+related: [q-accessibility-text-scaling--android--medium, q-android-app-components--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [accessibility, android/ui-theming, android/ui-views, difficulty/easy, dp, measurement-units, sp]
 
+date created: Saturday, November 1st 2025, 1:24:45 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -169,7 +171,7 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 // текст автоматически увеличится
 ```
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как вы обрабатываете конверсии dp/sp в кастомных view?
 - Что происходит с значениями dp при изменении конфигурации устройства (ротация, fold)?
@@ -183,12 +185,12 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 - https://developer.android.com/guide/practices/screens_support — поддержка разных экранов
 - https://m3.material.io/foundations/layout/applying-layout/spacing — отступы в Material Design
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### Предпосылки (проще)
 - [[q-android-app-components--android--easy]] — сначала разберите базовые компоненты и view
 
-#### Связанные (тот же уровень)
+#### Связанные (тот Же уровень)
 - [[q-how-to-add-custom-attributes-to-custom-view--android--medium]] — кастомные атрибуты во view
 
 #### Продвинутые (сложнее)

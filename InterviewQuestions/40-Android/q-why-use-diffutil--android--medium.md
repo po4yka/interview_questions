@@ -1,38 +1,33 @@
 ---
 id: android-338
 title: Why Use DiffUtil / Почему использовать DiffUtil
-aliases:
-- DiffUtil
-- DiffUtil в RecyclerView
-- ListAdapter
-- RecyclerView DiffUtil
+aliases: [DiffUtil, DiffUtil в RecyclerView, ListAdapter, RecyclerView DiffUtil]
 topic: android
 subtopics:
-- performance-rendering
-- ui-views
+  - performance-rendering
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance
-- q-cicd-pipeline-android--android--medium
-- q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
+  - c-performance
+  - q-cicd-pipeline-android--android--medium
+  - q-what-is-diffutil-for--android--medium
+  - q-what-is-layout-types-and-when-to-use--android--easy
+  - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
+  - q-which-class-to-use-for-detecting-gestures--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 sources:
-- https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
-tags:
-- android/performance-rendering
-- android/ui-views
-- difficulty/medium
-- diffutil
-- performance
-- recyclerview
+  - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
+tags: [android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)

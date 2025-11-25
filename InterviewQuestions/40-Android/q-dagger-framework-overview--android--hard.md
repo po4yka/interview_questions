@@ -4,29 +4,33 @@ title: Dagger Framework Overview / Обзор фреймворка Dagger
 aliases: [Dagger Framework Overview, Обзор фреймворка Dagger]
 topic: android
 subtopics:
-- architecture-clean
-- architecture-mvvm
-- di-hilt
+  - architecture-clean
+  - architecture-mvvm
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dagger
-- c-dependency-injection
-- c-hilt
-- q-dagger-build-time-optimization--android--medium
-- q-dagger-custom-scopes--android--hard
+  - c-dagger
+  - c-dependency-injection
+  - c-hilt
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-custom-scopes--android--hard
+  - q-dagger-multibinding--android--hard
+  - q-dagger-purpose--android--easy
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
-- "https://dagger.dev/"
+  - "https://dagger.dev/"
 
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -141,7 +145,7 @@ class UserViewModel @Inject constructor(
 - Изолированное тестирование компонентов
 - Mock-friendly архитектура
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как Dagger обнаруживает и репортит циклические зависимости на этапе компиляции, и какой алгоритм обхода графа он использует?
 - Каковы trade-offs между constructor injection и field injection с точки зрения неизменяемости, тестируемости и управления жизненным циклом?
@@ -156,12 +160,12 @@ class UserViewModel @Inject constructor(
 - [[c-hilt]] — Hilt для Android
 - "https://dagger.dev/" — официальная документация Dagger
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### База (проще)
 - [[q-dagger-field-injection--android--medium]] — различия между field и constructor injection
 
-#### Того же уровня (средний/текущий)
+#### Того Же Уровня (средний/текущий)
 - [[q-dagger-build-time-optimization--android--medium]] — оптимизация времени сборки с Dagger
 
 #### Продвинутые (сложнее)

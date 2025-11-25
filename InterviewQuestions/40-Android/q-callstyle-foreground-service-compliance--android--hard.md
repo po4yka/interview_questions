@@ -1,37 +1,36 @@
 ---
 id: android-645
 title: CallStyle & Foreground Service Compliance / CallStyle и требования foreground-сервисов
-aliases:
-- CallStyle & Foreground Service Compliance
-- CallStyle и требования foreground-сервисов
+aliases: [CallStyle & Foreground Service Compliance, CallStyle и требования foreground-сервисов]
 topic: android
 subtopics:
-- background-execution
-- notifications
-- service
+  - background-execution
+  - notifications
+  - service
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-communication-surfaces
-- q-android-service-types--android--easy
+  - c-communication-surfaces
+  - q-android-service-types--android--easy
+  - q-background-vs-foreground-service--android--medium
+  - q-foreground-service-types--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/background-execution
-- android/notifications
-- android/service
-- difficulty/hard
+tags: [android/background-execution, android/notifications, android/service, difficulty/hard]
 sources:
-- "https://developer.android.com/develop/ui/views/notifications/callstyle"
-- "https://developer.android.com/about/versions/13/behavior-changes-13#post-notification-runtime-permission"
-- "https://developer.android.com/about/versions/14/behavior-changes-14#foreground-services"
+  - "https://developer.android.com/about/versions/13/behavior-changes-13#post-notification-runtime-permission"
+  - "https://developer.android.com/about/versions/14/behavior-changes-14#foreground-services"
+  - "https://developer.android.com/develop/ui/views/notifications/callstyle"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +43,7 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Foreground `Service` классификация
+### 1. Foreground `Service` Классификация
 
 - На Android 13+ необходимо указывать один или несколько корректных `foregroundServiceType` (например: `phoneCall`, `camera`, `microphone`, и др. в соответствии с официальным списком для вашей функциональности).
 - Для звонков → обязательно `FOREGROUND_SERVICE_TYPE_PHONE_CALL`; для видеозвонка дополнительно `FOREGROUND_SERVICE_TYPE_CAMERA` и/или `FOREGROUND_SERVICE_TYPE_MICROPHONE`, если реально используете камеру/микрофон.
@@ -75,38 +74,38 @@ val notification = NotificationCompat.Builder(context, CHANNEL_CALLS)
 
 - Используйте `forIncomingCall`, `forOngoingCall`, `forScreeningCall` в зависимости от сценария. Убедитесь, что pending intent'ы корректно обрабатываются сервисом/`ConnectionService` и приводят к обновлению состояния звонка и уведомления.
 
-### 3. Privacy Indicators и mic/camera access
+### 3. Privacy Indicators И mic/camera Access
 
 - Android 12+: при использовании микрофона/камеры автоматически отображаются индикаторы приватности. Убедитесь, что поведение приложения прозрачно для пользователя (UI/описание объясняют использование).
 - При необходимости предоставьте действия "Mute camera/mic" в уведомлении или UI звонка.
 - Обрабатывайте runtime-разрешения (`RECORD_AUDIO`, `CAMERA`); при их отсутствии адаптируйте опыт (например, только входящий уведомительный экран до выдачи разрешения; не пытайтесь использовать ресурсы без разрешения).
 
-### 4. Background ограничения
+### 4. Background Ограничения
 
 - Перед показом уведомлений на Android 13+ запрашивайте `POST_NOTIFICATIONS` (если это не системный сценарий, освобождённый от разрешения). Корректно обрабатывайте случай отказа: звонковое уведомление не может быть показано без разрешения, продумайте in-app UX.
 - Incoming call: используйте `fullScreenIntent` только для реальных входящих звонков и в соответствии с официальной policy; для остальных кейсов используйте обычные уведомления.
 - Ограничивайте длительность работы FGS: останавливайте сервис, когда звонок завершён или становится неактуальным, чтобы избежать нарушений FGS-политик и возможных санкций. Не удерживайте FGS в неактивном состоянии (ожидание, idle) дольше, чем это оправдано политиками платформы/Play.
 
-### 5. Тестирование и политики
+### 5. Тестирование И Политики
 
 - Тестируйте поведение на разных API уровнях (особенно 12+), включая отсутствие/отзыв разрешений, запрет `POST_NOTIFICATIONS` и разные состояния активности.
 - Инструментальные/автоматизированные тесты: симулируйте входящий звонок, проверяйте CallStyle, доступность действий (answer/decline/mute), работу full-screen intent, корректное завершение FGS и поведение при невозможности стартовать FGS.
 - Policy compliance: корректно декларируйте FGS-типы и сценарии в Play Console, имейте понятное user-facing обоснование использования, избегайте неправомерного удержания foreground-сервисов и несоответствия заявленных и фактических типов.
 
-### 6. Интеграция с системными сервисами
+### 6. Интеграция С Системными Сервисами
 
 - Используйте `ConnectionService` для интеграции с телефонией и системным UI звонков, учитывая его требования и ограничения.
 - `SelfManagedConnectionService` применяйте только если вы строите полностью управляемое своим UI решение; учтите строгие ограничения для self-managed приложений (ограничения по overlay, взаимодействию с системным dialer и т.п.) и то, что такие приложения не могут стать системным dialer'ом по умолчанию.
 - Для VoIP-приложений `ROLE_DIALER` требуется только если вы хотите стать системным dialer'ом по умолчанию; для большинства VoIP-сценариев достаточно корректной интеграции через ConnectionService и CallStyle.
 - Логируйте ключевые события (answer, decline, missed, mute), чтобы анализировать качество UX и корректность логики.
 
-### 7. Degradation & fallback
+### 7. Degradation & Fallback
 
 - На старых версиях Android `NotificationCompat.CallStyle` обеспечивает совместимость: визуальное оформление может быть менее богатым, но базовый сценарий звонкового уведомления сохраняется. При необходимости добавьте fallback на обычное уведомление с `CATEGORY_CALL`.
 - Когда пользователь отключил относящиеся разрешения (уведомления, overlay/full-screen, bubbles) или специальные привилегии звонков, обеспечьте понятное in-app предупреждение и альтернативный UX.
 - Для multi-device сценариев синхронизируйте статус звонка с backend так, чтобы уведомления и состояние звонка были консистентны.
 
-### Краткая версия (RU)
+### Краткая Версия (RU)
 
 - Укажите корректные типы foreground-сервисов и соответствующие разрешения; на Android 14+ строго следите за соответствием типов и сценариев.
 - Используйте `NotificationCompat.CallStyle` с подходящим вариантом (incoming/ongoing/screening) и `CATEGORY_CALL`.
@@ -114,7 +113,7 @@ val notification = NotificationCompat.Builder(context, CHANNEL_CALLS)
 - Запросите `POST_NOTIFICATIONS` на Android 13+, используйте full-screen только для реальных звонков и корректно обрабатывайте отказ.
 - Останавливайте FGS сразу после завершения звонка и соблюдайте Play policy.
 
-### Детальная версия (RU)
+### Детальная Версия (RU)
 
 #### Требования
 

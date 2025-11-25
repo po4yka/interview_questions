@@ -1,36 +1,35 @@
 ---
 id: android-411
 title: What Is PendingIntent / Что такое PendingIntent
-aliases:
-- What is PendingIntent
-- Что такое PendingIntent
+aliases: [What is PendingIntent, Что такое PendingIntent]
 topic: android
 subtopics:
-- intents-deeplinks
-- notifications
+  - intents-deeplinks
+  - notifications
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-intent
-- c-permissions
-- q-anr-application-not-responding--android--medium
-- q-intent-filters-android--android--medium
-- q-what-unifies-android-components--android--easy
+  - c-intent
+  - c-permissions
+  - q-anr-application-not-responding--android--medium
+  - q-compose-core-components--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-intent-filters-android--android--medium
+  - q-what-unifies-android-components--android--easy
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags:
-- android
-- android/intents-deeplinks
-- android/notifications
-- difficulty/medium
+tags: [android, android/intents-deeplinks, android/notifications, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -311,7 +310,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `requestCode` влияет на равенство и обновление PendingIntent?
 - Когда следует использовать `FLAG_MUTABLE` вместо `FLAG_IMMUTABLE`?
@@ -345,9 +344,9 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-intent]]
 - [[c-permissions]]

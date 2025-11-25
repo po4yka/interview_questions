@@ -17,6 +17,8 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [channels, cold-stream, concurrency, coroutines, difficulty/medium, flow, hot-stream, kotlin]
 
+date created: Tuesday, October 14th 2025, 8:56:38 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +36,7 @@ Channel и `Flow` — это механизмы для работы с пото�
 - `Channel` — низкоуровневый примитив коммуникации между корутинами.
 - `Flow` — высокоуровневый холодный асинхронный поток с операторами.
 
-### Основное различие: горячий vs холодный (концептуально)
+### Основное Различие: Горячий Vs Холодный (концептуально)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -89,7 +91,7 @@ fun flowColdExample() = runBlocking {
 - Продьюсер на `Channel` обычно живет независимо от конкретных потребителей (горячий паттерн использования), а конкретная семантика (suspend, буфер) определяет, будут ли значения реально производиться заранее или продьюсер будет блокироваться.
 - `Flow` по умолчанию холодный: collect запускает производство, для каждого коллектора выполняется свой экземпляр.
 
-### Краткое резюме ключевых различий
+### Краткое Резюме Ключевых Различий
 
 ```kotlin
 class ChannelVsFlowComparison(private val scope: CoroutineScope) {
@@ -189,7 +191,7 @@ class ChannelVsFlowComparison(private val scope: CoroutineScope) {
 }
 ```
 
-### Детализированное сравнение (концептуально)
+### Детализированное Сравнение (концептуально)
 
 ```kotlin
 /**
@@ -215,7 +217,7 @@ class ChannelVsFlowComparison(private val scope: CoroutineScope) {
  */
 ```
 
-### Практическая демонстрация
+### Практическая Демонстрация
 
 ```kotlin
 class PracticalComparison(private val scope: CoroutineScope) {
@@ -268,7 +270,7 @@ class PracticalComparison(private val scope: CoroutineScope) {
 }
 ```
 
-### Когда использовать Channel (подробно)
+### Когда Использовать Channel (подробно)
 
 ```kotlin
 class WhenToUseChannel(private val scope: CoroutineScope) {
@@ -385,7 +387,7 @@ class WhenToUseChannel(private val scope: CoroutineScope) {
 }
 ```
 
-### Когда использовать Flow (подробно)
+### Когда Использовать Flow (подробно)
 
 ```kotlin
 class WhenToUseFlow {
@@ -481,7 +483,7 @@ class WhenToUseFlow {
 }
 ```
 
-### Конвертация между Channel и Flow
+### Конвертация Между Channel И Flow
 
 ```kotlin
 class ChannelFlowConversion(private val scope: CoroutineScope) {
@@ -588,7 +590,7 @@ class PerformanceComparison(private val scope: CoroutineScope) {
 }
 ```
 
-### Частые паттерны и анти-паттерны
+### Частые Паттерны И Анти-паттерны
 
 ```kotlin
 class Patterns {
@@ -840,7 +842,7 @@ class ChannelVsFlowComparisonEn(private val scope: CoroutineScope) {
  */
 ```
 
-### Practical demonstration
+### Practical Demonstration
 
 ```kotlin
 class PracticalComparisonEn(private val scope: CoroutineScope) {
@@ -1324,12 +1326,12 @@ class PatternsEn {
 - [[q-kotlin-flow-basics--kotlin--medium]]
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 1. Как `SharedFlow` сочетает свойства `Channel` и `Flow`, и когда он предпочтительнее каждого из них?
 2. В каких случаях стоит выбирать `StateFlow` вместо `SharedFlow` или `Channel` для экспонирования состояния UI из `ViewModel`?
 3. Как реализовать и настроить стратегии backpressure с помощью емкости каналов и операторов `Flow` (`buffer`, `conflate`, `debounce`)?
 4. Каковы семантические и производительные trade-off'ы при конвертации между `Channel` и `Flow` через `receiveAsFlow` и `produceIn`?
 5. Как выстроить unit-тесты для акторов на основе `Channel` и конвейеров на основе `Flow` (включая использование Turbine и test dispatchers)?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ## Ссылки (RU)
 - Официальная документация Kotlin Coroutines: "Channels" и "Flows" (смотрите разделы про `Channel`, `Flow`, `SharedFlow`, `StateFlow` на kotlinlang.org)

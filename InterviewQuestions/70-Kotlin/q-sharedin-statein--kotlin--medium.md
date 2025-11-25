@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140019
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-statein-sharein-flow--kotlin--medium]
+related: [c-flow, c-kotlin, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin]
 
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -167,7 +169,7 @@ class ViewModel : ViewModel() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Чем `SharedFlow` и `StateFlow` отличаются от `Channel` для одноразовых событий и обработки backpressure?
 2. В каких случаях вы выберете `SharingStarted.Eagerly` вместо `SharingStarted.WhileSubscribed`, и как это влияет на потребление ресурсов?
@@ -203,7 +205,7 @@ class ViewModel : ViewModel() {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-flow-basics--kotlin--easy]] - `Flow`

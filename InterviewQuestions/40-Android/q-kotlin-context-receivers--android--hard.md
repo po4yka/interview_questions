@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
 sources: ["https://kotlinlang.org/docs/whatsnew15.html#context-receivers"]
 
+date created: Saturday, November 1st 2025, 1:24:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -306,7 +308,7 @@ fun openCamera() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как context receivers влияют на бинарную совместимость при эволюции библиотеки?
 - Каков накладной расход по сравнению с явной передачей параметров?
@@ -334,7 +336,7 @@ fun openCamera() {
 - [Kotlin `Context` Receivers (KEEP)](https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md)
 - [Kotlin 1.6.20 Release Notes](https://kotlinlang.org/docs/whatsnew1620.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (Medium)
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders

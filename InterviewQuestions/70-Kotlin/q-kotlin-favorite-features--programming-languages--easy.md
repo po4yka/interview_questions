@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, c-kotlin-features, q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [coroutines, difficulty/easy, extensions, features, null-safety, overview, kotlin]
+tags: [coroutines, difficulty/easy, extensions, features, kotlin, null-safety, overview]
+date created: Friday, October 31st 2025, 6:29:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Расскажи Про Три Любимых Фичи В Kotlin
 
 # Вопрос (RU)
@@ -99,7 +102,7 @@ See also: [[c-kotlin]], [[c-kotlin-features]], [[c-coroutines]]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этих возможностей от Java?
 - Когда бы ты использовал каждую из этих возможностей на практике?
@@ -119,7 +122,7 @@ See also: [[c-kotlin]], [[c-kotlin-features]], [[c-coroutines]]
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-operators-map-filter--kotlin--medium]]
 - [[q-class-initialization-order--kotlin--medium]]

@@ -1,30 +1,31 @@
 ---
 id: android-318
 title: Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование
-aliases:
-- Screenshot and Snapshot Testing
-- Screenshot и Snapshot тестирование
+aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]
 topic: android
 subtopics:
-- testing-screenshot
+  - testing-screenshot
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-testing
-- q-testing-viewmodels-turbine--android--medium
-- q-testing-compose-ui--android--medium
+  - c-android-testing
+  - q-accessibility-testing--android--medium
+  - q-android-testing-strategies--android--medium
+  - q-integration-testing-strategies--android--medium
+  - q-testing-compose-ui--android--medium
+  - q-testing-viewmodels-turbine--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/testing-screenshot
-- difficulty/medium
+tags: [android/testing-screenshot, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -102,7 +103,7 @@ class ButtonScreenshotTest {
 
 ---
 
-### Разные конфигурации устройств
+### Разные Конфигурации Устройств
 
 С помощью `deviceConfig` проверяйте разные размеры экранов, плотность, ориентацию, масштаб шрифта и другие параметры конфигурации.
 
@@ -157,7 +158,7 @@ class ResponsiveScreenshotTest {
 
 ---
 
-### Тестирование тем
+### Тестирование Тем
 
 Используйте `uiMode` и тематизацию для проверки светлой и тёмной тем.
 
@@ -217,7 +218,7 @@ class ThemeScreenshotTest {
 
 ---
 
-### Параметризованные screenshot-тесты
+### Параметризованные Screenshot-тесты
 
 Можно итерироваться по наборам устройств и тем, чтобы покрыть все комбинации размеров и тем. Ниже пример, концептуально демонстрирующий идею (конкретные поля `DeviceConfig` следует брать из текущего API):
 
@@ -257,7 +258,7 @@ class ParameterizedScreenshotTest {
 
 ---
 
-### Тестирование разных состояний
+### Тестирование Разных Состояний
 
 Покрывайте несколько состояний одного экрана, чтобы отлавливать визуальные проблемы в каждом.
 
@@ -360,7 +361,7 @@ class MainActivityScreenshotTest : ShotTest { // интерфейс/базовы
 
 ---
 
-### Shot с несколькими конфигурациями (концептуально)
+### Shot С Несколькими Конфигурациями (концептуально)
 
 Можно запускать одни и те же Shot-тесты на разных эмуляторах / устройствах (телефон, планшет, разные ориентации):
 
@@ -372,7 +373,7 @@ class MainActivityScreenshotTest : ShotTest { // интерфейс/базовы
 
 ---
 
-### Paparazzi vs Shot (сравнение)
+### Paparazzi Vs Shot (сравнение)
 
 | Возможность             | Paparazzi               | Shot                      |
 | ----------------------- | ----------------------- | ------------------------- |
@@ -387,7 +388,7 @@ class MainActivityScreenshotTest : ShotTest { // интерфейс/базовы
 
 ---
 
-### Реалистичный пример полного набора тестов
+### Реалистичный Пример Полного Набора Тестов
 
 Ниже пример, иллюстрирующий стратегию покрытия разных конфигураций. Конфигурации и сигнатуры Paparazzi/DeviceConfig могут отличаться в зависимости от версии, поэтому рассматривайте это как шаблон.
 
@@ -485,7 +486,7 @@ class UserProfileScreenshotSuite {
 
 ---
 
-### Обработка нестабильных скриншотов
+### Обработка Нестабильных Скриншотов
 
 - Анимации: отключайте или делайте детерминированными.
 - Время/рандом: фиксируйте timestamp и случайные значения.
@@ -541,7 +542,7 @@ fun messageView_deterministic() {
 
 ---
 
-### CI интеграция
+### CI Интеграция
 
 Пример интеграции Paparazzi в GitHub Actions (без эмулятора):
 
@@ -577,7 +578,7 @@ Shot в CI потребует настроенного эмулятора или
 
 ---
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Тестируйте критичные, переиспользуемые UI-компоненты, а не только целые экраны.
 2. Покрывайте несколько состояний (загрузка, успех, ошибка, пустое состояние, крайние случаи).
@@ -1138,7 +1139,7 @@ Shot in CI requires a configured emulator or device and running `executeScreensh
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы обрабатываете падения screenshot-тестов, когда изменения в UI намеренные, а когда это регрессия?
 - Какую стратегию вы используете для поддержки эталонных скриншотов для разных конфигураций устройств?
@@ -1162,7 +1163,7 @@ Shot in CI requires a configured emulator or device and running `executeScreensh
 - https://developer.android.com/training/testing/instrumented-tests — Android testing guide
 - https://developer.android.com/jetpack/compose/testing — Compose testing
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

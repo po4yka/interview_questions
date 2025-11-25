@@ -4,25 +4,30 @@ title: ANR (Application Not Responding) / ANR (Приложение не отв�
 aliases: [ANR (Application Not Responding), ANR (Приложение не отвечает)]
 topic: android
 subtopics:
-- performance-rendering
-- profiling
-- strictmode-anr
+  - performance-rendering
+  - profiling
+  - strictmode-anr
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-lifecycle
-- q-android-app-lag-analysis--android--medium
+  - c-lifecycle
+  - q-android-app-lag-analysis--android--medium
+  - q-optimize-memory-usage-android--android--medium
+  - q-performance-monitoring-jank-compose--android--medium
+  - q-recomposition-compose--android--medium
 created: 2025-10-05
 updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, debugging, difficulty/medium, performance]
 
+date created: Saturday, November 1st 2025, 1:03:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -205,7 +210,7 @@ if (BuildConfig.DEBUG) {
 
 ---
 
-## Дополнительные вопросы (Follow-ups, RU)
+## Дополнительные Вопросы (Follow-ups, RU)
 
 - Как анализировать ANR-трейсы из `/data/anr/traces.txt` (или bugreport/Android Vitals), чтобы найти корневую причину блокировки?
 - В чем разница между использованием WorkManager и корутин для предотвращения ANR в долгих задачах?
@@ -239,13 +244,13 @@ if (BuildConfig.DEBUG) {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-android-app-components--android--easy]] — понимание компонентов и их жизненного цикла
 - [[q-android-app-lag-analysis--android--medium]] — анализ лагов и производительности
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-strictmode-debugging--android--medium]] — использование StrictMode для отладки производительности
 - [[q-android-performance-measurement-tools--android--medium]] — инструменты измерения производительности на Android
 

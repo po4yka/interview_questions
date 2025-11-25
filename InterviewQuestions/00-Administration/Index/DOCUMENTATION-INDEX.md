@@ -1,24 +1,57 @@
+---
+date created: Tuesday, November 25th 2025, 8:18:23 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
+---
+
 # Documentation Index
 
-**Status**: ✅ Production Ready
+**Status**: Active
+**Last Updated**: 2025-11-25
 
 ## Quick Start
-1. **AI-Integration/LM-STUDIO-QUICKSTART.md** - LM Studio setup
-2. **Validation/VALIDATION-QUICKSTART.md** - Basic validation
-3. **BILINGUAL-COVERAGE-FINAL-REPORT.md** - Current status
 
-## Essential Documentation
-- **AI-Integration/LM-STUDIO-QUICKSTART.md** - Setup guide
-- **Validation/VALIDATION-QUICKSTART.md** - Basic commands
-- **Validation/VALIDATION-README.md** - Complete validation docs
-- **FINAL-IMPLEMENTATION-STATUS.md** - System overview
-- **AI-VALIDATOR-SETUP.md** - Technical setup
-- **AI-PROMPT-IMPROVEMENTS.md** - Prompt engineering
-- **TRANSLATION-QUALITY-VALIDATION.md** - Quality testing
+1. **[[VALIDATION-QUICKSTART|Validation Quick Start]]** - Run validation checks
+2. **[[LM-STUDIO-QUICKSTART|LM Studio Setup]]** - Local AI translation
+3. **[[AGENT-CHECKLIST|AI Agent Checklist]]** - Pre-flight for note creation
 
-## Status Reports
-- **FULL-VAULT-VALIDATION-REPORT.md** - Complete validation results
-- **VAULT-TRANSLATION-STATUS.md** - Translation status
-- **BILINGUAL-COVERAGE-FINAL-REPORT.md** - Final coverage report
+## Core Documentation
 
-**Last Updated**: 2025-11-08
+### Vault Rules
+- **[[TAXONOMY]]** - Controlled vocabularies for YAML fields (topics, subtopics, difficulty, status)
+- **[[FILE-NAMING-RULES]]** - File naming conventions and patterns
+
+### AI Integration
+- **[[LM-STUDIO-QUICKSTART]]** - LM Studio setup for local AI translation
+- **[[AGENT-CHECKLIST]]** - Quick reference for AI agents
+- **[[NOTE-REVIEW-PROMPT]]** - Comprehensive review prompt for AI agents
+
+### Validation
+- **[[VALIDATION-QUICKSTART]]** - Basic validation commands
+- **[[VALIDATION-README]]** - Full validation system documentation
+
+### Linking System
+- **[[LINKING-STRATEGY]]** - MOC linking rules and folder mappings
+- **[[LINK-MONITORING-GUIDE]]** - How to monitor link health
+- **[[LINK-HEALTH-DASHBOARD]]** - Automated link health monitoring (Dataview)
+
+### Domain Guides
+- **[[ANDROID-INTERVIEWER-GUIDE]]** - Android system design interview approach
+- **[[ANDROID-SYSTEM-DESIGN-CHECKLIST]]** - End-to-end checklist for Android design
+
+## Directory Structure
+
+```
+00-Administration/
+  AI-Agents/           - AI agent prompts and checklists
+  AI-Integration/      - LM Studio and local AI setup
+  Domain-Guides/       - Interview approach guides
+  Index/               - This documentation index
+  Linking-System/      - MOC and linking documentation
+  Validation/          - Validation system docs
+  Vault-Rules/         - YAML taxonomy and naming rules
+```
+
+## See Also
+
+- **[[README|Vault README]]** - Full vault documentation
+- **[[AGENTS|AGENTS.md]]** - Task instructions for AI agents

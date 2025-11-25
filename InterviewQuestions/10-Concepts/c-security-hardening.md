@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-022
 title: Security Hardening / Укрепление безопасности
-aliases:
-  - Security Hardening
-  - Укрепление безопасности Android
+aliases: [Security Hardening, Укрепление безопасности Android]
 kind: concept
 summary: Advanced application security practices including data disclosures, network protection, and sensitive data lifecycle controls
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - security
-  - compliance
-  - privacy
+tags: [android, compliance, concept, privacy, security]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

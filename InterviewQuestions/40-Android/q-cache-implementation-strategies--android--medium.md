@@ -1,35 +1,34 @@
 ---
 id: android-074
 title: Cache Implementation Strategies / Стратегии реализации кэша
-aliases:
-- Cache Implementation Strategies
-- Стратегии реализации кэша
+aliases: [Cache Implementation Strategies, Стратегии реализации кэша]
 topic: android
 subtopics:
-- cache-offline
-- networking-http
-- room
+  - cache-offline
+  - networking-http
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-room
-- c-performance
-- q-android-performance-measurement-tools--android--medium
-- q-android-storage-types--android--medium
-- q-database-optimization-android--android--medium
+  - c-performance
+  - c-room
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-storage-types--android--medium
+  - q-android-testing-strategies--android--medium
+  - q-database-optimization-android--android--medium
+  - q-integration-testing-strategies--android--medium
+  - q-tflite-acceleration-strategies--android--hard
 created: 2024-10-13
 updated: 2025-11-10
-tags:
-- android/cache-offline
-- android/networking-http
-- android/room
-- difficulty/medium
+tags: [android/cache-offline, android/networking-http, android/room, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -162,7 +161,7 @@ val client = OkHttpClient.Builder()
 
 **Tools**: LruCache (memory), Room (disk), DataStore (settings), OkHttp Cache (HTTP), Glide/Coil (images).
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как балансировать TTL с серверными заголовками кэша (`Cache-Control`, `max-age`)?
 - Когда выбирать `write-through` vs `write-back` для консистентности данных на мобильных устройствах?
 - Как измерять `cache hit rate` и паттерны вытеснения в продакшене?
@@ -190,7 +189,7 @@ val client = OkHttpClient.Builder()
 - https://developer.android.com/reference/androidx/collection/LruCache
 - https://square.github.io/okhttp/features/caching/
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 
@@ -200,7 +199,7 @@ val client = OkHttpClient.Builder()
 ### Предпосылки (проще)
 - [[q-android-storage-types--android--medium]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-database-optimization-android--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
 

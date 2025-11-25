@@ -16,6 +16,8 @@ created: 2024-10-06
 updated: 2025-11-10
 tags: [android/app-bundle, android/gradle, android/performance-memory, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -137,7 +139,7 @@ implementation "com.google.android.gms:play-services-maps:..."
 3. Регулярный анализ через APK Analyzer / `analyzeReleaseBundle`.
 4. Dynamic Feature Modules для опциональных компонентов, чтобы не загружать их при первой установке.
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - В чем различия между R8 и ProGuard с точки зрения возможностей оптимизации?
 - Каковы компромиссы использования Dynamic Feature Modules для времени запуска приложения?
@@ -150,9 +152,9 @@ implementation "com.google.android.gms:play-services-maps:..."
 - https://developer.android.com/topic/performance/reduce-apk-size
 - https://developer.android.com/studio/build/shrink-code
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
-#### Предварительные знания
+#### Предварительные Знания
 
 - Понимание системы сборки Gradle и типов сборок
 - Базовые знания ProGuard/R8

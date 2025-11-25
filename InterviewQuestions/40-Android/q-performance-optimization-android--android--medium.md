@@ -1,42 +1,36 @@
 ---
 id: android-136
 title: Performance Optimization Android / Performance Оптимизация Android
-aliases:
-- Performance Optimization Android
-- Performance Оптимизация Android
+aliases: [Performance Optimization Android, Performance Оптимизация Android]
 topic: android
 subtopics:
-- performance-battery
-- performance-memory
-- performance-rendering
+  - performance-battery
+  - performance-memory
+  - performance-rendering
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- c-power-profiling
-- c-performance
-- q-baseline-profiles-android--android--medium
-- q-notification-channels-android--android--medium
+  - c-memory-management
+  - c-performance
+  - c-power-profiling
+  - q-android-build-optimization--android--medium
+  - q-baseline-profiles-android--android--medium
+  - q-notification-channels-android--android--medium
+  - q-optimize-memory-usage-android--android--medium
+  - q-parsing-optimization-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/performance-battery
-- android/performance-memory
-- android/performance-rendering
-- checklist
-- difficulty/medium
-- optimization
-- performance
-- performance-memory
-- performance-rendering
+tags: [android/performance-battery, android/performance-memory, android/performance-rendering, checklist, difficulty/medium, optimization, performance, performance-memory, performance-rendering]
 
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -86,7 +80,7 @@ val imageLoader by lazy { Coil.imageLoader(context) }
 - Baseline Profiles для предкомпиляции критического кода
 - Стандартный SplashScreen API (Android 12+) и/или windowBackground для сплэш-экрана (избегать отдельной `Activity`)
 
-### 2. Оптимизация UI и Рендеринга
+### 2. Оптимизация UI И Рендеринга
 
 **Целевой ориентир**: 60 FPS (≈16ms на кадр), минимизация jank.
 
@@ -527,7 +521,7 @@ android {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Baseline Profiles помогают улучшить время запуска?
 - Каковы компромиссы между использованием `DiskLruCache` и `DataStore` для кэширования?
@@ -555,7 +549,7 @@ android {
 - https://developer.android.com/topic/performance/baselineprofiles
 - [Profiling](https://developer.android.com/studio/profile)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

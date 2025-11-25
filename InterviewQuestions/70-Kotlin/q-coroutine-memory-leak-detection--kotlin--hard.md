@@ -9,12 +9,14 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 moc: moc-kotlin
-related: [c-concurrency, c-android-profiling, q-coroutine-resource-cleanup--kotlin--medium]
+related: [c-android-profiling, c-concurrency, q-coroutine-resource-cleanup--kotlin--medium]
 status: draft
 created: 2025-10-12
 updated: 2025-11-11
 tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, lifecycle, memory-leaks, profiling]
 
+date created: Saturday, November 1st 2025, 1:28:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +35,7 @@ tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, life
 
 Важно понимать типичные паттерны утечек, способы их обнаружения и стратегии предотвращения, особенно в Android.
 
-### Что такое утечка памяти, связанная с корутинами?
+### Что Такое Утечка Памяти, Связанная С Корутинами?
 
 Строго говоря, утечка памяти возникает, когда объекты, которые больше не нужны, остаются достижимыми бесконечно долго.
 
@@ -68,7 +70,7 @@ class LeakyActivity : AppCompatActivity() {
 }
 ```
 
-### Обзор типичных источников утечек
+### Обзор Типичных Источников Утечек
 
 | Тип утечки | Причина | Тяжесть | Сложность обнаружения |
 |-----------|---------|--------|------------------------|
@@ -120,14 +122,14 @@ class GlobalScopeLeakActivity : AppCompatActivity() {
 }
 ```
 
-#### Почему это приводит к утечке
+#### Почему Это Приводит К Утечке
 
 1. `GlobalScope` никогда не отменяется автоматически.
 2. Лямбды внутри корутины захватывают экземпляр `Activity` и её `View`.
 3. Пока корутина жива, `Activity` не может быть собрана GC.
 4. При поворотах/навигации такие корутины накапливаются, удерживая старые экземпляры.
 
-#### Концептуальное влияние на память
+#### Концептуальное Влияние На Память
 
 ```kotlin
 class GlobalScopeLeakSimulation {
@@ -183,11 +185,11 @@ class FixedActivity : AppCompatActivity() {
 
 Используйте статический анализ (Detekt, Lint) для флага `GlobalScope` в UI/компонентном коде и рассматривайте его как smell, кроме чётко процесс-широких задач.
 
-### Утечка #2: Неотмена при уничтожении компонента
+### Утечка #2: Неотмена При Уничтожении Компонента
 
 Проблема: создаются собственные `CoroutineScope`, но не отменяются при уничтожении компонента.
 
-#### Пример с `Fragment`
+#### Пример С `Fragment`
 
 ```kotlin
 import android.os.Bundle
@@ -223,7 +225,7 @@ class LeakyFragment : Fragment() {
 }
 ```
 
-#### Исправление: lifecycle-aware scope
+#### Исправление: Lifecycle-aware Scope
 
 ```kotlin
 import android.os.Bundle
@@ -274,7 +276,7 @@ class FixedFragmentWithCustomScope : Fragment() {
 }
 ```
 
-#### Пример с `ViewModel`
+#### Пример С `ViewModel`
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -327,11 +329,11 @@ class FixedViewModel : ViewModel() {
 }
 ```
 
-### Утечка #3: Захваченные сильные ссылки
+### Утечка #3: Захваченные Сильные Ссылки
 
 Проблема: корутины захватывают сильные ссылки на `Activity`, `View` или `Context` в долгих операциях и выполняются в scope, который может жить дольше владельца.
 
-#### Пример (удержание, а не утечка при правильном scope)
+#### Пример (удержание, А Не Утечка При Правильном scope)
 
 ```kotlin
 import android.os.Bundle
@@ -367,13 +369,13 @@ data class LargeUserData(
 
 Это пример временного удержания, а не утечки, пока используется правильный scope. Утечка появится, если аналогичный код поместить в scope, который живёт дольше `Activity`.
 
-#### Безопасные паттерны
+#### Безопасные Паттерны
 
 - Не захватывать `Activity`/`View` в долгоживущих задачах; выносить обработку в независимые слои (`ViewModel`/репозиторий).
 - Использовать проверки `Lifecycle` перед обновлением UI.
 - При необходимости — `WeakReference`, но не как замену правильной архитектуре.
 
-##### Вариант исправления: WeakReference (точечно)
+##### Вариант Исправления: WeakReference (точечно)
 
 ```kotlin
 import android.os.Bundle
@@ -406,7 +408,7 @@ class FixedCapturedReferenceActivity : AppCompatActivity() {
 }
 ```
 
-##### Вариант исправления: проверка Lifecycle
+##### Вариант Исправления: Проверка Lifecycle
 
 ```kotlin
 import android.os.Bundle
@@ -439,7 +441,7 @@ class LifecycleAwareActivity : AppCompatActivity() {
 }
 ```
 
-##### Вариант исправления: вынести обработку из UI
+##### Вариант Исправления: Вынести Обработку Из UI
 
 ```kotlin
 import android.os.Bundle
@@ -468,7 +470,7 @@ class ExtractedProcessingActivity : AppCompatActivity() {
 }
 ```
 
-### Утечка #4: Длительные операции удерживают ссылки
+### Утечка #4: Длительные Операции Удерживают Ссылки
 
 Проблема: долгие I/O или CPU-задачи напрямую удерживают UI-объекты или запускаются из scope, живущего дольше UI.
 
@@ -519,7 +521,7 @@ class LongOperationLeakActivity : AppCompatActivity() {
 
 Если запустить подобное из `GlobalScope` или не отменять при уничтожении компонента, это превращается в утечку.
 
-#### Исправление: `Flow` + lifecycle-aware сбор
+#### Исправление: `Flow` + Lifecycle-aware Сбор
 
 ```kotlin
 import android.os.Bundle
@@ -566,7 +568,7 @@ class FixedLongOperationActivity : AppCompatActivity() {
 data class DownloadProgress(val percentage: Int, val data: String)
 ```
 
-#### Исправление: разделение UI и бизнес-логики
+#### Исправление: Разделение UI И Бизнес-логики
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -639,7 +641,7 @@ class DownloadActivity : AppCompatActivity() {
 }
 ```
 
-### Утечка #5: Коллекторы `Flow` не отменены
+### Утечка #5: Коллекторы `Flow` Не Отменены
 
 Проблема: сбор `Flow` выполняется в scope, который живёт дольше UI-компонента (`GlobalScope` и т.п.), удерживая `Fragment`/`Activity`.
 
@@ -710,7 +712,7 @@ class FixedFlowFragment : Fragment() {
 }
 ```
 
-### Инструмент обнаружения #1: LeakCanary 2.x
+### Инструмент Обнаружения #1: LeakCanary 2.x
 
 LeakCanary 2.x помогает находить случаи, когда корутины/`Job`/`CoroutineScope` удерживают уничтоженные `Activity`, `Fragment` или `View`.
 
@@ -724,13 +726,13 @@ dependencies {
 // Дополнительной инициализации в типичном случае не требуется.
 ```
 
-#### Интерпретация отчётов
+#### Интерпретация Отчётов
 
 Признаки корутинных утечек:
 - GC-root — поток (например, `DefaultDispatcher-worker-1`) или долгоживущий scope.
 - В цепочке ссылок видны `CoroutineScope`, `Job`, диспетчеры, ведущие к экземплярам `Activity`/`Fragment`.
 
-### Инструмент обнаружения #2: Android Studio Memory Profiler
+### Инструмент Обнаружения #2: Android Studio Memory Profiler
 
 Подход:
 1. Воспроизвести сценарий: создать и уничтожить подозряемый компонент.
@@ -750,7 +752,7 @@ class MemoryProfilerHelper(private val context: Context) {
 }
 ```
 
-### Инструмент обнаружения #3: DebugProbes для корутин
+### Инструмент Обнаружения #3: DebugProbes Для Корутин
 
 `kotlinx-coroutines-debug` даёт возможность видеть активные корутины и их состояния (использовать только в debug-билдах).
 
@@ -777,7 +779,7 @@ class MyApplication : Application() {
 }
 ```
 
-#### Выгрузка информации о корутинах
+#### Выгрузка Информации О Корутинах
 
 ```kotlin
 import kotlinx.coroutines.debug.DebugProbes
@@ -795,7 +797,7 @@ class CoroutineDebugger {
 }
 ```
 
-### Инспекция дерева `Job`
+### Инспекция Дерева `Job`
 
 Ручная проверка иерархии `Job` помогает убедиться, что scope корректно отменяются.
 
@@ -831,7 +833,7 @@ class JobTreeInspector {
 }
 ```
 
-### Предотвращение: lifecycle-aware scope
+### Предотвращение: Lifecycle-aware Scope
 
 Используйте стандартные Android lifecycle-aware scope:
 
@@ -873,14 +875,14 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-#### Выбор правильного scope
+#### Выбор Правильного Scope
 
 - `GlobalScope`: только для действительно процесс-широких задач; почти никогда не подходит для UI.
 - `lifecycleScope` (`Activity`/`Fragment`): для задач, привязанных к жизненному циклу компонента.
 - `viewLifecycleOwner.lifecycleScope`: для задач, завязанных на `View` фрагмента.
 - `viewModelScope`: для логики `ViewModel`, независимой от конкретных `View`.
 
-### Предотвращение: структурированная конкуррентность
+### Предотвращение: Структурированная Конкуррентность
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -907,7 +909,7 @@ class StructuredConcurrencyDemo {
 }
 ```
 
-### Тестирование на утечки (концептуально)
+### Тестирование На Утечки (концептуально)
 
 Можно проверять, что scope корректно отменяется и не оставляет активных `Job`.
 
@@ -940,7 +942,7 @@ class LeakDetectionTest {
 
 Для Android интеграции можно использовать LeakCanary-подходы (например, `DetectLeaksAfterTestSuccess`).
 
-### Статический анализ: правила Detekt (концептуально)
+### Статический Анализ: Правила Detekt (концептуально)
 
 ```yaml
 # detekt.yml (концептуальный пример)
@@ -950,7 +952,7 @@ coroutines:
   # - флагать поля CoroutineScope без явной отмены в onCleared/onDestroy/close
 ```
 
-### Мониторинг в продакшене (концептуально)
+### Мониторинг В Продакшене (концептуально)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -986,7 +988,7 @@ class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
 }
 ```
 
-### Резюме лучших практик
+### Резюме Лучших Практик
 
 1. Используйте lifecycle-aware scope (`lifecycleScope`, `viewModelScope`, `viewLifecycleOwner.lifecycleScope`).
 2. Не используйте `GlobalScope` для логики, связанной с `Activity`/`Fragment`/`View`.

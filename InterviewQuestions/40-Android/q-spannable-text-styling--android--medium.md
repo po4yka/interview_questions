@@ -1,35 +1,31 @@
 ---
 id: android-109
 title: Spannable Text Styling / Стилизация текста Spannable
-aliases:
-- Spannable Text Styling
-- Стилизация текста Spannable
+aliases: [Spannable Text Styling, Стилизация текста Spannable]
 topic: android
 subtopics:
-- ui-views
-- ui-widgets
+  - ui-views
+  - ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 created: 2025-10-13
 updated: 2025-11-11
 sources: []
-tags:
-- android/ui-views
-- android/ui-widgets
-- difficulty/medium
-- spannable
-- text-styling
+tags: [android/ui-views, android/ui-widgets, difficulty/medium, spannable, text-styling]
 moc: moc-android
 related:
-- c-android-components
-- q-accessibility-text-scaling--android--medium
-- q-custom-view-attributes--android--medium
-- q-how-to-break-text-by-screen-width--android--easy
+  - c-android-components
+  - q-accessibility-text-scaling--android--medium
+  - q-custom-view-attributes--android--medium
+  - q-how-to-break-text-by-screen-width--android--easy
+  - q-how-to-organize-work-with-text-and-images-in-a-delegate--android--easy
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -260,7 +256,7 @@ val styled = SpannableStringBuilder()
 4. **Avoid** excessive spans — each adds overhead during layout/draw.
 5. **Reuse spans carefully**: safe for simple stateless spans (e.g., color/style), but avoid reusing spans that hold internal state or depend on a specific range/view.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем отличие пользовательских (custom) spans от стандартных spans из фреймворка?
 - Как использование большого количества spans влияет на производительность в RecyclerView?
@@ -288,7 +284,7 @@ val styled = SpannableStringBuilder()
 - [Spantastic Text Styling with Spans](https://medium.com/androiddevelopers/spantastic-text-styling-with-spans-17b0c16b4568)
 - [Text Spans Guide](https://developer.android.com/guide/topics/text/spans)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -299,7 +295,7 @@ val styled = SpannableStringBuilder()
 - [[q-view-fundamentals--android--easy]]
 - [[q-how-to-break-text-by-screen-width--android--easy]]
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 
 - [[q-custom-view-attributes--android--medium]]
 - [[q-accessibility-text-scaling--android--medium]]

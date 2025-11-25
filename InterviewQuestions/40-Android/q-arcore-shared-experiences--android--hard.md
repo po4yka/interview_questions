@@ -1,36 +1,35 @@
 ---
 id: android-628
 title: ARCore Shared Experiences / Совместные ARCore-сцены
-aliases:
-- ARCore Shared Experiences
-- Совместные ARCore-сцены
+aliases: [ARCore Shared Experiences, Совместные ARCore-сцены]
 topic: android
 subtopics:
-- camera
-- sensors
-- networking-http
+  - camera
+  - networking-http
+  - sensors
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-arcore
-- q-android-tv-compose-leanback--android--hard
+  - c-arcore
+  - q-android-tv-compose-leanback--android--hard
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-shared-element-transitions--android--hard
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/camera
-- android/sensors
-- android/networking-http
-- difficulty/hard
+tags: [android/camera, android/networking-http, android/sensors, difficulty/hard]
 sources:
-- "https://developers.google.com/ar/develop/java/cloud-anchors/overview"
-- "https://developers.google.com/ar/develop/depth"
-- "https://developers.google.com/ar/reference/java"
+  - "https://developers.google.com/ar/develop/depth"
+  - "https://developers.google.com/ar/develop/java/cloud-anchors/overview"
+  - "https://developers.google.com/ar/reference/java"
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -71,7 +70,7 @@ sources:
 - **Networking**: backend (Firebase/Cloud Functions/WebRTC) для обмена Cloud Anchor ID и состояния объектов.
 - **Rendering**: Sceneform / Filament / custom GL renderer.
 
-### 3. Инициализация сессии
+### 3. Инициализация Сессии
 
 ```kotlin
 // Предполагается, что уже проверены доступность ARCore и установлены
@@ -96,7 +95,7 @@ session.configure(config)
 - Обрабатывайте `session.resume()`/`pause()` в lifecycle.
 - Проверяйте поддержку Depth/Cloud Anchors/Augmented Images на устройстве и отключайте соответствующие фичи при отсутствии.
 
-### 4. Создание и обмен Cloud Anchor
+### 4. Создание И Обмен Cloud Anchor
 
 ```kotlin
 val anchor = hitResult.createAnchor()
@@ -111,7 +110,7 @@ if (cloudAnchor.cloudAnchorState == CloudAnchorState.SUCCESS) {
 - Клиенты слушают backend и вызывают `session.resolveCloudAnchor(anchorId)` для привязки к общей сцене.
 - Управляйте временем жизни: у Cloud Anchors есть ограниченный срок действия (типично до 24 ч по умолчанию); для длительного хранения используйте режимы с увеличенным TTL (до ~365 д) и отражайте выбранный режим в архитектуре backend и данных.
 
-### 5. Depth API и окклюзия
+### 5. Depth API И Окклюзия
 
 ```kotlin
 val frame = session.update()
@@ -138,7 +137,7 @@ if (frame.camera.trackingState == TrackingState.TRACKING &&
 - Синхронизируйте `Camera.getViewMatrix()` и `getProjectionMatrix()` для виртуальных объектов.
 - Адаптируйте освещение: `LightEstimation` → spherical harmonics / main light.
 
-### 7. Трекинг и устойчивость
+### 7. Трекинг И Устойчивость
 
 - Обновляйте анкерные объекты только при `TrackingState.TRACKING`; при `PAUSED`/ограниченном трекинге показывайте пользователю подсказки (освещение, текстура, движение устройства).
 - Визуализируйте `Trackable` (плоскости, point cloud), чтобы явно показать, где можно разместить якоря.
@@ -181,7 +180,7 @@ if (frame.camera.trackingState == TrackingState.TRACKING &&
 - **Networking**: backend (Firebase/Cloud Functions/WebRTC) used to exchange Cloud Anchor IDs and shared object state between clients.
 - **Rendering**: Sceneform / Filament / custom GL renderer to draw shared virtual content consistently.
 
-### 3. Session initialization
+### 3. Session Initialization
 
 ```kotlin
 // Assumes ARCore availability and Google Play Services for AR are verified
@@ -206,7 +205,7 @@ session.configure(config)
 - Properly handle `session.resume()` / `pause()` in the lifecycle.
 - Check support for Depth, Cloud Anchors, and Augmented Images per device and disable unsupported features.
 
-### 4. Cloud Anchor creation and sharing
+### 4. Cloud Anchor Creation and Sharing
 
 ```kotlin
 val anchor = hitResult.createAnchor()
@@ -221,7 +220,7 @@ if (cloudAnchor.cloudAnchorState == CloudAnchorState.SUCCESS) {
 - Other clients subscribe to the backend and call `session.resolveCloudAnchor(anchorId)` to join the shared coordinate frame.
 - Manage anchor lifetime: Cloud Anchors have limited TTL (commonly up to 24 hours by default); for long-term persistence use extended TTL/persistent modes (up to ~365 days) and reflect that choice in your backend and data model.
 
-### 5. Depth API and occlusion
+### 5. Depth API and Occlusion
 
 ```kotlin
 val frame = session.update()
@@ -248,7 +247,7 @@ if (frame.camera.trackingState == TrackingState.TRACKING &&
 - Feed ARCore camera `getViewMatrix()` and `getProjectionMatrix()` into your renderer for proper alignment.
 - Apply Light Estimation: use spherical harmonics and main directional light to match real-world lighting.
 
-### 7. Tracking and stability
+### 7. Tracking and Stability
 
 - Update anchors/virtual objects only while `TrackingState.TRACKING`; when tracking is `PAUSED`/limited, show clear guidance (move device, improve lighting, look at textured surfaces).
 - Visualize `Trackable` data (planes, point cloud) to give precise feedback where anchors can be placed.
@@ -262,7 +261,7 @@ if (frame.camera.trackingState == TrackingState.TRACKING &&
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как синхронизировать состояние объектов (physics/animations) между клиентами?
 - Как хранить и обновлять Cloud Anchors дольше 24 часов (персистентные/расширенный TTL-якоря)?
 - Как адаптировать pipeline под ARCore Geospatial Anchors (outdoor AR)?
@@ -282,7 +281,7 @@ if (frame.camera.trackingState == TrackingState.TRACKING &&
 - https://developers.google.com/ar/develop/java/cloud-anchors/overview
 - https://developers.google.com/ar/develop/depth
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[c-arcore]]
 
 ## Related Questions

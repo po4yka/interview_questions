@@ -1,33 +1,33 @@
 ---
 id: android-371
 title: State Hoisting in Compose / Поднятие состояния в Compose
-aliases:
-- State Hoisting in Compose
-- Поднятие состояния в Compose
+aliases: [State Hoisting in Compose, Поднятие состояния в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- q-separate-ui-business-logic--android--easy
-- q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
-- q-what-is-hilt--android--medium
+  - c-compose-state
+  - q-compose-core-components--android--medium
+  - q-does-state-made-in-compose-help-avoid-race-condition--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-separate-ui-business-logic--android--easy
+  - q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
+  - q-what-is-hilt--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-compose
-- android/ui-state
-- difficulty/medium
+tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +50,7 @@ tags:
 
 [[c-compose-state]]
 
-### Проблема: компонент хранит состояние, хотя не должен
+### Проблема: Компонент Хранит Состояние, Хотя Не Должен
 
 ```kotlin
 // Пример: внутреннее состояние усложняет переиспользование и внешний контроль
@@ -74,7 +74,7 @@ fun SearchBar() {
 
 Заметка: такой подход допустим для простого локального UI-состояния; он становится проблемой, когда нужен внешний контроль или переиспользование.
 
-### Решение: поднятие состояния (State Hoisting)
+### Решение: Поднятие Состояния (State Hoisting)
 
 ```kotlin
 // Stateless, переиспользуемый
@@ -111,7 +111,7 @@ fun SearchScreen() {
 - Предсказуемость: явное владение состоянием и обновления
 - Комбинаторность: легко комбинировать с другими composable
 
-### Принципы поднятия состояния
+### Принципы Поднятия Состояния
 
 Правило: поднимайте состояние к ближайшему общему предку всех composable, которым нужно читать или изменять это состояние.
 
@@ -167,7 +167,7 @@ fun CartSummary(
 }
 ```
 
-### Паттерны поднятия состояния
+### Паттерны Поднятия Состояния
 
 #### 1. Паттерн "Value + `Callback`"
 
@@ -199,7 +199,7 @@ fun CounterScreen() {
 }
 ```
 
-#### 2. Паттерн объекта состояния
+#### 2. Паттерн Объекта Состояния
 
 ```kotlin
 // Объект состояния для сложного состояния
@@ -242,7 +242,7 @@ fun FilterPanel(
 }
 ```
 
-#### 3. Класс-холдер состояния
+#### 3. Класс-холдер Состояния
 
 Для сложной логики состояния можно использовать отдельный класс-холдер, помеченный `@Stable`, когда вы можете гарантировать стабильность.
 
@@ -312,9 +312,9 @@ fun SearchScreen() {
 }
 ```
 
-### Уровни поднятия состояния
+### Уровни Поднятия Состояния
 
-#### Уровень 1: локальное UI-состояние
+#### Уровень 1: Локальное UI-состояние
 
 ```kotlin
 @Composable
@@ -337,7 +337,7 @@ fun ExpandableCard(title: String, content: String) {
 }
 ```
 
-#### Уровень 2: состояние на уровне экрана
+#### Уровень 2: Состояние На Уровне Экрана
 
 ```kotlin
 @Composable
@@ -361,7 +361,7 @@ fun ProductListScreen() {
 }
 ```
 
-#### Уровень 3: состояние во `ViewModel`
+#### Уровень 3: Состояние Во `ViewModel`
 
 ```kotlin
 @HiltViewModel
@@ -401,9 +401,9 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel()) {
 }
 ```
 
-### Состояние внутри и снаружи composable
+### Состояние Внутри И Снаружи Composable
 
-#### Stateful — внутреннее состояние
+#### Stateful — Внутреннее Состояние
 
 ```kotlin
 // Stateful: сам владеет своим состоянием
@@ -431,7 +431,7 @@ fun Screen() {
 - Не нужно сохранять за пределами стандартного поведения
 - Примеры: состояние анимаций, позиция скролла (через специальные state-объекты), флаг раскрытия
 
-#### Stateless — поднятое состояние
+#### Stateless — Поднятое Состояние
 
 ```kotlin
 // Stateless: получает состояние и отдает события
@@ -462,9 +462,9 @@ fun Screen() {
 - Состояние живёт на уровне экрана/`ViewModel`/родителя
 - Примеры: поля ввода, фильтры, выбранные элементы, переиспользуемые виджеты
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: форма регистрации
+#### Пример 1: Форма Регистрации
 
 ```kotlin
 data class RegistrationFormState(
@@ -535,7 +535,7 @@ fun RegistrationScreen(viewModel: RegistrationViewModel = hiltViewModel()) {
 }
 ```
 
-#### Пример 2: вкладки с контентом
+#### Пример 2: Вкладки С Контентом
 
 ```kotlin
 @Composable
@@ -579,7 +579,7 @@ fun ProfileScreen() {
 }
 ```
 
-#### Пример 3: список с мультивыбором
+#### Пример 3: Список С Мультивыбором
 
 ```kotlin
 @Composable
@@ -641,7 +641,7 @@ fun ProductSelectionScreen(products: List<Product>) {
 }
 ```
 
-### Поднятие с `derivedStateOf`
+### Поднятие С `derivedStateOf`
 
 ```kotlin
 @Composable
@@ -668,7 +668,7 @@ fun ProductList(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Поднимайте состояние на нужный уровень
 
@@ -691,11 +691,11 @@ class CounterViewModel : ViewModel() {
 }
 ```
 
-2. Используйте data class для сложного состояния, группируйте связанные поля
+1. Используйте data class для сложного состояния, группируйте связанные поля
 
-3. Держите логику бизнес-состояния во `ViewModel`/слоях домена, а UI-компоненты делайте максимально stateless
+2. Держите логику бизнес-состояния во `ViewModel`/слоях домена, а UI-компоненты делайте максимально stateless
 
-4. Поддерживайте однонаправленный поток данных: состояние сверху вниз, события снизу вверх
+3. Поддерживайте однонаправленный поток данных: состояние сверху вниз, события снизу вверх
 
 ---
 
@@ -711,7 +711,7 @@ This improves:
 
 [[c-compose-state]]
 
-### Problem: Stateful Component (when it shouldn't be)
+### Problem: Stateful Component (when it Shouldn't be)
 
 ```kotlin
 // Example: internally managed state makes reuse and external control harder
@@ -1060,7 +1060,7 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel()) {
 }
 ```
 
-### Stateful vs Stateless Composables
+### Stateful Vs Stateless Composables
 
 #### Stateful - Internal State
 
@@ -1350,11 +1350,11 @@ class CounterViewModel : ViewModel() {
 }
 ```
 
-2. Use data classes for complex state to keep it grouped and immutable by default
+1. Use data classes for complex state to keep it grouped and immutable by default
 
-3. Keep business/stateful logic in `ViewModel`/domain; make UI composables as stateless as possible
+2. Keep business/stateful logic in `ViewModel`/domain; make UI composables as stateless as possible
 
-4. Maintain unidirectional data flow: state down, events up
+3. Maintain unidirectional data flow: state down, events up
 
 ---
 

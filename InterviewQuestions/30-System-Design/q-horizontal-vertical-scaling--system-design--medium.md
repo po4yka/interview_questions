@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [architecture, difficulty/medium, distributed-systems, scalability, system-design]
 sources: ["https://en.wikipedia.org/wiki/Scalability"]
 
+date created: Sunday, October 12th 2025, 8:22:20 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -56,10 +58,10 @@ sources: ["https://en.wikipedia.org/wiki/Scalability"]
 - Однопоточные нагрузки
 - Быстрые временные решения (buy time)
 
-# Вертикальное масштабирование PostgreSQL (RU пример)
+# Вертикальное Масштабирование PostgreSQL (RU пример)
 Initial: m5.large (2 vCPU, 8GB RAM)
 Scale:   m5.4xlarge (16 vCPU, 64GB RAM)
-# Нет изменений в приложении, ACID гарантии сохранены
+# Нет Изменений В Приложении, ACID Гарантии Сохранены
 
 **Горизонтальное масштабирование (Scaling Out):**
 
@@ -151,7 +153,7 @@ class UserService(
 - Горизонтальное масштабирование: использование нескольких экземпляров сервисов за load balancer, разделение состояния через общие хранилища, кеши и реплики БД.
 - Комбинированный подход: вертикальное усиление критичных компонентов (например, primary DB) плюс горизонтальное масштабирование stateless-слоёв и чтений.
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как обрабатывать сессионное состояние в горизонтально масштабируемых приложениях?
 - В чём разница между stateless и stateful сервисами?
@@ -162,7 +164,7 @@ class UserService(
 - [[q-load-balancing-strategies--system-design--medium]]
 - [[q-database-sharding-partitioning--system-design--hard]]
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### Предпосылки (проще)
 - [[q-load-balancing-strategies--system-design--medium]] - Стратегии балансировки нагрузки
@@ -208,10 +210,10 @@ Scaling is the process of increasing system capacity to handle growing load. Two
 - Single-threaded workloads
 - `Short`-term quick fixes (to buy time)
 
-# Vertical scaling PostgreSQL (EN example)
+# Vertical Scaling PostgreSQL (EN example)
 Initial: m5.large (2 vCPU, 8GB RAM)
 Scale:   m5.4xlarge (16 vCPU, 64GB RAM)
-# No application changes, ACID guarantees maintained
+# No Application Changes, ACID Guarantees Maintained
 
 **Horizontal Scaling (Scaling Out):**
 

@@ -14,7 +14,10 @@ related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-kotlin-lamb
 created: 2025-10-15
 updated: 2025-11-09
 tags: [comparison, concurrency, coroutines, difficulty/medium, kotlin, programming-languages, threads]
+date created: Friday, October 31st 2025, 6:32:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > В чём концептуальное отличие корутин от потоков в Java?
 
@@ -99,7 +102,7 @@ thread {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия корутин в Kotlin от потоков в Java на практике?
 - Когда на реальных проектах стоит предпочесть корутины потокам?
@@ -119,7 +122,7 @@ thread {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-lambda-expressions--kotlin--medium]]
 - [[q-abstract-class-vs-interface--kotlin--medium]]

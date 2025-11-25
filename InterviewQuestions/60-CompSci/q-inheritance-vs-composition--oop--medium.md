@@ -3,18 +3,20 @@ id: oop-001
 title: "Inheritance Vs Composition / Наследование против композиции"
 aliases: [Inheritance Vs Composition, Наследование против композиции]
 topic: cs
-subtopics: [c-cs, c-architecture-patterns, c-clean-code]
+subtopics: [c-architecture-patterns, c-clean-code, c-cs]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-architecture-patterns, q-when-inheritance-useful--cs--medium]
+related: [c-architecture-patterns, c-computer-science, q-when-inheritance-useful--cs--medium]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [cs, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:43:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -696,7 +698,7 @@ class Car(
 
 ## Android Example (RU)
 
-### Подход с Наследованием (традиционный)
+### Подход С Наследованием (традиционный)
 
 ```kotlin
 // Наследование: тесная связанность
@@ -732,7 +734,7 @@ class ProductActivity : BaseActivity() {
 // - Сложнее варьировать поведение для отдельных экранов
 ```
 
-### Подход с Композицией (современный)
+### Подход С Композицией (современный)
 
 ```kotlin
 // Композиция: слабая связанность через внедрение зависимостей
@@ -859,7 +861,7 @@ class UserActivity : AppCompatActivity() {
 
 ## Когда Использовать Каждый (RU)
 
-### Используйте Наследование (когда это хорошо)
+### Используйте Наследование (когда Это хорошо)
 
 - Чёткое отношение **IS-A (ЯВЛЯЕТСЯ)**
 - Нужен **полиморфизм** (обрабатывать Dog как Animal)
@@ -873,7 +875,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Используйте Композицию (когда это хорошо)
+### Используйте Композицию (когда Это хорошо)
 
 - Отношение **HAS-A (ИМЕЕТ)**
 - Нужна **гибкость**
@@ -1055,7 +1057,7 @@ Composition is considered **more flexible and less coupled** than inheritance, m
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-java-all-classes-inherit-from-object--programming-languages--easy]]

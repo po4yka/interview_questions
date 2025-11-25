@@ -1,37 +1,33 @@
 ---
 id: android-056
 title: KAPT to KSP Migration Guide / Руководство по миграции с KAPT на KSP
-aliases:
-- KAPT to KSP Migration Guide
-- Руководство по миграции с KAPT на KSP
+aliases: [KAPT to KSP Migration Guide, Руководство по миграции с KAPT на KSP]
 topic: android
 subtopics:
-- performance-startup
+  - performance-startup
 question_kind: coding
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: Original
 source_note: Annotation processing migration best practices
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-android-profiler
-- q-annotation-processing-android--android--medium
+  - c-android
+  - c-android-profiler
+  - q-annotation-processing-android--android--medium
+  - q-background-tasks-decision-guide--android--medium
+  - q-kapt-vs-ksp--android--medium
+  - q-workmanager-decision-guide--android--medium
 created: 2025-10-11
 updated: 2025-11-11
-tags:
-- android/performance-startup
-- annotation-processing
-- difficulty/medium
-- en
-- kapt
-- ksp
-- ru
+tags: [android/performance-startup, annotation-processing, difficulty/medium, en, kapt, ksp, ru]
 
+date created: Saturday, November 1st 2025, 12:46:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +40,7 @@ tags:
 
 ## Ответ (RU)
 
-### Архитектура KAPT vs KSP
+### Архитектура KAPT Vs KSP
 
 #### KAPT (Kotlin Annotation Processing Tool)
 
@@ -108,7 +104,7 @@ Kotlin Source (.kt)
 - Нативный Kotlin API для написания процессоров (лучшая типобезопасность и работа с null).
 - Часто меньшее потребление памяти.
 
-### Сравнение производительности (пример)
+### Сравнение Производительности (пример)
 
 Пример синтетического бенчмарка (не гарантия; измеряйте в своём проекте):
 
@@ -143,9 +139,9 @@ Kotlin Source (.kt)
 
 Типичные реальные улучшения при миграции основных процессоров (Room, некоторые реализации Dagger, Moshi и др., если у них есть реализация на KSP) находятся примерно в диапазоне 20–50%, но всегда проверяйте на своём проекте.
 
-### Полное руководство по миграции
+### Полное Руководство По Миграции
 
-#### Шаг 1: Проверка поддержки библиотек
+#### Шаг 1: Проверка Поддержки Библиотек
 
 Проверьте официальную документацию каждой библиотеки на наличие артефактов с поддержкой KSP.
 
@@ -163,7 +159,7 @@ Kotlin Source (.kt)
 
 Не предполагайте, что «все библиотеки генерации кода» поддерживают KSP — всегда проверяйте.
 
-#### Шаг 2: Обновление файлов сборки
+#### Шаг 2: Обновление Файлов Сборки
 
 Пример для Gradle Kotlin DSL.
 
@@ -261,7 +257,7 @@ dependencies {
 
 Убедитесь, что версия KSP совместима с версией Kotlin (см. таблицу соответствий в документации KSP) и что вы используете именно те артефакты, которые официально заявлены как KSP-совместимые для каждой библиотеки. Не используйте несуществующие артефакты вроде `moshi-kotlin-codegen-ksp`.
 
-#### Шаг 3: Обновление путей к исходникам (при необходимости)
+#### Шаг 3: Обновление Путей К Исходникам (при необходимости)
 
 Во многих случаях KSP автоматически регистрирует директории. Если IDE или сборка не видит сгенерированный код, добавьте явно:
 
@@ -289,7 +285,7 @@ kotlin.sourceSets {
 }
 ```
 
-#### Шаг 4: Очистка и пересборка
+#### Шаг 4: Очистка И Пересборка
 
 ```bash
 ./gradlew clean
@@ -300,7 +296,7 @@ rm -rf build/generated/source/kapt/
 # Сравнить время сборки с конфигурацией на KAPT
 ```
 
-### Чек-лист миграции (RU)
+### Чек-лист Миграции (RU)
 
 - [ ] Обновить project-level build.gradle (добавить плагин KSP)
 - [ ] Обновить app-level build.gradle (подключить KSP и оставить KAPT только для неподдерживаемых процессоров)
@@ -315,7 +311,7 @@ rm -rf build/generated/source/kapt/
 - [ ] Обновить конфигурацию CI/CD
 - [ ] Обновить документацию
 
-### Тестирование миграции (RU)
+### Тестирование Миграции (RU)
 
 **Проверка сгенерированного кода и путей:**
 
@@ -335,7 +331,7 @@ ls -la app/build/generated/ksp/debug/kotlin/
 
 Язык и структура сгенерированного кода (Java vs Kotlin) могут отличаться, важно функциональное совпадение. При необходимости можно использовать `javap` для проверки того, что нужные классы существуют и корректно слинкованы.
 
-### Смешанные KAPT/KSP проекты (RU)
+### Смешанные KAPT/KSP Проекты (RU)
 
 Если часть библиотек ещё не поддерживает KSP, временно используйте оба инструмента:
 
@@ -356,7 +352,7 @@ dependencies {
 
 Учтите: пока существует хотя бы один KAPT-процессор, часть его накладных расходов сохраняется. Стремитесь со временем полностью перейти на KSP для всех поддерживаемых библиотек.
 
-### Измерение времени сборки (RU)
+### Измерение Времени Сборки (RU)
 
 **Пример скрипта для сравнения KAPT и KSP:**
 
@@ -396,7 +392,7 @@ echo "  Улучшение: ${IMPROVEMENT}%"
 - Средний проект (50–200 файлов): KAPT 89с, KSP 47с → ~47% быстрее
 - Крупный проект (200+ файлов): KAPT 245с, KSP 128с → ~48% быстрее
 
-### Решение проблем (RU)
+### Решение Проблем (RU)
 
 **Проблема 1: Не находятся сгенерированные классы**
 - Проверьте, применён ли плагин KSP в модуле.
@@ -412,7 +408,7 @@ echo "  Улучшение: ${IMPROVEMENT}%"
 - Проверьте, что используемые процессоры заявляют поддержку инкрементальной обработки.
 - Не форсируйте параметры задач без понимания поведения процессоров.
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 1. Мигрировать по модулям и по процессорам, а не всем сразу.
 2. После каждого шага запускать тесты и проверять функциональность.
@@ -425,7 +421,7 @@ echo "  Улучшение: ${IMPROVEMENT}%"
 9. Обращать внимание на предупреждения Gradle/KSP.
 10. Документировать изменения для команды.
 
-### Распространённые ошибки (RU)
+### Распространённые Ошибки (RU)
 
 1. Механически заменяют `kapt(...)` на `ksp(...)` без подтверждённой поддержки KSP.
 2. Оставляют старые KAPT-артефакты, мешающие IDE/сборке.
@@ -440,7 +436,7 @@ echo "  Улучшение: ${IMPROVEMENT}%"
 
 ## Answer (EN)
 
-### KAPT vs KSP Architecture
+### KAPT Vs KSP Architecture
 
 #### KAPT (Kotlin Annotation Processing Tool)
 
@@ -845,7 +841,7 @@ ksp {
 9. Expecting identical generated source or bytecode instead of functional equivalence.
 10. Treating reported speedups as guaranteed without measuring.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы спланируете поэтапный rollout миграции на KSP в многомодульном проекте для снижения рисков?
 - Как отлаживать проблемы, когда сгенерированный код отличается между реализациями библиотеки на KAPT и KSP?
@@ -877,9 +873,9 @@ ksp {
 - https://dagger.dev/dev-guide/ksp.html
 - Official docs for the libraries you use (Room, Dagger/Hilt, Moshi, etc.) for up-to-date KSP artifacts
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные материалы / Концепции
+### Предварительные Материалы / Концепции
 - [[c-android]]
 - [[c-android-profiler]]
 

@@ -5,7 +5,7 @@ aliases: ["Suspend Functions Basics", "Основы suspend функций"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, functions, c-kotlin-coroutines-basics]
+subtopics: [c-kotlin-coroutines-basics, coroutines, functions]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140028
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-launch-vs-async-vs-runblocking--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-launch-vs-async-vs-runblocking--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/easy, kotlin]
+date created: Saturday, October 18th 2025, 12:37:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140028
 
@@ -296,7 +299,7 @@ val data = retry(3) { fetchData() }
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Объясните различие между `suspend`-функцией и обычной функцией с точки зрения блокировки потоков.
 2. Почему `suspend`-функции должны вызываться только из корутин или других `suspend`-функций?

@@ -4,25 +4,28 @@ title: Advanced Compose UI Testing / Продвинутое тестирован
 aliases: [Advanced Compose UI Testing, Продвинутое тестирование Compose UI]
 topic: android
 subtopics:
-- testing-ui
-- ui-compose
+  - testing-ui
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources: []
 status: draft
 related:
-- c-accessibility
-- q-compose-semantics--android--medium
-- q-compose-testing--android--medium
+  - c-accessibility
+  - q-compose-semantics--android--medium
+  - q-compose-side-effects-advanced--android--hard
+  - q-compose-testing--android--medium
 created: 2025-10-20
 updated: 2025-11-10
 tags: [accessibility, android/testing-ui, android/ui-compose, compose-testing, difficulty/hard, semantics]
 moc: moc-android
 
+date created: Saturday, November 1st 2025, 1:26:08 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -153,7 +156,7 @@ fun testAccessibility() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как тестировать навигацию в Compose с вложенными destination?
 - Как мокать зависимости `ViewModel` в тестах Compose?
@@ -167,13 +170,13 @@ fun testAccessibility() {
 - https://developer.android.com/jetpack/compose/testing
 - https://developer.android.com/jetpack/compose/semantics
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-compose-testing--android--medium]] — Базовая настройка тестов Compose и matchers
 - [[q-compose-semantics--android--medium]] — Понимание структуры semantic tree
 
-### На том же уровне
+### На Том Же Уровне
 - [[q-compose-performance-optimization--android--hard]] — Тестирование производительности и профилирование
 
 ### Продвинутые (сложнее)

@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, c-kotlin, q-abstract-class-vs-interface--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [companion-objects, difficulty/easy, initialization, programming-languages]
+date created: Saturday, November 1st 2025, 1:27:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Когда инициализируется companion object в Kotlin?
 
@@ -40,7 +43,7 @@ Companion object инициализируется **при инициализа�
 
 (Примеры ниже иллюстрируют типичное поведение; фактический момент инициализации может отличаться в зависимости от платформы и реализации.)
 
-### Пример базовой инициализации
+### Пример Базовой Инициализации
 
 ```kotlin
 class MyClass {
@@ -68,7 +71,7 @@ fun main() {
 }
 ```
 
-### Инициализация companion object с состоянием
+### Инициализация Companion Object С Состоянием
 
 ```kotlin
 class Database {
@@ -106,7 +109,7 @@ fun main() {
 }
 ```
 
-### Один companion для множества экземпляров
+### Один Companion Для Множества Экземпляров
 
 ```kotlin
 class Counter(val instanceId: Int) {
@@ -144,7 +147,7 @@ fun main() {
 }
 ```
 
-### Ленивая семантика и дорогостоящая инициализация
+### Ленивая Семантика И Дорогостоящая Инициализация
 
 ```kotlin
 class ExpensiveResource {
@@ -180,7 +183,7 @@ fun main() {
 }
 ```
 
-### Порядок инициализации при наследовании
+### Порядок Инициализации При Наследовании
 
 ```kotlin
 open class Base {
@@ -223,7 +226,7 @@ fun main() {
 }
 ```
 
-### Компаньон как фабрика (ленивая инициализация фабрики)
+### Компаньон Как Фабрика (ленивая Инициализация фабрики)
 
 ```kotlin
 class User private constructor(val id: Int, val name: String) {
@@ -263,7 +266,7 @@ fun main() {
 }
 ```
 
-### Потокобезопасная инициализация
+### Потокобезопасная Инициализация
 
 ```kotlin
 class ThreadSafeExample {
@@ -294,7 +297,7 @@ fun main() {
 }
 ```
 
-### Избежание преждевременной инициализации (иллюстрация возможной проблемы)
+### Избежание Преждевременной Инициализации (иллюстрация Возможной проблемы)
 
 ```kotlin
 class ConfigManager {
@@ -351,9 +354,9 @@ Important: The exact timing depends on the target platform and class initializat
 
 (The examples below illustrate typical behavior; actual timing may vary by platform and implementation.)
 
-### Code examples
+### Code Examples
 
-#### Basic initialization timing
+#### Basic Initialization Timing
 
 ```kotlin
 class MyClass {
@@ -382,7 +385,7 @@ fun main() {
 }
 ```
 
-#### Companion object initialization with state
+#### Companion Object Initialization with State
 
 ```kotlin
 class Database {
@@ -420,7 +423,7 @@ fun main() {
 }
 ```
 
-#### One companion for many instances
+#### One Companion for Many Instances
 
 ```kotlin
 class Counter(val instanceId: Int) {
@@ -458,7 +461,7 @@ fun main() {
 }
 ```
 
-#### Lazy-like semantics and expensive initialization
+#### Lazy-like Semantics and Expensive Initialization
 
 ```kotlin
 class ExpensiveResource {
@@ -494,7 +497,7 @@ fun main() {
 }
 ```
 
-#### Initialization order with inheritance
+#### Initialization order with Inheritance
 
 ```kotlin
 open class Base {
@@ -537,7 +540,7 @@ fun main() {
 }
 ```
 
-#### Companion as factory (lazy initialization of factory)
+#### Companion as Factory (lazy Initialization of factory)
 
 ```kotlin
 class User private constructor(val id: Int, val name: String) {
@@ -577,7 +580,7 @@ fun main() {
 }
 ```
 
-#### Thread-safe initialization
+#### Thread-safe Initialization
 
 ```kotlin
 class ThreadSafeExample {
@@ -608,7 +611,7 @@ fun main() {
 }
 ```
 
-#### Avoiding premature initialization (illustrating a potential issue)
+#### Avoiding Premature Initialization (illustrating a Potential issue)
 
 ```kotlin
 class ConfigManager {
@@ -646,7 +649,7 @@ fun main() {
 
 (In this example, heavy work still runs during class/companion initialization; it illustrates how such initialization may happen earlier or later depending on when the class is initialized, highlighting a potential pitfall rather than a solution.)
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия поведения companion object по сравнению со `static` в Java?
 - Когда на практике стоит опираться на кажущуюся "ленивую" инициализацию companion object и как учитывать правила инициализации класса?
@@ -668,7 +671,7 @@ fun main() {
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-abstract-class-vs-interface--kotlin--medium]]
 

@@ -4,27 +4,31 @@ title: Dagger Problems / Проблемы Dagger
 aliases: [Dagger Problems, Проблемы Dagger]
 topic: android
 subtopics:
-- di-hilt
-- gradle
-- testing-unit
+  - di-hilt
+  - gradle
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dependency-injection
-- q-dagger-build-time-optimization--android--medium
-- q-dagger-field-injection--android--medium
-- q-dagger-framework-overview--android--hard
+  - c-dependency-injection
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-field-injection--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-dagger-purpose--android--easy
+  - q-dagger-scope-explained--android--medium
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, android/gradle, android/testing-unit, challenges, dagger, difficulty/medium, hilt]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -287,7 +291,7 @@ object TestNetworkModule {
 
 ---
 
-## Последующие вопросы (RU)
+## Последующие Вопросы (RU)
 
 - Как именно Hilt помогает смягчить проблемы Dagger с временем компиляции?
 - В чем основные компромиссы между DI с проверкой на этапе компиляции и DI с проверкой в рантайме?
@@ -315,12 +319,12 @@ object TestNetworkModule {
 - Official Dagger documentation: https://dagger.dev/
 - Hilt documentation: https://dagger.dev/hilt/
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-dagger-inject-annotation--android--easy]] — Базовое использование `@Inject` и основы аннотаций
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-dagger-field-injection--android--medium]] — Стратегии внедрения и лучшие практики
 - [[q-dagger-build-time-optimization--android--medium]] — Техники оптимизации времени сборки
 

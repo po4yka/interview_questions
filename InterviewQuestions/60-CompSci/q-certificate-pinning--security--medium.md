@@ -14,7 +14,10 @@ related:
   - c-computer-science
   - q-android-keystore-system--security--medium
   - q-android-security-practices-checklist--android--medium
+  - q-api-rate-limiting-throttling--android--medium
   - q-app-security-best-practices--android--medium
+  - q-okhttp-interceptors-advanced--networking--medium
+  - q-retrofit-coroutines-best-practices--kotlin--medium
 created: 2025-10-15
 updated: 2025-11-11
 original_language: en
@@ -22,6 +25,8 @@ language_tags:
   - en
   - ru
 tags: [difficulty/medium, networking, okhttp, security, tls]
+date created: Sunday, October 12th 2025, 12:27:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -138,7 +143,7 @@ val client = OkHttpClient.Builder()
 ### Предпосылки (проще)
 - [[q-app-security-best-practices--android--medium]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-security-practices-checklist--android--medium]]
 - [[q-android-keystore-system--security--medium]]
 

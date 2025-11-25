@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, programming-languages]
 sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 
+date created: Saturday, November 1st 2025, 1:25:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)

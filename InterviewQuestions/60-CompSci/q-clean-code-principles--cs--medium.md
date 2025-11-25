@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [best-practices, clean-code, code-quality, difficulty/medium, refactoring]
 sources: ["https://en.wikipedia.org/wiki/Clean_code"]
 
+date created: Saturday, November 1st 2025, 1:24:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -528,7 +530,7 @@ fun createUser(email: Email, age: Age)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между связностью (cohesion) и зацеплением (coupling)?
 - Как refactorить длинные методы?
@@ -540,7 +542,7 @@ fun createUser(email: Email, age: Age)
 - How do you refactor long methods?
 - What are SOLID principles?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (более простые)
 - Базовые концепции программирования

@@ -1,30 +1,30 @@
 ---
 id: android-280
 title: How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений
-aliases:
-- How To Connect BroadcastReceiver So It Can Receive Messages
-- Как подключить BroadcastReceiver для получения сообщений
+aliases: [How To Connect BroadcastReceiver So It Can Receive Messages, Как подключить BroadcastReceiver для получения сообщений]
 topic: android
 subtopics:
-- broadcast-receiver
+  - broadcast-receiver
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-broadcast-receiver
-- q-what-is-broadcastreceiver--android--easy
-- q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
+  - c-broadcast-receiver
+  - q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
+  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+  - q-what-can-be-done-through-composer--android--medium
+  - q-what-is-broadcastreceiver--android--easy
 created: 2024-10-15
 updated: 2025-11-10
-tags:
-- android/broadcast-receiver
-- difficulty/medium
+tags: [android/broadcast-receiver, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +38,7 @@ tags:
 ## Ответ (RU)
 `BroadcastReceiver` можно подключить двумя основными способами: статически через `AndroidManifest.xml` и динамически в коде. В ряде сценариев также используются упорядоченные (ordered) рассылки, разрешения и (исторически) `LocalBroadcastManager`. Конкретное поведение зависит от версии Android (ограничения фонового выполнения, ограничения на implicit broadcasts, требования к `android:exported`). Важно учитывать, что динамическая регистрация не "отменяет" платформенные ограничения — некоторые broadcast'ы могут быть недоступны или изменены. Ниже приведены подробные примеры для каждого подхода.
 
-### Метод 1: Статическая регистрация (Manifest)
+### Метод 1: Статическая Регистрация (Manifest)
 
 Регистрируем ресивер в `AndroidManifest.xml`, чтобы система могла запускать процесс приложения для доставки подходящих broadcast-сообщений.
 
@@ -88,7 +88,7 @@ class BootReceiver : BroadcastReceiver() {
 - Подчиняется ограничениям Android 8.0+: многие implicit broadcasts недоступны для сторонних приложений через манифест.
 - Можно включать/отключать через `PackageManager`, но это менее гибко, чем динамическая регистрация.
 
-### Метод 2: Динамическая регистрация (в коде)
+### Метод 2: Динамическая Регистрация (в коде)
 
 Регистрируем ресивер в коде так, чтобы его жизнь была связана с компонентом (`Activity`, `Service` и т.п.). Это основной способ получения многих implicit broadcasts на современных Android (там, где они ещё поддерживаются).
 
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 - Помогает корректно использовать оставшиеся implicit broadcasts без manifest-регистрации (но сами отправляемые системой broadcast'ы всё равно ограничены политиками платформы).
 - Требует корректного `unregisterReceiver` для предотвращения утечек и `IllegalArgumentException`.
 
-### Метод 3: Ресивер с областью жизни компонента (Component-Scoped Receiver)
+### Метод 3: Ресивер С Областью Жизни Компонента (Component-Scoped Receiver)
 
 Пример, когда ресивер живёт столько же, сколько конкретная `Activity`.
 
@@ -225,7 +225,7 @@ class ReceiverActivity : AppCompatActivity() {
 }
 ```
 
-### Примеры системных broadcast'ов
+### Примеры Системных Broadcast'ов
 
 ```kotlin
 class SystemBroadcastReceiver : BroadcastReceiver() {
@@ -312,7 +312,7 @@ override fun onStart() {
 }
 ```
 
-### Упорядоченные (Ordered) broadcast'ы
+### Упорядоченные (Ordered) Broadcast'ы
 
 Упорядоченные broadcast'ы доставляются ресиверам в порядке приоритета.
 
@@ -361,7 +361,7 @@ fun Context.sendCustomOrderedBroadcast() {
 }
 ```
 
-### Exported vs Not Exported
+### Exported Vs Not Exported
 
 ```xml
 <!-- Получает broadcast'ы из других приложений -->
@@ -386,7 +386,7 @@ fun Context.sendCustomOrderedBroadcast() {
 Примечание:
 - Начиная с Android 12 (API 31), явное указание `android:exported` обязательно для компонентов с `intent-filter`.
 
-### Broadcast'ы, защищённые разрешениями (Permission-Protected)
+### Broadcast'ы, Защищённые Разрешениями (Permission-Protected)
 
 ```xml
 <!-- Объявляем собственное разрешение -->
@@ -412,7 +412,7 @@ fun Context.sendProtectedBroadcast() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 class BestPracticesActivity : AppCompatActivity() {
@@ -461,7 +461,7 @@ class BestPracticesActivity : AppCompatActivity() {
 - Не выполняйте долгие операции в `onReceive()`; переносите их в `WorkManager`, foreground service или другие асинхронные механизмы.
 - Для новых задач по возможности используйте современные API (`NetworkCallback`, `WorkManager`, внутриприложечные event bus'ы и реактивные потоки), а не глобальные broadcast'ы.
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Метод                | Когда получает                             | Жизненный цикл           | Типичные случаи использования                |
 |----------------------|--------------------------------------------|--------------------------|----------------------------------------------|
@@ -470,7 +470,7 @@ class BestPracticesActivity : AppCompatActivity() {
 | LocalBroadcastManager| Только пока зарегистрирован (deprecated)   | Жизнь компонента         | Устаревшая внутренняя коммуникация           |
 | WorkManager          | При выполнении условий/расписания          | Управляется системой     | Отложенная фоновая работа (предпочтительно)  |
 
-### Современные альтернативы
+### Современные Альтернативы
 
 Во многих сценариях внутреннего взаимодействия или фоновой работы вместо глобальных broadcast'ов используйте:
 

@@ -13,7 +13,9 @@ moc: moc-kotlin
 aliases: ["What is special about sealed classes in Kotlin?", "Особенности sealed классов в Kotlin"]
 question_kind: theory
 related: [c-kotlin, c-sealed-classes, q-channelflow-callbackflow-flow--kotlin--medium]
-subtopics: [sealed-classes, enums, when-expression]
+subtopics: [enums, sealed-classes, when-expression]
+date created: Friday, November 7th 2025, 6:45:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -25,7 +27,7 @@ subtopics: [sealed-classes, enums, when-expression]
 ## Ответ (RU)
 Особенность запечатанных (sealed) классов заключается в том, что они задают ограниченную (закрытую) иерархию типов: компилятор знает полный набор допустимых подтипов и может проверять их исчерпывающим образом (при соблюдении правил видимости и размещения). В современных версиях Kotlin их прямые наследники должны находиться в том же модуле (ранее — в одном файле; затем — в том же пакете и модуле), с возможностью объявления в разных файлах, что сохраняет строгий контроль над иерархией.
 
-### Основная идея
+### Основная Идея
 
 Sealed классы идеальны для создания ограниченных иерархий, где требуется строго контролировать набор возможных подтипов, особенно при моделировании состояний или результатов операций (см. [[c-kotlin]], [[c-sealed-classes]]).
 
@@ -38,7 +40,7 @@ sealed class UiState {
 }
 ```
 
-### Преимущества при использовании `when`
+### Преимущества При Использовании `when`
 
 Так как компилятор может знать все допустимые подтипы sealed-класса (когда вся иерархия видима в текущем модуле), он может проверять `when` на исчерпываемость, и ветка `else` может быть не нужна.
 
@@ -67,9 +69,9 @@ sealed class UiState {
 // перестанут компилироваться.
 ```
 
-### Примеры использования
+### Примеры Использования
 
-#### 1. Моделирование результата операции
+#### 1. Моделирование Результата Операции
 
 ```kotlin
 sealed class Result<out T> {
@@ -105,7 +107,7 @@ result.observe(this) { resultValue ->
 }
 ```
 
-#### 2. Моделирование сетевых запросов
+#### 2. Моделирование Сетевых Запросов
 
 ```kotlin
 sealed class NetworkResponse<out T> {
@@ -131,7 +133,7 @@ suspend fun fetchData(): NetworkResponse<List<Item>> {
 }
 ```
 
-#### 3. Навигационные события
+#### 3. Навигационные События
 
 ```kotlin
 sealed class NavigationEvent {
@@ -165,7 +167,7 @@ viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
 }
 ```
 
-### Sealed Class vs Enum
+### Sealed Class Vs Enum
 
 | Аспект | Enum | Sealed Class |
 |--------|------|--------------|
@@ -209,7 +211,7 @@ class MyAction : Action, AnotherInterface {
 
 The key feature of sealed classes is the restricted inheritance hierarchy: they define a closed set of subclasses that the compiler can be aware of and check exhaustively (subject to visibility and placement rules). In modern Kotlin, their direct subclasses must be declared in the same module (originally: same file; later: same package and module), potentially in different files, which still provides strong control over the type hierarchy.
 
-### Main idea
+### Main Idea
 
 Sealed classes are ideal for creating restricted class hierarchies where you need to strictly control the set of possible subtypes, especially when modeling states or operation results (see [[c-kotlin]], [[c-sealed-classes]]).
 
@@ -389,7 +391,7 @@ class MyAction : Action, AnotherInterface {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия sealed-классов от подхода в Java?
 - Когда вы бы использовали sealed-классы на практике?
@@ -409,7 +411,7 @@ class MyAction : Action, AnotherInterface {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-heap-pollution-generics--kotlin--hard]]
 - [[q-kotlin-safe-cast--programming-languages--easy]]

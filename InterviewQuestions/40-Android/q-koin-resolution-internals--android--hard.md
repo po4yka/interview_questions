@@ -1,36 +1,29 @@
 ---
 id: android-611
 title: Koin Resolution Internals / Внутренние механизмы Koin
-aliases:
-- Koin Resolution Internals
-- Внутренние механизмы Koin
-- Koin Instance Resolution
+aliases: [Koin Instance Resolution, Koin Resolution Internals, Внутренние механизмы Koin]
 topic: android
 subtopics:
-- di-koin
-- architecture-clean
+  - architecture-clean
+  - di-koin
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-dependency-injection
-- q-koin-fundamentals--android--medium
-- q-koin-scope-management--android--medium
-- q-koin-testing-strategies--android--medium
-- q-koin-vs-hilt-comparison--android--medium
+  - c-dependency-injection
+  - q-koin-fundamentals--android--medium
+  - q-koin-scope-management--android--medium
+  - q-koin-testing-strategies--android--medium
+  - q-koin-vs-dagger-philosophy--android--hard
+  - q-koin-vs-hilt-comparison--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/di-koin
-- android/architecture-clean
-- dependency-injection
-- koin
-- difficulty/hard
+tags: [android/architecture-clean, android/di-koin, dependency-injection, difficulty/hard, koin]
 sources:
 - url: https://insert-koin.io/docs/reference/koin-core/architecture
   note: Официальный обзор архитектуры Koin
@@ -39,6 +32,8 @@ sources:
 - url: https://blog.insert-koin.io/posts/koin-3-4-deep-dive/
   note: Deep dive по разрешению зависимостей в Koin 3.x
 
+date created: Wednesday, November 5th 2025, 11:24:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -53,7 +48,7 @@ sources:
 
 Koin — это runtime `Service Locator`/DI-контейнер. DSL `module { single { ... } }` разворачивается в `BeanDefinition`, которые регистрируются через модули и становятся доступны для поиска через внутренние реестры (`BeanRegistry`, `ScopeRegistry`). При каждом вызове `get()` фреймворк запускает **pipeline разрешения**, комбинируя `DefinitionResolver`, `ScopeRegistry` и `InstanceContext` (часть внутреннего API).
 
-### 1. От DSL к BeanDefinition
+### 1. От DSL К BeanDefinition
 
 ```kotlin
 val presentationModule = module {
@@ -70,7 +65,7 @@ val presentationModule = module {
    - `options` (`createdAtStart`, `override`, `secondaryTypes`)
 3. При `startKoin` модули регистрируются внутри Koin, а определения попадают в структуры поиска (`BeanRegistry` и связанные индексы), где строятся отображения из ключа `(KClass, Qualifier)` в `BeanDefinition`.
 
-### 2. Pipeline разрешения
+### 2. Pipeline Разрешения
 
 ```text
 InstanceContext(request) ─┐
@@ -93,7 +88,7 @@ BeanRegistry               │
    Детальный порядок обхода инкапсулирован во внутренних методах `DefinitionResolver`/`ScopeRegistry`; стабильного отдельного `ScopeResolver` класса в публичном API нет.
 4. Для найденного `BeanDefinition` вызывается его `InstanceFactory` (через `resolveValue` или аналогичный внутренний метод), который либо берёт значение из кэша, либо создаёт новый экземпляр.
 
-### 3. Стратегия кэширования
+### 3. Стратегия Кэширования
 
 | Kind        | Реализация (core)             | Хранилище                               |
 |------------|-------------------------------|-----------------------------------------|
@@ -107,7 +102,7 @@ BeanRegistry               │
 - При `close()` scope очищает свой map и уведомляет Koin/`ScopeCallback` об удалении экземпляров.
 - Для ViewModel используются отдельные фабрики/интеграция (артефакт `koin-androidx-viewmodel` и др.), которые опираются на Koin scopes и Android `ViewModelStore`, но не являются просто обычным `ScopedInstanceFactory`.
 
-### 4. Параметры и secondary types
+### 4. Параметры И Secondary Types
 
 - `ParametersHolder` инкапсулирует runtime-аргументы и передаётся до `definition`:
 
@@ -126,17 +121,17 @@ singleOf(::SqlUserRepository) {
 
 `BeanDefinition.secondaryTypes` добавляет дополнительные ключи в реестры поиска, поэтому `get<AnalyticsSource>()` или `get<UserRepository>()` попадут в один и тот же инстанс.
 
-### 5. Внутренняя защита от циклов
+### 5. Внутренняя Защита От Циклов
 
 Koin не строит compile-time граф; всё разрешение — runtime. Для защиты от циклических зависимостей используется внутреннее отслеживание цепочки разрешений (стек/трекер активных ключей + глубина). Если при разрешении повторно встречается тот же ключ в текущей цепочке, выбрасывается `CyclicDependencyException`. Конкретные имена внутренних структур могут отличаться между версиями, поэтому важно опираться на концепцию, а не на конкретный класс.
 
-### 6. Отложенный старт и eager singletons
+### 6. Отложенный Старт И Eager Singletons
 
 - `createdAtStart = true` → Koin собирает список таких definitions и создаёт их при `startKoin`.
 - Остальные singletons создаются лениво при первом `get()`.
 - Это полезно для инфраструктурных сервисов (логгер, crash reporter), но увеличивает время старта, поэтому использовать нужно осознанно.
 
-### 7. ScopeRegistry и жизненный цикл
+### 7. ScopeRegistry И Жизненный Цикл
 
 ```kotlin
 val featureScope = koin.createScope<FeatureState>("feature_scope", named("feature"))
@@ -178,7 +173,7 @@ val presentationModule = module {
   - `options` (`createdAtStart`, `override`, `secondaryTypes`)
 - During `startKoin`, modules are registered into Koin, and their definitions are indexed inside the lookup structures (`BeanRegistry` and related maps) from `(KClass, Qualifier)` to `BeanDefinition`.
 
-### 2. Resolution pipeline
+### 2. Resolution Pipeline
 
 ```text
 InstanceContext(request) ─┐
@@ -201,14 +196,14 @@ BeanRegistry               │
    The concrete traversal order is encapsulated in internal `DefinitionResolver`/`ScopeRegistry` logic; there is no dedicated stable `ScopeResolver` class in the public API.
 4. For the selected `BeanDefinition`, the corresponding `InstanceFactory` is invoked (via `resolveValue` or a similar internal call) to either reuse a cached instance or create a new one.
 
-### 3. Caching strategy
+### 3. Caching Strategy
 
 - `SingleInstanceFactory` uses an `InstanceHolder` with lazy initialization plus synchronized access (`KoinPlatformTools.synchronized` / double-checked locking) to ensure a single instance.
 - `FactoryInstanceFactory` never caches; it always creates a fresh instance.
 - `ScopedInstanceFactory` stores instances in `Scope.instances`, keyed by definition id and bound to that scope's lifecycle.
 - ViewModels are exposed via dedicated ViewModel definitions/factories on Android (`koin-androidx-viewmodel` / `koin-androidx-compose` etc.). They leverage Koin scopes and integrate with the Android `ViewModelStore` but are not just plain generic `ScopedInstanceFactory` entries.
 
-### 4. Parameters and secondary types
+### 4. Parameters and Secondary Types
 
 - `ParametersHolder` carries runtime parameters and passes them down to the definition lambda:
 
@@ -227,24 +222,24 @@ singleOf(::SqlUserRepository) {
 
 `BeanDefinition.secondaryTypes` adds additional keys into the lookup registries, so `get<AnalyticsSource>()` or `get<UserRepository>()` resolve to the same instance.
 
-### 5. Cycle detection
+### 5. Cycle Detection
 
 - Koin handles dependency graphs at runtime only. Cycle detection is implemented using an internal tracking of the active resolution chain (e.g., a stack of keys plus depth counters). If the same key appears again in the current chain, Koin throws a `CyclicDependencyException`. Specific internal class names are not stable and should not be relied upon.
 
-### 6. Eager vs lazy singletons
+### 6. Eager Vs Lazy Singletons
 
 - Definitions with `createdAtStart = true` are instantiated during `startKoin`.
 - All other singles are instantiated lazily on first `get()`.
 - This is useful for infrastructure services that must be ready early, but it increases startup time and should be used deliberately.
 
-### 7. ScopeRegistry lifecycle
+### 7. ScopeRegistry Lifecycle
 
 - `ScopeRegistry` keeps a `scopeId → Scope` map.
 - `createScope` uses `ScopeDefinition` declared in modules (`module { scope(named("feature")) { ... } }`).
 - Each `Scope` holds resolution helpers and its instance cache. `Scope.close()` clears its cached instances and notifies registered `ScopeCallback`s.
 - Linked scopes (`scope.linkTo(parentScope)`) add ids into `Scope.links`, extending the search space during resolution.
 
-### 8. Concurrency guarantees
+### 8. Concurrency Guarantees
 
 - `InstanceHolder` uses platform-specific locking via `KoinPlatformTools` to make singleton initialization thread-safe.
 - Scope creation and closing are managed in a thread-safe manner within `ScopeRegistry`.
@@ -252,7 +247,7 @@ singleOf(::SqlUserRepository) {
 
 ---
 
-## Дополнительные вопросы
+## Дополнительные Вопросы
 - Как Koin реализует `qualifier` в multiplatform окружении?
 - Какая стратегия у Koin при работе с coroutine scopes внутри `Definition`?
 - Как оптимизировать разрешение Koin при больших графах (например, через `module { includes(...) }`)?

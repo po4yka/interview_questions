@@ -1,37 +1,31 @@
 ---
 id: android-491
 title: Тестирование ViewModel с Turbine / Testing ViewModels with Turbine
-aliases:
-- Testing ViewModels
-- Turbine
-- Turbine Library
-- 2535414238403e32303d3835 ViewModels
+aliases: [2535414238403e32303d3835 ViewModels, Testing ViewModels, Turbine, Turbine Library]
 topic: android
 subtopics:
-- coroutines
-- testing-unit
+  - coroutines
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-flow
-- q-android-testing-strategies--android--medium
+  - c-flow
+  - q-accessibility-testing--android--medium
+  - q-android-testing-strategies--android--medium
+  - q-flow-testing-turbine--android--medium
+  - q-integration-testing-strategies--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/coroutines
-- android/testing-unit
-- coroutines
-- difficulty/medium
-- flow
-- testing
-- turbine
+tags: [android/coroutines, android/testing-unit, coroutines, difficulty/medium, flow, testing, turbine]
 
+date created: Saturday, November 1st 2025, 1:24:35 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -306,7 +300,7 @@ Benefits:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как тестировать несколько `Flow` одновременно с помощью Turbine?
 - В чём разница между `awaitItem()` и `expectMostRecentItem()`?
@@ -332,7 +326,7 @@ Benefits:
 - https://github.com/cashapp/turbine
 - https://developer.android.com/kotlin/flow/test
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-viewmodel-pattern--android--easy]]

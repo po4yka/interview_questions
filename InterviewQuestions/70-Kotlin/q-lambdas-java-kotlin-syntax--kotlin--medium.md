@@ -3,18 +3,21 @@ id: kotlin-139
 title: "Lambdas Java Kotlin Syntax / Синтаксис лямбд Java и Kotlin"
 aliases: [Functional Programming, Lambda Syntax, Lambdas]
 topic: kotlin
-subtopics: [lambdas, syntax, functions]
+subtopics: [functions, lambdas, syntax]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-concepts--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-concepts--kotlin--medium, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, functional-programming, java, kotlin, lambdas, syntax]
+date created: Friday, October 31st 2025, 6:28:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?
 
@@ -23,7 +26,7 @@ tags: [difficulty/medium, functional-programming, java, kotlin, lambdas, syntax]
 
 ## Ответ (RU)
 
-### Лямбды в Java
+### Лямбды В Java
 
 В Java лямбды — это синтаксический сахар для реализации функциональных интерфейсов (интерфейсов с одним абстрактным методом, SAM). Записываются как `(параметры) -> выражение` или `(параметры) -> { операторы }`. На уровне спецификации они не объявляют анонимный класс напрямую, а компилируются через `invokedynamic`, но логически заменяют анонимные классы, реализующие функциональный интерфейс. Это также значит, что у лямбд иные семантики идентичности и сериализации по сравнению с анонимными классами.
 
@@ -45,7 +48,7 @@ list.stream()
     .collect(Collectors.toList());
 ```
 
-### Лямбды в Kotlin
+### Лямбды В Kotlin
 
 В Kotlin лямбды — это функциональные литералы: выражения вида `{ параметры -> тело }`, значения типов функций, которые можно передавать как аргументы, возвращать из функций и сохранять в переменные. Kotlin поддерживает нативные типы функций (без обязательных интерфейсов), мощный вывод типов, trailing-lambda-синтаксис и неявный параметр `it` для лямбд с одним параметром.
 
@@ -62,7 +65,7 @@ list.filter { it > 0 }
     .map { it * 2 }
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 
 - Синтаксис:
   - Java: `(a, b) -> expr` или `(a, b) -> { ... }`.
@@ -143,7 +146,7 @@ Key differences:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия между синтаксисом и семантикой лямбд в Java и Kotlin?
 - Когда на практике использовать лямбды в Kotlin по сравнению с Java?
@@ -165,7 +168,7 @@ Key differences:
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-advanced-coroutine-patterns--kotlin--hard]]
 

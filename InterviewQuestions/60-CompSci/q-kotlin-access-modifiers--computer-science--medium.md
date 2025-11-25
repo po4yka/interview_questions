@@ -1,5 +1,5 @@
 ---
-id: cs-014
+id: lang-213
 title: "Kotlin Access Modifiers / Модификаторы доступа Kotlin"
 aliases: []
 topic: kotlin
@@ -14,6 +14,8 @@ related: [c-concepts--kotlin--medium, q-kotlin-intrange--programming-languages--
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/functions]
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -220,7 +222,7 @@ internal fun internalFunction() {}  // Visible in the same module
 - Use `public` only for stable, external APIs.
 - Use `protected` sparingly; prefer composition over inheritance when possible.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-kotlin-intrange--programming-languages--easy]]
 - [[q-suspend-functions-deep-dive--kotlin--medium]]

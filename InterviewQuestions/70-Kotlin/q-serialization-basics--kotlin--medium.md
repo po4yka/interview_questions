@@ -14,6 +14,8 @@ related: [c-kotlin, q-kotlin-delegation--programming-languages--easy, q-kotlin-e
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-formats, difficulty/medium, json, kotlin, serialization]
+date created: Friday, October 31st 2025, 6:30:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +47,7 @@ dependencies {
 }
 ```
 
-### Базовое использование
+### Базовое Использование
 ```kotlin
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -66,7 +68,7 @@ val json = Json.encodeToString(user)
 val user2 = Json.decodeFromString<User>(json)
 ```
 
-### Кастомные сериализаторы
+### Кастомные Сериализаторы
 ```kotlin
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -188,7 +190,7 @@ val json = Json {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от механизмов сериализации в Java?
 - Когда вы бы использовали этот подход на практике?
@@ -208,7 +210,7 @@ val json = Json {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-delegation--programming-languages--easy]]
 - [[q-suspend-cancellable-coroutine--kotlin--hard]]

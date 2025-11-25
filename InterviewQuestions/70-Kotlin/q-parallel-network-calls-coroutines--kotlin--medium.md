@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-kotlin-coroutines-introduction--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-11-09
 
 tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, performance]
+date created: Saturday, November 1st 2025, 9:25:31 am
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Как выполнить несколько сетевых запросов параллельно с помощью Kotlin корутин?
 
@@ -40,7 +43,7 @@ tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, perfo
 
 Выполнение параллельных сетевых запросов — распространенное требование в Android-приложениях для улучшения производительности и сокращения времени загрузки. Kotlin coroutines позволяют элегантно выполнять такие запросы конкурентно (обычно на `Dispatchers.IO`).
 
-### 1. Использование `async` и `await`
+### 1. Использование `async` И `await`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -92,7 +95,7 @@ class UserViewModel @Inject constructor(
 }
 ```
 
-### 2. Обработка частичных ошибок
+### 2. Обработка Частичных Ошибок
 
 Для независимых запросов важно не "ронять" весь экран из-за одного сбоя. Можно оборачивать каждый `async` в `runCatching` или использовать `try-catch`.
 
@@ -146,7 +149,7 @@ suspend fun fetchUserDataWithErrorHandling(userId: String): UserScreenData = cor
 }
 ```
 
-### 3. Использование `awaitAll` для коллекций
+### 3. Использование `awaitAll` Для Коллекций
 
 ```kotlin
 suspend fun fetchMultipleUsers(userIds: List<String>): List<User> = coroutineScope {
@@ -164,7 +167,7 @@ suspend fun fetchMultipleUsersSafely(userIds: List<String>): List<User> = corout
 }
 ```
 
-### 4. Использование `supervisorScope` для независимых сбоев
+### 4. Использование `supervisorScope` Для Независимых Сбоев
 
 Когда сбой одного запроса не должен отменять остальные:
 
@@ -205,7 +208,7 @@ suspend fun fetchDashboardData(): DashboardData = supervisorScope {
 }
 ```
 
-### 5. Паттерн гонки (Race) — первый успешный результат
+### 5. Паттерн Гонки (Race) — Первый Успешный Результат
 
 Получение первого успешного результата из нескольких источников, с отменой остальных:
 
@@ -236,7 +239,7 @@ suspend fun <T> raceForFirst(
 }
 ```
 
-### 6. Ограничение параллельных запросов (throttling)
+### 6. Ограничение Параллельных Запросов (throttling)
 
 Ограничиваем количество одновременных запросов, чтобы не перегружать сервер:
 
@@ -267,7 +270,7 @@ suspend fun fetchManyItems(itemIds: List<String>): List<Item> = coroutineScope {
 }
 ```
 
-### 7. Пакетная (chunked) параллельная обработка
+### 7. Пакетная (chunked) Параллельная Обработка
 
 ```kotlin
 suspend fun fetchInBatches(
@@ -307,7 +310,7 @@ suspend fun fetchWithProgress(
 }
 ```
 
-### 8. Комбинирование результатов с помощью `Flow`
+### 8. Комбинирование Результатов С Помощью `Flow`
 
 Будьте осторожны, чтобы не блокироваться на неудачных запросах; ошибки обрабатываем внутри корутины.
 
@@ -329,7 +332,7 @@ fun fetchUsersFlow(userIds: List<String>): Flow<User> = channelFlow {
 }
 ```
 
-### 9. Реальный пример: экран деталей продукта
+### 9. Реальный Пример: Экран Деталей Продукта
 
 ```kotlin
 class ProductRepository @Inject constructor(
@@ -360,7 +363,7 @@ class ProductRepository @Inject constructor(
 }
 ```
 
-### 10. Лучшие практики
+### 10. Лучшие Практики
 
 #### - ДЕЛАЙТЕ:
 
@@ -414,7 +417,7 @@ suspend fun bad3() = coroutineScope {
 }
 ```
 
-### 11. Сравнение производительности (упрощенно)
+### 11. Сравнение Производительности (упрощенно)
 
 ```kotlin
 // Последовательный (медленный)
@@ -859,7 +862,7 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java без корутин?
 - Когда на практике стоит использовать параллельные запросы, а когда лучше последовательные?
@@ -885,15 +888,15 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [async Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] — Введение в корутины
 - [[q-deferred-async-patterns--kotlin--medium]] — Паттерны async/deferred
 - [[q-coroutine-context-explained--kotlin--medium]] — Контекст корутины
 - [[q-coroutine-builders-comparison--kotlin--medium]] — Сравнение билдров корутин
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-flow-testing-advanced--kotlin--hard]] — Тестирование `Flow`
 
 ### Хаб

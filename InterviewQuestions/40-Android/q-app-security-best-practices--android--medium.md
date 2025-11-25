@@ -1,7 +1,7 @@
 ---
 id: android-277
 title: App Security Best Practices / 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f
-aliases: [App Security Best Practices, 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f]
+aliases: [1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f, App Security Best Practices]
 topic: android
 subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
 
+date created: Saturday, November 1st 2025, 1:03:47 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

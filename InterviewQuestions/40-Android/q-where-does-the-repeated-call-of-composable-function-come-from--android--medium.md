@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, jetpack-compose, recomposition]
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, jetpack
 
 Повторный вызов composable функции происходит из механизма **рекомпозиции (recomposition)**. Compose автоматически отслеживает чтение состояния внутри composable во время композиции и при изменении этого состояния помечает соответствующие участки дерева композиции как "невалидные", планируя их повторное выполнение.
 
-### Механизм рекомпозиции
+### Механизм Рекомпозиции
 
 ```kotlin
 @Composable
@@ -53,7 +55,7 @@ fun Counter() {
 3. Compose планирует рекомпозицию (обычно к следующему кадру).
 4. Соответствующая часть UI выполняется заново; Compose старается переиспользовать неизменившиеся элементы и минимизировать объём работы.
 
-### Источники рекомпозиции
+### Источники Рекомпозиции
 
 ```kotlin
 @Composable
@@ -77,7 +79,7 @@ fun TriggerSources(viewModel: MyViewModel) {
 }
 ```
 
-### Область рекомпозиции (Recomposition Scope)
+### Область Рекомпозиции (Recomposition Scope)
 
 Compose минимизирует рекомпозицию — повторно выполняются только те composable или их части, которые зависят от изменившегося состояния в их области композиции.
 
@@ -215,7 +217,7 @@ See also: [[c-compose-recomposition]]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Compose определяет, какие composable нужно рекомпозировать (механизм "умной" рекомпозиции)?
 - В чем разница между `remember` и `rememberSaveable`?
@@ -243,7 +245,7 @@ See also: [[c-compose-recomposition]]
 - [State and Recomposition](https://developer.android.com/jetpack/compose/state)
 - [Performance Best Practices](https://developer.android.com/jetpack/compose/performance)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Базовые принципы Compose

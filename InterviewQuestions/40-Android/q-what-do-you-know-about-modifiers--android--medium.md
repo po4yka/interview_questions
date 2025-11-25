@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-compose-state, q-compose-modifier-system--android--medium]
+related: [c-compose-state, c-jetpack-compose, q-compose-modifier-system--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/ui-compose, android/ui-state, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:25:39 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -441,7 +443,7 @@ fun Modifier.shimmer(): Modifier = composed {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем отличие `Modifier.composed` от обычных extension-функций?
 - Каково влияние глубокой цепочки модификаторов на производительность?
@@ -471,7 +473,7 @@ fun Modifier.shimmer(): Modifier = composed {
 - [Compose Modifiers Official Docs](https://developer.android.com/jetpack/compose/modifiers)
 - [Compose API Guidelines](https://github.com/androidx/androidx/blob/androidx-main/compose/docs/compose-api-guidelines.md)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные
 - [[q-android-jetpack-overview--android--easy]]

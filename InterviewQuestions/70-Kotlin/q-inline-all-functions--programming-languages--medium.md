@@ -14,6 +14,8 @@ related: [c-kotlin-features, c-performance, q-java-access-modifiers--programming
 created: 2025-10-15
 updated: 2025-11-09
 tags: [compiler-optimization, difficulty/medium, inline, inline-functions, kotlin, performance]
+date created: Friday, October 31st 2025, 6:31:48 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -78,7 +80,7 @@ Conclusion: making "everything inline" at the compiler level is neither possible
 
 ---
 
-## Последующие вопросы (RU)
+## Последующие Вопросы (RU)
 
 - В чем ключевые отличия этого поведения от Java?
 - Когда вы бы использовали это на практике?

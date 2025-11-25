@@ -4,23 +4,28 @@ title: Can a Service Communicate With the User / Может ли сервис о
 aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
 topic: android
 subtopics:
-- service
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-service-types--android--easy
-- q-background-vs-foreground-service--android--medium
+  - q-android-service-types--android--easy
+  - q-background-vs-foreground-service--android--medium
+  - q-foreground-service-types--android--medium
+  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/service, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +47,7 @@ tags: [android/service, difficulty/medium]
 3. **Broadcast/`LiveData`/`Flow`** — сервис отправляет событие → UI-слой реагирует
 4. **Запуск `Activity`** — только для критичных и явно user-initiated сценариев
 
-### Foreground `Service` с уведомлением
+### Foreground `Service` С Уведомлением
 
 ```kotlin
 class MusicService : Service() {
@@ -65,7 +70,7 @@ class MusicService : Service() {
 }
 ```
 
-### Bound `Service` с callbacks
+### Bound `Service` С Callbacks
 
 ```kotlin
 // Service
@@ -118,7 +123,7 @@ class MainActivity : AppCompatActivity(), DataListener {
 }
 ```
 
-### Broadcast (`LocalBroadcastManager` устарел → `Flow`/`LiveData`)
+### Broadcast (`LocalBroadcastManager` Устарел → `Flow`/`LiveData`)
 
 ```kotlin
 // ❌ Legacy: LocalBroadcastManager.getInstance(this).sendBroadcast(...)
@@ -269,7 +274,7 @@ lifecycleScope.launch {
 - UI updates only in the UI layer and on the main thread, even if data comes from a service
 - Always release resources (callbacks/bindings/observers) when the owner is destroyed or no longer visible (e.g., in `onStop()`/`onDestroy()` for an `Activity`)
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В каких случаях задача должна быть переведена в foreground service?
 2. Как безопасно реализовать действия уведомления (Play/Pause/Stop) с использованием `PendingIntent`?
@@ -295,13 +300,13 @@ lifecycleScope.launch {
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/develop/background-work/services/foreground-services
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - [[q-android-service-types--android--easy]] — обзор типов `Service`
 - Базовый жизненный цикл `Service`
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-background-vs-foreground-service--android--medium]] — foreground vs background services
 - Когда использовать `WorkManager` вместо `Service`
 

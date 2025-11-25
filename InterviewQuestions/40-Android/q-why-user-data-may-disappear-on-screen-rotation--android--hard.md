@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/activity, android/architecture-mvvm, android/lifecycle, configuration-change, difficulty/hard, state-preservation]
 
+date created: Saturday, November 1st 2025, 1:26:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -357,7 +359,7 @@ This helps persist important UI state across configuration changes and simplifie
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем практическая разница между использованием `onSaveInstanceState()` и `ViewModel` для сохранения состояния в реальных проектах?
 2. Как `SavedStateHandle` ведет себя при смерти процесса по сравнению с обычными полями `ViewModel`?
@@ -387,7 +389,7 @@ This helps persist important UI state across configuration changes and simplifie
 - https://developer.android.com/guide/components/activities/activity-lifecycle
 - https://developer.android.com/topic/libraries/architecture/viewmodel-savedstate
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-activity-lifecycle-methods--android--medium]] — основы жизненного цикла `Activity`

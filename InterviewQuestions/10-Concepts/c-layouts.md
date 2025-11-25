@@ -1,16 +1,15 @@
 ---
 id: concept-layouts
 title: Android Layouts / Макеты Android
-aliases:
-  - Android Layouts
-  - Макеты Android
-  - View Layouts
+aliases: [Android Layouts, View Layouts, Макеты Android]
 kind: concept
 summary: Layout systems for arranging UI elements in Android applications
 links: []
 created: 2025-11-06
 updated: 2025-11-06
-tags: [concept, android, layouts, ui]
+tags: [android, concept, layouts, ui]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

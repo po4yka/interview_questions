@@ -1,37 +1,35 @@
 ---
 id: android-029
 title: remember vs rememberSaveable in Compose / remember vs rememberSaveable в Compose
-aliases:
-- remember vs rememberSaveable in Compose
-- remember vs rememberSaveable в Compose
+aliases: [remember vs rememberSaveable in Compose, remember vs rememberSaveable в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- q-how-animations-work-in-recyclerview--android--medium
-- q-transaction-too-large-exception--android--medium
+  - c-compose-state
+  - q-compose-core-components--android--medium
+  - q-compose-remember-derived-state--android--medium
+  - q-how-animations-work-in-recyclerview--android--medium
+  - q-remember-vs-remembersaveable-compose--android--medium
+  - q-transaction-too-large-exception--android--medium
 created: 2025-10-06
 updated: 2025-11-11
-tags:
-- android/ui-compose
-- android/ui-state
-- difficulty/medium
-- en
-- ru
+tags: [android/ui-compose, android/ui-state, difficulty/medium, en, ru]
 
 
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +44,7 @@ tags:
 
 `remember` хранит значение только между рекомпозициями. `rememberSaveable` хранит значение между рекомпозициями и при изменениях конфигурации, используя `Bundle` через `SavedStateRegistry` (что позволяет восстановить состояние после пересоздания процесса при использовании в корректном хосте, например `Activity`/`NavBackStackEntry`).
 
-### remember — Переживает только рекомпозицию
+### Remember — Переживает Только Рекомпозицию
 
 ```kotlin
 @Composable
@@ -62,7 +60,7 @@ fun Counter() {
 // - Теряется при: Изменении конфигурации, пересоздании процесса
 ```
 
-### rememberSaveable — Переживает изменения конфигурации
+### rememberSaveable — Переживает Изменения Конфигурации
 
 ```kotlin
 @Composable
@@ -89,7 +87,7 @@ fun Counter() {
 | Поддерживаемые типы | Любые типы Kotlin (без требований к сериализации) | Типы, поддерживаемые `Bundle`: примитивы, `String`, массивы, `Parcelable`, `Serializable` и др., либо любые типы через `Saver` |
 | Производительность | Без сериализации; обычно дешевле | Возможна (де)сериализация; немного дороже |
 
-### Когда использовать
+### Когда Использовать
 
 Используйте `remember` для:
 - Временного UI-состояния (развернуто/свернуто)
@@ -130,7 +128,7 @@ fun SearchScreen() {
 }
 ```
 
-### Пользовательский Saver для сложных объектов
+### Пользовательский Saver Для Сложных Объектов
 
 ```kotlin
 data class User(val id: String, val name: String)
@@ -160,7 +158,7 @@ fun UserProfile() {
 
 `remember` stores value across recompositions only. `rememberSaveable` stores value across recompositions and configuration changes by saving to a `Bundle` via `SavedStateRegistry` (so it can also be restored after process recreation when used in a proper owner, e.g. `Activity`/`NavBackStackEntry`).
 
-### remember — Survives Recomposition Only
+### Remember — Survives Recomposition Only
 
 ```kotlin
 @Composable

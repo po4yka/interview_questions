@@ -1,42 +1,35 @@
 ---
 id: android-468
 title: Design WhatsApp App / Проектирование приложения WhatsApp
-aliases:
-- Design WhatsApp App
-- Проектирование приложения WhatsApp
+aliases: [Design WhatsApp App, Проектирование приложения WhatsApp]
 topic: android
 subtopics:
-- networking-http
-- service
-- media
+  - media
+  - networking-http
+  - service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-service
-- q-data-sync-unstable-network--android--hard
-- q-database-encryption-android--android--medium
-- q-design-instagram-stories--android--hard
+  - c-service
+  - q-data-sync-unstable-network--android--hard
+  - q-database-encryption-android--android--medium
+  - q-design-instagram-stories--android--hard
+  - q-design-uber-app--android--hard
+  - q-macrobenchmark-startup--android--medium
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-- android/networking-http
-- android/service
-- android/media
-- difficulty/hard
-- messaging
-- networking
-- performance
-- realtime
-- system-design
+tags: [android/media, android/networking-http, android/service, difficulty/hard, messaging, networking, performance, realtime, system-design]
 sources:
-- "https://signal.org/docs/specifications/doubleratchet/"
+  - "https://signal.org/docs/specifications/doubleratchet/"
 
+date created: Saturday, November 1st 2025, 12:46:49 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

@@ -5,7 +5,7 @@ aliases: ["Kotlin Multiplatform - How does it work?", "Kotlin Multiplatform - К
 
 # Classification
 topic: kotlin
-subtopics: [kotlin-multiplatform, kmp]
+subtopics: [kmp, kotlin-multiplatform]
 question_kind: theory
 difficulty: hard
 
@@ -25,7 +25,10 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, native]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Kotlin Multiplatform - Как это работает?
 
@@ -38,7 +41,7 @@ tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, nativ
 
 **Kotlin Multiplatform (KMP)** — это технология, позволяющая использовать общий код на разных платформах (Android, iOS, web, desktop, backend), сохраняя возможность доступа к платформо-специфичным API.
 
-### Основная концепция
+### Основная Концепция
 
 KMP использует механизм **`expect` / `actual`** для определения платформо-агностического API в общих модулях и платформо-специфичных реализаций.
 
@@ -66,7 +69,7 @@ actual class Platform actual constructor() {
 actual fun getPlatform(): Platform = Platform()
 ```
 
-### Архитектура слоев
+### Архитектура Слоев
 
 **1. Общий код (shared code)**
 
@@ -123,7 +126,7 @@ actual class DatabaseDriver {
 }
 ```
 
-### Как это работает внутри
+### Как Это Работает Внутри
 
 **Процесс компиляции (упрощённо):**
 
@@ -143,14 +146,14 @@ Android backend          iOS/Native backend         JS backend
 
 Общий код компилируется в таргеты конкретных платформ: JVM (Android, backend), Kotlin/Native (iOS, desktop native), JS и др.
 
-#### Примеры компиляции под платформы
+#### Примеры Компиляции Под Платформы
 
 - Android: Kotlin → JVM bytecode → DEX
 - iOS: Kotlin → Kotlin/Native → LLVM IR → ARM64/x86_64 → framework/xcframework
 - JS: Kotlin → JavaScript
 - Другие native-таргеты: Kotlin → Kotlin/Native → нативные бинарники
 
-### Структура проекта (концептуально)
+### Структура Проекта (концептуально)
 
 ```
 project/
@@ -178,7 +181,7 @@ project/
     iosApp.xcodeproj
 ```
 
-### Ключевые технологии
+### Ключевые Технологии
 
 - Kotlin/JVM для Android и backend
 - Kotlin/Native для iOS и других native-таргетов
@@ -210,7 +213,7 @@ class ApiClient {
 
 Версии библиотек в примерах условные и могут отличаться от актуальных.
 
-### Конфигурация Gradle (пример, зависит от версии Kotlin)
+### Конфигурация Gradle (пример, Зависит От Версии Kotlin)
 
 ```kotlin
 // shared/build.gradle.kts (упрощённый пример)
@@ -257,7 +260,7 @@ kotlin {
 }
 ```
 
-### Стратегии использования
+### Стратегии Использования
 
 **1. Делиться всем (кроме UI)**
 
@@ -283,7 +286,7 @@ kotlin {
    Общий Data Layer            ← API, DB
 ```
 
-### Интеграция с iOS
+### Интеграция С iOS
 
 **Генерация iOS Framework/XCFramework:**
 
@@ -313,7 +316,7 @@ class ViewController: UIViewController {
 
 Suspend-функции из общего кода при экспорте в Swift доступны через сгенерированные bridge-функции: либо как функции с completion handler, либо как async/await (в зависимости от версии Kotlin/Native и настроек interop). Приведённый пример носит концептуальный характер.
 
-### Обработка платформенных различий
+### Обработка Платформенных Различий
 
 **1. Expect/Actual для платформенных API**
 
@@ -344,7 +347,7 @@ class AppModule {
 
 (Вспомогательные функции вроде `createDatabase` реализуются через expect/actual или предоставляются платформами; пример концептуальный.)
 
-### Модель потоков
+### Модель Потоков
 
 KMP и корутины предоставляют единый API; конкретные диспетчеры реализуются для каждой платформы. В общем коде обычно используют абстракции или инъекцию нужных диспетчеров, чтобы не полагаться на платформо-специфичные детали напрямую.
 
@@ -364,7 +367,7 @@ class DataRepository(
 
 На iOS Kotlin/Native генерирует обёртки, чтобы suspend-функции вызывались из Swift через callbacks или async/await. Нужно уважать правила работы с потоками конкретной платформы и UI-потока.
 
-### Управление памятью
+### Управление Памятью
 
 Kotlin/JVM использует GC; Kotlin/Native использует собственную модель памяти (в новых версиях — новый memory manager). Рекомендации для общего кода:
 
@@ -401,7 +404,7 @@ class ViewModel {
 4. Поддержка библиотек: не все библиотеки имеют KMP-версии
 5. UI: обычно остаётся платформо-специфичным (если не использовать отдельные multiplatform UI-решения)
 
-### Реальный пример: Login Flow (концептуально)
+### Реальный Пример: Login Flow (концептуально)
 
 ```kotlin
 // shared/commonMain

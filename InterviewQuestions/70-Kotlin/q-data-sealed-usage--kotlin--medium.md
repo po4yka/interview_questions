@@ -14,7 +14,10 @@ related: [c-kotlin, c-sealed-classes, q-kotlin-equals-hashcode-purpose--programm
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-classes, difficulty/medium, sealed-classes]
+date created: Friday, October 31st 2025, 6:33:32 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Для чего используются `data` классы и `sealed` классы в Kotlin? Каковы их практические применения?
 
@@ -25,7 +28,7 @@ tags: [data-classes, difficulty/medium, sealed-classes]
 
 ## Ответ (RU)
 
-### `data` классы — для хранения и работы с данными
+### `data` Классы — Для Хранения И Работы С Данными
 
 `data class` используется для хранения и работы с данными. Удобны при:
 - копировании — метод `copy()` для создания изменённых копий;
@@ -41,7 +44,7 @@ tags: [data-classes, difficulty/medium, sealed-classes]
 - configuration-объекты;
 - неизменяемые состояния.
 
-#### Пример: копирование
+#### Пример: Копирование
 ```kotlin
 data class UserResponse(
     val id: Int,
@@ -61,7 +64,7 @@ println(deactivatedUser)    // Изменён только isActive
 println(renamedUser)        // Изменён только username
 ```
 
-#### Пример: логическое сравнение и коллекции
+#### Пример: Логическое Сравнение И Коллекции
 ```kotlin
 data class Point(val x: Int, val y: Int)
 
@@ -85,7 +88,7 @@ val uniqueOrders = setOf(order1, order2)
 println("Уникальных заказов: ${uniqueOrders.size}")  // 1
 ```
 
-#### Пример: сериализация
+#### Пример: Сериализация
 ```kotlin
 @Serializable
 data class Product(
@@ -116,7 +119,7 @@ println("Восстановлено: $restored")
 println("Равны: ${item == restored}")  // true
 ```
 
-### `sealed` классы — для ограниченного набора подтипов
+### `sealed` Классы — Для Ограниченного Набора Подтипов
 
 `sealed class` используется для ограниченного набора подтипов. Удобны при использовании `when`, так как все случаи должны быть обработаны — это повышает безопасность и читаемость.
 
@@ -128,7 +131,7 @@ println("Равны: ${item == restored}")  // true
 - state machine;
 - command-паттерны.
 
-#### Пример: `when` с исчерпывающей обработкой
+#### Пример: `when` С Исчерпывающей Обработкой
 ```kotlin
 sealed class Operation {
     data class Add(val a: Int, val b: Int) : Operation()
@@ -161,7 +164,7 @@ println(calculate(Operation.Divide(10, 5)))    // 2.0
 println(calculate(Operation.Divide(10, 0)))    // NaN
 ```
 
-#### Пример: типобезопасное управление состоянием UI
+#### Пример: Типобезопасное Управление Состоянием UI
 ```kotlin
 // Типобезопасное управление состоянием
 sealed class UiState<out T> {
@@ -274,7 +277,7 @@ fun handleLoginResult(result: ApiResult<UserData>) {
 }
 ```
 
-### Валидация формы
+### Валидация Формы
 
 ```kotlin
 // Data-класс для данных формы
@@ -335,7 +338,7 @@ fun handleValidation(result: ValidationResult) {
 }
 ```
 
-### Краткий ответ
+### Краткий Ответ
 
 `data class` — для хранения и работы с данными:
 - автоматическое копирование (`copy()`);
@@ -360,9 +363,9 @@ Key use cases:
 - `data class`: DTOs, models, API responses, database entities, configuration objects, immutable state;
 - `sealed class`: state management, result types, navigation events, error handling, state machines, command patterns.
 
-### Code examples
+### Code Examples
 
-#### `data class` for data storage
+#### `data class` For Data Storage
 ```kotlin
 // API response model
 data class UserResponse(
@@ -386,7 +389,7 @@ fun demonstrateCopying() {
 }
 ```
 
-#### `data class` for logical comparison
+#### `data class` For Logical Comparison
 ```kotlin
 data class Point(val x: Int, val y: Int)
 
@@ -418,7 +421,7 @@ fun demonstrateComparison() {
 }
 ```
 
-#### `data class` for serialization
+#### `data class` For Serialization
 ```kotlin
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
@@ -454,7 +457,7 @@ fun demonstrateSerialization() {
 }
 ```
 
-### `sealed class` for exhaustive `when`
+### `sealed class` For Exhaustive `when`
 
 ```kotlin
 sealed class Operation {
@@ -482,7 +485,7 @@ fun calculate(operation: Operation): Double {
 }
 ```
 
-### `sealed class` for safety and readability
+### `sealed class` For Safety and Readability
 
 ```kotlin
 // Type-safe state management
@@ -531,7 +534,7 @@ fun render(state: UiState<List<String>>) {
 }
 ```
 
-### Combined example: API client
+### Combined Example: API Client
 
 ```kotlin
 // Data classes for requests/responses
@@ -596,7 +599,7 @@ fun handleLoginResult(result: ApiResult<UserData>) {
 }
 ```
 
-### Real-world form validation
+### Real-world Form Validation
 
 ```kotlin
 // Data class for form data
@@ -659,7 +662,7 @@ fun handleValidation(result: ValidationResult) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия `data` и `sealed` классов от аналогов в Java?
 - В каких практических сценариях вы бы использовали `data` и `sealed` классы?
@@ -681,7 +684,7 @@ fun handleValidation(result: ValidationResult) {
 - Kotlin Documentation: https://kotlinlang.org/docs/home.html
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-extension-functions-advanced--kotlin--hard]]
 - [[q-kotlin-higher-order-functions--kotlin--medium]]

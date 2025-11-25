@@ -13,7 +13,9 @@ moc: moc-kotlin
 related: [c-algorithms, c-computer-science, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-11-11
-tags: [difficulty/easy, programming-languages/inheritance, java, object-class, oop]
+tags: [difficulty/easy, java, object-class, oop, programming-languages/inheritance]
+date created: Saturday, November 1st 2025, 12:43:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -346,7 +348,7 @@ class User {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как эта единая корневая иерархия `Object` сравнивается с языками, где нет единого универсального базового класса?
 - В каких практических ситуациях вы будете переопределять `equals()`, `hashCode()` и `toString()`?

@@ -1,38 +1,34 @@
 ---
 id: android-091
 title: List Optimization / Оптимизация больших списков
-aliases:
-- List Optimization
-- Оптимизация списков
+aliases: [List Optimization, Оптимизация списков]
 topic: android
 subtopics:
-- performance-memory
-- performance-rendering
-- ui-views
+  - performance-memory
+  - performance-rendering
+  - ui-views
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance
-- c-recyclerview
-- q-what-is-diffutil-for--android--medium
-- q-what-is-known-about-recyclerview--android--easy
+  - c-performance
+  - c-recyclerview
+  - q-canvas-drawing-optimization--android--hard
+  - q-dagger-build-time-optimization--android--medium
+  - q-parsing-optimization-android--android--medium
+  - q-what-is-diffutil-for--android--medium
+  - q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-13
 updated: 2025-10-31
-tags:
-- android/performance-memory
-- android/performance-rendering
-- android/ui-views
-- difficulty/hard
-- optimization
-- performance
-- recyclerview
+tags: [android/performance-memory, android/performance-rendering, android/ui-views, difficulty/hard, optimization, performance, recyclerview]
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +43,7 @@ tags:
 
 Оптимизация больших списков в Android-приложениях критична для плавной прокрутки и хорошего пользовательского опыта. Ниже ключевые аспекты (RecyclerView / Views; не Compose):
 
-### 1. Правильное использование ViewHolder в RecyclerView
+### 1. Правильное Использование ViewHolder В RecyclerView
 
 Паттерн ViewHolder важен для переиспользования view и производительности.
 
@@ -89,7 +85,7 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 }
 ```
 
-### 2. Использование DiffUtil для эффективных обновлений
+### 2. Использование DiffUtil Для Эффективных Обновлений
 
 DiffUtil вычисляет минимальный набор изменений при обновлении данных и позволяет избежать `notifyDataSetChanged()`. Сам `DiffUtil.calculateDiff` — синхронный; для больших списков использовать `ListAdapter` / `AsyncListDiffer`, которые запускают diff в фоне.
 
@@ -166,7 +162,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallba
 adapter.submitList(newItems)
 ```
 
-### 3. Оптимизация загрузки изображений
+### 3. Оптимизация Загрузки Изображений
 
 Использовать библиотеки (Glide, Coil, Picasso) с правильной конфигурацией: кэширование, downsampling, отмена запросов при рециклинге.
 
@@ -211,7 +207,7 @@ imageView.load(item.imageUrl) {
 }
 ```
 
-### 4. Реализация пагинации
+### 4. Реализация Пагинации
 
 Загружайте данные порциями, а не весь список сразу.
 
@@ -319,7 +315,7 @@ class ItemPagingAdapter : PagingDataAdapter<Item, ItemPagingAdapter.ViewHolder>(
 }
 ```
 
-### 5. Избегать тяжелых операций в onBindViewHolder
+### 5. Избегать Тяжелых Операций В onBindViewHolder
 
 `onBindViewHolder()` должен быть максимально легким.
 
@@ -352,7 +348,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### 6. Оптимизация конфигурации RecyclerView
+### 6. Оптимизация Конфигурации RecyclerView
 
 ```kotlin
 recyclerView.apply {
@@ -377,7 +373,7 @@ recyclerView.apply {
 }
 ```
 
-### 7. Оптимизация сложности layout
+### 7. Оптимизация Сложности Layout
 
 ```xml
 <!-- ПЛОХО - глубокая иерархия view -->
@@ -446,7 +442,7 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewBindingVi
 }
 ```
 
-### 9. Реализация предварительной загрузки элементов
+### 9. Реализация Предварительной Загрузки Элементов
 
 ```kotlin
 class PrefetchingLayoutManager(context: Context) : LinearLayoutManager(context) {
@@ -460,7 +456,7 @@ class PrefetchingLayoutManager(context: Context) : LinearLayoutManager(context) 
 recyclerView.layoutManager = PrefetchingLayoutManager(context)
 ```
 
-### 10. Мониторинг производительности
+### 10. Мониторинг Производительности
 
 ```kotlin
 // Включить StrictMode в debug-сборках для отслеживания обращения к диску/сети на главном потоке

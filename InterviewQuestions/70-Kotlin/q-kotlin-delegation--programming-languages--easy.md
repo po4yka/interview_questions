@@ -3,7 +3,7 @@ id: lang-005
 title: "Kotlin Delegation / Делегирование в Kotlin"
 aliases: ["Kotlin Delegation", "Делегирование в Kotlin"]
 topic: kotlin
-subtopics: [c-kotlin, c-kotlin-features, c-kotlin-coroutines-basics]
+subtopics: [c-kotlin, c-kotlin-coroutines-basics, c-kotlin-features]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -14,7 +14,10 @@ related: [c-kotlin, c-kotlin-features, q-kotlin-delegation-detailed--kotlin--med
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy]
+date created: Saturday, November 1st 2025, 12:42:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что известно о делегировании?
 
@@ -63,7 +66,7 @@ See also: [[c-kotlin]], [[c-kotlin-features]]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия делегирования в Kotlin и Java?
 - Когда вы бы использовали делегирование на практике?
@@ -83,12 +86,12 @@ See also: [[c-kotlin]], [[c-kotlin-features]]
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Реализации в Android
+### Реализации В Android
 - [[q-recyclerview-viewtypes-delegation--android--medium]] - Паттерны проектирования
 
-### Возможности языка Kotlin
+### Возможности Языка Kotlin
 - [[q-delegation-by-keyword--kotlin--medium]] - Паттерны проектирования
 - [[q-kotlin-singleton-creation--programming-languages--easy]] - Паттерны проектирования
 - [[q-deferred-async-patterns--kotlin--medium]] - Паттерны проектирования

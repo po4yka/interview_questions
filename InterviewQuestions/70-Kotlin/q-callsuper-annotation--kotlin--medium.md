@@ -14,7 +14,10 @@ related: [c-kotlin-features, q-annotation-processing--android--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [android, annotations, best-practices, difficulty/medium, kotlin, lifecycle]
+date created: Saturday, November 1st 2025, 1:27:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Что такое аннотация `@CallSuper` и когда её следует использовать?
 
@@ -225,7 +228,7 @@ class UserViewModel : BaseViewModel() {
 
 ### Практические Примеры
 
-#### Пример 1: RecyclerView Adapter с `@CallSuper`
+#### Пример 1: RecyclerView Adapter С `@CallSuper`
 
 ```kotlin
 abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> :
@@ -314,7 +317,7 @@ class UserAdapter : BaseAdapter<User, UserAdapter.UserViewHolder>() {
 data class User(val id: Int, val name: String)
 ```
 
-#### Пример 2: Custom `View` c `@CallSuper`
+#### Пример 2: Custom `View` C `@CallSuper`
 
 ```kotlin
 abstract class BaseCustomView @JvmOverloads constructor(
@@ -381,7 +384,7 @@ class CircleView @JvmOverloads constructor(
 }
 ```
 
-#### Пример 3: Repository Pattern c `@CallSuper`
+#### Пример 3: Repository Pattern C `@CallSuper`
 
 ```kotlin
 abstract class BaseRepository {
@@ -456,7 +459,7 @@ class UserRepository : BaseRepository() {
 }
 ```
 
-### `@CallSuper` vs `override`
+### `@CallSuper` Vs `override`
 
 ```kotlin
 // `override` (в Kotlin) - проверяет, что метод переопределён.
@@ -562,7 +565,7 @@ class ConcreteActivity : Level2Activity() {
 // Concrete: onCreate
 ```
 
-#### 2. Интерфейсы с default-методами (Java 8+)
+#### 2. Интерфейсы С Default-методами (Java 8+)
 
 ```kotlin
 // Интерфейс с default методом
@@ -605,7 +608,7 @@ class ProperTrackedActivity : AppCompatActivity(), Trackable {
 }
 ```
 
-#### 3. Композиция компонентов с `@CallSuper`
+#### 3. Композиция Компонентов С `@CallSuper`
 
 ```kotlin
 abstract class BasePresenter<V : BaseView> {
@@ -1266,7 +1269,7 @@ class UserRepository : BaseRepository() {
 }
 ```
 
-### `@CallSuper` vs `override`
+### `@CallSuper` Vs `override`
 
 ```kotlin
 // `override` ensures the method actually overrides something.
@@ -1622,7 +1625,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между `@CallSuper` и обычным `override`?
 - Когда практично использовать `@CallSuper` в Android-проектах?

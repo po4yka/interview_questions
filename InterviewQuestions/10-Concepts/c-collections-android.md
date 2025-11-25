@@ -14,7 +14,9 @@ moc: "moc-android"
 related: []
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "concept", "difficulty/medium", "auto-generated"]
+tags: ["android", "auto-generated", "concept", "difficulty/medium"]
+date created: Monday, November 10th 2025, 8:37:43 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

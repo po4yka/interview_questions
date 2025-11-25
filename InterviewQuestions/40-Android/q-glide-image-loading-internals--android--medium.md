@@ -1,38 +1,35 @@
 ---
 id: android-034
 title: How do image loading libraries like Glide work internally? / Как работают библиотеки загрузки изображений вроде Glide?
-aliases:
-- How do image loading libraries like Glide work internally?
-- Как работают библиотеки загрузки изображений вроде Glide?
+aliases: [How do image loading libraries like Glide work internally?, Как работают библиотеки загрузки изображений вроде Glide?]
 topic: android
 subtopics:
-- cache-offline
-- files-media
-- performance-memory
+  - cache-offline
+  - files-media
+  - performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- c-database-design
-- c-scoped-storage-security
+  - c-database-design
+  - c-memory-management
+  - c-scoped-storage-security
+  - q-architecture-components-libraries--android--easy
+  - q-how-animations-work-in-recyclerview--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
 created: 2025-10-06
 updated: 2025-11-10
-tags:
-- android/cache-offline
-- android/files-media
-- android/performance-memory
-- difficulty/medium
-- en
-- ru
+tags: [android/cache-offline, android/files-media, android/performance-memory, difficulty/medium, en, ru]
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +44,7 @@ tags:
 
 Библиотеки загрузки изображений, такие как Glide, Fresco и Coil, решают сложные задачи эффективной загрузки, кэширования и отображения изображений в Android-приложениях. Ниже приведён упрощённый (концептуальный) обзор архитектуры Glide-подобных библиотек. Это НЕ точный исходный код Glide.
 
-### 1. Основные компоненты Glide-подобных библиотек
+### 1. Основные Компоненты Glide-подобных Библиотек
 
 ```kotlin
 // Высокоуровневый (упрощённый) обзор архитектуры Glide-подобной библиотеки
@@ -74,7 +71,7 @@ tags:
 - RequestManager: привязка запросов к жизненному циклу `Activity`/`Fragment`/`View`.
 - Engine: координация поиска в кэше, декодирования, трансформаций и доставки результата.
 
-### 2. Pipeline загрузки (упрощённый)
+### 2. Pipeline Загрузки (упрощённый)
 
 ```kotlin
 // Сильно упрощённый, концептуальный пример потока загрузки (не production-ready)
@@ -151,7 +148,7 @@ class MemoryCache(maxSizeKb: Int) {
 
 На практике `maxSizeKb` часто выбирают как долю от `Runtime.getRuntime().maxMemory()` (например, около 1/8 под кэш изображений).
 
-### 4. Управление жизненным циклом запросов
+### 4. Управление Жизненным Циклом Запросов
 
 ```kotlin
 class RequestManager(private val lifecycle: Lifecycle) {
@@ -197,7 +194,7 @@ class RequestManager(private val lifecycle: Lifecycle) {
 
 Glide интегрируется с жизненным циклом `FragmentActivity`, `Fragment`, `View`, автоматически приостанавливает/отменяет запросы и уменьшает утечки памяти и бесполезную работу.
 
-### 5. Трансформации изображений
+### 5. Трансформации Изображений
 
 ```kotlin
 interface Transformation {
@@ -226,7 +223,7 @@ class CenterCropTransformation : Transformation {
 
 В Glide трансформации являются частью конвейера декодирования, участвуют в формировании ключа и позволяют кэшировать результаты.
 
-### 6. Дедупликация запросов
+### 6. Дедупликация Запросов
 
 ```kotlin
 class EngineJob {
@@ -250,7 +247,7 @@ class EngineJob {
 
 Это позволяет нескольким целям использовать один и тот же фоновой загрузчик для одинаковых запросов и избегать дублирующейся работы.
 
-### 7. Пул Bitmap для повторного использования
+### 7. Пул Bitmap Для Повторного Использования
 
 ```kotlin
 class BitmapPool(maxSizeBytes: Int) {
@@ -286,7 +283,7 @@ class BitmapPool(maxSizeBytes: Int) {
 
 Повторное использование Bitmap снижает давление на GC и повышает производительность при скролле списков.
 
-### 8. Стратегия кэширования на диск
+### 8. Стратегия Кэширования На Диск
 
 ```kotlin
 sealed class DiskCacheStrategy {
@@ -317,7 +314,7 @@ class DiskCacheManager {
 
 Эти стратегии соответствуют основным вариантам `DiskCacheStrategy` в Glide.
 
-### 9. Glide и другие библиотеки (в общих чертах)
+### 9. Glide И Другие Библиотеки (в Общих чертах)
 
 - Glide:
   - Сильная автоматическая интеграция с жизненным циклом, оптимизация памяти, bitmap pool.
@@ -331,7 +328,7 @@ class DiskCacheManager {
 
 (Детали зависят от версии; это намеренно высокоуровневое сравнение.)
 
-### 10. Пример использования Glide
+### 10. Пример Использования Glide
 
 ```kotlin
 Glide.with(context) // Привязка к жизненному циклу Activity/Fragment/View
@@ -624,7 +621,7 @@ class DiskCacheManager {
 
 These strategies are similar to Glide's real `DiskCacheStrategy` options.
 
-### 9. Glide vs Other Libraries (High-Level, Simplified)
+### 9. Glide Vs Other Libraries (High-Level, Simplified)
 
 - Glide:
   - Strong focus on automatic lifecycle integration, memory efficiency, bitmap pooling.
@@ -655,7 +652,7 @@ Glide.with(context) // Lifecycle-aware (Activity/Fragment/View)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как бы вы спроектировали стратегию кэширования для изображений с разными размерами и качеством?
 - Как избежать утечек памяти и OOM при использовании Glide/Fresco в списках (`RecyclerView`)?

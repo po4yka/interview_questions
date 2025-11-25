@@ -14,7 +14,10 @@ related: [c-kotlin, q-infix-functions--kotlin--medium, q-kotlin-extensions-overv
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]
+date created: Friday, October 31st 2025, 6:32:39 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Как Работают SAM (Single Abstract Method)?
 
 # Вопрос (RU)

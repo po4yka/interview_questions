@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard, generics, kotlin, programming-languages, reified, type-erasure]
 
+date created: Friday, October 31st 2025, 6:30:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -53,7 +55,7 @@ Key idea (for JVM): without special mechanisms (reified inline functions, reflec
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия от Java?
 - Когда это используется на практике?
@@ -73,7 +75,7 @@ Key idea (for JVM): without special mechanisms (reified inline functions, reflec
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-what-is-garbage-in-gc--programming-languages--easy]]
 

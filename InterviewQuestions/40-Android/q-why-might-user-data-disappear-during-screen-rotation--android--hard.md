@@ -1,45 +1,38 @@
 ---
 id: android-096
 title: Почему данные пользователя могут исчезать при повороте экрана? / Why might user data disappear during screen rotation?
-aliases:
-- Configuration change data loss
-- Screen rotation data loss
-- Данные исчезают при повороте
-- Потеря данных при повороте
+aliases: [Configuration change data loss, Screen rotation data loss, Данные исчезают при повороте, Потеря данных при повороте]
 topic: android
 subtopics:
-- architecture-mvvm
-- lifecycle
-- ui-state
+  - architecture-mvvm
+  - lifecycle
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- c-lifecycle
-- c-mvvm
-- q-compose-gesture-detection--android--medium
-- q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
+  - c-compose-state
+  - c-lifecycle
+  - c-mvvm
+  - q-compose-gesture-detection--android--medium
+  - q-which-event-is-called-when-user-touches-screen--android--medium
+  - q-which-event-is-triggered-when-user-presses-screen--android--medium
+  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
+  - q-why-user-data-may-disappear-on-screen-rotation--android--hard
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/architecture-mvvm
-- android/lifecycle
-- android/ui-state
-- configuration-changes
-- difficulty/hard
-- lifecycle
-- state-management
-- viewmodel
+tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, configuration-changes, difficulty/hard, lifecycle, state-management, viewmodel]
 sources:
-- "https://developer.android.com/guide/topics/resources/runtime-changes"
-- "https://developer.android.com/topic/libraries/architecture/saving-states"
+  - "https://developer.android.com/guide/topics/resources/runtime-changes"
+  - "https://developer.android.com/topic/libraries/architecture/saving-states"
 
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -64,7 +57,7 @@ sources:
 ### Подробная Версия
 Android по умолчанию уничтожает и пересоздает `Activity` при изменении конфигурации (поворот экрана). Поля активити и локальные переменные сбрасываются, и несохранённые данные теряются.
 
-### Почему Android пересоздаёт `Activity`
+### Почему Android Пересоздаёт `Activity`
 
 Система пересоздаёт `Activity` для:
 1. Применения новых ресурсов (layout-land, values-sw600dp)
@@ -72,7 +65,7 @@ Android по умолчанию уничтожает и пересоздает `
 3. Пересчёта размеров layout
 4. Применения изменений плотности/языка/темы
 
-### Жизненный цикл при повороте
+### Жизненный Цикл При Повороте
 
 ```
 Поворот устройства
@@ -90,7 +83,7 @@ onCreate(savedInstanceState)  ← ВОССТАНОВИТЬ СОСТОЯНИЕ
 onStart() → onRestoreInstanceState() → onResume()
 ```
 
-### ❌ Проблема: Потеря данных
+### ❌ Проблема: Потеря Данных
 
 ```kotlin
 // Данные будут потеряны при повороте
@@ -143,7 +136,7 @@ class FormActivity : AppCompatActivity() {
 - `Bundle` имеет лимит порядка сотен килобайт (слишком большие данные могут привести к `TransactionTooLargeException`)
 - Только сериализуемые типы (`Parcelable`, `Serializable`, примитивы)
 
-### ✅ Решение 2: `ViewModel` (для сложных данных)
+### ✅ Решение 2: `ViewModel` (для Сложных данных)
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -188,7 +181,7 @@ class FormActivity : AppCompatActivity() {
 
 **Ограничение**: не переживает process death (данные нужно уметь восстановить из надёжного источника: БД, кэш, сеть).
 
-### ✅ Решение 3: `SavedStateHandle` (best practice для небольшого критичного состояния)
+### ✅ Решение 3: `SavedStateHandle` (best Practice Для Небольшого Критичного состояния)
 
 ```kotlin
 class FormViewModel(
@@ -254,7 +247,7 @@ class MainActivity : AppCompatActivity() {
 - Усложняет код
 - Считается плохой практикой, за редкими, обоснованными исключениями
 
-### Автоматическое сохранение состояния `View`
+### Автоматическое Сохранение Состояния `View`
 
 ```xml
 <!-- Поддерживаемые View с android:id автоматически сохраняют базовое состояние -->
@@ -276,7 +269,7 @@ class MainActivity : AppCompatActivity() {
 - `View` должна быть присоединена к window во время `onSaveInstanceState()`
 - Виджет или кастомная `View` должны корректно реализовывать механизм сохранения/восстановления состояния (стандартные виджеты уже реализуют)
 
-### Что требует ручного сохранения
+### Что Требует Ручного Сохранения
 
 ```kotlin
 // ❌ НЕ сохраняется автоматически
@@ -296,7 +289,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 }
 ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Ошибка 1: игнорирование savedInstanceState
@@ -330,7 +323,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Матрица решений
+### Матрица Решений
 
 | Тип данных | Решение | Причина |
 |------------|---------|---------|
@@ -341,7 +334,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 | Сетевые данные | `ViewModel` + Repository | Не перезагружать |
 | Ввод формы | `SavedStateHandle` (малый объём) + по необходимости персистентное хранилище | Должен пережить process death |
 
-### Полный пример (best practice)
+### Полный Пример (best practice)
 
 ```kotlin
 class RegistrationViewModel(
@@ -489,7 +482,7 @@ class FormActivity : AppCompatActivity() {
 - `Bundle` is constrained by Binder transaction limits (too much data can cause `TransactionTooLargeException`)
 - Only serializable types (`Parcelable`, `Serializable`, primitives)
 
-### ✅ Solution 2: `ViewModel` (for complex data)
+### ✅ Solution 2: `ViewModel` (for Complex data)
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -534,7 +527,7 @@ class FormActivity : AppCompatActivity() {
 
 **Limitation**: does not survive process death (state must be restorable from a reliable source such as DB, cache, or network).
 
-### ✅ Solution 3: `SavedStateHandle` (best practice for small critical state)
+### ✅ Solution 3: `SavedStateHandle` (best Practice for Small Critical state)
 
 ```kotlin
 class FormViewModel(

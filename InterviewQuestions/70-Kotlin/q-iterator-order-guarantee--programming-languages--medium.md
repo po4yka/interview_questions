@@ -14,7 +14,10 @@ related: [c-collections, q-iterator-concept--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/medium, iterators, kotlin]
+date created: Friday, October 31st 2025, 6:32:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > После перебирания данных итератором, гарантируется ли очередность получения этих данных?
 
@@ -41,7 +44,7 @@ The iteration order is determined by the contract of the specific collection/dat
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого поведения от Java?
 - Когда бы вы использовали это на практике?
@@ -61,7 +64,7 @@ The iteration order is determined by the contract of the specific collection/dat
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-java-object-comparison--programming-languages--easy]]
 - [[q-inheritance-composition-aggregation--oop--medium]]

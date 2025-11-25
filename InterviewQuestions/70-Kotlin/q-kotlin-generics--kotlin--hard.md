@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/hard, generics, kotlin, type-erasure, types, variance]
+date created: Thursday, October 16th 2025, 12:35:35 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете об обобщениях (Generics) в Kotlin?
 
@@ -145,7 +148,7 @@ interface Consumer<in T> {
 
 Для Java-коллекций Kotlin использует проекции типов, чтобы отразить их ковариантность/контравариантность.
 
-### Вариативность на месте использования (use-site variance)
+### Вариативность На Месте Использования (use-site variance)
 
 Помимо объявления `in`/`out` в определении типа, можно использовать их в месте использования (типовые проекции):
 
@@ -205,7 +208,7 @@ val intsDictionary: Map<String, Int> = readDictionary(intsFile) as Map<String, I
 
 Чтобы избежать непроверяемых приведений, вы можете переработать структуру программы. В приведенном выше примере вы могли бы использовать интерфейсы `DictionaryReader<T>` и `DictionaryWriter<T>` с типобезопасными реализациями для разных типов и инкапсулировать небезопасные приведения внутри реализации.
 
-### Реализованные Параметры Типа (reified type parameters)
+### Реализованные Параметры Типа (reified Type parameters)
 
 Kotlin позволяет частично обходить стирание типов в inline-функциях с помощью `reified` параметров типа:
 
@@ -400,7 +403,7 @@ inline fun <reified T> Gson.fromJson(json: String): T =
 - `reified T` is available inside the function body; you can use `T::class`, `is T`, `as T` without passing `Class`/`KClass` explicitly.
 - This only works for `inline` functions and is backend-specific (on the JVM, the concrete type is substituted at call sites).
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия обобщений в Kotlin и Java?
 - Когда вы бы использовали обобщения на практике?
@@ -423,7 +426,7 @@ inline fun <reified T> Gson.fromJson(json: String): T =
 - [Understanding Kotlin generics](https://blog.logrocket.com/understanding-kotlin-generics/)
 - [Generics in Kotlin](https://kt.academy/article/kfde-generics)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-collections--kotlin--easy]]
 - [[q-kotlin-type-system--kotlin--medium]]

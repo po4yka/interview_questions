@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-021
 title: Media3 Transformer / Media3 Transformer
-aliases:
-  - Media3 Transformer
-  - Android Media Editing
+aliases: [Android Media Editing, Media3 Transformer]
 kind: concept
 summary: Media3 Transformer API for video/audio editing, composition, and transcoding on Android
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - media
-  - media3
-  - editing
+tags: [android, concept, editing, media, media3]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

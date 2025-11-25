@@ -28,7 +28,10 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplatform, native]
+date created: Sunday, October 12th 2025, 3:21:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое Kotlin/Native? Объясните нативную компиляцию, interop с C библиотеками и Objective-C/Swift, различия в модели памяти и случаи использования для iOS разработки.
 
@@ -41,7 +44,7 @@ tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplat
 
 См. также: [[c-kotlin]].
 
-### Ключевые возможности
+### Ключевые Возможности
 
 1. **Нативная компиляция**: компиляция в платформенно-специфичный машинный код через LLVM.
 2. **Без JVM**: автономные исполняемые файлы и библиотеки.
@@ -72,7 +75,7 @@ tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplat
 
 ```
 
-### Базовая мультиплатформенная настройка (Kotlin/Native)
+### Базовая Мультиплатформенная Настройка (Kotlin/Native)
 
 ```kotlin
 // commonMain/Platform.kt
@@ -92,7 +95,7 @@ actual class Platform {
 }
 ```
 
-### C interop и cinterop-конфигурация
+### C Interop И Cinterop-конфигурация
 
 Взаимодействие с C-библиотеками настраивается через `.def` файл, который описывает заголовки и опции линковки.
 
@@ -131,7 +134,7 @@ fun httpGet(url: String): String? {
 }
 ```
 
-#### Работа с C-структурами
+#### Работа С C-структурами
 
 ```c
 // mylib.h
@@ -166,7 +169,7 @@ fun useStruct() {
 }
 ```
 
-### Objective-C/Swift interop
+### Objective-C/Swift Interop
 
 Вызов Objective-C из Kotlin:
 
@@ -248,9 +251,9 @@ class ViewModel: ObservableObject {
 }
 ```
 
-### Модель памяти
+### Модель Памяти
 
-#### Старая модель памяти (до единого менеджера)
+#### Старая Модель Памяти (до Единого менеджера)
 
 Исторически использовались `freeze()`, `Worker`, `DetachedObjectGraph` и строгие ограничения на совместное использование изменяемых объектов между потоками. Нарушения приводили к runtime-ошибкам (`InvalidMutabilityException`). Сейчас эта модель устарела, но может встречаться в легаси-коде.
 
@@ -269,7 +272,7 @@ holder.data = "World"
 // попытка некорректной мутации могла привести к InvalidMutabilityException.
 ```
 
-#### Новая модель памяти (1.7.20+ по умолчанию)
+#### Новая Модель Памяти (1.7.20+ По умолчанию)
 
 - Единый менеджер памяти.
 - Объекты можно свободно передавать между потоками.
@@ -287,7 +290,7 @@ val holder = DataHolder()
 holder.data = "Modified"
 ```
 
-#### Управление памятью при interop
+#### Управление Памятью При Interop
 
 ```kotlin
 import kotlinx.cinterop.*
@@ -311,7 +314,7 @@ fun scopedMemory() {
 }
 ```
 
-### Корутины в Kotlin/Native
+### Корутины В Kotlin/Native
 
 Корутины поддерживаются; для iOS/Swift обычно предоставляют обёртки (callback- или Flow-wrapper), чтобы сделать API удобным для потребления, и важно контролировать жизненный цикл scope.
 
@@ -393,7 +396,7 @@ actual class PlatformFile actual constructor(private val path: String) {
 }
 ```
 
-### Конфигурация сборки
+### Конфигурация Сборки
 
 ```kotlin
 // build.gradle.kts (KMP-фрагмент, версии и зависимости приведены как пример)
@@ -420,7 +423,7 @@ kotlin {
 }
 ```
 
-### Практический пример: общий сетевой слой
+### Практический Пример: Общий Сетевой Слой
 
 ```kotlin
 // commonMain
@@ -488,7 +491,7 @@ actual class NetworkClient {
 }
 ```
 
-### Сценарии использования
+### Сценарии Использования
 
 1. **iOS-разработка**
    - Общий бизнес-/доменный код для Android и iOS.
@@ -525,7 +528,7 @@ memScoped {
 class FlowWrapper<T>(private val flow: Flow<T>, private val scope: CoroutineScope)
 ```
 
-#### Не делайте (DON'T)
+#### Не Делайте (DON'T)
 
 ```kotlin
 // Не забывайте вызывать free для nativeHeap-аллоцированной памяти
@@ -758,7 +761,7 @@ class ViewModel: ObservableObject {
 
 ### Memory Model
 
-#### Old Memory Model (pre unified memory manager)
+#### Old Memory Model (pre Unified Memory manager)
 
 - Required `freeze()`, `Worker`, `DetachedObjectGraph` patterns.
 - Sharing mutable objects across threads without freeze caused runtime errors.
@@ -796,7 +799,7 @@ val holder = DataHolder()
 holder.data = "Modified"
 ```
 
-#### Interop-related memory management
+#### Interop-related Memory Management
 
 ```kotlin
 import kotlinx.cinterop.*
@@ -1054,7 +1057,7 @@ suspend fun getData(): List<User>
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия между Kotlin/Native и запуском Kotlin на JVM?
 - В каких практических сценариях вы бы выбрали Kotlin/Native или KMP для iOS?
@@ -1080,7 +1083,7 @@ suspend fun getData(): List<User>
 - https://kotlinlang.org/docs/native-objc-interop.html
 - https://kotlinlang.org/docs/native-memory-manager.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]

@@ -1,40 +1,34 @@
 ---
 id: android-124
 title: How Application Priority Is Determined By The System / Как система определяет приоритет приложения
-aliases:
-- How Application Priority Is Determined
-- Как система определяет приоритет приложения
+aliases: [How Application Priority Is Determined, Как система определяет приоритет приложения]
 topic: android
 subtopics:
-- lifecycle
-- performance-memory
-- processes
+  - lifecycle
+  - performance-memory
+  - processes
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- c-lifecycle
-- q-anr-application-not-responding--android--medium
-- q-what-unites-the-main-components-of-an-android-application--android--medium
+  - c-lifecycle
+  - c-memory-management
+  - q-anr-application-not-responding--android--medium
+  - q-raise-process-priority--android--medium
+  - q-what-unites-the-main-components-of-an-android-application--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android
-- android/lifecycle
-- android/performance-memory
-- android/processes
-- difficulty/hard
-- lifecycle
-- performance-memory
-- processes
+tags: [android, android/lifecycle, android/performance-memory, android/processes, difficulty/hard, lifecycle, performance-memory, processes]
 
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -127,7 +121,7 @@ class PriorityChecker(private val context: Context) {
 3. **Bound services** — сервис, к которому привязан foreground/visible компонент, получает более высокий приоритет.
 4. **Зависимости процессов** — если процесс A напрямую зависит от процесса B (например, binder-связь с критичным сервисом), система может повысить приоритет B ближе к A, чтобы избежать kill критичного зависимого.
 
-### Low Memory Killer / lmkd
+### Low Memory Killer / Lmkd
 
 Под давлением памяти система (через `ActivityManager` и `lmkd`/LMK) завершает процессы, начиная с наименее важных:
 
@@ -138,7 +132,7 @@ class PriorityChecker(private val context: Context) {
 
 Критерий — не только категория, но и объём потребляемой памяти, недавняя активность и политика конкретной версии Android.
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как `oom_adj`/importance-оценка динамически меняется при переходах состояний `Activity`?
 - В чем компромиссы между использованием foreground-сервисов и WorkManager для фоновых задач?
@@ -149,7 +143,7 @@ class PriorityChecker(private val context: Context) {
 - https://developer.android.com/guide/components/activities/process-lifecycle - Жизненный цикл процессов
 - https://developer.android.com/guide/components/services - Сервисы и приоритет процессов
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 #### Предпосылки / Концепции
 
@@ -250,7 +244,7 @@ Notes:
 3. **Bound services** - a service bound to a foreground/visible component gets higher priority.
 4. **Process dependencies** - if process A depends on process B via critical binder bindings, the system may raise B's priority closer to A's.
 
-### Low Memory Killer / lmkd
+### Low Memory Killer / Lmkd
 
 Under memory pressure, the system (via `ActivityManager` and `lmkd`/LMK) kills processes starting from the least important:
 

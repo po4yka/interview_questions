@@ -1,36 +1,34 @@
 ---
 id: android-175
 title: Android Testing Strategies / Стратегии тестирования Android
-aliases:
-- Android Testing Strategies
-- Стратегии тестирования Android
+aliases: [Android Testing Strategies, Стратегии тестирования Android]
 topic: android
 subtopics:
-- testing-instrumented
-- testing-ui
-- testing-unit
+  - testing-instrumented
+  - testing-ui
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-architectural-patterns--android--medium
-- q-android-performance-measurement-tools--android--medium
-- q-android-security-best-practices--android--medium
+  - q-android-architectural-patterns--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-security-best-practices--android--medium
+  - q-integration-testing-strategies--android--medium
+  - q-koin-testing-strategies--android--medium
+  - q-tflite-acceleration-strategies--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/testing-instrumented
-- android/testing-ui
-- android/testing-unit
-- difficulty/medium
-- testing
+tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, difficulty/medium, testing]
 
+date created: Saturday, November 1st 2025, 12:46:43 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -182,7 +180,7 @@ fun clickButton_displaysMessage() {
 
 **Инструменты**: Compose UI Test, Espresso, UI Automator (для межприложенческого взаимодействия)
 
-### Ключевые практики
+### Ключевые Практики
 
 1. **Изоляция через DI** — Hilt/Koin позволяют подменять зависимости в тестах (для Hilt инструментальные тесты с `HiltAndroidRule`, для JVM-тестов — обычные конструкторы/модули).
 2. **Идемпотентность** — тесты не зависят от порядка выполнения и предыдущего состояния.
@@ -347,7 +345,7 @@ fun clickButton_displaysMessage() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как тестировать Compose UI с вынесенным состоянием (state hoisting) и учетом рекомпозиции, какие ключевые edge-case-сценарии нужно покрыть?
 2. В чем компромисс между использованием Robolectric и инструментальных тестов с точки зрения скорости, реалистичности окружения и поддержки?
@@ -393,7 +391,7 @@ fun clickButton_displaysMessage() {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -404,7 +402,7 @@ fun clickButton_displaysMessage() {
 - [[q-android-project-parts--android--easy]] — Структура приложения
 - [[q-android-app-components--android--easy]] — Базовые компоненты Android
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-architectural-patterns--android--medium]] — MVVM/MVI и тестируемость
 - [[q-android-performance-measurement-tools--android--medium]] — Профилирование и бенчмаркинг
 - [[q-android-security-best-practices--android--medium]] — Подходы к безопасности и их тестирование

@@ -13,8 +13,10 @@ updated: "2025-11-09"
 tags: ["coroutines", "delay", "difficulty/easy", "kotlin", "suspending", "threads"]
 description: "Understanding the fundamental differences between suspending delay() and blocking Thread.sleep() in Kotlin coroutines, including thread usage and performance implications"
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutines-threads-android-differences--kotlin--easy]
+related: [c-coroutines, c-kotlin, q-coroutines-threads-android-differences--kotlin--easy]
 subtopics: [coroutines, threading]
+date created: Friday, October 31st 2025, 6:31:14 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)

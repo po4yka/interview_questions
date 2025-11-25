@@ -5,7 +5,7 @@ aliases: ["Flow Exception Handling", "Обработка исключений в
 
 # Classification
 topic: kotlin
-subtopics: [flow, coroutines, error-handling]
+subtopics: [coroutines, error-handling, flow]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-catch-operator-flow--kotlin--medium, q-coroutine-exception-handling--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related: [c-flow, c-kotlin, q-catch-operator-flow--kotlin--medium, q-coroutine-exception-handling--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-11-09
 
 tags: [catch, difficulty/medium, error-handling, exceptions, flow, kotlin, retry]
+date created: Saturday, October 18th 2025, 3:12:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как обрабатывать исключения в `Flow`? Объясните операторы catch, retry, retryWhen. Реализуйте стратегию повтора с экспоненциальной задержкой.
 
@@ -89,7 +92,7 @@ fetchUser(-1)
     }
 ```
 
-#### Свойства catch
+#### Свойства Catch
 
 1. Перехватывает только исключения из upstream (не исключения внутри `collect`).
 2. Может эмитить fallback-значения.
@@ -173,7 +176,7 @@ flow {
 .collect { data -> println("Данные: $data") }
 ```
 
-#### Помощник Retry с Фиксированной Задержкой
+#### Помощник Retry С Фиксированной Задержкой
 
 ```kotlin
 fun <T> Flow<T>.retryWithDelay(
@@ -331,7 +334,7 @@ class CircuitBreaker(
 class CircuitBreakerOpenException(message: String) : Exception(message)
 ```
 
-#### Использование Circuit Breaker с `Flow`
+#### Использование Circuit Breaker С `Flow`
 
 ```kotlin
 fun <T> Flow<T>.withCircuitBreaker(
@@ -382,7 +385,7 @@ fun <T> Flow<T>.withRobustErrorHandling(
     }
 ```
 
-### Обработка Ошибок в `StateFlow`/`SharedFlow`
+### Обработка Ошибок В `StateFlow`/`SharedFlow`
 
 ```kotlin
 class UserViewModel : ViewModel() {

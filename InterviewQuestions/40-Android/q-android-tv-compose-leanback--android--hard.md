@@ -1,34 +1,34 @@
 ---
 id: android-623
 title: Android TV Compose & Leanback / Android TV на Compose и Leanback
-aliases:
-- Android TV Compose & Leanback
-- Android TV на Compose и Leanback
+aliases: [Android TV Compose & Leanback, Android TV на Compose и Leanback]
 topic: android
 subtopics:
-- tv
-- ui-compose
+  - tv
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-tv
-- q-android-auto-guidelines--android--hard
+  - c-android-tv
+  - q-android-auto-guidelines--android--hard
+  - q-compose-core-components--android--medium
+  - q-compose-custom-animations--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/tv
-- android/ui-compose
-- difficulty/hard
+tags: [android/tv, android/ui-compose, difficulty/hard]
 sources:
-- "https://developer.android.com/training/tv/start"
-- "https://developer.android.com/jetpack/compose/tv"
+  - "https://developer.android.com/jetpack/compose/tv"
+  - "https://developer.android.com/training/tv/start"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -73,7 +73,7 @@ sources:
 - Используйте навигацию, способную маршрутизировать к Leanback и Compose экранам.
 - Инкапсулируйте работу с рекомендациями/каналами и плеером в отдельные компоненты/сервисы.
 
-### 4. Фокус и навигация
+### 4. Фокус И Навигация
 
 ```kotlin
 @Composable
@@ -143,7 +143,7 @@ channelManager.addProgram(
 - Follow official Google TV/Android TV checklists for certification readiness.
 
 ## Detailed Version
-### 1. UI architecture
+### 1. UI Architecture
 
 - Use **Leanback** for existing stable components (`BrowseSupportFragment`, `PlaybackSupportFragment`).
 - Use **Compose for TV** for new screens (DPAD focus support, `TvLazyRow`/`TvLazyColumn`, `ImmersiveList`).
@@ -167,7 +167,7 @@ channelManager.addProgram(
 - Use navigation capable of routing to both Leanback and Compose screens.
 - Encapsulate recommendations/channels logic and player integration into dedicated components/services.
 
-### 4. Focus and navigation
+### 4. Focus and Navigation
 
 ```kotlin
 @Composable
@@ -227,7 +227,7 @@ channelManager.addProgram(
 
 ---
 
-## Дополнительные вопросы
+## Дополнительные Вопросы
 - Как мигрировать существующее Leanback-приложение на Compose for TV постепенно?
 - Какие требования к DRM/HDCP для контента 4K HDR?
 - Как реализовать мультипрофильную поддержку (Kids) на Google TV?

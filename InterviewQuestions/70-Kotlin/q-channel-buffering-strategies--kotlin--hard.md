@@ -19,14 +19,17 @@ source_note: Comprehensive guide on Channel buffering strategies
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-flow-backpressure--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-flow-backpressure--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-11
 
 tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, performance, rendezvous, unlimited]
+date created: Sunday, October 12th 2025, 3:16:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Что такое стратегии буферизации каналов в Kotlin? Объясните каналы RENDEZVOUS, BUFFERED, UNLIMITED и CONFLATED и когда использовать каждый.
 
@@ -39,7 +42,7 @@ tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, perf
 
 См. также: [[c-kotlin]], [[c-coroutines]]
 
-### Типы ёмкости канала
+### Типы Ёмкости Канала
 
 ```kotlin
 // Rendezvous (0 buffer)
@@ -231,7 +234,7 @@ class RateLimitedChannel<T>(
 }
 ```
 
-### CONFLATED (Размер 1, сброс старых значений)
+### CONFLATED (Размер 1, Сброс Старых значений)
 
 ```kotlin
 suspend fun conflatedExample() = coroutineScope {
@@ -264,7 +267,7 @@ suspend fun conflatedExample() = coroutineScope {
 - Важно только последнее значение
 - Постоянное использование памяти
 
-### Сравнение производительности
+### Сравнение Производительности
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -318,7 +321,7 @@ suspend fun testChannel(capacity: Int, count: Int) = coroutineScope {
 
 (Фактические времена зависят от окружения; UNLIMITED и CONFLATED часто быстрее за счёт меньшего количества приостановок/доставки меньшего числа элементов, но могут увеличивать нагрузку на память/GC.)
 
-### Выбор стратегии буферизации
+### Выбор Стратегии Буферизации
 
 | Стратегия | Память | Скорость | Потеря данных | Случай использования |
 |-----------|--------|----------|---------------|----------------------|
@@ -327,7 +330,7 @@ suspend fun testChannel(capacity: Int, count: Int) = coroutineScope {
 | UNLIMITED | Риск OOM | Высокая скорость отправки, но возможна деградация | Никогда (канал не дропает, растёт задержка/память) | Логирование/метрики с внешними ограничителями |
 | CONFLATED | Постоянная | Высокая (за счёт дропа промежуточных) | Да (отбрасывает промежуточные) | Обновления UI, данные сенсоров, "важно только последнее" |
 
-### Стратегии при переполнении буфера
+### Стратегии При Переполнении Буфера
 
 ```kotlin
 import kotlinx.coroutines.channels.BufferOverflow
@@ -343,7 +346,7 @@ val channel = Channel<Int>(
 // BufferOverflow.DROP_LATEST - отбрасывать новый элемент
 ```
 
-### Реальный пример: Event Bus
+### Реальный Пример: Event Bus
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -400,7 +403,7 @@ println("Empty: ${channel.isEmpty}, closedForSend: ${channel.isClosedForSend}")
 channel.close()
 ```
 
-#### Не делайте:
+#### Не Делайте:
 
 ```kotlin
 // Не используйте UNLIMITED без внешних лимитов/мониторинга
@@ -424,7 +427,7 @@ val tinyBuffer = Channel<Int>(capacity = 1) // может вызывать ли�
 val hugeBuffer = Channel<Int>(capacity = 1_000_000) // может тратить много памяти
 ```
 
-### Учет памяти
+### Учет Памяти
 
 ```kotlin
 // Приблизительная интуиция (конкретные значения зависят от реализации/JVM):
@@ -845,7 +848,7 @@ val hugeBuffer = Channel<Int>(capacity = 1_000_000) // May waste memory
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этих стратегий от примитивов конкурентности в Java?
 - Когда вы бы использовали каждую стратегию на практике для реальных нагрузок?
@@ -869,7 +872,7 @@ val hugeBuffer = Channel<Int>(capacity = 1_000_000) // May waste memory
 - [Channel Capacity](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
 - [Buffering Strategies](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines.channels/-buffer-overflow/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-backpressure--kotlin--hard]]
 - [[q-actor-pattern--kotlin--hard]]

@@ -1,39 +1,34 @@
 ---
 id: android-116
 title: Large File Upload / Загрузка больших файлов
-aliases:
-- Large File Upload
-- Загрузка больших файлов
+aliases: [Large File Upload, Загрузка больших файлов]
 topic: android
 subtopics:
-- background-execution
-- files-media
-- networking-http
+  - background-execution
+  - files-media
+  - networking-http
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-retrofit
-- c-background-tasks
-- q-viewmodel-vs-onsavedinstancestate--android--medium
+  - c-background-tasks
+  - c-retrofit
+  - q-api-file-upload-server--android--medium
+  - q-how-to-display-svg-string-as-a-vector-file--android--medium
+  - q-large-file-upload-app--android--hard
+  - q-viewmodel-vs-onsavedinstancestate--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/background-execution
-- android/files-media
-- android/networking-http
-- difficulty/medium
-- file-upload
-- multipart
-- retrofit
-- workmanager
+tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, file-upload, multipart, retrofit, workmanager]
 
+date created: Saturday, November 1st 2025, 12:46:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -151,7 +146,7 @@ fun uploadFile(filePath: String): UUID {
 }
 ```
 
-### 2. Chunked Upload (для файлов > 50 MB)
+### 2. Chunked Upload (для Файлов > 50 MB)
 
 ```kotlin
 class ChunkedFileUploadWorker(
@@ -482,7 +477,7 @@ val largeFileConstraints = Constraints.Builder()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать сжатие файла перед загрузкой?
 - Каковы trade-off'ы между chunked upload и multipart upload?
@@ -510,14 +505,14 @@ val largeFileConstraints = Constraints.Builder()
 - Retrofit and OkHttp best practices for file uploads
 - HTTP multipart/form-data specification
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-retrofit]]
 - [[c-background-tasks]]
 
-### Предварительные требования
+### Предварительные Требования
 
 - Понимание корутин Kotlin для асинхронных операций
 - Подходы к фоновым задачам в Android (`Service` vs WorkManager)

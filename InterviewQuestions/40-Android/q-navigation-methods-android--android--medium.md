@@ -16,6 +16,8 @@ tags: [android, android/ui-compose, android/ui-navigation, architecture, compose
 moc: moc-android
 related: [c-activity, q-navigation-methods-in-android--android--medium]
 
+date created: Saturday, November 1st 2025, 1:25:25 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -416,7 +418,7 @@ fun AppNavigation() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Navigation Component обрабатывает deep links автоматически?
 - В чем разница между API результатов `Activity` и устаревшим `onActivityResult`?
@@ -452,7 +454,7 @@ fun AppNavigation() {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-what-is-intent--android--easy]] - основы `Intent`
@@ -460,7 +462,7 @@ fun AppNavigation() {
 - [[q-main-android-components--android--easy]] - компоненты Android
 - [[q-android-app-components--android--easy]] - типы компонентов приложения
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-navigation-methods-in-android--android--medium]] - обзор методов навигации
 - [[q-deep-link-vs-app-link--android--medium]] - deep linking
 - [[q-single-activity-approach--android--medium]] - паттерн Single `Activity`

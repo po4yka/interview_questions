@@ -4,26 +4,30 @@ title: Databases Android / Базы данных в Android
 aliases: [Databases Android, Базы данных в Android]
 topic: android
 subtopics:
-- datastore
-- room
+  - datastore
+  - room
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-database-design
-- q-database-encryption-android--android--medium
-- q-database-optimization-android--android--medium
+  - c-database-design
+  - q-android-storage-types--android--medium
+  - q-database-encryption-android--android--medium
+  - q-database-optimization-android--android--medium
+  - q-how-to-start-drawing-ui-in-android--android--easy
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/datastore, android/room, database, difficulty/easy]
 sources:
-- "https://developer.android.com/training/data-storage"
+  - "https://developer.android.com/training/data-storage"
 
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -64,7 +68,7 @@ class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
 }
 ```
 
-### 2. Room — Официальный абстракционный слой над SQLite (рекомендуется)
+### 2. Room — Официальный Абстракционный Слой Над SQLite (рекомендуется)
 
 Генерирует имплементации DAO на этапе компиляции через annotation processing. Предоставляет безопасные suspend-функции и `Flow` для реактивных обновлений. По умолчанию запрещает блокирующие операции с БД на главном потоке.
 

@@ -21,14 +21,17 @@ source_note: Comprehensive comparison of SharedFlow and StateFlow
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-flow-basics--kotlin--easy]
+related: [c-flow, c-kotlin, q-flow-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharedflow, state-management, stateflow]
+date created: Saturday, November 1st 2025, 9:25:31 am
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > В чём разница между `SharedFlow` и `StateFlow`? Когда использовать каждый из них?
 
@@ -80,7 +83,7 @@ _state.update { it + 1 }  // Атомарное обновление
 4. **Только различные значения** — не излучает, если новое значение равно текущему (`==`).
 5. **Обычно не завершается самостоятельно** — в типичных сценариях (например, в `ViewModel`) остаётся активным, пока не отменён scope или не завершится источник; как `Flow` теоретически может завершиться при завершении апстрима.
 
-### Глубокое Погружение в `StateFlow`
+### Глубокое Погружение В `StateFlow`
 
 #### Создание `StateFlow`
 
@@ -126,7 +129,7 @@ class CounterViewModel : ViewModel() {
 }
 ```
 
-#### Conflation в `StateFlow`
+#### Conflation В `StateFlow`
 
 ```kotlin
 // StateFlow всегда conflated
@@ -147,7 +150,7 @@ viewModelScope.launch {
 }
 ```
 
-#### Только различные значения в `StateFlow`
+#### Только Различные Значения В `StateFlow`
 
 ```kotlin
 val state = MutableStateFlow("A")
@@ -190,7 +193,7 @@ val _results = MutableSharedFlow<Result>(
 4. **Излучает все значения** — включая дубликаты.
 5. **Сам по себе не завершается** — но можно строить поверх него `Flow`, который завершается (`take`, `first` и т.п.).
 
-### Глубокое Погружение в `SharedFlow`
+### Глубокое Погружение В `SharedFlow`
 
 #### Создание `SharedFlow`
 
@@ -219,7 +222,7 @@ val shared4 = flow.shareIn(
 )
 ```
 
-#### Replay в `SharedFlow`
+#### Replay В `SharedFlow`
 
 ```kotlin
 class EventBus {
@@ -246,7 +249,7 @@ bus.events.collect { event ->
 }
 ```
 
-#### Стратегии буфера в `SharedFlow`
+#### Стратегии Буфера В `SharedFlow`
 
 ```kotlin
 // DROP_OLDEST: удалять старые при переполнении буфера (replay + extra)
@@ -330,7 +333,7 @@ class UserActivity : AppCompatActivity() {
 
 ### Когда Использовать `StateFlow`
 
-#### Использовать `StateFlow` для:
+#### Использовать `StateFlow` Для:
 
 ```kotlin
 // 1. Состояние UI
@@ -369,7 +372,7 @@ class Repository {
 
 ### Когда Использовать `SharedFlow`
 
-#### Использовать `SharedFlow` для:
+#### Использовать `SharedFlow` Для:
 
 ```kotlin
 // 1. Одноразовые события
@@ -421,7 +424,7 @@ class EventBus {
 }
 ```
 
-### Подробное Сравнение: `StateFlow` vs `SharedFlow`
+### Подробное Сравнение: `StateFlow` Vs `SharedFlow`
 
 #### Инициализация
 
@@ -437,7 +440,7 @@ val shared2 = MutableSharedFlow<String?>(replay = 1).apply {
 }
 ```
 
-#### Доступ к значению
+#### Доступ К Значению
 
 ```kotlin
 // StateFlow: прямой доступ к value
@@ -477,7 +480,7 @@ sharedWithReplay.collect { value ->
 
 ### Продвинутые Паттерны
 
-#### Конвертация между `StateFlow` и `SharedFlow`
+#### Конвертация Между `StateFlow` И `SharedFlow`
 
 ```kotlin
 // SharedFlow -> StateFlow
@@ -493,7 +496,7 @@ val stateFlowSrc = MutableStateFlow(0)
 val sharedFlowView: SharedFlow<Int> = stateFlowSrc
 ```
 
-#### Комбинирование нескольких Flow
+#### Комбинирование Нескольких Flow
 
 ```kotlin
 class CombinedViewModel : ViewModel() {
@@ -520,7 +523,7 @@ class CombinedViewModel : ViewModel() {
 }
 ```
 
-#### `SharedFlow` на базе Channel
+#### `SharedFlow` На Базе Channel
 
 ```kotlin
 class EventManager {
@@ -1187,7 +1190,7 @@ repeat(1000) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём отличие от аналогичных механизмов в Java или RxJava?
 - Когда вы бы применили `StateFlow` или `SharedFlow` на практике?
@@ -1213,15 +1216,15 @@ repeat(1000) {
 - [Kotlin StateFlow Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
 - [StateFlow and SharedFlow Guide](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-testing-stateflow-sharedflow--kotlin--medium]]
 - [[q-stateflow-sharedflow-android--kotlin--medium]]
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 - [[q-sharedflow-replay-buffer-config--kotlin--medium]]
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-actor-pattern--kotlin--hard]]
 - [[q-testing-flow-operators--kotlin--hard]]
 

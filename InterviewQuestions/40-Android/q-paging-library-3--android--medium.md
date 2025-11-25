@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/architecture-clean, android/room, difficulty/medium, jetpack, pagination, paging, recyclerview]
 sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
 
+date created: Saturday, November 1st 2025, 1:03:32 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -246,7 +248,7 @@ adapter.addLoadStateListener { loadState ->
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `RemoteMediator` координирует источники сети и базы данных?
 - В чём разница между типами загрузки `refresh`, `prepend` и `append`?
@@ -277,7 +279,7 @@ adapter.addLoadStateListener { loadState ->
 - [[q-android-app-components--android--easy]]
 - [[q-android-manifest-file--android--easy]]
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-android-architectural-patterns--android--medium]]
 - [[q-android-jetpack-overview--android--easy]]
 - [[q-sharedflow-stateflow--kotlin--medium]]

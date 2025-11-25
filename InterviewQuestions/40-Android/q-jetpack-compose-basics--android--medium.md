@@ -1,38 +1,35 @@
 ---
 id: android-064
 title: Jetpack Compose Basics / Основы Jetpack Compose
-aliases:
-- Jetpack Compose Basics
-- Основы Jetpack Compose
+aliases: [Jetpack Compose Basics, Основы Jetpack Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
-- ui-theming
+  - ui-compose
+  - ui-state
+  - ui-theming
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: internal
 source_note: Created for vault completeness
 status: draft
 moc: moc-android
 related:
-- c-compose-state
-- q-how-does-jetpack-compose-work--android--medium
-- q-compose-modifier-system--android--medium
-- q-compose-remember-derived-state--android--medium
+  - c-compose-state
+  - q-compose-modifier-system--android--medium
+  - q-compose-remember-derived-state--android--medium
+  - q-compose-semantics--android--medium
+  - q-how-does-jetpack-compose-work--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-how-jetpack-compose-works--android--medium
 created: 2025-10-12
 updated: 2025-11-11
-tags:
-- android/ui-compose
-- android/ui-state
-- android/ui-theming
-- difficulty/medium
-- en
-- ru
+tags: [android/ui-compose, android/ui-state, android/ui-theming, difficulty/medium, en, ru]
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -74,7 +71,7 @@ fun Greeting(name: String) {
 }
 ```
 
-### Основные принципы
+### Основные Принципы
 
 1. **Декларативность**: UI описывается как функция состояния, а не последовательность мутаций.
 2. **Компонуемость**: UI строится из мелких переиспользуемых composable-функций.
@@ -122,11 +119,11 @@ data class Message(val id: Long, val author: String, val body: String)
 - Обычно возвращают `Unit` и описывают UI, а не создают `View`.
 - Должны быть по возможности без побочных эффектов; побочные эффекты выносятся в `LaunchedEffect`, `SideEffect`, `DisposableEffect` и т.п.
 
-### Состояние и Recomposition
+### Состояние И Recomposition
 
 Состояние — любое значение, которое может изменяться со временем. Если composable читает observable-состояние (например, `MutableState`), то при его изменении соответствующая область композиции будет перерассчитана.
 
-#### Базовое управление состоянием
+#### Базовое Управление Состоянием
 
 ```kotlin
 @Composable
@@ -155,7 +152,7 @@ fun BrokenCounter() {
 }
 ```
 
-#### Подъём состояния (State Hoisting)
+#### Подъём Состояния (State Hoisting)
 
 ```kotlin
 @Composable
@@ -193,7 +190,7 @@ fun CounterScreen() {
 }
 ```
 
-#### Типы состояния (Compose runtime)
+#### Типы Состояния (Compose runtime)
 
 ```kotlin
 // 1. mutableStateOf — одно наблюдаемое значение
@@ -301,7 +298,7 @@ fun ModifierExamples() {
 }
 ```
 
-#### Подборка распространённых модификаторов
+#### Подборка Распространённых Модификаторов
 
 ```kotlin
 @Composable
@@ -337,7 +334,7 @@ fun ModifierGuide() {
 }
 ```
 
-#### Пользовательские модификаторы
+#### Пользовательские Модификаторы
 
 ```kotlin
 fun Modifier.debugBorder(color: Color = Color.Red): Modifier =
@@ -370,7 +367,7 @@ fun Modifier.shimmer(enabled: Boolean): Modifier = composed {
 
 ### Макеты
 
-#### Column — вертикальный список
+#### Column — Вертикальный Список
 
 ```kotlin
 @Composable
@@ -389,7 +386,7 @@ fun ColumnExample() {
 }
 ```
 
-#### Row — горизонтальное размещение
+#### Row — Горизонтальное Размещение
 
 ```kotlin
 @Composable
@@ -406,7 +403,7 @@ fun RowExample() {
 }
 ```
 
-#### Box — наложение
+#### Box — Наложение
 
 ```kotlin
 @Composable
@@ -429,7 +426,7 @@ fun BoxExample() {
 }
 ```
 
-#### LazyColumn / LazyRow — списки
+#### LazyColumn / LazyRow — Списки
 
 ```kotlin
 @Composable
@@ -507,9 +504,9 @@ fun ConstraintLayoutExample() {
 }
 ```
 
-### Полные примеры UI
+### Полные Примеры UI
 
-#### Пример 1: Экран входа (LoginScreen)
+#### Пример 1: Экран Входа (LoginScreen)
 
 ```kotlin
 @Composable
@@ -597,7 +594,7 @@ fun LoginScreen(
 }
 ```
 
-#### Пример 2: Профиль с состоянием (ProfileCard / ProfileScreen)
+#### Пример 2: Профиль С Состоянием (ProfileCard / ProfileScreen)
 
 ```kotlin
 data class User(
@@ -697,7 +694,7 @@ fun ProfileScreen() {
 }
 ```
 
-#### Пример 3: Список задач с CRUD (TodoListScreen / TodoItemRow)
+#### Пример 3: Список Задач С CRUD (TodoListScreen / TodoItemRow)
 
 ```kotlin
 data class TodoItem(
@@ -831,7 +828,7 @@ fun TodoItemRow(
 }
 ```
 
-### Жизненный цикл Composable
+### Жизненный Цикл Composable
 
 Composable проходит через стадии:
 1. Вход в composition — первый запуск и добавление в дерево.
@@ -859,7 +856,7 @@ fun LifecycleExample() {
 }
 ```
 
-### Побочные эффекты в Compose
+### Побочные Эффекты В Compose
 
 Composable-функции должны быть максимально чистыми; для побочных эффектов используются специальные API.
 
@@ -900,7 +897,7 @@ fun AnalyticsExample(screen: String) {
 }
 ```
 
-### Тема и стилизация
+### Тема И Стилизация
 
 ```kotlin
 @Composable
@@ -925,7 +922,7 @@ fun ThemedText() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Делайте composable-функции маленькими и переиспользуемыми.
 2. Поднимайте состояние наверх, когда логика должна контролироваться извне.
@@ -1837,7 +1834,7 @@ fun ThemedText() {
 6. Use `derivedStateOf` for derived/expensive computations based on other state.
 7. Prefer stateless, UI-only composables for reusability; pass in state and events from the caller.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-compose-remember-derived-state--android--medium]]
 - [[q-compose-side-effects-advanced--android--hard]]
@@ -1863,7 +1860,7 @@ fun ThemedText() {
 - [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)
 - [Compose Layout Basics](https://developer.android.com/jetpack/compose/layouts/basics)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

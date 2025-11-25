@@ -3,7 +3,7 @@ id: lang-036
 title: "Regular Vs Extension Method / Обычный метод против Extension метода"
 aliases: [Regular Vs Extension Method, Обычный метод против Extension метода]
 topic: kotlin
-subtopics: [functions, extension-functions]
+subtopics: [extension-functions, functions]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -14,6 +14,8 @@ related: [c-kotlin, q-hot-vs-cold-flows--programming-languages--medium, q-refere
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, extension-functions, functions, kotlin, programming-languages, static-methods]
+date created: Friday, October 31st 2025, 6:29:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -416,7 +418,7 @@ fun <T> List<T>.middle(): T? =
 fun <T> List<T>.shuffleCopy(): List<T> = this.shuffled()
 ```
 
-### Extension и DSL / Receiver Типы
+### Extension И DSL / Receiver Типы
 
 Extensions всегда имеют receiver type. В сочетании с function types with receiver они активно используются для построения DSL:
 
@@ -873,7 +875,7 @@ fun String.isPalindrome(): Boolean {
 "radar".isPalindrome()  // true
 ```
 
-2. Cleaner API:
+1. Cleaner API:
 
 ```kotlin
 // Before: static utilities
@@ -886,7 +888,7 @@ text.trim().uppercase()
 fun String.addPrefix(prefix: String): String = "$prefix$this"
 ```
 
-3. Scope control:
+1. Scope control:
 
 ```kotlin
 class HtmlBuilder {
@@ -904,7 +906,7 @@ private fun String.internalHelper() {
 }
 ```
 
-4. Grouped organization:
+1. Grouped organization:
 
 ```kotlin
 // StringExtensions.kt
@@ -1042,7 +1044,7 @@ Choose:
 - Member for core behavior, encapsulation, and polymorphism
 - Extension for utilities, DSLs, and extending existing APIs without modifying them
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этого подхода от Java?
 - Когда бы вы использовали extension функции на практике?
@@ -1064,7 +1066,7 @@ Choose:
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-reference-types-protect-from-deletion--programming-languages--easy]]
 - [[q-solid-principles--software-design--medium]]

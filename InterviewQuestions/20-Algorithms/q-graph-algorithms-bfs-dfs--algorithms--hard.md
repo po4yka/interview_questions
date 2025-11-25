@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [algorithms, bfs, dfs, difficulty/hard, graphs, traversal]
 sources: ["https://en.wikipedia.org/wiki/Breadth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search"]
 
+date created: Saturday, November 1st 2025, 1:24:14 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)
@@ -449,14 +451,14 @@ fun numIslands(grid: Array<CharArray>): Int {
 
 ### Advanced (Harder)
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - В чём разница в потреблении памяти между BFS и DFS?
 - Как обнаружить цикл в неориентированном и ориентированном графе?
 - Что такое двунаправленный BFS и когда он полезен?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ### Предпосылки (проще)
 - [[q-data-structures-overview--algorithms--easy]] - Базовые структуры данных
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - Алгоритмы динамического программирования
 - [[q-binary-search-variants--algorithms--medium]] - Варианты бинарного поиска
 ### Продвинутые (сложнее)

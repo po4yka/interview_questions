@@ -3,7 +3,7 @@ id: kotlin-062
 title: "Testing StateFlow and SharedFlow in ViewModels / Тестирование StateFlow и SharedFlow в ViewModels"
 aliases: ["Testing StateFlow and SharedFlow in ViewModels", "Тестирование StateFlow и SharedFlow в ViewModels"]
 topic: kotlin
-subtopics: [coroutines, stateflow, sharedflow]
+subtopics: [coroutines, sharedflow, stateflow]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Flow Testing Guide
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-flow, q-stateflow-sharedflow-differences--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
+related: [c-flow, c-kotlin, q-stateflow-sharedflow-differences--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, sharedflow, stateflow, testing, viewmodel]
 
+date created: Sunday, October 12th 2025, 1:20:44 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -107,7 +109,7 @@ class CounterViewModelTest {
 }
 ```
 
-### Тестирование `StateFlow` с асинхронными операциями
+### Тестирование `StateFlow` С Асинхронными Операциями
 
 ```kotlin
 sealed class UiState<out T> {
@@ -199,7 +201,7 @@ class UserViewModelTest {
 
 (Примечание: `User`, `UserRepository`, `FakeUserRepository`, `MainDispatcherRule` предполагаются определёнными в тестовом окружении.)
 
-### Тестирование `StateFlow` — "latest value wins"
+### Тестирование `StateFlow` — "latest Value wins"
 
 `StateFlow` хранит только последнее значение; после серии быстрых обновлений важно проверить, что итоговое состояние соответствует последнему присвоенному значению.
 
@@ -229,7 +231,7 @@ fun `StateFlow после быстрых обновлений содержит �
 }
 ```
 
-### Тестирование `SharedFlow` — базовые случаи
+### Тестирование `SharedFlow` — Базовые Случаи
 
 `SharedFlow` — горячий `Flow`, который можно сконфигурировать через replay и буфер. По умолчанию:
 - нет начального значения;
@@ -311,7 +313,7 @@ class EventsViewModelTest {
 }
 ```
 
-### Тестирование `SharedFlow` с replay cache
+### Тестирование `SharedFlow` С Replay Cache
 
 ```kotlin
 class NotificationsViewModel : ViewModel() {
@@ -360,7 +362,7 @@ fun `SharedFlow реплейит последние N эмиссий новым 
 }
 ```
 
-### Использование библиотеки Turbine
+### Использование Библиотеки Turbine
 
 ```gradle
 testImplementation("app.cash.turbine:turbine:1.0.0")
@@ -464,7 +466,7 @@ fun `SharedFlow с DROP_OLDEST при активной коллекции отд
 }
 ```
 
-### Edge Cases и подводные камни
+### Edge Cases И Подводные Камни
 
 ```kotlin
 // SharedFlow без replay — поздний коллектор не получает прошлые эмиссии
@@ -1042,7 +1044,7 @@ Testing strategies:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как поведение `SharingStarted.WhileSubscribed` влияет на запуск и остановку сборщиков при тестировании `StateFlow` и `SharedFlow` во `ViewModel`, и какие проверки нужны, чтобы убедиться, что побочные эффекты не выполняются без активных подписчиков?
 2. Как большой replay cache у `SharedFlow` влияет на использование памяти и время выполнения в тестах и продакшене, и как это учитывать при написании проверок?
@@ -1080,7 +1082,7 @@ Testing strategies:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-stateflow-sharedflow-android--kotlin--medium]]
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]

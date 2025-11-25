@@ -1,38 +1,36 @@
 ---
 id: android-636
 title: Network Security Hardening / Укрепление сетевой безопасности
-aliases:
-- Network Security Hardening
-- Укрепление сетевой безопасности
+aliases: [Network Security Hardening, Укрепление сетевой безопасности]
 topic: android
 subtopics:
-- network-security-config
-- keystore-crypto
-- networking-http
+  - keystore-crypto
+  - network-security-config
+  - networking-http
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-keystore
-- moc-android
+  - c-android-keystore
+  - moc-android
+  - q-android-security-practices-checklist--android--medium
+  - q-app-security-best-practices--android--medium
+  - q-data-sync-unstable-network--android--hard
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/network-security-config
-- android/keystore-crypto
-- android/networking-http
-- certificate-pinning
-- difficulty/hard
+tags: [android/keystore-crypto, android/network-security-config, android/networking-http, certificate-pinning, difficulty/hard]
 sources:
-- "https://developer.android.com/training/articles/security-config"
-- "https://square.github.io/okhttp/https/#certificate-pinning"
-- "https://cloud.google.com/security/en-transit/application-layer-transport-security"
+  - "https://cloud.google.com/security/en-transit/application-layer-transport-security"
+  - "https://developer.android.com/training/articles/security-config"
+  - "https://square.github.io/okhttp/https/#certificate-pinning"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -55,7 +53,7 @@ sources:
 - Экосистема: контроль SDK и WebView, документированный incident response.
 
 ## Подробная Версия
-### 1. Network Security Config как база
+### 1. Network Security Config Как База
 
 ```xml
 <network-security-config>
@@ -81,26 +79,26 @@ sources:
 - Пины: минимум два разных пина (основной и резервный), `expiration` и план ротации.
 - При использовании своих trust anchors (`@raw/app_certs`) по возможности ограничивайте их конкретными доменами через `domain-config`, чтобы не расширять доверие глобально без необходимости.
 
-### 2. Certificate pinning (runtime)
+### 2. Certificate Pinning (runtime)
 
 - Для OkHttp: используйте `CertificatePinner`; при необходимости допускайте системные CA, пингуя конкретные публичные ключи.
 - Включите reporting: при pin mismatch → отправлять событие в телеметрию (без логирования ключей или самих пинов).
 - Ротация: CI/CD обновляет `@raw/app_certs` и конфиг синхронно с выпуском новых серверных сертификатов.
 
-### 3. Взаимная аутентификация TLS (mTLS)
+### 3. Взаимная Аутентификация TLS (mTLS)
 
 - Создавайте краткоживущие клиентские сертификаты и храните приватные ключи в аппаратно защищенном (`hardware-backed`) Keystore, где он доступен.
 - Используйте `KeyChain.choosePrivateKeyAlias` или собственный `SSLSocketFactory`/`X509KeyManager` для выбора ключа.
 - На бэкенде включите отзыв и короткий срок жизни (например, ≤ 7 дней) для клиентских сертификатов.
 
-### 4. Key attestation
+### 4. Key Attestation
 
 - Генерируйте ключи только в `AndroidKeyStore` с `KeyGenParameterSpec`, запрашивая аппаратно защищённое (`hardware-backed`) хранилище и аутентификацию пользователя там, где это релевантно, учитывая, что не на всех устройствах доступны такие гарантии.
 - Запрашивайте attestation chain при создании ключа и отправляйте её на сервер.
 - На сервере проверяйте, что ключ создан в доверенном окружении и не импортирован; используйте SafetyNet/Play Integrity как отдельные дополнительные сигналы.
 - Настройте ротацию ключей при подозрении компрометации или изменении политик.
 
-### 5. Мониторинг и реакция
+### 5. Мониторинг И Реакция
 
 - Логируйте (с учётом приватности):
   - pin mismatch;
@@ -109,7 +107,7 @@ sources:
 - Стройте дашборды и алерты (Grafana/Looker и т.п.).
 - Для критичных endpoint используйте поведение fail-close при подозрительных условиях, уведомляйте SecOps и имейте план экстренного обновления конфигурации/пинов.
 
-### 6. CI/CD и тестирование
+### 6. CI/CD И Тестирование
 
 - Автотесты: instrumentation и интеграционные тесты с `MockWebServer` для сценариев pin mismatch, истёкших/ротированных сертификатов и сбоев mTLS.
 - Статический анализ: сканируйте репозиторий на:
@@ -166,7 +164,7 @@ sources:
 - Ecosystem: control SDKs and WebView, documented incident response.
 
 ## Detailed Version
-### 1. Network Security Config as the baseline
+### 1. Network Security Config as the Baseline
 
 ```xml
 <network-security-config>
@@ -192,7 +190,7 @@ sources:
 - Pins: at least two different pins (primary and backup), `expiration`, and a rotation plan.
 - When using custom trust anchors (`@raw/app_certs`), scope them to specific `domain-config` entries where possible to avoid unnecessarily broad trust.
 
-### 2. Certificate pinning (runtime)
+### 2. Certificate Pinning (runtime)
 
 - With OkHttp, use `CertificatePinner`; when necessary, still rely on system CAs while pinning specific public keys.
 - Enable reporting: on pin mismatch, send a telemetry event (without logging keys or pins).
@@ -204,14 +202,14 @@ sources:
 - Use `KeyChain.choosePrivateKeyAlias` or a custom `SSLSocketFactory`/`X509KeyManager` to select the key.
 - On the backend, use revocation and short lifetimes (e.g., ≤ 7 days) for client certs.
 
-### 4. Key attestation
+### 4. Key Attestation
 
 - Generate keys only in `AndroidKeyStore` with `KeyGenParameterSpec`, requesting hardware-backed storage and user auth where appropriate, acknowledging that not all devices provide the same guarantees.
 - Request the attestation chain when creating the key and send it to the backend.
 - On the backend, verify that the key is created in a trusted environment and not imported; use SafetyNet/Play Integrity as additional signals.
 - Configure key rotation on suspected compromise or policy changes.
 
-### 5. Monitoring and response
+### 5. Monitoring and Response
 
 - Log (with privacy safeguards):
   - pin mismatches;
@@ -220,7 +218,7 @@ sources:
 - Build dashboards and alerts (e.g., Grafana/Looker).
 - For critical endpoints, use fail-close behavior on suspicious conditions, notify SecOps, and maintain an emergency config/pin update plan.
 
-### 6. CI/CD and testing
+### 6. CI/CD And Testing
 
 - Instrumentation and integration tests with `MockWebServer` for pin mismatch, expired/rotated certs, and mTLS failures.
 - Static analysis to detect:
@@ -265,7 +263,7 @@ sources:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как безопасно выполнять горячую ротацию пинов без обновления приложения?
 - Как интегрировать Key Attestation с Play Integrity score и backend-политиками?
 - Какая стратегия fallback для пользователей в странах с TLS-интерцепцией (enterprise proxies)?
@@ -285,7 +283,7 @@ sources:
 - [[c-android-keystore]]
 - [Network Security Configuration](https://developer.android.com/training/articles/security-config)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[moc-android]]
 

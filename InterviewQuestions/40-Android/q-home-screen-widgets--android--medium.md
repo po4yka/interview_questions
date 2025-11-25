@@ -1,31 +1,31 @@
 ---
 id: android-193
 title: Home Screen Widgets / Виджеты домашнего экрана
-aliases:
-- Home Screen Widgets
-- Виджеты домашнего экрана
+aliases: [Home Screen Widgets, Виджеты домашнего экрана]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-recyclerview-viewtypes-delegation--android--medium
-- q-what-is-broadcastreceiver--android--easy
-- q-what-is-known-about-recyclerview--android--easy
+  - c-android-components
+  - q-how-compose-draws-on-screen--android--hard
+  - q-how-to-break-text-by-screen-width--android--easy
+  - q-recyclerview-viewtypes-delegation--android--medium
+  - q-what-is-broadcastreceiver--android--easy
+  - q-what-is-known-about-recyclerview--android--easy
+  - q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-views
-- difficulty/medium
-- widgets
+tags: [android/ui-views, difficulty/medium, widgets]
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)

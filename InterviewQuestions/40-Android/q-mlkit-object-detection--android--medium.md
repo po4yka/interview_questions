@@ -1,37 +1,32 @@
 ---
 id: android-362
 title: ML Kit Object Detection / Распознавание объектов ML Kit
-aliases:
-- ML Kit Barcode Scanning
-- ML Kit Image Labeling
-- ML Kit Object Detection
-- Распознавание объектов ML Kit
+aliases: [ML Kit Barcode Scanning, ML Kit Image Labeling, ML Kit Object Detection, Распознавание объектов ML Kit]
 topic: android
 subtopics:
-- camera
-- media
+  - camera
+  - media
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-media3
-- c-camerax
-- q-compose-performance-optimization--android--hard
-- q-when-can-the-system-restart-a-service--android--medium
+  - c-camerax
+  - c-media3
+  - q-compose-gesture-detection--android--medium
+  - q-compose-performance-optimization--android--hard
+  - q-mlkit-custom-models--android--hard
+  - q-mlkit-face-detection--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-- android/camera
-- android/media
-- barcode-scanning
-- difficulty/medium
-- ml-kit
-- object-detection
+tags: [android/camera, android/media, barcode-scanning, difficulty/medium, ml-kit, object-detection]
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)

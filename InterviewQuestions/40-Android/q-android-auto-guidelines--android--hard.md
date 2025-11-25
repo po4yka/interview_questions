@@ -1,32 +1,33 @@
 ---
 id: android-622
 title: Android Auto Guidelines / Руководство Android Auto
-aliases:
-- Android Auto Guidelines
-- Руководство Android Auto
+aliases: [Android Auto Guidelines, Руководство Android Auto]
 topic: android
 subtopics:
-- auto
+  - auto
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-auto
-- q-android-auto-guidelines--android--hard
+  - c-android-auto
+  - q-android-auto-guidelines--android--hard
+  - q-android-lint-tool--android--medium
+  - q-main-thread-android--android--medium
+  - q-parsing-optimization-android--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/auto
-- difficulty/hard
+tags: [android/auto, difficulty/hard]
 sources:
-- "https://developer.android.com/training/cars/apps"
-- "https://developer.android.com/training/cars/apps/media"
+  - "https://developer.android.com/training/cars/apps"
+  - "https://developer.android.com/training/cars/apps/media"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -65,32 +66,32 @@ sources:
 - Интеграция с backend при необходимости (контент, маршруты, аккаунты) с учётом ограничений сети и времени отклика.
 - Использование OEM/vehicle API (Automotive OS) через `CarHardwareManager` и др. с строгими разрешениями.
 
-#### Категория и шаблоны
+#### Категория И Шаблоны
 
 - Android Auto поддерживает ограниченный набор категорий (Navigation, POI, Media, Messaging и др., согласно актуальной документации).
 - Используйте Car App Library (`ListTemplate`, `PaneTemplate`, `MapTemplate`, `NavigationTemplate` и т.п.); произвольного кастомного UI и произвольных жестов нет — только шаблоны.
 - Навигационные приложения обязаны предоставлять маршруты и поддерживать turn-by-turn через соответствующие навигационные шаблоны (например, `NavigationTemplate`).
 
-#### Правила отвлечения водителя (Driver Distraction)
+#### Правила Отвлечения Водителя (Driver Distraction)
 
 - Логика безопасности задаётся библиотекой и шаблонами: ограничены длины списков, количество интеракций, ввод текста и доступные действия при движении.
 - Длинные формы, произвольный текстовый ввод и сложные пошаговые флоу при движении запрещены; используйте голос, упрощённые шаблоны или companion app для сложных операций.
 - При движении часть UI и действий автоматически блокируется или урезается в зависимости от политики Android Auto/Automotive OS (например, ограничения на длину списков, ввод, мультимедиа).
 
-#### Голос и Assistant
+#### Голос И Assistant
 
 - Интегрируйте голосовые сценарии через стандартные механизмы: обработка поиска, навигационных запросов и действий медиаплеера, совместимых с Assistant (например, поддержка поиска и команд через соответствующие callback'и Car App Library и интент-фильтры).
 - Для сообщений используйте поддерживаемые API (например, интеграция с SMS/MMS/notification messaging и соответствующими car messaging шаблонами), а не кастомные UI решения.
 - Media-приложения должны корректно обрабатывать голосовой поиск и команды (search / play / pause и т.п.) через предусмотренные методы (например, `onSearch`/intent-based запросы), чтобы работать с Assistant и голосом автомобиля.
 
-#### Automotive OS vs Android Auto
+#### Automotive OS Vs Android Auto
 
 - Для Android Auto на телефоне вы создаёте car app, использующую Car App Library и шаблоны; UI рендерится на головном устройстве и подчиняется ограничениям безопасности.
 - Для Android Automotive OS (AAOS) можно создавать standalone-приложения, которые устанавливаются напрямую на головное устройство; для шаблонных приложений также используется Car App Library и `CarAppService`.
 - Для доступа к данным автомобиля на Automotive OS используйте соответствующие API (например, `CarHardwareManager` и связанные интерфейсы), с учётом разрешений, OEM-ограничений и конфиденциальности.
 - Требуется взаимодействие с OEM: требования к UI, плотности экрана, брендингу и, при необходимости, OEM-сертификация.
 
-#### Процесс сертификации / ревью
+#### Процесс Сертификации / Ревью
 
 1. Соберите car app в соответствии с требованиями Car App Library и пройдите внутренний QA по официальным чек-листам (Media, Navigation, Messaging и др.).
 2. Выполните self-review в Play Console: заполните форму для автомобильных приложений, подтвердите соответствие категориям и политикам.
@@ -103,7 +104,7 @@ sources:
 - Тестируйте на эмуляторе с нужным уровнем Car App Library / Car API и различными конфигурациями дисплея.
 - По возможности прогоните сценарии на реальных головных устройствах или тестовых стендах (touch target size, читаемость, блики, поведение при движении).
 
-#### Монетизация и Policy
+#### Монетизация И Policy
 
 - Нельзя показывать отвлекающую рекламу или видео-контент на экранах, доступных при движении, и нарушать driver distraction policy.
 - Флоу покупок и ввода платёжных данных должен соответствовать политикам безопасности: избегайте сложных транзакций при движении, переносите их в безопасный контекст (остановка, companion app, голосовые сценарии, если разрешены).
@@ -139,13 +140,13 @@ sources:
 - Backend integration (routes, content, accounts) designed for constrained networks and latency.
 - Use OEM/vehicle APIs on Automotive OS via `CarHardwareManager` etc., guarded by strict permissions.
 
-#### Category and templates
+#### Category and Templates
 
 - Choose an allowed car app category (Navigation, POI, Media, Messaging, etc.).
 - Build only with Car App Library templates (`ListTemplate`, `PaneTemplate`, `MapTemplate`, `NavigationTemplate`, etc.); arbitrary custom UI and free-form layouts/gestures are not allowed.
 - Navigation apps must provide routes and turn-by-turn guidance via the appropriate navigation templates (e.g., `NavigationTemplate`).
 
-#### Driver Distraction rules
+#### Driver Distraction Rules
 
 - Rely on the built-in safety model: templates and platform rules cap list length, interactions, text input, and available actions while driving.
 - Long forms, free-form text input, and complex multi-step flows while driving are prohibited; offload them to voice, simplified templates, or a companion app.
@@ -157,14 +158,14 @@ sources:
 - For messaging, use supported APIs and car messaging templates (e.g., notification-based messaging integration), not custom conversation UIs.
 - Media apps must properly handle voice search and playback commands (search / play / pause, etc.) through the provided methods (e.g., `onSearch`/intent-based requests) to work well with Assistant and car voice systems.
 
-#### Automotive OS vs Android Auto
+#### Automotive OS Vs Android Auto
 
 - Android Auto (phone-based): you build a car app that uses Car App Library and templates; it runs on the phone, renders UI on the head unit, and is strictly constrained by safety and templates.
 - Android Automotive OS (AAOS): you can ship standalone APKs installed directly on the head unit; for template-based experiences you still use Car App Library and `CarAppService`.
 - Use Automotive OS vehicle data APIs (e.g., `CarHardwareManager` and related interfaces) with proper permissions, OEM constraints, and privacy protections.
 - Coordinate with OEMs regarding UI requirements, densities, branding, and any OEM-specific certification.
 
-#### Certification / review process
+#### Certification / Review Process
 
 1. Build your car app according to Car App Library requirements and run internal QA using official quality checklists (Media, Navigation, Messaging, etc.).
 2. Complete the car app self-review in Play Console: declare category, answer policy questions, and confirm compliance.
@@ -185,7 +186,7 @@ sources:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать гибридный подход (Auto + Automotive) с общим кодом?
 - Какие метрики latency отслеживает Google при ревью?
@@ -209,7 +210,7 @@ sources:
 - https://developer.android.com/training/cars/apps
 - https://developer.android.com/training/cars/apps/media
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-android-auto-guidelines--android--hard]]
 

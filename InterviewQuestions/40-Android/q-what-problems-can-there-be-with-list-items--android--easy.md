@@ -1,35 +1,31 @@
 ---
 id: android-079
 title: List Items Problems / Проблемы с элементами списка
-aliases:
-- List Items Problems
-- Проблемы с элементами списка
+aliases: [List Items Problems, Проблемы с элементами списка]
 topic: android
 subtopics:
-- performance-memory
-- ui-views
+  - performance-memory
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance
-- c-recyclerview
+  - c-performance
+  - c-recyclerview
+  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
+  - q-list-elements-problems--android--medium
+  - q-what-to-put-in-state-for-initial-list--android--easy
 created: 2025-10-13
 updated: 2025-11-10
-tags:
-- android/performance-memory
-- android/ui-views
-- difficulty/easy
-- listview
-- memory
-- performance
-- recyclerview
+tags: [android/performance-memory, android/ui-views, difficulty/easy, listview, memory, performance, recyclerview]
 
+date created: Saturday, November 1st 2025, 1:26:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +39,7 @@ tags:
 ## Ответ (RU)
 Проблемы с элементами списка в Android-приложениях могут быть разнообразными. Ниже перечислены основные типичные проблемы и способы их решения, с примерами.
 
-### 1. Переполнение памяти (Out of Memory)
+### 1. Переполнение Памяти (Out of Memory)
 
 **Проблема:** Списки с большим количеством элементов, особенно с изображениями, могут приводить к OOM.
 
@@ -107,7 +103,7 @@ recyclerView.apply {
 
 Используйте Glide/Coil/Picasso, не храните долгоживущие ссылки на `View` или `Activity` в адаптере, доверяйте отмену загрузки самим библиотекам.
 
-### 2. Медленная прокрутка (Lagging)
+### 2. Медленная Прокрутка (Lagging)
 
 **Проблема:** Дёрганная или медленная прокрутка списка.
 
@@ -182,7 +178,7 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### 3. Неправильное отображение данных (Data Inconsistency)
+### 3. Неправильное Отображение Данных (Data Inconsistency)
 
 **Проблема:** Элементы показывают чужие данные, мигают или не обновляются.
 
@@ -264,7 +260,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallba
 adapter.submitList(newItems)
 ```
 
-### 4. Проблемы многопоточности (Concurrency Issues)
+### 4. Проблемы Многопоточности (Concurrency Issues)
 
 **Проблема:** Обновления данных из разных потоков могут вызывать краши или неконсистентный UI.
 
@@ -336,7 +332,7 @@ class FlowFragment : Fragment() {
 }
 ```
 
-### 5. Проблемы с обработкой кликов
+### 5. Проблемы С Обработкой Кликов
 
 **Проблема:** Обработчики кликов не срабатывают или приводят к утечкам памяти.
 
@@ -381,7 +377,7 @@ val adapter = ClickableAdapter { item ->
 }
 ```
 
-### 6. Неправильное позиционирование элементов
+### 6. Неправильное Позиционирование Элементов
 
 **Проблема:** Элементы "скачут", пропадают или отображаются не на своих местах при скролле.
 

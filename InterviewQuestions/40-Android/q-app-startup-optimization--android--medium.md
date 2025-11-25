@@ -4,24 +4,29 @@ title: App Startup Optimization / Оптимизация запуска прил
 aliases: [App Startup Optimization, Оптимизация запуска приложения]
 topic: android
 subtopics:
-- app-startup
-- performance-memory
-- performance-startup
+  - app-startup
+  - performance-memory
+  - performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-content-provider
+  - c-content-provider
+  - q-app-size-optimization--android--medium
+  - q-app-startup-library--android--medium
+  - q-optimize-memory-usage-android--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/app-startup, android/performance-memory, android/performance-startup, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:04:13 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -232,7 +237,7 @@ An example of optimization impact in a real project (values are not universal):
 - Test on low-end devices and realistic conditions
 - `Set` startup time targets based on app category and device profile; for typical utility/content apps, aim for sub-second cold start where feasible
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как библиотека App Startup обрабатывает граф зависимостей между инициализаторами?
 - Какие целевые значения времени старта рекомендуются для разных категорий приложений (игры vs утилиты)?
@@ -270,7 +275,7 @@ An example of optimization impact in a real project (values are not universal):
 - [Perfetto Tracing](https://perfetto.dev/)
 - [Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-app-start-types-android--android--medium]]

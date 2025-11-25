@@ -18,10 +18,15 @@ moc: moc-android
 related:
   - c-gradle
   - c-modularization
+  - q-annotation-processing-android--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-optimize-memory-usage-android--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium, gradle, performance]
+date created: Saturday, November 1st 2025, 1:02:18 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +43,7 @@ tags: [android/build-variants, android/dependency-management, android/gradle, di
 
 **Стратегия**: настройка Gradle + модуляризация + управление зависимостями + профилирование.
 
-### 1. Критичные настройки gradle.properties
+### 1. Критичные Настройки gradle.properties
 
 ```properties
 # ✅ Параллельная сборка
@@ -70,7 +75,7 @@ kotlin.incremental=true
 **Эффект**: Эти настройки могут дать заметный выигрыш (например, десятки процентов на инкрементальных сборках),
 но точные цифры сильно зависят от структуры проекта, плагинов, железа и CI-инфраструктуры.
 
-### 2. Зависимости: implementation vs api
+### 2. Зависимости: Implementation Vs Api
 
 ```kotlin
 dependencies {
@@ -89,7 +94,7 @@ dependencies {
 
 **Правило**: `api` использовать только если зависимость является частью публичного API модуля, иначе предпочитать `implementation`.
 
-### 3. Отключение неиспользуемых функций
+### 3. Отключение Неиспользуемых Функций
 
 ```kotlin
 android {
@@ -145,7 +150,7 @@ include(":core:network", ":core:database")
 
 **Strategy**: Gradle configuration + modularization + dependency management + profiling.
 
-### 1. Critical gradle.properties settings
+### 1. Critical gradle.properties Settings
 
 ```properties
 # ✅ Parallel build
@@ -177,7 +182,7 @@ kotlin.incremental=true
 **Impact**: These settings can bring significant improvements (e.g., noticeable gains on incremental builds),
 but exact percentages vary greatly with project structure, plugins, hardware, and CI setup.
 
-### 2. Dependencies: implementation vs api
+### 2. Dependencies: Implementation Vs Api
 
 ```kotlin
 dependencies {
@@ -196,7 +201,7 @@ dependencies {
 
 **Rule**: Use `api` only if the dependency is part of the module's public API; otherwise prefer `implementation`.
 
-### 3. Disable unused features
+### 3. Disable Unused Features
 
 ```kotlin
 android {
@@ -248,7 +253,7 @@ include(":core:network", ":core:database")
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем Configuration Cache отличается от Build Cache?
 - Каковы компромиссы использования `api` vs `implementation` в многомодульных проектах?
@@ -284,12 +289,12 @@ include(":core:network", ":core:database")
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-gradle-basics--android--easy]]
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 
 
 

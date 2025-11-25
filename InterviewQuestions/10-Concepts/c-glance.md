@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-008
 title: Jetpack Glance / Jetpack Glance
-aliases:
-  - Glance App Widgets
-  - Compose Widgets
+aliases: [Compose Widgets, Glance App Widgets]
 kind: concept
 summary: Jetpack Glance brings Compose-based app widgets with the Glance composition runtime and state management
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - widgets
-  - compose
-  - glance
+tags: [android, compose, concept, glance, widgets]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

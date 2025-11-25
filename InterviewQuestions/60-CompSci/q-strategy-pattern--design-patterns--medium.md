@@ -1,5 +1,5 @@
 ---
-id: cs-060
+id: dp-004
 title: "Strategy Pattern / Strategy Паттерн"
 aliases: [Strategy Pattern, Strategy Паттерн]
 topic: behavioral
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, policy-pattern, strategy]
 
+date created: Saturday, November 1st 2025, 1:27:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -247,7 +249,7 @@ fun sortingExample() {
 }
 ```
 
-### Пояснение к Примерам
+### Пояснение К Примерам
 
 - **`RouteStrategy`** определяет контракт, которому должны следовать все стратегии (алгоритмы)
 - **Конкретные стратегии** (`DrivingStrategy`, `WalkingStrategy` и др.) инкапсулируют отдельные алгоритмы
@@ -639,7 +641,7 @@ processor.process("Hello") // "HELLO"
 
 Strategy is a behavioral design pattern that defines a family of interchangeable algorithms and allows selecting them at runtime. Use it when you have multiple algorithms for the same task, want to avoid complex conditionals, and prefer extending the system with new algorithms without modifying existing code.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать выбор стратегии (например, через фабрику или конфигурацию), не смешивая бизнес-логику с клиентским кодом?
 - Когда использование Strategy является избыточным по сравнению с простыми условными операторами?

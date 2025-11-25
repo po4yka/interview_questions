@@ -1,37 +1,35 @@
 ---
 id: android-629
 title: TFLite Acceleration Strategies / Стратегии ускорения TFLite
-aliases:
-- TFLite Acceleration Strategies
-- Стратегии ускорения TFLite
+aliases: [TFLite Acceleration Strategies, Стратегии ускорения TFLite]
 topic: android
 subtopics:
-- performance-battery
-- performance-memory
-- threads-sync
+  - performance-battery
+  - performance-memory
+  - threads-sync
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-profiling
-- q-android-performance-measurement-tools--android--medium
+  - c-android-profiling
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-testing-strategies--android--medium
+  - q-cache-implementation-strategies--android--medium
+  - q-integration-testing-strategies--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/performance-battery
-- android/performance-memory
-- android/threads-sync
-- performance
-- difficulty/hard
+tags: [android/performance-battery, android/performance-memory, android/threads-sync, difficulty/hard, performance]
 sources:
-- "https://www.tensorflow.org/lite/performance/delegates"
-- "https://firebase.google.com/docs/ml/manage-hosted-models"
+  - "https://firebase.google.com/docs/ml/manage-hosted-models"
+  - "https://www.tensorflow.org/lite/performance/delegates"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -73,13 +71,13 @@ sources:
 - Компонент OTA-обновлений модели (Downloader + верификация + hot-swap с fallback).
 - Интеграция с системой телеметрии (логирование делегатов, версий моделей, латентности).
 
-#### 1. Подготовка модели
+#### 1. Подготовка Модели
 
 - Используйте `tf.lite.TFLiteConverter` с оптимизациями через `converter.optimizations = [tf.lite.Optimize.DEFAULT]`, применяйте post-training quantization (динамическая, full integer) и/или проводите quantization-aware training на стороне обучения до конвертации.
 - При целевом использовании NNAPI/других делегатов проверяйте совместимость операторов (поддержка INT8/FP16, отсутствие редких/нестандартных ops); понимайте, какие части графа реально пойдут через делегат, а какие останутся на CPU.
 - Для больших моделей минимизируйте использование `FlexDelegate` (он тянет TF runtime и ухудшает размер/latency) и по возможности избегайте TensorFlow ops вне основного TFLite набора.
 
-#### 2. Загрузка и кеш
+#### 2. Загрузка И Кеш
 
 ```kotlin
 val fileDescriptor = context.assets.openFd("model.tflite")
@@ -119,13 +117,13 @@ val interpreter = Interpreter(mapped, options)
 - NNAPI delegate — универсальный слой над аппаратными акселераторами OEM; поведение зависит от реализации драйверов. Не все операторы и типы (например, INT8/FP16) гарантированно поддержаны.
 - Выбирайте делегат динамически (feature detection, проверка доступности/поддержки) и всегда обеспечивайте падение обратно на CPU: перехватывайте ошибки делегата (`IllegalArgumentException`/`UnsupportedOperationException`/внутренние ошибки) и пересоздавайте интерпретатор без делегата.
 
-#### 4. Потоки и батчинг
+#### 4. Потоки И Батчинг
 
 - Выполняйте inference на `HandlerThread`/`Executors`/корутинах, чтобы не блокировать UI.
 - Поддерживайте очередь запросов (например, через `Channel`/`Flow` или собственный пул), чтобы избегать contention и не создавать интерпретатор на каждый запрос.
 - Для видеопотоков снижайте частоту inference и/или используйте `ImageAnalysis` с `setBackpressureStrategy(KEEP_ONLY_LATEST)` вместо ручного накопления очереди.
 
-#### 5. OTA обновления
+#### 5. OTA Обновления
 
 - Для Firebase Model Downloader: используйте `getModel(name, DownloadType.LOCAL_MODEL)`/`getModelDetails` и регистрируйте observer/worker, обновляющий локальный файл и перезагружающий интерпретатор безопасно.
 - Верифицируйте hash и подпись скачанной модели. Храните текущую и предыдущую версии (например, в Proto DataStore), чтобы иметь возможность rollback.
@@ -137,7 +135,7 @@ val interpreter = Interpreter(mapped, options)
 - Используйте `PerformanceTrace` (Firebase Performance) или собственные метрики/логирование для разных версий модели и конфигураций делегатов.
 - Собирайте crash dumps и отчёты: делегаты (особенно NNAPI/GPU на старых драйверах) могут приводить к нестабильности; при выявлении проблем динамически отключайте проблемный делегат для затронутых устройств.
 
-#### 7. Ссылки на концепции
+#### 7. Ссылки На Концепции
 
 - См. также: [[c-android-profiling]]
 
@@ -174,13 +172,13 @@ val interpreter = Interpreter(mapped, options)
 - OTA model update component (downloader + verification + hot-swap with fallback).
 - Telemetry integration (log delegates, model versions, latencies).
 
-#### 1. Model preparation
+#### 1. Model Preparation
 
 - Use `tf.lite.TFLiteConverter` with `converter.optimizations = [tf.lite.Optimize.DEFAULT]`, apply post-training quantization (dynamic or full integer) and/or quantization-aware training before conversion.
 - When targeting NNAPI/other delegates, verify operator and dtype compatibility (INT8/FP16, no rare/custom ops); understand which graph segments will actually run on the delegate vs CPU.
 - Minimize `FlexDelegate` usage for large models because it pulls in the full TensorFlow runtime and significantly increases binary size and can hurt startup/latency; whenever possible, stay within the native TFLite operator set.
 
-#### 2. Loading and cache
+#### 2. Loading and Cache
 
 - Memory-map the `.tflite` file (for uncompressed assets or a downloaded file) using a `ByteBuffer` to reduce load time and peak memory usage. For compressed assets, first write the model to internal storage, then memory-map it from there.
 - For OTA, use Firebase ML `ModelDownloader` or your own CDN plus integrity checks (hash/signature), then memory-map the verified local file in the same way.
@@ -212,13 +210,13 @@ val interpreter = Interpreter(mapped, options)
 - Use NNAPI as an abstraction over vendor accelerators; behavior and supported ops/dtypes depend on OEM drivers.
 - Select the delegate dynamically via feature detection; always provide a robust CPU fallback: catch delegate-related failures (e.g., `IllegalArgumentException`, `UnsupportedOperationException`, internal errors), recreate the interpreter without the delegate, and continue on CPU.
 
-#### 4. Threading and batching
+#### 4. Threading and Batching
 
 - Run inference off the main thread (HandlerThread/Executors/coroutines).
 - Maintain a request queue (e.g., via `Channel`/`Flow` or your own pool) instead of creating an interpreter per request to avoid contention and churn.
 - For video/camera pipelines, reduce inference frequency and explicitly use `ImageAnalysis` with `setBackpressureStrategy(KEEP_ONLY_LATEST)` to avoid unbounded frame queues.
 
-#### 5. OTA updates
+#### 5. OTA Updates
 
 - With Firebase Model Downloader, use `getModel(name, DownloadType.LOCAL_MODEL)` / `getModelDetails` and a worker/observer that updates the on-disk model file and reloads the interpreter safely.
 - Verify downloaded model integrity via hash and signature; keep both current and previous versions (e.g., tracked in Proto DataStore) to support rollback.
@@ -230,7 +228,7 @@ val interpreter = Interpreter(mapped, options)
 - Use Firebase Performance or custom telemetry to correlate metrics with model/delegate versions and device classes.
 - Collect crash reports; if specific devices/drivers are unstable with certain delegates, remotely disable those delegates for affected segments.
 
-#### 7. Concept references
+#### 7. Concept References
 
 - See also: [[c-android-profiling]]
 

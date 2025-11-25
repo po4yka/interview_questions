@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +35,7 @@ tags: [android/ui-compose, android/ui-views, difficulty/medium]
 
 См. также: [[c-android-ui-composition]]
 
-### setContent в `Activity`
+### setContent В `Activity`
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -55,7 +57,7 @@ fun MyApp() {
 }
 ```
 
-### ComposeView во `Fragment`
+### ComposeView Во `Fragment`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -151,7 +153,7 @@ val layout = LinearLayout(this).apply {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
 - [[q-network-error-handling-strategies--networking--medium]]
@@ -181,7 +183,7 @@ val layout = LinearLayout(this).apply {
 - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
 - [Jetpack Compose](https://developer.android.com/develop/ui/compose)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
 - [[q-network-error-handling-strategies--networking--medium]]

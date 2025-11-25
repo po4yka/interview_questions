@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
 
+date created: Saturday, November 1st 2025, 1:24:41 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -83,7 +85,7 @@ interface FileUploadApi {
 }
 ```
 
-#### 2. Отслеживание прогресса
+#### 2. Отслеживание Прогресса
 
 ```kotlin
 class ProgressRequestBody(
@@ -651,7 +653,7 @@ class ChunkedUploadWorker(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как бы вы реализовали паузу и возобновление загрузок больших файлов?
 2. Какие стратегии вы бы использовали для обработки сбоев загрузки в медленных сетях?
@@ -681,7 +683,7 @@ class ChunkedUploadWorker(
 - [Android WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Retrofit Documentation](https://square.github.io/retrofit/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (Medium)
 - [[q-android-testing-strategies--android--medium]]

@@ -1,36 +1,35 @@
 ---
 id: android-644
 title: Conversation Notifications & Bubbles / Уведомления и Bubbles для переписки
-aliases:
-- Conversation Notifications & Bubbles
-- Уведомления и Bubbles для переписки
+aliases: [Conversation Notifications & Bubbles, Уведомления и Bubbles для переписки]
 topic: android
 subtopics:
-- notifications
-- ui-navigation
-- ui-state
+  - notifications
+  - ui-navigation
+  - ui-state
 question_kind: theory
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-communication-surfaces
-- q-advanced-share-sheet-shortcuts--android--hard
+  - c-communication-surfaces
+  - q-advanced-share-sheet-shortcuts--android--hard
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-local-notification-exact-time--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/notifications
-- android/ui-navigation
-- android/ui-state
-- difficulty/hard
+tags: [android/notifications, android/ui-navigation, android/ui-state, difficulty/hard]
 sources:
-- "https://developer.android.com/develop/ui/views/notifications/conversation"
-- "https://developer.android.com/about/versions/11/features/bubbles"
+  - "https://developer.android.com/about/versions/11/features/bubbles"
+  - "https://developer.android.com/develop/ui/views/notifications/conversation"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -43,13 +42,13 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Модель данных
+### 1. Модель Данных
 
 - Определите для участников `Person` с именем и avatar/URI (для self-пользователя и собеседников).
 - Создайте `ShortcutInfoCompat` с постоянным ID переписки и зарегистрируйте через `ShortcutManagerCompat.pushDynamicShortcut` (или pinned shortcuts).
 - Связывайте уведомления с shortcut через `setShortcutId(conversationId)` и при необходимости `setLocusId` для улучшения интеграции с системным поиском/recents.
 
-### 2. Conversation notification
+### 2. Conversation Notification
 
 - Используйте `NotificationCompat.MessagingStyle` для системно распознаваемых conversation notifications:
 
@@ -98,13 +97,13 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 - Активити для bubble должна поддерживать ресайзинг (`android:resizeableActivity="true"`) и корректное поведение в плавающем окне; `documentLaunchMode` настраивайте так, чтобы каждая беседа открывалась предсказуемо (например, отдельный таск для каждой беседы при необходимости).
 - Обрабатывайте события сворачивания/закрытия через callbacks/интенты и фиксируйте это в аналитике.
 
-### 4. Background limits
+### 4. Background Limits
 
 - Соблюдайте `POST_NOTIFICATIONS` runtime permission (Android 13+). При отсутствии разрешения не показывайте обычные уведомления/бабблы для чата и уважайте выбор пользователя.
 - Если используется Foreground `Service` (например, для ongoing calls, screen sharing, записи аудио/видео), применяйте соответствующие типы (`FOREGROUND_SERVICE_MICROPHONE`, `FOREGROUND_SERVICE_CAMERA` и т.д.) и связанную `CATEGORY_CALL`/`ongoing` нотификацию. Сами по себе bubbles для чата не требуют FGS.
 - Android 13+: уведомления для новых установок по умолчанию отключены → нужен onboarding flow и явный запрос `POST_NOTIFICATIONS`.
 
-### 5. Аналитика и UX
+### 5. Аналитика И UX
 
 - Логируйте:
   - open rate уведомлений и bubble (открытие activity из уведомления/баббла),
@@ -119,7 +118,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 - Используйте тестовый `NotificationListenerService` для проверки содержимого и свойств уведомлений.
 - Для end-to-end тестов применяйте UI Automation: `UiDevice.openNotification()` и `executeShellCommand("cmd notification expand-notifications")` / управление bubbles.
 
-### 7. Политики и приватность
+### 7. Политики И Приватность
 
 - Чувствительные данные скрывайте на lock screen через `setVisibility(NotificationCompat.VISIBILITY_PRIVATE)` и соответствующие настройки пользователя.
 - Предоставляйте в приложении настройки для бесед: отключение уведомлений для треда, отключение bubbles, уровни важности.
@@ -129,13 +128,13 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 
 ## Answer (EN)
 
-### 1. Data model
+### 1. Data Model
 
 - Define `Person` objects for all participants (including the self user) with names and avatar URIs.
 - Create `ShortcutInfoCompat` with a stable conversation ID and register via `ShortcutManagerCompat.pushDynamicShortcut` (or pinned shortcuts).
 - Link notifications to shortcuts via `setShortcutId(conversationId)` and optionally `setLocusId` for better integration with system search/recents.
 
-### 2. Conversation notification
+### 2. Conversation Notification
 
 - Use `NotificationCompat.MessagingStyle` so the system recognizes your notifications as conversations:
 
@@ -184,7 +183,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 - The bubble activity must support resizing (`android:resizeableActivity="true"`) and behave correctly in a floating window; configure `documentLaunchMode` so each conversation opens predictably (e.g., separate task per conversation if needed).
 - Handle bubble collapse/close events via callbacks/intents and record them in analytics.
 
-### 4. Background limits
+### 4. Background Limits
 
 - Honor the `POST_NOTIFICATIONS` runtime permission (Android 13+). If it is not granted, do not show regular chat notifications/bubbles and respect the user's choice.
 - When using a foreground `Service` (e.g., for ongoing calls, screen sharing, audio/video recording), use the correct foreground service types (such as `FOREGROUND_SERVICE_MICROPHONE`, `FOREGROUND_SERVICE_CAMERA`) and an associated `CATEGORY_CALL`/ongoing notification. Regular chat bubbles do not require a foreground service.
@@ -205,7 +204,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 - Use a test `NotificationListenerService` to inspect notification content and properties.
 - For end-to-end tests, use UI automation: `UiDevice.openNotification()` and shell commands like `executeShellCommand("cmd notification expand-notifications")`, plus bubble interaction checks.
 
-### 7. Policy and privacy
+### 7. Policy and Privacy
 
 - Hide sensitive information on the lock screen using `setVisibility(NotificationCompat.VISIBILITY_PRIVATE)` and respect user lockscreen preferences.
 - Provide in-app controls per conversation: mute thread, disable bubbles, configure importance levels.
@@ -213,7 +212,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как синхронизировать статус прочтения между устройствами и bubbles?
 - Какие UX паттерны для групповых чатов и mentions?
 - Как обрабатывать авторизацию/реактивацию после долгого отсутствия приложения (Doze, standby)?
@@ -231,7 +230,7 @@ val bubbleNotification = NotificationCompat.Builder(context, CHANNEL_ID)
 - [[c-communication-surfaces]]
 - https://developer.android.com/develop/ui/views/notifications/conversation
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[c-communication-surfaces]]
 

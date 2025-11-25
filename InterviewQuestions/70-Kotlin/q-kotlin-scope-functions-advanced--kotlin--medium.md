@@ -14,6 +14,8 @@ related: [c-kotlin, q-flow-performance--kotlin--hard, q-kotlin-null-safety--prog
 created: 2025-10-15
 updated: 2025-11-09
 tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
+date created: Friday, October 31st 2025, 6:32:39 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +40,7 @@ Scope-функции Kotlin (`let`, `run`, `with`, `apply`, `also`) выполн
 | **apply** | this (receiver) | Объект контекста | Конфигурация объекта |
 | **also** | it (аргумент) | Объект контекста | Дополнительные эффекты, логирование |
 
-### Let - Трансформация и Null Safety
+### Let - Трансформация И Null Safety
 
 ```kotlin
 // Null safety
@@ -69,7 +71,7 @@ fun process() {
 }
 ```
 
-### Run - Инициализация и Вычисление
+### Run - Инициализация И Вычисление
 
 ```kotlin
 // Инициализация объекта + вычисление результата
@@ -534,7 +536,7 @@ user?.email?.let { email ->
 8. Prefer `let` (by convention) over `run` for nullable receivers when you want to make null-handling explicit; it's a style guideline, not a strict rule.
 9. Don't overuse scope functions—simple, direct code is often clearer.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия подхода с scope-функциями в Kotlin от Java-кода без них?
 - Когда вы будете использовать эти функции на практике?
@@ -556,7 +558,7 @@ user?.email?.let { email ->
 - [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-performance--kotlin--hard]]
 - [[q-kotlin-null-safety--programming-languages--medium]]

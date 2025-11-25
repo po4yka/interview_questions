@@ -17,13 +17,18 @@ moc: moc-android
 related:
   - c-jetpack-compose
   - q-animated-visibility-vs-content--android--medium
+  - q-compose-core-components--android--medium
+  - q-compose-gesture-detection--android--medium
   - q-how-to-create-animations-in-android--android--medium
   - q-jetpack-compose-basics--android--medium
   - q-vector-graphics-animations--android--medium
+  - q-what-are-the-most-important-components-of-compose--android--medium
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-animation, android/ui-compose, difficulty/medium]
 sources: []
+date created: Saturday, November 1st 2025, 1:01:55 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -139,7 +144,7 @@ fun AnimatedCard(isExpanded: Boolean) {
 
 ---
 
-## Ответ: Дополнительные вопросы (RU)
+## Ответ: Дополнительные Вопросы (RU)
 
 - Как последовательно запускать несколько анимаций с разными задержками и длительностями?
 - В каких случаях `Transition` даёт лучшие характеристики, чем несколько независимых вызовов `animate*AsState`?
@@ -155,7 +160,7 @@ fun AnimatedCard(isExpanded: Boolean) {
 - "https://developer.android.com/develop/ui/compose/animation/introduction"
 - "https://developer.android.com/develop/ui/compose/animation/quick-guide"
 
-## Ответ: Связанные вопросы (RU)
+## Ответ: Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-jetpack-compose-basics--android--medium]] — понимание основ Compose и state

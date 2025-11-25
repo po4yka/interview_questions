@@ -14,7 +14,10 @@ related: [c-kotlin, q-kotlin-dsl-creation--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, higher-order-functions, inline, inline-functions, lambda-expressions, performance]
+date created: Friday, October 31st 2025, 6:29:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что такое inline функции?
 
@@ -45,7 +48,7 @@ Key points:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия inline функций в Kotlin от аналогичных механизмов в Java?
 - Когда на практике стоит использовать inline функции?
@@ -67,7 +70,7 @@ Key points:
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-dsl-creation--kotlin--hard]]
 

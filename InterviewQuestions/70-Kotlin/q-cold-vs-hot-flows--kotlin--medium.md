@@ -17,6 +17,8 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
 
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -131,7 +133,7 @@ val sharedFlow = MutableSharedFlow<Int>(
 )
 ```
 
-### Конвертация Холодного в Горячий: `shareIn()`
+### Конвертация Холодного В Горячий: `shareIn()`
 
 Оператор `shareIn` конвертирует холодный поток в горячий `SharedFlow`, запуская общий корутин, который коллекционирует исходный `Flow` и шарит значения.
 
@@ -239,7 +241,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-### Конвертация Холодного в Горячий: `stateIn()`
+### Конвертация Холодного В Горячий: `stateIn()`
 
 Оператор `stateIn` конвертирует холодный поток в горячий `StateFlow`, который всегда имеет текущее значение и ведёт себя как "горячий" источник состояния.
 
@@ -251,7 +253,7 @@ fun <T> Flow<T>.stateIn(
 ): StateFlow<T>
 ```
 
-#### Ключевые Отличия от `shareIn`
+#### Ключевые Отличия От `shareIn`
 
 | Характеристика | `shareIn` | `stateIn` |
 |----------------|-----------|-----------|
@@ -330,7 +332,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-### Таблица Сравнения: Холодные vs Горячие Потоки
+### Таблица Сравнения: Холодные Vs Горячие Потоки
 
 | Аспект | Холодный поток | Горячий поток |
 |--------|----------------|---------------|
@@ -877,7 +879,7 @@ val users2 = repository.users
 
 **English Summary**: Cold flows execute independently for each collector; hot flows share a single execution or state among multiple collectors and may emit regardless of who is collecting, depending on the strategy. Use `shareIn()` to convert a cold `Flow` into a `SharedFlow` with configurable `replay` and starting behavior. Use `stateIn()` to convert into a `StateFlow` when you need a state holder with a current value. Prefer `WhileSubscribed` for UI, `Lazily` for one-time initialization that stays active within scope, and `Eagerly` for always-on services.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java без `Flow`/горячих потоков?
 - Когда бы вы использовали это на практике?
@@ -901,7 +903,7 @@ val users2 = repository.users
 - [Cold flows, hot flows - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flows-are-cold)
 - [shareIn and stateIn operators - Kotlinx Coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Похожие (Medium)
 - [[q-hot-cold-flows--kotlin--medium]]

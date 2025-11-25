@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-callsuper-annotation--kotlin--medium]
+related: [c-collections, c-kotlin, q-callsuper-annotation--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/medium, kotlin, lazy-evaluation, optimization, performance, sequences]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Когда следует использовать Sequences вместо Collections? Объясните промежуточные против терминальных операций и влияние на производительность.
 
@@ -64,7 +67,7 @@ val result = numbers
 - Позволяют эффективнее обрабатывать большие наборы данных и длинные цепочки операций, особенно при ранней остановке.
 - Имеют накладные расходы на каждый элемент, поэтому для небольших коллекций или простых операций могут быть невыгодны.
 
-### Сравнение производительности
+### Сравнение Производительности
 
 **Collections:**
 - Просты и быстры для маленьких и средних наборов данных.
@@ -81,7 +84,7 @@ val result = numbers
   - сценариев, где не нужно потреблять все элементы.
 - Вводят накладные расходы на каждый элемент, из-за чего на малых данных могут быть медленнее коллекций.
 
-### Когда использовать Sequences
+### Когда Использовать Sequences
 
 **Большие наборы данных / ранняя остановка:**
 
@@ -115,7 +118,7 @@ val firstMatch = list.asSequence()
     .firstOrNull()    // Останавливается, как только найден подходящий элемент
 ```
 
-### Когда использовать Collections
+### Когда Использовать Collections
 
 **Малые наборы данных:**
 
@@ -284,7 +287,7 @@ val countSeq = seq.count() // Re-traverses the source and filter
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия от Java Streams?
 - Когда вы бы использовали это на практике?
@@ -308,7 +311,7 @@ val countSeq = seq.count() // Re-traverses the source and filter
 - [[c-kotlin]]
 - [[c-collections]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-callsuper-annotation--kotlin--medium]]
 - [[q-kotlin-native--kotlin--hard]]

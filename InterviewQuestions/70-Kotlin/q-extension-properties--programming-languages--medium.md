@@ -14,7 +14,10 @@ related: [c-kotlin, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin, programming-languages]
+date created: Friday, October 31st 2025, 6:29:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Свойства какого вида можно добавить как расширение?
 
@@ -31,7 +34,7 @@ In Kotlin, you can declare extension properties as both `val` and `var`, but the
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия от Java?
 - Когда это стоит использовать на практике?
@@ -53,7 +56,7 @@ In Kotlin, you can declare extension properties as both `val` and `var`, but the
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-what-is-coroutinescope--programming-languages--medium]]
 - [[q-how-suspend-function-detects-suspension--programming-languages--hard]]

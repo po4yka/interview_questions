@@ -6,8 +6,8 @@ aliases: ["Structured Concurrency", "Структурированная пара
 # Classification
 topic: kotlin
 subtopics:
-  - coroutines
   - cancellation
+  - coroutines
   - structured-concurrency
 question_kind: theory
 difficulty: hard
@@ -21,14 +21,17 @@ source_note: Comprehensive guide on Structured Concurrency
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, scope, structured-concurrency]
+date created: Sunday, October 12th 2025, 3:22:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Что такое структурированная параллельность в Kotlin? Объясните иерархию родитель-потомок корутин, распространение отмены, распространение исключений и разницу между coroutineScope, supervisorScope и withContext.
 
@@ -49,7 +52,7 @@ tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, sc
 4. **Исключения**: По умолчанию исключения потомка (в обычных скоупах) распространяются к родителю и отменяют сиблингов.
 5. **Завершение**: Родитель ждёт всех потомков.
 
-### Иерархия корутин
+### Иерархия Корутин
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -221,7 +224,7 @@ suspend fun loadUserScope(id: Int): User = coroutineScope {
 }
 ```
 
-### Распространение отмены
+### Распространение Отмены
 
 **Родитель -> потомок:**
 
@@ -274,7 +277,7 @@ suspend fun childException() {
 // родитель ловит исключение, второй потомок отменяется и не успевает напечатать.
 ```
 
-### Стратегии обработки исключений
+### Стратегии Обработки Исключений
 
 **Стратегия 1: try-catch в дочерней корутине**
 
@@ -320,7 +323,7 @@ scope.launch {
 }
 ```
 
-### Реальный пример: параллельная загрузка данных
+### Реальный Пример: Параллельная Загрузка Данных
 
 ```kotlin
 class UserProfileLoader(
@@ -425,7 +428,7 @@ fun demonstrateJobHierarchy() = runBlocking {
 | Ждёт потомков | Да | Да | Ждёт завершения тела и любых потомков внутри блока |
 | Меняет диспетчер | Нет | Нет | Да (опционально) |
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
 **Паттерн 1: timeout с очисткой**
 
@@ -545,7 +548,7 @@ coroutineScope {
 }
 ```
 
-### Тестирование структурированной параллельности
+### Тестирование Структурированной Параллельности
 
 ```kotlin
 @Test

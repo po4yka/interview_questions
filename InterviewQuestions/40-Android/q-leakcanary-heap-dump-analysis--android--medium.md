@@ -16,6 +16,8 @@ moc: moc-android
 related: [c-android-profiling, q-leakcanary-detection-mechanism--android--medium]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:25:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -259,7 +261,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как LeakCanary отличает намеренно долго живущие объекты от утечек памяти?
 - Каковы накладные расходы по производительности при использовании LeakCanary в debug-сборках?
@@ -289,12 +291,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-main-thread-android--android--medium]] - Понимание модели потоков в Android
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-leakcanary-detection-mechanism--android--medium]] - Как LeakCanary обнаруживает утечки
 - [[q-memory-leak-detection--android--medium]] - Общие подходы к обнаружению утечек памяти
 - [[q-memory-leak-vs-oom-android--android--medium]] - Утечки памяти vs OOM

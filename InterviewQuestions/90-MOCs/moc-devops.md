@@ -5,6 +5,8 @@ kind: moc
 created: 2025-10-18
 updated: 2025-10-18
 tags: [moc, topic/devops-ci-cd]
+date created: Saturday, October 18th 2025, 2:45:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # DevOps & CI/CD — Map of Content

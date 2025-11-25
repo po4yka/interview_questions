@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: ["https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration"]
 tags: [android/background-execution, android/coroutines, background-processing, data-passing, difficulty/medium, workmanager]
 
+date created: Saturday, November 1st 2025, 12:47:12 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -188,7 +190,7 @@ class MyWorker(context: Context, params: WorkerParameters)
 }
 ```
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как WorkManager гарантирует доставку данных при гибели процесса?
 - Что происходит с выходными данными, если приложение завершится до их получения наблюдателем (данные остаются в WorkInfo до очистки истории)?
@@ -199,14 +201,14 @@ class MyWorker(context: Context, params: WorkerParameters)
 - https://developer.android.com/topic/libraries/architecture/workmanager — официальное руководство по WorkManager
 - https://developer.android.com/reference/androidx/work/Data — документация по классу Data
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
-#### Предварительные материалы
+#### Предварительные Материалы
 - [[c-workmanager]] — концепция WorkManager
 - [[c-coroutines]] — корутины Kotlin
 - [[c-background-tasks]] — фоновые задачи
 
-#### На том же уровне
+#### На Том Же Уровне
 - [[q-workmanager-execution-guarantee--android--medium]] — гарантии выполнения
 - [[q-workmanager-vs-alternatives--android--medium]] — WorkManager vs альтернативы
 

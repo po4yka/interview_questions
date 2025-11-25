@@ -13,9 +13,11 @@ created: 2025-10-13
 updated: 2025-11-11
 sources: []
 moc: moc-android
-related: [c-android-surfaces, c-android-graphics-pipeline, q-android-app-lag-analysis--android--medium]
+related: [c-android-graphics-pipeline, c-android-surfaces, q-android-app-lag-analysis--android--medium]
 tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
 
+date created: Saturday, November 1st 2025, 1:26:25 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -166,7 +168,7 @@ class CustomTextureView(context: Context) :
 
 (Это типичные сценарии, а не жесткие правила; выбор зависит от конкретного кейса.)
 
-### Использование с корутинами
+### Использование С Корутинами
 
 ```kotlin
 class ModernSurfaceView(context: Context) :
@@ -517,7 +519,7 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 - The main thread manages lifecycle and regular `View` operations without being blocked by heavy drawing.
 - Data shared between UI and rendering threads is synchronized using safe primitives (flags, `synchronized`, coroutine mechanisms).
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Каковы ключевые trade-off'ы между использованием `SurfaceView` и `TextureView` для высокочастотного рендеринга?
 2. Как синхронизировать потоки игровой логики и рендеринга при использовании `SurfaceView`?
@@ -553,12 +555,12 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 - https://developer.android.com/reference/android/view/SurfaceView
 - https://developer.android.com/reference/android/view/TextureView
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Базовые знания о главном потоке
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-android-app-lag-analysis--android--medium]]
 
 ### Продвинутые (сложнее)

@@ -16,6 +16,8 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "difficulty/medium", "permissions", "privacy", "security"]
+date created: Saturday, October 25th 2025, 11:07:59 am
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Android Permissions / Разрешения Android

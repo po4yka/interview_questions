@@ -4,26 +4,31 @@ title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
 aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android
 subtopics:
-- ci-cd
-- gradle
-- testing-instrumented
+  - ci-cd
+  - gradle
+  - testing-instrumented
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-build-optimization-gradle--android--medium
-- q-cicd-automated-testing--android--medium
-- q-cicd-deployment-automation--android--medium
+  - q-android-build-optimization--android--medium
+  - q-android-release-pipeline-cicd--android--hard
+  - q-build-optimization-gradle--android--medium
+  - q-cicd-automated-testing--android--medium
+  - q-cicd-deployment-automation--android--medium
+  - q-cicd-pipeline-setup--android--medium
 created: 2025-10-11
 updated: 2025-11-10
 sources: []
 tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:46:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -36,14 +41,14 @@ tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/m
 
 ## Ответ (RU)
 
-### Цели пайплайна
+### Цели Пайплайна
 
 * **Скорость**: проверки PR ≤10 минут на средних проектах
 * **Воспроизводимость**: Gradle wrapper, зафиксированные версии SDK/build-tools
 * **Безопасность**: OIDC для Play Console (без долгоживущих ключей), secret scanning
 * **Надёжность**: минимальная flakiness, детерминированные релизы
 
-### Основные этапы
+### Основные Этапы
 
 **1. Setup**
 ```yaml
@@ -254,7 +259,7 @@ testOptions {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать flaky-тесты в CI, не блокируя полностью PR?
 - Каковы компромиссы между локальным и удалённым build cache?
@@ -288,14 +293,14 @@ testOptions {
 - https://docs.gradle.org/current/userguide/configuration_cache.html
 - https://github.com/Triple-T/gradle-play-publisher
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-build-optimization-gradle--android--medium]] — основы оптимизации сборки Gradle
 - [[q-cicd-automated-testing--android--medium]] — стратегии автоматизации тестирования
 - Понимание жизненного цикла и задач Gradle
 
-### На том же уровне
+### На Том Же Уровне
 - [[q-cicd-deployment-automation--android--medium]] — детали автоматизации деплоя
 - Управление зависимостями Gradle и version catalogs
 - Стратегии шардинга и параллелизации Android-тестов

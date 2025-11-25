@@ -14,7 +14,10 @@ related: [c-coroutines, q-object-companion-object--kotlin--medium, q-test-dispat
 created: 2024-10-15
 updated: 2025-11-09
 tags: [difficulty/easy]
+date created: Friday, November 7th 2025, 2:49:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Почему следует избегать использования `GlobalScope` в Android приложениях?
 
@@ -146,7 +149,7 @@ fun testLoadUser() {
 }
 ```
 
-### Правильный Способ: Корутины с Жизненным Циклом
+### Правильный Способ: Корутины С Жизненным Циклом
 
 **Решение 1: Использовать lifecycleScope (`Activity`/`Fragment`)**
 
@@ -284,7 +287,7 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 | **Обработка исключений** | Глобальный обработчик по умолчанию | Обработчик области |
 | **Практика Android** | Анти-паттерн | Рекомендуется |
 
-### Распространенные Ошибки и Как Их Исправить
+### Распространенные Ошибки И Как Их Исправить
 
 **Ошибка 1: Фоновая работа после ухода пользователя**
 
@@ -663,7 +666,7 @@ class MyViewModel : ViewModel() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java-потоков?
 - В каких редких случаях использование `GlobalScope` все же можно обосновать?
@@ -689,7 +692,7 @@ class MyViewModel : ViewModel() {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-object-companion-object--kotlin--medium]]
 - [[q-test-dispatcher-types--kotlin--medium]]

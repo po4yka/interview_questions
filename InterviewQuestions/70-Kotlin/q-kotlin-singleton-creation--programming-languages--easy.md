@@ -14,7 +14,10 @@ related: [c-kotlin, q-coroutine-job-lifecycle--kotlin--medium, q-statein-sharein
 created: 2025-10-15
 updated: 2025-11-09
 tags: [design-patterns, difficulty/easy, singleton]
+date created: Friday, October 31st 2025, 6:32:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Как создать singleton в Kotlin?
 
@@ -349,7 +352,7 @@ fun main() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали такой singleton на практике?
@@ -369,7 +372,7 @@ fun main() {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
 - [[q-suspend-functions-basics--kotlin--easy]]

@@ -1,36 +1,33 @@
 ---
 id: android-341
 title: Navigation Methods Android / Методы навигации Android
-aliases:
-- Navigation Methods
-- Методы навигации
+aliases: [Navigation Methods, Методы навигации]
 topic: android
 subtopics:
-- activity
-- ui-navigation
+  - activity
+  - ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-tasks-back-stack--android--medium
-- q-what-is-activity-and-what-is-it-used-for--android--medium
-- c-activity
+  - c-activity
+  - q-navigation-methods-android--android--medium
+  - q-navigation-methods-in-android--android--medium
+  - q-tasks-back-stack--android--medium
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
+  - q-what-navigation-methods-do-you-know--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/ui-navigation
-- difficulty/medium
-- intent
-- navigation
-- startActivity
+tags: [android/activity, android/ui-navigation, difficulty/medium, intent, navigation, startActivity]
 
 
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -178,7 +175,7 @@ val detailsFragment = DetailsFragment.newInstance(itemId)
 (mainActivity as MainActivity).navigateToFragment(detailsFragment)
 ```
 
-### 3. Навигация через `Intent`
+### 3. Навигация Через `Intent`
 
 Используется для переходов между `Activity` внутри приложения или между приложениями.
 
@@ -222,7 +219,7 @@ class DetailsActivity : AppCompatActivity() {
 }
 ```
 
-#### Неявный (`Implicit`) `Intent` (система или другие приложения)
+#### Неявный (`Implicit`) `Intent` (система Или Другие приложения)
 
 ```kotlin
 // Открыть веб-страницу
@@ -310,7 +307,7 @@ fun createDeepLink(itemId: Int): PendingIntent {
 }
 ```
 
-### Сравнение методов навигации
+### Сравнение Методов Навигации
 
 | Метод                                      | Когда использовать                               | Плюсы                                              | Минусы                                          |
 | ------------------------------------------ | ------------------------------------------------ | -------------------------------------------------- | ----------------------------------------------- |

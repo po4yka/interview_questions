@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-023
 title: Release Engineering / Инженерия релизов
-aliases:
-  - Release Engineering
-  - Инженерия релизов Android
+aliases: [Release Engineering, Инженерия релизов Android]
 kind: concept
 summary: Processes, tooling, and automation that move Android builds from CI to staged production with quality gates and compliance checks
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - release-engineering
-  - ci-cd
-  - quality
+tags: [android, ci-cd, concept, quality, release-engineering]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

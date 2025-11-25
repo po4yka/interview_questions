@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [algorithms, bellman-ford, difficulty/hard, dijkstra, floyd-warshall, graph, mst, shortest-path]
 sources: ["https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm", "https://en.wikipedia.org/wiki/Minimum_spanning_tree"]
 
+date created: Saturday, November 1st 2025, 1:01:42 pm
+date modified: Tuesday, November 25th 2025, 8:43:38 pm
 ---
 
 # Вопрос (RU)
@@ -480,7 +482,7 @@ fun bellmanFord(vertices: Int, edges: List<BFEdge>, source: Int): IntArray? {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как выбрать между алгоритмами Дейкстры и Беллмана-Форда?
 - Каковы особенности и trade-off'ы между алгоритмами Краскала и Прима для построения MST?
 - В каких случаях алгоритм Флойда-Уоршелла предпочтительнее, чем запускать Дейкстру V раз?
@@ -491,13 +493,13 @@ fun bellmanFord(vertices: Int, edges: List<BFEdge>, source: Int): IntArray? {
 - What are the trade-offs between Kruskal and Prim for MST?
 - When is Floyd-Warshall better than running Dijkstra V times?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Базовые алгоритмы на графах
 - [[q-data-structures-overview--algorithms--easy]] - Структуры данных
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - Основы динамического программирования
 - [[q-binary-search-trees-bst--algorithms--hard]] - Алгоритмы на деревьях
 

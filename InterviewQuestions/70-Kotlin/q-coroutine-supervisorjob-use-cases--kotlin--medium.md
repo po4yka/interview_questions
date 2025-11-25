@@ -13,9 +13,11 @@ updated: "2025-11-11"
 tags: ["coroutines", "difficulty/medium", "error-handling", "job", "kotlin", "supervisorjob"]
 description: "Key use cases for SupervisorJob in Kotlin coroutines: independent failures, differences from Job, and Android patterns"
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-structured-concurrency--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-structured-concurrency--kotlin--hard]
 subtopics: [coroutines, supervisorjob]
 
+date created: Saturday, November 1st 2025, 1:29:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +38,7 @@ subtopics: [coroutines, supervisorjob]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Можно ли использовать одновременно обычный `Job` и `SupervisorJob` в одной иерархии корутин и как это влияет на отмену?
 2. Что произойдет, если в родительском scope с `SupervisorJob` дочерняя корутина создаст собственный scope с обычным `Job`?
@@ -76,7 +78,7 @@ subtopics: [coroutines, supervisorjob]
 - [Android Developers - viewModelScope](https://developer.android.com/topic/libraries/architecture/coroutines)
 - [Roman Elizarov - Exceptions in coroutines](https://medium.com/@elizarov/exceptions-in-coroutines-ce8da1ec060c)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-structured-concurrency--kotlin--hard]]
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
@@ -189,7 +191,7 @@ fun supervisorJobCreation() = runBlocking {
 }
 ```
 
-#### Обработка Исключений с SupervisorJob
+#### Обработка Исключений С SupervisorJob
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -288,7 +290,7 @@ suspend fun compareScopeBuilders() {
 }
 ```
 
-#### Случаи Использования в Android
+#### Случаи Использования В Android
 
 ```kotlin
 import kotlinx.coroutines.*

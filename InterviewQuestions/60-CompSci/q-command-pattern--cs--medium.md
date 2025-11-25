@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral, command, design-patterns, difficulty/medium, gof-patterns]
 sources: ["https://en.wikipedia.org/wiki/Command_pattern"]
+date created: Saturday, November 1st 2025, 1:24:26 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -507,13 +509,13 @@ fun main() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать undo/redo с использованием паттерна Command?
 - В чем разница между паттернами Command и Strategy?
 - Как обрабатывать валидацию команд и ошибки при выполнении?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые ООП-концепции

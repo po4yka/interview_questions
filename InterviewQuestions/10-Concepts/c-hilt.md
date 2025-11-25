@@ -16,6 +16,8 @@ related: []
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture", "concept", "dependency-injection", "difficulty/medium", "hilt"]
+date created: Thursday, October 23rd 2025, 1:45:31 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Hilt / Hilt DI

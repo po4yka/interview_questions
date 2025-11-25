@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/room, android/ui-compose, database, difficulty/medium, offline-first, pagination, paging3]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -403,7 +405,7 @@ Use **PagingSource** for simple local pagination, **RemoteMediator** for offline
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `PagingSource` обрабатывает обновления базы данных без ручной инвалидции?
 - В чем компромиссы между `enablePlaceholders: true` и `false`?
@@ -419,16 +421,16 @@ Use **PagingSource** for simple local pagination, **RemoteMediator** for offline
 - [[c-coroutines]] — корутины Kotlin для асинхронных операций
 - Android Paging 3 Documentation
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-room-library-definition--android--easy]] — основы Room
 
-### Средний уровень
+### Средний Уровень
 - [[q-room-transactions-dao--android--medium]] — транзакции в Room
 - [[q-room-type-converters--android--medium]] — конвертеры типов в Room
 
-### Продвинутый уровень (сложнее)
+### Продвинутый Уровень (сложнее)
 - [[q-room-fts-full-text-search--android--hard]] — полнотекстовый поиск в Room
 - Стратегии миграций базы данных и версионирования
 

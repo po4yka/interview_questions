@@ -16,6 +16,8 @@ related: []
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["acid", "concept", "database", "difficulty/medium", "rdbms", "relational", "transactions"]
+date created: Sunday, October 12th 2025, 2:36:30 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

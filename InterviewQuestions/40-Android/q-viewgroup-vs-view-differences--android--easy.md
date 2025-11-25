@@ -1,34 +1,32 @@
 ---
 id: android-239
 title: ViewGroup vs View Differences / Различия ViewGroup и View
-aliases:
-- ViewGroup vs View
-- Различия ViewGroup и View
+aliases: [ViewGroup vs View, Различия ViewGroup и View]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: reviewed
 moc: moc-android
 related:
-- c-android
-- c-android-views
-- q-viewmodel-pattern--android--easy
-- q-what-does-viewgroup-inherit-from--android--easy
+  - c-android
+  - c-android-views
+  - q-custom-view-attributes--android--medium
+  - q-viewmodel-pattern--android--easy
+  - q-what-does-viewgroup-inherit-from--android--easy
+  - q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/ui-views
-- difficulty/easy
-- view
-- view-hierarchy
-- viewgroup
+tags: [android/ui-views, difficulty/easy, view, view-hierarchy, viewgroup]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +39,7 @@ tags:
 
 ## Ответ (RU)
 
-### Что такое `ViewGroup`?
+### Что Такое `ViewGroup`?
 
 **`ViewGroup`** — это специальный `View`, который может **содержать другие `View`** (дочерние элементы). `ViewGroup` является базовым классом для layout-ов и контейнеров представлений. Этот класс также определяет `ViewGroup.LayoutParams`, который служит базовым классом для параметров размещения дочерних элементов.
 
@@ -72,7 +70,7 @@ tags:
 - **MotionLayout** — layout для анимаций и переходов (расширяет ConstraintLayout)
 - **GridLayout** — размещает дочерние элементы в таблице
 
-### Что такое `View`?
+### Что Такое `View`?
 
 **`View`** — это базовый строительный блок компонентов пользовательского интерфейса. `View` занимает прямоугольную область на экране и отвечает за отрисовку содержимого и обработку событий (нажатия, жесты и т.д.).
 
@@ -86,7 +84,7 @@ tags:
 - **CheckBox** — переключатель-флажок
 - **RadioButton** — переключатель-вариант
 
-### `View` vs `ViewGroup`: ключевые отличия
+### `View` Vs `ViewGroup`: Ключевые Отличия
 
 #### `View`
 - Определение: базовый элемент UI (`android.view.View`)
@@ -102,7 +100,7 @@ tags:
 - Дочерние элементы: может содержать несколько дочерних `View` и `ViewGroup`
 - Примеры: `LinearLayout`, `RelativeLayout`, `ConstraintLayout`, `FrameLayout`
 
-### Пример сравнения
+### Пример Сравнения
 
 ```xml
 <!-- View: не может содержать дочерние элементы -->
@@ -168,7 +166,7 @@ abstract class ViewGroup : View() {
 }
 ```
 
-### Пример кастомного `ViewGroup` (упрощенно)
+### Пример Кастомного `ViewGroup` (упрощенно)
 
 ```kotlin
 class CustomContainer @JvmOverloads constructor(
@@ -223,7 +221,7 @@ class CustomContainer @JvmOverloads constructor(
 | Основная ответственность | Отрисовка и обработка событий | Измерение, размещение и управление дочерними `View` |
 | Кастомные реализации | Часто переопределяют `onDraw()`, `onMeasure()` | Обязателен `onLayout()`, часто переопределяют `onMeasure()` |
 
-### Ключевые моменты
+### Ключевые Моменты
 
 1. **`ViewGroup` является `View`** — наследует все возможности `View` и добавляет управление дочерними элементами.
 2. **Вложенные контейнеры** — `ViewGroup` может содержать другие `ViewGroup`, образуя сложную иерархию.
@@ -284,7 +282,7 @@ Common UI components that extend `View`:
 - **CheckBox** - checkbox control
 - **RadioButton** - radio button control
 
-### `View` vs `ViewGroup`: Key Differences
+### `View` Vs `ViewGroup`: Key Differences
 
 #### `View`
 - **Definition**: Basic building block of User Interface (UI) elements in Android (`android.view.View`)

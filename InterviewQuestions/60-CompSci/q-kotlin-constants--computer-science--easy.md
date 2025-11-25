@@ -1,5 +1,5 @@
 ---
-id: cs-008
+id: lang-207
 title: "Kotlin Constants / Константы в Kotlin"
 aliases: []
 topic: kotlin
@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy]
 
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -73,7 +75,7 @@ const val MAX_SIZE = 100 // Known at compile time
 
 Constants (including `const val` and `val` properties used as constants) are not reassignable after initialization.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-inline-function-limitations--kotlin--medium]]
 - [[q-kotlin-native--kotlin--hard]]
@@ -85,7 +87,7 @@ Constants (including `const val` and `val` properties used as constants) are not
 - [[q-kotlin-native--kotlin--hard]]
 - [[q-kotlin-extensions-overview--programming-languages--medium]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-inline-function-limitations--kotlin--medium]]
 - [[q-kotlin-native--kotlin--hard]]

@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-launch-vs-async-vs-runblocking--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-launch-vs-async-vs-runblocking--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [context-switching, coroutines, difficulty/medium, dispatchers, kotlin, withcontext]
+date created: Saturday, November 1st 2025, 1:30:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)

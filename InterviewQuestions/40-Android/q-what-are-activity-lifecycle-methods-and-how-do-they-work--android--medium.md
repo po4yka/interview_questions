@@ -1,36 +1,32 @@
 ---
 id: android-343
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
-aliases:
-- Activity Lifecycle Methods
-- Методы жизненного цикла Activity
+aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
 topic: android
 subtopics:
-- activity
-- lifecycle
+  - activity
+  - lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: reviewed
 moc: moc-android
 related:
-- c-activity-lifecycle
-- q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-activity-lifecycle
+  - q-activity-lifecycle-methods--android--medium
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/lifecycle
-- difficulty/medium
-- lifecycle
-- onCreate
-- onResume
-- onStart
+tags: [android/activity, android/lifecycle, difficulty/medium, lifecycle, onCreate, onResume, onStart]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +40,7 @@ tags:
 ## Ответ (RU)
 Методы жизненного цикла `Activity` — это колбэк-функции, которые система Android вызывает на разных этапах жизни `Activity`. Понимание этих методов критически важно для правильного управления ресурсами, сохранения состояния и обеспечения плавного пользовательского опыта.
 
-### Жизненный цикл `Activity`
+### Жизненный Цикл `Activity`
 
 ```
    Activity запущена
@@ -78,7 +74,7 @@ tags:
      onDestroy()  ← Activity уничтожается
 ```
 
-### Полный набор методов жизненного цикла (пример)
+### Полный Набор Методов Жизненного Цикла (пример)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -207,34 +203,34 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Типичные сценарии жизненного цикла
+### Типичные Сценарии Жизненного Цикла
 
-#### Сценарий 1: Запуск приложения
+#### Сценарий 1: Запуск Приложения
 
 ```
 onCreate() → onStart() → onResume() → [Running]
 ```
 
-#### Сценарий 2: Пользователь нажимает Home
+#### Сценарий 2: Пользователь Нажимает Home
 
 ```
 [Running] → onPause() → onStop() → [Stopped]
 ```
 
-#### Сценарий 3: Возврат в приложение
+#### Сценарий 3: Возврат В Приложение
 
 ```
 [Stopped] → onRestart() → onStart() → onResume() → [Running]
 ```
 
-#### Сценарий 4: Поворот экрана
+#### Сценарий 4: Поворот Экрана
 
 ```
 onPause() → onStop() → onDestroy() →
 onCreate() → onStart() → onResume()
 ```
 
-#### Сценарий 5: Диалог поверх (`Activity` частично видна)
+#### Сценарий 5: Диалог Поверх (`Activity` Частично видна)
 
 ```
 [Running] → onPause() → [Paused, Activity может оставаться частично видимой]
@@ -242,13 +238,13 @@ onCreate() → onStart() → onResume()
 
 Например, при показе диалоговой или прозрачной `Activity`/`Fragment` поверх.
 
-#### Сценарий 6: Другая `Activity` полностью перекрывает
+#### Сценарий 6: Другая `Activity` Полностью Перекрывает
 
 ```
 onPause() → onStop() → [Stopped]
 ```
 
-### Сохранение и восстановление состояния
+### Сохранение И Восстановление Состояния
 
 ```kotlin
 class DataActivity : AppCompatActivity() {
@@ -299,7 +295,7 @@ class DataActivity : AppCompatActivity() {
 }
 ```
 
-### Компоненты, учитывающие жизненный цикл
+### Компоненты, Учитывающие Жизненный Цикл
 
 Современный подход — использовать lifecycle-aware компоненты (`ViewModel`, `SavedStateHandle`, `LiveData`, `Flow` с `lifecycleScope`, `LifecycleObserver`).
 
@@ -361,7 +357,7 @@ class MyLifecycleObserver : DefaultLifecycleObserver {
 }
 ```
 
-### Конфигурационные изменения
+### Конфигурационные Изменения
 
 ```kotlin
 class ConfigActivity : AppCompatActivity() {
@@ -417,7 +413,7 @@ class DataViewModel : ViewModel() {
 data class LargeData(val items: List<String> = emptyList())
 ```
 
-### Обработка кнопки Назад
+### Обработка Кнопки Назад
 
 ```kotlin
 class BackHandlingActivity : AppCompatActivity() {
@@ -448,7 +444,7 @@ class BackHandlingActivity : AppCompatActivity() {
 }
 ```
 
-### Тайминг вызова методов жизненного цикла
+### Тайминг Вызова Методов Жизненного Цикла
 
 ```kotlin
 class TimingActivity : AppCompatActivity() {
@@ -485,7 +481,7 @@ class TimingActivity : AppCompatActivity() {
 }
 ```
 
-### Сводная таблица методов жизненного цикла
+### Сводная Таблица Методов Жизненного Цикла
 
 | Метод | Когда вызывается | Видимость | Интерактивность | Что делать |
 |-------|------------------|-----------|-----------------|------------|
@@ -497,7 +493,7 @@ class TimingActivity : AppCompatActivity() {
 | onDestroy() | Уничтожается | Нет | Нет | Финальная очистка ресурсов, отмена задач |
 | onRestart() | Перед возвратом из Stopped | Нет | Нет | Подготовка к повторному входу перед `onStart()` |
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Корректно вызывать `super` в методах жизненного цикла:
    - Обычно в начале: `onCreate`, `onStart`, `onResume`, `onRestart`.
@@ -513,7 +509,7 @@ class TimingActivity : AppCompatActivity() {
 9. Корректно обрабатывать конфигурационные изменения (ротация, multi-window, locale и т.д.).
 10. Тестировать все распространённые сценарии: навигация, ротация, возврат/выход, multi-window, убийство процесса.
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // НЕПРАВИЛЬНО: Долгая операция в onCreate
@@ -1070,7 +1066,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## Связанные темы (RU)
+## Связанные Темы (RU)
 - Жизненный цикл `Fragment`
 - `ViewModel`
 - `SavedStateHandle`
@@ -1090,7 +1086,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[c-activity-lifecycle]]
 - [[q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard]]
@@ -1116,7 +1112,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Базовые (проще)
 - [[q-viewmodel-pattern--android--easy]] - Жизненный цикл

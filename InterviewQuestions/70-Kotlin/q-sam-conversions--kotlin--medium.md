@@ -14,6 +14,8 @@ related: [c-kotlin, q-flow-exception-handling--kotlin--medium, q-kotlin-inline-f
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, functional-interface, java-interop, kotlin, lambda, sam]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -28,7 +30,7 @@ tags: [difficulty/medium, functional-interface, java-interop, kotlin, lambda, sa
 
 **SAM (Single Abstract Method)** конверсии позволяют использовать **лямбда-функции** вместо объектов анонимных классов для интерфейсов с **одним абстрактным методом**. Это делает код короче и читабельнее, особенно при работе с Java API и функциональными интерфейсами.
 
-### Что такое SAM-интерфейс
+### Что Такое SAM-интерфейс
 
 **SAM-интерфейс** — это интерфейс с одним абстрактным методом.
 
@@ -44,7 +46,7 @@ fun interface OnClickListener {
 }
 ```
 
-### SAM-конверсия на практике
+### SAM-конверсия На Практике
 
 #### До SAM (старый подход)
 
@@ -71,7 +73,7 @@ button.setOnClickListener {
 }
 ```
 
-### SAM для Java-интерфейсов
+### SAM Для Java-интерфейсов
 
 Kotlin автоматически применяет SAM-конверсии к **Java** интерфейсам с одним абстрактным методом, таким как `Runnable`, `Callable`, `Comparator` и слушатели Android.
 
@@ -117,7 +119,7 @@ val sorted = numbers.sortedWith { a, b -> a.compareTo(b) }
 val sorted2 = numbers.sortedWith(Comparator { a, b -> a - b })
 ```
 
-### SAM для Kotlin-интерфейсов (`fun interface`)
+### SAM Для Kotlin-интерфейсов (`fun interface`)
 
 Для SAM-конверсии Kotlin-интерфейсов используется модификатор `fun interface` (начиная с Kotlin 1.4).
 
@@ -148,7 +150,7 @@ val result3 = processString("test", object : StringTransformer {
 
 Обычный `interface` с одним методом в Kotlin не становится SAM-совместимым для Kotlin-лямбд без `fun interface`.
 
-### Практические примеры
+### Практические Примеры
 
 #### Пример 1: Android OnClickListener
 
@@ -184,7 +186,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### Пример 2: RecyclerView Adapter (лямбда как коллбек)
+#### Пример 2: RecyclerView Adapter (лямбда Как коллбек)
 
 ```kotlin
 class UserAdapter(
@@ -241,7 +243,7 @@ val emailValidator = Validator<User> { it.email.contains("@") }
 val validUsers = repo.findUsers(emailValidator)
 ```
 
-#### Пример 4: Обработчики событий (EventBus)
+#### Пример 4: Обработчики Событий (EventBus)
 
 ```kotlin
 fun interface EventHandler<T> {
@@ -373,7 +375,7 @@ val t2 = TransformerFun { it.uppercase() }  // OK
 val runnable = Runnable { println("Running") }  // OK
 ```
 
-### Сравнение с высшими функциями (function types)
+### Сравнение С Высшими Функциями (function types)
 
 ```kotlin
 // Подход 1: SAM-интерфейс
@@ -713,7 +715,7 @@ fun interface SingleMethod {
 val obj2 = SingleMethod { /* ... */ }  // OK
 ```
 
-2. Default methods do not count as abstract.
+1. Default methods do not count as abstract.
 
 ```kotlin
 // SAM - only one ABSTRACT method
@@ -729,7 +731,7 @@ fun interface Processor {
 val processor = Processor { it.uppercase() }  // OK
 ```
 
-3. Kotlin interfaces require `fun interface` for SAM conversion.
+1. Kotlin interfaces require `fun interface` for SAM conversion.
 
 ```kotlin
 // Regular Kotlin interface - NOT treated as SAM for Kotlin SAM conversion
@@ -747,7 +749,7 @@ fun interface TransformerFun {
 val t2 = TransformerFun { it.uppercase() }  // OK
 ```
 
-4. Java interfaces are supported automatically.
+1. Java interfaces are supported automatically.
 
 ```kotlin
 // Java interface (from library)
@@ -790,7 +792,7 @@ When to use function types `(T) -> R`:
 
 SAM constructors like `Runnable { ... }`, `Comparator { ... }`, `StringMapper { ... }` help disambiguate overloads and explicitly select the functional interface overload.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия SAM-конверсий Kotlin от Java-подхода?
 - Когда вы бы использовали SAM-конверсии на практике?
@@ -811,7 +813,7 @@ SAM constructors like `Runnable { ... }`, `Comparator { ... }`, `StringMapper { 
 
 - https://kotlinlang.org/docs/home.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-exception-handling--kotlin--medium]]
 - [[q-kotlin-inline-functions--kotlin--medium]]

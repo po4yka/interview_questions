@@ -1,35 +1,32 @@
 ---
 id: android-237
 title: CI/CD Automated Testing / Автоматизированное тестирование в CI/CD
-aliases:
-- CI/CD Automated Testing
-- Автоматизированное тестирование в CI/CD
+aliases: [CI/CD Automated Testing, Автоматизированное тестирование в CI/CD]
 topic: android
 subtopics:
-- ci-cd
-- testing-instrumented
-- testing-unit
+  - ci-cd
+  - testing-instrumented
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- q-android-release-pipeline-cicd--android--hard
+  - c-gradle
+  - q-accessibility-testing--android--medium
+  - q-android-release-pipeline-cicd--android--hard
+  - q-android-testing-strategies--android--medium
+  - q-integration-testing-strategies--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/ci-cd
-- android/testing-instrumented
-- android/testing-unit
-- ci-cd
-- difficulty/medium
-- testing
+tags: [android/ci-cd, android/testing-instrumented, android/testing-unit, ci-cd, difficulty/medium, testing]
+date created: Saturday, November 1st 2025, 1:05:16 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +39,7 @@ tags:
 
 ## Ответ (RU)
 
-### Архитектура пайплайна
+### Архитектура Пайплайна
 
 **Pre-merge (быстрая обратная связь < 10 мин)**:
 - Статический анализ (`lint`/`detekt`)
@@ -56,7 +53,7 @@ tags:
 - Device farm на разных API/размерах
 - Тесты производительности и сбор метрик
 
-### Стратегии тестирования
+### Стратегии Тестирования
 
 ```kotlin
 // ✅ Unit-тесты: быстрые, изолированные, мокируем Android API
@@ -107,7 +104,7 @@ fun loadData() {
 }
 ```
 
-### Оптимизация скорости
+### Оптимизация Скорости
 
 ```yaml
 # ✅ GitHub Actions с кэшированием
@@ -158,7 +155,7 @@ android {
   -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
 ```
 
-### Управление нестабильными тестами
+### Управление Нестабильными Тестами
 
 ```kotlin
 // ✅ Стратегия карантина для flaky тестов
@@ -173,7 +170,7 @@ fun animationTest() {
   -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
 ```
 
-### Отчетность и артефакты
+### Отчетность И Артефакты
 
 **Что сохранять**:
 - JUnit XML (для CI-системы)
@@ -186,7 +183,7 @@ fun animationTest() {
 - Дашборд с трендами (coverage, flakiness)
 - Ссылки на результаты device farm
 
-### Безопасность в CI
+### Безопасность В CI
 
 ```yaml
 # ✅ Подписание APK в защищенной среде
@@ -374,7 +371,7 @@ fun animationTest() {
   # Typically the metadata is committed and then enforced via --verify-configuration
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как поддерживать процесс карантина нестабильных тестов и отслеживать метрики снижения flaky-тестов со временем?
 - Какие критерии определяют состав pre-merge и nightly-наборов тестов для оптимального баланса стоимости и качества сигнала?

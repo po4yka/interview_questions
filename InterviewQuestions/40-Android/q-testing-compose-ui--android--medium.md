@@ -1,35 +1,32 @@
 ---
 id: android-253
 title: Testing Compose UI / Тестирование Compose UI
-aliases:
-- Testing Compose UI
-- Тестирование Compose UI
+aliases: [Testing Compose UI, Тестирование Compose UI]
 topic: android
 subtopics:
-- testing-ui
-- ui-compose
+  - testing-ui
+  - ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-jetpack-compose
-- c-testing
-- q-what-is-diffutil-for--android--medium
+  - c-jetpack-compose
+  - c-testing
+  - q-compose-core-components--android--medium
+  - q-compose-testing--android--medium
+  - q-compose-ui-testing-advanced--android--hard
+  - q-what-is-diffutil-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/testing-ui
-- android/ui-compose
-- difficulty/medium
-- jetpack-compose
-- testing
-- ui-testing
+tags: [android/testing-ui, android/ui-compose, difficulty/medium, jetpack-compose, testing, ui-testing]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +38,7 @@ tags:
 ## Ответ (RU)
 Тестирование Compose UI использует тестовый API Compose для декларативного поиска, взаимодействия и проверки UI-компонентов.
 
-### Базовая настройка
+### Базовая Настройка
 
 ```kotlin
 class LoginScreenTest {
@@ -70,7 +67,7 @@ class LoginScreenTest {
 - Синхронизируется с рекомпозициями и idling-ресурсами.
 - Предоставляет finders, assertions и actions.
 
-### Поисковые функции (Finders) — поиск элементов
+### Поисковые Функции (Finders) — Поиск Элементов
 
 ```kotlin
 // По тексту
@@ -104,7 +101,7 @@ composeTestRule.onAllNodesWithText("Item")
     .onFirst()
 ```
 
-### Тестовые теги — предпочтительный способ
+### Тестовые Теги — Предпочтительный Способ
 
 ```kotlin
 // Composable с тестовыми тегами
@@ -165,7 +162,7 @@ fun loginButton_enabled_when_fields_valid() {
 - Явно помечают тестируемые элементы.
 - Обычно эффективнее поиска по тексту.
 
-### Действия (Actions) — взаимодействие с элементами
+### Действия (Actions) — Взаимодействие С Элементами
 
 ```kotlin
 // Клик
@@ -195,7 +192,7 @@ composeTestRule.onNodeWithTag("item").performTouchInput {
 }
 ```
 
-### Утверждения (Assertions) — проверка состояния
+### Утверждения (Assertions) — Проверка Состояния
 
 ```kotlin
 // Существование
@@ -230,7 +227,7 @@ composeTestRule.onNodeWithTag("progress")
     .assert(hasProgressBarRangeInfo(ProgressBarRangeInfo(0.5f, 0f..1f)))
 ```
 
-### Тестирование изменения состояния
+### Тестирование Изменения Состояния
 
 ```kotlin
 @Composable
@@ -331,7 +328,7 @@ fun userList_scrolls_to_bottom() {
 }
 ```
 
-### Тестирование с ViewModel
+### Тестирование С ViewModel
 
 ```kotlin
 class ProductsScreenTest {
@@ -398,7 +395,7 @@ class ProductsScreenTest {
 }
 ```
 
-### `waitUntil` — ожидание состояния
+### `waitUntil` — Ожидание Состояния
 
 ```kotlin
 // Ожидание появления элемента
@@ -420,7 +417,7 @@ composeTestRule.waitUntil(timeoutMillis = 5_000) {
 }
 ```
 
-### Тестирование навигации (Compose Navigation)
+### Тестирование Навигации (Compose Navigation)
 
 ```kotlin
 @Test
@@ -446,7 +443,7 @@ fun clicking_product_navigates_to_details() {
 }
 ```
 
-### Тестирование диалогов и Bottom Sheet
+### Тестирование Диалогов И Bottom Sheet
 
 ```kotlin
 @Composable
@@ -516,7 +513,7 @@ fun dialog_cancels_deletion() {
 }
 ```
 
-### `unmergedTree` — для вложенных элементов
+### `unmergedTree` — Для Вложенных Элементов
 
 ```kotlin
 // По умолчанию семантика дочерних элементов может сливаться с родителем
@@ -548,7 +545,7 @@ fun ListItemWithTags(title: String, subtitle: String) {
 composeTestRule.onNodeWithTag("subtitle").assertExists() // OK
 ```
 
-### Тестирование анимаций и `mainClock`
+### Тестирование Анимаций И `mainClock`
 
 ```kotlin
 @Composable
@@ -631,7 +628,7 @@ fun loginScreen_screenshot() {
 // Можно использовать специализированные библиотеки screenshot-тестирования (например, Paparazzi, Shot).
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 - Использовать `testTag` вместо текста для стабильных селекторов.
 - Проверять поведение и наблюдаемое состояние UI, а не внутренние детали реализации.
@@ -641,7 +638,7 @@ fun loginScreen_screenshot() {
 - Группировать связанные тесты по экрану/фиче.
 - Выносить общую настройку в `@Before`.
 
-### Частые ошибки (Common Pitfalls)
+### Частые Ошибки (Common Pitfalls)
 
 ```kotlin
 // 1. Неиспользование useUnmergedTree, когда это нужно

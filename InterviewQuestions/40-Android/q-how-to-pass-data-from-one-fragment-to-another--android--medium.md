@@ -11,15 +11,19 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-- c-fragments
-- q-fragment-basics--android--easy
-- q-fragment-vs-activity-lifecycle--android--medium
-- q-save-data-outside-fragment--android--medium
+  - c-fragments
+  - q-fragment-basics--android--easy
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium
+  - q-save-data-outside-fragment--android--medium
+  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/medium]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -159,7 +163,7 @@ class FragmentB : Fragment() {
 | **FragmentResult API** | Одноразовые результаты между фрагментами без shared `ViewModel` |
 | **`Activity` посредник** | Работает, но не рекомендуется из-за сильной связанности |
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как отличается жизненный цикл общего `ViewModel` от жизненного цикла фрагмента?
 - Что произойдет, если передавать большой объём данных через `Bundle` arguments?
@@ -174,7 +178,7 @@ class FragmentB : Fragment() {
 - [[c-activity-lifecycle]]
 - [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (Проще)
 - [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment`

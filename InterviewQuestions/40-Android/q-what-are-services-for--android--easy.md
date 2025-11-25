@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, background-execution, difficulty/easy, service]
 
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -214,7 +216,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между Foreground `Service` и Background `Service`?
 - Как ограничения фонового выполнения в Android 8.0+ влияют на использование `Service`?
@@ -244,13 +246,13 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - https://developer.android.com/guide/components/services — Official Services guide
 - https://developer.android.com/guide/background — Background work overview
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 
 - [[q-android-app-components--android--easy]] — обзор основных компонентов Android
 
-### Похожие (тот же уровень)
+### Похожие (тот Же уровень)
 
 - [[q-background-tasks-decision-guide--android--medium]] — выбор подходящего API для фоновых задач
 - [[q-raise-process-priority--android--medium]] — управление приоритетом процесса

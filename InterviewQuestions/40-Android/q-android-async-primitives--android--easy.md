@@ -4,25 +4,30 @@ title: Android Async Primitives / Примитивы асинхронности 
 aliases: [Android Async Primitives, Примитивы асинхронности Android]
 topic: android
 subtopics:
-- coroutines
-- threads-sync
+  - coroutines
+  - threads-sync
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-coroutines
-- q-coroutine-builders-basics--kotlin--easy
-- q-viewmodel-pattern--android--easy
+  - c-coroutines
+  - q-async-operations-android--android--medium
+  - q-coroutine-builders-basics--kotlin--easy
+  - q-how-to-start-drawing-ui-in-android--android--easy
+  - q-viewmodel-pattern--android--easy
+  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 12:46:42 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -107,7 +112,7 @@ lifecycleScope.launch {
 }
 ```
 
-### 3. WorkManager (фоновые задачи с устойчивым планированием)
+### 3. WorkManager (фоновые Задачи С Устойчивым планированием)
 
 ```kotlin
 class DataSyncWorker(context: Context, params: WorkerParameters)
@@ -222,7 +227,7 @@ lifecycleScope.launch {
 }
 ```
 
-### 3. WorkManager (background work with resilient scheduling)
+### 3. WorkManager (background Work with Resilient scheduling)
 
 ```kotlin
 class DataSyncWorker(context: Context, params: WorkerParameters)
@@ -265,7 +270,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `viewModelScope` обеспечивает автоматическую отмену при очистке `ViewModel`?
 - В чем разница между `StateFlow` и `SharedFlow` с точки зрения буферизации и `replay`?
@@ -301,7 +306,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Background Tasks Overview](https://developer.android.com/develop/background-work/background-tasks)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предусловия
 - [[q-coroutine-builders-basics--kotlin--easy]] — основы корутин

@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:03:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -352,7 +354,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как реализовать polling с fallback на WebSocket при ненадежном соединении?
 2. Как оптимизировать расход батареи при фоновом polling?
@@ -377,13 +379,13 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 - [Android Background Work Guide](https://developer.android.com/guide/background)
 - [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 
 - [[q-android-async-primitives--android--easy]]
 
-### На том же уровне
+### На Том Же Уровне
 
 - [[q-android-lint-tool--android--medium]]
 

@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android/intents-deeplinks, android/performance-memory, android/serialization, bundle, difficulty/medium, ipc, parcelable]
 sources: ["https://developer.android.com/reference/android/os/Parcelable", "https://kotlinlang.org/docs/compiler-plugins.html#parcelable-implementations-generator"]
 
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -246,7 +248,7 @@ object DateParceler : Parceler<Date> {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что произойдет, если превысить лимит ~1MB для транзакции Binder при передаче `Parcelable` через `Intent`/`Bundle`?
 2. Как `Parcelable` (c `@Parcelize`) обрабатывает вложенные объекты и коллекции?

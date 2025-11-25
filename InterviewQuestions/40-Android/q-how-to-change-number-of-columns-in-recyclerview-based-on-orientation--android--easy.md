@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, grid-layout, recyclerview]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -103,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Адаптивный Подход: По ширине
+### Адаптивный Подход: По Ширине
 
 ```kotlin
 class AdaptiveGridLayoutManager(
@@ -224,7 +226,7 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `GridLayoutManager` обрабатывает span sizes для элементов с разной шириной?
 - Как изменение `spanCount` влияет на производительность `RecyclerView` при изменении ориентации?
@@ -246,9 +248,9 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 - [[c-recyclerview]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания
+### Предварительные Знания
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Базовые концепции RecyclerView
 
 ### Связанные

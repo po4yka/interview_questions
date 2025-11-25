@@ -3,18 +3,21 @@ id: lang-037
 title: "Synchronized Blocks With Coroutines / Синхронизированные блоки с корутинами"
 aliases: [Synchronized Blocks With Coroutines, Синхронизированные блоки с корутинами]
 topic: kotlin
-subtopics: [c-coroutines, c-structured-concurrency, c-kotlin]
+subtopics: [c-coroutines, c-kotlin, c-structured-concurrency]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-sealed-vs-enum-classes--programming-languages--medium]
+related: [c-coroutines, c-kotlin, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, synchronization]
+date created: Friday, October 31st 2025, 6:31:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
+
 # Вопрос (RU)
 > Почему, как правило, не следует использовать `synchronized`-блоки с корутинами и когда это допустимо?
 
@@ -31,7 +34,7 @@ tags: [coroutines, difficulty/medium, kotlin, synchronization]
 
 При этом для коротких, быстрых, не приостанавливающихся секций (особенно в чисто блокирующем коде) `synchronized` остаётся корректным и может использоваться.
 
-### Проблема с synchronized
+### Проблема С Synchronized
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -57,7 +60,7 @@ class BadExample {
 // 3. Поощряет смешивание блокирующего стиля с корутинами вместо использования Mutex/конфайнмента
 ```
 
-### Проблема 1: Блокировка потоков
+### Проблема 1: Блокировка Потоков
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -84,7 +87,7 @@ fun synchronizedBlocking() = runBlocking {
 // При тысячах корутин с synchronized можно быстро исчерпать доступные потоки.
 ```
 
-### Проблема 2: Отмена и приостановка
+### Проблема 2: Отмена И Приостановка
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -107,7 +110,7 @@ fun cancellationProblem() = runBlocking {
 }
 ```
 
-### Решение 1: Использовать Mutex (дружественный к корутинам замок)
+### Решение 1: Использовать Mutex (дружественный К Корутинам замок)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -136,7 +139,7 @@ class GoodExample {
 // 3. Работает с suspend-функциями и кооперативной отменой внутри критической секции
 ```
 
-### Сравнение Mutex и synchronized
+### Сравнение Mutex И Synchronized
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -189,7 +192,7 @@ fun comparePerformance() = runBlocking {
 }
 ```
 
-### Отмена с Mutex
+### Отмена С Mutex
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -215,7 +218,7 @@ fun mutexCancellation() = runBlocking {
 }
 ```
 
-### Решение 2: Атомарные операции
+### Решение 2: Атомарные Операции
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -244,7 +247,7 @@ fun useAtomic() = runBlocking {
 }
 ```
 
-### Решение 3: Конфайнмент на один поток
+### Решение 3: Конфайнмент На Один Поток
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -266,7 +269,7 @@ class ConfinedCounter {
 }
 ```
 
-### Реальный пример: разделяемый ресурс
+### Реальный Пример: Разделяемый Ресурс
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -304,7 +307,7 @@ class GoodResourceManager {
 }
 ```
 
-### Сложная синхронизация
+### Сложная Синхронизация
 
 ```kotlin
 import kotlinx.coroutines.sync.Mutex
@@ -344,7 +347,7 @@ class BankAccount {
 }
 ```
 
-### Когда synchronized может быть допустим
+### Когда Synchronized Может Быть Допустим
 
 ```kotlin
 // ВНИМАНИЕ: допустимо для быстрых, некорутинных, неблокирующих операций
@@ -377,7 +380,7 @@ class CacheManager {
 }
 ```
 
-### Рекомендации по использованию
+### Рекомендации По Использованию
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -432,7 +435,7 @@ class SynchronizationBestPractices {
 }
 ```
 
-### Влияние на производительность
+### Влияние На Производительность
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -470,7 +473,7 @@ fun demonstrateThreadBlocking() = runBlocking {
 }
 ```
 
-### Сводная таблица
+### Сводная Таблица
 
 | Характеристика | synchronized | Mutex |
 |----------------|-------------|-------|
@@ -943,7 +946,7 @@ fun demonstrateThreadBlocking() = runBlocking {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия поведения `synchronized` и `Mutex` в контексте корутин?
 - Когда использование `synchronized` все еще может быть оправдано в Kotlin-коде?
@@ -967,7 +970,7 @@ fun demonstrateThreadBlocking() = runBlocking {
 - [[c-kotlin]]
 - [[c-coroutines]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-sealed-vs-enum-classes--programming-languages--medium]]
 

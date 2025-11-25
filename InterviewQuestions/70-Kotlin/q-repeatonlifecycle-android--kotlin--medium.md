@@ -12,11 +12,13 @@ source: internal
 source_note: Comprehensive Kotlin Android repeatOnLifecycle Guide
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-lifecycle-aware-coroutines--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-lifecycle-aware-coroutines--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeatonlifecycle]
 
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeaton
 
 `repeatOnLifecycle` — это lifecycle-aware API из AndroidX Lifecycle (lifecycle-runtime-ktx), которое автоматически запускает и отменяет корутины/подписки на `Flow` в зависимости от состояния жизненного цикла `LifecycleOwner`. Это помогает избежать утечек памяти и обращения к уничтоженным `View` при сборе `Flow` в Android.
 
-### Проблема: утечки памяти при сборе `Flow`
+### Проблема: Утечки Памяти При Сборе `Flow`
 
 ```kotlin
 // ПЛОХО: возможна утечка / некорректный доступ к UI
@@ -102,7 +104,7 @@ class GoodFragment : Fragment() {
 - отменяется при переходе ниже `STARTED`, освобождая ссылки и останавливая связанное с коллекцией вычисление;
 - при повторном входе в состояние снова запускается.
 
-### Как работает `repeatOnLifecycle`
+### Как Работает `repeatOnLifecycle`
 
 ```kotlin
 /**
@@ -144,7 +146,7 @@ class LifecycleExample : Fragment() {
 }
 ```
 
-### Сравнение: `repeatOnLifecycle` vs `launchWhenStarted`
+### Сравнение: `repeatOnLifecycle` Vs `launchWhenStarted`
 
 ```kotlin
 class ComparisonExample : Fragment() {
@@ -202,7 +204,7 @@ class ComparisonExample : Fragment() {
 
 Важно: для горячих потоков (`StateFlow`, `SharedFlow`) продюсер обычно живет дольше коллектора и не останавливается при отмене одной корутины. `repeatOnLifecycle` гарантирует безопасную коллекцию и обновление UI в валидных состояниях, но не обязан останавливать глобальный источник.
 
-### Множественный сбор `Flow`
+### Множественный Сбор `Flow`
 
 ```kotlin
 class MultipleFlowsExample : Fragment() {
@@ -245,7 +247,7 @@ class MultipleFlowsExample : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 class BestPractices {
@@ -296,7 +298,7 @@ class BestPractices {
 }
 ```
 
-### Реальный пример
+### Реальный Пример
 
 ```kotlin
 // ViewModel
@@ -530,7 +532,7 @@ class LifecycleExample : Fragment() {
 }
 ```
 
-### Comparison: `repeatOnLifecycle` vs `launchWhenStarted`
+### Comparison: `repeatOnLifecycle` Vs `launchWhenStarted`
 
 ```kotlin
 class ComparisonExample : Fragment() {

@@ -4,25 +4,30 @@ title: Accessibility Testing / Тестирование доступности
 aliases: [Accessibility Testing, Тестирование доступности]
 topic: android
 subtopics:
-- testing-ui
-- ui-accessibility
+  - testing-ui
+  - ui-accessibility
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-accessibility
-- q-accessibility-compose--android--medium
-- q-accessibility-talkback--android--medium
+  - c-accessibility
+  - q-accessibility-color-contrast--android--medium
+  - q-accessibility-compose--android--medium
+  - q-accessibility-talkback--android--medium
+  - q-compose-testing--android--medium
+  - q-custom-view-accessibility--android--medium
 created: 2025-10-11
 updated: 2025-11-10
 tags: [a11y, android/testing-ui, android/ui-accessibility, difficulty/medium, testing]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:02:01 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -262,7 +267,7 @@ Text(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как `AccessibilityChecks.enable()` влияет на время выполнения тестов в CI-пайплайнах?
 - Какие семантические свойства должны предоставлять кастомные компоненты Compose для совместимости с TalkBack?
@@ -290,12 +295,12 @@ Text(
 - https://developer.android.com/guide/topics/ui/accessibility/testing
 - https://developer.android.com/training/testing/espresso/accessibility-checking
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-testing-compose-ui--android--medium]] - основы тестирования Compose UI
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-accessibility-compose--android--medium]] - реализация доступности
 - [[q-accessibility-talkback--android--medium]] - интеграция TalkBack
 - [[q-compose-testing--android--medium]] - паттерны тестирования Compose

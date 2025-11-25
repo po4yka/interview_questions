@@ -1,5 +1,5 @@
 ---
-id: cs-005
+id: lang-204
 title: "Kotlin Delegation By Restriction / Ограничения делегирования в Kotlin"
 aliases: []
 topic: kotlin
@@ -14,6 +14,8 @@ related: [c--kotlin--medium, q-kotlin-init-block--kotlin--easy, q-lifecycle-scop
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/functions]
+date created: Friday, October 17th 2025, 9:46:30 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -376,7 +378,7 @@ class Document : Printer by object : Printer {
 - Not allowed: using an expression whose type does not satisfy the delegation requirements (e.g., wrong type, wrong `lazy()` usage).
 - Key idea: `by` uses the value of the expression as the delegate; it does not forbid function or constructor calls.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как компилятор разворачивает синтаксис делегирования под капотом в Kotlin?
 - Каковы накладные расходы и особенности производительности при использовании делегирования по сравнению с прямой реализацией?

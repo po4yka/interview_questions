@@ -12,12 +12,14 @@ tags: [advanced, continuation, coroutines, cps, difficulty/hard, internals, kotl
 aliases: ["Continuation and CPS internals in Kotlin", "Continuation и CPS: внутренняя работа suspend-функций"]
 question_kind: theory
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 subtopics:
-- continuation
-- coroutines
-- state-machine
+  - continuation
+  - coroutines
+  - state-machine
 
+date created: Saturday, November 1st 2025, 12:10:31 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +36,7 @@ subtopics:
 
 См. также: [[c-kotlin]], [[c-coroutines]].
 
-### Что такое Continuation?
+### Что Такое Continuation?
 
 **Continuation** представляет "остаток вычисления" — что должно произойти после возобновления из точки приостановки.
 
@@ -107,7 +109,7 @@ private class GetUserNameStateMachine(
 - возвращаемый тип становится `Any?`/`Object`, чтобы можно было вернуть как результат, так и `COROUTINE_SUSPENDED`;
 - логика разворачивается в конечный автомат.
 
-### Трансформация в конечный автомат (State Machine Transformation)
+### Трансформация В Конечный Автомат (State Machine Transformation)
 
 Компилятор преобразует `suspend`-функции в конечные автоматы, где каждая точка приостановки становится состоянием.
 
@@ -172,7 +174,7 @@ class ExampleStateMachine(
 - Класс конечного автомата хранит состояние между приостановками.
 - Методы `resumeWith` / `invokeSuspend` двигают выполнение вперёд при возобновлении.
 
-### Реальный декомпилированный пример (Real Decompiled Example)
+### Реальный Декомпилированный Пример (Real Decompiled Example)
 
 Ниже показан упрощённый, но структурно реалистичный пример декомпилированной `suspend`-функции:
 
@@ -270,7 +272,7 @@ static final class FetchUserDataContinuation extends ContinuationImpl {
 5. Локальные переменные, переживающие приостановку, становятся полями.
 6. Каждая точка приостановки сопоставлена со значением `label`.
 
-### suspendCoroutine и suspendCancellableCoroutine
+### suspendCoroutine И suspendCancellableCoroutine
 
 `suspendCoroutine` — низкоуровневый API для создания пользовательских приостанавливающих операций.
 
@@ -320,7 +322,7 @@ suspend fun cancellableDelay(timeMillis: Long) = suspendCancellableCoroutine<Uni
 }
 ```
 
-### Continuation.resume и resumeWith
+### Continuation.resume И resumeWith
 
 ```kotlin
 // Успешное возобновление
@@ -404,7 +406,7 @@ runBlocking(LoggingInterceptor()) {
 }
 ```
 
-### Как диспетчеры перехватывают Continuation (How Dispatchers Intercept Continuations)
+### Как Диспетчеры Перехватывают Continuation (How Dispatchers Intercept Continuations)
 
 Концептуальный пример (упрощённо, не реальная реализация):
 
@@ -446,7 +448,7 @@ class DispatchedContinuation<T>(
 5. Диспетчер планирует `resumeWith` на нужном потоке.
 6. Конечный автомат продолжает выполнение с нужного `label`.
 
-### Почему suspend-функции нельзя вызывать из обычных функций (Why Suspend Functions Can't Be Called from Regular Functions)
+### Почему Suspend-функции Нельзя Вызывать Из Обычных Функций (Why Suspend Functions Can't Be Called from Regular Functions)
 
 ```kotlin
 fun regularFunction() {
@@ -534,7 +536,7 @@ inline suspend fun inlinedSum(a: Int, b: Int): Int = a + b
 - Если нет точек приостановки, можно избежать лишних уровней автомата.
 - Если они есть, автомат всё равно нужен, но на соответствующем уровне.
 
-### Продвинутый пример: свои приостанавливающие операции (Advanced: Implementing Custom Suspending Operations)
+### Продвинутый Пример: Свои Приостанавливающие Операции (Advanced: Implementing Custom Suspending Operations)
 
 **Обёртка над callback API с поддержкой отмены:**
 
@@ -568,7 +570,7 @@ suspend fun fetchData(): String = suspendCancellableCoroutine { cont ->
 }
 ```
 
-### Конечный автомат с несколькими переменными (State Machine with Multiple Variables)
+### Конечный Автомат С Несколькими Переменными (State Machine with Multiple Variables)
 
 ```kotlin
 suspend fun complexFunction(x: Int): Int {
@@ -601,7 +603,7 @@ class ComplexFunctionContinuation(
 
 Ключевой вывод: все значения, нужные после точки приостановки, хранятся в полях сгенерированного класса.
 
-### Обработка исключений в конечных автоматах (Exception Handling in State Machines)
+### Обработка Исключений В Конечных Автоматах (Exception Handling in State Machines)
 
 Исходный код:
 
@@ -655,7 +657,7 @@ class WithExceptionContinuation(
 - Исключения до и после точек приостановки проходят через логику автомата.
 - `Result` и `throwOnFailure` используются для переноса ошибок между шагами.
 
-### Визуализация выполнения конечного автомата (Visualizing State Machine Execution)
+### Визуализация Выполнения Конечного Автомата (Visualizing State Machine Execution)
 
 ```
 Начальный вызов: label = 0
@@ -681,7 +683,7 @@ continuation.resumeWith(result2)
 Готово
 ```
 
-### Основные выводы (RU)
+### Основные Выводы (RU)
 
 1. **Continuation = "остаток вычисления"** — что выполняется после возобновления.
 2. **CPS-трансформация** — компилятор добавляет параметр `Continuation` и код конечного автомата.
@@ -989,7 +991,7 @@ suspend fun cancellableDelay(timeMillis: Long) = suspendCancellableCoroutine<Uni
 }
 ```
 
-### Continuation.resume and resumeWith
+### Continuation.resume And resumeWith
 
 ```kotlin
 // Resume with success
@@ -1366,7 +1368,7 @@ Complete
 
 ---
 
-## Дополнительные вопросы (Follow-ups, RU)
+## Дополнительные Вопросы (Follow-ups, RU)
 
 1. Как компилятор Kotlin оптимизирует конечные автоматы для `suspend`-функций без точек приостановки?
 2. В чем разница между `ContinuationImpl` и `BaseContinuationImpl` во внутренней реализации корутин?
@@ -1400,7 +1402,7 @@ Complete
 - [KotlinConf 2017: Deep Dive into Coroutines](https://www.youtube.com/watch?v=_hfBv0a09Jc)
 - [Continuation Documentation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-continuation/)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-suspend-cancellable-coroutine--kotlin--hard|Построение suspend API через suspendCancellableCoroutine]]
 - [[q-debugging-coroutines-techniques--kotlin--medium|Отладка корутин в Kotlin]]

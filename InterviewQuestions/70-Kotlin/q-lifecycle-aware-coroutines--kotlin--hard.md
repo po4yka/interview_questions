@@ -5,7 +5,7 @@ aliases: ["Lifecycle-Aware Coroutines", "Корутины с учетом жиз
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, lifecycle, android]
+subtopics: [android, coroutines, lifecycle]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-coroutine-cancellation-mechanisms--kotlin--medium, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-10
 
 tags: [android, coroutines, difficulty/hard, kotlin, lifecycle, lifecyclescope, viewmodelscope]
+date created: Sunday, October 12th 2025, 2:12:24 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Объясните корутины с учетом жизненного цикла в Android. Как работают viewModelScope, lifecycleScope и repeatOnLifecycle? Каковы лучшие практики для обработки изменений конфигурации, process death и утечек памяти? Приведите подробные примеры.
 
@@ -166,7 +169,7 @@ class ProductViewModel(
 }
 ```
 
-#### Изменения Конфигурации с viewModelScope
+#### Изменения Конфигурации С viewModelScope
 
 ```kotlin
 class WeatherViewModel(
@@ -256,7 +259,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-#### Жизненный цикл `Fragment` vs жизненный цикл `View`
+#### Жизненный Цикл `Fragment` Vs Жизненный Цикл `View`
 
 ```kotlin
 class ImportantFragment : Fragment() {
@@ -368,7 +371,7 @@ class GoodFragment : Fragment() {
 }
 ```
 
-#### Несколько `Flow` с repeatOnLifecycle
+#### Несколько `Flow` С repeatOnLifecycle
 
 ```kotlin
 class DashboardFragment : Fragment() {
@@ -405,7 +408,7 @@ class DashboardFragment : Fragment() {
 }
 ```
 
-### Изменения Конфигурации и Process Death
+### Изменения Конфигурации И Process Death
 
 #### Переживание Изменений Конфигурации
 
@@ -624,7 +627,7 @@ class LoginFragment : Fragment() {
 }
 ```
 
-#### Паттерн 2: Повтор с Ретраями
+#### Паттерн 2: Повтор С Ретраями
 
 ```kotlin
 class DataViewModel : ViewModel() {
@@ -734,7 +737,7 @@ class DataFragment : Fragment() {
 }
 ```
 
-### Тестирование Корутины с Учетом Жизненного Цикла
+### Тестирование Корутины С Учетом Жизненного Цикла
 
 ```kotlin
 class UserViewModelTest {

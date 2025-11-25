@@ -14,7 +14,10 @@ related: [c-kotlin, q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-map-
 created: 2025-10-15
 updated: 2025-11-11
 tags: [dependency-injection, difficulty/medium, initialization, lateinit, programming-languages, properties]
+date created: Friday, October 31st 2025, 6:30:30 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что известно о `lateinit`?
 
@@ -175,7 +178,7 @@ Constraints:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия от подхода в Java?
 - Когда вы бы использовали `lateinit` на практике?
@@ -197,7 +200,7 @@ Constraints:
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-map-flatmap--kotlin--medium]]
 - [[q-kotlin-advantages-for-android--kotlin--easy]]

@@ -1,9 +1,7 @@
 ---
 id: kotlin-019
 title: "Kotlin lateinit Keyword / Ключевое слово lateinit в Kotlin"
-aliases:
-  - "Kotlin lateinit Keyword"
-  - "Ключевое слово lateinit в Kotlin"
+aliases: ["Kotlin lateinit Keyword", "Ключевое слово lateinit в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -27,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, initialization, kotlin, lateinit, null-safety, properties]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о `lateinit` в Kotlin?
 
@@ -83,7 +84,7 @@ if (foo::bar.isInitialized) {
 - доступна только для `lateinit`-свойств;
 - возможна только для свойств, которые лексически доступны: объявлены в том же типе, одном из внешних типов или на верхнем уровне в том же файле.
 
-### Использование `lateinit` в Kotlin
+### Использование `lateinit` В Kotlin
 
 - **Внедрение зависимостей**. Во многих DI-фреймворках зависимости устанавливаются фреймворком после создания объекта. С `lateinit` можно объявить свойства для этих зависимостей и инициализировать их, когда они становятся доступны;
 - **UI-компоненты**. `lateinit` обычно используется для UI-компонентов, таких как `TextView`, `Button` или `EditText`, которые инициализируются в `onCreate` / `onViewCreated` после раздувания макета;

@@ -16,6 +16,8 @@ updated: 2025-11-11
 sources: []
 tags: [authentication, caching, difficulty/medium, interceptors, networking, okhttp, retry]
 
+date created: Monday, October 27th 2025, 5:14:04 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -240,7 +242,7 @@ class OkHttpClientFactory(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Порядок важен: `Application` (Logging → Auth → Cache → Retry) → `Network`
 2. Закрывайте ответы: вызывайте `response.close()` перед повторами
@@ -522,7 +524,7 @@ refreshMutex.withLock { refresh() }
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как бы вы реализовали дедупликацию запросов для параллельных идентичных запросов?
 - Каковы последствия использования `runBlocking` в auth-interceptor-е для не-UI-потоков?
@@ -550,9 +552,9 @@ refreshMutex.withLock { refresh() }
 - Retrofit Documentation: https://square.github.io/retrofit/
 - Android Network Security: https://developer.android.com/training/articles/security-config
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания
+### Предварительные Знания
 - Базовая настройка HTTP-клиента с Retrofit
 - Понимание корутин для асинхронного обновления токена
 - Основы конфигурации OkHttp-клиента

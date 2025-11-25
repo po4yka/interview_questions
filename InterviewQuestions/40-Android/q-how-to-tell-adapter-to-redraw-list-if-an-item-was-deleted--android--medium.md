@@ -1,40 +1,35 @@
 ---
 id: android-315
 title: How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален
-aliases:
-- Adapter Redraw on Item Deletion
-- Перерисовка адаптера при удалении элемента
+aliases: [Adapter Redraw on Item Deletion, Перерисовка адаптера при удалении элемента]
 topic: android
 subtopics:
-- architecture-modularization
-- ui-views
-- ui-widgets
+  - architecture-modularization
+  - ui-views
+  - ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-recyclerview
-- q-mvi-handle-one-time-events--android--hard
-- q-tasks-back-stack--android--medium
-- q-view-fundamentals--android--easy
+  - c-recyclerview
+  - q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
+  - q-mvi-handle-one-time-events--android--hard
+  - q-tasks-back-stack--android--medium
+  - q-view-fundamentals--android--easy
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
+  - q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
-tags:
-- adapters
-- android
-- android/architecture-modularization
-- android/ui-views
-- android/ui-widgets
-- difficulty/medium
-- recyclerview
-- ui
+tags: [adapters, android, android/architecture-modularization, android/ui-views, android/ui-widgets, difficulty/medium, recyclerview, ui]
 
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -51,7 +46,7 @@ tags:
 
 Если удалился элемент из списка, нужно: (1) удалить его из списка данных, (2) сообщить `Adapter`, чтобы он перерисовал только изменённые элементы, используя специфичные `notify`-методы (а не всегда весь список целиком).
 
-### Три подхода
+### Три Подхода
 
 **1. Базовые notify-методы**
 
@@ -119,7 +114,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 }
 ```
 
-### Сравнение методов
+### Сравнение Методов
 
 | Метод | Анимация | Производительность | Случай использования |
 |-------|----------|-------------------|----------------------|
@@ -127,7 +122,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 | `notifyItemRemoved()` | Да | Хорошая | Одиночные/локальные удаления |
 | `ListAdapter` + `DiffUtil` | Да | Отличная | Динамические списки, частые обновления |
 
-### Ключевые правила
+### Ключевые Правила
 
 1. По возможности используйте точечные `notify`-методы (`notifyItemRemoved`, `notifyItemInserted`, `notifyItemChanged`, `notifyItemRange...`) вместо `notifyDataSetChanged()`.
 2. Для современных приложений и динамических списков предпочтителен `ListAdapter` с `DiffUtil`.
@@ -223,7 +218,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем `notifyItemRangeRemoved()` отличается от `notifyItemRemoved()`?
 - Что произойдёт, если вызвать `notify` до удаления элемента из списка данных?
@@ -251,7 +246,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 - [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [ListAdapter API Reference](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

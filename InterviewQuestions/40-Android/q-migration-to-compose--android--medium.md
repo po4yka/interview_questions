@@ -16,6 +16,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, difficulty/medium, jetpack-compose, migration, xml-to-compose]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -262,7 +264,7 @@ Use Canvas API in Compose for full drawing control.
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как обрабатывать deep link-навигацию в гибридной Compose/XML архитектуре?
 - Какие стратегии тестирования использовать во время миграции (UI-тесты для обоих стеков)?
@@ -292,7 +294,7 @@ Use Canvas API in Compose for full drawing control.
 - [Compose and `Views` interoperability](https://developer.android.com/jetpack/compose/interop/interop-apis)
 - [Migration strategy guide](https://developer.android.com/jetpack/compose/migrate/strategy)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-jetpack-compose-basics--android--medium]] - основы Compose и ключевые концепции

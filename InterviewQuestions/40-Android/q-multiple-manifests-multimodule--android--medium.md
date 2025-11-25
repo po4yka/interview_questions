@@ -1,21 +1,23 @@
 ---
 id: android-265
 title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
-aliases: ["Multiple Manifests Multimodule", "Множественные манифесты в мультимодульных проектах", "Android Manifest Merging", "Слияние манифестов Android"]
+aliases: ["Android Manifest Merging", "Multiple Manifests Multimodule", "Множественные манифесты в мультимодульных проектах", "Слияние манифестов Android"]
 topic: android
-subtopics: [architecture-modularization, gradle, dependency-management]
+subtopics: [architecture-modularization, dependency-management, gradle]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [c-gradle, q-android-manifest-file--android--easy, q-android-modularization--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/architecture-modularization, android/gradle, android/dependency-management, manifest-merging, modularization, difficulty/medium]
+tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium, manifest-merging, modularization]
 sources: ["https://developer.android.com/build/manage-manifests", "https://developer.android.com/studio/build/manifest-merge"]
 
+date created: Saturday, November 1st 2025, 1:25:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +38,7 @@ sources: ["https://developer.android.com/build/manage-manifests", "https://devel
 2. **Инкапсуляции компонентов** - `Activity`/`Service`/Provider локализованы в модуле и явно декларируются там
 3. **Автоматического слияния** - build-система (Gradle + manifest merger) объединяет все манифесты в один итоговый
 
-### Принцип работы
+### Принцип Работы
 
 ```
 project/
@@ -71,7 +73,7 @@ project/
 - Модуль проще переносить между проектами (минимум правок)
 - Ясно, какому модулю нужны какие разрешения и компоненты
 
-### Приоритет слияния
+### Приоритет Слияния
 
 **app** > **feature modules** > **libraries**
 
@@ -83,7 +85,7 @@ project/
 <activity android:screenOrientation="landscape" />  ← Побеждает app
 ```
 
-### Разрешение конфликтов
+### Разрешение Конфликтов
 
 ```xml
 <manifest xmlns:tools="http://schemas.android.com/tools">
@@ -99,7 +101,7 @@ project/
 - `tools:node="remove"` - удалить узел из итогового манифеста
 - `tools:replace="attr"` - заменить конкретный атрибут при конфликте значений
 
-### Best practices
+### Best Practices
 
 ✅ **DO:**
 - Держать app-манифест минимальным: `application`, launcher activity, high-level настройки
@@ -111,7 +113,7 @@ project/
 - Хардкодить `android:authorities` (используй `${applicationId}` для уникальности в разных сборках)
 - Игнорировать merge conflicts (проверяй вкладку Merged Manifest и логи manifest merger)
 
-### Просмотр результата
+### Просмотр Результата
 
 **Android Studio:** `app/AndroidManifest.xml` → вкладка **Merged Manifest**
 
@@ -131,7 +133,7 @@ In multi-module projects, each module has its own **AndroidManifest.xml** for:
 2. **Component encapsulation** - Activities/Services/Providers are declared in and scoped to the module that owns them
 3. **Automatic merging** - the build system (Gradle + manifest merger) combines all manifests into a single final manifest
 
-### How it works
+### How it Works
 
 ```
 project/
@@ -143,7 +145,7 @@ project/
  app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ```
 
-### Example: Camera feature module
+### Example: Camera Feature Module
 
 ```xml
 <!-- feature-camera/src/main/AndroidManifest.xml -->
@@ -166,7 +168,7 @@ project/
 - Module is easier to move between projects (minimal changes needed)
 - Clear ownership of permissions/components per module
 
-### Merge priority
+### Merge Priority
 
 **app** > **feature modules** > **libraries**
 
@@ -178,7 +180,7 @@ project/
 <activity android:screenOrientation="landscape" />  ← app wins
 ```
 
-### Conflict resolution
+### Conflict Resolution
 
 ```xml
 <manifest xmlns:tools="http://schemas.android.com/tools">
@@ -194,7 +196,7 @@ project/
 - `tools:node="remove"` - remove node from final manifest
 - `tools:replace="attr"` - replace specific attribute value on conflict
 
-### Best practices
+### Best Practices
 
 ✅ **DO:**
 - Keep the app manifest minimal: `application`, launcher activity, high-level configuration
@@ -206,7 +208,7 @@ project/
 - Hardcode `android:authorities` (use `${applicationId}` to keep authorities unique across variants)
 - Ignore merge conflicts (review the Merged Manifest tab and manifest merger logs)
 
-### `View` merged result
+### `View` Merged Result
 
 **Android Studio:** `app/AndroidManifest.xml` → **Merged Manifest** tab
 
@@ -218,7 +220,7 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как в Android Studio анализировать и отлаживать конфликты слияния манифестов (Merged Manifest, логи manifest merger)?
 2. Что произойдет, если два модуля объявят одно и то же разрешение с разными атрибутами или protectionLevel?
@@ -246,13 +248,13 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 - [Merge multiple manifest files](https://developer.android.com/build/manage-manifests)
 - [Manifest merge tool](https://developer.android.com/studio/build/manifest-merge)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-android-manifest-file--android--easy]] - Основы файла манифеста
 - [[q-android-project-parts--android--easy]] - Структура Android-проекта
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-android-modularization--android--medium]] - Стратегии модульности
 
 ### Продвинутые (сложнее)

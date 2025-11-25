@@ -3,18 +3,20 @@ id: kotlin-188
 title: "Migrating from RxJava to Kotlin Coroutines / Миграция сRxJava на Kotlin корутины"
 aliases: [Coroutines Migration, Reactive Programming, RxJava Migration, RxJava to Coroutines]
 topic: kotlin
-subtopics: [coroutines, reactive-programming, functions]
+subtopics: [coroutines, functions, reactive-programming]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-testing-flow-operators--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, migration, reactive-programming, refactoring, rxjava]
 
+date created: Friday, October 31st 2025, 6:30:29 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +37,7 @@ Below is a detailed guide for migrating from RxJava to Kotlin Coroutines/`Flow`,
 
 ---
 
-# Миграция с RxJava на Kotlin корутины
+# Миграция С RxJava На Kotlin Корутины
 
 **Русский** | [English](#migrating-from-rxjava-to-kotlin-coroutines)
 
@@ -83,9 +85,9 @@ Below is a detailed guide for migrating from RxJava to Kotlin Coroutines/`Flow`,
 
 ---
 
-## Почему мигрировать
+## Почему Мигрировать
 
-### Преимущества Kotlin корутин
+### Преимущества Kotlin Корутин
 
 ```kotlin
 // RxJava: сложный пайплайн
@@ -145,7 +147,7 @@ fun getUsers(): Flow<User> = flow {
 }.flowOn(Dispatchers.IO)
 ```
 
-### `Observable` с операторами
+### `Observable` С Операторами
 
 ```kotlin
 // RxJava
@@ -180,9 +182,9 @@ fun searchUsers(queryChanges: Flow<String>): Flow<User> =
 
 ---
 
-## Single → suspend-функция
+## Single → Suspend-функция
 
-### Базовое преобразование
+### Базовое Преобразование
 
 ```kotlin
 // RxJava: Single
@@ -196,7 +198,7 @@ suspend fun getUser(userId: String): User = withContext(Dispatchers.IO) {
 }
 ```
 
-### Single с fallback-логикой
+### Single С Fallback-логикой
 
 ```kotlin
 // RxJava: Single с обработкой ошибок
@@ -232,9 +234,9 @@ fun CoroutineScope.getUserDeferred(userId: String): Deferred<User> = async(Dispa
 
 ---
 
-## Completable → suspend Unit
+## Completable → Suspend Unit
 
-### Базовое преобразование
+### Базовое Преобразование
 
 ```kotlin
 // RxJava: Completable
@@ -270,9 +272,9 @@ suspend fun initializeApp() {
 
 ---
 
-## Maybe → nullable suspend
+## Maybe → Nullable Suspend
 
-### Базовое преобразование
+### Базовое Преобразование
 
 ```kotlin
 // RxJava: Maybe
@@ -293,7 +295,7 @@ suspend fun findUser(query: String): User? = withContext(Dispatchers.IO) {
 }
 ```
 
-### Maybe с defaultIfEmpty
+### Maybe С defaultIfEmpty
 
 ```kotlin
 // RxJava
@@ -346,7 +348,7 @@ fun observeMessages(): Flow<Message> = callbackFlow {
 }
 ```
 
-### Flowable с backpressure
+### Flowable С Backpressure
 
 ```kotlin
 // RxJava
@@ -376,7 +378,7 @@ fun produceDataConflated(): Flow<Data> = flow {
 
 ---
 
-## Горячие источники и Subjects
+## Горячие Источники И Subjects
 
 ### `PublishSubject` → `SharedFlow`
 
@@ -428,7 +430,7 @@ class UserStore {
 }
 ```
 
-### `ReplaySubject` → `SharedFlow` с `replay`
+### `ReplaySubject` → `SharedFlow` С `replay`
 
 ```kotlin
 class MessageStoreRx {
@@ -457,7 +459,7 @@ class MessageStore {
 }
 ```
 
-### `AsyncSubject` → кастом через `Channel`
+### `AsyncSubject` → Кастом Через `Channel`
 
 ```kotlin
 class ResultStore {
@@ -473,7 +475,7 @@ class ResultStore {
 
 ---
 
-## Таблица операторов (RU)
+## Таблица Операторов (RU)
 
 Приблизительное соответствие операторов (аналогично английской таблице):
 
@@ -508,7 +510,7 @@ class ResultStore {
 | `merge` | `merge` | Объединение нескольких источников |
 | `startWith` | `onStart` | Добавить значение в начало |
 
-### Обработка ошибок
+### Обработка Ошибок
 
 | RxJava | `Flow` / coroutines | Описание |
 |--------|--------------------|----------|
@@ -516,7 +518,7 @@ class ResultStore {
 | `onErrorResumeNext` | `catch { emitAll(fallback) }` | Переход на запасной поток |
 | `retry` | `retry` | Повтор при ошибке |
 
-### Потоки выполнения
+### Потоки Выполнения
 
 | RxJava | Coroutines | Описание |
 |--------|-----------|----------|
@@ -525,7 +527,7 @@ class ResultStore {
 
 ---
 
-## Комбинирующие операторы: combineLatest и zip
+## Комбинирующие Операторы: combineLatest И Zip
 
 ### `combineLatest` → `combine`
 
@@ -611,7 +613,7 @@ class DataStore {
 
 ---
 
-## Обработка ошибок
+## Обработка Ошибок
 
 ```kotlin
 // RxJava
@@ -645,7 +647,7 @@ fun loadUserFlow(userId: String): Flow<User> {
 
 ---
 
-## Потоки выполнения
+## Потоки Выполнения
 
 ### Schedulers → Dispatchers
 
@@ -698,7 +700,7 @@ fun produceConflated(): Flow<Data> = flow {
 
 ---
 
-## Полный пример миграции
+## Полный Пример Миграции
 
 ### Репозиторий (до)
 
@@ -815,7 +817,7 @@ class UserViewModel(
 
 ---
 
-## Интероперабельность RxJava и корутин
+## Интероперабельность RxJava И Корутин
 
 ### RxJava → Coroutines
 
@@ -856,7 +858,7 @@ fun observeUsersAsRx(repository: UserRepository): Observable<User> = rxObservabl
 }
 ```
 
-### Гибридный адаптер
+### Гибридный Адаптер
 
 ```kotlin
 class HybridRepository(
@@ -874,7 +876,7 @@ class HybridRepository(
 
 ---
 
-## Тестирование миграции
+## Тестирование Миграции
 
 ### Тесты RxJava
 
@@ -884,7 +886,7 @@ class UserRepositoryRxTest {
 }
 ```
 
-### Тесты корутин (suspend)
+### Тесты Корутин (suspend)
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -926,9 +928,9 @@ fun `observeUsers emits user list`() = runTest {
 
 ---
 
-## Постепенная стратегия миграции
+## Постепенная Стратегия Миграции
 
-### Этап 1: новые фичи на корутинах
+### Этап 1: Новые Фичи На Корутинах
 
 ```kotlin
 class NewFeatureRepository(private val api: NewApi) {
@@ -938,7 +940,7 @@ class NewFeatureRepository(private val api: NewApi) {
 }
 ```
 
-### Этап 2: обертки вокруг RxJava
+### Этап 2: Обертки Вокруг RxJava
 
 ```kotlin
 class MigrationRepository(private val legacyApi: LegacyApi) {
@@ -950,7 +952,7 @@ class MigrationRepository(private val legacyApi: LegacyApi) {
 }
 ```
 
-### Этап 3: миграция ядра + адаптеры
+### Этап 3: Миграция Ядра + Адаптеры
 
 ```kotlin
 class UserRepositoryMigrated(private val api: UserApi) {
@@ -964,13 +966,13 @@ class UserRepositoryMigrated(private val api: UserApi) {
 }
 ```
 
-### Этап 4: полный отказ от RxJava
+### Этап 4: Полный Отказ От RxJava
 
 Удаляем зависимости RxJava и адаптеры после переноса всех вызовов.
 
 ---
 
-## Распространенные ошибки
+## Распространенные Ошибки
 
 1. Отсутствие `flowOn` для тяжелых операций — весь `Flow` выполняется в контексте коллектора.
 2. Использование `runBlocking` в продакшене — блокирует поток.
@@ -980,7 +982,7 @@ class UserRepositoryMigrated(private val api: UserApi) {
 
 ---
 
-## Лучшие практики
+## Лучшие Практики
 
 1. Начинать миграцию с новых фич.
 2. Использовать interop (`await`, `asFlow`, `rxSingle`) для плавного перехода.
@@ -990,16 +992,16 @@ class UserRepositoryMigrated(private val api: UserApi) {
 
 ---
 
-## Чеклист миграции
+## Чеклист Миграции
 
-### До миграции
+### До Миграции
 
 - [ ] Найти все места использования RxJava
 - [ ] Выделить приоритетные области миграции
 - [ ] Добавить зависимости coroutines и interop
 - [ ] Настроить infra для тестирования корутин
 
-### Во время миграции
+### Во Время Миграции
 
 - [ ] Перевести `Single` на suspend-функции
 - [ ] Перевести `Observable` на `Flow`
@@ -1009,7 +1011,7 @@ class UserRepositoryMigrated(private val api: UserApi) {
 - [ ] Обновить обработку ошибок (на `catch` и try-catch)
 - [ ] Актуализировать тесты
 
-### После миграции
+### После Миграции
 
 - [ ] Удалить зависимости RxJava
 - [ ] Убрать временные адаптеры
@@ -1018,7 +1020,7 @@ class UserRepositoryMigrated(private val api: UserApi) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем основное преимущество миграции с RxJava на корутины с точки зрения долгосрочного сопровождения и снижения когнитивной сложности кода?
 2. Как безопасно поддерживать период, когда в проекте одновременно используются RxJava и корутины, и какие паттерны interop для этого предпочтительнее?
@@ -1037,7 +1039,7 @@ class UserRepositoryMigrated(private val api: UserApi) {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-flow-operators--kotlin--medium]]
 
@@ -1155,7 +1157,7 @@ fun getUsers(): Flow<User> = flow {
 }.flowOn(Dispatchers.IO)
 ```
 
-### `Observable` with operators
+### `Observable` With Operators
 
 ```kotlin
 // RxJava
@@ -1356,7 +1358,7 @@ class UserStore {
 }
 ```
 
-### `ReplaySubject` → `SharedFlow` with `replay`
+### `ReplaySubject` → `SharedFlow` With `replay`
 
 ```kotlin
 class MessageStoreRx {
@@ -1385,7 +1387,7 @@ class MessageStore {
 }
 ```
 
-### `AsyncSubject` → via `Channel`
+### `AsyncSubject` → Via `Channel`
 
 ```kotlin
 class ResultStore {
@@ -1453,7 +1455,7 @@ Approximate mapping of common operators from RxJava to `Flow`/coroutines:
 
 ---
 
-## combineLatest and zip
+## combineLatest and Zip
 
 ### `combineLatest` → `combine`
 
@@ -1469,7 +1471,7 @@ fun observeDashboard(): Flow<DashboardData> {
 }
 ```
 
-### `zip` via structured concurrency
+### `zip` Via Structured Concurrency
 
 ```kotlin
 suspend fun loadUserWithPosts(userId: String): Pair<User, List<Post>> = coroutineScope {

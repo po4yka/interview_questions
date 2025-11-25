@@ -1,37 +1,36 @@
 ---
 id: android-052
 title: CI/CD for Multi‑Module Android / CI/CD для мультимодульных Android‑проектов
-aliases:
-- CI/CD for Multi-Module Android
-- CI/CD для мультимодульных Android‑проектов
+aliases: [CI/CD for Multi-Module Android, CI/CD для мультимодульных Android‑проектов]
 topic: android
 subtopics:
-- architecture-modularization
-- ci-cd
-- gradle
+  - architecture-modularization
+  - ci-cd
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: reviewed
 moc: moc-android
 related:
-- c-modularization
-- c-gradle
-- c-release-engineering
-- q-android-modularization--android--medium
-- q-build-optimization-gradle--android--medium
-- q-cicd-automated-testing--android--medium
+  - c-gradle
+  - c-modularization
+  - c-release-engineering
+  - q-android-lint-tool--android--medium
+  - q-android-modularization--android--medium
+  - q-build-optimization-gradle--android--medium
+  - q-cicd-automated-testing--android--medium
+  - q-module-types-android--android--medium
+  - q-multi-module-best-practices--android--hard
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags:
-- android/architecture-modularization
-- android/ci-cd
-- android/gradle
-- difficulty/medium
+tags: [android/architecture-modularization, android/ci-cd, android/gradle, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:46:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -52,7 +51,7 @@ tags:
 
 ### Ключевые Стратегии
 
-#### 1. Affected Module Detection (определение затронутых модулей)
+#### 1. Affected Module Detection (определение Затронутых модулей)
 Вычисление минимального набора модулей для проверки на основе изменённых файлов:
 
 ```bash
@@ -112,12 +111,12 @@ buildCache {
 }
 ```
 
-#### 4. Параллелизм и шардирование
+#### 4. Параллелизм И Шардирование
 - **Matrix builds**: группировка модулей в независимые задачи CI (`:feature:*` → один job, `:core:*` → другой)
 - **Test sharding**: распределение тестов по нескольким runner'ам (например, Gradle Enterprise Test Distribution)
 - **Parallel execution**: `org.gradle.parallel=true`, `--max-workers=<N>`
 
-### Gradle-специфичные техники
+### Gradle-специфичные Техники
 
 #### Convention Plugins (плагины конвенций)
 Унификация конфигурации модулей через `build-logic/`:
@@ -151,7 +150,7 @@ dependencies {
 includeBuild("build-logic")
 ```
 
-### Стабильность и борьба с flaky-тестами
+### Стабильность И Борьба С Flaky-тестами
 - **Quarantine**: изоляция нестабильных тестов по модулям (аннотации `@Ignore`, отдельные test suites)
 - **Retry mechanism**: повтор только упавших тестов (Gradle Test Retry Plugin)
 - **Hermetic tests**: без сети, фиксированные Java toolchains, детерминированные seed'ы
@@ -165,7 +164,7 @@ tasks.withType<Test> {
 }
 ```
 
-### Пример минимального CI-скрипта (GitHub Actions)
+### Пример Минимального CI-скрипта (GitHub Actions)
 
 ```yaml
 # ✅ Affected modules + caching

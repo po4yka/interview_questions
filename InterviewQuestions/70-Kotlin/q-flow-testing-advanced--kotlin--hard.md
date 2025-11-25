@@ -17,6 +17,8 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [async, difficulty/hard, flow, kotlin, testing, testscope]
 
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [async, difficulty/hard, flow, kotlin, testing, testscope]
 
 > См. также: [[c-flow]]
 
-### Зависимости для тестов
+### Зависимости Для Тестов
 
 ```kotlin
 // build.gradle.kts
@@ -42,7 +44,7 @@ dependencies {
 }
 ```
 
-### TestScope и TestDispatcher
+### TestScope И TestDispatcher
 
 `runTest` создаёт `TestScope` и `TestDispatcher`, включая виртуальное время.
 
@@ -75,7 +77,7 @@ fun `test flow with delays using virtual time`() = runTest {
 
 Важно: `advanceTimeBy` / `advanceUntilIdle` доступны в контексте `runTest` / `TestScope` и применяются для управления виртуальным временем в самих тестах. При использовании Turbine (`flow.test { ... }`) виртуальное время также контролируется через `runTest`, но функции продвижения времени вызываются снаружи `test {}` или через отдельный `TestScope`, так как `test` использует свой собственный scope.
 
-### Тестирование с Turbine
+### Тестирование С Turbine
 
 ```kotlin
 @Test
@@ -102,7 +104,7 @@ fun `test flow emissions with turbine`() = runTest {
 
 `flow.test {}` запускается с использованием тестового диспетчера (например, из `runTest`), однако управление виртуальным временем делайте на уровне окружения (`runTest` / `TestScope`), а не через вызов `advanceTimeBy` / `advanceUntilIdle` внутри лямбды Turbine.
 
-### Тестирование преобразований `Flow`
+### Тестирование Преобразований `Flow`
 
 ```kotlin
 class UserRepository(private val api: UserApi) {
@@ -204,7 +206,7 @@ fun `test sharedflow broadcasts to multiple collectors`() = runTest {
 }
 ```
 
-### Тестирование обработки ошибок
+### Тестирование Обработки Ошибок
 
 ```kotlin
 @Test
@@ -242,7 +244,7 @@ fun `test flow propagates uncaught exception`() = runTest {
 }
 ```
 
-### Тестирование холодных и горячих `Flow`
+### Тестирование Холодных И Горячих `Flow`
 
 ```kotlin
 @Test
@@ -293,7 +295,7 @@ fun `test hot flow shares stream between collectors`() = runTest {
 }
 ```
 
-### Тестирование сложных сценариев (`debounce`, отмена)
+### Тестирование Сложных Сценариев (`debounce`, отмена)
 
 ```kotlin
 class SearchViewModel(
@@ -390,7 +392,7 @@ fun `test search cancellation`() = runTest {
 }
 ```
 
-### Тестирование backpressure (`buffer`, `conflate`)
+### Тестирование Backpressure (`buffer`, `conflate`)
 
 ```kotlin
 @Test
@@ -438,7 +440,7 @@ fun `test conflate drops intermediate values`() = runTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте `runTest` для тестов корутин, чтобы получить `TestScope`, `TestDispatcher` и виртуальное время.
 2. Используйте Turbine (`flow.test { ... }`) для проверки всех испусканий, ошибок и завершения.
@@ -447,7 +449,7 @@ fun `test conflate drops intermediate values`() = runTest {
 5. Тестируйте сложные сценарии: последовательные операторы, отмену (`flatMapLatest`), поведение холодных и горячих потоков (`StateFlow`, `SharedFlow`), backpressure (`buffer`, `conflate`).
 6. Явно покрывайте сценарии с повторными попытками (`retry`), обработкой ошибок (`catch`), распространением необработанных исключений и конкурирующими подписками.
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. Неиспользование `runTest` и работа с реальными задержками, что делает тесты медленными и нестабильными.
 2. Забывают продвигать виртуальное время (`advanceTimeBy` / `advanceUntilIdle`) для `delay` и операторов времени.
@@ -674,7 +676,7 @@ fun `test flow propagates uncaught exception`() = runTest {
 }
 ```
 
-### Testing Cold vs Hot `Flow`s
+### Testing Cold Vs Hot `Flow`s
 
 ```kotlin
 @Test
@@ -890,7 +892,7 @@ fun `test conflate drops intermediate values`() = runTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого подхода от Java?
 - Когда вы бы использовали этот подход на практике?

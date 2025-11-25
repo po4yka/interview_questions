@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [difficulty/medium, interview, scalability, system-design, url-shortener]
 sources: ["https://en.wikipedia.org/wiki/URL_shortening"]
 
+date created: Sunday, October 12th 2025, 8:45:45 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -185,7 +187,7 @@ fun redirect(shortCode: String): String {
 3. Длина короткого кода — баланс между количеством комбинаций и удобством
 4. Шардирование — сложность против масштабируемости и отказоустойчивости
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Как изменить дизайн для поддержки пользовательских доменов для коротких ссылок?
 - Как обрабатывать массовое создание ссылок (batch API) и rate limiting?
@@ -195,7 +197,7 @@ fun redirect(shortCode: String): String {
 
 - "https://en.wikipedia.org/wiki/URL_shortening"
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 - [[q-caching-strategies--system-design--medium]]
 - [[q-database-sharding-partitioning--system-design--hard]]

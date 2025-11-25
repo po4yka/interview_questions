@@ -17,12 +17,17 @@ moc: moc-android
 related:
   - c-coroutines
   - c-workmanager
+  - q-design-instagram-stories--android--hard
+  - q-large-file-upload-app--android--hard
+  - q-network-operations-android--android--medium
   - q-offline-first-architecture--android--hard
 created: 2025-10-20
 updated: 2025-11-02
 tags: [android/architecture-clean, android/networking-http, data-sync, difficulty/hard, networking, offline-first, workmanager]
 sources:
   - https://developer.android.com/guide/background/processing-data/sync
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

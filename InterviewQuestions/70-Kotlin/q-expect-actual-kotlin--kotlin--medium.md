@@ -5,7 +5,7 @@ aliases: ["Kotlin Multiplatform expect/actual", "Механизм expect/actual 
 
 # Classification
 topic: kotlin
-subtopics: [expect-actual, kmp, c-kotlin-multiplatform]
+subtopics: [c-kotlin-multiplatform, expect-actual, kmp]
 question_kind: theory
 difficulty: medium
 
@@ -25,7 +25,10 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cross-platform, difficulty/medium, expect-actual, kmp, kotlin, multiplatform, platform-specific]
+date created: Sunday, October 12th 2025, 3:00:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое механизм expect/actual в Kotlin Multiplatform? Объясните как объявлять платформо-специфичные реализации и приведите практические примеры.
 
@@ -199,7 +202,7 @@ actual class KeyValueStorage {
 
 (В реальном коде реализации могут учитывать миграции, типизированный доступ и избегать устаревших API.)
 
-### expect/actual с Параметрами Типов (Концептуально)
+### expect/actual С Параметрами Типов (Концептуально)
 
 Важно, чтобы `expect`/`actual`-объявления совпадали полностью, включая дженерики и ограничения типов. Для JSON в KMP обычно используют kotlinx.serialization и механизмы `serializer()` вместо `Class<T>`.
 
@@ -344,7 +347,7 @@ class ApiRepository(private val client: HttpClient) {
 - Не блокировать внутри `suspend`-функций.
 - Корректно бриджить колбэки в `suspend` или использовать мультиплатформенные HTTP-библиотеки.
 
-### expect/actual с Интерфейсами
+### expect/actual С Интерфейсами
 
 ```kotlin
 // commonMain/Database.kt
@@ -521,7 +524,7 @@ myproject/
          PlatformTest.kt   (общие тесты)
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого механизма от подхода в Java (без expect/actual)?
 - В каких практических сценариях вы бы использовали expect/actual в реальных проектах?
@@ -534,7 +537,7 @@ myproject/
 - https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html
 - https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-expect-actual.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-native--kotlin--hard]]
 - [[q-kotlin-constructors--kotlin--easy]]

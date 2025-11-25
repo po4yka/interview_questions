@@ -1,34 +1,31 @@
 ---
 id: android-213
 title: Runtime Permissions Best Practices / Лучшие практики runtime разрешений
-aliases:
-- Runtime Permissions Best Practices
-- Лучшие практики runtime разрешений
+aliases: [Runtime Permissions Best Practices, Лучшие практики runtime разрешений]
 topic: android
 subtopics:
-- permissions
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-permissions
-- q-android-security-practices-checklist--android--medium
-- q-database-encryption-android--android--medium
+  - c-permissions
+  - q-android-security-practices-checklist--android--medium
+  - q-app-security-best-practices--android--medium
+  - q-database-encryption-android--android--medium
+  - q-multi-module-best-practices--android--hard
+  - q-rtl-support-best-practices--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android
-- android/permissions
-- difficulty/medium
-- permissions
-- security
-- ux
+tags: [android, android/permissions, difficulty/medium, permissions, security, ux]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -54,7 +51,7 @@ tags:
 
 Важно: `shouldShowRequestPermissionRationale()` возвращает `false` как при первом запросе, так и после выбора "Больше не спрашивать", поэтому для определения "навсегда отклонено" нужно помнить, что разрешение уже запрашивалось ранее.
 
-### Реализация с ActivityResultContracts
+### Реализация С ActivityResultContracts
 
 ```kotlin
 class PermissionManager(private val activity: AppCompatActivity) {
@@ -418,7 +415,7 @@ if (isPermanentlyDenied) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как по-разному обрабатывать фоновые разрешения на локацию по сравнению с foreground?
 - Как строить стратегию запроса разрешения на уведомления в Android 13+?
@@ -446,7 +443,7 @@ if (isPermanentlyDenied) {
 - https://developer.android.com/guide/topics/permissions/overview
 - https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContracts
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -457,7 +454,7 @@ if (isPermanentlyDenied) {
 - Понимание модели разрешений Android и объявлений в манифесте
 - Базовые знания системы runtime-разрешений Android
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-database-encryption-android--android--medium]] - Практики безопасности
 - [[q-android-security-practices-checklist--android--medium]] - Чек-лист по безопасности

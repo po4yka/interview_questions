@@ -4,26 +4,31 @@ title: Android Jetpack Overview / Обзор Android Jetpack
 aliases: [Android Jetpack Overview, Обзор Android Jetpack]
 topic: android
 subtopics:
-- architecture-mvvm
-- lifecycle
-- ui-compose
+  - architecture-mvvm
+  - lifecycle
+  - ui-compose
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-room-library-definition--android--easy
-- q-viewmodel-pattern--android--easy
+  - c-android
+  - q-architecture-components-libraries--android--easy
+  - q-how-jetpack-compose-works--android--medium
+  - q-room-library-definition--android--easy
+  - q-viewmodel-pattern--android--easy
+  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 sources: []
 created: 2025-10-13
 updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-compose, difficulty/easy, jetpack]
 question_kind: android
 
+date created: Saturday, November 1st 2025, 1:02:19 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -210,7 +215,7 @@ class UserViewModel @Inject constructor(
 ) : ViewModel()
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать WorkManager, а когда AlarmManager или foreground `Service`?
 - Как `ViewModel` внутренне переживает конфигурационные изменения?
@@ -234,9 +239,9 @@ class UserViewModel @Inject constructor(
 
 - Official docs: https://developer.android.com/jetpack
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания
+### Предварительные Знания
 - [[q-android-app-components--android--easy]] — базовые компоненты Android
 
 ### Связанные

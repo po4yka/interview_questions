@@ -1,36 +1,35 @@
 ---
 id: android-619
 title: Play Integrity Attestation / Аттестация Play Integrity
-aliases:
-- Play Integrity Attestation
-- Аттестация Play Integrity
+aliases: [Play Integrity Attestation, Аттестация Play Integrity]
 topic: android
 subtopics:
-- keystore-crypto
-- play-console
-- billing
+  - billing
+  - keystore-crypto
+  - play-console
 question_kind: theory
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-keystore
-- q-android-security-best-practices--android--medium
+  - c-android-keystore
+  - q-android-security-best-practices--android--medium
+  - q-play-billing-v6-architecture--android--hard
+  - q-play-feature-delivery--android--medium
+  - q-play-store-publishing--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags:
-- android/keystore-crypto
-- android/play-console
-- android/billing
-- difficulty/hard
+tags: [android/billing, android/keystore-crypto, android/play-console, difficulty/hard]
 sources:
-- "https://developer.android.com/google/play/integrity"
-- "https://cloud.google.com/play-integrity/reference/rest"
+  - "https://cloud.google.com/play-integrity/reference/rest"
+  - "https://developer.android.com/google/play/integrity"
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +42,7 @@ sources:
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 
 - Используйте Play Integrity API только через доверенный backend.
 - На клиенте запрашивайте integrity-токен с `nonce`, связанным с конкретным запросом/покупкой.
@@ -51,7 +50,7 @@ sources:
 - Используйте capability tokens для устойчивости в ограниченных условиях.
 - Комбинируйте Play Integrity с server-side Play Billing проверкой и дополнительными сигналами.
 
-### Подробный вариант
+### Подробный Вариант
 
 ### 1. Требования
 
@@ -78,13 +77,13 @@ sources:
 - Хранилище/логирование:
   - Логирует результаты проверок, метрики, аномалии для мониторинга и tuning-а политик.
 
-### 3. Настройка в Google Cloud
+### 3. Настройка В Google Cloud
 
 - Включите Play Integrity API в связанном GCP-проекте.
 - Настройте сервисный аккаунт и сохраните JSON-ключ (используется только на сервере).
 - В Play Console привяжите приложение к этому GCP-проекту.
 
-### 4. Клиентский запрос токена (основной поток)
+### 4. Клиентский Запрос Токена (основной поток)
 
 ```kotlin
 val integrityManager = IntegrityManagerFactory.create(appContext)
@@ -101,7 +100,7 @@ val token = integrityManager.requestIntegrityToken(request)
 - Обновите зависимость `com.google.android.play:integrity` до актуальной версии.
 - Токен необходимо немедленно отправить на ваш защищённый backend для проверки.
 
-### 5. Серверная проверка
+### 5. Серверная Проверка
 
 ```python
 def verify_token(token: str):
@@ -136,14 +135,14 @@ def verify_token(token: str):
 - Клиент затем использует capability token при запросе integrity-токена, чтобы выполнять проверку, когда Google Play services/сеть недоступны или ограничены.
 - Capability tokens имеют срок действия и ограничения по использованию; обрабатывайте истечение срока и ошибки (не полагайтесь на них как на постоянный оффлайн-режим).
 
-### 7. Интеграция с Play Billing
+### 7. Интеграция С Play Billing
 
 - Перед подтверждением или разблокировкой контента на сервере сопоставляйте результаты Play Integrity с результатами server-side проверки покупок.
 - Связывайте `purchaseToken` и `nonce` (или другой контекст запроса) для уменьшения риска replay-атак.
 - Решения по блокировке (например, игнорировать покупки с определёнными `deviceRecognitionVerdict`) формулируйте как внутреннюю политику на основе риска; не опирайтесь на один конкретный флаг как на универсальную рекомендацию.
 - Для повышенной защиты используйте комбинацию: Play Integrity + server-side Play Billing verification + дополнительные сигналы (rate limiting, поведение пользователя и др.).
 
-### 8. Политики и мониторинг
+### 8. Политики И Мониторинг
 
 - Настройте метрики: доля запросов/устройств с "подозрительными" вердиктами, доля с ошибками Play Integrity и т.п.
 - Не используйте Play Integrity как единственный критерий блокировки доступа: учитывайте возможные ложные срабатывания и проблемы совместимости.
@@ -188,13 +187,13 @@ def verify_token(token: str):
 - Storage/logging:
   - Logs checks, metrics, anomalies for monitoring and policy tuning.
 
-### 3. Google Cloud setup
+### 3. Google Cloud Setup
 
 - Enable the Play Integrity API in the linked GCP project.
 - Create and configure a service account; keep the JSON key only on the backend.
 - In Play Console, bind your app to this GCP project.
 
-### 4. Client integrity token request (main flow)
+### 4. Client Integrity Token Request (main flow)
 
 ```kotlin
 val integrityManager = IntegrityManagerFactory.create(appContext)
@@ -211,7 +210,7 @@ val token = integrityManager.requestIntegrityToken(request)
 - Keep `com.google.android.play:integrity` up to date.
 - Immediately send the received token to your secure backend for verification.
 
-### 5. Server-side verification
+### 5. Server-side Verification
 
 ```python
 def verify_token(token: str):
@@ -246,14 +245,14 @@ def verify_token(token: str):
 - The client uses the capability token when requesting integrity tokens in constrained environments (e.g., limited Google Play services / network).
 - Respect their validity period and usage limits; handle expiry and errors, and do not treat them as a permanent offline mode.
 
-### 7. Play Billing integration
+### 7. Play Billing Integration
 
 - Before confirming or unlocking content, combine Play Integrity verdicts with server-side Play Billing verification.
 - Explicitly link `purchaseToken` and `nonce` (or other request context) to reduce replay risk and ensure that the integrity verdict belongs to the same logical purchase/session.
 - Define blocking policies internally (e.g., ignore or flag purchases from devices with certain `deviceRecognitionVerdict` values) instead of relying on a single flag.
 - For stronger protection, use: Play Integrity + server-side Billing checks + additional signals (rate limiting, behavioral heuristics, etc.).
 
-### 8. Policies and monitoring
+### 8. Policies and Monitoring
 
 - Track metrics such as the share of requests/devices with suspicious verdicts and the share of Play Integrity errors.
 - Do not treat Play Integrity as the sole gatekeeper; account for false positives and compatibility issues.
@@ -261,7 +260,7 @@ def verify_token(token: str):
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Какой fallback использовать при недоступности Play Integrity?
 - Как масштабировать серверную валидацию (Pub/Sub, Cloud Functions)?
 - Какие стратегии для AB-тестов мер безопасности без роста false positive?
@@ -279,7 +278,7 @@ def verify_token(token: str):
 - https://developer.android.com/google/play/integrity
 - https://cloud.google.com/play-integrity/reference/rest
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-android-security-best-practices--android--medium]]
 

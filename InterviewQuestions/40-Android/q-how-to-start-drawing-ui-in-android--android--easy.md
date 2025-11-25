@@ -16,6 +16,8 @@ updated: 2025-11-10
 tags: [android, android/activity, android/ui-views, difficulty/easy, ui]
 sources: []
 
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -166,7 +168,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если вызвать `setContentView()` несколько раз?
 - Как Android обрабатывает пересоздание `Activity` при изменении конфигурации (например, поворот экрана)?
@@ -190,13 +192,13 @@ class MainActivity : AppCompatActivity() {
 - [[c-activity]] - `Activity` lifecycle and fundamentals
 - https://developer.android.com/guide/components/activities/intro-activities
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 
 - [[c-activity]] - Базовые понятия об `Activity`
 
-### Похожие (тот же уровень)
+### Похожие (тот Же уровень)
 
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - Жизненный цикл `Fragment` vs `Activity`
 - [[q-retrofit-library--android--medium]] - Настройка сетевого слоя

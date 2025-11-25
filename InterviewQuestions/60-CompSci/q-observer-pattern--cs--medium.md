@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, flow, gof-patterns, livedata, observer, publish-subscribe]
 sources: ["https://refactoring.guru/design-patterns/observer"]
 
+date created: Saturday, November 1st 2025, 1:26:49 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -602,7 +604,7 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Observer отличается от паттерна Pub/Sub?
 - Каковы типичные реализации Observer в Android?
@@ -614,13 +616,13 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
 - What are common Android implementations of Observer?
 - How to prevent memory leaks with Observer pattern?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Базовые концепции паттернов проектирования
 - Понимание событийно-ориентированного программирования
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - [[q-strategy-pattern--design-patterns--medium]] — паттерн Strategy
 - Паттерн Command (см. соответствующий вопрос)
 - Паттерн State (см. соответствующий вопрос)

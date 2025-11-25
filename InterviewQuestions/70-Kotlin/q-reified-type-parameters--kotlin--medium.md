@@ -14,6 +14,8 @@ related: [c-kotlin, c-kotlin-features, q-inline-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, generics, inline-functions, kotlin, reified, type-system]
+date created: Friday, October 31st 2025, 6:30:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [difficulty/medium, generics, inline-functions, kotlin, reified, type-syst
 
 Важно: `reified` не отменяет стирание типов на JVM глобально, он лишь даёт доступ к конкретному типу внутри инлайновой функции, где компилятор его знает.
 
-### Проблема: стирание типов в Java/Kotlin
+### Проблема: Стирание Типов В Java/Kotlin
 
 ```kotlin
 // - НЕ РАБОТАЕТ - тип T стирается на этапе компиляции
@@ -52,7 +54,7 @@ fun <T> createInstance(clazz: Class<T>): T {
 val user = createInstance(User::class.java)
 ```
 
-### Решение: Reified + inline
+### Решение: Reified + Inline
 
 ```kotlin
 // С reified — информация о типе доступна внутри инлайнового тела
@@ -70,9 +72,9 @@ val user = createInstance<User>()
 val isUser = isInstanceOf<User>(someObject)
 ```
 
-### Практические примеры
+### Практические Примеры
 
-#### 1. Фильтрация коллекций по типу
+#### 1. Фильтрация Коллекций По Типу
 
 ```kotlin
 // Без reified — нужно передавать Class
@@ -122,7 +124,7 @@ val users: List<User> = gson.fromJsonGeneric(jsonString)
 val map: Map<String, User> = gson.fromJsonGeneric(jsonString)
 ```
 
-#### 3. Extras в Intent в Android
+#### 3. Extras В Intent В Android
 
 ```kotlin
 // Без reified — многословно
@@ -157,7 +159,7 @@ val user2 = intent.getParcelableExtraCompat<User>("user")
 val location = intent.getParcelableExtraCompat<Location>("location")
 ```
 
-#### 4. Type-safe запуск Activity
+#### 4. Type-safe Запуск Activity
 
 ```kotlin
 // Старый способ
@@ -228,7 +230,7 @@ inline fun <reified T : Any> Kodein.instanceTyped(): T {
 val db: AppDatabase = kodein.instanceTyped()
 ```
 
-#### 7. Проверка типа во время выполнения
+#### 7. Проверка Типа Во Время Выполнения
 
 ```kotlin
 inline fun <reified T> checkType(value: Any): String {
@@ -250,7 +252,7 @@ println(x.isType<String>())  // true
 println(x.isType<Int>())     // false
 ```
 
-#### 8. Запросы к Room Database
+#### 8. Запросы К Room Database
 
 ```kotlin
 // Пример паттерна с Room и reified (упрощённо; требует явного сопоставления типов)
@@ -267,7 +269,7 @@ val userDao = database.getDao<UserDao>()
 val productDao = database.getDao<ProductDao>()
 ```
 
-### Как работает reified под капотом
+### Как Работает Reified Под Капотом
 
 ```kotlin
 // Kotlin-код
@@ -294,7 +296,7 @@ fun test() {
 
 Ключевой момент: компилятор инлайнит тело функции в место вызова, подставляя конкретные типы вместо `T`. Поэтому `T::class` и проверки `is T` работают внутри таких функций, несмотря на стирание типов на JVM.
 
-### Ограничения reified
+### Ограничения Reified
 
 ```kotlin
 // РАЗРЕШЕНО
@@ -317,7 +319,7 @@ interface Repository<T> {
 inline fun test(reified param: Any) {}  // ERROR: only type parameters can be reified
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 ```kotlin
 // 1. Без обобщений — дублирование кода
@@ -336,9 +338,9 @@ inline fun <reified T> parseReified(json: String): T = gson.fromJson(json, T::cl
 val user2 = parseReified<User>(jsonString)
 ```
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
-#### Несколько reified-параметров
+#### Несколько Reified-параметров
 
 ```kotlin
 inline fun <reified K, reified V> createMap(): MutableMap<K, V> {
@@ -349,7 +351,7 @@ inline fun <reified K, reified V> createMap(): MutableMap<K, V> {
 val userMap = createMap<Int, User>()  // MutableMap<Int, User>
 ```
 
-#### Reified с ограничениями
+#### Reified С Ограничениями
 
 ```kotlin
 inline fun <reified T : Number> sumOf(vararg values: T): Double {
@@ -360,7 +362,7 @@ val sum1 = sumOf(1, 2, 3)
 val sum2 = sumOf(1.5, 2.5, 3.5)
 ```
 
-#### Reified для рефлексии
+#### Reified Для Рефлексии
 
 ```kotlin
 inline fun <reified T> getAnnotations(): List<Annotation> {
@@ -374,7 +376,7 @@ val annotations = getAnnotations<User>()
 annotations.forEach { println(it) }  // @Deprecated(...)
 ```
 
-#### Безопасное приведение с reified
+#### Безопасное Приведение С Reified
 
 ```kotlin
 inline fun <reified T> Any?.safeCast(): T? {
@@ -400,7 +402,7 @@ val product = create<Product>()
 // инлайнинг может привести к раздутию байткода. Используйте компактные reified-хелперы.
 ```
 
-### Рекомендации по использованию
+### Рекомендации По Использованию
 
 1. Используйте `reified` для type-safe API.
    ```kotlin
@@ -839,7 +841,7 @@ val product = create<Product>()
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого механизма от Java?
 - В каких практических сценариях вы бы использовали `reified`?
@@ -861,7 +863,7 @@ val product = create<Product>()
 - [[q-compose-side-effects-coroutines--kotlin--medium]]
 - [[q-suspending-vs-blocking--kotlin--medium]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-inline-functions--kotlin--medium]]
 - [[q-compose-side-effects-coroutines--kotlin--medium]]

@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/lifecycle, difficulty/medium, savedstatehandle, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -110,7 +112,7 @@ class MyViewModel : ViewModel() {
 
 A `ViewModel` instance (and its in-memory state) is retained as long as its scope (`Activity`, `Fragment`, or NavBackStackEntry) is alive and the app process is not killed. It survives configuration changes (e.g., rotation) but does not survive process death or final destruction of its owner (`Activity`/`Fragment`). See also [[c-android-lifecycle]].
 
-### When Data Survives (`ViewModel` instance is kept)
+### When Data Survives (`ViewModel` Instance is kept)
 
 **Configuration Changes**:
 ```kotlin
@@ -186,7 +188,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Что произойдет с `ViewModel`, если приложение завершить из списка недавних?
 2. Чем `SavedStateHandle` отличается от `onSaveInstanceState`?
@@ -212,7 +214,7 @@ class MyViewModel : ViewModel() {
 - [Android Developer Guide: `ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [Android Developer Guide: Saved State](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-what-is-viewmodel--android--medium]] - Что такое `ViewModel` и зачем он нужен

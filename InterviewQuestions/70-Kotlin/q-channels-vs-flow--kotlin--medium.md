@@ -18,14 +18,17 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-kotlin-channels--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-kotlin-channels--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-11-10
 
 tags: [async, buffering, channels, difficulty/medium, flow, kotlin]
+date created: Friday, October 17th 2025, 11:24:31 am
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Когда следует использовать Channels или `Flow`? Реализуйте буферизованный канал с различными стратегиями емкости и объясните их поведение.
 
@@ -81,7 +84,7 @@ fun main() = runBlocking {
 
 ### Стратегии Емкости Channel
 
-#### 1. Rendezvous (по умолчанию, емкость = 0)
+#### 1. Rendezvous (по Умолчанию, Емкость = 0)
 
 ```kotlin
 val channel = Channel<Int>() // или Channel<Int>(Channel.RENDEZVOUS)
@@ -218,7 +221,7 @@ fun main() = runBlocking {
 }
 ```
 
-### Когда Использовать Channels vs Flow
+### Когда Использовать Channels Vs Flow
 
 #### Когда Использовать Channels
 
@@ -292,7 +295,7 @@ userRepository.getUserUpdates(123)
 // Каждый collect запускает новый поток запросов
 ```
 
-### Преобразование между Channel и Flow
+### Преобразование Между Channel И Flow
 
 ```kotlin
 // Flow -> Channel (производим значения Flow в Channel)
@@ -315,7 +318,7 @@ val channel = flow.produceIn(GlobalScope)
 val newFlow = channel.consumeAsFlow()
 ```
 
-### Реальный Пример: Шина Событий с Channel (очередь, не broadcast)
+### Реальный Пример: Шина Событий С Channel (очередь, Не broadcast)
 
 ```kotlin
 sealed class AppEvent {
@@ -367,7 +370,7 @@ eventBus.publish(AppEvent.UserLoggedIn(123))
 
 > Примечание: В этом примере подписчики конкурируют за события одного канала и не получают полную копию потока. Для broadcast-семантики лучше использовать `SharedFlow`/`StateFlow` или явный fan-out.
 
-### Реальный Пример: Конвейер Данных с Flow
+### Реальный Пример: Конвейер Данных С Flow
 
 ```kotlin
 class DataPipeline {
@@ -550,7 +553,7 @@ fun main() = runBlocking {
 
 Channels support different buffering strategies via the capacity parameter:
 
-#### 1. Rendezvous (Default, capacity = 0)
+#### 1. Rendezvous (Default, Capacity = 0)
 
 ```kotlin
 val channel = Channel<Int>() // or Channel<Int>(Channel.RENDEZVOUS)
@@ -731,7 +734,7 @@ suspend fun testChannel(channel: Channel<Int>, name: String) = coroutineScope {
 }
 ```
 
-### When to Use Channels vs Flow
+### When to Use Channels Vs Flow
 
 #### Use Channels When:
 

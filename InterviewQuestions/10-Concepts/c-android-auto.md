@@ -1,21 +1,15 @@
 ---
 id: ivc-20251102-009
 title: Android Auto & Automotive OS / Android Auto и Automotive OS
-aliases:
-  - Android Auto
-  - Android Automotive OS
-  - Car App Library
+aliases: [Android Auto, Android Automotive OS, Car App Library]
 kind: concept
 summary: Car-optimized Android platforms using car app templates and in-vehicle systems
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - automotive
-  - android-auto
-  - in-car
+tags: [android, android-auto, automotive, concept, in-car]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

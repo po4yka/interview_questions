@@ -14,6 +14,8 @@ related: [c-kotlin, c-kotlin-features, q-structured-concurrency-patterns--kotlin
 created: 2025-10-15
 updated: 2025-11-09
 tags: [abstract, difficulty/medium, inheritance, java, oop, open, programming-languages]
+date created: Friday, October 31st 2025, 6:30:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -117,7 +119,7 @@ abstract class Animal {
 
 This makes Kotlin's inheritance model more explicit and intentional. See also [[c-kotlin]].
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как эти значения по умолчанию для наследования влияют на проектирование API в Kotlin по сравнению с Java?
 - В каких случаях вы намеренно помечаете члены как `final`, `open` или `abstract`?

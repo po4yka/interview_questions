@@ -3,7 +3,7 @@ id: android-084
 title: "Memory Leak vs OOM / Утечка памяти vs OOM"
 aliases: ["Memory Leak vs OOM", "Утечка памяти vs OOM"]
 topic: android
-subtopics: [performance-memory, performance-battery]
+subtopics: [performance-battery, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,8 +14,10 @@ related: [c-garbage-collection, q-coroutine-memory-leak-detection--kotlin--hard,
 sources: []
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android, android/performance-memory, android/performance-battery, difficulty/medium, leakcanary, memory-leak, oom]
+tags: [android, android/performance-battery, android/performance-memory, difficulty/medium, leakcanary, memory-leak, oom]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)

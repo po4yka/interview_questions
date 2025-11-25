@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [algorithms, backtracking, combinations, difficulty/hard, n-queens, permutations, recursion, sudoku]
 sources: ["https://en.wikipedia.org/wiki/Backtracking"]
 
+date created: Saturday, November 1st 2025, 1:24:13 pm
+date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Вопрос (RU)
@@ -598,7 +600,7 @@ fun subsets(nums: IntArray): List<List<Int>> {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Чем backtracking отличается от динамического программирования?
 - Каковы ключевые техники оптимизации backtracking-алгоритмов?
@@ -620,12 +622,12 @@ fun subsets(nums: IntArray): List<List<Int>> {
 - [[c-algorithms]]
 - "https://en.wikipedia.org/wiki/Backtracking"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-data-structures-overview--algorithms--easy]] - Структуры данных
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - Базовые концепции динамического программирования
 - [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Графовые алгоритмы
 

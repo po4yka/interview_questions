@@ -1,5 +1,5 @@
 ---
-id: cs-010
+id: lang-209
 title: "Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin"
 aliases: []
 topic: kotlin
@@ -14,6 +14,8 @@ related: [c-concepts--kotlin--medium, q-abstract-class-vs-interface--kotlin--med
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes, kotlin/functions]
+date created: Saturday, November 1st 2025, 1:26:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -190,7 +192,7 @@ class Internal private constructor(val id: Int)
 - Primary constructor: Parameters are declared in the class header; `constructor` is optional and mainly needed when adding annotations/modifiers to the primary constructor.
 - Secondary constructor: Always use the `constructor` keyword.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем разница между первичным и вторичными конструкторами в Kotlin?
 - Когда предпочтительно использовать только первичный конструктор без вторичных?

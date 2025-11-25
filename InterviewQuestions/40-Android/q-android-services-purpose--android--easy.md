@@ -18,10 +18,14 @@ moc: moc-android
 related:
   - c-lifecycle
   - q-android-service-types--android--easy
+  - q-service-types-android--android--easy
+  - q-what-are-services-for--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/lifecycle, android/service, difficulty/easy]
+date created: Saturday, November 1st 2025, 1:03:09 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

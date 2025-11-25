@@ -5,7 +5,7 @@ aliases: ["Kotlin Operator Overloading", "Перегрузка оператор�
 
 # Classification
 topic: kotlin
-subtopics: [operators, conventions, language-features]
+subtopics: [conventions, language-features, operators]
 question_kind: theory
 difficulty: medium
 
@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [conventions, difficulty/medium, kotlin, operators, overloading]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о перегрузке операторов в Kotlin?
 
@@ -222,7 +225,7 @@ fun main() {
 
 Все сравнения переводятся в вызовы `compareTo`, которая должна возвращать `Int`.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия от Java?
 - Когда вы бы использовали перегрузку операторов на практике?

@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-11-10
 tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]
 sources: ["https://developer.android.com/topic/libraries/architecture/workmanager"]
+date created: Saturday, November 1st 2025, 1:26:42 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -247,7 +249,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как ограничения ведут себя на разных версиях Android (особенно с учетом Doze и ограничений Android 12+)?
 - Каковы накладные расходы и компромиссы между цепочками работ и отдельными Worker-ами?
@@ -275,12 +277,12 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 - "https://developer.android.com/topic/libraries/architecture/workmanager/advanced"
 - "https://developer.android.com/topic/libraries/architecture/workmanager/how-to/chain-work"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-android-app-components--android--easy]] - Обзор компонентов приложения
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - [[q-workmanager-vs-alternatives--android--medium]] - WorkManager и альтернативы
 - [[q-workmanager-return-result--android--medium]] - Возврат результатов из Worker-ов
 

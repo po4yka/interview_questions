@@ -1,38 +1,34 @@
 ---
 id: android-166
 title: Mlkit Face Detection / Распознавание лиц ML Kit
-aliases:
-- ML Kit Face Detection
-- Распознавание лиц ML Kit
+aliases: [ML Kit Face Detection, Распознавание лиц ML Kit]
 topic: android
 subtopics:
-- camera
-- performance-rendering
-- ui-graphics
+  - camera
+  - performance-rendering
+  - ui-graphics
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-performance
-- c-camerax
-- q-dagger-framework-overview--android--hard
-- q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
+  - c-camerax
+  - c-performance
+  - q-compose-gesture-detection--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-mlkit-custom-models--android--hard
+  - q-mlkit-object-detection--android--medium
+  - q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags:
-- android/camera
-- android/performance-rendering
-- android/ui-graphics
-- difficulty/medium
-- face-detection
-- kotlin
-- machine-learning
+tags: [android/camera, android/performance-rendering, android/ui-graphics, difficulty/medium, face-detection, kotlin, machine-learning]
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -467,7 +463,7 @@ Use such checks as part of UX or as one of multiple signals, not as a standalone
 4. Storing raw face images or identifiers without clear need, protection, and retention policy.
 5. Misusing Face Detection as full-fledged face recognition or secure biometric auth without additional, appropriate solutions.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как ML Kit Face Detection обрабатывает несколько лиц в одном кадре?
 - Каковы trade-offs между режимами FAST и ACCURATE в продакшене?

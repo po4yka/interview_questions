@@ -1,37 +1,36 @@
 ---
 id: android-630
 title: Wear Compose UX Patterns / UX-паттерны Wear Compose
-aliases:
-- Wear Compose UX Patterns
-- UX-паттерны Wear Compose
+aliases: [UX-паттерны Wear Compose, Wear Compose UX Patterns]
 topic: android
 subtopics:
-- wear
-- ui-compose
+  - ui-compose
+  - wear
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-jetpack-compose
-- q-android-tv-compose-leanback--android--hard
+  - c-jetpack-compose
+  - q-android-tv-compose-leanback--android--hard
+  - q-compose-core-components--android--medium
+  - q-compose-custom-animations--android--medium
+  - q-how-does-jetpackcompose-work--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/wear
-- android/ui-compose
-- ux
-- difficulty/hard
+tags: [android/ui-compose, android/wear, difficulty/hard, ux]
 sources:
 - url: "https://developer.android.com/training/wearables/compose"
   note: Compose for Wear OS guide
 - url: "https://github.com/google/horologist"
   note: Horologist libraries
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +43,7 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Навигация и структура
+### 1. Навигация И Структура
 
 - Используйте `SwipeDismissableNavHost` из Wear Compose для стековой навигации со встроенным swipe-to-dismiss.
 - `rememberSwipeDismissableNavController()` хранит состояние навигации.
@@ -72,7 +71,7 @@ SwipeDismissableNavHost(
 - Используйте системные компоненты Wear Compose: `TimeText`, `Vignette`, `PositionIndicator`.
 - Для изогнутого текста задействуйте `CurvedRow`, `CurvedText`.
 
-### 3. Rotary input & жесты
+### 3. Rotary Input & Жесты
 
 ```kotlin
 val scalingState = rememberScalingLazyListState()
@@ -124,7 +123,7 @@ class StatsTileService : TileService() {
 - Логику получения состояния (шаги и т.п.) инкапсулируйте в репозитории/слое данных и считывайте её внутри сервиса; не используйте напрямую Compose state из UI.
 - Complications реализуются через `ComplicationDataSourceService` (без Compose UI) и обновляются через `ComplicationDataSourceUpdateRequester`.
 
-### 5. Performance & power
+### 5. Performance & Power
 
 - Держите recomposition лёгкой: используйте `remember`, immutable state, ключи для списков.
 - Для долгих задач применяйте `WorkManager` и другие фоновые механизмы с осторожным выбором приоритетов (бережно к батарее).
@@ -136,14 +135,14 @@ class StatsTileService : TileService() {
 - UI-тесты: `ComposeTestRule` + `createAndroidComposeRule` для экранов на Wear Compose.
 - Accessibility: проверяйте touch target ≥ 48dp, поддержку TalkBack, контрастность и читаемость на небольшом экране.
 
-## Краткая версия
+## Краткая Версия
 - Используйте `SwipeDismissableNavHost` и `SwipeToDismissBox` для нативной навигации со swipe-to-dismiss.
 - Применяйте `ScalingLazyColumn`, `TimeText`, `Vignette`, `PositionIndicator`, `CurvedText` для адаптации под круглые экраны.
 - Обрабатывайте rotary input через `onRotaryScrollEvent` или Horologist, обеспечивая фокус.
 - Выносите данные и бизнес-логику в отдельные слои для экранов, Tiles и Complications.
 - Оптимизируйте производительность и энергопотребление, минимизируя тяжёлый UI и фоновую работу.
 
-### Детальная версия
+### Детальная Версия
 
 #### Требования
 
@@ -169,7 +168,7 @@ class StatsTileService : TileService() {
 
 ## Answer (EN)
 
-### 1. Navigation and structure
+### 1. Navigation and Structure
 
 - Use `SwipeDismissableNavHost` from Wear Compose for stack-based navigation with built-in swipe-to-dismiss.
 - Keep a shared navigation state via `rememberSwipeDismissableNavController()`.
@@ -197,7 +196,7 @@ SwipeDismissableNavHost(
 - Leverage Wear Compose components: `TimeText`, `Vignette`, `PositionIndicator`.
 - Use `CurvedRow` and `CurvedText` for curved text along the watch edge.
 
-### 3. Rotary input & gestures
+### 3. Rotary Input & Gestures
 
 ```kotlin
 val scalingState = rememberScalingLazyListState()
@@ -249,7 +248,7 @@ class StatsTileService : TileService() {
 - Encapsulate data fetching logic (steps, etc.) in a repository/data layer and read it inside the service; avoid using Compose state from app UI directly in `TileService`.
 - Implement complications with `ComplicationDataSourceService` (they do not use Compose UI directly) and trigger updates via `ComplicationDataSourceUpdateRequester`.
 
-### 5. Performance & power
+### 5. Performance & Power
 
 - Keep recompositions cheap: use stable/immutable state, `remember`, and keys for list items; avoid heavy work in Composables.
 - Use background work (e.g., `WorkManager`) conservatively, respecting battery constraints on Wear devices.
@@ -292,7 +291,7 @@ class StatsTileService : TileService() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как интегрировать стримы Health Services в Compose UI с минимальной задержкой?
 - Как реализовать offline caching и sync в Wear-приложении (Companion + DataLayer)?
 - Какие паттерны использовать для multi-device навигации (телефон ↔ часы) при использовании Compose?
@@ -310,7 +309,7 @@ class StatsTileService : TileService() {
 - [[c-jetpack-compose]]
 - https://developer.android.com/training/wearables/compose
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[q-android-tv-compose-leanback--android--hard]]
 
 ## Related Questions

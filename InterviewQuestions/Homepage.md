@@ -1,6 +1,7 @@
 ---
 date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Wednesday, November 12th 2025, 9:13:23 am
+date modified: Tuesday, November 25th 2025, 9:49:21Wednesday, November 12th 2025, 12:38:14 pm
+date modified: Tuesday, November 25th 2025, 8:41:43 pm
 ---
 
 # Interview Questions Knowledge Base
@@ -120,16 +121,12 @@ if (statusRows.length) {
 ### Documentation
 - [Vault Documentation](00-Administration/README.md)
 - [File Naming Rules](00-Administration/Vault-Rules/FILE-NAMING-RULES.md)
-- [Import Progress Report](00-Administration/SOURCE-IMPORT-PROGRESS.md)
+- [Taxonomy](00-Administration/Vault-Rules/TAXONOMY.md)
 
 ### Templates
 - [Q&A Template](_templates/_tpl-qna.md)
 - [Concept Template](_templates/_tpl-concept.md)
 - [MOC Template](_templates/_tpl-moc.md)
-
-### Reports
-- [Complete Import Summary](00-Administration/COMPLETE-SOURCE-IMPORT-SUMMARY.md)
-- [Quality Review Report](00-Administration/QUALITY-REVIEW-REPORT.md)
 
 ---
 

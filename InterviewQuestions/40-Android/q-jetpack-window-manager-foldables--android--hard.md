@@ -1,38 +1,37 @@
 ---
 id: android-616
 title: Jetpack Window Manager for Foldables / Jetpack Window Manager для складных устройств
-aliases:
-- Jetpack Window Manager Foldables
-- Jetpack Window Manager для складных устройств
+aliases: [Jetpack Window Manager Foldables, Jetpack Window Manager для складных устройств]
 topic: android
 subtopics:
-- foldables-chromeos
-- ui-compose
-- ui-state
+  - foldables-chromeos
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-adaptive-layouts-compose--kotlin--hard
+  - c-android
+  - q-adaptive-layouts-compose--kotlin--hard
+  - q-how-does-jetpackcompose-work--android--medium
+  - q-how-jetpack-compose-works--android--medium
+  - q-jetpack-compose-basics--android--medium
 created: 2025-11-02
 updated: 2025-11-10
-tags:
-- android/foldables-chromeos
-- android/ui-compose
-- android/ui-state
-- difficulty/hard
+tags: [android/foldables-chromeos, android/ui-compose, android/ui-state, difficulty/hard]
 sources:
 - url: "https://developer.android.com/jetpack/androidx/releases/window"
   note: Jetpack Window Manager documentation
 - url: "https://developer.android.com/guide/topics/large-screens/ideas"
   note: Adaptive layout patterns
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -71,7 +70,7 @@ sources:
 - На уровне презентации (Compose/Views) подписываться на это состояние и выбирать соответствующую компоновку (одна панель, две панели, три панели).
 - Инкапсулировать правила разметки и реагирование на posture в одном месте, чтобы избежать дублирования и обеспечить тестируемость.
 
-#### 1. Получение WindowMetrics и SizeClass
+#### 1. Получение WindowMetrics И SizeClass
 
 ```kotlin
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -89,7 +88,7 @@ fun AdaptiveApp(windowSizeClass: WindowSizeClass) {
 - Используйте Jetpack Window Manager (`androidx.window`) для получения `WindowMetrics`, если нужен более низкоуровневый контроль.
 - Сохраняйте класс размера в `ViewModel` или локальном состоянии (`remember`) на уровне навигационного хоста для переиспользования.
 
-#### 2. Posture и FoldingFeature
+#### 2. Posture И FoldingFeature
 
 ```kotlin
 val windowInfoTracker = WindowInfoTracker.getOrCreate(context)
@@ -134,7 +133,7 @@ RuleController.getInstance(context).setRules(
 - Работает поверх Jetpack Window Manager (`androidx.window.embedding`).
 - Пример носит схемный характер: в реальном коде необходимо настроить пары `Activity`, пороги размеров, split ratio, ориентацию/направление раскладки и учитывать актуальную версию Window API (XML-правила или программная конфигурация).
 
-#### 4. Compose адаптация
+#### 4. Compose Адаптация
 
 - Используйте `NavigationSuiteScaffold` (Material 3) для адаптивной навигации (bottom bar / navigation rail / navigation drawer в зависимости от `WindowSizeClass`).
 - Используйте адаптивные двухпанельные компоненты: `ListDetailPaneScaffold` и аналогичные из актуальных adaptive-библиотек (`material3-adaptive`), либо их эквиваленты (Accompanist/legacy — с осознанием статуса библиотек).
@@ -265,7 +264,7 @@ RuleController.getInstance(context).setRules(
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как реализовать drag-and-drop между pane в режиме Expanded?
 - Какие UX-анти-паттерны существуют для foldables (например, элементы под шарниром)?
 - Как совместить ActivityEmbedding и Navigation Component в многопанельном приложении?
@@ -283,7 +282,7 @@ RuleController.getInstance(context).setRules(
 - https://developer.android.com/jetpack/androidx/releases/window
 - https://developer.android.com/guide/topics/large-screens/ideas
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 - [[q-adaptive-layouts-compose--kotlin--hard]]
 
 ## Related Questions

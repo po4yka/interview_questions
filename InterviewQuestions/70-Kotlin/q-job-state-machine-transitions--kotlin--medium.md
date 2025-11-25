@@ -1,7 +1,7 @@
 ---
 id: kotlin-105
 title: "Job state machine and state transitions / Job машина состояний и переходы"
-aliases: ["Job state machine", "Kotlin Job states", "Job state transitions"]
+aliases: ["Job state machine", "Job state transitions", "Kotlin Job states"]
 topic: kotlin
 subtopics: [coroutines]
 question_kind: theory
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium]
+related: [c-coroutines, c-kotlin, q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [difficulty/medium]
 
+date created: Saturday, November 1st 2025, 1:07:23 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +37,7 @@ tags: [difficulty/medium]
 
 Важно: конкретные внутренние состояния — деталь реализации `kotlinx.coroutines`. Описанные далее состояния — удобная модель, а не жёсткий публичный контракт по комбинациям трёх булевых флагов.
 
-### 6 состояний `Job`
+### 6 Состояний `Job`
 
 Концептуально `Job` можно мыслить в одном из следующих состояний (по его публичным свойствам и поведению):
 
@@ -48,7 +50,7 @@ tags: [difficulty/medium]
 
 Важно: это концептуальные стадии жизненного цикла. Внутренняя реализация может иметь больше состояний/вариантов, но модель отражает наблюдаемое поведение API `Job`.
 
-### Поведение свойств состояния
+### Поведение Свойств Состояния
 
 | Состояние | isActive | isCompleted | isCancelled |
 |-----------|----------|-------------|-------------|
@@ -61,7 +63,7 @@ tags: [difficulty/medium]
 
 Важно: таблица отражает логическую модель. Реально наблюдаемые комбинации могут быть кратковременно переходными, и по трём флагам нельзя надёжно различить все внутренние стадии.
 
-### Диаграмма переходов состояний (текстовая)
+### Диаграмма Переходов Состояний (текстовая)
 
 ```
 
@@ -298,7 +300,7 @@ fun demonstrateCompletedState() = runBlocking {
 }
 ```
 
-### Состояние 5: Cancelling (отмена в процессе)
+### Состояние 5: Cancelling (отмена В процессе)
 
 Состояние `Cancelling` возникает, когда отмена запрошена. `Job` помечен как отменённый (`isCancelled = true`), выполняются блоки `finally` и обработчики, а также отменяются/дожидаются потомки. До завершения этой фазы `isCompleted` остаётся `false`.
 
@@ -356,7 +358,7 @@ fun demonstrateCancellingState() = runBlocking {
 }
 ```
 
-### Состояние 6: Cancelled (терминальное отменённое состояние)
+### Состояние 6: Cancelled (терминальное Отменённое состояние)
 
 Состояние `Cancelled` — терминальное: отмена завершена, все необходимые обработчики выполнены, потомки завершены.
 
@@ -405,7 +407,7 @@ fun demonstrateCancelledState() = runBlocking {
 }
 ```
 
-### Правила распространения состояний Родитель–Потомок
+### Правила Распространения Состояний Родитель–Потомок
 
 1. Отмена родителя → отмена потомков
    - При отмене родителя все его потомки рекурсивно отменяются.
@@ -465,7 +467,7 @@ fun demonstrateParentChildPropagation() = runBlocking {
 }
 ```
 
-### Поведение `join()` в разных состояниях
+### Поведение `join()` В Разных Состояниях
 
 `join()` приостанавливает вызывающую корутину, пока `Job` не достигнет терминального состояния (`Completed` или `Cancelled`).
 
@@ -543,7 +545,7 @@ fun demonstrateJoinBehavior() = runBlocking {
 }
 ```
 
-### Поведение `cancel()` в разных состояниях
+### Поведение `cancel()` В Разных Состояниях
 
 `cancel()` запрашивает отмену `Job`.
 
@@ -619,7 +621,7 @@ fun demonstrateCancelBehavior() = runBlocking {
 }
 ```
 
-### `invokeOnCompletion` для уведомлений о состоянии
+### `invokeOnCompletion` Для Уведомлений О Состоянии
 
 Используйте `invokeOnCompletion`, чтобы получать уведомление, когда `Job` достигает терминального состояния (`Completed` или `Cancelled`, либо завершился с ошибкой).
 
@@ -671,7 +673,7 @@ fun demonstrateInvokeOnCompletion() = runBlocking {
 }
 ```
 
-### Невозможные (или недопустимые) переходы состояний
+### Невозможные (или недопустимые) Переходы Состояний
 
 1. Нельзя перейти из `Completed` в `Active` — терминальное состояние, вызов `start()` после завершения не меняет состояние (no-op).
 2. Нельзя перейти из `Cancelled` в `Active`.
@@ -733,7 +735,7 @@ fun demonstrateImpossibleTransitions() = runBlocking {
 }
 ```
 
-### Иллюстративный пример: логирование состояний
+### Иллюстративный Пример: Логирование Состояний
 
 Важно: по трём булевым (`isActive`, `isCompleted`, `isCancelled`) нельзя точно восстановить внутреннюю машину состояний, можно лишь приблизительно оценивать состояние для логирования. Состояние "Cancelling" (как отдельная стадия) надёжно не различается только по этим флагам.
 
@@ -796,7 +798,7 @@ fun demonstrateStateLogging() = runBlocking {
 }
 ```
 
-### Иллюстративный пример: Android-подобный `ViewModel` с отслеживанием состояния
+### Иллюстративный Пример: Android-подобный `ViewModel` С Отслеживанием Состояния
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -903,7 +905,7 @@ fun demonstrateViewModelStateTracking() = runBlocking {
 }
 ```
 
-### Лучшие практики проверки состояния
+### Лучшие Практики Проверки Состояния
 
 1. Проверяйте `isActive` перед тяжёлой работой или коммитом результата:
 
@@ -965,7 +967,7 @@ fun demonstrateViewModelStateTracking() = runBlocking {
    // Теперь безопасно освобождать ресурсы
    ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. Считать, что `isCompleted == true` гарантирует успех:
 
@@ -1017,14 +1019,14 @@ fun demonstrateViewModelStateTracking() = runBlocking {
    // Лучше создать новый Job
    ```
 
-### Соображения производительности
+### Соображения Производительности
 
 1. Проверки состояния (`isActive`, `isCompleted`, `isCancelled`) — O(1), их можно вызывать часто.
 2. `invokeOnCompletion` добавляет небольшую накладную — не регистрируйте множество обработчиков без необходимости.
 3. Фаза `Completing` может добавлять задержку при большом числе дочерних корутин.
 4. Время в фазе отмены зависит от работы в `finally`/обработчиках — держите их быстрыми и не блокирующими.
 
-### Тестирование состояний `Job` (иллюстративно)
+### Тестирование Состояний `Job` (иллюстративно)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1693,7 +1695,7 @@ fun demonstrateCancelBehavior() = runBlocking {
 }
 ```
 
-### `invokeOnCompletion` for State Notifications
+### `invokeOnCompletion` For State Notifications
 
 Use `invokeOnCompletion` to be notified when a job reaches a terminal state (`Completed` or `Cancelled`, or failed with exception).
 

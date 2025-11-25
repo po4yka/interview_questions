@@ -16,6 +16,8 @@ updated: 2025-11-11
 tags: [android/di-hilt, android/lifecycle, dependency-injection, difficulty/medium, hilt]
 sources: ["https://dagger.dev/hilt/entry-points.html"]
 
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -308,7 +310,7 @@ interface ActivityEntryPoint {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как точки входа влияют на производительность запуска приложения по сравнению со стандартной инъекцией?
 - Какую стратегию тестирования использовать для классов, зависящих от Entry Points?
@@ -332,14 +334,14 @@ interface ActivityEntryPoint {
 - [[c-dependency-injection]] - Dependency injection fundamentals
 - [[c-hilt]] - Hilt dependency injection framework
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - Основы Hilt и иерархии компонентов
 - Жизненный цикл компонентов Android-приложения
 - Паттерны dependency injection в Android
 
-### На том же уровне
+### На Том Же Уровне
 - Инъекция `ViewModel` в Hilt и `SavedStateHandle`
 - Кастомные компоненты и скоупы в Hilt
 - Интеграция WorkManager с Hilt

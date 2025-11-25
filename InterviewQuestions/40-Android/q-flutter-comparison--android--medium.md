@@ -4,26 +4,31 @@ title: KMM vs Flutter Comparison / Сравнение KMM и Flutter
 aliases: [KMM vs Flutter, Kotlin Multiplatform Mobile vs Flutter, Сравнение KMM и Flutter]
 topic: android
 subtopics:
-- architecture-clean
-- kmp
+  - architecture-clean
+  - kmp
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-android-architectural-patterns--android--medium
+  - c-android
+  - q-android-architectural-patterns--android--medium
+  - q-kmm-architecture--android--hard
+  - q-kmm-testing--android--medium
+  - q-react-native-vs-flutter--android--medium
 sources:
-- "https://docs.flutter.dev"
-- "https://kotlinlang.org/docs/multiplatform.html"
+  - "https://docs.flutter.dev"
+  - "https://kotlinlang.org/docs/multiplatform.html"
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, flutter, multiplatform]
 
+date created: Saturday, November 1st 2025, 12:46:50 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -87,12 +92,12 @@ KMM and Flutter represent two fundamentally different approaches to cross-platfo
 
 - [[q-android-architectural-patterns--android--medium]]
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как вы сравните React Native с KMM и Flutter по тем же критериям (архитектура, производительность, UX, стоимость)?
 - В каких сценариях разумно комбинировать KMM и нативные модули вместо использования Flutter?
 - Как изменится выбор стека для продукта с жесткими требованиями по офлайн-режиму и локальному шифрованию?
 - Как архитектурно спроектировать проект, чтобы при необходимости можно было мигрировать с Flutter на KMM или наоборот?
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 ## Ссылки (RU)
 - https://kotlinlang.org/docs/multiplatform.html — официальная документация KMM
 - https://docs.flutter.dev — официальная документация Flutter

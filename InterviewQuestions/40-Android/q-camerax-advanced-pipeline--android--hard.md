@@ -1,35 +1,35 @@
 ---
 id: android-614
 title: CameraX Advanced Pipeline / Продвинутый pipeline CameraX
-aliases:
-- CameraX Advanced Pipeline
-- Продвинутый pipeline CameraX
+aliases: [CameraX Advanced Pipeline, Продвинутый pipeline CameraX]
 topic: android
 subtopics:
-- camera
+  - camera
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-camerax
-- q-advanced-share-sheet-shortcuts--android--hard
+  - c-camerax
+  - q-advanced-share-sheet-shortcuts--android--hard
+  - q-android-release-pipeline-cicd--android--hard
+  - q-recyclerview-itemdecoration-advanced--android--medium
+  - q-room-type-converters-advanced--android--medium
 created: 2025-11-02
 updated: 2025-11-11
-tags:
-- android/camerax
-- android/camera
-- difficulty/hard
+tags: [android/camera, android/camerax, difficulty/hard]
 sources:
 - url: "https://developer.android.com/training/camerax"
   note: Official CameraX guide
 - url: "https://medium.com/androiddevelopers/camerax-advanced-usage-article"
   note: Advanced CameraX best practices
 
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -95,7 +95,7 @@ cameraProvider.bindToLifecycle(
   - Стабильная работа на разных устройствах с разными возможностями камеры.
   - Контролируемое потребление ресурсов (CPU/GPU/память).
 
-#### Camera2Interop: ручные настройки
+#### Camera2Interop: Ручные Настройки
 
 Важно: ручной контроль (AE/AF/ISO/выдержка) через `Camera2Interop` зависит от конкретного устройства и может быть частично ограничен. Опции задаются на `Builder` соответствующего use case до биндинга.
 
@@ -126,31 +126,31 @@ val imageCapture = imageCaptureBuilder.build()
 - Через `Extender` можно (в пределах возможностей устройства) управлять экспозицией, ISO, фокусом, HDR, стабилизацией.
 - Доступны vendor-extensions для специализированных режимов (HDR, night mode и др.).
 
-#### ML-интеграция без лагов
+#### ML-интеграция Без Лагов
 
 - Обработка выносится в `Executor` (`newFixedThreadPool`) или `CoroutineDispatcher` — не блокируйте главный поток.
 - `ImageAnalysis` должен использовать `setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)` для предотвращения роста очереди.
 - Для TensorFlow Lite и других моделей работайте напрямую с `YUV_420_888` через `image.planes` и избегайте лишних конверсий в `Bitmap`.
 - При необходимости длительной обработки копируйте данные (copy-out) и как можно раньше закрывайте `ImageProxy` вызовом `image.close()`.
 
-#### Работа с VideoCapture
+#### Работа С VideoCapture
 
 - Для одновременной записи и анализа используйте `VideoCapture` + `ImageAnalysis`; на слабых устройствах ограничьте разрешение/фреймрейт/битрейт.
 - При переключении качества применяйте `unbind`/`bind` с новым `Recorder`/`VideoCapture` — горячая смена большинства параметров ограничена.
 
-#### Управление состоянием камеры
+#### Управление Состоянием Камеры
 
 - Используйте `camera.cameraInfo` для мониторинга `zoomState`, `exposureState`.
 - Для плавного зума — `camera.cameraControl.setLinearZoom()`.
 - Проверяйте `camera.cameraInfo.exposureState.isExposureCompensationSupported` перед изменением компенсации экспозиции.
 
-#### Оптимизация под устройство
+#### Оптимизация Под Устройство
 
 - CameraX применяет "quirks" и обходные решения автоматически; учитывайте, что реальные ограничения (например, cap на 30 fps или ограничения manual control) зависят от устройства.
 - Используйте `previewView.previewStreamState` для реакции на `STREAMING`/`IDLE` и отображения skeleton UI.
 - При проблемах с ресурсами ограничьте одновременно активные use case (например, временно отключите `ImageCapture` или снизьте качество видео).
 
-#### Тестирование и профилирование
+#### Тестирование И Профилирование
 
 - Для unit/UI-тестов pipeline можно использовать `FakeLifecycleOwner` + Robolectric / инструментальные тесты.
 - Производительность профилируйте с помощью Android Studio профайлеров и Perfetto (следите за потоками камеры/кодека и задержками анализа).
@@ -271,7 +271,7 @@ val imageCapture = imageCaptureBuilder.build()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как реализовать HDR-режим с использованием vendor extension в CameraX?
 - Какие ограничения накладывает одновременное использование `VideoCapture` и `ImageCapture`?
 - Как организовать ML-инференс на GPU/NNAPI внутри CameraX pipeline?

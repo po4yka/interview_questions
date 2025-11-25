@@ -13,9 +13,11 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/profiling, debugging-tools, difficulty/easy, leakcanary, memory-leaks]
 moc: moc-android
-related: [c-memory-management, c-garbage-collection]
+related: [c-garbage-collection, c-memory-management]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:25:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)

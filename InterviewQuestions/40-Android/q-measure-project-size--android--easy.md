@@ -1,35 +1,33 @@
 ---
 id: android-223
 title: Measure Project Size / Измерение размера проекта
-aliases:
-- Measure Project Size
-- Измерение размера проекта
+aliases: [Measure Project Size, Измерение размера проекта]
 topic: android
 subtopics:
-- architecture-modularization
-- gradle
+  - architecture-modularization
+  - gradle
 question_kind: theory
 difficulty: easy
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-gradle
-- q-how-navigation-is-implemented-in-android--android--medium
-- q-how-to-write-recyclerview-cache-ahead--android--medium
+  - c-gradle
+  - q-how-navigation-is-implemented-in-android--android--medium
+  - q-how-to-write-recyclerview-cache-ahead--android--medium
+  - q-reduce-apk-size-techniques--android--medium
+  - q-reduce-app-size--android--medium
+  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android/architecture-modularization
-- android/gradle
-- codebase-analysis
-- difficulty/easy
-- project-metrics
+tags: [android/architecture-modularization, android/gradle, codebase-analysis, difficulty/easy, project-metrics]
 
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -346,7 +344,7 @@ Build Time:       ~2 min (incremental)
 3. **Regular cleanup** — remove unused dependencies, resources, and dead code.
 4. **Optimize** — use R8/ProGuard shrinking, resource shrinking, ABI/language splits, and optimize images/native libs.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как уменьшить размер APK, если он превышает допустимые значения?
 - В чем разница между MultiDex и App `Bundle` при работе с лимитом методов?
@@ -372,9 +370,9 @@ Build Time:       ~2 min (incremental)
 - Gradle User Manual: Build Scans
 - SonarQube documentation for Android projects
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-gradle]]
 
@@ -384,7 +382,7 @@ Build Time:       ~2 min (incremental)
 - Основы системы сборки Gradle
 - Состав и структура APK
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 
 - [[q-how-to-write-recyclerview-cache-ahead--android--medium]]
 - [[q-how-navigation-is-implemented-in-android--android--medium]]

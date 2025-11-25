@@ -1,39 +1,33 @@
 ---
 id: android-448
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
-aliases:
-- Custom Matchers
-- Custom ViewActions
-- Espresso Advanced Patterns
-- IdlingResource
-- Продвинутые паттерны Espresso
+aliases: [Custom Matchers, Custom ViewActions, Espresso Advanced Patterns, IdlingResource, Продвинутые паттерны Espresso]
 topic: android
 subtopics:
-- testing-instrumented
-- testing-ui
+  - testing-instrumented
+  - testing-ui
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-testing
-- q-android-testing-strategies--android--medium
+  - c-android-testing
+  - q-android-architectural-patterns--android--medium
+  - q-android-testing-strategies--android--medium
+  - q-camerax-advanced-pipeline--android--hard
+  - q-wear-compose-ux-patterns--android--hard
 sources:
-- "https://developer.android.com/training/testing/espresso"
+  - "https://developer.android.com/training/testing/espresso"
 created: 2025-10-20
 updated: 2025-11-10
-tags:
-- android/testing-instrumented
-- android/testing-ui
-- difficulty/medium
-- espresso
-- idling-resource
-- ui-testing
+tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
 
+date created: Saturday, November 1st 2025, 1:29:00 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -396,7 +390,7 @@ See also: [[c-android-testing]]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как отлаживать нестабильные (flaky) Espresso-тесты?
 - Когда стоит использовать UI Automator вместо Espresso?
@@ -424,13 +418,13 @@ See also: [[c-android-testing]]
 - https://developer.android.com/training/testing/espresso/idling-resource
 - https://developer.android.com/training/testing/espresso/recipes
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[q-android-testing-strategies--android--medium]]
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 
 - [[q-android-testing-strategies--android--medium]]
 

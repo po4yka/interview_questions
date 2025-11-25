@@ -17,11 +17,16 @@ moc: moc-android
 related:
   - c-android-keystore
   - q-android-security-best-practices--android--medium
+  - q-database-encryption-android--android--medium
+  - q-save-data-outside-fragment--android--medium
+  - q-workmanager-data-passing--android--medium
 created: 2025-10-20
 updated: 2025-11-11
 tags: [android/files-media, android/keystore-crypto, difficulty/medium, encryption]
 sources:
   - "https://developer.android.com/guide/topics/security/encryption"
+date created: Saturday, November 1st 2025, 12:46:48 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -268,7 +273,7 @@ val masterKey = MasterKey.Builder(context)
 - Use batching and transactions with `SQLCipher` to amortize overhead.
 - Cache decrypted data in memory cautiously (risk of leaks via memory dumps, logs, etc.); clear sensitive caches on app exit/lock.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как мигрировать с обычной базы данных на зашифрованную без потери данных?
 - Что происходит с зашифрованными данными при смене PIN/графического ключа устройства пользователем?
@@ -292,14 +297,14 @@ val masterKey = MasterKey.Builder(context)
 
 - [[c-android-keystore]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - Понимание симметричного шифрования (`AES`)
 - Базовые знания о хранилищах в Android (`SharedPreferences`, `Room`)
 - Базовое понимание `Android Keystore`
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 - Android биометрическая аутентификация
 - Паттерны безопасного хранения учетных данных
 - Стратегии миграции данных

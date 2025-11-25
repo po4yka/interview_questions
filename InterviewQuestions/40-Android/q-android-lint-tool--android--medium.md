@@ -16,7 +16,10 @@ status: draft
 moc: moc-android
 related:
   - c-android-components
+  - q-android-build-optimization--android--medium
   - q-android-testing-strategies--android--medium
+  - q-annotation-processing--android--medium
+  - q-annotation-processing-android--android--medium
   - q-gradle-build-system--android--medium
   - q-proguard-r8--android--medium
 created: 2025-10-15
@@ -24,6 +27,8 @@ updated: 2025-11-10
 tags: [android/build-variants, android/static-analysis, code-quality, difficulty/medium, static-analysis]
 sources:
   - "https://developer.android.com/studio/write/lint"
+date created: Saturday, November 1st 2025, 12:46:42 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -190,7 +195,7 @@ See also: [[c-android-components]] for context on components and how Lint intera
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как создавать собственные правила Lint для проверки архитектурных ограничений проекта?
 - Каков влияние запуска Lint на производительность CI/CD-конвейера?
@@ -216,9 +221,9 @@ See also: [[c-android-components]] for context on components and how Lint intera
 - https://developer.android.com/studio/write/lint — Official documentation
 - https://github.com/googlesamples/android-custom-lint-rules — Custom rules examples
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания
+### Предварительные Знания
 - [[q-gradle-build-system--android--medium]] — Понимание Gradle-конфигурации и build variants
 
 ### Связанные

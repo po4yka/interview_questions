@@ -13,8 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-infix-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [class-modifiers, classes, difficulty/easy, final, inheritance, open, kotlin, syntax]
+tags: [class-modifiers, classes, difficulty/easy, final, inheritance, kotlin, open, syntax]
+date created: Friday, October 31st 2025, 6:29:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Какой модификатор в Kotlin делает класс нерасширяемым?
 
@@ -87,7 +90,7 @@ class Derived : OpenClass()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого поведения от Java?
 - Когда вы бы использовали это на практике?
@@ -107,7 +110,7 @@ class Derived : OpenClass()
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-infix-functions--kotlin--medium]]
 - [[q-flowon-operator-context-switching--kotlin--hard]]

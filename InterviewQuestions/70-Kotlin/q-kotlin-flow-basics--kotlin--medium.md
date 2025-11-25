@@ -17,6 +17,8 @@ created: 2025-10-05
 updated: 2025-11-10
 tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
 
+date created: Sunday, October 5th 2025, 10:32:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -127,7 +129,7 @@ Flow started
 
 *Промежуточные операторы* на flow, такие как `map`, `filter`, `take`, `zip` и т.д., являются функциями, которые применяются к *upstream* flow или flows и возвращают *downstream* flow, к которому могут быть применены дальнейшие операторы. Промежуточные операции не выполняют никакого кода в flow и не являются suspend функциями. Они только настраивают цепочку операций для будущего выполнения и быстро возвращаются. Это известно как свойство *холодного flow*.
 
-### Сбор из Flow
+### Сбор Из Flow
 
 Используйте *терминальный оператор* для запуска flow и начала прослушивания значений. Терминальные операторы на flow являются либо suspend функциями, такими как `collect`, `single`, `reduce`, `toList` и т.д., либо оператором `launchIn`, который запускает сбор flow в заданной области видимости. Они применяются к upstream flow и запускают выполнение всех операций. Выполнение flow также называется *сбором flow* и всегда выполняется приостанавливающим образом без фактической блокировки. Терминальные операторы завершаются нормально или исключительно в зависимости от успешного или неудачного выполнения всех операций flow в upstream. Самым базовым терминальным оператором является `collect`, например:
 
@@ -143,7 +145,7 @@ try {
 
 По умолчанию flow являются *последовательными*, и все операции flow выполняются последовательно в одной корутине, за исключением нескольких операций, специально разработанных для внесения параллелизма в выполнение flow, таких как [buffer](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html) и [flatMapMerge](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flat-map-merge.html).
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия `Flow` от подходов в Java к работе с потоками данных?
 - Когда вы бы использовали `Flow` на практике?
@@ -156,7 +158,7 @@ try {
 - [Testing Kotlin flows on Android](https://developer.android.com/kotlin/flow/test)
 - [`StateFlow` and `SharedFlow`](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-flow-basics--kotlin--easy]] - Основы `Flow` и способы создания

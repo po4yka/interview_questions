@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-014
 title: Mobile Observability / Наблюдаемость мобильных приложений
-aliases:
-  - Android Observability
-  - Mobile Telemetry
+aliases: [Android Observability, Mobile Telemetry]
 kind: concept
 summary: Instrumentation patterns for logs, metrics, traces in mobile apps with OpenTelemetry and gRPC
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - observability
-  - telemetry
-  - logging
+tags: [android, concept, logging, observability, telemetry]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

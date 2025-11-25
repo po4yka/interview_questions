@@ -5,7 +5,7 @@ aliases: ["Ranges in Kotlin", "Диапазоны в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [ranges, iteration, step]
+subtopics: [iteration, ranges, step]
 question_kind: theory
 difficulty: easy
 
@@ -25,7 +25,10 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/easy, kotlin, ranges]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
+
 # Вопрос (RU)
 > Что такое диапазоны в Kotlin и как их использовать?
 
@@ -40,7 +43,7 @@ tags: [difficulty/easy, kotlin, ranges]
 
 Конструкции `..`, `downTo`, `until` и `step` создают объекты типов диапазонов и числовых прогрессий (`IntProgression`, `LongProgression`, `CharProgression` и соответствующих им `*Range`). Шаг по умолчанию равен 1, не может быть 0 и всегда положителен для возрастающих прогрессий; для `downTo` используется убывающая прогрессия с отрицательным внутренним шагом.
 
-### Базовое использование
+### Базовое Использование
 
 ```kotlin
 if (i in 1..4) {  // эквивалентно 1 <= i && i <= 4
@@ -54,20 +57,20 @@ if (i in 1..4) {  // эквивалентно 1 <= i && i <= 4
 for (i in 1..4) print(i)  // Печатает: 1234
 ```
 
-### Обратная итерация с downTo
+### Обратная Итерация С downTo
 
 ```kotlin
 for (i in 4 downTo 1) print(i)  // Печатает: 4321
 ```
 
-### Пользовательский шаг
+### Пользовательский Шаг
 
 ```kotlin
 for (i in 1..8 step 2) print(i)  // Печатает: 1357
 for (i in 8 downTo 1 step 2) print(i)  // Печатает: 8642
 ```
 
-### Исключение конца с until
+### Исключение Конца С until
 
 ```kotlin
 for (i in 1 until 10) {  // i в [1, 10), 10 исключено
@@ -75,7 +78,7 @@ for (i in 1 until 10) {  // i в [1, 10), 10 исключено
 }
 ```
 
-### Способы создания диапазонов и прогрессий
+### Способы Создания Диапазонов И Прогрессий
 
 #### 1. Оператор `..`
 
@@ -125,7 +128,7 @@ println((11..20 step 4).last)   // 19
 println((11..20 step 5).step)   // 5
 ```
 
-### Типы диапазонов и прогрессий
+### Типы Диапазонов И Прогрессий
 
 - `IntRange`, `LongRange`, `CharRange`, `UIntRange`, `ULongRange` — диапазоны для соответствующих типов
 - `IntProgression`, `LongProgression`, `CharProgression` — базовые типы для прогрессий с шагом
@@ -179,7 +182,7 @@ for (i in 1 until 10) {  // i in [1, 10), 10 is excluded
 
 ### Ways to Create Ranges and Progressions
 
-#### 1. `..` operator
+#### 1. `..` Operator
 
 ```kotlin
 for (num in 1..5) {
@@ -188,7 +191,7 @@ for (num in 1..5) {
 // Output: 1, 2, 3, 4, 5
 ```
 
-#### 2. `rangeTo()` function
+#### 2. `rangeTo()` Function
 
 ```kotlin
 for (num in 1.rangeTo(5)) {
@@ -197,7 +200,7 @@ for (num in 1.rangeTo(5)) {
 // Output: 1, 2, 3, 4, 5
 ```
 
-#### 3. `downTo()` function
+#### 3. `downTo()` Function
 
 ```kotlin
 for (num in 5.downTo(1)) {
@@ -206,7 +209,7 @@ for (num in 5.downTo(1)) {
 // Output: 5, 4, 3, 2, 1
 ```
 
-#### 4. `until` function (end exclusive)
+#### 4. `until` Function (end exclusive)
 
 ```kotlin
 for (num in 1 until 5) {
@@ -215,7 +218,7 @@ for (num in 1 until 5) {
 // Output: 1, 2, 3, 4
 ```
 
-### step() function
+### step() Function
 
 `step` creates a numeric progression with the given step based on an existing range or progression. The default step is 1 and it cannot be 0. For increasing progressions the step is positive; for `downTo` the resulting progression has a negative step.
 
@@ -236,7 +239,7 @@ All of them support iteration in `for` loops, and range types support membership
 
 **English Summary**: In Kotlin, ranges and progressions represent sequences of values with a start and end. For `..`, `rangeTo`, and `downTo`, both ends are inclusive; `until` creates a half-open interval with an exclusive end. Use `step` for custom (non-zero) step values; it's positive for increasing progressions and negative for `downTo`. Ranges and progressions are commonly used for iteration, membership checks (`in`), and validation.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия диапазонов Kotlin от подхода в Java?
 - Когда вы бы использовали диапазоны на практике?
@@ -258,7 +261,7 @@ All of them support iteration in `for` loops, and range types support membership
 - [[c-kotlin]]
 - [Ranges and progressions - Kotlin Documentation](https://kotlinlang.org/docs/ranges.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-collections--kotlin--easy]]
 

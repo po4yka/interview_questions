@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, filtering, kotlin, pair, partition]
 
+date created: Friday, October 31st 2025, 6:29:56 pm
+date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ tags: [collections, difficulty/easy, filtering, kotlin, pair, partition]
 
 `partition()` разделяет коллекцию на **два списка** на основе предиката: первый содержит элементы, для которых предикат вернул `true`, второй — элементы, для которых предикат вернул `false`. Возвращает `Pair<List<T>, List<T>>`. Удобна, когда нужно отфильтровать данные, сохранив обе группы.
 
-### Базовый пример
+### Базовый Пример
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -48,7 +50,7 @@ val even = numbers.filter { it % 2 == 0 }
 val odd = numbers.filter { it % 2 != 0 }
 ```
 
-### Тип возвращаемого значения
+### Тип Возвращаемого Значения
 
 ```kotlin
 val result: Pair<List<Int>, List<Int>> = numbers.partition { it > 5 }
@@ -60,7 +62,7 @@ val nonMatching = result.second   // [1, 2, 3, 4, 5]
 val (matching2, nonMatching2) = numbers.partition { it > 5 }
 ```
 
-### Сравнение с filter
+### Сравнение С Filter
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6)
@@ -75,9 +77,9 @@ val (positive2, negative2) = numbers.partition { it > 3 }
 // negative2 = [1, 2, 3]
 ```
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: Валидация данных
+#### Пример 1: Валидация Данных
 
 ```kotlin
 data class User(val name: String, val email: String, val age: Int) {
@@ -110,7 +112,7 @@ valid.forEach { saveToDatabase(it) }
 invalid.forEach { logValidationError(it) }
 ```
 
-#### Пример 2: Обработка результатов API
+#### Пример 2: Обработка Результатов API
 
 ```kotlin
 sealed class ApiResult<out T> {
@@ -144,7 +146,7 @@ println("Errors: $errorMessages")
 // Errors: [Network timeout, 404 Not Found]
 ```
 
-#### Пример 3: Сортировка файлов
+#### Пример 3: Сортировка Файлов
 
 ```kotlin
 val files = listOf(
@@ -168,7 +170,7 @@ println("Other files: ${others.map { it.name }}")
 // Other files: [document.pdf, data.json, config.xml, archive.zip]
 ```
 
-#### Пример 4: Разделение задач по приоритету
+#### Пример 4: Разделение Задач По Приоритету
 
 ```kotlin
 data class Task(val title: String, val priority: Int) {
@@ -193,7 +195,7 @@ println("Regular tasks:")
 regular.forEach { println("  - ${it.title} (priority ${it.priority})") }
 ```
 
-#### Пример 5: Обработка платежей
+#### Пример 5: Обработка Платежей
 
 ```kotlin
 data class Payment(val id: Int, val amount: Double, val status: String)
@@ -222,7 +224,7 @@ println("Pending: $$totalPending")      // Pending: $500.0
 println("Failed: $$totalFailed")        // Failed: $250.0
 ```
 
-### Работа с пустыми коллекциями
+### Работа С Пустыми Коллекциями
 
 ```kotlin
 val empty = emptyList<Int>()
@@ -233,7 +235,7 @@ println(nonMatching)  // []
 // Обе части пустые
 ```
 
-### Вложенное использование и деструктуризация
+### Вложенное Использование И Деструктуризация
 
 ```kotlin
 data class Student(val name: String, val grade: Int, val isPassing: Boolean)
@@ -257,7 +259,7 @@ println("Good: ${good.map { it.name }}")
 println("Failing: ${failing.map { it.name }}")
 ```
 
-### Performance / Ленивость против eager
+### Performance / Ленивость Против Eager
 
 ```kotlin
 val largeList = (1..1_000_000).toList()
@@ -279,7 +281,7 @@ println("partition: $time2 ms")
 - `partition()` всегда делает eager-разделение и возвращает `List`-ы.
 - Для `Sequence` результат тоже немедленно материализуется в `List` (в отличие от ленивых цепочек операций `Sequence`).
 
-### Работа с разными коллекциями
+### Работа С Разными Коллекциями
 
 ```kotlin
 // Set
@@ -293,7 +295,7 @@ val (evenSeq, oddSeq) = sequence.partition { it % 2 == 0 }
 // partition материализует Sequence в `List<Int>` (eager), в отличие от ленивых операций Sequence
 ```
 
-### Типичные use cases
+### Типичные Use Cases
 
 1. Разделение на категории (например, `URGENT` / `NORMAL`).
 2. Разделение результатов (`success` / `error`).
@@ -319,7 +321,7 @@ val (validOnly, _) = data.partition { it.isValid() }
 val validOnly2 = data.filter { it.isValid() }
 ```
 
-2. Нужно разбить на более чем две группы — используйте `groupBy`.
+1. Нужно разбить на более чем две группы — используйте `groupBy`.
 
 ```kotlin
 // Анти-паттерн: последовательные partition для приоритетов
@@ -372,7 +374,7 @@ val nonMatching = result.second   // [1, 2, 3, 4, 5]
 val (matching2, nonMatching2) = numbers.partition { it > 5 }
 ```
 
-### Comparison with filter
+### Comparison with Filter
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6)
@@ -532,7 +534,7 @@ println("Pending: $$totalPending")
 println("Failed: $$totalFailed")
 ```
 
-### Working with empty collections
+### Working with Empty Collections
 
 ```kotlin
 val empty = emptyList<Int>()
@@ -542,7 +544,7 @@ println(matching)     // []
 println(nonMatching)  // []
 ```
 
-### Nested usage
+### Nested Usage
 
 ```kotlin
 data class Student(val name: String, val grade: Int, val isPassing: Boolean)
@@ -563,7 +565,7 @@ println("Good: ${good.map { it.name }}")
 println("Failing: ${failing.map { it.name }}")
 ```
 
-### Performance / Eager vs lazy
+### Performance / Eager Vs Lazy
 
 ```kotlin
 val largeList = (1..1_000_000).toList()
@@ -585,7 +587,7 @@ println("partition: $time2 ms")
 - `partition()` is always eager and returns `List`s.
 - For a `Sequence`, `partition()` also eagerly materializes both result lists (unlike other lazy `Sequence` operations).
 
-### With other collections
+### With other Collections
 
 ```kotlin
 // Set
@@ -599,7 +601,7 @@ val (evenSeq, oddSeq) = sequence.partition { it % 2 == 0 }
 // partition eagerly materializes to `List<Int>` (not lazy like other Sequence ops)
 ```
 
-### Typical use cases
+### Typical Use Cases
 
 1. Splitting into two categories (e.g., `URGENT` / `NORMAL`).
 2. Separating results (`success` / `error`).
@@ -625,7 +627,7 @@ val (validOnly, _) = data.partition { it.isValid() }
 val validOnly2 = data.filter { it.isValid() }
 ```
 
-2. You need more than two groups — use `groupBy`.
+1. You need more than two groups — use `groupBy`.
 
 ```kotlin
 // Wrong: multiple partition calls
@@ -642,7 +644,7 @@ val byPriority = items.groupBy {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём отличие использования `partition()` от нескольких вызовов `filter`?
 - В каких практических случаях вы бы применили `partition()`?
@@ -664,7 +666,7 @@ val byPriority = items.groupBy {
 - Kotlin Documentation: https://kotlinlang.org/docs/home.html
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
 - [[q-testing-viewmodel-coroutines--kotlin--medium]]

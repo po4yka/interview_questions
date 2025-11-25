@@ -1,3 +1,8 @@
+---
+date created: Tuesday, November 25th 2025, 8:42:34 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
+---
+
 # Administration Documentation
 
 This folder contains all administrative documentation for the Interview Questions vault, organized into logical subfolders for better navigation.
@@ -14,6 +19,7 @@ AI agent guidelines, checklists, and prompts for automated content creation and 
 Setup and integration guides for AI tools and services.
 
 - `AI-Integration/LM-STUDIO-QUICKSTART.md` - LM Studio setup guide for local AI processing
+- `AI-Integration/LANGCHAIN_INTEGRATION.md` - LangChain-based AI validation implementation
 
 ### Domain-Guides/
 Domain-specific guides and checklists for different technical areas.
@@ -43,8 +49,12 @@ Documentation for the validation system and tools.
 ### Vault-Rules/
 Core rules, standards, and controlled vocabularies for the vault.
 
-- `Vault-Rules/FILE-NAMING-RULES.md` - File naming conventions and rules
-- `Vault-Rules/TAXONOMY.md` - Controlled vocabularies and taxonomy definitions
+- `Vault-Rules/FILE-NAMING-RULES.md` - Core file naming conventions
+- `Vault-Rules/NAMING-EXAMPLES.md` - Detailed naming examples and patterns
+- `Vault-Rules/NAMING-VALIDATION.md` - Validation scripts and tools
+- `Vault-Rules/TAXONOMY.md` - Controlled vocabularies reference
+- `Vault-Rules/ANDROID-SUBTOPICS.md` - Android-specific subtopics list
+- `Vault-Rules/YAML-EXAMPLES.md` - Complete YAML examples by topic
 
 ## Quick Access
 
@@ -78,4 +88,4 @@ When adding new documentation:
 3. Update cross-references in other documents as needed
 4. Test AI tool integrations if adding new workflows
 
-Last updated: 2025-11-08
+Last updated: 2025-11-25

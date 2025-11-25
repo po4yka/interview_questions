@@ -4,27 +4,30 @@ title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout �
 aliases: [Compose Lazy Layout Optimization, LazyColumn optimization, LazyRow optimization, Оптимизация Lazy‑layout в Compose, Оптимизация LazyColumn]
 topic: android
 subtopics:
-- performance-memory
-- ui-compose
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- q-android-performance-measurement-tools--android--medium
-- q-compose-compiler-plugin--android--hard
-- q-compose-custom-layout--android--hard
-- q-compose-performance-optimization--android--hard
+  - c-android
+  - q-android-performance-measurement-tools--android--medium
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-custom-layout--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-stability-skippability--android--hard
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 
+date created: Saturday, November 1st 2025, 1:04:33 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +40,7 @@ tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 
 ## Ответ (RU)
 
-### Краткий вариант
+### Краткий Вариант
 - Используйте стабильные ключи (`key`) для элементов.
 - Храните состояние вне item composable (state hoisting, map по ID).
 - Делайте callback'ы и эффекты стабильными (`rememberUpdatedState` для long-lived эффектов).
@@ -45,7 +48,7 @@ tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 - Переиспользуйте объекты и избегайте ненужных intrinsic измерений.
 - Профилируйте через Layout Inspector, Compose Compiler Metrics и Perfetto (см. [[c-android]]).
 
-### Подробный вариант
+### Подробный Вариант
 
 #### Критичные Оптимизации
 

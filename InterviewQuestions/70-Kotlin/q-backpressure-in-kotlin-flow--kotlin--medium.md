@@ -1,7 +1,7 @@
 ---
 id: kotlin-038
 title: "Back Pressure в Kotlin Flow / Back Pressure in Kotlin Flow"
-aliases: ["Back Pressure в Kotlin Flow", "Back Pressure in Kotlin Flow"]
+aliases: ["Back Pressure in Kotlin Flow", "Back Pressure в Kotlin Flow"]
 topic: kotlin
 subtopics: [backpressure, buffer, conflate]
 question_kind: theory
@@ -17,6 +17,8 @@ created: 2025-10-06
 updated: 2025-11-11
 tags: [backpressure, buffer, conflate, difficulty/medium, flow, kotlin, operators]
 
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -252,7 +254,7 @@ class EventLogger {
 }
 ```
 
-### Стратегия 5: sample / Throttle
+### Стратегия 5: Sample / Throttle
 
 ```kotlin
 // sample: испускает последнее значение с фиксированным интервалом
@@ -936,7 +938,7 @@ class BackPressureBestPractices {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Back Pressure в Kotlin `Flow` отличается от подходов в реактивных библиотеках на JVM?
 - В каких реальных сценариях вы бы применили каждую из стратегий (`buffer`, `conflate`, `collectLatest`, `sample`, `debounce`)?
@@ -964,15 +966,15 @@ class BackPressureBestPractices {
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Коррутины и операторы
 - [[q-channel-flow-comparison--kotlin--medium]] - Коррутины
 - [[q-flow-operators--kotlin--medium]] - `Flow`
 
-### Продвинутый уровень
+### Продвинутый Уровень
 - [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
 - [[q-flow-backpressure--kotlin--hard]] - `Flow`
 - [[q-testing-flow-operators--kotlin--hard]] - Коррутины

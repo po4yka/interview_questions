@@ -1,34 +1,34 @@
 ---
 id: android-348
 title: RSS Feed Aggregator / Агрегатор RSS лент
-aliases:
-- RSS Feed Aggregator
-- Агрегатор RSS лент
+aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
 topic: android
 subtopics:
-- networking-http
-- room
+  - networking-http
+  - room
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-retrofit
-- c-room
-- q-databases-android--android--easy
-- q-how-to-choose-layout-for-fragment--android--easy
-- q-webp-image-format-android--android--easy
+  - c-retrofit
+  - c-room
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-databases-android--android--easy
+  - q-how-to-choose-layout-for-fragment--android--easy
+  - q-tiktok-video-feed--android--hard
+  - q-webp-image-format-android--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/networking-http
-- android/room
-- difficulty/medium
+tags: [android/networking-http, android/room, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -60,7 +60,7 @@ RSS-агрегатор получает и отображает RSS-ленты �
 
 ```
 
-### 1. Модели данных
+### 1. Модели Данных
 
 ```kotlin
 // Entity для Room
@@ -312,7 +312,7 @@ class RssRepository(
 }
 ```
 
-### 5. WorkManager для фоновой синхронизации
+### 5. WorkManager Для Фоновой Синхронизации
 
 ```kotlin
 class RssSyncWorker(
@@ -992,7 +992,7 @@ English: RSS aggregator architecture: Jsoup (in this sample) for XML parsing, Ro
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-databases-android--android--easy]]
 - [[q-how-to-choose-layout-for-fragment--android--easy]]
@@ -1014,7 +1014,7 @@ English: RSS aggregator architecture: Jsoup (in this sample) for XML parsing, Ro
 - [Connecting to the Network](https://developer.android.com/training/basics/network-ops/connecting)
 - [Room Database](https://developer.android.com/training/data-storage/room)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепты
 

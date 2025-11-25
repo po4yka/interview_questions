@@ -13,9 +13,11 @@ moc: moc-kotlin
 related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: "2025-10-12"
 updated: "2025-11-11"
-tags: [kotlin/classes, difficulty/medium, kotlin/inner-classes, kotlin/nested-classes]
+tags: [difficulty/medium, kotlin/classes, kotlin/inner-classes, kotlin/nested-classes]
 sources: ["https://kotlinlang.org/docs/nested-classes.html"]
 
+date created: Sunday, October 12th 2025, 1:58:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -133,7 +135,7 @@ class Activity {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать вложенные (nested) vs внутренние (inner) классы?
 - Как избежать утечек памяти при использовании inner классов?
@@ -144,7 +146,7 @@ class Activity {
 - [[c-kotlin]]
 - https://kotlinlang.org/docs/nested-classes.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы

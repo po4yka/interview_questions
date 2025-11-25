@@ -14,7 +14,10 @@ related: [c-equality, c-java-features, q-equals-hashcode-contracts--programming-
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy, equality, java, object-methods, programming-languages, reference-equality]
+date created: Friday, October 31st 2025, 6:32:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как по умолчанию работает метод equals() из java.lang.Object в Java, что именно он сравнивает?
 
@@ -274,7 +277,7 @@ box1 == box2;       // false - different references
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия этого поведения от Kotlin?
 - Когда на практике достаточно поведения `Object.equals()` по умолчанию?
@@ -294,7 +297,7 @@ box1 == box2;       // false - different references
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Простые (Easy)
 - [[q-java-object-comparison--programming-languages--easy]] - Java

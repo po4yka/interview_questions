@@ -1,20 +1,15 @@
 ---
 id: ivc-20251102-015
 title: ARCore / ARCore
-aliases:
-  - ARCore
-  - Google ARCore
+aliases: [ARCore, Google ARCore]
 kind: concept
 summary: Google’s augmented reality SDK for motion tracking, environmental understanding, and light estimation
 links: []
 created: 2025-11-02
 updated: 2025-11-02
-tags:
-  - android
-  - concept
-  - arcore
-  - xr
-  - 3d
+tags: [3d, android, arcore, concept, xr]
+date created: Thursday, November 6th 2025, 4:39:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

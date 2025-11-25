@@ -16,6 +16,8 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-patterns", "clean-architecture", "concept", "difficulty/medium", "domain-layer", "repository", "use-cases"]
+date created: Saturday, October 25th 2025, 12:52:57 pm
+date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Clean Architecture / Чистая Архитектура

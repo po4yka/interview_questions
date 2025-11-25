@@ -14,6 +14,8 @@ related: [c-kotlin, q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-ba
 created: 2025-10-15
 updated: 2025-11-09
 tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, thread-safety]
+date created: Saturday, November 1st 2025, 1:26:33 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +36,7 @@ tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, threa
 
 Ниже приведены примеры и детали, полностью соответствующие английской секции.
 
-### Atomic переменные — для простых операций
+### Atomic Переменные — Для Простых Операций
 
 Используйте для:
 - простого счетчика;
@@ -87,7 +89,7 @@ threads.forEach { it.join() }
 // При корректном ожидании потоков: counter.get() == 1000
 ```
 
-### `synchronized` — для сложных операций
+### `synchronized` — Для Сложных Операций
 
 Используйте для:
 - работы с несколькими переменными или объектами;
@@ -131,7 +133,7 @@ class BankAccount(
 }
 ```
 
-### Примеры использования
+### Примеры Использования
 
 #### Пример 1: Счетчик (Atomic лучше)
 
@@ -162,7 +164,7 @@ class RequestCounterSync {
 }
 ```
 
-#### Пример 2: Cache с TTL (`synchronized` лучше)
+#### Пример 2: Cache С TTL (`synchronized` лучше)
 
 ```kotlin
 // Synchronized — нужен для сложной логики
@@ -199,7 +201,7 @@ class Cache<K, V>(private val ttlMs: Long) {
 }
 ```
 
-#### Пример 3: Флаг состояния (Atomic проще)
+#### Пример 3: Флаг Состояния (Atomic проще)
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicBoolean
@@ -229,7 +231,7 @@ class ConnectionManager {
 }
 ```
 
-#### Пример 4: Перевод между счетами (`synchronized` обязателен)
+#### Пример 4: Перевод Между Счетами (`synchronized` обязателен)
 
 Важно: все операции с `BankAccount` должны использовать один и тот же монитор (например, `synchronized(this)`), иначе возможны гонки.
 
@@ -258,7 +260,7 @@ class Bank {
 // Atomic здесь не помогает — нужна координация между аккаунтами и единая критическая секция
 ```
 
-### Сравнение производительности
+### Сравнение Производительности
 
 Для простых операций атомарные переменные часто быстрее, чем `synchronized`, за счет lock-free реализации на CAS. Но:
 - при высокой конкуренции CAS может многократно переотклоняться и терять преимущество;
@@ -292,7 +294,7 @@ class BenchmarkCounter {
 }
 ```
 
-### Типы атомарных переменных
+### Типы Атомарных Переменных
 
 ```kotlin
 import java.util.concurrent.atomic.*
@@ -358,7 +360,7 @@ class CASExample {
 }
 ```
 
-### Когда НЕ использовать Atomic и `synchronized`
+### Когда НЕ Использовать Atomic И `synchronized`
 
 Во многих сценариях на Android/Kotlin предпочтительнее более высокоуровневые абстракции над потоками: корутины, `Mutex`, акторы.
 
@@ -430,7 +432,7 @@ class Statistics {
 }
 ```
 
-2. Используйте `synchronized` для сложной логики и общих инвариантов
+1. Используйте `synchronized` для сложной логики и общих инвариантов
 
 ```kotlin
 // Вся работа с коллекцией под одним lock — корректно
@@ -452,7 +454,7 @@ class ResourcePool<T>(private val factory: () -> T) {
 }
 ```
 
-3. Не смешивайте разные механизмы синхронизации для одного логического состояния
+1. Не смешивайте разные механизмы синхронизации для одного логического состояния
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicInteger
@@ -472,7 +474,7 @@ class BadExample {
 }
 ```
 
-4. В Android по возможности используйте корутины и диспетчеры вместо ручных блокировок
+1. В Android по возможности используйте корутины и диспетчеры вместо ручных блокировок
 
 ```kotlin
 import kotlinx.coroutines.Dispatchers
@@ -493,7 +495,7 @@ class DataRepository {
 }
 ```
 
-### Сводное сравнение
+### Сводное Сравнение
 
 | Aspekt | Atomic | synchronized |
 |--------|--------|--------------|
@@ -564,7 +566,7 @@ val threads = List(1000) {
 threads.forEach { it.join() }
 ```
 
-### `synchronized` – for Complex Operations
+### `synchronized` – For Complex Operations
 
 Use when:
 - multiple variables/objects must be updated together;
@@ -609,7 +611,7 @@ class BankAccount(
 
 ### Usage Examples
 
-1) Counter (Atomic is better)
+1. Counter (Atomic is better)
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicLong
@@ -636,7 +638,7 @@ class RequestCounterSync {
 }
 ```
 
-2) Cache with TTL (`synchronized` is better)
+1. Cache with TTL (`synchronized` is better)
 
 ```kotlin
 class Cache<K, V>(private val ttlMs: Long) {
@@ -672,7 +674,7 @@ class Cache<K, V>(private val ttlMs: Long) {
 }
 ```
 
-3) State Flag (Atomic is simpler)
+1. State Flag (Atomic is simpler)
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicBoolean
@@ -699,7 +701,7 @@ class ConnectionManager {
 }
 ```
 
-4) Transfer between Accounts (`synchronized` required)
+1. Transfer between Accounts (`synchronized` required)
 
 ```kotlin
 class Bank {
@@ -867,7 +869,7 @@ sealed class CacheCommand {
 
 ### Best Practices
 
-1) Prefer Atomic for simple independent state (counters/flags not tied to shared invariants)
+1. Prefer Atomic for simple independent state (counters/flags not tied to shared invariants)
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicLong
@@ -886,7 +888,7 @@ class Statistics {
 }
 ```
 
-2) Use `synchronized` for complex/compound state and invariants
+1. Use `synchronized` for complex/compound state and invariants
 
 ```kotlin
 class ResourcePool<T>(private val factory: () -> T) {
@@ -907,7 +909,7 @@ class ResourcePool<T>(private val factory: () -> T) {
 }
 ```
 
-3) Avoid mixing synchronization mechanisms for the same logical state
+1. Avoid mixing synchronization mechanisms for the same logical state
 
 ```kotlin
 import java.util.concurrent.atomic.AtomicInteger
@@ -926,7 +928,7 @@ class BadExample {
 }
 ```
 
-4) On Android, favor coroutines/Dispatchers instead of manual threads/locks when appropriate
+1. On Android, favor coroutines/Dispatchers instead of manual threads/locks when appropriate
 
 ```kotlin
 import kotlinx.coroutines.Dispatchers
@@ -960,7 +962,7 @@ class DataRepository {
 
 In short: Atomic is simple and efficient for isolated values. `synchronized` is flexible and safe for complex shared state and invariants.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия использования Atomic/`synchronized` в Kotlin по сравнению с Java?
 - В каких реальных сценариях Android/Kotlin-кода вы бы выбрали Atomic, а в каких — `synchronized` или корутины?
@@ -982,7 +984,7 @@ In short: Atomic is simple and efficient for isolated values. `synchronized` is 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-continuation-cps-internals--kotlin--hard]]
 - [[q-kotlin-flow-basics--kotlin--medium]]

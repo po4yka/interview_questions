@@ -1,35 +1,33 @@
 ---
 id: android-278
 title: Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup
-aliases:
-- View Hierarchy
-- ViewGroup Inheritance
-- Иерархия View
-- Наследование ViewGroup
+aliases: [View Hierarchy, ViewGroup Inheritance, Иерархия View, Наследование ViewGroup]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-components
-- q-canvas-optimization--android--medium
-- q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
-- q-what-does-itemdecoration-do--android--medium
+  - c-android-components
+  - q-canvas-optimization--android--medium
+  - q-custom-viewgroup-layout--android--hard
+  - q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
+  - q-viewgroup-vs-view-differences--android--easy
+  - q-what-does-itemdecoration-do--android--medium
+  - q-what-does-viewgroup-inherit-from--android--easy
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags:
-- android
-- android/ui-views
-- difficulty/easy
+tags: [android, android/ui-views, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -58,7 +56,7 @@ ViewGroup (контейнер для других View)
 Конкретные Layout классы (LinearLayout, RelativeLayout, и т.д.)
 ```
 
-### Ключевые Методы и Ответственности `View`
+### Ключевые Методы И Ответственности `View`
 
 Ниже упрощённый псевдокод, иллюстрирующий базовую функциональность `View` (не точные сигнатуры исходного API):
 
@@ -294,7 +292,7 @@ setViewProperties(linearLayout) // Works because LinearLayout : ViewGroup : View
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия между `View` и `ViewGroup`?
 - Почему метод `onLayout()` объявлен абстрактным в `ViewGroup` и что должны реализовать наследники?

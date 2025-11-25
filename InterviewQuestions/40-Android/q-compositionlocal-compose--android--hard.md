@@ -15,14 +15,19 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
+  - q-compose-gesture-detection--android--medium
   - q-compose-performance-optimization--android--hard
   - q-compose-remember-derived-state--android--medium
+  - q-compose-side-effects-advanced--android--hard
+  - q-compose-stability-skippability--android--hard
   - q-compositionlocal-advanced--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
 sources:
   - https://developer.android.com/jetpack/compose/compositionlocal
+date created: Saturday, November 1st 2025, 1:11:44 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)

@@ -14,6 +14,8 @@ related: [c-kotlin, q-coroutinescope-vs-supervisorscope--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/hard, generics, inline, kotlin, reified, type-parameters]
+date created: Friday, October 31st 2025, 6:32:17 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -68,7 +70,7 @@ isInstance<String>("hello")  // true
 isInstance<Int>("hello")     // false
 ```
 
-### Типобезопасный парсинг JSON
+### Типобезопасный Парсинг JSON
 
 ```kotlin
 inline fun <reified T> String.parseJson(): T {
@@ -82,7 +84,7 @@ val users: List<User> = jsonString.parseJson()
 
 (Здесь `Json.decodeFromString` подразумевает реализацию/библиотеку, умеющую работать с `reified` типами; конкретный JSON-движок опущен.)
 
-### Типобезопасные фабрики / Android-хелперы (упрощённо)
+### Типобезопасные Фабрики / Android-хелперы (упрощённо)
 
 ```kotlin
 // Пример упрощённого фабричного метода для Fragment.
@@ -192,7 +194,7 @@ isInstance<String>("hello")  // true
 isInstance<Int>("hello")     // false
 ```
 
-### Type-safe JSON parsing
+### Type-safe JSON Parsing
 
 ```kotlin
 inline fun <reified T> String.parseJson(): T {
@@ -206,7 +208,7 @@ val users: List<User> = jsonString.parseJson()
 
 (Here `Json.decodeFromString` stands for a JSON implementation that can leverage `reified` type information; the concrete library is omitted.)
 
-### Type-safe factories / Android helpers (simplified)
+### Type-safe Factories / Android Helpers (simplified)
 
 ```kotlin
 // Simplified factory method for Fragment.
@@ -232,7 +234,7 @@ inline fun <reified T : Activity> Context.startActivity(extras: Bundle? = null) 
 context.startActivity<MainActivity>()
 ```
 
-### ViewModel factory (simplified example)
+### ViewModel Factory (simplified example)
 
 ```kotlin
 inline fun <reified VM : ViewModel> Fragment.viewModels(

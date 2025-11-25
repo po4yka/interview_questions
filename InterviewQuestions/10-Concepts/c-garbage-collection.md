@@ -1,13 +1,15 @@
 ---
 id: concept-001
 title: Garbage Collection / Сборка мусора
-aliases: [Garbage Collection, GC, Сборка мусора, Автоматическое управление памятью]
+aliases: [Garbage Collection, GC, Автоматическое управление памятью, Сборка мусора]
 kind: concept
 summary: Automatic memory management mechanism that identifies and reclaims memory occupied by objects that are no longer reachable or needed by the program.
 links: []
 created: 2025-11-05
 updated: 2025-11-05
-tags: [concept, memory-management, jvm, runtime]
+tags: [concept, jvm, memory-management, runtime]
+date created: Wednesday, November 5th 2025, 6:30:35 pm
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

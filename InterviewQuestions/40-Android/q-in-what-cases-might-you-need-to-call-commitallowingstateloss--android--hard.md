@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +38,7 @@ tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycl
 
 **Когда использовать (редкие случаи)**:
 
-### 1. Некритичные/эфемерные операции после сохранения состояния
+### 1. Некритичные/эфемерные Операции После Сохранения Состояния
 Ситуации, когда:
 - транзакция не содержит пользовательских данных;
 - UI носит временный характер и его безопасно не показать после восстановления;
@@ -55,7 +57,7 @@ class NotificationHandler {
 }
 ```
 
-### 2. Закрытие диалогов при изменении состояния
+### 2. Закрытие Диалогов При Изменении Состояния
 Dismiss диалогов, когда активность уже может быть на грани уничтожения:
 
 ```kotlin
@@ -68,7 +70,7 @@ override fun onPause() {
 
 Здесь важно не "гарантировать пересоздание" диалога, а наоборот — принять, что он может не восстановиться, и это приемлемо.
 
-### 3. Коллбеки фоновых процессов
+### 3. Коллбеки Фоновых Процессов
 Фоновые задачи, которые приходят, когда `Activity` уже сохранила состояние, и результат:
 - не критичен для навигации;
 - может быть повторно загружен или просто проигнорирован;
@@ -185,7 +187,7 @@ class MainActivity : AppCompatActivity() {
 
 **When to use (rare cases)**:
 
-### 1. Non-critical/ephemeral operations after state is saved
+### 1. Non-critical/ephemeral Operations after State is Saved
 Cases where:
 - the transaction does not involve user-entered data;
 - the UI is transient and safe to drop after restoration;
@@ -204,7 +206,7 @@ class NotificationHandler {
 }
 ```
 
-### 2. Dismissing dialogs when lifecycle is changing
+### 2. Dismissing Dialogs when Lifecycle is Changing
 Dismiss dialogs when the activity may already be finishing or its state is saved:
 
 ```kotlin
@@ -217,7 +219,7 @@ override fun onPause() {
 
 The point is not that the dialog will be reliably recreated, but that losing it is acceptable.
 
-### 3. Callbacks from background work
+### 3. Callbacks from Background Work
 Background callbacks that arrive after state is saved, where the result:
 - is not critical for navigation;
 - can be re-fetched or ignored safely;

@@ -2,7 +2,7 @@
 id: lang-011
 title: "Java Object Comparison / Сравнение объектов в Java"
 aliases: ["Java Object Comparison", "Java Object Сравнение"]
-topic: programming-languages
+topic: kotlin
 subtopics: [equality]
 question_kind: theory
 difficulty: easy
@@ -15,6 +15,8 @@ created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, programming-languages]
 
+date created: Tuesday, November 25th 2025, 12:55:28 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -100,7 +102,7 @@ if (p1.hashCode() == p2.hashCode()) {
 }
 ```
 
-### Пример правильной реализации equals() и hashCode()
+### Пример Правильной Реализации equals() И hashCode()
 
 ```java
 import java.util.Objects;
@@ -137,7 +139,7 @@ System.out.println(p1 == p2);        // false - разные объекты
 System.out.println(p1.equals(p2));   // true - равны по содержимому
 ```
 
-### Частые ошибки
+### Частые Ошибки
 
 ```java
 // Ошибка: использование == для сравнения содержимого строк
@@ -171,14 +173,14 @@ class Bad {
 }
 ```
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Оператор    | Что сравнивает                               | Когда использовать                    | Пример               |
 |-------------|----------------------------------------------|----------------------------------------|----------------------|
 | `==`        | Ссылки (идентичность объекта)               | Проверка, один ли это объект           | `obj1 == obj2`      |
 | `.equals()` | Реализацию в классе (обычно данные объекта) | Логическое равенство                   | `obj1.equals(obj2)` |
 
-### Краткое резюме
+### Краткое Резюме
 
 - `==` сравнивает ссылки (идентичность объекта).
 - `.equals()` определяет логическое равенство; по умолчанию как `==`, но многие классы переопределяют его для сравнения содержимого.
@@ -264,7 +266,7 @@ if (p1.hashCode() == p2.hashCode()) {
 }
 ```
 
-### Example of correct equals() and hashCode() implementation
+### Example of Correct equals() and hashCode() Implementation
 
 ```java
 import java.util.Objects;
@@ -351,7 +353,7 @@ class Bad {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем различия между `==`/`.equals()` в Java и `==`/`===` в Kotlin?
 - Когда на практике стоит использовать проверку идентичности, а когда логического равенства?
@@ -372,7 +374,7 @@ class Bad {
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 - [[c-equality]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Простые (Easy)
 - [[q-java-equals-default-behavior--programming-languages--easy]] - Java

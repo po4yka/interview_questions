@@ -14,7 +14,10 @@ updated: 2025-11-09
 tags: [adaptive-layouts, difficulty/hard, jetpack-compose, kotlin/adaptive-layouts, kotlin/jetpack-compose, responsive-design, window-size-classes]
 moc: moc-kotlin
 related: [c-jetpack-compose, c-window-size-class, q-android-jetpack-overview--android--easy]
+date created: Sunday, October 19th 2025, 1:47:08 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Как создавать адаптивные layouts в Compose? Что такое window size классы? Как обрабатывать телефоны, планшеты и складные устройства?
 
@@ -199,7 +202,7 @@ fun Material3AdaptiveNav() {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как тестировать адаптивные layouts на разных размерах экранов?
 - В чем разница между `WindowSizeClass` и `BoxWithConstraints`?
@@ -214,7 +217,7 @@ fun Material3AdaptiveNav() {
 - [Compose Adaptive Layouts](https://developer.android.com/jetpack/compose/layouts/adaptive)
 - [[c-jetpack-compose]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-what-is-coroutine--kotlin--easy]] - основы `Coroutine`

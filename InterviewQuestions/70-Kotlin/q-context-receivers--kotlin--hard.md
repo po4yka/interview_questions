@@ -1,7 +1,7 @@
 ---
 id: kotlin-142
 title: "Context Receivers / Context Receivers"
-aliases: ["Context Receivers", "Контекстные получатели", "Context Receivers in Kotlin", "Контекстные получатели в Kotlin"]
+aliases: ["Context Receivers in Kotlin", "Context Receivers", "Контекстные получатели в Kotlin", "Контекстные получатели"]
 topic: kotlin
 subtopics: [c-kotlin, c-kotlin-features]
 question_kind: theory
@@ -10,11 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, c-kotlin, q-actor-pattern--kotlin--hard]
+related: [c-kotlin, c-kotlin-features, q-actor-pattern--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, scope-functions]
+date created: Saturday, November 1st 2025, 5:30:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+
 # Вопрос (RU)
 > Объясните context receivers в Kotlin. Чем они отличаются от extension receivers? Приведите примеры DSL.
 
@@ -89,7 +92,7 @@ fun useLogMessage() {
 
 ---
 
-### Базовый пример с несколькими контекстами
+### Базовый Пример С Несколькими Контекстами
 
 ```kotlin
 class Logger {
@@ -128,7 +131,7 @@ fun demoFetchAndLog() {
 
 ---
 
-### Context Receivers vs Extension Receivers (Сравнение)
+### Context Receivers Vs Extension Receivers (Сравнение)
 
 | Характеристика          | Extension Receiver            | Context Receiver                        |
 |-------------------------|------------------------------|-----------------------------------------|
@@ -309,7 +312,7 @@ fun demoQuery() {
 
 ---
 
-### Context Receivers для Dependency Injection
+### Context Receivers Для Dependency Injection
 
 Полный пример, зеркалирующий EN-версию:
 
@@ -386,7 +389,7 @@ fun demoUserService() {
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте `@DslMarker` для предотвращения утечки областей видимости в сложных DSL:
 
@@ -407,7 +410,7 @@ class OuterBuilder {
 }
 ```
 
-2. Предоставляйте удобные функции-обертки, скрывающие детали создания контекста:
+1. Предоставляйте удобные функции-обертки, скрывающие детали создания контекста:
 
 ```kotlin
 // Хелпер, оборачивающий настройку контекста
@@ -427,7 +430,7 @@ val html = buildHtml {
 }
 ```
 
-3. Не злоупотребляйте: слишком много контекстов ухудшает читаемость. Группируйте связанные зависимости:
+1. Не злоупотребляйте: слишком много контекстов ухудшает читаемость. Группируйте связанные зависимости:
 
 ```kotlin
 // Плохо: слишком много контекстов
@@ -828,7 +831,7 @@ class OuterBuilder {
 }
 ```
 
-2. Provide convenience functions to hide context wiring:
+1. Provide convenience functions to hide context wiring:
 
 ```kotlin
 fun buildHtml(block: context(HtmlDocument) () -> Unit): String {
@@ -846,7 +849,7 @@ val html = buildHtml {
 }
 ```
 
-3. Don't overuse: group related contexts into cohesive holders:
+1. Don't overuse: group related contexts into cohesive holders:
 
 ```kotlin
 context(Logger, Database, Cache, Config, Metrics, Auth, EmailService)
@@ -871,7 +874,7 @@ fun betterFunction() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия context receivers от Java-подходов к передаче контекста/зависимостей?
 - В каких практических сценариях вы бы применили context receivers?
@@ -895,7 +898,7 @@ fun betterFunction() {
 - [[c-kotlin]]
 - [[c-kotlin-features]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-actor-pattern--kotlin--hard]]
 

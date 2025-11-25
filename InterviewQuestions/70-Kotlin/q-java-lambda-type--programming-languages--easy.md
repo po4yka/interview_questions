@@ -14,7 +14,10 @@ related: [c-java-features, q-java-object-comparison--programming-languages--easy
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy, functional-interface, functional-programming, java, lambda, programming-languages]
+date created: Friday, October 31st 2025, 6:32:22 pm
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Какой тип у лямбды в Java?
 
@@ -191,7 +194,7 @@ Lambda expressions in Java have the type of a target functional interface — an
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия между лямбдами Java и анонимными классами?
 - Когда на практике стоит использовать лямбды?
@@ -211,7 +214,7 @@ Lambda expressions in Java have the type of a target functional interface — an
 
 - Official Java documentation for lambda expressions and functional interfaces
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Связанные (Простые)
 - [[q-java-equals-default-behavior--programming-languages--easy]] - Java

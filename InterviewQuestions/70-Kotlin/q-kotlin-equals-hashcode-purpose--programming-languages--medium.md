@@ -3,18 +3,21 @@ id: lang-087
 title: "Kotlin Equals Hashcode Purpose / Назначение equals и hashCode в Kotlin"
 aliases: [Kotlin Equals Hashcode Purpose, Назначение equals и hashCode в Kotlin]
 topic: kotlin
-subtopics: [equality, hash-tables, collections]
+subtopics: [collections, equality, hash-tables]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-equality, q-launch-vs-async--kotlin--easy, q-semaphore-rate-limiting--kotlin--medium]
+related: [c-equality, c-kotlin, q-launch-vs-async--kotlin--easy, q-semaphore-rate-limiting--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [collections, difficulty/medium, equals, hashcode, object-comparison, kotlin]
+tags: [collections, difficulty/medium, equals, hashcode, kotlin, object-comparison]
+date created: Friday, October 31st 2025, 6:28:52 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Зачем нужны методы equals и hashCode?
 

@@ -16,6 +16,8 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/background-execution, android/lifecycle, android/service, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +36,7 @@ tags: [android, android/background-execution, android/lifecycle, android/service
 
 Режимы ниже относятся к started-сервисам (работающим через `startService()` / `startForegroundService()` и `onStartCommand()`), а не к чисто bound-сервисам. Чисто bound-сервисы существуют, пока есть активные клиенты, и не перезапускаются системой после потери всех связей.
 
-### Режимы перезапуска
+### Режимы Перезапуска
 
 **START_STICKY** — при убийстве сервисного процесса системой сервис может быть воссоздан, и `onStartCommand()` будет вызван снова, но `intent` при повторном запуске будет `null`:
 
@@ -86,7 +88,7 @@ class MusicService : Service() {
 }
 ```
 
-### Условия перезапуска (упрощённо)
+### Условия Перезапуска (упрощённо)
 
 Система может попытаться перезапустить сервис (в соответствии с режимом `onStartCommand()`), если:
 
@@ -97,7 +99,7 @@ class MusicService : Service() {
 
 Важно: поведение недетерминированное и зависит от политики планировщика, версии Android и текущей нагрузки.
 
-### Обработка null `Intent`
+### Обработка Null `Intent`
 
 ```kotlin
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -111,7 +113,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Сравнение режимов
+### Сравнение Режимов
 
 | Режим | Перезапуск при убийстве системой | `Intent` при перезапуске | Типичные случаи |
 |-------|-----------------------------------|--------------------------|------------------|
@@ -191,7 +193,7 @@ The system may attempt to restart the service (according to the `onStartCommand(
 
 This behavior is best-effort and non-deterministic; it depends on Android version, system policies, and current load.
 
-### Handling null `Intent`
+### Handling Null `Intent`
 
 ```kotlin
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

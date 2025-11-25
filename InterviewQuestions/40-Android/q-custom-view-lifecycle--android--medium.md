@@ -4,25 +4,29 @@ title: Custom View Lifecycle / Жизненный цикл Custom View
 aliases: [Custom View Lifecycle, Жизненный цикл Custom View]
 topic: android
 subtopics:
-- lifecycle
-- ui-graphics
-- ui-views
+  - lifecycle
+  - ui-graphics
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-view-system
-- q-custom-view-state-saving--android--medium
+  - c-android-view-system
+  - q-custom-view-attributes--android--medium
+  - q-custom-view-state-saving--android--medium
+  - q-what-is-known-about-view-lifecycles--android--medium
 created: 2025-10-21
 updated: 2025-11-11
 tags: [android/lifecycle, android/ui-graphics, android/ui-views, custom-views, difficulty/medium]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:27:08 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -75,7 +79,7 @@ class CustomProgressBar @JvmOverloads constructor(
 }
 ```
 
-#### 2. onAttachedToWindow — Присоединение к окну
+#### 2. onAttachedToWindow — Присоединение К Окну
 
 `View` добавлена в иерархию и присоединена к окну. Здесь безопасно запускать анимации, регистрировать listeners, подписки и т.п.
 
@@ -91,7 +95,7 @@ override fun onDetachedFromWindow() {
 }
 ```
 
-#### 3. onMeasure — Измерение размеров
+#### 3. onMeasure — Измерение Размеров
 
 Вызывается многократно. **Обязательно** установить размеры через `setMeasuredDimension()` (либо вызвать реализацию суперкласса, которая это делает), с учетом `MeasureSpec`.
 
@@ -111,7 +115,7 @@ override fun onMeasure(widthSpec: Int, heightSpec: Int) {
 
 Для простых наследников `View` не требуется. В `ViewGroup` используется для размещения потомков и может вызываться многократно.
 
-#### 5. onSizeChanged — Реакция на изменение размеров
+#### 5. onSizeChanged — Реакция На Изменение Размеров
 
 Вызывается после того, как размер `View` был вычислен или изменился. Удобное место для пересчета геометрии, кэшированных путей, шейдеров и т.п., если они зависят от ширины/высоты.
 
@@ -134,7 +138,7 @@ override fun onDraw(canvas: Canvas) {
 }
 ```
 
-### Ключевые правила
+### Ключевые Правила
 
 1. **Constructor**: инициализация `Paint`, атрибутов и ресурсов; не использовать размеры `View`.
 2. **onAttachedToWindow**: запуск анимаций, регистрация listeners/подписок.
@@ -144,7 +148,7 @@ override fun onDraw(canvas: Canvas) {
 6. **onDraw**: минимизировать создание объектов и тяжелые операции в hot path.
 7. **onDetachedFromWindow**: остановить анимации, отписаться от listeners, освободить ресурсы.
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 ```kotlin
 class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -291,7 +295,7 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Что произойдет, если забыть вызвать `setMeasuredDimension()` в `onMeasure`?
 - Чем `invalidate()` отличается от `requestLayout()` и когда использовать каждый из них?
@@ -319,11 +323,11 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 - https://developer.android.com/guide/topics/ui/custom-components
 - https://developer.android.com/reference/android/view/View
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 
-### Связанные (тот же уровень)
+### Связанные (тот Же уровень)
 - [[q-custom-view-state-saving--android--medium]]
 
 ### Продвинутое (сложнее)

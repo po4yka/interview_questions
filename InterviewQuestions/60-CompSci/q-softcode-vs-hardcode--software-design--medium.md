@@ -1,5 +1,5 @@
 ---
-id: cs-001
+id: sd-001
 title: "Softcode Vs Hardcode / Softcode против Hardcode"
 aliases: [Softcode Vs Hardcode, Softcode против Hardcode]
 topic: cs
@@ -13,8 +13,10 @@ moc: moc-cs
 related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-13
 updated: 2025-11-11
-tags: [cs, configuration, difficulty/medium, flexibility, hardcoding, maintainability, softcoding]
+tags: [configuration, cs, difficulty/medium, flexibility, hardcoding, maintainability, softcoding]
 
+date created: Tuesday, November 25th 2025, 12:56:01 pm
+date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ tags: [cs, configuration, difficulty/medium, flexibility, hardcoding, maintainab
 
 Ниже — детальное сравнение с хардкодом и примеры.
 
-### Хардкод против софткода
+### Хардкод Против Софткода
 
 #### Хардкод (Hard Coding)
 
@@ -135,9 +137,9 @@ class PaymentProcessor(private val config: AppConfig) {
 
 ---
 
-### Типичные источники софткода
+### Типичные Источники Софткода
 
-#### 1. Конфигурационные файлы
+#### 1. Конфигурационные Файлы
 
 JSON, YAML, TOML, properties-файлы.
 
@@ -166,7 +168,7 @@ class PropertiesConfigLoader {
 }
 ```
 
-#### 2. Переменные окружения
+#### 2. Переменные Окружения
 
 ```kotlin
 // Чтение из переменных окружения (упрощено; в реальном коде нужна валидация)
@@ -193,7 +195,7 @@ class EnvConfigLoader {
 - CI/CD-конфигураций
 - Секретов (через менеджер секретов + env)
 
-#### 3. Удалённая конфигурация
+#### 3. Удалённая Конфигурация
 
 ```kotlin
 // Firebase Remote Config (упрощено)
@@ -223,7 +225,7 @@ class RemoteConfigLoader(private val remoteConfig: FirebaseRemoteConfig) {
 // - Персонализация по сегментам
 ```
 
-#### 4. База данных
+#### 4. База Данных
 
 ```kotlin
 // Хранение конфигурации в БД (пример на Room, упрощённый)
@@ -259,7 +261,7 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 ---
 
-### Когда использовать софткод и когда хардкод
+### Когда Использовать Софткод И Когда Хардкод
 
 Используем софткод для:
 
@@ -382,7 +384,7 @@ class Calculator(private val config: CalculatorConfig) {
 
 ---
 
-### Android-пример: система конфигурации
+### Android-пример: Система Конфигурации
 
 ```kotlin
 // Демонстрационный пример; опущены импорты и обработка ошибок
@@ -501,7 +503,7 @@ class CheckoutFragment : Fragment() {
 
 ---
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 
 #### Делайте (DO)
 
@@ -533,7 +535,7 @@ class CheckoutFragment : Fragment() {
    val rawConfig: Map<String, Any>
    ```
 
-#### Не делайте (DON'T)
+#### Не Делайте (DON'T)
 
 1. Не переусердствуйте с софткодом:
    ```kotlin
@@ -560,7 +562,7 @@ Softcode (soft coding) is a design approach where system behavior and configurat
 
 Below is a detailed comparison with hardcoding and aligned examples.
 
-### Hardcode vs softcode
+### Hardcode Vs Softcode
 
 #### Hardcode
 
@@ -666,9 +668,9 @@ Benefits of softcoding:
 
 ---
 
-### Typical sources of softcode
+### Typical Sources of Softcode
 
-#### 1. Configuration files
+#### 1. Configuration Files
 
 JSON, YAML, TOML, properties files.
 
@@ -697,7 +699,7 @@ class PropertiesConfigLoader {
 }
 ```
 
-#### 2. Environment variables
+#### 2. Environment Variables
 
 ```kotlin
 // Reading from environment variables (simplified; real code needs validation)
@@ -724,7 +726,7 @@ Used for:
 - CI/CD configuration
 - Secrets (combined with secrets manager + env)
 
-#### 3. Remote configuration
+#### 3. Remote Configuration
 
 ```kotlin
 // Firebase Remote Config (simplified)
@@ -790,7 +792,7 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 ---
 
-### When to use softcoding vs hardcoding
+### When to Use Softcoding Vs Hardcoding
 
 Use softcoding for:
 
@@ -913,7 +915,7 @@ Rule: fundamental algorithms, invariants, and safety-critical logic should stay 
 
 ---
 
-### Android example: configuration system
+### Android Example: Configuration System
 
 ```kotlin
 // Demo example; imports and error handling omitted
@@ -1032,7 +1034,7 @@ class CheckoutFragment : Fragment() {
 
 ---
 
-### Best practices (EN)
+### Best Practices (EN)
 
 #### DO
 
@@ -1085,7 +1087,7 @@ class CheckoutFragment : Fragment() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Сравните использование софткода с dependency injection для достижения гибкости.
 - В каких случаях избыточный софткодинг повышает риски системы вместо их снижения?

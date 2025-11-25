@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Android Lifecycle Scopes Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-coroutines, q-lifecycle-aware-coroutines--kotlin--hard]
+related: [c-coroutines, c-kotlin, q-lifecycle-aware-coroutines--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-11-09
 
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между lifecycleScope и viewModelScope? Когда использовать каждый, как они обрабатывают события жизненного цикла и какие есть лучшие практики для Android coroutine scopes.
 
@@ -38,7 +41,7 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
 
 `lifecycleScope` и `viewModelScope` — это `CoroutineScope` с поддержкой жизненного цикла Android, которые автоматически отменяют корутины в зависимости от жизненного цикла владельца.
 
-### Ключевые различия
+### Ключевые Различия
 
 ```kotlin
 /**
@@ -67,7 +70,7 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
   - Отменяется в `onCleared()`
   - Переживает конфигурационные изменения (например, поворот экрана), пока `ViewModel` переиспользуется
 
-### Когда использовать
+### Когда Использовать
 
 `lifecycleScope`:
 - Короткоживущие UI-операции (анимации, обновления, взаимодействие с вью)
@@ -79,7 +82,7 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
 - Загрузка и кэширование данных, запросы к сети и БД
 - Долгоживущие задачи, переживающие пересоздание UI, но ограниченные жизненным циклом `ViewModel`
 
-### lifecycleScope: подробности
+### lifecycleScope: Подробности
 
 ```kotlin
 class LifecycleScopeExamples : Fragment() {
@@ -134,7 +137,7 @@ class LifecycleScopeExamples : Fragment() {
 }
 ```
 
-### viewModelScope: подробности
+### viewModelScope: Подробности
 
 ```kotlin
 class ViewModelScopeExamples : ViewModel() {
@@ -189,7 +192,7 @@ class ViewModelScopeExamples : ViewModel() {
 }
 ```
 
-### Обработка конфигурационных изменений
+### Обработка Конфигурационных Изменений
 
 ```kotlin
 class ConfigurationChanges {
@@ -227,7 +230,7 @@ class ConfigurationChanges {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 class BestPractices {
@@ -309,7 +312,7 @@ class BestPractices {
 }
 ```
 
-### Реальный пример
+### Реальный Пример
 
 ```kotlin
 // ViewModel: бизнес-логика с viewModelScope
@@ -383,7 +386,7 @@ class ProductFragment : Fragment() {
 }
 ```
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 1. В чем роль `repeatOnLifecycle` и почему он важен?
 2. Как избежать утечек памяти при сборе `Flow`?

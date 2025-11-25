@@ -1,7 +1,7 @@
 ---
 id: kotlin-003
 title: "Kotlin fold and reduce / fold и reduce в Kotlin"
-aliases: ["Kotlin fold and reduce", "fold и reduce в Kotlin"]
+aliases: ["fold и reduce в Kotlin", "Kotlin fold and reduce"]
 
 # Classification
 topic: kotlin
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-collections, q-kotlin-map-collection--programming-languages--easy]
+related: [c-collections, c-kotlin, q-kotlin-map-collection--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-11-09
 
 tags: [collections, difficulty/medium, fold, functional-programming, kotlin, reduce]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Какая разница между fold и reduce в Kotlin?
 
@@ -101,7 +104,7 @@ val sum: Long = numbers.fold(0L) { acc, next -> acc + next } // R = Long, T = In
 - предоставляет явный контроль над начальным значением;
 - позволяет менять тип результата независимо от типа элементов коллекции.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия от подхода в Java?
 - Когда вы бы использовали это на практике?
@@ -112,7 +115,7 @@ val sum: Long = numbers.fold(0L) { acc, next -> acc + next } // R = Long, T = In
 - [[c-kotlin]]
 - "https://kotlinlang.org/docs/collections-overview.html"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-kotlin-collections--kotlin--easy]]
 - [[q-kotlin-scope-functions--kotlin--medium]]

@@ -4,26 +4,30 @@ title: Compose Testing / Тестирование Compose
 aliases: [Compose Testing, Тестирование Compose]
 topic: android
 subtopics:
-- testing-ui
-- ui-compose
+  - testing-ui
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
-status: active
+  - en
+  - ru
+status: ready
 moc: moc-android
 related:
-- c-android-testing
-- q-compose-performance-optimization--android--hard
-- q-compose-semantics--android--medium
+  - c-android-testing
+  - q-accessibility-compose--android--medium
+  - q-compose-performance-optimization--android--hard
+  - q-compose-semantics--android--medium
+  - q-compose-ui-testing-advanced--android--hard
 created: 2024-10-20
 updated: 2025-11-10
 tags: [android/testing-ui, android/ui-compose, compose, difficulty/medium, semantics, testing]
 sources:
-- "https://developer.android.com/jetpack/compose/testing"
+  - "https://developer.android.com/jetpack/compose/testing"
 
+date created: Tuesday, November 25th 2025, 8:13:30 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -238,7 +242,7 @@ fun asyncData_appearsAfterLoad() {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как тестировать `LaunchedEffect` и другие побочные эффекты в Compose?
 - Когда использовать немёрдженное vs мёрдженное семантическое дерево?
@@ -264,7 +268,7 @@ fun asyncData_appearsAfterLoad() {
 - https://developer.android.com/jetpack/compose/testing
 - https://developer.android.com/jetpack/compose/testing/semantics
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 

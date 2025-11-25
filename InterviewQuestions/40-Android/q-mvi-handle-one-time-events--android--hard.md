@@ -1,42 +1,33 @@
 ---
 id: android-431
 title: MVI Handle One Time Events / Обработка одноразовых событий в MVI
-aliases:
-- Event Wrapper
-- MVI One-Time Events
-- SingleLiveEvent
-- Обработка событий MVI
-- Одноразовые события
+aliases: [Event Wrapper, MVI One-Time Events, SingleLiveEvent, Обработка событий MVI, Одноразовые события]
 topic: android
 subtopics:
-- architecture-mvi
-- coroutines
-- flow
+  - architecture-mvi
+  - coroutines
+  - flow
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-flow
-- c-coroutines
-- q-mvi-architecture--android--hard
-- q-mvi-one-time-events--android--medium
+  - c-coroutines
+  - c-flow
+  - q-dagger-build-time-optimization--android--medium
+  - q-mvi-architecture--android--hard
+  - q-mvi-one-time-events--android--medium
+  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-tags:
-- android/architecture-mvi
-- android/coroutines
-- android/flow
-- architecture-mvi
-- difficulty/hard
-- sharedflow
-- stateflow
-- viewmodel
+tags: [android/architecture-mvi, android/coroutines, android/flow, architecture-mvi, difficulty/hard, sharedflow, stateflow, viewmodel]
 
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -89,7 +80,7 @@ lifecycleScope.launch {
 - `extraBufferCapacity` — буфер для событий при временном отсутствии активных подписчиков (если буфер заполнен, при выбранной политике события могут быть отброшены)
 - `BufferOverflow.DROP_OLDEST` — при переполнении удаляет старейшие события
 
-### 2. Канал (Channel) Для Буферизации и Управляемой Доставки
+### 2. Канал (Channel) Для Буферизации И Управляемой Доставки
 
 ✅ **Для более критичных событий** — позволяет буферизовать события, пока есть потребитель, но не является абсолютной «гарантией доставки» в любых условиях.
 
@@ -253,7 +244,7 @@ fun `event emitted once`() = runTest {
 
 In MVI, there's a fundamental tension: State should be reproducible and survive configuration changes, while events (navigation, toast, snackbar) must be delivered only once. Several patterns are used to solve this.
 
-### 1. `SharedFlow` with Replay = 0 (Recommended)
+### 1. `SharedFlow` With Replay = 0 (Recommended)
 
 ✅ **Best Practice** — a pure reactive solution for one-time events:
 
@@ -449,7 +440,7 @@ fun `event emitted once`() = runTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем разница между `replay` и `extraBufferCapacity` в `SharedFlow` и когда использовать каждый из них?
 2. Что произойдет, если эмитить событие при `replay = 0` и `extraBufferCapacity = 0`, когда нет активных коллекторов?
@@ -481,14 +472,14 @@ fun `event emitted once`() = runTest {
 - "https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/"
 - "https://developer.android.com/topic/libraries/architecture/coroutines"
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Предварительные знания / Концепции
+### Предварительные Знания / Концепции
 
 - [[c-flow]]
 - [[c-coroutines]]
 
-### Предварительные вопросы (Medium)
+### Предварительные Вопросы (Medium)
 
 - [[q-mvi-one-time-events--android--medium]] — базовая обработка одноразовых событий
 - [[q-stateflow-flow-sharedflow-livedata--android--medium]] — обзор типов `Flow`

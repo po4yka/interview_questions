@@ -4,26 +4,31 @@ title: Android Performance Measurement Tools / Инструменты измер
 aliases: [Android Performance Measurement Tools, Инструменты измерения производительности Android]
 topic: android
 subtopics:
-- performance-memory
-- profiling
-- testing-benchmark
+  - performance-memory
+  - profiling
+  - testing-benchmark
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android-basics
-- c-performance
-- q-android-app-lag-analysis--android--medium
+  - c-android-basics
+  - c-performance
+  - q-android-app-lag-analysis--android--medium
+  - q-multithreading-tools-android--android--medium
+  - q-optimize-memory-usage-android--android--medium
+  - q-performance-monitoring-jank-compose--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/profiling, android/testing-benchmark, difficulty/medium, optimization, performance]
 
+date created: Saturday, November 1st 2025, 1:02:45 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -258,7 +263,7 @@ val trimmedMean = times.sorted()
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как интегрировать Jetpack Benchmark в CI/CD для автоматического выявления регрессий производительности?
 - Какие метрики памяти в Android Profiler помогают отличить утечки от нормального роста?
@@ -286,7 +291,7 @@ val trimmedMean = times.sorted()
 - [Performance](https://developer.android.com/topic/performance)
 - https://developer.android.com/studio/profile/benchmark
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-android-app-lag-analysis--android--medium]] - Понимание проблем производительности и jank

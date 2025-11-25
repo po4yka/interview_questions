@@ -4,26 +4,31 @@ title: Cancel Presenter Requests / Отмена запросов презент�
 aliases: [Cancel Presenter Requests, Отмена запросов презентера]
 topic: android
 subtopics:
-- architecture-clean
-- coroutines
-- lifecycle
+  - architecture-clean
+  - coroutines
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-coroutines
-- c-android
-- q-activity-lifecycle-methods--android--medium
+  - c-android
+  - c-coroutines
+  - q-activity-lifecycle-methods--android--medium
+  - q-inject-router-to-presenter--android--medium
+  - q-mvvm-pattern--android--medium
+  - q-presenter-notify-view--android--medium
 sources: []
 created: 2023-10-15
 updated: 2025-11-10
 tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium, mvp, presenter-pattern]
 
+date created: Saturday, November 1st 2025, 1:05:16 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -36,10 +41,10 @@ tags: [android/architecture-clean, android/coroutines, android/lifecycle, diffic
 
 ## Ответ (RU)
 
-### Ключевая проблема
+### Ключевая Проблема
 `Presenter` не должен обновлять уничтоженную или detached `View` — это вызывает утечки памяти и крэши. Решение: привязать отмену запросов к событиям жизненного цикла `View` и корректно управлять областью (scope) асинхронной работы.
 
-### Подход с coroutines (рекомендуется)
+### Подход С Coroutines (рекомендуется)
 
 ```kotlin
 class UserPresenter(private val repo: UserRepository) {
@@ -73,7 +78,7 @@ class UserPresenter(private val repo: UserRepository) {
 
 Важно: `repo.fetchUser` как suspend-функция должен быть кооперативно отменяемым (например, использовать функции, проверяющие `isActive`, или основанные на cancellable API), чтобы вызов действительно прерывался при `cancelChildren()` / `cancel()`.
 
-### Подход с RxJava
+### Подход С RxJava
 
 ```kotlin
 class UserPresenter(private val repo: UserRepository) {
@@ -210,7 +215,7 @@ fun detach() {
 
 The no-op pattern does not replace cancellation of async work; it only prevents UI calls hitting a dead `View`, so you still need to cancel coroutines/subscriptions.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. В чем разница между `cancelChildren()` и `cancel()`, и когда использовать каждый из них в презентере?
 2. Что происходит, если coroutine отменяется во время выполнения `suspend`-вызова, и какие вызовы корректно реагируют на отмену?
@@ -240,14 +245,14 @@ The no-op pattern does not replace cancellation of async work; it only prevents 
 - https://developer.android.com/kotlin/coroutines/coroutines-best-practices
 - https://developer.android.com/topic/architecture/ui-layer
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-activity-lifecycle-methods--android--medium]] — понимание колбэков жизненного цикла `Activity`
 - Понимание паттерна MVP и разделения ответственности
 - Базовые знания coroutines или `RxJava`
 
-### Связанные (такой же уровень)
+### Связанные (такой Же уровень)
 - Общие стратегии обработки асинхронных операций в Android
 - Использование `ViewModel` как альтернативы `Presenter`
 - Выявление и предотвращение утечек памяти

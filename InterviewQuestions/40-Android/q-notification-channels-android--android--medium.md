@@ -1,36 +1,32 @@
 ---
 id: android-013
 title: Notification Channels / Каналы уведомлений
-aliases:
-- Notification Channels
-- Каналы уведомлений
+aliases: [Notification Channels, Каналы уведомлений]
 topic: android
 subtopics:
-- notifications
-- ui-widgets
+  - notifications
+  - ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-permissions
-- q-android-app-components--android--easy
+  - c-permissions
+  - q-android-app-components--android--easy
+  - q-dagger-build-time-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-push-notification-navigation--android--medium
 created: 2025-10-05
 updated: 2025-11-10
-tags:
-- android/notifications
-- android/ui-widgets
-- android8
-- difficulty/medium
-- importance
-- notification-channels
-- notifications
+tags: [android/notifications, android/ui-widgets, android8, difficulty/medium, importance, notification-channels, notifications]
 sources:
-- "https://developer.android.com/guide/topics/ui/notifiers/notifications"
+  - "https://developer.android.com/guide/topics/ui/notifiers/notifications"
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -155,7 +151,7 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID on API 
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как вы будете работать с каналами уведомлений на разных версиях Android (до и после Android 8.0)?
 - Какие лучшие практики по названию и организации каналов уведомлений?
@@ -179,9 +175,9 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID on API 
 
 - [Notifications](https://developer.android.com/develop/ui/views/notifications)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые понятия / Концепции
+### Базовые Понятия / Концепции
 
 - [[c-permissions]]
 
@@ -189,7 +185,7 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID on API 
 
 - [[q-android-app-components--android--easy]] — Компоненты приложения
 
-### Связанные (того же уровня)
+### Связанные (того Же уровня)
 
 - Android-сервисы и фоновая работа
 - Обработка разрешений

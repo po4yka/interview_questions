@@ -14,6 +14,8 @@ related: [c--kotlin--medium, c-coroutines, c-flow, q-partition-function--kotlin-
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]
+date created: Saturday, November 1st 2025, 1:01:40 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +37,7 @@ tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]
 
 Фактический параллелизм (например, два сетевых запроса одновременно) зависит от того, как построены ваши `Flow` и какие диспетчеры/конструкции (`async` и др.) вы используете.
 
-### Пример поведения Zip
+### Пример Поведения Zip
 ```kotlin
 val flow1 = flow {
     println("Flow1: Starting")
@@ -61,7 +63,7 @@ flow1
 // Но zip сам лишь последовательно связывает пары: (1,"A"), затем (2,"B"), каждый раз ожидая оба значения.
 ```
 
-### Ключевые моменты
+### Ключевые Моменты
 
 **1. Нет гарантии параллелизма**
 - `Flow` — "холодные"; они не выполняются, пока их не начнут собирать.
@@ -100,7 +102,7 @@ suspend fun parallelCalls(): Pair<Result1, Result2> = coroutineScope {
 
 См. также: [[c--kotlin--medium]], [[c-coroutines]], [[c-flow]].
 
-### Дополнительные вопросы (RU)
+### Дополнительные Вопросы (RU)
 
 - Каковы ключевые отличия этого поведения от Java?
 - Когда вы бы использовали это на практике?
@@ -110,7 +112,7 @@ suspend fun parallelCalls(): Pair<Result1, Result2> = coroutineScope {
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-### Связанные вопросы (RU)
+### Связанные Вопросы (RU)
 
 - [[q-partition-function--kotlin--easy]]
 

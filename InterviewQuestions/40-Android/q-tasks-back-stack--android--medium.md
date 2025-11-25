@@ -1,36 +1,33 @@
 ---
 id: android-227
 title: Tasks and Back Stack / Задачи и стек возврата
-aliases:
-- Tasks and Back Stack
-- Задачи и стек возврата
+aliases: [Tasks and Back Stack, Задачи и стек возврата]
 topic: android
 subtopics:
-- activity
-- ui-navigation
+  - activity
+  - ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-activity-lifecycle
-- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
-- q-what-is-activity-and-what-is-it-used-for--android--medium
+  - c-activity-lifecycle
+  - q-background-tasks-decision-guide--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-stack-heap-memory-multiple-threads--android--medium
+  - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+  - q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/activity
-- android/ui-navigation
-- back-stack
-- difficulty/medium
-- launch-mode
-- tasks
+tags: [android/activity, android/ui-navigation, back-stack, difficulty/medium, launch-mode, tasks]
 
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +43,7 @@ tags:
 
 Например, почтовое приложение может иметь одну `Activity` для отображения списка новых сообщений. Когда пользователь выбирает сообщение, открывается новая `Activity` для просмотра этого сообщения. Эта новая `Activity` добавляется в стек возврата. Когда пользователь нажимает кнопку или использует жест "Назад", новая `Activity` завершается и удаляется из стека.
 
-### Жизненный цикл задачи и ее back stack
+### Жизненный Цикл Задачи И Ее back Stack
 
 Домашний экран устройства является отправной точкой для большинства задач. Когда пользователь нажимает на значок приложения или ярлык в лаунчере или на домашнем экране, задача этого приложения выводится на передний план. Если задачи для приложения еще не существует, создается новая задача, и главная `Activity` приложения открывается как корневая (root) `Activity` в стеке.
 
@@ -56,7 +53,7 @@ tags:
 
 По мере того как пользователь продолжает нажимать или использовать жест "Назад", каждая `Activity` по очереди извлекается из стека, чтобы показать предыдущую, пока пользователь не вернется на домашний экран или к той `Activity`, которая выполнялась, когда началась задача. Когда все `Activity` удалены из стека, задача перестает существовать.
 
-### Задачи в фоне и на переднем плане
+### Задачи В Фоне И На Переднем Плане
 
 Задача — это связная единица, которая может быть отправлена в **фон** (background), когда пользователь начинает новую задачу или переходит на домашний экран. Находясь в фоне, все `Activity` задачи находятся в остановленном состоянии, но стек возврата этой задачи остается логически целостным — задача теряет фокус, пока другая задача находится на переднем плане.
 
@@ -66,7 +63,7 @@ tags:
 - Несколько задач могут одновременно находиться в фоне.
 - Если системе нужно освободить память, она может уничтожать процессы и их фоновые `Activity`. В этом случае точное состояние UI не гарантируется: система может пересоздать `Activity`, используя сохраненное состояние (`savedInstanceState`) и постоянные данные, но только при условии, что приложение корректно реализует сохранение состояния.
 
-### Поведение кнопки/жеста "Назад" для корневых launcher-`Activity`
+### Поведение кнопки/жеста "Назад" Для Корневых launcher-`Activity`
 
 Корневые launcher-`Activity` — это `Activity`, которые объявляют фильтр намерений с `ACTION_MAIN` и `CATEGORY_LAUNCHER`. Они выступают в роли точек входа в приложение из лаунчера и используются для запуска задачи.
 
@@ -77,7 +74,7 @@ tags:
 
 Пользовательская обработка "Назад" (например, через `OnBackPressedDispatcher` или `OnBackInvokedCallback`) и навигационные библиотеки могут изменить фактическое поведение, но должны использоваться осторожно, чтобы не ломать ожидаемую модель навигации платформы.
 
-### Управление задачами
+### Управление Задачами
 
 По умолчанию Android управляет задачами и стеком возврата, помещая последовательно запущенные `Activity` в одну и ту же задачу в виде стека LIFO. Для большинства приложений этого достаточно, и обычно не требуется вручную управлять привязкой `Activity` к задачам.
 
@@ -169,7 +166,7 @@ These are the principal `<activity>` attributes that you can use to manage tasks
 
 ## Ссылки (RU)
 - [Задачи и стек возврата](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 - Как `launchMode` (`standard`, `singleTop`, `singleTask`, `singleInstance`) влияет на формирование задач и стека возврата?
 - Как флаги `Intent` (`FLAG_ACTIVITY_NEW_TASK`, `FLAG_ACTIVITY_CLEAR_TOP` и др.) влияют на существующие задачи и их back stack?
 - Чем поведение кнопки/жеста "Назад" в системе навигации отличается от логики навигации внутри `NavController`/`Navigation Component`?

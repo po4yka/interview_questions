@@ -1,34 +1,34 @@
 ---
 id: android-027
 title: What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true) в RecyclerView?
-aliases:
-- setHasFixedSize in RecyclerView
-- setHasFixedSize в RecyclerView
+aliases: [setHasFixedSize in RecyclerView, setHasFixedSize в RecyclerView]
 topic: android
 subtopics:
-- performance-memory
-- ui-views
+  - performance-memory
+  - ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- q-handler-looper-main-thread--android--medium
-- q-what-events-are-activity-methods-tied-to--android--medium
+  - c-memory-management
+  - q-handler-looper-main-thread--android--medium
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+  - q-recyclerview-itemdecoration-advanced--android--medium
+  - q-what-events-are-activity-methods-tied-to--android--medium
 created: 2025-10-06
 updated: 2025-11-10
 sources:
-- "https://github.com/amitshekhariitbhu/android-interview-questions"
-tags:
-- android/performance-memory
-- android/ui-views
-- difficulty/easy
+  - "https://github.com/amitshekhariitbhu/android-interview-questions"
+tags: [android/performance-memory, android/ui-views, difficulty/easy]
 
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)

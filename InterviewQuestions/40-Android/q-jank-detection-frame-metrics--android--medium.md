@@ -1,35 +1,33 @@
 ---
 id: android-053
 title: Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров
-aliases:
-- Jank Detection and Frame Metrics
-- Обнаружение рывков и метрики кадров
+aliases: [Jank Detection and Frame Metrics, Обнаружение рывков и метрики кадров]
 topic: android
 subtopics:
-- performance-rendering
-- monitoring-slo
+  - monitoring-slo
+  - performance-rendering
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: Original
 source_note: Frame rendering performance best practices
 status: draft
 moc: moc-android
 related:
-- c-perfetto
-- c-performance
+  - c-perfetto
+  - c-performance
+  - q-compose-gesture-detection--android--medium
+  - q-mlkit-face-detection--android--medium
+  - q-performance-monitoring-jank-compose--android--medium
 created: 2025-10-11
 updated: 2025-11-11
-tags:
-- android/performance-rendering
-- android/monitoring-slo
-- difficulty/medium
-- en
-- ru
+tags: [android/monitoring-slo, android/performance-rendering, difficulty/medium, en, ru]
 
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -69,7 +67,7 @@ dependencies {
 }
 ```
 
-#### 1. Базовый мониторинг метрик кадров
+#### 1. Базовый Мониторинг Метрик Кадров
 
 ```kotlin
 class PerformanceMonitoringActivity : AppCompatActivity() {
@@ -168,7 +166,7 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Мониторинг кадров в реальном времени с `OnFrameMetricsAvailableListener`
+#### 2. Мониторинг Кадров В Реальном Времени С `OnFrameMetricsAvailableListener`
 
 ```kotlin
 class RealTimeFrameMonitor : AppCompatActivity() {
@@ -302,7 +300,7 @@ class ModernJankMonitor : AppCompatActivity() {
 }
 ```
 
-### Распространённые причины и исправления рывков
+### Распространённые Причины И Исправления Рывков
 
 #### 1. Overdraw
 
@@ -342,7 +340,7 @@ class ModernJankMonitor : AppCompatActivity() {
 - Developer Options → Debug GPU Overdraw → Show overdraw areas
 - Синий: 1x (норма), зелёный: 2x (проверить), розовый: 3x (оптимизировать), красный: 4x+ (критично)
 
-#### 2. Сложность макета
+#### 2. Сложность Макета
 
 Проблема: Глубоко вложенные макеты → тяжёлый `measure/layout`.
 
@@ -370,7 +368,7 @@ class ModernJankMonitor : AppCompatActivity() {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-#### 3. Рывки в RecyclerView
+#### 3. Рывки В RecyclerView
 
 Проблема: Тяжёлый `onBindViewHolder` (синхронная декодировка изображений, сложное форматирование текста).
 
@@ -435,7 +433,7 @@ class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-#### 4. Рывки при инфляции `View`
+#### 4. Рывки При Инфляции `View`
 
 Проблема: Инфляция тяжёлого layout по клику блокирует UI-поток.
 
@@ -469,7 +467,7 @@ button.setOnClickListener {
 }
 ```
 
-### Анализ с помощью Systrace / Perfetto
+### Анализ С Помощью Systrace / Perfetto
 
 Используйте System Trace / Perfetto (в Android Studio) или `perfetto` CLI вместо устаревшего `systrace.py`. Если используется Systrace, общая логика работы аналогична.
 
@@ -507,7 +505,7 @@ Frame 145: 28 ms (JANK - missed deadline)
 Action: Move expensive onBindViewHolder work off main thread.
 ```
 
-### Мониторинг в продакшене
+### Мониторинг В Продакшене
 
 Пример с Firebase Performance и `FrameMetricsAggregator`:
 
@@ -601,7 +599,7 @@ class FrameMetricsMonitor {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Стремиться как минимум к 60 FPS (и учитывать дисплеи с 90/120 Гц).
 2. Тестировать на реальных устройствах, включая средний и низкий сегмент.
@@ -616,7 +614,7 @@ class FrameMetricsMonitor {
 11. Избегать избыточных аллокаций во время анимаций и на горячих путях, чтобы снизить jank от GC.
 12. Предпочитать современные тулкиты (Jetpack Compose + корректное профилирование), но всегда измерять.
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. Синхронная загрузка изображений в UI-потоке.
 2. Тяжёлый и не оптимизированный `onDraw()` без кэширования.
@@ -1219,7 +1217,7 @@ class FrameMetricsMonitor {
 8. Blocking animations with non-accelerated properties.
 9. Testing only on flagship devices.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 1. Как интегрировать Perfetto/System Trace в CI-пайплайн для регулярного анализа jank?
 2. Как измерять и оптимизировать jank в Jetpack Compose-сценариях (scrolling, lists, animations)?
@@ -1249,7 +1247,7 @@ class FrameMetricsMonitor {
 - https://developer.android.com/topic/performance/vitals/render
 - https://developer.android.com/topic/performance/tracing
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 

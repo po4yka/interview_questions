@@ -14,6 +14,8 @@ related: [c-kotlin, q-kotlin-val-vs-var--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [collections, difficulty/easy, immutability, kotlin]
+date created: Friday, October 31st 2025, 6:29:34 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +46,7 @@ Collections returned by `listOf()`, `setOf()`, and `mapOf()` cannot be modified 
 
 The key practical mechanism is the type-level separation: use `List`/`Set`/`Map` when you want a read-only view for consumers, and use `MutableList`/`MutableSet`/`MutableMap` when mutation is required.
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чём ключевые отличия этого подхода от Java?
 - Когда вы бы использовали этот механизм на практике?

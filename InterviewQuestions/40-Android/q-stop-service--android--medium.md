@@ -1,30 +1,31 @@
 ---
 id: android-261
 title: How To Stop Service / Остановка Service
-aliases:
-- How To Stop Service
-- Остановка Service
+aliases: [How To Stop Service, Остановка Service]
 topic: android
 subtopics:
-- service
+  - service
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-service
-- q-async-operations-android--android--medium
-- q-how-to-fix-a-bad-element-layout--android--easy
+  - c-service
+  - q-async-operations-android--android--medium
+  - q-foreground-service-types--android--medium
+  - q-how-to-fix-a-bad-element-layout--android--easy
+  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+  - q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/service
-- difficulty/medium
+tags: [android/service, difficulty/medium]
 
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 
 # Вопрос (RU)
@@ -38,13 +39,13 @@ tags:
 ## Ответ (RU)
 Способ остановки сервиса зависит от того, как он был запущен и используется ли он как started, bound или foreground.
 
-## `Service` типы и способы остановки
+## `Service` Типы И Способы Остановки
 
 ### 1. Started `Service`
 
 Сервис, запущенный через `startService()` (или `startForegroundService()`), работает, пока вы явно не остановите его через `stopSelf()` / `stopService()` (или пока система не завершит его по условиям памяти или политик).
 
-#### Остановка изнутри `Service`
+#### Остановка Изнутри `Service`
 
 ```kotlin
 class DownloadService : Service() {
@@ -75,7 +76,7 @@ class DownloadService : Service() {
 - `stopSelf()` запрашивает остановку сервиса.
 - Безопасно вызывать несколько раз.
 
-#### Остановка снаружи (`Activity` / `Fragment`)
+#### Остановка Снаружи (`Activity` / `Fragment`)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 - `true`, если соответствующий started-сервис работал и был запрошен стоп;
 - `false`, если такого started-сервиса не было.
 
-#### Множественные запуски: `stopSelf(startId)`
+#### Множественные Запуски: `stopSelf(startId)`
 
 Если `startService()` вызывается несколько раз, каждый вызов получает увеличивающийся `startId`.
 
@@ -149,7 +150,7 @@ stopSelf(3) → сервис может быть остановлен (нет б
 
 Чисто bound-сервис (созданный только через `bindService()`, без `startService()`) существует, пока есть хотя бы один привязанный клиент. Когда последний клиент отвязывается, система (по умолчанию) уничтожает сервис.
 
-#### Остановка через отвязку
+#### Остановка Через Отвязку
 
 ```kotlin
 class MyActivity : AppCompatActivity() {
@@ -404,7 +405,7 @@ unbindService() → onUnbind() → onDestroy()  (теперь остановле
 
 ---
 
-## Полный пример: Foreground `Service` для скачивания с остановкой
+## Полный Пример: Foreground `Service` Для Скачивания С Остановкой
 
 ```kotlin
 class DownloadService : Service() {
@@ -549,9 +550,9 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-## Частые ошибки
+## Частые Ошибки
 
-### Ошибка 1: Неправильная работа с foreground-состоянием
+### Ошибка 1: Неправильная Работа С Foreground-состоянием
 
 Плохо (неявный teardown foreground):
 
@@ -584,7 +585,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Ошибка 2: Вызов `stopSelf()` до завершения асинхронной работы
+### Ошибка 2: Вызов `stopSelf()` До Завершения Асинхронной Работы
 
 Плохо:
 
@@ -612,7 +613,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Ошибка 3: Игнорирование различий started vs bound в смешанном сервисе
+### Ошибка 3: Игнорирование Различий Started Vs Bound В Смешанном Сервисе
 
 Плохо (предполагаем, что `stopSelf()` всегда достаточно, независимо от bound-клиентов):
 
@@ -1291,7 +1292,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Mistake 3: Ignoring Started vs Bound States in a Mixed `Service`
+### Mistake 3: Ignoring Started Vs Bound States in a Mixed `Service`
 
 Bad (assuming `stopSelf()` is always enough regardless of bound clients):
 

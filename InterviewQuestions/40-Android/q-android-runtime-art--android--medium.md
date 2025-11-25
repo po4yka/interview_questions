@@ -1,7 +1,7 @@
 ---
 id: android-297
 title: Android Runtime (ART) / Android Runtime
-aliases: [Android Runtime (ART), Android Runtime]
+aliases: [Android Runtime, Android Runtime (ART)]
 topic: android
 subtopics:
   - performance-memory
@@ -18,10 +18,15 @@ related:
   - c-android-basics
   - q-android-app-lag-analysis--android--medium
   - q-android-performance-measurement-tools--android--medium
+  - q-android-runtime-internals--android--hard
+  - q-dalvik-vs-art-runtime--android--medium
+  - q-optimize-memory-usage-android--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, android/processes, compilation, difficulty/medium, gc, runtime]
 sources: []
+date created: Saturday, November 1st 2025, 1:02:46 pm
+date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)
@@ -121,7 +126,7 @@ class CriticalPath {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как baseline profiles влияют на время установки и первый запуск приложения?
 - В каких случаях AOT-компиляция может критично увеличить размер APK?
@@ -135,7 +140,7 @@ class CriticalPath {
 - https://developer.android.com/topic/performance/baselineprofiles
 - [[c-android-basics]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-android-app-components--android--easy]]

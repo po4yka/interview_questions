@@ -14,7 +14,10 @@ related: [c-kotlin, c-kotlin-features, q-enum-class-advanced--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [companion-object, const, difficulty/easy, jvmstatic, kotlin, static]
+date created: Friday, October 31st 2025, 6:32:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
+
 # Вопрос (RU)
 > Как сделать статическую переменную?
 
@@ -249,7 +252,7 @@ val admin = User.createAdmin("Алиса")
 - **const val** - константы времени компиляции
 - **object** - паттерн синглтон
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия от Java-подхода со `static`?
 - Когда вы бы использовали каждый из этих подходов на практике?
@@ -260,7 +263,7 @@ val admin = User.createAdmin("Алиса")
 - [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-structured-concurrency-patterns--kotlin--hard]]
 - [[q-enum-class-advanced--kotlin--medium]]

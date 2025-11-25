@@ -4,25 +4,30 @@ title: Factory Pattern Android / Паттерн Factory в Android
 aliases: [Abstract Factory Pattern, Factory Method Pattern, Factory Pattern Android, Паттерн Factory в Android]
 topic: android
 subtopics:
-- architecture-clean
-- ui-views
+  - architecture-clean
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 sources:
-- "https://developer.android.com/guide/topics/ui/declaring-layout"
+  - "https://developer.android.com/guide/topics/ui/declaring-layout"
 status: draft
 moc: moc-android
 related:
-- c-design-patterns
-- q-usecase-pattern-android--android--medium
+  - c-design-patterns
+  - q-android-architectural-patterns--android--medium
+  - q-splash-screen-api-android12--android--medium
+  - q-usecase-pattern-android--android--medium
+  - q-what-is-known-about-view-lifecycles--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
 
+date created: Saturday, November 1st 2025, 1:29:16 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)

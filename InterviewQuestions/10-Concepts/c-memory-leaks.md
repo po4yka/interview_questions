@@ -16,6 +16,8 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "debugging", "difficulty/medium", "memory-leaks", "memory-management", "performance", "profiling"]
+date created: Saturday, October 25th 2025, 11:11:38 am
+date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Memory Leaks / Утечки Памяти

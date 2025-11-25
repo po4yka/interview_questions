@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-custom-view-animation--android--medium, c-android-surfaces]
+related: [c-android-surfaces, q-custom-view-animation--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, opengl-es, rendering, shaders]
+date created: Saturday, November 1st 2025, 1:03:14 pm
+date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)
@@ -703,7 +705,7 @@ class Framebuffer(width: Int, height: Int) {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как реализовать instanced rendering для повторяющейся геометрии (в ES 3.0+ или через соответствующие расширения)?
 - В чем различия между GLSL ES и десктопным GLSL?
@@ -729,9 +731,9 @@ class Framebuffer(width: Int, height: Int) {
 - OpenGL ES 3.0 Programming Guide
 - Android OpenGL ES documentation
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые знания
+### Базовые Знания
 - [[q-custom-view-animation--android--medium]] — Рендеринг 2D на Canvas
 
 ### Связанные

@@ -4,24 +4,28 @@ title: Custom View Attributes / Атрибуты Custom View
 aliases: [Custom View Attributes, Атрибуты Custom View]
 topic: android
 subtopics:
-- ui-theming
-- ui-views
+  - ui-theming
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-custom-views
-- q-custom-view-lifecycle--android--medium
+  - c-custom-views
+  - q-custom-view-accessibility--android--medium
+  - q-custom-view-lifecycle--android--medium
+  - q-custom-view-state-saving--android--medium
 created: 2025-10-21
 updated: 2025-11-10
 tags: [android/ui-theming, android/ui-views, difficulty/medium]
 sources: []
 
+date created: Saturday, November 1st 2025, 1:26:58 pm
+date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 
 # Вопрос (RU)
@@ -280,7 +284,7 @@ context.obtainStyledAttributes(attrs, R.styleable.MyView, 0, 0).apply {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как работает разрешение атрибутов через иерархию стилей и тем?
 - Что произойдет, если забыть вызвать `recycle()` у `TypedArray`?
@@ -294,7 +298,7 @@ context.obtainStyledAttributes(attrs, R.styleable.MyView, 0, 0).apply {
 - https://developer.android.com/develop/ui/views/layout/custom-views/create-view
 - https://developer.android.com/develop/ui/views/theming/themes
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки
 - [[q-custom-view-lifecycle--android--medium]] — Понимание жизненного цикла инициализации `View`

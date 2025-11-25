@@ -25,7 +25,10 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [debounce, difficulty/medium, flow, kotlin, operators, performance, search]
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin `Flow`?
 
@@ -42,7 +45,7 @@ tags: [debounce, difficulty/medium, flow, kotlin, operators, performance, search
 
 Ниже приведены основные паттерны реализации. Типы вроде `SearchResult`, `SearchUiState`, `SearchResults`, `NetworkMonitor` и репозитории предполагаются определенными в проекте.
 
-### 1. Базовая реализация мгновенного поиска
+### 1. Базовая Реализация Мгновенного Поиска
 
 ```kotlin
 import kotlinx.coroutines.flow.*
@@ -83,7 +86,7 @@ class SearchViewModel(
 - `mapLatest` обеспечивает отмену предыдущего поиска при новом вводе.
 - `catch` позволяет обработать ошибки и вернуть безопасное значение.
 
-### 2. Поиск с состояниями загрузки и ошибок
+### 2. Поиск С Состояниями Загрузки И Ошибок
 
 ```kotlin
 sealed class SearchUiState {
@@ -137,7 +140,7 @@ class SearchWithStateViewModel(
 }
 ```
 
-### 3. Поиск с учетом сети и повторными попытками
+### 3. Поиск С Учетом Сети И Повторными Попытками
 
 Предполагается, что `SearchResultState` — это иерархия UI-состояний.
 
@@ -198,7 +201,7 @@ class NetworkAwareSearchViewModel(
 }
 ```
 
-### 4. Многоканальный поиск (локальный + удаленный)
+### 4. Многоканальный Поиск (локальный + удаленный)
 
 ```kotlin
 class HybridSearchViewModel(
@@ -249,7 +252,7 @@ class HybridSearchViewModel(
 }
 ```
 
-### 5. Поиск с подсказками и недавними запросами
+### 5. Поиск С Подсказками И Недавними Запросами
 
 ```kotlin
 class SmartSearchViewModel(
@@ -296,7 +299,7 @@ class SmartSearchViewModel(
 }
 ```
 
-### 6. Интеграция с Jetpack Compose (концептуально)
+### 6. Интеграция С Jetpack Compose (концептуально)
 
 Пример связывает простой `SearchViewModel`, который предоставляет `searchQuery` и `searchResults`. Для более сложных состояний можно использовать `SearchUiState`/`SearchResultState` из примеров выше.
 
@@ -343,7 +346,7 @@ fun SearchBar(
 }
 ```
 
-### 7. Поиск с фильтрами
+### 7. Поиск С Фильтрами
 
 ```kotlin
 class FilteredSearchViewModel(
@@ -391,7 +394,7 @@ class FilteredSearchViewModel(
 }
 ```
 
-### 8. Производительный вариант реализации
+### 8. Производительный Вариант Реализации
 
 ```kotlin
 class OptimizedSearchViewModel(
@@ -434,7 +437,7 @@ class OptimizedSearchViewModel(
 }
 ```
 
-### 9. Тестирование поведения debounce (концептуально)
+### 9. Тестирование Поведения Debounce (концептуально)
 
 ```kotlin
 @Test
@@ -456,7 +459,7 @@ fun `search debounces user input`() = runTest {
 }
 ```
 
-### 10. Краткие рекомендации (Best Practices)
+### 10. Краткие Рекомендации (Best Practices)
 
 | Оператор | Назначение | Типичное значение |
 |----------|------------|-------------------|
@@ -925,7 +928,7 @@ fun `search debounces user input`() = runTest {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия такого подхода от реализации без корутин/`Flow`?
 - В каких реальных сценариях на Android вы будете использовать мгновенный поиск на основе `Flow`?
@@ -951,9 +954,9 @@ fun `search debounces user input`() = runTest {
 - [[c-flow]]
 - [[c-kotlin]]
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Средний уровень
+### Средний Уровень
 - [[q-flow-operators-map-filter--kotlin--medium]] — операторы Flow
 - [[q-flow-operators--kotlin--medium]] — обзор операторов Flow
 - [[q-retry-operators-flow--kotlin--medium]] — операторы повторов

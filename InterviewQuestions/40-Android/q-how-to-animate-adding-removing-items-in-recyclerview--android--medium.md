@@ -1,32 +1,31 @@
 ---
 id: android-419
 title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление и удаление элементов в RecyclerView
-aliases:
-- How To Animate Adding Removing Items In RecyclerView
-- Как анимировать добавление и удаление элементов в RecyclerView
+aliases: [How To Animate Adding Removing Items In RecyclerView, Как анимировать добавление и удаление элементов в RecyclerView]
 topic: android
 subtopics:
-- ui-animation
+  - ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-custom-views
-- q-bundle-data-types--android--medium
-- q-stack-heap-memory-multiple-threads--android--medium
+  - c-custom-views
+  - q-bundle-data-types--android--medium
+  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
+  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+  - q-stack-heap-memory-multiple-threads--android--medium
+  - q-what-problems-can-there-be-with-list-items--android--easy
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/ui-animation
-- animations
-- difficulty/medium
-- recyclerview
+tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -483,7 +482,7 @@ recyclerView.itemAnimator = DefaultItemAnimator()
 // Это значение используется по умолчанию, можно не устанавливать явно
 ```
 
-### 2. Базовые уведомления элементов
+### 2. Базовые Уведомления Элементов
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -528,7 +527,7 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
 Ключевое правило: используйте конкретные методы notifyItem* вместо notifyDataSetChanged(), если нужны анимации.
 
-### 3. DiffUtil для автоматических анимаций
+### 3. DiffUtil Для Автоматических Анимаций
 
 DiffUtil вычисляет различия и генерирует соответствующие анимации:
 
@@ -644,7 +643,7 @@ recyclerView.itemAnimator = animator
 
 Если вы переопределяете animateAdd/animateRemove у DefaultItemAnimator, нельзя одновременно запускать свои ViewPropertyAnimator и вызывать super.animate* — это может привести к двойным или некорректным анимациям. Для полноценного контроля лучше наследоваться от SimpleItemAnimator.
 
-### 6. Продвинутый кастомный аниматор (скелет)
+### 6. Продвинутый Кастомный Аниматор (скелет)
 
 Пример на базе SimpleItemAnimator. Это демонстрационный скелет — реальная реализация должна отслеживать pending/running анимации, корректно вызывать dispatch* и правильно реализовывать isRunning/endAnimation/endAnimations.
 
@@ -749,7 +748,7 @@ recyclerView.itemAnimator = SlideInItemAnimator()
 
 Важно: этот SlideInItemAnimator намеренно неполный и подходит только как концептуальный пример. В реальном проекте необходимо корректно отслеживать состояние анимаций.
 
-### 7. Пример со swipe-to-delete (ListAdapter)
+### 7. Пример Со Swipe-to-delete (ListAdapter)
 
 ```kotlin
 class AnimatedListActivity : AppCompatActivity() {
@@ -836,7 +835,7 @@ private fun <T> MutableList<T>.coerceIndex(index: Int): Int =
 
 Этот пример показывает, как ListAdapter + DefaultItemAnimator обеспечивают плавные анимации при добавлении/удалении, и демонстрирует использование bindingAdapterPosition и проверок индексов для избежания тонких багов.
 
-### 8. Настройка и отключение отдельных анимаций
+### 8. Настройка И Отключение Отдельных Анимаций
 
 ```kotlin
 // Настройка стандартного аниматора
@@ -859,7 +858,7 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 9. Лучшие практики (RU)
+### 9. Лучшие Практики (RU)
 
 1. Используйте точечные методы notifyItem* или DiffUtil/ListAdapter вместо notifyDataSetChanged(), если нужны анимации.
 2. В случае ListAdapter обычно опирайтесь на ItemCallback для идентификации; стабильные ID используйте только если понимаете их взаимодействие.

@@ -1,40 +1,34 @@
 ---
 id: android-421
 title: How Is Navigation Implemented / Как реализована навигация
-aliases:
-- Android Navigation
-- How Is Navigation Implemented
-- Как реализована навигация
-- Навигация в Android
+aliases: [Android Navigation, How Is Navigation Implemented, Как реализована навигация, Навигация в Android]
 topic: android
 subtopics:
-- fragment
-- ui-navigation
+  - fragment
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- c-fragments
-- q-navigation-methods-in-kotlin--android--medium
-- q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy
+  - c-compose-navigation
+  - c-fragments
+  - q-how-dialog-differs-from-other-navigation--android--medium
+  - q-how-navigation-is-implemented-in-android--android--medium
+  - q-navigation-methods-in-kotlin--android--medium
+  - q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy
+  - q-what-navigation-methods-do-you-know--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags:
-- android/fragment
-- android/ui-navigation
-- difficulty/medium
-- fragments
-- navigation
-- navigation-component
-- ui
+tags: [android/fragment, android/ui-navigation, difficulty/medium, fragments, navigation, navigation-component, ui]
 
+date created: Saturday, November 1st 2025, 12:46:52 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -313,7 +307,7 @@ findNavController().navigate(action)
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Как Navigation Component обрабатывает back stack во вложенных графах навигации?
 - В чем разница между `popUpTo` и `popUpToInclusive` в навигационных действиях?
@@ -328,7 +322,7 @@ findNavController().navigate(action)
 - [Android Developers: Fragments](https://developer.android.com/guide/fragments)
 - [Material Design: Navigation](https://material.io/design/navigation)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки / Концепции
 
@@ -339,7 +333,7 @@ findNavController().navigate(action)
 
 - [[q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]] - Базовые концепции UI-разметки
 
-### Похожие (того же уровня)
+### Похожие (того Же уровня)
 
 - [[q-navigation-methods-in-kotlin--android--medium]] - Разные техники навигации
 - [[q-what-navigation-methods-do-you-know--android--medium]] - Обзор паттернов навигации

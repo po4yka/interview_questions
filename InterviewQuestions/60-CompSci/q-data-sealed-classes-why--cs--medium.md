@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [data-class, difficulty/medium, kotlin, programming-languages, sealed-classes]
 sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
+date created: Saturday, November 1st 2025, 1:25:20 pm
+date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 
 # Вопрос (RU)
@@ -369,7 +371,7 @@ sealed class TaskState {
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда следует использовать `data class`, а когда `sealed class`?
 - Может ли sealed class иметь sealed-подклассы?
@@ -381,12 +383,12 @@ sealed class TaskState {
 - Can a sealed class have sealed subclasses?
 - How do you test exhaustiveness in when expressions in practice?
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### База (проще)
 - Основы data classes и их особенности
 
-### На том же уровне
+### На Том Же Уровне
 - [[q-sealed-classes--kotlin--medium]] - Детали sealed classes
 
 ### Сложнее

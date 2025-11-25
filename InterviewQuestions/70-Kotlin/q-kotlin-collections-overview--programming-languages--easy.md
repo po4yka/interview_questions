@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-collections, q-abstract-class-vs-interface--kotlin--medium]
+related: [c-collections, c-concepts--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy]
 
+date created: Saturday, October 18th 2025, 9:35:30 am
+date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +41,7 @@ tags: [difficulty/easy]
 - `MutableSet` — можно добавлять/удалять уникальные элементы
 - `MutableMap` — можно добавлять/удалять пары ключ-значение
 
-### Специализированные Реализации (JVM / стандартные реализации)
+### Специализированные Реализации (JVM / Стандартные реализации)
 - `ArrayList` — реализация `MutableList` на основе динамического массива (на JVM обычно `java.util.ArrayList`)
 - `HashSet` — реализация `MutableSet` на основе хеш-таблицы (на JVM обычно `java.util.HashSet`)
 - `HashMap` — реализация `MutableMap` на основе хеш-таблицы (на JVM обычно `java.util.HashMap`)
@@ -85,7 +87,7 @@ In Kotlin there are collections with **read-only interfaces** and **mutable** co
 - `MutableSet` - can add/remove unique elements
 - `MutableMap` - can add/remove key-value pairs
 
-### Specialized Implementations (JVM / standard implementations)
+### Specialized Implementations (JVM / Standard implementations)
 - `ArrayList` - dynamic array implementation of `MutableList` (on JVM typically `java.util.ArrayList`)
 - `HashSet` - hash table implementation of `MutableSet` (on JVM typically `java.util.HashSet`)
 - `HashMap` - hash table implementation of `MutableMap` (on JVM typically `java.util.HashMap`)
@@ -115,7 +117,7 @@ See also: [[c-kotlin]], [[c-collections]]
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - В чем ключевые отличия коллекций Kotlin от коллекций Java?
 - Когда бы ты использовал коллекции Kotlin на практике?
@@ -135,7 +137,7 @@ See also: [[c-kotlin]], [[c-collections]]
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 - [[q-abstract-class-vs-interface--kotlin--medium]]
 

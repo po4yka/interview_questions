@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/gradle, difficulty/medium, gradle, toml]
 sources: ["https://developer.android.com/build/migrate-to-catalogs", "https://docs.gradle.org/current/userguide/platforms.html"]
+date created: Saturday, November 1st 2025, 12:46:51 pm
+date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)
@@ -59,7 +61,7 @@ retrofit = ["retrofit-core", "retrofit-gson"]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ```
 
-### Использование в build.gradle.kts
+### Использование В build.gradle.kts
 
 ```kotlin
 plugins {
@@ -75,7 +77,7 @@ dependencies {
 }
 ```
 
-### Правила именования алиасов
+### Правила Именования Алиасов
 
 Gradle на основе ключей в TOML генерирует Kotlin/Groovy аксессоры. Важно понимать, как символы преобразуются:
 
@@ -87,7 +89,7 @@ Gradle на основе ключей в TOML генерирует Kotlin/Groovy
 
 **Невалидные**: `this.#invalid` (спецсимволы запрещены).
 
-### Пример для Android-проекта
+### Пример Для Android-проекта
 
 ```toml
 [versions]
@@ -122,7 +124,7 @@ dependencies {
 }
 ```
 
-### Стратегия миграции
+### Стратегия Миграции
 
 1. Создайте `gradle/libs.versions.toml` (при этом стандартный каталог `libs` поддерживается Gradle без дополнительной конфигурации).
 2. Вынесите версии из `build.gradle` файлов в секцию `[versions]`.

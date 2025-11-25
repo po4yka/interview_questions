@@ -3,7 +3,7 @@ id: kotlin-235
 title: "Value Classes (Inline Classes) in Kotlin / Value классы в Kotlin"
 aliases: ["Value Classes", "Встраиваемые классы"]
 topic: kotlin
-subtopics: [value-classes, inline-classes, performance]
+subtopics: [inline-classes, performance, value-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -15,6 +15,8 @@ created: "2024-10-12"
 updated: "2025-11-09"
 tags: [difficulty/medium, inline-classes, kotlin, kotlin-features, performance, value-classes]
 sources: ["https://kotlinlang.org/docs/inline-classes.html"]
+date created: Saturday, November 1st 2025, 12:42:10 pm
+date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Вопрос (RU)
@@ -151,7 +153,7 @@ fun nullableId(id: Id?): Id? {
 }
 ```
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - Когда использовать value class vs `data class`?
 - Каковы особенности производительности value классов?
@@ -162,7 +164,7 @@ fun nullableId(id: Id?): Id? {
 - [[c-kotlin]]
 - https://kotlinlang.org/docs/inline-classes.html
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
 ### Предпосылки (проще)
 - [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы

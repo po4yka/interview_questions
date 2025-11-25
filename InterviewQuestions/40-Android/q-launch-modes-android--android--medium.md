@@ -1,39 +1,37 @@
 ---
 id: android-010
 title: Android Activity Launch Modes / Режимы запуска Activity в Android
-aliases:
-- Android Activity Launch Modes
-- Режимы запуска Activity в Android
+aliases: [Android Activity Launch Modes, Режимы запуска Activity в Android]
 topic: android
 subtopics:
-- activity
-- ui-navigation
+  - activity
+  - ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
 related:
-- c-compose-navigation
-- c-activity
-- q-kapt-vs-ksp--android--medium
-- q-viewmodel-vs-onsavedinstancestate--android--medium
-- q-which-event-is-triggered-when-user-presses-screen--android--medium
+  - c-activity
+  - c-compose-navigation
+  - q-android-components-besides-activity--android--easy
+  - q-android-lint-tool--android--medium
+  - q-kapt-vs-ksp--android--medium
+  - q-parsing-optimization-android--android--medium
+  - q-viewmodel-vs-onsavedinstancestate--android--medium
+  - q-which-event-is-triggered-when-user-presses-screen--android--medium
 created: 2025-10-05
 updated: 2025-11-11
-tags:
-- android/activity
-- android/ui-navigation
-- difficulty/medium
-- en
-- ru
+tags: [android/activity, android/ui-navigation, difficulty/medium, en, ru]
 
 
+date created: Saturday, November 1st 2025, 12:46:57 pm
+date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 
 # Вопрос (RU)
@@ -59,7 +57,7 @@ tags:
 
 Начиная с Android 5.0, документ-ориентированный режим (`FLAG_ACTIVITY_NEW_DOCUMENT` и `FLAG_ACTIVITY_MULTIPLE_TASK`) вводит поведение, аналогичное `singleInstancePerTask`, для отдельных `Activity`, но это не отдельное значение атрибута `android:launchMode` и не отдельный «режим запуска» в манифесте.
 
-### standard (режим по умолчанию)
+### Standard (режим По умолчанию)
 
 Режим по умолчанию. Система создает новый экземпляр `Activity` в задаче, из которой она была запущена, и направляет в него `Intent`. `Activity` может быть создана несколько раз; каждый экземпляр может принадлежать разным задачам, и одна задача может содержать несколько экземпляров.
 
@@ -157,7 +155,7 @@ There are four standard launch modes you can assign directly to the `launchMode`
 
 Starting with Android 5.0, document-mode flags (such as `FLAG_ACTIVITY_NEW_DOCUMENT` and `FLAG_ACTIVITY_MULTIPLE_TASK`) can be used to achieve behavior similar to `singleInstancePerTask` for specific activities, but this is not a distinct `android:launchMode` value and not an official manifest launch mode.
 
-### standard (the default mode)
+### Standard (the Default mode)
 
 Default. The system creates a new instance of the activity in the task from which it was started and routes the intent to it. The activity can be instantiated multiple times; each instance can belong to different tasks, and one task can contain multiple instances.
 

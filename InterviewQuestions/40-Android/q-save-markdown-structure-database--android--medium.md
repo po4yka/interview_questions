@@ -1,29 +1,30 @@
 ---
 id: android-218
 title: Save Markdown Structure To Database / Сохранение структуры Markdown в базе данных
-aliases:
-- Save Markdown Structure To Database
-- Сохранение структуры Markdown в базе данных
+aliases: [Save Markdown Structure To Database, Сохранение структуры Markdown в базе данных]
 topic: android
 subtopics:
-- room
+  - room
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- c-android
-- c-database-design
-- q-database-encryption-android--android--medium
+  - c-android
+  - c-database-design
+  - q-database-encryption-android--android--medium
+  - q-how-to-save-and-apply-theme-settings--android--medium
+  - q-room-database-migrations--android--medium
+  - q-save-data-outside-fragment--android--medium
 created: 2025-10-15
 updated: 2025-11-10
-tags:
-- android/room
-- difficulty/medium
+tags: [android/room, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +38,7 @@ tags:
 ## Ответ (RU)
 Сохранение Markdown (и при необходимости его структуры) зависит от задач приложения. На Android обычно используют Room (SQLite) и/или файловое хранение. Ниже приведены основные подходы с примерами реализации, плюс гибридный вариант.
 
-### Подход 1: Хранить как обычный текст (самый простой)
+### Подход 1: Хранить Как Обычный Текст (самый простой)
 
 Лучше всего подходит для простых случаев, read-heavy-приложений, редакторов форматированного текста.
 
@@ -108,7 +109,7 @@ class MarkdownRepository(private val documentDao: DocumentDao) {
 
 ---
 
-### Подход 2: Парсить в JSON и сохранять структуру
+### Подход 2: Парсить В JSON И Сохранять Структуру
 
 Лучше всего подходит для сложных запросов, структурированного поиска, анализа содержимого.
 
@@ -275,7 +276,7 @@ class MarkdownStructureRepository(
 
 ---
 
-### Подход 3: Конвертация в HTML и хранение HTML
+### Подход 3: Конвертация В HTML И Хранение HTML
 
 Лучше всего подходит для приложений, ориентированных на отображение, особенно если используется WebView.
 
@@ -356,7 +357,7 @@ class MarkdownViewerFragment : Fragment() {
 
 ---
 
-### Подход 4: Хранение в файлах
+### Подход 4: Хранение В Файлах
 
 Лучше всего подходит для больших документов, экспорта/импорта и совместимости с внешними инструментами.
 
@@ -429,7 +430,7 @@ class MarkdownFileManager(private val context: Context) {
 
 ---
 
-### Гибридный подход (рекомендуемый)
+### Гибридный Подход (рекомендуемый)
 
 Комбинируем варианты: Room для индексации/метаданных и хранения Markdown, кэш HTML для быстрого отображения, плюс при необходимости бэкап в файл.
 
@@ -1008,7 +1009,7 @@ Recommended:
 
 ---
 
-## Дополнительные вопросы (RU)
+## Дополнительные Вопросы (RU)
 
 - [[q-database-encryption-android--android--medium]]
 - [[q-fragments-vs-activity--android--medium]]
@@ -1032,9 +1033,9 @@ Recommended:
 
 ---
 
-## Связанные вопросы (RU)
+## Связанные Вопросы (RU)
 
-### Базовые концепции
+### Базовые Концепции
 
 - [[c-android]]
 - [[c-database-design]]
