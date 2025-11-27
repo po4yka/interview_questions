@@ -28,7 +28,6 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, seq
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Что такое последовательности в Kotlin и чем они отличаются от Iterable?
 

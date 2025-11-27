@@ -18,7 +18,6 @@ sources: ["https://kotlinlang.org/docs/interfaces.html"]
 date created: Sunday, October 5th 2025, 10:54:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > В чём разница между абстрактным классом и интерфейсом в Kotlin?
 

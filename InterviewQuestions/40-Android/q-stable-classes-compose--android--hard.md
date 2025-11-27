@@ -19,7 +19,6 @@ tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immut
 date created: Saturday, November 1st 2025, 1:24:29 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Какие классы будут автоматически выводиться как stable в Jetpack Compose?
@@ -195,7 +194,7 @@ android {
 ```
 
 Эти флаги включают генерацию метрик и отчётов (а не изменяют поведение компилятора). В отчётах видно, какие классы и свойства помечены как `stable` или `unstable`, например:
-```
+```kotlin
 stable class User {
   stable val id: String
   stable val name: String
@@ -372,7 +371,7 @@ android {
 ```
 
 These flags enable generation of metrics and reports (they do not, by themselves, change behavior). The output will show which classes and properties are marked as `stable` or `unstable`, e.g.:
-```
+```kotlin
 stable class User {
   stable val id: String
   stable val name: String

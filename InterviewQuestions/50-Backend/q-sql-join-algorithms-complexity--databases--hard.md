@@ -30,7 +30,6 @@ updated: 2025-11-11
 # Tags
 tags: [sql, join, algorithms, complexity, database-performance, difficulty/hard, easy_kotlin, lang/ru, topic/databases]
 ---
-
 # Вопрос (RU)
 > Как выглядит алгоритм запроса данных из двух таблиц и какая у него сложность?
 
@@ -144,9 +143,9 @@ ON employees.department_id = departments.id
 - [[moc-backend]]
 
 ## Связанные вопросы (RU)
-- [[q-hashmap-how-it-works--programming-languages--medium]]
+- [[q-hashmap-how-it-works--kotlin--medium]]
 - [[q-data-structures-overview--algorithms--easy]]
 
 ## Related Questions (EN)
-- [[q-hashmap-how-it-works--programming-languages--medium]]
+- [[q-hashmap-how-it-works--kotlin--medium]]
 - [[q-data-structures-overview--algorithms--easy]]

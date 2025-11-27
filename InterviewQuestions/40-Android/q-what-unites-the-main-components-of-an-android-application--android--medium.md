@@ -28,7 +28,6 @@ tags: [android/activity, android/lifecycle, android/service, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Объединение основных компонентов
 
@@ -43,7 +42,7 @@ date modified: Tuesday, November 25th 2025, 8:53:55 pm
 
 ### Четыре Основных Компонента
 
-```
+```text
 Компоненты Android-приложения
  Activity          → UI-экраны
  Service           → Фоновые операции
@@ -367,7 +366,7 @@ The main Android components (`Activity`, `Service`, `BroadcastReceiver`, `Conten
 
 ### Four Main Components
 
-```
+```text
 Android Application Components
  Activity          → UI screens
  Service           → Background operations

@@ -1,7 +1,9 @@
 ---
 id: android-633
-title: ChromeOS Desktop Optimization / Оптимизация Android-приложения под ChromeOS
-aliases: [ChromeOS Desktop Optimization, Оптимизация Android-приложения под ChromeOS]
+title: ChromeOS Desktop Optimization / Оптимизация Android-приложения под 
+  ChromeOS
+aliases: [ChromeOS Desktop Optimization, Оптимизация Android-приложения под 
+      ChromeOS]
 topic: android
 subtopics:
   - foldables-chromeos
@@ -23,15 +25,20 @@ related:
   - q-performance-optimization-android--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags: [android/foldables-chromeos, android/ui-state, android/ui-views, difficulty/hard]
+tags: [android/foldables-chromeos, android/ui-state, android/ui-views, 
+      difficulty/hard]
 sources:
   - "https://developer.android.com/games/playgamespc"
   - "https://developer.android.com/large-screens/chromeos"
 
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
+anki_synced: true
+anki_slugs:
+  - 40-android-q-chromeos-desktop-optimization-android-hard-p01-en
+  - 40-android-q-chromeos-desktop-optimization-android-hard-p01-ru
+anki_last_sync: '2025-11-27T09:56:33.839728'
 ---
-
 # Вопрос (RU)
 > Как адаптировать Android-приложение для ChromeOS/Desktop: поддержать resizeable окна, клавиатуру/мышь, drag-and-drop, файловые диалоги и Play Games on PC требования?
 

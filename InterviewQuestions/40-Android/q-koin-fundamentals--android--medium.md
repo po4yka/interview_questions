@@ -32,7 +32,6 @@ tags: [android/architecture-clean, android/di-koin, android/lifecycle, architect
 date created: Saturday, November 1st 2025, 12:46:56 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Чем Koin отличается от Dagger/Hilt? Реализуйте полный Koin модуль с определениями factory, single и viewModel.
@@ -63,9 +62,9 @@ date modified: Tuesday, November 25th 2025, 8:53:59 pm
 
 ### Основные Определения
 
-**Module** - контейнер зависимостей  
-**Factory** - новый экземпляр при каждом запросе  
-**Single** - singleton (один экземпляр на контейнер)  
+**Module** - контейнер зависимостей
+**Factory** - новый экземпляр при каждом запросе
+**Single** - singleton (один экземпляр на контейнер)
 **`ViewModel`** - интеграция с Android `ViewModel` и её lifecycle (через артефакты `koin-androidx-viewmodel` / `koin-androidx-navigation` / `koin-androidx-compose`)
 
 ### Полная Настройка Koin
@@ -362,9 +361,9 @@ class UserRepositoryTest : KoinTest {
 
 ### Core Definitions
 
-**Module** - dependency container  
-**Factory** - new instance on each request  
-**Single** - singleton instance per Koin container  
+**Module** - dependency container
+**Factory** - new instance on each request
+**Single** - singleton instance per Koin container
 **`ViewModel`** - Android `ViewModel` integration with lifecycle awareness (via `koin-androidx-viewmodel` / `koin-androidx-navigation` / `koin-androidx-compose` artifacts)
 
 ### Complete Koin Setup

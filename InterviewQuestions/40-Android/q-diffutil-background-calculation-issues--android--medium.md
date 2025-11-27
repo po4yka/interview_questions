@@ -28,7 +28,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:28:34 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Когда фоновое вычисление DiffUtil работает плохо?
 
@@ -297,18 +296,18 @@ fun updateUsers(newUsers: List<User>) {
 
 **Архитектурные решения:**
 
--   Использовать `ListAdapter` вместо ручного `DiffUtil`, когда это возможно — `AsyncListDiffer` внутри автоматически выполняет расчет в фоне, захватывает копии и обрабатывает большинство описанных проблем.
--   Захватывать неизменяемые копии данных перед расчетом — предотвращает race conditions и `IndexOutOfBoundsException`.
--   Отменять предыдущие операции при новых обновлениях — предотвращает race conditions и потерю обновлений.
--   Обрабатывать ошибки с fallback-стратегиями — `notifyDataSetChanged()` как резервный вариант для восстановления консистентного состояния.
--   Кэшировать тяжелые вычисления вне callback — снижает время расчета при повторных вызовах.
+- Использовать `ListAdapter` вместо ручного `DiffUtil`, когда это возможно — `AsyncListDiffer` внутри автоматически выполняет расчет в фоне, захватывает копии и обрабатывает большинство описанных проблем.
+- Захватывать неизменяемые копии данных перед расчетом — предотвращает race conditions и `IndexOutOfBoundsException`.
+- Отменять предыдущие операции при новых обновлениях — предотвращает race conditions и потерю обновлений.
+- Обрабатывать ошибки с fallback-стратегиями — `notifyDataSetChanged()` как резервный вариант для восстановления консистентного состояния.
+- Кэшировать тяжелые вычисления вне callback — снижает время расчета при повторных вызовах.
 
 **Оптимизация производительности:**
 
--   Эффективно использовать `equals()` и/или сравнение по полям — корректная логика в `areContentsTheSame()`.
--   Избегать глубокого сравнения всего объекта, если меняются только отдельные поля.
--   Минимизировать работу в callback — каждый вызов должен быть максимально быстрым.
--   Использовать `payload` для частичных обновлений — передавать информацию о конкретных изменениях для оптимизации `onBindViewHolder()`.
+- Эффективно использовать `equals()` и/или сравнение по полям — корректная логика в `areContentsTheSame()`.
+- Избегать глубокого сравнения всего объекта, если меняются только отдельные поля.
+- Минимизировать работу в callback — каждый вызов должен быть максимально быстрым.
+- Использовать `payload` для частичных обновлений — передавать информацию о конкретных изменениях для оптимизации `onBindViewHolder()`.
 
 **Пример оптимизированного DiffCallback:**
 
@@ -357,9 +356,9 @@ override fun onBindViewHolder(
 
 **Альтернативы для очень больших списков:**
 
--   `Paging 3`: для действительно больших наборов данных использовать пагинацию вместо загрузки и diff всего списка в памяти.
--   Локальная фильтрация: при фильтрации уже загруженного списка можно обновлять только отфильтрованный подмножество и избегать повторного diff для всей исходной коллекции.
--   Разбиение на страницы: разбивать очень большие списки на страницы и обновлять только текущую страницу/окно просмотра.
+- `Paging 3`: для действительно больших наборов данных использовать пагинацию вместо загрузки и diff всего списка в памяти.
+- Локальная фильтрация: при фильтрации уже загруженного списка можно обновлять только отфильтрованный подмножество и избегать повторного diff для всей исходной коллекции.
+- Разбиение на страницы: разбивать очень большие списки на страницы и обновлять только текущую страницу/окно просмотра.
 
 ## Answer (EN)
 
@@ -619,18 +618,18 @@ fun updateUsers(newUsers: List<User>) {
 
 **Architectural decisions:**
 
--   Use `ListAdapter` instead of manual `DiffUtil` when possible — `AsyncListDiffer` inside automatically runs background diff, snapshots lists, and handles most described pitfalls.
--   Capture immutable copies before calculation — prevents race conditions and `IndexOutOfBoundsException`.
--   Cancel previous operations on new updates — prevents race conditions and lost updates.
--   Handle errors with fallback strategies — `notifyDataSetChanged()` as a safe fallback to restore consistency.
--   Cache heavy computations outside callbacks — reduces total diff calculation time.
+- Use `ListAdapter` instead of manual `DiffUtil` when possible — `AsyncListDiffer` inside automatically runs background diff, snapshots lists, and handles most described pitfalls.
+- Capture immutable copies before calculation — prevents race conditions and `IndexOutOfBoundsException`.
+- Cancel previous operations on new updates — prevents race conditions and lost updates.
+- Handle errors with fallback strategies — `notifyDataSetChanged()` as a safe fallback to restore consistency.
+- Cache heavy computations outside callbacks — reduces total diff calculation time.
 
 **Performance optimization:**
 
--   Use `equals()`/field comparisons efficiently — implement correct logic for `areContentsTheSame()`.
--   Avoid deep comparison of entire objects when only a few fields can change.
--   Minimize work in callbacks — each invocation must be fast.
--   Use `payload` for partial updates — pass information about what exactly changed to optimize `onBindViewHolder()`.
+- Use `equals()`/field comparisons efficiently — implement correct logic for `areContentsTheSame()`.
+- Avoid deep comparison of entire objects when only a few fields can change.
+- Minimize work in callbacks — each invocation must be fast.
+- Use `payload` for partial updates — pass information about what exactly changed to optimize `onBindViewHolder()`.
 
 **Optimized DiffCallback example:**
 
@@ -679,9 +678,9 @@ override fun onBindViewHolder(
 
 **Alternatives for very large lists:**
 
--   `Paging 3`: for truly large datasets use paging instead of holding and diffing the full list in memory.
--   Local filtering: when filtering an already loaded list, update only the filtered subset and avoid recomputing diff against the entire original dataset each time.
--   Pagination: split very large collections into pages/windows and update only the currently visible page.
+- `Paging 3`: for truly large datasets use paging instead of holding and diffing the full list in memory.
+- Local filtering: when filtering an already loaded list, update only the filtered subset and avoid recomputing diff against the entire original dataset each time.
+- Pagination: split very large collections into pages/windows and update only the currently visible page.
 
 ---
 

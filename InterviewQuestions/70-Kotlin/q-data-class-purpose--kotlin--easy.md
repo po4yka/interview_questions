@@ -17,7 +17,6 @@ tags: [code-generation, data-classes, difficulty/easy, kotlin]
 date created: Saturday, November 1st 2025, 1:29:19 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Что такое data class в Kotlin и для чего он нужен?
 
@@ -135,9 +134,9 @@ println("$name is $age years old")
 ## Связанные Вопросы (RU)
 
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
-- [[q-kotlin-lateinit--programming-languages--medium]]
+- [[q-kotlin-lateinit--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
-- [[q-kotlin-lateinit--programming-languages--medium]]
+- [[q-kotlin-lateinit--kotlin--medium]]

@@ -17,7 +17,6 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, optimization, pe
 date created: Friday, October 31st 2025, 6:30:53 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Когда следует использовать Sequences вместо Collections? Объясните промежуточные против терминальных операций и влияние на производительность.
 

@@ -20,7 +20,6 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:38 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
 

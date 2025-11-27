@@ -2,7 +2,7 @@
 id: cs-027
 title: "Zip Operator Parallel Requests / Оператор zip для параллельных запросов"
 aliases: ["Zip Operator", "Оператор zip"]
-topic: concurrency
+topic: cs
 subtopics: [parallel-processing]
 question_kind: theory
 difficulty: medium
@@ -19,7 +19,6 @@ sources: ["https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core
 date created: Saturday, October 4th 2025, 10:39:32 am
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Как использовать оператор zip для параллельных запросов?
 
@@ -203,9 +202,9 @@ flowOf(1, 2, 3).combine(flowOf("A", "B")) { num, letter ->
 - Понимание асинхронных операций
 
 ### Связанные (Тот Же уровень)
-- [[q-what-is-flow--programming-languages--medium]] — Что такое `Flow`
-- [[q-launch-vs-async-await--programming-languages--medium]] — launch vs async
-- [[q-hot-vs-cold-flows--programming-languages--medium]] — hot vs cold flows
+- [[q-what-is-flow--kotlin--medium]] — Что такое `Flow`
+- [[q-launch-vs-async-await--kotlin--medium]] — launch vs async
+- [[q-hot-vs-cold-flows--kotlin--medium]] — hot vs cold flows
 
 ### Продвинутое (Сложнее)
 - Продвинутые операторы `Flow`
@@ -219,9 +218,9 @@ flowOf(1, 2, 3).combine(flowOf("A", "B")) { num, letter ->
 - Understanding of async operations
 
 ### Related (Same Level)
-- [[q-what-is-flow--programming-languages--medium]] - What is `Flow`
-- [[q-launch-vs-async-await--programming-languages--medium]] - launch vs async
-- [[q-hot-vs-cold-flows--programming-languages--medium]] - hot vs cold flows
+- [[q-what-is-flow--kotlin--medium]] - What is `Flow`
+- [[q-launch-vs-async-await--kotlin--medium]] - launch vs async
+- [[q-hot-vs-cold-flows--kotlin--medium]] - hot vs cold flows
 
 ### Advanced (Harder)
 - Advanced `Flow` operators

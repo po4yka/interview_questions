@@ -17,7 +17,6 @@ tags: [context-switching, coroutines, difficulty/medium, dispatchers, kotlin, wi
 date created: Saturday, November 1st 2025, 1:30:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 
 > Когда и в каких случаях следует использовать `withContext` в корутинах Kotlin по сравнению с такими построителями, как `launch` и `async`?

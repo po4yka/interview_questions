@@ -17,7 +17,6 @@ tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, sin
 date created: Friday, October 31st 2025, 6:29:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Что Такое Object / Companion Object?
 
 # Вопрос (RU)
@@ -399,6 +398,6 @@ MyClass.bar()  // "bar"
 
 ## Related Questions
 
-- [[q-kotlin-java-type-differences--programming-languages--medium]]
+- [[q-kotlin-java-type-differences--kotlin--medium]]
 - [[q-coroutinecontext-composition--kotlin--hard]]
 - [[q-flow-backpressure--kotlin--hard]]

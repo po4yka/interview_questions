@@ -17,7 +17,6 @@ tags: [difficulty/medium]
 date created: Tuesday, November 25th 2025, 8:11:35 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 Что такое оператор `onCompletion` в `Kotlin Flow` и чем он отличается от блоков `finally`? Как обрабатывать завершение для успешных случаев, исключений и отмены? Приведите production-примеры очистки, логирования, обновления UI-состояния и аналитики с корректными стратегиями тестирования.
 

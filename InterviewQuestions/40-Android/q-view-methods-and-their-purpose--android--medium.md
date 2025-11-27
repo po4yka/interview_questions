@@ -26,7 +26,6 @@ tags: [android/ui-views, difficulty/medium, drawing, rendering, view]
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Методы `View` и их назначение
 

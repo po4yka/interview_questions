@@ -19,7 +19,6 @@ tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium,
 date created: Saturday, November 1st 2025, 1:01:54 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Объясните стратегии тестирования KMM проектов. Как писать тесты в commonTest, androidTest и iosTest? Как мокировать платформо-специфичные зависимости?
 
@@ -67,7 +66,7 @@ kotlin {
 
 **Структура директорий:**
 
-```
+```text
 shared/src/
   commonTest/kotlin/         # Общие тесты (все платформы)
   androidUnitTest/kotlin/    # Android-специфичные unit-тесты (JVM)
@@ -341,7 +340,7 @@ kotlin {
 
 Directory layout:
 
-```
+```text
 shared/src/
   commonTest/kotlin/         # Shared tests (all platforms)
   androidUnitTest/kotlin/    # Android-specific unit tests (JVM)

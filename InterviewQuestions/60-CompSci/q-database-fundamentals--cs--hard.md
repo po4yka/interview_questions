@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Database"]
 date created: Monday, October 13th 2025, 8:07:02 am
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Объясните фундаментальные концепции баз данных. Что такое ACID, транзакции, индексы, нормализация? Когда использовать SQL vs NoSQL?
 

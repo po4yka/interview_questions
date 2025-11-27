@@ -31,7 +31,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:24:37 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 
 > Как работает навигация между `Activity` в Android?

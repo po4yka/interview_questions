@@ -28,7 +28,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:30:28 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Что такое Assisted Injection в Hilt/Dagger? Когда использовать `@AssistedInject` и `@AssistedFactory`?
 

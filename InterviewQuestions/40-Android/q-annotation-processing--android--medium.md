@@ -22,11 +22,16 @@ related:
 sources: []
 created: 2025-10-12
 updated: 2025-10-30
-tags: [android/build-variants, android/gradle, annotation-processing, code-generation, difficulty/medium, kapt, ksp]
+tags: [android/build-variants, android/gradle, annotation-processing, 
+      code-generation, difficulty/medium, kapt, ksp]
 date created: Saturday, November 1st 2025, 1:03:46 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
+anki_synced: true
+anki_slugs:
+  - 40-android-q-annotation-processing-android-medium-p01-en
+  - 40-android-q-annotation-processing-android-medium-p01-ru
+anki_last_sync: '2025-11-27T09:56:33.839728'
 ---
-
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и чем отличаются kapt и KSP?
 

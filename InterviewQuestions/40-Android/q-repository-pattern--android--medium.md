@@ -32,7 +32,6 @@ tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium,
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Repository в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
 
@@ -94,7 +93,7 @@ class UserRepositoryImpl(
 
 ### Repository В MVVM-архитектуре
 
-```
+```text
 View (Activity/Fragment/Composable)
     ↓ наблюдает состояние
 ViewModel
@@ -830,7 +829,7 @@ class UserRepositoryImpl(
 
 ### Repository in MVVM Architecture
 
-```
+```text
 View (Activity/Fragment/Composable)
     ↓ observes state
 ViewModel

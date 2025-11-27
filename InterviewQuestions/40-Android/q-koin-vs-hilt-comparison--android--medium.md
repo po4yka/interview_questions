@@ -19,7 +19,6 @@ tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/m
 date created: Saturday, November 1st 2025, 1:24:30 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Сравните Koin и Hilt детально. Когда вы бы выбрали один вместо другого? Обсудите compile-time vs runtime DI.

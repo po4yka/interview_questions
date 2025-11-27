@@ -29,7 +29,6 @@ related:
 date created: Saturday, November 1st 2025, 12:46:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как спроектировать и реализовать offline-first архитектуру в Android? Какие ключевые компоненты, паттерны и практики необходимо использовать?

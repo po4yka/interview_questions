@@ -17,7 +17,6 @@ tags: [concurrency, continuation, coroutines, difficulty/medium, kotlin, suspend
 date created: Friday, October 31st 2025, 6:31:34 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните, как работают suspend функции в корутинах Kotlin. Что делает ключевое слово `suspend`?

@@ -19,7 +19,6 @@ tags: [android/lifecycle, difficulty/hard, memory-leaks]
 date created: Saturday, November 1st 2025, 12:47:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Почему была создана библиотека Lifecycle?

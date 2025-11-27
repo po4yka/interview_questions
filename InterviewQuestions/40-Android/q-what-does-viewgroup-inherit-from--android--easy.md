@@ -26,7 +26,6 @@ tags: [android/ui-views, difficulty/easy, inheritance, ui, viewgroup, views]
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > От какого класса наследуется `ViewGroup`?
@@ -45,7 +44,7 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 
 Иерархия наследования в упрощённом виде:
 
-```
+```text
 java.lang.Object
   ↓
 android.view.View
@@ -100,7 +99,7 @@ class CustomContainerLayout @JvmOverloads constructor(
 
 Simplified inheritance hierarchy:
 
-```
+```text
 java.lang.Object
   ↓
 android.view.View

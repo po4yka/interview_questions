@@ -19,7 +19,6 @@ subtopics: [coroutines, supervisorjob]
 date created: Saturday, November 1st 2025, 1:29:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 
 > Когда и почему следует использовать `SupervisorJob` в Kotlin-корутинах (в том числе в Android), чем он отличается от обычного `Job`, и какие реальные кейсы его применения?

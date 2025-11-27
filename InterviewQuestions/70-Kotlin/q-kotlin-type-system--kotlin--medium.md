@@ -28,7 +28,6 @@ tags: [difficulty/medium, kotlin, type-system, types]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Что вы знаете о типах Any, Nothing, Unit в Kotlin?
 

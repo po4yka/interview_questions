@@ -28,7 +28,6 @@ tags: [android/performance-memory, android/serialization, difficulty/medium, jso
 date created: Saturday, November 1st 2025, 12:47:00 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Где можно оптимизировать парсинг в Android-приложениях?

@@ -30,7 +30,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Как создать и поддерживать аппвиджет на Jetpack Glance: управлять состоянием, обновлениями, действиями и ограничениями RemoteViews?
 

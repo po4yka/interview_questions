@@ -28,7 +28,6 @@ tags: [blocking, concurrency, coroutines, difficulty/medium, kotlin, suspend]
 date created: Friday, October 17th 2025, 9:47:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между приостанавливающими (suspending) и блокирующими (blocking) функциями в Kotlin?
 
@@ -124,13 +123,13 @@ suspend fun suspendFunction(counter: Int, delay: Long) {
 ### Визуальное Сравнение
 
 **Blocking:**
-```
+```text
 Поток: [====Функция A====][====Функция B====]
         ^ Заблокирован      ^ Заблокирован
 ```
 
 **Suspending:**
-```
+```text
 Поток: [==A=][=Другое=][==A==][==B=][=Другое=][==B==]
         ^приостановка ^    ^возобновление
 ```
@@ -253,13 +252,13 @@ Important: the `suspend` modifier by itself does not automatically make code non
 ### Visual Comparison
 
 **Blocking**:
-```
+```text
 Thread: [====Function A====][====Function B====]
         ^ Blocked          ^ Blocked
 ```
 
 **Suspending**:
-```
+```text
 Thread: [==A=][=Other=][==A==][==B=][=Other=][==B==]
         ^suspend  ^    ^resume
 ```

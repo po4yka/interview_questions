@@ -29,7 +29,6 @@ tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espr
 date created: Saturday, November 1st 2025, 1:29:00 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать продвинутые паттерны Espresso с `IdlingResource`, custom matchers и `ViewAction`s?
 

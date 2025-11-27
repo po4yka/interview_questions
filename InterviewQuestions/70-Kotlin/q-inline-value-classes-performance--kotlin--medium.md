@@ -17,7 +17,6 @@ tags: [difficulty/medium]
 date created: Sunday, October 12th 2025, 3:43:41 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Как работают inline value классы? Когда следует использовать их для производительности? Каковы ограничения?
 
@@ -354,9 +353,9 @@ When used within these constraints, value classes provide stronger type safety a
 ## Связанные Вопросы (RU)
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
-- [[q-kotlin-static-variable--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]
 
 ## Related Questions
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
-- [[q-kotlin-static-variable--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]

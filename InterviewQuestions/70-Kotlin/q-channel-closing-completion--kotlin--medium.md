@@ -28,7 +28,6 @@ tags: [channels, cleanup, closing, completion, coroutines, difficulty/medium, ko
 date created: Sunday, October 12th 2025, 3:43:52 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Как правильно закрывать и завершать каналы? Объясните close(), cancel(), разницу между ClosedSendChannelException и ClosedReceiveChannelException и лучшие практики очистки ресурсов.
 

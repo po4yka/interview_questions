@@ -24,7 +24,6 @@ tags: [android/keystore-crypto, android/networking-http, android/permissions, di
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как спроектировать безопасный вход и подписание транзакций для банковского приложения?

@@ -17,7 +17,6 @@ tags: [data-classes, difficulty/medium, sealed-classes]
 date created: Friday, October 31st 2025, 6:33:32 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Для чего используются `data` классы и `sealed` классы в Kotlin? Каковы их практические применения?
 
@@ -688,10 +687,10 @@ fun handleValidation(result: ValidationResult) {
 
 - [[q-kotlin-extension-functions-advanced--kotlin--hard]]
 - [[q-kotlin-higher-order-functions--kotlin--medium]]
-- [[q-kotlin-equals-hashcode-purpose--programming-languages--medium]]
+- [[q-kotlin-equals-hashcode-purpose--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-kotlin-extension-functions-advanced--kotlin--hard]]
 - [[q-kotlin-higher-order-functions--kotlin--medium]]
-- [[q-kotlin-equals-hashcode-purpose--programming-languages--medium]]
+- [[q-kotlin-equals-hashcode-purpose--kotlin--medium]]

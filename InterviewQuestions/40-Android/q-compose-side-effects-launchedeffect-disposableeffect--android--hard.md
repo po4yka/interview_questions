@@ -29,7 +29,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:09:10 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между побочными эффектами Compose: LaunchedEffect vs DisposableEffect?
 

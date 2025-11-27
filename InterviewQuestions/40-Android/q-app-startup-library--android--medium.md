@@ -23,7 +23,6 @@ tags: [android/app-startup, android/performance-startup, difficulty/medium, jetp
 date created: Saturday, November 1st 2025, 1:04:12 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Зачем нужна библиотека App Startup?
 

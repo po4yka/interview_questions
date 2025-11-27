@@ -26,7 +26,6 @@ tags: [android/ui-views, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Как работает AsyncListDiffer? Объясните diffing в фоновом потоке, сравнение AsyncListDiffer vs ListAdapter, безопасную обработку мутаций списка и оптимизацию для обновлений больших наборов данных.
 
@@ -122,7 +121,7 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
 **Поток выполнения (схематично):**
 
-```
+```text
 Главный поток                     Фоновый поток
 -----------                       -----------------
 submitList(newList)
@@ -577,7 +576,7 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
 **Thread flow (conceptual):**
 
-```
+```text
 Main Thread                      Background Thread
 -----------                      -----------------
 submitList(newList)

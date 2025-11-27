@@ -25,7 +25,6 @@ tags: [android/performance-memory, android/ui-compose, compose, difficulty/mediu
 date created: Saturday, November 1st 2025, 1:24:56 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как порядок модификаторов влияет на производительность в Jetpack Compose?
 

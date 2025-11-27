@@ -28,7 +28,6 @@ tags: [coroutines, difficulty/easy, kotlin]
 date created: Sunday, October 12th 2025, 3:39:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Базовая тема корутин Kotlin 140029 (билдеры `launch`, `async`, `runBlocking`)
 

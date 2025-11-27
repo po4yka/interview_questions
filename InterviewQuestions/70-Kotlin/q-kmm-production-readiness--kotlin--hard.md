@@ -18,7 +18,6 @@ related: [c-kotlin, q-handler-looper-comprehensive--android--medium]
 date created: Tuesday, October 28th 2025, 9:23:20 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 
 > Каковы ключевые соображения для вывода KMM проекта в production? Как обрабатывать versioning, binary compatibility, crash reporting и performance monitoring на разных платформах? Каковы частые ошибки и как их избегать?

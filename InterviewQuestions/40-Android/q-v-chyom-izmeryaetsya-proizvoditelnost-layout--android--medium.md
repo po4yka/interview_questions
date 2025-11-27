@@ -19,7 +19,6 @@ tags: [android/performance-rendering, android/ui-views, difficulty/medium, perfo
 date created: Saturday, November 1st 2025, 1:24:44 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > В чём измеряется производительность layout в Android?

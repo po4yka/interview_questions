@@ -17,7 +17,6 @@ tags: [difficulty/medium]
 date created: Thursday, October 16th 2025, 5:48:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Что Такое JIT?
 
 **English**: What is JIT?
@@ -31,7 +30,7 @@ date modified: Tuesday, November 25th 2025, 8:53:51 pm
 
 **Ahead-of-Time (AOT) Compilation:**
 
-```
+```text
 Source Code → Compiler → Machine Code → Execution
   (.c, .cpp)              (native)      (runs)
 
@@ -43,7 +42,7 @@ Example: C, C++, Rust
 
 **Interpretation:**
 
-```
+```text
 Source Code → Interpreter → Execution
   (.py, .js)              (line by line)
 
@@ -55,7 +54,7 @@ Example: Python (CPython), basic JavaScript
 
 **JIT Compilation:**
 
-```
+```text
 Source Code → Bytecode → JIT Compiler → Machine Code → Execution
   (.java)      (.class)    (runtime)      (native)      (runs)
 
@@ -93,7 +92,7 @@ fun fibonacci(n: Int): Int {
 
 **2. Interpretation (Initially):**
 
-```
+```text
 First few calls:
 fibonacci(5) → Interpreted (slow)
 fibonacci(10) → Still interpreted
@@ -101,7 +100,7 @@ fibonacci(10) → Still interpreted
 
 **3. Profiling:**
 
-```
+```text
 JVM monitors:
 - How often is this method called?
 - What are the typical argument types?
@@ -110,7 +109,7 @@ JVM monitors:
 
 **4. JIT Compilation (When Hot):**
 
-```
+```text
 After many calls:
 fibonacci() is "hot" → JIT compiles to native machine code
 
@@ -123,7 +122,7 @@ jle .L2
 
 **5. Optimized Execution:**
 
-```
+```text
 Future calls:
 fibonacci(20) → Runs native machine code (fast!)
 ```
@@ -238,7 +237,7 @@ fun main() {
 
 JIT compiler itself consumes memory:
 
-```
+```text
 Application memory:     100 MB
 JIT compiler overhead:  +20 MB
 JIT-compiled code:      +10 MB
@@ -467,7 +466,7 @@ JIT (Just-In-Time) компиляция компилирует код в маш�
 ### Как Работает JIT
 
 **1. Сначала интерпретация**
-```
+```text
 Исходный код → Bytecode → Интерпретатор
                        ↓
                   JIT Компилятор
@@ -494,7 +493,7 @@ fun fibonacci(n: Int): Int {
 ```
 
 **HotSpot JVM Tiered Compilation**
-```
+```text
 Уровень 0: Интерпретатор
 Уровень 1: C1 Компилятор (Client, быстрая компиляция)
 Уровень 2-3: Профилирование
@@ -540,7 +539,7 @@ fun fibonacci(n: Int): Int {
 
 **2. Интерпретация (изначально):**
 
-```
+```text
 Первые несколько вызовов:
 fibonacci(5) → Интерпретируется (медленно)
 fibonacci(10) → Всё ещё интерпретируется
@@ -548,7 +547,7 @@ fibonacci(10) → Всё ещё интерпретируется
 
 **3. Профилирование:**
 
-```
+```text
 JVM отслеживает:
 - Как часто вызывается этот метод?
 - Какие типы аргументов обычно используются?
@@ -557,7 +556,7 @@ JVM отслеживает:
 
 **4. JIT компиляция (когда код "горячий"):**
 
-```
+```text
 После многих вызовов:
 fibonacci() становится "горячим" → JIT компилирует в нативный машинный код
 
@@ -570,7 +569,7 @@ jle .L2
 
 **5. Оптимизированное выполнение:**
 
-```
+```text
 Будущие вызовы:
 fibonacci(20) → Выполняется нативный машинный код (быстро!)
 ```
@@ -685,7 +684,7 @@ fun main() {
 
 Сам JIT компилятор потребляет память:
 
-```
+```text
 Память приложения:     100 МБ
 Накладные расходы JIT:  +20 МБ
 JIT-компилированный код: +10 МБ

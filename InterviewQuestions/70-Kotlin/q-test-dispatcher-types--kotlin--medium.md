@@ -20,7 +20,6 @@ subtopics:
 date created: Friday, November 7th 2025, 6:45:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
 

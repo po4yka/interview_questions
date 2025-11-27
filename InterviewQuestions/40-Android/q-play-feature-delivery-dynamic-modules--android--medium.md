@@ -29,7 +29,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:03:33 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Что такое Play Feature Delivery и динамические модули?
 

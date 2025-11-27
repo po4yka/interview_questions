@@ -28,7 +28,6 @@ tags: [difficulty/medium, functional-programming, kotlin, lambda-expressions, sa
 date created: Saturday, October 18th 2025, 3:12:53 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Что такое лямбда-выражения в Kotlin и как они работают?
 

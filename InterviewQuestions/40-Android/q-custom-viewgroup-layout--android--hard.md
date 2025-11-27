@@ -29,7 +29,6 @@ sources: []
 date created: Saturday, November 1st 2025, 12:46:47 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 
 > Как создать кастомный `ViewGroup`? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.

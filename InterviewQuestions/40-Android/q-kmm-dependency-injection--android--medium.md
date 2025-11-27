@@ -19,7 +19,6 @@ tags: [android/di-koin, android/kmp, di, difficulty/medium, koin, kotlin]
 date created: Saturday, November 1st 2025, 1:01:27 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните стратегии dependency injection для KMM проектов. Как использовать Koin для multiplatform DI? Как обрабатывать platform-specific зависимости? В чем разница между Koin, Dagger/Hilt и manual DI в KMM?

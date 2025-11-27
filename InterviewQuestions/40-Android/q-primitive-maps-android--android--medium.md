@@ -19,7 +19,6 @@ tags: [android/performance-memory, collections, difficulty/medium, memory-optimi
 date created: Saturday, November 1st 2025, 1:03:50 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Какие специализированные `Map`-коллекции для примитивных типов предоставляет Android SDK? Когда и почему их следует использовать вместо стандартных `HashMap`?

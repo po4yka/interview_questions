@@ -18,7 +18,6 @@ tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medi
 date created: Saturday, November 1st 2025, 1:26:27 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Зачем нужен DiffUtil в Android? Какие проблемы он решает?

@@ -28,7 +28,6 @@ tags: [android/camera, android/media, barcode-scanning, difficulty/medium, ml-ki
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать обнаружение объектов, распознавание изображений и сканирование штрих-кодов с помощью ML Kit? В чём разница между моделями на устройстве и облачными моделями? Как обрабатывать обнаружение в реальном времени с камеры?

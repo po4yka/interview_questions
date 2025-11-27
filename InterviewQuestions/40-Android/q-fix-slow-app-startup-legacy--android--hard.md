@@ -32,7 +32,6 @@ tags: [android/architecture-modularization, android/monitoring-slo, android/perf
 date created: Saturday, November 1st 2025, 1:29:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Что делать, если нужно исправить медленный запуск приложения в legacy-проекте?

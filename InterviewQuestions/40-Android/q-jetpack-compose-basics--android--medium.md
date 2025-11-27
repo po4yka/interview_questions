@@ -31,7 +31,6 @@ tags: [android/ui-compose, android/ui-state, android/ui-theming, difficulty/medi
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Что такое Jetpack Compose? Объясните основные концепции: composable функции, управление состоянием, recomposition, модификаторы, макеты и жизненный цикл. Приведите подробные примеры построения UI.
 

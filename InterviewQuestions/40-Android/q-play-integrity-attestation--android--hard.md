@@ -31,7 +31,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать Play Integrity: запрос токена на клиенте, проверка вердикта на сервере, использование capability tokens и связь с Play Billing?
 

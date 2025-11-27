@@ -18,7 +18,6 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 date created: Friday, October 31st 2025, 6:33:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Опишите data классы и sealed классы в Kotlin. Каковы их ключевые особенности и применения?
 
@@ -779,10 +778,10 @@ fun handleValidation(result: ValidationResult) {
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-immutable-collections--programming-languages--easy]]
+- [[q-kotlin-immutable-collections--kotlin--easy]]
 - [[q-kotlin-sam-interfaces--kotlin--medium]]
 
 ## Related Questions
 
-- [[q-kotlin-immutable-collections--programming-languages--easy]]
+- [[q-kotlin-immutable-collections--kotlin--easy]]
 - [[q-kotlin-sam-interfaces--kotlin--medium]]

@@ -17,7 +17,6 @@ tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, threa
 date created: Saturday, November 1st 2025, 1:26:33 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 
 > Когда в Kotlin использовать атомарные переменные (`Atomic*`) вместо `synchronized`, и наоборот?

@@ -30,7 +30,6 @@ question_kind: android
 date created: Saturday, November 1st 2025, 1:02:19 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое Android Jetpack и какие его основные компоненты?
 

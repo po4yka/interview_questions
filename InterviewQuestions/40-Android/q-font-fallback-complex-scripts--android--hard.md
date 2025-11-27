@@ -30,7 +30,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Как обеспечить корректное отображение сложных скриптов (CJK, арабский, индийские письменности) в Android: настройте font fallback цепочки с Noto шрифтами, используйте downloadable fonts для динамической загрузки, корректно учитывайте ligatures и complex shaping. Тестируйте на реальных устройствах с accessibility scaling.

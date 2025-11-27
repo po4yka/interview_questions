@@ -20,7 +20,6 @@ tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
 date created: Sunday, October 5th 2025, 10:32:28 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Что вы знаете о `Flow` в Kotlin?
 
@@ -58,7 +57,7 @@ fun main() = runBlocking<Unit> {
 
 Этот код ждет 100мс перед выводом каждого числа без блокировки корутины, в которой запущен сбор. Это видно из вывода "I'm not blocked" каждые 100мс из отдельной корутины, которая выполняется параллельно сбору:
 
-```
+```text
 I'm not blocked 1
 1
 I'm not blocked 2
@@ -111,7 +110,7 @@ fun main() = runBlocking<Unit> {
 ```
 
 Что выводит:
-```
+```text
 Calling simple function...
 Calling collect...
 Flow started
@@ -239,7 +238,7 @@ fun main() = runBlocking<Unit> {
 
 This code waits 100ms before printing each number without blocking the coroutine in which the collection is running. This is verified by printing "I'm not blocked" every 100ms from a separate coroutine that runs concurrently with the collection:
 
-```
+```text
 I'm not blocked 1
 1
 I'm not blocked 2
@@ -292,7 +291,7 @@ fun main() = runBlocking<Unit> {
 ```
 
 Which prints:
-```
+```text
 Calling simple function...
 Calling collect...
 Flow started

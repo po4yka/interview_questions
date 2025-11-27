@@ -19,7 +19,6 @@ sources: ["https://kotlinlang.org/docs/composing-suspending-functions.html"]
 date created: Saturday, November 1st 2025, 1:26:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Где можно вызывать suspend-функции?
 
@@ -367,8 +366,8 @@ fun regularFunctionFixed() {
 - Понимание `suspend`-функций
 
 ### Связанные (такой Же уровень)
-- [[q-how-to-create-suspend-function--programming-languages--medium]] — создание `suspend`-функций
-- [[q-launch-vs-async-await--programming-languages--medium]] — различия `launch` и `async`
+- [[q-how-to-create-suspend-function--kotlin--medium]] — создание `suspend`-функций
+- [[q-launch-vs-async-await--kotlin--medium]] — различия `launch` и `async`
 
 ### Продвинутые (сложнее)
 - Продвинутые паттерны корутин
@@ -382,8 +381,8 @@ fun regularFunctionFixed() {
 - Understanding of suspend functions
 
 ### Related (Same Level)
-- [[q-how-to-create-suspend-function--programming-languages--medium]] - Creating suspend functions
-- [[q-launch-vs-async-await--programming-languages--medium]] - `launch` vs `async`
+- [[q-how-to-create-suspend-function--kotlin--medium]] - Creating suspend functions
+- [[q-launch-vs-async-await--kotlin--medium]] - `launch` vs `async`
 
 ### Advanced (Harder)
 - Advanced coroutine patterns

@@ -17,7 +17,6 @@ tags: [comparison, concurrency, coroutines, difficulty/medium, kotlin, programmi
 date created: Friday, October 31st 2025, 6:32:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > В чём концептуальное отличие корутин от потоков в Java?
 

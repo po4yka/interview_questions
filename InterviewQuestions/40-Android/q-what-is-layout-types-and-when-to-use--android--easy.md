@@ -19,7 +19,6 @@ tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое layout, какие их виды бывают и когда их использовать?

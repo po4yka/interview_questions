@@ -18,7 +18,6 @@ tags: ["buffer", "context-switching", "coroutines", "difficulty/hard", "dispatch
 date created: Saturday, October 18th 2025, 3:06:32 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что делает оператор `flowOn` в `Flow` в Kotlin? Чем он отличается от `withContext`? Объясните сохранение контекста, поведение буферизации, использование нескольких `flowOn` в цепочке и влияние на производительность с реальными примерами.
 
@@ -152,7 +151,7 @@ fun demonstrateUpstreamChange() = runBlocking {
 
 Визуализация:
 
-```
+```kotlin
 [emit] -> [map lowercase] -> flowOn(IO) -> [map uppercase] -> [collect]
    ↑           ↑                               ↑                 ↑
    IO          IO                            Main              Main
@@ -262,7 +261,7 @@ fun demonstrateMultipleFlowOn() = runBlocking {
 
 Визуализация:
 
-```
+```kotlin
 [emit] -> [map1] -> flowOn(IO) -> [map2] -> flowOn(Default) -> [collect]
    ↑        ↑                        ↑                            ↑
    IO       IO                     Default                      Main
@@ -481,7 +480,7 @@ suspend fun demonstrateRealWorldRu() {
 
 Контекстный поток (концептуально):
 
-```
+```text
 [Сеть] --IO--> [Парсинг] --Default--> [БД] --IO--> [UI]
 ```
 
@@ -778,7 +777,7 @@ fun demonstrateUpstreamChange() = runBlocking {
 
 Visualization:
 
-```
+```kotlin
 [emit] -> [map lowercase] -> flowOn(IO) -> [map uppercase] -> [collect]
    ↑           ↑                               ↑                 ↑
    IO          IO                            Main              Main
@@ -888,7 +887,7 @@ fun demonstrateMultipleFlowOn() = runBlocking {
 
 Visualization:
 
-```
+```kotlin
 [emit] -> [map1] -> flowOn(IO) -> [map2] -> flowOn(Default) -> [collect]
    ↑        ↑                        ↑                            ↑
    IO       IO                     Default                      Main
@@ -1108,7 +1107,7 @@ suspend fun demonstrateRealWorld() {
 
 `Context` flow (conceptual):
 
-```
+```text
 [Network fetch] --IO--> [Parsing] --Default--> [DB save] --IO--> [UI update]
 ```
 

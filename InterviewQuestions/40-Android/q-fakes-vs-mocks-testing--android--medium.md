@@ -27,7 +27,6 @@ tags: [android/testing-instrumented, android/testing-unit, difficulty/medium, fa
 date created: Saturday, November 1st 2025, 1:29:29 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Объясните разницу между fakes, mocks и stubs. Когда следует использовать каждый?
 

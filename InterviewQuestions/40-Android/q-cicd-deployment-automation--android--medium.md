@@ -27,7 +27,6 @@ tags: [android/build-variants, android/ci-cd, android/play-console, ci-cd, deplo
 date created: Saturday, November 1st 2025, 12:46:45 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как автоматизировать деплой Android-приложения через CI/CD?
 
@@ -42,7 +41,7 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 Репродуцируемые подписанные сборки с трассируемым версионированием, безопасным staged rollout и быстрым контролируемым откатом (через инструменты Play Console/API, а не ручное перекладывание файлов).
 
 ### Пайплайн
-```
+```text
 Build → Sign → Test/Lint → Upload Internal → Gates →
 Promote (alpha/beta/prod) → Monitor → Rollback
 ```
@@ -153,7 +152,7 @@ jobs:
 Reproducible signed builds with traceable versioning, safe staged rollout, and fast controlled rollback (via Play Console/API tooling rather than manual file juggling).
 
 ### Pipeline
-```
+```text
 Build → Sign → Test/Lint → Upload Internal → Gates →
 Promote (alpha/beta/prod) → Monitor → Rollback
 ```

@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Abstract_type"]
 date created: Saturday, November 1st 2025, 1:26:52 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое абстрактный класс и для чего он используется?
 
@@ -78,7 +77,7 @@ class Rectangle(val width: Double, val height: Double) : Shape() {
 ## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
-- [[q-inheritance-vs-composition--oop--medium]] - концепции наследования
+- [[q-inheritance-vs-composition--cs--medium]] - концепции наследования
 
 ### Смежные (средней сложности)
 - [[q-abstract-class-vs-interface--kotlin--medium]] - когда использовать интерфейс vs абстрактный класс
@@ -135,7 +134,7 @@ class Rectangle(val width: Double, val height: Double) : Shape() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-inheritance-vs-composition--oop--medium]] - Inheritance concepts
+- [[q-inheritance-vs-composition--cs--medium]] - Inheritance concepts
 
 ### Related (Medium)
 - [[q-abstract-class-vs-interface--kotlin--medium]] - When to use interface vs abstract class

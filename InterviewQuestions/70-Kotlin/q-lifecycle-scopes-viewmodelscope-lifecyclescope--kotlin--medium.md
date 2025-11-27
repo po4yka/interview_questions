@@ -18,7 +18,6 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
 date created: Friday, October 31st 2025, 6:29:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > В чём разница между viewModelScope и lifecycleScope? Когда использовать каждый из них?
 
@@ -708,7 +707,7 @@ class GoodService : Service() {
 class BadViewModelScopeUsage : ViewModel() {
     fun loadData() {
         // Неверно: lifecycleScope недоступен в ViewModel и не привязан к её lifecycle
-        // lifecycleScope.launch { 
+        // lifecycleScope.launch {
         //     repository.getData()
         // }
     }

@@ -19,7 +19,6 @@ sources: ["https://refactoring.guru/design-patterns/abstract-factory"]
 date created: Saturday, November 1st 2025, 1:26:52 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Abstract Factory? Когда и зачем его использовать?
 
@@ -204,7 +203,7 @@ fun createUI(factory: GUIFactory): Pair<Button, Window> =
 - [[q-abstract-class-purpose--cs--medium]] - Abstract class purpose
 
 ### Related (Medium)
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-template-method-pattern--cs--medium]] - Factory Method pattern
 
 ### Advanced (Harder)
 - No specific advanced related questions linked (previous broken links removed)

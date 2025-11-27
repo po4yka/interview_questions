@@ -29,7 +29,6 @@ tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty
 date created: Saturday, November 1st 2025, 1:29:16 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Можешь привести пример когда Android фреймворк использует паттерн Factory?
 

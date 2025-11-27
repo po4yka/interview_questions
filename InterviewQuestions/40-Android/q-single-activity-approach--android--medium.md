@@ -19,7 +19,6 @@ tags: [activity, android, android/activity, android/ui-navigation, difficulty/me
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Что означает в Android-разработке подход Single `Activity`?
 

@@ -19,7 +19,6 @@ sources: ["https://refactoring.guru/design-patterns/observer"]
 date created: Saturday, November 1st 2025, 1:26:49 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Observer? Когда его использовать и как он работает?
 
@@ -623,7 +622,7 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
 - Понимание событийно-ориентированного программирования
 
 ### Связанные (того Же уровня)
-- [[q-strategy-pattern--design-patterns--medium]] — паттерн Strategy
+- [[q-strategy-pattern--cs--medium]] — паттерн Strategy
 - Паттерн Command (см. соответствующий вопрос)
 - Паттерн State (см. соответствующий вопрос)
 
@@ -639,7 +638,7 @@ class MainViewModel(private val repository: DataRepository) : ViewModel() {
 - Understanding of event-driven programming
 
 ### Related (Same Level)
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+- [[q-strategy-pattern--cs--medium]] - Strategy pattern
 - Command pattern (see corresponding question)
 - State pattern (see corresponding question)
 

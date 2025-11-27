@@ -27,7 +27,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:27:37 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать темную тему в Android? Объясните ключевые подходы и преимущества.
 

@@ -34,7 +34,6 @@ sources:
 date created: Saturday, November 1st 2025, 12:47:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Почему данные пользователя могут исчезать при повороте экрана и как это предотвратить?
@@ -67,7 +66,7 @@ Android по умолчанию уничтожает и пересоздает `
 
 ### Жизненный Цикл При Повороте
 
-```
+```text
 Поворот устройства
       ↓
 onPause()
@@ -413,7 +412,7 @@ System recreates to:
 
 ### Lifecycle During Rotation
 
-```
+```text
 Device rotated
       ↓
 onPause()

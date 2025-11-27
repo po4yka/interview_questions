@@ -32,7 +32,6 @@ tags: [android/performance-battery, android/performance-memory, android/performa
 date created: Saturday, November 1st 2025, 12:47:00 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Каков комплексный подход к оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?

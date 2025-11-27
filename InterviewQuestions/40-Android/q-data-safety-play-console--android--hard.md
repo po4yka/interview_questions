@@ -25,15 +25,14 @@ created: 2025-11-02
 updated: 2025-11-10
 tags: [android/permissions, android/play-console, android/privacy-sdks, difficulty/hard, play-data-safety]
 sources:
-- url: "https://support.google.com/googleplay/android-developer/answer/10787469"
-  note: Play Data Safety form policies
-- url: "https://support.google.com/googleplay/android-developer/answer/10787478"
-  note: Data safety best practices guide
+  - url: "https://support.google.com/googleplay/android-developer/answer/10787469"
+    note: "Play Data Safety form policies"
+  - url: "https://support.google.com/googleplay/android-developer/answer/10787478"
+    note: "Data safety best practices guide"
 
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как организовать процесс заполнения и поддержки Play Data Safety: инвентаризация данных, согласование с командами, автоматизация проверки и обновление формы при релизах?
 

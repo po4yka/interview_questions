@@ -22,12 +22,17 @@ related:
   - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/ui-views, difficulty/medium, event-handling, interaction, touch-events, ui]
+tags: [android/ui-views, difficulty/medium, event-handling, interaction, 
+      touch-events, ui]
 
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
+anki_synced: true
+anki_slugs:
+  - 40-android-q-what-event-is-called-when-user-presses-the-screen-android-en
+  - 40-android-q-what-event-is-called-when-user-presses-the-screen-android-ru
+anki_last_sync: '2025-11-26T22:32:40.783101'
 ---
-
 # Вопрос (RU)
 
 > Какое событие вызывается при нажатии пользователя на экран?
@@ -297,7 +302,7 @@ fun MotionEvent.actionToString(): String = when (action) {
 
 ### Последовательность Событий Для Одиночного Тапа (упрощенно)
 
-```
+```text
 1. ACTION_DOWN → dispatchTouchEvent()
 2. ACTION_DOWN → onTouchEvent()
 3. ACTION_UP   → dispatchTouchEvent()
@@ -666,7 +671,7 @@ fun MotionEvent.actionToString(): String = when (action) {
 
 ### Event Sequence for Single Tap (Simplified)
 
-```
+```text
 1. ACTION_DOWN → dispatchTouchEvent()
 2. ACTION_DOWN → onTouchEvent()
 3. ACTION_UP   → dispatchTouchEvent()

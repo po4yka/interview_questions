@@ -26,15 +26,14 @@ updated: 2025-11-10
 tags: [android/shortcuts-widgets, android/ui-navigation, android/ui-views, difficulty/hard]
 sources:
   - url: "https://developer.android.com/develop/ui/views/sharing/send"
-    note: ShareSheet user experience
+    note: "ShareSheet user experience"
   - url: "https://developer.android.com/develop/ui/views/shortcuts"
-    note: Shortcuts guide
+    note: "Shortcuts guide"
   - url: "https://developer.android.com/about/versions/13/features/predictive-back"
-    note: Predictive back integration
+    note: "Predictive back integration"
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как построить продвинутую интеграцию с ShareSheet: direct share, динамические ярлыки, персонализация, аналитика и соответствие политикам?
 

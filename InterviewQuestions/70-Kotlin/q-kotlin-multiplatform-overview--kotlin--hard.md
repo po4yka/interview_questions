@@ -28,7 +28,6 @@ tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, nativ
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Kotlin Multiplatform - Как это работает?
 
@@ -130,7 +129,7 @@ actual class DatabaseDriver {
 
 **Процесс компиляции (упрощённо):**
 
-```
+```text
 Общий код (Kotlin)
         ↓
    Фронтенд компилятора
@@ -155,7 +154,7 @@ Android backend          iOS/Native backend         JS backend
 
 ### Структура Проекта (концептуально)
 
-```
+```kotlin
 project/
   shared/
     commonMain/
@@ -264,7 +263,7 @@ kotlin {
 
 **1. Делиться всем (кроме UI)**
 
-```
+```text
    Платформенный UI            ← Android: Jetpack Compose
    (Android/iOS)               ← iOS: SwiftUI
 
@@ -277,7 +276,7 @@ kotlin {
 
 **2. Делить только Data/Business Logic**
 
-```
+```text
    Платформенный UI
    + Presentation              ← ViewModel'и на каждую платформу
 
@@ -560,7 +559,7 @@ actual class DatabaseDriver {
 
 **1. Compilation Process (simplified)**
 
-```
+```text
 Common Code (Kotlin)
         ↓
    Compiler Frontend
@@ -585,7 +584,7 @@ Common code is compiled to concrete platform targets: JVM (Android, server), Nat
 
 ### Project Structure (Conceptual)
 
-```
+```kotlin
 project/
   shared/
     commonMain/
@@ -694,7 +693,7 @@ kotlin {
 
 **1. Share Everything (except UI)**
 
-```
+```text
    Platform-Specific UI        ← Android: Jetpack Compose
    (Android/iOS)               ← iOS: SwiftUI
 
@@ -707,7 +706,7 @@ kotlin {
 
 **2. Share Only Data/Business Logic**
 
-```
+```text
    Platform-Specific UI
    + Presentation              ← ViewModels are per-platform
 

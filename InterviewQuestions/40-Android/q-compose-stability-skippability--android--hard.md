@@ -27,7 +27,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:25:52 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как стабильность типов влияет на пропускаемость перекомпозиции в Jetpack Compose?
 

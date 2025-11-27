@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/AVL_tree", "https://en.wikipedia.org/wi
 date created: Saturday, November 1st 2025, 1:01:44 pm
 date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
-
 # Вопрос (RU)
 > Как работают BST? Каковы основные операции? Как AVL деревья поддерживают баланс?
 

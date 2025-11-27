@@ -28,7 +28,6 @@ tags: [android/service, difficulty/hard]
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 >
 Объясните жизненный цикл `Service`, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между `startService()` и `bindService()`? Как управлять жизненным циклом сервисов в современном Android (12+)?

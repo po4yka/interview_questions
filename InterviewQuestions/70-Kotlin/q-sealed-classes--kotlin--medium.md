@@ -17,7 +17,6 @@ subtopics: [enums, sealed-classes, when-expression]
 date created: Friday, November 7th 2025, 6:45:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > В чем особенность sealed классов в Kotlin?
 
@@ -414,11 +413,11 @@ class MyAction : Action, AnotherInterface {
 ## Связанные Вопросы (RU)
 
 - [[q-heap-pollution-generics--kotlin--hard]]
-- [[q-kotlin-safe-cast--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]
 - [[q-channelflow-callbackflow-flow--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-heap-pollution-generics--kotlin--hard]]
-- [[q-kotlin-safe-cast--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]
 - [[q-channelflow-callbackflow-flow--kotlin--medium]]

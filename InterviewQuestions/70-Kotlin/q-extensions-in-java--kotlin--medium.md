@@ -17,7 +17,6 @@ tags: [difficulty/medium]
 date created: Sunday, October 12th 2025, 3:43:41 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Как применяются расширения (Extensions) в Java? Поддерживает ли Java extension-функции как в Kotlin?
 
@@ -671,7 +670,7 @@ public class Main {
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-property-delegates--programming-languages--medium]]
+- [[q-kotlin-property-delegates--kotlin--medium]]
 - [[q-kotlin-delegation-detailed--kotlin--medium]]
 - [[q-flow-testing-advanced--kotlin--hard]]
 
@@ -688,6 +687,6 @@ public class Main {
 
 ## Related Questions
 
-- [[q-kotlin-property-delegates--programming-languages--medium]]
+- [[q-kotlin-property-delegates--kotlin--medium]]
 - [[q-kotlin-delegation-detailed--kotlin--medium]]
 - [[q-flow-testing-advanced--kotlin--hard]]

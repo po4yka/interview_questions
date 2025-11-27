@@ -18,7 +18,6 @@ tags: [difficulty/hard]
 date created: Sunday, October 12th 2025, 3:43:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерны fan-out и fan-in в Kotlin Coroutines с каналами? Как реализовать распределение работы (fan-out) и агрегацию результатов (fan-in)? Приведите production-примеры параллельной обработки изображений, распределенных очередей задач и агрегации логов.
 
@@ -47,7 +46,7 @@ date modified: Tuesday, November 25th 2025, 8:53:51 pm
 
 **Визуальное представление:**
 
-```
+```text
 Fan-out:
 Производитель → [Channel] → Потребитель 1
                           → Потребитель 2
@@ -811,7 +810,7 @@ Below is an English mirror of the key production-style patterns and examples.
 
 Visual model:
 
-```
+```text
 Fan-out:
 Producer → [Channel] → Worker 1
                      → Worker 2

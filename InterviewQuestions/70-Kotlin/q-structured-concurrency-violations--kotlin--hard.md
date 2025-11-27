@@ -18,7 +18,6 @@ tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard,
 date created: Saturday, November 1st 2025, 1:29:39 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 
 > Нарушения структурной конкурентности в корутинах Kotlin: какие типичные анти-паттерны (GlobalScope, неуправляемые Job/CoroutineScope, утечки через архитектурные границы и т.п.), почему они опасны, и какие допустимые escape hatches существуют для работы вне строгой структуры?
@@ -52,7 +51,7 @@ date modified: Tuesday, November 25th 2025, 8:53:48 pm
 
 #### Основной Принцип
 
-```
+```text
 Scope
    Родительская корутина
       Дочерняя корутина 1
@@ -102,7 +101,7 @@ fun demonstrateStructuredRu() = runBlocking {
 ```
 
 **Вывод:**
-```
+```text
 === Структурная конкурентность ===
 Тело родителя завершено, ждём детей...
 Дочерняя 2 завершена
@@ -329,7 +328,7 @@ fun demonstrateGlobalScopeProblemsRu() = runBlocking {
 ```
 
 **Вывод:**
-```
+```text
 === Проблемы GlobalScope ===
 Компонент запущен
 Компонент остановлен
@@ -1338,7 +1337,7 @@ Key ideas:
 
 #### Core Principle
 
-```
+```text
 Scope
    Parent Coroutine
       Child Coroutine 1
@@ -1388,7 +1387,7 @@ fun demonstrateStructuredEn() = runBlocking {
 ```
 
 **Output:**
-```
+```kotlin
 === Structured Concurrency ===
 Parent body done, waiting for children...
 Child 2 done

@@ -19,7 +19,6 @@ tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibili
 date created: Sunday, October 5th 2025, 6:51:27 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?
 

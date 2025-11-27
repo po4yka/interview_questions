@@ -19,7 +19,6 @@ tags: [android, android/activity, android/intents-deeplinks, android/service, di
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Для чего нужны `Intent` в Android?

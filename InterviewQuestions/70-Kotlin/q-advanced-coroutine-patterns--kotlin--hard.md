@@ -31,7 +31,6 @@ tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-
 date created: Sunday, October 12th 2025, 3:06:29 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое продвинутые паттерны корутин в Kotlin? Объясните паттерн pipeline, producer-consumer с несколькими стадиями, пулинг ресурсов с Mutex/Semaphore, кастомные scope builders и паттерны rate limiting.
 

@@ -18,7 +18,6 @@ tags: [android/coroutines, android/performance-rendering, android/ui-compose, ch
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Рекомпозиция происходит в рандомное время или по команде Choreographer?

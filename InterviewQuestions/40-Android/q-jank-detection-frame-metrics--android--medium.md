@@ -29,7 +29,6 @@ tags: [android/monitoring-slo, android/performance-rendering, difficulty/medium,
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Реализуйте мониторинг метрик кадров для обнаружения и исправления рывков. Используйте FrameMetricsAggregator, OnFrameMetricsAvailableListener и инструменты трассировки (Systrace/Perfetto) для выявления проблем рендеринга.
 
@@ -492,7 +491,7 @@ chrome trace.html
 
 Пример:
 
-```
+```text
 Frame 145: 28 ms (JANK - missed deadline)
  Input: 0.2 ms
  Animation: 0.5 ms
@@ -1083,7 +1082,7 @@ What to look for:
 
 Example snippet:
 
-```
+```text
 Frame 145: 28 ms (JANK - missed deadline)
  Input: 0.2 ms
  Animation: 0.5 ms

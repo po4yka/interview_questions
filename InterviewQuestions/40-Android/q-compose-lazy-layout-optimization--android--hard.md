@@ -29,7 +29,6 @@ tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 date created: Saturday, November 1st 2025, 1:04:33 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как оптимизировать производительность Lazy-layout (LazyColumn, LazyRow) в Jetpack Compose?
 

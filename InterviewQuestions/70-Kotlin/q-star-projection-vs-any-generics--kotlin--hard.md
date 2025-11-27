@@ -20,7 +20,6 @@ tags: [difficulty/hard, generics, kotlin, star-projection, type-safety, variance
 date created: Saturday, October 18th 2025, 3:06:33 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между `*` (звездная проекция) и `Any` в обобщениях Kotlin?
 

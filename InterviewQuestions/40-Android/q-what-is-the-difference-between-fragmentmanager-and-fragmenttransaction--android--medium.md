@@ -32,7 +32,6 @@ tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/medium,
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > В чём разница между FragmentManager и FragmentTransaction?

@@ -29,7 +29,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:28:09 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Какие основные отличия между Deep Link и App Link в Android?
 

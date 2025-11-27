@@ -18,7 +18,6 @@ sources: ["https://developer.android.com/guide/topics/resources/more-resources#D
 date created: Saturday, November 1st 2025, 1:25:40 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между единицами измерения dp и sp?
 

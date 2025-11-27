@@ -29,7 +29,6 @@ tags: [android/gradle, difficulty/medium, en, ru]
 date created: Saturday, November 1st 2025, 12:46:50 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Какие различия между Gradle Kotlin DSL и Groovy? Когда использовать каждый?
 

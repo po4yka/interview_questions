@@ -29,7 +29,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как мигрировать с ExoPlayer на Media3: перестроить архитектуру плеера, перенести UI, сессии и офлайн-функциональность, не ломая авто/TV интеграцию?
 

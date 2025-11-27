@@ -18,7 +18,6 @@ tags: [advertising, android/privacy-sdks, difficulty/medium, privacy, privacy-sa
 date created: Saturday, November 1st 2025, 1:03:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое Topics API в Privacy Sandbox для Android? Как он обеспечивает рекламу на основе интересов с сохранением приватности?

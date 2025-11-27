@@ -25,17 +25,16 @@ created: 2025-11-02
 updated: 2025-11-10
 tags: [android/architecture-clean, android/di-koin, dependency-injection, difficulty/hard, koin]
 sources:
-- url: https://insert-koin.io/docs/reference/koin-core/architecture
-  note: Официальный обзор архитектуры Koin
-- url: https://github.com/InsertKoinIO/koin/blob/master/core/koin-core/src/main/kotlin/org/koin/core/Koin.kt
-  note: Код ядра Koin (ScopeRegistry, DefinitionResolver)
-- url: https://blog.insert-koin.io/posts/koin-3-4-deep-dive/
-  note: Deep dive по разрешению зависимостей в Koin 3.x
+  - url: "https://insert-koin.io/docs/reference/koin-core/architecture"
+    note: "Официальный обзор архитектуры Koin"
+  - url: "https://github.com/InsertKoinIO/koin/blob/master/core/koin-core/src/main/kotlin/org/koin/core/Koin.kt"
+    note: "Код ядра Koin (ScopeRegistry, DefinitionResolver)"
+  - url: "https://blog.insert-koin.io/posts/koin-3-4-deep-dive/"
+    note: "Deep dive по разрешению зависимостей в Koin 3.x"
 
 date created: Wednesday, November 5th 2025, 11:24:34 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Объясните, как Koin разрешает зависимости внутри себя: от DSL-модуля до получения экземпляра. Раскройте работу DefinitionResolver, ScopeRegistry, InstanceContext и стратегию выбора scope.
 

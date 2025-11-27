@@ -18,7 +18,6 @@ tags: [collections, difficulty/easy, kotlin, list, map, set]
 date created: Friday, October 31st 2025, 6:29:30 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Расскажите отличия между `List`, `Set` и `Map`. Когда использовать каждый из них?
 
@@ -397,10 +396,10 @@ Use `Map` when:
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-object-companion-object--programming-languages--easy]]
+- [[q-kotlin-object-companion-object--kotlin--easy]]
 - [[q-dispatchers-unconfined--kotlin--medium]]
 
 ## Related Questions
 
-- [[q-kotlin-object-companion-object--programming-languages--easy]]
+- [[q-kotlin-object-companion-object--kotlin--easy]]
 - [[q-dispatchers-unconfined--kotlin--medium]]

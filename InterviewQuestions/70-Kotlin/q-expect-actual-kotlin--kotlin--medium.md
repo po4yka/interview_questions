@@ -28,7 +28,6 @@ tags: [cross-platform, difficulty/medium, expect-actual, kmp, kotlin, multiplatf
 date created: Sunday, October 12th 2025, 3:00:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Что такое механизм expect/actual в Kotlin Multiplatform? Объясните как объявлять платформо-специфичные реализации и приведите практические примеры.
 
@@ -49,7 +48,7 @@ date modified: Tuesday, November 25th 2025, 8:53:52 pm
 
 ### Как Работает expect/actual
 
-```
+```kotlin
 
          commonMain
 
@@ -502,7 +501,7 @@ class PlatformTest {
 
 ### Структура Проекта
 
-```
+```kotlin
 myproject/
  commonMain/
     kotlin/
@@ -561,7 +560,7 @@ The **expect/actual** mechanism in Kotlin Multiplatform (KMP) allows you to writ
 
 ### How expect/actual Works
 
-```
+```kotlin
 
          commonMain
 
@@ -1010,7 +1009,7 @@ Each platform can have specific tests too, ensuring actual implementations behav
 
 ### Project Structure
 
-```
+```kotlin
 myproject/
  commonMain/
     kotlin/

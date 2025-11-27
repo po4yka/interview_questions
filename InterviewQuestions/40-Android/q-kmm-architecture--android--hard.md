@@ -19,7 +19,6 @@ tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, k
 date created: Saturday, November 1st 2025, 1:01:27 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните архитектуру Kotlin Multiplatform Mobile (KMM) и структуру проекта. Как организовать shared код между Android и iOS? Что такое expect/actual механизмы? Как обрабатывать platform-specific реализации максимизируя переиспользование кода?
@@ -64,7 +63,7 @@ KMM позволяет делиться бизнес-логикой, сетью 
 ### Структура Проекта
 
 **Модули:**
-```
+```text
 shared/          # Общий Kotlin код
   commonMain/    # Код для всех платформ
   androidMain/   # Android-specific
@@ -402,7 +401,7 @@ High-level design:
 ### Project Structure
 
 **Modules:**
-```
+```text
 shared/          # Shared Kotlin code
   commonMain/    # Platform-agnostic code
   androidMain/   # Android-specific

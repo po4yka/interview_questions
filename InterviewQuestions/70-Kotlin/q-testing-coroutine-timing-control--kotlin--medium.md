@@ -18,7 +18,6 @@ tags: [coroutines, deterministic, difficulty/medium, kotlin, runtest, test-dispa
 date created: Saturday, November 1st 2025, 1:29:52 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 
 > Как детерминированно тестировать тайминги корутин в Kotlin с помощью виртуального времени (`runTest`, `TestScope`, `TestDispatcher`, `advanceTimeBy`, `advanceUntilIdle`, `runCurrent`, `currentTime`), и как правильно использовать эти примитивы для проверки задержек, тайм-аутов, периодических операций, `Flow` и `ViewModel`?

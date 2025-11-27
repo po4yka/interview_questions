@@ -28,7 +28,6 @@ tags: [android/gradle, android/performance-startup, android/profiling, difficult
 date created: Saturday, November 1st 2025, 1:04:47 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое Baseline Profiles в Android и как они работают?
 
@@ -44,13 +43,13 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 Baseline Profiles — это метаданные компиляции, которые сообщают Android Runtime (ART), какие методы и классы критичны для запуска и ключевых сценариев. ART использует эту информацию для более агрессивной предварительной (`AOT`) компиляции соответствующих путей (например, при установке через Play или во время фоновых оптимизаций), уменьшая долю интерпретации и `JIT`-компиляции во время первых запусков.
 
 **Типичный путь без профиля**:
-```
+```text
 Запуск → Интерпретация байткода → JIT-компиляция горячих методов → Нативный код
   (медленно)                          (на 2-3 запуске)            (быстро)
 ```
 
 **С Baseline Profile**:
-```
+```text
 Установка/оптимизация → AOT-компиляция критичных методов → Запуск → Нативный код быстрее
         (dex2oat применяет профиль)                         (ускоренный старт)
 ```
@@ -98,7 +97,7 @@ class BaselineProfileGenerator {
 ```
 
 **3. Формат профиля** (`.txt`, упрощённый пример):
-```
+```text
 HSPLcom/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
 SPLcom/app/ui/FeedScreen;->Content(Landroidx/compose/runtime/Composer;I)V
 Lcom/app/data/FeedRepository;
@@ -142,13 +141,13 @@ when (status.profileInstallResultCode) {
 Baseline Profiles are compilation metadata that tell the Android Runtime (ART) which methods and classes are critical for startup and key flows. ART uses this information to more aggressively precompile (`AOT`) those paths (e.g., at install time via Play or during background optimizations), reducing interpretation and `JIT` work during the first launches.
 
 **Typical path without profile**:
-```
+```text
 Launch → Interpret bytecode → JIT compile hot methods → Native code
  (slow)                          (on 2nd-3rd run)        (fast)
 ```
 
 **With Baseline Profile**:
-```
+```text
 Install/optimization → AOT compile critical methods → Launch → Faster native execution
        (dex2oat applies profile)                        (faster startup)
 ```
@@ -196,7 +195,7 @@ class BaselineProfileGenerator {
 ```
 
 **3. Profile Format** (`.txt`, simplified example):
-```
+```text
 HSPLcom/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
 SPLcom/app/ui/FeedScreen;->Content(Landroidx/compose/runtime/Composer;I)V
 Lcom/app/data/FeedRepository;

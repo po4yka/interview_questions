@@ -18,7 +18,6 @@ sources: []
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
@@ -96,7 +95,7 @@ class AOTExample {
 
 **Profile-Guided Optimization (в упрощённом виде):**
 
-```
+```text
 Установка → Быстро (DEX + минимальная начальная компиляция)
     ↓
 Первый запуск → Интерпретация + JIT + профилирование горячих путей
@@ -261,7 +260,7 @@ Modern ART uses a hybrid: interpretation + JIT + profiles + selective AOT based 
 
 **Profile-Guided Optimization (simplified):**
 
-```
+```text
 Install → Fast (DEX + minimal initial compilation)
     ↓
 First Run → Interpretation + JIT + profiling of hot paths

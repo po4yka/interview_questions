@@ -17,7 +17,6 @@ tags: [difficulty/medium]
 date created: Sunday, October 12th 2025, 3:43:41 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Как работают Executor и ExecutorService в Java?
 
@@ -909,4 +908,4 @@ CompletableFuture<String> future = CompletableFuture
 ## Related Questions
 
 - [[q-kotlin-inline-functions--kotlin--medium]]
-- [[q-kotlin-partition-function--programming-languages--easy]]
+- [[q-kotlin-partition-function--kotlin--easy]]

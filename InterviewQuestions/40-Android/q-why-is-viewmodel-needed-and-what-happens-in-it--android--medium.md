@@ -31,7 +31,6 @@ tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, difficult
 date created: Saturday, November 1st 2025, 12:47:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Зачем нужен `ViewModel` и что в нем происходит?
@@ -279,7 +278,7 @@ class DetailFragment : Fragment() {
 
 ### Жизненный Цикл `ViewModel`
 
-```
+```text
 Activity/Fragment создан
          ↓
     ViewModel создана
@@ -548,7 +547,7 @@ class DetailFragment : Fragment() {
 
 ### `ViewModel` Lifecycle
 
-```
+```text
 Activity/Fragment Created
          ↓
     ViewModel Created

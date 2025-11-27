@@ -18,7 +18,6 @@ tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
 date created: Friday, October 31st 2025, 6:28:54 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Сколько инстансов `Unit` существует в одном приложении?
 
@@ -134,7 +133,7 @@ fun method2() { }         // Same as above (Unit inferred)
 
 - [[q-channel-buffer-strategies-comparison--kotlin--hard]]
 - [[q-suspend-functions-basics--kotlin--easy]]
-- [[q-kotlin-generic-function-syntax--programming-languages--easy]]
+- [[q-kotlin-generic-function-syntax--kotlin--easy]]
 
 ## Дополнительные Вопросы (RU)
 - Каковы основные различия между `Unit` и `void` в Java?

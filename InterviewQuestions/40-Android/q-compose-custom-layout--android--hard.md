@@ -29,7 +29,6 @@ tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 date created: Saturday, November 1st 2025, 1:02:38 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как создать кастомный layout в Compose? Объясните механизм measurement и placement.
 

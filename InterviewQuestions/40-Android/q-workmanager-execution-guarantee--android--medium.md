@@ -19,7 +19,6 @@ tags: [android/background-execution, background-tasks, difficulty/medium, reliab
 date created: Saturday, November 1st 2025, 12:47:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Как WorkManager гарантирует выполнение задач?

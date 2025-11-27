@@ -19,7 +19,6 @@ subtopics: [coroutines, dispatchers]
 date created: Friday, October 31st 2025, 6:34:25 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое `Dispatchers.Unconfined` в корутинах Kotlin и когда его следует использовать?

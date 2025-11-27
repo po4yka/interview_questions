@@ -17,7 +17,6 @@ tags: [difficulty/hard, generics, inline, kotlin, reified, type-parameters]
 date created: Friday, October 31st 2025, 6:32:17 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните `reified` type parameters. Реализуйте type-safe builders и factories, используя `reified`. Каковы ограничения?

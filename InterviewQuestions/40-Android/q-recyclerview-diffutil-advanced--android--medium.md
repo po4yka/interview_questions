@@ -26,7 +26,6 @@ tags: [android/ui-views, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского `DiffUtil.Callback`, использование `ListAdapter` и оптимизацию DiffUtil для больших наборов данных.
 
@@ -84,7 +83,7 @@ DiffUtil основан на **алгоритме Myers diff**, который �
 
 **Пример (упрощённый):**
 
-```
+```text
 Старый список: [A, B, C, D]
 Новый список: [A, C, D, E]
 
@@ -634,7 +633,7 @@ Important notes:
 
 **Example (simplified):**
 
-```
+```text
 Old list: [A, B, C, D]
 New list: [A, C, D, E]
 

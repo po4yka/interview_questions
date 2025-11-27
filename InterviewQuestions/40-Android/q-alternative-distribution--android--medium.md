@@ -30,7 +30,6 @@ tags: [android/app-bundle, android/billing, android/play-console, difficulty/med
 date created: Saturday, November 1st 2025, 12:46:42 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое альтернативное распространение Android-приложений и какие платформы существуют помимо Google Play?
 
@@ -49,7 +48,7 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 
 **Основные платформы:**
 
-**1. Samsung Galaxy Store**  
+**1. Samsung Galaxy Store**
 Встроенный магазин устройств Samsung с собственной системой покупок (Samsung In-App Purchase).
 
 ```kotlin
@@ -72,7 +71,7 @@ fun initializeSamsungIap(context: Context) {
 }
 ```
 
-**2. Huawei AppGallery**  
+**2. Huawei AppGallery**
 Магазин для устройств без Google Mobile Services, требует интеграции HMS Core (Auth, IAP и др.).
 
 ```kotlin
@@ -85,10 +84,10 @@ fun isHmsAvailable(context: Context): Boolean {
 }
 ```
 
-**3. Amazon Appstore**  
+**3. Amazon Appstore**
 Используется на устройствах Fire и некоторых других, требует Amazon SDK для IAP и собственного билда.
 
-**4. Прямое распространение (sideloading)**  
+**4. Прямое распространение (sideloading)**
 Установка APK напрямую — например, с корпоративного портала, сайта или через MDM. Для инициирования установки из приложения требуется разрешение `REQUEST_INSTALL_PACKAGES` (для сторонних источников) и включённая пользователем возможность установки из неизвестных источников для конкретного источника. На современных версиях Android рекомендуется использовать intent `ACTION_INSTALL_PACKAGE`.
 
 ```kotlin
@@ -147,7 +146,7 @@ Many stores support [[c-app-bundle|App `Bundle`]] or their own delivery formats,
 
 **Major Platforms:**
 
-**1. Samsung Galaxy Store**  
+**1. Samsung Galaxy Store**
 Built-in store for Samsung devices with its own billing system (Samsung In-App Purchase).
 
 ```kotlin
@@ -170,7 +169,7 @@ fun initializeSamsungIap(context: Context) {
 }
 ```
 
-**2. Huawei AppGallery**  
+**2. Huawei AppGallery**
 Store for devices without Google Mobile Services; requires integrating HMS Core (Auth, IAP, etc.).
 
 ```kotlin
@@ -183,10 +182,10 @@ fun isHmsAvailable(context: Context): Boolean {
 }
 ```
 
-**3. Amazon Appstore**  
+**3. Amazon Appstore**
 Used on Fire devices and others; requires Amazon SDK for IAP and its own build configuration.
 
-**4. Direct Distribution (sideloading)**  
+**4. Direct Distribution (sideloading)**
 Direct APK installation, e.g. from a corporate portal, website, or via MDM. To initiate installation from within an app you need the `REQUEST_INSTALL_PACKAGES` permission (for third-party sources) and the user must enable installing from unknown sources for that source. On modern Android versions, `ACTION_INSTALL_PACKAGE` is recommended.
 
 ```kotlin

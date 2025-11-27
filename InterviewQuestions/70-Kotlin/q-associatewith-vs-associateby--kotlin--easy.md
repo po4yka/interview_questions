@@ -18,7 +18,6 @@ tags: [collections, difficulty/easy, kotlin, map, transformation]
 date created: Saturday, November 1st 2025, 1:26:23 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 
 > Разница между `associateWith()` и `associateBy()` в Kotlin при создании `Map` из коллекций.
@@ -579,4 +578,4 @@ In short: `associateBy` when key is derived and value is the element; `associate
 ## Related Questions
 
 - [[q-inline-function-limitations--kotlin--medium]]
-- [[q-kotlin-reflection--programming-languages--medium]]
+- [[q-kotlin-reflection--kotlin--medium]]

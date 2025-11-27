@@ -19,7 +19,6 @@ sources: ["https://kotlinlang.org/docs/nested-classes.html"]
 date created: Sunday, October 12th 2025, 1:58:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > В чём разница между внутренними (inner) и вложенными (nested) классами в Kotlin?
 

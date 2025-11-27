@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Breadth-first_search", "https://en.wiki
 date created: Saturday, November 1st 2025, 1:24:14 pm
 date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
-
 # Вопрос (RU)
 > Как работают BFS и DFS? Когда следует использовать каждый? Каковы распространённые задачи и паттерны с графами?
 

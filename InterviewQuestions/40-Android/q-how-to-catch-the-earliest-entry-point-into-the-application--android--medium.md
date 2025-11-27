@@ -27,7 +27,6 @@ tags: [android/lifecycle, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:46:52 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Как поймать самую раннюю точку входа в приложение
 
@@ -81,7 +80,7 @@ class MyApplication : Application() {
 
 ### Порядок Выполнения (упрощённо, В Одном процессе)
 
-```
+```text
 1. Создание процесса
    ↓
 2. ContentProvider.onCreate()          ← Самый ранний код (для каждого провайдера)
@@ -388,7 +387,7 @@ Register in AndroidManifest.xml:
 
 ### Execution Order (simplified, Same process)
 
-```
+```text
 1. Process creation
    ↓
 2. ContentProvider.onCreate()          ← Earliest app code (for each provider)

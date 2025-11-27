@@ -24,7 +24,6 @@ tags: [android/build-variants, android/obfuscation, android/static-analysis, dif
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Напишите комплексный набор правил ProGuard/R8 для Android библиотеки. Обработайте рефлексию, сериализацию, нативные методы и публичный API. Оптимизируйте для production, сохраняя функциональность.

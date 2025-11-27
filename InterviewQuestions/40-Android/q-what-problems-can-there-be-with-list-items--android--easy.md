@@ -27,7 +27,6 @@ tags: [android/performance-memory, android/ui-views, difficulty/easy, listview, 
 date created: Saturday, November 1st 2025, 1:26:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Проблемы с элементами списка
 
@@ -850,7 +849,7 @@ Common problems and solutions:
 ## Related Questions
 
 ### Computer Science Fundamentals
-- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+- [[q-list-vs-sequence--kotlin--medium]] - Data Structures
 
 ### Kotlin Language Features
 - [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures

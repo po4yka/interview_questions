@@ -31,7 +31,6 @@ tags: [android/ui-compose, android/ui-state, difficulty/medium]
 date created: Saturday, November 1st 2025, 1:07:56 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Что такое remember и derivedStateOf в Jetpack Compose? Когда и как их использовать?
 

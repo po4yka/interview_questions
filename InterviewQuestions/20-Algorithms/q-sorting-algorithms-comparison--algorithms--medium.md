@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Sorting_algorithm"]
 date created: Saturday, November 1st 2025, 1:24:14 pm
 date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
-
 # Вопрос (RU)
 > Каковы основные алгоритмы сортировки? Сравните их временную/пространственную сложность и когда следует использовать каждый алгоритм?
 

@@ -28,7 +28,6 @@ tags: [android/activity, android/lifecycle, difficulty/medium, lifecycle, onCrea
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Методы жизненного цикла `Activity`
 
@@ -42,7 +41,7 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 
 ### Жизненный Цикл `Activity`
 
-```
+```text
    Activity запущена
 
            ↓
@@ -207,32 +206,32 @@ class MainActivity : AppCompatActivity() {
 
 #### Сценарий 1: Запуск Приложения
 
-```
+```text
 onCreate() → onStart() → onResume() → [Running]
 ```
 
 #### Сценарий 2: Пользователь Нажимает Home
 
-```
+```text
 [Running] → onPause() → onStop() → [Stopped]
 ```
 
 #### Сценарий 3: Возврат В Приложение
 
-```
+```text
 [Stopped] → onRestart() → onStart() → onResume() → [Running]
 ```
 
 #### Сценарий 4: Поворот Экрана
 
-```
+```text
 onPause() → onStop() → onDestroy() →
 onCreate() → onStart() → onResume()
 ```
 
 #### Сценарий 5: Диалог Поверх (`Activity` Частично видна)
 
-```
+```text
 [Running] → onPause() → [Paused, Activity может оставаться частично видимой]
 ```
 
@@ -240,7 +239,7 @@ onCreate() → onStart() → onResume()
 
 #### Сценарий 6: Другая `Activity` Полностью Перекрывает
 
-```
+```text
 onPause() → onStop() → [Stopped]
 ```
 
@@ -555,7 +554,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### The `Activity` Lifecycle
 
-```
+```text
    Activity Launched
 
            ↓
@@ -720,32 +719,32 @@ class MainActivity : AppCompatActivity() {
 
 #### Scenario 1: App Launch
 
-```
+```text
 onCreate() → onStart() → onResume() → [Running]
 ```
 
 #### Scenario 2: User Presses Home Button
 
-```
+```text
 [Running] → onPause() → onStop() → [Stopped]
 ```
 
 #### Scenario 3: User Returns to App
 
-```
+```text
 [Stopped] → onRestart() → onStart() → onResume() → [Running]
 ```
 
 #### Scenario 4: Screen Rotation
 
-```
+```text
 onPause() → onStop() → onDestroy() →
 onCreate() → onStart() → onResume()
 ```
 
 #### Scenario 5: Dialog Appears (`Activity` Still Visible)
 
-```
+```text
 [Running] → onPause() → [Paused but underlying activity may remain partially visible]
 ```
 
@@ -753,7 +752,7 @@ onCreate() → onStart() → onResume()
 
 #### Scenario 6: Another `Activity` Fully Covers It
 
-```
+```text
 onPause() → onStop() → [Stopped]
 ```
 

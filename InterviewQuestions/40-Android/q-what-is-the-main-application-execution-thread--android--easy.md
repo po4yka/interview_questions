@@ -28,7 +28,6 @@ tags: [android/lifecycle, android/performance-rendering, android/threads-sync, d
 date created: Saturday, November 1st 2025, 1:26:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое главный поток выполнения приложения в Android и для чего он используется?

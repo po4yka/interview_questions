@@ -28,7 +28,6 @@ tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 date created: Saturday, November 1st 2025, 1:24:23 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как эффективно работать с Canvas и графикой в Jetpack Compose?
 

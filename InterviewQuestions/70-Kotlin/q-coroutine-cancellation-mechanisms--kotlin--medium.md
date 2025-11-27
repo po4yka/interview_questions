@@ -21,12 +21,7 @@ tags:
   - isactive
   - cancellationexception
   - difficulty/medium
-original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:
-  - coroutines
-  - cancellation
-  - cooperative-cancellation
 ---
 # Вопрос (RU)
 > Как работает отмена корутин и чем она отличается от отмены потока?

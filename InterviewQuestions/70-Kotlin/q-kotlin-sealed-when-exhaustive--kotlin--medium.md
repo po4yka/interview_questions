@@ -17,7 +17,6 @@ tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-ex
 date created: Friday, October 31st 2025, 6:32:40 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 
 > Как использовать sealed-классы и исчерпывающие when-выражения в Kotlin для реализации типобезопасных Result-типов и конечных автоматов состояния (state machines)?

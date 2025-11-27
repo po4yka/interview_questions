@@ -29,7 +29,6 @@ tags: [android/lifecycle, android/ui-views, custom-view, difficulty/easy, ui, vi
 date created: Saturday, November 1st 2025, 12:46:53 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как можно реализовать поведение `View` при её добавлении в дерево?

@@ -29,7 +29,6 @@ tags: [android/performance-memory, android/ui-compose, compiler, compose, diffic
 date created: Saturday, November 1st 2025, 1:24:29 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как работает плагин компилятора Compose и как он оптимизирует перекомпозицию?
 

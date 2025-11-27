@@ -34,7 +34,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Как спроектировать архитектуру Quick Settings Tile так, чтобы тайл оставался синхронизирован с состоянием приложения, безопасно поддерживал фоновые операции и был согласован с интеграцией App Shortcuts?
 

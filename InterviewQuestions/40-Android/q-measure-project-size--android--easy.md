@@ -29,7 +29,6 @@ tags: [android/architecture-modularization, android/gradle, codebase-analysis, d
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как можно измерить размер проекта?
@@ -167,7 +166,7 @@ App Bundles сами по себе не отменяют лимит 65,536 сс�
 
 **Пример метрик реального проекта (e-commerce, средний размер, условный):**
 
-```
+```text
 Строки кода:      ~78,000 LOC (79% Kotlin, 11% Java, 10% XML)
 Модули:           8 модулей
 Размер APK:       ~24 MB release (одна конфигурация)
@@ -320,7 +319,7 @@ Android App Bundles do not remove the 65,536 reference limit for the DEX files i
 
 **Example metrics of a real-world (e-commerce, medium-sized, hypothetical) project:**
 
-```
+```text
 Lines of Code:    ~78,000 LOC (79% Kotlin, 11% Java, 10% XML)
 Modules:          8 modules
 APK Size:         ~24 MB release (single variant)

@@ -19,7 +19,6 @@ tags: [android/background-execution, android/coroutines, background-processing, 
 date created: Saturday, November 1st 2025, 12:47:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Как передать данные в WorkManager Worker и получить результат обратно? Какие типы данных поддерживаются и какие есть ограничения?

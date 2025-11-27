@@ -29,7 +29,6 @@ tags: [android/performance-startup, annotation-processing, difficulty/medium, en
 date created: Saturday, November 1st 2025, 12:46:56 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Подробно сравните KAPT и KSP для обработки аннотаций. Мигрируйте зависимости библиотек с KAPT на KSP. Измерьте и задокументируйте улучшения времени сборки.
 
@@ -45,7 +44,7 @@ date modified: Tuesday, November 25th 2025, 8:53:59 pm
 #### KAPT (Kotlin Annotation Processing Tool)
 
 **Как работает:**
-```
+```text
 1. Kotlin-код → генерация Java-заглушек
 2. Java-заглушки → запуск Java-аннотационных процессоров
 3. Сгенерированный код → компиляция в байт-код
@@ -54,7 +53,7 @@ date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ```
 
 **Диаграмма архитектуры:**
-```
+```text
 Kotlin Source (.kt)
     ↓
 [Генерация Java заглушек]
@@ -78,7 +77,7 @@ Java Stubs (.java)
 #### KSP (Kotlin Symbol Processing)
 
 **Как работает:**
-```
+```text
 1. Kotlin-код → KSP-процессор (прямой доступ к Kotlin-символам)
 2. Генерация кода → компиляция в байт-код
 
@@ -86,7 +85,7 @@ Java Stubs (.java)
 ```
 
 **Диаграмма архитектуры:**
-```
+```text
 Kotlin Source (.kt)
     ↓
 [KSP Processor] ← Прямой доступ к API Kotlin-символов
@@ -115,7 +114,7 @@ Kotlin Source (.kt)
 - Moshi (15 data-классов)
 
 **KAPT (пример):**
-```
+```text
 Время конфигурации: 8.2с
 Обработка KAPT: 45.3с
   - Генерация заглушек: 18.7с
@@ -126,7 +125,7 @@ Kotlin Source (.kt)
 ```
 
 **KSP (пример):**
-```
+```text
 Время конфигурации: 8.2с
 Обработка KSP: 22.1с
   - Room processor: 7.3с
@@ -441,7 +440,7 @@ echo "  Улучшение: ${IMPROVEMENT}%"
 #### KAPT (Kotlin Annotation Processing Tool)
 
 **How it works:**
-```
+```text
 1. Kotlin code → Generate Java stubs
 2. Java stubs → Run Java annotation processors
 3. Generated code → Compile to bytecode
@@ -450,7 +449,7 @@ Cost: Stub generation and non-incremental processors can be expensive and slow
 ```
 
 **Architecture diagram:**
-```
+```text
 Kotlin Source (.kt)
     ↓
 [Generate Java Stubs]
@@ -474,7 +473,7 @@ Bytecode
 #### KSP (Kotlin Symbol Processing)
 
 **How it works:**
-```
+```text
 1. Kotlin code → KSP processor (direct access to Kotlin symbols)
 2. Generated code → Compile to bytecode
 
@@ -482,7 +481,7 @@ Benefit: No Java stub generation; designed for faster and more incremental proce
 ```
 
 **Architecture diagram:**
-```
+```text
 Kotlin Source (.kt)
     ↓
 [KSP Processor] ← Direct Kotlin symbol API access
@@ -511,7 +510,7 @@ Illustrative synthetic benchmark (not a guarantee; measure in your project):
 - Moshi JSON parsing (15 data classes)
 
 **KAPT results (example):**
-```
+```text
 Configuration time: 8.2s
 KAPT processing: 45.3s
   - Stub generation: 18.7s
@@ -522,7 +521,7 @@ Total build: 89.5s
 ```
 
 **KSP results (example):**
-```
+```text
 Configuration time: 8.2s
 KSP processing: 22.1s
   - Room processor: 7.3s

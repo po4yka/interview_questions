@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Message_queue"]
 date created: Sunday, October 12th 2025, 8:40:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое очереди сообщений? Когда их следует использовать? В чём разница между Kafka, RabbitMQ и другими системами обмена сообщениями?
 

@@ -29,7 +29,6 @@ sources:
 date created: Tuesday, November 25th 2025, 8:13:30 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как тестировать UI в Jetpack Compose? Какие основные инструменты и подходы используются?
 

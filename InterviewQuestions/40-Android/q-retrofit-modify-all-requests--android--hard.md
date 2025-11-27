@@ -19,7 +19,6 @@ sources: ["https://square.github.io/okhttp/interceptors/"]
 date created: Saturday, November 1st 2025, 1:04:41 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Как в Retrofit изменять все запросы глобально (добавлять заголовки, параметры, логирование)?
 

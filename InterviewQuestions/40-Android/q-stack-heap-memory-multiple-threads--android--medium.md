@@ -26,7 +26,6 @@ related:
 date created: Saturday, November 1st 2025, 1:24:35 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > `Stack` и Heap память для нескольких потоков
 
@@ -91,7 +90,7 @@ Thread {
 - Максимальный heap процесса: 512 MB (общий)
 
 Тогда:
-```
+```text
 1 поток:     8 + 0*1 + (использование heap ≤ 512) MB
 10 потоков:  8 + 10*1 + (использование heap ≤ 512) MB
 100 потоков: 8 + 100*1 + (использование heap ≤ 512) MB
@@ -168,7 +167,7 @@ Assume (numbers are arbitrary for illustration only, not actual defaults):
 - Max heap for process: 512 MB (shared)
 
 Then:
-```
+```text
 1 thread:    8 + 0*1 + (heap usage ≤ 512) MB
 10 threads:  8 + 10*1 + (heap usage ≤ 512) MB
 100 threads: 8 + 100*1 + (heap usage ≤ 512) MB

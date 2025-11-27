@@ -19,7 +19,6 @@ sources: []
 date created: Saturday, November 1st 2025, 12:46:54 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как зарегистрировать `BroadcastReceiver` для получения сообщений?
@@ -120,7 +119,7 @@ class BootReceiver : BroadcastReceiver() {
 ### Современные Альтернативы
 
 ```kotlin
-// 🚫 LocalBroadcastManager устарел в AndroidX и не рекомендован к использованию
+// DEPRECATED: LocalBroadcastManager устарел в AndroidX и не рекомендован к использованию
 // LocalBroadcastManager.getInstance(context)
 //     .sendBroadcast(Intent("action"))
 
@@ -232,7 +231,7 @@ class BootReceiver : BroadcastReceiver() {
 ### Modern Alternatives
 
 ```kotlin
-// 🚫 LocalBroadcastManager is deprecated in AndroidX and not recommended
+// DEPRECATED: LocalBroadcastManager is deprecated in AndroidX and not recommended
 // LocalBroadcastManager.getInstance(context)
 //     .sendBroadcast(Intent("action"))
 

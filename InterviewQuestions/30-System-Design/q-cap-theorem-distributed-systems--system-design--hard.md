@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/CAP_theorem"]
 date created: Sunday, October 12th 2025, 8:27:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Что такое CAP теорема? Какие компромиссы делают разные системы, и как выбрать между CP и AP системами?
 
@@ -30,7 +29,11 @@ date modified: Tuesday, November 25th 2025, 8:53:55 pm
 
 ## Ответ (RU)
 
+См. разделы "Краткая Версия" и "Детальная Версия" ниже для полного ответа.
+
 ## Answer (EN)
+
+See "Short Version" and "Detailed Version" sections below for the complete answer.
 
 ## Follow-ups
 

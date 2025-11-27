@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-debugging-coroutines-techniques--kotlin--medium, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-default-inheritance-type--programming-languages--easy]
+related: [q-debugging-coroutines-techniques--kotlin--medium, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-default-inheritance-type--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
 tags:
@@ -21,12 +21,7 @@ tags:
   - lifecycle
   - memory-leaks
   - difficulty/medium
-original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:
-  - coroutines
-  - structured-concurrency
-  - scope-management
 ---
 # Вопрос (RU)
 > Что такое структурированная конкурентность и почему она важна при использовании корутин в Android?

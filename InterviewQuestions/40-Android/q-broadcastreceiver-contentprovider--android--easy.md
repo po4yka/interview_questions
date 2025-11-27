@@ -33,7 +33,6 @@ tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
 date created: Saturday, November 1st 2025, 12:46:45 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое `BroadcastReceiver` и `ContentProvider` в Android?
 

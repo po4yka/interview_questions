@@ -19,7 +19,6 @@ sources: ["https://martinfowler.com/articles/injection.html"]
 date created: Saturday, November 1st 2025, 1:27:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн `Service` Locator? Когда его использовать и как он работает?
 

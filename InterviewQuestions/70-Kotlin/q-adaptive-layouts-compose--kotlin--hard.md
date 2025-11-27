@@ -17,7 +17,6 @@ related: [c-jetpack-compose, c-window-size-class, q-android-jetpack-overview--an
 date created: Sunday, October 19th 2025, 1:47:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Как создавать адаптивные layouts в Compose? Что такое window size классы? Как обрабатывать телефоны, планшеты и складные устройства?
 

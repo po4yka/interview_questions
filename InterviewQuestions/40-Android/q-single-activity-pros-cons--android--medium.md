@@ -31,7 +31,6 @@ tags: [android, android/activity, android/ui-navigation, difficulty/medium, navi
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Какие у подхода Single `Activity` этого подхода плюсы и минусы?

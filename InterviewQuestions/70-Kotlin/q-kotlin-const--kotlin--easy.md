@@ -28,7 +28,6 @@ tags: [compile-time-constants, const, difficulty/easy, kotlin, properties]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое ключевое слово `const` в Kotlin?
 

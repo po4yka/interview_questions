@@ -30,7 +30,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:28:24 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Какая разница между диалогом и фрагментом?
 
@@ -250,21 +249,21 @@ NavHost(navController, startDestination = "profile") {
 
 **Dialog vs DialogFragment:**
 
--   **Используйте `Dialog`** для простых сценариев, когда не критично восстановление при rotation и не нужен tight integration с навигацией.
--   **Используйте `DialogFragment`** когда нужен lifecycle (`FragmentManager`, rotation, state preservation) или передача данных.
--   **Частая ошибка**: использование только `Dialog` в случаях, где диалог должен корректно переживать конфигурационные изменения.
+- **Используйте `Dialog`** для простых сценариев, когда не критично восстановление при rotation и не нужен tight integration с навигацией.
+- **Используйте `DialogFragment`** когда нужен lifecycle (`FragmentManager`, rotation, state preservation) или передача данных.
+- **Частая ошибка**: использование только `Dialog` в случаях, где диалог должен корректно переживать конфигурационные изменения.
 
 **`Fragment` best practices:**
 
--   **`viewLifecycleOwner`**: всегда используйте `viewLifecycleOwner` для `LiveData`/`Flow` observers вместо `this` — предотвращает утечки памяти при уничтожении `View`.
--   **State preservation**: при необходимости сохраняйте важное состояние через аргументы, `ViewModel` или `onSaveInstanceState()` (учитывая, что многие виджеты сами управляют своим состоянием).
--   **`Fragment` Result API**: используйте `Fragment` Result API вместо "плотно связанных" интерфейсов для передачи данных между фрагментами (рекомендуемый современный подход).
+- **`viewLifecycleOwner`**: всегда используйте `viewLifecycleOwner` для `LiveData`/`Flow` observers вместо `this` — предотвращает утечки памяти при уничтожении `View`.
+- **State preservation**: при необходимости сохраняйте важное состояние через аргументы, `ViewModel` или `onSaveInstanceState()` (учитывая, что многие виджеты сами управляют своим состоянием).
+- **`Fragment` Result API**: используйте `Fragment` Result API вместо "плотно связанных" интерфейсов для передачи данных между фрагментами (рекомендуемый современный подход).
 
 **Compose best practices:**
 
--   **State hoisting**: поднимайте состояние диалога на уровень родительского composable для правильного управления.
--   **`remember`**: используйте `remember`/`rememberSaveable` для сохранения состояния при recomposition и (при необходимости) конфигурационных изменениях.
--   **Navigation**: для Compose-первых приложений используйте Navigation Compose для навигации между экранами вместо ручного управления фрагментами.
+- **State hoisting**: поднимайте состояние диалога на уровень родительского composable для правильного управления.
+- **`remember`**: используйте `remember`/`rememberSaveable` для сохранения состояния при recomposition и (при необходимости) конфигурационных изменениях.
+- **Navigation**: для Compose-первых приложений используйте Navigation Compose для навигации между экранами вместо ручного управления фрагментами.
 
 **Частые ошибки:**
 
@@ -483,21 +482,21 @@ NavHost(navController, startDestination = "profile") {
 
 **Dialog vs DialogFragment:**
 
--   **Use `Dialog`** for simple cases where restoration and back stack integration are not important.
--   **Use `DialogFragment`** when lifecycle (`FragmentManager`, rotation, state preservation) or structured data passing is required.
--   **Common mistake**: using only a plain `Dialog` in scenarios where the dialog must survive configuration changes.
+- **Use `Dialog`** for simple cases where restoration and back stack integration are not important.
+- **Use `DialogFragment`** when lifecycle (`FragmentManager`, rotation, state preservation) or structured data passing is required.
+- **Common mistake**: using only a plain `Dialog` in scenarios where the dialog must survive configuration changes.
 
 **`Fragment` best practices:**
 
--   **`viewLifecycleOwner`**: always use `viewLifecycleOwner` for `LiveData`/`Flow` observers instead of `this` — prevents memory leaks when the `View` is destroyed.
--   **State preservation**: when needed, preserve critical state via arguments, `ViewModel`, or `onSaveInstanceState()` (many widgets already handle their own state).
--   **`Fragment` Result API**: prefer `Fragment` Result API over tightly coupled interfaces for communication between fragments (recommended modern approach).
+- **`viewLifecycleOwner`**: always use `viewLifecycleOwner` for `LiveData`/`Flow` observers instead of `this` — prevents memory leaks when the `View` is destroyed.
+- **State preservation**: when needed, preserve critical state via arguments, `ViewModel`, or `onSaveInstanceState()` (many widgets already handle their own state).
+- **`Fragment` Result API**: prefer `Fragment` Result API over tightly coupled interfaces for communication between fragments (recommended modern approach).
 
 **Compose best practices:**
 
--   **State hoisting**: hoist dialog state to the parent composable for proper state management.
--   **`remember` / `rememberSaveable`**: use these to preserve state across recompositions and, when appropriate, configuration changes.
--   **Navigation**: for Compose-first apps, use Navigation Compose to handle navigation between screens instead of manual fragment management.
+- **State hoisting**: hoist dialog state to the parent composable for proper state management.
+- **`remember` / `rememberSaveable`**: use these to preserve state across recompositions and, when appropriate, configuration changes.
+- **Navigation**: for Compose-first apps, use Navigation Compose to handle navigation between screens instead of manual fragment management.
 
 **Common mistakes:**
 

@@ -17,7 +17,6 @@ tags: [difficulty/medium, generics, inline-functions, kotlin, reified, type-syst
 date created: Friday, October 31st 2025, 6:30:28 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 
 > Зачем нужен `reified` в Kotlin?

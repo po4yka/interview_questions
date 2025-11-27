@@ -18,7 +18,6 @@ sources: [https://developer.android.com/jetpack/compose/performance, https://dev
 date created: Saturday, November 1st 2025, 12:47:00 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как обнаружить и устранить проблемы производительности (jank) в Jetpack Compose приложениях?
@@ -170,7 +169,7 @@ fun generateBaselineProfile() = rule.collect(
 
 ```kotlin
 // ❌ 1. Тяжёлая логика внутри lambda/onClick или создание больших объектов на каждый recompose
-Button(onClick = { 
+Button(onClick = {
     // тяжёлая работа здесь приведёт к jank
     viewModel.increment()
 }) { Text("Click") }

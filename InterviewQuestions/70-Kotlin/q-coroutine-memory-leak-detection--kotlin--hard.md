@@ -18,7 +18,6 @@ tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, life
 date created: Saturday, November 1st 2025, 1:28:52 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 
 > Как обнаруживать и предотвращать утечки памяти, связанные с корутинами, в Kotlin/Android (LeakCanary, профилировщики, типичные паттерны утечек и лучшие практики)?

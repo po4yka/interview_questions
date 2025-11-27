@@ -31,7 +31,6 @@ tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-ev
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Какой класс можно использовать для обнаружения жестов в Android?

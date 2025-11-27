@@ -30,7 +30,6 @@ tags: [android/gradle, difficulty/medium, en, ru]
 date created: Saturday, November 1st 2025, 12:46:56 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между kapt и KSP? Какой использовать?
 
@@ -87,7 +86,7 @@ KSP, как правило, уменьшает время сборки по ср
 
 Пример (иллюстративно):
 
-```
+```text
 Сборка с kapt:    45 секунд
 Сборка с KSP:     23 секунды
 ```
@@ -215,7 +214,7 @@ KSP typically reduces build times compared to kapt because it avoids generating 
 
 Example (illustrative only):
 
-```
+```text
 Build with kapt:    45 seconds
 Build with KSP:     23 seconds
 ```

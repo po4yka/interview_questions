@@ -28,7 +28,6 @@ tags: [android/ci-cd, android/testing-instrumented, android/testing-unit, ci-cd,
 date created: Saturday, November 1st 2025, 1:05:16 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как организовать автоматизированное тестирование Android-приложения в CI/CD пайплайне?
 
@@ -362,7 +361,7 @@ fun animationTest() {
     echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
     ./gradlew assembleRelease \
       -Pandroid.injected.signing.store.file=keystore.jks \
-      -Pandroid.injected.signing.store.password="$KEY_PASSWORD" 
+      -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
     rm keystore.jks
 
 # ✅ Verify dependencies (supply-chain security)

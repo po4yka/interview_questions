@@ -31,7 +31,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как спроектировать архитектуру интеграции Play Billing v6: от каталога товаров и гибких подписок до бэкенд-проверки, RTDN и обработки отложенных покупок?
 

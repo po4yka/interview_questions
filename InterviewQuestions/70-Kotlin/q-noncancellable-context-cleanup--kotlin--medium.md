@@ -17,7 +17,6 @@ tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancella
 date created: Friday, October 31st 2025, 6:29:31 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос
 Что такое `NonCancellable` в корутинах Kotlin? Когда следует его использовать? Объясните, как использовать его в блоках `finally` для критической очистки, связанные риски и лучшие практики с реальными примерами.
 

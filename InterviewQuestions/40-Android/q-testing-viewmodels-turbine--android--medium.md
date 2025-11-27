@@ -27,7 +27,6 @@ tags: [android/coroutines, android/testing-unit, coroutines, difficulty/medium, 
 date created: Saturday, November 1st 2025, 1:24:35 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Как тестировать `ViewModel`, которые отдают `Flow`/`StateFlow`, с помощью библиотеки Turbine?
 

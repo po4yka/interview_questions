@@ -27,7 +27,6 @@ tags: [advertising, android/privacy-sdks, difficulty/hard, fledge, privacy, priv
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое FLEDGE (Protected Audience API) в Privacy Sandbox? Как он обеспечивает remarketing без third-party cookies? Как реализовать on-device аукционы рекламы и каковы технические вызовы?

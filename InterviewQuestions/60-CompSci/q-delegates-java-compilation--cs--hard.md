@@ -19,7 +19,6 @@ sources: ["https://kotlinlang.org/docs/delegated-properties.html"]
 date created: Saturday, November 1st 2025, 1:25:47 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Как делегаты Kotlin компилируются в Java? Что генерирует компилятор для property delegation?
 

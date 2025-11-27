@@ -18,7 +18,6 @@ tags: [android, android/datastore, android/files-media, difficulty/easy]
 date created: Saturday, November 1st 2025, 1:05:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое SharedPreferences и для чего используется?

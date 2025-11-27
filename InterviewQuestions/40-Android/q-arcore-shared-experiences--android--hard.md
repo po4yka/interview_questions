@@ -31,7 +31,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как построить многопользовательский AR-опыт на ARCore: синхронизировать Cloud Anchors, использовать Depth API для окклюзии, совмещать Sceneform/Filament рендеринг и гарантировать стабильность трекинга?
 

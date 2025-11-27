@@ -19,7 +19,6 @@ tags: [android/fragment, android/intents-deeplinks, android/ui-navigation, bundl
 date created: Saturday, November 1st 2025, 12:46:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > С помощью чего делается переход со списков на деталки в Android?

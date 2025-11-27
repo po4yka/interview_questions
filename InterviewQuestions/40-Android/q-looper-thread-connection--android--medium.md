@@ -26,7 +26,6 @@ tags: [android/coroutines, android/threads-sync, difficulty/medium, handler, loo
 date created: Saturday, November 1st 2025, 12:46:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как Looper связывается с потоком?

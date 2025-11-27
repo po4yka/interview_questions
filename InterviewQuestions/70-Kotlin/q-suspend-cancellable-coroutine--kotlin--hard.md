@@ -20,7 +20,6 @@ question_kind: coding
 date created: Saturday, November 1st 2025, 12:10:13 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
 

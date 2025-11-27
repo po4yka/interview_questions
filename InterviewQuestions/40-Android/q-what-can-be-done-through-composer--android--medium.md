@@ -18,7 +18,6 @@ tags: [android, android/architecture-mvvm, android/performance-rendering, androi
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Что можно делать через Composer в Jetpack Compose? За что он отвечает и как правильно им пользоваться?
@@ -127,7 +126,7 @@ fun SmartRecomposition() {
 
     Column {
         Text("Counter: $counter") // ✅ Перекомпозится при изменении counter
-        ExpensiveComponent()      // 🔍 Не будет рекомпозирована только из-за counter,
+        ExpensiveComponent()      // NOTE: Не будет рекомпозирована только из-за counter,
                                   // если сама не зависит от изменившегося состояния
         Button(onClick = { counter++ }) { Text("Increment") }
     }
@@ -261,7 +260,7 @@ fun SmartRecomposition() {
 
     Column {
         Text("Counter: $counter") // ✅ Will recompose when counter changes
-        ExpensiveComponent()      // 🔍 Will not recompose solely because counter changed,
+        ExpensiveComponent()      // NOTE: Will not recompose solely because counter changed,
                                   // unless it also reads state affected by that change
         Button(onClick = { counter++ }) { Text("Increment") }
     }

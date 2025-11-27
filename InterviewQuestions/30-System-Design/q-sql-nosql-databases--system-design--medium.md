@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/NoSQL"]
 date created: Sunday, October 12th 2025, 8:29:41 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Каковы ключевые различия между SQL и NoSQL базами данных? Когда следует использовать каждый тип, и каковы компромиссы?
 

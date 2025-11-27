@@ -19,7 +19,6 @@ tags: [accessibility, android/ui-theming, android/ui-views, difficulty/easy, dp,
 date created: Saturday, November 1st 2025, 1:24:45 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое px, dp и sp в Android?

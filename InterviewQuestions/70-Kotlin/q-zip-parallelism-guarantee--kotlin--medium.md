@@ -17,7 +17,6 @@ tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]
 date created: Saturday, November 1st 2025, 1:01:40 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 
 > Гарантирует ли `zip` параллельное выполнение двух сетевых запросов, запущенных в `Flow`/`Coroutine`?

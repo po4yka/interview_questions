@@ -29,7 +29,6 @@ tags: [android/compose-multiplatform, android/ui-compose, compose, difficulty/ha
 date created: Saturday, November 1st 2025, 12:46:46 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Что такое Compose Multiplatform и как реализовать кроссплатформенную UI-архитектуру?
 

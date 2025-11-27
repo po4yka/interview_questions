@@ -30,7 +30,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:05:48 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 
 > Как работает система Modifier в Jetpack Compose? Объясните порядок выполнения, влияние на производительность и ключевые паттерны использования.
@@ -49,8 +48,8 @@ Modifier представляет собой упорядоченную, неи�
 
 **Модель выполнения**:
 
--   Измерение/Layout (обход сверху вниз): концептуально, внешние модификаторы обрабатывают и могут корректировать входящие ограничения/позиционирование перед делегированием внутренним. На практике каждый Modifier.Element определяет, как он обрабатывает измерение/layout; не каждый модификатор влияет на все фазы.
--   Отрисовка/Draw (обход снизу вверх): модификаторы отрисовки вызываются так, чтобы внутреннее содержимое рисовалось первым, затем внешние модификаторы могут рисовать поверх или вокруг него. Позднее добавленные модификаторы в цепочке становятся логически более "внешними" и могут накладываться на более ранние.
+- Измерение/Layout (обход сверху вниз): концептуально, внешние модификаторы обрабатывают и могут корректировать входящие ограничения/позиционирование перед делегированием внутренним. На практике каждый Modifier.Element определяет, как он обрабатывает измерение/layout; не каждый модификатор влияет на все фазы.
+- Отрисовка/Draw (обход снизу вверх): модификаторы отрисовки вызываются так, чтобы внутреннее содержимое рисовалось первым, затем внешние модификаторы могут рисовать поверх или вокруг него. Позднее добавленные модификаторы в цепочке становятся логически более "внешними" и могут накладываться на более ранние.
 
 Примечание: Эффективный порядок зависит от того, как реализован каждый элемент, но рассуждение в терминах конвейера внешний-внутренний (измерение/layout) и внутренний-внешний (отрисовка) точно для понимания типичного поведения.
 
@@ -134,10 +133,10 @@ val modifier = Modifier
 
 ### Оптимизация Производительности
 
--   Предпочитайте модификаторы только для отрисовки (например, background, border, drawBehind) для чисто визуальных эффектов, когда они не влияют на размер или layout. Они обычно избегают дополнительной работы measure/layout по сравнению с введением дополнительных модификаторов layout.
--   Используйте `remember {}` (или remember-calculated значения) для дорогих вычислений, используемых внутри модификаторов, чтобы избежать повторного вычисления на каждой рекомпозиции.
--   Избегайте unnecessarily глубоких или overly фрагментированных цепочек модификаторов; компилятор/рантайм оптимизирует модификаторы, но чрезмерные цепочки все равно могут добавить накладные расходы.
--   Минимизируйте intrinsic measurements (например, API на основе intrinsicSize), поскольку они требуют дополнительных проходов измерения и могут быть costly.
+- Предпочитайте модификаторы только для отрисовки (например, background, border, drawBehind) для чисто визуальных эффектов, когда они не влияют на размер или layout. Они обычно избегают дополнительной работы measure/layout по сравнению с введением дополнительных модификаторов layout.
+- Используйте `remember {}` (или remember-calculated значения) для дорогих вычислений, используемых внутри модификаторов, чтобы избежать повторного вычисления на каждой рекомпозиции.
+- Избегайте unnecessarily глубоких или overly фрагментированных цепочек модификаторов; компилятор/рантайм оптимизирует модификаторы, но чрезмерные цепочки все равно могут добавить накладные расходы.
+- Минимизируйте intrinsic measurements (например, API на основе intrinsicSize), поскольку они требуют дополнительных проходов измерения и могут быть costly.
 
 ## Answer (EN)
 
@@ -147,8 +146,8 @@ A Modifier is an ordered, immutable chain of modifier elements applied to a comp
 
 **Execution Model**:
 
--   Measure/Layout (traversal top to bottom): conceptually, outer modifiers process and may adjust the incoming constraints/placement before delegating to inner ones. In practice, each Modifier.Element defines how it handles measurement/layout; not every modifier affects all phases.
--   Draw (traversal bottom to top): draw modifiers are invoked so that inner content is drawn first, then outer modifiers can draw on top or around it. Later-added modifiers in the chain become logically more "outer" and can overlay earlier ones.
+- Measure/Layout (traversal top to bottom): conceptually, outer modifiers process and may adjust the incoming constraints/placement before delegating to inner ones. In practice, each Modifier.Element defines how it handles measurement/layout; not every modifier affects all phases.
+- Draw (traversal bottom to top): draw modifiers are invoked so that inner content is drawn first, then outer modifiers can draw on top or around it. Later-added modifiers in the chain become logically more "outer" and can overlay earlier ones.
 
 Note: The effective order depends on how each element is implemented, but reasoning in terms of an outer-to-inner (measure/layout) and inner-to-outer (draw) pipeline is accurate for understanding typical behavior.
 
@@ -232,42 +231,42 @@ val modifier = Modifier
 
 ### Performance Optimization
 
--   Prefer draw-only modifiers (e.g., background, border, drawBehind) for purely visual effects when they don't need to affect size or layout. They typically avoid extra measure/layout work compared to introducing additional layout modifiers.
--   Use `remember {}` (or remember-calculated values) for expensive computations used inside modifiers to avoid recomputing them on each recomposition.
--   Avoid unnecessarily deep or overly fragmented modifier chains; the compiler/runtime optimize modifiers, but excessive chains can still add overhead.
--   Minimize intrinsic measurements (e.g., intrinsicSize-based APIs) because they require additional measure passes and can be costly.
+- Prefer draw-only modifiers (e.g., background, border, drawBehind) for purely visual effects when they don't need to affect size or layout. They typically avoid extra measure/layout work compared to introducing additional layout modifiers.
+- Use `remember {}` (or remember-calculated values) for expensive computations used inside modifiers to avoid recomputing them on each recomposition.
+- Avoid unnecessarily deep or overly fragmented modifier chains; the compiler/runtime optimize modifiers, but excessive chains can still add overhead.
+- Minimize intrinsic measurements (e.g., intrinsicSize-based APIs) because they require additional measure passes and can be costly.
 
 ## Follow-ups
 
--   When should you implement a custom Modifier via `Modifier.Element` vs using built-in modifiers?
--   How does the Compose compiler optimize Modifier chains during recomposition?
--   What's the performance difference between `.padding().background()` and `.background().padding()`?
--   How to debug Modifier execution order with Layout Inspector?
--   Why is `Modifier.then()` preferred over conditional `.let {}` blocks?
+- When should you implement a custom Modifier via `Modifier.Element` vs using built-in modifiers?
+- How does the Compose compiler optimize Modifier chains during recomposition?
+- What's the performance difference between `.padding().background()` and `.background().padding()`?
+- How to debug Modifier execution order with Layout Inspector?
+- Why is `Modifier.then()` preferred over conditional `.let {}` blocks?
 
 ## References
 
--   [[c-jetpack-compose]]
--   [[c-compose-recomposition]]
--   [[c-performance-optimization]]
--   https://developer.android.com/jetpack/compose/modifiers
--   https://developer.android.com/jetpack/compose/modifiers-list
--   https://developer.android.com/develop/ui/compose/performance
+- [[c-jetpack-compose]]
+- [[c-compose-recomposition]]
+- [[c-performance-optimization]]
+- https://developer.android.com/jetpack/compose/modifiers
+- https://developer.android.com/jetpack/compose/modifiers-list
+- https://developer.android.com/develop/ui/compose/performance
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
--   [[q-android-jetpack-overview--android--easy]]
+- [[q-android-jetpack-overview--android--easy]]
 
 ### Related (Same Level)
 
--   [[q-animated-visibility-vs-content--android--medium]]
--   [[q-compose-gesture-detection--android--medium]]
--   [[q-android-performance-measurement-tools--android--medium]]
+- [[q-animated-visibility-vs-content--android--medium]]
+- [[q-compose-gesture-detection--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
 
 ### Advanced (Harder)
 
--   [[q-compose-compiler-plugin--android--hard]]
--   [[q-compose-custom-layout--android--hard]]
--   [[q-compose-lazy-layout-optimization--android--hard]]
+- [[q-compose-compiler-plugin--android--hard]]
+- [[q-compose-custom-layout--android--hard]]
+- [[q-compose-lazy-layout-optimization--android--hard]]

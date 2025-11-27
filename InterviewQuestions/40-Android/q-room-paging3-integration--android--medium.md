@@ -18,7 +18,6 @@ tags: [android/architecture-mvvm, android/room, android/ui-compose, database, di
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Как интегрировать Room с Paging 3? Реализуйте источник данных из Room и обработку RemoteMediator для офлайн-first архитектуры с сетью и базой данных.

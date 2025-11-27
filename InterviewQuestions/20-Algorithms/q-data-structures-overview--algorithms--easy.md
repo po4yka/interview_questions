@@ -17,7 +17,6 @@ tags: [algorithms, data-structures, difficulty/easy, fundamentals, overview]
 date created: Friday, October 3rd 2025, 4:43:25 pm
 date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
-
 # Вопрос (RU)
 > Расскажи про какие структуры данных знаешь
 

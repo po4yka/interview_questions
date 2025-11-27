@@ -28,7 +28,6 @@ tags: [android/keystore-crypto, android/permissions, authentication, biometric, 
 date created: Saturday, November 1st 2025, 1:04:48 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать биометрическую аутентификацию в Android?
 
@@ -346,7 +345,7 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 - [[q-android-security-best-practices--android--medium]] — Базовые принципы безопасности
 
 ### Связанные (тот Же уровень)
-- [[q-android-keystore-system--security--medium]] — Keystore API и генерация ключей
+- [[q-android-keystore-system--android--medium]] — Keystore API и генерация ключей
 - [[q-app-security-best-practices--android--medium]] — Подходы к безопасности приложения
 
 ### Продвинутые (сложнее)
@@ -358,7 +357,7 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 - [[q-android-security-best-practices--android--medium]] — Security fundamentals
 
 ### Related (Same Level)
-- [[q-android-keystore-system--security--medium]] — Keystore API and key generation
+- [[q-android-keystore-system--android--medium]] — Keystore API and key generation
 - [[q-app-security-best-practices--android--medium]] — App-level security patterns
 
 ### Advanced (Harder)

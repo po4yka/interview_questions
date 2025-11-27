@@ -27,7 +27,6 @@ tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 date created: Saturday, November 1st 2025, 1:24:36 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как обрабатывать масштабирование текста для доступности в Android?
 

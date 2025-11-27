@@ -19,7 +19,6 @@ tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Как тестировать suspend функции, `StateFlow` и `SharedFlow`? Объясните TestDispatcher, runTest и библиотеку turbine.
@@ -146,7 +145,7 @@ fun testSharedFlow() = runTest {
     val emissions = mutableListOf<Event>()
 
     // ✅ Начать сбор ДО эмиссии, используя тот же планировщик runTest
-    val job = launch { 
+    val job = launch {
         eventBus.events.collect { emissions.add(it) }
     }
 

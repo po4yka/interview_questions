@@ -28,7 +28,6 @@ tags: [android/ui-compose, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:46:53 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Как создать список как RecyclerView в Compose
 

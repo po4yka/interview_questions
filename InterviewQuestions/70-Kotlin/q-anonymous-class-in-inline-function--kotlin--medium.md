@@ -28,7 +28,6 @@ tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-exp
 date created: Saturday, November 1st 2025, 12:43:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Можно ли создать анонимный класс внутри inline функции в Kotlin?
 

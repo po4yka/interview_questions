@@ -19,7 +19,6 @@ tags: [android/architecture-mvvm, android/lifecycle, android/room, data-persiste
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Каким образом можно сохранить данные за пределами фрагмента?
@@ -74,7 +73,7 @@ class UserFragment : Fragment() {
 ```
 
 **3. `ViewModel` и SavedStateHandle**
-Для временных UI-состояний и шаринга данных между фрагментами в рамках одной `Activity`. 
+Для временных UI-состояний и шаринга данных между фрагментами в рамках одной `Activity`.
 - `ViewModel` переживает изменения конфигурации (например, ротацию), но не смерть процесса.
 - SavedStateHandle позволяет явно сохранять небольшой объем состояния так, чтобы его можно было восстановить после смерти процесса (на основе SavedInstanceState).
 

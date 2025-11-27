@@ -29,7 +29,6 @@ tags: [android/coroutines, android/threads-sync, difficulty/easy]
 date created: Saturday, November 1st 2025, 12:46:42 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Какие примитивы асинхронности предоставляет Android?
 

@@ -22,7 +22,6 @@ tags: [android/ci-cd, android/testing-unit, automation, devops-ci-cd, difficulty
 date created: Saturday, November 1st 2025, 1:05:17 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как настроить CI/CD пайплайн для Android-приложения?
 

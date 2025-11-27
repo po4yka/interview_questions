@@ -29,7 +29,6 @@ tags: [android, android/permissions, android/privacy-sdks, difficulty/hard, secu
 date created: Saturday, November 1st 2025, 1:03:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое SDK Runtime в Privacy Sandbox? Как он изолирует сторонние SDK? Какие вызовы возникают при миграции SDK в sandbox-окружение и как обрабатывать cross-sandbox коммуникацию?
@@ -63,7 +62,7 @@ date modified: Tuesday, November 25th 2025, 8:53:57 pm
 - **Resource Quotas** — система ограничивает использование CPU, памяти, сети и др. sandbox-процессом, чтобы снизить влияние SDK на приложение и систему.
 - **Privacy Protection** — SDK не видит стабильные device IDs и чувствительные данные, если они не переданы явно и в соответствии с политиками; идентификаторы и сигналы медиируются Privacy Sandbox API.
 
-```
+```text
 App Process <-> SDK Runtime (Sandbox Process) <-> Network/Services
      |                      |
   App Code             SDK Code (isolated)
@@ -319,7 +318,7 @@ class SdkMigrationManager(private val context: Context) {
 - **Resource Quotas** — the system constrains CPU, memory, and network usage of the sandbox process to limit the SDKs' impact on the app and system.
 - **Privacy Protection** — SDKs do not see stable device IDs or sensitive data unless explicitly (and compliantly) proxied by the host; identifiers and signals are mediated by Privacy Sandbox mechanisms.
 
-```
+```text
 App Process <-> SDK Runtime (Sandbox Process) <-> Network/Services
      |                      |
   App Code             SDK Code (isolated)

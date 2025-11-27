@@ -18,7 +18,6 @@ tags: [android/architecture-mvi, android/coroutines, android/ui-state, architect
 date created: Saturday, November 1st 2025, 1:25:24 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Объясните архитектурный паттерн MVI (Model-`View`-`Intent`). В чем его ключевые отличия от MVVM?
 
@@ -34,7 +33,7 @@ date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ### Компоненты MVI
 
 **Циклический поток данных** (упрощенно):
-```
+```text
 Intent → Processor/ViewModel → Model (State) → View → Intent
 ```
 
@@ -437,7 +436,7 @@ class DebuggableViewModel<I, S>(
 ### MVI Components
 
 **Cyclic data flow** (simplified):
-```
+```text
 Intent → Processor/ViewModel → Model (State) → View → Intent
 ```
 

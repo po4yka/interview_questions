@@ -28,7 +28,6 @@ tags: [difficulty/medium, kotlin, optimization, performance, value-class]
 date created: Saturday, November 1st 2025, 12:43:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое встроенные классы (value классы) в Kotlin?
 

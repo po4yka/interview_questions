@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Load_balancing_(computing)"]
 date created: Sunday, October 12th 2025, 8:23:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Каковы основные алгоритмы балансировки нагрузки? Когда следует использовать каждый алгоритм и каковы их компромиссы?
 

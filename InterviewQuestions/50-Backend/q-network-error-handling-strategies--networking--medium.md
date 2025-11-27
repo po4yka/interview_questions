@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-backend
-related: [c-http-protocol, q-leakcanary-detection-mechanism--android--medium, q-presenter-notify-view--android--medium]
+related: [c-http-client, q-leakcanary-detection-mechanism--android--medium, q-presenter-notify-view--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
@@ -19,7 +19,6 @@ tags: [architecture, difficulty/medium, error-handling, strategy, ux]
 date created: Monday, October 27th 2025, 4:02:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 
 > Спроектируйте стратегию обработки сетевых ошибок. Обрабатывайте таймауты, отсутствие интернета, 4xx/5xx ошибки по-разному с понятными сообщениями пользователю.
@@ -34,7 +33,7 @@ date modified: Tuesday, November 25th 2025, 8:53:54 pm
 
 **Комплексная обработка ошибок** критична для хорошего UX. Пользователи должны понимать проблему и знать, что делать. Стратегия включает классификацию ошибок, интеллектуальные повторы и понятные сообщения.
 
-См. также: [[c-http-protocol]]
+См. также: [[c-http-client]]
 
 ### Классификация Ошибок
 
@@ -307,7 +306,7 @@ fun NetworkError.toUserFriendlyMessage(): String {
 
 **Comprehensive error handling** is critical for good UX. Users must understand the problem and know what to do. The strategy includes error classification, intelligent retries, and user-friendly messages.
 
-See also: [[c-http-protocol]]
+See also: [[c-http-client]]
 
 ### Error Classification
 

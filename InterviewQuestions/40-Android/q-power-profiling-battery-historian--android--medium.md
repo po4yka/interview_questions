@@ -29,7 +29,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как провести анализ энергопотребления приложения с помощью Battery Historian и Energy Profiler: сбор данных, интерпретация wakelock, сетевой активности и план устранения проблем?
 

@@ -31,7 +31,6 @@ tags: [android/fragment, android/ui-views, difficulty/easy, fragments, ui]
 date created: Saturday, November 1st 2025, 12:46:53 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Как на экране одновременно отобразить два одинаковых `Fragment`?

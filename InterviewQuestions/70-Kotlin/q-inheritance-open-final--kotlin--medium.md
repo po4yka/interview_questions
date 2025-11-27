@@ -18,7 +18,6 @@ sources: ["https://kotlinlang.org/docs/inheritance.html"]
 date created: Sunday, October 12th 2025, 1:58:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Как работают ключевые слова open, final, abstract и override в наследовании Kotlin?
 

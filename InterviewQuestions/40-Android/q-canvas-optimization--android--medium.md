@@ -31,7 +31,6 @@ tags: [android/performance-rendering, android/ui-graphics, android/ui-views, cus
 date created: Saturday, November 1st 2025, 12:46:45 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как оптимизировать отрисовку Canvas для достижения 60 FPS?
 

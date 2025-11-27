@@ -31,7 +31,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:01:25 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Из каких более важных компонентов состоит Compose?
 

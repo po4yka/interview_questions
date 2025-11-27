@@ -17,7 +17,6 @@ tags: [difficulty/medium, functional-interface, java-interop, kotlin, lambda, sa
 date created: Friday, October 31st 2025, 6:30:53 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое SAM (Single Abstract Method) конверсии в Kotlin, как они работают для Java и Kotlin интерфейсов, какие ограничения у SAM-конверсий, как использовать SAM-конструкторы и чем SAM-интерфейсы отличаются от типов функций?

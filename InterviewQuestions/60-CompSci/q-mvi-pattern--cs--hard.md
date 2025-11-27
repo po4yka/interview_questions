@@ -18,7 +18,6 @@ sources: ["https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8
 date created: Saturday, November 1st 2025, 1:26:37 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн MVI? Когда его использовать и как он работает?
 
@@ -255,7 +254,7 @@ class MviStore(
 
 **MVI vs MVVM vs MVP:**
 
-*Теория:* 
+*Теория:*
 - MVP: `View` пассивная, Presenter управляет `View` и часто напрямую вызывает методы `View` — поток часто менее строго односторонний.
 - MVVM: `View` наблюдает за `ViewModel` (`LiveData`/`StateFlow`); нередко используется двусторонний биндинг, возможны более сложные зависимости.
 - MVI: строго односторонний поток, `Intent`-ориентированная модель, единый immutable state. Более строгий и предсказуемый, но требует больше кода и дисциплины.

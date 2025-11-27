@@ -19,7 +19,6 @@ tags: [android/ui-compose, android/ui-views, difficulty/medium]
 date created: Saturday, November 1st 2025, 1:04:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Сравните React Native и Flutter: архитектуру, производительность, экосистему и сценарии использования.

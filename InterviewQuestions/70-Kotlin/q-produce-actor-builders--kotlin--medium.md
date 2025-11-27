@@ -28,7 +28,6 @@ tags: [actor, builders, channels, coroutines, difficulty/medium, kotlin, produce
 date created: Sunday, October 12th 2025, 3:43:53 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Что такое билдеры каналов `produce` и `actor`? Объясните их назначение, автоматическое управление ресурсами, особенности привязки к `CoroutineScope` и когда использовать каждый паттерн билдера.
 

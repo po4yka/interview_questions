@@ -19,7 +19,6 @@ sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 date created: Saturday, November 1st 2025, 1:25:31 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между Default и IO dispatcher? Когда использовать каждый из них?
 
@@ -98,7 +97,7 @@ suspend fun readFileContents(path: String): String = withContext(Dispatchers.IO)
 interface UserDao {
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
-    // Реализация Room сама использует подходящий диспетчер под капотом, 
+    // Реализация Room сама использует подходящий диспетчер под капотом,
     // но вызовы часто делаются из Dispatchers.IO контекста, особенно для блокирующих сценариев
 }
 ```
@@ -230,7 +229,7 @@ suspend fun readFileContents(path: String): String = withContext(Dispatchers.IO)
 interface UserDao {
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
-    // Room's implementation manages threading internally, 
+    // Room's implementation manages threading internally,
     // but callers often use it from Dispatchers.IO when interacting with blocking layers
 }
 ```

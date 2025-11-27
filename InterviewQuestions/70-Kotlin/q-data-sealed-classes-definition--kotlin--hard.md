@@ -18,7 +18,6 @@ tags: [difficulty/hard, programming-languages, sealed-classes]
 date created: Friday, October 31st 2025, 6:33:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Что такое Data Class и Sealed Classes в Kotlin? Объясните их характеристики, применения и приведите подробные примеры.
 
@@ -648,13 +647,13 @@ fun displayArticles(response: ApiResponse<List<Article>>) {
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-sam-conversions--programming-languages--medium]]
+- [[q-kotlin-sam-conversions--kotlin--medium]]
 - [[q-sequences-vs-collections-performance--kotlin--medium]]
 - [[q-kotlin-channels--kotlin--medium]]
 
 ## Related Questions
 
-- [[q-kotlin-sam-conversions--programming-languages--medium]]
+- [[q-kotlin-sam-conversions--kotlin--medium]]
 - [[q-sequences-vs-collections-performance--kotlin--medium]]
 - [[q-kotlin-channels--kotlin--medium]]
 

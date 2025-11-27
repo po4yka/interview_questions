@@ -28,7 +28,6 @@ tags: [android/ui-views, difficulty/easy, view, view-hierarchy, viewgroup]
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Различия `ViewGroup` и `View`
 
@@ -47,7 +46,7 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 
 ### Иерархия `View`
 
-```
+```text
 `View` (базовый класс)
   ↓
 `ViewGroup` (контейнер)
@@ -241,7 +240,7 @@ A **`ViewGroup`** is a special `View` that can **contain other `View` instances*
 
 ### `View` Hierarchy
 
-```
+```text
 `View` (base class)
   ↓
 `ViewGroup` (container)

@@ -28,7 +28,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:02:46 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое Android Runtime (ART) и чем он отличается от Dalvik?
 
@@ -54,7 +53,7 @@ class HotPath {
     }
 }
 
-// 🔍 Редко используемый код может выполняться интерпретатором или JIT-компилироваться при необходимости
+// NOTE: Редко используемый код может выполняться интерпретатором или JIT-компилироваться при необходимости
 class ColdPath {
     fun rareOperation() { cleanup() }
 }
@@ -78,7 +77,7 @@ class MemoryExample {
     }
 }
 
-// 🔍 В Dalvik были stop-the-world паузы и менее эффективные алгоритмы;
+// NOTE: В Dalvik были stop-the-world паузы и менее эффективные алгоритмы;
 // ART использует более современные конкурентные сборщики и лучше оптимизирует паузы.
 ```
 
@@ -94,10 +93,10 @@ val dexFormat = """
     ClassDefs → определения классов
 """
 
-// 🔍 DEX формат используется и Dalvik, и ART.
+// NOTE: DEX формат используется и Dalvik, и ART.
 // ART дополнительно компилирует DEX в нативный код (oat/odex/art) для выполнения.
 
-// ❌ В обычной JVM: отдельный .class для каждого класса (Java bytecode)
+// COMPARE: В обычной JVM: отдельный .class для каждого класса (Java bytecode)
 ```
 
 ### ART Vs Dalvik
@@ -170,7 +169,7 @@ class HotPath {
     }
 }
 
-// 🔍 Rarely used code may run in the interpreter or be JIT-compiled if it becomes hot
+// NOTE: Rarely used code may run in the interpreter or be JIT-compiled if it becomes hot
 class ColdPath {
     fun rareOperation() { cleanup() }
 }
@@ -194,7 +193,7 @@ class MemoryExample {
     }
 }
 
-// 🔍 Dalvik had noticeable stop-the-world pauses and less advanced algorithms;
+// NOTE: Dalvik had noticeable stop-the-world pauses and less advanced algorithms;
 // ART introduces more modern concurrent collectors with shorter pauses.
 ```
 
@@ -210,10 +209,10 @@ val dexFormat = """
     ClassDefs → class definitions
 """
 
-// 🔍 The DEX format is used by both Dalvik and ART.
+// NOTE: The DEX format is used by both Dalvik and ART.
 // ART additionally compiles DEX into native code (oat/odex/art) for execution.
 
-// ❌ On a standard JVM: separate .class file per class (Java bytecode)
+// COMPARE: On a standard JVM: separate .class file per class (Java bytecode)
 ```
 
 ### ART Vs Dalvik

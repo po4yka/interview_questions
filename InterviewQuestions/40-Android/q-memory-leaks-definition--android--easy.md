@@ -30,7 +30,6 @@ related:
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое утечки памяти в Android и как они возникают?
@@ -264,8 +263,8 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 ### Предпосылки (RU)
 
-- [[q-primitive-vs-reference-types--programming-languages--easy]] - Понимание ссылочных типов
-- [[q-reference-types-criteria--programming-languages--medium]] - Детали ссылочных типов
+- [[q-primitive-vs-reference-types--kotlin--easy]] - Понимание ссылочных типов
+- [[q-reference-types-criteria--kotlin--medium]] - Детали ссылочных типов
 
 ### Похожие (RU)
 
@@ -276,7 +275,7 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 ### Продвинутые (RU)
 
 - [[q-coroutine-memory-leaks--kotlin--hard]] - Утечки памяти, связанные с `Coroutine`
-- [[q-find-object-without-references--programming-languages--medium]] - Продвинутое поведение GC
+- [[q-find-object-without-references--kotlin--medium]] - Продвинутое поведение GC
 
 ---
 
@@ -303,8 +302,8 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 ### Prerequisites
 
-- [[q-primitive-vs-reference-types--programming-languages--easy]] - Understanding references
-- [[q-reference-types-criteria--programming-languages--medium]] - Reference types in depth
+- [[q-primitive-vs-reference-types--kotlin--easy]] - Understanding references
+- [[q-reference-types-criteria--kotlin--medium]] - Reference types in depth
 
 ### Related
 
@@ -315,4 +314,4 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 ### Advanced
 
 - [[q-coroutine-memory-leaks--kotlin--hard]] - `Coroutine`-specific memory leaks
-- [[q-find-object-without-references--programming-languages--medium]] - Advanced GC behavior
+- [[q-find-object-without-references--kotlin--medium]] - Advanced GC behavior

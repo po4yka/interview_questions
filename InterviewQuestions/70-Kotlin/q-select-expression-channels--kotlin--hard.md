@@ -28,7 +28,6 @@ tags: [channels, coroutines, difficulty/hard, kotlin]
 date created: Sunday, October 12th 2025, 3:43:53 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Что такое выражение `select` для каналов в Kotlin? Объясните, как мультиплексировать несколько каналов, обрабатывать таймауты с `onTimeout`, реализовать приоритетный выбор и продвинутые паттерны fan-in/fan-out.
 

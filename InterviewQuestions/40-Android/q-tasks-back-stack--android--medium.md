@@ -29,7 +29,6 @@ tags: [android/activity, android/ui-navigation, back-stack, difficulty/medium, l
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Что вы знаете о задачах и стеке возврата?
 

@@ -30,7 +30,6 @@ tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/ea
 date created: Saturday, November 1st 2025, 1:04:14 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое Android Architecture Components и зачем они нужны?
 
@@ -155,7 +154,7 @@ val args: ProfileFragmentArgs by navArgs()
 
 ### Архитектурная Интеграция
 
-```
+```text
 Data Layer (Room, DataStore)
     ↓
 Repository (data transformations)
@@ -289,7 +288,7 @@ val args: ProfileFragmentArgs by navArgs()
 
 ### Architectural Integration
 
-```
+```text
 Data Layer (Room, DataStore)
     ↓
 Repository (data transformations)

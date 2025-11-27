@@ -18,7 +18,6 @@ tags: [android/networking-http, difficulty/medium, http, networking]
 date created: Saturday, November 1st 2025, 12:46:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Какие инструменты используются для сетевых операций в Android?

@@ -26,7 +26,6 @@ tags: [android/testing-instrumented, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Стратегии интеграционного тестирования
 
@@ -43,7 +42,7 @@ date modified: Tuesday, November 25th 2025, 8:53:59 pm
 
 ### Пирамида Тестирования
 
-```
+```text
     E2E-тесты (UI / Full Stack)
         ↑
 Интеграционные тесты (несколько слоёв)
@@ -319,7 +318,7 @@ Integration tests verify that multiple components work together correctly. They 
 
 ### Integration Test Pyramid
 
-```
+```text
     E2E Tests (UI / Full Stack)
         ↑
 Integration Tests (Multiple Layers)

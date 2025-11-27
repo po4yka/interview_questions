@@ -19,7 +19,6 @@ tags: [android/background-execution, android/coroutines, difficulty/medium, work
 date created: Saturday, November 1st 2025, 1:26:42 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Как вернуть результат работы WorkManager в приложение?

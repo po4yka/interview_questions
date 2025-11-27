@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Representational_state_transfer"]
 date created: Sunday, October 12th 2025, 8:38:24 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Каковы лучшие практики проектирования RESTful API? Как структурировать endpoints, обрабатывать ошибки и обеспечивать качество API?
 
@@ -75,7 +74,7 @@ REST (Representational State Transfer) - архитектурный стиль �
 *Теория:* Используйте существительные (nouns), не глаголы (verbs). HTTP методы уже являются глаголами. Используйте множественное число для коллекций. Вложенные ресурсы для отношений.
 
 ✅ **Правильно:**
-```
+```text
 GET    /users             # Получить всех пользователей
 POST   /users             # Создать пользователя
 GET    /users/123         # Получить конкретного пользователя
@@ -85,7 +84,7 @@ GET    /users/123/orders  # Заказы пользователя (вложен�
 ```
 
 ❌ **Неправильно:**
-```
+```text
 GET  /getUsers
 POST /createUser
 POST /updateUser/123
@@ -390,7 +389,7 @@ REST (Representational State Transfer) is an architectural style for distributed
 *Theory:* Use nouns, not verbs. HTTP methods are already verbs. Use plural for collections. Use nested resources for relationships.
 
 ✅ **Correct:**
-```
+```text
 GET    /users             # Get all users
 POST   /users             # Create user
 GET    /users/123         # Get specific user
@@ -400,7 +399,7 @@ GET    /users/123/orders  # User's orders (nested resource)
 ```
 
 ❌ **Incorrect:**
-```
+```text
 GET  /getUsers
 POST /createUser
 POST /updateUser/123

@@ -30,7 +30,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как построить надёжный CI/CD пайплайн релизов Android: ветвление, подпись, автоматизированные проверки, каналы дистрибуции (internal, QA, production) и управление фич-флагами?
 

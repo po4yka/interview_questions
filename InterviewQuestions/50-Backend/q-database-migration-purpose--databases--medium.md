@@ -29,7 +29,6 @@ updated: 2025-11-11
 # Tags
 tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
 ---
-
 # Вопрос (RU)
 > Что такое миграция баз данных и для чего она нужна
 

@@ -28,7 +28,6 @@ tags: [android/ui-compose, android/ui-state, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Remember vs RememberSaveable в Compose
 

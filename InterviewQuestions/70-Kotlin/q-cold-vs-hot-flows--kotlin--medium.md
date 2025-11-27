@@ -20,7 +20,6 @@ tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Объясните холодные и горячие потоки. Как `shareIn` и `stateIn` конвертируют холодные в горячие? Как правильно настроить параметры `replay` и `started`?
 

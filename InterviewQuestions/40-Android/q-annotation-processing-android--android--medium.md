@@ -31,7 +31,6 @@ tags: [android/build-variants, android/dependency-management, android/gradle, di
 date created: Saturday, November 1st 2025, 12:46:44 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и зачем она нужна?
 

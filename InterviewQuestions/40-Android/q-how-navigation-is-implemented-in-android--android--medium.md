@@ -32,7 +32,6 @@ tags: [android/activity, android/fragment, android/ui-navigation, difficulty/med
 date created: Saturday, November 1st 2025, 12:46:52 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Каким образом осуществляется навигация в Android?

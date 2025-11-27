@@ -18,7 +18,6 @@ tags: [android, best-practices, coroutines, difficulty/medium, error-handling, k
 date created: Friday, October 31st 2025, 6:30:28 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 
 > Лучшие практики использования Retrofit с корутинами в Kotlin для реальных Android-приложений.

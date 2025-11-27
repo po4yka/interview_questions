@@ -18,7 +18,6 @@ sources: ["https://kotlinlang.org/docs/inline-classes.html"]
 date created: Saturday, November 1st 2025, 12:42:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Что такое value классы (inline классы) в Kotlin и зачем они нужны?
 

@@ -31,7 +31,6 @@ moc: moc-android
 date created: Saturday, November 1st 2025, 12:46:50 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Что такое система сборки Gradle в Android и какие ключевые понятия (типы сборки, product flavors, build variants, настройки манифеста, зависимости, подпись, shrink, multiple APK, конфигурационные файлы) нужно знать для собеседования?
 
@@ -273,7 +272,7 @@ android {
 
 #### Структура Файлов Проекта
 
-```
+```text
  MyApp/                    # Проект
      build.gradle.kts      # Файл сборки верхнего уровня
      settings.gradle.kts   # Файл настроек
@@ -658,7 +657,7 @@ When starting a new project, Android Studio automatically creates Gradle files b
 
 #### Project File Structure
 
-```
+```kotlin
  MyApp/                    # Project
      build.gradle.kts      # Top-level build file
      settings.gradle.kts   # Settings file

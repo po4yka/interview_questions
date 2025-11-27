@@ -18,7 +18,6 @@ tags: [android/ab-testing, android/app-bundle, android/play-console, difficulty/
 date created: Saturday, November 1st 2025, 1:03:34 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните процесс публикации в Google Play Store: треки релизов, стратегии подписи приложений, управление App Bundles и версиями. Каковы best practices для staged rollouts и A/B тестирования?
@@ -191,7 +190,7 @@ end
 ### 5. Staged Rollout Стратегия
 
 **✅ Примерный план** (адаптируйте под метрики продукта):
-```
+```text
 День 1:  5%  → мониторить crash rate, ANR, ключевые бизнес-метрики
 День 3:  20% → проверить reviews, vitals, технические и продуктовые сигналы
 День 5:  50% → финальная проверка стабильности
@@ -472,7 +471,7 @@ end
 ### 5. Staged Rollout Strategy
 
 **✅ Example plan** (tune to your product and risk):
-```
+```text
 Day 1:  5%  → monitor crash rate, ANR, key metrics
 Day 3:  20% → check reviews, vitals, technical and business signals
 Day 5:  50% → final stability verification

@@ -33,7 +33,6 @@ tags: [android/activity, android/ui-navigation, difficulty/medium, en, ru]
 date created: Saturday, November 1st 2025, 12:46:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Какие режимы запуска (launch modes) вы знаете?
 

@@ -29,7 +29,6 @@ tags: [android/activity, android/ui-views, difficulty/easy, layout, manifest, ui
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
@@ -164,7 +163,7 @@ class MainActivity : ComponentActivity() {
 
 ### Пример Структуры Проекта
 
-```
+```text
 app/
  src/
     main/
@@ -346,7 +345,7 @@ class MainActivity : ComponentActivity() {
 
 ### Complete Example Project Structure
 
-```
+```text
 app/
  src/
     main/

@@ -18,7 +18,6 @@ tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, depend
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Что использовать для того, чтобы роутер инжектился напрямую в презентер?

@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Backtracking"]
 date created: Saturday, November 1st 2025, 1:24:13 pm
 date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
-
 # Вопрос (RU)
 > Что такое backtracking? Как решать задачи N-Queens, Sudoku, Permutations, Combinations и Subsets?
 

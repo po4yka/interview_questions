@@ -30,7 +30,6 @@ sources:
 date created: Saturday, November 1st 2025, 12:46:50 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между FragmentManager и FragmentTransaction?
 
@@ -61,7 +60,7 @@ manager.popBackStack()
 manager.beginTransaction().apply {
     replace(R.id.container, MyFragment())
     addToBackStack(null)
-    commit() // ✅ Асинхронно: транзакция ставится в очередь и будет выполнена на главном потоке, 
+    commit() // ✅ Асинхронно: транзакция ставится в очередь и будет выполнена на главном потоке,
              // когда цикл сообщений сможет её обработать. Вызывать до onSaveInstanceState().
 }
 

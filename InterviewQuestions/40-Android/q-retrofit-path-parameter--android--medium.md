@@ -26,7 +26,6 @@ tags: [android/networking-http, difficulty/medium, networking, path-parameters, 
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Как в Retrofit в GET-методе поставить атрибут в конкретное место пути?
 

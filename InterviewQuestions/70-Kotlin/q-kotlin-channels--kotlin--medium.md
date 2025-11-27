@@ -28,7 +28,6 @@ tags: [async, channels, concurrency, coroutines, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что вы знаете о каналах (Channels) в Kotlin?
 
@@ -62,7 +61,7 @@ runBlocking {
 ```
 
 Вывод этого кода:
-```
+```text
 1
 4
 9
@@ -166,7 +165,7 @@ runBlocking {
 ```
 
 Он выводит "Sending" **пять** раз используя буферизованный канал с емкостью **четыре**:
-```
+```text
 Sending 0
 Sending 1
 Sending 2
@@ -218,7 +217,7 @@ runBlocking {
 ```
 
 The output of this code is:
-```
+```text
 1
 4
 9
@@ -322,7 +321,7 @@ runBlocking {
 ```
 
 It prints "Sending" **five** times using a buffered channel with capacity of **four**:
-```
+```text
 Sending 0
 Sending 1
 Sending 2

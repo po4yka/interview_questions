@@ -27,7 +27,6 @@ tags: [android/ui-views, difficulty/easy, framelayout, layouts, ui, view-positio
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Макет для перекрывающихся объектов
 

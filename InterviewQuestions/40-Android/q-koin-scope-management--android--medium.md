@@ -31,7 +31,6 @@ tags: [android/architecture-mvvm, android/di-koin, android/lifecycle, dependency
 date created: Saturday, November 1st 2025, 12:46:56 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как управлять scope в Koin? Реализуйте зависимости с ограниченным временем жизни для `Activity` и `Fragment` с правильной обработкой жизненного цикла.

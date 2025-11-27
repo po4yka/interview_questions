@@ -17,7 +17,6 @@ tags: [data-formats, difficulty/medium, json, kotlin, serialization]
 date created: Friday, October 31st 2025, 6:30:54 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое сериализация в Kotlin и в программировании в целом?
@@ -212,12 +211,12 @@ val json = Json {
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-delegation--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]
 - [[q-suspend-cancellable-coroutine--kotlin--hard]]
 - [[q-kotlin-extension-functions--kotlin--medium]]
 
 ## Related Questions
 
-- [[q-kotlin-delegation--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]
 - [[q-suspend-cancellable-coroutine--kotlin--hard]]
 - [[q-kotlin-extension-functions--kotlin--medium]]

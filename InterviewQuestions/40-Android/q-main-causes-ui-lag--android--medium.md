@@ -19,7 +19,6 @@ tags: [android/performance-memory, android/performance-rendering, android/thread
 date created: Saturday, November 1st 2025, 12:46:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Какие основные причины торможения UI в Android-приложениях?

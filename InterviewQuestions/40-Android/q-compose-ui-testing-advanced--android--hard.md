@@ -27,7 +27,6 @@ moc: moc-android
 date created: Saturday, November 1st 2025, 1:26:08 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как тестировать сложные UI сценарии в Compose включая анимации, жесты, semantic matchers и доступность? Как обрабатывать async операции в тестах?
 

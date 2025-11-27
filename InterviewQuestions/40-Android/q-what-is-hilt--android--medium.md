@@ -28,7 +28,6 @@ tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, dif
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Фреймворк Hilt
 
@@ -139,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
 Hilt предоставляет предопределённые компоненты, привязанные к жизненному циклу Android:
 
-```
+```text
 SingletonComponent (уровень Application)
     ↓
 ActivityRetainedComponent (переживает конфигурационные изменения, используется для ViewModel)
@@ -679,7 +678,7 @@ class MainActivity : AppCompatActivity() {
 
 Hilt provides predefined components tied to the Android lifecycle:
 
-```
+```text
 SingletonComponent (Application scope)
     ↓
 ActivityRetainedComponent (Retained across configuration changes, used for ViewModels)

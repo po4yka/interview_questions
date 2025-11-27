@@ -17,7 +17,6 @@ tags: [classes, data-classes, difficulty/medium, java, kotlin, syntax]
 date created: Friday, October 31st 2025, 6:28:54 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Что при создании классов в Kotlin изменилось по сравнению с Java?
 

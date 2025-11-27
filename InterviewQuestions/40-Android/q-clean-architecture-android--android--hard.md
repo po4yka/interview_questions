@@ -29,7 +29,6 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 date created: Saturday, November 1st 2025, 1:24:08 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать Clean Architecture в Android?
 
@@ -87,7 +86,7 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 
 #### Минимальная Структура Модулей
 
-```
+```text
 core-domain/     # entities, use cases, repository ports (без Android/Hilt)
 core-data/       # repository impls, API/DB sources, мапперы DTO/DB→domain
 app/             # DI setup (Hilt), navigation, composition root
@@ -235,7 +234,7 @@ Strictly separate layers (`presentation`, `domain`, `data`), direct dependencies
 
 #### Minimal Module Layout
 
-```
+```text
 core-domain/     # entities, use cases, repository ports (no Android/Hilt)
 core-data/       # repository impls, API/DB sources, DTO/DB→domain mappers
 app/             # DI setup (Hilt), navigation, composition root

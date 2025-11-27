@@ -19,7 +19,6 @@ tags: [android/lifecycle, android/performance-memory, android/profiling, difficu
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler и дампы кучи (heap dumps). Исправьте утечки `Activity`/`Fragment`/`ViewModel`.
 

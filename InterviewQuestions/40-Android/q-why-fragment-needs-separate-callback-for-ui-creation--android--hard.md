@@ -18,7 +18,6 @@ tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycl
 date created: Saturday, November 1st 2025, 12:47:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Почему у `Fragment` отдельный callback для создания UI (`onCreateView()`) вместо создания view в `onCreate()` как у `Activity`?
@@ -44,7 +43,7 @@ date modified: Tuesday, November 25th 2025, 8:53:55 pm
 
 ### Lifecycle `Flow`
 
-```
+```text
 Fragment Lifecycle:
 onCreate() ────────────────────────────────────── onDestroy()
            └─> onCreateView() ──> onDestroyView() ─┘
@@ -260,7 +259,7 @@ Important: the `Fragment`'s own lifecycle (`onCreate()` / `onDestroy()`) is mana
 
 ### Lifecycle `Flow`
 
-```
+```text
 Fragment Lifecycle:
 onCreate() ────────────────────────────────────── onDestroy()
            └─> onCreateView() ──> onDestroyView() ─┘

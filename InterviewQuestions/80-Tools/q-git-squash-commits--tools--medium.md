@@ -28,7 +28,6 @@ tags: [difficulty/medium, easy_kotlin, git, lang/ru, rebase, squash, tools, vers
 date created: Tuesday, November 25th 2025, 8:13:30 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Question (EN)
 > How to combine multiple commits into one in Git
 # Вопрос (RU)
@@ -49,7 +48,7 @@ git rebase -i HEAD~n
 where `n` is the number of commits you want to combine
 
 2. In the editor, change `pick` to `squash` (or `s`) for all commits except the first one:
-```
+```text
 pick abc1234 First commit
 squash def5678 Second commit
 squash ghi9012 Third commit
@@ -86,7 +85,7 @@ git rebase -i HEAD~n
 где `n` — это количество коммитов, которые вы хотите объединить
 
 2. В редакторе измените `pick` на `squash` (или `s`) для всех коммитов кроме первого:
-```
+```text
 pick abc1234 Первый коммит
 squash def5678 Второй коммит
 squash ghi9012 Третий коммит

@@ -31,7 +31,6 @@ tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, sc
 date created: Sunday, October 12th 2025, 3:22:19 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Что такое структурированная параллельность в Kotlin? Объясните иерархию родитель-потомок корутин, распространение отмены, распространение исключений и разницу между coroutineScope, supervisorScope и withContext.
 

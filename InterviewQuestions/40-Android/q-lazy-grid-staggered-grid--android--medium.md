@@ -28,7 +28,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:24:41 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Как работают LazyGrid и LazyStaggeredGrid в Jetpack Compose?
 

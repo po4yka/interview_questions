@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm", "https://en.wi
 date created: Saturday, November 1st 2025, 1:01:42 pm
 date modified: Tuesday, November 25th 2025, 8:43:38 pm
 ---
-
 # Вопрос (RU)
 > Как работают алгоритмы Дейкстры, MST (Краскал, Прим), Флойда-Уоршелла и Беллмана-Форда?
 

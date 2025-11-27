@@ -25,12 +25,17 @@ related:
   - q-large-file-upload-app--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
+tags: [android/background-execution, android/files-media, 
+      android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
 
 date created: Tuesday, November 25th 2025, 4:56:25 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
+anki_synced: true
+anki_slugs:
+  - 40-android-q-api-file-upload-server-android-medium-p01-en
+  - 40-android-q-api-file-upload-server-android-medium-p01-ru
+anki_last_sync: '2025-11-27T09:56:33.839728'
 ---
-
 # Вопрос (RU)
 
 > Как реализовать загрузку файлов на сервер через API в Android?

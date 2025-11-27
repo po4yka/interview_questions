@@ -19,7 +19,6 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
 date created: Saturday, November 1st 2025, 1:24:44 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Как работать с векторной графикой и `AnimatedVectorDrawable` в Android? Каковы лучшие практики для импорта SVG, морфинга путей и оптимизации производительности?
@@ -536,7 +535,7 @@ fun AnimatedVectorIcon(
 
 ### Продвинутые (сложнее)
 - [[q-android-runtime-internals--android--hard]] — Внутреннее устройство Android Runtime
-- [[q-android-keystore-system--security--medium]] — Безопасное управление ключами в Android
+- [[q-android-keystore-system--android--medium]] — Безопасное управление ключами в Android
 
 ## Related Questions
 
@@ -550,4 +549,4 @@ fun AnimatedVectorIcon(
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] — Android runtime internals
-- [[q-android-keystore-system--security--medium]] — Secure key management on Android
+- [[q-android-keystore-system--android--medium]] — Secure key management on Android

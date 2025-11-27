@@ -17,7 +17,6 @@ tags: [collections, difficulty/easy, implementations, kotlin, list, map, program
 date created: Friday, October 31st 2025, 6:30:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Какие Есть Реализации Коллекций?
 
 # Вопрос (RU)

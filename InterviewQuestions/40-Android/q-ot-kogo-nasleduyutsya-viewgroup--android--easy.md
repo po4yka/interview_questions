@@ -29,7 +29,6 @@ tags: [android, android/ui-views, difficulty/easy]
 date created: Saturday, November 1st 2025, 12:47:00 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > От кого наследуется класс `ViewGroup` в Android?
@@ -46,7 +45,7 @@ date modified: Tuesday, November 25th 2025, 8:53:58 pm
 
 ### Иерархия Наследования
 
-```
+```text
 Object
   ↓
 View (базовый класс для всех UI элементов)
@@ -172,7 +171,7 @@ setViewProperties(linearLayout) // Работает, так как LinearLayout 
 
 ### Inheritance Hierarchy
 
-```
+```text
 Object
   ↓
 View (base class for all UI elements)

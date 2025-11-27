@@ -28,7 +28,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:24:36 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Объясните методы жизненного цикла `Activity` и правила управления ресурсами в них.
 

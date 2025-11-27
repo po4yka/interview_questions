@@ -28,7 +28,6 @@ tags: [difficulty/hard, generics, kotlin, type-erasure, types, variance]
 date created: Thursday, October 16th 2025, 12:35:35 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Что вы знаете об обобщениях (Generics) в Kotlin?
 

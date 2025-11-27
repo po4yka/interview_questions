@@ -34,7 +34,6 @@ tags: [android/app-bundle, android/build-variants, android/performance-memory, d
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Какие способы уменьшения размера приложения вы знаете?
 
@@ -67,7 +66,7 @@ date modified: Tuesday, November 25th 2025, 8:53:57 pm
 
 Инструмент `lint` — статический анализатор кода, включённый в Android Studio — обнаруживает ресурсы в папке `res/`, на которые не ссылается ваш код. Когда `lint` находит потенциально неиспользуемый ресурс, он выдаёт сообщение, подобное следующему:
 
-```
+```text
 res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
     to be unused [UnusedResources]
 ```
@@ -233,7 +232,7 @@ The size of your app package has an impact on how fast your app loads, how much 
 
 The `lint` tool—a static code analyzer included in Android Studio—detects resources in your `res/` folder that your code doesn't reference. When the `lint` tool discovers a potentially unused resource in your project, it prints a message like the following example:
 
-```
+```text
 res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
     to be unused [UnusedResources]
 ```

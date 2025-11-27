@@ -20,7 +20,6 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?
 

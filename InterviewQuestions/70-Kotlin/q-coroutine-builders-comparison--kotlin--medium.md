@@ -19,7 +19,6 @@ related: [c-coroutines, c-kotlin, q-dispatcher-performance--kotlin--hard]
 date created: Friday, October 31st 2025, 6:30:42 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 
 > Сравните основные builders корутин в Kotlin: `launch`, `async`, `runBlocking`, `withContext`, `coroutineScope`, `supervisorScope` — по возвращаемым типам, блокирующему/приостанавливающему поведению, обработке исключений, структурной конкуррентности и основным вариантам использования.

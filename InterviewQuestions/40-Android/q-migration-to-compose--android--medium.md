@@ -19,7 +19,6 @@ tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, diff
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Какая стратегия миграции большого проекта на Jetpack Compose?

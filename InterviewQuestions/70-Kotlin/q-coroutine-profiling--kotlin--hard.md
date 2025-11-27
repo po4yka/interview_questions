@@ -20,7 +20,6 @@ tags: [coroutines, difficulty/hard, kotlin]
 date created: Saturday, October 18th 2025, 12:38:46 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Профилирование и отладка корутин в Kotlin: какие инструменты и подходы использовать для эффективной диагностики, поиска утечек и оптимизации производительности?
 

@@ -18,7 +18,6 @@ sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
 date created: Saturday, November 1st 2025, 1:25:20 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Зачем нужны Data Class и Sealed Classes? Какие проблемы они решают?
 

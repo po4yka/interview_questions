@@ -17,7 +17,6 @@ tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recycler
 date created: Tuesday, November 25th 2025, 8:13:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как сохранить позицию скролла при пересоздании Activity?

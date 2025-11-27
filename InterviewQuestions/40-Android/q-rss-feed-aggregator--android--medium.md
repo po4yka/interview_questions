@@ -30,7 +30,6 @@ tags: [android/networking-http, android/room, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Агрегатор RSS лент
 
@@ -45,7 +44,7 @@ RSS-агрегатор получает и отображает RSS-ленты �
 
 ### Архитектура
 
-```
+```text
 
    UI Layer     Compose/XML + ViewModel
 
@@ -521,7 +520,7 @@ An RSS aggregator fetches and displays feeds from multiple sources. Key requirem
 
 ### Architecture
 
-```
+```text
 
    UI Layer     Compose/XML + ViewModel
 

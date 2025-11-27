@@ -18,7 +18,6 @@ subtopics: [coroutines, lifecycle]
 date created: Saturday, November 1st 2025, 1:28:34 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое `Job` и как устроен его жизненный цикл в корутинах Kotlin?

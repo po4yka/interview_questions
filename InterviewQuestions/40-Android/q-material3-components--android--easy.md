@@ -28,7 +28,6 @@ sources: []
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Каковы ключевые различия между Material 2 и Material 3? Перечислите основные компоненты Material 3 и их сценарии использования. Как мигрировать с Material 2 на Material 3?
 

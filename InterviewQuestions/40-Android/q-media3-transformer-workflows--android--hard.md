@@ -23,15 +23,14 @@ created: 2025-11-02
 updated: 2025-11-10
 tags: [android/files-media, android/media, difficulty/hard]
 sources:
-- url: "https://developer.android.com/guide/topics/media/media3/transformer"
-  note: Media3 Transformer guide
-- url: "https://medium.com/androiddevelopers/media3-transformer-deep-dive"
-  note: Transformer deep dive
+  - url: "https://developer.android.com/guide/topics/media/media3/transformer"
+    note: "Media3 Transformer guide"
+  - url: "https://medium.com/androiddevelopers/media3-transformer-deep-dive"
+    note: "Transformer deep dive"
 
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как построить pipeline для редактирования видео на Media3 Transformer: комбинировать клипы, применять эффекты, контролировать кодеки/битрейт, выполнять экспорт в фоне и обрабатывать ошибки?
 

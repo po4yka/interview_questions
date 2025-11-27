@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Microservices"]
 date created: Sunday, October 12th 2025, 8:31:16 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Каковы ключевые различия между микросервисами и монолитной архитектурой? Когда следует использовать каждый подход, и каковы компромиссы?
 
@@ -119,7 +118,7 @@ Choosing between monolith and microservices is a fundamental architectural decis
 **Монолитная архитектура:**
 *Теория:* Единое приложение, где все компоненты разворачиваются как одна единица. Все модули (UI, бизнес-логика, доступ к данным) работают в одном процессе и обычно используют одну общую базу данных. Это позволяет относительно просто использовать ACID-транзакции в пределах одного приложения и одной БД (т.е. «между модулями» в рамках общего транзакционного контура), но не гарантирует ACID для внешних или распределённых интеграций.
 *Архитектура:*
-```
+```text
 Monolithic Application
 ├─ UI Layer
 ├─ Business Logic (User, Order, Payment, Inventory)
@@ -163,7 +162,7 @@ class OrderService(
 **Микросервисная архитектура:**
 *Теория:* Приложение, состоящее из небольших, независимых сервисов, которые коммуницируют по сети. Каждый сервис — отдельное приложение со своей базой данных (паттерн Database per `Service`), может быть написан на разных языках и развёртывается независимо. ACID-транзакции возможны внутри каждого сервиса и его локальной БД, но не существуют «из коробки» для операций, затрагивающих несколько сервисов и БД.
 *Архитектура:*
-```
+```text
 API Gateway/Load Balancer
 ├─ User Service → User DB
 ├─ Order Service → Order DB
@@ -274,7 +273,7 @@ Below is how the same requirements are addressed by monolith vs microservices.
 **Monolithic Architecture:**
 *Theory:* A single application where all components are deployed as one unit. All modules (UI, business logic, data access) run in one process and usually share a single database. This makes it straightforward to use ACID transactions within one application and one DB (across modules within the same transactional boundary), but does not guarantee ACID for external or distributed integrations.
 *Architecture:*
-```
+```text
 Monolithic Application
 ├─ UI Layer
 ├─ Business Logic (User, Order, Payment, Inventory)
@@ -318,7 +317,7 @@ class OrderService(
 **Microservices Architecture:**
 *Theory:* An application composed of small, independent services communicating over the network. Each service is a separate application with its own database (Database per `Service` pattern), can be written in different languages, and is deployed independently. ACID transactions are possible inside each service and its local DB, but you do not get ACID across multiple services/databases out of the box.
 *Architecture:*
-```
+```text
 API Gateway/Load Balancer
 ├─ User Service → User DB
 ├─ Order Service → Order DB

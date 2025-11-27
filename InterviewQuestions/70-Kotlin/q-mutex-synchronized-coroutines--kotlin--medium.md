@@ -20,7 +20,6 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
 

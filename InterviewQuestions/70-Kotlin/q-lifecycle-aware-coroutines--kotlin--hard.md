@@ -28,7 +28,6 @@ tags: [android, coroutines, difficulty/hard, kotlin, lifecycle, lifecyclescope, 
 date created: Sunday, October 12th 2025, 2:12:24 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Объясните корутины с учетом жизненного цикла в Android. Как работают viewModelScope, lifecycleScope и repeatOnLifecycle? Каковы лучшие практики для обработки изменений конфигурации, process death и утечек памяти? Приведите подробные примеры.
 

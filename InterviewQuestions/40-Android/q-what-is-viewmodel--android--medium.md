@@ -31,7 +31,6 @@ tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, architect
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое `ViewModel` в Android?

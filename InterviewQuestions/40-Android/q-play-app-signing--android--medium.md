@@ -18,7 +18,6 @@ sources: ["https://developer.android.com/studio/publish/app-signing#app-signing-
 date created: Saturday, November 1st 2025, 12:47:00 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое Play App Signing и как он работает?
@@ -50,7 +49,7 @@ Play App Signing использует **app signing key** (ключ подпис
 - Используется Google для проверки подлинности загрузчика и привязки к учётной записи разработчика
 
 **Процесс:**
-```
+```text
 Разработчик → подпись upload key → загрузка в Play Console
                                            ↓
                             Google верифицирует upload certificate
@@ -183,7 +182,7 @@ Play App Signing uses an **app signing key** and an **upload key**:
 - Used by Google to verify uploader identity and association with the developer account
 
 **Flow:**
-```
+```text
 Developer → sign with upload key → upload to Play Console
                                           ↓
                           Google verifies upload certificate

@@ -28,7 +28,6 @@ tags: [android/coroutines, android/threads-sync, blocking, difficulty/medium, lo
 date created: Saturday, November 1st 2025, 1:25:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
@@ -185,7 +184,7 @@ Message next() {
 
 **Native mechanism:**
 - Uses an efficient blocking primitive (e.g., **epoll_wait** on Linux) instead of busy-waiting
-- Thread state is shown as **RUNNABLE**, but it is actually blocked in native code (not in Java `Object.wait()`) 
+- Thread state is shown as **RUNNABLE**, but it is actually blocked in native code (not in Java `Object.wait()`)
 - Woken up via **nativeWake()** when a message is posted or queue state changes (effectively immediately from the app's perspective, subject to scheduler)
 
 ### Example: Thread with Empty `Queue`

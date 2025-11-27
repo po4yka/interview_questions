@@ -31,7 +31,6 @@ tags: [android/architecture-clean, android/networking-http, android/service, dif
 date created: Saturday, November 1st 2025, 12:46:49 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Как спроектировать SDK флагов функций и экспериментов для Android?

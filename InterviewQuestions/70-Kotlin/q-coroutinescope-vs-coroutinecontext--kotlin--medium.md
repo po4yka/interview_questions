@@ -28,7 +28,6 @@ tags: [coroutinecontext, coroutines, coroutinescope, difficulty/medium, kotlin, 
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Что такое CoroutineScope и чем он отличается от CoroutineContext?
 
@@ -104,7 +103,7 @@ public interface CoroutineScope {
 
 ### Визуальное Представление
 
-```
+```kotlin
 
         CoroutineScope
 
@@ -257,7 +256,7 @@ public interface CoroutineScope {
 
 ### Visual Representation
 
-```
+```kotlin
 
         CoroutineScope
 

@@ -31,7 +31,6 @@ tags: [coroutines, difficulty/medium, kotlin, stateflow, testing, turbine, unit-
 date created: Saturday, November 1st 2025, 9:25:31 am
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Как тестировать `ViewModel` с корутинами? Объясните `TestCoroutineDispatcher`, `StandardTestDispatcher`, тестирование `StateFlow`/`SharedFlow` и мокирование suspend функций.
 

@@ -17,7 +17,6 @@ tags: [android, annotations, best-practices, difficulty/medium, kotlin, lifecycl
 date created: Saturday, November 1st 2025, 1:27:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое аннотация `@CallSuper` и когда её следует использовать?
 

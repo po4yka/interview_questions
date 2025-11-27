@@ -28,7 +28,6 @@ tags: [debounce, difficulty/medium, flow, kotlin, operators, performance, search
 date created: Saturday, November 1st 2025, 9:25:30 am
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin `Flow`?
 

@@ -31,7 +31,6 @@ tags: [backpressure, channels, coroutines, difficulty/hard, fan-in, fan-out, kot
 date created: Sunday, October 12th 2025, 2:05:38 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Объясните конвейеры каналов в корутинах Kotlin. Как реализовать паттерны производитель-потребитель, fan-out, fan-in и стратегии буферизации? Приведите примеры реальных архитектур конвейеров.
 

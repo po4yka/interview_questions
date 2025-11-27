@@ -28,7 +28,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:27:08 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Каков жизненный цикл Custom `View` в Android? Какие методы вызываются при создании, отрисовке и удалении `View`?
 
@@ -41,7 +40,7 @@ date modified: Tuesday, November 25th 2025, 8:54:01 pm
 
 **`View` Lifecycle** описывает ключевые этапы от создания до удаления `View`. Упрощенная типичная последовательность для уже добавленной в иерархию `View` выглядит так:
 
-```
+```text
 Constructor → onAttachedToWindow → onMeasure → onLayout → onSizeChanged (при изменении размеров) → onDraw → onDetachedFromWindow
 ```
 
@@ -169,7 +168,7 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 
 **`View` Lifecycle** describes the key stages from creation to removal of a `View`. A simplified typical sequence for a `View` already added to a hierarchy looks like:
 
-```
+```text
 Constructor → onAttachedToWindow → onMeasure → onLayout → onSizeChanged (when size changes) → onDraw → onDetachedFromWindow
 ```
 

@@ -31,7 +31,6 @@ tags: [backpressure, buffer, collectlatest, conflate, difficulty/hard, flow, kot
 date created: Sunday, October 12th 2025, 3:14:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое противодавление в Kotlin `Flow`? Объясните операторы `buffer()`, `conflate()` и `collectLatest()` и когда использовать каждую стратегию.
 

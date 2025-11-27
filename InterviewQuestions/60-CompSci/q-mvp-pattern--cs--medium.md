@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter"]
 date created: Saturday, November 1st 2025, 1:26:37 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн MVP? Когда его использовать и как он работает?
 
@@ -218,8 +217,8 @@ class ProductPresenter(
 
 **Contract Interface:**
 
-*Теория:* Contract interface определяет границы между `View` и Presenter. Обычно содержит две вложенные интерфейсные части: `View` и Presenter. 
-- `View`-интерфейс описывает методы, которые Presenter может вызывать для обновления UI. 
+*Теория:* Contract interface определяет границы между `View` и Presenter. Обычно содержит две вложенные интерфейсные части: `View` и Presenter.
+- `View`-интерфейс описывает методы, которые Presenter может вызывать для обновления UI.
 - Presenter-интерфейс описывает методы, которые `View` вызывает, чтобы сообщить о событиях (жизненный цикл, клики, ввод пользователя).
 
 Это делает связи явными, уменьшает связность и упрощает тестирование.
@@ -290,7 +289,7 @@ class UserProfileActivity : AppCompatActivity(), UserProfileContract.View {
 
 **MVP vs MVVM vs MVI:**
 
-*Теория:* 
+*Теория:*
 - MVP: пассивный `View`, Presenter управляет состоянием `View` и вызывает Model. Хорошо контролируется поток данных, Presenter легко мокать и тестировать.
 - MVVM: `ViewModel` экспонирует данные/состояния (`LiveData`/`StateFlow` и т.п.), `View` подписывается на изменения. Двусторонний data binding возможен, но не обязателен.
 - MVI: однонаправленный поток данных, намерения (intents), редьюсер и иммутабельное состояние.

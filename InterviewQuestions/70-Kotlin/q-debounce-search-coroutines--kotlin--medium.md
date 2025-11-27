@@ -23,7 +23,6 @@ tags:
   - android
   - difficulty/medium
   - ru
-original_language: en
 source: Kotlin Coroutines Interview Questions PDF
 ---
 # Вопрос (RU)

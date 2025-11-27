@@ -32,7 +32,6 @@ tags: [android/architecture-modularization, android/ci-cd, android/gradle, diffi
 date created: Saturday, November 1st 2025, 12:46:45 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как организовать CI/CD для мультимодульного Android-проекта с учётом оптимизации времени сборки и детерминированности?
 

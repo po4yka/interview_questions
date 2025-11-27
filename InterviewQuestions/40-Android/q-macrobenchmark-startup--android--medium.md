@@ -29,7 +29,6 @@ tags: [android/profiling, android/testing-benchmark, difficulty/medium, macroben
 date created: Saturday, November 1st 2025, 12:46:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Реализуйте macrobenchmark для запуска приложения. Измерьте холодный, теплый и горячий запуск. Используйте трассировку Perfetto для выявления узких мест и оптимизации на основе результатов.
 

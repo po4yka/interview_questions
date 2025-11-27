@@ -23,7 +23,6 @@ tags: [android/background-execution, android/bluetooth, android/service, difficu
 date created: Saturday, November 1st 2025, 12:46:45 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 
 > Спроектируйте Android-компаньон для BLE носимого трекера здоровья. Требования: pairing & bonding, фоновая синхронизация каждые 10 мин, backfill пропущенных данных за 24ч, бюджет батареи <1%/ч во время активной синхронизации, защита приватности. Включите GATT profile, логику переподключения, модель данных, flow разрешений, наблюдаемость.
@@ -42,13 +41,13 @@ BLE синхронизация носимых устройств требует 
 
 **Core modules**:
 
--   **ble-core**: BluetoothGatt wrapper, connection state machine, MTU negotiation
--   **device-manager**: pairing/bonding, device discovery, address caching
--   **gatt-services**: custom GATT profile, characteristic reads/writes/notifications
--   **sync-engine**: orchestration, backfill cursor, deduplication, retry logic
--   **store (Room)**: local persistence, conflict resolution, cursor tracking
--   **analytics**: connection metrics, sync success rates, battery impact
--   **feature-flags**: gradual rollout of sync strategies
+- **ble-core**: BluetoothGatt wrapper, connection state machine, MTU negotiation
+- **device-manager**: pairing/bonding, device discovery, address caching
+- **gatt-services**: custom GATT profile, characteristic reads/writes/notifications
+- **sync-engine**: orchestration, backfill cursor, deduplication, retry logic
+- **store (Room)**: local persistence, conflict resolution, cursor tracking
+- **analytics**: connection metrics, sync success rates, battery impact
+- **feature-flags**: gradual rollout of sync strategies
 
 ### 2. Pairing & Bonding
 
@@ -86,10 +85,10 @@ fun createBond(context: Context, device: BluetoothDevice): Flow<BondState> = cal
 
 **Characteristics (пример)**:
 
--   **Summary** (read/notify): текущие метрики (шаги, пульс, калории) — компактный payload (≤ MTU - 3 байт)
--   **History** (read/notify): bulk transfer для backfill — chunked, полезная нагрузка каждого пакета ограничена `(negotiatedMtu - 3)` байт
--   **Control** (write): команды (start sync, set cursor, clear cache)
--   **Device Info** (read): firmware version, battery level, capabilities
+- **Summary** (read/notify): текущие метрики (шаги, пульс, калории) — компактный payload (≤ MTU - 3 байт)
+- **History** (read/notify): bulk transfer для backfill — chunked, полезная нагрузка каждого пакета ограничена `(negotiatedMtu - 3)` байт
+- **Control** (write): команды (start sync, set cursor, clear cache)
+- **Device Info** (read): firmware version, battery level, capabilities
 
 ```kotlin
 // ✅ Enable notifications for real-time updates
@@ -114,8 +113,8 @@ fun requestMtu(gatt: BluetoothGatt, size: Int = 512) {
 
 **Foreground vs Background**:
 
--   **Active sync**: Foreground Service с notification (обязательно для Android 8+ при долгих операциях)
--   **Periodic sync**: WorkManager с `ExistingPeriodicWorkPolicy.KEEP`, constraints на battery/network
+- **Active sync**: Foreground Service с notification (обязательно для Android 8+ при долгих операциях)
+- **Periodic sync**: WorkManager с `ExistingPeriodicWorkPolicy.KEEP`, constraints на battery/network
 
 ```kotlin
 // ✅ Foreground service for active sync (user-initiated)
@@ -176,11 +175,11 @@ suspend fun connectWithRetry(
 
 **Strategies**:
 
--   Batch reads: группировать characteristic reads в один connection window
--   Notifications > polling: prefer GATT notifications для real-time data
--   Payload compression: gzip или аналогичная схема для bulk history transfers (если поддерживает устройство)
--   Throttle scans: не чаще 1 раз в 10 мин, использовать `ScanSettings.SCAN_MODE_LOW_POWER`
--   Doze alignment: `setRequiresDeviceIdle(false)` + flex windows в WorkManager для согласования с системными окнами
+- Batch reads: группировать characteristic reads в один connection window
+- Notifications > polling: prefer GATT notifications для real-time data
+- Payload compression: gzip или аналогичная схема для bulk history transfers (если поддерживает устройство)
+- Throttle scans: не чаще 1 раз в 10 мин, использовать `ScanSettings.SCAN_MODE_LOW_POWER`
+- Doze alignment: `setRequiresDeviceIdle(false)` + flex windows в WorkManager для согласования с системными окнами
 
 **Target**: бюджет <1% battery/hr для активной синхронизации. Для батареи 2000mAh это ≈20mAh/час; при 10-минутном sync window ориентировочно ≤3–4mAh, что требует агрессивной оптимизации соединений.
 
@@ -217,10 +216,10 @@ data class SyncCursor(
 
 **Runtime permissions** (Android 12+):
 
--   `BLUETOOTH_CONNECT` — для подключения к bonded devices
--   `BLUETOOTH_SCAN` — для discovery новых устройств
--   `BLUETOOTH_ADVERTISE` — если нужен reverse connection
--   `ACCESS_FINE_LOCATION` — для BLE scan на устройствах до Android 11 (там, где требуется системой)
+- `BLUETOOTH_CONNECT` — для подключения к bonded devices
+- `BLUETOOTH_SCAN` — для discovery новых устройств
+- `BLUETOOTH_ADVERTISE` — если нужен reverse connection
+- `ACCESS_FINE_LOCATION` — для BLE scan на устройствах до Android 11 (там, где требуется системой)
 
 **Request flow**: показывать rationale UI перед запросом, обрабатывать denial с fallback на manual pairing через Settings и graceful degradation функциональности.
 
@@ -228,21 +227,21 @@ data class SyncCursor(
 
 **Safeguards**:
 
--   Encrypt at rest: Room database с SQLCipher или EncryptedSharedPreferences для токенов/ключей (не логировать сырые health данные в открытом виде)
--   Minimize PII: минимизировать идентификаторы, использовать псевдонимизацию/хеширование device IDs
--   User opt-out: позволять отключить cloud sync, поддерживать локальный режим
--   Audit logs: логировать только метаданные доступа (кто/когда/операция) без избыточных health деталей, с учетом требований HIPAA/GDPR по минимуму и срокам хранения
+- Encrypt at rest: Room database с SQLCipher или EncryptedSharedPreferences для токенов/ключей (не логировать сырые health данные в открытом виде)
+- Minimize PII: минимизировать идентификаторы, использовать псевдонимизацию/хеширование device IDs
+- User opt-out: позволять отключить cloud sync, поддерживать локальный режим
+- Audit logs: логировать только метаданные доступа (кто/когда/операция) без избыточных health деталей, с учетом требований HIPAA/GDPR по минимуму и срокам хранения
 
 ### 10. Observability
 
 **Key metrics** (Firebase Analytics / Datadog):
 
--   **Connection success %**: `(successful_connects / total_attempts) * 100`
--   **GATT error codes**: distribution of 133, 8, 22, 257 errors
--   **Sync duration**: p50, p95, p99 latencies
--   **Throughput**: bytes/sec during active sync
--   **Battery impact**: оценка mAh или % батареи, потребленных за sync сессии
--   **Crash/ANR**: BLE stack crashes, ANRs в GATT callbacks
+- **Connection success %**: `(successful_connects / total_attempts) * 100`
+- **GATT error codes**: distribution of 133, 8, 22, 257 errors
+- **Sync duration**: p50, p95, p99 latencies
+- **Throughput**: bytes/sec during active sync
+- **Battery impact**: оценка mAh или % батареи, потребленных за sync сессии
+- **Crash/ANR**: BLE stack crashes, ANRs в GATT callbacks
 
 **Logging**: structured logs с correlation IDs для трассировки одной sync session через все модули, без записи чувствительных payload-данных.
 
@@ -250,11 +249,11 @@ data class SyncCursor(
 
 **Scenarios**:
 
--   **RF-noisy environments**: retry с exponential backoff, при необходимости fallback на меньший MTU / lower connection priority
--   **Phone sleeps mid-transfer**: partial WakeLock во время active sync, корректное возобновление или повтор синхронизации после wake
--   **Device firmware mismatch**: version check в Device Info characteristic, show upgrade prompt
--   **Bond loss**: detect via `BOND_NONE` broadcast, trigger re-pairing flow
--   **Multiple devices**: queue syncs, ограничивать 1 активное GATT-подключение на устройство одновременно (с учетом ограничений платформы)
+- **RF-noisy environments**: retry с exponential backoff, при необходимости fallback на меньший MTU / lower connection priority
+- **Phone sleeps mid-transfer**: partial WakeLock во время active sync, корректное возобновление или повтор синхронизации после wake
+- **Device firmware mismatch**: version check в Device Info characteristic, show upgrade prompt
+- **Bond loss**: detect via `BOND_NONE` broadcast, trigger re-pairing flow
+- **Multiple devices**: queue syncs, ограничивать 1 активное GATT-подключение на устройство одновременно (с учетом ограничений платформы)
 
 **Instrumented tests**: mock BluetoothGatt для unit tests, real device tests для integration, сценарии нестабильного радио и фоновый режим.
 
@@ -281,13 +280,13 @@ BLE wearable sync requires an architecture with separated concerns: connection m
 
 **Core modules**:
 
--   **ble-core**: BluetoothGatt wrapper, connection state machine, MTU negotiation
--   **device-manager**: pairing/bonding, device discovery, address caching
--   **gatt-services**: custom GATT profile, characteristic reads/writes/notifications
--   **sync-engine**: orchestration, backfill cursor, deduplication, retry logic
--   **store (Room)**: local persistence, conflict resolution, cursor tracking
--   **analytics**: connection metrics, sync success rates, battery impact
--   **feature-flags**: gradual rollout of sync strategies
+- **ble-core**: BluetoothGatt wrapper, connection state machine, MTU negotiation
+- **device-manager**: pairing/bonding, device discovery, address caching
+- **gatt-services**: custom GATT profile, characteristic reads/writes/notifications
+- **sync-engine**: orchestration, backfill cursor, deduplication, retry logic
+- **store (Room)**: local persistence, conflict resolution, cursor tracking
+- **analytics**: connection metrics, sync success rates, battery impact
+- **feature-flags**: gradual rollout of sync strategies
 
 ### 2. Pairing & Bonding
 
@@ -325,10 +324,10 @@ fun createBond(context: Context, device: BluetoothDevice): Flow<BondState> = cal
 
 **Characteristics (example)**:
 
--   **Summary** (read/notify): current metrics (steps, heart rate, calories) — compact payload (≤ MTU - 3 bytes)
--   **History** (read/notify): bulk transfer for backfill — chunked, each packet payload limited by `(negotiatedMtu - 3)` bytes
--   **Control** (write): commands (start sync, set cursor, clear cache)
--   **Device Info** (read): firmware version, battery level, capabilities
+- **Summary** (read/notify): current metrics (steps, heart rate, calories) — compact payload (≤ MTU - 3 bytes)
+- **History** (read/notify): bulk transfer for backfill — chunked, each packet payload limited by `(negotiatedMtu - 3)` bytes
+- **Control** (write): commands (start sync, set cursor, clear cache)
+- **Device Info** (read): firmware version, battery level, capabilities
 
 ```kotlin
 // ✅ Enable notifications for real-time updates
@@ -353,8 +352,8 @@ fun requestMtu(gatt: BluetoothGatt, size: Int = 512) {
 
 **Foreground vs Background**:
 
--   **Active sync**: Foreground Service with a notification (required on Android 8+ for long-running work)
--   **Periodic sync**: WorkManager with `ExistingPeriodicWorkPolicy.KEEP`, constraints on battery/network
+- **Active sync**: Foreground Service with a notification (required on Android 8+ for long-running work)
+- **Periodic sync**: WorkManager with `ExistingPeriodicWorkPolicy.KEEP`, constraints on battery/network
 
 ```kotlin
 // ✅ Foreground service for active sync (user-initiated)
@@ -415,11 +414,11 @@ suspend fun connectWithRetry(
 
 **Strategies**:
 
--   Batch reads: group characteristic reads into one connection window
--   Notifications > polling: prefer GATT notifications for real-time data
--   Payload compression: gzip or similar for bulk history transfers (only if both sides support it)
--   Throttle scans: no more than once per 10 min, use `ScanSettings.SCAN_MODE_LOW_POWER`
--   Doze alignment: `setRequiresDeviceIdle(false)` + flex windows in WorkManager to align with system maintenance windows
+- Batch reads: group characteristic reads into one connection window
+- Notifications > polling: prefer GATT notifications for real-time data
+- Payload compression: gzip or similar for bulk history transfers (only if both sides support it)
+- Throttle scans: no more than once per 10 min, use `ScanSettings.SCAN_MODE_LOW_POWER`
+- Doze alignment: `setRequiresDeviceIdle(false)` + flex windows in WorkManager to align with system maintenance windows
 
 **Target**: keep active sync under <1% battery/hr. For a 2000mAh battery, this is about 20mAh per hour; for a 10-minute sync window, the budget is roughly 3–4mAh, so connection efficiency is critical.
 
@@ -456,10 +455,10 @@ data class SyncCursor(
 
 **Runtime permissions** (Android 12+):
 
--   `BLUETOOTH_CONNECT` — for connecting to bonded devices
--   `BLUETOOTH_SCAN` — for discovering new devices
--   `BLUETOOTH_ADVERTISE` — if reverse connection is needed
--   `ACCESS_FINE_LOCATION` — for BLE scan on legacy Android (<12) where required by the platform
+- `BLUETOOTH_CONNECT` — for connecting to bonded devices
+- `BLUETOOTH_SCAN` — for discovering new devices
+- `BLUETOOTH_ADVERTISE` — if reverse connection is needed
+- `ACCESS_FINE_LOCATION` — for BLE scan on legacy Android (<12) where required by the platform
 
 **Request flow**: show rationale UI before requesting, handle denial with fallback to manual pairing via Settings and graceful feature degradation.
 
@@ -467,21 +466,21 @@ data class SyncCursor(
 
 **Safeguards**:
 
--   Encrypt at rest: use SQLCipher for Room or EncryptedSharedPreferences for tokens/keys; avoid logging raw health data
--   Minimize PII: anonymize/pseudonymize user and device identifiers before cloud upload
--   User opt-out: allow disabling cloud sync and support local-only mode
--   Audit logs: record only necessary metadata (who/when/what action) for access events, with retention and minimization aligned to HIPAA/GDPR; avoid storing full payloads in logs
+- Encrypt at rest: use SQLCipher for Room or EncryptedSharedPreferences for tokens/keys; avoid logging raw health data
+- Minimize PII: anonymize/pseudonymize user and device identifiers before cloud upload
+- User opt-out: allow disabling cloud sync and support local-only mode
+- Audit logs: record only necessary metadata (who/when/what action) for access events, with retention and minimization aligned to HIPAA/GDPR; avoid storing full payloads in logs
 
 ### 10. Observability
 
 **Key metrics** (Firebase Analytics / Datadog):
 
--   **Connection success %**: `(successful_connects / total_attempts) * 100`
--   **GATT error codes**: distribution of 133, 8, 22, 257 errors
--   **Sync duration**: p50, p95, p99 latencies
--   **Throughput**: bytes/sec during active sync
--   **Battery impact**: estimated mAh or % consumed per sync session
--   **Crash/ANR**: BLE stack crashes, ANRs in GATT callbacks
+- **Connection success %**: `(successful_connects / total_attempts) * 100`
+- **GATT error codes**: distribution of 133, 8, 22, 257 errors
+- **Sync duration**: p50, p95, p99 latencies
+- **Throughput**: bytes/sec during active sync
+- **Battery impact**: estimated mAh or % consumed per sync session
+- **Crash/ANR**: BLE stack crashes, ANRs in GATT callbacks
 
 **Logging**: structured logs with correlation IDs for tracing a single sync session across modules, without persisting sensitive payload data.
 
@@ -489,11 +488,11 @@ data class SyncCursor(
 
 **Scenarios**:
 
--   **RF-noisy environments**: retry with exponential backoff, consider lower MTU / lower priority
--   **Phone sleeps mid-transfer**: acquire a partial WakeLock during active sync and resume or restart sync on wake
--   **Device firmware mismatch**: version check via Device Info characteristic, show upgrade prompt
--   **Bond loss**: detect via `BOND_NONE` broadcast, trigger re-pairing flow
--   **Multiple devices**: queue syncs and limit to one active GATT connection per device at a time within platform limits
+- **RF-noisy environments**: retry with exponential backoff, consider lower MTU / lower priority
+- **Phone sleeps mid-transfer**: acquire a partial WakeLock during active sync and resume or restart sync on wake
+- **Device firmware mismatch**: version check via Device Info characteristic, show upgrade prompt
+- **Bond loss**: detect via `BOND_NONE` broadcast, trigger re-pairing flow
+- **Multiple devices**: queue syncs and limit to one active GATT connection per device at a time within platform limits
 
 **Instrumented tests**: mock BluetoothGatt for unit tests, use real devices for integration tests, cover unstable RF and background execution scenarios.
 
@@ -514,37 +513,37 @@ data class SyncCursor(
 
 ## Follow-ups
 
--   How would you handle device firmware updates over BLE (DFU protocol)?
--   What strategies ensure data completeness when the device buffer overflows between syncs?
--   How to scale the architecture to support simultaneous syncing with multiple paired wearables?
--   How to recover from corrupted GATT data (invalid checksums, incomplete packets)?
--   How would you implement privacy-preserving analytics while maintaining regulatory compliance (HIPAA/GDPR)?
+- How would you handle device firmware updates over BLE (DFU protocol)?
+- What strategies ensure data completeness when the device buffer overflows between syncs?
+- How to scale the architecture to support simultaneous syncing with multiple paired wearables?
+- How to recover from corrupted GATT data (invalid checksums, incomplete packets)?
+- How would you implement privacy-preserving analytics while maintaining regulatory compliance (HIPAA/GDPR)?
 
 ## References
 
--   [[c-lifecycle]]
--   [[c-workmanager]]
--   [[c-room]]
--   [[c-service]]
--   [[c-permissions]]
--   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
--   [[ANDROID-INTERVIEWER-GUIDE]]
--   https://developer.android.com/guide/topics/connectivity/bluetooth/ble-overview
--   https://developer.android.com/develop/connectivity/bluetooth/bt-background-optimizations
+- [[c-lifecycle]]
+- [[c-workmanager]]
+- [[c-room]]
+- [[c-service]]
+- [[c-permissions]]
+- [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
+- [[ANDROID-INTERVIEWER-GUIDE]]
+- https://developer.android.com/guide/topics/connectivity/bluetooth/ble-overview
+- https://developer.android.com/develop/connectivity/bluetooth/bt-background-optimizations
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
--   [[q-service-component--android--medium]] - Understanding Service lifecycle and foreground services
--   [[q-service-restrictions-why--android--medium]] - Background execution limits on Android 8+
+- [[q-service-component--android--medium]] - Understanding Service lifecycle and foreground services
+- [[q-service-restrictions-why--android--medium]] - Background execution limits on Android 8+
 
 ### Related (Same Level)
 
--   [[q-service-lifecycle-binding--android--hard]] - Bound services and lifecycle management
--   [[q-polling-implementation--android--medium]] - Alternative sync strategies with WorkManager
+- [[q-service-lifecycle-binding--android--hard]] - Bound services and lifecycle management
+- [[q-polling-implementation--android--medium]] - Alternative sync strategies with WorkManager
 
 ### Advanced (Harder)
 
--   [[q-modularization-patterns--android--hard]] - Multi-module architecture for complex apps
--   Design a multi-device health data aggregation platform with conflict resolution
+- [[q-modularization-patterns--android--hard]] - Multi-module architecture for complex apps
+- Design a multi-device health data aggregation platform with conflict resolution

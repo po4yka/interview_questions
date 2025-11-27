@@ -27,7 +27,6 @@ tags: [android/activity, android/lifecycle, difficulty/medium, events, lifecycle
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > К каким событиям привязаны методы `Activity`?
 
@@ -40,7 +39,7 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 
 ### Основные События И Методы Жизненного Цикла
 
-```
+```text
          Activity Lifecycle Events
 
 
@@ -389,7 +388,7 @@ class DetailActivity : AppCompatActivity() {
 
 При стандартном поведении (без переопределения `configChanges`) `Activity` уничтожается и пересоздаётся. В типичном сценарии при конфигурационном изменении последовательность колбэков выглядит так:
 
-```
+```kotlin
 onPause()
 onSaveInstanceState()
 onStop()
@@ -564,7 +563,7 @@ override fun onStop() {
 
 ### `Activity` Lifecycle Events and Methods
 
-```
+```text
          Activity Lifecycle Events
 
 
@@ -907,7 +906,7 @@ Common triggers:
 
 With default behavior (no custom `configChanges`), the `Activity` is destroyed and recreated. A typical callback sequence on a configuration change is:
 
-```
+```text
 onPause()
 onSaveInstanceState()
 onStop()

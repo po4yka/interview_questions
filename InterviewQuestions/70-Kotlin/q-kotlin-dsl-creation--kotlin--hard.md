@@ -17,7 +17,6 @@ tags: [difficulty/hard]
 date created: Sunday, October 12th 2025, 3:43:42 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Разработайте и реализуйте типобезопасный DSL для построения UI компонентов. Используйте контроль области видимости, extension-лямбды и `@DslMarker`.
 

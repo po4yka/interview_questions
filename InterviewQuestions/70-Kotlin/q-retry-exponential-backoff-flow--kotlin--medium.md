@@ -17,7 +17,6 @@ tags: [circuit-breaker, coroutines, difficulty/medium, error-handling, exponenti
 date created: Friday, October 31st 2025, 6:30:29 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать retry логику с экспоненциальным backoff в Kotlin `Flow`? Объясните операторы `retry()` и `retryWhen()`, кастомные retry политики, jitter, интеграцию с circuit breaker и стратегии тестирования. Приведите production-ready примеры для сетевых запросов, операций с БД и устойчивых потоков данных.
 

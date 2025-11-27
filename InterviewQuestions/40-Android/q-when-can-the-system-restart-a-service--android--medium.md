@@ -19,7 +19,6 @@ tags: [android, android/background-execution, android/lifecycle, android/service
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Когда система может перезапустить сервис?

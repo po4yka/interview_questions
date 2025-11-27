@@ -31,7 +31,6 @@ tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, messag
 date created: Sunday, October 12th 2025, 3:04:52 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Actor в корутинах Kotlin? Объясните передачу сообщений через каналы, инкапсуляцию состояния и приведите реальные примеры акторов.
 
@@ -57,7 +56,7 @@ date modified: Tuesday, November 25th 2025, 8:53:53 pm
 
 ### Архитектура Модели Акторов
 
-```
+```text
 
             Актор
 
@@ -696,7 +695,7 @@ An actor prevents data races by processing messages one-by-one in its coroutine.
 
 ### Actor Model Architecture
 
-```
+```text
 
             Actor
 

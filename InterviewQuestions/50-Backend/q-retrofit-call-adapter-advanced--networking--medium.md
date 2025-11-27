@@ -19,7 +19,6 @@ tags: [backend, call-adapter, difficulty/medium, networking, result, retrofit]
 date created: Monday, October 27th 2025, 3:57:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать кастомный Retrofit CallAdapter для типа `Result<T>`? Как централизованно обрабатывать разные типы ошибок с помощью sealed классов?

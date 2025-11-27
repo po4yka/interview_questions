@@ -17,7 +17,6 @@ tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management, 
 date created: Friday, October 31st 2025, 6:31:34 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Для чего нужен `StateFlow`?
 
@@ -82,8 +81,8 @@ Key properties:
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-property-delegates--programming-languages--medium]]
+- [[q-kotlin-property-delegates--kotlin--medium]]
 
 ## Related Questions
 
-- [[q-kotlin-property-delegates--programming-languages--medium]]
+- [[q-kotlin-property-delegates--kotlin--medium]]

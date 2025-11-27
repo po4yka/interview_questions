@@ -28,7 +28,6 @@ tags: [combining, difficulty/medium, filtering, flow, kotlin, operators, transfo
 date created: Sunday, October 12th 2025, 2:10:07 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое операторы `Flow` в Kotlin? Объясните категории: трансформации (`map`, `flatMap`), фильтрации (`filter`, `distinctUntilChanged`), комбинирования (`zip`, `combine`) и терминальные операторы (`collect`, `toList`). Приведите практические примеры.
 

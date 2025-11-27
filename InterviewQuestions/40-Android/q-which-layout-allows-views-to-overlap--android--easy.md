@@ -30,7 +30,6 @@ tags: [android, android/ui-compose, android/ui-views, compose, difficulty/easy, 
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Какой layout в Android позволяет View перекрываться друг с другом?

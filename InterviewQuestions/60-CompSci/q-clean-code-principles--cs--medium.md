@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Clean_code"]
 date created: Saturday, November 1st 2025, 1:24:22 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое принципы чистого кода? Как писать осмысленные имена, хорошие функции и понятные комментарии? Что такое code smells и как их рефакторить?
 

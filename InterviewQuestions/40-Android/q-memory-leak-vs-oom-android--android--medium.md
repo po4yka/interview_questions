@@ -19,7 +19,6 @@ tags: [android, android/performance-battery, android/performance-memory, difficu
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
 
@@ -435,7 +434,7 @@ class MemoryMonitor {
 
 ### Prerequisites
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Understanding Android threading fundamentals
-- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory management basics
+- [[q-primitive-vs-reference-types--kotlin--easy]] - Memory management basics
 
 ### Related
 - [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - UI lifecycle and memory

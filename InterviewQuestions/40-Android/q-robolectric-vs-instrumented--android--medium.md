@@ -18,7 +18,6 @@ tags: [android/testing-instrumented, android/testing-unit, comparison, difficult
 date created: Saturday, November 1st 2025, 1:04:41 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Когда следует использовать Robolectric вместо инструментальных тестов? Какие компромиссы в скорости, надежности и покрытии?

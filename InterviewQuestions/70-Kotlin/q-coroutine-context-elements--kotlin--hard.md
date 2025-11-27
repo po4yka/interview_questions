@@ -19,7 +19,6 @@ related: [c-concepts--kotlin--medium, c-concurrency, q-coroutine-job-lifecycle--
 date created: Saturday, November 1st 2025, 5:31:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое элементы CoroutineContext и как они комбинируются? Объясните Job, CoroutineDispatcher, CoroutineName, CoroutineExceptionHandler и как работает оператор +.
@@ -1679,7 +1678,7 @@ fun testExceptionHandlerUsage() = runTest {
 ## Связанные Вопросы (RU)
 
 ### База (проще)
-- [[q-what-is-job-object--programming-languages--medium]]
+- [[q-what-is-job-object--kotlin--medium]]
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
 - Базовые концепции корутин
 
@@ -1694,7 +1693,7 @@ fun testExceptionHandlerUsage() = runTest {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-job-object--programming-languages--medium]]
+- [[q-what-is-job-object--kotlin--medium]]
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
 - Basic coroutine concepts
 

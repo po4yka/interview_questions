@@ -18,7 +18,6 @@ tags: [android, android/ui-compose, android/ui-state, difficulty/medium]
 date created: Saturday, November 1st 2025, 1:25:39 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Что вы знаете о модификаторах в Jetpack Compose?

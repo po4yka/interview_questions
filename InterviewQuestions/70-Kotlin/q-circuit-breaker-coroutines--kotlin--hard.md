@@ -18,7 +18,6 @@ related: [c-coroutines, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 date created: Saturday, November 1st 2025, 12:10:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать и использовать паттерн circuit breaker с использованием Kotlin coroutines в продакшене: состояния (Closed/Open/Half-Open), конфигурация порогов, потокобезопасность, мониторинг и интеграция с retry/timeout для разных сервисов?

@@ -18,7 +18,6 @@ tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animatio
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать переходы с общими элементами между composables? Объясните API SharedTransitionLayout.

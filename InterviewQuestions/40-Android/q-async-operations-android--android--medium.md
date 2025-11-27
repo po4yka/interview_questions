@@ -29,7 +29,6 @@ tags: [android/background-execution, android/coroutines, android/threads-sync, d
 date created: Saturday, November 1st 2025, 1:04:14 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Какие существуют способы выполнения асинхронных операций в Android?
 

@@ -19,7 +19,6 @@ tags: [android/room, difficulty/hard]
 date created: Saturday, November 1st 2025, 1:04:42 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Реализуйте полнотекстовый поиск в Room с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?

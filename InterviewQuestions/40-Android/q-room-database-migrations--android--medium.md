@@ -18,7 +18,6 @@ tags: [android/room, android/testing-instrumented, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Реализуйте сложные миграции базы данных Room с версии 1 до 3. Обработайте деструктивные и недеструктивные миграции с тестированием.

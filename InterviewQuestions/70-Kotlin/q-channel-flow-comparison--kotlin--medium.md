@@ -20,7 +20,6 @@ tags: [channels, cold-stream, concurrency, coroutines, difficulty/medium, flow, 
 date created: Tuesday, October 14th 2025, 8:56:38 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между `Channel` и `Flow`? Объясните горячие и холодные потоки, обработку backpressure и когда выбирать каждый подход.
 

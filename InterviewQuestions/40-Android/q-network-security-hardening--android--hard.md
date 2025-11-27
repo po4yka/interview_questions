@@ -32,7 +32,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как спроектировать сетевой уровень Android-приложения с усиленной безопасностью: Network Security Config, certificate pinning, двустороннее TLS, key attestation и мониторинг нарушений?
 

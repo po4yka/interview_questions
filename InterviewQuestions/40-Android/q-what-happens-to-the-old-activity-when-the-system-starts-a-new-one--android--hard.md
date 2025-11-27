@@ -28,7 +28,6 @@ tags: [android/activity, android/lifecycle, difficulty/hard, lifecycle, memory]
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Жизненный цикл при запуске новой `Activity`
 

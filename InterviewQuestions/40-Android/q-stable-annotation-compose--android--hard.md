@@ -19,7 +19,6 @@ tags: [android/performance-rendering, android/ui-compose, difficulty/hard, jetpa
 date created: Saturday, November 1st 2025, 1:24:29 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Что известно о `@Stable` в Jetpack Compose?
@@ -183,7 +182,7 @@ kotlinOptions {
 
 Отчёты покажут, какие классы компилятор считает stable/immutable и как он выводит стабильность, например:
 
-```
+```kotlin
 stable class User {
   stable val id: String
   stable val name: String
@@ -345,7 +344,7 @@ kotlinOptions {
 
 The reports will show which classes the compiler treats as stable/immutable and how stability is inferred, for example:
 
-```
+```kotlin
 stable class User {
   stable val id: String
   stable val name: String

@@ -19,7 +19,6 @@ tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Какой класс можно использовать чтобы ловить разные жесты?

@@ -30,7 +30,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:10:06 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как работают Slot Table и рекомпозиция в Jetpack Compose? Объясните механизм внутреннего представления и оптимизации перерисовки.
 

@@ -17,7 +17,6 @@ tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, 
 date created: Friday, October 31st 2025, 6:30:28 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните паттерны объединения запросов (request coalescing) и дедупликации в Kotlin: зачем они нужны, как реализуются (на базе корутин), какие существуют потокобезопасные варианты, как отличать от батчинга и кэширования, и в каких продакшн-сценариях они применяются.
@@ -82,7 +81,7 @@ date modified: Tuesday, November 25th 2025, 8:53:49 pm
 
 ### Что Такое Объединение Запросов?
 
-```
+```text
 БЕЗ объединения:
      Запрос 1
   Клиент
@@ -1037,7 +1036,7 @@ When to use:
 
 ### What is Request Coalescing?
 
-```
+```text
 WITHOUT Coalescing:
      Request 1
   Client

@@ -18,7 +18,6 @@ sources: ["https://en.wikipedia.org/wiki/Command_pattern"]
 date created: Saturday, November 1st 2025, 1:24:26 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Command? Когда и зачем его использовать?
 

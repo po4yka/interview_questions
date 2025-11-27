@@ -31,7 +31,6 @@ tags: [adapters, android, android/architecture-modularization, android/ui-views,
 date created: Saturday, November 1st 2025, 12:46:54 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как сказать адаптеру перерисовать список, если какой-то элемент удалился?

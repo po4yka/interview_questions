@@ -29,7 +29,6 @@ tags: [android/activity, android/fragment, android/intent, android/service, diff
 date created: Saturday, November 1st 2025, 1:26:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Объединение компонентов Android
 
@@ -170,7 +169,7 @@ contentResolver.query(
 
 **Единая схема компонентов (концептуально):**
 
-```
+```text
 
         AndroidManifest.xml
   (основные компоненты объявлены здесь)
@@ -333,7 +332,7 @@ contentResolver.query(
 
 **Unified Component Diagram (Conceptual):**
 
-```
+```text
 
         AndroidManifest.xml
   (Core components declared here)

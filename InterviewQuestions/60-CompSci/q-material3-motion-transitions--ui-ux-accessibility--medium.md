@@ -18,7 +18,6 @@ tags: [difficulty/medium, ui-animation, ui-ux-accessibility]
 date created: Tuesday, October 28th 2025, 9:36:31 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 
 > Каковы ключевые принципы движения в Material 3? Объясните shared element transitions, анимации предиктивного жеста назад и реализацию плавных переходов между composables в соответствии с рекомендациями Material Design.

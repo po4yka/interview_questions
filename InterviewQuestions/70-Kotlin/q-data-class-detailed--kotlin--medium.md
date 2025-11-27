@@ -18,20 +18,19 @@ subtopics: [data-classes]
 date created: Saturday, November 1st 2025, 1:29:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
-# Вопрос
+# Вопрос (RU)
 
 Что такое data классы в Kotlin, какие методы для них автоматически генерируются, как работают `copy()` и `componentN()`/деструктуризация, какие есть ограничения и лучшие практики использования?
 
-# Question
+# Question (EN)
 
 What are data classes in Kotlin, what methods are automatically generated for them, how do `copy()` and `componentN()`/destructuring work, what are their limitations, and what are the best practices for using them?
 
-## Ответ
+## Ответ (RU)
 
 Ниже приведено подробное пояснение с примерами (английские примеры кода идентичны для обеих языковых секций).
 
-## Answer
+## Answer (EN)
 
 Below is a detailed explanation with examples (code samples are shared between both language sections).
 

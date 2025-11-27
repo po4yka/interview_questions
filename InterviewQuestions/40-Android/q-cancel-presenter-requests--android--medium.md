@@ -30,7 +30,6 @@ tags: [android/architecture-clean, android/coroutines, android/lifecycle, diffic
 date created: Saturday, November 1st 2025, 1:05:16 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как корректно отменять асинхронные запросы в Presenter при изменении состояния жизненного цикла `View`?
 

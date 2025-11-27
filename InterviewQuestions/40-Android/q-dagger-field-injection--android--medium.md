@@ -31,7 +31,6 @@ tags: [android/architecture-mvvm, android/di-hilt, dagger, dependency-injection,
 date created: Saturday, November 1st 2025, 1:27:26 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Какие особенности инъекции в поле при помощи Dagger?
 

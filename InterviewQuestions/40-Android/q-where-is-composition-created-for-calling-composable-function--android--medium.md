@@ -19,7 +19,6 @@ tags: [android/ui-compose, difficulty/medium, jetpack-compose, setContent]
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Где создается Composition для вызова composable функции?

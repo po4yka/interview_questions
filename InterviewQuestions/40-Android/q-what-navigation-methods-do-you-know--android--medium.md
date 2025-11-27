@@ -30,7 +30,6 @@ tags: [android, android/ui-navigation, difficulty/medium, navigation]
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Какие способы навигации вы знаете в Android?
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, DetailsFragment())
     .addToBackStack("details") // ✅ Сохраняет историю
-    .commit()                   // 🔄 Операция планируется и будет применена на главном потоке позже
+    .commit()                   // NOTE: Операция планируется и будет применена на главном потоке позже
 ```
 
 **Применение**: сложные single-activity приложения, динамические UI.
@@ -207,7 +206,7 @@ Manual fragment management for flexible UI composition in single-activity apps.
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, DetailsFragment())
     .addToBackStack("details") // ✅ Preserves history
-    .commit()                   // 🔄 Schedules the transaction to be applied on the main thread
+    .commit()                   // NOTE: Schedules the transaction to be applied on the main thread
 ```
 
 **Use case**: complex single-activity apps, dynamic UI.

@@ -17,7 +17,6 @@ tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
 date created: Friday, October 31st 2025, 6:32:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 
 > Зачем в Kotlin нужны data и sealed классы?

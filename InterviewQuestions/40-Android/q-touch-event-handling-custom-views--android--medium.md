@@ -30,7 +30,6 @@ tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-ev
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Как обрабатывать события касания в пользовательских `View`? Объясните механизм диспетчеризации, разницу между `onTouchEvent()` и `onInterceptTouchEvent()`, и как реализовать пользовательские жесты.
 
@@ -45,7 +44,7 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 
 Android использует цепочку диспетчеризации касаний через активность и иерархию `View`:
 
-```
+```text
 Activity.dispatchTouchEvent()
     ↓
 Window / DecorView
@@ -352,7 +351,7 @@ class FlingView @JvmOverloads constructor(
 
 Android uses a touch dispatch chain through the `Activity` and the `View` hierarchy:
 
-```
+```text
 Activity.dispatchTouchEvent()
     ↓
 Window / DecorView

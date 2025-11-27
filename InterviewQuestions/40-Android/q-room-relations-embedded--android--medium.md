@@ -28,7 +28,6 @@ tags: [android/architecture-clean, android/room, difficulty/medium, embedded, re
 date created: Saturday, November 1st 2025, 1:04:43 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать связи между сущностями в Room Database? Объясни использование `@Relation` для отношений один-ко-многим и многие-ко-многим, а также `@Embedded` для встраивания объектов в одну таблицу.

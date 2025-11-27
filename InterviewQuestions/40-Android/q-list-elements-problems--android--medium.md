@@ -19,7 +19,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:25:03 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Какие могут быть проблемы с элементами списка в Android и как их решать?
@@ -39,7 +38,7 @@ date modified: Tuesday, November 25th 2025, 8:53:59 pm
 **Проблема:** Большие изображения или отсутствие корректного переиспользования / масштабирования `View` и битмапов приводят к переполнению памяти.
 
 **Симптомы:**
-```
+```java
 java.lang.OutOfMemoryError: Failed to allocate a 12345678 byte allocation
 ```
 
@@ -168,7 +167,7 @@ adapter.submitList(newItems)
 **Проблема:** Обновление данных из нескольких потоков вызывает crashes.
 
 **Симптомы:**
-```
+```java
 java.lang.IndexOutOfBoundsException: Index: 5, Size: 3
 java.util.ConcurrentModificationException
 android.view.ViewRootImpl$CalledFromWrongThreadException
@@ -275,7 +274,7 @@ override fun onViewRecycled(holder: ViewHolder) {
 **Problem:** Large images or incorrect view/bitmap usage (no scaling/reuse) cause excessive memory usage and OOM.
 
 **Symptoms:**
-```
+```java
 java.lang.OutOfMemoryError: Failed to allocate a 12345678 byte allocation
 ```
 
@@ -404,7 +403,7 @@ adapter.submitList(newItems)
 **Problem:** Multi-threaded data updates cause crashes.
 
 **Symptoms:**
-```
+```java
 java.lang.IndexOutOfBoundsException: Index: 5, Size: 3
 java.util.ConcurrentModificationException
 android.view.ViewRootImpl$CalledFromWrongThreadException

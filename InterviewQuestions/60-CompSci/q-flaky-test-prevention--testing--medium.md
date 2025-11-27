@@ -19,7 +19,6 @@ tags: [difficulty/medium, stability, testing/best-practices, testing/flaky-tests
 date created: Monday, October 27th 2025, 3:58:21 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 
 > Как выявлять и исправлять flaky тесты? Обрабатывайте проблемы с таймингом, изоляцию тестов, очистку ресурсов.

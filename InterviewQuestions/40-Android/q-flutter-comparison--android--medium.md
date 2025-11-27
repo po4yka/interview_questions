@@ -30,7 +30,6 @@ tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/mediu
 date created: Saturday, November 1st 2025, 12:46:50 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки.
@@ -360,18 +359,18 @@ Flutter's platform channels introduce serialization and IPC overhead compared to
 - KMM: Close to platforms, good for tracking OS changes; Kotlin Multiplatform is stable, while ecosystem and tooling continue to evolve.
 - Flutter: Depends on Flutter SDK evolution and ecosystem; very capable but one more layer between you and the platforms.
 ### Decision Framework
-**Native Experience Priority** → KMM  
-**Speed to Market Priority** → Flutter  
-**Existing Native App** → KMM (incremental adoption)  
-**Multi-platform (Web/Desktop)** → Flutter  
-**Deep Platform Integration priority** → KMM  
+**Native Experience Priority** → KMM
+**Speed to Market Priority** → Flutter
+**Existing Native App** → KMM (incremental adoption)
+**Multi-platform (Web/Desktop)** → Flutter
+**Deep Platform Integration priority** → KMM
 **Small Team/Budget** → Flutter
 ### Decision Framework
-**Native Experience Priority** → KMM  
-**Speed to Market Priority** → Flutter  
-**Existing Native App** → KMM (incremental adoption)  
-**Multi-platform (Web/Desktop)** → Flutter  
-**Deep Platform Integration** → KMM  
+**Native Experience Priority** → KMM
+**Speed to Market Priority** → Flutter
+**Existing Native App** → KMM (incremental adoption)
+**Multi-platform (Web/Desktop)** → Flutter
+**Deep Platform Integration** → KMM
 **Small Team/Budget** → Flutter
 ### Лучшие Практики
 - **Пилотный проект** — начните с небольшой фичи для оценки подхода перед полным переходом.

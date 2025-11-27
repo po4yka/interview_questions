@@ -17,7 +17,6 @@ tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
 date created: Friday, October 31st 2025, 6:32:39 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 
 > Сравните `let`, `run`, `with`, `apply`, `also`. Когда использовать каждый? Объясните return values и context objects.
@@ -183,7 +182,7 @@ class Builder {
 
 ### Дерево Решений
 
-```
+```text
 Нужно работать с объектом?
 
  Хотите вернуть сам объект?
@@ -438,7 +437,7 @@ class Builder {
 
 ### Decision Tree
 
-```
+```text
 Need to operate on an object?
 
  Want to return the object itself?
@@ -561,11 +560,11 @@ user?.email?.let { email ->
 ## Связанные Вопросы (RU)
 
 - [[q-flow-performance--kotlin--hard]]
-- [[q-kotlin-null-safety--programming-languages--medium]]
-- [[q-kotlin-sam-conversions--programming-languages--medium]]
+- [[q-kotlin-null-safety--kotlin--medium]]
+- [[q-kotlin-sam-conversions--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-flow-performance--kotlin--hard]]
-- [[q-kotlin-null-safety--programming-languages--medium]]
-- [[q-kotlin-sam-conversions--programming-languages--medium]]
+- [[q-kotlin-null-safety--kotlin--medium]]
+- [[q-kotlin-sam-conversions--kotlin--medium]]

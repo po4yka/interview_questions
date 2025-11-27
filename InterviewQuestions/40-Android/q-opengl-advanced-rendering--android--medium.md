@@ -18,7 +18,6 @@ tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui
 date created: Saturday, November 1st 2025, 1:03:14 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать продвинутые техники рендеринга с использованием OpenGL ES в Android? Каковы лучшие практики для управления текстурами, framebuffer objects и пользовательских шейдеров?

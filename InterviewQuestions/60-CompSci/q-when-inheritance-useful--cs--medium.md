@@ -19,7 +19,6 @@ sources: ["https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programmin
 date created: Saturday, November 1st 2025, 1:26:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Когда наследование полезно, а когда нет?
 
@@ -353,11 +352,11 @@ class Player(private var attackStrategy: AttackStrategy) {
 ## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
-- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] — основы наследования
+- [[q-java-all-classes-inherit-from-object--kotlin--easy]] — основы наследования
 
 ### Связанные (тот Же уровень)
-- [[q-inheritance-vs-composition--oop--medium]] — Наследование vs композиция
-- [[q-interface-vs-abstract-class--programming-languages--medium]] — Интерфейсы
+- [[q-inheritance-vs-composition--cs--medium]] — Наследование vs композиция
+- [[q-interface-vs-abstract-class--kotlin--medium]] — Интерфейсы
 
 ### Продвинутые (сложнее)
 - Паттерны проектирования (Strategy, Template Method)
@@ -367,11 +366,11 @@ class Player(private var attackStrategy: AttackStrategy) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance basics
+- [[q-java-all-classes-inherit-from-object--kotlin--easy]] - Inheritance basics
 
 ### Related (Same Level)
-- [[q-inheritance-vs-composition--oop--medium]] - Inheritance vs Composition
-- [[q-interface-vs-abstract-class--programming-languages--medium]] - Interfaces
+- [[q-inheritance-vs-composition--cs--medium]] - Inheritance vs Composition
+- [[q-interface-vs-abstract-class--kotlin--medium]] - Interfaces
 
 ### Advanced (Harder)
 - Design patterns (Strategy, Template Method)

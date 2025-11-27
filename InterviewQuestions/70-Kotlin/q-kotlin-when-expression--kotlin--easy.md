@@ -17,7 +17,6 @@ tags: [control-flow, difficulty/easy, kotlin, pattern-matching, syntax, when]
 date created: Friday, October 31st 2025, 6:29:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Как использовать `when` в Kotlin вместо `switch`?
 

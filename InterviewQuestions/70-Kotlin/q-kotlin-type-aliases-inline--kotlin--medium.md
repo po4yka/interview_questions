@@ -17,7 +17,6 @@ tags: [difficulty/medium, inline-classes, kotlin, performance, type-aliases, typ
 date created: Friday, October 31st 2025, 6:28:52 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 
 > Когда использовать `typealias` (type aliases) vs `inline/value class` (inline classes) vs wrapper classes в Kotlin? Сравните memory overhead и type safety.
@@ -275,7 +274,7 @@ val id = UserId("123")  // Объект String + отдельный объект
 
 ### Дерево Принятия Решений
 
-```
+```text
 Нужна типовая абстракция?
 
  Только для читаемости?
@@ -631,7 +630,7 @@ val id = UserId("123")  // String object + separate UserId object
 
 ### Use Case Decision Tree
 
-```
+```text
 Need type abstraction?
 
  Just for readability?

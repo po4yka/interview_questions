@@ -18,7 +18,6 @@ sources: ["https://en.wikipedia.org/wiki/Object-oriented_programming"]
 date created: Saturday, November 1st 2025, 1:26:49 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Каковы четыре столпа ООП? Как работают инкапсуляция, наследование, полиморфизм и абстракция?
 
@@ -620,7 +619,7 @@ interface DataStore {
 - Understanding of classes and objects
 
 ### Related (Same Level)
-- [[q-solid-principles--software-design--medium]] - SOLID principles
+- [[q-solid-principles--cs--medium]] - SOLID principles
 
 ### Advanced (Harder)
 - Advanced OOP patterns

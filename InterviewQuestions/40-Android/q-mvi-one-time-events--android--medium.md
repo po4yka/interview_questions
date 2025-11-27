@@ -19,7 +19,6 @@ tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
 date created: Saturday, November 1st 2025, 12:46:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как обработать одноразовые события (one-time events) в MVI архитектуре?

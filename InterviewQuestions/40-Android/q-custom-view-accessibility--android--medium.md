@@ -32,7 +32,6 @@ tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
 date created: Saturday, November 1st 2025, 1:26:41 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как правильно реализовать доступность для custom view в Android?
 

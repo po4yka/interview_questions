@@ -20,7 +20,6 @@ related: [c--kotlin--medium, c-concurrency, q-lifecyclescope-viewmodelscope--kot
 date created: Friday, October 31st 2025, 6:33:46 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое `Deferred<T>` в корутинах Kotlin? Чем он отличается от `Job`? Объясните билдер `async`, функцию `await()` и различные паттерны параллельного выполнения с реальными примерами.
@@ -164,7 +163,7 @@ fun demonstrateDeferredStates() = runBlocking {
 
 **Диаграмма переходов состояний:**
 
-```
+```text
 NEW (только для ленивых)
     ↓ start()
 ACTIVE
@@ -650,7 +649,7 @@ fun main() = runBlocking {
 ```
 
 **Пример результатов (один запуск):**
-```
+```text
 Последовательно (10 вызовов): ~1000ms
 Параллельно (10 вызовов): ~100ms
 Ускорение: ~10x
@@ -1099,7 +1098,7 @@ fun demonstrateDeferredStates() = runBlocking {
 
 **State Transition Diagram:**
 
-```
+```text
 NEW (lazy only)
     ↓ start()
 ACTIVE
@@ -1594,7 +1593,7 @@ fun main() = runBlocking {
 ```
 
 **Benchmark results (example run):**
-```
+```text
 Sequential (10 calls): ~1000ms
 Parallel (10 calls): ~100ms
 Speedup: ~10x

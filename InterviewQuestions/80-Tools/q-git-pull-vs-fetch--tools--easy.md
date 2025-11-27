@@ -28,7 +28,6 @@ tags: [difficulty/easy, easy_kotlin, fetch, git, lang/ru, pull, remote, tools, v
 date created: Saturday, November 1st 2025, 12:09:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Question (EN)
 > Difference between git pull and git fetch
 # Вопрос (RU)

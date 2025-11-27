@@ -29,7 +29,6 @@ updated: 2025-11-11
 # Tags
 tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
 ---
-
 # Вопрос (RU)
 > Как в реляционной таблице сохранить уникальную для каждого элемента информацию
 

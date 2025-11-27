@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-factory-method-pattern--design-patterns--medium]
+related: [q-factory-method-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [builder, creational-patterns, design-patterns, difficulty/medium, gof-patterns]
@@ -19,7 +19,6 @@ sources: ["https://refactoring.guru/design-patterns/builder"]
 date created: Saturday, November 1st 2025, 1:24:17 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Builder? Когда его использовать и как он решает проблему телескопических конструкторов?
 
@@ -246,4 +245,4 @@ Named arguments and default values address readability and optional parameters w
 ## Related Questions
 
 ### Related (Medium)
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-template-method-pattern--cs--medium]] - Factory Method pattern

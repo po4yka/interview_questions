@@ -19,7 +19,6 @@ sources: ["https://developer.android.com/jetpack/guide"]
 date created: Saturday, November 1st 2025, 1:26:37 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн MVVM? Когда его использовать и как он работает?
 

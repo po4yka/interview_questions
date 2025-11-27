@@ -28,7 +28,6 @@ tags: [debounce, difficulty/medium, flow, kotlin, operators, throttle]
 date created: Thursday, October 16th 2025, 4:20:35 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между `debounce` и `throttle` в Kotlin `Flow`? Когда использовать каждый?
 
@@ -43,7 +42,7 @@ date modified: Tuesday, November 25th 2025, 8:53:52 pm
 
 ### Визуальное Сравнение
 
-```
+```text
 Вход:   A----B-C---D------E-F-G--------H
         |         |             |      |
 
@@ -461,7 +460,7 @@ searchQuery
 
 ### Visual Comparison
 
-```
+```text
 Input:  A----B-C---D------E-F-G--------H
         |         |             |      |
 

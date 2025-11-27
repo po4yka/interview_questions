@@ -18,7 +18,6 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 date created: Saturday, November 1st 2025, 1:25:38 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > С какими дизайн-системами в Android вы работали?

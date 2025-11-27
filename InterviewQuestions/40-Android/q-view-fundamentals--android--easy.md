@@ -19,7 +19,6 @@ tags: [android/ui-views, android/ui-widgets, difficulty/easy, view, view-hierarc
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое `View` в Android?
@@ -43,7 +42,7 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 - Декларативно через XML-макеты
 
 **Пример иерархии:**
-```
+```text
 ViewGroup (LinearLayout)
 ├── TextView (Заголовок)
 ├── ViewGroup (RelativeLayout)
@@ -124,7 +123,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Жизненный Цикл `View`
 
-```
+```text
 Событие → Обработка → requestLayout()/invalidate() → Measure/Layout/Draw
 ```
 
@@ -220,7 +219,7 @@ All views are arranged in a **tree structure**. You can add views:
 - Declaratively via XML layouts
 
 **Hierarchy Example:**
-```
+```text
 ViewGroup (LinearLayout)
 ├── TextView (Header)
 ├── ViewGroup (RelativeLayout)
@@ -301,7 +300,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### `View` Lifecycle
 
-```
+```text
 Event → Handle → requestLayout()/invalidate() → Measure/Layout/Draw
 ```
 

@@ -1,7 +1,8 @@
 ---
 id: kotlin-043
 title: "Kotlin Delegation Pattern Deep Dive / Паттерн делегирования в Kotlin - детально"
-aliases: ["Kotlin Delegation Pattern Deep Dive", "Паттерн делегирования в Kotlin - детально"]
+aliases: ["Kotlin Delegation Pattern Deep Dive", "Паттерн делегирования в Kotlin -
+      детально"]
 
 # Classification
 topic: kotlin
@@ -13,12 +14,14 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
+source_note: Amit Shekhar Android Interview Questions repository - MEDIUM 
+  priority
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-destructuring-declarations--kotlin--medium, q-infix-functions--kotlin--medium]
+related: [c-kotlin, q-destructuring-declarations--kotlin--medium, 
+      q-infix-functions--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
@@ -27,8 +30,12 @@ updated: 2025-11-09
 tags: [by-keyword, delegates, delegation, difficulty/medium, kotlin, patterns]
 date created: Sunday, October 12th 2025, 1:56:16 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
+anki_synced: true
+anki_slugs:
+  - 70-kotlin-q-kotlin-delegation-detailed-kotlin-medium-p01-en
+  - 70-kotlin-q-kotlin-delegation-detailed-kotlin-medium-p01-ru
+anki_last_sync: '2025-11-27T09:56:33.839728'
 ---
-
 # Вопрос (RU)
 > Объясните паттерн делегирования в Kotlin детально. Что такое делегирование классов и делегирование свойств?
 
@@ -541,7 +548,7 @@ class UserValidated {
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-delegation--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]
 - [[q-lazy-vs-lateinit--kotlin--medium]]
 
 ## Follow-ups
@@ -555,5 +562,5 @@ class UserValidated {
 - [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
 
 ## Related Questions
-- [[q-kotlin-delegation--programming-languages--easy]]
+- [[c-variable--programming-languages--easy]]
 - [[q-lazy-vs-lateinit--kotlin--medium]]

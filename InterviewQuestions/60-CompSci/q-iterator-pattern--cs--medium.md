@@ -18,7 +18,6 @@ sources: ["https://refactoring.guru/design-patterns/iterator"]
 date created: Saturday, November 1st 2025, 1:03:21 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Итератор? Когда его использовать и как он работает?
 
@@ -442,8 +441,8 @@ You might avoid explicit Iterator pattern when:
 - Понимание интерфейса `Iterable`
 
 ### Связанные (того Же уровня)
-- [[q-facade-pattern--design-patterns--medium]] - Паттерн Фасад
-- [[q-visitor-pattern--design-patterns--hard]] - Паттерн Посетитель
+- [[q-state-pattern--cs--medium]] - Паттерн Фасад
+- [[q-visitor-pattern--cs--hard]] - Паттерн Посетитель
 
 ### Продвинутые (сложнее)
 - Кастомные реализации итераторов
@@ -457,8 +456,8 @@ You might avoid explicit Iterator pattern when:
 - Understanding of Iterable interface
 
 ### Related (Same Level)
-- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
-- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
+- [[q-state-pattern--cs--medium]] - Facade pattern
+- [[q-visitor-pattern--cs--hard]] - Visitor pattern
 
 ### Advanced (Harder)
 - Custom iterator implementations

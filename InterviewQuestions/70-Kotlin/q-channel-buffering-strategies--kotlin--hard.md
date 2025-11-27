@@ -29,7 +29,6 @@ tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, perf
 date created: Sunday, October 12th 2025, 3:16:28 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое стратегии буферизации каналов в Kotlin? Объясните каналы RENDEZVOUS, BUFFERED, UNLIMITED и CONFLATED и когда использовать каждый.
 

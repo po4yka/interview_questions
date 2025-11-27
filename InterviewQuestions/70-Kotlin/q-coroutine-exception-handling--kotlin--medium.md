@@ -20,7 +20,6 @@ tags: [coroutines, difficulty/medium, error-handling, kotlin]
 date created: Sunday, October 12th 2025, 1:56:16 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?
 
@@ -145,7 +144,7 @@ viewModelScope.launch(handler) {
     throw Exception("Failed")  // Поймано handler'ом
 }
 
-// Для async handler НЕ вызывается, когда исключение захвачено; 
+// Для async handler НЕ вызывается, когда исключение захвачено;
 // оно перебрасывается при await(), где его нужно обработать явно.
 viewModelScope.async(handler) {
     throw Exception("Failed")  // Handler НЕ вызывается здесь; обработка вокруг await()

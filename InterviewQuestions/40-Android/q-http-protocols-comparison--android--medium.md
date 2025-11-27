@@ -19,7 +19,6 @@ tags: [android/networking-http, android/performance-memory, android/websockets, 
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между HTTP, `Long`-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
 

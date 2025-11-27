@@ -19,7 +19,6 @@ sources: ["https://developer.android.com/build/manage-manifests", "https://devel
 date created: Saturday, November 1st 2025, 1:25:22 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
@@ -40,7 +39,7 @@ date modified: Tuesday, November 25th 2025, 8:53:58 pm
 
 ### Принцип Работы
 
-```
+```text
 project/
  app/src/main/AndroidManifest.xml          ← Главный манифест
  feature-login/src/main/AndroidManifest.xml
@@ -135,7 +134,7 @@ In multi-module projects, each module has its own **AndroidManifest.xml** for:
 
 ### How it Works
 
-```
+```text
 project/
  app/src/main/AndroidManifest.xml          ← Main manifest
  feature-login/src/main/AndroidManifest.xml

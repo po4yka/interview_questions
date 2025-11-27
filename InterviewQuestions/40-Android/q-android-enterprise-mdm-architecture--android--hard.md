@@ -31,7 +31,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как спроектировать MDM-решение на Android Enterprise: DPC-приложение, режимы управления (Work Profile, Fully Managed, COPE), политики безопасности и интеграция с Play EMM API?
 

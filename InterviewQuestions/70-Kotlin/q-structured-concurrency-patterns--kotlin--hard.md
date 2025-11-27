@@ -28,7 +28,6 @@ tags: [advanced, coroutines, coroutinescope, difficulty/hard, kotlin, structured
 date created: Sunday, October 12th 2025, 3:39:19 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Что такое структурированная конкурентность? Объясните различия coroutineScope и supervisorScope, отношения родитель-потомок, распространение отмены и продвинутые паттерны, включая withContext и координацию async/await.
 

@@ -17,7 +17,6 @@ tags: [android, coroutines, difficulty/medium, kotlin, testing, unit-testing, vi
 date created: Friday, October 31st 2025, 6:32:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 
 > Как правильно тестировать `ViewModel`, использующие корутины? Каковы типичные паттерны и подводные камни?
@@ -1473,4 +1472,4 @@ testImplementation "app.cash.turbine:turbine:1.0.0" // For Flow testing
 ## Related Questions
 
 - [[q-flowon-operator-context-switching--kotlin--hard]]
-- [[q-kotlin-reflection--programming-languages--medium]]
+- [[q-kotlin-reflection--kotlin--medium]]

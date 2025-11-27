@@ -30,7 +30,6 @@ tags: [android/background-execution, android/coroutines, android/service, diffic
 date created: Saturday, November 1st 2025, 12:46:44 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как выбрать правильный способ выполнения фоновых задач в Android?
 

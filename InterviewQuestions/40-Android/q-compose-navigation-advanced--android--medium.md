@@ -29,7 +29,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:25:30 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать продвинутую навигацию в Jetpack Compose с аргументами, deep links и контролем back stack?
 

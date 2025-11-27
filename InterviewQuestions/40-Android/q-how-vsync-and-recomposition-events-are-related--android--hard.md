@@ -27,7 +27,6 @@ tags: [android, android/performance-rendering, android/ui-compose, difficulty/ha
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как связаны VSYNC и события рекомпозиции в Jetpack Compose?

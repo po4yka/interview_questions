@@ -18,7 +18,6 @@ tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard]
 date created: Saturday, November 1st 2025, 12:47:11 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Почему колбэки `Fragment` отличаются от колбэков `Activity`?
@@ -43,12 +42,12 @@ date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ### Ключевые Различия
 
 **`Activity`**: автономный компонент с более линейным жизненным циклом
-```
+```text
 onCreate → onStart → onResume → onPause → onStop → onDestroy
 ```
 
 **`Fragment`**: вложенный компонент с несколькими связанными циклами
-```
+```text
 Fragment lifecycle: onCreate → ... → onDestroy
 View lifecycle:     onCreateView → ... → onDestroyView
 Host lifecycle:     onAttach → ... → onDetach
@@ -310,12 +309,12 @@ class OptimizedFragment : Fragment() {
 ### Key Differences
 
 **`Activity`**: autonomous component with a more linear lifecycle
-```
+```text
 onCreate → onStart → onResume → onPause → onStop → onDestroy
 ```
 
 **`Fragment`**: nested component with several related lifecycles
-```
+```text
 Fragment lifecycle: onCreate → ... → onDestroy
 View lifecycle:     onCreateView → ... → onDestroyView
 Host lifecycle:     onAttach → ... → onDetach

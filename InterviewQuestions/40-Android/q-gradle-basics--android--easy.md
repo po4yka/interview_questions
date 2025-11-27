@@ -29,7 +29,6 @@ tags: [android/build-variants, android/gradle, build-system, dependencies, diffi
 date created: Saturday, November 1st 2025, 12:46:50 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Gradle Основы
 
@@ -44,7 +43,7 @@ Gradle — это универсальный инструмент автомат
 
 ### Структура Проекта
 
-```
+```kotlin
 MyApp/
  build.gradle.kts          (уровень проекта)
  settings.gradle.kts
@@ -188,7 +187,7 @@ Gradle is a general build automation tool. In Android projects, it is used toget
 
 ### Project Structure
 
-```
+```kotlin
 MyApp/
  build.gradle.kts          (project-level)
  settings.gradle.kts

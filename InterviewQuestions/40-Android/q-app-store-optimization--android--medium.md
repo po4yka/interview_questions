@@ -30,7 +30,6 @@ tags: [android/ab-testing, android/analytics, android/play-console, difficulty/m
 date created: Saturday, November 1st 2025, 1:04:13 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое оптимизация App Store и как её реализовать?
 

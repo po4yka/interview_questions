@@ -29,7 +29,6 @@ tags: [android/performance-rendering, android/ui-views, canvas, custom-views, di
 date created: Saturday, November 1st 2025, 12:46:45 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как оптимизировать отрисовку в Canvas для достижения 60 FPS в кастомных View?
 
@@ -59,7 +58,7 @@ class OptimizedView(context: Context) : View(context) {
     path.moveTo(0f, 0f)
     path.lineTo(width.toFloat(), height.toFloat())
 
-    // 🚫 Избегать систематического создания новых объектов здесь в каждом кадре
+    // FORBIDDEN: Избегать систематического создания новых объектов здесь в каждом кадре
     // val newPaint = Paint()
   }
 }
@@ -161,7 +160,7 @@ class OptimizedView(context: Context) : View(context) {
     path.moveTo(0f, 0f)
     path.lineTo(width.toFloat(), height.toFloat())
 
-    // 🚫 Avoid systematic per-frame allocations here
+    // FORBIDDEN: Avoid systematic per-frame allocations here
     // val newPaint = Paint()
   }
 }

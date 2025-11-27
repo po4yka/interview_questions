@@ -12,7 +12,7 @@ status: draft
 moc: moc-security
 related:
   - c-computer-science
-  - q-android-keystore-system--security--medium
+  - q-android-keystore-system--android--medium
   - q-android-security-practices-checklist--android--medium
   - q-api-rate-limiting-throttling--android--medium
   - q-app-security-best-practices--android--medium
@@ -28,7 +28,6 @@ tags: [difficulty/medium, networking, okhttp, security, tls]
 date created: Sunday, October 12th 2025, 12:27:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (OkHttp и Network Security Config)?
 
@@ -145,7 +144,7 @@ val client = OkHttpClient.Builder()
 
 ### Связанные (тот Же уровень)
 - [[q-android-security-practices-checklist--android--medium]]
-- [[q-android-keystore-system--security--medium]]
+- [[q-android-keystore-system--android--medium]]
 
 ### Продвинутые (сложнее)
 - [[q-android-runtime-art--android--medium]]
@@ -168,7 +167,7 @@ val client = OkHttpClient.Builder()
 
 ### Related (Same Level)
 - [[q-android-security-practices-checklist--android--medium]]
-- [[q-android-keystore-system--security--medium]]
+- [[q-android-keystore-system--android--medium]]
 
 ### Advanced (Harder)
 - [[q-android-runtime-art--android--medium]]

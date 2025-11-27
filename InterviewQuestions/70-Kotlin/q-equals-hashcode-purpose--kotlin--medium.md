@@ -17,7 +17,6 @@ tags: [difficulty/medium, equality, hashmap, kotlin, object-comparison]
 date created: Friday, October 31st 2025, 6:29:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Зачем нужны методы equals() и hashCode() в Kotlin/Java?
 
@@ -302,10 +301,10 @@ println(userRoles[User("Alice", 30)])  // "Engineer"
 
 ## Связанные Вопросы (RU)
 
-- [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]
+- [[q-kotlin-sealed-classes-purpose--kotlin--medium]]
 - [[q-kotlin-map-flatmap--kotlin--medium]]
 
 ## Related Questions
 
-- [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]
+- [[q-kotlin-sealed-classes-purpose--kotlin--medium]]
 - [[q-kotlin-map-flatmap--kotlin--medium]]

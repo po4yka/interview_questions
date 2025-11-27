@@ -28,7 +28,6 @@ tags: [difficulty/medium, functions, infix, kotlin, operators, syntax]
 date created: Saturday, October 18th 2025, 3:06:33 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое инфиксные функции в Kotlin?
 

@@ -21,13 +21,7 @@ tags:
   - noncancellable
   - cancellation
   - difficulty/medium
-original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:
-  - coroutines
-  - resource-management
-  - cancellation
-  - cleanup
 ---
 # Вопрос (RU)
 > Как обеспечить правильную очистку ресурсов при отмене корутины?

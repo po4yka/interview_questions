@@ -23,15 +23,14 @@ created: 2025-11-02
 updated: 2025-11-11
 tags: [android/camera, android/camerax, difficulty/hard]
 sources:
-- url: "https://developer.android.com/training/camerax"
-  note: Official CameraX guide
-- url: "https://medium.com/androiddevelopers/camerax-advanced-usage-article"
-  note: Advanced CameraX best practices
+  - url: "https://developer.android.com/training/camerax"
+    note: "Official CameraX guide"
+  - url: "https://medium.com/androiddevelopers/camerax-advanced-usage-article"
+    note: "Advanced CameraX best practices"
 
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как построить продвинутый pipeline с CameraX: объединить Preview, ImageAnalysis и VideoCapture, вручную контролировать экспозицию/фокус и интегрировать ML-обработку кадров без лагов?
 

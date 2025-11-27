@@ -19,7 +19,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:03:33 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Что вы знаете о Play Feature Delivery?
@@ -183,7 +182,7 @@ if (isModuleInstalled("ar_preview")) {
 
 ### Примеры Использования
 
-```
+```text
 :app (базовый модуль — списки товаров, навигация)
 :feature:auth (install-time — логин/регистрация)
 :feature:seller (on-demand — функции для продавцов)
@@ -346,7 +345,7 @@ if (isModuleInstalled("ar_preview")) {
 
 ### Example Use Cases
 
-```
+```text
 :app (base module — product listings, navigation)
 :feature:auth (install-time — login/registration)
 :feature:seller (on-demand — seller functionality)

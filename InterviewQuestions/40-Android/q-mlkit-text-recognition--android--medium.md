@@ -19,7 +19,6 @@ tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit
 date created: Saturday, November 1st 2025, 1:25:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать распознавание текста с помощью ML Kit? Как обрабатывать on-device vs cloud распознавание? Каковы best practices для предобработки изображений, оптимизации и обработки разных языков и скриптов?
@@ -74,7 +73,7 @@ class TextRecognitionManager {
     fun close() = latinRecognizer.close()
 }
 
-// 🔎 Плохо на практике: создание множества recognizer-экземпляров без закрытия
+// WARNING: Плохо на практике: создание множества recognizer-экземпляров без закрытия
 // повышает потребление памяти/ресурсов. Используйте скоуп и close(), когда более не нужно.
 class BadManager {
     private val recognizer = TextRecognition.getClient(/* options */)
@@ -337,7 +336,7 @@ class TextRecognitionManager {
     fun close() = latinRecognizer.close()
 }
 
-// 🔎 Not ideal: creating many recognizer instances and never closing them
+// WARNING: Not ideal: creating many recognizer instances and never closing them
 // can waste memory/resources. Prefer scoped usage and close() when done.
 class BadManager {
     private val recognizer = TextRecognition.getClient(/* options */)

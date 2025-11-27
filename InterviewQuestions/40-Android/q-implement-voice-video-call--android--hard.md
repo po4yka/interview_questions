@@ -29,7 +29,6 @@ tags: [android/media, android/networking-http, android/websockets, difficulty/ha
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 > Как бы вы реализовали функции голосовых и видеозвонков в Android приложении?
 
@@ -52,7 +51,7 @@ date modified: Tuesday, November 25th 2025, 8:53:59 pm
 - **Signaling Server** — обмен SDP и ICE-кандидатами (обычно WebSocket, с идентификацией пиров)
 
 **Архитектура**:
-```
+```text
 Устройство А                    Устройство Б
     ↓                                ↓
 Signaling Server ← WebSocket → Offer/Answer/ICE
@@ -442,7 +441,7 @@ fun endCall() {
 - **Signaling Server** - exchanges SDP and ICE candidates (typically via WebSocket, with peer addressing)
 
 **Architecture**:
-```
+```text
 Device A                        Device B
     ↓                               ↓
 Signaling Server ← WebSocket → Offer/Answer/ICE

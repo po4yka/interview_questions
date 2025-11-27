@@ -17,7 +17,6 @@ tags: [data-classes, difficulty/medium, programming-languages]
 date created: Friday, October 31st 2025, 6:33:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Какие переменные можно использовать в data class в Kotlin?
 

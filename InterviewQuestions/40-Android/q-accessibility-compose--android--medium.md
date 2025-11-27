@@ -29,7 +29,6 @@ tags: [accessibility, android/ui-accessibility, android/ui-compose, compose, dif
 date created: Saturday, November 1st 2025, 1:02:00 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как обеспечить доступность в Jetpack Compose для людей с ограниченными возможностями?
 

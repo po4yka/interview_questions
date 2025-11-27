@@ -19,7 +19,6 @@ sources: ["https://refactoring.guru/design-patterns"]
 date created: Saturday, November 1st 2025, 1:25:48 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерны проектирования? Какие основные категории паттернов существуют и когда их использовать?
 
@@ -431,28 +430,28 @@ class Item
 ## Связанные Вопросы (RU)
 
 ### Обзор
-- [[q-design-patterns-types--design-patterns--medium]] — Категории паттернов
+- [[q-design-patterns-types--cs--medium]] — Категории паттернов
 
 ### Порождающие Паттерны
-- [[q-singleton-pattern--design-patterns--easy]] — Singleton
+- [[q-singleton-pattern--cs--easy]] — Singleton
 
 ### Поведенческие Паттерны
-- [[q-strategy-pattern--design-patterns--medium]] — Strategy
-- [[q-state-pattern--design-patterns--medium]] — State
-- [[q-template-method-pattern--design-patterns--medium]] — Template Method
+- [[q-strategy-pattern--cs--medium]] — Strategy
+- [[q-state-pattern--cs--medium]] — State
+- [[q-template-method-pattern--cs--medium]] — Template Method
 
 ## Related Questions
 
 ### Overview
-- [[q-design-patterns-types--design-patterns--medium]] - Pattern categories
+- [[q-design-patterns-types--cs--medium]] - Pattern categories
 
 ### Creational Patterns
-- [[q-singleton-pattern--design-patterns--easy]] - Singleton
+- [[q-singleton-pattern--cs--easy]] - Singleton
 
 ### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy
-- [[q-state-pattern--design-patterns--medium]] - State
-- [[q-template-method-pattern--design-patterns--medium]] - Template Method
+- [[q-strategy-pattern--cs--medium]] - Strategy
+- [[q-state-pattern--cs--medium]] - State
+- [[q-template-method-pattern--cs--medium]] - Template Method
 
 ## References
 

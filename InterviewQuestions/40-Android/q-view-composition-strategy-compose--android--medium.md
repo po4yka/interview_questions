@@ -19,7 +19,6 @@ sources: ["https://developer.android.com/jetpack/compose/interop/view-compositio
 date created: Saturday, November 1st 2025, 1:24:45 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Что такое ViewCompositionStrategy и когда её использовать?
 

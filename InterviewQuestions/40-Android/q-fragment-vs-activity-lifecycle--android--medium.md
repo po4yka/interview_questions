@@ -32,7 +32,6 @@ tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium,
 date created: Saturday, November 1st 2025, 12:46:50 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Чем жизненный цикл `Fragment` отличается от жизненного цикла `Activity`?
 
@@ -103,12 +102,12 @@ class MyFragment : Fragment() {
 **3. Порядок состояний**
 
 **`Activity`** (базовая последовательность ключевых коллбеков):
-```
+```text
 onCreate → onStart → onResume → onPause → onStop → onDestroy
 ```
 
 **`Fragment`** (расширенная последовательность ключевых коллбеков):
-```
+```text
 onAttach → onCreate → onCreateView → onViewCreated →
 onStart → onResume → onPause → onStop →
 onDestroyView → onDestroy → onDetach
@@ -239,12 +238,12 @@ class MyFragment : Fragment() {
 **3. State Order**
 
 **`Activity`** (basic sequence of key callbacks):
-```
+```text
 onCreate → onStart → onResume → onPause → onStop → onDestroy
 ```
 
 **`Fragment`** (extended sequence of key callbacks):
-```
+```text
 onAttach → onCreate → onCreateView → onViewCreated →
 onStart → onResume → onPause → onStop →
 onDestroyView → onDestroy → onDetach

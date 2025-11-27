@@ -31,7 +31,6 @@ tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, opera
 date created: Sunday, October 12th 2025, 3:02:56 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое коллекции в Kotlin? Объясните `List`, `Set`, `Map`, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.
 
@@ -48,7 +47,7 @@ Kotlin предоставляет богатый набор типов колл�
 
 Упрощенная иерархия коллекций:
 
-```
+```java
 Iterable<T>
 ├── Collection<T>
 │   ├── List<T>
@@ -706,7 +705,7 @@ Kotlin provides a rich set of collection types and operations that make data man
 
 Collections hierarchy (simplified):
 
-```
+```java
 Iterable<T>
 ├── Collection<T>
 │   ├── List<T>

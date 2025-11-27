@@ -19,7 +19,6 @@ tags: [android/activity, android/architecture-mvvm, android/lifecycle, configura
 date created: Saturday, November 1st 2025, 1:26:42 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Почему пользовательские данные могут исчезнуть при повороте экрана?
@@ -151,7 +150,7 @@ class MyViewModel(
 
 ### Жизненный Цикл При Изменении Конфигурации
 
-```
+```text
 Поворот экрана
     ↓
 onPause()
@@ -315,7 +314,7 @@ class MyViewModel(
 
 ### Configuration Change Lifecycle
 
-```
+```text
 Screen rotation
     ↓
 onPause()

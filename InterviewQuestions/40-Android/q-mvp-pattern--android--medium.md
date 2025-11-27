@@ -19,7 +19,6 @@ tags: [android/architecture-mvvm, android/testing-unit, architecture-patterns, d
 date created: Saturday, November 1st 2025, 12:46:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое архитектурный паттерн MVP (Model-`View`-Presenter)? Объясните его компоненты и отличия от других паттернов.
@@ -44,7 +43,7 @@ date modified: Tuesday, November 25th 2025, 8:53:58 pm
 
 ### Contract Interface
 
-`View` и Presenter тесно сотрудничают: 
+`View` и Presenter тесно сотрудничают:
 - `View` держит ссылку на Presenter и делегирует ему действия пользователя.
 - Presenter держит ссылку на интерфейс `View`, а не на конкретную реализацию.
 

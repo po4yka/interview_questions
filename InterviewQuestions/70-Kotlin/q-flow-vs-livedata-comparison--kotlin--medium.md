@@ -18,7 +18,6 @@ tags: [difficulty/medium]
 date created: Friday, November 7th 2025, 2:49:31 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между Kotlin `Flow` и `LiveData`? Когда следует использовать каждый из них?
 

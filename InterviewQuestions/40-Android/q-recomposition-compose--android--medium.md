@@ -19,7 +19,6 @@ tags: [android/performance-rendering, android/ui-compose, android/ui-state, diff
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое рекомпозиция в Jetpack Compose? Что триггерит рекомпозицию и как Compose решает какие composable нужно перерисовать?

@@ -31,7 +31,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Как построить высокопроизводительный pipeline on-device ML на Android: подготовить модель, включить NNAPI/GPU delegate, организовать поток выполнения и обновлять модель по воздуху?
 

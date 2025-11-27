@@ -29,7 +29,6 @@ tags: [android/architecture-mvi, android/coroutines, android/flow, architecture-
 date created: Saturday, November 1st 2025, 12:46:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как в MVI-архитектуре правильно обрабатывать одноразовые события (one-time events), которые не должны храниться в State и пересылаться при пересоздании экрана?
 

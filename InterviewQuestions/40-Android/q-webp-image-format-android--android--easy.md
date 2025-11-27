@@ -26,7 +26,6 @@ tags: [android/files-media, android/performance-memory, difficulty/easy, images,
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Формат изображений WebP в Android
 
@@ -101,7 +100,7 @@ WebP поддерживает анимацию (animated WebP), как GIF, но
 
 #### Способ 1: Android Studio (встроенная конвертация)
 
-```
+```text
 1. Правый клик на изображение в res/drawable
 2. Выбрать "Convert to WebP..."
 3. Настроить параметры:
@@ -214,7 +213,7 @@ imageView.load("https://example.com/image.webp") {
 
 #### До Оптимизации
 
-```
+```text
 app/
   src/main/res/
     drawable/
@@ -230,7 +229,7 @@ APK размер: +1680 KB
 
 #### После Конвертации В WebP
 
-```
+```text
 app/
   src/main/res/
     drawable/
@@ -249,7 +248,7 @@ APK размер: +1088 KB
 
 #### 1. Фотографии (lossy)
 
-```
+```text
 Оригинал (JPEG): 800x600, 150 KB
 WebP (q=80):     800x600, 95 KB  (экономия ~37%)
 WebP (q=90):     800x600, 110 KB (экономия ~27%)
@@ -257,21 +256,21 @@ WebP (q=90):     800x600, 110 KB (экономия ~27%)
 
 #### 2. Логотипы И Иконки (lossless)
 
-```
+```text
 Оригинал (PNG):  512x512, 120 KB
 WebP (lossless): 512x512, 70 KB  (экономия ~42%)
 ```
 
 #### 3. Прозрачные Изображения
 
-```
+```text
 Оригинал (PNG):  1024x1024 с прозрачностью, 250 KB
 WebP (lossless): 1024x1024 с прозрачностью, 140 KB (экономия ~44%)
 ```
 
 #### 4. Анимация
 
-```
+```text
 Оригинал (GIF):  320x240, 30 frames, 1.5 MB
 WebP (animated): 320x240, 30 frames, 400 KB (экономия ~73%)
 ```
@@ -320,7 +319,7 @@ imageView.setImageResource(R.drawable.image)
 
 #### Анализ APK В Android Studio
 
-```
+```text
 Build → Analyze APK → выбрать APK
 
 Смотрим:
@@ -465,7 +464,7 @@ WebP supports animated images (animated WebP), similar to GIF but usually with m
 
 #### Method 1: Android Studio (built-in)
 
-```
+```text
 1. Right-click on image in res/drawable
 2. Select "Convert to WebP..."
 3. Configure:
@@ -576,7 +575,7 @@ imageView.load("https://example.com/image.webp") {
 
 #### Before
 
-```
+```text
 app/
   src/main/res/
     drawable/
@@ -592,7 +591,7 @@ APK size contribution: +1680 KB
 
 #### After Converting to WebP
 
-```
+```text
 app/
   src/main/res/
     drawable/
@@ -611,7 +610,7 @@ Saving: 592 KB (~35%)
 
 #### 1. Photos (lossy)
 
-```
+```text
 Original (JPEG): 800x600, 150 KB
 WebP (q=80):     800x600, 95 KB  (~37% saved)
 WebP (q=90):     800x600, 110 KB (~27% saved)
@@ -619,21 +618,21 @@ WebP (q=90):     800x600, 110 KB (~27% saved)
 
 #### 2. Logos and Icons (lossless)
 
-```
+```text
 Original (PNG):  512x512, 120 KB
 WebP (lossless): 512x512, 70 KB  (~42% saved)
 ```
 
 #### 3. Transparent Images
 
-```
+```text
 Original (PNG):  1024x1024 with alpha, 250 KB
 WebP (lossless): 1024x1024 with alpha, 140 KB (~44% saved)
 ```
 
 #### 4. Animation
 
-```
+```text
 Original (GIF):  320x240, 30 frames, 1.5 MB
 WebP (animated): 320x240, 30 frames, 400 KB (~73% saved)
 ```
@@ -681,7 +680,7 @@ imageView.setImageResource(R.drawable.image)
 
 #### Analyze APK in Android Studio
 
-```
+```text
 Build → Analyze APK → select APK
 
 Check:

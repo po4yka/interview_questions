@@ -2,8 +2,8 @@
 id: cs-012
 title: "Memento Pattern / Паттерн Хранитель"
 aliases: ["Memento Pattern", "Паттерн Хранитель"]
-topic: behavioral
-subtopics: [memento, state-management, undo-redo]
+topic: cs
+subtopics: [design-patterns, behavioral, memento, state-management, undo-redo]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -18,7 +18,6 @@ sources: ["https://refactoring.guru/design-patterns/memento"]
 date created: Saturday, November 1st 2025, 1:26:36 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Memento? Когда его использовать и как он работает?
 
@@ -360,7 +359,7 @@ fun main() {
 - Understanding of state management
 
 ### Related (Same Level)
-- [[q-state-pattern--design-patterns--medium]] - State pattern
+- [[q-state-pattern--cs--medium]] - State pattern
 
 ### Advanced (Harder)
 - Memory-optimized Memento implementations

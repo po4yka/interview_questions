@@ -30,7 +30,6 @@ tags: [android/gradle, android/performance-memory, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:46:41 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое проблема размера страницы DEX 16KB в Android?
 
@@ -51,7 +50,7 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 
 Условная иллюстрация:
 
-```
+```text
 Оптимально:      [Data A.......][Data B.......]
 Неоптимально:    [Data A..padding][Data B......]
                              ^^^^^ Потерянное место
@@ -102,7 +101,7 @@ This is not a bug in R8/ProGuard themselves. Instead, their optimizations (repac
 
 Illustrative view:
 
-```
+```text
 Optimal:       [Data A.......][Data B.......]
 Suboptimal:    [Data A..padding][Data B......]
                           ^^^^^ Wasted space

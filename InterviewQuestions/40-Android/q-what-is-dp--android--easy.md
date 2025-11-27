@@ -31,7 +31,6 @@ tags: [android/ui-compose, android/ui-theming, android/ui-views, density, diffic
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Что такое dp (density-independent pixel, плотность-независимый пиксель)?

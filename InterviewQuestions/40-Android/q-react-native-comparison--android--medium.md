@@ -29,7 +29,6 @@ tags: [android/architecture-mvvm, android/kmp, difficulty/medium, javascript, km
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 >
 Сравните Kotlin Multiplatform Mobile с React Native. Каковы архитектурные различия, bridge overhead и зрелость экосистемы? Чем отличается JavaScript vs Kotlin/Native подход?

@@ -19,7 +19,6 @@ sources: ["https://developer.android.com/guide/background", "https://developer.a
 date created: Saturday, November 1st 2025, 1:26:27 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Для чего нужна многопоточность в Android и какие инструменты использовать?

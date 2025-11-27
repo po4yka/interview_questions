@@ -32,7 +32,6 @@ tags: [channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, load-bala
 date created: Sunday, October 12th 2025, 3:13:16 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерны Fan-in и Fan-out в корутинах Kotlin? Объясните как распределять работу между несколькими воркерами и агрегировать результаты из множества источников.
 

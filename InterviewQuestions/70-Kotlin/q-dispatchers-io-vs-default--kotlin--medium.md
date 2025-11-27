@@ -18,7 +18,6 @@ tags: [concurrency, coroutines, difficulty/medium, dispatchers, kotlin, threadin
 date created: Friday, October 31st 2025, 6:34:14 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > В чём разница между Dispatchers.IO и Dispatchers.Default? Когда использовать каждый из них?
 

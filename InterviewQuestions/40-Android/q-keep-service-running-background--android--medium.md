@@ -31,7 +31,6 @@ tags: [android/background-execution, android/coroutines, android/service, diffic
 date created: Saturday, November 1st 2025, 12:46:56 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Что делать если нужно чтобы сервис продолжал работу в фоне?

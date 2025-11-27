@@ -17,7 +17,6 @@ tags: [android, background, constraints, coroutines, coroutineworker, difficulty
 date created: Saturday, November 1st 2025, 1:30:19 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Что такое CoroutineWorker в Android WorkManager и чем он отличается от Worker и RxWorker? Когда следует использовать WorkManager с корутинами, а когда запускать корутины напрямую? Приведите production-примеры синхронизации данных, загрузки файлов и периодической очистки с обработкой ошибок, обновлениями прогресса и стратегиями тестирования.
 
@@ -961,7 +960,7 @@ override suspend fun doWork(): Result {
 
 ### Связанные Вопросы
 - [[q-structured-concurrency--kotlin--hard]] - Принципы структурированной конкурентности
-- [[q-kotlin-serialization--programming-languages--easy]]
+- [[q-kotlin-serialization--kotlin--easy]]
 - [[q-flow-basics--kotlin--easy]] - `Flow` для реактивных обновлений
 
 ### Дополнительные Вопросы
@@ -1946,7 +1945,7 @@ override suspend fun doWork(): Result {
 
 ### Related Questions
 - [[q-structured-concurrency--kotlin--hard]] - Structured concurrency principles
-- [[q-kotlin-serialization--programming-languages--easy]]
+- [[q-kotlin-serialization--kotlin--easy]]
 - [[q-flow-basics--kotlin--easy]] - `Flow` for reactive updates
 
 ## Follow-ups

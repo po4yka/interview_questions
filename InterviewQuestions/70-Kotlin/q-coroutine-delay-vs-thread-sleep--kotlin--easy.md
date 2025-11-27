@@ -18,7 +18,6 @@ subtopics: [coroutines, threading]
 date created: Friday, October 31st 2025, 6:31:14 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 
 > В чём разница между `delay()` и `Thread.sleep()` в Kotlin-корутинах, как это влияет на блокировку потоков, производительность и когда что использовать?

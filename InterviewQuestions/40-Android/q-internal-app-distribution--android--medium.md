@@ -19,7 +19,6 @@ tags: [android/ci-cd, android/play-console, beta-testing, difficulty/medium, fir
 date created: Saturday, November 1st 2025, 1:32:33 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните стратегии внутреннего распространения приложений для бета-тестирования и QA. Как использовать Firebase App Distribution, Google Play Internal Testing и enterprise инструменты? Каковы best practices для управления группами тестировщиков, сбора feedback и автоматизации распространения?

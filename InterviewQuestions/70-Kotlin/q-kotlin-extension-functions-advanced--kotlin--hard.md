@@ -17,7 +17,6 @@ tags: [difficulty/hard, dsl, extensions, generics, kotlin, receivers]
 date created: Tuesday, November 25th 2025, 12:37:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Question (EN)
 
 > Implement extension functions with receivers, generic extensions, and nullable receivers. Understand resolution and scope.
@@ -269,4 +268,4 @@ Context receivers generalize the idea of multiple receivers for extensions/DSLs.
 
 - [[q-crossinline-keyword--kotlin--medium]]
 - [[q-object-singleton-companion--kotlin--medium]]
-- [[q-kotlin-java-primitives--programming-languages--medium]]
+- [[q-kotlin-java-primitives--kotlin--medium]]

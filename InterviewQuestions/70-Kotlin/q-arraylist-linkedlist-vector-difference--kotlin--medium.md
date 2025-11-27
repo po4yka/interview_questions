@@ -17,7 +17,6 @@ tags: [collections, data-structures, difficulty/medium, kotlin]
 date created: Friday, October 31st 2025, 6:29:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между `ArrayList`, `LinkedList` и `Vector`?
 

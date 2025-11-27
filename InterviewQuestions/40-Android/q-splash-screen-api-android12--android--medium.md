@@ -19,7 +19,6 @@ sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
 date created: Saturday, November 1st 2025, 1:24:29 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Что вы знаете об API Splash Screen в Android 12+?

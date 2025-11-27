@@ -31,7 +31,6 @@ tags: [cold-flows, coroutines, difficulty/medium, flow, hot-flows, kotlin]
 date created: Saturday, October 18th 2025, 9:34:33 am
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между горячими и холодными потоками? Объясните `Flow` (холодный), `SharedFlow`, `StateFlow` (горячие), когда использовать каждый и как конвертировать между ними.
 

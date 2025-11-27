@@ -18,7 +18,6 @@ tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
 date created: Saturday, November 1st 2025, 12:46:53 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как организовать работу с текстом и картинками в делегате RecyclerView?

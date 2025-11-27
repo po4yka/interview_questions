@@ -28,7 +28,6 @@ tags: [difficulty/medium, kotlin, type-aliases, types]
 date created: Saturday, October 18th 2025, 3:06:33 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?
 

@@ -20,7 +20,6 @@ tags: [coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
 date created: Saturday, October 18th 2025, 3:12:22 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-
 # Вопрос (RU)
 > Что такое `StateFlow` и `SharedFlow` в Kotlin? В чем их отличия?
 

@@ -31,7 +31,6 @@ tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplat
 date created: Sunday, October 12th 2025, 3:21:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > Что такое Kotlin/Native? Объясните нативную компиляцию, interop с C библиотеками и Objective-C/Swift, различия в модели памяти и случаи использования для iOS разработки.
 
@@ -55,7 +54,7 @@ date modified: Tuesday, November 25th 2025, 8:53:50 pm
 
 ### Архитектура Kotlin/Native
 
-```
+```text
 
        Kotlin Source Code
 
@@ -562,7 +561,7 @@ See also: [[c-kotlin]].
 
 ### Kotlin/Native Architecture
 
-```
+```text
 
        Kotlin Source Code
 

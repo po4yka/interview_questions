@@ -17,7 +17,6 @@ tags: [android, backward-compatibility, compilation, difficulty/medium, java, ko
 date created: Friday, October 31st 2025, 6:34:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Что такое desugaring в Android и как он работает?
 
@@ -148,13 +147,13 @@ fun printOptional() {
 
 #### Этап 1: Компиляция
 
-```
+```text
 Kotlin/Java код → Kotlin/Java Compiler → JVM bytecode (обычно Java 8)
 ```
 
 #### Этап 2: Desugaring + DEX
 
-```
+```text
 JVM bytecode → D8/R8:
   - language desugaring для Java 8+ фич (где нужно),
   - переписывание поддерживаемых Java 8+ API на desugar_jdk_libs (если coreLibraryDesugaringEnabled),
@@ -163,7 +162,7 @@ JVM bytecode → D8/R8:
 
 #### Этап 3: Упаковка
 
-```
+```text
 DEX bytecode + desugar_jdk_libs → APK/AAB
 ```
 

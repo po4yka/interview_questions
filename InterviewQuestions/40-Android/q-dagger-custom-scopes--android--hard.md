@@ -30,7 +30,6 @@ sources:
 date created: Saturday, November 1st 2025, 12:46:48 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между `@Singleton`, пользовательскими (custom) скоупами и unscoped-зависимостями. Когда и зачем стоит создавать кастомный скоуп?
 

@@ -19,7 +19,6 @@ tags: [authentication, caching, difficulty/medium, interceptors, networking, okh
 date created: Monday, October 27th 2025, 5:14:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 
 > Реализовать пользовательские интерцепторы OkHttp для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки `application` vs `network` интерцепторов.

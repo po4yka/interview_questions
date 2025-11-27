@@ -30,7 +30,6 @@ tags: [android/camera, android/performance-rendering, android/ui-graphics, diffi
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Объясните как реализовать детекцию и анализ лиц с помощью ML Kit. Как детектировать лица, landmarks, контуры и классифицировать выражения лица? Каковы best practices для real-time отслеживания, оптимизации производительности и приватности?
 

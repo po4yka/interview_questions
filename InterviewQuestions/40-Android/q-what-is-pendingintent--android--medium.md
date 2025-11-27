@@ -31,7 +31,6 @@ tags: [android, android/intents-deeplinks, android/notifications, difficulty/med
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Что такое PendingIntent?
 
@@ -49,7 +48,7 @@ date modified: Tuesday, November 25th 2025, 8:53:55 pm
 - **Отложенное выполнение** — `Intent` выполняется позже, не сразу.
 - **Делегирование прав** — действие выполняется с правами вашего приложения (того, кто создал PendingIntent), а не вызывающего кода.
 - **Контролируемая изменяемость**:
-  - до Android 12 поведение зависело от комбинации флагов; 
+  - до Android 12 поведение зависело от комбинации флагов;
   - начиная с Android 12 (targetSdkVersion >= 31) при создании нужно явно указать `FLAG_IMMUTABLE` или `FLAG_MUTABLE`, иначе будет выброшено исключение;
   - `FLAG_IMMUTABLE` делает PendingIntent неизменяемым после создания (рекомендуется, если нет необходимости менять данные через сторонний код);
   - `FLAG_MUTABLE` разрешает изменять/читать вложенный `Intent` через PendingIntent (использовать только при реальной необходимости).

@@ -19,7 +19,6 @@ sources: ["https://developer.android.com/topic/modularization/patterns"]
 date created: Saturday, November 1st 2025, 1:25:21 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Какие типы модулей существуют в Android?
@@ -100,7 +99,7 @@ App модули — точки входа в приложение (обычно
 
 Для разных типов устройств можно создавать отдельные app модули (каждый со своим манифестом и конфигурацией):
 
-```
+```groovy
 :app              // Mobile
 :app-wear         // WearOS
 :app-tv           // Android TV
@@ -268,7 +267,7 @@ App modules are the entry points to the application (typically host the `Applica
 
 For multiple device types, you can define separate app modules (each with its own manifest and configuration):
 
-```
+```groovy
 :app              // Mobile
 :app-wear         // WearOS
 :app-tv           // Android TV

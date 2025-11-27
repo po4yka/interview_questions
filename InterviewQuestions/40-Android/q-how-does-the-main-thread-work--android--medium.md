@@ -19,7 +19,6 @@ tags: [android, android/lifecycle, android/performance-rendering, android/thread
 date created: Saturday, November 1st 2025, 12:46:52 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Как работает главный поток в Android?
@@ -57,7 +56,7 @@ Main Thread
 - **Handler**: привязан к Looper, публикует сообщения/задачи в Message `Queue` и получает их обратно для обработки.
 
 ```kotlin
-// Упрощённая схема внутренней работы (для понимания; 
+// Упрощённая схема внутренней работы (для понимания;
 // фактический главный поток создаётся фреймворком, так писать для main thread не нужно)
 fun main() {
     Looper.prepare()
@@ -208,7 +207,7 @@ Main Thread
 - **Handler**: associated with a Looper; posts messages/runnables to the MessageQueue and receives them back for handling.
 
 ```kotlin
-// Simplified internal model (for understanding only; 
+// Simplified internal model (for understanding only;
 // the real main thread is created by the framework and you must not call loop() like this on it)
 fun main() {
     Looper.prepare()

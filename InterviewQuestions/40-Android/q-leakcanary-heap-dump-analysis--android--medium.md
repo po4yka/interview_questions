@@ -19,7 +19,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:25:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > Как понять что в heap dump есть утечка памяти?
@@ -91,7 +90,7 @@ fun analyzeHeap(heapDumpFile: File) {
 
 Shark ищет цепочку сильных ссылок от GC root к объекту, который по логике приложения должен был стать недостижимым, но остается удержан. Если такой путь существует и не отфильтрован как допустимый (через reference matchers и leak filters), то это считается утечкой памяти.
 
-```
+```text
 GC Root: Thread (main)
   ↓ HandlerThread.mQueue
   ↓ MessageQueue.mMessages
@@ -206,7 +205,7 @@ In practice, LeakCanary uses its own integration layer over Shark; this code onl
 
 Shark looks for strong reference chains from GC roots to an object that, according to app logic, should no longer be reachable but is still retained. If such a path exists and is not filtered out as allowed (through reference matchers / leak filters), it is treated as a memory leak.
 
-```
+```text
 GC Root: Thread (main)
   ↓ HandlerThread.mQueue
   ↓ MessageQueue.mMessages

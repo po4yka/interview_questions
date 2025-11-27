@@ -18,7 +18,6 @@ tags: [difficulty/medium]
 date created: Saturday, November 1st 2025, 1:07:23 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 
 > Объясните машину состояний `Job` в Kotlin корутинах: какие есть состояния (`New`, `Active`, `Completing`, `Completed`, `Cancelling`, `Cancelled`), допустимые переходы между ними, как ведут себя свойства `isActive`, `isCompleted`, `isCancelled` в каждом состоянии, как работают правила распространения состояний между родителем и потомками, и как `join()` и `cancel()` взаимодействуют с различными состояниями. Проиллюстрируйте ответ подробными примерами, включая реальные сценарии (логирование состояний и `ViewModel`-подобное использование).
@@ -65,7 +64,7 @@ date modified: Tuesday, November 25th 2025, 8:53:51 pm
 
 ### Диаграмма Переходов Состояний (текстовая)
 
-```
+```text
 
                            New      (только LAZY)
                        (начальное)
@@ -1137,7 +1136,7 @@ Important: This table reflects the logical model. In practice, transient combina
 
 ### State Transition Diagram (Text-Based)
 
-```
+```text
 
                            New      (LAZY only)
                         (initial)

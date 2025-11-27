@@ -27,7 +27,6 @@ tags: [android/architecture-mvvm, android/ui-state, difficulty/easy, ui-state]
 date created: Saturday, November 1st 2025, 1:26:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 > Состояние для начального списка
 
@@ -237,7 +236,7 @@ This is suitable for hints, placeholders, or otherwise known local data.
 ## Связанные Вопросы (RU)
 
 ### Базовые Концепции Информатики
-- [[q-list-vs-sequence--programming-languages--medium]] - Структуры данных
+- [[q-list-vs-sequence--kotlin--medium]] - Структуры данных
 
 ### Особенности Языка Kotlin
 - [[q-array-vs-list-kotlin--kotlin--easy]] - Структуры данных
@@ -253,7 +252,7 @@ This is suitable for hints, placeholders, or otherwise known local data.
 ## Related Questions
 
 ### Computer Science Fundamentals
-- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+- [[q-list-vs-sequence--kotlin--medium]] - Data Structures
 
 ### Kotlin Language Features
 - [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures

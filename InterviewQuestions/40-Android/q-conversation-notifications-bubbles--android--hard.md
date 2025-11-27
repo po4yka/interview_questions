@@ -31,7 +31,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как реализовать и поддерживать conversation notifications и bubbles: shortcuts, MessagingStyle, человекоориентированные уведомления, ограничения Android 11–14 и аналитика?
 

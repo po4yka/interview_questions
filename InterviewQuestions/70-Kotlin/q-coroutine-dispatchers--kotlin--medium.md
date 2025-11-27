@@ -31,7 +31,6 @@ tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, th
 date created: Thursday, October 16th 2025, 4:31:25 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
 > Что такое диспетчеры корутин в Kotlin? Объясните диспетчеры Main, IO, Default и Unconfined и когда использовать каждый.
 
@@ -436,7 +435,7 @@ launch(Dispatchers.Unconfined) {
 
 ### Дерево Решений
 
-```
+```text
 Какую операцию нужно выполнить?
 
  Обновление UI?

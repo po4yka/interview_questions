@@ -19,7 +19,6 @@ tags: [android/performance-memory, android/ui-views, difficulty/easy, recyclervi
 date created: Saturday, November 1st 2025, 1:26:26 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Какой layout выбрать для списка из большого количества элементов?

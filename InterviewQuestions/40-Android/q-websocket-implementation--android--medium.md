@@ -28,7 +28,6 @@ tags: [android/connectivity-caching, android/coroutines, android/websockets, dif
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Реализация WebSocket-клиента на Android (устойчивое, отказоустойчивое подключение для реального времени)
 

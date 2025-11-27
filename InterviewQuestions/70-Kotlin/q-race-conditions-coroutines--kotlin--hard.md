@@ -21,7 +21,6 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?
 
@@ -158,7 +157,7 @@ println(counter) // Ожидаем: 1000, фактически: < 1000
 
 Возможное чередование:
 
-```
+```text
 Корутина 1: Read(0)
 Корутина 2: Read(0)
 Корутина 1: Add(0+1)
@@ -873,7 +872,7 @@ Why? `counter++` is:
 
 Possible interleaving:
 
-```
+```text
 Coroutine 1: Read(0)
 Coroutine 2: Read(0)
 Coroutine 1: Add(0+1)

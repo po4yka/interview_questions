@@ -18,7 +18,6 @@ tags: [coroutines, difficulty/medium, kotlin, migration, reactive-programming, r
 date created: Friday, October 31st 2025, 6:30:29 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 
 > Как грамотно мигрировать с RxJava на Kotlin Coroutines/`Flow` в Android/Kotlin-проекте: какие соответствия типов (`Observable`/Single/Completable/Maybe/Flowable ↔ `Flow`/suspend/`StateFlow`/`SharedFlow`), как заменить операторы, настроить потоки выполнения, обработку ошибок и backpressure, обеспечить совместимость и поэтапную миграцию, а также каких подводных камней избегать?

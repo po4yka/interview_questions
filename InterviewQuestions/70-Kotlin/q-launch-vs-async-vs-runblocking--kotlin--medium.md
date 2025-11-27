@@ -17,7 +17,6 @@ tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblo
 date created: Saturday, November 1st 2025, 12:42:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
-
 # Вопрос (RU)
 > В чём разница между корутинными билдерами `launch`, `async` и `runBlocking`?
 

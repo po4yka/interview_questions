@@ -30,7 +30,6 @@ tags: [android/analytics, android/logging-tracing, android/performance-startup, 
 date created: Saturday, November 1st 2025, 12:46:59 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как спроектировать SDK наблюдаемости для Android, который обеспечивает crash/perf метрики и health‑gated staged rollouts?
@@ -157,29 +156,29 @@ Rich traces improve diagnosis but increase privacy/cost/overhead; default to min
 
 ## Follow-ups
 
--   How to balance telemetry collection with privacy regulations (GDPR/CCPA)?
--   What sampling strategy ensures statistical validity while minimizing data volume?
--   How to handle telemetry in offline scenarios and large backlogs?
--   How to implement automatic rollback triggers without false positives?
+- How to balance telemetry collection with privacy regulations (GDPR/CCPA)?
+- What sampling strategy ensures statistical validity while minimizing data volume?
+- How to handle telemetry in offline scenarios and large backlogs?
+- How to implement automatic rollback triggers without false positives?
 
 ## References
 
--   [[q-feature-flags-sdk--android--hard]]
--   [[c-workmanager]]
--   [[c-room]]
--   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
--   [[ANDROID-INTERVIEWER-GUIDE]]
+- [[q-feature-flags-sdk--android--hard]]
+- [[c-workmanager]]
+- [[c-room]]
+- [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
+- [[ANDROID-INTERVIEWER-GUIDE]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
--   Understanding of Android app lifecycle and background execution
+- Understanding of Android app lifecycle and background execution
 
 ### Related (Same Level)
 
--   [[q-feature-flags-sdk--android--hard]]
+- [[q-feature-flags-sdk--android--hard]]
 
 ### Advanced (Harder)
 
--   Design a global observability platform at Datadog/Firebase scale
+- Design a global observability platform at Datadog/Firebase scale

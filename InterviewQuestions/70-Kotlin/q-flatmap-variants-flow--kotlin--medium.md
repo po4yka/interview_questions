@@ -28,7 +28,6 @@ tags: [coroutines, difficulty/medium, flatmap, flow, kotlin, operators]
 date created: Thursday, October 16th 2025, 4:18:49 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между `flatMapConcat`, `flatMapMerge` и `flatMapLatest` в Kotlin `Flow`?
 
@@ -43,7 +42,7 @@ date modified: Tuesday, November 25th 2025, 8:53:51 pm
 
 ### Визуальное Сравнение
 
-```
+```text
 Источник:  A -----> B -----> C
            ↓        ↓        ↓
 Трансформация в flows (каждый требует времени):
@@ -344,7 +343,7 @@ urls.asFlow()
 
 ### Visual Comparison
 
-```
+```kotlin
 Source:  A -----> B -----> C
          ↓        ↓        ↓
 Transform to flows (each takes time):

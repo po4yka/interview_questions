@@ -26,7 +26,6 @@ tags: [android/ui-views, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Объяснение RecyclerView
 

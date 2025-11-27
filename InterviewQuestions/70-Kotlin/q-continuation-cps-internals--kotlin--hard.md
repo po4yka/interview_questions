@@ -21,7 +21,6 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:31 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?
 
@@ -659,7 +658,7 @@ class WithExceptionContinuation(
 
 ### Визуализация Выполнения Конечного Автомата (Visualizing State Machine Execution)
 
-```
+```text
 Начальный вызов: label = 0
      ↓
 [Состояние 0] Вызов operation1()
@@ -1329,7 +1328,7 @@ Important points:
 
 ### Visualizing State Machine Execution
 
-```
+```kotlin
 Initial call: label = 0
      ↓
 [State 0] Call operation1()

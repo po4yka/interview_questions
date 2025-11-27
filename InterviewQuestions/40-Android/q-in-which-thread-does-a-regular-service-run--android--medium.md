@@ -31,7 +31,6 @@ tags: [android, android/lifecycle, android/service, android/threads-sync, diffic
 date created: Saturday, November 1st 2025, 12:46:55 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
-
 # Вопрос (RU)
 
 > В каком потоке работает обычный `Service` по умолчанию?

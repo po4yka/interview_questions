@@ -33,7 +33,6 @@ tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-state,
 date created: Saturday, November 1st 2025, 12:46:52 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Как работает Jetpack Compose?
@@ -48,9 +47,9 @@ date modified: Tuesday, November 25th 2025, 8:54:00 pm
 
 ### Основные Принципы
 
-**Declarative UI**: описываете, что должно быть, а не как по шагам построить UI  
-**Reactive**: UI автоматически обновляется при изменении наблюдаемого состояния  
-**Component-based**: UI собирается из переиспользуемых composable-функций  
+**Declarative UI**: описываете, что должно быть, а не как по шагам построить UI
+**Reactive**: UI автоматически обновляется при изменении наблюдаемого состояния
+**Component-based**: UI собирается из переиспользуемых composable-функций
 **Kotlin-first**: тесная интеграция с Kotlin (включая корутины и `Flow` через специализированные API)
 
 ### Как Работает Composition
@@ -186,9 +185,9 @@ Compose работает через:
 
 ### Core Principles
 
-**Declarative UI**: describe what the UI should be, not step-by-step how to mutate it  
-**Reactive**: UI automatically updates when observable state changes  
-**Component-based**: build UIs from reusable composable functions  
+**Declarative UI**: describe what the UI should be, not step-by-step how to mutate it
+**Reactive**: UI automatically updates when observable state changes
+**Component-based**: build UIs from reusable composable functions
 **Kotlin-first**: designed for Kotlin, with coroutine/`Flow`-aware APIs and seamless Kotlin integration
 
 ### How Composition Works

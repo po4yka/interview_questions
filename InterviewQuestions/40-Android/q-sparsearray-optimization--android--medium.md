@@ -19,7 +19,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:24:28 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Что такое SparseArray и когда его использовать вместо `HashMap` с ключами `Int`?
 

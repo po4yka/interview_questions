@@ -19,7 +19,6 @@ tags: [android/performance-startup, difficulty/medium, performance, startup]
 date created: Saturday, November 1st 2025, 1:03:48 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Какие существуют типы запуска Android-приложения (cold/warm/hot), и как оптимизировать каждый из них?
 

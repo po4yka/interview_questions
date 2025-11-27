@@ -19,7 +19,6 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Какие лучшие практики для мульти-модульной архитектуры в Android? Когда и зачем её использовать?
 

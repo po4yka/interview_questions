@@ -28,7 +28,6 @@ tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
 date created: Sunday, October 12th 2025, 2:24:09 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое CoroutineContext в Kotlin? Как он работает и какие его ключевые элементы?
 
@@ -43,9 +42,9 @@ date modified: Tuesday, November 25th 2025, 8:53:53 pm
 
 ### Основные Элементы
 
-**1. Job - Жизненный цикл и отмена**  
-**2. CoroutineDispatcher - Выполнение на потоках**  
-**3. CoroutineName - Имя для отладки**  
+**1. Job - Жизненный цикл и отмена**
+**2. CoroutineDispatcher - Выполнение на потоках**
+**3. CoroutineName - Имя для отладки**
 **4. CoroutineExceptionHandler - Обработка исключений**
 
 ```kotlin
@@ -186,8 +185,8 @@ class DataViewModel : ViewModel() {
 
 ### Правила Распространения Контекста
 
-**1. Ребенок наследует родительский контекст.**  
-**2. Ребенок может переопределить специфичные элементы.**  
+**1. Ребенок наследует родительский контекст.**
+**2. Ребенок может переопределить специфичные элементы.**
 **3. Job НЕ переиспользуется: для дочерней корутины создается новый Job, у которого родитель — исходный Job.**
 
 ```kotlin
@@ -211,9 +210,9 @@ launch(parentContext) {
 
 ### Core Elements
 
-**1. Job - Lifecycle and cancellation**  
-**2. CoroutineDispatcher - Thread execution**  
-**3. CoroutineName - Debugging name**  
+**1. Job - Lifecycle and cancellation**
+**2. CoroutineDispatcher - Thread execution**
+**3. CoroutineName - Debugging name**
 **4. CoroutineExceptionHandler - Exception handling**
 
 ```kotlin
@@ -354,8 +353,8 @@ class DataViewModel : ViewModel() {
 
 ### Context Propagation Rules
 
-**1. Child inherits parent context.**  
-**2. Child can override specific elements.**  
+**1. Child inherits parent context.**
+**2. Child can override specific elements.**
 **3. Job is NOT reused: a new child Job is created with the parent Job as its parent.**
 
 ```kotlin

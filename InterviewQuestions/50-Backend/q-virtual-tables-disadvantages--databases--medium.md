@@ -29,7 +29,6 @@ updated: 2025-11-11
 # Tags
 tags: [database, virtual-tables, views, performance, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
 ---
-
 # Вопрос (RU)
 > Какой минус есть у виртуальных таблиц
 

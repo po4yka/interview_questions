@@ -21,7 +21,6 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:17 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Какие самые распространенные ошибки при использовании Kotlin корутин, и как их исправить?
 

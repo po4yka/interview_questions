@@ -17,10 +17,19 @@ tags: [backpressure, buffer, capacity, channels, coroutines, difficulty/hard, ko
 date created: Saturday, November 1st 2025, 1:27:21 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
+# Вопрос (RU)
 
-# Channel Buffer Strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии Буферизации Каналов
+Как работают различные стратегии буферизации каналов в Kotlin (RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED)? Объясните поведение send()/receive(), обработку противодавления, характеристики производительности, последствия для памяти и когда использовать каждую стратегию.
 
-## English
+# Question (EN)
+
+How do different channel buffer strategies work in Kotlin (RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED)? Explain send()/receive() behavior, backpressure handling, performance characteristics, memory implications, and when to use each strategy.
+
+## Ответ (RU)
+
+Ниже приведено подробное объяснение каждой стратегии буферизации с примерами, таблицами сравнения и реальными сценариями использования.
+
+## Answer (EN)
 
 ### Overview
 
@@ -89,7 +98,7 @@ fun demonstrateRendezvous() = runBlocking {
 ```
 
 **Output:**
-```
+```text
 === RENDEZVOUS Channel Demo ===
 Producer: Sending 0
 (waits ~100ms)
@@ -218,7 +227,7 @@ fun demonstrateBuffered() = runBlocking {
 ```
 
 **Output:**
-```
+```text
 === BUFFERED Channel Demo ===
 Sending 0
 Sending 1
@@ -365,7 +374,7 @@ fun demonstrateUnlimited() = runBlocking {
 ```
 
 **Output:**
-```
+```text
 === UNLIMITED Channel Demo ===
 Sent 0 (channel size unknown)
 Sent 1000 (channel size unknown)
@@ -520,7 +529,7 @@ fun demonstrateConflated() = runBlocking {
 ```
 
 **Output:**
-```
+```text
 === CONFLATED Channel Demo ===
 Sending 0
 Sending 1
@@ -677,7 +686,7 @@ fun demonstrateExplicitCapacity() = runBlocking {
 ```
 
 **Output:**
-```
+```text
 === Explicit Capacity Demo ===
 Sending 0
 ...
@@ -835,7 +844,7 @@ fun demonstrateBackpressure() = runBlocking {
 ```
 
 **Expected Output:**
-```
+```text
 === Backpressure Comparison ===
 
 RENDEZVOUS:
@@ -941,7 +950,7 @@ fun runChannelBenchmark() = runBlocking {
 ```
 
 **Sample Output:**
-```
+```text
 === Channel Performance Benchmark ===
 
 Results:
@@ -1014,7 +1023,7 @@ fun analyzeMemoryUsage() = runBlocking {
 ```
 
 **Output:**
-```
+```text
 === Memory Usage Analysis ===
 
 Memory estimates (1KB items):
@@ -1033,7 +1042,7 @@ UNLIMITED WARNING:
 
 ### Decision Tree: Which Strategy to Use?
 
-```
+```text
 Do you need ALL values consumed?
  Yes
    Can producer wait for consumer?
@@ -1523,7 +1532,7 @@ Kotlin корутины каналы поддерживают несколько
 
 ### Дерево Решений: Какую Стратегию Использовать?
 
-```
+```text
 Нужны ВСЕ значения для потребления?
  Да
    Может ли производитель ждать потребителя?

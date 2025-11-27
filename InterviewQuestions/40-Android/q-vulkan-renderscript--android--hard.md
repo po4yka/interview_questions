@@ -17,7 +17,6 @@ tags: [android/performance-rendering, difficulty/hard]
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Как использовать Vulkan для низкоуровневых операций на GPU в Android? Какие существуют альтернативы устаревшему RenderScript? Как реализовать compute-шейдеры и GPU-ускоренную обработку изображений?
 

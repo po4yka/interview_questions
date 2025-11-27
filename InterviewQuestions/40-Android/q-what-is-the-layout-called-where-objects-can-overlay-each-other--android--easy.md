@@ -18,7 +18,6 @@ tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, 
 date created: Saturday, November 1st 2025, 1:25:40 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Как называется layout, в котором UI-элементы могут наслаиваться друг на друга?

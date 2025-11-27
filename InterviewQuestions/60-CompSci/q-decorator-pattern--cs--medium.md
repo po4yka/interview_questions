@@ -18,7 +18,6 @@ sources: ["https://refactoring.guru/design-patterns/decorator"]
 date created: Saturday, November 1st 2025, 1:25:31 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Decorator? Когда и зачем его использовать?
 

@@ -27,7 +27,6 @@ tags: [android/background-execution, android/lifecycle, android/service, difficu
 date created: Saturday, November 1st 2025, 1:03:09 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Для чего используются Service-компоненты в Android и когда они необходимы?
 

@@ -27,7 +27,6 @@ tags: [android/service, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Ограничения `Service`
 
@@ -42,7 +41,7 @@ date modified: Tuesday, November 25th 2025, 8:53:57 pm
 
 ### История Ограничений `Service`
 
-```
+```text
 Android 5.0 (Lollipop)   - Введен JobScheduler
 Android 6.0 (Marshmallow) - Doze Mode
 Android 7.0 (Nougat)     - Doze on the go
@@ -138,7 +137,7 @@ class MyApp : Application() {
 
 Ошибка:
 
-```
+```java
 java.lang.IllegalStateException: Not allowed to start service Intent: app is in background
 ```
 
@@ -446,7 +445,7 @@ Key reasons:
 
 ### History of `Service` Restrictions
 
-```
+```text
 Android 5.0 (Lollipop)   - JobScheduler introduced
 Android 6.0 (Marshmallow) - Doze mode
 Android 7.0 (Nougat)     - Doze on the go
@@ -486,7 +485,7 @@ class MyApp : Application() {
 
 Error:
 
-```
+```java
 java.lang.IllegalStateException: Not allowed to start service Intent: app is in background
 ```
 

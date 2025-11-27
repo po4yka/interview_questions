@@ -28,7 +28,6 @@ sources:
 date created: Saturday, November 1st 2025, 1:24:15 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Что такое cleartext traffic в Android и как его контролировать?
 
@@ -86,7 +85,7 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ### Типичная Ошибка
 
 При попытке HTTP-запроса на API 28+ без разрешённого cleartext:
-```
+```java
 java.net.UnknownServiceException:
 CLEARTEXT communication not permitted by network security policy
 ```
@@ -147,7 +146,7 @@ CLEARTEXT communication not permitted by network security policy
 ### Common Error
 
 When attempting an HTTP request on API 28+ without permitted cleartext:
-```
+```java
 java.net.UnknownServiceException:
 CLEARTEXT communication not permitted by network security policy
 ```
@@ -188,6 +187,6 @@ CLEARTEXT communication not permitted by network security policy
 
 ### Advanced (Harder)
 - [[q-certificate-pinning--security--medium]] — Certificate pinning implementation
-- [[q-android-keystore-system--security--medium]] — Android Keystore
+- [[q-android-keystore-system--android--medium]] — Android Keystore
 - SSL/TLS handshake internals
 - Man-in-the-middle attack prevention

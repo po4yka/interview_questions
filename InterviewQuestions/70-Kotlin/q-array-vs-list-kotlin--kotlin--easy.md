@@ -26,7 +26,6 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:09:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > В чём разница между `Array` и `List` в Kotlin?
 

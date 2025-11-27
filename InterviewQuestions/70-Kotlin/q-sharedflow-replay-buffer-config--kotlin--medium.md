@@ -19,7 +19,6 @@ contributors: []
 date created: Friday, October 31st 2025, 6:30:54 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-
 # Вопрос (RU)
 > Как настроить replay cache и buffer в `SharedFlow`? Объясните параметры `replay`, `extraBufferCapacity` и `onBufferOverflow`, их взаимодействие и реальные сценарии использования с учётом производительности.
 
@@ -170,7 +169,7 @@ fun demonstrateExtraBufferRu() = runBlocking {
 
 **Общая ёмкость буфера:**
 
-```
+```text
 Общая ёмкость = replay + extraBufferCapacity
 ```
 
@@ -324,7 +323,7 @@ fun demonstrateReplayAndBufferRu() = runBlocking {
 
 #### Визуализация Расположения replay/buffer
 
-```
+```text
 Конфигурация: replay=2, extraBufferCapacity=3, onBufferOverflow=DROP_OLDEST
 
 [Replay Cache (2)] [Extra Buffer (3)]
@@ -1023,7 +1022,7 @@ fun demonstrateReplayAndBuffer() = runBlocking {
 
 ### Visualization
 
-```
+```text
 Configuration: replay=2, extraBufferCapacity=3, onBufferOverflow=DROP_OLDEST
 
 [Replay Cache (2)] [Extra Buffer (3)]

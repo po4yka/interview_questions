@@ -27,7 +27,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:26:58 pm
 date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
-
 # Вопрос (RU)
 > Как работают кастомные атрибуты в Custom `View` и как их правильно объявлять и считывать?
 

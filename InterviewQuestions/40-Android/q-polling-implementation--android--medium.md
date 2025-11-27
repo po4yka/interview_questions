@@ -19,7 +19,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:03:49 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 
 > Как реализовать polling в Android приложении? Какие подходы существуют и когда их использовать?

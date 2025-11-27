@@ -18,7 +18,6 @@ sources: ["https://refactoring.guru/design-patterns/prototype"]
 date created: Saturday, November 1st 2025, 1:27:01 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
-
 # Вопрос (RU)
 > Что такое паттерн Prototype? Когда его использовать и как он работает?
 
@@ -135,7 +134,7 @@ val clone = prototype.clone()  // Быстрое создание нового �
 
 **Глубокое vs Поверхностное клонирование:**
 
-*Теория:* 
+*Теория:*
 - Поверхностное (shallow) клонирование — создаёт новый объект, но вложенные объекты копируются по ссылке и остаются общими.
 - Глубокое (deep) клонирование — создаёт новые экземпляры для вложенных объектов/структур.
 
@@ -344,7 +343,7 @@ class DeepCloneableCharacter(val settings: CharacterSettings) : DeepCloneable<De
 - Understanding of object creation
 
 ### Related (Same Level)
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-template-method-pattern--cs--medium]] - Factory Method pattern
 
 ### Advanced (Harder)
 - Advanced cloning patterns

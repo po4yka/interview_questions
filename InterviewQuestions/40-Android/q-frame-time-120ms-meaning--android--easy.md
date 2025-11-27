@@ -18,7 +18,6 @@ sources: []
 date created: Saturday, November 1st 2025, 1:30:15 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 
 > Если профайлер показывает что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
@@ -34,7 +33,7 @@ date modified: Tuesday, November 25th 2025, 8:54:00 pm
 Кадр в 120мс означает **критическое превышение бюджета**: вместо целевых 16.67мс (60 fps) приложение пропустило примерно 7 кадров подряд относительно идеального расписания, что пользователь видит как заметное зависание интерфейса (jank / hitch).
 
 **Расчёт:**
-```
+```text
 Целевой бюджет: 1000мс / 60 ≈ 16.67мс на кадр
 Фактическое время: 120мс
 Пропущено кадров: 120 / 16.67 ≈ 7 кадров
@@ -115,7 +114,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 A 120ms frame represents a **critical frame time budget overrun**: instead of the target 16.67ms (60 fps), the app missed roughly 7 vsync intervals for that frame, which appears to the user as noticeable jank / a hitch.
 
 **Calculation:**
-```
+```text
 Target budget: 1000ms / 60 ≈ 16.67ms per frame
 Actual time: 120ms
 Missed intervals (dropped opportunities): 120 / 16.67 ≈ 7

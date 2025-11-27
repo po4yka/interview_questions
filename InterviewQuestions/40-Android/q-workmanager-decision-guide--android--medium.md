@@ -19,7 +19,6 @@ tags: [android/background-execution, android/coroutines, android/performance-bat
 date created: Saturday, November 1st 2025, 12:47:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
-
 # Вопрос (RU)
 
 > Когда использовать WorkManager vs Coroutines vs `Service` для фоновой работы в Android?
@@ -244,7 +243,7 @@ class DataSyncManager(
 
 ### Decision Tree
 
-```
+```text
 Нужна ли повышенная гарантия выполнения после закрытия приложения / перезапуска процесса?
  ДА: Можно отложить выполнение?
     ДА: WorkManager
@@ -472,7 +471,7 @@ class DataSyncManager(
 
 ### Decision Tree
 
-```
+```text
 Need higher reliability beyond app/process lifetime (including after app close/restart)?
  YES: Can execution be deferred?
     YES: WorkManager

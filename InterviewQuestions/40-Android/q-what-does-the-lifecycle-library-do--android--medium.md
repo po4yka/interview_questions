@@ -30,7 +30,6 @@ tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium,
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Что делает библиотека Lifecycle?
@@ -49,8 +48,8 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 
 ### Основные Компоненты
 
-**1. Lifecycle** — абстракция, представляющая состояние жизненного цикла и события переходов  
-**2. LifecycleOwner** — интерфейс, реализуемый компонентами (`Activity`/`Fragment` и др.), предоставляющими `Lifecycle`  
+**1. Lifecycle** — абстракция, представляющая состояние жизненного цикла и события переходов
+**2. LifecycleOwner** — интерфейс, реализуемый компонентами (`Activity`/`Fragment` и др.), предоставляющими `Lifecycle`
 **3. LifecycleObserver** / **DefaultLifecycleObserver** — наблюдатели за изменениями жизненного цикла (**рекомендуется** `DefaultLifecycleObserver`, тогда как аннотированный `LifecycleObserver` считается устаревшим подходом)
 
 ### Современный Подход: DefaultLifecycleObserver
@@ -179,8 +178,8 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-**2. Повторное использование** — один observer работает с любыми компонентами, реализующими `LifecycleOwner`  
-**3. Тестируемость** — компоненты, зависящие от `Lifecycle`, можно тестировать, эмулируя события состояний  
+**2. Повторное использование** — один observer работает с любыми компонентами, реализующими `LifecycleOwner`
+**3. Тестируемость** — компоненты, зависящие от `Lifecycle`, можно тестировать, эмулируя события состояний
 **4. Уменьшение boilerplate** — меньше прямых переопределений методов жизненного цикла в UI-классах
 
 ---
@@ -191,8 +190,8 @@ The **Lifecycle library** provides classes and interfaces to build **lifecycle-a
 
 ### Core Components
 
-**1. Lifecycle** — abstraction that represents lifecycle state and transition events  
-**2. LifecycleOwner** — interface implemented by components (`Activity`/`Fragment` and others) that expose a `Lifecycle`  
+**1. Lifecycle** — abstraction that represents lifecycle state and transition events
+**2. LifecycleOwner** — interface implemented by components (`Activity`/`Fragment` and others) that expose a `Lifecycle`
 **3. LifecycleObserver** / **DefaultLifecycleObserver** — observers that react to lifecycle changes (`DefaultLifecycleObserver` is the recommended modern API; the generic `LifecycleObserver` with annotations is considered legacy-style)
 
 ### Modern Approach: DefaultLifecycleObserver
@@ -321,8 +320,8 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-**2. Reusability** — the same observer works with any `LifecycleOwner` components  
-**3. Testability** — components depending on `Lifecycle` can be tested by simulating lifecycle state events  
+**2. Reusability** — the same observer works with any `LifecycleOwner` components
+**3. Testability** — components depending on `Lifecycle` can be tested by simulating lifecycle state events
 **4. Reduces Boilerplate** — fewer direct lifecycle overrides in UI classes
 
 ---

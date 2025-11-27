@@ -21,13 +21,7 @@ tags:
   - android
   - comparison
   - difficulty/easy
-original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:
-  - coroutines
-  - threads
-  - performance
-  - android
 ---
 # Вопрос (RU)
 > Каковы ключевые различия между корутинами и потоками в Android разработке?

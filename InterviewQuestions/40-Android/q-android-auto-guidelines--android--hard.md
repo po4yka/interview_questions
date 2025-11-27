@@ -29,7 +29,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
-
 # Вопрос (RU)
 > Как спроектировать и сертифицировать Android Auto / Automotive OS приложение: соблюсти ограничений по отвлечению, шаблонам, голосовому управлению и процессу ревью?
 
@@ -212,8 +211,5 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 
 ## Связанные Вопросы (RU)
 
-- [[q-android-auto-guidelines--android--hard]]
-
 ## Related Questions
 
-- [[q-android-auto-guidelines--android--hard]]

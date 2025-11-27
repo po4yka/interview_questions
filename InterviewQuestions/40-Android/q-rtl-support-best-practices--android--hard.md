@@ -30,7 +30,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
-
 # Вопрос (RU)
 > Как обеспечить поддержку RTL (справа налево) в Android-приложении: макеты `View`/Compose, зеркалирование ресурсов, BiDi-текст, тестирование и интеграция с локалями?
 

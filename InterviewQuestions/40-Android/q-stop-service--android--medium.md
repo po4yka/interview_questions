@@ -27,7 +27,6 @@ tags: [android/service, difficulty/medium]
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 > Остановка `Service`
 
@@ -132,7 +131,7 @@ class DownloadService : Service() {
 
 Как работает `stopSelf(startId)` (концептуально):
 
-```
+```text
 startService(intent1) → onStartCommand(..., startId = 1)
 startService(intent2) → onStartCommand(..., startId = 2)
 startService(intent3) → onStartCommand(..., startId = 3)
@@ -223,7 +222,7 @@ class MyService : Service() {
 
 Жизненный цикл (чистый bound):
 
-```
+```text
 bindService() → onCreate() → onBind() → сервис работает
 last unbindService() → onUnbind() → onDestroy() → сервис остановлен
 ```
@@ -379,7 +378,7 @@ class HybridService : Service() {
 
 Сценарии жизненного цикла (концептуально):
 
-```
+```text
 Сценарий 1: только started
 startService() → onStartCommand()
 stopService() / stopSelf() → onDestroy()  (остановка)
@@ -811,7 +810,7 @@ class DownloadService : Service() {
 
 How `stopSelf(startId)` works conceptually:
 
-```
+```text
 startService(intent1) → onStartCommand(..., startId = 1)
 startService(intent2) → onStartCommand(..., startId = 2)
 startService(intent3) → onStartCommand(..., startId = 3)
@@ -902,7 +901,7 @@ class MyService : Service() {
 
 Lifecycle (purely bound):
 
-```
+```text
 bindService() → onCreate() → onBind() → Service running
 last unbindService() → onUnbind() → onDestroy() → Service stopped
 ```
@@ -1058,7 +1057,7 @@ class HybridService : Service() {
 
 Lifecycle scenarios (conceptual):
 
-```
+```text
 Scenario 1: Started only
 startService() → onStartCommand()
 stopService() / stopSelf() → onDestroy()  (stops)

@@ -1,7 +1,11 @@
 ---
 id: android-188
-title: How To Change The Number Of Columns In RecyclerView Depending On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации
-aliases: [How To Change The Number Of Columns In RecyclerView Depending On Orientation, Как изменить количество колонок в RecyclerView в зависимости от ориентации]
+title: How To Change The Number Of Columns In RecyclerView Depending On 
+  Orientation / Как изменить количество колонок в RecyclerView в зависимости от 
+  ориентации
+aliases: [How To Change The Number Of Columns In RecyclerView Depending On 
+      Orientation, Как изменить количество колонок в RecyclerView в зависимости 
+      от ориентации]
 topic: android
 subtopics:
   - ui-views
@@ -26,8 +30,12 @@ tags: [android/ui-views, difficulty/easy]
 
 date created: Saturday, November 1st 2025, 12:46:52 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
+anki_synced: true
+anki_slugs:
+  - 40-android-q-how-to-change-the-number-of-columns-in-recyclerview-depen-en
+  - 40-android-q-how-to-change-the-number-of-columns-in-recyclerview-depen-ru
+anki_last_sync: '2025-11-27T09:56:33.839728'
 ---
-
 # Вопрос (RU)
 > Как изменить количество колонок в RecyclerView в зависимости от ориентации
 

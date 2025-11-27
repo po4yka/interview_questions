@@ -17,7 +17,6 @@ tags: [difficulty/medium]
 date created: Sunday, October 12th 2025, 3:43:42 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-
 # Вопрос (RU)
 > Как работать со свойствами в интерфейсах в Kotlin?
 

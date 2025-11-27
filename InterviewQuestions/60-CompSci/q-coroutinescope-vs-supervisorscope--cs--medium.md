@@ -18,7 +18,6 @@ sources: ["https://kotlinlang.org/docs/exception-handling.html"]
 date created: Saturday, November 1st 2025, 1:24:42 pm
 date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
-
 # Вопрос (RU)
 > В чем разница между `coroutineScope` и `supervisorScope`? Когда использовать каждый из них?
 
@@ -53,7 +52,7 @@ suspend fun fetchUserData(userId: Int): UserData = coroutineScope {
     // Если любой запрос завершится с исключением, все будут отменены (нужны все данные)
 }
 
-// ❌ Пример failure
+// EXAMPLE: Пример failure
 suspend fun coroutineScopeFailure() = coroutineScope {
     launch {
         delay(100)
@@ -140,7 +139,7 @@ suspend fun coroutineScopePropagation() {
     }
 }
 
-// 🔍 supervisorScope: siblings независимы, но исключения не игнорируются
+// NOTE: supervisorScope: siblings независимы, но исключения не игнорируются
 suspend fun supervisorScopePropagation() {
     try {
         supervisorScope {
@@ -286,7 +285,7 @@ suspend fun fetchUserData(userId: Int): UserData = coroutineScope {
     // If any request fails, all are cancelled (we need all data)
 }
 
-// ❌ Failure example
+// EXAMPLE: Failure example
 suspend fun coroutineScopeFailure() = coroutineScope {
     launch {
         delay(100)
@@ -373,7 +372,7 @@ suspend fun coroutineScopePropagation() {
     }
 }
 
-// 🔍 supervisorScope: siblings independent, but exception not caught here
+// NOTE: supervisorScope: siblings independent, but exception not caught here
 suspend fun supervisorScopePropagation() {
     try {
         supervisorScope {

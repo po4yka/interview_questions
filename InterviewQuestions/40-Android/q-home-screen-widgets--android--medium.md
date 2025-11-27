@@ -27,7 +27,6 @@ tags: [android/ui-views, difficulty/medium, widgets]
 date created: Saturday, November 1st 2025, 12:46:51 pm
 date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
-
 # Вопрос (RU)
 > Виджеты домашнего экрана
 

@@ -19,7 +19,6 @@ tags: [android/background-execution, android/service, difficulty/medium]
 date created: Saturday, November 1st 2025, 1:24:46 pm
 date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
-
 # Вопрос (RU)
 
 > Для чего используются сервисы в Android?
@@ -150,12 +149,12 @@ class MainActivity : AppCompatActivity() {
 ### Жизненный Цикл
 
 **Started `Service`** (упрощенная схема):
-```
+```text
 startService() → onCreate() (один раз при первом запуске) → onStartCommand() (может вызываться многократно) → stopSelf()/stopService() → onDestroy()
 ```
 
 **Bound `Service`** (упрощенная схема):
-```
+```text
 bindService() → onCreate() (при первой привязке, если сервис еще не создан) → onBind() → (возможны дополнительные bind/unbind) → когда все клиенты отвязаны и сервис не запущен как started → onDestroy()
 ```
 
@@ -327,12 +326,12 @@ class MainActivity : AppCompatActivity() {
 ### Lifecycle
 
 **Started `Service`** (simplified):
-```
+```text
 startService() → onCreate() (called once on first start) → onStartCommand() (may be called multiple times) → stopSelf()/stopService() → onDestroy()
 ```
 
 **Bound `Service`** (simplified):
-```
+```text
 bindService() → onCreate() (if service not yet created) → onBind() → (multiple bind/unbind possible) → when all clients are unbound and service is not started → onDestroy()
 ```
 

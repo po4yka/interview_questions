@@ -30,7 +30,6 @@ sources:
 date created: Thursday, November 6th 2025, 4:39:51 pm
 date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
-
 # Вопрос (RU)
 > Как разработать стратегию Play Asset Delivery: выбрать режимы (install-time, fast-follow, on-demand), управлять динамическими фичами, обновлять ассеты без релиза и мониторить доставку?
 

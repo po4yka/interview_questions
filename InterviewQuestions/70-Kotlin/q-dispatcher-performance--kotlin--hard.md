@@ -28,12 +28,13 @@ tags: [coroutines, difficulty/hard, kotlin]
 date created: Sunday, October 12th 2025, 3:39:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
-
 # Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140022
 
-## Question (EN)
-> Kotlin Coroutines advanced topic 140022
+Как выбрать правильный dispatcher для задачи в Kotlin корутинах? Объясните модели пула потоков различных dispatcher-ов (Default, IO, Main), паттерны производительности, использование limitedParallelism, создание кастомных dispatcher-ов и как избежать чрезмерных переключений контекста и блокировок.
+
+# Question (EN)
+
+How do you choose the right dispatcher for a task in Kotlin coroutines? Explain the thread pool models of different dispatchers (Default, IO, Main), performance patterns, using limitedParallelism, creating custom dispatchers, and how to avoid excessive context switching and blocking.
 
 ## Ответ (RU)
 
