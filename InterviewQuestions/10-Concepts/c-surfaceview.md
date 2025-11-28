@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: []
+related: [c-textureview, c-custom-views, c-canvas-drawing, c-android-graphics, c-view-rendering]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

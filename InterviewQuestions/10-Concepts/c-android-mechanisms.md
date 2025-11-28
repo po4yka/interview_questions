@@ -1,7 +1,7 @@
 ---
 id: "20251110-180735"
-title: "Mechanisms  Android  Hard / Mechanisms  Android  Hard"
-aliases: ["Mechanisms  Android  Hard"]
+title: "Android Mechanisms"
+aliases: ["Android Mechanisms"]
 summary: "Foundational concept for interview preparation"
 topic: "android"
 subtopics: ["general"]
@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-android-ipc, c-binder, c-android-background-execution, c-memory-management, c-multithreading]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["android", "auto-generated", "concept", "difficulty/medium"]

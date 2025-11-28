@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-system-design"
-related: []
+related: [c-material-3, c-design-systems, c-theming, c-design-tokens, c-android-themes]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]

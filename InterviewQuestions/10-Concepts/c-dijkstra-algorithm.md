@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-algorithms"
-related: []
+related: [c-algorithms, c-graph-algorithms, c-shortest-path, c-data-structures, c-priority-queue]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["algorithms", "auto-generated", "concept", "difficulty/medium"]

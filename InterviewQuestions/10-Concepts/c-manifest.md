@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: []
+related: [c-android-manifest, c-permissions, c-application-class, c-intents]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

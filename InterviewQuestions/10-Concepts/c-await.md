@@ -1,9 +1,9 @@
 ---
-id: "20251109-230632"
-title: "Await / Await"
+id: "20251110-015045"
+title: "Await"
 aliases: ["Await"]
 summary: "Foundational concept for interview preparation"
-topic: "programming-languages"
+topic: "kotlin"
 subtopics: ["general"]
 question_kind: "theory"
 difficulty: "medium"
@@ -11,44 +11,43 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: []
-created: "2025-11-09"
-updated: "2025-11-09"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+related: [c-coroutines, c-kotlin-coroutines, c-structured-concurrency, c-coroutine-context, c-flow]
+created: "2025-11-10"
+updated: "2025-11-10"
+tags: ["auto-generated", "concept", "difficulty/medium", "kotlin"]
 date created: Monday, November 10th 2025, 7:48:48 am
 date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)
 
-"await" is an operator/keyword used in asynchronous programming to suspend execution of the current function until an awaited asynchronous operation (promise/future/deferred) completes, without blocking the underlying thread. It simplifies callback-based code into a sequential style, improving readability and error handling. Commonly used in languages like JavaScript (async/await), C#, and Kotlin coroutines.
+In Kotlin coroutines, `await` is a suspending operation (commonly `Deferred.await()` or `Job.join()`) that asynchronously waits for a result or completion without blocking the underlying thread. It allows structured, readable asynchronous code by suspending the coroutine until the awaited computation finishes, then resuming with the result or error. `await` is heavily used when composing multiple concurrent tasks, improving performance while keeping code sequential in style.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-"await" — это оператор/ключевое слово для асинхронного программирования, которое приостанавливает выполнение текущей функции до завершения ожидаемой асинхронной операции (promise/future/deferred), не блокируя поток. Оно упрощает код с колбэками до последовательного стиля, повышая читаемость и упрощая обработку ошибок. Широко используется в языках JavaScript (async/await), C# и корутинах Kotlin.
+В корутинах Kotlin `await` — это приостанавливающая операция (обычно `Deferred.await()` или `Job.join()`), которая асинхронно ожидает результат или завершение без блокировки потока. Она позволяет писать структурированный и читаемый асинхронный код: корутина приостанавливается до окончания вычисления, затем возобновляется с результатом или ошибкой. `await` часто используется при композиции нескольких параллельных задач, повышая производительность при сохранении последовательного стиля кода.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
 ## Key Points (EN)
 
-- Requires an async context: "await" can only be used inside functions or blocks marked for async/coroutine execution (e.g., async function, suspend function).
-- Non-blocking semantics: Suspends the current coroutine/task while allowing the underlying thread or event loop to process other work.
-- Error propagation: Exceptions from the awaited operation are rethrown at the await site, making error handling similar to synchronous code (try/catch around await).
-- Sequential style over callbacks: Allows writing asynchronous steps in order (top-to-bottom) instead of nesting callbacks or using explicit continuations.
-- Awaiting multiple tasks: Often combined with constructs like Promise.all / Task.WhenAll / async combinators to run operations concurrently while awaiting their results.
+- `Deferred.await()` suspends the calling coroutine until the asynchronous computation completes and returns its result (or throws the underlying exception).
+- `await` is non-blocking: it frees the thread to run other coroutines instead of using traditional blocking calls like `Thread.sleep` or `Future.get`.
+- Commonly used with `async`/`await` pattern to start concurrent work (`async`) and later collect results (`await`) in a clear, sequential-looking style.
+- Works within structured concurrency: cancellations and exceptions propagate through coroutine scopes, so `await` participates in cooperative cancellation.
+- Misuse (e.g., calling `runBlocking` + `await` on main/UI thread incorrectly) can lead to deadlocks or UI freezes; prefer suspending contexts.
 
 ## Ключевые Моменты (RU)
 
-- Требует асинхронного контекста: "await" может использоваться только внутри функций или блоков, объявленных как async/корутины (например, async-функция, suspend-функция).
-- Неблокирующая семантика: Приостанавливает текущую корутину/задачу, позволяя потоку или цикл обработки событий выполнять другую работу.
-- Проброс ошибок: Исключения из ожидаемой операции пробрасываются в точке await, что позволяет обрабатывать их как в синхронном коде (try/catch вокруг await).
-- Последовательный стиль вместо колбэков: Позволяет писать асинхронные шаги линейно (сверху вниз), избегая вложенных колбэков и явных продолжений.
-- Ожидание нескольких задач: Часто используется вместе с конструкциями вроде Promise.all / Task.WhenAll / асинхронными комбинаторами для параллельного запуска операций и ожидания их результатов.
+- `Deferred.await()` приостанавливает вызывающую корутину до завершения асинхронного вычисления и возвращает результат (или пробрасывает исходное исключение).
+- `await` неблокирующий: он освобождает поток для выполнения других корутин, в отличие от классических блокирующих вызовов вроде `Thread.sleep` или `Future.get`.
+- Часто используется в паре `async`/`await`: `async` запускает параллельную работу, `await` позднее читает результаты в коде, выглядящем как последовательный.
+- Вписывается в структурную конкуррентность: отмена и исключения распространяются по иерархии скоупов, `await` участвует в кооперативной отмене.
+- Некорректное использование (например, `runBlocking` + `await` на основном/UI-потоке без необходимости) может привести к взаимоблокировкам или фризам UI; предпочтительны корректные приостанавливающие контексты.
 
 ## References
 
-- MDN Web Docs: JavaScript async/await
-- Microsoft Docs: Asynchronous programming with async and await in C#
-- Kotlin Documentation: Coroutines and suspend functions
+- Kotlin Coroutines Guide – Asynchronous programming with coroutines (kotlinlang.org/docs/coroutines-guide.html)
+- Kotlinx Coroutines API Reference – `Deferred` and `await` (kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/)

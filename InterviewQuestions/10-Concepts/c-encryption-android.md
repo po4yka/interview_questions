@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-encryption, c-security, c-sharedpreferences, c-datastore, c-keystore]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["android", "auto-generated", "concept", "difficulty/medium"]

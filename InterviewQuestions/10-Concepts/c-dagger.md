@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-dependency-injection, c-hilt, c-koin, c-di-frameworks, c-architecture-patterns]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture", "concept", "dagger", "dependency-injection", "difficulty/medium"]

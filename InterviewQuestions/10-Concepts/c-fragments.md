@@ -5,6 +5,7 @@ aliases: [Android Fragment, Fragment, Фрагмент, Фрагменты]
 kind: concept
 summary: Reusable UI component with its own lifecycle, part of an Activity
 links: []
+related: [c-activity-lifecycle, c-fragment-lifecycle, c-navigation, c-viewmodel, c-single-activity-architecture]
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, android-components, concept, fragments, ui]

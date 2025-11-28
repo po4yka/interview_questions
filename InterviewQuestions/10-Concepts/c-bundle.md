@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: []
+related: [c-parcelable, c-savedinstancestate, c-intent, c-fragments, c-activity-lifecycle]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

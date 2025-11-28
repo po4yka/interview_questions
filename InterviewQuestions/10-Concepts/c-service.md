@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-foreground-service, c-jobscheduler, c-alarmmanager, c-broadcast-receiver, c-android-background-execution]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "background-tasks", "concept", "difficulty/medium", "lifecycle", "service"]

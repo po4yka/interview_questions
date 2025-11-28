@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-performance"
-related: []
+related: [c-memory-leaks, c-memory-optimization, c-memory-profiler, c-weak-references, c-android-profiler]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["concept", "difficulty/medium", "garbage-collection", "jvm", "memory", "performance"]

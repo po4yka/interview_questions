@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-testing"
-related: []
+related: [c-test-doubles, c-mockk, c-junit, c-testing-pyramid, c-testing-strategies]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["concept", "difficulty/medium", "junit", "quality-assurance", "tdd", "testing"]

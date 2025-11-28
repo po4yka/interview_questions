@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-android-views, c-android-view-system, c-canvas-drawing, c-touch-events, c-view-hierarchy]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "canvas", "concept", "custom-views", "difficulty/medium", "drawing", "ui", "view-lifecycle"]

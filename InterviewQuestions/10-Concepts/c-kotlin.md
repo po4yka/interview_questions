@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: []
+related: [c-coroutines, c-flow, c-sealed-classes, c-data-classes, c-collections]
 created: "2025-11-08"
 updated: "2025-11-08"
 tags: ["auto-generated", "concept", "difficulty/easy", "kotlin", "programming-languages"]

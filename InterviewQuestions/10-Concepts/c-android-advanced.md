@@ -1,7 +1,7 @@
 ---
 id: "20251110-140548"
-title: " Android  Hard /  Android  Hard"
-aliases: [" Android  Hard"]
+title: "Android Advanced"
+aliases: ["Android Advanced"]
 summary: "Foundational concept for interview preparation"
 topic: "android"
 subtopics: ["general"]
@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-android-lifecycle, c-performance-optimization, c-memory-management, c-clean-architecture, c-android-profiling]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["android", "auto-generated", "concept", "difficulty/medium"]

@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: []
+related: [c-algorithms, c-array, c-hash-tables, c-binary-search-tree, c-graph-algorithms]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["arrays", "concept", "data-structures", "difficulty/medium", "graphs", "hash-tables", "lists", "trees"]

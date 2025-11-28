@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-kotlin"
-related: []
+related: [c-flow, c-structured-concurrency, c-kotlin, c-threading, c-concurrency]
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["async", "concept", "concurrency", "coroutines", "difficulty/medium", "kotlin", "structured-concurrency"]

@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-system-design"
-related: []
+related: [c-scaling-strategies, c-load-balancing, c-caching-strategies, c-microservices, c-software-design]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]

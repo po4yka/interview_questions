@@ -23,6 +23,10 @@ date modified: Tuesday, November 25th 2025, 8:53:48 pm
 
 > Compare supervisorScope and coroutineScope. When should you use each? Demonstrate how they handle independent failures differently.
 
+# Вопрос (RU)
+
+> Сравните supervisorScope и coroutineScope. Когда следует использовать каждый из них? Продемонстрируйте, как они обрабатывают независимые сбои по-разному.
+
 ---
 
 ## Answer (EN)
@@ -543,7 +547,523 @@ Do all operations need to succeed?
    }
    ```
 
-**English Summary**: `coroutineScope` is fail-fast: an unhandled child failure cancels the scope and (typically) its siblings, and the exception is rethrown. `supervisorScope` isolates child failures so one child does not cancel others, but unhandled exceptions can still propagate to the parent. Use `coroutineScope` for all-or-nothing operations with dependencies. Use `supervisorScope` for independent tasks and partial success scenarios. Always handle exceptions inside `supervisorScope` children when you don't want them to abort the whole operation. `CoroutineExceptionHandler` works uniformly based on where it is installed in the context; it is not exclusive to `supervisorScope`.
+## Ответ (RU)
+
+Ключевое различие между `supervisorScope` и `coroutineScope` заключается в том, как они реагируют на сбои дочерних корутин внутри структурированной конкурентности.
+
+### coroutineScope - поведение Fail-Fast
+
+`coroutineScope` использует стратегию fail-fast: необработанное исключение в любой дочерней корутине отменяет scope и его другие дочерние элементы, а исключение пробрасывается из scope.
+
+```kotlin
+suspend fun demonstrateCoroutineScope() {
+    println("Starting coroutineScope")
+
+    try {
+        coroutineScope {
+            launch {
+                delay(100)
+                println("Task 1 completed")
+            }
+
+            launch {
+                delay(50)
+                throw Exception("Task 2 failed!")
+            }
+
+            launch {
+                delay(200)
+                println("Task 3 completed")
+            }
+        }
+    } catch (e: Exception) {
+        println("Caught: ${e.message}")
+    }
+
+    println("Done")
+}
+
+/*
+Концептуально (фактическое чередование может варьироваться):
+Starting coroutineScope
+Caught: Task 2 failed!
+Done
+
+Task 1 и Task 3 могут не завершить свою работу, потому что scope отменяется при сбое Task 2.
+*/
+```
+
+### supervisorScope - независимые сбои
+
+`supervisorScope` изолирует сбои своих дочерних элементов: сбой дочернего элемента не отменяет его siblings. Необработанные исключения из scope в целом могут распространяться к родителю.
+
+```kotlin
+suspend fun demonstrateSupervisorScope() {
+    println("Starting supervisorScope")
+
+    try {
+        supervisorScope {
+            launch {
+                delay(100)
+                println("Task 1 completed")
+            }
+
+            launch {
+                delay(50)
+                throw Exception("Task 2 failed!")
+            }
+
+            launch {
+                delay(200)
+                println("Task 3 completed")
+            }
+        }
+    } catch (e: Exception) {
+        // Это выполнится, если исключение дочернего элемента не обработано иначе
+        println("Caught in supervisorScope: ${e.message}")
+    }
+
+    println("Done")
+}
+
+/*
+Концептуально:
+Starting supervisorScope
+Task 1 completed
+Task 3 completed
+Done
+
+Сбой Task 2 не отменяет Task 1 и Task 3.
+Маршрутизация исключений зависит от наличия родительского обработчика.
+*/
+```
+
+### Таблица сравнения
+
+| Аспект | coroutineScope | supervisorScope |
+|--------|----------------|-----------------|
+| **Сбой дочернего элемента** | Отменяет scope и (обычно) все остальные дочерние элементы | Отменяется только сбойный дочерний элемент; siblings продолжают выполнение |
+| **Сбой родителя** | Отменяет все дочерние элементы | Отменяет все дочерние элементы |
+| **Распространение исключений** | Необработанное исключение из scope пробрасывается родителю | Необработанное исключение из scope также пробрасывается; разница в изоляции siblings |
+| **Сценарий использования** | Операции "всё или ничего" | Независимые задачи |
+| **Обработка ошибок** | Часто достаточно одного try-catch вокруг scope | Обычно нужен отдельный try-catch для каждого дочернего элемента для best-effort поведения |
+
+### Когда использовать каждый из них
+
+#### Используйте coroutineScope когда:
+
+1. Все операции должны завершиться успешно (fail-fast).
+2. Операции зависят друг от друга.
+3. Вам нужна транзакционная семантика (всё или ничего).
+
+```kotlin
+// Пример: Загрузка профиля пользователя - нужны все данные
+suspend fun loadUserProfile(userId: Int): UserProfile = coroutineScope {
+    val userDeferred = async { fetchUser(userId) }
+    val postsDeferred = async { fetchPosts(userId) }
+    val friendsDeferred = async { fetchFriends(userId) }
+
+    // Если что-то сбоит, scope отменяется и исключение выбрасывается
+    UserProfile(
+        user = userDeferred.await(),
+        posts = postsDeferred.await(),
+        friends = friendsDeferred.await()
+    )
+}
+
+// Использование
+try {
+    val profile = loadUserProfile(123)
+    displayProfile(profile)
+} catch (e: Exception) {
+    showError("Failed to load profile")
+}
+```
+
+#### Используйте supervisorScope когда:
+
+1. Задачи независимы - сбой одной не должен отменять другие.
+2. Вам нужно best-effort поведение - собрать то, что успешно завершилось.
+3. Фоновая/вспомогательная работа должна продолжаться несмотря на частичные сбои.
+
+```kotlin
+// Пример: Загрузка виджетов дашборда - показать то, что работает
+suspend fun loadDashboard(): Dashboard = supervisorScope {
+    val weatherWidget = async {
+        try {
+            fetchWeather()
+        } catch (e: Exception) {
+            println("Weather failed: ${e.message}")
+            WeatherWidget.UNAVAILABLE
+        }
+    }
+
+    val newsWidget = async {
+        try {
+            fetchNews()
+        } catch (e: Exception) {
+            println("News failed: ${e.message}")
+            NewsWidget.UNAVAILABLE
+        }
+    }
+
+    val stocksWidget = async {
+        try {
+            fetchStocks()
+        } catch (e: Exception) {
+            println("Stocks failed: ${e.message}")
+            StocksWidget.UNAVAILABLE
+        }
+    }
+
+    Dashboard(
+        weather = weatherWidget.await(),
+        news = newsWidget.await(),
+        stocks = stocksWidget.await()
+    )
+}
+```
+
+### Паттерны обработки ошибок
+
+#### Паттерн 1: Явная обработка ошибок в supervisorScope
+
+```kotlin
+suspend fun processItemsIndependently(items: List<Item>) = supervisorScope {
+    val results = mutableListOf<Result>()
+    val errors = mutableListOf<ItemError>()
+
+    items.forEach { item ->
+        launch {
+            try {
+                val result = processItem(item)
+                synchronized(results) {
+                    results.add(result)
+                }
+            } catch (e: Exception) {
+                synchronized(errors) {
+                    errors.add(ItemError(item.id, e))
+                }
+            }
+        }
+    }
+
+    // supervisorScope ждёт завершения всех своих дочерних элементов
+    ProcessingReport(
+        successful = results,
+        failed = errors
+    )
+}
+```
+
+#### Паттерн 2: Сбор успешных результатов
+
+```kotlin
+data class PartialResult<T>(
+    val successes: List<T>,
+    val failures: List<Pair<String, Exception>>
+)
+
+suspend fun <T> parallelTasks(
+    tasks: Map<String, suspend () -> T>
+): PartialResult<T> = supervisorScope {
+    val deferreds = tasks.map { (name, task) ->
+        name to async {
+            try {
+                Result.success(task())
+            } catch (e: Exception) {
+                Result.failure<T>(e)
+            }
+        }
+    }
+
+    val results = deferreds.map { (name, deferred) ->
+        name to deferred.await()
+    }
+
+    PartialResult(
+        successes = results.mapNotNull { it.second.getOrNull() },
+        failures = results.mapNotNull { (name, result) ->
+            result.exceptionOrNull()?.let { name to it }
+        }
+    )
+}
+
+// Использование
+val result = parallelTasks(
+    mapOf(
+        "API1" to { fetchFromApi1() },
+        "API2" to { fetchFromApi2() },
+        "API3" to { fetchFromApi3() }
+    )
+)
+
+println("Successful: ${result.successes.size}")
+println("Failed: ${result.failures.size}")
+```
+
+### Примеры из реальной жизни
+
+#### Пример 1: Синхронизация данных
+
+```kotlin
+class SyncManager {
+    // Используйте coroutineScope - все критичные синхронизации должны успешно завершиться
+    suspend fun syncCriticalData() = coroutineScope {
+        launch { syncUserProfile() }
+        launch { syncSettings() }
+        launch { syncPermissions() }
+    }
+    // При любом необработанном сбое scope отменяется.
+
+    // Используйте supervisorScope - best effort для некритичных данных
+    suspend fun syncOptionalData() = supervisorScope {
+        launch {
+            try { syncAnalytics() }
+            catch (e: Exception) { /* Записать в лог и продолжить */ }
+        }
+
+        launch {
+            try { syncCache() }
+            catch (e: Exception) { /* Записать в лог и продолжить */ }
+        }
+
+        launch {
+            try { syncPrefetch() }
+            catch (e: Exception) { /* Записать в лог и продолжить */ }
+        }
+    }
+    // Каждый может сбоить независимо без отмены siblings.
+}
+```
+
+#### Пример 2: Агрегация микросервисов
+
+```kotlin
+// Загрузка из нескольких сервисов
+suspend fun aggregateUserData(userId: Int): AggregatedData {
+    return supervisorScope {
+        val profile = async {
+            try {
+                userService.getProfile(userId)
+            } catch (e: Exception) {
+                logger.warn("Profile service failed", e)
+                null
+            }
+        }
+
+        val orders = async {
+            try {
+                orderService.getOrders(userId)
+            } catch (e: Exception) {
+                logger.warn("Order service failed", e)
+                emptyList()
+            }
+        }
+
+        val recommendations = async {
+            try {
+                recommendationService.getRecommendations(userId)
+            } catch (e: Exception) {
+                logger.warn("Recommendation service failed", e)
+                emptyList()
+            }
+        }
+
+        AggregatedData(
+            profile = profile.await(),
+            orders = orders.await(),
+            recommendations = recommendations.await()
+        )
+    }
+}
+```
+
+#### Пример 3: Пакетная обработка
+
+```kotlin
+// Обработка с coroutineScope - любой необработанный сбой отменяет scope
+suspend fun strictBatchProcess(items: List<Item>) {
+    coroutineScope {
+        items.forEach { item ->
+            launch {
+                processItem(item)
+            }
+        }
+    }
+}
+
+// Обработка с supervisorScope - продолжить при сбоях
+suspend fun lenientBatchProcess(items: List<Item>): BatchResult {
+    return supervisorScope {
+        val results = items.map { item ->
+            async {
+                try {
+                    Result.success(processItem(item))
+                } catch (e: Exception) {
+                    Result.failure<ProcessedItem>(e)
+                }
+            }
+        }.awaitAll()
+
+        BatchResult(
+            successful = results.count { it.isSuccess },
+            failed = results.count { it.isFailure }
+        )
+    }
+}
+```
+
+### CoroutineExceptionHandler
+
+`CoroutineExceptionHandler` вызывается для неперехваченных исключений в корневых корутинах `CoroutineScope`. Он не ограничен `supervisorScope`; он работает с любым scope, где является частью контекста.
+
+```kotlin
+val handler = CoroutineExceptionHandler { _, exception ->
+    println("Caught: ${exception.message}")
+}
+
+// Корневой scope с обработчиком
+val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default + handler)
+
+// Обработчик увидит это исключение
+scope.launch {
+    throw Exception("Task failed")
+}
+
+// Вложенный supervisorScope: сбои дочерних элементов попадают к обработчику, если не перехвачены
+scope.launch {
+    supervisorScope {
+        launch {
+            throw Exception("Child failed in supervisorScope")
+        }
+    }
+}
+
+// Вложенный coroutineScope: сбой дочернего элемента отменяет scope и распространяется вверх;
+// вы можете его перехватить или позволить обработчику увидеть его на родительском scope.
+scope.launch {
+    try {
+        coroutineScope {
+            launch {
+                throw Exception("Child failed in coroutineScope")
+            }
+        }
+    } catch (e: Exception) {
+        println("Caught around coroutineScope: ${e.message}")
+    }
+}
+```
+
+Ключевой момент: поведение `CoroutineExceptionHandler` одинаково для `coroutineScope` и `supervisorScope`; различается то, как сбои дочерних элементов влияют на siblings и отмену scope.
+
+### Дерево решений
+
+```
+Должны ли все операции завершиться успешно?
+ Да → coroutineScope
+    Один необработанный сбой отменяет scope и обычно другие дочерние элементы.
+
+ Нет → supervisorScope
+     Операции независимы
+         Нужны все результаты?
+            Оберните каждый дочерний элемент в try-catch
+
+         Можно работать с частичными результатами?
+             Соберите успешные результаты
+```
+
+### Лучшие практики
+
+1. По умолчанию используйте coroutineScope, если не нужна явная изоляция сбоев:
+   ```kotlin
+   suspend fun loadData() = coroutineScope {
+       // ...
+   }
+   ```
+
+2. Используйте supervisorScope для независимых операций:
+   ```kotlin
+   suspend fun loadWidgets() = supervisorScope {
+       // Каждый виджет независим
+   }
+   ```
+
+3. В supervisorScope обрабатывайте сбои дочерних элементов явно, когда не хотите, чтобы они приводили к краху всей операции:
+   ```kotlin
+   supervisorScope {
+       launch {
+           try {
+               riskyOperation()
+           } catch (e: Exception) {
+               handleError(e)
+           }
+       }
+   }
+   ```
+
+4. Избегайте ненужного смешивания scopes:
+   ```kotlin
+   // Запутанно
+   coroutineScope {
+       supervisorScope {
+           // ...
+       }
+   }
+
+   // Предпочтите чёткое намерение
+   supervisorScope {
+       // Дочерние элементы независимы
+   }
+   ```
+
+### Распространённые ошибки
+
+1. Предположение, что supervisorScope автоматически поглощает исключения:
+   ```kotlin
+   supervisorScope {
+       launch {
+           throw Exception("Oops") // Если не перехвачено, будет распространяться к родителю/обработчику
+       }
+   }
+   ```
+
+2. Использование coroutineScope там, где сбои должны быть изолированы:
+   ```kotlin
+   // Сбой одного виджета может отменить все
+   coroutineScope {
+       launch { loadWeather() }
+       launch { loadNews() }
+       launch { loadStocks() }
+   }
+
+   // Для независимых виджетов комбинируйте supervisorScope с обработкой для каждого дочернего элемента
+   supervisorScope {
+       launch { try { loadWeather() } catch (e: Exception) { /* ... */ } }
+       launch { try { loadNews() } catch (e: Exception) { /* ... */ } }
+       launch { try { loadStocks() } catch (e: Exception) { /* ... */ } }
+   }
+   ```
+
+3. Неправильное понимание CoroutineExceptionHandler со структурированной конкурентностью:
+   ```kotlin
+   val handler = CoroutineExceptionHandler { _, e -> println("Caught: $e") }
+   val scope = CoroutineScope(SupervisorJob() + handler)
+
+   // Обработчик используется для сбоев корневых корутин
+   scope.launch { throw Exception() }
+
+   // Для coroutineScope перехватывайте вокруг него или полагайтесь на обработчик родителя
+   scope.launch {
+       try {
+           coroutineScope {
+               launch { throw Exception("Inner failure") }
+           }
+       } catch (e: Exception) {
+           handleError(e)
+       }
+   }
+   ```
 
 ## Follow-ups
 

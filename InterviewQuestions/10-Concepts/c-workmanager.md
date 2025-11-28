@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-service, c-background-tasks, c-coroutines, c-threading, c-performance]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "background-tasks", "concept", "coroutines", "difficulty/medium", "jetpack", "threading", "workmanager"]

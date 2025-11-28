@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: []
+related: [c-sql-queries, c-database-design, c-migrations, c-room-library, c-orm]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["acid", "concept", "database", "difficulty/medium", "rdbms", "relational", "transactions"]

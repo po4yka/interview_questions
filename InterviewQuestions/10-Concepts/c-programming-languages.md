@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: []
+related: [c-kotlin-concepts, c-oop, c-functional-programming, c-concurrency, c-compiler-optimization]
 created: "2025-11-12"
 updated: "2025-11-12"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

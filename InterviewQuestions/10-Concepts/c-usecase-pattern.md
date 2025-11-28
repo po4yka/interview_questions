@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-system-design"
-related: []
+related: [c-clean-architecture, c-architecture-patterns, c-mvp-pattern, c-design-patterns, c-software-design]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]

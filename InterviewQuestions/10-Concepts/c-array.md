@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: []
+related: [c-data-structures, c-hash-tables, c-hash-map, c-collections, c-collections-android]
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["algorithms", "arrays", "collections", "concept", "data-structures", "difficulty/medium"]

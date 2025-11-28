@@ -1,7 +1,7 @@
 ---
 id: "20251110-120834"
-title: "Unstable Network  Android  Hard / Unstable Network  Android  Hard"
-aliases: ["Unstable Network  Android  Hard"]
+title: "Unstable Network"
+aliases: ["Unstable Network"]
 summary: "Foundational concept for interview preparation"
 topic: "android"
 subtopics: ["general"]
@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-networking, c-okhttp-interceptors, c-rest-api, c-offline-first-architecture, c-error-handling]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["android", "auto-generated", "concept", "difficulty/medium"]

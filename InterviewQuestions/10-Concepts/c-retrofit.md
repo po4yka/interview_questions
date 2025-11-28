@@ -5,6 +5,7 @@ aliases: [Retrofit, Retrofit Library, Square Retrofit]
 kind: concept
 summary: Type-safe HTTP client for Android and Java by Square
 links: []
+related: [c-rest-api, c-coroutines, c-okhttp, c-repository-pattern, c-networking]
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, concept, http, networking, rest-api, retrofit]

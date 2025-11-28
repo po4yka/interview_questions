@@ -5,6 +5,7 @@ aliases: [Kotlin Sealed, Sealed Class Hierarchy, Sealed Classes, Запечат�
 kind: concept
 summary: Kotlin sealed classes for restricted class hierarchies enabling exhaustive when expressions
 links: []
+related: [c-kotlin, c-data-classes, c-enum-class, c-when-expression, c-adt]
 created: 2025-10-30
 updated: 2025-10-30
 tags: [adt, concept, exhaustive-when, kotlin, sealed-classes, type-safety]

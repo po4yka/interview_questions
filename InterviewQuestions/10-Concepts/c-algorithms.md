@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: []
+related: [c-data-structures, c-sorting-algorithms, c-binary-search, c-dynamic-programming, c-backtracking-algorithm]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["algorithms", "big-o", "complexity", "concept", "difficulty/medium", "searching", "sorting"]

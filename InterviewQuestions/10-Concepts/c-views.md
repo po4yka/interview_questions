@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: []
+related: [c-sql-queries, c-database-performance, c-database-design, c-sqlite, c-relational-databases]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "difficulty/medium", "materialized-views", "views", "virtual-tables"]

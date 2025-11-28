@@ -1,7 +1,7 @@
 ---
 id: "20251110-030616"
-title: "Concepts  Kotlin  Medium / Concepts  Kotlin  Medium"
-aliases: ["Concepts  Kotlin  Medium"]
+title: "Kotlin Concepts"
+aliases: ["Kotlin Concepts"]
 summary: "Foundational concept for interview preparation"
 topic: "kotlin"
 subtopics: ["general"]

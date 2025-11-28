@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: []
+related: [c-design-patterns, c-architecture-patterns, c-clean-architecture, c-mvp-pattern, c-adapter-pattern]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["architecture", "concept", "design-patterns", "difficulty/medium", "software-engineering"]

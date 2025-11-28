@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: []
+related: [c-coroutines, c-kotlin-coroutines, c-structured-concurrency, c-flow, c-dispatchers]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

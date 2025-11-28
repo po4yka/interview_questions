@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-android-testing-pyramid, c-unit-testing, c-espresso-testing, c-junit, c-testing]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["android", "auto-generated", "concept", "difficulty/medium"]

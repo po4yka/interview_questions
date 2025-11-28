@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-architecture-patterns"
-related: []
+related: [c-hilt, c-dagger, c-mvvm, c-clean-architecture, c-repository-pattern]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture-patterns", "concept", "dependency-injection", "difficulty/medium"]

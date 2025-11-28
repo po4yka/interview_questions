@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-activity-lifecycle, c-fragment-lifecycle, c-viewmodel, c-process-lifecycle, c-coroutines]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture-components", "concept", "difficulty/medium", "lifecycle"]

@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-performance"
-related: []
+related: [c-databases, c-performance-optimization, c-sql-optimization, c-indexing, c-query-optimization]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "difficulty/medium", "indexing", "optimization", "performance", "query-tuning"]

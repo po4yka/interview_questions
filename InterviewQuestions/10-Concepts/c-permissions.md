@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-android-manifest, c-security, c-scoped-storage, c-privacy-by-design, c-biometric-authentication]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "difficulty/medium", "permissions", "privacy", "security"]

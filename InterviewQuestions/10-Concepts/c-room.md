@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-sqlite, c-flow, c-coroutines, c-repository-pattern, c-database-design]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "database", "difficulty/medium", "jetpack", "persistence", "room", "sqlite"]

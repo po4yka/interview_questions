@@ -5,6 +5,7 @@ aliases: [Android RecyclerView, RecyclerView]
 kind: concept
 summary: Flexible view for displaying large datasets with view recycling and efficient scrolling
 links: []
+related: [c-viewholder, c-view-recycling, c-performance, c-custom-views, c-views]
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, concept, performance, recyclerview, ui]

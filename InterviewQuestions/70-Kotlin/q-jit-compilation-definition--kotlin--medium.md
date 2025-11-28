@@ -17,9 +17,15 @@ tags: [difficulty/medium]
 date created: Thursday, October 16th 2025, 5:48:05 pm
 date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
-# Что Такое JIT?
+# Question (EN)
 
-**English**: What is JIT?
+> What is JIT?
+
+# Вопрос (RU)
+
+> Что Такое JIT?
+
+---
 
 ## Answer (EN)
 **JIT (Just-In-Time compilation)** is a technology where **bytecode is compiled into machine code during runtime** (while the program is executing), rather than before execution.

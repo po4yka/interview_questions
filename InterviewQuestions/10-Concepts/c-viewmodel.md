@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-lifecycle, c-activity-lifecycle, c-mvvm, c-state-flow, c-savedstatehandle]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-components", "concept", "difficulty/medium", "jetpack", "lifecycle", "mvvm", "viewmodel"]

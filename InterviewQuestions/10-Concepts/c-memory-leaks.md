@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-memory-management, c-memory-profiler, c-weak-references, c-memory-optimization, c-android-profiler]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "debugging", "difficulty/medium", "memory-leaks", "memory-management", "performance", "profiling"]

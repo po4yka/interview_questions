@@ -5,6 +5,7 @@ aliases: [Compose State, State Management Compose, Состояние Compose, �
 kind: concept
 summary: State management in Jetpack Compose using mutableStateOf, derivedStateOf, and state hoisting patterns
 links: []
+related: [c-jetpack-compose, c-compose-recomposition, c-viewmodel, c-state-flow, c-unidirectional-data-flow]
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, concept, jetpack-compose, state-management, ui]

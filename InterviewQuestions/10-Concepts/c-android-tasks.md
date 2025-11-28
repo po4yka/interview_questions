@@ -1,7 +1,7 @@
 ---
 id: "20251110-180501"
-title: "Tasks  Android  Medium / Tasks  Android  Medium"
-aliases: ["Tasks  Android  Medium"]
+title: "Android Tasks"
+aliases: ["Android Tasks"]
 summary: "Foundational concept for interview preparation"
 topic: "android"
 subtopics: ["general"]
@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-task-backstack, c-activity-lifecycle, c-intent-flags, c-task-affinity, c-activity]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["android", "auto-generated", "concept", "difficulty/medium"]

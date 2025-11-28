@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-system-design"
-related: []
+related: [c-dagger, c-koin, c-assisted-injection, c-factory-pattern, c-design-patterns]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]

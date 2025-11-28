@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-android-ipc, c-service, c-android-components, c-intent, c-android-manifest]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "broadcast", "components", "concept", "difficulty/medium", "system-events"]

@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: []
+related: [c-databases, c-database-normalization, c-database-relations, c-sql, c-system-design]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "design", "difficulty/medium", "normalization", "relational", "schema"]

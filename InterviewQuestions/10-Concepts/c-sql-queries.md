@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: []
+related: [c-sqlite, c-sqlite-indexes, c-database-performance, c-database-design, c-relational-databases]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "ctes", "difficulty/medium", "joins", "queries", "sql", "subqueries"]

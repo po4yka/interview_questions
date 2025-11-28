@@ -5,6 +5,7 @@ aliases: [Activity Lifecycle, Lifecycle Activity, Жизненный цикл Ac
 kind: concept
 summary: Android Activity lifecycle states and transitions
 links: []
+related: [c-lifecycle, c-fragment-lifecycle, c-viewmodel, c-savedinstancestate, c-activity]
 created: 2025-10-30
 updated: 2025-10-30
 tags: [activity, android, android-components, concept, lifecycle]

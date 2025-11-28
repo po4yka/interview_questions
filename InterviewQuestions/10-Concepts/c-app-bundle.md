@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-gradle, c-release-engineering, c-app-signing, c-play-console, c-play-feature-delivery]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "app-bundle", "build", "concept", "difficulty/medium", "gradle", "publishing"]

@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-viewmodel, c-state-flow, c-clean-architecture, c-repository-pattern, c-dependency-injection]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-patterns", "concept", "databinding", "difficulty/medium", "livedata", "mvvm", "viewmodel"]

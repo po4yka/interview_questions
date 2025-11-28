@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-algorithms"
-related: []
+related: [c-algorithms, c-dynamic-programming, c-recursion, c-graph-algorithms, c-data-structures]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["algorithms", "auto-generated", "concept", "difficulty/medium"]

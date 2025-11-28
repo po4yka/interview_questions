@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-viewmodel, c-compose-state, c-compose-recomposition, c-lifecycle, c-navigation]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "composables", "concept", "declarative-ui", "difficulty/medium", "jetpack-compose", "recomposition", "ui"]

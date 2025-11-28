@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-architecture-patterns, c-mvvm, c-repository-pattern, c-dependency-injection, c-software-design]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-patterns", "clean-architecture", "concept", "difficulty/medium", "domain-layer", "repository", "use-cases"]

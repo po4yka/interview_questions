@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-compose-semantics, c-jetpack-compose, c-custom-views, c-material-design, c-ui-ux-accessibility]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["a11y", "accessibility", "android", "concept", "difficulty/medium", "talkback", "ui-ux"]

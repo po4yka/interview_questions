@@ -1,7 +1,7 @@
 ---
 id: "20251110-030554"
-title: " Kotlin  Medium /  Kotlin  Medium"
-aliases: [" Kotlin  Medium"]
+title: "Kotlin Intermediate"
+aliases: ["Kotlin Intermediate"]
 summary: "Foundational concept for interview preparation"
 topic: "kotlin"
 subtopics: ["general"]

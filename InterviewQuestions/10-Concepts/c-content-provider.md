@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: []
+related: [c-android-ipc, c-android-components, c-service, c-broadcast-receiver, c-android-storage-options]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "content-provider", "crud", "data-sharing", "difficulty/medium", "ipc", "uri"]
