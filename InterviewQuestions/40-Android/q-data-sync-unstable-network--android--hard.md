@@ -360,4 +360,3 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 - Implementing operational transformation for real-time collaboration
 - Building distributed consensus algorithms for multi-node sync
 - `CRDTs` for automatic conflict resolution
-```
