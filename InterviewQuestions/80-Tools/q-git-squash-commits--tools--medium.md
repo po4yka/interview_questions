@@ -28,50 +28,13 @@ tags: [difficulty/medium, easy_kotlin, git, lang/ru, rebase, squash, tools, vers
 date created: Tuesday, November 25th 2025, 8:13:30 pm
 date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
-# Question (EN)
-> How to combine multiple commits into one in Git
 # Вопрос (RU)
 > Как объединить несколько коммитов в один в Git
 
 ---
 
-## Answer (EN)
-
-Combining multiple commits into one in Git is a process known as **squashing commits**. There are several ways to perform this operation, depending on your scenario.
-
-### Method 1: Interactive Rebase (recommended)
-
-1. Run interactive rebase:
-```bash
-git rebase -i HEAD~n
-```
-where `n` is the number of commits you want to combine
-
-2. In the editor, change `pick` to `squash` (or `s`) for all commits except the first one:
-```text
-pick abc1234 First commit
-squash def5678 Second commit
-squash ghi9012 Third commit
-```
-
-3. Save and close the editor
-
-4. You'll see another editor to combine commit messages - edit as needed and save
-
-### Method 2: Soft Reset and New Commit
-
-1. Create a temporary branch (optional, for safety)
-2. Do a soft reset to the desired point:
-```bash
-git reset --soft HEAD~n
-```
-3. Create a new commit with all changes:
-```bash
-git commit -m "Combined commit message"
-```
-
-**Note**: Be careful when rewriting history on shared branches!
-
+# Question (EN)
+> How to combine multiple commits into one in Git
 ## Ответ (RU)
 
 Объединение нескольких коммитов в один в Git — это процесс, известный как **squashing commits**. Существует несколько способов выполнения этой операции, в зависимости от вашего сценария.
@@ -123,3 +86,40 @@ git commit -m "Объединённое сообщение коммита"
 
 ## Related Questions
 - [[q-git-merge-vs-rebase--tools--medium]]
+
+## Answer (EN)
+
+Combining multiple commits into one in Git is a process known as **squashing commits**. There are several ways to perform this operation, depending on your scenario.
+
+### Method 1: Interactive Rebase (recommended)
+
+1. Run interactive rebase:
+```bash
+git rebase -i HEAD~n
+```
+where `n` is the number of commits you want to combine
+
+2. In the editor, change `pick` to `squash` (or `s`) for all commits except the first one:
+```text
+pick abc1234 First commit
+squash def5678 Second commit
+squash ghi9012 Third commit
+```
+
+3. Save and close the editor
+
+4. You'll see another editor to combine commit messages - edit as needed and save
+
+### Method 2: Soft Reset and New Commit
+
+1. Create a temporary branch (optional, for safety)
+2. Do a soft reset to the desired point:
+```bash
+git reset --soft HEAD~n
+```
+3. Create a new commit with all changes:
+```bash
+git commit -m "Combined commit message"
+```
+
+**Note**: Be careful when rewriting history on shared branches!

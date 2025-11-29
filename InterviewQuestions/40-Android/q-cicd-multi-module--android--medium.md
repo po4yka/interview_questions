@@ -349,7 +349,6 @@ tasks.withType<Test> {
 - [[c-gradle]]
 - [[c-release-engineering]]
 
-
 ### Prerequisites
 - [[q-android-modularization--android--medium]] — Understanding module boundaries and dependency management
 - [[q-build-optimization-gradle--android--medium]] — Basic Gradle optimization techniques

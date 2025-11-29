@@ -280,7 +280,6 @@ suspend fun getUser(@Path("userId") userId: String)
 
 - [[c-retrofit]]
 
-
 ### Prerequisites (Easier)
 - [[q-graphql-vs-rest--networking--easy]] - Understanding REST API fundamentals
 - [[q-retrofit-library--android--medium]] - Basic Retrofit setup and usage

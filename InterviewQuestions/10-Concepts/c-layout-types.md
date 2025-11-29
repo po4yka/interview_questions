@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-constraintlayout, c-linearlayout, c-framelayout, c-layout-performance, c-relativelayout]
+related: [c-constraintlayout, c-framelayout, c-layout-performance]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-jetpack-compose, c-functional-programming, c-imperative-programming, c-ui-frameworks, c-react]
+related: [c-jetpack-compose, c-functional-programming]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

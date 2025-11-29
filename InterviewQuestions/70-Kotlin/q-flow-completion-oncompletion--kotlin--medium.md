@@ -20,6 +20,9 @@ date modified: Tuesday, November 25th 2025, 8:53:51 pm
 # Вопрос (RU)
 Что такое оператор `onCompletion` в `Kotlin Flow` и чем он отличается от блоков `finally`? Как обрабатывать завершение для успешных случаев, исключений и отмены? Приведите production-примеры очистки, логирования, обновления UI-состояния и аналитики с корректными стратегиями тестирования.
 
+# Question (EN)
+What is the `onCompletion` operator in `Kotlin Flow` and how does it differ from `finally` blocks? How do you handle completion for success, exceptions, and cancellation cases? Provide production examples of cleanup, logging, UI state updates, and analytics with proper testing strategies.
+
 ## Ответ (RU)
 
 Оператор `onCompletion` регистрирует действие, которое вызывается при завершении сборки `Flow` — при успешном завершении, с исключением или из-за отмены. Он похож по идее на блок `finally`, но:
@@ -829,9 +832,6 @@ class StateMachine {
 - [Обработка исключений Flow](https://kotlinlang.org/docs/flow.html#flow-exceptions)
 - [Операторы Flow](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
 - [Документация Kotlin Flow](https://kotlinlang.org/docs/flow.html)
-
-# Question (EN)
-What is the `onCompletion` operator in `Kotlin Flow` and how does it differ from `finally` blocks? How do you handle completion for success, exceptions, and cancellation cases? Provide production examples of cleanup, logging, UI state updates, and analytics with proper testing strategies.
 
 ## Answer (EN)
 

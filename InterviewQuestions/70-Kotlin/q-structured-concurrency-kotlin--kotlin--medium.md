@@ -405,7 +405,6 @@ In Android, this means using `viewModelScope`, `lifecycleScope`, or well-defined
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
 
-
 ---
 
 ## Related Questions

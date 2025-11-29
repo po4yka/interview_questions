@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-map-flatmap--kotlin--medium, q-kotlin-sealed-classes-purpose--programming-languages--medium]
+related: [c-kotlin, q-kotlin-map-flatmap--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, equality, hashmap, kotlin, object-comparison]

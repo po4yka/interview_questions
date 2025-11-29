@@ -147,7 +147,6 @@ view.setOnTouchListener { _, e ->
 - [[q-custom-view-animation--android--medium]]
 - [[q-list-elements-problems--android--medium]]
 
-
 ## Related Questions
 
 ### Prerequisites

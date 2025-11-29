@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-kotlin-intrange--programming-languages--easy, q-semaphore-rate-limiting--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
+related: [q-semaphore-rate-limiting--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/functions]
@@ -29,7 +29,7 @@ date modified: Tuesday, November 25th 2025, 8:53:54 pm
 
 Модификаторы доступа в Kotlin управляют видимостью классов, интерфейсов, функций, свойств, конструкторов и других объявлений. Это ключевой механизм инкапсуляции: он позволяет скрывать детали реализации и открывать только необходимый внешний API.
 
-В Kotlin есть четыре модификатора видимости: `public`, `private`, `protected`, `internal` (см. также [[c-concepts--kotlin--medium]]).
+В Kotlin есть четыре модификатора видимости: `public`, `private`, `protected`, `internal` (см. также ).
 
 **1. `public` (по умолчанию в большинстве случаев)**
 - Виден отовсюду.
@@ -127,7 +127,7 @@ internal fun internalFunction() {}  // Видна в рамках модуля
 
 Access modifiers in Kotlin control the visibility of classes, interfaces, functions, properties, constructors, and other declarations. They are essential for encapsulation: you hide implementation details and expose only what is needed.
 
-Kotlin provides four visibility modifiers: `public`, `private`, `protected`, and `internal` (see also [[c-concepts--kotlin--medium]]).
+Kotlin provides four visibility modifiers: `public`, `private`, `protected`, and `internal` (see also ).
 
 **1. `public` (default in most cases)**
 - Visible everywhere.
@@ -223,26 +223,15 @@ internal fun internalFunction() {}  // Visible in the same module
 
 ## Дополнительные Вопросы (RU)
 
-- [[c-variable--programming-languages--easy]]
 - [[q-suspend-functions-deep-dive--kotlin--medium]]
 - [[q-semaphore-rate-limiting--kotlin--medium]]
 
 ## Follow-ups
 
-- [[c-variable--programming-languages--easy]]
 - [[q-suspend-functions-deep-dive--kotlin--medium]]
 - [[q-semaphore-rate-limiting--kotlin--medium]]
 
-## Ссылки (RU)
-
-- [[c-concepts--kotlin--medium]]
-
-## References
-
-- [[c-concepts--kotlin--medium]]
-
 ## Related Questions
 
-- [[c-variable--programming-languages--easy]]
 - [[q-suspend-functions-deep-dive--kotlin--medium]]
 - [[q-semaphore-rate-limiting--kotlin--medium]]

@@ -275,7 +275,6 @@ fun loadData() {
 - [[c-coroutines]]
 - [[c-background-tasks]]
 
-
 ### Prerequisites
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Understanding Android main thread
 - [[q-why-multithreading-tools--android--easy]] - Why we need threading tools

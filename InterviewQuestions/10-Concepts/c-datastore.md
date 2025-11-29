@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-android-storage-options, c-sharedpreferences, c-room, c-preferences, c-serialization]
+related: [c-android-storage-options, c-sharedpreferences, c-room, c-serialization]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-system-design"
-related: [c-design-patterns, c-behavioral-patterns, c-oop-patterns, c-software-design, c-strategy-pattern]
+related: [c-design-patterns, c-software-design]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]

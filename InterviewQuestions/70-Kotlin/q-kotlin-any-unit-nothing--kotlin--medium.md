@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-coroutine-supervisorjob-use-cases--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium, q-sharedflow-stateflow--kotlin--medium]
+related: [q-coroutine-supervisorjob-use-cases--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
@@ -88,10 +88,6 @@ fun fail(message: String): Nothing {
 - How are `Any`, `Unit`, and `Nothing` used in designing type-safe APIs in Kotlin?
 - How does `Nothing` improve control-flow analysis for functions like `error()` or `TODO()`?
 - In what scenarios would you explicitly specify `Unit` or `Any` in function signatures instead of relying on type inference?
-
-## References
-
-- [[c--kotlin--medium]]
 
 ## Related Questions
 

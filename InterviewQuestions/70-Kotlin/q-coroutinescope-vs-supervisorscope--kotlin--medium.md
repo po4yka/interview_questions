@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-await--kotlin--medium, c-concurrency, q-channel-pipelines--kotlin--hard]
+related: [c-concurrency, q-channel-pipelines--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scope]

@@ -20,7 +20,7 @@ date modified: Tuesday, November 25th 2025, 8:53:50 pm
 # Вопрос (RU)
 > В чем особенность делегатов свойств?
 
-## Question (EN)
+# Question (EN)
 > What are the features of property delegates?
 
 ## Ответ (RU)

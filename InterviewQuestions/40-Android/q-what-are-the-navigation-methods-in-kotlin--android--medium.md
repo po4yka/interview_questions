@@ -336,7 +336,6 @@ class MainActivity : AppCompatActivity() {
 - [[c-activity]]
 - [[c-fragments]]
 
-
 ### Prerequisites (Easier)
 - [[q-fragment-basics--android--easy]]
 - [[q-android-components-besides-activity--android--easy]]

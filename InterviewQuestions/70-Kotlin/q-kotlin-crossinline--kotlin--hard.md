@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-data-class-detailed--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
+related: [q-data-class-detailed--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard, kotlin/functions]
@@ -66,14 +66,6 @@ Therefore, `crossinline` is used to:
 - [[q-semaphore-rate-limiting--kotlin--medium]]
 - [[q-object-singleton-companion--kotlin--medium]]
 - [[q-data-class-detailed--kotlin--medium]]
-
-## Ссылки (RU)
-
-- [[c-concepts--kotlin--medium]]
-
-## References
-
-- [[c-concepts--kotlin--medium]]
 
 ## Related Questions
 

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, q-iterator-concept--programming-languages--easy]
+related: [c-collections]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/medium, iterators, kotlin]

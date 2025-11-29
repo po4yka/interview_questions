@@ -408,7 +408,6 @@ fun updateItems(newItems: List<Item>) {
 
 - [[c-performance]]
 
-
 ### Same Level
 - [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
 - [[q-cicd-pipeline-android--android--medium]]

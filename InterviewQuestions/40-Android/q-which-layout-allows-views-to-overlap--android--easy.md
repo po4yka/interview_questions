@@ -400,7 +400,6 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 
-
 ### Prerequisites (Easier)
 - [[q-viewgroup-vs-view-differences--android--easy]] — Understanding View hierarchy
 - [[q-what-is-layout-types-and-when-to-use--android--easy]] — Layout types overview

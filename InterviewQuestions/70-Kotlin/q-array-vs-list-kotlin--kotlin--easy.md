@@ -16,7 +16,6 @@ related:
   - c-collections
   - c-kotlin
   - q-kotlin-collections--kotlin--easy
-  - q-kotlin-map-collection--programming-languages--easy
   - q-list-set-map-differences--kotlin--easy
   - q-list-vs-sequence--kotlin--medium
 subtopics:

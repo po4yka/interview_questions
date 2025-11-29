@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-architecture-patterns
+moc: moc-cs
 related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11

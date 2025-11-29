@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes, q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-sam-interfaces--kotlin--medium]
+related: [c-kotlin, c-sealed-classes, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]

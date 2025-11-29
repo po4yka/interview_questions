@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-inline-function-limitations--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-native--kotlin--hard]
+related: [q-inline-function-limitations--kotlin--medium, q-kotlin-native--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy]
@@ -98,10 +98,3 @@ Constants (including `const val` and `val` properties used as constants) are not
 - [[q-kotlin-native--kotlin--hard]]
 - [[q-kotlin-extensions-overview--kotlin--medium]]
 
-## Ссылки (RU)
-
-- [[c-concepts--kotlin--medium]]
-
-## References
-
-- [[c-concepts--kotlin--medium]]

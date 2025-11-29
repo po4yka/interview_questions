@@ -379,7 +379,6 @@ fun AppTheme(content: @Composable () -> Unit) {
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 
-
 ### Prerequisites
 - Jetpack Compose basics
 - Compose theming fundamentals

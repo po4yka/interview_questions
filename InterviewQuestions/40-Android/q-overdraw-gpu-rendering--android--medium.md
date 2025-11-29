@@ -218,7 +218,6 @@ override fun onDraw(canvas: Canvas) {
 - [[c-perfetto]]
 - [[c-performance]]
 
-
 ### Prerequisites
 - [[q-what-is-layout-performance-measured-in--android--medium]] — Understanding rendering metrics
 

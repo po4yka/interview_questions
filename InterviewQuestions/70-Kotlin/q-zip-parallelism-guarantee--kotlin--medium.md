@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, c-coroutines, c-flow, q-partition-function--kotlin--easy]
+related: [c-coroutines, c-flow, q-partition-function--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]
@@ -99,7 +99,7 @@ suspend fun parallelCalls(): Pair<Result1, Result2> = coroutineScope {
 }
 ```
 
-См. также: [[c--kotlin--medium]], [[c-coroutines]], [[c-flow]].
+См. также: , [[c-coroutines]], [[c-flow]].
 
 ### Дополнительные Вопросы (RU)
 

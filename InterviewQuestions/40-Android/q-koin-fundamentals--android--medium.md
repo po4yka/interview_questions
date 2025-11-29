@@ -662,7 +662,6 @@ class UserRepositoryTest : KoinTest {
 - [[c-lifecycle]]
 - [[c-dependency-injection]]
 
-
 ### Prerequisites (Easier)
 - [[q-what-is-viewmodel--android--medium]]
 

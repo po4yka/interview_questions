@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-java-features, q-java-object-comparison--programming-languages--easy]
+related: [c-java-features]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy, functional-interface, functional-programming, java, lambda, programming-languages]

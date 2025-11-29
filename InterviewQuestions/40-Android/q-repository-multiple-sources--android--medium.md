@@ -28,7 +28,6 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/architecture-clean, android/cache-offline, difficulty/medium, en, ru]
 
-
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
@@ -402,10 +401,8 @@ class ProfileRepository(
 - Как реализовать стратегию синхронизации, когда локальные изменения пользователя должны отправляться на сервер и объединяться с удалёнными данными?
 - Как тестировать `Repository` с несколькими источниками данных (моки для API/БД/кэша, фейковые реализация и т.д.)?
 
-
 ## References
 - [Data layer - Android](https://developer.android.com/topic/architecture/data-layer)
-
 
 ## Related Questions
 
@@ -413,7 +410,6 @@ class ProfileRepository(
 
 - [[c-database-design]]
 - [[c-clean-architecture]]
-
 
 ### Related (Medium)
 - [[q-repository-pattern--android--medium]] - Architecture

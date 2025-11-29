@@ -1096,7 +1096,6 @@ class ChatListViewModel : ViewModel() {
 - [[q-what-are-px-dp-sp--android--easy]]
 - [[q-what-is-known-about-recyclerview--android--easy]]
 
-
 ## Ссылки (RU)
 
 - [Views](https://developer.android.com/develop/ui/views)
@@ -1106,7 +1105,6 @@ class ChatListViewModel : ViewModel() {
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Связанные Вопросы (RU)
 

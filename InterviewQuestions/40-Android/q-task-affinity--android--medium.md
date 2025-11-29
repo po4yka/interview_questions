@@ -159,7 +159,6 @@ startActivity(intent)
 - What happens when you don't specify taskAffinity (neither on application nor on activity)?
 - How do you handle taskAffinity with notifications and `FLAG_ACTIVITY_NEW_TASK`?
 
-
 ## Ссылки (RU)
 
 - [Навигация](https://developer.android.com/guide/navigation)
@@ -169,7 +168,6 @@ startActivity(intent)
 
 - [Navigation](https://developer.android.com/guide/navigation)
 - [Activities](https://developer.android.com/guide/components/activities)
-
 
 ## Связанные Вопросы (RU)
 
@@ -189,13 +187,11 @@ startActivity(intent)
 
 - [[q-android-runtime-internals--android--hard]] - Внутреннее устройство Runtime
 
-
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-activity-lifecycle]]
-
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components

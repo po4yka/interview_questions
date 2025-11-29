@@ -220,7 +220,6 @@ class FileTransferService : LifecycleService() {
 - https://developer.android.com/develop/background-work/background-tasks
 - [Foreground Services](https://developer.android.com/develop/background-work/services/foreground-services)
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

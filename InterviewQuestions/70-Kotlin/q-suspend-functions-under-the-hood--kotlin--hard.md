@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-synchronized-blocks-with-coroutines--programming-languages--medium]
+related: [c-coroutines, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [compiler, coroutines, difficulty/hard, kotlin]

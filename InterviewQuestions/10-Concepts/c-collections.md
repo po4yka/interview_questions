@@ -5,7 +5,7 @@ aliases: [Collection Framework, Collections, Java Collections, Kotlin Collection
 kind: concept
 summary: Data structures for storing and manipulating groups of objects, including List, Set, Map, and their implementations in Java and Kotlin.
 links: []
-related: [c-kotlin, c-data-structures, c-generics, c-sequences, c-functional-programming]
+related: [c-kotlin, c-data-structures, c-functional-programming]
 created: 2025-11-05
 updated: 2025-11-05
 tags: [collections, concept, data-structures, java, kotlin]

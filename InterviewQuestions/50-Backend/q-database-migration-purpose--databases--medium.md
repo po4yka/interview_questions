@@ -17,10 +17,7 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-backend
-related: [
-  c-database-design,
-  c-migrations
-]
+related: [c-database-design, c-migrations]
 
 # Timestamps
 created: 2025-10-03

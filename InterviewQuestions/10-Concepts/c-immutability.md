@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-functional-programming, c-data-classes, c-value-classes, c-kotlin-concepts, c-thread-safety]
+related: [c-functional-programming, c-data-classes, c-value-classes, c-kotlin-concepts]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

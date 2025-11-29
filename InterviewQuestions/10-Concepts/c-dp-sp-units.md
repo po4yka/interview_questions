@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-dimension-units, c-density-independent-pixels, c-android-resources, c-typography, c-spacing]
+related: [c-dimension-units, c-density-independent-pixels, c-android-resources]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

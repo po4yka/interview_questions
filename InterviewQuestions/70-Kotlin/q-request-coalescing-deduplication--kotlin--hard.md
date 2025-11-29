@@ -97,7 +97,6 @@ date modified: Tuesday, November 25th 2025, 8:53:49 pm
 
 Результат: 3 идентичных вызова бэкенда
 
-
 С объединением:
 
   Клиент
@@ -1050,9 +1049,7 @@ WITHOUT Coalescing:
   Client
     C
 
-
 Result: 3 identical backend calls
-
 
 WITH Coalescing:
 
@@ -1065,7 +1062,6 @@ WITH Coalescing:
 
   Client
     C
-
 
 Result: 1 backend call, 3 clients get result
 ```

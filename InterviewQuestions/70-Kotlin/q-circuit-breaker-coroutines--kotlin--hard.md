@@ -105,11 +105,9 @@ The Circuit Breaker pattern is inspired by electrical circuit breakers that auto
    Client       Circuit      Service
                          Breaker              (Backend)
 
-
                                Monitors failures
                                Controls access
                                Manages state
-
 
                            State
                           Machine
@@ -248,28 +246,19 @@ sealed class CircuitBreakerState {
                        CLOSED
                       (Normal)
 
-
                             Failure threshold        Success threshold
                             exceeded                 in HALF_OPEN
-
-
 
                         OPEN
                       (Failing)
 
-
                             Timeout period
                             elapsed
-
-
 
                       HALF_OPEN
                       (Testing)
 
-
                             Failure
-
-
 
                         OPEN
                       (Failing)

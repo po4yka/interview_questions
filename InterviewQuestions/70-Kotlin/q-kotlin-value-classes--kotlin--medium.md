@@ -14,7 +14,6 @@ language_tags:
 status: draft
 moc: moc-kotlin
 related:
-- c-concepts--kotlin--medium
 - q-android-runtime-art--android--medium
 - q-inline-classes-value-classes--kotlin--medium
 - q-inline-value-classes-performance--kotlin--medium
@@ -298,9 +297,6 @@ val nullable: UserId? = userId            // 3. Nullable types (commonly boxed)
 ## Related Questions
 
 ### Prerequisites / Concepts
-
-- [[c-concepts--kotlin--medium]]
-
 
 ### Prerequisites (Easier)
 

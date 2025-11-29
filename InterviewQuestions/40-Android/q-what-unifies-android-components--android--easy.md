@@ -174,14 +174,9 @@ contentResolver.query(
         AndroidManifest.xml
   (основные компоненты объявлены здесь)
 
-
-
-
     Activity   Service  Receiver  Provider
 
-
             Все используют / получают Context
-
 
        Context и Intent (где применимо)
   Единый доступ к ресурсам и обмену сообщениями
@@ -337,14 +332,9 @@ contentResolver.query(
         AndroidManifest.xml
   (Core components declared here)
 
-
-
-
     Activity   Service  Receiver  Provider
 
-
             All use / receive Context
-
 
        Context & Intents (where applicable)
    Unified access to resources + messaging

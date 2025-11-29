@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-algorithms, c-computer-science, q-interface-vs-abstract-class--programming-languages--medium]
+related: [c-algorithms, c-computer-science]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy, java, object-class, oop, programming-languages/inheritance]

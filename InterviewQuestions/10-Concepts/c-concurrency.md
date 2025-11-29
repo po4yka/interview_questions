@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-multithreading, c-coroutines, c-threading, c-structured-concurrency, c-synchronization]
+related: [c-multithreading, c-coroutines, c-threading, c-structured-concurrency]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

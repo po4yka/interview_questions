@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-inline-function-limitations--kotlin--medium]
+related: [q-inline-function-limitations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
@@ -72,10 +72,6 @@ Key points:
 - What is the main practical benefit of abstract properties in Kotlin compared to abstract methods in Java?
 - How does Kotlin's `final`-by-default policy influence the design of abstract base class hierarchies compared to Java?
 - What common mistakes occur when designing abstract classes in Kotlin (e.g., missing `open`, confusion with interfaces, etc.)?
-
-## Ссылки (RU)
-
-- [[c--kotlin--medium]]
 
 ## References
 

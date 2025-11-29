@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-concurrency, q-hot-vs-cold-flows--programming-languages--medium, q-launch-vs-async-await--programming-languages--medium, q-what-is-flow--programming-languages--medium]
+related: [c-concurrency]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [concurrency, coroutines, difficulty/medium, flow, kotlin, parallel-requests, zip-operator]

@@ -266,7 +266,6 @@ fun `load users emits data`() = runTest {
 - [[c-lifecycle]]
 - [[c-clean-architecture]]
 
-
 ### Prerequisites
 - [[q-what-is-viewmodel--android--medium]] - Understanding `ViewModel` basics
 

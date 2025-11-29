@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-actor-pattern--kotlin--hard]
+related: [q-actor-pattern--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin]
@@ -115,7 +115,6 @@ class Example(val param: String) {
 - Если есть первичный конструктор, каждый вторичный конструктор должен делегировать ему через `this(...)` (напрямую или цепочкой вторичных конструкторов).
 - Блоки `init` и инициализаторы свойств выполняются в порядке объявления в теле класса, до тела вторичного конструктора.
 - Свойства могут инициализироваться непосредственно при объявлении или в блоках `init`.
-
 
 ## Answer (EN)
 
@@ -228,10 +227,3 @@ class Example(val param: String) {
 
 - [[q-actor-pattern--kotlin--hard]]
 
-## Ссылки (RU)
-
-- [[c-concepts--kotlin--medium]]
-
-## References
-
-- [[c-concepts--kotlin--medium]]

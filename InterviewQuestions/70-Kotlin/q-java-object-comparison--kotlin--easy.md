@@ -9,8 +9,8 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-system-design
-related: [c-equality, q-flow-map-operator--programming-languages--medium]
+moc: moc-kotlin
+related: [c-equality]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, programming-languages]
@@ -377,7 +377,7 @@ class Bad {
 
 ### Простые (Easy)
 - [[q-java-equals-default-behavior--kotlin--easy]] - Java
-- [[c-variable--programming-languages--easy]] - Java
+-  - Java
 
 ### Продвинутые (Сложнее)
 - [[q-java-access-modifiers--kotlin--medium]] - Java
@@ -388,7 +388,7 @@ class Bad {
 
 ### Related (Easy)
 - [[q-java-equals-default-behavior--kotlin--easy]] - Java
-- [[c-variable--programming-languages--easy]] - Java
+-  - Java
 
 ### Advanced (Harder)
 - [[q-java-access-modifiers--kotlin--medium]] - Java

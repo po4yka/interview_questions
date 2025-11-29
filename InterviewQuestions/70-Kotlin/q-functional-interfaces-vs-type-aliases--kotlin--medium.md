@@ -12,7 +12,7 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-kotlin, q-kotlin-sam-interfaces--kotlin--medium, q-type-aliases--kotlin--medium]
+related: [c-kotlin, q-kotlin-sam-interfaces--kotlin--medium, q-type-aliases--kotlin--medium]
 created: 2025-10-05
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin, type-aliases]

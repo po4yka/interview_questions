@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-hash-map, q-equals-hashcode-contracts--programming-languages--medium]
+related: [c-collections, c-hash-map]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, kotlin]
@@ -79,10 +79,8 @@ Key points:
 
 ## Связанные Вопросы (RU)
 
-- [[c-variable--programming-languages--easy]]
 - [[q-how-suspend-function-detects-suspension--kotlin--hard]]
 
 ## Related Questions
 
-- [[c-variable--programming-languages--easy]]
 - [[q-how-suspend-function-detects-suspension--kotlin--hard]]

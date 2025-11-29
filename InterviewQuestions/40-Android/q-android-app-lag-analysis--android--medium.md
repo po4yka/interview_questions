@@ -272,7 +272,6 @@ StrictMode.setVmPolicy(
 
 ### Предпосылки / Концепты
 
-
 ### Предпосылки
 
 - [[q-android-performance-measurement-tools--android--medium]]
@@ -302,7 +301,6 @@ StrictMode.setVmPolicy(
 ## Related Questions
 
 ### Prerequisites / Concepts
-
 
 ### Prerequisites
 

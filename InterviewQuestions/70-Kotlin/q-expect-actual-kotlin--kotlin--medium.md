@@ -55,9 +55,6 @@ date modified: Tuesday, November 25th 2025, 8:53:52 pm
     expect fun getPlatform()
     expect class Storage
 
-
-
-
  androidMain     iosMain
  actual impl    actual impl
 
@@ -566,9 +563,6 @@ The **expect/actual** mechanism in Kotlin Multiplatform (KMP) allows you to writ
 
     expect fun getPlatform()
     expect class Storage
-
-
-
 
  androidMain     iosMain
  actual impl    actual impl

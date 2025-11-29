@@ -255,14 +255,12 @@ override fun onDraw(canvas: Canvas) {
 - https://developer.android.com/reference/android/graphics/Canvas
 - https://developer.android.com/training/custom-views/optimizing-view
 
-
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-performance]]
 - [[c-performance-optimization]]
-
 
 ### Prerequisites
 - [[q-android-performance-measurement-tools--android--medium]] - Profiling tools and techniques

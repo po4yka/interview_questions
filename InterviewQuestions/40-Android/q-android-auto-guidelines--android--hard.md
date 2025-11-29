@@ -211,5 +211,16 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 
 ## Связанные Вопросы (RU)
 
+- [[c-android-auto]]
+- [[q-android-auto-guidelines--android--hard]]
+- [[q-android-lint-tool--android--medium]]
+- [[q-main-thread-android--android--medium]]
+- [[q-parsing-optimization-android--android--medium]]
+
 ## Related Questions
 
+- [[c-android-auto]]
+- [[q-android-auto-guidelines--android--hard]]
+- [[q-android-lint-tool--android--medium]]
+- [[q-main-thread-android--android--medium]]
+- [[q-parsing-optimization-android--android--medium]]

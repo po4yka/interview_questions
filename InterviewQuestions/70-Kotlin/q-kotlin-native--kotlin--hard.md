@@ -58,17 +58,11 @@ date modified: Tuesday, November 25th 2025, 8:53:50 pm
 
        Kotlin Source Code
 
-
-
           Kotlin/Native
             Compiler
 
-
-
   LLVM                LLVM
   iOS                 macOS
-
-
 
  .framework           Binary
 
@@ -565,17 +559,11 @@ See also: [[c-kotlin]].
 
        Kotlin Source Code
 
-
-
           Kotlin/Native
             Compiler
 
-
-
   LLVM                LLVM
   iOS                 macOS
-
-
 
  .framework           Binary
 

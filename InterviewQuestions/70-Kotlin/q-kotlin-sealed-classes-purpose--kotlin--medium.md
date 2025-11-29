@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-sealed-classes, q-expect-actual-kotlin--kotlin--medium, q-kotlin-null-checks-methods--programming-languages--easy, q-kotlin-reified-types--kotlin--hard]
+related: [c-sealed-classes, q-expect-actual-kotlin--kotlin--medium, q-kotlin-reified-types--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/medium, oop, programming-languages, sealed-classes, type-hierarchy, when-expressions]

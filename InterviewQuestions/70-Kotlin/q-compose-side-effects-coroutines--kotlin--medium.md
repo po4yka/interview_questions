@@ -13,7 +13,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, coroutines, difficulty/medium, jetpack-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
 moc: moc-kotlin
-related: [c-await--kotlin--medium, c-concepts--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium]
+related: [q-testing-stateflow-sharedflow--kotlin--medium]
 
 date created: Saturday, November 1st 2025, 1:28:03 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm
@@ -620,9 +620,6 @@ fun testArticleLoading_showsData() {
 - [LaunchedEffect](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1))
 - [Lifecycle-aware сбор `Flow`](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
 - [Тестирование Compose](https://developer.android.com/jetpack/compose/testing)
-- [[c-concepts--kotlin--medium]]
-- [[c-await--kotlin--medium]]
-
 ## Answer (EN)
 
 Side effects in Compose are operations that escape the scope of a composable function and affect the state of the app outside of the composition itself. Coroutines are central to managing async side effects in Compose.
@@ -1205,8 +1202,5 @@ Note: The precise testing setup (`runTest` vs using only `composeTestRule`) depe
 - [LaunchedEffect](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1))
 - [Lifecycle-aware `Flow` collection](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
 - [Compose Testing](https://developer.android.com/jetpack/compose/testing)
-- [[c-concepts--kotlin--medium]]
-- [[c-await--kotlin--medium]]
-
 ## Related Questions
 - [[q-testing-stateflow-sharedflow--kotlin--medium]]

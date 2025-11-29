@@ -274,7 +274,6 @@ Decisions consider not only the category, but also actual memory usage, recency,
 - [[c-memory-management]]
 - [[c-lifecycle]]
 
-
 ### Prerequisites (Easier)
 - [[q-anr-application-not-responding--android--medium]] - ANR fundamentals
 - [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Android components

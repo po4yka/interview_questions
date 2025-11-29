@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-sequences-detailed--kotlin--medium]
+related: [q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-sequences-detailed--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/functions]
@@ -391,14 +391,12 @@ class Document : Printer by object : Printer {
 
 ## Ссылки (RU)
 
-- [[c--kotlin--medium]]
 - [[q-kotlin-init-block--kotlin--easy]]
 - [[q-sequences-detailed--kotlin--medium]]
 - [[q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]]
 
 ## References
 
-- [[c--kotlin--medium]]
 - [[q-kotlin-init-block--kotlin--easy]]
 - [[q-sequences-detailed--kotlin--medium]]
 - [[q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]]

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, functional-programming, java, kotlin, lambdas, syntax]

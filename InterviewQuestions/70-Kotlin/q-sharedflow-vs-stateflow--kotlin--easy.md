@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-concurrency, q-launch-vs-async-error-handling--programming-languages--medium]
+related: [c-concurrency]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/easy, flow, kotlin, sharedflow, stateflow]
@@ -806,14 +806,10 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 
 - [Документация Kotlin]("https://kotlinlang.org/docs/home.html")
 - [[c-concurrency]]
-- [[c-concepts--kotlin--medium]]
-
 ## References
 
 - [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
 - [[c-concurrency]]
-- [[c-concepts--kotlin--medium]]
-
 ## Связанные Вопросы (RU)
 
 - [[q-launch-vs-async-error-handling--kotlin--medium]]

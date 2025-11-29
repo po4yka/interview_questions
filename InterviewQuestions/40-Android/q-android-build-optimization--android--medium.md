@@ -295,11 +295,7 @@ include(":core:network", ":core:database")
 
 ### Связанные (того Же уровня)
 
-
-
 ### Продвинутые (сложнее)
-
-
 
 ## Related Questions (EN)
 
@@ -308,8 +304,5 @@ include(":core:network", ":core:database")
 
 ### Related (Same Level)
 
-
-
 ### Advanced (Harder)
-
 

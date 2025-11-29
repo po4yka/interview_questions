@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-concepts--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium]
+related: [c-collections, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy]

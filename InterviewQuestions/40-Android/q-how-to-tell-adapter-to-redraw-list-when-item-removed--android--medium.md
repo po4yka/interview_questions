@@ -380,7 +380,6 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 - [[c-custom-views]]
 
-
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
 

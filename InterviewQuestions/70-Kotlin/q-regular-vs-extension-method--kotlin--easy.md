@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-hot-vs-cold-flows--programming-languages--medium, q-reference-types-protect-from-deletion--programming-languages--easy]
+related: [c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, extension-functions, functions, kotlin, programming-languages, static-methods]

@@ -111,9 +111,7 @@ public interface CoroutineScope {
 
        Job       Dispatcher
 
-
        Name       Handler
-
 
   + launch(), async(), cancel() // extension-функции, использующие контекст области
 
@@ -264,9 +262,7 @@ public interface CoroutineScope {
 
        Job       Dispatcher
 
-
        Name       Handler
-
 
   + launch(), async(), cancel() // extension functions using the scope's context
 

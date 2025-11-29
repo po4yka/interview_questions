@@ -364,7 +364,6 @@ fun ItemList() {
 
 - [[c-recyclerview]]
 
-
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Architecture fundamentals

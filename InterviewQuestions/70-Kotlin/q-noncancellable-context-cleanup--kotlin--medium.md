@@ -17,293 +17,15 @@ tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancella
 date created: Friday, October 31st 2025, 6:29:31 pm
 date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
-# Question (EN)
-
-> What is `NonCancellable` in Kotlin coroutines? When should you use it? Explain how to use it in `finally` blocks for critical cleanup, the risks involved, and best practices with real-world examples.
-
 # Вопрос (RU)
 
 > Что такое `NonCancellable` в корутинах Kotlin? Когда следует его использовать? Объясните, как использовать его в блоках `finally` для критической очистки, связанные риски и лучшие практики с реальными примерами.
 
 ---
 
-## Answer (EN)
+# Question (EN)
 
-#### What is `NonCancellable`?
-
-`NonCancellable` is a special `CoroutineContext` element (a `Job`) that makes a block of code run in a context that ignores cancellation. It allows suspend functions inside that context to execute even when the surrounding coroutine has been cancelled.
-
-```kotlin
-import kotlinx.coroutines.*
-
-public object NonCancellable : AbstractCoroutineContextElement(Job), Job {
-    // Job that cannot be cancelled
-    // All Job cancellation operations are ignored
-}
-```
-
-Key characteristics:
-- Job that ignores cancellation: `cancel()` on this `Job` has no effect; it never transitions to a cancelled state.
-- Allows suspend functions in `finally`: Can safely call suspend functions for cleanup after cancellation inside `withContext(NonCancellable) { ... }`.
-- Does not auto-enforce time limits: It ignores cancellation, but if you explicitly wrap work in `withTimeout` or similar inside it, those timeouts still apply.
-- Use sparingly: Only for critical, short, and bounded cleanup.
-
-#### When to Use `NonCancellable`
-
-Use `NonCancellable` only for critical cleanup operations where:
-- the work is short and bounded, and
-- failing to run it would leave resources leaked, state corrupted, or invariants broken.
-
-Examples:
-1. Closing resources (files, network connections, database handles)
-2. Saving essential state before shutdown
-3. Rolling back or finalizing transactions that must not be left inconsistent
-4. Sending minimal analytics/audit logs about cancellation (only if cheap and important)
-5. Releasing locks or semaphores
-
-Do NOT use for:
-- regular business logic,
-- long-running operations,
-- operations that should be cancellable,
-- large blocks "just in case".
-
-#### Using `NonCancellable` in `finally` Blocks
-
-```kotlin
-import kotlinx.coroutines.*
-
-suspend fun demonstrateNonCancellable() = coroutineScope {
-    val job = launch {
-        try {
-            println("Working...")
-            delay(1000)
-            println("Work completed")
-        } finally {
-            withContext(NonCancellable) {
-                println("Cleanup starting...")
-                delay(500)
-                println("Cleanup completed")
-            }
-        }
-    }
-
-    delay(100)
-    job.cancel()
-    job.join()
-}
-```
-
-Why needed: After cancellation, the coroutine's `Job` is in a cancelled state. Normally, cancellable suspend functions will throw `CancellationException`. `withContext(NonCancellable)` runs cleanup in a context that ignores that cancellation so that short, critical suspend-based cleanup can complete.
-
-#### Real Example: Closing Resources
-
-```kotlin
-import kotlinx.coroutines.*
-import java.io.*
-
-suspend fun processFile(path: String) {
-    val file = File(path)
-    val reader = file.bufferedReader()
-
-    try {
-        // Process file
-        reader.lineSequence().forEach { line ->
-            println("Processing: $line")
-            // In real code use a suspending-friendly loop instead of forEach with suspend
-        }
-    } finally {
-        withContext(NonCancellable) {
-            println("Closing file...")
-            reader.close()
-            println("File closed")
-        }
-    }
-}
-
-suspend fun demonstrateFileCleanup() {
-    val job = CoroutineScope(Dispatchers.IO).launch {
-        processFile("data.txt")
-    }
-
-    delay(250)
-    job.cancel()
-    job.join()
-}
-```
-
-#### Real Example: Saving State
-
-```kotlin
-import kotlinx.coroutines.*
-
-data class AppState(val unsavedChanges: List<String>)
-
-class StateManager {
-    private var state = AppState(emptyList())
-
-    suspend fun saveState() {
-        delay(200)
-        println("State saved: ${state.unsavedChanges.size} changes")
-    }
-
-    suspend fun doWork() {
-        try {
-            repeat(10) { i ->
-                state = state.copy(unsavedChanges = state.unsavedChanges + "Change $i")
-                println("Made change $i")
-                delay(100)
-            }
-        } finally {
-            withContext(NonCancellable) {
-                println("Saving unsaved changes on cancellation...")
-                saveState()
-                println("Save complete")
-            }
-        }
-    }
-}
-
-suspend fun demonstrateStateSave() {
-    val manager = StateManager()
-    val job = CoroutineScope(Dispatchers.Default).launch {
-        manager.doWork()
-    }
-
-    delay(350)
-    println("Cancelling...")
-    job.cancelAndJoin()
-    println("Job cancelled and cleanup done")
-}
-```
-
-#### Real Example: Database Transaction commit/rollback
-
-```kotlin
-import kotlinx.coroutines.*
-
-class DatabaseTransaction {
-    private val uncommittedChanges = mutableListOf<String>()
-
-    suspend fun executeQuery(query: String) {
-        delay(50)
-        uncommittedChanges.add(query)
-        println("Executed: $query")
-    }
-
-    suspend fun commit() {
-        delay(100)
-        println("Committed ${uncommittedChanges.size} changes")
-        uncommittedChanges.clear()
-    }
-
-    suspend fun rollback() {
-        delay(50)
-        println("Rolled back ${uncommittedChanges.size} changes")
-        uncommittedChanges.clear()
-    }
-}
-
-suspend fun performTransaction() {
-    val transaction = DatabaseTransaction()
-
-    try {
-        transaction.executeQuery("INSERT INTO users ...")
-        delay(100)
-        transaction.executeQuery("UPDATE users ...")
-        delay(100)
-        transaction.executeQuery("DELETE FROM sessions ...")
-
-        transaction.commit()
-    } catch (e: CancellationException) {
-        withContext(NonCancellable) {
-            println("Transaction cancelled, rolling back...")
-            transaction.rollback()
-        }
-        throw e
-    } finally {
-        withContext(NonCancellable) {
-            println("Closing transaction...")
-            delay(50)
-            println("Transaction closed")
-        }
-    }
-}
-
-suspend fun demonstrateTransaction() {
-    val job = CoroutineScope(Dispatchers.IO).launch {
-        performTransaction()
-    }
-
-    delay(150)
-    println("Cancelling transaction...")
-    job.cancelAndJoin()
-}
-```
-
-#### Real Example: Analytics Event on Cancellation
-
-```kotlin
-import kotlinx.coroutines.*
-
-object Analytics {
-    suspend fun logEvent(event: String, properties: Map<String, Any>) {
-        delay(100)
-        println("Analytics: $event - $properties")
-    }
-}
-
-suspend fun longRunningTask(taskId: String) {
-    val startTime = System.currentTimeMillis()
-
-    try {
-        println("Starting task $taskId")
-        delay(5000)
-        println("Task $taskId completed")
-
-        Analytics.logEvent("task_completed", mapOf("taskId" to taskId))
-    } finally {
-        val duration = System.currentTimeMillis() - startTime
-
-        withContext(NonCancellable) {
-            println("Logging cancellation event...")
-            Analytics.logEvent(
-                "task_cancelled",
-                mapOf(
-                    "taskId" to taskId,
-                    "duration_ms" to duration,
-                    "reason" to "user_cancellation"
-                )
-            )
-            println("Analytics sent")
-        }
-    }
-}
-
-suspend fun demonstrateAnalytics() {
-    val job = CoroutineScope(Dispatchers.Default).launch {
-        longRunningTask("task-123")
-    }
-
-    delay(1000)
-    job.cancelAndJoin()
-}
-```
-
-#### Risks of Using `NonCancellable`
-
-1. Blocking cancellation for too long.
-2. Hiding bugs by wrapping business logic instead of fixing cancellation.
-3. Resource exhaustion if long or hanging operations run without additional timeouts.
-
-#### `NonCancellable` Does not Prevent Cancellation
-
-`NonCancellable` does not prevent cancellation of the original `Job`; it allows suspend functions in its context to run despite that cancellation.
-
-#### Best Practices
-
-- Use for short, critical cleanup only.
-- Add explicit timeouts inside `NonCancellable` if cleanup might hang.
-- For simple synchronous cleanup, rely on regular `finally` without suspend.
+> What is `NonCancellable` in Kotlin coroutines? When should you use it? Explain how to use it in `finally` blocks for critical cleanup, the risks involved, and best practices with real-world examples.
 
 ## Ответ (RU)
 
@@ -642,3 +364,281 @@ suspend fun demonstrateAnalytics() {
 - [[q-coroutine-memory-leak-detection--kotlin--hard]]
 - [[q-testing-coroutine-timing-control--kotlin--medium]]
 - [[q-deferred-async-patterns--kotlin--medium]]
+
+## Answer (EN)
+
+#### What is `NonCancellable`?
+
+`NonCancellable` is a special `CoroutineContext` element (a `Job`) that makes a block of code run in a context that ignores cancellation. It allows suspend functions inside that context to execute even when the surrounding coroutine has been cancelled.
+
+```kotlin
+import kotlinx.coroutines.*
+
+public object NonCancellable : AbstractCoroutineContextElement(Job), Job {
+    // Job that cannot be cancelled
+    // All Job cancellation operations are ignored
+}
+```
+
+Key characteristics:
+- Job that ignores cancellation: `cancel()` on this `Job` has no effect; it never transitions to a cancelled state.
+- Allows suspend functions in `finally`: Can safely call suspend functions for cleanup after cancellation inside `withContext(NonCancellable) { ... }`.
+- Does not auto-enforce time limits: It ignores cancellation, but if you explicitly wrap work in `withTimeout` or similar inside it, those timeouts still apply.
+- Use sparingly: Only for critical, short, and bounded cleanup.
+
+#### When to Use `NonCancellable`
+
+Use `NonCancellable` only for critical cleanup operations where:
+- the work is short and bounded, and
+- failing to run it would leave resources leaked, state corrupted, or invariants broken.
+
+Examples:
+1. Closing resources (files, network connections, database handles)
+2. Saving essential state before shutdown
+3. Rolling back or finalizing transactions that must not be left inconsistent
+4. Sending minimal analytics/audit logs about cancellation (only if cheap and important)
+5. Releasing locks or semaphores
+
+Do NOT use for:
+- regular business logic,
+- long-running operations,
+- operations that should be cancellable,
+- large blocks "just in case".
+
+#### Using `NonCancellable` in `finally` Blocks
+
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun demonstrateNonCancellable() = coroutineScope {
+    val job = launch {
+        try {
+            println("Working...")
+            delay(1000)
+            println("Work completed")
+        } finally {
+            withContext(NonCancellable) {
+                println("Cleanup starting...")
+                delay(500)
+                println("Cleanup completed")
+            }
+        }
+    }
+
+    delay(100)
+    job.cancel()
+    job.join()
+}
+```
+
+Why needed: After cancellation, the coroutine's `Job` is in a cancelled state. Normally, cancellable suspend functions will throw `CancellationException`. `withContext(NonCancellable)` runs cleanup in a context that ignores that cancellation so that short, critical suspend-based cleanup can complete.
+
+#### Real Example: Closing Resources
+
+```kotlin
+import kotlinx.coroutines.*
+import java.io.*
+
+suspend fun processFile(path: String) {
+    val file = File(path)
+    val reader = file.bufferedReader()
+
+    try {
+        // Process file
+        reader.lineSequence().forEach { line ->
+            println("Processing: $line")
+            // In real code use a suspending-friendly loop instead of forEach with suspend
+        }
+    } finally {
+        withContext(NonCancellable) {
+            println("Closing file...")
+            reader.close()
+            println("File closed")
+        }
+    }
+}
+
+suspend fun demonstrateFileCleanup() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        processFile("data.txt")
+    }
+
+    delay(250)
+    job.cancel()
+    job.join()
+}
+```
+
+#### Real Example: Saving State
+
+```kotlin
+import kotlinx.coroutines.*
+
+data class AppState(val unsavedChanges: List<String>)
+
+class StateManager {
+    private var state = AppState(emptyList())
+
+    suspend fun saveState() {
+        delay(200)
+        println("State saved: ${state.unsavedChanges.size} changes")
+    }
+
+    suspend fun doWork() {
+        try {
+            repeat(10) { i ->
+                state = state.copy(unsavedChanges = state.unsavedChanges + "Change $i")
+                println("Made change $i")
+                delay(100)
+            }
+        } finally {
+            withContext(NonCancellable) {
+                println("Saving unsaved changes on cancellation...")
+                saveState()
+                println("Save complete")
+            }
+        }
+    }
+}
+
+suspend fun demonstrateStateSave() {
+    val manager = StateManager()
+    val job = CoroutineScope(Dispatchers.Default).launch {
+        manager.doWork()
+    }
+
+    delay(350)
+    println("Cancelling...")
+    job.cancelAndJoin()
+    println("Job cancelled and cleanup done")
+}
+```
+
+#### Real Example: Database Transaction commit/rollback
+
+```kotlin
+import kotlinx.coroutines.*
+
+class DatabaseTransaction {
+    private val uncommittedChanges = mutableListOf<String>()
+
+    suspend fun executeQuery(query: String) {
+        delay(50)
+        uncommittedChanges.add(query)
+        println("Executed: $query")
+    }
+
+    suspend fun commit() {
+        delay(100)
+        println("Committed ${uncommittedChanges.size} changes")
+        uncommittedChanges.clear()
+    }
+
+    suspend fun rollback() {
+        delay(50)
+        println("Rolled back ${uncommittedChanges.size} changes")
+        uncommittedChanges.clear()
+    }
+}
+
+suspend fun performTransaction() {
+    val transaction = DatabaseTransaction()
+
+    try {
+        transaction.executeQuery("INSERT INTO users ...")
+        delay(100)
+        transaction.executeQuery("UPDATE users ...")
+        delay(100)
+        transaction.executeQuery("DELETE FROM sessions ...")
+
+        transaction.commit()
+    } catch (e: CancellationException) {
+        withContext(NonCancellable) {
+            println("Transaction cancelled, rolling back...")
+            transaction.rollback()
+        }
+        throw e
+    } finally {
+        withContext(NonCancellable) {
+            println("Closing transaction...")
+            delay(50)
+            println("Transaction closed")
+        }
+    }
+}
+
+suspend fun demonstrateTransaction() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        performTransaction()
+    }
+
+    delay(150)
+    println("Cancelling transaction...")
+    job.cancelAndJoin()
+}
+```
+
+#### Real Example: Analytics Event on Cancellation
+
+```kotlin
+import kotlinx.coroutines.*
+
+object Analytics {
+    suspend fun logEvent(event: String, properties: Map<String, Any>) {
+        delay(100)
+        println("Analytics: $event - $properties")
+    }
+}
+
+suspend fun longRunningTask(taskId: String) {
+    val startTime = System.currentTimeMillis()
+
+    try {
+        println("Starting task $taskId")
+        delay(5000)
+        println("Task $taskId completed")
+
+        Analytics.logEvent("task_completed", mapOf("taskId" to taskId))
+    } finally {
+        val duration = System.currentTimeMillis() - startTime
+
+        withContext(NonCancellable) {
+            println("Logging cancellation event...")
+            Analytics.logEvent(
+                "task_cancelled",
+                mapOf(
+                    "taskId" to taskId,
+                    "duration_ms" to duration,
+                    "reason" to "user_cancellation"
+                )
+            )
+            println("Analytics sent")
+        }
+    }
+}
+
+suspend fun demonstrateAnalytics() {
+    val job = CoroutineScope(Dispatchers.Default).launch {
+        longRunningTask("task-123")
+    }
+
+    delay(1000)
+    job.cancelAndJoin()
+}
+```
+
+#### Risks of Using `NonCancellable`
+
+1. Blocking cancellation for too long.
+2. Hiding bugs by wrapping business logic instead of fixing cancellation.
+3. Resource exhaustion if long or hanging operations run without additional timeouts.
+
+#### `NonCancellable` Does not Prevent Cancellation
+
+`NonCancellable` does not prevent cancellation of the original `Job`; it allows suspend functions in its context to run despite that cancellation.
+
+#### Best Practices
+
+- Use for short, critical cleanup only.
+- Add explicit timeouts inside `NonCancellable` if cleanup might hang.
+- For simple synchronous cleanup, rely on regular `finally` without suspend.

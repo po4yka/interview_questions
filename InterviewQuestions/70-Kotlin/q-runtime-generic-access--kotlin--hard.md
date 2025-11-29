@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-what-is-garbage-in-gc--programming-languages--easy]
+related: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard, generics, kotlin, programming-languages, reified, type-erasure]
@@ -37,7 +37,7 @@ date modified: Tuesday, November 25th 2025, 8:53:49 pm
 - Можно явно передавать `KClass<*>` или `Class<*>` / `KClass<T>` параметром (например, `fun <T: Any> parse(json: String, type: KClass<T>)`), но это обычно даёт доступ только к классу, а не к полным параметрам сложных дженериков без дополнительных оберток (type tokens).
 - Для сложных дженериков (например, `List<T>`, `Map<K, V>`) `typeOf<T>()` в сочетании с `reified` и `inline` позволяет получить `KType` с информацией о параметрах типа на месте вызова.
 
-Ключевая идея (для JVM): без специальных механизмов (`reified` в `inline`-функциях, reflection над декларациями, явная передача type tokens) тип параметра дженерика `T` недоступен в runtime из-за type erasure. См. также [[c-concepts--kotlin--medium]].
+Ключевая идея (для JVM): без специальных механизмов (`reified` в `inline`-функциях, reflection над декларациями, явная передача type tokens) тип параметра дженерика `T` недоступен в runtime из-за type erasure. См. также .
 
 ## Answer (EN)
 
@@ -76,8 +76,8 @@ Key idea (for JVM): without special mechanisms (reified inline functions, reflec
 
 ## Связанные Вопросы (RU)
 
-- [[c-variable--programming-languages--easy]]
+No related questions available.
 
 ## Related Questions
 
-- [[c-variable--programming-languages--easy]]
+No related questions available.

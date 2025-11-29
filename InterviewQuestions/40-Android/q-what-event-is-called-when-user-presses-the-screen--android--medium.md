@@ -22,7 +22,7 @@ related:
   - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/ui-views, difficulty/medium, event-handling, interaction, 
+tags: [android/ui-views, difficulty/medium, event-handling, interaction,
       touch-events, ui]
 
 date created: Saturday, November 1st 2025, 12:47:07 pm

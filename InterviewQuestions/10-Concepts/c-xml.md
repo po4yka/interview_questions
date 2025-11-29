@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-android-layouts, c-view-binding, c-data-formats, c-serialization, c-rest-api]
+related: [c-view-binding, c-serialization, c-rest-api]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-functional-interfaces-vs-type-aliases--kotlin--medium, q-kotlin-non-inheritable-class--programming-languages--easy]
+related: [c-kotlin, q-functional-interfaces-vs-type-aliases--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-persistence, difficulty/easy, json, kotlin, serialization]

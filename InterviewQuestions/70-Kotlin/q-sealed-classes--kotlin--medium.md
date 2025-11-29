@@ -413,11 +413,9 @@ class MyAction : Action, AnotherInterface {
 ## Связанные Вопросы (RU)
 
 - [[q-heap-pollution-generics--kotlin--hard]]
-- [[c-variable--programming-languages--easy]]
 - [[q-channelflow-callbackflow-flow--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-heap-pollution-generics--kotlin--hard]]
-- [[c-variable--programming-languages--easy]]
 - [[q-channelflow-callbackflow-flow--kotlin--medium]]

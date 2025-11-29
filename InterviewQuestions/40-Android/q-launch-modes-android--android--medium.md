@@ -29,7 +29,6 @@ created: 2025-10-05
 updated: 2025-11-11
 tags: [android/activity, android/ui-navigation, difficulty/medium, en, ru]
 
-
 date created: Saturday, November 1st 2025, 12:46:57 pm
 date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
@@ -242,13 +241,11 @@ Note: For both singleTask-like behavior and `singleInstancePerTask` in document 
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
 - [[q-which-event-is-triggered-when-user-presses-screen--android--medium]]
 
-
 ## References
 - [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 - [Understand the types of Launch Modes in an Android `Activity`](https://mohamedyousufmo.medium.com/understand-android-activity-launch-mode-c21fcecf04b8)
 - [Android `Activity` Launch Mode](https://medium.com/android-news/android-activity-launch-mode-e0df1aa72242)
 - [Understand Android `Activity`'s launchMode: standard, singleTop, singleTask and singleInstance](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en)
-
 
 ## Related Questions
 
@@ -256,7 +253,6 @@ Note: For both singleTask-like behavior and `singleInstancePerTask` in document 
 
 - [[c-compose-navigation]]
 - [[c-activity]]
-
 
 ### Related (Medium)
 - [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose

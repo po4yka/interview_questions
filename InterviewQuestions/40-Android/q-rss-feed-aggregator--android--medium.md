@@ -48,11 +48,7 @@ RSS-агрегатор получает и отображает RSS-ленты �
 
    UI Layer     Compose/XML + ViewModel
 
-
-
  Repository         Координация данных
-
-
 
  Network        Room      WorkManager
   (RSS)       Database      (Sync)
@@ -524,11 +520,7 @@ An RSS aggregator fetches and displays feeds from multiple sources. Key requirem
 
    UI Layer     Compose/XML + ViewModel
 
-
-
  Repository         Data coordination
-
-
 
  Network        Room      WorkManager
   (RSS)       Database      (Sync)

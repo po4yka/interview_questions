@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy]
+related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singleton]

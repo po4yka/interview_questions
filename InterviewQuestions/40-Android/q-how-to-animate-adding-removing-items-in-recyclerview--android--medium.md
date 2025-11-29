@@ -881,18 +881,15 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 - [[q-compositionlocal-advanced--android--medium]]
 - [[q-stack-heap-memory-multiple-threads--android--medium]]
 
-
 ## References
 
 - [Animations](https://developer.android.com/develop/ui/views/animations)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-custom-views]]
-
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui

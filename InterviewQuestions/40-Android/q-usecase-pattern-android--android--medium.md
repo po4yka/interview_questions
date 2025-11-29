@@ -246,7 +246,6 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 
 - [[c-clean-architecture]]
 
-
 ### Prerequisites (Easier)
 - [[q-repository-pattern--android--medium]] - Repository pattern basics
 

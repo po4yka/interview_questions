@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-testing-viewmodels-coroutines--kotlin--medium]
+related: [c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, elvis, kotlin, null-safety, nullable, operators, safe-call]
@@ -105,8 +105,6 @@ Kotlin's null safety prevents most null-related crashes at compile time.
 
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]
 - [[q-testing-viewmodels-coroutines--kotlin--medium]]
-- [[c-variable--programming-languages--easy]]
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -121,4 +119,3 @@ Kotlin's null safety prevents most null-related crashes at compile time.
 
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]
 - [[q-testing-viewmodels-coroutines--kotlin--medium]]
-- [[c-variable--programming-languages--easy]]

@@ -23,11 +23,9 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 
 > Какие основные практики безопасности следует применять в Android-приложении?
 
-
 # Question (EN)
 
 > What are the essential security best practices for Android applications?
-
 
 ---
 

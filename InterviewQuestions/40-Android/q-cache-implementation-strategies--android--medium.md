@@ -212,7 +212,6 @@ val client = OkHttpClient.Builder()
 - [[c-room]]
 - [[c-performance]]
 
-
 ### Prerequisites (Easier)
 - [[q-android-storage-types--android--medium]]
 

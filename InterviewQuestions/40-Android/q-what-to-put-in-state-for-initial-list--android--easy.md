@@ -221,7 +221,6 @@ This is suitable for hints, placeholders, or otherwise known local data.
 - How do you handle error and retry states for list loading?
 - How can initial list state depend on user type or cached data?
 
-
 ## Ссылки (RU)
 
 - [Architecture](https://developer.android.com/topic/architecture)
@@ -231,7 +230,6 @@ This is suitable for hints, placeholders, or otherwise known local data.
 
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Связанные Вопросы (RU)
 

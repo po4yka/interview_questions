@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-touch-events, c-touch-input, c-event-handling, c-custom-views, c-motion-events]
+related: [c-touch-events, c-touch-input, c-event-handling, c-custom-views]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

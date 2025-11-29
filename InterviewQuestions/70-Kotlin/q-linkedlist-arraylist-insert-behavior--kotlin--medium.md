@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-flow-map-operator--programming-languages--medium, q-what-is-flow--programming-languages--medium]
+related: [c-collections, c-kotlin]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [arraylist, collections, data-structures, difficulty/medium, kotlin, linkedlist, programming-languages]

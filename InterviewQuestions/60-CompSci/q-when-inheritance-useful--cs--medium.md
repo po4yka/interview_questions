@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, q-inheritance-vs-composition--oop--medium, q-java-all-classes-inherit-from-object--programming-languages--easy]
+related: [c-computer-science]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]

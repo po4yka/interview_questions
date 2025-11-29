@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-coroutines, q-how-to-create-suspend-function--programming-languages--medium, q-launch-vs-async-await--programming-languages--medium]
+related: [c-coroutines]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin, suspend-functions]

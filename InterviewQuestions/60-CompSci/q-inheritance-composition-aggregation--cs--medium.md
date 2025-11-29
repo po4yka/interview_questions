@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, q-inheritance-vs-composition--oop--medium]
+related: [c-architecture-patterns, c-computer-science]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [cs/object-oriented, cs/relationships, design-patterns, difficulty/medium]

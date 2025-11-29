@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-system-ui, c-edge-to-edge, c-compose-ui, c-android-ui, c-android-themes]
+related: [c-system-ui, c-compose-ui, c-android-themes]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

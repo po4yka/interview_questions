@@ -388,7 +388,6 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 - [[c-lifecycle]]
 
-
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Basic `View` concepts
 

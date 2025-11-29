@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-kotlin-immutable-collections--programming-languages--easy]
+related: [c-collections, c-kotlin]
 
 # Timestamps
 created: 2025-10-05

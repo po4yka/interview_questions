@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
+related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/medium, java, primitives, types, wrappers]

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-algorithms, c-computer-science, q-what-is-job-object--programming-languages--medium]
+related: [c-algorithms, c-computer-science]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy, java, kotlin, memory, primitive-types, programming-languages, reference-types]

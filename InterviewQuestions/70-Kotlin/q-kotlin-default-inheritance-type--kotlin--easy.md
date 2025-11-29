@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium]
+related: [q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes]
@@ -185,10 +185,8 @@ class Error : Result()
 
 ## Ссылки (RU)
 
-- [[c-concepts--kotlin--medium]]
 - [[q-abstract-class-vs-interface--kotlin--medium]]
 
 ## References
 
-- [[c-concepts--kotlin--medium]]
 - [[q-abstract-class-vs-interface--kotlin--medium]]

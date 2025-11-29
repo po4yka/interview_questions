@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-equality, c-kotlin, q-kotlin-favorite-features--programming-languages--easy]
+related: [c-equality, c-kotlin]
 
 # Timestamps
 created: 2025-10-05

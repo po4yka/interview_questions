@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-how-to-create-suspend-function--programming-languages--medium]
+related: [c-coroutines, c-kotlin]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, kotlin]
@@ -674,10 +674,7 @@ fun <T> func(completion: Continuation<? super T>): Object
 
 - [[q-how-to-create-suspend-function--kotlin--medium]]
 - [[q-java-all-classes-inherit-from-object--kotlin--easy]]
-- [[c-variable--programming-languages--easy]]
-
 ## Related Questions
 
 - [[q-how-to-create-suspend-function--kotlin--medium]]
 - [[q-java-all-classes-inherit-from-object--kotlin--easy]]
-- [[c-variable--programming-languages--easy]]

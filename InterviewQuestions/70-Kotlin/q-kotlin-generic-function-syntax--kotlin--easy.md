@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-sealed-classes-features--programming-languages--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
+related: [c-kotlin, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, functions, generics, kotlin, syntax, type-parameters]

@@ -17,10 +17,7 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-backend
-related: [
-  c-database-performance,
-  c-views
-]
+related: [c-database-performance, c-views]
 
 # Timestamps
 created: 2025-10-03

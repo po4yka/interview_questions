@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-abstract-class-purpose--cs--medium]
+related: [q-abstract-class-purpose--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [component-functions, data-classes, destructuring, difficulty/easy, kotlin]
@@ -452,5 +452,4 @@ fun processCoordinate(coord: Coordinate) = when (coord) {
 
 ## References
 
-- [[c-concepts--kotlin--medium]]
 - "https://kotlinlang.org/docs/data-classes.html"

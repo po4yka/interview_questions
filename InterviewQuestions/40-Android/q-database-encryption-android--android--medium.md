@@ -283,7 +283,6 @@ class DatabaseProvider @Inject constructor(private val context: Context) {
 - **StrongBox Keystore** — where available on API 28+ devices, use `setIsStrongBoxBacked(true)` for maximum key protection
 - **Key rotation** — periodically rotate keys and passphrases with a well-defined, tested process
 
-
 ## Follow-ups
 
 - How do you migrate from unencrypted to encrypted `Room` database without data loss?

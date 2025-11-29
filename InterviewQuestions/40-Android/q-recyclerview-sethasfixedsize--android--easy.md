@@ -274,7 +274,6 @@ Key Point: `setHasFixedSize(true)` is about the stability of the RecyclerView CO
 
 - [[c-memory-management]]
 
-
 ### Prerequisites
 
 - [[q-what-events-are-activity-methods-tied-to--android--medium]] - `Activity` lifecycle basics

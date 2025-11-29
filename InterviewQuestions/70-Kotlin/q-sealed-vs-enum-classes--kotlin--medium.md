@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes, q-primitive-vs-reference-types--programming-languages--easy]
+related: [c-kotlin, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, sealed-class]
@@ -307,7 +307,6 @@ sealed class TaskResult {
 
 ## Связанные Вопросы (RU)
 
-- [[c-variable--programming-languages--easy]]
 - [[q-suspend-function-suspension-mechanism--kotlin--hard]]
 - [[q-primitive-vs-reference-types--kotlin--easy]]
 
@@ -325,6 +324,5 @@ sealed class TaskResult {
 
 ## Related Questions
 
-- [[c-variable--programming-languages--easy]]
 - [[q-suspend-function-suspension-mechanism--kotlin--hard]]
 - [[q-primitive-vs-reference-types--kotlin--easy]]

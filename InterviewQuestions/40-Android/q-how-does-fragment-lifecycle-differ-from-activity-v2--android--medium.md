@@ -442,7 +442,6 @@ override fun onDestroyView() {
 - [[c-activity]]
 - [[c-lifecycle]]
 
-
 ### Prerequisites
 - [[q-android-project-parts--android--easy]] - Basic Android components
 

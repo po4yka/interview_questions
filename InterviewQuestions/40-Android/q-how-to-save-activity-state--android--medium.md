@@ -509,7 +509,6 @@ class UserActivity : AppCompatActivity() {
 - https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate
 - https://developer.android.com/topic/libraries/architecture/datastore
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -226,12 +226,10 @@ RecyclerView is a flexible and performant component for displaying data collecti
 - [[c-recyclerview]]
 - [[q-what-is-diffutil-for--android--medium]]
 
-
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Related Questions
 

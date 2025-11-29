@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-kotlin]
+related: [c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [by-keyword, delegation, difficulty/easy, programming-languages]

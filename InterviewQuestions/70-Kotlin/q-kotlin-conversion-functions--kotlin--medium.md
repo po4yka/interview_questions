@@ -1,6 +1,6 @@
 ---
 id: lang-206
-title: "Kotlin Conversion Functions"
+title: "Kotlin Conversion Functions / Kotlin Conversion Функции"
 aliases: ["Kotlin Conversion Функции"]
 topic: kotlin
 subtopics: [functions, null-safety, types]
@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-kotlin-property-delegates--programming-languages--medium]
+related: [q-coroutine-cancellation-mechanisms--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
@@ -646,10 +646,3 @@ Best practice: Use clear `toXxx()` naming and extension functions where it impro
 - [[q-kotlin-property-delegates--kotlin--medium]]
 - [[q-coroutine-dispatchers--kotlin--medium]]
 
-## Ссылки (RU)
-
-- [[c--kotlin--medium]]
-
-## References
-
-- [[c--kotlin--medium]]

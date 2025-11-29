@@ -71,38 +71,27 @@ date modified: Tuesday, November 25th 2025, 8:53:51 pm
 
                               start()
 
-
             Active
                      (выполнение)
 
-
                              тело завершено
-
 
                       Completing
                      (ожид. детей)
 
-
                              все дети
                              завершены
-
 
                        Completed
                         (успех)
 
-
            cancel()
-
-
-
 
                 Cancelling
                (finally,
                 ожид. детей) дети завершены
 
-
                        finally выполнен
-
 
                  Cancelled
                (терминальное)
@@ -1143,38 +1132,27 @@ Important: This table reflects the logical model. In practice, transient combina
 
                               start()
 
-
             Active
                       (executing)
 
-
                              body done
-
 
                       Completing
                      (wait kids)
 
-
                              all children
                              complete
-
 
                        Completed
                        (success)
 
-
            cancel()
-
-
-
 
                 Cancelling
                (finally,
                 wait kids)   children done
 
-
                        finally done
-
 
                  Cancelled
                 (terminal)

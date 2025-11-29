@@ -377,7 +377,6 @@ addInterceptor(HttpLoggingInterceptor().apply {
 - HttpLoggingInterceptor levels and security
 - Certificate pinning with CertificatePinner
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

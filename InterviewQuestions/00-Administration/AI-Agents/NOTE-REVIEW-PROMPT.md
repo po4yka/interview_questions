@@ -99,7 +99,7 @@ Confirm all issues resolved before proceeding.
 ### Adding Related Notes
 
 ```yaml
-related: [q-coroutines-basics--kotlin--easy, q-flow-operators--kotlin--medium]
+related: [q-flow-operators--kotlin--medium]
 ```
 
 Find related notes by:

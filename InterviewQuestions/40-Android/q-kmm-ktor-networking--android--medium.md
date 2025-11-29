@@ -365,7 +365,6 @@ val client = HttpClient(MockEngine) {
 - [[c-coroutines]]
 - [[c-retrofit]]
 
-
 ### Prerequisites (Easier)
 
 - Basic HTTP client configuration and usage

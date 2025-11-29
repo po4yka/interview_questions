@@ -33,7 +33,7 @@ status: draft
 
 # Links (WITHOUT brackets)
 moc: moc-algorithms
-related: [c-hash-map, c-array, q-three-sum--algorithms--medium]
+related: [c-hash-map, c-array]
 
 # Timestamps
 created: 2025-10-18
@@ -67,7 +67,7 @@ status: draft
 
 # Links
 moc: moc-android
-related: [c-compose-state, c-viewmodel, q-compose-recomposition--android--medium]
+related: [c-compose-state, c-viewmodel]
 
 # Timestamps
 created: 2025-10-18
@@ -102,8 +102,7 @@ status: draft
 
 # Links
 moc: moc-system-design
-related: [c-consistent-hashing, c-load-balancing,
-          q-design-pastebin--system-design--medium]
+related: [c-load-balancing]
 
 # Timestamps
 created: 2025-10-18
@@ -138,8 +137,7 @@ status: draft
 
 # Links
 moc: moc-kotlin
-related: [c-coroutines, c-structured-concurrency,
-          q-coroutine-context--kotlin--hard]
+related: [c-coroutines, c-structured-concurrency]
 
 # Timestamps
 created: 2025-10-18
@@ -173,7 +171,7 @@ status: draft
 
 # Links
 moc: moc-backend
-related: [c-sql-basics, q-sql-indexing--databases--medium]
+related: []
 
 # Timestamps
 created: 2025-10-18
@@ -251,7 +249,7 @@ topic: [algorithms, data-structures]  # FORBIDDEN - only ONE topic
 
 ```yaml
 moc: [[moc-algorithms]]               # FORBIDDEN - no brackets
-related: [[c-hash-map]], [[c-array]]  # FORBIDDEN - no double brackets
+related: []], [[c-array]]  # FORBIDDEN - no double brackets
 ```
 
 ### Russian in Tags (WRONG)

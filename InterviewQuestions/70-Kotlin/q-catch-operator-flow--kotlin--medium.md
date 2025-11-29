@@ -16,7 +16,6 @@ related:
   - c-flow
   - q-flow-basics--kotlin--easy
   - q-flow-exception-handling--kotlin--medium
-  - q-flow-map-operator--programming-languages--medium
   - q-retry-operators-flow--kotlin--medium
 created: 2025-10-12
 updated: 2025-11-09

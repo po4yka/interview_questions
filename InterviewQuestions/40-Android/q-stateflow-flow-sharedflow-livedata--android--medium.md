@@ -110,7 +110,6 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 - https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
 - [`LiveData`](https://developer.android.com/topic/libraries/architecture/livedata)
 
-
 ## Related Questions
 - [[q-flow-vs-livedata-comparison--kotlin--medium]]
 - [[q-testing-coroutines-flow--android--hard]]

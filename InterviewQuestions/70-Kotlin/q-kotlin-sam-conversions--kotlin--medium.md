@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-infix-functions--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium]
+related: [c-kotlin, q-infix-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]

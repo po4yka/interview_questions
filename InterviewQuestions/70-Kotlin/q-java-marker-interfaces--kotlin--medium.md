@@ -9,8 +9,8 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-backend
-related: [c-kotlin, q-java-all-classes-inherit-from-object--programming-languages--easy]
+moc: moc-kotlin
+related: [c-kotlin]
 created: 2024-10-13
 updated: 2025-11-11
 tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, randomaccess, serializable]

@@ -720,7 +720,6 @@ override fun onBindViewHolder(
 
 - [[c-memory-management]]
 
-
 ### Prerequisites (Easier)
 - RecyclerView basics and adapter patterns
 - Coroutines and background threading

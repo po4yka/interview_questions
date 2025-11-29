@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-networking, c-caching-strategies, c-pagination, c-repository-pattern, c-offline-first]
+related: [c-networking, c-caching-strategies, c-repository-pattern]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

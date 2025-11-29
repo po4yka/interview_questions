@@ -287,7 +287,6 @@ Text(
 - [[c-jetpack-compose]]
 - [[c-viewmodel]]
 
-
 ### Prerequisites (Easier)
 - Basic Compose concepts and composable functions
 - Understanding of declarative UI principles

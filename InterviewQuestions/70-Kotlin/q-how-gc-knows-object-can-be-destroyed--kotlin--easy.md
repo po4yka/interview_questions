@@ -9,8 +9,8 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
-related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-mediator-pattern--design-patterns--medium, q-what-is-job-object--programming-languages--medium]
+moc: moc-kotlin
+related: [c-garbage-collection]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]

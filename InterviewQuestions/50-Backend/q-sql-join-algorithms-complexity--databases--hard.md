@@ -17,11 +17,7 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-backend
-related: [
-  c-sql-queries,
-  c-database-performance,
-  c-algorithms
-]
+related: [c-sql-queries, c-database-performance, c-algorithms]
 
 # Timestamps
 created: 2025-10-03

@@ -1,6 +1,6 @@
 ---
 id: lang-025
-title: "Sealed Classes Limitations"
+title: "Sealed Classes Limitations / Ограничения Sealed Классов"
 aliases: [Sealed Classes Limitations, Ограничения Sealed Классов]
 topic: kotlin
 subtopics: [class-hierarchy, oop, sealed-classes]
@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes, q-what-is-flow--programming-languages--medium]
+related: [c-kotlin, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed-classes]

@@ -341,7 +341,6 @@ NavHost(navController, startDestination = "home") {
 - [[c-jetpack-compose]]
 - [Fragments](https://developer.android.com/guide/fragments)
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flow-backpressure--kotlin--hard, q-kotlin-intrange--programming-languages--easy]
+related: [c-kotlin, q-flow-backpressure--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
@@ -723,9 +723,6 @@ fun demonstrateSingletonComparison() {
 ## Связанные Вопросы (RU)
 
 - [[q-flow-backpressure--kotlin--hard]]
-- [[c-variable--programming-languages--easy]]
-
 ## Related Questions (EN)
 
 - [[q-flow-backpressure--kotlin--hard]]
-- [[c-variable--programming-languages--easy]]

@@ -301,7 +301,6 @@ Also see [[c-android-components]] for broader Android architecture context.
 - [Room Database](https://developer.android.com/training/data-storage/room)
 - https://developer.android.com/topic/libraries/architecture/saving-states
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

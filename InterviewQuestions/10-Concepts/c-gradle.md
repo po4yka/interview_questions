@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-dependency-injection, c-kotlin, c-app-bundle, c-modularization, c-build-variants]
+related: [c-dependency-injection, c-kotlin, c-app-bundle, c-modularization]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "automation", "build-system", "concept", "difficulty/medium", "gradle", "groovy", "kotlin-dsl"]

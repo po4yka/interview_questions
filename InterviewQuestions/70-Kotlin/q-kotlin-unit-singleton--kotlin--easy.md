@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-channel-buffer-strategies-comparison--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
+related: [q-channel-buffer-strategies-comparison--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
@@ -127,8 +127,6 @@ fun method2() { }         // Same as above (Unit inferred)
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
-- [[c-concepts--kotlin--medium]]
-
 ## Related Questions
 
 - [[q-channel-buffer-strategies-comparison--kotlin--hard]]

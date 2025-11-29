@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-java-primitives--programming-languages--medium, q-structured-concurrency-kotlin--kotlin--medium]
+related: [c-kotlin, q-structured-concurrency-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

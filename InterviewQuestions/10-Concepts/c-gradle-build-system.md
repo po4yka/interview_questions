@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-gradle-build-cache, c-dependency-management, c-build-automation, c-android-build, c-kotlin-dsl]
+related: [c-gradle-build-cache, c-kotlin-dsl]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

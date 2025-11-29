@@ -1,6 +1,6 @@
 ---
 id: kotlin-239
-title: "What are CoroutineContext elements and how do they combine?"
+title: "What are CoroutineContext elements and how do they combine? / Элементы CoroutineContext и их комбинирование"
 aliases: [CoroutineContext Elements, Элементы CoroutineContext]
 topic: kotlin
 subtopics: [coroutines]
@@ -14,7 +14,7 @@ updated: "2025-11-11"
 tags: [coroutines, difficulty/hard, kotlin]
 description: "Comprehensive guide to CoroutineContext elements and how they combine in Kotlin coroutines"
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-concurrency, q-coroutine-job-lifecycle--kotlin--medium]
+related: [c-concurrency, q-coroutine-job-lifecycle--kotlin--medium]
 
 date created: Saturday, November 1st 2025, 5:31:12 pm
 date modified: Tuesday, November 25th 2025, 8:53:53 pm

@@ -363,7 +363,6 @@ fun User.toUiModel() = UserUiModel(name, email)
 - [Architecture](https://developer.android.com/topic/architecture)
 - https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

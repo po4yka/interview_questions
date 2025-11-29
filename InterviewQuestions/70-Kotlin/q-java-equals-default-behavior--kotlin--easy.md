@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-equality, c-java-features, q-equals-hashcode-contracts--programming-languages--medium]
+related: [c-equality, c-java-features]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy, equality, java, object-methods, programming-languages, reference-equality]
@@ -300,7 +300,7 @@ box1 == box2;       // false - different references
 
 ### Простые (Easy)
 - [[q-java-object-comparison--kotlin--easy]] - Java
-- [[c-variable--programming-languages--easy]] - Java
+-  - Java
 
 ### Продвинутые (Harder)
 - [[q-java-access-modifiers--kotlin--medium]] - Java
@@ -311,7 +311,7 @@ box1 == box2;       // false - different references
 
 ### Related (Easy)
 - [[q-java-object-comparison--kotlin--easy]] - Java
-- [[c-variable--programming-languages--easy]] - Java
+-  - Java
 
 ### Advanced (Harder)
 - [[q-java-access-modifiers--kotlin--medium]] - Java

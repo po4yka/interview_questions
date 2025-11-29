@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-sealed-vs-enum-classes--programming-languages--medium]
+related: [c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, exceptions, java, kotlin, programming-languages, throw, throws]

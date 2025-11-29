@@ -29,7 +29,6 @@ created: 2025-10-05
 updated: 2025-11-10
 tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
 
-
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
@@ -201,7 +200,6 @@ These paths can be combined. For example, you can start a background music servi
 - [[c-service]]
 - [[c-background-tasks]]
 - [[c-lifecycle]]
-
 
 ### Related (Medium)
 - [[q-memory-leak-detection--android--medium]] - Performance

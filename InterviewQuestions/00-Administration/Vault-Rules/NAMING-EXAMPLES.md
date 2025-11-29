@@ -83,7 +83,7 @@ language_tags: [en, ru]
 
 status: draft
 moc: moc-android
-related: [c-viewmodel, c-mvvm-pattern, q-viewmodel-vs-savedstate--android--medium]
+related: [c-viewmodel, c-mvvm-pattern]
 
 created: 2025-10-18
 updated: 2025-10-18

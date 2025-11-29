@@ -329,7 +329,6 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 }
 ```
 
-
 ## Follow-ups
 
 - How would you implement `CRDTs` (Conflict-free Replicated Data Types) for automatic conflict resolution?

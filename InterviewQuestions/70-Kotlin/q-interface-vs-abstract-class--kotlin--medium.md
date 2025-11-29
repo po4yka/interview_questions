@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-class-composition--oop--medium]
+related: [c-kotlin]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, oop, programming-languages]

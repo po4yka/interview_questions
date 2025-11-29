@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-softcode-vs-hardcode--software-design--medium]
+related: [c-architecture-patterns]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [architecture, design-principles, difficulty/medium, dip, isp, lsp, ocp, oop, solid, srp]

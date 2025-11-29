@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-kotlin-flatmap-ranges--programming-languages--easy]
+related: [c-coroutines, c-kotlin]
 
 # Timestamps
 created: 2025-10-05

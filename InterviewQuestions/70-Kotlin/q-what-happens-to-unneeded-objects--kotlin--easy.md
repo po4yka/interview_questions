@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-garbage-collection, c-kotlin, q-java-lambda-type--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard]
+related: [c-garbage-collection, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memory-management]
@@ -331,9 +331,6 @@ This is how automatic memory management works in Kotlin/Java on the JVM.
 ## Связанные Вопросы (RU)
 
 - [[q-suspend-function-return-type-after-compilation--kotlin--hard]]
-- [[c-variable--programming-languages--easy]]
-
 ## Related Questions
 
 - [[q-suspend-function-return-type-after-compilation--kotlin--hard]]
-- [[c-variable--programming-languages--easy]]

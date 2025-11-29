@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-delegation--programming-languages--easy, q-kotlin-extension-functions--kotlin--medium]
+related: [c-kotlin, q-kotlin-extension-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-formats, difficulty/medium, json, kotlin, serialization]
@@ -211,12 +211,10 @@ val json = Json {
 
 ## Связанные Вопросы (RU)
 
-- [[c-variable--programming-languages--easy]]
 - [[q-suspend-cancellable-coroutine--kotlin--hard]]
 - [[q-kotlin-extension-functions--kotlin--medium]]
 
 ## Related Questions
 
-- [[c-variable--programming-languages--easy]]
 - [[q-suspend-cancellable-coroutine--kotlin--hard]]
 - [[q-kotlin-extension-functions--kotlin--medium]]

@@ -324,7 +324,6 @@ textView.layoutParams.width = widthPx
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 
-
 ### Same Difficulty (Easy)
 - [[q-what-are-px-dp-sp--android--easy]]
 

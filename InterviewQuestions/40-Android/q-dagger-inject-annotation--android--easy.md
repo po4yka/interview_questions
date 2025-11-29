@@ -224,7 +224,6 @@ Note: with Hilt, ViewModels are typically obtained via `@HiltViewModel` and dele
 - https://dagger.dev/api/latest/dagger/Inject.html
 - [Dagger Basics](https://developer.android.com/training/dependency-injection/dagger-basics)
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

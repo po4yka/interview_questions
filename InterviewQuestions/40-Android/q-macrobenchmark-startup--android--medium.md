@@ -653,7 +653,6 @@ Warm startup: 180ms
 
 - [[c-perfetto]]
 
-
 ### Prerequisites
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Basic performance optimization
 

@@ -12,7 +12,7 @@ source: internal
 source_note: Comprehensive Kotlin Room Coroutines Flow Guide
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
+related: [q-kotlin-flow-basics--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, room]
@@ -524,15 +524,11 @@ In short:
 ## Ссылки (RU)
 
 - [Room с корутинами](https://developer.android.com/training/data-storage/room/async-queries)
-- [[c--kotlin--medium]]
-
 ---
 
 ## References
 
 - [Room with Coroutines](https://developer.android.com/training/data-storage/room/async-queries)
-- [[c--kotlin--medium]]
-
 ---
 
 ## Связанные Вопросы (RU)

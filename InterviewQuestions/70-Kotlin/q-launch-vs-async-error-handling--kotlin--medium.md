@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-kotlin, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
+related: [c-concurrency, c-kotlin]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin]

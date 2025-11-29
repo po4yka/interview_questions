@@ -272,7 +272,6 @@ fun CartSummary(cart: State<Cart>) {
   - hold collections in `State` (`mutableStateOf`, `SnapshotStateList`, etc.);
   - prefer stable/immutable data structures so `equals()` and stability behave predictably.
 
-
 ## Follow-ups
 
 - How does the `Snapshot` system handle concurrent writes from different threads?
@@ -295,7 +294,6 @@ fun CartSummary(cart: State<Cart>) {
 - [[c-memory-management]]
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
-
 
 ### Prerequisites (Easier)
 - Basic `Compose` state management (`mutableStateOf`, `remember`)

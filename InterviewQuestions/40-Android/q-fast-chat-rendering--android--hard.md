@@ -145,7 +145,6 @@ fun ChatImage(url: String) {
 - Большие изображения без ресайза, отсутствие кэша → утечки памяти и OOM.
 - Тяжелые вычисления в `@Composable` (парсинг, сортировка, форматирование) без `remember`/`derivedStateOf` или вынесения в слой данных.
 
-
 ## Answer (EN)
 
 The goal is to minimize unnecessary redraws, allocations, and heavy work on the main thread when rendering message lists. Focus on list UI (`RecyclerView`/`LazyColumn`), data loading (`Paging 3`), images (`Glide`/`Coil`), and caching (`Room`).

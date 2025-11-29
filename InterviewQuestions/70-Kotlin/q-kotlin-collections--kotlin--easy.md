@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-collections, q-coroutine-profiling--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
+related: [c-collections, q-coroutine-profiling--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05

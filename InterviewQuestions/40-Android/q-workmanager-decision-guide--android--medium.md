@@ -503,7 +503,6 @@ Need higher reliability beyond app/process lifetime (including after app close/r
 - [Foreground services](https://developer.android.com/develop/background-work/services/foreground-services)
 - [[c-background-tasks]]
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

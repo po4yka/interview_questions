@@ -484,7 +484,6 @@ fun testObserver() {
 - [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [`LiveData`](https://developer.android.com/topic/libraries/architecture/livedata)
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

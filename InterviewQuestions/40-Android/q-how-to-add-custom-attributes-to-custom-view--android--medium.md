@@ -986,19 +986,16 @@ class CustomButton @JvmOverloads constructor(
 - [[q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]]
 - [[q-performance-optimization-android--android--medium]]
 
-
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-android-components]]
-
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - `View`

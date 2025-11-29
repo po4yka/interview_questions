@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-serialization--programming-languages--easy, q-object-companion-object--kotlin--medium]
+related: [c-kotlin, q-object-companion-object--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin-reflect, metaprogramming, programming-languages, reflection, runtime]

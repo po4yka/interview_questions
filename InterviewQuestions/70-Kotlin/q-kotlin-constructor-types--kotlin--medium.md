@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
+related: [q-abstract-class-vs-interface--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/type-system]
@@ -290,12 +290,10 @@ val user = User("Alice", 30)
 
 ## Ссылки (RU)
 
-- [[c--kotlin--medium]]
 - [[moc-kotlin]]
 - [[q-abstract-class-vs-interface--kotlin--medium]]
 
 ## References
 
-- [[c--kotlin--medium]]
 - [[moc-kotlin]]
 - [[q-abstract-class-vs-interface--kotlin--medium]]

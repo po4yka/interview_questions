@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard]
+related: [c-equality]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, contracts, difficulty/medium, equality, kotlin, object-methods]

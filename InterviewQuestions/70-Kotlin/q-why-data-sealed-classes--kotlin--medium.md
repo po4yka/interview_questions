@@ -10,8 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-fan-in-fan-out--kotlin--hard, 
-      q-kotlin-visibility-modifiers--kotlin--easy]
+related: [c-kotlin, q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]

@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-privacy-by-design, c-data-protection, c-encryption, c-security, c-user-consent]
+related: [c-privacy-by-design, c-encryption, c-security]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

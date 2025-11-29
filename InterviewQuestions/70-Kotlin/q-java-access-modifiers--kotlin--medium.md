@@ -9,8 +9,8 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-architecture-patterns
-related: [c-architecture-patterns, q-interface-vs-abstract-class--programming-languages--medium]
+moc: moc-kotlin
+related: [c-architecture-patterns]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programming-languages]
@@ -504,7 +504,7 @@ Also see [[c-architecture-patterns]] for API and encapsulation design context.
 ### Предпосылки (проще)
 - [[q-java-equals-default-behavior--kotlin--easy]] - Java
 - [[q-java-object-comparison--kotlin--easy]] - Java
-- [[c-variable--programming-languages--easy]] - Java
+-  - Java
 
 ### Связанные (средний уровень)
 - [[q-kotlin-operator-overloading--kotlin--medium]] - Операторы
@@ -515,7 +515,7 @@ Also see [[c-architecture-patterns]] for API and encapsulation design context.
 ### Prerequisites (Easier)
 - [[q-java-equals-default-behavior--kotlin--easy]] - Java
 - [[q-java-object-comparison--kotlin--easy]] - Java
-- [[c-variable--programming-languages--easy]] - Java
+-  - Java
 
 ### Related (Medium)
 - [[q-kotlin-operator-overloading--kotlin--medium]] - Operators

@@ -1,6 +1,6 @@
 ---
 id: android-134
-title: "What Is Layout Types And When To Use"
+title: "What Is Layout Types And When To Use / Типы Layout и когда их использовать"
 aliases: ["What Is Layout Types And When To Use", "What Is Layout Types и When To Use"]
 topic: android
 subtopics: [ui-views]

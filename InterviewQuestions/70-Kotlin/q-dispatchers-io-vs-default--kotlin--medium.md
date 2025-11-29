@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, c-concurrency, q-coroutine-scope-basics--kotlin--easy, q-request-coalescing-deduplication--kotlin--hard]
+related: [c-concurrency, q-coroutine-scope-basics--kotlin--easy, q-request-coalescing-deduplication--kotlin--hard]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [concurrency, coroutines, difficulty/medium, dispatchers, kotlin, threading]
@@ -912,13 +912,11 @@ class RepositoryTest {
 ## Ссылки (RU)
 
 - [Kotlin Документация](https://kotlinlang.org/docs/home.html)
-- [[c--kotlin--medium]]
 - [[c-concurrency]]
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
-- [[c--kotlin--medium]]
 - [[c-concurrency]]
 
 ## Связанные Вопросы (RU)

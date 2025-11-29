@@ -12,7 +12,7 @@ source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-concurrency, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related: [c-concurrency, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-11
 updated: 2025-11-11
 tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]

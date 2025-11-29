@@ -42,7 +42,6 @@ date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ```text
          Activity Lifecycle Events
 
-
 onCreate()   Activity создана
     ↓
 onStart()   Activity становится видимой
@@ -565,7 +564,6 @@ override fun onStop() {
 
 ```text
          Activity Lifecycle Events
-
 
 onCreate()   Activity is created
     ↓

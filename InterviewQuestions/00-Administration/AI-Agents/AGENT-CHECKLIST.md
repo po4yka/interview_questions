@@ -31,7 +31,7 @@ original_language: en          # en | ru
 language_tags: [en, ru]        # Languages present in content
 status: draft                  # draft | reviewed | ready
 moc: moc-<topic>              # NO brackets
-related: [q-note-1, q-note-2] # Array format, 2+ items
+related: [] # Array format, 2+ items
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [difficulty/<level>, <topic>/<subtopic>]

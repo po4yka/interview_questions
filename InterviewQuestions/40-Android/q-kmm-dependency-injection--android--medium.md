@@ -1,6 +1,6 @@
 ---
 id: android-222
-title: "KMM Dependency Injection"
+title: "KMM Dependency Injection / Dependency Injection в KMM"
 aliases: ["Dependency Injection в KMM", "KMM Dependency Injection", "KMM DI", "Koin для KMM", "Koin"]
 topic: android
 subtopics: [di-koin, kmp]

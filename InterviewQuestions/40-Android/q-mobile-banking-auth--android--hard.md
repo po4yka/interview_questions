@@ -1,6 +1,6 @@
 ---
 id: android-490
-title: Design Mobile Banking Auth & Transaction Signing
+title: Design Mobile Banking Auth & Transaction Signing / Проектирование аутентификации и подписания транзакций
 aliases: [Design Mobile Banking Auth & Transaction Signing, Проектирование аутентификации и подписания транзакций]
 topic: android
 subtopics:

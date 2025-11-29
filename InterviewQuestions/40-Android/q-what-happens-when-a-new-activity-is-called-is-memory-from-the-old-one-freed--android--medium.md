@@ -276,7 +276,6 @@ Key points:
 - [[c-memory-management]]
 - [[c-lifecycle]]
 
-
 ### Prerequisites
 
 - [[q-android-components-besides-activity--android--easy]] - Basic Android components

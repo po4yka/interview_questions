@@ -262,7 +262,6 @@ val Context.dataStore by preferencesDataStore(
 
 **Important:** `DataStore` is not suitable for large data volumes (use `Room` or files) or frequent synchronous reads (asynchronous API by default). Rather than a strict documented size limit, follow best practices: keep it for relatively small data sets (typically preferences and related small data), and use `Room` or other storage for large data or complex queries.
 
-
 ## Follow-ups
 
 - How do you handle `DataStore` exceptions (e.g., `CorruptionException`)?

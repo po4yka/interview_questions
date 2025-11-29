@@ -1,6 +1,6 @@
 ---
 id: dp-001
-title: "Visitor Pattern"
+title: "Visitor Pattern / Visitor Паттерн"
 aliases: [Visitor Pattern, Visitor Паттерн]
 topic: cs
 subtopics: [double-dispatch, polymorphism]
@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, q-design-patterns-types--design-patterns--medium]
+related: [c-architecture-patterns, c-computer-science]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/hard, double-dispatch, gof-patterns, visitor]

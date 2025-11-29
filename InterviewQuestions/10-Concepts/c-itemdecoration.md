@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-recyclerview, c-viewholder, c-custom-views, c-canvas-drawing, c-ui-components]
+related: [c-recyclerview, c-viewholder, c-custom-views, c-canvas-drawing]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

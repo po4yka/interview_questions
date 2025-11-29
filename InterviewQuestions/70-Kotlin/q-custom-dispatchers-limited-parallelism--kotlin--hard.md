@@ -1,6 +1,6 @@
 ---
 id: kotlin-117
-title: "Creating custom CoroutineDispatchers with limitedParallelism"
+title: "Creating custom CoroutineDispatchers with limitedParallelism / Создание пользовательских CoroutineDispatchers с limitedParallelism"
 aliases: ["Custom Dispatchers", "limitedParallelism"]
 topic: kotlin
 subtopics: [coroutines, dispatchers]
@@ -15,7 +15,7 @@ category: "coroutines-advanced"
 tags: ["concurrency", "difficulty/hard", "dispatchers", "limitedparallelism", "performance", "resource-management", "threading"]
 description: "Deep dive into creating custom dispatchers, limitedParallelism API, thread pool sizing, and resource-specific dispatchers"
 moc: moc-kotlin
-related: [q-kotlin-map-collection--programming-languages--easy, q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
+related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
 date created: Friday, October 31st 2025, 6:32:38 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---

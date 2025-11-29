@@ -213,7 +213,6 @@ class User : RealmObject() {
 - **SQLite** — suitable when you need full control, minimal dependencies, or already have an SQL layer (not only for legacy).
 - **Realm** — when MongoDB Atlas sync, built-in live objects/reactivity, or cross-platform needs are important.
 
-
 ## Follow-ups
 
 - How do you implement database migrations in Room when schema changes?

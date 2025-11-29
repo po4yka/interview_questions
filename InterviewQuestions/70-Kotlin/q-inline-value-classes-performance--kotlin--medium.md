@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-expect-actual-kotlin--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
+related: [c-kotlin, q-expect-actual-kotlin--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
@@ -353,9 +353,6 @@ When used within these constraints, value classes provide stronger type safety a
 ## Связанные Вопросы (RU)
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
-- [[c-variable--programming-languages--easy]]
-
 ## Related Questions
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
-- [[c-variable--programming-languages--easy]]

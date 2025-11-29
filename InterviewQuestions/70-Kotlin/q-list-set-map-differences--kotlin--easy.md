@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-dispatchers-unconfined--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy]
+related: [c-collections, c-kotlin, q-dispatchers-unconfined--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, kotlin, list, map, set]

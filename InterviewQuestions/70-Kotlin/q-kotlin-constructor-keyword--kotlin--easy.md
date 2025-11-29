@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related: [q-abstract-class-vs-interface--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes, kotlin/functions]
@@ -206,14 +206,6 @@ class Internal private constructor(val id: Int)
 - How do annotations and visibility modifiers affect the need to explicitly use the `constructor` keyword?
 - How do `constructor` and `init` blocks differ in terms of responsibility?
 - How can secondary constructors be used to delegate logic between different initialization options?
-
-## Ссылки (RU)
-
-- [[c-concepts--kotlin--medium]]
-
-## References
-
-- [[c-concepts--kotlin--medium]]
 
 ## Related Questions
 

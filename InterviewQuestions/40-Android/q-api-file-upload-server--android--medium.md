@@ -25,7 +25,7 @@ related:
   - q-large-file-upload-app--android--hard
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/background-execution, android/files-media, 
+tags: [android/background-execution, android/files-media,
       android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
 
 date created: Tuesday, November 25th 2025, 4:56:25 pm
@@ -540,7 +540,6 @@ sealed class UploadState {
 - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - https://square.github.io/retrofit/
 - https://square.github.io/okhttp/
-
 
 ## Related Questions
 

@@ -1,6 +1,6 @@
 ---
 id: android-021
-title: Modifier System in Compose
+title: Modifier System in Compose / Система модификаторов в Compose
 aliases: [Modifier System in Compose]
 topic: android
 subtopics:

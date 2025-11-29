@@ -290,7 +290,6 @@ userState?.hostToStateMap?.forEach { (domain, state) ->
 - [[c-intent]]
 - [[c-fragments]]
 
-
 ### Prerequisites (Easier)
 - Understanding of Android `Intent` system
 - Basic knowledge of URI schemes and `AndroidManifest.xml`

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-sealed-classes, q-kotlin-equals-hashcode-purpose--programming-languages--medium]
+related: [c-kotlin, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-classes, difficulty/medium, sealed-classes]

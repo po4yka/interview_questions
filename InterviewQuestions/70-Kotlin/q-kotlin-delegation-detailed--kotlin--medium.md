@@ -14,14 +14,13 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM 
+source_note: Amit Shekhar Android Interview Questions repository - MEDIUM
   priority
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-destructuring-declarations--kotlin--medium, 
-      q-infix-functions--kotlin--medium]
+related: [c-kotlin, q-destructuring-declarations--kotlin--medium, q-infix-functions--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
@@ -548,7 +547,6 @@ class UserValidated {
 
 ## Связанные Вопросы (RU)
 
-- [[c-variable--programming-languages--easy]]
 - [[q-lazy-vs-lateinit--kotlin--medium]]
 
 ## Follow-ups
@@ -562,5 +560,4 @@ class UserValidated {
 - [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
 
 ## Related Questions
-- [[c-variable--programming-languages--easy]]
 - [[q-lazy-vs-lateinit--kotlin--medium]]

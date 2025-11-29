@@ -52,10 +52,8 @@ date modified: Tuesday, November 25th 2025, 8:54:00 pm
            RequestManager
   (Управление запросами с учётом жизненного цикла)
 
-
         Request Coordinator & Engine
     (Планирование задач, потоки, дедупликация)
-
 
  Memory          Disk           Network
  Cache           Cache          Fetcher
@@ -356,10 +354,8 @@ Image loading libraries like Glide, Fresco, and Coil solve complex problems rela
            RequestManager
   (Lifecycle-aware request management)
 
-
         Request Coordinator & Engine
     (Job scheduling, threading, deduplication)
-
 
  Memory          Disk           Network
  Cache           Cache          Fetcher

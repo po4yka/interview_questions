@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-concepts--kotlin--medium, q-channels-basics-types--kotlin--medium]
+related: [c-computer-science, q-channels-basics-types--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
@@ -75,7 +75,7 @@ fun handleResult(result: Result<String>) = when (result) {
 - Чистый, поддерживаемый код
 - Отлично подходит для представления иерархий UI/состояний/результатов
 
-См. также: [[c-concepts--kotlin--medium]]
+См. также:
 
 ---
 
@@ -146,9 +146,6 @@ Benefits of combination:
 ## Ссылки (RU)
 
 - [[c-computer-science]]
-- [[c-concepts--kotlin--medium]]
-
 ## References
 
 - [[c-computer-science]]
-- [[c-concepts--kotlin--medium]]

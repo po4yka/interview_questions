@@ -9,8 +9,8 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-architecture-patterns
-related: [c-architecture-patterns, q-strategy-pattern--design-patterns--medium]
+moc: moc-cs
+related: [c-architecture-patterns]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, hook-method, template-method]

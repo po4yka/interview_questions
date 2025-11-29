@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance--kotlin--hard]
+related: [q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin, kotlin/access-modifiers]
@@ -130,12 +130,6 @@ val counter = 0  // public property
 - How does `protected` visibility differ between Kotlin and Java?
 - How does the default `public` visibility interact with `internal` in multi-module projects?
 - Why might you still explicitly write `public` in some APIs despite it being the default?
-
-## Ссылки (RU)
-- [[c-concepts--kotlin--medium]]
-
-## References
-- [[c-concepts--kotlin--medium]]
 
 ## Связанные Вопросы (RU)
 

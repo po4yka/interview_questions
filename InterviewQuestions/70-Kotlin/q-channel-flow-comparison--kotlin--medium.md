@@ -12,7 +12,7 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Channel vs Flow Guide
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, c-concurrency, q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related: [c-concurrency, q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [channels, cold-stream, concurrency, coroutines, difficulty/medium, flow, hot-stream, kotlin]
@@ -1315,7 +1315,6 @@ class PatternsEn {
 
 ## References
 
-- [[c--kotlin--medium]]
 - [[c-concurrency]]
 - Official Kotlin Coroutines documentation: "Channels" and "Flows" (see sections for `Channel`, `Flow`, `SharedFlow`, `StateFlow` on kotlinlang.org)
 

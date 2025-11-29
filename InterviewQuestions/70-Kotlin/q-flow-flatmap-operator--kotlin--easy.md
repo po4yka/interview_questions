@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
+related: [c-coroutines, c-flow]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languages, reactive]

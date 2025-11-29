@@ -32,10 +32,8 @@ date modified: Tuesday, November 25th 2025, 8:54:02 pm
 # Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
 
-
 # Question (EN)
 > What are the main architectural patterns used in Android development, and how do they differ?
-
 
 ---
 
@@ -134,7 +132,6 @@ class GetUserUseCase(private val repo: UserRepository) {
 - **MVI**: когда важны строго однонаправленный поток данных, предсказуемость и трассировка состояния (сложные UI, много событий).
 - **Clean Architecture**: когда нужна чёткая изоляция домена, тестируемость и масштабируемость (более крупные/многомодульные проекты), но может применяться и в небольших.
 
-
 ## Answer (EN)
 
 Android commonly uses several architectural patterns: **MVP**, **MVVM**, **MVI**, and **Clean Architecture**. Today, Google's recommended approach is a layered architecture based on **MVVM with Jetpack (Architecture Components)**, often combined with Clean Architecture principles and, in some cases, MVI-style state handling.
@@ -230,7 +227,6 @@ class GetUserUseCase(private val repo: UserRepository) {
 - **MVI**: when strict unidirectional data flow, predictability, and state traceability are important (complex UIs, many events).
 - **Clean Architecture**: when you need strong domain isolation, testability, and scalability (larger/multi-module projects), but it can also be applied in smaller apps.
 
-
 ## Дополнительные Вопросы (RU)
 
 - В каких случаях вы выберете MVI вместо MVVM для управления состоянием?
@@ -238,7 +234,6 @@ class GetUserUseCase(private val repo: UserRepository) {
 - Как обрабатывать общее состояние между несколькими ViewModel в MVVM?
 - Каковы особенности тестирования для каждого архитектурного паттерна?
 - Как паттерн Repository интегрируется со слоями Clean Architecture?
-
 
 ## Follow-ups
 
@@ -248,14 +243,12 @@ class GetUserUseCase(private val repo: UserRepository) {
 - What are the testing implications of each architectural pattern?
 - How does Repository pattern integrate with Clean Architecture layers?
 
-
 ## Ссылки (RU)
 
 - [[c-mvvm]]
 - [[c-clean-architecture]]
 - [[c-dependency-injection]]
 - [Architecture](https://developer.android.com/topic/architecture)
-
 
 ## References
 
@@ -264,7 +257,6 @@ class GetUserUseCase(private val repo: UserRepository) {
 - [[c-dependency-injection]]
 - [Architecture](https://developer.android.com/topic/architecture)
 
-
 ## Похожие Вопросы (RU)
 
 ### Связанные
@@ -272,7 +264,6 @@ class GetUserUseCase(private val repo: UserRepository) {
 
 ### Продвинутые
 - [[q-kmm-architecture--android--hard]]
-
 
 ## Related Questions
 

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, q-dispatchers-main-immediate--kotlin--medium, q-inline-value-classes-performance--kotlin--medium, q-kotlin-null-checks-methods--programming-languages--easy]
+related: [q-dispatchers-main-immediate--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/null-safety]
@@ -114,7 +114,6 @@ val checked = checkNotNull(config) {
 - Когда есть сильный, задокументированный инвариант или внешний контракт, гарантирующий non-null, и немедленный краш предпочтителен при его нарушении.
 - В редких случаях, когда nullable-бэкинг плюс `!!` для read-only `val` лучше моделирует семантику инициализации, чем `lateinit`, при строго контролируемом инварианте.
 
-
 ## Answer (EN)
 
 The double-bang operator `!!` in Kotlin forcefully asserts that an expression of a nullable type is non-null. At runtime it performs a null-check and throws `NullPointerException` if the value is null.
@@ -203,7 +202,6 @@ These alternatives preserve the spirit of null-safety by making expectations exp
 - When you have a strong, well-documented invariant or external contract that guarantees non-null, and an immediate crash is preferable if violated.
 - In rare cases where using a nullable backing field plus `!!` for a read-only `val` closely models initialization semantics better than `lateinit`, and the invariant is strictly controlled.
 
-
 ## Дополнительные Вопросы (RU)
 
 - Как соотносятся `!!`, safe calls и оператор `?:` в контексте null-безопасности в Kotlin?
@@ -215,14 +213,6 @@ These alternatives preserve the spirit of null-safety by making expectations exp
 - How do `!!`, safe calls, and the `?:` operator relate in the context of Kotlin null-safety?
 - In which cases is `requireNotNull` preferable to `!!`?
 - Why is overuse of `!!` considered a sign of poor design?
-
-## Ссылки (RU)
-
-- [[c--kotlin--medium]]
-
-## References
-
-- [[c--kotlin--medium]]
 
 ## Related Questions
 

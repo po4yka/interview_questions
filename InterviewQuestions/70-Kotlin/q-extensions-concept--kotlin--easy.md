@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-extension-properties--programming-languages--medium]
+related: [c-kotlin, c-kotlin-features]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, extension-functions, extensions, kotlin]

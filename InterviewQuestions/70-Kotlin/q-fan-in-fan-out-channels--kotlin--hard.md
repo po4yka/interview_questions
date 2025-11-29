@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-delegation-by-keyword--kotlin--medium, q-kotlin-nullable-string-declaration--programming-languages--easy]
+related: [c-coroutines, c-kotlin, q-delegation-by-keyword--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard]

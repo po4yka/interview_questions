@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-compose-ui, c-jetpack-compose, c-compose-modifiers, c-box-compose, c-column-row]
+related: [c-compose-ui, c-jetpack-compose, c-compose-modifiers, c-box-compose]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

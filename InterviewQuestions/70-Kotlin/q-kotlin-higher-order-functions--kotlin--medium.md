@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository - adapted from inl
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-collections--kotlin--easy, q-kotlin-extensions--programming-languages--easy]
+related: [c-kotlin, q-kotlin-collections--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, c-performance, q-java-access-modifiers--programming-languages--medium]
+related: [c-kotlin-features, c-performance]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [compiler-optimization, difficulty/medium, inline, inline-functions, kotlin, performance]

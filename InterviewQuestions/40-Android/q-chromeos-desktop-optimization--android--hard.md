@@ -1,8 +1,8 @@
 ---
 id: android-633
-title: ChromeOS Desktop Optimization / Оптимизация Android-приложения под 
+title: ChromeOS Desktop Optimization / Оптимизация Android-приложения под
   ChromeOS
-aliases: [ChromeOS Desktop Optimization, Оптимизация Android-приложения под 
+aliases: [ChromeOS Desktop Optimization, Оптимизация Android-приложения под
       ChromeOS]
 topic: android
 subtopics:
@@ -25,7 +25,7 @@ related:
   - q-performance-optimization-android--android--medium
 created: 2024-11-02
 updated: 2025-11-10
-tags: [android/foldables-chromeos, android/ui-state, android/ui-views, 
+tags: [android/foldables-chromeos, android/ui-state, android/ui-views,
       difficulty/hard]
 sources:
   - "https://developer.android.com/games/playgamespc"

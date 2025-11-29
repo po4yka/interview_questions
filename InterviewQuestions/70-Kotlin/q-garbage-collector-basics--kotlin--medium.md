@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-garbage-collection, q-garbage-collector-definition--programming-languages--easy, q-garbage-collector-roots--programming-languages--medium]
+related: [c-garbage-collection]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, garbage-collection, java, kotlin, memory-management, performance, programming-languages]

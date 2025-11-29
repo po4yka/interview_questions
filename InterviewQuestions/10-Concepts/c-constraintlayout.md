@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-layouts, c-android-views, c-performance-optimization, c-layout-types, c-motionlayout]
+related: [c-layouts, c-android-views, c-performance-optimization, c-layout-types]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

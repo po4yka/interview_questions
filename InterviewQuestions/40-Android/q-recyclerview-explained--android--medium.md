@@ -387,17 +387,14 @@ RecyclerView is a flexible, extensible, and high-performance component for list 
 - [[q-how-animations-work-in-recyclerview--android--medium]]
 - [[q-recyclerview-async-list-differ--android--medium]]
 
-
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
-
 ## Related Questions
 
 ### Prerequisites / Concepts
-
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui

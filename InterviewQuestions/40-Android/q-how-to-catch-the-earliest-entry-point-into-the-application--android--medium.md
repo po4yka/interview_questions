@@ -672,19 +672,16 @@ class MyApplication : Application() {
 - When should you prefer Jetpack App Startup over manual initialization in `Application.onCreate()`?
 - How would you structure initialization code to support multi-process apps safely?
 
-
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
 - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-lifecycle]]
-
 
 ### Prerequisites (Easier)
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, c-computer-science, q-debugging-coroutines-techniques--kotlin--medium]
+related: [c-computer-science, q-debugging-coroutines-techniques--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/classes, kotlin/functions, kotlin/types]
@@ -228,6 +228,5 @@ Important:
 
 ## References
 
-- [[c--kotlin--medium]]
 - [[c-computer-science]]
 - Official Kotlin docs: "Classes and Inheritance" and "Equality" sections

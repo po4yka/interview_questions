@@ -851,18 +851,15 @@ class UserRepository(private val userDao: UserDao) {
 - [[q-android-runtime-art--android--medium]]
 - [[q-room-transactions-dao--android--medium]]
 
-
 ## References
 
 - [Room Database](https://developer.android.com/training/data-storage/room)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-room]]
-
 
 ### Prerequisites (Easier)
 - [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage

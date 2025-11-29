@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-system-design
+moc: moc-ui-ux-accessibility
 related: [c-animation, c-animation-framework, q-jetpack-compose-basics--android--medium]
 created: 2025-10-13
 updated: 2025-11-11

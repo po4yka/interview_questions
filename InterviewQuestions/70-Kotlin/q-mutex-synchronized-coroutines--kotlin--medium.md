@@ -32,7 +32,6 @@ date modified: Tuesday, November 25th 2025, 8:53:49 pm
 
 При работе с общим изменяемым состоянием в Kotlin корутинах необходимы потокобезопасные механизмы синхронизации. Традиционные Java блоки `synchronized` и Kotlin аннотация `@Synchronized` блокируют потоки, что неэффективно в мире корутин. `Mutex` предоставляет альтернативу на основе приостановки, которая старается не блокировать потоки и гораздо лучше масштабируется с большим числом корутин.
 
-
 ### Что Такое Mutex?
 
 `Mutex` (взаимное исключение) — это примитив синхронизации из `kotlinx.coroutines.sync`, который обеспечивает взаимное исключение, интегрированное с корутинами. При использовании `withLock` он приостанавливает корутину, ожидая освобождения блокировки, вместо того чтобы блокировать поток.
@@ -636,7 +635,6 @@ class BankAccountTest {
 ## Answer (EN)
 
 When working with shared mutable state in Kotlin coroutines, you need thread-safe synchronization mechanisms. Traditional Java `synchronized` blocks and Kotlin's `@Synchronized` annotation block threads, which is often inefficient in coroutine-heavy code. `Mutex` provides a coroutine-friendly alternative that integrates with suspension and scales better with many coroutines.
-
 
 ### What is Mutex?
 

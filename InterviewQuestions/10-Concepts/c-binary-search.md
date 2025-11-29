@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-kotlin"
-related: [c-algorithms, c-binary-search-tree, c-data-structures, c-sorting-algorithms, c-tree]
+related: [c-algorithms, c-binary-search-tree, c-data-structures, c-sorting-algorithms]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]

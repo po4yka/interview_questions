@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flow-performance--kotlin--hard, q-kotlin-null-safety--programming-languages--medium]
+related: [c-kotlin, q-flow-performance--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]

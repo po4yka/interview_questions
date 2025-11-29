@@ -15,7 +15,7 @@ category: "coroutines-advanced"
 tags: ["async", "await", "concurrency", "coroutines", "deferred", "difficulty/medium", "parallel-execution", "performance"]
 description: "Complete guide to `Deferred<T>`, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
 moc: moc-kotlin
-related: [c--kotlin--medium, c-concurrency, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related: [c-concurrency, q-lifecyclescope-viewmodelscope--kotlin--medium]
 
 date created: Friday, October 31st 2025, 6:33:46 pm
 date modified: Tuesday, November 25th 2025, 8:53:52 pm
@@ -1955,7 +1955,6 @@ suspend fun loadDataGood() = coroutineScope {
 
 ## Ссылки (RU)
 
-- [[c--kotlin--medium]]
 - [[c-concurrency]]
 - [Kotlin `Coroutines` Guide - Composing Suspending Functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
 - [Deferred API Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-deferred/)
@@ -1965,7 +1964,6 @@ suspend fun loadDataGood() = coroutineScope {
 
 ## References
 
-- [[c--kotlin--medium]]
 - [[c-concurrency]]
 - [Kotlin `Coroutines` Guide - Composing Suspending Functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
 - [Deferred API Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-deferred/)

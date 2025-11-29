@@ -63,16 +63,10 @@ date modified: Tuesday, November 25th 2025, 8:53:53 pm
        Приватное состояние
     (доступно только коду актора)
 
-
-
      Цикл обработки сообщений
      (обработка по одному)
 
-
-
         Почтовый ящик (Channel)
-
-
 
           Сообщения от
           внешних отправителей
@@ -702,16 +696,10 @@ An actor prevents data races by processing messages one-by-one in its coroutine.
        Private State
     (only actor can access)
 
-
-
      Message Processing Loop
      (processes one at a time)
 
-
-
         Mailbox (Channel)
-
-
 
           Messages from
           external senders

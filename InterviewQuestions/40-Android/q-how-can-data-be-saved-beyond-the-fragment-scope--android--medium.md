@@ -344,7 +344,6 @@ class MyApplication : Application() {
 - [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - https://developer.android.com/topic/libraries/architecture/saving-states
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

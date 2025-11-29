@@ -23,7 +23,7 @@ date modified: Tuesday, November 25th 2025, 8:53:49 pm
 # Вопрос (RU)
 > Что такое `repeatOnLifecycle` и почему это важно? Объясните как он предотвращает утечки памяти при подписке на `Flow`, сравнение с `launchWhenStarted` и лучшие практики.
 
-## Question (EN)
+# Question (EN)
 > What is `repeatOnLifecycle` and why is it important? Explain how it prevents memory leaks when collecting `Flow`s, comparison with `launchWhenStarted`, and best practices.
 
 ---

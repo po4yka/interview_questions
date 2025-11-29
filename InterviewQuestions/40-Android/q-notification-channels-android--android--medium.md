@@ -195,7 +195,6 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID on API 
 
 - [[c-permissions]]
 
-
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
 

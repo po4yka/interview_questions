@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, c-concepts--kotlin--medium, q-sealed-classes--kotlin--medium]
+related: [c-computer-science, q-sealed-classes--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [data-class, difficulty/medium, kotlin, programming-languages, sealed-classes]
@@ -409,5 +409,4 @@ sealed class TaskState {
 ## References
 
 - [[c-computer-science]]
-- [[c-concepts--kotlin--medium]]
 - "https://kotlinlang.org/docs/sealed-classes.html"

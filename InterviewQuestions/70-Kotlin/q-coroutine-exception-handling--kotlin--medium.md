@@ -12,7 +12,7 @@ source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-kotlin
-related: [c--kotlin--medium, c-concurrency, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
+related: [c-concurrency, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin]
@@ -30,7 +30,7 @@ date modified: Tuesday, November 25th 2025, 8:53:52 pm
 
 ## Ответ (RU)
 
-Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа. См. также [[c--kotlin--medium]] и [[c-concurrency]].
+Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа. См. также  и [[c-concurrency]].
 
 ### Правила Распространения Исключений
 
@@ -286,7 +286,7 @@ viewModelScope.launch {
 
 ## Answer (EN)
 
-Exception handling in coroutines follows specific rules based on the coroutine builder and scope used. See also [[c--kotlin--medium]] and [[c-concurrency]].
+Exception handling in coroutines follows specific rules based on the coroutine builder and scope used. See also  and [[c-concurrency]].
 
 ### Exception Propagation Rules
 

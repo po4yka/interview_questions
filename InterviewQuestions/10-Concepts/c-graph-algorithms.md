@@ -11,7 +11,7 @@ original_language: "en"
 language_tags: ["en", "ru"]
 status: "draft"
 moc: "moc-algorithms"
-related: [c-data-structures, c-algorithms, c-bfs, c-dfs, c-dijkstra-algorithm]
+related: [c-data-structures, c-algorithms, c-dijkstra-algorithm]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["algorithms", "auto-generated", "concept", "difficulty/medium"]

@@ -227,7 +227,6 @@ composeTestRule
 - [Accessibility](https://developer.android.com/guide/topics/ui/accessibility)
 - https://developer.android.com/jetpack/compose/testing
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-memory-management, q-garbage-collector-basics--programming-languages--medium]
+related: [c-memory-management]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [debugging, difficulty/medium, memory-management, memory-profiler, profiling, programming-languages]

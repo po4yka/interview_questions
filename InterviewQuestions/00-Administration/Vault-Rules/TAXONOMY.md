@@ -198,10 +198,10 @@ moc: [[moc-algorithms]]
 
 ```yaml
 # CORRECT
-related: [c-hash-map, c-array, q-three-sum--algorithms--medium]
+related: [c-hash-map, c-array]
 
 # WRONG
-related: [[c-hash-map]], [[c-array]]
+related: []], [[c-array]]
 ```
 
 ## 9. Tags (English Only)

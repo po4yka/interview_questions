@@ -1,6 +1,6 @@
 ---
 id: android-015
-title: Android App Bundle (AAB)
+title: Android App Bundle (AAB) / Android App Bundle
 aliases: [4ndroid App Bundle, 608088847290 AAB, AAB, Android App Bundle, Android App Bundles]
 topic: android
 subtopics:

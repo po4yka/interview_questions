@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-kotlin, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-kotlin, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]

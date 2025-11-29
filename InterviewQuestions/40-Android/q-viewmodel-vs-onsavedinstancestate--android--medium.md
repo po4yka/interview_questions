@@ -1,7 +1,7 @@
 ---
 id: android-389
-title: ViewModel vs OnSavedInstanceState
-aliases: [ViewModel fefdfb OnSavedInstanceState, ViewModel vs 
+title: ViewModel vs OnSavedInstanceState / ViewModel против OnSavedInstanceState
+aliases: [ViewModel fefdfb OnSavedInstanceState, ViewModel vs
       OnSavedInstanceState]
 topic: android
 subtopics:
@@ -23,7 +23,7 @@ related:
   - q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium
 created: 2024-10-15
 updated: 2025-11-11
-tags: [android/architecture-mvvm, android/lifecycle, difficulty/medium, 
+tags: [android/architecture-mvvm, android/lifecycle, difficulty/medium,
       state-management, viewmodel]
 
 date created: Saturday, November 1st 2025, 12:47:06 pm

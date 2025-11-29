@@ -1,6 +1,6 @@
 ---
 id: android-049
-title: Hilt Assisted Injection
+title: Hilt Assisted Injection / Hilt Ассистированный инжект
 aliases: [Hilt Assisted Injection, Hilt Ассистированный инжект]
 topic: android
 subtopics:

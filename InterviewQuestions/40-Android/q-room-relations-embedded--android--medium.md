@@ -107,7 +107,6 @@ data class Post(
     val content: String
 )
 
-
 data class UserWithPosts(
     @Embedded val user: User,
     @Relation(
@@ -158,7 +157,6 @@ data class Enrollment(
     val courseId: Long,
     val grade: String? = null  // ✅ Дополнительные данные связи
 )
-
 
 data class StudentWithCourses(
     @Embedded val student: Student,
@@ -267,7 +265,6 @@ data class Post(
     val content: String
 )
 
-
 data class UserWithPosts(
     @Embedded val user: User,
     @Relation(
@@ -318,7 +315,6 @@ data class Enrollment(
     val courseId: Long,
     val grade: String? = null  // ✅ Additional relationship data
 )
-
 
 data class StudentWithCourses(
     @Embedded val student: Student,

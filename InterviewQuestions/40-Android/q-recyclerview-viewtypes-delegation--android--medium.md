@@ -266,7 +266,6 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 ### Предпосылки / Концепции
 
-
 ### Предпосылки (Проще)
 - [[q-android-app-components--android--easy]] - Компоненты приложения
 
@@ -279,7 +278,6 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 ## Related Questions (EN)
 
 ### Prerequisites / Concepts
-
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components

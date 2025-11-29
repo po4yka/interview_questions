@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-flow-basics--kotlin--easy, q-kotlin-extensions-overview--programming-languages--medium]
+related: [c-kotlin, q-flow-basics--kotlin--easy]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, extension-functions, extensions, programming-languages]

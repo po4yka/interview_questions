@@ -371,7 +371,6 @@ class MyWidgetProvider : AppWidgetProvider() {
 - [[c-intent]]
 - [[c-permissions]]
 
-
 ### Prerequisites (Easier)
 - [[q-what-unifies-android-components--android--easy]] - `Intent` basics
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Android threading

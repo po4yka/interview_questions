@@ -820,18 +820,15 @@ if (!context.isGlobalAnimationsDisabled()) {
 - [[q-save-data-outside-fragment--android--medium]]
 - [[q-spannable-text-styling--android--medium]]
 
-
 ## References
 
 - [Animations](https://developer.android.com/develop/ui/views/animations)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-custom-views]]
-
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui

@@ -30,7 +30,6 @@ created: 2025-10-05
 updated: 2025-11-11
 tags: [android/app-bundle, android/build-variants, android/performance-memory, difficulty/medium, en, ru]
 
-
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
@@ -382,14 +381,12 @@ You may recognize `&lt;` and `&gt;` as escape characters for `<` and `>`. They'r
 - How would you integrate R8 configuration and `shrinkResources` into a CI pipeline to ensure size regressions are detected early?
 - When would you choose dynamic feature modules over a monolithic app in terms of size, and what trade-offs does this introduce?
 
-
 ## References
 - [Reduce your app size](https://developer.android.com/topic/performance/reduce-apk-size)
 - [Reduce app size](https://developer.android.com/guide/topics/androidgo/optimize-size)
 - [8 Ways to Reduce Android App Size During Development Phase?](https://www.elluminatiinc.com/reduce-android-app-size/)
 - [8 Best Ways to Reduce Android App Size](https://www.mantralabsglobal.com/blog/reduce-android-app-size/)
 - [Minimizing APK Size: Techniques for Shrinking Android App Size](https://diegomarcher.medium.com/minimizing-apk-size-techniques-for-shrinking-android-app-size-7a4c5eefbd46)
-
 
 ## Related Questions
 
@@ -398,7 +395,6 @@ You may recognize `&lt;` and `&gt;` as escape characters for `<` and `>`. They'r
 - [[c-gradle]]
 - [[c-app-bundle]]
 - [[c-memory-management]]
-
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview

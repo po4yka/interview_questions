@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: [c-version-control, c-ci-cd, c-merge-strategies, c-branching-strategies, c-code-review]
+related: [c-version-control, c-ci-cd]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["branching", "concept", "difficulty/medium", "git", "merging", "rebasing", "version-control"]

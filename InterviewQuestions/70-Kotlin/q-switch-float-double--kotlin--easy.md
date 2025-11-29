@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-hashmap-how-it-works--programming-languages--medium, q-kotlin-double-bang-operator--computer-science--medium, q-kotlin-java-abstract-differences--programming-languages--medium, q-kotlin-type-system-features--kotlin--medium, q-solid-principles--software-design--medium]
+related: [q-kotlin-type-system-features--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags:

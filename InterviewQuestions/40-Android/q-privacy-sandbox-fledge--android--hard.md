@@ -528,7 +528,6 @@ class EcommerceRemarketingManager(
 
 - [[c-permissions]]
 
-
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Network protocols for ad delivery
 

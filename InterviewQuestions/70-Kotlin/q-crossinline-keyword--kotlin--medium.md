@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concepts--kotlin--medium, c-kotlin-features, q-abstract-class-vs-interface--kotlin--medium]
+related: [c-kotlin-features, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, inline-functions, kotlin, lambda, non-local-returns]
@@ -639,8 +639,6 @@ Remember: labeled returns (e.g. `return@foo`) remain available with `crossinline
 - What are common pitfalls to avoid?
 
 ## Ссылки (RU)
-
-- [[c-concepts--kotlin--medium]]
 
 ## References
 

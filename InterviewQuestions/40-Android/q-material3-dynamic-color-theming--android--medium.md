@@ -553,7 +553,6 @@ Snackbar(
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 
-
 ### Prerequisites
 - [[q-single-activity-approach--android--medium]] — App architecture for theming
 

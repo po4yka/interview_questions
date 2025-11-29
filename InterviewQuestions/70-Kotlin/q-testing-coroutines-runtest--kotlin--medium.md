@@ -23,7 +23,7 @@ date modified: Tuesday, November 25th 2025, 8:53:48 pm
 # Вопрос (RU)
 > Как тестировать корутины с `runTest` и `TestDispatcher`? Объясните виртуальное время, `StandardTestDispatcher` vs `UnconfinedTestDispatcher` и практические паттерны тестирования для `ViewModel`.
 
-## Question (EN)
+# Question (EN)
 > How to test coroutines with `runTest` and `TestDispatcher`? Explain virtual time, `StandardTestDispatcher` vs `UnconfinedTestDispatcher`, and practical testing patterns for `ViewModel`s.
 
 ---

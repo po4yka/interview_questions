@@ -679,7 +679,6 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 - [[c-media3]]
 - [[c-camerax]]
 
-
 ### Prerequisites (Easier)
 - [[q-when-can-the-system-restart-a-service--android--medium]]
 

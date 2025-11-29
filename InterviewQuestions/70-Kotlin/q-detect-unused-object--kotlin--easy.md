@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]
+related: [c-garbage-collection]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, kotlin, memory-management, programming-languages, weak-references]

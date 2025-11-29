@@ -9,8 +9,8 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-system-design
-related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy]
+moc: moc-kotlin
+related: [c-garbage-collection]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, garbage-collection, jvm, memory-management, programming-languages]

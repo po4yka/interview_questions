@@ -16,7 +16,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - c--android--hard
   - q-android-app-lag-analysis--android--medium
   - q-android-performance-measurement-tools--android--medium
   - q-android-runtime-art--android--medium

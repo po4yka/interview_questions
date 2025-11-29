@@ -86,6 +86,15 @@ These differences impact:
 
 ## Related Questions
 
+- [[c-dagger]]
+- [[c-dependency-injection]]
+- [[c-hilt]]
+- [[q-dagger-build-time-optimization--android--medium]]
+- [[q-dagger-framework-overview--android--hard]]
+- [[q-hilt-entry-points--android--medium]]
+- [[q-koin-fundamentals--android--medium]]
+- [[q-koin-vs-hilt-comparison--android--medium]]
+
 ## Краткая Версия
 - Koin: runtime DI, гибкость и низкий порог входа ценой меньших compile-time гарантий.
 - Dagger/Hilt: compile-time DI, строгий контракт и масштабируемость ценой сложности и ceremony.

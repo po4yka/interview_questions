@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-equality, c-kotlin, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy]
+related: [c-equality, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [comparison, difficulty/medium, equality, java, kotlin, operators]

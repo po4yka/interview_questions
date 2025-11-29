@@ -33,11 +33,9 @@ date modified: Tuesday, November 25th 2025, 8:53:59 pm
 
 > Как использовать SQLDelight для кросс-платформенного управления БД в KMM? Как определять схемы, выполнять миграции, работать с транзакциями и оптимизировать запросы для Android и iOS?
 
-
 # Question (EN)
 
 > How to use SQLDelight for cross-platform database management in KMM? How to define schemas, handle migrations, work with transactions, and optimize queries for Android and iOS?
-
 
 ---
 
@@ -647,7 +645,6 @@ class TaskRepositoryTest {
 ### Prerequisites / Concepts
 
 - [[c-room]]
-
 
 ### Related
 - [[q-annotation-processing-android--android--medium]] - Code generation comparison with SQLDelight

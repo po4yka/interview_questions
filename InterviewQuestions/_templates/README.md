@@ -173,7 +173,7 @@ question_kind: theory          # coding | theory | system-design
 source: https://...            # Original source URL
 source_note: "Description"     # Source description
 moc: moc-kotlin               # Related MOC (without brackets)
-related: [c-reactive]          # Related concepts
+related: []          # Related concepts
 created: 2025-10-06           # Creation date
 updated: 2025-10-06           # Last update date
 ```

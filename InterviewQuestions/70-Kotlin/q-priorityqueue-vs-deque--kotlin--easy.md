@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-class-composition--oop--medium]
+related: [c-collections, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [collections, deque, difficulty/easy, kotlin, priority-queue, queue]

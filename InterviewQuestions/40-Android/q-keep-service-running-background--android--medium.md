@@ -463,7 +463,6 @@ Is task user-initiated and time-sensitive?
 - [[c-coroutines]]
 - [[c-background-tasks]]
 
-
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]] - Types of Android services
 
