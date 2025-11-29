@@ -1,11 +1,48 @@
 ---
 date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Wednesday, November 26th 2025, 12:02:10 pm
+date modified: Saturday, November 29th 2025, 12:07:29 pm
 ---
 
 # Interview Questions Knowledge Base
 
-> **Comprehensive bilingual collection** of interview questions for Android, Kotlin, Computer Science, and more. Perfect for interview preparation from Junior to Staff+ levels.
+**Comprehensive bilingual collection** of interview questions for Android, Kotlin, Computer Science, and more. Perfect for interview preparation from Junior to Staff+ levels.
+
+---
+
+## Quick Navigation
+
+### Maps of Content
+
+```dataviewjs
+const topicMapping = {
+    'moc-android': { folder: '40-Android', label: 'Android' },
+    'moc-kotlin': { folder: '70-Kotlin', label: 'Kotlin' },
+    'moc-algorithms': { folder: '20-Algorithms', label: 'Algorithms' },
+    'moc-system-design': { folder: '30-System-Design', label: 'System Design' },
+    'moc-backend': { folder: '50-Backend', label: 'Backend' },
+    'moc-cs': { folder: '60-CompSci', label: 'Computer Science' },
+    'moc-tools': { folder: '80-Tools', label: 'Tools' }
+};
+
+const mocs = dv.pages('"90-MOCs"').where(p => p.kind === "moc");
+const rows = [];
+
+for (const moc of mocs) {
+    const mapping = topicMapping[moc.file.name];
+    if (mapping) {
+        const qCount = dv.pages(`"${mapping.folder}"`).where(p => p.file.name.startsWith('q-')).length;
+        rows.push([mapping.label, moc.file.link, qCount]);
+    }
+}
+
+rows.sort((a, b) => b[2] - a[2]);
+dv.table(["Topic", "MOC", "Questions"], rows);
+```
+
+### Documentation & Templates
+
+- [[00-Administration/README|Vault Documentation]] | [[00-Administration/Vault-Rules/TAXONOMY|Taxonomy]] | [[00-Administration/Vault-Rules/FILE-NAMING-RULES|Naming Rules]]
+- [[_templates/_tpl-qna|Q&A Template]] | [[_templates/_tpl-concept|Concept Template]] | [[_templates/_tpl-moc|MOC Template]]
 
 ---
 
@@ -13,376 +50,253 @@ date modified: Wednesday, November 26th 2025, 12:02:10 pm
 
 ### Overall Metrics
 
-```dataview
-TABLE WITHOUT ID
-    length(rows) as "Total Questions"
-FROM "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
-WHERE topic
-GROUP BY true
+```dataviewjs
+const QA_SOURCES = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const questions = dv.pages(QA_SOURCES).where(p => p.topic);
+const concepts = dv.pages('"10-Concepts"').where(p => p.file.name.startsWith('c-'));
+const mocs = dv.pages('"90-MOCs"').where(p => p.kind === "moc");
+
+dv.table(
+    ["Content Type", "Count", "Draft", "Reviewed", "Ready"],
+    [
+        [
+            "Q&A Notes",
+            questions.length,
+            questions.where(p => String(p.status).toLowerCase() === "draft").length,
+            questions.where(p => String(p.status).toLowerCase() === "reviewed").length,
+            questions.where(p => String(p.status).toLowerCase() === "ready").length
+        ],
+        [
+            "Concept Notes",
+            concepts.length,
+            "-",
+            "-",
+            "-"
+        ],
+        [
+            "MOCs",
+            mocs.length,
+            "-",
+            "-",
+            "-"
+        ]
+    ]
+);
+
+dv.paragraph(`**Total Knowledge Items:** ${questions.length + concepts.length + mocs.length}`);
 ```
 
 ### By Topic
 
-```dataview
-TABLE WITHOUT ID
-    topic as "Topic",
-    length(rows) as "Count",
-    round((length(filter(rows, (r) => r.difficulty = "easy")) / length(rows)) * 100) + "%" as "Easy",
-    round((length(filter(rows, (r) => r.difficulty = "medium")) / length(rows)) * 100) + "%" as "Medium",
-    round((length(filter(rows, (r) => r.difficulty = "hard")) / length(rows)) * 100) + "%" as "Hard"
-FROM "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
-WHERE topic
-GROUP BY topic
-SORT length(rows) DESC
+```dataviewjs
+const QA_SOURCES = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const allPages = dv.pages(QA_SOURCES).where(p => p.topic);
+
+const topicData = {};
+for (const page of allPages) {
+    const topic = String(page.topic).toLowerCase();
+    if (!topicData[topic]) {
+        topicData[topic] = { total: 0, easy: 0, medium: 0, hard: 0, ready: 0 };
+    }
+    topicData[topic].total++;
+    const diff = String(page.difficulty).toLowerCase();
+    if (diff === 'easy') topicData[topic].easy++;
+    else if (diff === 'medium') topicData[topic].medium++;
+    else if (diff === 'hard') topicData[topic].hard++;
+    if (String(page.status).toLowerCase() === 'ready') topicData[topic].ready++;
+}
+
+const progressBar = (current, total, width = 10) => {
+    if (total === 0) return '[' + '-'.repeat(width) + ']';
+    const filled = Math.round((current / total) * width);
+    return '[' + '='.repeat(filled) + '-'.repeat(width - filled) + ']';
+};
+
+const formatTopic = (t) => t.charAt(0).toUpperCase() + t.slice(1).replace(/-/g, ' ');
+
+const rows = Object.entries(topicData)
+    .sort((a, b) => b[1].total - a[1].total)
+    .map(([topic, data]) => [
+        formatTopic(topic),
+        data.total,
+        `${data.easy}/${data.medium}/${data.hard}`,
+        data.total > 0 ? `${Math.round((data.ready / data.total) * 100)}%` : "0%",
+        progressBar(data.ready, data.total)
+    ]);
+
+dv.table(["Topic", "Count", "E/M/H", "Ready %", "Progress"], rows);
 ```
 
-### By Difficulty
+### Distribution Summary
 
 ```dataviewjs
-const sources = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
-const difficultyPages = dv.pages(sources)
-    .where(p => p.difficulty);
+const QA_SOURCES = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const pages = dv.pages(QA_SOURCES).where(p => p.topic);
+const total = pages.length;
 
-const totalDifficulty = difficultyPages.length;
-const preferredOrder = ["easy", "medium", "hard"];
-const difficultyCounts = {};
+// Difficulty counts
+const easy = pages.where(p => String(p.difficulty).toLowerCase() === 'easy').length;
+const medium = pages.where(p => String(p.difficulty).toLowerCase() === 'medium').length;
+const hard = pages.where(p => String(p.difficulty).toLowerCase() === 'hard').length;
 
-for (const page of difficultyPages) {
-    const key = String(page.difficulty).toLowerCase();
-    difficultyCounts[key] = (difficultyCounts[key] ?? 0) + 1;
-}
+// Status counts
+const draft = pages.where(p => String(p.status).toLowerCase() === 'draft').length;
+const reviewed = pages.where(p => String(p.status).toLowerCase() === 'reviewed').length;
+const ready = pages.where(p => String(p.status).toLowerCase() === 'ready').length;
 
-const formatLabel = value => value ? value.charAt(0).toUpperCase() + value.slice(1) : "Unknown";
+const pct = (n) => total > 0 ? Math.round((n / total) * 100) : 0;
 
-const orderedRows = preferredOrder
-    .map(diff => ({ diff, count: difficultyCounts[diff] ?? 0 }))
-    .filter(entry => entry.count > 0);
-
-const otherRows = Object.keys(difficultyCounts)
-    .filter(diff => !preferredOrder.includes(diff))
-    .sort()
-    .map(diff => ({ diff, count: difficultyCounts[diff] }));
-
-const tableRows = orderedRows.concat(otherRows).map(({ diff, count }) => [
-    formatLabel(diff),
-    count,
-    totalDifficulty ? `${Math.round((count / totalDifficulty) * 100)}%` : "0%"
-]);
-
-if (tableRows.length) {
-    dv.table(["Difficulty", "Count", "Percentage"], tableRows);
-} else {
-    dv.paragraph("No questions with difficulty metadata.");
-}
+dv.paragraph(`**By Difficulty:** Easy: ${easy} (${pct(easy)}%) | Medium: ${medium} (${pct(medium)}%) | Hard: ${hard} (${pct(hard)}%)`);
+dv.paragraph(`**By Status:** Draft: ${draft} (${pct(draft)}%) | Reviewed: ${reviewed} (${pct(reviewed)}%) | Ready: ${ready} (${pct(ready)}%)`);
 ```
 
-### By Status
+---
+
+## Concept Notes
 
 ```dataviewjs
-const statusSources = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
-const statusPages = dv.pages(statusSources)
-    .where(p => p.status);
+const concepts = dv.pages('"10-Concepts"').where(p => p.file.name.startsWith('c-'));
 
-const totalStatuses = statusPages.length;
-const statusOrder = ["draft", "reviewed", "ready"];
-const statusCounts = {};
-
-for (const page of statusPages) {
-    const key = String(page.status).toLowerCase();
-    statusCounts[key] = (statusCounts[key] ?? 0) + 1;
+// Group by main tags
+const tagCounts = {};
+for (const c of concepts) {
+    if (c.tags) {
+        const tags = Array.isArray(c.tags) ? c.tags : [c.tags];
+        for (const tag of tags) {
+            const mainTag = String(tag).split('/')[0].toLowerCase();
+            // Filter to meaningful categories
+            if (['android', 'kotlin', 'java', 'concurrency', 'lifecycle', 'compose', 'coroutines', 'testing', 'performance', 'security', 'architecture', 'ui', 'networking', 'database'].includes(mainTag)) {
+                tagCounts[mainTag] = (tagCounts[mainTag] || 0) + 1;
+            }
+        }
+    }
 }
 
-const formatLabel = value => value ? value.charAt(0).toUpperCase() + value.slice(1) : "Unknown";
+dv.paragraph(`**Total Concepts:** ${concepts.length}`);
 
-const preferredStatuses = statusOrder
-    .map(status => ({ status, count: statusCounts[status] ?? 0 }))
-    .filter(entry => entry.count > 0);
+const rows = Object.entries(tagCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([tag, count]) => [tag.charAt(0).toUpperCase() + tag.slice(1), count]);
 
-const additionalStatuses = Object.keys(statusCounts)
-    .filter(status => !statusOrder.includes(status))
-    .sort()
-    .map(status => ({ status, count: statusCounts[status] }));
+if (rows.length > 0) {
+    dv.table(["Category", "Count"], rows);
+}
 
-const statusRows = preferredStatuses.concat(additionalStatuses).map(({ status, count }) => [
-    formatLabel(status),
-    count,
-    totalStatuses ? `${Math.round((count / totalStatuses) * 100)}%` : "0%"
-]);
-
-if (statusRows.length) {
-    dv.table(["Status", "Count", "Percentage"], statusRows);
-} else {
-    dv.paragraph("No questions with status metadata.");
+// Show concepts without tags
+const noTags = concepts.where(c => !c.tags || c.tags.length === 0).length;
+if (noTags > 0) {
+    dv.paragraph(`*${noTags} concepts have no tags defined.*`);
 }
 ```
-## Quick Links
 
-### Documentation
-- [Vault Documentation](00-Administration/README.md)
-- [File Naming Rules](00-Administration/Vault-Rules/FILE-NAMING-RULES.md)
-- [Taxonomy](00-Administration/Vault-Rules/TAXONOMY.md)
+---
 
-### Templates
-- [Q&A Template](_templates/_tpl-qna.md)
-- [Concept Template](_templates/_tpl-concept.md)
-- [MOC Template](_templates/_tpl-moc.md)
+## Recent Activity
+
+### Recently Created
+
+```dataviewjs
+const ALL_CONTENT = '"10-Concepts" or "20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const allPages = dv.pages(ALL_CONTENT);
+
+const getType = (name) => {
+    if (name.startsWith('q-')) return 'Q&A';
+    if (name.startsWith('c-')) return 'Concept';
+    return 'Other';
+};
+
+const recentlyCreated = allPages
+    .sort(p => p.file.ctime, 'desc')
+    .slice(0, 10);
+
+dv.table(
+    ["Note", "Type", "Topic", "Created"],
+    recentlyCreated.map(p => [
+        p.file.link,
+        getType(p.file.name),
+        p.topic || "-",
+        dv.date(p.file.ctime).toFormat("yyyy-MM-dd")
+    ])
+);
+```
+
+### Recently Modified
+
+```dataviewjs
+const ALL_CONTENT = '"10-Concepts" or "20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const allPages = dv.pages(ALL_CONTENT);
+
+const getType = (name) => {
+    if (name.startsWith('q-')) return 'Q&A';
+    if (name.startsWith('c-')) return 'Concept';
+    return 'Other';
+};
+
+const recentlyModified = allPages
+    .sort(p => p.file.mtime, 'desc')
+    .slice(0, 10);
+
+dv.table(
+    ["Note", "Type", "Topic", "Modified"],
+    recentlyModified.map(p => [
+        p.file.link,
+        getType(p.file.name),
+        p.topic || "-",
+        dv.date(p.file.mtime).toFormat("yyyy-MM-dd")
+    ])
+);
+```
 
 ---
 
 ## Language Coverage
 
-**All questions support**:
-- English (EN)
-- Russian (RU)
+```dataviewjs
+const QA_SOURCES = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const pages = dv.pages(QA_SOURCES).where(p => p.language_tags);
+const total = pages.length;
 
-```dataview
-TABLE WITHOUT ID
-    "Bilingual Coverage" as "Metric",
-    length(filter(rows, (r) => contains(r.language_tags, "en") AND contains(r.language_tags, "ru"))) as "Questions with EN+RU",
-    round((length(filter(rows, (r) => contains(r.language_tags, "en") AND contains(r.language_tags, "ru"))) / length(rows)) * 100) + "%" as "Coverage"
-FROM "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
-WHERE language_tags
-GROUP BY true
+const hasTag = (p, tag) => {
+    if (!p.language_tags) return false;
+    const tags = Array.isArray(p.language_tags) ? p.language_tags : [p.language_tags];
+    return tags.includes(tag);
+};
+
+const bilingual = pages.where(p => hasTag(p, 'en') && hasTag(p, 'ru')).length;
+const enOnly = pages.where(p => hasTag(p, 'en') && !hasTag(p, 'ru')).length;
+const ruOnly = pages.where(p => hasTag(p, 'ru') && !hasTag(p, 'en')).length;
+
+const pct = (n) => total > 0 ? Math.round((n / total) * 100) : 0;
+
+dv.paragraph(`**Language Coverage:** ${total} questions tracked`);
+dv.paragraph(`- Bilingual (EN+RU): ${bilingual} (${pct(bilingual)}%)`);
+dv.paragraph(`- English only: ${enOnly} (${pct(enOnly)}%)`);
+dv.paragraph(`- Russian only: ${ruOnly} (${pct(ruOnly)}%)`);
 ```
 
 ---
 
-## Link Health Monitor
-
-### Broken Links Detection
+## Quick Health Check
 
 ```dataviewjs
-// Find all files with broken wikilinks
-const folderQuery = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
-const files = dv.pages(folderQuery)
-    .where(p => p.file.ext === "md");
+const QA_SOURCES = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const allPages = dv.pages(QA_SOURCES).where(p => p.file.name.startsWith('q-'));
 
-let brokenLinks = [];
-let totalLinks = 0;
-let brokenCount = 0;
+const noRelated = allPages.where(p => !p.related || (Array.isArray(p.related) && p.related.length === 0)).length;
+const orphans = allPages.where(p => p.file.inlinks.length === 0).length;
 
-for (let file of files) {
-    const content = await dv.io.load(file.file.path);
-    if (!content) continue;
-
-    // Find all wikilinks [[...]]
-    const wikilinkRegex = /\[\[([^\]|]+)(\|[^\]]+)?\]\]/g;
-    let match;
-
-    while ((match = wikilinkRegex.exec(content)) !== null) {
-        totalLinks++;
-        const linkTarget = match[1].trim();
-
-        // Check if target exists (try with and without .md extension)
-        const targetExists = dv.page(linkTarget) ||
-                           dv.page(linkTarget + '.md') ||
-                           dv.pages().find(p => p.file.name === linkTarget);
-
-        if (!targetExists) {
-            brokenCount++;
-            brokenLinks.push({
-                source: file.file.name,
-                target: linkTarget,
-                path: file.file.path
-            });
-        }
-    }
-}
-
-// Display results
-dv.header(3, ` Summary`);
-const linkHealth = totalLinks > 0 ? Math.round(((totalLinks - brokenCount) / totalLinks) * 100) : 100;
-dv.paragraph(`**Total Links**: ${totalLinks} | **Broken**: ${brokenCount} | **Health**: ${linkHealth}%`);
-
-if (brokenCount > 0) {
-    dv.header(3, ` Broken Links (${brokenCount})`);
-
-    // Group by source file
-    const grouped = {};
-    for (let link of brokenLinks) {
-        if (!grouped[link.source]) {
-            grouped[link.source] = [];
-        }
-        grouped[link.source].push(link.target);
-    }
-
-    // Display top 10 files with most broken links
-    const sorted = Object.entries(grouped)
-        .sort((a, b) => b[1].length - a[1].length)
-        .slice(0, 10);
-
-    dv.table(
-        ["Source File", "Broken Links", "Count"],
-        sorted.map(([source, targets]) => [
-            `[[${source}]]`,
-            targets.slice(0, 3).map(t => `\`${t}\``).join(", ") + (targets.length > 3 ? "..." : ""),
-            targets.length
-        ])
-    );
-
-    dv.paragraph(`*Showing top 10 files. See [Link Analysis Report](LINK_ANALYSIS_REPORT.md) for complete list.*`);
-} else {
-    dv.paragraph(" **All links are healthy!**");
-}
-```
-
-### Missing Cross-References
-
-```dataviewjs
-// Find related questions that should link to each other but don't
-const questionFiles = dv.pages('"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"')
-    .where(p => p.file.name.startsWith('q-'));
-
-let suggestions = [];
-
-for (let file of questionFiles) {
-    if (!file.subtopics) continue;
-
-    // Find files with overlapping subtopics
-    const related = questionFiles.where(f =>
-        f.file.path !== file.file.path &&
-        f.subtopics &&
-        f.subtopics.some(st => file.subtopics.includes(st))
-    );
-
-    for (let rel of related) {
-        // Check if they already link to each other
-        const content = await dv.io.load(file.file.path);
-        if (!content || content.includes(`[[${rel.file.name}]]`)) continue;
-
-        suggestions.push({
-            from: file.file.name,
-            to: rel.file.name,
-            commonTopics: file.subtopics.filter(st => rel.subtopics.includes(st)),
-            fromTopic: file.topic,
-            toTopic: rel.topic
-        });
-    }
-}
-
-dv.header(3, ` Suggested Cross-References`);
-
-if (suggestions.length > 0) {
-    // Show top 15 suggestions (files with most overlapping topics)
-    const topSuggestions = suggestions
-        .sort((a, b) => b.commonTopics.length - a.commonTopics.length)
-        .slice(0, 15);
-
-    dv.table(
-        ["From", "To", "Common Topics", "Count"],
-        topSuggestions.map(s => [
-            `[[${s.from}]]`,
-            `[[${s.to}]]`,
-            s.commonTopics.slice(0, 2).map(t => `\`${t}\``).join(", "),
-            s.commonTopics.length
-        ])
-    );
-
-    dv.paragraph(`*Found ${suggestions.length} potential cross-references. Showing top 15.*`);
-} else {
-    dv.paragraph(" No obvious missing cross-references detected.");
-}
-```
-
-### Orphan Files (No Incoming Links)
-
-```dataviewjs
-// Find files with no incoming links
-const allFiles = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci" or "20-Algorithms" or "50-Backend" or "80-Tools"')
-    .where(p => p.file.path.endsWith('.md'));
-
-const filesWithLinks = new Set();
-
-// Check all files for outgoing links
-for (let file of allFiles) {
-    const content = await dv.io.load(file.file.path);
-    if (!content) continue;
-
-    const wikilinkRegex = /\[\[([^\]|]+)(\|[^\]]+)?\]\]/g;
-    let match;
-
-    while ((match = wikilinkRegex.exec(content)) !== null) {
-        const linkTarget = match[1].trim();
-        filesWithLinks.add(linkTarget);
-        filesWithLinks.add(linkTarget + '.md');
-    }
-}
-
-// Find orphans
-const orphans = allFiles
-    .where(f => !filesWithLinks.has(f.file.name) && !filesWithLinks.has(f.file.name.replace('.md', '')))
-    .sort(f => f.file.name, 'asc')
-    .slice(0, 20);
-
-dv.header(3, ` Orphan Files (No Incoming Links)`);
-
-if (orphans.length > 0) {
-    dv.table(
-        ["File", "Topic", "Difficulty"],
-        orphans.map(f => [
-            `[[${f.file.name}]]`,
-            f.topic || "N/A",
-            f.difficulty || "N/A"
-        ])
-    );
-    dv.paragraph(`*Showing first 20 orphans. These files might need cross-references.*`);
-} else {
-    dv.paragraph(" No orphan files found!");
-}
-```
-
-### Files Without Related Questions Section
-
-```dataviewjs
-// Find files that don't have a "Related Questions" section
-const files = dv.pages('"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"')
-    .where(p => p.file.name.startsWith('q-'));
-
-let filesWithoutRelated = [];
-
-for (let file of files) {
-    const content = await dv.io.load(file.file.path);
-    if (!content) continue;
-
-    // Check if file has "Related Questions" section
-    if (!content.includes('## Related Questions')) {
-        filesWithoutRelated.push({
-            name: file.file.name,
-            topic: file.topic,
-            difficulty: file.difficulty,
-            path: file.file.path
-        });
-    }
-}
-
-dv.header(3, ` Files Missing Related Questions Section`);
-
-if (filesWithoutRelated.length > 0) {
-    const sample = filesWithoutRelated.slice(0, 15);
-
-    dv.table(
-        ["File", "Topic", "Difficulty"],
-        sample.map(f => [
-            `[[${f.name}]]`,
-            f.topic || "N/A",
-            f.difficulty || "N/A"
-        ])
-    );
-
-    dv.paragraph(`*Found ${filesWithoutRelated.length} files. Showing first 15. Consider adding related questions to improve navigation.*`);
-} else {
-    dv.paragraph(" All files have Related Questions sections!");
-}
+dv.paragraph(`**Files without 'related' field:** ${noRelated}`);
+dv.paragraph(`**Potential orphans (no inlinks):** ${orphans}`);
+dv.paragraph(`[[00-Administration/Link-Health-Report|View Full Link Health Report]]`);
 ```
 
 ---
 
-## Tips for Using This Vault
+## Quick Tips
 
-1. **Search by difficulty**: Use the filters above to focus on your level
-2. **Study by topic**: Navigate via Quick Navigation sections
-3. **Track progress**: Mark questions as `reviewed` or `ready` after studying
-4. **Use tags**: Each question has detailed tags for granular filtering
-5. **Bilingual learning**: Switch between EN/RU sections for better understanding
-6. **System Design**: Start with easy questions, progress to hard architectural challenges
-7. **Monitor link health**: Check the Link Health Monitor section regularly
+1. **Navigate by MOC** - Start with topic MOCs above for structured learning paths
+2. **Filter by difficulty** - Use Dataview queries or search `difficulty: easy/medium/hard`
+3. **Track progress** - Update `status` field: draft -> reviewed -> ready
+4. **Bilingual study** - Toggle between EN/RU sections for deeper understanding
+5. **Link concepts** - Use `related` field to connect Q&As with concept notes

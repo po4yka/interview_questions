@@ -1,351 +1,301 @@
 ---
 date created: Tuesday, November 25th 2025, 8:13:58 pm
-date modified: Tuesday, November 25th 2025, 8:43:23 pm
+date modified: Saturday, November 29th 2025, 12:09:58 pm
 ---
 
-# Obsidian Interview Vault — Full README
+# Obsidian Interview Vault
 
-A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical interview preparation across **Android**, **Kotlin**, **CompSci** (design patterns, architecture), **Algorithms**, **System Design**, **Backend**, and **Tools**. This README describes the **normative rules**, folder layout, metadata schema, templates, tagging and linking conventions, MOCs, Dataview queries, LLM-assisted workflows, and maintenance practices.
-
-> **For LLM Agents**:
-> - **Cursor AI**: Rules are in `../.cursorrules` (auto-loaded)
-> - **General agents**: [AGENTS.md](AGENTS.md) for task instructions
-> - **Quick reference**: [AGENT-CHECKLIST.md](00-Administration/AI-Agents/AGENT-CHECKLIST.md) for validation
-> - **Gemini CLI**: [GEMINI.md](GEMINI.md) for command-line workflows
+A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical interview preparation across **Android**, **Kotlin**, **CompSci**, **Algorithms**, **System Design**, **Backend**, and **Tools**.
 
 ---
 
-## 0) Design Goals & Non‑Goals
+## Quick Links
+
+| Resource | Description |
+|----------|-------------|
+| [[Homepage]] | Vault entry point with statistics and navigation |
+| [[00-Administration/Vault-Rules/TAXONOMY\|Taxonomy]] | All valid topics, subtopics, difficulty values |
+| [[00-Administration/Vault-Rules/FILE-NAMING-RULES\|Naming Rules]] | File naming conventions |
+| [[00-Administration/Link-Health-Report\|Link Health Report]] | Broken links and orphan detection |
+| [[_templates/_tpl-qna\|Q&A Template]] | Template for new questions |
+
+---
+
+## For LLM Agents
+
+| Agent | Configuration |
+|-------|---------------|
+| **Cursor AI** | Rules in `../.cursorrules` (auto-loaded) |
+| **Claude Code** | Workflows in `.claude/` directory |
+| **General Agents** | See [[AGENTS.md]] for task instructions |
+| **Quick Validation** | [[00-Administration/AI-Agents/AGENT-CHECKLIST.md\|AGENT-CHECKLIST]] |
+| **Gemini CLI** | See [[GEMINI.md]] for command-line workflows |
+
+**Key Rule**: Set `status: draft` for all LLM-created/modified content until human review.
+
+---
+
+## Quick Start
+
+### Creating a New Q&A Note
+
+1. Use template: `_templates/_tpl-qna.md`
+2. Name file: `q-<slug>--<topic>--<difficulty>.md`
+3. Place in correct folder based on topic
+4. Fill both EN and RU sections
+5. Set `status: draft`
+
+### File Naming Examples
+
+| Type | Pattern | Example |
+|------|---------|---------|
+| Q&A | `q-<slug>--<topic>--<difficulty>.md` | `q-two-sum--algorithms--easy.md` |
+| Concept | `c-<slug>.md` | `c-hash-map.md` |
+| MOC | `moc-<topic>.md` | `moc-android.md` |
+
+---
+
+## Design Goals
 
 **Goals:**
-* Keep all information **in one place** per question: EN+RU in the same note.
-* Make notes **queryable** via YAML for Dataview dashboards.
-* Use **folders for coarse topics**; **tags + links** for facets and relationships.
-* Maintain a **controlled vocabulary** for topics, subtopics, difficulty, language, and Android areas.
-* Support **LLM-assisted** translation/normalization with **human review**.
+- Keep all information **in one place** per question: EN+RU in the same note
+- Make notes **queryable** via YAML for Dataview dashboards
+- Use **folders for coarse topics**; **tags + links** for facets and relationships
+- Maintain a **controlled vocabulary** for topics, subtopics, difficulty, language
+- Support **LLM-assisted** translation/normalization with **human review**
 
-**Non‑Goals:**
-* Flashcard/Spaced repetition (Anki) is out of scope.
-* Team collaboration features are not primary (personal vault).
-
----
-
-## 1) Canonical Rules (MUST / SHOULD / MAY)
-
-* **MUST**: One note == one Q&A item; **both languages (EN/RU)** live in the **same file**.
-* **MUST**: Every note starts with **complete YAML frontmatter** (schema below).
-* **MUST**: **English-only tags**; Russian appears in content and `aliases`.
-* **MUST**: Choose **exactly one** `topic` (maps 1:1 to a top-level folder).
-* **SHOULD**: Add **1–3 `subtopics`**; prefer namespaced tags for clarity.
-* **SHOULD**: Link each Q&A to at least one **Concept** and one **MOC** hub.
-* **MAY**: Use LLMs to translate/normalize/suggest links; mark `status: draft` until reviewed.
+**Non-Goals:**
+- Flashcard/Spaced repetition (Anki) is out of scope
+- Team collaboration features are not primary (personal vault)
 
 ---
 
-## 2) Folder Layout (Shallow, Topic‑first)
+## Canonical Rules
 
-> Folders encode coarse topics; use YAML/tags/links for everything else.
+| Level | Rule |
+|-------|------|
+| **MUST** | One note == one Q&A item; both languages (EN/RU) in same file |
+| **MUST** | Every note starts with complete YAML frontmatter |
+| **MUST** | English-only tags; Russian only in content and `aliases` |
+| **MUST** | Exactly one `topic` per note (maps 1:1 to folder) |
+| **SHOULD** | Add 1-3 `subtopics`; use namespaced tags for clarity |
+| **SHOULD** | Link each Q&A to at least one Concept and one MOC |
+| **MAY** | Use LLMs to translate/normalize; mark `status: draft` until reviewed |
+
+---
+
+## Folder Layout
 
 ```
- Homepage.md                # vault entry point
- _templates                 # note templates for Q&A, concepts, MOCs
- 00-Administration          # vault documentation, README, taxonomy
- 10-Concepts                # theory/glossary/definitions referenced across notes
- 20-Algorithms              # coding problems incl. LeetCode-style
- 30-System-Design           # large-scale design, components, trade-offs
- 40-Android                 # platform APIs, lifecycle, Compose, perf, tooling
- 50-Backend                 # backend development, APIs, databases
- 50-Behavioral              # optional, non-technical interview topics
- 60-CompSci                 # CS fundamentals, design patterns, architecture patterns
- 70-Kotlin                  # Kotlin language: coroutines, syntax, idioms, Flow
- 80-Tools                   # development tools: Git, build systems, CI/CD, IDEs
- 90-MOCs                    # Maps of Content (hub/overview notes)
+Homepage.md                 # Vault entry point with stats
+README.md                   # This file - vault documentation
+_templates/                 # Note templates (Q&A, Concept, MOC)
+00-Administration/          # Vault rules, taxonomy, agent docs
+10-Concepts/                # Theory/glossary notes (~359 files)
+20-Algorithms/              # Coding problems, LeetCode-style
+30-System-Design/           # Large-scale design, trade-offs
+40-Android/                 # Platform APIs, Compose, lifecycle (~528 files)
+50-Backend/                 # Backend development, APIs, databases
+60-CompSci/                 # CS fundamentals, design patterns
+70-Kotlin/                  # Coroutines, Flow, syntax, idioms (~358 files)
+80-Tools/                   # Git, build systems, CI/CD, IDEs
+90-MOCs/                    # Maps of Content (hub pages)
 ```
 
 **Rules:**
-* A file **belongs to exactly one** top-level topic folder.
-* Use **10-Concepts** for reusable theory; **90-MOCs** for hub pages per topic.
-* Folders use numeric prefixes (00, 10, 20, etc.) for consistent sorting.
+- A file belongs to **exactly one** top-level topic folder
+- Use **10-Concepts** for reusable theory; **90-MOCs** for hub pages
+- Numeric prefixes (00, 10, 20...) ensure consistent sorting
 
 ---
 
-## 3) Topic Taxonomy (for `topic:`)
+## Topic Taxonomy
 
-Use **one** of the following canonical values (lower kebab-case):
+Use **one** of these canonical values for `topic:` (lower kebab-case):
 
-* `algorithms` — problem solving, techniques (two-pointers, DP, greedy), complexity.
-* `data-structures` — arrays, lists, trees, heaps, hash maps, graphs.
-* `system-design` — large-scale design, scalability, availability, consistency.
-* `android` — platform, lifecycle, Jetpack, Compose, performance, tooling.
-* `kotlin` — Kotlin language: coroutines, flow, syntax, idioms, stdlib.
-* `programming-languages` — other languages (Java, etc.), language comparisons.
-* `architecture-patterns` — MVVM/MVI/Clean, SOLID, modularization.
-* `design-patterns` — creational, structural, behavioral patterns (Singleton, Factory, Observer, etc.).
-* `concurrency` — threads, coroutines, synchronization, actors.
-* `distributed-systems` — consensus, partitioning, replication, queues.
-* `databases` — SQL/NoSQL, indexing, transactions, query plans, ORMs.
-* `networking` — TCP/UDP/HTTP, REST, gRPC, caching, CDNs.
-* `operating-systems` — processes, scheduling, memory, filesystems.
-* `security` — authN/authZ, crypto basics, OWASP, mobile app security.
-* `performance` — profiling, memory/CPU, startup, rendering.
-* `testing` — unit/integration/UI, strategy, TDD, coverage.
-* `devops-ci-cd` — build systems, pipelines, artifacts, release engineering.
-* `cloud` — AWS/GCP/Azure, containers, serverless, infra basics.
-* `debugging` — troubleshooting, logs, tracing, crash analysis.
-* `ui-ux-accessibility` — UI principles, accessibility, navigation patterns.
-* `behavioral` — collaboration, leadership, estimation, culture.
-* `tools` — Git, build systems, CI/CD, IDEs, development tools.
-* `cs` — catch-all CS fundamentals **only if nothing else fits**.
+| Topic | Description | Folder |
+|-------|-------------|--------|
+| `algorithms` | Problem solving, techniques (DP, greedy, two-pointers) | 20-Algorithms |
+| `data-structures` | Arrays, trees, heaps, graphs, hash maps | 20-Algorithms |
+| `system-design` | Scalability, availability, consistency | 30-System-Design |
+| `android` | Platform, lifecycle, Jetpack, Compose | 40-Android |
+| `kotlin` | Coroutines, Flow, syntax, idioms | 70-Kotlin |
+| `architecture-patterns` | MVVM/MVI/Clean, SOLID, modularization | 60-CompSci |
+| `design-patterns` | Creational, structural, behavioral patterns | 60-CompSci |
+| `concurrency` | Threads, synchronization, actors | 60-CompSci |
+| `databases` | SQL/NoSQL, indexing, transactions | 50-Backend |
+| `networking` | TCP/UDP/HTTP, REST, gRPC | 50-Backend |
+| `operating-systems` | Processes, scheduling, memory | 60-CompSci |
+| `security` | AuthN/AuthZ, crypto, OWASP | 60-CompSci |
+| `performance` | Profiling, memory/CPU optimization | 40-Android or 60-CompSci |
+| `testing` | Unit/integration/UI, TDD | 40-Android or 70-Kotlin |
+| `devops-ci-cd` | Build systems, pipelines, release engineering | 80-Tools |
+| `tools` | Git, IDEs, development tools | 80-Tools |
+| `cs` | Catch-all CS fundamentals (use only if nothing else fits) | 60-CompSci |
 
-> Prefer the **most specific** topic (`networking` over `cs`). Expand detail with `subtopics` and tags.
+> Prefer the **most specific** topic. Expand detail with `subtopics` and tags.
 
 ---
 
-## 4) Android Subtopics (for `subtopics:` when `topic: android`)
+## Android Subtopics
 
-Pick **1–3** values. Mirror each into a tag `android/<subtopic>`.
+When `topic: android`, pick **1-3** subtopics. Mirror each to a tag `android/<subtopic>`.
 
-**UI & UX:**
-* `ui-compose`, `ui-views`, `ui-navigation`, `ui-state`, `ui-animation`, `ui-theming`, `ui-accessibility`, `ui-graphics`, `ui-widgets`
+### Categories
 
-**Architecture & Modularity:**
-* `architecture-mvvm`, `architecture-mvi`, `architecture-clean`, `architecture-modularization`, `di-hilt`, `di-koin`, `feature-flags-remote-config`
+| Category | Subtopics |
+|----------|-----------|
+| **UI & UX** | `ui-compose`, `ui-views`, `ui-navigation`, `ui-state`, `ui-animation`, `ui-theming`, `ui-accessibility` |
+| **Architecture** | `architecture-mvvm`, `architecture-mvi`, `architecture-clean`, `architecture-modularization`, `di-hilt`, `di-koin` |
+| **Lifecycle** | `lifecycle`, `activity`, `fragment`, `service`, `broadcast-receiver`, `content-provider` |
+| **Concurrency** | `coroutines`, `flow`, `threads-sync`, `background-execution` |
+| **Data** | `room`, `sqldelight`, `datastore`, `files-media`, `serialization`, `cache-offline` |
+| **Networking** | `networking-http`, `websockets`, `grpc`, `graphql`, `connectivity-caching` |
+| **Performance** | `performance-startup`, `performance-rendering`, `performance-memory`, `performance-battery`, `profiling` |
+| **Testing** | `testing-unit`, `testing-instrumented`, `testing-ui`, `testing-screenshot`, `testing-benchmark` |
+| **Build** | `gradle`, `build-variants`, `dependency-management`, `static-analysis`, `ci-cd` |
+| **Security** | `permissions`, `keystore-crypto`, `obfuscation`, `network-security-config` |
 
-**Lifecycle & Components:**
-* `lifecycle`, `activity`, `fragment`, `service`, `broadcast-receiver`, `content-provider`, `app-startup`, `processes`
-
-**Concurrency & Reactivity:**
-* `coroutines`, `flow`, `threads-sync`, `background-execution`
-
-**Data & Storage:**
-* `room`, `sqldelight`, `datastore`, `files-media`, `serialization`, `cache-offline`
-
-**Networking & APIs:**
-* `networking-http`, `websockets`, `grpc`, `graphql`, `connectivity-caching`
-
-**Performance & Reliability:**
-* `performance-startup`, `performance-rendering`, `performance-memory`, `performance-battery`, `strictmode-anr`, `profiling`
-
-**Testing & QA:**
-* `testing-unit`, `testing-instrumented`, `testing-ui`, `testing-screenshot`, `testing-benchmark`, `testing-mocks`
-
-**Build, Tooling & CI/CD:**
-* `gradle`, `build-variants`, `dependency-management`, `static-analysis`, `ci-cd`, `versioning`
-
-**Distribution & Play:**
-* `app-bundle`, `play-console`, `in-app-updates`, `in-app-review`, `billing`, `instant-apps`
-
-**Security & Privacy:**
-* `permissions`, `keystore-crypto`, `obfuscation`, `network-security-config`, `privacy-sdks`
-
-**Platform APIs & Hardware:**
-* `camera`, `media`, `location`, `bluetooth`, `nfc`, `sensors`, `notifications`, `intents-deeplinks`, `shortcuts-widgets`
-
-**I18n & A11y:**
-* `i18n-l10n`, `a11y`
-
-**Kotlin Multiplatform:**
-* `kmp`, `compose-multiplatform`
-
-**Form Factors:**
-* `wear`, `tv`, `auto`, `foldables-chromeos`
-
-**Analytics & Observability:**
-* `analytics`, `logging-tracing`, `crash-reporting`, `monitoring-slo`
-
-**Monetization & Growth:**
-* `ads`, `engagement-retention`, `ab-testing`
+Full list: [[00-Administration/Vault-Rules/ANDROID-SUBTOPICS.md]]
 
 ---
 
-## 5) File Naming
+## YAML Schema
 
-* **Q&A notes**: `q-<slug>--<topic>--<difficulty>.md` → `q-two-sum--algorithms--easy.md`
-* **Concepts**: `c-<slug>.md` → `c-hash-map.md`
-* **MOCs**: `moc-<topic>.md` → `moc-android.md`
-
-Rules: English, **kebab-case**, short, stable. Use `aliases` for RU/EN titles.
-
----
-
-## 6) YAML Schemas
-
-### 6.1 Q&A Note (Required fields)
+### Q&A Note (Required Fields)
 
 ```yaml
 ---
 # Identity
 id: iv-2025-0001
-title: Two Sum / Два слагаемых
-aliases: [Two Sum, Два слагаемых]
+title: Two Sum / Dva slagayemykh
+aliases: [Two Sum, Dva slagayemykh]
 
 # Classification
 topic: algorithms                  # one canonical topic
-subtopics: [arrays, hash-map]      # 0–3; android-specific when topic=android
+subtopics: [arrays, hash-map]      # 0-3 values
 question_kind: coding              # coding | theory | system-design | android
 difficulty: easy                   # easy | medium | hard
 
-# Language & provenance
+# Language
 original_language: en              # en | ru
-language_tags: [en, ru]            # which languages are present here
-source: https://leetcode.com/problems/two-sum/
-source_note: LeetCode original problem
+language_tags: [en, ru]            # which languages are present
 
-# Workflow & relations
+# Workflow
 status: draft                      # draft | reviewed | ready | retired
 moc: moc-algorithms                # without brackets
 related:                           # list without brackets
   - c-hash-map
   - c-array
 
-# Timestamps (ISO8601)
+# Timestamps
 created: 2025-10-03
 updated: 2025-10-03
 
-# Tags (English only; no leading # in YAML)
+# Tags (English only)
 tags: [leetcode, arrays, hash-map, difficulty/easy]
 ---
 ```
 
-### 6.2 Concept Note
+### Concept Note
 
 ```yaml
 ---
 id: ivc-2025-0001
-title: Hash Map / Хеш-таблица
-aliases: [Hash Map, Hash Table, Хеш-таблица]
+title: Hash Map / Khesh-tablitsa
+aliases: [Hash Map, Hash Table, Khesh-tablitsa]
 kind: concept
-summary: Constant-time average lookups via hashing; collisions via chaining/open addressing.
-links:
-  - url: https://en.wikipedia.org/wiki/Hash_table
-  - url: https://algs4.cs.princeton.edu/34hash/
-created: 2025-10-03
-updated: 2025-10-03
+summary: Constant-time average lookups via hashing.
 tags: [concept, data-structures, hashing]
 ---
 ```
 
-### 6.3 MOC Note
+### MOC Note
 
 ```yaml
 ---
 id: ivm-2025-0001
-title: Algorithms — MOC
+title: Algorithms - MOC
 kind: moc
-created: 2025-10-03
-updated: 2025-10-03
 tags: [moc, topic/algorithms]
 ---
 ```
 
 ---
 
-## 7) Note Body Templates
+## Note Body Structure
 
-### 7.1 Q&A (Bilingual In One note)
+### Q&A Template
 
 ```markdown
 # Question (EN)
 > Clear, concise English version of the prompt.
 
-# Вопрос (RU)
-> Точная русская формулировка задачи.
+# Vopros (RU)
+> Tochnaya russkaya formulirovka zadachi.
 
 ---
 
 ## Answer (EN)
-Explain approach, complexity, trade-offs, pitfalls. Include code when relevant.
+Explain approach, complexity, trade-offs. Include code when relevant.
 
-## Ответ (RU)
-Подробное объяснение на русском. Код при необходимости.
+## Otvet (RU)
+Podrobnoye ob"yasneniye na russkom. Kod pri neobkhodimosti.
 
 ---
 
 ## Follow-ups
-- Variation A ...
-- Edge cases ...
+- Variation A...
+- Edge cases...
 
 ## References
 - [[c-hash-map]]
-- External links (also listed in YAML `sources`).
+- External links
 
 ## Related Questions
 - [[q-three-sum--algorithms--medium]]
 ```
 
-### 7.2 Concept
+---
 
-```markdown
-# Summary (EN)
-Short definition, key properties, diagrams.
+## Tagging Conventions
 
-# Сводка (RU)
-Краткое определение, ключевые свойства, схемы.
+| Namespace | Examples | Use |
+|-----------|----------|-----|
+| `difficulty/` | `difficulty/easy`, `difficulty/hard` | Required for all Q&A |
+| `android/` | `android/ui-compose`, `android/lifecycle` | Mirror from subtopics |
+| `lang/` | `lang/kotlin`, `lang/java` | Programming language used |
+| `topic/` | `topic/algorithms` | Only in MOC files |
 
-## Use Cases / Trade-offs
-- …
-
-## References
-- …
-```
-
-### 7.3 MOC (Hub)
-
-````markdown
-# Start Here
-- [[c-complexity-analysis]]
-- [[c-hash-map]]
-
-## Easy Starters (Dataview)
-```dataview
-TABLE difficulty, file.link, subtopics
-FROM "20-Algorithms"
-WHERE difficulty = "easy"
-SORT file.name ASC
-````
-
-## By Technique
-
-```dataview
-LIST FROM "20-Algorithms"
-WHERE contains(tags, "two-pointers")
-```
-
-````
+**Rules:**
+- English-only, short, reusable
+- Do not duplicate folder name as tag unless helpful
+- Use namespaces for controlled vocabularies
 
 ---
 
-## 8) Tagging & Namespaces
-- **English-only**, short, reusable: `arrays`, `graphs`, `dp`, `kotlin`, `android/compose`.
-- Prefer **namespaces** for controlled vocabularies:
-  - `difficulty/easy|medium|hard`
-  - `lang/en|ru|kotlin|java`
-  - `platform/android|web|backend`
-  - `android/<subtopic>` for Android specifics
-- Do **not** duplicate the folder name as a tag unless helpful (e.g., `topic/algorithms`).
+## Linking Strategy
+
+| Link Type | Rule |
+|-----------|------|
+| **Concepts** | Every Q&A SHOULD link to at least one `[[c-...]]` |
+| **MOCs** | Every Q&A SHOULD reference its topic MOC |
+| **Related** | Use YAML `related:` field (without brackets) |
+| **Backlinks** | Obsidian auto-generates; check in right panel |
 
 ---
 
-## 9) Linking Strategy (Backlinks, Concepts, MOCs)
-- Each Q&A **SHOULD** link to at least one **Concept** and **MOC**.
-- Use concept links for shared theory (e.g., `[[c-binary-tree]]`).
-- For sequences/follow-ups, link forward/back and list in YAML `related`.
-- Maintain a few curated **MOCs** per topic as navigational hubs.
+## Dataview Examples
 
----
-
-## 10) Dataview Dashboards (Examples)
-
-**All LeetCode by difficulty**
+**All LeetCode by Difficulty**
 ```dataview
 TABLE difficulty, subtopics, status
 FROM "20-Algorithms"
 WHERE contains(tags, "leetcode")
 SORT difficulty ASC, file.name ASC
-````
+```
 
-**Android notes touching Compose**
-
+**Android Notes Using Compose**
 ```dataview
 LIST file.link
 FROM "40-Android"
@@ -353,7 +303,6 @@ WHERE contains(tags, "android/ui-compose")
 ```
 
 **Recently Updated (30 days)**
-
 ```dataview
 TABLE updated, topic, difficulty
 FROM ""
@@ -362,47 +311,68 @@ SORT updated DESC
 ```
 
 ---
-## 11) LLM‑Assisted Workflows (Human‑Reviewed)
 
-* **Translate sections**: Generate RU from EN (and vice versa); keep both; review.
-* **Normalize YAML**: Ask the model to validate keys/values; ensure canonical topics/tags.
-* **Suggest cross‑links**: Request 3–5 related concepts/questions; add to `related`.
-* **Summaries**: Produce 1–2 line TL;DR for answer sections.
+## LLM-Assisted Workflows
 
-**Rule**: Keep `status: draft` for LLM-modified notes until reviewed; then set `reviewed`/`ready`.
+| Task | Instruction |
+|------|-------------|
+| **Translate** | Generate RU from EN (or vice versa); keep both; review |
+| **Normalize YAML** | Validate keys/values against taxonomy |
+| **Suggest Links** | Request 3-5 related concepts/questions |
+| **Summaries** | Produce 1-2 line TL;DR for answer sections |
 
----
-
-## 12) Maintenance & Hygiene
-
-* **Statuses**: `draft` → `reviewed` → `ready` (→ `retired` in Archive).
-* **Timestamps**: Update `updated` on meaningful edits.
-* **Renames**: Prefer `aliases` over filename changes; if renaming, fix backlinks.
-* **Archive**: Move deprecated/duplicates to `99-Archive/` (when created) with `status: retired`.
-* **Tag Health**: Periodically dedupe (`hashmap` vs `hash-map`) and standardize.
-
-**Quality Checklist (per note)**
-
-* YAML complete and valid; topic set and folder matches.
-* 1–3 subtopics; tags include `difficulty/*` and any `android/*` derived tags.
-* Linked to ≥1 Concept and ≥1 MOC; `related` populated if applicable.
-* EN/RU sections accurate and equivalent; examples compile.
+**Key Rule**: Keep `status: draft` for LLM-modified notes until human review.
 
 ---
 
-## 13) Appendix — Controlled Vocabularies
+## Maintenance Checklist
 
-**Difficulty**: `easy | medium | hard`
+### Per-Note Quality Check
 
-**Question Kind**: `coding | theory | system-design | android`
+- [ ] YAML complete and valid
+- [ ] Topic matches folder location
+- [ ] 1-3 subtopics defined
+- [ ] Tags include `difficulty/*`
+- [ ] Android notes have `android/*` tags mirrored from subtopics
+- [ ] Linked to at least 1 Concept and 1 MOC
+- [ ] `related` field populated
+- [ ] EN/RU sections accurate and equivalent
+- [ ] Code examples compile
 
-**Languages** (tags): `lang/en | lang/ru | lang/kotlin | lang/java`
+### Vault-Wide Maintenance
 
-**Android Subtopics**: see §4; mirror to `android/<subtopic>` tags.
+- [ ] Check [[00-Administration/Link-Health-Report|Link Health Report]] for broken links
+- [ ] Dedupe similar tags (`hashmap` vs `hash-map`)
+- [ ] Update `updated` timestamp on meaningful edits
+- [ ] Archive deprecated notes with `status: retired`
 
-**Examples (Tags)**
+---
+
+## Status Workflow
 
 ```
-# topic/algorithms, difficulty/medium, arrays, two-pointers
-# android/ui-compose, android/lifecycle, lang/kotlin
+draft --> reviewed --> ready --> retired
+  |                      |
+  +--- (needs work) <----+
 ```
+
+| Status | Meaning |
+|--------|---------|
+| `draft` | New or LLM-generated, needs human review |
+| `reviewed` | Human-verified content and metadata |
+| `ready` | Production quality, fully validated |
+| `retired` | Deprecated, moved to archive |
+
+---
+
+## Controlled Vocabularies Summary
+
+| Field | Valid Values |
+|-------|--------------|
+| `difficulty` | `easy`, `medium`, `hard` |
+| `question_kind` | `coding`, `theory`, `system-design`, `android` |
+| `status` | `draft`, `reviewed`, `ready`, `retired` |
+| `original_language` | `en`, `ru` |
+| `language_tags` | `[en]`, `[ru]`, `[en, ru]` |
+
+Full taxonomy: [[00-Administration/Vault-Rules/TAXONOMY.md]]
