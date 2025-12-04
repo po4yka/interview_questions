@@ -1,7 +1,7 @@
 ---
 id: android-034
 title: How do image loading libraries like Glide work internally? / Как работают библиотеки загрузки изображений вроде Glide?
-aliases: [How do image loading libraries like Glide work internally?, Как работают библиотеки загрузки изображений вроде Glide?]
+aliases: ["How do image loading libraries like Glide work internally?", "Как работают библиотеки загрузки изображений вроде Glide?"]
 topic: android
 subtopics:
   - cache-offline

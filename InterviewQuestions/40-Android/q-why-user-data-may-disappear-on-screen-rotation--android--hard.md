@@ -397,7 +397,6 @@ This helps persist important UI state across configuration changes and simplifie
 - [[q-compose-side-effects-advanced--android--hard]] — продвинутые сайд-эффекты в Compose
 
 ### Продвинутое
-<!-- Оставляем заголовок без ссылок, чтобы избежать битых ссылок. -->
 
 ## Related Questions
 
@@ -408,4 +407,3 @@ This helps persist important UI state across configuration changes and simplifie
 - [[q-compose-side-effects-advanced--android--hard]] - Side effects in Compose
 
 ### Advanced
-<!-- The following referenced notes are not available; keeping section header only to avoid broken links. -->

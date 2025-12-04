@@ -338,5 +338,3 @@ view?.showData(data)
 - [[q-workmanager-chaining--android--hard]] — Background processing with architecture patterns
 - Clean Architecture with MVP in multi-module projects
 - State preservation strategies across configuration changes
-
-```

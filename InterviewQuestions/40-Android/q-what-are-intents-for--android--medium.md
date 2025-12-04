@@ -370,4 +370,3 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### Advanced (Harder)
 - [[q-how-application-priority-is-determined-by-the-system--android--hard]] - System component management
-```

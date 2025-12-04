@@ -512,7 +512,7 @@ fun GoodExample(viewModel: ViewModel) {
 ### Best Practices
 
 1. **State hoisting** — lift state to the lowest common ancestor that needs to control it.
-2. **Stable parameters** — prefer types compatible with Compose stability (`@Immutable`, `@Stable`, immutable collections`) when appropriate.
+2. **Stable parameters** — prefer types compatible with Compose stability (`@Immutable`, `@Stable`, immutable collections) when appropriate.
 3. **Narrow scope** — read state as close as possible to where it is used.
 4. **Keys in lists** — use `key` in `items()` to provide stable identities.
 5. **Derived state** — use `derivedStateOf` for derived/computed values.

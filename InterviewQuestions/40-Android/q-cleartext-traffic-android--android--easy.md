@@ -156,7 +156,7 @@ CLEARTEXT communication not permitted by network security policy
 1. **HTTPS everywhere** — use TLS for all connections.
 2. **Certificate pinning** — for sensitive APIs (banking, payments, etc.).
 3. **Build variants** — allow cleartext only in debug builds (separate Network Security Config and manifest per debug/release).
-4. **Build pipeline** — ensure debug configs (including XML and `usesCleartextTraffic="true") are excluded from release; do this via productFlavors/Build Types instead of relying on ProGuard/R8.
+4. **Build pipeline** — ensure debug configs (including XML and `usesCleartextTraffic="true"`) are excluded from release; do this via productFlavors/Build Types instead of relying on ProGuard/R8.
 
 ---
 

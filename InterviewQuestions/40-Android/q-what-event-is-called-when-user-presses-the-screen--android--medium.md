@@ -48,7 +48,7 @@ anki_last_sync: '2025-11-26T22:32:40.783101'
 1. **`dispatchTouchEvent()`** — сначала вызывается у `Activity`, затем у `ViewGroup` и далее у конкретного `View`, распределяя `MotionEvent`.
 2. **`onInterceptTouchEvent()`** (только у `ViewGroup`) — родитель может решить перехватить дальнейшие события этого жеста.
 3. **`onTouchEvent()`** — основной метод обработки касаний во `View`.
-4. При корректной последовательности `ACTION_DOWN` → `ACTION_UP` без существенного движения, без `ACTION_CANCEL`, при кликабельном и включённом `View` — может быть вызвано **`performClick()`**, а затем **`onClick()` слушателя.
+4. При корректной последовательности `ACTION_DOWN` → `ACTION_UP` без существенного движения, без `ACTION_CANCEL`, при кликабельном и включённом `View` — может быть вызвано **`performClick()`**, а затем **`onClick()`** слушателя.
 
 Ключевые моменты:
 - Само «нажатие» (первое прикосновение) соответствует **`ACTION_DOWN`**.
@@ -409,7 +409,7 @@ fun ComposeTouchEvents() {
 2. **`dispatchTouchEvent()`** запускает распространение события (`Activity` → `ViewGroup` → `View`).
 3. **`onInterceptTouchEvent()`** (`ViewGroup`) может перехватить дальнейшие события жеста.
 4. **`onTouchEvent()`** в целевом `View` обрабатывает касание.
-5. Если жест завершается подходящим **`ACTION_UP`** (без отмены, в пределах допусков, `View` кликабелен и включен), вызывается **`performClick()`**, ведущий к **`onClick()`.
+5. Если жест завершается подходящим **`ACTION_UP`** (без отмены, в пределах допусков, `View` кликабелен и включен), вызывается **`performClick()`**, ведущий к **`onClick()`**.
 
 Ключевые моменты:
 - Низкоуровневое событие для нажатия — `MotionEvent.ACTION_DOWN`.
@@ -419,7 +419,7 @@ fun ComposeTouchEvents() {
 
 ## Answer (EN)
 
-When a user presses the screen in Android, the system generates a touch event with action **`MotionEvent.ACTION_DOWN`**, which travels through the touch dispatch chain. The main callbacks involved are: **`dispatchTouchEvent()`**, **`onInterceptTouchEvent()`** (for `ViewGroup`s), **`onTouchEvent()`**, and, for clickable views with a valid tap sequence, **`performClick()` / `onClick()`.
+When a user presses the screen in Android, the system generates a touch event with action **`MotionEvent.ACTION_DOWN`**, which travels through the touch dispatch chain. The main callbacks involved are: **`dispatchTouchEvent()`**, **`onInterceptTouchEvent()`** (for `ViewGroup`s), **`onTouchEvent()`**, and, for clickable views with a valid tap sequence, **`performClick()` / `onClick()`**.
 
 Key idea: the physical press corresponds to **`ACTION_DOWN`**; higher-level callbacks (`onClick`) are derived from the full gesture (DOWN → UP without cancel/too much movement, etc.).
 
@@ -778,7 +778,7 @@ When the user presses the screen:
 2. **`dispatchTouchEvent()`** starts the event distribution (`Activity` → `ViewGroup` → `View`).
 3. **`onInterceptTouchEvent()`** (`ViewGroup`) may choose to intercept subsequent events for this gesture.
 4. **`onTouchEvent()`** in the target `View` handles the touch.
-5. If the gesture completes with a suitable **`ACTION_UP`** (no cancel, within touch slop, view clickable/enabled), **`performClick()`** is invoked, leading to **`onClick()`.
+5. If the gesture completes with a suitable **`ACTION_UP`** (no cancel, within touch slop, view clickable/enabled), **`performClick()`** is invoked, leading to **`onClick()`**.
 
 Key points:
 - The low-level event for the press is `MotionEvent.ACTION_DOWN`.

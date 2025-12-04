@@ -54,7 +54,7 @@ Parse output and identify issues by severity:
 
 | Issue | Fix |
 |-------|-----|
-| Code without language | Add ` ```kotlin ` or ` ```java ` |
+| Code without language | Add `` ```kotlin `` or `` ```java `` |
 | Unescaped generics | Wrap in backticks: `List<String>` |
 | Trailing whitespace | Remove trailing spaces |
 | Wrong header levels | Use # for Question, ## for Answer, ### for subsections |

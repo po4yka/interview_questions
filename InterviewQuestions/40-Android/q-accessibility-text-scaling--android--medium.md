@@ -195,5 +195,3 @@ fun TextScalingPreview() {
 - [[q-accessibility-testing--android--medium]] - Accessibility testing
 
 ### Advanced
-
-```
