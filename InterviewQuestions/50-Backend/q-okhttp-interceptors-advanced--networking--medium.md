@@ -2,8 +2,8 @@
 id: net-004
 title: "OkHttp Interceptors Advanced / Продвинутые перехватчики OkHttp"
 aliases: ["OkHttp Interceptors Advanced", "Продвинутые перехватчики OkHttp"]
-topic: networking
-subtopics: [authentication, caching, http-clients]
+topic: databases
+subtopics: [api-clients, authentication, caching, http-clients]
 question_kind: theory
 difficulty: medium
 original_language: en

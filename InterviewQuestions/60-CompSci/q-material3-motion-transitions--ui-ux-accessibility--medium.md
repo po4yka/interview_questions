@@ -2,14 +2,14 @@
 id: ui-001
 title: "Material3 Motion Transitions / Движение и переходы Material3"
 aliases: ["Material3 Motion Transitions", "Движение и переходы Material3"]
-topic: ui-ux-accessibility
-subtopics: [ui-animation]
+topic: cs
+subtopics: [ui-ux-accessibility, ui-animation]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-ui-ux-accessibility
+moc: moc-cs
 related: [c-animation, c-animation-framework, q-jetpack-compose-basics--android--medium]
 created: 2025-10-13
 updated: 2025-11-11

@@ -2,8 +2,8 @@
 
 **Purpose**: Claude Code Skills and configuration for maintaining this bilingual Obsidian interview questions vault.
 
-**Version**: 1.0
-**Last Updated**: 2025-11-09
+**Version**: 2.0
+**Last Updated**: 2025-01-05
 
 ---
 
@@ -12,7 +12,7 @@
 This directory contains Claude Code configuration for automated vault maintenance:
 
 - **Custom Instructions**: Auto-loaded brief context (`custom_instructions.md`)
-- **Skills**: 6 specialized skills for common workflows (`skills/`)
+- **Skills**: 17 specialized skills for common workflows (`skills/`)
 - **Documentation**: This README
 
 ---
@@ -23,14 +23,16 @@ This directory contains Claude Code configuration for automated vault maintenanc
 .claude/
 ├── README.md                           # This file
 ├── custom_instructions.md              # Auto-loaded context (~500 tokens)
-└── skills/                             # Skills directory
+└── skills/                             # Skills directory (17 skills)
+    │
+    │   # Original Skills (Content Creation)
     ├── obsidian-qna-creator/           # Create Q&A notes
     │   ├── SKILL.md
     │   └── core/
     │       ├── taxonomy_validator.py
     │       ├── filename_generator.py
     │       └── yaml_builder.py
-    ├── obsidian-validator/             # Validate notes
+    ├── obsidian-validator/             # Validate single notes
     │   ├── SKILL.md
     │   └── core/
     │       ├── validator.py
@@ -41,7 +43,31 @@ This directory contains Claude Code configuration for automated vault maintenanc
     │   └── SKILL.md
     ├── obsidian-moc-creator/           # Create MOCs
     │   └── SKILL.md
-    └── obsidian-link-analyzer/         # Suggest links
+    ├── obsidian-link-analyzer/         # Suggest links
+    │   └── SKILL.md
+    │
+    │   # New Skills (Vault Maintenance)
+    ├── vault-health-report/            # Generate vault health reports
+    │   └── SKILL.md
+    ├── batch-validator/                # Validate multiple files at once
+    │   └── SKILL.md
+    ├── android-enforcer/               # Android-specific rule enforcement
+    │   └── SKILL.md
+    ├── link-fixer/                     # Fix orphans and broken links
+    │   └── SKILL.md
+    ├── gap-analyzer/                   # Identify content gaps
+    │   └── SKILL.md
+    ├── bulk-normalizer/                # Batch YAML normalization
+    │   └── SKILL.md
+    ├── translation-auditor/            # Audit bilingual content
+    │   └── SKILL.md
+    ├── duplicate-detector/             # Find duplicate questions
+    │   └── SKILL.md
+    ├── study-path-builder/             # Create learning progressions
+    │   └── SKILL.md
+    ├── code-validator/                 # Validate code examples
+    │   └── SKILL.md
+    └── url-ingestor/                   # Generate Q&As from URLs
         └── SKILL.md
 ```
 
@@ -142,6 +168,161 @@ User: "Translate q-coroutine-basics--kotlin--easy.md to Russian"
 - Enhancing existing notes
 - Building knowledge graph
 - Finding related questions
+
+### New Skills: Vault Maintenance (Added 2025-01-05)
+
+#### 7. vault-health-report
+**Purpose**: Generate comprehensive vault health reports with statistics and issue detection
+
+**Use When**:
+- Weekly/monthly vault health checks
+- Before major content updates
+- Monitoring vault quality over time
+
+**What It Does**:
+- Counts notes by topic, difficulty, status
+- Identifies YAML issues across vault
+- Finds orphaned notes and broken links
+- Reports translation coverage
+- Calculates overall health score (0-100)
+
+#### 8. batch-validator
+**Purpose**: Validate multiple files at once with aggregated reporting
+
+**Use When**:
+- After creating multiple notes
+- Before committing changes
+- Auditing entire folders or topics
+
+**What It Does**:
+- Validates all notes in a folder or by topic
+- Groups issues by severity (CRITICAL, ERROR, WARNING)
+- Generates fix suggestions and checklists
+
+#### 9. android-enforcer
+**Purpose**: Validate and auto-fix Android-specific rules
+
+**Use When**:
+- Creating Android Q&A notes
+- Auditing Android content
+- Fixing subtopic-to-tag mirroring
+
+**What It Does**:
+- Checks `android/<subtopic>` tag mirroring
+- Validates subtopics against ANDROID-SUBTOPICS list
+- Auto-adds missing mirrored tags
+
+#### 10. link-fixer
+**Purpose**: Bulk fix link-related issues across the vault
+
+**Use When**:
+- Fixing orphaned notes
+- Repairing broken links
+- Improving vault connectivity
+
+**What It Does**:
+- Finds and fixes orphaned notes
+- Adds missing related links based on similarity
+- Removes broken links
+- Suggests bidirectional links
+
+#### 11. gap-analyzer
+**Purpose**: Identify content gaps and suggest new Q&As to create
+
+**Use When**:
+- Planning content sprints
+- Quarterly content reviews
+- Identifying under-represented topics
+
+**What It Does**:
+- Analyzes coverage by topic and difficulty
+- Finds topics with missing difficulty levels
+- Suggests specific Q&A titles to fill gaps
+- Generates prioritized content roadmaps
+
+#### 12. bulk-normalizer
+**Purpose**: Batch normalize YAML frontmatter across files
+
+**Use When**:
+- Monthly maintenance
+- After bulk content imports
+- Standardizing metadata format
+
+**What It Does**:
+- Standardizes field ordering
+- Converts multi-line arrays to single-line
+- Updates timestamps
+- Removes duplicate fields
+
+#### 13. translation-auditor
+**Purpose**: Audit bilingual content quality and completeness
+
+**Use When**:
+- Reviewing translation coverage
+- Quality control for bilingual content
+- Finding partially translated notes
+
+**What It Does**:
+- Finds partially translated sections
+- Checks EN/RU content parity
+- Reports translation completeness by folder
+- Flags inconsistent terminology
+
+#### 14. duplicate-detector
+**Purpose**: Find duplicate or near-duplicate questions
+
+**Use When**:
+- Quarterly vault audits
+- After bulk content imports
+- Cleaning up redundant content
+
+**What It Does**:
+- Detects exact title duplicates
+- Finds semantically similar questions
+- Suggests merge candidates
+- Generates deduplication reports
+
+#### 15. study-path-builder
+**Purpose**: Create learning progressions and study paths
+
+**Use When**:
+- Building study guides
+- Creating MOCs with learning order
+- Helping users navigate content
+
+**What It Does**:
+- Builds easy → medium → hard chains
+- Suggests prerequisite relationships
+- Generates study guides
+- Creates progression MOCs
+
+#### 16. code-validator
+**Purpose**: Validate and analyze code examples in notes
+
+**Use When**:
+- After creating algorithm questions
+- During technical content review
+- Quality control for code examples
+
+**What It Does**:
+- Checks Kotlin/Java/Python syntax
+- Verifies code block language tags
+- Detects missing imports
+- Flags incomplete or placeholder code
+
+#### 17. url-ingestor
+**Purpose**: Generate Q&A notes from web articles and documentation
+
+**Use When**:
+- Content sprints from reference materials
+- Expanding topic coverage
+- Importing from documentation
+
+**What It Does**:
+- Fetches and parses URL content
+- Extracts key concepts as questions
+- Generates bilingual Q&A structure
+- Auto-classifies topic and difficulty
 
 ---
 
@@ -463,6 +644,23 @@ Sample usage
 ---
 
 ## Version History
+
+### v2.0 (2025-01-05)
+- Added 11 new vault maintenance skills
+- Total skills: 17
+- New skills include:
+  - vault-health-report: Comprehensive vault health reports
+  - batch-validator: Validate multiple files at once
+  - android-enforcer: Android-specific rule enforcement
+  - link-fixer: Fix orphans and broken links
+  - gap-analyzer: Identify content gaps
+  - bulk-normalizer: Batch YAML normalization
+  - translation-auditor: Audit bilingual content
+  - duplicate-detector: Find duplicate questions
+  - study-path-builder: Create learning progressions
+  - code-validator: Validate code examples
+  - url-ingestor: Generate Q&As from URLs
+- Updated documentation and directory structure
 
 ### v1.0 (2025-11-09)
 - Initial implementation

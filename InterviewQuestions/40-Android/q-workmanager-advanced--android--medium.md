@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-background-tasks]
+related: [c-background-tasks, c-android-background-execution, c-jobscheduler]
 created: 2025-10-12
 updated: 2025-11-10
 tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]

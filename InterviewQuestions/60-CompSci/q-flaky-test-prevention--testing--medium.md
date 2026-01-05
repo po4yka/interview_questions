@@ -2,14 +2,14 @@
 id: test-001
 title: "Flaky Test Prevention / Предотвращение нестабильных тестов"
 aliases: ["Flaky Test Prevention", "Предотвращение нестабильных тестов"]
-topic: testing
-subtopics: [best-practices]
+topic: cs
+subtopics: [testing, best-practices]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-testing
+moc: moc-cs
 related: [c-testing, q-robolectric-vs-instrumented--android--medium, q-testing-compose-ui--android--medium]
 created: 2025-10-15
 updated: 2025-11-11

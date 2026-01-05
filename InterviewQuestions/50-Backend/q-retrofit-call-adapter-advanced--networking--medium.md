@@ -2,8 +2,8 @@
 id: net-002
 title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
 aliases: ["Retrofit Call Adapter Advanced", "Продвинутый CallAdapter для Retrofit"]
-topic: networking
-subtopics: [retrofit]
+topic: databases
+subtopics: [api-clients, retrofit]
 question_kind: theory
 difficulty: medium
 original_language: en

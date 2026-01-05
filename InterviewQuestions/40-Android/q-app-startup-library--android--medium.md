@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy]
+related: [q-android-app-components--android--easy, c-application-class, c-performance-optimization]
 created: 2024-10-15
 updated: 2024-11-10
 sources: []

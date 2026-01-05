@@ -2,8 +2,8 @@
 id: net-005
 title: "Network Request Deduplication / Дедупликация сетевых запросов"
 aliases: [Network Request Deduplication, Request Deduplication, Дедупликация запросов, Дедупликация сетевых запросов]
-topic: networking
-subtopics: [concurrency]
+topic: databases
+subtopics: [api-clients, concurrency]
 question_kind: theory
 difficulty: hard
 original_language: en

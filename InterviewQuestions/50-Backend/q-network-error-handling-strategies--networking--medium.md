@@ -2,8 +2,8 @@
 id: net-003
 title: Network Error Handling Strategies / Стратегии обработки сетевых ошибок
 aliases: [Network Error Handling Strategies, Стратегии обработки сетевых ошибок]
-topic: networking
-subtopics: [http]
+topic: databases
+subtopics: [api-clients, error-handling, http]
 question_kind: theory
 difficulty: medium
 original_language: en

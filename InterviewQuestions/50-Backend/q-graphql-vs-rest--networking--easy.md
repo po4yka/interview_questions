@@ -2,8 +2,8 @@
 id: net-001
 title: "GraphQL vs REST / GraphQL против REST"
 aliases: ["GraphQL vs REST", "GraphQL против REST"]
-topic: networking
-subtopics: [http]
+topic: databases
+subtopics: [api-design, http]
 question_kind: theory
 difficulty: easy
 original_language: en

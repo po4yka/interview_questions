@@ -2,12 +2,12 @@
 id: sec-002
 title: Certificate Pinning / Закрепление сертификатов
 aliases: [Certificate Pinning, Закрепление сертификатов]
-topic: security
-subtopics: [networking, tls]
+topic: cs
+subtopics: [security, networking, tls]
 question_kind: android
 difficulty: medium
 status: draft
-moc: moc-security
+moc: moc-cs
 related: [c-computer-science, q-android-keystore-system--android--medium, q-android-security-practices-checklist--android--medium, q-api-rate-limiting-throttling--android--medium, q-app-security-best-practices--android--medium, q-okhttp-interceptors-advanced--networking--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11

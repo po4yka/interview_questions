@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-custom-views]
+related: [c-custom-views, c-touch-events, c-gesture-detection]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-events]

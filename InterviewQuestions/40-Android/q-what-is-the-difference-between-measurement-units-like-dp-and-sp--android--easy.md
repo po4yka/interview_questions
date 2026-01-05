@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-accessibility]
+related: [c-accessibility, c-android-resources, c-android-views]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [accessibility, android/ui-accessibility, android/ui-widgets, difficulty/easy, dp, sp, ui]

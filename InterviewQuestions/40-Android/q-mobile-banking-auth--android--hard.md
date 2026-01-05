@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-keystore]
+related: [c-android-keystore, c-security-hardening, c-biometric-authentication]
 sources: []
 created: 2025-10-29
 updated: 2025-11-10

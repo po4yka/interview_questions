@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-kotlin, q-reified-type-parameters--kotlin--medium, q-kotlin-reified-types--kotlin--hard, q-kotlin-generics--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard, generics, kotlin, programming-languages, reified, type-erasure]
@@ -74,8 +74,24 @@ Key idea (for JVM): without special mechanisms (reified inline functions, reflec
 
 ## Связанные Вопросы (RU)
 
-No related questions available.
+### Понятия
+- [[c-kotlin]]
+
+### Связанные (Тот же уровень)
+- [[q-kotlin-reified-types--kotlin--hard]]
+- [[q-kotlin-generics--kotlin--hard]]
+
+### Предпосылки (Легче)
+- [[q-reified-type-parameters--kotlin--medium]]
 
 ## Related Questions
 
-No related questions available.
+### Concepts
+- [[c-kotlin]]
+
+### Related (Same Level)
+- [[q-kotlin-reified-types--kotlin--hard]]
+- [[q-kotlin-generics--kotlin--hard]]
+
+### Prerequisites (Easier)
+- [[q-reified-type-parameters--kotlin--medium]]
