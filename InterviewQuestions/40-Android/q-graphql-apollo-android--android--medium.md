@@ -3,30 +3,18 @@ id: android-167
 title: GraphQL with Apollo Android / GraphQL с Apollo Android
 aliases: [GraphQL with Apollo Android, GraphQL с Apollo Android]
 topic: android
-subtopics:
-  - graphql
+subtopics: [graphql]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-retrofit
-  - q-android-lint-tool--android--medium
-  - q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
-  - q-main-thread-android--android--medium
-  - q-parsing-optimization-android--android--medium
-  - q-play-app-signing--android--medium
-  - q-sharedpreferences-definition--android--easy
+related: [c-retrofit, q-android-lint-tool--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium, q-play-app-signing--android--medium, q-sharedpreferences-definition--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/graphql, difficulty/medium, graphql]
 
-date created: Saturday, November 1st 2025, 12:46:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > GraphQL с Apollo Android

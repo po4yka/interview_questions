@@ -16,8 +16,6 @@ related: [c-compose-semantics, c-jetpack-compose, c-custom-views, c-material-des
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["a11y", "accessibility", "android", "concept", "difficulty/medium", "talkback", "ui-ux"]
-date created: Saturday, October 25th 2025, 11:03:49 am
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Accessibility / Доступность

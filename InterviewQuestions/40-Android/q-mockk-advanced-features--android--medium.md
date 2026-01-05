@@ -3,29 +3,18 @@ id: android-351
 title: MockK Advanced Features / Продвинутые возможности MockK
 aliases: [MockK Advanced Features, Продвинутые возможности MockK]
 topic: android
-subtopics:
-  - testing-mocks
+subtopics: [testing-mocks]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-testing
-  - q-android-testing-strategies--android--medium
-  - q-camerax-advanced-pipeline--android--hard
-  - q-recyclerview-itemdecoration-advanced--android--medium
-  - q-room-type-converters-advanced--android--medium
-  - q-why-use-diffutil--android--medium
+related: [c-android-testing, q-android-testing-strategies--android--medium, q-camerax-advanced-pipeline--android--hard, q-recyclerview-itemdecoration-advanced--android--medium, q-room-type-converters-advanced--android--medium, q-why-use-diffutil--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-mocks, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Объясните relaxed mocks, spy, аннотации MockK и моккирование корутин в MockK. Чем MockK отличается от Mockito?

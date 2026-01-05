@@ -3,32 +3,19 @@ id: android-102
 title: Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment и Activity
 aliases: [Fragment Lifecycle Connection, Связь жизненных циклов Fragment и Activity]
 topic: android
-subtopics:
-  - activity
-  - fragment
-  - lifecycle
+subtopics: [activity, fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
 moc: moc-android
-related:
-  - c-activity
-  - q-android-runtime-art--android--medium
-  - q-fragment-vs-activity-lifecycle--android--medium
-  - q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-view-composition-strategy-compose--android--medium
+related: [c-activity, q-android-runtime-art--android--medium, q-fragment-vs-activity-lifecycle--android--medium, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-view-composition-strategy-compose--android--medium]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:31:34 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

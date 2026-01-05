@@ -3,24 +3,14 @@ id: android-611
 title: Koin Resolution Internals / Внутренние механизмы Koin
 aliases: [Koin Instance Resolution, Koin Resolution Internals, Внутренние механизмы Koin]
 topic: android
-subtopics:
-  - architecture-clean
-  - di-koin
+subtopics: [architecture-clean, di-koin]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dependency-injection
-  - q-koin-fundamentals--android--medium
-  - q-koin-scope-management--android--medium
-  - q-koin-testing-strategies--android--medium
-  - q-koin-vs-dagger-philosophy--android--hard
-  - q-koin-vs-hilt-comparison--android--medium
+related: [c-dependency-injection, q-koin-fundamentals--android--medium, q-koin-scope-management--android--medium, q-koin-testing-strategies--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-koin-vs-hilt-comparison--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/architecture-clean, android/di-koin, dependency-injection, difficulty/hard, koin]
@@ -32,8 +22,6 @@ sources:
   - url: "https://blog.insert-koin.io/posts/koin-3-4-deep-dive/"
     note: "Deep dive по разрешению зависимостей в Koin 3.x"
 
-date created: Wednesday, November 5th 2025, 11:24:34 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Объясните, как Koin разрешает зависимости внутри себя: от DSL-модуля до получения экземпляра. Раскройте работу DefinitionResolver, ScopeRegistry, InstanceContext и стратегию выбора scope.

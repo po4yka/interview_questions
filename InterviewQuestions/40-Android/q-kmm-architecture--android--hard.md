@@ -16,8 +16,6 @@ updated: 2025-11-11
 sources: []
 tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, kotlin, multiplatform]
 
-date created: Saturday, November 1st 2025, 1:01:27 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

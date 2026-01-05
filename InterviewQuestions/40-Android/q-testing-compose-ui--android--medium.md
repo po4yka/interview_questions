@@ -3,30 +3,18 @@ id: android-253
 title: Testing Compose UI / Тестирование Compose UI
 aliases: [Testing Compose UI, Тестирование Compose UI]
 topic: android
-subtopics:
-  - testing-ui
-  - ui-compose
+subtopics: [testing-ui, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-jetpack-compose
-  - c-testing
-  - q-compose-core-components--android--medium
-  - q-compose-testing--android--medium
-  - q-compose-ui-testing-advanced--android--hard
-  - q-what-is-diffutil-for--android--medium
+related: [c-jetpack-compose, c-testing, q-compose-core-components--android--medium, q-compose-testing--android--medium, q-compose-ui-testing-advanced--android--hard, q-what-is-diffutil-for--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-ui, android/ui-compose, difficulty/medium, jetpack-compose, testing, ui-testing]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Тестирование Compose UI

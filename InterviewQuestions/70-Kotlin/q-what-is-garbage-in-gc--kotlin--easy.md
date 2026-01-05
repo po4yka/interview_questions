@@ -14,8 +14,6 @@ related: [c-garbage-collection, c-memory-management]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management]
-date created: Saturday, November 1st 2025, 1:01:36 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Что такое "мусор" в сборщике мусора?

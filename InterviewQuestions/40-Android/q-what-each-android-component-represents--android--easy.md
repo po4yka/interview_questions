@@ -3,32 +3,18 @@ id: android-382
 title: Android Components / Компоненты Android
 aliases: [Android Components, Компоненты Android]
 topic: android
-subtopics:
-  - activity
-  - broadcast-receiver
-  - service
+subtopics: [activity, broadcast-receiver, service]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - c-broadcast-receiver
-  - q-android-components-besides-activity--android--easy
-  - q-what-is-activity-and-what-is-it-used-for--android--medium
-  - q-what-is-broadcastreceiver--android--easy
-  - q-what-unifies-android-components--android--easy
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
+related: [c-android-components, c-broadcast-receiver, q-android-components-besides-activity--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-is-broadcastreceiver--android--easy, q-what-unifies-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/broadcast-receiver, android/service, components, difficulty/easy, intent]
 
-date created: Saturday, November 1st 2025, 12:47:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Компоненты Android

@@ -3,31 +3,19 @@ id: android-138
 title: How To Choose Layout For Fragment / Как выбрать layout для Fragment
 aliases: [How To Choose Layout For Fragment, Как выбрать layout для Fragment]
 topic: android
-subtopics:
-  - fragment
-  - ui-views
+subtopics: [fragment, ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-fragments
-  - q-fragment-basics--android--easy
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-save-data-outside-fragment--android--medium
-  - q-what-is-layout-types-and-when-to-use--android--easy
-  - q-why-user-data-may-disappear-on-screen-rotation--android--hard
+related: [c-fragments, q-fragment-basics--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-save-data-outside-fragment--android--medium, q-what-is-layout-types-and-when-to-use--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/fragment, android/ui-views, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

@@ -5,10 +5,7 @@ aliases: ["Flow Time Operators: debounce, sample, throttle", "Временные
 
 # Classification
 topic: kotlin
-subtopics:
-  - coroutines
-  - flow
-  - time-operators
+subtopics: [coroutines, flow, time-operators]
 question_kind: theory
 difficulty: medium
 
@@ -28,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, time-operators]
-date created: Saturday, November 1st 2025, 9:25:30 am
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что такое операторы `debounce`, `sample` и throttle в Kotlin `Flow`? В чём различия и случаи использования?

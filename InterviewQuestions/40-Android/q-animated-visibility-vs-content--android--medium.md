@@ -3,30 +3,18 @@ id: android-076
 title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против AnimatedContent против Crossfade
 aliases: [AnimatedVisibility vs AnimatedContent vs Crossfade, AnimatedVisibility против AnimatedContent против Crossfade]
 topic: android
-subtopics:
-  - ui-animation
-  - ui-compose
+subtopics: [ui-animation, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-recomposition
-  - c-jetpack-compose
-  - q-android-jetpack-overview--android--easy
-  - q-compose-custom-animations--android--medium
-  - q-compose-gesture-detection--android--medium
-  - q-compose-semantics--android--medium
+related: [c-compose-recomposition, c-jetpack-compose, q-android-jetpack-overview--android--easy, q-compose-custom-animations--android--medium, q-compose-gesture-detection--android--medium, q-compose-semantics--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-animation, android/ui-compose, animation, compose, difficulty/medium]
 sources: []
-date created: Saturday, November 1st 2025, 1:03:10 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > В чем разница между AnimatedVisibility, AnimatedContent и Crossfade в Jetpack Compose?

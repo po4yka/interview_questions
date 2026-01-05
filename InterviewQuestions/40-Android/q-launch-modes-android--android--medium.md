@@ -3,34 +3,20 @@ id: android-010
 title: Android Activity Launch Modes / Режимы запуска Activity в Android
 aliases: [Android Activity Launch Modes, Режимы запуска Activity в Android]
 topic: android
-subtopics:
-  - activity
-  - ui-navigation
+subtopics: [activity, ui-navigation]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - c-compose-navigation
-  - q-android-components-besides-activity--android--easy
-  - q-android-lint-tool--android--medium
-  - q-kapt-vs-ksp--android--medium
-  - q-parsing-optimization-android--android--medium
-  - q-viewmodel-vs-onsavedinstancestate--android--medium
-  - q-which-event-is-triggered-when-user-presses-screen--android--medium
+related: [c-activity, c-compose-navigation, q-android-components-besides-activity--android--easy, q-android-lint-tool--android--medium, q-kapt-vs-ksp--android--medium, q-parsing-optimization-android--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium]
 created: 2025-10-05
 updated: 2025-11-11
 tags: [android/activity, android/ui-navigation, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:46:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Какие режимы запуска (launch modes) вы знаете?

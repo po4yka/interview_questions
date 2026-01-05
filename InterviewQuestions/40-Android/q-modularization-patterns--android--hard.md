@@ -3,31 +3,19 @@ id: android-005
 title: Android Modularization Patterns / Паттерны модуляризации в Android
 aliases: [Android Modularization Patterns, Паттерны модуляризации в Android]
 topic: android
-subtopics:
-  - architecture-clean
-  - architecture-modularization
+subtopics: [architecture-clean, architecture-modularization]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related:
-  - c-clean-architecture
-  - q-android-architectural-patterns--android--medium
-  - q-android-lint-tool--android--medium
-  - q-android-modularization--android--medium
-  - q-does-state-made-in-compose-help-avoid-race-condition--android--medium
-  - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
+related: [c-clean-architecture, q-android-architectural-patterns--android--medium, q-android-lint-tool--android--medium, q-android-modularization--android--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-05
 updated: 2025-11-11
 tags: [android/architecture-clean, android/architecture-modularization, difficulty/hard, en, ru]
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Какие паттерны модуляризации вы знаете?

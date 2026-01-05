@@ -14,8 +14,6 @@ related: [c-kotlin, c-sealed-classes, q-kotlin-enum-classes--kotlin--easy]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, polymorphism, sealed-classes, sealed-interfaces, when-expression]
-date created: Friday, October 31st 2025, 6:30:53 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 

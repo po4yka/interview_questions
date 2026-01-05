@@ -3,33 +3,20 @@ id: android-032
 title: How to schedule local notifications at exact time? / Как запланировать локальные уведомления на точное время?
 aliases: ["How to schedule local notifications at exact time?", "Как запланировать локальные уведомления на точное время?"]
 topic: android
-subtopics:
-  - background-execution
-  - notifications
+subtopics: [background-execution, notifications]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-android
-related:
-  - c-background-tasks
-  - q-dagger-build-time-optimization--android--medium
-  - q-fragments-history-and-purpose--android--hard
-  - q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
-  - q-mvi-one-time-events--android--medium
-  - q-recomposition-choreographer--android--hard
-  - q-which-event-is-called-when-user-touches-screen--android--medium
+related: [c-background-tasks, q-dagger-build-time-optimization--android--medium, q-fragments-history-and-purpose--android--hard, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-mvi-one-time-events--android--medium, q-recomposition-choreographer--android--hard, q-which-event-is-called-when-user-touches-screen--android--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [android/background-execution, android/notifications, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 
 # Вопрос (RU)

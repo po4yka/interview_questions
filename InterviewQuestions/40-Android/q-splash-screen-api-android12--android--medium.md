@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/app-startup, android/ui-animation, android/ui-views, android12, difficulty/medium, splash-screen]
 sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
 
-date created: Saturday, November 1st 2025, 1:24:29 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 

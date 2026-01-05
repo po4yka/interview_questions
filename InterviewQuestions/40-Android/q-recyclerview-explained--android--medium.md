@@ -3,28 +3,18 @@ id: android-292
 title: RecyclerView Explained / Объяснение RecyclerView
 aliases: [RecyclerView Explained, Объяснение RecyclerView]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
-  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
-  - q-recyclerview-itemdecoration-advanced--android--medium
-  - q-what-does-itemdecoration-do--android--medium
-  - q-why-are-fragments-needed-if-there-is-activity--android--hard
+related: [q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-recyclerview-itemdecoration-advanced--android--medium, q-what-does-itemdecoration-do--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Объяснение RecyclerView

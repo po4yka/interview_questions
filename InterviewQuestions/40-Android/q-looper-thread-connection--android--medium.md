@@ -3,28 +3,18 @@ id: android-229
 title: Looper Thread Connection / Связь Looper и потока
 aliases: [Looper Thread Connection, Связь Looper и потока]
 topic: android
-subtopics:
-  - coroutines
-  - threads-sync
+subtopics: [coroutines, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - q-handler-looper-comprehensive--android--medium
-  - q-handler-looper-main-thread--android--medium
-  - q-main-thread-android--android--medium
+related: [c-coroutines, q-handler-looper-comprehensive--android--medium, q-handler-looper-main-thread--android--medium, q-main-thread-android--android--medium]
 sources: []
 created: 2024-10-15
 updated: 2025-11-11
 tags: [android/coroutines, android/threads-sync, difficulty/medium, handler, looper, message-queue]
-date created: Saturday, November 1st 2025, 12:46:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-inline-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, generics, inline-functions, kotlin, reified, type-system]
-date created: Friday, October 31st 2025, 6:30:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 

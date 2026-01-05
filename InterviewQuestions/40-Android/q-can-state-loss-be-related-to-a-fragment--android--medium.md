@@ -3,31 +3,19 @@ id: android-174
 title: Can Fragment State Loss Occur? / Бывает ли потеря состояния у Fragment
 aliases: ["Can Fragment State Loss Occur?", "Бывает ли потеря состояния у Fragment"]
 topic: android
-subtopics:
-  - fragment
-  - processes
+subtopics: [fragment, processes]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-lifecycle
-  - c-android-navigation
-  - q-activity-lifecycle-methods--android--medium
-  - q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium
-  - q-how-to-choose-layout-for-fragment--android--easy
-  - q-save-data-outside-fragment--android--medium
+related: [c-android-lifecycle, c-android-navigation, q-activity-lifecycle-methods--android--medium, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-save-data-outside-fragment--android--medium]
 sources: []
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/processes, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Вопрос (RU)

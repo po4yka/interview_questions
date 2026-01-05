@@ -14,8 +14,6 @@ related: [c-algorithms, c-computer-science]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy, java, object-class, oop, programming-languages/inheritance]
-date created: Saturday, November 1st 2025, 12:43:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > От какого объекта наследуются все классы в Java?

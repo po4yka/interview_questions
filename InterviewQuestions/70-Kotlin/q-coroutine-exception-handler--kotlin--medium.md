@@ -13,12 +13,7 @@ aliases: ["CoroutineExceptionHandler installation and usage", "CoroutineExceptio
 tags: [ceh, coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
 moc: moc-kotlin
 related: [c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
-subtopics:
-  - ceh
-  - coroutines
-  - error-handling
-date created: Saturday, November 1st 2025, 12:10:38 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
+subtopics: [ceh, coroutines, error-handling]
 ---
 # Вопрос (RU)
 > Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?

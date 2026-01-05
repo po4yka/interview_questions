@@ -15,8 +15,6 @@ related: [c-background-tasks, c-coroutines, c-workmanager]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, difficulty/medium, jetpack, scheduled-tasks, workmanager]
-date created: Saturday, November 1st 2025, 1:26:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Что такое WorkManager и когда его следует использовать?

@@ -14,8 +14,6 @@ related: [c-equality, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [collections, contracts, difficulty/medium, equality, kotlin, object-methods]
-date created: Friday, October 31st 2025, 6:29:22 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Расскажи о контрактах `equals` и `hashCode`

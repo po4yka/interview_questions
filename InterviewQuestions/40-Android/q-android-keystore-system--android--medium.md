@@ -3,28 +3,18 @@ id: sec-001
 title: Android Keystore System / Система Android Keystore
 aliases: [Android Keystore System, Система Android Keystore]
 topic: android
-subtopics:
-  - keystore-crypto
+subtopics: [keystore-crypto]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/keystore-crypto, difficulty/medium]
-related:
-  - c-android-keystore
-  - q-android-security-best-practices--android--medium
-  - q-android-security-practices-checklist--android--medium
-  - q-database-encryption-android--android--medium
-  - q-encrypted-file-storage--android--medium
+related: [c-android-keystore, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium, q-encrypted-file-storage--android--medium]
 sources: ["https://developer.android.com/training/articles/keystore"]
-date created: Tuesday, November 25th 2025, 8:13:30 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Как реализовать безопасное хранение ключей с помощью Android Keystore?

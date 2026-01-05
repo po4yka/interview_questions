@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:07:23 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 

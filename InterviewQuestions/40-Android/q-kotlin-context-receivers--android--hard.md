@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
 sources: ["https://kotlinlang.org/docs/whatsnew15.html#context-receivers"]
 
-date created: Saturday, November 1st 2025, 1:24:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Что такое context receivers в Kotlin и когда их использовать в Android?

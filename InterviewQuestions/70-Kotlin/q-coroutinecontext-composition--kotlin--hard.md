@@ -17,8 +17,6 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, flow, kotlin]
 
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Объясните как элементы `CoroutineContext` комбинируются и наследуются. Создайте пользовательский элемент `CoroutineContext` для отслеживания ID запроса в асинхронных операциях.

@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/easy]
 sources: ["https://developer.android.com/guide/background", "https://developer.android.com/kotlin/coroutines"]
 
-date created: Saturday, November 1st 2025, 1:26:27 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

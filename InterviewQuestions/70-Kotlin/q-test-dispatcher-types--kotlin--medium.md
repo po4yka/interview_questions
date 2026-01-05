@@ -13,12 +13,7 @@ updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 moc: moc-kotlin
 related: [c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
-subtopics:
-  - coroutines
-  - runtest
-  - testing
-date created: Friday, November 7th 2025, 6:45:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
+subtopics: [coroutines, runtest, testing]
 ---
 # Вопрос (RU)
 > В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?

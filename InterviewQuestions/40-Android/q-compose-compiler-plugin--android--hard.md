@@ -3,31 +3,19 @@ id: android-041
 title: Compose Compiler Plugin / Плагин компилятора Compose
 aliases: [Compose Compiler, Compose Compiler Plugin, Компилятор Compose, Плагин компилятора Compose]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-compose
+subtopics: [performance-memory, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-recomposition
-  - c-compose-state
-  - q-android-performance-measurement-tools--android--medium
-  - q-compose-multiplatform--android--hard
-  - q-compose-performance-optimization--android--hard
-  - q-compose-stability-skippability--android--hard
+related: [c-compose-recomposition, c-compose-state, q-android-performance-measurement-tools--android--medium, q-compose-multiplatform--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, compiler, compose, difficulty/hard, performance]
 
-date created: Saturday, November 1st 2025, 1:24:29 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как работает плагин компилятора Compose и как он оптимизирует перекомпозицию?

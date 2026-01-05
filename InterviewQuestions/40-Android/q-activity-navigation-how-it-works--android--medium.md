@@ -3,24 +3,14 @@ id: android-377
 title: Как работает навигация Activity / How Activity Navigation Works
 aliases: [Activity Back Stack, Activity Navigation, Навигация Activity, Стек активностей]
 topic: android
-subtopics:
-  - activity
-  - ui-navigation
+subtopics: [activity, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity-lifecycle
-  - q-activity-lifecycle-methods--android--medium
-  - q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
-  - q-how-to-pass-data-from-one-activity-to-another--android--medium
-  - q-single-activity-approach--android--medium
-  - q-what-is-intent--android--easy
+related: [c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-how-to-pass-data-from-one-activity-to-another--android--medium, q-single-activity-approach--android--medium, q-what-is-intent--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/ui-navigation, back-stack, difficulty/medium, intent]
@@ -28,8 +18,6 @@ sources:
   - "https://developer.android.com/guide/components/activities/tasks-and-back-stack"
   - "https://developer.android.com/guide/navigation"
 
-date created: Saturday, November 1st 2025, 1:24:37 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 

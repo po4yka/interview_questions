@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, best-practices, coroutines, difficulty/medium, error-handling, kotlin, networking, okhttp, rest-api, retrofit]
 
-date created: Friday, October 31st 2025, 6:30:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 

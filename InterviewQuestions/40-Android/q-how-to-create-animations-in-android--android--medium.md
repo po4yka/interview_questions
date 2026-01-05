@@ -3,30 +3,18 @@ id: android-394
 title: How To Create Animations In Android / Как создавать анимации в Android
 aliases: [How To Create Animations In Android, Как создавать анимации в Android]
 topic: android
-subtopics:
-  - ui-animation
+subtopics: [ui-animation]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-custom-views
-  - q-android-lint-tool--android--medium
-  - q-app-start-types-android--android--medium
-  - q-compose-custom-animations--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-parsing-optimization-android--android--medium
-  - q-stable-classes-compose--android--hard
+related: [c-custom-views, q-android-lint-tool--android--medium, q-app-start-types-android--android--medium, q-compose-custom-animations--android--medium, q-data-sync-unstable-network--android--hard, q-parsing-optimization-android--android--medium, q-stable-classes-compose--android--hard]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-animation, animations, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:53 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как создавать анимации в Android

@@ -3,31 +3,19 @@ id: android-040
 title: Macrobenchmark for App Startup / Macrobenchmark для запуска приложения
 aliases: [Macrobenchmark for App Startup, Macrobenchmark для запуска приложения]
 topic: android
-subtopics:
-  - testing-benchmark
+subtopics: [testing-benchmark]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related:
-  - c-perfetto
-  - q-android-performance-measurement-tools--android--medium
-  - q-app-startup-library--android--medium
-  - q-app-startup-optimization--android--medium
-  - q-baseline-profiles-optimization--android--medium
-  - q-fix-slow-app-startup-legacy--android--hard
-  - q-performance-optimization-android--android--medium
+related: [c-perfetto, q-android-performance-measurement-tools--android--medium, q-app-startup-library--android--medium, q-app-startup-optimization--android--medium, q-baseline-profiles-optimization--android--medium, q-fix-slow-app-startup-legacy--android--hard, q-performance-optimization-android--android--medium]
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/profiling, android/testing-benchmark, difficulty/medium, macrobenchmark, perfetto, performance, startup]
 
-date created: Saturday, November 1st 2025, 12:46:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Реализуйте macrobenchmark для запуска приложения. Измерьте холодный, теплый и горячий запуск. Используйте трассировку Perfetto для выявления узких мест и оптимизации на основе результатов.

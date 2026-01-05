@@ -3,31 +3,19 @@ id: android-190
 title: Async Operations in Android / Асинхронные операции в Android
 aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android
-subtopics:
-  - background-execution
-  - coroutines
-  - threads-sync
+subtopics: [background-execution, coroutines, threads-sync]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - c-lifecycle
-  - q-android-async-primitives--android--easy
-  - q-multithreading-tools-android--android--medium
-  - q-network-operations-android--android--medium
+related: [c-coroutines, c-lifecycle, q-android-async-primitives--android--easy, q-multithreading-tools-android--android--medium, q-network-operations-android--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:04:14 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие существуют способы выполнения асинхронных операций в Android?

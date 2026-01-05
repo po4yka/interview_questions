@@ -9,8 +9,6 @@ related: [c-kotlin, c-data-structures, c-functional-programming]
 created: 2025-11-05
 updated: 2025-11-05
 tags: [collections, concept, data-structures, java, kotlin]
-date created: Wednesday, November 5th 2025, 6:30:35 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

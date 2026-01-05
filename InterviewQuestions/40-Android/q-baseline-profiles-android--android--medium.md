@@ -3,30 +3,18 @@ id: android-310
 title: Baseline Profiles Android / Базовые профили Android
 aliases: [Baseline Profiles Android, Базовые профили Android]
 topic: android
-subtopics:
-  - gradle
-  - performance-startup
-  - profiling
+subtopics: [gradle, performance-startup, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-basics
-  - q-android-lint-tool--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-baseline-profiles-optimization--android--medium
-  - q-parsing-optimization-android--android--medium
+related: [c-android-basics, q-android-lint-tool--android--medium, q-android-performance-measurement-tools--android--medium, q-baseline-profiles-optimization--android--medium, q-parsing-optimization-android--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
-date created: Saturday, November 1st 2025, 1:04:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое Baseline Profiles в Android и как они работают?

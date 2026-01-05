@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, garbage-collection, jvm, memory-management, programming-languages]
 
-date created: Tuesday, November 25th 2025, 12:55:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что такое Garbage Collector Roots?

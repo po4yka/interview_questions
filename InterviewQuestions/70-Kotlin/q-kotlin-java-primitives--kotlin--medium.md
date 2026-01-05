@@ -14,8 +14,6 @@ related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/medium, java, primitives, types, wrappers]
-date created: Friday, October 31st 2025, 6:30:30 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Какие примитивы есть в Kotlin, а какие в Java?

@@ -25,8 +25,6 @@ created: 2025-10-11
 updated: 2025-11-09
 
 tags: [cancellation, cooperation, coroutines, difficulty/medium, ensureActive, kotlin, yield]
-date created: Sunday, October 12th 2025, 12:27:46 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Реализуйте долгоиграющие операции с поддержкой отмены. Правильно используйте `yield()`, `ensureActive()` и `isActive`. Корректно обрабатывайте `CancellationException`.

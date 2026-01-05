@@ -3,31 +3,20 @@ id: android-472
 title: Compose Testing / Тестирование Compose
 aliases: [Compose Testing, Тестирование Compose]
 topic: android
-subtopics:
-  - testing-ui
-  - ui-compose
+subtopics: [testing-ui, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-status: ready
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-android-testing
-  - q-accessibility-compose--android--medium
-  - q-compose-performance-optimization--android--hard
-  - q-compose-semantics--android--medium
-  - q-compose-ui-testing-advanced--android--hard
+related: [c-android-testing, q-accessibility-compose--android--medium, q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium, q-compose-ui-testing-advanced--android--hard]
 created: 2024-10-20
 updated: 2025-11-10
 tags: [android/testing-ui, android/ui-compose, compose, difficulty/medium, semantics, testing]
 sources:
   - "https://developer.android.com/jetpack/compose/testing"
 
-date created: Tuesday, November 25th 2025, 8:13:30 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как тестировать UI в Jetpack Compose? Какие основные инструменты и подходы используются?

@@ -14,8 +14,6 @@ related: [c-coroutines, c-kotlin, c-structured-concurrency]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, job, kotlin]
-date created: Saturday, November 1st 2025, 1:01:37 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Для чего нужен объект Job?

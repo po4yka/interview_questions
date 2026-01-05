@@ -15,8 +15,6 @@ related: [c-material-design, c-material-3, c-android-resources, c-theming, c-des
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["android", "auto-generated", "concept", "difficulty/medium"]
-date created: Monday, November 10th 2025, 8:37:43 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

@@ -14,8 +14,6 @@ related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-infix-f
 created: 2025-10-15
 updated: 2025-11-11
 tags: [class-modifiers, classes, difficulty/easy, final, inheritance, kotlin, open, syntax]
-date created: Friday, October 31st 2025, 6:29:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Какой модификатор в Kotlin делает класс нерасширяемым?

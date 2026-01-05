@@ -14,8 +14,6 @@ updated: 2025-11-09
 tags: [collections, difficulty/easy, kotlin, map]
 moc: moc-kotlin
 related: [c-collections, c-kotlin]
-date created: Friday, October 31st 2025, 6:30:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Расскажи про коллекцию `Map`

@@ -15,8 +15,6 @@ related: [c-scaling-strategies, c-load-balancing, c-caching-strategies, c-micros
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
-date created: Tuesday, November 11th 2025, 8:46:19 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

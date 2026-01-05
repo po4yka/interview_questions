@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
 
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Как в Kotlin называется функция, которая вызывается на объекте для преобразования его в другой тип?

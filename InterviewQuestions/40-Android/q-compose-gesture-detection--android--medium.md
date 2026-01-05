@@ -3,29 +3,18 @@ id: android-038
 title: Compose Gesture Detection / Обработка жестов в Compose
 aliases: [Compose Gesture Detection, Обработка жестов в Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, ui-state]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - q-compose-semantics--android--medium
-  - q-mutable-state-compose--android--medium
-  - q-recomposition-compose--android--medium
+related: [c-compose-state, c-jetpack-compose, q-compose-semantics--android--medium, q-mutable-state-compose--android--medium, q-recomposition-compose--android--medium]
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gestures]
-date created: Saturday, November 1st 2025, 1:24:40 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как обрабатывать жесты в Jetpack Compose?

@@ -3,29 +3,18 @@ id: android-044
 title: Accessibility Text Scaling / Масштабирование текста для доступности
 aliases: [Text Scaling Accessibility, Масштабирование текста]
 topic: android
-subtopics:
-  - ui-accessibility
-  - ui-theming
+subtopics: [ui-accessibility, ui-theming]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-accessibility
-  - q-accessibility-color-contrast--android--medium
-  - q-accessibility-testing--android--medium
-  - q-accessibility-text-scaling--android--medium
-  - q-how-to-break-text-by-screen-width--android--easy
+related: [c-accessibility, q-accessibility-color-contrast--android--medium, q-accessibility-testing--android--medium, q-accessibility-text-scaling--android--medium, q-how-to-break-text-by-screen-width--android--easy]
 created: 2025-10-11
 updated: 2025-11-10
 sources: []
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
-date created: Saturday, November 1st 2025, 1:24:36 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как обрабатывать масштабирование текста для доступности в Android?

@@ -14,8 +14,6 @@ related: [c-kotlin, c-sealed-classes, q-kotlin-lambda-expressions--kotlin--mediu
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, programming-languages, sealed-classes]
-date created: Friday, October 31st 2025, 6:32:39 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > В чем особенность sealed классов?

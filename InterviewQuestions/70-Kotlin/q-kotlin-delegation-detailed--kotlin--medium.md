@@ -27,8 +27,6 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [by-keyword, delegates, delegation, difficulty/medium, kotlin, patterns]
-date created: Sunday, October 12th 2025, 1:56:16 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 anki_synced: true
 anki_slugs:
   - 70-kotlin-q-kotlin-delegation-detailed-kotlin-medium-p01-en

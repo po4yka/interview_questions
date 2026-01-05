@@ -3,35 +3,20 @@ id: android-004
 title: Ways to Reduce Android App Size / Способы уменьшения размера Android приложения
 aliases: [Ways to Reduce Android App Size, Способы уменьшения размера Android приложения]
 topic: android
-subtopics:
-  - app-bundle
-  - build-variants
-  - performance-memory
+subtopics: [app-bundle, build-variants, performance-memory]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: "https://github.com/Kirchhoff-Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related:
-  - c-app-bundle
-  - c-gradle
-  - c-memory-management
-  - q-app-size-optimization--android--medium
-  - q-app-start-types-android--android--medium
-  - q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium
-  - q-memory-leak-vs-oom-android--android--medium
-  - q-reduce-apk-size-techniques--android--medium
+related: [c-app-bundle, c-gradle, c-memory-management, q-app-size-optimization--android--medium, q-app-start-types-android--android--medium, q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium, q-memory-leak-vs-oom-android--android--medium, q-reduce-apk-size-techniques--android--medium]
 created: 2025-10-05
 updated: 2025-11-11
 tags: [android/app-bundle, android/build-variants, android/performance-memory, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:47:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Какие способы уменьшения размера приложения вы знаете?

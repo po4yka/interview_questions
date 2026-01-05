@@ -16,8 +16,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/networking-http, android/performance-startup, difficulty/medium, networking, okhttp, performance, retrofit]
 
-date created: Saturday, November 1st 2025, 1:03:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как реализовать rate limiting и throttling для API запросов в Android?

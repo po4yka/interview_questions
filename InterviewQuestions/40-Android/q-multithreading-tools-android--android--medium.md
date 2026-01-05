@@ -15,8 +15,6 @@ created: 2024-10-15
 updated: 2025-11-10
 sources: ["https://developer.android.com/kotlin/coroutines", "https://developer.android.com/topic/libraries/architecture/workmanager"]
 tags: [android/background-execution, android/coroutines, android/performance-startup, concurrency, difficulty/medium, rxjava, workmanager]
-date created: Saturday, November 1st 2025, 1:25:23 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

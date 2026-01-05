@@ -14,8 +14,6 @@ related: [q-abstract-class-vs-interface--kotlin--medium, q-lifecyclescope-viewmo
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes, kotlin/functions]
-date created: Saturday, November 1st 2025, 1:26:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Какое ключевое слово используется в Kotlin при объявлении параметров конструктора и когда необходимо явно указывать `constructor`?

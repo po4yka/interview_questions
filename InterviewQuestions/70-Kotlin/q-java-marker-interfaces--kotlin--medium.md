@@ -15,8 +15,6 @@ created: 2024-10-13
 updated: 2025-11-11
 tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, randomaccess, serializable]
 
-date created: Tuesday, November 25th 2025, 12:55:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Перечислите маркерные интерфейсы в Java.

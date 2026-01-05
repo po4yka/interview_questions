@@ -3,31 +3,18 @@ id: android-157
 title: Material3 Dynamic Color Theming / Динамические цвета Material3
 aliases: [Material3 Dynamic Color Theming, Динамические цвета Material3]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-theming
+subtopics: [ui-compose, ui-theming]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - q-accessibility-color-contrast--android--medium
-  - q-compose-semantics--android--medium
-  - q-how-to-create-dynamic-screens-at-runtime--android--hard
-  - q-material3-components--android--easy
-  - q-single-activity-approach--android--medium
+related: [c-compose-state, c-jetpack-compose, q-accessibility-color-contrast--android--medium, q-compose-semantics--android--medium, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-material3-components--android--easy, q-single-activity-approach--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-theming, design, difficulty/medium, dynamic-color, material3]
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как работает динамический цвет Material 3? Объясните генерацию цветовой схемы из обоев, реализацию пользовательских тем и обработку светлого/тёмного режимов с динамической темизацией.

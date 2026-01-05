@@ -14,8 +14,6 @@ related: [c-kotlin, q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifier
 created: 2025-10-15
 updated: 2025-11-10
 tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
-date created: Saturday, November 1st 2025, 1:01:37 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 anki_synced: true
 anki_slugs:
   - 70-kotlin-q-why-data-sealed-classes-kotlin-medium-p01-ru

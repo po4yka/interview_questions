@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [architecture, difficulty/medium, distributed-systems, scalability, system-design]
 sources: ["https://en.wikipedia.org/wiki/Scalability"]
 
-date created: Sunday, October 12th 2025, 8:22:20 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > В чём разница между горизонтальным и вертикальным масштабированием? Когда следует использовать каждый подход, и каковы их компромиссы?

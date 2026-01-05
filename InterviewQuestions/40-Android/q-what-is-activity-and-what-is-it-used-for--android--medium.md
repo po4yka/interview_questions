@@ -3,29 +3,17 @@ id: android-187
 title: Activity / Компонент Activity
 aliases: [Activity, Компонент Activity]
 topic: android
-subtopics:
-  - activity
+subtopics: [activity]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity-lifecycle
-  - c-android-components
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-single-activity-pros-cons--android--medium
-  - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
-  - q-what-each-android-component-represents--android--easy
-  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+related: [c-activity-lifecycle, c-android-components, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-single-activity-pros-cons--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-each-android-component-represents--android--easy, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:47:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Компонент `Activity`

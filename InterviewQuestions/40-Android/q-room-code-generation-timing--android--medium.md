@@ -3,30 +3,18 @@ id: android-122
 title: Room Code Generation Timing / Время генерации кода Room
 aliases: [Room Code Generation Timing, Время генерации кода Room]
 topic: android
-subtopics:
-  - room
+subtopics: [room]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-room
-  - q-dagger-framework-overview--android--hard
-  - q-kapt-ksp-migration--android--medium
-  - q-kapt-vs-ksp--android--medium
-  - q-room-database-migrations--android--medium
-  - q-room-relations-embedded--android--medium
-  - q-room-type-converters-advanced--android--medium
+related: [c-room, q-dagger-framework-overview--android--hard, q-kapt-ksp-migration--android--medium, q-kapt-vs-ksp--android--medium, q-room-database-migrations--android--medium, q-room-relations-embedded--android--medium, q-room-type-converters-advanced--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/room, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:47:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

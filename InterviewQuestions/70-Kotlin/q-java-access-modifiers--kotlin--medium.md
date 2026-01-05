@@ -14,8 +14,6 @@ related: [c-architecture-patterns]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programming-languages]
-date created: Tuesday, November 25th 2025, 12:55:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Как лучше всего использовать модификаторы доступа в Java?

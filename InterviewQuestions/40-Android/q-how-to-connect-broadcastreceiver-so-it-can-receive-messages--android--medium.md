@@ -3,28 +3,18 @@ id: android-280
 title: How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений
 aliases: [How To Connect BroadcastReceiver So It Can Receive Messages, Как подключить BroadcastReceiver для получения сообщений]
 topic: android
-subtopics:
-  - broadcast-receiver
+subtopics: [broadcast-receiver]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-broadcast-receiver
-  - q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
-  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
-  - q-what-can-be-done-through-composer--android--medium
-  - q-what-is-broadcastreceiver--android--easy
+related: [c-broadcast-receiver, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-what-can-be-done-through-composer--android--medium, q-what-is-broadcastreceiver--android--easy]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как подключить `BroadcastReceiver` для получения сообщений

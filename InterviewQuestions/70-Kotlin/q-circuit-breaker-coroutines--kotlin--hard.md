@@ -15,8 +15,6 @@ tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, mic
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 
-date created: Saturday, November 1st 2025, 12:10:11 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 

@@ -17,8 +17,6 @@ created: 2023-10-11
 updated: 2025-11-09
 tags: [concurrency, difficulty/hard, flow, kotlin, performance]
 
-date created: Sunday, October 12th 2025, 12:27:46 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Реализуйте обработку противодавления в `Flow`. Сравните стратегии `buffer`, `conflate` и `collectLatest` с производительными бенчмарками.

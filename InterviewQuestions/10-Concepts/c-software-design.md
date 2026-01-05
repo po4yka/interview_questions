@@ -15,8 +15,6 @@ related: [c-system-design, c-architecture-patterns, c-clean-architecture, c-desi
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
-date created: Tuesday, November 11th 2025, 7:36:50 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

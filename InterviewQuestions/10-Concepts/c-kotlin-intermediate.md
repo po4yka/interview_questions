@@ -15,8 +15,6 @@ related: []
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "kotlin"]
-date created: Monday, November 10th 2025, 7:48:48 am
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

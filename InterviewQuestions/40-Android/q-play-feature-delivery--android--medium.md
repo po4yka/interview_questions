@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android, android/app-bundle, android/build-variants, android/gradle, app-bundle, difficulty/medium, dynamic-modules]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:03:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

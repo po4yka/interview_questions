@@ -3,30 +3,18 @@ id: android-346
 title: SurfaceView Rendering / Рендеринг SurfaceView
 aliases: [SurfaceView Rendering, Рендеринг SurfaceView]
 topic: android
-subtopics:
-  - performance-rendering
-  - ui-views
+subtopics: [performance-rendering, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-surfaces
-  - q-opengl-advanced-rendering--android--medium
-  - q-overdraw-gpu-rendering--android--medium
-  - q-viewgroup-vs-view-differences--android--easy
-  - q-what-methods-redraw-views--android--medium
-  - q-which-class-to-use-for-rendering-view-in-background-thread--android--hard
+related: [c-android-surfaces, q-opengl-advanced-rendering--android--medium, q-overdraw-gpu-rendering--android--medium, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard]
 created: 2023-10-15
 updated: 2025-11-11
 tags: [android/performance-rendering, android/ui-views, difficulty/medium, rendering, surfaceview]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Рендеринг SurfaceView

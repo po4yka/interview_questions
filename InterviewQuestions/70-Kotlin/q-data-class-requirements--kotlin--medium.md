@@ -14,8 +14,6 @@ related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-actor-patte
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-classes, difficulty/medium, programming-languages]
-date created: Friday, October 31st 2025, 6:33:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Какие требования при создании data class в Kotlin?

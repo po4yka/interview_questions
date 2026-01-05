@@ -17,8 +17,6 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [buffered, channel-types, channels, coroutines, difficulty/medium, kotlin, rendezvous]
 
-date created: Sunday, October 12th 2025, 3:43:52 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое каналы в корутинах Kotlin? Объясните различные типы каналов (Rendezvous, Buffered, Unlimited, Conflated), их характеристики и когда использовать каждый тип.

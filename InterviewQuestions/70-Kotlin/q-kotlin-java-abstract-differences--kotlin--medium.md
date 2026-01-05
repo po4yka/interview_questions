@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-structured-concurrency-patterns--kotlin
 created: 2025-10-15
 updated: 2025-11-09
 tags: [abstract, difficulty/medium, inheritance, java, oop, open, programming-languages]
-date created: Friday, October 31st 2025, 6:30:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?

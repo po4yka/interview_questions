@@ -5,10 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics:
-  - cinterop
-  - kotlin-native
-  - multiplatform
+subtopics: [cinterop, kotlin-native, multiplatform]
 question_kind: theory
 difficulty: hard
 
@@ -28,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplatform, native]
-date created: Sunday, October 12th 2025, 3:21:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Что такое Kotlin/Native? Объясните нативную компиляцию, interop с C библиотеками и Objective-C/Swift, различия в модели памяти и случаи использования для iOS разработки.

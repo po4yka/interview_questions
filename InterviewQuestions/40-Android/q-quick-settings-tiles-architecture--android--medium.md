@@ -3,25 +3,14 @@ id: android-631
 title: Quick Settings Tiles Architecture / Quick Settings
 aliases: [Quick Settings, Quick Settings Tiles Architecture]
 topic: android
-subtopics:
-  - background-execution
-  - shortcuts-widgets
-  - ui-state
+subtopics: [background-execution, shortcuts-widgets, ui-state]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - c-android-surfaces
-  - q-advanced-share-sheet-shortcuts--android--hard
-  - q-architecture-components-libraries--android--easy
-  - q-multi-module-best-practices--android--hard
-  - q-play-billing-v6-architecture--android--hard
+related: [c-android-components, c-android-surfaces, q-advanced-share-sheet-shortcuts--android--hard, q-architecture-components-libraries--android--easy, q-multi-module-best-practices--android--hard, q-play-billing-v6-architecture--android--hard]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/background-execution, android/shortcuts-widgets, android/ui-state, difficulty/medium]
@@ -31,8 +20,6 @@ sources:
 - url: "https://developer.android.com/develop/shortcutmanager"
   note: App Shortcuts documentation
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Как спроектировать архитектуру Quick Settings Tile так, чтобы тайл оставался синхронизирован с состоянием приложения, безопасно поддерживал фоновые операции и был согласован с интеграцией App Shortcuts?

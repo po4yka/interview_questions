@@ -3,24 +3,14 @@ id: android-644
 title: Conversation Notifications & Bubbles / Уведомления и Bubbles для переписки
 aliases: [Conversation Notifications & Bubbles, Уведомления и Bubbles для переписки]
 topic: android
-subtopics:
-  - notifications
-  - ui-navigation
-  - ui-state
+subtopics: [notifications, ui-navigation, ui-state]
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-communication-surfaces
-  - q-advanced-share-sheet-shortcuts--android--hard
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-local-notification-exact-time--android--medium
+related: [c-communication-surfaces, q-advanced-share-sheet-shortcuts--android--hard, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-local-notification-exact-time--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/notifications, android/ui-navigation, android/ui-state, difficulty/hard]
@@ -28,8 +18,6 @@ sources:
   - "https://developer.android.com/about/versions/11/features/bubbles"
   - "https://developer.android.com/develop/ui/views/notifications/conversation"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как реализовать и поддерживать conversation notifications и bubbles: shortcuts, MessagingStyle, человекоориентированные уведомления, ограничения Android 11–14 и аналитика?

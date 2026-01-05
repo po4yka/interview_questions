@@ -3,30 +3,18 @@ id: android-309
 title: What Does ItemDecoration Do / Что делает ItemDecoration
 aliases: [ItemDecoration, Что делает ItemDecoration]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-ui-composition
-  - c-android-view-system
-  - c-recyclerview
-  - q-android-app-components--android--easy
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-recyclerview-itemdecoration-advanced--android--medium
+related: [c-android-ui-composition, c-android-view-system, c-recyclerview, q-android-app-components--android--easy, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-recyclerview-itemdecoration-advanced--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-views, difficulty/medium, itemdecoration, recyclerview]
-date created: Saturday, November 1st 2025, 12:47:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 

@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-kotlin-delegation-detailed--kotlin--med
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Что известно о делегировании?

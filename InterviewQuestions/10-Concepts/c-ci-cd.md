@@ -15,8 +15,6 @@ related: [c-ci-cd-pipelines, c-ci-cd-patterns, c-gradle, c-testing, c-git]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Monday, November 10th 2025, 8:37:43 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

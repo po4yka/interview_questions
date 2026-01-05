@@ -3,30 +3,18 @@ id: android-206
 title: Android Components Unity / Объединение основных компонентов
 aliases: [Android Components Unity, Объединение компонентов]
 topic: android
-subtopics:
-  - activity
-  - lifecycle
-  - service
+subtopics: [activity, lifecycle, service]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-android-components-besides-activity--android--easy
-  - q-main-android-components--android--easy
-  - q-what-each-android-component-represents--android--easy
-  - q-what-unifies-android-components--android--easy
+related: [c-android-components, q-android-components-besides-activity--android--easy, q-main-android-components--android--easy, q-what-each-android-component-represents--android--easy, q-what-unifies-android-components--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/lifecycle, android/service, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Объединение основных компонентов

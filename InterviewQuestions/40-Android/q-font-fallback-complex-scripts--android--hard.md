@@ -3,23 +3,14 @@ id: android-643
 title: Font Fallback for Complex Scripts / Резерв шрифтов для сложных скриптов
 aliases: [Font Fallback for Complex Scripts, Резерв шрифтов для сложных скриптов]
 topic: android
-subtopics:
-  - i18n-l10n
-  - ui-theming
+subtopics: [i18n-l10n, ui-theming]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-android-components
-  - q-compose-core-components--android--medium
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
+related: [c-android, c-android-components, q-compose-core-components--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/i18n-l10n, android/ui-theming, difficulty/hard]
@@ -27,8 +18,6 @@ sources:
   - "https://developer.android.com/guide/topics/resources/font-resource"
   - "https://developer.android.com/guide/topics/text/downloadable-fonts"
   - "https://material.io/design/typography/international-typography.html"
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

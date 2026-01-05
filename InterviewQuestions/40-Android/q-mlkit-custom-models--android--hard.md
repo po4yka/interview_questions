@@ -3,33 +3,19 @@ id: android-126
 title: ML Kit Custom Models / Кастомные модели ML Kit
 aliases: [ML Kit Custom Models, Кастомные модели ML Kit]
 topic: android
-subtopics:
-  - ab-testing
-  - analytics
-  - performance-memory
+subtopics: [ab-testing, analytics, performance-memory]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-memory-management
-  - c-mobile-observability
-  - q-compose-custom-animations--android--medium
-  - q-custom-view-attributes--android--medium
-  - q-mlkit-face-detection--android--medium
-  - q-performance-optimization-android--android--medium
-  - q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy
+related: [c-memory-management, c-mobile-observability, q-compose-custom-animations--android--medium, q-custom-view-attributes--android--medium, q-mlkit-face-detection--android--medium, q-performance-optimization-android--android--medium, q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ab-testing, android/analytics, android/performance-memory, difficulty/hard, machine-learning, ml-kit, tensorflow-lite]
 
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

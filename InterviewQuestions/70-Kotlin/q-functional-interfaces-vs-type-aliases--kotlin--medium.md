@@ -17,8 +17,6 @@ created: 2025-10-05
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin, type-aliases]
 
-date created: Thursday, October 16th 2025, 4:43:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?

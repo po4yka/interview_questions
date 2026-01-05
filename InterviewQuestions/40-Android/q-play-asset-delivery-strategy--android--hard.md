@@ -3,22 +3,14 @@ id: android-639
 title: Play Asset Delivery Strategy / Стратегия Play Asset Delivery
 aliases: [Play Asset Delivery Strategy, Стратегия Play Asset Delivery]
 topic: android
-subtopics:
-  - app-bundle
+subtopics: [app-bundle]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-app-bundle
-  - q-android-app-bundles--android--easy
-  - q-play-billing-v6-architecture--android--hard
-  - q-play-feature-delivery--android--medium
-  - q-play-feature-delivery-dynamic-modules--android--medium
+related: [c-app-bundle, q-android-app-bundles--android--easy, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium, q-play-feature-delivery-dynamic-modules--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/app-bundle, difficulty/hard, play-asset-delivery]
@@ -27,8 +19,6 @@ sources:
   note: Play Asset Delivery documentation
 - url: "https://developer.android.com/guide/app-bundle/asset-delivery-options"
   note: Delivery modes overview
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как разработать стратегию Play Asset Delivery: выбрать режимы (install-time, fast-follow, on-demand), управлять динамическими фичами, обновлять ассеты без релиза и мониторить доставку?

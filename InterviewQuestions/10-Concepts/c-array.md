@@ -16,8 +16,6 @@ related: [c-data-structures, c-hash-tables, c-hash-map, c-collections, c-collect
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["algorithms", "arrays", "collections", "concept", "data-structures", "difficulty/medium"]
-date created: Saturday, October 18th 2025, 3:07:28 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

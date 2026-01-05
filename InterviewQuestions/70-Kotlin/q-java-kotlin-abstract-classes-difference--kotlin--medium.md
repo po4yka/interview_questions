@@ -14,8 +14,6 @@ related: [q-inline-function-limitations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
-date created: Tuesday, November 25th 2025, 12:59:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?

@@ -3,34 +3,19 @@ id: android-282
 title: How Navigation Is Implemented In Android / Как реализована навигация в Android
 aliases: [How Navigation Is Implemented In Android, Navigation Implementation, Как реализована навигация в Android, Реализация навигации]
 topic: android
-subtopics:
-  - activity
-  - fragment
-  - ui-navigation
+subtopics: [activity, fragment, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - c-compose-navigation
-  - q-activity-navigation-how-it-works--android--medium
-  - q-compose-navigation-advanced--android--medium
-  - q-how-is-navigation-implemented--android--medium
-  - q-navigation-methods-in-android--android--medium
-  - q-what-navigation-methods-do-you-know--android--medium
-  - q-what-navigation-methods-exist-in-kotlin--android--medium
+related: [c-activity, c-compose-navigation, q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-how-is-navigation-implemented--android--medium, q-navigation-methods-in-android--android--medium, q-what-navigation-methods-do-you-know--android--medium, q-what-navigation-methods-exist-in-kotlin--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation, ui]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

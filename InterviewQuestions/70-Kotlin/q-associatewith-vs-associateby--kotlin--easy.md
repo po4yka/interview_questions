@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/easy, kotlin, map, transformation]
 
-date created: Saturday, November 1st 2025, 1:26:23 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 

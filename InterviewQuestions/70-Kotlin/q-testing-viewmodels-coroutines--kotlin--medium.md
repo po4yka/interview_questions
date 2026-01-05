@@ -14,8 +14,6 @@ related: [c-coroutines, c-kotlin, q-flowon-operator-context-switching--kotlin--h
 created: 2025-10-15
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, kotlin, testing, unit-testing, viewmodel]
-date created: Friday, October 31st 2025, 6:32:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 

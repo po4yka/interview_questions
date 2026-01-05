@@ -16,8 +16,6 @@ created: 2024-10-06
 updated: 2025-11-10
 tags: [android/app-bundle, android/gradle, android/performance-memory, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

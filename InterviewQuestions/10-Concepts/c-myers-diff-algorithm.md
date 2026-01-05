@@ -15,8 +15,6 @@ related: [c-diffutil, c-algorithms, c-dynamic-programming, c-data-structures, c-
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["algorithms", "auto-generated", "concept", "difficulty/medium"]
-date created: Monday, November 10th 2025, 8:37:44 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

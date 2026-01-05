@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-navigation, dialog, difficulty/medium, navigation]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:30:38 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

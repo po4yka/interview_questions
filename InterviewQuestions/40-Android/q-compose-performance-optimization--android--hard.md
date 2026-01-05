@@ -3,24 +3,14 @@ id: android-443
 title: Compose Performance Optimization / Оптимизация производительности Compose
 aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-compose
+subtopics: [performance-memory, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-recomposition
-  - q-android-performance-measurement-tools--android--medium
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-lazy-layout-optimization--android--hard
-  - q-compose-modifier-order-performance--android--medium
-  - q-compose-stability-skippability--android--hard
+related: [c-compose-recomposition, q-android-performance-measurement-tools--android--medium, q-compose-compiler-plugin--android--hard, q-compose-lazy-layout-optimization--android--hard, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
@@ -28,8 +18,6 @@ sources:
   - "https://developer.android.com/jetpack/compose/mental-model"
   - "https://developer.android.com/jetpack/compose/performance"
 
-date created: Saturday, November 1st 2025, 1:07:33 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 

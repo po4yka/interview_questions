@@ -17,8 +17,6 @@ created: 2025-10-05
 updated: 2025-11-10
 tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
 
-date created: Sunday, October 5th 2025, 10:32:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Что вы знаете о `Flow` в Kotlin?

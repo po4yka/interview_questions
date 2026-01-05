@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [concurrency, difficulty/hard]
 sources: ["https://en.wikipedia.org/wiki/Concurrency_(computer_science)"]
-date created: Saturday, November 1st 2025, 1:24:32 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое concurrency vs parallelism? Что такое race conditions и как их предотвратить? Что такое mutexes, semaphores и monitors? Как избежать deadlocks?

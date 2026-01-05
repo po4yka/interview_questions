@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]
 sources: ["https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a"]
-date created: Saturday, November 1st 2025, 1:26:37 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн MVI? Когда его использовать и как он работает?

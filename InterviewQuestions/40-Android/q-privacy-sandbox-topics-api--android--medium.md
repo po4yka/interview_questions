@@ -15,8 +15,6 @@ sources: []
 created: 2024-10-10
 updated: 2025-11-10
 tags: [advertising, android/privacy-sdks, difficulty/medium, privacy, privacy-sandbox, topics-api, user-privacy]
-date created: Saturday, November 1st 2025, 1:03:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

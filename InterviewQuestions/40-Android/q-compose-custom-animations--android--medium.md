@@ -3,32 +3,18 @@ id: android-073
 title: Compose Custom Animations / Кастомные анимации Compose
 aliases: [Compose Custom Animations, Кастомные анимации Compose]
 topic: android
-subtopics:
-  - ui-animation
-  - ui-compose
+subtopics: [ui-animation, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-jetpack-compose
-  - q-animated-visibility-vs-content--android--medium
-  - q-compose-core-components--android--medium
-  - q-compose-gesture-detection--android--medium
-  - q-how-to-create-animations-in-android--android--medium
-  - q-jetpack-compose-basics--android--medium
-  - q-vector-graphics-animations--android--medium
-  - q-what-are-the-most-important-components-of-compose--android--medium
+related: [c-jetpack-compose, q-animated-visibility-vs-content--android--medium, q-compose-core-components--android--medium, q-compose-gesture-detection--android--medium, q-how-to-create-animations-in-android--android--medium, q-jetpack-compose-basics--android--medium, q-vector-graphics-animations--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-animation, android/ui-compose, difficulty/medium]
 sources: []
-date created: Saturday, November 1st 2025, 1:01:55 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как реализовать кастомные анимации в Jetpack Compose и когда использовать разные Animation API?

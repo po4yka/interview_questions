@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
 
-date created: Friday, October 31st 2025, 6:29:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Расскажите про ключевое слово `object` в Kotlin. Каковы его применения и характеристики?

@@ -13,14 +13,7 @@ moc: moc-kotlin
 related: [q-debugging-coroutines-techniques--kotlin--medium, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-default-inheritance-type--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - structured-concurrency
-  - scope
-  - lifecycle
-  - memory-leaks
-  - difficulty/medium
+tags: [kotlin, coroutines, structured-concurrency, scope, lifecycle, memory-leaks, difficulty/medium]
 source: Kotlin Coroutines Interview Questions PDF
 ---
 # Вопрос (RU)

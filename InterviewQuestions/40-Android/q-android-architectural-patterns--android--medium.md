@@ -3,31 +3,19 @@ id: android-154
 title: Android Architectural Patterns / Архитектурные паттерны Android
 aliases: [Android Architectural Patterns, Архитектурные паттерны Android]
 topic: android
-subtopics:
-  - architecture-clean
-  - architecture-mvi
-  - architecture-mvvm
+subtopics: [architecture-clean, architecture-mvi, architecture-mvvm]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-clean-architecture
-  - c-mvvm
-  - q-android-lint-tool--android--medium
-  - q-factory-pattern-android--android--medium
-  - q-modularization-patterns--android--hard
+related: [c-clean-architecture, c-mvvm, q-android-lint-tool--android--medium, q-factory-pattern-android--android--medium, q-modularization-patterns--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-mvi, android/architecture-mvvm, difficulty/medium]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:24:37 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?

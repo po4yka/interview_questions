@@ -3,32 +3,19 @@ id: android-462
 title: Dagger Scope Explained / Объяснение скоупов Dagger
 aliases: [Dagger Scope Explained, Объяснение скоупов Dagger]
 topic: android
-subtopics:
-  - di-hilt
-  - lifecycle
+subtopics: [di-hilt, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dagger
-  - q-dagger-custom-scopes--android--hard
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-main-elements--android--medium
-  - q-dagger-problems--android--medium
-  - q-dagger-purpose--android--easy
-  - q-singleton-scope-binding--android--medium
+related: [c-dagger, q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-main-elements--android--medium, q-dagger-problems--android--medium, q-dagger-purpose--android--easy, q-singleton-scope-binding--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
 sources:
   - "https://dagger.dev/api/latest/dagger/Scope.html"
-date created: Saturday, November 1st 2025, 12:46:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Что такое scope в Dagger и как они работают?

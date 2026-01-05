@@ -16,8 +16,6 @@ updated: 2025-11-11
 sources: []
 tags: [concurrency, deduplication, difficulty/hard, networking, performance]
 
-date created: Tuesday, October 28th 2025, 9:50:49 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Как реализовать дедупликацию сетевых запросов в Android для предотвращения множественных идентичных вызовов API? Объясните стратегии с использованием Kotlin coroutines и `Flow`.

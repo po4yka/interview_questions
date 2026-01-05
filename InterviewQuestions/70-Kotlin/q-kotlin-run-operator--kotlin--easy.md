@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-compose-side-effects-coroutines--kotlin
 created: 2025-10-15
 updated: 2025-11-09
 tags: [also, apply, difficulty/easy, kotlin, let, run, scope-functions, with]
-date created: Friday, October 31st 2025, 6:32:17 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Какой оператор в Kotlin исполняет блок кода и возвращает его значение?

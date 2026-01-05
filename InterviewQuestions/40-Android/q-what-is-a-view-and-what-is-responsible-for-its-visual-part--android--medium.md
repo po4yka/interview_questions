@@ -3,29 +3,19 @@ id: android-145
 title: What Is A View And What Is Responsible For Its Visual Part / Что такое View и что отвечает за её визуальную часть
 aliases: [What Is A View And What Is Responsible For Its Visual Part, Что такое View и что отвечает за её визуальную часть]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-custom-view-attributes--android--medium
-  - q-view-binding--android--medium
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
-  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium
+related: [c-android-components, q-custom-view-attributes--android--medium, q-view-binding--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 

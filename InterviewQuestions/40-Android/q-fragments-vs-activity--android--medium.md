@@ -3,33 +3,18 @@ id: android-404
 title: Fragments Vs Activity / Fragments против Activity
 aliases: [Fragments Vs Activity, Fragments против Activity]
 topic: android
-subtopics:
-  - fragment
-  - lifecycle
-  - ui-navigation
+subtopics: [fragment, lifecycle, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-navigation
-  - c-fragments
-  - c-lifecycle
-  - q-fragment-vs-activity-lifecycle--android--medium
-  - q-fragments-and-activity-relationship--android--hard
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
-  - q-why-are-fragments-needed-if-there-is-activity--android--hard
+related: [c-compose-navigation, c-fragments, c-lifecycle, q-fragment-vs-activity-lifecycle--android--medium, q-fragments-and-activity-relationship--android--hard, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/lifecycle, android/ui-navigation, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

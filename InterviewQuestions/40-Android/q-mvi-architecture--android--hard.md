@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
 
-date created: Saturday, November 1st 2025, 1:25:24 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Объясните архитектурный паттерн MVI (Model-`View`-`Intent`). В чем его ключевые отличия от MVVM?

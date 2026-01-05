@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral, difficulty/medium, state-machine]
 
-date created: Saturday, November 1st 2025, 1:27:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн State? Когда и зачем его следует использовать?

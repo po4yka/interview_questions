@@ -16,8 +16,6 @@ related: [c-gradle, c-release-engineering, c-app-signing, c-play-console, c-play
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "app-bundle", "build", "concept", "difficulty/medium", "gradle", "publishing"]
-date created: Saturday, October 25th 2025, 12:50:10 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Android App Bundle / Android App Bundle

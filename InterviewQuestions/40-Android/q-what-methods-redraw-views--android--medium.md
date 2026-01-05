@@ -3,29 +3,18 @@ id: android-214
 title: View Redraw Methods / Методы перерисовки View
 aliases: [View Redraw Methods, Методы перерисовки View]
 topic: android
-subtopics:
-  - lifecycle
-  - ui-views
+subtopics: [lifecycle, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-view-system
-  - q-view-methods-and-their-purpose--android--medium
-  - q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
-  - q-what-layout-allows-overlapping-objects--android--easy
+related: [c-android-view-system, q-view-methods-and-their-purpose--android--medium, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, invalidate, requestLayout, view-rendering]
 
-date created: Saturday, November 1st 2025, 12:47:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Методы перерисовки `View`

@@ -3,30 +3,18 @@ id: android-199
 title: Hilt / Фреймворк Hilt
 aliases: [Hilt, Фреймворк Hilt]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - di-hilt
+subtopics: [architecture-mvvm, di-hilt]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dependency-injection
-  - c-hilt
-  - q-hilt-assisted-injection--android--medium
-  - q-hilt-entry-points--android--medium
-  - q-koin-vs-dagger-philosophy--android--hard
-  - q-what-is-known-about-recyclerview--android--easy
+related: [c-dependency-injection, c-hilt, q-hilt-assisted-injection--android--medium, q-hilt-entry-points--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, difficulty/medium, hilt]
 
-date created: Saturday, November 1st 2025, 12:47:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Фреймворк Hilt

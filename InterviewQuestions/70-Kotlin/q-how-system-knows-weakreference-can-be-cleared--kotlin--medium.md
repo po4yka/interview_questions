@@ -14,8 +14,6 @@ related: [c-collections]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/medium, kotlin, references]
-date created: Friday, October 31st 2025, 6:31:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Как система понимает, что WeakReference можно очистить?

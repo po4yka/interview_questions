@@ -16,8 +16,6 @@ related: [c-foreground-service, c-jobscheduler, c-alarmmanager, c-broadcast-rece
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "background-tasks", "concept", "difficulty/medium", "lifecycle", "service"]
-date created: Saturday, October 25th 2025, 11:08:08 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Android Service / Сервис Android

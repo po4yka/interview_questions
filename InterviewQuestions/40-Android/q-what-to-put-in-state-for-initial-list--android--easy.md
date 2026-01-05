@@ -3,29 +3,17 @@ id: android-082
 title: State for Initial List / Состояние для начального списка
 aliases: [State for Initial List, Состояние для начального списка]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - ui-state
+subtopics: [architecture-mvvm, ui-state]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - c-jetpack-compose
-  - q-android-architectural-patterns--android--medium
-  - q-can-state-loss-be-related-to-a-fragment--android--medium
-  - q-sealed-classes-state-management--android--medium
-  - q-what-problems-can-there-be-with-list-items--android--easy
+related: [c-android-components, c-jetpack-compose, q-android-architectural-patterns--android--medium, q-can-state-loss-be-related-to-a-fragment--android--medium, q-sealed-classes-state-management--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/ui-state, difficulty/easy, ui-state]
-date created: Saturday, November 1st 2025, 1:26:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Состояние для начального списка

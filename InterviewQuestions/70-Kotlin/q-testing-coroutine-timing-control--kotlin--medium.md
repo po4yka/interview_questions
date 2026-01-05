@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [coroutines, deterministic, difficulty/medium, kotlin, runtest, test-dispatcher, testing, timing, virtual-time]
 
-date created: Saturday, November 1st 2025, 1:29:52 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 

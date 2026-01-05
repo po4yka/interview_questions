@@ -12,16 +12,10 @@ source: internal
 source_note: Deep dive into catch operator in Kotlin Flow
 status: draft
 moc: moc-kotlin
-related:
-  - c-flow
-  - q-flow-basics--kotlin--easy
-  - q-flow-exception-handling--kotlin--medium
-  - q-retry-operators-flow--kotlin--medium
+related: [c-flow, q-flow-basics--kotlin--easy, q-flow-exception-handling--kotlin--medium, q-retry-operators-flow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, error-handling, flow, lang/kotlin, topic/kotlin]
-date created: Sunday, October 12th 2025, 2:49:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 

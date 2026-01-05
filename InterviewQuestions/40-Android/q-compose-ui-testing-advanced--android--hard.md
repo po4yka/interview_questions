@@ -3,29 +3,19 @@ id: android-471
 title: Advanced Compose UI Testing / Продвинутое тестирование Compose UI
 aliases: [Advanced Compose UI Testing, Продвинутое тестирование Compose UI]
 topic: android
-subtopics:
-  - testing-ui
-  - ui-compose
+subtopics: [testing-ui, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources: []
 status: draft
-related:
-  - c-accessibility
-  - q-compose-semantics--android--medium
-  - q-compose-side-effects-advanced--android--hard
-  - q-compose-testing--android--medium
+related: [c-accessibility, q-compose-semantics--android--medium, q-compose-side-effects-advanced--android--hard, q-compose-testing--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [accessibility, android/testing-ui, android/ui-compose, compose-testing, difficulty/hard, semantics]
 moc: moc-android
 
-date created: Saturday, November 1st 2025, 1:26:08 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как тестировать сложные UI сценарии в Compose включая анимации, жесты, semantic matchers и доступность? Как обрабатывать async операции в тестах?

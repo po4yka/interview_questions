@@ -3,30 +3,19 @@ id: android-473
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
 aliases: [DiffUtil Background Calculation Issues, DiffUtil background issues, Проблемы DiffUtil в фоне, Проблемы фонового вычисления DiffUtil]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-views
+subtopics: [performance-memory, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-memory-management
-  - q-background-vs-foreground-service--android--medium
-  - q-keep-service-running-background--android--medium
-  - q-main-causes-ui-lag--android--medium
-  - q-what-is-diffutil-for--android--medium
+related: [c-memory-management, q-background-vs-foreground-service--android--medium, q-keep-service-running-background--android--medium, q-main-causes-ui-lag--android--medium, q-what-is-diffutil-for--android--medium]
 created: 2025-10-20
 updated: 2025-11-02
 tags: [android/performance-memory, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
 sources:
   - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
-date created: Saturday, November 1st 2025, 1:28:34 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Когда фоновое вычисление DiffUtil работает плохо?

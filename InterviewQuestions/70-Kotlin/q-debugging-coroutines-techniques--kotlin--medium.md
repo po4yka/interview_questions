@@ -13,13 +13,8 @@ moc: moc-kotlin
 aliases: []
 question_kind: coding
 related: [c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-coroutine-exception-handler--kotlin--medium, q-kotlin-null-safety--kotlin--medium, q-produce-actor-builders--kotlin--medium]
-subtopics:
-  - coroutines
-  - debugging
-  - profiling
+subtopics: [coroutines, debugging, profiling]
 
-date created: Saturday, November 1st 2025, 12:10:44 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Какие инструменты и техники доступны для отладки Kotlin корутин? Как идентифицировать deadlock, утечки и проблемы производительности?

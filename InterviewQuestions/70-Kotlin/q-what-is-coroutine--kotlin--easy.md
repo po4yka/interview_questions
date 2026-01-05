@@ -17,8 +17,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
 
-date created: Saturday, November 1st 2025, 1:01:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Что такое корутина в Kotlin? Объясните её основные концепции и чем она отличается от потока.

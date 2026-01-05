@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [algorithms, difficulty/hard, dp, dynamic-programming, memoization, optimization]
 sources: ["https://en.wikipedia.org/wiki/Dynamic_programming"]
 
-date created: Saturday, November 1st 2025, 1:24:13 pm
-date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 # Вопрос (RU)
 > Что такое динамическое программирование? Чем оно отличается от рекурсии? Каковы основные паттерны DP и классические задачи?

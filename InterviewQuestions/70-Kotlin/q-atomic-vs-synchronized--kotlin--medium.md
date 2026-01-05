@@ -14,8 +14,6 @@ related: [c-kotlin, q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-ba
 created: 2025-10-15
 updated: 2025-11-09
 tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, thread-safety]
-date created: Saturday, November 1st 2025, 1:26:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 

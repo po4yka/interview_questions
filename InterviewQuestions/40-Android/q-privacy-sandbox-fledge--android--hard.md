@@ -3,29 +3,18 @@ id: android-415
 title: Privacy Sandbox FLEDGE / Privacy Sandbox FLEDGE (Protected Audience API)
 aliases: [FLEDGE, On-Device Ad Auctions, Privacy Sandbox FLEDGE, Protected Audience API]
 topic: android
-subtopics:
-  - privacy-sdks
+subtopics: [privacy-sdks]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-permissions
-  - q-http-protocols-comparison--android--medium
-  - q-privacy-sandbox-attribution--android--medium
-  - q-privacy-sandbox-sdk-runtime--android--hard
-  - q-privacy-sandbox-topics-api--android--medium
-  - q-retrofit-modify-all-requests--android--hard
+related: [c-permissions, q-http-protocols-comparison--android--medium, q-privacy-sandbox-attribution--android--medium, q-privacy-sandbox-sdk-runtime--android--hard, q-privacy-sandbox-topics-api--android--medium, q-retrofit-modify-all-requests--android--hard]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [advertising, android/privacy-sdks, difficulty/hard, fledge, privacy, privacy-sandbox, protected-audience, remarketing]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

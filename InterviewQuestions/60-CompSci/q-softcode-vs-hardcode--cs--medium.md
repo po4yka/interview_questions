@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-11-11
 tags: [configuration, cs, difficulty/medium, flexibility, hardcoding, maintainability, softcoding]
 
-date created: Tuesday, November 25th 2025, 12:56:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое софткод и чем он отличается от хардкода?

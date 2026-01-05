@@ -16,8 +16,6 @@ moc: moc-android
 related: [c-gradle, c-modularization]
 sources: ["https://developer.android.com/topic/modularization/patterns"]
 
-date created: Saturday, November 1st 2025, 1:25:21 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

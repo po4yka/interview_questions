@@ -3,22 +3,14 @@ id: android-111
 title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect"
 aliases: [Compose LaunchedEffect vs DisposableEffect, Compose Side Effects, DisposableEffect, LaunchedEffect, Побочные эффекты Compose]
 topic: android
-subtopics:
-  - ui-compose
+subtopics: [ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-performance-optimization--android--hard
-  - q-compose-remember-derived-state--android--medium
-  - q-compose-side-effects-advanced--android--hard
-  - q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard
+related: [q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-compose, compose, difficulty/hard, side-effects]
@@ -26,8 +18,6 @@ sources:
   - "https://developer.android.com/jetpack/compose/lifecycle"
   - "https://developer.android.com/jetpack/compose/side-effects"
 
-date created: Saturday, November 1st 2025, 1:09:10 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > В чем разница между побочными эффектами Compose: LaunchedEffect vs DisposableEffect?

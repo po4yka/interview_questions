@@ -3,23 +3,14 @@ id: android-386
 title: Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity
 aliases: [Fragment Lifecycle Dependency, Fragments And Activity Relationship, Взаимосвязь Фрагментов И Activity, Зависимость жизненного цикла фрагмента]
 topic: android
-subtopics:
-  - fragment
-  - lifecycle
+subtopics: [fragment, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
-  - q-why-are-fragments-needed-if-there-is-activity--android--hard
-  - q-why-use-fragments-when-we-have-activities--android--medium
+related: [c-android-components, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-why-use-fragments-when-we-have-activities--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources:
@@ -28,8 +19,6 @@ sources:
   - "https://developer.android.com/guide/fragments/lifecycle"
 tags: [android/fragment, android/lifecycle, difficulty/hard]
 
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как существуют и к чему привязаны фрагменты в `Activity`?

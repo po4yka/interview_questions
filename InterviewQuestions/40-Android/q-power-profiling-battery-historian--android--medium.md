@@ -3,31 +3,19 @@ id: android-626
 title: Power Profiling with Battery Historian / Профилирование энергии с Battery Historian
 aliases: [Power Profiling with Battery Historian, Профилирование энергии с Battery Historian]
 topic: android
-subtopics:
-  - monitoring-slo
-  - performance-battery
-  - profiling
+subtopics: [monitoring-slo, performance-battery, profiling]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-profiling
-  - q-android-performance-measurement-tools--android--medium
-  - q-compose-core-components--android--medium
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
+related: [c-android-profiling, q-android-performance-measurement-tools--android--medium, q-compose-core-components--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/monitoring-slo, android/performance-battery, android/profiling, battery, difficulty/medium]
 sources:
   - "https://developer.android.com/topic/performance/power/battery-historian"
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как провести анализ энергопотребления приложения с помощью Battery Historian и Energy Profiler: сбор данных, интерпретация wakelock, сетевой активности и план устранения проблем?

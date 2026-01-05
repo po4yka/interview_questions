@@ -14,8 +14,6 @@ related: [c-collections, c-hash-map]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, kotlin]
-date created: Friday, October 31st 2025, 6:31:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Как работает `HashMap`?

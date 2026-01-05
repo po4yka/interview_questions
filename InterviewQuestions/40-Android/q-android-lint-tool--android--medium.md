@@ -3,32 +3,19 @@ id: android-121
 title: Android Lint Tool / Инструмент Android Lint
 aliases: [Android Lint Tool, Инструмент Android Lint]
 topic: android
-subtopics:
-  - build-variants
-  - static-analysis
+subtopics: [build-variants, static-analysis]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-android-build-optimization--android--medium
-  - q-android-testing-strategies--android--medium
-  - q-annotation-processing--android--medium
-  - q-annotation-processing-android--android--medium
-  - q-gradle-build-system--android--medium
-  - q-proguard-r8--android--medium
+related: [c-android-components, q-android-build-optimization--android--medium, q-android-testing-strategies--android--medium, q-annotation-processing--android--medium, q-annotation-processing-android--android--medium, q-gradle-build-system--android--medium, q-proguard-r8--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/build-variants, android/static-analysis, code-quality, difficulty/medium, static-analysis]
 sources:
   - "https://developer.android.com/studio/write/lint"
-date created: Saturday, November 1st 2025, 12:46:42 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое Android Lint, его основные возможности и методы настройки для проекта?

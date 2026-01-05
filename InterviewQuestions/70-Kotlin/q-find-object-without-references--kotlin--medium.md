@@ -14,8 +14,6 @@ related: [c-memory-management]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [debugging, difficulty/medium, memory-management, memory-profiler, profiling, programming-languages]
-date created: Friday, October 31st 2025, 6:30:13 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Как найти объект, если на него нет ссылок?

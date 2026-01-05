@@ -3,34 +3,20 @@ id: android-008
 title: Android Service Component / Компонент Service в Android
 aliases: [Android Service Component, Компонент Service в Android]
 topic: android
-subtopics:
-  - background-execution
-  - lifecycle
-  - service
+subtopics: [background-execution, lifecycle, service]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: "https://github.com/Kirchhoff-Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
-related:
-  - c-background-tasks
-  - c-lifecycle
-  - c-service
-  - q-android-service-types--android--easy
-  - q-android-services-purpose--android--easy
-  - q-anr-application-not-responding--android--medium
-  - q-service-types-android--android--easy
+related: [c-background-tasks, c-lifecycle, c-service, q-android-service-types--android--easy, q-android-services-purpose--android--easy, q-anr-application-not-responding--android--medium, q-service-types-android--android--easy]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Что такое `Service`?

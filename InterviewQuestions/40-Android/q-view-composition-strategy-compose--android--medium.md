@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/lifecycle, android/ui-compose, compose, difficulty/medium, interop, lifecycle, viewcompositionstrategy]
 sources: ["https://developer.android.com/jetpack/compose/interop/view-composition-strategy"]
 
-date created: Saturday, November 1st 2025, 1:24:45 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Что такое ViewCompositionStrategy и когда её использовать?

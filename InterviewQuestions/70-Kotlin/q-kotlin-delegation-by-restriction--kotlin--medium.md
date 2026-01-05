@@ -14,8 +14,6 @@ related: [q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-l
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/functions]
-date created: Friday, October 17th 2025, 9:46:30 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Можно ли после `by` вызвать функцию или конструктор?

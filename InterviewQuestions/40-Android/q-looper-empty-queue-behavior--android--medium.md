@@ -3,30 +3,19 @@ id: android-106
 title: Looper Empty Queue Behavior / Поведение Looper при пустой очереди
 aliases: [Looper Blocking Behavior, Looper Empty Queue, Блокировка Looper, Поведение Looper при пустой очереди]
 topic: android
-subtopics:
-  - coroutines
-  - threads-sync
+subtopics: [coroutines, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-concurrency
-  - q-handler-looper-comprehensive--android--medium
-  - q-handler-looper-main-thread--android--medium
-  - q-looper-thread-connection--android--medium
+related: [c-android, c-concurrency, q-handler-looper-comprehensive--android--medium, q-handler-looper-main-thread--android--medium, q-looper-thread-connection--android--medium]
 sources: []
 created: 2025-10-13
 updated: 2025-11-11
 tags: [android/coroutines, android/threads-sync, blocking, difficulty/medium, looper, message-queue]
 
-date created: Saturday, November 1st 2025, 1:25:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

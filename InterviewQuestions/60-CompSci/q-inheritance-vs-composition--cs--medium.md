@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-11-11
 tags: [cs, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:43:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Какие отличия наследования от композиции?

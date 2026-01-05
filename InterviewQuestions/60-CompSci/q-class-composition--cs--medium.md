@@ -14,8 +14,6 @@ related: [c-composition, c-computer-science, q-inheritance-vs-composition--cs--m
 created: 2025-10-13
 updated: 2025-11-11
 tags: [code-reuse, composition, difficulty/medium, encapsulation, inheritance, oop, relationships]
-date created: Saturday, November 1st 2025, 12:43:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что известно о композиции классов?

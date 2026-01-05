@@ -3,25 +3,14 @@ id: android-474
 title: Fast Chat Rendering / Быстрый рендеринг чата
 aliases: [Fast Chat Rendering, Быстрый рендеринг чата]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-compose
-  - ui-views
+subtopics: [performance-memory, ui-compose, ui-views]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-performance-optimization
-  - c-recyclerview
-  - q-compose-compiler-plugin--android--hard
-  - q-diffutil-background-calculation-issues--android--medium
-  - q-list-elements-problems--android--medium
-  - q-why-diffutil-needed--android--medium
+related: [c-performance-optimization, c-recyclerview, q-compose-compiler-plugin--android--hard, q-diffutil-background-calculation-issues--android--medium, q-list-elements-problems--android--medium, q-why-diffutil-needed--android--medium]
 sources:
   - https://developer.android.com/jetpack/compose/performance
   - https://developer.android.com/topic/libraries/architecture/paging/v3-overview
@@ -29,8 +18,6 @@ sources:
 created: 2025-10-20
 updated: 2025-11-03
 tags: [android/performance-memory, android/ui-compose, android/ui-views, chat, difficulty/hard, diffutil, paging, performance, recyclerview]
-date created: Saturday, November 1st 2025, 1:29:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как оптимизировать рендеринг чатов для высокой производительности?

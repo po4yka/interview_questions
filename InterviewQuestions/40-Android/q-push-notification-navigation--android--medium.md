@@ -3,31 +3,19 @@ id: android-305
 title: Push Notification Navigation / Навигация из push уведомлений
 aliases: [FCM Navigation, Navigation from Notifications, Push Notification Navigation, Навигация из push уведомлений]
 topic: android
-subtopics:
-  - notifications
-  - ui-navigation
+subtopics: [notifications, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-navigation
-  - q-activity-navigation-how-it-works--android--medium
-  - q-compose-navigation-advanced--android--medium
-  - q-how-dialog-differs-from-other-navigation--android--medium
-  - q-how-navigation-is-implemented-in-android--android--medium
-  - q-what-navigation-methods-do-you-know--android--medium
+related: [c-compose-navigation, q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-how-dialog-differs-from-other-navigation--android--medium, q-how-navigation-is-implemented-in-android--android--medium, q-what-navigation-methods-do-you-know--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/notifications, android/ui-navigation, deeplink, difficulty/medium, fcm, navigation, notifications]
 
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

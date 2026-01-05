@@ -17,8 +17,6 @@ created: 2025-10-06
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharein, statein]
 
-date created: Tuesday, November 25th 2025, 12:55:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Что такое операторы `stateIn` и `shareIn` в Kotlin `Flow`? Когда использовать каждый?

@@ -3,31 +3,18 @@ id: android-371
 title: State Hoisting in Compose / Поднятие состояния в Compose
 aliases: [State Hoisting in Compose, Поднятие состояния в Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, ui-state]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - q-compose-core-components--android--medium
-  - q-does-state-made-in-compose-help-avoid-race-condition--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-separate-ui-business-logic--android--easy
-  - q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
-  - q-what-is-hilt--android--medium
+related: [c-compose-state, q-compose-core-components--android--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-how-does-jetpackcompose-work--android--medium, q-separate-ui-business-logic--android--easy, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-what-is-hilt--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Поднятие состояния в Compose

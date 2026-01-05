@@ -16,8 +16,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

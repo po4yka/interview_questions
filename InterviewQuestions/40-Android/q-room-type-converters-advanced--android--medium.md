@@ -3,30 +3,18 @@ id: android-220
 title: Room Advanced Type Converters / Продвинутые Type Converters в Room
 aliases: [Room Advanced Type Converters, Продвинутые Type Converters в Room]
 topic: android
-subtopics:
-  - room
+subtopics: [room]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-room
-  - q-how-to-animate-adding-removing-items-in-recyclerview--android--medium
-  - q-room-code-generation-timing--android--medium
-  - q-room-relations-embedded--android--medium
-  - q-room-type-converters--android--medium
-  - q-tasks-back-stack--android--medium
-  - q-what-is-broadcastreceiver--android--easy
+related: [c-room, q-how-to-animate-adding-removing-items-in-recyclerview--android--medium, q-room-code-generation-timing--android--medium, q-room-relations-embedded--android--medium, q-room-type-converters--android--medium, q-tasks-back-stack--android--medium, q-what-is-broadcastreceiver--android--easy]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/room, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Продвинутые Type Converters в Room

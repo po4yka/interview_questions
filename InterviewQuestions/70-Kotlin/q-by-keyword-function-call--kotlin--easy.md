@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [by-keyword, delegation, difficulty/easy, programming-languages]
 
-date created: Saturday, November 1st 2025, 1:26:53 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Можно ли вызывать функцию или конструктор после ключевого слова `by` в Kotlin?

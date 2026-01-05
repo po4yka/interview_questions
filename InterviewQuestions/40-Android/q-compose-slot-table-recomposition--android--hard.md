@@ -3,32 +3,19 @@ id: android-333
 title: Compose Slot Table & Recomposition / Slot Table и рекомпозиция Compose
 aliases: [Compose Slot Table and Recomposition, Slot Table и рекомпозиция]
 topic: android
-subtopics:
-  - performance-rendering
-  - ui-compose
+subtopics: [performance-rendering, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-recomposition
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-performance-optimization--android--hard
-  - q-compose-stability-skippability--android--hard
-  - q-recomposition-choreographer--android--hard
-  - q-recomposition-compose--android--medium
-  - q-stable-classes-compose--android--hard
+related: [c-compose-recomposition, q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-choreographer--android--hard, q-recomposition-compose--android--medium, q-stable-classes-compose--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-compose, difficulty/hard]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:10:06 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как работают Slot Table и рекомпозиция в Jetpack Compose? Объясните механизм внутреннего представления и оптимизации перерисовки.

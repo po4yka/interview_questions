@@ -5,24 +5,14 @@ title: ChromeOS Desktop Optimization / Оптимизация Android-прило
 aliases: [ChromeOS Desktop Optimization, Оптимизация Android-приложения под
       ChromeOS]
 topic: android
-subtopics:
-  - foldables-chromeos
-  - ui-state
-  - ui-views
+subtopics: [foldables-chromeos, ui-state, ui-views]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-chromeos-desktop
-  - moc-android
-  - q-optimize-memory-usage-android--android--medium
-  - q-parsing-optimization-android--android--medium
-  - q-performance-optimization-android--android--medium
+related: [c-chromeos-desktop, moc-android, q-optimize-memory-usage-android--android--medium, q-parsing-optimization-android--android--medium, q-performance-optimization-android--android--medium]
 created: 2024-11-02
 updated: 2025-11-10
 tags: [android/foldables-chromeos, android/ui-state, android/ui-views,
@@ -31,8 +21,6 @@ sources:
   - "https://developer.android.com/games/playgamespc"
   - "https://developer.android.com/large-screens/chromeos"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 anki_synced: true
 anki_slugs:
   - 40-android-q-chromeos-desktop-optimization-android-hard-p01-en

@@ -3,30 +3,17 @@ id: sec-002
 title: Certificate Pinning / Закрепление сертификатов
 aliases: [Certificate Pinning, Закрепление сертификатов]
 topic: security
-subtopics:
-  - networking
-  - tls
+subtopics: [networking, tls]
 question_kind: android
 difficulty: medium
 status: draft
 moc: moc-security
-related:
-  - c-computer-science
-  - q-android-keystore-system--android--medium
-  - q-android-security-practices-checklist--android--medium
-  - q-api-rate-limiting-throttling--android--medium
-  - q-app-security-best-practices--android--medium
-  - q-okhttp-interceptors-advanced--networking--medium
-  - q-retrofit-coroutines-best-practices--kotlin--medium
+related: [c-computer-science, q-android-keystore-system--android--medium, q-android-security-practices-checklist--android--medium, q-api-rate-limiting-throttling--android--medium, q-app-security-best-practices--android--medium, q-okhttp-interceptors-advanced--networking--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 tags: [difficulty/medium, networking, okhttp, security, tls]
-date created: Sunday, October 12th 2025, 12:27:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (OkHttp и Network Security Config)?

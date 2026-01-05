@@ -3,31 +3,18 @@ id: android-037
 title: Baseline Profiles Optimization / Оптимизация с Baseline Profiles
 aliases: [Baseline Profiles Optimization, Оптимизация с Baseline Profiles]
 topic: android
-subtopics:
-  - gradle
-  - performance-startup
-  - profiling
+subtopics: [gradle, performance-startup, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-modularization
-  - c-performance
-  - c-performance-optimization
-  - q-baseline-profiles-android--android--medium
-  - q-canvas-drawing-optimization--android--hard
-  - q-dagger-build-time-optimization--android--medium
+related: [c-modularization, c-performance, c-performance-optimization, q-baseline-profiles-android--android--medium, q-canvas-drawing-optimization--android--hard, q-dagger-build-time-optimization--android--medium]
 sources: []
 created: 2024-10-11
 updated: 2025-11-11
 tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
-date created: Saturday, November 1st 2025, 1:04:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как оптимизировать Android-приложение с помощью Baseline Profiles?

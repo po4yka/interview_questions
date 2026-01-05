@@ -3,29 +3,18 @@ id: android-491
 title: Тестирование ViewModel с Turbine / Testing ViewModels with Turbine
 aliases: [2535414238403e32303d3835 ViewModels, Testing ViewModels, Turbine, Turbine Library]
 topic: android
-subtopics:
-  - coroutines
-  - testing-unit
+subtopics: [coroutines, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-flow
-  - q-accessibility-testing--android--medium
-  - q-android-testing-strategies--android--medium
-  - q-flow-testing-turbine--android--medium
-  - q-integration-testing-strategies--android--medium
+related: [c-flow, q-accessibility-testing--android--medium, q-android-testing-strategies--android--medium, q-flow-testing-turbine--android--medium, q-integration-testing-strategies--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/testing-unit, coroutines, difficulty/medium, flow, testing, turbine]
 
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Как тестировать `ViewModel`, которые отдают `Flow`/`StateFlow`, с помощью библиотеки Turbine?

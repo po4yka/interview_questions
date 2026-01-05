@@ -3,31 +3,19 @@ id: android-430
 title: Privacy Sandbox SDK Runtime / SDK Runtime в Privacy Sandbox
 aliases: [Privacy Sandbox, Privacy Sandbox SDK Runtime, SDK Runtime]
 topic: android
-subtopics:
-  - permissions
-  - privacy-sdks
+subtopics: [permissions, privacy-sdks]
 question_kind: system-design
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-permissions
-  - q-android-security-best-practices--android--medium
-  - q-privacy-sandbox-attribution--android--medium
-  - q-privacy-sandbox-fledge--android--hard
-  - q-privacy-sandbox-topics-api--android--medium
+related: [c-android, c-permissions, q-android-security-best-practices--android--medium, q-privacy-sandbox-attribution--android--medium, q-privacy-sandbox-fledge--android--hard, q-privacy-sandbox-topics-api--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android, android/permissions, android/privacy-sdks, difficulty/hard, security/privacy]
 
-date created: Saturday, November 1st 2025, 1:03:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

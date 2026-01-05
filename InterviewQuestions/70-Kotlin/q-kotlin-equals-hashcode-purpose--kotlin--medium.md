@@ -14,8 +14,6 @@ related: [c-equality, c-kotlin, q-launch-vs-async--kotlin--easy, q-semaphore-rat
 created: 2025-10-15
 updated: 2025-11-10
 tags: [collections, difficulty/medium, equals, hashcode, kotlin, object-comparison]
-date created: Friday, October 31st 2025, 6:28:52 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Зачем нужны методы equals и hashCode?

@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-11-11
 sources: []
 tags: [difficulty/medium, ui-animation, ui-ux-accessibility]
-date created: Tuesday, October 28th 2025, 9:36:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 

@@ -3,23 +3,14 @@ id: android-642
 title: RTL Support Best Practices / 1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL
 aliases: [1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL, RTL Support Best Practices]
 topic: android
-subtopics:
-  - i18n-l10n
-  - ui-views
+subtopics: [i18n-l10n, ui-views]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-android-resources
-  - q-app-security-best-practices--android--medium
-  - q-multi-module-best-practices--android--hard
-  - q-runtime-permissions-best-practices--android--medium
+related: [c-android, c-android-resources, q-app-security-best-practices--android--medium, q-multi-module-best-practices--android--hard, q-runtime-permissions-best-practices--android--medium]
 created: 2025-10-02
 updated: 2025-11-11
 tags: [accessibility, android/i18n-l10n, android/ui-views, difficulty/hard]
@@ -27,8 +18,6 @@ sources:
   - "https://developer.android.com/guide/topics/resources/layout-direction"
   - "https://material.io/design/usability/bidirectionality.html"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Как обеспечить поддержку RTL (справа налево) в Android-приложении: макеты `View`/Compose, зеркалирование ресурсов, BiDi-текст, тестирование и интеграция с локалями?

@@ -14,8 +14,6 @@ related: [c-kotlin, q-catch-operator-flow--kotlin--medium, q-coroutine-scope-bas
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, elvis, kotlin, null-checks, null-safety, operators, safe-call]
-date created: Friday, October 31st 2025, 6:30:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Каким образом осуществлять проверки на null?

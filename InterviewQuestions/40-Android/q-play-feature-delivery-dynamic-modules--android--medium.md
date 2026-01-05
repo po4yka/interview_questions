@@ -3,31 +3,20 @@ id: android-007
 title: Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули
 aliases: [Play Feature Delivery and Dynamic Modules, Play Feature Delivery и динамические модули]
 topic: android
-subtopics:
-  - app-bundle
-  - architecture-modularization
+subtopics: [app-bundle, architecture-modularization]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-app-bundle
-  - q-android-app-bundles--android--easy
-  - q-play-asset-delivery-strategy--android--hard
-  - q-play-billing-v6-architecture--android--hard
-  - q-play-feature-delivery--android--medium
+related: [c-app-bundle, q-android-app-bundles--android--easy, q-play-asset-delivery-strategy--android--hard, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium]
 created: 2025-10-05
 updated: 2025-11-11
 tags: [android/app-bundle, android/architecture-modularization, app-bundle, difficulty/medium, dynamic-modules, modularization, play-feature-delivery]
 sources:
   - "https://developer.android.com/guide/app-bundle/dynamic-delivery"
 
-date created: Saturday, November 1st 2025, 1:03:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Что такое Play Feature Delivery и динамические модули?

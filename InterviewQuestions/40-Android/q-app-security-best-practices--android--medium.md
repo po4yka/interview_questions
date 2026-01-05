@@ -16,8 +16,6 @@ updated: 2025-11-10
 sources: []
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
 
-date created: Saturday, November 1st 2025, 1:03:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 

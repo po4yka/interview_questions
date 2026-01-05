@@ -15,8 +15,6 @@ created: 2023-10-15
 updated: 2025-11-11
 tags: [difficulty/hard, kotlin/collections, kotlin/functions, kotlin/types]
 
-date created: Thursday, October 16th 2025, 12:35:35 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что такое heap pollution (загрязнение кучи) в дженериках Kotlin/Java? Как это происходит и как можно предотвратить?

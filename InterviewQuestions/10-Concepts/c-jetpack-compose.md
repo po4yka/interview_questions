@@ -16,8 +16,6 @@ related: [c-viewmodel, c-compose-state, c-compose-recomposition, c-lifecycle, c-
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "composables", "concept", "declarative-ui", "difficulty/medium", "jetpack-compose", "recomposition", "ui"]
-date created: Saturday, October 25th 2025, 11:04:55 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Jetpack Compose / Jetpack Compose

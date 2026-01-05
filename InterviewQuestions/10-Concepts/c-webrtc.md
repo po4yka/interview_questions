@@ -15,8 +15,6 @@ related: [c-websockets, c-real-time-communication, c-networking, c-server-sent-e
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Monday, November 10th 2025, 8:37:44 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Summary (EN)

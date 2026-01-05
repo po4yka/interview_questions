@@ -13,14 +13,7 @@ moc: moc-kotlin
 related: [c-coroutines, c-structured-concurrency]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - cancellation
-  - cooperative
-  - isactive
-  - cancellationexception
-  - difficulty/medium
+tags: [kotlin, coroutines, cancellation, cooperative, isactive, cancellationexception, difficulty/medium]
 source: Kotlin Coroutines Interview Questions PDF
 ---
 # Вопрос (RU)

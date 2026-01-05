@@ -3,30 +3,18 @@ id: android-201
 title: How Animations Work In RecyclerView / Как работают анимации в RecyclerView
 aliases: [How Animations Work In RecyclerView, Как работают анимации в RecyclerView]
 topic: android
-subtopics:
-  - ui-animation
+subtopics: [ui-animation]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-custom-views
-  - q-broadcastreceiver-contentprovider--android--easy
-  - q-compose-custom-animations--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
-  - q-save-data-outside-fragment--android--medium
-  - q-spannable-text-styling--android--medium
+related: [c-custom-views, q-broadcastreceiver-contentprovider--android--easy, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-save-data-outside-fragment--android--medium, q-spannable-text-styling--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 
-date created: Saturday, November 1st 2025, 12:46:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как работают анимации в RecyclerView

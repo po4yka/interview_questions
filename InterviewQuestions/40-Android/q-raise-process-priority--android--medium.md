@@ -3,33 +3,19 @@ id: android-147
 title: Raise Process Priority / Повышение приоритета процесса
 aliases: [Raise Process Priority, Повышение приоритета процесса]
 topic: android
-subtopics:
-  - lifecycle
-  - processes
-  - service
+subtopics: [lifecycle, processes, service]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - c-lifecycle
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-how-application-priority-is-determined-by-the-system--android--hard
-  - q-network-operations-android--android--medium
-  - q-what-events-are-activity-methods-tied-to--android--medium
+related: [c-android-components, c-lifecycle, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-how-application-priority-is-determined-by-the-system--android--hard, q-network-operations-android--android--medium, q-what-events-are-activity-methods-tied-to--android--medium]
 created: 2024-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/processes, android/service, difficulty/medium, foreground-service, lifecycle, process-priority, services]
 
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

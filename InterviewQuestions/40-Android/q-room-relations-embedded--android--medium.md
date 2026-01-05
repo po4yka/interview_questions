@@ -25,8 +25,6 @@ updated: 2025-11-10
 
 # Tags
 tags: [android/architecture-clean, android/room, difficulty/medium, embedded, relations]
-date created: Saturday, November 1st 2025, 1:04:43 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

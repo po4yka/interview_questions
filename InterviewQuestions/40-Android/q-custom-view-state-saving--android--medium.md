@@ -3,30 +3,19 @@ id: android-480
 title: Custom View State Saving / Сохранение состояния Custom View
 aliases: [Custom View State Saving, Сохранение состояния Custom View]
 topic: android
-subtopics:
-  - lifecycle
-  - ui-views
+subtopics: [lifecycle, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-custom-views
-  - q-activity-lifecycle-methods--android--medium
-  - q-custom-view-accessibility--android--medium
-  - q-custom-view-attributes--android--medium
-  - q-custom-view-lifecycle--android--medium
+related: [c-custom-views, q-activity-lifecycle-methods--android--medium, q-custom-view-accessibility--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium]
 created: 2025-10-21
 updated: 2025-11-10
 tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, state-management]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:27:18 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как реализовать сохранение состояния в Custom `View` при configuration changes?

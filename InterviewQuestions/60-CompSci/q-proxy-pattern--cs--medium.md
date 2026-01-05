@@ -14,8 +14,6 @@ related: [c-architecture-patterns, q-adapter-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [cs, design-patterns, difficulty/medium, gof-patterns, proxy, structural-patterns, surrogate]
-date created: Saturday, November 1st 2025, 1:27:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Proxy? Когда и зачем его следует использовать?

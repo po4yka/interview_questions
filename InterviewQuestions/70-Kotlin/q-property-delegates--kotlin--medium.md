@@ -14,8 +14,6 @@ related: [c-kotlin, q-coroutine-memory-leak-detection--kotlin--hard, q-dispatche
 created: 2025-10-15
 updated: 2025-11-09
 tags: [delegates, difficulty/medium, kotlin, properties]
-date created: Friday, October 31st 2025, 6:30:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 

@@ -3,15 +3,11 @@ id: android-251
 title: App Startup Library / Библиотека App Startup
 aliases: [App Startup Library, Библиотека App Startup]
 topic: android
-subtopics:
-  - app-startup
-  - performance-startup
+subtopics: [app-startup, performance-startup]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-android-app-components--android--easy]
@@ -20,8 +16,6 @@ updated: 2024-11-10
 sources: []
 tags: [android/app-startup, android/performance-startup, difficulty/medium, jetpack]
 
-date created: Saturday, November 1st 2025, 1:04:12 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Зачем нужна библиотека App Startup?

@@ -16,8 +16,6 @@ moc: moc-android
 related: [c-android-graphics-pipeline, c-android-surfaces, q-android-app-lag-analysis--android--medium]
 tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
 
-date created: Saturday, November 1st 2025, 1:26:25 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

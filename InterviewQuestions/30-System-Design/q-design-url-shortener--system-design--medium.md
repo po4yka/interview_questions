@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [difficulty/medium, interview, scalability, system-design, url-shortener]
 sources: ["https://en.wikipedia.org/wiki/URL_shortening"]
 
-date created: Sunday, October 12th 2025, 8:45:45 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Спроектируйте сервис сокращения URL (как bit.ly). Каковы требования, архитектура и ключевые компромиссы?

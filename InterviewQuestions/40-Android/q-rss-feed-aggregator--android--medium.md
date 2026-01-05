@@ -3,32 +3,18 @@ id: android-348
 title: RSS Feed Aggregator / Агрегатор RSS лент
 aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
 topic: android
-subtopics:
-  - networking-http
-  - room
+subtopics: [networking-http, room]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-retrofit
-  - c-room
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-databases-android--android--easy
-  - q-how-to-choose-layout-for-fragment--android--easy
-  - q-tiktok-video-feed--android--hard
-  - q-webp-image-format-android--android--easy
+related: [c-retrofit, c-room, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-databases-android--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-tiktok-video-feed--android--hard, q-webp-image-format-android--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/networking-http, android/room, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Агрегатор RSS лент

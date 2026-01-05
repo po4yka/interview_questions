@@ -17,8 +17,6 @@ created: 2025-10-06
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin]
 
-date created: Sunday, October 12th 2025, 1:56:16 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?

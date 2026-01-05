@@ -3,31 +3,20 @@ id: android-053
 title: Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров
 aliases: [Jank Detection and Frame Metrics, Обнаружение рывков и метрики кадров]
 topic: android
-subtopics:
-  - monitoring-slo
-  - performance-rendering
+subtopics: [monitoring-slo, performance-rendering]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: Original
 source_note: Frame rendering performance best practices
 status: draft
 moc: moc-android
-related:
-  - c-perfetto
-  - c-performance
-  - q-compose-gesture-detection--android--medium
-  - q-mlkit-face-detection--android--medium
-  - q-performance-monitoring-jank-compose--android--medium
+related: [c-perfetto, c-performance, q-compose-gesture-detection--android--medium, q-mlkit-face-detection--android--medium, q-performance-monitoring-jank-compose--android--medium]
 created: 2025-10-11
 updated: 2025-11-11
 tags: [android/monitoring-slo, android/performance-rendering, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Реализуйте мониторинг метрик кадров для обнаружения и исправления рывков. Используйте FrameMetricsAggregator, OnFrameMetricsAvailableListener и инструменты трассировки (Systrace/Perfetto) для выявления проблем рендеринга.

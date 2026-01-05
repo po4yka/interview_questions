@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, collection-traversal, design-patterns, difficulty/medium, iterator]
 sources: ["https://refactoring.guru/design-patterns/iterator"]
-date created: Saturday, November 1st 2025, 1:03:21 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Итератор? Когда его использовать и как он работает?

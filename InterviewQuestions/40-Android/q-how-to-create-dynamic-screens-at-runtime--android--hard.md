@@ -3,29 +3,17 @@ id: android-184
 title: How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения
 aliases: [How To Create Dynamic Screens At Runtime, Как создавать динамические экраны во время выполнения]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-dalvik-vs-art-runtime--android--medium
-  - q-fragments-history-and-purpose--android--hard
-  - q-how-is-navigation-implemented--android--medium
-  - q-how-to-add-fragment-synchronously-asynchronously--android--medium
-  - q-material3-dynamic-color-theming--android--medium
-  - q-runtime-permissions-best-practices--android--medium
+related: [c-android-components, q-dalvik-vs-art-runtime--android--medium, q-fragments-history-and-purpose--android--hard, q-how-is-navigation-implemented--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-material3-dynamic-color-theming--android--medium, q-runtime-permissions-best-practices--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/hard]
-date created: Saturday, November 1st 2025, 12:46:53 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

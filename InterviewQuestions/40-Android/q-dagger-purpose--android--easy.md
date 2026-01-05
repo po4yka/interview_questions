@@ -3,30 +3,19 @@ id: android-447
 title: Dagger Purpose / Назначение Dagger
 aliases: [Dagger Purpose, Назначение Dagger]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dagger
-  - c-dependency-injection
-  - q-dagger-custom-scopes--android--hard
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-inject-annotation--android--easy
-  - q-dagger-main-elements--android--medium
+related: [c-dagger, c-dependency-injection, q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-inject-annotation--android--easy, q-dagger-main-elements--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources:
   - "https://dagger.dev/"
-date created: Saturday, November 1st 2025, 12:46:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Для чего нужен Dagger?

@@ -14,8 +14,6 @@ related: [c-garbage-collection, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, phantom-reference, programming-languages, references, soft-reference, strong-reference, weak-reference]
-date created: Friday, October 31st 2025, 6:29:43 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Все ли виды ссылок защищают объект от удаления (сборки мусора)?

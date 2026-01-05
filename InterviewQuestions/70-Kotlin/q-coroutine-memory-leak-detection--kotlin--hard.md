@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, lifecycle, memory-leaks, profiling]
 
-date created: Saturday, November 1st 2025, 1:28:52 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 

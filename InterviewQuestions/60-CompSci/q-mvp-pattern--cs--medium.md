@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [architecture-patterns, difficulty/medium, mvi, mvp, mvvm, separation-of-concerns, testability]
 sources: ["https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter"]
 
-date created: Saturday, November 1st 2025, 1:26:37 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн MVP? Когда его использовать и как он работает?

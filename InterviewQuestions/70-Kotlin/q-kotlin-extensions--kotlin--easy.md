@@ -14,8 +14,6 @@ related: [c-kotlin, q-flow-basics--kotlin--easy]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, extension-functions, extensions, programming-languages]
-date created: Friday, October 31st 2025, 6:28:53 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Что такое Extensions?

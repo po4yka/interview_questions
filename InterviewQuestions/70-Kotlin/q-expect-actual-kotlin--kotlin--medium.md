@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cross-platform, difficulty/medium, expect-actual, kmp, kotlin, multiplatform, platform-specific]
-date created: Sunday, October 12th 2025, 3:00:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Что такое механизм expect/actual в Kotlin Multiplatform? Объясните как объявлять платформо-специфичные реализации и приведите практические примеры.

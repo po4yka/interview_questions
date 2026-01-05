@@ -5,10 +5,7 @@ aliases: ["Structured Concurrency", "Структурированная пара
 
 # Classification
 topic: kotlin
-subtopics:
-  - cancellation
-  - coroutines
-  - structured-concurrency
+subtopics: [cancellation, coroutines, structured-concurrency]
 question_kind: theory
 difficulty: hard
 
@@ -28,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, scope, structured-concurrency]
-date created: Sunday, October 12th 2025, 3:22:19 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Что такое структурированная параллельность в Kotlin? Объясните иерархию родитель-потомок корутин, распространение отмены, распространение исключений и разницу между coroutineScope, supervisorScope и withContext.

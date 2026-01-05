@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-11-11
 tags: [architecture, design-principles, difficulty/medium, dip, isp, lsp, ocp, oop, solid, srp]
 
-date created: Friday, October 31st 2025, 6:30:49 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое принципы SOLID?

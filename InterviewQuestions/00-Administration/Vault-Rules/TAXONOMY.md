@@ -1,6 +1,4 @@
 ---
-date created: Tuesday, November 25th 2025, 8:30:06 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Controlled Vocabularies & Taxonomy

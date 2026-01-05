@@ -3,29 +3,18 @@ id: android-205
 title: Service Restrictions / Ограничения Service
 aliases: [Service Restrictions, Ограничения Service]
 topic: android
-subtopics:
-  - service
+subtopics: [service]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-android-service-types--android--easy
-  - q-foreground-service-types--android--medium
-  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
-  - q-what-is-data-binding--android--easy
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [c-android-components, q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-what-is-data-binding--android--easy, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/service, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Ограничения `Service`

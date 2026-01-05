@@ -3,33 +3,19 @@ id: android-194
 title: Keep Service Running Background / Удержание Service в фоне
 aliases: [Background Service, Keep Service Running Background, Удержание Service в фоне, Фоновый сервис]
 topic: android
-subtopics:
-  - background-execution
-  - coroutines
-  - service
+subtopics: [background-execution, coroutines, service]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-background-tasks
-  - c-coroutines
-  - q-android-service-types--android--easy
-  - q-background-vs-foreground-service--android--medium
-  - q-foreground-service-types--android--medium
-  - q-service-component--android--medium
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [c-background-tasks, c-coroutines, q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium, q-foreground-service-types--android--medium, q-service-component--android--medium, q-when-can-the-system-restart-a-service--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium, foreground-service, jobscheduler, workmanager]
 
-date created: Saturday, November 1st 2025, 12:46:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

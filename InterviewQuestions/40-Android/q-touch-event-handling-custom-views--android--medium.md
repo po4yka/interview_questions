@@ -3,32 +3,19 @@ id: android-378
 title: Touch Event Handling Custom Views / Обработка касаний в пользовательских View
 aliases: [Touch Event Handling Custom Views, Обработка касаний в пользовательских View]
 topic: android
-subtopics:
-  - ui-state
-  - ui-views
+subtopics: [ui-state, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-viewmodel
-  - q-custom-view-accessibility--android--medium
-  - q-custom-view-attributes--android--medium
-  - q-custom-view-lifecycle--android--medium
-  - q-modularization-patterns--android--hard
-  - q-what-does-itemdecoration-do--android--medium
+related: [c-compose-state, c-viewmodel, q-custom-view-accessibility--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-modularization-patterns--android--hard, q-what-does-itemdecoration-do--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events, views]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Как обрабатывать события касания в пользовательских `View`? Объясните механизм диспетчеризации, разницу между `onTouchEvent()` и `onInterceptTouchEvent()`, и как реализовать пользовательские жесты.

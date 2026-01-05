@@ -3,28 +3,19 @@ id: android-442
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
 aliases: [Dalvik vs ART Runtime, Dalvik против ART Runtime]
 topic: android
-subtopics:
-  - performance-memory
+subtopics: [performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-android-runtime-art--android--medium
-  - q-how-to-create-dynamic-screens-at-runtime--android--hard
-  - q-runtime-permissions-best-practices--android--medium
+related: [c-android-components, q-android-runtime-art--android--medium, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-runtime-permissions-best-practices--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
 sources:
   - "https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime"
-date created: Saturday, November 1st 2025, 12:46:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > В чем различия между рантаймами Dalvik и ART в Android? Почему Android перешел с Dalvik на ART?

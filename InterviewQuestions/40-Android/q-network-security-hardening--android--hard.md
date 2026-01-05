@@ -3,24 +3,14 @@ id: android-636
 title: Network Security Hardening / Укрепление сетевой безопасности
 aliases: [Network Security Hardening, Укрепление сетевой безопасности]
 topic: android
-subtopics:
-  - keystore-crypto
-  - network-security-config
-  - networking-http
+subtopics: [keystore-crypto, network-security-config, networking-http]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-keystore
-  - moc-android
-  - q-android-security-practices-checklist--android--medium
-  - q-app-security-best-practices--android--medium
-  - q-data-sync-unstable-network--android--hard
+related: [c-android-keystore, moc-android, q-android-security-practices-checklist--android--medium, q-app-security-best-practices--android--medium, q-data-sync-unstable-network--android--hard]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/keystore-crypto, android/network-security-config, android/networking-http, certificate-pinning, difficulty/hard]
@@ -29,8 +19,6 @@ sources:
   - "https://developer.android.com/training/articles/security-config"
   - "https://square.github.io/okhttp/https/#certificate-pinning"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как спроектировать сетевой уровень Android-приложения с усиленной безопасностью: Network Security Config, certificate pinning, двустороннее TLS, key attestation и мониторинг нарушений?

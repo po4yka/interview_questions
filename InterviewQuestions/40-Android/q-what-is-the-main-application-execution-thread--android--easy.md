@@ -4,29 +4,18 @@ title: What Is The Main Application Execution Thread / Что такое гла�
   приложения
 aliases: [Main Thread, UI Thread, Главный поток, Поток UI]
 topic: android
-subtopics:
-  - lifecycle
-  - performance-rendering
-  - threads-sync
+subtopics: [lifecycle, performance-rendering, threads-sync]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-handler-looper-main-thread--android--medium
-  - q-how-does-the-main-thread-work--android--medium
-  - q-main-thread-android--android--medium
+related: [c-android-components, q-handler-looper-main-thread--android--medium, q-how-does-the-main-thread-work--android--medium, q-main-thread-android--android--medium]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/easy]
-date created: Saturday, November 1st 2025, 1:26:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

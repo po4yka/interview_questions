@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [cpu-scheduling, difficulty/hard, memory, os, processes, threads, virtual-memory]
 sources: ["https://en.wikipedia.org/wiki/Operating_system"]
 
-date created: Saturday, November 1st 2025, 1:26:49 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое основные концепции операционных систем? Как работают процессы и потоки, виртуальная память и планирование CPU?

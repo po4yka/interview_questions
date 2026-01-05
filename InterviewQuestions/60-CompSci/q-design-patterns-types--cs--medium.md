@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:25:48 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Какие основные типы паттернов проектирования? Опишите каждую категорию и приведите примеры.

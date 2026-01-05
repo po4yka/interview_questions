@@ -17,8 +17,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin]
 
-date created: Sunday, October 12th 2025, 3:39:19 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140020

@@ -3,29 +3,18 @@ id: android-433
 title: Android Services Purpose / Назначение Service в Android
 aliases: [Android Services Purpose, Назначение Service в Android]
 topic: android
-subtopics:
-  - background-execution
-  - lifecycle
-  - service
+subtopics: [background-execution, lifecycle, service]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-lifecycle
-  - q-android-service-types--android--easy
-  - q-service-types-android--android--easy
-  - q-what-are-services-for--android--easy
+related: [c-lifecycle, q-android-service-types--android--easy, q-service-types-android--android--easy, q-what-are-services-for--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/lifecycle, android/service, difficulty/easy]
-date created: Saturday, November 1st 2025, 1:03:09 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Для чего используются Service-компоненты в Android и когда они необходимы?

@@ -3,35 +3,19 @@ id: android-119
 title: How Does Jetpack Compose Work / Как работает Jetpack Compose
 aliases: [How Does Jetpack Compose Work, Как работает Jetpack Compose]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - ui-compose
-  - ui-state
+subtopics: [architecture-mvvm, ui-compose, ui-state]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - c-mvvm
-  - q-cache-implementation-strategies--android--medium
-  - q-how-does-activity-lifecycle-work--android--medium
-  - q-how-does-jetpack-compose-work--android--medium
-  - q-how-does-the-main-thread-work--android--medium
-  - q-how-jetpack-compose-works--android--medium
-  - q-jetpack-compose-basics--android--medium
+related: [c-compose-state, c-jetpack-compose, c-mvvm, q-cache-implementation-strategies--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-how-does-jetpack-compose-work--android--medium, q-how-does-the-main-thread-work--android--medium, q-how-jetpack-compose-works--android--medium, q-jetpack-compose-basics--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

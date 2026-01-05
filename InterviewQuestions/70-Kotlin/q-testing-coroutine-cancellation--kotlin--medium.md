@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-11
 
 tags: [cancellation, coroutines, difficulty/medium, kotlin, testing]
-date created: Sunday, October 12th 2025, 1:24:38 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Как тестировать сценарии отмены корутин? Покрыть тестирование кооперативной отмены, timeout, ensureActive, CancellationException и очистки ресурсов с NonCancellable.

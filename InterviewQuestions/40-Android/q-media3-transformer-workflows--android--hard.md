@@ -3,22 +3,14 @@ id: android-634
 title: Media3 Transformer Workflows / Пайплайны Media3 Transformer
 aliases: [Media3 Transformer Workflows, Пайплайны Media3 Transformer]
 topic: android
-subtopics:
-  - files-media
-  - media
+subtopics: [files-media, media]
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-media3-migration-strategy--android--hard
+related: [c-android, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-media3-migration-strategy--android--hard]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/files-media, android/media, difficulty/hard]
@@ -28,8 +20,6 @@ sources:
   - url: "https://medium.com/androiddevelopers/media3-transformer-deep-dive"
     note: "Transformer deep dive"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как построить pipeline для редактирования видео на Media3 Transformer: комбинировать клипы, применять эффекты, контролировать кодеки/битрейт, выполнять экспорт в фоне и обрабатывать ошибки?

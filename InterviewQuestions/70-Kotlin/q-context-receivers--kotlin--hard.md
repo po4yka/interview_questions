@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-actor-pattern--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, scope-functions]
-date created: Saturday, November 1st 2025, 5:30:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Объясните context receivers в Kotlin. Чем они отличаются от extension receivers? Приведите примеры DSL.

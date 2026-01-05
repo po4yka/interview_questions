@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, difficulty/medium, edge-to-edge, immersive, system-ui, windowinsets]
 sources: ["https://developer.android.com/develop/ui/views/layout/edge-to-edge"]
-date created: Saturday, November 1st 2025, 1:26:42 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Что такое WindowInsets и как реализовать edge-to-edge дизайн?

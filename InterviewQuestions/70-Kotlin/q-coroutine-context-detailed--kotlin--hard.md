@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-11-10
 
 tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
-date created: Sunday, October 12th 2025, 2:24:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое CoroutineContext в Kotlin? Как он работает и какие его ключевые элементы?

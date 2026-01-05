@@ -3,30 +3,19 @@ id: android-479
 title: Custom View Lifecycle / Жизненный цикл Custom View
 aliases: [Custom View Lifecycle, Жизненный цикл Custom View]
 topic: android
-subtopics:
-  - lifecycle
-  - ui-graphics
-  - ui-views
+subtopics: [lifecycle, ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-view-system
-  - q-custom-view-attributes--android--medium
-  - q-custom-view-state-saving--android--medium
-  - q-what-is-known-about-view-lifecycles--android--medium
+related: [c-android-view-system, q-custom-view-attributes--android--medium, q-custom-view-state-saving--android--medium, q-what-is-known-about-view-lifecycles--android--medium]
 created: 2025-10-21
 updated: 2025-11-11
 tags: [android/lifecycle, android/ui-graphics, android/ui-views, custom-views, difficulty/medium]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:27:08 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Каков жизненный цикл Custom `View` в Android? Какие методы вызываются при создании, отрисовке и удалении `View`?

@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, kotlin, testing, virtual-time]
-date created: Friday, October 17th 2025, 11:23:08 am
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Как работает виртуальное время в тестировании корутин? Объясните advanceTimeBy, runCurrent, advanceUntilIdle, currentTime, тестирование delay и как TestDispatcher контролирует время выполнения.

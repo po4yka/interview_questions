@@ -16,8 +16,6 @@ related: [c-viewmodel, c-state-flow, c-clean-architecture, c-repository-pattern,
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-patterns", "concept", "databinding", "difficulty/medium", "livedata", "mvvm", "viewmodel"]
-date created: Saturday, October 25th 2025, 12:51:28 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # MVVM Pattern / Паттерн MVVM

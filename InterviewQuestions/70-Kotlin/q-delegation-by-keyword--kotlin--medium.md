@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [by-keyword, classes, delegation, difficulty/medium, kotlin, kotlin-features]
 sources: ["https://kotlinlang.org/docs/delegation.html"]
-date created: Sunday, October 12th 2025, 1:58:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Что такое делегирование класса с ключевым словом `by` в Kotlin?

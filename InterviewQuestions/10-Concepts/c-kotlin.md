@@ -15,8 +15,6 @@ related: [c-coroutines, c-flow, c-sealed-classes, c-data-classes, c-collections]
 created: "2025-11-08"
 updated: "2025-11-08"
 tags: ["auto-generated", "concept", "difficulty/easy", "kotlin", "programming-languages"]
-date created: Saturday, November 8th 2025, 10:49:49 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

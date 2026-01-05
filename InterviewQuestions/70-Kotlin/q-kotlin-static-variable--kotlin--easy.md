@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-enum-class-advanced--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [companion-object, const, difficulty/easy, jvmstatic, kotlin, static]
-date created: Friday, October 31st 2025, 6:32:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Как сделать статическую переменную?

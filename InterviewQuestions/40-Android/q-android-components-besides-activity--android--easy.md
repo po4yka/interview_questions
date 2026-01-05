@@ -3,30 +3,19 @@ id: android-272
 title: Android Components Besides Activity / Компоненты Android кроме Activity
 aliases: [Android Components Besides Activity, Компоненты Android кроме Activity]
 topic: android
-subtopics:
-  - broadcast-receiver
-  - content-provider
-  - service
+subtopics: [broadcast-receiver, content-provider, service]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-android-app-components--android--easy
-  - q-what-unifies-android-components--android--easy
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
+related: [c-android-components, q-android-app-components--android--easy, q-what-unifies-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, android/content-provider, android/service, difficulty/easy]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:02:18 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 

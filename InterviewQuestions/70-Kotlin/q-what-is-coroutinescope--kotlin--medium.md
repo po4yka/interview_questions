@@ -14,8 +14,6 @@ related: [c-coroutines, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [coroutines, difficulty/medium, kotlin, scope]
-date created: Saturday, November 1st 2025, 1:01:34 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Что такое CoroutineScope?

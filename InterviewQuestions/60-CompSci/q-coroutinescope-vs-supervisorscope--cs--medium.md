@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, coroutinescope, difficulty/medium, error-handling, kotlin, programming-languages, supervisorscope]
 sources: ["https://kotlinlang.org/docs/exception-handling.html"]
-date created: Saturday, November 1st 2025, 1:24:42 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > В чем разница между `coroutineScope` и `supervisorScope`? Когда использовать каждый из них?

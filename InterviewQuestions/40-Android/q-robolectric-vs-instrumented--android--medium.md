@@ -15,8 +15,6 @@ related: [c-android, q-testing-compose-ui--android--medium, q-testing-viewmodels
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-unit, comparison, difficulty/medium, robolectric, strategy]
-date created: Saturday, November 1st 2025, 1:04:41 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

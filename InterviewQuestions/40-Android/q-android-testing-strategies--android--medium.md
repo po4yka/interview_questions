@@ -3,32 +3,19 @@ id: android-175
 title: Android Testing Strategies / Стратегии тестирования Android
 aliases: [Android Testing Strategies, Стратегии тестирования Android]
 topic: android
-subtopics:
-  - testing-instrumented
-  - testing-ui
-  - testing-unit
+subtopics: [testing-instrumented, testing-ui, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-architectural-patterns--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-security-best-practices--android--medium
-  - q-integration-testing-strategies--android--medium
-  - q-koin-testing-strategies--android--medium
-  - q-tflite-acceleration-strategies--android--hard
+related: [q-android-architectural-patterns--android--medium, q-android-performance-measurement-tools--android--medium, q-android-security-best-practices--android--medium, q-integration-testing-strategies--android--medium, q-koin-testing-strategies--android--medium, q-tflite-acceleration-strategies--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, difficulty/medium, testing]
 
-date created: Saturday, November 1st 2025, 12:46:43 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие существуют стратегии тестирования Android приложений и как построить эффективную пирамиду тестов?

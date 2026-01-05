@@ -3,31 +3,20 @@ id: android-465
 title: Dagger Component Dependencies / Зависимости компонентов Dagger
 aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dagger
-  - q-dagger-build-time-optimization--android--medium
-  - q-dagger-custom-scopes--android--hard
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-multibinding--android--hard
-  - q-hilt-components-scope--android--medium
+related: [c-dagger, q-dagger-build-time-optimization--android--medium, q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-multibinding--android--hard, q-hilt-components-scope--android--medium]
 created: 2025-10-20
 updated: 2025-11-11
 tags: [android/di-hilt, difficulty/hard]
 sources:
   - "https://dagger.dev/api/latest/dagger/Component.html"
 
-date created: Saturday, November 1st 2025, 12:46:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > В чем разница между Component Dependencies и Subcomponents в Dagger? Когда использовать один подход вместо другого?

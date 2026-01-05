@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy]
 
-date created: Saturday, October 18th 2025, 9:35:30 am
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Какие коллекции знаешь?

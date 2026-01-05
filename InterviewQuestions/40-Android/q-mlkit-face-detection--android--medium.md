@@ -3,32 +3,18 @@ id: android-166
 title: Mlkit Face Detection / Распознавание лиц ML Kit
 aliases: [ML Kit Face Detection, Распознавание лиц ML Kit]
 topic: android
-subtopics:
-  - camera
-  - performance-rendering
-  - ui-graphics
+subtopics: [camera, performance-rendering, ui-graphics]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-camerax
-  - c-performance
-  - q-compose-gesture-detection--android--medium
-  - q-dagger-framework-overview--android--hard
-  - q-mlkit-custom-models--android--hard
-  - q-mlkit-object-detection--android--medium
-  - q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
+related: [c-camerax, c-performance, q-compose-gesture-detection--android--medium, q-dagger-framework-overview--android--hard, q-mlkit-custom-models--android--hard, q-mlkit-object-detection--android--medium, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/camera, android/performance-rendering, android/ui-graphics, difficulty/medium, face-detection, kotlin, machine-learning]
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Объясните как реализовать детекцию и анализ лиц с помощью ML Kit. Как детектировать лица, landmarks, контуры и классифицировать выражения лица? Каковы best practices для real-time отслеживания, оптимизации производительности и приватности?

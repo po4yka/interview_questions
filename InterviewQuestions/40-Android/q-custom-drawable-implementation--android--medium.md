@@ -3,31 +3,19 @@ id: android-478
 title: Custom Drawable Implementation / Реализация Custom Drawable
 aliases: [Custom Drawable Implementation, Реализация Custom Drawable]
 topic: android
-subtopics:
-  - ui-graphics
-  - ui-views
+subtopics: [ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-custom-views
-  - q-canvas-drawing-optimization--android--hard
-  - q-custom-view-accessibility--android--medium
-  - q-custom-view-attributes--android--medium
-  - q-custom-view-lifecycle--android--medium
-  - q-custom-viewgroup-layout--android--hard
+related: [c-custom-views, q-canvas-drawing-optimization--android--hard, q-custom-view-accessibility--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-custom-viewgroup-layout--android--hard]
 created: 2025-10-21
 updated: 2025-11-10
 tags: [android/ui-graphics, android/ui-views, difficulty/medium]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:11:56 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как реализовать Custom Drawable в Android?

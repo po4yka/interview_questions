@@ -16,8 +16,6 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android, android/performance-battery, android/performance-memory, difficulty/medium, leakcanary, memory-leak, oom]
 
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?

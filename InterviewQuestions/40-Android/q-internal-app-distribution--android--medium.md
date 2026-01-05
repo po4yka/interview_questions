@@ -16,8 +16,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ci-cd, android/play-console, beta-testing, difficulty/medium, firebase]
 
-date created: Saturday, November 1st 2025, 1:32:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

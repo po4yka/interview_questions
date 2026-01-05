@@ -13,13 +13,8 @@ aliases: ["Continuation and CPS internals in Kotlin", "Continuation и CPS: вн
 question_kind: theory
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
-subtopics:
-  - continuation
-  - coroutines
-  - state-machine
+subtopics: [continuation, coroutines, state-machine]
 
-date created: Saturday, November 1st 2025, 12:10:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?

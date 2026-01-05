@@ -3,31 +3,19 @@ id: android-025
 title: UseCase Pattern in Android / Паттерн UseCase в Android
 aliases: [UseCase Pattern in Android, Паттерн UseCase в Android]
 topic: android
-subtopics:
-  - architecture-clean
-  - architecture-mvvm
-  - di-hilt
+subtopics: [architecture-clean, architecture-mvvm, di-hilt]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related:
-  - c-clean-architecture
-  - q-android-architectural-patterns--android--medium
-  - q-android-lint-tool--android--medium
-  - q-factory-pattern-android--android--medium
-  - q-repository-pattern--android--medium
+related: [c-clean-architecture, q-android-architectural-patterns--android--medium, q-android-lint-tool--android--medium, q-factory-pattern-android--android--medium, q-repository-pattern--android--medium]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн UseCase в Android? Когда и как его реализовать?

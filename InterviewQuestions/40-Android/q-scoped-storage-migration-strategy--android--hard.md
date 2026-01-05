@@ -3,22 +3,14 @@ id: android-632
 title: Scoped Storage Migration Strategy / Стратегия миграции на Scoped Storage
 aliases: [Scoped Storage Migration Strategy, Стратегия миграции на Scoped Storage]
 topic: android
-subtopics:
-  - files-media
-  - permissions
+subtopics: [files-media, permissions]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-storage-options
-  - q-android-storage-types--android--medium
-  - q-global-localization-strategy--android--hard
-  - q-media3-migration-strategy--android--hard
+related: [c-android-storage-options, q-android-storage-types--android--medium, q-global-localization-strategy--android--hard, q-media3-migration-strategy--android--hard]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/files-media, android/permissions, difficulty/hard]
@@ -26,8 +18,6 @@ sources:
   - "https://developer.android.com/about/versions/11/privacy/storage"
   - "https://developer.android.com/training/data-storage"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Как мигрировать legacy-приложение на scoped storage, сохранив данные пользователей, обеспечив приватность и совместимость с бэкапом/экспортом?

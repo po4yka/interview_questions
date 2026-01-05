@@ -14,8 +14,6 @@ related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, creational-patterns, difficulty/medium, factory-method, gof-patterns]
-date created: Saturday, November 1st 2025, 1:02:43 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Factory Method? Чем он отличается от Abstract Factory?

@@ -3,31 +3,19 @@ id: android-223
 title: Measure Project Size / Измерение размера проекта
 aliases: [Measure Project Size, Измерение размера проекта]
 topic: android
-subtopics:
-  - architecture-modularization
-  - gradle
+subtopics: [architecture-modularization, gradle]
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - q-how-navigation-is-implemented-in-android--android--medium
-  - q-how-to-write-recyclerview-cache-ahead--android--medium
-  - q-reduce-apk-size-techniques--android--medium
-  - q-reduce-app-size--android--medium
-  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
+related: [c-gradle, q-how-navigation-is-implemented-in-android--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-reduce-apk-size-techniques--android--medium, q-reduce-app-size--android--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-modularization, android/gradle, codebase-analysis, difficulty/easy, project-metrics]
 
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

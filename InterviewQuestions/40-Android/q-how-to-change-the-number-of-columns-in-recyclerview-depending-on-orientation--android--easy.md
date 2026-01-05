@@ -7,29 +7,18 @@ aliases: [How To Change The Number Of Columns In RecyclerView Depending On
       Orientation, Как изменить количество колонок в RecyclerView в зависимости 
       от ориентации]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-broadcastreceiver-contentprovider--android--easy
-  - q-compose-ui-testing-advanced--android--hard
-  - q-how-animations-work-in-recyclerview--android--medium
-  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
-  - q-recyclerview-itemdecoration-advanced--android--medium
+related: [c-android, q-broadcastreceiver-contentprovider--android--easy, q-compose-ui-testing-advanced--android--hard, q-how-animations-work-in-recyclerview--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-recyclerview-itemdecoration-advanced--android--medium]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 anki_synced: true
 anki_slugs:
   - 40-android-q-how-to-change-the-number-of-columns-in-recyclerview-depen-en

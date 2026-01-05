@@ -3,24 +3,14 @@ id: android-616
 title: Jetpack Window Manager for Foldables / Jetpack Window Manager для складных устройств
 aliases: [Jetpack Window Manager Foldables, Jetpack Window Manager для складных устройств]
 topic: android
-subtopics:
-  - foldables-chromeos
-  - ui-compose
-  - ui-state
+subtopics: [foldables-chromeos, ui-compose, ui-state]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-adaptive-layouts-compose--kotlin--hard
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-how-jetpack-compose-works--android--medium
-  - q-jetpack-compose-basics--android--medium
+related: [c-android, q-adaptive-layouts-compose--kotlin--hard, q-how-does-jetpackcompose-work--android--medium, q-how-jetpack-compose-works--android--medium, q-jetpack-compose-basics--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/foldables-chromeos, android/ui-compose, android/ui-state, difficulty/hard]
@@ -30,8 +20,6 @@ sources:
   - url: "https://developer.android.com/guide/topics/large-screens/ideas"
     note: "Adaptive layout patterns"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Как адаптировать Android-приложение под планшеты и складные устройства с помощью Jetpack Window Manager: обрабатывать WindowSizeClass, posture, hinge и настраивать Compose/Views под разные состояния?

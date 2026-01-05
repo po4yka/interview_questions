@@ -3,33 +3,20 @@ id: android-115
 title: Fragments History And Purpose / История и назначение фрагментов
 aliases: [Fragments History And Purpose, История и назначение фрагментов]
 topic: android
-subtopics:
-  - fragment
-  - lifecycle
+subtopics: [fragment, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-fragments
-  - c-lifecycle
-  - q-dagger-purpose--android--easy
-  - q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
-  - q-save-data-outside-fragment--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
-  - q-why-are-fragments-needed-if-there-is-activity--android--hard
+related: [c-fragments, c-lifecycle, q-dagger-purpose--android--easy, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-save-data-outside-fragment--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources:
   - "https://developer.android.com/guide/fragments"
   - "https://developer.android.com/guide/fragments/lifecycle"
 tags: [android/fragment, android/lifecycle, difficulty/hard]
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

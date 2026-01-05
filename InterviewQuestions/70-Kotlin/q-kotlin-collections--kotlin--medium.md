@@ -5,10 +5,7 @@ aliases: ["Kotlin Collections", "Коллекции в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics:
-  - collections
-  - list
-  - sequences
+subtopics: [collections, list, sequences]
 question_kind: theory
 difficulty: medium
 
@@ -28,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, operators, sequences, set]
-date created: Sunday, October 12th 2025, 3:02:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что такое коллекции в Kotlin? Объясните `List`, `Set`, `Map`, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.

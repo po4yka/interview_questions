@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [context, coroutinecontext, coroutines, difficulty/medium, kotlin, programming-languages]
 sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 
-date created: Saturday, November 1st 2025, 1:24:36 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что является сущностью корутин контекста? Из каких элементов состоит CoroutineContext и как они работают?

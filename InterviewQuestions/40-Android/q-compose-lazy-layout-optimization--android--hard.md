@@ -3,31 +3,19 @@ id: android-381
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
 aliases: [Compose Lazy Layout Optimization, LazyColumn optimization, LazyRow optimization, Оптимизация Lazy‑layout в Compose, Оптимизация LazyColumn]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-compose
+subtopics: [performance-memory, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-android-performance-measurement-tools--android--medium
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-custom-layout--android--hard
-  - q-compose-performance-optimization--android--hard
-  - q-compose-stability-skippability--android--hard
+related: [c-android, q-android-performance-measurement-tools--android--medium, q-compose-compiler-plugin--android--hard, q-compose-custom-layout--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 
-date created: Saturday, November 1st 2025, 1:04:33 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как оптимизировать производительность Lazy-layout (LazyColumn, LazyRow) в Jetpack Compose?

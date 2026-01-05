@@ -16,8 +16,6 @@ updated: "2025-11-11"
 tags: [design-patterns, difficulty/hard, gof]
 sources: ["https://refactoring.guru/design-patterns"]
 
-date created: Saturday, November 1st 2025, 1:25:48 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерны проектирования? Какие основные категории паттернов существуют и когда их использовать?

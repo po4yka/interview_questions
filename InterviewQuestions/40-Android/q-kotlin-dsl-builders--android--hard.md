@@ -3,32 +3,20 @@ id: android-061
 title: Kotlin DSL Builders / Kotlin DSL строители
 aliases: [Kotlin DSL Builders, Kotlin DSL строители]
 topic: android
-subtopics:
-  - coroutines
-  - ui-compose
+subtopics: [coroutines, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - c-kotlin
-  - q-gradle-kotlin-dsl-vs-groovy--android--medium
-  - q-kotlin-context-receivers--android--hard
-  - q-kotlin-lambda-expressions--kotlin--medium
-  - q-navigation-methods-in-kotlin--android--medium
+related: [c-gradle, c-kotlin, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-kotlin-context-receivers--android--hard, q-kotlin-lambda-expressions--kotlin--medium, q-navigation-methods-in-kotlin--android--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [android/coroutines, android/ui-compose, api-design, builders, difficulty/hard, dsl, lambdas]
 sources:
   - "https://kotlinlang.org/docs/type-safe-builders.html"
 
-date created: Saturday, November 1st 2025, 1:24:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Что такое DSL строители в Kotlin и как их создавать?

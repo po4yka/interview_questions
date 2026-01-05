@@ -8,8 +8,6 @@ links: []
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, background-tasks, concept, performance, workmanager]
-date created: Thursday, October 30th 2025, 12:30:17 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

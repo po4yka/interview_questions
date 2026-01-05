@@ -14,8 +14,6 @@ related: [c-kotlin, q-kotlin-val-vs-var--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [collections, difficulty/easy, immutability, kotlin]
-date created: Friday, October 31st 2025, 6:29:34 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Какой механизм позволяет создавать неизменяемые (только для чтения) коллекции в Kotlin?

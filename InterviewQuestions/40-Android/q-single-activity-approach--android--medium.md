@@ -16,8 +16,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, fragment, jetpack-navigation]
 
-date created: Saturday, November 1st 2025, 12:47:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Что означает в Android-разработке подход Single `Activity`?

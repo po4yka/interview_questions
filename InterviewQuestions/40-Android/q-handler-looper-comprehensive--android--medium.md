@@ -3,29 +3,18 @@ id: android-198
 title: Handler Looper Comprehensive / Handler и Looper подробно
 aliases: [Handler Looper Comprehensive, Handler и Looper подробно]
 topic: android
-subtopics:
-  - threads-sync
+subtopics: [threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - q-glide-image-loading-internals--android--medium
-  - q-handler-looper-main-thread--android--medium
-  - q-looper-empty-queue-behavior--android--medium
-  - q-looper-thread-connection--android--medium
-  - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
+related: [c-coroutines, q-glide-image-loading-internals--android--medium, q-handler-looper-main-thread--android--medium, q-looper-empty-queue-behavior--android--medium, q-looper-thread-connection--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/threads-sync, concurrency, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Handler и Looper подробно

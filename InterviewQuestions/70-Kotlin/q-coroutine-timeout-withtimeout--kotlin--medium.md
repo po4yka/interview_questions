@@ -15,8 +15,6 @@ description: "Comprehensive guide to timeout handling in Kotlin coroutines, cove
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, c-structured-concurrency]
 subtopics: [coroutines, timeout]
-date created: Saturday, November 1st 2025, 1:07:52 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 

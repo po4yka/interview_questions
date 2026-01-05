@@ -3,30 +3,18 @@ id: android-092
 title: WebSocket Implementation / Реализация WebSocket
 aliases: [WebSocket Implementation, Реализация WebSocket]
 topic: android
-subtopics:
-  - connectivity-caching
-  - coroutines
-  - websockets
+subtopics: [connectivity-caching, coroutines, websockets]
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-cache-implementation-strategies--android--medium
-  - q-custom-drawable-implementation--android--medium
-  - q-http-protocols-comparison--android--medium
-  - q-what-are-services-for--android--easy
+related: [c-android, q-cache-implementation-strategies--android--medium, q-custom-drawable-implementation--android--medium, q-http-protocols-comparison--android--medium, q-what-are-services-for--android--easy]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/connectivity-caching, android/coroutines, android/websockets, difficulty/medium, okhttp, real-time, resilience, websocket]
 
-date created: Saturday, November 1st 2025, 12:47:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Реализация WebSocket-клиента на Android (устойчивое, отказоустойчивое подключение для реального времени)

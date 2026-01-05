@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [concurrency, coroutines, difficulty/medium, flow, kotlin, parallel-requests, zip-operator]
 sources: ["https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/zip.html"]
 
-date created: Saturday, October 4th 2025, 10:39:32 am
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Как использовать оператор zip для параллельных запросов?

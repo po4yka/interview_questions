@@ -15,8 +15,6 @@ related: [c-kotlin-concepts, c-oop, c-functional-programming, c-concurrency, c-c
 created: "2025-11-12"
 updated: "2025-11-12"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Wednesday, November 12th 2025, 12:14:57 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

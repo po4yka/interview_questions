@@ -14,8 +14,6 @@ aliases: ["What is special about sealed classes in Kotlin?", "Особеннос
 question_kind: theory
 related: [c-kotlin, c-sealed-classes, q-channelflow-callbackflow-flow--kotlin--medium]
 subtopics: [enums, sealed-classes, when-expression]
-date created: Friday, November 7th 2025, 6:45:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > В чем особенность sealed классов в Kotlin?

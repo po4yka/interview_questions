@@ -3,34 +3,19 @@ id: android-136
 title: Performance Optimization Android / Performance Оптимизация Android
 aliases: [Performance Optimization Android, Performance Оптимизация Android]
 topic: android
-subtopics:
-  - performance-battery
-  - performance-memory
-  - performance-rendering
+subtopics: [performance-battery, performance-memory, performance-rendering]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-memory-management
-  - c-performance
-  - c-power-profiling
-  - q-android-build-optimization--android--medium
-  - q-baseline-profiles-android--android--medium
-  - q-notification-channels-android--android--medium
-  - q-optimize-memory-usage-android--android--medium
-  - q-parsing-optimization-android--android--medium
+related: [c-memory-management, c-performance, c-power-profiling, q-android-build-optimization--android--medium, q-baseline-profiles-android--android--medium, q-notification-channels-android--android--medium, q-optimize-memory-usage-android--android--medium, q-parsing-optimization-android--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/performance-battery, android/performance-memory, android/performance-rendering, checklist, difficulty/medium, optimization, performance, performance-memory, performance-rendering]
 
-date created: Saturday, November 1st 2025, 12:47:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

@@ -14,8 +14,6 @@ related: [c-kotlin, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed-classes]
-date created: Friday, October 31st 2025, 6:30:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Какие есть ограничения у sealed классов?

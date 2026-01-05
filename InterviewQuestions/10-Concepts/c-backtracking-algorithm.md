@@ -15,8 +15,6 @@ related: [c-algorithms, c-dynamic-programming, c-graph-algorithms, c-data-struct
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["algorithms", "auto-generated", "concept", "difficulty/medium"]
-date created: Tuesday, November 11th 2025, 10:05:57 am
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

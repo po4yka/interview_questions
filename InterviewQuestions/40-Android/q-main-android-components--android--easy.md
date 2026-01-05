@@ -3,34 +3,19 @@ id: android-358
 title: Main Android Components / Основные компоненты Android
 aliases: [Main Android Components, Основные компоненты Android]
 topic: android
-subtopics:
-  - activity
-  - content-provider
-  - service
+subtopics: [activity, content-provider, service]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - c-android-components
-  - c-content-provider
-  - q-android-components-besides-activity--android--easy
-  - q-how-does-activity-lifecycle-work--android--medium
-  - q-main-thread-android--android--medium
-  - q-what-unifies-android-components--android--easy
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
+related: [c-activity, c-android-components, c-content-provider, q-android-components-besides-activity--android--easy, q-how-does-activity-lifecycle-work--android--medium, q-main-thread-android--android--medium, q-what-unifies-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/activity, android/content-provider, android/service, components, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 12:46:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

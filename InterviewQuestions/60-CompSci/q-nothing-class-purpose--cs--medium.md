@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [control-flow, difficulty/medium, exceptions, kotlin, type-system, unreachable-code]
 sources: ["https://kotlinlang.org/docs/whatsnew15.html"]
-date created: Saturday, November 1st 2025, 1:26:49 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Зачем нужен класс `Nothing` в Kotlin? Какую роль он играет в системе типов?

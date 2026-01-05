@@ -3,32 +3,19 @@ id: android-399
 title: App Store Optimization / Оптимизация App Store
 aliases: [App Store Optimization, ASO, Оптимизация App Store]
 topic: android
-subtopics:
-  - ab-testing
-  - analytics
-  - play-console
+subtopics: [ab-testing, analytics, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-performance
-  - c-performance-optimization
-  - q-android-app-bundles--android--easy
-  - q-app-size-optimization--android--medium
-  - q-app-startup-optimization--android--medium
-  - q-dagger-build-time-optimization--android--medium
+related: [c-performance, c-performance-optimization, q-android-app-bundles--android--easy, q-app-size-optimization--android--medium, q-app-startup-optimization--android--medium, q-dagger-build-time-optimization--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ab-testing, android/analytics, android/play-console, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:04:13 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое оптимизация App Store и как её реализовать?

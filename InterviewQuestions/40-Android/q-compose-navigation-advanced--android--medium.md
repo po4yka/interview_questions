@@ -3,31 +3,20 @@ id: android-359
 title: Compose Navigation Advanced / Продвинутая навигация Compose
 aliases: [Compose Navigation Advanced, Продвинутая навигация Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-navigation
+subtopics: [ui-compose, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-navigation
-  - q-android-jetpack-overview--android--easy
-  - q-compose-side-effects-advanced--android--hard
-  - q-compose-ui-testing-advanced--android--hard
-  - q-how-dialog-differs-from-other-navigation--android--medium
+related: [c-compose-navigation, q-android-jetpack-overview--android--easy, q-compose-side-effects-advanced--android--hard, q-compose-ui-testing-advanced--android--hard, q-how-dialog-differs-from-other-navigation--android--medium]
 created: 2025-09-10
 updated: 2025-10-10
 tags: [android/ui-compose, android/ui-navigation, difficulty/medium]
 sources:
   - "https://developer.android.com/jetpack/compose/navigation"
 
-date created: Saturday, November 1st 2025, 1:25:30 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как реализовать продвинутую навигацию в Jetpack Compose с аргументами, deep links и контролем back stack?

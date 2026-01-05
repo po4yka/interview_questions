@@ -3,31 +3,18 @@ id: android-209
 title: Unified Android Components / Объединение компонентов Android
 aliases: [Unified Components, Объединение компонентов]
 topic: android
-subtopics:
-  - activity
-  - fragment
-  - service
+subtopics: [activity, fragment, service]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - c-intent
-  - c-lifecycle
-  - q-android-components-besides-activity--android--easy
-  - q-main-android-components--android--easy
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
+related: [c-android-components, c-intent, c-lifecycle, q-android-components-besides-activity--android--easy, q-main-android-components--android--easy, q-what-unites-the-main-components-of-an-android-application--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/intent, android/service, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 1:26:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Объединение компонентов Android

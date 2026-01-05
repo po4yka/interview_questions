@@ -16,8 +16,6 @@ created: 2024-10-15
 updated: 2024-10-15
 tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-views, difficulty/medium, notifications, snackbar, toast]
 
-date created: Saturday, November 1st 2025, 12:46:53 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

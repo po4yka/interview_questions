@@ -3,32 +3,19 @@ id: android-051
 title: App Size Optimization / Оптимизация размера приложения
 aliases: [App Size Optimization, Оптимизация размера приложения]
 topic: android
-subtopics:
-  - app-bundle
-  - obfuscation
-  - performance-memory
+subtopics: [app-bundle, obfuscation, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-app-bundle
-  - q-android-app-bundles--android--easy
-  - q-android-build-optimization--android--medium
-  - q-app-startup-optimization--android--medium
-  - q-optimize-memory-usage-android--android--medium
-  - q-reduce-apk-size-techniques--android--medium
+related: [c-app-bundle, q-android-app-bundles--android--easy, q-android-build-optimization--android--medium, q-app-startup-optimization--android--medium, q-optimize-memory-usage-android--android--medium, q-reduce-apk-size-techniques--android--medium]
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/app-bundle, android/obfuscation, android/performance-memory, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:03:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие техники используются для уменьшения размера Android-приложения?

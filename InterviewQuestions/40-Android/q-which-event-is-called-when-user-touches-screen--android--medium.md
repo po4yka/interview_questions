@@ -3,32 +3,19 @@ id: android-155
 title: Which Event Is Called When User Touches Screen / Какое событие вызывается когда пользователь касается экрана
 aliases: [Touch Events, События касания]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-views
+subtopics: [ui-compose, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - q-how-to-create-chat-lists-from-a-ui-perspective--android--hard
-  - q-how-to-create-dynamic-screens-at-runtime--android--hard
-  - q-which-event-is-triggered-when-user-presses-screen--android--medium
-  - q-which-event-on-screen-press--android--easy
-  - q-why-might-user-data-disappear-during-screen-rotation--android--hard
+related: [c-compose-state, c-jetpack-compose, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-which-event-on-screen-press--android--easy, q-why-might-user-data-disappear-during-screen-rotation--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-views, difficulty/medium, touch-events, ui]
 
-date created: Saturday, November 1st 2025, 12:47:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

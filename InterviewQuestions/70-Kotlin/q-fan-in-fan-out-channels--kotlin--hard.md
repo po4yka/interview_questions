@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard]
 
-date created: Sunday, October 12th 2025, 3:43:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что такое паттерны fan-out и fan-in в Kotlin Coroutines с каналами? Как реализовать распределение работы (fan-out) и агрегацию результатов (fan-in)? Приведите production-примеры параллельной обработки изображений, распределенных очередей задач и агрегации логов.

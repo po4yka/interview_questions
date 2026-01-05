@@ -3,29 +3,18 @@ id: android-318
 title: Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование
 aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]
 topic: android
-subtopics:
-  - testing-screenshot
+subtopics: [testing-screenshot]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-testing
-  - q-accessibility-testing--android--medium
-  - q-android-testing-strategies--android--medium
-  - q-integration-testing-strategies--android--medium
-  - q-testing-compose-ui--android--medium
-  - q-testing-viewmodels-turbine--android--medium
+related: [c-android-testing, q-accessibility-testing--android--medium, q-android-testing-strategies--android--medium, q-integration-testing-strategies--android--medium, q-testing-compose-ui--android--medium, q-testing-viewmodels-turbine--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-screenshot, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

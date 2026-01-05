@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [blocking, concurrency, coroutines, difficulty/medium, kotlin, suspend]
-date created: Friday, October 17th 2025, 9:47:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > В чем разница между приостанавливающими (suspending) и блокирующими (blocking) функциями в Kotlin?

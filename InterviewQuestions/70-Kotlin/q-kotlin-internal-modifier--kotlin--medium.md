@@ -14,8 +14,6 @@ related: [c-kotlin, q-flow-completion-oncompletion--kotlin--medium, q-flow-excep
 created: 2024-10-15
 updated: 2025-11-09
 tags: [access-modifiers, difficulty/medium, internal, module, programming-languages, visibility]
-date created: Friday, October 31st 2025, 6:29:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Что известно про `internal`?

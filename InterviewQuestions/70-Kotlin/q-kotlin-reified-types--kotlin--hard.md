@@ -14,8 +14,6 @@ related: [c-kotlin, q-coroutinescope-vs-supervisorscope--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/hard, generics, inline, kotlin, reified, type-parameters]
-date created: Friday, October 31st 2025, 6:32:17 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 

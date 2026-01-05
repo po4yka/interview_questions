@@ -14,8 +14,6 @@ related: [c-coroutines, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, synchronization]
-date created: Friday, October 31st 2025, 6:31:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Почему, как правило, не следует использовать `synchronized`-блоки с корутинами и когда это допустимо?

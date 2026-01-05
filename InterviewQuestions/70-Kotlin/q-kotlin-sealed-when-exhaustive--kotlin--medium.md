@@ -14,8 +14,6 @@ related: [c-kotlin, c-sealed-classes, q-flow-combining-zip-combine--kotlin--medi
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-expression]
-date created: Friday, October 31st 2025, 6:32:40 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 

@@ -15,8 +15,6 @@ created: "2025-10-12"
 updated: "2025-11-11"
 tags: [difficulty/medium, kotlin, visibility-modifiers]
 sources: ["https://kotlinlang.org/docs/visibility-modifiers.html"]
-date created: Saturday, November 1st 2025, 12:42:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Какие модификаторы видимости есть в Kotlin и чем они отличаются?

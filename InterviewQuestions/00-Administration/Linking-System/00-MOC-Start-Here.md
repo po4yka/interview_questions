@@ -5,8 +5,6 @@ kind: moc
 created: 2025-10-06
 updated: 2025-10-06
 tags: [index, moc, start-here]
-date created: Tuesday, November 25th 2025, 8:38:12 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Interview Questions Vault — Start Here

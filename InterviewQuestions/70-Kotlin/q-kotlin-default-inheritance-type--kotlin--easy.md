@@ -14,8 +14,6 @@ related: [q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes]
-date created: Saturday, November 1st 2025, 1:26:21 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Какой тип наследования по умолчанию используется для классов в Kotlin?

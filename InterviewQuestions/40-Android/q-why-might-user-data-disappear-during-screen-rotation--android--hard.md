@@ -3,27 +3,14 @@ id: android-096
 title: Почему данные пользователя могут исчезать при повороте экрана? / Why might user data disappear during screen rotation?
 aliases: [Configuration change data loss, Screen rotation data loss, Данные исчезают при повороте, Потеря данных при повороте]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - lifecycle
-  - ui-state
+subtopics: [architecture-mvvm, lifecycle, ui-state]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-lifecycle
-  - c-mvvm
-  - q-compose-gesture-detection--android--medium
-  - q-which-event-is-called-when-user-touches-screen--android--medium
-  - q-which-event-is-triggered-when-user-presses-screen--android--medium
-  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
-  - q-why-user-data-may-disappear-on-screen-rotation--android--hard
+related: [c-compose-state, c-lifecycle, c-mvvm, q-compose-gesture-detection--android--medium, q-which-event-is-called-when-user-touches-screen--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, configuration-changes, difficulty/hard, lifecycle, state-management, viewmodel]
@@ -31,8 +18,6 @@ sources:
   - "https://developer.android.com/guide/topics/resources/runtime-changes"
   - "https://developer.android.com/topic/libraries/architecture/saving-states"
 
-date created: Saturday, November 1st 2025, 12:47:11 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

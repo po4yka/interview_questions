@@ -14,8 +14,6 @@ related: [c-java-features, c-kotlin, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 3:43:41 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Как работают Executor и ExecutorService в Java?

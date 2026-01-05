@@ -3,29 +3,19 @@ id: android-330
 title: Can a Service Communicate With the User / Может ли сервис общаться с пользователем
 aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
 topic: android
-subtopics:
-  - service
+subtopics: [service]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-service-types--android--easy
-  - q-background-vs-foreground-service--android--medium
-  - q-foreground-service-types--android--medium
-  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium, q-foreground-service-types--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-when-can-the-system-restart-a-service--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/service, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:04:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Может ли сервис общаться с пользователем?

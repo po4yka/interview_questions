@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scope]
 
-date created: Friday, October 31st 2025, 6:32:26 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > В чём разница между `coroutineScope` и `supervisorScope` в корутинах Kotlin?

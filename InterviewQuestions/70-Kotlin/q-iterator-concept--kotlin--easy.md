@@ -14,8 +14,6 @@ related: [c-collections]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, design-patterns, difficulty/easy, iterator, kotlin]
-date created: Friday, October 31st 2025, 6:32:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что такое итератор?

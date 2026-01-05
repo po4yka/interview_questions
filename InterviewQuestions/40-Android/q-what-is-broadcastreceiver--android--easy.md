@@ -3,30 +3,18 @@ id: android-395
 title: BroadcastReceiver / Компонент BroadcastReceiver
 aliases: [BroadcastReceiver, Компонент BroadcastReceiver]
 topic: android
-subtopics:
-  - broadcast-receiver
+subtopics: [broadcast-receiver]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-broadcast-receiver
-  - c-intent
-  - q-broadcastreceiver-contentprovider--android--easy
-  - q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium
-  - q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
-  - q-what-each-android-component-represents--android--easy
-  - q-what-is-activity-and-what-is-it-used-for--android--medium
+related: [c-broadcast-receiver, c-intent, q-broadcastreceiver-contentprovider--android--easy, q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-what-each-android-component-represents--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, difficulty/easy, intent, system-events]
 
-date created: Saturday, November 1st 2025, 12:47:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

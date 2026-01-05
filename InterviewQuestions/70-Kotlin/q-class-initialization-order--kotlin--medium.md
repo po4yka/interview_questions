@@ -15,8 +15,6 @@ created: "2025-10-12"
 updated: "2025-11-11"
 tags: [classes, difficulty/medium, initialization, kotlin, kotlin-features]
 sources: ["https://kotlinlang.org/docs/inheritance.html"]
-date created: Saturday, November 1st 2025, 1:27:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > В каком порядке происходит инициализация класса в Kotlin?

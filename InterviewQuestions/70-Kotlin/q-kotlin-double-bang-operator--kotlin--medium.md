@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/null-safety]
 
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что известно о операторе double bang `!!` в Kotlin?

@@ -14,8 +14,6 @@ related: [c-coroutines, c-flow]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languages, reactive]
-date created: Friday, October 31st 2025, 6:30:45 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Чем в Kotlin `Flow` воспользоваться, если нужно преобразовать один поток данных в другой поток данных?

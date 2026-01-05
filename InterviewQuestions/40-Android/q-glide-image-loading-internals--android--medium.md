@@ -3,33 +3,20 @@ id: android-034
 title: How do image loading libraries like Glide work internally? / Как работают библиотеки загрузки изображений вроде Glide?
 aliases: ["How do image loading libraries like Glide work internally?", "Как работают библиотеки загрузки изображений вроде Glide?"]
 topic: android
-subtopics:
-  - cache-offline
-  - files-media
-  - performance-memory
+subtopics: [cache-offline, files-media, performance-memory]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-android
-related:
-  - c-database-design
-  - c-memory-management
-  - c-scoped-storage-security
-  - q-architecture-components-libraries--android--easy
-  - q-how-animations-work-in-recyclerview--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
+related: [c-database-design, c-memory-management, c-scoped-storage-security, q-architecture-components-libraries--android--easy, q-how-animations-work-in-recyclerview--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/cache-offline, android/files-media, android/performance-memory, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 
 # Вопрос (RU)

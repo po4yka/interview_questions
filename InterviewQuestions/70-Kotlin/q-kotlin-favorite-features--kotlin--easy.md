@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-class-initialization-order--kotlin--med
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/easy, extensions, features, kotlin, null-safety, overview]
-date created: Friday, October 31st 2025, 6:29:33 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Расскажи Про Три Любимых Фичи В Kotlin
 

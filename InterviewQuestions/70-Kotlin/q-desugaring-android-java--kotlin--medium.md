@@ -14,8 +14,6 @@ related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [android, backward-compatibility, compilation, difficulty/medium, java, kotlin]
-date created: Friday, October 31st 2025, 6:34:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Что такое desugaring в Android и как он работает?

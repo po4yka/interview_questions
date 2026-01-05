@@ -15,8 +15,6 @@ related: [c-algorithms, c-data-structures, c-software-design, c-cs, c-programmin
 created: "2025-11-08"
 updated: "2025-11-08"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Sunday, November 9th 2025, 12:10:26 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

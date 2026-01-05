@@ -14,8 +14,6 @@ related: [c-kotlin, q-coroutine-cancellation-cooperation--kotlin--medium, q-flow
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/hard]
-date created: Sunday, October 12th 2025, 3:43:42 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что такое контракты Kotlin? Как они обеспечивают умные приведения типов (smart casts)? Реализуйте пользовательский контракт для функции валидации.

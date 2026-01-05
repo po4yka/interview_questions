@@ -14,8 +14,6 @@ related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-variance-typ
 created: 2025-10-15
 updated: 2025-10-31
 tags: [as, casting, difficulty/easy, kotlin, safe-cast, type-conversion, type-safety]
-date created: Friday, October 31st 2025, 6:32:39 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Как в Kotlin привести переменную типа `Any` к типу `String` безопасно, чтобы избежать исключения?

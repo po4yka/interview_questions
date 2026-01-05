@@ -3,32 +3,20 @@ id: android-066
 title: Flow Testing with Turbine / Тестирование Flow с Turbine
 aliases: [Flow Testing with Turbine, Тестирование Flow с Turbine]
 topic: android
-subtopics:
-  - coroutines
-  - flow
-  - testing-unit
+subtopics: [coroutines, flow, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-flow
-  - q-compose-testing--android--medium
-  - q-testing-coroutines-flow--android--hard
-  - q-testing-viewmodels-turbine--android--medium
-  - q-unit-testing-coroutines-flow--android--medium
+related: [c-flow, q-compose-testing--android--medium, q-testing-coroutines-flow--android--hard, q-testing-viewmodels-turbine--android--medium, q-unit-testing-coroutines-flow--android--medium]
 created: 2025-10-12
 updated: 2025-11-10
 tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, turbine, unit-testing]
 sources:
   - "https://github.com/cashapp/turbine"
 
-date created: Saturday, November 1st 2025, 1:30:02 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Что такое Turbine? Как тестировать Flows с Turbine?

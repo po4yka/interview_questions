@@ -3,30 +3,19 @@ id: android-081
 title: RecyclerView ItemDecoration Advanced / Продвинутый ItemDecoration для RecyclerView
 aliases: [RecyclerView ItemDecoration Advanced, Продвинутый ItemDecoration для RecyclerView]
 topic: android
-subtopics:
-  - ui-graphics
-  - ui-views
+subtopics: [ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-graphics
-  - q-android-app-components--android--easy
-  - q-camerax-advanced-pipeline--android--hard
-  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
-  - q-recyclerview-diffutil-advanced--android--medium
+related: [c-android-graphics, q-android-app-components--android--easy, q-camerax-advanced-pipeline--android--hard, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-recyclerview-diffutil-advanced--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-graphics, android/ui-views, custom-drawing, difficulty/medium, itemdecoration, ui]
 sources:
   - "https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration"
-date created: Saturday, November 1st 2025, 1:04:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Как создать пользовательские ItemDecorations для RecyclerView?

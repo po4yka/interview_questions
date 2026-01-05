@@ -14,8 +14,6 @@ related: [c-kotlin, q-executor-service-java--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [collections, comparison, difficulty/medium, java, kotlin, null-safety, type-inference, type-system]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Чем типы в Kotlin отличаются от типов в Java?

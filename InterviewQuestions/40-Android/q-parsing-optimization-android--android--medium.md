@@ -3,30 +3,19 @@ id: android-130
 title: Parsing Optimization Android / Оптимизация парсинга Android
 aliases: [Parsing Optimization Android, Оптимизация парсинга Android]
 topic: android
-subtopics:
-  - performance-memory
-  - serialization
+subtopics: [performance-memory, serialization]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-memory-management
-  - q-android-build-optimization--android--medium
-  - q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
-  - q-optimize-memory-usage-android--android--medium
-  - q-performance-optimization-android--android--medium
+related: [c-memory-management, q-android-build-optimization--android--medium, q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-optimize-memory-usage-android--android--medium, q-performance-optimization-android--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/performance-memory, android/serialization, difficulty/medium, json, optimization, xml]
 
-date created: Saturday, November 1st 2025, 12:47:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

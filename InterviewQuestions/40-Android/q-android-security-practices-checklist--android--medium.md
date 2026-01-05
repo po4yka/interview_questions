@@ -3,30 +3,18 @@ id: android-002
 title: Android Security Practices Checklist / Чек-лист практик безопасности Android
 aliases: [Android Security Practices Checklist, Чек-лист практик безопасности Android]
 topic: android
-subtopics:
-  - keystore-crypto
-  - network-security-config
-  - permissions
+subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-keystore
-  - c-encryption
-  - q-android-security-best-practices--android--medium
-  - q-app-security-best-practices--android--medium
-  - q-database-encryption-android--android--medium
+related: [c-android-keystore, c-encryption, q-android-security-best-practices--android--medium, q-app-security-best-practices--android--medium, q-database-encryption-android--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, security]
 sources: []
-date created: Saturday, November 1st 2025, 1:03:09 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какой минимальный чек-лист безопасности Android приложения для production?

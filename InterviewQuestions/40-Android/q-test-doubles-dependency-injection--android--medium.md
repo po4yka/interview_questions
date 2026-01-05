@@ -3,29 +3,18 @@ id: android-128
 title: Test Doubles Dependency Injection / Тестовые двойники Dependency Injection
 aliases: [Test Doubles, Тестовые двойники]
 topic: android
-subtopics:
-  - di-hilt
-  - testing-unit
+subtopics: [di-hilt, testing-unit]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dependency-injection
-  - q-hilt-assisted-injection--android--medium
-  - q-kmm-dependency-injection--android--medium
-  - q-test-coverage-quality-metrics--android--medium
-  - q-what-is-hilt--android--medium
+related: [c-dependency-injection, q-hilt-assisted-injection--android--medium, q-kmm-dependency-injection--android--medium, q-test-coverage-quality-metrics--android--medium, q-what-is-hilt--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/di-hilt, android/testing-unit, dependency-injection, difficulty/medium, hilt, test-doubles]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Тестовые двойники Dependency Injection

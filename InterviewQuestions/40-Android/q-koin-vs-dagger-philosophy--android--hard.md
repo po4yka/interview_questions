@@ -3,27 +3,14 @@ id: android-612
 title: Koin vs Dagger/Hilt Philosophy / Философия Koin против Dagger/Hilt
 aliases: [Koin vs Dagger Philosophy, Runtime vs Compile-Time DI Philosophy, Философия Koin и Dagger]
 topic: android
-subtopics:
-  - architecture-clean
-  - di-hilt
-  - di-koin
+subtopics: [architecture-clean, di-hilt, di-koin]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dagger
-  - c-dependency-injection
-  - c-hilt
-  - q-dagger-build-time-optimization--android--medium
-  - q-dagger-framework-overview--android--hard
-  - q-hilt-entry-points--android--medium
-  - q-koin-fundamentals--android--medium
-  - q-koin-vs-hilt-comparison--android--medium
+related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-framework-overview--android--hard, q-hilt-entry-points--android--medium, q-koin-fundamentals--android--medium, q-koin-vs-hilt-comparison--android--medium]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/architecture-clean, android/di-hilt, android/di-koin, architecture/philosophy, dependency-injection, difficulty/hard]
@@ -32,8 +19,6 @@ sources:
   - "https://developer.android.com/training/dependency-injection/hilt-android"
   - "https://github.com/InsertKoinIO/koin/blob/master/README.md#koin-philosophy"
 
-date created: Wednesday, November 5th 2025, 11:24:34 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Сравните философию DI Koin и Dagger/Hilt: какие цели они решают, как формализуют граф зависимостей, и какие архитектурные компромиссы требуют? Проанализируйте влияние на тестирование, эволюцию продукта и командные практики.

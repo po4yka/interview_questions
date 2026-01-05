@@ -3,32 +3,19 @@ id: android-451
 title: Dagger Custom Scopes / Кастомные скоупы Dagger
 aliases: [Dagger Custom Scopes, Кастомные скоупы Dagger]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dagger
-  - c-dependency-injection
-  - q-dagger-build-time-optimization--android--medium
-  - q-dagger-component-dependencies--android--hard
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-multibinding--android--hard
-  - q-dagger-purpose--android--easy
-  - q-hilt-components-scope--android--medium
+related: [c-dagger, c-dependency-injection, q-dagger-build-time-optimization--android--medium, q-dagger-component-dependencies--android--hard, q-dagger-framework-overview--android--hard, q-dagger-multibinding--android--hard, q-dagger-purpose--android--easy, q-hilt-components-scope--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
   - "https://dagger.dev/hilt/components.html"
-date created: Saturday, November 1st 2025, 12:46:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между `@Singleton`, пользовательскими (custom) скоупами и unscoped-зависимостями. Когда и зачем стоит создавать кастомный скоуп?

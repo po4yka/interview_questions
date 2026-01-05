@@ -16,8 +16,6 @@ related: [c-version-control, c-ci-cd]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["branching", "concept", "difficulty/medium", "git", "merging", "rebasing", "version-control"]
-date created: Sunday, October 12th 2025, 2:37:10 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

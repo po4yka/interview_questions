@@ -15,8 +15,6 @@ related: [c-design-patterns, c-decorator-pattern, c-adapter-pattern]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
-date created: Tuesday, November 11th 2025, 8:17:53 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

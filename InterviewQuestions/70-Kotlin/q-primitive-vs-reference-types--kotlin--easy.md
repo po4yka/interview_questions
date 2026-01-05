@@ -14,8 +14,6 @@ related: [c-algorithms, c-computer-science]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy, java, kotlin, memory, primitive-types, programming-languages, reference-types]
-date created: Tuesday, November 25th 2025, 12:55:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > В чем разница примитивного и ссылочного типов?

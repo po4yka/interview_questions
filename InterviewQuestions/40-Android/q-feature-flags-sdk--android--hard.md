@@ -3,33 +3,20 @@ id: android-488
 title: Design Feature Flags & Experimentation SDK / Проектирование SDK флагов и экспериментов
 aliases: [Experimentation SDK, Feature Flags SDK]
 topic: android
-subtopics:
-  - architecture-clean
-  - networking-http
-  - service
+subtopics: [architecture-clean, networking-http, service]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-clean-architecture
-  - c-dependency-injection
-  - c-workmanager
-  - q-data-sync-unstable-network--android--hard
-  - q-design-instagram-stories--android--hard
-  - q-design-uber-app--android--hard
+related: [c-clean-architecture, c-dependency-injection, c-workmanager, q-data-sync-unstable-network--android--hard, q-design-instagram-stories--android--hard, q-design-uber-app--android--hard]
 sources:
   - "https://developer.android.com/topic/architecture"
 created: 2025-10-29
 updated: 2025-11-10
 tags: [android/architecture-clean, android/networking-http, android/service, difficulty/hard, experimentation, feature-flags, sdk-design]
 
-date created: Saturday, November 1st 2025, 12:46:49 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

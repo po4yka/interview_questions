@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/gradle, difficulty/medium, gradle, toml]
 sources: ["https://developer.android.com/build/migrate-to-catalogs", "https://docs.gradle.org/current/userguide/platforms.html"]
-date created: Saturday, November 1st 2025, 12:46:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

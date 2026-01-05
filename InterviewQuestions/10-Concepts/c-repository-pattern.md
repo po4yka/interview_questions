@@ -8,8 +8,6 @@ links: []
 created: 2025-10-30
 updated: 2025-10-30
 tags: [architecture-patterns, clean-architecture, concept, data-layer, repository]
-date created: Thursday, October 30th 2025, 12:29:27 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

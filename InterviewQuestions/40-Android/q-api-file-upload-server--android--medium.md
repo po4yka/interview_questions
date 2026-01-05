@@ -3,33 +3,20 @@ id: android-161
 title: API File Upload Server / Загрузка файлов на сервер через API
 aliases: [API File Upload Server, Загрузка файлов на сервер через API]
 topic: android
-subtopics:
-  - background-execution
-  - files-media
-  - networking-http
+subtopics: [background-execution, files-media, networking-http]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related:
-  - c-okhttp
-  - c-workmanager
-  - q-android-storage-types--android--medium
-  - q-api-rate-limiting-throttling--android--medium
-  - q-large-file-upload--android--medium
-  - q-large-file-upload-app--android--hard
+related: [c-okhttp, c-workmanager, q-android-storage-types--android--medium, q-api-rate-limiting-throttling--android--medium, q-large-file-upload--android--medium, q-large-file-upload-app--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/files-media,
       android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
 
-date created: Tuesday, November 25th 2025, 4:56:25 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 anki_synced: true
 anki_slugs:
   - 40-android-q-api-file-upload-server-android-medium-p01-en

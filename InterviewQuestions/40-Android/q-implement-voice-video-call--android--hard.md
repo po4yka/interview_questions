@@ -3,31 +3,19 @@ id: android-019
 title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок в Android?
 aliases: [Voice Video Call Android, WebRTC Android, Голосовой видеозвонок Android]
 topic: android
-subtopics:
-  - media
-  - networking-http
-  - websockets
+subtopics: [media, networking-http, websockets]
 question_kind: coding
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources:
   - "https://github.com/amitshekhariitbhu/android-interview-questions"
 status: draft
 moc: moc-android
-related:
-  - q-android-lint-tool--android--medium
-  - q-http-protocols-comparison--android--medium
-  - q-main-thread-android--android--medium
-  - q-parallel-network-calls-coroutines--kotlin--medium
-  - q-parsing-optimization-android--android--medium
+related: [q-android-lint-tool--android--medium, q-http-protocols-comparison--android--medium, q-main-thread-android--android--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-parsing-optimization-android--android--medium]
 created: 2025-10-06
 updated: 2025-10-31
 tags: [android/media, android/networking-http, android/websockets, difficulty/hard]
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Как бы вы реализовали функции голосовых и видеозвонков в Android приложении?

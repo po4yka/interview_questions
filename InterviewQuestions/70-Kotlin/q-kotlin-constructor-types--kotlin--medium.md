@@ -14,8 +14,6 @@ related: [q-abstract-class-vs-interface--kotlin--medium, q-advanced-coroutine-pa
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/type-system]
-date created: Saturday, November 1st 2025, 1:26:20 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Какие типы конструкторов есть у классов в Kotlin?

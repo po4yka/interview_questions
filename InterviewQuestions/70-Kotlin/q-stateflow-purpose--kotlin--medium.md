@@ -14,8 +14,6 @@ related: [c-kotlin]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management, stateflow]
-date created: Friday, October 31st 2025, 6:31:34 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Для чего нужен `StateFlow`?

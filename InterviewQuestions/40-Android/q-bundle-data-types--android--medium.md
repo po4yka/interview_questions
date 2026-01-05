@@ -3,30 +3,19 @@ id: android-387
 title: Типы данных Bundle / Bundle Data Types
 aliases: [Bundle Data Types, Типы данных Bundle]
 topic: android
-subtopics:
-  - serialization
+subtopics: [serialization]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - q-android-app-components--android--easy
-  - q-data-sync-unstable-network--android--hard
-  - q-foreground-service-types--android--medium
-  - q-parcelable-implementation--android--medium
-  - q-what-is-layout-types-and-when-to-use--android--easy
+related: [c-activity, q-android-app-components--android--easy, q-data-sync-unstable-network--android--hard, q-foreground-service-types--android--medium, q-parcelable-implementation--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
 created: 2024-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/serialization, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:04:49 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие типы данных поддерживает `Bundle`?

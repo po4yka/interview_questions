@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral, coupling, difficulty/medium, gof-patterns, mediator]
 
-date created: Saturday, November 1st 2025, 1:26:22 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Mediator? Когда и зачем его следует использовать?

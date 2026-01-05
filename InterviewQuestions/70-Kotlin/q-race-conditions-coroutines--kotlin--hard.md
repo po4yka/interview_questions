@@ -13,13 +13,8 @@ question_kind: coding
 tags: [bugs, concurrency, coroutines, data-races, difficulty/hard, kotlin, race-conditions, thread-safety]
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-debugging-coroutines-techniques--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
-subtopics:
-  - concurrency
-  - coroutines
-  - race-conditions
+subtopics: [concurrency, coroutines, race-conditions]
 
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?

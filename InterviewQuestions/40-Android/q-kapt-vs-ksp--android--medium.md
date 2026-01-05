@@ -3,32 +3,20 @@ id: android-020
 title: kapt vs KSP comparison / Сравнение kapt и KSP
 aliases: [kapt vs KSP comparison, Сравнение kapt и KSP]
 topic: android
-subtopics:
-  - gradle
+subtopics: [gradle]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - q-fix-slow-app-startup-legacy--android--hard
-  - q-flutter-comparison--android--medium
-  - q-kapt-ksp-migration--android--medium
-  - q-looper-thread-connection--android--medium
-  - q-macrobenchmark-startup--android--medium
-  - q-react-native-vs-flutter--android--medium
+related: [c-gradle, q-fix-slow-app-startup-legacy--android--hard, q-flutter-comparison--android--medium, q-kapt-ksp-migration--android--medium, q-looper-thread-connection--android--medium, q-macrobenchmark-startup--android--medium, q-react-native-vs-flutter--android--medium]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/gradle, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:46:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > В чем разница между kapt и KSP? Какой использовать?

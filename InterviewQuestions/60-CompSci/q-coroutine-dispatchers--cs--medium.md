@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [coroutines, difficulty/medium, dispatchers, kotlin, programming-languages, threading]
 sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 
-date created: Saturday, November 1st 2025, 1:24:42 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое диспетчеры корутин? Какие типы диспетчеров существуют и когда их использовать?

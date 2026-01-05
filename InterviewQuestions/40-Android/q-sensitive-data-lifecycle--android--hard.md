@@ -3,23 +3,14 @@ id: android-637
 title: Sensitive Data Lifecycle / Жизненный цикл чувствительных данных
 aliases: [Sensitive Data Lifecycle, Жизненный цикл чувствительных данных]
 topic: android
-subtopics:
-  - keystore-crypto
-  - privacy-sdks
+subtopics: [keystore-crypto, privacy-sdks]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-keystore
-  - q-android-security-best-practices--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-save-data-outside-fragment--android--medium
-  - q-what-is-data-binding--android--easy
+related: [c-android-keystore, q-android-security-best-practices--android--medium, q-data-sync-unstable-network--android--hard, q-save-data-outside-fragment--android--medium, q-what-is-data-binding--android--easy]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/keystore-crypto, android/privacy-sdks, data-lifecycle, difficulty/hard]
@@ -31,8 +22,6 @@ sources:
 - url: "https://owasp.org/www-project-mobile-security-testing-guide/"
   note: OWASP MSTG data storage/testing guidance
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Как построить систему управления жизненным циклом чувствительных данных в Android: классификация, минимизация, шифрование, контролируемое кеширование, безопасное удаление и аудит?

@@ -3,29 +3,18 @@ id: android-352
 title: How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение
 aliases: [How To Catch The Earliest Entry Point Into The Application, Как поймать самую раннюю точку входа в приложение]
 topic: android
-subtopics:
-  - lifecycle
+subtopics: [lifecycle]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-lifecycle
-  - q-hilt-entry-points--android--medium
-  - q-how-application-priority-is-determined-by-the-system--android--hard
-  - q-jetpack-compose-lazy-column--android--easy
-  - q-retrofit-modify-all-requests--android--hard
-  - q-which-class-to-catch-gestures--android--easy
+related: [c-lifecycle, q-hilt-entry-points--android--medium, q-how-application-priority-is-determined-by-the-system--android--hard, q-jetpack-compose-lazy-column--android--easy, q-retrofit-modify-all-requests--android--hard, q-which-class-to-catch-gestures--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/lifecycle, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как поймать самую раннюю точку входа в приложение

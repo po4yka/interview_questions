@@ -15,8 +15,6 @@ related: [c-material-design, c-design-tokens, c-theming, c-accessibility]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
-date created: Monday, November 10th 2025, 8:37:44 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

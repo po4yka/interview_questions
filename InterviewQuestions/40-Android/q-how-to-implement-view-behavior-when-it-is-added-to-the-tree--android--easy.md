@@ -3,31 +3,19 @@ id: android-243
 title: How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево
 aliases: [How To Implement View Behavior When It Is Added To The Tree, Как реализовать поведение View при добавлении в дерево]
 topic: android
-subtopics:
-  - lifecycle
-  - ui-views
+subtopics: [lifecycle, ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-lifecycle
-  - q-custom-view-attributes--android--medium
-  - q-recyclerview-sethasfixedsize--android--easy
-  - q-viewmodel-pattern--android--easy
-  - q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
+related: [c-lifecycle, q-custom-view-attributes--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-viewmodel-pattern--android--easy, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/lifecycle, android/ui-views, custom-view, difficulty/easy, ui, view-lifecycle]
 
-date created: Saturday, November 1st 2025, 12:46:53 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

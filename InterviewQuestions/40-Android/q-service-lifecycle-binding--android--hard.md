@@ -3,30 +3,18 @@ id: android-325
 title: Service Lifecycle and Binding / Жизненный цикл и привязка Service
 aliases: [Service Lifecycle and Binding, Жизненный цикл и привязка Service]
 topic: android
-subtopics:
-  - service
+subtopics: [service]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-foreground-service-types--android--medium
-  - q-how-to-add-custom-attributes-to-custom-view--android--medium
-  - q-migration-to-compose--android--medium
-  - q-viewmodel-pattern--android--easy
-  - q-what-is-data-binding--android--easy
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [c-android, q-foreground-service-types--android--medium, q-how-to-add-custom-attributes-to-custom-view--android--medium, q-migration-to-compose--android--medium, q-viewmodel-pattern--android--easy, q-what-is-data-binding--android--easy, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-10
 updated: 2025-11-11
 tags: [android/service, difficulty/hard]
 
-date created: Saturday, November 1st 2025, 12:47:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 >

@@ -3,31 +3,20 @@ id: android-182
 title: View Binding / Привязка View
 aliases: [View Binding, Привязка View]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources:
   - "https://developer.android.com/topic/libraries/view-binding"
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - q-reduce-apk-size-techniques--android--medium
-  - q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
-  - q-what-is-data-binding--android--easy
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
-  - q-what-is-viewmodel--android--medium
+related: [c-gradle, q-reduce-apk-size-techniques--android--medium, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-is-data-binding--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium, view-binding]
 
-date created: Saturday, November 1st 2025, 12:47:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 

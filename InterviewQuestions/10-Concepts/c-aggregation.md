@@ -15,8 +15,6 @@ related: [c-composition, c-oop-concepts, c-oop-principles, c-inheritance, c-oop-
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Tuesday, November 11th 2025, 8:16:21 am
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

@@ -3,30 +3,18 @@ id: android-248
 title: How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView в Compose
 aliases: [How To Create List Like RecyclerView In Compose, Как создать список как RecyclerView в Compose]
 topic: android
-subtopics:
-  - ui-compose
+subtopics: [ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - q-compose-core-components--android--medium
-  - q-compose-custom-animations--android--medium
-  - q-compose-testing--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
+related: [c-compose-state, c-jetpack-compose, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-compose-testing--android--medium, q-how-does-jetpackcompose-work--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/ui-compose, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:53 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как создать список как RecyclerView в Compose

@@ -15,8 +15,6 @@ related: [c-accessibility, c-compose-semantics, c-touch-input, c-material-design
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Tuesday, November 11th 2025, 8:44:13 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

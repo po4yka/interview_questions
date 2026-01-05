@@ -16,8 +16,6 @@ updated: 2025-11-11
 sources: []
 tags: [android/fragment, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 1:31:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

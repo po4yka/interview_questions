@@ -3,30 +3,18 @@ id: android-467
 title: CompositionLocal Advanced / CompositionLocal — продвинутый уровень
 aliases: [CompositionLocal — продвинутый уровень, CompositionLocal Advanced]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - ui-compose
+subtopics: [architecture-mvvm, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - q-compose-core-components--android--medium
-  - q-compose-navigation-advanced--android--medium
-  - q-compose-performance-optimization--android--hard
-  - q-compose-remember-derived-state--android--medium
-  - q-compose-semantics--android--medium
-  - q-what-are-the-most-important-components-of-compose--android--medium
+related: [q-compose-core-components--android--medium, q-compose-navigation-advanced--android--medium, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-semantics--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 sources: []
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:46:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Когда использовать `CompositionLocal`? Чем различаются `staticCompositionLocalOf` и `compositionLocalOf`?

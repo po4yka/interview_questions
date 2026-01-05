@@ -3,31 +3,20 @@ id: android-056
 title: KAPT to KSP Migration Guide / Руководство по миграции с KAPT на KSP
 aliases: [KAPT to KSP Migration Guide, Руководство по миграции с KAPT на KSP]
 topic: android
-subtopics:
-  - performance-startup
+subtopics: [performance-startup]
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: Original
 source_note: Annotation processing migration best practices
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-android-profiler
-  - q-annotation-processing-android--android--medium
-  - q-background-tasks-decision-guide--android--medium
-  - q-kapt-vs-ksp--android--medium
-  - q-workmanager-decision-guide--android--medium
+related: [c-android, c-android-profiler, q-annotation-processing-android--android--medium, q-background-tasks-decision-guide--android--medium, q-kapt-vs-ksp--android--medium, q-workmanager-decision-guide--android--medium]
 created: 2025-10-11
 updated: 2025-11-11
 tags: [android/performance-startup, annotation-processing, difficulty/medium, en, kapt, ksp, ru]
 
-date created: Saturday, November 1st 2025, 12:46:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Подробно сравните KAPT и KSP для обработки аннотаций. Мигрируйте зависимости библиотек с KAPT на KSP. Измерьте и задокументируйте улучшения времени сборки.

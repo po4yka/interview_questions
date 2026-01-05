@@ -3,29 +3,20 @@ id: android-647
 title: Kotlin Value Classes (Inline Classes) / Value классы в Kotlin
 aliases: [Kotlin Value Classes (Inline Classes), Value классы в Kotlin]
 topic: kotlin
-subtopics:
-- type-system
+subtopics: [type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-- en
-- ru
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related:
-- q-android-runtime-art--android--medium
-- q-inline-classes-value-classes--kotlin--medium
-- q-inline-value-classes-performance--kotlin--medium
-- q-value-classes-inline-classes--kotlin--medium
+related: [q-android-runtime-art--android--medium, q-inline-classes-value-classes--kotlin--medium, q-inline-value-classes-performance--kotlin--medium, q-value-classes-inline-classes--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-10
 tags: [difficulty/medium, inline-classes, kotlin/types, performance, type-safety, value-classes]
 sources:
 - "https://kotlinlang.org/docs/inline-classes.html"
 
-date created: Tuesday, November 25th 2025, 1:00:18 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Что такое value классы в Kotlin и как они работают?

@@ -3,33 +3,19 @@ id: android-196
 title: Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов
 aliases: [Which Class To Use For Detecting Gestures, Какой класс использовать для обнаружения жестов]
 topic: android
-subtopics:
-  - ui-state
-  - ui-views
+subtopics: [ui-state, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-viewmodel
-  - q-dagger-field-injection--android--medium
-  - q-how-to-write-recyclerview-cache-ahead--android--medium
-  - q-what-are-services-for--android--easy
-  - q-what-is-layout-types-and-when-to-use--android--easy
-  - q-which-class-can-be-used-to-detect-different-gestures--android--easy
-  - q-which-class-to-catch-gestures--android--easy
+related: [c-compose-state, c-viewmodel, q-dagger-field-injection--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-what-are-services-for--android--easy, q-what-is-layout-types-and-when-to-use--android--easy, q-which-class-can-be-used-to-detect-different-gestures--android--easy, q-which-class-to-catch-gestures--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events]
 
-date created: Saturday, November 1st 2025, 12:47:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

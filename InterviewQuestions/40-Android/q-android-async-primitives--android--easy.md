@@ -3,31 +3,19 @@ id: android-143
 title: Android Async Primitives / Примитивы асинхронности Android
 aliases: [Android Async Primitives, Примитивы асинхронности Android]
 topic: android
-subtopics:
-  - coroutines
-  - threads-sync
+subtopics: [coroutines, threads-sync]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - q-async-operations-android--android--medium
-  - q-coroutine-builders-basics--kotlin--easy
-  - q-how-to-start-drawing-ui-in-android--android--easy
-  - q-viewmodel-pattern--android--easy
-  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
+related: [c-coroutines, q-async-operations-android--android--medium, q-coroutine-builders-basics--kotlin--easy, q-how-to-start-drawing-ui-in-android--android--easy, q-viewmodel-pattern--android--easy, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 12:46:42 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие примитивы асинхронности предоставляет Android?

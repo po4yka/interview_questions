@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [advertising, android/privacy-sdks, attribution-reporting, difficulty/medium, privacy, privacy-sandbox]
-date created: Saturday, November 1st 2025, 1:03:50 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

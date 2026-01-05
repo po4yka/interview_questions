@@ -3,23 +3,14 @@ id: android-630
 title: Wear Compose UX Patterns / UX-паттерны Wear Compose
 aliases: [UX-паттерны Wear Compose, Wear Compose UX Patterns]
 topic: android
-subtopics:
-  - ui-compose
-  - wear
+subtopics: [ui-compose, wear]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-jetpack-compose
-  - q-android-tv-compose-leanback--android--hard
-  - q-compose-core-components--android--medium
-  - q-compose-custom-animations--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
+related: [c-jetpack-compose, q-android-tv-compose-leanback--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/ui-compose, android/wear, difficulty/hard, ux]
@@ -29,8 +20,6 @@ sources:
 - url: "https://github.com/google/horologist"
   note: Horologist libraries
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Как спроектировать сложное приложение на Wear OS с Compose: навигация со Swipe-to-dismiss, обработка rotary input, адаптация под круглые экраны, Tiles и Complications?

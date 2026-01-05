@@ -3,22 +3,14 @@ id: android-615
 title: Media3 Migration Strategy / Стратегия миграции на Media3
 aliases: [Media3 Migration Strategy, Стратегия миграции на Media3]
 topic: android
-subtopics:
-  - media
+subtopics: [media]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-surfaces
-  - c-android-tv
-  - q-global-localization-strategy--android--hard
-  - q-media3-transformer-workflows--android--hard
-  - q-scoped-storage-migration-strategy--android--hard
+related: [c-android-surfaces, c-android-tv, q-global-localization-strategy--android--hard, q-media3-transformer-workflows--android--hard, q-scoped-storage-migration-strategy--android--hard]
 created: 2024-11-02
 updated: 2025-11-10
 tags: [android/media, difficulty/hard]
@@ -26,8 +18,6 @@ sources:
   - "https://developer.android.com/guide/topics/media/media3/getting-started"
   - "https://medium.com/androiddevelopers/media3-from-exoplayer-migration"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как мигрировать с ExoPlayer на Media3: перестроить архитектуру плеера, перенести UI, сессии и офлайн-функциональность, не ломая авто/TV интеграцию?

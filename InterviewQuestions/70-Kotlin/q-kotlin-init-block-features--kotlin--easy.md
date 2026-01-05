@@ -14,8 +14,6 @@ related: [c-kotlin, q-noncancellable-context-cleanup--kotlin--medium, q-room-cor
 created: 2024-10-15
 updated: 2025-11-09
 tags: [constructors, difficulty/easy, init, initialization, kotlin, oop]
-date created: Friday, October 31st 2025, 6:29:34 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Есть какие-то особенности использования `init` блока?

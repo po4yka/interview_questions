@@ -16,8 +16,6 @@ related: [c-data-structures, c-sorting-algorithms, c-binary-search, c-dynamic-pr
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["algorithms", "big-o", "complexity", "concept", "difficulty/medium", "searching", "sorting"]
-date created: Sunday, October 12th 2025, 2:38:09 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/hard, expression-evaluation, interpreter, language-processing]
 sources: ["https://refactoring.guru/design-patterns/interpreter"]
-date created: Saturday, November 1st 2025, 1:03:11 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Интерпретатор? Когда его использовать и как он работает?

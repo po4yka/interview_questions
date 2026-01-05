@@ -14,8 +14,6 @@ related: [c-java-features]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy, functional-interface, functional-programming, java, lambda, programming-languages]
-date created: Friday, October 31st 2025, 6:32:22 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Какой тип у лямбды в Java?

@@ -14,8 +14,6 @@ related: [c-equality, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [comparison, difficulty/medium, equality, java, kotlin, operators]
-date created: Friday, October 31st 2025, 6:30:29 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Чем отличаются двойное равно в Java и Kotlin?

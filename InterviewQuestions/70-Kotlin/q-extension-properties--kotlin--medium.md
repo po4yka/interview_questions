@@ -14,8 +14,6 @@ related: [c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin, programming-languages]
-date created: Friday, October 31st 2025, 6:29:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Свойства какого вида можно добавить как расширение?

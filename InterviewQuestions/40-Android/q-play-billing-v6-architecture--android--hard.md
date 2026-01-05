@@ -3,22 +3,14 @@ id: android-618
 title: Play Billing v6 Architecture / Архитектура Play Billing v6
 aliases: [Play Billing v6 Architecture, Архитектура Play Billing v6]
 topic: android
-subtopics:
-  - billing
+subtopics: [billing]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-play-billing
-  - q-android-release-pipeline-cicd--android--hard
-  - q-multi-module-best-practices--android--hard
-  - q-play-feature-delivery--android--medium
-  - q-quick-settings-tiles-architecture--android--medium
+related: [c-play-billing, q-android-release-pipeline-cicd--android--hard, q-multi-module-best-practices--android--hard, q-play-feature-delivery--android--medium, q-quick-settings-tiles-architecture--android--medium]
 created: 2024-11-02
 updated: 2025-11-10
 tags: [android/billing, difficulty/hard]
@@ -28,8 +20,6 @@ sources:
 - url: "https://developer.android.com/google/play/billing/migrate-gpblv6"
   note: Billing v6 migration
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как спроектировать архитектуру интеграции Play Billing v6: от каталога товаров и гибких подписок до бэкенд-проверки, RTDN и обработки отложенных покупок?

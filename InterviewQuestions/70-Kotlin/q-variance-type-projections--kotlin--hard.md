@@ -14,8 +14,6 @@ related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async
 created: 2025-10-15
 updated: 2025-11-09
 tags: [contravariance, covariance, difficulty/hard, generics, kotlin, projections, type-system, variance]
-date created: Friday, October 31st 2025, 6:32:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Объясните variance на месте объявления против на месте использования в Kotlin. В чем разница между in, out и star проекциями?

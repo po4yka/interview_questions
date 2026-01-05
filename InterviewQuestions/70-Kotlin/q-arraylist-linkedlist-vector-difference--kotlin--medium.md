@@ -14,8 +14,6 @@ related: [c-collections, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, data-structures, difficulty/medium, kotlin]
-date created: Friday, October 31st 2025, 6:29:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > В чем разница между `ArrayList`, `LinkedList` и `Vector`?

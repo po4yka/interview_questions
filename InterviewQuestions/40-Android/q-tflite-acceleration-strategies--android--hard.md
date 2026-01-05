@@ -3,24 +3,14 @@ id: android-629
 title: TFLite Acceleration Strategies / Стратегии ускорения TFLite
 aliases: [TFLite Acceleration Strategies, Стратегии ускорения TFLite]
 topic: android
-subtopics:
-  - performance-battery
-  - performance-memory
-  - threads-sync
+subtopics: [performance-battery, performance-memory, threads-sync]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-profiling
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-testing-strategies--android--medium
-  - q-cache-implementation-strategies--android--medium
-  - q-integration-testing-strategies--android--medium
+related: [c-android-profiling, q-android-performance-measurement-tools--android--medium, q-android-testing-strategies--android--medium, q-cache-implementation-strategies--android--medium, q-integration-testing-strategies--android--medium]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/performance-battery, android/performance-memory, android/threads-sync, difficulty/hard, performance]
@@ -28,8 +18,6 @@ sources:
   - "https://firebase.google.com/docs/ml/manage-hosted-models"
   - "https://www.tensorflow.org/lite/performance/delegates"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Как построить высокопроизводительный pipeline on-device ML на Android: подготовить модель, включить NNAPI/GPU delegate, организовать поток выполнения и обновлять модель по воздуху?

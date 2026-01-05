@@ -3,31 +3,19 @@ id: android-370
 title: What Does The Lifecycle Library Do / Что делает библиотека Lifecycle
 aliases: [What Does The Lifecycle Library Do, Что делает библиотека Lifecycle]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - lifecycle
+subtopics: [architecture-mvvm, lifecycle]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources: []
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-leakcanary-library--android--easy
-  - q-service-lifecycle-binding--android--hard
-  - q-what-is-viewmodel--android--medium
-  - q-why-was-the-lifecycle-library-created--android--hard
+related: [c-android, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-leakcanary-library--android--easy, q-service-lifecycle-binding--android--hard, q-what-is-viewmodel--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium, lifecycle-aware]
 
-date created: Saturday, November 1st 2025, 12:47:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 

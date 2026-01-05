@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, opengl-es, rendering, shaders]
-date created: Saturday, November 1st 2025, 1:03:14 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

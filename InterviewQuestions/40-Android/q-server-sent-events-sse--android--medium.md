@@ -3,30 +3,18 @@ id: android-286
 title: Server-Sent Events (SSE) / Server-Sent Events (SSE)
 aliases: [Server-Sent Events, SSE]
 topic: android
-subtopics:
-  - networking-http
+subtopics: [networking-http]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-retrofit
-  - q-api-file-upload-server--android--medium
-  - q-compose-testing--android--medium
-  - q-http-protocols-comparison--android--medium
-  - q-mvi-one-time-events--android--medium
-  - q-recyclerview-explained--android--medium
-  - q-recyclerview-viewtypes-delegation--android--medium
+related: [c-retrofit, q-api-file-upload-server--android--medium, q-compose-testing--android--medium, q-http-protocols-comparison--android--medium, q-mvi-one-time-events--android--medium, q-recyclerview-explained--android--medium, q-recyclerview-viewtypes-delegation--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/networking-http, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Server-Sent Events (SSE)

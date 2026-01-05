@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [composite, design-patterns, difficulty/medium, gof-patterns, structural-patterns, tree-structure]
 sources: ["https://en.wikipedia.org/wiki/Composite_pattern"]
 
-date created: Saturday, November 1st 2025, 1:24:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Composite? Когда и зачем его использовать?

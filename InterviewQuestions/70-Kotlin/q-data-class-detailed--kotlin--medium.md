@@ -15,8 +15,6 @@ description: "Comprehensive guide to Kotlin data classes covering generated meth
 moc: moc-kotlin
 related: [c-equality, c-kotlin-features, q-sealed-class-sealed-interface--kotlin--medium]
 subtopics: [data-classes]
-date created: Saturday, November 1st 2025, 1:29:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 

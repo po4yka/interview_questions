@@ -1,6 +1,4 @@
 ---
-date created: Tuesday, November 25th 2025, 8:13:57 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Android System Design — Interviewer One-Pager

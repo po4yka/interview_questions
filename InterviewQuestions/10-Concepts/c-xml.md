@@ -15,8 +15,6 @@ related: [c-view-binding, c-serialization, c-rest-api]
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Tuesday, November 11th 2025, 8:40:56 am
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Summary (EN)

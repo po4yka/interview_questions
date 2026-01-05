@@ -3,29 +3,18 @@ id: android-107
 title: Android Runtime Internals / Внутреннее устройство Android Runtime
 aliases: [Android Runtime Internals, Внутреннее устройство Android Runtime]
 topic: android
-subtopics:
-  - performance-memory
-  - processes
-  - profiling
+subtopics: [performance-memory, processes, profiling]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-app-lag-analysis--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-runtime-art--android--medium
-  - q-optimize-memory-usage-android--android--medium
+related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium, q-android-runtime-art--android--medium, q-optimize-memory-usage-android--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/processes, android/profiling, difficulty/hard]
 sources: []
-date created: Saturday, November 1st 2025, 12:46:43 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как устроено внутреннее функционирование Android Runtime (ART)?

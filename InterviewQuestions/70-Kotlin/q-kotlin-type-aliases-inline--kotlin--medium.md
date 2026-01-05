@@ -14,8 +14,6 @@ related: [c-kotlin, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup-
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, inline-classes, kotlin, performance, type-aliases, type-safety]
-date created: Friday, October 31st 2025, 6:28:52 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 

@@ -3,24 +3,14 @@ id: android-646
 title: Advanced ShareSheet & Shortcuts / Расширенный ShareSheet и ярлыки
 aliases: [Advanced ShareSheet & Shortcuts, Расширенный ShareSheet и ярлыки]
 topic: android
-subtopics:
-  - shortcuts-widgets
-  - ui-navigation
-  - ui-views
+subtopics: [shortcuts-widgets, ui-navigation, ui-views]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-communication-surfaces
-  - q-advanced-share-sheet-shortcuts--android--hard
-  - q-camerax-advanced-pipeline--android--hard
-  - q-recyclerview-itemdecoration-advanced--android--medium
-  - q-room-type-converters-advanced--android--medium
+related: [c-communication-surfaces, q-advanced-share-sheet-shortcuts--android--hard, q-camerax-advanced-pipeline--android--hard, q-recyclerview-itemdecoration-advanced--android--medium, q-room-type-converters-advanced--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/shortcuts-widgets, android/ui-navigation, android/ui-views, difficulty/hard]
@@ -31,8 +21,6 @@ sources:
     note: "Shortcuts guide"
   - url: "https://developer.android.com/about/versions/13/features/predictive-back"
     note: "Predictive back integration"
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как построить продвинутую интеграцию с ShareSheet: direct share, динамические ярлыки, персонализация, аналитика и соответствие политикам?

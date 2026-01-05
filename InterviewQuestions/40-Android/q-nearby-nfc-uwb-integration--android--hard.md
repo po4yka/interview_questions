@@ -3,25 +3,14 @@ id: android-620
 title: Nearby, NFC & UWB Integration / Интеграция Nearby, NFC и UWB
 aliases: [Nearby NFC UWB Integration, NFC и UWB, Интеграция Nearby]
 topic: android
-subtopics:
-  - networking-http
-  - nfc
-  - sensors
+subtopics: [networking-http, nfc, sensors]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-android-ipc
-  - q-android-auto-guidelines--android--hard
-  - q-integration-testing-strategies--android--medium
-  - q-room-paging3-integration--android--medium
-  - q-wearos-health-connect-integration--android--hard
+related: [c-android, c-android-ipc, q-android-auto-guidelines--android--hard, q-integration-testing-strategies--android--medium, q-room-paging3-integration--android--medium, q-wearos-health-connect-integration--android--hard]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/networking-http, android/nfc, android/sensors, difficulty/hard]
@@ -33,8 +22,6 @@ sources:
 - url: "https://developers.google.com/nearby/connections/overview"
   note: Nearby Connections docs
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как спроектировать гибридную систему ближней связи на Android, комбинируя NFC для первичной инициализации, Nearby Connections для обмена данными и UWB для точного позиционирования? Какие ограничения безопасность и аппаратная совместимость накладывают?

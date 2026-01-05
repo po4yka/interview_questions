@@ -3,33 +3,19 @@ id: android-001
 title: ProGuard and R8 / ProGuard и R8
 aliases: [ProGuard and R8, ProGuard и R8]
 topic: android
-subtopics:
-  - gradle
-  - obfuscation
-  - performance-memory
+subtopics: [gradle, obfuscation, performance-memory]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources:
   - "https://github.com/Kirchhoff-Android-Interview-Questions"
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - c-memory-management
-  - q-build-optimization-gradle--android--medium
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-proguard-r8-rules--android--medium
-  - q-reduce-app-size--android--medium
+related: [c-gradle, c-memory-management, q-build-optimization-gradle--android--medium, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-proguard-r8-rules--android--medium, q-reduce-app-size--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/gradle, android/obfuscation, android/performance-memory, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Что такое ProGuard и R8?

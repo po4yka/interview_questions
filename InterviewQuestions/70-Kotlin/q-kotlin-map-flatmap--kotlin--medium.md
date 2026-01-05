@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-11-10
 
 tags: [collections, difficulty/medium, flatmap, higher-order-functions, kotlin, map]
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > В чем разница между `map()` и `flatMap()` в Kotlin?

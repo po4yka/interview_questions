@@ -3,24 +3,14 @@ id: android-635
 title: Play Data Safety Workflow / Процесс Play Data Safety
 aliases: [Play Data Safety Workflow, Процесс Play Data Safety]
 topic: android
-subtopics:
-  - permissions
-  - play-console
-  - privacy-sdks
+subtopics: [permissions, play-console, privacy-sdks]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-keystore
-  - q-android-release-pipeline-cicd--android--hard
-  - q-data-sync-unstable-network--android--hard
-  - q-play-billing-v6-architecture--android--hard
-  - q-save-data-outside-fragment--android--medium
+related: [c-android-keystore, q-android-release-pipeline-cicd--android--hard, q-data-sync-unstable-network--android--hard, q-play-billing-v6-architecture--android--hard, q-save-data-outside-fragment--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/permissions, android/play-console, android/privacy-sdks, difficulty/hard, play-data-safety]
@@ -30,8 +20,6 @@ sources:
   - url: "https://support.google.com/googleplay/android-developer/answer/10787478"
     note: "Data safety best practices guide"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как организовать процесс заполнения и поддержки Play Data Safety: инвентаризация данных, согласование с командами, автоматизация проверки и обновление формы при релизах?

@@ -8,8 +8,6 @@ links: []
 created: 2025-11-02
 updated: 2025-11-02
 tags: [adaptive-ui, android, concept, foldable, window-manager]
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Summary (EN)

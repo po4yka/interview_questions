@@ -17,8 +17,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, room]
 
-date created: Sunday, October 12th 2025, 3:39:19 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Как использовать Room БД с корутинами и `Flow`? Объясните suspend функции в DAO, `Flow` для реактивных запросов, обработку транзакций и лучшие практики.

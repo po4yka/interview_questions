@@ -14,8 +14,6 @@ related: [c-collections, c-kotlin]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [arraylist, collections, data-structures, difficulty/medium, kotlin, linkedlist, programming-languages]
-date created: Friday, October 31st 2025, 6:29:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Как будут вести себя `LinkedList` и `ArrayList`, если вставить в них элемент?

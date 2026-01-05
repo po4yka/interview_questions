@@ -3,32 +3,19 @@ id: android-439
 title: Dagger Build Time Optimization / Оптимизация времени сборки Dagger
 aliases: [Dagger Build Time Optimization, Оптимизация времени сборки Dagger]
 topic: android
-subtopics:
-  - di-hilt
-  - gradle
+subtopics: [di-hilt, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dependency-injection
-  - c-gradle
-  - q-android-build-optimization--android--medium
-  - q-build-optimization-gradle--android--medium
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-problems--android--medium
-  - q-kapt-ksp-migration--android--medium
+related: [c-dependency-injection, c-gradle, q-android-build-optimization--android--medium, q-build-optimization-gradle--android--medium, q-dagger-framework-overview--android--hard, q-dagger-problems--android--medium, q-kapt-ksp-migration--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, android/gradle, difficulty/medium]
 sources:
   - "https://dagger.dev/hilt/"
-date created: Saturday, November 1st 2025, 12:46:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как минимизировать влияние Dagger на время сборки?

@@ -26,8 +26,6 @@ updated: '<% tp.date.now("YYYY-MM-DD") %>'
 
 # Tags (EN only; no leading #)
 tags: []
-date created: Friday, October 17th 2025, 2:39:19 pm
-date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Question (EN)

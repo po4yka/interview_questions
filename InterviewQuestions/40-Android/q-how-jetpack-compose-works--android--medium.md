@@ -16,8 +16,6 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium, jetpack-compose]
 
-date created: Saturday, November 1st 2025, 1:32:08 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

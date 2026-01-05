@@ -16,8 +16,6 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
 
-date created: Saturday, November 1st 2025, 1:24:28 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > В чем разница между методами `commit()` и `apply()` в `SharedPreferences`?

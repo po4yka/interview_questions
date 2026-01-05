@@ -3,35 +3,20 @@ id: android-482
 title: Context Types in Android / 2b3f4b Context 32 Android
 aliases: [22383f4b Context 32 Android, Context Types in Android]
 topic: android
-subtopics:
-  - activity
-  - app-startup
-  - lifecycle
+subtopics: [activity, app-startup, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - c-activity-lifecycle
-  - q-activity-lifecycle-methods--android--medium
-  - q-android-service-types--android--easy
-  - q-android-storage-types--android--medium
-  - q-app-start-types-android--android--medium
-  - q-memory-leaks-definition--android--easy
-  - q-usecase-pattern-android--android--medium
+related: [c-activity, c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-android-service-types--android--easy, q-android-storage-types--android--medium, q-app-start-types-android--android--medium, q-memory-leaks-definition--android--easy, q-usecase-pattern-android--android--medium]
 created: 2025-10-21
 updated: 2025-11-10
 tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
 sources:
   - "https://developer.android.com/reference/android/content/Context"
 
-date created: Saturday, November 1st 2025, 12:46:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Какие типы `Context` существуют в Android и когда следует использовать каждый из них?

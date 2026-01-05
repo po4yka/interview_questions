@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: ["buffer", "context-switching", "coroutines", "difficulty/hard", "dispatchers", "flow-operators", "flow", "flowon", "kotlin", "performance"]
 
-date created: Saturday, October 18th 2025, 3:06:32 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Что делает оператор `flowOn` в `Flow` в Kotlin? Чем он отличается от `withContext`? Объясните сохранение контекста, поведение буферизации, использование нескольких `flowOn` в цепочке и влияние на производительность с реальными примерами.

@@ -3,33 +3,19 @@ id: android-064
 title: Jetpack Compose Basics / Основы Jetpack Compose
 aliases: [Jetpack Compose Basics, Основы Jetpack Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
-  - ui-theming
+subtopics: [ui-compose, ui-state, ui-theming]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: internal
 source_note: Created for vault completeness
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - q-compose-modifier-system--android--medium
-  - q-compose-remember-derived-state--android--medium
-  - q-compose-semantics--android--medium
-  - q-how-does-jetpack-compose-work--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-how-jetpack-compose-works--android--medium
+related: [c-compose-state, q-compose-modifier-system--android--medium, q-compose-remember-derived-state--android--medium, q-compose-semantics--android--medium, q-how-does-jetpack-compose-work--android--medium, q-how-does-jetpackcompose-work--android--medium, q-how-jetpack-compose-works--android--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [android/ui-compose, android/ui-state, android/ui-theming, difficulty/medium, en, ru]
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Что такое Jetpack Compose? Объясните основные концепции: composable функции, управление состоянием, recomposition, модификаторы, макеты и жизненный цикл. Приведите подробные примеры построения UI.

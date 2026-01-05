@@ -3,30 +3,18 @@ id: android-295
 title: Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose
 aliases: [Remember vs RememberSaveable in Compose, Remember vs RememberSaveable в Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, ui-state]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - q-compose-core-components--android--medium
-  - q-compose-remember-derived-state--android--medium
-  - q-handler-looper-main-thread--android--medium
-  - q-remember-remembersaveable--android--medium
-  - q-what-are-the-most-important-components-of-compose--android--medium
+related: [c-compose-state, q-compose-core-components--android--medium, q-compose-remember-derived-state--android--medium, q-handler-looper-main-thread--android--medium, q-remember-remembersaveable--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2023-10-15
 updated: 2025-11-11
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Remember vs RememberSaveable в Compose

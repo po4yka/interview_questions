@@ -3,24 +3,14 @@ id: android-619
 title: Play Integrity Attestation / Аттестация Play Integrity
 aliases: [Play Integrity Attestation, Аттестация Play Integrity]
 topic: android
-subtopics:
-  - billing
-  - keystore-crypto
-  - play-console
+subtopics: [billing, keystore-crypto, play-console]
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-keystore
-  - q-android-security-best-practices--android--medium
-  - q-play-billing-v6-architecture--android--hard
-  - q-play-feature-delivery--android--medium
-  - q-play-store-publishing--android--medium
+related: [c-android-keystore, q-android-security-best-practices--android--medium, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium, q-play-store-publishing--android--medium]
 created: 2024-11-02
 updated: 2025-11-10
 tags: [android/billing, android/keystore-crypto, android/play-console, difficulty/hard]
@@ -28,8 +18,6 @@ sources:
   - "https://cloud.google.com/play-integrity/reference/rest"
   - "https://developer.android.com/google/play/integrity"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как реализовать Play Integrity: запрос токена на клиенте, проверка вердикта на сервере, использование capability tokens и связь с Play Billing?

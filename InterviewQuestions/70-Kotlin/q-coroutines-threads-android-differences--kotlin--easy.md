@@ -13,14 +13,7 @@ moc: moc-kotlin
 related: [q-rxjava-to-coroutines-migration--kotlin--medium, q-callsuper-annotation--kotlin--medium, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - threads
-  - performance
-  - android
-  - comparison
-  - difficulty/easy
+tags: [kotlin, coroutines, threads, performance, android, comparison, difficulty/easy]
 source: Kotlin Coroutines Interview Questions PDF
 ---
 # Вопрос (RU)

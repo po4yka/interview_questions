@@ -4,29 +4,18 @@ title: How To Tell Adapter To Redraw List When Item Removed / Как сказа�
   перерисовать список когда элемент удален
 aliases: [How To Tell Adapter To Redraw List, Как сказать адаптеру перерисовать список]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-custom-views
-  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
-  - q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium
-  - q-recyclerview-sethasfixedsize--android--easy
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
-  - q-what-problems-can-there-be-with-list-items--android--easy
+related: [c-custom-views, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [adapter, android/ui-views, difficulty/medium, diffutil, recyclerview]
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

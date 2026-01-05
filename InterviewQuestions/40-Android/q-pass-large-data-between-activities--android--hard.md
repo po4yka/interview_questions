@@ -3,25 +3,14 @@ id: android-365
 title: Pass Large Data Between Activities / Передача больших данных между Activity
 aliases: [Content URI, FileProvider, Large Data Transfer, Pass Large Data Between Activities, Передача больших данных между Activity]
 topic: android
-subtopics:
-  - activity
-  - content-provider
-  - intents-deeplinks
+subtopics: [activity, content-provider, intents-deeplinks]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-binder
-  - q-android-security-best-practices--android--medium
-  - q-how-to-pass-data-from-one-activity-to-another--android--medium
-  - q-how-to-pass-data-from-one-fragment-to-another--android--medium
-  - q-why-use-fragments-when-we-have-activities--android--medium
+related: [c-android, c-binder, q-android-security-best-practices--android--medium, q-how-to-pass-data-from-one-activity-to-another--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium, q-why-use-fragments-when-we-have-activities--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources:
@@ -30,8 +19,6 @@ sources:
   - "https://developer.android.com/training/secure-file-sharing"
 tags: [android/activity, android/content-provider, android/intents-deeplinks, binder, difficulty/hard, file-provider, ipc]
 
-date created: Saturday, November 1st 2025, 1:03:32 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

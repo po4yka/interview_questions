@@ -3,32 +3,18 @@ id: android-006
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
 aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам]
 topic: android
-subtopics:
-  - background-execution
-  - coroutines
-  - service
+subtopics: [background-execution, coroutines, service]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - c-service
-  - q-async-operations-android--android--medium
-  - q-background-vs-foreground-service--android--medium
-  - q-foreground-service-types--android--medium
-  - q-what-is-workmanager--android--medium
-  - q-workmanager-decision-guide--android--medium
+related: [c-coroutines, c-service, q-async-operations-android--android--medium, q-background-vs-foreground-service--android--medium, q-foreground-service-types--android--medium, q-what-is-workmanager--android--medium, q-workmanager-decision-guide--android--medium]
 sources: []
 created: 2025-10-05
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:46:44 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как выбрать правильный способ выполнения фоновых задач в Android?

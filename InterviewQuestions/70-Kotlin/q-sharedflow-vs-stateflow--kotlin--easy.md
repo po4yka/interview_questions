@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/easy, flow, kotlin, sharedflow, stateflow]
 
-date created: Friday, October 31st 2025, 6:30:48 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Какие различия между `SharedFlow` и `StateFlow`?

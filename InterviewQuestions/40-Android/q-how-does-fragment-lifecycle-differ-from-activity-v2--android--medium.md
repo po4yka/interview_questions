@@ -3,33 +3,19 @@ id: android-339
 title: How Does Fragment Lifecycle Differ From Activity V2
 aliases: [How Does Fragment Lifecycle Differ From Activity V2, Чем жизненный цикл Fragment отличается от Activity v2]
 topic: android
-subtopics:
-  - activity
-  - fragment
-  - lifecycle
+subtopics: [activity, fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - c-lifecycle
-  - q-android-project-parts--android--easy
-  - q-fragment-vs-activity-lifecycle--android--medium
-  - q-how-to-add-custom-attributes-to-custom-view--android--medium
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
+related: [c-activity, c-lifecycle, q-android-project-parts--android--easy, q-fragment-vs-activity-lifecycle--android--medium, q-how-to-add-custom-attributes-to-custom-view--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

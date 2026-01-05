@@ -14,8 +14,6 @@ related: [c-kotlin, q-channel-pipelines--kotlin--hard, q-supervisor-scope-vs-cor
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, extension-functions, extension-properties, extensions, kotlin]
-date created: Friday, October 31st 2025, 6:29:14 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Что известно про extension?

@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [cap-theorem, consistency, difficulty/hard, distributed-systems, system-design]
 sources: ["https://en.wikipedia.org/wiki/CAP_theorem"]
 
-date created: Sunday, October 12th 2025, 8:27:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Что такое CAP теорема? Какие компромиссы делают разные системы, и как выбрать между CP и AP системами?

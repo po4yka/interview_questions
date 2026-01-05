@@ -3,28 +3,19 @@ id: android-455
 title: DataStore Preferences и Proto / DataStore Preferences and Proto
 aliases: [DataStore Preferences and Proto, DataStore Preferences и Proto]
 topic: android
-subtopics:
-  - datastore
+subtopics: [datastore]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - q-android-storage-types--android--medium
-  - q-save-data-outside-fragment--android--medium
-  - q-sharedpreferences-definition--android--easy
+related: [c-coroutines, q-android-storage-types--android--medium, q-save-data-outside-fragment--android--medium, q-sharedpreferences-definition--android--easy]
 created: 2025-10-20
 updated: 2025-11-02
 tags: [android/datastore, datastore, difficulty/medium, preferences, proto-datastore, storage]
 sources:
   - https://developer.android.com/topic/libraries/architecture/datastore
-date created: Saturday, November 1st 2025, 12:46:49 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Что вы знаете о DataStore?

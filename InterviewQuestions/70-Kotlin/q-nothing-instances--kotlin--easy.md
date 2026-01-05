@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
 
-date created: Friday, October 31st 2025, 6:29:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Сколько экземпляров имеет тип Nothing в Kotlin?

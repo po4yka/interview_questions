@@ -3,31 +3,18 @@ id: android-431
 title: MVI Handle One Time Events / Обработка одноразовых событий в MVI
 aliases: [Event Wrapper, MVI One-Time Events, SingleLiveEvent, Обработка событий MVI, Одноразовые события]
 topic: android
-subtopics:
-  - architecture-mvi
-  - coroutines
-  - flow
+subtopics: [architecture-mvi, coroutines, flow]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - c-flow
-  - q-dagger-build-time-optimization--android--medium
-  - q-mvi-architecture--android--hard
-  - q-mvi-one-time-events--android--medium
-  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+related: [c-coroutines, c-flow, q-dagger-build-time-optimization--android--medium, q-mvi-architecture--android--hard, q-mvi-one-time-events--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvi, android/coroutines, android/flow, architecture-mvi, difficulty/hard, sharedflow, stateflow, viewmodel]
 
-date created: Saturday, November 1st 2025, 12:46:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как в MVI-архитектуре правильно обрабатывать одноразовые события (one-time events), которые не должны храниться в State и пересылаться при пересоздании экрана?

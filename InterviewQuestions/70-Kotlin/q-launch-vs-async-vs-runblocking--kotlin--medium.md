@@ -14,8 +14,6 @@ related: [c-coroutines, c-kotlin, q-coroutine-memory-leak-detection--kotlin--har
 created: 2024-10-15
 updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblocking]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > В чём разница между корутинными билдерами `launch`, `async` и `runBlocking`?

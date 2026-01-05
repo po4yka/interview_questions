@@ -3,31 +3,19 @@ id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
 aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
 topic: android
-subtopics:
-  - files-media
-  - permissions
+subtopics: [files-media, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-permissions
-  - c-scoped-storage-security
-  - q-api-file-upload-server--android--medium
-  - q-data-encryption-at-rest--android--medium
-  - q-how-to-display-svg-string-as-a-vector-file--android--medium
-  - q-large-file-upload--android--medium
+related: [c-permissions, c-scoped-storage-security, q-api-file-upload-server--android--medium, q-data-encryption-at-rest--android--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium, q-large-file-upload--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore, security]
 sources:
   - "https://developer.android.com/topic/security/data"
-date created: Saturday, November 1st 2025, 12:46:49 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как реализовать зашифрованное хранение файлов с использованием EncryptedFile API?

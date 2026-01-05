@@ -3,29 +3,18 @@ id: android-079
 title: List Items Problems / Проблемы с элементами списка
 aliases: [List Items Problems, Проблемы с элементами списка]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-views
+subtopics: [performance-memory, ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-performance
-  - c-recyclerview
-  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
-  - q-list-elements-problems--android--medium
-  - q-what-to-put-in-state-for-initial-list--android--easy
+related: [c-performance, c-recyclerview, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-list-elements-problems--android--medium, q-what-to-put-in-state-for-initial-list--android--easy]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-views, difficulty/easy, listview, memory, performance, recyclerview]
 
-date created: Saturday, November 1st 2025, 1:26:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Проблемы с элементами списка

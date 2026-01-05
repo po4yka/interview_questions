@@ -3,30 +3,18 @@ id: android-343
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
 aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
 topic: android
-subtopics:
-  - activity
-  - lifecycle
+subtopics: [activity, lifecycle]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-activity-lifecycle
-  - q-activity-lifecycle-methods--android--medium
-  - q-fragment-vs-activity-lifecycle--android--medium
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard
-  - q-what-is-activity-and-what-is-it-used-for--android--medium
+related: [c-activity-lifecycle, q-activity-lifecycle-methods--android--medium, q-fragment-vs-activity-lifecycle--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/lifecycle, difficulty/medium, lifecycle, onCreate, onResume, onStart]
 
-date created: Saturday, November 1st 2025, 12:47:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Методы жизненного цикла `Activity`

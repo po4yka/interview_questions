@@ -3,33 +3,19 @@ id: android-335
 title: In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service
 aliases: [Main Thread Service, Service Thread, Поток Service, Сервис в главном потоке]
 topic: android
-subtopics:
-  - lifecycle
-  - service
-  - threads-sync
+subtopics: [lifecycle, service, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-coroutines
-  - c-lifecycle
-  - c-service
-  - q-android-service-types--android--easy
-  - q-foreground-service-types--android--medium
-  - q-main-thread-android--android--medium
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [c-coroutines, c-lifecycle, c-service, q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-main-thread-android--android--medium, q-when-can-the-system-restart-a-service--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/lifecycle, android/service, android/threads-sync, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

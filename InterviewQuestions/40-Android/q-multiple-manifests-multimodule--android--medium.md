@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium, manifest-merging, modularization]
 sources: ["https://developer.android.com/build/manage-manifests", "https://developer.android.com/studio/build/manifest-merge"]
 
-date created: Saturday, November 1st 2025, 1:25:22 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

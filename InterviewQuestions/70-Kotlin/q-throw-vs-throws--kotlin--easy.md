@@ -14,8 +14,6 @@ related: [c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, exceptions, java, kotlin, programming-languages, throw, throws]
-date created: Friday, October 31st 2025, 6:32:26 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Throw Vs Throws / Throw Против Throws
 

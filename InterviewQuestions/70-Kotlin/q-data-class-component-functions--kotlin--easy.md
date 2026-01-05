@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [component-functions, data-classes, destructuring, difficulty/easy, kotlin]
 sources: ["https://kotlinlang.org/docs/data-classes.html"]
-date created: Saturday, November 1st 2025, 1:25:19 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Для чего служат `component` функции в `data class`? Как они работают и генерируются?

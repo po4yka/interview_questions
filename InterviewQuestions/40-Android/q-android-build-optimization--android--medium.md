@@ -3,30 +3,18 @@ id: android-158
 title: Android Build Optimization / Оптимизация сборки Android
 aliases: [Android Build Optimization, Оптимизация сборки Android]
 topic: android
-subtopics:
-  - build-variants
-  - dependency-management
-  - gradle
+subtopics: [build-variants, dependency-management, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - c-modularization
-  - q-annotation-processing-android--android--medium
-  - q-dagger-build-time-optimization--android--medium
-  - q-optimize-memory-usage-android--android--medium
+related: [c-gradle, c-modularization, q-annotation-processing-android--android--medium, q-dagger-build-time-optimization--android--medium, q-optimize-memory-usage-android--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium, gradle, performance]
-date created: Saturday, November 1st 2025, 1:02:18 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как оптимизировать время сборки Android-приложения?

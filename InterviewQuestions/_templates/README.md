@@ -1,6 +1,4 @@
 ---
-date created: Thursday, October 16th 2025, 11:57:04 am
-date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Templates Usage Guide

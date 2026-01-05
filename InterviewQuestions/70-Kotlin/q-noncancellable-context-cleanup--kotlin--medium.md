@@ -14,8 +14,6 @@ related: [c-coroutines, c-kotlin, q-sealed-class-sealed-interface--kotlin--mediu
 created: 2025-10-12
 updated: 2025-11-09
 tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancellable, resource-management]
-date created: Friday, October 31st 2025, 6:29:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 

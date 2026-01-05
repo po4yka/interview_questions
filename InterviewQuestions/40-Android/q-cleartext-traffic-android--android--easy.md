@@ -3,30 +3,19 @@ id: android-033
 title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
 aliases: [Cleartext traffic, Network Security Config, Незашифрованный трафик]
 topic: android
-subtopics:
-  - network-security-config
-  - networking-http
-  - permissions
+subtopics: [network-security-config, networking-http, permissions]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-encryption
-  - q-android-manifest-file--android--easy
-  - q-android-security-best-practices--android--medium
-  - q-android-security-practices-checklist--android--medium
+related: [c-encryption, q-android-manifest-file--android--easy, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]
 sources:
   - "https://developer.android.com/training/articles/security-config"
-date created: Saturday, November 1st 2025, 1:24:15 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое cleartext traffic в Android и как его контролировать?

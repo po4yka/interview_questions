@@ -3,24 +3,14 @@ id: android-625
 title: Perfetto Frame Timeline Analysis / Анализ Frame Timeline в Perfetto
 aliases: [Perfetto Frame Timeline Analysis, Анализ Frame Timeline в Perfetto]
 topic: android
-subtopics:
-  - logging-tracing
-  - monitoring-slo
-  - performance-rendering
+subtopics: [logging-tracing, monitoring-slo, performance-rendering]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-profiling
-  - q-android-performance-measurement-tools--android--medium
-  - q-frame-time-120ms-meaning--android--easy
-  - q-jank-detection-frame-metrics--android--medium
-  - q-leakcanary-heap-dump-analysis--android--medium
+related: [c-android-profiling, q-android-performance-measurement-tools--android--medium, q-frame-time-120ms-meaning--android--easy, q-jank-detection-frame-metrics--android--medium, q-leakcanary-heap-dump-analysis--android--medium]
 created: 2025-10-02
 updated: 2025-11-10
 tags: [android/logging-tracing, android/monitoring-slo, android/performance-rendering, difficulty/hard]
@@ -28,8 +18,6 @@ sources:
   - "https://developer.android.com/topic/performance/tracing/perfetto"
   - "https://perfetto.dev/docs/concepts/frame-timeline"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как использовать Perfetto и Frame Timeline для анализа лагов: настройка трассировки, интерпретация DisplayFrame/AppFrame, корреляция с потоками и автоматизация метрик?

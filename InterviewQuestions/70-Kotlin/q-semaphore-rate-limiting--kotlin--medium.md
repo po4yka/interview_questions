@@ -13,12 +13,7 @@ aliases: ["Semaphore rate limiting and resource pooling in Kotlin", "Semaphore �
 moc: moc-kotlin
 question_kind: coding
 related: [c-coroutines, c-kotlin, q-channelflow-callbackflow-flow--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
-subtopics:
-  - concurrency
-  - coroutines
-  - semaphore
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
+subtopics: [concurrency, coroutines, semaphore]
 ---
 # Вопрос (RU)
 > Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?

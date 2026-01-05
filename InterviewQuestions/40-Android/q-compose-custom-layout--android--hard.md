@@ -3,31 +3,19 @@ id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
 aliases: [Compose Custom Layout, Custom Layout Jetpack Compose, Кастомная разметка Compose, Кастомный layout в Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-graphics
+subtopics: [ui-compose, ui-graphics]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - q-compose-canvas-graphics--android--hard
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-custom-animations--android--medium
-  - q-compose-lazy-layout-optimization--android--hard
-  - q-custom-viewgroup-layout--android--hard
+related: [c-compose-state, q-compose-canvas-graphics--android--hard, q-compose-compiler-plugin--android--hard, q-compose-custom-animations--android--medium, q-compose-lazy-layout-optimization--android--hard, q-custom-viewgroup-layout--android--hard]
 sources: []
 created: 2023-10-11
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 
-date created: Saturday, November 1st 2025, 1:02:38 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Как создать кастомный layout в Compose? Объясните механизм measurement и placement.

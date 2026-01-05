@@ -3,31 +3,19 @@ id: android-135
 title: What Is Known About Methods That Redraw View / Что известно о методах перерисовки View
 aliases: [Methods That Redraw View, Методы перерисовки View]
 topic: android
-subtopics:
-  - performance-rendering
-  - ui-graphics
-  - ui-views
+subtopics: [performance-rendering, ui-graphics, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-performance
-  - q-handler-looper-main-thread--android--medium
-  - q-view-methods-and-their-purpose--android--medium
-  - q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium
-  - q-what-methods-redraw-views--android--medium
+related: [c-performance, q-handler-looper-main-thread--android--medium, q-view-methods-and-their-purpose--android--medium, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium, q-what-methods-redraw-views--android--medium]
 created: 2023-10-15
 updated: 2023-10-15
 sources: []
 tags: [android/performance-rendering, android/ui-graphics, android/ui-views, difficulty/medium, postInvalidate, rendering, requestLayout, ui, views]
 
-date created: Saturday, November 1st 2025, 12:47:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

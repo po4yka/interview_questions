@@ -15,8 +15,6 @@ created: 2024-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, kotlin]
 
-date created: Friday, October 31st 2025, 6:31:23 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Каким становится тип возврата suspend-функции после компиляции?

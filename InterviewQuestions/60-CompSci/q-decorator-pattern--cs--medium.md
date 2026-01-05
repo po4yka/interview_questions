@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [decorator, design-patterns, difficulty/medium, gof-patterns, kotlin, structural-patterns, wrapper]
 sources: ["https://refactoring.guru/design-patterns/decorator"]
-date created: Saturday, November 1st 2025, 1:25:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Decorator? Когда и зачем его использовать?

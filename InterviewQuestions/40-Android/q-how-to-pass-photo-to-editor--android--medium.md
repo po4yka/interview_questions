@@ -3,34 +3,19 @@ id: android-257
 title: How To Pass Photo To Editor / Как передать фото в редактор
 aliases: [How To Pass Photo To Editor, Как передать фото в редактор]
 topic: android
-subtopics:
-  - files-media
-  - intents-deeplinks
-  - ui-graphics
+subtopics: [files-media, intents-deeplinks, ui-graphics]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-intent
-  - c-scoped-storage-security
-  - q-android-storage-types--android--medium
-  - q-fileprovider-secure-sharing--android--medium
-  - q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy
-  - q-how-to-pass-data-from-one-fragment-to-another--android--medium
-  - q-how-to-pass-parameters-to-a-fragment--android--easy
-  - q-what-are-intents-for--android--medium
+related: [c-intent, c-scoped-storage-security, q-android-storage-types--android--medium, q-fileprovider-secure-sharing--android--medium, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-how-to-pass-data-from-one-fragment-to-another--android--medium, q-how-to-pass-parameters-to-a-fragment--android--easy, q-what-are-intents-for--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, difficulty/medium, image-processing]
 
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

@@ -16,8 +16,6 @@ related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-vs-supervis
 created: 2025-10-11
 updated: 2025-10-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scopes, supervisor]
-date created: Thursday, October 16th 2025, 4:28:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 

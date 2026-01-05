@@ -1,6 +1,4 @@
 ---
-date created: Tuesday, November 25th 2025, 8:18:23 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Documentation Index

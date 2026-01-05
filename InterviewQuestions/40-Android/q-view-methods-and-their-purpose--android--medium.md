@@ -3,28 +3,18 @@ id: android-303
 title: View Methods And Their Purpose / Методы View и их назначение
 aliases: [View Methods, Методы View]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-view-system-basics
-  - q-fragments-history-and-purpose--android--hard
-  - q-viewgroup-vs-view-differences--android--easy
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
-  - q-what-methods-redraw-views--android--medium
+related: [c-android-view-system-basics, q-fragments-history-and-purpose--android--hard, q-viewgroup-vs-view-differences--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium, drawing, rendering, view]
 
-date created: Saturday, November 1st 2025, 12:47:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Методы `View` и их назначение

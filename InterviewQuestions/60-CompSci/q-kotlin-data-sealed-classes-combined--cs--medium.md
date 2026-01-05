@@ -14,8 +14,6 @@ related: [c-computer-science, q-channels-basics-types--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 12:27:48 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Расскажи про data классы и sealed классы и как их сочетать

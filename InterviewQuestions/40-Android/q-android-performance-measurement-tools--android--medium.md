@@ -3,32 +3,19 @@ id: android-098
 title: Android Performance Measurement Tools / Инструменты измерения производительности Android
 aliases: [Android Performance Measurement Tools, Инструменты измерения производительности Android]
 topic: android
-subtopics:
-  - performance-memory
-  - profiling
-  - testing-benchmark
+subtopics: [performance-memory, profiling, testing-benchmark]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-basics
-  - c-performance
-  - q-android-app-lag-analysis--android--medium
-  - q-multithreading-tools-android--android--medium
-  - q-optimize-memory-usage-android--android--medium
-  - q-performance-monitoring-jank-compose--android--medium
+related: [c-android-basics, c-performance, q-android-app-lag-analysis--android--medium, q-multithreading-tools-android--android--medium, q-optimize-memory-usage-android--android--medium, q-performance-monitoring-jank-compose--android--medium]
 sources: []
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/profiling, android/testing-benchmark, difficulty/medium, optimization, performance]
 
-date created: Saturday, November 1st 2025, 1:02:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие инструменты используются для измерения производительности Android приложений и как их применять?

@@ -3,30 +3,19 @@ id: android-078
 title: Material3 Components / Компоненты Material3
 aliases: [Material3 Components, Компоненты Material3]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-theming
+subtopics: [ui-compose, ui-theming]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - q-compose-core-components--android--medium
-  - q-material3-dynamic-color-theming--android--medium
-  - q-what-are-the-most-important-components-of-compose--android--medium
+related: [c-compose-state, c-jetpack-compose, q-compose-core-components--android--medium, q-material3-dynamic-color-theming--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-theming, design-system, difficulty/easy, material3]
 sources: []
 
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Каковы ключевые различия между Material 2 и Material 3? Перечислите основные компоненты Material 3 и их сценарии использования. Как мигрировать с Material 2 на Material 3?

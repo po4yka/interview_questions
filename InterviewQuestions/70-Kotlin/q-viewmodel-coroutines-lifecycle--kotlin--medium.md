@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, viewmodel, viewmodelscope]
-date created: Sunday, October 12th 2025, 3:43:53 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Как использовать корутины в `ViewModel`? Объясните `viewModelScope`, автоматическую отмену при `onCleared()`, лучшие практики запуска корутин и обработку изменений конфигурации.

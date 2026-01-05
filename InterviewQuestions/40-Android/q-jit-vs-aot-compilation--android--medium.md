@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-startup, android/profiling, aot, art, baseline-profiles, compilation, difficulty/medium, jit]
 sources: []
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

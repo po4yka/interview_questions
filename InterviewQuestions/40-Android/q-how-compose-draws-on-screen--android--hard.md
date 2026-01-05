@@ -3,33 +3,18 @@ id: android-152
 title: How Compose Draws On Screen / Как Compose рисует на экране
 aliases: [How Compose Draws On Screen, Как Compose рисует на экране]
 topic: android
-subtopics:
-  - performance-rendering
-  - ui-compose
+subtopics: [performance-rendering, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - c-performance
-  - q-compose-core-components--android--medium
-  - q-compose-custom-animations--android--medium
-  - q-compose-performance-optimization--android--hard
-  - q-compose-stability-skippability--android--hard
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-recomposition-compose--android--medium
+related: [c-compose-state, c-jetpack-compose, c-performance, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium, q-recomposition-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/medium, rendering]
 sources: []
-date created: Saturday, November 1st 2025, 12:46:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

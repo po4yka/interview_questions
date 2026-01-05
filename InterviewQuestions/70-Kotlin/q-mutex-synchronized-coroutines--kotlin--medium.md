@@ -13,12 +13,7 @@ question_kind: coding
 tags: [concurrency, coroutines, difficulty/medium, kotlin, mutex, synchronization, thread-safety]
 moc: moc-kotlin
 related: [c-kotlin, q-channelflow-callbackflow-flow--kotlin--medium, q-debounce-throttle-flow--kotlin--medium, q-race-conditions-coroutines--kotlin--hard, q-semaphore-rate-limiting--kotlin--medium]
-subtopics:
-  - concurrency
-  - coroutines
-  - mutex
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
+subtopics: [concurrency, coroutines, mutex]
 ---
 # Вопрос (RU)
 > В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?

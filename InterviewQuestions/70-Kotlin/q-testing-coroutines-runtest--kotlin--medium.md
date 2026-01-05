@@ -17,8 +17,6 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 
-date created: Sunday, October 12th 2025, 1:18:39 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 > Как тестировать корутины с `runTest` и `TestDispatcher`? Объясните виртуальное время, `StandardTestDispatcher` vs `UnconfinedTestDispatcher` и практические паттерны тестирования для `ViewModel`.

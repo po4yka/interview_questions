@@ -3,32 +3,19 @@ id: android-406
 title: Alternative Distribution / Альтернативное распространение
 aliases: [Alternative Distribution, Альтернативное распространение]
 topic: android
-subtopics:
-  - app-bundle
-  - billing
-  - play-console
+subtopics: [app-bundle, billing, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-app-bundle
-  - q-android-app-bundles--android--easy
-  - q-app-store-optimization--android--medium
-  - q-internal-app-distribution--android--medium
-  - q-play-app-signing--android--medium
-  - q-play-store-publishing--android--medium
+related: [c-app-bundle, q-android-app-bundles--android--easy, q-app-store-optimization--android--medium, q-internal-app-distribution--android--medium, q-play-app-signing--android--medium, q-play-store-publishing--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/app-bundle, android/billing, android/play-console, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:42 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое альтернативное распространение Android-приложений и какие платформы существуют помимо Google Play?

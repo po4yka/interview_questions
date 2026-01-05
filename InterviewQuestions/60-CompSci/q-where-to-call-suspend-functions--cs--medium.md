@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin, suspend-functions]
 sources: ["https://kotlinlang.org/docs/composing-suspending-functions.html"]
 
-date created: Saturday, November 1st 2025, 1:26:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Где можно вызывать suspend-функции?

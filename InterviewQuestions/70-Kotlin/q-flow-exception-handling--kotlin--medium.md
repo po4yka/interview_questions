@@ -25,8 +25,6 @@ created: 2025-10-11
 updated: 2025-11-09
 
 tags: [catch, difficulty/medium, error-handling, exceptions, flow, kotlin, retry]
-date created: Saturday, October 18th 2025, 3:12:22 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Как обрабатывать исключения в `Flow`? Объясните операторы catch, retry, retryWhen. Реализуйте стратегию повтора с экспоненциальной задержкой.

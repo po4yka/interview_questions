@@ -16,8 +16,6 @@ related: [c-sql-queries, c-database-performance, c-database-design, c-sqlite, c-
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "difficulty/medium", "materialized-views", "views", "virtual-tables"]
-date created: Sunday, October 12th 2025, 2:37:10 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 
 # Summary (EN)

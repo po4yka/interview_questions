@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [adapter, design-patterns, difficulty/medium, gof-patterns, structural-patterns, wrapper]
 sources: ["https://refactoring.guru/design-patterns/adapter"]
 
-date created: Saturday, November 1st 2025, 1:26:52 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Adapter? Когда и зачем его использовать?

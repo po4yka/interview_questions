@@ -3,25 +3,18 @@ id: android-489
 title: Design BLE Wearable Sync / Проектирование синхронизации BLE носимых устройств
 aliases: [Design BLE Wearable Sync, Проектирование синхронизации BLE носимых устройств]
 topic: android
-subtopics:
-  - background-execution
-  - bluetooth
-  - service
+subtopics: [background-execution, bluetooth, service]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
 related: [c-lifecycle, c-permissions, c-service, c-workmanager]
 sources: []
 created: 2025-10-29
 updated: 2025-10-30
 tags: [android/background-execution, android/bluetooth, android/service, difficulty/hard, topic/android]
-date created: Saturday, November 1st 2025, 12:46:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 

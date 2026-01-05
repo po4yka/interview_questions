@@ -3,23 +3,14 @@ id: android-252
 title: KMM vs Flutter Comparison / Сравнение KMM и Flutter
 aliases: [KMM vs Flutter, Kotlin Multiplatform Mobile vs Flutter, Сравнение KMM и Flutter]
 topic: android
-subtopics:
-  - architecture-clean
-  - kmp
+subtopics: [architecture-clean, kmp]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-android-architectural-patterns--android--medium
-  - q-kmm-architecture--android--hard
-  - q-kmm-testing--android--medium
-  - q-react-native-vs-flutter--android--medium
+related: [c-android, q-android-architectural-patterns--android--medium, q-kmm-architecture--android--hard, q-kmm-testing--android--medium, q-react-native-vs-flutter--android--medium]
 sources:
   - "https://docs.flutter.dev"
   - "https://kotlinlang.org/docs/multiplatform.html"
@@ -27,8 +18,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, flutter, multiplatform]
 
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

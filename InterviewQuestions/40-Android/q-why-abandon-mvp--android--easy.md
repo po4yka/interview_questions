@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/architecture-mvvm, architecture-patterns, difficulty/easy, mvi, mvp, mvvm]
 sources: ["https://developer.android.com/jetpack/guide", "https://developer.android.com/topic/architecture"]
 
-date created: Saturday, November 1st 2025, 12:47:11 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Почему многие отказываются от MVP?

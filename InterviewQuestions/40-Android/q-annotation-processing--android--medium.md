@@ -3,29 +3,19 @@ id: android-067
 title: Annotation Processing in Android / Обработка аннотаций в Android
 aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
 topic: android
-subtopics:
-  - build-variants
+subtopics: [build-variants]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - c-hilt
-  - c-room
-  - q-android-build-optimization--android--medium
-  - q-annotation-processing-android--android--medium
-  - q-module-types-android--android--medium
+related: [c-hilt, c-room, q-android-build-optimization--android--medium, q-annotation-processing-android--android--medium, q-module-types-android--android--medium]
 sources: []
 created: 2025-10-12
 updated: 2025-10-30
 tags: [android/build-variants, android/gradle, annotation-processing,
       code-generation, difficulty/medium, kapt, ksp]
-date created: Saturday, November 1st 2025, 1:03:46 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 anki_synced: true
 anki_slugs:
   - 40-android-q-annotation-processing-android-medium-p01-en

@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/app-bundle, android/keystore-crypto, android/play-console, difficulty/medium, play-app-signing, security, signing]
 sources: ["https://developer.android.com/studio/publish/app-signing#app-signing-google-play", "https://support.google.com/googleplay/android-developer/answer/9842756"]
-date created: Saturday, November 1st 2025, 12:47:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

@@ -3,32 +3,19 @@ id: android-086
 title: Memory Leaks Definition / Определение утечек памяти
 aliases: [Memory Leaks Definition, Определение утечек памяти]
 topic: android
-subtopics:
-  - lifecycle
-  - performance-memory
+subtopics: [lifecycle, performance-memory]
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/performance-memory, difficulty/easy, memory-leaks, performance]
 moc: moc-android
-related:
-  - c-activity-lifecycle
-  - c-android
-  - q-coroutine-memory-leak-detection--kotlin--hard
-  - q-coroutine-memory-leaks--kotlin--hard
-  - q-optimize-memory-usage-android--android--medium
-  - q-sharedpreferences-definition--android--easy
-  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
+related: [c-activity-lifecycle, c-android, q-coroutine-memory-leak-detection--kotlin--hard, q-coroutine-memory-leaks--kotlin--hard, q-optimize-memory-usage-android--android--medium, q-sharedpreferences-definition--android--easy, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

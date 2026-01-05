@@ -3,32 +3,20 @@ id: android-015
 title: Android App Bundle (AAB) / Android App Bundle
 aliases: [4ndroid App Bundle, 608088847290 AAB, AAB, Android App Bundle, Android App Bundles]
 topic: android
-subtopics:
-  - app-bundle
+subtopics: [app-bundle]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-app-bundle
-  - c-gradle
-  - q-android-app-components--android--easy
-  - q-app-start-types-android--android--medium
-  - q-gradle-basics--android--easy
-  - q-play-feature-delivery--android--medium
-  - q-reduce-app-size--android--medium
+related: [c-app-bundle, c-gradle, q-android-app-components--android--easy, q-app-start-types-android--android--medium, q-gradle-basics--android--easy, q-play-feature-delivery--android--medium, q-reduce-app-size--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 sources:
   - "https://developer.android.com/guide/app-bundle"
 tags: [android/app-bundle, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 12:46:42 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое Android App `Bundle` (AAB)?

@@ -3,30 +3,19 @@ id: android-322
 title: Touch Events / События касания
 aliases: [Touch Events, События касания]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-view-system
-  - q-mvi-one-time-events--android--medium
-  - q-server-sent-events-sse--android--medium
-  - q-view-methods-and-their-purpose--android--medium
-  - q-what-events-are-activity-methods-tied-to--android--medium
-  - q-what-layout-allows-overlapping-objects--android--easy
+related: [c-android-view-system, q-mvi-one-time-events--android--medium, q-server-sent-events-sse--android--medium, q-view-methods-and-their-purpose--android--medium, q-what-events-are-activity-methods-tied-to--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/ui-views, difficulty/medium, event-handling, interaction,
       touch-events, ui]
 
-date created: Saturday, November 1st 2025, 12:47:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 anki_synced: true
 anki_slugs:
   - 40-android-q-what-event-is-called-when-user-presses-the-screen-android-en

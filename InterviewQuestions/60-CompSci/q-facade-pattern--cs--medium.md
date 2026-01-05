@@ -14,8 +14,6 @@ related: [c-architecture-patterns, c-computer-science, q-adapter-pattern--cs--me
 created: 2023-10-15
 updated: 2025-11-11
 tags: [cs, difficulty/medium, facade, gof-patterns, structural-patterns]
-date created: Saturday, November 1st 2025, 1:02:32 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Facade? Когда и зачем его использовать?

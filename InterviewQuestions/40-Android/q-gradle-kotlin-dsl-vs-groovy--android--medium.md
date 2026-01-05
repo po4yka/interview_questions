@@ -3,31 +3,20 @@ id: android-028
 title: Gradle Kotlin DSL vs Groovy / Gradle Kotlin DSL против Groovy
 aliases: [Gradle Kotlin DSL vs Groovy, Gradle Kotlin DSL vs Groovy differences, Gradle Kotlin DSL против Groovy]
 topic: android
-subtopics:
-  - gradle
+subtopics: [gradle]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - q-build-optimization-gradle--android--medium
-  - q-gradle-version-catalog--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-kotlin-dsl-builders--android--hard
-  - q-what-is-workmanager--android--medium
+related: [c-gradle, q-build-optimization-gradle--android--medium, q-gradle-version-catalog--android--medium, q-how-does-jetpackcompose-work--android--medium, q-kotlin-dsl-builders--android--hard, q-what-is-workmanager--android--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [android/gradle, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Какие различия между Gradle Kotlin DSL и Groovy? Когда использовать каждый?

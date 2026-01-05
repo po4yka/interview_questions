@@ -3,29 +3,18 @@ id: android-043
 title: Gradle Build Optimization / Оптимизация сборки Gradle
 aliases: [Gradle Build Optimization, Оптимизация сборки Gradle]
 topic: android
-subtopics:
-  - build-variants
-  - dependency-management
-  - gradle
+subtopics: [build-variants, dependency-management, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-app-bundle
-  - q-android-build-optimization--android--medium
-  - q-dagger-build-time-optimization--android--medium
-  - q-gradle-build-system--android--medium
+related: [c-app-bundle, q-android-build-optimization--android--medium, q-dagger-build-time-optimization--android--medium, q-gradle-build-system--android--medium]
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/build-variants, android/ci-cd, android/dependency-management, android/gradle, difficulty/medium]
-date created: Saturday, November 1st 2025, 1:04:49 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как оптимизировать сборку Gradle в Android?

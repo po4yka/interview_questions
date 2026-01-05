@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-kotlin-coroutines-introduction--kotlin-
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin, null-safety, type-inference, type-system]
-date created: Friday, October 31st 2025, 6:28:53 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Какие особенности системы типов в Kotlin ты знаешь?

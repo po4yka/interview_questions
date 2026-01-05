@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/architecture-mvi, android/ui-state, difficulty/medium, mvi, sealed-classes, state-management]
 sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
 
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Как использовать sealed классы для управления состоянием в Android приложениях?

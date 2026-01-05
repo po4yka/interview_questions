@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard, kotlin, lifecycle, scope, structured-concurrency, violations]
 
-date created: Saturday, November 1st 2025, 1:29:39 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 # Вопрос (RU)
 

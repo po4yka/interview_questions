@@ -3,29 +3,18 @@ id: android-261
 title: How To Stop Service / Остановка Service
 aliases: [How To Stop Service, Остановка Service]
 topic: android
-subtopics:
-  - service
+subtopics: [service]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-service
-  - q-async-operations-android--android--medium
-  - q-foreground-service-types--android--medium
-  - q-how-to-fix-a-bad-element-layout--android--easy
-  - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [c-service, q-async-operations-android--android--medium, q-foreground-service-types--android--medium, q-how-to-fix-a-bad-element-layout--android--easy, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/service, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Остановка `Service`

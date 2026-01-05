@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-11-10
 
 tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-expressions, performance]
-date created: Saturday, November 1st 2025, 12:43:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Можно ли создать анонимный класс внутри inline функции в Kotlin?

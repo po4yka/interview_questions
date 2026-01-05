@@ -3,28 +3,18 @@ id: android-350
 title: RecyclerView DiffUtil Advanced / Продвинутый DiffUtil для RecyclerView
 aliases: [RecyclerView DiffUtil Advanced, Продвинутый DiffUtil для RecyclerView]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-recyclerview
-  - q-android-project-parts--android--easy
-  - q-camerax-advanced-pipeline--android--hard
-  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
-  - q-recyclerview-itemdecoration-advanced--android--medium
+related: [c-recyclerview, q-android-project-parts--android--easy, q-camerax-advanced-pipeline--android--hard, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-recyclerview-itemdecoration-advanced--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/ui-views, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского `DiffUtil.Callback`, использование `ListAdapter` и оптимизацию DiffUtil для больших наборов данных.

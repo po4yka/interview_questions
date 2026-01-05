@@ -14,8 +14,6 @@ related: [c-sealed-classes, q-expect-actual-kotlin--kotlin--medium, q-kotlin-rei
 created: 2025-10-15
 updated: 2025-11-10
 tags: [difficulty/medium, oop, programming-languages, sealed-classes, type-hierarchy, when-expressions]
-date created: Friday, October 31st 2025, 6:32:40 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Что Такое Sealed Классы И Зачем Они Нужны?
 

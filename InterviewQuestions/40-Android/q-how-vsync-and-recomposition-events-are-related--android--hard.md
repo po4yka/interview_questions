@@ -3,29 +3,18 @@ id: android-110
 title: How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события рекомпозиции
 aliases: [VSYNC Recomposition, VSYNC и рекомпозиция]
 topic: android
-subtopics:
-  - performance-rendering
-  - ui-compose
+subtopics: [performance-rendering, ui-compose]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
-  - q-mvi-one-time-events--android--medium
-  - q-recomposition-choreographer--android--hard
-  - q-recomposition-compose--android--medium
+related: [c-compose-state, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-mvi-one-time-events--android--medium, q-recomposition-choreographer--android--hard, q-recomposition-compose--android--medium]
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
 tags: [android, android/performance-rendering, android/ui-compose, difficulty/hard]
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

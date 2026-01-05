@@ -15,8 +15,6 @@ tags: [android, coroutines, difficulty/medium, jetpack-compose, kotlin, launched
 moc: moc-kotlin
 related: [q-testing-stateflow-sharedflow--kotlin--medium]
 
-date created: Saturday, November 1st 2025, 1:28:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое side effects в Jetpack Compose и как с ними интегрируются корутины? Объясните `LaunchedEffect`, `rememberCoroutineScope`, `DisposableEffect`, `produceState` и другие обработчики побочных эффектов. Когда какой использовать? Приведите production-примеры загрузки данных, анимаций, обработки событий и коллекции `Flow` с корректным управлением жизненным циклом и стратегиями тестирования.

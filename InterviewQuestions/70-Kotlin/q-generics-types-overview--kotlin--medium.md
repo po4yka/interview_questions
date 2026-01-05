@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-coroutine-parent-child-relationship--ko
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 3:43:41 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Какие виды дженериков существуют в Kotlin и Java?

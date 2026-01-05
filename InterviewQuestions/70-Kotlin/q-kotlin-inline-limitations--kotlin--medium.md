@@ -14,8 +14,6 @@ related: [c-kotlin, q-context-receivers--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, inline, kotlin, lambdas, optimization, performance]
-date created: Friday, October 31st 2025, 6:29:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Бывают ли случаи, когда нельзя использовать inline?

@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/intents-deeplinks, android/performance-memory, android/serialization, bundle, difficulty/medium, ipc, parcelable]
 sources: ["https://developer.android.com/reference/android/os/Parcelable", "https://kotlinlang.org/docs/compiler-plugins.html#parcelable-implementations-generator"]
 
-date created: Saturday, November 1st 2025, 12:47:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

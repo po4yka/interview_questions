@@ -3,32 +3,19 @@ id: android-247
 title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент
 aliases: [Photo Editor Component, Separate Photo Editor, Отдельный компонент редактора, Фоторедактор как компонент]
 topic: android
-subtopics:
-  - fragment
-  - ui-graphics
-  - ui-views
+subtopics: [fragment, ui-graphics, ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - q-how-to-pass-photo-to-editor--android--medium
-  - q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium
-  - q-implement-voice-video-call--android--hard
-  - q-why-separate-ui-and-business-logic--android--easy
-  - q-workmanager-vs-alternatives--android--medium
+related: [c-activity, q-how-to-pass-photo-to-editor--android--medium, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-implement-voice-video-call--android--hard, q-why-separate-ui-and-business-logic--android--easy, q-workmanager-vs-alternatives--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, android/ui-graphics, android/ui-views, bitmap, canvas, difficulty/easy, fragments, imageview, views]
 
-date created: Saturday, November 1st 2025, 1:30:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

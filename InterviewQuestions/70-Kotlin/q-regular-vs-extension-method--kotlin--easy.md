@@ -14,8 +14,6 @@ related: [c-kotlin]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, extension-functions, functions, kotlin, programming-languages, static-methods]
-date created: Friday, October 31st 2025, 6:29:44 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > В чём отличие обычного метода от extension метода в Kotlin?

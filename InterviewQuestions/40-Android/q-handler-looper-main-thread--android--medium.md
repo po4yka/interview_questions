@@ -3,32 +3,19 @@ id: android-162
 title: Handler Looper Main Thread / Handler и Looper главного потока
 aliases: [Handler and Looper on Main Thread, Handler и Looper главного потока]
 topic: android
-subtopics:
-  - background-execution
-  - threads-sync
+subtopics: [background-execution, threads-sync]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-background-tasks
-  - c-coroutines
-  - q-handler-looper-comprehensive--android--medium
-  - q-looper-thread-connection--android--medium
-  - q-main-thread-android--android--medium
-  - q-multithreading-tools-android--android--medium
-  - q-what-is-the-main-application-execution-thread--android--easy
+related: [c-background-tasks, c-coroutines, q-handler-looper-comprehensive--android--medium, q-looper-thread-connection--android--medium, q-main-thread-android--android--medium, q-multithreading-tools-android--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/background-execution, android/threads-sync, concurrency, difficulty/medium, handler, looper, main-thread, message-queue]
 
-date created: Saturday, November 1st 2025, 12:46:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

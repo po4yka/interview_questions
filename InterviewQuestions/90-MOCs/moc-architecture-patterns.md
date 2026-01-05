@@ -5,8 +5,6 @@ kind: moc
 created: 2025-10-06
 updated: 2025-10-06
 tags: [architecture-patterns, design-patterns, moc]
-date created: Monday, October 6th 2025, 1:57:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
 ---
 
 # Architecture Patterns & Design Patterns — Map of Content

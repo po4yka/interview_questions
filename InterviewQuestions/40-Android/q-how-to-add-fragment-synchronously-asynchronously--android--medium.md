@@ -3,30 +3,18 @@ id: android-337
 title: How To Add Fragment Synchronously/Asynchronously / Как добавить Fragment синхронно и асинхронно
 aliases: [How To Add Fragment Synchronously Asynchronously, Как добавить Fragment синхронно и асинхронно]
 topic: android
-subtopics:
-  - fragment
+subtopics: [fragment]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-fragments
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-how-to-choose-layout-for-fragment--android--easy
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-play-app-signing--android--medium
-  - q-save-data-outside-fragment--android--medium
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
+related: [c-fragments, q-how-does-jetpackcompose-work--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-play-app-signing--android--medium, q-save-data-outside-fragment--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как добавить `Fragment` синхронно и асинхронно

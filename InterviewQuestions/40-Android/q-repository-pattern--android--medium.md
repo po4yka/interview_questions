@@ -3,33 +3,20 @@ id: android-070
 title: Repository Pattern in Android / Паттерн Repository в Android
 aliases: [Repository Pattern in Android, Паттерн Repository в Android]
 topic: android
-subtopics:
-  - architecture-clean
-  - architecture-mvvm
+subtopics: [architecture-clean, architecture-mvvm]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: internal
 source_note: Created for vault completeness
 status: draft
 moc: moc-android
-related:
-  - c-clean-architecture
-  - c-mvvm
-  - c-viewmodel
-  - q-clean-architecture-android--android--hard
-  - q-factory-pattern-android--android--medium
-  - q-repository-multiple-sources--android--medium
-  - q-usecase-pattern-android--android--medium
+related: [c-clean-architecture, c-mvvm, c-viewmodel, q-clean-architecture-android--android--hard, q-factory-pattern-android--android--medium, q-repository-multiple-sources--android--medium, q-usecase-pattern-android--android--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:47:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Repository в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?

@@ -3,28 +3,17 @@ id: android-118
 title: Is LayoutInflater A Singleton And Why / Является ли LayoutInflater синглтоном и почему
 aliases: [Is LayoutInflater A Singleton And Why, Является ли LayoutInflater синглтоном и почему]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - ui-views
+subtopics: [architecture-mvvm, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-home-screen-widgets--android--medium
-  - q-singleton-scope-binding--android--medium
-  - q-what-design-systems-in-android-have-you-worked-with--android--medium
+related: [q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-home-screen-widgets--android--medium, q-singleton-scope-binding--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/architecture-mvvm, android/ui-views, context, difficulty/medium, system-services]
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

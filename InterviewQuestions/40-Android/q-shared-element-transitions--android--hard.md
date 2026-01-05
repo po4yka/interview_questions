@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/jetpack/compose/animation/overview]
 tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animations, compose, difficulty/hard, hero-animations, navigation, shared-elements, transitions]
-date created: Saturday, November 1st 2025, 12:47:04 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

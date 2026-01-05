@@ -3,32 +3,19 @@ id: android-273
 title: Cancel Presenter Requests / Отмена запросов презентера
 aliases: [Cancel Presenter Requests, Отмена запросов презентера]
 topic: android
-subtopics:
-  - architecture-clean
-  - coroutines
-  - lifecycle
+subtopics: [architecture-clean, coroutines, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-coroutines
-  - q-activity-lifecycle-methods--android--medium
-  - q-inject-router-to-presenter--android--medium
-  - q-mvvm-pattern--android--medium
-  - q-presenter-notify-view--android--medium
+related: [c-android, c-coroutines, q-activity-lifecycle-methods--android--medium, q-inject-router-to-presenter--android--medium, q-mvvm-pattern--android--medium, q-presenter-notify-view--android--medium]
 sources: []
 created: 2023-10-15
 updated: 2025-11-10
 tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium, mvp, presenter-pattern]
 
-date created: Saturday, November 1st 2025, 1:05:16 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как корректно отменять асинхронные запросы в Presenter при изменении состояния жизненного цикла `View`?

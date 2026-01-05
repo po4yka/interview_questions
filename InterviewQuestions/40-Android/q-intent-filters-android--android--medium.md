@@ -3,30 +3,19 @@ id: android-178
 title: Intent Filters / Intent Фильтры
 aliases: [Intent Filters, Intent Фильтры, Фильтры намерений]
 topic: android
-subtopics:
-  - activity
-  - intents-deeplinks
+subtopics: [activity, intents-deeplinks]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - c-intent
-  - q-dagger-build-time-optimization--android--medium
-  - q-what-are-intents-for--android--medium
-  - q-what-is-intent--android--easy
+related: [c-activity, c-intent, q-dagger-build-time-optimization--android--medium, q-what-are-intents-for--android--medium, q-what-is-intent--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/intents-deeplinks, deep-linking, difficulty/medium, intent-filter]
 sources: []
 
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

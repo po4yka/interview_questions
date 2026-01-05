@@ -9,8 +9,6 @@ related: [c-rest-api, c-coroutines, c-okhttp, c-repository-pattern, c-networking
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, concept, http, networking, rest-api, retrofit]
-date created: Thursday, October 30th 2025, 12:29:23 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

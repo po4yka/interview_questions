@@ -10,20 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-fragments
-  - q-fragment-basics--android--easy
-  - q-fragment-vs-activity-lifecycle--android--medium
-  - q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium
-  - q-save-data-outside-fragment--android--medium
-  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
+related: [c-fragments, q-fragment-basics--android--easy, q-fragment-vs-activity-lifecycle--android--medium, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium, q-save-data-outside-fragment--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/medium]
 sources: []
 
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Как передавать данные из одного фрагмента в другой?

@@ -17,8 +17,6 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [async, difficulty/hard, flow, kotlin, testing, testscope]
 
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Протестируйте сложные цепочки `Flow` с задержками и множественными испусканиями. Используйте `TestScope`, `TestDispatcher` и виртуальное время для детерминированного тестирования.

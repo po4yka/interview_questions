@@ -3,33 +3,19 @@ id: android-072
 title: Compose Core Components / Основные компоненты Compose
 aliases: [Compose Components, Jetpack Compose Architecture, Архитектура Jetpack Compose, Основные компоненты Compose]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - ui-compose
+subtopics: [architecture-mvvm, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-recomposition
-  - c-compose-state
-  - c-mvvm-pattern
-  - q-compose-modifier-order-performance--android--medium
-  - q-compose-stability-skippability--android--hard
-  - q-how-jetpack-compose-works--android--medium
-  - q-migration-to-compose--android--medium
-  - q-what-are-the-most-important-components-of-compose--android--medium
+related: [c-compose-recomposition, c-compose-state, c-mvvm-pattern, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard, q-how-jetpack-compose-works--android--medium, q-migration-to-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, jetpack-compose]
 sources:
   - "https://developer.android.com/jetpack/compose/architecture"
-date created: Saturday, November 1st 2025, 1:01:25 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Из каких более важных компонентов состоит Compose?

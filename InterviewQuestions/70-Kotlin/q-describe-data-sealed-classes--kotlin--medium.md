@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 
-date created: Friday, October 31st 2025, 6:33:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Опишите data классы и sealed классы в Kotlin. Каковы их ключевые особенности и применения?

@@ -14,8 +14,6 @@ related: [c-kotlin-features, c-performance]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [compiler-optimization, difficulty/medium, inline, inline-functions, kotlin, performance]
-date created: Friday, October 31st 2025, 6:31:48 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Можно ли на уровне компилятора сделать все функции inline?

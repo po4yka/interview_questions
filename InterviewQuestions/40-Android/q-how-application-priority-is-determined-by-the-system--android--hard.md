@@ -3,32 +3,19 @@ id: android-124
 title: How Application Priority Is Determined By The System / Как система определяет приоритет приложения
 aliases: [How Application Priority Is Determined, Как система определяет приоритет приложения]
 topic: android
-subtopics:
-  - lifecycle
-  - performance-memory
-  - processes
+subtopics: [lifecycle, performance-memory, processes]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-lifecycle
-  - c-memory-management
-  - q-anr-application-not-responding--android--medium
-  - q-raise-process-priority--android--medium
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [c-lifecycle, c-memory-management, q-anr-application-not-responding--android--medium, q-raise-process-priority--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/lifecycle, android/performance-memory, android/processes, difficulty/hard, lifecycle, performance-memory, processes]
 
-date created: Saturday, November 1st 2025, 12:46:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [api-design, difficulty/medium, http, rest-api, system-design]
 sources: ["https://en.wikipedia.org/wiki/Representational_state_transfer"]
 
-date created: Sunday, October 12th 2025, 8:38:24 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Каковы лучшие практики проектирования RESTful API? Как структурировать endpoints, обрабатывать ошибки и обеспечивать качество API?

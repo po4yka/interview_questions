@@ -3,33 +3,19 @@ id: android-203
 title: Koin Scope Management / Управление Scope В Koin
 aliases: [Koin Scope Management, Koin Scopes, Жизненный цикл Koin, Управление Scope В Koin]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - di-koin
-  - lifecycle
+subtopics: [architecture-mvvm, di-koin, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dependency-injection
-  - q-how-to-display-snackbar-or-toast-based-on-results--android--medium
-  - q-koin-fundamentals--android--medium
-  - q-koin-vs-dagger-philosophy--android--hard
-  - q-sealed-classes-state-management--android--medium
-  - q-stable-classes-compose--android--hard
-  - q-what-methods-redraw-views--android--medium
+related: [c-dependency-injection, q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-koin-fundamentals--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-sealed-classes-state-management--android--medium, q-stable-classes-compose--android--hard, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/di-koin, android/lifecycle, dependency-injection, difficulty/medium, koin, scopes]
 
-date created: Saturday, November 1st 2025, 12:46:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

@@ -3,31 +3,19 @@ id: android-003
 title: ANR (Application Not Responding) / ANR (Приложение не отвечает)
 aliases: [ANR (Application Not Responding), ANR (Приложение не отвечает)]
 topic: android
-subtopics:
-  - performance-rendering
-  - profiling
-  - strictmode-anr
+subtopics: [performance-rendering, profiling, strictmode-anr]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-lifecycle
-  - q-android-app-lag-analysis--android--medium
-  - q-optimize-memory-usage-android--android--medium
-  - q-performance-monitoring-jank-compose--android--medium
-  - q-recomposition-compose--android--medium
+related: [c-lifecycle, q-android-app-lag-analysis--android--medium, q-optimize-memory-usage-android--android--medium, q-performance-monitoring-jank-compose--android--medium, q-recomposition-compose--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, debugging, difficulty/medium, performance]
 
-date created: Saturday, November 1st 2025, 1:03:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое ANR (`Application` Not Responding) и как его предотвратить?

@@ -9,8 +9,6 @@ related: [c-activity-lifecycle, c-fragment-lifecycle, c-navigation, c-viewmodel,
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, android-components, concept, fragments, ui]
-date created: Thursday, October 30th 2025, 12:30:09 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

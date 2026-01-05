@@ -15,8 +15,6 @@ related: [c-rest-api, c-microservices, c-databases, c-system-design, c-networkin
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Tuesday, November 11th 2025, 10:33:28 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

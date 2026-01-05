@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [architecture, difficulty/hard, distributed-systems, microservices, system-design]
 sources: ["https://en.wikipedia.org/wiki/Microservices"]
 
-date created: Sunday, October 12th 2025, 8:31:16 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Каковы ключевые различия между микросервисами и монолитной архитектурой? Когда следует использовать каждый подход, и каковы компромиссы?

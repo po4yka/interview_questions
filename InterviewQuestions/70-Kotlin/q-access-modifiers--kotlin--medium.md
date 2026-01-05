@@ -16,8 +16,6 @@ related: [c-kotlin, q-kotlin-visibility-modifiers--kotlin--easy]
 created: 2025-10-06
 updated: 2025-11-10
 tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibility]
-date created: Sunday, October 5th 2025, 6:51:27 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?

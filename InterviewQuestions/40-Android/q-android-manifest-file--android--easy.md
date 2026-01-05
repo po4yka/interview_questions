@@ -3,16 +3,11 @@ id: android-360
 title: AndroidManifest.xml / Файл манифеста Android
 aliases: [AndroidManifest.xml, Файл манифеста Android]
 topic: android
-subtopics:
-  - app-startup
-  - intents-deeplinks
-  - permissions
+subtopics: [app-startup, intents-deeplinks, permissions]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [c-android, q-android-app-components--android--easy, q-intent-filters-android--android--medium]
@@ -21,8 +16,6 @@ updated: 2025-11-10
 tags: [android/app-startup, android/intents-deeplinks, android/permissions, difficulty/easy]
 sources:
   - "https://github.com/Kirchhoff-/Android-Interview-Questions"
-date created: Saturday, November 1st 2025, 1:02:44 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Что такое AndroidManifest.xml и зачем он нужен?

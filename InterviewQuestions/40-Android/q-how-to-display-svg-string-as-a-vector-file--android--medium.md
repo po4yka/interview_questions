@@ -16,8 +16,6 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, ui]
 
-date created: Saturday, November 1st 2025, 12:46:53 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

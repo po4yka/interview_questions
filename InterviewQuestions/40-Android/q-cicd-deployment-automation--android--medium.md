@@ -3,29 +3,18 @@ id: android-355
 title: CI/CD Deployment Automation / Автоматизация деплоя в CI/CD
 aliases: [CI/CD Deployment Automation, Автоматизация деплоя в CI/CD]
 topic: android
-subtopics:
-  - build-variants
-  - ci-cd
-  - play-console
+subtopics: [build-variants, ci-cd, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-build-optimization--android--medium
-  - q-android-lint-tool--android--medium
-  - q-android-release-pipeline-cicd--android--hard
-  - q-internal-app-distribution--android--medium
+related: [q-android-build-optimization--android--medium, q-android-lint-tool--android--medium, q-android-release-pipeline-cicd--android--hard, q-internal-app-distribution--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/build-variants, android/ci-cd, android/play-console, ci-cd, deployment, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:46:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как автоматизировать деплой Android-приложения через CI/CD?

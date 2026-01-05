@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [companion-object, difficulty/medium, kotlin, kotlin-features, object-keyword, singleton-pattern]
 sources: ["https://kotlinlang.org/docs/object-declarations.html"]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Как работают object, companion object и паттерн singleton в Kotlin?

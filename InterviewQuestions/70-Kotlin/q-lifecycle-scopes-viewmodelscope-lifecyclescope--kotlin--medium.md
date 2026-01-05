@@ -15,8 +15,6 @@ created: 2023-10-15
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
 
-date created: Friday, October 31st 2025, 6:29:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > В чём разница между viewModelScope и lifecycleScope? Когда использовать каждый из них?

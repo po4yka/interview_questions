@@ -14,8 +14,6 @@ related: [c-kotlin, q-flow-backpressure--kotlin--hard, q-kotlin-delegation-detai
 created: 2025-10-15
 updated: 2025-11-09
 tags: [advanced, bytecode, compilation, delegates, difficulty/hard, kotlin]
-date created: Friday, October 31st 2025, 6:33:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Как делегаты Kotlin работают на уровне компиляции? Какой bytecode и вспомогательные структуры генерируются?

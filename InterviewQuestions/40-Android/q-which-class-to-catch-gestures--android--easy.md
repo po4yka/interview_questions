@@ -3,31 +3,19 @@ id: android-149
 title: Which Class To Catch Gestures / Какой класс для ловли жестов
 aliases: [Which Class To Catch Gestures, Какой класс для ловли жестов]
 topic: android
-subtopics:
-  - ui-views
-  - ui-widgets
+subtopics: [ui-views, ui-widgets]
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 question_kind: android
 moc: moc-android
-related:
-  - c-android-components
-  - q-compose-side-effects-launchedeffect-disposableeffect--android--hard
-  - q-how-does-jetpack-compose-work--android--medium
-  - q-which-class-can-be-used-to-detect-different-gestures--android--easy
-  - q-which-class-to-use-for-detecting-gestures--android--medium
-  - q-which-event-is-called-when-user-touches-screen--android--medium
+related: [c-android-components, q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-how-does-jetpack-compose-work--android--medium, q-which-class-can-be-used-to-detect-different-gestures--android--easy, q-which-class-to-use-for-detecting-gestures--android--medium, q-which-event-is-called-when-user-touches-screen--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-views, android/ui-widgets, difficulty/easy, gesture-detector, gestures, ui]
 
-date created: Saturday, November 1st 2025, 12:47:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

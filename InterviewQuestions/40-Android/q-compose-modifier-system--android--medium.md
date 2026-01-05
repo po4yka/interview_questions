@@ -3,32 +3,19 @@ id: android-021
 title: Modifier System in Compose / Система модификаторов в Compose
 aliases: [Modifier System in Compose]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-compose
+subtopics: [performance-memory, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-status: reviewed
+language_tags: [en, ru]
+status: draft
 moc: moc-android
-related:
-  - q-android-performance-measurement-tools--android--medium
-  - q-animated-visibility-vs-content--android--medium
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-core-components--android--medium
-  - q-compose-custom-animations--android--medium
-  - q-compose-gesture-detection--android--medium
-  - q-compose-modifier-order-performance--android--medium
+related: [q-android-performance-measurement-tools--android--medium, q-animated-visibility-vs-content--android--medium, q-compose-compiler-plugin--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-compose-gesture-detection--android--medium, q-compose-modifier-order-performance--android--medium]
 created: 2025-10-06
 updated: 2025-10-30
 tags: [android/performance-memory, android/ui-compose, difficulty/medium]
 sources:
   - https://developer.android.com/jetpack/compose/modifiers
-date created: Saturday, November 1st 2025, 1:05:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 

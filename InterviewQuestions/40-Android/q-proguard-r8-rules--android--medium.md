@@ -3,16 +3,11 @@ id: android-153
 title: ProGuard/R8 Rules / Правила ProGuard и R8
 aliases: [ProGuard/R8 Rules, Правила ProGuard и R8]
 topic: android
-subtopics:
-  - build-variants
-  - obfuscation
-  - static-analysis
+subtopics: [build-variants, obfuscation, static-analysis]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [c-gradle, q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium, q-encrypted-file-storage--android--medium]
@@ -21,8 +16,6 @@ updated: 2025-11-10
 sources: []
 tags: [android/build-variants, android/obfuscation, android/static-analysis, difficulty/medium, proguard, r8, security]
 
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

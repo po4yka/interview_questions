@@ -14,8 +14,6 @@ related: [c-kotlin, q-expect-actual-kotlin--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 3:43:41 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Как работают inline value классы? Когда следует использовать их для производительности? Каковы ограничения?

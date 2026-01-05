@@ -3,31 +3,19 @@ id: android-424
 title: Android Security Best Practices / Лучшие практики безопасности Android
 aliases: [Android Security Best Practices, Лучшие практики безопасности Android]
 topic: android
-subtopics:
-  - keystore-crypto
-  - network-security-config
-  - permissions
+subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-encryption
-  - c-permissions
-  - q-android-security-practices-checklist--android--medium
-  - q-app-security-best-practices--android--medium
-  - q-database-encryption-android--android--medium
+related: [c-encryption, c-permissions, q-android-security-practices-checklist--android--medium, q-app-security-best-practices--android--medium, q-database-encryption-android--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, encryption, security]
 sources: []
 
-date created: Saturday, November 1st 2025, 1:03:08 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие основные практики безопасности нужно соблюдать при разработке Android приложений?

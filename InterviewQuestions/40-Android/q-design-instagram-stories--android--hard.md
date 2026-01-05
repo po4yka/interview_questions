@@ -3,32 +3,20 @@ id: android-441
 title: Design Instagram Stories / Проектирование Instagram Stories
 aliases: [Design Instagram Stories, Проектирование Instagram Stories]
 topic: android
-subtopics:
-  - architecture-clean
-  - media
-  - service
+subtopics: [architecture-clean, media, service]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 sources:
   - "https://developer.android.com/guide/topics/media"
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-data-sync-unstable-network--android--hard
-  - q-database-optimization-android--android--medium
-  - q-design-uber-app--android--hard
-  - q-feature-flags-sdk--android--hard
+related: [c-android, q-data-sync-unstable-network--android--hard, q-database-optimization-android--android--medium, q-design-uber-app--android--hard, q-feature-flags-sdk--android--hard]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/architecture-clean, android/media, android/service, architecture, difficulty/hard, exoplayer, mediacodec, performance, system-design, workmanager]
 
-date created: Tuesday, November 25th 2025, 3:45:29 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 

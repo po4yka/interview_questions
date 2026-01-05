@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/room, difficulty/easy]
 sources: ["https://developer.android.com/codelabs/android-room-with-a-view-kotlin", "https://developer.android.com/training/data-storage/room"]
 
-date created: Saturday, November 1st 2025, 1:04:42 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > Что такое библиотека Room?

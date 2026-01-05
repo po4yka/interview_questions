@@ -16,8 +16,6 @@ updated: 2025-11-11
 sources: []
 tags: [backend, call-adapter, difficulty/medium, networking, result, retrofit]
 
-date created: Monday, October 27th 2025, 3:57:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 

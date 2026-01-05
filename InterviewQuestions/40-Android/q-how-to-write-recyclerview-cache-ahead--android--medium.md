@@ -3,33 +3,18 @@ id: android-314
 title: How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед
 aliases: [RecyclerView Cache Ahead, RecyclerView Prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
 topic: android
-subtopics:
-  - cache-offline
-  - performance-rendering
-  - ui-views
+subtopics: [cache-offline, performance-rendering, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-database-design
-  - c-performance
-  - q-cache-implementation-strategies--android--medium
-  - q-how-animations-work-in-recyclerview--android--medium
-  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
-  - q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium
-  - q-recyclerview-async-list-differ--android--medium
-  - q-recyclerview-sethasfixedsize--android--easy
+related: [c-database-design, c-performance, q-cache-implementation-strategies--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium, q-recyclerview-async-list-differ--android--medium, q-recyclerview-sethasfixedsize--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/cache-offline, android/performance-rendering, android/ui-views, difficulty/medium, optimization, prefetching, recyclerview]
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

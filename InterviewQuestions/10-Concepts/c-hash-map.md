@@ -16,8 +16,6 @@ related: [c-hash-tables, c-data-structures, c-collections-android, c-sparsearray
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["algorithms", "collections", "concept", "data-structures", "difficulty/medium", "hash-map"]
-date created: Saturday, October 18th 2025, 3:06:58 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

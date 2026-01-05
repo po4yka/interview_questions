@@ -15,8 +15,6 @@ related: [c-oop-concepts, c-aggregation, c-inheritance, c-oop-principles, c-desi
 created: "2025-11-11"
 updated: "2025-11-11"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Tuesday, November 11th 2025, 8:10:37 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

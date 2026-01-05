@@ -3,29 +3,18 @@ id: android-213
 title: Runtime Permissions Best Practices / Лучшие практики runtime разрешений
 aliases: [Runtime Permissions Best Practices, Лучшие практики runtime разрешений]
 topic: android
-subtopics:
-  - permissions
+subtopics: [permissions]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-permissions
-  - q-android-security-practices-checklist--android--medium
-  - q-app-security-best-practices--android--medium
-  - q-database-encryption-android--android--medium
-  - q-multi-module-best-practices--android--hard
-  - q-rtl-support-best-practices--android--hard
+related: [c-permissions, q-android-security-practices-checklist--android--medium, q-app-security-best-practices--android--medium, q-database-encryption-android--android--medium, q-multi-module-best-practices--android--hard, q-rtl-support-best-practices--android--hard]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/permissions, difficulty/medium, permissions, security, ux]
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 

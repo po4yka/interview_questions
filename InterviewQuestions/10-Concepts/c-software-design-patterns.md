@@ -16,8 +16,6 @@ related: [c-design-patterns, c-architecture-patterns, c-clean-architecture, c-mv
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["architecture", "concept", "design-patterns", "difficulty/medium", "software-engineering"]
-date created: Saturday, October 25th 2025, 11:03:49 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Software Design Patterns / Паттерны Проектирования

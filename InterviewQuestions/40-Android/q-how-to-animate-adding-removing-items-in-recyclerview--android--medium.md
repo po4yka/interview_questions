@@ -3,29 +3,18 @@ id: android-419
 title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление и удаление элементов в RecyclerView
 aliases: [How To Animate Adding Removing Items In RecyclerView, Как анимировать добавление и удаление элементов в RecyclerView]
 topic: android
-subtopics:
-  - ui-animation
+subtopics: [ui-animation]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-custom-views
-  - q-bundle-data-types--android--medium
-  - q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy
-  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
-  - q-stack-heap-memory-multiple-threads--android--medium
-  - q-what-problems-can-there-be-with-list-items--android--easy
+related: [c-custom-views, q-bundle-data-types--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--android--easy, q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-stack-heap-memory-multiple-threads--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 
-date created: Saturday, November 1st 2025, 12:46:52 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как анимировать добавление и удаление элементов в RecyclerView

@@ -3,30 +3,19 @@ id: android-293
 title: Android 14 Permissions / Разрешения Android 14
 aliases: [Android 14 Permissions, Разрешения Android 14]
 topic: android
-subtopics:
-  - permissions
-  - privacy-sdks
+subtopics: [permissions, privacy-sdks]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-permissions
-  - q-android-lint-tool--android--medium
-  - q-android-manifest-file--android--easy
-  - q-android-security-best-practices--android--medium
-  - q-android-security-practices-checklist--android--medium
+related: [c-permissions, q-android-lint-tool--android--medium, q-android-manifest-file--android--easy, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium]
 sources: []
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/permissions, android/privacy-sdks, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:44 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 

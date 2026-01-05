@@ -16,8 +16,6 @@ updated: "2025-01-25"
 tags: [algorithms, big-o, complexity, data-structures, difficulty/hard, dynamic-programming, graphs, recursion, searching, sorting, trees]
 sources: ["https://en.wikipedia.org/wiki/Data_structure"]
 
-date created: Monday, October 13th 2025, 8:01:06 am
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 > Объясните фундаментальные структуры данных и алгоритмы. Какие особенности у каждой структуры и когда их использовать?

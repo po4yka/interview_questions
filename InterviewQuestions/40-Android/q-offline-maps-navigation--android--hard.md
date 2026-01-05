@@ -3,31 +3,19 @@ id: android-485
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
 aliases: [Design Offline Maps & Navigation, Проектирование офлайн карт и навигации]
 topic: android
-subtopics:
-  - files-media
-  - location
-  - service
+subtopics: [files-media, location, service]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-background-tasks
-  - q-design-instagram-stories--android--hard
-  - q-design-uber-app--android--hard
-  - q-how-dialog-differs-from-other-navigation--android--medium
-  - q-what-navigation-methods-do-you-know--android--medium
+related: [c-background-tasks, q-design-instagram-stories--android--hard, q-design-uber-app--android--hard, q-how-dialog-differs-from-other-navigation--android--medium, q-what-navigation-methods-do-you-know--android--medium]
 sources: []
 created: 2025-10-29
 updated: 2025-11-10
 tags: [android/files-media, android/location, android/service, difficulty/hard, topic/android]
 
-date created: Saturday, November 1st 2025, 12:46:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

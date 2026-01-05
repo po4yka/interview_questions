@@ -3,29 +3,18 @@ id: android-087
 title: Test Coverage Quality Metrics / Метрики покрытия и качества тестов
 aliases: [Test Coverage Quality Metrics, Метрики покрытия и качества тестов]
 topic: android
-subtopics:
-  - testing-instrumented
-  - testing-unit
+subtopics: [testing-instrumented, testing-unit]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-testing
-  - q-dagger-build-time-optimization--android--medium
-  - q-jank-detection-frame-metrics--android--medium
-  - q-test-doubles-dependency-injection--android--medium
-  - q-what-is-diffutil-for--android--medium
+related: [c-testing, q-dagger-build-time-optimization--android--medium, q-jank-detection-frame-metrics--android--medium, q-test-doubles-dependency-injection--android--medium, q-what-is-diffutil-for--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-unit, coverage, difficulty/medium, jacoco, metrics]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Метрики покрытия и качества тестов

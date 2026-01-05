@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-data-class-detailed--kotlin--medium, q-
 created: 2025-10-15
 updated: 2025-11-10
 tags: [companion-object, difficulty/easy, object, singleton]
-date created: Friday, October 31st 2025, 6:30:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Что такое object / companion object?

@@ -16,8 +16,6 @@ tags: ["concurrency", "difficulty/hard", "dispatchers", "limitedparallelism", "p
 description: "Deep dive into creating custom dispatchers, limitedParallelism API, thread pool sizing, and resource-specific dispatchers"
 moc: moc-kotlin
 related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
-date created: Friday, October 31st 2025, 6:32:38 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 

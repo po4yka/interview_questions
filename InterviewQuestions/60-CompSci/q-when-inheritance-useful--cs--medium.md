@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]
 sources: ["https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)"]
 
-date created: Saturday, November 1st 2025, 1:26:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Когда наследование полезно, а когда нет?

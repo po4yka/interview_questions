@@ -16,8 +16,6 @@ updated: 2025-11-11
 tags: [cs, data-format, difficulty/easy, fundamentals, markup-language, xml]
 sources: ["https://www.w3.org/XML/"]
 
-date created: Friday, October 3rd 2025, 7:03:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Как расшифровывается аббревиатура XML?

@@ -16,8 +16,6 @@ related: [c-activity-lifecycle, c-fragment-lifecycle, c-viewmodel, c-process-lif
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture-components", "concept", "difficulty/medium", "lifecycle"]
-date created: Thursday, October 23rd 2025, 1:45:31 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Android Lifecycle / Жизненный Цикл Android

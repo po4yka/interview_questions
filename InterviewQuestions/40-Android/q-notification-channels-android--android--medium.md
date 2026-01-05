@@ -3,30 +3,19 @@ id: android-013
 title: Notification Channels / Каналы уведомлений
 aliases: [Notification Channels, Каналы уведомлений]
 topic: android
-subtopics:
-  - notifications
-  - ui-widgets
+subtopics: [notifications, ui-widgets]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-permissions
-  - q-android-app-components--android--easy
-  - q-dagger-build-time-optimization--android--medium
-  - q-data-sync-unstable-network--android--hard
-  - q-push-notification-navigation--android--medium
+related: [c-permissions, q-android-app-components--android--easy, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-push-notification-navigation--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/notifications, android/ui-widgets, android8, difficulty/medium, importance, notification-channels, notifications]
 sources:
   - "https://developer.android.com/guide/topics/ui/notifiers/notifications"
-date created: Saturday, November 1st 2025, 12:46:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Что такое каналы уведомлений в Android?

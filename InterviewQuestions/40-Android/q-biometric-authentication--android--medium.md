@@ -3,30 +3,20 @@ id: android-068
 title: Biometric Authentication / Биометрическая аутентификация
 aliases: [Biometric Authentication, Биометрическая аутентификация]
 topic: android
-subtopics:
-  - keystore-crypto
-  - permissions
+subtopics: [keystore-crypto, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-keystore
-  - q-android-security-best-practices--android--medium
-  - q-android-security-practices-checklist--android--medium
-  - q-app-security-best-practices--android--medium
+related: [c-android-keystore, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium, q-app-security-best-practices--android--medium]
 sources:
   - "https://developer.android.com/training/sign-in/biometric-auth"
 created: 2024-10-12
 updated: 2025-11-11
 tags: [android/keystore-crypto, android/permissions, authentication, biometric, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:04:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как реализовать биометрическую аутентификацию в Android?

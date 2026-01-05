@@ -14,8 +14,6 @@ related: [c-collections, c-kotlin, q-channels-vs-flow--kotlin--medium]
 created: 2025-10-13
 updated: 2025-11-09
 tags: [difficulty/easy]
-date created: Thursday, October 16th 2025, 4:16:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?

@@ -15,8 +15,6 @@ sources: []
 tags: [best-practices, difficulty/hard, kmp, kotlin, production]
 moc: moc-kotlin
 related: [c-kotlin, q-handler-looper-comprehensive--android--medium]
-date created: Tuesday, October 28th 2025, 9:23:20 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 

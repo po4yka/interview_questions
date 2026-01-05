@@ -3,32 +3,18 @@ id: android-091
 title: List Optimization / Оптимизация больших списков
 aliases: [List Optimization, Оптимизация списков]
 topic: android
-subtopics:
-  - performance-memory
-  - performance-rendering
-  - ui-views
+subtopics: [performance-memory, performance-rendering, ui-views]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-performance
-  - c-recyclerview
-  - q-canvas-drawing-optimization--android--hard
-  - q-dagger-build-time-optimization--android--medium
-  - q-parsing-optimization-android--android--medium
-  - q-what-is-diffutil-for--android--medium
-  - q-what-is-known-about-recyclerview--android--easy
+related: [c-performance, c-recyclerview, q-canvas-drawing-optimization--android--hard, q-dagger-build-time-optimization--android--medium, q-parsing-optimization-android--android--medium, q-what-is-diffutil-for--android--medium, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-13
 updated: 2025-10-31
 tags: [android/performance-memory, android/performance-rendering, android/ui-views, difficulty/hard, optimization, performance, recyclerview]
 
-date created: Saturday, November 1st 2025, 12:47:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Оптимизация больших списков

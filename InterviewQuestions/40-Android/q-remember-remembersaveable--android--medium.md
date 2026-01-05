@@ -3,32 +3,20 @@ id: android-029
 title: remember vs rememberSaveable in Compose / remember vs rememberSaveable в Compose
 aliases: [remember vs rememberSaveable in Compose, remember vs rememberSaveable в Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, ui-state]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - q-compose-core-components--android--medium
-  - q-compose-remember-derived-state--android--medium
-  - q-how-animations-work-in-recyclerview--android--medium
-  - q-remember-vs-remembersaveable-compose--android--medium
-  - q-transaction-too-large-exception--android--medium
+related: [c-compose-state, q-compose-core-components--android--medium, q-compose-remember-derived-state--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-transaction-too-large-exception--android--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [android/ui-compose, android/ui-state, difficulty/medium, en, ru]
 
-date created: Saturday, November 1st 2025, 12:47:02 pm
-date modified: Tuesday, November 25th 2025, 8:53:57 pm
 ---
 # Вопрос (RU)
 > В чем разница между `remember` и `rememberSaveable` в Jetpack Compose?

@@ -14,8 +14,6 @@ related: [c-coroutines, q-object-companion-object--kotlin--medium, q-test-dispat
 created: 2024-10-15
 updated: 2025-11-09
 tags: [difficulty/easy]
-date created: Friday, November 7th 2025, 2:49:31 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Почему следует избегать использования `GlobalScope` в Android приложениях?

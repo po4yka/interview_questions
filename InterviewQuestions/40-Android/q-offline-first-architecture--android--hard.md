@@ -3,31 +3,17 @@ id: android-097
 title: Offline First Architecture / Архитектура Offline First
 aliases: [Offline First Architecture, Архитектура Offline First]
 topic: android
-subtopics:
-  - architecture-clean
-  - cache-offline
-  - room
+subtopics: [architecture-clean, cache-offline, room]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android, android/architecture-clean, android/cache-offline, android/room, architecture, difficulty/hard, offline-first, sync, workmanager]
 moc: moc-android
-related:
-  - c-clean-architecture
-  - c-database-design
-  - q-clean-architecture-android--android--hard
-  - q-how-to-create-dynamic-screens-at-runtime--android--hard
-  - q-multi-module-best-practices--android--hard
-  - q-play-billing-v6-architecture--android--hard
-  - q-quick-settings-tiles-architecture--android--medium
-date created: Saturday, November 1st 2025, 12:46:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
+related: [c-clean-architecture, c-database-design, q-clean-architecture-android--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-multi-module-best-practices--android--hard, q-play-billing-v6-architecture--android--hard, q-quick-settings-tiles-architecture--android--medium]
 ---
 # Вопрос (RU)
 

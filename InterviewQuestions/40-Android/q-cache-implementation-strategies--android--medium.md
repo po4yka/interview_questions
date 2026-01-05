@@ -3,32 +3,17 @@ id: android-074
 title: Cache Implementation Strategies / Стратегии реализации кэша
 aliases: [Cache Implementation Strategies, Стратегии реализации кэша]
 topic: android
-subtopics:
-  - cache-offline
-  - networking-http
-  - room
+subtopics: [cache-offline, networking-http, room]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-performance
-  - c-room
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-storage-types--android--medium
-  - q-android-testing-strategies--android--medium
-  - q-database-optimization-android--android--medium
-  - q-integration-testing-strategies--android--medium
-  - q-tflite-acceleration-strategies--android--hard
+related: [c-performance, c-room, q-android-performance-measurement-tools--android--medium, q-android-storage-types--android--medium, q-android-testing-strategies--android--medium, q-database-optimization-android--android--medium, q-integration-testing-strategies--android--medium, q-tflite-acceleration-strategies--android--hard]
 created: 2024-10-13
 updated: 2025-11-10
 tags: [android/cache-offline, android/networking-http, android/room, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:46:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Какие существуют стратегии реализации кэша в Android?

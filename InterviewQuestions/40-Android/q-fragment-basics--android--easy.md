@@ -9,27 +9,14 @@ updated: 2025-11-10
 difficulty: easy
 question_kind: android
 original_language: en
-language_tags:
-  - en
-  - ru
-subtopics:
-  - fragment
-  - ui-navigation
+language_tags: [en, ru]
+subtopics: [fragment, ui-navigation]
 sources:
   - "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md"
 tags: [android/fragment, android/ui-navigation, difficulty/easy, ui-component]
 moc: moc-android
-related:
-  - c-compose-navigation
-  - c-fragments
-  - q-android-build-optimization--android--medium
-  - q-how-to-choose-layout-for-fragment--android--easy
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-save-data-outside-fragment--android--medium
-  - q-what-each-android-component-represents--android--easy
+related: [c-compose-navigation, c-fragments, q-android-build-optimization--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-save-data-outside-fragment--android--medium, q-what-each-android-component-represents--android--easy]
 
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Что такое `Fragment` в Android и для чего он используется?

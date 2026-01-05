@@ -3,31 +3,18 @@ id: android-396
 title: Fragments and Multiple Activities / Фрагменты и несколько Activity
 aliases: [Fragments and Activities, Фрагменты и Activities]
 topic: android
-subtopics:
-  - activity
-  - fragment
-  - ui-navigation
+subtopics: [activity, fragment, ui-navigation]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
-  - q-what-is-activity-and-what-is-it-used-for--android--medium
-  - q-why-are-fragments-needed-if-there-is-activity--android--hard
-  - q-why-use-fragments-when-we-have-activities--android--medium
+related: [c-activity, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-why-use-fragments-when-we-have-activities--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/ui-navigation, difficulty/hard, fragments, ui-navigation]
 
-date created: Saturday, November 1st 2025, 12:47:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Фрагменты и несколько `Activity`

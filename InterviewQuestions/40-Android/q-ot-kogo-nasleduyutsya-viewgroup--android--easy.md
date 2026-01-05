@@ -3,31 +3,19 @@ id: android-278
 title: Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup
 aliases: [View Hierarchy, ViewGroup Inheritance, Иерархия View, Наследование ViewGroup]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-components
-  - q-canvas-optimization--android--medium
-  - q-custom-viewgroup-layout--android--hard
-  - q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
-  - q-viewgroup-vs-view-differences--android--easy
-  - q-what-does-itemdecoration-do--android--medium
-  - q-what-does-viewgroup-inherit-from--android--easy
+related: [c-android-components, q-canvas-optimization--android--medium, q-custom-viewgroup-layout--android--hard, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-viewgroup-vs-view-differences--android--easy, q-what-does-itemdecoration-do--android--medium, q-what-does-viewgroup-inherit-from--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android, android/ui-views, difficulty/easy]
 
-date created: Saturday, November 1st 2025, 12:47:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

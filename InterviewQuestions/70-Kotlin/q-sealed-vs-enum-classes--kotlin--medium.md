@@ -14,8 +14,6 @@ related: [c-kotlin, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, sealed-class]
-date created: Friday, October 31st 2025, 6:30:08 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > Каковы отличия sealed и enum классов в Kotlin?

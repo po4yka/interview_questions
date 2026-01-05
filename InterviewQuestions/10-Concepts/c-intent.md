@@ -8,8 +8,6 @@ links: []
 created: 2025-11-06
 updated: 2025-11-06
 tags: [android, concept, intent, ipc]
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Summary (EN)

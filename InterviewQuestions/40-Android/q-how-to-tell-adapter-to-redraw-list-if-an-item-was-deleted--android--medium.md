@@ -3,33 +3,19 @@ id: android-315
 title: How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален
 aliases: [Adapter Redraw on Item Deletion, Перерисовка адаптера при удалении элемента]
 topic: android
-subtopics:
-  - architecture-modularization
-  - ui-views
-  - ui-widgets
+subtopics: [architecture-modularization, ui-views, ui-widgets]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-recyclerview
-  - q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
-  - q-mvi-handle-one-time-events--android--hard
-  - q-tasks-back-stack--android--medium
-  - q-view-fundamentals--android--easy
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
-  - q-what-problems-can-there-be-with-list-items--android--easy
+related: [c-recyclerview, q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-mvi-handle-one-time-events--android--hard, q-tasks-back-stack--android--medium, q-view-fundamentals--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
 created: 2025-10-15
 updated: 2025-11-11
 sources: []
 tags: [adapters, android, android/architecture-modularization, android/ui-views, android/ui-widgets, difficulty/medium, recyclerview, ui]
 
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

@@ -7,29 +7,15 @@ status: draft
 created: 2025-10-05
 updated: 2025-11-11
 difficulty: medium
-subtopics:
-  - build-variants
-  - dependency-management
-  - gradle
+subtopics: [build-variants, dependency-management, gradle]
 question_kind: theory
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 tags: [android/build-variants, android/dependency-management, android/gradle, build-system, dependency-management, difficulty/medium]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Gradle.md
-related:
-  - c-gradle
-  - q-build-optimization-gradle--android--medium
-  - q-cache-implementation-strategies--android--medium
-  - q-dagger-build-time-optimization--android--medium
-  - q-how-application-priority-is-determined-by-the-system--android--hard
-  - q-kapt-vs-ksp--android--medium
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
+related: [c-gradle, q-build-optimization-gradle--android--medium, q-cache-implementation-strategies--android--medium, q-dagger-build-time-optimization--android--medium, q-how-application-priority-is-determined-by-the-system--android--hard, q-kapt-vs-ksp--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 moc: moc-android
 
-date created: Saturday, November 1st 2025, 12:46:50 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Что такое система сборки Gradle в Android и какие ключевые понятия (типы сборки, product flavors, build variants, настройки манифеста, зависимости, подпись, shrink, multiple APK, конфигурационные файлы) нужно знать для собеседования?

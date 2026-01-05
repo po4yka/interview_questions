@@ -3,34 +3,19 @@ id: android-160
 title: Koin Fundamentals / Основы Koin
 aliases: [Koin DI, Koin Framework, Koin внедрение зависимостей, Service Locator, Основы Koin]
 topic: android
-subtopics:
-  - architecture-clean
-  - di-koin
-  - lifecycle
+subtopics: [architecture-clean, di-koin, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-clean-architecture
-  - c-dependency-injection
-  - c-lifecycle
-  - q-compositionlocal-compose--android--hard
-  - q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
-  - q-koin-scope-management--android--medium
-  - q-koin-vs-dagger-philosophy--android--hard
-  - q-view-fundamentals--android--easy
+related: [c-clean-architecture, c-dependency-injection, c-lifecycle, q-compositionlocal-compose--android--hard, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-koin-scope-management--android--medium, q-koin-vs-dagger-philosophy--android--hard, q-view-fundamentals--android--easy]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/architecture-clean, android/di-koin, android/lifecycle, architecture, difficulty/medium, injection, koin, service-locator]
 
-date created: Saturday, November 1st 2025, 12:46:56 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 

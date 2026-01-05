@@ -3,32 +3,19 @@ id: android-048
 title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
 aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android
-subtopics:
-  - ci-cd
-  - gradle
-  - testing-instrumented
+subtopics: [ci-cd, gradle, testing-instrumented]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-build-optimization--android--medium
-  - q-android-release-pipeline-cicd--android--hard
-  - q-build-optimization-gradle--android--medium
-  - q-cicd-automated-testing--android--medium
-  - q-cicd-deployment-automation--android--medium
-  - q-cicd-pipeline-setup--android--medium
+related: [q-android-build-optimization--android--medium, q-android-release-pipeline-cicd--android--hard, q-build-optimization-gradle--android--medium, q-cicd-automated-testing--android--medium, q-cicd-deployment-automation--android--medium, q-cicd-pipeline-setup--android--medium]
 created: 2025-10-11
 updated: 2025-11-10
 sources: []
 tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как построить эффективный CI/CD пайплайн для Android-приложения?

@@ -16,8 +16,6 @@ updated: 2025-11-10
 tags: [android/coroutines, android/flow, android/ui-state, difficulty/medium, state-management]
 sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", "https://developer.android.com/topic/libraries/architecture/livedata"]
 
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Когда в Android приложении стоит выбирать `StateFlow`, `SharedFlow`, обычный `Flow` или `LiveData` для доставки и наблюдения состояния UI?

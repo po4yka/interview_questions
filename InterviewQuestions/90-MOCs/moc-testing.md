@@ -5,8 +5,6 @@ kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/testing]
-date created: Saturday, October 18th 2025, 2:46:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:47 pm
 ---
 
 # Testing — Map of Content

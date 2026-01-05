@@ -14,8 +14,6 @@ updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, dispatchers, immediate, kotlin, main, optimization, performance, ui-thread]
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-flowon-operator-context-switching--kotlin--hard]
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Что такое `Dispatchers.Main.immediate`, чем он отличается от `Dispatchers.Main`? В каких случаях `Main.immediate` избегает дополнительной диспетчеризации и как это влияет на производительность? Приведите примеры из практики: обновление UI, изменение состояния представления, измерение производительности и стратегии тестирования.

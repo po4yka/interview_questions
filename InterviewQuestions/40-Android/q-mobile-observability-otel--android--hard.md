@@ -3,33 +3,20 @@ id: android-627
 title: Mobile Observability with OpenTelemetry / Наблюдаемость на Android с OpenTelemetry
 aliases: [Mobile Observability with OpenTelemetry, Наблюдаемость на Android с OpenTelemetry]
 topic: android
-subtopics:
-  - logging-tracing
-  - monitoring-slo
-  - performance-battery
+subtopics: [logging-tracing, monitoring-slo, performance-battery]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - moc-android
-  - q-android-lint-tool--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-main-thread-android--android--medium
-  - q-parsing-optimization-android--android--medium
+related: [c-android, moc-android, q-android-lint-tool--android--medium, q-android-performance-measurement-tools--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/logging-tracing, android/monitoring-slo, android/performance-battery, difficulty/hard, opentelemetry]
 sources:
   - "https://developer.android.com/topic/performance/monitoring"
   - "https://opentelemetry.io/docs/instrumentation/android/"
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 > Как построить наблюдаемость в Android-приложении с OpenTelemetry: структурированные логи, метрики, трассировки, фоновая отправка данных и ограничения батареи/приватности?

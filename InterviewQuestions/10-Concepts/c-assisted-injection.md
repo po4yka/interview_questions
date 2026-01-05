@@ -15,8 +15,6 @@ related: [c-dagger, c-hilt, c-dependency-injection, c-koin, c-factory-pattern]
 created: "2025-11-10"
 updated: "2025-11-10"
 tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
-date created: Monday, November 10th 2025, 8:37:43 pm
-date modified: Tuesday, November 25th 2025, 8:54:04 pm
 ---
 
 # Summary (EN)

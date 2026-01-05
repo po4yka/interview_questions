@@ -3,30 +3,18 @@ id: android-219
 title: How To Create Chat Lists From A UI Perspective / Как создать списки чатов с точки зрения UI
 aliases: [How To Create Chat Lists From A UI Perspective, Как создать списки чатов с точки зрения UI]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-recyclerview
-  - q-how-dialog-differs-from-other-navigation--android--medium
-  - q-how-to-create-dynamic-screens-at-runtime--android--hard
-  - q-network-error-handling-strategies--networking--medium
-  - q-what-are-px-dp-sp--android--easy
-  - q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium
-  - q-what-is-known-about-recyclerview--android--easy
+related: [c-recyclerview, q-how-dialog-differs-from-other-navigation--android--medium, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-network-error-handling-strategies--networking--medium, q-what-are-px-dp-sp--android--easy, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/hard, recyclerview]
 
-date created: Saturday, November 1st 2025, 12:46:53 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как создать списки чатов с точки зрения UI

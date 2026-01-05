@@ -3,31 +3,19 @@ id: android-454
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
 aliases: [Custom ViewGroup Layout, Layout кастомных ViewGroup]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-custom-views
-  - q-compose-custom-animations--android--medium
-  - q-compose-custom-layout--android--hard
-  - q-custom-drawable-implementation--android--medium
-  - q-custom-view-attributes--android--medium
-  - q-custom-view-lifecycle--android--medium
-  - q-mlkit-custom-models--android--hard
+related: [c-custom-views, q-compose-custom-animations--android--medium, q-compose-custom-layout--android--hard, q-custom-drawable-implementation--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium, q-mlkit-custom-models--android--hard]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/ui-views, custom-views, difficulty/hard, layout]
 sources: []
 
-date created: Saturday, November 1st 2025, 12:46:47 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 

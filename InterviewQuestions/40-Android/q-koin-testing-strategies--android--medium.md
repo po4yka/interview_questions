@@ -3,33 +3,20 @@ id: android-610
 title: Koin Testing Strategies / Стратегии тестирования Koin
 aliases: [Koin Testing Strategies, Тестирование модулей Koin]
 topic: android
-subtopics:
-  - architecture-clean
-  - di-koin
-  - testing-unit
+subtopics: [architecture-clean, di-koin, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dependency-injection
-  - q-android-testing-strategies--android--medium
-  - q-integration-testing-strategies--android--medium
-  - q-koin-fundamentals--android--medium
-  - q-koin-scope-management--android--medium
-  - q-tflite-acceleration-strategies--android--hard
+related: [c-dependency-injection, q-android-testing-strategies--android--medium, q-integration-testing-strategies--android--medium, q-koin-fundamentals--android--medium, q-koin-scope-management--android--medium, q-tflite-acceleration-strategies--android--hard]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/architecture-clean, android/di-koin, android/testing-unit, dependency-injection, difficulty/medium, koin]
 sources:
   - "https://insert-koin.io/docs/reference/koin-android/check-modules"
   - "https://insert-koin.io/docs/reference/koin-test/testing"
-date created: Sunday, November 2nd 2025, 5:37:44 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Как организовать тестирование модулей Koin? Покажите стратегии для юнит-тестов, инструментальных тестов и проверки графа зависимостей.

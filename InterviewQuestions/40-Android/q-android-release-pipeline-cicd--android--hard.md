@@ -3,22 +3,14 @@ id: android-640
 title: Android Release Pipeline CI/CD / CI/CD пайплайн релизов Android
 aliases: [Android Release Pipeline CI/CD, CI/CD пайплайн релизов Android]
 topic: android
-subtopics:
-  - ci-cd
+subtopics: [ci-cd]
 question_kind: theory
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-release-engineering
-  - q-android-build-optimization--android--medium
-  - q-android-lint-tool--android--medium
-  - q-cicd-pipeline-android--android--medium
-  - q-cicd-pipeline-setup--android--medium
+related: [c-release-engineering, q-android-build-optimization--android--medium, q-android-lint-tool--android--medium, q-cicd-pipeline-android--android--medium, q-cicd-pipeline-setup--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/ci-cd, difficulty/hard]
@@ -27,8 +19,6 @@ sources:
   - "https://docs.fastlane.tools/actions/supply/"
   - "https://firebase.google.com/docs/app-distribution"
 
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Как построить надёжный CI/CD пайплайн релизов Android: ветвление, подпись, автоматизированные проверки, каналы дистрибуции (internal, QA, production) и управление фич-флагами?

@@ -14,8 +14,6 @@ related: [c-kotlin, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-classes, difficulty/medium, sealed-classes]
-date created: Friday, October 31st 2025, 6:33:32 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 > Для чего используются `data` классы и `sealed` классы в Kotlin? Каковы их практические применения?

@@ -3,31 +3,18 @@ id: android-384
 title: ViewModel Pattern / Паттерн ViewModel
 aliases: [ViewModel Pattern, Паттерн ViewModel]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - lifecycle
+subtopics: [architecture-mvvm, lifecycle]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - c-android-lifecycle
-  - q-mvp-pattern--android--medium
-  - q-mvvm-pattern--android--medium
-  - q-viewmodel-vs-onsavedinstancestate--android--medium
-  - q-what-is-activity-and-what-is-it-used-for--android--medium
-  - q-what-is-viewmodel--android--medium
+related: [c-android, c-android-lifecycle, q-mvp-pattern--android--medium, q-mvvm-pattern--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, difficulty/easy, mvvm, viewmodel]
 
-date created: Saturday, November 1st 2025, 12:47:06 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Паттерн `ViewModel`

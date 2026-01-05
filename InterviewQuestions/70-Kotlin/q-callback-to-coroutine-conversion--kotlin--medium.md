@@ -17,8 +17,6 @@ created: 2025-10-06
 updated: 2025-11-11
 tags: [async, callbacks, coroutines, difficulty/medium, kotlin, migration, suspendcoroutine]
 
-date created: Saturday, November 1st 2025, 9:25:30 am
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
 ---
 # Вопрос (RU)
 > Как конвертировать callback-based API в корутины в Kotlin?

@@ -3,31 +3,20 @@ id: android-016
 title: Task Affinity in Android / Task Affinity в Android
 aliases: [Task Affinity in Android, Task Affinity в Android]
 topic: android
-subtopics:
-  - activity
-  - ui-navigation
+subtopics: [activity, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-activity
-  - q-android-app-components--android--easy
-  - q-android-lint-tool--android--medium
-  - q-main-thread-android--android--medium
-  - q-parsing-optimization-android--android--medium
+related: [c-activity, q-android-app-components--android--easy, q-android-lint-tool--android--medium, q-main-thread-android--android--medium, q-parsing-optimization-android--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/activity, android/ui-navigation, difficulty/medium, task-affinity, tasks]
 sources:
   - "https://developer.android.com/guide/components/activities/tasks-and-back-stack"
 
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Tuesday, November 25th 2025, 8:53:56 pm
 ---
 # Вопрос (RU)
 > Что такое taskAffinity и как она работает?

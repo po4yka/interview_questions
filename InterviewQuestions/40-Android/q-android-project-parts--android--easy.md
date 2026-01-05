@@ -3,29 +3,18 @@ id: android-216
 title: Android Project Parts / Части Android проекта
 aliases: [Android Project Parts, Части Android проекта]
 topic: android
-subtopics:
-  - build-variants
-  - gradle
+subtopics: [build-variants, gradle]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-gradle
-  - q-android-lint-tool--android--medium
-  - q-android-manifest-file--android--easy
-  - q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy
-  - q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy
+related: [c-gradle, q-android-lint-tool--android--medium, q-android-manifest-file--android--easy, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/build-variants, android/gradle, build-system, difficulty/easy, project-structure]
 sources: []
-date created: Saturday, November 1st 2025, 1:02:45 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > Из каких основных частей состоит Android проект?

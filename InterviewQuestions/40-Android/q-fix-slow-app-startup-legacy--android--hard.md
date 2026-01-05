@@ -3,25 +3,14 @@ id: android-271
 title: Fix Slow App Startup Legacy / Исправление медленного запуска приложения
 aliases: [Fix Slow App Startup in Legacy Project, Исправление медленного запуска приложения в легаси-проекте]
 topic: android
-subtopics:
-  - architecture-modularization
-  - monitoring-slo
-  - performance-startup
+subtopics: [architecture-modularization, monitoring-slo, performance-startup]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-app-startup
-  - q-android-performance-measurement-tools--android--medium
-  - q-app-startup-library--android--medium
-  - q-app-startup-optimization--android--medium
-  - q-macrobenchmark-startup--android--medium
-  - q-what-are-services-used-for--android--medium
+related: [c-app-startup, q-android-performance-measurement-tools--android--medium, q-app-startup-library--android--medium, q-app-startup-optimization--android--medium, q-macrobenchmark-startup--android--medium, q-what-are-services-used-for--android--medium]
 sources:
   - "https://developer.android.com/topic/performance/baselineprofiles/overview"
   - "https://developer.android.com/topic/performance/vitals/launch-time"
@@ -29,8 +18,6 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/architecture-modularization, android/monitoring-slo, android/performance-startup, app-startup, difficulty/hard, lazy-init, legacy-code, optimization]
 
-date created: Saturday, November 1st 2025, 1:29:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 

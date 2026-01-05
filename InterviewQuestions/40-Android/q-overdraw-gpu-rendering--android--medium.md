@@ -3,34 +3,19 @@ id: android-301
 title: Overdraw Gpu Rendering / Overdraw и GPU рендеринг
 aliases: [Overdraw GPU Rendering, Overdraw и GPU рендеринг]
 topic: android
-subtopics:
-  - performance-rendering
-  - profiling
-  - ui-graphics
+subtopics: [performance-rendering, profiling, ui-graphics]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-perfetto
-  - c-performance
-  - q-android-performance-measurement-tools--android--medium
-  - q-opengl-advanced-rendering--android--medium
-  - q-performance-optimization-android--android--medium
-  - q-surfaceview-rendering--android--medium
-  - q-what-is-layout-performance-measured-in--android--medium
-  - q-which-class-to-use-for-rendering-view-in-background-thread--android--hard
+related: [c-perfetto, c-performance, q-android-performance-measurement-tools--android--medium, q-opengl-advanced-rendering--android--medium, q-performance-optimization-android--android--medium, q-surfaceview-rendering--android--medium, q-what-is-layout-performance-measured-in--android--medium, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, gpu, overdraw, performance, rendering]
 sources: []
 
-date created: Saturday, November 1st 2025, 12:47:00 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

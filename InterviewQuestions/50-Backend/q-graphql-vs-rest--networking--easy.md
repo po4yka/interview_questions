@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-11-11
 sources: []
 tags: [difficulty/easy, graphql, networking/http, rest]
-date created: Monday, October 27th 2025, 3:57:25 pm
-date modified: Tuesday, November 25th 2025, 8:53:54 pm
 ---
 # Вопрос (RU)
 

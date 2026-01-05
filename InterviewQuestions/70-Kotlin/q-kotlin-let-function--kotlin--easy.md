@@ -14,8 +14,6 @@ related: [c-kotlin, q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-ty
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, kotlin, let, null-safety, scope-functions]
-date created: Friday, October 31st 2025, 6:30:30 pm
-date modified: Tuesday, November 25th 2025, 8:53:50 pm
 ---
 # Вопрос (RU)
 > Для чего нужна функция `let` в Kotlin?

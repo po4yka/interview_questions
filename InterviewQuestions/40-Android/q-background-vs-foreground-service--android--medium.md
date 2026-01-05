@@ -3,31 +3,19 @@ id: android-195
 title: Background vs Foreground Service / Фоновый vs Foreground-сервис
 aliases: [Background vs Foreground Service, Фоновый vs Foreground-сервис]
 topic: android
-subtopics:
-  - background-execution
-  - service
+subtopics: [background-execution, service]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-background-tasks
-  - q-android-service-types--android--easy
-  - q-android-services-purpose--android--easy
-  - q-background-tasks-decision-guide--android--medium
-  - q-foreground-service-types--android--medium
-  - q-when-can-the-system-restart-a-service--android--medium
+related: [c-background-tasks, q-android-service-types--android--easy, q-android-services-purpose--android--easy, q-background-tasks-decision-guide--android--medium, q-foreground-service-types--android--medium, q-when-can-the-system-restart-a-service--android--medium]
 sources: []
 created: 2023-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 1:04:15 pm
-date modified: Tuesday, November 25th 2025, 8:54:02 pm
 ---
 # Вопрос (RU)
 > В чем разница между background-сервисом и foreground-сервисом в Android?

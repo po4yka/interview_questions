@@ -3,28 +3,18 @@ id: android-120
 title: Integration Testing Strategies / Стратегии интеграционного тестирования
 aliases: [Integration Testing Strategies, Стратегии интеграционного тестирования]
 topic: android
-subtopics:
-  - testing-instrumented
+subtopics: [testing-instrumented]
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android-testing
-  - q-android-manifest-file--android--easy
-  - q-android-testing-strategies--android--medium
-  - q-koin-testing-strategies--android--medium
-  - q-tflite-acceleration-strategies--android--hard
+related: [c-android-testing, q-android-manifest-file--android--easy, q-android-testing-strategies--android--medium, q-koin-testing-strategies--android--medium, q-tflite-acceleration-strategies--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-instrumented, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Tuesday, November 25th 2025, 8:53:59 pm
 ---
 # Вопрос (RU)
 > Стратегии интеграционного тестирования

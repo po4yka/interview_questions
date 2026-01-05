@@ -17,8 +17,6 @@ description: "Complete guide to `Deferred<T>`, async patterns, parallel executio
 moc: moc-kotlin
 related: [c-concurrency, q-lifecyclescope-viewmodelscope--kotlin--medium]
 
-date created: Friday, October 31st 2025, 6:33:46 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 

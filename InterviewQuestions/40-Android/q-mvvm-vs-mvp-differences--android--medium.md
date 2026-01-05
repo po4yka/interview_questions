@@ -3,31 +3,19 @@ id: android-296
 title: MVVM vs MVP Differences / Различия MVVM и MVP
 aliases: [MVVM vs MVP, Различия MVVM и MVP]
 topic: android
-subtopics:
-  - architecture-mvvm
-  - lifecycle
+subtopics: [architecture-mvvm, lifecycle]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-clean-architecture
-  - c-lifecycle
-  - q-clean-architecture-android--android--hard
-  - q-mvp-pattern--android--medium
-  - q-mvvm-pattern--android--medium
-  - q-viewgroup-vs-view-differences--android--easy
+related: [c-clean-architecture, c-lifecycle, q-clean-architecture-android--android--hard, q-mvp-pattern--android--medium, q-mvvm-pattern--android--medium, q-viewgroup-vs-view-differences--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, architecture-patterns, difficulty/medium]
 
-date created: Saturday, November 1st 2025, 12:46:59 pm
-date modified: Tuesday, November 25th 2025, 8:53:58 pm
 ---
 # Вопрос (RU)
 

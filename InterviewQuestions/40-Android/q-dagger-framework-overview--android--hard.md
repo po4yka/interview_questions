@@ -3,34 +3,20 @@ id: android-456
 title: Dagger Framework Overview / Обзор фреймворка Dagger
 aliases: [Dagger Framework Overview, Обзор фреймворка Dagger]
 topic: android
-subtopics:
-  - architecture-clean
-  - architecture-mvvm
-  - di-hilt
+subtopics: [architecture-clean, architecture-mvvm, di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-dagger
-  - c-dependency-injection
-  - c-hilt
-  - q-dagger-build-time-optimization--android--medium
-  - q-dagger-custom-scopes--android--hard
-  - q-dagger-multibinding--android--hard
-  - q-dagger-purpose--android--easy
+related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-custom-scopes--android--hard, q-dagger-multibinding--android--hard, q-dagger-purpose--android--easy]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
   - "https://dagger.dev/"
 
-date created: Saturday, November 1st 2025, 12:46:48 pm
-date modified: Tuesday, November 25th 2025, 8:54:01 pm
 ---
 # Вопрос (RU)
 > Что известно про фреймворк Dagger?

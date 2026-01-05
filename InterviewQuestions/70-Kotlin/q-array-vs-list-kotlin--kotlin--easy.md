@@ -12,18 +12,8 @@ aliases: [Array vs List in Kotlin, Разница между Array и List в Ko
 tags: [collections, data-structures, difficulty/easy, kotlin]
 moc: moc-kotlin
 question_kind: theory
-related:
-  - c-collections
-  - c-kotlin
-  - q-kotlin-collections--kotlin--easy
-  - q-list-set-map-differences--kotlin--easy
-  - q-list-vs-sequence--kotlin--medium
-subtopics:
-  - array
-  - collections
-  - list
-date created: Saturday, November 1st 2025, 12:09:57 pm
-date modified: Tuesday, November 25th 2025, 8:53:53 pm
+related: [c-collections, c-kotlin, q-kotlin-collections--kotlin--easy, q-list-set-map-differences--kotlin--easy, q-list-vs-sequence--kotlin--medium]
+subtopics: [array, collections, list]
 ---
 # Вопрос (RU)
 > В чём разница между `Array` и `List` в Kotlin?

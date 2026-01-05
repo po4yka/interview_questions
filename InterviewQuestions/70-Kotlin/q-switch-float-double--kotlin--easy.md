@@ -13,10 +13,7 @@ moc: moc-kotlin
 related: [q-kotlin-type-system-features--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-- difficulty/easy
-date created: Tuesday, November 25th 2025, 8:11:42 pm
-date modified: Tuesday, November 25th 2025, 8:53:48 pm
+tags: [difficulty/easy]
 ---
 # Вопрос (RU)
 

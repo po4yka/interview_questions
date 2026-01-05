@@ -14,8 +14,6 @@ related: [c-collections, c-kotlin, q-list-vs-sequence--kotlin--medium]
 created: 2024-10-13
 updated: 2025-11-11
 tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequence]
-date created: Friday, October 31st 2025, 6:29:17 pm
-date modified: Tuesday, November 25th 2025, 8:53:49 pm
 ---
 # Вопрос (RU)
 > В чем разница между работой с `List` и работой с `Sequence`?

@@ -15,8 +15,6 @@ description: "A comprehensive guide to understanding Job and its lifecycle state
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin]
 subtopics: [coroutines, lifecycle]
-date created: Saturday, November 1st 2025, 1:28:34 pm
-date modified: Tuesday, November 25th 2025, 8:53:52 pm
 ---
 # Вопрос (RU)
 

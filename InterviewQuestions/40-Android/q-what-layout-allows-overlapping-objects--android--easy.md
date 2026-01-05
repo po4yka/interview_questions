@@ -3,29 +3,18 @@ id: android-186
 title: Layout Overlapping Objects / Макет для перекрывающихся объектов
 aliases: [Overlapping Layout, Макет для перекрывания]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-layouts
-  - q-how-to-choose-layout-for-fragment--android--easy
-  - q-viewgroup-vs-view-differences--android--easy
-  - q-what-is-layout-types-and-when-to-use--android--easy
-  - q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy
-  - q-what-methods-redraw-views--android--medium
+related: [c-layouts, q-how-to-choose-layout-for-fragment--android--easy, q-viewgroup-vs-view-differences--android--easy, q-what-is-layout-types-and-when-to-use--android--easy, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/easy, framelayout, layouts, ui, view-positioning]
 
-date created: Saturday, November 1st 2025, 12:47:09 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 > Макет для перекрывающихся объектов

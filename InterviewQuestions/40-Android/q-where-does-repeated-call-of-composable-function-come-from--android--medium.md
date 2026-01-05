@@ -4,33 +4,18 @@ title: Where Does Repeated Call Of Composable Function Come From / Откуда 
   повторный вызов Composable функции
 aliases: [Where Does Repeated Call Of Composable Function Come From, Откуда берется повторный вызов Composable функции]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, ui-state]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-compose-state
-  - c-jetpack-compose
-  - c-viewmodel
-  - q-compose-performance-optimization--android--hard
-  - q-compose-stability-skippability--android--hard
-  - q-how-dialog-differs-from-other-navigation--android--medium
-  - q-how-does-jetpackcompose-work--android--medium
-  - q-where-does-the-repeated-call-of-composable-function-come-from--android--medium
-  - q-where-is-composition-created-for-calling-composable-function--android--medium
+related: [c-compose-state, c-jetpack-compose, c-viewmodel, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-how-dialog-differs-from-other-navigation--android--medium, q-how-does-jetpackcompose-work--android--medium, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium, q-where-is-composition-created-for-calling-composable-function--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-state, compose, difficulty/medium, recomposition]
-date created: Saturday, November 1st 2025, 12:47:10 pm
-date modified: Tuesday, November 25th 2025, 8:53:55 pm
 ---
 # Вопрос (RU)
 

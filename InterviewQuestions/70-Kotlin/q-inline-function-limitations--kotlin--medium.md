@@ -14,8 +14,6 @@ related: [c-kotlin, c-kotlin-features, q-coroutine-context-elements--kotlin--har
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
-date created: Friday, October 17th 2025, 3:04:07 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > Когда нельзя или нежелательно использовать inline-функции в Kotlin, и какие ограничения при этом действуют?

@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-11-10
 
 tags: [coroutines, difficulty/medium, flatmap, flow, kotlin, operators]
-date created: Thursday, October 16th 2025, 4:18:49 pm
-date modified: Tuesday, November 25th 2025, 8:53:51 pm
 ---
 # Вопрос (RU)
 > В чем разница между `flatMapConcat`, `flatMapMerge` и `flatMapLatest` в Kotlin `Flow`?

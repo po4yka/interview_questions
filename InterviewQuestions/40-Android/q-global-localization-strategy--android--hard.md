@@ -3,30 +3,20 @@ id: android-641
 title: Global Localization Strategy / Стратегия глобальной локализации
 aliases: [Global Localization Strategy, Стратегия глобальной локализации]
 topic: android
-subtopics:
-  - i18n-l10n
+subtopics: [i18n-l10n]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-android
-  - q-android-architectural-patterns--android--medium
-  - q-media3-migration-strategy--android--hard
-  - q-play-asset-delivery-strategy--android--hard
-  - q-scoped-storage-migration-strategy--android--hard
+related: [c-android, q-android-architectural-patterns--android--medium, q-media3-migration-strategy--android--hard, q-play-asset-delivery-strategy--android--hard, q-scoped-storage-migration-strategy--android--hard]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/i18n-l10n, difficulty/hard]
 sources:
   - "https://developer.android.com/guide/topics/resources/localization"
   - "https://developer.android.com/guide/topics/resources/pseudolocales"
-date created: Thursday, November 6th 2025, 4:39:51 pm
-date modified: Tuesday, November 25th 2025, 8:54:00 pm
 ---
 # Вопрос (RU)
 > Как построить стратегию глобальной локализации Android-приложения: управление ресурсами, процесс перевода, псевдолокализация, тестирование и автоматизация в CI/CD?

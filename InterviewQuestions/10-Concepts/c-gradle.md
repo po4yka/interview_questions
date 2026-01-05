@@ -16,8 +16,6 @@ related: [c-dependency-injection, c-kotlin, c-app-bundle, c-modularization]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "automation", "build-system", "concept", "difficulty/medium", "gradle", "groovy", "kotlin-dsl"]
-date created: Saturday, October 25th 2025, 11:06:08 am
-date modified: Tuesday, November 25th 2025, 8:54:03 pm
 ---
 
 # Gradle / Gradle
