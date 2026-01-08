@@ -1,4 +1,4 @@
----
+---\
 id: android-450
 title: Deep Link Vs App Link / Deep Link против App Link
 aliases: [Deep Link Vs App Link, Deep Link против App Link]
@@ -16,7 +16,7 @@ updated: 2025-11-02
 tags: [android/intents-deeplinks, android/ui-navigation, app-links, deep-linking, difficulty/medium]
 sources:
   - https://developer.android.com/training/app-links
----
+---\
 # Вопрос (RU)
 > Какие основные отличия между Deep Link и App Link в Android?
 
@@ -42,7 +42,7 @@ sources:
 
 ### Deep Link: Реализация
 
-**Intent Filter (AndroidManifest.xml):**
+**`Intent` Filter (AndroidManifest.xml):**
 ```xml
 <activity android:name=".DetailActivity">
     <intent-filter>
@@ -56,7 +56,7 @@ sources:
 </activity>
 ```
 
-**Обработка в Activity:**
+**Обработка в `Activity`:**
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -75,7 +75,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### App Link: Реализация
 
-**Intent Filter с autoVerify:**
+**`Intent` Filter с autoVerify:**
 ```xml
 <activity android:name=".DetailActivity">
     <!-- ✅ autoVerify=true для автоматической верификации App Links -->
@@ -159,7 +159,7 @@ userState?.hostToStateMap?.forEach { (domain, state) ->
 
 ### Deep Link: Implementation
 
-**Intent Filter (AndroidManifest.xml):**
+**`Intent` Filter (AndroidManifest.xml):**
 ```xml
 <activity android:name=".DetailActivity">
     <intent-filter>
@@ -173,7 +173,7 @@ userState?.hostToStateMap?.forEach { (domain, state) ->
 </activity>
 ```
 
-**Activity Handling:**
+**`Activity` Handling:**
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -192,7 +192,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### App Link: Implementation
 
-**Intent Filter with autoVerify:**
+**`Intent` Filter with autoVerify:**
 ```xml
 <activity android:name=".DetailActivity">
     <!-- ✅ autoVerify=true for automatic verification of App Links -->

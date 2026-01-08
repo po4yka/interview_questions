@@ -1,4 +1,4 @@
----
+---\
 id: android-430
 title: Privacy Sandbox SDK Runtime / SDK Runtime в Privacy Sandbox
 aliases: [Privacy Sandbox, Privacy Sandbox SDK Runtime, SDK Runtime]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, android/permissions, android/privacy-sdks, difficulty/hard, security/privacy]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое SDK Runtime в Privacy Sandbox? Как он изолирует сторонние SDK? Какие вызовы возникают при миграции SDK в sandbox-окружение и как обрабатывать cross-sandbox коммуникацию?
@@ -293,7 +293,7 @@ class SdkMigrationManager(private val context: Context) {
 - Isolates third-party SDKs into a dedicated sandbox process.
 - Restricts access to app data and device identifiers; SDK sees only host-provided data and Privacy Sandbox APIs.
 - All interactions go through controlled Binder IPC.
-- Provides strong privacy guarantees and resource quotas.
+- `Provides` strong privacy guarantees and resource quotas.
 - Migration requires IPC-based contracts, handling storage/permission constraints, and supporting fallbacks.
 
 ## Detailed Version

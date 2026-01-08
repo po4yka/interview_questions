@@ -1,4 +1,4 @@
----
+---\
 id: android-087
 title: Test Coverage Quality Metrics / Метрики покрытия и качества тестов
 aliases: [Test Coverage Quality Metrics, Метрики покрытия и качества тестов]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-unit, coverage, difficulty/medium, jacoco, metrics]
 
----
+---\
 # Вопрос (RU)
 > Метрики покрытия и качества тестов
 
@@ -787,7 +787,7 @@ class CoverageReporter {
 
 ### Best Practices
 
-1. Set realistic coverage goals (commonly 70–85%+ for core logic) per layer; treat them as guidance, not dogma.
+1. `Set` realistic coverage goals (commonly 70–85%+ for core logic) per layer; treat them as guidance, not dogma.
 2. Focus on critical paths and error handling, not just the headline percentage.
 3. Exclude generated/framework/boilerplate code where appropriate to avoid skewing metrics.
 4. Pay attention to branch coverage for complex conditionals.

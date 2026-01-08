@@ -1,4 +1,4 @@
----
+---\
 id: lang-065
 title: "Flow map operator / Оператор map для Flow"
 aliases: [Flow Map Operator, Оператор map для Flow]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-flow]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, reactive]
----
+---\
 # Вопрос (RU)
 > Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой?
 
@@ -155,7 +155,7 @@ flowOf(1, 2, 3, 4)
 
 1. **Преобразование DTO в Domain Model**
 2. **Форматирование данных** (например, timestamp в читаемые даты)
-3. **Трансформация Entity в UI Model**
+3. **Трансформация `Entity` в UI Model**
 4. **Применение бизнес-логики** к каждому элементу
 5. **Преобразования типов** (`String` в `Int`, и т.д.)
 
@@ -299,7 +299,7 @@ flowOf(1, 2, 3, 4)
 
 1. **DTO to Domain Model Conversion**
 2. **Data Formatting** (e.g., timestamps to readable dates)
-3. **Entity to UI Model Transformation**
+3. **`Entity` to UI Model Transformation**
 4. **Applying Business Logic** to each element
 5. **Type Conversions** (`String` to `Int`, etc.)
 

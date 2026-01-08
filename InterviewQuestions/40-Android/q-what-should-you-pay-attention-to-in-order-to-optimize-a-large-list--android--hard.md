@@ -1,4 +1,4 @@
----
+---\
 id: android-091
 title: List Optimization / Оптимизация больших списков
 aliases: [List Optimization, Оптимизация списков]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-10-31
 tags: [android/performance-memory, android/performance-rendering, android/ui-views, difficulty/hard, optimization, performance, recyclerview]
 
----
+---\
 # Вопрос (RU)
 > Оптимизация больших списков
 
@@ -26,11 +26,11 @@ tags: [android/performance-memory, android/performance-rendering, android/ui-vie
 
 ## Ответ (RU)
 
-Оптимизация больших списков в Android-приложениях критична для плавной прокрутки и хорошего пользовательского опыта. Ниже ключевые аспекты (RecyclerView / Views; не Compose):
+Оптимизация больших списков в Android-приложениях критична для плавной прокрутки и хорошего пользовательского опыта. Ниже ключевые аспекты (`RecyclerView` / Views; не Compose):
 
 ### 1. Правильное Использование ViewHolder В RecyclerView
 
-Паттерн ViewHolder важен для переиспользования view и производительности.
+Паттерн `ViewHolder` важен для переиспользования view и производительности.
 
 ```kotlin
 class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
@@ -72,7 +72,7 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 
 ### 2. Использование DiffUtil Для Эффективных Обновлений
 
-DiffUtil вычисляет минимальный набор изменений при обновлении данных и позволяет избежать `notifyDataSetChanged()`. Сам `DiffUtil.calculateDiff` — синхронный; для больших списков использовать `ListAdapter` / `AsyncListDiffer`, которые запускают diff в фоне.
+`DiffUtil` вычисляет минимальный набор изменений при обновлении данных и позволяет избежать `notifyDataSetChanged()`. Сам `DiffUtil.calculateDiff` — синхронный; для больших списков использовать `ListAdapter` / `AsyncListDiffer`, которые запускают diff в фоне.
 
 ```kotlin
 class ItemDiffCallback(
@@ -116,7 +116,7 @@ fun RecyclerView.Adapter<*>.updateItemsWithDiff(
 }
 ```
 
-Лучше использовать `ListAdapter`, который встроенно использует DiffUtil (через `AsyncListDiffer`) и выполняет вычисления не на главном потоке.
+Лучше использовать `ListAdapter`, который встроенно использует `DiffUtil` (через `AsyncListDiffer`) и выполняет вычисления не на главном потоке.
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallback()) {
@@ -467,12 +467,12 @@ if (BuildConfig.DEBUG) {
 
 Для оптимизации больших списков:
 
-1. Правильно использовать ViewHolder и держать биндинг легким.
-2. Использовать DiffUtil / ListAdapter для эффективных обновлений (с учетом того, где выполняется diff).
+1. Правильно использовать `ViewHolder` и держать биндинг легким.
+2. Использовать `DiffUtil` / ListAdapter для эффективных обновлений (с учетом того, где выполняется diff).
 3. Оптимизировать загрузку изображений (кэш, уменьшение размера, отмена при рециклинге).
 4. Реализовать пагинацию; для сложных случаев использовать Paging 3.
 5. Избегать тяжелых операций в `onBindViewHolder()`, выносить их с главного потока.
-6. Тонко настраивать RecyclerView (fixed size, кэш, пул, prefetch).
+6. Тонко настраивать `RecyclerView` (fixed size, кэш, пул, prefetch).
 7. Упрощать разметку, избегать глубокой иерархии.
 8. Использовать `View` Binding для типобезопасности и меньшего boilerplate.
 9. Включать предварительную загрузку элементов, когда это уместно.
@@ -481,11 +481,11 @@ if (BuildConfig.DEBUG) {
 ---
 
 ## Answer (EN)
-Optimizing large lists in Android applications is critical for smooth scrolling and a good user experience. Focus on the following areas (RecyclerView / Views; not Compose):
+Optimizing large lists in Android applications is critical for smooth scrolling and a good user experience. Focus on the following areas (`RecyclerView` / Views; not Compose):
 
 ### 1. Proper Use of ViewHolder in RecyclerView
 
-The ViewHolder pattern is essential for view reuse and performance.
+The `ViewHolder` pattern is essential for view reuse and performance.
 
 ```kotlin
 class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
@@ -529,7 +529,7 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 
 ### 2. Use DiffUtil for Efficient Updates
 
-DiffUtil calculates a minimal set of updates when data changes and helps avoid `notifyDataSetChanged()`. `DiffUtil.calculateDiff` itself is synchronous; for large lists prefer `ListAdapter` / `AsyncListDiffer`, which perform diffing on a background thread.
+`DiffUtil` calculates a minimal set of updates when data changes and helps avoid `notifyDataSetChanged()`. `DiffUtil.calculateDiff` itself is synchronous; for large lists prefer `ListAdapter` / `AsyncListDiffer`, which perform diffing on a background thread.
 
 ```kotlin
 class ItemDiffCallback(
@@ -573,7 +573,7 @@ fun RecyclerView.Adapter<*>.updateItemsWithDiff(
 }
 ```
 
-Better: use `ListAdapter`, which integrates DiffUtil (via `AsyncListDiffer`) and runs diffing off the main thread.
+Better: use `ListAdapter`, which integrates `DiffUtil` (via `AsyncListDiffer`) and runs diffing off the main thread.
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallback()) {
@@ -940,12 +940,12 @@ if (BuildConfig.DEBUG) {
 
 To optimize large lists:
 
-1. Use ViewHolder correctly and keep bindings lightweight.
-2. Use DiffUtil / ListAdapter for efficient item updates (being explicit about where diffing runs).
+1. Use `ViewHolder` correctly and keep bindings lightweight.
+2. Use `DiffUtil` / ListAdapter for efficient item updates (being explicit about where diffing runs).
 3. Optimize image loading (caching, downsampling, cancel on recycle).
 4. Implement pagination; prefer Paging 3 for complex / large data.
 5. Avoid heavy work in `onBindViewHolder()`; precompute off the main thread.
-6. Tune RecyclerView (fixed size when valid, cache, recycled pool, prefetch).
+6. Tune `RecyclerView` (fixed size when valid, cache, recycled pool, prefetch).
 7. Simplify item layouts; avoid deep hierarchies.
 8. Use `View` Binding for type safety and fewer errors.
 9. Enable item prefetching where appropriate.

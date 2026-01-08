@@ -1,4 +1,4 @@
----
+---\
 id: lang-206
 title: "Kotlin Conversion Functions / Kotlin Conversion Функции"
 aliases: ["Kotlin Conversion Функции"]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как в Kotlin называется функция, которая вызывается на объекте для преобразования его в другой тип?
 
@@ -590,7 +590,7 @@ val dtoList2En = usersListEn.toDtos()
 - Преобразования числовых типов.
 - Парсинг `String`.
 - Трансформации коллекций.
-- Доменные преобразования (Entity ↔ DTO).
+- Доменные преобразования (`Entity` ↔ DTO).
 - Сериализация (объект ↔ JSON/XML) через библиотеки.
 
 Рекомендуется использовать понятные `toXxx()`-имена и функции-расширения, не путать приведение типов с преобразованием значений и не создавать ложного ощущения неявных преобразований, которых в Kotlin нет.
@@ -612,8 +612,8 @@ Naming pattern:
 Common uses:
 - Number type conversions.
 - `String` parsing.
-- Collection transformations.
-- Domain model conversions (Entity ↔ DTO).
+- `Collection` transformations.
+- Domain model conversions (`Entity` ↔ DTO).
 - Serialization (Object ↔ JSON/XML) via libraries.
 
 Best practice: Use clear `toXxx()` naming and extension functions where it improves readability; avoid conflating casting with data conversion or implying implicit conversions that Kotlin does not support.

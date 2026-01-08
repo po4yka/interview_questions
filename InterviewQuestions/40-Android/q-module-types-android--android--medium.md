@@ -1,4 +1,4 @@
----
+---\
 id: android-112
 title: "Module Types Android / Типы модулей Android"
 aliases: [Android Module Types, Module Types, Типы модулей, Типы модулей Android]
@@ -16,7 +16,7 @@ moc: moc-android
 related: [c-gradle, c-modularization]
 sources: ["https://developer.android.com/topic/modularization/patterns"]
 
----
+---\
 # Вопрос (RU)
 
 > Какие типы модулей существуют в Android?
@@ -355,7 +355,7 @@ Test modules are used to support testing and reuse of test code. In Android, mos
 
 ### Summary
 
-| Module Type | Purpose | Dependencies |
+| `Module` Type | Purpose | Dependencies |
 |------------|---------|--------------|
 | **Data** | Repositories, data sources, models | Depend on Core/Common; consumed by Feature/App |
 | **Feature** | UI, `ViewModel`, feature logic | Depend on Data, Core/Common modules |

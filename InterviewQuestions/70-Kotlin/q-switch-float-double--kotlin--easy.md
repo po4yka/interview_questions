@@ -1,4 +1,4 @@
----
+---\
 id: lang-092
 title: "Switch Float Double / Switch float double"
 aliases: [Switch float double, Switch Float Double]
@@ -14,7 +14,7 @@ related: [q-kotlin-type-system-features--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy]
----
+---\
 # Вопрос (RU)
 
 > Работает ли switch() с double/float?
@@ -30,9 +30,9 @@ tags: [difficulty/easy]
 Нет, в Java switch не работает с float и double. Для классического switch-выражения разрешены только целочисленные типы:
 
 - byte, short, char, int;
-- соответствующие классы-обёртки (Byte, Short, Character, Integer) с auto-unboxing;
+- соответствующие классы-обёртки (`Byte`, `Short`, Character, Integer) с auto-unboxing;
 - enum;
-- String (Java 7+).
+- `String` (Java 7+).
 
 long, float, double, boolean не поддерживаются в switch-выражениях: это определено спецификацией языка, где требуется точное совпадение значений, что проблематично для floating-point чисел. long и boolean также не поддерживаются в классическом switch.
 
@@ -231,7 +231,7 @@ This exactness makes integral types suitable for the constant-equality semantics
 | `float`, `double`      | No                       | Not allowed by spec; exact-match semantics poorly suit FP |
 | `long`                 | No                       | Not allowed by spec for classic switch                    |
 | `boolean`              | No                       | Not allowed by spec (use if-else)                         |
-| Other Objects          | No (except String, enum) | Not allowed by classic switch                             |
+| Other Objects          | No (except `String`, enum) | Not allowed by classic switch                             |
 
 **Key point:** Java's classic `switch` requires exact equality on a restricted set of types; `float`/`double` are not permitted, and using them for exact matches is generally unsafe due to their representation.
 

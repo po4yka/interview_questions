@@ -1,4 +1,4 @@
----
+---\
 id: android-320
 title: BroadcastReceiver and ContentProvider / BroadcastReceiver и ContentProvider
 aliases: [BroadcastReceiver and ContentProvider, BroadcastReceiver и ContentProvider]
@@ -18,7 +18,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 > Что такое `BroadcastReceiver` и `ContentProvider` в Android?
 
@@ -144,7 +144,7 @@ val cursor = contentResolver.query(
 
 ### `BroadcastReceiver`
 
-**Component for receiving system and custom events**. Responds to broadcast messages from the system or other applications.
+**`Component` for receiving system and custom events**. Responds to broadcast messages from the system or other applications.
 
 **Broadcast types**:
 - System: ACTION_BATTERY_LOW, ACTION_BOOT_COMPLETED, ACTION_POWER_CONNECTED
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity() {
 
 ### `ContentProvider`
 
-**Standardized interface for accessing structured data**. Provides CRUD operations and data sharing between apps via URI.
+**Standardized interface for accessing structured data**. `Provides` CRUD operations and data sharing between apps via URI.
 
 **Basic implementation (simplified example)**:
 ```kotlin

@@ -1,4 +1,4 @@
----
+---\
 id: android-226
 title: "What Is Workmanager / Что такое WorkManager"
 aliases: ["What Is WorkManager", "Что такое WorkManager"]
@@ -15,20 +15,20 @@ related: [c-background-tasks, c-coroutines, c-workmanager]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, difficulty/medium, jetpack, scheduled-tasks, workmanager]
----
+---\
 # Вопрос (RU)
-> Что такое WorkManager и когда его следует использовать?
+> Что такое `WorkManager` и когда его следует использовать?
 
 # Question (EN)
-> What is WorkManager and when should it be used?
+> What is `WorkManager` and when should it be used?
 
 ## Ответ (RU)
 
-**WorkManager** — это Jetpack библиотека для **отложенных (deferrable) и надёжных фоновых задач**, которые должны быть **гарантированно поставлены в очередь и предприняты для выполнения** даже при закрытии приложения или перезагрузке устройства, с учётом системных ограничений (Doze, оптимизация батареи). Это не абсолютная гарантия выполнения (работа может не выполниться, если, например, приложение удалено или условия так и не выполнены), но максимально приближенная в рамках платформы.
+**`WorkManager`** — это Jetpack библиотека для **отложенных (deferrable) и надёжных фоновых задач**, которые должны быть **гарантированно поставлены в очередь и предприняты для выполнения** даже при закрытии приложения или перезагрузке устройства, с учётом системных ограничений (Doze, оптимизация батареи). Это не абсолютная гарантия выполнения (работа может не выполниться, если, например, приложение удалено или условия так и не выполнены), но максимально приближенная в рамках платформы.
 
 ### Ключевые Особенности
 
-**Надёжное выполнение**: задачи сохраняются в SQLite БД и автоматически пере-планируются после перезапуска процесса или устройства, когда выполняются заданные условия.
+**Надёжное выполнение**: задачи сохраняются в `SQLite` БД и автоматически пере-планируются после перезапуска процесса или устройства, когда выполняются заданные условия.
 
 **Умный выбор механизма**: под капотом выбирает подходящий планировщик в зависимости от версии Android и ограничений (например, JobScheduler на новых версиях), абстрагируя детали реализации.
 
@@ -38,7 +38,7 @@ tags: [android/background-execution, android/coroutines, difficulty/medium, jetp
 
 **Интеграция с корутинами**: `CoroutineWorker` для suspend-функций без блокировки потоков.
 
-**Уважение системных ограничений**: WorkManager предназначен для отложенных задач и может значительно откладывать выполнение, объединяя работы в батчи, чтобы соответствовать Doze и политикам энергосбережения.
+**Уважение системных ограничений**: `WorkManager` предназначен для отложенных задач и может значительно откладывать выполнение, объединяя работы в батчи, чтобы соответствовать Doze и политикам энергосбережения.
 
 ### Основные Компоненты
 
@@ -120,7 +120,7 @@ WorkManager.getInstance(context)
 
 ### Когда Использовать
 
-**Используйте WorkManager**:
+**Используйте `WorkManager`**:
 - Загрузка файлов, которые должны быть надёжно поставлены в очередь и завершены при выполнении условий
 - Синхронизация данных с сервером
 - Отправка аналитики/логов
@@ -128,24 +128,24 @@ WorkManager.getInstance(context)
 - Обработка изображений
 - Периодические задачи (минимальный интервал ~15 минут, фактическое время запуска может быть отложено системой)
 
-**Не используйте WorkManager**:
+**Не используйте `WorkManager`**:
 - Жёстко точное время выполнения (используйте AlarmManager или специализированные механизмы планирования)
 - Задачи, требующие немедленного и непрерывного выполнения в реальном времени (используйте foreground service / bound service)
 - Немедленные UI-обновления (используйте корутины, `ViewModel`, др. механизмы на основном потоке)
 
-Если вам нужен как гарантированный план/ретраи, так и выполнение в переднем плане (например, видимая пользователю долгая загрузка), используйте WorkManager с `setForeground()` внутри `ListenableWorker`/`CoroutineWorker` вместо ручного управления службой.
+Если вам нужен как гарантированный план/ретраи, так и выполнение в переднем плане (например, видимая пользователю долгая загрузка), используйте `WorkManager` с `setForeground()` внутри `ListenableWorker`/`CoroutineWorker` вместо ручного управления службой.
 
 ### Дополнительные Вопросы (RU)
 
-- Как WorkManager обрабатывает ограничения Doze и оптимизации батареи?
+- Как `WorkManager` обрабатывает ограничения Doze и оптимизации батареи?
 - В чем разница между `Worker`, `CoroutineWorker` и `RxWorker`?
-- Как реализовать отслеживание прогресса для длительных задач WorkManager?
+- Как реализовать отслеживание прогресса для длительных задач `WorkManager`?
 - Какие политики доступны для обработки дублирующейся работы с `enqueueUniqueWork`?
-- Как работает механизм экспоненциального бэкофф-ретрая WorkManager и как его настроить?
+- Как работает механизм экспоненциального бэкофф-ретрая `WorkManager` и как его настроить?
 
 ### Ссылки (RU)
 
-- [[c-coroutines]] — Интеграция WorkManager с Kotlin coroutines через `CoroutineWorker`
+- [[c-coroutines]] — Интеграция `WorkManager` с Kotlin coroutines через `CoroutineWorker`
 - [[c-background-tasks]] — Обзор вариантов фонового выполнения в Android
 - [Документация WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) — Официальное руководство
 - [WorkManager Basics](https://medium.com/androiddevelopers/workmanager-basics-beba51e94048) — Вводная статья
@@ -166,11 +166,11 @@ WorkManager.getInstance(context)
 
 ## Answer (EN)
 
-**WorkManager** is a Jetpack library for **deferrable and reliable background work** that should be **persistently enqueued and best-effort guaranteed to run** even if the app exits or the device restarts, while respecting system constraints (Doze, battery optimizations). It is not an absolute guarantee (e.g., work will not run if the app is uninstalled or constraints are never met), but it is the most robust option within platform limits.
+**`WorkManager`** is a Jetpack library for **deferrable and reliable background work** that should be **persistently enqueued and best-effort guaranteed to run** even if the app exits or the device restarts, while respecting system constraints (Doze, battery optimizations). It is not an absolute guarantee (e.g., work will not run if the app is uninstalled or constraints are never met), but it is the most robust option within platform limits.
 
 ### Key Features
 
-**Reliable execution**: tasks are persisted in an internal SQLite database and automatically rescheduled after process death or device reboot when constraints are met.
+**Reliable execution**: tasks are persisted in an internal `SQLite` database and automatically rescheduled after process death or device reboot when constraints are met.
 
 **Smart mechanism selection**: under the hood chooses an appropriate scheduler based on Android version and constraints (e.g., JobScheduler on newer APIs), hiding implementation details.
 
@@ -262,7 +262,7 @@ WorkManager.getInstance(context)
 
 ### When to Use
 
-**Use WorkManager for**:
+**Use `WorkManager` for**:
 - File uploads that must be reliably enqueued and completed when constraints are met
 - Data synchronization with server
 - Sending analytics/logs
@@ -270,24 +270,24 @@ WorkManager.getInstance(context)
 - Image processing
 - Periodic tasks (minimum interval ~15 minutes; actual runs may be batched/delayed by the system)
 
-**Don't use WorkManager for**:
+**Don't use `WorkManager` for**:
 - Strictly exact timing (use AlarmManager or other precise scheduling mechanisms)
 - Tasks requiring immediate, continuous, real-time/low-latency execution (use a foreground service / bound service)
 - Immediate UI updates (use coroutines, `ViewModel`, and main-thread mechanisms)
 
-If you need both robust scheduling/retries and foreground execution (e.g., user-visible long-running upload), use WorkManager with `setForeground()` inside your `ListenableWorker`/`CoroutineWorker` instead of manually managing a service.
+If you need both robust scheduling/retries and foreground execution (e.g., user-visible long-running upload), use `WorkManager` with `setForeground()` inside your `ListenableWorker`/`CoroutineWorker` instead of manually managing a service.
 
 ## Follow-ups
 
-- How does WorkManager handle battery optimization and Doze mode constraints?
+- How does `WorkManager` handle battery optimization and Doze mode constraints?
 - What is the difference between `Worker`, `CoroutineWorker`, and `RxWorker`?
-- How do you implement progress tracking for long-running WorkManager tasks?
+- How do you implement progress tracking for long-running `WorkManager` tasks?
 - What policies exist for handling duplicate work with `enqueueUniqueWork`?
-- How does WorkManager's exponential backoff retry mechanism work and how can it be customized?
+- How does `WorkManager`'s exponential backoff retry mechanism work and how can it be customized?
 
 ## References
 
-- [[c-coroutines]] — WorkManager integrates with Kotlin coroutines via `CoroutineWorker`
+- [[c-coroutines]] — `WorkManager` integrates with Kotlin coroutines via `CoroutineWorker`
 - [[c-background-tasks]] — Overview of Android background execution options
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager) — Official Android guide
 - [WorkManager Basics](https://medium.com/androiddevelopers/workmanager-basics-beba51e94048) — Introduction article

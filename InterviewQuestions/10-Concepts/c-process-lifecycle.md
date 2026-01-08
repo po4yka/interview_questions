@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-132013"
 title: "Process Lifecycle / Process Lifecycle"
 aliases: ["Process Lifecycle"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-android-lifecycle, c-memory-management, c-android-background-execution, c-service, c-foreground-service]
+moc: "moc-cs"
+related: ["c-android-lifecycle", "c-memory-management", "c-android-background-execution", "c-service", "c-foreground-service"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ Process lifecycle is the sequence of states a program goes through from creation
 
 ## Key Points (EN)
 
-- Lifecycle stages: Typical stages include creation, ready (runnable), running, waiting/blocked (e.g., on I/O or locks), and terminated/zombie (waiting for parent to collect exit status).
+- `Lifecycle` stages: Typical stages include creation, ready (runnable), running, waiting/blocked (e.g., on I/O or locks), and terminated/zombie (waiting for parent to collect exit status).
 - Creation mechanisms: Processes are created by the OS (e.g., fork/exec in Unix-like systems, CreateProcess on Windows) often inheriting environment, file descriptors, and other resources.
 - Scheduling and states: The scheduler moves processes between ready, running, and waiting states based on priorities, time slices, and system load.
 - Resource management: Each process has its own virtual address space and resources; correct termination and waiting (e.g., wait/waitpid) prevent leaks and zombie processes.

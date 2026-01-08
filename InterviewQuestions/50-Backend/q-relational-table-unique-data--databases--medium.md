@@ -1,4 +1,4 @@
----
+---\
 id: db-003
 title: Storing unique data in relational tables / Хранение уникальных данных в реляционных таблицах
 aliases: []
@@ -24,8 +24,8 @@ created: 2025-10-03
 updated: 2025-11-11
 
 # Tags
-tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
----
+tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, kotlin, lang/ru, topic/databases]
+---\
 # Вопрос (RU)
 > Как в реляционной таблице сохранить уникальную для каждого элемента информацию
 
@@ -48,7 +48,7 @@ tags: [database, relational, primary-key, unique-constraints, indexes, difficult
    - Может состоять из одного или нескольких столбцов (составной ключ)
    - Не может содержать NULL значения
 
-2. **Уникальные ограничения (UNIQUE Constraints)**
+2. **Уникальные ограничения (UNIQUE `Constraints`)**
    - Гарантируют уникальность значений в одном или нескольких столбцах
    - В таблице может существовать несколько UNIQUE-ограничений
    - Обращение с NULL значениями зависит от реализации:
@@ -81,7 +81,7 @@ Important: these mechanisms guarantee uniqueness at the database level for the c
    - Can consist of one or more columns (composite key)
    - Cannot contain NULL values
 
-2. **Unique Constraints**
+2. **Unique `Constraints`**
    - Guarantee value uniqueness in one or more columns
    - Multiple unique constraints can exist in a table
    - Handling of NULL values is implementation-dependent:

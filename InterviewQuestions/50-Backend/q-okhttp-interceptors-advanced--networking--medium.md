@@ -1,4 +1,4 @@
----
+---\
 id: net-004
 title: "OkHttp Interceptors Advanced / Продвинутые перехватчики OkHttp"
 aliases: ["OkHttp Interceptors Advanced", "Продвинутые перехватчики OkHttp"]
@@ -16,18 +16,18 @@ updated: 2025-11-11
 sources: []
 tags: [authentication, caching, difficulty/medium, interceptors, networking, okhttp, retry]
 
----
+---\
 # Вопрос (RU)
 
-> Реализовать пользовательские интерцепторы OkHttp для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки `application` vs `network` интерцепторов.
+> Реализовать пользовательские интерцепторы `OkHttp` для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки `application` vs `network` интерцепторов.
 
 # Question (EN)
 
-> Implement custom OkHttp interceptors for authentication refresh, request retry, and response caching. Explain `application` vs `network` interceptor chain order.
+> Implement custom `OkHttp` interceptors for authentication refresh, request retry, and response caching. Explain `application` vs `network` interceptor chain order.
 
 ## Ответ (RU)
 
-**Интерцепторы OkHttp** — механизмы для перехвата, модификации и обработки HTTP-запросов/ответов без загрязнения бизнес-логики.
+**Интерцепторы `OkHttp`** — механизмы для перехвата, модификации и обработки HTTP-запросов/ответов без загрязнения бизнес-логики.
 
 См. также: [[c-coroutines]]
 
@@ -275,7 +275,7 @@ refreshMutex.withLock { refresh() }
 
 ## Answer (EN)
 
-**OkHttp Interceptors** intercept, modify, and handle HTTP requests/responses without polluting business logic.
+**`OkHttp` Interceptors** intercept, modify, and handle HTTP requests/responses without polluting business logic.
 
 See also: [[c-coroutines]]
 
@@ -491,7 +491,7 @@ class OkHttpClientFactory(
 
 1. Order matters: `Application` (Logging → Auth → Cache → Retry) → `Network`
 2. Close responses: call `response.close()` before retries
-3. Thread safety: use `Mutex` for token refresh
+3. `Thread` safety: use `Mutex` for token refresh
 4. Avoid loops: separate auth client without auth interceptor
 5. Redact sensitive data: don't log tokens in production
 
@@ -539,25 +539,25 @@ refreshMutex.withLock { refresh() }
 
 ## Ссылки (RU)
 
-- Документация по OkHttp Interceptors: https://square.github.io/okhttp/features/interceptors/
-- Документация по Retrofit: https://square.github.io/retrofit/
+- Документация по `OkHttp` Interceptors: https://square.github.io/okhttp/features/interceptors/
+- Документация по `Retrofit`: https://square.github.io/retrofit/
 - Android Network Security: https://developer.android.com/training/articles/security-config
 
 ## References
 
-- OkHttp Interceptors Documentation: https://square.github.io/okhttp/features/interceptors/
-- Retrofit Documentation: https://square.github.io/retrofit/
+- `OkHttp` Interceptors Documentation: https://square.github.io/okhttp/features/interceptors/
+- `Retrofit` Documentation: https://square.github.io/retrofit/
 - Android Network Security: https://developer.android.com/training/articles/security-config
 
 ## Связанные Вопросы (RU)
 
 ### Предварительные Знания
-- Базовая настройка HTTP-клиента с Retrofit
+- Базовая настройка HTTP-клиента с `Retrofit`
 - Понимание корутин для асинхронного обновления токена
-- Основы конфигурации OkHttp-клиента
+- Основы конфигурации `OkHttp`-клиента
 
 ### Связанные
-- Продвинутые call adapters и конвертеры в Retrofit
+- Продвинутые call adapters и конвертеры в `Retrofit`
 - Стратегии обработки сетевых ошибок и политики повторных попыток
 - Архитектурные паттерны API-клиентов (Repository, DataSource)
 
@@ -569,16 +569,16 @@ refreshMutex.withLock { refresh() }
 ## Related Questions
 
 ### Prerequisites
-- Basic HTTP client setup with Retrofit
+- Basic HTTP client setup with `Retrofit`
 - Understanding coroutines for async token refresh
-- OkHttp client configuration fundamentals
+- `OkHttp` client configuration fundamentals
 
 ### Related
-- Advanced Retrofit call adapters and converters
+- Advanced `Retrofit` call adapters and converters
 - Network error handling strategies and retry policies
 - API client architecture patterns (Repository, DataSource)
 
 ### Advanced
-- Request deduplication for concurrent identical requests
+- `Request` deduplication for concurrent identical requests
 - Certificate pinning and security interceptors
 - Network layer testing with MockWebServer

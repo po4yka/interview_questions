@@ -1,4 +1,4 @@
----
+---\
 id: android-404
 title: Fragments Vs Activity / Fragments против Activity
 aliases: [Fragments Vs Activity, Fragments против Activity]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/lifecycle, android/ui-navigation, difficulty/medium]
----
+---\
 # Вопрос (RU)
 
 > Для чего нужны фрагменты, если есть `Activity`?
@@ -95,7 +95,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-**5. Navigation Component**
+**5. Navigation `Component`**
 
 Jetpack Navigation упрощает навигацию между экранами и хорошо интегрируется с `Fragment`-based архитектурой (через NavHostFragment), но также поддерживает другие хосты (`Activity`, `View`, Jetpack Compose).
 
@@ -149,7 +149,7 @@ if (isTablet()) {
 }
 ```
 
-**3. Lifecycle and State Management**
+**3. `Lifecycle` and State Management**
 
 A `Fragment`'s lifecycle is tied to its host `Activity` but handled through its own callbacks. Fragments themselves do not inherently survive `Activity` recreation on configuration changes; instead, they work well with `ViewModel` and state restoration mechanisms, and can be placed on the `Fragment` back stack to support navigation behavior.
 
@@ -177,7 +177,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-**5. Navigation Component**
+**5. Navigation `Component`**
 
 Jetpack Navigation simplifies navigation between destinations and integrates well with fragment-based architectures via NavHostFragment, but it also supports other host types (such as Activities, Views, and Jetpack Compose destinations).
 
@@ -243,5 +243,5 @@ findNavController().navigate(
 
 ### Related
 
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle relationship
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Lifecycle` relationship

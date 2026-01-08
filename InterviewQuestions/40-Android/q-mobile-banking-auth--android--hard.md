@@ -1,4 +1,4 @@
----
+---\
 id: android-490
 title: Design Mobile Banking Auth & Transaction Signing / Проектирование аутентификации и подписания транзакций
 aliases: [Design Mobile Banking Auth & Transaction Signing, Проектирование аутентификации и подписания транзакций]
@@ -16,7 +16,7 @@ created: 2025-10-29
 updated: 2025-11-10
 tags: [android/keystore-crypto, android/networking-http, android/permissions, difficulty/hard, topic/android]
 
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать безопасный вход и подписание транзакций для банковского приложения?
@@ -100,7 +100,7 @@ Use Play Integrity and similar device integrity signals; bind sessions and trust
 
 ### Session
 
-Short‑lived access token + refresh; rotate on risk events. For 3DS flows, load issuer/acquirer pages securely (prefer Custom Tabs or a well-isolated WebView with proper origin binding and redirect handling); for embedded web content use secure cookies, strict origin management, and CSRF tokens.
+`Short`‑lived access token + refresh; rotate on risk events. For 3DS flows, load issuer/acquirer pages securely (prefer Custom Tabs or a well-isolated WebView with proper origin binding and redirect handling); for embedded web content use secure cookies, strict origin management, and CSRF tokens.
 
 ### Transaction Signing
 

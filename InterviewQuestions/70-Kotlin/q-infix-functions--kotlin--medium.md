@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-020
 title: "Infix Functions / Инфиксные функции"
 aliases: ["Infix Functions", "Инфиксные функции"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, functions, infix, kotlin, operators, syntax]
----
+---\
 # Вопрос (RU)
 > Что такое инфиксные функции в Kotlin?
 
@@ -241,7 +241,7 @@ Infix calls have **lower precedence** than:
 ```
 
 Infix calls have **higher precedence** than:
-- Boolean operators (`&&`, `||`)
+- `Boolean` operators (`&&`, `||`)
 - `is` and `in` checks
 
 ```kotlin

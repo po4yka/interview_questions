@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-007
 title: "Load Balancing Algorithms and Strategies / Алгоритмы и стратегии балансировки нагрузки"
 aliases: ["Load Balancing Algorithms", "Алгоритмы балансировки нагрузки"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [algorithms, difficulty/medium, load-balancing, scalability, system-design]
 sources: ["https://en.wikipedia.org/wiki/Load_balancing_(computing)"]
 
----
+---\
 # Вопрос (RU)
 > Каковы основные алгоритмы балансировки нагрузки? Когда следует использовать каждый алгоритм и каковы их компромиссы?
 
@@ -61,7 +61,7 @@ Load balancing - распределение входящего трафика м
 
 *Теория:* Последовательное распределение запросов по серверам по кругу. Простейший алгоритм, справедлив для гомогенных серверов.
 
-*Работа:* Request 1 → Server 1, Request 2 → Server 2, Request 3 → Server 3, Request 4 → Server 1 (цикл)
+*Работа:* `Request` 1 → Server 1, `Request` 2 → Server 2, `Request` 3 → Server 3, `Request` 4 → Server 1 (цикл)
 
 *Преимущества:*
 - Простая реализация
@@ -155,7 +155,7 @@ class LeastConnectionsLB(private val servers: List<Server>) {
 }
 ```
 
-**4. Least Response Time (Наименьшее время отклика):**
+**4. Least `Response` Time (Наименьшее время отклика):**
 
 *Теория:* Выбор сервера с минимальным временем отклика и/или наименьшим количеством активных соединений. Комбинирует метрики производительности и нагрузки.
 
@@ -317,7 +317,7 @@ Load balancing is distributing incoming traffic across multiple servers to ensur
 
 *Theory:* Sequentially distributes requests across servers in a loop. Simplest algorithm, fair for homogeneous servers.
 
-*How it works:* Request 1 → Server 1, Request 2 → Server 2, Request 3 → Server 3, Request 4 → Server 1 (cycle)
+*How it works:* `Request` 1 → Server 1, `Request` 2 → Server 2, `Request` 3 → Server 3, `Request` 4 → Server 1 (cycle)
 
 *Advantages:*
 - Simple implementation
@@ -411,7 +411,7 @@ class LeastConnectionsLB(private val servers: List<Server>) {
 }
 ```
 
-**4. Least Response Time:**
+**4. Least `Response` Time:**
 
 *Theory:* Chooses server with the lowest observed response time and/or fewest active connections. Combines performance and load metrics.
 
@@ -447,7 +447,7 @@ class LeastResponseTimeLB(private val servers: List<Server>) {
 
 **5. IP Hash:**
 
-*Theory:* Uses a hash of the client IP address to choose server. Provides basic session persistence: the same client tends to hit the same server (while configuration is stable and server is available).
+*Theory:* Uses a hash of the client IP address to choose server. `Provides` basic session persistence: the same client tends to hit the same server (while configuration is stable and server is available).
 
 *How it works:* hash(client_ip) % server_count = server_index
 

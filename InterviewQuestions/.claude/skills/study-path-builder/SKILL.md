@@ -1,11 +1,11 @@
----
+---\
 name: study-path-builder
 description: >
   Create learning progressions and study paths. Builds easy-to-medium-to-hard
   chains, suggests prerequisite relationships, generates study guides, and creates
   progression MOCs. Helps users navigate the vault in a structured learning sequence
   rather than random access.
----
+---\
 
 # Study Path Builder
 
@@ -42,7 +42,7 @@ Required context:
 
 ### Step 1: Analyze Available Content
 
-Map content by topic and difficulty:
+`Map` content by topic and difficulty:
 
 ```
 Topic: kotlin
@@ -335,7 +335,7 @@ Full study guide created: moc-kotlin-coroutines-path.md
 
 ### Example 2: Prerequisite Analysis
 
-**User**: "What should I learn before Flow?"
+**User**: "What should I learn before `Flow`?"
 
 **Output**:
 ```markdown

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-193
 title: "GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope"
 aliases: [GlobalScope Anti-Pattern, GlobalScope Antipattern]
@@ -14,7 +14,7 @@ related: [c-coroutines, q-object-companion-object--kotlin--medium, q-test-dispat
 created: 2024-10-15
 updated: 2025-11-09
 tags: [difficulty/easy]
----
+---\
 # Вопрос (RU)
 > Почему следует избегать использования `GlobalScope` в Android приложениях?
 
@@ -396,8 +396,8 @@ class UserProfileActivity : AppCompatActivity() {
 1. `Activity` starts and launches a coroutine in `GlobalScope`
 2. User rotates device or presses back
 3. `Activity` is destroyed
-4. Coroutine keeps running (not tied to `Activity` lifecycle)
-5. Coroutine tries to update destroyed views → **crash** or holding references to `Activity`/Views → **memory leak**
+4. `Coroutine` keeps running (not tied to `Activity` lifecycle)
+5. `Coroutine` tries to update destroyed views → **crash** or holding references to `Activity`/Views → **memory leak**
 
 Key point: `GlobalScope` itself does not magically leak, but coroutines in it outlive components and can easily capture them.
 
@@ -487,7 +487,7 @@ class UserProfileActivity : AppCompatActivity() {
 ```
 
 **Benefits**:
-- Coroutine is canceled when `Activity` is destroyed
+- `Coroutine` is canceled when `Activity` is destroyed
 - Reduced risk of memory leaks
 - Avoids wasting work after screen is gone
 - Safe UI updates
@@ -596,7 +596,7 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 
 | Aspect | GlobalScope | lifecycleScope/viewModelScope |
 |--------|-------------|-------------------------------|
-| **Lifetime** | Entire app process | Component lifecycle |
+| **Lifetime** | Entire app process | `Component` lifecycle |
 | **Cancellation** | Manual only | Automatic |
 | **Memory Leaks** | High risk (if capturing components) | Safer |
 | **Resource Waste** | Possible | Reduced |
@@ -659,7 +659,7 @@ class MyViewModel : ViewModel() {
 - `WorkManager` for background tasks that outlive UI
 - See also: [[c-coroutines]]
 
-**Key Principle**: **Always tie coroutines to a lifecycle-aware scope**. If you think you need `GlobalScope`, you probably need a better architecture or WorkManager instead.
+**Key Principle**: **Always tie coroutines to a lifecycle-aware scope**. If you think you need `GlobalScope`, you probably need a better architecture or `WorkManager` instead.
 
 ---
 

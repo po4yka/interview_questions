@@ -1,4 +1,4 @@
----
+---\
 id: android-060
 title: "Recomposition in Compose / Рекомпозиция в Compose"
 aliases: [Compose Recomposition, Recomposition, Рекомпозиция, Рекомпозиция Compose]
@@ -14,9 +14,9 @@ related: [c-jetpack-compose, q-compose-performance-optimization--android--hard, 
 created: 2025-10-12
 updated: 2025-11-10
 sources: ["https://developer.android.com/jetpack/compose/lifecycle"]
-tags: [android/performance-rendering, android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, performance, recomposition, state]
+tags: [android/performance-rendering, android/ui-compose, android/ui-state, difficulty/medium, performance, recomposition, state]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое рекомпозиция в Jetpack Compose? Что триггерит рекомпозицию и как Compose решает какие composable нужно перерисовать?
@@ -528,7 +528,7 @@ fun GoodExample(viewModel: ViewModel) {
 ## References
 
 - [[c-jetpack-compose]] - Jetpack Compose concept
-- https://developer.android.com/jetpack/compose/lifecycle - Compose Lifecycle
+- https://developer.android.com/jetpack/compose/lifecycle - Compose `Lifecycle`
 - https://developer.android.com/jetpack/compose/state - State and Compose
 - https://developer.android.com/jetpack/compose/performance - Compose Performance
 

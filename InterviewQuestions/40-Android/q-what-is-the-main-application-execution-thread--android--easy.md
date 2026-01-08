@@ -1,4 +1,4 @@
----
+---\
 id: android-207
 title: What Is The Main Application Execution Thread / Что такое главный поток выполнения
   приложения
@@ -16,7 +16,7 @@ related: [c-android-components, q-handler-looper-main-thread--android--medium, q
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/easy]
----
+---\
 # Вопрос (RU)
 
 > Что такое главный поток выполнения приложения в Android и для чего он используется?
@@ -29,12 +29,12 @@ tags: [android/lifecycle, android/performance-rendering, android/threads-sync, d
 
 ## Ответ (RU)
 
-**Main Thread** (или **UI Thread**) — основной поток в Android-приложении, в котором выполняются все операции с пользовательским интерфейсом и большинство обратных вызовов жизненного цикла компонентов. Он создаётся вместе с процессом приложения и живёт, пока живёт процесс.
+**Main `Thread`** (или **UI `Thread`**) — основной поток в Android-приложении, в котором выполняются все операции с пользовательским интерфейсом и большинство обратных вызовов жизненного цикла компонентов. Он создаётся вместе с процессом приложения и живёт, пока живёт процесс.
 
 ### Ключевые Характеристики
 
 1. **Единственный UI-поток на процесс** — создаётся при старте процесса приложения и существует весь его жизненный цикл (дополнительные UI-потоки создавать нельзя).
-2. **Все UI-операции** — только Main Thread может безопасно обращаться к `View` и другим UI-компонентам (в противном случае возможен `CalledFromWrongThreadException`).
+2. **Все UI-операции** — только Main `Thread` может безопасно обращаться к `View` и другим UI-компонентам (в противном случае возможен `CalledFromWrongThreadException`).
 3. **Event Loop** — поток использует `Looper` + `MessageQueue` для обработки сообщений и событий (touch, lifecycle callbacks, некоторые Binder callbacks, broadcasts). Все задачи выполняются по очереди в этом цикле сообщений.
 
 ### Правило 16ms (60 FPS)
@@ -88,21 +88,21 @@ fun isMainThread(): Boolean =
     Looper.myLooper() == Looper.getMainLooper()
 ```
 
-**Ответственность Main Thread:**
+**Ответственность Main `Thread`:**
 - Отрисовка UI (measure, layout, draw)
 - Обработка пользовательских событий (touch, key events)
-- Lifecycle callbacks (onCreate, onStart, onResume и др.)
+- `Lifecycle` callbacks (onCreate, onStart, onResume и др.)
 - Вызовы `BroadcastReceiver.onReceive()` (если не указано иное)
 - Обработка сообщений/колбэков, отправленных в основной `Looper`
 
 ## Answer (EN)
 
-The **Main Thread** (also called the **UI Thread**) is the primary thread in an Android application where all UI operations and most component lifecycle callbacks are executed. It is created with the app process and exists as long as that process is alive.
+The **Main `Thread`** (also called the **UI `Thread`**) is the primary thread in an Android application where all UI operations and most component lifecycle callbacks are executed. It is created with the app process and exists as long as that process is alive.
 
 ### Key Characteristics
 
 1. **Single UI thread per process** — created when the app process starts and exists for the lifetime of that process (you cannot create additional UI-capable threads).
-2. **All UI operations** — only the Main Thread may safely access `View` and other UI toolkit components (otherwise you may get a `CalledFromWrongThreadException`).
+2. **All UI operations** — only the Main `Thread` may safely access `View` and other UI toolkit components (otherwise you may get a `CalledFromWrongThreadException`).
 3. **Event Loop** — the thread uses a `Looper` + `MessageQueue` to process messages and events (touch, lifecycle callbacks, some Binder callbacks, broadcasts). All tasks run sequentially on this message loop.
 
 ### The 16ms Rule (60 FPS)
@@ -156,10 +156,10 @@ fun isMainThread(): Boolean =
     Looper.myLooper() == Looper.getMainLooper()
 ```
 
-**Main Thread Responsibilities:**
+**Main `Thread` Responsibilities:**
 - UI rendering (measure, layout, draw)
 - Event handling (touch, key events)
-- Lifecycle callbacks (onCreate, onStart, onResume, etc.)
+- `Lifecycle` callbacks (onCreate, onStart, onResume, etc.)
 - `BroadcastReceiver.onReceive()` calls (unless specified otherwise)
 - Handling messages/callbacks posted to the main `Looper`
 
@@ -167,19 +167,19 @@ fun isMainThread(): Boolean =
 
 ## Дополнительные Вопросы (RU)
 
-- Что произойдет, если заблокировать Main Thread более чем на 5 секунд (например, ANR)?
-- Как `Looper.loop()` поддерживает отзывчивость Main Thread, оставаясь блокирующим вызовом?
+- Что произойдет, если заблокировать Main `Thread` более чем на 5 секунд (например, ANR)?
+- Как `Looper.loop()` поддерживает отзывчивость Main `Thread`, оставаясь блокирующим вызовом?
 - Можно ли создать дополнительные UI-потоки в Android?
 - В чем разница между `Handler.post()` и `Handler.postDelayed()`?
-- Как корутины Kotlin обеспечивают выполнение обновлений UI в Main Thread?
+- Как корутины Kotlin обеспечивают выполнение обновлений UI в Main `Thread`?
 
 ## Follow-ups
 
-- What happens if you block the Main Thread for more than 5 seconds (e.g., ANR)?
-- How does `Looper.loop()` keep the Main Thread responsive while being a blocking call?
+- What happens if you block the Main `Thread` for more than 5 seconds (e.g., ANR)?
+- How does `Looper.loop()` keep the Main `Thread` responsive while being a blocking call?
 - Can you create additional UI threads in Android?
 - What is the difference between `Handler.post()` and `Handler.postDelayed()`?
-- How do Kotlin coroutines ensure UI updates run on the Main Thread?
+- How do Kotlin coroutines ensure UI updates run on the Main `Thread`?
 
 ## Ссылки (RU)
 
@@ -219,7 +219,7 @@ fun isMainThread(): Boolean =
 - [[q-main-android-components--android--easy]] — Basic Android components
 
 ### Related (Same Level)
-- [[q-what-unifies-android-components--android--easy]] — Component fundamentals
+- [[q-what-unifies-android-components--android--easy]] — `Component` fundamentals
 
 ### Advanced (Harder)
 - [[q-anr-application-not-responding--android--medium]] — ANR debugging

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-167
 title: "Kotlin Scope Functions Advanced / Продвинутые Scope Functions в Kotlin"
 aliases: [Kotlin Scope Functions Advanced, Продвинутые Scope Functions в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-flow-performance--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
----
+---\
 # Вопрос (RU)
 
 > Сравните `let`, `run`, `with`, `apply`, `also`. Когда использовать каждый? Объясните return values и context objects.
@@ -284,13 +284,13 @@ Kotlin's scope functions (`let`, `run`, `with`, `apply`, `also`) execute code bl
 
 ### Quick Reference Table
 
-| Function | Context | Returns | Use Case |
+| Function | `Context` | Returns | Use Case |
 |----------|---------|---------|----------|
 | **let** | it (argument) | Lambda result | Transform object, null safety |
 | **run** | this (receiver) | Lambda result | Object config + compute result |
 | **with** | this (receiver) | Lambda result | Group calls on existing object |
-| **apply** | this (receiver) | Context object | Object configuration |
-| **also** | it (argument) | Context object | Additional effects, logging |
+| **apply** | this (receiver) | `Context` object | Object configuration |
+| **also** | it (argument) | `Context` object | Additional effects, logging |
 
 ### Let - Transform and Null Safety
 

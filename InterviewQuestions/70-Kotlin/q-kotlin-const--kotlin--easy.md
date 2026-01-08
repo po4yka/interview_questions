@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-017
 title: "Const Keyword in Kotlin / Ключевое слово const в Kotlin"
 aliases: ["Const Keyword in Kotlin", "Ключевое слово const в Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [compile-time-constants, const, difficulty/easy, kotlin, properties]
----
+---\
 # Вопрос (RU)
 > Что такое ключевое слово `const` в Kotlin?
 
@@ -168,7 +168,7 @@ class Example {
 
 - **Configuration values** that are logically immutable (API endpoints, timeouts, etc.)
 - **Magic numbers** that need meaningful names
-- **String constants** used throughout the application
+- **`String` constants** used throughout the application
 - When you need a value that is a **true compile-time constant** (e.g., for annotations or inlined usage in other code)
 
 ### Performance Note

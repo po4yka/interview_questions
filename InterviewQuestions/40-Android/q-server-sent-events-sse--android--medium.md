@@ -1,4 +1,4 @@
----
+---\
 id: android-286
 title: Server-Sent Events (SSE) / Server-Sent Events (SSE)
 aliases: [Server-Sent Events, SSE]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/networking-http, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Server-Sent Events (SSE)
 
@@ -54,7 +54,7 @@ data: {"more": "data"}
 
 ### Пример Реализации SSE-клиента
 
-Ниже приведён пример SSE-клиента для Android на базе OkHttp и Kotlin `Flow`. Он демонстрирует базовый парсинг, поддержку `Last-Event-ID`, обработку `retry`, а также переподключение с экспоненциальной задержкой. Для продакшена его следует доработать (обработка ошибок, отмена, логирование и т.п.).
+Ниже приведён пример SSE-клиента для Android на базе `OkHttp` и Kotlin `Flow`. Он демонстрирует базовый парсинг, поддержку `Last-Event-ID`, обработку `retry`, а также переподключение с экспоненциальной задержкой. Для продакшена его следует доработать (обработка ошибок, отмена, логирование и т.п.).
 
 #### 1. SSE-клиент С OkHttp
 
@@ -721,7 +721,7 @@ data: {"more": "data"}
 
 ### Complete SSE Implementation
 
-Below is an example of an SSE client for Android based on OkHttp. It demonstrates parsing, reconnection with backoff, and integration with Kotlin `Flow`. It is simplified for interview/educational purposes and should be adapted for production (e.g., robust error handling, resource cleanup, tuning, etc.).
+Below is an example of an SSE client for Android based on `OkHttp`. It demonstrates parsing, reconnection with backoff, and integration with Kotlin `Flow`. It is simplified for interview/educational purposes and should be adapted for production (e.g., robust error handling, resource cleanup, tuning, etc.).
 
 #### 1. SSE Client with OkHttp
 
@@ -1288,7 +1288,7 @@ sealed class LiveUpdatesUiState {
 | Complexity | Low | Medium | Medium | Low |
 | Browser Support | Native `EventSource` | Native `WebSocket` | Requires implementation | Simple fetch |
 | Reconnection | Built-in in `EventSource` (browser) / manual for custom clients | Manual in client | Manual in client | N/A |
-| Message Format | Text (UTF-8) | Binary or Text | Any | Any |
+| `Message` Format | Text (UTF-8) | Binary or Text | Any | Any |
 | Resource Usage | Low | Medium | Medium | High |
 | Latency | Very Low | Very Low | Low | High |
 | Scalability | High | Medium | Medium | Low |

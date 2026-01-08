@@ -1,4 +1,4 @@
----
+---\
 id: lang-032
 title: "Kotlin Internal Modifier / Модификатор internal в Kotlin"
 aliases: [Kotlin Internal Modifier, Модификатор internal в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-flow-completion-oncompletion--kotlin--medium, q-flow-excep
 created: 2024-10-15
 updated: 2025-11-09
 tags: [access-modifiers, difficulty/medium, internal, module, programming-languages, visibility]
----
+---\
 # Вопрос (RU)
 > Что известно про `internal`?
 
@@ -243,7 +243,7 @@ Declarations marked with `internal` are visible only within the same module and 
 
 - Visible only within the same module
 - Not visible from other modules
-- "Module" = a set of files compiled together (commonly a Gradle/Maven/IntelliJ module)
+- "`Module`" = a set of files compiled together (commonly a Gradle/Maven/IntelliJ module)
 - Supports encapsulation between modules
 
 **Example:**
@@ -268,7 +268,7 @@ class UserRepository {
 }
 ```
 
-**Multi-Module Example:**
+**Multi-`Module` Example:**
 
 ```kotlin
 project/
@@ -316,7 +316,7 @@ class MainActivity {
 |-----------|----------------------|----------------------------|
 | private   | Same file/class only | Implementation details     |
 | protected | Class + subclasses   | Inheritance API            |
-| internal  | Same module only     | Module implementation      |
+| internal  | Same module only     | `Module` implementation      |
 | public    | Everywhere           | Public API                 |
 
 **Use Cases:**
@@ -342,7 +342,7 @@ class CacheManager {
 }
 ```
 
-**2. Multi-Module Architecture:**
+**2. Multi-`Module` Architecture:**
 ```kotlin
 // :data module
 internal interface UserLocalDataSource {
@@ -438,7 +438,7 @@ Because of this, `internal` should not be relied upon as a strict encapsulation 
 
 - `internal` = module-level visibility
 - Visible within a module, inaccessible from other modules in Kotlin source
-- Module = a set of files compiled together (often a Gradle/Maven/IntelliJ module)
+- `Module` = a set of files compiled together (often a Gradle/Maven/IntelliJ module)
 - Useful for multi-module architecture
 - Helps encapsulate implementation details
 

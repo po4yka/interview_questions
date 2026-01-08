@@ -1,11 +1,11 @@
----
+---\
 name: batch-validator
 description: >
   Validate multiple files at once with aggregated reporting. Extends obsidian-validator
   to work on entire folders or topics. Groups issues by severity, generates fix
   suggestions, supports dry-run mode, and creates actionable checklists for bulk
   remediation workflows.
----
+---\
 
 # Batch Validator
 
@@ -54,7 +54,7 @@ Input formats supported:
 - Full vault: "entire vault", "all notes"
 ```
 
-Map input to file glob pattern:
+`Map` input to file glob pattern:
 - `40-Android/` → `InterviewQuestions/40-Android/q-*.md`
 - `kotlin` → `InterviewQuestions/70-Kotlin/q-*.md`
 - `all hard` → `InterviewQuestions/*/q-*--hard.md`
@@ -298,7 +298,7 @@ Top Issue: Android subtopic mirroring (15 files)
 **User**: "Check all kotlin notes"
 
 **Process**:
-1. Map topic to folder: kotlin → 70-Kotlin/
+1. `Map` topic to folder: kotlin → 70-Kotlin/
 2. Find 358 Q&A notes
 3. Validate and aggregate
 
@@ -377,7 +377,7 @@ Overall: 911/972 passed (93.7%)
 **Solution**:
 1. Report zero files found
 2. Suggest alternative paths/patterns
-3. List available folders for reference
+3. `List` available folders for reference
 
 ## Dry-Run Mode
 

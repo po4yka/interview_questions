@@ -1,4 +1,4 @@
----
+---\
 id: android-199
 title: Hilt / Фреймворк Hilt
 aliases: [Hilt, Фреймворк Hilt]
@@ -15,17 +15,17 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, difficulty/medium, hilt]
 
----
+---\
 # Вопрос (RU)
-> Фреймворк Hilt
+> Фреймворк `Hilt`
 
 # Question (EN)
-> Hilt
+> `Hilt`
 
 ---
 
 ## Ответ (RU)
-**Hilt** — это фреймворк для внедрения зависимостей (Dependency Injection, DI), разработанный Google специально для Android. Он построен поверх **Dagger** и упрощает настройку DI в Android-приложениях за счёт уменьшения шаблонного кода и стандартных паттернов для Android-компонентов.
+**`Hilt`** — это фреймворк для внедрения зависимостей (Dependency Injection, DI), разработанный Google специально для Android. Он построен поверх **`Dagger`** и упрощает настройку DI в Android-приложениях за счёт уменьшения шаблонного кода и стандартных паттернов для Android-компонентов.
 
 ### Что Такое Dependency Injection
 
@@ -49,13 +49,13 @@ class UserViewModel(
 
 ### Зачем Нужен Hilt
 
-До появления Hilt использование Dagger в Android требовало:
+До появления `Hilt` использование `Dagger` в Android требовало:
 - Ручного объявления и связывания компонентов
 - Явного управления жизненным циклом компонентов
 - Настройки областей видимости под Android-компоненты
 - Дополнительной интеграции с Architecture Components
 
-Hilt решает это за счёт:
+`Hilt` решает это за счёт:
 1. Предопределённых компонентов под ключевые Android-слои
 2. Автоматического управления жизненным циклом графа зависимостей
 3. Стандартных scope-аннотаций, согласованных с Android lifecycle
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 1. Компоненты Hilt
 
-Hilt предоставляет предопределённые компоненты, привязанные к жизненному циклу Android:
+`Hilt` предоставляет предопределённые компоненты, привязанные к жизненному циклу Android:
 
 ```text
 SingletonComponent (уровень Application)
@@ -329,11 +329,11 @@ class MyWorker(
 }
 ```
 
-> Примечание: для WorkManager есть отдельная интеграция через `androidx.hilt:hilt-work`.
+> Примечание: для `WorkManager` есть отдельная интеграция через `androidx.hilt:hilt-work`.
 
 #### 3. Assisted Injection (для runtime-параметров)
 
-Для параметров, которые Hilt не может предоставить напрямую во время компиляции, можно использовать assisted-injection паттерн. Один из вариантов (для не-`@HiltViewModel` классов):
+Для параметров, которые `Hilt` не может предоставить напрямую во время компиляции, можно использовать assisted-injection паттерн. Один из вариантов (для не-`@HiltViewModel` классов):
 
 ```kotlin
 class UserDetailViewModel @AssistedInject constructor(
@@ -351,7 +351,7 @@ class UserDetailViewModel @AssistedInject constructor(
 }
 ```
 
-Для `ViewModel` в Hilt-проектах современный подход — использовать `@HiltViewModel` совместно с `SavedStateHandle` вместо ручного assisted-injection.
+Для `ViewModel` в `Hilt`-проектах современный подход — использовать `@HiltViewModel` совместно с `SavedStateHandle` вместо ручного assisted-injection.
 
 ---
 
@@ -427,7 +427,7 @@ class MainActivityTest {
 ### Преимущества Hilt (детально)
 
 1. Упрощённая настройка
-   - Меньше шаблонного кода по сравнению с ручной настройкой Dagger
+   - Меньше шаблонного кода по сравнению с ручной настройкой `Dagger`
    - Предопределённые компоненты под Android
    - Стандартные области видимости
 
@@ -442,7 +442,7 @@ class MainActivityTest {
 
 4. Интеграция с Jetpack
    - Инъекция в `ViewModel`
-   - Интеграция с WorkManager, Navigation и др.
+   - Интеграция с `WorkManager`, Navigation и др.
 
 5. Тестируемость
    - Лёгкая подмена зависимостей в тестах
@@ -537,12 +537,12 @@ object DatabaseModule {
 
 ### Резюме
 
-**Hilt** — это фреймворк DI для Android, который:
+**`Hilt`** — это фреймворк DI для Android, который:
 
-1. Упрощает настройку DI по сравнению с ручной конфигурацией Dagger
+1. Упрощает настройку DI по сравнению с ручной конфигурацией `Dagger`
 2. Предоставляет стандартные компоненты, согласованные с жизненным циклом Android
 3. Управляет областями видимости и временем жизни зависимостей автоматически
-4. Интегрируется с Jetpack (`ViewModel`, WorkManager, Navigation и др.)
+4. Интегрируется с Jetpack (`ViewModel`, `WorkManager`, Navigation и др.)
 5. Улучшает тестируемость за счёт тестовых модулей и заменяемых биндингов
 6. Обеспечивает compile-time безопасность через сгенерированный код
 7. Избегает рефлексии и минимизирует накладные расходы во время выполнения
@@ -556,7 +556,7 @@ object DatabaseModule {
 - `@Provides` — для фабричных методов
 - `@Binds` — для привязки интерфейсов к реализациям
 
-Когда использовать Hilt:
+Когда использовать `Hilt`:
 - В новых Android-приложениях
 - Когда нужна DI, учитывающая жизненный цикл компонентов
 - Когда важны модульность, тестируемость и интеграция с Jetpack
@@ -564,7 +564,7 @@ object DatabaseModule {
 ---
 
 ## Answer (EN)
-**Hilt** is a dependency injection (DI) framework developed by Google specifically for Android. It's built on top of **Dagger** and designed to simplify dependency injection setup in Android applications by reducing boilerplate code and providing standardized patterns for Android components.
+**`Hilt`** is a dependency injection (DI) framework developed by Google specifically for Android. It's built on top of **`Dagger`** and designed to simplify dependency injection setup in Android applications by reducing boilerplate code and providing standardized patterns for Android components.
 
 ### What is Dependency Injection?
 
@@ -588,13 +588,13 @@ class UserViewModel(
 
 ### Why Hilt?
 
-Before Hilt, setting up Dagger in Android required significant boilerplate:
+Before `Hilt`, setting up `Dagger` in Android required significant boilerplate:
 - Manual component creation
-- Component lifecycle management
+- `Component` lifecycle management
 - Scoping to Android components
 - Integration with Architecture Components
 
-Hilt solves these problems by providing:
+`Hilt` solves these problems by providing:
 1. Predefined components for Android classes
 2. Automatic component lifecycle management
 3. Standard scopes aligned with Android lifecycle
@@ -629,7 +629,7 @@ dependencies {
 }
 ```
 
-Note: The older `androidx.hilt:hilt-lifecycle-viewmodel` artifact is deprecated; modern Hilt uses `@HiltViewModel` from `com.google.dagger:hilt-android`.
+Note: The older `androidx.hilt:hilt-lifecycle-viewmodel` artifact is deprecated; modern `Hilt` uses `@HiltViewModel` from `com.google.dagger:hilt-android`.
 
 ### 2. Annotate `Application` Class
 
@@ -664,7 +664,7 @@ class MainActivity : AppCompatActivity() {
 
 ### 1. Hilt Components
 
-Hilt provides predefined components tied to the Android lifecycle:
+`Hilt` provides predefined components tied to the Android lifecycle:
 
 ```text
 SingletonComponent (Application scope)
@@ -841,7 +841,7 @@ object NetworkModule {
 
 ### 2. Entry Points (for non-Android classes)
 
-For classes that Hilt doesn't support via `@AndroidEntryPoint` (e.g., some library callbacks), you can use entry points:
+For classes that `Hilt` doesn't support via `@AndroidEntryPoint` (e.g., some library callbacks), you can use entry points:
 
 ```kotlin
 @EntryPoint
@@ -869,11 +869,11 @@ class MyWorker(
 }
 ```
 
-(Note: Hilt also provides dedicated integration for WorkManager via `androidx.hilt:hilt-work`.)
+(Note: `Hilt` also provides dedicated integration for `WorkManager` via `androidx.hilt:hilt-work`.)
 
 ### 3. Assisted Injection (for Runtime parameters)
 
-For runtime parameters that Hilt can't provide directly, you can use assisted injection patterns. One option (for non-`@HiltViewModel` classes) is:
+For runtime parameters that `Hilt` can't provide directly, you can use assisted injection patterns. One option (for non-`@HiltViewModel` classes) is:
 
 ```kotlin
 class UserDetailViewModel @AssistedInject constructor(
@@ -891,7 +891,7 @@ class UserDetailViewModel @AssistedInject constructor(
 }
 ```
 
-For ViewModels in Hilt-based apps, the recommended modern approach is to use `@HiltViewModel` together with `SavedStateHandle` or a `SavedStateHandle`-backed key instead of manual assisted injection.
+For ViewModels in `Hilt`-based apps, the recommended modern approach is to use `@HiltViewModel` together with `SavedStateHandle` or a `SavedStateHandle`-backed key instead of manual assisted injection.
 
 ---
 
@@ -967,11 +967,11 @@ class MainActivityTest {
 ## Benefits of Hilt
 
 1. **Simplified Setup**
-   - Less boilerplate than plain Dagger
+   - Less boilerplate than plain `Dagger`
    - Predefined components for Android
    - Standard scopes
 
-2. **Lifecycle Awareness**
+2. **`Lifecycle` Awareness**
    - Components tied to Android lifecycle
    - Automatic cleanup
    - Support for surviving configuration changes via ActivityRetainedComponent
@@ -982,7 +982,7 @@ class MainActivityTest {
 
 4. **Integration with Jetpack**
    - `ViewModel` injection
-   - WorkManager support
+   - `WorkManager` support
    - Navigation component support
 
 5. **Testability**
@@ -1078,12 +1078,12 @@ object DatabaseModule {
 
 ## Summary
 
-**Hilt** is a dependency injection framework for Android that:
+**`Hilt`** is a dependency injection framework for Android that:
 
-1. Simplifies DI setup compared to manual Dagger configuration
-2. Provides standard components aligned with the Android lifecycle
+1. Simplifies DI setup compared to manual `Dagger` configuration
+2. `Provides` standard components aligned with the Android lifecycle
 3. Manages scopes with automatic lifecycle management
-4. Integrates with Jetpack libraries (`ViewModel`, WorkManager, Navigation, etc.)
+4. Integrates with Jetpack libraries (`ViewModel`, `WorkManager`, Navigation, etc.)
 5. Improves testability through test-specific modules and swappable bindings
 6. Offers compile-time safety via generated code and type-checked graphs
 7. Avoids reflection and keeps runtime overhead low
@@ -1097,7 +1097,7 @@ object DatabaseModule {
 - `@Provides` - Provide method
 - `@Binds` - Bind interface to implementation
 
-**When to use Hilt:**
+**When to use `Hilt`:**
 - Building new Android apps
 - Need lifecycle-aware DI
 - Want compile-time safety

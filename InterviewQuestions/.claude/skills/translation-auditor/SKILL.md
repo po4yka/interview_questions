@@ -1,11 +1,11 @@
----
+---\
 name: translation-auditor
 description: >
   Audit bilingual content quality and translation completeness. Finds partially
   translated sections, checks EN/RU content parity, identifies missing translations
   by folder, reports translation completeness percentage, and flags inconsistent
   terminology. Essential for maintaining bilingual vault quality.
----
+---\
 
 # Translation Auditor
 
@@ -18,7 +18,7 @@ Audit and improve bilingual (EN/RU) content quality:
 3. **Parity Analysis**: Check if EN and RU have equivalent content
 4. **Terminology Consistency**: Flag inconsistent term translations
 5. **Coverage Report**: Calculate translation percentage by folder
-6. **Priority List**: Generate list of notes needing translation
+6. **Priority `List`**: Generate list of notes needing translation
 
 ## When to Use
 
@@ -468,7 +468,7 @@ Check all aspects:
 
 **Prioritized**: Generates actionable priority queue.
 
-**Statistical**: Provides coverage metrics by folder.
+**Statistical**: `Provides` coverage metrics by folder.
 
 **Non-Destructive**: Read-only audit, no modifications.
 

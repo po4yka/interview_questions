@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-102
 title: "Coroutine Builders: launch, async, runBlocking / Билдеры корутин: launch, async, runBlocking"
 aliases: ["Coroutine Builders: launch, async, runBlocking", "Билдеры корутин: launch, async, runBlocking"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/easy, kotlin]
----
+---\
 # Вопрос (RU)
 > Базовая тема корутин Kotlin 140029 (билдеры `launch`, `async`, `runBlocking`)
 
@@ -158,7 +158,7 @@ fun main() {
 ```
 
 ### Key Differences
-| Builder    | Returns            | Blocks Thread | Use Case                                      |
+| Builder    | Returns            | Blocks `Thread` | Use Case                                      |
 |------------|--------------------|---------------|-----------------------------------------------|
 | launch     | `Job`              | No            | Fire and forget, side effects                 |
 | async      | `Deferred<T>`      | No            | Need a result, concurrent computations        |
@@ -267,7 +267,7 @@ fun main() = runBlocking {
 
 ### Next Steps (Medium)
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutine` dispatchers overview
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `CoroutineContext`
 
 ### Advanced (Harder)

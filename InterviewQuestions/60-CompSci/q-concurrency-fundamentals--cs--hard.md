@@ -1,4 +1,4 @@
----
+---\
 id: cs-003
 title: "Concurrency Fundamentals / Основы параллелизма"
 aliases: ["Concurrency Fundamentals", "Основы параллелизма"]
@@ -15,7 +15,7 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [concurrency, difficulty/hard]
 sources: ["https://en.wikipedia.org/wiki/Concurrency_(computer_science)"]
----
+---\
 # Вопрос (RU)
 > Что такое concurrency vs parallelism? Что такое race conditions и как их предотвратить? Что такое mutexes, semaphores и monitors? Как избежать deadlocks?
 
@@ -249,9 +249,9 @@ fun transferSafe(from: Account, to: Account, amount: Int) {
 4. **Avoid nested locks** — минимизировать вложенные блокировки.
 5. **Use higher-level primitives** — channels, actors вместо низкоуровневых locks.
 
-**5. Thread-Safe Data Structures:**
+**5. `Thread`-Safe Data Structures:**
 
-*Теория:* Thread-safe структуры данных используют внутреннюю синхронизацию или lock-free алгоритмы. Примеры: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Компромисс: безопасность vs производительность.
+*Теория:* `Thread`-safe структуры данных используют внутреннюю синхронизацию или lock-free алгоритмы. Примеры: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Компромисс: безопасность vs производительность.
 
 ```kotlin
 // ✅ Thread-safe collections (Java/JVM)
@@ -545,9 +545,9 @@ fun transferSafe(from: Account, to: Account, amount: Int) {
 4. **Avoid nested locks** - minimize nested locking.
 5. **Use higher-level primitives** - channels, actors instead of low-level locks when possible.
 
-**5. Thread-Safe Data Structures:**
+**5. `Thread`-Safe Data Structures:**
 
-*Theory:* Thread-safe data structures use internal synchronization or lock-free algorithms. Examples: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Trade-off: safety vs performance.
+*Theory:* `Thread`-safe data structures use internal synchronization or lock-free algorithms. Examples: `ConcurrentHashMap`, `CopyOnWriteArrayList`, `BlockingQueue`. Trade-off: safety vs performance.
 
 ```kotlin
 // ✅ Thread-safe collections (Java/JVM)

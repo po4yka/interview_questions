@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251018-140200
 title: Cloud Platforms — MOC
 kind: moc
 created: 2025-10-18
 updated: 2025-10-18
 tags: [moc, topic/cloud]
----
+---\
 
 # Cloud Platforms — Map of Content
 
@@ -56,10 +56,10 @@ LIMIT 50
 
 **Planned Coverage**:
 - EC2 (Elastic Compute Cloud)
-- S3 (Simple Storage Service)
+- S3 (Simple Storage `Service`)
 - Lambda (Serverless Functions)
-- RDS (Relational Database Service)
-- DynamoDB (NoSQL Database)
+- RDS (Relational `Database` `Service`)
+- DynamoDB (NoSQL `Database`)
 - API Gateway
 - CloudFront (CDN)
 - VPC (Virtual Private Cloud)
@@ -108,8 +108,8 @@ SORT difficulty ASC, file.name ASC
 - Blob Storage
 - Azure Functions
 - Cosmos DB
-- Azure SQL Database
-- Application Gateway
+- Azure SQL `Database`
+- `Application` Gateway
 - Azure CDN
 - Active Directory
 - Azure Monitor
@@ -128,7 +128,7 @@ SORT difficulty ASC, file.name ASC
 
 **Planned Coverage**:
 - Microservices patterns
-- Service mesh
+- `Service` mesh
 - API gateways
 - Cloud-native security
 - Observability and monitoring
@@ -149,7 +149,7 @@ SORT difficulty ASC, file.name ASC
 ### Serverless Computing
 
 **Planned Coverage**:
-- Function as a Service (FaaS)
+- Function as a `Service` (FaaS)
 - Event-driven architecture
 - Lambda/Cloud Functions patterns
 - Cold starts and optimization
@@ -175,7 +175,7 @@ SORT difficulty ASC, file.name ASC
 - Kubernetes basics
 - ECS/EKS/GKE/AKS
 - Container networking
-- Service discovery
+- `Service` discovery
 - Container security
 - CI/CD with containers
 - Container registries
@@ -221,7 +221,7 @@ SORT difficulty ASC, file.name ASC
 - Pulumi
 - Configuration management
 - State management
-- Module design
+- `Module` design
 - Best practices
 
 **All IaC Questions:**
@@ -311,7 +311,7 @@ When creating cloud questions, consider covering:
 - Container basics and Docker
 - Kubernetes architecture
 - Pod scheduling and scaling
-- Service mesh patterns
+- `Service` mesh patterns
 - Helm charts
 - GitOps workflows
 
@@ -320,7 +320,7 @@ When creating cloud questions, consider covering:
 This MOC uses flexible Dataview queries that search across all folders for `topic: cloud` notes, since cloud questions may be placed in various folders (30-System-Design/, 50-Backend/, 60-CompSci/) depending on their specific focus.
 
 When creating cloud questions:
-- Set `topic: cloud` in YAML frontmatter
+- `Set` `topic: cloud` in YAML frontmatter
 - Choose appropriate subtopics (aws, gcp, azure, serverless, containers, etc.)
 - Add platform-specific tags (aws, gcp, azure, kubernetes, docker, terraform)
 - Link to this MOC with `moc: moc-cloud`

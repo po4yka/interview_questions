@@ -1,4 +1,4 @@
----
+---\
 id: android-639
 title: Play Asset Delivery Strategy / Стратегия Play Asset Delivery
 aliases: [Play Asset Delivery Strategy, Стратегия Play Asset Delivery]
@@ -19,7 +19,7 @@ sources:
   note: Play Asset Delivery documentation
 - url: "https://developer.android.com/guide/app-bundle/asset-delivery-options"
   note: Delivery modes overview
----
+---\
 # Вопрос (RU)
 > Как разработать стратегию Play Asset Delivery: выбрать режимы (install-time, fast-follow, on-demand), управлять динамическими фичами, обновлять ассеты без релиза и мониторить доставку?
 
@@ -122,7 +122,7 @@ assetManager.registerListener { state ->
 
 - Для критичных сценариев держите минимальный набор ассетов в install-time-паке.
 - Если on-demand загрузка провалилась → уведомление, retry с бэком-оффом и graceful degradation (например, более низкое качество ресурсов).
-- Рассмотрите prefetch (Wi‑Fi only) через WorkManager для ожидаемых сценариев.
+- Рассмотрите prefetch (Wi‑Fi only) через `WorkManager` для ожидаемых сценариев.
 
 ### 9. Compliance & QA
 
@@ -226,7 +226,7 @@ assetManager.registerListener { state ->
 
 - Keep a minimal critical asset set as install-time.
 - On on-demand failure, notify the user, retry with backoff, and gracefully degrade (e.g., lower-quality resources or reduced features).
-- Optionally prefetch expected asset packs over Wi‑Fi using background work (e.g., WorkManager).
+- Optionally prefetch expected asset packs over Wi‑Fi using background work (e.g., `WorkManager`).
 
 ### 9. Compliance and QA
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-315
 title: How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален
 aliases: [Adapter Redraw on Item Deletion, Перерисовка адаптера при удалении элемента]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 sources: []
 tags: [adapters, android, android/architecture-modularization, android/ui-views, android/ui-widgets, difficulty/medium, recyclerview, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Как сказать адаптеру перерисовать список, если какой-то элемент удалился?
@@ -142,7 +142,7 @@ class MyAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<Vie
 }
 ```
 
-**2. ListAdapter with DiffUtil (Recommended for dynamic lists)**
+**2. ListAdapter with `DiffUtil` (Recommended for dynamic lists)**
 
 ```kotlin
 class MyAdapter : ListAdapter<Item, MyAdapter.ItemViewHolder>(ItemDiffCallback()) {
@@ -217,7 +217,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 - What happens if you call notify before removing from the data list?
 - When should you use `AsyncListDiffer` instead of `ListAdapter`?
 - How do payloads work with `notifyItemChanged(position, payload)`?
-- What's the difference between `areItemsTheSame()` and `areContentsTheSame()` in DiffUtil?
+- What's the difference between `areItemsTheSame()` and `areContentsTheSame()` in `DiffUtil`?
 
 ## Ссылки (RU)
 
@@ -239,7 +239,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 
 ### Предпосылки (проще)
 
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Оптимизация RecyclerView
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Оптимизация `RecyclerView`
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - Основы UI
 - [[q-view-fundamentals--android--easy]] - Базовые принципы системы `View`
 
@@ -263,7 +263,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 
 ### Prerequisites (Easier)
 
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI fundamentals
 - [[q-view-fundamentals--android--easy]] - `View` system basics
 

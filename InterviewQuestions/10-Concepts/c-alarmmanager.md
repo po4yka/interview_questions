@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-135440"
 title: "Alarmmanager / Alarmmanager"
 aliases: ["Alarmmanager"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-workmanager, c-jobscheduler, c-android-background-execution, c-foreground-service, c-background-tasks]
+moc: "moc-cs"
+related: ["c-workmanager", "c-jobscheduler", "c-android-background-execution", "c-foreground-service", "c-background-tasks"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -34,7 +35,7 @@ AlarmManager — это системный сервис Android для план�
 - Types of alarms: supports exact, inexact, repeating, and idle/boot-aware alarms via methods like set(), setExact(), setRepeating(), setWindow(), and setAndAllowWhileIdle().
 - Persistence and process independence: alarms are managed by the system; they can wake the app or device even if the process is killed (subject to API level and flags).
 - Power and API constraints: from Android 6.0+, Doze and App Standby restrict alarms; exact alarms are limited and require careful use to avoid battery drain.
-- Common usage: used for time-based triggers (e.g., calendar alerts), but non-urgent or network/background work is often better handled by WorkManager or JobScheduler.
+- Common usage: used for time-based triggers (e.g., calendar alerts), but non-urgent or network/background work is often better handled by `WorkManager` or JobScheduler.
 - Permissions and boot handling: waking the device or surviving reboots may require USE_EXACT_ALARM (on newer APIs), SCHEDULE_EXACT_ALARM, WAKE_LOCK (historically), and handling BOOT_COMPLETED to reschedule alarms.
 
 ## Ключевые Моменты (RU)
@@ -42,7 +43,7 @@ AlarmManager — это системный сервис Android для план�
 - Типы будильников: поддерживает точные, неточные, повторяющиеся и учитывающие простои/перезагрузку будильники через методы set(), setExact(), setRepeating(), setWindow(), setAndAllowWhileIdle().
 - Управление системой: будильники планируются и хранятся системой; они могут запускать приложение или будить устройство даже после убийства процесса (с учётом версии Android и флагов).
 - Ограничения энергосбережения: начиная с Android 6.0+, Doze и App Standby ограничивают срабатывание будильников; точные будильники лимитируются и должны использоваться осторожно, чтобы не разряжать батарею.
-- Типичные сценарии: триггер напоминаний, сигналов календаря, тайм-аутов; для фоновой/сетевой работы без жёстких временных требований предпочтительнее WorkManager или JobScheduler.
+- Типичные сценарии: триггер напоминаний, сигналов календаря, тайм-аутов; для фоновой/сетевой работы без жёстких временных требований предпочтительнее `WorkManager` или JobScheduler.
 - Разрешения и после перезагрузки: для пробуждения устройства или сохранения поведения после перезагрузки могут потребоваться USE_EXACT_ALARM / SCHEDULE_EXACT_ALARM, WAKE_LOCK (ранее) и обработка BOOT_COMPLETED для повторного планирования будильников.
 
 ## References

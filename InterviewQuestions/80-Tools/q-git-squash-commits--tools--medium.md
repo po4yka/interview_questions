@@ -24,7 +24,7 @@ created: 2025-10-03
 updated: 2025-10-03
 
 # Tags
-tags: [difficulty/medium, easy_kotlin, git, lang/ru, rebase, squash, tools, version-control]
+tags: [difficulty/medium, kotlin, git, lang/ru, rebase, squash, tools, version-control]
 ---
 # Вопрос (RU)
 > Как объединить несколько коммитов в один в Git

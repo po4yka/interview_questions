@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-024
 title: "lazy vs lateinit / lazy против lateinit"
 aliases: ["lazy vs lateinit", "lazy против lateinit"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [delegation, difficulty/medium, initialization, kotlin, lateinit, lazy]
----
+---\
 # Вопрос (RU)
 > В чем разница между `lazy` и `lateinit` в Kotlin?
 
@@ -193,7 +193,7 @@ class DemoClass {
 | **Property type** | `val` only | `var` only |
 | **Primitive types** | Can use | Cannot use (compiler prohibits) |
 | **Nullable** | Can use | Cannot use (type must be non-null) |
-| **Thread safety** | Thread-safe by default (`LazyThreadSafetyMode.SYNCHRONIZED`), configurable | Not thread-safe, requires external synchronization |
+| **`Thread` safety** | `Thread`-safe by default (`LazyThreadSafetyMode.SYNCHRONIZED`), configurable | Not thread-safe, requires external synchronization |
 | **Initialization** | Only from initializer lambda | From any code path before first read |
 | **Initialization check** | Available via `Lazy<T>.isInitialized()` when holding `Lazy` explicitly | `::property.isInitialized` |
 | **When initialized** | On first access | Manually before use |

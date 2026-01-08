@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-040
 title: "Kotlin Multiplatform - How does it work? / Kotlin Multiplatform - Как это работает?"
 aliases: ["Kotlin Multiplatform - How does it work?", "Kotlin Multiplatform - Как это работает?"]
@@ -25,7 +25,7 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, native]
----
+---\
 # Вопрос (RU)
 > Kotlin Multiplatform - Как это работает?
 
@@ -616,7 +616,7 @@ project/
 
 Popular KMP libraries:
 - **Ktor** — Networking (HTTP client)
-- **SQLDelight** — Database
+- **SQLDelight** — `Database`
 - **kotlinx.serialization** — Serialization / JSON
 - **kotlinx.coroutines** — Async operations
 - **kotlinx.datetime** — Date/time

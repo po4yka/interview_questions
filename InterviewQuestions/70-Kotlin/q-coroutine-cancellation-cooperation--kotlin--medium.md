@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-051
 title: "Coroutine Cancellation Cooperation / Кооперативная отмена корутин"
 aliases: ["Coroutine Cancellation Cooperation", "Кооперативная отмена корутин"]
@@ -25,7 +25,7 @@ created: 2025-10-11
 updated: 2025-11-09
 
 tags: [cancellation, cooperation, coroutines, difficulty/medium, ensureActive, kotlin, yield]
----
+---\
 # Вопрос (RU)
 > Реализуйте долгоиграющие операции с поддержкой отмены. Правильно используйте `yield()`, `ensureActive()` и `isActive`. Корректно обрабатывайте `CancellationException`.
 
@@ -451,7 +451,7 @@ class BackgroundSync {
 
 ## Answer (EN)
 
-Coroutine cancellation is **cooperative**: coroutines must periodically check for cancellation (`isActive`, `ensureActive()`, `yield()`, suspension points) and complete gracefully.
+`Coroutine` cancellation is **cooperative**: coroutines must periodically check for cancellation (`isActive`, `ensureActive()`, `yield()`, suspension points) and complete gracefully.
 
 ### Why Cancellation is Cooperative
 
@@ -908,7 +908,7 @@ onPause {
    }
    ```
 
-**English Summary**: Coroutine cancellation is cooperative: coroutines must periodically check for cancellation using `ensureActive()`, `yield()`, or `isActive`. Use `ensureActive()` for quick checks, `yield()` for CPU-intensive loops, and `isActive` in while conditions. When handling `CancellationException`, do not accidentally swallow cancellation; rethrow it (or map it to a clear "cancelled" outcome) after cleanup. Use `NonCancellable` for critical cleanup operations that must complete. Check for cancellation periodically in long-running operations, especially in loops.
+**English Summary**: `Coroutine` cancellation is cooperative: coroutines must periodically check for cancellation using `ensureActive()`, `yield()`, or `isActive`. Use `ensureActive()` for quick checks, `yield()` for CPU-intensive loops, and `isActive` in while conditions. When handling `CancellationException`, do not accidentally swallow cancellation; rethrow it (or map it to a clear "cancelled" outcome) after cleanup. Use `NonCancellable` for critical cleanup operations that must complete. Check for cancellation periodically in long-running operations, especially in loops.
 
 ## Follow-ups
 

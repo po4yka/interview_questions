@@ -1,4 +1,4 @@
----
+---\
 id: android-294
 title: How To Show SVG String As Vector File / Как показать SVG строку как векторный файл
 aliases: [SVG String Display, SVG Vector Rendering, Отображение SVG строки]
@@ -17,7 +17,7 @@ sources:
   - "https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources"
 tags: [android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, image-loading, svg, vector-graphics]
 
----
+---\
 # Вопрос (RU)
 
 > Как отобразить SVG строку в виде векторного изображения в Android?
@@ -277,20 +277,20 @@ class SvgViewModel : ViewModel() {
 |--------|-------------------|-------------|-----------|----------|
 | AndroidSVG | Высокая | Ручное | Низкая | Простые случаи, прямой рендеринг из строки |
 | Coil | Высокая | Автоматическое | Средняя | Сеть, кэш, унифицированная загрузка (URL/файлы) |
-| Custom Drawable | Высокая | Ручное | Средняя | Особые требования, кастомный рендеринг |
-| Bitmap | Ниже | Ручное | Низкая | Спец. случаи, когда нужен Bitmap (не как основной способ) |
+| Custom `Drawable` | Высокая | Ручное | Средняя | Особые требования, кастомный рендеринг |
+| `Bitmap` | Ниже | Ручное | Низкая | Спец. случаи, когда нужен `Bitmap` (не как основной способ) |
 
 Рекомендации по выбору:
-- Прямой рендер из SVG строки → AndroidSVG или Custom Drawable.
+- Прямой рендер из SVG строки → AndroidSVG или Custom `Drawable`.
 - Сетевые или кэшируемые SVG → Coil с SVG декодером (для URL/файлов или с кастомным fetcher/decoder для строк).
 - Compose UI → рендер через Canvas/Drawable + парсинг вне главного потока.
-- Особая логика отрисовки → Custom Drawable.
+- Особая логика отрисовки → Custom `Drawable`.
 
 ---
 
 ## Answer (EN)
 
-Android doesn't support SVG natively, and an SVG string cannot be directly used as a `VectorDrawable` resource. However, there are several proven approaches to render SVG strings as scalable vector graphics at runtime: AndroidSVG library, Coil with SVG decoder (for URLs/files), Bitmap conversion, or a custom `Drawable`.
+Android doesn't support SVG natively, and an SVG string cannot be directly used as a `VectorDrawable` resource. However, there are several proven approaches to render SVG strings as scalable vector graphics at runtime: AndroidSVG library, Coil with SVG decoder (for URLs/files), `Bitmap` conversion, or a custom `Drawable`.
 
 Important: you cannot "convert" an in-memory SVG string into a real `VectorDrawable` resource at runtime without offline conversion to VectorDrawable XML.
 
@@ -537,14 +537,14 @@ class SvgViewModel : ViewModel() {
 |----------|------------|---------|------------|----------|
 | AndroidSVG | High | Manual | Low | Simple cases, direct rendering from string |
 | Coil | High | Automatic | Medium | Network + cache, unified loading (URLs/files; strings via custom integration) |
-| Custom Drawable | High | Manual | Medium | Special requirements, custom rendering |
-| Bitmap | Lower | Manual | Low | Special cases requiring Bitmap (not primary) |
+| Custom `Drawable` | High | Manual | Medium | Special requirements, custom rendering |
+| `Bitmap` | Lower | Manual | Low | Special cases requiring `Bitmap` (not primary) |
 
 Selection recommendations:
-- Direct rendering from SVG string → AndroidSVG or Custom Drawable.
+- Direct rendering from SVG string → AndroidSVG or Custom `Drawable`.
 - Network / cached SVG → Coil with SVG decoder (for URLs/files or via custom fetcher/decoder for strings).
 - Compose UI → Canvas/Drawable rendering with off-main-thread parsing.
-- Custom rendering logic → Custom Drawable.
+- Custom rendering logic → Custom `Drawable`.
 
 ---
 
@@ -554,7 +554,7 @@ Selection recommendations:
 2. What memory optimizations are needed when caching multiple SVG drawables?
 3. How to implement SVG color tinting at runtime?
 4. What are the performance implications of SVG vs VectorDrawable in Android?
-5. How to batch-load multiple SVG strings efficiently in RecyclerView?
+5. How to batch-load multiple SVG strings efficiently in `RecyclerView`?
 
 ## References
 

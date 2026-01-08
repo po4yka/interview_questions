@@ -1,4 +1,4 @@
----
+---\
 id: android-385
 title: API Rate Limiting and Throttling / Ограничение скорости API и троттлинг
 aliases: [API Rate Limiting and Throttling, Ограничение скорости API и троттлинг]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/networking-http, android/performance-startup, difficulty/medium, networking, okhttp, performance, retrofit]
 
----
+---\
 # Вопрос (RU)
 > Как реализовать rate limiting и throttling для API запросов в Android?
 
@@ -71,7 +71,7 @@ class TokenBucketInterceptor(
 
 ### 2. Exponential Backoff
 
-Обрабатывает 429 и 5xx ошибки с увеличивающимися задержками. Пример ниже синхронный и блокирующий (подходит только для фоновых потоков OkHttp / синхронных вызовов; не использовать на главном потоке).
+Обрабатывает 429 и 5xx ошибки с увеличивающимися задержками. Пример ниже синхронный и блокирующий (подходит только для фоновых потоков `OkHttp` / синхронных вызовов; не использовать на главном потоке).
 
 Важно: слепое повторение небезопасно для неидемпотентных методов (POST и др.); в реальных приложениях ограничивайтесь идемпотентными запросами или следуйте рекомендациям API.
 
@@ -211,7 +211,7 @@ class TokenBucketInterceptor(
 
 ### 2. Exponential Backoff
 
-Handles 429 and 5xx errors with increasing delays. The example below is synchronous and blocking (intended only for OkHttp background threads / synchronous calls; do not use this pattern on the main thread).
+Handles 429 and 5xx errors with increasing delays. The example below is synchronous and blocking (intended only for `OkHttp` background threads / synchronous calls; do not use this pattern on the main thread).
 
 Important: blindly retrying is unsafe for non-idempotent methods (e.g. POST); in real apps restrict retries to idempotent requests or follow the API's guidelines.
 

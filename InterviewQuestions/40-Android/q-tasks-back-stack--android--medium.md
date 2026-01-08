@@ -1,4 +1,4 @@
----
+---\
 id: android-227
 title: Tasks and Back Stack / Задачи и стек возврата
 aliases: [Tasks and Back Stack, Задачи и стек возврата]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/ui-navigation, back-stack, difficulty/medium, launch-mode, tasks]
 
----
+---\
 # Вопрос (RU)
 > Что вы знаете о задачах и стеке возврата?
 
@@ -138,7 +138,7 @@ These are the principal `<activity>` attributes that you can use to manage tasks
 - [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
 - How does `launchMode` (`standard`, `singleTop`, `singleTask`, `singleInstance`) affect task and back stack behavior?
 - How do `Intent` flags (`FLAG_ACTIVITY_NEW_TASK`, `FLAG_ACTIVITY_CLEAR_TOP`, etc.) affect existing tasks and their back stacks?
-- How does Back behavior at the system level differ from navigation logic handled inside `NavController` / Navigation Component?
+- How does Back behavior at the system level differ from navigation logic handled inside `NavController` / Navigation `Component`?
 
 ## References
 

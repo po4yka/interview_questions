@@ -1,4 +1,4 @@
----
+---\
 id: android-152
 title: How Compose Draws On Screen / Как Compose рисует на экране
 aliases: [How Compose Draws On Screen, Как Compose рисует на экране]
@@ -13,9 +13,9 @@ moc: moc-android
 related: [c-compose-state, c-jetpack-compose, c-performance, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium, q-recomposition-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/medium, rendering]
+tags: [android, android/performance-rendering, android/ui-compose, difficulty/medium, rendering]
 sources: []
----
+---\
 # Вопрос (RU)
 
 > Как Jetpack Compose отрисовывает UI на экране? Опишите трёхфазный процесс рендеринга.
@@ -34,7 +34,7 @@ Jetpack Compose использует **трёхфазный пайплайн р�
 
 1. **Composition (Композиция)** — построение дерева UI из composable-функций
 2. **Layout (Размещение)** — измерение и позиционирование элементов
-3. **Drawing (Рисование)** — рисование на Canvas (через Skia), с аппаратным ускорением
+3. **Drawing (Рисование)** — рисование на `Canvas` (через Skia), с аппаратным ускорением
 
 ### Фаза 1: Composition
 
@@ -104,7 +104,7 @@ fun SimpleCustomLayout(
 
 ### Фаза 3: Drawing
 
-**Рисование на Skia Canvas:**
+**Рисование на Skia `Canvas`:**
 - Используется `DrawScope` для операций рисования
 - GPU-ускорение через аппаратные слои
 - `graphicsLayer` может создавать отдельный слой для трансформаций и эффектов
@@ -235,7 +235,7 @@ Jetpack Compose uses a **three-stage rendering pipeline** with distinct Composit
 
 1. **Composition** — builds the UI tree from composable functions
 2. **Layout** — measures and positions elements
-3. **Drawing** — draws onto a Canvas (via Skia) with hardware acceleration
+3. **Drawing** — draws onto a `Canvas` (via Skia) with hardware acceleration
 
 ### Phase 1: Composition
 
@@ -305,7 +305,7 @@ fun SimpleCustomLayout(
 
 ### Phase 3: Drawing
 
-**Rendering to Skia Canvas:**
+**Rendering to Skia `Canvas`:**
 - Uses `DrawScope` for drawing operations
 - Hardware acceleration via GPU-backed layers
 - `graphicsLayer` can create separate layers for transformations and effects

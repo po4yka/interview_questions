@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-171042"
 title: "Assisted Injection / Assisted Injection"
 aliases: ["Assisted Injection"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-dagger, c-hilt, c-dependency-injection, c-koin, c-factory-pattern]
+moc: "moc-cs"
+related: ["c-dagger", "c-hilt", "c-dependency-injection", "c-koin", "c-factory-pattern"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -47,5 +48,5 @@ Assisted injection (ассоциированная/частично управл
 
 ## References
 
-- Dagger / Hilt documentation on `@AssistedInject` and `@AssistedFactory`
+- `Dagger` / `Hilt` documentation on `@AssistedInject` and `@AssistedFactory`
 - Google Guice documentation on AssistedInject extension

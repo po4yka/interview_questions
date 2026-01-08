@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-065
 title: "produce and actor Channel Builders / Билдеры каналов produce и actor"
 aliases: ["produce and actor Channel Builders", "Билдеры каналов produce и actor"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [actor, builders, channels, coroutines, difficulty/medium, kotlin, produce]
----
+---\
 # Вопрос (RU)
 > Что такое билдеры каналов `produce` и `actor`? Объясните их назначение, автоматическое управление ресурсами, особенности привязки к `CoroutineScope` и когда использовать каждый паттерн билдера.
 
@@ -1522,7 +1522,7 @@ class BuilderTests {
 
 2. Can you compose multiple actors together?
    - Actor hierarchies
-   - Message routing
+   - `Message` routing
    - Coordination patterns
 
 3. How to test code using `produce` and `actor`?
@@ -1532,13 +1532,13 @@ class BuilderTests {
 
 4. What are the performance implications?
    - Memory overhead of channels and coroutines
-   - Message processing throughput
+   - `Message` processing throughput
    - Comparison with manual channels / mutexes
 
 5. How to implement timeout in actor messages?
    - Timeout strategies with `withTimeout` / `select`
    - Deadlock prevention
-   - Response handling and fallbacks
+   - `Response` handling and fallbacks
 
 ---
 

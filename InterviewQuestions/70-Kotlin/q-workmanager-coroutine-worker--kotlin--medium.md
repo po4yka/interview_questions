@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-168
 title: "Using CoroutineWorker with WorkManager / Использование CoroutineWorker с WorkManager"
 aliases: [Background Work, CoroutineWorker, CoroutineWorker Background, WorkManager]
@@ -14,16 +14,16 @@ related: [c-coroutines, c-workmanager, q-what-is-coroutine--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [android, background, constraints, coroutines, coroutineworker, difficulty/medium, kotlin, periodic-work, worker, workmanager]
----
+---\
 # Вопрос (RU)
-> Что такое CoroutineWorker в Android WorkManager и чем он отличается от Worker и RxWorker? Когда следует использовать WorkManager с корутинами, а когда запускать корутины напрямую? Приведите production-примеры синхронизации данных, загрузки файлов и периодической очистки с обработкой ошибок, обновлениями прогресса и стратегиями тестирования.
+> Что такое CoroutineWorker в Android `WorkManager` и чем он отличается от `Worker` и RxWorker? Когда следует использовать `WorkManager` с корутинами, а когда запускать корутины напрямую? Приведите production-примеры синхронизации данных, загрузки файлов и периодической очистки с обработкой ошибок, обновлениями прогресса и стратегиями тестирования.
 
 # Question (EN)
-> What is CoroutineWorker in Android WorkManager and how does it differ from Worker and RxWorker? When should you use WorkManager with coroutines versus launching coroutines directly? Provide production examples of data synchronization, file uploads, and periodic cleanup tasks with proper error handling, progress updates, and testing strategies.
+> What is CoroutineWorker in Android `WorkManager` and how does it differ from `Worker` and RxWorker? When should you use `WorkManager` with coroutines versus launching coroutines directly? Provide production examples of data synchronization, file uploads, and periodic cleanup tasks with proper error handling, progress updates, and testing strategies.
 
 ## Ответ (RU)
 
-**CoroutineWorker** — это coroutine-friendly реализация Worker из WorkManager, которая позволяет писать фоновую работу, используя suspend-функции вместо блокирующих операций.
+**CoroutineWorker** — это coroutine-friendly реализация `Worker` из `WorkManager`, которая позволяет писать фоновую работу, используя suspend-функции вместо блокирующих операций.
 
 #### 1. Основы CoroutineWorker
 
@@ -31,7 +31,7 @@ tags: [android, background, constraints, coroutines, coroutineworker, difficulty
 
 CoroutineWorker специально разработан для работы с Kotlin Coroutines:
 - `doWork()` — это **suspend-функция**
-- Корректно интегрируется с coroutine scope, управляемым WorkManager
+- Корректно интегрируется с coroutine scope, управляемым `WorkManager`
 - Учитывает отмену через `Job`
 - Хорошо сочетается со структурированной конкурентностью
 
@@ -108,7 +108,7 @@ class RxBasedWorker(context: Context, params: WorkerParameters)
 
 **Таблица сравнения:**
 
-| Характеристика | Worker | CoroutineWorker | RxWorker |
+| Характеристика | `Worker` | CoroutineWorker | RxWorker |
 |----------------|--------|-----------------|----------|
 | Выполнение | Блокирующий поток | Suspend (неблокирующий) | Реактивный поток |
 | Отмена | Ручная/кооперативная | Через `Job` | Через `Disposable` |
@@ -197,11 +197,11 @@ fun observeMessages() = kotlinx.coroutines.flow.channelFlow {
 
 | Сценарий | Решение | Причина |
 |----------|---------|--------|
-| Загрузка файла в фоне | WorkManager | Переживает смерть процесса, учитывает ограничения |
+| Загрузка файла в фоне | `WorkManager` | Переживает смерть процесса, учитывает ограничения |
 | Загрузка данных для экрана | `ViewModel` + корутина | Привязано к lifecycle |
-| Периодическая очистка | WorkManager | Планирование, устойчивость |
+| Периодическая очистка | `WorkManager` | Планирование, устойчивость |
 | Чат в реальном времени | Корутина + `Flow` | Нужны немедленные обновления |
-| Миграция БД | WorkManager | Длительная, должна завершиться |
+| Миграция БД | `WorkManager` | Длительная, должна завершиться |
 | API-вызов по нажатию кнопки | `ViewModel` + корутина | Немедленно, отменяемо |
 
 #### 4. Production-пример: Data Sync Worker
@@ -962,17 +962,17 @@ override suspend fun doWork(): Result {
 - [[q-flow-basics--kotlin--easy]] - `Flow` для реактивных обновлений
 
 ### Дополнительные Вопросы
-1. Как WorkManager гарантирует выполнение работы даже после смерти процесса приложения? Опишите роль внутреннего планировщика и сохраненных work-запросов.
+1. Как `WorkManager` гарантирует выполнение работы даже после смерти процесса приложения? Опишите роль внутреннего планировщика и сохраненных work-запросов.
 2. В чем разница между setForeground()/getForegroundInfo() в CoroutineWorker и когда их использовать для длительных задач?
-3. Как реализовать менеджер загрузок с паузой/возобновлением, используя CoroutineWorker и ограничения WorkManager?
-4. Объясните, как работает backoff policy в WorkManager с экспоненциальными задержками. Какова максимальная задержка и как она рассчитывается?
-5. Как тестировать CoroutineWorker, использующий Android-специфичные API или DI-фреймворки (например, Hilt)?
-6. Что происходит с выполняющейся работой, когда constraints больше не выполняются (например, отключается Wi-Fi), и как WorkManager обрабатывает повторное планирование?
-7. Как реализовать worker, который отправляет детальные обновления прогресса в UI с использованием progress API WorkManager и `Flow`/`LiveData`?
+3. Как реализовать менеджер загрузок с паузой/возобновлением, используя CoroutineWorker и ограничения `WorkManager`?
+4. Объясните, как работает backoff policy в `WorkManager` с экспоненциальными задержками. Какова максимальная задержка и как она рассчитывается?
+5. Как тестировать CoroutineWorker, использующий Android-специфичные API или DI-фреймворки (например, `Hilt`)?
+6. Что происходит с выполняющейся работой, когда constraints больше не выполняются (например, отключается Wi-Fi), и как `WorkManager` обрабатывает повторное планирование?
+7. Как реализовать worker, который отправляет детальные обновления прогресса в UI с использованием progress API `WorkManager` и `Flow`/`LiveData`?
 
 ## Answer (EN)
 
-**CoroutineWorker** is a coroutine-friendly implementation of WorkManager's Worker that allows you to write background work using suspend functions instead of blocking operations.
+**CoroutineWorker** is a coroutine-friendly implementation of `WorkManager`'s `Worker` that allows you to write background work using suspend functions instead of blocking operations.
 
 #### 1. CoroutineWorker Basics
 
@@ -980,8 +980,8 @@ override suspend fun doWork(): Result {
 
 CoroutineWorker is specifically designed to work with Kotlin Coroutines:
 - `doWork()` is a **suspend function**
-- Properly integrates with the WorkManager-managed coroutine scope
-- Respects WorkManager cancellation via the coroutine `Job`
+- Properly integrates with the `WorkManager`-managed coroutine scope
+- Respects `WorkManager` cancellation via the coroutine `Job`
 - Plays well with structured concurrency
 
 **Class structure:**
@@ -1064,7 +1064,7 @@ class RxBasedWorker(context: Context, params: WorkerParameters)
 
 **Comparison Table:**
 
-| Feature | Worker | CoroutineWorker | RxWorker |
+| Feature | `Worker` | CoroutineWorker | RxWorker |
 |---------|--------|-----------------|----------|
 | Execution | Blocking thread | Suspending (non-blocking) | Reactive stream |
 | Cancellation | Manual/cooperative | Integrated with `Job` | Via `Disposable` |
@@ -1155,11 +1155,11 @@ fun observeMessages() = kotlinx.coroutines.flow.channelFlow {
 
 | Scenario | Solution | Reason |
 |----------|----------|--------|
-| Upload file in background | WorkManager | Survives process death, can enforce constraints |
+| Upload file in background | `WorkManager` | Survives process death, can enforce constraints |
 | Load data for screen | `ViewModel` + coroutine | Tied to lifecycle |
-| Periodic cleanup | WorkManager | Scheduled, resilient |
-| Real-time chat | Coroutine + `Flow` | Needs immediate, continuous updates |
-| Database migration | WorkManager | Long-running, needs completion |
+| Periodic cleanup | `WorkManager` | Scheduled, resilient |
+| Real-time chat | `Coroutine` + `Flow` | Needs immediate, continuous updates |
+| `Database` migration | `WorkManager` | `Long`-running, needs completion |
 | API call on button click | `ViewModel` + coroutine | Immediate, cancellable |
 
 #### 4. Production Example: Data Sync Worker
@@ -1947,15 +1947,15 @@ override suspend fun doWork(): Result {
 - [[q-flow-basics--kotlin--easy]] - `Flow` for reactive updates
 
 ## Follow-ups
-1. How does WorkManager ensure work execution survives app process death? Describe the role of internal scheduling and persisted work requests.
+1. How does `WorkManager` ensure work execution survives app process death? Describe the role of internal scheduling and persisted work requests.
 2. What's the difference between setForeground()/getForegroundInfo() in CoroutineWorker and when should each be used in long-running tasks?
-3. How would you implement a download manager with pause/resume using CoroutineWorker and WorkManager constraints?
-4. Explain how WorkManager's backoff policy works with exponential delays. What is the maximum delay and how is it calculated?
-5. How do you test a CoroutineWorker that depends on Android-specific APIs or uses DI frameworks like Hilt?
-6. What happens to running work when constraints are no longer met (e.g., WiFi disconnects) and how does WorkManager handle rescheduling?
-7. How would you implement a worker that reports granular progress updates to the UI using WorkManager's progress APIs and `Flow`/`LiveData`?
+3. How would you implement a download manager with pause/resume using CoroutineWorker and `WorkManager` constraints?
+4. Explain how `WorkManager`'s backoff policy works with exponential delays. What is the maximum delay and how is it calculated?
+5. How do you test a CoroutineWorker that depends on Android-specific APIs or uses DI frameworks like `Hilt`?
+6. What happens to running work when constraints are no longer met (e.g., WiFi disconnects) and how does `WorkManager` handle rescheduling?
+7. How would you implement a worker that reports granular progress updates to the UI using `WorkManager`'s progress APIs and `Flow`/`LiveData`?
 
 ## References
 - [[c-workmanager]]
 - [[c-coroutines]]
-- Official WorkManager and CoroutineWorker documentation on developer.android.com
+- Official `WorkManager` and CoroutineWorker documentation on developer.android.com

@@ -14,7 +14,7 @@ related: [c-compose-state, c-jetpack-compose, q-android-manifest-file--android--
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/ui-compose, android/ui-views, difficulty/medium, jetpack-compose, programmatic-views, ui]
+tags: [android, android/ui-compose, android/ui-views, difficulty/medium, programmatic-views, ui]
 
 ---
 # Вопрос (RU)

@@ -1,4 +1,4 @@
----
+---\
 id: android-107
 title: Android Runtime Internals / Внутреннее устройство Android Runtime
 aliases: [Android Runtime Internals, Внутреннее устройство Android Runtime]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/processes, android/profiling, difficulty/hard]
 sources: []
----
+---\
 # Вопрос (RU)
 > Как устроено внутреннее функционирование Android Runtime (ART)?
 
@@ -177,7 +177,7 @@ enum class CompilationFilter {
 
 (The actual set/semantics can differ between Android releases; this is illustrative.)
 
-**Garbage Collection and Generational Behavior (conceptual):**
+**Garbage `Collection` and Generational Behavior (conceptual):**
 
 ART uses multiple collectors (e.g., concurrent copying, CMS, space-based) and heap spaces to:
 - collect short-lived objects more frequently and cheaply;

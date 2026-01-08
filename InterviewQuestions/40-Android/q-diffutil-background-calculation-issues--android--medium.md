@@ -1,4 +1,4 @@
----
+---\
 id: android-473
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
 aliases: [DiffUtil Background Calculation Issues, DiffUtil background issues, Проблемы DiffUtil в фоне, Проблемы фонового вычисления DiffUtil]
@@ -16,12 +16,12 @@ updated: 2025-11-02
 tags: [android/performance-memory, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
 sources:
   - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
----
+---\
 # Вопрос (RU)
-> Когда фоновое вычисление DiffUtil работает плохо?
+> Когда фоновое вычисление `DiffUtil` работает плохо?
 
 # Question (EN)
-> When does DiffUtil background calculation work poorly?
+> When does `DiffUtil` background calculation work poorly?
 
 ---
 
@@ -413,7 +413,7 @@ fun updateUsers(newUsers: List<User>) {
 **Problem:**
 
 Complex operations in `areContentsTheSame()` are invoked many times during `DiffUtil` calculation (Myers-based algorithm: average O(N * D), worst-case O(N²)). Even on a background thread this can cause:
-- Long computations — `DiffUtil` is blocked by heavy operations
+- `Long` computations — `DiffUtil` is blocked by heavy operations
 - Repeated work — same data processed multiple times
 - Increased total time — runtime grows with callback complexity
 
@@ -467,7 +467,7 @@ class MessageDiffCallback(
 **Problem:**
 
 `DiffUtil` uses the Myers algorithm. It runs in O(N * D) on average but can degrade to O(N²) in the worst case. For large lists this can lead to:
-- Long calculations — can take noticeable time even on a background thread
+- `Long` calculations — can take noticeable time even on a background thread
 - Background thread saturation — if sharing the same pool, it can delay other work
 - UX degradation — lag between data change and UI update
 
@@ -710,13 +710,13 @@ override fun onBindViewHolder(
 - [[c-memory-management]]
 
 ### Prerequisites (Easier)
-- RecyclerView basics and adapter patterns
+- `RecyclerView` basics and adapter patterns
 - Coroutines and background threading
 
 ### Related (Same Level)
 - Main causes of UI lag
-- RecyclerView optimization techniques
+- `RecyclerView` optimization techniques
 
 ### Advanced (Harder)
-- Custom DiffUtil algorithm implementation
+- Custom `DiffUtil` algorithm implementation
 - Paging 3 library for large datasets

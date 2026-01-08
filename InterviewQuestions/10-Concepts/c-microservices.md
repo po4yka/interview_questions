@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-rest-api, c-message-queues, c-system-design, c-scaling-strategies, c-load-balancing]
+moc: "moc-cs"
+related: ["c-rest-api", "c-message-queues", "c-system-design", "c-scaling-strategies", "c-load-balancing"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

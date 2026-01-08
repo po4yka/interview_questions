@@ -14,7 +14,7 @@ related: [c-jetpack-compose, q-how-does-fragment-lifecycle-differ-from-activity-
 created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/jetpack/compose/animation/overview]
-tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animations, compose, difficulty/hard, hero-animations, navigation, shared-elements, transitions]
+tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animations, difficulty/hard, hero-animations, navigation, shared-elements, transitions]
 ---
 # Вопрос (RU)
 

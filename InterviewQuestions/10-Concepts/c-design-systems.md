@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-175957"
 title: "Design Systems / Design Systems"
 aliases: ["Design Systems"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-system-design"
-related: [c-material-design, c-design-tokens, c-theming, c-accessibility]
+related: ["c-material-design", "c-design-tokens", "c-theming", "c-accessibility"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
----
+tags: [concept, difficulty/medium, system-design]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ Design System (дизайн-система) — это структуриров�
 ## Key Points (EN)
 
 - Consistency and brand alignment: Centralizes visual language (colors, typography, spacing, iconography) and interaction patterns to keep products visually and behaviorally consistent.
-- Reusable components: Provides a library of coded UI components (e.g., buttons, inputs, layouts) that can be shared across teams, reducing implementation time and UI bugs.
+- Reusable components: `Provides` a library of coded UI components (e.g., buttons, inputs, layouts) that can be shared across teams, reducing implementation time and UI bugs.
 - Design tokens: Encodes core style decisions (colors, sizes, radii, shadows) as platform-agnostic variables, enabling easy theming and cross-platform synchronization.
 - Governance and documentation: Includes contribution rules, review processes, and usage guidelines to keep the system evolving without chaos.
 - Scalability and efficiency: Speeds up feature delivery, simplifies onboarding, and makes large-scale redesigns and accessibility improvements more manageable.

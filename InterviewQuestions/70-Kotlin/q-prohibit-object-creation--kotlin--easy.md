@@ -13,7 +13,7 @@ moc: moc-kotlin
 related: [c-kotlin, q-sequences-vs-collections-performance--kotlin--medium, q-structured-concurrency-violations--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [classes, constructor, design, difficulty/easy, kotlin, singleton]
+tags: [classes, constructors, design, difficulty/easy, kotlin, singleton]
 ---
 # Вопрос (RU)
 

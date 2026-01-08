@@ -1,70 +1,78 @@
----
-id: ivc-20251030-140000
-title: View Lifecycle / Жизненный цикл View
-aliases: [Custom View Lifecycle, Lifecycle View, View Lifecycle, Жизненный цикл View]
-kind: concept
-summary: Android View lifecycle methods from creation to cleanup
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, custom-views, lifecycle, ui]
----
+---\
+id: "20251030-140000"
+title: "View Lifecycle / Жизненный цикл View"
+aliases: ["Custom View Lifecycle", "Lifecycle View", "View Lifecycle", "Жизненный цикл View"]
+summary: "Android View lifecycle methods from creation to cleanup"
+topic: "android"
+subtopics: ["custom-views", "lifecycle", "ui"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "concept", "custom-views", "lifecycle", "ui", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-The Android View lifecycle defines the sequence of callback methods invoked as a View is created, attached to a window, measured, laid out, drawn, and eventually detached. Understanding this lifecycle is critical for custom views to properly allocate resources, handle state, and clean up when destroyed.
+The Android `View` lifecycle defines the sequence of callback methods invoked as a `View` is created, attached to a window, measured, laid out, drawn, and eventually detached. Understanding this lifecycle is critical for custom views to properly allocate resources, handle state, and clean up when destroyed.
 
-**Core Lifecycle Sequence**:
-1. **Constructor** - View instantiation
-2. **onAttachedToWindow()** - View attached to window, acquire resources
+**Core `Lifecycle` Sequence**:
+1. **Constructor** - `View` instantiation
+2. **onAttachedToWindow()** - `View` attached to window, acquire resources
 3. **onMeasure()** - Calculate view dimensions
 4. **onLayout()** - Position child views
 5. **onDraw()** - Render view content
-6. **onDetachedFromWindow()** - View removed from window, release resources
+6. **onDetachedFromWindow()** - `View` removed from window, release resources
 
 # Сводка (RU)
 
-Жизненный цикл View определяет последовательность вызова методов-обратного вызова при создании View, присоединении к окну, измерении, размещении, отрисовке и, в конечном итоге, отсоединении. Понимание этого цикла критически важно для custom views, чтобы правильно выделять ресурсы, управлять состоянием и освобождать память при уничтожении.
+Жизненный цикл `View` определяет последовательность вызова методов-обратного вызова при создании `View`, присоединении к окну, измерении, размещении, отрисовке и, в конечном итоге, отсоединении. Понимание этого цикла критически важно для custom views, чтобы правильно выделять ресурсы, управлять состоянием и освобождать память при уничтожении.
 
 **Основная последовательность жизненного цикла**:
-1. **Конструктор** - Создание экземпляра View
-2. **onAttachedToWindow()** - View присоединена к окну, получить ресурсы
+1. **Конструктор** - Создание экземпляра `View`
+2. **onAttachedToWindow()** - `View` присоединена к окну, получить ресурсы
 3. **onMeasure()** - Вычислить размеры view
 4. **onLayout()** - Разместить дочерние view
 5. **onDraw()** - Отрисовать содержимое view
-6. **onDetachedFromWindow()** - View удалена из окна, освободить ресурсы
+6. **onDetachedFromWindow()** - `View` удалена из окна, освободить ресурсы
 
 ---
 
 ## Lifecycle Methods (EN)
 
-**Constructor(context: Context, attrs: AttributeSet?)**: Initialize view, parse custom attributes from XML. Keep lightweight - avoid heavy operations.
+**Constructor(context: `Context`, attrs: AttributeSet?)**: Initialize view, parse custom attributes from XML. Keep lightweight - avoid heavy operations.
 
-**onAttachedToWindow()**: View added to window hierarchy. Start animations, register listeners, acquire resources. Called when view becomes visible to user.
+**onAttachedToWindow()**: `View` added to window hierarchy. Start animations, register listeners, acquire resources. Called when view becomes visible to user.
 
-**onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)**: Calculate desired dimensions based on constraints. Must call `setMeasuredDimension()`. May be called multiple times.
+**onMeasure(widthMeasureSpec: `Int`, heightMeasureSpec: `Int`)**: Calculate desired dimensions based on constraints. Must call `setMeasuredDimension()`. May be called multiple times.
 
-**onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)**: Position child views. Only relevant for ViewGroups. Final position/size now known.
+**onLayout(changed: `Boolean`, left: `Int`, top: `Int`, right: `Int`, bottom: `Int`)**: Position child views. Only relevant for ViewGroups. Final position/size now known.
 
-**onDraw(canvas: Canvas)**: Render view content. Performance-critical - avoid allocations. Use `invalidate()` to trigger redraw.
+**onDraw(canvas: `Canvas`)**: Render view content. Performance-critical - avoid allocations. Use `invalidate()` to trigger redraw.
 
-**onDetachedFromWindow()**: View removed from window. Stop animations, unregister listeners, release resources. Mirror of `onAttachedToWindow()`.
+**onDetachedFromWindow()**: `View` removed from window. Stop animations, unregister listeners, release resources. Mirror of `onAttachedToWindow()`.
 
 **onSaveInstanceState()** / **onRestoreInstanceState()**: Save/restore view state across configuration changes or process death.
 
 ## Методы Жизненного Цикла (RU)
 
-**Конструктор(context: Context, attrs: AttributeSet?)**: Инициализация view, парсинг атрибутов из XML. Должен быть легковесным - избегать тяжелых операций.
+**Конструктор(context: `Context`, attrs: AttributeSet?)**: Инициализация view, парсинг атрибутов из XML. Должен быть легковесным - избегать тяжелых операций.
 
-**onAttachedToWindow()**: View добавлена в иерархию окна. Запустить анимации, зарегистрировать слушатели, получить ресурсы. Вызывается, когда view становится видимой для пользователя.
+**onAttachedToWindow()**: `View` добавлена в иерархию окна. Запустить анимации, зарегистрировать слушатели, получить ресурсы. Вызывается, когда view становится видимой для пользователя.
 
-**onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)**: Вычислить желаемые размеры на основе ограничений. Обязательно вызвать `setMeasuredDimension()`. Может вызываться многократно.
+**onMeasure(widthMeasureSpec: `Int`, heightMeasureSpec: `Int`)**: Вычислить желаемые размеры на основе ограничений. Обязательно вызвать `setMeasuredDimension()`. Может вызываться многократно.
 
-**onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)**: Разместить дочерние view. Актуально только для ViewGroups. Финальная позиция/размер теперь известны.
+**onLayout(changed: `Boolean`, left: `Int`, top: `Int`, right: `Int`, bottom: `Int`)**: Разместить дочерние view. Актуально только для ViewGroups. Финальная позиция/размер теперь известны.
 
-**onDraw(canvas: Canvas)**: Отрисовать содержимое view. Критично для производительности - избегать аллокаций. Использовать `invalidate()` для перерисовки.
+**onDraw(canvas: `Canvas`)**: Отрисовать содержимое view. Критично для производительности - избегать аллокаций. Использовать `invalidate()` для перерисовки.
 
-**onDetachedFromWindow()**: View удалена из окна. Остановить анимации, отменить регистрацию слушателей, освободить ресурсы. Зеркальный метод для `onAttachedToWindow()`.
+**onDetachedFromWindow()**: `View` удалена из окна. Остановить анимации, отменить регистрацию слушателей, освободить ресурсы. Зеркальный метод для `onAttachedToWindow()`.
 
 **onSaveInstanceState()** / **onRestoreInstanceState()**: Сохранить/восстановить состояние view при изменении конфигурации или уничтожении процесса.
 
@@ -175,6 +183,6 @@ class CustomProgressView @JvmOverloads constructor(
 
 ## References
 
-- [Android View Documentation](https://developer.android.com/reference/android/view/View)
-- [Custom View Components Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
+- [Android `View` Documentation](https://developer.android.com/reference/android/view/View)
+- [Custom `View` Components Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 - [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)

@@ -1,30 +1,38 @@
----
-id: ivc-20251030-143000
-title: OkHttp / OkHttp
-aliases: [OkHttp, OkHttp Library, Square OkHttp]
-kind: concept
-summary: Efficient HTTP client for Android and Java by Square
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, http, networking, okhttp]
----
+---\
+id: "20251030-143000"
+title: "OkHttp / OkHttp"
+aliases: ["OkHttp", "OkHttp Library", "Square OkHttp"]
+summary: "Efficient HTTP client for Android and Java by Square"
+topic: "android"
+subtopics: ["http", "networking", "okhttp"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "concept", "http", "networking", "okhttp", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-OkHttp is a modern, efficient HTTP client for Android and Java developed by Square. It provides advanced features like connection pooling, transparent GZIP compression, HTTP/2 support, and automatic retry mechanisms. OkHttp is the foundation for Retrofit and many other networking libraries.
+`OkHttp` is a modern, efficient HTTP client for Android and Java developed by Square. It provides advanced features like connection pooling, transparent GZIP compression, HTTP/2 support, and automatic retry mechanisms. `OkHttp` is the foundation for `Retrofit` and many other networking libraries.
 
 **Core Features**:
 - Connection pooling for reduced latency
 - HTTP/2 and WebSocket support
 - Transparent GZIP compression
-- Response caching
+- `Response` caching
 - Interceptor chain for request/response manipulation
 - Automatic handling of common connection problems
 
 # Сводка (RU)
 
-OkHttp - современный, эффективный HTTP-клиент для Android и Java, разработанный компанией Square. Предоставляет продвинутые возможности, такие как пулинг соединений, прозрачное сжатие GZIP, поддержка HTTP/2 и автоматические механизмы повторных попыток. OkHttp является основой для Retrofit и многих других сетевых библиотек.
+`OkHttp` - современный, эффективный HTTP-клиент для Android и Java, разработанный компанией Square. Предоставляет продвинутые возможности, такие как пулинг соединений, прозрачное сжатие GZIP, поддержка HTTP/2 и автоматические механизмы повторных попыток. `OkHttp` является основой для `Retrofit` и многих других сетевых библиотек.
 
 **Основные возможности**:
 - Пулинг соединений для снижения латентности
@@ -38,25 +46,25 @@ OkHttp - современный, эффективный HTTP-клиент для
 
 ## Core Concept (EN)
 
-**Connection Pooling**: OkHttp maintains a pool of connections that can be reused, reducing latency and improving performance. Connections are automatically released when idle.
+**Connection Pooling**: `OkHttp` maintains a pool of connections that can be reused, reducing latency and improving performance. Connections are automatically released when idle.
 
 **HTTP/2 Support**: Multiple requests to the same host share a single socket, improving efficiency through multiplexing.
 
 **Interceptors**: Powerful mechanism to observe, modify, and retry requests. Interceptors can be added at application or network level.
 
-**Automatic Retries**: OkHttp automatically recovers from common connection failures, including routing failures and socket timeout exceptions.
+**Automatic Retries**: `OkHttp` automatically recovers from common connection failures, including routing failures and socket timeout exceptions.
 
 **Caching**: Built-in response cache that respects HTTP cache headers, reducing bandwidth and improving response times.
 
 ## Основная Концепция (RU)
 
-**Пулинг соединений**: OkHttp поддерживает пул соединений, которые можно переиспользовать, снижая латентность и улучшая производительность. Соединения автоматически освобождаются при простое.
+**Пулинг соединений**: `OkHttp` поддерживает пул соединений, которые можно переиспользовать, снижая латентность и улучшая производительность. Соединения автоматически освобождаются при простое.
 
 **Поддержка HTTP/2**: Множественные запросы к одному хосту разделяют один сокет, повышая эффективность через мультиплексирование.
 
 **Перехватчики**: Мощный механизм для наблюдения, модификации и повтора запросов. Перехватчики можно добавлять на уровне приложения или сети.
 
-**Автоматические повторы**: OkHttp автоматически восстанавливается после распространенных ошибок соединения, включая ошибки маршрутизации и таймауты сокета.
+**Автоматические повторы**: `OkHttp` автоматически восстанавливается после распространенных ошибок соединения, включая ошибки маршрутизации и таймауты сокета.
 
 **Кэширование**: Встроенный кэш ответов, учитывающий HTTP-заголовки кэширования, снижает использование трафика и улучшает время отклика.
 
@@ -72,7 +80,7 @@ OkHttp - современный, эффективный HTTP-клиент для
 
 **WebSocket Support**: Full-duplex communication over a single TCP connection.
 
-**Integration with Retrofit**: Retrofit uses OkHttp as its HTTP client, benefiting from all OkHttp features.
+**Integration with `Retrofit`**: `Retrofit` uses `OkHttp` as its HTTP client, benefiting from all `OkHttp` features.
 
 ## Ключевые Возможности (RU)
 
@@ -84,7 +92,7 @@ OkHttp - современный, эффективный HTTP-клиент для
 
 **Поддержка WebSocket**: Полнодуплексная коммуникация через одно TCP-соединение.
 
-**Интеграция с Retrofit**: Retrofit использует OkHttp в качестве HTTP-клиента, получая все преимущества OkHttp.
+**Интеграция с `Retrofit`**: `Retrofit` использует `OkHttp` в качестве HTTP-клиента, получая все преимущества `OkHttp`.
 
 ---
 
@@ -147,14 +155,14 @@ fun makeRequest() {
 - File downloads/uploads with progress tracking
 - WebSocket real-time communication
 - Custom authentication flows via interceptors
-- Response caching for offline support
+- `Response` caching for offline support
 - Certificate pinning for enhanced security
 
 **Trade-offs**:
 - Adds ~1MB to APK size
 - Requires manual lifecycle management for requests
 - Callback-based API (can be wrapped with coroutines)
-- More verbose than higher-level libraries like Retrofit
+- More verbose than higher-level libraries like `Retrofit`
 
 **Best Practices**:
 - Use a single `OkHttpClient` instance per application

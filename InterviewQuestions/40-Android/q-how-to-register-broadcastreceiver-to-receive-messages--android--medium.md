@@ -1,4 +1,4 @@
----
+---\
 id: android-163
 title: "How To Register Broadcastreceiver To Receive Messages / Как зарегистрировать BroadcastReceiver для получения сообщений"
 aliases: ["How To Register BroadcastReceiver", "Как зарегистрировать BroadcastReceiver"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android, android/broadcast-receiver, difficulty/medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Как зарегистрировать `BroadcastReceiver` для получения сообщений?
@@ -254,7 +254,7 @@ class EventBus {
 - Что произойдет, если забыть вызвать `unregisterReceiver` для динамически зарегистрированного ресивера?
 - Как Android обрабатывает приоритет в упорядоченных (ordered) broadcast'ах?
 - Каковы риски для безопасности при использовании экспортированных ресиверов?
-- Когда стоит предпочесть WorkManager вместо `BroadcastReceiver`?
+- Когда стоит предпочесть `WorkManager` вместо `BroadcastReceiver`?
 - Как тестировать реализации `BroadcastReceiver`?
 
 ## Follow-ups
@@ -262,7 +262,7 @@ class EventBus {
 - What happens if you forget to unregister a dynamically registered receiver?
 - How does Android handle priority in ordered broadcasts?
 - What are the security implications of using exported receivers?
-- When should you prefer WorkManager over `BroadcastReceiver`?
+- When should you prefer `WorkManager` over `BroadcastReceiver`?
 - How do you test `BroadcastReceiver` implementations?
 
 ## Ссылки (RU)
@@ -297,8 +297,8 @@ class EventBus {
 - [[q-what-is-broadcastreceiver--android--easy]] - What is `BroadcastReceiver`
 
 ### Related (Medium)
-- [[q-what-does-the-lifecycle-library-do--android--medium]] - Lifecycle management
-- [[q-how-animations-work-in-recyclerview--android--medium]] - Component lifecycle
+- [[q-what-does-the-lifecycle-library-do--android--medium]] - `Lifecycle` management
+- [[q-how-animations-work-in-recyclerview--android--medium]] - `Component` lifecycle
 
 ### Advanced (Harder)
 - [[q-why-was-the-lifecycle-library-created--android--hard]] - Advanced lifecycle concepts

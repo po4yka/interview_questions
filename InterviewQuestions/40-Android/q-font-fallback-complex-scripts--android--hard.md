@@ -1,4 +1,4 @@
----
+---\
 id: android-643
 title: Font Fallback for Complex Scripts / Резерв шрифтов для сложных скриптов
 aliases: [Font Fallback for Complex Scripts, Резерв шрифтов для сложных скриптов]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/guide/topics/resources/font-resource"
   - "https://developer.android.com/guide/topics/text/downloadable-fonts"
   - "https://material.io/design/typography/international-typography.html"
----
+---\
 # Вопрос (RU)
 
 > Как обеспечить корректное отображение сложных скриптов (CJK, арабский, индийские письменности) в Android: настройте font fallback цепочки с Noto шрифтами, используйте downloadable fonts для динамической загрузки, корректно учитывайте ligatures и complex shaping. Тестируйте на реальных устройствах с accessibility scaling.
@@ -234,7 +234,7 @@ class FontCache {
 
 ### 4. Rendering Настройки
 
-**TextView optimization:**
+**`TextView` optimization:**
 ```kotlin
 class OptimizedTextView(context: Context, attrs: AttributeSet? = null) : AppCompatTextView(context, attrs) {
     init {
@@ -613,7 +613,7 @@ class FontCache {
 
 ### 4. Rendering Settings
 
-**TextView optimization:**
+**`TextView` optimization:**
 ```kotlin
 class OptimizedTextView(context: Context, attrs: AttributeSet? = null) : AppCompatTextView(context, attrs) {
     init {

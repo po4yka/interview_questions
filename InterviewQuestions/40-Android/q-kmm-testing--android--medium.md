@@ -1,4 +1,4 @@
----
+---\
 id: android-400
 title: "KMM Testing / Тестирование в KMM"
 aliases: [KMM Testing, Kotlin Multiplatform Testing, Тестирование KMM, Тестирование Kotlin Multiplatform]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium, kotlin, multiplatform, testing]
 
----
+---\
 # Вопрос (RU)
 > Объясните стратегии тестирования KMM проектов. Как писать тесты в commonTest, androidTest и iosTest? Как мокировать платформо-специфичные зависимости?
 
@@ -241,7 +241,7 @@ fun `loadTasks обновляет состояние`() = runTest {
 
 **Android (инструментальные / JVM):**
 
-Платформенный код (например, работа с `Context`, SharedPreferences, файлами) тестируется в `androidUnitTest` (JVM unit-тесты) или `androidTest` (инструментальные тесты на устройстве/эмуляторе).
+Платформенный код (например, работа с `Context`, `SharedPreferences`, файлами) тестируется в `androidUnitTest` (JVM unit-тесты) или `androidTest` (инструментальные тесты на устройстве/эмуляторе).
 
 ```kotlin
 // Не используйте реальный Context в commonTest
@@ -489,7 +489,7 @@ class FakeLogger : PlatformLogger {
 
 ### `Coroutine` Testing
 
-Inject a dispatcher provider (e.g., `CoroutineDispatchers`) and use test dispatchers in `commonTest`.
+`Inject` a dispatcher provider (e.g., `CoroutineDispatchers`) and use test dispatchers in `commonTest`.
 
 ```kotlin
 object TestDispatchers : CoroutineDispatchers {
@@ -515,7 +515,7 @@ fun `loadTasks updates state`() = runTest {
 
 **Android:**
 
-Use `androidUnitTest` (JVM unit tests) or `androidTest` (instrumented tests on device/emulator) for Android-specific code (`Context`, SharedPreferences, files, etc.).
+Use `androidUnitTest` (JVM unit tests) or `androidTest` (instrumented tests on device/emulator) for Android-specific code (`Context`, `SharedPreferences`, files, etc.).
 
 ```kotlin
 // Don't use real Context in commonTest

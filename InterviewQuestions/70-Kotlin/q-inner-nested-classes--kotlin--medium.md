@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-233
 title: "Inner vs Nested Classes in Kotlin / Внутренние и вложенные классы в Kotlin"
 aliases: ["Inner vs Nested Classes", "Внутренние vs вложенные классы"]
@@ -16,7 +16,7 @@ updated: "2025-11-11"
 tags: [difficulty/medium, kotlin/classes, kotlin/inner-classes, kotlin/nested-classes]
 sources: ["https://kotlinlang.org/docs/nested-classes.html"]
 
----
+---\
 # Вопрос (RU)
 > В чём разница между внутренними (inner) и вложенными (nested) классами в Kotlin?
 
@@ -218,7 +218,7 @@ class Outer {
 }
 ```
 
-**Practical Application:**
+**Practical `Application`:**
 ```kotlin
 class ViewHolder(private val view: View) {
     private val data = "ViewHolder Data"

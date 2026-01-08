@@ -14,7 +14,7 @@ related: [c-compose-recomposition, c-compose-state, q-compose-stability-skippabi
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/performance-rendering, android/ui-compose, difficulty/hard, jetpack-compose, recomposition, stable-annotation]
+tags: [android/performance-rendering, android/ui-compose, difficulty/hard, recomposition, stable-annotation]
 
 ---
 # Вопрос (RU)

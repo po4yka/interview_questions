@@ -1,4 +1,4 @@
----
+---\
 id: android-043
 title: Gradle Build Optimization / Оптимизация сборки Gradle
 aliases: [Gradle Build Optimization, Оптимизация сборки Gradle]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-11
 updated: 2025-11-10
 tags: [android/build-variants, android/ci-cd, android/dependency-management, android/gradle, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Как оптимизировать сборку Gradle в Android?
 
@@ -64,7 +64,7 @@ buildCache {
 
 **3. KSP вместо KAPT**
 - KSP избегает генерации Java-стабов; обычно заметно быстрее (часто до ~2×)
-- Поддерживается: Room, Hilt, Moshi
+- Поддерживается: `Room`, `Hilt`, `Moshi`
 
 ```kotlin
 // ❌ Медленный KAPT
@@ -176,7 +176,7 @@ buildCache {
 
 **3. KSP instead of KAPT**
 - KSP avoids Java stub generation; typically significantly faster (often up to around 2×)
-- Supported by: Room, Hilt, Moshi
+- Supported by: `Room`, `Hilt`, `Moshi`
 
 ```kotlin
 // ❌ Slow KAPT
@@ -254,7 +254,7 @@ When enabling configuration cache, watch for reported incompatibilities and fix 
 
 - How do you make a custom Gradle task cacheable with proper input/output declarations?
 - What breaks configuration cache compatibility and how do you debug it?
-- How do you migrate from KAPT to KSP for Room and Hilt processors?
+- How do you migrate from KAPT to KSP for `Room` and `Hilt` processors?
 - What's the difference between local and remote build cache, and when to use each?
 - How do you measure the ROI of modularization on build performance?
 
@@ -276,7 +276,7 @@ When enabling configuration cache, watch for reported incompatibilities and fix 
 - [[q-android-build-optimization--android--medium]] — General Android build optimization strategies
 
 ### Related (Same Level)
-- [[q-android-modularization--android--medium]] — Module structure for better build performance
+- [[q-android-modularization--android--medium]] — `Module` structure for better build performance
 
 ### Advanced (Harder)
 - [[q-cicd-pipeline-android--android--medium]] — CI/CD setup with build caching

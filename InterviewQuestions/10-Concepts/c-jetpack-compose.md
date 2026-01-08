@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-140100"
 title: "Jetpack Compose / Jetpack Compose"
 aliases: ["Compose", "Declarative UI", "Jetpack Compose UI", "Jetpack Compose", "Декларативный UI", "Композ"]
@@ -12,21 +12,21 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-viewmodel, c-compose-state, c-compose-recomposition, c-lifecycle, c-navigation]
+related: ["c-viewmodel", "c-compose-state", "c-compose-recomposition", "c-lifecycle", "c-navigation"]
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["android", "composables", "concept", "declarative-ui", "difficulty/medium", "jetpack-compose", "recomposition", "ui"]
----
+tags: [android, composables, concept, declarative-ui, difficulty/medium, android/ui-compose, recomposition, ui]
+---\
 
 # Jetpack Compose / Jetpack Compose
 
 ## Summary (EN)
 
-Jetpack Compose is Android's modern, declarative UI toolkit that simplifies and accelerates UI development. Unlike the traditional View-based system, Compose allows developers to describe what the UI should look like based on the current state, and the framework handles UI updates automatically. It uses Kotlin language features, composable functions, and a reactive programming model to create dynamic, responsive interfaces with less boilerplate code.
+Jetpack Compose is Android's modern, declarative UI toolkit that simplifies and accelerates UI development. Unlike the traditional `View`-based system, Compose allows developers to describe what the UI should look like based on the current state, and the framework handles UI updates automatically. It uses Kotlin language features, composable functions, and a reactive programming model to create dynamic, responsive interfaces with less boilerplate code.
 
 ## Краткое Описание (RU)
 
-Jetpack Compose - это современный декларативный UI-инструментарий Android, который упрощает и ускоряет разработку пользовательского интерфейса. В отличие от традиционной системы на основе View, Compose позволяет разработчикам описывать, как должен выглядеть UI на основе текущего состояния, а фреймворк автоматически обрабатывает обновления UI. Использует возможности языка Kotlin, компонуемые функции и реактивную модель программирования для создания динамичных, отзывчивых интерфейсов с меньшим количеством шаблонного кода.
+Jetpack Compose - это современный декларативный UI-инструментарий Android, который упрощает и ускоряет разработку пользовательского интерфейса. В отличие от традиционной системы на основе `View`, Compose позволяет разработчикам описывать, как должен выглядеть UI на основе текущего состояния, а фреймворк автоматически обрабатывает обновления UI. Использует возможности языка Kotlin, компонуемые функции и реактивную модель программирования для создания динамичных, отзывчивых интерфейсов с меньшим количеством шаблонного кода.
 
 ## Key Points (EN)
 
@@ -34,9 +34,9 @@ Jetpack Compose - это современный декларативный UI-и
 - **Composable Functions**: UI components are Kotlin functions annotated with `@Composable`
 - **Recomposition**: Automatic UI updates when state changes
 - **State Management**: Built-in state primitives (`remember`, `mutableStateOf`, `derivedStateOf`)
-- **Unidirectional Data Flow**: State flows down, events flow up
+- **Unidirectional Data `Flow`**: State flows down, events flow up
 - **Kotlin-first**: Leverages Kotlin features (lambdas, default parameters, DSL)
-- **Interoperability**: Works with existing View-based code (AndroidView, ComposeView)
+- **Interoperability**: Works with existing `View`-based code (AndroidView, ComposeView)
 - **Material Design 3**: Built-in Material Design components
 - **Performance**: Optimized for minimal recompositions, skip optimizations
 - **Tooling**: Live preview, layout inspector, semantic tree debugging
@@ -49,7 +49,7 @@ Jetpack Compose - это современный декларативный UI-и
 - **Управление состоянием**: Встроенные примитивы состояния (`remember`, `mutableStateOf`, `derivedStateOf`)
 - **Однонаправленный поток данных**: Состояние течёт вниз, события вверх
 - **Kotlin-first**: Использует возможности Kotlin (лямбды, параметры по умолчанию, DSL)
-- **Совместимость**: Работает с существующим View-кодом (AndroidView, ComposeView)
+- **Совместимость**: Работает с существующим `View`-кодом (AndroidView, ComposeView)
 - **Material Design 3**: Встроенные компоненты Material Design
 - **Производительность**: Оптимизация для минимальных рекомпозиций, пропуск оптимизаций
 - **Инструменты**: Живой предварительный просмотр, инспектор макетов, отладка семантического дерева
@@ -68,11 +68,11 @@ Jetpack Compose - это современный декларативный UI-и
 
 ### When to Avoid
 
-- **Legacy apps with heavy View investment**: Migration cost may be high
+- **Legacy apps with heavy `View` investment**: Migration cost may be high
 - **WebView-heavy apps**: Compose doesn't add much value
-- **Custom View-heavy apps**: Complex custom Views may be harder to port
+- **Custom `View`-heavy apps**: Complex custom Views may be harder to port
 - **Team unfamiliar with Kotlin**: Requires Kotlin knowledge
-- **Tight deadlines with View expertise**: Learning curve may slow initial development
+- **Tight deadlines with `View` expertise**: Learning curve may slow initial development
 
 ## Trade-offs
 
@@ -87,11 +87,11 @@ Jetpack Compose - это современный декларативный UI-и
 - **Smaller APK**: No XML inflation overhead
 
 **Cons**:
-- **Learning curve**: New mental model for View-based developers
-- **Ecosystem maturity**: Fewer third-party libraries than View system
+- **Learning curve**: New mental model for `View`-based developers
+- **Ecosystem maturity**: Fewer third-party libraries than `View` system
 - **Debugging complexity**: Recomposition can be hard to debug
 - **Performance pitfalls**: Easy to trigger unnecessary recompositions
-- **Limited customization**: Some advanced View features not yet available
+- **Limited customization**: Some advanced `View` features not yet available
 - **Breaking changes**: API still evolving (though stable since 1.0)
 - **Build times**: Kotlin compilation can be slower than XML
 
@@ -535,10 +535,10 @@ Card(
 
 ## Related Concepts
 
-- [[c-viewmodel]] - State management with ViewModel
+- [[c-viewmodel]] - State management with `ViewModel`
 - [[c-coroutines]] - Asynchronous operations in Compose
 - [[c-flow]] - Reactive data streams
-- [[c-dependency-injection]] - Hilt integration with Compose
+- [[c-dependency-injection]] - `Hilt` integration with Compose
 - [[c-navigation]] - Navigation component for Compose
 - [[c-material-design]] - Material Design 3 in Compose
 - [[c-accessibility]] - Accessibility in Compose

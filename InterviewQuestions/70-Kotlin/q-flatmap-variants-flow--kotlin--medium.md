@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-050
 title: "flatMapConcat vs flatMapMerge vs flatMapLatest / flatMapConcat против flatMapMerge против flatMapLatest"
 aliases: ["flatMapConcat vs flatMapMerge vs flatMapLatest", "flatMapConcat против flatMapMerge против flatMapLatest"]
@@ -25,7 +25,7 @@ created: 2025-10-06
 updated: 2025-11-10
 
 tags: [coroutines, difficulty/medium, flatmap, flow, kotlin, operators]
----
+---\
 # Вопрос (RU)
 > В чем разница между `flatMapConcat`, `flatMapMerge` и `flatMapLatest` в Kotlin `Flow`?
 
@@ -652,7 +652,7 @@ urls.asFlow()
 
 - [[c-kotlin]]
 - [[c-flow]]
-- [Операторы Flow - документация Kotlin](https://kotlinlang.org/docs/flow.html#flattening-flows)
+- [Операторы `Flow` - документация Kotlin](https://kotlinlang.org/docs/flow.html#flattening-flows)
 - [flatMap variants in Flow](https://elizarov.medium.com/reactive-streams-and-kotlin-flows-bfd12772cda4)
 
 ## References
@@ -665,29 +665,29 @@ urls.asFlow()
 ## Связанные Вопросы (RU)
 
 ### Средний Уровень
-- [[q-instant-search-flow-operators--kotlin--medium]] — Flow
-- [[q-catch-operator-flow--kotlin--medium]] — Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] — `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] — `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] — Coroutines
 - [[q-channel-flow-comparison--kotlin--medium]] — Coroutines
 
 ### Продвинутый Уровень
 - [[q-testing-flow-operators--kotlin--hard]] — Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] — Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] — `Flow`
 
 ### Хаб
-- [[q-kotlin-flow-basics--kotlin--medium]] — Введение в Flow
+- [[q-kotlin-flow-basics--kotlin--medium]] — Введение в `Flow`
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] - `Flow`
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

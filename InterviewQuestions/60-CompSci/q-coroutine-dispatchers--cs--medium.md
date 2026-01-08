@@ -1,4 +1,4 @@
----
+---\
 id: cs-020
 title: "Coroutine Dispatchers / Диспетчеры корутин"
 aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [coroutines, difficulty/medium, dispatchers, kotlin, programming-languages, threading]
 sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 
----
+---\
 # Вопрос (RU)
 > Что такое диспетчеры корутин? Какие типы диспетчеров существуют и когда их использовать?
 
@@ -110,7 +110,7 @@ launch(Dispatchers.Unconfined) {
 
 **Custom Dispatchers:**
 
-*Теория:* Custom dispatchers создаются для специфичных задач: ограничение размера пула потоков, однопоточное выполнение, кастомный Executor и т.п. `newSingleThreadContext()` создаёт single-threaded dispatcher. `newFixedThreadPoolContext(n)` (устаревший, deprecated) создавал dispatcher с фиксированным пулом потоков; вместо него рекомендуется использовать собственный ExecutorService + `asCoroutineDispatcher()`. `asCoroutineDispatcher()` конвертирует ExecutorService в dispatcher. Важно освобождать ресурсы таких диспетчеров.
+*Теория:* Custom dispatchers создаются для специфичных задач: ограничение размера пула потоков, однопоточное выполнение, кастомный `Executor` и т.п. `newSingleThreadContext()` создаёт single-threaded dispatcher. `newFixedThreadPoolContext(n)` (устаревший, deprecated) создавал dispatcher с фиксированным пулом потоков; вместо него рекомендуется использовать собственный ExecutorService + `asCoroutineDispatcher()`. `asCoroutineDispatcher()` конвертирует ExecutorService в dispatcher. Важно освобождать ресурсы таких диспетчеров.
 
 ```kotlin
 // ✅ Custom single-threaded dispatcher
@@ -180,7 +180,7 @@ repeat(10) {
 |--------|-----------|---------|
 | UI updates | Main | Только Main thread может обновлять UI |
 | Network requests | IO | Блокирующие/потенциально блокирующие I/O операции |
-| Database queries | IO | Блокирующие/потенциально блокирующие I/O операции |
+| `Database` queries | IO | Блокирующие/потенциально блокирующие I/O операции |
 | File I/O | IO | Блокирующие/потенциально блокирующие I/O операции |
 | JSON parsing | Default | CPU-intensive вычисления |
 | Sorting/filtering | Default | CPU-intensive вычисления |
@@ -189,7 +189,7 @@ repeat(10) {
 
 **Ключевые концепции:**
 
-1. **Thread Pool Management** — Dispatchers эффективно управляют пулами потоков.
+1. **`Thread` Pool Management** — Dispatchers эффективно управляют пулами потоков.
 2. **`Context` Switching** — `withContext` для безопасного переключения контекста внутри structured concurrency.
 3. **Blocking vs Non-blocking** — IO для I/O, Default для CPU-intensive; избегать блокирующего кода на Main и Default.
 4. **Structured Concurrency** — Dispatchers интегрированы с иерархией корутин и scope-ами.
@@ -280,7 +280,7 @@ launch(Dispatchers.Unconfined) {
 
 **Custom Dispatchers:**
 
-*Theory:* Custom dispatchers are created for specific needs: limiting thread pool size, single-threaded execution, using a custom Executor, etc. `newSingleThreadContext()` creates a single-threaded dispatcher. `newFixedThreadPoolContext(n)` (deprecated) used to create a fixed-size thread pool dispatcher; instead prefer your own ExecutorService plus `asCoroutineDispatcher()`. `asCoroutineDispatcher()` converts an ExecutorService into a dispatcher. It is important to properly release resources.
+*Theory:* Custom dispatchers are created for specific needs: limiting thread pool size, single-threaded execution, using a custom `Executor`, etc. `newSingleThreadContext()` creates a single-threaded dispatcher. `newFixedThreadPoolContext(n)` (deprecated) used to create a fixed-size thread pool dispatcher; instead prefer your own ExecutorService plus `asCoroutineDispatcher()`. `asCoroutineDispatcher()` converts an ExecutorService into a dispatcher. It is important to properly release resources.
 
 ```kotlin
 // ✅ Custom single-threaded dispatcher
@@ -350,7 +350,7 @@ repeat(10) {
 |------|-----------|--------|
 | UI updates | Main | Only the main thread can update UI |
 | Network requests | IO | Blocking/potentially blocking I/O operations |
-| Database queries | IO | Blocking/potentially blocking I/O operations |
+| `Database` queries | IO | Blocking/potentially blocking I/O operations |
 | File I/O | IO | Blocking/potentially blocking I/O operations |
 | JSON parsing | Default | CPU-intensive computations |
 | Sorting/filtering | Default | CPU-intensive computations |
@@ -359,7 +359,7 @@ repeat(10) {
 
 **Key Concepts:**
 
-1. **Thread Pool Management** - Dispatchers efficiently manage thread pools.
+1. **`Thread` Pool Management** - Dispatchers efficiently manage thread pools.
 2. **`Context` Switching** - `withContext` for safe context switching within structured concurrency.
 3. **Blocking vs Non-blocking** - IO for I/O, Default for CPU-intensive; avoid blocking on Main and Default.
 4. **Structured Concurrency** - Dispatchers integrate with coroutine scopes and job hierarchy.

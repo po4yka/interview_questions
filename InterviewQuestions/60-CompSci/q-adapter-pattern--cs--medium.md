@@ -1,4 +1,4 @@
----
+---\
 id: cs-009
 title: "Adapter Pattern / Adapter Паттерн"
 aliases: ["Adapter Pattern", "Паттерн Adapter"]
@@ -16,30 +16,30 @@ updated: 2025-11-11
 tags: [adapter, design-patterns, difficulty/medium, gof-patterns, structural-patterns, wrapper]
 sources: ["https://refactoring.guru/design-patterns/adapter"]
 
----
+---\
 # Вопрос (RU)
-> Что такое паттерн Adapter? Когда и зачем его использовать?
+> Что такое паттерн `Adapter`? Когда и зачем его использовать?
 
 # Question (EN)
-> What is the Adapter pattern? When and why should it be used?
+> What is the `Adapter` pattern? When and why should it be used?
 
 ---
 
 ## Ответ (RU)
 
-**Теория Adapter:**
-Adapter — структурный паттерн, который позволяет двум несовместимым интерфейсам работать вместе, действуя как мост между двумя классами с разными интерфейсами. Решает проблему невозможности прямого переиспользования класса из-за несовместимого интерфейса.
+**Теория `Adapter`:**
+`Adapter` — структурный паттерн, который позволяет двум несовместимым интерфейсам работать вместе, действуя как мост между двумя классами с разными интерфейсами. Решает проблему невозможности прямого переиспользования класса из-за несовместимого интерфейса.
 
 **Проблема:**
 Часто (уже существующий) класс не может быть переиспользован только потому, что его интерфейс не соответствует интерфейсу, требуемому клиентами или существующим абстракциям. Без адаптации клиентский код оказывается жёстко привязан к конкретным реализациям и их контрактам, что усложняет подмену реализаций и интеграцию стороннего кода.
 
 **Решение:**
-Определить отдельный класс "Adapter", который конвертирует (несовместимый) интерфейс класса ("Adaptee") в другой интерфейс ("Target"), требуемый клиентами. Клиент работает с Target, а Adapter внутри переадресует вызовы к Adaptee, позволяя переиспользовать существующие классы с несовместимым интерфейсом без их изменения.
+Определить отдельный класс "`Adapter`", который конвертирует (несовместимый) интерфейс класса ("Adaptee") в другой интерфейс ("Target"), требуемый клиентами. Клиент работает с Target, а `Adapter` внутри переадресует вызовы к Adaptee, позволяя переиспользовать существующие классы с несовместимым интерфейсом без их изменения.
 
 **Ключевые компоненты:**
 - **Target** — интерфейс, ожидаемый клиентом
 - **Adaptee** — существующая функциональность с несовместимым интерфейсом
-- **Adapter** — класс, который реализует интерфейс Target и оборачивает Adaptee
+- **`Adapter`** — класс, который реализует интерфейс Target и оборачивает Adaptee
 
 **Применение:**
 ```kotlin
@@ -84,7 +84,7 @@ class UserAdapter(private val users: List<User>) :
 }
 ```
 
-(Здесь Adapter выступает посредником, приводящим коллекцию "сырых" данных к форме, с которой умеет работать RecyclerView. Однако это не буквальный учебный пример GoF Adapter, а прикладная вариация идеи адаптации.)
+(Здесь `Adapter` выступает посредником, приводящим коллекцию "сырых" данных к форме, с которой умеет работать `RecyclerView`. Однако это не буквальный учебный пример GoF `Adapter`, а прикладная вариация идеи адаптации.)
 
 **Преимущества:**
 - Переиспользование существующего кода без его изменения
@@ -101,9 +101,9 @@ class UserAdapter(private val users: List<User>) :
 
 ## Дополнительные Вопросы (RU)
 
-- Отличия между Adapter и Decorator?
+- Отличия между `Adapter` и Decorator?
 - Когда использовать extension-функции, а когда адаптеры?
-- Лучшие практики использования RecyclerView адаптеров?
+- Лучшие практики использования `RecyclerView` адаптеров?
 
 ## Ссылки (RU)
 
@@ -124,21 +124,21 @@ class UserAdapter(private val users: List<User>) :
 
 ## Answer (EN)
 
-**Adapter Theory:**
-Adapter is a structural design pattern that lets two incompatible interfaces work together by acting as a bridge between classes with different interfaces. It solves the problem of not being able to directly reuse an existing class because its interface is incompatible with what the client expects.
+**`Adapter` Theory:**
+`Adapter` is a structural design pattern that lets two incompatible interfaces work together by acting as a bridge between classes with different interfaces. It solves the problem of not being able to directly reuse an existing class because its interface is incompatible with what the client expects.
 
 **Problem:**
 Often an existing class cannot be reused simply because its interface does not match the interface required by clients or existing abstractions. Without adaptation, client code becomes tightly coupled to concrete implementations and their contracts, which complicates swapping implementations and integrating third-party code.
 
 **Solution:**
-Define a separate "Adapter" class that converts the (incompatible) interface of a class (the "Adaptee") into another interface (the "Target") required by clients. The client works with Target, and the Adapter internally translates calls to the Adaptee, enabling reuse of existing classes with incompatible interfaces without modifying them.
+Define a separate "`Adapter`" class that converts the (incompatible) interface of a class (the "Adaptee") into another interface (the "Target") required by clients. The client works with Target, and the `Adapter` internally translates calls to the Adaptee, enabling reuse of existing classes with incompatible interfaces without modifying them.
 
 **Key Components:**
 - **Target** — interface expected by the client
 - **Adaptee** — existing functionality with an incompatible interface
-- **Adapter** — class that implements Target and wraps Adaptee
+- **`Adapter`** — class that implements Target and wraps Adaptee
 
-**Application:**
+**`Application`:**
 ```kotlin
 // ✅ Target interface
 interface ThreePinSocket {
@@ -161,7 +161,7 @@ class PlugAdapter(private val plug: TwoPinPlug) : ThreePinSocket {
 }
 ```
 
-**Android Application:**
+**Android `Application`:**
 ```kotlin
 // ✅ RecyclerView Adapter — an adapter between the data model and RecyclerView's view API
 class UserAdapter(private val users: List<User>) :
@@ -181,7 +181,7 @@ class UserAdapter(private val users: List<User>) :
 }
 ```
 
-(Here the adapter plays a mediator role, adapting a collection of raw data into the form that RecyclerView understands. It illustrates the idea of adaptation, though it is not a literal textbook GoF Adapter example.)
+(Here the adapter plays a mediator role, adapting a collection of raw data into the form that `RecyclerView` understands. It illustrates the idea of adaptation, though it is not a literal textbook GoF `Adapter` example.)
 
 **Advantages:**
 - Reuse of existing code without modification
@@ -198,9 +198,9 @@ class UserAdapter(private val users: List<User>) :
 
 ## Follow-ups
 
-- Adapter vs Decorator pattern differences?
+- `Adapter` vs Decorator pattern differences?
 - When to use extension functions vs adapters?
-- RecyclerView adapters best practices?
+- `RecyclerView` adapters best practices?
 
 ## References
 

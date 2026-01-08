@@ -36,12 +36,15 @@ You are working with a **personal Obsidian vault** designed to build and maintai
 ```
 📄 README.md (root level)
 📁 InterviewQuestions/    # Main content directory
-    ├─ Algorithms/     # LeetCode-style coding problems
-    ├─ Android/        # Android platform questions
-    ├─ Behavioural/    # Non-technical interview questions
-    ├─ CompSci/        # Computer science theory
-    ├─ Data Structures/ # Data structure implementations
-    └─ System Design/  # System design scenarios
+    ├─ 10-Concepts/       # Concept definitions
+    ├─ 20-Algorithms/     # LeetCode-style coding problems
+    ├─ 30-System-Design/  # System design scenarios
+    ├─ 40-Android/        # Android platform questions
+    ├─ 50-Backend/        # Backend development
+    ├─ 60-CompSci/        # Computer science theory
+    ├─ 70-Kotlin/         # Kotlin language
+    ├─ 80-Tools/          # Git, Docker, etc.
+    └─ 90-MOCs/           # Maps of Content
 ```
 
 ### File Naming Conventions (MANDATORY)
@@ -57,7 +60,7 @@ You are working with a **personal Obsidian vault** designed to build and maintai
 
 - Use kebab-case for all filenames
 - Keep filenames short and stable
-- Never include numbers in folder names
+- Use established numbered prefixes for top-level topic folders (e.g. `40-Android`)
 - Always use English for filenames
 
 ## YAML Frontmatter Template (REQUIRED)

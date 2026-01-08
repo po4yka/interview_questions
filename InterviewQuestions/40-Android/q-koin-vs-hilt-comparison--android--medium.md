@@ -1,4 +1,4 @@
----
+---\
 id: android-093
 title: "Koin Vs Hilt Comparison / Сравнение Koin и Hilt"
 aliases: ["Koin Vs Hilt Comparison", "Сравнение Koin и Hilt"]
@@ -16,22 +16,22 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/medium, hilt, koin]
 
----
+---\
 # Вопрос (RU)
 
-> Сравните Koin и Hilt детально. Когда вы бы выбрали один вместо другого? Обсудите compile-time vs runtime DI.
+> Сравните `Koin` и `Hilt` детально. Когда вы бы выбрали один вместо другого? Обсудите compile-time vs runtime DI.
 
 # Question (EN)
 
-> Compare Koin and Hilt in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
+> Compare `Koin` and `Hilt` in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
 
 ## Ответ (RU)
 
 ### Архитектурное Сравнение
 
-| Аспект | Koin | Hilt |
+| Аспект | `Koin` | `Hilt` |
 |--------|------|------|
-| **Паттерн** | DI через DSL, может использоваться как `Service` Locator | Компилируемый DI поверх Dagger |
+| **Паттерн** | DI через DSL, может использоваться как `Service` Locator | Компилируемый DI поверх `Dagger` |
 | **Разрешение** | Runtime (через DSL/registry) | Compile-time (генерация кода) |
 | **Верификация** | В основном runtime (есть checkModules()) | Compile-time |
 | **Время сборки** | Как правило быстрее (нет/минимум KAPT) | Медленнее (kapt/ksp, генерация кода) |
@@ -43,8 +43,8 @@ tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/m
 
 ### Compile-Time Vs Runtime DI
 
-**Compile-Time DI (Hilt):**
-- Генерация кода на этапе компиляции (Dagger под капотом)
+**Compile-Time DI (`Hilt`):**
+- Генерация кода на этапе компиляции (`Dagger` под капотом)
 - Граф зависимостей проверяется до запуска
 - Нет рефлексии для резолвинга зависимостей → обычно лучшая производительность
 - Большинство ошибок конфигурации обнаруживаются при сборке
@@ -62,7 +62,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository
 ```
 
-**Runtime DI (Koin):**
+**Runtime DI (`Koin`):**
 - Модули DSL регистрируются и загружаются при старте
 - Зависимости разрешаются на runtime при первом запросе
 - Простой декларативный синтаксис, но ошибки wiring-а проявляются в runtime
@@ -87,23 +87,23 @@ class MyApp : Application() {
 
 ### Матрица Решений
 
-**Выбирайте Koin:**
+**Выбирайте `Koin`:**
 - Kotlin Multiplatform проекты
 - MVP/прототипы (быстрая итерация)
 - Небольшие/средние приложения
 - Время сборки критично
 - Простота и гибкость важнее строгой compile-time типобезопасности
 
-**Выбирайте Hilt:**
+**Выбирайте `Hilt`:**
 - Только Android приложения
 - Крупномасштабные проекты (много модулей, большая команда)
 - Критична типобезопасность и compile-time проверка
 - Долгосрочная поддержка (официальная поддержка Google, 5+ лет горизонта)
-- Команда уже знакома с Dagger или готова инвестировать в изучение
+- Команда уже знакома с `Dagger` или готова инвестировать в изучение
 
 ### Лучшие Практики
 
-**Koin:**
+**`Koin`:**
 ```kotlin
 // ✅ Используйте checkModules() для базовой валидации графа
 class AppTest : KoinTest {
@@ -125,7 +125,7 @@ class Repository {
 }
 ```
 
-**Hilt:**
+**`Hilt`:**
 ```kotlin
 // ✅ Для простых связок интерфейс → реализация используйте @Binds
 @Module
@@ -148,9 +148,9 @@ object LegacyDataModule {
 
 ### Architecture Comparison
 
-| Aspect | Koin | Hilt |
+| Aspect | `Koin` | `Hilt` |
 |--------|------|------|
-| **Pattern** | DI via Kotlin DSL, can be used as `Service` Locator | Compile-time DI on top of Dagger |
+| **Pattern** | DI via Kotlin DSL, can be used as `Service` Locator | Compile-time DI on top of `Dagger` |
 | **Resolution** | Runtime (via DSL/registry) | Compile-time (code generation) |
 | **Verification** | Mostly runtime (has checkModules()) | Compile-time |
 | **Build Time** | Generally faster (no/heavy kapt avoided) | Slower (kapt/ksp, code generation) |
@@ -162,8 +162,8 @@ object LegacyDataModule {
 
 ### Compile-Time Vs Runtime DI
 
-**Compile-Time DI (Hilt):**
-- Code generation at compile time (Dagger under the hood)
+**Compile-Time DI (`Hilt`):**
+- Code generation at compile time (`Dagger` under the hood)
 - Dependency graph verified before runtime
 - No reflection-based resolution → usually better performance
 - Most configuration errors caught during build
@@ -181,7 +181,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository
 ```
 
-**Runtime DI (Koin):**
+**Runtime DI (`Koin`):**
 - DSL modules registered and loaded at startup
 - Dependencies resolved at runtime on demand
 - Simple declarative syntax, but wiring errors appear at runtime
@@ -206,23 +206,23 @@ class MyApp : Application() {
 
 ### Decision Matrix
 
-**Choose Koin:**
+**Choose `Koin`:**
 - Kotlin Multiplatform projects
 - MVP/prototypes (fast iteration)
 - Small/medium apps
 - Build time is critical
 - Prefer simplicity and flexibility over strict compile-time safety
 
-**Choose Hilt:**
+**Choose `Hilt`:**
 - Android-only apps
 - Large-scale projects (many modules, big team)
 - Type safety and compile-time validation are critical
-- Long-term maintenance (official Google support, 5+ year horizon)
-- Team is experienced with Dagger or ready to invest in learning it
+- `Long`-term maintenance (official Google support, 5+ year horizon)
+- Team is experienced with `Dagger` or ready to invest in learning it
 
 ### Best Practices
 
-**Koin:**
+**`Koin`:**
 ```kotlin
 // ✅ Use checkModules() for basic graph validation
 class AppTest : KoinTest {
@@ -244,7 +244,7 @@ class Repository {
 }
 ```
 
-**Hilt:**
+**`Hilt`:**
 ```kotlin
 // ✅ Prefer @Binds for simple interface -> implementation bindings
 @Module
@@ -266,9 +266,9 @@ object LegacyDataModule {
 ## Follow-ups
 
 - How would you handle scoped dependencies (`Activity`/`Fragment` scope) in both frameworks?
-- What are the strategies for migrating from Dagger2 to either Koin or Hilt?
-- How do you test modules with circular dependencies in Koin vs Hilt?
-- Can Koin and Hilt coexist in the same codebase during migration?
+- What are the strategies for migrating from Dagger2 to either `Koin` or `Hilt`?
+- How do you test modules with circular dependencies in `Koin` vs `Hilt`?
+- Can `Koin` and `Hilt` coexist in the same codebase during migration?
 
 ## References
 
@@ -284,12 +284,12 @@ object LegacyDataModule {
 - [[q-viewmodel-pattern--android--easy]] - `ViewModel` architecture
 
 ### Related
-- [[q-what-is-hilt--android--medium]] - Hilt framework overview
-- [[q-koin-fundamentals--android--medium]] - Koin fundamentals
-- [[q-hilt-components-scope--android--medium]] - Hilt scoping
-- [[q-koin-scope-management--android--medium]] - Koin scopes
+- [[q-what-is-hilt--android--medium]] - `Hilt` framework overview
+- [[q-koin-fundamentals--android--medium]] - `Koin` fundamentals
+- [[q-hilt-components-scope--android--medium]] - `Hilt` scoping
+- [[q-koin-scope-management--android--medium]] - `Koin` scopes
 
 ### Advanced
-- [[q-dagger-framework-overview--android--hard]] - Dagger internals
-- [[q-koin-resolution-internals--android--hard]] - Koin resolution mechanism
+- [[q-dagger-framework-overview--android--hard]] - `Dagger` internals
+- [[q-koin-resolution-internals--android--hard]] - `Koin` resolution mechanism
 - [[q-dagger-custom-scopes--android--hard]] - Custom scopes

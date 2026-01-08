@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-008
 title: "Message Queues and Event-Driven Architecture / Очереди сообщений и событийная архитектура"
 aliases: ["Event-Driven Architecture", "Message Queues", "Очереди сообщений", "Событийная архитектура"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [async, difficulty/medium, event-driven, kafka, message-queues, system-design]
 sources: ["https://en.wikipedia.org/wiki/Message_queue"]
 
----
+---\
 # Вопрос (RU)
 > Что такое очереди сообщений? Когда их следует использовать? В чём разница между Kafka, RabbitMQ и другими системами обмена сообщениями?
 
@@ -28,7 +28,7 @@ sources: ["https://en.wikipedia.org/wiki/Message_queue"]
 ## Ответ (RU)
 
 **Теория асинхронной коммуникации:**
-Message `Queue` - паттерн асинхронной коммуникации, где producers отправляют сообщения в очередь, а consumers обрабатывают их независимо. Решает проблемы tight coupling, cascading failures и позволяет строить масштабируемые, resilient системы. См. также [[c-architecture-patterns]].
+`Message` `Queue` - паттерн асинхронной коммуникации, где producers отправляют сообщения в очередь, а consumers обрабатывают их независимо. Решает проблемы tight coupling, cascading failures и позволяет строить масштабируемые, resilient системы. См. также [[c-architecture-patterns]].
 
 ### Требования
 
@@ -123,7 +123,7 @@ fun handleUserRegisteredAnalytics(event: UserRegisteredEvent) {
 *Архитектура:* Producer → Exchange (routing) → `Queue` → Consumer
 
 *Особенности:*
-- Message acknowledgment (подтверждение обработки)
+- `Message` acknowledgment (подтверждение обработки)
 - Dead letter queues (для failed messages)
 - Priority queues (приоритеты сообщений)
 - Flexible routing (exchanges: direct, topic, fanout, headers)
@@ -226,7 +226,7 @@ redisTemplate.opsForStream<String, Any>().add(
 
 **Ключевые концепции:**
 
-**1. Message Acknowledgment:**
+**1. `Message` Acknowledgment:**
 *Теория:* Consumer подтверждает успешную обработку. Если нет ack - сообщение может быть доставлено повторно. Это даёт at-least-once delivery; для избежания дублей требуется идемпотентность.
 
 **2. Dead Letter `Queue` (DLQ):**
@@ -241,7 +241,7 @@ redisTemplate.opsForStream<String, Any>().add(
 **5. Backpressure:**
 *Теория:* Механизм контроля скорости producer, когда consumers не успевают обрабатывать. Kafka - pull-based (consumer сам регулирует скорость чтения), RabbitMQ - prefetch limit и другие настройки.
 
-**Когда использовать Message `Queues`:**
+**Когда использовать `Message` `Queues`:**
 
 ✅ **Используйте:**
 - Асинхронная обработка (email, reports, image processing)
@@ -260,7 +260,7 @@ redisTemplate.opsForStream<String, Any>().add(
 ## Answer (EN)
 
 **Asynchronous Communication Theory:**
-Message `Queue` is an asynchronous communication pattern where producers send messages to a queue and consumers process them independently. It reduces tight coupling and cascading failures and enables building scalable, resilient systems. See also [[c-architecture-patterns]].
+`Message` `Queue` is an asynchronous communication pattern where producers send messages to a queue and consumers process them independently. It reduces tight coupling and cascading failures and enables building scalable, resilient systems. See also [[c-architecture-patterns]].
 
 ### Requirements
 
@@ -355,7 +355,7 @@ fun handleUserRegisteredAnalytics(event: UserRegisteredEvent) {
 *Architecture:* Producer → Exchange (routing) → `Queue` → Consumer
 
 *Features:*
-- Message acknowledgment (processing confirmation)
+- `Message` acknowledgment (processing confirmation)
 - Dead letter queues (for failed messages)
 - Priority queues (message priorities)
 - Flexible routing (exchanges: direct, topic, fanout, headers)
@@ -458,14 +458,14 @@ redisTemplate.opsForStream<String, Any>().add(
 
 **Key Concepts:**
 
-**1. Message Acknowledgment:**
+**1. `Message` Acknowledgment:**
 *Theory:* Consumer confirms successful processing. If no ack is sent, the message may be redelivered. This provides at-least-once delivery; idempotency is required to handle duplicates safely.
 
 **2. Dead Letter `Queue` (DLQ):**
 *Theory:* `Queue` for messages that failed processing after N attempts. Allows isolating problematic messages without blocking others.
 
 **3. Consumer Groups (Kafka):**
-*Theory:* Group of consumers where each partition is read by only one consumer within that group. Provides load balancing within a group and fan-out/broadcast across different groups.
+*Theory:* Group of consumers where each partition is read by only one consumer within that group. `Provides` load balancing within a group and fan-out/broadcast across different groups.
 
 **4. Idempotency:**
 *Theory:* Operation can be executed multiple times with the same result. Critical for at-least-once delivery because a message may be delivered more than once.
@@ -473,7 +473,7 @@ redisTemplate.opsForStream<String, Any>().add(
 **5. Backpressure:**
 *Theory:* Mechanism to control producer rate when consumers cannot keep up. Kafka is pull-based (consumer controls read rate), RabbitMQ supports backpressure via prefetch limits and related settings.
 
-**When to Use Message `Queues`:**
+**When to Use `Message` `Queues`:**
 
 ✅ **Use:**
 - Asynchronous processing (email, reports, image processing)

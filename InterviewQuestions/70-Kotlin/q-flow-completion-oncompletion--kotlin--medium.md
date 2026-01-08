@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-148
 title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
 aliases: [Completion, Flow, onCompletion]
@@ -14,7 +14,7 @@ related: [c-flow, c-kotlin, q-kotlin-extension-functions--kotlin--medium, q-kotl
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
----
+---\
 # Вопрос (RU)
 Что такое оператор `onCompletion` в `Kotlin Flow` и чем он отличается от блоков `finally`? Как обрабатывать завершение для успешных случаев, исключений и отмены? Приведите production-примеры очистки, логирования, обновления UI-состояния и аналитики с корректными стратегиями тестирования.
 
@@ -185,12 +185,12 @@ suspend fun withOnCompletion() {
 
 | Аспект | finally | onCompletion |
 |--------|---------|--------------|
-| Область | Вокруг всего блока collect | Часть цепочки Flow |
-| Композируемость | Не оператор Flow | Композируемый оператор |
+| Область | Вокруг всего блока collect | Часть цепочки `Flow` |
+| Композируемость | Не оператор `Flow` | Композируемый оператор |
 | Информация об исключении | Не передается | Доступна через параметр cause |
-| Размещение | Вне Flow | Внутри цепочки Flow |
+| Размещение | Вне `Flow` | Внутри цепочки `Flow` |
 | Может emit | Нет | Нет |
-| Сценарий | Очистка вокруг области коллекции | Очистка/побочные эффекты как часть Flow |
+| Сценарий | Очистка вокруг области коллекции | Очистка/побочные эффекты как часть `Flow` |
 
 **Размещение onCompletion имеет значение:**
 
@@ -227,7 +227,7 @@ suspend fun placementMatters() {
 
 #### 4. Жизненный Цикл Flow С onStart И onCompletion
 
-**Полный жизненный цикл Flow:**
+**Полный жизненный цикл `Flow`:**
 
 ```kotlin
 suspend fun flowLifecycle() {
@@ -811,15 +811,15 @@ class StateMachine {
 | Использовать для аналитики/логирования/метрик | Использовать для трансформации данных |
 
 ### Связанные Вопросы (RU)
-- [[q-flow-operators--kotlin--medium]] - Операторы Flow
-- [[q-flow-exception-handling--kotlin--medium]] - Обработка исключений в Flow
-- [[q-flow-basics--kotlin--easy]] - Основы Flow
+- [[q-flow-operators--kotlin--medium]] - Операторы `Flow`
+- [[q-flow-exception-handling--kotlin--medium]] - Обработка исключений в `Flow`
+- [[q-flow-basics--kotlin--easy]] - Основы `Flow`
 - [[q-structured-concurrency--kotlin--hard]] - Структурированная конкурентность
 
 ### Дополнительные Вопросы (RU)
-1. В чем разница между onCompletion до и после оператора catch в цепочке Flow?
+1. В чем разница между onCompletion до и после оператора catch в цепочке `Flow`?
 2. Почему onCompletion не может emit значения? Чем это отличается от catch?
-3. Как реализовать Flow-оператор, который гарантирует очистку даже если collector бросает исключение?
+3. Как реализовать `Flow`-оператор, который гарантирует очистку даже если collector бросает исключение?
 4. Объясните порядок выполнения: finally в flow builder vs onCompletion. Что выполняется первым?
 5. Как различить обычную отмену и отмену из-за timeout в onCompletion?
 6. Когда выбрать onCompletion вместо DisposableEffect в Jetpack Compose?
@@ -998,12 +998,12 @@ suspend fun withOnCompletion() {
 
 | Aspect | finally | onCompletion |
 |--------|---------|--------------|
-| Scope | Around entire collect block | Part of Flow chain |
-| Composability | Not composable as Flow operator | Composable operator |
+| Scope | Around entire collect block | Part of `Flow` chain |
+| Composability | Not composable as `Flow` operator | Composable operator |
 | Exception info | Not passed in | Available via cause parameter |
-| Placement | Outside Flow | Inside Flow chain |
+| Placement | Outside `Flow` | Inside `Flow` chain |
 | Can emit | No | No |
-| Use case | Cleanup around collection scope | Cleanup/side effects as part of Flow |
+| Use case | Cleanup around collection scope | Cleanup/side effects as part of `Flow` |
 
 **onCompletion placement matters:**
 
@@ -1040,7 +1040,7 @@ suspend fun placementMatters() {
 
 #### 4. Flow Lifecycle with onStart and onCompletion
 
-**Complete Flow lifecycle:**
+**Complete `Flow` lifecycle:**
 
 ```kotlin
 suspend fun flowLifecycle() {
@@ -1615,7 +1615,7 @@ class StateMachine {
 
 ### Related Questions (EN)
 
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
@@ -1626,9 +1626,9 @@ class StateMachine {
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
 
 ## Follow-ups (EN)
-1. What's the difference between onCompletion before and after a catch operator in a Flow chain?
+1. What's the difference between onCompletion before and after a catch operator in a `Flow` chain?
 2. Why can't onCompletion emit values? How is this different from catch?
-3. How would you implement a Flow operator that guarantees cleanup even if the collector throws an exception?
+3. How would you implement a `Flow` operator that guarantees cleanup even if the collector throws an exception?
 4. Explain the order of execution: flow builder finally vs onCompletion. Which runs first?
 5. How do you distinguish between normal cancellation and cancellation due to timeout in onCompletion?
 6. When would you choose onCompletion over DisposableEffect in Jetpack Compose?
@@ -1638,4 +1638,4 @@ class StateMachine {
 - [Flow Completion](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/on-completion.html)
 - [Flow Exception Handling](https://kotlinlang.org/docs/flow.html#flow-exceptions)
 - [Flow Operators](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
+- [Kotlin `Flow` Documentation](https://kotlinlang.org/docs/flow.html)

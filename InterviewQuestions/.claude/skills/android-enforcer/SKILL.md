@@ -1,11 +1,11 @@
----
+---\
 name: android-enforcer
 description: >
   Validate and auto-fix Android-specific vault rules. Checks subtopic-to-tag mirroring,
   validates subtopics against ANDROID-SUBTOPICS.md controlled list, auto-adds missing
   android/* tags, and generates Android-specific compliance reports. Essential for
   maintaining Android note quality.
----
+---\
 
 # Android Enforcer
 
@@ -389,7 +389,7 @@ Suggestion: Replace "compose-ui" with "ui-compose"
 
 **Solution**:
 1. Report successful fixes
-2. List failed fixes with reasons
+2. `List` failed fixes with reasons
 3. Provide manual fix instructions for failures
 
 ## Integration with Other Skills

@@ -1,4 +1,4 @@
----
+---\
 id: cs-006
 title: "Default vs IO Dispatcher / Разница между Default и IO Dispatcher"
 aliases: ["Default vs IO Dispatcher", "Разница между Default и IO Dispatcher"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, programming-languages]
 sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 
----
+---\
 # Вопрос (RU)
 > В чем разница между Default и IO dispatcher? Когда использовать каждый из них?
 
@@ -36,10 +36,10 @@ Dispatchers определяют, на каких потоках выполня�
 | Характеристика | Dispatchers.Default | Dispatchers.IO |
 |----------------|---------------------|----------------|
 | **Цель** | CPU-intensive work | I/O-bound / blocking operations |
-| **Thread Pool Size** | ~ CPU cores (min 2) | Расширенный пул поверх Default (большее допустимое число параллельных задач, по умолчанию до 64 блокирующих) |
+| **`Thread` Pool Size** | ~ CPU cores (min 2) | Расширенный пул поверх Default (большее допустимое число параллельных задач, по умолчанию до 64 блокирующих) |
 | **Blocking** | Блокировки нежелательны | Спроектирован для потенциально блокирующих вызовов |
 | **Use Cases** | Parsing, sorting, calculations | Network, files, database (особенно блокирующие API) |
-| **Thread Type** | Shared computational pool | Shared pool с увеличенной параллельностью под I/O |
+| **`Thread` Type** | Shared computational pool | Shared pool с увеличенной параллельностью под I/O |
 
 **Dispatchers.Default - CPU-Интенсивные операции:**
 
@@ -143,15 +143,15 @@ suspend fun badPractice2() = withContext(Dispatchers.IO) {
 **Когда использовать IO:**
 
 - Network requests (HTTP, WebSocket), особенно при использовании блокирующих клиентов
-- Database queries (Room, SQLite, JDBC и др. блокирующие драйверы)
+- `Database` queries (`Room`, `SQLite`, JDBC и др. блокирующие драйверы)
 - File I/O operations
-- Работа с SharedPreferences или другими строго блокирующими хранилищами
+- Работа с `SharedPreferences` или другими строго блокирующими хранилищами
 - Legacy / blocking API calls
 
 **Ключевые концепции:**
 
 1. **CPU vs I/O** — Default для CPU-bound, IO для потенциально блокирующего I/O
-2. **Thread Pool / Parallelism** — Default ≈ CPU cores; IO увеличивает доступную параллельность для блокирующих задач
+2. **`Thread` Pool / Parallelism** — Default ≈ CPU cores; IO увеличивает доступную параллельность для блокирующих задач
 3. **Blocking Allowed** — в IO допускаются блокирующие вызовы; в Default их следует избегать
 4. **Performance** — правильный выбор диспетчера улучшает latency и throughput
 5. **`Context` Switching** — переключайте диспетчеры при смене характера работы (CPU ↔ I/O)
@@ -167,14 +167,14 @@ Key difference: Default for non-blocking CPU-bound computations, IO for operatio
 | Feature | Dispatchers.Default | Dispatchers.IO |
 |---------|---------------------|----------------|
 | **Purpose** | CPU-intensive work | I/O-bound / blocking operations |
-| **Thread Pool Size** | ~ CPU cores (min 2) | Extended pool on top of Default (higher allowed parallelism, default cap around 64 blocking tasks) |
+| **`Thread` Pool Size** | ~ CPU cores (min 2) | Extended pool on top of Default (higher allowed parallelism, default cap around 64 blocking tasks) |
 | **Blocking** | Blocking should be avoided | Designed for potentially blocking calls |
 | **Use Cases** | Parsing, sorting, calculations | Network, files, database (especially blocking APIs) |
-| **Thread Type** | Shared computational pool | Shared pool with increased parallelism for I/O |
+| **`Thread` Type** | Shared computational pool | Shared pool with increased parallelism for I/O |
 
 **Dispatchers.Default - CPU-Intensive Operations:**
 
-*Theory:* Default is used for CPU-intensive tasks that maximize CPU usage. Thread pool size is approximately equal to the number of CPU cores (minimum 2). Threads should not be blocked for long (sleep, long blocking I/O), to avoid harming throughput.
+*Theory:* Default is used for CPU-intensive tasks that maximize CPU usage. `Thread` pool size is approximately equal to the number of CPU cores (minimum 2). Threads should not be blocked for long (sleep, long blocking I/O), to avoid harming throughput.
 Use for: computation-heavy operations, JSON/XML parsing when it is effectively CPU-bound, image processing, mathematical computations.
 
 ```kotlin
@@ -275,15 +275,15 @@ suspend fun badPractice2() = withContext(Dispatchers.IO) {
 **When to use IO:**
 
 - Network requests (HTTP, WebSocket), especially with blocking clients
-- Database queries (Room, SQLite, JDBC, other blocking drivers)
+- `Database` queries (`Room`, `SQLite`, JDBC, other blocking drivers)
 - File I/O operations
-- Working with SharedPreferences or other strictly blocking storage
+- Working with `SharedPreferences` or other strictly blocking storage
 - Legacy / blocking API calls
 
 **Key Concepts:**
 
 1. **CPU vs I/O** - Default for CPU-bound, IO for potentially blocking I/O
-2. **Thread Pool / Parallelism** - Default ≈ CPU cores; IO increases available parallelism for blocking tasks
+2. **`Thread` Pool / Parallelism** - Default ≈ CPU cores; IO increases available parallelism for blocking tasks
 3. **Blocking Allowed** - Blocking is acceptable on IO; should be avoided on Default
 4. **Performance** - choosing the right dispatcher improves latency and throughput
 5. **`Context` Switching** - switch dispatchers when the nature of work changes (CPU ↔ I/O)

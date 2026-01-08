@@ -1,4 +1,4 @@
----
+---\
 id: android-119
 title: How Does Jetpack Compose Work / Как работает Jetpack Compose
 aliases: [How Does Jetpack Compose Work, Как работает Jetpack Compose]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Как работает Jetpack Compose?
@@ -33,7 +33,7 @@ tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-state,
 
 **Declarative UI**: описываете, что должно быть, а не как по шагам построить UI
 **Reactive**: UI автоматически обновляется при изменении наблюдаемого состояния
-**Component-based**: UI собирается из переиспользуемых composable-функций
+**`Component`-based**: UI собирается из переиспользуемых composable-функций
 **Kotlin-first**: тесная интеграция с Kotlin (включая корутины и `Flow` через специализированные API)
 
 ### Как Работает Composition
@@ -171,7 +171,7 @@ Compose работает через:
 
 **Declarative UI**: describe what the UI should be, not step-by-step how to mutate it
 **Reactive**: UI automatically updates when observable state changes
-**Component-based**: build UIs from reusable composable functions
+**`Component`-based**: build UIs from reusable composable functions
 **Kotlin-first**: designed for Kotlin, with coroutine/`Flow`-aware APIs and seamless Kotlin integration
 
 ### How Composition Works

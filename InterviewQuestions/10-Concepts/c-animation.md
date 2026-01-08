@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-200745"
 title: "Animation / Animation"
 aliases: ["Animation"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-animation-framework, c-value-animator, c-compose-ui, c-interpolator, c-android-graphics]
+moc: "moc-cs"
+related: ["c-animation-framework", "c-value-animator", "c-compose-ui", "c-interpolator", "c-android-graphics"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -48,6 +49,6 @@ Animation in programming is the technique of creating the illusion of motion or 
 ## References
 
 - MDN Web Docs: "Using CSS animations"
-- MDN Web Docs: "Window.requestAnimationFrame()"
+- MDN Web Docs: "`Window`.requestAnimationFrame()"
 - Android Developers: "Property Animation"
 - Apple Developer Documentation: "Core Animation Programming Guide"

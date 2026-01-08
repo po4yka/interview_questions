@@ -1,4 +1,4 @@
----
+---\
 id: android-402
 title: "Internal App Distribution / Внутреннее распространение приложения"
 aliases: [Beta Testing Distribution, Firebase App Distribution, Google Play Internal Testing, Internal App Distribution, Внутреннее распространение приложения]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ci-cd, android/play-console, beta-testing, difficulty/medium, firebase]
 
----
+---\
 # Вопрос (RU)
 
 > Объясните стратегии внутреннего распространения приложений для бета-тестирования и QA. Как использовать Firebase App Distribution, Google Play Internal Testing и enterprise инструменты? Каковы best practices для управления группами тестировщиков, сбора feedback и автоматизации распространения?
@@ -125,7 +125,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-**In-App Feedback Collection**
+**In-App Feedback `Collection`**
 
 ```kotlin
 @Singleton
@@ -345,7 +345,7 @@ data class ComplianceResult(
 - Выделять breaking changes и known issues
 - Давать ссылку на подробный changelog
 
-**3. Feedback Collection**
+**3. Feedback `Collection`**
 - In-app механизм (shake to report / отдельный экран)
 - Автоматический захват скриншота и device info
 - Категоризация (bug/feature/UX и т.п.)
@@ -479,7 +479,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-**In-App Feedback Collection**
+**In-App Feedback `Collection`**
 
 ```kotlin
 @Singleton
@@ -698,7 +698,7 @@ data class ComplianceResult(
 - Highlight breaking changes and known issues
 - Link to detailed changelog
 
-**3. Feedback Collection**
+**3. Feedback `Collection`**
 - In-app mechanism (shake to report / dedicated screen)
 - Auto-capture screenshots and device info
 - Categorization (bug/feature/UX, etc.)

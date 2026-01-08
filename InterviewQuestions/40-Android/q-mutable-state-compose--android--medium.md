@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-compose-state, c-jetpack-compose, q-compose-remember-derived-state--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, recomposition, state-management]
+tags: [android/ui-compose, android/ui-state, difficulty/medium, recomposition, state-management]
 sources: []
 
 ---

@@ -1,4 +1,4 @@
----
+---\
 id: android-257
 title: How To Pass Photo To Editor / Как передать фото в редактор
 aliases: [How To Pass Photo To Editor, Как передать фото в редактор]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, difficulty/medium, image-processing]
 
----
+---\
 # Вопрос (RU)
 
 > Как передать фотографию в редактор — внутри приложения и во внешнее приложение?
@@ -385,7 +385,7 @@ fun PhotoEditorScreen(photoUri: Uri) {
 
 - Android FileProvider Guide: https://developer.android.com/reference/androidx/core/content/FileProvider
 - Sharing Files Documentation: https://developer.android.com/training/secure-file-sharing
-- Intent Documentation: https://developer.android.com/reference/android/content/Intent
+- `Intent` Documentation: https://developer.android.com/reference/android/content/Intent
 
 ## Related Questions
 
@@ -395,7 +395,7 @@ fun PhotoEditorScreen(photoUri: Uri) {
 - [[c-scoped-storage-security]]
 
 ### Prerequisites
-- [[q-what-are-intents-for--android--medium]] — Understanding Intent basics
+- [[q-what-are-intents-for--android--medium]] — Understanding `Intent` basics
 - [[q-android-storage-types--android--medium]] — Storage options in Android
 
 ### Related
@@ -405,5 +405,5 @@ fun PhotoEditorScreen(photoUri: Uri) {
 
 ### Advanced
 - Image optimization and memory management for large photos
-- Custom ContentProvider for complex file sharing scenarios
+- Custom `ContentProvider` for complex file sharing scenarios
 - Implementing image filters and transformations efficiently

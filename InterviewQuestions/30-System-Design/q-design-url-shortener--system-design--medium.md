@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-006
 title: "Design URL Shortener (like bit.ly) / Проектирование сокращателя URL"
 aliases: ["URL Shortener Design", "Проектирование сокращателя URL"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [difficulty/medium, interview, scalability, system-design, url-shortener]
 sources: ["https://en.wikipedia.org/wiki/URL_shortening"]
 
----
+---\
 # Вопрос (RU)
 > Спроектируйте сервис сокращения URL (как bit.ly). Каковы требования, архитектура и ключевые компромиссы?
 
@@ -51,7 +51,7 @@ URL shortener преобразует длинные URL в короткие, л�
 1. Load Balancer — распределение трафика
 2. `Application` Servers — бизнес-логика
 3. Redis Cache — кеш short_code → long_url (TTL ~24 часа, можно адаптивно)
-4. Database (sharded) — постоянное хранилище
+4. `Database` (sharded) — постоянное хранилище
 5. Analytics `Service` — асинхронная обработка кликов
 
 **API Design:**
@@ -225,7 +225,7 @@ URL shortener converts long URLs into short, easily shareable links. Key challen
 1. Load Balancer - traffic distribution
 2. `Application` Servers - business logic
 3. Redis Cache - cache short_code → long_url (TTL ~24 hours, can be tuned)
-4. Database (sharded) - persistent storage
+4. `Database` (sharded) - persistent storage
 5. Analytics `Service` - asynchronous click processing
 
 **API Design:**
@@ -238,7 +238,7 @@ fun createShortUrl(longUrl: String, customAlias: String? = null): ShortUrl
 fun redirect(shortCode: String): RedirectResponse // returns HTTP 302 Redirect (Location: longUrl)
 ```
 
-**Short Code Generation:**
+**`Short` Code Generation:**
 
 *Theory:* Need to generate unique short codes. Main approaches: Base62 encoding, hash-based, random generation.
 
@@ -289,7 +289,7 @@ fun generateShortCode(): String {
 ```
 *Theory:* Generates random string. Downside: collisions, requires DB/cache check and retry.
 
-**Database Schema:**
+**`Database` Schema:**
 ```sql
 CREATE TABLE urls (
     id BIGSERIAL PRIMARY KEY,
@@ -301,7 +301,7 @@ CREATE TABLE urls (
 );
 ```
 
-**Service with caching:**
+**`Service` with caching:**
 ```kotlin
 class URLShortenerService(
     private val cache: RedisCache,
@@ -329,7 +329,7 @@ class URLShortenerService(
 - CDN/edge for static resources and/or executing redirect logic closer to users
 - High cache hit rate (target around 99%) is critical for performance
 
-*2. Database Sharding:*
+*2. `Database` Sharding:*
 ```kotlin
 // Shard by short_code
 fun getShard(shortCode: String): DataSource {
@@ -355,7 +355,7 @@ fun redirect(shortCode: String): String {
 
 1. Eventual consistency for counters - accuracy vs performance (aggregate asynchronously)
 2. 302 vs 301 redirect - impact on caching and flexibility
-3. Short code length - balance between number of combinations and usability
+3. `Short` code length - balance between number of combinations and usability
 4. Sharding - complexity vs scalability and fault isolation
 
 ## Follow-ups

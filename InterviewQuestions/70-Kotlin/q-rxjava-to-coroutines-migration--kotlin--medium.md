@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-188
 title: "Migrating from RxJava to Kotlin Coroutines / Миграция сRxJava на Kotlin корутины"
 aliases: [Coroutines Migration, Reactive Programming, RxJava Migration, RxJava to Coroutines]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, migration, reactive-programming, refactoring, rxjava]
 
----
+---\
 # Вопрос (RU)
 
 > Как грамотно мигрировать с RxJava на Kotlin Coroutines/`Flow` в Android/Kotlin-проекте: какие соответствия типов (`Observable`/Single/Completable/Maybe/Flowable ↔ `Flow`/suspend/`StateFlow`/`SharedFlow`), как заменить операторы, настроить потоки выполнения, обработку ошибок и backpressure, обеспечить совместимость и поэтапную миграцию, а также каких подводных камней избегать?
@@ -1875,7 +1875,7 @@ Key steps:
 - [ ] Identify all RxJava usages.
 - [ ] Prioritize areas to migrate.
 - [ ] Add coroutine and interop dependencies.
-- [ ] Set up coroutine testing infrastructure.
+- [ ] `Set` up coroutine testing infrastructure.
 
 ### During Migration
 

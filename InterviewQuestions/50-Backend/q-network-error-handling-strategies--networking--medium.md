@@ -1,4 +1,4 @@
----
+---\
 id: net-003
 title: Network Error Handling Strategies / Стратегии обработки сетевых ошибок
 aliases: [Network Error Handling Strategies, Стратегии обработки сетевых ошибок]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 sources: []
 tags: [architecture, difficulty/medium, error-handling, strategy, ux]
 
----
+---\
 # Вопрос (RU)
 
 > Спроектируйте стратегию обработки сетевых ошибок. Обрабатывайте таймауты, отсутствие интернета, 4xx/5xx ошибки по-разному с понятными сообщениями пользователю.
@@ -602,4 +602,4 @@ fun NetworkError.toUserFriendlyMessage(): String {
 ### Advanced (Harder)
 
 - [[q-data-sync-unstable-network--android--hard]] - Data sync strategies
-- [[q-network-request-deduplication--networking--hard]] - Request deduplication
+- [[q-network-request-deduplication--networking--hard]] - `Request` deduplication

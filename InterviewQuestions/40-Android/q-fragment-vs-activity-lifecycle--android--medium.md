@@ -1,4 +1,4 @@
----
+---\
 id: android-244
 title: Чем Жизненный Цикл Fragment Отличается От Activity / Fragment vs Activity Lifecycle
 aliases: [Fragment vs Activity Lifecycle, Чем отличается жизненный цикл Fragment от Activity]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/topic/libraries/architecture/lifecycle"
 tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium, fragments, lifecycle]
 
----
+---\
 # Вопрос (RU)
 > Чем жизненный цикл `Fragment` отличается от жизненного цикла `Activity`?
 
@@ -41,7 +41,7 @@ tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium,
 
 **Взаимосвязь с `Activity`:**
 - `Fragment` всегда существует внутри контекста хоста (обычно `Activity` или другого `Fragment` через `childFragmentManager`) и не может пережить его lifecycle.
-- Lifecycle `Fragment` зависит от lifecycle хоста и синхронизируется с ним, но имеет дополнительные промежуточные состояния и коллбеки.
+- `Lifecycle` `Fragment` зависит от lifecycle хоста и синхронизируется с ним, но имеет дополнительные промежуточные состояния и коллбеки.
 - `Fragment` получает события от `Activity`, но может реагировать по-своему.
 
 **Ключевые отличия от `Activity`:**
@@ -141,7 +141,7 @@ supportFragmentManager.beginTransaction()
 | Привязка к родителю | — | `onAttach`/`onDetach` |
 | Back stack | Системный back stack `Activity` | Внутренний back stack `FragmentManager` внутри хоста |
 | Вложенность | — | Поддерживает child fragments |
-| LifecycleOwner | `Activity` сама по себе | `Fragment` как `LifecycleOwner` + `viewLifecycleOwner` для `View` |
+| `LifecycleOwner` | `Activity` сама по себе | `Fragment` как `LifecycleOwner` + `viewLifecycleOwner` для `View` |
 | Повторное использование | Более ограничено | Высокая переиспользуемость |
 | Управление состоянием | `onSaveInstanceState` + `ViewModel` | `onSaveInstanceState` + `ViewModel` (часто для долгоживущих / общих данных между фрагментами и `Activity`) |
 
@@ -206,7 +206,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**2. Separate `View` Lifecycle**
+**2. Separate `View` `Lifecycle`**
 
 A `Fragment` separates its own lifecycle from the `View` lifecycle, allowing `View` recreation without destroying the `Fragment` instance itself:
 
@@ -253,7 +253,7 @@ class MyFragment : Fragment() {
 
 Using `viewLifecycleOwner` prevents observers from outliving the view and updating a destroyed UI.
 
-**5. FragmentManager Back Stack**
+**5. FragmentManager Back `Stack`**
 
 `Fragment` transactions can be added to the `FragmentManager`'s internal back stack inside the hosting `Activity` or fragment container:
 
@@ -277,7 +277,7 @@ This back stack:
 | Parent binding | — | `onAttach`/`onDetach` |
 | Back stack | System back stack of `Activities` | Internal `FragmentManager` back stack within the host |
 | Nesting | — | Supports child fragments |
-| LifecycleOwner | `Activity` itself | `Fragment` as `LifecycleOwner` + `viewLifecycleOwner` for the `View` |
+| `LifecycleOwner` | `Activity` itself | `Fragment` as `LifecycleOwner` + `viewLifecycleOwner` for the `View` |
 | Reusability | More limited | High reusability |
 | State management | `onSaveInstanceState` + `ViewModel` | `onSaveInstanceState` + `ViewModel` (commonly for longer-lived / shared data between fragments and `Activity`) |
 
@@ -322,7 +322,7 @@ This back stack:
 
 ## References (EN)
 
-- [Android `Fragment` Lifecycle Documentation](https://developer.android.com/guide/fragments/lifecycle)
+- [Android `Fragment` `Lifecycle` Documentation](https://developer.android.com/guide/fragments/lifecycle)
 - [ViewLifecycleOwner Best Practices](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 ---
@@ -353,4 +353,4 @@ This back stack:
 - [[q-what-are-fragments-for-if-there-is-activity--android--medium]] — `Fragment` purpose
 
 ### Related
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] — Lifecycle dependency
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] — `Lifecycle` dependency

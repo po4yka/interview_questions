@@ -1,4 +1,4 @@
----
+---\
 id: android-162
 title: Handler Looper Main Thread / Handler и Looper главного потока
 aliases: [Handler and Looper on Main Thread, Handler и Looper главного потока]
@@ -16,20 +16,20 @@ updated: 2025-11-10
 sources: []
 tags: [android/background-execution, android/threads-sync, concurrency, difficulty/medium, handler, looper, main-thread, message-queue]
 
----
+---\
 # Вопрос (RU)
 
-> Как получить сообщения на главном потоке с помощью Handler и Looper?
+> Как получить сообщения на главном потоке с помощью `Handler` и `Looper`?
 
 # Question (EN)
 
-> How can you receive messages on the main thread using Handler and Looper?
+> How can you receive messages on the main thread using `Handler` and `Looper`?
 
 ## Ответ (RU)
 
-**Handler** ставит сообщения и runnable-задачи в **MessageQueue** потока, которая обрабатывается **Looper**. Чтобы получать сообщения на главном потоке:
+**`Handler`** ставит сообщения и runnable-задачи в **MessageQueue** потока, которая обрабатывается **`Looper`**. Чтобы получать сообщения на главном потоке:
 
-1. Создайте Handler, привязанный к `Looper.getMainLooper()` (это Looper главного потока)
+1. Создайте `Handler`, привязанный к `Looper.getMainLooper()` (это `Looper` главного потока)
 2. Отправьте сообщение из любого потока через `sendMessage()` или `post()` — оно будет добавлено в очередь главного потока
 3. Обработайте его в `handleMessage()` или лямбде
 
@@ -100,11 +100,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Главная идея: сам по себе Handler на главном Looper не создаёт утечку; риск возникает, если вы размещаете в очереди отложенные задачи, которые удерживают ссылку на `Activity`/`Fragment` после их уничтожения.
+Главная идея: сам по себе `Handler` на главном `Looper` не создаёт утечку; риск возникает, если вы размещаете в очереди отложенные задачи, которые удерживают ссылку на `Activity`/`Fragment` после их уничтожения.
 
 ### Handler Vs Coroutines
 
-**Handler (традиционный)**:
+**`Handler` (традиционный)**:
 ```kotlin
 fun loadData() {
     Thread {
@@ -127,18 +127,18 @@ fun loadData() {
 ```
 
 **Ключевые моменты:**
-- Главный поток имеет Looper по умолчанию
-- `Looper.getMainLooper()` возвращает Looper главного потока
-- При использовании Handler'ов внутри `Activity`/`Fragment` очищайте отложенные callbacks/messages, которые могут пережить жизненный цикл компонента, чтобы избежать утечек
-- В новых проектах обычно предпочитают coroutines вместо прямого использования Handler, оставляя Handler для интеграции с низкоуровневым/legacy API
+- Главный поток имеет `Looper` по умолчанию
+- `Looper.getMainLooper()` возвращает `Looper` главного потока
+- При использовании `Handler`'ов внутри `Activity`/`Fragment` очищайте отложенные callbacks/messages, которые могут пережить жизненный цикл компонента, чтобы избежать утечек
+- В новых проектах обычно предпочитают coroutines вместо прямого использования `Handler`, оставляя `Handler` для интеграции с низкоуровневым/legacy API
 
 ---
 
 ## Answer (EN)
 
-**Handler** enqueues messages and runnable tasks into a thread's **MessageQueue**, which is processed by a **Looper**. To receive messages on the main thread:
+**`Handler`** enqueues messages and runnable tasks into a thread's **MessageQueue**, which is processed by a **`Looper`**. To receive messages on the main thread:
 
-1. Create a Handler bound to `Looper.getMainLooper()` (the main thread's Looper)
+1. Create a `Handler` bound to `Looper.getMainLooper()` (the main thread's `Looper`)
 2. Send messages from any thread via `sendMessage()` or `post()` — they will be added to the main thread queue
 3. Handle them in `handleMessage()` or a lambda callback
 
@@ -209,11 +209,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-The core idea: a Handler on the main Looper itself does not automatically cause a leak; the risk comes from posting delayed or long-lived tasks that capture an `Activity`/`Fragment` after it is destroyed.
+The core idea: a `Handler` on the main `Looper` itself does not automatically cause a leak; the risk comes from posting delayed or long-lived tasks that capture an `Activity`/`Fragment` after it is destroyed.
 
 ### Handler Vs Coroutines
 
-**Handler (traditional)**:
+**`Handler` (traditional)**:
 ```kotlin
 fun loadData() {
     Thread {
@@ -236,10 +236,10 @@ fun loadData() {
 ```
 
 **Key Points:**
-- The main thread has a Looper by default
-- `Looper.getMainLooper()` returns the main thread's Looper
+- The main thread has a `Looper` by default
+- `Looper.getMainLooper()` returns the main thread's `Looper`
 - When using Handlers inside `Activity`/`Fragment`, clear delayed callbacks/messages that may outlive the component to avoid leaks
-- For new projects, coroutines are generally preferred over direct Handler usage, with Handlers kept for low-level/legacy integrations
+- For new projects, coroutines are generally preferred over direct `Handler` usage, with Handlers kept for low-level/legacy integrations
 
 ---
 
@@ -248,11 +248,11 @@ fun loadData() {
 - How does MessageQueue prioritize messages with different timestamps?
 - What happens if you call `Looper.prepare()` on the main thread?
 - How do `sendMessageAtFrontOfQueue()` and `sendMessageDelayed()` differ?
-- When would you use Handler instead of coroutines in modern Android?
+- When would you use `Handler` instead of coroutines in modern Android?
 
 ## References
 
-- Android Developer Documentation - Handler and Looper
+- Android Developer Documentation - `Handler` and `Looper`
 - Android Developer Documentation - Processes and Threads
 
 ## Related Questions
@@ -268,7 +268,7 @@ fun loadData() {
 
 ### Related
 - [[q-main-thread-android--android--medium]] - Main thread responsibilities
-- [[q-looper-thread-connection--android--medium]] - Looper and thread relationship
+- [[q-looper-thread-connection--android--medium]] - `Looper` and thread relationship
 - [[q-multithreading-tools-android--android--medium]] - Threading tools comparison
 
 ### Advanced

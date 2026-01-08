@@ -1,4 +1,4 @@
----
+---\
 id: android-343
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
 aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
@@ -15,12 +15,12 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/lifecycle, difficulty/medium, lifecycle, onCreate, onResume, onStart]
 
----
+---\
 # Вопрос (RU)
 > Методы жизненного цикла `Activity`
 
 # Question (EN)
-> `Activity` Lifecycle Methods
+> `Activity` `Lifecycle` Methods
 
 ---
 
@@ -1068,7 +1068,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - `ViewModel`
 - SavedStateHandle
 - Configuration changes
-- Lifecycle-aware components
+- `Lifecycle`-aware components
 - Process death
 
 ---
@@ -1114,11 +1114,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+- [[q-viewmodel-pattern--android--easy]] - `Lifecycle`
 
 ### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, `Activity`
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, `Activity`
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, `Activity`
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, `Activity`
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, `Activity`
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Lifecycle`, `Activity`
+- [[q-activity-lifecycle-methods--android--medium]] - `Lifecycle`, `Activity`
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle`, `Activity`
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - `Lifecycle`, `Activity`
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Lifecycle`, `Activity`

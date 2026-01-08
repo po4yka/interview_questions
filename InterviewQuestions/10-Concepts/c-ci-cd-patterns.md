@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-system-design"
-related: [c-ci-cd, c-ci-cd-pipelines, c-gradle, c-release-engineering, c-testing]
+moc: "moc-architecture-patterns"
+related: ["c-ci-cd", "c-ci-cd-pipelines", "c-gradle", "c-release-engineering", "c-testing"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
+tags: [architecture-patterns, concept, difficulty/medium]
 ---
 
 # Summary (EN)

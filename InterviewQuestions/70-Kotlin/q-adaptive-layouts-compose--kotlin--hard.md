@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-079
 title: "Adaptive Layouts in Compose / Адаптивные layouts в Compose"
 aliases: [Adaptive Layouts Compose, Адаптивные layouts Compose]
@@ -11,10 +11,10 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 updated: 2025-11-09
-tags: [adaptive-layouts, difficulty/hard, jetpack-compose, kotlin/adaptive-layouts, kotlin/jetpack-compose, responsive-design, window-size-classes]
+tags: [adaptive-layouts, difficulty/hard, android/ui-compose, kotlin/adaptive-layouts, kotlin/jetpack-compose, responsive-design, window-size-classes]
 moc: moc-kotlin
 related: [c-jetpack-compose, c-window-size-class, q-android-jetpack-overview--android--easy]
----
+---\
 # Вопрос (RU)
 > Как создавать адаптивные layouts в Compose? Что такое window size классы? Как обрабатывать телефоны, планшеты и складные устройства?
 
@@ -27,7 +27,7 @@ related: [c-jetpack-compose, c-window-size-class, q-android-jetpack-overview--an
 
 Адаптивные layouts подстраивают UI под размер экрана, ориентацию и форм-фактор. В Compose на Android основой являются window size классы (Material 3 / material3-window-size-class) и адаптивные компоненты, а также вспомогательные API (`BoxWithConstraints`, `Configuration`, `WindowManager`) — они используются совместно.
 
-**Window Size Classes:**
+**`Window` Size Classes:**
 
 ```kotlin
 @Composable
@@ -230,7 +230,7 @@ fun Material3AdaptiveNav() {
 
 Adaptive layouts adjust UI based on screen size, orientation, and form factor. In Compose on Android, the core tools are window size classes (Material 3 / material3-window-size-class) and adaptive components, plus helper APIs (`BoxWithConstraints`, `Configuration`, `WindowManager`). These are meant to be used together.
 
-**Window Size Classes:**
+**`Window` Size Classes:**
 
 ```kotlin
 @Composable
@@ -280,7 +280,7 @@ when (windowSizeClass.widthSizeClass) {
 }
 ```
 
-**List-Detail Pattern:**
+**`List`-Detail Pattern:**
 
 ```kotlin
 when (windowSizeClass.widthSizeClass) {

@@ -1,4 +1,4 @@
----
+---\
 id: cs-018
 title: "Bridge Pattern / Bridge Паттерн"
 aliases: ["Bridge Pattern", "Паттерн Bridge"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [abstraction, bridge, design-patterns, difficulty/hard, gof-patterns, structural-patterns]
 sources: ["https://refactoring.guru/design-patterns/bridge"]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Bridge? Когда и зачем его использовать?
 
@@ -186,7 +186,7 @@ Create two hierarchies connected via composition: the abstraction holds a refere
 - **Refined Abstraction** - concrete variants of the abstraction that delegate to an Implementor.
 - **Concrete Implementor** - concrete classes that implement the Implementor interface.
 
-**Application:**
+**`Application`:**
 ```kotlin
 // ✅ Implementor
 interface Device {
@@ -243,7 +243,7 @@ class AdvancedRemote(device: Device) : RemoteControl(device) {
 }
 ```
 
-**Android Application:**
+**Android `Application`:**
 ```kotlin
 // ✅ Implementor - Rendering API
 interface Renderer {
@@ -313,7 +313,7 @@ class Square(renderer: Renderer, private var side: Float) : Shape(renderer) {
 
 ## Follow-ups
 
-- Bridge vs Adapter pattern differences?
+- Bridge vs `Adapter` pattern differences?
 - When to use composition vs inheritance?
 - Platform-specific implementations with Bridge?
 
@@ -328,7 +328,7 @@ class Square(renderer: Renderer, private var side: Float) : Shape(renderer) {
 - Design patterns overview
 
 ### Related (Medium)
-- Adapter pattern
+- `Adapter` pattern
 - Decorator pattern
 
 ### Advanced (Harder)

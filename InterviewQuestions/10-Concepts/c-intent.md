@@ -1,18 +1,26 @@
----
-id: concept-intent
-title: Intent / Intent (намерение)
-aliases: [Android Intent, Intent, Intent (намерение)]
-kind: concept
-summary: Messaging objects used to request actions from Android components
-links: []
-created: 2025-11-06
-updated: 2025-11-06
-tags: [android, concept, intent, ipc]
----
+---\
+id: "20260108-110550"
+title: "Intent / Intent (намерение)"
+aliases: ["Android Intent", "Intent", "Intent (намерение)"]
+summary: "Messaging objects used to request actions from Android components"
+topic: "android"
+subtopics: ["intent", "ipc"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-06"
+updated: "2025-11-06"
+tags: ["android", "concept", "intent", "ipc", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-An Intent is a messaging object used to request an action from another app component. Intents facilitate communication between components in several ways:
+An `Intent` is a messaging object used to request an action from another app component. Intents facilitate communication between components in several ways:
 
 **Types of Intents**:
 
@@ -30,7 +38,7 @@ An Intent is a messaging object used to request an action from another app compo
 - Delivering Broadcasts
 - Passing data between components
 
-**Intent Components**:
+**`Intent` Components**:
 - Action - Action to perform (VIEW, SEND, EDIT)
 - Data - URI of data
 - Category - Additional intent category
@@ -39,15 +47,15 @@ An Intent is a messaging object used to request an action from another app compo
 
 # Сводка (RU)
 
-Intent — это объект сообщений, используемый для запроса действия от другого компонента приложения. Intents облегчают взаимодействие между компонентами несколькими способами:
+`Intent` — это объект сообщений, используемый для запроса действия от другого компонента приложения. Intents облегчают взаимодействие между компонентами несколькими способами:
 
-**Типы Intent**:
+**Типы `Intent`**:
 
-1. **Явные (Explicit) Intent** - Указывают точный компонент для запуска
+1. **Явные (Explicit) `Intent`** - Указывают точный компонент для запуска
    - Используются для запуска компонентов внутри вашего приложения
    - Пример: `Intent(context, TargetActivity::class.java)`
 
-2. **Неявные (Implicit) Intent** - Объявляют общее действие для выполнения
+2. **Неявные (Implicit) `Intent`** - Объявляют общее действие для выполнения
    - Система находит подходящий компонент на основе intent filters
    - Пример: `ACTION_VIEW`, `ACTION_SEND`
 
@@ -57,7 +65,7 @@ Intent — это объект сообщений, используемый дл
 - Отправка Broadcast
 - Передача данных между компонентами
 
-**Компоненты Intent**:
+**Компоненты `Intent`**:
 - Action - Действие для выполнения (VIEW, SEND, EDIT)
 - Data - URI данных
 - Category - Дополнительная категория intent
@@ -77,18 +85,18 @@ Intent — это объект сообщений, используемый дл
 - Taking photos with camera
 - Sending emails
 
-**Intent Extras**:
+**`Intent` Extras**:
 - `putExtra()` for primitive types and `Serializable`
 - `putParcelableExtra()` for `Parcelable` objects (more efficient)
-- Bundle for grouping multiple extras
+- `Bundle` for grouping multiple extras
 
 **Trade-offs**:
 - `Serializable` vs `Parcelable` (ease vs performance)
-- Intent size limits (~1MB for IPC)
+- `Intent` size limits (~1MB for IPC)
 - Security considerations for implicit intents
 
 ## References
 
-- [Intents and Intent Filters](https://developer.android.com/guide/components/intents-filters)
+- [Intents and `Intent` Filters](https://developer.android.com/guide/components/intents-filters)
 - [Common Intents](https://developer.android.com/guide/components/intents-common)
 - [Parcelable vs Serializable](https://developer.android.com/reference/android/os/Parcelable)

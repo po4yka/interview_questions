@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251018-140100
 title: Performance & Optimization — MOC
 kind: moc
 created: 2025-10-18
 updated: 2025-10-18
 tags: [moc, topic/performance]
----
+---\
 
 # Performance & Optimization — Map of Content
 
@@ -48,7 +48,7 @@ LIMIT 100
 
 ### Performance Measurement & Profiling
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Measurement Tools
 - [[q-android-performance-measurement-tools--android--medium]] - Overview of Android profiling tools
@@ -145,22 +145,22 @@ SORT difficulty ASC, file.name ASC
 #### Rendering Optimization
 - [[q-overdraw-gpu-rendering--android--medium]] - GPU overdraw detection
 - [[q-main-causes-ui-lag--android--medium]] - Common causes of UI lag
-- [[q-why-list-scrolling-lags--android--medium]] - List scrolling performance issues
+- [[q-why-list-scrolling-lags--android--medium]] - `List` scrolling performance issues
 - [[q-android-app-lag-analysis--android--medium]] - Analyzing app lag
 - [[q-how-to-fix-a-bad-element-layout--android--easy]] - Fixing slow layouts
 - [[q-frame-time-120ms-meaning--android--easy]] - Understanding frame time
 
 #### RecyclerView Performance
 - [[q-recyclerview-sethasfixedsize--android--easy]] - setHasFixedSize optimization
-- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - RecyclerView caching strategies
-- [[q-diffutil-background-calculation-issues--android--medium]] - DiffUtil performance considerations
-- [[q-why-use-diffutil--android--medium]] - DiffUtil for efficient updates
-- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - Advanced DiffUtil patterns
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - `RecyclerView` caching strategies
+- [[q-diffutil-background-calculation-issues--android--medium]] - `DiffUtil` performance considerations
+- [[q-why-use-diffutil--android--medium]] - `DiffUtil` for efficient updates
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - Advanced `DiffUtil` patterns
 - [[q-recyclerview-async-list-differ--recyclerview--medium]] - AsyncListDiffer for background diffing
 
 #### Custom Views
 - [[q-custom-view-lifecycle--android--medium]] - Custom view lifecycle
-- [[q-canvas-optimization--graphics--medium]] - Canvas drawing optimization
+- [[q-canvas-optimization--graphics--medium]] - `Canvas` drawing optimization
 - [[q-canvas-drawing-optimization--android--hard]] - Advanced canvas optimization
 
 **All Rendering Questions:**
@@ -178,7 +178,7 @@ SORT difficulty ASC, file.name ASC
 #### Build Optimization
 - [[q-android-build-optimization--android--medium]] - Build time optimization
 - [[q-build-optimization-gradle--android--medium]] - Gradle build optimization
-- [[q-dagger-build-time-optimization--android--medium]] - Dagger build performance
+- [[q-dagger-build-time-optimization--android--medium]] - `Dagger` build performance
 
 #### Compilation Strategies
 - [[q-jit-vs-aot-compilation--android--medium]] - JIT vs AOT compilation
@@ -203,10 +203,10 @@ SORT difficulty ASC, file.name ASC
 **Key Questions**:
 
 #### Coroutines Performance
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutine performance optimization
+- [[q-coroutine-performance-optimization--kotlin--hard]] - `Coroutine` performance optimization
 - [[q-dispatcher-performance--kotlin--hard]] - Dispatcher performance considerations
-- [[q-flow-performance--kotlin--hard]] - Flow performance optimization
-- [[q-flow-backpressure--kotlin--hard]] - Flow backpressure handling
+- [[q-flow-performance--kotlin--hard]] - `Flow` performance optimization
+- [[q-flow-backpressure--kotlin--hard]] - `Flow` backpressure handling
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
 - [[q-channel-buffering-strategies--kotlin--hard]] - Channel buffering for performance
 - [[q-channel-buffer-strategies-comparison--kotlin--hard]] - Comparing buffer strategies
@@ -221,8 +221,8 @@ SORT difficulty ASC, file.name ASC
 #### Collections Performance
 - [[q-sequences-vs-collections-performance--kotlin--medium]] - Sequences vs collections
 - [[q-sequences-detailed--kotlin--medium]] - Sequence performance characteristics
-- [[q-list-vs-sequence--kotlin--medium]] - List vs Sequence tradeoffs
-- [[q-array-vs-list-kotlin--kotlin--easy]] - Array vs List performance
+- [[q-list-vs-sequence--kotlin--medium]] - `List` vs Sequence tradeoffs
+- [[q-array-vs-list-kotlin--kotlin--easy]] - `Array` vs `List` performance
 
 #### Async Performance
 - [[q-deferred-async-patterns--kotlin--medium]] - Deferred and async patterns
@@ -246,10 +246,10 @@ SORT difficulty ASC, file.name ASC
 - [[q-virtual-tables-disadvantages--backend--medium]] - Virtual table performance
 
 #### Room Optimization
-- [[q-room-fts-full-text-search--room--hard]] - Full-text search in Room
+- [[q-room-fts-full-text-search--room--hard]] - Full-text search in `Room`
 - [[q-room-type-converters-advanced--room--medium]] - Type converter efficiency
 
-**All Database Performance Questions:**
+**All `Database` Performance Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "40-Android" OR "50-Backend"
@@ -276,7 +276,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-cache-implementation-strategies--android--medium]] - Cache implementation patterns
 
 #### Network Performance
-- [[q-network-request-deduplication--networking--hard]] - Request deduplication
+- [[q-network-request-deduplication--networking--hard]] - `Request` deduplication
 - [[q-http-protocols-comparison--android--medium]] - HTTP protocol performance
 
 #### Data Rendering
@@ -352,7 +352,7 @@ SORT difficulty ASC
 
 ## Related Concepts
 
-- [[c-database-performance]] - Database performance optimization patterns
+- [[c-database-performance]] - `Database` performance optimization patterns
 
 ## Related MOCs
 

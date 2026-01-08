@@ -1,4 +1,4 @@
----
+---\
 id: android-020
 title: kapt vs KSP comparison / Сравнение kapt и KSP
 aliases: [kapt vs KSP comparison, Сравнение kapt и KSP]
@@ -17,7 +17,7 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/gradle, difficulty/medium, en, ru]
 
----
+---\
 # Вопрос (RU)
 > В чем разница между kapt и KSP? Какой использовать?
 
@@ -37,7 +37,7 @@ tags: [android/gradle, difficulty/medium, en, ru]
 | **Скорость** | Медленнее (есть генерация Java stubs, дополнительный шаг) | Обычно заметно быстрее (нет stubs; более эффективная интеграция) |
 | **Фокус по языку** | Java annotation processing (JSR 269) | Kotlin-first API для работы с символами |
 | **API** | Стандартный Java Annotation Processing API (javax.annotation.processing / JSR 269) | Отдельный Kotlin Symbol Processing API |
-| **Поддержка библиотек** | Любые процессоры, реализованные как Java annotation processors (напр. legacy Dagger 2, Glide, старые процессоры) | Растущая нативная поддержка (Room, Moshi, Hilt 2.44+, Dagger через KSP-артефакты и др.) |
+| **Поддержка библиотек** | Любые процессоры, реализованные как Java annotation processors (напр. legacy `Dagger` 2, Glide, старые процессоры) | Растущая нативная поддержка (`Room`, `Moshi`, `Hilt` 2.44+, `Dagger` через KSP-артефакты и др.) |
 | **Инкрементальность** | Ограниченная, возможны проблемы из-за stubs | Из коробки лучше интегрирован с инкрементальной сборкой |
 
 ### Пример Использования Kapt
@@ -82,14 +82,14 @@ KSP, как правило, уменьшает время сборки по ср
 ### Поддержка Библиотек
 
 **Часто имеют поддержку KSP (уточняйте версии в документации):**
-- Room
-- Moshi
-- Hilt (через поддержку KSP в Dagger, начиная примерно с 2.44+)
-- Dagger (через dagger-ksp артефакты)
+- `Room`
+- `Moshi`
+- `Hilt` (через поддержку KSP в `Dagger`, начиная примерно с 2.44+)
+- `Dagger` (через dagger-ksp артефакты)
 - Многие современные библиотеки
 
 **Могут по-прежнему требовать kapt:**
-- Старые конфигурации Dagger 2 без миграции на KSP
+- Старые конфигурации `Dagger` 2 без миграции на KSP
 - Glide (процессор основан на Java APT; поддержка KSP зависит от версии/конфигурации)
 - Legacy / неактивно поддерживаемые библиотеки, предоставляющие только Java annotation processors
 
@@ -97,7 +97,7 @@ KSP, как правило, уменьшает время сборки по ср
 
 ### Миграция С Kapt На KSP (по процессорам)
 
-Базовый пример миграции для библиотеки с поддержкой KSP (например, Room):
+Базовый пример миграции для библиотеки с поддержкой KSP (например, `Room`):
 
 ```kotlin
 // До (kapt)
@@ -144,7 +144,7 @@ kotlin {
 ### Когда Что Использовать
 
 **Используйте KSP, когда:**
-- Библиотека предоставляет официальный KSP-артефакт (Room, Moshi, Hilt с KSP, Dagger с KSP и т.п.).
+- Библиотека предоставляет официальный KSP-артефакт (`Room`, `Moshi`, `Hilt` с KSP, `Dagger` с KSP и т.п.).
 - Важна скорость сборки и предсказуемая инкрементальность.
 - Новый проект или активная модернизация.
 
@@ -165,7 +165,7 @@ kotlin {
 | **Speed** | Slower (generates Java stubs; extra compilation step) | Often significantly faster (no stubs; more efficient integration) |
 | **Language focus** | Java annotation processing (JSR 269) | Kotlin-first symbol API |
 | **API** | Uses Java annotation processing API (javax.annotation.processing / JSR 269) | Uses dedicated Kotlin Symbol Processing API |
-| **Library support** | Works with processors implemented as Java annotation processors (e.g. legacy Dagger 2, Glide, older processors) | Growing native support (Room, Moshi, Hilt 2.44+, Dagger via KSP artifacts, many modern processors) |
+| **Library support** | Works with processors implemented as Java annotation processors (e.g. legacy `Dagger` 2, Glide, older processors) | Growing native support (`Room`, `Moshi`, `Hilt` 2.44+, `Dagger` via KSP artifacts, many modern processors) |
 | **Incremental processing** | Limited / can break incrementality due to stubs | Designed for better incremental and caching behavior |
 
 ### Kapt Usage (example)
@@ -210,14 +210,14 @@ Build with KSP:     23 seconds
 ### Library Support
 
 **Commonly support KSP (check docs for exact versions):**
-- Room
-- Moshi
-- Hilt (via Dagger KSP support; e.g. 2.44+)
-- Dagger (via dagger-ksp artifacts)
+- `Room`
+- `Moshi`
+- `Hilt` (via `Dagger` KSP support; e.g. 2.44+)
+- `Dagger` (via dagger-ksp artifacts)
 - Many newer or actively maintained libraries
 
 **May still require kapt (as of many legacy setups):**
-- Older Dagger 2 setups without KSP migration
+- Older `Dagger` 2 setups without KSP migration
 - Glide (annotation processor is Java-AP based; KSP support depends on version and configuration)
 - Some legacy or unmaintained libraries that only expose Java annotation processors
 
@@ -225,7 +225,7 @@ Always check each library's documentation: if it provides a KSP artifact, prefer
 
 ### Migration from Kapt to KSP (per-processor)
 
-Basic migration for a library that supports KSP (e.g. Room):
+Basic migration for a library that supports KSP (e.g. `Room`):
 
 ```kotlin
 // Before (kapt)
@@ -272,7 +272,7 @@ In most modern Android Gradle Plugin / KSP setups, these paths are wired automat
 ### When to Use Each
 
 **Use KSP when:**
-- The library provides official KSP support (e.g. Room, Hilt with KSP, Moshi, modern Dagger, etc.).
+- The library provides official KSP support (e.g. `Room`, `Hilt` with KSP, `Moshi`, modern `Dagger`, etc.).
 - You care about build speed and incremental builds.
 - You are starting a new project or modernizing an existing one.
 

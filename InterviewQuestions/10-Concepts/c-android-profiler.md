@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-190607"
 title: "Android Profiler / Android Profiler"
 aliases: ["Android Profiler"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-profiling, c-memory-profiler, c-performance-optimization, c-debugging, c-perfetto]
+related: ["c-android-profiling", "c-memory-profiler", "c-performance-optimization", "c-debugging", "c-perfetto"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -34,7 +35,7 @@ Android Profiler — это набор инструментов в Android Studi
 - CPU Profiler: Visualizes thread activity, method traces, and CPU usage over time to detect heavy operations on the main thread, infinite loops, or inefficient algorithms.
 - Memory Profiler: Shows heap usage, object allocations, garbage collection events, and supports heap dumps/leak analysis to find memory leaks and unnecessary allocations.
 - Network Profiler: Tracks HTTP/HTTPS requests, payload sizes, response times, and frequency to identify chatty or slow network calls affecting performance.
-- Energy/Profiler integration: Highlights wake locks, background work, and resource usage that can drain battery; helps align work with best practices (WorkManager, JobScheduler).
+- Energy/Profiler integration: Highlights wake locks, background work, and resource usage that can drain battery; helps align work with best practices (`WorkManager`, JobScheduler).
 - Real-device focus and workflow: Typically run on physical devices with realistic scenarios; used iteratively: reproduce issue → profile → analyze traces → optimize code → re-verify.
 
 ## Ключевые Моменты (RU)
@@ -42,7 +43,7 @@ Android Profiler — это набор инструментов в Android Studi
 - CPU Profiler: Показывает активность потоков, трассировку методов и загрузку CPU во времени для обнаружения тяжёлых операций на main thread, бесконечных циклов и неэффективных алгоритмов.
 - Memory Profiler: Отображает использование кучи, аллокации объектов, события GC и поддерживает heap dump/анализ утечек для поиска утечек памяти и лишних аллокаций.
 - Network Profiler: Отслеживает HTTP/HTTPS-запросы, размеры payload, время ответов и частоту вызовов, помогая находить «болтливые» или медленные сетевые операции.
-- Energy/интеграция: Помогает выявлять wake lock'и, некорректный фоновой ворк и потребление ресурсов, приводящее к разряду батареи, и соотносить их с рекомендованными паттернами (WorkManager, JobScheduler).
+- Energy/интеграция: Помогает выявлять wake lock'и, некорректный фоновой ворк и потребление ресурсов, приводящее к разряду батареи, и соотносить их с рекомендованными паттернами (`WorkManager`, JobScheduler).
 - Фокус на реальных сценариях: Обычно используется на физических устройствах при воспроизведении реальных сценариев; рабочий цикл: воспроизвести проблему → профилировать → проанализировать трассы → оптимизировать → перепроверить.
 
 ## References

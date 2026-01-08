@@ -1,24 +1,32 @@
----
-id: concept-001
-title: Garbage Collection / Сборка мусора
-aliases: [Garbage Collection, GC, Автоматическое управление памятью, Сборка мусора]
-kind: concept
-summary: Automatic memory management mechanism that identifies and reclaims memory occupied by objects that are no longer reachable or needed by the program.
-links: []
-created: 2025-11-05
-updated: 2025-11-05
-tags: [concept, jvm, memory-management, runtime]
----
+---\
+id: "20260108-110550"
+title: "Garbage Collection / Сборка мусора"
+aliases: ["Garbage Collection", "GC", "Автоматическое управление памятью", "Сборка мусора"]
+summary: "Automatic memory management mechanism that identifies and reclaims memory occupied by objects that are no longer reachable or needed by the program."
+topic: "cs"
+subtopics: ["jvm", "memory-management", "runtime"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-11-05"
+updated: "2025-11-05"
+tags: ["concept", "jvm", "memory-management", "runtime", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-**Garbage Collection (GC)** is an automatic memory management process that runs in managed runtime environments (JVM, .NET CLR, etc.). The garbage collector periodically identifies objects that are no longer reachable from any root references and reclaims their memory.
+**Garbage `Collection` (GC)** is an automatic memory management process that runs in managed runtime environments (JVM, .NET CLR, etc.). The garbage collector periodically identifies objects that are no longer reachable from any root references and reclaims their memory.
 
 Key concepts:
 - **Garbage**: Objects that have no live references pointing to them
 - **GC Roots**: Starting points for reachability analysis (local variables, static fields, active threads, JNI references)
 - **Reachability**: An object is reachable if there's a path of references from any GC root to that object
-- **Collection cycles**: GC runs periodically or when memory pressure increases
+- **`Collection` cycles**: GC runs periodically or when memory pressure increases
 
 Common GC algorithms:
 - **Mark-and-Sweep**: Mark all reachable objects, then sweep and reclaim unmarked ones
@@ -27,7 +35,7 @@ Common GC algorithms:
 
 # Сводка (RU)
 
-**Сборка мусора (Garbage Collection, GC)** — это процесс автоматического управления памятью, который работает в управляемых средах выполнения (JVM, .NET CLR и др.). Сборщик мусора периодически находит объекты, которые больше не достижимы из корневых ссылок, и освобождает их память.
+**Сборка мусора (Garbage `Collection`, GC)** — это процесс автоматического управления памятью, который работает в управляемых средах выполнения (JVM, .NET CLR и др.). Сборщик мусора периодически находит объекты, которые больше не достижимы из корневых ссылок, и освобождает их память.
 
 Ключевые понятия:
 - **Мусор**: Объекты, на которые нет активных ссылок

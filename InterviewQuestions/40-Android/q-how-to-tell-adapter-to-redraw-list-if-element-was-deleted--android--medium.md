@@ -1,4 +1,4 @@
----
+---\
 id: android-392
 title: Как сказать адаптеру перерисовать список если элемент был удален / How To Tell
   Adapter To Redraw List If Element Was Deleted
@@ -16,14 +16,14 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [adapter, android, android/ui-views, difficulty/medium, recyclerview]
----
+---\
 # Вопрос (RU)
 
-> Как правильно уведомить адаптер RecyclerView о том, что элемент был удален из списка?
+> Как правильно уведомить адаптер `RecyclerView` о том, что элемент был удален из списка?
 
 # Question (EN)
 
-> How to properly notify a RecyclerView adapter that an item has been deleted from the list?
+> How to properly notify a `RecyclerView` adapter that an item has been deleted from the list?
 
 ---
 
@@ -54,7 +54,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
-**2. DiffUtil с RecyclerView.Adapter**
+**2. `DiffUtil` с `RecyclerView`.`Adapter`**
 
 ```kotlin
 // ✅ Эффективно для больших списков
@@ -124,7 +124,7 @@ itemTouchHelper.attachToRecyclerView(recyclerView)
 
 ### Важные Особенности
 
-**Всегда используйте актуальную позицию ViewHolder**
+**Всегда используйте актуальную позицию `ViewHolder`**
 
 ```kotlin
 // ❌ Неправильно - позиция из параметра может устареть
@@ -207,7 +207,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
-**2. DiffUtil with RecyclerView.Adapter**
+**2. `DiffUtil` with `RecyclerView`.`Adapter`**
 
 ```kotlin
 // ✅ Efficient for large lists
@@ -336,14 +336,14 @@ fun ItemList() {
 ## Follow-ups
 
 - What are the performance implications of `notifyDataSetChanged()` vs `notifyItemRemoved()`?
-- How does DiffUtil determine which items changed?
+- How does `DiffUtil` determine which items changed?
 - When should you use `notifyItemRangeChanged()` after deletion?
 - How to handle item deletion in a multi-selection scenario?
 - What happens if you call `notifyItemRemoved()` without actually removing the item from the data source?
 
 ## References
 
-- Android Documentation: [RecyclerView.Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter)
+- Android Documentation: [RecyclerView.Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.`Adapter`)
 - Android Documentation: [ListAdapter](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 - Android Documentation: [DiffUtil](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 
@@ -354,13 +354,13 @@ fun ItemList() {
 - [[c-recyclerview]]
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` basics
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Architecture fundamentals
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI fundamentals
 
 ### Related (Same Level)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - RecyclerView customization
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `RecyclerView` customization
 - [[q-testing-compose-ui--android--medium]] - Testing UI components
 
 ### Advanced (Harder)

@@ -1,4 +1,4 @@
----
+---\
 id: cs-004
 title: "Operating System Fundamentals / Основы операционных систем"
 aliases: ["OS Fundamentals", "Основы ОС"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [cpu-scheduling, difficulty/hard, memory, os, processes, threads, virtual-memory]
 sources: ["https://en.wikipedia.org/wiki/Operating_system"]
 
----
+---\
 # Вопрос (RU)
 > Что такое основные концепции операционных систем? Как работают процессы и потоки, виртуальная память и планирование CPU?
 
@@ -28,11 +28,11 @@ sources: ["https://en.wikipedia.org/wiki/Operating_system"]
 ## Ответ (RU)
 
 **Теория OS Fundamentals:**
-Operating Systems управляют аппаратными ресурсами, предоставляют уровни абстракции, обеспечивают параллельное/псевдопараллельное выполнение. Базовые концепции: Process (изолированная единица выполнения), Thread (легковесный поток выполнения внутри процесса), Virtual Memory (абстракция адресного пространства), CPU Scheduling (распределение процессорного времени), System Calls (сервисы ядра), IPC (межпроцессное взаимодействие), Deadlock (взаимная блокировка).
+Operating Systems управляют аппаратными ресурсами, предоставляют уровни абстракции, обеспечивают параллельное/псевдопараллельное выполнение. Базовые концепции: Process (изолированная единица выполнения), `Thread` (легковесный поток выполнения внутри процесса), Virtual Memory (абстракция адресного пространства), CPU Scheduling (распределение процессорного времени), System Calls (сервисы ядра), IPC (межпроцессное взаимодействие), Deadlock (взаимная блокировка).
 
 **Процессы vs Потоки:**
 
-*Теория:* Process — программа в выполнении, собственное виртуальное адресное пространство и ресурсы. Thread — легковесный поток внутри процесса, разделяет память процесса. Process: более независим, «тяжёлый», более дорогой контекстный переключатель, взаимодействует с другими процессами через IPC. Thread: общая память внутри процесса, «легкий», контекстный переключатель дешевле, обмен данными через общие структуры (но требуется синхронизация). Ключевое отличие: изоляция vs разделение.
+*Теория:* Process — программа в выполнении, собственное виртуальное адресное пространство и ресурсы. `Thread` — легковесный поток внутри процесса, разделяет память процесса. Process: более независим, «тяжёлый», более дорогой контекстный переключатель, взаимодействует с другими процессами через IPC. `Thread`: общая память внутри процесса, «легкий», контекстный переключатель дешевле, обмен данными через общие структуры (но требуется синхронизация). Ключевое отличие: изоляция vs разделение.
 
 ```kotlin
 // ✅ Process: отдельное (обычно) изолированное адресное пространство
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 
 **System Calls:**
 
-*Теория:* System Call — запрос к ядру ОС на выполнение операции от имени процесса. Категории: Process Control (fork, exec, exit), File Management (open, read, write), Device Management (ioctl), Information Maintenance (getpid, alarm), Communication (pipe, socket), Protection (chmod). Выполнение: переход из user mode в kernel mode и обратно.
+*Теория:* System `Call` — запрос к ядру ОС на выполнение операции от имени процесса. Категории: Process Control (fork, exec, exit), File Management (open, read, write), Device Management (ioctl), Information Maintenance (getpid, alarm), Communication (pipe, socket), Protection (chmod). Выполнение: переход из user mode в kernel mode и обратно.
 
 ```kotlin
 // ✅ Поток системных вызовов
@@ -133,7 +133,7 @@ file.writeText("Hello")
 
 **IPC (Inter-Process Communication):**
 
-*Теория:* IPC — взаимодействие между процессами. Механизмы: Shared Memory (быстрый доступ, нужна синхронизация), Message Passing (например, Binder в Android), Pipes (однонаправленные локальные каналы), Sockets (двунаправленные, в том числе по сети), очереди сообщений и др. В Android Binder — основной механизм для обращения к системным сервисам и многим межпроцессным взаимодействиям, но приложения также могут использовать сокеты, контент-провайдеры и т.п.
+*Теория:* IPC — взаимодействие между процессами. Механизмы: Shared Memory (быстрый доступ, нужна синхронизация), `Message` Passing (например, Binder в Android), Pipes (однонаправленные локальные каналы), Sockets (двунаправленные, в том числе по сети), очереди сообщений и др. В Android Binder — основной механизм для обращения к системным сервисам и многим межпроцессным взаимодействиям, но приложения также могут использовать сокеты, контент-провайдеры и т.п.
 
 ```kotlin
 // ✅ Пример Binder IPC (упрощенно)
@@ -195,10 +195,10 @@ thread {
 
 **Ключевые выводы:**
 1. Process — изолированная единица выполнения с собственным виртуальным адресным пространством.
-2. Thread — легковесный поток внутри процесса, разделяющий память; требует синхронизации.
+2. `Thread` — легковесный поток внутри процесса, разделяющий память; требует синхронизации.
 3. Virtual Memory — абстракция адресного пространства для изоляции и эффективного использования памяти.
 4. CPU Scheduling — определяет, какой процесс/поток выполняется далее; есть вытесняющие и невытесняющие алгоритмы.
-5. System Call — запрос сервиса ядра (переход user → kernel → user mode).
+5. System `Call` — запрос сервиса ядра (переход user → kernel → user mode).
 6. `Context` Switch — сохранение/восстановление состояния (накладные расходы, зависящие от системы).
 7. IPC — механизмы взаимодействия процессов (Binder в Android — основной системный механизм, но не единственный возможный).
 8. Deadlock — взаимная блокировка; предотвращается нарушением условий (например, порядком захвата).
@@ -212,7 +212,7 @@ Operating Systems manage hardware resources, provide abstraction layers, and ena
 
 **Processes vs Threads:**
 
-*Theory:* A process is a program in execution with its own virtual address space and resources. A thread is a lightweight execution unit within a process that shares the process address space. Process: more independent, heavyweight, context switch is more expensive, inter-process data exchange requires IPC. Thread: shares memory within the process, lightweight, cheaper context switches, data exchange via shared variables (requires synchronization). Key difference: isolation vs sharing.
+*Theory:* A process is a program in execution with its own virtual address space and resources. A thread is a lightweight execution unit within a process that shares the process address space. Process: more independent, heavyweight, context switch is more expensive, inter-process data exchange requires IPC. `Thread`: shares memory within the process, lightweight, cheaper context switches, data exchange via shared variables (requires synchronization). Key difference: isolation vs sharing.
 
 ```kotlin
 // ✅ Process: typically its own isolated address space
@@ -295,7 +295,7 @@ class MainActivity : AppCompatActivity() {
 
 **System Calls:**
 
-*Theory:* A System Call is a request to the OS kernel to perform an operation on behalf of a process. Categories: Process Control (fork, exec, exit), File Management (open, read, write), Device Management (ioctl), Information Maintenance (getpid, alarm), Communication (pipe, socket), Protection (chmod). Execution: transition from user mode to kernel mode and back.
+*Theory:* A System `Call` is a request to the OS kernel to perform an operation on behalf of a process. Categories: Process Control (fork, exec, exit), File Management (open, read, write), Device Management (ioctl), Information Maintenance (getpid, alarm), Communication (pipe, socket), Protection (chmod). Execution: transition from user mode to kernel mode and back.
 
 ```kotlin
 // ✅ System Call Flow
@@ -313,7 +313,7 @@ file.writeText("Hello")
 
 **IPC (Inter-Process Communication):**
 
-*Theory:* IPC is communication between processes. Mechanisms: Shared Memory (fastest, requires synchronization), Message Passing (e.g., Binder on Android), Pipes (unidirectional local channels), Sockets (bidirectional, including over networks), message queues, etc. In Android, Binder is the primary mechanism for system services and much app-to-app IPC, but apps can also use sockets, content providers, and other mechanisms.
+*Theory:* IPC is communication between processes. Mechanisms: Shared Memory (fastest, requires synchronization), `Message` Passing (e.g., Binder on Android), Pipes (unidirectional local channels), Sockets (bidirectional, including over networks), message queues, etc. In Android, Binder is the primary mechanism for system services and much app-to-app IPC, but apps can also use sockets, content providers, and other mechanisms.
 
 ```kotlin
 // ✅ Binder IPC Example (simplified)
@@ -375,10 +375,10 @@ thread {
 
 **Key Takeaways:**
 1. Process: isolated execution unit with its own virtual address space.
-2. Thread: lightweight execution unit within a process sharing memory; requires synchronization.
+2. `Thread`: lightweight execution unit within a process sharing memory; requires synchronization.
 3. Virtual Memory: address space abstraction for isolation and efficient memory use.
 4. CPU Scheduling: decides which process/thread runs next; includes preemptive and non-preemptive algorithms.
-5. System Call: request for a kernel service (user → kernel → user mode).
+5. System `Call`: request for a kernel service (user → kernel → user mode).
 6. `Context` Switch: save/restore execution state (overhead; cost depends on system).
 7. IPC: mechanisms for inter-process communication (Binder is Android’s primary system IPC mechanism, but not the only option).
 8. Deadlock: circular wait; prevent/avoid by breaking necessary conditions (e.g., strict lock ordering).

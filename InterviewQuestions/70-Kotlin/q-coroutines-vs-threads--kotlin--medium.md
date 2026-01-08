@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-182
 title: "Coroutines Vs Threads / Корутины против потоков"
 aliases: [Coroutines vs Threads, Корутины против потоков]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-kotlin-lamb
 created: 2025-10-15
 updated: 2025-11-09
 tags: [comparison, concurrency, coroutines, difficulty/medium, kotlin, programming-languages, threads]
----
+---\
 # Вопрос (RU)
 > В чём концептуальное отличие корутин от потоков в Java?
 
@@ -74,7 +74,7 @@ See also: [[c-kotlin]], [[c-coroutines]], [[c-structured-concurrency]].
 | **Weight** | Lightweight (you can create tens or hundreds of thousands) | Heavyweight (count limited by OS/VM resources) |
 | **Management** | Compiler + library (`kotlinx.coroutines`), scheduled within thread pools | Scheduled by OS/JVM as system threads |
 | **Cost** | Low per-unit memory/CPU overhead | Higher overhead (stack, context switching) |
-| **Context switching** | Cheap: switching between coroutines in user space within a thread | Expensive: switching between threads via the OS kernel |
+| **`Context` switching** | Cheap: switching between coroutines in user space within a thread | Expensive: switching between threads via the OS kernel |
 | **Blocking** | Support suspension (`suspend`): with proper non-blocking APIs they don't block the underlying thread | Typical blocking calls (I/O, `sleep`, `join`) block the thread |
 | **Creation cost** | Very low (state + stack footprint orders of magnitude smaller than a thread; implementation-dependent) | Relatively high (stack in the hundreds of KB–MB range per thread, platform/JVM dependent) |
 | **Scalability** | Can efficiently run 100,000+ coroutines on a limited number of threads | Practically operate with on the order of hundreds–thousands of threads |

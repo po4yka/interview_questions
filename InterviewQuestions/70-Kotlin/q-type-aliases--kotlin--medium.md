@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-021
 title: "Type Aliases in Kotlin / Псевдонимы типов в Kotlin"
 aliases: ["Type Aliases in Kotlin", "Псевдонимы типов в Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [difficulty/medium, kotlin, type-aliases, types]
----
+---\
 # Вопрос (RU)
 > Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?
 
@@ -356,7 +356,7 @@ fun main() {
 
 1. Improved Readability - Makes code more understandable by giving meaningful names to complex types
 2. Abstraction and Encapsulation - Can abstract implementation details
-3. Code Reusability - Provides consistent way to represent concepts
+3. Code Reusability - `Provides` consistent way to represent concepts
 4. DSL Creation - Helps create domain-specific languages
 
 ### Examples

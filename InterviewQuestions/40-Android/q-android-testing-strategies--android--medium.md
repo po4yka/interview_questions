@@ -1,4 +1,4 @@
----
+---\
 id: android-175
 title: Android Testing Strategies / Стратегии тестирования Android
 aliases: [Android Testing Strategies, Стратегии тестирования Android]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, difficulty/medium, testing]
 
----
+---\
 # Вопрос (RU)
 > Какие существуют стратегии тестирования Android приложений и как построить эффективную пирамиду тестов?
 
@@ -31,7 +31,7 @@ tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, d
 
 **Пирамида тестирования Android** распределяет тесты по уровням (проценты примерные, а не жёсткое правило):
 - **Unit тесты (~70%)** — быстрые JVM-тесты бизнес-логики без Android Framework
-- **Integration тесты (~20%)** — проверка взаимодействия между слоями и с Android компонентами (Room, WorkManager и т.п.)
+- **Integration тесты (~20%)** — проверка взаимодействия между слоями и с Android компонентами (`Room`, `WorkManager` и т.п.)
 - **UI тесты (~10%)** — end-to-end сценарии на эмуляторах/устройствах
 
 ### 1. Unit-тесты
@@ -84,7 +84,7 @@ class UserViewModelTest {
 
 ### 2. Integration-тесты
 
-Проверяют взаимодействие между слоями и с Android компонентами. Пример для Room (инструментальный тест):
+Проверяют взаимодействие между слоями и с Android компонентами. Пример для `Room` (инструментальный тест):
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -119,7 +119,7 @@ class UserDaoTest {
 }
 ```
 
-**Инструменты**: AndroidX Test, Robolectric (для быстрого локального запуска без устройства), реальная или in-memory Room БД в интеграционных тестах
+**Инструменты**: AndroidX Test, Robolectric (для быстрого локального запуска без устройства), реальная или in-memory `Room` БД в интеграционных тестах
 
 ### 3. UI-тесты
 
@@ -168,13 +168,13 @@ fun clickButton_displaysMessage() {
 
 ### Ключевые Практики
 
-1. **Изоляция через DI** — Hilt/Koin позволяют подменять зависимости в тестах (для Hilt инструментальные тесты с `HiltAndroidRule`, для JVM-тестов — обычные конструкторы/модули).
+1. **Изоляция через DI** — Hilt/Koin позволяют подменять зависимости в тестах (для `Hilt` инструментальные тесты с `HiltAndroidRule`, для JVM-тестов — обычные конструкторы/модули).
 2. **Идемпотентность** — тесты не зависят от порядка выполнения и предыдущего состояния.
 3. **Детерминизм** — избегать flaky тестов (жесткие таймауты, race conditions, зависимость от сети/часов).
 4. **Стратегии Test Doubles**:
    - Mocks для внешних API
    - Fakes для репозиториев (in-memory реализации)
-   - Real-компоненты для тех частей, которые и проверяются в интеграционных тестах (например, Room БД); для навигации чаще использовать тестовые/подмененные реализации.
+   - Real-компоненты для тех частей, которые и проверяются в интеграционных тестах (например, `Room` БД); для навигации чаще использовать тестовые/подмененные реализации.
 5. **CI-оптимизация** — unit/integration на каждый коммит, UI тесты реже (например, на pull request или перед релизом); ограничения по времени рассматривать как целевые бюджеты, а не жесткие нормы.
 
 ---
@@ -183,7 +183,7 @@ fun clickButton_displaysMessage() {
 
 **Android Testing Pyramid** distributes tests by execution speed and isolation (percentages are indicative, not strict rules):
 - **Unit tests (~70%)** — fast JVM tests of business logic without Android Framework
-- **Integration tests (~20%)** — verify interactions between layers and with Android components (Room, WorkManager, etc.)
+- **Integration tests (~20%)** — verify interactions between layers and with Android components (`Room`, `WorkManager`, etc.)
 - **UI tests (~10%)** — end-to-end scenarios on emulators/devices
 
 ### 1. Unit Tests
@@ -236,7 +236,7 @@ class UserViewModelTest {
 
 ### 2. Integration Tests
 
-Verify interaction between layers and with Android components. Example for Room (instrumented test):
+Verify interaction between layers and with Android components. Example for `Room` (instrumented test):
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -271,7 +271,7 @@ class UserDaoTest {
 }
 ```
 
-**Tools**: AndroidX Test, Robolectric (for fast local execution without a device), real or in-memory Room DB in integration tests
+**Tools**: AndroidX Test, Robolectric (for fast local execution without a device), real or in-memory `Room` DB in integration tests
 
 ### 3. UI Tests
 
@@ -326,7 +326,7 @@ fun clickButton_displaysMessage() {
 4. **Test Doubles strategies**:
    - Mocks for external APIs
    - Fakes for repositories (in-memory implementations)
-   - Real components for what you explicitly validate in integration tests (e.g., Room DB); for navigation prefer test/dedicated implementations.
+   - Real components for what you explicitly validate in integration tests (e.g., `Room` DB); for navigation prefer test/dedicated implementations.
 5. **CI optimization** — run unit/integration tests on every commit, UI tests less frequently (e.g., per PR or pre-release); treat time limits as target budgets, not rigid correctness rules.
 
 ---

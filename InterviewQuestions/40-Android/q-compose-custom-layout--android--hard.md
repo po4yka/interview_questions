@@ -1,4 +1,4 @@
----
+---\
 id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
 aliases: [Compose Custom Layout, Custom Layout Jetpack Compose, Кастомная разметка Compose, Кастомный layout в Compose]
@@ -16,7 +16,7 @@ created: 2023-10-11
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 > Как создать кастомный layout в Compose? Объясните механизм measurement и placement.
 
@@ -386,7 +386,7 @@ Here only one intrinsic method is overridden; others use defaults. If your custo
 ## References
 
 - [Custom layouts in Compose](https://developer.android.com/develop/ui/compose/layouts/custom)
-- [Layout basics - Constraints and measurement](https://developer.android.com/develop/ui/compose/layouts/basics)
+- [Layout basics - `Constraints` and measurement](https://developer.android.com/develop/ui/compose/layouts/basics)
 - [Compose performance best practices](https://developer.android.com/develop/ui/compose/performance)
 
 ## Related Questions
@@ -397,7 +397,7 @@ Here only one intrinsic method is overridden; others use defaults. If your custo
 
 ### Related (Same Level)
 
-- [[q-compose-canvas-graphics--android--hard]] — Canvas for custom drawing, Layout for custom measurement
+- [[q-compose-canvas-graphics--android--hard]] — `Canvas` for custom drawing, Layout for custom measurement
 - [[q-compose-compiler-plugin--android--hard]] — How Compose compiler optimizes layouts
 
 ### Advanced (Harder)

@@ -1,4 +1,4 @@
----
+---\
 id: "20251018-140001"
 title: "Hash Map / Хеш-таблица"
 aliases: ["Associative Array", "Dictionary", "Hash Map", "Hash Table", "HashMap", "Хеш-карта", "Хеш-таблица"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: [c-hash-tables, c-data-structures, c-collections-android, c-sparsearray]
+related: ["c-hash-tables", "c-data-structures", "c-collections-android", "c-sparsearray"]
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["algorithms", "collections", "concept", "data-structures", "difficulty/medium", "hash-map"]
----
+---\
 
 # Summary (EN)
 
@@ -33,7 +33,7 @@ A **hash map** (also called hash table, dictionary, or associative array) is a d
 ### Core Components
 
 1. **Hash Function**: A function that takes a key and produces an integer hash code
-2. **Buckets Array**: An array that stores the key-value pairs
+2. **Buckets `Array`**: An array that stores the key-value pairs
 3. **Collision Resolution**: A strategy for handling multiple keys that hash to the same index
 
 ### Step-by-Step Process
@@ -196,7 +196,7 @@ fun resize() {
 2. **Counting/Frequency**: Count occurrences of elements
 3. **Deduplication**: Remove duplicates or check for uniqueness
 4. **Grouping**: Group items by category or property
-5. **Two-way Mapping**: Map between two sets of values
+5. **Two-way Mapping**: `Map` between two sets of values
 
 ### Common Patterns
 
@@ -261,10 +261,10 @@ fun groupAnagrams(words: List<String>): List<List<String>> {
 
 | Structure | Lookup | Insert | Delete | Ordered | Use Case |
 |-----------|--------|--------|--------|---------|----------|
-| Hash Map  | O(1)   | O(1)   | O(1)   | No      | Fast key-value lookup |
+| Hash `Map`  | O(1)   | O(1)   | O(1)   | No      | Fast key-value lookup |
 | TreeMap   | O(log n) | O(log n) | O(log n) | Yes   | Sorted key-value pairs |
-| Array     | O(n)   | O(n)   | O(n)   | By index | Sequential access |
-| Linked List | O(n) | O(1)   | O(1)   | No      | Frequent insertions/deletions |
+| `Array`     | O(n)   | O(n)   | O(n)   | By index | Sequential access |
+| Linked `List` | O(n) | O(1)   | O(1)   | No      | Frequent insertions/deletions |
 
 ---
 
@@ -323,7 +323,7 @@ val threadSafeMap = ConcurrentHashMap<String, Int>()
 ```
 
 Features:
-- Thread-safe without locking entire map
+- `Thread`-safe without locking entire map
 - Uses segment-level locking or lock-free techniques
 - Allows concurrent reads and writes
 
@@ -378,7 +378,7 @@ map[Person("Alice", 30)] = "Engineer"
 ## References
 
 ### Documentation
-- [Java HashMap Documentation](https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html)
+- [Java `HashMap` Documentation](https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html)
 - [Kotlin Collections Overview](https://kotlinlang.org/docs/collections-overview.html)
 - [Python dict Documentation](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)
 

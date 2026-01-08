@@ -1,4 +1,4 @@
----
+---\
 id: android-170
 title: "What To Do In Android Project To Start Drawing UI On Screen / Что делать в Android проекте чтобы начать рисовать UI на экране"
 aliases: ["What To Do In Android Project To Start Drawing UI On Screen", "Что делать в Android проекте чтобы начать рисовать UI на экране"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/activity, android/ui-compose, android/ui-views, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 > Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
 
@@ -109,7 +109,7 @@ To display UI on screen in Android, you need to: **(1)** create an `Activity` as
 ### Minimum Steps
 
 1. **Create an `Activity`**
-2. **Set content view** (XML, Compose, or programmatically)
+2. **`Set` content view** (XML, Compose, or programmatically)
 3. **Register the `Activity` in AndroidManifest.xml** (and add MAIN/LAUNCHER for the launch `Activity`)
 
 ### Classic Approach (XML + Views)

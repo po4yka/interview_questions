@@ -1,4 +1,4 @@
----
+---\
 id: android-341
 title: Navigation Methods Android / Методы навигации Android
 aliases: [Navigation Methods, Методы навигации]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/ui-navigation, difficulty/medium, intent, navigation, startActivity]
 
----
+---\
 # Вопрос (RU)
 
 > Какие существуют способы навигации в Android-приложениях на Kotlin?
@@ -247,7 +247,7 @@ fun sendEmail(email: String, subject: String, body: String) {
 
 ### 4. Deep Links
 
-Deep links позволяют открывать конкретные экраны из уведомлений, браузера или других приложений. В связке с Navigation Component:
+Deep links позволяют открывать конкретные экраны из уведомлений, браузера или других приложений. В связке с Navigation `Component`:
 
 ```xml
 // Deep link в навигационном графе
@@ -304,12 +304,12 @@ fun createDeepLink(itemId: Int): PendingIntent {
 
 ### Рекомендации (Best Practices)
 
-1. Использовать Jetpack Navigation Component для новых проектов, когда это уместно.
+1. Использовать Jetpack Navigation `Component` для новых проектов, когда это уместно.
 2. Избегать чрезмерно вложенных фрагментов и сложных стеков навигации.
 3. При ручной работе через `FragmentTransaction` явно управлять back stack и состоянием.
 4. Применять Safe Args для типобезопасной передачи аргументов.
 5. Настраивать deep links для прямого доступа к важным экранам (уведомления, веб-ссылки).
-6. Отдавать предпочтение архитектуре с одной `Activity` и фрагментами + Navigation Component, если это упрощает навигацию.
+6. Отдавать предпочтение архитектуре с одной `Activity` и фрагментами + Navigation `Component`, если это упрощает навигацию.
 
 ---
 
@@ -534,7 +534,7 @@ fun sendEmail(email: String, subject: String, body: String) {
 
 ### 4. Deep Links Navigation
 
-Deep links allow navigation to a specific screen from outside or inside the app. With the Navigation Component, you declare them in the navigation graph and configure intent-filters in the manifest.
+Deep links allow navigation to a specific screen from outside or inside the app. With the Navigation `Component`, you declare them in the navigation graph and configure intent-filters in the manifest.
 
 ```xml
 // Define deep link in navigation graph
@@ -591,19 +591,19 @@ fun createDeepLink(itemId: Int): PendingIntent {
 
 ### Best Practices
 
-1. Use Jetpack Navigation Component for new projects where appropriate.
+1. Use Jetpack Navigation `Component` for new projects where appropriate.
 2. Avoid deep nesting of fragments and overly complex back stacks.
 3. Handle the back stack explicitly when using FragmentTransactions.
-4. Use Safe Args for type-safe argument passing with the Navigation Component.
+4. Use Safe Args for type-safe argument passing with the Navigation `Component`.
 5. Implement deep links for a better user experience and direct navigation.
-6. Prefer a single-`Activity` architecture with fragments + Navigation Component where it simplifies navigation.
+6. Prefer a single-`Activity` architecture with fragments + Navigation `Component` where it simplifies navigation.
 
 ---
 
 ## Follow-ups
 
-- How does the back stack differ between activities and fragments when using the Navigation Component?
-- When would you choose FragmentTransactions over the Navigation Component?
+- How does the back stack differ between activities and fragments when using the Navigation `Component`?
+- When would you choose FragmentTransactions over the Navigation `Component`?
 - How do you handle up navigation vs back navigation in a multi-activity app?
 
 ## References

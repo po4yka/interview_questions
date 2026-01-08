@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-244
 title: "How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull / Таймауты в корутинах"
 aliases: [Coroutine Timeouts, Таймауты в корутинах]
@@ -15,7 +15,7 @@ description: "Comprehensive guide to timeout handling in Kotlin coroutines, cove
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, c-structured-concurrency]
 subtopics: [coroutines, timeout]
----
+---\
 # Вопрос (RU)
 
 > Как обрабатывать таймауты в корутинах Kotlin: когда использовать `withTimeout`, а когда `withTimeoutOrNull`, в чём их различия и как применять их на практике?
@@ -500,7 +500,7 @@ suspend fun fetchStocks(): String {
 
 1. Use `withTimeout` for critical operations that must either complete within the deadline or fail explicitly.
 2. Use `withTimeoutOrNull` for optional/non-critical operations where you can proceed without a result.
-3. Set reasonable timeout values based on operation type, environment, and UX expectations.
+3. `Set` reasonable timeout values based on operation type, environment, and UX expectations.
 4. Always provide a fallback for `withTimeoutOrNull` (e.g., default value, cache, or skipping the feature).
 5. Remember that `TimeoutCancellationException` is a form of cancellation: it will cancel the timed-out block and its children, and `finally` blocks still run.
 6. Timeouts are cooperative and checked at suspension points; long CPU-bound work without suspension will not be interrupted unless you make it cancellable.

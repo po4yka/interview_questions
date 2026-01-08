@@ -1,4 +1,4 @@
----
+---\
 id: android-340
 title: "Service Types Android / Типы Service в Android"
 aliases: ["Service Types Android", "Типы Service в Android"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-10-28
 tags: [android/background-execution, android/service, background-tasks, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 
 > Какие существуют типы `Service` в Android?
@@ -47,7 +47,7 @@ startForeground(NOTIFICATION_ID, notification)
 
 Под "background service" обычно понимают запущенный (started) `Service`, выполняющий операции без прямого взаимодействия с пользователем: синхронизация данных, загрузка файлов и т.п.
 
-**Критическое ограничение**: с Android 8.0 (API 26) приложение **не может свободно запускать background service, находясь в фоне** (background execution limits). Если нужно длительное выполнение в фоне, следует использовать Foreground `Service` (с уведомлением) или такие компоненты, как WorkManager / JobScheduler.
+**Критическое ограничение**: с Android 8.0 (API 26) приложение **не может свободно запускать background service, находясь в фоне** (background execution limits). Если нужно длительное выполнение в фоне, следует использовать Foreground `Service` (с уведомлением) или такие компоненты, как `WorkManager` / JobScheduler.
 
 ```kotlin
 // ⚠️ Ограничение: такой вызов из фонового состояния приложения
@@ -77,7 +77,7 @@ class LocalService : Service() {
 ```
 
 **Важно**: `IntentService` устарел (deprecated с API 30). Для фоновых задач вместо него обычно используют:
-- WorkManager / JobScheduler — для отложенных и гарантированных задач;
+- `WorkManager` / JobScheduler — для отложенных и гарантированных задач;
 - обычный `Service` (или Foreground `Service`) с потоками/корутинами — если нужен прямой контроль выполнения.
 
 См. также: [[c-android-components]], [[q-android-app-components--android--easy]].
@@ -102,7 +102,7 @@ startForeground(NOTIFICATION_ID, notification)
 
 "Background service" usually refers to a started `Service` performing work without direct user interaction: data sync, file downloads, etc.
 
-**Critical limitation**: since Android 8.0 (API 26), an app **cannot freely start background services while in the background** (background execution limits). For long-running background work, you should use a Foreground `Service` (with a notification) or components like WorkManager / JobScheduler instead.
+**Critical limitation**: since Android 8.0 (API 26), an app **cannot freely start background services while in the background** (background execution limits). For long-running background work, you should use a Foreground `Service` (with a notification) or components like `WorkManager` / JobScheduler instead.
 
 ```kotlin
 // ⚠️ Limitation: this call from a backgrounded app
@@ -116,7 +116,7 @@ WorkManager.getInstance(context).enqueue(request)
 
 ### 3. Bound `Service`
 
-Provides an interface for interaction with other components via `bindService()`. It remains running only while at least one client is bound to it.
+`Provides` an interface for interaction with other components via `bindService()`. It remains running only while at least one client is bound to it.
 
 ```kotlin
 // ✅ Bound Service example
@@ -132,7 +132,7 @@ class LocalService : Service() {
 ```
 
 **Important**: `IntentService` is deprecated (since API 30). For background work instead you typically use:
-- WorkManager / JobScheduler for deferred and guaranteed tasks;
+- `WorkManager` / JobScheduler for deferred and guaranteed tasks;
 - a regular `Service` (or Foreground `Service`) with threads/coroutines when you need direct execution control.
 
 See also: [[c-android-components]], [[q-android-app-components--android--easy]].
@@ -142,7 +142,7 @@ See also: [[c-android-components]], [[q-android-app-components--android--easy]].
 ## Follow-ups
 
 - What are Foreground `Service` types and when were they introduced?
-- How does WorkManager differ from Services in terms of execution guarantees?
+- How does `WorkManager` differ from Services in terms of execution guarantees?
 - What happens to a Bound `Service` when all clients unbind?
 - What are the specific background execution limits on API 26+?
 - Can a `Service` be both foreground and bound simultaneously?

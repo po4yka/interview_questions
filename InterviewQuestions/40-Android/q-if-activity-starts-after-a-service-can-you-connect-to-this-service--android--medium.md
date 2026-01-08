@@ -1,4 +1,4 @@
----
+---\
 id: android-177
 title: If Activity Starts After A Service Can You Connect To This Service / Можно ли подключиться к Service если Activity запустилась после него
 aliases: [If Activity Starts After A Service Can You Connect To This Service, Можно ли подключиться к Service если Activity запустилась после него]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/intents-deeplinks, android/lifecycle, android/service, binding, difficulty/medium, ipc, service]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Можно ли подключиться к `Service`, если `Activity` запустилась после него?
@@ -148,7 +148,7 @@ class MyActivity : AppCompatActivity() {
 - `BIND_AUTO_CREATE`:
   - creates the `Service` if it is not yet running;
   - binds to it if it is already running and accessible.
-- Call `unbindService()` symmetrically to where you called `bindService()` (commonly `onStart()` / `onStop()` for `Activity`). Ensure you only call `unbindService()` when actually bound to avoid `IllegalArgumentException`.
+- `Call` `unbindService()` symmetrically to where you called `bindService()` (commonly `onStart()` / `onStop()` for `Activity`). Ensure you only call `unbindService()` when actually bound to avoid `IllegalArgumentException`.
 - Cross-process or cross-app binding requires additional configuration (exported `Service`, permissions, AIDL/IPC). The simple local `Binder` in this example applies only to in-process binding.
 
 ---

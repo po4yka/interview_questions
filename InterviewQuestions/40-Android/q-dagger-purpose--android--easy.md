@@ -1,4 +1,4 @@
----
+---\
 id: android-447
 title: Dagger Purpose / Назначение Dagger
 aliases: [Dagger Purpose, Назначение Dagger]
@@ -16,16 +16,16 @@ updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources:
   - "https://dagger.dev/"
----
+---\
 # Вопрос (RU)
-> Для чего нужен Dagger?
+> Для чего нужен `Dagger`?
 
 # Question (EN)
-> What is Dagger used for?
+> What is `Dagger` used for?
 
 ## Ответ (RU)
 
-**Dagger** - compile-time DI фреймворк, автоматизирующий создание и управление зависимостями в Android-приложениях.
+**`Dagger`** - compile-time DI фреймворк, автоматизирующий создание и управление зависимостями в Android-приложениях.
 
 ### Основные Преимущества
 
@@ -60,11 +60,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Зависимости `ApiService` и `UserDatabase` должны быть предоставлены через Dagger/Hilt (модули и компоненты), после чего Dagger сгенерирует код для их внедрения.
+Зависимости `ApiService` и `UserDatabase` должны быть предоставлены через Dagger/Hilt (модули и компоненты), после чего `Dagger` сгенерирует код для их внедрения.
 
 ### Hilt - Упрощение Для Android
 
-**Hilt** автоматизирует настройку Dagger для Android lifecycle:
+**`Hilt`** автоматизирует настройку `Dagger` для Android lifecycle:
 
 ```kotlin
 @HiltAndroidApp
@@ -78,14 +78,14 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-**Dagger** is a compile-time DI framework that automates dependency creation and management in Android applications.
+**`Dagger`** is a compile-time DI framework that automates dependency creation and management in Android applications.
 
 ### Main Benefits
 
 - **Loose coupling** - objects receive dependencies externally
 - **Testability** - easy mocking of real dependencies
 - **Compile-time validation** - dependency graph errors are caught at compile time
-- **Lifecycle management** - automatic creation/reuse via scopes
+- **`Lifecycle` management** - automatic creation/reuse via scopes
 
 ### Problem without DI
 
@@ -113,11 +113,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-The `ApiService` and `UserDatabase` dependencies must be provided via Dagger/Hilt (modules and components), after which Dagger generates the code to inject them.
+The `ApiService` and `UserDatabase` dependencies must be provided via Dagger/Hilt (modules and components), after which `Dagger` generates the code to inject them.
 
 ### Hilt - Android Simplification
 
-**Hilt** automates Dagger setup for Android lifecycle:
+**`Hilt`** automates `Dagger` setup for Android lifecycle:
 
 ```kotlin
 @HiltAndroidApp
@@ -131,31 +131,31 @@ class MainActivity : AppCompatActivity() {
 
 ## Дополнительные Вопросы (RU)
 
-- В чем разница между Dagger и Hilt?
-- Как работает compile-time валидация в Dagger?
+- В чем разница между `Dagger` и `Hilt`?
+- Как работает compile-time валидация в `Dagger`?
 - Что такое scopes и как они управляют жизненным циклом объектов?
-- Как вы будете тестировать класс с зависимостями, предоставленными через Dagger?
+- Как вы будете тестировать класс с зависимостями, предоставленными через `Dagger`?
 - Когда стоит использовать constructor injection vs field injection?
 
 ## Follow-ups (EN)
 
-- What's the difference between Dagger and Hilt?
-- How does compile-time validation work in Dagger?
+- What's the difference between `Dagger` and `Hilt`?
+- How does compile-time validation work in `Dagger`?
 - What are scopes and how do they manage object lifecycle?
-- How would you test a class with Dagger dependencies?
+- How would you test a class with `Dagger` dependencies?
 - When should you use constructor injection vs field injection?
 
 ## Ссылки (RU)
 
 - [[c-dependency-injection]]
-- Официальная документация Dagger: https://dagger.dev/
-- Руководство по Hilt: https://developer.android.com/training/dependency-injection/hilt-android
+- Официальная документация `Dagger`: https://dagger.dev/
+- Руководство по `Hilt`: https://developer.android.com/training/dependency-injection/hilt-android
 
 ## References (EN)
 
 - [[c-dependency-injection]]
-- Official Dagger documentation: https://dagger.dev/
-- Hilt guide: https://developer.android.com/training/dependency-injection/hilt-android
+- Official `Dagger` documentation: https://dagger.dev/
+- `Hilt` guide: https://developer.android.com/training/dependency-injection/hilt-android
 
 ## Связанные Вопросы (RU)
 

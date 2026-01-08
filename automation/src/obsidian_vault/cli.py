@@ -281,7 +281,7 @@ def cmd_normalize(args: argparse.Namespace) -> int:
         return 1
 
     taxonomy = TaxonomyLoader(repo_root).load()
-    allowed_topics = set(taxonomy.topics.keys()) if taxonomy and taxonomy.topics else set()
+    allowed_topics = taxonomy.topics if taxonomy and taxonomy.topics else set()
 
     moc_map = _build_moc_map(taxonomy) if taxonomy else {}
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-222
 title: "KMM Dependency Injection / Dependency Injection в KMM"
 aliases: ["Dependency Injection в KMM", "KMM Dependency Injection", "KMM DI", "Koin для KMM", "Koin"]
@@ -16,20 +16,20 @@ updated: 2025-11-10
 sources: []
 tags: [android/di-koin, android/kmp, di, difficulty/medium, koin, kotlin]
 
----
+---\
 # Вопрос (RU)
 
-> Объясните стратегии dependency injection для KMM проектов. Как использовать Koin для multiplatform DI? Как обрабатывать platform-specific зависимости? В чем разница между Koin, Dagger/Hilt и manual DI в KMM?
+> Объясните стратегии dependency injection для KMM проектов. Как использовать `Koin` для multiplatform DI? Как обрабатывать platform-specific зависимости? В чем разница между `Koin`, Dagger/Hilt и manual DI в KMM?
 
 # Question (EN)
 
-> Explain dependency injection strategies for KMM projects. How do you use Koin for multiplatform DI? How do you handle platform-specific dependencies? What are the differences between using Koin, Dagger/Hilt, and manual DI in KMM?
+> Explain dependency injection strategies for KMM projects. How do you use `Koin` for multiplatform DI? How do you handle platform-specific dependencies? What are the differences between using `Koin`, Dagger/Hilt, and manual DI in KMM?
 
 ---
 
 ## Ответ (RU)
 
-**Подход**: KMM DI требует унифицированного решения для всех платформ с поддержкой platform-specific реализаций. Koin — один из популярных вариантов для KMM благодаря официальной поддержке multiplatform.
+**Подход**: KMM DI требует унифицированного решения для всех платформ с поддержкой platform-specific реализаций. `Koin` — один из популярных вариантов для KMM благодаря официальной поддержке multiplatform.
 
 ### Koin Для KMM
 
@@ -129,7 +129,7 @@ actual class DatabaseDriverFactory {
 
 ### Сравнение DI Фреймворков
 
-**Koin**:
+**`Koin`**:
 - Multiplatform (Android, iOS, Desktop, Web)
 - Простая настройка, DSL
 - Нет code generation
@@ -151,7 +151,7 @@ actual class DatabaseDriverFactory {
 
 ### Рекомендации
 
-**Для KMM**: Чаще всего используется Koin (много платформ из коробки, единый стиль DI), либо manual DI для максимальной прозрачности.
+**Для KMM**: Чаще всего используется `Koin` (много платформ из коробки, единый стиль DI), либо manual DI для максимальной прозрачности.
 
 **Для Android-only**: Dagger/Hilt (compile-time safety, оптимизация).
 
@@ -161,11 +161,11 @@ actual class DatabaseDriverFactory {
 
 ## Answer (EN)
 
-**Approach**: KMM DI requires a unified solution across platforms while supporting platform-specific implementations. Koin is one of the popular options for KMM thanks to official multiplatform support.
+**Approach**: KMM DI requires a unified solution across platforms while supporting platform-specific implementations. `Koin` is one of the popular options for KMM thanks to official multiplatform support.
 
 ### Koin For KMM
 
-**Module setup**:
+**`Module` setup**:
 ```kotlin
 // commonMain - shared dependencies
 val networkModule = module {
@@ -261,7 +261,7 @@ actual class DatabaseDriverFactory {
 
 ### DI Framework Comparison
 
-**Koin**:
+**`Koin`**:
 - Multiplatform (Android, iOS, Desktop, Web)
 - Simple setup, DSL
 - No code generation
@@ -283,7 +283,7 @@ actual class DatabaseDriverFactory {
 
 ### Recommendations
 
-**For KMM**: Commonly Koin (good multiplatform support, consistent DI style) or manual DI for maximum simplicity/explicitness.
+**For KMM**: Commonly `Koin` (good multiplatform support, consistent DI style) or manual DI for maximum simplicity/explicitness.
 
 **For Android-only**: Dagger/Hilt (compile-time safety, performance).
 
@@ -293,19 +293,19 @@ actual class DatabaseDriverFactory {
 
 ## Дополнительные Вопросы (RU)
 
-- Как тестировать модули Koin в KMM?
+- Как тестировать модули `Koin` в KMM?
 - Каковы лучшие практики внедрения `ViewModel` в KMM?
 - Как обрабатывать зависимости, учитывающие жизненный цикл, на iOS?
-- Когда использовать `factory` против `single` scope в Koin?
-- Как мигрировать с Dagger на Koin в KMM?
+- Когда использовать `factory` против `single` scope в `Koin`?
+- Как мигрировать с `Dagger` на `Koin` в KMM?
 
 ## Follow-ups
 
-- How do you test Koin modules in KMM?
+- How do you test `Koin` modules in KMM?
 - What are best practices for `ViewModel` injection in KMM?
 - How do you handle lifecycle-aware dependencies in iOS?
-- When should you use factory vs single scope in Koin?
-- How do you migrate from Dagger to Koin in KMM?
+- When should you use factory vs single scope in `Koin`?
+- How do you migrate from `Dagger` to `Koin` in KMM?
 
 ## Ссылки (RU)
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-276
 title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
 aliases: ["Retrofit Usage Tutorial", "Retrofit Использование Tutorial"]
@@ -16,20 +16,20 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, retrofit]
 
----
+---\
 # Вопрос (RU)
 
-> Как делать сетевые запросы с помощью Retrofit?
+> Как делать сетевые запросы с помощью `Retrofit`?
 
 # Question (EN)
 
-> How to make network requests with Retrofit?
+> How to make network requests with `Retrofit`?
 
 ---
 
 ## Ответ (RU)
 
-Retrofit — это type-safe HTTP клиент для Android. Основная идея: вы описываете API через интерфейс с аннотациями, а Retrofit генерирует реализацию.
+`Retrofit` — это type-safe HTTP клиент для Android. Основная идея: вы описываете API через интерфейс с аннотациями, а `Retrofit` генерирует реализацию.
 
 ### Основные Шаги
 
@@ -69,14 +69,14 @@ interface ApiService {
 }
 ```
 
-**Аннотации Retrofit**:
+**Аннотации `Retrofit`**:
 - `@GET`, `@POST`, `@PUT`, `@DELETE` — HTTP методы
 - `@Path` — параметр пути URL (users/{id})
 - `@Query` — query параметры (?userId=123)
 - `@Body` — тело запроса (JSON)
 - `@Header` — заголовок запроса
 
-**4. Создать экземпляр Retrofit**
+**4. Создать экземпляр `Retrofit`**
 
 ```kotlin
 object RetrofitClient {
@@ -205,11 +205,11 @@ suspend fun getPostsRequired(
 2. Оборачивайте результаты в Result/Either для централизованной обработки ошибок
 3. Выносите сетевую логику в Repository — не вызывайте API напрямую из `ViewModel`
 4. Логируйте только в DEBUG — HttpLoggingInterceptor с проверкой BuildConfig
-5. Добавляйте timeouts в OkHttp (connectTimeout, readTimeout)
+5. Добавляйте timeouts в `OkHttp` (connectTimeout, readTimeout)
 
 ## Answer (EN)
 
-Retrofit is a type-safe HTTP client for Android. The core concept: you describe the API through an interface with annotations, and Retrofit generates the implementation.
+`Retrofit` is a type-safe HTTP client for Android. The core concept: you describe the API through an interface with annotations, and `Retrofit` generates the implementation.
 
 ### Key Steps
 
@@ -249,14 +249,14 @@ interface ApiService {
 }
 ```
 
-**Retrofit annotations**:
+**`Retrofit` annotations**:
 - `@GET`, `@POST`, `@PUT`, `@DELETE` — HTTP methods
 - `@Path` — URL path parameter (users/{id})
 - `@Query` — query parameters (?userId=123)
 - `@Body` — request body (JSON)
 - `@Header` — request header
 
-**4. Create Retrofit instance**
+**4. Create `Retrofit` instance**
 
 ```kotlin
 object RetrofitClient {
@@ -312,7 +312,7 @@ sealed class Result<out T> {
 }
 ```
 
-**6. Call from `ViewModel`**
+**6. `Call` from `ViewModel`**
 
 ```kotlin
 class UserViewModel(
@@ -385,22 +385,22 @@ suspend fun getPostsRequired(
 2. Wrap results in Result/Either for centralized error handling
 3. Extract networking into a Repository — don't call the API directly from the `ViewModel`
 4. Log only in DEBUG — HttpLoggingInterceptor with a BuildConfig check
-5. Add timeouts in OkHttp (connectTimeout, readTimeout)
+5. Add timeouts in `OkHttp` (connectTimeout, readTimeout)
 
 ---
 
 ## Дополнительные Вопросы (RU)
 
-- Как обрабатывать токены аутентификации с помощью интерсепторов Retrofit?
-- В чем разница между suspend-функциями и `Call<T>` в Retrofit?
+- Как обрабатывать токены аутентификации с помощью интерсепторов `Retrofit`?
+- В чем разница между suspend-функциями и `Call<T>` в `Retrofit`?
 - Как реализовать логику повторных попыток для неудачных сетевых запросов?
 - Когда стоит использовать `@QueryMap` вместо отдельных `@Query` параметров?
-- Как тестировать вызовы Retrofit с помощью MockWebServer?
+- Как тестировать вызовы `Retrofit` с помощью MockWebServer?
 
 ## Ссылки (RU)
 
-- Официальная документация Retrofit: https://square.github.io/retrofit/
-- Документация по OkHttp Interceptors: https://square.github.io/okhttp/interceptors/
+- Официальная документация `Retrofit`: https://square.github.io/retrofit/
+- Документация по `OkHttp` Interceptors: https://square.github.io/okhttp/interceptors/
 
 ## Связанные Вопросы (RU)
 
@@ -414,11 +414,11 @@ suspend fun getPostsRequired(
 
 ## Follow-ups
 
-- How to handle authentication tokens with Retrofit interceptors?
-- What's the difference between suspend functions and `Call<T>` in Retrofit?
+- How to handle authentication tokens with `Retrofit` interceptors?
+- What's the difference between suspend functions and `Call<T>` in `Retrofit`?
 - How to implement retry logic for failed network requests?
 - When should you use `@QueryMap` vs individual `@Query` parameters?
-- How to test Retrofit API calls with MockWebServer?
+- How to test `Retrofit` API calls with MockWebServer?
 
 ## References
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-159
 title: "MVI One-Time Events / Одноразовые события в MVI"
 aliases: ["MVI One-Time Events", "One-time events in MVI", "SharedFlow для событий", "Одноразовые события в MVI"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
 
----
+---\
 # Вопрос (RU)
 
 > Как обработать одноразовые события (one-time events) в MVI архитектуре?
@@ -328,7 +328,7 @@ fun `loadUsers failure emits error event`() = runTest {
 ## References
 
 - [[c-viewmodel]] - `ViewModel` fundamentals
-- [[c-lifecycle]] - Android Lifecycle
+- [[c-lifecycle]] - Android `Lifecycle`
 
 ## Related Questions
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-145
 title: What Is A View And What Is Responsible For Its Visual Part / Что такое View и что отвечает за её визуальную часть
 aliases: [What Is A View And What Is Responsible For Its Visual Part, Что такое View и что отвечает за её визуальную часть]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое `View` и что отвечает за её визуальную часть?
@@ -31,7 +31,7 @@ tags: [android/ui-views, difficulty/medium]
 
 ### Основные Характеристики
 
-**`View`** — базовый класс для виджетов (Button, TextView, ImageView). **`ViewGroup`** — подкласс `View`, контейнер для других `View`, формирующий иерархию и управляющий измерением и компоновкой дочерних элементов (например, LinearLayout, ConstraintLayout).
+**`View`** — базовый класс для виджетов (`Button`, `TextView`, `ImageView`). **`ViewGroup`** — подкласс `View`, контейнер для других `View`, формирующий иерархию и управляющий измерением и компоновкой дочерних элементов (например, `LinearLayout`, `ConstraintLayout`).
 
 ```kotlin
 // ✅ Типичные подклассы View
@@ -112,7 +112,7 @@ textView.apply {
 }
 ```
 
-1. Canvas API — используется внутри `onDraw()` для кастомной отрисовки (например, `drawCircle`, `drawPath`, `drawText`).
+1. `Canvas` API — используется внутри `onDraw()` для кастомной отрисовки (например, `drawCircle`, `drawPath`, `drawText`).
 
 В конечном итоге визуальная часть `View` формируется комбинацией:
 - параметров компоновки от родителя (где и какого размера `View`),
@@ -126,7 +126,7 @@ A **`View`** is the fundamental building block for user interfaces in Android. I
 
 ### Core Characteristics
 
-**`View`** is the base class for widgets (Button, TextView, ImageView). **`ViewGroup`** is a subclass of `View` that acts as a container for other `Views`, forming a hierarchy and controlling how its children are measured and laid out (e.g., LinearLayout, ConstraintLayout).
+**`View`** is the base class for widgets (`Button`, `TextView`, `ImageView`). **`ViewGroup`** is a subclass of `View` that acts as a container for other `Views`, forming a hierarchy and controlling how its children are measured and laid out (e.g., `LinearLayout`, `ConstraintLayout`).
 
 ```kotlin
 // ✅ Typical View subclasses
@@ -207,7 +207,7 @@ textView.apply {
 }
 ```
 
-1. Canvas API — used inside `onDraw()` for custom drawing (e.g., `drawCircle`, `drawPath`, `drawText`).
+1. `Canvas` API — used inside `onDraw()` for custom drawing (e.g., `drawCircle`, `drawPath`, `drawText`).
 
 Ultimately, the `View`'s visual part is defined by the combination of:
 - layout parameters from its parent (where it is placed and how big it is),

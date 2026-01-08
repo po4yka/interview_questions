@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-073616"
 title: "Coroutine Context / Coroutine Context"
 aliases: ["Coroutine Context"]
@@ -9,17 +9,18 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-coroutines, c-kotlin-coroutines, c-structured-concurrency, c-flow]
+moc: "moc-cs"
+related: ["c-coroutines", "c-kotlin-coroutines", "c-structured-concurrency", "c-flow"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-Coroutine context is a structured set of elements that defines how a coroutine runs: its dispatcher (threading), job (lifecycle), name, and other metadata. It matters because it controls scheduling, cancellation, propagation of metadata, and resource management across suspended functions. In practice (e.g., Kotlin coroutines), every coroutine has a context, and child coroutines inherit and can override parts of their parent's context.
+`Coroutine` context is a structured set of elements that defines how a coroutine runs: its dispatcher (threading), job (lifecycle), name, and other metadata. It matters because it controls scheduling, cancellation, propagation of metadata, and resource management across suspended functions. In practice (e.g., Kotlin coroutines), every coroutine has a context, and child coroutines inherit and can override parts of their parent's context.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
@@ -35,7 +36,7 @@ Coroutine context is a structured set of elements that defines how a coroutine r
 - Dispatcher/threading: The CoroutineDispatcher in the context determines which thread or thread pool executes coroutine code (e.g., Default, IO, Main).
 - Job and cancellation: The Job element controls lifecycle, structured concurrency, and cancellation; cancellation propagates through the context hierarchy.
 - Inheritance and overriding: Child coroutines inherit their parent context by default, but specific elements (like dispatcher or name) can be overridden when launching.
-- Context propagation: Context travels across suspension points, ensuring consistent execution environment and metadata without manually passing parameters.
+- `Context` propagation: `Context` travels across suspension points, ensuring consistent execution environment and metadata without manually passing parameters.
 
 ## Ключевые Моменты (RU)
 
@@ -47,4 +48,4 @@ Coroutine context is a structured set of elements that defines how a coroutine r
 
 ## References
 
-- Kotlin Coroutines Guide: Coroutine context and dispatchers — https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html
+- Kotlin Coroutines Guide: `Coroutine` context and dispatchers — https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html

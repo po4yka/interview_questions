@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-windowinsets, c-notification, c-android-views, c-system-ui, c-android-basics]
+related: ["c-windowinsets", "c-notification", "c-android-views", "c-system-ui", "c-android-basics"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
+tags: [android, concept, difficulty/medium]
 ---
 
 # Summary (EN)

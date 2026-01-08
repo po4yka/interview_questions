@@ -1,4 +1,4 @@
----
+---\
 id: android-247
 title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент
 aliases: [Photo Editor Component, Separate Photo Editor, Отдельный компонент редактора, Фоторедактор как компонент]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, android/ui-graphics, android/ui-views, bitmap, canvas, difficulty/easy, fragments, imageview, views]
 
----
+---\
 # Вопрос (RU)
 
 > Как реализовать фоторедактор как отдельный компонент?
@@ -409,7 +409,7 @@ private fun saveImage() {
 
 ## References
 
-- [Android Canvas and Bitmap Documentation](https://developer.android.com/reference/android/graphics/Bitmap)
+- [Android `Canvas` and `Bitmap` Documentation](https://developer.android.com/reference/android/graphics/Bitmap)
 - [ColorMatrix Filters](https://developer.android.com/reference/android/graphics/ColorMatrix)
 - [MediaStore API](https://developer.android.com/training/data-storage/shared/media)
 

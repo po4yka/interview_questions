@@ -1,4 +1,4 @@
----
+---\
 id: android-174
 title: Can Fragment State Loss Occur? / Бывает ли потеря состояния у Fragment
 aliases: ["Can Fragment State Loss Occur?", "Бывает ли потеря состояния у Fragment"]
@@ -16,7 +16,7 @@ created: 2024-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/processes, difficulty/medium]
 
----
+---\
 
 # Вопрос (RU)
 > Бывает ли потеря состояния у `Fragment`?
@@ -213,16 +213,16 @@ fragmentManager.beginTransaction()
 1. В чём разница между `commit()`, `commitNow()` и `commitAllowingStateLoss()` с точки зрения времени выполнения и безопасности состояния?
 2. Как работает `isStateSaved()` внутренне и когда именно он возвращает `true`?
 3. Как безопасно обрабатывать транзакции фрагментов, запускаемые асинхронными операциями (сеть, база данных)?
-4. Какие данные должны храниться в `ViewModel`, какие — в `savedInstanceState`, а какие — в персистентном хранилище (Room, DataStore)?
-5. Как Navigation Component помогает снизить риск потери состояния фрагментов по сравнению с ручным использованием `FragmentManager`?
+4. Какие данные должны храниться в `ViewModel`, какие — в `savedInstanceState`, а какие — в персистентном хранилище (`Room`, DataStore)?
+5. Как Navigation `Component` помогает снизить риск потери состояния фрагментов по сравнению с ручным использованием `FragmentManager`?
 
 ## Follow-ups
 
 1. What's the difference between `commit()`, `commitNow()`, and `commitAllowingStateLoss()` in terms of execution timing and state safety?
 2. How does `isStateSaved()` work internally and when exactly does it return true?
 3. How do you handle fragment transactions triggered by asynchronous operations (network, database) safely?
-4. What data should live in `ViewModel` vs `savedInstanceState` vs persistent storage (Room, DataStore)?
-5. How does Navigation Component help mitigate fragment state loss compared to manual `FragmentManager` usage?
+4. What data should live in `ViewModel` vs `savedInstanceState` vs persistent storage (`Room`, DataStore)?
+5. How does Navigation `Component` help mitigate fragment state loss compared to manual `FragmentManager` usage?
 
 ## Ссылки (RU)
 
@@ -249,7 +249,7 @@ fragmentManager.beginTransaction()
 - Вопросы о методах коммита `FragmentTransaction`
 
 ### Продвинутые (сложнее)
-- Вопросы о Navigation Component и архитектуре Jetpack Navigation
+- Вопросы о Navigation `Component` и архитектуре Jetpack Navigation
 - Вопросы об обработке смерти процесса и стратегиях восстановления состояния
 - Вопросы о мультимодульной навигации и deeplink-ах с использованием фрагментов
 
@@ -264,6 +264,6 @@ fragmentManager.beginTransaction()
 - Questions about `FragmentTransaction` commit methods
 
 ### Advanced (Harder)
-- Questions about Navigation Component and Jetpack Navigation architecture
+- Questions about Navigation `Component` and Jetpack Navigation architecture
 - Questions about process death handling and state restoration strategies
 - Questions about multi-module navigation and deep linking with fragments

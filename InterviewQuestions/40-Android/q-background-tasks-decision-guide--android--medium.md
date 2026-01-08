@@ -1,4 +1,4 @@
----
+---\
 id: android-006
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
 aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-05
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Как выбрать правильный способ выполнения фоновых задач в Android?
 
@@ -50,7 +50,7 @@ flowchart TD
 - Автоматическая отмена при уничтожении scope
 - Применение: загрузка данных UI, вычисления для экрана
 
-**2. WorkManager (отложенные задачи)**
+**2. `WorkManager` (отложенные задачи)**
 - Надёжное (best-effort) выполнение с учётом ограничений системы (сеть, батарея, Doze Mode), с возможностью пережить перезагрузку устройства
 - Применение: синхронизация, периодические загрузки, очистка кэша
 
@@ -102,9 +102,9 @@ class FileTransferService : LifecycleService() {
 
 **Ключевые моменты**:
 - **Coroutines**: используйте структурированные scope (`viewModelScope`, `lifecycleScope`) для автоотмены
-- **WorkManager**: обеспечивает устойчивое выполнение даже после перезагрузки устройства и учитывает Doze Mode; точное время запуска контролируется системой
+- **`WorkManager`**: обеспечивает устойчивое выполнение даже после перезагрузки устройства и учитывает Doze Mode; точное время запуска контролируется системой
 - **ShortService**: использует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, доступный только на поддерживаемых версиях Android и предназначенный для задач с жёстким лимитом выполнения (~3 минут)
-- **Избегайте**: обычных Service без foreground-режима для продолжительных задач; они нестабильны и подвержены убийству системой
+- **Избегайте**: обычных `Service` без foreground-режима для продолжительных задач; они нестабильны и подвержены убийству системой
 
 ---
 
@@ -132,7 +132,7 @@ flowchart TD
 - Automatic cancellation on scope destruction
 - Use cases: UI data loading, screen computations
 
-**2. WorkManager (deferred tasks)**
+**2. `WorkManager` (deferred tasks)**
 - Best-effort reliable execution respecting system constraints (network, battery, Doze Mode), with ability to survive device reboot
 - Use cases: synchronization, periodic downloads, cache cleanup
 
@@ -184,7 +184,7 @@ class FileTransferService : LifecycleService() {
 
 **Key points**:
 - **Coroutines**: use structured scopes (`viewModelScope`, `lifecycleScope`) for auto-cancellation
-- **WorkManager**: provides robust execution even after device reboot and respects Doze Mode; exact timing is controlled by the system
+- **`WorkManager`**: provides robust execution even after device reboot and respects Doze Mode; exact timing is controlled by the system
 - **ShortService**: uses `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, only available on supported Android versions, and is intended for work that must complete within the enforced time limit (~3 minutes)
 - **Avoid**: using regular Services without foreground mode for long-running tasks; they are unstable and likely to be killed by the system
 
@@ -192,9 +192,9 @@ class FileTransferService : LifecycleService() {
 
 ## Follow-ups
 
-- How does Doze Mode affect WorkManager execution timing and constraints?
+- How does Doze Mode affect `WorkManager` execution timing and constraints?
 - What happens to ShortService if execution exceeds 3 minutes timeout?
-- When to use ExactAlarmPermission vs WorkManager for time-sensitive operations?
+- When to use ExactAlarmPermission vs `WorkManager` for time-sensitive operations?
 - How to implement graceful degradation when foreground service permission is denied?
 - What are the battery implications of using START_STICKY vs START_NOT_STICKY?
 

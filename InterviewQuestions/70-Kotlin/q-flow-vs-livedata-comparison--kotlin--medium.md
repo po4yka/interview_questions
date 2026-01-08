@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-144
 title: "Flow vs LiveData Comparison / Сравнение Flow и LiveData"
 aliases: [Flow vs LiveData Comparison, Kotlin Flow vs LiveData]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > В чем разница между Kotlin `Flow` и `LiveData`? Когда следует использовать каждый из них?
 
@@ -484,7 +484,7 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 | Feature | `LiveData` | `Flow` (`StateFlow`/`SharedFlow`) |
 |---------|------------|-----------------------------------|
 | **Type** | Hot stream (holds state, delivers to active observers) | Cold stream (`Flow`) / Hot stream (`StateFlow`/`SharedFlow`) |
-| **Lifecycle Aware** | Yes, built-in | No, requires explicit handling (e.g., `repeatOnLifecycle`) |
+| **`Lifecycle` Aware** | Yes, built-in | No, requires explicit handling (e.g., `repeatOnLifecycle`) |
 | **Platform** | Android-specific (AndroidX library, primarily for Android) | Platform-agnostic (part of Kotlin coroutines) |
 | **Operators** | Limited (map, switchMap, etc.) | Rich set of transformation/combination operators |
 | **Threading** | Observers receive updates on Main thread | Configurable with dispatchers |
@@ -557,7 +557,7 @@ class UserViewModel : ViewModel() {
 
 ### Lifecycle Awareness
 
-**`LiveData` - Built-in Lifecycle Awareness**:
+**`LiveData` - Built-in `Lifecycle` Awareness**:
 ```kotlin
 // LiveData automatically delivers values only to active observers
 class UserActivity : AppCompatActivity() {
@@ -574,7 +574,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-**`Flow` - Manual Lifecycle Handling Required**:
+**`Flow` - Manual `Lifecycle` Handling Required**:
 ```kotlin
 // BAD: Flow does not stop automatically with lifecycle state changes
 class UserActivity : AppCompatActivity() {
@@ -656,7 +656,7 @@ class UserViewModel : ViewModel() {
 
 ### Threading Model
 
-**`LiveData` - Main Thread Default**:
+**`LiveData` - Main `Thread` Default**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableLiveData<User>()

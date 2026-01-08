@@ -1,4 +1,4 @@
----
+---\
 id: android-363
 title: "Polling Implementation / Реализация Polling"
 aliases: ["Android Polling", "Polling Implementation", "Реализация Polling"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Как реализовать polling в Android приложении? Какие подходы существуют и когда их использовать?
@@ -172,19 +172,19 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Best Practices
 
-1. **Lifecycle-aware cancellation**: Используйте `viewModelScope` или другие scope'ы для автоотмены.
+1. **`Lifecycle`-aware cancellation**: Используйте `viewModelScope` или другие scope'ы для автоотмены.
 2. **Network checks**: Проверяйте доступность сети перед запросом.
-3. **Battery optimization**: Избегайте частых запросов в фоне, используйте WorkManager constraints.
+3. **Battery optimization**: Избегайте частых запросов в фоне, используйте `WorkManager` constraints.
 4. **Error handling**: Используйте exponential backoff для retry.
 5. **Adaptive intervals**: Подстраивайте частоту под реальные изменения данных.
 
 ### Сравнение Подходов
 
-| Метод | Use Case | Интервал | Lifecycle |
+| Метод | Use Case | Интервал | `Lifecycle` |
 |-------|----------|----------|-----------|
 | Coroutines + `Flow` | UI-bound | Любой | Привязан к lifecycle scope (`Activity`/`Fragment`/`ViewModel`) |
-| WorkManager | Background | ≥15 минут | Переживает перезагрузку |
-| Handler + Runnable | Simple tasks | Любой | Ручное управление |
+| `WorkManager` | Background | ≥15 минут | Переживает перезагрузку |
+| `Handler` + `Runnable` | Simple tasks | Любой | Ручное управление |
 | AlarmManager | Exact timing | Любой | Работает в фоне, возможен повышенный расход батареи |
 
 ---
@@ -334,19 +334,19 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Best Practices
 
-1. **Lifecycle-aware cancellation**: Use `viewModelScope` or other scopes for auto-cancellation.
+1. **`Lifecycle`-aware cancellation**: Use `viewModelScope` or other scopes for auto-cancellation.
 2. **Network checks**: Verify network availability before requests.
-3. **Battery optimization**: Avoid frequent background polling, use WorkManager constraints.
+3. **Battery optimization**: Avoid frequent background polling, use `WorkManager` constraints.
 4. **Error handling**: Use exponential backoff for retries.
 5. **Adaptive intervals**: Adjust frequency based on actual data changes.
 
 ### Comparison
 
-| Method | Use Case | Interval | Lifecycle |
+| Method | Use Case | Interval | `Lifecycle` |
 |--------|----------|----------|-----------|
 | Coroutines + `Flow` | UI-bound | Any | Tied to lifecycle scope (`Activity`/`Fragment`/`ViewModel`) |
-| WorkManager | Background | ≥15 min | Survives reboot |
-| Handler + Runnable | Simple tasks | Any | Manual management |
+| `WorkManager` | Background | ≥15 min | Survives reboot |
+| `Handler` + `Runnable` | Simple tasks | Any | Manual management |
 | AlarmManager | Exact timing | Any | Background, possible higher battery usage |
 
 ---

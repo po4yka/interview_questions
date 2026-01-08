@@ -13,7 +13,7 @@ moc: moc-kotlin
 related: [c-collections, c-kotlin, q-list-vs-sequence--kotlin--medium]
 created: 2024-10-13
 updated: 2025-11-11
-tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequence]
+tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequences]
 ---
 # Вопрос (RU)
 > В чем разница между работой с `List` и работой с `Sequence`?

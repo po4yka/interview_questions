@@ -1,4 +1,4 @@
----
+---\
 id: android-616
 title: Jetpack Window Manager for Foldables / Jetpack Window Manager для складных устройств
 aliases: [Jetpack Window Manager Foldables, Jetpack Window Manager для складных устройств]
@@ -20,12 +20,12 @@ sources:
   - url: "https://developer.android.com/guide/topics/large-screens/ideas"
     note: "Adaptive layout patterns"
 
----
+---\
 # Вопрос (RU)
-> Как адаптировать Android-приложение под планшеты и складные устройства с помощью Jetpack Window Manager: обрабатывать WindowSizeClass, posture, hinge и настраивать Compose/Views под разные состояния?
+> Как адаптировать Android-приложение под планшеты и складные устройства с помощью Jetpack `Window` Manager: обрабатывать WindowSizeClass, posture, hinge и настраивать Compose/Views под разные состояния?
 
 # Question (EN)
-> How do you adapt an Android app for tablets and foldables using Jetpack Window Manager, handling WindowSizeClass, posture, and hinge data to customize Compose/`View` layouts across states?
+> How do you adapt an Android app for tablets and foldables using Jetpack `Window` Manager, handling WindowSizeClass, posture, and hinge data to customize Compose/`View` layouts across states?
 
 ---
 
@@ -33,7 +33,7 @@ sources:
 
 ## Краткая Версия
 - Используйте `calculateWindowSizeClass(activity)` из `material3-window-size-class` в `Activity` для определения compact/medium/expanded и пробрасывайте в UI.
-- Применяйте Jetpack Window Manager (`androidx.window`) для чтения `WindowLayoutInfo` и `FoldingFeature` (posture, hinge, `isSeparating`, `bounds`).
+- Применяйте Jetpack `Window` Manager (`androidx.window`) для чтения `WindowLayoutInfo` и `FoldingFeature` (posture, hinge, `isSeparating`, `bounds`).
 - Для `View`-интерфейсов используйте `ActivityEmbedding` (`androidx.window.embedding`) и правила split-view.
 - В Compose применяйте адаптивные скэффолды (`NavigationSuiteScaffold`, list-detail), учитывая шарнир и системные insets.
 - Тестируйте на эмуляторах складных устройств, эмулируйте posture/hinge через тестовые утилиты и оптимизируйте recomposition при изменении размера и posture.
@@ -53,7 +53,7 @@ sources:
 
 #### Архитектура
 
-- Использовать слой адаптера window/layout-информации (обертка над Jetpack Window Manager), который поставляет UI состояние: `WindowSizeClass`, наличие/тип `FoldingFeature`, разделяющий ли шарнир, безопасные зоны.
+- Использовать слой адаптера window/layout-информации (обертка над Jetpack `Window` Manager), который поставляет UI состояние: `WindowSizeClass`, наличие/тип `FoldingFeature`, разделяющий ли шарнир, безопасные зоны.
 - На уровне презентации (Compose/Views) подписываться на это состояние и выбирать соответствующую компоновку (одна панель, две панели, три панели).
 - Инкапсулировать правила разметки и реагирование на posture в одном месте, чтобы избежать дублирования и обеспечить тестируемость.
 
@@ -72,7 +72,7 @@ fun AdaptiveApp(windowSizeClass: WindowSizeClass) {
 ```
 
 - Рассчитывайте `WindowSizeClass` через `calculateWindowSizeClass(activity)` (из `androidx.compose.material3.windowsizeclass`) в `Activity` и передавайте его в корневой composable.
-- Используйте Jetpack Window Manager (`androidx.window`) для получения `WindowMetrics`, если нужен более низкоуровневый контроль.
+- Используйте Jetpack `Window` Manager (`androidx.window`) для получения `WindowMetrics`, если нужен более низкоуровневый контроль.
 - Сохраняйте класс размера в `ViewModel` или локальном состоянии (`remember`) на уровне навигационного хоста для переиспользования.
 
 #### 2. Posture И FoldingFeature
@@ -117,19 +117,19 @@ RuleController.getInstance(context).setRules(
 ```
 
 - Позволяет запускать master-detail / list-detail в двух панелях для планшетов и складных устройств.
-- Работает поверх Jetpack Window Manager (`androidx.window.embedding`).
-- Пример носит схемный характер: в реальном коде необходимо настроить пары `Activity`, пороги размеров, split ratio, ориентацию/направление раскладки и учитывать актуальную версию Window API (XML-правила или программная конфигурация).
+- Работает поверх Jetpack `Window` Manager (`androidx.window.embedding`).
+- Пример носит схемный характер: в реальном коде необходимо настроить пары `Activity`, пороги размеров, split ratio, ориентацию/направление раскладки и учитывать актуальную версию `Window` API (XML-правила или программная конфигурация).
 
 #### 4. Compose Адаптация
 
 - Используйте `NavigationSuiteScaffold` (Material 3) для адаптивной навигации (bottom bar / navigation rail / navigation drawer в зависимости от `WindowSizeClass`).
 - Используйте адаптивные двухпанельные компоненты: `ListDetailPaneScaffold` и аналогичные из актуальных adaptive-библиотек (`material3-adaptive`), либо их эквиваленты (Accompanist/legacy — с осознанием статуса библиотек).
-- Для учета области шарнира используйте `FoldingFeature.bounds` и `isSeparating` из Jetpack Window Manager; системные insets (`WindowInsets` / `WindowInsetsCompat`, включая `displayCutout`) учитывайте отдельно для вырезов и системных жестов.
+- Для учета области шарнира используйте `FoldingFeature.bounds` и `isSeparating` из Jetpack `Window` Manager; системные insets (`WindowInsets` / `WindowInsetsCompat`, включая `displayCutout`) учитывайте отдельно для вырезов и системных жестов.
 
 #### 5. Тестирование
 
-- Используйте эмуляторы с профилями складных устройств (Pixel Fold, Surface Duo и др.) и меняйте posture/fold state.
-- Для UI-тестов Jetpack Window Manager применяйте `WindowLayoutInfoPublisherRule` из тестового артефакта, чтобы эмулировать разные `FoldingFeature` конфигурации.
+- Используйте эмуляторы с профилями складных устройств (Pixel Fold, `Surface` Duo и др.) и меняйте posture/fold state.
+- Для UI-тестов Jetpack `Window` Manager применяйте `WindowLayoutInfoPublisherRule` из тестового артефакта, чтобы эмулировать разные `FoldingFeature` конфигурации.
 - Делайте snapshot/скриншот-тесты для разных `WindowSizeClass` и состояний posture.
 
 #### 6. Производительность
@@ -144,7 +144,7 @@ RuleController.getInstance(context).setRules(
 
 ## Short Version
 - Use `calculateWindowSizeClass(activity)` from `material3-window-size-class` in the `Activity` to decide between compact/medium/expanded layouts and pass it down.
-- Use Jetpack Window Manager (`androidx.window`) to read `WindowLayoutInfo` and `FoldingFeature` (posture, hinge, `isSeparating`, `bounds`).
+- Use Jetpack `Window` Manager (`androidx.window`) to read `WindowLayoutInfo` and `FoldingFeature` (posture, hinge, `isSeparating`, `bounds`).
 - For `View`-based UIs, configure `ActivityEmbedding` (`androidx.window.embedding`) split rules.
 - In Compose, use adaptive scaffolds (`NavigationSuiteScaffold`, list-detail patterns) and honor hinge plus regular insets.
 - Test on foldable/large-screen profiles, simulate posture/hinge in tests, and optimize recomposition when posture/size changes.
@@ -164,7 +164,7 @@ RuleController.getInstance(context).setRules(
 
 #### Architecture
 
-- Use a window/layout info adapter layer (wrapper around Jetpack Window Manager) that exposes UI state: `WindowSizeClass`, `FoldingFeature` presence/type, whether hinge is separating, safe areas.
+- Use a window/layout info adapter layer (wrapper around Jetpack `Window` Manager) that exposes UI state: `WindowSizeClass`, `FoldingFeature` presence/type, whether hinge is separating, safe areas.
 - In the presentation layer (Compose/Views), observe this state and switch between appropriate layouts (single, two-pane, three-pane).
 - Centralize layout rules and posture handling to avoid duplication and enable testing.
 
@@ -183,7 +183,7 @@ fun AdaptiveApp(windowSizeClass: WindowSizeClass) {
 ```
 
 - Compute `WindowSizeClass` per activity using `calculateWindowSizeClass(activity)` (from `androidx.compose.material3.windowsizeclass`) in the `Activity` and pass it to the root composable.
-- Use Jetpack Window Manager (`androidx.window`) to obtain `WindowMetrics` when lower-level control is needed.
+- Use Jetpack `Window` Manager (`androidx.window`) to obtain `WindowMetrics` when lower-level control is needed.
 - Keep the size class in a `ViewModel` or local state (`remember`) at the navigation host level for reuse.
 
 #### 2. Posture and FoldingFeature
@@ -228,7 +228,7 @@ RuleController.getInstance(context).setRules(
 ```
 
 - Enables master-detail / list-detail two-pane layouts for tablets and foldables.
-- Built on top of Jetpack Window Manager (`androidx.window.embedding`).
+- Built on top of Jetpack `Window` Manager (`androidx.window.embedding`).
 - Example is schematic: in real code you configure activity pairs, size thresholds, split ratio, layout direction, and align with the current Window/Embedding API (XML rules or programmatic).
 
 #### 4. Compose Adaptation
@@ -239,8 +239,8 @@ RuleController.getInstance(context).setRules(
 
 #### 5. Testing
 
-- Use emulator profiles for foldables (e.g., Pixel Fold, Surface Duo) and vary posture/fold state.
-- For UI tests with Jetpack Window Manager, use `WindowLayoutInfoPublisherRule` from the test artifact to emulate different `FoldingFeature` configurations.
+- Use emulator profiles for foldables (e.g., Pixel Fold, `Surface` Duo) and vary posture/fold state.
+- For UI tests with Jetpack `Window` Manager, use `WindowLayoutInfoPublisherRule` from the test artifact to emulate different `FoldingFeature` configurations.
 - Perform screenshot/snapshot tests across `WindowSizeClass` values and postures.
 
 #### 6. Performance
@@ -254,12 +254,12 @@ RuleController.getInstance(context).setRules(
 ## Дополнительные Вопросы (RU)
 - Как реализовать drag-and-drop между pane в режиме Expanded?
 - Какие UX-анти-паттерны существуют для foldables (например, элементы под шарниром)?
-- Как совместить ActivityEmbedding и Navigation Component в многопанельном приложении?
+- Как совместить ActivityEmbedding и Navigation `Component` в многопанельном приложении?
 
 ## Follow-ups (EN)
 - How to implement drag-and-drop between panes in Expanded mode?
 - What UX anti-patterns exist for foldables (e.g., placing elements under the hinge)?
-- How to combine ActivityEmbedding and Navigation Component in a multi-pane app?
+- How to combine ActivityEmbedding and Navigation `Component` in a multi-pane app?
 
 ## Ссылки (RU)
 - [[c-android-components]]

@@ -1,4 +1,4 @@
----
+---\
 id: android-248
 title: How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView в Compose
 aliases: [How To Create List Like RecyclerView In Compose, Как создать список как RecyclerView в Compose]
@@ -15,17 +15,17 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/ui-compose, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
-> Как создать список как RecyclerView в Compose
+> Как создать список как `RecyclerView` в Compose
 
 # Question (EN)
-> How To Create `List` Like RecyclerView In Compose
+> How To Create `List` Like `RecyclerView` In Compose
 
 ---
 
 ## Ответ (RU)
-В Jetpack Compose для реализации списков, аналогичных RecyclerView (но в Compose-среде), используются ленивые компоненты: `LazyColumn`, `LazyRow` и `LazyVerticalGrid`.
+В Jetpack Compose для реализации списков, аналогичных `RecyclerView` (но в Compose-среде), используются ленивые компоненты: `LazyColumn`, `LazyRow` и `LazyVerticalGrid`.
 
 Основные идеи:
 - Композируются только видимые и ближайшие к ним элементы.
@@ -501,11 +501,11 @@ fun ItemRow(item: Item) {
 
 ### Сравнение: RecyclerView Vs LazyColumn (в Compose UI)
 
-| Возможность | RecyclerView | LazyColumn |
+| Возможность | `RecyclerView` | LazyColumn |
 |------------|-------------|-----------|
 | Адаптер | Обязателен | Не нужен, используется `items {}` DSL внутри LazyColumn |
-| ViewHolder | Обязателен | Не нужен |
-| DiffUtil / диффинг | Часто настраивается вручную через `DiffUtil` | Нет явного `DiffUtil`; поведение основано на декларативной композиции, `key` и идентичности элементов |
+| `ViewHolder` | Обязателен | Не нужен |
+| `DiffUtil` / диффинг | Часто настраивается вручную через `DiffUtil` | Нет явного `DiffUtil`; поведение основано на декларативной композиции, `key` и идентичности элементов |
 | Типы элементов | `getItemViewType()` | Условные composable / разные блоки `item` |
 | Разделители | `ItemDecoration` | Компоненты `Divider` между элементами |
 | Заголовки | Отдельные view-типы | `item {}` / `stickyHeader {}` |
@@ -991,10 +991,10 @@ fun ItemRow(item: Item) {
 
 ### Comparison: RecyclerView Vs LazyColumn (in Compose UIs)
 
-| Feature | RecyclerView | LazyColumn |
+| Feature | `RecyclerView` | LazyColumn |
 |---------|-------------|------------|
-| Adapter | Required | Not needed; use `items {}` DSL inside LazyColumn |
-| ViewHolder | Required | Not needed |
+| `Adapter` | Required | Not needed; use `items {}` DSL inside LazyColumn |
+| `ViewHolder` | Required | Not needed |
 | Diffing | Typically uses `DiffUtil` manually | No explicit `DiffUtil`; behavior relies on declarative composition plus `key`/item identity |
 | Item types | `getItemViewType()` | Conditional composables / different `item` blocks |
 | Dividers | `ItemDecoration` | `Divider` composables between items |

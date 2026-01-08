@@ -1,4 +1,4 @@
----
+---\
 topic: kotlin
 id: kotlin-097
 title: "Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов"
@@ -14,7 +14,7 @@ status: draft
 created: 2025-10-12
 updated: 2025-10-31
 tags: [backpressure, buffer, capacity, channels, coroutines, difficulty/hard, kotlin, performance, producer-consumer]
----
+---\
 # Вопрос (RU)
 
 Как работают различные стратегии буферизации каналов в Kotlin (RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED)? Объясните поведение send()/receive(), обработку противодавления, характеристики производительности, последствия для памяти и когда использовать каждую стратегию.
@@ -179,7 +179,7 @@ fun demonstrateRendezvousUseCase() = runBlocking {
 
 ### 2. Channel.BUFFERED (Default Capacity = 64)
 
-**Buffered** channels use the default buffer size (64 elements by default, configurable via system property). Provides reasonable buffering for most use cases.
+**Buffered** channels use the default buffer size (64 elements by default, configurable via system property). `Provides` reasonable buffering for most use cases.
 
 #### Characteristics
 
@@ -427,7 +427,7 @@ fun demonstrateUnlimitedMemoryIssue() = runBlocking {
    - Example: Reading fixed-size file
 
 2. **Temporary spike handling**
-   - Short bursts, then consumer catches up
+   - `Short` bursts, then consumer catches up
    - Example: Initialization tasks
 
 3. **Producer must not block** (last resort)
@@ -1421,7 +1421,7 @@ class ChannelStrategyTest {
    - Testing synchronization logic
 
 3. **Use CONFLATED for**:
-   - State updates (consider StateFlow first)
+   - State updates (consider `StateFlow` first)
    - Real-time dashboards
    - Progress reporting
 
@@ -1436,7 +1436,7 @@ class ChannelStrategyTest {
    - Need fine-tuned backpressure
 
 6. **Monitor in production**:
-   - Queue sizes
+   - `Queue` sizes
    - Blocked producer time
    - Dropped messages (for CONFLATED)
 
@@ -1563,7 +1563,7 @@ Kotlin корутины каналы поддерживают несколько
 
 1. How do you measure the optimal buffer size for a Channel.BUFFERED in production?
 2. What happens if you use Channel.UNLIMITED with a slow consumer that never catches up?
-3. How does CONFLATED differ from StateFlow, and when should you choose one over the other?
+3. How does CONFLATED differ from `StateFlow`, and when should you choose one over the other?
 4. Can you combine multiple buffer strategies in a pipeline, and what are the implications?
 5. How do you implement rate limiting with channels and different buffer strategies?
 6. What are the performance implications of using trySend() vs send() in a hot loop?
@@ -1578,4 +1578,4 @@ Kotlin корутины каналы поддерживают несколько
 
 ## Related Questions
 
-- [[q-statein-sharein-flow--kotlin--medium|StateFlow and SharedFlow]]
+- [[q-statein-sharein-flow--kotlin--medium|`StateFlow` and SharedFlow]]

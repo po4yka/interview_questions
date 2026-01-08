@@ -1,4 +1,4 @@
----
+---\
 id: lang-039
 title: "Kotlin Sam Conversions / SAM конверсии в Kotlin"
 aliases: [Kotlin Sam Conversions, SAM конверсии в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-infix-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]
----
+---\
 # Как Работают SAM (Single Abstract Method)?
 
 # Вопрос (RU)
@@ -74,7 +74,7 @@ button.setOnClickListener { view ->
 }
 ```
 
-**2. Runnable (Java SAM)**
+**2. `Runnable` (Java SAM)**
 ```kotlin
 // Java: Thread(Runnable target)
 Thread {
@@ -172,7 +172,7 @@ button.setOnClickListener { view ->
 }
 ```
 
-**2. Runnable (Java SAM)**
+**2. `Runnable` (Java SAM)**
 ```kotlin
 // Java: Thread(Runnable target)
 Thread {

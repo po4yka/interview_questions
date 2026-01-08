@@ -1,4 +1,4 @@
----
+---\
 id: android-008
 title: Android Service Component / Компонент Service в Android
 aliases: [Android Service Component, Компонент Service в Android]
@@ -17,7 +17,7 @@ created: 2025-10-05
 updated: 2025-11-10
 tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
 
----
+---\
 # Вопрос (RU)
 > Что такое `Service`?
 
@@ -103,7 +103,7 @@ By default, a service runs in the same process as the application, and its lifec
 
 Services generally have a higher process priority than inactive or invisible activities, so they are less likely to be terminated than purely cached/background activities. However, the system can still stop services at any time to reclaim resources or enforce background execution limits. Services can request to be restarted (via the value returned from `onStartCommand()`) if they are terminated and resources later become available.
 
-Note (modern Android): due to background execution limits (starting with Android 8.0 Oreo), apps have restrictions on starting background services while in the background. Long-running background work should typically use foreground services, `WorkManager`, or other appropriate APIs.
+Note (modern Android): due to background execution limits (starting with Android 8.0 Oreo), apps have restrictions on starting background services while in the background. `Long`-running background work should typically use foreground services, `WorkManager`, or other appropriate APIs.
 
 ### Types of Services
 

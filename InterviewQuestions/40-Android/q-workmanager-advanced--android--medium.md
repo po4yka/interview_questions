@@ -1,4 +1,4 @@
----
+---\
 id: android-065
 title: "WorkManager Advanced / Продвинутый WorkManager"
 aliases: ["WorkManager Advanced", "Продвинутый WorkManager"]
@@ -15,20 +15,20 @@ created: 2025-10-12
 updated: 2025-11-10
 tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]
 sources: ["https://developer.android.com/topic/libraries/architecture/workmanager"]
----
+---\
 # Вопрос (RU)
-> Какие продвинутые возможности WorkManager?
+> Какие продвинутые возможности `WorkManager`?
 
 # Question (EN)
-> What are the advanced features of WorkManager?
+> What are the advanced features of `WorkManager`?
 
 ---
 
 ## Ответ (RU)
 
-WorkManager обеспечивает надежное планирование и выполнение отложенной фоновой работы (best-effort, без гарантий точного времени запуска), с поддержкой ограничений, цепочек, уникальной работы и восстановления после перезагрузок в рамках системных лимитов платформы.
+`WorkManager` обеспечивает надежное планирование и выполнение отложенной фоновой работы (best-effort, без гарантий точного времени запуска), с поддержкой ограничений, цепочек, уникальной работы и восстановления после перезагрузок в рамках системных лимитов платформы.
 
-**Constraints (Ограничения):**
+**`Constraints` (Ограничения):**
 Выполнение работы только при соблюдении условий для экономии батареи и трафика.
 
 ```kotlin
@@ -98,7 +98,7 @@ WorkManager.getInstance(context)
 (Примечание: `APPEND` устарел и заменён на `APPEND_OR_REPLACE`.)
 
 **Persistence:**
-WorkManager сохраняет задачи в SQLite и восстанавливает их после перезагрузки устройства или обновления приложения.
+`WorkManager` сохраняет задачи в `SQLite` и восстанавливает их после перезагрузки устройства или обновления приложения.
 
 ```kotlin
 @HiltWorker
@@ -118,7 +118,7 @@ class MigrationWorker @AssistedInject constructor(
 ```
 
 **Прогресс и результаты (Progress / Result / Retry):**
-- Worker может публиковать прогресс, чтобы UI мог подписаться на обновления.
+- `Worker` может публиковать прогресс, чтобы UI мог подписаться на обновления.
 - Через `Result.success()`, `Result.failure()` и `Result.retry()` контролируется окончательный исход и повторные попытки (с backoff-стратегией).
 
 ```kotlin
@@ -136,9 +136,9 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ## Answer (EN)
 
-WorkManager provides robust scheduling and execution of deferrable background work (best-effort, no guarantee of exact execution time), with support for constraints, chaining, unique work, and recovery after reboots within platform limits.
+`WorkManager` provides robust scheduling and execution of deferrable background work (best-effort, no guarantee of exact execution time), with support for constraints, chaining, unique work, and recovery after reboots within platform limits.
 
-**Constraints:**
+**`Constraints`:**
 Execute work only when conditions are met to save battery and data.
 
 ```kotlin
@@ -208,7 +208,7 @@ WorkManager.getInstance(context)
 (Note: `APPEND` is deprecated and replaced by `APPEND_OR_REPLACE`.)
 
 **Persistence:**
-WorkManager persists work in SQLite and restores it after device reboot or app update.
+`WorkManager` persists work in `SQLite` and restores it after device reboot or app update.
 
 ```kotlin
 @HiltWorker
@@ -228,7 +228,7 @@ class MigrationWorker @AssistedInject constructor(
 ```
 
 **Progress and Result/Retry:**
-- A Worker can publish progress so that UI can observe updates.
+- A `Worker` can publish progress so that UI can observe updates.
 - `Result.success()`, `Result.failure()`, and `Result.retry()` control completion outcome and retries (with backoff policy).
 
 ```kotlin
@@ -249,8 +249,8 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 ## Дополнительные Вопросы (RU)
 
 - Как ограничения ведут себя на разных версиях Android (особенно с учетом Doze и ограничений Android 12+)?
-- Каковы накладные расходы и компромиссы между цепочками работ и отдельными Worker-ами?
-- Как обрабатывать отмену Worker во время отслеживания прогресса?
+- Каковы накладные расходы и компромиссы между цепочками работ и отдельными `Worker`-ами?
+- Как обрабатывать отмену `Worker` во время отслеживания прогресса?
 - Что произойдет при использовании `ExistingWorkPolicy.APPEND` с завершившимися с ошибкой задачами?
 - Как тестировать периодическую работу с `flexTimeInterval` в модульных тестах?
 
@@ -258,7 +258,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 - How do constraints behave across different Android versions (especially Android 12+ Doze restrictions)?
 - What are the performance trade-offs of work chaining vs. separate Workers?
-- How to handle Worker cancellation during progress tracking?
+- How to handle `Worker` cancellation during progress tracking?
 - What happens when `ExistingWorkPolicy.APPEND` is used with failed workers?
 - How to test periodic work with `flexTimeInterval` in unit tests?
 
@@ -270,7 +270,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ## References
 
-- [[c-workmanager]] - WorkManager concepts
+- [[c-workmanager]] - `WorkManager` concepts
 - "https://developer.android.com/topic/libraries/architecture/workmanager/advanced"
 - "https://developer.android.com/topic/libraries/architecture/workmanager/how-to/chain-work"
 
@@ -280,8 +280,8 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 - [[q-android-app-components--android--easy]] - Обзор компонентов приложения
 
 ### Связанные (такой Же уровень)
-- [[q-workmanager-vs-alternatives--android--medium]] - WorkManager и альтернативы
-- [[q-workmanager-return-result--android--medium]] - Возврат результатов из Worker-ов
+- [[q-workmanager-vs-alternatives--android--medium]] - `WorkManager` и альтернативы
+- [[q-workmanager-return-result--android--medium]] - Возврат результатов из `Worker`-ов
 
 ### Продвинутые (сложнее)
 - [[q-android-runtime-internals--android--hard]] - Внутреннее устройство Android Runtime
@@ -292,7 +292,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 - [[q-android-app-components--android--easy]] - App components overview
 
 ### Related (Same Level)
-- [[q-workmanager-vs-alternatives--android--medium]] - WorkManager vs alternatives
+- [[q-workmanager-vs-alternatives--android--medium]] - `WorkManager` vs alternatives
 - [[q-workmanager-return-result--android--medium]] - Returning results from Workers
 
 ### Advanced (Harder)

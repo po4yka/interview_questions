@@ -1,4 +1,4 @@
----
+---\
 id: android-441
 title: Design Instagram Stories / Проектирование Instagram Stories
 aliases: [Design Instagram Stories, Проектирование Instagram Stories]
@@ -17,7 +17,7 @@ created: 2025-10-20
 updated: 2025-11-10
 tags: [android/architecture-clean, android/media, android/service, architecture, difficulty/hard, exoplayer, mediacodec, performance, system-design, workmanager]
 
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать Instagram Stories для Android?
@@ -248,7 +248,7 @@ class CleanupExpiredWorker(ctx: Context, params: WorkerParameters) : CoroutineWo
 **Паттерны архитектуры:**
 
 - **MVVM + однонаправленный поток данных**: `ViewModel` содержит бизнес-логику и state, `View` (Compose/Views) только отображает состояние и отправляет события обратно в `ViewModel`. `Flow` обеспечивает реактивность
-- **DI (Hilt)**: Dependency injection для управления зависимостями между модулями — легкость тестирования и поддержки
+- **DI (`Hilt`)**: Dependency injection для управления зависимостями между модулями — легкость тестирования и поддержки
 
 **Захват видео:**
 
@@ -289,9 +289,9 @@ Pre-upload оптимизации:
 - **Возобновление**: Offset negotiation — сервер сообщает последний успешно загруженный байт, клиент продолжает с этого смещения. `WorkManager` обеспечивает хранение состояния и повторный запуск задач, но сам протокол возобновления реализуется в приложении и на backend
 - **Безопасность**: `TLS` для транспорта, опционально клиентское шифрование `AES-GCM` для критичных данных перед загрузкой
 
-WorkManager интеграция:
+`WorkManager` интеграция:
 
-- **Constraints**: Загрузка только при наличии сети (`NetworkType.CONNECTED`), опционально только на Wi-Fi или при зарядке — экономия мобильного трафика и батареи
+- **`Constraints`**: Загрузка только при наличии сети (`NetworkType.CONNECTED`), опционально только на Wi-Fi или при зарядке — экономия мобильного трафика и батареи
 - **Exponential backoff**: Автоматическая задержка между retry с экспоненциальным увеличением для предотвращения перегрузки сервера
 - **Doze Mode**: `WorkManager` уважает `Doze Mode` и `App Standby` — задачи откладываются до maintenance window в соответствии с платформой
 
@@ -514,7 +514,7 @@ class CleanupExpiredWorker(ctx: Context, params: WorkerParameters) : CoroutineWo
 
 ### Detailed Implementation Capture Pipeline
 
-**Module architecture:**
+**`Module` architecture:**
 
 Modular structure separates functionality by feature modules for independent development and testing:
 
@@ -529,7 +529,7 @@ Modular structure separates functionality by feature modules for independent dev
 **Architecture patterns:**
 
 - **MVVM + unidirectional data flow**: `ViewModel` contains business logic and state, `View` (Compose/Views) only displays state and sends events back to `ViewModel`. `Flow` provides reactivity
-- **DI (Hilt)**: Dependency injection for managing dependencies between modules — ease of testing and maintenance
+- **DI (`Hilt`)**: Dependency injection for managing dependencies between modules — ease of testing and maintenance
 
 **Video capture:**
 
@@ -570,9 +570,9 @@ Chunked upload:
 - **Resumability**: Offset negotiation — server reports last successfully uploaded byte, client continues from that offset. `WorkManager` persists task state and reschedules if needed; the resumable protocol is implemented in app/backend
 - **Security**: `TLS` for transport, optionally client-side `AES-GCM` encryption for critical data before upload
 
-WorkManager integration:
+`WorkManager` integration:
 
-- **Constraints**: Upload only on network (`NetworkType.CONNECTED`), optionally only on Wi-Fi or charging — saves mobile data and battery
+- **`Constraints`**: Upload only on network (`NetworkType.CONNECTED`), optionally only on Wi-Fi or charging — saves mobile data and battery
 - **Exponential backoff**: Automatic delay between retries with exponential increase to prevent server overload
 - **Doze Mode**: `WorkManager` respects `Doze Mode` and `App Standby` — work deferred to maintenance windows per platform rules
 
@@ -709,7 +709,7 @@ MVP → Hardening → Scale:
 
 ### Prerequisites
 
-- Understanding of WorkManager retry policies and constraints
+- Understanding of `WorkManager` retry policies and constraints
 - ExoPlayer basics for video playback
 
 ### Related

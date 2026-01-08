@@ -1,4 +1,4 @@
----
+---\
 id: android-147
 title: Raise Process Priority / Повышение приоритета процесса
 aliases: [Raise Process Priority, Повышение приоритета процесса]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/processes, android/service, difficulty/medium, foreground-service, lifecycle, process-priority, services]
 
----
+---\
 # Вопрос (RU)
 
 > Можно ли поднять приоритет процесса в Android?
@@ -107,8 +107,8 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 - Скачивания файлов (инициировано пользователем)
 
 **❌ НЕ используйте** для:
-- Простых фоновых задач (используйте WorkManager)
-- Периодической синхронизации (используйте JobScheduler / WorkManager)
+- Простых фоновых задач (используйте `WorkManager`)
+- Периодической синхронизации (используйте JobScheduler / `WorkManager`)
 
 ### Другие Способы Влияния На Приоритет
 
@@ -145,7 +145,7 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 - Используйте foreground service только когда это **действительно необходимо** и оправдано пользовательским сценарием.
 - Всегда вызывайте `stopForeground(STOP_FOREGROUND_REMOVE)` и останавливайте сервис по завершении задачи.
 - Указывайте корректный `foregroundServiceType` на Android 10+ для соответствующих кейсов.
-- Рассмотрите WorkManager для отложенных / периодических задач вместо удержания высокого приоритета процесса.
+- Рассмотрите `WorkManager` для отложенных / периодических задач вместо удержания высокого приоритета процесса.
 
 ---
 
@@ -229,8 +229,8 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 - User-initiated file downloads
 
 **❌ DON'T use** for:
-- Simple background work (use WorkManager)
-- Periodic sync (use JobScheduler / WorkManager)
+- Simple background work (use `WorkManager`)
+- Periodic sync (use JobScheduler / `WorkManager`)
 
 ### Other Ways to Influence Priority
 
@@ -267,7 +267,7 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 - Use a foreground service only when **truly necessary** and justified by user-visible work.
 - Always call `stopForeground(STOP_FOREGROUND_REMOVE)` and stop the service when the task is complete.
 - Declare the correct `foregroundServiceType` on Android 10+ where applicable.
-- Prefer WorkManager for deferrable / periodic tasks instead of artificially holding a high process priority.
+- Prefer `WorkManager` for deferrable / periodic tasks instead of artificially holding a high process priority.
 
 ---
 
@@ -275,25 +275,25 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 
 - Что произойдет, если не вызвать `startForeground()` в течение 5 секунд на Android 8.0+?
 - Чем приоритет bound service отличается от foreground service?
-- Когда следует выбрать WorkManager вместо foreground service?
+- Когда следует выбрать `WorkManager` вместо foreground service?
 - Какие типы foreground service существуют и как они связаны с разрешениями?
 
 ## Follow-ups
 
 - What happens if you don't call `startForeground()` within 5 seconds on Android 8.0+?
 - How does bound service priority differ from foreground service priority?
-- When should you choose WorkManager over foreground service?
+- When should you choose `WorkManager` over foreground service?
 - What foreground service types are available and how do they affect permissions?
 
 ## Ссылки (RU)
 
 - Официальная документация Android: Services и Foreground Services
-- Официальная документация Android: Process и `Application` Lifecycle
+- Официальная документация Android: Process и `Application` `Lifecycle`
 
 ## References
 
 - Android Documentation: Services and Foreground Services
-- Android Documentation: Process and `Application` Lifecycle
+- Android Documentation: Process and `Application` `Lifecycle`
 
 ## Связанные Вопросы (RU)
 

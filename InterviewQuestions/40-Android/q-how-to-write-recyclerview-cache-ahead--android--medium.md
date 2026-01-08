@@ -1,4 +1,4 @@
----
+---\
 id: android-314
 title: How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед
 aliases: [RecyclerView Cache Ahead, RecyclerView Prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
@@ -15,20 +15,20 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/cache-offline, android/performance-rendering, android/ui-views, difficulty/medium, optimization, prefetching, recyclerview]
----
+---\
 # Вопрос (RU)
 
-> Как настроить RecyclerView для кеширования и предзагрузки элементов (cache/prefetch ahead)?
+> Как настроить `RecyclerView` для кеширования и предзагрузки элементов (cache/prefetch ahead)?
 
 # Question (EN)
 
-> How to configure RecyclerView to cache and prefetch items ahead?
+> How to configure `RecyclerView` to cache and prefetch items ahead?
 
 ---
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько механизмов для предзагрузки и кеширования элементов вперед (уменьшения работы при появлении следующих элементов на экране):
+`RecyclerView` предоставляет несколько механизмов для предзагрузки и кеширования элементов вперед (уменьшения работы при появлении следующих элементов на экране):
 
 **1. setItemViewCacheSize() - кеш view (view cache)**
 
@@ -36,7 +36,7 @@ RecyclerView предоставляет несколько механизмов 
 recyclerView.setItemViewCacheSize(20) // Default: 2
 ```
 
-Сохраняет недавно ушедшие с экрана ViewHolder'ы в отсоединенном, но уже связанном (bound) состоянии, чтобы при повторном появлении их не приходилось пересоздавать или заново искать view. Это не выполняет асинхронную предзагрузку данных, а лишь уменьшает объем работы при повторном показе.
+Сохраняет недавно ушедшие с экрана `ViewHolder`'ы в отсоединенном, но уже связанном (bound) состоянии, чтобы при повторном появлении их не приходилось пересоздавать или заново искать view. Это не выполняет асинхронную предзагрузку данных, а лишь уменьшает объем работы при повторном показе.
 
 Важно: слишком большое значение увеличивает потребление памяти и может ухудшить производительность — подбирайте его на основе профилирования.
 
@@ -51,7 +51,7 @@ recyclerView.layoutManager = layoutManager
 ```
 
 `isItemPrefetchEnabled` включает layout prefetch (по умолчанию включен).
-`initialPrefetchItemCount` используется в основном, когда этот LayoutManager вложен внутри другого скроллируемого контейнера (например, горизонтальный список внутри вертикального), чтобы заранее подготовить несколько child-элементов. Для обычного "топ-левел" RecyclerView этот параметр не управляет сетевой/дата-предзагрузкой и не заменяет собственную логику пагинации.
+`initialPrefetchItemCount` используется в основном, когда этот `LayoutManager` вложен внутри другого скроллируемого контейнера (например, горизонтальный список внутри вертикального), чтобы заранее подготовить несколько child-элементов. Для обычного "топ-левел" `RecyclerView` этот параметр не управляет сетевой/дата-предзагрузкой и не заменяет собственную логику пагинации.
 
 **3. OnScrollListener для предзагрузки данных (data prefetch)**
 
@@ -72,7 +72,7 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
 Этот подход управляет именно предзагрузкой данных (пагинацией, сетевыми запросами), а не только переиспользованием view. Порог (threshold) подбирается эмпирически.
 
-**4. Кастомный LayoutManager для точного контроля prefetch**
+**4. Кастомный `LayoutManager` для точного контроля prefetch**
 
 ```kotlin
 class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(context) {
@@ -104,7 +104,7 @@ class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(contex
 
 Переопределяя `collectAdjacentPrefetchPositions`, можно явно указать, какие позиции нужно подготовить заранее. Важно не выходить за пределы `itemCount`.
 
-**5. RecycledViewPool для вложенных RecyclerView**
+**5. RecycledViewPool для вложенных `RecyclerView`**
 
 ```kotlin
 val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -120,17 +120,17 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-Общий `RecycledViewPool` полезен для множества вложенных RecyclerView с одинаковыми viewType'ами (например, карусели в списке). Это уменьшает количество инфляций и создает эффект "cache ahead" на уровне переиспользуемых view. Для разных макетов или сильно различающихся списков общий пул может не дать эффекта или навредить.
+Общий `RecycledViewPool` полезен для множества вложенных `RecyclerView` с одинаковыми viewType'ами (например, карусели в списке). Это уменьшает количество инфляций и создает эффект "cache ahead" на уровне переиспользуемых view. Для разных макетов или сильно различающихся списков общий пул может не дать эффекта или навредить.
 
 **Лучшие практики** (ориентиры, требующие профилирования):
 - увеличивать `setItemViewCacheSize()` только при наличии фризов из-за частого пересоздания view и с учетом памяти устройства;
-- для вложенных RecyclerView `initialPrefetchItemCount` часто выбирают в диапазоне 4–6, чтобы элементы были готовы при скролле;
+- для вложенных `RecyclerView` `initialPrefetchItemCount` часто выбирают в диапазоне 4–6, чтобы элементы были готовы при скролле;
 - использовать `OnScrollListener` (или Paging 3) для предзагрузки данных с порогом (например, 5–10 элементов) до конца списка;
 - применять `RecycledViewPool` для вложенных списков с одинаковыми типами элементов.
 
 ## Answer (EN)
 
-RecyclerView provides several mechanisms to prefetch and cache items ahead (reducing work before items appear on screen):
+`RecyclerView` provides several mechanisms to prefetch and cache items ahead (reducing work before items appear on screen):
 
 **1. setItemViewCacheSize() - view cache**
 
@@ -153,7 +153,7 @@ recyclerView.layoutManager = layoutManager
 ```
 
 `isItemPrefetchEnabled` controls layout prefetching (enabled by default).
-`initialPrefetchItemCount` is mainly effective when this LayoutManager is inside another scrolling container (e.g., horizontal RV inside vertical RV), so child views are prepared in advance. For a top-level list it does not replace proper data prefetching/paging.
+`initialPrefetchItemCount` is mainly effective when this `LayoutManager` is inside another scrolling container (e.g., horizontal RV inside vertical RV), so child views are prepared in advance. For a top-level list it does not replace proper data prefetching/paging.
 
 **3. OnScrollListener for data prefetching**
 
@@ -174,7 +174,7 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
 This pattern handles data prefetching/pagination (network or DB), not just view reuse. Choose the threshold empirically.
 
-**4. Custom LayoutManager for fine-grained prefetch**
+**4. Custom `LayoutManager` for fine-grained prefetch**
 
 ```kotlin
 class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(context) {
@@ -243,7 +243,7 @@ A shared `RecycledViewPool` is beneficial when you have many nested RecyclerView
 
 - What's the difference between view cache and RecycledViewPool?
 - How does prefetching impact memory consumption?
-- When to use custom LayoutManager vs OnScrollListener?
+- When to use custom `LayoutManager` vs OnScrollListener?
 - How to measure cache hit rate in production?
 
 ## Ссылки (RU)
@@ -254,7 +254,7 @@ A shared `RecycledViewPool` is beneficial when you have many nested RecyclerView
 ## References
 
 - [RecyclerView Performance Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
-- [Understanding RecyclerView Caching](https://proandroiddev.com/recyclerview-caching-8f3c5c6b4e92)
+- [Understanding `RecyclerView` Caching](https://proandroiddev.com/recyclerview-caching-8f3c5c6b4e92)
 
 ## Связанные Вопросы (RU)
 
@@ -276,7 +276,7 @@ A shared `RecycledViewPool` is beneficial when you have many nested RecyclerView
 
 ### Продвинутое (сложнее)
 
-- Продвинутая оптимизация RecyclerView с кастомным `ItemAnimator`
+- Продвинутая оптимизация `RecyclerView` с кастомным `ItemAnimator`
 - Построение бесконечного скролла с предзагрузкой и обработкой ошибок
 
 ## Related Questions
@@ -296,5 +296,5 @@ A shared `RecycledViewPool` is beneficial when you have many nested RecyclerView
 - [[q-recyclerview-itemdecoration-advanced--android--medium]]
 
 ### Advanced (Harder)
-- Advanced RecyclerView optimization with custom ItemAnimator
+- Advanced `RecyclerView` optimization with custom ItemAnimator
 - Building infinite scroll with prefetching and error handling

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-240
 title: "delay() vs Thread.sleep(): what's the difference? / delay() против Thread.sleep()"
 aliases: [delay vs Thread.sleep, delay против Thread.sleep]
@@ -15,7 +15,7 @@ description: "Understanding the fundamental differences between suspending delay
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-coroutines-threads-android-differences--kotlin--easy]
 subtopics: [coroutines, threading]
----
+---\
 # Вопрос (RU)
 
 > В чём разница между `delay()` и `Thread.sleep()` в Kotlin-корутинах, как это влияет на блокировку потоков, производительность и когда что использовать?
@@ -643,7 +643,7 @@ fun legacyCode() {
 
 ### Сводка По Производительности
 
-| Аспект | delay() | Thread.sleep() |
+| Аспект | delay() | `Thread`.sleep() |
 |--------|---------|----------------|
 | Использование потока | Приостанавливает, освобождает поток | Блокирует поток |
 | Возможность отмены | Да (кооперативно) | Нет (некооперативно, только через interrupt потока) |
@@ -1273,13 +1273,13 @@ fun legacyCode() {
 
 ### Performance Summary
 
-| Aspect | delay() | Thread.sleep() |
+| Aspect | delay() | `Thread`.sleep() |
 |--------|---------|----------------|
-| Thread Usage | Suspends, frees thread | Blocks thread |
+| `Thread` Usage | Suspends, frees thread | Blocks thread |
 | Cancellable | Yes (cooperative) | No (non-cooperative, only via thread interrupt) |
 | Test Support | Fast-forward possible with virtual time | Real-time/blocking, not virtual-time aware |
 | Resource Efficient | Yes | No (wastes threads while sleeping) |
-| Coroutine-friendly | Yes | No |
+| `Coroutine`-friendly | Yes | No |
 | Performance | High scalability in coroutine code | Poor scalability in coroutine code |
 
 ---

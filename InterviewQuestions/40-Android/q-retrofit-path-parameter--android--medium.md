@@ -1,4 +1,4 @@
----
+---\
 id: android-289
 title: Retrofit Path Parameter / Path параметр Retrofit
 aliases: [Path параметр Retrofit, Retrofit Path Parameter]
@@ -15,15 +15,15 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/networking-http, difficulty/medium, networking, path-parameters, rest-api, retrofit]
----
+---\
 # Вопрос (RU)
-> Как в Retrofit в GET-методе поставить атрибут в конкретное место пути?
+> Как в `Retrofit` в GET-методе поставить атрибут в конкретное место пути?
 
 # Question (EN)
-> How to put a parameter in a specific place in the path for a GET method in Retrofit?
+> How to put a parameter in a specific place in the path for a GET method in `Retrofit`?
 
 ## Ответ (RU)
-В Retrofit используйте аннотацию **`@Path`** для подстановки значений в URL.
+В `Retrofit` используйте аннотацию **`@Path`** для подстановки значений в URL.
 
 **Механизм:**
 1. В `@GET` укажите плейсхолдер в фигурных скобках: `{имяПараметра}`
@@ -79,7 +79,7 @@ suspend fun getUserPosts(
 
 ### URL-кодирование
 
-Retrofit по умолчанию URL-кодирует специальные символы в значениях `@Path`.
+`Retrofit` по умолчанию URL-кодирует специальные символы в значениях `@Path`.
 
 ```kotlin
 @GET("search/{query}")
@@ -138,7 +138,7 @@ suspend fun getUser(@Path("userId") userId: String)
 ```
 
 ## Answer (EN)
-In Retrofit, use the **`@Path`** annotation to insert values into specific URL path locations.
+In `Retrofit`, use the **`@Path`** annotation to insert values into specific URL path locations.
 
 **Mechanism:**
 1. Define a placeholder in `@GET` using curly braces: `{parameterName}`
@@ -194,7 +194,7 @@ suspend fun getUserPosts(
 
 ### URL Encoding
 
-By default Retrofit URL-encodes special characters in `@Path` values.
+By default `Retrofit` URL-encodes special characters in `@Path` values.
 
 ```kotlin
 @GET("search/{query}")
@@ -255,13 +255,13 @@ suspend fun getUser(@Path("userId") userId: String)
 ## Follow-ups
 - What happens if you pass `null` to a `@Path` parameter?
 - Can you use the same placeholder name multiple times in a single URL?
-- How does Retrofit handle special characters like `/` or `?` in path parameters?
+- How does `Retrofit` handle special characters like `/` or `?` in path parameters?
 - What's the difference between `@Path` and `@Url` annotations?
 - How do you handle dynamic base URLs with path parameters?
 
 ## References
-- https://square.github.io/retrofit/ - Official Retrofit documentation
-- https://square.github.io/retrofit/2.x/retrofit/retrofit2/http/Path.html - @Path annotation reference
+- https://square.github.io/retrofit/ - Official `Retrofit` documentation
+- https://square.github.io/retrofit/2.x/retrofit/retrofit2/http/Path.html - @`Path` annotation reference
 - https://developer.android.com/training/basics/network-ops - Android networking fundamentals
 
 ## Related Questions
@@ -272,12 +272,12 @@ suspend fun getUser(@Path("userId") userId: String)
 
 ### Prerequisites (Easier)
 - [[q-graphql-vs-rest--networking--easy]] - Understanding REST API fundamentals
-- [[q-retrofit-library--android--medium]] - Basic Retrofit setup and usage
+- [[q-retrofit-library--android--medium]] - Basic `Retrofit` setup and usage
 
 ### Related (Medium)
-- [[q-retrofit-usage-tutorial--android--medium]] - Comprehensive Retrofit tutorial
+- [[q-retrofit-usage-tutorial--android--medium]] - Comprehensive `Retrofit` tutorial
 - [[q-http-protocols-comparison--android--medium]] - HTTP protocol details
-- [[q-retrofit-call-adapter-advanced--networking--medium]] - Advanced Retrofit features
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Advanced `Retrofit` features
 
 ### Advanced (Harder)
 - [[q-retrofit-modify-all-requests--android--hard]] - Interceptors and request modification

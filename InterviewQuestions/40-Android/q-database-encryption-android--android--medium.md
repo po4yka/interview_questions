@@ -1,4 +1,4 @@
----
+---\
 id: android-470
 title: Database Encryption Android / Шифрование базы данных Android
 aliases: [Database Encryption Android, Шифрование базы данных Android]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [android/keystore-crypto, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
 sources:
   - "https://developer.android.com/topic/security/data"
----
+---\
 # Вопрос (RU)
 > Как реализовать шифрование базы данных в Android? Какие лучшие практики и доступные библиотеки?
 
@@ -30,7 +30,7 @@ sources:
 ### Архитектура Шифрования
 
 **Компоненты:**
-- **`SQLCipher`** — прозрачное шифрование (обычно `AES-256`) для SQLite (совместимо с `Room`)
+- **`SQLCipher`** — прозрачное шифрование (обычно `AES-256`) для `SQLite` (совместимо с `Room`)
 - **`Android Keystore`** — защищенное (по возможности hardware-backed) хранение ключей
 - **`Room + SupportFactory`** — интеграция зашифрованной БД с `Room` (прозрачная для разработчика)
 
@@ -39,7 +39,7 @@ sources:
 
 ### Реализация
 
-**1. Настройка SQLCipher с Room:**
+**1. Настройка SQLCipher с `Room`:**
 
 ```kotlin
 // ✅ Правильно: использование SupportFactory для шифрования
@@ -150,12 +150,12 @@ class DatabaseProvider @Inject constructor(private val context: Context) {
 
 ## Answer (EN)
 
-Database encryption in Android protects data at rest. A common practical solution is `SQLCipher` with `Room`, combined with `Android Keystore` for secure key/passphrase management. This provides transparent encryption without changing the database access API.
+`Database` encryption in Android protects data at rest. A common practical solution is `SQLCipher` with `Room`, combined with `Android Keystore` for secure key/passphrase management. This provides transparent encryption without changing the database access API.
 
 ### Encryption Architecture
 
 **Components:**
-- **`SQLCipher`** — transparent encryption (typically `AES-256`) for SQLite (compatible with `Room`)
+- **`SQLCipher`** — transparent encryption (typically `AES-256`) for `SQLite` (compatible with `Room`)
 - **`Android Keystore`** — secure (preferably hardware-backed) key storage
 - **`Room + SupportFactory`** — integration of encrypted DB with `Room` (transparent to developer)
 
@@ -164,7 +164,7 @@ Data is encrypted before being written to disk (for example with `AES-256` as im
 
 ### Implementation
 
-**1. SQLCipher with Room Setup:**
+**1. SQLCipher with `Room` Setup:**
 
 ```kotlin
 // ✅ Correct: using SupportFactory for encryption
@@ -256,7 +256,7 @@ class DatabaseProvider @Inject constructor(private val context: Context) {
 
 **Performance:**
 - Roughly 10–15% overhead on read/write operations (encryption/decryption), depending on device and workload
-- Database initialization may be slower by tens of milliseconds (key retrieval/generation, integrity checks)
+- `Database` initialization may be slower by tens of milliseconds (key retrieval/generation, integrity checks)
 - Mitigations: caching data, asynchronous work via Coroutines, query/index optimization
 
 **Security:**

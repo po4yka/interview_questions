@@ -1,4 +1,4 @@
----
+---\
 id: android-645
 title: CallStyle & Foreground Service Compliance / CallStyle и требования foreground-сервисов
 aliases: [CallStyle & Foreground Service Compliance, CallStyle и требования foreground-сервисов]
@@ -19,7 +19,7 @@ sources:
   - "https://developer.android.com/about/versions/14/behavior-changes-14#foreground-services"
   - "https://developer.android.com/develop/ui/views/notifications/callstyle"
 
----
+---\
 # Вопрос (RU)
 > Как реализовать звонковые уведомления с использованием CallStyle и соблюсти требования foreground-сервисов: категории FGS, индикаторы приватности (микрофон/камера), разрешения и тестирование?
 
@@ -138,10 +138,10 @@ val notification = NotificationCompat.Builder(context, CHANNEL_CALLS)
 
 ### Short Version (EN)
 
-- Set correct FGS types and permissions; on Android 14+ ensure strong alignment between declared types and actual usage.
+- `Set` correct FGS types and permissions; on Android 14+ ensure strong alignment between declared types and actual usage.
 - Use `NotificationCompat.CallStyle` with appropriate variants and `CATEGORY_CALL`.
 - Honor privacy indicators and mic/camera runtime permissions.
-- Request `POST_NOTIFICATIONS` on Android 13+, use full-screen only for real calls, and handle permission denial.
+- `Request` `POST_NOTIFICATIONS` on Android 13+, use full-screen only for real calls, and handle permission denial.
 - Stop FGS as soon as the call ends and stay compliant with Play policies.
 
 ### Detailed Version (EN)
@@ -149,7 +149,7 @@ val notification = NotificationCompat.Builder(context, CHANNEL_CALLS)
 #### Requirements
 
 - Functional:
-  - Call-style notification with answer/decline/mute actions.
+  - `Call`-style notification with answer/decline/mute actions.
   - Support for incoming and ongoing calls, including video when needed.
   - Optional integration with `ConnectionService` for system UI.
 - Non-functional:

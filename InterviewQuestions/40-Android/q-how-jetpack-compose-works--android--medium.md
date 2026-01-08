@@ -1,4 +1,4 @@
----
+---\
 id: android-260
 title: "How Jetpack Compose Works / Как работает Jetpack Compose"
 aliases: ["How Jetpack Compose Works", "Как работает Jetpack Compose"]
@@ -14,9 +14,9 @@ related: [c-compose-state, c-jetpack-compose, c-mvvm, c-viewmodel]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium, jetpack-compose]
+tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Как работает Jetpack Compose? Объясните основные принципы и внутреннее устройство.
@@ -252,7 +252,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 | XML + код           | Чистый Kotlin             |
 | findViewById        | Прямой доступ             |
 | Ручные обновления   | Автоматическое обновление |
-| RecyclerView нужен  | Встроенный LazyColumn     |
+| `RecyclerView` нужен  | Встроенный LazyColumn     |
 | Сложный lifecycle   | Более унифицированный lifecycle |
 
 ---
@@ -267,7 +267,7 @@ Jetpack Compose is Google's modern declarative UI toolkit for building native An
 
 **Reactivity** — UI automatically updates when data changes.
 
-**Component architecture** — reusable functions with clear responsibilities.
+**`Component` architecture** — reusable functions with clear responsibilities.
 
 ### Basic Composable Function
 
@@ -482,7 +482,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 | XML + code          | Pure Kotlin                     |
 | findViewById        | Direct access                   |
 | Manual updates      | Automatic updates               |
-| RecyclerView needed | Built-in LazyColumn             |
+| `RecyclerView` needed | Built-in LazyColumn             |
 | Complex lifecycle   | More unified, composition-based lifecycle |
 
 ---

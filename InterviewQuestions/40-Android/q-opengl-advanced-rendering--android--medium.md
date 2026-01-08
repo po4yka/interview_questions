@@ -1,4 +1,4 @@
----
+---\
 id: android-383
 title: "OpenGL Advanced Rendering / Продвинутый рендеринг OpenGL"
 aliases: ["OpenGL Advanced Rendering", "Продвинутый рендеринг OpenGL"]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, opengl-es, rendering, shaders]
----
+---\
 # Вопрос (RU)
 
 > Как реализовать продвинутые техники рендеринга с использованием OpenGL ES в Android? Каковы лучшие практики для управления текстурами, framebuffer objects и пользовательских шейдеров?
@@ -124,7 +124,7 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
 ```
 
 **VAO/VBO/EBO для геометрии:**
-Эффективное управление вершинными данными через Vertex Array Objects и индексированные draw calls.
+Эффективное управление вершинными данными через Vertex `Array` Objects и индексированные draw calls.
 
 ```kotlin
 class Mesh(vertices: FloatArray, indices: IntArray, private val stride: Int = 8) {
@@ -462,7 +462,7 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
 ```
 
 **VAO/VBO/EBO for Geometry:**
-Efficient vertex data management via Vertex Array Objects and indexed draw calls.
+Efficient vertex data management via Vertex `Array` Objects and indexed draw calls.
 
 ```kotlin
 class Mesh(vertices: FloatArray, indices: IntArray, private val stride: Int = 8) {
@@ -731,7 +731,7 @@ class Framebuffer(width: Int, height: Int) {
 ## Связанные Вопросы (RU)
 
 ### Базовые Знания
-- [[q-custom-view-animation--android--medium]] — Рендеринг 2D на Canvas
+- [[q-custom-view-animation--android--medium]] — Рендеринг 2D на `Canvas`
 
 ### Связанные
 - [[q-jank-detection-frame-metrics--android--medium]] — Мониторинг производительности
@@ -742,7 +742,7 @@ class Framebuffer(width: Int, height: Int) {
 ## Related Questions
 
 ### Prerequisites
-- [[q-custom-view-animation--android--medium]] — Canvas-based 2D rendering
+- [[q-custom-view-animation--android--medium]] — `Canvas`-based 2D rendering
 
 ### Related
 - [[q-jank-detection-frame-metrics--android--medium]] — Performance monitoring

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-130
 title: "Lifecycle-Aware Coroutines / Корутины с учетом жизненного цикла"
 aliases: ["Lifecycle-Aware Coroutines", "Корутины с учетом жизненного цикла"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [android, coroutines, difficulty/hard, kotlin, lifecycle, lifecyclescope, viewmodelscope]
----
+---\
 # Вопрос (RU)
 > Объясните корутины с учетом жизненного цикла в Android. Как работают viewModelScope, lifecycleScope и repeatOnLifecycle? Каковы лучшие практики для обработки изменений конфигурации, process death и утечек памяти? Приведите подробные примеры.
 
@@ -854,7 +854,7 @@ class MyViewModel(
 
 ## Answer (EN)
 
-Lifecycle-aware coroutines automatically manage coroutine cancellation based on Android lifecycle events, preventing memory leaks and reducing boilerplate. They integrate Kotlin Coroutines with Android lifecycle components such as `ViewModel`, `LifecycleOwner`, and `SavedStateHandle`.
+`Lifecycle`-aware coroutines automatically manage coroutine cancellation based on Android lifecycle events, preventing memory leaks and reducing boilerplate. They integrate Kotlin Coroutines with Android lifecycle components such as `ViewModel`, `LifecycleOwner`, and `SavedStateHandle`.
 
 ### The Problem Without Lifecycle Awareness
 
@@ -888,7 +888,7 @@ class OldFragment : Fragment() {
 
 Android provides core mechanisms to bind coroutines to lifecycle:
 
-| Mechanism | Lifecycle Binding | Use Case | Cancellation |
+| Mechanism | `Lifecycle` Binding | Use Case | Cancellation |
 |----------|-------------------|----------|--------------|
 | **viewModelScope** | `ViewModel` lifecycle | Repository calls, business logic | When `ViewModel.onCleared()` is called |
 | **lifecycleScope** | `LifecycleOwner` (`Activity`/`Fragment`/`Service`) | UI updates, one-off work tied to owner | When `LifecycleOwner` is destroyed |
@@ -1635,7 +1635,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 }
 ```
 
-3. **Use repeatOnLifecycle for Flow collection**
+3. **Use repeatOnLifecycle for `Flow` collection**
 ```kotlin
 viewLifecycleOwner.lifecycleScope.launch {
     viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -1650,7 +1650,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 viewModelScope.launch { }
 ```
 
-5. **Handle configuration changes with ViewModel**
+5. **Handle configuration changes with `ViewModel`**
 ```kotlin
 class MyViewModel : ViewModel() {
     val data = repository.getData()

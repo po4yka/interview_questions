@@ -1,4 +1,4 @@
----
+---\
 id: android-040
 title: Macrobenchmark for App Startup / Macrobenchmark для запуска приложения
 aliases: [Macrobenchmark for App Startup, Macrobenchmark для запуска приложения]
@@ -16,7 +16,7 @@ created: 2025-10-11
 updated: 2025-11-10
 tags: [android/profiling, android/testing-benchmark, difficulty/medium, macrobenchmark, perfetto, performance, startup]
 
----
+---\
 # Вопрос (RU)
 > Реализуйте macrobenchmark для запуска приложения. Измерьте холодный, теплый и горячий запуск. Используйте трассировку Perfetto для выявления узких мест и оптимизации на основе результатов.
 
@@ -219,7 +219,7 @@ macrobenchmark/build/outputs/connected_android_test_additional_output/
 
 2. **Блокировка главного потока:**
    - Инициализацию БД по возможности делать асинхронно или подготовить заранее; избегать длительных (> десятков мс) операций
-   - Чтение SharedPreferences делать минимальным и быстрым, дорогое — переносить
+   - Чтение `SharedPreferences` делать минимальным и быстрым, дорогое — переносить
    - Все сетевые вызовы — только асинхронно
 
 3. **Медленная инфляция view / построение UI:**
@@ -516,7 +516,7 @@ macrobenchmark/build/outputs/connected_android_test_additional_output/
 
 2. **Main thread blocking:**
    - Avoid long (> tens of ms) DB setup; make heavy work async or precomputed
-   - Keep SharedPreferences reads minimal and fast; move heavy processing elsewhere
+   - Keep `SharedPreferences` reads minimal and fast; move heavy processing elsewhere
    - Network calls must be async
 
 3. **Slow view inflation / UI construction:**

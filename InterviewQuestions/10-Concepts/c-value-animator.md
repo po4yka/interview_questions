@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-175129"
 title: "Value Animator / Value Animator"
 aliases: ["Value Animator"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-animation, c-animation-framework, c-interpolator, c-custom-views, c-android-graphics]
+moc: "moc-cs"
+related: ["c-animation", "c-animation-framework", "c-interpolator", "c-custom-views", "c-android-graphics"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ ValueAnimator — это вспомогательный класс анимац�
 
 ## Key Points (EN)
 
-- Core behavior: Provides a timing engine that runs over a set duration and repeatedly calls `onAnimationUpdate` with the current animated value.
+- Core behavior: `Provides` a timing engine that runs over a set duration and repeatedly calls `onAnimationUpdate` with the current animated value.
 - Value types: Supports primitive types (int, float), ARGB colors, and custom types via `TypeEvaluator`, making it flexible for various animation scenarios.
 - Separation of concerns: Does not modify views directly; you manually apply computed values (e.g., translation, alpha, height) inside the update listener.
 - Control options: Allows configuration of duration, start delay, repeat count/mode, interpolators, and play states (start, pause, resume, cancel).
@@ -41,7 +42,7 @@ ValueAnimator — это вспомогательный класс анимац�
 
 - Основное поведение: Предоставляет тайминг-движок, который за заданную длительность вызывает `onAnimationUpdate` с текущим анимированным значением.
 - Типы значений: Поддерживает примитивные типы (int, float), ARGB-цвета и пользовательские типы через `TypeEvaluator`, что делает его гибким для разных сценариев.
-- Разделение обязанностей: Не изменяет View напрямую; вы сами применяете вычисленные значения (например, translation, alpha, высота) внутри слушателя обновления.
+- Разделение обязанностей: Не изменяет `View` напрямую; вы сами применяете вычисленные значения (например, translation, alpha, высота) внутри слушателя обновления.
 - Управление анимацией: Позволяет настраивать длительность, стартовую задержку, количество и режим повторений, интерполяторы и состояние (start, pause, resume, cancel).
 - Типичные случаи: Подходит для анимации нестандартных свойств (layout-параметры, кастомные view, свойства отрисовки, числовые счётчики), которые не поддерживаются property-аниматорами напрямую.
 

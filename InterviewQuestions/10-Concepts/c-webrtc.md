@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-132908"
 title: "Webrtc / Webrtc"
 aliases: ["Webrtc"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-websockets, c-real-time-communication, c-networking, c-server-sent-events, c-rest-api]
+moc: "moc-cs"
+related: ["c-websockets", "c-real-time-communication", "c-networking", "c-server-sent-events", "c-rest-api"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ WebRTC (Web Real-Time Communication) — это открытый стандар�
 ## Key Points (EN)
 
 - Peer-to-peer communication: Establishes direct connections between clients using ICE (Interactive Connectivity Establishment), STUN, and TURN to traverse NATs and firewalls.
-- Media and data channels: Provides high-level APIs for audio/video streams (getUserMedia, RTCPeerConnection) and low-latency bidirectional data channels (RTCDataChannel).
+- Media and data channels: `Provides` high-level APIs for audio/video streams (getUserMedia, RTCPeerConnection) and low-latency bidirectional data channels (RTCDataChannel).
 - Built-in codecs and encryption: Uses standardized media codecs (e.g., Opus, VP8/VP9/AV1 where supported) and mandatory end-to-end encryption over DTLS-SRTP for secure communication.
 - Signaling is external: Does not define how peers discover each other; applications must implement their own signaling (e.g., via WebSocket, HTTP, or other channels).
 - Typical use cases: Video conferencing, voice chat in apps/games, screen sharing, file transfer, and collaborative tools (e.g., whiteboards, remote assistance).

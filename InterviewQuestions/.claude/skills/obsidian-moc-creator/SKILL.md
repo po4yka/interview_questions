@@ -1,11 +1,11 @@
----
+---\
 name: obsidian-moc-creator
 description: >
   Create Maps of Content (MOCs) to organize related interview questions by topic.
   Generates study paths organized by difficulty, subtopic groupings, and Dataview
   queries for dynamic content. Uses moc-[topic].md naming pattern and places in
   90-MOCs/ directory.
----
+---\
 
 # Obsidian MOC Creator
 
@@ -61,7 +61,7 @@ moc-[topic-name].md
 ```
 
 **Filename Rules**:
-- Prefix with `moc-` (for "Map of Content")
+- Prefix with `moc-` (for "`Map` of Content")
 - English only (NO Cyrillic)
 - Lowercase, hyphens as separators
 - Match exact topic name from TAXONOMY.md
@@ -115,7 +115,7 @@ Before building MOC structure:
 
 4. **Identify key concepts**:
    - Find concept notes (`c-*.md`) related to this topic
-   - List them for "Core Concepts" section
+   - `List` them for "Core Concepts" section
 
 ### Step 5: Build Content Structure
 
@@ -273,7 +273,7 @@ Before finalizing:
 **Structure**:
 - [ ] Overview section (bilingual)
 - [ ] Core Concepts section with links
-- [ ] Study Path organized by difficulty
+- [ ] Study `Path` organized by difficulty
 - [ ] By Subtopic groupings (if applicable)
 - [ ] Dataview queries for statistics
 - [ ] Related topics linked
@@ -311,7 +311,7 @@ Before finalizing:
 
 ### Example 1: Kotlin MOC
 
-**User Request**: "Create MOC for Kotlin"
+**User `Request`**: "Create MOC for Kotlin"
 
 **Generated**:
 - Filename: `moc-kotlin.md`
@@ -487,7 +487,7 @@ updated: 2025-11-09
 
 **Solution**:
 1. Report error
-2. List valid topics from TAXONOMY.md
+2. `List` valid topics from TAXONOMY.md
 3. Ask user to choose valid topic
 4. Do NOT proceed with invalid topic
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-151
 title: What Happens When A New Activity Is Called Is Memory From The Old One Freed / Что происходит когда вызывается новая Activity освобождается ли память от старой
 aliases: [What Happens When A New Activity Is Called Is Memory From The Old One Freed, Что происходит когда вызывается новая Activity освобождается ли память от старой]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/lifecycle, android/performance-memory, difficulty/medium, lifecycle, performance-memory]
 
----
+---\
 # Вопрос (RU)
 
 > Что происходит, когда запускается новая `Activity`? Освобождается ли память предыдущей?
@@ -268,7 +268,7 @@ Key points:
 
 ### Related
 
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle handling
+- [[q-activity-lifecycle-methods--android--medium]] - `Lifecycle` handling
 - [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle details
 - [[q-activity-navigation-how-it-works--android--medium]] - Navigation mechanics
 

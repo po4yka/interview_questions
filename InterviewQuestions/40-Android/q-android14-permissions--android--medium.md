@@ -1,4 +1,4 @@
----
+---\
 id: android-293
 title: Android 14 Permissions / Разрешения Android 14
 aliases: [Android 14 Permissions, Разрешения Android 14]
@@ -16,7 +16,7 @@ created: 2024-10-15
 updated: 2025-11-10
 tags: [android/permissions, android/privacy-sdks, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Какие изменения в системе разрешений появились в Android 13-14, и как правильно их обрабатывать?
@@ -308,7 +308,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
 1. Prioritize Photo Picker when user-selected media is enough.
 2. Use granular `READ_MEDIA_*` permissions only when you need broader direct access (e.g., MediaStore queries, file processing in background, etc.).
 3. Maintain backward compatibility: declare `READ_EXTERNAL_STORAGE` with `maxSdkVersion="32"` and branch logic by SDK version.
-4. Request permissions contextually, close to the feature that needs them, with clear rationale.
+4. `Request` permissions contextually, close to the feature that needs them, with clear rationale.
 5. Handle Android 14 partial access by checking both `READ_MEDIA_VISUAL_USER_SELECTED` and `READ_MEDIA_*` and adapting behavior.
 
 ## Follow-ups

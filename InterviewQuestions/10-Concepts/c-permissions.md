@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-110314"
 title: "Android Permissions / Разрешения Android"
 aliases: ["Android Permissions", "Permissions", "Runtime Permissions", "Разрешения Времени Выполнения", "Разрешения"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-manifest, c-security, c-scoped-storage, c-privacy-by-design, c-biometric-authentication]
+related: ["c-android-manifest", "c-security", "c-scoped-storage", "c-privacy-by-design", "c-biometric-authentication"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "difficulty/medium", "permissions", "privacy", "security"]
----
+---\
 
 # Android Permissions / Разрешения Android
 
@@ -35,7 +35,7 @@ Android permissions are a security mechanism that controls app access to sensiti
 - **Permission groups**: Related permissions grouped together
 - **Grant modes**: Install-time vs runtime
 - **User control**: Users can revoke permissions at any time
-- **Best practices**: Request only necessary permissions, explain why needed
+- **Best practices**: `Request` only necessary permissions, explain why needed
 - **Android 11+**: One-time permissions and auto-reset
 
 ## Ключевые Моменты (RU)
@@ -539,9 +539,9 @@ if (PermissionHelper.hasPermission(this, Manifest.permission.CAMERA)) {
 
 ## Best Practices
 
-1. **Request in context**: Ask for permission when user initiates related feature
+1. **`Request` in context**: Ask for permission when user initiates related feature
 2. **Explain why**: Show rationale before requesting
-3. **Request minimum**: Only request necessary permissions
+3. **`Request` minimum**: Only request necessary permissions
 4. **Handle denials gracefully**: Provide alternative functionality
 5. **Check before use**: Always verify permission before accessing resource
 6. **Use intents when possible**: Camera/file picker intents don't need permissions

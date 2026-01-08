@@ -1,4 +1,4 @@
----
+---\
 id: android-230
 title: "Room Database Migrations / Миграции базы данных Room"
 aliases: ["Room Database Migrations", "Миграции базы данных Room"]
@@ -15,18 +15,18 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/room, android/testing-instrumented, difficulty/medium]
----
+---\
 # Вопрос (RU)
 
-> Реализуйте сложные миграции базы данных Room с версии 1 до 3. Обработайте деструктивные и недеструктивные миграции с тестированием.
+> Реализуйте сложные миграции базы данных `Room` с версии 1 до 3. Обработайте деструктивные и недеструктивные миграции с тестированием.
 
 # Question (EN)
 
-> Implement complex Room database migrations from version 1 to 3. Handle destructive and non-destructive migrations with testing.
+> Implement complex `Room` database migrations from version 1 to 3. Handle destructive and non-destructive migrations with testing.
 
 ## Ответ (RU)
 
-**Миграции Room** — SQL-скрипты и программная логика для обновления схемы БД без потери пользовательских данных. Критично для production-приложений для предотвращения потери данных и крашей.
+**Миграции `Room`** — SQL-скрипты и программная логика для обновления схемы БД без потери пользовательских данных. Критично для production-приложений для предотвращения потери данных и крашей.
 
 ### Основные Принципы
 
@@ -92,7 +92,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
 #### Миграция 2→3: Сложное Изменение (пересоздание таблицы)
 
-SQLite не поддерживает изменение существующих колонок (ALTER COLUMN), поэтому при изменении структуры часто нужно пересоздать таблицу.
+`SQLite` не поддерживает изменение существующих колонок (ALTER COLUMN), поэтому при изменении структуры часто нужно пересоздать таблицу.
 
 Важно: нижеупрощённый пример предполагает, что поле `name` всегда содержит ровно два токена: "First Last". В реальном приложении логику разбора ФИО нужно сделать более надёжной (обработка отсутствия пробела, нескольких слов, локали и т.д.).
 
@@ -235,14 +235,14 @@ Room.databaseBuilder(context, AppDatabase::class.java, "db")
 
 1. **exportSchema = true** — ведите историю схемы для валидации миграций.
 2. **Тестировать миграции** — покрывайте каждый реальный путь (например, 1→2→3).
-3. **Инкрементальные миграции** — определяйте отдельную Migration для каждой пары версий; Room сам свяжет цепочку.
+3. **Инкрементальные миграции** — определяйте отдельную Migration для каждой пары версий; `Room` сам свяжет цепочку.
 4. **Избегать деструктивных миграций в production** — по возможности всегда сохраняйте данные.
 5. **NULL → NOT NULL** — изменение существующего столбца обычно требует пересоздания таблицы; добавление нового NOT NULL-столбца допустимо с корректным DEFAULT.
 6. **Трансформация данных** — делайте её явно: через SQL (INSERT SELECT) или временные таблицы/колонки, учитывая edge cases.
 
 ## Answer (EN)
 
-**Room Migrations** are SQL and code-based transformations to update the database schema while preserving user data. They are critical for production apps to avoid data loss and crashes.
+**`Room` Migrations** are SQL and code-based transformations to update the database schema while preserving user data. They are critical for production apps to avoid data loss and crashes.
 
 ### Core Principles
 
@@ -308,7 +308,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
 #### Migration 2→3: Complex Change (Table Recreation)
 
-SQLite does not support altering existing column types/constraints directly, so complex changes typically require table recreation.
+`SQLite` does not support altering existing column types/constraints directly, so complex changes typically require table recreation.
 
 Note: the following is a simplified example assuming `name` is always "First Last". Real-world apps must handle missing spaces, multiple words, locale-specific names, etc.
 
@@ -450,7 +450,7 @@ Room.databaseBuilder(context, AppDatabase::class.java, "db")
 
 1. **exportSchema = true** — keep schema history JSON for validating migrations.
 2. **Test migrations** — cover each realistic upgrade path (e.g., 1→2, 2→3, 1→3 via chain).
-3. **Incremental migrations** — define `Migration` for each version step; Room composes them.
+3. **Incremental migrations** — define `Migration` for each version step; `Room` composes them.
 4. **Avoid destructive strategies in production** — prefer preserving and transforming data.
 5. **NULL → NOT NULL** — changing an existing column usually requires table recreation; adding a new NOT NULL column is valid with an appropriate DEFAULT.
 6. **Data transformation** — do it explicitly via SQL or temporary tables/columns and handle edge cases.
@@ -472,15 +472,15 @@ Room.databaseBuilder(context, AppDatabase::class.java, "db")
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-room-library-definition--android--easy|Room Library Basics]]
-- [[q-sharedpreferences-commit-vs-apply--android--easy|SharedPreferences vs Room]]
+- [[q-room-library-definition--android--easy|`Room` Library Basics]]
+- [[q-sharedpreferences-commit-vs-apply--android--easy|`SharedPreferences` vs Room]]
 
 ### Related (Medium)
-- [[q-room-transactions-dao--android--medium|Room Transactions]]
-- [[q-room-type-converters-advanced--android--medium|Room Type Converters]]
-- [[q-room-paging3-integration--android--medium|Room Paging3 Integration]]
+- [[q-room-transactions-dao--android--medium|`Room` Transactions]]
+- [[q-room-type-converters-advanced--android--medium|`Room` Type Converters]]
+- [[q-room-paging3-integration--android--medium|`Room` Paging3 Integration]]
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--android--hard|Room Full-Text Search]]
-- Database schema versioning across multi-module projects
+- [[q-room-fts-full-text-search--android--hard|`Room` Full-Text Search]]
+- `Database` schema versioning across multi-module projects
 - Zero-downtime migrations for large databases

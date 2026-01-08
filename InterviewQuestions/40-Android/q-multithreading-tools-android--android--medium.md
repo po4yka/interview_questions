@@ -1,4 +1,4 @@
----
+---\
 id: android-275
 title: "Multithreading Tools Android / Инструменты многопоточности Android"
 aliases: [Android Threading, Multithreading Tools Android, Инструменты многопоточности Android, Многопоточность Android]
@@ -15,7 +15,7 @@ created: 2024-10-15
 updated: 2025-11-10
 sources: ["https://developer.android.com/kotlin/coroutines", "https://developer.android.com/topic/libraries/architecture/workmanager"]
 tags: [android/background-execution, android/coroutines, android/performance-startup, concurrency, difficulty/medium, rxjava, workmanager]
----
+---\
 # Вопрос (RU)
 
 > Какие инструменты для многопоточности в Android вы знаете?
@@ -199,7 +199,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 | Инструмент | Статус | Лучше всего для | Сложность |
 |------------|--------|-----------------|-----------|
 | **Kotlin Coroutines** | ✅ Рекомендуется | Общие async/await, современная разработка, UI + I/O | Низкая-Средняя |
-| **WorkManager** | ✅ Рекомендуется | Отложенная/гарантируемая (best-effort) фоновая работа с ограничениями | Средняя |
+| **`WorkManager`** | ✅ Рекомендуется | Отложенная/гарантируемая (best-effort) фоновая работа с ограничениями | Средняя |
 | **RxJava** | Зрелый | Сложные реактивные потоки событий | Высокая |
 | **AsyncTask** | ❌ Устарел | Ничего (используйте альтернативы) | Низкая |
 
@@ -207,7 +207,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 
 Для новой разработки Android:
 1. **Kotlin Coroutines** — для асинхронных операций, сетевых вызовов, доступа к БД, работы с UI
-2. **WorkManager** — для отложенных фоновых задач с учётом ограничений и best-effort гарантий выполнения
+2. **`WorkManager`** — для отложенных фоновых задач с учётом ограничений и best-effort гарантий выполнения
 3. **RxJava** — только при существующей Rx-кодовой базе или специфических реактивных требованиях
 4. **Базовые примитивы (`Executor`, `HandlerThread`)** — когда нужен точный контроль над потоками/очередями
 5. **❌ `AsyncTask`** — не использовать (устарел)
@@ -268,7 +268,7 @@ suspend fun load(): Result {
 }
 ```
 
-**Coroutine scopes:**
+**`Coroutine` scopes:**
 - `viewModelScope` — tied to `ViewModel` lifecycle
 - `lifecycleScope` — tied to `Activity`/`Fragment` lifecycle
 - `GlobalScope` — application-level scope (use carefully)
@@ -344,7 +344,7 @@ Not suitable for low-latency or tightly UI-coupled operations — use coroutines
 
 Reactive Extensions for the JVM — composing asynchronous programs via observable sequences.
 
-**✅ Thread Switching Example:**
+**✅ `Thread` Switching Example:**
 
 ```kotlin
 Observable.fromCallable { fetchDataFromNetwork() }
@@ -387,7 +387,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 | Tool | Status | Best For | Complexity |
 |------|--------|----------|------------|
 | **Kotlin Coroutines** | ✅ Recommended | General async/await, modern Android (UI + I/O) | Low-Medium |
-| **WorkManager** | ✅ Recommended | Deferrable/background work with constraints; best-effort guaranteed | Medium |
+| **`WorkManager`** | ✅ Recommended | Deferrable/background work with constraints; best-effort guaranteed | Medium |
 | **RxJava** | Mature | Complex reactive event streams | High |
 | **AsyncTask** | ❌ Deprecated | Nothing (use alternatives) | Low |
 
@@ -395,7 +395,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 
 For new Android development:
 1. **Kotlin Coroutines** — for async operations, network calls, DB access, and coordinating with UI
-2. **WorkManager** — for deferrable background tasks with constraints and persisted/best-effort execution
+2. **`WorkManager`** — for deferrable background tasks with constraints and persisted/best-effort execution
 3. **RxJava** — only if you have an existing Rx-based codebase or strong reactive requirements
 4. **Core primitives (`Executor`, `HandlerThread`)** — when you need fine-grained control over threads/queues
 5. **❌ `AsyncTask`** — never use (deprecated)

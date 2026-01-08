@@ -1,4 +1,4 @@
----
+---\
 id: android-318
 title: Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование
 aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-screenshot, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Реализуйте screenshot тестирование с помощью Paparazzi или Shot. Как обрабатывать разные размеры экранов и темы?
@@ -905,7 +905,7 @@ Running Shot:
 You can run Shot tests on different emulators/devices (phone vs tablet, different orientations) by configuring your instrumented test environment:
 
 - Start emulator with desired resolution/density.
-- Control orientation in your tests (for Activity-based tests).
+- Control orientation in your tests (for `Activity`-based tests).
 - Run `executeScreenshotTests` for each configuration as needed.
 
 Concrete API usage depends on your Shot version, test rules, and CI setup; avoid relying on undocumented APIs.

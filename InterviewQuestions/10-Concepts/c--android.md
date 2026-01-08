@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-153149"
 title: " Android /  Android"
 aliases: [" Android"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
 related: []
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -33,14 +34,14 @@ Android — это мобильная операционная система с
 
 - Platform architecture: Built on a Linux kernel with layers for hardware abstraction, native libraries, Android Runtime (ART), application framework APIs, and apps.
 - App components: Core building blocks include Activities, Fragments, Services, Broadcast Receivers, and Content Providers, each with a specific role and lifecycle.
-- Lifecycle and resources: Strong focus on managing component lifecycles, configuration changes, and limited resources (battery, memory, network) in a mobile environment.
+- `Lifecycle` and resources: Strong focus on managing component lifecycles, configuration changes, and limited resources (battery, memory, network) in a mobile environment.
 - Security and permissions: Sandboxed apps, permission-based access to sensitive data and hardware, and signing requirements for app distribution.
 - Ecosystem and tooling: Development commonly uses Android Studio, Gradle, Jetpack libraries, and distribution through Google Play and other app stores.
 
 ## Ключевые Моменты (RU)
 
 - Архитектура платформы: Основана на ядре Linux с уровнями аппаратной абстракции, нативных библиотек, Android Runtime (ART), API фреймворка и пользовательских приложений.
-- Компоненты приложения: Базовые сущности — Activity, Fragment, Service, Broadcast Receiver и Content Provider, каждая со своей ролью и жизненным циклом.
+- Компоненты приложения: Базовые сущности — `Activity`, `Fragment`, `Service`, Broadcast Receiver и Content Provider, каждая со своей ролью и жизненным циклом.
 - Жизненный цикл и ресурсы: Акцент на корректном управлении жизненным циклом компонентов, конфигурационными изменениями и ограниченными ресурсами (батарея, память, сеть).
 - Безопасность и разрешения: Изоляция приложений в песочнице, доступ к чувствительным данным и оборудованию через систему разрешений и обязательная подпись приложений.
 - Экосистема и инструменты: Разработка ведётся в Android Studio с использованием Gradle, библиотек Jetpack и распространением через Google Play и другие магазины приложений.

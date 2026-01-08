@@ -1,4 +1,4 @@
----
+---\
 id: dp-011
 title: "State Pattern / Паттерн State"
 aliases: [State Pattern, State Паттерн]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral, difficulty/medium, state-machine]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн State? Когда и зачем его следует использовать?
 
@@ -646,7 +646,7 @@ class Order(private var state: OrderState = OrderState.Pending) {
 ### Real World Examples
 
 1. TV box power states.
-2. Thread lifecycle states.
+2. `Thread` lifecycle states.
 3. Order workflow.
 4. Media player states.
 

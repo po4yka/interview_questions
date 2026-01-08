@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-websockets, c-webrtc, c-real-time-communication, c-rest-api, c-networking]
+moc: "moc-cs"
+related: ["c-websockets", "c-webrtc", "c-real-time-communication", "c-rest-api", "c-networking"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

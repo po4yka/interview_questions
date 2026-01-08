@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-035
 title: "Kotlin Flow Basics / Основы Flow в Kotlin"
 aliases: ["Kotlin Flow Basics", "Основы Flow в Kotlin"]
@@ -17,7 +17,7 @@ created: 2025-10-05
 updated: 2025-11-10
 tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
 
----
+---\
 # Вопрос (RU)
 > Что вы знаете о `Flow` в Kotlin?
 
@@ -193,7 +193,7 @@ try {
 - [[q-channelflow-callbackflow-flow--kotlin--medium]] - channelFlow против callbackFlow
 - [[q-flow-exception-handling--kotlin--medium]] - Обработка ошибок в `Flow`
 - [[q-instant-search-flow-operators--kotlin--medium]] - Мгновенный поиск с `Flow`
-- [[q-room-coroutines-flow--kotlin--medium]] - Использование Room с `Flow`
+- [[q-room-coroutines-flow--kotlin--medium]] - Использование `Room` с `Flow`
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Тестирование горячих `Flow`
 
 ### Продвинутые (сложнее)
@@ -374,7 +374,7 @@ By default, flows are *sequential* and all flow operations are executed sequenti
 - [[q-channelflow-callbackflow-flow--kotlin--medium]] - channelFlow vs callbackFlow
 - [[q-flow-exception-handling--kotlin--medium]] - Exception handling in `Flow`
 - [[q-instant-search-flow-operators--kotlin--medium]] - Instant search with `Flow`
-- [[q-room-coroutines-flow--kotlin--medium]] - Room with `Flow`
+- [[q-room-coroutines-flow--kotlin--medium]] - `Room` with `Flow`
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing hot `Flows`
 
 ### Advanced (Harder)

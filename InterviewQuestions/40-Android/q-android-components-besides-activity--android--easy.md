@@ -1,4 +1,4 @@
----
+---\
 id: android-272
 title: Android Components Besides Activity / Компоненты Android кроме Activity
 aliases: [Android Components Besides Activity, Компоненты Android кроме Activity]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/broadcast-receiver, android/content-provider, android/service, difficulty/easy]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Какие компоненты Android существуют помимо `Activity`?
@@ -50,7 +50,7 @@ class MusicService : Service() {
 - Для долгих пользовательски-заметных задач (например, музыка) обычно используется foreground service с уведомлением.
 - Для отложенной/гарантированной работы (сеть, ограничения по заряду и т.п.) предпочтительнее `WorkManager`, а не обычный `Service`.
 
-**Применение**: Воспроизведение музыки, загрузка файлов, синхронизация данных (с учётом современных ограничений и часто в связке с WorkManager).
+**Применение**: Воспроизведение музыки, загрузка файлов, синхронизация данных (с учётом современных ограничений и часто в связке с `WorkManager`).
 
 ### 2. `BroadcastReceiver` (Приёмник событий)
 Реагирует на системные и кастомные broadcast-сообщения.
@@ -144,7 +144,7 @@ Important:
 - For long-running, user-visible tasks (e.g., music playback) you typically use a foreground service with a notification.
 - For deferrable/guaranteed background work (network, battery constraints, etc.), prefer `WorkManager` instead of a plain `Service`.
 
-**Use cases**: Music playback, file downloads, data synchronization (respecting modern background execution limits, often via WorkManager).
+**Use cases**: Music playback, file downloads, data synchronization (respecting modern background execution limits, often via `WorkManager`).
 
 ### 2. `BroadcastReceiver`
 Responds to system-wide and custom broadcast announcements.
@@ -208,10 +208,10 @@ class DetailsFragment : Fragment() {
 
 **Benefits**: Reusability, master-detail layouts, back stack support.
 
-| Component | Purpose | UI | Lifecycle |
+| `Component` | Purpose | UI | `Lifecycle` |
 |-----------|---------|----|-----------|
 | `Service` | Background operations | ❌ | Managed by the system; can run independently of an `Activity`, subject to OS limits |
-| `BroadcastReceiver` | Event handling | ❌ | Short-lived; `onReceive` must complete quickly |
+| `BroadcastReceiver` | Event handling | ❌ | `Short`-lived; `onReceive` must complete quickly |
 | `ContentProvider` | Data sharing | ❌ | Created on demand and runs in the app's process |
 | `Fragment` | UI modules (not a core app component) | ✅ | Managed by `FragmentManager`, tied to the `Activity` lifecycle |
 
@@ -220,7 +220,7 @@ class DetailsFragment : Fragment() {
 ## Дополнительные Вопросы (RU)
 
 - В чем разница между запущенным (`started`) `Service` и привязанным (`bound`) `Service`?
-- Когда следует использовать WorkManager вместо `Service`?
+- Когда следует использовать `WorkManager` вместо `Service`?
 - Как ограничения по времени выполнения и условия для `BroadcastReceiver` влияют на реализацию?
 - Какие механизмы безопасности предоставляет `ContentProvider`?
 - Почему фрагменты считаются спорным решением в современной Android-разработке?
@@ -228,7 +228,7 @@ class DetailsFragment : Fragment() {
 ## Follow-ups
 
 - What's the difference between started `Service` and bound `Service`?
-- When should you use WorkManager instead of `Service`?
+- When should you use `WorkManager` instead of `Service`?
 - How does `BroadcastReceiver`'s time limit and execution constraints affect implementation?
 - What security mechanisms does `ContentProvider` offer?
 - Why are Fragments controversial in modern Android development?

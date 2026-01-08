@@ -1,4 +1,4 @@
----
+---\
 id: cs-035
 title: "Data Structures and Algorithms Fundamentals / Фундаментальные структуры данных и алгоритмы"
 aliases: ["Data Structures and Algorithms Fundamentals", "Фундаментальные структуры данных и алгоритмы"]
@@ -16,7 +16,7 @@ updated: "2025-01-25"
 tags: [algorithms, big-o, complexity, data-structures, difficulty/hard, dynamic-programming, graphs, recursion, searching, sorting, trees]
 sources: ["https://en.wikipedia.org/wiki/Data_structure"]
 
----
+---\
 # Вопрос (RU)
 > Объясните фундаментальные структуры данных и алгоритмы. Какие особенности у каждой структуры и когда их использовать?
 
@@ -342,7 +342,7 @@ class Graph<T> {
 
 | Структура   | Access       | Search                 | Insert                               | Delete                               | Space |
 |------------|--------------|------------------------|--------------------------------------|--------------------------------------|-------|
-| Array      | O(1)         | O(n)                   | O(n) (в середину), O(1)* в конец    | O(n)                                 | O(n) |
+| `Array`      | O(1)         | O(n)                   | O(n) (в середину), O(1)* в конец    | O(n)                                 | O(n) |
 | `LinkedList` | O(n)         | O(n)                   | O(1) при известном месте             | O(1) при известном месте             | O(n) |
 | `Stack`      | O(1) (top)   | - (через pop: O(n))    | O(1)                                 | O(1)                                 | O(n) |
 | `Queue`      | O(1) (front) | - (через dequeue: O(n))| O(1)                                 | O(1)                                 | O(n) |
@@ -686,7 +686,7 @@ Summary table (typical):
 
 | Structure  | Access        | Search                     | Insert                               | Delete                               | Space |
 |-----------|---------------|----------------------------|--------------------------------------|--------------------------------------|-------|
-| Array     | O(1)          | O(n)                       | O(n) middle, amortized O(1) end     | O(n)                                 | O(n) |
+| `Array`     | O(1)          | O(n)                       | O(n) middle, amortized O(1) end     | O(n)                                 | O(n) |
 | `LinkedList`| O(n)          | O(n)                       | O(1) at known position               | O(1) at known position               | O(n) |
 | `Stack`     | O(1) (top)    | - (via pops: O(n))         | O(1)                                 | O(1)                                 | O(n) |
 | `Queue`     | O(1) (front)  | - (via dequeues: O(n))     | O(1)                                 | O(1)                                 | O(n) |

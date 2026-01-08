@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-115
 title: "Room Database with Coroutines and Flow / Room БД с корутинами и Flow"
 aliases: ["Room Database with Coroutines and Flow", "Room БД с корутинами и Flow"]
@@ -17,18 +17,18 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, room]
 
----
+---\
 # Вопрос (RU)
-> Как использовать Room БД с корутинами и `Flow`? Объясните suspend функции в DAO, `Flow` для реактивных запросов, обработку транзакций и лучшие практики.
+> Как использовать `Room` БД с корутинами и `Flow`? Объясните suspend функции в DAO, `Flow` для реактивных запросов, обработку транзакций и лучшие практики.
 
 ---
 
 # Question (EN)
-> How to use Room database with coroutines and `Flow`? Explain suspend functions in DAO, `Flow` for reactive queries, transaction handling, and best practices.
+> How to use `Room` database with coroutines and `Flow`? Explain suspend functions in DAO, `Flow` for reactive queries, transaction handling, and best practices.
 
 ## Ответ (RU)
 
-Room предоставляет первоклассную поддержку корутин и `Flow` для асинхронной и реактивной работы с БД в Android.
+`Room` предоставляет первоклассную поддержку корутин и `Flow` для асинхронной и реактивной работы с БД в Android.
 
 ### Базовая Работа С Suspend-функциями Room
 
@@ -85,7 +85,7 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 }
 ```
 
-Примечание: suspend-вызовы DAO Room выполняет вне главного потока с помощью своих внутренних исполнителей (при использовании соответствующих зависимостей Room), поэтому обычно не требуется оборачивать их в `withContext(Dispatchers.IO)`.
+Примечание: suspend-вызовы DAO `Room` выполняет вне главного потока с помощью своих внутренних исполнителей (при использовании соответствующих зависимостей `Room`), поэтому обычно не требуется оборачивать их в `withContext(Dispatchers.IO)`.
 
 ### Реактивные Запросы С `Flow`
 
@@ -256,15 +256,15 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 Кратко:
 - Используйте suspend-функции в DAO для одноразовых операций.
-- Используйте `Flow` для реактивных запросов и автоматических обновлений UI; Room переисполняет запрос при изменениях соответствующих таблиц.
+- Используйте `Flow` для реактивных запросов и автоматических обновлений UI; `Room` переисполняет запрос при изменениях соответствующих таблиц.
 - Применяйте `@Transaction` и `withTransaction` для атомарности.
-- Инкапсулируйте доступ к БД в репозитории и комбинируйте Room с сетью по необходимости.
+- Инкапсулируйте доступ к БД в репозитории и комбинируйте `Room` с сетью по необходимости.
 
 ---
 
 ## Answer (EN)
 
-Room provides first-class support for coroutines and `Flow`, making async and reactive database operations straightforward in Android apps.
+`Room` provides first-class support for coroutines and `Flow`, making async and reactive database operations straightforward in Android apps.
 
 ### Basic Room with Suspend Functions
 
@@ -321,7 +321,7 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 }
 ```
 
-Note: Room executes suspend DAO calls off the main thread using its own executors (with the appropriate Room dependencies), so you generally do not need to wrap them in `withContext(Dispatchers.IO)`.
+Note: `Room` executes suspend DAO calls off the main thread using its own executors (with the appropriate `Room` dependencies), so you generally do not need to wrap them in `withContext(Dispatchers.IO)`.
 
 ### Reactive Queries with `Flow`
 
@@ -493,29 +493,29 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 In short:
 - Use suspend functions in DAO for one-off operations.
-- Use `Flow` for reactive queries and automatic UI updates; Room re-runs the query when relevant tables change.
+- Use `Flow` for reactive queries and automatic UI updates; `Room` re-runs the query when relevant tables change.
 - Use `@Transaction` and `withTransaction` for atomic operations.
-- Encapsulate DB access in a repository and combine Room with network as needed.
+- Encapsulate DB access in a repository and combine `Room` with network as needed.
 
 ---
 
 ## Дополнительные Вопросы (RU)
 
-1. Как безопасно выполнять миграции Room с использованием корутин, чтобы операции чтения/записи оставались неблокирующими?
+1. Как безопасно выполнять миграции `Room` с использованием корутин, чтобы операции чтения/записи оставались неблокирующими?
 2. В каких случаях предпочтительнее использовать `Flow` в DAO, а в каких — только suspend-функции для одноразовых запросов?
-3. Как тестировать DAO и репозитории Room, которые используют корутины и `Flow` (например, с `runTest` и `TestDispatcher`)?
-4. Как обрабатывать и пробрасывать ошибки при работе с Room через `Flow` и структурированную конкуррентность?
-5. Как интегрировать `Flow` из Room с `StateFlow`/`SharedFlow` во ViewModel для управления состоянием UI?
+3. Как тестировать DAO и репозитории `Room`, которые используют корутины и `Flow` (например, с `runTest` и `TestDispatcher`)?
+4. Как обрабатывать и пробрасывать ошибки при работе с `Room` через `Flow` и структурированную конкуррентность?
+5. Как интегрировать `Flow` из `Room` с `StateFlow`/`SharedFlow` во `ViewModel` для управления состоянием UI?
 
 ---
 
 ## Follow-ups
 
-1. How to safely perform Room migrations with coroutines so that reads/writes remain non-blocking?
+1. How to safely perform `Room` migrations with coroutines so that reads/writes remain non-blocking?
 2. In which scenarios should you prefer `Flow` in DAO vs only suspend functions for one-shot queries?
-3. How to test Room DAOs and repositories using coroutines and `Flow` (e.g., with `runTest` and `TestDispatcher`)?
-4. How to handle and propagate errors from Room when using `Flow` and structured concurrency?
-5. How to integrate Room `Flow` streams with `StateFlow`/`SharedFlow` in ViewModel for UI state management?
+3. How to test `Room` DAOs and repositories using coroutines and `Flow` (e.g., with `runTest` and `TestDispatcher`)?
+4. How to handle and propagate errors from `Room` when using `Flow` and structured concurrency?
+5. How to integrate `Room` `Flow` streams with `StateFlow`/`SharedFlow` in `ViewModel` for UI state management?
 
 ---
 

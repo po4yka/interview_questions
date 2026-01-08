@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-111
 title: "SharedFlow vs StateFlow / SharedFlow против StateFlow"
 aliases: ["SharedFlow vs StateFlow", "SharedFlow против StateFlow"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharedflow, state-management, stateflow]
----
+---\
 # Вопрос (RU)
 > В чём разница между `SharedFlow` и `StateFlow`? Когда использовать каждый из них?
 
@@ -645,7 +645,7 @@ _state.value = 1
 _state.update { it + 1 }  // Atomic update
 ```
 
-**StateFlow Characteristics**:
+**`StateFlow` Characteristics**:
 1. **Always has a value** — must provide an initial value.
 2. **Replay = 1** — new collectors immediately receive the current value.
 3. **Conflated** — only the latest value matters; slow collectors may skip intermediate updates.
@@ -755,7 +755,7 @@ val _results = MutableSharedFlow<Result>(
 )
 ```
 
-**SharedFlow Characteristics**:
+**`SharedFlow` Characteristics**:
 1. **No initial value required** — can start empty.
 2. **Configurable replay** — from 0 to unlimited; new collectors receive up to `replay` most recent values.
 3. **No conflation by default** — by default attempts to deliver all values, subject to buffer/overflow settings.
@@ -1200,15 +1200,15 @@ repeat(1000) {
 
 - [[c-kotlin]]
 - [[c-flow]]
-- Kotlin SharedFlow Documentation: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/
-- Kotlin StateFlow Documentation: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/
-- StateFlow and SharedFlow Guide (Android): https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
+- Kotlin `SharedFlow` Documentation: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/
+- Kotlin `StateFlow` Documentation: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/
+- `StateFlow` and `SharedFlow` Guide (Android): https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
 
 ## References
 
-- [Kotlin SharedFlow Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
-- [Kotlin StateFlow Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
-- [StateFlow and SharedFlow Guide](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Kotlin `SharedFlow` Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
+- [Kotlin `StateFlow` Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
+- [StateFlow and `SharedFlow` Guide](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ## Связанные Вопросы (RU)
 

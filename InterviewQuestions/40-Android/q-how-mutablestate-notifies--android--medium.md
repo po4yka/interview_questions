@@ -1,4 +1,4 @@
----
+---\
 id: android-108
 title: "How MutableState Notifies / Как MutableState уведомляет"
 aliases: [MutableState notifications, MutableState уведомления, Snapshot system]
@@ -11,12 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state-management]
+tags: [android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium, mutablestate, observer-pattern, recomposition, snapshot-system, state-management]
 moc: moc-android
 related: [c-compose-state, c-recomposition, q-recomposition-choreographer--android--hard]
 sources: []
 
----
+---\
 # Вопрос (RU)
 > Как MutableState уведомляет о том, что он изменился?
 
@@ -27,7 +27,7 @@ sources: []
 
 ## Ответ (RU)
 
-**MutableState** использует систему снимков состояния (**Snapshot system**) и механизм отслеживания чтений/записей, концептуально похожий на **Observer pattern**, чтобы автоматически помечать затронутые участки композиции как требующие рекомпозиции.
+**MutableState** использует систему снимков состояния (**Snapshot system**) и механизм отслеживания чтений/записей, концептуально похожий на **`Observer` pattern**, чтобы автоматически помечать затронутые участки композиции как требующие рекомпозиции.
 
 ### Механизм Работы
 
@@ -182,7 +182,7 @@ Compose автоматически управляет зависимостями
 
 ## Answer (EN)
 
-**MutableState** uses Compose's **Snapshot system** and read/write tracking (conceptually similar to an **Observer pattern**) to automatically mark dependent parts of the composition as needing recomposition when its value changes.
+**MutableState** uses Compose's **Snapshot system** and read/write tracking (conceptually similar to an **`Observer` pattern**) to automatically mark dependent parts of the composition as needing recomposition when its value changes.
 
 ### How It Works
 
@@ -225,7 +225,7 @@ The example below illustrates the idea and is not real production code:
 
 **Benefits (in the context of the Snapshot system):**
 - **Isolation** – reads within a snapshot see a consistent view of state.
-- **Thread-safe reads** – multiple threads can safely read using snapshots.
+- **`Thread`-safe reads** – multiple threads can safely read using snapshots.
 - **Rollback capability** – with explicit snapshot APIs you can discard changes; in typical UI code with `mutableStateOf`, this is handled by the framework rather than as a general undo mechanism.
 
 ### Granular Recomposition

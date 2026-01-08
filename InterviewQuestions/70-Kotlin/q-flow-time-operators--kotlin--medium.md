@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-127
 title: "Flow Time Operators: debounce, sample, throttle / Временные операторы Flow"
 aliases: ["Flow Time Operators: debounce, sample, throttle", "Временные операторы Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, time-operators]
----
+---\
 # Вопрос (RU)
 > Что такое операторы `debounce`, `sample` и throttle в Kotlin `Flow`? В чём различия и случаи использования?
 
@@ -394,7 +394,7 @@ input
 
 ## Answer (EN)
 
-Time-based operators in Kotlin `Flow` control the rate of emissions based on time intervals. Two standard operators — **`debounce`** and **`sample`** — plus a commonly used pattern **`throttleFirst`** (implemented as an extension, not a built-in Flow operator) serve different purposes for handling rapid emissions.
+Time-based operators in Kotlin `Flow` control the rate of emissions based on time intervals. Two standard operators — **`debounce`** and **`sample`** — plus a commonly used pattern **`throttleFirst`** (implemented as an extension, not a built-in `Flow` operator) serve different purposes for handling rapid emissions.
 
 ### Quick Comparison
 
@@ -402,7 +402,7 @@ Time-based operators in Kotlin `Flow` control the rate of emissions based on tim
 |----------|---------|------------|----------|
 | **`debounce`** | Wait for pause | After timeout since last emission | Search input, form validation |
 | **`sample`** | Periodic sampling | At fixed interval points, if there were new values | Real-time data, sensor readings |
-| **`throttleFirst`** (custom) | Rate limiting | First in time window | Button clicks, rapid events |
+| **`throttleFirst`** (custom) | Rate limiting | First in time window | `Button` clicks, rapid events |
 
 ### Debounce: Wait for Silence
 
@@ -758,27 +758,27 @@ input
 
 ## References
 
-- [Kotlin Flow debounce](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)
-- [Kotlin Flow sample](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/sample.html)
+- [Kotlin `Flow` debounce](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)
+- [Kotlin `Flow` sample](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/sample.html)
 - [Flow Time-based Operators](https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf)
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-backpressure--kotlin--hard]] - Flow
+- [[q-flow-backpressure--kotlin--hard]] - `Flow`
 
 ### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
+- [[q-flow-basics--kotlin--easy]] - `Flow`
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction
 
 ## MOC Links
 

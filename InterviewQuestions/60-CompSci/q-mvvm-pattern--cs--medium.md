@@ -1,4 +1,4 @@
----
+---\
 id: cs-021
 title: "MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)"
 aliases: ["MVVM Pattern", "Паттерн MVVM"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [android-architecture, architecture-patterns, data-binding, difficulty/medium, livedata, mvvm, reactive-programming, viewmodel]
 sources: ["https://developer.android.com/jetpack/guide"]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн MVVM? Когда его использовать и как он работает?
 
@@ -193,7 +193,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 **2. `Observable` Pattern:**
 *Теория:* `ViewModel` экспонирует наблюдаемые данные (например, `LiveData`, `StateFlow`). `View` подписывается на них и реагирует на изменения. `ViewModel` не знает о конкретных подписчиках. Несколько `View` могут подписываться на один и тот же источник данных, что обеспечивает слабую связанность.
 
-**3. Lifecycle Awareness (в Android):**
+**3. `Lifecycle` Awareness (в Android):**
 *Теория:* В Android `ViewModel` привязан к lifecycle owner (`Activity`, `Fragment`) и переживает конфигурационные изменения (например, поворот экрана). `LiveData` отслеживает состояние жизненного цикла и автоматически прекращает доставку обновлений, когда владелец уничтожен. Это платформенные особенности реализации MVVM в Android.
 
 **4. No `View` Reference:**
@@ -238,7 +238,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 2. Separation of Concerns — чёткое разделение UI, презентационной и бизнес-логики.
 3. Отсутствие зависимости `ViewModel` от `View`.
 4. (Опционально) Two-Way Binding — может применяться, но не обязателен.
-5. Lifecycle Awareness в Android — реализация MVVM учитывает жизненный цикл компонентов.
+5. `Lifecycle` Awareness в Android — реализация MVVM учитывает жизненный цикл компонентов.
 
 ---
 
@@ -410,7 +410,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 **2. `Observable` Pattern:**
 *Theory:* The `ViewModel` exposes observable data (e.g., `LiveData`, `StateFlow`). The `View` subscribes to these observables and reacts to changes. The `ViewModel` is unaware of specific `View` subscribers. Multiple Views can observe the same data source, supporting a decoupled architecture.
 
-**3. Lifecycle Awareness (in Android):**
+**3. `Lifecycle` Awareness (in Android):**
 *Theory:* In Android, `ViewModel` instances are scoped to a lifecycle owner (`Activity`, `Fragment`) and survive configuration changes (e.g., rotation). `LiveData` is lifecycle-aware and automatically stops sending updates when the owner is destroyed. These are Android-specific implementation details supporting MVVM.
 
 **4. No `View` Reference:**
@@ -422,7 +422,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 2. Extensibility — features can be added or modified with limited impact on other layers.
 3. Testability — business and presentation logic are decoupled from UI, enabling easier unit testing.
 4. Clear Contracts — `ViewModel` exposes an explicit state/events interface to the `View`.
-5. Lifecycle Support (Android) — `ViewModel` helps survive configuration changes.
+5. `Lifecycle` Support (Android) — `ViewModel` helps survive configuration changes.
 
 **Disadvantages:**
 
@@ -455,7 +455,7 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
 2. Separation of Concerns — clear boundaries between UI, presentation, and business logic.
 3. No `View` Dependency — `ViewModel` does not depend on `View`.
 4. (Optional) Two-Way Binding — may be used, but not required.
-5. Lifecycle Awareness in Android — using Android tools that respect lifecycle.
+5. `Lifecycle` Awareness in Android — using Android tools that respect lifecycle.
 
 ---
 

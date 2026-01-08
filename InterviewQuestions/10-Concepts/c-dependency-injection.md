@@ -1,4 +1,4 @@
----
+---\
 id: "20251023-120000"
 title: "Dependency Injection / Внедрение зависимостей"
 aliases: ["Dependency Injection", "DI", "Внедрение зависимостей", "Инъекция зависимостей"]
@@ -12,37 +12,37 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-architecture-patterns"
-related: [c-hilt, c-dagger, c-mvvm, c-clean-architecture, c-repository-pattern]
+related: ["c-hilt", "c-dagger", "c-mvvm", "c-clean-architecture", "c-repository-pattern"]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture-patterns", "concept", "dependency-injection", "difficulty/medium"]
----
+---\
 
 # Dependency Injection / Внедрение Зависимостей
 
 ## Summary (EN)
 
-Dependency Injection (DI) is a design pattern where an object receives its dependencies from external sources rather than creating them internally. This promotes loose coupling, testability, and maintainability by separating object creation from business logic. In Android, DI is commonly implemented using frameworks like Dagger, Hilt, or Koin.
+Dependency Injection (DI) is a design pattern where an object receives its dependencies from external sources rather than creating them internally. This promotes loose coupling, testability, and maintainability by separating object creation from business logic. In Android, DI is commonly implemented using frameworks like `Dagger`, `Hilt`, or `Koin`.
 
 ## Краткое Описание (RU)
 
-Внедрение зависимостей (DI) — это паттерн проектирования, при котором объект получает свои зависимости из внешних источников, а не создает их внутри себя. Это способствует слабой связанности, тестируемости и поддерживаемости кода, разделяя создание объектов от бизнес-логики. В Android DI обычно реализуется с помощью фреймворков, таких как Dagger, Hilt или Koin.
+Внедрение зависимостей (DI) — это паттерн проектирования, при котором объект получает свои зависимости из внешних источников, а не создает их внутри себя. Это способствует слабой связанности, тестируемости и поддерживаемости кода, разделяя создание объектов от бизнес-логики. В Android DI обычно реализуется с помощью фреймворков, таких как `Dagger`, `Hilt` или `Koin`.
 
 ## Key Points (EN)
 
 - **Inversion of Control**: Dependencies are provided to objects rather than objects creating them
 - **Three main types**: Constructor injection, field injection, method injection
-- **Framework support**: Android commonly uses Dagger, Hilt (built on Dagger), or Koin
-- **Compile-time vs runtime**: Dagger/Hilt use compile-time generation, Koin uses runtime reflection
-- **Scopes**: Control lifetime of dependencies (Singleton, Activity-scoped, ViewModel-scoped, etc.)
+- **Framework support**: Android commonly uses `Dagger`, `Hilt` (built on `Dagger`), or `Koin`
+- **Compile-time vs runtime**: Dagger/Hilt use compile-time generation, `Koin` uses runtime reflection
+- **Scopes**: Control lifetime of dependencies (Singleton, `Activity`-scoped, `ViewModel`-scoped, etc.)
 
 ## Ключевые Моменты (RU)
 
 - **Инверсия управления**: Зависимости предоставляются объектам извне, а не создаются внутри них
 - **Три основных типа**: Инъекция через конструктор, поле или метод
-- **Поддержка фреймворков**: В Android обычно используются Dagger, Hilt (построен на Dagger) или Koin
-- **Компиляция vs выполнение**: Dagger/Hilt используют генерацию во время компиляции, Koin — рефлексию во время выполнения
-- **Области видимости**: Управление жизненным циклом зависимостей (Singleton, Activity-scoped, ViewModel-scoped и т.д.)
+- **Поддержка фреймворков**: В Android обычно используются `Dagger`, `Hilt` (построен на `Dagger`) или `Koin`
+- **Компиляция vs выполнение**: Dagger/Hilt используют генерацию во время компиляции, `Koin` — рефлексию во время выполнения
+- **Области видимости**: Управление жизненным циклом зависимостей (Singleton, `Activity`-scoped, `ViewModel`-scoped и т.д.)
 
 ## Types of Injection
 
@@ -113,7 +113,7 @@ class UserPresenter {
 **Cons**:
 - **Learning curve**: Requires understanding of DI concepts and framework specifics
 - **Setup complexity**: Initial configuration can be time-consuming
-- **Build time**: Compile-time frameworks like Dagger increase build time
+- **Build time**: Compile-time frameworks like `Dagger` increase build time
 - **Debugging**: Harder to trace dependency resolution issues
 - **Boilerplate**: Requires annotations and configuration code
 
@@ -123,9 +123,9 @@ class UserPresenter {
 
 | Framework | Type | Pros | Cons |
 |-----------|------|------|------|
-| **Hilt** | Compile-time | Official support, less boilerplate | Dagger complexity underneath |
-| **Dagger** | Compile-time | Fast runtime, type-safe | Steep learning curve |
-| **Koin** | Runtime | Easy to learn, Kotlin DSL | Runtime overhead, less type safety |
+| **`Hilt`** | Compile-time | Official support, less boilerplate | `Dagger` complexity underneath |
+| **`Dagger`** | Compile-time | Fast runtime, type-safe | Steep learning curve |
+| **`Koin`** | Runtime | Easy to learn, Kotlin DSL | Runtime overhead, less type safety |
 
 ### Common Scopes in Android
 

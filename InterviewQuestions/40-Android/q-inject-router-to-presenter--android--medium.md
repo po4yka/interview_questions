@@ -1,4 +1,4 @@
----
+---\
 id: android-215
 title: "Inject Router To Presenter / Инъекция Router в Presenter"
 aliases: ["Inject Router To Presenter", "Router DI", "Инъекция Router в Presenter", "Инъекция роутера"]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, dependency-injection, difficulty/medium, navigation, router]
 
----
+---\
 # Вопрос (RU)
 
 > Что использовать для того, чтобы роутер инжектился напрямую в презентер?
@@ -34,9 +34,9 @@ tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, depend
 
 **Основные подходы**:
 
-1. **Hilt** — официальный Android DI, минимальный boilerplate
-2. **Dagger 2** — compile-time DI, больше контроля
-3. **Koin** — runtime DI, Kotlin DSL, простая настройка
+1. **`Hilt`** — официальный Android DI, минимальный boilerplate
+2. **`Dagger` 2** — compile-time DI, больше контроля
+3. **`Koin`** — runtime DI, Kotlin DSL, простая настройка
 
 ### Ключевой Паттерн: Router Через Интерфейс
 
@@ -106,7 +106,7 @@ class ProductListFragment : Fragment() {
 }
 ```
 
-Этот пример демонстрирует идею: презентер получает `Router` по интерфейсу, а конкретная реализация `Router` знает, как работать с навигацией. Важно спроектировать `Router` так, чтобы он не держал долгоживущих ссылок на `NavController` или `Fragment` и уважал scope компонентов Hilt.
+Этот пример демонстрирует идею: презентер получает `Router` по интерфейсу, а конкретная реализация `Router` знает, как работать с навигацией. Важно спроектировать `Router` так, чтобы он не держал долгоживущих ссылок на `NavController` или `Fragment` и уважал scope компонентов `Hilt`.
 
 ### Пример С Koin
 
@@ -195,9 +195,9 @@ Importantly, "direct injection" here should mean injecting a `Router` abstractio
 
 **Main approaches**:
 
-1. **Hilt** — official Android DI, minimal boilerplate
-2. **Dagger 2** — compile-time DI, more control
-3. **Koin** — runtime DI, Kotlin DSL, simple setup
+1. **`Hilt`** — official Android DI, minimal boilerplate
+2. **`Dagger` 2** — compile-time DI, more control
+3. **`Koin`** — runtime DI, Kotlin DSL, simple setup
 
 ### Key Pattern: Interface-Based Router
 
@@ -328,7 +328,7 @@ class ProductListPresenterTest {
 2. **Easy testing** — router can be mocked/stubbed in unit tests
 3. **Separation of concerns** — presentation logic is decoupled from navigation implementation details
 4. **Reusability** — one `Router` (or a set of interfaces) can be reused across multiple presenters
-5. **Module isolation** — feature modules depend on navigation abstractions instead of a concrete navigation stack
+5. **`Module` isolation** — feature modules depend on navigation abstractions instead of a concrete navigation stack
 
 ### Best Practices
 
@@ -369,14 +369,14 @@ class Presenter @Inject constructor(private val navController: NavController)
 - [[c-dependency-injection]] — Принципы DI
 - [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Koin Documentation](https://insert-koin.io/)
-- [Navigation Component Guide](https://developer.android.com/guide/navigation)
+- [Navigation `Component` Guide](https://developer.android.com/guide/navigation)
 
 ## References
 
 - [[c-dependency-injection]] — DI principles
 - [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Koin Documentation](https://insert-koin.io/)
-- [Navigation Component Guide](https://developer.android.com/guide/navigation)
+- [Navigation `Component` Guide](https://developer.android.com/guide/navigation)
 
 ## Связанные Вопросы (RU)
 

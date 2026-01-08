@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-172
 title: "Circuit breaker pattern with coroutines / Circuit breaker паттерн с корутинами"
 aliases: [Circuit Breaker Pattern, Circuit breaker паттерн]
@@ -15,7 +15,7 @@ tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, mic
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
 
----
+---\
 # Вопрос (RU)
 
 > Как реализовать и использовать паттерн circuit breaker с использованием Kotlin coroutines в продакшене: состояния (Closed/Open/Half-Open), конфигурация порогов, потокобезопасность, мониторинг и интеграция с retry/timeout для разных сервисов?
@@ -84,7 +84,7 @@ The Circuit Breaker pattern prevents an application from repeatedly trying to ex
 
 Key benefits:
 - Prevents cascading failures in distributed systems
-- Provides fast failure detection and recovery
+- `Provides` fast failure detection and recovery
 - Reduces load on failing services
 - Improves system resilience and stability
 - Enables graceful degradation

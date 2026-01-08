@@ -1,4 +1,4 @@
----
+---\
 id: android-479
 title: Custom View Lifecycle / Жизненный цикл Custom View
 aliases: [Custom View Lifecycle, Жизненный цикл Custom View]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [android/lifecycle, android/ui-graphics, android/ui-views, custom-views, difficulty/medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
 > Каков жизненный цикл Custom `View` в Android? Какие методы вызываются при создании, отрисовке и удалении `View`?
 
@@ -27,7 +27,7 @@ sources: []
 
 ## Ответ (RU)
 
-**`View` Lifecycle** описывает ключевые этапы от создания до удаления `View`. Упрощенная типичная последовательность для уже добавленной в иерархию `View` выглядит так:
+**`View` `Lifecycle`** описывает ключевые этапы от создания до удаления `View`. Упрощенная типичная последовательность для уже добавленной в иерархию `View` выглядит так:
 
 ```text
 Constructor → onAttachedToWindow → onMeasure → onLayout → onSizeChanged (при изменении размеров) → onDraw → onDetachedFromWindow
@@ -155,7 +155,7 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 
 ## Answer (EN)
 
-**`View` Lifecycle** describes the key stages from creation to removal of a `View`. A simplified typical sequence for a `View` already added to a hierarchy looks like:
+**`View` `Lifecycle`** describes the key stages from creation to removal of a `View`. A simplified typical sequence for a `View` already added to a hierarchy looks like:
 
 ```text
 Constructor → onAttachedToWindow → onMeasure → onLayout → onSizeChanged (when size changes) → onDraw → onDetachedFromWindow

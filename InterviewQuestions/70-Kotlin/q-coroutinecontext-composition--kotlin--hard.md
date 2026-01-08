@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-057
 title: "CoroutineContext Composition / Композиция CoroutineContext"
 aliases: ["CoroutineContext Composition", "Композиция CoroutineContext"]
@@ -17,7 +17,7 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, flow, kotlin]
 
----
+---\
 # Вопрос (RU)
 > Объясните как элементы `CoroutineContext` комбинируются и наследуются. Создайте пользовательский элемент `CoroutineContext` для отслеживания ID запроса в асинхронных операциях.
 
@@ -1109,7 +1109,7 @@ suspend fun logInfo(message: String) {
 - What are common pitfalls to avoid?
 
 ## References
-- ["Coroutine" context and dispatchers - Kotlin]("https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html")
+- ["`Coroutine`" context and dispatchers - Kotlin]("https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html")
 - [CoroutineContext - API Reference]("https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/")
 - [Custom CoroutineContext elements]("https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/")
 

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-037
 title: "How to make parallel network calls using coroutines? / Как выполнять параллельные сетевые запросы с помощью корутин?"
 aliases: ["How to make parallel network calls using coroutines?", "Как выполнять параллельные сетевые запросы с помощью корутин?"]
@@ -25,7 +25,7 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, performance]
----
+---\
 # Вопрос (RU)
 > Как выполнить несколько сетевых запросов параллельно с помощью Kotlin корутин?
 
@@ -70,7 +70,7 @@ suspend fun fetchUserData(userId: String): UserData = coroutineScope {
 }
 ```
 
-// Использование во ViewModel
+// Использование во `ViewModel`
 ```kotlin
 class UserViewModel @Inject constructor(
     private val repository: UserRepository
@@ -478,7 +478,7 @@ suspend fun fetchUserData(userId: String): UserData = coroutineScope {
 }
 ```
 
-Usage in ViewModel:
+Usage in `ViewModel`:
 
 ```kotlin
 class UserViewModel @Inject constructor(
@@ -908,7 +908,7 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 - [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutines
 
 ### Advanced (Harder)
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+- [[q-flow-testing-advanced--kotlin--hard]] - `Flow`
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction

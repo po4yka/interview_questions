@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-121
 title: "ViewModel Coroutines and Lifecycle / Корутины в ViewModel и жизненный цикл"
 aliases: ["ViewModel Coroutines and Lifecycle", "Корутины в ViewModel и жизненный цикл"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, viewmodel, viewmodelscope]
----
+---\
 # Вопрос (RU)
 > Как использовать корутины в `ViewModel`? Объясните `viewModelScope`, автоматическую отмену при `onCleared()`, лучшие практики запуска корутин и обработку изменений конфигурации.
 
@@ -36,7 +36,7 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, viewmodel, vie
 
 ## Ответ (RU)
 
-ViewModel с корутинами обеспечивает мощный и безопасный паттерн для управления асинхронными операциями с учётом жизненного цикла.
+`ViewModel` с корутинами обеспечивает мощный и безопасный паттерн для управления асинхронными операциями с учётом жизненного цикла.
 
 ### `viewModelScope`
 
@@ -1285,7 +1285,7 @@ class AntiPatterns : ViewModel() {
 1. How to test ViewModels with coroutines?
 2. When to use `StateFlow` vs `LiveData`?
 3. How to handle one-time events in ViewModels?
-4. How to cancel specific coroutines in ViewModel?
+4. How to cancel specific coroutines in `ViewModel`?
 5. How to share data between ViewModels?
 
 ---
@@ -1294,7 +1294,7 @@ class AntiPatterns : ViewModel() {
 
 ### Official Documentation
 - [ViewModels with Coroutines](https://developer.android.com/topic/libraries/architecture/coroutines)
-- [viewModelScope](https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#(androidx.lifecycle.ViewModel).viewModelScope:kotlinx.coroutines.CoroutineScope)
+- [viewModelScope](https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#(androidx.lifecycle.`ViewModel`).viewModelScope:kotlinx.coroutines.CoroutineScope)
 
 - [[c-coroutines]]
 

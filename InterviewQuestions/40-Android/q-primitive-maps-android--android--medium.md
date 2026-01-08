@@ -1,4 +1,4 @@
----
+---\
 id: android-321
 title: "Primitive Maps Android / Примитивные Map в Android"
 aliases: ["Primitive Maps Android", "SparseArray", "SparseIntArray", "Примитивные Map в Android"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, collections, difficulty/medium, memory-optimization, performance]
 
----
+---\
 # Вопрос (RU)
 
 > Какие специализированные `Map`-коллекции для примитивных типов предоставляет Android SDK? Когда и почему их следует использовать вместо стандартных `HashMap`?
@@ -96,7 +96,7 @@ timestampCache.put(timestamp, Event("Click"))
 
 **SparseArray и аналоги: преимущества:**
 - Нет boxing для ключей типа `int`/`long` (они хранятся во внутренних массивах примитивов).
-- Меньше накладных расходов по памяти по сравнению с `HashMap<`Int`, T>` или `HashMap<`Long`, T>`; на практических измерениях часто выигрывает порядка десятков процентов, но точные значения зависят от реализации и версии платформы.
+- Меньше накладных расходов по памяти по сравнению с `HashMap<``Int``, T>` или `HashMap<``Long``, T>`; на практических измерениях часто выигрывает порядка десятков процентов, но точные значения зависят от реализации и версии платформы.
 - Снижение давления на GC за счёт уменьшения количества объектов.
 
 **Ограничения и нюансы:**
@@ -107,7 +107,7 @@ timestampCache.put(timestamp, Event("Click"))
 
 ### Практическое Применение
 
-**RecyclerView адаптер:**
+**`RecyclerView` адаптер:**
 ```kotlin
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
     private val expandedItems = SparseBooleanArray()  // ✅ Флаги состояния по позициям/ID
@@ -255,7 +255,7 @@ timestampCache.put(timestamp, Event("Click"))
 
 **SparseArray-family advantages:**
 - No boxing for int/long keys (stored in primitive arrays internally).
-- Lower memory overhead compared to `HashMap<`Int`, T>` / `HashMap<`Long`, T>` in many practical scenarios; the exact numbers are implementation-dependent.
+- Lower memory overhead compared to `HashMap<``Int``, T>` / `HashMap<``Long``, T>` in many practical scenarios; the exact numbers are implementation-dependent.
 - Reduced GC pressure due to fewer allocated objects.
 
 **Limitations and trade-offs:**
@@ -266,7 +266,7 @@ timestampCache.put(timestamp, Event("Click"))
 
 ### Practical Use Cases
 
-**RecyclerView adapter:**
+**`RecyclerView` adapter:**
 ```kotlin
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
     private val expandedItems = SparseBooleanArray()  // ✅ State flags by position/ID
@@ -319,7 +319,7 @@ class StateManager {
 **Use SparseArray and related collections when:**
 - Keys are integers (`int` or `long`), often representing IDs, positions, or resource identifiers.
 - Memory efficiency and reduced allocations/GC are important.
-- Collection size is typically not extremely large (hundreds to a few thousands), and profiling indicates benefits.
+- `Collection` size is typically not extremely large (hundreds to a few thousands), and profiling indicates benefits.
 - Access is single-threaded, or you provide your own synchronization.
 
 **Use `HashMap` (or `ConcurrentHashMap`) when:**
@@ -378,7 +378,7 @@ val exists = cache2.indexOfKey(id) >= 0
 - [[q-where-is-composition-created--android--medium]] — Управление состоянием в Compose
 
 ### Похожие
-- [[q-recyclerview-explained--android--medium]] — Паттерны производительности RecyclerView
+- [[q-recyclerview-explained--android--medium]] — Паттерны производительности `RecyclerView`
 
 ## Related Questions
 
@@ -387,4 +387,4 @@ val exists = cache2.indexOfKey(id) >= 0
 - [[q-where-is-composition-created--android--medium]] - State management in Compose
 
 ### Related
-- [[q-recyclerview-explained--android--medium]] - RecyclerView performance patterns
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` performance patterns

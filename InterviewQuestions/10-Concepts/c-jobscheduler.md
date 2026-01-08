@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-135422"
 title: "Jobscheduler / Jobscheduler"
 aliases: ["Jobscheduler"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
+moc: "moc-cs"
 related: []
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -34,16 +35,16 @@ JobScheduler — это фреймворк-API Android для планирова
 - Condition-based scheduling: Jobs run only when specified constraints are met (e.g., unmetered network, device idle, charging), reducing unnecessary work.
 - System-managed execution: The OS batches jobs from different apps to optimize CPU, network usage, and battery, instead of each app running its own background loop.
 - Persistence across reboots: Jobs can be configured to persist after device restarts, ensuring reliable execution of critical background work.
-- Replaces older patterns: Introduced to discourage long-running background services and manual AlarmManager + Service combinations for periodic tasks.
-- Integration with WorkManager: JobScheduler is one of the underlying mechanisms used by higher-level libraries like WorkManager on newer Android versions.
+- Replaces older patterns: Introduced to discourage long-running background services and manual AlarmManager + `Service` combinations for periodic tasks.
+- Integration with `WorkManager`: JobScheduler is one of the underlying mechanisms used by higher-level libraries like `WorkManager` on newer Android versions.
 
 ## Ключевые Моменты (RU)
 
 - Планирование по условиям: Задания выполняются только при выполнении заданных ограничений (например, безлимитная сеть, режим зарядки, бездействие устройства), что снижает лишнюю нагрузку.
 - Управление системой: ОС группирует и оптимизирует выполнение заданий разных приложений, уменьшая расход CPU, сети и батареи вместо фоновых циклов в каждом приложении.
 - Сохранение при перезагрузке: Задания могут быть настроены на сохранение после перезапуска устройства, что повышает надёжность важных фоновых операций.
-- Замена старых подходов: Использование JobScheduler рекомендуется вместо длительно работающих сервисов и ручных комбинаций AlarmManager + Service для периодических задач.
-- Интеграция с WorkManager: JobScheduler используется как один из внутренних механизмов WorkManager на современных версиях Android.
+- Замена старых подходов: Использование JobScheduler рекомендуется вместо длительно работающих сервисов и ручных комбинаций AlarmManager + `Service` для периодических задач.
+- Интеграция с `WorkManager`: JobScheduler используется как один из внутренних механизмов `WorkManager` на современных версиях Android.
 
 ## References
 

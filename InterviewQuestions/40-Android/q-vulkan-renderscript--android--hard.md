@@ -1,4 +1,4 @@
----
+---\
 id: android-380
 title: "Vulkan RenderScript / Vulkan и RenderScript"
 aliases: ["Vulkan RenderScript / Vulkan и RenderScript", "Vulkan RenderScript"]
@@ -14,7 +14,7 @@ related: [c-performance, q-surfaceview-rendering--android--medium]
 created: 2024-10-15
 updated: 2025-11-10
 tags: [android/performance-rendering, difficulty/hard]
----
+---\
 # Вопрос (RU)
 > Как использовать Vulkan для низкоуровневых операций на GPU в Android? Какие существуют альтернативы устаревшему RenderScript? Как реализовать compute-шейдеры и GPU-ускоренную обработку изображений?
 
@@ -505,7 +505,7 @@ class RenderScriptProcessor(private val context: Context) {
 - Create an EGL context targeting ES 3.1.
 - Build a program with a compute shader.
 - Bind images/textures via `glBindImageTexture`.
-- Call `glDispatchCompute` and `glMemoryBarrier`.
+- `Call` `glDispatchCompute` and `glMemoryBarrier`.
 
 Example (simplified):
 

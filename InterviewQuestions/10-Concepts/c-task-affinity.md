@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-202702"
 title: "Task Affinity / Task Affinity"
 aliases: ["Task Affinity"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-task-backstack, c-android-tasks, c-intent-flags, c-intents, c-single-activity-architecture]
+moc: "moc-cs"
+related: ["c-task-backstack", "c-android-tasks", "c-intent-flags", "c-intents", "c-single-activity-architecture"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -47,5 +48,5 @@ Task affinity (аффинность задач) определяет привя�
 
 ## References
 
-- Android Developers: "Tasks and Back Stack" and documentation on taskAffinity attribute
+- Android Developers: "Tasks and Back `Stack`" and documentation on taskAffinity attribute
 - Kotlin Coroutines documentation: Dispatchers and confined execution contexts

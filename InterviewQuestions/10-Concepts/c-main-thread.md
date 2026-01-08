@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-134705"
 title: "Main Thread / Main Thread"
 aliases: ["Main Thread"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-multithreading, c-kotlin-coroutines, c-anr, c-threading, c-concurrency]
+moc: "moc-cs"
+related: ["c-multithreading", "c-kotlin-coroutines", "c-anr", "c-threading", "c-concurrency"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -25,7 +26,7 @@ The main thread is the primary execution thread of a program or process, respons
 
 # Краткое Описание (RU)
 
-Main Thread (главный поток) — это основной поток выполнения программы или процесса, отвечающий за старт пользовательского кода и часто за обработку критически важных задач, таких как обновление UI и обработка событий. Он важен, потому что многие фреймворки (GUI, мобильные платформы, рантаймы Java/Kotlin) требуют выполнения определённых операций только в главном потоке для обеспечения потокобезопасности и предсказуемого поведения. На собеседованиях понимание главного потока критично для обсуждения конкурентности, отзывчивости интерфейса и предотвращения зависаний и гонок данных.
+Main `Thread` (главный поток) — это основной поток выполнения программы или процесса, отвечающий за старт пользовательского кода и часто за обработку критически важных задач, таких как обновление UI и обработка событий. Он важен, потому что многие фреймворки (GUI, мобильные платформы, рантаймы Java/Kotlin) требуют выполнения определённых операций только в главном потоке для обеспечения потокобезопасности и предсказуемого поведения. На собеседованиях понимание главного потока критично для обсуждения конкурентности, отзывчивости интерфейса и предотвращения зависаний и гонок данных.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
@@ -33,8 +34,8 @@ Main Thread (главный поток) — это основной поток �
 
 - Single entry point: Program startup code (e.g., main function) typically runs on the main thread, which may spawn additional worker threads.
 - UI constraints: In many environments (Android, iOS, Swing/JavaFX, desktop GUI), all UI operations must run on the main thread; blocking it causes freezes and ANRs.
-- Concurrency model: Long-running or blocking tasks (I/O, networking, heavy computation) should be offloaded from the main thread to background threads or async mechanisms.
-- Thread safety: Access to shared state used by the main thread and background threads must be synchronized to avoid race conditions and inconsistent UI state.
+- Concurrency model: `Long`-running or blocking tasks (I/O, networking, heavy computation) should be offloaded from the main thread to background threads or async mechanisms.
+- `Thread` safety: Access to shared state used by the main thread and background threads must be synchronized to avoid race conditions and inconsistent UI state.
 - Debugging and profiling: Many performance and responsiveness issues are diagnosed by checking what is executed on the main thread vs background threads.
 
 ## Ключевые Моменты (RU)

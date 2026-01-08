@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-120000"
 title: "Android Service / Сервис Android"
 aliases: ["Android Service", "Service", "Сервис", "Фоновый сервис"]
@@ -12,21 +12,21 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-foreground-service, c-jobscheduler, c-alarmmanager, c-broadcast-receiver, c-android-background-execution]
+related: ["c-foreground-service", "c-jobscheduler", "c-alarmmanager", "c-broadcast-receiver", "c-android-background-execution"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "background-tasks", "concept", "difficulty/medium", "lifecycle", "service"]
----
+---\
 
 # Android Service / Сервис Android
 
 ## Summary (EN)
 
-An Android Service is a component that performs long-running operations in the background without providing a user interface. Services can be started to perform a task (Started Service) or bound to provide client-server interaction (Bound Service). Unlike Activities, Services have no UI and continue running even when the user switches to another application.
+An Android `Service` is a component that performs long-running operations in the background without providing a user interface. Services can be started to perform a task (Started `Service`) or bound to provide client-server interaction (Bound `Service`). Unlike Activities, Services have no UI and continue running even when the user switches to another application.
 
 ## Краткое Описание (RU)
 
-Android Service - это компонент, который выполняет длительные операции в фоновом режиме без пользовательского интерфейса. Сервисы могут быть запущены для выполнения задачи (Started Service) или привязаны для клиент-серверного взаимодействия (Bound Service). В отличие от Activity, Service не имеет UI и продолжает работу даже когда пользователь переключается на другое приложение.
+Android `Service` - это компонент, который выполняет длительные операции в фоновом режиме без пользовательского интерфейса. Сервисы могут быть запущены для выполнения задачи (Started `Service`) или привязаны для клиент-серверного взаимодействия (Bound `Service`). В отличие от `Activity`, `Service` не имеет UI и продолжает работу даже когда пользователь переключается на другое приложение.
 
 ## Key Points (EN)
 
@@ -152,11 +152,11 @@ class ForegroundService : Service() {
 
 ### When to Avoid
 
-- **Short tasks**: Use coroutines or WorkManager instead
-- **Scheduled tasks**: Use WorkManager for guaranteed execution
-- **UI updates**: Services have no UI; use ViewModels and LiveData
-- **Battery-intensive operations**: Consider JobScheduler or WorkManager
-- **Android 8.0+ background limits**: Use WorkManager or Foreground Service
+- **`Short` tasks**: Use coroutines or `WorkManager` instead
+- **Scheduled tasks**: Use `WorkManager` for guaranteed execution
+- **UI updates**: Services have no UI; use ViewModels and `LiveData`
+- **Battery-intensive operations**: Consider JobScheduler or `WorkManager`
+- **Android 8.0+ background limits**: Use `WorkManager` or Foreground `Service`
 
 ## Trade-offs
 
@@ -177,18 +177,18 @@ class ForegroundService : Service() {
 
 ## Service Lifecycle
 
-**Started Service**:
-1. `onCreate()` - Service created
-2. `onStartCommand()` - Service started (can be called multiple times)
-3. Service runs
-4. `onDestroy()` - Service stopped
+**Started `Service`**:
+1. `onCreate()` - `Service` created
+2. `onStartCommand()` - `Service` started (can be called multiple times)
+3. `Service` runs
+4. `onDestroy()` - `Service` stopped
 
-**Bound Service**:
-1. `onCreate()` - Service created
+**Bound `Service`**:
+1. `onCreate()` - `Service` created
 2. `onBind()` - First client binds
 3. Clients interact through IBinder
 4. `onUnbind()` - All clients unbind
-5. `onDestroy()` - Service destroyed
+5. `onDestroy()` - `Service` destroyed
 
 ## Return Flags for onStartCommand
 
@@ -207,20 +207,20 @@ return START_REDELIVER_INTENT
 
 Since Android 8.0 (Oreo), Google recommends alternatives to background Services:
 
-- **WorkManager**: For deferrable, guaranteed background work
-- **Foreground Service**: For user-visible ongoing tasks
+- **`WorkManager`**: For deferrable, guaranteed background work
+- **Foreground `Service`**: For user-visible ongoing tasks
 - **JobScheduler**: For scheduled tasks with constraints
 - **Coroutines**: For short asynchronous operations within app lifecycle
 
 ## Best Practices
 
 - Always run heavy operations in a background thread (not main thread)
-- Use Foreground Service for user-visible tasks
+- Use Foreground `Service` for user-visible tasks
 - Stop service when work is complete to save resources
-- Consider WorkManager for most background tasks
+- Consider `WorkManager` for most background tasks
 - Properly handle service lifecycle to prevent memory leaks
-- Request appropriate permissions (e.g., FOREGROUND_SERVICE)
-- Use IntentService or JobIntentService for simpler cases (deprecated, use WorkManager)
+- `Request` appropriate permissions (e.g., FOREGROUND_SERVICE)
+- Use IntentService or JobIntentService for simpler cases (deprecated, use `WorkManager`)
 
 ## Related Concepts
 

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-108
 title: "Race conditions and data races in Kotlin coroutines / Состояния гонки и data race в Kotlin корутинах"
 topic: kotlin
@@ -15,7 +15,7 @@ moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-debugging-coroutines-techniques--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
 subtopics: [concurrency, coroutines, race-conditions]
 
----
+---\
 # Вопрос (RU)
 > Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?
 
@@ -306,7 +306,7 @@ class UserCache(private val api: Api, scope: CoroutineScope) {
 
 1. Стресс-тесты конкурентности: много корутин, много повторений, сравнение ожидаемого и фактического результата для подозрительного кода.
 2. Логирование с таймстампами и анализ межпоточных interleavings.
-3. Thread Sanitizer (в первую очередь Kotlin/Native; для JVM поддержка ограничена/экспериментальна).
+3. `Thread` Sanitizer (в первую очередь Kotlin/Native; для JVM поддержка ограничена/экспериментальна).
 4. Чек-листы код-ревью:
    - Есть ли разделяемые изменяемые переменные?
    - Доступ к ним из нескольких корутин/потоков?
@@ -1070,7 +1070,7 @@ runBlocking {
 log.forEach { println(it) }
 ```
 
-1. Thread Sanitizer (primarily Kotlin/Native; JVM support limited/experimental).
+1. `Thread` Sanitizer (primarily Kotlin/Native; JVM support limited/experimental).
 
 ```kotlin
 // Kotlin/Native example

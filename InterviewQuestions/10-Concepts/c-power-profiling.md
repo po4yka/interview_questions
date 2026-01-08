@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-013
-title: Power Profiling on Android / Профилирование потребления энергии на Android
-aliases: [Android Energy Profiler, Battery Historian]
-kind: concept
-summary: Tools and techniques for analyzing power consumption including Battery Historian, Energy Profiler, and wake lock audits
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, concept, energy, performance, power]
+id: "20260108-110550"
+title: "Power Profiling on Android / Профилирование потребления энергии на Android"
+aliases: ["Android Energy Profiler", "Battery Historian"]
+summary: "Tools and techniques for analyzing power consumption including Battery Historian, Energy Profiler, and wake lock audits"
+topic: "android"
+subtopics: ["energy", "performance", "power"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "concept", "energy", "performance", "power", "difficulty/medium"]
 ---
 
 # Summary (EN)

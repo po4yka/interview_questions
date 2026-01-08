@@ -13,7 +13,7 @@ moc: moc-kotlin
 related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
 created: 2025-10-05
 updated: 2025-11-11
-tags: [abstract-class, difficulty/medium, inheritance, interface, kotlin, kotlin-features, oop]
+tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, kotlin-features, oop]
 sources: ["https://kotlinlang.org/docs/interfaces.html"]
 ---
 # Вопрос (RU)

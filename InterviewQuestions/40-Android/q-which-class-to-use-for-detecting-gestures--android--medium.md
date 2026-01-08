@@ -1,4 +1,4 @@
----
+---\
 id: android-196
 title: Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов
 aliases: [Which Class To Use For Detecting Gestures, Какой класс использовать для обнаружения жестов]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events]
 
----
+---\
 # Вопрос (RU)
 
 > Какой класс можно использовать для обнаружения жестов в Android?
@@ -306,8 +306,8 @@ fun GestureExample() {
 | `onDown()` | Touch down event (must return true) |
 | `onSingleTapUp()` | Single tap |
 | `onSingleTapConfirmed()` | Confirmed single tap (not double) |
-| `onDoubleTap()` | Double tap |
-| `onLongPress()` | Long press |
+| `onDoubleTap()` | `Double` tap |
+| `onLongPress()` | `Long` press |
 | `onScroll()` | Scroll/drag |
 | `onFling()` | Quick swipe |
 
@@ -360,7 +360,7 @@ fun GestureExample() {
 
 ### Связанные (такой Же уровень)
 
-- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - Обработка касаний в RecyclerView
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - Обработка касаний в `RecyclerView`
 - [[q-dagger-field-injection--android--medium]] - Паттерны внедрения зависимостей
 
 ### Продвинутые (сложнее)
@@ -380,7 +380,7 @@ fun GestureExample() {
 - [[q-what-are-services-for--android--easy]] - Basic Android components understanding
 
 ### Related (Same Level)
-- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - Touch handling in RecyclerView
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - Touch handling in `RecyclerView`
 - [[q-dagger-field-injection--android--medium]] - Dependency injection patterns
 
 ### Advanced (Harder)

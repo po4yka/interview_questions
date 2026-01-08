@@ -1,4 +1,4 @@
----
+---\
 id: "20251023-120200"
 title: "Hilt / Hilt DI"
 aliases: ["Dependency Injection with Hilt", "Hilt DI", "Hilt"]
@@ -12,37 +12,37 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-dependency-injection, c-dagger, c-viewmodel, c-testing, c-mvvm]
+related: ["c-dependency-injection", "c-dagger", "c-viewmodel", "c-testing", "c-mvvm"]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture", "concept", "dependency-injection", "difficulty/medium", "hilt"]
----
+---\
 
 # Hilt / Hilt DI
 
 ## Summary (EN)
 
-Hilt is Google's officially recommended dependency injection library for Android, built on top of Dagger. It reduces the boilerplate code required for Dagger by providing standard Android components with predefined scopes and automatic injection points. Hilt simplifies DI setup with annotations like @HiltAndroidApp, @AndroidEntryPoint, and @Inject, making dependency injection more accessible for Android developers.
+`Hilt` is Google's officially recommended dependency injection library for Android, built on top of `Dagger`. It reduces the boilerplate code required for `Dagger` by providing standard Android components with predefined scopes and automatic injection points. `Hilt` simplifies DI setup with annotations like @HiltAndroidApp, @AndroidEntryPoint, and @`Inject`, making dependency injection more accessible for Android developers.
 
 ## Краткое Описание (RU)
 
-Hilt — официально рекомендуемая Google библиотека внедрения зависимостей для Android, построенная поверх Dagger. Она уменьшает количество шаблонного кода, необходимого для Dagger, предоставляя стандартные Android-компоненты с предопределенными областями видимости и автоматическими точками инъекции. Hilt упрощает настройку DI с помощью аннотаций, таких как @HiltAndroidApp, @AndroidEntryPoint и @Inject.
+`Hilt` — официально рекомендуемая Google библиотека внедрения зависимостей для Android, построенная поверх `Dagger`. Она уменьшает количество шаблонного кода, необходимого для `Dagger`, предоставляя стандартные Android-компоненты с предопределенными областями видимости и автоматическими точками инъекции. `Hilt` упрощает настройку DI с помощью аннотаций, таких как @HiltAndroidApp, @AndroidEntryPoint и @`Inject`.
 
 ## Key Points (EN)
 
-- **Built on Dagger**: Uses Dagger's compile-time code generation for performance
+- **Built on `Dagger`**: Uses `Dagger`'s compile-time code generation for performance
 - **Reduced boilerplate**: Predefined components and scopes for Android
-- **Standard annotations**: @HiltAndroidApp, @AndroidEntryPoint, @Inject
+- **Standard annotations**: @HiltAndroidApp, @AndroidEntryPoint, @`Inject`
 - **Predefined scopes**: @Singleton, @ActivityScoped, @ViewModelScoped, etc.
-- **ViewModel integration**: Built-in support for injecting ViewModels
+- **`ViewModel` integration**: Built-in support for injecting ViewModels
 
 ## Ключевые Моменты (RU)
 
-- **Построен на Dagger**: Использует генерацию кода Dagger во время компиляции для производительности
+- **Построен на `Dagger`**: Использует генерацию кода `Dagger` во время компиляции для производительности
 - **Меньше шаблонного кода**: Предопределенные компоненты и области видимости для Android
-- **Стандартные аннотации**: @HiltAndroidApp, @AndroidEntryPoint, @Inject
+- **Стандартные аннотации**: @HiltAndroidApp, @AndroidEntryPoint, @`Inject`
 - **Предопределенные области**: @Singleton, @ActivityScoped, @ViewModelScoped и т.д.
-- **Интеграция с ViewModel**: Встроенная поддержка инъекции ViewModels
+- **Интеграция с `ViewModel`**: Встроенная поддержка инъекции ViewModels
 
 ## Setup and Basic Usage
 
@@ -224,40 +224,40 @@ class ApiClient @Inject constructor(
 
 - Android projects requiring dependency injection
 - Applications with complex dependency graphs
-- Projects needing ViewModel injection
+- Projects needing `ViewModel` injection
 - Teams wanting official Google DI solution
-- Migrating from manual Dagger setup
+- Migrating from manual `Dagger` setup
 - Projects requiring scoped dependencies
 
 ### When to Avoid
 
 - Very simple apps with minimal dependencies
-- Projects already using Dagger with custom setup (migration overhead)
-- Non-Android Kotlin projects (use Koin or manual Dagger)
+- Projects already using `Dagger` with custom setup (migration overhead)
+- Non-Android Kotlin projects (use `Koin` or manual `Dagger`)
 - Learning Android basics (adds complexity for beginners)
 
 ## Trade-offs
 
 **Pros**:
 - **Official support**: Recommended by Google with ongoing support
-- **Less boilerplate**: Compared to raw Dagger (30-40% less code)
+- **Less boilerplate**: Compared to raw `Dagger` (30-40% less code)
 - **Type-safe**: Compile-time verification of dependencies
 - **Performance**: No runtime overhead (compile-time generation)
-- **ViewModel integration**: Simplified ViewModel injection
+- **`ViewModel` integration**: Simplified `ViewModel` injection
 - **Standard scopes**: Predefined Android component scopes
-- **Better error messages**: Clearer than Dagger errors
+- **Better error messages**: Clearer than `Dagger` errors
 
 **Cons**:
 - **Build time**: Increases build time due to code generation
 - **Learning curve**: Still requires understanding DI concepts
-- **Dagger knowledge**: Complex issues may require Dagger understanding
+- **`Dagger` knowledge**: Complex issues may require `Dagger` understanding
 - **Generated code**: Large amount of generated code in build folder
-- **Limited customization**: Less flexible than pure Dagger
+- **Limited customization**: Less flexible than pure `Dagger`
 - **Android-only**: Not suitable for multiplatform projects
 
 ## Hilt Vs Dagger Vs Koin
 
-| Feature | Hilt | Dagger | Koin |
+| Feature | `Hilt` | `Dagger` | `Koin` |
 |---------|------|--------|------|
 | **Type** | Compile-time | Compile-time | Runtime |
 | **Boilerplate** | Low | High | Very Low |
@@ -316,9 +316,9 @@ abstract class FakeRepositoryModule {
 ## Related Concepts
 
 - [[c-dependency-injection]] - General DI pattern
-- [[c-dagger]] - Underlying framework for Hilt
-- [[c-viewmodel]] - Commonly injected with Hilt
-- [[c-testing]] - Hilt has built-in testing support
+- [[c-dagger]] - Underlying framework for `Hilt`
+- [[c-viewmodel]] - Commonly injected with `Hilt`
+- [[c-testing]] - `Hilt` has built-in testing support
 
 ## References
 

@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-120100"
 title: "Room Database / База данных Room"
 aliases: ["Room Database", "Room Persistence Library", "Room", "База данных Room"]
@@ -12,39 +12,39 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-sqlite, c-flow, c-coroutines, c-repository-pattern, c-database-design]
+related: ["c-sqlite", "c-flow", "c-coroutines", "c-repository-pattern", "c-database-design"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "database", "difficulty/medium", "jetpack", "persistence", "room", "sqlite"]
----
+---\
 
 # Room Database / База Данных Room
 
 ## Summary (EN)
 
-Room is a persistence library that provides an abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite. Room handles much of the boilerplate code for working with databases, provides compile-time verification of SQL queries, and works seamlessly with LiveData, Flow, and RxJava for reactive data observation.
+`Room` is a persistence library that provides an abstraction layer over `SQLite` to allow fluent database access while harnessing the full power of `SQLite`. `Room` handles much of the boilerplate code for working with databases, provides compile-time verification of SQL queries, and works seamlessly with `LiveData`, `Flow`, and RxJava for reactive data observation.
 
 ## Краткое Описание (RU)
 
-Room - это библиотека для сохранения данных, которая предоставляет слой абстракции над SQLite, позволяя удобный доступ к базе данных при сохранении всей мощности SQLite. Room обрабатывает большую часть шаблонного кода для работы с базами данных, обеспечивает проверку SQL-запросов на этапе компиляции и бесшовно работает с LiveData, Flow и RxJava для реактивного наблюдения за данными.
+`Room` - это библиотека для сохранения данных, которая предоставляет слой абстракции над `SQLite`, позволяя удобный доступ к базе данных при сохранении всей мощности `SQLite`. `Room` обрабатывает большую часть шаблонного кода для работы с базами данных, обеспечивает проверку SQL-запросов на этапе компиляции и бесшовно работает с `LiveData`, `Flow` и RxJava для реактивного наблюдения за данными.
 
 ## Key Points (EN)
 
 - Part of Android Jetpack Architecture Components
-- Three main components: Database, Entity, and DAO (Data Access Object)
+- Three main components: `Database`, `Entity`, and DAO (Data Access Object)
 - Compile-time verification of SQL queries prevents runtime errors
 - Automatic mapping between Kotlin/Java objects and database tables
-- Built-in support for LiveData, Flow, and RxJava observables
+- Built-in support for `LiveData`, `Flow`, and RxJava observables
 - Type converters allow storing custom types
-- Database migrations ensure smooth schema updates
+- `Database` migrations ensure smooth schema updates
 
 ## Ключевые Моменты (RU)
 
 - Часть Android Jetpack Architecture Components
-- Три основных компонента: Database, Entity и DAO (Data Access Object)
+- Три основных компонента: `Database`, `Entity` и DAO (Data Access Object)
 - Проверка SQL-запросов на этапе компиляции предотвращает ошибки во время выполнения
 - Автоматическое сопоставление между Kotlin/Java объектами и таблицами базы данных
-- Встроенная поддержка LiveData, Flow и RxJava observables
+- Встроенная поддержка `LiveData`, `Flow` и RxJava observables
 - Type converters позволяют хранить пользовательские типы
 - Миграции базы данных обеспечивают плавное обновление схемы
 
@@ -96,7 +96,7 @@ interface UserDao {
 ```
 
 ### Database
-The main access point for the underlying SQLite database.
+The main access point for the underlying `SQLite` database.
 
 ```kotlin
 @Database(
@@ -218,7 +218,7 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
 
 ### When to Avoid
 
-- **Simple key-value storage**: Use DataStore or SharedPreferences instead
+- **Simple key-value storage**: Use DataStore or `SharedPreferences` instead
 - **Very small datasets**: Overhead might not be justified
 - **Unstructured data**: Consider using files or other storage methods
 - **Real-time sync only**: If data never needs offline access
@@ -228,8 +228,8 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
 
 **Pros**:
 - Compile-time SQL verification prevents errors
-- Less boilerplate code compared to raw SQLite
-- Seamless integration with coroutines and Flow
+- Less boilerplate code compared to raw `SQLite`
+- Seamless integration with coroutines and `Flow`
 - Automatic LiveData/Flow updates on data changes
 - Type-safe query builders reduce errors
 - Built-in migration support
@@ -237,11 +237,11 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
 - Support for complex relationships
 
 **Cons**:
-- Learning curve for developers new to Room
-- Slightly more overhead than raw SQLite
+- Learning curve for developers new to `Room`
+- Slightly more overhead than raw `SQLite`
 - Migration complexity for schema changes
 - Limited support for complex SQL operations
-- Database must be created on background thread
+- `Database` must be created on background thread
 - No built-in encryption (requires additional library)
 - Compile-time processing increases build time
 
@@ -315,7 +315,7 @@ class UserDaoTest {
 ## Best Practices
 
 - Use suspend functions with coroutines for database operations
-- Return Flow or LiveData for reactive updates
+- Return `Flow` or `LiveData` for reactive updates
 - Implement repository pattern for separation of concerns
 - Use @Transaction for operations that should be atomic
 - Create database instance as singleton
@@ -356,7 +356,7 @@ class UserDaoTest {
 
 ## References
 
-- [Android Developer Guide: Room Persistence Library](https://developer.android.com/training/data-storage/room)
+- [Android Developer Guide: `Room` Persistence Library](https://developer.android.com/training/data-storage/room)
 - [Room Documentation](https://developer.android.com/jetpack/androidx/releases/room)
-- [Codelabs: Room with a View](https://developer.android.com/codelabs/android-room-with-a-view-kotlin)
-- [Room Database Migration](https://developer.android.com/training/data-storage/room/migrating-db-versions)
+- [Codelabs: `Room` with a View](https://developer.android.com/codelabs/android-room-with-a-view-kotlin)
+- [Room `Database` Migration](https://developer.android.com/training/data-storage/room/migrating-db-versions)

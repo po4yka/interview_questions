@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-141349"
 title: "Navigation / Navigation"
 aliases: ["Navigation"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-fragments, c-compose-navigation, c-single-activity-architecture, c-deep-linking, c-intent]
+moc: "moc-cs"
+related: ["c-fragments", "c-compose-navigation", "c-single-activity-architecture", "c-deep-linking", "c-intent"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ In programming, navigation refers to how control and data move between screens, 
 
 ## Key Points (EN)
 
-- Flow and structure: Navigation defines the logical flow of an application (e.g., linear, hierarchical, tabbed, graph-based), ensuring predictable user journeys.
+- `Flow` and structure: Navigation defines the logical flow of an application (e.g., linear, hierarchical, tabbed, graph-based), ensuring predictable user journeys.
 - Back stack/history: Proper navigation manages a stack of visited destinations (e.g., browser history, Android back stack) to support Back/Up behavior and state restoration.
 - Parameter passing: Routes/screens often accept parameters (IDs, filters, query params); navigation solutions must support safe argument passing and type safety where possible.
 - Deep linking: Navigation frequently integrates with external entry points (URLs, intents, app links) to open specific screens directly.

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-043
 title: "Kotlin Delegation Pattern Deep Dive / Паттерн делегирования в Kotlin - детально"
 aliases: ["Kotlin Delegation Pattern Deep Dive", "Паттерн делегирования в Kotlin -
@@ -32,7 +32,7 @@ anki_slugs:
   - 70-kotlin-q-kotlin-delegation-detailed-kotlin-medium-p01-en
   - 70-kotlin-q-kotlin-delegation-detailed-kotlin-medium-p01-ru
 anki_last_sync: '2025-11-27T09:56:33.839728'
----
+---\
 # Вопрос (RU)
 > Объясните паттерн делегирования в Kotlin детально. Что такое делегирование классов и делегирование свойств?
 
@@ -415,7 +415,7 @@ println(userUppercase.name)  // Prints: ALICE
 
 ### Real-World Examples
 
-**Example 1: ViewModel with delegation**
+**Example 1: `ViewModel` with delegation**
 
 ```kotlin
 interface UserRepository {
@@ -441,7 +441,7 @@ class UserViewModel(
 }
 ```
 
-**Example 2: SharedPreferences delegate (supports only specific types)**
+**Example 2: `SharedPreferences` delegate (supports only specific types)**
 
 ```kotlin
 class PreferenceDelegate<T>(
@@ -484,7 +484,7 @@ settings.username = "Alice"
 println(settings.darkMode)
 ```
 
-**Example 3: Map delegation**
+**Example 3: `Map` delegation**
 
 ```kotlin
 class UserFromMap(map: Map<String, Any?>) {
@@ -529,7 +529,7 @@ class UserValidated {
 }
 ```
 
-**English Summary**: Kotlin delegation: **Class delegation** (`by` keyword) — delegates interface implementation to another object, eliminating boilerplate. **Property delegation** — delegates getter/setter logic. Built-in: `lazy` (lazy init), `observable` (observe changes), `vetoable` (veto changes), `notNull` (late init). Custom delegates: implement `ReadOnlyProperty` / `ReadWriteProperty`. Use cases: SharedPreferences, validation, caching, composition over inheritance.
+**English Summary**: Kotlin delegation: **Class delegation** (`by` keyword) — delegates interface implementation to another object, eliminating boilerplate. **Property delegation** — delegates getter/setter logic. Built-in: `lazy` (lazy init), `observable` (observe changes), `vetoable` (veto changes), `notNull` (late init). Custom delegates: implement `ReadOnlyProperty` / `ReadWriteProperty`. Use cases: `SharedPreferences`, validation, caching, composition over inheritance.
 
 ## Дополнительные Вопросы (RU)
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-080
 title: Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких потоков
 aliases: [Stack vs Heap Memory In Multithreading, Stack и Heap память для нескольких потоков]
@@ -14,7 +14,7 @@ updated: 2025-11-10
 tags: [android/performance-memory, android/threads-sync, difficulty/medium]
 moc: moc-android
 related: [c-android, c-concurrency, q-optimize-memory-usage-android--android--medium, q-tasks-back-stack--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
----
+---\
 # Вопрос (RU)
 > `Stack` и Heap память для нескольких потоков
 
@@ -152,7 +152,7 @@ Key points:
 
 Assume (numbers are arbitrary for illustration only, not actual defaults):
 - Main thread stack:    8 MB
-- Worker thread stack:  1 MB each
+- `Worker` thread stack:  1 MB each
 - Max heap for process: 512 MB (shared)
 
 Then:

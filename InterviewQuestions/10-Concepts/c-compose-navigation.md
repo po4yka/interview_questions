@@ -1,14 +1,22 @@
----
-id: ivc-20251030-120000
-title: Compose Navigation / Навигация в Compose
-aliases: [Compose Navigation, Navigation Compose, Навигация Compose]
-kind: concept
-summary: Navigation component for Jetpack Compose with type-safe routing
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, jetpack-compose, navigation, ui]
----
+---\
+id: "20251030-120000"
+title: "Compose Navigation / Навигация в Compose"
+aliases: ["Compose Navigation", "Navigation Compose", "Навигация Compose"]
+summary: "Navigation component for Jetpack Compose with type-safe routing"
+topic: "android"
+subtopics: ["jetpack-compose", "navigation", "ui"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: [android, concept, android/ui-compose, navigation, ui, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -86,8 +94,8 @@ navController.navigate(Screen.Profile.createRoute(userId))
 
 1. **Argument Passing**: Required and optional arguments via route patterns
 2. **Deep Links**: Support for implicit and explicit deep links
-3. **Back Stack Management**: `popBackStack()`, `popUpTo`, `launchSingleTop`
-4. **ViewModel Scoping**: Scope ViewModels to navigation graph or destination
+3. **Back `Stack` Management**: `popBackStack()`, `popUpTo`, `launchSingleTop`
+4. **`ViewModel` Scoping**: Scope ViewModels to navigation graph or destination
 5. **Nested Navigation**: Support for nested NavHosts and bottom navigation
 
 ```kotlin
@@ -108,7 +116,7 @@ val viewModel: SharedViewModel = viewModel(
 1. **Передача аргументов**: Обязательные и опциональные аргументы через паттерны маршрутов
 2. **Deep Links**: Поддержка implicit и explicit deep links
 3. **Управление стеком**: `popBackStack()`, `popUpTo`, `launchSingleTop`
-4. **Область ViewModel**: Привязка ViewModel к графу навигации или назначению
+4. **Область `ViewModel`**: Привязка `ViewModel` к графу навигации или назначению
 5. **Вложенная навигация**: Поддержка вложенных NavHosts и нижней навигации
 
 ---
@@ -118,7 +126,7 @@ val viewModel: SharedViewModel = viewModel(
 1. **Single NavController**: One NavController per app/activity, passed down as needed
 2. **Hoist NavController**: Keep NavController at top level, pass navigation callbacks down
 3. **Type-Safe Routes**: Use sealed classes/objects for route definitions
-4. **SavedStateHandle**: Access arguments via ViewModel's SavedStateHandle
+4. **SavedStateHandle**: Access arguments via `ViewModel`'s SavedStateHandle
 5. **Testing**: Use TestNavHostController for navigation testing
 
 ## Лучшие Практики (RU)
@@ -126,7 +134,7 @@ val viewModel: SharedViewModel = viewModel(
 1. **Единый NavController**: Один NavController на приложение/activity
 2. **Подъем NavController**: Держать NavController на верхнем уровне, передавать navigation callbacks вниз
 3. **Типобезопасные маршруты**: Использовать sealed классы/объекты для определения маршрутов
-4. **SavedStateHandle**: Получать аргументы через SavedStateHandle ViewModel
+4. **SavedStateHandle**: Получать аргументы через SavedStateHandle `ViewModel`
 5. **Тестирование**: Использовать TestNavHostController для тестирования навигации
 
 ---
@@ -140,11 +148,11 @@ val viewModel: SharedViewModel = viewModel(
 - Integrating with Compose state management
 
 **Avoid When**:
-- Using legacy View-based navigation (use Navigation Component instead)
+- Using legacy `View`-based navigation (use Navigation `Component` instead)
 - Need complex multi-module navigation (consider feature-based navigation abstractions)
 
 **Trade-offs**:
-- Learning curve for developers familiar with Fragment-based navigation
+- Learning curve for developers familiar with `Fragment`-based navigation
 - Limited animation customization compared to custom solutions
 - Route string parsing overhead (mitigated by type-safe wrappers)
 

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-078
 title: "Channel Closing and Completion / Закрытие и завершение каналов"
 aliases: ["Channel Closing and Completion", "Закрытие и завершение каналов"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [channels, cleanup, closing, completion, coroutines, difficulty/medium, kotlin]
----
+---\
 # Вопрос (RU)
 > Как правильно закрывать и завершать каналы? Объясните close(), cancel(), разницу между ClosedSendChannelException и ClosedReceiveChannelException и лучшие практики очистки ресурсов.
 
@@ -1481,7 +1481,7 @@ class BestPractices(private val scope: CoroutineScope) {
 - [produce Builder](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/produce.html)
 
 ### Learning Resources
-- "Kotlin Coroutines" by Marcin Moskała - Channel Lifecycle
+- "Kotlin Coroutines" by Marcin Moskała - Channel `Lifecycle`
 - [Channel Closing Best Practices](https://kotlinlang.org/docs/channels.html#closing-and-iteration-over-channels)
 
 ### Related Topics

@@ -1,4 +1,4 @@
----
+---\
 id: android-273
 title: Cancel Presenter Requests / Отмена запросов презентера
 aliases: [Cancel Presenter Requests, Отмена запросов презентера]
@@ -16,7 +16,7 @@ created: 2023-10-15
 updated: 2025-11-10
 tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium, mvp, presenter-pattern]
 
----
+---\
 # Вопрос (RU)
 > Как корректно отменять асинхронные запросы в Presenter при изменении состояния жизненного цикла `View`?
 
@@ -111,7 +111,7 @@ fun detach() {
 }
 ```
 
-Шаблон no-op не заменяет отмену асинхронной работы: он лишь предотвращает попытки обновить уничтоженную View, поэтому отмена coroutine / подписок всё равно нужна.
+Шаблон no-op не заменяет отмену асинхронной работы: он лишь предотвращает попытки обновить уничтоженную `View`, поэтому отмена coroutine / подписок всё равно нужна.
 
 ## Answer (EN)
 

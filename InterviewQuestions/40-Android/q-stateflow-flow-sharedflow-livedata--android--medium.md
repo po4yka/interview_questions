@@ -1,4 +1,4 @@
----
+---\
 id: android-484
 title: "StateFlow vs Flow vs SharedFlow vs LiveData / StateFlow против Flow, SharedFlow и LiveData"
 aliases: [SharedFlow и LiveData, StateFlow vs Flow vs SharedFlow vs LiveData, StateFlow против Flow]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/coroutines, android/flow, android/ui-state, difficulty/medium, state-management]
 sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", "https://developer.android.com/topic/libraries/architecture/livedata"]
 
----
+---\
 # Вопрос (RU)
 > Когда в Android приложении стоит выбирать `StateFlow`, `SharedFlow`, обычный `Flow` или `LiveData` для доставки и наблюдения состояния UI?
 
@@ -62,7 +62,7 @@ sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", 
 - Для `LiveData` в новых слоях используйте адаптеры (`asLiveData()`) только на границе с UI, чтобы остальная часть стека оставалась на `Flow`.
 
 ## Answer (EN)
-`StateFlow` and `SharedFlow` are hot flows built on Kotlin `Flow`, while `LiveData` is an Android Architecture Component that is lifecycle-aware. The decision rests on data shape, subscription semantics, lifecycle awareness, and compatibility with Compose, XML, or Java.
+`StateFlow` and `SharedFlow` are hot flows built on Kotlin `Flow`, while `LiveData` is an Android Architecture `Component` that is lifecycle-aware. The decision rests on data shape, subscription semantics, lifecycle awareness, and compatibility with Compose, XML, or Java.
 
 ### `StateFlow`
 - Semantics similar to `BehaviorSubject`: always holds the latest value and instantly replays it to new collectors, but requires a non-null initial value and conflates rapid updates.
@@ -73,7 +73,7 @@ sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", 
 ### `SharedFlow`
 - Hot stream with no mandatory initial value and configurable replay and buffer.
 - Suits one-off events (navigation, snackbars) and broadcasting updates to multiple collectors when configured correctly (`replay = 0` plus appropriate buffer/overflow strategy to avoid replaying stale events and with clear understanding that late collectors will miss past emissions).
-- Provides configuration for buffer size, overflow behavior, and replay count, but does not implement classic reactive backpressure.
+- `Provides` configuration for buffer size, overflow behavior, and replay count, but does not implement classic reactive backpressure.
 - Not lifecycle-aware: UI code must tie collection to the `Lifecycle`.
 
 ### `Flow`
@@ -82,7 +82,7 @@ sources: ["https://developer.android.com/kotlin/flow/stateflow-and-sharedflow", 
 - Useful for one-off data loads or transformations, but not intended as a long-lived UI state holder.
 
 ### `LiveData`
-- Lifecycle-aware: delivers updates only to active observers (lifecycle at least `STARTED`); observers remain registered until the lifecycle owner is destroyed or they are explicitly removed.
+- `Lifecycle`-aware: delivers updates only to active observers (lifecycle at least `STARTED`); observers remain registered until the lifecycle owner is destroyed or they are explicitly removed.
 - Helpful when the stack is still XML/Java-based and you need tight integration with DataBinding.
 - Designed for main-thread interaction: `setValue` must be called on the main thread, while `postValue` can be called from background threads; has a smaller operator surface compared with `Flow`.
 

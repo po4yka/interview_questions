@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-192639"
 title: "Task Backstack / Task Backstack"
 aliases: ["Task Backstack"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-task-affinity, c-android-tasks, c-navigation-component, c-intent-flags, c-android-navigation]
+moc: "moc-cs"
+related: ["c-task-affinity", "c-android-tasks", "c-navigation-component", "c-intent-flags", "c-android-navigation"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -32,8 +33,8 @@ Task Backstack (часто имеющий в виду стек задач и а�
 ## Key Points (EN)
 
 - Logical task: A "task" groups activities/screens that together fulfill a user goal; the backstack preserves their order for Back navigation.
-- Activity stack behavior: New activities are pushed on top; Back pops the current activity, revealing the previous one.
-- Launch modes and flags: launchMode (standard, singleTop, singleTask, singleInstance) and Intent flags (e.g., FLAG_ACTIVITY_NEW_TASK, CLEAR_TOP) directly influence how tasks and their backstacks are created and reused.
+- `Activity` stack behavior: New activities are pushed on top; Back pops the current activity, revealing the previous one.
+- Launch modes and flags: launchMode (standard, singleTop, singleTask, singleInstance) and `Intent` flags (e.g., FLAG_ACTIVITY_NEW_TASK, CLEAR_TOP) directly influence how tasks and their backstacks are created and reused.
 - Multiple tasks: An app can participate in multiple tasks (e.g., via deep links or different entry points), so understanding when a new task is created vs. reusing an existing one is key.
 - UX and correctness: Misconfigured backstack leads to broken navigation (loops, unexpected exits, multiple copies of screens), so correct configuration is a common interview topic.
 
@@ -41,7 +42,7 @@ Task Backstack (часто имеющий в виду стек задач и а�
 
 - Логическая задача (task): "Task" объединяет экраны/активити, которые вместе реализуют цель пользователя; backstack сохраняет их порядок для корректной навигации Назад.
 - Поведение стека активити: Новые активити добавляются сверху стека; кнопка Назад снимает верхнюю активити, показывая предыдущую.
-- Режимы запуска и флаги: launchMode (standard, singleTop, singleTask, singleInstance) и флаги Intent (например, FLAG_ACTIVITY_NEW_TASK, CLEAR_TOP) напрямую влияют на создание, переиспользование задач и формирование backstack.
+- Режимы запуска и флаги: launchMode (standard, singleTop, singleTask, singleInstance) и флаги `Intent` (например, FLAG_ACTIVITY_NEW_TASK, CLEAR_TOP) напрямую влияют на создание, переиспользование задач и формирование backstack.
 - Несколько задач: Приложение может участвовать в нескольких задачах (через диплинки, разные точки входа), поэтому важно понимать, когда создаётся новый task, а когда используется существующий.
 - UX и корректность: Неверная настройка backstack приводит к сломанной навигации (циклы, неожиданный выход, дубликаты экранов), поэтому тема часто поднимается на собеседованиях.
 

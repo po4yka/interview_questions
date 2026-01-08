@@ -1,4 +1,4 @@
----
+---\
 id: android-172
 title: "How To Display SVG String As A Vector File / Как отобразить SVG строку как векторный файл"
 aliases: ["Display SVG String", "Отображение SVG строки"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Как отобразить SVG-строку в виде векторного изображения в Android?
@@ -185,7 +185,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 }
 ```
 
-Замечание: пустые реализации setAlpha/setColorFilter означают, что системные эффекты прозрачности/тоновки к этому Drawable применяться не будут, если явно не добавить поддержку.
+Замечание: пустые реализации setAlpha/setColorFilter означают, что системные эффекты прозрачности/тоновки к этому `Drawable` применяться не будут, если явно не добавить поддержку.
 
 ### Сравнение Подходов
 
@@ -193,7 +193,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 |--------|--------------|------------|-------------------|
 | AndroidSVG | Простота, прямой парсинг строки, контроль | Нет поддержки всех SVG-фич, требуется ручная настройка `View` | Простые случаи, локальные SVG-строки |
 | Coil + SVG | Кеширование, современный API, интеграция с сетью | Доп. зависимость, нюансы с model/кешем для сырых строк | Загрузка из сети, повторное использование и кеширование |
-| Custom Drawable | Полный контроль рендеринга | Больше кода, нужно самому учитывать размеры/аспект-ратио | Специфичные требования, сложные UIs |
+| Custom `Drawable` | Полный контроль рендеринга | Больше кода, нужно самому учитывать размеры/аспект-ратио | Специфичные требования, сложные UIs |
 | Compose | Декларативный UI, единый подход с Coil | Требуется Compose, те же нюансы с моделью/кешем | Приложения на Compose UI |
 
 ### Важные Моменты
@@ -203,7 +203,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 - Для сложных SVG-файлов поведение может отличаться от браузеров.
 
 **Память**:
-- Преобразование больших SVG в Bitmap может вызвать OutOfMemoryError.
+- Преобразование больших SVG в `Bitmap` может вызвать OutOfMemoryError.
 - Используйте PictureDrawable или векторный рендеринг, когда это возможно.
 
 **Обработка ошибок**:
@@ -217,7 +217,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 **Размеры и масштабирование**:
 - Многие SVG используют viewBox и не задают явные размеры — задавайте или вычисляйте размеры осознанно.
 - Следите за сохранением аспект-ратио при масштабировании.
-- Для ImageView используйте подходящий scaleType в соответствии с дизайном.
+- Для `ImageView` используйте подходящий scaleType в соответствии с дизайном.
 
 ## Answer (EN)
 
@@ -379,7 +379,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 }
 ```
 
-Note: leaving setAlpha/setColorFilter empty means framework-driven alpha/tint will not affect this Drawable unless you add explicit support.
+Note: leaving setAlpha/setColorFilter empty means framework-driven alpha/tint will not affect this `Drawable` unless you add explicit support.
 
 ### Approach Comparison
 
@@ -387,7 +387,7 @@ Note: leaving setAlpha/setColorFilter empty means framework-driven alpha/tint wi
 |----------|-----------|---------------|----------|
 | AndroidSVG | Simple, direct string parsing, good control | Not all SVG features supported, manual `View` setup | Simple cases, local SVG strings |
 | Coil + SVG | Caching, modern API, network integration | Extra dependency, model/cache nuances for raw strings | Network-loaded SVGs, caching and reuse |
-| Custom Drawable | Full rendering control | More code, must handle sizing/aspect ratio yourself | Specific rendering requirements, complex UIs |
+| Custom `Drawable` | Full rendering control | More code, must handle sizing/aspect ratio yourself | Specific rendering requirements, complex UIs |
 | Compose | Declarative, integrates well with Coil | Requires Compose, similar model/cache nuances | Compose-based UIs |
 
 ### Key Considerations
@@ -411,7 +411,7 @@ Note: leaving setAlpha/setColorFilter empty means framework-driven alpha/tint wi
 **Sizing and scaling**:
 - Many SVGs rely on viewBox without explicit sizes — define or compute sizes deliberately.
 - Preserve aspect ratio when scaling unless distortion is acceptable.
-- For ImageView, choose an appropriate scaleType according to design.
+- For `ImageView`, choose an appropriate scaleType according to design.
 
 ## Follow-ups
 
@@ -436,7 +436,7 @@ Note: leaving setAlpha/setColorFilter empty means framework-driven alpha/tint wi
 - [[c-jetpack-compose]] - Jetpack Compose basics
 
 ### Related
-- How to load images efficiently in RecyclerView
+- How to load images efficiently in `RecyclerView`
 - Vector drawables vs raster images in Android
 
 ### Advanced

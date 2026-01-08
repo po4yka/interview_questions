@@ -1,4 +1,4 @@
----
+---\
 id: android-092
 title: WebSocket Implementation / Реализация WebSocket
 aliases: [WebSocket Implementation, Реализация WebSocket]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/connectivity-caching, android/coroutines, android/websockets, difficulty/medium, okhttp, real-time, resilience, websocket]
 
----
+---\
 # Вопрос (RU)
 > Реализация WebSocket-клиента на Android (устойчивое, отказоустойчивое подключение для реального времени)
 
@@ -991,7 +991,7 @@ Key client states:
 
 ### Complete WebSocket Client Implementation (EN)
 
-Below is the same resilient `WebSocketClient` as in the RU section (OkHttp + coroutines) with:
+Below is the same resilient `WebSocketClient` as in the RU section (`OkHttp` + coroutines) with:
 - explicit states
 - event stream
 - reconnection using exponential backoff with jitter (configured via `Config`)
@@ -1787,7 +1787,7 @@ private fun ChatInput(
 
 1. Automatic reconnection with exponential backoff and jitter (via configurable `Config`).
 2. Heartbeat mechanism (app-level or protocol ping/pong) to detect stale connections.
-3. Message queue with limits for offline buffering.
+3. `Message` queue with limits for offline buffering.
 4. Explicit state management for UI (Connected/Connecting/Disconnected/Error).
 5. Robust error handling and logging.
 6. Proper resource cleanup (cancel coroutines, close WebSocket).

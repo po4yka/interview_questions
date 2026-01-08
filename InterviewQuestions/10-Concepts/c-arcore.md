@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-015
-title: ARCore / ARCore
-aliases: [ARCore, Google ARCore]
-kind: concept
-summary: Google’s augmented reality SDK for motion tracking, environmental understanding, and light estimation
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [3d, android, arcore, concept, xr]
+id: "20260108-110549"
+title: "ARCore / ARCore"
+aliases: ["ARCore", "Google ARCore"]
+summary: "Google’s augmented reality SDK for motion tracking, environmental understanding, and light estimation"
+topic: "android"
+subtopics: ["3d", "arcore", "xr"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["3d", "android", "arcore", "concept", "xr", "difficulty/medium"]
 ---
 
 # Summary (EN)

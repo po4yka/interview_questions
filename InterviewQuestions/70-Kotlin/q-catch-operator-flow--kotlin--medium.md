@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-070
 title: "Catch Operator in Kotlin Flow / Оператор catch в Kotlin Flow"
 aliases: [Catch Operator in Kotlin Flow, Оператор catch в Kotlin Flow]
@@ -16,7 +16,7 @@ related: [c-flow, q-flow-basics--kotlin--easy, q-flow-exception-handling--kotlin
 created: 2025-10-12
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, error-handling, flow, lang/kotlin, topic/kotlin]
----
+---\
 # Вопрос (RU)
 
 > Как работает оператор `catch` в Kotlin `Flow`? Что такое прозрачность исключений и где размещать `catch` в конвейере?
@@ -39,7 +39,7 @@ tags: [coroutines, difficulty/medium, error-handling, flow, lang/kotlin, topic/k
 
 ### Прозрачность Исключений
 
-Прозрачность исключений в Kotlin Flow означает, что промежуточные операторы не должны скрывать исключения `downstream` и должны явно управлять `upstream`-ошибками. `catch` следует этому принципу: он
+Прозрачность исключений в Kotlin `Flow` означает, что промежуточные операторы не должны скрывать исключения `downstream` и должны явно управлять `upstream`-ошибками. `catch` следует этому принципу: он
 - перехватывает только исключения, выброшенные в предыдущих (upstream) операторах/блоках,
 - может логировать, преобразовывать или повторно выбрасывать исключения,
 - не должен неожиданно скрывать ошибки, из-за чего потребитель не узнает о сбое.
@@ -113,7 +113,7 @@ fun loadProduct(id: String): Flow<Result<Product>> = flow {
 
 ### Exception Transparency
 
-Exception transparency in Kotlin Flow means intermediate operators must not catch and hide exceptions from downstream operators, and should manage upstream errors explicitly. `catch` follows this rule:
+Exception transparency in Kotlin `Flow` means intermediate operators must not catch and hide exceptions from downstream operators, and should manage upstream errors explicitly. `catch` follows this rule:
 - it intercepts only exceptions from preceding (upstream) operators/blocks,
 - it may log, transform, or rethrow exceptions,
 - it should not make failures invisible to collectors unintentionally.
@@ -189,7 +189,7 @@ Additional best practices live in [[c-structured-concurrency]].
 - [[c-flow]]
 - [[c-coroutines]]
 - [[c-structured-concurrency]]
-- [Kotlin Flow Exception Transparency](https://kotlinlang.org/docs/flow.html#exception-transparency)
+- [Kotlin `Flow` Exception Transparency](https://kotlinlang.org/docs/flow.html#exception-transparency)
 - [Flow catch operator API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/catch.html)
 
 ## Related Questions

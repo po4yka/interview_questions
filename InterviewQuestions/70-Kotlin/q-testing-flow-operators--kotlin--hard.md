@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-082
 title: "Testing Flow Operators and Transformations / Тестирование операторов и трансформаций Flow"
 aliases: ["Testing Flow Operators and Transformations", "Тестирование операторов и трансформаций Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
----
+---\
 # Вопрос (RU)
 > Как тестировать операторы и трансформации `Flow` такие как `flatMap`, `debounce`, `retry` и `combine`? Покрыть тестирование виртуального времени, использование Turbine и стратегии тестирования сложных цепочек `Flow`.
 
@@ -2344,9 +2344,9 @@ In summary, core strategies when testing `Flow` operators and transformations:
 
 - [[c-flow]]
 - [[c-testing]]
-- Операторы Flow в документации Kotlin: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/
+- Операторы `Flow` в документации Kotlin: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/
 - Библиотека Turbine: https://github.com/cashapp/turbine
-- Тестирование Flow на Android: https://developer.android.com/kotlin/flow/test
+- Тестирование `Flow` на Android: https://developer.android.com/kotlin/flow/test
 
 ---
 
@@ -2354,7 +2354,7 @@ In summary, core strategies when testing `Flow` operators and transformations:
 
 - [[c-flow]]
 - [[c-testing]]
-- Flow Operators - Kotlin Docs: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/
+- `Flow` Operators - Kotlin Docs: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/
 - Turbine Testing Library: https://github.com/cashapp/turbine
 - Testing Flows - Android Developers: https://developer.android.com/kotlin/flow/test
 

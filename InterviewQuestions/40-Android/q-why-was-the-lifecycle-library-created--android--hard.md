@@ -1,4 +1,4 @@
----
+---\
 id: android-217
 title: "Why Was The Lifecycle Library Created / Зачем создали библиотеку Lifecycle"
 aliases: ["Why Was The Lifecycle Library Created", "Зачем создали библиотеку Lifecycle"]
@@ -16,18 +16,18 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/lifecycle, difficulty/hard, memory-leaks]
 
----
+---\
 # Вопрос (RU)
 
-> Почему была создана библиотека Lifecycle?
+> Почему была создана библиотека `Lifecycle`?
 
 # Question (EN)
 
-> Why was the Lifecycle library created?
+> Why was the `Lifecycle` library created?
 
 ## Ответ (RU)
 
-Библиотека Lifecycle была создана как часть Architecture Components, чтобы ввести формальную модель жизненного цикла и lifecycle-aware компоненты. Это позволило системно решить несколько типичных проблем Android-разработки:
+Библиотека `Lifecycle` была создана как часть Architecture Components, чтобы ввести формальную модель жизненного цикла и lifecycle-aware компоненты. Это позволило системно решить несколько типичных проблем Android-разработки:
 
 1. **Утечки памяти** — компоненты оставались в памяти после уничтожения `Activity` из-за неподписанных слушателей и долгоживущих ссылок
 2. **Крэши** — обновление UI или обращение к `Context` после уничтожения `Activity`/`Fragment`
@@ -129,7 +129,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Реальный Пример: WebSocket Чат
 
-**До Lifecycle:**
+**До `Lifecycle`:**
 ```kotlin
 // ❌ Ручное управление состоянием
 class ChatActivity : AppCompatActivity() {
@@ -153,7 +153,7 @@ class ChatActivity : AppCompatActivity() {
 }
 ```
 
-**С Lifecycle:**
+**С `Lifecycle`:**
 ```kotlin
 // ✅ Автоматическое управление через lifecycle-aware observer
 class ChatObserver : DefaultLifecycleObserver {
@@ -184,7 +184,7 @@ class ChatActivity : AppCompatActivity() {
 
 ### Ключевые Компоненты
 
-**LifecycleOwner** — `Activity`/`Fragment` реализуют этот интерфейс:
+**`LifecycleOwner`** — `Activity`/`Fragment` реализуют этот интерфейс:
 ```kotlin
 interface LifecycleOwner {
     val lifecycle: Lifecycle
@@ -248,7 +248,7 @@ fun testObserver() {
 
 ## Answer (EN)
 
-The Lifecycle library was introduced as part of Architecture Components to provide a formal lifecycle model and lifecycle-aware components. This systematically addresses several common Android development problems:
+The `Lifecycle` library was introduced as part of Architecture Components to provide a formal lifecycle model and lifecycle-aware components. This systematically addresses several common Android development problems:
 
 1. **Memory leaks** — components staying in memory after `Activity` destruction due to missing unregister/cleanup and long-lived references
 2. **Crashes** — updating UI or using `Context` after `Activity`/`Fragment` is destroyed
@@ -350,7 +350,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Real Example: WebSocket Chat
 
-**Before Lifecycle:**
+**Before `Lifecycle`:**
 ```kotlin
 // ❌ Manual state management
 class ChatActivity : AppCompatActivity() {
@@ -374,7 +374,7 @@ class ChatActivity : AppCompatActivity() {
 }
 ```
 
-**With Lifecycle:**
+**With `Lifecycle`:**
 ```kotlin
 // ✅ Automatic management via lifecycle-aware observer
 class ChatObserver : DefaultLifecycleObserver {
@@ -405,7 +405,7 @@ class ChatActivity : AppCompatActivity() {
 
 ### Key Components
 
-**LifecycleOwner** — `Activity`/`Fragment` implement this interface:
+**`LifecycleOwner`** — `Activity`/`Fragment` implement this interface:
 ```kotlin
 interface LifecycleOwner {
     val lifecycle: Lifecycle
@@ -477,7 +477,7 @@ fun testObserver() {
 
 ## References
 
-- [[c-lifecycle]] — Lifecycle-aware components and architecture patterns
+- [[c-lifecycle]] — `Lifecycle`-aware components and architecture patterns
 - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
 - [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [`LiveData`](https://developer.android.com/topic/libraries/architecture/livedata)

@@ -1,14 +1,22 @@
----
-id: concept-002
-title: Equality / Равенство объектов
-aliases: [Equality, Equals, HashCode, Равенство, Сравнение объектов]
-kind: concept
-summary: Mechanisms for comparing objects for equality, including structural equality (equals/==) and referential equality (===), and the contract between equals() and hashCode().
-links: []
-created: 2025-11-05
-updated: 2025-11-05
-tags: [concept, equality, java, kotlin, oop]
----
+---\
+id: "20260108-110550"
+title: "Equality / Равенство объектов"
+aliases: ["Equality", "Equals", "HashCode", "Равенство", "Сравнение объектов"]
+summary: "Mechanisms for comparing objects for equality, including structural equality (equals/==) and referential equality (===), and the contract between equals() and hashCode()."
+topic: "kotlin"
+subtopics: ["equality", "java", "oop"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-kotlin"
+related: []
+created: "2025-11-05"
+updated: "2025-11-05"
+tags: ["concept", "equality", "java", "kotlin", "oop", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -32,7 +40,7 @@ When overriding `equals()`, you MUST also override `hashCode()` to maintain the 
 - If two objects are equal, their hash codes must be equal
 - If two objects are not equal, their hash codes MAY be equal (collision) but SHOULD be different for performance
 
-Violating this contract breaks hash-based collections (HashMap, HashSet).
+Violating this contract breaks hash-based collections (`HashMap`, `HashSet`).
 
 # Сводка (RU)
 
@@ -56,13 +64,13 @@ Violating this contract breaks hash-based collections (HashMap, HashSet).
 - Если два объекта равны, их хеш-коды должны быть равны
 - Если два объекта не равны, их хеш-коды МОГУТ быть равны (коллизия), но ДОЛЖНЫ различаться для производительности
 
-Нарушение этого контракта ломает коллекции на основе хеша (HashMap, HashSet).
+Нарушение этого контракта ломает коллекции на основе хеша (`HashMap`, `HashSet`).
 
 ## Use Cases / Trade-offs
 
 **When to override equals()**:
 - Value objects / data classes: Objects representing values (Point, Person, Money)
-- Collections membership: Need to use object as HashMap key or HashSet element
+- Collections membership: Need to use object as `HashMap` key or `HashSet` element
 - Business logic: Domain-specific equality (two Users are equal if they have same ID)
 
 **Default behavior** (if not overridden):

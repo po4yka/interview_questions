@@ -1,4 +1,4 @@
----
+---\
 id: cs-001
 title: "Clean Code Principles / Принципы чистого кода"
 aliases: ["Clean Code Principles", "Принципы чистого кода"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [best-practices, clean-code, code-quality, difficulty/medium, refactoring]
 sources: ["https://en.wikipedia.org/wiki/Clean_code"]
 
----
+---\
 # Вопрос (RU)
 > Что такое принципы чистого кода? Как писать осмысленные имена, хорошие функции и понятные комментарии? Что такое code smells и как их рефакторить?
 
@@ -473,7 +473,7 @@ fun getExistingUser(id: Long): User {
 **Main code smells:**
 
 1. **Code Duplication** — repeated logic
-2. **Long Methods** (commonly noticeable > ~20–30 lines) — hard to understand
+2. **`Long` Methods** (commonly noticeable > ~20–30 lines) — hard to understand
 3. **Large Classes** (hundreds of lines, many responsibilities) — do too much
 4. **Feature Envy** — a method is more interested in another class's data than its own
 5. **Primitive Obsession** — using primitives for rich domain concepts instead of dedicated types

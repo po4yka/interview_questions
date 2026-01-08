@@ -1,4 +1,4 @@
----
+---\
 id: android-350
 title: RecyclerView DiffUtil Advanced / Продвинутый DiffUtil для RecyclerView
 aliases: [RecyclerView DiffUtil Advanced, Продвинутый DiffUtil для RecyclerView]
@@ -15,22 +15,22 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
-> Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского `DiffUtil.Callback`, использование `ListAdapter` и оптимизацию DiffUtil для больших наборов данных.
+> Как работает `DiffUtil` внутренне? Объясните алгоритм Myers diff, реализацию пользовательского `DiffUtil.Callback`, использование `ListAdapter` и оптимизацию `DiffUtil` для больших наборов данных.
 
 # Question (EN)
-> How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom `DiffUtil.Callback`, using `ListAdapter`, and optimizing DiffUtil for large datasets.
+> How does `DiffUtil` work internally? Explain the Myers diff algorithm, implementing custom `DiffUtil.Callback`, using `ListAdapter`, and optimizing `DiffUtil` for large datasets.
 
 ---
 
 ## Ответ (RU)
 
-**DiffUtil** — это утилитный класс, который вычисляет разницу между двумя списками и выдаёт набор операций обновления. Он необходим для эффективных обновлений RecyclerView без полного обновления набора данных.
+**`DiffUtil`** — это утилитный класс, который вычисляет разницу между двумя списками и выдаёт набор операций обновления. Он необходим для эффективных обновлений `RecyclerView` без полного обновления набора данных.
 
 ### Зачем Нужен DiffUtil?
 
-**Без DiffUtil:**
+**Без `DiffUtil`:**
 ```kotlin
 //  ПЛОХО — неэффективно
 fun updateData(newList: List<Item>) {
@@ -39,7 +39,7 @@ fun updateData(newList: List<Item>) {
 }
 ```
 
-**С DiffUtil:**
+**С `DiffUtil`:**
 ```kotlin
 //  ХОРОШО — эффективно, с анимированными обновлениями
 fun updateData(newList: List<Item>) {
@@ -59,7 +59,7 @@ fun updateData(newList: List<Item>) {
 
 ### Как Работает DiffUtil (алгоритм Myers)
 
-DiffUtil основан на **алгоритме Myers diff**, который ищет (почти) минимальный набор операций вставки/удаления для преобразования одной последовательности в другую. В Android он дополнен оптимизациями и поддержкой перемещений и частичных изменений.
+`DiffUtil` основан на **алгоритме Myers diff**, который ищет (почти) минимальный набор операций вставки/удаления для преобразования одной последовательности в другую. В Android он дополнен оптимизациями и поддержкой перемещений и частичных изменений.
 
 Идея:
 1. Строится поиск по диагоналям графа редактирования ("змейкам") совпадающих элементов.
@@ -69,7 +69,7 @@ DiffUtil основан на **алгоритме Myers diff**, который �
 Замечания по сложности:
 - Пусть `N` — размер старого списка, `M` — нового, `D` — минимальное число правок.
 - Классический Myers имеет сложность `O((N + M) * D)` по времени и `O(N + M)` по памяти.
-- Реализация DiffUtil оптимизирована и обычно близка к линейной при небольшом количестве изменений, но для очень больших списков и больших отличий может быть дорогой.
+- Реализация `DiffUtil` оптимизирована и обычно близка к линейной при небольшом количестве изменений, но для очень больших списков и больших отличий может быть дорогой.
 
 **Пример (упрощённый):**
 
@@ -226,7 +226,7 @@ adapter.submitList(newItems) // Diff вычисляется асинхронно
 - Асинхронное вычисление diff через `AsyncListDiffer`
 - Более чистый API
 - Меньше шаблонного кода
-- Корректная работа с обновлениями RecyclerView
+- Корректная работа с обновлениями `RecyclerView`
 
 ---
 
@@ -323,7 +323,7 @@ class StableIdAdapter : ListAdapter<Item, ViewHolder>(DiffCallback()) {
 }
 ```
 
-Стабильные ID помогают RecyclerView лучше переиспользовать ViewHolder'ы. Логику DiffUtil по-прежнему определяют `areItemsTheSame` и `areContentsTheSame`.
+Стабильные ID помогают `RecyclerView` лучше переиспользовать `ViewHolder`'ы. Логику `DiffUtil` по-прежнему определяют `areItemsTheSame` и `areContentsTheSame`.
 
 **3. Пагинация и частичная загрузка для очень больших списков**
 
@@ -558,7 +558,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 | `DiffUtil` (sync)        | ниже           | да       | сохраняется       |
 | `ListAdapter` (async)    | минимум в UI   | да       | сохраняется       |
 
-Подходы на основе DiffUtil уменьшают работу в главном потоке и дают лучший UX по сравнению с полным обновлением.
+Подходы на основе `DiffUtil` уменьшают работу в главном потоке и дают лучший UX по сравнению с полным обновлением.
 
 ---
 
@@ -569,18 +569,18 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 - Используйте payload для частичных обновлений.
 - Выносите вычисление diff с главного потока для больших списков.
 - Используйте пагинацию / частичную загрузку для очень больших или бесконечных списков.
-- Применяйте стабильные ID для улучшения переиспользования ViewHolder, но не вместо корректных колбэков DiffUtil.
+- Применяйте стабильные ID для улучшения переиспользования `ViewHolder`, но не вместо корректных колбэков `DiffUtil`.
 - Для очень простых или редко обновляемых списков допустимо использовать `notifyDataSetChanged()`.
 
 ---
 
 ## Answer (EN)
 
-**DiffUtil** is a utility class that calculates the difference between two lists and outputs a list of update operations. It's essential for efficient RecyclerView updates without full dataset refreshes.
+**`DiffUtil`** is a utility class that calculates the difference between two lists and outputs a list of update operations. It's essential for efficient `RecyclerView` updates without full dataset refreshes.
 
 ### Why DiffUtil?
 
-**Without DiffUtil:**
+**Without `DiffUtil`:**
 ```kotlin
 //  BAD - Inefficient
 fun updateData(newList: List<Item>) {
@@ -589,7 +589,7 @@ fun updateData(newList: List<Item>) {
 }
 ```
 
-**With DiffUtil:**
+**With `DiffUtil`:**
 ```kotlin
 //  GOOD - Efficient, animated updates
 fun updateData(newList: List<Item>) {
@@ -609,7 +609,7 @@ fun updateData(newList: List<Item>) {
 
 ### How DiffUtil Works (Myers Algorithm)
 
-DiffUtil is based on the **Myers diff algorithm**, which finds a (near) minimum edit script (insert/delete) to transform one sequence into another. Android's implementation includes optimizations and support for moves and content changes.
+`DiffUtil` is based on the **Myers diff algorithm**, which finds a (near) minimum edit script (insert/delete) to transform one sequence into another. Android's implementation includes optimizations and support for moves and content changes.
 
 Conceptually:
 1. It builds a search over edit graph diagonals ("snakes") of matching elements.
@@ -619,7 +619,7 @@ Conceptually:
 Important notes:
 - Let `N` be old size, `M` be new size, `D` be minimal edit distance.
 - Classic Myers runs in `O((N + M) * D)` time and `O(N + M)` space; practical performance is usually close to linear when `D` is small relative to list size.
-- DiffUtil's implementation is optimized for typical UI lists but still can be expensive for very large lists or huge diffs.
+- `DiffUtil`'s implementation is optimized for typical UI lists but still can be expensive for very large lists or huge diffs.
 
 **Example (simplified):**
 
@@ -776,7 +776,7 @@ adapter.submitList(newItems) // Diff is computed asynchronously (off the main th
 - Asynchronous diff calculation via `AsyncListDiffer`
 - Cleaner API
 - Less boilerplate
-- Correct interaction with RecyclerView update APIs
+- Correct interaction with `RecyclerView` update APIs
 
 ---
 
@@ -875,11 +875,11 @@ class StableIdAdapter : ListAdapter<Item, ViewHolder>(DiffCallback()) {
 }
 ```
 
-Stable IDs help RecyclerView reuse ViewHolders more effectively. DiffUtil still relies primarily on `areItemsTheSame` / `areContentsTheSame`.
+Stable IDs help `RecyclerView` reuse ViewHolders more effectively. `DiffUtil` still relies primarily on `areItemsTheSame` / `areContentsTheSame`.
 
 **3. Prefer paging / incremental loading for very large lists**
 
-For very large or unbounded lists (e.g., feeds with tens of thousands of items), use libraries like Paging 3 with DiffUtil instead of loading gigantic lists at once. There is no strict item-count limit; it's about keeping computation and memory reasonable.
+For very large or unbounded lists (e.g., feeds with tens of thousands of items), use libraries like Paging 3 with `DiffUtil` instead of loading gigantic lists at once. There is no strict item-count limit; it's about keeping computation and memory reasonable.
 
 **4. Debounce rapid updates**
 
@@ -1110,18 +1110,18 @@ Example scenario: updating ~1,000 items where ~10 items changed. Actual numbers 
 | `DiffUtil` (sync)        | lower          | Yes        | Kept            |
 | `ListAdapter` (async)    | minimal on UI  | Yes        | Kept            |
 
-DiffUtil-based approaches reduce main-thread work and provide better UX compared to blind full refreshes.
+`DiffUtil`-based approaches reduce main-thread work and provide better UX compared to blind full refreshes.
 
 ---
 
 ### Best Practices
 
-- Prefer `ListAdapter` / `AsyncListDiffer` for most RecyclerView lists.
+- Prefer `ListAdapter` / `AsyncListDiffer` for most `RecyclerView` lists.
 - Implement precise `areItemsTheSame` (stable identity) and `areContentsTheSame` (visual equality).
 - Use payloads for partial updates to avoid rebinding whole items.
 - Offload diffing from the main thread for larger lists.
 - Use paging/incremental loading for very large or infinite lists.
-- Use stable IDs when it helps RecyclerView reuse ViewHolders; don't rely on them to replace proper DiffUtil callbacks.
+- Use stable IDs when it helps `RecyclerView` reuse ViewHolders; don't rely on them to replace proper `DiffUtil` callbacks.
 - For very simple or rarely updated lists, `notifyDataSetChanged()` can be acceptable.
 
 ---
@@ -1130,8 +1130,8 @@ DiffUtil-based approaches reduce main-thread work and provide better UX compared
 
 - [[q-android-project-parts--android--easy]]
 - How would you design `DiffUtil.ItemCallback` for complex composite items (e.g., posts with media and reactions)?
-- When would you prefer manual diffing or `notifyDataSetChanged()` over DiffUtil, and why?
-- How does using `setHasStableIds(true)` interact with DiffUtil and what pitfalls can arise?
+- When would you prefer manual diffing or `notifyDataSetChanged()` over `DiffUtil`, and why?
+- How does using `setHasStableIds(true)` interact with `DiffUtil` and what pitfalls can arise?
 - How would you benchmark and profile diff performance in a real app with Paging 3 and multiple view types?
 
 ## References

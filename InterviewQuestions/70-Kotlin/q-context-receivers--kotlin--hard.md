@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-142
 title: "Context Receivers / Context Receivers"
 aliases: ["Context Receivers in Kotlin", "Context Receivers", "Контекстные получатели в Kotlin", "Контекстные получатели"]
@@ -14,7 +14,7 @@ related: [c-kotlin, c-kotlin-features, q-actor-pattern--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, scope-functions]
----
+---\
 # Вопрос (RU)
 > Объясните context receivers в Kotlin. Чем они отличаются от extension receivers? Приведите примеры DSL.
 
@@ -25,7 +25,7 @@ tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, sco
 
 ## Ответ (RU)
 
-**Context Receivers** — это (начиная с Kotlin 2.0) стабильная языковая функция, которая позволяет функциям и свойствам объявлять явные контексты и, в частности, требовать несколько типов получателей одновременно. Это позволяет строить более выразительные DSL и более чисто передавать зависимости без параметров в сигнатуре.
+**`Context` Receivers** — это (начиная с Kotlin 2.0) стабильная языковая функция, которая позволяет функциям и свойствам объявлять явные контексты и, в частности, требовать несколько типов получателей одновременно. Это позволяет строить более выразительные DSL и более чисто передавать зависимости без параметров в сигнатуре.
 
 Ниже — подробные примеры и сравнение, параллельные EN-версии.
 
@@ -130,7 +130,7 @@ fun demoFetchAndLog() {
 
 ### Context Receivers Vs Extension Receivers (Сравнение)
 
-| Характеристика          | Extension Receiver            | Context Receiver                        |
+| Характеристика          | Extension Receiver            | `Context` Receiver                        |
 |-------------------------|------------------------------|-----------------------------------------|
 | Количество              | Ровно 1                      | 1 или более контекстов                  |
 | Синтаксис               | `Type.function()`            | `context(Type1, Type2)` перед объявлением |
@@ -452,11 +452,11 @@ fun betterFunction() {
 }
 ```
 
-Context receivers — мощный инструмент для создания выразительных DSL и явного описания зависимостей в Kotlin. См. также [[c-kotlin]] и [[c-kotlin-features]].
+`Context` receivers — мощный инструмент для создания выразительных DSL и явного описания зависимостей в Kotlin. См. также [[c-kotlin]] и [[c-kotlin-features]].
 
 ## Answer (EN)
 
-Context receivers are (as of Kotlin 2.0) a stable language feature that allows functions and properties to declare explicit contexts and, in particular, require multiple receiver-like types simultaneously. This enables more expressive DSLs and cleaner dependency handling without threading parameters through every call.
+`Context` receivers are (as of Kotlin 2.0) a stable language feature that allows functions and properties to declare explicit contexts and, in particular, require multiple receiver-like types simultaneously. This enables more expressive DSLs and cleaner dependency handling without threading parameters through every call.
 
 ---
 
@@ -559,11 +559,11 @@ fun demoFetchAndLog() {
 
 ### Context Receivers Vs Extension Receivers
 
-| Feature | Extension Receiver | Context Receiver |
+| Feature | Extension Receiver | `Context` Receiver |
 |---------|-------------------|------------------|
 | **Count** | Exactly 1 | One or more contexts |
 | **Syntax** | `Type.function()` | `context(Type1, Type2)` before declaration |
-| **Call site** | `receiver.function()` | Any style that provides required receivers (e.g. nested `with`, or context functions) |
+| **`Call` site** | `receiver.function()` | Any style that provides required receivers (e.g. nested `with`, or context functions) |
 | **Access** | `this` or implicit | Implicit receivers from declared contexts |
 | **Maturity** | Stable | Stable (was experimental in earlier versions) |
 

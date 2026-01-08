@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-220
 title: "Why Data Sealed Classes Needed / Зачем нужны Data и Sealed классы"
 aliases: [Class Design, Data Classes, Sealed Classes]
@@ -14,7 +14,7 @@ related: [c-kotlin, c-sealed-classes, q-flow-exception-handling--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
----
+---\
 # Вопрос (RU)
 
 > Зачем в Kotlin нужны data и sealed классы?
@@ -129,7 +129,7 @@ Note: immutability is not enforced by the data class itself; it depends on using
 val (name, age) = user  // uses generated componentN functions
 ```
 
-**4. Useful toString and Component Functions**
+**4. Useful toString and `Component` Functions**
 Automatically generated toString, componentN, equals, hashCode, and copy reduce boilerplate and make value types safer and clearer.
 
 ### Sealed Classes Benefits

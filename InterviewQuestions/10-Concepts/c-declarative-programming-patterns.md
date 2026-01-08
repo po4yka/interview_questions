@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-system-design"
-related: [c-declarative-programming, c-jetpack-compose, c-functional-programming]
+moc: "moc-architecture-patterns"
+related: ["c-declarative-programming", "c-jetpack-compose", "c-functional-programming"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
+tags: [architecture-patterns, concept, difficulty/medium]
 ---
 
 # Summary (EN)

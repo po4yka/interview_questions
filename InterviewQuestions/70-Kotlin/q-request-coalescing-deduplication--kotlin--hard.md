@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-200
 title: "Request coalescing and deduplication patterns / Объединение и дедупликация запросов"
 aliases: [Caching, Deduplication, Optimization, Request Coalescing, Объединение запросов]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-kotlin, q-job-vs-supervisorjob--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, optimization, patterns, performance]
----
+---\
 # Вопрос (RU)
 
 > Объясните паттерны объединения запросов (request coalescing) и дедупликации в Kotlin: зачем они нужны, как реализуются (на базе корутин), какие существуют потокобезопасные варианты, как отличать от батчинга и кэширования, и в каких продакшн-сценариях они применяются.
@@ -1012,7 +1012,7 @@ Below is the English version with full detail, aligned with the Russian section.
 
 ## Overview
 
-Request coalescing (also called request deduplication or request collapsing) is an optimization technique that combines multiple concurrent requests for the same resource into a single backend call.
+`Request` coalescing (also called request deduplication or request collapsing) is an optimization technique that combines multiple concurrent requests for the same resource into a single backend call.
 
 Key benefits:
 - Reduces backend load significantly (often several times, sometimes 10-100x)

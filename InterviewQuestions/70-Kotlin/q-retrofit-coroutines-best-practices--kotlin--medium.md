@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-184
 title: "Retrofit with coroutines: best practices / Retrofit с корутинами: лучшие практики"
 aliases: [Coroutines Retrofit, Networking, REST API, Retrofit, Retrofit с корутинами]
@@ -15,14 +15,14 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, best-practices, coroutines, difficulty/medium, error-handling, kotlin, networking, okhttp, rest-api, retrofit]
 
----
+---\
 # Вопрос (RU)
 
-> Лучшие практики использования Retrofit с корутинами в Kotlin для реальных Android-приложений.
+> Лучшие практики использования `Retrofit` с корутинами в Kotlin для реальных Android-приложений.
 
 # Question (EN)
 
-> Best practices for using Retrofit with coroutines in Kotlin for real-world Android apps.
+> Best practices for using `Retrofit` with coroutines in Kotlin for real-world Android apps.
 
 ## Ответ (RU)
 
@@ -50,10 +50,10 @@ Detailed best-practices guide follows below. English and Russian sections are st
 - [Cancellation Handling](#cancellation-handling)
 - [Concurrent Requests](#concurrent-requests)
 - [Sequential vs Parallel Patterns](#sequential-vs-parallel-patterns)
-- [Call Adapter vs Suspend Functions](#call-adapter-vs-suspend-functions)
+- [Call `Adapter` vs Suspend Functions](#call-adapter-vs-suspend-functions)
 - [`Flow` Return Types](#flow-return-types)
 - [Complete Repository Implementation](#complete-repository-implementation)
-- [Caching with Room + `Flow`](#caching-with-room--flow)
+- [Caching with `Room` + `Flow`](#caching-with-room--flow)
 - [Retry Logic with Exponential Backoff](#retry-logic-with-exponential-backoff)
 - [Testing](#testing)
 - [OkHttp Interceptors](#okhttp-interceptors)
@@ -68,7 +68,7 @@ Detailed best-practices guide follows below. English and Russian sections are st
 
 ## Overview
 
-Retrofit with Kotlin Coroutines provides a modern, efficient way to handle network operations in Android applications. This guide covers best practices for integrating Retrofit with coroutines. See also [[c-coroutines]].
+`Retrofit` with Kotlin Coroutines provides a modern, efficient way to handle network operations in Android applications. This guide covers best practices for integrating `Retrofit` with coroutines. See also [[c-coroutines]].
 
 **Key Benefits:**
 - Natural async/await syntax with suspend functions
@@ -216,7 +216,7 @@ suspend fun loadUser(userId: String): ApiResult<User> {
 **Pros:**
 - Cleaner API
 - Less boilerplate
-- Retrofit throws on non-2xx / network failures, handled in one place
+- `Retrofit` throws on non-2xx / network failures, handled in one place
 
 **Cons:**
 - No access to headers
@@ -496,7 +496,7 @@ interface TimeoutApiService {
 
 ### Automatic Cancellation
 
-When a coroutine is cancelled, Retrofit (2.6+) automatically cancels the underlying OkHttp call.
+When a coroutine is cancelled, `Retrofit` (2.6+) automatically cancels the underlying `OkHttp` call.
 
 ```kotlin
 class CancellableUserViewModel(private val repository: UserRepository) : ViewModel() {
@@ -798,7 +798,7 @@ interface CoroutineApiService {
 ```
 
 Why suspend functions are generally preferred:
-- Built-in support (Retrofit 2.6+)
+- Built-in support (`Retrofit` 2.6+)
 - No extra dependency
 - Natural Kotlin syntax
 - Automatic cancellation support
@@ -1524,11 +1524,11 @@ Do's and Don'ts below use `ApiResult` to avoid confusion with Kotlin's built-in 
 
 1. Use suspend functions instead of `Call<T>` in new code.
 2. Handle cancellation by rethrowing `CancellationException`.
-3. Let Retrofit handle threading for network; use `Dispatchers.IO` for disk.
+3. Let `Retrofit` handle threading for network; use `Dispatchers.IO` for disk.
 4. Configure appropriate timeouts instead of relying on defaults.
 5. Use structured concurrency (`coroutineScope`/`async`) for parallel requests.
 6. Use sealed result types (e.g., `ApiResult`) for clear error handling.
-7. Cache responses with Room for offline support.
+7. Cache responses with `Room` for offline support.
 8. Use `Flow` for reactive streams over your cache.
 
 ### Don'ts
@@ -1538,7 +1538,7 @@ Do's and Don'ts below use `ApiResult` to avoid confusion with Kotlin's built-in 
 3. Do not use `GlobalScope` in production; prefer scoped coroutines.
 4. Do not block main thread with `runBlocking`.
 5. Do not ignore error handling around network calls.
-6. Do not use synchronous OkHttp `execute()` on the main thread.
+6. Do not use synchronous `OkHttp` `execute()` on the main thread.
 7. Do not create a new Retrofit/OkHttp client per request.
 
 ---
@@ -1570,7 +1570,7 @@ interface UserApiService {
 
 ### Repository / `ViewModel` / Compose UI / Hilt
 
-(The following sections mirror patterns above: inject Retrofit service and DAO, expose `Flow`/`StateFlow`, use `viewModelScope` for calls, no `runBlocking`/`GlobalScope`, and use `ApiResult` for state.)
+(The following sections mirror patterns above: inject `Retrofit` service and DAO, expose `Flow`/`StateFlow`, use `viewModelScope` for calls, no `runBlocking`/`GlobalScope`, and use `ApiResult` for state.)
 
 ---
 
@@ -1578,10 +1578,10 @@ interface UserApiService {
 
 Key pitfalls (with correct patterns embedded earlier):
 - Not rethrowing `CancellationException`.
-- Wrapping Retrofit suspend calls in `withContext(Dispatchers.IO)` unnecessarily.
+- Wrapping `Retrofit` suspend calls in `withContext(Dispatchers.IO)` unnecessarily.
 - Assuming `Response.body()` is non-null without checking.
 - Forgetting to close `errorBody()`.
-- Creating multiple Retrofit instances.
+- Creating multiple `Retrofit` instances.
 - Relying on unsuitable timeout defaults instead of configuring for your needs.
 - Blocking the main thread with `runBlocking`.
 - Mixing callbacks and coroutines for the same API surface.
@@ -1592,11 +1592,11 @@ Key pitfalls (with correct patterns embedded earlier):
 ## Follow-ups
 
 1. When should you prefer `Response<T>` over direct `T` in suspend endpoints, and how does that choice change your error parsing and logging strategy for different status codes?
-2. How does Retrofit cooperate with coroutine cancellation and structured concurrency on complex screens (e.g., dashboards) that fire multiple parallel requests and navigations?
-3. What concrete patterns can you use to combine `flowOn()` and `withContext()` when exposing Retrofit-backed data as `Flow` from repositories without breaking dispatcher confinement?
+2. How does `Retrofit` cooperate with coroutine cancellation and structured concurrency on complex screens (e.g., dashboards) that fire multiple parallel requests and navigations?
+3. What concrete patterns can you use to combine `flowOn()` and `withContext()` when exposing `Retrofit`-backed data as `Flow` from repositories without breaking dispatcher confinement?
 4. How can you deduplicate concurrent requests for the same resource across multiple consumers (for example, different `ViewModel`s or screens) while still keeping proper cancellation semantics?
-5. How would you design an offline-first stack with Retrofit, Room, and `Flow` that includes cache invalidation rules, retry with exponential backoff, and proper handling of stale-but-usable data?
-6. How can you implement robust, race-free token refresh with OkHttp interceptors and coroutines so that all pending requests either reuse the refreshed token or fail fast when refresh is impossible?
+5. How would you design an offline-first stack with `Retrofit`, `Room`, and `Flow` that includes cache invalidation rules, retry with exponential backoff, and proper handling of stale-but-usable data?
+6. How can you implement robust, race-free token refresh with `OkHttp` interceptors and coroutines so that all pending requests either reuse the refreshed token or fail fast when refresh is impossible?
 7. Why are sealed result hierarchies (`ApiResult`, `NetworkResponse`) more suitable for modeling API outcomes in coroutine-based architectures than nullable types or unchecked exceptions alone?
 
 ---
@@ -1633,10 +1633,10 @@ Key pitfalls (with correct patterns embedded earlier):
 - [Обработка отмены](#обработка-отмены)
 - [Конкурентные запросы](#конкурентные-запросы-ru)
 - [Последовательные vs параллельные паттерны](#последовательные-vs-параллельные-паттерны)
-- [Call Adapter vs suspend функции](#call-adapter-vs-suspend-функции)
+- [Call `Adapter` vs suspend функции](#call-adapter-vs-suspend-функции)
 - [`Flow` типы возврата](#flow-типы-возврата)
 - [Полная реализация репозитория](#полная-реализация-репозитория)
-- [Кеширование с Room + `Flow`](#кеширование-с-room--flow)
+- [Кеширование с `Room` + `Flow`](#кеширование-с-room--flow)
 - [Логика повторных попыток с экспоненциальной задержкой](#логика-повторных-попыток-с-экспоненциальной-задержкой)
 - [Тестирование](#тестирование-ru)
 - [OkHttp перехватчики](#okhttp-перехватчики)
@@ -1652,7 +1652,7 @@ Key pitfalls (with correct patterns embedded earlier):
 <a name="обзор-ru"></a>
 ## Обзор
 
-Retrofit с Kotlin корутинами предоставляет современный и эффективный способ обработки сетевых операций в Android-приложениях. Далее приведены лучшие практики интеграции Retrofit и корутин. См. также [[c-coroutines]].
+`Retrofit` с Kotlin корутинами предоставляет современный и эффективный способ обработки сетевых операций в Android-приложениях. Далее приведены лучшие практики интеграции `Retrofit` и корутин. См. также [[c-coroutines]].
 
 **Ключевые преимущества:**
 - Естественный синтаксис async/await с suspend-функциями
@@ -1989,7 +1989,7 @@ class NetworkUserRepository(private val api: ApiService) {
 
 ## Конфигурация Таймаутов
 
-- Настройте `connectTimeout`, `readTimeout`, `writeTimeout`, `callTimeout` на уровне OkHttp.
+- Настройте `connectTimeout`, `readTimeout`, `writeTimeout`, `callTimeout` на уровне `OkHttp`.
 - Используйте `withTimeout` / `withTimeoutOrNull` для ограничений на уровне корутин.
 - При необходимости добавьте `TimeoutInterceptor` и заголовки вроде `X-Timeout` для специфичных запросов.
 
@@ -1999,7 +1999,7 @@ class NetworkUserRepository(private val api: ApiService) {
 
 ## Обработка Отмены
 
-- Retrofit (2.6+) отменяет HTTP-вызов при отмене корутины.
+- `Retrofit` (2.6+) отменяет HTTP-вызов при отмене корутины.
 - В `ViewModel` храните `Job` и отменяйте предыдущие загрузки при новых запросах.
 - Для нескольких запросов одного ресурса можно отслеживать активные `Deferred` (пример `CancellableRepository`).
 - При отмене выполняйте очистку ресурсов (файлы, стримы) и пробрасывайте `CancellationException` дальше.
@@ -2033,9 +2033,9 @@ class NetworkUserRepository(private val api: ApiService) {
 ## Call Adapter Vs Suspend Функции
 
 - Устаревший подход: `CallAdapter` (RxJava и др.) с возвратом `Call<T>` или `Single<T>`.
-- Современный подход: нативные suspend-функции в Retrofit (2.6+) без дополнительных адаптеров.
+- Современный подход: нативные suspend-функции в `Retrofit` (2.6+) без дополнительных адаптеров.
 
-(Кодовые примеры Call Adapter и CoroutineApiService совпадают с английскими.)
+(Кодовые примеры `Call` `Adapter` и CoroutineApiService совпадают с английскими.)
 
 ---
 
@@ -2051,7 +2051,7 @@ class NetworkUserRepository(private val api: ApiService) {
 
 ## Полная Реализация Репозитория
 
-- Репозиторий объединяет Retrofit и Room.
+- Репозиторий объединяет `Retrofit` и `Room`.
 - Используются `ApiResult` для представления состояний (Loading/Success/Error).
 - Реализованы кеширование, пагинация, обновление и удаление пользователя.
 - Корутинный контекст (`Dispatchers.IO`) применяется для операций ввода-вывода.
@@ -2100,7 +2100,7 @@ class NetworkUserRepository(private val api: ApiService) {
 - Перехватчик повторных попыток для 5xx/сетевых ошибок.
 - Перехватчик кеширования с заголовками `Cache-Control`.
 
-(Код идентичен английским примерам OkHttp Interceptors.)
+(Код идентичен английским примерам `OkHttp` Interceptors.)
 
 ---
 
@@ -2111,11 +2111,11 @@ class NetworkUserRepository(private val api: ApiService) {
 
 1. Использовать suspend-функции вместо `Call<T>` в новом коде.
 2. Явно обрабатывать отмену (пробрасывать `CancellationException`).
-3. Поручать Retrofit управление потоками для сети, использовать `Dispatchers.IO` для диска.
+3. Поручать `Retrofit` управление потоками для сети, использовать `Dispatchers.IO` для диска.
 4. Настраивать таймауты под реальные условия.
 5. Использовать структурированный параллелизм (`coroutineScope`/`async`).
 6. Применять sealed-классы (`ApiResult`, `NetworkResponse`) для результатов запросов.
-7. Кешировать ответы через Room для оффлайн-режима.
+7. Кешировать ответы через `Room` для оффлайн-режима.
 8. Использовать `Flow` для реактивной работы с кешом и сетью.
 
 ### Чего Избегать
@@ -2160,11 +2160,11 @@ class NetworkUserRepository(private val api: ApiService) {
 ## Дополнительные Вопросы (RU)
 
 1. В каких случаях стоит предпочесть `Response<T>` прямому `T` в suspend-эндпоинтах и как это влияет на стратегию парсинга и логирования ошибок для разных статус-кодов?
-2. Как Retrofit взаимодействует с отменой корутин и структурированным параллелизмом на сложных экранах (например, дашбордах) с несколькими параллельными запросами и навигацией?
-3. Какие конкретные паттерны позволяют корректно сочетать `flowOn()` и `withContext()` при экспонировании данных Retrofit как `Flow` из репозиториев, не нарушая ограничений диспетчеров?
+2. Как `Retrofit` взаимодействует с отменой корутин и структурированным параллелизмом на сложных экранах (например, дашбордах) с несколькими параллельными запросами и навигацией?
+3. Какие конкретные паттерны позволяют корректно сочетать `flowOn()` и `withContext()` при экспонировании данных `Retrofit` как `Flow` из репозиториев, не нарушая ограничений диспетчеров?
 4. Как дедуплицировать параллельные запросы одного и того же ресурса между несколькими потребителями (например, разными `ViewModel` или экранами), сохраняя корректную отмену?
-5. Как спроектировать offline-first стек с Retrofit, Room и `Flow`, включающий правила инвалидации кеша, ретраи с экспоненциальной задержкой и обработку устаревших, но пригодных данных?
-6. Как реализовать надёжную, свободную от гонок логику обновления токена с OkHttp-перехватчиками и корутинами так, чтобы ожидающие запросы либо переиспользовали новый токен, либо быстро завершались при неуспешном обновлении?
+5. Как спроектировать offline-first стек с `Retrofit`, `Room` и `Flow`, включающий правила инвалидации кеша, ретраи с экспоненциальной задержкой и обработку устаревших, но пригодных данных?
+6. Как реализовать надёжную, свободную от гонок логику обновления токена с `OkHttp`-перехватчиками и корутинами так, чтобы ожидающие запросы либо переиспользовали новый токен, либо быстро завершались при неуспешном обновлении?
 7. Почему и в каких сценариях иерархии результатов (`ApiResult`, `NetworkResponse`) удобнее для моделирования исходов API в корутинной архитектуре, чем nullable-типы или только исключения?
 
 ---

@@ -1,4 +1,4 @@
----
+---\
 id: android-622
 title: Android Auto Guidelines / Руководство Android Auto
 aliases: [Android Auto Guidelines, Руководство Android Auto]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/training/cars/apps"
   - "https://developer.android.com/training/cars/apps/media"
 
----
+---\
 # Вопрос (RU)
 > Как спроектировать и сертифицировать Android Auto / Automotive OS приложение: соблюсти ограничений по отвлечению, шаблонам, голосовому управлению и процессу ревью?
 
@@ -138,7 +138,7 @@ sources:
 #### Driver Distraction Rules
 
 - Rely on the built-in safety model: templates and platform rules cap list length, interactions, text input, and available actions while driving.
-- Long forms, free-form text input, and complex multi-step flows while driving are prohibited; offload them to voice, simplified templates, or a companion app.
+- `Long` forms, free-form text input, and complex multi-step flows while driving are prohibited; offload them to voice, simplified templates, or a companion app.
 - While the vehicle is in motion, parts of the UI/actions are automatically blocked or constrained based on Android Auto/Automotive OS policies (e.g., list size limits, input restrictions, media constraints).
 
 #### Voice and Assistant

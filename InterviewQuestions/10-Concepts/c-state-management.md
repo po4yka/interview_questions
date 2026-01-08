@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-133756"
 title: "State Management / State Management"
 aliases: ["State Management"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-livedata, c-mutablestate, c-unidirectional-data-flow, c-savedstatehandle, c-compose-stability]
+moc: "moc-cs"
+related: ["c-livedata", "c-mutablestate", "c-unidirectional-data-flow", "c-savedstatehandle", "c-compose-stability"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -49,4 +50,4 @@ State management is the set of techniques and patterns used to represent, store,
 
 - Redux Documentation (https://redux.js.org/understanding/thinking-in-redux)
 - Vuex / Pinia State Management Concepts (https://vuejs.org/guide/scaling-up/state-management.html)
-- "Unidirectional Data Flow" in React Docs (https://react.dev/learn/thinking-in-react)
+- "Unidirectional Data `Flow`" in React Docs (https://react.dev/learn/thinking-in-react)

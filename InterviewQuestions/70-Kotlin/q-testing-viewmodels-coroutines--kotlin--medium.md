@@ -13,7 +13,7 @@ moc: moc-kotlin
 related: [c-coroutines, c-kotlin, q-flowon-operator-context-switching--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [android, coroutines, difficulty/medium, kotlin, testing, unit-testing, viewmodel]
+tags: [android, coroutines, difficulty/medium, kotlin, testing, testing-unit, viewmodel]
 ---
 # Вопрос (RU)
 

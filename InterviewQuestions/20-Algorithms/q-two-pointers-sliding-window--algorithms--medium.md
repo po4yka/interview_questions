@@ -1,4 +1,4 @@
----
+---\
 id: algo-003
 title: "Two Pointers and Sliding Window Patterns / Паттерны двух указателей и скользящего окна"
 aliases: ["Sliding Window", "Two Pointers", "Два указателя", "Скользящее окно"]
@@ -15,12 +15,12 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, array, difficulty/medium, optimization, sliding-window, two-pointers]
 sources: [https://en.wikipedia.org/wiki/Two_pointer_technique]
----
+---\
 # Вопрос (RU)
 > Что такое техники двух указателей и скользящего окна? Когда их следует использовать? Каковы распространённые паттерны задач?
 
 # Question (EN)
-> What are Two Pointers and Sliding Window techniques? When should you use them? What are common problem patterns?
+> What are Two Pointers and Sliding `Window` techniques? When should you use them? What are common problem patterns?
 
 ---
 
@@ -179,7 +179,7 @@ fun minWindow(s: String, t: String): String {
 
 ## Answer (EN)
 
-**Two Pointers and Sliding Window Theory:**
+**Two Pointers and Sliding `Window` Theory:**
 These techniques efficiently solve array and string problems, often reducing complexity from O(n²) to O(n). Two pointers use two indices to traverse data, while sliding window maintains a dynamic range of elements.
 
 **Two Pointers - Opposite Ends:**
@@ -237,7 +237,7 @@ fun hasCycle(head: ListNode?): Boolean {
 }
 ```
 
-**Sliding Window - Fixed Size:**
+**Sliding `Window` - Fixed Size:**
 ```kotlin
 // Maintain a window of fixed size
 fun maxSumSubarray(arr: IntArray, k: Int): Int {
@@ -261,7 +261,7 @@ fun maxSumSubarray(arr: IntArray, k: Int): Int {
 }
 ```
 
-**Sliding Window - Variable Size:**
+**Sliding `Window` - Variable Size:**
 ```kotlin
 // Maintain a window of variable size with condition
 fun lengthOfLongestSubstring(s: String): Int {

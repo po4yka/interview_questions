@@ -1,4 +1,4 @@
----
+---\
 id: android-213
 title: Runtime Permissions Best Practices / Лучшие практики runtime разрешений
 aliases: [Runtime Permissions Best Practices, Лучшие практики runtime разрешений]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/permissions, difficulty/medium, permissions, security, ux]
----
+---\
 # Вопрос (RU)
 
 > Реализуйте обработку runtime-разрешений с правильным UX: показывайте обоснование запроса, корректно обрабатывайте постоянный отказ и используйте API ActivityResultContracts.
@@ -366,10 +366,10 @@ fun CameraPermissionScreen() {
 
 ### Best Practices
 
-1. **Request at point of use** — not on app launch.
+1. **`Request` at point of use** — not on app launch.
 2. **Explain before requesting** — make it clear why the permission is needed.
 3. **Handle permanent denial** — direct users to Settings instead of looping requests.
-4. **Request minimum** — only necessary and logically related permissions.
+4. **`Request` minimum** — only necessary and logically related permissions.
 5. **Test all states** — granted, denied, permanently denied (including "Don't ask again").
 
 ### Common Mistakes

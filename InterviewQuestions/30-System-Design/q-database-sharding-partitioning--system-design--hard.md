@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-010
 title: "Database Sharding and Partitioning / Шардирование и партиционирование баз данных"
 aliases: ["Database Sharding", "Шардирование баз данных"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [database, difficulty/hard, partitioning, scalability, sharding, system-design]
 sources: ["https://en.wikipedia.org/wiki/Shard_(database_architecture)"]
 
----
+---\
 # Вопрос (RU)
 > Что такое шардирование базы данных? Чем оно отличается от партиционирования? Каковы стратегии шардирования и какие компромиссы?
 
@@ -48,7 +48,7 @@ Sharding and partitioning are horizontal data-splitting techniques used to impro
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-sql-nosql-databases--system-design--medium]] - Database fundamentals
+- [[q-sql-nosql-databases--system-design--medium]] - `Database` fundamentals
 - [[q-caching-strategies--system-design--medium]] - Caching strategies
 
 ### Related (Same Level)

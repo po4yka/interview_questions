@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-material-design, c-material-3, c-design-tokens, c-android-themes, c-system-ui]
+moc: "moc-cs"
+related: ["c-material-design", "c-material-3", "c-design-tokens", "c-android-themes", "c-system-ui"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

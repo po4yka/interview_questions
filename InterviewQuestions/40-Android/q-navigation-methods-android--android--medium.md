@@ -1,4 +1,4 @@
----
+---\
 id: android-114
 title: "Navigation Methods Android / Методы навигации Android"
 aliases: ["Navigation Methods Android", "Методы навигации Android"]
@@ -12,11 +12,11 @@ status: draft
 created: 2025-10-13
 updated: 2025-11-10
 sources: []
-tags: [android, android/ui-compose, android/ui-navigation, architecture, compose, difficulty/medium, navigation]
+tags: [android, android/ui-compose, android/ui-navigation, architecture, difficulty/medium, navigation]
 moc: moc-android
 related: [c-activity, q-navigation-methods-in-android--android--medium]
 
----
+---\
 # Вопрос (RU)
 
 > Какие способы навигации знаешь в Android?
@@ -35,15 +35,15 @@ Android предоставляет несколько подходов к нав
 
 **2. `Fragment` Navigation (FragmentManager)** - управление фрагментами внутри одной `Activity`.
 
-**3. Navigation Component (Jetpack)** - декларативная навигация с визуальным графом и type-safe аргументами.
+**3. Navigation `Component` (Jetpack)** - декларативная навигация с визуальным графом и type-safe аргументами.
 
-**4. Bottom/Tab Navigation** - быстрый доступ к top-level секциям через BottomNavigationView или TabLayout (реализуется через выбранный навигационный механизм, чаще всего Navigation Component).
+**4. Bottom/Tab Navigation** - быстрый доступ к top-level секциям через BottomNavigationView или TabLayout (реализуется через выбранный навигационный механизм, чаще всего Navigation `Component`).
 
-**5. Drawer Navigation** - боковое меню для множества направлений навигации (обычно поверх Navigation Component / `Fragment` навигации).
+**5. Drawer Navigation** - боковое меню для множества направлений навигации (обычно поверх Navigation `Component` / `Fragment` навигации).
 
-**6. Deep Links/App Links** - навигация по URI, внешняя интеграция (часто через Navigation Component).
+**6. Deep Links/App Links** - навигация по URI, внешняя интеграция (часто через Navigation `Component`).
 
-**7. Compose Navigation** - навигация в Jetpack Compose через NavHost (на базе Navigation Component для Compose).
+**7. Compose Navigation** - навигация в Jetpack Compose через NavHost (на базе Navigation `Component` для Compose).
 
 ### 1. `Activity` Navigation
 
@@ -137,7 +137,7 @@ val navController = findNavController(R.id.nav_host_fragment)
 bottomNavigationView.setupWithNavController(navController)
 ```
 
-**Применение**: 3-5 основных секций приложения с равным приоритетом. Используется в связке с NavController (Navigation Component) или вручную через переключение фрагментов.
+**Применение**: 3-5 основных секций приложения с равным приоритетом. Используется в связке с NavController (Navigation `Component`) или вручную через переключение фрагментов.
 
 ### 5. Drawer Navigation
 
@@ -152,7 +152,7 @@ val appBarConfiguration = AppBarConfiguration(
 setupActionBarWithNavController(navController, appBarConfiguration)
 ```
 
-**Применение**: много направлений навигации, вторичные функции, настройки. Обычно комбинируется с Navigation Component или `Fragment` навигацией.
+**Применение**: много направлений навигации, вторичные функции, настройки. Обычно комбинируется с Navigation `Component` или `Fragment` навигацией.
 
 ### 6. Deep Links
 
@@ -211,13 +211,13 @@ fun AppNavigation() {
 |-------|-----------|-----------|--------|
 | `Activity` (`Intent`) | Отдельные флоу/секции, энтрипойнты | Низкая | Legacy для мелкой навигации, актуален для крупных флоу |
 | `Fragment` (FragmentManager) | Внутренняя навигация | Средняя | Manual |
-| Navigation Component | Навигация между фрагментами/дестинациями | Средняя | Recommended |
+| Navigation `Component` | Навигация между фрагментами/дестинациями | Средняя | Recommended |
 | Bottom Navigation | Top-level вкладки (поверх NavController/фрагментов) | Низкая | Common |
 | Drawer Navigation | Много направлений (поверх NavController/фрагментов) | Средняя | Common |
 | Deep Links | Внешняя/shareable навигация (URI/App Links) | Средняя–Высокая | Modern |
-| Compose Navigation | Compose UI (Navigation Component for Compose) | Средняя | Modern |
+| Compose Navigation | Compose UI (Navigation `Component` for Compose) | Средняя | Modern |
 
-**Рекомендуемый подход**: Single `Activity` + Navigation Component для современных приложений на `View`/`Fragment`-стеке; Navigation Component for Compose (Compose Navigation) для Compose-based приложений.
+**Рекомендуемый подход**: Single `Activity` + Navigation `Component` для современных приложений на `View`/`Fragment`-стеке; Navigation `Component` for Compose (Compose Navigation) для Compose-based приложений.
 
 ---
 
@@ -229,15 +229,15 @@ Android provides several approaches for navigating between screens:
 
 **2. `Fragment` Navigation (FragmentManager)** - managing fragments within a single `Activity`.
 
-**3. Navigation Component (Jetpack)** - declarative navigation with visual graph and type-safe arguments.
+**3. Navigation `Component` (Jetpack)** - declarative navigation with visual graph and type-safe arguments.
 
-**4. Bottom/Tab Navigation** - quick access to top-level sections via BottomNavigationView or TabLayout (implemented on top of a chosen navigation mechanism, most commonly Navigation Component).
+**4. Bottom/Tab Navigation** - quick access to top-level sections via BottomNavigationView or TabLayout (implemented on top of a chosen navigation mechanism, most commonly Navigation `Component`).
 
-**5. Drawer Navigation** - side menu for multiple destinations (typically built on top of Navigation Component / `Fragment` navigation).
+**5. Drawer Navigation** - side menu for multiple destinations (typically built on top of Navigation `Component` / `Fragment` navigation).
 
-**6. Deep Links/App Links** - URI-based navigation, external integration (often via Navigation Component).
+**6. Deep Links/App Links** - URI-based navigation, external integration (often via Navigation `Component`).
 
-**7. Compose Navigation** - navigation in Jetpack Compose via NavHost (based on the Navigation Component for Compose).
+**7. Compose Navigation** - navigation in Jetpack Compose via NavHost (based on the Navigation `Component` for Compose).
 
 ### 1. `Activity` Navigation
 
@@ -331,7 +331,7 @@ val navController = findNavController(R.id.nav_host_fragment)
 bottomNavigationView.setupWithNavController(navController)
 ```
 
-**Use cases**: 3-5 primary app sections with equal priority. Typically used with NavController (Navigation Component) or by manually switching fragments.
+**Use cases**: 3-5 primary app sections with equal priority. Typically used with NavController (Navigation `Component`) or by manually switching fragments.
 
 ### 5. Drawer Navigation
 
@@ -346,7 +346,7 @@ val appBarConfiguration = AppBarConfiguration(
 setupActionBarWithNavController(navController, appBarConfiguration)
 ```
 
-**Use cases**: many navigation destinations, secondary features, settings. Commonly combined with Navigation Component or `Fragment` navigation.
+**Use cases**: many navigation destinations, secondary features, settings. Commonly combined with Navigation `Component` or `Fragment` navigation.
 
 ### 6. Deep Links
 
@@ -405,35 +405,35 @@ fun AppNavigation() {
 |--------|----------|------------|--------|
 | `Activity` (`Intent`) | Separate flows/sections, entry points | Low | Legacy for fine-grained navigation, valid for major flows |
 | `Fragment` (FragmentManager) | In-app navigation | Medium | Manual |
-| Navigation Component | Navigation between fragments/destinations | Medium | Recommended |
+| Navigation `Component` | Navigation between fragments/destinations | Medium | Recommended |
 | Bottom Navigation | Top-level tabs (on top of NavController/fragments) | Low | Common |
 | Drawer Navigation | Many destinations (on top of NavController/fragments) | Medium | Common |
 | Deep Links | External/shareable navigation (URI/App Links) | Medium–High | Modern |
-| Compose Navigation | Compose UI (Navigation Component for Compose) | Medium | Modern |
+| Compose Navigation | Compose UI (Navigation `Component` for Compose) | Medium | Modern |
 
-**Recommended approach**: Single-`Activity` + Navigation Component for modern `View`/`Fragment`-based apps; Navigation Component for Compose (Compose Navigation) for Compose-based apps.
+**Recommended approach**: Single-`Activity` + Navigation `Component` for modern `View`/`Fragment`-based apps; Navigation `Component` for Compose (Compose Navigation) for Compose-based apps.
 
 ---
 
 ## Дополнительные Вопросы (RU)
 
-- Как Navigation Component обрабатывает deep links автоматически?
+- Как Navigation `Component` обрабатывает deep links автоматически?
 - В чем разница между API результатов `Activity` и устаревшим `onActivityResult`?
-- Как реализовать shared element transitions с использованием Navigation Component?
+- Как реализовать shared element transitions с использованием Navigation `Component`?
 - Как безопасно передавать сложные объекты между destination?
 - Каковы лучшие практики управления back stack в мультимодульных приложениях?
-- Чем навигация в Compose отличается от XML-based Navigation Component?
+- Чем навигация в Compose отличается от XML-based Navigation `Component`?
 
 ---
 
 ## Follow-ups
 
-- How does Navigation Component handle deep links automatically?
+- How does Navigation `Component` handle deep links automatically?
 - What are the differences between `Activity` result API and deprecated `onActivityResult`?
-- How to implement shared element transitions with Navigation Component?
+- How to implement shared element transitions with Navigation `Component`?
 - How to pass complex objects between destinations safely?
 - What are the best practices for handling back stack in multi-module apps?
-- How does Compose Navigation differ from XML-based Navigation Component?
+- How does Compose Navigation differ from XML-based Navigation `Component`?
 
 ---
 

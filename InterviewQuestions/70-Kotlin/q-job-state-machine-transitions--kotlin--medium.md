@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-105
 title: "Job state machine and state transitions / Job машина состояний и переходы"
 aliases: ["Job state machine", "Job state transitions", "Kotlin Job states"]
@@ -15,7 +15,7 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Объясните машину состояний `Job` в Kotlin корутинах: какие есть состояния (`New`, `Active`, `Completing`, `Completed`, `Cancelling`, `Cancelled`), допустимые переходы между ними, как ведут себя свойства `isActive`, `isCompleted`, `isCancelled` в каждом состоянии, как работают правила распространения состояний между родителем и потомками, и как `join()` и `cancel()` взаимодействуют с различными состояниями. Проиллюстрируйте ответ подробными примерами, включая реальные сценарии (логирование состояний и `ViewModel`-подобное использование).
@@ -2062,9 +2062,9 @@ class JobStateTest {
 
 ## References
 
-- "Coroutine context and dispatchers" — официальная документация Kotlin Coroutines
-- "Coroutine cancellation and timeouts" — официальная документация Kotlin Coroutines
-- "Coroutine scope and supervision" — официальная документация Kotlin Coroutines
+- "`Coroutine` context and dispatchers" — официальная документация Kotlin Coroutines
+- "`Coroutine` cancellation and timeouts" — официальная документация Kotlin Coroutines
+- "`Coroutine` scope and supervision" — официальная документация Kotlin Coroutines
 - Исходный код библиотеки kotlinx.coroutines (`JobSupport` и связанные реализации модели состояний)
 - Практические руководства по structured concurrency и обработке отмены в Kotlin coroutines
 

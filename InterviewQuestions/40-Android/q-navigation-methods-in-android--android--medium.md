@@ -1,4 +1,4 @@
----
+---\
 id: android-345
 title: "Navigation Methods In Android / Методы навигации в Android"
 aliases: ["Navigation Methods In Android", "Методы навигации в Android"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-modularization, android/intents-deeplinks, android/ui-navigation, difficulty/medium, navigation, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Какие способы навигации в Android знаешь?
@@ -149,7 +149,7 @@ val navController = findNavController(R.id.nav_host_fragment)
 binding.bottomNav.setupWithNavController(navController)
 ```
 
-**Когда использовать**: главные разделы приложения (3-5 основных экранов). Для сохранения состояния разделов рекомендуется хранить отдельные back stack-и (через Navigation Component или управление фрагментами без пересоздания при каждом выборе).
+**Когда использовать**: главные разделы приложения (3-5 основных экранов). Для сохранения состояния разделов рекомендуется хранить отдельные back stack-и (через Navigation `Component` или управление фрагментами без пересоздания при каждом выборе).
 
 ### 5. Deep Links И App Links
 
@@ -191,7 +191,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 </intent-filter>
 ```
 
-**Когда использовать**: внешние переходы из уведомлений, email, web-страниц, динамические ссылки, универсальные ссылки. Navigation Component может автоматически обрабатывать deep links, сопоставленные с графом.
+**Когда использовать**: внешние переходы из уведомлений, email, web-страниц, динамические ссылки, универсальные ссылки. Navigation `Component` может автоматически обрабатывать deep links, сопоставленные с графом.
 
 ### 6. Навигация В Jetpack Compose С NavHost И NavController
 
@@ -234,7 +234,7 @@ fun DetailScreen(
 }
 ```
 
-**Когда использовать**: полностью Compose-based приложения, декларативная навигация, интеграция с Compose state management и Navigation Component.
+**Когда использовать**: полностью Compose-based приложения, декларативная навигация, интеграция с Compose state management и Navigation `Component`.
 
 ### 7. Navigation Drawer
 
@@ -262,11 +262,11 @@ binding.drawerLayout.addDrawerListener(
 
 ## Ответ: Дополнительные Вопросы (RU)
 
-- Как Navigation Component обрабатывает изменения конфигурации и убийство процесса?
+- Как Navigation `Component` обрабатывает изменения конфигурации и убийство процесса?
 - В чем преимущества и недостатки single-activity по сравнению с multi-activity архитектурой?
-- Как реализовать вложенные графы навигации с помощью Navigation Component?
+- Как реализовать вложенные графы навигации с помощью Navigation `Component`?
 - В чем разница между Deep Links и App Links?
-- Как шарить `ViewModel` между фрагментами при использовании Navigation Component?
+- Как шарить `ViewModel` между фрагментами при использовании Navigation `Component`?
 - Как реализовать условную навигацию в зависимости от состояния пользователя?
 - Каковы лучшие практики для анимаций и переходов между экранами?
 
@@ -418,7 +418,7 @@ val navController = findNavController(R.id.nav_host_fragment)
 binding.bottomNav.setupWithNavController(navController)
 ```
 
-**When to use**: main app sections (3-5 primary screens). To preserve section state, prefer keeping separate back stacks (via Navigation Component or fragment management without recreating on each selection).
+**When to use**: main app sections (3-5 primary screens). To preserve section state, prefer keeping separate back stacks (via Navigation `Component` or fragment management without recreating on each selection).
 
 ### 5. Deep Links and App Links
 
@@ -460,7 +460,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 </intent-filter>
 ```
 
-**When to use**: external transitions from notifications, email, web pages, dynamic links, universal links. Navigation Component can automatically handle deep links mapped in the graph.
+**When to use**: external transitions from notifications, email, web pages, dynamic links, universal links. Navigation `Component` can automatically handle deep links mapped in the graph.
 
 ### 6. Navigation in Jetpack Compose with NavHost and NavController
 
@@ -503,7 +503,7 @@ fun DetailScreen(
 }
 ```
 
-**When to use**: fully Compose-based apps, declarative navigation, tight integration with Compose state management and the Navigation Component ecosystem.
+**When to use**: fully Compose-based apps, declarative navigation, tight integration with Compose state management and the Navigation `Component` ecosystem.
 
 ### 7. Navigation Drawer
 
@@ -531,11 +531,11 @@ binding.drawerLayout.addDrawerListener(
 
 ## Follow-ups
 
-- How does Navigation Component handle configuration changes and process death?
+- How does Navigation `Component` handle configuration changes and process death?
 - What are the trade-offs between single-activity vs multi-activity architecture?
-- How to implement nested navigation graphs with Navigation Component?
+- How to implement nested navigation graphs with Navigation `Component`?
 - What's the difference between Deep Links and App Links?
-- How to share ViewModels between fragments when using Navigation Component?
+- How to share ViewModels between fragments when using Navigation `Component`?
 - How to implement conditional navigation based on user state?
 - What are best practices for animation and transitions between screens?
 

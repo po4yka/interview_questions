@@ -1,4 +1,4 @@
----
+---\
 id: android-428
 title: "Почему колбэки Fragment отличаются от колбэков Activity / Why Fragment Callbacks Differ From Activity Callbacks"
 aliases: [Fragment Callbacks, Fragment Lifecycle Differences]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 
 > Почему колбэки `Fragment` отличаются от колбэков `Activity`?
@@ -387,7 +387,7 @@ override fun onDetach() {
 
 **3. ViewLifecycleOwner differs from `Fragment` lifecycle**
 
-❌ Wrong: observing `LiveData` with `Fragment` as LifecycleOwner
+❌ Wrong: observing `LiveData` with `Fragment` as `LifecycleOwner`
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel.data.observe(this) { // Observer bound to Fragment outlives View; risk of leaks/crashes
@@ -472,7 +472,7 @@ class MyFragment : Fragment() {
 
 ### Real-World Scenarios
 
-**ViewPager `Fragment` Lifecycle**:
+**ViewPager `Fragment` `Lifecycle`**:
 ```kotlin
 // Page 0 visible
 FragmentA: onCreate() → onCreateView() → onViewCreated()
@@ -582,8 +582,8 @@ Benefits (within a single `Activity` lifetime / back stack):
 
 - [[c-activity]] - `Activity` fundamentals
 - [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - onCreateView separation
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
-- [`Fragment` Lifecycle | Android Developers](https://developer.android.com/guide/fragments/lifecycle)
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
+- [`Fragment` `Lifecycle` | Android Developers](https://developer.android.com/guide/fragments/lifecycle)
 - [ViewLifecycleOwner | Android Developers](https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner())
 
 ---

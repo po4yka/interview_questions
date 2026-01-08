@@ -1,4 +1,4 @@
----
+---\
 id: android-360
 title: AndroidManifest.xml / Файл манифеста Android
 aliases: [AndroidManifest.xml, Файл манифеста Android]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/app-startup, android/intents-deeplinks, android/permissions, difficulty/easy]
 sources:
   - "https://github.com/Kirchhoff-/Android-Interview-Questions"
----
+---\
 # Вопрос (RU)
 > Что такое AndroidManifest.xml и зачем он нужен?
 
@@ -107,7 +107,7 @@ sources:
 See also: [[c-android]].
 
 **Core Functions:**
-- **Component Registration** — Activities, Services, BroadcastReceivers, ContentProviders
+- **`Component` Registration** — Activities, Services, BroadcastReceivers, ContentProviders
 - **Permission Management** — system and custom permissions
 - **App Metadata** — package name, minimum SDK, icon, theme
 - **`Intent` Filters** — interaction points with system and other apps
@@ -153,7 +153,7 @@ See also: [[c-android]].
 </activity>
 ```
 
-**Component Protection:**
+**`Component` Protection:**
 ```xml
 <!-- Only apps with same signature can invoke this component -->
 <permission

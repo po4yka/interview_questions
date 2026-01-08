@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-089
 title: "Что делает Flow холодным потоком? / What makes Flow a cold stream?"
 aliases: [Cold, Flow, Fundamentals]
@@ -14,7 +14,7 @@ related: [c-flow, c-kotlin, q-flow-basics--kotlin--easy]
 created: 2025-10-12
 updated: 2025-11-09
 tags: ["coroutines", "difficulty/easy", "kotlin"]
----
+---\
 # Вопрос (RU)
 
 > Что делает `Flow` холодным потоком?
@@ -55,7 +55,7 @@ runBlocking {
 // Collected 2
 // Collected 3
 ```
-- "Flow started" выводится только при вызове `collect`, что показывает отсутствие жадного выполнения.
+- "`Flow` started" выводится только при вызове `collect`, что показывает отсутствие жадного выполнения.
 
 1. Выполнение заново для каждого коллектора
 - Каждый новый коллектор запускает исходный `Flow` с начала.
@@ -139,7 +139,7 @@ runBlocking {
 // Collected 2
 // Collected 3
 ```
-- "Flow started" is printed only when `collect` is invoked, showing that the `Flow` does not execute eagerly.
+- "`Flow` started" is printed only when `collect` is invoked, showing that the `Flow` does not execute eagerly.
 
 1. Per-collector execution
 - Each new collector triggers the upstream `Flow` to run from the beginning.
@@ -254,21 +254,21 @@ Practical implications:
 ## Related Questions
 
 ### Same Level (Easy)
-- [[q-flow-basics--kotlin--easy]] - Flow basics and creation
+- [[q-flow-basics--kotlin--easy]] - `Flow` basics and creation
 
 ### Next Steps (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs `LiveData`
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow`
 
 ### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Testing Flow operators
+- [[q-testing-flow-operators--kotlin--hard]] - Testing `Flow` operators
 - [[q-flow-backpressure--kotlin--hard]] - Backpressure and flow control in `Flow`
-- [[q-flow-testing-advanced--kotlin--hard]] - Advanced Flow testing
+- [[q-flow-testing-advanced--kotlin--hard]] - Advanced `Flow` testing
 
 ### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
+- [[q-flow-basics--kotlin--easy]] - `Flow`
 
 ### Related (Same Level)
 - [[q-catch-operator-flow--kotlin--medium]] - `catch` operator in `Flow`
@@ -277,4 +277,4 @@ Practical implications:
 - [[q-channel-flow-comparison--kotlin--medium]] - Channels vs `Flow`
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

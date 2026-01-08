@@ -1,4 +1,4 @@
----
+---\
 id: android-233
 title: "View Lifecycle in Android / View lifecycle in Android"
 aliases: ["View lifecycle in Android", "View Lifecycle"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Что нужно знать о жизненном цикле `View` в Android?
@@ -496,7 +496,7 @@ class CustomView @JvmOverloads constructor(
 
 ### Related (Same Level)
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation patterns
-- [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - `View` updates in RecyclerView
+- [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - `View` updates in `RecyclerView`
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layouts in Jetpack Compose

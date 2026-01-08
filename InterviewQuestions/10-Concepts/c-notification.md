@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-132432"
 title: "Notification / Notification"
 aliases: ["Notification"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-broadcast-receiver, c-foreground-service, c-android-system-ui, c-permissions, c-event-handling]
+moc: "moc-cs"
+related: ["c-broadcast-receiver", "c-foreground-service", "c-android-system-ui", "c-permissions", "c-event-handling"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ Notification (уведомление) — это сообщение или со�
 
 ## Key Points (EN)
 
-- Decoupling: Notifications separate the event source from listeners/handlers (Observer pattern, pub/sub), reducing direct dependencies between components.
+- Decoupling: Notifications separate the event source from listeners/handlers (`Observer` pattern, pub/sub), reducing direct dependencies between components.
 - Asynchronous delivery: Notifications are often sent and handled asynchronously (callbacks, message queues, push services), improving responsiveness and scalability.
 - Targeting and channels: Notifications can be user-facing (mobile push, email, UI banners) or system-level (logs, webhooks, events between services).
 - Reliability and guarantees: Implementations may provide at-most-once, at-least-once, or exactly-once delivery semantics, influencing idempotency and system design.
@@ -39,7 +40,7 @@ Notification (уведомление) — это сообщение или со�
 
 ## Ключевые Моменты (RU)
 
-- Разделение компонентов: Уведомления отделяют источник события от подписчиков/обработчиков (Observer, pub/sub), снижая жёсткие зависимости между модулями.
+- Разделение компонентов: Уведомления отделяют источник события от подписчиков/обработчиков (`Observer`, pub/sub), снижая жёсткие зависимости между модулями.
 - Асинхронная доставка: Уведомления часто отправляются и обрабатываются асинхронно (callbacks, очереди сообщений, push-сервисы), повышая отзывчивость и масштабируемость.
 - Каналы и аудитория: Уведомления могут быть пользовательскими (push на мобильные устройства, email, баннеры в UI) или системными (логи, webhooks, события между сервисами).
 - Надёжность и гарантии: Реализации могут обеспечивать at-most-once, at-least-once или exactly-once доставку, что влияет на требования к идемпотентности и архитектуре.

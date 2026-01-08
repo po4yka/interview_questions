@@ -1,9 +1,9 @@
----
----
+---\
+---\
 
 # Android System Design Checklist
 
-Use this end-to-end checklist to drive staff-level, Android-aware system design answers. Set measurable targets and enforce Android platform realities.
+Use this end-to-end checklist to drive staff-level, Android-aware system design answers. `Set` measurable targets and enforce Android platform realities.
 
 ## 1) Constraints
 
@@ -45,7 +45,7 @@ Use this end-to-end checklist to drive staff-level, Android-aware system design 
 
 ## 6) Background Plan
 
--   WorkManager constraints windows; periodic and opportunistic sync
+-   `WorkManager` constraints windows; periodic and opportunistic sync
 -   Foreground service criteria and lifetimes; notifications
 -   Doze-aware scheduling; backoff; maintenance windows
 

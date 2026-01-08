@@ -1,4 +1,4 @@
----
+---\
 id: lang-058
 title: "Kotlin Null Checks Methods / Методы проверки на null в Kotlin"
 aliases: [Kotlin Null Checks Methods, Методы проверки на null в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-catch-operator-flow--kotlin--medium, q-coroutine-scope-bas
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, elvis, kotlin, null-checks, null-safety, operators, safe-call]
----
+---\
 # Вопрос (RU)
 > Каким образом осуществлять проверки на null?
 
@@ -135,7 +135,7 @@ val upper: String? = text?.uppercase()?.trim()  // Chain safe calls
 
 ### 2. Elvis Operator `?:`
 
-Provides a default value if the expression is null:
+`Provides` a default value if the expression is null:
 
 ```kotlin
 val length = name?.length ?: 0  // Returns 0 if name == null

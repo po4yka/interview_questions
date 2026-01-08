@@ -1,4 +1,4 @@
----
+---\
 id: android-051
 title: App Size Optimization / Оптимизация размера приложения
 aliases: [App Size Optimization, Оптимизация размера приложения]
@@ -16,7 +16,7 @@ created: 2025-10-11
 updated: 2025-11-10
 tags: [android/app-bundle, android/obfuscation, android/performance-memory, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Какие техники используются для уменьшения размера Android-приложения?
 
@@ -125,7 +125,7 @@ android {
 }
 ```
 
-Для Android App Bundle Google Play сам использует ABI splits; агрессивное ограничение `abiFilters` имеет смысл в первую очередь для прямой поставки APK или когда вы осознанно исключаете часть устройств.
+Для Android App `Bundle` Google Play сам использует ABI splits; агрессивное ограничение `abiFilters` имеет смысл в первую очередь для прямой поставки APK или когда вы осознанно исключаете часть устройств.
 
 Ограничение списка ABI уменьшает размер пакета, но требует учитывать целевые устройства и каналы дистрибуции.
 

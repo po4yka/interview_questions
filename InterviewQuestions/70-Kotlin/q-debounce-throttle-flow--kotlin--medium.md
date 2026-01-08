@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-046
 title: "Debounce vs Throttle in Flow / Debounce vs Throttle в Flow"
 aliases: []
@@ -25,7 +25,7 @@ created: 2025-10-06
 updated: 2025-11-10
 
 tags: [debounce, difficulty/medium, flow, kotlin, operators, throttle]
----
+---\
 # Вопрос (RU)
 > В чем разница между `debounce` и `throttle` в Kotlin `Flow`? Когда использовать каждый?
 
@@ -584,7 +584,7 @@ fun <T> Flow<T>.throttleFirst(windowDurationMillis: Long): Flow<T> = flow {
 
 ### Throttle Use Cases
 
-**1. Button Click Prevention**
+**1. `Button` Click Prevention**
 
 ```kotlin
 class ButtonViewModel : ViewModel() {
@@ -647,7 +647,7 @@ class ScrollViewModel : ViewModel() {
 | Emits | Last value after quiet period | At most one value per window (typically first) |
 | Timer | Resets on each emission | Fixed window; new values do not reset it |
 | Use case | Wait until user finishes / burst ends | Limit frequency of actions |
-| Example | Search input | Button clicks |
+| Example | Search input | `Button` clicks |
 | Delay | After last event | After first event in each window |
 
 ### Real-World Comparison
@@ -665,7 +665,7 @@ class ScrollViewModel : ViewModel() {
 // → Likely searches for the first character and then skips others within windows → BAD for search
 ```
 
-**Button Clicks (throttle preferred):**
+**`Button` Clicks (throttle preferred):**
 
 ```kotlin
 // User clicks rapidly: click---click---click---click
@@ -880,14 +880,14 @@ searchQuery
 ## Related Questions
 
 ### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - `Flow`
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] - `Flow`
+- [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

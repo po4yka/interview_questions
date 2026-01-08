@@ -1,4 +1,4 @@
----
+---\
 id: android-301
 title: Overdraw Gpu Rendering / Overdraw и GPU рендеринг
 aliases: [Overdraw GPU Rendering, Overdraw и GPU рендеринг]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, gpu, overdraw, performance, rendering]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Что такое Overdraw и как его оптимизировать?
@@ -43,7 +43,7 @@ sources: []
 
 1. **Избыточные фоны** — background на view, полностью закрытой дочерними элементами
 2. **Глубокая иерархия layouts** — вложенные LinearLayout/RelativeLayout с пересекающимися bounds
-3. **Window background** — дефолтный фон окна, дублирующий корневой layout
+3. **`Window` background** — дефолтный фон окна, дублирующий корневой layout
 4. **Неоптимальный onDraw()** — перерисовка всей области вместо изменённых участков либо отрисовка вне реально видимых границ
 
 **Стратегии оптимизации:**
@@ -99,7 +99,7 @@ override fun onDraw(canvas: Canvas) {
 
 **Практические советы:**
 
-- **ConstraintLayout** вместо вложенных Linear/Relative — уменьшает глубину иерархии
+- **`ConstraintLayout`** вместо вложенных Linear/Relative — уменьшает глубину иерархии
 - **ViewStub** для редко показываемых элементов — ленивая инициализация
 - **Профилирование** — Perfetto / Android Studio профайлеры для анализа GPU и рендеринга (Systrace устарел, заменён современными инструментами)
 - **Целевой уровень** — стремиться к минимуму слоёв; 0–1 дополнительный слой (зелёный) для основных экранов считается хорошей практикой, интенсивный красный — сигнал к оптимизации
@@ -122,7 +122,7 @@ The **Debug GPU Overdraw** tool (Developer Options) visualizes how many times ea
 
 1. **Redundant backgrounds** — background on a view that is fully covered by its children
 2. **Deep layout hierarchy** — nested LinearLayout/RelativeLayout with overlapping bounds
-3. **Window background** — default window background duplicating the root layout
+3. **`Window` background** — default window background duplicating the root layout
 4. **Inefficient onDraw()** — redrawing the entire area instead of changed regions, or drawing outside the actually visible bounds
 
 **Optimization Strategies:**
@@ -177,7 +177,7 @@ override fun onDraw(canvas: Canvas) {
 
 **Practical Guidelines:**
 
-- **ConstraintLayout** instead of nested Linear/Relative — reduces hierarchy depth
+- **`ConstraintLayout`** instead of nested Linear/Relative — reduces hierarchy depth
 - **ViewStub** for rarely shown elements — lazy initialization
 - **Profiling** — use Perfetto / Android Studio profilers to analyze GPU and rendering (Systrace is deprecated and replaced by modern tools)
 - **Target level** — aim to minimize layers; 0–1 extra layer (green) on primary screens is a good baseline, heavy dark red areas indicate issues that require optimization
@@ -186,7 +186,7 @@ override fun onDraw(canvas: Canvas) {
 
 - How does Compose handle overdraw compared to `View` system?
 - What's the performance impact of translucent views on overdraw?
-- How to optimize overdraw in RecyclerView with complex items?
+- How to optimize overdraw in `RecyclerView` with complex items?
 - When is clipRect() applicable and when does it add overhead?
 - How does hardware acceleration affect overdraw detection and optimization?
 

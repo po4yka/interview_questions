@@ -1,4 +1,4 @@
----
+---\
 id: android-485
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
 aliases: [Design Offline Maps & Navigation, Проектирование офлайн карт и навигации]
@@ -16,7 +16,7 @@ created: 2025-10-29
 updated: 2025-11-10
 tags: [android/files-media, android/location, android/service, difficulty/hard, topic/android]
 
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать офлайн карты и пошаговую навигацию для Android?
@@ -80,7 +80,7 @@ Duty‑cycle GPS; significant‑motion для перехода на низкий
 
 ### Загрузки
 
-WorkManager; pause/resume; checksum verification; пользовательские настройки хранилища.
+`WorkManager`; pause/resume; checksum verification; пользовательские настройки хранилища.
 
 ### Наблюдаемость
 
@@ -143,7 +143,7 @@ Duty-cycle GPS; significant-motion to drop to low sampling; coalesce writes; for
 
 ### Downloads
 
-WorkManager; pause/resume; checksum verification; user controls for storage.
+`WorkManager`; pause/resume; checksum verification; user controls for storage.
 
 ### Observability
 

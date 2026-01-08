@@ -1,4 +1,4 @@
----
+---\
 id: cs-037
 title: "Design Patterns Fundamentals / Фундаментальные паттерны проектирования"
 aliases: ["Design Patterns Fundamentals", "Фундаментальные паттерны проектирования"]
@@ -16,7 +16,7 @@ updated: "2025-11-11"
 tags: [design-patterns, difficulty/hard, gof]
 sources: ["https://refactoring.guru/design-patterns"]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерны проектирования? Какие основные категории паттернов существуют и когда их использовать?
 
@@ -35,8 +35,8 @@ Design Patterns — общие, переиспользуемые решения 
 | Категория | Назначение | Примеры |
 |-----------|-----------|---------|
 | **Creational** | Создание и инициализация объектов | Singleton, Factory Method, Builder |
-| **Structural** | Композиция объектов и структур | Adapter, Decorator, Facade |
-| **Behavioral** | Взаимодействие и распределение обязанностей | Observer, Strategy, Command |
+| **Structural** | Композиция объектов и структур | `Adapter`, Decorator, Facade |
+| **Behavioral** | Взаимодействие и распределение обязанностей | `Observer`, Strategy, Command |
 
 **Creational Patterns:**
 
@@ -88,7 +88,7 @@ class User private constructor(val name: String, val age: Int) {
 
 **Structural Patterns:**
 
-*Теория:* Структурные паттерны управляют композицией объектов в более крупные структуры. Adapter — преобразование одного интерфейса в другой, Decorator — динамическое добавление функциональности без изменения исходного класса, Facade — упрощение сложной подсистемы единым интерфейсом, Proxy — контролируемый доступ к объекту, Composite — работа с древовидными структурами как с единым объектом. Используются для работы с legacy-кодом, упрощения сложных интерфейсов, добавления обязанностей без наследования.
+*Теория:* Структурные паттерны управляют композицией объектов в более крупные структуры. `Adapter` — преобразование одного интерфейса в другой, Decorator — динамическое добавление функциональности без изменения исходного класса, Facade — упрощение сложной подсистемы единым интерфейсом, Proxy — контролируемый доступ к объекту, Composite — работа с древовидными структурами как с единым объектом. Используются для работы с legacy-кодом, упрощения сложных интерфейсов, добавления обязанностей без наследования.
 
 ```kotlin
 // ✅ Adapter example
@@ -126,7 +126,7 @@ class MilkDecorator(private val coffee: Coffee) : Coffee {
 
 **Behavioral Patterns:**
 
-*Теория:* Поведенческие паттерны управляют взаимодействием объектов и распределением обязанностей. Observer — оповещение подписчиков об изменении состояния субъекта, Strategy — взаимозаменяемые алгоритмы под единым интерфейсом, Command — инкапсуляция запроса как объекта, State — изменение поведения в зависимости от текущего состояния, Template Method — задание «скелета» алгоритма с переопределяемыми шагами. Используются для гибкой коммуникации, расширяемости алгоритмов, реализации undo/redo и управления состоянием.
+*Теория:* Поведенческие паттерны управляют взаимодействием объектов и распределением обязанностей. `Observer` — оповещение подписчиков об изменении состояния субъекта, Strategy — взаимозаменяемые алгоритмы под единым интерфейсом, Command — инкапсуляция запроса как объекта, State — изменение поведения в зависимости от текущего состояния, Template Method — задание «скелета» алгоритма с переопределяемыми шагами. Используются для гибкой коммуникации, расширяемости алгоритмов, реализации undo/redo и управления состоянием.
 
 ```kotlin
 // ✅ Simplified Observer-style example
@@ -173,7 +173,7 @@ class Sorter(private val strategy: SortStrategy) {
 
 **Современные Android/Kotlin-подходы:**
 
-*Теория:* Современные подходы на Android и в Kotlin: Dependency Injection (Hilt/Dagger) вместо ручного Singleton для зависимостей, `StateFlow`/`SharedFlow` вместо самописного Observer, sealed-классы для выражения состояний (частично решают задачи State/Result-паттернов), корутины для асинхронных задач. Эти подходы более идиоматичны для Kotlin и Android, но концептуально опираются на те же идеи, что и классические паттерны.
+*Теория:* Современные подходы на Android и в Kotlin: Dependency Injection (Hilt/Dagger) вместо ручного Singleton для зависимостей, `StateFlow`/`SharedFlow` вместо самописного `Observer`, sealed-классы для выражения состояний (частично решают задачи State/Result-паттернов), корутины для асинхронных задач. Эти подходы более идиоматичны для Kotlin и Android, но концептуально опираются на те же идеи, что и классические паттерны.
 
 ```kotlin
 // ✅ Modern: Dependency Injection (пример DI контейнера вместо ручного Singleton)
@@ -228,8 +228,8 @@ Design patterns are general, reusable solutions to typical problems in object-or
 | Category | Purpose | Examples |
 |----------|---------|----------|
 | **Creational** | Object creation and initialization | Singleton, Factory Method, Builder |
-| **Structural** | Object and structure composition | Adapter, Decorator, Facade |
-| **Behavioral** | Object interaction and responsibility distribution | Observer, Strategy, Command |
+| **Structural** | Object and structure composition | `Adapter`, Decorator, Facade |
+| **Behavioral** | Object interaction and responsibility distribution | `Observer`, Strategy, Command |
 
 **Creational Patterns:**
 
@@ -281,7 +281,7 @@ class User private constructor(val name: String, val age: Int) {
 
 **Structural Patterns:**
 
-*Theory:* Structural patterns manage object composition into larger structures. Adapter — converting one interface to another, Decorator — dynamically adding functionality without modifying the original class, Facade — providing a simplified interface to a complex subsystem, Proxy — controlled access to an object, Composite — treating tree structures uniformly. Used for working with legacy code, simplifying complex interfaces, and adding responsibilities without subclassing.
+*Theory:* Structural patterns manage object composition into larger structures. `Adapter` — converting one interface to another, Decorator — dynamically adding functionality without modifying the original class, Facade — providing a simplified interface to a complex subsystem, Proxy — controlled access to an object, Composite — treating tree structures uniformly. Used for working with legacy code, simplifying complex interfaces, and adding responsibilities without subclassing.
 
 ```kotlin
 // ✅ Adapter example
@@ -319,7 +319,7 @@ class MilkDecorator(private val coffee: Coffee) : Coffee {
 
 **Behavioral Patterns:**
 
-*Theory:* Behavioral patterns manage object interaction and responsibility distribution. Observer — notifying subscribers about subject state changes, Strategy — interchangeable algorithms under a common interface, Command — encapsulating a request as an object, State — changing behavior based on current state, Template Method — defining the skeleton of an algorithm with overridable steps. Used for flexible communication, algorithm extensibility, undo/redo functionality, and state management.
+*Theory:* Behavioral patterns manage object interaction and responsibility distribution. `Observer` — notifying subscribers about subject state changes, Strategy — interchangeable algorithms under a common interface, Command — encapsulating a request as an object, State — changing behavior based on current state, Template Method — defining the skeleton of an algorithm with overridable steps. Used for flexible communication, algorithm extensibility, undo/redo functionality, and state management.
 
 ```kotlin
 // ✅ Simplified Observer-style example
@@ -366,7 +366,7 @@ class Sorter(private val strategy: SortStrategy) {
 
 **Modern Android/Kotlin Approaches:**
 
-*Theory:* Modern approaches in Android and Kotlin: Dependency Injection (Hilt/Dagger) instead of manual singletons for dependencies, `StateFlow`/`SharedFlow` instead of ad-hoc Observer implementations, sealed classes for representing states (partially covering State/Result-like patterns), coroutines for async patterns. These approaches are more idiomatic for Kotlin and Android, while conceptually building on the same underlying design principles.
+*Theory:* Modern approaches in Android and Kotlin: Dependency Injection (Hilt/Dagger) instead of manual singletons for dependencies, `StateFlow`/`SharedFlow` instead of ad-hoc `Observer` implementations, sealed classes for representing states (partially covering State/Result-like patterns), coroutines for async patterns. These approaches are more idiomatic for Kotlin and Android, while conceptually building on the same underlying design principles.
 
 ```kotlin
 // ✅ Modern: Dependency Injection (use DI container instead of manual Singleton)
@@ -417,13 +417,13 @@ class Item
 
 - Когда следует предпочесть композицию наследованию?
 - Каковы современные альтернативы классическим GoF-паттернам?
-- Как `StateFlow`/`SharedFlow` соотносятся с паттерном Observer?
+- Как `StateFlow`/`SharedFlow` соотносятся с паттерном `Observer`?
 
 ## Follow-ups
 
 - When should you prefer composition over inheritance?
 - What are the modern alternatives to classic GoF patterns?
-- How do `StateFlow`/`SharedFlow` relate to the Observer pattern?
+- How do `StateFlow`/`SharedFlow` relate to the `Observer` pattern?
 
 ## Связанные Вопросы (RU)
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-285
 title: Android Service Types / Типы Service в Android
 aliases: [Android Service Types, Типы Service в Android]
@@ -15,7 +15,7 @@ created: 2024-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 > Какие типы `Service` существуют в Android?
 
@@ -72,8 +72,8 @@ class LocalService : Service() {
 | Bound          | Необязательна     | Зависит от привязанных клиентов      | IPC/общий сервис для компонентов             |
 
 **Ограничения:**
-- Android 8.0+ резко ограничивает длительную фоновую работу; для долгих операций обычно используют Foreground `Service`, WorkManager или другие планировщики в зависимости от сценария.
-- WorkManager предпочтителен для отложенной, гарантируемой, но не немедленной работы.
+- Android 8.0+ резко ограничивает длительную фоновую работу; для долгих операций обычно используют Foreground `Service`, `WorkManager` или другие планировщики в зависимости от сценария.
+- `WorkManager` предпочтителен для отложенной, гарантируемой, но не немедленной работы.
 - Started `Service` может быть убит системой; поведение при перезапуске определяется значением, возвращаемым `onStartCommand()`.
 
 См. также: [[c-android-components]]
@@ -105,7 +105,7 @@ class MusicService : Service() {
 ```
 
 **3. Bound `Service`**
-Provides a client-server interface. Lives only while clients are bound (unless also started).
+`Provides` a client-server interface. Lives only while clients are bound (unless also started).
 
 ```kotlin
 class LocalService : Service() {
@@ -119,15 +119,15 @@ class LocalService : Service() {
 
 **Key Differences:**
 
-| Type       | Notification  | Lifecycle                          | Use Case                                      |
+| Type       | Notification  | `Lifecycle`                          | Use Case                                      |
 |------------|---------------|------------------------------------|-----------------------------------------------|
 | Started    | Optional      | Independent (may be killed)        | One-shot / time-limited background work       |
 | Foreground | Required      | Independent, higher priority       | Music, navigation, active downloads, etc.     |
 | Bound      | Optional      | Client-dependent                   | IPC/shared service for components             |
 
-**Constraints:**
-- Android 8.0+ heavily restricts long-running background work; for long tasks you typically use a Foreground `Service`, WorkManager, or scheduling APIs depending on the use case.
-- WorkManager is preferred for deferrable, guaranteed, but not strictly immediate work.
+**`Constraints`:**
+- Android 8.0+ heavily restricts long-running background work; for long tasks you typically use a Foreground `Service`, `WorkManager`, or scheduling APIs depending on the use case.
+- `WorkManager` is preferred for deferrable, guaranteed, but not strictly immediate work.
 - A Started `Service` can be killed by the system; restart behavior depends on the `onStartCommand()` return value.
 
 See also: [[c-android-components]]
@@ -138,7 +138,7 @@ See also: [[c-android-components]]
 
 - Какие существуют типы Foreground `Service` и когда каждый из них обязателен?
 - Чем отличается `START_STICKY` от `START_NOT_STICKY` и `START_REDELIVER_INTENT`?
-- В каких случаях следует использовать WorkManager вместо `Service`?
+- В каких случаях следует использовать `WorkManager` вместо `Service`?
 - Как реализовать гибридный `Service`, который одновременно started и bound?
 - Что происходит с Bound `Service`, когда последний клиент отвязывается?
 
@@ -146,7 +146,7 @@ See also: [[c-android-components]]
 
 - What are the Foreground `Service` types and when are they required?
 - How does `START_STICKY` differ from `START_NOT_STICKY` and `START_REDELIVER_INTENT`?
-- When should you use WorkManager instead of a `Service`?
+- When should you use `WorkManager` instead of a `Service`?
 - How do you implement a hybrid `Service` (both started and bound)?
 - What happens to a Bound `Service` when the last client unbinds?
 

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-099
 title: "When to use withContext in Kotlin coroutines? / Когда использовать withContext"
 aliases: [context switching, dispatchers, withcontext, withcontext use cases]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-kotlin, q-launch-vs-async-vs-runblocking--kotlin--medi
 created: 2025-10-12
 updated: 2025-11-09
 tags: [context-switching, coroutines, difficulty/medium, dispatchers, kotlin, withcontext]
----
+---\
 # Вопрос (RU)
 
 > Когда и в каких случаях следует использовать `withContext` в корутинах Kotlin по сравнению с такими построителями, как `launch` и `async`?
@@ -1326,14 +1326,14 @@ class WithContextTest {
 
 ## References (RU)
 
-- [Kotlin Coroutines Guide - Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Kotlin Coroutines Guide - `Coroutine` `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [withContext - kotlinx.coroutines API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/with-context.html)
 - [Roman Elizarov - Blocking threads, suspending coroutines](https://medium.com/@elizarov/blocking-threads-suspending-coroutines-d33e11bf4761)
 - [Android Developers - Best practices for coroutines](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
 ## References (EN)
 
-- [Kotlin Coroutines Guide - Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Kotlin Coroutines Guide - `Coroutine` `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [withContext - kotlinx.coroutines API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/with-context.html)
 - [Roman Elizarov - Blocking threads, suspending coroutines](https://medium.com/@elizarov/blocking-threads-suspending-coroutines-d33e11bf4761)
 - [Android Developers - Best practices for coroutines](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)

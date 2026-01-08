@@ -1,4 +1,4 @@
----
+---\
 id: "20251023-120100"
 title: "Android Lifecycle / Жизненный цикл Android"
 aliases: ["Android Lifecycle", "Lifecycle Components", "Lifecycle", "Жизненный цикл"]
@@ -12,35 +12,35 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-activity-lifecycle, c-fragment-lifecycle, c-viewmodel, c-process-lifecycle, c-coroutines]
+related: ["c-activity-lifecycle", "c-fragment-lifecycle", "c-viewmodel", "c-process-lifecycle", "c-coroutines"]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture-components", "concept", "difficulty/medium", "lifecycle"]
----
+---\
 
 # Android Lifecycle / Жизненный Цикл Android
 
 ## Summary (EN)
 
-Android Lifecycle refers to the series of states that Android components (Activity, Fragment, Service) go through from creation to destruction. The Lifecycle Architecture Component provides classes and interfaces that help build lifecycle-aware components, which automatically adjust their behavior based on the current lifecycle state, preventing memory leaks and crashes.
+Android `Lifecycle` refers to the series of states that Android components (`Activity`, `Fragment`, `Service`) go through from creation to destruction. The `Lifecycle` Architecture `Component` provides classes and interfaces that help build lifecycle-aware components, which automatically adjust their behavior based on the current lifecycle state, preventing memory leaks and crashes.
 
 ## Краткое Описание (RU)
 
-Жизненный цикл Android — это серия состояний, через которые проходят компоненты Android (Activity, Fragment, Service) от создания до уничтожения. Архитектурный компонент Lifecycle предоставляет классы и интерфейсы для создания компонентов, учитывающих жизненный цикл, которые автоматически адаптируют свое поведение в зависимости от текущего состояния, предотвращая утечки памяти и сбои.
+Жизненный цикл Android — это серия состояний, через которые проходят компоненты Android (`Activity`, `Fragment`, `Service`) от создания до уничтожения. Архитектурный компонент `Lifecycle` предоставляет классы и интерфейсы для создания компонентов, учитывающих жизненный цикл, которые автоматически адаптируют свое поведение в зависимости от текущего состояния, предотвращая утечки памяти и сбои.
 
 ## Key Points (EN)
 
-- **Lifecycle States**: CREATED, STARTED, RESUMED, DESTROYED
-- **Lifecycle Events**: ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY
-- **LifecycleOwner**: Interface implemented by Activity and Fragment
+- **`Lifecycle` States**: CREATED, STARTED, RESUMED, DESTROYED
+- **`Lifecycle` Events**: ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY
+- **`LifecycleOwner`**: Interface implemented by `Activity` and `Fragment`
 - **LifecycleObserver**: Interface for components that observe lifecycle changes
-- **Lifecycle-aware components**: Automatically respond to lifecycle changes
+- **`Lifecycle`-aware components**: Automatically respond to lifecycle changes
 
 ## Ключевые Моменты (RU)
 
 - **Состояния жизненного цикла**: CREATED, STARTED, RESUMED, DESTROYED
 - **События жизненного цикла**: ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY
-- **LifecycleOwner**: Интерфейс, реализуемый Activity и Fragment
+- **`LifecycleOwner`**: Интерфейс, реализуемый `Activity` и `Fragment`
 - **LifecycleObserver**: Интерфейс для компонентов, наблюдающих за изменениями жизненного цикла
 - **Компоненты, учитывающие жизненный цикл**: Автоматически реагируют на изменения жизненного цикла
 
@@ -168,7 +168,7 @@ class MyLocationManager(context: Context, lifecycle: Lifecycle) {
 - Starting/stopping animations based on lifecycle
 - Network requests that should be cancelled when component is destroyed
 - Location updates that should respect lifecycle
-- Observing LiveData or Flow in ViewModels
+- Observing `LiveData` or `Flow` in ViewModels
 - Camera, sensors, or other system resources
 
 ### When to Avoid
@@ -182,8 +182,8 @@ class MyLocationManager(context: Context, lifecycle: Lifecycle) {
 
 **Pros**:
 - **Automatic cleanup**: Prevents memory leaks and crashes
-- **Decoupled code**: Lifecycle logic separated from component code
-- **Reusable**: Lifecycle observers can be shared across components
+- **Decoupled code**: `Lifecycle` logic separated from component code
+- **Reusable**: `Lifecycle` observers can be shared across components
 - **Predictable**: Clear state transitions and events
 - **Integration**: Works seamlessly with Architecture Components
 
@@ -191,7 +191,7 @@ class MyLocationManager(context: Context, lifecycle: Lifecycle) {
 - **Complexity**: Adds abstraction layer to understand
 - **Learning curve**: Requires understanding lifecycle states and events
 - **Boilerplate**: May require additional classes for observers
-- **Debugging**: Lifecycle issues can be harder to trace
+- **Debugging**: `Lifecycle` issues can be harder to trace
 
 ## Common Lifecycle Issues
 
@@ -255,13 +255,13 @@ class MainActivity : AppCompatActivity() {
 ## Related Concepts
 
 - [[c-viewmodel]] - Survives configuration changes
-- [[c-livedata]] - Lifecycle-aware observable data holder
-- [[c-fragment]] - Has its own lifecycle tied to Activity
+- [[c-livedata]] - `Lifecycle`-aware observable data holder
+- [[c-fragment]] - Has its own lifecycle tied to `Activity`
 - [[c-coroutines]] - Can be scoped to lifecycle
 
 ## References
 
-- [Android Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [Android `Activity` Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
 - [Lifecycle-Aware Components](https://developer.android.com/topic/libraries/architecture/lifecycle)
 - [Handling Lifecycles](https://developer.android.com/topic/libraries/architecture/lifecycle)
 - [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)

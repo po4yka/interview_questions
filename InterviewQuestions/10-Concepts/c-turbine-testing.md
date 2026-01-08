@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-kotlin-coroutines, c-unit-testing, c-testing-strategies, c-mockk, c-junit]
+moc: "moc-cs"
+related: ["c-kotlin-coroutines", "c-unit-testing", "c-testing-strategies", "c-mockk", "c-junit"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

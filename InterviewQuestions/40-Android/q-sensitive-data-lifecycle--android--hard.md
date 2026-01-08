@@ -1,4 +1,4 @@
----
+---\
 id: android-637
 title: Sensitive Data Lifecycle / Жизненный цикл чувствительных данных
 aliases: [Sensitive Data Lifecycle, Жизненный цикл чувствительных данных]
@@ -22,7 +22,7 @@ sources:
 - url: "https://owasp.org/www-project-mobile-security-testing-guide/"
   note: OWASP MSTG data storage/testing guidance
 
----
+---\
 # Вопрос (RU)
 > Как построить систему управления жизненным циклом чувствительных данных в Android: классификация, минимизация, шифрование, контролируемое кеширование, безопасное удаление и аудит?
 
@@ -46,7 +46,7 @@ sources:
 
 - Разбейте данные на уровни (PII, финансовые, биометрические данные, телеметрия).
 - Принцип минимизации: не собирайте данные без явной, задокументированной цели.
-- Обновляйте классификацию при изменении схем (Room migrations, DTO) и при добавлении новых типов данных.
+- Обновляйте классификацию при изменении схем (`Room` migrations, DTO) и при добавлении новых типов данных.
 
 ### 2. Хранение (at rest)
 
@@ -64,7 +64,7 @@ sources:
 
 - На сетевом уровне для содержимого с PII используйте заголовки `Cache-Control: no-store`/`no-cache` по необходимости, чтобы предотвратить кеширование на клиенте/прокси.
 - Для загрузчиков изображений (Glide/Picasso и др.) отключайте диск-кеш для изображений, содержащих чувствительные данные (например, персональные документы, медицинские снимки), через `DiskCacheStrategy.NONE`/аналогичные настройки.
-- В хранилище (Room и др.) разделяйте таблицы с PII и прочими данными, используйте шифрование на уровне таблиц/колонок, когда необходимо, чтобы минимизировать объём чувствительных данных в кеше/индексах.
+- В хранилище (`Room` и др.) разделяйте таблицы с PII и прочими данными, используйте шифрование на уровне таблиц/колонок, когда необходимо, чтобы минимизировать объём чувствительных данных в кеше/индексах.
 
 ### 5. Удаление И Ретенция
 
@@ -122,8 +122,8 @@ sources:
 - Classify sensitive data (PII, financial, biometric, telemetry), minimize collection, and document purposes; keep classifications updated when schemas or data types change.
 - Protect data at rest with encrypted storage (`EncryptedSharedPreferences`, `EncryptedFile` via Jetpack Security, SQLCipher for critical DBs) and store keys in a hardware-backed Keystore with appropriate key properties.
 - Secure data in transit with TLS 1.2+; use certificate pinning selectively for high-risk use cases with a well-thought rotation mechanism; avoid sending sensitive data unencrypted. For offline queues, encrypt payloads and add integrity protection (e.g., HMAC).
-- Control caching layers: use appropriate HTTP cache headers (e.g., `Cache-Control: no-store`/`no-cache` for PII responses), disable disk caching in image loaders (Glide/Picasso/etc.) for images containing sensitive data, and structure local storage (e.g., Room) so that PII is separated and encrypted at table/column level when needed.
-- Enforce explicit retention policies per data type, automate cleanup with scheduled work (e.g., WorkManager), use crypto-shredding (key deletion) as the primary secure deletion mechanism (overwriting files alone does not guarantee secure deletion at the FS/storage level), and exclude sensitive files from OS or custom backups.
+- Control caching layers: use appropriate HTTP cache headers (e.g., `Cache-Control: no-store`/`no-cache` for PII responses), disable disk caching in image loaders (Glide/Picasso/etc.) for images containing sensitive data, and structure local storage (e.g., `Room`) so that PII is separated and encrypted at table/column level when needed.
+- Enforce explicit retention policies per data type, automate cleanup with scheduled work (e.g., `WorkManager`), use crypto-shredding (key deletion) as the primary secure deletion mechanism (overwriting files alone does not guarantee secure deletion at the FS/storage level), and exclude sensitive files from OS or custom backups.
 - Maintain audit logs of security-relevant actions using pseudonymous identifiers (no raw sensitive values), monitor for anomalies (abnormal access patterns, unusual IPs/devices/geo), and preserve necessary evidence for compliance without violating minimization principles.
 - Add automated tests and static analysis rules to detect leaks in logs, intents, notifications, backups, and ensure coverage for caches, backups, debug builds, root/jailbreak handling, and exported components as per OWASP MSTG.
 
@@ -144,7 +144,7 @@ sources:
 - Client side:
   - A secure data access layer (secure repository) encapsulating encryption, caching, and retention.
   - Android Keystore for key management and Jetpack Security for secure storage.
-  - Integration with WorkManager for background cleanup.
+  - Integration with `WorkManager` for background cleanup.
 - Backend side:
   - Centralized policies for storage, logging, and anomaly detection.
   - Secure APIs (TLS, authorization, rate limiting) and aligned data classification model.

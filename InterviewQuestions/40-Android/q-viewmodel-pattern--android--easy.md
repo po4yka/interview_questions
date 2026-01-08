@@ -1,4 +1,4 @@
----
+---\
 id: android-384
 title: ViewModel Pattern / Паттерн ViewModel
 aliases: [ViewModel Pattern, Паттерн ViewModel]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, difficulty/easy, mvvm, viewmodel]
 
----
+---\
 # Вопрос (RU)
 > Паттерн `ViewModel`
 
@@ -59,7 +59,7 @@ tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, difficul
    - `ViewModel` не должен зависеть от Android UI framework-компонентов.
    - Логика в `ViewModel` легко покрывается unit-тестами без запуска UI.
 
-4. **Управление жизненным циклом / Lifecycle scoping:**
+4. **Управление жизненным циклом / `Lifecycle` scoping:**
    - `ViewModel` привязан к жизненному циклу своего владельца (`Activity`/`Fragment`/`NavBackStackEntry` и т.п.) через `ViewModelStore`.
    - Не получает стандартные callbacks жизненного цикла (`onStart`/`onStop` и т.д.), только `onCleared()` при уничтожении scope.
    - Помогает предотвратить утечки памяти, так как `ViewModel` не должен хранить ссылки на `View`.
@@ -209,7 +209,7 @@ In Android MVVM, the `ViewModel` represents the "`ViewModel`" layer of the archi
    - `ViewModel` should not depend on Android UI framework types.
    - Its logic can be unit-tested without starting Android UI.
 
-4. **Lifecycle scoping and memory safety:**
+4. **`Lifecycle` scoping and memory safety:**
    - `ViewModel` is scoped to its owner via `ViewModelStore`.
    - It receives `onCleared()` when its scope is destroyed.
    - It should not keep references to `View`/`Context` that outlive the scope, which helps prevent memory leaks.

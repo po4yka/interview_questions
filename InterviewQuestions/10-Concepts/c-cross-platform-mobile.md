@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-cross-platform-development, c-kmm, c-jetpack-compose]
+moc: "moc-cs"
+related: ["c-cross-platform-development", "c-kmm", "c-jetpack-compose"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

@@ -1,4 +1,4 @@
----
+---\
 id: android-184
 title: How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения
 aliases: [How To Create Dynamic Screens At Runtime, Как создавать динамические экраны во время выполнения]
@@ -14,7 +14,7 @@ related: [c-android-components, q-dalvik-vs-art-runtime--android--medium, q-frag
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/hard]
----
+---\
 # Вопрос (RU)
 
 > Как в runtime делать динамические экраны которые не были предусмотрены
@@ -29,7 +29,7 @@ tags: [android/ui-views, difficulty/hard]
 - Загружают конфигурацию с бэкенда (JSON/XML/Proto)
 - Мапят её в локальную модель
 - Используют фабрики (Fragments/Views/Composables) для построения UI из описания
-- Используют контейнеры вроде RecyclerView с разными ViewType или Jetpack Compose
+- Используют контейнеры вроде `RecyclerView` с разными ViewType или Jetpack Compose
 
 Ниже представлены основные подходы.
 
@@ -473,7 +473,7 @@ To create truly dynamic screens at runtime in Android you typically:
 - Load configuration from a backend (JSON/XML/Proto)
 - `Map` this configuration to a local model
 - Use factories (Fragments/Views/Composables) to render UI from that model
-- Use containers such as RecyclerView (multiple view types) or Jetpack Compose
+- Use containers such as `RecyclerView` (multiple view types) or Jetpack Compose
 
 Below are core implementation patterns.
 

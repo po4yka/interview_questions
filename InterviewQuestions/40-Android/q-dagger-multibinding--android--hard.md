@@ -1,4 +1,4 @@
----
+---\
 id: android-459
 title: Dagger Multibinding / Multibinding в Dagger
 aliases: [Dagger Multibinding, Multibinding в Dagger]
@@ -15,7 +15,7 @@ created: 2025-10-20
 updated: 2025-11-02
 tags: [android/architecture-modularization, android/di-hilt, dagger, dependency-injection, difficulty/hard, multibinding]
 sources: []
----
+---\
 # Вопрос (RU)
 > Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
 
@@ -312,8 +312,8 @@ class App : Application() {
 
 ## References
 
-- [[c-dagger]] — Dagger fundamentals
-- [[c-hilt]] — Hilt DI framework
+- [[c-dagger]] — `Dagger` fundamentals
+- [[c-hilt]] — `Hilt` DI framework
 - [[c-dependency-injection]] — DI principles
 - [Dagger Multibindings Guide](https://dagger.dev/dev-guide/multibindings.html)
 
@@ -321,13 +321,13 @@ class App : Application() {
 
 ### Prerequisites (Easier)
 - [[q-dagger-inject-annotation--android--easy]] — Basic injection
-- [[q-dagger-main-elements--android--medium]] — Module binding methods
+- [[q-dagger-main-elements--android--medium]] — `Module` binding methods
 - Understanding of `@Binds` and `@Provides`
 
 ### Related (Same Level)
 - [[q-dagger-custom-scopes--android--hard]] — Custom scope creation
-- [[q-dagger-component-dependencies--android--hard]] — Component relationships
+- [[q-dagger-component-dependencies--android--hard]] — `Component` relationships
 
 ### Advanced (Harder)
-- [[q-dagger-framework-overview--android--hard]] — Complete Dagger architecture
+- [[q-dagger-framework-overview--android--hard]] — Complete `Dagger` architecture
 - Large-scale modularization patterns

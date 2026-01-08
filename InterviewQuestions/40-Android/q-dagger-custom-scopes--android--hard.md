@@ -1,4 +1,4 @@
----
+---\
 id: android-451
 title: Dagger Custom Scopes / Кастомные скоупы Dagger
 aliases: [Dagger Custom Scopes, Кастомные скоупы Dagger]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
   - "https://dagger.dev/hilt/components.html"
----
+---\
 # Вопрос (RU)
 > Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между `@Singleton`, пользовательскими (custom) скоупами и unscoped-зависимостями. Когда и зачем стоит создавать кастомный скоуп?
 
@@ -25,7 +25,7 @@ sources:
 
 ## Ответ (RU)
 
-Кастомные скоупы в обычном Dagger позволяют управлять временем жизни зависимостей за пределами стандартных Android-компонентов (`Activity`, `Fragment`) и изолировать состояние для конкретных фич или сущностей (например, пользовательская сессия). В отличие от `@Singleton` и встроенных Hilt-скоупов (таких как `@ActivityScoped`), кастомный скоуп в Dagger реализуется через отдельный компонент со своим `@Scope`, время жизни которого вы создаёте и уничтожаете явно.
+Кастомные скоупы в обычном `Dagger` позволяют управлять временем жизни зависимостей за пределами стандартных Android-компонентов (`Activity`, `Fragment`) и изолировать состояние для конкретных фич или сущностей (например, пользовательская сессия). В отличие от `@Singleton` и встроенных `Hilt`-скоупов (таких как `@ActivityScoped`), кастомный скоуп в `Dagger` реализуется через отдельный компонент со своим `@Scope`, время жизни которого вы создаёте и уничтожаете явно.
 
 ### Типы Скоупов
 
@@ -33,15 +33,15 @@ sources:
   - Привязан к корневому (singleton) компоненту.
   - В рамках этого компонента создаётся один экземпляр зависимости на весь его жизненный цикл (в Android обычно на процесс приложения).
 
-- `@ActivityScoped` / `@FragmentScoped` (Hilt)
-  - Привязаны к соответствующим Hilt-компонентам (`ActivityComponent`, `FragmentComponent`).
+- `@ActivityScoped` / `@FragmentScoped` (`Hilt`)
+  - Привязаны к соответствующим `Hilt`-компонентам (`ActivityComponent`, `FragmentComponent`).
   - Экземпляры кэшируются на время жизни компонента (включая дочерние графы), а не строго по `onCreate`/`onDestroy`, но по сути живут столько же, сколько соответствующий экран.
 
 - Unscoped-зависимости
   - Компонент их не кэширует.
   - Новый экземпляр создаётся при каждом запросе инъекции (через `@Provides` или `@Inject` конструктор), даже внутри скоупленного компонента.
 
-- Кастомный скоуп (Dagger)
+- Кастомный скоуп (`Dagger`)
   - Вы определяете собственную аннотацию `@Scope` и помечаете ей компонент и зависимости.
   - Время жизни скоупа = время жизни соответствующего компонента, которым вы управляете явно (создание/очистка ссылки).
   - Полезен для пользовательских сессий, навигационных flows/feature-скоупов и любых жизненных циклов, которые не совпадают 1:1 со стандартными скоупами.
@@ -102,14 +102,14 @@ object UserSessionHolder {
 - требуется изоляция между модулями/фичами и вы хотите избежать глобальных `@Singleton`, которые могут протекать данными.
 
 Используйте встроенные скоупы (Hilt/Dagger), когда:
-- жизненный цикл зависимости естественно совпадает с `Activity`/`Fragment`/`ViewModel` (обычно достаточно Hilt-скоупов);
+- жизненный цикл зависимости естественно совпадает с `Activity`/`Fragment`/`ViewModel` (обычно достаточно `Hilt`-скоупов);
 - состояние простое и не требует отдельного графа и явного управления временем жизни.
 
 ### Сравнение С Hilt
 
-В Hilt жизненные циклы компонентов и скоупов фиксированы и управляются фреймворком. Добавлять произвольные новые скоупы для Hilt-компонентов нельзя.
+В `Hilt` жизненные циклы компонентов и скоупов фиксированы и управляются фреймворком. Добавлять произвольные новые скоупы для `Hilt`-компонентов нельзя.
 
-Предпочитайте встроенные в Hilt скоупы:
+Предпочитайте встроенные в `Hilt` скоупы:
 - `@Singleton` — для зависимостей на весь процесс (SingletonComponent);
 - `@ActivityRetainedScoped` — для объектов, переживающих конфигурационные изменения (`ViewModel`-подобные);
 - `@ActivityScoped` — на время жизни `Activity`;
@@ -118,24 +118,24 @@ object UserSessionHolder {
 - `@ViewScoped` — на время жизни `View`.
 
 Если нужный жизненный цикл не попадает в эти варианты (например, сессия пользователя), то:
-- используйте отдельные обычные Dagger-компоненты вне Hilt-графа и управляйте ими вручную; или
-- храните сессионное состояние во `@Singleton`/других Hilt-скоупах и явно очищайте его при logout.
+- используйте отдельные обычные `Dagger`-компоненты вне `Hilt`-графа и управляйте ими вручную; или
+- храните сессионное состояние во `@Singleton`/других `Hilt`-скоупах и явно очищайте его при logout.
 
-`@EntryPoint` в Hilt используется для доступа к уже существующим Hilt-компонентам из типов фреймворка, в которые Hilt не может внедрить зависимости напрямую; он не предназначен для объявления новых скоупов.
+`@EntryPoint` в `Hilt` используется для доступа к уже существующим `Hilt`-компонентам из типов фреймворка, в которые `Hilt` не может внедрить зависимости напрямую; он не предназначен для объявления новых скоупов.
 
 ## Answer (EN)
 
-Custom scopes in plain Dagger let you control the lifecycle of dependencies beyond standard Android components (`Activity`, `Fragment`), providing state isolation for specific features. Unlike `@Singleton` and Hilt's built-in scopes (such as `@ActivityScoped`), a custom scope in Dagger is implemented via a dedicated scoped component that you create and destroy explicitly.
+Custom scopes in plain `Dagger` let you control the lifecycle of dependencies beyond standard Android components (`Activity`, `Fragment`), providing state isolation for specific features. Unlike `@Singleton` and `Hilt`'s built-in scopes (such as `@ActivityScoped`), a custom scope in `Dagger` is implemented via a dedicated scoped component that you create and destroy explicitly.
 
 ### Scope Types
 
 **`@Singleton`** in Dagger/Hilt is bound to the root/singleton component. A single instance is shared within that component's lifetime (on Android this is typically one graph per process).
 
-**`@ActivityScoped` / `@FragmentScoped` (Hilt)** are tied to Hilt components (`ActivityComponent`, `FragmentComponent`). Instances are cached for the lifetime of the corresponding component (including its child graph), rather than being strictly defined by `onCreate`/`onDestroy` callbacks.
+**`@ActivityScoped` / `@FragmentScoped` (`Hilt`)** are tied to `Hilt` components (`ActivityComponent`, `FragmentComponent`). Instances are cached for the lifetime of the corresponding component (including its child graph), rather than being strictly defined by `onCreate`/`onDestroy` callbacks.
 
 **Unscoped** dependencies are not cached by the component: for every injection request, a new instance is created (via `@Provides` or `@Inject` constructor), even when requested from a scoped component.
 
-**Custom scope (Dagger)** means you define your own `@Scope` annotation and attach it to a dedicated component. The scope's lifetime equals the lifetime of that component, which you manage explicitly. This is useful for user sessions, feature flows, and other lifecycles that don't map 1:1 to built-in scopes.
+**Custom scope (`Dagger`)** means you define your own `@Scope` annotation and attach it to a dedicated component. The scope's lifetime equals the lifetime of that component, which you manage explicitly. This is useful for user sessions, feature flows, and other lifecycles that don't map 1:1 to built-in scopes.
 
 ### Creating a Custom Scope (Dagger)
 
@@ -193,14 +193,14 @@ Create a custom scope when:
 - you want isolation between modules/features and want to avoid global singletons leaking data.
 
 Use built-in scopes (Hilt/Dagger) when:
-- the dependency lifecycle naturally matches `Activity`/`Fragment`/`ViewModel` lifecycles (Hilt's scopes are usually sufficient);
+- the dependency lifecycle naturally matches `Activity`/`Fragment`/`ViewModel` lifecycles (`Hilt`'s scopes are usually sufficient);
 - you manage simple state that doesn't require its own graph or explicit lifecycle.
 
 ### Comparison with Hilt
 
-In **Hilt**, component and scope lifecycles are fixed and managed by the framework. Defining arbitrary new scopes for Hilt-managed components is not supported.
+In **`Hilt`**, component and scope lifecycles are fixed and managed by the framework. Defining arbitrary new scopes for `Hilt`-managed components is not supported.
 
-Prefer Hilt's built-in scopes:
+Prefer `Hilt`'s built-in scopes:
 - `@Singleton` for app-wide dependencies (SingletonComponent);
 - `@ActivityRetainedScoped` for objects surviving configuration changes (`ViewModel`-like);
 - `@ActivityScoped` for an `Activity` instance lifetime;
@@ -209,10 +209,10 @@ Prefer Hilt's built-in scopes:
 - `@ViewScoped` for a `View` lifecycle.
 
 For lifecycles that don't align with these (e.g., a user session):
-- either use separate plain Dagger components outside the Hilt graph and manage them explicitly;
-- or keep session-like state in Hilt-provided objects (often `@Singleton`) and manually clear that state on logout.
+- either use separate plain `Dagger` components outside the `Hilt` graph and manage them explicitly;
+- or keep session-like state in `Hilt`-provided objects (often `@Singleton`) and manually clear that state on logout.
 
-`@EntryPoint` in Hilt is used to access existing Hilt components from framework types that Hilt can't inject into directly; it is not a mechanism for defining new scopes.
+`@EntryPoint` in `Hilt` is used to access existing `Hilt` components from framework types that `Hilt` can't inject into directly; it is not a mechanism for defining new scopes.
 
 ## Дополнительные Вопросы (RU)
 
@@ -249,9 +249,9 @@ For lifecycles that don't align with these (e.g., a user session):
 ## Связанные Вопросы (RU)
 
 ### База (проще)
-- [[q-hilt-components-scope--android--medium]] — стандартные скоупы Hilt
+- [[q-hilt-components-scope--android--medium]] — стандартные скоупы `Hilt`
 - [[c-dependency-injection]] — основы DI
-- Базовое понимание компонентов Dagger
+- Базовое понимание компонентов `Dagger`
 
 ### Связанные (тот Же уровень)
 - [[q-dagger-component-dependencies--android--hard]] — связи и зависимости компонентов
@@ -265,12 +265,12 @@ For lifecycles that don't align with these (e.g., a user session):
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-hilt-components-scope--android--medium]] — Understanding standard Hilt scopes
+- [[q-hilt-components-scope--android--medium]] — Understanding standard `Hilt` scopes
 - [[c-dependency-injection]] — DI fundamentals
-- Basic understanding of Dagger components
+- Basic understanding of `Dagger` components
 
 ### Related (Same Level)
-- [[q-dagger-component-dependencies--android--hard]] — Component relationships and dependencies
+- [[q-dagger-component-dependencies--android--hard]] — `Component` relationships and dependencies
 - [[q-dagger-build-time-optimization--android--medium]] — Build performance with scopes
 
 ### Advanced (Harder)

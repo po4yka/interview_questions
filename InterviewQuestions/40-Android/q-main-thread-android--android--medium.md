@@ -1,4 +1,4 @@
----
+---\
 id: android-132
 title: Main Thread Android / Главный поток Android
 aliases: [Main Thread Android, UI Thread, Главный поток Android, Поток UI]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/lifecycle, android/threads-sync, difficulty/medium, threading, ui-thread]
 
----
+---\
 # Вопрос (RU)
 
 > Какой основной поток выполнения в Android-приложении?
@@ -29,7 +29,7 @@ tags: [android/lifecycle, android/threads-sync, difficulty/medium, threading, ui
 
 ## Ответ (RU)
 
-Главный поток (Main Thread), также известный как UI Thread, создаётся фреймворком при запуске процесса приложения и отвечает за обработку пользовательского интерфейса и событий в Android. Большинство API Android UI не являются потокобезопасными, поэтому взаимодействие с ними должно выполняться именно из этого потока.
+Главный поток (Main `Thread`), также известный как UI `Thread`, создаётся фреймворком при запуске процесса приложения и отвечает за обработку пользовательского интерфейса и событий в Android. Большинство API Android UI не являются потокобезопасными, поэтому взаимодействие с ними должно выполняться именно из этого потока.
 
 ### Основные Характеристики
 
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 2. Event Loop
 
-Main thread работает на основе очереди сообщений/событий (Looper + MessageQueue):
+Main thread работает на основе очереди сообщений/событий (`Looper` + MessageQueue):
 
 ```kotlin
 // ✅ Отправка задачи в main thread
@@ -130,7 +130,7 @@ class MyViewModel : ViewModel() {
 
 ## Answer (EN)
 
-The Main Thread, also known as the UI Thread, is created by the Android framework when the app process starts and is responsible for handling user interface operations and events. Most Android UI toolkit APIs are not thread-safe, so they must be accessed from this thread.
+The Main `Thread`, also known as the UI `Thread`, is created by the Android framework when the app process starts and is responsible for handling user interface operations and events. Most Android UI toolkit APIs are not thread-safe, so they must be accessed from this thread.
 
 ### Key Characteristics
 
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 2. Event Loop
 
-The main thread operates using a message/event queue (Looper + MessageQueue):
+The main thread operates using a message/event queue (`Looper` + MessageQueue):
 
 ```kotlin
 // ✅ Posting task to main thread
@@ -189,7 +189,7 @@ button.setOnClickListener {
 
 ### Prohibited / Undesired Operations
 
-Long-running or blocking work must NOT be performed on the main thread, including:
+`Long`-running or blocking work must NOT be performed on the main thread, including:
 
 - Network requests
 - Heavy database operations
@@ -256,8 +256,8 @@ class MyViewModel : ViewModel() {
 
 ### Related
 
-- [[q-room-code-generation-timing--android--medium]] - Database operations and threading
-- Handler and Looper patterns
+- [[q-room-code-generation-timing--android--medium]] - `Database` operations and threading
+- `Handler` and `Looper` patterns
 
 ### Advanced
 

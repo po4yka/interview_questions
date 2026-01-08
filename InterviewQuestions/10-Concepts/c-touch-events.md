@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-150030"
 title: "Touch Events / Touch Events"
 aliases: ["Touch Events"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-touch-input, c-gesture-detection, c-event-handling, c-custom-views, c-views]
+moc: "moc-cs"
+related: ["c-touch-input", "c-gesture-detection", "c-event-handling", "c-custom-views", "c-views"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -35,7 +36,7 @@ Touch events (сенсорные события) — это события вв�
 - Multi-touch support: touch APIs typically track multiple pointers (finger contacts) simultaneously via IDs, enabling gestures like pinch-to-zoom and rotation.
 - Coordinate systems and hit-testing: each touch event carries position data (x/y, sometimes pressure, radius), used to determine which UI element should handle the event.
 - Gesture recognition: higher-level gesture detectors (e.g., tap, double-tap, fling, long press) are often built on top of raw touch events to simplify interaction handling.
-- Platform specifics: implementations differ across platforms (Web Touch/Pointer Events, Android View touch handling, iOS UIKit touches), so correct handling requires understanding the target framework’s event model and propagation.
+- Platform specifics: implementations differ across platforms (Web Touch/Pointer Events, Android `View` touch handling, iOS UIKit touches), so correct handling requires understanding the target framework’s event model and propagation.
 
 ## Ключевые Моменты (RU)
 
@@ -43,7 +44,7 @@ Touch events (сенсорные события) — это события вв�
 - Мультитач: API сенсорных событий отслеживают несколько указателей (касаний) по ID, что позволяет реализовывать жесты вроде pinch-to-zoom и вращения.
 - Координаты и хит-тест: каждое событие содержит позицию (x/y, иногда давление, радиус), по которой определяется, какой UI-элемент должен обработать касание.
 - Распознавание жестов: поверх «сырых» touch-событий строятся детекторы жестов (tap, double-tap, swipe/fling, long press), упрощающие реализацию взаимодействий.
-- Особенности платформ: реализация и модель распространения событий различаются (Web Touch/Pointer Events, обработка touch в Android View, iOS UIKit), поэтому важно учитывать конкретный фреймворк.
+- Особенности платформ: реализация и модель распространения событий различаются (Web Touch/Pointer Events, обработка touch в Android `View`, iOS UIKit), поэтому важно учитывать конкретный фреймворк.
 
 ## References
 

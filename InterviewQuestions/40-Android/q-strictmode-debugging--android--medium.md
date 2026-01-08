@@ -1,4 +1,4 @@
----
+---\
 id: android-331
 title: StrictMode Debugging / Отладка StrictMode
 aliases: [StrictMode Debugging, Отладка StrictMode]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/performance-rendering, difficulty/medium]
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md"
----
+---\
 # Вопрос (RU)
 > Отладка StrictMode
 
@@ -126,7 +126,7 @@ StrictMode.setThreadPolicy(
 
 ## Thread Policy
 
-Thread policy описывает правила для конкретного потока (обычно основного), фиксируя опасные операции:
+`Thread` policy описывает правила для конкретного потока (обычно основного), фиксируя опасные операции:
 
 ### Общие Обнаружения
 
@@ -161,7 +161,7 @@ VM policy описывает проверки на уровне всего пр�
 
 - **detectActivityLeaks()** — Обнаруживает утечки экземпляров `Activity`.
 - **detectLeakedClosableObjects()** — Обнаруживает незакрытые `Closeable`-объекты (потоки, курсоры и т.п.).
-- **detectLeakedSqlLiteObjects()** — Обнаруживает незакрытые объекты SQLite (устаревший метод в новых версиях API, приведён для полноты картины).
+- **detectLeakedSqlLiteObjects()** — Обнаруживает незакрытые объекты `SQLite` (устаревший метод в новых версиях API, приведён для полноты картины).
 - **detectLeakedRegistrationObjects()** — Обнаруживает утечки `BroadcastReceiver` и `ServiceConnection`.
 - **detectFileUriExposure()** — Обнаруживает раскрытие `file://`-URI за пределы приложения (на соответствующих уровнях API).
 - **detectAll()** — Включает все доступные для текущего уровня API проверки VM policy.
@@ -421,7 +421,7 @@ StrictMode.setThreadPolicy(
 
 ## Thread Policy
 
-Thread policy detects certain violations that occur on specific threads (commonly configured for the main thread):
+`Thread` policy detects certain violations that occur on specific threads (commonly configured for the main thread):
 
 ### Common Detections
 
@@ -456,7 +456,7 @@ VM policy detects violations across your entire application process:
 
 - **detectActivityLeaks()** - Detects when `Activity` instances are leaked.
 - **detectLeakedClosableObjects()** - Detects when closeable objects (like Streams or Cursors) are not closed.
-- **detectLeakedSqlLiteObjects()** - Detects when SQLite objects are not closed. (Deprecated in newer API levels; kept here for legacy awareness.)
+- **detectLeakedSqlLiteObjects()** - Detects when `SQLite` objects are not closed. (Deprecated in newer API levels; kept here for legacy awareness.)
 - **detectLeakedRegistrationObjects()** - Detects when `BroadcastReceiver` or `ServiceConnection` instances are leaked.
 - **detectFileUriExposure()** - Detects when `file://` URIs are exposed beyond your app on API levels where this is relevant.
 - **detectAll()** - Enables all available VM policy detections for the current API level.

@@ -1,4 +1,4 @@
----
+---\
 id: android-349
 title: "How To Organize Work With Text And Images In A Delegate / Как Организовать Работу С Текстом И Картинками В Делегате"
 aliases: [Adapter Delegates, RecyclerView Delegates, Делегаты адаптера]
@@ -15,14 +15,14 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
----
+---\
 # Вопрос (RU)
 
-> Как организовать работу с текстом и картинками в делегате RecyclerView?
+> Как организовать работу с текстом и картинками в делегате `RecyclerView`?
 
 # Question (EN)
 
-> How to organize work with text and images in a RecyclerView delegate?
+> How to organize work with text and images in a `RecyclerView` delegate?
 
 ---
 
@@ -80,7 +80,7 @@ class MultiTypeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 Где `inflate` — это вспомогательная функция для `LayoutInflater.from(parent.context).inflate(...)`.
 
-**ViewHolder с изображениями**:
+**`ViewHolder` с изображениями**:
 
 ```kotlin
 class ImageViewHolder(private val binding: ItemImageBinding) :
@@ -160,7 +160,7 @@ data class ImageItem(val imageUrl: String, val caption: String) : ListItem()
 data class MixedItem(val title: String, val imageUrl: String) : ListItem()
 ```
 
-**Adapter with multiple view types**:
+**`Adapter` with multiple view types**:
 
 ```kotlin
 class MultiTypeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -191,7 +191,7 @@ class MultiTypeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 Here `inflate` is a helper around `LayoutInflater.from(parent.context).inflate(...)`.
 
-**ViewHolder with images**:
+**`ViewHolder` with images**:
 
 ```kotlin
 class ImageViewHolder(private val binding: ItemImageBinding) :
@@ -268,13 +268,13 @@ class DelegateAdapter : ListDelegationAdapter<List<ListItem>>() {
 
 - [[c-recyclerview]]
 - [[q-which-layout-for-large-list--android--easy]]
-- Android RecyclerView documentation
+- Android `RecyclerView` documentation
 
 ## References
 
 - [[c-recyclerview]]
 - [[q-which-layout-for-large-list--android--easy]]
-- Android RecyclerView documentation
+- Android `RecyclerView` documentation
 
 ## Связанные Вопросы (RU)
 

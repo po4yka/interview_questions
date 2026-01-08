@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-180
 title: "Singleton Object Keyword / Синглтон с ключевым словом object"
 aliases: [Object Keyword, Singleton, Singleton Pattern, Синглтон]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-associatewith-vs-associateby--kotlin--easy, q-coroutine-ca
 created: 2025-10-15
 updated: 2025-11-09
 tags: [classes, design-patterns, difficulty/easy, kotlin, object-keyword, singleton]
----
+---\
 # Вопрос (RU)
 
 > Какое ключевое слово используется для создания синглтонов (singleton-объектов) в Kotlin?
@@ -211,7 +211,7 @@ It's important to distinguish between:
 
 **Key characteristics of `object` declarations:**
 - Create a single shared instance for the declaration within the corresponding classloader
-- Thread-safe initialization by default for object declarations
+- `Thread`-safe initialization by default for object declarations
 - Lazily initialized on first access for object declarations
 - No public constructor is needed or available (the instance is created and managed by the target platform runtime)
 - Can contain properties, functions, and `init` blocks

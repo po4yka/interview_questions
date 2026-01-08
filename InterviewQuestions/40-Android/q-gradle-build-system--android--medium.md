@@ -1,4 +1,4 @@
----
+---\
 id: android-011
 title: Gradle Build System / Система сборки Gradle
 aliases: [Gradle Build System, Система сборки Gradle]
@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/An
 related: [c-gradle, q-build-optimization-gradle--android--medium, q-cache-implementation-strategies--android--medium, q-dagger-build-time-optimization--android--medium, q-how-application-priority-is-determined-by-the-system--android--hard, q-kapt-vs-ksp--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 moc: moc-android
 
----
+---\
 # Вопрос (RU)
 > Что такое система сборки Gradle в Android и какие ключевые понятия (типы сборки, product flavors, build variants, настройки манифеста, зависимости, подпись, shrink, multiple APK, конфигурационные файлы) нужно знать для собеседования?
 
@@ -784,9 +784,9 @@ kotlin.code.style=official
 - Configure local environment properties.
 - Not checked into version control.
 - Common properties:
-  - `sdk.dir` - Path to the Android SDK.
-  - `ndk.dir` - Path to the NDK (deprecated in favor of using SDK-managed NDK).
-  - `cmake.dir` - Path to CMake.
+  - `sdk.dir` - `Path` to the Android SDK.
+  - `ndk.dir` - `Path` to the NDK (deprecated in favor of using SDK-managed NDK).
+  - `cmake.dir` - `Path` to CMake.
   - `ndk.symlinkdir` - Symlink to NDK (Android Studio 3.5+).
 
 ```properties

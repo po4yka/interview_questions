@@ -1,43 +1,50 @@
----
-id: ivc-20251030-140000
-title: RecyclerView / RecyclerView
-aliases: [Android RecyclerView, RecyclerView]
-kind: concept
-summary: Flexible view for displaying large datasets with view recycling and efficient scrolling
-links: []
-related: [c-viewholder, c-view-recycling, c-performance, c-custom-views, c-views]
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, performance, recyclerview, ui]
----
+---\
+id: "20251030-140000"
+title: "RecyclerView / RecyclerView"
+aliases: ["Android RecyclerView", "RecyclerView"]
+summary: "Flexible view for displaying large datasets with view recycling and efficient scrolling"
+topic: "android"
+subtopics: ["performance", "recyclerview", "ui"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: ["c-viewholder", "c-view-recycling", "c-performance", "c-custom-views", "c-views"]
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "concept", "performance", "recyclerview", "ui", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-RecyclerView is a flexible Android view component designed for efficiently displaying large datasets. It uses the ViewHolder pattern to recycle views as they scroll off-screen, significantly reducing memory usage and improving performance. The architecture separates concerns through three key components: Adapter (data binding), ViewHolder (view caching), and LayoutManager (positioning logic).
+`RecyclerView` is a flexible Android view component designed for efficiently displaying large datasets. It uses the `ViewHolder` pattern to recycle views as they scroll off-screen, significantly reducing memory usage and improving performance. The architecture separates concerns through three key components: `Adapter` (data binding), `ViewHolder` (view caching), and `LayoutManager` (positioning logic).
 
 **Core Principles**:
-- **View Recycling**: Reuses view objects instead of creating new ones
-- **Adapter Pattern**: Separates data from presentation logic
+- **`View` Recycling**: Reuses view objects instead of creating new ones
+- **`Adapter` Pattern**: Separates data from presentation logic
 - **Flexible Layout**: Supports vertical, horizontal, grid, and custom layouts
-- **Efficient Updates**: Uses DiffUtil for smart dataset change detection
+- **Efficient Updates**: Uses `DiffUtil` for smart dataset change detection
 
 # Сводка (RU)
 
-RecyclerView — это гибкий компонент Android для эффективного отображения больших наборов данных. Использует паттерн ViewHolder для переиспользования представлений при прокрутке, значительно снижая потребление памяти и улучшая производительность. Архитектура разделяет ответственность через три ключевых компонента: Adapter (привязка данных), ViewHolder (кеширование представлений) и LayoutManager (логика позиционирования).
+`RecyclerView` — это гибкий компонент Android для эффективного отображения больших наборов данных. Использует паттерн `ViewHolder` для переиспользования представлений при прокрутке, значительно снижая потребление памяти и улучшая производительность. Архитектура разделяет ответственность через три ключевых компонента: `Adapter` (привязка данных), `ViewHolder` (кеширование представлений) и `LayoutManager` (логика позиционирования).
 
 **Основные принципы**:
 - **Переиспользование представлений**: Повторно использует объекты вместо создания новых
-- **Паттерн Adapter**: Отделяет данные от логики отображения
+- **Паттерн `Adapter`**: Отделяет данные от логики отображения
 - **Гибкая компоновка**: Поддерживает вертикальные, горизонтальные, сеточные и кастомные макеты
-- **Эффективные обновления**: Использует DiffUtil для умного определения изменений в наборе данных
+- **Эффективные обновления**: Использует `DiffUtil` для умного определения изменений в наборе данных
 
 ---
 
 ## Key Components
 
-**Adapter**: Binds data to views and creates ViewHolders
-**ViewHolder**: Holds references to item views for reuse
-**LayoutManager**: Manages item positioning (Linear, Grid, Staggered)
+**`Adapter`**: Binds data to views and creates ViewHolders
+**`ViewHolder`**: Holds references to item views for reuse
+**`LayoutManager`**: Manages item positioning (Linear, Grid, Staggered)
 **ItemDecoration**: Adds visual decorations (dividers, spacing)
 **ItemAnimator**: Animates item changes
 
@@ -45,20 +52,20 @@ RecyclerView — это гибкий компонент Android для эффе�
 
 ## Performance Considerations
 
-**View Recycling**:
+**`View` Recycling**:
 - Views are recycled as they scroll off-screen
 - Reduces inflation overhead and memory allocations
-- ViewHolder pattern eliminates expensive findViewById() calls
+- `ViewHolder` pattern eliminates expensive findViewById() calls
 
 **Efficient Updates**:
-- Use DiffUtil to calculate minimal changes between datasets
+- Use `DiffUtil` to calculate minimal changes between datasets
 - Avoid notifyDataSetChanged() for partial updates
 - Use specific notify methods: notifyItemInserted(), notifyItemChanged()
 
 **Best Practices**:
-- Cache expensive calculations in ViewHolder
+- Cache expensive calculations in `ViewHolder`
 - Use setHasFixedSize(true) when size doesn't change
-- Set RecycledViewPool for nested RecyclerViews
+- `Set` RecycledViewPool for nested RecyclerViews
 - Avoid nested scrolling when possible
 
 ---
@@ -105,7 +112,7 @@ recyclerView.apply {
 }
 ```
 
-**Using DiffUtil for Updates**:
+**Using `DiffUtil` for Updates**:
 
 ```kotlin
 class ItemDiffCallback(
@@ -146,18 +153,18 @@ fun updateItems(newItems: List<Item>) {
 **Alternatives**:
 - ListView: Simpler but less flexible, deprecated for most use cases
 - Compose LazyColumn/LazyRow: Modern declarative alternative
-- ViewPager2: For horizontal paging (uses RecyclerView internally)
+- ViewPager2: For horizontal paging (uses `RecyclerView` internally)
 
 **Trade-offs**:
 - More complex setup than ListView
-- Requires understanding of ViewHolder pattern
-- Initial learning curve for DiffUtil and ItemDecorations
+- Requires understanding of `ViewHolder` pattern
+- Initial learning curve for `DiffUtil` and ItemDecorations
 
 ---
 
 ## References
 
-- [Official RecyclerView Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
+- [Official `RecyclerView` Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
 - [RecyclerView Guide](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 - [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [Best Practices for RecyclerView](https://developer.android.com/topic/performance/vitals/render)

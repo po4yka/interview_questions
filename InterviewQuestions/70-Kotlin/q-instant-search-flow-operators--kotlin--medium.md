@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-036
 title: "How to implement instant search using Flow operators? / Как реализовать мгновенный поиск с помощью Flow операторов?"
 aliases: ["How to implement instant search using Flow operators?", "Как реализовать мгновенный поиск с помощью Flow операторов?"]
@@ -25,7 +25,7 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [debounce, difficulty/medium, flow, kotlin, operators, performance, search]
----
+---\
 # Вопрос (RU)
 > Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin `Flow`?
 
@@ -465,7 +465,7 @@ fun `search debounces user input`() = runTest {
 | `filter` | Минимальная длина запроса | 2-3 символа |
 | `mapLatest` | Отмена предыдущего поиска | Для сетевых запросов |
 | `catch` | Гибкая обработка ошибок | Рекомендуется |
-| `stateIn` | Шаринг Flow между коллекторами | `WhileSubscribed` |
+| `stateIn` | Шаринг `Flow` между коллекторами | `WhileSubscribed` |
 
 - Делайте:
   - Используйте `debounce` для снижения количества запросов.
@@ -906,7 +906,7 @@ fun `search debounces user input`() = runTest {
 | `filter` | Minimum query length | 2-3 characters |
 | `mapLatest` | Cancel previous search | For API calls |
 | `catch` | Handle errors gracefully | Recommended |
-| `stateIn` | Share Flow across collectors | WhileSubscribed |
+| `stateIn` | Share `Flow` across collectors | WhileSubscribed |
 
 - DO:
   - Use `debounce` to reduce API calls
@@ -954,31 +954,31 @@ fun `search debounces user input`() = runTest {
 ## Связанные Вопросы (RU)
 
 ### Средний Уровень
-- [[q-flow-operators-map-filter--kotlin--medium]] — операторы Flow
-- [[q-flow-operators--kotlin--medium]] — обзор операторов Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] — операторы `Flow`
+- [[q-flow-operators--kotlin--medium]] — обзор операторов `Flow`
 - [[q-retry-operators-flow--kotlin--medium]] — операторы повторов
-- [[q-flow-time-operators--kotlin--medium]] — временные операторы Flow
+- [[q-flow-time-operators--kotlin--medium]] — временные операторы `Flow`
 
 ### Продвинутые
-- [[q-testing-flow-operators--kotlin--hard]] — тестирование Flow
-- [[q-flow-operators-deep-dive--kotlin--hard]] — углубленный разбор операторов Flow
+- [[q-testing-flow-operators--kotlin--hard]] — тестирование `Flow`
+- [[q-flow-operators-deep-dive--kotlin--hard]] — углубленный разбор операторов `Flow`
 - [[q-flow-backpressure-strategies--kotlin--hard]] — стратегии работы с нагрузкой
 
 ### Хабы
-- [[q-kotlin-flow-basics--kotlin--medium]] — основы Kotlin Flow
+- [[q-kotlin-flow-basics--kotlin--medium]] — основы Kotlin `Flow`
 
 ## Related Questions
 
 ### Related (Medium)
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-flow-time-operators--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - `Flow`
+- [[q-retry-operators-flow--kotlin--medium]] - `Flow`
+- [[q-flow-time-operators--kotlin--medium]] - `Flow`
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] - `Flow`
+- [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

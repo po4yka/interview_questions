@@ -1,4 +1,4 @@
----
+---\
 id: android-362
 title: ML Kit Object Detection / Распознавание объектов ML Kit
 aliases: [ML Kit Barcode Scanning, ML Kit Image Labeling, ML Kit Object Detection, Распознавание объектов ML Kit]
@@ -14,7 +14,7 @@ related: [c-camerax, c-media3, q-compose-gesture-detection--android--medium, q-c
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/camera, android/media, barcode-scanning, difficulty/medium, ml-kit, object-detection]
----
+---\
 # Вопрос (RU)
 
 > Как реализовать обнаружение объектов, распознавание изображений и сканирование штрих-кодов с помощью ML Kit? В чём разница между моделями на устройстве и облачными моделями? Как обрабатывать обнаружение в реальном времени с камеры?
@@ -247,7 +247,7 @@ class MLKitCameraAnalyzer(
 }
 ```
 
-✅ **Compose UI с ML Kit (упрощённый пример взаимодействия ViewModel и CameraX):**
+✅ **Compose UI с ML Kit (упрощённый пример взаимодействия `ViewModel` и CameraX):**
 ```kotlin
 @Composable
 fun MLKitScannerScreen(viewModel: MLKitScannerViewModel = viewModel()) {
@@ -557,7 +557,7 @@ class MLKitCameraAnalyzer(
 }
 ```
 
-✅ **Compose UI with ML Kit (simplified example of ViewModel + CameraX coordination):**
+✅ **Compose UI with ML Kit (simplified example of `ViewModel` + CameraX coordination):**
 ```kotlin
 @Composable
 fun MLKitScannerScreen(viewModel: MLKitScannerViewModel = viewModel()) {
@@ -627,13 +627,13 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 - ✅ Always call `imageProxy.close()`
 
 **Resource management:**
-- ✅ Call `detector.close()` on destroy (it implements Closeable and releases internal resources)
+- ✅ `Call` `detector.close()` on destroy (it implements Closeable and releases internal resources)
 - ✅ Use `ExecutorService` for background processing
 - ✅ Stop camera when inactive
 
 **Security:**
 - ✅ Validate barcode data before use
-- ✅ Request confirmation for sensitive actions
+- ✅ `Request` confirmation for sensitive actions
 - ✅ Sanitize URLs before opening; treat all barcode-derived data as untrusted
 
 ❌ **Common pitfalls:**

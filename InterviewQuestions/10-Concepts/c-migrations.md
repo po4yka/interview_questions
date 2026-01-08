@@ -1,4 +1,4 @@
----
+---\
 id: "20251012-000000"
 title: "Database Migrations / Миграции баз данных"
 aliases: []
@@ -12,15 +12,15 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: [c-room-library, c-sqlite, c-database-design, c-relational-databases, c-database-performance]
+related: ["c-room-library", "c-sqlite", "c-database-design", "c-relational-databases", "c-database-performance"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "difficulty/medium", "migrations", "schema", "versioning"]
----
+---\
 
 # Summary (EN)
 
-Database migrations are version-controlled schema changes that can be applied and rolled back systematically. They enable safe database evolution in production environments through forward migrations (applying changes) and rollback migrations (reverting changes). Key patterns include additive changes (safe), breaking changes (requires careful planning), and zero-downtime migrations for high-availability systems.
+`Database` migrations are version-controlled schema changes that can be applied and rolled back systematically. They enable safe database evolution in production environments through forward migrations (applying changes) and rollback migrations (reverting changes). Key patterns include additive changes (safe), breaking changes (requires careful planning), and zero-downtime migrations for high-availability systems.
 
 # Сводка (RU)
 
@@ -33,17 +33,17 @@ Database migrations are version-controlled schema changes that can be applied an
 - Synchronized database changes across environments
 - Rollback capability for failed deployments
 - Team collaboration on database changes
-- Database versioning and history
+- `Database` versioning and history
 
 **Trade-offs:**
 - **Additive vs Breaking Changes:** Safe additions vs. complex multi-step migrations
 - **Automatic vs Manual:** Automated migrations vs. manual control for critical changes
 - **Up/Down Migrations:** Bidirectional changes vs. forward-only migrations
-- **Zero-Downtime:** Application complexity vs. continuous availability
+- **Zero-Downtime:** `Application` complexity vs. continuous availability
 
 ## Overview
 
-Database migrations are version-controlled schema changes that can be applied and rolled back systematically.
+`Database` migrations are version-controlled schema changes that can be applied and rolled back systematically.
 
 ---
 
@@ -122,10 +122,10 @@ ALTER TABLE users DROP COLUMN old_email;
 
 ## References
 
-- [Flyway Database Migrations](https://flywaydb.org/)
+- [Flyway `Database` Migrations](https://flywaydb.org/)
 - [Liquibase Documentation](https://www.liquibase.org/)
 - [Refactoring Databases](https://databaserefactoring.com/)
-- "Refactoring Databases: Evolutionary Database Design" by Scott W. Ambler and Pramod J. Sadalage
+- "Refactoring Databases: Evolutionary `Database` Design" by Scott W. Ambler and Pramod J. Sadalage
 
 ## MOC Links
 

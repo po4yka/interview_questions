@@ -1,4 +1,4 @@
----
+---\
 id: sec-001
 title: Android Keystore System / Система Android Keystore
 aliases: [Android Keystore System, Система Android Keystore]
@@ -15,7 +15,7 @@ updated: 2025-11-11
 tags: [android/keystore-crypto, difficulty/medium]
 related: [c-android-keystore, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium, q-encrypted-file-storage--android--medium]
 sources: ["https://developer.android.com/training/articles/keystore"]
----
+---\
 # Вопрос (RU)
 > Как реализовать безопасное хранение ключей с помощью Android Keystore?
 
@@ -169,7 +169,7 @@ class BiometricAuthenticator(
 ```
 
 **Теория безопасного хранилища:**
-Безопасное хранилище сочетает Android Keystore (для хранения ключа) с устойчивым хранилищем (например, SharedPreferences или файл) для хранения зашифрованных данных. Данные шифруются с помощью ключей Keystore перед сохранением, что защищает их даже при компрометации обычного хранилища.
+Безопасное хранилище сочетает Android Keystore (для хранения ключа) с устойчивым хранилищем (например, `SharedPreferences` или файл) для хранения зашифрованных данных. Данные шифруются с помощью ключей Keystore перед сохранением, что защищает их даже при компрометации обычного хранилища.
 
 **Реализация безопасного хранилища:**
 ```kotlin
@@ -403,7 +403,7 @@ class BiometricAuthenticator(
 ```
 
 **Secure Storage Theory:**
-Secure storage combines Android Keystore (for key protection) with persistent storage (e.g., SharedPreferences or files) to hold encrypted data. Data is encrypted with a Keystore-managed key before being persisted, mitigating risks if the plain storage is compromised.
+Secure storage combines Android Keystore (for key protection) with persistent storage (e.g., `SharedPreferences` or files) to hold encrypted data. Data is encrypted with a Keystore-managed key before being persisted, mitigating risks if the plain storage is compromised.
 
 **Secure Storage Implementation:**
 ```kotlin
@@ -487,4 +487,4 @@ fun generateEcKeyWithAttestation(alias: String, challenge: ByteArray): Array<X50
 - [[q-encrypted-file-storage--android--medium]] - File encryption
 
 ### Related (Medium)
-- [[q-database-encryption-android--android--medium]] - Database encryption
+- [[q-database-encryption-android--android--medium]] - `Database` encryption

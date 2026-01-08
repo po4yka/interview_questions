@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-058
 title: "Channels vs Flow / Channels против Flow"
 aliases: ["Channels vs Flow", "Channels против Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-11
 updated: 2025-11-10
 
 tags: [async, buffering, channels, difficulty/medium, flow, kotlin]
----
+---\
 # Вопрос (RU)
 > Когда следует использовать Channels или `Flow`? Реализуйте буферизованный канал с различными стратегиями емкости и объясните их поведение.
 
@@ -40,7 +40,7 @@ Channels и `Flow` используются для асинхронных пот
 
 ### Ключевые Различия
 
-| Характеристика | Channel | Flow |
+| Характеристика | Channel | `Flow` |
 |----------------|---------|------|
 | **Тип** | Горячий (используется активными продюсерами/консюмерами) | Холодный (ленивый) |
 | **Выполнение** | Используется активными корутинами, существующий канал может принимать данные в любой момент | Активируется при collect() |
@@ -450,7 +450,7 @@ val flow = flow { emit(data) }
    Channel<Request>(Channel.RENDEZVOUS)
    ```
 
-4. **Предпочитайте Flow для трансформаций**:
+4. **Предпочитайте `Flow` для трансформаций**:
    ```kotlin
    // Flow естественно подходит для цепочек операторов
    flow { emit(data) }
@@ -497,7 +497,7 @@ val flow = flow { emit(data) }
    flowOf(1, 2, 3).map { process(it) }.collect()
    ```
 
-**Краткое содержание**: Channel — горячий примитив коммуникации и очереди между корутинами для producer-consumer и распределения задач. Flow — холодный декларативный поток значений для трансформаций и реактивных сценариев. Каналы поддерживают стратегии емкости: RENDEZVOUS (без буфера по емкости), BUFFERED (фиксированный размер), UNLIMITED (без ограничений по емкости), CONFLATED (только последнее значение). Выбирайте на основе горячего vs холодного поведения и семантики очереди/трансформаций, аккуратно управляйте емкостью и жизненным циклом и явно закрывайте каналы, которые вы контролируете.
+**Краткое содержание**: Channel — горячий примитив коммуникации и очереди между корутинами для producer-consumer и распределения задач. `Flow` — холодный декларативный поток значений для трансформаций и реактивных сценариев. Каналы поддерживают стратегии емкости: RENDEZVOUS (без буфера по емкости), BUFFERED (фиксированный размер), UNLIMITED (без ограничений по емкости), CONFLATED (только последнее значение). Выбирайте на основе горячего vs холодного поведения и семантики очереди/трансформаций, аккуратно управляйте емкостью и жизненным циклом и явно закрывайте каналы, которые вы контролируете.
 
 ---
 
@@ -507,7 +507,7 @@ Channels and `Flow`s are both used for asynchronous data streams, but they serve
 
 ### Key Differences
 
-| Feature | Channel | Flow |
+| Feature | Channel | `Flow` |
 |---------|---------|------|
 | **Type** | Hot-style primitive used by active producers/consumers | Cold (lazy) |
 | **Execution** | Used by running coroutines; an existing channel can receive/send at any time | Starts work only when collected |
@@ -516,7 +516,7 @@ Channels and `Flow`s are both used for asynchronous data streams, but they serve
 | **Multiple consumers** | Single consumer by default; multiple consumers share work (competing receivers) | Multiple independent collectors, each re-runs the upstream |
 | **State** | Mutable, stateful communication | Immutable, declarative pipeline |
 | **Use case** | Producer-consumer queues, task distribution, inter-coroutine events | Data transformations, reactive streams, UI/data updates |
-| **Lifecycle** | Needs explicit close (or producer completion helpers) | Auto-completes when upstream finishes |
+| **`Lifecycle`** | Needs explicit close (or producer completion helpers) | Auto-completes when upstream finishes |
 
 ### Channel Basics
 
@@ -738,7 +738,7 @@ suspend fun testChannel(channel: Channel<Int>, name: String) = coroutineScope {
 1. **Hot-style communication** - data is produced regardless of active collectors
 2. **Single producer/single consumer**, or multiple competing consumers sharing a work queue
 3. **Event/task queues** - decoupled communication between coroutines
-4. **Worker pools** - distributing work across coroutines
+4. **`Worker` pools** - distributing work across coroutines
 5. **Real-time data** - sensors, websockets (with clear semantics: single consumer or explicit fan-out)
 
 ```kotlin
@@ -962,7 +962,7 @@ val flow = flow { emit(data) }
    Channel<Request>(Channel.RENDEZVOUS)
    ```
 
-4. **Prefer Flow for transformations**:
+4. **Prefer `Flow` for transformations**:
    ```kotlin
    // Flow is a natural fit for pipelines
    flow { emit(data) }
@@ -1028,26 +1028,26 @@ val flow = flow { emit(data) }
 ## Related Questions
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction
 
 ### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
+- [[q-flow-basics--kotlin--easy]] - `Flow`
 - [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
 
 ### Related (Medium)
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs `LiveData`
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
 - [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - `StateFlow` & `SharedFlow` differences
 
 ### Advanced (Harder)
 - [[q-select-expression-channels--kotlin--hard]] - Coroutines
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] - `Flow`
 - [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
 - [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

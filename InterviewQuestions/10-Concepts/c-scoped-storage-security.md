@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-019
-title: Scoped Storage Security / Безопасность Scoped Storage
-aliases: [Android Storage Isolation, Scoped Storage Security]
-kind: concept
-summary: Advanced scoped storage patterns covering SAF, MediaStore, app-private files, and data migrations with privacy constraints
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, concept, privacy, security, storage]
+id: "20260108-110550"
+title: "Scoped Storage Security / Безопасность Scoped Storage"
+aliases: ["Android Storage Isolation", "Scoped Storage Security"]
+summary: "Advanced scoped storage patterns covering SAF, MediaStore, app-private files, and data migrations with privacy constraints"
+topic: "android"
+subtopics: ["privacy", "security", "storage"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "concept", "privacy", "security", "storage", "difficulty/medium"]
 ---
 
 # Summary (EN)

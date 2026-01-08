@@ -24,7 +24,7 @@ related: [c-kotlin, q-coroutine-memory-leaks--kotlin--hard, q-retry-operators-fl
 created: 2025-10-05
 updated: 2025-11-10
 
-tags: [classes, difficulty/medium, inner-class, kotlin, nested-class, oop]
+tags: [classes, difficulty/medium, inner-classes, kotlin, nested-classes, oop]
 ---
 # Вопрос (RU)
 > В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?

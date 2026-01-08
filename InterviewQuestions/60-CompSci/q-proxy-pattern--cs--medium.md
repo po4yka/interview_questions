@@ -1,4 +1,4 @@
----
+---\
 id: dp-007
 title: "Proxy Pattern / Proxy Паттерн"
 aliases: [Proxy Pattern, Proxy Паттерн]
@@ -14,7 +14,7 @@ related: [c-architecture-patterns, q-adapter-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [cs, design-patterns, difficulty/medium, gof-patterns, proxy, structural-patterns, surrogate]
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Proxy? Когда и зачем его следует использовать?
 
@@ -250,7 +250,7 @@ val retrofit = Retrofit.Builder()
 - **`ProxyDatabase`** контролирует доступ, добавляет логирование, ограничивает опасные запросы.
 - **`Image` / `ProxyImage` / `RealImage`** демонстрируют виртуальный прокси с ленивой загрузкой.
 - **`ApiService` / `CachingApiProxy`** демонстрируют кэширующий прокси.
-- **OkHttp Interceptors** выступают как прокси-подобные обёртки над HTTP-запросами, добавляя логирование, аутентификацию и другие сквозные аспекты.
+- **`OkHttp` Interceptors** выступают как прокси-подобные обёртки над HTTP-запросами, добавляя логирование, аутентификацию и другие сквозные аспекты.
 
 ### Преимущества
 
@@ -273,7 +273,7 @@ val retrofit = Retrofit.Builder()
 Паттерн Proxy активно используется в следующих сценариях:
 
 - **Ленивая загрузка изображений** - прокси-объект откладывает загрузку до момента отображения.
-- **Перехват HTTP-запросов (OkHttp Interceptors)** - добавляют логирование, аутентификацию, кэширование.
+- **Перехват HTTP-запросов (`OkHttp` Interceptors)** - добавляют логирование, аутентификацию, кэширование.
 - **Кэширование сетевых ответов** - прокси оборачивает сетевой слой и повторно использует результаты.
 - **Контроль доступа к базе данных или файловой системе** - прокси ограничивает операции в зависимости от прав.
 
@@ -359,7 +359,7 @@ class AsyncCacheProxy(
 - **Проблема**: нужен контроль доступа, ленивая инициализация, логирование, кэширование или удалённый доступ.
 - **Решение**: создать прокси, реализующий тот же интерфейс, что и реальный объект, и делегирующий ему вызовы с добавлением дополнительного поведения.
 - **Когда использовать**: при необходимости ленивой инициализации, контроля прав, мониторинга, кэширования или работы с удалёнными объектами.
-- **В Android**: ленивая загрузка изображений, перехват HTTP-запросов (OkHttp), кэширование, контроль доступа к ресурсам.
+- **В Android**: ленивая загрузка изображений, перехват HTTP-запросов (`OkHttp`), кэширование, контроль доступа к ресурсам.
 
 ---
 
@@ -584,7 +584,7 @@ val retrofit = Retrofit.Builder()
 - **`ProxyDatabase`** controls access, logs actions, restricts dangerous queries.
 - **`Image` / `ProxyImage` / `RealImage`** demonstrate a Virtual Proxy via lazy loading.
 - **`ApiService` / `CachingApiProxy`** demonstrate a Caching Proxy.
-- **OkHttp Interceptors** behave as proxy-like wrappers around HTTP requests for logging, auth, monitoring, etc.
+- **`OkHttp` Interceptors** behave as proxy-like wrappers around HTTP requests for logging, auth, monitoring, etc.
 
 ### Pros and Cons
 
@@ -685,7 +685,7 @@ Proxy is a structural pattern that provides a placeholder to control access to a
 - Problem: need to control access, add behavior, or optimize interactions.
 - Solution: introduce a proxy implementing the same interface and delegating to the real object with extra behavior.
 - Use when: lazy loading, access control, logging/monitoring, caching, remote access are required.
-- Android: image lazy loading, HTTP interception (OkHttp), caching layers.
+- Android: image lazy loading, HTTP interception (`OkHttp`), caching layers.
 
 ---
 

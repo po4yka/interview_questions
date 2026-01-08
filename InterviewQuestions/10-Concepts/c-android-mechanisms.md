@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-180735"
 title: "Android Mechanisms"
 aliases: ["Android Mechanisms"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-ipc, c-binder, c-android-background-execution, c-memory-management, c-multithreading]
+related: ["c-android-ipc", "c-binder", "c-android-background-execution", "c-memory-management", "c-multithreading"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ tags: ["android", "auto-generated", "concept", "difficulty/medium"]
 ## Key Points (EN)
 
 - Android Runtime (ART) and memory: how ART manages heap, garbage collection, and optimizations (AOT/JIT), and how this impacts app startup time, memory leaks, and performance.
-- Process and thread model: single Linux process per app (usually), main thread constraints, Handler/Looper/message queue, and correct use of background threads (Executors, coroutines, WorkManager).
+- Process and thread model: single Linux process per app (usually), main thread constraints, Handler/Looper/message queue, and correct use of background threads (Executors, coroutines, `WorkManager`).
 - Inter-Process Communication (IPC): Binder as the core IPC mechanism, use in system services and bound services, and implications for latency, security (permissions), and API design.
 - Background execution and lifecycle constraints: job scheduling, foreground services, battery optimizations (Doze, App Standby), and how modern Android limits background work, alarms, and implicit broadcasts.
 - Security and sandboxing: per-app UID sandbox, permission model, scoped storage, and how OS-level isolation and system services affect data access, intents, and component exposure.
@@ -40,7 +41,7 @@ tags: ["android", "auto-generated", "concept", "difficulty/medium"]
 ## Ключевые Моменты (RU)
 
 - Android Runtime (ART) и память: как ART управляет кучей, сборкой мусора и оптимизациями (AOT/JIT), и как это влияет на время старта, утечки памяти и производительность.
-- Модель процессов и потоков: один Linux-процесс на приложение (обычно), ограничения главного потока, Handler/Looper/message queue и корректное использование фоновых потоков (Executors, корутины, WorkManager).
+- Модель процессов и потоков: один Linux-процесс на приложение (обычно), ограничения главного потока, Handler/Looper/message queue и корректное использование фоновых потоков (Executors, корутины, `WorkManager`).
 - Межпроцессное взаимодействие (IPC): Binder как основной механизм IPC, его использование системными сервисами и bound-сервисами, влияние на задержки, безопасность (permissions) и проектирование API.
 - Ограничения фонового выполнения и жизненного цикла: планирование задач, foreground-сервисы, энергосбережение (Doze, App Standby) и современные ограничения на фоновые задачи, будильники и неявные broadcast-ы.
 - Безопасность и песочница: изоляция приложений через UID, модель разрешений, scoped storage и влияние механизмов безопасности ОС на доступ к данным, intents и экспонирование компонентов.

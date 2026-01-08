@@ -1,4 +1,4 @@
----
+---\
 id: android-200
 title: "MVP Pattern / MVP Паттерн"
 aliases: ["Model-View-Presenter", "MVP Pattern", "MVP Паттерн"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/testing-unit, architecture-patterns, difficulty/medium, model-view-presenter, mvp]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое архитектурный паттерн MVP (Model-`View`-Presenter)? Объясните его компоненты и отличия от других паттернов.
@@ -136,7 +136,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 | **Ссылка на `View`** | Presenter знает `View` через интерфейс | `ViewModel` не знает `View` напрямую | Controller знает `View` |
 | **Обновление `View`** | Явные вызовы методов `View`-интерфейса | Чаще всего через observable / data binding | Прямые вызовы на `View` |
 | **Тестируемость** | Хорошая (mock `View`) | Отличная (минимум зависимостей от `View`) | Средняя |
-| **Lifecycle** | Ручное управление (attach/detach) | `ViewModel` привязан к lifecycle владельца, но ресурсы внутри всё равно требуют явного управления | Ручное |
+| **`Lifecycle`** | Ручное управление (attach/detach) | `ViewModel` привязан к lifecycle владельца, но ресурсы внутри всё равно требуют явного управления | Ручное |
 | **Изменения конфигурации** | Состояние теряется по умолчанию, если Presenter не ретейнится/не сохраняет state | `ViewModel` переживает конфигурационные изменения, но не гарантирует выживание при убийстве процесса | Состояние теряется по умолчанию |
 
 ### Best Practices
@@ -276,7 +276,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 | **`View` reference** | Presenter knows `View` via interface | `ViewModel` does not directly know `View` | Controller knows `View` |
 | **`View` updates** | Explicit `View` interface method calls | Via observables / data binding / state flows | Direct calls on `View` |
 | **Testability** | Good (mock `View`) | Excellent (minimal `View` dependencies) | Moderate |
-| **Lifecycle** | Manual (attach/detach) | `ViewModel` is lifecycle-aware (tied to owner), but internal resources still need explicit cleanup | Manual |
+| **`Lifecycle`** | Manual (attach/detach) | `ViewModel` is lifecycle-aware (tied to owner), but internal resources still need explicit cleanup | Manual |
 | **Configuration changes** | State lost by default unless Presenter is retained or state is saved | `ViewModel` survives configuration changes; not guaranteed across process death | State lost by default |
 
 ### Best Practices

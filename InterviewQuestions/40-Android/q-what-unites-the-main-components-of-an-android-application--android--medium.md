@@ -1,4 +1,4 @@
----
+---\
 id: android-206
 title: Android Components Unity / Объединение основных компонентов
 aliases: [Android Components Unity, Объединение компонентов]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/lifecycle, android/service, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Объединение основных компонентов
 
@@ -423,8 +423,8 @@ startActivity(Intent(this, MainActivity::class.java))
 ```
 
 System responsibilities include:
-- Component instantiation based on manifest/registration and Intents
-- Lifecycle callback dispatch
+- `Component` instantiation based on manifest/registration and Intents
+- `Lifecycle` callback dispatch
 - Process allocation and management
 - Memory management and component teardown
 
@@ -580,7 +580,7 @@ Components integrate with the same **permission-based security model** and can d
 |-----------------------|------------------------|----------------------------------------------|--------------------------------------|----------------------------------|
 | Purpose               | UI screen              | Background / long-running work (with limits) | Event handling                      | Data sharing / persistence       |
 | Has UI                | Yes                    | No                                           | No                                   | No                               |
-| Lifecycle             | Multiple callbacks     | onCreate/onStartCommand/onBind/onDestroy     | Single onReceive callback            | Minimal (onCreate + CRUD)        |
+| `Lifecycle`             | Multiple callbacks     | onCreate/onStartCommand/onBind/onDestroy     | Single onReceive callback            | Minimal (onCreate + CRUD)        |
 | Created by            | System                 | System                                       | System                               | System                           |
 | Manifest required     | Yes                    | Yes                                          | Yes (for static)                    | Yes                              |
 | `Intent` interaction    | Yes                    | Yes                                          | Yes                                  | Indirect (via ContentResolver)   |
@@ -678,7 +678,7 @@ A good answer should include:
 - AndroidManifest.xml
 - `Intent` system
 - `Context` and `Application`
-- Component lifecycles
+- `Component` lifecycles
 - Process management
 
 ---

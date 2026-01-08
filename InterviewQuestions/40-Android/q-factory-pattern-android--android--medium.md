@@ -1,4 +1,4 @@
----
+---\
 id: android-460
 title: Factory Pattern Android / Паттерн Factory в Android
 aliases: [Abstract Factory Pattern, Factory Method Pattern, Factory Pattern Android, Паттерн Factory в Android]
@@ -17,7 +17,7 @@ created: 2025-10-20
 updated: 2025-10-20
 tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
 
----
+---\
 # Вопрос (RU)
 > Можешь привести пример когда Android фреймворк использует паттерн Factory?
 
@@ -28,7 +28,7 @@ tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty
 
 ## Ответ (RU)
 
-Android фреймворк широко использует Factory / Factory Method паттерн. Основные примеры: **`LayoutInflater`** (создает Views из XML), **`Fragment.instantiate()` / `FragmentFactory`** (создают фрагменты), **`Intent.createChooser()`** (создает Intent-обертку для chooser UI), **`MediaPlayer.create()`** (создает pre-configured media players).
+Android фреймворк широко использует Factory / Factory Method паттерн. Основные примеры: **`LayoutInflater`** (создает Views из XML), **`Fragment.instantiate()` / `FragmentFactory`** (создают фрагменты), **`Intent.createChooser()`** (создает `Intent`-обертку для chooser UI), **`MediaPlayer.create()`** (создает pre-configured media players).
 
 См. также: [[c-android-basics]]
 
@@ -110,7 +110,7 @@ mediaPlayer.prepare() // дополнительный шаг
 
 **4. `Intent.createChooser()` - Static Factory Method**
 
-Создает специальный chooser `Intent` для выбора приложения (chooser UI будет показан при передаче этого Intent в `startActivity()`):
+Создает специальный chooser `Intent` для выбора приложения (chooser UI будет показан при передаче этого `Intent` в `startActivity()`):
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -123,7 +123,7 @@ startActivity(chooser)
 
 ### Custom Factory Implementation
 
-Пример для RecyclerView (viewType — это константы адаптера, например `TYPE_TEXT = 1`, `TYPE_IMAGE = 2`):
+Пример для `RecyclerView` (viewType — это константы адаптера, например `TYPE_TEXT = 1`, `TYPE_IMAGE = 2`):
 
 ```kotlin
 class ViewHolderFactory {
@@ -161,7 +161,7 @@ class ViewHolderFactory {
 
 ## Answer (EN)
 
-Android framework extensively uses Factory / Factory Method pattern. Main examples: **`LayoutInflater`** (creates Views from XML), **`Fragment.instantiate()` / `FragmentFactory`** (create fragments), **`Intent.createChooser()`** (creates a chooser Intent that triggers chooser UI), **`MediaPlayer.create()`** (creates pre-configured media players).
+Android framework extensively uses Factory / Factory Method pattern. Main examples: **`LayoutInflater`** (creates Views from XML), **`Fragment.instantiate()` / `FragmentFactory`** (create fragments), **`Intent.createChooser()`** (creates a chooser `Intent` that triggers chooser UI), **`MediaPlayer.create()`** (creates pre-configured media players).
 
 See also: [[c-android-basics]]
 
@@ -243,7 +243,7 @@ mediaPlayer.prepare() // additional step
 
 **4. `Intent.createChooser()` - Static Factory Method**
 
-Creates a special chooser `Intent` used for app selection (chooser UI is shown when this Intent is passed to `startActivity()`):
+Creates a special chooser `Intent` used for app selection (chooser UI is shown when this `Intent` is passed to `startActivity()`):
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -256,7 +256,7 @@ startActivity(chooser)
 
 ### Custom Factory Implementation
 
-Example for RecyclerView (viewType here refers to adapter-defined constants like `TYPE_TEXT = 1`, `TYPE_IMAGE = 2`):
+Example for `RecyclerView` (viewType here refers to adapter-defined constants like `TYPE_TEXT = 1`, `TYPE_IMAGE = 2`):
 
 ```kotlin
 class ViewHolderFactory {

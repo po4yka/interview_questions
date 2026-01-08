@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-128
 title: "Structured Concurrency / Структурированная параллельность"
 aliases: ["Structured Concurrency", "Структурированная параллельность"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, scope, structured-concurrency]
----
+---\
 # Вопрос (RU)
 > Что такое структурированная параллельность в Kotlin? Объясните иерархию родитель-потомок корутин, распространение отмены, распространение исключений и разницу между coroutineScope, supervisorScope и withContext.
 
@@ -1160,7 +1160,7 @@ fun testExceptionPropagation() = runTest {
 
 ## References
 
-- [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Coroutine `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Structured Concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency)
 - [Coroutine Exceptions](https://kotlinlang.org/docs/exception-handling.html)
 

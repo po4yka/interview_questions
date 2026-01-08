@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-091
 title: "CoroutineExceptionHandler: installation and usage / CoroutineExceptionHandler: установка и использование"
 topic: kotlin
@@ -14,7 +14,7 @@ tags: [ceh, coroutines, difficulty/medium, error-handling, exception-handling, k
 moc: moc-kotlin
 related: [c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 subtopics: [ceh, coroutines, error-handling]
----
+---\
 # Вопрос (RU)
 > Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
 
@@ -665,7 +665,7 @@ fun main() = runBlocking {
 
 ### Key Principles
 
-Coroutine exception handling follows structured concurrency rules:
+`Coroutine` exception handling follows structured concurrency rules:
 
 - Exceptions are first handled locally (try-catch inside the coroutine).
 - Then they propagate up the Job hierarchy to the parent.

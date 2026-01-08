@@ -13,7 +13,7 @@ moc: moc-android
 related: [q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/ui-compose, compose, difficulty/hard, side-effects]
+tags: [android/ui-compose, difficulty/hard, side-effects]
 sources:
   - "https://developer.android.com/jetpack/compose/lifecycle"
   - "https://developer.android.com/jetpack/compose/side-effects"

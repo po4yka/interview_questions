@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-017
-title: Wear OS Compose UI / Compose UI для Wear OS
-aliases: [Compose for Wearables, Wear OS Compose]
-kind: concept
-summary: Compose toolkit tailored for Wear OS including scaffolds, scaling layouts, rotary input, and Tiles
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, compose, concept, ui, wear]
+id: "20260108-110551"
+title: "Wear OS Compose UI / Compose UI для Wear OS"
+aliases: ["Compose for Wearables", "Wear OS Compose"]
+summary: "Compose toolkit tailored for Wear OS including scaffolds, scaling layouts, rotary input, and Tiles"
+topic: "android"
+subtopics: ["compose", "ui", "wear"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "compose", "concept", "ui", "wear", "difficulty/medium"]
 ---
 
 # Summary (EN)

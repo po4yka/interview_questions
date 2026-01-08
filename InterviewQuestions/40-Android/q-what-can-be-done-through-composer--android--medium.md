@@ -1,4 +1,4 @@
----
+---\
 id: android-140
 title: "What Can Be Done Through Composer / Что можно сделать через Composer"
 aliases: ["Composer in Jetpack Compose", "Composer в Jetpack Compose"]
@@ -14,8 +14,8 @@ related: [c-jetpack-compose, q-compose-stability-skippability--android--hard, q-
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/architecture-mvvm, android/performance-rendering, android/ui-compose, difficulty/medium, jetpack-compose, recomposition]
----
+tags: [android, android/architecture-mvvm, android/performance-rendering, android/ui-compose, difficulty/medium, recomposition]
+---\
 # Вопрос (RU)
 
 > Что можно делать через Composer в Jetpack Compose? За что он отвечает и как правильно им пользоваться?
@@ -167,7 +167,7 @@ fun CorrectExample() {
 1. **Tracks state** — links `State`/`MutableState` changes to dependent composables
 2. **Manages recomposition** — re-evaluates only composables that depend on changed values, minimizing the updated UI scope
 3. **Builds the composition tree** — maintains structure and values in the slot table across recompositions
-4. **Provides CompositionLocal** — propagates contextual values down the tree and reacts to their changes
+4. **`Provides` CompositionLocal** — propagates contextual values down the tree and reacts to their changes
 5. **Coordinates side effects** — runs side effects at correct points in the composition lifecycle
 
 ### Key Concepts

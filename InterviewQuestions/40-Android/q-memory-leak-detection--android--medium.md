@@ -1,4 +1,4 @@
----
+---\
 id: android-045
 title: "Memory Leak Detection and Fixing / Обнаружение и исправление утечек памяти"
 aliases: [LeakCanary, Memory Leak Detection, Memory Profiler, Обнаружение утечек памяти]
@@ -16,7 +16,7 @@ created: 2025-10-11
 updated: 2025-11-10
 tags: [android/lifecycle, android/performance-memory, android/profiling, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler и дампы кучи (heap dumps). Исправьте утечки `Activity`/`Fragment`/`ViewModel`.
 
@@ -419,14 +419,14 @@ fun dumpHeap() {
 ### Лучшие Практики
 
 1. **LeakCanary в debug** — ловите утечки до продакшена
-2. **Lifecycle-компоненты** — `LiveData`, `ViewModel`, `lifecycleScope` / `viewLifecycleOwner.lifecycleScope`
+2. **`Lifecycle`-компоненты** — `LiveData`, `ViewModel`, `lifecycleScope` / `viewLifecycleOwner.lifecycleScope`
 3. **Не храните сильные ссылки на контекст `Activity`/`Fragment`** в синглтонах и долгоживущих объектах
 4. **Отменяйте слушатели и callback-и** в `onDestroy`/`onPause`/`onStop` (в зависимости от кейса)
 5. **Очищайте ViewBinding** в `onDestroyView` у `Fragment`
 6. **Используйте `Application` context** для синглтонов и репозиториев
 7. **Избегайте статических ссылок на `Activity`/`Fragment`/`View`**
 8. **Используйте `viewModelScope` вместо `GlobalScope`**
-9. **Используйте проверенные библиотеки изображений** (Coil, Glide) вместо ручного управления Bitmap-ами
+9. **Используйте проверенные библиотеки изображений** (Coil, Glide) вместо ручного управления `Bitmap`-ами
 10. **Регулярно профилируйте память** на реальных сценариях
 
 ## Answer (EN)

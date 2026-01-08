@@ -1,4 +1,4 @@
----
+---\
 id: dp-006
 title: "Mediator Pattern / Mediator Паттерн"
 aliases: [Mediator Pattern, Mediator Паттерн]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral, coupling, difficulty/medium, gof-patterns, mediator]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Mediator? Когда и зачем его следует использовать?
 
@@ -749,13 +749,13 @@ class EventBus {
 
 ## Дополнительные Вопросы (RU)
 
-- Чем Mediator отличается от Observer и Publisher-Subscriber на концептуальном и реализационном уровнях?
+- Чем Mediator отличается от `Observer` и Publisher-Subscriber на концептуальном и реализационном уровнях?
 - В каких случаях вы предпочтёте Mediator вместо использования DI и интерфейсов между компонентами?
 - Как избежать превращения посредника в "god object" в крупной системе?
 
 ## Follow-ups
 
-- How does the Mediator pattern differ from the Observer and Publish-Subscribe patterns conceptually and in implementation?
+- How does the Mediator pattern differ from the `Observer` and Publish-Subscribe patterns conceptually and in implementation?
 - When would you prefer Mediator over simply using dependency injection and interfaces between components?
 - How can you prevent the mediator from turning into a god object in a large system?
 

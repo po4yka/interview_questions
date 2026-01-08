@@ -1,4 +1,4 @@
----
+---\
 id: android-128
 title: Test Doubles Dependency Injection / Тестовые двойники Dependency Injection
 aliases: [Test Doubles, Тестовые двойники]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/di-hilt, android/testing-unit, dependency-injection, difficulty/medium, hilt, test-doubles]
 
----
+---\
 # Вопрос (RU)
 > Тестовые двойники Dependency Injection
 
@@ -26,7 +26,7 @@ tags: [android/di-hilt, android/testing-unit, dependency-injection, difficulty/m
 
 ## Ответ (RU)
 
-Hilt предоставляет мощные возможности для тестирования с dependency injection, позволяя легко заменять production-зависимости на test doubles (mock-и, fake-и, stub-ы) как в инструментальных тестах, так и в локальных unit-тестах.
+`Hilt` предоставляет мощные возможности для тестирования с dependency injection, позволяя легко заменять production-зависимости на test doubles (mock-и, fake-и, stub-ы) как в инструментальных тестах, так и в локальных unit-тестах.
 
 ### Настройка Тестов С Hilt
 
@@ -42,7 +42,7 @@ dependencies {
 }
 ```
 
-Убедитесь, что приложение/тесты настроены для Hilt: есть `@HiltAndroidApp` в production-приложении или используется `HiltTestApplication` в test-манифесте при необходимости.
+Убедитесь, что приложение/тесты настроены для `Hilt`: есть `@HiltAndroidApp` в production-приложении или используется `HiltTestApplication` в test-манифесте при необходимости.
 
 ```kotlin
 @HiltAndroidTest
@@ -342,7 +342,7 @@ class MockTest {
 
 ## Answer (EN)
 
-Hilt provides powerful dependency injection testing capabilities, allowing you to replace production dependencies with test doubles (mocks, fakes, stubs) easily in both instrumented and local tests.
+`Hilt` provides powerful dependency injection testing capabilities, allowing you to replace production dependencies with test doubles (mocks, fakes, stubs) easily in both instrumented and local tests.
 
 ### Test Setup with Hilt
 
@@ -358,7 +358,7 @@ dependencies {
 }
 ```
 
-Make sure your test `Application` is configured for Hilt (e.g. via `@HiltAndroidApp` in the production app, or using `HiltTestApplication` in the test manifest when needed).
+Make sure your test `Application` is configured for `Hilt` (e.g. via `@HiltAndroidApp` in the production app, or using `HiltTestApplication` in the test manifest when needed).
 
 ```kotlin
 @HiltAndroidTest
@@ -658,7 +658,7 @@ class MockTest {
 - [[q-what-is-hilt--android--medium]]
 - Как с помощью `@TestInstallIn` заменить сетевой слой на fake-реализацию в инструментальных тестах?
 - Как использовать `@BindValue` для конфигурации разных `UserRepository` в отдельных тестах?
-- Какие преимущества дают fakes по сравнению с mocks при тестировании архитектуры с Hilt?
+- Какие преимущества дают fakes по сравнению с mocks при тестировании архитектуры с `Hilt`?
 
 ## Follow-ups
 
@@ -666,7 +666,7 @@ class MockTest {
 - [[q-what-is-hilt--android--medium]]
 - How can you use `@TestInstallIn` to replace the network layer with a fake in instrumented tests?
 - How do you use `@BindValue` to configure different `UserRepository` implementations per test?
-- What are the benefits of using fakes instead of mocks when testing a Hilt-based architecture?
+- What are the benefits of using fakes instead of mocks when testing a `Hilt`-based architecture?
 
 ## Ссылки (RU)
 

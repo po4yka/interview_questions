@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-052
 title: "Flow Exception Handling / Обработка исключений в Flow"
 aliases: ["Flow Exception Handling", "Обработка исключений в Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-11
 updated: 2025-11-09
 
 tags: [catch, difficulty/medium, error-handling, exceptions, flow, kotlin, retry]
----
+---\
 # Вопрос (RU)
 > Как обрабатывать исключения в `Flow`? Объясните операторы catch, retry, retryWhen. Реализуйте стратегию повтора с экспоненциальной задержкой.
 
@@ -995,7 +995,7 @@ class UserViewModel : ViewModel() {
    .retry(3)
    ```
 
-**English Summary**: Flow exception handling uses `catch` for handling upstream exceptions, `retry` for automatic retries, and `retryWhen` for conditional retry logic. Exponential backoff with jitter is a standard retry strategy. The `catch` operator only handles exceptions from upstream, not from the `collect` block. Combine error handling strategies with `timeout` and circuit breaker patterns for robust applications. Provide fallback values or error states for UI flows (e.g., `StateFlow`/`SharedFlow`) where appropriate.
+**English Summary**: `Flow` exception handling uses `catch` for handling upstream exceptions, `retry` for automatic retries, and `retryWhen` for conditional retry logic. Exponential backoff with jitter is a standard retry strategy. The `catch` operator only handles exceptions from upstream, not from the `collect` block. Combine error handling strategies with `timeout` and circuit breaker patterns for robust applications. Provide fallback values or error states for UI flows (e.g., `StateFlow`/`SharedFlow`) where appropriate.
 
 ## Follow-ups
 
@@ -1012,12 +1012,12 @@ class UserViewModel : ViewModel() {
 
 ### Related (Medium)
 - [[q-coroutine-exception-handling--kotlin--medium]] - Coroutines
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
+- [[q-retry-operators-flow--kotlin--medium]] - `Flow`
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

@@ -1,4 +1,4 @@
----
+---\
 id: android-173
 title: "Workmanager Chaining / Цепочки WorkManager"
 aliases: ["Workmanager Chaining", "Цепочки WorkManager"]
@@ -16,14 +16,14 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/background-execution, android/coroutines, background, difficulty/hard, workmanager]
 
----
+---\
 # Вопрос (RU)
 
-> Объясните продвинутые паттерны цепочек WorkManager. Как реализовать параллельное выполнение, последовательные цепи и сложные графы зависимостей? Каковы best practices для обработки ошибок и передачи данных между воркерами?
+> Объясните продвинутые паттерны цепочек `WorkManager`. Как реализовать параллельное выполнение, последовательные цепи и сложные графы зависимостей? Каковы best practices для обработки ошибок и передачи данных между воркерами?
 
 # Question (EN)
 
-> Explain advanced WorkManager chaining patterns. How do you implement parallel execution, sequential chains, and complex dependency graphs? What are best practices for error handling and data passing between workers?
+> Explain advanced `WorkManager` chaining patterns. How do you implement parallel execution, sequential chains, and complex dependency graphs? What are best practices for error handling and data passing between workers?
 
 ## Ответ (RU)
 
@@ -73,7 +73,7 @@ WorkManager.getInstance(context)
 ### Передача Данных Между Воркерами
 
 **Ограничения WorkData**
-- Практический лимит ~10 KB на `Data` (input/output), хранится в БД WorkManager
+- Практический лимит ~10 KB на `Data` (input/output), хранится в БД `WorkManager`
 - Только примитивные типы и `String`/Array
 - ❌ Не передавать большие объекты напрямую
 - ✅ Передавать ID, пути к файлам, метаданные
@@ -142,7 +142,7 @@ class ReliableWorker(appContext: Context, params: WorkerParameters) : CoroutineW
 
 **Fallback-цепи для критических сбоев**
 
-WorkManager не поддерживает условные ветки напрямую. Важно:
+`WorkManager` не поддерживает условные ветки напрямую. Важно:
 - если воркер возвращает `Result.failure()`, следующие по цепочке воркеры не будут выполнены;
 - fallback обычно реализуется через:
   - анализ `WorkInfo` и постановку альтернативной задачи из приложения, или
@@ -190,7 +190,7 @@ WorkManager.getInstance(context)
 
 **Отслеживание прогресса цепи**
 
-Ниже используется псевдо-обертка над стандартными API WorkManager; `getWorkInfosByTagFlow` иллюстрирует идею и может быть реализован, например, через `getWorkInfosByTagLiveData().asFlow()`.
+Ниже используется псевдо-обертка над стандартными API `WorkManager`; `getWorkInfosByTagFlow` иллюстрирует идею и может быть реализован, например, через `getWorkInfosByTagLiveData().asFlow()`.
 
 ```kotlin
 class ChainMonitor(private val workManager: WorkManager) {
@@ -241,7 +241,7 @@ class ChainMonitor(private val workManager: WorkManager) {
 - Проектируйте для наблюдаемости (логи, прогресс, теги)
 - Используйте `beginUniqueWork` / `enqueueUniqueWork` и `ExistingWorkPolicy` для управления уникальными цепочками и повторными постановками
 
-**4. Constraints и политики**
+**4. `Constraints` и политики**
 ```kotlin
 val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
     .setConstraints(
@@ -314,7 +314,7 @@ WorkManager.getInstance(context)
 ### Data Passing Between Workers
 
 **WorkData constraints**
-- Practical limit is ~10 KB for `Data` (input/output), stored in WorkManager DB
+- Practical limit is ~10 KB for `Data` (input/output), stored in `WorkManager` DB
 - Only primitive types and `String`/Array are supported
 - ❌ Don't pass large objects directly
 - ✅ Pass IDs, file paths, metadata
@@ -383,7 +383,7 @@ class ReliableWorker(appContext: Context, params: WorkerParameters) : CoroutineW
 
 **Fallback chains for critical failures**
 
-WorkManager does not support conditional branches natively inside chains. Important points:
+`WorkManager` does not support conditional branches natively inside chains. Important points:
 - when a worker returns `Result.failure()`, subsequent chained workers are not executed;
 - typical fallback patterns:
   - observe `WorkInfo` in app code and enqueue alternative work when a chain/worker fails;
@@ -430,7 +430,7 @@ WorkManager.getInstance(context)
 
 **Chain progress tracking**
 
-The following uses a pseudo-wrapper over standard WorkManager APIs; `getWorkInfosByTagFlow` is illustrative and could be implemented via `getWorkInfosByTagLiveData().asFlow()` or similar.
+The following uses a pseudo-wrapper over standard `WorkManager` APIs; `getWorkInfosByTagFlow` is illustrative and could be implemented via `getWorkInfosByTagLiveData().asFlow()` or similar.
 
 ```kotlin
 class ChainMonitor(private val workManager: WorkManager) {
@@ -481,7 +481,7 @@ class ChainMonitor(private val workManager: WorkManager) {
 - Design for observability (logs, progress, tags)
 - Use `beginUniqueWork` / `enqueueUniqueWork` with `ExistingWorkPolicy` to control unique chains and restarts
 
-**4. Constraints and policies**
+**4. `Constraints` and policies**
 ```kotlin
 val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
     .setConstraints(
@@ -508,10 +508,10 @@ val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
 
 ## Follow-ups
 
-- How do you test complex WorkManager chains?
+- How do you test complex `WorkManager` chains?
 - What's the difference between `beginWith(listOf(...))` and `enqueue(listOf(...))`?
 - How do you handle scenarios where one worker in a parallel group fails but others succeed?
-- How do you implement conditional branching in WorkManager chains based on worker results?
+- How do you implement conditional branching in `WorkManager` chains based on worker results?
 - What's the performance impact of having too many workers in a chain?
 
 ## References
@@ -522,15 +522,15 @@ val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
 ## Related Questions
 
 ### Prerequisites
-- Basic WorkManager concepts and worker implementation
+- Basic `WorkManager` concepts and worker implementation
 - Understanding Kotlin coroutines and `Flow` for monitoring
 
 ### Related
-- WorkManager constraints and network requirements
+- `WorkManager` constraints and network requirements
 - Periodic work scheduling patterns
 - Background task scheduling strategies
 
 ### Advanced
-- Custom WorkManager configuration and initialization
-- Comparing background processing approaches (WorkManager vs Services vs AlarmManager)
+- Custom `WorkManager` configuration and initialization
+- Comparing background processing approaches (`WorkManager` vs Services vs AlarmManager)
 - Testing complex work chains and dependency graphs

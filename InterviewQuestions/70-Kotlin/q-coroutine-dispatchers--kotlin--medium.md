@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-096
 title: "Coroutine Dispatchers / Диспетчеры корутин"
 aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, threading, unconfined]
----
+---\
 # Вопрос (RU)
 > Что такое диспетчеры корутин в Kotlin? Объясните диспетчеры Main, IO, Default и Unconfined и когда использовать каждый.
 
@@ -42,7 +42,7 @@ tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, th
 
 | Диспетчер | Пул потоков | Случай использования | Примеры |
 |------------|-------------|----------|----------|
-| **Dispatchers.Main** | UI поток | Обновления UI, взаимодействие с пользователем | Обновить TextView, показать Dialog |
+| **Dispatchers.Main** | UI поток | Обновления UI, взаимодействие с пользователем | Обновить `TextView`, показать Dialog |
 | **Dispatchers.IO** | Общий пул (отдельный от Default, с настраиваемым верхним лимитом, по умолчанию ≈ 64) | I/O операции, блокирующие вызовы | Сеть, БД, файловый I/O |
 | **Dispatchers.Default** | CPU-bound пул (ядра CPU) | CPU-интенсивная работа | Парсинг, сортировка, вычисления |
 | **Dispatchers.Unconfined** | Нет конкретного потока | Специальные/низкоуровневые случаи, отладка | Демонстрации, специфические сценарии |
@@ -114,8 +114,8 @@ class UserRepository(private val api: ApiService, private val db: UserDao) {
 - Позволяет блокировать потоки, минимизируя влияние на CPU-задачи `Default`, но чрезмерное блокирование всё равно вредит производительности
 
 **Использовать для**:
-- Сетевых запросов (Retrofit, Ktor)
-- Операций с БД (Room, SQLite)
+- Сетевых запросов (`Retrofit`, Ktor)
+- Операций с БД (`Room`, `SQLite`)
 - Файлового I/O (чтение/запись файлов)
 - Других блокирующих I/O операций
 
@@ -453,14 +453,14 @@ launch(Dispatchers.Unconfined) {
 
 ## Answer (EN)
 
-Coroutine dispatchers determine which thread or thread pool executes a coroutine. Kotlin provides four main dispatchers, each optimized for specific workloads.
+`Coroutine` dispatchers determine which thread or thread pool executes a coroutine. Kotlin provides four main dispatchers, each optimized for specific workloads.
 
 ### Dispatcher Overview
 
-| Dispatcher | Thread Pool | Use Case | Examples |
+| Dispatcher | `Thread` Pool | Use Case | Examples |
 |------------|-------------|----------|----------|
-| **Dispatchers.Main** | UI thread | UI updates, user interaction | Update TextView, show Dialog |
-| **Dispatchers.IO** | Shared pool (separate from Default, configurable upper bound, default ≈ 64 threads) | I/O operations, blocking calls | Network, Database, File I/O |
+| **Dispatchers.Main** | UI thread | UI updates, user interaction | Update `TextView`, show Dialog |
+| **Dispatchers.IO** | Shared pool (separate from Default, configurable upper bound, default ≈ 64 threads) | I/O operations, blocking calls | Network, `Database`, File I/O |
 | **Dispatchers.Default** | CPU-bound pool (CPU cores) | CPU-intensive work | Parsing, sorting, calculations |
 | **Dispatchers.Unconfined** | No specific thread | Special/low-level cases, debugging | Demos, specific scenarios |
 
@@ -531,8 +531,8 @@ class UserRepository(private val api: ApiService, private val db: UserDao) {
 - Allows blocking without immediately starving CPU-bound tasks on Default, but excessive blocking still degrades performance
 
 **Use for**:
-- Network requests (Retrofit, Ktor)
-- Database operations (Room, SQLite)
+- Network requests (`Retrofit`, Ktor)
+- `Database` operations (`Room`, `SQLite`)
 - File I/O (reading/writing files)
 - Other blocking I/O operations
 
@@ -562,7 +562,7 @@ class DataProcessor {
 ```
 
 **Characteristics**:
-- Thread pool size ≈ number of CPU cores (minimum 2)
+- `Thread` pool size ≈ number of CPU cores (minimum 2)
 - Optimized for computational work
 - Should not be used for blocking I/O
 - Good for parallel processing
@@ -733,7 +733,7 @@ val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 **Deprecation Note:**
 The `newSingleThreadContext()` and `newFixedThreadPoolContext()` functions were **deprecated in Kotlin Coroutines 1.6.0**. Modern code should use `Executors.asCoroutineDispatcher()` as shown above.
 
-**Custom Dispatcher Lifecycle Management:**
+**Custom Dispatcher `Lifecycle` Management:**
 ```kotlin
 class DataProcessor {
     // Create custom dispatcher
@@ -855,7 +855,7 @@ launch(Dispatchers.Unconfined) {
 
 ## References
 
-- [Kotlin Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Kotlin `Coroutine` Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Dispatchers Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/)
 - [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 

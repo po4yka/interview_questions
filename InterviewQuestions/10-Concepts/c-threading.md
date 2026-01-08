@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-134646"
 title: "Threading / Threading"
 aliases: ["Threading"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-multithreading, c-concurrency, c-kotlin-coroutines, c-main-thread, c-anr]
+moc: "moc-cs"
+related: ["c-multithreading", "c-concurrency", "c-kotlin-coroutines", "c-main-thread", "c-anr"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -34,7 +35,7 @@ Threading (многопоточность) — это модель конкур�
 - Shared memory: Threads within the same process share heap and static data, enabling fast communication but increasing the risk of race conditions.
 - Concurrency vs parallelism: Threading supports overlapping work (concurrency) and can exploit multiple CPU cores for true parallel execution.
 - Synchronization: Correct use of locks, atomic operations, and memory visibility guarantees is required to avoid data races and inconsistent state.
-- Context switching and overhead: Excessive threads lead to scheduling overhead, contention, and potential performance degradation.
+- `Context` switching and overhead: Excessive threads lead to scheduling overhead, contention, and potential performance degradation.
 - High-level abstractions: Modern languages/frameworks often wrap raw threads with thread pools, executors, async/await, and coroutines to simplify concurrent programming.
 
 ## Ключевые Моменты (RU)

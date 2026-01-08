@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-224248"
 title: "Url Shortener / Url Shortener"
 aliases: ["Url Shortener"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-system-design, c-hash-tables, c-database-design, c-rest-api, c-scaling-strategies]
+moc: "moc-cs"
+related: ["c-system-design", "c-hash-tables", "c-database-design", "c-rest-api", "c-scaling-strategies"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ URL-укоротитель — это сервис или компонент, к
 
 ## Key Points (EN)
 
-- Unique key generation: Short URLs are usually generated via hashing, encoding (e.g., Base62), or ID sequences to produce collision-resistant, human-friendly keys.
+- Unique key generation: `Short` URLs are usually generated via hashing, encoding (e.g., Base62), or ID sequences to produce collision-resistant, human-friendly keys.
 - Persistent storage: A mapping from short code to original URL is stored in a database or cache, optimized for fast reads and high throughput.
 - Redirection flow: On request, the service looks up the short code and returns an HTTP redirect (typically 301/302) to the original URL.
 - Analytics and limits: Systems often track clicks (time, referrer, geo), apply rate limiting, and validate or blacklist malicious URLs.

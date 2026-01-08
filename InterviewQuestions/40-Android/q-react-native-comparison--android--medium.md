@@ -1,4 +1,4 @@
----
+---\
 id: android-169
 title: KMM vs React Native / KMM против React Native
 aliases: [KMM vs React Native, KMM против React Native, React Native Comparison, React Native Сравнение]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/kmp, difficulty/medium, javascript, kmp, kotlin, multiplatform, reactnative]
 
----
+---\
 # Вопрос (RU)
 >
 Сравните Kotlin Multiplatform Mobile с React Native. Каковы архитектурные различия, bridge overhead и зрелость экосистемы? Чем отличается JavaScript vs Kotlin/Native подход?
@@ -135,7 +135,7 @@ class TaskRepository {
 
 **KMM**: активно развивающаяся экосистема (Kotlin Multiplatform стабилизируется постепенно; поддержка JetBrains, участие Google)
 - Сотни multiplatform-библиотек
-- Примеры: Ktor, SQLDelight, Koin, kotlinx.serialization, kotlinx.coroutines
+- Примеры: Ktor, SQLDelight, `Koin`, kotlinx.serialization, kotlinx.coroutines
 
 ### Platform Feature Access
 
@@ -274,7 +274,7 @@ class TaskRepository {
 
 **KMM**: growing ecosystem (Kotlin Multiplatform stabilizing; led by JetBrains with Google involvement)
 - Hundreds of multiplatform libraries
-- Common choices: Ktor, SQLDelight, Koin, kotlinx.serialization, kotlinx.coroutines
+- Common choices: Ktor, SQLDelight, `Koin`, kotlinx.serialization, kotlinx.coroutines
 
 ### Platform Feature Access
 

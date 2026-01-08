@@ -1,4 +1,4 @@
----
+---\
 id: android-367
 title: "Why DiffUtil Needed / Зачем нужен DiffUtil"
 aliases: [AsyncListDiffer, DiffUtil, ListAdapter]
@@ -15,20 +15,20 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
 
----
+---\
 # Вопрос (RU)
 
-> Зачем нужен DiffUtil в Android? Какие проблемы он решает?
+> Зачем нужен `DiffUtil` в Android? Какие проблемы он решает?
 
 # Question (EN)
 
-> Why do we need DiffUtil in Android? What problems does it solve?
+> Why do we need `DiffUtil` in Android? What problems does it solve?
 
 ---
 
 ## Ответ (RU)
 
-**DiffUtil** — утилита для вычисления разницы между двумя списками и генерации минимального набора операций обновления RecyclerView.
+**`DiffUtil`** — утилита для вычисления разницы между двумя списками и генерации минимального набора операций обновления `RecyclerView`.
 
 ### Проблема Без DiffUtil
 
@@ -80,7 +80,7 @@ fun updateUsers(newUsers: List<User>) {
 }
 ```
 
-> На практике списки, переданные в DiffUtil, должны рассматриваться как неизменяемые во время вычисления diff, чтобы избежать некорректных результатов.
+> На практике списки, переданные в `DiffUtil`, должны рассматриваться как неизменяемые во время вычисления diff, чтобы избежать некорректных результатов.
 
 ### Частичное Обновление Через Payload
 
@@ -160,7 +160,7 @@ adapter.submitList(newUsers)
 
 ### Compose Vs Views
 
-**В Compose DiffUtil не нужен:**
+**В Compose `DiffUtil` не нужен:**
 
 ```kotlin
 @Composable
@@ -184,7 +184,7 @@ fun UserList(users: List<User>) {
 
 ## Answer (EN)
 
-**DiffUtil** is a utility that calculates the difference between two lists and generates a minimal set of update operations for RecyclerView.
+**`DiffUtil`** is a utility that calculates the difference between two lists and generates a minimal set of update operations for `RecyclerView`.
 
 ### Problem Without DiffUtil
 
@@ -236,7 +236,7 @@ fun updateUsers(newUsers: List<User>) {
 }
 ```
 
-> In practice, lists passed to DiffUtil should be treated as immutable during diff calculation to avoid inconsistent results.
+> In practice, lists passed to `DiffUtil` should be treated as immutable during diff calculation to avoid inconsistent results.
 
 ### Partial Updates via Payload
 
@@ -316,7 +316,7 @@ adapter.submitList(newUsers)
 
 ### Compose Vs Views
 
-**In Compose, DiffUtil is not needed:**
+**In Compose, `DiffUtil` is not needed:**
 
 ```kotlin
 @Composable
@@ -340,16 +340,16 @@ fun UserList(users: List<User>) {
 
 ## Follow-ups
 
-- How does DiffUtil's algorithm work internally?
+- How does `DiffUtil`'s algorithm work internally?
 - When should you use `DiffUtil.calculateDiff(detectMoves = true)`?
-- What are the performance implications of DiffUtil on the main thread?
+- What are the performance implications of `DiffUtil` on the main thread?
 - How does `submitList()` handle rapid consecutive updates?
 - When would you implement custom `getChangePayload()` logic?
 
 ## References
 
 - [[c-recyclerview]]
-- [Android DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
+- [Android `DiffUtil` Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [RecyclerView Performance](https://developer.android.com/topic/performance/recyclerview)
 
 ## Related Questions

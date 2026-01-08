@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-110310"
 title: "Software Design Patterns / Паттерны Проектирования"
 aliases: ["Design Patterns", "Software Patterns", "Архитектурные Паттерны", "Паттерны Проектирования"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: [c-design-patterns, c-architecture-patterns, c-clean-architecture, c-mvp-pattern, c-adapter-pattern]
+related: ["c-design-patterns", "c-architecture-patterns", "c-clean-architecture", "c-mvp-pattern", "c-adapter-pattern"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["architecture", "concept", "design-patterns", "difficulty/medium", "software-engineering"]
----
+---\
 
 # Software Design Patterns / Паттерны Проектирования
 
@@ -31,8 +31,8 @@ Design patterns are reusable, proven solutions to common problems that occur in 
 ## Key Points (EN)
 
 - **Creational Patterns**: Control object creation mechanisms (Singleton, Factory, Builder)
-- **Structural Patterns**: Compose objects and classes into larger structures (Adapter, Decorator, Facade)
-- **Behavioral Patterns**: Define communication between objects (Observer, Strategy, Command)
+- **Structural Patterns**: Compose objects and classes into larger structures (`Adapter`, Decorator, Facade)
+- **Behavioral Patterns**: Define communication between objects (`Observer`, Strategy, Command)
 - **Architectural Patterns**: High-level organization of software systems (MVC, MVVM, MVI)
 - **Language-agnostic**: Applicable across different programming languages and platforms
 - **Not silver bullets**: Must be applied appropriately based on context
@@ -40,8 +40,8 @@ Design patterns are reusable, proven solutions to common problems that occur in 
 ## Ключевые Моменты (RU)
 
 - **Порождающие паттерны**: Управляют механизмами создания объектов (Singleton, Factory, Builder)
-- **Структурные паттерны**: Компонуют объекты и классы в более крупные структуры (Adapter, Decorator, Facade)
-- **Поведенческие паттерны**: Определяют взаимодействие между объектами (Observer, Strategy, Command)
+- **Структурные паттерны**: Компонуют объекты и классы в более крупные структуры (`Adapter`, Decorator, Facade)
+- **Поведенческие паттерны**: Определяют взаимодействие между объектами (`Observer`, Strategy, Command)
 - **Архитектурные паттерны**: Высокоуровневая организация программных систем (MVC, MVVM, MVI)
 - **Независимость от языка**: Применимы в различных языках программирования и платформах
 - **Не панацея**: Должны применяться соответственно контексту
@@ -100,7 +100,7 @@ class NetworkRequest private constructor(
 
 ### Structural Patterns
 
-**Adapter**
+**`Adapter`**
 ```kotlin
 // Adapts legacy API to new interface
 class LegacyUserAdapter(private val legacyUser: LegacyUser) : User {
@@ -124,7 +124,7 @@ class LoggingRepository(private val repository: Repository) : Repository {
 
 ### Behavioral Patterns
 
-**Observer**
+**`Observer`**
 ```kotlin
 // Used extensively in LiveData, Flow
 class DataSource {
@@ -164,7 +164,7 @@ class Sorter(private val strategy: SortStrategy) {
 
 ### Architectural Patterns
 
-**MVVM (Model-View-ViewModel)**
+**MVVM (Model-`View`-`ViewModel`)**
 ```kotlin
 // Model
 data class User(val id: Int, val name: String)
@@ -199,9 +199,9 @@ class UserFragment : Fragment() {
 
 - **Complex object creation**: Use Factory or Builder patterns
 - **Single instance needed**: Use Singleton pattern
-- **Incompatible interfaces**: Use Adapter pattern
+- **Incompatible interfaces**: Use `Adapter` pattern
 - **Dynamic behavior changes**: Use Strategy pattern
-- **Event-driven systems**: Use Observer pattern
+- **Event-driven systems**: Use `Observer` pattern
 - **UI architecture**: Use MVVM, MVI, or Clean Architecture patterns
 - **Code reusability**: Apply DRY principle with appropriate patterns
 
@@ -242,7 +242,7 @@ class UserFragment : Fragment() {
 - Prototype
 
 **Structural** (7 patterns):
-- Adapter
+- `Adapter`
 - Bridge
 - Composite
 - Decorator
@@ -254,10 +254,10 @@ class UserFragment : Fragment() {
 - Chain of Responsibility
 - Command
 - Interpreter
-- Iterator
+- `Iterator`
 - Mediator
 - Memento
-- Observer
+- `Observer`
 - State
 - Strategy
 - Template Method
@@ -265,8 +265,8 @@ class UserFragment : Fragment() {
 
 ### Modern Android Patterns
 
-- **MVVM**: Model-View-ViewModel architecture
-- **MVI**: Model-View-Intent architecture
+- **MVVM**: Model-`View`-`ViewModel` architecture
+- **MVI**: Model-`View`-`Intent` architecture
 - **Repository Pattern**: Data access abstraction
 - **Dependency Injection**: Inversion of control
 - **Clean Architecture**: Layered architecture with dependency rule

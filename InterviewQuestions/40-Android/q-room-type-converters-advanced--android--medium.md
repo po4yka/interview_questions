@@ -1,4 +1,4 @@
----
+---\
 id: android-220
 title: Room Advanced Type Converters / Продвинутые Type Converters в Room
 aliases: [Room Advanced Type Converters, Продвинутые Type Converters в Room]
@@ -15,21 +15,21 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/room, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
-> Продвинутые Type Converters в Room
+> Продвинутые Type Converters в `Room`
 
 # Question (EN)
-> Room Advanced Type Converters
+> `Room` Advanced Type Converters
 
 ---
 
 ## Ответ (RU)
-**Продвинутые Type Converters** в Room позволяют хранить сложные типы данных (пользовательские объекты, коллекции, enum-ы, UUID, BigDecimal, типы `java.time`) с сохранением типобезопасности и контролем производительности.
+**Продвинутые Type Converters** в `Room` позволяют хранить сложные типы данных (пользовательские объекты, коллекции, enum-ы, UUID, BigDecimal, типы `java.time`) с сохранением типобезопасности и контролем производительности.
 
 ### Базовые Принципы
 
-Room может напрямую хранить только ограниченный набор типов. Для остальных нужны `@TypeConverter`-ы, которые:
+`Room` может напрямую хранить только ограниченный набор типов. Для остальных нужны `@TypeConverter`-ы, которые:
 
 - Определяют двунаправленное преобразование между кастомным типом и поддерживаемым типом (примитивы, `String`, `ByteArray` и т.п.).
 - Должны быть чистыми и детерминированными.
@@ -509,7 +509,7 @@ class TypeConverterBenchmark {
 }
 ```
 
-(На практике производительность зависит от окружения и структуры данных; Moshi и kotlinx.serialization часто быстрее Gson, но всегда измеряйте в своём контексте.)
+(На практике производительность зависит от окружения и структуры данных; `Moshi` и kotlinx.serialization часто быстрее `Gson`, но всегда измеряйте в своём контексте.)
 
 ### Стратегии Оптимизации Производительности
 
@@ -679,15 +679,15 @@ abstract class AppDatabase : RoomDatabase() {
 
 | Библиотека / подход    | Плюсы                         | Минусы                               | Типичные случаи использования            |
 |------------------------|-------------------------------|--------------------------------------|------------------------------------------|
-| Gson                   | Простая, зрелая              | Рефлексия, часто медленнее           | Легаси и существующие проекты            |
-| Moshi                  | Дружественна к Kotlin, быстра | Чуть больше настроек                 | Современные продакшн-приложения          |
+| `Gson`                   | Простая, зрелая              | Рефлексия, часто медленнее           | Легаси и существующие проекты            |
+| `Moshi`                  | Дружественна к Kotlin, быстра | Чуть больше настроек                 | Современные продакшн-приложения          |
 | kotlinx.serialization  | Компиляторная поддержка, быстра| Требует плагин/аннотации             | Новые Kotlin-first приложения            |
 | Разделённые строки     | Очень просто и компактно      | Только для простых типов             | Небольшие коллекции примитивов           |
 | Protobuf / бинарные    | Компактно, явная схема        | Доп. инструменты, бинарный формат    | Большие / производительно критичные данные |
 
 ### Резюме
 
-Продвинутые Type Converters в Room позволяют:
+Продвинутые Type Converters в `Room` позволяют:
 
 - Отображать кастомные и сложные типы (UUID, BigDecimal, `java.time`, enum-ы, коллекции).
 - Использовать JSON или бинарные форматы там, где это оправдано.
@@ -700,11 +700,11 @@ abstract class AppDatabase : RoomDatabase() {
 ---
 
 ## Answer (EN)
-**Advanced Type Converters** in Room enable storing complex data types like custom objects, collections, enums, and specialized types (UUID, BigDecimal, LocalDateTime) while maintaining type safety and appropriate performance.
+**Advanced Type Converters** in `Room` enable storing complex data types like custom objects, collections, enums, and specialized types (UUID, BigDecimal, LocalDateTime) while maintaining type safety and appropriate performance.
 
 ### Type Converter Fundamentals
 
-Room requires `@TypeConverter`s to store types it cannot directly persist. A converter must provide a bidirectional transformation between your custom type and a type Room can store (primitives, `String`, `ByteArray`, etc.).
+`Room` requires `@TypeConverter`s to store types it cannot directly persist. A converter must provide a bidirectional transformation between your custom type and a type `Room` can store (primitives, `String`, `ByteArray`, etc.).
 
 - Converters must be pure and deterministic.
 - For each custom type you store, you need both `fromX` and `toX` directions.
@@ -1212,7 +1212,7 @@ class TypeConverterBenchmark {
 }
 ```
 
-(Anecdotally, Moshi and kotlinx.serialization are often faster than Gson, but always measure in your own context.)
+(Anecdotally, `Moshi` and kotlinx.serialization are often faster than `Gson`, but always measure in your own context.)
 
 ### Performance Optimization Strategies
 
@@ -1380,15 +1380,15 @@ abstract class AppDatabase : RoomDatabase() {
 
 | Library / Approach | Pros | Cons | Typical Use |
 |--------------------|------|------|-------------|
-| Gson               | Simple, mature | Reflection-based, often slower | Legacy / existing codebases |
-| Moshi              | Kotlin-friendly, efficient | Slightly more setup | Modern production apps |
+| `Gson`               | Simple, mature | Reflection-based, often slower | Legacy / existing codebases |
+| `Moshi`              | Kotlin-friendly, efficient | Slightly more setup | Modern production apps |
 | kotlinx.serialization | Compile-time, often fast | Requires plugin/annotations | New Kotlin-first apps |
 | Delimited strings  | Very small, simple | Only for simple types | Small primitive collections |
 | Protobuf / binary  | Compact, explicit schema | Extra tooling, binary | Large / performance-critical data |
 
 ### Summary
 
-Advanced Type Converters in Room enable:
+Advanced Type Converters in `Room` enable:
 
 - Mapping custom and complex types (UUID, BigDecimal, java.time, enums, collections).
 - Using JSON or binary serialization where appropriate.

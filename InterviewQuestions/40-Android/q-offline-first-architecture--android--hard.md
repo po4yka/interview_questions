@@ -1,4 +1,4 @@
----
+---\
 id: android-097
 title: Offline First Architecture / Архитектура Offline First
 aliases: [Offline First Architecture, Архитектура Offline First]
@@ -14,7 +14,7 @@ updated: 2025-11-10
 tags: [android, android/architecture-clean, android/cache-offline, android/room, architecture, difficulty/hard, offline-first, sync, workmanager]
 moc: moc-android
 related: [c-clean-architecture, c-database-design, q-clean-architecture-android--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-multi-module-best-practices--android--hard, q-play-billing-v6-architecture--android--hard, q-quick-settings-tiles-architecture--android--medium]
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать и реализовать offline-first архитектуру в Android? Какие ключевые компоненты, паттерны и практики необходимо использовать?
@@ -31,9 +31,9 @@ offline-first архитектура обеспечивает работу пр�
 
 ### Краткий Вариант
 
-- Локальная БД (Room) как единственный источник истины.
+- Локальная БД (`Room`) как единственный источник истины.
 - Все операции сначала пишут в локальное хранилище, затем синхронизируются с сервером.
-- WorkManager и сетевой монитор обеспечивают надежную фоновую синхронизацию.
+- `WorkManager` и сетевой монитор обеспечивают надежную фоновую синхронизацию.
 - Явная стратегия разрешения конфликтов и понятный UX для offline/online состояний.
 
 ### Подробный Вариант
@@ -60,11 +60,11 @@ UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → Wo
 - Локальная БД — единственный источник истины
 - UI читает только из локальной БД через `Flow`
 - Операции CUD пишут локально, затем синхронизируются
-- WorkManager — надежная фоновая синхронизация
+- `WorkManager` — надежная фоновая синхронизация
 
 ### Ключевые Компоненты
 
-**1. Room Entity с метаданными синхронизации:**
+**1. `Room` `Entity` с метаданными синхронизации:**
 
 ```kotlin
 @Entity(tableName = "articles")
@@ -158,7 +158,7 @@ interface SyncScheduler {
 }
 ```
 
-**4. WorkManager для синхронизации:**
+**4. `WorkManager` для синхронизации:**
 
 ```kotlin
 class SyncWorker(
@@ -325,7 +325,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 - Явная обработка состояния сети
 
 **Синхронизация:**
-- WorkManager с exponential backoff (`BackoffPolicy.EXPONENTIAL`)
+- `WorkManager` с exponential backoff (`BackoffPolicy.EXPONENTIAL`)
 - Отслеживание pending-операций (CREATE, UPDATE, DELETE)
 - Конфликт-резолюшн: Last-Write-Wins или Three-Way Merge (или другая выбранная политика)
 - Incremental sync: передача только изменений (`lastSyncTimestamp`)
@@ -348,9 +348,9 @@ offline-first architecture ensures apps work without network, syncing data when 
 
 ### Short Version
 
-- Local DB (Room) as single source of truth.
+- Local DB (`Room`) as single source of truth.
 - All operations write to local storage first, then sync with backend.
-- WorkManager and network monitoring for reliable background sync.
+- `WorkManager` and network monitoring for reliable background sync.
 - Explicit conflict resolution strategy and clear UX for offline/online states.
 
 ### Detailed Version
@@ -377,11 +377,11 @@ UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → Wo
 - Local DB is single source of truth
 - UI reads only from local DB via `Flow`
 - CUD operations write locally first, then sync
-- WorkManager ensures reliable background sync
+- `WorkManager` ensures reliable background sync
 
 ### Key Components
 
-**1. Room Entity with sync metadata:**
+**1. `Room` `Entity` with sync metadata:**
 
 ```kotlin
 @Entity(tableName = "articles")
@@ -475,7 +475,7 @@ interface SyncScheduler {
 }
 ```
 
-**4. WorkManager for sync:**
+**4. `WorkManager` for sync:**
 
 ```kotlin
 class SyncWorker(
@@ -642,7 +642,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 - Explicit network state handling
 
 **Synchronization:**
-- WorkManager with exponential backoff (`BackoffPolicy.EXPONENTIAL`)
+- `WorkManager` with exponential backoff (`BackoffPolicy.EXPONENTIAL`)
 - Track pending operations (CREATE, UPDATE, DELETE)
 - Conflict resolution: Last-Write-Wins or Three-Way Merge (or another explicit policy)
 - Incremental sync: only changes since `lastSyncTimestamp`
@@ -678,15 +678,15 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 ## Ссылки (RU)
 
 - Repository pattern как Single Source of Truth
-- Документация WorkManager
-- Рекомендации по использованию Room
+- Документация `WorkManager`
+- Рекомендации по использованию `Room`
 - [[moc-android]]
 
 ## References
 
 - Repository pattern as single source of truth
-- WorkManager official documentation
-- Room database best practices
+- `WorkManager` official documentation
+- `Room` database best practices
 - [[moc-android]]
 
 ## Связанные Вопросы (RU)
@@ -698,8 +698,8 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 
 ### Предпосылки
 
-- Основы Room: локальные операции с базой данных
-- Основы WorkManager: планирование фоновых задач
+- Основы `Room`: локальные операции с базой данных
+- Основы `WorkManager`: планирование фоновых задач
 - Kotlin `Flow`: реактивные потоки данных
 
 ### Связанные
@@ -721,8 +721,8 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 - [[c-clean-architecture]]
 
 ### Prerequisites
-- Room database fundamentals - local database operations
-- WorkManager basics - background task scheduling
+- `Room` database fundamentals - local database operations
+- `WorkManager` basics - background task scheduling
 - Kotlin `Flow` - reactive data streams
 
 ### Related

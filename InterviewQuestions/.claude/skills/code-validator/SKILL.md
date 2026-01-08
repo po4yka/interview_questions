@@ -1,11 +1,11 @@
----
+---\
 name: code-validator
 description: >
   Validate and analyze code examples in interview notes. Checks Kotlin/Java/Python
   syntax validity, verifies code block language tags, detects missing imports,
   checks indentation consistency, and flags potentially broken snippets. Essential
   for maintaining quality code examples in technical interview content.
----
+---\
 
 # Code Validator
 
@@ -208,7 +208,7 @@ fun example() { }
 ### Issue 2: Missing Import (Line 67)
 
 ```kotlin
-suspend fun fetchData(): Flow<Data> {
+suspend fun fetchData(): `Flow`<Data> {
     return flow { emit(fetchFromApi()) }
 }
 ```
@@ -222,7 +222,7 @@ suspend fun fetchData(): Flow<Data> {
 ### Issue 3: Incomplete Code (Line 89)
 
 ```kotlin
-fun processItems(items: List<Item>) {
+fun processItems(items: `List`<Item>) {
     // TODO: implement processing
 }
 ```
@@ -461,7 +461,7 @@ For quick checks.
 
 **Language-Aware**: Different rules for different languages.
 
-**Context-Sensitive**: Understands interview question context.
+**`Context`-Sensitive**: Understands interview question context.
 
 **Practical**: Focuses on issues that matter for learning.
 

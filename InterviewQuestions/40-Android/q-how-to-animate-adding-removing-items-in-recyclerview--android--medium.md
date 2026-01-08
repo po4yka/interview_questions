@@ -1,4 +1,4 @@
----
+---\
 id: android-419
 title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление и удаление элементов в RecyclerView
 aliases: [How To Animate Adding Removing Items In RecyclerView, Как анимировать добавление и удаление элементов в RecyclerView]
@@ -15,18 +15,18 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 
----
+---\
 # Вопрос (RU)
-> Как анимировать добавление и удаление элементов в RecyclerView
+> Как анимировать добавление и удаление элементов в `RecyclerView`
 
 # Question (EN)
-> How To Animate Adding/Removing Items In RecyclerView
+> How To Animate Adding/Removing Items In `RecyclerView`
 
 ---
 
 ## Ответ (RU)
 
-Для анимации добавления и удаления элементов в RecyclerView обычно используют:
+Для анимации добавления и удаления элементов в `RecyclerView` обычно используют:
 - ItemAnimator (по умолчанию `DefaultItemAnimator`), и
 - точечные уведомления адаптера (`notifyItemInserted`/`notifyItemRemoved` и т.п.) или `DiffUtil`/`ListAdapter`, которые генерируют эти события автоматически.
 
@@ -37,7 +37,7 @@ tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 
 ## Answer (EN)
 
-To animate adding and removing items in a RecyclerView you typically rely on:
+To animate adding and removing items in a `RecyclerView` you typically rely on:
 - an `ItemAnimator` (by default `DefaultItemAnimator`), and
 - fine-grained adapter updates (`notifyItemInserted`/`notifyItemRemoved`, etc.) or `DiffUtil`/`ListAdapter` to produce those updates.
 
@@ -48,13 +48,13 @@ In short:
 
 ## EN (expanded)
 
-To animate item additions and removals in RecyclerView, you use:
+To animate item additions and removals in `RecyclerView`, you use:
 - ItemAnimator (DefaultItemAnimator by default), and
 - correct adapter notifications (notifyItemInserted/Removed/etc.) or DiffUtil/ListAdapter.
 
 ### 1. DefaultItemAnimator (Built-in)
 
-RecyclerView includes a default animator:
+`RecyclerView` includes a default animator:
 
 ```kotlin
 recyclerView.itemAnimator = DefaultItemAnimator()
@@ -108,7 +108,7 @@ Key rule: use the specific notifyItem* methods instead of notifyDataSetChanged()
 
 ### 3. DiffUtil for Automatic Animations
 
-DiffUtil calculates differences and triggers appropriate animations:
+`DiffUtil` calculates differences and triggers appropriate animations:
 
 ```kotlin
 class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
@@ -144,7 +144,7 @@ class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
 
 ### 4. ListAdapter (Recommended)
 
-ListAdapter automatically handles DiffUtil and animations:
+ListAdapter automatically handles `DiffUtil` and animations:
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator) {
@@ -328,7 +328,7 @@ class SlideInItemAnimator : SimpleItemAnimator() {
 recyclerView.itemAnimator = SlideInItemAnimator()
 ```
 
-Note: This SlideInItemAnimator is intentionally incomplete and for conceptual demonstration only. A real ItemAnimator must correctly track pending and running animations to comply with RecyclerView's expectations.
+Note: This SlideInItemAnimator is intentionally incomplete and for conceptual demonstration only. A real ItemAnimator must correctly track pending and running animations to comply with `RecyclerView`'s expectations.
 
 ### 7. Complete Example with Swipe to Delete (with ListAdapter)
 
@@ -448,7 +448,7 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 - With ListAdapter, typically rely on ItemCallback for identity; use stable IDs only if you fully understand how they interact.
 - If implementing a custom ItemAnimator:
   - Use SimpleItemAnimator when you need full control.
-  - Call dispatchAdd/Remove/Move/ChangeStarting/Finished appropriately.
+  - `Call` dispatchAdd/Remove/Move/ChangeStarting/Finished appropriately.
   - Implement isRunning/endAnimation/endAnimations correctly with real tracking.
 - Disable change animations if you see blinking with partial updates.
 - Test animations on low-end devices to ensure performance.
@@ -457,13 +457,13 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 
 ## RU (расширенный ответ)
 
-Для анимации добавления и удаления элементов в RecyclerView используются:
+Для анимации добавления и удаления элементов в `RecyclerView` используются:
 - ItemAnimator (по умолчанию DefaultItemAnimator), и
 - корректные уведомления адаптера (notifyItemInserted/Removed и т.п.) или DiffUtil/ListAdapter.
 
 ### 1. DefaultItemAnimator (Встроенный)
 
-RecyclerView включает аниматор по умолчанию:
+`RecyclerView` включает аниматор по умолчанию:
 
 ```kotlin
 recyclerView.itemAnimator = DefaultItemAnimator()
@@ -517,7 +517,7 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
 ### 3. DiffUtil Для Автоматических Анимаций
 
-DiffUtil вычисляет различия и генерирует соответствующие анимации:
+`DiffUtil` вычисляет различия и генерирует соответствующие анимации:
 
 ```kotlin
 class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
@@ -553,7 +553,7 @@ class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
 
 ### 4. ListAdapter (Рекомендуется)
 
-ListAdapter автоматически использует DiffUtil и анимирует изменения списка:
+ListAdapter автоматически использует `DiffUtil` и анимирует изменения списка:
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator) {
@@ -861,7 +861,7 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 
 Кратко:
 - ItemAnimator (DefaultItemAnimator по умолчанию) + точечные notifyItem* уже дают базовые анимации.
-- DiffUtil или ListAdapter обеспечивают автоматическое вычисление изменений и анимацию добавлений/удалений/перемещений.
+- `DiffUtil` или ListAdapter обеспечивают автоматическое вычисление изменений и анимацию добавлений/удалений/перемещений.
 - При необходимости — настраивайте durations или пишите кастомный ItemAnimator, корректно управляя dispatch* и состоянием.
 
 ## Follow-ups

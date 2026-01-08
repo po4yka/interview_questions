@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-compose-recomposition, c-compose-state, c-mvvm-pattern, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard, q-how-jetpack-compose-works--android--medium, q-migration-to-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, jetpack-compose]
+tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium]
 sources:
   - "https://developer.android.com/jetpack/compose/architecture"
 ---

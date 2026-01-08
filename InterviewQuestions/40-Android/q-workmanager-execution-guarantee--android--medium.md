@@ -1,4 +1,4 @@
----
+---\
 id: android-234
 title: "WorkManager Execution Guarantee / Гарантия выполнения WorkManager"
 aliases: ["WorkManager Execution Guarantee", "Гарантия выполнения WorkManager"]
@@ -16,28 +16,28 @@ updated: 2025-11-10
 sources: ["https://developer.android.com/topic/libraries/architecture/workmanager", "https://developer.android.com/topic/libraries/architecture/workmanager/advanced"]
 tags: [android/background-execution, background-tasks, difficulty/medium, reliability, workmanager]
 
----
+---\
 # Вопрос (RU)
 
-> Как WorkManager гарантирует выполнение задач?
+> Как `WorkManager` гарантирует выполнение задач?
 
 # Question (EN)
 
-> How does WorkManager guarantee task execution?
+> How does `WorkManager` guarantee task execution?
 
 ## Ответ (RU)
 
-WorkManager предоставляет надежный, максимально возможный (best-effort) запуск отложенных фоновых задач, устойчивый к перезапускам, за счет трех ключевых механизмов: персистентного хранилища (SQLite), мониторинга системных ограничений и адаптивной интеграции с системными API планирования (в т.ч. JobScheduler на API 23+ и AlarmManager на старых версиях). Это не абсолютная гарантия против всех сценариев (force stop, удаление приложения, factory reset, жесткие OEM-ограничения), но один из самых надежных официальных механизмов.
+`WorkManager` предоставляет надежный, максимально возможный (best-effort) запуск отложенных фоновых задач, устойчивый к перезапускам, за счет трех ключевых механизмов: персистентного хранилища (`SQLite`), мониторинга системных ограничений и адаптивной интеграции с системными API планирования (в т.ч. JobScheduler на API 23+ и AlarmManager на старых версиях). Это не абсолютная гарантия против всех сценариев (force stop, удаление приложения, factory reset, жесткие OEM-ограничения), но один из самых надежных официальных механизмов.
 
 См. также [[c-background-tasks]].
 
 ### Ключевые Гарантии (в Рамках Ограничений ОС)
 
-1. **Персистентность** — все запросы работы сохраняются в SQLite и переживают перезапуски приложения/устройства
+1. **Персистентность** — все запросы работы сохраняются в `SQLite` и переживают перезапуски приложения/устройства
 2. **Constraint-based выполнение** — работа запускается только при выполнении всех условий (сеть, батарея, хранилище)
 3. **Автоматический retry** — поддержка повторных попыток с backoff (линейным или экспоненциальным) до установленного лимита
 4. **Упорядоченность** — цепочки работ соблюдают последовательность выполнения (следующая работа не начнется, пока предыдущая не завершится успешно, если не указано иное)
-5. **Фоновое выполнение** — `doWork()` выполняется не в UI-потоке (но разработчик не должен выполнять UI-операции из Worker)
+5. **Фоновое выполнение** — `doWork()` выполняется не в UI-потоке (но разработчик не должен выполнять UI-операции из `Worker`)
 
 ### Механизмы Гарантии
 
@@ -52,11 +52,11 @@ WorkManager.getInstance(context).enqueue(workRequest)
 // ✅ Даже если приложение упадет или будет перезапущено, работа сохранена в БД
 ```
 
-Внутри SQLite хранятся: параметры Worker, constraints, счетчик попыток, статус, output data. Это позволяет WorkManager восстановить состояние и продолжить планирование.
+Внутри `SQLite` хранятся: параметры `Worker`, constraints, счетчик попыток, статус, output data. Это позволяет `WorkManager` восстановить состояние и продолжить планирование.
 
 #### 2. Системная Интеграция
 
-WorkManager автоматически выбирает подходящий механизм выполнения в зависимости от версии платформы и доступных API (например, JobScheduler на современных версиях и комбинацию AlarmManager/`BroadcastReceiver` на старых). Конкретный выбор является деталью реализации библиотеки и может эволюционировать.
+`WorkManager` автоматически выбирает подходящий механизм выполнения в зависимости от версии платформы и доступных API (например, JobScheduler на современных версиях и комбинацию AlarmManager/`BroadcastReceiver` на старых). Конкретный выбор является деталью реализации библиотеки и может эволюционировать.
 
 #### 3. Constraint-based Выполнение
 
@@ -71,7 +71,7 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .build()
 ```
 
-WorkManager мониторит системное состояние и запускает работу только при выполнении всех заданных constraints. Если условия пропадают во время выполнения, работа может быть остановлена и пере-запланирована.
+`WorkManager` мониторит системное состояние и запускает работу только при выполнении всех заданных constraints. Если условия пропадают во время выполнения, работа может быть остановлена и пере-запланирована.
 
 #### 4. Автоматический Retry С Backoff
 
@@ -123,11 +123,11 @@ WorkManager.getInstance(context).enqueueUniqueWork(
 
 ### Обработка Перезагрузки
 
-После перезагрузки устройства WorkManager восстанавливает незавершенные работы из своей БД и продолжает планирование в соответствии с их статусами и constraints (механизмы доставки событий перезагрузки являются деталью реализации и могут отличаться между версиями библиотеки).
+После перезагрузки устройства `WorkManager` восстанавливает незавершенные работы из своей БД и продолжает планирование в соответствии с их статусами и constraints (механизмы доставки событий перезагрузки являются деталью реализации и могут отличаться между версиями библиотеки).
 
 ### Expedited Work
 
-Для срочных задач WorkManager поддерживает "expedited work" — приоритетное выполнение с использованием foreground service-подхода под капотом, в рамках квот платформы. Если квота исчерпана, запрос может быть выполнен как обычная (non-expedited) работа в соответствии с выбранной политикой.
+Для срочных задач `WorkManager` поддерживает "expedited work" — приоритетное выполнение с использованием foreground service-подхода под капотом, в рамках квот платформы. Если квота исчерпана, запрос может быть выполнен как обычная (non-expedited) работа в соответствии с выбранной политикой.
 
 ```kotlin
 class ExpeditedWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
@@ -153,8 +153,8 @@ val expeditedRequest = OneTimeWorkRequestBuilder<ExpeditedWorker>()
 
 ### Резюме
 
-WorkManager обеспечивает высокую надежность выполнения отложенных задач за счет:
-- Немедленного сохранения в SQLite при enqueue
+`WorkManager` обеспечивает высокую надежность выполнения отложенных задач за счет:
+- Немедленного сохранения в `SQLite` при enqueue
 - Автоматического выбора системных механизмов планирования (JobScheduler и др.)
 - Строгого учета constraints
 - Backoff-стратегий для повторных попыток
@@ -167,17 +167,17 @@ WorkManager обеспечивает высокую надежность вып�
 
 ## Answer (EN)
 
-WorkManager provides a resilient, best-effort execution of deferrable background work that needs guaranteed scheduling and persistence, using three core mechanisms: persistent storage (SQLite), system constraint monitoring, and adaptive integration with platform scheduling APIs (including JobScheduler on API 23+ and AlarmManager on older versions). It is not an absolute guarantee against all scenarios (force stop, app uninstall, factory reset, aggressive OEM kills), but it is the recommended reliable solution within platform constraints.
+`WorkManager` provides a resilient, best-effort execution of deferrable background work that needs guaranteed scheduling and persistence, using three core mechanisms: persistent storage (`SQLite`), system constraint monitoring, and adaptive integration with platform scheduling APIs (including JobScheduler on API 23+ and AlarmManager on older versions). It is not an absolute guarantee against all scenarios (force stop, app uninstall, factory reset, aggressive OEM kills), but it is the recommended reliable solution within platform constraints.
 
 See also [[c-background-tasks]].
 
 ### Key Guarantees (Within OS Constraints)
 
-1. **Persistence** — all work requests are stored in SQLite and survive app/process/device restarts
+1. **Persistence** — all work requests are stored in `SQLite` and survive app/process/device restarts
 2. **Constraint-based execution** — work runs only when all specified conditions are met (network, battery, storage, etc.)
 3. **Automatic retry** — supports retries with linear or exponential backoff up to configured limits
 4. **Ordering** — work chains preserve execution order (next work runs only after the prerequisite succeeds, unless configured otherwise)
-5. **Background execution** — `doWork()` is invoked off the main thread (your Worker must not perform UI operations directly)
+5. **Background execution** — `doWork()` is invoked off the main thread (your `Worker` must not perform UI operations directly)
 
 ### Guarantee Mechanisms
 
@@ -192,11 +192,11 @@ WorkManager.getInstance(context).enqueue(workRequest)
 // ✅ Even if the app crashes or restarts, the work is persisted in the DB
 ```
 
-SQLite stores: Worker parameters, constraints, run attempt count, status, and output data. This allows WorkManager to restore state and continue scheduling.
+`SQLite` stores: `Worker` parameters, constraints, run attempt count, status, and output data. This allows `WorkManager` to restore state and continue scheduling.
 
 #### 2. System Integration
 
-WorkManager automatically selects appropriate scheduling mechanisms based on API level and capabilities (e.g., JobScheduler on modern devices and combinations of AlarmManager/`BroadcastReceiver` on older ones). The exact choice is an implementation detail of the library and may evolve.
+`WorkManager` automatically selects appropriate scheduling mechanisms based on API level and capabilities (e.g., JobScheduler on modern devices and combinations of AlarmManager/`BroadcastReceiver` on older ones). The exact choice is an implementation detail of the library and may evolve.
 
 #### 3. Constraint-based Execution
 
@@ -211,7 +211,7 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .build()
 ```
 
-WorkManager tracks system state and runs work only when all constraints are satisfied. If constraints are no longer met while running, the work may be stopped and rescheduled.
+`WorkManager` tracks system state and runs work only when all constraints are satisfied. If constraints are no longer met while running, the work may be stopped and rescheduled.
 
 #### 4. Automatic Retry with Backoff
 
@@ -263,11 +263,11 @@ Unique work and chaining help avoid duplication and make behavior deterministic,
 
 ### Device Reboot Handling
 
-After a device reboot, WorkManager reloads unfinished work from its database and resumes scheduling according to their status and constraints. The low-level reboot handling (e.g., receivers) is internal to the library and may differ between versions.
+After a device reboot, `WorkManager` reloads unfinished work from its database and resumes scheduling according to their status and constraints. The low-level reboot handling (e.g., receivers) is internal to the library and may differ between versions.
 
 ### Expedited Work
 
-For urgent tasks, WorkManager supports "expedited work" — prioritized execution that may use a foreground service under the hood, subject to platform quotas. If the quota is exceeded, the request can fall back to a normal (non-expedited) work request depending on the specified `OutOfQuotaPolicy`.
+For urgent tasks, `WorkManager` supports "expedited work" — prioritized execution that may use a foreground service under the hood, subject to platform quotas. If the quota is exceeded, the request can fall back to a normal (non-expedited) work request depending on the specified `OutOfQuotaPolicy`.
 
 ```kotlin
 class ExpeditedWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
@@ -293,8 +293,8 @@ val expeditedRequest = OneTimeWorkRequestBuilder<ExpeditedWorker>()
 
 ### Summary
 
-WorkManager ensures high reliability for deferrable background work via:
-- Immediate SQLite persistence on enqueue
+`WorkManager` ensures high reliability for deferrable background work via:
+- Immediate `SQLite` persistence on enqueue
 - Automatic selection of platform scheduling mechanisms (JobScheduler, etc.)
 - Strict constraint enforcement
 - Configurable backoff strategies for retries
@@ -307,18 +307,18 @@ WorkManager ensures high reliability for deferrable background work via:
 
 ## Дополнительные Вопросы (RU)
 
-1. Что происходит с задачами WorkManager во время Doze Mode?
-2. Как отслеживать прогресс WorkManager в `ViewModel`?
+1. Что происходит с задачами `WorkManager` во время Doze Mode?
+2. Как отслеживать прогресс `WorkManager` в `ViewModel`?
 3. Когда следует использовать expedited work вместо прямого foreground service?
-4. Как WorkManager обрабатывает сбои в цепочке работ (например, если `workA` завершилась с ошибкой)?
+4. Как `WorkManager` обрабатывает сбои в цепочке работ (например, если `workA` завершилась с ошибкой)?
 5. Каковы trade-off'ы между `ExistingWorkPolicy.KEEP` и `ExistingWorkPolicy.REPLACE`?
 
 ## Follow-ups
 
-1. What happens to WorkManager tasks during Doze Mode?
-2. How do you observe WorkManager progress in a `ViewModel`?
+1. What happens to `WorkManager` tasks during Doze Mode?
+2. How do you observe `WorkManager` progress in a `ViewModel`?
 3. When should you use expedited work vs. a direct foreground service?
-4. How does WorkManager handle work chain failures (e.g., if `workA` fails)?
+4. How does `WorkManager` handle work chain failures (e.g., if `workA` fails)?
 5. What are the trade-offs between `ExistingWorkPolicy.KEEP` vs. `ExistingWorkPolicy.REPLACE`?
 
 ## Ссылки (RU)

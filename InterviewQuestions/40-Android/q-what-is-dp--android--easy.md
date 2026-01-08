@@ -1,4 +1,4 @@
----
+---\
 id: android-259
 title: What Is Dp / Что такое dp
 aliases: [Density-independent Pixels, Dp, Плотность-независимые пиксели]
@@ -16,7 +16,7 @@ updated: 2025-10-27
 sources:
   - https://developer.android.com/training/multiscreen/screendensities
 tags: [android/ui-compose, android/ui-theming, android/ui-views, density, difficulty/easy, material-design]
----
+---\
 # Вопрос (RU)
 
 > Что такое dp (density-independent pixel, плотность-независимый пиксель)?
@@ -95,7 +95,7 @@ fun DpExample() {
 
 ### Конвертация Dp ↔ Px
 
-**View System**:
+**`View` System**:
 ```kotlin
 // dp → px (упрощённый пример; в реальных проектах используйте Context-специфичные ресурсы)
 val density = resources.displayMetrics.density
@@ -137,7 +137,7 @@ fun DpConversion() {
 | Размеры layout              | dp      | `width = 100.dp`    |
 | Отступы/padding/margin      | dp      | `padding(16.dp)`    |
 | Размер текста               | **sp**  | `fontSize = 16.sp`  |
-| Canvas и низкоуровневый UI  | px      | Операции рисования  |
+| `Canvas` и низкоуровневый UI  | px      | Операции рисования  |
 
 ### Best Practices
 
@@ -227,7 +227,7 @@ fun DpExample() {
 
 ### Converting Dp ↔ Px
 
-**View System**:
+**`View` System**:
 ```kotlin
 // dp → px (simplified; in real apps prefer Context-specific resources)
 val density = resources.displayMetrics.density
@@ -269,7 +269,7 @@ fun DpConversion() {
 | Layout sizes           | dp     | `width = 100.dp`    |
 | Padding/Margins        | dp     | `padding(16.dp)`    |
 | Text size              | **sp** | `fontSize = 16.sp`  |
-| Canvas / low-level UI  | px     | Drawing operations  |
+| `Canvas` / low-level UI  | px     | Drawing operations  |
 
 ### Best Practices
 
@@ -293,7 +293,7 @@ textView.layoutParams.width = widthPx
 
 ## Follow-ups
 
-- Когда использовать sp вместо dp (и в Compose, и во View-системе)?
+- Когда использовать sp вместо dp (и в Compose, и во `View`-системе)?
 - Как связаны density buckets и папки ресурсов `drawable-*`/`mipmap-*`?
 - Какие проблемы возникают при смешении px и dp?
 

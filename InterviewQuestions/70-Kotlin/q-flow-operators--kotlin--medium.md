@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-103
 title: "Flow Operators in Kotlin / Операторы Flow в Kotlin"
 aliases: ["Flow Operators in Kotlin", "Операторы Flow в Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [combining, difficulty/medium, filtering, flow, kotlin, operators, transformation]
----
+---\
 # Вопрос (RU)
 > Что такое операторы `Flow` в Kotlin? Объясните категории: трансформации (`map`, `flatMap`), фильтрации (`filter`, `distinctUntilChanged`), комбинирования (`zip`, `combine`) и терминальные операторы (`collect`, `toList`). Приведите практические примеры.
 
@@ -572,9 +572,9 @@ fun fetchDataOfflineFirst(): Flow<Data> = flow {
 
 ### Ссылки (RU)
 
-- [Операторы Flow — документация Kotlin](https://kotlinlang.org/docs/flow.html#flow-operators)
+- [Операторы `Flow` — документация Kotlin](https://kotlinlang.org/docs/flow.html#flow-operators)
 - [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
+- [Kotlin `Flow` Guide](https://developer.android.com/kotlin/flow)
 - См. также: [[c-flow]]
 
 ### Связанные Вопросы (RU)
@@ -589,7 +589,7 @@ fun fetchDataOfflineFirst(): Flow<Data> = flow {
 
 ## Answer (EN)
 
-Flow operators are extension functions that transform, filter, combine, or collect `Flow` streams. They enable building complex reactive data pipelines in a declarative way, similar to sequence and collection operations.
+`Flow` operators are extension functions that transform, filter, combine, or collect `Flow` streams. They enable building complex reactive data pipelines in a declarative way, similar to sequence and collection operations.
 
 ### Operator Categories Overview
 
@@ -1153,7 +1153,7 @@ fun fetchDataOfflineFirst(): Flow<Data> = flow {
 ## References
 - [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flow-operators)
 - [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
+- [Kotlin `Flow` Guide](https://developer.android.com/kotlin/flow)
 - See also: [[c-flow]]
 
 ## Related Questions

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-160
 title: "ArrayList LinkedList Vector Difference / Разница ArrayList LinkedList и Vector"
 aliases: [ArrayList LinkedList Vector Difference, Разница ArrayList LinkedList Vector]
@@ -14,7 +14,7 @@ related: [c-collections, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, data-structures, difficulty/medium, kotlin]
----
+---\
 # Вопрос (RU)
 > В чем разница между `ArrayList`, `LinkedList` и `Vector`?
 
@@ -113,7 +113,7 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 
 ### Сравнение Производительности
 
-| Операция                   | ArrayList | LinkedList      | Vector |
+| Операция                   | `ArrayList` | `LinkedList`      | Vector |
 |----------------------------|----------:|----------------:|-------:|
 | get(index)                 | O(1)      | O(n)            | O(1)   |
 | add(element)               | O(1)*     | O(1)            | O(1)*  |
@@ -229,7 +229,7 @@ Characteristics:
 
 Best for:
 - Frequent insertions/deletions at the beginning/end
-- Queue or `Deque` operations
+- `Queue` or `Deque` operations
 - Frequent insertions/deletions near already-known positions/nodes
 - Avoid for random access by index on large lists
 
@@ -276,14 +276,14 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 
 ### Performance Comparison
 
-| Operation           | ArrayList | LinkedList | Vector |
+| Operation           | `ArrayList` | `LinkedList` | Vector |
 |---------------------|----------:|-----------:|-------:|
 | get(index)          | O(1)      | O(n)       | O(1)   |
 | add(element)        | O(1)*     | O(1)       | O(1)*  |
 | add(index, element) | O(n)      | O(n)**     | O(n)   |
 | remove(index)       | O(n)      | O(n)**     | O(n)   |
 | contains(element)   | O(n)      | O(n)       | O(n)   |
-| Thread Safety       | No        | No         | Yes*** |
+| `Thread` Safety       | No        | No         | Yes*** |
 | Memory Overhead     | Low       | High       | Low    |
 
 *Amortized.

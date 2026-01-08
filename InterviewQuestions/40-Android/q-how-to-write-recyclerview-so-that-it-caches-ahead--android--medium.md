@@ -1,4 +1,4 @@
----
+---\
 id: android-267
 title: How To Write RecyclerView So That It Caches Ahead
 aliases: [RecyclerView caching, RecyclerView prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
@@ -16,22 +16,22 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, android/performance-memory, android/performance-rendering, android/ui-views, caching, difficulty/medium, prefetching, recyclerview]
 
----
+---\
 # Вопрос (RU)
 
-> Как можно писать RecyclerView, чтобы он кэшировал наперёд?
+> Как можно писать `RecyclerView`, чтобы он кэшировал наперёд?
 
 ---
 
 # Question (EN)
 
-> How to write RecyclerView so that it caches ahead?
+> How to write `RecyclerView` so that it caches ahead?
 
 ---
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько механизмов для кэширования и предзагрузки элементов, улучшая производительность скроллинга. Важно различать:
+`RecyclerView` предоставляет несколько механизмов для кэширования и предзагрузки элементов, улучшая производительность скроллинга. Важно различать:
 - кэширование view (повторное использование уже созданных и привязанных `View`),
 - предзагрузку layout/bind (layout prefetch из `LayoutManager`),
 - предзагрузку данных (pagination, предварительная загрузка контента).
@@ -185,9 +185,9 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
 
 ## Answer (EN)
 
-RecyclerView provides several mechanisms for caching and prefetching items to improve scrolling performance. It is important to distinguish between:
+`RecyclerView` provides several mechanisms for caching and prefetching items to improve scrolling performance. It is important to distinguish between:
 - view caching (reusing already created and bound views),
-- layout/bind prefetch (LayoutManager item prefetch),
+- layout/bind prefetch (`LayoutManager` item prefetch),
 - data preloading (pagination / fetching content ahead).
 
 ### 1. `View` Caching via `setItemViewCacheSize()`
@@ -349,9 +349,9 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
 
 ## Follow-ups
 
-- How does RecyclerView's view recycling work internally?
+- How does `RecyclerView`'s view recycling work internally?
 - What's the difference between ViewCache and RecycledViewPool?
-- When should you use DiffUtil vs AsyncListDiffer?
+- When should you use `DiffUtil` vs AsyncListDiffer?
 - How to measure cache hit rate in production?
 - What's the performance impact of nested RecyclerViews?
 
@@ -408,4 +408,4 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
 - [[q-recyclerview-async-list-differ--android--medium]]
 
 ### Advanced (Harder)
-- Profiling RecyclerView performance with systrace
+- Profiling `RecyclerView` performance with systrace

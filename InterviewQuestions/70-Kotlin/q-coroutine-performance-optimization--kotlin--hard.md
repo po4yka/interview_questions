@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-083
 title: "Coroutine Performance Optimization / Оптимизация производительности корутин"
 aliases: ["Coroutine Performance Optimization", "Оптимизация производительности корутин"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/hard, kotlin]
----
+---\
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140021
 
@@ -162,7 +162,7 @@ suspend fun measurePerformance() {
 
 ## Answer (EN)
 
-Coroutine performance optimization involves understanding dispatcher selection, minimizing context switching, efficient resource usage, and avoiding common performance pitfalls. See also [[c-kotlin]] and [[c-coroutines]].
+`Coroutine` performance optimization involves understanding dispatcher selection, minimizing context switching, efficient resource usage, and avoiding common performance pitfalls. See also [[c-kotlin]] and [[c-coroutines]].
 
 ### Key Performance Principles
 

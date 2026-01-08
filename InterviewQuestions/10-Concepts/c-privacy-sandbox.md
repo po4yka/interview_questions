@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-142848"
 title: "Privacy Sandbox / Privacy Sandbox"
 aliases: ["Privacy Sandbox"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-privacy-by-design, c-differential-privacy, c-gdpr-compliance, c-permissions, c-security]
+moc: "moc-cs"
+related: ["c-privacy-by-design", "c-differential-privacy", "c-gdpr-compliance", "c-permissions", "c-security"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -33,7 +34,7 @@ Privacy Sandbox — это набор конфиденциальных API дл�
 
 - Privacy by design: Shifts sensitive operations (interest inference, attribution, anti-fraud) to on-device computation, reducing exposure of user-level data.
 - Replacement for legacy tracking: Designed as an alternative to third-party cookies, fingerprinting, and ad IDs, while still supporting use cases like remarketing and conversion tracking.
-- Scoped, purpose-specific APIs: Provides focused APIs (e.g., for interest groups, topics, attribution reporting, protected audiences) instead of broad cross-site identifiers.
+- Scoped, purpose-specific APIs: `Provides` focused APIs (e.g., for interest groups, topics, attribution reporting, protected audiences) instead of broad cross-site identifiers.
 - Transparency and control: Gives users clearer controls over ad-related features and limits silent tracking by default.
 - Regulatory alignment: Aims to align ad tech practices with modern privacy regulations and platform policies (e.g., GDPR-like principles, Android/iOS privacy models).
 

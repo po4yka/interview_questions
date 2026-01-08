@@ -1,4 +1,4 @@
----
+---\
 id: android-052
 title: CI/CD for Multi‑Module Android / CI/CD для мультимодульных Android‑проектов
 aliases: [CI/CD for Multi-Module Android, CI/CD для мультимодульных Android‑проектов]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/architecture-modularization, android/ci-cd, android/gradle, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Как организовать CI/CD для мультимодульного Android-проекта с учётом оптимизации времени сборки и детерминированности?
 
@@ -192,7 +192,7 @@ AFFECTED=$(scripts/affected-modules.sh "$CHANGED")
 ```
 
 **Algorithm**:
-1. Map changed files → modules (files in `core/ui/` → module `:core:ui`)
+1. `Map` changed files → modules (files in `core/ui/` → module `:core:ui`)
 2. Find reverse dependencies for each module
 3. Deduplicate and compute minimal set
 
@@ -321,7 +321,7 @@ tasks.withType<Test> {
 ## References
 
 - [Gradle Performance Guide](https://docs.gradle.org/current/userguide/performance.html)
-- [Android Multi-Module Architecture](https://developer.android.com/topic/modularization)
+- [Android Multi-`Module` Architecture](https://developer.android.com/topic/modularization)
 - [Gradle Build Cache Documentation](https://docs.gradle.org/current/userguide/build_cache.html)
 - [Gradle Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html)
 
@@ -339,7 +339,7 @@ tasks.withType<Test> {
 
 ### Related
 - [[q-cicd-automated-testing--android--medium]] — Test automation strategies in CI/CD
-- Module dependency graph algorithms and visualization
+- `Module` dependency graph algorithms and visualization
 - Gradle composite builds and included builds setup
 - Remote build cache infrastructure setup
 

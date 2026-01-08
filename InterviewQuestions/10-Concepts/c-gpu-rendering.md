@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-183738"
 title: "Gpu Rendering / Gpu Rendering"
 aliases: ["Gpu Rendering"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-android-graphics, c-shader-programming]
+moc: "moc-cs"
+related: ["c-android-graphics", "c-shader-programming"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -35,7 +36,7 @@ GPU-рендеринг — это использование графическ�
 - Rendering pipeline: Modern GPU rendering follows a pipeline (vertex processing, rasterization, fragment processing, blending), often programmable via shaders (e.g., GLSL, HLSL, Metal Shading Language).
 - Offloading from CPU: Moving rendering work to the GPU frees the CPU for game logic, I/O, and system tasks, improving responsiveness and throughput.
 - Platform usage: Used in OpenGL/Vulkan/Direct3D/Metal, Android/iOS hardware-accelerated UI, WebGL/WebGPU in browsers, and compute APIs (CUDA/OpenCL) for non-graphics workloads.
-- Performance trade-offs: Provides significant speedups but requires attention to draw-call count, overdraw, batching, memory bandwidth, and GPU/CPU synchronization to avoid bottlenecks.
+- Performance trade-offs: `Provides` significant speedups but requires attention to draw-call count, overdraw, batching, memory bandwidth, and GPU/CPU synchronization to avoid bottlenecks.
 
 ## Ключевые Моменты (RU)
 

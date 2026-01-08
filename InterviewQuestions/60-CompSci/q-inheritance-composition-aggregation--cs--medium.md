@@ -1,4 +1,4 @@
----
+---\
 id: oop-002
 title: "Inheritance, Composition, Aggregation / Наследование, композиция и агрегация"
 aliases: [Inheritance Composition Aggregation, композиция и агрегация, Наследование]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-11-11
 tags: [cs/object-oriented, cs/relationships, design-patterns, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > В чём различия наследования, композиции, агрегации?
 
@@ -473,7 +473,7 @@ dog.sleep()      // "Buddy is sleeping"
 ### Key Characteristics
 
 - **Ownership in the model** - container conceptually owns the components
-- **Lifecycle dependency (conceptual)** - components are treated as parts; if the whole is removed, its parts usually do not make sense independently
+- **`Lifecycle` dependency (conceptual)** - components are treated as parts; if the whole is removed, its parts usually do not make sense independently
 - **Strong relationship** - components are integral to the whole
 - **Encapsulation** - components can be hidden from outside
 - **Flexibility** - behavior built by delegating to components rather than inheriting
@@ -616,7 +616,7 @@ designDept.addEmployee(bob)
 |--------|-------------|-------------|-------------|
 | **Relationship** | IS-A | HAS-A (strong, part-of) | HAS-A (weak) |
 | **Coupling** | Strong | Strong to moderate | Weak |
-| **Lifecycle (conceptual)** | Shared type hierarchy | Parts depend on whole | Independent |
+| **`Lifecycle` (conceptual)** | Shared type hierarchy | Parts depend on whole | Independent |
 | **Flexibility** | Lower (hierarchy-bound) | High | High |
 | **Code reuse** | Through parent | Through components | Shared objects |
 | **Polymorphism** | Yes (via base type) | Not inherent | Not inherent |
@@ -756,7 +756,7 @@ class UserListFragment : Fragment() {
 }
 ```
 
-This example illustrates that the `Fragment` can reference an Adapter without owning its existence; the Adapter could be managed or shared elsewhere.
+This example illustrates that the `Fragment` can reference an `Adapter` without owning its existence; the `Adapter` could be managed or shared elsewhere.
 
 ---
 

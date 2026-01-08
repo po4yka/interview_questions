@@ -1,4 +1,4 @@
----
+---\
 id: android-198
 title: Handler Looper Comprehensive / Handler и Looper подробно
 aliases: [Handler Looper Comprehensive, Handler и Looper подробно]
@@ -15,24 +15,24 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/threads-sync, concurrency, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
-> Handler и Looper подробно
+> `Handler` и `Looper` подробно
 
 # Question (EN)
-> Handler Looper Comprehensive
+> `Handler` `Looper` Comprehensive
 
 ---
 
 ## Ответ (RU)
 
-Handler и Looper — это фундаментальные примитивы Android для организации межпоточного взаимодействия и обработки событий через очередь сообщений.
+`Handler` и `Looper` — это фундаментальные примитивы Android для организации межпоточного взаимодействия и обработки событий через очередь сообщений.
 
-Важно: далее примеры ориентированы на классический Handler API. В современном коде часть конструкторов помечена как deprecated — используйте явный Looper и/или Callback, и рассматривайте coroutines/Executors как предпочтительный инструмент, но принципы Handler/Looper остаются теми же.
+Важно: далее примеры ориентированы на классический `Handler` API. В современном коде часть конструкторов помечена как deprecated — используйте явный `Looper` и/или Callback, и рассматривайте coroutines/Executors как предпочтительный инструмент, но принципы Handler/Looper остаются теми же.
 
 Важные идеи:
-- Handler связывает вызывающий код с конкретным Looper/потоком.
-- Looper крутит бесконечный цикл и вытаскивает сообщения/задачи из MessageQueue.
+- `Handler` связывает вызывающий код с конкретным Looper/потоком.
+- `Looper` крутит бесконечный цикл и вытаскивает сообщения/задачи из MessageQueue.
 - MessageQueue хранит `Message` и `Runnable` с временными метками.
 
 ### 1. Handler-Looper-MessageQueue Architecture
@@ -63,12 +63,12 @@ class Handler(val looper: Looper) {
 ```
 
 Ключевые ограничения:
-- Один поток → максимум один Looper → одна MessageQueue.
-- Handler всегда привязан к конкретному Looper (а значит — к конкретному потоку).
+- Один поток → максимум один `Looper` → одна MessageQueue.
+- `Handler` всегда привязан к конкретному `Looper` (а значит — к конкретному потоку).
 
 ### 2. Как Looper Привязывается К Потоку
 
-Looper создается и привязывается к потоку через `Looper.prepare()` и `Looper.loop()`.
+`Looper` создается и привязывается к потоку через `Looper.prepare()` и `Looper.loop()`.
 
 ```kotlin
 // Пример кастомного потока с собственным Looper (для демонстрации, в реальном коде лучше HandlerThread)
@@ -139,7 +139,7 @@ handler.sendMessage(
 ```
 
 Важно:
-- `Looper.prepare()` создает Looper и сохраняет его в `ThreadLocal` текущего потока.
+- `Looper.prepare()` создает `Looper` и сохраняет его в `ThreadLocal` текущего потока.
 - `Looper.loop()` — бесконечный цикл чтения/диспетчеризации сообщений из очереди; блокирует поток.
 - В большинстве случаев вместо ручного `Thread + Looper` следует использовать `HandlerThread` или другие высокоуровневые механизмы.
 
@@ -426,7 +426,7 @@ class TaskQueue {
 
 ### 8. IdleHandler — Выполнение, Когда Очередь Пуста
 
-Важно: доступ к очереди главного Looper через `Looper.getMainLooper().queue` относится к внутренним деталям реализации и может быть недоступен или изменён; такие примеры носят концептуальный характер.
+Важно: доступ к очереди главного `Looper` через `Looper.getMainLooper().queue` относится к внутренним деталям реализации и может быть недоступен или изменён; такие примеры носят концептуальный характер.
 
 ```kotlin
 class IdleMonitor {
@@ -600,19 +600,19 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 | Компонент | Назначение                 | Количество на поток |
 |----------|----------------------------|---------------------|
-| Looper   | Цикл обработки сообщений   | 1                   |
-| MessageQueue | Очередь сообщений      | 1 (у Looper)        |
-| Handler  | Отправка/обработка сообщений | Много             |
-| Message  | Контейнер данных/события  | Много               |
+| `Looper`   | Цикл обработки сообщений   | 1                   |
+| MessageQueue | Очередь сообщений      | 1 (у `Looper`)        |
+| `Handler`  | Отправка/обработка сообщений | Много             |
+| `Message`  | Контейнер данных/события  | Много               |
 
 ### Best Practices
 
-1. Очищать Handler в onDestroy()/onCleared(), если он может жить дольше компонента.
+1. Очищать `Handler` в onDestroy()/onCleared(), если он может жить дольше компонента.
    ```kotlin
    handler.removeCallbacksAndMessages(null)
    ```
-2. Не держать сильные ссылки на `Activity`/`Fragment`/`Context` в длительно живущих Handler-callback'ах; использовать WeakReference или lifecycle-aware решения.
-3. Для фоновых задач предпочтительнее `HandlerThread` или современные средства (Executors, coroutines), чем вручную созданный `Thread` с Looper.
+2. Не держать сильные ссылки на `Activity`/`Fragment`/`Context` в длительно живущих `Handler`-callback'ах; использовать WeakReference или lifecycle-aware решения.
+3. Для фоновых задач предпочтительнее `HandlerThread` или современные средства (Executors, coroutines), чем вручную созданный `Thread` с `Looper`.
 4. Использовать `Message.obtain()` вместо прямого конструктора для переиспользования объектов.
 5. Проверять lifecycle/поток перед обновлением UI из отложенных задач.
 
@@ -620,13 +620,13 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 ## Answer (EN)
 
-Handler and Looper are fundamental Android primitives for thread-confined, message-based execution and inter-thread communication.
+`Handler` and `Looper` are fundamental Android primitives for thread-confined, message-based execution and inter-thread communication.
 
-Note: examples below illustrate the classic Handler API. Some constructors are deprecated in modern Android; always specify an explicit Looper and/or Callback, and prefer coroutines/Executors for many use cases. The core Handler/Looper principles remain valid.
+Note: examples below illustrate the classic `Handler` API. Some constructors are deprecated in modern Android; always specify an explicit `Looper` and/or Callback, and prefer coroutines/Executors for many use cases. The core Handler/Looper principles remain valid.
 
 Key ideas:
-- A Handler binds calling code to a specific Looper/thread.
-- A Looper runs an infinite loop pulling messages/tasks from its MessageQueue.
+- A `Handler` binds calling code to a specific Looper/thread.
+- A `Looper` runs an infinite loop pulling messages/tasks from its MessageQueue.
 - MessageQueue stores `Message` and `Runnable` instances with timestamps.
 
 ### 1. Handler-Looper-MessageQueue Architecture
@@ -656,13 +656,13 @@ class Handler(val looper: Looper) {
 }
 ```
 
-Constraints:
-- One thread → at most one Looper → one MessageQueue.
-- A Handler is always bound to a particular Looper (and thus a specific thread).
+`Constraints`:
+- One thread → at most one `Looper` → one MessageQueue.
+- A `Handler` is always bound to a particular `Looper` (and thus a specific thread).
 
 ### 2. How a Looper is Bound to a Thread
 
-A Looper is created and attached to a thread via `Looper.prepare()` and `Looper.loop()`.
+A `Looper` is created and attached to a thread via `Looper.prepare()` and `Looper.loop()`.
 
 ```kotlin
 // Custom thread with its own Looper (demo only; prefer HandlerThread in production)
@@ -730,7 +730,7 @@ handler.sendMessage(
 ```
 
 Notes:
-- `Looper.prepare()` creates and stores the Looper in the current thread's `ThreadLocal`.
+- `Looper.prepare()` creates and stores the `Looper` in the current thread's `ThreadLocal`.
 - `Looper.loop()` is a blocking loop that reads/dispatches messages from the queue.
 - In practice, prefer `HandlerThread` or other high-level APIs over raw `Thread + Looper`.
 
@@ -1196,16 +1196,16 @@ Note: sync barriers and related internals are not for regular production use unl
 
 ### Component Comparison
 
-| Component   | Purpose                        | Per thread        |
+| `Component`   | Purpose                        | Per thread        |
 |------------|--------------------------------|-------------------|
-| Looper     | Message processing loop        | 1                 |
-| MessageQueue | Holds scheduled messages     | 1 (per Looper)    |
-| Handler    | Send/handle messages to Looper | Many              |
-| Message    | Data/event container           | Many              |
+| `Looper`     | `Message` processing loop        | 1                 |
+| MessageQueue | Holds scheduled messages     | 1 (per `Looper`)    |
+| `Handler`    | Send/handle messages to `Looper` | Many              |
+| `Message`    | Data/event container           | Many              |
 
 ### Best Practices
 
-1. Clear callbacks/messages in `onDestroy()` / `onCleared()` when a Handler can outlive its owner.
+1. Clear callbacks/messages in `onDestroy()` / `onCleared()` when a `Handler` can outlive its owner.
    ```kotlin
    handler.removeCallbacksAndMessages(null)
    ```

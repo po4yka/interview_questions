@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-076
 title: "Hot vs Cold Flows / Горячие и холодные потоки"
 aliases: ["Hot vs Cold Flows", "Горячие и холодные потоки"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [cold-flows, coroutines, difficulty/medium, flow, hot-flows, kotlin]
----
+---\
 # Вопрос (RU)
 > В чем разница между горячими и холодными потоками? Объясните `Flow` (холодный), `SharedFlow`, `StateFlow` (горячие), когда использовать каждый и как конвертировать между ними.
 
@@ -194,7 +194,7 @@ val hotFlow = MutableSharedFlow<Int>()
 ## Related Questions
 
 ### Related (Medium)
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Flow
+- [[q-cold-vs-hot-flows--kotlin--medium]] - `Flow`
 - [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
 - [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
@@ -203,4 +203,4 @@ val hotFlow = MutableSharedFlow<Int>()
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

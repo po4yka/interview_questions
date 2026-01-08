@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-165852"
 title: "Immutability / Immutability"
 aliases: ["Immutability"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-functional-programming, c-data-classes, c-value-classes, c-kotlin-concepts]
+moc: "moc-cs"
+related: ["c-functional-programming", "c-data-classes", "c-value-classes", "c-kotlin-concepts"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ Immutability (иммутабельность) — это свойство дан
 ## Key Points (EN)
 
 - Immutable vs mutable: Immutable values cannot be modified; updates are modeled by creating new values, while mutable values allow in-place changes.
-- Thread-safety: Immutable objects are inherently thread-safe and can be freely shared without synchronization, reducing concurrency bugs.
+- `Thread`-safety: Immutable objects are inherently thread-safe and can be freely shared without synchronization, reducing concurrency bugs.
 - Functional style: Immutability is a core principle of functional programming, enabling referential transparency and easier reasoning about functions.
 - Performance trade-offs: Creating new objects instead of mutating can be more expensive, but is often mitigated by persistent data structures and structural sharing.
 - Practical usage: Prefer immutable data for DTOs, configuration, domain values, and public APIs; use controlled mutability internally where performance or stateful behavior is required.

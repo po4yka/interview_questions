@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-185
 title: "Structured Concurrency in Kotlin Coroutines / Структурированная параллельность"
 aliases: [Structured Concurrency, Coroutine Scope, Lifecycle, Структурированная параллельность]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [kotlin, coroutines, structured-concurrency, scope, lifecycle, memory-leaks, difficulty/medium]
 source: Kotlin Coroutines Interview Questions PDF
----
+---\
 # Вопрос (RU)
 > Что такое структурированная конкурентность и почему она важна при использовании корутин в Android?
 
@@ -25,7 +25,7 @@ source: Kotlin Coroutines Interview Questions PDF
 > What is structured concurrency and why is it important in Android coroutine usage?
 ## Ответ (RU)
 
-**Структурированная конкурентность** — это подход к работе с конкурентностью, который привязывает время жизни корутин к области видимости (scope), формируя иерархию родитель–потомок и гарантируя, что когда область завершается (например, Activity уничтожается), все дочерние корутины завершаются или отменяются.
+**Структурированная конкурентность** — это подход к работе с конкурентностью, который привязывает время жизни корутин к области видимости (scope), формируя иерархию родитель–потомок и гарантируя, что когда область завершается (например, `Activity` уничтожается), все дочерние корутины завершаются или отменяются.
 
 ### Основные Принципы
 
@@ -171,7 +171,7 @@ viewModelScope.launch {
 
 ## Answer (EN)
 
-**Structured concurrency** is a concurrency model that ties the lifetime of coroutines to a scope, forming a parent–child hierarchy and ensuring that when a scope ends (e.g., an Activity is destroyed), all its child coroutines are completed or cancelled.
+**Structured concurrency** is a concurrency model that ties the lifetime of coroutines to a scope, forming a parent–child hierarchy and ensuring that when a scope ends (e.g., an `Activity` is destroyed), all its child coroutines are completed or cancelled.
 
 ### Core Principles
 
@@ -179,7 +179,7 @@ viewModelScope.launch {
 - Ties coroutine lifetimes to a specific scope
 - Ensures all child coroutines complete or cancel when the parent scope ends
 - Prevents coroutine leaks where background work continues after the UI is destroyed
-- Provides predictable cancellation, cleanup, and error propagation through the hierarchy
+- `Provides` predictable cancellation, cleanup, and error propagation through the hierarchy
 
 ### Why It Matters in Android
 
@@ -407,8 +407,8 @@ In Android, this means using `viewModelScope`, `lifecycleScope`, or well-defined
 
 ### Related (Medium)
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutine` dispatchers overview
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `Context`
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
 
 ### Advanced (Harder)

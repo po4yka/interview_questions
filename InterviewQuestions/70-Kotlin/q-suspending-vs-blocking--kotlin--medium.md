@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-015
 title: "Suspending vs Blocking / Приостанавливающие vs блокирующие функции"
 aliases: ["Suspending vs Blocking", "Приостанавливающие vs блокирующие функции"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [blocking, concurrency, coroutines, difficulty/medium, kotlin, suspend]
----
+---\
 # Вопрос (RU)
 > В чем разница между приостанавливающими (suspending) и блокирующими (blocking) функциями в Kotlin?
 
@@ -239,7 +239,7 @@ Important: the `suspend` modifier by itself does not automatically make code non
 
 | Aspect | Blocking | Suspending |
 |--------|----------|------------|
-| **Thread** | Locked/blocked for the duration of the call | Can be free to do other work while coroutine is suspended (with non-blocking suspend operations) |
+| **`Thread`** | Locked/blocked for the duration of the call | Can be free to do other work while coroutine is suspended (with non-blocking suspend operations) |
 | **Execution** | Sequential on a given thread (must wait) | Concurrent: many coroutines can interleave on a smaller thread pool |
 | **Resource usage** | Holds a thread resource while waiting | Efficient: many coroutines can share fewer threads |
 | **Android UI** | Blocking on main thread freezes UI / risks ANR | When used properly, keeps UI responsive |

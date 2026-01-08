@@ -1,4 +1,4 @@
----
+---\
 id: android-094
 title: "Frame Time 120ms Meaning / Значение времени кадра 120мс"
 aliases: ["Frame Time 120ms Meaning", "Значение времени кадра 120мс"]
@@ -15,7 +15,7 @@ tags: [android/performance-rendering, android/profiling, difficulty/easy, fps, f
 moc: moc-android
 related: [c-android-basics, c-android-profiling, q-android-performance-measurement-tools--android--medium]
 sources: []
----
+---\
 # Вопрос (RU)
 
 > Если профайлер показывает что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
@@ -105,7 +105,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - **~120мс** — явный jank / «фриз» кадра
 - **≈5000мс на главном потоке** — высокий риск ANR для input/broadcast (5с), для некоторых случаев (service) порог 10с; настолько долгие блокировки недопустимы.
 
-**Решение:** профилировать с помощью Perfetto/Trace, переносить тяжёлую работу на Dispatchers.Default/IO и off-main механизмы, оптимизировать layout hierarchy, использовать RecyclerView с корректным recycling и DiffUtil.
+**Решение:** профилировать с помощью Perfetto/Trace, переносить тяжёлую работу на Dispatchers.Default/IO и off-main механизмы, оптимизировать layout hierarchy, использовать `RecyclerView` с корректным recycling и `DiffUtil`.
 
 ## Answer (EN)
 
@@ -186,7 +186,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - **~120ms** — clear jank / visible hitch
 - **≈5000ms on main thread** — high ANR risk for input/broadcast (5s), with some cases (services) at 10s; such long stalls are unacceptable.
 
-**Solution:** Profile with Perfetto/trace tools, move heavy work to Dispatchers.Default/IO or other background mechanisms, optimize layout hierarchy, use RecyclerView with proper recycling and DiffUtil.
+**Solution:** Profile with Perfetto/trace tools, move heavy work to Dispatchers.Default/IO or other background mechanisms, optimize layout hierarchy, use `RecyclerView` with proper recycling and `DiffUtil`.
 
 ---
 

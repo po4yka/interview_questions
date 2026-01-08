@@ -1,4 +1,4 @@
----
+---\
 id: android-034
 title: How do image loading libraries like Glide work internally? / Как работают библиотеки загрузки изображений вроде Glide?
 aliases: ["How do image loading libraries like Glide work internally?", "Как работают библиотеки загрузки изображений вроде Glide?"]
@@ -17,7 +17,7 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/cache-offline, android/files-media, android/performance-memory, difficulty/medium, en, ru]
 
----
+---\
 
 # Вопрос (RU)
 > Как работают библиотеки загрузки изображений вроде Glide/Fresco внутри?
@@ -266,7 +266,7 @@ class BitmapPool(maxSizeBytes: Int) {
 }
 ```
 
-Повторное использование Bitmap снижает давление на GC и повышает производительность при скролле списков.
+Повторное использование `Bitmap` снижает давление на GC и повышает производительность при скролле списков.
 
 ### 8. Стратегия Кэширования На Диск
 
@@ -307,9 +307,9 @@ class DiskCacheManager {
 - Fresco:
   - Собственный pipeline, активное использование нативной памяти, управление через Drawee.
 - Coil:
-  - Kotlin-first, корутины, собственные кэши (память/диск), часто OkHttp для сети.
+  - Kotlin-first, корутины, собственные кэши (память/диск), часто `OkHttp` для сети.
 - Picasso:
-  - Более простой API, LRU-кэши и OkHttp, меньше автоматизации жизненного цикла по сравнению с Glide.
+  - Более простой API, LRU-кэши и `OkHttp`, меньше автоматизации жизненного цикла по сравнению с Glide.
 
 (Детали зависят от версии; это намеренно высокоуровневое сравнение.)
 
@@ -571,7 +571,7 @@ class BitmapPool(maxSizeBytes: Int) {
 }
 ```
 
-Bitmap reuse reduces GC pressure and improves performance, especially when scrolling lists.
+`Bitmap` reuse reduces GC pressure and improves performance, especially when scrolling lists.
 
 ### 8. Disk Cache Strategy (Modeled After Glide)
 
@@ -612,9 +612,9 @@ These strategies are similar to Glide's real `DiskCacheStrategy` options.
 - Fresco:
   - Uses native memory and its own pipeline; manages Drawee hierarchy and lifecycle explicitly.
 - Coil:
-  - Kotlin-first, coroutine-based; has its own memory/disk caches; often uses OkHttp for networking.
+  - Kotlin-first, coroutine-based; has its own memory/disk caches; often uses `OkHttp` for networking.
 - Picasso:
-  - Simpler API; uses LRU caches and OkHttp; less automatic lifecycle integration compared to Glide.
+  - Simpler API; uses LRU caches and `OkHttp`; less automatic lifecycle integration compared to Glide.
 
 (Details vary by version; this is intentionally high-level.)
 

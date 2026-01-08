@@ -1,4 +1,4 @@
----
+---\
 id: android-269
 title: Android Modularization / Модуляризация Android
 aliases: [Android Modularization, Модуляризация Android]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium]
 sources: []
----
+---\
 # Вопрос (RU)
 > Что такое модуляризация Android-приложений и какие основные преимущества она даёт?
 
@@ -27,7 +27,7 @@ sources: []
 **Модуляризация Android** — разделение кодовой базы на слабо связанные, независимо разрабатываемые модули Gradle. Каждый модуль инкапсулирует определённую функциональность и может собираться независимо от других.
 
 **Типы модулей:**
-- **App Module** — точка входа, координирует feature-модули
+- **App `Module`** — точка входа, координирует feature-модули
 - **Feature Modules** — изолированные фичи (news, profile, settings)
 - **Core Modules** — переиспользуемая логика (data, network, ui)
 - **Library Modules** — общие компоненты без Android-зависимостей
@@ -113,8 +113,8 @@ class NewsViewModel {
 
 **Android Modularization** is organizing a codebase into loosely coupled, independently developable Gradle modules. Each module encapsulates specific functionality and can be built independently from others.
 
-**Module Types:**
-- **App Module** — entry point, coordinates feature modules
+**`Module` Types:**
+- **App `Module`** — entry point, coordinates feature modules
 - **Feature Modules** — isolated features (news, profile, settings)
 - **Core Modules** — reusable logic (data, network, ui)
 - **Library Modules** — shared components without Android dependencies

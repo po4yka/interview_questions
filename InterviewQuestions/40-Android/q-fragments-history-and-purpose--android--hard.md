@@ -1,4 +1,4 @@
----
+---\
 id: android-115
 title: Fragments History And Purpose / История и назначение фрагментов
 aliases: [Fragments History And Purpose, История и назначение фрагментов]
@@ -17,7 +17,7 @@ sources:
   - "https://developer.android.com/guide/fragments"
   - "https://developer.android.com/guide/fragments/lifecycle"
 tags: [android/fragment, android/lifecycle, difficulty/hard]
----
+---\
 # Вопрос (RU)
 
 > Как появились фрагменты и для чего их начали использовать?
@@ -78,7 +78,7 @@ class UserListFragment : Fragment() {
 // ✅ Может использоваться в MainActivity, SettingsActivity, AdminActivity (общий UI-модуль)
 ```
 
-**3. Независимый Lifecycle**
+**3. Независимый `Lifecycle`**
 
 Фрагменты имеют собственный жизненный цикл (вложенный в lifecycle `Activity`), что позволяет управлять состоянием UI-компонентов более локально и модульно:
 
@@ -96,7 +96,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**4. Back Stack Management**
+**4. Back `Stack` Management**
 
 ```kotlin
 // ✅ Навигация: Fragment3 → Fragment2 → Fragment1 → Exit
@@ -175,7 +175,7 @@ Jetpack Compose снижает необходимость фрагментов �
 
 ### Типичные Ошибки
 
-- Утечки памяти из-за неправильного использования lifecycle для подписок и ссылок на View
+- Утечки памяти из-за неправильного использования lifecycle для подписок и ссылок на `View`
 - `IllegalStateException` из-за транзакций после `onSaveInstanceState()`
 - Ошибки с back stack из-за пропуска `addToBackStack()` (где ожидается возврат)
 - Неправильная коммуникация через устаревший `setTargetFragment()`
@@ -231,7 +231,7 @@ class UserListFragment : Fragment() {
 // ✅ Can be used in MainActivity, SettingsActivity, AdminActivity as a shared UI module
 ```
 
-**3. Independent Lifecycle**
+**3. Independent `Lifecycle`**
 
 Fragments have their own lifecycle (nested within the `Activity` lifecycle), which allows more localized and modular management of UI component state:
 
@@ -249,7 +249,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**4. Back Stack Management**
+**4. Back `Stack` Management**
 
 ```kotlin
 // ✅ Navigation: Fragment3 → Fragment2 → Fragment1 → Exit
@@ -328,7 +328,7 @@ Jetpack Compose reduces the need for fragments in new projects (navigation and r
 
 ### Common Pitfalls
 
-- Memory leaks due to incorrect lifecycle usage for subscriptions and View references
+- Memory leaks due to incorrect lifecycle usage for subscriptions and `View` references
 - `IllegalStateException` due to transactions after `onSaveInstanceState()`
 - Back stack issues due to missing `addToBackStack()` where back navigation is expected
 - Incorrect communication via deprecated `setTargetFragment()`

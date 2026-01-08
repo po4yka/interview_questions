@@ -1,4 +1,4 @@
----
+---\
 id: lang-028
 title: "Kotlin Singleton Creation / Создание синглтона в Kotlin"
 aliases: [Kotlin Singleton Creation, Создание синглтона в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-coroutine-job-lifecycle--kotlin--medium, q-statein-sharein
 created: 2025-10-15
 updated: 2025-11-09
 tags: [design-patterns, difficulty/easy, singleton]
----
+---\
 # Вопрос (RU)
 > Как создать singleton в Kotlin?
 
@@ -196,7 +196,7 @@ object MySingleton {
 ```
 
 **Key features (on the JVM):**
-- Thread-safe initialization by default (the object instance is created once without explicit synchronization)
+- `Thread`-safe initialization by default (the object instance is created once without explicit synchronization)
 - Lazily initialized when first accessed
 - Only one instance exists throughout the application
 - Cannot have constructors

@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-100541"
 title: "Mst Algorithms / Mst Algorithms"
 aliases: ["Mst Algorithms"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: [c-graph-algorithms, c-algorithms, c-dijkstra-algorithm, c-data-structures, c-dynamic-programming]
+related: ["c-graph-algorithms", "c-algorithms", "c-dijkstra-algorithm", "c-data-structures", "c-dynamic-programming"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["algorithms", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [algorithms, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ MST (Minimum Spanning Tree) algorithms find a subset of edges in a connected, we
 ## Key Points (EN)
 
 - MST requirements: works on connected, weighted, undirected graphs; if the graph is disconnected, algorithms find a minimum spanning forest instead.
-- Kruskal's algorithm: greedy edge-selection; sort edges by weight and add the smallest edge that does not create a cycle, typically using Disjoint Set (Union-Find); time complexity O(E log E).
+- Kruskal's algorithm: greedy edge-selection; sort edges by weight and add the smallest edge that does not create a cycle, typically using Disjoint `Set` (Union-Find); time complexity O(E log E).
 - Prim's algorithm: greedy vertex-expansion; grow the tree from a start vertex by repeatedly adding the minimum-weight edge to a new vertex; with a binary heap runs in O(E log V).
 - Multiple MSTs: when edge weights are not unique, multiple distinct MSTs may exist with the same total weight; correctness proofs rely on cut and cycle properties.
 - Interview focus: choose between Kruskal vs Prim based on graph density and representation; be ready to reason about complexity, implementation details, and edge cases (disconnected graphs, negative weights allowed, etc.).

@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-150942"
 title: "Constraints / Constraints"
 aliases: ["Constraints"]
@@ -9,17 +9,18 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-compose-layout, c-design-systems]
+moc: "moc-cs"
+related: ["c-compose-layout", "c-design-systems"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-In programming languages, constraints are formal rules or restrictions that limit the range of valid programs, values, or type relationships. They ensure correctness, safety, and expressiveness by enforcing conditions such as type bounds, invariants, and allowed operations at compile time or runtime. Constraints are widely used in type systems, generics, database schemas, API contracts, and validation logic.
+In programming languages, constraints are formal rules or restrictions that limit the range of valid programs, values, or type relationships. They ensure correctness, safety, and expressiveness by enforcing conditions such as type bounds, invariants, and allowed operations at compile time or runtime. `Constraints` are widely used in type systems, generics, database schemas, API contracts, and validation logic.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
@@ -34,7 +35,7 @@ In programming languages, constraints are formal rules or restrictions that limi
 - Type and generic constraints: Limit which types can be used as type parameters (e.g., upper/lower bounds, interface/class constraints) to ensure only compatible types are allowed.
 - Semantic constraints: Express invariants and business rules (e.g., non-null, ranges, uniqueness) that must always hold for program state or input data.
 - Compile-time vs runtime: Some constraints are enforced statically by the compiler (type bounds, visibility, mutability), others dynamically via checks, assertions, or validation frameworks.
-- Safety and documentation: Constraints act as machine-checkable contracts, reducing bugs, guiding API usage, and making intent explicit for maintainers and tools.
+- Safety and documentation: `Constraints` act as machine-checkable contracts, reducing bugs, guiding API usage, and making intent explicit for maintainers and tools.
 - Trade-offs: Stricter constraints increase reliability and tooling support but may reduce flexibility and require more upfront design.
 
 ## Ключевые Моменты (RU)

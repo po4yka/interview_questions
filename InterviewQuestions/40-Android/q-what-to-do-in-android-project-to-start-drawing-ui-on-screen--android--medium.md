@@ -1,4 +1,4 @@
----
+---\
 id: android-364
 title: "Android UI Drawing Setup / Подготовка UI к рисованию"
 aliases: [Android UI Setup, Подготовка UI]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/activity, android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
 
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
 #### Шаг 1: Включить `View` Binding
 
-В `build.gradle.kts` (Module: app):
+В `build.gradle.kts` (`Module`: app):
 
 ```kotlin
 android {
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
 #### Шаг 1: Включить Compose
 
-В `build.gradle.kts` (Module: app):
+В `build.gradle.kts` (`Module`: app):
 
 ```kotlin
 android {
@@ -475,7 +475,7 @@ class MainActivity : AppCompatActivity() {
 
 #### Step 1: Enable `View` Binding
 
-In `build.gradle.kts` (Module: app):
+In `build.gradle.kts` (`Module`: app):
 
 ```kotlin
 android {
@@ -511,7 +511,7 @@ class MainActivity : AppCompatActivity() {
 
 #### Step 1: Enable Compose
 
-In `build.gradle.kts` (Module: app):
+In `build.gradle.kts` (`Module`: app):
 
 ```kotlin
 android {

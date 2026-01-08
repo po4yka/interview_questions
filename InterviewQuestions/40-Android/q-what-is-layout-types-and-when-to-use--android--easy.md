@@ -1,4 +1,4 @@
----
+---\
 id: android-134
 title: "What Is Layout Types And When To Use / Типы Layout и когда их использовать"
 aliases: ["What Is Layout Types And When To Use", "What Is Layout Types и When To Use"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое layout, какие их виды бывают и когда их использовать?
@@ -87,10 +87,10 @@ tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
 
 **Когда использовать:**
 - Элементы должны быть позиционированы относительно друг друга или родителя
-- Нужно сократить вложенность по сравнению с комбинацией нескольких LinearLayout
+- Нужно сократить вложенность по сравнению с комбинацией нескольких `LinearLayout`
 - Для создания перекрывающихся view
 
-NOTE: Для новых проектов обычно рекомендуется использовать ConstraintLayout вместо RelativeLayout.
+NOTE: Для новых проектов обычно рекомендуется использовать `ConstraintLayout` вместо `RelativeLayout`.
 
 #### 3. ConstraintLayout
 
@@ -125,7 +125,7 @@ NOTE: Для новых проектов обычно рекомендуется
 - Адаптивные дизайны для разных размеров экранов
 - Как дефолтный выбор для большинства современных XML-макетов
 
-(Важно: для очень простых макетов один LinearLayout или FrameLayout может быть проще и не хуже по производительности.)
+(Важно: для очень простых макетов один `LinearLayout` или `FrameLayout` может быть проще и не хуже по производительности.)
 
 #### 4. FrameLayout
 
@@ -182,17 +182,17 @@ NOTE: Для новых проектов обычно рекомендуется
 
 | Layout Type      | Производительность*       | Гибкость | Сложность | Лучше для                |
 | ---------------- | ------------------------- | -------- | --------- | ------------------------ |
-| LinearLayout     | Очень хорошая (простая)   | Низкая   | Низкая    | Простые списки, формы    |
-| RelativeLayout   | Хорошая                   | Средняя  | Средняя   | Legacy-разметки          |
-| ConstraintLayout | Хорошая при грамотном UX  | Высокая  | Средняя   | Сложные современные UI   |
-| FrameLayout      | Очень хорошая (простая)   | Низкая   | Низкая    | Контейнеры, overlays     |
+| `LinearLayout`     | Очень хорошая (простая)   | Низкая   | Низкая    | Простые списки, формы    |
+| `RelativeLayout`   | Хорошая                   | Средняя  | Средняя   | Legacy-разметки          |
+| `ConstraintLayout` | Хорошая при грамотном UX  | Высокая  | Средняя   | Сложные современные UI   |
+| `FrameLayout`      | Очень хорошая (простая)   | Низкая   | Низкая    | Контейнеры, overlays     |
 | GridLayout       | Хорошая для малых сеток   | Средняя  | Средняя   | Статические сетки        |
 
-*Фактическая производительность зависит от сложности разметки и количества view; простой LinearLayout/FrameLayout может быть быстрее сложного ConstraintLayout.
+*Фактическая производительность зависит от сложности разметки и количества view; простой LinearLayout/FrameLayout может быть быстрее сложного `ConstraintLayout`.
 
 ### Best Practices
 
-1. **Предпочитайте ConstraintLayout** для сложных макетов, но не усложняйте простые экраны без необходимости
+1. **Предпочитайте `ConstraintLayout`** для сложных макетов, но не усложняйте простые экраны без необходимости
 2. **Избегайте глубокой вложенности** layout-ов (влияет на измерение/отрисовку и производительность)
 3. **Используйте тег `<merge>`** для устранения избыточных `ViewGroup`
 4. **Используйте тег `<include>`** для переиспользуемых layout-ов
@@ -261,11 +261,11 @@ Positions child elements relative to each other or to the parent container.
 - Reducing nesting compared to combining multiple LinearLayouts
 - Creating overlapping views
 
-NOTE: For new projects, ConstraintLayout is generally preferred over RelativeLayout.
+NOTE: For new projects, `ConstraintLayout` is generally preferred over `RelativeLayout`.
 
 #### 3. ConstraintLayout
 
-Provides a flexible constraint system for positioning elements relative to each other and to container boundaries.
+`Provides` a flexible constraint system for positioning elements relative to each other and to container boundaries.
 
 ```xml
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -296,7 +296,7 @@ Provides a flexible constraint system for positioning elements relative to each 
 - Responsive designs that adapt to different screen sizes
 - As a default choice for many modern XML-based layouts
 
-(Note: For very simple layouts, a single LinearLayout or FrameLayout can be simpler and at least as performant.)
+(Note: For very simple layouts, a single `LinearLayout` or `FrameLayout` can be simpler and at least as performant.)
 
 #### 4. FrameLayout
 
@@ -353,17 +353,17 @@ Arranges children in a grid structure.
 
 | Layout Type      | Performance*             | Flexibility | Complexity | Best For                 |
 | ---------------- | ------------------------ | ----------- | ---------- | ------------------------ |
-| LinearLayout     | Very good (simple)       | Low         | Low        | Simple lists, forms      |
-| RelativeLayout   | Good                     | Moderate    | Moderate   | Legacy layouts           |
-| ConstraintLayout | Good when used properly  | High        | Moderate   | Complex modern UIs       |
-| FrameLayout      | Very good (simple)       | Low         | Low        | Containers, overlays     |
+| `LinearLayout`     | Very good (simple)       | Low         | Low        | Simple lists, forms      |
+| `RelativeLayout`   | Good                     | Moderate    | Moderate   | Legacy layouts           |
+| `ConstraintLayout` | Good when used properly  | High        | Moderate   | Complex modern UIs       |
+| `FrameLayout`      | Very good (simple)       | Low         | Low        | Containers, overlays     |
 | GridLayout       | Good for small grids     | Moderate    | Moderate   | Static grid structures   |
 
-*Actual performance depends on layout complexity and number of views; a simple LinearLayout/FrameLayout can outperform a complex ConstraintLayout.
+*Actual performance depends on layout complexity and number of views; a simple LinearLayout/FrameLayout can outperform a complex `ConstraintLayout`.
 
 ### Best Practices
 
-1. **Prefer ConstraintLayout** for complex layouts, but avoid overusing it for trivially simple screens
+1. **Prefer `ConstraintLayout`** for complex layouts, but avoid overusing it for trivially simple screens
 2. **Avoid deep nesting** of layouts (impacts measure/layout/draw and performance)
 3. **Use the `<merge>` tag** to remove redundant parent ViewGroups
 4. **Use the `<include>` tag** for reusable layout parts
@@ -373,14 +373,14 @@ Arranges children in a grid structure.
 
 ## Дополнительные Вопросы (RU)
 
-- Как ConstraintLayout улучшает производительность по сравнению с вложенными LinearLayout?
+- Как `ConstraintLayout` улучшает производительность по сравнению с вложенными `LinearLayout`?
 - Каковы последствия для производительности при глубокой иерархии view?
 - Как оптимизировать время инфлейта layout-ов для сложных экранов?
 - В каких случаях стоит выбирать программное создание layout вместо XML?
 
 ## Follow-ups
 
-- How does ConstraintLayout improve performance compared to nested LinearLayouts?
+- How does `ConstraintLayout` improve performance compared to nested LinearLayouts?
 - What are the performance implications of deeply nested view hierarchies?
 - How do you optimize layout inflation time for complex screens?
 - When would you choose programmatic layout creation over XML?
@@ -388,12 +388,12 @@ Arranges children in a grid structure.
 ## Ссылки (RU)
 
 - Официальное руководство по Layout: https://developer.android.com/guide/topics/ui/declaring-layout
-- Руководство по ConstraintLayout: https://developer.android.com/training/constraint-layout
+- Руководство по `ConstraintLayout`: https://developer.android.com/training/constraint-layout
 
 ## References
 
 - Official Layout Guide: https://developer.android.com/guide/topics/ui/declaring-layout
-- ConstraintLayout Guide: https://developer.android.com/training/constraint-layout
+- `ConstraintLayout` Guide: https://developer.android.com/training/constraint-layout
 
 ## Связанные Вопросы (RU)
 

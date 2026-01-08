@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-066
 title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"
 aliases: ["Actor Pattern with Coroutines", "Паттерн Actor с корутинами"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, message-passing, state-encapsulation]
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Actor в корутинах Kotlin? Объясните передачу сообщений через каналы, инкапсуляцию состояния и приведите реальные примеры акторов.
 
@@ -676,11 +676,11 @@ An actor prevents data races by processing messages one-by-one in its coroutine.
 ### Key Concepts
 
 1. **Actor**: Independent entity with private state.
-2. **Message passing**: Communication via messages, typically over a `Channel`.
+2. **`Message` passing**: Communication via messages, typically over a `Channel`.
 3. **Sequential processing**: Messages processed one at a time in a loop.
 4. **State encapsulation**: No shared mutable state outside the actor.
-5. **Thread-safe**: No race conditions because only actor logic touches its state during sequential processing.
-6. **Mailbox**: Queue of messages (commonly a `Channel`).
+5. **`Thread`-safe**: No race conditions because only actor logic touches its state during sequential processing.
+6. **Mailbox**: `Queue` of messages (commonly a `Channel`).
 
 ### Actor Model Architecture
 

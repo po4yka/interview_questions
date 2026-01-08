@@ -1,4 +1,4 @@
----
+---\
 id: android-077
 title: "Memory Optimization in Android / Оптимизация памяти в Android"
 aliases: ["Memory Optimization in Android", "Оптимизация памяти в Android"]
@@ -15,7 +15,7 @@ tags: [android/performance-memory, android/profiling, difficulty/medium, perform
 moc: moc-android
 related: [c-memory-management, q-how-to-fix-a-bad-element-layout--android--easy, q-list-to-detail-navigation--android--medium]
 sources: []
----
+---\
 # Вопрос (RU)
 
 > Как оптимизировать использование памяти в Android-приложении?
@@ -59,7 +59,7 @@ val memoryCache = object : LruCache<String, Bitmap>(cacheSizeKb) {
 }
 ```
 
-**3. Оптимизируйте работу с Bitmap**
+**3. Оптимизируйте работу с `Bitmap`**
 
 - Загружайте изображения нужного размера, а не в полном разрешении.
 - При необходимости используйте более экономичные форматы (`Bitmap.Config.RGB_565` вместо `ARGB_8888`).
@@ -152,7 +152,7 @@ val memoryCache = object : LruCache<String, Bitmap>(cacheSizeKb) {
 }
 ```
 
-**3. Optimize Bitmap Loading**
+**3. Optimize `Bitmap` Loading**
 
 - Load images at the required resolution instead of full-size.
 - When acceptable, use more memory-efficient configs (e.g., `Bitmap.Config.RGB_565`).

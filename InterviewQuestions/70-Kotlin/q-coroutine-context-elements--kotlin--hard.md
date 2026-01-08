@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-239
 title: "What are CoroutineContext elements and how do they combine? / Элементы CoroutineContext и их комбинирование"
 aliases: [CoroutineContext Elements, Элементы CoroutineContext]
@@ -16,7 +16,7 @@ description: "Comprehensive guide to CoroutineContext elements and how they comb
 moc: moc-kotlin
 related: [c-concurrency, q-coroutine-job-lifecycle--kotlin--medium]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое элементы CoroutineContext и как они комбинируются? Объясните Job, CoroutineDispatcher, CoroutineName, CoroutineExceptionHandler и как работает оператор +.
@@ -276,7 +276,7 @@ fun main() = runBlocking {
 }
 ```
 
-1. Handler должен находиться в контексте той корутины, чьи неперехваченные исключения вы хотите обрабатывать.
+1. `Handler` должен находиться в контексте той корутины, чьи неперехваченные исключения вы хотите обрабатывать.
 
 2. SupervisorJob влияет на распространение исключений: падение одного потомка не отменяет остальных, но неперехваченные исключения по-прежнему могут быть направлены в `CoroutineExceptionHandler`.
 
@@ -1014,7 +1014,7 @@ fun main() = runBlocking {
 
 #### 3. CoroutineName - Debugging
 
-Purpose: Provides meaningful names for debugging and logging.
+Purpose: `Provides` meaningful names for debugging and logging.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1260,7 +1260,7 @@ class UserRepository(
 }
 ```
 
-Pattern 2: Configurable Worker
+Pattern 2: Configurable `Worker`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1460,7 +1460,7 @@ class Repository(private val scope: CoroutineScope) {
 }
 ```
 
-Anti-Pattern 3: Misplaced Exception Handler
+Anti-Pattern 3: Misplaced Exception `Handler`
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1552,7 +1552,7 @@ fun processManyReused() = runBlocking {
 
 ### Testing Strategies
 
-Strategy 1: Inject Dispatchers
+Strategy 1: `Inject` Dispatchers
 
 ```kotlin
 import kotlinx.coroutines.*

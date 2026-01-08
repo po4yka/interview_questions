@@ -1,4 +1,4 @@
----
+---\
 id: android-481
 title: Custom View Animation / Анимация Custom View
 aliases: [Custom View Animation, Анимация Custom View]
@@ -17,7 +17,7 @@ created: 2025-10-21
 updated: 2025-11-10
 tags: [android/ui-animation, android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как реализовать анимацию в Custom `View`?
 
@@ -34,7 +34,7 @@ tags: [android/ui-animation, android/ui-views, difficulty/medium]
 |--------|------------|-------------------|------------|
 | **ValueAnimator** | Анимация пользовательских свойств | Высокая (VSYNC-синхронизация, гибкий контроль) | Полный контроль |
 | **Property Animation** | Анимация стандартных свойств `View` | Отличная (hardware-ускорение трансформаций) | Простое |
-| **Canvas Animation** | Сложная математическая графика | Хорошая | Требует математики |
+| **`Canvas` Animation** | Сложная математическая графика | Хорошая | Требует математики |
 
 ### ValueAnimator - Универсальный Подход
 
@@ -224,7 +224,7 @@ class LifecycleAwareAnimatedView @JvmOverloads constructor(
 |----------|----------|-------------|---------|
 | **ValueAnimator** | Animate custom properties | High (VSYNC-synced, flexible) | Full control |
 | **Property Animation** | Animate standard `View` properties | Excellent (hardware-accelerated transforms) | Simple |
-| **Canvas Animation** | Complex mathematical graphics | Good | Requires math |
+| **`Canvas` Animation** | Complex mathematical graphics | Good | Requires math |
 
 ### ValueAnimator - Universal Approach
 
@@ -444,17 +444,17 @@ class LifecycleAwareAnimatedView @JvmOverloads constructor(
 
 ### Prerequisites (Easier)
 
-- [[q-custom-view-lifecycle--android--medium]] - View lifecycle for proper animation cleanup / Жизненный цикл `View` для правильной очистки анимаций
+- [[q-custom-view-lifecycle--android--medium]] - `View` lifecycle for proper animation cleanup / Жизненный цикл `View` для правильной очистки анимаций
 - Custom `View` basics - onDraw() and rendering basics / Основы Custom `View` - `onDraw()` и базовый рендеринг
 
 ### Related (Same Level)
 
-- [[q-canvas-drawing-optimization--android--hard]] - Canvas performance for smooth animations / Оптимизация Canvas для плавных анимаций
+- [[q-canvas-drawing-optimization--android--hard]] - `Canvas` performance for smooth animations / Оптимизация `Canvas` для плавных анимаций
 - Property Animation System - ObjectAnimator vs ViewPropertyAnimator / Система Property Animation - `ObjectAnimator` vs `ViewPropertyAnimator`
 - Touch handling with animation - Gesture integration / Обработка касаний с анимациями - интеграция жестов
 
 ### Advanced (Harder)
 
-- Path animations with `PathMeasure` - complex motion paths / Path-анимации с `PathMeasure` - сложные траектории
+- `Path` animations with `PathMeasure` - complex motion paths / `Path`-анимации с `PathMeasure` - сложные траектории
 - Spring animations - physics-based motion (`SpringAnimation`, `FlingAnimation`) / Spring-анимации - физически правдоподобное движение (`SpringAnimation`, `FlingAnimation`)
 - Coordinated animations - Transition API and Motion Layout / Координированные анимации - Transition API и Motion Layout

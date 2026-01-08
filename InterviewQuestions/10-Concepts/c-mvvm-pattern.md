@@ -1,34 +1,42 @@
----
-id: ivc-20251030-130000
-title: MVVM Pattern / Паттерн MVVM
-aliases: [Model-View-ViewModel, MVVM, Паттерн MVVM]
-kind: concept
-summary: Architectural pattern separating UI from business logic through three distinct layers - Model, View, and ViewModel
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, architecture-patterns, concept, design-patterns, mvvm]
----
+---\
+id: "20251030-130000"
+title: "MVVM Pattern / Паттерн MVVM"
+aliases: ["Model-View-ViewModel", "MVVM", "Паттерн MVVM"]
+summary: "Architectural pattern separating UI from business logic through three distinct layers - Model, View, and ViewModel"
+topic: "android"
+subtopics: ["architecture-patterns", "design-patterns", "mvvm"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "architecture-patterns", "concept", "design-patterns", "mvvm", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-**MVVM (Model-View-ViewModel)** is an architectural pattern that separates an application into three distinct layers:
+**MVVM (Model-`View`-`ViewModel`)** is an architectural pattern that separates an application into three distinct layers:
 
 - **Model**: Data layer containing business logic, domain models, and data sources (repositories, databases, network)
-- **View**: UI layer (Activities, Fragments, Composables) that observes ViewModel state and renders UI
-- **ViewModel**: Presentation logic layer that holds UI state, processes user events, and exposes data streams to the View
+- **`View`**: UI layer (Activities, Fragments, Composables) that observes `ViewModel` state and renders UI
+- **`ViewModel`**: Presentation logic layer that holds UI state, processes user events, and exposes data streams to the `View`
 
-The key principle is **unidirectional data flow**: View observes ViewModel state, user events flow to ViewModel, ViewModel updates state, View reacts to state changes. This creates a testable, maintainable architecture with clear separation of concerns.
+The key principle is **unidirectional data flow**: `View` observes `ViewModel` state, user events flow to `ViewModel`, `ViewModel` updates state, `View` reacts to state changes. This creates a testable, maintainable architecture with clear separation of concerns.
 
 # Сводка (RU)
 
-**MVVM (Model-View-ViewModel)** - архитектурный паттерн, разделяющий приложение на три отдельных слоя:
+**MVVM (Model-`View`-`ViewModel`)** - архитектурный паттерн, разделяющий приложение на три отдельных слоя:
 
 - **Model**: Слой данных, содержащий бизнес-логику, доменные модели и источники данных (репозитории, базы данных, сеть)
-- **View**: Слой UI (Activity, Fragment, Composable), который наблюдает за состоянием ViewModel и отображает интерфейс
-- **ViewModel**: Слой логики представления, хранящий состояние UI, обрабатывающий события пользователя и предоставляющий потоки данных для View
+- **`View`**: Слой UI (`Activity`, `Fragment`, Composable), который наблюдает за состоянием `ViewModel` и отображает интерфейс
+- **`ViewModel`**: Слой логики представления, хранящий состояние UI, обрабатывающий события пользователя и предоставляющий потоки данных для `View`
 
-Ключевой принцип - **однонаправленный поток данных**: View наблюдает за состоянием ViewModel, события пользователя передаются в ViewModel, ViewModel обновляет состояние, View реагирует на изменения состояния. Это создает тестируемую, поддерживаемую архитектуру с четким разделением ответственности.
+Ключевой принцип - **однонаправленный поток данных**: `View` наблюдает за состоянием `ViewModel`, события пользователя передаются в `ViewModel`, `ViewModel` обновляет состояние, `View` реагирует на изменения состояния. Это создает тестируемую, поддерживаемую архитектуру с четким разделением ответственности.
 
 ---
 
@@ -40,17 +48,17 @@ The key principle is **unidirectional data flow**: View observes ViewModel state
 - Network and database operations
 - Business logic validation
 
-**View Layer**:
+**`View` Layer**:
 - Rendering UI based on state
 - Capturing user input events
 - Navigation logic
 - NO business logic or state management
 
-**ViewModel Layer**:
+**`ViewModel` Layer**:
 - Holding UI state (immutable data classes)
 - Processing user events and business operations
-- Exposing state streams (LiveData, StateFlow, SharedFlow)
-- Lifecycle awareness (survives configuration changes)
+- Exposing state streams (`LiveData`, `StateFlow`, `SharedFlow`)
+- `Lifecycle` awareness (survives configuration changes)
 - NO Android framework dependencies (except lifecycle-viewmodel)
 
 ---
@@ -130,23 +138,23 @@ fun UserProfileScreen(viewModel: UserProfileViewModel = hiltViewModel()) {
 
 **State Management**:
 - Use immutable data classes for state
-- Single source of truth in ViewModel
-- Expose read-only state (StateFlow, not MutableStateFlow)
+- Single source of truth in `ViewModel`
+- Expose read-only state (`StateFlow`, not MutableStateFlow)
 - Separate UI state from one-time events (use Channel/SharedFlow for events)
 
-**Data Flow**:
-- Unidirectional: View -> Event -> ViewModel -> State -> View
-- No direct View-to-Model communication
-- ViewModel never holds View references
+**Data `Flow`**:
+- Unidirectional: `View` -> Event -> `ViewModel` -> State -> `View`
+- No direct `View`-to-Model communication
+- `ViewModel` never holds `View` references
 
 **Testability**:
-- ViewModel has no Android dependencies (easy unit testing)
-- Mock repositories in ViewModel tests
+- `ViewModel` has no Android dependencies (easy unit testing)
+- Mock repositories in `ViewModel` tests
 - Test state transitions and event emissions
 - Use TestDispatcher for coroutine testing
 
-**Lifecycle**:
-- ViewModel survives configuration changes (rotation)
+**`Lifecycle`**:
+- `ViewModel` survives configuration changes (rotation)
 - Collect flows with lifecycle awareness (collectAsStateWithLifecycle)
 - Cancel coroutines in viewModelScope automatically
 
@@ -163,21 +171,21 @@ fun UserProfileScreen(viewModel: UserProfileViewModel = hiltViewModel()) {
 
 **Advantages**:
 - Clear separation of concerns
-- Highly testable (ViewModel independent of Android framework)
+- Highly testable (`ViewModel` independent of Android framework)
 - Survives configuration changes
 - Easy state management with reactive streams
 - Official Google recommendation
 
 **Trade-offs**:
 - More boilerplate than simple approaches
-- Learning curve for reactive programming (Flow, LiveData)
+- Learning curve for reactive programming (`Flow`, `LiveData`)
 - Potential over-engineering for simple screens
 - Need dependency injection (Hilt/Dagger)
 
 **Alternatives**:
-- MVI (Model-View-Intent): More strict unidirectional flow, single state reducer
-- MVP (Model-View-Presenter): More control, but tighter coupling
-- Clean Architecture: Adds use cases layer between ViewModel and Repository
+- MVI (Model-`View`-`Intent`): More strict unidirectional flow, single state reducer
+- MVP (Model-`View`-Presenter): More control, but tighter coupling
+- Clean Architecture: Adds use cases layer between `ViewModel` and Repository
 
 ---
 

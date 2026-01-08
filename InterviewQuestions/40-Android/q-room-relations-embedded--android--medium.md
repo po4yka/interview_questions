@@ -1,4 +1,4 @@
----
+---\
 id: android-148
 title: "Room Relations and Embedded / Отношения и Embedded в Room"
 aliases: ["Room Relations and Embedded", "Отношения и Embedded в Room"]
@@ -25,20 +25,20 @@ updated: 2025-11-10
 
 # Tags
 tags: [android/architecture-clean, android/room, difficulty/medium, embedded, relations]
----
+---\
 # Вопрос (RU)
 
-> Как реализовать связи между сущностями в Room Database? Объясни использование `@Relation` для отношений один-ко-многим и многие-ко-многим, а также `@Embedded` для встраивания объектов в одну таблицу.
+> Как реализовать связи между сущностями в `Room` `Database`? Объясни использование `@Relation` для отношений один-ко-многим и многие-ко-многим, а также `@Embedded` для встраивания объектов в одну таблицу.
 
 # Question (EN)
 
-> How do you implement relationships between entities in Room Database? Explain using `@Relation` for one-to-many and many-to-many relationships, and `@Embedded` for flattening objects into a single table.
+> How do you implement relationships between entities in `Room` `Database`? Explain using `@Relation` for one-to-many and many-to-many relationships, and `@Embedded` for flattening objects into a single table.
 
 ---
 
 ## Ответ (RU)
 
-Room предоставляет два механизма для работы со связями: `@Embedded` для встраивания объектов в одну таблицу и `@Relation` для моделирования связей между отдельными сущностями.
+`Room` предоставляет два механизма для работы со связями: `@Embedded` для встраивания объектов в одну таблицу и `@Relation` для моделирования связей между отдельными сущностями.
 
 ### @Embedded — Встраивание Объектов
 
@@ -183,7 +183,7 @@ interface EnrollmentDao {
 2. **Индексы**: Индексируйте колонки, используемые как внешние ключи и в условиях JOIN/фильтрации — это важно для производительности, хотя не строго обязательно.
 3. **@Transaction**: Используйте при запросах, которые читают несколько связанных сущностей или требуют нескольких SQL-запросов под капотом (`@Relation` может генерировать отдельные запросы), чтобы получить консистентные данные.
 4. **CASCADE**: `onDelete = CASCADE` удобно для связей parent-child, но включайте его только если логика домена требует автоматического удаления дочерних записей.
-5. **Загрузка данных**: Room не делает "ленивую" загрузку автоматически. Данные по `@Relation` загружаются в рамках соответствующего DAO-метода и могут требовать дополнительных запросов. Для больших наборов данных используйте отдельные запросы, лимиты, пагинацию и/или Paging 3.
+5. **Загрузка данных**: `Room` не делает "ленивую" загрузку автоматически. Данные по `@Relation` загружаются в рамках соответствующего DAO-метода и могут требовать дополнительных запросов. Для больших наборов данных используйте отдельные запросы, лимиты, пагинацию и/или Paging 3.
 
 **Сравнение @Embedded vs @Relation**:
 
@@ -196,7 +196,7 @@ interface EnrollmentDao {
 
 ## Answer (EN)
 
-Room provides two mechanisms for working with relationships: `@Embedded` for flattening objects into a single table and `@Relation` for modeling relationships between separate entities.
+`Room` provides two mechanisms for working with relationships: `@Embedded` for flattening objects into a single table and `@Relation` for modeling relationships between separate entities.
 
 ### @Embedded — Object Flattening
 
@@ -341,7 +341,7 @@ interface EnrollmentDao {
 2. **Indices**: Index the columns used as foreign keys and in JOIN/WHERE clauses for performance; not strictly required but important in real applications.
 3. **@Transaction**: Use when reading multiple related entities or when `@Relation` triggers multiple queries under the hood, so the result is consistent.
 4. **CASCADE**: `onDelete = CASCADE` is useful for parent-child relationships but should be enabled only if your domain logic expects automatic deletion of child rows.
-5. **Data loading**: Room does not provide implicit lazy loading. `@Relation` data is loaded as part of the DAO method execution and may involve multiple queries. For large datasets, design dedicated queries, use limits/pagination, and/or Paging 3.
+5. **Data loading**: `Room` does not provide implicit lazy loading. `@Relation` data is loaded as part of the DAO method execution and may involve multiple queries. For large datasets, design dedicated queries, use limits/pagination, and/or Paging 3.
 
 **Comparison @Embedded vs @Relation**:
 
@@ -372,14 +372,14 @@ interface EnrollmentDao {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-room-library-definition--android--easy]] — Room basics and setup
+- [[q-room-library-definition--android--easy]] — `Room` basics and setup
 - [[q-sharedpreferences-commit-vs-apply--android--easy]] — Alternative storage options
 
 ### Related (Same Level)
-- [[q-room-transactions-dao--android--medium]] — Transaction handling in Room
+- [[q-room-transactions-dao--android--medium]] — Transaction handling in `Room`
 - [[q-room-type-converters-advanced--android--medium]] — Converting complex types
-- [[q-room-code-generation-timing--android--medium]] — Room annotation processing
-- [[q-room-vs-sqlite--android--medium]] — Room vs raw SQLite comparison
+- [[q-room-code-generation-timing--android--medium]] — `Room` annotation processing
+- [[q-room-vs-sqlite--android--medium]] — `Room` vs raw `SQLite` comparison
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--android--hard]] — Full-text search in Room
+- [[q-room-fts-full-text-search--android--hard]] — Full-text search in `Room`

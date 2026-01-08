@@ -1,4 +1,4 @@
----
+---\
 id: android-319
 title: "List To Detail Navigation / Навигация от списка к детализации"
 aliases: ["List To Detail Navigation", "Навигация от списка к детализации"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/intents-deeplinks, android/ui-navigation, bundle, difficulty/medium, navigation-component, parcelable]
 
----
+---\
 # Вопрос (RU)
 
 > С помощью чего делается переход со списков на деталки в Android?
@@ -29,9 +29,9 @@ tags: [android/fragment, android/intents-deeplinks, android/ui-navigation, bundl
 
 ## Ответ (RU)
 
-Переход от списка к экрану деталей обычно реализуется через **`Intent` + `Bundle`** (для `Activity`), **Navigation Component** (для `Fragment`) и **Deep Link-ы**. Для тесно связанных `Fragment` (master-detail в одной `Activity`) можно использовать **shared `ViewModel`** как механизм выбора элемента, но не вместо явной передачи аргументов для независимых экранов.
+Переход от списка к экрану деталей обычно реализуется через **`Intent` + `Bundle`** (для `Activity`), **Navigation `Component`** (для `Fragment`) и **Deep Link-ы**. Для тесно связанных `Fragment` (master-detail в одной `Activity`) можно использовать **shared `ViewModel`** как механизм выбора элемента, но не вместо явной передачи аргументов для независимых экранов.
 
-Современный подход — Single `Activity` архитектура с Navigation Component и Safe Args для type-safe передачи аргументов.
+Современный подход — Single `Activity` архитектура с Navigation `Component` и Safe Args для type-safe передачи аргументов.
 
 ### Основные Подходы
 
@@ -62,7 +62,7 @@ class UserDetailActivity : AppCompatActivity() {
 intent.putParcelableArrayListExtra("USERS", ArrayList(allUsers))
 ```
 
-**2. Navigation Component + Safe Args (`Fragment` → `Fragment`)**
+**2. Navigation `Component` + Safe Args (`Fragment` → `Fragment`)**
 
 Type-safe навигация с автогенерацией классов:
 
@@ -146,7 +146,7 @@ class UserDetailFragment : Fragment() {
 | Подход | Когда использовать | Преимущества | Недостатки |
 |--------|-------------------|-------------|-----------|
 | **`Intent` + `Bundle`** | Multi-activity или простые навигационные сценарии | Простой, знакомый | Boilerplate, нет type-safety |
-| **Navigation Component** | Современные single-activity приложения | Type-safe (с Safe Args), визуальный граф | Требует настройки |
+| **Navigation `Component`** | Современные single-activity приложения | Type-safe (с Safe Args), визуальный граф | Требует настройки |
 | **Shared `ViewModel`** | Master-detail и тесно связанные `Fragment` в одной `Activity` | Реактивный, общий state | Не подходит для независимых экранов и deep links |
 | **Deep Links** | Внешняя навигация, URL-ы | Можно делиться, индексируются | Требует отдельной конфигурации |
 
@@ -208,9 +208,9 @@ NavHost(navController, startDestination = "userList") {
 
 ## Answer (EN)
 
-Navigation from list to detail screens is typically implemented via **`Intent` + `Bundle`** (for Activities), **Navigation Component** (for Fragments), and **deep links**. For tightly related Fragments within a single `Activity` (e.g., master-detail), a **shared `ViewModel`** can be used to coordinate selection, but it should not replace explicit arguments for independent/detail screens that must survive process death or be addressable directly.
+Navigation from list to detail screens is typically implemented via **`Intent` + `Bundle`** (for Activities), **Navigation `Component`** (for Fragments), and **deep links**. For tightly related Fragments within a single `Activity` (e.g., master-detail), a **shared `ViewModel`** can be used to coordinate selection, but it should not replace explicit arguments for independent/detail screens that must survive process death or be addressable directly.
 
-The modern approach is a Single-`Activity` architecture with Navigation Component and Safe Args for type-safe argument passing.
+The modern approach is a Single-`Activity` architecture with Navigation `Component` and Safe Args for type-safe argument passing.
 
 ### Main Approaches
 
@@ -241,7 +241,7 @@ class UserDetailActivity : AppCompatActivity() {
 intent.putParcelableArrayListExtra("USERS", ArrayList(allUsers))
 ```
 
-**2. Navigation Component + Safe Args (`Fragment` → `Fragment`)**
+**2. Navigation `Component` + Safe Args (`Fragment` → `Fragment`)**
 
 Type-safe navigation with auto-generated classes:
 
@@ -325,7 +325,7 @@ class UserDetailFragment : Fragment() {
 | Approach | When to Use | Pros | Cons |
 |----------|------------|------|------|
 | **`Intent` + `Bundle`** | Multi-activity apps or simple flows | Simple, familiar | Boilerplate, not type-safe |
-| **Navigation Component** | Modern single-activity apps | Type-safe (with Safe Args), visual graph | Requires setup |
+| **Navigation `Component`** | Modern single-activity apps | Type-safe (with Safe Args), visual graph | Requires setup |
 | **Shared `ViewModel`** | Master-detail, tightly coupled Fragments in one `Activity` | Reactive, shared state | Not suitable for independent screens or deep links |
 | **Deep Links** | External navigation, URLs | Sharable, indexable | Requires separate configuration |
 
@@ -390,7 +390,7 @@ NavHost(navController, startDestination = "userList") {
 ## Follow-ups
 
 1. What happens if you pass a large `Parcelable` object through an `Intent` and approach the Binder transaction size limit?
-2. How does Navigation Component manage the back stack when using nested navigation graphs in a list-detail flow?
+2. How does Navigation `Component` manage the back stack when using nested navigation graphs in a list-detail flow?
 3. How would you design list-to-detail navigation differently for phones vs tablets (e.g., single-pane vs master-detail)?
 4. What is the difference between using a shared `ViewModel` and Safe Args for passing data to a detail screen?
 5. How do you handle deep links that must route through authentication before opening the detail screen?

@@ -24,7 +24,7 @@ related: [c-kotlin, c-kotlin-features, q-kotlin-lateinit--kotlin--medium]
 created: 2025-10-05
 updated: 2025-11-09
 
-tags: [classes, difficulty/easy, enum, kotlin, types]
+tags: [classes, difficulty/easy, enums, kotlin, types]
 ---
 # Вопрос (RU)
 > Что такое Enum в Kotlin?

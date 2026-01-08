@@ -1,4 +1,4 @@
----
+---\
 id: android-277
 title: App Security Best Practices / 1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f
 aliases: [1b4347483835 3f40303a42383a38 3135373e3f30413d3e414238 3f40383b3e36353d384f, App Security Best Practices]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
 
----
+---\
 # Вопрос (RU)
 
 > Какие основные практики безопасности следует применять в Android-приложении?
@@ -61,7 +61,7 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
-(Этот конфиг должен быть подключен в `AndroidManifest.xml` через атрибут `android:networkSecurityConfig` для применения. Будьте осторожны при одновременном использовании pinning в OkHttp и в XML, чтобы не дублировать пины без продуманной стратегии ротации.)
+(Этот конфиг должен быть подключен в `AndroidManifest.xml` через атрибут `android:networkSecurityConfig` для применения. Будьте осторожны при одновременном использовании pinning в `OkHttp` и в XML, чтобы не дублировать пины без продуманной стратегии ротации.)
 
 ### 2. Защита Данных
 
@@ -159,7 +159,7 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
-(This config must be referenced from `AndroidManifest.xml` via the `android:networkSecurityConfig` attribute to take effect. Be careful when combining OkHttp pinning and XML pinning to avoid duplicated pins without a rotation strategy.)
+(This config must be referenced from `AndroidManifest.xml` via the `android:networkSecurityConfig` attribute to take effect. Be careful when combining `OkHttp` pinning and XML pinning to avoid duplicated pins without a rotation strategy.)
 
 ### 2. Data Protection
 
@@ -215,7 +215,7 @@ suspend fun findUser(email: String): User?
 
 ### 5. Critical Rules
 
-- **Permissions**: Request minimal required set, validate at runtime, and clearly justify to users.
+- **Permissions**: `Request` minimal required set, validate at runtime, and clearly justify to users.
 - **Logging**: Never log tokens, passwords, PII, or other secrets, especially in release builds.
 - **Biometric Auth**: Use BiometricPrompt / Biometric APIs for sensitive operations, typically to unlock Keystore-backed keys (`setUserAuthenticationRequired`); do not treat biometrics alone as a full replacement for proper authentication and authorization on the server.
 - **Root Detection**: Use only as a heuristic signal (easily bypassed); do not rely on it as a sole control. For highly sensitive apps, you may restrict certain capabilities when high-risk signals (e.g., root) are detected.

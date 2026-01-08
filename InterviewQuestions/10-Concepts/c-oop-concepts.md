@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-oop-principles, c-oop-fundamentals, c-inheritance, c-composition, c-design-patterns]
+moc: "moc-cs"
+related: ["c-oop-principles", "c-oop-fundamentals", "c-inheritance", "c-composition", "c-design-patterns"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

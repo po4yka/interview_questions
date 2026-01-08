@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-010
-title: Android TV & Google TV / Android TV и Google TV
-aliases: [Android TV, Google TV, Leanback]
-kind: concept
-summary: TV-specific Android platform using Leanback and Compose for TV libraries
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, compose-tv, concept, leanback, tv]
+id: "20260108-110549"
+title: "Android TV & Google TV / Android TV и Google TV"
+aliases: ["Android TV", "Google TV", "Leanback"]
+summary: "TV-specific Android platform using Leanback and Compose for TV libraries"
+topic: "android"
+subtopics: ["compose-tv", "leanback", "tv"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "compose-tv", "concept", "leanback", "tv", "difficulty/medium"]
 ---
 
 # Summary (EN)

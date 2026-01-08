@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-compose-stability, c-state-management, c-mutablestate, c-immutability, c-compose-phases]
+moc: "moc-cs"
+related: ["c-compose-stability", "c-state-management", "c-mutablestate", "c-immutability", "c-compose-phases"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

@@ -1,4 +1,4 @@
----
+---\
 id: lang-047
 title: "Reference Types Criteria / Критерии типов ссылок"
 aliases: [Reference Types Criteria, Критерии типов ссылок]
@@ -14,7 +14,7 @@ related: [c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [best-practices, design, difficulty/medium, immutability, kotlin, programming-languages, reference-types]
----
+---\
 # Вопрос (RU)
 > Каким критериям должны соответствовать ссылочные типы?
 
@@ -288,7 +288,7 @@ Kotlin classes (including `data class`) are reference types on the JVM and most 
 
 Criterion | Guideline | Reason
 -------- | --------- | ------
-Immutability | Prefer `val` and no mutable state when possible | Thread-safety (for fully immutable), predictability
+Immutability | Prefer `val` and no mutable state when possible | `Thread`-safety (for fully immutable), predictability
 Nullability | Use nullable vs not-null explicitly | Type safety, clear intent
 `equals`/`hashCode` | Use data classes or override when semantics matter | Correct `Set`/`Map` behavior, logical equality
 `toString` | Provide readable representation | Debugging, logging

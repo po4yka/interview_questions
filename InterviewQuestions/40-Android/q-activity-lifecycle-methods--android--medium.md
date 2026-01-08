@@ -1,4 +1,4 @@
----
+---\
 id: android-181
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
 aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/activity, android/lifecycle, difficulty/medium, jetpack]
 sources: []
 
----
+---\
 # Вопрос (RU)
 > Объясните методы жизненного цикла `Activity` и правила управления ресурсами в них.
 
@@ -41,7 +41,7 @@ onCreate() → onStart() → onResume() → RUNNING
 
 Типичный поток:
 - `onCreate()` → `onStart()` → `onResume()`
-- При возврате к остановленной Activity: `onRestart()` → `onStart()` → `onResume()`
+- При возврате к остановленной `Activity`: `onRestart()` → `onStart()` → `onResume()`
 - При уходе с экрана: `onPause()` → `onStop()` → (возможен `onDestroy()`)
 
 Ключевые методы:
@@ -165,7 +165,7 @@ onCreate() → onStart() → onResume() → RUNNING
 
 Typical flows:
 - `onCreate()` → `onStart()` → `onResume()` for a fresh start.
-- Returning to a stopped Activity: `onRestart()` → `onStart()` → `onResume()`.
+- Returning to a stopped `Activity`: `onRestart()` → `onStart()` → `onResume()`.
 - Leaving the screen: `onPause()` → `onStop()` → (optionally `onDestroy()`).
 
 Key methods:

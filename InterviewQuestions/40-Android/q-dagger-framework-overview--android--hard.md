@@ -1,4 +1,4 @@
----
+---\
 id: android-456
 title: Dagger Framework Overview / Обзор фреймворка Dagger
 aliases: [Dagger Framework Overview, Обзор фреймворка Dagger]
@@ -17,12 +17,12 @@ tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, d
 sources:
   - "https://dagger.dev/"
 
----
+---\
 # Вопрос (RU)
-> Что известно про фреймворк Dagger?
+> Что известно про фреймворк `Dagger`?
 
 # Question (EN)
-> What do you know about the Dagger framework?
+> What do you know about the `Dagger` framework?
 
 ## Ответ (RU)
 
@@ -30,7 +30,7 @@ sources:
 
 ### Ключевые Компоненты
 
-**@Inject — Constructor Injection**
+**@`Inject` — Constructor Injection**
 ```kotlin
 // ✅ Предпочтительный способ: Dagger автоматически создает экземпляр
 class UserRepository @Inject constructor(
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**@Module + @Provides — Сложные Зависимости**
+**@`Module` + @`Provides` — Сложные Зависимости**
 ```kotlin
 @Module
 object NetworkModule {
@@ -58,7 +58,7 @@ object NetworkModule {
 }
 ```
 
-**@Component — Граф Зависимостей**
+**@`Component` — Граф Зависимостей**
 ```kotlin
 @Singleton
 @Component(modules = [NetworkModule::class, DatabaseModule::class])
@@ -88,7 +88,7 @@ class SomeActivityScopedDependency @Inject constructor()
 
 ### [[c-hilt]] — Упрощенный Dagger Для Android
 
-Hilt автоматизирует boilerplate-код и предоставляет стандартные компоненты и scope-аннотации для Android.
+`Hilt` автоматизирует boilerplate-код и предоставляет стандартные компоненты и scope-аннотации для Android.
 
 ```kotlin
 // ✅ Hilt автоматически создает компоненты и внедряет зависимости
@@ -106,7 +106,7 @@ class UserViewModel @Inject constructor(
 ) : ViewModel()
 ```
 
-**Стандартные Scopes в Hilt:**
+**Стандартные Scopes в `Hilt`:**
 - `@Singleton` — `SingletonComponent` / уровень `Application`
 - `@ActivityScoped` — `ActivityComponent` (один экземпляр на `Activity`)
 - `@ActivityRetainedScoped` — `ActivityRetainedComponent` (связано с жизненным циклом `Activity`, переживает конфигурационные изменения; подходит для зависимостей `ViewModel`)
@@ -132,18 +132,18 @@ class UserViewModel @Inject constructor(
 
 ### Дополнительные Вопросы (RU)
 
-- Как Dagger обнаруживает и репортит циклические зависимости на этапе компиляции, и какой алгоритм обхода графа он использует?
+- Как `Dagger` обнаруживает и репортит циклические зависимости на этапе компиляции, и какой алгоритм обхода графа он использует?
 - Каковы trade-offs между constructor injection и field injection с точки зрения неизменяемости, тестируемости и управления жизненным циклом?
-- Как работают пользовательские scope в Dagger, и когда стоит создавать свои вместо использования стандартных?
+- Как работают пользовательские scope в `Dagger`, и когда стоит создавать свои вместо использования стандартных?
 - Что произойдет, если внедрить незаскопленную зависимость в scoped-компонент, и как это повлияет на создание экземпляров?
-- Как иерархия компонентов Hilt соотносится с жизненным циклом Android-компонентов и как это влияет на утечки памяти?
+- Как иерархия компонентов `Hilt` соотносится с жизненным циклом Android-компонентов и как это влияет на утечки памяти?
 
 ### Ссылки (RU)
 
-- [[c-dagger]] — концепции фреймворка Dagger
+- [[c-dagger]] — концепции фреймворка `Dagger`
 - [[c-dependency-injection]] — паттерн Dependency Injection
-- [[c-hilt]] — Hilt для Android
-- "https://dagger.dev/" — официальная документация Dagger
+- [[c-hilt]] — `Hilt` для Android
+- "https://dagger.dev/" — официальная документация `Dagger`
 
 ### Связанные Вопросы (RU)
 
@@ -151,7 +151,7 @@ class UserViewModel @Inject constructor(
 - [[q-dagger-field-injection--android--medium]] — различия между field и constructor injection
 
 #### Того Же Уровня (средний/текущий)
-- [[q-dagger-build-time-optimization--android--medium]] — оптимизация времени сборки с Dagger
+- [[q-dagger-build-time-optimization--android--medium]] — оптимизация времени сборки с `Dagger`
 
 #### Продвинутые (сложнее)
 - [[q-dagger-custom-scopes--android--hard]] — создание и управление пользовательскими scope
@@ -162,7 +162,7 @@ class UserViewModel @Inject constructor(
 
 ### Key Components
 
-**@Inject — Constructor Injection**
+**@`Inject` — Constructor Injection**
 ```kotlin
 // ✅ Preferred: Dagger automatically creates instance
 class UserRepository @Inject constructor(
@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**@Module + @Provides — Complex Dependencies**
+**@`Module` + @`Provides` — Complex Dependencies**
 ```kotlin
 @Module
 object NetworkModule {
@@ -190,7 +190,7 @@ object NetworkModule {
 }
 ```
 
-**@Component — Dependency Graph**
+**@`Component` — Dependency Graph**
 ```kotlin
 @Singleton
 @Component(modules = [NetworkModule::class, DatabaseModule::class])
@@ -202,7 +202,7 @@ interface AppComponent {
 }
 ```
 
-**Scopes — Lifecycle Management**
+**Scopes — `Lifecycle` Management**
 ```kotlin
 @Singleton  // One instance across entire graph
 class ApiClient @Inject constructor()
@@ -220,7 +220,7 @@ class SomeActivityScopedDependency @Inject constructor()
 
 ### [[c-hilt]] — Simplified Dagger for Android
 
-Hilt automates boilerplate and provides standard components and scope annotations tailored for Android.
+`Hilt` automates boilerplate and provides standard components and scope annotations tailored for Android.
 
 ```kotlin
 // ✅ Hilt automatically creates components and injects dependencies
@@ -238,7 +238,7 @@ class UserViewModel @Inject constructor(
 ) : ViewModel()
 ```
 
-**Standard Hilt Scopes:**
+**Standard `Hilt` Scopes:**
 - `@Singleton` — `SingletonComponent` / `Application` level
 - `@ActivityScoped` — `ActivityComponent` (one instance per `Activity`)
 - `@ActivityRetainedScoped` — `ActivityRetainedComponent` (tied to `Activity` lifecycle across configuration changes; suitable for `ViewModel`-related dependencies)
@@ -255,7 +255,7 @@ class UserViewModel @Inject constructor(
 **Safety:**
 - Compile-time cyclic dependency detection
 - Guaranteed existence of all dependencies
-- Thread-safe singleton creation via generated code and properly configured components
+- `Thread`-safe singleton creation via generated code and properly configured components
 
 **Testability:**
 - Simple module replacement for tests
@@ -264,18 +264,18 @@ class UserViewModel @Inject constructor(
 
 ## Follow-ups
 
-- How does Dagger detect and report cyclic dependencies at compile time, and what graph traversal algorithm does it use?
+- How does `Dagger` detect and report cyclic dependencies at compile time, and what graph traversal algorithm does it use?
 - What are the trade-offs between constructor injection and field injection in terms of immutability, testability, and lifecycle management?
-- How do custom scopes work in Dagger, and when should you create them versus reusing standard scopes?
+- How do custom scopes work in `Dagger`, and when should you create them versus reusing standard scopes?
 - What happens if you inject a non-scoped dependency into a scoped component, and how does this affect instance creation?
-- How does Hilt's component hierarchy map to Android component lifecycles, and what are the implications for memory leaks?
+- How does `Hilt`'s component hierarchy map to Android component lifecycles, and what are the implications for memory leaks?
 
 ## References
 
-- [[c-dagger]] — Dagger framework concepts
+- [[c-dagger]] — `Dagger` framework concepts
 - [[c-dependency-injection]] — Dependency Injection pattern
-- [[c-hilt]] — Hilt wrapper for Android
-- "https://dagger.dev/" — Official Dagger documentation
+- [[c-hilt]] — `Hilt` wrapper for Android
+- "https://dagger.dev/" — Official `Dagger` documentation
 
 ## Related Questions
 
@@ -283,7 +283,7 @@ class UserViewModel @Inject constructor(
 - [[q-dagger-field-injection--android--medium]] — Understanding field vs constructor injection
 
 ### Related (Same Level)
-- [[q-dagger-build-time-optimization--android--medium]] — Optimizing Dagger build times
+- [[q-dagger-build-time-optimization--android--medium]] — Optimizing `Dagger` build times
 
 ### Advanced (Harder)
 - [[q-dagger-custom-scopes--android--hard]] — Creating and managing custom scopes

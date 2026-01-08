@@ -1,4 +1,4 @@
----
+---\
 id: android-627
 title: Mobile Observability with OpenTelemetry / Наблюдаемость на Android с OpenTelemetry
 aliases: [Mobile Observability with OpenTelemetry, Наблюдаемость на Android с OpenTelemetry]
@@ -17,7 +17,7 @@ tags: [android/logging-tracing, android/monitoring-slo, android/performance-batt
 sources:
   - "https://developer.android.com/topic/performance/monitoring"
   - "https://opentelemetry.io/docs/instrumentation/android/"
----
+---\
 # Вопрос (RU)
 > Как построить наблюдаемость в Android-приложении с OpenTelemetry: структурированные логи, метрики, трассировки, фоновая отправка данных и ограничения батареи/приватности?
 
@@ -50,7 +50,7 @@ sources:
 
 - **SDK слой**: OpenTelemetry API (`Meter`, `Tracer`, `Logger`), включая провайдеры и экспортеры для всех трёх сигналов.
 - **Transport слой**: OTLP exporter (gRPC/HTTP) с batching.
-- **Storage**: Disk buffer (например, Proto/DataStore или SQLite) для offline и сглаживания пиков.
+- **Storage**: Disk buffer (например, Proto/DataStore или `SQLite`) для offline и сглаживания пиков.
 - **Governance**: sampling, privacy-фильтры, opt-in/opt-out UI и developer toggles.
 
 ### Инициализация
@@ -100,7 +100,7 @@ OpenTelemetrySdk.builder()
 - **Логи**: `Logger.logRecordBuilder()` с структурированными ключами (`event`, `screen`, `userJourneyId` и др.), без PII.
 - **Метрики**: `LongCounter` для событий, `Histogram` для latency и размеров payload, `ObservableGauge` для state-based метрик.
 - **Трейсы**: `Tracer.spanBuilder("login.request")` + атрибуты (network type, feature flag/experiment, result). Пропагируйте контекст через слои.
-- Интегрируйте с gRPC/OkHttp interceptors, WorkManager listeners, ключевыми use-cases и критичными UI-флоу.
+- Интегрируйте с gRPC/OkHttp interceptors, `WorkManager` listeners, ключевыми use-cases и критичными UI-флоу.
 
 ### Сбор И Отправка
 
@@ -148,7 +148,7 @@ OpenTelemetrySdk.builder()
 
 - SDK layer: OpenTelemetry API (`Meter`, `Tracer`, `Logger`) with providers and exporters for all three signals.
 - Transport layer: OTLP exporter (gRPC/HTTP) with batching.
-- Storage: disk buffer (e.g., Proto/DataStore or SQLite) for offline and smoothing peaks.
+- Storage: disk buffer (e.g., Proto/DataStore or `SQLite`) for offline and smoothing peaks.
 - Governance: sampling, privacy filters, opt-in/opt-out UI, and developer toggles.
 
 ### Initialization
@@ -198,7 +198,7 @@ OpenTelemetrySdk.builder()
 - Logs: use `Logger.logRecordBuilder()` with structured keys (e.g., `event`, `screen`, `userJourneyId`), no PII.
 - Metrics: use `LongCounter` for events, `Histogram` for latency and payload sizes, `ObservableGauge` for state-based metrics.
 - Traces: use `Tracer.spanBuilder("login.request")` with attributes (network type, feature flag/experiment, result). Propagate context across layers.
-- Integrate instrumentation with gRPC/OkHttp interceptors, WorkManager listeners, and critical UI flows.
+- Integrate instrumentation with gRPC/OkHttp interceptors, `WorkManager` listeners, and critical UI flows.
 
 ### Collection and Export
 

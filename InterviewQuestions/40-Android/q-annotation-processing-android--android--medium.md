@@ -1,4 +1,4 @@
----
+---\
 id: android-024
 title: Annotation Processing in Android / Обработка аннотаций в Android
 aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-06
 updated: 2025-11-10
 tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и зачем она нужна?
 
@@ -28,14 +28,14 @@ tags: [android/build-variants, android/dependency-management, android/gradle, di
 
 ## Ответ (RU)
 
-**Обработка аннотаций** — compile-time механизм генерации boilerplate-кода на основе метаданных в исходниках. Процессор анализирует аннотации (@Dao, @Inject, @Entity) и создает .kt/.java файлы (или Java-классы), которые попадают в `build/generated/...` и компилируются вместе с основным кодом.
+**Обработка аннотаций** — compile-time механизм генерации boilerplate-кода на основе метаданных в исходниках. Процессор анализирует аннотации (@`Dao`, @`Inject`, @`Entity`) и создает .kt/.java файлы (или Java-классы), которые попадают в `build/generated/...` и компилируются вместе с основным кодом.
 
 **Зачем нужна:**
 - Устранение повторяющегося кода (SQL-запросы, DI-графы, сериализаторы)
-- Compile-time валидация (Room проверяет SQL-схемы и SQL-синтаксис на этапе сборки)
+- Compile-time валидация (`Room` проверяет SQL-схемы и SQL-синтаксис на этапе сборки)
 - Type-safety без тяжелой рефлексии (меньше runtime-overhead, ошибки находят на этапе компиляции)
 
-**Пример: Room DAO**
+**Пример: `Room` DAO**
 
 ```kotlin
 // ✅ Разработчик пишет только интерфейс
@@ -69,7 +69,7 @@ dependencies { ksp("androidx.room:room-compiler") }
 ```
 
 **Типичные процессоры:**
-- Room — SQL-запросы и DAO
+- `Room` — SQL-запросы и DAO
 - Hilt/Dagger — DI-граф
 - Moshi/kotlinx.serialization — JSON-сериализация (через KAPT/KSP-зависимости, если включены)
 
@@ -85,14 +85,14 @@ dependencies { ksp("androidx.room:room-compiler") }
 
 ## Answer (EN)
 
-**Annotation processing** is a compile-time code generation mechanism that analyzes metadata in source files (@Dao, @Inject, @Entity) and creates .kt/.java (or Java) files under `build/generated/...` that are compiled alongside the main code.
+**Annotation processing** is a compile-time code generation mechanism that analyzes metadata in source files (@`Dao`, @`Inject`, @`Entity`) and creates .kt/.java (or Java) files under `build/generated/...` that are compiled alongside the main code.
 
 **Purpose:**
 - Eliminate boilerplate (SQL queries, DI graphs, serializers)
-- Compile-time validation (Room validates schemas and SQL syntax at build time)
+- Compile-time validation (`Room` validates schemas and SQL syntax at build time)
 - Type-safety without heavy reflection (reduced runtime overhead, errors caught during compilation)
 
-**Example: Room DAO**
+**Example: `Room` DAO**
 
 ```kotlin
 // ✅ Developer writes only the interface
@@ -126,7 +126,7 @@ dependencies { ksp("androidx.room:room-compiler") }
 ```
 
 **Common processors:**
-- Room — SQL queries and DAO implementations
+- `Room` — SQL queries and DAO implementations
 - Hilt/Dagger — DI graph generation
 - Moshi/kotlinx.serialization — JSON serialization (via their KAPT/KSP integrations when enabled)
 
@@ -159,7 +159,7 @@ dependencies { ksp("androidx.room:room-compiler") }
 ## Ссылки (RU)
 
 - [[c-gradle]] — Основы build-системы и конфигурация плагинов
-- [[c-room]] — База данных Room и генерация DAO
+- [[c-room]] — База данных `Room` и генерация DAO
 - [[c-dagger]] — Фреймворк DI с обработкой аннотаций
 - [KSP Official Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [Android KSP Migration Guide](https://developer.android.com/build/migrate-to-ksp)
@@ -167,7 +167,7 @@ dependencies { ksp("androidx.room:room-compiler") }
 ## References
 
 - [[c-gradle]] — Build system fundamentals and plugin configuration
-- [[c-room]] — Room database and DAO generation
+- [[c-room]] — `Room` database and DAO generation
 - [[c-dagger]] — DI framework with annotation processing
 - [KSP Official Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [Android KSP Migration Guide](https://developer.android.com/build/migrate-to-ksp)

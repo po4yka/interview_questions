@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-100515"
 title: "Sliding Window / Sliding Window"
 aliases: ["Sliding Window"]
@@ -9,23 +9,24 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-two-pointers, c-dynamic-programming, c-algorithms, c-data-structures, c-backtracking-algorithm]
+moc: "moc-cs"
+related: ["c-two-pointers", "c-dynamic-programming", "c-algorithms", "c-data-structures", "c-backtracking-algorithm"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-Sliding Window is an algorithmic technique for processing contiguous segments (windows) of an array, string, or list while moving start/end pointers instead of recomputing results from scratch. It is used to solve problems involving subarrays/substrings with constraints (sum, length, distinct elements, etc.) in linear or near-linear time. This pattern matters in interviews because it turns many O(n·k) brute-force solutions into O(n) implementations by reusing partial computations as the window moves.
+Sliding `Window` is an algorithmic technique for processing contiguous segments (windows) of an array, string, or list while moving start/end pointers instead of recomputing results from scratch. It is used to solve problems involving subarrays/substrings with constraints (sum, length, distinct elements, etc.) in linear or near-linear time. This pattern matters in interviews because it turns many O(n·k) brute-force solutions into O(n) implementations by reusing partial computations as the window moves.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-Sliding Window (скользящее окно) — это алгоритмический приём для обработки непрерывных фрагментов (окон) массива, строки или списка с помощью движения указателей начала и конца вместо полного пересчёта результата. Он используется для задач о подмассивах/подстроках с ограничениями (сумма, длина, количество уникальных элементов и т.п.), позволяя получать решения за линейное или почти линейное время. Этот паттерн важен на собеседованиях, так как часто заменяет грубую силу O(n·k) на более эффективные реализации O(n).
+Sliding `Window` (скользящее окно) — это алгоритмический приём для обработки непрерывных фрагментов (окон) массива, строки или списка с помощью движения указателей начала и конца вместо полного пересчёта результата. Он используется для задач о подмассивах/подстроках с ограничениями (сумма, длина, количество уникальных элементов и т.п.), позволяя получать решения за линейное или почти линейное время. Этот паттерн важен на собеседованиях, так как часто заменяет грубую силу O(n·k) на более эффективные реализации O(n).
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
@@ -47,5 +48,5 @@ Sliding Window (скользящее окно) — это алгоритмиче
 
 ## References
 
-- "Sliding Window Technique" — articles and tutorials on LeetCode Explore / Educative.io (search by name).
+- "Sliding `Window` Technique" — articles and tutorials on LeetCode Explore / Educative.io (search by name).
 - Relevant sections in algorithm books such as "Grokking Algorithms" and online competitive programming resources on two-pointer and sliding window patterns.

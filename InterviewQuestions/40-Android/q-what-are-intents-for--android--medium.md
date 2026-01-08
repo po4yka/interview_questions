@@ -1,4 +1,4 @@
----
+---\
 id: android-250
 title: "What Are Intents For / Для чего нужны Intent"
 aliases: ["What Are Intents For", "Для чего нужны Intent"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/activity, android/intents-deeplinks, android/service, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Для чего нужны `Intent` в Android?
@@ -364,7 +364,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### Related (Medium)
 - [[q-intent-filters-android--android--medium]] - How apps declare `Intent` handling
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Component architecture
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - `Component` architecture
 
 ### Advanced (Harder)
 - [[q-how-application-priority-is-determined-by-the-system--android--hard]] - System component management

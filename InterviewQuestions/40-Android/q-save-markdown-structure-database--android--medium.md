@@ -1,4 +1,4 @@
----
+---\
 id: android-218
 title: Save Markdown Structure To Database / Сохранение структуры Markdown в базе данных
 aliases: [Save Markdown Structure To Database, Сохранение структуры Markdown в базе данных]
@@ -14,23 +14,23 @@ related: [c-android, c-database-design, q-database-encryption-android--android--
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/room, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Сохранение структуры Markdown в базе данных
 
 # Question (EN)
-> Save Markdown Structure To Database
+> Save Markdown Structure To `Database`
 
 ---
 
 ## Ответ (RU)
-Сохранение Markdown (и при необходимости его структуры) зависит от задач приложения. На Android обычно используют Room (SQLite) и/или файловое хранение. Ниже приведены основные подходы с примерами реализации, плюс гибридный вариант.
+Сохранение Markdown (и при необходимости его структуры) зависит от задач приложения. На Android обычно используют `Room` (`SQLite`) и/или файловое хранение. Ниже приведены основные подходы с примерами реализации, плюс гибридный вариант.
 
 ### Подход 1: Хранить Как Обычный Текст (самый простой)
 
 Лучше всего подходит для простых случаев, read-heavy-приложений, редакторов форматированного текста.
 
-Сохраняем сырой Markdown как строку в базе (например, Room поверх SQLite).
+Сохраняем сырой Markdown как строку в базе (например, `Room` поверх `SQLite`).
 
 ```kotlin
 @Entity(tableName = "documents")
@@ -196,7 +196,7 @@ private fun Node.children(): List<Node> {
 }
 ```
 
-Room + поиск по JSON-строке (без JSON-операторов):
+`Room` + поиск по JSON-строке (без JSON-операторов):
 
 ```kotlin
 @Dao
@@ -247,7 +247,7 @@ class MarkdownStructureRepository(
 }
 ```
 
-Замечание: поиск по JSON через LIKE в SQLite (включая Android) хрупкий и неэффективный, так как нет нативных JSON-операторов. Для серьезных задач стоит:
+Замечание: поиск по JSON через LIKE в `SQLite` (включая Android) хрупкий и неэффективный, так как нет нативных JSON-операторов. Для серьезных задач стоит:
 - нормализовать структуру в отдельные таблицы (например, таблица заголовков), и/или
 - использовать FTS (Full-Text Search) по содержимому.
 
@@ -349,7 +349,7 @@ class MarkdownViewerFragment : Fragment() {
 
 Лучше всего подходит для больших документов, экспорта/импорта и совместимости с внешними инструментами.
 
-Часто используется вместе с Room: база хранит метаданные и индексы, а сами .md-файлы лежат в файловой системе.
+Часто используется вместе с `Room`: база хранит метаданные и индексы, а сами .md-файлы лежат в файловой системе.
 
 ```kotlin
 class MarkdownFileManager(private val context: Context) {
@@ -420,7 +420,7 @@ class MarkdownFileManager(private val context: Context) {
 
 ### Гибридный Подход (рекомендуемый)
 
-Комбинируем варианты: Room для индексации/метаданных и хранения Markdown, кэш HTML для быстрого отображения, плюс при необходимости бэкап в файл.
+Комбинируем варианты: `Room` для индексации/метаданных и хранения Markdown, кэш HTML для быстрого отображения, плюс при необходимости бэкап в файл.
 
 ```kotlin
 @Entity(tableName = "documents")
@@ -498,15 +498,15 @@ class HybridMarkdownRepository(
 
 Основные подходы на Android (часто комбинируются):
 
-1. Сырой Markdown в Room — самый простой и хороший базовый вариант.
-2. AST/JSON + Room — для сложного структурного поиска и анализа.
-3. HTML + Room — для быстрого отображения и WebView.
+1. Сырой Markdown в `Room` — самый простой и хороший базовый вариант.
+2. AST/JSON + `Room` — для сложного структурного поиска и анализа.
+3. HTML + `Room` — для быстрого отображения и WebView.
 4. Файлы (.md) — для больших документов и интеграции с внешними инструментами; база хранит индексы/метаданные.
 
 Рекомендуется:
-- Для простого приложения: хранить сырой Markdown в Room.
+- Для простого приложения: хранить сырой Markdown в `Room`.
 - Для сложного: гибрид — сырой Markdown + кэш HTML + метаданные (и/или нормализованная структура, FTS).
-- Для очень больших документов/экспорта: хранить содержимое в файлах, а в Room держать только индекс и служебные данные.
+- Для очень больших документов/экспорта: хранить содержимое в файлах, а в `Room` держать только индекс и служебные данные.
 
 ---
 
@@ -517,7 +517,7 @@ Saving Markdown (and optionally its structure) depends on your application's goa
 
 Best for: Simple use cases, read-heavy applications, rich text editors.
 
-Store the raw Markdown text as a string in the database (e.g., Room over SQLite).
+Store the raw Markdown text as a string in the database (e.g., `Room` over `SQLite`).
 
 ```kotlin
 @Entity(tableName = "documents")
@@ -683,7 +683,7 @@ private fun Node.children(): List<Node> {
 }
 ```
 
-Room + LIKE-based JSON search (no JSON operators):
+`Room` + LIKE-based JSON search (no JSON operators):
 
 ```kotlin
 @Dao
@@ -734,7 +734,7 @@ class MarkdownStructureRepository(
 }
 ```
 
-Note: JSON LIKE search in SQLite on Android is fragile and inefficient because there are no native JSON operators by default. For serious use cases, prefer:
+Note: JSON LIKE search in `SQLite` on Android is fragile and inefficient because there are no native JSON operators by default. For serious use cases, prefer:
 - normalized tables for key structural elements (e.g., headings), and/or
 - FTS (Full-Text Search) for content.
 
@@ -836,7 +836,7 @@ Cons:
 
 Best for: Large documents, import/export, interoperability with external tools.
 
-Frequently combined with Room: DB stores metadata and indexes, while .md files live on the file system.
+Frequently combined with `Room`: DB stores metadata and indexes, while .md files live on the file system.
 
 ```kotlin
 class MarkdownFileManager(private val context: Context) {
@@ -907,7 +907,7 @@ Cons:
 
 ### Hybrid Approach (Recommended)
 
-Combine options: Room for indexing/metadata and Markdown storage, HTML cache for fast rendering, plus optional file backup.
+Combine options: `Room` for indexing/metadata and Markdown storage, HTML cache for fast rendering, plus optional file backup.
 
 ```kotlin
 @Entity(tableName = "documents")
@@ -985,15 +985,15 @@ This approach lets you:
 
 Four main approaches on Android (often combined):
 
-1. Plain Markdown in Room — simplest and a solid default.
-2. AST/JSON + Room — for complex structural search and analysis.
-3. HTML + Room — for fast display and WebView integration.
+1. Plain Markdown in `Room` — simplest and a solid default.
+2. AST/JSON + `Room` — for complex structural search and analysis.
+3. HTML + `Room` — for fast display and WebView integration.
 4. Files (.md) — for large documents and external tooling; DB stores index/metadata.
 
 Recommended:
-- Simple app: store raw Markdown in Room.
+- Simple app: store raw Markdown in `Room`.
 - Complex app: hybrid — raw Markdown + HTML cache + metadata (and/or normalized structure, FTS).
-- Very large docs/export: store content in files, keep only index/metadata in Room.
+- Very large docs/export: store content in files, keep only index/metadata in `Room`.
 
 ---
 

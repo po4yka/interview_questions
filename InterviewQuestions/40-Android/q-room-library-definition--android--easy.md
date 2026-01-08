@@ -1,4 +1,4 @@
----
+---\
 id: android-083
 title: "Room Library Definition / Определение библиотеки Room"
 aliases: ["Room Library Definition", "Определение библиотеки Room"]
@@ -16,18 +16,18 @@ updated: 2025-11-10
 tags: [android/room, difficulty/easy]
 sources: ["https://developer.android.com/codelabs/android-room-with-a-view-kotlin", "https://developer.android.com/training/data-storage/room"]
 
----
+---\
 # Вопрос (RU)
-> Что такое библиотека Room?
+> Что такое библиотека `Room`?
 
 # Question (EN)
-> What is the Room library?
+> What is the `Room` library?
 
 ---
 
 ## Ответ (RU)
 
-Room — это ORM-библиотека от Google, предоставляющая абстракцию над SQLite с типобезопасностью на этапе компиляции и проверкой SQL-запросов.
+`Room` — это ORM-библиотека от Google, предоставляющая абстракцию над `SQLite` с типобезопасностью на этапе компиляции и проверкой SQL-запросов.
 
 См. также: [[c-database-design]].
 
@@ -39,7 +39,7 @@ Room — это ORM-библиотека от Google, предоставляющ
 
 **Три компонента архитектуры:**
 
-**1. Entity (таблица):**
+**1. `Entity` (таблица):**
 ```kotlin
 @Entity(tableName = "users")
 data class User(
@@ -61,7 +61,7 @@ interface UserDao {
 }
 ```
 
-**3. Database (точка входа):**
+**3. `Database` (точка входа):**
 ```kotlin
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
@@ -84,7 +84,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 ## Answer (EN)
 
-Room is Google's ORM library providing an abstraction over SQLite with compile-time type safety and SQL query validation.
+`Room` is Google's ORM library providing an abstraction over `SQLite` with compile-time type safety and SQL query validation.
 
 See also: [[c-database-design]].
 
@@ -96,7 +96,7 @@ See also: [[c-database-design]].
 
 **Three architecture components:**
 
-**1. Entity (table):**
+**1. `Entity` (table):**
 ```kotlin
 @Entity(tableName = "users")
 data class User(
@@ -118,7 +118,7 @@ interface UserDao {
 }
 ```
 
-**3. Database (entry point):**
+**3. `Database` (entry point):**
 ```kotlin
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
@@ -143,58 +143,58 @@ abstract class AppDatabase : RoomDatabase() {
 
 ## Дополнительные Вопросы (RU)
 
-- Как Room обрабатывает миграции базы данных между версиями схемы?
-- Каковы правила работы с потоками (threading rules) для операций Room?
+- Как `Room` обрабатывает миграции базы данных между версиями схемы?
+- Каковы правила работы с потоками (threading rules) для операций `Room`?
 - Как реализовать сложные запросы с отношениями (one-to-many, many-to-many)?
 - В чем разница между `@Insert`, `@Update` и `@Upsert`?
-- Как Room поддерживает RxJava и Kotlin `Flow` для реактивных запросов?
+- Как `Room` поддерживает RxJava и Kotlin `Flow` для реактивных запросов?
 
 ## Follow-ups
 
-- How does Room handle database migrations between schema versions?
-- What are the threading rules for Room operations?
+- How does `Room` handle database migrations between schema versions?
+- What are the threading rules for `Room` operations?
 - How do you implement complex queries with relationships (one-to-many, many-to-many)?
 - What's the difference between `@Insert`, `@Update`, and `@Upsert`?
-- How does Room support RxJava and Kotlin `Flow` for reactive queries?
+- How does `Room` support RxJava and Kotlin `Flow` for reactive queries?
 
 ## Ссылки (RU)
 
-- https://developer.android.com/training/data-storage/room - Официальная документация по Room
-- https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Codelab по Room
+- https://developer.android.com/training/data-storage/room - Официальная документация по `Room`
+- https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Codelab по `Room`
 
 ## References
 
-- https://developer.android.com/training/data-storage/room - Official Room documentation
-- https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Room codelab
+- https://developer.android.com/training/data-storage/room - Official `Room` documentation
+- https://developer.android.com/codelabs/android-room-with-a-view-kotlin - `Room` codelab
 
 ## Связанные Вопросы (RU)
 
 ### Предварительные (проще)
 - Android варианты хранения данных (см. вопрос об общих вариантах хранения данных в Android)
-- Основы SQLite (см. вопрос об основах SQLite в Android)
+- Основы `SQLite` (см. вопрос об основах `SQLite` в Android)
 
 ### Связанные (того Же уровня)
-- Базовые операции Room
-- Определение сущностей (Entity) в Room
-- Паттерны реализации DAO в Room
+- Базовые операции `Room`
+- Определение сущностей (`Entity`) в `Room`
+- Паттерны реализации DAO в `Room`
 
 ### Продвинутые (сложнее)
-- Миграции схемы базы данных в Room
-- Моделирование связей таблиц в Room
-- Тестирование баз данных Room
+- Миграции схемы базы данных в `Room`
+- Моделирование связей таблиц в `Room`
+- Тестирование баз данных `Room`
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - Android data storage options
-- SQLite fundamentals
+- `SQLite` fundamentals
 
 ### Related (Same Level)
-- Room basic operations
-- Defining Room entities
+- `Room` basic operations
+- Defining `Room` entities
 - DAO implementation patterns
 
 ### Advanced (Harder)
-- Room database schema migrations
-- Modeling table relationships in Room
-- Testing Room databases
+- `Room` database schema migrations
+- Modeling table relationships in `Room`
+- Testing `Room` databases

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-109
 title: "Flow Performance Optimization / Оптимизация производительности Flow"
 aliases: ["Flow Performance Optimization", "Оптимизация производительности Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/hard, kotlin]
----
+---\
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140023
 
@@ -85,7 +85,7 @@ flow
     .collect()
 ```
 
-**5. Буферы Flow и каналов**
+**5. Буферы `Flow` и каналов**
 ```kotlin
 flow
     .buffer(capacity = 64)            // Ограниченный буфер, контролируемое сглаживание нагрузки
@@ -112,7 +112,7 @@ println("Took ${time}ms")
 
 ## Answer (EN)
 
-Flow performance optimization focuses on efficient data processing, proper buffering, minimizing context switching, and avoiding unnecessary work.
+`Flow` performance optimization focuses on efficient data processing, proper buffering, minimizing context switching, and avoiding unnecessary work.
 
 ### Key Performance Techniques
 
@@ -161,7 +161,7 @@ flow
     .collect()
 ```
 
-**5. Flow / channel buffers**
+**5. `Flow` / channel buffers**
 ```kotlin
 flow
     .buffer(capacity = 64)            // Bounded buffer, controlled load smoothing
@@ -217,4 +217,4 @@ For serious performance analysis, account for warm-up, variance, dispatcher effe
 - [[q-what-is-coroutine--kotlin--easy]] - Coroutines
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

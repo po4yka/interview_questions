@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-132848"
 title: "Websockets / Websockets"
 aliases: ["Websockets"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-webrtc, c-server-sent-events, c-real-time-communication, c-networking, c-rest-api]
+moc: "moc-cs"
+related: ["c-webrtc", "c-server-sent-events", "c-real-time-communication", "c-networking", "c-rest-api"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -33,7 +34,7 @@ WebSocket — это протокол постоянного двунаправ�
 
 - Persistent, full-duplex channel: After the initial HTTP handshake (Upgrade request), client and server keep a single open TCP connection for bidirectional communication.
 - Low overhead vs HTTP polling: Avoids repeated headers and connections, reducing latency and bandwidth for frequent small messages.
-- Message-based protocol: Data is sent as discrete text or binary frames, making it suitable for streaming updates and real-time events.
+- `Message`-based protocol: Data is sent as discrete text or binary frames, making it suitable for streaming updates and real-time events.
 - Requires server support: Backend must implement the WebSocket protocol (e.g., via libraries/frameworks) and handle connection lifecycle, scaling, and backpressure.
 - Security and compatibility: Commonly used as wss:// over TLS; works through most proxies but may need configuration, and is distinct from REST semantics.
 

@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-122815"
 title: "Database Normalization / Database Normalization"
 aliases: ["Database Normalization"]
@@ -9,17 +9,18 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-databases, c-database-design, c-relational-databases]
+moc: "moc-cs"
+related: ["c-databases", "c-database-design", "c-relational-databases"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-Database normalization is a systematic process of organizing relational database columns and tables to minimize redundancy and avoid anomalies in insert, update, and delete operations. It relies on functional dependencies and a sequence of normal forms (1NF, 2NF, 3NF, BCNF, etc.) to ensure data integrity and consistency. Normalization is widely used when designing OLTP systems and schemas that must remain correct as data and application logic evolve.
+`Database` normalization is a systematic process of organizing relational database columns and tables to minimize redundancy and avoid anomalies in insert, update, and delete operations. It relies on functional dependencies and a sequence of normal forms (1NF, 2NF, 3NF, BCNF, etc.) to ensure data integrity and consistency. Normalization is widely used when designing OLTP systems and schemas that must remain correct as data and application logic evolve.
 
 *This concept file was auto-generated and has been enriched with interview-focused technical context.*
 

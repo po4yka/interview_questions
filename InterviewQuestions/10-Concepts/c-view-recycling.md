@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-182330"
 title: "View Recycling / View Recycling"
 aliases: ["View Recycling"]
@@ -9,23 +9,24 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-viewholder, c-performance-optimization, c-memory-optimization]
+moc: "moc-cs"
+related: ["c-viewholder", "c-performance-optimization", "c-memory-optimization"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-View recycling is a UI performance technique where reusable view objects are passed back into adapters or layout managers instead of being recreated for each data item. It reduces object allocations, layout/measure calls, and binding cost when rendering large, scrollable lists or grids (e.g., RecyclerView/ListView in Android, UITableView in iOS, virtualized lists on the web). Correct view recycling leads to smoother scrolling, lower memory usage, and better battery and CPU efficiency.
+`View` recycling is a UI performance technique where reusable view objects are passed back into adapters or layout managers instead of being recreated for each data item. It reduces object allocations, layout/measure calls, and binding cost when rendering large, scrollable lists or grids (e.g., RecyclerView/ListView in Android, UITableView in iOS, virtualized lists on the web). Correct view recycling leads to smoother scrolling, lower memory usage, and better battery and CPU efficiency.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-View recycling — это техника оптимизации UI, при которой уже созданные элементы представления (view) повторно используются адаптером или менеджером компоновки вместо создания новых для каждого элемента данных. Это уменьшает количество выделений объектов, операций измерения/разметки и привязки данных при отрисовке больших прокручиваемых списков или сеток (например, RecyclerView/ListView в Android, UITableView в iOS, виртуализированные списки в вебе). Корректное использование view recycling обеспечивает плавный скролл, меньшее потребление памяти и ресурсов CPU/батареи.
+`View` recycling — это техника оптимизации UI, при которой уже созданные элементы представления (view) повторно используются адаптером или менеджером компоновки вместо создания новых для каждого элемента данных. Это уменьшает количество выделений объектов, операций измерения/разметки и привязки данных при отрисовке больших прокручиваемых списков или сеток (например, RecyclerView/ListView в Android, UITableView в iOS, виртуализированные списки в вебе). Корректное использование view recycling обеспечивает плавный скролл, меньшее потребление памяти и ресурсов CPU/батареи.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
@@ -47,6 +48,6 @@ View recycling — это техника оптимизации UI, при ко�
 
 ## References
 
-- Android Developers – RecyclerView and ViewHolder pattern documentation
+- Android Developers – `RecyclerView` and `ViewHolder` pattern documentation
 - Apple Developer Documentation – UITableView/UICollectionView cell reuse
 - Documentation for virtualized list components in modern UI frameworks (e.g., React Virtualized, SwiftUI/List optimizations)

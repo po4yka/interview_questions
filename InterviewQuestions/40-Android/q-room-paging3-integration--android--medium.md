@@ -1,4 +1,4 @@
----
+---\
 id: android-242
 title: "Room Paging3 Integration / Интеграция Room с Paging3"
 aliases: ["Room Paging3 Integration", "Интеграция Room с Paging3"]
@@ -15,14 +15,14 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/room, android/ui-compose, database, difficulty/medium, offline-first, pagination, paging3]
----
+---\
 # Вопрос (RU)
 
-> Как интегрировать Room с Paging 3? Реализуйте источник данных из Room и обработку RemoteMediator для офлайн-first архитектуры с сетью и базой данных.
+> Как интегрировать `Room` с Paging 3? Реализуйте источник данных из `Room` и обработку RemoteMediator для офлайн-first архитектуры с сетью и базой данных.
 
 # Question (EN)
 
-> How to integrate Room with Paging 3? Implement Room database source and handle RemoteMediator for offline-first architecture with network and database paging.
+> How to integrate `Room` with Paging 3? Implement `Room` database source and handle RemoteMediator for offline-first architecture with network and database paging.
 
 ## Ответ (RU)
 
@@ -30,7 +30,7 @@ tags: [android/architecture-mvvm, android/room, android/ui-compose, database, di
 
 ### Базовый PagingSource
 
-Room автоматически создаёт `PagingSource` из DAO-запросов:
+`Room` автоматически создаёт `PagingSource` из DAO-запросов:
 
 ```kotlin
 @Dao
@@ -62,7 +62,7 @@ class UserViewModel(repository: UserRepository) : ViewModel() {
 }
 ```
 
-Room-интеграция с Paging 3 автоматически инвалидирует `PagingSource` при изменении таблиц, участвующих в запросе, что обеспечивает актуальные данные без ручного обновления.
+`Room`-интеграция с Paging 3 автоматически инвалидирует `PagingSource` при изменении таблиц, участвующих в запросе, что обеспечивает актуальные данные без ручного обновления.
 
 ### UI (Compose)
 
@@ -98,7 +98,7 @@ fun UserListScreen(viewModel: UserViewModel) {
 
 ### RemoteMediator (Offline-First)
 
-**RemoteMediator** загружает данные из сети и кэширует их в Room.
+**RemoteMediator** загружает данные из сети и кэширует их в `Room`.
 Ниже — пример однонаправленной пагинации «вниз» (APPEND) с постраничным API вида `page=1,2,3...`:
 
 ```kotlin
@@ -194,15 +194,15 @@ class UserRepository(
 1. **cachedIn(viewModelScope)** — кэш данных для переживания rotation и пересоздания UI.
 2. **PagingConfig**: `pageSize` 20–50, `prefetchDistance` 5–10, `initialLoadSize` 2–3× `pageSize`.
 3. **LoadState** — обработка состояний загрузки и ошибок (`refresh`, `append`, `prepend`).
-4. **RemoteMediator** — офлайн-first с кэшированием в Room.
-5. **DiffUtil** — для RecyclerView (в Compose используется диффинг списков под капотом).
+4. **RemoteMediator** — офлайн-first с кэшированием в `Room`.
+5. **`DiffUtil`** — для `RecyclerView` (в Compose используется диффинг списков под капотом).
 6. **Remote Keys** — отдельная таблица для состояния пагинации.
 7. **withTransaction** — атомарность операций записи.
 8. **Retry mechanism** — восстановление после ошибок через `retry()` / пользовательские стратегии.
 
 ### Ключевые Моменты
 
-- **PagingSource**: автоматическая пагинация из Room-запросов.
+- **PagingSource**: автоматическая пагинация из `Room`-запросов.
 - **RemoteMediator**: офлайн-first с сетью + БД.
 - **LoadState**: обработка loading/error/success.
 - **collectAsLazyPagingItems()**: интеграция с Compose LazyColumn.
@@ -219,7 +219,7 @@ class UserRepository(
 
 ### Basic PagingSource
 
-Room automatically creates a `PagingSource` from DAO queries:
+`Room` automatically creates a `PagingSource` from DAO queries:
 
 ```kotlin
 @Dao
@@ -251,7 +251,7 @@ class UserViewModel(repository: UserRepository) : ViewModel() {
 }
 ```
 
-Paging 3 with Room automatically invalidates the `PagingSource` when underlying tables used in the query change, ensuring up-to-date data without manual refresh logic.
+Paging 3 with `Room` automatically invalidates the `PagingSource` when underlying tables used in the query change, ensuring up-to-date data without manual refresh logic.
 
 ### UI (Compose)
 
@@ -287,7 +287,7 @@ fun UserListScreen(viewModel: UserViewModel) {
 
 ### RemoteMediator (Offline-First)
 
-**RemoteMediator** fetches data from the network and caches it into Room.
+**RemoteMediator** fetches data from the network and caches it into `Room`.
 Below is a simple one-directional (append-only) paging example for a page-based API `page = 1,2,3...`:
 
 ```kotlin
@@ -383,15 +383,15 @@ class UserRepository(
 1. **cachedIn(viewModelScope)** — cache in a lifecycle-aware scope to survive rotation and UI recreation.
 2. **PagingConfig**: `pageSize` 20–50, `prefetchDistance` 5–10, `initialLoadSize` 2–3× `pageSize`.
 3. **LoadState** — always handle loading and error states (`refresh`, `append`, `prepend`).
-4. **RemoteMediator** — implement offline-first behavior with Room-backed cache.
-5. **DiffUtil** — for RecyclerView usage (Compose handles diffs internally).
+4. **RemoteMediator** — implement offline-first behavior with `Room`-backed cache.
+5. **`DiffUtil`** — for `RecyclerView` usage (Compose handles diffs internally).
 6. **Remote Keys** — dedicated table to persist pagination state.
 7. **withTransaction** — ensure atomic writes for data + remote keys.
 8. **Retry mechanism** — expose `retry()` / custom retry logic after failures.
 
 ### Key Points
 
-- **PagingSource**: automatic paging from Room queries.
+- **PagingSource**: automatic paging from `Room` queries.
 - **RemoteMediator**: offline-first with network + database cache.
 - **LoadState**: handle loading/error/success states.
 - **collectAsLazyPagingItems()**: integration with Compose LazyColumn.
@@ -414,21 +414,21 @@ Use **PagingSource** for simple local pagination, **RemoteMediator** for offline
 
 ## Ссылки (RU)
 
-- [[c-room]] — основы базы данных Room
+- [[c-room]] — основы базы данных `Room`
 - [[c-coroutines]] — корутины Kotlin для асинхронных операций
 - Android Paging 3 Documentation
 
 ## Связанные Вопросы (RU)
 
 ### Базовые (проще)
-- [[q-room-library-definition--android--easy]] — основы Room
+- [[q-room-library-definition--android--easy]] — основы `Room`
 
 ### Средний Уровень
-- [[q-room-transactions-dao--android--medium]] — транзакции в Room
-- [[q-room-type-converters--android--medium]] — конвертеры типов в Room
+- [[q-room-transactions-dao--android--medium]] — транзакции в `Room`
+- [[q-room-type-converters--android--medium]] — конвертеры типов в `Room`
 
 ### Продвинутый Уровень (сложнее)
-- [[q-room-fts-full-text-search--android--hard]] — полнотекстовый поиск в Room
+- [[q-room-fts-full-text-search--android--hard]] — полнотекстовый поиск в `Room`
 - Стратегии миграций базы данных и версионирования
 
 ---
@@ -445,19 +445,19 @@ Use **PagingSource** for simple local pagination, **RemoteMediator** for offline
 
 ## References
 
-- [[c-room]] - Room database fundamentals
+- [[c-room]] - `Room` database fundamentals
 - [[c-coroutines]] - Kotlin coroutines for async operations
 - Android Paging 3 Documentation
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-room-library-definition--android--easy]] - Room database basics
+- [[q-room-library-definition--android--easy]] - `Room` database basics
 
 ### Related (Medium)
-- [[q-room-transactions-dao--android--medium]] - Room transactions
-- [[q-room-type-converters--android--medium]] - Room type converters
+- [[q-room-transactions-dao--android--medium]] - `Room` transactions
+- [[q-room-type-converters--android--medium]] - `Room` type converters
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--android--hard]] - Full-text search with Room
-- Database migrations and versioning strategies
+- [[q-room-fts-full-text-search--android--hard]] - Full-text search with `Room`
+- `Database` migrations and versioning strategies

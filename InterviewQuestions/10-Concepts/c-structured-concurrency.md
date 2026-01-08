@@ -1,14 +1,22 @@
----
-id: ivc-20251030-140000
-title: Structured Concurrency / Структурированная конкурентность
-aliases: [Coroutine Scoping, Structured Concurrency, Структурированная конкурентность]
-kind: concept
-summary: Kotlin Coroutines paradigm ensuring proper scope and cleanup
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [concept, concurrency, coroutines, kotlin, structured-concurrency]
----
+---\
+id: "20251030-140000"
+title: "Structured Concurrency / Структурированная конкурентность"
+aliases: ["Coroutine Scoping", "Structured Concurrency", "Структурированная конкурентность"]
+summary: "Kotlin Coroutines paradigm ensuring proper scope and cleanup"
+topic: "concurrency"
+subtopics: ["coroutines", "kotlin", "structured-concurrency"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["concept", "concurrency", "coroutines", "kotlin", "structured-concurrency", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -59,14 +67,14 @@ Key principles:
 ## Best Practices / Лучшие Практики
 
 **EN**:
-- Use `viewModelScope` in Android ViewModels for automatic cleanup on ViewModel clear
+- Use `viewModelScope` in Android ViewModels for automatic cleanup on `ViewModel` clear
 - Use `lifecycleScope` in Activities/Fragments tied to lifecycle
 - Create custom scopes with `CoroutineScope(SupervisorJob() + Dispatchers.Main)` for independent components
 - Use `supervisorScope` when you want child failures to not cancel siblings
 - Always cancel scopes explicitly when they're no longer needed
 
 **RU**:
-- Используйте `viewModelScope` в Android ViewModels для автоматической очистки при уничтожении ViewModel
+- Используйте `viewModelScope` в Android ViewModels для автоматической очистки при уничтожении `ViewModel`
 - Используйте `lifecycleScope` в Activity/Fragment, привязанные к жизненному циклу
 - Создавайте пользовательские области с `CoroutineScope(SupervisorJob() + Dispatchers.Main)` для независимых компонентов
 - Используйте `supervisorScope`, когда отказ дочерних корутин не должен отменять соседние
@@ -137,7 +145,7 @@ class UserViewModel : ViewModel() {
 
 ## References
 
-- [Kotlin Coroutines Guide: Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Kotlin Coroutines Guide: `Coroutine` `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Kotlin Coroutines Guide: Cancellation and Timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
 - [Roman Elizarov: Structured Concurrency](https://medium.com/@elizarov/structured-concurrency-722d765aa952)
 - [Android Developers: Coroutines on Android](https://developer.android.com/kotlin/coroutines)

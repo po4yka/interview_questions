@@ -1,5 +1,5 @@
----
----
+---\
+---\
 
 # LangChain Integration for AI Validation
 
@@ -16,7 +16,7 @@ The `LangChainValidator` provides the same AI-powered validation features as `Lo
 - Code quality checking with Pydantic models
 - Answer completeness evaluation with ratings
 - Built-in retry mechanisms via LangChain
-- Response caching (InMemoryCache by default)
+- `Response` caching (InMemoryCache by default)
 - Support for both Ollama and OpenAI-compatible APIs (LM Studio)
 
 ### Key Improvements Over LocalAIValidator
@@ -219,7 +219,7 @@ pyproject.toml                   # UPDATED: Added LangChain dependencies
 |---------|-----------------|-------------------|
 | Translation | Direct API calls | Prompt templates + Pydantic |
 | Code Review | Regex parsing | Structured CodeReviewResult |
-| Completeness | String matching | Structured CompletenessResult |
+| Completeness | `String` matching | Structured CompletenessResult |
 | Caching | None | Built-in InMemoryCache |
 | Retry Logic | Manual | Automatic via LangChain |
 | Fallback | None | Graceful degradation |

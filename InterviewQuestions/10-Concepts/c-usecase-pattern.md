@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-160936"
 title: "Usecase Pattern / Usecase Pattern"
 aliases: ["Usecase Pattern"]
@@ -9,17 +9,18 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-system-design"
-related: [c-clean-architecture, c-architecture-patterns, c-mvp-pattern, c-design-patterns, c-software-design]
+moc: "moc-architecture-patterns"
+related: ["c-clean-architecture", "c-architecture-patterns", "c-mvp-pattern", "c-design-patterns", "c-software-design"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [architecture-patterns, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
-Usecase Pattern (a.k.a. Use Case Interactor or Application Service pattern) structures business logic around explicit use cases, each represented by a dedicated class or function. It separates application-specific operations ("what the system should do") from delivery mechanisms (web, mobile, CLI) and infrastructure (DB, messaging), improving clarity, testability, and maintainability. Commonly used in Clean/Hexagonal Architecture, it helps align code with business language and requirements.
+Usecase Pattern (a.k.a. Use Case Interactor or `Application` `Service` pattern) structures business logic around explicit use cases, each represented by a dedicated class or function. It separates application-specific operations ("what the system should do") from delivery mechanisms (web, mobile, CLI) and infrastructure (DB, messaging), improving clarity, testability, and maintainability. Commonly used in Clean/Hexagonal Architecture, it helps align code with business language and requirements.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 

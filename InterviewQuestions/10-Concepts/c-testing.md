@@ -1,14 +1,22 @@
----
-id: concept-testing
-title: Android Testing / Тестирование Android
-aliases: [Android Testing, Mobile Testing, Тестирование Android]
-kind: concept
-summary: Comprehensive testing strategies for Android applications including unit, integration, and UI tests
-links: []
-created: 2025-11-06
-updated: 2025-11-06
-tags: [android, concept, quality, testing]
----
+---\
+id: "20260108-110550"
+title: "Android Testing / Тестирование Android"
+aliases: ["Android Testing", "Mobile Testing", "Тестирование Android"]
+summary: "Comprehensive testing strategies for Android applications including unit, integration, and UI tests"
+topic: "android"
+subtopics: ["quality", "testing"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-06"
+updated: "2025-11-06"
+tags: ["android", "concept", "quality", "testing", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -27,7 +35,7 @@ Android testing encompasses multiple testing levels to ensure app quality, relia
 Key testing frameworks:
 - JUnit 4/5 for unit tests
 - Mockito/MockK for mocking
-- Espresso for View-based UI testing
+- Espresso for `View`-based UI testing
 - Compose Test for Compose UI testing
 - Robolectric for local Android tests
 
@@ -48,7 +56,7 @@ Key testing frameworks:
 Ключевые фреймворки тестирования:
 - JUnit 4/5 для модульных тестов
 - Mockito/MockK для моков
-- Espresso для UI тестирования на View
+- Espresso для UI тестирования на `View`
 - Compose Test для UI тестирования Compose
 - Robolectric для локальных Android тестов
 
@@ -61,7 +69,7 @@ Key testing frameworks:
 - Utility functions
 
 **Integration Testing**:
-- Repository with Room database
+- Repository with `Room` database
 - Network + local cache interaction
 - Dependency injection graph
 - Navigation flows
@@ -69,7 +77,7 @@ Key testing frameworks:
 **UI Testing**:
 - User authentication flows
 - Form validation
-- List scrolling and interaction
+- `List` scrolling and interaction
 - Screen rotation handling
 
 **Trade-offs**:

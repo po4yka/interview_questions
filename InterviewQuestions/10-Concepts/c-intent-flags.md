@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-153623"
 title: "Intent Flags / Intent Flags"
 aliases: ["Intent Flags"]
@@ -9,23 +9,24 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-intents, c-intent-system, c-android-tasks, c-task-backstack, c-navigation]
+moc: "moc-cs"
+related: ["c-intents", "c-intent-system", "c-android-tasks", "c-task-backstack", "c-navigation"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-Intent flags are configuration constants used with Android Intents to control how activities are launched, reused, or placed in the back stack. They define task and activity behavior (e.g., whether to create a new instance, reuse an existing one, or clear history) and are critical for predictable navigation, deep links, and notification handling. Correct use of intent flags prevents duplicate screens, broken back navigation, and security issues when passing data between components.
+`Intent` flags are configuration constants used with Android Intents to control how activities are launched, reused, or placed in the back stack. They define task and activity behavior (e.g., whether to create a new instance, reuse an existing one, or clear history) and are critical for predictable navigation, deep links, and notification handling. Correct use of intent flags prevents duplicate screens, broken back navigation, and security issues when passing data between components.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-Intent flags — это набор констант, используемых с Android Intent для управления тем, как запускаются активности, переиспользуются ли они и как размещаются в back stack. Они определяют поведение задач и активностей (создать новый экземпляр, использовать существующий, очистить историю и т.п.) и критичны для предсказуемой навигации, deep link-ов и обработки уведомлений. Корректное использование intent flags помогает избежать дубликатов экранов, некорректной «Назад» навигации и потенциальных проблем с безопасностью при передаче данных.
+`Intent` flags — это набор констант, используемых с Android `Intent` для управления тем, как запускаются активности, переиспользуются ли они и как размещаются в back stack. Они определяют поведение задач и активностей (создать новый экземпляр, использовать существующий, очистить историю и т.п.) и критичны для предсказуемой навигации, deep link-ов и обработки уведомлений. Корректное использование intent flags помогает избежать дубликатов экранов, некорректной «Назад» навигации и потенциальных проблем с безопасностью при передаче данных.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
@@ -40,12 +41,12 @@ Intent flags — это набор констант, используемых с
 ## Ключевые Моменты (RU)
 
 - FLAG_ACTIVITY_NEW_TASK / FLAG_ACTIVITY_CLEAR_TASK: Управляют созданием новой задачи и очисткой текущей; часто применяются для запуска «чистого» потока (например, после логина), чтобы пользователь не мог вернуться на старые экраны.
-- FLAG_ACTIVITY_SINGLE_TOP / FLAG_ACTIVITY_REORDER_TO_FRONT: Позволяют переиспользовать уже существующий экземпляр Activity вместо создания нового, если он уже на вершине (или в стеке), уменьшая дублирование экранов.
-- FLAG_ACTIVITY_CLEAR_TOP: Поднимает существующую Activity наверх и удаляет все активности над ней — удобно для реализации «домой» или "up" навигации.
+- FLAG_ACTIVITY_SINGLE_TOP / FLAG_ACTIVITY_REORDER_TO_FRONT: Позволяют переиспользовать уже существующий экземпляр `Activity` вместо создания нового, если он уже на вершине (или в стеке), уменьшая дублирование экранов.
+- FLAG_ACTIVITY_CLEAR_TOP: Поднимает существующую `Activity` наверх и удаляет все активности над ней — удобно для реализации «домой» или "up" навигации.
 - FLAG_ACTIVITY_NO_HISTORY / FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS: Запрещают сохранение активности в back stack или показ в списке недавних приложений, что полезно для безопасности и улучшения UX.
 - Типичные сценарии: обработка нажатий по уведомлениям, deep link-ы, аутентификационные потоки, действия "logout"/"начать заново", где важно явно контролировать поведение стека.
 
 ## References
 
-- Android Developers: Intents and Intent Filters — https://developer.android.com/guide/components/intents-filters
-- Android Developers: Tasks and Back Stack — https://developer.android.com/guide/components/activities/tasks-and-back-stack
+- Android Developers: Intents and `Intent` Filters — https://developer.android.com/guide/components/intents-filters
+- Android Developers: Tasks and Back `Stack` — https://developer.android.com/guide/components/activities/tasks-and-back-stack

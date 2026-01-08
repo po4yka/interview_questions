@@ -1,4 +1,4 @@
----
+---\
 id: android-454
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
 aliases: [Custom ViewGroup Layout, Layout кастомных ViewGroup]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/ui-views, custom-views, difficulty/hard, layout]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Как создать кастомный `ViewGroup`? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.
@@ -396,13 +396,13 @@ Additionally (for interview completeness): if a single child becomes wider than 
 
 **MUST:**
 - Measure all children via `measureChild()`, `measureChildWithMargins()`, or `measure()` with proper `getChildMeasureSpec()` before computing own size.
-- Call `setMeasuredDimension()` at the end of `onMeasure()`.
+- `Call` `setMeasuredDimension()` at the end of `onMeasure()`.
 - Skip `GONE` children (`child.visibility == View.GONE`) — they do not take space.
 - Account for parent's `padding` and children's `margins` when calculating sizes and positions.
 - Respect parent's `MeasureSpec`; `resolveSize()` / `resolveSizeAndState()` are recommended helpers.
 
 **FORBIDDEN (within the normal layout contract context):**
-- Call `requestLayout()` inside `onLayout()` → risk of repeated layout passes / infinite loops.
+- `Call` `requestLayout()` inside `onLayout()` → risk of repeated layout passes / infinite loops.
 - Use `measuredWidth`/`measuredHeight` before calling `measure()` on the child.
 - Ignore `MeasureSpec` from parent — violates the measurement contract.
 - Intentionally compute child positions outside the parent's bounds unless you explicitly handle clipping/scrolling behavior.
@@ -487,7 +487,7 @@ val startX = if (isRtl) width - paddingRight else paddingLeft
 
 - Более сложный `FlowLayout` с выравниванием по базовой линии
 - Внутреннее устройство `AsyncLayoutInflater`
-- Внутренняя работа `RecyclerView` LayoutManager
+- Внутренняя работа `RecyclerView` `LayoutManager`
 
 ## Related Questions
 

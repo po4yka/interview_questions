@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-235
 title: "Value Classes (Inline Classes) in Kotlin / Value классы в Kotlin"
 aliases: ["Value Classes", "Встраиваемые классы"]
@@ -15,7 +15,7 @@ created: "2024-10-12"
 updated: "2025-11-09"
 tags: [difficulty/medium, inline-classes, kotlin, kotlin-features, performance, value-classes]
 sources: ["https://kotlinlang.org/docs/inline-classes.html"]
----
+---\
 # Вопрос (RU)
 > Что такое value классы (inline классы) в Kotlin и зачем они нужны?
 
@@ -184,7 +184,7 @@ Value classes (previously called inline classes) are a Kotlin mechanism for wrap
 **Core Concepts:**
 - **Single underlying property**: Must have exactly one `val` or `var` property in the primary constructor — this is the underlying value
 - **Inline-like representation**: The compiler uses the underlying type representation when possible and safe
-- **Type safety**: Provides stronger type safety over identical underlying types (e.g., `UserId` vs `OrderId` over `Long`)
+- **Type safety**: `Provides` stronger type safety over identical underlying types (e.g., `UserId` vs `OrderId` over `Long`)
 - **Reduced allocations**: Avoids creating wrapper objects in most common cases; boxing appears in specific usages
 
 **Basic Syntax (JVM):**
@@ -228,7 +228,7 @@ fun signup(email: Email, username: Username) {
 // signup(Username("test"), Email("test@example.com")) // Error!
 ```
 
-**Value Class Requirements and Constraints:**
+**Value Class Requirements and `Constraints`:**
 ```kotlin
 // ❌ BAD: more than one value in primary constructor
 // value class Bad(private val a: String, private val b: String)
@@ -253,7 +253,7 @@ Key constraints (essential for interviews):
 - Cannot inherit from other classes; can only implement interfaces; they are effectively final
 - No explicit backing fields other than the underlying property
 
-**Practical Application:**
+**Practical `Application`:**
 ```kotlin
 @JvmInline
 value class Price(val amountCents: Long) {

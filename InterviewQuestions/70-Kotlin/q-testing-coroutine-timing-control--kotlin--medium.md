@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-093
 title: "Тестирование тайминга корутин: advanceTimeBy vs advanceUntilIdle / Testing coroutine timing: advanceTimeBy vs advanceUntilIdle"
 aliases: [Coroutine Testing, Testing Timing, Virtual Time]
@@ -15,7 +15,7 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [coroutines, deterministic, difficulty/medium, kotlin, runtest, test-dispatcher, testing, timing, virtual-time]
 
----
+---\
 # Вопрос (RU)
 
 > Как детерминированно тестировать тайминги корутин в Kotlin с помощью виртуального времени (`runTest`, `TestScope`, `TestDispatcher`, `advanceTimeBy`, `advanceUntilIdle`, `runCurrent`, `currentTime`), и как правильно использовать эти примитивы для проверки задержек, тайм-аутов, периодических операций, `Flow` и `ViewModel`?
@@ -246,7 +246,7 @@ class PreciseTimingControl {
 
 ### `advanceUntilIdle()` — Выполнение Всей Отложенной Работы
 
-`advanceUntilIdle()` многократно выполняет задачи и продвигает виртуальное время к следующему событию, пока не останется задач. Не эквивалентен `advanceTimeBy(`Long`.MAX_VALUE)` при бесконечной генерации работы.
+`advanceUntilIdle()` многократно выполняет задачи и продвигает виртуальное время к следующему событию, пока не останется задач. Не эквивалентен `advanceTimeBy(``Long``.MAX_VALUE)` при бесконечной генерации работы.
 
 #### Базовое Использование
 
@@ -1333,7 +1333,7 @@ Aligned with RU "Частые ошибки":
 ---
 
 ## Дополнительные Вопросы (RU)
-1. В чём разница между `advanceUntilIdle()` и `advanceTimeBy(`Long`.MAX_VALUE)` при наличии бесконечной или лениво создаваемой работы?
+1. В чём разница между `advanceUntilIdle()` и `advanceTimeBy(``Long``.MAX_VALUE)` при наличии бесконечной или лениво создаваемой работы?
 2. Как протестировать бесконечный цикл с `delay()`, не зависая в `advanceUntilIdle()`?
 3. Когда стоит использовать `backgroundScope` вместо основного `TestScope` в `runTest`?
 4. Как протестировать, что корутина отменяется в определённый момент (например, до завершения `delay`)?
@@ -1341,7 +1341,7 @@ Aligned with RU "Частые ошибки":
 6. Как тестировать несколько корутин с разным таймингом, сохраняя детерминированный порядок событий?
 7. Можно ли тестировать код без искусственных `delay` с помощью `runTest`, и каковы ограничения такого подхода?
 ## Follow-ups (EN)
-1. What is the difference between `advanceUntilIdle()` and `advanceTimeBy(`Long`.MAX_VALUE)` when there is infinite or lazily produced work?
+1. What is the difference between `advanceUntilIdle()` and `advanceTimeBy(``Long``.MAX_VALUE)` when there is infinite or lazily produced work?
 2. How can you test an infinite loop with `delay()` without hanging in `advanceUntilIdle()`?
 3. When should you use `backgroundScope` instead of the main `TestScope` in `runTest`?
 4. How can you test that a coroutine is cancelled at a specific moment (e.g., before a delay completes)?

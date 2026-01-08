@@ -1,4 +1,4 @@
----
+---\
 id: android-437
 title: "Why Multithreading Tools / Зачем инструменты многопоточности"
 aliases: [Android Concurrency, Multithreading Tools, Инструменты многопоточности]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/easy]
 sources: ["https://developer.android.com/guide/background", "https://developer.android.com/kotlin/coroutines"]
 
----
+---\
 # Вопрос (RU)
 
 > Для чего нужна многопоточность в Android и какие инструменты использовать?
@@ -31,10 +31,10 @@ sources: ["https://developer.android.com/guide/background", "https://developer.a
 
 ### Зачем Нужна Многопоточность
 
-**Проблема:** UI поток (Main Thread) выполняет:
+**Проблема:** UI поток (Main `Thread`) выполняет:
 - Отрисовку интерфейса (60 FPS ≈ 16ms на кадр)
 - Обработку событий пользователя
-- Lifecycle callbacks
+- `Lifecycle` callbacks
 
 Если долго блокировать UI поток (сотни миллисекунд и более), интерфейс начинает лагать, а при длительной блокировке (порядка нескольких секунд, например около 5s для обработки ввода) система может показать **ANR** (`Application` Not Responding).
 
@@ -190,14 +190,14 @@ Dispatchers.Main
 
 ### Why Multithreading is Needed
 
-**Problem:** The UI thread (Main Thread) handles:
+**Problem:** The UI thread (Main `Thread`) handles:
 - UI rendering (60 FPS ≈ 16ms per frame)
 - User interaction events
-- Lifecycle callbacks
+- `Lifecycle` callbacks
 
 If you block the UI thread for a noticeable time (hundreds of milliseconds or more), the UI starts to stutter, and if it is blocked for a long time (on the order of several seconds, e.g. around 5s for input dispatch), the system may show an **ANR** (`Application` Not Responding).
 
-❌ **Bad: Blocking UI Thread**
+❌ **Bad: Blocking UI `Thread`**
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private fun loadData() {
@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-✅ **Good: Background Thread**
+✅ **Good: Background `Thread`**
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private fun loadData() {
@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity() {
 ### Tasks for Background Threads
 
 1. **Network requests**
-2. **Database operations**
+2. **`Database` operations**
 3. **File I/O**
 4. **Image processing**
 5. **Parsing large data**
@@ -349,7 +349,7 @@ Dispatchers.Main
 
 1. Что произойдёт, если выполнить сетевой запрос в главном потоке?
 2. В чём разница между `Dispatchers.IO` и `Dispatchers.Default`?
-3. В каких случаях стоит использовать WorkManager вместо только корутин?
+3. В каких случаях стоит использовать `WorkManager` вместо только корутин?
 4. Как lifecycleScope и viewModelScope помогают избежать утечек памяти?
 5. Что такое ANR и как его предотвратить?
 
@@ -357,7 +357,7 @@ Dispatchers.Main
 
 1. What happens if you perform a network request on the main thread?
 2. What is the difference between Dispatchers.IO and Dispatchers.Default?
-3. When should you use WorkManager instead of Coroutines?
+3. When should you use `WorkManager` instead of Coroutines?
 4. How do lifecycleScope and viewModelScope prevent memory leaks?
 5. What is ANR and how to prevent it?
 

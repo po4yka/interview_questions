@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-159
 title: "Object Companion Object / Object и Companion Object Advanced"
 aliases: [Advanced, Advanced Object Patterns, Companion Object, Object]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singleton]
----
+---\
 # Вопрос (RU)
 > Что такое `object` / `companion object` в Kotlin? Объясните их характеристики, различия и продвинутые случаи использования.
 
@@ -575,8 +575,8 @@ val page = HtmlBuilder.html {
 
 ### Short Answer
 
-- `object`: Singleton with lazy, thread-safe initialization. Good for one-off instances, utilities, global managers; can inherit and implement interfaces; can be used for constants at module/top level. Thread-safety here refers to initialization only; mutable state still requires explicit concurrency control.
-- `companion object`: Provides static-like members inside a class, accessed via the class name. Good for factory methods, constants, and static helpers tied to that class; can implement interfaces and have extensions; exactly one per class, optionally named; lazily and safely initialized on first access.
+- `object`: Singleton with lazy, thread-safe initialization. Good for one-off instances, utilities, global managers; can inherit and implement interfaces; can be used for constants at module/top level. `Thread`-safety here refers to initialization only; mutable state still requires explicit concurrency control.
+- `companion object`: `Provides` static-like members inside a class, accessed via the class name. Good for factory methods, constants, and static helpers tied to that class; can implement interfaces and have extensions; exactly one per class, optionally named; lazily and safely initialized on first access.
 
 ---
 

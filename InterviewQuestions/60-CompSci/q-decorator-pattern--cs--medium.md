@@ -1,4 +1,4 @@
----
+---\
 id: cs-013
 title: "Decorator Pattern / Паттерн Декоратор"
 aliases: ["Decorator Pattern", "Паттерн Декоратор"]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [decorator, design-patterns, difficulty/medium, gof-patterns, kotlin, structural-patterns, wrapper]
 sources: ["https://refactoring.guru/design-patterns/decorator"]
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Decorator? Когда и зачем его использовать?
 
@@ -356,13 +356,13 @@ class CompressionDecorator(private val wrappee: DataSource) : DataSource by wrap
 
 ## Дополнительные Вопросы (RU)
 
-- Как паттерн Decorator соотносится с паттерном Adapter?
+- Как паттерн Decorator соотносится с паттерном `Adapter`?
 - Можно ли удалять декораторы в runtime?
 - В чем разница между Decorator и Proxy?
 
 ## Follow-ups
 
-- How does Decorator pattern relate to Adapter pattern?
+- How does Decorator pattern relate to `Adapter` pattern?
 - Can you remove decorators at runtime?
 - What's the difference between Decorator and Proxy pattern?
 
@@ -373,7 +373,7 @@ class CompressionDecorator(private val wrappee: DataSource) : DataSource by wrap
 - Понимание интерфейсов
 
 ### Связанные (тот Же уровень)
-- [[q-adapter-pattern--cs--medium]] — паттерн Adapter
+- [[q-adapter-pattern--cs--medium]] — паттерн `Adapter`
 
 ### Продвинутые (сложнее)
 - Комбинирование нескольких паттернов проектирования
@@ -387,7 +387,7 @@ class CompressionDecorator(private val wrappee: DataSource) : DataSource by wrap
 - Interface concepts
 
 ### Related (Same Level)
-- [[q-adapter-pattern--cs--medium]] - Adapter pattern
+- [[q-adapter-pattern--cs--medium]] - `Adapter` pattern
 
 ### Advanced (Harder)
 - Combining multiple design patterns

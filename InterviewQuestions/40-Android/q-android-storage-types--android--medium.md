@@ -1,4 +1,4 @@
----
+---\
 id: android-183
 title: Android Storage Types / Типы хранилища Android
 aliases: [Android Storage Types, Типы хранилища Android]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/datastore, android/files-media, android/room, difficulty/medium, persistence, storage]
 
----
+---\
 # Вопрос (RU)
 > Какие существуют типы хранилищ данных в Android и когда их использовать?
 
@@ -83,9 +83,9 @@ val uri = contentResolver.insert(
 - app-specific external: кэш/медиа, которые может увидеть пользователь и которые удаляются при деинсталляции приложения;
 - MediaStore: фото/видео/аудио и другие файлы, которые должны быть доступны за пределами приложения.
 
-**4. Room Database — структурированные данные**
+**4. `Room` `Database` — структурированные данные**
 
-Type-safe слой над SQLite с compile-time проверкой SQL.
+Type-safe слой над `SQLite` с compile-time проверкой SQL.
 
 ```kotlin
 @Entity
@@ -110,12 +110,12 @@ interface UserDao {
 | Internal  | До квоты          | Приватное   | Кэш, конфиг, приватные файлы |
 | External (app-specific) | До емкости устройства | Изолировано от других приложений; доступно пользователю | Медиа/файлы приложения |
 | External (MediaStore)   | До емкости устройства | Доступно другим приложениям/пользователю | Общие медиа и документы |
-| Room     | До емкости устройства | Приватное | Локальная БД |
+| `Room`     | До емкости устройства | Приватное | Локальная БД |
 
 **Рекомендации:**
 - Мигрируйте с `SharedPreferences` на `DataStore` для настроек и конфигурации;
-- Для чувствительных данных: используйте `EncryptedSharedPreferences` или `EncryptedFile` (и/или шифрование над Room);
-- Предпочитайте Room сырому SQLite для безопасности типов и поддержки миграций;
+- Для чувствительных данных: используйте `EncryptedSharedPreferences` или `EncryptedFile` (и/или шифрование над `Room`);
+- Предпочитайте `Room` сырому `SQLite` для безопасности типов и поддержки миграций;
 - Scoped Storage обязателен для `targetSdk 30+`.
 
 ## Answer (EN)
@@ -178,9 +178,9 @@ val uri = contentResolver.insert(
 - App-specific external: app media/cache that should be visible to the user and removed on uninstall;
 - MediaStore: photos/videos/audio and other files that should be accessible outside your app.
 
-**4. Room Database — structured data**
+**4. `Room` `Database` — structured data**
 
-Type-safe abstraction over SQLite with compile-time SQL verification.
+Type-safe abstraction over `SQLite` with compile-time SQL verification.
 
 ```kotlin
 @Entity
@@ -205,12 +205,12 @@ See also: [[c-android-storage-options]]
 | Internal  | Up to quota   | Private | Cache, config, private files |
 | External (app-specific) | Device limit | Isolated from other apps; user-visible | App media/files |
 | External (MediaStore)   | Device limit | Visible to other apps/user | Shared media and documents |
-| Room     | Device limit | Private | Local database |
+| `Room`     | Device limit | Private | Local database |
 
 **Recommendations:**
 - Migrate from `SharedPreferences` to `DataStore` for settings and configuration;
-- For sensitive data: use `EncryptedSharedPreferences` or `EncryptedFile` (and/or encryption on top of Room);
-- Prefer Room over raw SQLite for type safety and migration support;
+- For sensitive data: use `EncryptedSharedPreferences` or `EncryptedFile` (and/or encryption on top of `Room`);
+- Prefer `Room` over raw `SQLite` for type safety and migration support;
 - Scoped Storage is mandatory for `targetSdk 30+`.
 
 ## Follow-ups
@@ -218,7 +218,7 @@ See also: [[c-android-storage-options]]
 - How does Proto DataStore differ from Preferences DataStore and when should you choose each?
 - What happens to Internal Storage data during app updates vs. uninstall?
 - How do you implement encrypted storage for sensitive data like auth tokens?
-- What are the performance trade-offs between Room and raw SQLite?
+- What are the performance trade-offs between `Room` and raw `SQLite`?
 - How do you handle storage permission changes when migrating from pre-Scoped Storage to Android 10+?
 
 ## References
@@ -236,13 +236,13 @@ See also: [[c-android-storage-options]]
 
 ### Advanced
 - Implementing custom `ContentProvider` for inter-app data sharing
-- Optimizing Room performance with indices and query optimization
+- Optimizing `Room` performance with indices and query optimization
 
 ## Дополнительные Вопросы (RU)
 - В чем различия между Proto DataStore и Preferences DataStore и когда выбирать каждый из них?
 - Что происходит с данными во внутреннем хранилище при обновлении приложения и при удалении?
 - Как реализовать шифрованное хранилище для чувствительных данных (например, токенов авторизации)?
-- Каковы производственные компромиссы между Room и "чистым" SQLite?
+- Каковы производственные компромиссы между `Room` и "чистым" `SQLite`?
 - Как обрабатывать изменения разрешений на хранилище при миграции с до-Scoped Storage на Android 10+?
 ## Связанные Вопросы (RU)
 ### Предпосылки
@@ -252,4 +252,4 @@ See also: [[c-android-storage-options]]
 - [[q-android-architectural-patterns--android--medium]] - Паттерн репозитория для слоя данных
 ### Продвинутое
 - Реализация собственного `ContentProvider` для обмена данными между приложениями
-- Оптимизация производительности Room с помощью индексов и оптимизации запросов
+- Оптимизация производительности `Room` с помощью индексов и оптимизации запросов

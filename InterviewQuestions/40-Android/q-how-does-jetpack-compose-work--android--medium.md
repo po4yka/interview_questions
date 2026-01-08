@@ -14,7 +14,7 @@ related: [c-android, q-mutable-state-compose--android--medium, q-what-are-the-mo
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/architecture-mvvm, android/ui-compose, compose, declarative-ui, difficulty/medium, recomposition]
+tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, recomposition]
 
 ---
 # Вопрос (RU)

@@ -1,4 +1,4 @@
----
+---\
 id: android-057
 title: Foreground Service Types / Foreground Service
 aliases: [Foreground Service, Foreground Service Types]
@@ -17,7 +17,7 @@ tags: [android/background-execution, android/service, difficulty/medium, foregro
 sources:
   - "https://developer.android.com/guide/components/foreground-services"
 
----
+---\
 # Вопрос (RU)
 > Какие существуют типы Foreground `Service` в Android и как правильно реализовывать foreground-сервисы?
 
@@ -40,7 +40,7 @@ sources:
 **Сравнение с фоновыми механизмами:**
 - Background `Services` — сильно ограничены начиная с Android 8.0; произвольные долгие фоновые сервисы в фоне в большинстве случаев недопустимы
 - Foreground `Services` — работают с видимым уведомлением и повышенным приоритетом, но требуют убедительного обоснования и корректного указания типа/разрешений
-- WorkManager — предпочтителен для отложенной, гарантированной или зависящей от условий фоновой работы без постоянной визуальной индикации
+- `WorkManager` — предпочтителен для отложенной, гарантированной или зависящей от условий фоновой работы без постоянной визуальной индикации
 
 **Эволюция ограничений:**
 - Android 8.0 — введены ограничения фонового выполнения; произвольные долгие background services в фоне запрещены
@@ -200,7 +200,7 @@ class QuickUploadService : Service() {
 **Comparison with background services:**
 - Background `Services`: heavily restricted since Android 8.0; background services can be stopped shortly after the app goes to background and should generally be replaced by foreground services or scheduled work (JobScheduler/WorkManager)
 - Foreground `Services`: run with a visible notification and higher priority, but require strong justification and correct type/permission usage
-- WorkManager: preferred for deferrable, guaranteed, or constraint-based background work without continuous user-visible operation
+- `WorkManager`: preferred for deferrable, guaranteed, or constraint-based background work without continuous user-visible operation
 
 **Evolution of restrictions:**
 - Android 8.0: background execution limits; apps generally cannot run arbitrary background services for long when in background
@@ -212,7 +212,7 @@ class QuickUploadService : Service() {
 **Key requirements:**
 - Persistent, user-visible notification (`setOngoing(true)` / `FLAG_ONGOING_EVENT`) while running as foreground service
 - `Service` type(s) declared via `android:foregroundServiceType` in manifest (Android 10+). For multiple types in manifest, specify them as a space-separated list (e.g., `"camera microphone"`).
-- Call `startForeground()` within 5 seconds after `startForegroundService()` to avoid ANR
+- `Call` `startForeground()` within 5 seconds after `startForegroundService()` to avoid ANR
 - Type-specific `FOREGROUND_SERVICE_*` permissions where applicable (e.g., media playback, location, etc.)
 - On Android 10+, when using typed FGS, pass the corresponding `ServiceInfo.FOREGROUND_SERVICE_TYPE_*` flags to `startForeground()` in addition to declaring them in the manifest
 
@@ -380,11 +380,11 @@ Note: Android's `Service` API does not provide an `onTimeout()` callback; SHORT_
 
 ### Связанные (тот Же уровень)
 - [[q-workmanager-vs-alternatives--android--medium]] - Сравнение подходов к фоновой работе
-- Разбор trade-off между `Service` и WorkManager
+- Разбор trade-off между `Service` и `WorkManager`
 
 ### Продвинутые (сложнее)
 - Реализация привязанных сервисов (bound services) в сочетании с foreground-сервисами
-- Продвинутые паттерны WorkManager для сложной фоновой работы
+- Продвинутые паттерны `WorkManager` для сложной фоновой работы
 
 ## Related Questions
 
@@ -394,8 +394,8 @@ Note: Android's `Service` API does not provide an `onTimeout()` callback; SHORT_
 
 ### Related (Same Level)
 - [[q-workmanager-vs-alternatives--android--medium]] - Background work comparison
-- `Service` vs WorkManager trade-offs and use cases
+- `Service` vs `WorkManager` trade-offs and use cases
 
 ### Advanced (Harder)
 - Implementing service binding with foreground services
-- Advanced WorkManager patterns for complex background work
+- Advanced `WorkManager` patterns for complex background work

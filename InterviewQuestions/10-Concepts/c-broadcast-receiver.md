@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-110313"
 title: "Broadcast Receiver / Широковещательный Приемник"
 aliases: ["Broadcast Receiver", "BroadcastReceiver", "Приемник Трансляций", "Широковещательный Приемник"]
@@ -12,21 +12,21 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-ipc, c-service, c-android-components, c-intent, c-android-manifest]
+related: ["c-android-ipc", "c-service", "c-android-components", "c-intent", "c-android-manifest"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "broadcast", "components", "concept", "difficulty/medium", "system-events"]
----
+---\
 
 # Broadcast Receiver / Широковещательный Приемник
 
 ## Summary (EN)
 
-BroadcastReceiver is one of Android's four fundamental components that allows applications to receive and respond to broadcast messages from the Android system or other applications. Broadcasts are asynchronous messages sent system-wide or to specific apps, enabling loose coupling between components. Receivers can listen for system events (battery low, connectivity changes) or custom app events.
+`BroadcastReceiver` is one of Android's four fundamental components that allows applications to receive and respond to broadcast messages from the Android system or other applications. Broadcasts are asynchronous messages sent system-wide or to specific apps, enabling loose coupling between components. Receivers can listen for system events (battery low, connectivity changes) or custom app events.
 
 ## Краткое Описание (RU)
 
-BroadcastReceiver - это один из четырех фундаментальных компонентов Android, который позволяет приложениям получать и обрабатывать широковещательные сообщения от системы Android или других приложений. Трансляции - это асинхронные сообщения, отправляемые системно или конкретным приложениям, обеспечивающие слабую связанность между компонентами. Приемники могут прослушивать системные события (низкий заряд батареи, изменения подключения) или пользовательские события приложения.
+`BroadcastReceiver` - это один из четырех фундаментальных компонентов Android, который позволяет приложениям получать и обрабатывать широковещательные сообщения от системы Android или других приложений. Трансляции - это асинхронные сообщения, отправляемые системно или конкретным приложениям, обеспечивающие слабую связанность между компонентами. Приемники могут прослушивать системные события (низкий заряд батареи, изменения подключения) или пользовательские события приложения.
 
 ## Key Points (EN)
 
@@ -36,7 +36,7 @@ BroadcastReceiver - это один из четырех фундаменталь
 - **Ordered broadcasts**: Delivered to receivers sequentially with priority
 - **Local broadcasts**: Delivered only within the app (deprecated, use LiveData/Flow)
 - **Background limitations**: Android 8.0+ restricts implicit broadcasts
-- **Lifecycle**: Short-lived, cannot perform long-running operations
+- **`Lifecycle`**: `Short`-lived, cannot perform long-running operations
 
 ## Ключевые Моменты (RU)
 
@@ -433,8 +433,8 @@ class MyWorker(context: Context, params: WorkerParameters) : Worker(context, par
 
 ### When to Avoid
 
-- **In-app communication**: Use LiveData, Flow, or EventBus instead
-- **Long-running tasks**: Use WorkManager or Services
+- **In-app communication**: Use `LiveData`, `Flow`, or EventBus instead
+- **`Long`-running tasks**: Use `WorkManager` or Services
 - **Frequent updates**: Use direct method calls or reactive patterns
 - **Tight coupling**: Consider dependency injection instead
 
@@ -493,11 +493,11 @@ val intent = Intent("com.example.ACTION").apply {
 
 1. **Unregister dynamic receivers**: Always call `unregisterReceiver()` to prevent leaks
 2. **Keep onReceive() short**: Under 10 seconds, preferably instant
-3. **Use WorkManager**: For background work triggered by broadcasts
+3. **Use `WorkManager`**: For background work triggered by broadcasts
 4. **Prefer explicit intents**: More secure and efficient
 5. **Check Android version**: Handle API level differences
 6. **Use appropriate registration**: Manifest for always-on, dynamic for context-dependent
-7. **Handle null cases**: Intent extras may be null
+7. **Handle null cases**: `Intent` extras may be null
 8. **Add permissions**: Declare required permissions in manifest
 
 ## Related Concepts

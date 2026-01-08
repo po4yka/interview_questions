@@ -1,4 +1,4 @@
----
+---\
 id: android-268
 title: "What Are Px Dp Sp / Что такое px dp и sp"
 aliases: ["What Are Px Dp Sp", "Что такое px dp и sp"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [accessibility, android/ui-theming, android/ui-views, difficulty/easy, dp, measurement-units, sp]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое px, dp и sp в Android?
@@ -43,7 +43,7 @@ Android использует три основные единицы измере
 |---------|------------------|---------------------|
 | **dp** | Размеры view, отступы, иконки | Размер текста |
 | **sp** | Размер текста, элементов зависящих от размера шрифта | Фиксированные размеры layout |
-| **px** | Редкие случаи (Canvas, низкоуровневый drawing) | Обычные UI-элементы |
+| **px** | Редкие случаи (`Canvas`, низкоуровневый drawing) | Обычные UI-элементы |
 
 ### Таблица Конверсии Плотности
 
@@ -210,7 +210,7 @@ Android uses three main measurement units for UI:
 |------|---------|---------------|
 | **dp** | `View` dimensions, margins, icons | Text size |
 | **sp** | Text size, font-dependent elements | Fixed layout dimensions |
-| **px** | Rare cases (Canvas, low-level drawing) | Regular UI elements |
+| **px** | Rare cases (`Canvas`, low-level drawing) | Regular UI elements |
 
 ### Density Conversion Table
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-104
 title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
 aliases: ["RecyclerView Performance", "Why List Scrolling Lags", "Почему тормозит скроллинг списка"]
@@ -16,7 +16,7 @@ moc: moc-android
 related: [c-android-profiler, q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Почему при скролле может тормозить список?
@@ -29,7 +29,7 @@ sources: []
 
 ## Ответ (RU)
 
-Торможение списка происходит из-за проблем производительности в реализации RecyclerView. Основные причины (см. также [[c-android-view-system]], [[c-android-profiler]]):
+Торможение списка происходит из-за проблем производительности в реализации `RecyclerView`. Основные причины (см. также [[c-android-view-system]], [[c-android-profiler]]):
 
 ### 1. Неправильное Использование ViewHolder
 
@@ -46,7 +46,7 @@ override fun getView(position: Int, convertView: View?, parent: ViewGroup): View
 }
 ```
 
-✅ **Хорошо**: ViewHolder кэширует ссылки
+✅ **Хорошо**: `ViewHolder` кэширует ссылки
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -124,7 +124,7 @@ Glide.with(context)
 </LinearLayout>
 ```
 
-✅ **Хорошо**: Плоская структура ConstraintLayout
+✅ **Хорошо**: Плоская структура `ConstraintLayout`
 
 ```xml
 <ConstraintLayout>
@@ -205,7 +205,7 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ## Answer (EN)
 
-`List` scrolling lags due to **RecyclerView performance issues**. Main causes (see also [[c-android-view-system]], [[c-android-profiler]]):
+`List` scrolling lags due to **`RecyclerView` performance issues**. Main causes (see also [[c-android-view-system]], [[c-android-profiler]]):
 
 ### 1. Incorrect ViewHolder Usage
 
@@ -222,7 +222,7 @@ override fun getView(position: Int, convertView: View?, parent: ViewGroup): View
 }
 ```
 
-✅ **Good**: ViewHolder caches references
+✅ **Good**: `ViewHolder` caches references
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -300,7 +300,7 @@ Glide.with(context)
 </LinearLayout>
 ```
 
-✅ **Good**: Flat ConstraintLayout structure
+✅ **Good**: Flat `ConstraintLayout` structure
 
 ```xml
 <ConstraintLayout>
@@ -381,19 +381,19 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ## Дополнительные Вопросы (RU)
 
-- Как внутренне работает механизм переиспользования ViewHolder в RecyclerView?
+- Как внутренне работает механизм переиспользования `ViewHolder` в `RecyclerView`?
 - В чем разница между RecycledViewPool и ViewCacheExtension?
-- Как профилировать производительность RecyclerView с помощью Android Profiler?
+- Как профилировать производительность `RecyclerView` с помощью Android Profiler?
 - Когда стоит использовать AsyncListDiffer по сравнению с ListAdapter?
-- Как ConstraintLayout улучшает производительность по сравнению с другими Layout?
+- Как `ConstraintLayout` улучшает производительность по сравнению с другими Layout?
 
 ## Follow-ups
 
-- How does RecyclerView's ViewHolder recycling mechanism work internally?
+- How does `RecyclerView`'s `ViewHolder` recycling mechanism work internally?
 - What is the difference between RecycledViewPool and ViewCacheExtension?
-- How can you profile RecyclerView performance using Android Profiler?
+- How can you profile `RecyclerView` performance using Android Profiler?
 - When should you use AsyncListDiffer vs ListAdapter?
-- How does ConstraintLayout improve performance compared to other layouts?
+- How does `ConstraintLayout` improve performance compared to other layouts?
 
 ## Ссылки (RU)
 
@@ -407,13 +407,13 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ### База (Easy)
 
-- [[q-what-is-known-about-recyclerview--android--easy]] - основы RecyclerView
+- [[q-what-is-known-about-recyclerview--android--easy]] - основы `RecyclerView`
 - [[q-recyclerview-sethasfixedsize--android--easy]] - оптимизация setHasFixedSize
 
 ### Связанные (Medium)
 
-- [[q-recyclerview-explained--android--medium]] - подробное устройство RecyclerView
-- [[q-recyclerview-diffutil-advanced--android--medium]] - продвинутое использование DiffUtil
+- [[q-recyclerview-explained--android--medium]] - подробное устройство `RecyclerView`
+- [[q-recyclerview-diffutil-advanced--android--medium]] - продвинутое использование `DiffUtil`
 - [[q-recyclerview-async-list-differ--android--medium]] - шаблоны использования AsyncListDiffer
 - [[q-performance-optimization-android--android--medium]] - общая оптимизация производительности
 - [[q-android-performance-measurement-tools--android--medium]] - инструменты профилирования производительности
@@ -426,13 +426,13 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ### Prerequisites (Easy)
 
-- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView basics
+- [[q-what-is-known-about-recyclerview--android--easy]] - `RecyclerView` basics
 - [[q-recyclerview-sethasfixedsize--android--easy]] - setHasFixedSize optimization
 
 ### Related (Medium)
 
-- [[q-recyclerview-explained--android--medium]] - RecyclerView deep dive
-- [[q-recyclerview-diffutil-advanced--android--medium]] - DiffUtil advanced usage
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` deep dive
+- [[q-recyclerview-diffutil-advanced--android--medium]] - `DiffUtil` advanced usage
 - [[q-recyclerview-async-list-differ--android--medium]] - AsyncListDiffer patterns
 - [[q-performance-optimization-android--android--medium]] - General performance optimization
 - [[q-android-performance-measurement-tools--android--medium]] - Performance profiling tools

@@ -1,4 +1,4 @@
----
+---\
 id: android-171
 title: Single Activity Pros Cons / Преимущества и недостатки Single Activity
 aliases: [Single Activity Pros Cons, Преимущества и недостатки Single Activity]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/activity, android/ui-navigation, difficulty/medium, navigation, single-activity, viewmodel]
 
----
+---\
 # Вопрос (RU)
 
 > Какие у подхода Single `Activity` этого подхода плюсы и минусы?
@@ -36,7 +36,7 @@ tags: [android, android/activity, android/ui-navigation, difficulty/medium, navi
 3. **Общие UI элементы** — общий `Toolbar`, `BottomNavigationView` и другие контейнеры живут в `Activity` и не пересоздаются при переходах между фрагментами.
 4. **Лучшие анимации** — проще делать плавные переходы и shared element transitions между фрагментами внутри одной `Activity`.
 5. **Менее затратные переходы** — нет накладных расходов полного создания новой `Activity` (новый `Window`, тема, дополнительные lifecycle callbacks) при каждом переходе; переходы чаще ограничиваются операциями с фрагментами.
-6. **Deep links** — с Navigation Component проще конфигурировать и обрабатывать deep links в рамках одной `Activity` (но требуется корректная настройка графа и `intent-filter`).
+6. **Deep links** — с Navigation `Component` проще конфигурировать и обрабатывать deep links в рамках одной `Activity` (но требуется корректная настройка графа и `intent-filter`).
 7. **Централизованный подход к состоянию** — проще проектировать согласованный state management (например, через общие `ViewModel` и `SavedStateHandle` для конкретных destination), чем при разбросе по множеству `Activity`.
 
 **Пример навигации:**
@@ -70,7 +70,7 @@ class FragmentB : Fragment() {
 
 1. **Сложный lifecycle фрагментов** — больше callback-методов (`onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`), два уровня lifecycle (`Fragment` и его `View`), легко ошибиться.
 2. **Риск утечек памяти** — при использовании ViewBinding/DataBinding во фрагментах нужно очищать ссылки в `onDestroyView()`, иначе возможны утечки.
-3. **Сложность FragmentManager** — ручное управление back stack'ом и транзакциями может быть запутанным (особенно без Navigation Component).
+3. **Сложность FragmentManager** — ручное управление back stack'ом и транзакциями может быть запутанным (особенно без Navigation `Component`).
 4. **State loss проблемы** — `IllegalStateException` при commit после `onSaveInstanceState()` остаётся типичной проблемой для транзакций фрагментов; это особенно критично в Single `Activity`, где весь UI завязан на фрагменты.
 5. **Вложенные фрагменты** — различия между `childFragmentManager` и `parentFragmentManager` усложняют архитектуру и могут приводить к ошибкам.
 6. **Сложность тестирования** — UI-тесты фрагментов требуют дополнительного setup (`FragmentScenario`, `launchFragmentInContainer`), по сравнению с прямым тестированием одной отдельной `Activity`.
@@ -135,10 +135,10 @@ class MyFragment : Fragment() {
 **Не идеально для:**
 - Простых приложений с малым количеством экранов, где одна-две `Activity` проще и прозрачнее.
 - Крупных legacy-кодовых баз, где миграция на Single `Activity` слишком затратна.
-- Команд, незнакомых с `Fragment` lifecycle и Navigation Component (высокий риск ошибок).
+- Команд, незнакомых с `Fragment` lifecycle и Navigation `Component` (высокий риск ошибок).
 
 **Вердикт:**
-Single `Activity` — рекомендованный и распространённый подход для современных фрагмент-ориентированных Android-приложений (особенно в связке с Navigation Component), но он не является единственно "правильным" стандартом. Важно понимать сложность lifecycle фрагментов, избегать утечек памяти и выбирать архитектуру исходя из размера приложения и опыта команды.
+Single `Activity` — рекомендованный и распространённый подход для современных фрагмент-ориентированных Android-приложений (особенно в связке с Navigation `Component`), но он не является единственно "правильным" стандартом. Важно понимать сложность lifecycle фрагментов, избегать утечек памяти и выбирать архитектуру исходя из размера приложения и опыта команды.
 
 ## Answer (EN)
 
@@ -151,7 +151,7 @@ The **Single `Activity` approach** uses **one `Activity`** (as the root containe
 3. **Shared UI elements** — common `Toolbar`, `BottomNavigationView`, and other containers live in the `Activity` and are not recreated when switching between fragments.
 4. **Better animations** — smoother transitions and shared element transitions are easier to implement between fragments within one `Activity`.
 5. **Lower transition overhead** — no full `Activity` creation (`Window`, theme inflation, additional lifecycle callbacks) on every navigation step; many transitions are just fragment operations.
-6. **Deep links** — with Navigation Component, configuring and handling deep links into specific destinations in a single host `Activity` becomes easier (assuming proper graph and `intent-filter` setup).
+6. **Deep links** — with Navigation `Component`, configuring and handling deep links into specific destinations in a single host `Activity` becomes easier (assuming proper graph and `intent-filter` setup).
 7. **Centralized state patterns** — it’s easier to design consistent state management (e.g., shared ViewModels and `SavedStateHandle` per destination) than when logic is scattered across many Activities.
 
 **Navigation example:**
@@ -185,7 +185,7 @@ class FragmentB : Fragment() {
 
 1. **`Fragment` lifecycle complexity** — more callbacks (`onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`), two lifecycles (`Fragment` and its `View`); easier to make mistakes.
 2. **Memory leak risk** — with ViewBinding/DataBinding in Fragments you must clear references in `onDestroyView()`, otherwise you can leak Views and `Context`.
-3. **FragmentManager complexity** — manual back stack and transaction management can be tricky (especially without Navigation Component).
+3. **FragmentManager complexity** — manual back stack and transaction management can be tricky (especially without Navigation `Component`).
 4. **State loss issues** — committing fragment transactions after `onSaveInstanceState()` can cause `IllegalStateException`; this is a general fragment/navigation concern and becomes more visible when all navigation relies on a single host `Activity`.
 5. **Nested fragments** — differences between `childFragmentManager` and `parentFragmentManager` make architecture more complex and error-prone.
 6. **Testing complexity** — fragment UI tests often need extra setup (`FragmentScenario`, `launchFragmentInContainer`) compared to straightforward single-`Activity` tests.
@@ -250,10 +250,10 @@ class MyFragment : Fragment() {
 **Not ideal for:**
 - Simple apps with few screens where one or a couple of Activities is clearer and sufficient.
 - Large legacy codebases where migrating to a Single `Activity` architecture is too costly.
-- Teams unfamiliar with `Fragment` lifecycle and Navigation Component (higher risk of bugs).
+- Teams unfamiliar with `Fragment` lifecycle and Navigation `Component` (higher risk of bugs).
 
 **Verdict:**
-Single `Activity` is a widely recommended approach for modern `Fragment`-based Android apps (especially together with Navigation Component), but it is not the only valid architecture. Choose it when it matches your app’s complexity and your team’s expertise, and be mindful of `Fragment` lifecycle and memory management pitfalls.
+Single `Activity` is a widely recommended approach for modern `Fragment`-based Android apps (especially together with Navigation `Component`), but it is not the only valid architecture. Choose it when it matches your app’s complexity and your team’s expertise, and be mindful of `Fragment` lifecycle and memory management pitfalls.
 
 ---
 
@@ -261,13 +261,13 @@ Single `Activity` is a widely recommended approach for modern `Fragment`-based A
 
 - How to handle configuration changes in Single `Activity` with Fragments?
 - What are the memory implications of keeping Fragments in back stack?
-- How does Navigation Component handle deep links and conditional navigation?
+- How does Navigation `Component` handle deep links and conditional navigation?
 - What are best practices for ViewBinding cleanup in Fragments?
 - How to implement nested navigation graphs in Single `Activity`?
 
 ## References
 
-- Official Android documentation: Navigation Component
+- Official Android documentation: Navigation `Component`
 - Official Android documentation: `Fragment` best practices
 - Official Android documentation: Single `Activity` architecture guide
 

@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251018-140000
 title: Security — MOC
 kind: moc
 created: 2025-10-18
 updated: 2025-10-18
 tags: [moc, topic/security]
----
+---\
 
 # Security — Map of Content
 
@@ -42,7 +42,7 @@ LIMIT 100
 
 ### Android Security Best Practices
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Security Fundamentals
 - [[q-cleartext-traffic-android--android--easy]] - What is cleartext traffic?
@@ -68,7 +68,7 @@ SORT difficulty ASC, file.name ASC
 
 #### File & Database Encryption
 - [[q-encrypted-file-storage--android--medium]] - Encrypted file storage
-- [[q-database-encryption-android--android--medium]] - Database encryption
+- [[q-database-encryption-android--android--medium]] - `Database` encryption
 
 **All Encryption Questions:**
 ```dataview
@@ -178,13 +178,13 @@ SORT difficulty ASC
 ### Data Protection
 - Encryption at rest
 - Encrypted file storage
-- Database encryption
-- Secure SharedPreferences
+- `Database` encryption
+- Secure `SharedPreferences`
 - Key attestation
 
 ### Network Security
 - HTTPS enforcement
-- Certificate pinning (OkHttp, NetworkSecurityConfig)
+- Certificate pinning (`OkHttp`, NetworkSecurityConfig)
 - TLS/SSL configuration
 - Cleartext traffic policies
 - Certificate rotation handling
@@ -247,10 +247,10 @@ SORT difficulty ASC
 
 ### Data Storage
 - Unencrypted sensitive data
-- Insecure SharedPreferences
+- Insecure `SharedPreferences`
 - World-readable files
 - SQL injection
-- Path traversal
+- `Path` traversal
 
 ### Authentication
 - Weak password policies
@@ -299,7 +299,7 @@ SORT difficulty ASC
 - EncryptedFile
 
 ### Network Security
-- OkHttp CertificatePinner
+- `OkHttp` CertificatePinner
 - NetworkSecurityConfig
 - Conscrypt (BoringSSL)
 - Certificate Transparency

@@ -1,4 +1,4 @@
----
+---\
 id: android-214
 title: View Redraw Methods / Методы перерисовки View
 aliases: [View Redraw Methods, Методы перерисовки View]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, invalidate, requestLayout, view-rendering]
 
----
+---\
 # Вопрос (RU)
 > Методы перерисовки `View`
 
@@ -56,7 +56,7 @@ class CustomView @JvmOverloads constructor(
 
 #### Когда Использовать invalidate():
 - Изменения цвета
-- Обновления текста или содержимого Drawable
+- Обновления текста или содержимого `Drawable`
 - Изменения состояния рисования
 - Изменения видимости в рамках тех же границ
 - Кадры анимации, не меняющие границы `View`
@@ -249,7 +249,7 @@ fun forceLayoutExample(view: View) {
 ```
 
 #### invalidateDrawable()
-Вызывается, когда дочерний Drawable требует перерисовки; часто используется в кастомных `View`.
+Вызывается, когда дочерний `Drawable` требует перерисовки; часто используется в кастомных `View`.
 
 ```kotlin
 class DrawableView @JvmOverloads constructor(
@@ -646,7 +646,7 @@ fun forceLayoutExample(view: View) {
 ```
 
 #### invalidateDrawable()
-Called when a child Drawable needs to be redrawn; often used in custom views.
+Called when a child `Drawable` needs to be redrawn; often used in custom views.
 
 ```kotlin
 class DrawableView @JvmOverloads constructor(
@@ -810,7 +810,7 @@ fun View.safeInvalidate() {
 
 ### Summary Table
 
-| Method            | Thread        | Calls                            | Use Case                               |
+| Method            | `Thread`        | Calls                            | Use Case                               |
 |------------------|--------------|----------------------------------|----------------------------------------|
 | `invalidate()`    | UI thread    | `onDraw()`                       | Visual changes only                    |
 | `requestLayout()` | UI thread    | `onMeasure()`, `onLayout()`      | Size/position/layout changes           |

@@ -1,4 +1,4 @@
----
+---\
 id: cs-030
 title: "Abstract Factory Pattern / Abstract Factory Паттерн"
 aliases: ["Abstract Factory Pattern", "Паттерн Abstract Factory"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [abstract-factory, creational-patterns, design-patterns, difficulty/medium, factory, gof-patterns]
 sources: ["https://refactoring.guru/design-patterns/abstract-factory"]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Abstract Factory? Когда и зачем его использовать?
 
@@ -123,7 +123,7 @@ Encapsulate object creation in a separate factory object: define a factory inter
 - **Abstract Product** - interface/abstraction for family objects
 - **Concrete Product** - concrete implementations of the products
 
-**Application:**
+**`Application`:**
 ```kotlin
 // ✅ Product interfaces
 interface Button { fun display(): String }
@@ -189,7 +189,7 @@ fun createUI(factory: GUIFactory): Pair<Button, Window> =
 
 - Abstract Factory vs Factory Method pattern?
 - Android UI theme implementation?
-- Database factory patterns?
+- `Database` factory patterns?
 
 ## References
 

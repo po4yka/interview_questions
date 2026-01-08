@@ -1,4 +1,4 @@
----
+---\
 id: android-636
 title: Network Security Hardening / Укрепление сетевой безопасности
 aliases: [Network Security Hardening, Укрепление сетевой безопасности]
@@ -19,7 +19,7 @@ sources:
   - "https://developer.android.com/training/articles/security-config"
   - "https://square.github.io/okhttp/https/#certificate-pinning"
 
----
+---\
 # Вопрос (RU)
 > Как спроектировать сетевой уровень Android-приложения с усиленной безопасностью: Network Security Config, certificate pinning, двустороннее TLS, key attestation и мониторинг нарушений?
 
@@ -68,7 +68,7 @@ sources:
 
 ### 2. Certificate Pinning (runtime)
 
-- Для OkHttp: используйте `CertificatePinner`; при необходимости допускайте системные CA, пингуя конкретные публичные ключи.
+- Для `OkHttp`: используйте `CertificatePinner`; при необходимости допускайте системные CA, пингуя конкретные публичные ключи.
 - Включите reporting: при pin mismatch → отправлять событие в телеметрию (без логирования ключей или самих пинов).
 - Ротация: CI/CD обновляет `@raw/app_certs` и конфиг синхронно с выпуском новых серверных сертификатов.
 
@@ -179,7 +179,7 @@ sources:
 
 ### 2. Certificate Pinning (runtime)
 
-- With OkHttp, use `CertificatePinner`; when necessary, still rely on system CAs while pinning specific public keys.
+- With `OkHttp`, use `CertificatePinner`; when necessary, still rely on system CAs while pinning specific public keys.
 - Enable reporting: on pin mismatch, send a telemetry event (without logging keys or pins).
 - Rotation: use CI/CD to update `@raw/app_certs` and config in sync with server certificate changes.
 
@@ -192,7 +192,7 @@ sources:
 ### 4. Key Attestation
 
 - Generate keys only in `AndroidKeyStore` with `KeyGenParameterSpec`, requesting hardware-backed storage and user auth where appropriate, acknowledging that not all devices provide the same guarantees.
-- Request the attestation chain when creating the key and send it to the backend.
+- `Request` the attestation chain when creating the key and send it to the backend.
 - On the backend, verify that the key is created in a trusted environment and not imported; use SafetyNet/Play Integrity as additional signals.
 - Configure key rotation on suspected compromise or policy changes.
 
@@ -238,7 +238,7 @@ sources:
 - Client:
   - `OkHttp`/HTTP client configured via `network-security-config` and `CertificatePinner`.
   - Use `AndroidKeyStore` for key storage with hardware-backed protection where available.
-  - Component for key attestation and sending results to the backend.
+  - `Component` for key attestation and sending results to the backend.
   - Monitoring module for collecting and sending TLS/pinning failure telemetry.
 - Server:
   - TLS termination with pinning/mTLS policies.

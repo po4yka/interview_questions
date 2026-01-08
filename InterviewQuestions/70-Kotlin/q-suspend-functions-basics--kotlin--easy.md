@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-075
 title: "Suspend Functions Basics / Основы suspend функций"
 aliases: ["Suspend Functions Basics", "Основы suspend функций"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [coroutines, difficulty/easy, kotlin]
----
+---\
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140028
 
@@ -331,8 +331,8 @@ val data = retry(3) { fetchData() }
 - [[q-launch-vs-async--kotlin--easy]] - Coroutines
 
 ### Related (Medium)
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutine` dispatchers overview
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `Context`
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
 - Cancellation basics
 

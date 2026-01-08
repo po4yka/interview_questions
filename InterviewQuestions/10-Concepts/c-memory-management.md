@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-110312"
 title: "Memory Management / Управление Памятью"
 aliases: ["Garbage Collection", "GC", "Heap", "Memory Management", "Stack", "Управление Памятью"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-performance"
-related: [c-memory-leaks, c-memory-optimization, c-memory-profiler, c-weak-references, c-android-profiler]
+related: ["c-memory-leaks", "c-memory-optimization", "c-memory-profiler", "c-weak-references", "c-android-profiler"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["concept", "difficulty/medium", "garbage-collection", "jvm", "memory", "performance"]
----
+---\
 
 # Memory Management / Управление Памятью
 
@@ -30,13 +30,13 @@ Memory management is the process of controlling and coordinating how an applicat
 
 ## Key Points (EN)
 
-- **Stack**: Fast, automatic memory for local variables and method calls
+- **`Stack`**: Fast, automatic memory for local variables and method calls
 - **Heap**: Slower, managed memory for objects and dynamic allocation
-- **Garbage Collection**: Automatic reclamation of unused memory
+- **Garbage `Collection`**: Automatic reclamation of unused memory
 - **Memory Leaks**: Objects that cannot be garbage collected despite being unused
 - **Strong/Weak/Soft References**: Different reference types affect GC behavior
 - **Memory Profiling**: Tools to identify and fix memory issues
-- **Android specifics**: Activity lifecycle affects memory management
+- **Android specifics**: `Activity` lifecycle affects memory management
 
 ## Ключевые Моменты (RU)
 
@@ -46,7 +46,7 @@ Memory management is the process of controlling and coordinating how an applicat
 - **Утечки памяти**: Объекты, которые не могут быть собраны GC несмотря на неиспользование
 - **Сильные/Слабые/Мягкие ссылки**: Различные типы ссылок влияют на поведение GC
 - **Профилирование памяти**: Инструменты для выявления и исправления проблем с памятью
-- **Специфика Android**: Жизненный цикл Activity влияет на управление памятью
+- **Специфика Android**: Жизненный цикл `Activity` влияет на управление памятью
 
 ## Memory Regions
 
@@ -115,7 +115,7 @@ fun processData() {
 - Most objects die young
 
 **Old Generation**:
-- Long-lived objects promoted from young generation
+- `Long`-lived objects promoted from young generation
 - Infrequent, slower GC cycles (Major GC)
 - Contains objects that survived multiple GC cycles
 
@@ -148,7 +148,7 @@ fun processData() {
 
 ### Common Leak Patterns
 
-**1. Static References to Context**
+**1. Static References to `Context`**
 ```kotlin
 // BAD: Memory leak
 class DatabaseHelper {
@@ -419,7 +419,7 @@ val limitedCache = object : LinkedHashMap<String, Data>(
 
 - **Large datasets**: Processing big collections or files
 - **Image-heavy apps**: Photo galleries, image editors
-- **Long-running operations**: Background services, downloads
+- **`Long`-running operations**: Background services, downloads
 - **Caching**: Implementing memory caches
 - **Performance optimization**: Reducing GC pressure
 - **Low-memory devices**: Supporting budget Android devices
@@ -427,7 +427,7 @@ val limitedCache = object : LinkedHashMap<String, Data>(
 ### When Less Critical
 
 - **Simple apps**: Basic CRUD applications
-- **Short-lived processes**: Quick operations
+- **`Short`-lived processes**: Quick operations
 - **Modern devices**: Devices with abundant RAM
 
 ## Trade-offs
@@ -494,6 +494,6 @@ adb pull /sdcard/heap.hprof
 - [Android Memory Management Overview](https://developer.android.com/topic/performance/memory-overview)
 - [Investigate RAM usage with Memory Profiler](https://developer.android.com/studio/profile/memory-profiler)
 - [LeakCanary Documentation](https://square.github.io/leakcanary/)
-- [Java Garbage Collection Basics](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html)
+- [Java Garbage `Collection` Basics](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html)
 - [Android Performance Patterns - Memory](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE)
 - "Java Performance: The Definitive Guide" by Scott Oaks

@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-154017"
 title: "Junit / Junit"
 aliases: ["Junit"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-unit-testing, c-testing-pyramid, c-mockk, c-test-doubles]
+moc: "moc-cs"
+related: ["c-unit-testing", "c-testing-pyramid", "c-mockk", "c-test-doubles"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ JUnit — популярный фреймворк для модульного и
 ## Key Points (EN)
 
 - Annotations-based API: Uses annotations like @Test, @BeforeEach, @AfterEach, @BeforeAll, @AfterAll, @Disabled to declare test methods and lifecycle hooks.
-- Assertions and assumptions: Provides assertion methods (e.g., assertEquals, assertThrows) and assumptions (assumeTrue, assumeFalse) to express expected outcomes and conditional test execution.
+- Assertions and assumptions: `Provides` assertion methods (e.g., assertEquals, assertThrows) and assumptions (assumeTrue, assumeFalse) to express expected outcomes and conditional test execution.
 - JUnit 5 architecture: Consists of JUnit Platform, JUnit Jupiter, and JUnit Vintage, enabling modern tests and backward compatibility within the same build.
 - Integration with build tools: Seamlessly integrates with Maven, Gradle, and IDEs (IntelliJ IDEA, Eclipse) and is commonly wired into CI systems (GitHub Actions, Jenkins, GitLab CI).
 - Supports TDD and clean design: Encourages small, isolated tests, faster feedback cycles, and better code design through testability.

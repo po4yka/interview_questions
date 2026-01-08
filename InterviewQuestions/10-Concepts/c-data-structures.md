@@ -1,4 +1,4 @@
----
+---\
 id: "20251012-000000"
 title: "Data Structures / Структуры данных"
 aliases: []
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: [c-algorithms, c-array, c-hash-tables, c-binary-search-tree, c-graph-algorithms]
+related: ["c-algorithms", "c-array", "c-hash-tables", "c-binary-search-tree", "c-graph-algorithms"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["arrays", "concept", "data-structures", "difficulty/medium", "graphs", "hash-tables", "lists", "trees"]
----
+---\
 
 # Summary (EN)
 
@@ -132,7 +132,7 @@ class Queue<T> {
 **Use for:**
 - Task scheduling
 - BFS traversal
-- Request handling
+- `Request` handling
 
 ---
 
@@ -271,10 +271,10 @@ class Graph {
 
 | Data Structure | Access | Search | Insert | Delete | Space |
 |----------------|--------|--------|--------|--------|-------|
-| Array          | O(1)   | O(n)   | O(n)   | O(n)   | O(n)  |
-| Linked List    | O(n)   | O(n)   | O(1)*  | O(1)*  | O(n)  |
-| Stack          | O(n)   | O(n)   | O(1)   | O(1)   | O(n)  |
-| Queue          | O(n)   | O(n)   | O(1)   | O(1)   | O(n)  |
+| `Array`          | O(1)   | O(n)   | O(n)   | O(n)   | O(n)  |
+| Linked `List`    | O(n)   | O(n)   | O(1)*  | O(1)*  | O(n)  |
+| `Stack`          | O(n)   | O(n)   | O(1)   | O(1)   | O(n)  |
+| `Queue`          | O(n)   | O(n)   | O(1)   | O(1)   | O(n)  |
 | Hash Table     | O(1)†  | O(1)†  | O(1)†  | O(1)†  | O(n)  |
 | BST            | O(log n)† | O(log n)† | O(log n)† | O(log n)† | O(n) |
 

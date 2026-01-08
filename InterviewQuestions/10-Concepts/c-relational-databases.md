@@ -1,4 +1,4 @@
----
+---\
 id: "20251012-000000"
 title: "Relational Databases / Реляционные базы данных"
 aliases: []
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: [c-sql-queries, c-database-design, c-migrations, c-room-library, c-orm]
+related: ["c-sql-queries", "c-database-design", "c-migrations", "c-room-library", "c-orm"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["acid", "concept", "database", "difficulty/medium", "rdbms", "relational", "transactions"]
----
+---\
 
 # Summary (EN)
 
@@ -60,7 +60,7 @@ COMMIT;  -- Both succeed or both rollback
 ```
 
 ### Consistency (Согласованность)
-Database remains in valid state after transaction.
+`Database` remains in valid state after transaction.
 
 ```sql
 -- Constraints ensure consistency
@@ -118,7 +118,7 @@ COMMIT;
 
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [MySQL Documentation](https://dev.mysql.com/doc/)
-- "Database System Concepts" by Silberschatz, Korth, and Sudarshan
+- "`Database` System Concepts" by Silberschatz, Korth, and Sudarshan
 - [ACID Properties Explained](https://en.wikipedia.org/wiki/ACID)
 
 ## MOC Links

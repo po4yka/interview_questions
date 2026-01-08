@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-118
 title: "repeatOnLifecycle in Android / repeatOnLifecycle в Android"
 aliases: ["repeatOnLifecycle in Android", "repeatOnLifecycle в Android"]
@@ -17,7 +17,7 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeatonlifecycle]
 
----
+---\
 # Вопрос (RU)
 > Что такое `repeatOnLifecycle` и почему это важно? Объясните как он предотвращает утечки памяти при подписке на `Flow`, сравнение с `launchWhenStarted` и лучшие практики.
 
@@ -28,7 +28,7 @@ tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeaton
 
 ## Ответ (RU)
 
-`repeatOnLifecycle` — это lifecycle-aware API из AndroidX Lifecycle (lifecycle-runtime-ktx), которое автоматически запускает и отменяет корутины/подписки на `Flow` в зависимости от состояния жизненного цикла `LifecycleOwner`. Это помогает избежать утечек памяти и обращения к уничтоженным `View` при сборе `Flow` в Android.
+`repeatOnLifecycle` — это lifecycle-aware API из AndroidX `Lifecycle` (lifecycle-runtime-ktx), которое автоматически запускает и отменяет корутины/подписки на `Flow` в зависимости от состояния жизненного цикла `LifecycleOwner`. Это помогает избежать утечек памяти и обращения к уничтоженным `View` при сборе `Flow` в Android.
 
 ### Проблема: Утечки Памяти При Сборе `Flow`
 
@@ -414,7 +414,7 @@ class ProductDetailFragment : Fragment() {
 
 ## Answer (EN)
 
-`repeatOnLifecycle` is a lifecycle-aware API from AndroidX Lifecycle (lifecycle-runtime-ktx) that automatically starts and cancels coroutines based on the `LifecycleOwner`'s state. It helps prevent leaks and invalid UI access when collecting `Flow`s in Android.
+`repeatOnLifecycle` is a lifecycle-aware API from AndroidX `Lifecycle` (lifecycle-runtime-ktx) that automatically starts and cancels coroutines based on the `LifecycleOwner`'s state. It helps prevent leaks and invalid UI access when collecting `Flow`s in Android.
 
 ### The Problem: Memory Leaks with `Flow`s
 
@@ -807,7 +807,7 @@ Also see [[c-kotlin]] and [[c-coroutines]] for foundational concepts.
 
 ## References
 
-- Official documentation: "repeatOnLifecycle" in AndroidX Lifecycle KTX (lifecycle-runtime-ktx)
+- Official documentation: "repeatOnLifecycle" in AndroidX `Lifecycle` KTX (lifecycle-runtime-ktx)
 - [[c-kotlin]]
 - [[c-coroutines]]
 

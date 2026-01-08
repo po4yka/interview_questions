@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-137
 title: Array vs List in Kotlin / Разница между Array и List в Kotlin
 topic: kotlin
@@ -14,7 +14,7 @@ moc: moc-kotlin
 question_kind: theory
 related: [c-collections, c-kotlin, q-kotlin-collections--kotlin--easy, q-list-set-map-differences--kotlin--easy, q-list-vs-sequence--kotlin--medium]
 subtopics: [array, collections, list]
----
+---\
 # Вопрос (RU)
 > В чём разница между `Array` и `List` в Kotlin?
 
@@ -32,7 +32,7 @@ subtopics: [array, collections, list]
 
 #### 1. Размер И Изменяемость
 
-**Array**: Имеет фиксированный размер после создания; можно изменять элементы, но не длину.
+**`Array`**: Имеет фиксированный размер после создания; можно изменять элементы, но не длину.
 
 ```kotlin
 val array = arrayOf(1, 2, 3, 4, 5)
@@ -40,7 +40,7 @@ val array = arrayOf(1, 2, 3, 4, 5)
 array[0] = 10 // OK: массивы по умолчанию изменяемые
 ```
 
-**List**: Интерфейс `List` сам по себе только для чтения (нет add/remove). Для динамического изменения размера используется `MutableList` (например, через `mutableListOf`). На JVM `MutableList` обычно основан на `ArrayList`, который автоматически расширяется.
+**`List`**: Интерфейс `List` сам по себе только для чтения (нет add/remove). Для динамического изменения размера используется `MutableList` (например, через `mutableListOf`). На JVM `MutableList` обычно основан на `ArrayList`, который автоматически расширяется.
 
 ```kotlin
 val list: List<Int> = listOf(1, 2, 3)
@@ -53,14 +53,14 @@ mutableList.removeAt(0)   // Размер стал 3
 
 #### 2. Типизация И Представление
 
-**Array**: `Array<T>` хранит ссылки на элементы типа `T`. Для примитивов есть специализированные массивы (`IntArray`, `LongArray` и т.п.), чтобы избежать упаковки (boxing) и лишних накладных расходов (на JVM отображаются в `int[]` и т.п.).
+**`Array`**: `Array<T>` хранит ссылки на элементы типа `T`. Для примитивов есть специализированные массивы (`IntArray`, `LongArray` и т.п.), чтобы избежать упаковки (boxing) и лишних накладных расходов (на JVM отображаются в `int[]` и т.п.).
 
 ```kotlin
 val intArray: IntArray = intArrayOf(1, 2, 3)        // Специализированный массив примитивов
 val objectArray: Array<Int> = arrayOf(1, 2, 3)      // Массив упакованных `Int`
 ```
 
-**List**: Обобщённый тип, концептуально хранит элементы типа `T`. Отдельных примитивных `List`-типов (вроде `IntList`) в стандартной библиотеке нет; `List<Int>` использует упакованные значения там, где это релевантно для целевой платформы.
+**`List`**: Обобщённый тип, концептуально хранит элементы типа `T`. Отдельных примитивных `List`-типов (вроде `IntList`) в стандартной библиотеке нет; `List<Int>` использует упакованные значения там, где это релевантно для целевой платформы.
 
 ```kotlin
 val list: List<Int> = listOf(1, 2, 3)
@@ -68,7 +68,7 @@ val list: List<Int> = listOf(1, 2, 3)
 
 #### 3. Функциональность
 
-**Array**: Поддерживает индексированный доступ, изменение элементов, итерацию и ряд функций-расширений, но API обычно уже, чем у коллекций.
+**`Array`**: Поддерживает индексированный доступ, изменение элементов, итерацию и ряд функций-расширений, но API обычно уже, чем у коллекций.
 
 ```kotlin
 val array = arrayOf(1, 2, 3)
@@ -76,7 +76,7 @@ array[0] = 10
 val size = array.size
 ```
 
-**List / MutableList**: `List` предоставляет богатый набор операций только для чтения (map, filter и др.) как функции-расширения. `MutableList` добавляет операции изменения.
+**`List` / MutableList**: `List` предоставляет богатый набор операций только для чтения (map, filter и др.) как функции-расширения. `MutableList` добавляет операции изменения.
 
 ```kotlin
 val list = listOf(1, 2, 3, 4, 5)
@@ -94,7 +94,7 @@ mutableList[0] = 10
 
 И массивы, и списки на базе массивов обеспечивают O(1) доступ по индексу.
 
-**Array**:
+**`Array`**:
 - Фиксированный размер.
 - Специализированные массивы примитивов (`IntArray` и др.) более эффективны по памяти и часто быстрее за счёт отсутствия boxing.
 
@@ -134,13 +134,13 @@ shoppingList.remove("Молоко")
 
 ### Когда Использовать
 
-**Array**:
+**`Array`**:
 - Известный фиксированный размер
 - Высокая производительность индексного доступа
 - Работа с примитивами (`IntArray`, `ByteArray` и т.д.)
 - Interop с Java API, ожидающими массивы
 
-**List / MutableList**:
+**`List` / MutableList**:
 - Нужен богатый, идиоматичный API коллекций
 - Нужен интерфейс только для чтения (`List`)
 - Нужен динамически изменяемый размер и операции модификации (`MutableList`)
@@ -160,7 +160,7 @@ In Kotlin it's also important to distinguish between:
 
 #### 1. Size and Mutability
 
-**Array**: Has a fixed size after creation; you can change elements, but not the length.
+**`Array`**: Has a fixed size after creation; you can change elements, but not the length.
 
 ```kotlin
 val array = arrayOf(1, 2, 3, 4, 5)
@@ -168,7 +168,7 @@ val array = arrayOf(1, 2, 3, 4, 5)
 array[0] = 10 // OK: arrays are mutable by default
 ```
 
-**List**: The `List` interface itself is read-only (no add/remove). To have a resizable collection, use `MutableList` (e.g. via `mutableListOf`). On the JVM, `MutableList` is typically backed by `ArrayList`, which grows dynamically.
+**`List`**: The `List` interface itself is read-only (no add/remove). To have a resizable collection, use `MutableList` (e.g. via `mutableListOf`). On the JVM, `MutableList` is typically backed by `ArrayList`, which grows dynamically.
 
 ```kotlin
 val list: List<Int> = listOf(1, 2, 3)
@@ -181,14 +181,14 @@ mutableList.removeAt(0) // Size becomes 3
 
 #### 2. Typing and Representation
 
-**Array**: A Kotlin `Array<T>` stores references to elements of type `T`. For primitives there are specialized array types (e.g. `IntArray`, `LongArray`) to avoid boxing overhead (on JVM they map to primitive arrays like `int[]`).
+**`Array`**: A Kotlin `Array<T>` stores references to elements of type `T`. For primitives there are specialized array types (e.g. `IntArray`, `LongArray`) to avoid boxing overhead (on JVM they map to primitive arrays like `int[]`).
 
 ```kotlin
 val intArray: IntArray = intArrayOf(1, 2, 3)       // Specialized primitive array
 val objectArray: Array<Int> = arrayOf(1, 2, 3)     // Array of boxed `Int` values
 ```
 
-**List**: Is generic and conceptually holds elements of type `T`. Kotlin does not provide primitive-specialized `List` types like `IntList`; `List<Int>` uses boxed values where relevant for the target platform.
+**`List`**: Is generic and conceptually holds elements of type `T`. Kotlin does not provide primitive-specialized `List` types like `IntList`; `List<Int>` uses boxed values where relevant for the target platform.
 
 ```kotlin
 val list: List<Int> = listOf(1, 2, 3)
@@ -196,7 +196,7 @@ val list: List<Int> = listOf(1, 2, 3)
 
 #### 3. Functionality
 
-**Array**: Supports indexed access, mutation, iteration, and some extension functions, but has a more limited API compared to Kotlin collection interfaces.
+**`Array`**: Supports indexed access, mutation, iteration, and some extension functions, but has a more limited API compared to Kotlin collection interfaces.
 
 ```kotlin
 val array = arrayOf(1, 2, 3)
@@ -204,7 +204,7 @@ array[0] = 10
 val size = array.size
 ```
 
-**List / MutableList**: `List` provides rich read-only operations (map, filter, etc.) as extension functions. `MutableList` adds modification operations.
+**`List` / MutableList**: `List` provides rich read-only operations (map, filter, etc.) as extension functions. `MutableList` adds modification operations.
 
 ```kotlin
 val list = listOf(1, 2, 3, 4, 5)
@@ -222,7 +222,7 @@ mutableList[0] = 10
 
 Both arrays and lists backed by arrays provide O(1) access by index.
 
-**Array**:
+**`Array`**:
 - Fixed size.
 - Primitive arrays (`IntArray`, etc.) are memory-efficient and can be faster due to no boxing.
 
@@ -231,8 +231,8 @@ val array = IntArray(1_000_000)
 array[500_000] = 42  // O(1)
 ```
 
-**MutableList (ArrayList-backed)**:
-- Provides amortized O(1) `add` at the end, but may occasionally reallocate underlying storage.
+**MutableList (`ArrayList`-backed)**:
+- `Provides` amortized O(1) `add` at the end, but may occasionally reallocate underlying storage.
 - Uses boxed types for primitives on JVM (`MutableList<Int>` stores boxed `Int`).
 
 ```kotlin
@@ -261,13 +261,13 @@ shoppingList.remove("Milk")
 
 ### When to Use
 
-**Array**:
+**`Array`**:
 - Known fixed size
 - High-performance, index-based access
 - Working with primitive types (`IntArray`, `ByteArray`, etc.)
 - Interop with Java APIs that require arrays
 
-**List / MutableList**:
+**`List` / MutableList**:
 - Need a richer, idiomatic collections API
 - Need a read-only view over a collection (`List`)
 - Need dynamic size and mutation operations (`MutableList`)

@@ -1,4 +1,4 @@
----
+---\
 id: android-161
 title: API File Upload Server / Загрузка файлов на сервер через API
 aliases: [API File Upload Server, Загрузка файлов на сервер через API]
@@ -22,7 +22,7 @@ anki_slugs:
   - 40-android-q-api-file-upload-server-android-medium-p01-en
   - 40-android-q-api-file-upload-server-android-medium-p01-ru
 anki_last_sync: '2025-11-27T09:56:33.839728'
----
+---\
 # Вопрос (RU)
 
 > Как реализовать загрузку файлов на сервер через API в Android?
@@ -88,7 +88,7 @@ suspend fun uploadFile(
 - `@Part` для отдельных полей.
 - Для `Uri` используем `ContentResolver` (особенно важно с scoped storage и SAF).
 - `Result<T>` через `runCatching` для безопасной обработки ошибок.
-- `FileUploadApi` должен быть корректно создан (Retrofit) и передан в функцию (например, через DI).
+- `FileUploadApi` должен быть корректно создан (`Retrofit`) и передан в функцию (например, через DI).
 
 ### 2. Отслеживание Прогресса
 
@@ -176,10 +176,10 @@ val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
 WorkManager.getInstance(context).enqueue(uploadRequest)
 ```
 
-**Преимущества WorkManager**:
+**Преимущества `WorkManager`**:
 - Переживает рестарт приложения.
 - Автоматический retry с backoff.
-- Выполняется только при наличии сети (через Constraints).
+- Выполняется только при наличии сети (через `Constraints`).
 - Поддержка прогресса задач.
 
 ### 4. Сжатие Изображений
@@ -268,7 +268,7 @@ sealed class UploadState {
 | Сжатие | JPEG 80% для фото | Баланс качества и размера |
 | Retry | До 3 попыток с exponential backoff | Учитывает временные сетевые проблемы |
 | Размер | < 10MB для мобильных сетей (по возможности) | Снижение риска таймаутов и ограничений |
-| Фоновая загрузка | WorkManager вместо `Service` | Гарантированные условия выполнения, экономия батареи |
+| Фоновая загрузка | `WorkManager` вместо `Service` | Гарантированные условия выполнения, экономия батареи |
 | Разрешения | В зависимости от API уровня: для API 33+ `READ_MEDIA_IMAGES` (при доступе к медиа), для ниже — `READ_EXTERNAL_STORAGE`; для SAF/Uri-провайдеров возможен доступ без явных storage-разрешений | Корректная работа с медиа-файлами и scoped storage |
 
 ## Answer (EN)
@@ -326,7 +326,7 @@ suspend fun uploadFile(
 - `@Part` for individual fields.
 - Use `ContentResolver` with `Uri` (important for scoped storage and SAF).
 - Use `Result<T>` / `runCatching` for safer error handling.
-- Ensure `FileUploadApi` is properly created (Retrofit) and passed into the function (e.g., via DI).
+- Ensure `FileUploadApi` is properly created (`Retrofit`) and passed into the function (e.g., via DI).
 
 ### 2. Progress Tracking
 
@@ -414,10 +414,10 @@ val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
 WorkManager.getInstance(context).enqueue(uploadRequest)
 ```
 
-**WorkManager advantages**:
+**`WorkManager` advantages**:
 - Survives app restart.
 - Automatic retry with backoff.
-- Runs only when network is available (via Constraints).
+- Runs only when network is available (via `Constraints`).
 - Built-in support for reporting progress.
 
 ### 4. Image Compression
@@ -506,7 +506,7 @@ sealed class UploadState {
 | Compression | JPEG 80% for photos | Good quality-size balance |
 | Retry | Up to 3 attempts with exponential backoff | Handles temporary network issues |
 | Size | Prefer < 10MB over mobile networks when possible | Reduces risk of timeouts and carrier limits |
-| Background upload | Use WorkManager instead of a plain `Service` | Better execution guarantees, battery efficiency |
+| Background upload | Use `WorkManager` instead of a plain `Service` | Better execution guarantees, battery efficiency |
 | Permissions | Depends on API level: for API 33+ use `READ_MEDIA_IMAGES` when accessing shared media; below 33 use `READ_EXTERNAL_STORAGE`; for SAF/provider Uris you may rely on granted URI permissions without broad storage permission | Correct access to media under scoped storage |
 
 ---
@@ -521,9 +521,9 @@ sealed class UploadState {
 
 ## References
 
-- [[c-retrofit]] - Retrofit HTTP client basics
-- [[c-okhttp]] - OkHttp interceptors and customization
-- [[c-workmanager]] - WorkManager background tasks
+- [[c-retrofit]] - `Retrofit` HTTP client basics
+- [[c-okhttp]] - `OkHttp` interceptors and customization
+- [[c-workmanager]] - `WorkManager` background tasks
 - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - https://square.github.io/retrofit/
 - https://square.github.io/okhttp/
@@ -532,7 +532,7 @@ sealed class UploadState {
 
 ### Prerequisites (Easier)
 
-- Understanding Retrofit basics and HTTP requests
+- Understanding `Retrofit` basics and HTTP requests
 - File I/O and permissions in Android
 - Coroutines and suspend functions
 

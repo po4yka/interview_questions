@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-245
 title: "Data classes in Kotlin: features, limitations, and best practices / Data classes в Kotlin"
 aliases: [Data classes Kotlin, Data Classes Kotlin]
@@ -10,12 +10,12 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-11-09"
-tags: ["classes", "data-class", "difficulty/medium", "kotlin-features", "kotlin"]
+tags: [classes, data-classes, difficulty/medium, kotlin-features, kotlin]
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
 moc: moc-kotlin
 related: [c-equality, c-kotlin-features, q-sealed-class-sealed-interface--kotlin--medium]
 subtopics: [data-classes]
----
+---\
 # Вопрос (RU)
 
 Что такое data классы в Kotlin, какие методы для них автоматически генерируются, как работают `copy()` и `componentN()`/деструктуризация, какие есть ограничения и лучшие практики использования?
@@ -815,7 +815,7 @@ Use data classes for:
 - Value objects
 - Configuration objects
 - UI state representations
-- Database entities
+- `Database` entities
 
 Avoid:
 - Putting business logic into data classes

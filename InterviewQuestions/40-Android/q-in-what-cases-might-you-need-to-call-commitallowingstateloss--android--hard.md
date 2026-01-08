@@ -1,4 +1,4 @@
----
+---\
 id: android-418
 title: "In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях может понадобиться commitAllowingStateLoss"
 aliases: [commitAllowingStateLoss, commitAllowingStateLoss vs commit, commitAllowingStateLoss в Android, Fragment state loss]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle]
 
----
+---\
 # Вопрос (RU)
 
 > В каких случаях может понадобиться вызывать commitAllowingStateLoss?
@@ -328,7 +328,7 @@ class MainActivity : AppCompatActivity() {
 ## Follow-ups
 
 - What happens if you call `commit()` after `onSaveInstanceState()`?
-- How does Navigation Component handle state saving?
+- How does Navigation `Component` handle state saving?
 - Can you queue transactions for later execution?
 - What's the difference between `commitNow()` and `commitAllowingStateLoss()`?
 - How to check if activity state has been saved?

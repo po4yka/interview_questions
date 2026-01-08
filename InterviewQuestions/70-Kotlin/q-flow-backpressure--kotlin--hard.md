@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-123
 title: "Flow Backpressure / Противодавление в Flow"
 aliases: ["Flow Backpressure", "Противодавление в Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [backpressure, buffer, collectlatest, conflate, difficulty/hard, flow, kotlin, performance]
----
+---\
 # Вопрос (RU)
 > Что такое противодавление в Kotlin `Flow`? Объясните операторы `buffer()`, `conflate()` и `collectLatest()` и когда использовать каждую стратегию.
 
@@ -963,12 +963,12 @@ fastSensor
 
 ## Ссылки (RU)
 
-- Официальная документация Kotlin Flow (буферизация и противодавление)
+- Официальная документация Kotlin `Flow` (буферизация и противодавление)
 - [[c-flow]]
 
 ## References
 
-- [Kotlin Flow Backpressure](https://kotlinlang.org/docs/flow.html#buffering)
+- [Kotlin `Flow` Backpressure](https://kotlinlang.org/docs/flow.html#buffering)
 - [Flow buffer](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html)
 - [Flow conflate](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/conflate.html)
 
@@ -987,13 +987,13 @@ fastSensor
 ## Related Questions
 
 ### Related (Hard)
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
+- [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+- [[q-flow-testing-advanced--kotlin--hard]] - `Flow`
 
 ### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-basics--kotlin--easy]] - `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 
 ### Hub

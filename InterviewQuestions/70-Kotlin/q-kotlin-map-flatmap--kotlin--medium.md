@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-032
 title: "map() vs flatMap() in Kotlin / map() против flatMap() в Kotlin"
 aliases: ["map() vs flatMap() in Kotlin", "map() против flatMap() в Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-10
 
 tags: [collections, difficulty/medium, flatmap, higher-order-functions, kotlin, map]
----
+---\
 # Вопрос (RU)
 > В чем разница между `map()` и `flatMap()` в Kotlin?
 
@@ -46,7 +46,7 @@ println(numbers.map { it * it })
 
 ### flatMap()
 
-`flatMap()` применяет функцию преобразования к каждому элементу исходной коллекции. Эта функция должна возвращать коллекцию (Iterable) для каждого элемента. Затем `flatMap()` объединяет ("выравнивает") все полученные коллекции в один плоский список.
+`flatMap()` применяет функцию преобразования к каждому элементу исходной коллекции. Эта функция должна возвращать коллекцию (`Iterable`) для каждого элемента. Затем `flatMap()` объединяет ("выравнивает") все полученные коллекции в один плоский список.
 
 ```kotlin
 val list = listOf("123", "45")
@@ -191,7 +191,7 @@ println(numbers.map { it * it })
 
 ### flatMap()
 
-`flatMap()` applies the transform function to each element of the original collection. That function must return a collection (Iterable) for each element. Then `flatMap()` concatenates (flattens) all resulting collections into a single list.
+`flatMap()` applies the transform function to each element of the original collection. That function must return a collection (`Iterable`) for each element. Then `flatMap()` concatenates (flattens) all resulting collections into a single list.
 
 ```kotlin
 val list = listOf("123", "45")

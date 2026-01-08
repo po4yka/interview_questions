@@ -1,4 +1,4 @@
----
+---\
 id: lang-021
 title: "Garbage Collector Definition / Определение Garbage Collector"
 aliases: [Garbage Collector Definition, Определение Garbage Collector]
@@ -14,7 +14,7 @@ related: [c-garbage-collection]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, java, jvm, kotlin, memory-management, programming-languages]
----
+---\
 # Вопрос (RU)
 > Что такое сборщик мусора?
 
@@ -315,7 +315,7 @@ fun createUsers(): List<User> {
 Automatic memory management significantly reduces low-level memory bugs such as:
 
 - Memory leaks from forgotten `free`/`delete` calls (common in C/C++)
-- Double free (freeing the same memory twice)
+- `Double` free (freeing the same memory twice)
 - Use-after-free (accessing memory after it has been freed)
 
 In GC-based languages, you do not manually free objects, so classical double-free/use-after-free errors from manual deallocation are avoided. Logical leaks are still possible if you keep unnecessary references.

@@ -1,4 +1,4 @@
----
+---\
 id: android-164
 title: KMM Ktor Networking / Сетевое взаимодействие с Ktor в KMM
 aliases: [KMM Ktor Networking, Сетевое взаимодействие с Ktor в KMM]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/networking-http, difficulty/medium, kmm, ktor, multiplatform]
 sources: []
----
+---\
 # Вопрос (RU)
 
 > Объясните как использовать Ktor client для multiplatform networking в KMM проектах. Как настроить platform-specific engines, обработать аутентификацию, реализовать retry логику и управлять сетевыми ошибками на Android и iOS?
@@ -26,7 +26,7 @@ sources: []
 
 ## Ответ (RU)
 
-Ktor — один из основных HTTP-клиентов для Kotlin Multiplatform от JetBrains, предоставляющий единый API с platform-optimized движками (OkHttp для Android, NSURLSession/Darwin для iOS) и широкую поддержку плагинов.
+Ktor — один из основных HTTP-клиентов для Kotlin Multiplatform от JetBrains, предоставляющий единый API с platform-optimized движками (`OkHttp` для Android, NSURLSession/Darwin для iOS) и широкую поддержку плагинов.
 
 ### Основная Конфигурация
 
@@ -52,7 +52,7 @@ object HttpClientFactory {
 }
 ```
 
-**Platform-specific движки**: используйте `expect/actual` для конфигурации OkHttp (Android) и NSURLSession/Darwin (iOS), например таймауты, proxy settings, TLS.
+**Platform-specific движки**: используйте `expect/actual` для конфигурации `OkHttp` (Android) и NSURLSession/Darwin (iOS), например таймауты, proxy settings, TLS.
 
 ### Аутентификация
 
@@ -181,7 +181,7 @@ val client = HttpClient(MockEngine) {
 
 ## Answer (EN)
 
-Ktor is one of the primary HTTP clients for Kotlin Multiplatform from JetBrains, providing a unified API with platform-optimized engines (OkHttp for Android, NSURLSession/Darwin for iOS) and rich plugin support.
+Ktor is one of the primary HTTP clients for Kotlin Multiplatform from JetBrains, providing a unified API with platform-optimized engines (`OkHttp` for Android, NSURLSession/Darwin for iOS) and rich plugin support.
 
 ### Basic Configuration
 
@@ -207,7 +207,7 @@ object HttpClientFactory {
 }
 ```
 
-**Platform-specific engines**: Use `expect/actual` to configure OkHttp (Android) and NSURLSession/Darwin (iOS) for timeouts, proxy settings, TLS, etc.
+**Platform-specific engines**: Use `expect/actual` to configure `OkHttp` (Android) and NSURLSession/Darwin (iOS) for timeouts, proxy settings, TLS, etc.
 
 ### Authentication
 
@@ -361,10 +361,10 @@ val client = HttpClient(MockEngine) {
 
 ### Related (Medium)
 
-- Comparing different HTTP client libraries (Retrofit vs Ktor)
+- Comparing different HTTP client libraries (`Retrofit` vs Ktor)
 - Structuring multiplatform projects architecture
 
 ### Advanced (Harder)
 
 - Advanced caching strategies and offline-first patterns
-- Request deduplication and concurrent request management
+- `Request` deduplication and concurrent request management

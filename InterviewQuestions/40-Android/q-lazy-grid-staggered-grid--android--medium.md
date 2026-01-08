@@ -1,4 +1,4 @@
----
+---\
 id: android-071
 title: LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid
 aliases: [LazyGrid & LazyStaggeredGrid, LazyGrid и LazyStaggeredGrid]
@@ -13,10 +13,10 @@ moc: moc-android
 related: [c-android-ui-composition, q-compose-core-components--android--medium, q-compose-lazy-layout-optimization--android--hard, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard]
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/performance-rendering, android/ui-compose, difficulty/medium, grid, jetpack-compose, lazy-layout, performance]
+tags: [android/performance-rendering, android/ui-compose, difficulty/medium, grid, lazy-layout, performance]
 sources:
   - "https://developer.android.com/jetpack/compose/lists"
----
+---\
 # Вопрос (RU)
 > Как работают LazyGrid и LazyStaggeredGrid в Jetpack Compose?
 
@@ -218,7 +218,7 @@ LazyVerticalGrid(
 
 ### Prerequisites (Easier)
 - [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn basics
-- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView fundamentals
+- [[q-what-is-known-about-recyclerview--android--easy]] - `RecyclerView` fundamentals
 - [[q-which-layout-for-large-list--android--easy]] - Layout choices for lists
 
 ### Related (Same Level)

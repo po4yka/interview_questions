@@ -1,4 +1,4 @@
----
+---\
 id: android-346
 title: SurfaceView Rendering / Рендеринг SurfaceView
 aliases: [SurfaceView Rendering, Рендеринг SurfaceView]
@@ -15,7 +15,7 @@ created: 2023-10-15
 updated: 2025-11-11
 tags: [android/performance-rendering, android/ui-views, difficulty/medium, rendering, surfaceview]
 
----
+---\
 # Вопрос (RU)
 > Рендеринг SurfaceView
 
@@ -171,14 +171,14 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 
 **Key Characteristics:**
 
-**1. Dedicated Surface Buffer:**
+**1. Dedicated `Surface` Buffer:**
 - `SurfaceView` has its own separate surface buffer (backed by a `Surface`) that is composited by SurfaceFlinger, while regular views are drawn into the window's shared surface managed by `ViewRootImpl`.
 - This separation adds some overhead but allows `SurfaceView` content to be produced independently from the normal view hierarchy rendering.
 
-**2. Background Thread Rendering:**
+**2. Background `Thread` Rendering:**
 - Regular views must be drawn on the UI thread via the framework's rendering pipeline.
 - With `SurfaceView`, your rendering code can lock the `Surface` and draw from a dedicated background thread (e.g., a game loop) without blocking the UI thread.
-- Lifecycle and view operations (`addView`, layout, etc.) must still happen on the main thread; only drawing into the `Surface` is offloaded.
+- `Lifecycle` and view operations (`addView`, layout, etc.) must still happen on the main thread; only drawing into the `Surface` is offloaded.
 - Common use cases: games, video playback, camera preview, and other high-frame-rate content.
 
 **3. Hardware Acceleration and Compositing:**
@@ -285,8 +285,8 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 
 | Feature | SurfaceView | Regular `View` |
 |---------|-------------|--------------|
-| Threading | Can render to Surface from a background thread; view lifecycle on main thread | Rendering driven by framework on main (UI) thread |
-| Surface Buffer | Dedicated `Surface` / buffer, separately composited | Drawn into window's shared surface |
+| Threading | Can render to `Surface` from a background thread; view lifecycle on main thread | Rendering driven by framework on main (UI) thread |
+| `Surface` Buffer | Dedicated `Surface` / buffer, separately composited | Drawn into window's shared surface |
 | Hardware Acceleration | Separate composition path; does not use normal view HW-accel pipeline | Uses standard hardware-accelerated view pipeline (when enabled) |
 | Update Timing | App-controlled render loop; frames still displayed with VSYNC | Framework-controlled; VSYNC-synchronized |
 | Resource Usage | Higher; separate buffers and composition | Lower; shared buffers |

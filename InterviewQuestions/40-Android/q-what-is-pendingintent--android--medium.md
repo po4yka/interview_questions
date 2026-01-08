@@ -1,4 +1,4 @@
----
+---\
 id: android-411
 title: What Is PendingIntent / Что такое PendingIntent
 aliases: [What is PendingIntent, Что такое PendingIntent]
@@ -16,7 +16,7 @@ updated: 2025-10-29
 sources: []
 tags: [android, android/intents-deeplinks, android/notifications, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Что такое PendingIntent?
 
@@ -299,7 +299,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 - Как `requestCode` влияет на равенство и обновление PendingIntent?
 - Когда следует использовать `FLAG_MUTABLE` вместо `FLAG_IMMUTABLE`?
-- Как использовать PendingIntent совместно с WorkManager для фоновых задач?
+- Как использовать PendingIntent совместно с `WorkManager` для фоновых задач?
 - Что произойдет, если не вызывать `cancel()` для PendingIntent после использования?
 - Как отлаживать проблемы безопасности PendingIntent на Android 12+?
 
@@ -307,7 +307,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 - How does requestCode affect PendingIntent equality and updates?
 - When should you use FLAG_MUTABLE instead of FLAG_IMMUTABLE?
-- How do you handle PendingIntent with WorkManager for background tasks?
+- How do you handle PendingIntent with `WorkManager` for background tasks?
 - What happens if you don't cancel a PendingIntent after use?
 - How to debug PendingIntent security vulnerabilities in Android 12+?
 

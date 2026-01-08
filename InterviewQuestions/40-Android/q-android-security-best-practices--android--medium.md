@@ -1,4 +1,4 @@
----
+---\
 id: android-424
 title: Android Security Best Practices / Лучшие практики безопасности Android
 aliases: [Android Security Best Practices, Лучшие практики безопасности Android]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, encryption, security]
 sources: []
 
----
+---\
 # Вопрос (RU)
 > Какие основные практики безопасности нужно соблюдать при разработке Android приложений?
 
@@ -230,7 +230,7 @@ By itself, Network Security Config does not implement certificate pinning; pinni
 </network-security-config>
 ```
 
-**4. Component Protection:**
+**4. `Component` Protection:**
 Use `android:exported="false"` for internal `Activity`/`Service`/Provider components that must not be invoked externally. For exported components, always validate `Intents` from external sources.
 
 ```kotlin

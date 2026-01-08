@@ -1,4 +1,4 @@
----
+---\
 id: android-369
 title: "Retrofit Library / Библиотека Retrofit"
 aliases: ["Retrofit Library", "Библиотека Retrofit"]
@@ -15,18 +15,18 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, rest-api, retrofit]
----
+---\
 # Вопрос (RU)
 
-> Что из себя представляет Retrofit и зачем он нужен в Android-разработке?
+> Что из себя представляет `Retrofit` и зачем он нужен в Android-разработке?
 
 # Question (EN)
 
-> What is Retrofit and why is it needed in Android development?
+> What is `Retrofit` and why is it needed in Android development?
 
 ## Ответ (RU)
 
-**Retrofit** — типобезопасный HTTP-клиент от Square, преобразующий REST API в Kotlin/Java интерфейсы. Упрощает сетевое взаимодействие через декларативный подход с аннотациями.
+**`Retrofit`** — типобезопасный HTTP-клиент от Square, преобразующий REST API в Kotlin/Java интерфейсы. Упрощает сетевое взаимодействие через декларативный подход с аннотациями.
 
 ### Ключевые Возможности
 
@@ -74,7 +74,7 @@ viewModelScope.launch {
 apiService.getUser(123).enqueue(object : Callback<User> { /* ... */ })
 ```
 
-**4. Настройка через OkHttp**
+**4. Настройка через `OkHttp`**
 
 ```kotlin
 val client = OkHttpClient.Builder()
@@ -169,11 +169,11 @@ suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
     }
 ```
 
-**Итого**: Retrofit превращает HTTP API в идиоматичный Kotlin-код, убирая boilerplate для networking-логики.
+**Итого**: `Retrofit` превращает HTTP API в идиоматичный Kotlin-код, убирая boilerplate для networking-логики.
 
 ## Answer (EN)
 
-**Retrofit** is a type-safe HTTP client by Square that transforms REST APIs into Kotlin/Java interfaces. It simplifies networking via a declarative, annotation-based approach.
+**`Retrofit`** is a type-safe HTTP client by Square that transforms REST APIs into Kotlin/Java interfaces. It simplifies networking via a declarative, annotation-based approach.
 
 ### Key Capabilities
 
@@ -221,7 +221,7 @@ viewModelScope.launch {
 apiService.getUser(123).enqueue(object : Callback<User> { /* ... */ })
 ```
 
-**4. OkHttp Customization**
+**4. `OkHttp` Customization**
 
 ```kotlin
 val client = OkHttpClient.Builder()
@@ -316,23 +316,23 @@ suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
     }
 ```
 
-**Summary**: Retrofit transforms HTTP APIs into idiomatic Kotlin code, removing much of the networking boilerplate.
+**Summary**: `Retrofit` transforms HTTP APIs into idiomatic Kotlin code, removing much of the networking boilerplate.
 
 ---
 
 ## Follow-ups
 
-1. How does Retrofit integrate with [[c-coroutines]] and structured concurrency in Android apps?
-2. How would you choose between different call adapters (e.g. coroutines, RxJava, `Call<T>`) when using Retrofit?
-3. How can you design error-handling and result wrappers (e.g. `sealed class`) around Retrofit calls in a clean architecture setup?
-4. How would you configure different Retrofit instances (base URLs, interceptors, timeouts) for staging/production with dependency injection (e.g. [[c-dagger]])?
-5. How can you combine Retrofit with response caching and logging using OkHttp interceptors?
+1. How does `Retrofit` integrate with [[c-coroutines]] and structured concurrency in Android apps?
+2. How would you choose between different call adapters (e.g. coroutines, RxJava, `Call<T>`) when using `Retrofit`?
+3. How can you design error-handling and result wrappers (e.g. `sealed class`) around `Retrofit` calls in a clean architecture setup?
+4. How would you configure different `Retrofit` instances (base URLs, interceptors, timeouts) for staging/production with dependency injection (e.g. [[c-dagger]])?
+5. How can you combine `Retrofit` with response caching and logging using `OkHttp` interceptors?
 
 ## References
 
 - [[c-coroutines]]
-- https://square.github.io/retrofit/ - Official Retrofit documentation
-- https://square.github.io/okhttp/ - OkHttp documentation
+- https://square.github.io/retrofit/ - Official `Retrofit` documentation
+- https://square.github.io/okhttp/ - `OkHttp` documentation
 
 ## Related Questions
 

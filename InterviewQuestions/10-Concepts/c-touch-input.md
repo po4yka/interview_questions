@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-touch-events, c-gesture-detection, c-event-handling, c-custom-views, c-accessibility]
+moc: "moc-cs"
+related: ["c-touch-events", "c-gesture-detection", "c-event-handling", "c-custom-views", "c-accessibility"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

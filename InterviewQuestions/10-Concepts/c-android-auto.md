@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-009
-title: Android Auto & Automotive OS / Android Auto и Automotive OS
-aliases: [Android Auto, Android Automotive OS, Car App Library]
-kind: concept
-summary: Car-optimized Android platforms using car app templates and in-vehicle systems
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, android-auto, automotive, concept, in-car]
+id: "20260108-110549"
+title: "Android Auto & Automotive OS / Android Auto и Automotive OS"
+aliases: ["Android Auto", "Android Automotive OS", "Car App Library"]
+summary: "Car-optimized Android platforms using car app templates and in-vehicle systems"
+topic: "android"
+subtopics: ["android-auto", "automotive", "in-car"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "android-auto", "automotive", "concept", "in-car", "difficulty/medium"]
 ---
 
 # Summary (EN)

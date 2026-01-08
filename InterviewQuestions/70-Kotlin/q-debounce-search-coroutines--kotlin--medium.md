@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-156
 title: "Debouncing Search with Coroutines / Отложенный Поиск с Корутинами"
 aliases: [Debouncing Search, Отложенный поиск]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [kotlin, coroutines, debouncing, search, job, cancellation, android, difficulty/medium, ru]
 source: Kotlin Coroutines Interview Questions PDF
----
+---\
 # Вопрос (RU)
 > Как реализовать функцию поиска при вводе с отложенным выполнением (debouncing) используя Kotlin корутины?
 
@@ -100,7 +100,7 @@ class SearchActivity : AppCompatActivity() {
 
 ### Решение 2: Реализация в ViewModel
 
-**Лучшая Архитектура**: Переместить логику в ViewModel для тестируемости и независимости от жизненного цикла.
+**Лучшая Архитектура**: Переместить логику в `ViewModel` для тестируемости и независимости от жизненного цикла.
 
 ```kotlin
 class SearchViewModel(
@@ -179,7 +179,7 @@ class SearchActivity : AppCompatActivity() {
 
 ### Решение 3: Debouncing на Основе Flow (Наиболее Элегантное)
 
-**Использование операторов Flow** для декларативного debouncing.
+**Использование операторов `Flow`** для декларативного debouncing.
 
 ```kotlin
 class SearchViewModel(
@@ -212,12 +212,12 @@ class SearchViewModel(
 }
 ```
 
-**Объяснение Операторов Flow**:
+**Объяснение Операторов `Flow`**:
 - `debounce(300)`: Ждет 300мс без активности перед отправкой
 - `filter { it.isNotBlank() }`: Пропускает пустые запросы
 - `distinctUntilChanged()`: Предотвращает дублирующиеся поиски
 - `flatMapLatest`: Отменяет предыдущий поиск при новом запросе
-- `stateIn`: Конвертирует Flow в StateFlow для наблюдения из UI
+- `stateIn`: Конвертирует `Flow` в `StateFlow` для наблюдения из UI
 
 **Преимущества**:
 - Декларативный, читаемый код
@@ -314,7 +314,7 @@ searchQuery
 **Debouncing с Корутинами**:
 - **Отмена Job**: Простой паттерн, отмена предыдущего поиска при новом вводе
 - **delay(300)**: Часто используемое значение debounce для поиска (можно адаптировать под UX)
-- **Flow.debounce()**: Декларативный подход на основе операторов
+- **`Flow`.debounce()**: Декларативный подход на основе операторов
 - **flatMapLatest**: Автоматическая отмена предыдущего поиска
 - **distinctUntilChanged()**: Предотвращает дублирующиеся поиски
 - **Тестируемость**: Используйте TestDispatcher и `advanceTimeBy()` / `advanceUntilIdle()` для проверки поведения
@@ -404,11 +404,11 @@ class SearchActivity : AppCompatActivity() {
 - Only 1 API call instead of 3
 - Automatically cancels stale searches
 - Simple implementation
-- Lifecycle-aware with lifecycleScope
+- `Lifecycle`-aware with lifecycleScope
 
 ### Solution 2: ViewModel Implementation
 
-**Better Architecture**: Move logic to ViewModel for testability and lifecycle independence.
+**Better Architecture**: Move logic to `ViewModel` for testability and lifecycle independence.
 
 ```kotlin
 class SearchViewModel(
@@ -487,7 +487,7 @@ class SearchActivity : AppCompatActivity() {
 
 ### Solution 3: Flow-Based Debouncing (Most Elegant)
 
-**Using Flow operators** for declarative debouncing.
+**Using `Flow` operators** for declarative debouncing.
 
 ```kotlin
 class SearchViewModel(
@@ -520,12 +520,12 @@ class SearchViewModel(
 }
 ```
 
-**Flow Operators Explained**:
+**`Flow` Operators Explained**:
 - `debounce(300)`: Waits 300ms of inactivity before emitting
 - `filter { it.isNotBlank() }`: Skips empty queries
 - `distinctUntilChanged()`: Prevents duplicate searches
 - `flatMapLatest`: Cancels previous search when new query arrives
-- `stateIn`: Converts Flow to StateFlow for UI observation
+- `stateIn`: Converts `Flow` to `StateFlow` for UI observation
 
 **Benefits**:
 - Declarative, readable code
@@ -673,9 +673,9 @@ class SearchViewModelTest {
 | Approach | Complexity | Testability | Features | Best For |
 |----------|-----------|-------------|----------|----------|
 | **Job Cancellation** | Low | Medium | Basic debouncing | Simple cases, learning |
-| **ViewModel + Job** | Medium | High | + State management | Production Android apps |
-| **Flow debounce()** | Low | High | Declarative, clean | Modern Kotlin codebases |
-| **Flow + operators** | Medium | High | Full-featured | Complex search UIs |
+| **`ViewModel` + Job** | Medium | High | + State management | Production Android apps |
+| **`Flow` debounce()** | Low | High | Declarative, clean | Modern Kotlin codebases |
+| **`Flow` + operators** | Medium | High | Full-featured | Complex search UIs |
 
 ### Best Practices
 
@@ -712,7 +712,7 @@ searchJob = launch { ... } // Lost reference to previous job!
 **Debouncing with Coroutines**:
 - **Job Cancellation**: Simple pattern, cancel previous search when new input arrives
 - **delay(300)**: Common debounce time for search (tune for UX)
-- **Flow.debounce()**: Declarative, operator-based approach
+- **`Flow`.debounce()**: Declarative, operator-based approach
 - **flatMapLatest**: Automatic cancellation of previous search
 - **distinctUntilChanged()**: Prevents duplicate searches
 - **Testable**: Use TestDispatcher and `advanceTimeBy()` / `advanceUntilIdle()`

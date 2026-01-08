@@ -1,4 +1,4 @@
----
+---\
 id: android-157
 title: Material3 Dynamic Color Theming / Динамические цвета Material3
 aliases: [Material3 Dynamic Color Theming, Динамические цвета Material3]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-theming, design, difficulty/medium, dynamic-color, material3]
----
+---\
 # Вопрос (RU)
 > Как работает динамический цвет Material 3? Объясните генерацию цветовой схемы из обоев, реализацию пользовательских тем и обработку светлого/тёмного режимов с динамической темизацией.
 
@@ -547,4 +547,4 @@ Snackbar(
 - [[q-compose-semantics--android--medium]] — Accessibility with dynamic themes
 
 ### Advanced
-- [[q-why-was-the-lifecycle-library-created--android--hard]] — Lifecycle-aware theming
+- [[q-why-was-the-lifecycle-library-created--android--hard]] — `Lifecycle`-aware theming

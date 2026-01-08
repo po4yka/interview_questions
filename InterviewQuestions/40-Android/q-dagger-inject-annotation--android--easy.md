@@ -1,4 +1,4 @@
----
+---\
 id: android-463
 title: Dagger Inject Annotation / Аннотация Inject Dagger
 aliases: [Dagger Inject Annotation, Аннотация Inject Dagger]
@@ -16,24 +16,24 @@ updated: 2025-11-10
 sources: []
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/easy, hilt]
 
----
+---\
 # Вопрос (RU)
-> Как указать Dagger, где выполнить инъекцию зависимостей?
+> Как указать `Dagger`, где выполнить инъекцию зависимостей?
 
 # Question (EN)
-> How to tell Dagger where to inject dependencies?
+> How to tell `Dagger` where to inject dependencies?
 
 ## Ответ (RU)
 
-Аннотация **`@Inject`** указывает Dagger точки инъекции зависимостей и (для конструкторов) объявляет, какие реализации можно создавать и предоставлять из графа зависимостей. Существует три варианта использования, каждый со своими сценариями применения.
+Аннотация **`@Inject`** указывает `Dagger` точки инъекции зависимостей и (для конструкторов) объявляет, какие реализации можно создавать и предоставлять из графа зависимостей. Существует три варианта использования, каждый со своими сценариями применения.
 
 ### Ключевая Идея
 
-`@Inject` сообщает Dagger:
+`@Inject` сообщает `Dagger`:
 - **где** внедрить зависимости (поля, конструкторы, методы), и
 - **что** можно предоставить (конструктор с `@Inject` объявляет binding).
 
-Dagger анализирует граф зависимостей на этапе компиляции и генерирует код инъекции.
+`Dagger` анализирует граф зависимостей на этапе компиляции и генерирует код инъекции.
 
 ### Три Способа Использования
 
@@ -47,7 +47,7 @@ class UserRepository @Inject constructor(
 )
 ```
 
-**Когда использовать:** ViewModels, репозитории, use case-классы и другие классы, где вы контролируете создание экземпляра. Такой конструктор одновременно задает точку инъекции и объявляет для Dagger, как создать `UserRepository`.
+**Когда использовать:** ViewModels, репозитории, use case-классы и другие классы, где вы контролируете создание экземпляра. Такой конструктор одновременно задает точку инъекции и объявляет для `Dagger`, как создать `UserRepository`.
 
 **2. Field Injection** — для Android-компонентов с lifecycle, управляемым платформой:
 
@@ -83,7 +83,7 @@ class AnalyticsTracker @Inject constructor() {
 
 ### Hilt И Field Injection
 
-Hilt автоматизирует инъекцию в Android-компоненты через `@AndroidEntryPoint`:
+`Hilt` автоматизирует инъекцию в Android-компоненты через `@AndroidEntryPoint`:
 
 ```kotlin
 @AndroidEntryPoint
@@ -93,7 +93,7 @@ class ProfileActivity : AppCompatActivity() {
 }
 ```
 
-Без Hilt требуется явный вызов на компоненте:
+Без `Hilt` требуется явный вызов на компоненте:
 
 ```kotlin
 // ❌ Без Hilt — boilerplate-код
@@ -108,19 +108,19 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Обратите внимание: для Hilt `ViewModel`-ы обычно получают через `@HiltViewModel` и делегаты (`by viewModels()`, `hiltViewModel()`), а не через `@Inject` на полях `Activity`/`Fragment`.
+Обратите внимание: для `Hilt` `ViewModel`-ы обычно получают через `@HiltViewModel` и делегаты (`by viewModels()`, `hiltViewModel()`), а не через `@Inject` на полях `Activity`/`Fragment`.
 
 ## Answer (EN)
 
-The **`@Inject`** annotation tells Dagger where to inject dependencies and (for constructors) which implementations can be constructed and provided from the dependency graph. There are three usage patterns, each with specific use cases.
+The **`@Inject`** annotation tells `Dagger` where to inject dependencies and (for constructors) which implementations can be constructed and provided from the dependency graph. There are three usage patterns, each with specific use cases.
 
 ### Core Idea
 
-`@Inject` tells Dagger:
+`@Inject` tells `Dagger`:
 - **where** to inject dependencies (fields, constructors, methods), and
 - **what** can be provided (an `@Inject` constructor declares a binding).
 
-Dagger analyzes the dependency graph at compile time and generates the injection code.
+`Dagger` analyzes the dependency graph at compile time and generates the injection code.
 
 ### Three Usage Patterns
 
@@ -170,7 +170,7 @@ class AnalyticsTracker @Inject constructor() {
 
 ### Hilt and Field Injection
 
-Hilt automates injection into Android components via `@AndroidEntryPoint`:
+`Hilt` automates injection into Android components via `@AndroidEntryPoint`:
 
 ```kotlin
 @AndroidEntryPoint
@@ -180,7 +180,7 @@ class ProfileActivity : AppCompatActivity() {
 }
 ```
 
-Without Hilt, an explicit call on the component is required:
+Without `Hilt`, an explicit call on the component is required:
 
 ```kotlin
 // ❌ Without Hilt — more boilerplate
@@ -195,20 +195,20 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Note: with Hilt, ViewModels are typically obtained via `@HiltViewModel` and delegates (`by viewModels()`, `hiltViewModel()`), not via `@Inject`-annotated fields on the `Activity`/`Fragment`.
+Note: with `Hilt`, ViewModels are typically obtained via `@HiltViewModel` and delegates (`by viewModels()`, `hiltViewModel()`), not via `@Inject`-annotated fields on the `Activity`/`Fragment`.
 
 ## Follow-ups
 
 - Why is constructor injection preferred over field injection in terms of testability and explicit dependencies?
 - When must you use field injection instead of constructor injection in Android?
-- How does Dagger resolve the dependency graph and detect missing bindings at compile time?
+- How does `Dagger` resolve the dependency graph and detect missing bindings at compile time?
 - What happens if `@Inject` dependencies have circular references and how to resolve them?
 - Why can't you use `val` with field injection, and what are the implications for thread safety?
 
 ## References
 
 - [[c-dependency-injection]] - Dependency Injection pattern
-- [[c-dagger]] - Dagger dependency injection framework
+- [[c-dagger]] - `Dagger` dependency injection framework
 - https://dagger.dev/api/latest/dagger/Inject.html
 - [Dagger Basics](https://developer.android.com/training/dependency-injection/dagger-basics)
 
@@ -219,7 +219,7 @@ Note: with Hilt, ViewModels are typically obtained via `@HiltViewModel` and dele
 
 ### Related (Same Level)
 - [[q-dagger-field-injection--android--medium]] - Field injection details
-- [[q-hilt-components-scope--android--medium]] - Hilt component scopes
+- [[q-hilt-components-scope--android--medium]] - `Hilt` component scopes
 
 ### Advanced (Harder)
-- [[q-dagger-framework-overview--android--hard]] - Dagger architecture overview
+- [[q-dagger-framework-overview--android--hard]] - `Dagger` architecture overview

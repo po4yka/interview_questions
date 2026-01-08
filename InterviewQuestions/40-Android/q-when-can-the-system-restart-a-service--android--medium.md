@@ -1,4 +1,4 @@
----
+---\
 id: android-144
 title: "When Can The System Restart A Service / Когда система может перезапустить Service"
 aliases: ["When Can The System Restart A Service", "Когда система может перезапустить Service"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/background-execution, android/lifecycle, android/service, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Когда система может перезапустить сервис?
@@ -211,7 +211,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 | START_STICKY | May be restarted | null | Music, monitoring |
 | START_REDELIVER_INTENT | May be restarted | Redelivered (pending) | Downloads, sync |
 | START_NOT_STICKY | No auto-restart (only on new `Intent`) | — | One-time / non-critical tasks |
-| Foreground + STICKY | Less likely to be killed, may restart | Typically null | Long-running user-visible work |
+| Foreground + STICKY | Less likely to be killed, may restart | Typically null | `Long`-running user-visible work |
 
 **Modern alternative:** [[c-workmanager]] for deferred and guaranteed background work instead of direct long-running started services where appropriate.
 

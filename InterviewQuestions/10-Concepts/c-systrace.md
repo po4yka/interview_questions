@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-190629"
 title: "Systrace / Systrace"
 aliases: ["Systrace"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-android-profiler, c-android-profiling, c-strictmode, c-choreographer, c-anr]
+moc: "moc-cs"
+related: ["c-android-profiler", "c-android-profiling", "c-strictmode", "c-choreographer", "c-anr"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -33,7 +34,7 @@ Systrace — это инструмент системного трассиров
 
 - System-wide view: Captures events from kernel (scheduling, interrupts), system services, and app processes to show how they align on a unified timeline.
 - Performance diagnosis: Useful for analyzing jank, slow UI rendering, GC pauses, long I/O operations, and CPU contention in complex apps.
-- Fine-grained timing: Provides microsecond-level timestamps, enabling precise correlation between app code execution and system activity.
+- Fine-grained timing: `Provides` microsecond-level timestamps, enabling precise correlation between app code execution and system activity.
 - Visual trace format: Exports traces (e.g., HTML or trace files) viewable in tools like Perfetto/Trace Viewer for interactive exploration.
 - Low-level but safe: Lower overhead than heavy profilers when used with appropriate categories and durations, suitable for targeted debugging on real devices.
 

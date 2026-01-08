@@ -1,4 +1,4 @@
----
+---\
 id: algo-002
 title: "Graph Algorithms: BFS and DFS / Алгоритмы графов: BFS и DFS"
 aliases: ["BFS and DFS", "BFS и DFS", "Graph Algorithms", "Алгоритмы графов"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [algorithms, bfs, dfs, difficulty/hard, graphs, traversal]
 sources: ["https://en.wikipedia.org/wiki/Breadth-first_search", "https://en.wikipedia.org/wiki/Depth-first_search"]
 
----
+---\
 # Вопрос (RU)
 > Как работают BFS и DFS? Когда следует использовать каждый? Каковы распространённые задачи и паттерны с графами?
 
@@ -318,7 +318,7 @@ fun dfsIterative(graph: Graph, start: Int) {
 }
 ```
 
-**Shortest Path (BFS on Unweighted Graph):**
+**Shortest `Path` (BFS on Unweighted Graph):**
 ```kotlin
 // Find the length of the shortest path between two nodes in an unweighted graph
 fun shortestPath(graph: Graph, start: Int, end: Int): Int {

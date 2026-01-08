@@ -1,4 +1,4 @@
----
+---\
 id: android-150
 title: What Navigation Methods Do You Know / Какие методы навигации вы знаете
 aliases: [What Navigation Methods Do You Know, Какие методы навигации вы знаете]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/ui-navigation, difficulty/medium, navigation]
 
----
+---\
 # Вопрос (RU)
 
 > Какие способы навигации вы знаете в Android?
@@ -145,14 +145,14 @@ URL-based навигация из внешних источников.
 
 | Паттерн | Случай использования | Компоненты |
 |---------|---------------------|------------|
-| Bottom Navigation | 3-5 основных разделов | BottomNavigationView + Navigation Component |
+| Bottom Navigation | 3-5 основных разделов | BottomNavigationView + Navigation `Component` |
 | Tab Navigation | Связанный контент | ViewPager2 + TabLayout |
 | Drawer Navigation | 6+ разделов или реже используемые разделы | DrawerLayout + NavigationView |
 
 ### Best Practices
 
 1. **Single-`Activity` архитектура** — распространённый современный подход (особенно с фрагментами и Compose), но может сочетаться с несколькими `Activity` при необходимости (auth, onboarding и т.п.).
-2. **Navigation Component** для новых проектов — удобное управление графом, аргументами и back stack.
+2. **Navigation `Component`** для новых проектов — удобное управление графом, аргументами и back stack.
 3. **Правильный back stack** — используйте `popUpTo`, `launchSingleTop` и соответствующие options, чтобы избегать дубликатов экранов и контролировать историю.
 4. **Deep links/App Links** — используйте для улучшения UX и маркетинга; обеспечьте безопасную обработку и корректное восстановление стека.
 
@@ -276,14 +276,14 @@ URL-based navigation from external sources.
 
 | Pattern | Use Case | Components |
 |---------|----------|------------|
-| Bottom Navigation | 3-5 main sections | BottomNavigationView + Navigation Component |
+| Bottom Navigation | 3-5 main sections | BottomNavigationView + Navigation `Component` |
 | Tab Navigation | Related content | ViewPager2 + TabLayout |
 | Drawer Navigation | 6+ or less-frequently used sections | DrawerLayout + NavigationView |
 
 ### Best Practices
 
 1. **Single-`Activity` architecture** — a common modern pattern (especially with Fragments and Compose), but you can still use multiple Activities where it makes sense (e.g., auth/onboarding).
-2. **Navigation Component** for new projects — convenient graph-based navigation, arguments handling, and back stack control.
+2. **Navigation `Component`** for new projects — convenient graph-based navigation, arguments handling, and back stack control.
 3. **Proper back stack** — use `popUpTo`, `launchSingleTop`, and related options to avoid duplicate destinations and to control history.
 4. **Deep links/App Links** — leverage them for better UX and marketing; ensure secure handling and correct task/back stack behavior.
 
@@ -291,7 +291,7 @@ URL-based navigation from external sources.
 
 ## Дополнительные Вопросы (RU)
 
-- Как Navigation Component обрабатывает уничтожение процесса и восстановление состояния?
+- Как Navigation `Component` обрабатывает уничтожение процесса и восстановление состояния?
 - В чём плюсы и минусы архитектуры с одной `Activity` по сравнению с многими `Activity`?
 - Как реализовать вложенные графы навигации для модульных фич?
 - В чём разница между Deep Links и App Links с точки зрения безопасности?
@@ -299,7 +299,7 @@ URL-based navigation from external sources.
 
 ## Follow-ups
 
-- How does Navigation Component handle process death and state restoration?
+- How does Navigation `Component` handle process death and state restoration?
 - What are the trade-offs between single-`Activity` and multi-`Activity` architecture?
 - How to implement nested navigation graphs for modular features?
 - What's the difference between Deep Links and App Links in terms of security?
@@ -307,12 +307,12 @@ URL-based navigation from external sources.
 
 ## Ссылки (RU)
 
-- Документация Android Developers: Navigation Component
+- Документация Android Developers: Navigation `Component`
 - Руководство Android Developers: архитектура с одной `Activity`
 
 ## References
 
-- Android Developer Documentation: Navigation Component
+- Android Developer Documentation: Navigation `Component`
 - Android Developer Guide: Single-`Activity` Architecture
 
 ## Связанные Вопросы (RU)

@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-compose-state, c-jetpack-compose, c-memory-management, q-compose-performance-optimization--android--hard, q-compose-slot-table-recomposition--android--hard, q-compose-stability-skippability--android--hard, q-how-application-priority-is-determined-by-the-system--android--hard, q-sealed-classes-state-management--android--medium, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/performance-memory, android/ui-compose, compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
+tags: [android/performance-memory, android/ui-compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
 sources:
   - https://developer.android.com/jetpack/compose/state
 ---

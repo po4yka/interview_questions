@@ -1,4 +1,4 @@
----
+---\
 id: android-416
 title: SQLDelight в KMM / SQLDelight in KMM
 aliases: [SQLDelight in KMM, SQLDelight в KMM, SQLDelight для мультиплатформы]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [android/kmp, android/room, android/sqldelight, Database, difficulty/medium, KMM, Kotlin, multiplatform, SQLDelight]
----
+---\
 # Вопрос (RU)
 
 > Как использовать SQLDelight для кросс-платформенного управления БД в KMM? Как определять схемы, выполнять миграции, работать с транзакциями и оптимизировать запросы для Android и iOS?
@@ -615,7 +615,7 @@ class TaskRepositoryTest {
 ## Follow-ups
 
 - How to implement full-text search with SQLDelight FTS5 virtual tables?
-- What are the trade-offs between SQLDelight and Room for KMM projects?
+- What are the trade-offs between SQLDelight and `Room` for KMM projects?
 - How to handle schema conflicts during multi-way sync in SQLDelight?
 - How to profile and optimize complex JOIN queries in SQLDelight?
 - How to implement database encryption in KMM using SQLCipher?
@@ -624,7 +624,7 @@ class TaskRepositoryTest {
 
 - SQLDelight official documentation
 - KMM architecture best practices
-- SQLite optimization guide
+- `SQLite` optimization guide
 - Platform-specific database drivers comparison
 
 ## Related Questions

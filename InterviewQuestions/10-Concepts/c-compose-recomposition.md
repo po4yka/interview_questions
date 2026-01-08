@@ -1,13 +1,21 @@
 ---
-id: ivc-20251030-140000
-title: Compose Recomposition / Рекомпозиция в Compose
-aliases: [Compose Recomposition, Recomposition, Перерисовка Compose, Рекомпозиция]
-kind: concept
-summary: Recomposition process in Jetpack Compose - how UI updates in response to state changes
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, jetpack-compose, performance, recomposition, ui]
+id: "20251030-140000"
+title: "Compose Recomposition / Рекомпозиция в Compose"
+aliases: ["Compose Recomposition", "Recomposition", "Перерисовка Compose", "Рекомпозиция"]
+summary: "Recomposition process in Jetpack Compose - how UI updates in response to state changes"
+topic: "android"
+subtopics: ["jetpack-compose", "performance", "recomposition"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: [android, concept, android/ui-compose, performance, recomposition, ui, difficulty/medium]
 ---
 
 # Summary (EN)

@@ -1,4 +1,4 @@
----
+---\
 id: android-313
 title: "Presenter Notify View / Presenter уведомляет View"
 aliases: ["MVP communication", "Presenter Notify View", "Presenter уведомляет View", "Взаимодействие MVP"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback, difficulty/medium, lifecycle, mvp, platform/android, presenter, view]
 
----
+---\
 # Вопрос (RU)
 
 > После получения результата внутри Presenter как сообщить об этом `View`?
@@ -185,7 +185,7 @@ userPresenterLikeViewModel.userState.observe(this) { state ->
 ```
 
 **Преимущества**:
-- Наблюдение привязано к жизненному циклу `View` (через LifecycleOwner)
+- Наблюдение привязано к жизненному циклу `View` (через `LifecycleOwner`)
 - Удобно выражать состояния экрана
 
 **Недостатки**:
@@ -217,9 +217,9 @@ open class BasePresenter<V : BaseView> {
 }
 ```
 
-**WeakReference** — использование `WeakReference<`View`>` внутри Presenter, как правило, не требуется при правильно реализованных `attachView()/detachView()` и может усложнять код или приводить к неожиданным обнулениям. Если и использовать, то осознанно и с пониманием последствий.
+**WeakReference** — использование `WeakReference<``View``>` внутри Presenter, как правило, не требуется при правильно реализованных `attachView()/detachView()` и может усложнять код или приводить к неожиданным обнулениям. Если и использовать, то осознанно и с пониманием последствий.
 
-**Thread safety** — репозиторий и другие источники данных часто вызывают callback из фоновых потоков, поэтому все операции обновления UI должны выполняться на главном потоке:
+**`Thread` safety** — репозиторий и другие источники данных часто вызывают callback из фоновых потоков, поэтому все операции обновления UI должны выполняться на главном потоке:
 
 ```kotlin
 // ✅ Пример (псевдокод): обновление View через Handler главного потока
@@ -395,7 +395,7 @@ userPresenterLikeViewModel.userState.observe(this) { state ->
 ```
 
 **Advantages**:
-- Observer tied to LifecycleOwner (lifecycle-aware observation)
+- `Observer` tied to `LifecycleOwner` (lifecycle-aware observation)
 - Natural way to represent screen states
 
 **Disadvantages**:
@@ -404,7 +404,7 @@ userPresenterLikeViewModel.userState.observe(this) { state ->
 
 ### Important Considerations (Best Practices)
 
-**Lifecycle awareness** — Presenter should handle the fact that the `View` can be destroyed and must not keep a long-lived strong reference to it. For async operations, always work with `view?` and be prepared that by the time the callback fires, the `View` is detached.
+**`Lifecycle` awareness** — Presenter should handle the fact that the `View` can be destroyed and must not keep a long-lived strong reference to it. For async operations, always work with `view?` and be prepared that by the time the callback fires, the `View` is detached.
 
 ```kotlin
 interface BaseView
@@ -427,9 +427,9 @@ open class BasePresenter<V : BaseView> {
 }
 ```
 
-**WeakReference** — using `WeakReference<`View`>` inside Presenter is usually unnecessary when `attachView()/detachView()` are implemented correctly and may complicate code or introduce unexpected nulls. Use only deliberately and with understanding.
+**WeakReference** — using `WeakReference<``View``>` inside Presenter is usually unnecessary when `attachView()/detachView()` are implemented correctly and may complicate code or introduce unexpected nulls. Use only deliberately and with understanding.
 
-**Thread safety** — repositories and other data sources often invoke callbacks on background threads, so all UI updates must be executed on the Main thread:
+**`Thread` safety** — repositories and other data sources often invoke callbacks on background threads, so all UI updates must be executed on the Main thread:
 
 ```kotlin
 // ✅ Example (pseudo-code): post work to main thread handler

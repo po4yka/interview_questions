@@ -1,4 +1,4 @@
----
+---\
 id: dp-010
 title: "Design Patterns Types / Типы паттернов проектирования"
 aliases: [Design Patterns Types, Типы паттернов проектирования]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Какие основные типы паттернов проектирования? Опишите каждую категорию и приведите примеры.
 
@@ -69,10 +69,10 @@ tags: [difficulty/medium]
 | **Chain of Responsibility** | Способ передачи запроса по цепочке обработчиков до тех пор, пока один не обработает его |
 | **Command** | Инкапсулирует запрос (команду) как объект |
 | **Interpreter** | Описывает представление простого языка и интерпретатор для него |
-| **Iterator** | Предоставляет последовательный доступ к элементам коллекции |
+| **`Iterator`** | Предоставляет последовательный доступ к элементам коллекции |
 | **Mediator** | Определяет объект, инкапсулирующий взаимодействия между набором объектов |
 | **Memento** | Захватывает и внешне хранит внутреннее состояние объекта, не нарушая инкапсуляцию |
-| **Observer** | Определяет зависимость один-ко-многим для автоматических уведомлений об изменении состояния |
+| **`Observer`** | Определяет зависимость один-ко-многим для автоматических уведомлений об изменении состояния |
 | **State** | Позволяет объекту изменять поведение при изменении его внутреннего состояния |
 | **Strategy** | Определяет семейство алгоритмов и делает их взаимозаменяемыми |
 | **Template Method** | Определяет скелет алгоритма и делегирует реализацию шагов подклассам |
@@ -190,7 +190,7 @@ class CreatorB : Creator() {
 
 | Паттерн | Описание |
 |---------|----------|
-| **Adapter** | Согласует интерфейс класса с ожидаемым клиентами |
+| **`Adapter`** | Согласует интерфейс класса с ожидаемым клиентами |
 | **Bridge** | Отделяет абстракцию от реализации, позволяя им изменяться независимо |
 | **Composite** | Компонуёт объекты в древовидные структуры для представления иерархий "часть-целое" |
 | **Decorator** | Динамически добавляет объекту новые обязанности |
@@ -234,8 +234,8 @@ class MediaAdapter(private val mp4Player: Mp4Player) : MediaPlayer {
 | Категория | Фокус | Когда использовать | Примеры |
 |-----------|-------|-------------------|---------|
 | **Creational** | Создание объектов | Когда нужно гибкое создание объектов и сокрытие конкретных типов | Singleton, Factory Method, Builder |
-| **Structural** | Композиция объектов | Когда нужно компоновать объекты в более крупные и гибкие структуры | Adapter, Decorator, Facade |
-| **Behavioral** | Взаимодействие объектов | Когда нужно определить или варьировать взаимодействия и распределение обязанностей | Observer, Strategy, Command |
+| **Structural** | Композиция объектов | Когда нужно компоновать объекты в более крупные и гибкие структуры | `Adapter`, Decorator, Facade |
+| **Behavioral** | Взаимодействие объектов | Когда нужно определить или варьировать взаимодействия и распределение обязанностей | `Observer`, Strategy, Command |
 
 ## Gang of Four (GoF)
 
@@ -257,7 +257,7 @@ class MediaAdapter(private val mp4Player: Mp4Player) : MediaPlayer {
 - Не используйте паттерны только чтобы продемонстрировать знания
 - Не используйте паттерны, если команда их не понимает
 
-Резюме: Паттерны проектирования — это общие, переиспользуемые решения часто встречающихся проблем в разработке ПО. В классификации GoF они разделены на три фундаментальные группы: (1) Поведенческие — фокус на взаимодействиях и распределении обязанностей между объектами (Observer, Strategy, Command и т.д.), (2) Порождающие — фокус на механизмах создания объектов (Singleton, Factory Method, Builder и т.д.), (3) Структурные — фокус на композиции объектов в более крупные структуры (Adapter, Decorator, Facade и т.д.). Паттерны предоставляют проверенные парадигмы разработки, улучшают коммуникацию в команде и могут ускорять разработку. Оригинальные 23 паттерна описаны Gang of Four в 1994 году.
+Резюме: Паттерны проектирования — это общие, переиспользуемые решения часто встречающихся проблем в разработке ПО. В классификации GoF они разделены на три фундаментальные группы: (1) Поведенческие — фокус на взаимодействиях и распределении обязанностей между объектами (`Observer`, Strategy, Command и т.д.), (2) Порождающие — фокус на механизмах создания объектов (Singleton, Factory Method, Builder и т.д.), (3) Структурные — фокус на композиции объектов в более крупные структуры (`Adapter`, Decorator, Facade и т.д.). Паттерны предоставляют проверенные парадигмы разработки, улучшают коммуникацию в команде и могут ускорять разработку. Оригинальные 23 паттерна описаны Gang of Four в 1994 году.
 
 ---
 
@@ -304,10 +304,10 @@ Purpose:
 | **Chain of Responsibility** | Pass a request along a chain of handlers until one handles it |
 | **Command** | Encapsulate a request as an object |
 | **Interpreter** | Define a representation for a simple language and an interpreter for it |
-| **Iterator** | Provide sequential access to the elements of a collection |
+| **`Iterator`** | Provide sequential access to the elements of a collection |
 | **Mediator** | Define an object that encapsulates how a set of objects interact |
 | **Memento** | Capture and externalize an object's internal state without violating encapsulation |
-| **Observer** | Define a one-to-many dependency so that dependents are notified automatically of state changes |
+| **`Observer`** | Define a one-to-many dependency so that dependents are notified automatically of state changes |
 | **State** | Allow an object to alter its behavior when its internal state changes |
 | **Strategy** | Define a family of algorithms and make them interchangeable |
 | **Template Method** | Define the skeleton of an algorithm and let subclasses redefine certain steps |
@@ -425,7 +425,7 @@ Purpose:
 
 | Pattern | Description |
 |---------|-------------|
-| **Adapter** | Convert the interface of a class into another interface clients expect |
+| **`Adapter`** | Convert the interface of a class into another interface clients expect |
 | **Bridge** | Decouple an abstraction from its implementation so the two can vary independently |
 | **Composite** | Compose objects into tree structures to represent part-whole hierarchies |
 | **Decorator** | Attach additional responsibilities to an object dynamically |
@@ -469,8 +469,8 @@ class MediaAdapter(private val mp4Player: Mp4Player) : MediaPlayer {
 | Category | Focus | When to Use | Examples |
 |----------|-------|-------------|----------|
 | **Creational** | Object creation | When you need flexible object instantiation and want to hide concrete types | Singleton, Factory Method, Builder |
-| **Structural** | Object composition | When you need to compose objects into larger, flexible structures | Adapter, Decorator, Facade |
-| **Behavioral** | Object interaction | When you need to define or vary how objects communicate and distribute responsibilities | Observer, Strategy, Command |
+| **Structural** | Object composition | When you need to compose objects into larger, flexible structures | `Adapter`, Decorator, Facade |
+| **Behavioral** | Object interaction | When you need to define or vary how objects communicate and distribute responsibilities | `Observer`, Strategy, Command |
 
 ## Gang of Four (GoF)
 
@@ -492,7 +492,7 @@ When NOT to use:
 - Don't use patterns just to show off knowledge
 - Don't use patterns if the team doesn't understand them
 
-Summary: Design patterns are general, reusable solutions to commonly occurring problems in software design. In the GoF classification, they are divided into three fundamental groups: (1) Behavioral — focus on object interactions and communication (Observer, Strategy, Command, etc.), (2) Creational — focus on object creation mechanisms (Singleton, Factory Method, Builder, etc.), (3) Structural — focus on composing objects into larger structures (Adapter, Decorator, Facade, etc.). Patterns provide proven development paradigms, improve communication, and can speed up development. The original 23 patterns were documented by the Gang of Four (GoF) in 1994.
+Summary: Design patterns are general, reusable solutions to commonly occurring problems in software design. In the GoF classification, they are divided into three fundamental groups: (1) Behavioral — focus on object interactions and communication (`Observer`, Strategy, Command, etc.), (2) Creational — focus on object creation mechanisms (Singleton, Factory Method, Builder, etc.), (3) Structural — focus on composing objects into larger structures (`Adapter`, Decorator, Facade, etc.). Patterns provide proven development paradigms, improve communication, and can speed up development. The original 23 patterns were documented by the Gang of Four (GoF) in 1994.
 
 ---
 

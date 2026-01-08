@@ -1,4 +1,4 @@
----
+---\
 id: android-365
 title: Pass Large Data Between Activities / Передача больших данных между Activity
 aliases: [Content URI, FileProvider, Large Data Transfer, Pass Large Data Between Activities, Передача больших данных между Activity]
@@ -19,7 +19,7 @@ sources:
   - "https://developer.android.com/training/secure-file-sharing"
 tags: [android/activity, android/content-provider, android/intents-deeplinks, binder, difficulty/hard, file-provider, ipc]
 
----
+---\
 # Вопрос (RU)
 
 > Как правильно передать большой объем данных (например, изображение) между `Activity`?
@@ -179,7 +179,7 @@ class ReceiverFragment : Fragment() {
 
 **✅ Преимущества:**
 - Просто для навигации внутри одного host `Activity`
-- Lifecycle-aware
+- `Lifecycle`-aware
 
 **❌ Недостатки:**
 - Только в рамках одного процесса
@@ -472,7 +472,7 @@ class ReceiverFragment : Fragment() {
 
 **✅ Pros:**
 - Simple for multiple screens within one host `Activity`
-- Lifecycle-aware
+- `Lifecycle`-aware
 
 **❌ Cons:**
 - Single-process only
@@ -613,7 +613,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - Manages temporary permissions via `FLAG_GRANT_*_URI_PERMISSION`
 - Prevents `FileUriExposedException` on Android 7.0+
 
-**`ViewModel` Lifecycle:**
+**`ViewModel` `Lifecycle`:**
 - Survives configuration changes within its owner (`Activity`/`Fragment`)
 - Does not survive process death
 - Cleared when the owning scope is finished; not a long-term storage for large data

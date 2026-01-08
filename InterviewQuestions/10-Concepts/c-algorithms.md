@@ -1,4 +1,4 @@
----
+---\
 id: "20251012-000000"
 title: "Algorithms / Алгоритмы"
 aliases: []
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: [c-data-structures, c-sorting-algorithms, c-binary-search, c-dynamic-programming, c-backtracking-algorithm]
+related: ["c-data-structures", "c-sorting-algorithms", "c-binary-search", "c-dynamic-programming", "c-backtracking-algorithm"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["algorithms", "big-o", "complexity", "concept", "difficulty/medium", "searching", "sorting"]
----
+---\
 
 # Summary (EN)
 
@@ -184,7 +184,7 @@ fun binarySearch(list: List<Int>, target: Int): Int {
 - Memoization or tabulation
 
 ### Greedy
-- Activity selection, Huffman coding
+- `Activity` selection, Huffman coding
 - Make locally optimal choice
 - Hope for global optimum
 

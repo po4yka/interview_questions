@@ -1,4 +1,4 @@
----
+---\
 id: android-439
 title: Dagger Build Time Optimization / Оптимизация времени сборки Dagger
 aliases: [Dagger Build Time Optimization, Оптимизация времени сборки Dagger]
@@ -16,16 +16,16 @@ updated: 2025-11-10
 tags: [android/di-hilt, android/gradle, difficulty/medium]
 sources:
   - "https://dagger.dev/hilt/"
----
+---\
 # Вопрос (RU)
-> Как минимизировать влияние Dagger на время сборки?
+> Как минимизировать влияние `Dagger` на время сборки?
 
 # Question (EN)
-> How to minimize Dagger's impact on build time?
+> How to minimize `Dagger`'s impact on build time?
 
 ## Ответ (RU)
 
-Dagger генерирует код через annotation processing (kapt/ksp), что замедляет инкрементальные сборки. Ключевые стратегии оптимизации: миграция на Hilt (там, где это уместно), модуляризация, аккуратное использование scopes (не раздувать Singleton-граф), и переход на KSP вместо KAPT.
+`Dagger` генерирует код через annotation processing (kapt/ksp), что замедляет инкрементальные сборки. Ключевые стратегии оптимизации: миграция на `Hilt` (там, где это уместно), модуляризация, аккуратное использование scopes (не раздувать Singleton-граф), и переход на KSP вместо KAPT.
 
 Связано с концепциями [[c-dependency-injection]], [[c-gradle]].
 
@@ -43,7 +43,7 @@ Dagger генерирует код через annotation processing (kapt/ksp), 
 
 ### Практические Стратегии
 
-**1. Hilt вместо ручного Dagger, где возможно**
+**1. `Hilt` вместо ручного `Dagger`, где возможно**
 ```kotlin
 // ✅ Минимум boilerplate, оптимизированная генерация
 @AndroidEntryPoint
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Предпочитайте @Binds над @Provides для интерфейсных зависимостей**
+**2. Предпочитайте @Binds над @`Provides` для интерфейсных зависимостей**
 ```kotlin
 @Module
 abstract class DataModule {
@@ -62,7 +62,7 @@ abstract class DataModule {
 ```
 
 **3. Миграция на KSP**
-KSP обычно быстрее KAPT для annotation processing и лучше поддерживает инкрементальность. Hilt поддерживает KSP начиная с соответствующих версий плагина и библиотек; при миграции нужно проверить совместимость версий AGP/Dagger/Hilt.
+KSP обычно быстрее KAPT для annotation processing и лучше поддерживает инкрементальность. `Hilt` поддерживает KSP начиная с соответствующих версий плагина и библиотек; при миграции нужно проверить совместимость версий AGP/Dagger/Hilt.
 
 **4. Корректная работа со scope и графами**
 - Не складывайте весь граф в один `@Singleton`-компонент; выносите фичи в отдельные компоненты/модули
@@ -91,7 +91,7 @@ kapt {
 
 ## Answer (EN)
 
-Dagger generates code via annotation processing (kapt/ksp), which can slow down incremental builds. Key optimization strategies: migrate to Hilt where appropriate, design proper modularization, use scopes carefully (avoid an oversized Singleton graph), and switch from KAPT to KSP.
+`Dagger` generates code via annotation processing (kapt/ksp), which can slow down incremental builds. Key optimization strategies: migrate to `Hilt` where appropriate, design proper modularization, use scopes carefully (avoid an oversized Singleton graph), and switch from KAPT to KSP.
 
 Related to concepts [[c-dependency-injection]], [[c-gradle]].
 
@@ -109,7 +109,7 @@ Related to concepts [[c-dependency-injection]], [[c-gradle]].
 
 ### Practical Strategies
 
-**1. Hilt Over Manual Dagger Where It Fits**
+**1. `Hilt` Over Manual `Dagger` Where It Fits**
 ```kotlin
 // ✅ Minimal boilerplate, optimized generation
 @AndroidEntryPoint
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Prefer @Binds Over @Provides for Interface Bindings**
+**2. Prefer @Binds Over @`Provides` for Interface Bindings**
 ```kotlin
 @Module
 abstract class DataModule {
@@ -128,7 +128,7 @@ abstract class DataModule {
 ```
 
 **3. Migrate to KSP**
-KSP is typically faster than KAPT for annotation processing and offers better incremental behavior. Hilt supports KSP starting from compatible versions of the Hilt Gradle plugin and libraries; verify AGP/Dagger/Hilt versions when migrating.
+KSP is typically faster than KAPT for annotation processing and offers better incremental behavior. `Hilt` supports KSP starting from compatible versions of the `Hilt` Gradle plugin and libraries; verify AGP/Dagger/Hilt versions when migrating.
 
 **4. Scope and Graph Design**
 - Avoid putting everything into a single `@Singleton` component; split features into dedicated components/modules
@@ -159,13 +159,13 @@ Use Android Studio Build Analyzer or `./gradlew build --scan` to profile kapt/ks
 
 - Какова конкретная разница в производительности между KAPT и KSP для Dagger/Hilt?
 - В каких случаях не стоит использовать Singleton scope с точки зрения оптимизации времени сборки?
-- Как модуляризация влияет на генерацию кода Dagger?
+- Как модуляризация влияет на генерацию кода `Dagger`?
 
 ## Follow-ups
 
 - What is the specific performance difference between KAPT and KSP for Dagger/Hilt?
 - When should you avoid using Singleton scope for build time optimization?
-- How does modularization impact Dagger's code generation?
+- How does modularization impact `Dagger`'s code generation?
 
 ## Ссылки (RU)
 

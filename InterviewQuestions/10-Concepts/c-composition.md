@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-081037"
 title: "Composition / Composition"
 aliases: ["Composition"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-oop-concepts, c-aggregation, c-inheritance, c-oop-principles, c-design-patterns]
+moc: "moc-cs"
+related: ["c-oop-concepts", "c-aggregation", "c-inheritance", "c-oop-principles", "c-design-patterns"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -35,7 +36,7 @@ Composition is a design principle where complex behavior or structures are built
 - Object composition: One object holds references to other objects (has-a relationship) and delegates work to them, enabling easy replacement, testing, and runtime configuration.
 - Function composition: Building complex operations by chaining simpler pure functions, improving readability, reuse, and reasoning about data flow.
 - Encapsulation and flexibility: Implementation details remain hidden behind interfaces, allowing behavior changes without breaking callers.
-- Use in design patterns: Core to patterns like Strategy, Decorator, Adapter, and Builder, which assemble behavior through composed objects.
+- Use in design patterns: Core to patterns like Strategy, Decorator, `Adapter`, and Builder, which assemble behavior through composed objects.
 
 ## Ключевые Моменты (RU)
 
@@ -43,7 +44,7 @@ Composition is a design principle where complex behavior or structures are built
 - Объектная композиция: Объект содержит ссылки на другие объекты (отношение has-a) и делегирует им работу, что упрощает подмену, тестирование и конфигурацию во время выполнения.
 - Композиция функций: Построение сложных операций путём последовательного применения простых чистых функций, улучшая читаемость, переиспользование и понимание потока данных.
 - Инкапсуляция и гибкость: Детали реализации скрыты за интерфейсами, поэтому поведение можно менять без нарушения кода, который использует компонент.
-- Использование в шаблонах проектирования: Лежит в основе паттернов Strategy, Decorator, Adapter и Builder, которые формируют поведение через композицию объектов.
+- Использование в шаблонах проектирования: Лежит в основе паттернов Strategy, Decorator, `Adapter` и Builder, которые формируют поведение через композицию объектов.
 
 ## References
 

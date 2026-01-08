@@ -1,4 +1,4 @@
----
+---\
 id: android-191
 title: Compose Multiplatform / Compose Multiplatform
 aliases: [Compose Multiplatform, KMP Compose]
@@ -14,9 +14,9 @@ related: [c-jetpack-compose, q-compose-compiler-plugin--android--hard, q-compose
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/compose-multiplatform, android/ui-compose, compose, difficulty/hard, multiplatform]
+tags: [android/compose-multiplatform, android/ui-compose, difficulty/hard, multiplatform]
 
----
+---\
 # Вопрос (RU)
 > Что такое Compose Multiplatform и как реализовать кроссплатформенную UI-архитектуру?
 
@@ -275,7 +275,7 @@ fun main() = application {
 
 **Web**:
 - Canvas/DOM/WASM-based implementations → potential challenges with accessibility and SEO
-- Bundle size: typically a few megabytes or more (depends on target, optimizations, and dependencies)
+- `Bundle` size: typically a few megabytes or more (depends on target, optimizations, and dependencies)
 
 **Desktop**:
 - Differences in windowing APIs across `macOS`/`Windows`/`Linux`

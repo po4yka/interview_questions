@@ -1,11 +1,11 @@
----
+---\
 name: vault-health-report
 description: >
   Generate comprehensive vault health report with statistics and issue detection.
   Counts notes by topic, difficulty, status. Identifies YAML issues, orphaned notes,
   broken links, and translation coverage. Produces actionable markdown summary for
   vault maintenance and quality monitoring.
----
+---\
 
 # Vault Health Report
 
@@ -389,7 +389,7 @@ Display report directly in chat (default)
 
 ### File Output
 Save report to file:
-- Path: `00-Administration/Reports/vault-health-YYYY-MM-DD.md`
+- `Path`: `00-Administration/Reports/vault-health-YYYY-MM-DD.md`
 - Creates dated snapshot for tracking trends
 
 ### Summary Only

@@ -14,7 +14,7 @@ related: [c-compose-recomposition, q-compose-stability-skippability--android--ha
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immutability, jetpack-compose, recomposition, stability]
+tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immutability, recomposition, stability]
 
 ---
 # Вопрос (RU)

@@ -1,4 +1,4 @@
----
+---\
 id: android-356
 title: What Is The Difference Between FragmentManager And FragmentTransaction
 aliases: [FragmentManager vs FragmentTransaction, Разница между FragmentManager и FragmentTransaction]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/medium, fragmentmanager, fragments, fragmenttransaction]
 
----
+---\
 # Вопрос (RU)
 
 > В чём разница между FragmentManager и FragmentTransaction?
@@ -245,7 +245,7 @@ transaction.commitNowAllowingStateLoss()
 ### Related (Medium)
 - [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` lifecycle
 - [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - State loss
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
 
 ### Advanced (Harder)
 - [[q-fragments-history-and-purpose--android--hard]] - `Fragment` design rationale

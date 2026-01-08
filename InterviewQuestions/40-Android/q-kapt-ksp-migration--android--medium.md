@@ -1,4 +1,4 @@
----
+---\
 id: android-056
 title: KAPT to KSP Migration Guide / Руководство по миграции с KAPT на KSP
 aliases: [KAPT to KSP Migration Guide, Руководство по миграции с KAPT на KSP]
@@ -17,7 +17,7 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [android/performance-startup, annotation-processing, difficulty/medium, en, kapt, ksp, ru]
 
----
+---\
 # Вопрос (RU)
 > Подробно сравните KAPT и KSP для обработки аннотаций. Мигрируйте зависимости библиотек с KAPT на KSP. Измерьте и задокументируйте улучшения времени сборки.
 
@@ -98,9 +98,9 @@ Kotlin Source (.kt)
 
 **Тестовый проект:**
 - 50 исходных файлов
-- БД Room (5 сущностей, 3 DAO)
-- Hilt (10 модулей)
-- Moshi (15 data-классов)
+- БД `Room` (5 сущностей, 3 DAO)
+- `Hilt` (10 модулей)
+- `Moshi` (15 data-классов)
 
 **KAPT (пример):**
 ```text
@@ -125,7 +125,7 @@ Kotlin Source (.kt)
 Улучшение: ~47.7% быстрее в данном сценарии (89.5с → 46.8с)
 ```
 
-Типичные реальные улучшения при миграции основных процессоров (Room, некоторые реализации Dagger, Moshi и др., если у них есть реализация на KSP) находятся примерно в диапазоне 20–50%, но всегда проверяйте на своём проекте.
+Типичные реальные улучшения при миграции основных процессоров (`Room`, некоторые реализации `Dagger`, `Moshi` и др., если у них есть реализация на KSP) находятся примерно в диапазоне 20–50%, но всегда проверяйте на своём проекте.
 
 ### Полное Руководство По Миграции
 
@@ -151,7 +151,7 @@ Kotlin Source (.kt)
 
 Пример для Gradle Kotlin DSL.
 
-Важно: ниже показан образец миграции. Конкретные координаты артефактов для KSP (особенно для Dagger/Hilt и Moshi) необходимо брать из официальной документации; не все предыдущие kapt-артефакты можно просто заменить на `ksp(...)`.
+Важно: ниже показан образец миграции. Конкретные координаты артефактов для KSP (особенно для Dagger/Hilt и `Moshi`) необходимо брать из официальной документации; не все предыдущие kapt-артефакты можно просто заменить на `ksp(...)`.
 
 **До: конфигурация KAPT**
 
@@ -202,7 +202,7 @@ plugins {
 }
 ```
 
-**build.gradle.kts (app-модуль, пример: Room и Dagger core через KSP, Hilt частично на KAPT при необходимости):**
+**build.gradle.kts (app-модуль, пример: `Room` и `Dagger` core через KSP, `Hilt` частично на KAPT при необходимости):**
 ```kotlin
 plugins {
     id("com.android.application")
@@ -288,7 +288,7 @@ rm -rf build/generated/source/kapt/
 
 - [ ] Обновить project-level build.gradle (добавить плагин KSP)
 - [ ] Обновить app-level build.gradle (подключить KSP и оставить KAPT только для неподдерживаемых процессоров)
-- [ ] Перевести зависимости с `kapt(...)` на `ksp(...)` только для тех библиотек, у которых есть официальные KSP-артефакты (например, Dagger core, Room, Moshi)
+- [ ] Перевести зависимости с `kapt(...)` на `ksp(...)` только для тех библиотек, у которых есть официальные KSP-артефакты (например, `Dagger` core, `Room`, `Moshi`)
 - [ ] Настроить аргументы KSP (например, `room.schemaLocation`) согласно документации
 - [ ] Убедиться, что IDE/Gradle видят сгенерированные исходники
 - [ ] Очистить результаты сборки
@@ -494,9 +494,9 @@ Illustrative synthetic benchmark (not a guarantee; measure in your project):
 
 **Benchmark project:**
 - 50 source files
-- Room database (5 entities, 3 DAOs)
-- Hilt dependency injection (10 modules)
-- Moshi JSON parsing (15 data classes)
+- `Room` database (5 entities, 3 DAOs)
+- `Hilt` dependency injection (10 modules)
+- `Moshi` JSON parsing (15 data classes)
 
 **KAPT results (example):**
 ```text
@@ -521,7 +521,7 @@ Total build: 46.8s
 Improvement: ~47.7% faster in this setup (89.5s → 46.8s)
 ```
 
-Typical real-world improvements reported by projects migrating major processors (Room, Dagger core, Moshi etc. where KSP implementations exist) range roughly 20–50%, but always validate with your own measurements.
+Typical real-world improvements reported by projects migrating major processors (`Room`, `Dagger` core, `Moshi` etc. where KSP implementations exist) range roughly 20–50%, but always validate with your own measurements.
 
 ### Complete Migration Guide
 
@@ -598,7 +598,7 @@ plugins {
 }
 ```
 
-**build.gradle.kts (app module; example: Room and Dagger core on KSP, Hilt partly on KAPT):**
+**build.gradle.kts (app module; example: `Room` and `Dagger` core on KSP, `Hilt` partly on KAPT):**
 ```kotlin
 plugins {
     id("com.android.application")
@@ -683,7 +683,7 @@ rm -rf build/generated/source/kapt/
 
 - [ ] Update project-level build.gradle (add KSP plugin)
 - [ ] Update app-level build.gradle (enable KSP; keep KAPT only for unsupported processors)
-- [ ] Migrate `kapt(...)` dependencies to `ksp(...)` only where official KSP artifacts exist (e.g., Room, Dagger core, Moshi)
+- [ ] Migrate `kapt(...)` dependencies to `ksp(...)` only where official KSP artifacts exist (e.g., `Room`, `Dagger` core, `Moshi`)
 - [ ] Configure KSP arguments (e.g., `room.schemaLocation`) per library docs
 - [ ] Ensure generated sources are visible to IDE/build
 - [ ] Clean build outputs
@@ -851,7 +851,7 @@ ksp {
 - https://kotlinlang.org/docs/ksp-quickstart.html
 - https://developer.android.com/jetpack/androidx/releases/room#ksp
 - https://dagger.dev/dev-guide/ksp.html
-- Официальная документация используемых библиотек (Room, Dagger/Hilt, Moshi и др.) для актуальных артефактов KSP
+- Официальная документация используемых библиотек (`Room`, Dagger/Hilt, `Moshi` и др.) для актуальных артефактов KSP
 
 ## References (EN)
 
@@ -859,7 +859,7 @@ ksp {
 - https://kotlinlang.org/docs/ksp-quickstart.html
 - https://developer.android.com/jetpack/androidx/releases/room#ksp
 - https://dagger.dev/dev-guide/ksp.html
-- Official docs for the libraries you use (Room, Dagger/Hilt, Moshi, etc.) for up-to-date KSP artifacts
+- Official docs for the libraries you use (`Room`, Dagger/Hilt, `Moshi`, etc.) for up-to-date KSP artifacts
 
 ## Связанные Вопросы (RU)
 

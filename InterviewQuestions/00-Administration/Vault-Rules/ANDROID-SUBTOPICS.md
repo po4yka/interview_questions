@@ -1,5 +1,5 @@
----
----
+---\
+---\
 
 # Android Subtopics (Controlled List)
 
@@ -205,7 +205,7 @@ ab-testing              # A/B testing, experiments
 |----------|-----------|
 | **UI** | ui-compose, ui-views, ui-navigation, ui-state, ui-animation |
 | **Architecture** | architecture-mvvm, architecture-mvi, di-hilt, di-koin |
-| **Lifecycle** | lifecycle, activity, fragment, service |
+| **`Lifecycle`** | lifecycle, activity, fragment, service |
 | **Concurrency** | coroutines, flow, threads-sync |
 | **Data** | room, datastore, serialization |
 | **Network** | networking-http, websockets, graphql |

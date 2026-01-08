@@ -1,4 +1,4 @@
----
+---\
 id: lang-016
 title: "Hot Vs Cold Flows / Горячие и холодные потоки"
 aliases: [Hot Vs Cold Flows, Горячие и холодные потоки]
@@ -14,7 +14,7 @@ related: [c-flow, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive]
----
+---\
 # Вопрос (RU)
 > В чем разница между Hot и Cold Flows?
 
@@ -612,7 +612,7 @@ class ViewModel {
 
 ### Summary Table
 
-| Feature | Cold Flow | Hot Flow |
+| Feature | Cold `Flow` | Hot `Flow` |
 |---------|-----------|----------|
 | Start behavior | Starts on collection (lazy) | Producer active based on its own scope/lifecycle, not per collector |
 | Execution | New execution per collector | Shared execution for all collectors |

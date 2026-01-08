@@ -1,4 +1,4 @@
----
+---\
 id: android-095
 title: "LeakCanary Detection Mechanism / Механизм обнаружения LeakCanary"
 aliases: ["How LeakCanary Detects Memory Leaks", "LeakCanary Detection Mechanism", "Как LeakCanary обнаруживает утечки памяти", "Механизм обнаружения LeakCanary"]
@@ -16,7 +16,7 @@ moc: moc-android
 related: [c-android-profiler, q-android-performance-measurement-tools--android--medium]
 sources: ["https://square.github.io/leakcanary/"]
 
----
+---\
 # Вопрос (RU)
 
 > Как LeakCanary обнаруживает утечки памяти?
@@ -144,7 +144,7 @@ LeakCanary detects memory leaks by observing lifecycle events, tracking objects 
 
 **Detection Process (simplified):**
 
-**1. Lifecycle Integration**
+**1. `Lifecycle` Integration**
 
 LeakCanary automatically hooks into `Activity` and `Fragment` lifecycles (e.g., via `ActivityLifecycleCallbacks` and `FragmentLifecycleCallbacks`) and other relevant points. When a component is expected to be released (e.g., in `Activity.onDestroy()`), it is registered with `ObjectWatcher`:
 

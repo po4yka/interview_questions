@@ -1,4 +1,4 @@
----
+---\
 id: android-166
 title: Mlkit Face Detection / Распознавание лиц ML Kit
 aliases: [ML Kit Face Detection, Распознавание лиц ML Kit]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-11
 tags: [android/camera, android/performance-rendering, android/ui-graphics, difficulty/medium, face-detection, kotlin, machine-learning]
----
+---\
 # Вопрос (RU)
 > Объясните как реализовать детекцию и анализ лиц с помощью ML Kit. Как детектировать лица, landmarks, контуры и классифицировать выражения лица? Каковы best practices для real-time отслеживания, оптимизации производительности и приватности?
 
@@ -160,7 +160,7 @@ val analyzer = ImageAnalysis.Builder()
 **Best Practices**:
 1. Троттлить обработку кадров (например, до ~10 FPS) или использовать STRATEGY_KEEP_ONLY_LATEST вместо обработки каждого кадра.
 2. Уменьшать разрешение предварительного просмотра/анализа до разумного уровня (например, около 480x640), сохранять баланс качество/скорость.
-3. Выполнять обработку на background-потоках (Dispatchers.Default/IO или собственный Executor), не блокировать main thread.
+3. Выполнять обработку на background-потоках (Dispatchers.Default/IO или собственный `Executor`), не блокировать main thread.
 4. Переиспользовать один экземпляр детектора и освобождать ресурсы (close()) при завершении (например, в onCleared()/onDestroy()).
 5. Использовать FAST для real-time, ACCURATE для одиночных кадров/фото, избегать включения всех фич (landmarks, contours, classification), если они не нужны.
 
@@ -373,7 +373,7 @@ val analyzer = ImageAnalysis.Builder()
 **Best Practices**:
 1. Throttle processing (e.g., ~10 FPS) or rely on STRATEGY_KEEP_ONLY_LATEST instead of processing every frame.
 2. Use a reasonable lower resolution (e.g., around 480x640) for analysis to balance speed and accuracy.
-3. Run detection on background threads (Dispatchers.Default/IO or a custom Executor); avoid blocking the main thread.
+3. Run detection on background threads (Dispatchers.Default/IO or a custom `Executor`); avoid blocking the main thread.
 4. Reuse a single detector instance and close it when no longer needed (e.g., in onCleared()/onDestroy()).
 5. Use FAST for real-time streams and ACCURATE for single images; enable landmarks/contours/classification only when necessary.
 

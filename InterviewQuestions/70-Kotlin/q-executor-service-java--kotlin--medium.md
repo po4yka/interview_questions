@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-218
 title: "ExecutorService in Java: How It Works / ExecutorService в Java: как это работает"
 aliases: [Executor, ExecutorService, Java]
@@ -14,14 +14,14 @@ related: [c-java-features, c-kotlin, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]
----
+---\
 # Вопрос (RU)
-> Как работают Executor и ExecutorService в Java?
+> Как работают `Executor` и ExecutorService в Java?
 
 ---
 
 # Question (EN)
-> How do Executor and ExecutorService work in Java?
+> How do `Executor` and ExecutorService work in Java?
 
 ## Ответ (RU)
 
@@ -499,7 +499,7 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(
 
 ## Answer (EN)
 
-Executor is an interface from `java.util.concurrent` with a single `execute(Runnable)` method that decouples task submission from execution.
+`Executor` is an interface from `java.util.concurrent` with a single `execute(Runnable)` method that decouples task submission from execution.
 
 ### 1. Basic Executor Interface
 
@@ -528,7 +528,7 @@ executor.execute(() -> System.out.println("Task executed"));
 
 ### 2. ExecutorService
 
-ExecutorService extends Executor and adds lifecycle management and result-bearing task APIs.
+ExecutorService extends `Executor` and adds lifecycle management and result-bearing task APIs.
 
 ```java
 public interface ExecutorService extends Executor {
@@ -851,7 +851,7 @@ class UserRepository(private val apiService: ApiService) {
 | Type | Threads | Use Case | Advantages |
 |------|---------|----------|------------|
 | FixedThreadPool | Fixed number | Limit parallelism | Resource control |
-| CachedThreadPool | Dynamic | Many short tasks | Thread reuse |
+| CachedThreadPool | Dynamic | Many short tasks | `Thread` reuse |
 | SingleThreadExecutor | 1 | Sequential execution | Ordering guarantees |
 | ScheduledThreadPool | Fixed number | Delayed/periodic tasks | Scheduling support |
 

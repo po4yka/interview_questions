@@ -1,4 +1,4 @@
----
+---\
 id: android-305
 title: Push Notification Navigation / Навигация из push уведомлений
 aliases: [FCM Navigation, Navigation from Notifications, Push Notification Navigation, Навигация из push уведомлений]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/notifications, android/ui-navigation, deeplink, difficulty/medium, fcm, navigation, notifications]
 
----
+---\
 # Вопрос (RU)
 
 > Как открыть конкретную `Activity` или `Fragment` из push-уведомления?
@@ -184,7 +184,7 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 ✅ **Правильно**: `TaskStackBuilder` создает корректный back stack для цепочки `Activity`.
 ❌ **Замечание**: Переход напрямую на `DetailActivity` без родительского экрана технически возможен, но приведет к тому, что кнопка Back закроет приложение вместо возврата на список; `TaskStackBuilder` решает этот UX-вопрос.
 
-(Если используется Navigation Component и фрагменты внутри одной `Activity`, back stack управляется `NavController`, и `TaskStackBuilder` применяется к `Activity`, а не к отдельным `Fragment`.)
+(Если используется Navigation `Component` и фрагменты внутри одной `Activity`, back stack управляется `NavController`, и `TaskStackBuilder` применяется к `Activity`, а не к отдельным `Fragment`.)
 
 **Объяснение**:
 1. FCM `Service` получает сообщение и парсит data payload.
@@ -351,7 +351,7 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 ✅ **Correct**: `TaskStackBuilder` creates a proper back stack for `Activities`.
 ❌ **Note**: Navigating directly to `DetailActivity` without its parent is technically valid but results in Back closing the app instead of returning to the list; `TaskStackBuilder` is recommended to provide a better UX.
 
-(When using the Navigation Component with a single-`Activity`, multi-`Fragment` setup, `NavController` manages the fragment back stack; `TaskStackBuilder` is for `Activities`, not individual fragment destinations.)
+(When using the Navigation `Component` with a single-`Activity`, multi-`Fragment` setup, `NavController` manages the fragment back stack; `TaskStackBuilder` is for `Activities`, not individual fragment destinations.)
 
 **Explanation**:
 1. FCM service receives the message and parses the data payload.
@@ -389,7 +389,7 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 
 - [Android Notification Guide](https://developer.android.com/develop/ui/views/notifications)
 - [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging)
-- [Navigation Component Deep Links](https://developer.android.com/guide/navigation/navigation-deep-link)
+- [Navigation `Component` Deep Links](https://developer.android.com/guide/navigation/navigation-deep-link)
 - [TaskStackBuilder Documentation](https://developer.android.com/reference/androidx/core/app/TaskStackBuilder)
 
 ## Связанные Вопросы (RU)

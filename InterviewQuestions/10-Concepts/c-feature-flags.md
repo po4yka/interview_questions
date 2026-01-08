@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-150359"
 title: "Feature Flags / Feature Flags"
 aliases: ["Feature Flags"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-ci-cd]
+moc: "moc-cs"
+related: ["c-ci-cd"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -35,7 +36,7 @@ Feature flags (feature toggles, фиче-флаги) — это техника, 
 - Safe rollback: Disable a feature instantly via configuration if issues appear in production, without hotfix builds or redeploys.
 - Experimentation: Support A/B testing and canary releases by routing different users to different behaviors under separate flags.
 - Configuration-driven: Implemented via configuration files, remote config services, or dedicated flag platforms; must be designed for low latency and high availability.
-- Lifecycle & tech debt: Flags should have clear ownership and expiry; long-lived or forgotten flags complicate code, tests, and reasoning.
+- `Lifecycle` & tech debt: Flags should have clear ownership and expiry; long-lived or forgotten flags complicate code, tests, and reasoning.
 
 ## Ключевые Моменты (RU)
 

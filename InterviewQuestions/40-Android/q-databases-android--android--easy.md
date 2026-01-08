@@ -1,4 +1,4 @@
----
+---\
 id: android-475
 title: Databases Android / Базы данных в Android
 aliases: [Databases Android, Базы данных в Android]
@@ -17,7 +17,7 @@ tags: [android/datastore, android/room, database, difficulty/easy]
 sources:
   - "https://developer.android.com/training/data-storage"
 
----
+---\
 # Вопрос (RU)
 > Какие базы данных можно использовать в Android?
 
@@ -26,13 +26,13 @@ sources:
 
 ## Ответ (RU)
 
-В Android на практике для персистентности данных используют несколько подходов. Для структурированных/реляционных данных чаще всего применяют: SQLite (встроенная), [[c-room]] (рекомендуемая надстройка над SQLite от Google), и Realm/MongoDB (альтернативная объектная NoSQL-БД). Для простых ключ-значение и настроек обычно используют DataStore (современная замена SharedPreferences), но это не реляционная БД.
+В Android на практике для персистентности данных используют несколько подходов. Для структурированных/реляционных данных чаще всего применяют: `SQLite` (встроенная), [[c-room]] (рекомендуемая надстройка над `SQLite` от Google), и Realm/MongoDB (альтернативная объектная NoSQL-БД). Для простых ключ-значение и настроек обычно используют DataStore (современная замена `SharedPreferences`), но это не реляционная БД.
 
 ### Основные Концепции
 
-**SQLite** — встроенная реляционная БД без внешних зависимостей, требует ручного SQL и работы с Cursor API.
+**`SQLite`** — встроенная реляционная БД без внешних зависимостей, требует ручного SQL и работы с Cursor API.
 
-**Room** — типобезопасная обёртка над SQLite (ORM/DAO слой) с compile-time валидацией запросов, генерацией кода, нативной поддержкой корутин/`Flow` и проверками, что долгие операции не выполняются на главном потоке.
+**`Room`** — типобезопасная обёртка над `SQLite` (ORM/DAO слой) с compile-time валидацией запросов, генерацией кода, нативной поддержкой корутин/`Flow` и проверками, что долгие операции не выполняются на главном потоке.
 
 **Realm/MongoDB** — объектная БД с собственным движком (не SQL), поддерживает реактивные запросы и (в некоторых конфигурациях) синхронизацию с облаком, но увеличивает размер APK.
 
@@ -100,7 +100,7 @@ class User : RealmObject() {
 
 ### Критерии Выбора
 
-| Фактор | SQLite | Room | Realm |
+| Фактор | `SQLite` | `Room` | Realm |
 |--------|--------|------|-------|
 | APK размер | +0 KB | ≈ +50 KB | +3–5 MB |
 | Безопасность типов | ❌ runtime | ✅ compile-time | ✅ compile-time (собственная модель) |
@@ -109,19 +109,19 @@ class User : RealmObject() {
 | Реактивность | ❌ | ✅ `Flow`/`LiveData` | ✅ встроенная |
 
 **Рекомендации:**
-- **Room** — дефолтный выбор для большинства production-приложений (официальная поддержка Google, интеграция с Jetpack).
-- **SQLite** — подходит для случаев, где нужен полный контроль, минимальные зависимости или уже есть существующий SQL-слой (не только для legacy).
+- **`Room`** — дефолтный выбор для большинства production-приложений (официальная поддержка Google, интеграция с Jetpack).
+- **`SQLite`** — подходит для случаев, где нужен полный контроль, минимальные зависимости или уже есть существующий SQL-слой (не только для legacy).
 - **Realm** — если критична интеграция с MongoDB Atlas, нужны live-объекты/реактивность "из коробки" или рассматривается кросс-платформа.
 
 ## Answer (EN)
 
-In Android, several options are used in practice for data persistence. For structured/relational data, the most common ones are: SQLite (built-in), [[c-room]] (recommended abstraction over SQLite by Google), and Realm/MongoDB (alternative object NoSQL database). For simple key-value / preferences-like data, DataStore (the modern replacement for SharedPreferences) is typically used, but it is not a relational database.
+In Android, several options are used in practice for data persistence. For structured/relational data, the most common ones are: `SQLite` (built-in), [[c-room]] (recommended abstraction over `SQLite` by Google), and Realm/MongoDB (alternative object NoSQL database). For simple key-value / preferences-like data, DataStore (the modern replacement for `SharedPreferences`) is typically used, but it is not a relational database.
 
 ### Core Concepts
 
-**SQLite** — built-in relational database with no external dependencies, requires manual SQL and Cursor API handling.
+**`SQLite`** — built-in relational database with no external dependencies, requires manual SQL and Cursor API handling.
 
-**Room** — type-safe abstraction layer over SQLite (ORM/DAO style) with compile-time query validation, code generation, native coroutines/`Flow` support, and safeguards ensuring long-running operations are not performed on the main thread.
+**`Room`** — type-safe abstraction layer over `SQLite` (ORM/DAO style) with compile-time query validation, code generation, native coroutines/`Flow` support, and safeguards ensuring long-running operations are not performed on the main thread.
 
 **Realm/MongoDB** — object database with its own engine (not SQL), supports reactive queries and (in some setups) cloud sync, but increases APK size.
 
@@ -147,7 +147,7 @@ class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
 
 ### 2. Room — Official Abstraction over SQLite (Recommended)
 
-Generates DAO implementations at compile time via annotation processing. Provides safe suspend functions and `Flow` for reactive updates. By default, disallows blocking database operations on the main thread.
+Generates DAO implementations at compile time via annotation processing. `Provides` safe suspend functions and `Flow` for reactive updates. By default, disallows blocking database operations on the main thread.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -189,7 +189,7 @@ class User : RealmObject() {
 
 ### Selection Criteria
 
-| Factor | SQLite | Room | Realm |
+| Factor | `SQLite` | `Room` | Realm |
 |--------|--------|------|-------|
 | APK size | +0 KB | ≈ +50 KB | +3–5 MB |
 | Type safety | ❌ runtime | ✅ compile-time | ✅ compile-time (own model) |
@@ -198,13 +198,13 @@ class User : RealmObject() {
 | Reactivity | ❌ | ✅ `Flow`/`LiveData` | ✅ built-in |
 
 **Recommendations:**
-- **Room** — default choice for most production apps (official Google support, Jetpack integration).
-- **SQLite** — suitable when you need full control, minimal dependencies, or already have an SQL layer (not only for legacy).
+- **`Room`** — default choice for most production apps (official Google support, Jetpack integration).
+- **`SQLite`** — suitable when you need full control, minimal dependencies, or already have an SQL layer (not only for legacy).
 - **Realm** — when MongoDB Atlas sync, built-in live objects/reactivity, or cross-platform needs are important.
 
 ## Follow-ups
 
-- How do you implement database migrations in Room when schema changes?
+- How do you implement database migrations in `Room` when schema changes?
 - What are the threading constraints for each database solution?
 - When would you use DataStore instead of a database?
 - How do you handle database encryption and security?
@@ -212,8 +212,8 @@ class User : RealmObject() {
 
 ## References
 
-- [[c-room]] — Room persistence library concepts
-- [[c-database-design]] — Database design patterns
+- [[c-room]] — `Room` persistence library concepts
+- [[c-database-design]] — `Database` design patterns
 - [[c-database-performance]] — Performance optimization techniques
 - [Android Data Storage](https://developer.android.com/training/data-storage)
 - [Room Migration Guide](https://developer.android.com/training/data-storage/room/migrating-db-versions)

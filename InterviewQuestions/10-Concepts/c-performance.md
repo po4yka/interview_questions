@@ -1,14 +1,22 @@
----
-id: concept-performance
-title: Performance Optimization / Оптимизация производительности
-aliases: [Android Performance, Performance Optimization, Оптимизация производительности]
-kind: concept
-summary: Principles and techniques for optimizing Android app performance across various dimensions
-links: []
-created: 2025-11-06
-updated: 2025-11-06
-tags: [android, concept, optimization, performance]
----
+---\
+id: "20260108-110550"
+title: "Performance Optimization / Оптимизация производительности"
+aliases: ["Android Performance", "Performance Optimization", "Оптимизация производительности"]
+summary: "Principles and techniques for optimizing Android app performance across various dimensions"
+topic: "android"
+subtopics: ["optimization", "performance"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-06"
+updated: "2025-11-06"
+tags: ["android", "concept", "optimization", "performance", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -25,7 +33,7 @@ Common performance issues:
 - Memory leaks
 - Excessive battery drain
 - Slow app startup
-- ANR (Application Not Responding) errors
+- ANR (`Application` Not Responding) errors
 
 # Сводка (RU)
 
@@ -42,20 +50,20 @@ Common performance issues:
 - Утечки памяти
 - Чрезмерный расход батареи
 - Медленный запуск приложения
-- Ошибки ANR (Application Not Responding)
+- Ошибки ANR (`Application` Not Responding)
 
 ## Use Cases / Trade-offs
 
 **Profiling Tools**:
 - Android Profiler - CPU, Memory, Network, Energy profiling
 - Systrace/Perfetto - System-level trace analysis
-- Layout Inspector - View hierarchy analysis
+- Layout Inspector - `View` hierarchy analysis
 - Memory Profiler - Heap dumps and memory leak detection
 
 **Optimization Techniques**:
-- RecyclerView with ViewHolder pattern
+- `RecyclerView` with `ViewHolder` pattern
 - Image loading optimization (Coil, Glide)
-- Background task optimization (WorkManager)
+- Background task optimization (`WorkManager`)
 - LazyColumn in Compose with proper keys
 - ProGuard/R8 code shrinking
 - Baseline Profiles for improved startup

@@ -1,4 +1,4 @@
----
+---\
 id: android-296
 title: MVVM vs MVP Differences / Различия MVVM и MVP
 aliases: [MVVM vs MVP, Различия MVVM и MVP]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, architecture-patterns, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Чем MVVM отличается от MVP?
@@ -97,7 +97,7 @@ lifecycleScope.launch {
 |--------|-----|------|
 | **Конфигурационные изменения** | По умолчанию Presenter пересоздаётся вместе с `View`; сохранение состояния требует ручной реализации (retain, кеш, SavedState и т.п.) | `ViewModel` по умолчанию переживает конфигурационные изменения через `ViewModelStore` |
 | **Утечки памяти** | Есть риск при хранении сильной ссылки на `View` и неправильной очистке | Риск ниже, так как `ViewModel` не должен держать ссылку на `View`; утечки всё ещё возможны при нарушении этого правила |
-| **Lifecycle-aware** | Требует ручной обработки жизненного цикла для отписок/освобождения ресурсов | Стандартные компоненты (`ViewModel`, `LiveData`, `Flow` с repeatOnLifecycle и т.п.) интегрируются с жизненным циклом фреймворка |
+| **`Lifecycle`-aware** | Требует ручной обработки жизненного цикла для отписок/освобождения ресурсов | Стандартные компоненты (`ViewModel`, `LiveData`, `Flow` с repeatOnLifecycle и т.п.) интегрируются с жизненным циклом фреймворка |
 
 **3. Тестируемость**
 
@@ -196,13 +196,13 @@ lifecycleScope.launch {
 }
 ```
 
-**2. Lifecycle Management**
+**2. `Lifecycle` Management**
 
 | Aspect | MVP | MVVM |
 |--------|-----|------|
 | **Configuration changes** | By default, Presenter is recreated with the `View`; retaining state requires manual handling (retained instances, cache, SavedState, etc.) | `ViewModel` survives configuration changes by default via `ViewModelStore` |
 | **Memory leaks** | Risk if holding a strong `View` reference and not clearing it properly | Lower risk because `ViewModel` should not hold `View` references; leaks still possible if this rule is broken |
-| **Lifecycle-aware** | Requires manual lifecycle handling for subscriptions/resources | Standard components (`ViewModel`, `LiveData`, `Flow` with repeatOnLifecycle, etc.) integrate with the framework lifecycle |
+| **`Lifecycle`-aware** | Requires manual lifecycle handling for subscriptions/resources | Standard components (`ViewModel`, `LiveData`, `Flow` with repeatOnLifecycle, etc.) integrate with the framework lifecycle |
 
 **3. Testability**
 

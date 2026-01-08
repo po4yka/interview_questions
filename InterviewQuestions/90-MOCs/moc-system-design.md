@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251012-204100
 title: System Design — MOC
 kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/system-design]
----
+---\
 
 # System Design — Map of Content
 
@@ -52,7 +52,7 @@ Start with fundamental concepts to build a strong foundation:
    - [[q-horizontal-vertical-scaling--system-design--medium]] - Horizontal vs vertical scaling
    - [[q-load-balancing-strategies--system-design--medium]] - Load balancing strategies
 
-2. **Database Fundamentals**
+2. **`Database` Fundamentals**
    - [[q-sql-nosql-databases--system-design--medium]] - SQL vs NoSQL databases
 
 3. **API Design**
@@ -68,7 +68,7 @@ Apply concepts to design complete systems:
    - [[q-design-url-shortener--system-design--medium]] - Design URL shortener (complete system)
 
 2. **Async Communication**
-   - [[q-message-queues-event-driven--system-design--medium]] - Message queues and event-driven architecture
+   - [[q-message-queues-event-driven--system-design--medium]] - `Message` queues and event-driven architecture
 
 3. **Distributed Systems Fundamentals**
    - [[q-cap-theorem-distributed-systems--system-design--hard]] - CAP theorem and trade-offs
@@ -79,8 +79,8 @@ Master complex distributed systems and architecture:
 1. **Architecture Decisions**
    - [[q-microservices-vs-monolith--system-design--hard]] - Microservices vs monolith architecture
 
-2. **Database Scalability**
-   - [[q-database-sharding-partitioning--system-design--hard]] - Database sharding and partitioning
+2. **`Database` Scalability**
+   - [[q-database-sharding-partitioning--system-design--hard]] - `Database` sharding and partitioning
 
 ---
 
@@ -103,12 +103,12 @@ Master complex distributed systems and architecture:
 
 ### Communication Patterns
 - **Synchronous**: REST APIs, gRPC (request-response)
-- **Asynchronous**: Message queues, event streams (fire-and-forget)
+- **Asynchronous**: `Message` queues, event streams (fire-and-forget)
 - **Pub/Sub**: Publishers send events to multiple subscribers
-- **Request-Reply**: Client waits for server response
+- **`Request`-Reply**: Client waits for server response
 
 ### Data Patterns
-- **Database per Service**: Each microservice owns its database
+- **`Database` per `Service`**: Each microservice owns its database
 - **Event Sourcing**: Store all changes as sequence of events
 - **CQRS**: Separate read and write models
 - **Saga**: Distributed transactions across services
@@ -119,7 +119,7 @@ Master complex distributed systems and architecture:
 
 ### Scalability & Architecture
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Scaling Fundamentals
 - [[q-horizontal-vertical-scaling--system-design--medium]] - Horizontal vs vertical scaling
@@ -128,7 +128,7 @@ Master complex distributed systems and architecture:
 
 #### Architecture Patterns
 - [[q-microservices-vs-monolith--system-design--hard]] - Microservices vs monolith architecture
-- [[q-message-queues-event-driven--system-design--medium]] - Message queues and event-driven architecture
+- [[q-message-queues-event-driven--system-design--medium]] - `Message` queues and event-driven architecture
 
 #### Complete System Design
 - [[q-design-url-shortener--system-design--medium]] - Design URL shortener (end-to-end)
@@ -143,11 +143,11 @@ SORT difficulty ASC, file.name ASC
 
 ### Distributed Systems
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Distributed System Fundamentals
 - [[q-cap-theorem-distributed-systems--system-design--hard]] - CAP theorem and trade-offs
-- [[q-message-queues-event-driven--system-design--medium]] - Message queues and event-driven architecture
+- [[q-message-queues-event-driven--system-design--medium]] - `Message` queues and event-driven architecture
 
 #### Distributed Architecture
 - [[q-microservices-vs-monolith--system-design--hard]] - Microservices vs monolith architecture
@@ -169,7 +169,7 @@ SORT difficulty ASC, file.name ASC
 
 ### Caching & Performance
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Caching Fundamentals
 - [[q-caching-strategies--system-design--medium]] - Caching strategies overview
@@ -179,7 +179,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-horizontal-vertical-scaling--system-design--medium]] - Horizontal vs vertical scaling
 
 **Caching Strategies to Know**:
-- **Cache-Aside (Lazy Loading)**: Application manages cache
+- **Cache-Aside (Lazy Loading)**: `Application` manages cache
 - **Write-Through**: Write to cache and DB simultaneously
 - **Write-Behind**: Write to cache, async write to DB
 - **Refresh-Ahead**: Proactively refresh cache before expiry
@@ -188,7 +188,7 @@ SORT difficulty ASC, file.name ASC
 **Cache Technologies**:
 - **In-Memory**: Redis, Memcached
 - **CDN**: CloudFlare, Akamai, CloudFront
-- **Application-Level**: Local cache, distributed cache
+- **`Application`-Level**: Local cache, distributed cache
 
 **All Caching Questions:**
 ```dataview
@@ -200,15 +200,15 @@ SORT difficulty ASC, file.name ASC
 
 ### Database Design
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Database Selection
 - [[q-sql-nosql-databases--system-design--medium]] - SQL vs NoSQL databases
 
 #### Database Scalability
-- [[q-database-sharding-partitioning--system-design--hard]] - Database sharding and partitioning
+- [[q-database-sharding-partitioning--system-design--hard]] - `Database` sharding and partitioning
 
-**Database Types**:
+**`Database` Types**:
 - **SQL (Relational)**: PostgreSQL, MySQL - ACID transactions, complex queries
 - **NoSQL Document**: MongoDB, CouchDB - flexible schema
 - **NoSQL Key-Value**: Redis, DynamoDB - fast lookups
@@ -221,7 +221,7 @@ SORT difficulty ASC, file.name ASC
 - **Sharding**: Horizontal partitioning across servers
 - **Partitioning**: Split table within same server
 
-**All Database Questions:**
+**All `Database` Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "30-System-Design"
@@ -231,7 +231,7 @@ SORT difficulty ASC, file.name ASC
 
 ### API Design
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### REST API Design
 - [[q-rest-api-design-best-practices--system-design--medium]] - REST API design best practices
@@ -271,7 +271,7 @@ SORT difficulty ASC, file.name ASC
 1. **Requirements Clarification** (5 min)
    - Functional requirements: What features?
    - Non-functional requirements: Scale, latency, availability?
-   - Constraints: Budget, timeline, team size?
+   - `Constraints`: Budget, timeline, team size?
 
 2. **Capacity Estimation** (5 min)
    - Traffic: QPS (queries per second)
@@ -284,7 +284,7 @@ SORT difficulty ASC, file.name ASC
    - Request/response formats
    - Error handling
 
-4. **Database Schema** (5 min)
+4. **`Database` Schema** (5 min)
    - Tables/collections
    - Relationships
    - Indexes

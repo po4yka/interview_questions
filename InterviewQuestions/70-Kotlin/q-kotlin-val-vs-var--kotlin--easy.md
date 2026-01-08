@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-120
 title: "Val vs Var in Kotlin / Разница между val и var в Kotlin"
 aliases: ["Val vs Var in Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, val, var]
----
+---\
 # Вопрос (RU)
 > В чём разница между val и var в Kotlin? Когда использовать каждый из них?
 
@@ -1008,7 +1008,7 @@ class AppConfig {
 | **Reassignment** | Cannot be reassigned | Can be reassigned |
 | **Initialization** | Once | Multiple times |
 | **Preference** | Preferred (default choice) | Use when necessary |
-| **Thread Safety** | Safer (reference won't change) | Less safe |
+| **`Thread` Safety** | Safer (reference won't change) | Less safe |
 | **Smart Casts** | Works reliably | May not work |
 | **Java Equivalent** | final | non-final |
 

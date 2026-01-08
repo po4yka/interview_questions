@@ -1,5 +1,5 @@
----
----
+---\
+---\
 
 # Note Review System Prompt
 
@@ -35,7 +35,7 @@ Parse output and identify issues by severity:
 | Missing `moc` | Add `moc: moc-<topic>` (no brackets) |
 | Empty `related` | Add `related: [q-related-note-1, q-related-note-2]` |
 | Invalid `topic` | Use value from [[TAXONOMY]] |
-| Wrong `language_tags` | Set to `[en, ru]` or `[en]` based on content |
+| Wrong `language_tags` | `Set` to `[en, ru]` or `[en]` based on content |
 
 #### Content Fixes
 

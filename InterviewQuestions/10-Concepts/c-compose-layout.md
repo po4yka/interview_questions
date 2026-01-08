@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-133800"
 title: "Compose Layout / Compose Layout"
 aliases: ["Compose Layout"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-compose-ui, c-jetpack-compose, c-compose-modifiers, c-box-compose]
+moc: "moc-cs"
+related: ["c-compose-ui", "c-jetpack-compose", "c-compose-modifiers", "c-box-compose"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -40,7 +41,7 @@ Compose Layout в Jetpack Compose — это набор примитивов и 
 ## Ключевые Моменты (RU)
 
 - Модель ограничений: Родитель задает ограничения (мин/макс ширина/высота), а дочерний элемент обязан измериться и разметиться внутри этих рамок — подход, схожий с современными UI-фреймворками.
-- Базовые примитивы: Для компоновки используются Row, Column, Box, BoxWithConstraints, LazyColumn/LazyRow и другие composable-элементы вместо XML и глубоко вложенных View-групп.
+- Базовые примитивы: Для компоновки используются Row, Column, Box, BoxWithConstraints, LazyColumn/LazyRow и другие composable-элементы вместо XML и глубоко вложенных `View`-групп.
 - Поведение через Modifier: Модификаторы (padding, fillMaxSize, weight, align, offset, aspectRatio и др.) управляют измерением и позицией без изменения бизнес-логики composable.
 - Кастомные лэйауты: При недостатке стандартных компонентов можно создавать собственные раскладки через Layout или layout-модификатор, работая с measurePolicy, constraints и координатами placeable.
 - Производительность: Compose Layout поощряет мелкие и плоские иерархии; понимание триггеров измерения/разметки помогает избегать лишних перерасчетов и перегрузки UI.

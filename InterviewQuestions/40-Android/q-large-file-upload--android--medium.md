@@ -1,4 +1,4 @@
----
+---\
 id: android-116
 title: Large File Upload / Загрузка больших файлов
 aliases: [Large File Upload, Загрузка больших файлов]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, file-upload, multipart, retrofit, workmanager]
 
----
+---\
 # Вопрос (RU)
 
 > Как загрузить большой файл на сервер в Android?
@@ -29,7 +29,7 @@ tags: [android/background-execution, android/files-media, android/networking-htt
 
 ## Ответ (RU)
 
-Для загрузки больших файлов используйте **WorkManager + Retrofit** для гарантированного выполнения в фоне. Ключевые требования: асинхронная обработка, устойчивость к `configuration changes`, `retry`-логика, отображение прогресса.
+Для загрузки больших файлов используйте **`WorkManager` + `Retrofit`** для гарантированного выполнения в фоне. Ключевые требования: асинхронная обработка, устойчивость к `configuration changes`, `retry`-логика, отображение прогресса.
 
 Ниже приведены примерные шаблоны (не полный рабочий код), демонстрирующие ключевые идеи.
 
@@ -223,10 +223,10 @@ suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
 
 ### Best Practices
 
-1. **WorkManager** для надёжной фоновой загрузки (особенно для задач, которые должны выживать перезапуск устройства).
+1. **`WorkManager`** для надёжной фоновой загрузки (особенно для задач, которые должны выживать перезапуск устройства).
 2. **Chunked upload** для очень больших файлов (например, > 50 MB) с размером чанков, согласованным с сервером.
-3. **Progress tracking** для лучшего UX (обёртка над `RequestBody`/`ProgressRequestBody` или OkHttp `Interceptor`, подменяющий body).
-4. **Retry logic** с exponential backoff (через конфигурацию WorkManager и обработку ошибок; учитывать, что не все ошибки нужно ретраить).
+3. **Progress tracking** для лучшего UX (обёртка над `RequestBody`/`ProgressRequestBody` или `OkHttp` `Interceptor`, подменяющий body).
+4. **Retry logic** с exponential backoff (через конфигурацию `WorkManager` и обработку ошибок; учитывать, что не все ошибки нужно ретраить).
 5. Foreground `Service`/foreground-`Worker` с уведомлением для долгих/критичных загрузок, чтобы избежать ограничений фона.
 6. Ограничение только WiFi (`NetworkType.UNMETERED`) для больших файлов — по требованиям продукта и UX.
 7. **Resumable uploads** — сохранение прогресса (`SharedPreferences`/БД) и поддержка продолжения на уровне серверного API.
@@ -247,7 +247,7 @@ val largeFileConstraints = Constraints.Builder()
 
 ## Answer (EN)
 
-Use **WorkManager + Retrofit** to upload large files with guaranteed background execution. Key requirements: async processing, resilience to configuration changes, retry logic, and progress tracking.
+Use **`WorkManager` + `Retrofit`** to upload large files with guaranteed background execution. Key requirements: async processing, resilience to configuration changes, retry logic, and progress tracking.
 
 The snippets below are templates (not full production-ready code) to illustrate key ideas.
 
@@ -441,10 +441,10 @@ suspend fun uploadWithResume(fileId: String, file: File): Result<String> {
 
 ### Best Practices
 
-1. **WorkManager** for reliable background uploads (especially for work that should survive device restarts).
+1. **`WorkManager`** for reliable background uploads (especially for work that should survive device restarts).
 2. **Chunked upload** for very large files (e.g., > 50 MB), with chunk size aligned with server capabilities.
-3. **Progress tracking** for better UX (`RequestBody`/`ProgressRequestBody` wrapper or OkHttp `Interceptor` that swaps in such a body).
-4. **Retry logic** with exponential backoff (via WorkManager configuration and error handling; avoid retrying non-retryable errors).
+3. **Progress tracking** for better UX (`RequestBody`/`ProgressRequestBody` wrapper or `OkHttp` `Interceptor` that swaps in such a body).
+4. **Retry logic** with exponential backoff (via `WorkManager` configuration and error handling; avoid retrying non-retryable errors).
 5. Foreground `Service`/foreground `Worker` with a notification for long-running/critical uploads to avoid background limitations.
 6. WiFi-only constraint (`NetworkType.UNMETERED`) for large files when appropriate.
 7. **Resumable uploads** — persist progress (`SharedPreferences`/DB) and rely on server-side support for partial uploads.
@@ -481,14 +481,14 @@ val largeFileConstraints = Constraints.Builder()
 
 ## Ссылки (RU)
 
-- Документация Android WorkManager
-- Рекомендации по загрузке файлов с использованием Retrofit и OkHttp
+- Документация Android `WorkManager`
+- Рекомендации по загрузке файлов с использованием `Retrofit` и `OkHttp`
 - Спецификация HTTP multipart/form-data
 
 ## References
 
-- Android WorkManager documentation
-- Retrofit and OkHttp best practices for file uploads
+- Android `WorkManager` documentation
+- `Retrofit` and `OkHttp` best practices for file uploads
 - HTTP multipart/form-data specification
 
 ## Связанные Вопросы (RU)
@@ -501,7 +501,7 @@ val largeFileConstraints = Constraints.Builder()
 ### Предварительные Требования
 
 - Понимание корутин Kotlin для асинхронных операций
-- Подходы к фоновым задачам в Android (`Service` vs WorkManager)
+- Подходы к фоновым задачам в Android (`Service` vs `WorkManager`)
 
 ### Связанные
 
@@ -511,7 +511,7 @@ val largeFileConstraints = Constraints.Builder()
 ### Продвинутое
 
 - Продвинутые техники оптимизации сетевого взаимодействия (connection pooling, сжатие)
-- Кастомные ограничения и стратегии планирования для WorkManager
+- Кастомные ограничения и стратегии планирования для `WorkManager`
 
 ## Related Questions
 
@@ -523,7 +523,7 @@ val largeFileConstraints = Constraints.Builder()
 ### Prerequisites
 
 - Understanding Kotlin coroutines for async operations
-- Background work strategies in Android (`Service` vs WorkManager)
+- Background work strategies in Android (`Service` vs `WorkManager`)
 
 ### Related
 
@@ -533,4 +533,4 @@ val largeFileConstraints = Constraints.Builder()
 ### Advanced
 
 - Advanced networking optimization techniques (connection pooling, compression)
-- Custom WorkManager constraints and scheduling strategies
+- Custom `WorkManager` constraints and scheduling strategies

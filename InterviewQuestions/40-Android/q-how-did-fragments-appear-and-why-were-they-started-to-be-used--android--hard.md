@@ -1,4 +1,4 @@
----
+---\
 id: android-397
 title: "How Did Fragments Appear And Why Were They Started To Be Used / Как Появились Фрагменты И Для Чего Их Начали Использовать"
 aliases: [Fragment Origins, Fragments History, История фрагментов, Происхождение фрагментов]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/fragment, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 
 > Как появились фрагменты и для чего их начали использовать?
@@ -126,7 +126,7 @@ fun showDetail(itemId: String) {
 ### Современное Состояние
 
 - AndroidX `Fragment` library: улучшенные API, обратная совместимость, childFragmentManager, корректная работа с lifecycle.
-- Navigation Component: декларативная навигация, работа с back stack, аргументами и deep links поверх FragmentManager.
+- Navigation `Component`: декларативная навигация, работа с back stack, аргументами и deep links поверх FragmentManager.
 - `Fragment` Result API: типизированная, lifecycle-aware коммуникация между фрагментами и с родительской `Activity` без жёстких связей.
 - `ViewModel` (архитектурные компоненты): scope к `Activity`/`Fragment`, что решает часть исторических проблем с сохранением состояния при пересоздании UI.
 
@@ -187,7 +187,7 @@ class UserProfileFragment : Fragment() {
 }
 ```
 
-**3. Own Lifecycle Tied to the `Activity` Lifecycle**
+**3. Own `Lifecycle` Tied to the `Activity` `Lifecycle`**
 Fragments have their own lifecycle integrated with the `Activity`, providing finer-grained control:
 - separate callbacks for creating/destroying the `View` (onCreateView/onDestroyView);
 - ability to manage subscriptions, resources, and child fragments at the level of a portion of the UI.
@@ -229,7 +229,7 @@ fun showDetail(itemId: String) {
 ### Modern State
 
 - AndroidX `Fragment` library: improved APIs, compatibility, childFragmentManager, and better lifecycle integration.
-- Navigation Component: declarative navigation, handling of the back stack, arguments, and deep links on top of FragmentManager.
+- Navigation `Component`: declarative navigation, handling of the back stack, arguments, and deep links on top of FragmentManager.
 - `Fragment` Result API: lifecycle-aware, decoupled communication between fragments and with the host `Activity`.
 - `ViewModel` (Architecture Components): scoped to `Activity`/`Fragment`, addressing historical issues with preserving state across configuration changes and fragment recreation.
 
@@ -239,7 +239,7 @@ fun showDetail(itemId: String) {
 
 - What problems did fragments solve that Activities couldn't?
 - Why is the fragment lifecycle so complex?
-- How does Navigation Component simplify fragment usage?
+- How does Navigation `Component` simplify fragment usage?
 - What are the alternatives to fragments in modern Android?
 - When should you avoid using fragments?
 

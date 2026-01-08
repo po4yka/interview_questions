@@ -1,4 +1,4 @@
----
+---\
 id: android-224
 title: RecyclerView AsyncListDiffer / RecyclerView AsyncListDiffer
 aliases: [AsyncListDiffer, RecyclerView AsyncListDiffer]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как работает AsyncListDiffer? Объясните diffing в фоновом потоке, сравнение AsyncListDiffer vs ListAdapter, безопасную обработку мутаций списка и оптимизацию для обновлений больших наборов данных.
 
@@ -26,7 +26,7 @@ tags: [android/ui-views, difficulty/medium]
 
 ## Ответ (RU)
 
-**AsyncListDiffer** — это вспомогательный класс, который вычисляет разницу списков в фоновом потоке и применяет обновления к RecyclerView на главном потоке. Он помогает избежать фризов UI при обновлении больших списков при условии, что `submitList` и работа с адаптером выполняются на главном потоке.
+**AsyncListDiffer** — это вспомогательный класс, который вычисляет разницу списков в фоновом потоке и применяет обновления к `RecyclerView` на главном потоке. Он помогает избежать фризов UI при обновлении больших списков при условии, что `submitList` и работа с адаптером выполняются на главном потоке.
 
 ### Проблема: Блокировка UI-потока
 
@@ -47,7 +47,7 @@ class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```
 
 **Для списка из 10 000+ элементов (пример):**
-- Вычисление DiffUtil может занять десятки/сотни мс.
+- Вычисление `DiffUtil` может занять десятки/сотни мс.
 - Если делать это в главном потоке — UI может подвисать.
 - В итоге дёрганый скролл и плохой UX.
 
@@ -130,7 +130,7 @@ dispatchUpdatesTo(adapter)
 **Ключевые моменты:**
 - `submitList` нужно вызывать с главного потока.
 - Diff считается в фоне на executor'е (через `AsyncDifferConfig` / executor архитектурных компонентов).
-- Операции обновления RecyclerView выполняются на главном потоке.
+- Операции обновления `RecyclerView` выполняются на главном потоке.
 - `currentList` — это снимок данных; нельзя мутировать списки, переданные в `submitList`.
 
 ---
@@ -179,7 +179,7 @@ adapter.submitList(items)
 - Несколько разных списков/секций в одном адаптере.
 
 **Когда использовать ListAdapter:**
-- Типичный односписочный RecyclerView.
+- Типичный односписочный `RecyclerView`.
 - Хочется меньше кода и следовать рекомендациям Google.
 
 ---
@@ -369,7 +369,7 @@ class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-**2. Эффективные проверки в DiffUtil.ItemCallback:**
+**2. Эффективные проверки в `DiffUtil`.ItemCallback:**
 
 ```kotlin
 data class Item(
@@ -459,7 +459,7 @@ searchView.onQueryTextChange { query ->
 **Как работает:**
 - `submitList` на главном потоке фиксирует старый и новый списки.
 - Diff считается в фоне.
-- Обновления RecyclerView применяются на главном потоке.
+- Обновления `RecyclerView` применяются на главном потоке.
 
 **AsyncListDiffer vs ListAdapter:**
 - `ListAdapter` построен на `AsyncListDiffer` и покрывает большинство кейсов.
@@ -481,7 +481,7 @@ searchView.onQueryTextChange { query ->
 
 ## Answer (EN)
 
-**AsyncListDiffer** is a helper class that calculates list differences on a background thread and dispatches updates to RecyclerView on the main thread. It helps avoid UI freezes when updating large lists, as long as `submitList` and adapter interactions happen on the main thread.
+**AsyncListDiffer** is a helper class that calculates list differences on a background thread and dispatches updates to `RecyclerView` on the main thread. It helps avoid UI freezes when updating large lists, as long as `submitList` and adapter interactions happen on the main thread.
 
 ### The Problem: Blocking UI Thread
 
@@ -502,7 +502,7 @@ class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```
 
 **For list of 10,000 items (illustrative example):**
-- DiffUtil calculation can take tens or hundreds of milliseconds
+- `DiffUtil` calculation can take tens or hundreds of milliseconds
 - If done on the main thread, UI may freeze for that time
 - Produces jank and poor UX
 
@@ -564,7 +564,7 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
 ### How AsyncListDiffer Works Internally
 
-**Thread flow (conceptual):**
+**`Thread` flow (conceptual):**
 
 ```text
 Main Thread                      Background Thread
@@ -585,7 +585,7 @@ Update UI (smooth!)
 **Key points:**
 - `submitList` should be called on the main thread.
 - The diff is computed on a background executor (`AsyncDifferConfig` / Arch components executor) by default.
-- RecyclerView update operations (`notifyItem*`) are dispatched on the main thread.
+- `RecyclerView` update operations (`notifyItem*`) are dispatched on the main thread.
 - `currentList` is exposed as an immutable snapshot; you must not mutate the lists you pass in.
 
 ---
@@ -831,7 +831,7 @@ class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-**2. Use efficient equality in DiffUtil.ItemCallback:**
+**2. Use efficient equality in `DiffUtil`.ItemCallback:**
 
 ```kotlin
 data class Item(
@@ -1186,7 +1186,7 @@ searchView.onQueryTextChange { query ->
 **How it works:**
 - `submitList` on main thread captures old/new lists.
 - Diff is calculated on a background executor.
-- RecyclerView updates are dispatched on main thread.
+- `RecyclerView` updates are dispatched on main thread.
 
 **AsyncListDiffer vs ListAdapter:**
 - `ListAdapter` is built on top of `AsyncListDiffer`.

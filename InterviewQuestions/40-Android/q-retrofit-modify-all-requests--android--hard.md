@@ -1,4 +1,4 @@
----
+---\
 id: android-090
 title: "Retrofit Modify All Requests / Изменение всех запросов Retrofit"
 aliases: ["Retrofit Modify All Requests", "Изменение всех запросов Retrofit"]
@@ -16,24 +16,24 @@ updated: 2025-11-10
 tags: [android/di-hilt, android/networking-http, authentication, difficulty/hard, interceptor, logging, okhttp]
 sources: ["https://square.github.io/okhttp/interceptors/"]
 
----
+---\
 # Вопрос (RU)
-> Как в Retrofit изменять все запросы глобально (добавлять заголовки, параметры, логирование)?
+> Как в `Retrofit` изменять все запросы глобально (добавлять заголовки, параметры, логирование)?
 
 # Question (EN)
-> How to modify all requests globally in Retrofit (add headers, parameters, logging)?
+> How to modify all requests globally in `Retrofit` (add headers, parameters, logging)?
 
 ---
 
 ## Ответ (RU)
 
 **Краткий ответ:**
-Используйте `OkHttpClient` с глобальными `Interceptor` для добавления заголовков, query-параметров, логирования и обработки ошибок для всех запросов Retrofit.
+Используйте `OkHttpClient` с глобальными `Interceptor` для добавления заголовков, query-параметров, логирования и обработки ошибок для всех запросов `Retrofit`.
 
 ### Подробный Ответ
 
 **Концепция:**
-OkHttp Interceptors — это цепочка обработчиков, которые могут перехватывать каждый запрос и ответ. Используются для cross-cutting concerns: аутентификация, логирование, добавление общих параметров.
+`OkHttp` Interceptors — это цепочка обработчиков, которые могут перехватывать каждый запрос и ответ. Используются для cross-cutting concerns: аутентификация, логирование, добавление общих параметров.
 
 **Два типа:**
 - **`Application` Interceptor** — выполняется на уровне клиента до повторов/redirects, не взаимодействует напрямую с кэшем и не видит промежуточные ответы (redirects, retries).
@@ -103,7 +103,7 @@ class TokenRefreshInterceptor @Inject constructor(
 }
 ```
 
-(Для продакшена зачастую предпочтительнее использовать OkHttp `Authenticator` для автоматической обработки 401, особенно при работе с refresh token.)
+(Для продакшена зачастую предпочтительнее использовать `OkHttp` `Authenticator` для автоматической обработки 401, особенно при работе с refresh token.)
 
 ### Пример 3: Общие Query-параметры
 
@@ -174,13 +174,13 @@ addInterceptor(HttpLoggingInterceptor().apply {
 
 ## Answer (EN)
 
-**Short Version:**
-Configure a single `OkHttpClient` used by Retrofit and register global `Interceptor`s there to add headers, query params, logging, and error handling for all requests.
+**`Short` Version:**
+Configure a single `OkHttpClient` used by `Retrofit` and register global `Interceptor`s there to add headers, query params, logging, and error handling for all requests.
 
 ### Detailed Version
 
 **Concept:**
-OkHttp Interceptors are a chain of handlers that can intercept every request and response. They are used for cross-cutting concerns: authentication, logging, adding common parameters.
+`OkHttp` Interceptors are a chain of handlers that can intercept every request and response. They are used for cross-cutting concerns: authentication, logging, adding common parameters.
 
 **Two types:**
 - **`Application` Interceptor** - runs at the client level before retries/follow-ups, does not directly interact with the cache, and does not see intermediate responses (redirects, retries) in the same way as network interceptors.
@@ -250,7 +250,7 @@ class TokenRefreshInterceptor @Inject constructor(
 }
 ```
 
-(For production, using OkHttp `Authenticator` is often preferable for robust 401/refresh token handling.)
+(For production, using `OkHttp` `Authenticator` is often preferable for robust 401/refresh token handling.)
 
 ### Example 3: Common Query Parameters
 
@@ -354,7 +354,7 @@ addInterceptor(HttpLoggingInterceptor().apply {
 - https://developer.android.com/training/articles/security-config
 
 **Дополнительные материалы:**
-- OkHttp Authenticator для обработки 401
+- `OkHttp` Authenticator для обработки 401
 - HttpLoggingInterceptor: уровни логирования и безопасность
 - Пиннинг сертификатов с помощью `CertificatePinner`
 
@@ -371,7 +371,7 @@ addInterceptor(HttpLoggingInterceptor().apply {
 - https://developer.android.com/training/articles/security-config
 
 **Related Resources:**
-- OkHttp Authenticator for 401 handling
+- `OkHttp` Authenticator for 401 handling
 - HttpLoggingInterceptor levels and security
 - Certificate pinning with CertificatePinner
 
@@ -381,7 +381,7 @@ addInterceptor(HttpLoggingInterceptor().apply {
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
-- [[q-cicd-multi-module--android--medium]] - DI with Hilt modules
+- [[q-cicd-multi-module--android--medium]] - DI with `Hilt` modules
 
 ### Advanced (Harder)
 - [[q-android-enterprise-mdm-architecture--android--hard]] - Related enterprise networking and security patterns

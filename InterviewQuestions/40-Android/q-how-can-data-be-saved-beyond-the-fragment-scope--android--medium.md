@@ -1,4 +1,4 @@
----
+---\
 id: android-353
 title: "How Can Data Be Saved Beyond The Fragment Scope / Как можно сохранить данные за пределами скоупа Fragment"
 aliases: [Fragment Data Persistence, Fragment Scope, ViewModel Scope]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/datastore, android/lifecycle, difficulty/medium, fragment, state-management, viewmodel]
 
----
+---\
 # Вопрос (RU)
 
 > Как можно сохранить данные за пределами области видимости `Fragment`?
@@ -84,7 +84,7 @@ class MyFragment : Fragment() {
 
 ### 3. Repository + Database
 
-Постоянное хранение с использованием Room, SharedPreferences или DataStore.
+Постоянное хранение с использованием `Room`, `SharedPreferences` или DataStore.
 
 ```kotlin
 class UserRepository(private val userDao: UserDao) {
@@ -234,7 +234,7 @@ class MyFragment : Fragment() {
 
 ### 3. Repository + Database
 
-Persistent storage using Room, SharedPreferences, or DataStore.
+Persistent storage using `Room`, `SharedPreferences`, or DataStore.
 
 ```kotlin
 class UserRepository(private val userDao: UserDao) {
@@ -330,7 +330,7 @@ class MyApplication : Application() {
 ## Follow-ups
 
 - How does SavedStateHandle differ from onSaveInstanceState?
-- When should I use DataStore instead of SharedPreferences?
+- When should I use DataStore instead of `SharedPreferences`?
 - How to prevent memory leaks when sharing data via `Application` class?
 - What's the maximum `Bundle` size for SavedStateHandle?
 - How to share data between fragments in different activities?

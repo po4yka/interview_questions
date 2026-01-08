@@ -1,4 +1,4 @@
----
+---\
 id: cs-022
 title: "Coroutine Context Essence / Суть Coroutine Context"
 aliases: ["Coroutine Context", "Суть Coroutine Context"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [context, coroutinecontext, coroutines, difficulty/medium, kotlin, programming-languages]
 sources: ["https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html"]
 
----
+---\
 # Вопрос (RU)
 > Что является сущностью корутин контекста? Из каких элементов состоит CoroutineContext и как они работают?
 
@@ -164,7 +164,7 @@ suspend fun example() {
 **Ключевые концепции:**
 
 1. Immutability — `CoroutineContext` immutable, `+` создаёт новый контекст
-2. Indexed Set — элементы идентифицируются по ключу
+2. Indexed `Set` — элементы идентифицируются по ключу
 3. Composition — элементы комбинируются оператором `+`
 4. Inheritance — дочерние корутины наследуют контекст родителя
 5. Structured Concurrency — иерархия `Job` обеспечивает structured concurrency
@@ -273,7 +273,7 @@ val context1 = Dispatchers.IO + CoroutineName("First")
 val context2 = context1 + CoroutineName("Second")  // "Second" replaces "First"
 ```
 
-**Context Inheritance:**
+**`Context` Inheritance:**
 
 *Theory:* Child coroutines inherit the context from their parent but can override individual elements. A new `Job` is created for each child coroutine and linked to the parent `Job` (parent-child relationship). The dispatcher is inherited if not explicitly specified.
 
@@ -292,7 +292,7 @@ parentScope.launch {
 }
 ```
 
-**Accessing Context Elements:**
+**Accessing `Context` Elements:**
 
 ```kotlin
 // Getting elements from context
@@ -308,7 +308,7 @@ suspend fun example() {
 **Key Concepts:**
 
 1. Immutability - `CoroutineContext` is immutable; `+` creates a new context
-2. Indexed Set - elements are identified by key
+2. Indexed `Set` - elements are identified by key
 3. Composition - elements are combined with the `+` operator
 4. Inheritance - child coroutines inherit parent context
 5. Structured Concurrency - `Job` hierarchy ensures structured concurrency

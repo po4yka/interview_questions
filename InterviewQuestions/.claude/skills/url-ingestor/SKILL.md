@@ -1,11 +1,11 @@
----
+---\
 name: url-ingestor
 description: >
   Generate Q&A notes from web articles and documentation. Fetches and parses URL
   content, extracts key concepts and interview questions, generates bilingual Q&A
   structure, auto-classifies topic and difficulty, and creates draft notes with
   proper YAML. Supports batch URL processing for content sprints.
----
+---\
 
 # URL Ingestor
 
@@ -290,10 +290,10 @@ Questions generated: 12
 
 ### Example 3: Documentation Import
 
-**User**: "Import Room database documentation"
+**User**: "Import `Room` database documentation"
 
 **Process**:
-1. Fetch Room documentation pages
+1. Fetch `Room` documentation pages
 2. Extract comprehensive content
 3. Generate progressive questions
 

@@ -1,4 +1,4 @@
----
+---\
 id: cs-007
 title: "Xml Acronym / Расшифровка аббревиатуры XML"
 aliases: ["XML Acronym", "Аббревиатура XML"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [cs, data-format, difficulty/easy, fundamentals, markup-language, xml]
 sources: ["https://www.w3.org/XML/"]
 
----
+---\
 # Вопрос (RU)
 > Как расшифровывается аббревиатура XML?
 
@@ -98,7 +98,7 @@ XML — расширяемый язык разметки. "Markup language" оз
 
 ## Answer (EN)
 
-**Short answer:**
+**`Short` answer:**
 XML stands for eXtensible Markup Language.
 
 **XML Theory:**

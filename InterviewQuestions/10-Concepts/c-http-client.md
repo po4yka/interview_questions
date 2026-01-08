@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-181538"
 title: "Http Client / Http Client"
 aliases: ["Http Client"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-networking, c-okhttp, c-retrofit, c-rest-api, c-https-tls]
+moc: "moc-cs"
+related: ["c-networking", "c-okhttp", "c-retrofit", "c-rest-api", "c-https-tls"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ HTTP-клиент — это библиотека, инструмент или �
 
 ## Key Points (EN)
 
-- Abstraction over HTTP: Provides high-level methods (GET, POST, PUT, DELETE, etc.), header management, query parameters, and body serialization (JSON, XML, form data) instead of manual socket handling.
+- Abstraction over HTTP: `Provides` high-level methods (GET, POST, PUT, DELETE, etc.), header management, query parameters, and body serialization (JSON, XML, form data) instead of manual socket handling.
 - Connection and performance handling: Manages connection pooling, timeouts, keep-alive, compression, and sometimes retries to improve reliability and performance.
 - Error and status handling: Exposes HTTP status codes, network errors, and exceptions in a structured way; often allows custom interceptors/middleware for logging, auth, and retries.
 - Security features: Supports HTTPS/TLS, certificate validation, authentication (e.g., Basic, Bearer tokens, API keys), and secure header configuration.
@@ -48,5 +49,5 @@ HTTP-клиент — это библиотека, инструмент или �
 ## References
 
 - MDN Web Docs — HTTP overview: https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
-- OkHttp (Kotlin/Java) documentation: https://square.github.io/okhttp/
+- `OkHttp` (Kotlin/Java) documentation: https://square.github.io/okhttp/
 - Ktor HTTP client (Kotlin) documentation: https://ktor.io/docs/client.html

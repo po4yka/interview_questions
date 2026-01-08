@@ -1,4 +1,4 @@
----
+---\
 id: android-176
 title: "Which Class Can Be Used To Detect Different Gestures / Какой класс можно использовать для обнаружения разных жестов"
 aliases: ["Which Class Can Be Used To Detect Different Gestures", "Какой класс можно использовать для обнаружения разных жестов"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
 
----
+---\
 # Вопрос (RU)
 
 > Какой класс можно использовать чтобы ловить разные жесты?
@@ -377,7 +377,7 @@ fun GestureExample() {
 - [[q-which-class-to-catch-gestures--android--easy]] - Basic touch event handling
 
 ### Related
-- [[q-fragments-vs-activity--android--medium]] - Component lifecycle context
+- [[q-fragments-vs-activity--android--medium]] - `Component` lifecycle context
 
 ### Advanced
 - Custom multi-touch gesture recognizers

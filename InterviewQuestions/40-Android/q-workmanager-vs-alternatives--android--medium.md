@@ -1,4 +1,4 @@
----
+---\
 id: android-059
 title: "WorkManager vs Alternatives / WorkManager против альтернатив"
 aliases: ["WorkManager vs Alternatives", "WorkManager против альтернатив"]
@@ -16,30 +16,30 @@ updated: 2025-11-10
 tags: [android/background-execution, difficulty/medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
-> Когда использовать WorkManager vs AlarmManager vs JobScheduler vs Foreground `Service`?
+> Когда использовать `WorkManager` vs AlarmManager vs JobScheduler vs Foreground `Service`?
 
 # Question (EN)
-> When to use WorkManager vs AlarmManager vs JobScheduler vs Foreground `Service`?
+> When to use `WorkManager` vs AlarmManager vs JobScheduler vs Foreground `Service`?
 
 ---
 
 ## Ответ (RU)
 
 **Теория выбора API:**
-Android предоставляет несколько API для фоновой работы с разными гарантиями и ограничениями. Выбор зависит от требований к таймингу, гарантиям выполнения, видимости для пользователя и лимитов фонового выполнения на современных версиях Android. Для отложенных (deferrable) задач по умолчанию рекомендуется использовать WorkManager.
+Android предоставляет несколько API для фоновой работы с разными гарантиями и ограничениями. Выбор зависит от требований к таймингу, гарантиям выполнения, видимости для пользователя и лимитов фонового выполнения на современных версиях Android. Для отложенных (deferrable) задач по умолчанию рекомендуется использовать `WorkManager`.
 
 **Критерии выбора:**
 
 | API | Когда использовать | Ключевая особенность |
 |-----|-------------------|---------------------|
-| **WorkManager** | Отложенная надёжная работа, не требующая точного времени | Переживает перезагрузки, поддерживает ограничения, использует JobScheduler/AlarmManager/FirebaseJobDispatcher под капотом |
+| **`WorkManager`** | Отложенная надёжная работа, не требующая точного времени | Переживает перезагрузки, поддерживает ограничения, использует JobScheduler/AlarmManager/FirebaseJobDispatcher под капотом |
 | **AlarmManager** | Будильники и напоминания, когда нужен запуск в конкретное время | Может будить устройство; точность обеспечивается `setExact*`, но подлежит ограничениям Doze/политик точных будильников |
 | **Foreground `Service`** | Длительные задачи, ожидаемые и замечаемые пользователем (навигация, музыка, запись, фитнес-трекинг) | Обязательное постоянное уведомление; повышенный приоритет, но не абсолютная защита от убийства |
-| **JobScheduler** | Низкоуровневый контроль на API 21+ в системных/легаси сценариях | Обычно не используется напрямую в обычных приложениях, т.к. WorkManager абстрагирует его |
+| **JobScheduler** | Низкоуровневый контроль на API 21+ в системных/легаси сценариях | Обычно не используется напрямую в обычных приложениях, т.к. `WorkManager` абстрагирует его |
 
-**WorkManager — гарантированное (best-effort) выполнение:**
+**`WorkManager` — гарантированное (best-effort) выполнение:**
 
 ```kotlin
 // ✅ Правильно: периодическая синхронизация с ограничениями
@@ -56,7 +56,7 @@ WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
 ```
 
-WorkManager подходит для:
+`WorkManager` подходит для:
 - отложенной/периодической работы;
 - работ, которые должны быть выполнены даже после перезапуска устройства;
 - работ с условиями (Wi‑Fi, зарядка и т.д.).
@@ -105,18 +105,18 @@ Foreground `Service` подходит для задач, о которых по�
 ## Answer (EN)
 
 **API Selection Theory:**
-Android provides multiple APIs for background work with different guarantees and constraints. The choice depends on timing requirements, execution guarantees, user visibility, and modern background execution limits. For deferrable work, WorkManager is the recommended default.
+Android provides multiple APIs for background work with different guarantees and constraints. The choice depends on timing requirements, execution guarantees, user visibility, and modern background execution limits. For deferrable work, `WorkManager` is the recommended default.
 
 **Selection Criteria:**
 
 | API | When to Use | Key Feature |
 |-----|------------|-------------|
-| **WorkManager** | Deferrable, reliable work that does not require exact timing | Survives reboots, supports constraints, built on JobScheduler/AlarmManager/FirebaseJobDispatcher internally |
+| **`WorkManager`** | Deferrable, reliable work that does not require exact timing | Survives reboots, supports constraints, built on JobScheduler/AlarmManager/FirebaseJobDispatcher internally |
 | **AlarmManager** | Alarms/reminders when you need to run at a specific time | Can wake the device; precision via `setExact*`, but subject to Doze and exact alarm restrictions |
-| **Foreground `Service`** | Long-running tasks expected and noticed by the user (navigation, music, recording, fitness tracking) | Mandatory ongoing notification; elevated priority, but not absolute kill protection |
-| **JobScheduler** | Low-level scheduling on API 21+ for system/legacy use cases | Typically not used directly in modern apps because WorkManager abstracts it |
+| **Foreground `Service`** | `Long`-running tasks expected and noticed by the user (navigation, music, recording, fitness tracking) | Mandatory ongoing notification; elevated priority, but not absolute kill protection |
+| **JobScheduler** | Low-level scheduling on API 21+ for system/legacy use cases | Typically not used directly in modern apps because `WorkManager` abstracts it |
 
-**WorkManager — guaranteed (best-effort) execution:**
+**`WorkManager` — guaranteed (best-effort) execution:**
 
 ```kotlin
 // ✅ Correct: periodic sync with constraints
@@ -133,7 +133,7 @@ WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
 ```
 
-WorkManager is suitable for:
+`WorkManager` is suitable for:
 - deferrable/periodic work;
 - work that should run even after device reboot;
 - work with constraints (Wi‑Fi, charging, etc.).
@@ -181,15 +181,15 @@ Foreground `Service` is appropriate for tasks the user expects and that run for 
 
 ## Follow-ups (RU)
 
-- Как WorkManager обрабатывает ограничения на разных версиях Android (API 14+ vs 23+ vs 26+)?
+- Как `WorkManager` обрабатывает ограничения на разных версиях Android (API 14+ vs 23+ vs 26+)?
 - Каковы последствия для батареи у каждого подхода и как на них влияет режим Doze?
-- Как выполнять миграцию с устаревших API JobScheduler или AlarmManager на WorkManager?
-- Когда имеет смысл комбинировать несколько подходов (например, WorkManager + Foreground `Service`)?
+- Как выполнять миграцию с устаревших API JobScheduler или AlarmManager на `WorkManager`?
+- Когда имеет смысл комбинировать несколько подходов (например, `WorkManager` + Foreground `Service`)?
 - Каковы компромиссы между точными будильниками и неточными (окно запуска) с точки зрения батареи?
 
 ## References (RU)
 
-- [[c-workmanager]] — концепция WorkManager
+- [[c-workmanager]] — концепция `WorkManager`
 - [Документация WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Ограничения фонового выполнения](https://developer.android.com/about/versions/oreo/background)
 - [Планирование задач с WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
@@ -200,26 +200,26 @@ Foreground `Service` is appropriate for tasks the user expects and that run for 
 - [[q-android-app-components--android--easy]] — Компоненты приложения
 
 ### Связанные (тот Же уровень)
-- [[q-workmanager-return-result--android--medium]] — Результаты WorkManager
+- [[q-workmanager-return-result--android--medium]] — Результаты `WorkManager`
 - [[q-foreground-service-types--android--medium]] — Типы foreground-сервисов
 
 ### Продвинутые (сложнее)
-- [[q-workmanager-advanced--android--medium]] — Продвинутый WorkManager
+- [[q-workmanager-advanced--android--medium]] — Продвинутый `WorkManager`
 - [[q-android-runtime-internals--android--hard]] — Внутреннее устройство Runtime
 
 ---
 
 ## Follow-ups
 
-- How does WorkManager handle constraints on different Android versions (API 14+ vs 23+ vs 26+)?
+- How does `WorkManager` handle constraints on different Android versions (API 14+ vs 23+ vs 26+)?
 - What are the battery optimization implications of each approach, and how does Doze mode affect them?
-- How do you migrate from deprecated JobScheduler or AlarmManager APIs to WorkManager?
-- When would you combine multiple approaches (e.g., WorkManager + Foreground `Service`)?
+- How do you migrate from deprecated JobScheduler or AlarmManager APIs to `WorkManager`?
+- When would you combine multiple approaches (e.g., `WorkManager` + Foreground `Service`)?
 - What are the trade-offs between exact alarms and inexact window-based alarms for battery life?
 
 ## References
 
-- [[c-workmanager]] - WorkManager concept
+- [[c-workmanager]] - `WorkManager` concept
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Background Execution Limits](https://developer.android.com/about/versions/oreo/background)
 - [Schedule Tasks with WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
@@ -230,9 +230,9 @@ Foreground `Service` is appropriate for tasks the user expects and that run for 
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
-- [[q-workmanager-return-result--android--medium]] - WorkManager results
+- [[q-workmanager-return-result--android--medium]] - `WorkManager` results
 - [[q-foreground-service-types--android--medium]] - Foreground services
 
 ### Advanced (Harder)
-- [[q-workmanager-advanced--android--medium]] - Advanced WorkManager
+- [[q-workmanager-advanced--android--medium]] - Advanced `WorkManager`
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

@@ -1,4 +1,4 @@
----
+---\
 id: android-192
 title: App Startup Optimization / Оптимизация запуска приложения
 aliases: [App Startup Optimization, Оптимизация запуска приложения]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/app-startup, android/performance-memory, android/performance-startup, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как оптимизировать время запуска Android-приложения?
 
@@ -72,7 +72,7 @@ class MyApplication : Application() {
 
 **3. Отложенное выполнение**
 
-Некритичная инициализация выносится из горячего пути запуска и выполняется асинхронно (через WorkManager, корутины, Handler и т.п.) уже после первичного показа UI или в удобный момент жизненного цикла.
+Некритичная инициализация выносится из горячего пути запуска и выполняется асинхронно (через `WorkManager`, корутины, `Handler` и т.п.) уже после первичного показа UI или в удобный момент жизненного цикла.
 
 ```kotlin
 class DeferredInitializer : Initializer<Unit> {
@@ -173,7 +173,7 @@ class MyApplication : Application() {
 
 **3. Deferred Execution**
 
-Moves non-critical work off the hot startup path and runs it asynchronously (via WorkManager, coroutines, Handler, etc.) after the initial UI is presented or at an appropriate lifecycle point.
+Moves non-critical work off the hot startup path and runs it asynchronously (via `WorkManager`, coroutines, `Handler`, etc.) after the initial UI is presented or at an appropriate lifecycle point.
 
 ```kotlin
 class DeferredInitializer : Initializer<Unit> {

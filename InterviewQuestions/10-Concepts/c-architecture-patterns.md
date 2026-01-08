@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-133438"
 title: "Architecture Patterns / Architecture Patterns"
 aliases: ["Architecture Patterns"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-system-design"
-related: [c-mvvm, c-mvp-pattern, c-clean-architecture, c-design-patterns, c-repository-pattern]
+moc: "moc-architecture-patterns"
+related: ["c-mvvm", "c-mvp-pattern", "c-clean-architecture", "c-design-patterns", "c-repository-pattern"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [architecture-patterns, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -47,6 +48,6 @@ Architecture patterns are reusable, high-level templates that define the overall
 
 ## References
 
-- "Patterns of Enterprise Application Architecture" — Martin Fowler
+- "Patterns of Enterprise `Application` Architecture" — Martin Fowler
 - "Software Architecture Patterns" — Mark Richards (O'Reilly)
 - https://martinfowler.com/articles/microservices.html

@@ -1,4 +1,4 @@
----
+---\
 id: android-631
 title: Quick Settings Tiles Architecture / Quick Settings
 aliases: [Quick Settings, Quick Settings Tiles Architecture]
@@ -20,7 +20,7 @@ sources:
 - url: "https://developer.android.com/develop/shortcutmanager"
   note: App Shortcuts documentation
 
----
+---\
 # Вопрос (RU)
 > Как спроектировать архитектуру Quick Settings Tile так, чтобы тайл оставался синхронизирован с состоянием приложения, безопасно поддерживал фоновые операции и был согласован с интеграцией App Shortcuts?
 
@@ -114,7 +114,7 @@ class SyncTileService : TileService() {
 ### Безопасность, Приватность И UX
 
 - Проверяйте и запрашивайте необходимые разрешения (например, связанные с VPN/hotspot/location) через обычные механизмы приложения; сам `TileService` не даёт дополнительных привилегий.
-- Не запускайте чувствительные потоки с заблокированного экрана без необходимости; для действий, требующих взаимодействия пользователя или разблокировки, используйте `unlockAndRun { ... }` или открывайте Activity через `startActivityAndCollapse()`.
+- Не запускайте чувствительные потоки с заблокированного экрана без необходимости; для действий, требующих взаимодействия пользователя или разблокировки, используйте `unlockAndRun { ... }` или открывайте `Activity` через `startActivityAndCollapse()`.
 - Проектируйте UX тайла понятно: мгновенный отклик (optimistic UI при необходимости), корректные состояния, отсутствие неожиданных сайд-эффектов.
 
 ---

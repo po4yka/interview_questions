@@ -1,4 +1,4 @@
----
+---\
 id: android-197
 title: What Is Viewmodel / Что такое ViewModel
 aliases: [What Is ViewModel, Что такое ViewModel]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, architecture, difficulty/medium, mvvm, state-management, viewmodel]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое `ViewModel` в Android?
@@ -161,7 +161,7 @@ class SavedStateViewModel(
 
 ### Dependency Injection
 
-**С Hilt** (рекомендуется):
+**С `Hilt`** (рекомендуется):
 
 ```kotlin
 @HiltViewModel
@@ -201,7 +201,7 @@ private val viewModel by viewModels<UserViewModel> {
 
 ## Answer (EN)
 
-**`ViewModel`** is an Android Architecture Component class that acts as a **screen-level state holder and UI-related logic holder**. Its main advantage is **keeping state in memory across configuration changes** (screen rotation, language change) without refetching data. By itself, a `ViewModel` does not survive system process death.
+**`ViewModel`** is an Android Architecture `Component` class that acts as a **screen-level state holder and UI-related logic holder**. Its main advantage is **keeping state in memory across configuration changes** (screen rotation, language change) without refetching data. By itself, a `ViewModel` does not survive system process death.
 
 ### Key Characteristics
 
@@ -333,7 +333,7 @@ class SavedStateViewModel(
 
 ### Dependency Injection
 
-**With Hilt** (recommended):
+**With `Hilt`** (recommended):
 
 ```kotlin
 @HiltViewModel
@@ -391,8 +391,8 @@ private val viewModel by viewModels<UserViewModel> {
 
 ## References
 
-- ["ViewModel" Overview - Android Developers](https://developer.android.com/topic/libraries/architecture/viewmodel)
-- ["ViewModel" API Reference](https://developer.android.com/reference/androidx/lifecycle/ViewModel)
+- ["`ViewModel`" Overview - Android Developers](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- ["`ViewModel`" API Reference](https://developer.android.com/reference/androidx/lifecycle/ViewModel)
 - [ViewModels: A Simple Example - Medium](https://medium.com/androiddevelopers/viewmodels-a-simple-example-ed5ac416317e)
 - [[q-mvvm-pattern--android--medium]]
 - [[q-factory-pattern-android--android--medium]]

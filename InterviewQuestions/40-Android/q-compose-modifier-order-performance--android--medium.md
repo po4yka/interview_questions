@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-compose-recomposition, q-compose-modifier-system--android--medium, q-compose-performance-optimization--android--hard, q-performance-monitoring-jank-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-compose, compose, difficulty/medium, optimization]
+tags: [android/performance-memory, android/ui-compose, difficulty/medium, optimization]
 ---
 # Вопрос (RU)
 > Как порядок модификаторов влияет на производительность в Jetpack Compose?

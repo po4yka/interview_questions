@@ -1,4 +1,4 @@
----
+---\
 id: android-339
 title: How Does Fragment Lifecycle Differ From Activity V2
 aliases: [How Does Fragment Lifecycle Differ From Activity V2, Чем жизненный цикл Fragment отличается от Activity v2]
@@ -16,7 +16,7 @@ updated: 2025-10-28
 sources: []
 tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Чем жизненный цикл `Fragment` отличается от жизненного цикла `Activity`?
@@ -418,7 +418,7 @@ override fun onDestroyView() {
 ## References
 
 - [Android `Fragment` Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
-- [`Fragment` Lifecycle API](https://developer.android.com/reference/androidx/fragment/app/Fragment)
+- [`Fragment` `Lifecycle` API](https://developer.android.com/reference/androidx/fragment/app/Fragment)
 - [ViewLifecycleOwner](https://developer.android.com/reference/androidx/lifecycle/ViewLifecycleOwner)
 
 ## Related Questions

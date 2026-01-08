@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-222
 title: "Companion Object Initialization / Инициализация Companion Object"
 aliases: [Companion Object Initialization, Инициализация Companion Object]
@@ -14,7 +14,7 @@ related: [c-kotlin, c-kotlin-features, q-abstract-class-vs-interface--kotlin--me
 created: 2025-10-15
 updated: 2025-11-10
 tags: [companion-objects, difficulty/easy, initialization, programming-languages]
----
+---\
 # Вопрос (RU)
 > Когда инициализируется companion object в Kotlin?
 
@@ -341,7 +341,7 @@ Important: The exact timing depends on the target platform and class initializat
 **Key points:**
 - Companion object initialization is tied to initialization of the corresponding class
 - Often appears "lazy" (commonly near first actual use), but this is not a separate hard guarantee from the class initialization rules
-- Thread-safe by default (initialization happens only once, even with concurrent access)
+- `Thread`-safe by default (initialization happens only once, even with concurrent access)
 - Initialized only once for the process lifetime
 - On the JVM, behavior aligns with Java's class initialization and static initializer semantics
 

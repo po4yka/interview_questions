@@ -1,4 +1,4 @@
----
+---\
 id: android-619
 title: Play Integrity Attestation / Аттестация Play Integrity
 aliases: [Play Integrity Attestation, Аттестация Play Integrity]
@@ -18,7 +18,7 @@ sources:
   - "https://cloud.google.com/play-integrity/reference/rest"
   - "https://developer.android.com/google/play/integrity"
 
----
+---\
 # Вопрос (RU)
 > Как реализовать Play Integrity: запрос токена на клиенте, проверка вердикта на сервере, использование capability tokens и связь с Play Billing?
 
@@ -219,7 +219,7 @@ def verify_token(token: str):
     return payload
 ```
 
-- Call the Play Integrity API only from your backend using the service account; never store keys on the client.
+- `Call` the Play Integrity API only from your backend using the service account; never store keys on the client.
 - Validate at minimum:
   - `requestDetails.requestPackageName` matches your `PACKAGE_NAME`.
   - `requestDetails.nonce` matches the value generated for this request.
@@ -228,7 +228,7 @@ def verify_token(token: str):
 
 ### 6. Capability Tokens
 
-- Request capability tokens on the backend via the Play Integrity API and deliver them to the client.
+- `Request` capability tokens on the backend via the Play Integrity API and deliver them to the client.
 - The client uses the capability token when requesting integrity tokens in constrained environments (e.g., limited Google Play services / network).
 - Respect their validity period and usage limits; handle expiry and errors, and do not treat them as a permanent offline mode.
 

@@ -1,4 +1,4 @@
----
+---\
 id: "20251023-120300"
 title: "Encryption / Шифрование"
 aliases: ["Cryptography", "Encryption", "Криптография", "Шифрование"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-security"
-related: [c-encryption-android, c-security, c-https-tls, c-networking, c-biometric-authentication]
+related: ["c-encryption-android", "c-security", "c-https-tls", "c-networking", "c-biometric-authentication"]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "concept", "cryptography", "difficulty/medium", "encryption", "security"]
----
+---\
 
 # Encryption / Шифрование
 
@@ -33,7 +33,7 @@ Encryption is the process of converting plaintext data into ciphertext using cry
 - **Symmetric encryption**: Same key for encryption and decryption (AES, ChaCha20)
 - **Asymmetric encryption**: Public key for encryption, private key for decryption (RSA, ECC)
 - **Android Keystore**: Hardware-backed secure storage for cryptographic keys
-- **Data at rest**: Encrypt stored data (SharedPreferences, files, databases)
+- **Data at rest**: Encrypt stored data (`SharedPreferences`, files, databases)
 - **Data in transit**: Encrypt network communications (TLS/SSL)
 - **Key management**: Secure generation, storage, and rotation of encryption keys
 
@@ -42,7 +42,7 @@ Encryption is the process of converting plaintext data into ciphertext using cry
 - **Симметричное шифрование**: Один ключ для шифрования и расшифровки (AES, ChaCha20)
 - **Асимметричное шифрование**: Публичный ключ для шифрования, приватный для расшифровки (RSA, ECC)
 - **Android Keystore**: Аппаратно защищенное хранилище криптографических ключей
-- **Данные в хранилище**: Шифрование сохраненных данных (SharedPreferences, файлы, базы данных)
+- **Данные в хранилище**: Шифрование сохраненных данных (`SharedPreferences`, файлы, базы данных)
 - **Данные в передаче**: Шифрование сетевых коммуникаций (TLS/SSL)
 - **Управление ключами**: Безопасная генерация, хранение и ротация ключей шифрования
 

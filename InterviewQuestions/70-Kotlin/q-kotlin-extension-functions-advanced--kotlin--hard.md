@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-229
 title: "Kotlin Extension Functions Advanced / Продвинутые Extension-функции в Kotlin"
 aliases: ["Advanced Extension Functions", "Kotlin Extension Functions Advanced"]
@@ -14,7 +14,7 @@ related: [q-crossinline-keyword--kotlin--medium, q-object-singleton-companion--k
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/hard, dsl, extensions, generics, kotlin, receivers]
----
+---\
 # Вопрос (RU)
 
 > Реализуйте extension-функции с receivers, generic extensions и nullable receivers. Разберитесь с разрешением вызовов и областью видимости.
@@ -243,7 +243,7 @@ fun processOrder(order: Order) {
 }
 ```
 
-Context receivers обобщают идею множественных receivers для extensions/DSL.
+`Context` receivers обобщают идею множественных receivers для extensions/DSL.
 
 ### Лучшие практики
 
@@ -490,7 +490,7 @@ fun processOrder(order: Order) {
 }
 ```
 
-Context receivers generalize the idea of multiple receivers for extensions/DSLs.
+`Context` receivers generalize the idea of multiple receivers for extensions/DSLs.
 
 ### Best Practices
 

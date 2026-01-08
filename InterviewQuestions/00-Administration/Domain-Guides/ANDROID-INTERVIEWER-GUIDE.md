@@ -1,5 +1,5 @@
----
----
+---\
+---\
 
 # Android System Design — Interviewer One-Pager
 
@@ -30,7 +30,7 @@ Link: [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
 
 ## Red Flags
 
--   Vague “MVVM + Retrofit + Room” with no budgets
+-   Vague “MVVM + `Retrofit` + `Room`” with no budgets
 -   Ignores background limits and permission flows
 -   No schema evolution or conflict resolution
 -   No telemetry or rollback strategy

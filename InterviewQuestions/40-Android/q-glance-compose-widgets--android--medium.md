@@ -1,4 +1,4 @@
----
+---\
 id: android-621
 title: Glance Compose Widgets / Виджеты Glance на Compose
 aliases: [Glance Compose Widgets, Виджеты Glance на Compose]
@@ -17,7 +17,7 @@ tags: [android/glance, android/shortcuts-widgets, android/ui-compose, android/ui
 sources:
   - url: "https://developer.android.com/jetpack/compose/glance/appwidget"
     note: Glance app widget guide
----
+---\
 # Вопрос (RU)
 > Как создать и поддерживать аппвиджет на Jetpack Glance: управлять состоянием, обновлениями, действиями и ограничениями RemoteViews?
 
@@ -66,7 +66,7 @@ class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
 ```
 
 - Можно использовать `GlanceStateDefinition` (или готовые `PreferencesGlanceStateDefinition`/`ProtoGlanceStateDefinition`) для персистентного состояния; при кастомной реализации обязательно реализуйте все требуемые методы (`getData`, `updateData`, `getLocation`/`getDataStore` в зависимости от версии API) с устойчивыми ключами.
-- Для периодических обновлений обычно используют WorkManager + `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)`.
+- Для периодических обновлений обычно используют `WorkManager` + `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)`.
 - Учитывайте ограничения по обновлениям: для периодических обновлений действуют минимальные интервалы и квоты на частоту; ручные/событийные обновления возможны чаще, но также подчиняются системным лимитам по энергопотреблению.
 
 ### 3. Actions И Интерактивность
@@ -151,7 +151,7 @@ class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
 ```
 
 - Use a `GlanceStateDefinition` (or built-ins like `PreferencesGlanceStateDefinition`/`ProtoGlanceStateDefinition`) for persistent state; for custom definitions you must implement all required methods (`getData`, `updateData`, `getLocation`/`getDataStore` depending on API version) with stable keys.
-- Use WorkManager plus `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)` for periodic/background updates.
+- Use `WorkManager` plus `GlanceAppWidgetManager(context).getGlanceIds(WeatherWidget::class.java)` for periodic/background updates.
 - Respect update quotas: periodic updates have minimum intervals and system-enforced limits; event-driven/manual updates can be more frequent but are still constrained by system power/abuse policies.
 
 ### 3. Actions and Interactivity

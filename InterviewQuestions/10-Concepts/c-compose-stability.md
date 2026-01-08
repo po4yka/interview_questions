@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-124741"
 title: "Compose Stability / Compose Stability"
 aliases: ["Compose Stability"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-jetpack-compose, c-compose-recomposition, c-compose-phases, c-performance-optimization, c-immutability]
+moc: "moc-cs"
+related: ["c-jetpack-compose", "c-compose-recomposition", "c-compose-phases", "c-performance-optimization", "c-immutability"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ Compose Stability в Jetpack Compose — это свойство значени�
 ## Key Points (EN)
 
 - Stable vs unstable types: A "stable" type guarantees that Compose can detect all changes in its public state; if no tracked fields change, recomposition using that value can be skipped.
-- Built-in stable entities: Many primitives (e.g., Int, String), immutable data classes with stable fields, and key Compose types (e.g., Modifier) are treated as stable by the compiler.
+- Built-in stable entities: Many primitives (e.g., `Int`, `String`), immutable data classes with stable fields, and key Compose types (e.g., Modifier) are treated as stable by the compiler.
 - Compiler analysis: The Compose compiler performs stability analysis and uses it to generate equality checks and decide when to skip or re-run composables.
 - API and design impact: Marking types as immutable/stable (e.g., with @Immutable/@Stable) and preferring immutable state holders reduces unnecessary recompositions and improves performance.
 - Common pitfalls: Passing mutable collections, lambdas capturing changing state, or large unstable objects into composables can mark parameters as unstable and trigger excessive recomposition.
@@ -40,7 +41,7 @@ Compose Stability в Jetpack Compose — это свойство значени�
 ## Ключевые Моменты (RU)
 
 - Stable vs unstable типы: "Стабильный" тип гарантирует, что Compose может отследить все изменения его публичного состояния; если отслеживаемые поля не изменились, рекомпозицию с таким значением можно пропустить.
-- Встроенные стабильные сущности: Многие примитивы (например, Int, String), неизменяемые data-классы со стабильными полями и ключевые типы Compose (например, Modifier) рассматриваются компилятором как стабильные.
+- Встроенные стабильные сущности: Многие примитивы (например, `Int`, `String`), неизменяемые data-классы со стабильными полями и ключевые типы Compose (например, Modifier) рассматриваются компилятором как стабильные.
 - Анализ компилятора: Компилятор Compose выполняет анализ стабильности и на его основе генерирует проверки равенства и решает, когда можно пропустить или заново выполнить composable-функции.
 - Влияние на дизайн API: Отмечание типов как immutable/stable (например, через @Immutable/@Stable) и использование неизменяемых контейнеров состояния уменьшают количество лишних рекомпозиций и улучшают производительность.
 - Типичные ошибки: Передача изменяемых коллекций, лямбд с захватом меняющегося состояния или крупных нестабильных объектов в composable делает параметры нестабильными и приводит к избыточным рекомпозициям.

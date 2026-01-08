@@ -1,4 +1,4 @@
----
+---\
 id: android-127
 title: "How Dialog Differs From Other Navigation / Чем Dialog отличается от другой навигации"
 aliases: ["How Dialog Differs From Other Navigation", "Чем Dialog отличается от другой навигации"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-navigation, dialog, difficulty/medium, navigation]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Чем dialog отличается от остальной навигации?
@@ -36,10 +36,10 @@ Dialog — это UI-компонент, который отображается
 1. **Overlay vs Replacement** — Dialog отображается поверх текущего экрана; обычная навигация переходит на новый экран (destination) или изменяет back stack.
 2. **Back `Stack`** — Классический Dialog (вьюшный/Compose `AlertDialog`) сам по себе не добавляется в back stack навигации. Однако:
    - `DialogFragment` может быть добавлен в back stack `FragmentManager`.
-   - В Navigation Component и Compose Navigation существуют dialog-destinations, которые становятся частью back stack `NavController`.
+   - В Navigation `Component` и Compose Navigation существуют dialog-destinations, которые становятся частью back stack `NavController`.
 3. **State Preservation** — Под Dialog обычно сохраняется состояние родительского экрана (он остаётся в памяти и в иерархии/compose tree), тогда как при навигации на другой экран состояние может потребовать сохранения/восстановления через `SavedStateHandle`, `rememberSaveable` и т.п.
 4. **Scope** — Dialog используется для кратких, фокусированных взаимодействий (подтверждения, выбор опций, простые формы), а навигация — для полноценных экранов и сложных сценариев.
-5. **Lifecycle** — Dialog имеет собственный UI-жизненный цикл, но он привязан к родительскому `Activity`/`Fragment`/компоновке: при уничтожении родителя диалог должен быть корректно закрыт/воссоздан согласно их жизненному циклу.
+5. **`Lifecycle`** — Dialog имеет собственный UI-жизненный цикл, но он привязан к родительскому `Activity`/`Fragment`/компоновке: при уничтожении родителя диалог должен быть корректно закрыт/воссоздан согласно их жизненному циклу.
 
 **Использование:** подтверждения действий, простые формы, выбор опций (date/time picker), индикаторы прогресса.
 
@@ -123,10 +123,10 @@ A dialog is a UI component shown on top of the current screen as a temporary ove
 1. **Overlay vs Replacement** - A dialog appears on top of the current screen; standard navigation moves to another screen (destination) or mutates the back stack.
 2. **Back `Stack`** - A regular dialog (view-based or Compose `AlertDialog`) by itself is not added as a standard navigation back stack entry. However:
    - A `DialogFragment` can be added to the `FragmentManager` back stack.
-   - Navigation Component and Compose Navigation provide dialog destinations that do participate in the `NavController` back stack.
+   - Navigation `Component` and Compose Navigation provide dialog destinations that do participate in the `NavController` back stack.
 3. **State Preservation** - The underlying screen state is typically preserved while a dialog is shown (the screen remains in memory / in the compose tree). With full navigation to another destination, you often rely on `SavedStateHandle`, `rememberSaveable`, etc., to restore state.
 4. **Scope** - Dialogs are for short, focused interactions (confirmations, option picks, simple forms); navigation is for full screens and complex flows.
-5. **Lifecycle** - A dialog has its own UI lifecycle but is tied to its parent `Activity`/`Fragment`/composition: when the parent is destroyed, the dialog must be closed or recreated consistently with that lifecycle.
+5. **`Lifecycle`** - A dialog has its own UI lifecycle but is tied to its parent `Activity`/`Fragment`/composition: when the parent is destroyed, the dialog must be closed or recreated consistently with that lifecycle.
 
 **Use Cases:** Action confirmations, simple forms, option selection (date/time pickers), progress indicators.
 
@@ -205,14 +205,14 @@ AlertDialog.Builder(context)
 
 - Как состояние диалога переживает изменения конфигурации в Compose и во вьюшном подходе?
 - Что происходит с диалогом при уничтожении родительской activity/компоновки?
-- Как реализовать вложенную навигацию с диалогами в Navigation Component?
+- Как реализовать вложенную навигацию с диалогами в Navigation `Component`?
 - Каковы perf-аспекты частого показа диалогов?
 
 ## Follow-ups
 
 - How does dialog state survive configuration changes in Compose vs Views?
 - What happens to dialog when parent activity/composable is destroyed?
-- How to implement nested navigation with dialogs in Navigation Component?
+- How to implement nested navigation with dialogs in Navigation `Component`?
 - What are the performance implications of showing dialogs frequently?
 
 ---
@@ -240,7 +240,7 @@ AlertDialog.Builder(context)
 - [[q-what-is-layout-performance-measured-in--android--medium]]
 
 ### Продвинутые (сложнее)
-- Реализация собственных dialog-destinations в Navigation Component
+- Реализация собственных dialog-destinations в Navigation `Component`
 - Управление состоянием диалогов при смерти процесса
 - Построение переиспользуемых диалоговых систем в Compose
 
@@ -253,6 +253,6 @@ AlertDialog.Builder(context)
 - [[q-what-is-layout-performance-measured-in--android--medium]] - Performance considerations
 
 ### Advanced (Harder)
-- Implementing custom dialog destinations in Navigation Component
+- Implementing custom dialog destinations in Navigation `Component`
 - Managing dialog state across process death
 - Building reusable dialog systems with Compose

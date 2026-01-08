@@ -1,4 +1,4 @@
----
+---\
 id: android-625
 title: Perfetto Frame Timeline Analysis / Анализ Frame Timeline в Perfetto
 aliases: [Perfetto Frame Timeline Analysis, Анализ Frame Timeline в Perfetto]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/topic/performance/tracing/perfetto"
   - "https://perfetto.dev/docs/concepts/frame-timeline"
 
----
+---\
 # Вопрос (RU)
 > Как использовать Perfetto и Frame Timeline для анализа лагов: настройка трассировки, интерпретация DisplayFrame/AppFrame, корреляция с потоками и автоматизация метрик?
 
@@ -64,7 +64,7 @@ adb pull /data/misc/perfetto-traces/app.perfetto-trace
 
 ### 2. Интерпретация Frame Timeline
 
-- **AppFrame**: фрейм на стороне приложения — момент, когда приложение завершило подготовку кадра (рендеринг на `RenderThread` / запись в Surface) и передало результат системе.
+- **AppFrame**: фрейм на стороне приложения — момент, когда приложение завершило подготовку кадра (рендеринг на `RenderThread` / запись в `Surface`) и передало результат системе.
 - **DisplayFrame**: фрейм на стороне SurfaceFlinger/дисплея — момент, когда системный композитор выбрал и показал кадр на экране.
 - Jank определяется по тому, успевает ли AppFrame попасть в соответствующий DisplayFrame (до дедлайна VSync) и по полям `jank_type` / причинам jank в таблицах Frame Timeline.
 - В Perfetto UI используется цветовая подсветка состояний фреймов (успешные, с задержкой, дропнутые и др.); воспринимайте зелёный/жёлтый/красный как концептуальное обозначение нормальных, пограничных и проблемных кадров, а за точной семантикой цветов и легендой обращайтесь к конкретной версии UI.
@@ -117,7 +117,7 @@ SQL
 
 ### 2. Frame Timeline Interpretation
 
-- AppFrame: the application-side frame — when the app has finished producing the frame (RenderThread/GPU command submission / writing into its Surface) and hands it off to the system.
+- AppFrame: the application-side frame — when the app has finished producing the frame (RenderThread/GPU command submission / writing into its `Surface`) and hands it off to the system.
 - DisplayFrame: the system compositor/SurfaceFlinger-side frame — when the compositor selects and presents a frame on screen.
 - Jank is detected by checking whether AppFrames meet the deadlines for their corresponding DisplayFrames (vsync deadline) and by inspecting `jank_type` / jank reasons in frame timeline tables.
 - Treat green/yellow/red in the Perfetto UI as conceptual shorthand for good/borderline/bad frames; rely on the legend of your Perfetto UI version for exact semantics.
@@ -127,7 +127,7 @@ SQL
 
 - In Perfetto, use the Slice/Tracks views and dedicated Frame Timeline tracks to:
   - Filter for `Choreographer#doFrame` and frame-related slices.
-  - Map Main thread → RenderThread → GPU/compositor work.
+  - `Map` Main thread → RenderThread → GPU/compositor work.
   - Inspect Binder calls to SurfaceFlinger/ViewRootImpl to see where delays occur between the app and the system compositor.
 
 ### 4. Automation

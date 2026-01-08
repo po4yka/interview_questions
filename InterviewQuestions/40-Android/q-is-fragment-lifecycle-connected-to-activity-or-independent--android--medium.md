@@ -1,4 +1,4 @@
----
+---\
 id: android-156
 title: Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный цикл Fragment с Activity или независим
 aliases: [Fragment Lifecycle Connection, Связь жизненного цикла Fragment]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, android/lifecycle, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Связан ли жизненный цикл `Fragment` с `Activity` или независим?
@@ -335,12 +335,12 @@ supportFragmentManager.beginTransaction()
 
 ## Ссылки (RU)
 
-- Android Developer Docs: `Fragment` Lifecycle
+- Android Developer Docs: `Fragment` `Lifecycle`
 - Android Developer Docs: ViewLifecycleOwner
 
 ## References
 
-- Android Developer Docs: `Fragment` Lifecycle
+- Android Developer Docs: `Fragment` `Lifecycle`
 - Android Developer Docs: ViewLifecycleOwner
 
 ## Связанные Вопросы (RU)

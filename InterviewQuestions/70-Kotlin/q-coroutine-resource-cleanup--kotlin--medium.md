@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-210
 title: "Resource Cleanup in Coroutines / Очистка Ресурсов в Корутинах"
 aliases: [Resource Cleanup Coroutines, Очистка ресурсов в корутинах]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [kotlin, coroutines, resource-cleanup, try-finally, noncancellable, cancellation, difficulty/medium]
 source: Kotlin Coroutines Interview Questions PDF
----
+---\
 # Вопрос (RU)
 > Как обеспечить правильную очистку ресурсов при отмене корутины?
 
@@ -262,12 +262,12 @@ job.join()   // Wait for cleanup to complete
 ```
 
 **How It Works**:
-1. Coroutine starts writing to file.
+1. `Coroutine` starts writing to file.
 2. `cancel()` is called.
 3. At next suspension point (`delay(100)`), cancellation is detected.
 4. `CancellationException` is thrown.
 5. `finally` block executes → file closed.
-6. Coroutine terminates.
+6. `Coroutine` terminates.
 
 ### Solution 2: use() Extension (Automatic Cleanup)
 
@@ -344,7 +344,7 @@ job.join() // Waits for NonCancellable block to finish
 - Cleanup requires suspending functions
 - Must upload crash logs
 - Must save critical state
-- Database transactions must complete
+- `Database` transactions must complete
 
 ### Solution 4: Multiple Resources
 

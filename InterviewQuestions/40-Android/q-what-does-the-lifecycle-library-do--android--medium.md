@@ -1,4 +1,4 @@
----
+---\
 id: android-370
 title: What Does The Lifecycle Library Do / Что делает библиотека Lifecycle
 aliases: [What Does The Lifecycle Library Do, Что делает библиотека Lifecycle]
@@ -16,27 +16,27 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium, lifecycle-aware]
 
----
+---\
 # Вопрос (RU)
 
-> Что делает библиотека Lifecycle?
+> Что делает библиотека `Lifecycle`?
 
 ---
 
 # Question (EN)
 
-> What does the Lifecycle library do?
+> What does the `Lifecycle` library do?
 
 ---
 
 ## Ответ (RU)
 
-**Библиотека Lifecycle** предоставляет классы и интерфейсы для создания **lifecycle-aware компонентов**, которые автоматически адаптируют свое поведение в зависимости от текущего состояния жизненного цикла компонентов, реализующих `LifecycleOwner` (в первую очередь `Activity` и `Fragment`). Это помогает уменьшить утечки памяти и количество крэшей и улучшает архитектуру кода, делая работу с жизненным циклом явной и декларативной.
+**Библиотека `Lifecycle`** предоставляет классы и интерфейсы для создания **lifecycle-aware компонентов**, которые автоматически адаптируют свое поведение в зависимости от текущего состояния жизненного цикла компонентов, реализующих `LifecycleOwner` (в первую очередь `Activity` и `Fragment`). Это помогает уменьшить утечки памяти и количество крэшей и улучшает архитектуру кода, делая работу с жизненным циклом явной и декларативной.
 
 ### Основные Компоненты
 
-**1. Lifecycle** — абстракция, представляющая состояние жизненного цикла и события переходов
-**2. LifecycleOwner** — интерфейс, реализуемый компонентами (`Activity`/`Fragment` и др.), предоставляющими `Lifecycle`
+**1. `Lifecycle`** — абстракция, представляющая состояние жизненного цикла и события переходов
+**2. `LifecycleOwner`** — интерфейс, реализуемый компонентами (`Activity`/`Fragment` и др.), предоставляющими `Lifecycle`
 **3. LifecycleObserver** / **DefaultLifecycleObserver** — наблюдатели за изменениями жизненного цикла (**рекомендуется** `DefaultLifecycleObserver`, тогда как аннотированный `LifecycleObserver` считается устаревшим подходом)
 
 ### Современный Подход: DefaultLifecycleObserver
@@ -173,12 +173,12 @@ class GoodActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-The **Lifecycle library** provides classes and interfaces to build **lifecycle-aware components** that automatically adjust their behavior based on the current lifecycle state of components that implement `LifecycleOwner` (most commonly Activities and Fragments). It helps reduce memory leaks and crashes and improves code architecture by making lifecycle handling explicit and declarative.
+The **`Lifecycle` library** provides classes and interfaces to build **lifecycle-aware components** that automatically adjust their behavior based on the current lifecycle state of components that implement `LifecycleOwner` (most commonly Activities and Fragments). It helps reduce memory leaks and crashes and improves code architecture by making lifecycle handling explicit and declarative.
 
 ### Core Components
 
-**1. Lifecycle** — abstraction that represents lifecycle state and transition events
-**2. LifecycleOwner** — interface implemented by components (`Activity`/`Fragment` and others) that expose a `Lifecycle`
+**1. `Lifecycle`** — abstraction that represents lifecycle state and transition events
+**2. `LifecycleOwner`** — interface implemented by components (`Activity`/`Fragment` and others) that expose a `Lifecycle`
 **3. LifecycleObserver** / **DefaultLifecycleObserver** — observers that react to lifecycle changes (`DefaultLifecycleObserver` is the recommended modern API; the generic `LifecycleObserver` with annotations is considered legacy-style)
 
 ### Modern Approach: DefaultLifecycleObserver
@@ -315,7 +315,7 @@ class GoodActivity : AppCompatActivity() {
 
 ## Follow-ups
 
-- How does Lifecycle library handle configuration changes?
+- How does `Lifecycle` library handle configuration changes?
 - What's the difference between `LifecycleObserver` and `DefaultLifecycleObserver`?
 - Can custom components implement `LifecycleOwner`?
 - How does `ProcessLifecycleOwner` differ from component lifecycle?
@@ -337,7 +337,7 @@ class GoodActivity : AppCompatActivity() {
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Basic Android concepts
 
 ### Related (Medium)
-- [[q-what-is-viewmodel--android--medium]] - Uses Lifecycle library
+- [[q-what-is-viewmodel--android--medium]] - Uses `Lifecycle` library
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation across lifecycle
 
 ### Advanced (Harder)
@@ -345,7 +345,7 @@ class GoodActivity : AppCompatActivity() {
 - [[q-service-lifecycle-binding--android--hard]] - Advanced lifecycle management
 
 ## Дополнительные Вопросы (RU)
-- Как библиотека Lifecycle обрабатывает изменения конфигурации?
+- Как библиотека `Lifecycle` обрабатывает изменения конфигурации?
 - В чем разница между `LifecycleObserver` и `DefaultLifecycleObserver`?
 - Могут ли кастомные компоненты реализовывать `LifecycleOwner`?
 - Чем отличается `ProcessLifecycleOwner` от жизненного цикла конкретного компонента?
@@ -356,7 +356,7 @@ class GoodActivity : AppCompatActivity() {
 ### Предпосылки (проще)
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Базовые Android-концепции
 ### Связанные (средний уровень)
-- [[q-what-is-viewmodel--android--medium]] - Использует библиотеку Lifecycle
+- [[q-what-is-viewmodel--android--medium]] - Использует библиотеку `Lifecycle`
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Сохранение состояния через жизненный цикл
 ### Продвинутые (сложнее)
 - [[q-why-was-the-lifecycle-library-created--android--hard]] - Мотивация дизайна

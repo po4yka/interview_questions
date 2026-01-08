@@ -1,4 +1,4 @@
----
+---\
 id: android-099
 title: "Rendering Views in Background Thread / Отрисовка View в фоновом потоке"
 aliases: ["Rendering Views in Background Thread", "SurfaceView", "TextureView", "Отрисовка View в фоновом потоке"]
@@ -16,7 +16,7 @@ moc: moc-android
 related: [c-android-graphics-pipeline, c-android-surfaces, q-android-app-lag-analysis--android--medium]
 tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
 
----
+---\
 # Вопрос (RU)
 
 > Какой класс следует использовать для отрисовки `View`-подобного контента в фоновом потоке, не нарушая ограничения главного потока?
@@ -287,7 +287,7 @@ Important: the standard `View` hierarchy (measure/layout/draw) must run on the m
 Regular `Views` must be drawn on the main thread. `SurfaceView` addresses this by using a separate surface:
 - Has its own surface buffer
 - Allows drawing to that buffer from background threads
-- Provides high performance for games and video
+- `Provides` high performance for games and video
 - Reduces load on the UI thread because heavy rendering runs off the main thread (though `SurfaceHolder.Callback` events still arrive on the UI thread, and misusing them can block it)
 
 ### Basic SurfaceView Implementation
@@ -507,7 +507,7 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 - Non-functional:
   - High performance and minimal jank.
   - Predictable resource usage (CPU/GPU/memory).
-  - Thread-safety for shared data access.
+  - `Thread`-safety for shared data access.
 
 ### Architecture
 

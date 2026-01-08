@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-android-testing, q-accessibility-compose--android--medium, q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium, q-compose-ui-testing-advanced--android--hard]
 created: 2024-10-20
 updated: 2025-11-10
-tags: [android/testing-ui, android/ui-compose, compose, difficulty/medium, semantics, testing]
+tags: [android/testing-ui, android/ui-compose, difficulty/medium, semantics, testing]
 sources:
   - "https://developer.android.com/jetpack/compose/testing"
 

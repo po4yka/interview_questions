@@ -1,11 +1,11 @@
----
+---\
 name: obsidian-link-analyzer
 description: >
   Suggest and add cross-references between interview notes. Analyzes target note's
   topic, subtopics, and difficulty to find related questions and concepts. Ranks
   by relevance and adds to both YAML related field and content sections. Builds
   knowledge graph connections.
----
+---\
 
 # Obsidian Link Analyzer
 
@@ -44,7 +44,7 @@ Required context:
 1. **Read target note**
 2. **Extract metadata**:
    - `topic`: Main topic area
-   - `subtopics`: List of subtopics
+   - `subtopics`: `List` of subtopics
    - `difficulty`: easy, medium, or hard
    - `question_kind`: Type of question
    - Existing `related` links

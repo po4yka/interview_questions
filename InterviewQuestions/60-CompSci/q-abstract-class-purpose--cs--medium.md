@@ -13,7 +13,7 @@ moc: moc-cs
 related: [c-computer-science, c-inheritance]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [abstract-class, difficulty/medium, inheritance, oop, template-method]
+tags: [abstract-classes, difficulty/medium, inheritance, oop, template-method]
 sources: ["https://en.wikipedia.org/wiki/Abstract_type"]
 
 ---

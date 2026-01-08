@@ -1,4 +1,4 @@
----
+---\
 id: lang-071
 title: "Find Object Without References / Поиск объектов без ссылок"
 aliases: [Find Object Without References, Поиск объектов без ссылок]
@@ -14,7 +14,7 @@ related: [c-memory-management]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [debugging, difficulty/medium, memory-management, memory-profiler, profiling, programming-languages]
----
+---\
 # Вопрос (RU)
 > Как найти объект, если на него нет ссылок?
 
@@ -42,7 +42,7 @@ tags: [debugging, difficulty/medium, memory-management, memory-profiler, profili
    - Используйте просмотрщик heap в Android Studio или внешние инструменты (например, Memory Analyzer Tool, профайлеры JVM и т.п.).
    - Ищите нужные объекты по типу или специфическим значениям полей.
    - Для подозрительных экземпляров смотрите:
-     - Path to GC Roots: какие ссылки делают объект достижимым.
+     - `Path` to GC Roots: какие ссылки делают объект достижимым.
      - Shallow size и retained size.
      - Dominator Tree / retained set, чтобы увидеть объекты, удерживающие большие подграфы.
    - Это помогает понять, почему объект всё ещё существует, или убедиться, что его больше нет в куче.
@@ -50,7 +50,7 @@ tags: [debugging, difficulty/medium, memory-management, memory-profiler, profili
 3. Memory Analyzer Tool (MAT):
    - Откройте heap dump в MAT.
    - Используйте Histogram для поиска экземпляров нужного класса.
-   - Используйте отчёты Path to GC Roots и Dominator Tree, чтобы понять, за счёт каких ссылок объект удерживается.
+   - Используйте отчёты `Path` to GC Roots и Dominator Tree, чтобы понять, за счёт каких ссылок объект удерживается.
 
 4. LeakCanary (Android):
    - Интегрируйте LeakCanary в debug-сборки.
@@ -81,7 +81,7 @@ You solve this via heap dumps and memory profiling (Kotlin/JVM or Android):
    - Use Android Studio's heap viewer or an external tool.
    - Search for the target class/objects by type or specific field values.
    - For any suspicious instance, inspect:
-     - Path to GC Roots: which references keep it reachable.
+     - `Path` to GC Roots: which references keep it reachable.
      - Shallow size and retained size.
      - Dominator tree / retained set to see which objects retain large subgraphs.
    - This tells you why the object still exists (who holds it), or helps you confirm it's no longer present.
@@ -89,7 +89,7 @@ You solve this via heap dumps and memory profiling (Kotlin/JVM or Android):
 3. Memory Analyzer Tool (MAT)
    - Open the heap dump in MAT.
    - Use "Histogram" to find instances of the desired class.
-   - Use "Path to GC Roots" and "Dominator Tree" reports to understand retention.
+   - Use "`Path` to GC Roots" and "Dominator Tree" reports to understand retention.
 
 4. LeakCanary (Android)
    - Integrate LeakCanary in debug builds.

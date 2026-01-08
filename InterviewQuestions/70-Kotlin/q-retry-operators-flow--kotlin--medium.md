@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-044
 title: "Retry and RetryWhen operators in Flow / Операторы Retry и RetryWhen во `Flow`"
 aliases: ["Retry and RetryWhen operators in Flow", "Операторы Retry и RetryWhen во Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-06
 updated: 2025-11-09
 
 tags: [difficulty/medium, error-handling, flow, kotlin, operators, retry]
----
+---\
 # Вопрос (RU)
 > Что такое операторы `retry` и `retryWhen` в Kotlin `Flow`? Как они работают?
 
@@ -468,7 +468,7 @@ fun <T> Flow<T>.retry(
 
 ### Real-World Retry Examples
 
-**Example 1: Network Request with Retry**
+**Example 1: Network `Request` with Retry**
 
 ```kotlin
 class UserRepository {
@@ -673,7 +673,7 @@ fun loadWithRetry(): Flow<LoadState<Data>> = flow {
 }
 ```
 
-**Pattern 4: Conditional Retry Based on Response**
+**Pattern 4: Conditional Retry Based on `Response`**
 
 ```kotlin
 sealed class ApiException(message: String) : Exception(message) {
@@ -800,7 +800,7 @@ fun `retry should retry 3 times on IOException`() = runTest {
 }
 ```
 
-**3. Set maximum retry attempts**
+**3. `Set` maximum retry attempts**
 
 ```kotlin
 // - GOOD - Limited retries
@@ -838,7 +838,7 @@ fun `retry should retry 3 times on IOException`() = runTest {
 
 ## Ссылки (RU)
 
-- [Обработка ошибок во Flow - документация Kotlin](https://kotlinlang.org/docs/flow.html#exception-handling)
+- [Обработка ошибок во `Flow` - документация Kotlin](https://kotlinlang.org/docs/flow.html#exception-handling)
 - [Операторы Retry](https://elizarov.medium.com/kotlin-flows-and-coroutines-256260fb3bdb)
 
 ## References
@@ -849,31 +849,31 @@ fun `retry should retry 3 times on IOException`() = runTest {
 ## Связанные Вопросы (RU)
 
 ### Средний Уровень
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 
 ### Продвинутый Уровень
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] - `Flow`
+- [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
 
 ### Хаб
-- [[q-kotlin-flow-basics--kotlin--medium]] - Введение в Flow
+- [[q-kotlin-flow-basics--kotlin--medium]] - Введение в `Flow`
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
+- [[q-flow-operators-deep-dive--kotlin--hard]] - `Flow`
+- [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

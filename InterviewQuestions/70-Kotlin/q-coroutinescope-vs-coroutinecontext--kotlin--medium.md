@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-030
 title: "CoroutineScope vs CoroutineContext / CoroutineScope против CoroutineContext"
 aliases: ["CoroutineScope vs CoroutineContext", "CoroutineScope против CoroutineContext"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-10
 
 tags: [coroutinecontext, coroutines, coroutinescope, difficulty/medium, kotlin, structured-concurrency]
----
+---\
 # Вопрос (RU)
 > Что такое CoroutineScope и чем он отличается от CoroutineContext?
 
@@ -348,7 +348,7 @@ scope.launch {
 
 ## Ссылки (RU)
 
-- Документация Kotlin: Coroutine context and dispatchers
+- Документация Kotlin: `Coroutine` context and dispatchers
 - Статьи:
   - Things every Kotlin Developer should know about Coroutines. Part 1: CoroutineContext
   - Things every Kotlin Developer should know about Coroutines. Part 2: CoroutineScope

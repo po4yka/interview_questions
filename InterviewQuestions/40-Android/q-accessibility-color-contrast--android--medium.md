@@ -1,4 +1,4 @@
----
+---\
 id: android-039
 title: Accessibility Color Contrast / Контрастность цветов для доступности
 aliases: [Accessibility Color Contrast, Контрастность цветов для доступности]
@@ -15,7 +15,7 @@ created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 sources: []
----
+---\
 # Вопрос (RU)
 > Как обеспечить доступную контрастность цветов в Android-приложении согласно WCAG?
 
@@ -283,7 +283,7 @@ fun testColorContrast() {
 
 ### Связанные (средней сложности)
 - [[q-accessibility-testing--android--medium]] - Тестирование возможностей доступности
-- [[q-custom-view-accessibility--android--medium]] - Доступность для кастомных View
+- [[q-custom-view-accessibility--android--medium]] - Доступность для кастомных `View`
 
 ### Продвинутые (сложнее)
 - Оптимизация для скринридеров и семантическая разметка

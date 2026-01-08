@@ -1,4 +1,4 @@
----
+---\
 id: android-465
 title: Dagger Component Dependencies / Зависимости компонентов Dagger
 aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
@@ -17,25 +17,25 @@ tags: [android/di-hilt, difficulty/hard]
 sources:
   - "https://dagger.dev/api/latest/dagger/Component.html"
 
----
+---\
 # Вопрос (RU)
-> В чем разница между Component Dependencies и Subcomponents в Dagger? Когда использовать один подход вместо другого?
+> В чем разница между `Component` Dependencies и Subcomponents в `Dagger`? Когда использовать один подход вместо другого?
 
 # Question (EN)
-> What's the difference between Component Dependencies and Subcomponents in Dagger? When would you use one over the other?
+> What's the difference between `Component` Dependencies and Subcomponents in `Dagger`? When would you use one over the other?
 
 ## Ответ (RU)
 
-Component Dependencies и Subcomponents — два способа композиции Dagger-компонентов с различными характеристиками.
+`Component` Dependencies и Subcomponents — два способа композиции `Dagger`-компонентов с различными характеристиками.
 
 ## Краткая Версия
-- Используйте Component Dependencies для модульности и явного контроля того, что экспортируется между независимыми компонентами.
+- Используйте `Component` Dependencies для модульности и явного контроля того, что экспортируется между независимыми компонентами.
 - Используйте Subcomponents для иерархий, соответствующих жизненным циклам (`Activity`/`Fragment`), с общим базовым графом и удобным доступом ко всем зависимостям родителя.
 
 ## Подробная Версия
 #### Ключевые Различия
 
-| Аспект | Component Dependencies | Subcomponents |
+| Аспект | `Component` Dependencies | Subcomponents |
 |--------|-----------------------|---------------|
 | **Отношение** | Has-a (агрегация): компонент зависит от другого компонента как от поставщика зависимостей | Иерархическое включение: subcomponent создается родителем и использует его граф |
 | **Scope** | Имеет собственный граф; может использовать скоупы, отличные от родителя; родительский синглтон виден через явно экспортированные провайдеры | Наследует граф родителя и может добавлять свои binding'и; объекты в `@Singleton`/родительских скоупах общие, subcomponent может иметь свой более "узкий" scope |
@@ -109,7 +109,7 @@ val activityComponent = appComponent
 
 #### Когда Использовать
 
-Component Dependencies:
+`Component` Dependencies:
 - Модульная архитектура с четкой изоляцией: каждый модуль имеет свой компонент.
 - Независимые жизненные циклы компонент (компонент можно пересоздавать/менять, имея только ссылку на зависимости).
 - Точный контроль экспортируемых зависимостей между модулями.
@@ -142,16 +142,16 @@ object AppModule {
 
 ## Answer (EN)
 
-Component Dependencies and Subcomponents are two ways to compose [[c-dagger]] components with different characteristics.
+`Component` Dependencies and Subcomponents are two ways to compose [[c-dagger]] components with different characteristics.
 
 ## Short Version
-- Use Component Dependencies for modularization and explicit control over what is exposed between independent components.
+- Use `Component` Dependencies for modularization and explicit control over what is exposed between independent components.
 - Use Subcomponents for lifecycle-aligned hierarchies (`Activity`/`Fragment`) with a shared base graph and convenient access to all parent bindings.
 
 ## Detailed Version
 #### Key Differences
 
-| Aspect | Component Dependencies | Subcomponents |
+| Aspect | `Component` Dependencies | Subcomponents |
 |--------|-----------------------|---------------|
 | **Relationship** | Has-a (aggregation): a component depends on another component as a provider of dependencies | Hierarchical inclusion: subcomponent is created by the parent and uses its graph |
 | **Scope** | Has its own graph; may define scopes independent from the parent; parent singletons are visible only via explicitly exported provision methods | Inherits the parent's object graph and can add its own bindings; parent-scoped objects (e.g. `@Singleton`) are shared; subcomponent can define narrower scopes |
@@ -225,7 +225,7 @@ Key points:
 
 #### When to Use
 
-Component Dependencies:
+`Component` Dependencies:
 - Modular architecture with clear boundaries: each module owns its component.
 - Independent component lifecycles (you can recreate/replace dependent components while holding only references to required dependencies).
 - Fine-grained control over which dependencies are exposed between modules.
@@ -260,16 +260,16 @@ object AppModule {
 
 - Как обрабатывать циклические зависимости между компонентами?
 - Каковы производительные последствия каждого подхода?
-- Как Hilt автоматически управляет жизненными циклами компонентов?
-- Когда следует предпочесть Subcomponents вместо Component Dependencies?
+- Как `Hilt` автоматически управляет жизненными циклами компонентов?
+- Когда следует предпочесть Subcomponents вместо `Component` Dependencies?
 - Как тестировать компоненты с зависимостями?
 
 ## Follow-ups
 
 - How do you handle circular dependencies between components?
 - What are the performance implications of each approach?
-- How does Hilt manage component lifecycles automatically?
-- When should you prefer Subcomponents over Component Dependencies?
+- How does `Hilt` manage component lifecycles automatically?
+- When should you prefer Subcomponents over `Component` Dependencies?
 - How do you test components with dependencies?
 
 ## Ссылки (RU)
@@ -289,17 +289,17 @@ object AppModule {
 ## Связанные Вопросы (RU)
 
 ### Предпосылки
-- [[q-hilt-components-scope--android--medium]] - Scope'ы компонентов Hilt
-- [[q-dagger-build-time-optimization--android--medium]] - Оптимизация Dagger
+- [[q-hilt-components-scope--android--medium]] - Scope'ы компонентов `Hilt`
+- [[q-dagger-build-time-optimization--android--medium]] - Оптимизация `Dagger`
 
 ### Продвинутое
-- [[q-dagger-framework-overview--android--hard]] - Архитектура Dagger
+- [[q-dagger-framework-overview--android--hard]] - Архитектура `Dagger`
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-hilt-components-scope--android--medium]] - Hilt component scopes
-- [[q-dagger-build-time-optimization--android--medium]] - Dagger optimization
+- [[q-hilt-components-scope--android--medium]] - `Hilt` component scopes
+- [[q-dagger-build-time-optimization--android--medium]] - `Dagger` optimization
 
 ### Advanced
-- [[q-dagger-framework-overview--android--hard]] - Complete Dagger architecture
+- [[q-dagger-framework-overview--android--hard]] - Complete `Dagger` architecture

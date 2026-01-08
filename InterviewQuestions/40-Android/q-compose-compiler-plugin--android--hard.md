@@ -1,4 +1,4 @@
----
+---\
 id: android-041
 title: Compose Compiler Plugin / Плагин компилятора Compose
 aliases: [Compose Compiler, Compose Compiler Plugin, Компилятор Compose, Плагин компилятора Compose]
@@ -14,9 +14,9 @@ related: [c-compose-recomposition, c-compose-state, q-android-performance-measur
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
-tags: [android/performance-memory, android/ui-compose, compiler, compose, difficulty/hard, performance]
+tags: [android/performance-memory, android/ui-compose, compiler, difficulty/hard, performance]
 
----
+---\
 # Вопрос (RU)
 > Как работает плагин компилятора Compose и как он оптимизирует перекомпозицию?
 
@@ -181,7 +181,7 @@ fun ItemList(items: List<Item>) { // List instead of MutableList; relies on an e
 }
 ```
 
-(A List is treated as stable only when the implementation and contract ensure it is not mutated in a way that violates the compiler's assumptions.)
+(A `List` is treated as stable only when the implementation and contract ensure it is not mutated in a way that violates the compiler's assumptions.)
 
 ### Compiler Diagnostics
 

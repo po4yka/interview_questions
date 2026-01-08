@@ -1,4 +1,4 @@
----
+---\
 id: android-477
 title: Custom View Accessibility / Доступность Custom View
 aliases: [Custom View Accessibility, Доступность Custom View]
@@ -17,7 +17,7 @@ created: 2025-10-21
 updated: 2025-11-10
 tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как правильно реализовать доступность для custom view в Android?
 
@@ -339,7 +339,7 @@ class ProgressView @JvmOverloads constructor(
 
 - Как тестировать доступность custom view с помощью Accessibility Scanner и Espresso?
 - В чем разница между `contentDescription` и `stateDescription`?
-- Как реализовать доступность для ViewGroup с навигацией по дочерним элементам?
+- Как реализовать доступность для `ViewGroup` с навигацией по дочерним элементам?
 - Как обрабатывать пользовательские жесты, сохраняя совместимость с TalkBack?
 - Когда использовать `importantForAccessibility = NO` и когда `IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS`?
 

@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-140400"
 title: "ContentProvider / ContentProvider"
 aliases: ["Android Data Sharing", "Content Provider", "Content Resolver", "ContentProvider", "Поставщик контента", "Провайдер контента"]
@@ -12,21 +12,21 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-ipc, c-android-components, c-service, c-broadcast-receiver, c-android-storage-options]
+related: ["c-android-ipc", "c-android-components", "c-service", "c-broadcast-receiver", "c-android-storage-options"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "content-provider", "crud", "data-sharing", "difficulty/medium", "ipc", "uri"]
----
+---\
 
 # ContentProvider / ContentProvider
 
 ## Summary (EN)
 
-ContentProvider is one of Android's four fundamental components that manages access to a structured set of data and provides a standard interface for data sharing between applications. It acts as an abstraction layer between the data source (database, files, network) and the rest of the application or other applications. ContentProviders use content URIs to identify data, support CRUD operations (Create, Read, Update, Delete), and can enforce permissions to control data access. Common examples include ContactsContract, MediaStore, and CalendarContract.
+`ContentProvider` is one of Android's four fundamental components that manages access to a structured set of data and provides a standard interface for data sharing between applications. It acts as an abstraction layer between the data source (database, files, network) and the rest of the application or other applications. ContentProviders use content URIs to identify data, support CRUD operations (Create, Read, Update, Delete), and can enforce permissions to control data access. Common examples include ContactsContract, MediaStore, and CalendarContract.
 
 ## Краткое Описание (RU)
 
-ContentProvider - один из четырёх фундаментальных компонентов Android, который управляет доступом к структурированному набору данных и предоставляет стандартный интерфейс для обмена данными между приложениями. Выступает в качестве слоя абстракции между источником данных (база данных, файлы, сеть) и остальной частью приложения или другими приложениями. ContentProvider использует URI контента для идентификации данных, поддерживает CRUD операции (Create, Read, Update, Delete) и может применять разрешения для контроля доступа к данным. Распространённые примеры: ContactsContract, MediaStore, CalendarContract.
+`ContentProvider` - один из четырёх фундаментальных компонентов Android, который управляет доступом к структурированному набору данных и предоставляет стандартный интерфейс для обмена данными между приложениями. Выступает в качестве слоя абстракции между источником данных (база данных, файлы, сеть) и остальной частью приложения или другими приложениями. `ContentProvider` использует URI контента для идентификации данных, поддерживает CRUD операции (Create, Read, Update, Delete) и может применять разрешения для контроля доступа к данным. Распространённые примеры: ContactsContract, MediaStore, CalendarContract.
 
 ## Key Points (EN)
 
@@ -64,16 +64,16 @@ ContentProvider - один из четырёх фундаментальных к
 - **File sharing**: Share files securely with FileProvider
 - **System integration**: Integration with sync adapters, search
 - **Permission enforcement**: Fine-grained access control
-- **Data abstraction**: Hide implementation details (SQLite, files, network)
+- **Data abstraction**: Hide implementation details (`SQLite`, files, network)
 
 ### When to Avoid
 
-- **Internal app data only**: Use Repository pattern, Room directly
-- **Simple data sharing**: Use Intent extras for simple data
-- **Real-time updates**: Use broadcasts, callbacks, or Flow
+- **Internal app data only**: Use Repository pattern, `Room` directly
+- **Simple data sharing**: Use `Intent` extras for simple data
+- **Real-time updates**: Use broadcasts, callbacks, or `Flow`
 - **Large file transfers**: Use FileProvider or direct file sharing
 - **Performance-critical**: Direct database access is faster for internal use
-- **Complex queries**: ContentProvider has limited query capabilities
+- **Complex queries**: `ContentProvider` has limited query capabilities
 
 ## Trade-offs
 
@@ -572,13 +572,13 @@ startActivity(intent)
 1. **Use URI matcher** - Efficiently match content URIs
 2. **Handle threading** - Operations are synchronous, use coroutines/executors
 3. **Close cursors** - Use `use {}` or close manually to avoid leaks
-4. **Notify changes** - Call `notifyChange()` after modifications
+4. **Notify changes** - `Call` `notifyChange()` after modifications
 5. **Use batch operations** - More efficient than individual operations
 6. **Implement getType()** - Return proper MIME types
 7. **Validate input** - Check URIs and ContentValues before processing
 8. **Use FileProvider** - For secure file sharing
 9. **Enforce permissions** - Protect sensitive data with permissions
-10. **Consider alternatives** - ContentProvider may be overkill for simple cases
+10. **Consider alternatives** - `ContentProvider` may be overkill for simple cases
 
 ## Testing
 
@@ -647,7 +647,7 @@ object ItemsContract {
 
 - [[c-room]] - Modern alternative for internal data storage
 - [[c-sqlite]] - Underlying database used by ContentProviders
-- [[c-permissions]] - Runtime permissions for ContentProvider access
+- [[c-permissions]] - Runtime permissions for `ContentProvider` access
 - [[c-ipc]] - Inter-process communication concepts
 - [[c-cursor]] - Cursor-based data access
 - [[c-repository-pattern]] - Modern data access pattern

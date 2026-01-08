@@ -1,4 +1,4 @@
----
+---\
 id: android-153
 title: ProGuard/R8 Rules / Правила ProGuard и R8
 aliases: [ProGuard/R8 Rules, Правила ProGuard и R8]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/build-variants, android/obfuscation, android/static-analysis, difficulty/medium, proguard, r8, security]
 
----
+---\
 # Вопрос (RU)
 
 > Напишите комплексный набор правил ProGuard/R8 для Android библиотеки. Обработайте рефлексию, сериализацию, нативные методы и публичный API. Оптимизируйте для production, сохраняя функциональность.
@@ -670,7 +670,7 @@ class ProguardRulesTest {
 
 - [[q-android-security-practices-checklist--android--medium]] - Security practices
 - [[q-encrypted-file-storage--android--medium]] - Encrypted storage
-- [[q-database-encryption-android--android--medium]] - Database encryption
+- [[q-database-encryption-android--android--medium]] - `Database` encryption
 
 ### Advanced
 

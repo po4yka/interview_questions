@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-014235"
 title: "Hash Tables / Hash Tables"
 aliases: ["Hash Tables"]
@@ -9,23 +9,24 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-hash-map, c-data-structures, c-algorithms]
+moc: "moc-cs"
+related: ["c-hash-map", "c-data-structures", "c-algorithms"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-A hash table is a key–value data structure that uses a hash function to map keys to indices in an array for near-constant-time insertion, lookup, and deletion on average. It is widely used to implement dictionaries, maps, symbol tables, caches, and sets in many programming languages and standard libraries. Hash tables matter in interviews because they test understanding of complexity trade-offs, collision handling, and how real-world collections (like HashMap in Java/Kotlin) are built.
+A hash table is a key–value data structure that uses a hash function to map keys to indices in an array for near-constant-time insertion, lookup, and deletion on average. It is widely used to implement dictionaries, maps, symbol tables, caches, and sets in many programming languages and standard libraries. Hash tables matter in interviews because they test understanding of complexity trade-offs, collision handling, and how real-world collections (like `HashMap` in Java/Kotlin) are built.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-Хеш-таблица — это структура данных «ключ–значение», которая использует хеш-функцию для отображения ключей в индексы массива, обеспечивая амортизированно почти постоянное время вставки, поиска и удаления. Широко применяется для реализации словарей, отображений (map), таблиц символов, кешей и множеств во многих языках и стандартных библиотеках. Хеш-таблицы важны на собеседованиях, так как проверяют понимание асимптотики, обработки коллизий и реализации коллекций (например, HashMap в Java/Kotlin).
+Хеш-таблица — это структура данных «ключ–значение», которая использует хеш-функцию для отображения ключей в индексы массива, обеспечивая амортизированно почти постоянное время вставки, поиска и удаления. Широко применяется для реализации словарей, отображений (map), таблиц символов, кешей и множеств во многих языках и стандартных библиотеках. Хеш-таблицы важны на собеседованиях, так как проверяют понимание асимптотики, обработки коллизий и реализации коллекций (например, `HashMap` в Java/Kotlin).
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
@@ -48,5 +49,5 @@ A hash table is a key–value data structure that uses a hash function to map ke
 ## References
 
 - "Introduction to Algorithms" by Cormen, Leiserson, Rivest, and Stein – chapters on hash tables
-- Java SE Documentation – java.util.HashMap, java.util.HashSet
-- Kotlin Documentation – kotlin.collections.HashMap, kotlin.collections.HashSet
+- Java SE Documentation – java.util.`HashMap`, java.util.`HashSet`
+- Kotlin Documentation – kotlin.collections.`HashMap`, kotlin.collections.`HashSet`

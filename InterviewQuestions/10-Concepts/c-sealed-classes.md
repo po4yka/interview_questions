@@ -1,15 +1,22 @@
----
-id: ivc-20251030-122934
-title: Sealed Classes / Запечатанные классы
-aliases: [Kotlin Sealed, Sealed Class Hierarchy, Sealed Classes, Запечатанные классы]
-kind: concept
-summary: Kotlin sealed classes for restricted class hierarchies enabling exhaustive when expressions
-links: []
-related: [c-kotlin, c-data-classes]
-created: 2025-10-30
-updated: 2025-10-30
-tags: [adt, concept, exhaustive-when, kotlin, sealed-classes, type-safety]
----
+---\
+id: "20251030-122934"
+title: "Sealed Classes / Запечатанные классы"
+aliases: ["Kotlin Sealed", "Sealed Class Hierarchy", "Sealed Classes", "Запечатанные классы"]
+summary: "Kotlin sealed classes for restricted class hierarchies enabling exhaustive when expressions"
+topic: "kotlin"
+subtopics: ["adt", "exhaustive-when", "sealed-classes"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-kotlin"
+related: ["c-kotlin", "c-data-classes"]
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["adt", "concept", "exhaustive-when", "kotlin", "sealed-classes", "type-safety", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -72,7 +79,7 @@ sealed class UiState {
 }
 ```
 
-2. **Network Response Modeling**
+2. **Network `Response` Modeling**
 ```kotlin
 sealed class ApiResponse<out T> {
     data class Success<T>(val body: T, val code: Int = 200) : ApiResponse<T>()

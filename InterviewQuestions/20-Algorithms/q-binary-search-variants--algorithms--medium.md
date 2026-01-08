@@ -1,4 +1,4 @@
----
+---\
 id: algo-005
 title: "Binary Search and Variants / Бинарный поиск и варианты"
 aliases: ["Binary Search", "Бинарный поиск"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [algorithms, binary-search, difficulty/medium, log-n, searching]
 sources: ["https://en.wikipedia.org/wiki/Binary_search_algorithm"]
 
----
+---\
 # Вопрос (RU)
 > Как работает бинарный поиск? Каковы распространённые варианты и граничные случаи?
 
@@ -272,7 +272,7 @@ fun findLast(arr: IntArray, target: Int): Int {
 }
 ```
 
-**Search in Rotated Array:**
+**Search in Rotated `Array`:**
 ```kotlin
 // Array rotated at pivot: [4,5,6,7,0,1,2]
 fun searchRotated(nums: IntArray, target: Int): Int {

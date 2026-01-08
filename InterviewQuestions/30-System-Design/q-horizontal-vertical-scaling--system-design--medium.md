@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-009
 title: "Horizontal vs Vertical Scaling / Горизонтальное vs Вертикальное масштабирование"
 aliases: ["Horizontal vs Vertical Scaling", "Горизонтальное vs Вертикальное масштабирование"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [architecture, difficulty/medium, distributed-systems, scalability, system-design]
 sources: ["https://en.wikipedia.org/wiki/Scalability"]
 
----
+---\
 # Вопрос (RU)
 > В чём разница между горизонтальным и вертикальным масштабированием? Когда следует использовать каждый подход, и каковы их компромиссы?
 
@@ -130,7 +130,7 @@ class UserService(
 1. Stateless-дизайн сервисов, где возможно — состояние в Redis/БД, не в памяти конкретного сервера
 2. Load balancing — равномерное распределение нагрузки
 3. Shared storage — S3/NFS для файлов, не только локальный диск
-4. Database separation — отдельный tier для данных
+4. `Database` separation — отдельный tier для данных
 5. Idempotency — операции можно повторять безопасно
 
 ### Требования (RU)
@@ -282,7 +282,7 @@ class UserService(
 1. Stateless design for services where possible — state in Redis/DB, not in server memory.
 2. Load balancing — even traffic distribution.
 3. Shared storage — S3/NFS for files, not only local disk.
-4. Database separation — separate tier for data.
+4. `Database` separation — separate tier for data.
 5. Idempotency — operations can be safely retried.
 
 ### Requirements
@@ -324,5 +324,5 @@ class UserService(
 - [[q-rest-api-design-best-practices--system-design--medium]] - API design
 
 #### Advanced (Harder)
-- [[q-database-sharding-partitioning--system-design--hard]] - Database sharding
+- [[q-database-sharding-partitioning--system-design--hard]] - `Database` sharding
 - [[q-microservices-vs-monolith--system-design--hard]] - Architecture patterns

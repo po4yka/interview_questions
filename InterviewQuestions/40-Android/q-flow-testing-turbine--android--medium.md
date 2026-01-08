@@ -1,4 +1,4 @@
----
+---\
 id: android-066
 title: Flow Testing with Turbine / Тестирование Flow с Turbine
 aliases: [Flow Testing with Turbine, Тестирование Flow с Turbine]
@@ -13,11 +13,11 @@ moc: moc-android
 related: [c-flow, q-compose-testing--android--medium, q-testing-coroutines-flow--android--hard, q-testing-viewmodels-turbine--android--medium, q-unit-testing-coroutines-flow--android--medium]
 created: 2025-10-12
 updated: 2025-11-10
-tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, turbine, unit-testing]
+tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, turbine, testing-unit]
 sources:
   - "https://github.com/cashapp/turbine"
 
----
+---\
 # Вопрос (RU)
 > Что такое Turbine? Как тестировать Flows с Turbine?
 
@@ -386,7 +386,7 @@ stateFlow.test {
 
 ## Дополнительные Вопросы (RU)
 
-- Как Turbine ведёт себя при тестировании высокочастотных эмиссий и буферизации событий (учитывая, что backpressure в терминах Flow реализуется самим Flow/операторами)?
+- Как Turbine ведёт себя при тестировании высокочастотных эмиссий и буферизации событий (учитывая, что backpressure в терминах `Flow` реализуется самим Flow/операторами)?
 - В чем разница между методами `test()` и `testIn()`, и когда какой использовать?
 - Как тестировать холодные и горячие Flows с помощью Turbine?
 - Когда использовать `expectNoEvents()` vs `expectMostRecentItem()`?
@@ -412,7 +412,7 @@ stateFlow.test {
 
 - Official Turbine documentation: https://github.com/cashapp/turbine
 - kotlinx-coroutines-test guide: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
-- [[c-flow]] — Flow basics and operators
+- [[c-flow]] — `Flow` basics and operators
 
 ## Похожие Вопросы (RU)
 
@@ -434,7 +434,7 @@ stateFlow.test {
 
 ### Prerequisites / Concepts
 
-- [[c-flow]] - Flow concepts and operators
+- [[c-flow]] - `Flow` concepts and operators
 
 ### Related
 - [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flows

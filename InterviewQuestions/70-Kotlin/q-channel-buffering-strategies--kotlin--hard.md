@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-114
 title: "Channel Buffering Strategies / Стратегии буферизации каналов"
 aliases: ["Channel Buffering Strategies", "Стратегии буферизации каналов"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-11
 
 tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, performance, rendezvous, unlimited]
----
+---\
 # Вопрос (RU)
 > Что такое стратегии буферизации каналов в Kotlin? Объясните каналы RENDEZVOUS, BUFFERED, UNLIMITED и CONFLATED и когда использовать каждый.
 
@@ -497,7 +497,7 @@ suspend fun rendezvousExample() = coroutineScope {
 **Characteristics:**
 - Zero buffer capacity
 - `send` suspends until a receiver is available
-- Provides strict point-to-point synchronization
+- `Provides` strict point-to-point synchronization
 - No data loss by the channel itself
 - Low memory usage
 - Can cause hangs/deadlocks if no receiver is available
@@ -730,7 +730,7 @@ suspend fun testChannel(capacity: Int, count: Int) = coroutineScope {
 
 | Strategy | Memory | Speed | Data Loss | Use Case |
 |----------|--------|-------|-----------|----------|
-| RENDEZVOUS | Minimal | Lower (strict sync) | Never (no drop by channel) | Request-response, strict ordering |
+| RENDEZVOUS | Minimal | Lower (strict sync) | Never (no drop by channel) | `Request`-response, strict ordering |
 | BUFFERED | Predictable | Higher (decoupled) | Never (with SUSPEND overflow) | Task queues, batch processing |
 | UNLIMITED | Risk OOM | High send rate, but can hurt overall perf | Never (channel doesn't drop; latency/memory grows) | Logging/metrics with external safeguards |
 | CONFLATED | Constant | High (drops intermediates) | Yes | UI updates, sensor data, "latest only" |

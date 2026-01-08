@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-142908"
 title: "Differential Privacy / Differential Privacy"
 aliases: ["Differential Privacy"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-privacy-by-design, c-gdpr-compliance, c-security, c-encryption]
+moc: "moc-cs"
+related: ["c-privacy-by-design", "c-gdpr-compliance", "c-security", "c-encryption"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ Differential privacy is a formal privacy framework that ensures the output of a 
 
 ## Key Points (EN)
 
-- Formal guarantee: Provides a mathematically defined privacy guarantee that bounds how much the presence of any single record can influence the output.
+- Formal guarantee: `Provides` a mathematically defined privacy guarantee that bounds how much the presence of any single record can influence the output.
 - Random noise: Achieves privacy by adding carefully calibrated random noise to queries, gradients, or model parameters while preserving aggregate patterns.
 - Parameters (ε, δ): Privacy loss is controlled by epsilon (privacy budget) and optionally delta; smaller epsilon means stronger privacy but more noise.
 - Composition and accounting: Multiple differentially private queries accumulate privacy loss, requiring careful budgeting and tracking in real systems.

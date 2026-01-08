@@ -1,4 +1,4 @@
----
+---\
 id: android-231
 title: "How to Save and Apply Theme Settings / Как сохранять и применять настройки темы"
 aliases: ["How to Save and Apply Theme Settings", "Theme Settings", "Как сохранять и применять настройки темы", "Настройки темы"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/datastore, android/ui-compose, android/ui-theming, android/ui-views, dark-mode, difficulty/medium, sharedpreferences, themes]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Как сохранять и применять настройки темы в Android-приложении?
@@ -33,7 +33,7 @@ sources: []
 
 ### Основные Подходы
 
-**1. SharedPreferences + AppCompatDelegate (Views)**
+**1. `SharedPreferences` + AppCompatDelegate (Views)**
 
 Применять через `Application.onCreate()` для глобального эффекта:
 
@@ -201,7 +201,7 @@ Saving and applying theme settings requires coordinating user preference storage
 
 ### Core Approaches
 
-**1. SharedPreferences + AppCompatDelegate (Views)**
+**1. `SharedPreferences` + AppCompatDelegate (Views)**
 
 Apply through `Application.onCreate()` for a global effect:
 
@@ -231,7 +231,7 @@ class SettingsActivity : AppCompatActivity() {
 
 **2. DataStore + `Flow` (Reactive)**
 
-Use DataStore for reactive updates of the saved mode. Important: for the initial theme, read and apply the stored value before drawing UI (e.g., in `Application` or in the launcher Activity before `setContentView()`), otherwise a visible "flicker" may occur.
+Use DataStore for reactive updates of the saved mode. Important: for the initial theme, read and apply the stored value before drawing UI (e.g., in `Application` or in the launcher `Activity` before `setContentView()`), otherwise a visible "flicker" may occur.
 
 ```kotlin
 // Recommended: define DataStore as a top-level extension on Context

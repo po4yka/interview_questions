@@ -1,4 +1,4 @@
----
+---\
 id: android-210
 title: "WorkManager Data Passing / Передача данных WorkManager"
 aliases: [WorkManager Data Passing, WorkManager Input Output, WorkManager workDataOf, Передача данных WorkManager]
@@ -16,18 +16,18 @@ updated: 2025-11-10
 sources: ["https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration"]
 tags: [android/background-execution, android/coroutines, background-processing, data-passing, difficulty/medium, workmanager]
 
----
+---\
 # Вопрос (RU)
 
-> Как передать данные в WorkManager Worker и получить результат обратно? Какие типы данных поддерживаются и какие есть ограничения?
+> Как передать данные в `WorkManager` `Worker` и получить результат обратно? Какие типы данных поддерживаются и какие есть ограничения?
 
 # Question (EN)
 
-> How to pass data to WorkManager Worker and receive results back? What data types are supported and what are the limitations?
+> How to pass data to `WorkManager` `Worker` and receive results back? What data types are supported and what are the limitations?
 
 ## Ответ (RU)
 
-WorkManager использует класс **Data** для передачи небольших наборов данных (конфигурации, параметры) между вызывающим кодом (например, `Activity`/Repository) и Worker. Связано с [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
+`WorkManager` использует класс **Data** для передачи небольших наборов данных (конфигурации, параметры) между вызывающим кодом (например, `Activity`/Repository) и `Worker`. Связано с [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
 ### Передача Данных В Worker (Input)
 
@@ -161,7 +161,7 @@ val data = workDataOf("file_path" to "/path/to/file.txt")
 
 1. Сохраните данные в базу/файл
 2. Передайте только ID или путь к файлу
-3. В Worker загрузите данные по ID/пути
+3. В `Worker` загрузите данные по ID/пути
 
 ```kotlin
 // ✅ Передаем ID вместо больших данных
@@ -189,34 +189,34 @@ class MyWorker(context: Context, params: WorkerParameters)
 
 ### Дополнительные Вопросы (RU)
 
-- Как WorkManager гарантирует доставку данных при гибели процесса?
+- Как `WorkManager` гарантирует доставку данных при гибели процесса?
 - Что происходит с выходными данными, если приложение завершится до их получения наблюдателем (данные остаются в WorkInfo до очистки истории)?
-- Можно ли связывать несколько Worker и передавать данные между ними (через `WorkContinuation` и `InputMerger`)?
+- Можно ли связывать несколько `Worker` и передавать данные между ними (через `WorkContinuation` и `InputMerger`)?
 
 ### Ссылки (RU)
 
-- https://developer.android.com/topic/libraries/architecture/workmanager — официальное руководство по WorkManager
+- https://developer.android.com/topic/libraries/architecture/workmanager — официальное руководство по `WorkManager`
 - https://developer.android.com/reference/androidx/work/Data — документация по классу Data
 
 ### Связанные Вопросы (RU)
 
 #### Предварительные Материалы
-- [[c-workmanager]] — концепция WorkManager
+- [[c-workmanager]] — концепция `WorkManager`
 - [[c-coroutines]] — корутины Kotlin
 - [[c-background-tasks]] — фоновые задачи
 
 #### На Том Же Уровне
 - [[q-workmanager-execution-guarantee--android--medium]] — гарантии выполнения
-- [[q-workmanager-vs-alternatives--android--medium]] — WorkManager vs альтернативы
+- [[q-workmanager-vs-alternatives--android--medium]] — `WorkManager` vs альтернативы
 
 #### Продвинутое
-- [[q-workmanager-advanced--android--medium]] — продвинутые паттерны WorkManager
+- [[q-workmanager-advanced--android--medium]] — продвинутые паттерны `WorkManager`
 
 ---
 
 ## Answer (EN)
 
-WorkManager uses the **Data** class to pass small sets of primitive/configuration data between the caller (e.g., `Activity`/Repository) and a Worker. Related to [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
+`WorkManager` uses the **Data** class to pass small sets of primitive/configuration data between the caller (e.g., `Activity`/Repository) and a `Worker`. Related to [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
 ### Passing Data TO Worker
 
@@ -350,7 +350,7 @@ val data = workDataOf("file_path" to "/path/to/file.txt")
 
 1. Save data to database/file
 2. Pass only ID or file path
-3. Load data by ID/path in Worker
+3. Load data by ID/path in `Worker`
 
 ```kotlin
 // ✅ Pass ID instead of large data
@@ -379,25 +379,25 @@ class MyWorker(context: Context, params: WorkerParameters)
 
 ## Follow-ups
 
-- How does WorkManager guarantee data delivery across process death?
+- How does `WorkManager` guarantee data delivery across process death?
 - What happens to output data if the app is killed before observation (it remains in WorkInfo until history is pruned)?
 - Can you chain workers and pass data between them (via `WorkContinuation` and `InputMerger`)?
 
 ## References
 
-- https://developer.android.com/topic/libraries/architecture/workmanager — Official WorkManager guide
+- https://developer.android.com/topic/libraries/architecture/workmanager — Official `WorkManager` guide
 - https://developer.android.com/reference/androidx/work/Data — Data class documentation
 
 ## Related Questions
 
 ### Prerequisites
-- [[c-workmanager]] - WorkManager concept
+- [[c-workmanager]] - `WorkManager` concept
 - [[c-coroutines]] - Kotlin coroutines
 - [[c-background-tasks]] - Background processing
 
 ### Same Level
 - [[q-workmanager-execution-guarantee--android--medium]] - Execution guarantees
-- [[q-workmanager-vs-alternatives--android--medium]] - WorkManager vs alternatives
+- [[q-workmanager-vs-alternatives--android--medium]] - `WorkManager` vs alternatives
 
 ### Advanced
-- [[q-workmanager-advanced--android--medium]] - Advanced WorkManager patterns
+- [[q-workmanager-advanced--android--medium]] - Advanced `WorkManager` patterns

@@ -1,4 +1,4 @@
----
+---\
 id: android-482
 title: Context Types in Android / 2b3f4b Context 32 Android
 aliases: [22383f4b Context 32 Android, Context Types in Android]
@@ -17,7 +17,7 @@ tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medi
 sources:
   - "https://developer.android.com/reference/android/content/Context"
 
----
+---\
 # Вопрос (RU)
 > Какие типы `Context` существуют в Android и когда следует использовать каждый из них?
 
@@ -99,7 +99,7 @@ AlertDialog.Builder(this@MyActivity)
 
 ### Правила Выбора
 
-1. **`Application` `Context`** — для долгоживущих объектов (Repository, WorkManager, singletons), операций, не завязанных на конкретный экран
+1. **`Application` `Context`** — для долгоживущих объектов (Repository, `WorkManager`, singletons), операций, не завязанных на конкретный экран
 2. **`Activity` `Context`** — для UI-компонентов и операций, завязанных на конкретную `Activity` и её lifecycle
 3. **WeakReference** — если нужна ссылка на `Activity` в callback/async-операциях, и вы явно проверяете актуальность `Activity`
 4. Всегда учитывать lifecycle владельца `Context` перед его сохранением и использованием
@@ -177,7 +177,7 @@ AlertDialog.Builder(this@MyActivity)
 
 ### Selection Rules
 
-1. **`Application` `Context`** — for long-lived objects (Repository, WorkManager, singletons) and operations not tied to a specific screen
+1. **`Application` `Context`** — for long-lived objects (Repository, `WorkManager`, singletons) and operations not tied to a specific screen
 2. **`Activity` `Context`** — for UI components and operations bound to a specific `Activity` and its lifecycle
 3. **WeakReference** — when you must hold an `Activity` reference in callbacks/async work and explicitly check if it is still valid
 4. Always consider the lifecycle of the `Context` owner before storing and using a `Context`

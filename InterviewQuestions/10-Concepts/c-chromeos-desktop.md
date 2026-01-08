@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-020
-title: Android on ChromeOS / Android на ChromeOS
-aliases: [Android ChromeOS, Desktop Android Patterns]
-kind: concept
-summary: Patterns for running Android apps on ChromeOS and desktop-class environments, including mouse/keyboard, windowing, and Play Games on PC
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [adaptive-ui, android, chromeos, concept, desktop]
+id: "20260108-110549"
+title: "Android on ChromeOS / Android на ChromeOS"
+aliases: ["Android ChromeOS", "Desktop Android Patterns"]
+summary: "Patterns for running Android apps on ChromeOS and desktop-class environments, including mouse/keyboard, windowing, and Play Games on PC"
+topic: "android"
+subtopics: ["adaptive-ui", "chromeos", "desktop"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["adaptive-ui", "android", "chromeos", "concept", "desktop", "difficulty/medium"]
 ---
 
 # Summary (EN)

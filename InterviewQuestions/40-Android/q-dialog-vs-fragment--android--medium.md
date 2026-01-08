@@ -1,4 +1,4 @@
----
+---\
 id: android-357
 title: Dialog vs Fragment / Диалог против Фрагмента
 aliases: [Dialog vs Fragment, Диалог против Фрагмента]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/develop/ui/views/components/dialogs"
   - "https://developer.android.com/guide/fragments"
 
----
+---\
 # Вопрос (RU)
 > Какая разница между диалогом и фрагментом?
 
@@ -38,8 +38,8 @@ sources:
 | Аспект | Dialog | `Fragment` |
 |--------|--------|----------|
 | **Назначение** | Временные взаимодействия (подтверждения, ошибки, короткий ввод) | Переиспользуемые экраны и модули UI |
-| **Lifecycle** | Упрощенный: управляется `show()` / `dismiss()`, не интегрирован с `FragmentManager` | Полный lifecycle (onAttach → onCreate → onViewCreated → onDestroyView → onDestroy → onDetach) |
-| **Navigation** | Не участвует в `Fragment` back stack; обычно не интегрируется с Navigation Component | Может быть частью Navigation Component, управляется back stack |
+| **`Lifecycle`** | Упрощенный: управляется `show()` / `dismiss()`, не интегрирован с `FragmentManager` | Полный lifecycle (onAttach → onCreate → onViewCreated → onDestroyView → onDestroy → onDetach) |
+| **Navigation** | Не участвует в `Fragment` back stack; обычно не интегрируется с Navigation `Component` | Может быть частью Navigation `Component`, управляется back stack |
 | **Сложность** | Простые формы, один UI-контейнер | Сложные UI с состоянием, может содержать вложенные компоненты |
 | **Состояние** | Теряется при rotation и конфигурационных изменениях, если не использовать `DialogFragment`/свой код восстановления | Может сохраняться через аргументы, `ViewModel`, `onSaveInstanceState` и работу FragmentManager |
 | **Переиспользование** | Ограниченное, диалоги часто создаются заново | Высокое, может использоваться на разных экранах |
@@ -202,7 +202,7 @@ NavHost(navController, startDestination = "profile") {
 
 **`Fragment`:**
 - Полноценные экраны приложения (списки, детали, формы)
-- Навигация через Navigation Component
+- Навигация через Navigation `Component`
 - Сложное состояние с `ViewModel` и `LiveData`/`Flow`
 - Переиспользуемые модули UI (например, панель инструментов, боковое меню)
 - Многоколоночный layout на планшетах (master-detail)
@@ -272,8 +272,8 @@ NavHost(navController, startDestination = "profile") {
 | Aspect | Dialog | `Fragment` |
 |--------|--------|----------|
 | **Purpose** | Temporary interactions (confirmations, errors, short input) | Reusable screens and UI modules |
-| **Lifecycle** | Simplified: controlled via `show()` / `dismiss()`, not integrated with `FragmentManager` | Full lifecycle (onAttach → onCreate → onViewCreated → onDestroyView → onDestroy → onDetach) |
-| **Navigation** | Not part of `Fragment` back stack; generally not integrated with Navigation Component | Can be part of Navigation Component, managed by back stack |
+| **`Lifecycle`** | Simplified: controlled via `show()` / `dismiss()`, not integrated with `FragmentManager` | Full lifecycle (onAttach → onCreate → onViewCreated → onDestroyView → onDestroy → onDetach) |
+| **Navigation** | Not part of `Fragment` back stack; generally not integrated with Navigation `Component` | Can be part of Navigation `Component`, managed by back stack |
 | **Complexity** | Simple forms, single UI container | Complex UIs with state, can contain nested components |
 | **State** | Lost on rotation/config changes unless you implement custom restoration or use `DialogFragment` | Can be preserved via arguments, `ViewModel`, `onSaveInstanceState` and FragmentManager |
 | **Reusability** | Limited, dialogs often recreated | High, can be used across screens |
@@ -424,7 +424,7 @@ NavHost(navController, startDestination = "profile") {
 **Dialog:**
 - Simple confirmations or messages where automatic restoration on rotation is not critical
 - Quick error notifications
-- Short data input (e.g., file name)
+- `Short` data input (e.g., file name)
 - ⚠️ If the dialog must survive rotation/process death and integrate with navigation, prefer `DialogFragment`
 
 **DialogFragment:**
@@ -435,12 +435,12 @@ NavHost(navController, startDestination = "profile") {
 
 **`Fragment`:**
 - Full application screens (lists, details, forms)
-- Navigation via Navigation Component
+- Navigation via Navigation `Component`
 - Complex state with `ViewModel` and `LiveData`/`Flow`
 - Reusable UI modules (e.g., toolbar, side menu)
 - Multi-column layouts on tablets (master-detail)
 
-**Lifecycle comparison (simplified):**
+**`Lifecycle` comparison (simplified):**
 
 **Dialog lifecycle (AlertDialog without DialogFragment):**
 1. `show()` — dialog displayed

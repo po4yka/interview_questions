@@ -1,4 +1,4 @@
----
+---\
 id: android-634
 title: Media3 Transformer Workflows / Пайплайны Media3 Transformer
 aliases: [Media3 Transformer Workflows, Пайплайны Media3 Transformer]
@@ -20,7 +20,7 @@ sources:
   - url: "https://medium.com/androiddevelopers/media3-transformer-deep-dive"
     note: "Transformer deep dive"
 
----
+---\
 # Вопрос (RU)
 > Как построить pipeline для редактирования видео на Media3 Transformer: комбинировать клипы, применять эффекты, контролировать кодеки/битрейт, выполнять экспорт в фоне и обрабатывать ошибки?
 
@@ -209,8 +209,8 @@ val composition = Composition.Builder(editedItem1)
 ### 3. Architecture
 
 - Configuration layer:
-  - Module building `Composition` and `EditedMediaItem` from user scenarios.
-  - Module building `TransformationRequest` (codec, bitrate, resolution, `setEnableFallback(true)`).
+  - `Module` building `Composition` and `EditedMediaItem` from user scenarios.
+  - `Module` building `TransformationRequest` (codec, bitrate, resolution, `setEnableFallback(true)`).
 - Execution layer:
   - Wrapper around `Transformer` invoked from a `ForegroundService` or a `WorkManager` worker (respecting long-running work constraints).
   - Use `Transformer.Listener` for progress (`onProgress`), completion (`onCompleted`), and errors (`onError`).

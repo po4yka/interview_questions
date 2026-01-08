@@ -1,4 +1,4 @@
----
+---\
 id: android-382
 title: Android Components / Компоненты Android
 aliases: [Android Components, Компоненты Android]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/broadcast-receiver, android/service, components, difficulty/easy, intent]
 
----
+---\
 # Вопрос (RU)
 > Компоненты Android
 
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 Выполняет работу в фоне без собственного UI, например воспроизведение музыки или синхронизацию данных. Важно:
 - `Service` не создаёт свой UI.
 - По умолчанию код `Service` выполняется в главном потоке (для тяжёлых задач нужно явно использовать отдельные потоки).
-- В современных версиях Android действуют ограничения фонового выполнения; для длительных задач часто используется foreground service или WorkManager.
+- В современных версиях Android действуют ограничения фонового выполнения; для длительных задач часто используется foreground service или `WorkManager`.
 
 ```kotlin
 class MusicService : Service() {
@@ -145,7 +145,7 @@ startActivity(intent)
 | `BroadcastReceiver` | Системные/приложенческие события  | Нет     | Изменение сети          |
 | `ContentProvider` | Обмен структурированными данными    | Нет     | Контакты                |
 | `Fragment`        | Часть UI в `Activity`               | Да      | Содержимое вкладки      |
-| `View`            | Элемент UI                          | Да      | Button, TextView        |
+| `View`            | Элемент UI                          | Да      | `Button`, `TextView`        |
 | `Intent`          | Обмен сообщениями между компонентами| Нет     | Запуск `Activity`       |
 
 ---
@@ -165,7 +165,7 @@ These components interact with each other and with the operating system to creat
 
 **1. `Activity`** - User Interface Screen
 
-Provides a user interface. Each `Activity` represents a single, focused screen with which the user can interact.
+`Provides` a user interface. Each `Activity` represents a single, focused screen with which the user can interact.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
 Performs work in the background without a UI, such as playing music or syncing data. A `Service`:
 - Does not create its own UI.
 - Runs on the main thread by default (you must create background threads yourself if needed).
-- In modern Android, is subject to background execution limits and often should be a foreground service or replaced with WorkManager for deferrable tasks.
+- In modern Android, is subject to background execution limits and often should be a foreground service or replaced with `WorkManager` for deferrable tasks.
 
 ```kotlin
 class MusicService : Service() {
@@ -264,14 +264,14 @@ startActivity(intent)
 
 **Summary:**
 
-| Component          | Purpose                         | Has UI | Example            |
+| `Component`          | Purpose                         | Has UI | Example            |
 |--------------------|---------------------------------|--------|--------------------|
 | `Activity`         | Screen                          | Yes    | Login screen       |
 | `Service`          | Background work                 | No     | Music playback     |
 | `BroadcastReceiver`| System/app broadcasts           | No     | Network change     |
 | `ContentProvider`  | Data sharing                    | No     | Contacts           |
 | `Fragment`         | Portion of UI in `Activity`     | Yes    | Tab content        |
-| `View`             | UI element                      | Yes    | Button, TextView   |
+| `View`             | UI element                      | Yes    | `Button`, `TextView`   |
 | `Intent`           | Messaging between components    | No     | Start `Activity`   |
 
 ---

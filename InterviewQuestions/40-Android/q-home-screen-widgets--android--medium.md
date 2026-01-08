@@ -1,4 +1,4 @@
----
+---\
 id: android-193
 title: Home Screen Widgets / Виджеты домашнего экрана
 aliases: [Home Screen Widgets, Виджеты домашнего экрана]
@@ -14,7 +14,7 @@ related: [c-android-components, q-how-compose-draws-on-screen--android--hard, q-
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium, widgets]
----
+---\
 # Вопрос (RU)
 > Виджеты домашнего экрана
 
@@ -35,7 +35,7 @@ tags: [android/ui-views, difficulty/medium, widgets]
 Показывают важные данные и обновляют их по мере изменения.
 Примеры: погода, часы, курсы акций, спорт, календарь.
 
-**2. Коллекции (Collection widgets):**
+**2. Коллекции (`Collection` widgets):**
 Отображают список/набор однотипных элементов (новости, письма, сообщения, фото и т.п.).
 
 **3. Управляющие (Control widgets):**
@@ -423,7 +423,7 @@ Examples:
 - Stock price widgets
 - Calendar widgets
 
-**2. Collection widgets:**
+**2. `Collection` widgets:**
 
 Display multiple items of the same type (emails, messages, articles, photos, etc.).
 
@@ -583,7 +583,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 (Using `android:exported="false"` is a safe default for modern Android: app widget hosts send explicit broadcasts to your provider. Always verify against the current SDK level requirements.)
 
-**Widget Lifecycle Methods:**
+**Widget `Lifecycle` Methods:**
 
 | Method | Description |
 |--------|-------------|
@@ -660,7 +660,7 @@ Additionally:
 
 **Advanced Widget Features:**
 
-**1. Collection Widget (ListView example):**
+**1. `Collection` Widget (ListView example):**
 
 ```kotlin
 class CollectionWidgetProvider : AppWidgetProvider() {

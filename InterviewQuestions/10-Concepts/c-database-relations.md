@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-122837"
 title: "Database Relations / Database Relations"
 aliases: ["Database Relations"]
@@ -9,17 +9,18 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-databases, c-database-design, c-relational-databases]
+moc: "moc-cs"
+related: ["c-databases", "c-database-design", "c-relational-databases"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-Database relations describe how tables (relations in the relational model) are logically connected through keys to represent associations between entities. They are central to relational database design, enabling consistent querying, minimizing redundancy, and enforcing data integrity. Well-defined relations (1:1, 1:N, M:N) are essential for normalization, efficient joins, and correct application logic.
+`Database` relations describe how tables (relations in the relational model) are logically connected through keys to represent associations between entities. They are central to relational database design, enabling consistent querying, minimizing redundancy, and enforcing data integrity. Well-defined relations (1:1, 1:N, M:N) are essential for normalization, efficient joins, and correct application logic.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
@@ -47,6 +48,6 @@ Database relations describe how tables (relations in the relational model) are l
 
 ## References
 
-- "An Introduction to Database Systems" by C. J. Date
+- "An Introduction to `Database` Systems" by C. J. Date
 - Relational Model and Foreign Keys – PostgreSQL Documentation (https://www.postgresql.org/docs/current/tutorial-fk.html)
-- MySQL Reference Manual – Foreign Key Constraints (https://dev.mysql.com/doc/refman/en/create-table-foreign-keys.html)
+- MySQL Reference Manual – Foreign Key `Constraints` (https://dev.mysql.com/doc/refman/en/create-table-foreign-keys.html)

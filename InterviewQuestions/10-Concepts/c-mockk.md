@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-195645"
 title: "Mockk / Mockk"
 aliases: ["Mockk"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-unit-testing, c-test-doubles, c-junit, c-kotlin-coroutines, c-testing-strategies]
+moc: "moc-cs"
+related: ["c-unit-testing", "c-test-doubles", "c-junit", "c-kotlin-coroutines", "c-testing-strategies"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,9 +32,9 @@ MockK — это нативная для Kotlin библиотека для мо
 
 ## Key Points (EN)
 
-- Kotlin-first design: Provides an idiomatic DSL aligned with Kotlin syntax (e.g., `every { ... } returns ...`, `verify { ... }`).
+- Kotlin-first design: `Provides` an idiomatic DSL aligned with Kotlin syntax (e.g., `every { ... } returns ...`, `verify { ... }`).
 - Powerful mocking capabilities: Supports mocking final classes, objects, singletons, top-level and extension functions, and suspend functions out of the box.
-- Coroutine support: Integrates cleanly with coroutines and structured concurrency, allowing verification of suspend calls and asynchronous logic.
+- `Coroutine` support: Integrates cleanly with coroutines and structured concurrency, allowing verification of suspend calls and asynchronous logic.
 - Clear behavior specification: Separates stubbing (`every {}` / `coEvery {}`) from verification (`verify {}` / `coVerify {}`) for readable, maintainable tests.
 - Android and JVM friendly: Commonly used in Android tests instead of or alongside Mockito when working with pure Kotlin codebases.
 

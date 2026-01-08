@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-system-design"
-related: [c-system-design, c-architecture-patterns, c-clean-architecture, c-design-patterns, c-software-design-patterns]
+related: ["c-system-design", "c-architecture-patterns", "c-clean-architecture", "c-design-patterns", "c-software-design-patterns"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
+tags: [concept, difficulty/medium, system-design]
 ---
 
 # Summary (EN)

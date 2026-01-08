@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-009
 title: "Kotlin Coroutines Introduction / Введение в корутины Kotlin"
 aliases: ["Kotlin Coroutines Introduction", "Введение в корутины Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [async, concurrency, coroutines, difficulty/medium, kotlin, structured-concurrency]
----
+---\
 # Вопрос (RU)
 > Что такое корутины в Kotlin?
 
@@ -207,7 +207,7 @@ There is a better solution. We can use structured concurrency in our code. Inste
 - [[q-what-is-coroutine--kotlin--easy]] - Базовые концепции корутин
 - [[q-coroutine-builders-basics--kotlin--easy]] - launch, async, runBlocking
 - [[q-coroutine-scope-basics--kotlin--easy]] - Основы CoroutineScope
-- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() против Thread.sleep()
+- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() против `Thread`.sleep()
 - [[q-coroutines-threads-android-differences--kotlin--easy]] - Корутины против потоков на Android
 
 ### Связанные (Тот Же уровень)
@@ -241,12 +241,12 @@ There is a better solution. We can use structured concurrency in our code. Inste
 - [[q-what-is-coroutine--kotlin--easy]] - Basic coroutine concepts
 - [[q-coroutine-builders-basics--kotlin--easy]] - launch, async, runBlocking
 - [[q-coroutine-scope-basics--kotlin--easy]] - CoroutineScope fundamentals
-- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs Thread.sleep()
+- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs `Thread`.sleep()
 - [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads on Android
 
 ### Related (Same Level)
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutine` dispatchers overview
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `CoroutineContext`
 - [[q-coroutine-context-explained--kotlin--medium]] - `CoroutineContext` explained
 - [[q-coroutine-exception-handling--kotlin--medium]] - Exception handling

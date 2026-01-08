@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-054
 title: "Flow Operators Deep Dive / Глубокое погружение в операторы Flow"
 aliases: ["Flow Operators Deep Dive", "Глубокое погружение в операторы Flow"]
@@ -25,7 +25,7 @@ created: 2025-10-11
 updated: 2025-11-09
 
 tags: [async, difficulty/hard, flow, kotlin, operators, transformation]
----
+---\
 # Вопрос (RU)
 > Реализуйте пользовательские операторы `Flow`. Объясните `flatMapConcat` vs `flatMapMerge` vs `flatMapLatest` с практическими примерами и характеристиками производительности.
 
@@ -1013,13 +1013,13 @@ Note: The above timings are illustrative to show relative behavior, not exact gu
 
 ### Related (Hard)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+- [[q-flow-backpressure-strategies--kotlin--hard]] - `Flow`
+- [[q-flow-testing-advanced--kotlin--hard]] - `Flow`
 
 ### Prerequisites (Easier)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - `Flow`
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

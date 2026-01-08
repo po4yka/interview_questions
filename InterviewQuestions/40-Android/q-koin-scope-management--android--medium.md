@@ -1,4 +1,4 @@
----
+---\
 id: android-203
 title: Koin Scope Management / Управление Scope В Koin
 aliases: [Koin Scope Management, Koin Scopes, Жизненный цикл Koin, Управление Scope В Koin]
@@ -16,28 +16,28 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/di-koin, android/lifecycle, dependency-injection, difficulty/medium, koin, scopes]
 
----
+---\
 # Вопрос (RU)
 
-> Как управлять scope в Koin? Реализуйте зависимости с ограниченным временем жизни для `Activity` и `Fragment` с правильной обработкой жизненного цикла.
+> Как управлять scope в `Koin`? Реализуйте зависимости с ограниченным временем жизни для `Activity` и `Fragment` с правильной обработкой жизненного цикла.
 
 # Question (EN)
 
-> How do you manage scopes in Koin? Implement `Activity` and `Fragment` scoped dependencies with proper lifecycle handling.
+> How do you manage scopes in `Koin`? Implement `Activity` and `Fragment` scoped dependencies with proper lifecycle handling.
 
 ---
 
 ## Ответ (RU)
 
-**Scope в Koin** — это контейнеры для зависимостей с ограниченным временем жизни, которые можно привязать к Android-компонентам (`Activity`, `Fragment`) или пользовательским логическим границам. Они помогают избежать утечек памяти и делают поведение зависимостей согласованным с жизненным циклом.
+**Scope в `Koin`** — это контейнеры для зависимостей с ограниченным временем жизни, которые можно привязать к Android-компонентам (`Activity`, `Fragment`) или пользовательским логическим границам. Они помогают избежать утечек памяти и делают поведение зависимостей согласованным с жизненным циклом.
 
-Важно: Koin не "угадывает" жизненный цикл — вы создаёте и закрываете scope явно или через привязку к владельцу жизненного цикла (`LifecycleOwner`). Примеры ниже показывают типичный паттерн низкоуровневого явного управления scope для Koin 3.x с Android (без использования дополнительных Android-обёрток).
+Важно: `Koin` не "угадывает" жизненный цикл — вы создаёте и закрываете scope явно или через привязку к владельцу жизненного цикла (`LifecycleOwner`). Примеры ниже показывают типичный паттерн низкоуровневого явного управления scope для `Koin` 3.x с Android (без использования дополнительных Android-обёрток).
 
 ### Основные Концепции
 
 **Типы Scope**:
-1. **`Application` / Root Scope** — `single { ... }`, живёт столько, сколько живёт Koin application context.
-2. **Component Scope** — scope, явно создаваемый для `Activity`/`Fragment` и закрываемый при их уничтожении.
+1. **`Application` / Root Scope** — `single { ... }`, живёт столько, сколько живёт `Koin` application context.
+2. **`Component` Scope** — scope, явно создаваемый для `Activity`/`Fragment` и закрываемый при их уничтожении.
 3. **Named Scope** — scope с qualifier-ом (`named("...")`) для пользовательских логических границ (сессия, фича и т.п.).
 
 **Преимущества**:
@@ -95,7 +95,7 @@ class ShoppingActivity : AppCompatActivity() {
 - `createScope(scopeId, qualifier)` создаёт новый экземпляр scope.
 - `scoped` создаёт один экземпляр на scope.
 - При `close()` все scoped-зависимости освобождаются; вы решаете, когда звать `close()` (обычно в `onDestroy`).
-- В Android-проектах `getKoin()` предоставляется через Koin Android-расширения.
+- В Android-проектах `getKoin()` предоставляется через `Koin` Android-расширения.
 
 ### `Fragment` Scoped Dependencies
 
@@ -225,8 +225,8 @@ class SessionManager(private val koin: Koin) {
 
 | Подход | Использование | Автоматическая очистка |
 |--------|---------------|------------------------|
-| `Application` / `single` | Глобальные зависимости | Пока живёт Koin app context |
-| Component scope (`Activity`/`Fragment`) | Привязка к жизненному циклу компонента через явное создание/close | Нет, требуется вызвать `close()` в нужном месте |
+| `Application` / `single` | Глобальные зависимости | Пока живёт `Koin` app context |
+| `Component` scope (`Activity`/`Fragment`) | Привязка к жизненному циклу компонента через явное создание/close | Нет, требуется вызвать `close()` в нужном месте |
 | Named scope | Пользовательская логика (сессия, фича) | Нет, требуется ручное управление |
 
 ### Best Practices
@@ -240,21 +240,21 @@ class SessionManager(private val koin: Koin) {
 
 ## Answer (EN)
 
-Koin Scopes provide lifecycle-aware dependency management by creating containers for dependencies with limited lifetimes that you explicitly tie to Android components (`Activity`, `Fragment`) or custom logical boundaries. They help avoid memory leaks and keep dependency lifetimes aligned with owners.
+`Koin` Scopes provide lifecycle-aware dependency management by creating containers for dependencies with limited lifetimes that you explicitly tie to Android components (`Activity`, `Fragment`) or custom logical boundaries. They help avoid memory leaks and keep dependency lifetimes aligned with owners.
 
-Important: Koin does not automatically infer the Android lifecycle. You create and close scopes explicitly or via lifecycle-aware bindings. The examples below illustrate low-level explicit scope management patterns for Koin 3.x on Android (without using additional Android-specific helpers).
+Important: `Koin` does not automatically infer the Android lifecycle. You create and close scopes explicitly or via lifecycle-aware bindings. The examples below illustrate low-level explicit scope management patterns for `Koin` 3.x on Android (without using additional Android-specific helpers).
 
 ### Core Concepts
 
 **Scope Types**:
-1. **`Application` / Root Scope** – `single { ... }`, lives as long as the Koin application context.
-2. **Component Scope** – a scope explicitly created for an `Activity`/`Fragment` and closed when that component is destroyed.
+1. **`Application` / Root Scope** – `single { ... }`, lives as long as the `Koin` application context.
+2. **`Component` Scope** – a scope explicitly created for an `Activity`/`Fragment` and closed when that component is destroyed.
 3. **Named Scope** – a scope with a qualifier (`named("...")`) for custom logical boundaries (session, feature, etc.).
 
 **Benefits**:
 - Controlled resource cleanup.
 - Reduced risk of memory leaks.
-- Lifecycle alignment when scopes are created/closed correctly.
+- `Lifecycle` alignment when scopes are created/closed correctly.
 
 ### `Activity` Scoped Dependencies
 
@@ -305,7 +305,7 @@ class ShoppingActivity : AppCompatActivity() {
 - `createScope(scopeId, qualifier)` creates a new scope instance.
 - `scoped` provides one instance per scope.
 - Calling `close()` releases scoped dependencies; you decide when (typically in `onDestroy`).
-- In Android projects, `getKoin()` is provided via Koin Android extensions.
+- In Android projects, `getKoin()` is provided via `Koin` Android extensions.
 
 ### `Fragment` Scoped Dependencies
 
@@ -350,9 +350,9 @@ class ProfileFragment : Fragment() {
 ```
 
 **Key Points**:
-- `scope<ProfileFragment> { ... }` declares dependencies for the Fragment scope.
+- `scope<ProfileFragment> { ... }` declares dependencies for the `Fragment` scope.
 - `parametersOf()` passes runtime parameters to scoped definitions.
-- Close the scope when the Fragment is no longer needed (commonly `onDestroy()`), not merely in `onDestroyView()` if the Fragment instance is still retained.
+- Close the scope when the `Fragment` is no longer needed (commonly `onDestroy()`), not merely in `onDestroyView()` if the `Fragment` instance is still retained.
 
 ### Sharing Scopes Between Components
 
@@ -434,8 +434,8 @@ class SessionManager(private val koin: Koin) {
 
 | Approach | Use Case | Automatic Cleanup |
 |----------|----------|-------------------|
-| `Application` / `single` | Global dependencies | While Koin app context is alive |
-| Component scope (`Activity`/`Fragment`) | Tied to component lifecycle via explicit create/close | No, you must call `close()` manually |
+| `Application` / `single` | Global dependencies | While `Koin` app context is alive |
+| `Component` scope (`Activity`/`Fragment`) | Tied to component lifecycle via explicit create/close | No, you must call `close()` manually |
 | Named scope | Custom logical boundaries (session/feature) | No, manual management required |
 
 ### Best Practices
@@ -463,13 +463,13 @@ class SessionManager(private val koin: Koin) {
 
 ## Ссылки (RU)
 
-- Официальная документация Koin по Scope
+- Официальная документация `Koin` по Scope
 - Документация по жизненному циклу Android-компонентов
 - Материалы по паттернам dependency injection
 
 ## References
 
-- Koin official documentation on Scopes
+- `Koin` official documentation on Scopes
 - Android lifecycle documentation
 - Dependency injection patterns
 
@@ -481,7 +481,7 @@ class SessionManager(private val koin: Koin) {
 
 ### Предпосылки (проще)
 
-- Базовая настройка Koin и конфигурация модулей
+- Базовая настройка `Koin` и конфигурация модулей
 - Основы жизненного цикла Android-компонентов
 
 ### Связанные (тот Же уровень)
@@ -501,7 +501,7 @@ class SessionManager(private val koin: Koin) {
 - [[c-dependency-injection]]
 
 ### Prerequisites (Easier)
-- Basic Koin setup and module configuration
+- Basic `Koin` setup and module configuration
 - Android lifecycle fundamentals
 
 ### Related (Same Level)

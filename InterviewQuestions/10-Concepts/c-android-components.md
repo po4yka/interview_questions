@@ -1,14 +1,22 @@
----
-id: concept-android-components
-title: Android Components / Компоненты Android
-aliases: [Android Components, App Components, Компоненты Android]
-kind: concept
-summary: The four fundamental building blocks of Android applications
-links: []
-created: 2025-11-06
-updated: 2025-11-06
-tags: [android, architecture, components, concept]
----
+---\
+id: "20260108-110549"
+title: "Android Components / Компоненты Android"
+aliases: ["Android Components", "App Components", "Компоненты Android"]
+summary: "The four fundamental building blocks of Android applications"
+topic: "android"
+subtopics: ["architecture", "components"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-06"
+updated: "2025-11-06"
+tags: ["android", "architecture", "components", "concept", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -49,7 +57,7 @@ Each component type has a distinct purpose and lifecycle, and each is defined in
 - Responding to battery low events
 - Handling network connectivity changes
 - Receiving custom app events
-- Scheduled tasks (with WorkManager preferred)
+- Scheduled tasks (with `WorkManager` preferred)
 
 **Content Providers**:
 - Sharing data between apps

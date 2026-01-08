@@ -1,4 +1,4 @@
----
+---\
 id: android-047
 title: Clean Architecture on Android / Clean Architecture в Android
 aliases: [Clean Architecture on Android, Clean Architecture в Android]
@@ -16,7 +16,7 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [android/architecture-clean, android/architecture-modularization, android/di-hilt, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 > Как реализовать Clean Architecture в Android?
 
@@ -28,14 +28,14 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 ## Ответ (RU)
 
 ## Краткая Версия
-Строго разделите слои (`presentation`, `domain`, `data`), направьте зависимости внутрь (только к `domain`), держите бизнес-логику в чистом Kotlin без Android SDK и фреймворков, используйте интерфейсы репозиториев как порты, реализуйте их во внешних модулях, и связывайте всё через DI (например, Hilt).
+Строго разделите слои (`presentation`, `domain`, `data`), направьте зависимости внутрь (только к `domain`), держите бизнес-логику в чистом Kotlin без Android SDK и фреймворков, используйте интерфейсы репозиториев как порты, реализуйте их во внешних модулях, и связывайте всё через DI (например, `Hilt`).
 
 ## Подробная Версия
 #### Ключевые Принципы
 
 **Правило зависимостей**: код зависит от внутренних слоев (UI → domain ← data). Domain определяет интерфейсы (порты), data реализует адаптеры.
 
-**Разделение ответственности**: domain слой на чистом Kotlin без Android SDK. Фреймворки (Android, Retrofit, Room, Hilt) — на периферии.
+**Разделение ответственности**: domain слой на чистом Kotlin без Android SDK. Фреймворки (Android, `Retrofit`, `Room`, `Hilt`) — на периферии.
 
 **Тестируемость**: бизнес-логика полностью независима от платформы.
 
@@ -169,21 +169,21 @@ fun User.toUiModel() = UserUiModel(name, email)
 
 **Domain**: быстрые unit-тесты с fake repositories (без Android и DI-фреймворков)
 
-**Data**: contract-тесты против портов; instrumented-тесты для Room
+**Data**: contract-тесты против портов; instrumented-тесты для `Room`
 
 **Presentation**: `ViewModel` тесты с `TestDispatcher` и fake use cases
 
 ## Answer (EN)
 
 ## Short Version
-Strictly separate layers (`presentation`, `domain`, `data`), direct dependencies inward (only towards `domain`), keep business logic in pure Kotlin without Android SDK/frameworks, expose repository interfaces as ports, implement them in outer modules, and wire everything via DI (e.g., Hilt).
+Strictly separate layers (`presentation`, `domain`, `data`), direct dependencies inward (only towards `domain`), keep business logic in pure Kotlin without Android SDK/frameworks, expose repository interfaces as ports, implement them in outer modules, and wire everything via DI (e.g., `Hilt`).
 
 ## Detailed Version
 #### Core Principles
 
 **Dependency Rule**: code depends on inner layers (UI → domain ← data). Domain defines interfaces (ports), data implements adapters.
 
-**Separation of Concerns**: domain layer in pure Kotlin without Android SDK. Frameworks (Android, Retrofit, Room, Hilt) live at the edges.
+**Separation of Concerns**: domain layer in pure Kotlin without Android SDK. Frameworks (Android, `Retrofit`, `Room`, `Hilt`) live at the edges.
 
 **Testability**: business logic completely platform-independent.
 
@@ -317,7 +317,7 @@ fun User.toUiModel() = UserUiModel(name, email)
 
 **Domain**: fast unit tests with fake repositories (no Android or DI frameworks)
 
-**Data**: contract tests against ports; instrumented tests for Room
+**Data**: contract tests against ports; instrumented tests for `Room`
 
 **Presentation**: `ViewModel` tests with `TestDispatcher` and fake use cases
 

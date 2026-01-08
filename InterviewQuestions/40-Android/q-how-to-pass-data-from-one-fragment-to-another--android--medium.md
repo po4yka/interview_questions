@@ -1,4 +1,4 @@
----
+---\
 id: android-300
 title: How To Pass Data From One Fragment To Another / Как передавать данные из одного фрагмента в другой
 aliases: [Fragment Communication, Pass Data Between Fragments]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
 > Как передавать данные из одного фрагмента в другой?
 
@@ -69,7 +69,7 @@ class FragmentB : Fragment() {
 
 **2. `Bundle` и Arguments (включая Safe Args / Navigation)**
 
-Передача данных при создании фрагмента (базовый способ, также используется внутри Navigation Component через arguments/Safe Args):
+Передача данных при создании фрагмента (базовый способ, также используется внутри Navigation `Component` через arguments/Safe Args):
 
 ```kotlin
 // ✅ Создание фрагмента с данными
@@ -150,7 +150,7 @@ class FragmentB : Fragment() {
 | Подход | Когда использовать |
 |--------|-------------------|
 | **Shared `ViewModel`** | Динамический обмен данными между фрагментами, совместно используемое состояние |
-| **`Bundle` Arguments** | Передача данных при создании фрагмента или при навигации (в т.ч. через Navigation Component / Safe Args) |
+| **`Bundle` Arguments** | Передача данных при создании фрагмента или при навигации (в т.ч. через Navigation `Component` / Safe Args) |
 | **FragmentResult API** | Одноразовые результаты между фрагментами без shared `ViewModel` |
 | **`Activity` посредник** | Работает, но не рекомендуется из-за сильной связанности |
 
@@ -158,7 +158,7 @@ class FragmentB : Fragment() {
 
 - Как отличается жизненный цикл общего `ViewModel` от жизненного цикла фрагмента?
 - Что произойдет, если передавать большой объём данных через `Bundle` arguments?
-- Как обрабатывать коммуникацию фрагмент-фрагмент в Navigation Component?
+- Как обрабатывать коммуникацию фрагмент-фрагмент в Navigation `Component`?
 - Когда лучше использовать FragmentResult API вместо shared `ViewModel`?
 - Как тестировать коммуникацию фрагментов с использованием shared `ViewModel`?
 
@@ -231,7 +231,7 @@ class FragmentB : Fragment() {
 
 **2. `Bundle` and Arguments (including Safe Args / Navigation)**
 
-Passing data when creating a fragment (basic approach, also used internally by Navigation Component via arguments/Safe Args):
+Passing data when creating a fragment (basic approach, also used internally by Navigation `Component` via arguments/Safe Args):
 
 ```kotlin
 // ✅ Create fragment with data
@@ -312,7 +312,7 @@ class FragmentB : Fragment() {
 | Approach | When to use |
 |----------|-------------|
 | **Shared `ViewModel`** | Dynamic data exchange between fragments, shared state |
-| **`Bundle` Arguments** | Passing data on fragment creation or navigation (incl. Navigation Component / Safe Args) |
+| **`Bundle` Arguments** | Passing data on fragment creation or navigation (incl. Navigation `Component` / Safe Args) |
 | **FragmentResult API** | One-time results between fragments without shared `ViewModel` |
 | **`Activity` intermediary** | Works but not recommended due to tight coupling |
 
@@ -320,7 +320,7 @@ class FragmentB : Fragment() {
 
 - How does shared `ViewModel` lifecycle differ from fragment lifecycle?
 - What happens if you pass large data via `Bundle` arguments?
-- How to handle fragment-to-fragment communication in Navigation Component?
+- How to handle fragment-to-fragment communication in Navigation `Component`?
 - When should you use FragmentResult API instead of shared `ViewModel`?
 - How to test fragment communication with shared `ViewModel`?
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-195
 title: Background vs Foreground Service / Фоновый vs Foreground-сервис
 aliases: [Background vs Foreground Service, Фоновый vs Foreground-сервис]
@@ -16,7 +16,7 @@ created: 2023-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > В чем разница между background-сервисом и foreground-сервисом в Android?
 
@@ -75,7 +75,7 @@ class BackgroundService : Service() {
 }
 ```
 
-**✅ Современная альтернатива: WorkManager**
+**✅ Современная альтернатива: `WorkManager`**
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .setConstraints(
@@ -88,7 +88,7 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-WorkManager (см. [[c-background-tasks]]):
+`WorkManager` (см. [[c-background-tasks]]):
 - подходит для отложенных и гарантированных задач;
 - учитывает условия (Wi‑Fi, зарядка и т.п.);
 - обеспечивает повторные попытки при сбоях.
@@ -120,7 +120,7 @@ WorkManager (см. [[c-background-tasks]]):
 - Требуется немедленное и непрерывное выполнение, пока пользователь ожидает результат.
 - Подходит для долгих задач, которые должны продолжать работу в фоне и не могут быть отложены.
 
-**WorkManager:**
+**`WorkManager`:**
 - Задача может быть отложена.
 - Зависит от условий (Wi‑Fi, зарядка и т.п.).
 - Подходит для периодической синхронизации, загрузок, задач обслуживания.
@@ -176,7 +176,7 @@ class BackgroundService : Service() {
 }
 ```
 
-**✅ Modern alternative: WorkManager**
+**✅ Modern alternative: `WorkManager`**
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .setConstraints(
@@ -189,7 +189,7 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-WorkManager (see [[c-background-tasks]]):
+`WorkManager` (see [[c-background-tasks]]):
 - suitable for deferred and guaranteed tasks;
 - respects conditions (Wi‑Fi, charging, etc.);
 - provides retries on failure.
@@ -221,7 +221,7 @@ WorkManager (see [[c-background-tasks]]):
 - Needs immediate and continuous execution while user expects it.
 - Suitable for long-running tasks that must keep running in background and cannot be deferred.
 
-**WorkManager:**
+**`WorkManager`:**
 - Execution can be deferred.
 - Requires conditions (Wi-Fi, charging, etc.).
 - Periodic sync, uploads, maintenance jobs.

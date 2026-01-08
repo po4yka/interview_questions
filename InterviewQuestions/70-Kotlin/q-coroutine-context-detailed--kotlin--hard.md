@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-048
 title: "CoroutineContext explained in detail / CoroutineContext детально"
 aliases: ["CoroutineContext explained in detail", "CoroutineContext детально"]
@@ -25,7 +25,7 @@ created: 2025-10-06
 updated: 2025-11-10
 
 tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
----
+---\
 # Вопрос (RU)
 > Что такое CoroutineContext в Kotlin? Как он работает и какие его ключевые элементы?
 
@@ -208,8 +208,8 @@ launch(parentContext) {
 
 ### Core Elements
 
-**1. Job - Lifecycle and cancellation**
-**2. CoroutineDispatcher - Thread execution**
+**1. Job - `Lifecycle` and cancellation**
+**2. CoroutineDispatcher - `Thread` execution**
 **3. CoroutineName - Debugging name**
 **4. CoroutineExceptionHandler - Exception handling**
 
@@ -276,7 +276,7 @@ launch(parentContext) {
 
 ### Key Elements Explained
 
-**1. Job - Lifecycle management**
+**1. Job - `Lifecycle` management**
 
 ```kotlin
 val job = Job()
@@ -289,7 +289,7 @@ job.cancel()  // Cancels coroutine
 job.join()    // Waits for completion
 ```
 
-**2. CoroutineDispatcher - Thread control**
+**2. CoroutineDispatcher - `Thread` control**
 
 ```kotlin
 launch(Dispatchers.Main) {
@@ -407,5 +407,5 @@ launch(parentContext) {
 ### Related (Hard)
 - [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
-- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Lifecycle-aware patterns
+- [[q-lifecycle-aware-coroutines--kotlin--hard]] - `Lifecycle`-aware patterns
 - [[q-coroutine-profiling--kotlin--hard]] - Profiling and debugging

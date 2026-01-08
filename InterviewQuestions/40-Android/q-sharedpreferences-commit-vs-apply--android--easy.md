@@ -1,4 +1,4 @@
----
+---\
 id: android-031
 title: "commit() vs apply() in SharedPreferences / commit() против apply() в SharedPreferences"
 aliases: ["commit() vs apply() in SharedPreferences", "commit() против apply() в SharedPreferences"]
@@ -16,7 +16,7 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
 
----
+---\
 # Вопрос (RU)
 > В чем разница между методами `commit()` и `apply()` в `SharedPreferences`?
 
@@ -323,25 +323,25 @@ suspend fun savePreference(value: String) {
 
 ## Follow-ups
 
-1. How does SharedPreferences batch or coalesce multiple apply() calls, and what are the implications?
+1. How does `SharedPreferences` batch or coalesce multiple apply() calls, and what are the implications?
 2. In which scenarios is commit() strictly required despite its blocking nature?
-3. How does SharedPreferences behave with concurrent edits from multiple threads or processes?
-4. What are the trade-offs between SharedPreferences and DataStore in terms of consistency, performance, and error handling?
-5. How would you safely migrate critical SharedPreferences data to DataStore in a production app?
+3. How does `SharedPreferences` behave with concurrent edits from multiple threads or processes?
+4. What are the trade-offs between `SharedPreferences` and DataStore in terms of consistency, performance, and error handling?
+5. How would you safely migrate critical `SharedPreferences` data to DataStore in a production app?
 
 ## Ссылки (RU)
 
 - [[c-android-storage-options]]
 - [Документация SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences)
 - [Документация DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
-- [Руководство по миграции с SharedPreferences на DataStore](https://developer.android.com/codelabs/android-preferences-datastore)
+- [Руководство по миграции с `SharedPreferences` на DataStore](https://developer.android.com/codelabs/android-preferences-datastore)
 
 ## References
 
 - [[c-android-storage-options]]
 - [SharedPreferences Documentation](https://developer.android.com/reference/android/content/SharedPreferences)
 - [DataStore Documentation](https://developer.android.com/topic/libraries/architecture/datastore)
-- [Migration Guide: SharedPreferences to DataStore](https://developer.android.com/codelabs/android-preferences-datastore)
+- [Migration Guide: `SharedPreferences` to DataStore](https://developer.android.com/codelabs/android-preferences-datastore)
 
 ## Связанные Вопросы (RU)
 

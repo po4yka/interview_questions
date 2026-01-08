@@ -1,4 +1,4 @@
----
+---\
 id: android-123
 title: "What Are The Most Important Components Of Compose / Какие самые важные компоненты Compose"
 aliases: ["Compose Components", "Компоненты Compose"]
@@ -14,9 +14,9 @@ related: [c-jetpack-compose, q-how-does-jetpack-compose-work--android--medium, q
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/architecture-mvvm, android/coroutines, android/ui-compose, difficulty/medium, jetpack-compose]
+tags: [android, android/architecture-mvvm, android/coroutines, android/ui-compose, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Какие самые важные компоненты Jetpack Compose?
@@ -124,7 +124,7 @@ Box(
 - **Column** — вертикальная компоновка
 - **Row** — горизонтальная компоновка
 - **Box** — стековая компоновка (overlay)
-- **LazyColumn/LazyRow** — эффективные списки с виртуализацией (аналог RecyclerView)
+- **LazyColumn/LazyRow** — эффективные списки с виртуализацией (аналог `RecyclerView`)
 
 ```kotlin
 @Composable
@@ -296,7 +296,7 @@ Define child element positioning:
 - **Column** — vertical layout
 - **Row** — horizontal layout
 - **Box** — stack layout (overlay)
-- **LazyColumn/LazyRow** — efficient lists with virtualization (like RecyclerView)
+- **LazyColumn/LazyRow** — efficient lists with virtualization (like `RecyclerView`)
 
 ```kotlin
 @Composable

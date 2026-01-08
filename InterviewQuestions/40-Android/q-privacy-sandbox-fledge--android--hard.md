@@ -1,4 +1,4 @@
----
+---\
 id: android-415
 title: Privacy Sandbox FLEDGE / Privacy Sandbox FLEDGE (Protected Audience API)
 aliases: [FLEDGE, On-Device Ad Auctions, Privacy Sandbox FLEDGE, Protected Audience API]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [advertising, android/privacy-sdks, difficulty/hard, fledge, privacy, privacy-sandbox, protected-audience, remarketing]
----
+---\
 # Вопрос (RU)
 
 > Что такое FLEDGE (Protected Audience API) в Privacy Sandbox? Как он обеспечивает remarketing без third-party cookies? Как реализовать on-device аукционы рекламы и каковы технические вызовы?
@@ -275,7 +275,7 @@ FLEDGE (Protected Audience API) enables remarketing without cross-site tracking 
 - **JavaScript Bidding/Scoring** - Bidding and scoring logic runs in a sandboxed JS environment.
 - **k-anonymity / policy thresholds** - Minimum audience size and other eligibility conditions enforced via platform policies to protect privacy.
 
-**Flow (simplified):**
+**`Flow` (simplified):**
 1. Advertiser/ad tech adds the user to a Custom Audience via `joinCustomAudience`.
 2. Publisher initiates an ad request via `selectAds` within its own context.
 3. The on-device auction runs buyer bidding scripts and seller scoring scripts for relevant audiences.

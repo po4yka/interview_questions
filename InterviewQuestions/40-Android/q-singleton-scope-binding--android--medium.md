@@ -1,4 +1,4 @@
----
+---\
 id: android-324
 title: "Singleton Scope Binding / Привязка Singleton скоупа"
 aliases: ["Singleton Scope Binding", "Привязка Singleton скоупа"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium, hilt, scope]
 
----
+---\
 # Вопрос (RU)
 
 > К какому scope привязан @Singleton в Dagger/Hilt?
@@ -33,12 +33,12 @@ tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium, hilt, s
 
 **Ключевые аспекты:**
 
-- В Dagger: живет столько, сколько живет Component
-- В Hilt: привязан к SingletonComponent (`Application` lifecycle)
+- В `Dagger`: живет столько, сколько живет `Component`
+- В `Hilt`: привязан к SingletonComponent (`Application` lifecycle)
 - Один экземпляр на компонент, а не на JVM
 - Может вызвать утечки памяти при неправильном использовании
 
-**Hilt-пример:**
+**`Hilt`-пример:**
 
 ```kotlin
 @HiltAndroidApp
@@ -72,11 +72,11 @@ val comp2 = DaggerAppComponent.create()
 // repo1 !== repo2 (разные экземпляры!)
 ```
 
-**Hilt Component Scopes:**
+**`Hilt` `Component` Scopes:**
 
 | Scope | Lifetime | Типичные Use Cases |
 |-------|----------|-------------------|
-| @Singleton | `Application` | Database, NetworkClient, Analytics |
+| @Singleton | `Application` | `Database`, NetworkClient, Analytics |
 | @ActivityRetainedScoped | Config changes | `ViewModel` data |
 | @ActivityScoped | `Activity` | Presenter, Navigator |
 | @FragmentScoped | `Fragment` | `Fragment`-specific logic |
@@ -111,12 +111,12 @@ class ActivityPresenter
 
 **Key aspects:**
 
-- In Dagger: lives as long as the Component exists
-- In Hilt: bound to SingletonComponent (`Application` lifecycle)
+- In `Dagger`: lives as long as the `Component` exists
+- In `Hilt`: bound to SingletonComponent (`Application` lifecycle)
 - One instance per component, not per JVM
 - Can cause memory leaks if misused
 
-**Hilt example:**
+**`Hilt` example:**
 
 ```kotlin
 @HiltAndroidApp
@@ -150,11 +150,11 @@ val comp2 = DaggerAppComponent.create()
 // repo1 !== repo2 (different instances!)
 ```
 
-**Hilt Component Scopes:**
+**`Hilt` `Component` Scopes:**
 
 | Scope | Lifetime | Typical Use Cases |
 |-------|----------|-------------------|
-| @Singleton | `Application` | Database, NetworkClient, Analytics |
+| @Singleton | `Application` | `Database`, NetworkClient, Analytics |
 | @ActivityRetainedScoped | Config changes | `ViewModel` data |
 | @ActivityScoped | `Activity` | Presenter, Navigator |
 | @FragmentScoped | `Fragment` | `Fragment`-specific logic |
@@ -187,7 +187,7 @@ class ActivityPresenter
 
 ## Дополнительные Вопросы (RU)
 
-- Что произойдет, если создать несколько Dagger-компонентов с @Singleton-биндингами?
+- Что произойдет, если создать несколько `Dagger`-компонентов с @Singleton-биндингами?
 - Чем @ActivityRetainedScoped отличается от @Singleton при конфигурационных изменениях?
 - Можно ли использовать кастомные scope'ы и как определяется время жизни компонента?
 - Каковы последствия для тестирования при использовании синглтонов, привязанных к компоненту?
@@ -195,7 +195,7 @@ class ActivityPresenter
 
 ## Follow-ups
 
-- What happens if you create multiple Dagger components with @Singleton bindings?
+- What happens if you create multiple `Dagger` components with @Singleton bindings?
 - How does @ActivityRetainedScoped differ from @Singleton during configuration changes?
 - Can you use custom scopes, and how do you define component lifetime?
 - What are the testing implications of component-scoped singletons?
@@ -204,13 +204,13 @@ class ActivityPresenter
 ## Ссылки (RU)
 
 - [[c-dependency-injection]]
-- [Hilt Component Scopes](https://developer.android.com/training/dependency-injection/hilt-android#component-scopes)
+- [Hilt `Component` Scopes](https://developer.android.com/training/dependency-injection/hilt-android#component-scopes)
 - [Dagger Scopes](https://dagger.dev/dev-guide/custom-scopes)
 
 ## References
 
 - [[c-dependency-injection]]
-- [Hilt Component Scopes](https://developer.android.com/training/dependency-injection/hilt-android#component-scopes)
+- [Hilt `Component` Scopes](https://developer.android.com/training/dependency-injection/hilt-android#component-scopes)
 - [Dagger Scopes](https://dagger.dev/dev-guide/custom-scopes)
 
 ## Похожие Вопросы (RU)

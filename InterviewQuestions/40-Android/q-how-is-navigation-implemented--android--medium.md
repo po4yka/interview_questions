@@ -1,4 +1,4 @@
----
+---\
 id: android-421
 title: How Is Navigation Implemented / Как реализована навигация
 aliases: [Android Navigation, How Is Navigation Implemented, Как реализована навигация, Навигация в Android]
@@ -16,7 +16,7 @@ updated: 2025-10-28
 sources: []
 tags: [android/fragment, android/ui-navigation, difficulty/medium, fragments, navigation, navigation-component, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Как реализована навигация в Android приложениях?
@@ -35,7 +35,7 @@ tags: [android/fragment, android/ui-navigation, difficulty/medium, fragments, na
 
 #### 1. Navigation Component (рекомендуемый подход)
 
-Navigation Component — официальная библиотека от Google для управления навигацией. Предоставляет единый API и визуальный редактор навигационного графа.
+Navigation `Component` — официальная библиотека от Google для управления навигацией. Предоставляет единый API и визуальный редактор навигационного графа.
 
 ```kotlin
 // ✅ Переход между фрагментами через NavController
@@ -138,7 +138,7 @@ supportFragmentManager.beginTransaction()
 
 ### Ключевые Концепции
 
-**Back `Stack`** — стек навигации, определяющий поведение перехода «назад». Navigation Component управляет собственным стеком `NavController` (destination back stack), который может использовать `FragmentManager`, но абстрагирует детали.
+**Back `Stack`** — стек навигации, определяющий поведение перехода «назад». Navigation `Component` управляет собственным стеком `NavController` (destination back stack), который может использовать `FragmentManager`, но абстрагирует детали.
 
 **Deep Links** — возможность открыть конкретный экран напрямую:
 
@@ -151,7 +151,7 @@ supportFragmentManager.beginTransaction()
 </fragment>
 ```
 
-**Safe Args** — Gradle-плагин для типобезопасной передачи аргументов в Navigation Component:
+**Safe Args** — Gradle-плагин для типобезопасной передачи аргументов в Navigation `Component`:
 
 ```kotlin
 // ✅ Генерируемые классы для безопасной передачи параметров
@@ -167,7 +167,7 @@ Navigation in Android is the process of moving between screens (`Activity`, `Fra
 
 #### 1. Navigation Component (recommended approach)
 
-Navigation Component is the official library from Google for managing navigation. It provides a unified API and a visual navigation graph editor.
+Navigation `Component` is the official library from Google for managing navigation. It provides a unified API and a visual navigation graph editor.
 
 ```kotlin
 // ✅ Navigate between fragments using NavController
@@ -270,7 +270,7 @@ supportFragmentManager.beginTransaction()
 
 ### Key Concepts
 
-**Back `Stack`** — the navigation stack defining how "back" behavior works. Navigation Component manages its own `NavController` destination back stack, which may delegate to `FragmentManager` but hides low-level details.
+**Back `Stack`** — the navigation stack defining how "back" behavior works. Navigation `Component` manages its own `NavController` destination back stack, which may delegate to `FragmentManager` but hides low-level details.
 
 **Deep Links** — ability to open a specific screen directly:
 
@@ -283,7 +283,7 @@ supportFragmentManager.beginTransaction()
 </fragment>
 ```
 
-**Safe Args** — Gradle plugin for type-safe argument passing in Navigation Component:
+**Safe Args** — Gradle plugin for type-safe argument passing in Navigation `Component`:
 
 ```kotlin
 // ✅ Generated classes for safe parameter passing
@@ -295,10 +295,10 @@ findNavController().navigate(action)
 
 ## Дополнительные Вопросы (RU)
 
-- Как Navigation Component обрабатывает back stack во вложенных графах навигации?
+- Как Navigation `Component` обрабатывает back stack во вложенных графах навигации?
 - В чем разница между `popUpTo` и `popUpToInclusive` в навигационных действиях?
 - Как реализовать условную навигацию в зависимости от состояния аутентификации пользователя?
-- Как мигрировать с ручных транзакций `Fragment` на Navigation Component?
+- Как мигрировать с ручных транзакций `Fragment` на Navigation `Component`?
 - Каковы лучшие практики обработки deep links с динамическими параметрами?
 
 ## Ссылки (RU)
@@ -332,10 +332,10 @@ findNavController().navigate(action)
 
 ## Follow-ups
 
-- How does Navigation Component handle back stack in nested navigation graphs?
+- How does Navigation `Component` handle back stack in nested navigation graphs?
 - What are the differences between `popUpTo` and `popUpToInclusive` in navigation actions?
 - How to implement conditional navigation based on user authentication state?
-- How to migrate from manual `Fragment` transactions to Navigation Component?
+- How to migrate from manual `Fragment` transactions to Navigation `Component`?
 - What are the best practices for handling deep links with dynamic parameters?
 
 ## References

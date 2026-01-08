@@ -1,4 +1,4 @@
----
+---\
 id: android-138
 title: How To Choose Layout For Fragment / Как выбрать layout для Fragment
 aliases: [How To Choose Layout For Fragment, Как выбрать layout для Fragment]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/fragment, android/ui-views, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 
 > Каким образом ты выбираешь layout для `Fragment`?
@@ -47,7 +47,7 @@ override fun onCreateView(
 
 **Ключевые параметры:**
 - `inflater` — предоставляется системой
-- `container` — предполагаемый родительский `ViewGroup` (например, FrameLayout в активности)
+- `container` — предполагаемый родительский `ViewGroup` (например, `FrameLayout` в активности)
 - `attachToRoot` — для фрагментов должен быть `false`, т.к. добавлением во view hierarchy занимается FragmentManager; установка `true` приведёт к попытке двойного добавления и `IllegalStateException` во время выполнения.
 
 **2. `View` Binding** (рекомендуется)
@@ -166,7 +166,7 @@ override fun onCreateView(
 
 **Key parameters:**
 - `inflater` — provided by the system
-- `container` — the expected parent `ViewGroup` (e.g., the FrameLayout in the `Activity`)
+- `container` — the expected parent `ViewGroup` (e.g., the `FrameLayout` in the `Activity`)
 - `attachToRoot` — for fragments should be `false` because FragmentManager handles adding the view to the hierarchy; passing `true` causes double attachment and an `IllegalStateException` at runtime.
 
 **2. `View` Binding** (recommended)

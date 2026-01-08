@@ -1,4 +1,4 @@
----
+---\
 id: lang-061
 title: "What Is Garbage In GC / Что такое мусор в GC"
 aliases: [What Is Garbage In GC, Что такое мусор в GC]
@@ -14,7 +14,7 @@ related: [c-garbage-collection, c-memory-management]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management]
----
+---\
 # Вопрос (RU)
 > Что такое "мусор" в сборщике мусора?
 
@@ -153,7 +153,7 @@ class Activity {
 }
 ```
 
-Garbage Collection Process (conceptually):
+Garbage `Collection` Process (conceptually):
 
 1. Mark: Start from GC Roots, mark all reachable objects.
 2. Sweep: Reclaim memory of unmarked objects (garbage).

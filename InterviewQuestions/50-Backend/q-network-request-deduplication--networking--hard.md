@@ -1,4 +1,4 @@
----
+---\
 id: net-005
 title: "Network Request Deduplication / Дедупликация сетевых запросов"
 aliases: [Network Request Deduplication, Request Deduplication, Дедупликация запросов, Дедупликация сетевых запросов]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 sources: []
 tags: [concurrency, deduplication, difficulty/hard, networking, performance]
 
----
+---\
 # Вопрос (RU)
 > Как реализовать дедупликацию сетевых запросов в Android для предотвращения множественных идентичных вызовов API? Объясните стратегии с использованием Kotlin coroutines и `Flow`.
 
@@ -261,7 +261,7 @@ val cache = MemoryCache(maxSize = 100)
 
 ## Answer (EN)
 
-**Request deduplication** is an optimization technique that prevents making multiple identical network requests simultaneously. When multiple parts of an application request the same data concurrently, deduplication ensures only one actual network call is performed, and all callers share the same result for that overlapping request.
+**`Request` deduplication** is an optimization technique that prevents making multiple identical network requests simultaneously. When multiple parts of an application request the same data concurrently, deduplication ensures only one actual network call is performed, and all callers share the same result for that overlapping request.
 
 Note: deduplication acts on overlapping (concurrent) requests. If one request is already completed and the result is not cached or reused, a subsequent identical request will still hit the network.
 
@@ -441,7 +441,7 @@ class OptimizedUserRepository(
    - Deferred: best for many concurrent callers, allows sharing a single result.
    - `SharedFlow`/`StateFlow`: good for reactive streams where subscribers share the same data.
 
-2. **Set appropriate TTL**
+2. **`Set` appropriate TTL**
    ```kotlin
    val cache = MemoryCache(ttlMs = TimeUnit.MINUTES.toMillis(5))
    ```

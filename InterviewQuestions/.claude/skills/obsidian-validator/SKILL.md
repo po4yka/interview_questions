@@ -1,11 +1,11 @@
----
+---\
 name: obsidian-validator
 description: >
   Comprehensive validation of Obsidian interview notes against vault rules.
   Checks YAML completeness, topic validity, folder placement, content structure,
   linking requirements, and Android-specific rules. Reports issues with severity
   levels (REQUIRED, FORBIDDEN, WARNING, NOTE) and provides actionable suggestions.
----
+---\
 
 # Obsidian Note Validator
 
@@ -147,7 +147,7 @@ If `topic: android`, additional REQUIRED checks:
 Valid Android subtopics include:
 - UI: `ui-compose`, `ui-views`, `ui-navigation`, `ui-state`, etc.
 - Architecture: `architecture-mvvm`, `architecture-mvi`, `di-hilt`, etc.
-- Lifecycle: `lifecycle`, `activity`, `fragment`, `service`, etc.
+- `Lifecycle`: `lifecycle`, `activity`, `fragment`, `service`, etc.
 - Data: `room`, `datastore`, `files-media`, etc.
 - Testing: `testing-unit`, `testing-instrumented`, `testing-ui`, etc.
 
@@ -371,7 +371,7 @@ Summary: Note is valid but incomplete. Recommended improvements listed above.
 
 **Solution**:
 1. Report invalid topic value
-2. List all valid topics from TAXONOMY.md
+2. `List` all valid topics from TAXONOMY.md
 3. Suggest closest matches (by string similarity)
 4. Offer to update topic if user confirms
 
@@ -381,7 +381,7 @@ Summary: Note is valid but incomplete. Recommended improvements listed above.
 
 **Solution**:
 1. Report invalid subtopics
-2. List valid Android subtopics from TAXONOMY.md
+2. `List` valid Android subtopics from TAXONOMY.md
 3. Suggest closest matches
 4. Remind about tag mirroring requirement
 

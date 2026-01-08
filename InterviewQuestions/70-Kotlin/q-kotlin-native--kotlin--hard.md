@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-129
 title: "Kotlin/Native / Kotlin/Native"
 aliases: []
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplatform, native]
----
+---\
 # Вопрос (RU)
 > Что такое Kotlin/Native? Объясните нативную компиляцию, interop с C библиотеками и Objective-C/Swift, различия в модели памяти и случаи использования для iOS разработки.
 
@@ -304,7 +304,7 @@ fun scopedMemory() {
 
 ### Корутины В Kotlin/Native
 
-Корутины поддерживаются; для iOS/Swift обычно предоставляют обёртки (callback- или Flow-wrapper), чтобы сделать API удобным для потребления, и важно контролировать жизненный цикл scope.
+Корутины поддерживаются; для iOS/Swift обычно предоставляют обёртки (callback- или `Flow`-wrapper), чтобы сделать API удобным для потребления, и важно контролировать жизненный цикл scope.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -807,7 +807,7 @@ fun scopedMemory() {
 
 ### Coroutines in Kotlin/Native
 
-Coroutines are supported; for iOS/Swift interop you typically expose callback- or Flow-based wrappers and must manage coroutine scope lifecycle explicitly.
+Coroutines are supported; for iOS/Swift interop you typically expose callback- or `Flow`-based wrappers and must manage coroutine scope lifecycle explicitly.
 
 ```kotlin
 import kotlinx.coroutines.*

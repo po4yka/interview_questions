@@ -1,4 +1,4 @@
----
+---\
 id: android-407
 title: What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin
 aliases: [Navigation Methods in Kotlin, Методы навигации в Kotlin]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation]
----
+---\
 # Вопрос (RU)
 
 > Какие существуют способы навигации в Android-приложениях на Kotlin?
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
 ### 3. Intent Navigation
 
-Навигация между Activity или взаимодействие с внешними приложениями.
+Навигация между `Activity` или взаимодействие с внешними приложениями.
 
 ```kotlin
 // ✅ Explicit Intent - внутренняя навигация
@@ -114,7 +114,7 @@ fun Context.openWebPage(url: String) {
 ```
 
 **Преимущества**: Простота, интеграция с системой.
-**Недостатки**: Создание новых Activity (накладные расходы, необходимость управления жизненным циклом).
+**Недостатки**: Создание новых `Activity` (накладные расходы, необходимость управления жизненным циклом).
 
 ### 4. Deep Links
 
@@ -150,13 +150,13 @@ class MainActivity : AppCompatActivity() {
 |-------|-----------|-------|--------|
 | Jetpack Navigation | Современные приложения | Типобезопасность, визуальный граф | Требует настройки |
 | FragmentTransaction | Гибкая работа с фрагментами | Полный контроль | Ручное управление |
-| Explicit/Implicit Intent | Навигация между Activity и в систему | Простота, интеграция | Накладные расходы |
+| Explicit/Implicit `Intent` | Навигация между `Activity` и в систему | Простота, интеграция | Накладные расходы |
 | Deep Links | Внешняя интеграция | Переходы из других приложений/URL | Требует конфигурации |
 
 ### Best Practices
 
-1. **По возможности используйте Jetpack Navigation** для новых проектов, особенно с Single-Activity архитектурой.
-2. **Single-Activity архитектура** с Navigation Component упрощает навигацию и back stack.
+1. **По возможности используйте Jetpack Navigation** для новых проектов, особенно с Single-`Activity` архитектурой.
+2. **Single-`Activity` архитектура** с Navigation `Component` упрощает навигацию и back stack.
 3. **Safe Args plugin** для типобезопасной передачи аргументов между destination.
 4. **Избегайте глубокой вложенности** фрагментов и сложных графов.
 5. **Корректное управление back stack** и жизненным циклом для предотвращения утечек памяти и неконсистентного UI.
@@ -285,13 +285,13 @@ class MainActivity : AppCompatActivity() {
 |--------|----------|------|------|
 | Jetpack Navigation | Modern apps | Type safety, visual graph | Requires setup |
 | FragmentTransaction | Flexible fragment management | Full control | Manual management |
-| Explicit/Implicit Intent | Activity and system navigation | Simplicity, integration | Overhead |
+| Explicit/Implicit `Intent` | `Activity` and system navigation | Simplicity, integration | Overhead |
 | Deep Links | External integration | Entry from other apps/URLs | Requires configuration |
 
 ### Best Practices
 
-1. **Prefer Jetpack Navigation** for new projects where suitable, especially with Single-Activity architecture.
-2. **Single-Activity architecture** with Navigation Component can simplify navigation and back stack handling.
+1. **Prefer Jetpack Navigation** for new projects where suitable, especially with Single-`Activity` architecture.
+2. **Single-`Activity` architecture** with Navigation `Component` can simplify navigation and back stack handling.
 3. **Use Safe Args plugin** for type-safe argument passing between destinations.
 4. **Avoid deep nesting** of fragments and overly complex graphs.
 5. **Ensure proper back stack and lifecycle management** to prevent leaks and inconsistent UI.
@@ -300,15 +300,15 @@ class MainActivity : AppCompatActivity() {
 
 ## Follow-ups
 
-- How does Navigation Component handle process death and state restoration?
-- What are the performance implications of FragmentTransaction vs Navigation Component?
+- How does Navigation `Component` handle process death and state restoration?
+- What are the performance implications of FragmentTransaction vs Navigation `Component`?
 - How to implement conditional navigation (e.g., authentication gates)?
 - What's the difference between `navigate()` and `navigateUp()` in NavController?
 - How to pass complex objects between destinations safely?
 
 ## References
 
-- [Android Navigation Component Guide](https://developer.android.com/guide/navigation)
+- [Android Navigation `Component` Guide](https://developer.android.com/guide/navigation)
 - [Fragment Transactions Best Practices](https://developer.android.com/guide/fragments/transactions)
 - [Activity Result API](https://developer.android.com/training/basics/intents/result)
 

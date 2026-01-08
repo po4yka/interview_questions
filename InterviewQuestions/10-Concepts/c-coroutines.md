@@ -1,4 +1,4 @@
----
+---\
 id: "20251018-140003"
 title: "Kotlin Coroutines / Корутины Kotlin"
 aliases: ["Coroutines", "Kotlin Coroutines", "Корутины", "Сопрограммы"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-kotlin"
-related: [c-flow, c-structured-concurrency, c-kotlin, c-threading, c-concurrency]
+related: ["c-flow", "c-structured-concurrency", "c-kotlin", "c-threading", "c-concurrency"]
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["async", "concept", "concurrency", "coroutines", "difficulty/medium", "kotlin", "structured-concurrency"]
----
+---\
 
 # Summary (EN)
 
@@ -27,7 +27,7 @@ Key characteristics:
 - Structured concurrency for lifecycle management
 - Sequential-looking code for async operations
 - Built-in cancellation and exception handling
-- Thread-efficient execution
+- `Thread`-efficient execution
 
 # Краткое Описание (RU)
 
@@ -67,14 +67,14 @@ A **coroutine** is an instance of **suspendable computation**. It is conceptuall
 
 ### Coroutines Vs Threads
 
-| Feature | Coroutine | Thread |
+| Feature | `Coroutine` | `Thread` |
 |---------|-----------|--------|
 | **Resource Cost** | Very cheap (lightweight) | Expensive (heavyweight) |
 | **Blocking** | Non-blocking (suspends) | Blocking |
 | **Management** | Managed by Kotlin runtime | Managed by Operating System |
 | **Creation** | Fast | Slow |
-| **Context Switching** | Fast (in-process) | Slow (OS-level) |
-| **Lifecycle** | Tied to scope | Independent |
+| **`Context` Switching** | Fast (in-process) | Slow (OS-level) |
+| **`Lifecycle`** | Tied to scope | Independent |
 | **Cancellation** | Built-in, hierarchical | Manual |
 
 **Example:**
@@ -142,7 +142,7 @@ val job: Job = scope.launch {
 job.cancel()  // Can cancel
 ```
 
-**async**: Coroutine that returns a result
+**async**: `Coroutine` that returns a result
 ```kotlin
 val deferred: Deferred<String> = scope.async {
     fetchData()  // Returns Deferred
@@ -160,7 +160,7 @@ fun main() = runBlocking {
 
 **Comparison:**
 
-| Builder | Returns | Blocks Thread | Use Case |
+| Builder | Returns | Blocks `Thread` | Use Case |
 |---------|---------|---------------|----------|
 | `launch` | Job | No | Fire and forget |
 | `async` | Deferred<T> | No | Need result |
@@ -217,7 +217,7 @@ scope.launch(context) {
 
 **Elements:**
 - **Dispatcher**: Which thread(s) to use
-- **Job**: Lifecycle and cancellation
+- **Job**: `Lifecycle` and cancellation
 - **CoroutineName**: Debug name
 - **CoroutineExceptionHandler**: Error handling
 
@@ -276,7 +276,7 @@ suspend fun loadData(): Data {
 
 **Comparison:**
 
-| Dispatcher | Thread Pool | Use Case |
+| Dispatcher | `Thread` Pool | Use Case |
 |------------|-------------|----------|
 | Main | UI thread | UI updates, Android main |
 | IO | Shared pool (64 threads) | Network, file, database |
@@ -476,9 +476,9 @@ launch {
 
 ### Mobile Development (Android)
 - Network requests without blocking UI
-- Database operations
+- `Database` operations
 - Image loading/processing
-- Lifecycle-aware background work
+- `Lifecycle`-aware background work
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -495,7 +495,7 @@ class UserViewModel : ViewModel() {
 - Handling concurrent requests
 - Non-blocking I/O operations
 - Parallel data processing
-- Database queries
+- `Database` queries
 
 ```kotlin
 suspend fun handleRequest(id: String): Response {
@@ -680,7 +680,7 @@ launch {
 ### When to Use
 - Asynchronous operations (network, I/O)
 - Concurrent processing
-- Lifecycle-aware background work
+- `Lifecycle`-aware background work
 - Replacing callbacks/RxJava
 
 ### When NOT to Use
@@ -712,17 +712,17 @@ launch {
 - [[q-what-is-coroutine--kotlin--easy]] - What is a coroutine? Basic concepts
 - [[q-coroutine-scope-basics--kotlin--easy]] - CoroutineScope fundamentals
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutine builders: launch, async, runBlocking
+- [[q-coroutine-builders-basics--kotlin--easy]] - `Coroutine` builders: launch, async, runBlocking
 - [[q-launch-vs-async--kotlin--easy]] - Difference between launch and async
-- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs Thread.sleep()
+- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs `Thread`.sleep()
 - [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads on Android
 - [[q-globalscope-antipattern--kotlin--easy]] - Why avoid GlobalScope
 
 ### Core Concepts (Medium)
 - [[q-structured-concurrency-kotlin--kotlin--medium]] - Structured concurrency explained
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutine` dispatchers overview
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `Context`
 - [[q-launch-vs-async-vs-runblocking--kotlin--medium]] - Detailed builder comparison
 - [[q-dispatchers-io-vs-default--kotlin--medium]] - When to use IO vs Default
 - [[q-withcontext-use-cases--kotlin--medium]] - Using withContext
@@ -735,7 +735,7 @@ launch {
 ### Advanced Scopes & Lifecycle (Medium)
 - [[q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]] - Android lifecycle scopes
 - [[q-lifecyclescope-viewmodelscope--kotlin--medium]] - lifecycleScope vs viewModelScope
-- [[q-viewmodel-coroutines-lifecycle--kotlin--medium]] - ViewModel coroutines lifecycle
+- [[q-viewmodel-coroutines-lifecycle--kotlin--medium]] - `ViewModel` coroutines lifecycle
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]] - CoroutineScope vs SupervisorScope
 - [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Supervisor scope details
 - [[q-job-vs-supervisorjob--kotlin--medium]] - Job vs SupervisorJob
@@ -743,7 +743,7 @@ launch {
 
 ### Testing (Medium)
 - [[q-testing-viewmodels-coroutines--kotlin--medium]] - Testing ViewModels with coroutines
-- [[q-testing-viewmodel-coroutines--kotlin--medium]] - ViewModel coroutines testing
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - `ViewModel` coroutines testing
 - [[q-testing-coroutine-timing-control--kotlin--medium]] - Controlling time in tests
 - [[q-test-dispatcher-types--kotlin--medium]] - Test dispatcher types
 - [[q-testing-coroutine-cancellation--kotlin--medium]] - Testing cancellation
@@ -762,8 +762,8 @@ launch {
 - [[q-structured-concurrency--kotlin--hard]] - Deep dive into structured concurrency
 - [[q-structured-concurrency-violations--kotlin--hard]] - Structured concurrency violations
 - [[q-coroutine-context-detailed--kotlin--hard]] - CoroutineContext deep dive
-- [[q-coroutinecontext-composition--kotlin--hard]] - Context composition
-- [[q-coroutine-context-elements--kotlin--hard]] - Context elements
+- [[q-coroutinecontext-composition--kotlin--hard]] - `Context` composition
+- [[q-coroutine-context-elements--kotlin--hard]] - `Context` elements
 - [[q-continuation-cps-internals--kotlin--hard]] - Continuation internals
 - [[q-suspend-cancellable-coroutine--kotlin--hard]] - suspendCancellableCoroutine
 
@@ -774,22 +774,22 @@ launch {
 - [[q-dispatcher-performance--kotlin--hard]] - Dispatcher performance
 
 ### Flows (Medium/Hard)
-- [[q-kotlin-flow-basics--kotlin--medium]] - Kotlin Flow basics
-- [[q-flow-basics--kotlin--easy]] - Flow fundamentals
-- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Cold Flow fundamentals
+- [[q-kotlin-flow-basics--kotlin--medium]] - Kotlin `Flow` basics
+- [[q-flow-basics--kotlin--easy]] - `Flow` fundamentals
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Cold `Flow` fundamentals
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold Flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot Flows comparison
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow and StateFlow
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow vs SharedFlow
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` and `StateFlow`
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - `StateFlow` vs `SharedFlow`
 - [[q-sharedflow-stateflow-android--kotlin--medium]] - StateFlow/SharedFlow in Android
-- [[q-flow-operators-map-filter--kotlin--medium]] - Flow operators
-- [[q-flow-operators--kotlin--medium]] - Flow operators overview
+- [[q-flow-operators-map-filter--kotlin--medium]] - `Flow` operators
+- [[q-flow-operators--kotlin--medium]] - `Flow` operators overview
 - [[q-flow-combining-zip-combine--kotlin--medium]] - Combining flows
 
 ### Channels (Medium/Hard)
 - [[q-kotlin-channels--kotlin--medium]] - Kotlin Channels
 - [[q-channels-basics-types--kotlin--medium]] - Channel basics and types
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow`
 - [[q-channel-flow-comparison--kotlin--medium]] - Channel/Flow comparison
 - [[q-fan-in-fan-out--kotlin--hard]] - Fan-in/fan-out patterns
 - [[q-fan-in-fan-out-channels--kotlin--hard]] - Fan-in/fan-out with channels
@@ -803,9 +803,9 @@ launch {
 - [[q-noncancellable-context-cleanup--kotlin--medium]] - Non-cancellable cleanup
 
 ### Integration (Medium)
-- [[q-retrofit-coroutines-best-practices--kotlin--medium]] - Retrofit with coroutines
-- [[q-room-coroutines-flow--kotlin--medium]] - Room with coroutines and Flow
-- [[q-workmanager-coroutine-worker--kotlin--medium]] - WorkManager CoroutineWorker
+- [[q-retrofit-coroutines-best-practices--kotlin--medium]] - `Retrofit` with coroutines
+- [[q-room-coroutines-flow--kotlin--medium]] - `Room` with coroutines and `Flow`
+- [[q-workmanager-coroutine-worker--kotlin--medium]] - `WorkManager` CoroutineWorker
 - [[q-rxjava-to-coroutines-migration--kotlin--medium]] - RxJava to Coroutines migration
 
 ### Synchronization (Medium/Hard)

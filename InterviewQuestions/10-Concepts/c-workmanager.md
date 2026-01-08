@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-140300"
 title: "WorkManager / WorkManager"
 aliases: ["Android WorkManager", "Background Work", "Deferrable Work", "WorkManager", "Отложенная работа", "Фоновая работа"]
@@ -12,21 +12,21 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-service, c-background-tasks, c-coroutines, c-threading, c-performance]
+related: ["c-service", "c-background-tasks", "c-coroutines", "c-threading", "c-performance"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "background-tasks", "concept", "coroutines", "difficulty/medium", "jetpack", "threading", "workmanager"]
----
+---\
 
 # WorkManager / WorkManager
 
 ## Summary (EN)
 
-WorkManager is an Android Jetpack library designed for scheduling deferrable, guaranteed background work that needs to run even if the app exits or the device restarts. It intelligently chooses the best way to execute work based on device API level (JobScheduler, AlarmManager, or BroadcastReceiver) and respects system constraints like battery optimization, Doze mode, and App Standby. WorkManager is ideal for tasks like uploading logs, syncing data, backing up content, or processing images when constraints are met.
+`WorkManager` is an Android Jetpack library designed for scheduling deferrable, guaranteed background work that needs to run even if the app exits or the device restarts. It intelligently chooses the best way to execute work based on device API level (JobScheduler, AlarmManager, or `BroadcastReceiver`) and respects system constraints like battery optimization, Doze mode, and App Standby. `WorkManager` is ideal for tasks like uploading logs, syncing data, backing up content, or processing images when constraints are met.
 
 ## Краткое Описание (RU)
 
-WorkManager - это библиотека Android Jetpack для планирования отложенной, гарантированной фоновой работы, которая должна выполняться, даже если приложение закрыто или устройство перезагружено. Интеллектуально выбирает лучший способ выполнения работы в зависимости от уровня API устройства (JobScheduler, AlarmManager или BroadcastReceiver) и учитывает системные ограничения, такие как оптимизация батареи, режим Doze и App Standby. WorkManager идеально подходит для задач, таких как загрузка логов, синхронизация данных, резервное копирование контента или обработка изображений при соблюдении ограничений.
+`WorkManager` - это библиотека Android Jetpack для планирования отложенной, гарантированной фоновой работы, которая должна выполняться, даже если приложение закрыто или устройство перезагружено. Интеллектуально выбирает лучший способ выполнения работы в зависимости от уровня API устройства (JobScheduler, AlarmManager или `BroadcastReceiver`) и учитывает системные ограничения, такие как оптимизация батареи, режим Doze и App Standby. `WorkManager` идеально подходит для задач, таких как загрузка логов, синхронизация данных, резервное копирование контента или обработка изображений при соблюдении ограничений.
 
 ## Key Points (EN)
 
@@ -36,10 +36,10 @@ WorkManager - это библиотека Android Jetpack для планиро�
 - **Persistent**: Work survives app and device restarts
 - **Chainable**: Create sequences of work with dependencies
 - **Cancellable**: Cancel work by ID or tag
-- **Observable**: Monitor work status with LiveData or Flow
+- **Observable**: Monitor work status with `LiveData` or `Flow`
 - **One-time or Periodic**: Support for both execution patterns
 - **Exponential Backoff**: Automatic retry with configurable backoff policy
-- **Thread-safe**: Safe to schedule from any thread
+- **`Thread`-safe**: Safe to schedule from any thread
 
 ## Ключевые Моменты (RU)
 
@@ -49,7 +49,7 @@ WorkManager - это библиотека Android Jetpack для планиро�
 - **Персистентность**: Работа сохраняется при перезапуске приложения и устройства
 - **Цепочки**: Создание последовательностей работ с зависимостями
 - **Отменяемость**: Отмена работы по ID или тегу
-- **Наблюдаемость**: Мониторинг статуса работы через LiveData или Flow
+- **Наблюдаемость**: Мониторинг статуса работы через `LiveData` или `Flow`
 - **Разовая или периодическая**: Поддержка обоих шаблонов выполнения
 - **Экспоненциальная задержка**: Автоматические повторы с настраиваемой политикой задержки
 - **Потокобезопасность**: Безопасное планирование из любого потока
@@ -61,7 +61,7 @@ WorkManager - это библиотека Android Jetpack для планиро�
 - **Data synchronization**: Upload/download data when network available
 - **Log uploading**: Send analytics/crash logs periodically
 - **Image processing**: Compress, resize, or filter images
-- **Database cleanup**: Periodic maintenance tasks
+- **`Database` cleanup**: Periodic maintenance tasks
 - **Content backup**: Backup user data to cloud storage
 - **Notifications**: Schedule notifications for future delivery
 - **Prefetching content**: Download content when on WiFi
@@ -73,9 +73,9 @@ WorkManager - это библиотека Android Jetpack для планиро�
 - **Immediate execution**: Use coroutines or RxJava instead
 - **Precise timing**: Use AlarmManager for exact timing (e.g., alarm clock)
 - **User-initiated**: For tasks user expects immediately (use coroutines)
-- **Long-running tasks**: Limited to 10 minutes (use Foreground Service)
+- **`Long`-running tasks**: Limited to 10 minutes (use Foreground `Service`)
 - **Real-time updates**: Use WebSockets, Firebase, or similar
-- **Background location**: Use Foreground Service with notification
+- **Background location**: Use Foreground `Service` with notification
 
 ## Trade-offs
 
@@ -96,7 +96,7 @@ WorkManager - это библиотека Android Jetpack для планиро�
 - **10-minute limit**: Tasks longer than 10 minutes may be stopped
 - **Overhead**: Heavier than simple coroutines for immediate work
 - **Complexity for simple tasks**: Overkill for one-off immediate tasks
-- **Database dependency**: Uses Room internally (adds to APK size)
+- **`Database` dependency**: Uses `Room` internally (adds to APK size)
 
 ## Worker Types
 
@@ -566,7 +566,7 @@ class UploadWorkerTest {
 ## Best Practices
 
 1. **Use CoroutineWorker** - Simplifies async work with coroutines
-2. **Set appropriate constraints** - Minimize battery/data usage
+2. **`Set` appropriate constraints** - Minimize battery/data usage
 3. **Use unique work** - Prevent duplicate work
 4. **Tag your work** - Easier to query and cancel related work
 5. **Handle retries** - Return `Result.retry()` for transient failures
@@ -613,8 +613,8 @@ class UploadWorker(
 - [[c-foreground-service]] - For user-visible work
 - [[c-threading]] - Background threading concepts
 - [[c-rxjava]] - RxWorker integration
-- [[c-dependency-injection]] - Hilt WorkerFactory
-- [[c-testing]] - Testing WorkManager
+- [[c-dependency-injection]] - `Hilt` WorkerFactory
+- [[c-testing]] - Testing `WorkManager`
 
 ## References
 

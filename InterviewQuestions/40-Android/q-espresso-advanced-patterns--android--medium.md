@@ -1,4 +1,4 @@
----
+---\
 id: android-448
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
 aliases: [Custom Matchers, Custom ViewActions, Espresso Advanced Patterns, IdlingResource, Продвинутые паттерны Espresso]
@@ -17,7 +17,7 @@ created: 2025-10-20
 updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
 
----
+---\
 # Вопрос (RU)
 > Как реализовать продвинутые паттерны Espresso с `IdlingResource`, custom matchers и `ViewAction`s?
 
@@ -95,7 +95,7 @@ fun testWithNetwork() {
 }
 ```
 
-**2. Custom matcher для RecyclerView**
+**2. Custom matcher для `RecyclerView`**
 
 ```kotlin
 fun withItemCount(count: Int): Matcher<View> {
@@ -154,7 +154,7 @@ fun dragToCenter(): ViewAction {
 }
 ```
 
-**4. RecyclerView assertions**
+**4. `RecyclerView` assertions**
 
 ```kotlin
 // Проверка текста элемента на позиции 5
@@ -269,7 +269,7 @@ fun testWithNetwork() {
 }
 ```
 
-**2. Custom matcher for RecyclerView**
+**2. Custom matcher for `RecyclerView`**
 
 ```kotlin
 fun withItemCount(count: Int): Matcher<View> {
@@ -326,7 +326,7 @@ fun dragToCenter(): ViewAction {
 }
 ```
 
-**4. RecyclerView assertions**
+**4. `RecyclerView` assertions**
 
 ```kotlin
 // Check specific item text at position 5

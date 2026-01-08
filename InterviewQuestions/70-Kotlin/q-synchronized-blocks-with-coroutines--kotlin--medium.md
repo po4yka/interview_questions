@@ -1,4 +1,4 @@
----
+---\
 id: lang-037
 title: "Synchronized Blocks With Coroutines / Синхронизированные блоки с корутинами"
 aliases: [Synchronized Blocks With Coroutines, Синхронизированные блоки с корутинами]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, synchronization]
----
+---\
 # Вопрос (RU)
 > Почему, как правило, не следует использовать `synchronized`-блоки с корутинами и когда это допустимо?
 
@@ -937,9 +937,9 @@ fun demonstrateThreadBlocking() = runBlocking {
 | Blocking | Blocks thread | Waiting coroutines suspend |
 | Cancellation | Blocking code not cooperative | Cooperative with suspend points |
 | Performance | Degrades with many blocking coroutines | Scales better with many coroutines |
-| Thread usage | Holds thread while lock is held | Frees thread while waiting for lock |
+| `Thread` usage | Holds thread while lock is held | Frees thread while waiting for lock |
 | Suspend functions | Not allowed inside | Fully supported inside |
-| Use case | Small, quick, non-suspending sections | Coroutine-based shared state and suspending work |
+| Use case | Small, quick, non-suspending sections | `Coroutine`-based shared state and suspending work |
 
 ---
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-375
 title: "How To Pass Parameters To Fragment / Как передать параметры во Fragment"
 aliases: ["Fragment arguments", "Fragment Bundle", "How To Pass Parameters To Fragment", "Как передать параметры во Fragment"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/fragment, difficulty/medium, fragment]
 
----
+---\
 # Вопрос (RU)
 
 > Как передать параметры во фрагмент?
@@ -300,13 +300,13 @@ class CorrectFragment : Fragment() {
 - Что произойдет, если не использовать `Bundle` и передавать данные через конструктор?
 - Как `Bundle` переживает изменения конфигурации, например поворот экрана?
 - Когда следует использовать `Parcelable` vs `Serializable` для сложных объектов?
-- Как плагин Safe Args в Navigation Component улучшает типобезопасность?
+- Как плагин Safe Args в Navigation `Component` улучшает типобезопасность?
 - Каковы ограничения по объему данных, передаваемых через `Bundle`?
 
 ## Ссылки (RU)
 
 - [Документация Android - Fragments](https://developer.android.com/guide/fragments)
-- [Navigation Component Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
+- [Navigation `Component` Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
 - См. также: [[c-android-components]]
 
 ## Связанные Вопросы (RU)
@@ -329,13 +329,13 @@ class CorrectFragment : Fragment() {
 - What happens if you don't use `Bundle` and pass data via constructor?
 - How does `Bundle` survive configuration changes like screen rotation?
 - When should you use `Parcelable` vs `Serializable` for complex objects?
-- How does the Navigation Component's Safe Args plugin improve type safety?
+- How does the Navigation `Component`'s Safe Args plugin improve type safety?
 - What are the memory limits for data passed through `Bundle`?
 
 ## References
 
 - [Android Documentation - Fragments](https://developer.android.com/guide/fragments)
-- [Navigation Component Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
+- [Navigation `Component` Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
 - See also: [[c-android-components]]
 
 ## Related Questions

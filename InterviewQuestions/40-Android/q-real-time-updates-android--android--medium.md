@@ -1,4 +1,4 @@
----
+---\
 id: android-328
 title: "Real Time Updates Android / Обновления в реальном времени Android"
 aliases: ["Real Time Updates Android", "Обновления в реальном времени Android"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/networking-http, android/websockets, difficulty/medium, fcm, firebase, networking, real-time, sse, websockets]
 
----
+---\
 # Вопрос (RU)
 
 > Как реализовать обновления в реальном времени в Android-приложении? Какие технологии доступны и каковы best practices?
@@ -236,7 +236,7 @@ class ChatViewModel @Inject constructor(
 }
 ```
 
-Для production-кода также важно учитывать жизненный цикл UI (например, отключать WebSocket, когда экран не активен, если постоянное соединение не требуется) и использовать жизненно устойчивые скоупы (ViewModel / foreground service) для длительных соединений.
+Для production-кода также важно учитывать жизненный цикл UI (например, отключать WebSocket, когда экран не активен, если постоянное соединение не требуется) и использовать жизненно устойчивые скоупы (`ViewModel` / foreground service) для длительных соединений.
 
 ### Сравнение Технологий
 
@@ -257,7 +257,7 @@ class ChatViewModel @Inject constructor(
 
 **Производительность:**
 - Пакетная обработка обновлений
-- Локальное кэширование (Room)
+- Локальное кэширование (`Room`)
 - Сжатие сообщений (Gzip), если уместно на уровне протокола
 - Пагинация истории
 
@@ -480,7 +480,7 @@ class ChatViewModel @Inject constructor(
 }
 ```
 
-For production code, also tie the connection to UI/lifecycle needs (e.g., disconnect when the screen is not visible if a permanent connection is unnecessary) and use lifecycle-resilient scopes (ViewModel / foreground service) for long-lived connections.
+For production code, also tie the connection to UI/lifecycle needs (e.g., disconnect when the screen is not visible if a permanent connection is unnecessary) and use lifecycle-resilient scopes (`ViewModel` / foreground service) for long-lived connections.
 
 ### Technology Comparison
 
@@ -501,8 +501,8 @@ For production code, also tie the connection to UI/lifecycle needs (e.g., discon
 
 **Performance:**
 - Batch updates
-- Local caching (Room)
-- Message compression (Gzip) when appropriate at protocol level
+- Local caching (`Room`)
+- `Message` compression (Gzip) when appropriate at protocol level
 - Pagination for history
 
 **Security:**

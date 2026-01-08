@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-195702"
 title: "Compose Ui Basics / Compose Ui Basics"
 aliases: ["Compose Ui Basics"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-jetpack-compose, c-compose-ui, c-compose-layout, c-declarative-programming, c-android-ui-composition]
+moc: "moc-cs"
+related: ["c-jetpack-compose", "c-compose-ui", "c-compose-layout", "c-declarative-programming", "c-android-ui-composition"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -35,15 +36,15 @@ Compose UI basics cover how Jetpack Compose (Android) / Compose Multiplatform de
 - State-driven rendering: UI is automatically updated when observable state (e.g., `mutableStateOf`, `remember`, `StateFlow`) changes, forming a unidirectional data flow.
 - Composition & recomposition: Compose builds a UI tree from composables and efficiently recomposes only affected parts when state changes, improving performance and code clarity.
 - Layout primitives: Core elements like `Column`, `Row`, `Box`, `LazyColumn`, `Modifier` define structure, spacing, alignment, and interactions in a consistent, composable way.
-- Interoperability: Compose integrates with existing View-based UI (and vice versa), allowing gradual migration of legacy Android UIs.
+- Interoperability: Compose integrates with existing `View`-based UI (and vice versa), allowing gradual migration of legacy Android UIs.
 
 ## Ключевые Моменты (RU)
 
-- Декларативный UI: Разработчик описывает, "каким" должен быть интерфейс для заданного состояния через функции с аннотацией `@Composable`, вместо пошагового изменения View-элементов.
+- Декларативный UI: Разработчик описывает, "каким" должен быть интерфейс для заданного состояния через функции с аннотацией `@Composable`, вместо пошагового изменения `View`-элементов.
 - UI, управляемый состоянием: Интерфейс автоматически обновляется при изменении наблюдаемого состояния (`mutableStateOf`, `remember`, `StateFlow` и др.), поддерживая однонаправленный поток данных.
 - Композиция и рекомпозиция: Compose строит дерево composable-функций и эффективно перерассчитывает только затронутые участки при изменении состояния, повышая производительность и читаемость.
 - Базовые Layout-компоненты: `Column`, `Row`, `Box`, `LazyColumn`, `Modifier` задают структуру, отступы, выравнивание и поведение элементов в единой композиционной модели.
-- Интероперабельность: Compose легко встраивается в существующие View-экраны и наоборот, что упрощает поэтапную миграцию с классического Android UI.
+- Интероперабельность: Compose легко встраивается в существующие `View`-экраны и наоборот, что упрощает поэтапную миграцию с классического Android UI.
 
 ## References
 

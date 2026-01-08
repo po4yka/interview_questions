@@ -1,14 +1,22 @@
----
-id: concept-005
-title: Java Language Features / Особенности языка Java
-aliases: [Java Features, Java язык, JVM, Особенности Java]
-kind: concept
-summary: Overview of key Java language features including object-oriented programming, platform independence, garbage collection, strong typing, and the extensive standard library.
-links: []
-created: 2025-11-05
-updated: 2025-11-05
-tags: [concept, java, jvm, language-features, programming-languages]
----
+---\
+id: "20260108-110550"
+title: "Java Language Features / Особенности языка Java"
+aliases: ["Java Features", "Java язык", "JVM", "Особенности Java"]
+summary: "Overview of key Java language features including object-oriented programming, platform independence, garbage collection, strong typing, and the extensive standard library."
+topic: "programming-languages"
+subtopics: ["java", "jvm", "language-features"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-11-05"
+updated: "2025-11-05"
+tags: ["concept", "java", "jvm", "language-features", "programming-languages", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -37,7 +45,7 @@ tags: [concept, java, jvm, language-features, programming-languages]
 - Prevents memory leaks and dangling pointers
 
 **5. Rich Standard Library**:
-- Collections Framework (List, Set, Map)
+- Collections Framework (`List`, `Set`, `Map`)
 - java.util.concurrent for multithreading
 - java.io, java.nio for file/network I/O
 - java.time for date/time handling (Java 8+)
@@ -94,7 +102,7 @@ tags: [concept, java, jvm, language-features, programming-languages]
 - Предотвращает утечки памяти и висячие указатели
 
 **5. Богатая стандартная библиотека**:
-- Collections Framework (List, Set, Map)
+- Collections Framework (`List`, `Set`, `Map`)
 - java.util.concurrent для многопоточности
 - java.io, java.nio для файлового/сетевого ввода-вывода
 - java.time для работы с датой/временем (Java 8+)

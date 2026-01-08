@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-164949"
 title: "Collections Android / Collections Android"
 aliases: ["Collections Android"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-collections, c-data-structures, c-sparsearray, c-array, c-hash-map]
+related: ["c-collections", "c-data-structures", "c-sparsearray", "c-array", "c-hash-map"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -31,18 +32,18 @@ Collections Android обычно относится к двум близким �
 
 ## Key Points (EN)
 
-- Use standard Java/Kotlin collections (List, Set, Map, MutableList, etc.) for general logic, and prefer immutable collections for thread-safety and predictability where possible.
-- AndroidX Collections provides specialized types (e.g., SparseArray, LongSparseArray, SparseBooleanArray) that replace HashMap-like structures when keys are primitives to reduce memory overhead and allocations.
-- Sparse* collections are often preferred in Android framework APIs (e.g., for view IDs or flags) because they avoid autoboxing and can be more memory-efficient than HashMap on mobile.
-- Choosing the right collection affects scrolling smoothness (RecyclerView, adapters), caching strategies, and the performance of background work; avoid overusing heavy collections on the main thread.
+- Use standard Java/Kotlin collections (`List`, `Set`, `Map`, MutableList, etc.) for general logic, and prefer immutable collections for thread-safety and predictability where possible.
+- AndroidX Collections provides specialized types (e.g., SparseArray, LongSparseArray, SparseBooleanArray) that replace `HashMap`-like structures when keys are primitives to reduce memory overhead and allocations.
+- Sparse* collections are often preferred in Android framework APIs (e.g., for view IDs or flags) because they avoid autoboxing and can be more memory-efficient than `HashMap` on mobile.
+- Choosing the right collection affects scrolling smoothness (`RecyclerView`, adapters), caching strategies, and the performance of background work; avoid overusing heavy collections on the main thread.
 - Be aware of API and language evolution: Kotlin extensions, inline classes, and improved standard library utilities often provide safer and more expressive ways to work with collections in modern Android codebases.
 
 ## Ключевые Моменты (RU)
 
-- Стандартные коллекции Java/Kotlin (List, Set, Map, MutableList и др.) используются для общей логики; по возможности отдавайте предпочтение неизменяемым коллекциям для потокобезопасности и предсказуемости.
-- AndroidX Collections предоставляет специализированные типы (например, SparseArray, LongSparseArray, SparseBooleanArray), которые заменяют HashMap-подобные структуры при примитивных ключах, снижая использование памяти и количество аллокаций.
-- Sparse*-коллекции часто используются и рекомендуются во фреймворке Android (например, для ID вьюх или флагов), так как избегают автобоксинга и обычно более экономны по памяти, чем HashMap на мобильных устройствах.
-- Правильный выбор коллекции влияет на плавность скролла (RecyclerView, адаптеры), стратегии кэширования и производительность фоновых задач; избегайте тяжёлых структур данных на главном потоке.
+- Стандартные коллекции Java/Kotlin (`List`, `Set`, `Map`, MutableList и др.) используются для общей логики; по возможности отдавайте предпочтение неизменяемым коллекциям для потокобезопасности и предсказуемости.
+- AndroidX Collections предоставляет специализированные типы (например, SparseArray, LongSparseArray, SparseBooleanArray), которые заменяют `HashMap`-подобные структуры при примитивных ключах, снижая использование памяти и количество аллокаций.
+- Sparse*-коллекции часто используются и рекомендуются во фреймворке Android (например, для ID вьюх или флагов), так как избегают автобоксинга и обычно более экономны по памяти, чем `HashMap` на мобильных устройствах.
+- Правильный выбор коллекции влияет на плавность скролла (`RecyclerView`, адаптеры), стратегии кэширования и производительность фоновых задач; избегайте тяжёлых структур данных на главном потоке.
 - Учитывайте эволюцию API и языка: расширения Kotlin, inline-классы и утилиты стандартной библиотеки дают более безопасные и выразительные способы работы с коллекциями в современных Android-проектах.
 
 ## References

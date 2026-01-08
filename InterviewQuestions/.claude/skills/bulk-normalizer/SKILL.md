@@ -1,11 +1,11 @@
----
+---\
 name: bulk-normalizer
 description: >
   Batch normalize YAML frontmatter across multiple files. Standardizes field ordering,
   fixes array formatting to single-line, updates timestamps, removes duplicate fields,
   and previews changes before applying. Essential for monthly maintenance and ensuring
   consistent metadata structure across the vault.
----
+---\
 
 # Bulk Normalizer
 
@@ -14,7 +14,7 @@ description: >
 Standardize YAML frontmatter across multiple files:
 
 1. **Field Ordering**: Enforce consistent field order in YAML
-2. **Array Formatting**: Convert multi-line arrays to single-line `[a, b, c]`
+2. **`Array` Formatting**: Convert multi-line arrays to single-line `[a, b, c]`
 3. **Timestamp Updates**: Update `updated` field to current date
 4. **Duplicate Removal**: Remove redundant/duplicate fields
 5. **Format Cleanup**: Fix spacing, quoting, and formatting issues

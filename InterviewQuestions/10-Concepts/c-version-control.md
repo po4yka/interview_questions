@@ -12,7 +12,7 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: [c-git, c-ci-cd, c-feature-flags, c-clean-code, c-debugging]
+related: ["c-git", "c-ci-cd", "c-feature-flags", "c-clean-code", "c-debugging"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["collaboration", "concept", "difficulty/medium", "git", "vcs", "version-control"]

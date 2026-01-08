@@ -1,4 +1,4 @@
----
+---\
 id: android-417
 title: "Why User Data May Disappear On Screen Rotation / Почему данные пользователя могут пропасть при повороте экрана"
 aliases: ["Why User Data May Disappear On Screen Rotation", "Почему данные пользователя могут пропасть при повороте экрана"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/activity, android/architecture-mvvm, android/lifecycle, configuration-change, difficulty/hard, state-preservation]
 
----
+---\
 # Вопрос (RU)
 
 > Почему пользовательские данные могут исчезнуть при повороте экрана?
@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
 }
 ```
 
-**2. EditText без android:id**
+**2. `EditText` без android:id**
 ```xml
 <!-- ❌ Состояние не сохраняется (нет ID, системе не к чему привязать состояние) -->
 <EditText
@@ -218,7 +218,7 @@ class LoginActivity : AppCompatActivity() {
 }
 ```
 
-**2. EditText Without `android:id`**
+**2. `EditText` Without `android:id`**
 ```xml
 <!-- ❌ State not preserved (no ID, nothing to associate state with) -->
 <EditText

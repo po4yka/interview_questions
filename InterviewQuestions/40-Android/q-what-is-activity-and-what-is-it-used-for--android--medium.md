@@ -1,4 +1,4 @@
----
+---\
 id: android-187
 title: Activity / Компонент Activity
 aliases: [Activity, Компонент Activity]
@@ -14,7 +14,7 @@ related: [c-activity-lifecycle, c-android-components, q-is-fragment-lifecycle-co
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Компонент `Activity`
 
@@ -260,7 +260,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
 #### 5. Взаимодействие С Другими Компонентами
 
-`Activity` взаимодействует с другими компонентами Android: `Service`, `BroadcastReceiver`, `ContentProvider`, WorkManager:
+`Activity` взаимодействует с другими компонентами Android: `Service`, `BroadcastReceiver`, `ContentProvider`, `WorkManager`:
 
 ```kotlin
 class MainDashboardActivity : AppCompatActivity() {
@@ -412,7 +412,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 Предпочитайте другие компоненты вместо новой `Activity`, когда:
 - нужно разбить экран на части — используйте `Fragment` или навигацию на уровне composable;
 - нужна временная накладка/диалог — используйте `Dialog`, `DialogFragment` или элементы внутри текущего экрана;
-- требуется длительная или фоновая работа — используйте `Service`, WorkManager, корутины и т.п., а не держите `Activity` живой.
+- требуется длительная или фоновая работа — используйте `Service`, `WorkManager`, корутины и т.п., а не держите `Activity` живой.
 
 ---
 
@@ -655,7 +655,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
 #### 5. Component Interaction
 
-`Activity` interacts with other Android components such as Services, BroadcastReceivers, ContentProviders, and WorkManager:
+`Activity` interacts with other Android components such as Services, BroadcastReceivers, ContentProviders, and `WorkManager`:
 
 ```kotlin
 class MainDashboardActivity : AppCompatActivity() {
@@ -792,7 +792,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 
 - Single screen or entry point: typically represents one focused screen or logical entry point.
 - Can be started by other apps (if exported via manifest and with appropriate intent filters).
-- Lifecycle managed by the Android framework.
+- `Lifecycle` managed by the Android framework.
 - Can handle specific `Intent`s when matching intent filters are declared.
 - Manages its own UI and related resources.
 - Is a `Context`: used for UI-related operations; for application-wide or long-lived usage, prefer `applicationContext` instead of holding an `Activity` reference.
@@ -807,7 +807,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 - Prefer other components instead of a new `Activity` for:
   - Sub-sections of a screen (use Fragments or composable destinations).
   - Temporary UI overlays (use DialogFragment, dialogs, or in-view UI).
-  - Background operations (use `Service`, WorkManager, coroutines, etc., instead of keeping an `Activity` alive).
+  - Background operations (use `Service`, `WorkManager`, coroutines, etc., instead of keeping an `Activity` alive).
 
 ---
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-334
 title: "How Does The Main Thread Work / Как работает главный поток"
 aliases: ["How Does The Main Thread Work", "Как работает главный поток"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Как работает главный поток в Android?
@@ -27,13 +27,13 @@ tags: [android, android/lifecycle, android/performance-rendering, android/thread
 
 ## Ответ (RU)
 
-Главный поток (UI thread) — это центральный поток Android-приложения, который обрабатывает отрисовку интерфейса, пользовательский ввод и системные callback'и. Работает по модели **Looper + Message `Queue` + Handler**.
+Главный поток (UI thread) — это центральный поток Android-приложения, который обрабатывает отрисовку интерфейса, пользовательский ввод и системные callback'и. Работает по модели **`Looper` + `Message` `Queue` + `Handler`**.
 
 ### Основные Обязанности
 
 1. **Отрисовка UI**: measure, layout, draw view-иерархии
 2. **Обработка ввода**: touch events, gestures, клавиатура
-3. **Lifecycle callbacks**: `Activity`/`Fragment` методы
+3. **`Lifecycle` callbacks**: `Activity`/`Fragment` методы
 4. **Системные события**: изменения конфигурации, разрешения
 
 ### Архитектура Looper
@@ -49,9 +49,9 @@ Main Thread
 ```
 
 **Компоненты**:
-- **Looper**: бесконечный цикл, последовательно извлекает сообщения из очереди и передаёт их целевым Handler'ам.
-- **Message `Queue`**: очередь отложенных и немедленных сообщений/задач.
-- **Handler**: привязан к Looper, публикует сообщения/задачи в Message `Queue` и получает их обратно для обработки.
+- **`Looper`**: бесконечный цикл, последовательно извлекает сообщения из очереди и передаёт их целевым `Handler`'ам.
+- **`Message` `Queue`**: очередь отложенных и немедленных сообщений/задач.
+- **`Handler`**: привязан к `Looper`, публикует сообщения/задачи в `Message` `Queue` и получает их обратно для обработки.
 
 ```kotlin
 // Упрощённая схема внутренней работы (для понимания;
@@ -108,7 +108,7 @@ lifecycleScope.launch {
 }
 ```
 
-**Handler + Background Thread**:
+**`Handler` + Background `Thread`**:
 
 ```kotlin
 private val mainHandler = Handler(Looper.getMainLooper())
@@ -167,24 +167,24 @@ if (!isMainThread()) {
 - [[q-how-does-jetpack-compose-work--android--medium]] — Модель потоков в Compose
 - [[q-what-is-known-about-view-lifecycles--android--medium]] — Callbacks жизненного цикла `View`
 - Coroutines и диспетчеры потоков
-- Внутреннее устройство Handler и Looper
+- Внутреннее устройство `Handler` и `Looper`
 
 #### Продвинутые (сложнее)
 
-- Пользовательская реализация Looper для фоновых потоков
+- Пользовательская реализация `Looper` для фоновых потоков
 - Техники отладки и профилирования ANR
 - Настройка StrictMode для выявления нарушений работы с потоками
 - Choreographer и оптимизация тайминга кадров
 
 ## Answer (EN)
 
-The main thread (UI thread) is Android's central thread responsible for UI rendering, user input, and system callbacks. It follows the **Looper + Message `Queue` + Handler** model.
+The main thread (UI thread) is Android's central thread responsible for UI rendering, user input, and system callbacks. It follows the **`Looper` + `Message` `Queue` + `Handler`** model.
 
 ### Core Responsibilities
 
 1. **UI Rendering**: measure, layout, draw the view hierarchy
 2. **Input Processing**: touch events, gestures, keyboard
-3. **Lifecycle Callbacks**: `Activity`/`Fragment` methods
+3. **`Lifecycle` Callbacks**: `Activity`/`Fragment` methods
 4. **System Events**: configuration changes, permissions, etc.
 
 ### Looper Architecture
@@ -200,9 +200,9 @@ Main Thread
 ```
 
 **Components**:
-- **Looper**: infinite loop that pulls messages from the queue and dispatches them to target Handlers sequentially.
-- **Message `Queue`**: holds pending messages and runnables.
-- **Handler**: associated with a Looper; posts messages/runnables to the MessageQueue and receives them back for handling.
+- **`Looper`**: infinite loop that pulls messages from the queue and dispatches them to target Handlers sequentially.
+- **`Message` `Queue`**: holds pending messages and runnables.
+- **`Handler`**: associated with a `Looper`; posts messages/runnables to the MessageQueue and receives them back for handling.
 
 ```kotlin
 // Simplified internal model (for understanding only;
@@ -219,7 +219,7 @@ fun main() {
 **Safe / appropriate on main thread** (fast operations that don't stall rendering):
 - UI updates: `setText()`, `setVisibility()`, etc.
 - Simple layout inflation.
-- Short computations.
+- `Short` computations.
 
 Note: **16ms** is the frame time for 60fps and is a guideline, not a hard limit per call. All main-thread work for a frame shares this budget.
 
@@ -259,7 +259,7 @@ lifecycleScope.launch {
 }
 ```
 
-**Handler + Background Thread**:
+**`Handler` + Background `Thread`**:
 
 ```kotlin
 private val mainHandler = Handler(Looper.getMainLooper())
@@ -282,7 +282,7 @@ Choreographer.getInstance().postFrameCallback { frameTimeNanos ->
 }
 ```
 
-**Check Current Thread**:
+**Check Current `Thread`**:
 
 ```kotlin
 fun isMainThread() = Looper.myLooper() == Looper.getMainLooper()
@@ -318,11 +318,11 @@ if (!isMainThread()) {
 - [[q-how-does-jetpack-compose-work--android--medium]] — Compose threading model
 - [[q-what-is-known-about-view-lifecycles--android--medium]] — `View` lifecycle callbacks
 - Coroutines and thread dispatchers
-- Handler and Looper internals
+- `Handler` and `Looper` internals
 
 ### Advanced (Harder)
 
-- Custom Looper implementation for background threads
+- Custom `Looper` implementation for background threads
 - ANR debugging and profiling techniques
 - StrictMode configuration for thread violations
 - Choreographer and frame timing optimization

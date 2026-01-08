@@ -1,4 +1,4 @@
----
+---\
 id: lang-090
 title: "What Is CoroutineScope / Что такое CoroutineScope"
 aliases: [What Is CoroutineScope, Что такое CoroutineScope]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [coroutines, difficulty/medium, kotlin, scope]
----
+---\
 # Вопрос (RU)
 > Что такое CoroutineScope?
 
@@ -806,14 +806,14 @@ class MyRepositoryTest {
 CoroutineScope:
 - Defines coroutine lifecycle and context.
 - Enables structured concurrency.
-- Provides automatic child cancellation when the scope is cancelled.
+- `Provides` automatic child cancellation when the scope is cancelled.
 - Helps prevent leaks when tied to component lifecycle.
 - Manages parent-child relationships between coroutines.
 
 Key Points:
 - Always tie scopes to component lifecycle (`ViewModel`, `Activity`, services, managers, etc.).
 - Use `viewModelScope` in `ViewModel`s.
-- Use `lifecycleScope` in `Activity`/`Fragment` (and `viewLifecycleOwner.lifecycleScope` for Fragment views).
+- Use `lifecycleScope` in `Activity`/`Fragment` (and `viewLifecycleOwner.lifecycleScope` for `Fragment` views).
 - Avoid `GlobalScope` unless absolutely necessary.
 - Cancel custom scopes appropriately in `onCleared`/`onDestroy`/cleanup.
 

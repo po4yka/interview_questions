@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-032627"
 title: "Extensions / Extensions"
 aliases: ["Extensions"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-kotlin-concepts, c-dsl-builders, c-lambda-expressions, c-properties, c-functional-programming]
+moc: "moc-cs"
+related: ["c-kotlin-concepts", "c-dsl-builders", "c-lambda-expressions", "c-properties", "c-functional-programming"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ Extensions are language features that let developers add new functions, properti
 
 ## Key Points (EN)
 
-- Extension functions: Allow adding new callable methods to existing types (e.g., String.toIntSafe()) without altering their implementation, typically resolved statically at compile time.
+- Extension functions: Allow adding new callable methods to existing types (e.g., `String`.toIntSafe()) without altering their implementation, typically resolved statically at compile time.
 - Extension properties: Provide property-like syntax for computed values on existing types while not actually adding state to those types.
 - Non-intrusive design: Enable enhancing third-party or standard library classes when you cannot or should not modify their source (closed-source libraries, stable APIs).
 - Readability and domain-specific APIs: Help build fluent, domain-specific abstractions close to the usage site, improving clarity without deep inheritance hierarchies or utility classes.
@@ -39,7 +40,7 @@ Extensions are language features that let developers add new functions, properti
 
 ## Ключевые Моменты (RU)
 
-- Функции-расширения: Позволяют добавлять новые «методы» к существующим типам (например, String.toIntSafe()), не изменяя их реализацию; как правило, разрешаются статически на этапе компиляции.
+- Функции-расширения: Позволяют добавлять новые «методы» к существующим типам (например, `String`.toIntSafe()), не изменяя их реализацию; как правило, разрешаются статически на этапе компиляции.
 - Свойства-расширения: Дают синтаксис свойств для вычисляемых значений у существующих типов, при этом не добавляют новое состояние объекту.
 - Неинвазивное расширение: Позволяют дополнять функциональность сторонних или стандартных классов, когда исходный код недоступен или менять его нежелательно.
 - Улучшение читаемости и DSL: Помогают строить выразительные, предметно-ориентированные API рядом с местом использования, без усложнения иерархий наследования и без навязчивых утилитарных классов.

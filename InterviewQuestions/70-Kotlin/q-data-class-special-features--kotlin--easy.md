@@ -13,7 +13,7 @@ moc: moc-kotlin
 related: [c-computer-science, q-abstract-class-purpose--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [copy, data-class, difficulty/easy, equals, hashcode, kotlin, programming-languages, tostring]
+tags: [copy, data-classes, difficulty/easy, equals, hashcode, kotlin, programming-languages, tostring]
 sources: ["https://kotlinlang.org/docs/data-classes.html"]
 ---
 # Вопрос (RU)

@@ -1,4 +1,4 @@
----
+---\
 id: android-423
 title: "How To Save Scroll State When Activity Is Recreated / Как сохранить состояние скролла при пересоздании Activity"
 aliases: [Save RecyclerView Position, Scroll State Persistence]
@@ -14,22 +14,22 @@ related: [c-savedstatehandle, c-viewmodel, q-activity-lifecycle-methods--android
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recyclerview, scrollview, state-preservation]
----
+---\
 # Вопрос (RU)
 
-> Как сохранить позицию скролла при пересоздании Activity?
+> Как сохранить позицию скролла при пересоздании `Activity`?
 
 # Question (EN)
 
-> How to save scroll state when Activity is recreated?
+> How to save scroll state when `Activity` is recreated?
 
 ---
 
 ## Ответ (RU)
 
-При пересоздании Activity (rotation, process death) позиция скролла может сбрасываться. Для устойчивого сохранения состояния используются несколько подходов.
+При пересоздании `Activity` (rotation, process death) позиция скролла может сбрасываться. Для устойчивого сохранения состояния используются несколько подходов.
 
-Важно: многие стандартные View (включая ScrollView и RecyclerView с корректно заданными id) умеют автоматически сохранять и восстанавливать своё состояние через механизм `onSaveInstanceState()` / `onRestoreInstanceState()`. Явное сохранение имеет смысл, когда:
+Важно: многие стандартные `View` (включая ScrollView и `RecyclerView` с корректно заданными id) умеют автоматически сохранять и восстанавливать своё состояние через механизм `onSaveInstanceState()` / `onRestoreInstanceState()`. Явное сохранение имеет смысл, когда:
 - нужно полный контроль над логикой восстановления;
 - состояние зависит от данных (например, список меняется);
 - вы хотите пережить process death с помощью архитектурных компонентов.
@@ -64,11 +64,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Примечание: при наличии стабильного `id` у `ScrollView` фреймворк и так сохранит позицию скролла через иерархию View. Явный код нужен только при кастомной логике.
+Примечание: при наличии стабильного `id` у `ScrollView` фреймворк и так сохранит позицию скролла через иерархию `View`. Явный код нужен только при кастомной логике.
 
 ### Подход 2: RecyclerView С Состоянием LayoutManager
 
-Рекомендуемый базовый подход для RecyclerView - использовать встроенный механизм `LayoutManager.onSaveInstanceState()` / `onRestoreInstanceState()`.
+Рекомендуемый базовый подход для `RecyclerView` - использовать встроенный механизм `LayoutManager.onSaveInstanceState()` / `onRestoreInstanceState()`.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 Подход с `SavedStateHandle` - хороший выбор, если:
 - нужно пережить process death;
 - нужно восстановить позицию относительно данных доменной модели (например, по item-id),
-  а не полагаться только на внутреннее состояние LayoutManager;
+  а не полагаться только на внутреннее состояние `LayoutManager`;
 - список или порядок элементов может меняться.
 
 ```kotlin
@@ -181,36 +181,36 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Здесь `SavedStateHandle` обеспечивает сохранение нужных значений в `SavedStateRegistry`, так что они доступны после process death. Этот подход дополняет встроенное состояние RecyclerView, а не заменяет его.
+Здесь `SavedStateHandle` обеспечивает сохранение нужных значений в `SavedStateRegistry`, так что они доступны после process death. Этот подход дополняет встроенное состояние `RecyclerView`, а не заменяет его.
 
 ### Сравнение Подходов
 
 | Подход                         | Config Changes | Process Death | Точность                          | Сложность |
 |--------------------------------|----------------|---------------|-----------------------------------|-----------|
-| onSaveInstanceState (Bundle)   | Yes            | Yes           | Высокая (при корректной логике)   | Низкая    |
-| LayoutManager state (RV)       | Yes            | Yes           | Точная (при стабильных данных)    | Низкая    |
-| ViewModel + SavedStateHandle   | Yes            | Yes           | Точная и гибкая (данные-зависимая)| Средняя   |
+| onSaveInstanceState (`Bundle`)   | Yes            | Yes           | Высокая (при корректной логике)   | Низкая    |
+| `LayoutManager` state (RV)       | Yes            | Yes           | Точная (при стабильных данных)    | Низкая    |
+| `ViewModel` + SavedStateHandle   | Yes            | Yes           | Точная и гибкая (данные-зависимая)| Средняя   |
 
-(Отдельный вариант "чистый ViewModel без SavedStateHandle" намеренно не рекомендуется для критичного состояния, т.к. не переживает process death.)
+(Отдельный вариант "чистый `ViewModel` без SavedStateHandle" намеренно не рекомендуется для критичного состояния, т.к. не переживает process death.)
 
 ### Best Practices
 
 DO:
-- Используйте `LayoutManager.onSaveInstanceState()` для стандартного восстановления скролла RecyclerView.
-- Используйте `SavedStateHandle` (через ViewModel) для критичных UI-состояний, которые должны пережить process death или зависят от данных.
+- Используйте `LayoutManager.onSaveInstanceState()` для стандартного восстановления скролла `RecyclerView`.
+- Используйте `SavedStateHandle` (через `ViewModel`) для критичных UI-состояний, которые должны пережить process death или зависят от данных.
 - Вызывайте операции скролла через `post()` / после layout, чтобы избежать восстановления до отрисовки.
 - Тестируйте с включенной опцией "Don't keep activities".
 
 DON'T:
-- Не рассчитывайте на обычный ViewModel без `SavedStateHandle` для состояния, которое должно пережить process death.
+- Не рассчитывайте на обычный `ViewModel` без `SavedStateHandle` для состояния, которое должно пережить process death.
 - Не игнорируйте сценарии process death и задержки загрузки данных.
-- Не сохраняйте слишком много данных в Bundle (приблизительный лимит для `onSaveInstanceState()` около 1MB; превышение может вызвать TransactionTooLargeException).
+- Не сохраняйте слишком много данных в `Bundle` (приблизительный лимит для `onSaveInstanceState()` около 1MB; превышение может вызвать TransactionTooLargeException).
 
 ## Answer (EN)
 
-When Activity is recreated (rotation, process death), scroll position may reset. There are several approaches to robust state preservation.
+When `Activity` is recreated (rotation, process death), scroll position may reset. There are several approaches to robust state preservation.
 
-Important: many standard Views (including ScrollView and RecyclerView with stable ids) automatically save and restore their state via `onSaveInstanceState()` / `onRestoreInstanceState()`. Manual handling is useful when:
+Important: many standard Views (including ScrollView and `RecyclerView` with stable ids) automatically save and restore their state via `onSaveInstanceState()` / `onRestoreInstanceState()`. Manual handling is useful when:
 - you need full control over restore logic;
 - state depends on your data (e.g., list changes);
 - you want process-death resilience via architecture components.
@@ -249,7 +249,7 @@ Note: if `ScrollView` has a stable id and default behavior is kept, the framewor
 
 ### Approach 2: RecyclerView with LayoutManager State
 
-Recommended baseline for RecyclerView - use the built-in `LayoutManager.onSaveInstanceState()` / `onRestoreInstanceState()`.
+Recommended baseline for `RecyclerView` - use the built-in `LayoutManager.onSaveInstanceState()` / `onRestoreInstanceState()`.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -291,7 +291,7 @@ This works well when:
 Using `SavedStateHandle` is a strong option when:
 - you must survive process death;
 - you want to restore position relative to your domain data (e.g., by item-id),
-  not only rely on LayoutManager's internal state;
+  not only rely on `LayoutManager`'s internal state;
 - list contents or ordering can change.
 
 ```kotlin
@@ -362,60 +362,60 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Here, `SavedStateHandle` integrates with the `SavedStateRegistry` so values are preserved across process death. This approach complements the built-in RecyclerView state rather than replacing it.
+Here, `SavedStateHandle` integrates with the `SavedStateRegistry` so values are preserved across process death. This approach complements the built-in `RecyclerView` state rather than replacing it.
 
 ### Comparison of Approaches
 
 | Approach                       | Config Changes | Process Death | Precision                              | Complexity |
 |--------------------------------|----------------|---------------|-----------------------------------------|------------|
-| onSaveInstanceState (Bundle)   | Yes            | Yes           | High (with correct logic)               | Low        |
-| LayoutManager state (RV)       | Yes            | Yes           | Exact (with stable/compatible data)     | Low        |
-| ViewModel + SavedStateHandle   | Yes            | Yes           | Exact, flexible, data-aware             | Medium     |
+| onSaveInstanceState (`Bundle`)   | Yes            | Yes           | High (with correct logic)               | Low        |
+| `LayoutManager` state (RV)       | Yes            | Yes           | Exact (with stable/compatible data)     | Low        |
+| `ViewModel` + SavedStateHandle   | Yes            | Yes           | Exact, flexible, data-aware             | Medium     |
 
-(A "plain ViewModel without SavedStateHandle" variant is intentionally not recommended for critical scroll state because it does not survive process death.)
+(A "plain `ViewModel` without SavedStateHandle" variant is intentionally not recommended for critical scroll state because it does not survive process death.)
 
 ### Best Practices
 
 DO:
-- Use `LayoutManager.onSaveInstanceState()` for standard RecyclerView scroll restore.
-- Use `SavedStateHandle` (via ViewModel) for critical UI state that must survive process death and/or depends on your data model.
+- Use `LayoutManager.onSaveInstanceState()` for standard `RecyclerView` scroll restore.
+- Use `SavedStateHandle` (via `ViewModel`) for critical UI state that must survive process death and/or depends on your data model.
 - Post scroll operations (`post {}` / after layout) to avoid restoring before the view is laid out.
 - Test with "Don't keep activities" enabled.
 
 DON'T:
-- Don't rely on plain ViewModel without `SavedStateHandle` for state that must survive process death.
+- Don't rely on plain `ViewModel` without `SavedStateHandle` for state that must survive process death.
 - Don't ignore process death and delayed-data scenarios when designing scroll restoration.
-- Don't put excessive data into the Bundle (`onSaveInstanceState()` is effectively limited to about 1MB; exceeding it risks `TransactionTooLargeException`).
+- Don't put excessive data into the `Bundle` (`onSaveInstanceState()` is effectively limited to about 1MB; exceeding it risks `TransactionTooLargeException`).
 
 ---
 
 ## Follow-ups
 
 - How does SavedStateHandle survive process death internally?
-- What's the Bundle size limit for onSaveInstanceState()?
-- Can you save RecyclerView scroll state for StaggeredGridLayoutManager?
+- What's the `Bundle` size limit for onSaveInstanceState()?
+- Can you save `RecyclerView` scroll state for StaggeredGridLayoutManager?
 - How to handle scroll restoration when adapter data changes during recreation?
 - What happens if you restore scroll position before adapter data is loaded?
 
 ## References
 
 - [[c-savedstatehandle]] - SavedStateHandle concept
-- [[c-viewmodel]] - ViewModel lifecycle
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
+- [[c-viewmodel]] - `ViewModel` lifecycle
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
 - [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
 - [RecyclerView state management](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity basics
+- [[q-android-components-besides-activity--android--easy]] - `Activity` basics
 
 ### Related (Same Level)
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
 - [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Memory management
 - [[q-single-activity-pros-cons--android--medium]] - Architecture patterns
-- [[q-diffutil-background-calculation-issues--android--medium]] - RecyclerView optimization
+- [[q-diffutil-background-calculation-issues--android--medium]] - `RecyclerView` optimization
 
 ### Advanced (Harder)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` lifecycle
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Architecture decisions

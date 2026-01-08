@@ -1,4 +1,4 @@
----
+---\
 id: android-246
 title: "Main Causes UI Lag / Основные причины тормозов UI"
 aliases: [Main Causes UI Lag, UI Lag, UI Performance, Основные причины тормозов UI]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-10-28
 tags: [android/performance-memory, android/performance-rendering, android/threads-sync, difficulty/medium, performance, threading, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Какие основные причины торможения UI в Android-приложениях?
@@ -55,13 +55,13 @@ suspend fun loadData() {
 }
 ```
 
-**Современные подходы:** [[c-coroutines|Kotlin Coroutines]] (рекомендовано), WorkManager, `Flow`.
+**Современные подходы:** [[c-coroutines|Kotlin Coroutines]] (рекомендовано), `WorkManager`, `Flow`.
 
 ### 2. Неоптимизированные Макеты (layouts)
 
 **Проблема:** Сложная иерархия вызывает медленный рендеринг.
 
-**Примеры:** глубоко вложенные LinearLayout, множественные RelativeLayout.
+**Примеры:** глубоко вложенные `LinearLayout`, множественные `RelativeLayout`.
 
 **Решение:** Использовать плоские макеты:
 
@@ -85,7 +85,7 @@ suspend fun loadData() {
 </ConstraintLayout>
 ```
 
-**Best practices:** ConstraintLayout для сложных UI, ViewStub для условно отображаемых view, merge тег для устранения лишних `ViewGroup`.
+**Best practices:** `ConstraintLayout` для сложных UI, ViewStub для условно отображаемых view, merge тег для устранения лишних `ViewGroup`.
 
 ### 3. Неоптимизированная Работа С Изображениями
 
@@ -119,7 +119,7 @@ imageView.load(imageUrl) {
 
 **Проблема:** Слишком много обновлений UI вызывают избыточный рендеринг.
 
-**Примеры:** обновление всех элементов RecyclerView, избыточный notifyDataSetChanged().
+**Примеры:** обновление всех элементов `RecyclerView`, избыточный notifyDataSetChanged().
 
 **Решение:** Минимизировать и группировать обновления:
 
@@ -202,7 +202,7 @@ suspend fun loadData() {
 }
 ```
 
-**Modern approaches:** Kotlin Coroutines (recommended), WorkManager, `Flow`.
+**Modern approaches:** Kotlin Coroutines (recommended), `WorkManager`, `Flow`.
 
 ### 2. Unoptimized Layouts
 
@@ -232,7 +232,7 @@ suspend fun loadData() {
 </ConstraintLayout>
 ```
 
-**Best practices:** ConstraintLayout to reduce nesting, ViewStub for conditionally displayed views, merge tag to eliminate unnecessary ViewGroups.
+**Best practices:** `ConstraintLayout` to reduce nesting, ViewStub for conditionally displayed views, merge tag to eliminate unnecessary ViewGroups.
 
 ### 3. Unoptimized Image Handling
 
@@ -266,7 +266,7 @@ imageView.load(imageUrl) {
 
 **Problem:** Too many UI updates cause excessive rendering.
 
-**Examples:** updating every item in RecyclerView, excessive `notifyDataSetChanged()`.
+**Examples:** updating every item in `RecyclerView`, excessive `notifyDataSetChanged()`.
 
 **Solution:** Minimize and batch UI updates:
 
@@ -333,7 +333,7 @@ AnimatedVisibility(visible = isVisible) {
 
 - How to measure UI performance? (Use Systrace/Perfetto, Profile GPU Rendering, Layout Inspector, StrictMode)
 - What is the 16ms frame budget for 60fps?
-- How does DiffUtil calculate differences?
+- How does `DiffUtil` calculate differences?
 - What are the differences between Glide, Coil, and Picasso?
 - How to detect overdraw in your app?
 
@@ -341,7 +341,7 @@ AnimatedVisibility(visible = isVisible) {
 
 - Android Performance Patterns
 - Документация по Systrace / Perfetto
-- Руководство по ConstraintLayout
+- Руководство по `ConstraintLayout`
 - Kotlin Coroutines Best Practices
 
 ## References

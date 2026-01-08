@@ -1,4 +1,4 @@
----
+---\
 id: android-270
 title: Room vs SQLite / Room против SQLite
 aliases: [Room vs SQLite, Room против SQLite]
@@ -15,28 +15,28 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/room, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
-> Room против SQLite
+> `Room` против `SQLite`
 
 # Question (EN)
-> Room vs SQLite
+> `Room` vs `SQLite`
 
 ---
 
 ## Ответ (RU)
 
-**SQLite** – это **низкоуровневая реляционная база данных**, которая требует **ручного написания SQL-запросов**.
+**`SQLite`** – это **низкоуровневая реляционная база данных**, которая требует **ручного написания SQL-запросов**.
 
-**Room** – это **библиотека-абстракция с ORM-подобным маппингом над SQLite** (но не «полноценный» универсальный ORM), которая предоставляет **удобный API с аннотациями**, поддерживает **`LiveData` и `Flow`**, и предлагает **структурированную систему миграций** (включая ограниченную поддержку autoMigrations для совместимых изменений схемы).
+**`Room`** – это **библиотека-абстракция с ORM-подобным маппингом над `SQLite`** (но не «полноценный» универсальный ORM), которая предоставляет **удобный API с аннотациями**, поддерживает **`LiveData` и `Flow`**, и предлагает **структурированную систему миграций** (включая ограниченную поддержку autoMigrations для совместимых изменений схемы).
 
-Room упрощает работу с базой данных и делает код более читаемым, но **внутри все равно использует SQLite**.
+`Room` упрощает работу с базой данных и делает код более читаемым, но **внутри все равно использует `SQLite`**.
 
 ### Ключевые Различия
 
 #### 1. Уровень Абстракции
 
-**SQLite — низкоуровневый:**
+**`SQLite` — низкоуровневый:**
 
 ```kotlin
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
@@ -59,7 +59,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 }
 ```
 
-**Room — более высокоуровневый:**
+**`Room` — более высокоуровневый:**
 
 ```kotlin
 @Entity(tableName = "users")
@@ -78,7 +78,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 #### 2. Обработка SQL-запросов
 
-**SQLite — ручные строки:**
+**`SQLite` — ручные строки:**
 
 ```kotlin
 fun getUser(userId: Int): User? {
@@ -104,7 +104,7 @@ fun getUser(userId: Int): User? {
 }
 ```
 
-**Room — типобезопасный, проверяемый:**
+**`Room` — типобезопасный, проверяемый:**
 
 ```kotlin
 @Dao
@@ -119,7 +119,7 @@ interface UserDao {
 
 #### 3. CRUD-операции
 
-**SQLite — многословный:**
+**`SQLite` — многословный:**
 
 ```kotlin
 // Insert
@@ -149,7 +149,7 @@ fun deleteUser(userId: Int) {
 }
 ```
 
-**Room — лаконичный:**
+**`Room` — лаконичный:**
 
 ```kotlin
 @Dao
@@ -170,7 +170,7 @@ interface UserDao {
 
 #### 4. Реактивные Данные
 
-**SQLite — нет встроенной поддержки:**
+**`SQLite` — нет встроенной поддержки:**
 
 ```kotlin
 // Нужно вручную уведомлять наблюдателей
@@ -189,7 +189,7 @@ fun getUsers(): List<User> {
 }
 ```
 
-**Room — встроенные `Flow`/`LiveData`:**
+**`Room` — встроенные `Flow`/`LiveData`:**
 
 ```kotlin
 @Dao
@@ -213,7 +213,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 
 #### 5. Типобезопасность
 
-**SQLite — нет типобезопасности:**
+**`SQLite` — нет типобезопасности:**
 
 ```kotlin
 // Легко допустить ошибки
@@ -231,7 +231,7 @@ fun getUser(id: Int): User {
 }
 ```
 
-**Room — типобезопасный:**
+**`Room` — типобезопасный:**
 
 ```kotlin
 @Dao
@@ -247,7 +247,7 @@ val user: User? = userDao.getUser(123)
 
 #### 6. Миграции
 
-**SQLite — ручные:**
+**`SQLite` — ручные:**
 
 ```kotlin
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
@@ -264,7 +264,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 }
 ```
 
-**Room — структурированные миграции:**
+**`Room` — структурированные миграции:**
 
 ```kotlin
 val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -286,7 +286,7 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "database")
 
 #### 7. Тестирование
 
-**SQLite — сложнее:**
+**`SQLite` — сложнее:**
 
 ```kotlin
 // Можно писать тесты, работая с реальной SQLite (инструментальные тесты),
@@ -301,7 +301,7 @@ fun testGetUser() {
 }
 ```
 
-**Room — проще:**
+**`Room` — проще:**
 
 ```kotlin
 @Test
@@ -324,23 +324,23 @@ fun testGetUser() = runTest {
 
 ### Таблица Сравнения
 
-| Функция | SQLite | Room |
+| Функция | `SQLite` | `Room` |
 |---------|--------|------|
 | **Абстракция** | Низкоуровневая | Высокоуровневый ORM-подобный слой |
 | **Шаблонный код** | Много | Мало |
 | **Проверка SQL** | Во время выполнения | На этапе компиляции |
 | **Типобезопасность** | Нет | Да |
 | **CRUD-операции** | Ручные ContentValues | Аннотации |
-| **Реактивность (`Flow`/`LiveData`)** | Нет | Да (через API Room) |
-| **Поддержка корутин** | Нет встроенной | Поддерживаются `suspend`/`Flow` API Room (выполняются вне UI-потока) |
+| **Реактивность (`Flow`/`LiveData`)** | Нет | Да (через API `Room`) |
+| **Поддержка корутин** | Нет встроенной | Поддерживаются `suspend`/`Flow` API `Room` (выполняются вне UI-потока) |
 | **Миграции** | Ручные | Структурированные (есть autoMigrations для части кейсов) |
 | **Тестирование** | Сложнее | Проще (in-memory / инструментальные тесты) |
-| **Производительность** | Быстро | Быстро (использует SQLite внутри) |
+| **Производительность** | Быстро | Быстро (использует `SQLite` внутри) |
 | **Зависимости** | Встроено | Библиотека Jetpack |
 
 ### Полный Пример Сравнения
 
-**SQLite:**
+**`SQLite`:**
 
 ```kotlin
 class UserRepository(context: Context) {
@@ -375,7 +375,7 @@ class UserRepository(context: Context) {
 }
 ```
 
-**Room:**
+**`Room`:**
 
 ```kotlin
 @Dao
@@ -398,40 +398,40 @@ class UserRepository(private val userDao: UserDao) {
 
 ### Резюме
 
-**SQLite:**
+**`SQLite`:**
 - Низкоуровневая реляционная база данных
 - Требует ручных SQL-запросов в виде строк
 - Нет проверки на этапе компиляции
 - Много шаблонного кода
 - Встроено в Android
 
-**Room:**
-- Высокоуровневая ORM-подобная абстракция над SQLite (но с ограничениями по сравнению с полноценными ORM)
+**`Room`:**
+- Высокоуровневая ORM-подобная абстракция над `SQLite` (но с ограничениями по сравнению с полноценными ORM)
 - Типобезопасный API на основе аннотаций
 - Проверка SQL и схемы на этапе компиляции
 - Поддержка `LiveData`/`Flow`
 - Структурированные миграции (autoMigrations для части изменений схемы)
 - Более простое тестирование
 - Меньше шаблонного кода
-- По-прежнему использует SQLite внутри
+- По-прежнему использует `SQLite` внутри
 
-**Рекомендация:** Используйте **Room** для современной разработки Android. Он обеспечивает лучшую безопасность, меньше кода и более простое сопровождение при сохранении производительности SQLite.
+**Рекомендация:** Используйте **`Room`** для современной разработки Android. Он обеспечивает лучшую безопасность, меньше кода и более простое сопровождение при сохранении производительности `SQLite`.
 
 ---
 
 ## Answer (EN)
 
-**SQLite** is a **low-level relational database** that requires **manual SQL queries**.
+**`SQLite`** is a **low-level relational database** that requires **manual SQL queries**.
 
-**Room** is a **SQLite abstraction library with ORM-style mapping** (but not a fully generic ORM) that provides a **convenient annotation-based API**, supports **`LiveData` and `Flow`**, and offers a **structured migrations system** (including limited support for autoMigrations for compatible schema changes).
+**`Room`** is a **`SQLite` abstraction library with ORM-style mapping** (but not a fully generic ORM) that provides a **convenient annotation-based API**, supports **`LiveData` and `Flow`**, and offers a **structured migrations system** (including limited support for autoMigrations for compatible schema changes).
 
-Room simplifies database operations and makes code more readable, but **internally it still uses SQLite**.
+`Room` simplifies database operations and makes code more readable, but **internally it still uses `SQLite`**.
 
 ## Key Differences
 
 ### 1. Abstraction Level
 
-**SQLite - Low-level:**
+**`SQLite` - Low-level:**
 
 ```kotlin
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
@@ -457,7 +457,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 }
 ```
 
-**Room - High-level:**
+**`Room` - High-level:**
 
 ```kotlin
 @Entity(tableName = "users")
@@ -478,7 +478,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 ### 2. SQL Query Handling
 
-**SQLite - Manual strings:**
+**`SQLite` - Manual strings:**
 
 ```kotlin
 // No compile-time validation
@@ -505,7 +505,7 @@ fun getUser(userId: Int): User? {
 }
 ```
 
-**Room - Type-safe, validated:**
+**`Room` - Type-safe, validated:**
 
 ```kotlin
 @Dao
@@ -522,7 +522,7 @@ interface UserDao {
 
 ### 3. CRUD Operations
 
-**SQLite - Verbose:**
+**`SQLite` - Verbose:**
 
 ```kotlin
 // Insert
@@ -552,7 +552,7 @@ fun deleteUser(userId: Int) {
 }
 ```
 
-**Room - Concise:**
+**`Room` - Concise:**
 
 ```kotlin
 @Dao
@@ -575,7 +575,7 @@ interface UserDao {
 
 ### 4. Reactive Data
 
-**SQLite - No built-in support:**
+**`SQLite` - No built-in support:**
 
 ```kotlin
 // Must manually notify observers
@@ -594,7 +594,7 @@ fun getUsers(): List<User> {
 }
 ```
 
-**Room - Built-in `Flow`/`LiveData`:**
+**`Room` - Built-in `Flow`/`LiveData`:**
 
 ```kotlin
 @Dao
@@ -620,7 +620,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 
 ### 5. Type Safety
 
-**SQLite - No type safety:**
+**`SQLite` - No type safety:**
 
 ```kotlin
 // Easy to make mistakes
@@ -638,7 +638,7 @@ fun getUser(id: Int): User {
 }
 ```
 
-**Room - Type-safe:**
+**`Room` - Type-safe:**
 
 ```kotlin
 @Dao
@@ -656,7 +656,7 @@ val user: User? = userDao.getUser(123)
 
 ### 6. Migrations
 
-**SQLite - Manual:**
+**`SQLite` - Manual:**
 
 ```kotlin
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
@@ -673,7 +673,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 }
 ```
 
-**Room - Structured migrations:**
+**`Room` - Structured migrations:**
 
 ```kotlin
 val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -697,7 +697,7 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "database")
 
 ### 7. Testing
 
-**SQLite - Difficult:**
+**`SQLite` - Difficult:**
 
 ```kotlin
 // You can test against real SQLite (instrumented tests),
@@ -712,7 +712,7 @@ fun testGetUser() {
 }
 ```
 
-**Room - Easier:**
+**`Room` - Easier:**
 
 ```kotlin
 @Test
@@ -739,24 +739,24 @@ fun testGetUser() = runTest {
 
 ## Comparison Table
 
-| Feature | SQLite | Room |
+| Feature | `SQLite` | `Room` |
 |---------|--------|------|
 | **Abstraction** | Low-level | High-level ORM-style layer |
 | **Boilerplate** | High | Low |
 | **SQL Validation** | Runtime | Compile-time |
 | **Type Safety** | No | Yes |
 | **CRUD Operations** | Manual ContentValues | Annotations |
-| **Reactive (`Flow`/`LiveData`)** | No | Yes (via Room APIs) |
-| **Coroutines Support** | No built-in | `suspend`/`Flow` APIs provided by Room (off main thread) |
+| **Reactive (`Flow`/`LiveData`)** | No | Yes (via `Room` APIs) |
+| **Coroutines Support** | No built-in | `suspend`/`Flow` APIs provided by `Room` (off main thread) |
 | **Migrations** | Manual | Structured (with optional autoMigrations) |
 | **Testing** | More boilerplate | Easier (in-memory / instrumented tests) |
-| **Performance** | Fast | Fast (uses SQLite internally) |
+| **Performance** | Fast | Fast (uses `SQLite` internally) |
 | **Dependencies** | Built-in | Jetpack library |
 | **Learning Curve** | SQL knowledge | Annotations + SQL |
 
 ## Code Comparison - Complete Example
 
-**SQLite:**
+**`SQLite`:**
 
 ```kotlin
 class UserRepository(context: Context) {
@@ -791,7 +791,7 @@ class UserRepository(context: Context) {
 }
 ```
 
-**Room:**
+**`Room`:**
 
 ```kotlin
 @Dao
@@ -814,24 +814,24 @@ class UserRepository(private val userDao: UserDao) {
 
 ## Summary
 
-**SQLite:**
+**`SQLite`:**
 - Low-level relational database
 - Requires manual SQL query strings
 - No compile-time validation
 - Lots of boilerplate code
 - Built into Android
 
-**Room:**
-- High-level ORM-style abstraction over SQLite (with limitations compared to full ORMs)
+**`Room`:**
+- High-level ORM-style abstraction over `SQLite` (with limitations compared to full ORMs)
 - Type-safe, annotation-based API
 - Compile-time SQL and schema validation
 - `LiveData`/`Flow` support
 - Structured migrations (with optional autoMigrations for supported changes)
 - Easier testing
 - Less boilerplate
-- Still uses SQLite internally
+- Still uses `SQLite` internally
 
-**Recommendation:** Use **Room** for most modern Android development. It provides better safety, less code, and easier maintenance while maintaining SQLite's performance.
+**Recommendation:** Use **`Room`** for most modern Android development. It provides better safety, less code, and easier maintenance while maintaining `SQLite`'s performance.
 
 ---
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-409
 title: Paging Library 3 / Библиотека Paging 3
 aliases: [Android Paging, Paging 3, Paging Library 3, Библиотека Paging 3]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/architecture-clean, android/room, difficulty/medium, jetpack, pagination, paging, recyclerview]
 sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
 
----
+---\
 # Вопрос (RU)
 
 > Что вы знаете о библиотеке Paging?
@@ -33,8 +33,8 @@ sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions"]
 
 Обычно используют три подхода (они не являются жёстким ограничением библиотеки):
 - **Network-only**: прямая загрузка с сервера в UI
-- **Database-only**: данные только из локальной БД
-- **Network + Database**: сервер → Room → UI (кэширование через локальное хранилище)
+- **`Database`-only**: данные только из локальной БД
+- **Network + `Database`**: сервер → `Room` → UI (кэширование через локальное хранилище)
 
 ### Ключевые Компоненты Paging 3
 
@@ -80,7 +80,7 @@ class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
 }
 ```
 
-**PagingDataAdapter**: адаптер для RecyclerView.
+**PagingDataAdapter**: адаптер для `RecyclerView`.
 
 ```kotlin
 class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
@@ -109,7 +109,7 @@ interface ConcertDao {
 }
 ```
 
-✅ Room автоматически генерирует реализацию `PagingSource` для таких запросов; ключ используется для индексации страниц и управляется Paging.
+✅ `Room` автоматически генерирует реализацию `PagingSource` для таких запросов; ключ используется для индексации страниц и управляется Paging.
 
 ### Обработка Состояний Загрузки
 
@@ -143,8 +143,8 @@ The **Paging Library** helps load and display data in chunks, reducing network a
 
 Commonly used patterns (not strict limitations of the library) are:
 - **Network-only**: direct loading from server to UI
-- **Database-only**: data only from local DB
-- **Network + Database**: server → Room → UI (caching via local storage)
+- **`Database`-only**: data only from local DB
+- **Network + `Database`**: server → `Room` → UI (caching via local storage)
 
 ### Core Paging 3 Components
 
@@ -190,7 +190,7 @@ class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
 }
 ```
 
-**PagingDataAdapter**: RecyclerView adapter.
+**PagingDataAdapter**: `RecyclerView` adapter.
 
 ```kotlin
 class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
@@ -219,7 +219,7 @@ interface ConcertDao {
 }
 ```
 
-✅ Room automatically generates a `PagingSource` implementation for such queries; the key type is used for page indexing and managed by the Paging library.
+✅ `Room` automatically generates a `PagingSource` implementation for such queries; the key type is used for page indexing and managed by the Paging library.
 
 ### Load State Handling
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-302
 title: "Play App Signing / Подписание приложений Play"
 aliases: ["App Signing Key", "Play App Signing", "Upload Key", "Подписание приложений Play"]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/app-bundle, android/keystore-crypto, android/play-console, difficulty/medium, play-app-signing, security, signing]
 sources: ["https://developer.android.com/studio/publish/app-signing#app-signing-google-play", "https://support.google.com/googleplay/android-developer/answer/9842756"]
----
+---\
 # Вопрос (RU)
 
 > Что такое Play App Signing и как он работает?
@@ -179,7 +179,7 @@ Play App Signing uses an **app signing key** and an **upload key**:
 - Can be reset if compromised via Play Console
 - Used by Google to verify uploader identity and association with the developer account
 
-**Flow:**
+**`Flow`:**
 ```text
 Developer → sign with upload key → upload to Play Console
                                           ↓

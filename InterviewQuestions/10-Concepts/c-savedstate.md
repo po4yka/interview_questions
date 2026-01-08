@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-194628"
 title: "Savedstate / Savedstate"
 aliases: ["Savedstate"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-savedinstancestate, c-savedstatehandle, c-configuration-changes, c-lifecycle-awareness]
+moc: "moc-cs"
+related: ["c-savedinstancestate", "c-savedstatehandle", "c-configuration-changes", "c-lifecycle-awareness"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ Savedstate (часто "Saved State" или "SavedStateHandle" в Android/Kotlin
 ## Key Points (EN)
 
 - Distinct from persistent storage: saves short-lived UI and view-model state so it survives lifecycle events, but is not a replacement for databases or remote APIs.
-- Lifecycle-aware: in frameworks like Android, integrates with components (e.g., ViewModel, NavBackStackEntry) to automatically provide and restore state.
+- `Lifecycle`-aware: in frameworks like Android, integrates with components (e.g., `ViewModel`, NavBackStackEntry) to automatically provide and restore state.
 - Key–value semantics: exposes a simple map-like API for storing primitives and parcelable/serializable objects with well-defined keys.
 - Used for restoration, not sharing: designed to rebuild the same screen after recreation, not to pass large objects or long-term domain data.
 - Size and type constraints: encourages small, serializable data; large blobs or heavy objects should be avoided for performance and reliability.
@@ -40,11 +41,11 @@ Savedstate (часто "Saved State" или "SavedStateHandle" в Android/Kotlin
 ## Ключевые Моменты (RU)
 
 - Отличается от постоянного хранилища: сохраняет краткоживущие данные UI и состояния view-model так, чтобы они переживали события жизненного цикла, но не заменяет БД или удалённые API.
-- Учитывает жизненный цикл: во фреймворках вроде Android интегрируется с компонентами (например, ViewModel, NavBackStackEntry) для автоматического предоставления и восстановления состояния.
+- Учитывает жизненный цикл: во фреймворках вроде Android интегрируется с компонентами (например, `ViewModel`, NavBackStackEntry) для автоматического предоставления и восстановления состояния.
 - Семантика ключ–значение: предоставляет простой map-подобный API для хранения примитивов и parcelable/serializable объектов по фиксированным ключам.
 - Для восстановления, а не для шаринга: предназначен для восстановления того же экрана после пересоздания, а не для передачи больших объектов или долгоживущих доменных данных.
 - Ограничения по размеру и типам: предполагает хранение небольших сериализуемых данных; большие объекты и тяжёлые структуры стоит избегать ради производительности и надёжности.
 
 ## References
 
-- Android Developers: "Save UI states" and "Saved state module for ViewModel" (developer.android.com)
+- Android Developers: "Save UI states" and "Saved state module for `ViewModel`" (developer.android.com)

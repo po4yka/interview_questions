@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-181505"
 title: "Compose Ui / Compose Ui"
 aliases: ["Compose Ui"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-jetpack-compose, c-compose-ui-basics, c-compose-lifecycle, c-compose-modifiers, c-declarative-programming]
+moc: "moc-cs"
+related: ["c-jetpack-compose", "c-compose-ui-basics", "c-compose-lifecycle", "c-compose-modifiers", "c-declarative-programming"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -25,7 +26,7 @@ Compose UI (Jetpack Compose for Android and Compose Multiplatform) is a modern d
 
 # Краткое Описание (RU)
 
-Compose UI (Jetpack Compose для Android и Compose Multiplatform) — это современный декларативный UI‑фреймворк от JetBrains и Google, позволяющий описывать интерфейс как набор композиционных функций на Kotlin вместо XML-разметки и императивных View‑иерархий. Он реализует реактивный, основанный на состоянии рендеринг: интерфейс автоматически обновляется при изменении состояния, что улучшает читаемость, тестируемость и переиспользование кода. Широко используется для Android‑приложений, десктопных и мультиплатформенных решений.
+Compose UI (Jetpack Compose для Android и Compose Multiplatform) — это современный декларативный UI‑фреймворк от JetBrains и Google, позволяющий описывать интерфейс как набор композиционных функций на Kotlin вместо XML-разметки и императивных `View`‑иерархий. Он реализует реактивный, основанный на состоянии рендеринг: интерфейс автоматически обновляется при изменении состояния, что улучшает читаемость, тестируемость и переиспользование кода. Широко используется для Android‑приложений, десктопных и мультиплатформенных решений.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
@@ -39,10 +40,10 @@ Compose UI (Jetpack Compose для Android и Compose Multiplatform) — это 
 
 ## Ключевые Моменты (RU)
 
-- Декларативная модель UI: Интерфейс описывается как функции Kotlin с аннотацией `@Composable`, которые строят UI из текущего состояния вместо ручного изменения View.
+- Декларативная модель UI: Интерфейс описывается как функции Kotlin с аннотацией `@Composable`, которые строят UI из текущего состояния вместо ручного изменения `View`.
 - Рендеринг на основе состояния: Использует наблюдаемые состояния (`State`, `MutableState`, `remember`, `Flow`/`LiveData`), позволяя перерасчитывать только изменившиеся части дерева при recomposition.
 - Композиция и переиспользование: Сложные экраны собираются из мелких, переиспользуемых composable‑функций (`Text`, `Row`, `Column`, кастомные компоненты).
-- Интеграция с Android и мультиплатформой: Легко встраивается в существующую Android View‑систему (interop) и используется в Compose Multiplatform для desktop/web с общими UI‑подходами.
+- Интеграция с Android и мультиплатформой: Легко встраивается в существующую Android `View`‑систему (interop) и используется в Compose Multiplatform для desktop/web с общими UI‑подходами.
 - Инструменты и производительность: Поддержка превью в Android Studio/IntelliJ и эффективная, дифф‑ориентированная recomposition повышают продуктивность разработки и производительность UI.
 
 ## References

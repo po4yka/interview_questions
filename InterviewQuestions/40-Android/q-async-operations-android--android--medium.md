@@ -1,4 +1,4 @@
----
+---\
 id: android-190
 title: Async Operations in Android / Асинхронные операции в Android
 aliases: [Async Operations in Android, Асинхронные операции в Android]
@@ -16,7 +16,7 @@ updated: 2025-10-30
 sources: []
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Какие существуют способы выполнения асинхронных операций в Android?
 
@@ -29,7 +29,7 @@ tags: [android/background-execution, android/coroutines, android/threads-sync, d
 
 ## Ответ (RU)
 
-Главный поток — только для UI, остальное — в фон. Выбор зависит от задачи: корутины (по умолчанию), WorkManager (отложенные задачи), Executor/HandlerThread (легаси), RxJava (реактивность).
+Главный поток — только для UI, остальное — в фон. Выбор зависит от задачи: корутины (по умолчанию), `WorkManager` (отложенные задачи), Executor/HandlerThread (легаси), RxJava (реактивность).
 
 ### Kotlin Coroutines — Выбор По Умолчанию
 
@@ -81,11 +81,11 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
   ).build()
 ```
 
-**Важно**: Worker должен быть идемпотентным — может запуститься повторно.
+**Важно**: `Worker` должен быть идемпотентным — может запуститься повторно.
 
 ### ExecutorService — Java Interop
 
-Thread pools с ручным управлением, используется в легаси коде.
+`Thread` pools с ручным управлением, используется в легаси коде.
 
 ```kotlin
 val executor = Executors.newFixedThreadPool(2)
@@ -100,7 +100,7 @@ executor.execute {
 
 ### HandlerThread — Message `Queue`
 
-Один фоновый Looper для последовательной обработки.
+Один фоновый `Looper` для последовательной обработки.
 
 ```kotlin
 val handlerThread = HandlerThread("bg").apply { start() }
@@ -136,22 +136,22 @@ disposables.add(
 | Инструмент | Применение |
 |------------|-----------|
 | Coroutines | In-process задачи, UI updates, network |
-| WorkManager | Deferrable work, переживает process death |
-| Executor | Java interop, legacy код |
+| `WorkManager` | Deferrable work, переживает process death |
+| `Executor` | Java interop, legacy код |
 | HandlerThread | Sequential processing |
 | RxJava | Reactive streams, существующая Rx база |
 
 **Распространённые ошибки**:
 - Обновление UI вне main thread
 - Не отменена работа при lifecycle events
-- WorkManager для точного времени (используйте AlarmManager)
+- `WorkManager` для точного времени (используйте AlarmManager)
 - Утечка threads/executors — не вызван shutdown
 
 ---
 
 ## Answer (EN)
 
-Main thread for UI only, offload everything else to background. Choice depends on use case: coroutines (default), WorkManager (deferrable work), Executor/HandlerThread (legacy), RxJava (reactive).
+Main thread for UI only, offload everything else to background. Choice depends on use case: coroutines (default), `WorkManager` (deferrable work), Executor/HandlerThread (legacy), RxJava (reactive).
 
 ### Kotlin Coroutines — Default Choice
 
@@ -203,11 +203,11 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
   ).build()
 ```
 
-**Important**: Worker must be idempotent — may run multiple times.
+**Important**: `Worker` must be idempotent — may run multiple times.
 
 ### ExecutorService — Java Interop
 
-Thread pools with manual management, used in legacy code.
+`Thread` pools with manual management, used in legacy code.
 
 ```kotlin
 val executor = Executors.newFixedThreadPool(2)
@@ -222,7 +222,7 @@ executor.execute {
 
 ### HandlerThread — Message `Queue`
 
-Single background Looper for sequential processing.
+Single background `Looper` for sequential processing.
 
 ```kotlin
 val handlerThread = HandlerThread("bg").apply { start() }
@@ -258,22 +258,22 @@ disposables.add(
 | Tool | When to Use |
 |------|------------|
 | Coroutines | In-process tasks, UI updates, network |
-| WorkManager | Deferrable work, survives process death |
-| Executor | Java interop, legacy code |
+| `WorkManager` | Deferrable work, survives process death |
+| `Executor` | Java interop, legacy code |
 | HandlerThread | Sequential processing |
 | RxJava | Reactive streams, existing Rx codebase |
 
 **Common Pitfalls**:
 - Updating UI off main thread
 - Forgetting to cancel work on lifecycle events
-- WorkManager for exact timing (use AlarmManager)
+- `WorkManager` for exact timing (use AlarmManager)
 - Leaking threads/executors — missing shutdown
 
 ---
 
 ## Дополнительные Вопросы (RU)
 
-- Как выбрать между WorkManager и ForegroundService для долгих задач?
+- Как выбрать между `WorkManager` и ForegroundService для долгих задач?
 - Каковы компромиссы между разными типами `Dispatchers` в корутинах?
 - Как обрабатывать распространение отмены через несколько уровней repository/domain?
 - Когда использовать `async/await` по сравнению с `withContext` в корутинах?
@@ -281,7 +281,7 @@ disposables.add(
 
 ## Follow-ups
 
-- How do you choose between WorkManager and ForegroundService for long-running tasks?
+- How do you choose between `WorkManager` and ForegroundService for long-running tasks?
 - What are the trade-offs between different Dispatcher types in coroutines?
 - How do you handle cancellation propagation across multiple repository/domain layers?
 - When should you use `async/await` vs `withContext` in coroutines?

@@ -24,7 +24,7 @@ related: [c-coroutines, c-kotlin, q-lifecycle-scopes-viewmodelscope-lifecyclesco
 created: 2025-10-12
 updated: 2025-11-09
 
-tags: [coroutines, difficulty/medium, kotlin, stateflow, testing, turbine, unit-testing, viewmodel]
+tags: [coroutines, difficulty/medium, kotlin, stateflow, testing, turbine, testing-unit, viewmodel]
 ---
 # Вопрос (RU)
 > Как тестировать `ViewModel` с корутинами? Объясните `TestCoroutineDispatcher`, `StandardTestDispatcher`, тестирование `StateFlow`/`SharedFlow` и мокирование suspend функций.

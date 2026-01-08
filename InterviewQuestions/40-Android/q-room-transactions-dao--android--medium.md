@@ -1,4 +1,4 @@
----
+---\
 id: android-279
 title: "Room Transactions Dao / Транзакции DAO в Room"
 aliases: ["Room Transactions Dao", "Транзакции DAO в Room"]
@@ -15,20 +15,20 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/coroutines, android/room, dao, database, difficulty/medium, transactions]
----
+---\
 # Вопрос (RU)
 
-> Как обеспечить атомарность операций с несколькими таблицами в Room? Покажите использование @Transaction для критических операций.
+> Как обеспечить атомарность операций с несколькими таблицами в `Room`? Покажите использование @Transaction для критических операций.
 
 # Question (EN)
 
-> How do you ensure atomicity for multi-table operations in Room? Show @Transaction usage for critical operations.
+> How do you ensure atomicity for multi-table operations in `Room`? Show @Transaction usage for critical operations.
 
 ---
 
 ## Ответ (RU)
 
-**Транзакции Room** гарантируют атомарность набора операций с базой данных через аннотацию `@Transaction` в DAO-методах и метод `withTransaction` у `RoomDatabase`. Это критично для поддержания целостности связанных данных.
+**Транзакции `Room`** гарантируют атомарность набора операций с базой данных через аннотацию `@Transaction` в DAO-методах и метод `withTransaction` у `RoomDatabase`. Это критично для поддержания целостности связанных данных.
 
 Важно: транзакция будет откатена только если из аннотированного `@Transaction` метода или блока `withTransaction` выйдет неперехваченное исключение. Простое возвращение `Result.failure(...)` или логирование ошибки без выброса исключения не приводит к откату.
 
@@ -180,7 +180,7 @@ suspend fun transferMoney(from: String, to: String, amount: BigDecimal) {
 
 ## Answer (EN)
 
-**Room Transactions** ensure atomic groups of operations via the `@Transaction` annotation on DAO methods and the `withTransaction` extension on `RoomDatabase`. This is critical for maintaining data integrity across related entities.
+**`Room` Transactions** ensure atomic groups of operations via the `@Transaction` annotation on DAO methods and the `withTransaction` extension on `RoomDatabase`. This is critical for maintaining data integrity across related entities.
 
 Important: a transaction is rolled back only if an exception escapes the `@Transaction` method or the `withTransaction` block. Simply returning `Result.failure(...)` or swallowing/logging an exception without rethrowing does NOT trigger rollback.
 
@@ -332,26 +332,26 @@ suspend fun transferMoney(from: String, to: String, amount: BigDecimal) {
 
 ## Follow-ups
 
-- How does Room handle nested transactions (savepoints)?
-- What isolation level does Room use by default?
+- How does `Room` handle nested transactions (savepoints)?
+- What isolation level does `Room` use by default?
 - How to test transaction rollback scenarios effectively?
 - When should you use `withTransaction` vs `@Transaction`?
 - How do transactions affect database performance and locking?
 
 ## References
 
-- [[c-room]] - Room database architecture
+- [[c-room]] - `Room` database architecture
 - [[c-coroutines]] - Suspend functions and concurrency
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-room-library-definition--android--easy]] - Basic Room concepts
+- [[q-room-library-definition--android--easy]] - Basic `Room` concepts
 
 ### Related
-- [[q-room-code-generation-timing--android--medium]] - Room annotation processing
-- [[q-room-paging3-integration--android--medium]] - Room with Paging
+- [[q-room-code-generation-timing--android--medium]] - `Room` annotation processing
+- [[q-room-paging3-integration--android--medium]] - `Room` with Paging
 - [[q-room-type-converters--android--medium]] - Custom type handling
 
 ### Advanced
-- [[q-room-fts-full-text-search--android--hard]] - Full-text search in Room
+- [[q-room-fts-full-text-search--android--hard]] - Full-text search in `Room`

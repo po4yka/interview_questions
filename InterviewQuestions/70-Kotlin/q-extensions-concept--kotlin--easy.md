@@ -1,4 +1,4 @@
----
+---\
 id: lang-068
 title: "Extensions Concept / Концепция расширений"
 aliases: [Extensions Concept, Концепция расширений]
@@ -14,7 +14,7 @@ related: [c-kotlin, c-kotlin-features]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/easy, extension-functions, extensions, kotlin]
----
+---\
 # Вопрос (RU)
 > Что такое Extensions?
 
@@ -281,7 +281,7 @@ println(5.isEven)   // false
 
 ### Real-World Examples
 
-**1. String utilities (simplified):**
+**1. `String` utilities (simplified):**
 ```kotlin
 fun String.isEmailValid(): Boolean {
     // Simple check, not intended for production-grade validation
@@ -294,7 +294,7 @@ if (email.isEmailValid()) {
 }
 ```
 
-**2. Collection utilities:**
+**2. `Collection` utilities:**
 ```kotlin
 fun <T> List<T>.secondOrNull(): T? {
     return if (this.size >= 2) this[1] else null

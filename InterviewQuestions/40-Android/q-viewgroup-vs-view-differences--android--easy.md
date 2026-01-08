@@ -1,4 +1,4 @@
----
+---\
 id: android-239
 title: ViewGroup vs View Differences / Различия ViewGroup и View
 aliases: [ViewGroup vs View, Различия ViewGroup и View]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/ui-views, difficulty/easy, view, view-hierarchy, viewgroup]
 
----
+---\
 # Вопрос (RU)
 > Различия `ViewGroup` и `View`
 
@@ -50,11 +50,11 @@ tags: [android/ui-views, difficulty/easy, view, view-hierarchy, viewgroup]
 
 ### Популярные `ViewGroup`
 
-- **LinearLayout** — размещает дочерние элементы в один ряд или столбец
-- **RelativeLayout** — позиционирует дочерние элементы относительно друг друга или родителя
-- **ConstraintLayout** — гибкое позиционирование на основе ограничений
-- **FrameLayout** — накладывает дочерние элементы друг на друга
-- **MotionLayout** — layout для анимаций и переходов (расширяет ConstraintLayout)
+- **`LinearLayout`** — размещает дочерние элементы в один ряд или столбец
+- **`RelativeLayout`** — позиционирует дочерние элементы относительно друг друга или родителя
+- **`ConstraintLayout`** — гибкое позиционирование на основе ограничений
+- **`FrameLayout`** — накладывает дочерние элементы друг на друга
+- **MotionLayout** — layout для анимаций и переходов (расширяет `ConstraintLayout`)
 - **GridLayout** — размещает дочерние элементы в таблице
 
 ### Что Такое `View`?
@@ -63,10 +63,10 @@ tags: [android/ui-views, difficulty/easy, view, view-hierarchy, viewgroup]
 
 ### Популярные `View`
 
-- **TextView** — отображает текст
-- **ImageView** — отображает изображения
-- **EditText** — редактируемое текстовое поле
-- **Button** — кликабельная кнопка
+- **`TextView`** — отображает текст
+- **`ImageView`** — отображает изображения
+- **`EditText`** — редактируемое текстовое поле
+- **`Button`** — кликабельная кнопка
 - **SeekBar** — ползунок
 - **CheckBox** — переключатель-флажок
 - **RadioButton** — переключатель-вариант
@@ -246,11 +246,11 @@ A **`ViewGroup`** is a special `View` that can **contain other `View` instances*
 
 Common layout containers that extend `ViewGroup`:
 
-- **LinearLayout** - arranges children in a single row or column
-- **RelativeLayout** - positions children relative to each other or parent
-- **ConstraintLayout** - flexible constraint-based positioning
-- **FrameLayout** - stacks children on top of each other
-- **MotionLayout** - animation and transition layout (extends ConstraintLayout)
+- **`LinearLayout`** - arranges children in a single row or column
+- **`RelativeLayout`** - positions children relative to each other or parent
+- **`ConstraintLayout`** - flexible constraint-based positioning
+- **`FrameLayout`** - stacks children on top of each other
+- **MotionLayout** - animation and transition layout (extends `ConstraintLayout`)
 - **GridLayout** - arranges children in a grid
 
 ### What is `View`?
@@ -261,10 +261,10 @@ A **`View`** represents the basic building block for user interface components. 
 
 Common UI components that extend `View`:
 
-- **TextView** - displays text
-- **ImageView** - displays images
-- **EditText** - editable text field
-- **Button** - clickable button
+- **`TextView`** - displays text
+- **`ImageView`** - displays images
+- **`EditText`** - editable text field
+- **`Button`** - clickable button
 - **SeekBar** - slider control
 - **CheckBox** - checkbox control
 - **RadioButton** - radio button control
@@ -422,7 +422,7 @@ class CustomContainer @JvmOverloads constructor(
 
 - [`View` - Android Developers](https://developer.android.com/reference/android/view/View)
 - [`ViewGroup` - Android Developers](https://developer.android.com/reference/android/view/ViewGroup)
-- [Difference between `View` and `ViewGroup` in Android - Stack Overflow](https://stackoverflow.com/questions/27352476/difference-between-view-and-viewgroup-in-android)
+- [Difference between `View` and `ViewGroup` in Android - `Stack` Overflow](https://stackoverflow.com/questions/27352476/difference-between-view-and-viewgroup-in-android)
 - [The life cycle of a view in Android - ProAndroidDev](https://proandroiddev.com/the-life-cycle-of-a-view-in-android-6a2c4665b95e)
 
 ---

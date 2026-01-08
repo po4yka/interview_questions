@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-069
 title: "Debugging Kotlin coroutines: tools and techniques / Отладка Kotlin корутин: инструменты и техники"
 topic: kotlin
@@ -15,7 +15,7 @@ question_kind: coding
 related: [c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-coroutine-exception-handler--kotlin--medium, q-kotlin-null-safety--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 subtopics: [coroutines, debugging, profiling]
 
----
+---\
 # Вопрос (RU)
 > Какие инструменты и техники доступны для отладки Kotlin корутин? Как идентифицировать deadlock, утечки и проблемы производительности?
 
@@ -294,7 +294,7 @@ suspend fun logWithContext(message: String) {
 
 ### 11. Интерпретация Thread Dump
 
-Thread dump полезен, когда приложение "подвисло" под нагрузкой или в production:
+`Thread` dump полезен, когда приложение "подвисло" под нагрузкой или в production:
 
 - При включённом `kotlinx.coroutines.debug` идентификаторы корутин появляются в именах потоков (например, `DefaultDispatcher-worker-1 @coroutine#2`).
 - Снятие thread dump (через `jstack` или инструменты IDE) позволяет увидеть, где потоки диспетчеров блокируются или какие точки приостановки активны.
@@ -423,7 +423,7 @@ Modern IntelliJ IDEA / Android Studio versions provide dedicated coroutine debug
 - Step through suspending functions similar to regular functions.
 
 How to use:
-1. Set a breakpoint in a suspending function.
+1. `Set` a breakpoint in a suspending function.
 2. Run in debug mode.
 3. Open the `Coroutines` panel in the Debug tool window.
 
@@ -609,7 +609,7 @@ suspend fun loadData() {
 
 ### 11. Thread Dumps Interpretation
 
-Thread dumps can help when the app is stuck in production or under load:
+`Thread` dumps can help when the app is stuck in production or under load:
 
 - With `kotlinx.coroutines.debug` enabled, coroutine identifiers appear in thread names (e.g., `DefaultDispatcher-worker-1 @coroutine#2`).
 - Capturing a thread dump (e.g., via `jstack` or IDE tools) lets you see where dispatcher threads are blocked or what suspension points are active.

@@ -1,4 +1,4 @@
----
+---\
 id: android-610
 title: Koin Testing Strategies / Стратегии тестирования Koin
 aliases: [Koin Testing Strategies, Тестирование модулей Koin]
@@ -17,16 +17,16 @@ tags: [android/architecture-clean, android/di-koin, android/testing-unit, depend
 sources:
   - "https://insert-koin.io/docs/reference/koin-android/check-modules"
   - "https://insert-koin.io/docs/reference/koin-test/testing"
----
+---\
 # Вопрос (RU)
-> Как организовать тестирование модулей Koin? Покажите стратегии для юнит-тестов, инструментальных тестов и проверки графа зависимостей.
+> Как организовать тестирование модулей `Koin`? Покажите стратегии для юнит-тестов, инструментальных тестов и проверки графа зависимостей.
 
 # Question (EN)
-> How do you test Koin modules? Demonstrate strategies for unit tests, instrumented tests, and validating the dependency graph.
+> How do you test `Koin` modules? Demonstrate strategies for unit tests, instrumented tests, and validating the dependency graph.
 
 ## Ответ (RU)
 
-Тестирование Koin строится вокруг трёх задач: **валидация графа зависимостей**, **подмена зависимостей** и **контроль жизненного цикла**. Koin предоставляет утилиты `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules` и возможность переопределения модулей, которые позволяют тестам оставаться изолированными и быстрыми.
+Тестирование `Koin` строится вокруг трёх задач: **валидация графа зависимостей**, **подмена зависимостей** и **контроль жизненного цикла**. `Koin` предоставляет утилиты `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules` и возможность переопределения модулей, которые позволяют тестам оставаться изолированными и быстрыми.
 
 ### 1. Валидация Графа Модулей (checkModules)
 
@@ -85,7 +85,7 @@ class UserRepositoryTest : KoinTest {
 }
 ```
 
-- `KoinTestRule` гарантирует старт/останов Koin перед и после теста.
+- `KoinTestRule` гарантирует старт/останов `Koin` перед и после теста.
 - `inject()` даёт ленивый доступ к зависимостям.
 - Для корутин используйте `runTest` и мокайте зависимости (например, через MockK `coEvery`) вместо мокания тестируемого класса.
 
@@ -130,7 +130,7 @@ class DashboardViewModelTest : KoinTest {
 ```
 
 - `loadKoinModules` загружает дополнительные тестовые определения.
-- Используйте `module(override = true)` или соответствующий механизм переопределения (в зависимости от версии Koin) для замены production-зависимостей.
+- Используйте `module(override = true)` или соответствующий механизм переопределения (в зависимости от версии `Koin`) для замены production-зависимостей.
 - Не дублируйте управление жизненным циклом: если используете `KoinTestRule` или общий `startKoin` в тестовом раннере, не вызывайте `stopKoin()` точечно в каждом таком тесте без необходимости.
 
 ### 4. Инструментальные Тесты С KoinTestRule
@@ -157,11 +157,11 @@ class SettingsFragmentTest : KoinTest {
 
 - Для инструментальных тестов обязательно передать `androidContext`.
 - Отдельный `testingModule` содержит фейковые/фиктивные зависимости.
-- `KoinTestRule` автоматически управляет запуском и остановкой Koin.
+- `KoinTestRule` автоматически управляет запуском и остановкой `Koin`.
 
 ### 5. Практики Для Стабильных Тестов
 
-- **Изоляция**: каждый тест (или suite) должен стартовать Koin с минимальным набором модулей.
+- **Изоляция**: каждый тест (или suite) должен стартовать `Koin` с минимальным набором модулей.
 - **Явный lifecycle**: используйте либо `KoinTestRule`, либо явный `startKoin/stopKoin` для всего набора тестов; избегайте конфликтов.
 - **Переопределения**: для подмены зависимостей применяйте override-модули (`module(override = true)`, `loadKoinModules`/`unloadKoinModules`).
 - **Параметры**: используйте `parametersOf` для runtime-данных.
@@ -170,7 +170,7 @@ class SettingsFragmentTest : KoinTest {
 
 ## Answer (EN)
 
-Testing Koin spans three goals: **validating the graph**, **overriding dependencies**, and **controlling lifecycle**. Koin ships helpers such as `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules`, and module overrides to keep tests isolated and deterministic.
+Testing `Koin` spans three goals: **validating the graph**, **overriding dependencies**, and **controlling lifecycle**. `Koin` ships helpers such as `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules`, and module overrides to keep tests isolated and deterministic.
 
 ### 1. Validate Modules with checkModules
 
@@ -192,7 +192,7 @@ class AppModulesTest {
 
 - `koinApplication` builds an isolated container for the test.
 - `checkModules` resolves the graph and ensures every dependency can be created.
-- `withInstance` supplies runtime artifacts (like `Context`) that Koin cannot instantiate itself.
+- `withInstance` supplies runtime artifacts (like `Context`) that `Koin` cannot instantiate itself.
 
 ### 2. Unit Tests with KoinTestRule
 
@@ -228,7 +228,7 @@ class UserRepositoryTest : KoinTest {
 }
 ```
 
-- `KoinTestRule` handles starting/stopping Koin around each test.
+- `KoinTestRule` handles starting/stopping `Koin` around each test.
 - `inject()` gives lazy access to dependencies.
 - Use `runTest` and mock lower-level dependencies (e.g., via MockK `coEvery`) instead of mocking the class under test.
 
@@ -273,7 +273,7 @@ class DashboardViewModelTest : KoinTest {
 ```
 
 - `loadKoinModules` loads additional test definitions.
-- Use `module(override = true)` (or the appropriate override mechanism for your Koin version) to replace production dependencies.
+- Use `module(override = true)` (or the appropriate override mechanism for your `Koin` version) to replace production dependencies.
 - Avoid conflicting lifecycle control: if `KoinTestRule` or a global `startKoin` manages the container, don't call `stopKoin()` for individual tests unless you own that instance.
 
 ### 4. Instrumented Tests with KoinTestRule
@@ -300,11 +300,11 @@ class SettingsFragmentTest : KoinTest {
 
 - Instrumented tests must supply `androidContext`.
 - Keep a dedicated `testingModule` with fakes/stubs.
-- `KoinTestRule` tears Koin down automatically.
+- `KoinTestRule` tears `Koin` down automatically.
 
 ### 5. Practices for Stable Tests
 
-- **Isolation**: start Koin with the smallest set of modules per test or test suite.
+- **Isolation**: start `Koin` with the smallest set of modules per test or test suite.
 - **Explicit lifecycle**: choose either `KoinTestRule` or manual `startKoin/stopKoin` for the whole test run; avoid mixing patterns that fight each other.
 - **Overrides**: use override modules (`module(override = true)`, `loadKoinModules`/`unloadKoinModules`) to swap dependencies.
 - **Parameters**: leverage `parametersOf` for runtime inputs.
@@ -313,9 +313,9 @@ class SettingsFragmentTest : KoinTest {
 
 ## Follow-ups
 - How does `checkModules` behave with dynamic feature modules?
-- What are best practices for testing `Scope` definitions in Koin?
-- How do you migrate existing Dagger unit tests to Koin?
-- How can you combine Koin with MockK or Mockito for integration tests?
+- What are best practices for testing `Scope` definitions in `Koin`?
+- How do you migrate existing `Dagger` unit tests to `Koin`?
+- How can you combine `Koin` with MockK or Mockito for integration tests?
 
 ## References
 - [[c-dependency-injection]]

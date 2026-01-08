@@ -1,4 +1,4 @@
----
+---\
 id: android-086
 title: Memory Leaks Definition / Определение утечек памяти
 aliases: [Memory Leaks Definition, Определение утечек памяти]
@@ -16,7 +16,7 @@ tags: [android/lifecycle, android/performance-memory, difficulty/easy, memory-le
 moc: moc-android
 related: [c-activity-lifecycle, c-android, q-coroutine-memory-leak-detection--kotlin--hard, q-coroutine-memory-leaks--kotlin--hard, q-optimize-memory-usage-android--android--medium, q-sharedpreferences-definition--android--easy, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое утечки памяти в Android и как они возникают?
@@ -257,7 +257,7 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 - [[q-coroutine-memory-leak-detection--kotlin--hard]] - Обнаружение утечек в корутинах
 - Жизненный цикл `Activity` и корректная очистка ресурсов
-- Паттерны эффективного использования памяти в RecyclerView
+- Паттерны эффективного использования памяти в `RecyclerView`
 
 ### Продвинутые (RU)
 
@@ -296,7 +296,7 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 - [[q-coroutine-memory-leak-detection--kotlin--hard]] - Detecting coroutine leaks
 - `Activity` lifecycle and proper cleanup
-- RecyclerView memory efficiency patterns
+- `RecyclerView` memory efficiency patterns
 
 ### Advanced
 

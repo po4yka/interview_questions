@@ -1,15 +1,22 @@
----
-id: ivc-20251030-140000
-title: Compose State / Состояние в Compose
-aliases: [Compose State, State Management Compose, Состояние Compose, Управление состоянием Compose]
-kind: concept
-summary: State management in Jetpack Compose using mutableStateOf, derivedStateOf, and state hoisting patterns
-links: []
-related: [c-jetpack-compose, c-compose-recomposition, c-viewmodel, c-state-flow, c-unidirectional-data-flow]
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, jetpack-compose, state-management, ui]
----
+---\
+id: "20251030-140000"
+title: "Compose State / Состояние в Compose"
+aliases: ["Compose State", "State Management Compose", "Состояние Compose", "Управление состоянием Compose"]
+summary: "State management in Jetpack Compose using mutableStateOf, derivedStateOf, and state hoisting patterns"
+topic: "android"
+subtopics: ["jetpack-compose", "state-management", "ui"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: ["c-jetpack-compose", "c-compose-recomposition", "c-viewmodel", "c-state-flow", "c-unidirectional-data-flow"]
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: [android, concept, android/ui-compose, state-management, ui, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -20,7 +27,7 @@ tags: [android, concept, jetpack-compose, state-management, ui]
 **State APIs**:
 - `mutableStateOf(initialValue)`: Creates observable state that triggers recomposition when changed
 - `remember { }`: Caches values across recompositions (survives recomposition, not configuration changes)
-- `rememberSaveable { }`: Persists state across configuration changes using Bundle
+- `rememberSaveable { }`: Persists state across configuration changes using `Bundle`
 - `derivedStateOf { }`: Computes state from other state, only recomposes when result changes
 
 **State Hoisting**: Moving state up to a composable's caller to make the composable stateless and reusable. The pattern separates state ownership (parent) from state usage (child).
@@ -119,7 +126,7 @@ fun FormValidatorInefficient(fields: List<Field>) {
 **API для работы с состоянием**:
 - `mutableStateOf(initialValue)`: Создает наблюдаемое состояние, вызывающее recomposition при изменении
 - `remember { }`: Кэширует значения между recomposition (сохраняется при recomposition, но не при configuration changes)
-- `rememberSaveable { }`: Сохраняет состояние между configuration changes через Bundle
+- `rememberSaveable { }`: Сохраняет состояние между configuration changes через `Bundle`
 - `derivedStateOf { }`: Вычисляет состояние из другого состояния, вызывает recomposition только при изменении результата
 
 **Поднятие состояния (State Hoisting)**: Перемещение состояния вверх к вызывающей функции, чтобы сделать composable функцию stateless и переиспользуемой. Паттерн разделяет владение состоянием (родитель) и использование состояния (потомок).
@@ -165,7 +172,7 @@ fun FormValidatorInefficient(fields: List<Field>) {
 **Trade-offs**:
 - More state hoisting = more boilerplate but better testability and reusability
 - `remember` is fast but doesn't survive process death
-- `rememberSaveable` survives config changes but requires Bundle-compatible types
+- `rememberSaveable` survives config changes but requires `Bundle`-compatible types
 
 ## References
 

@@ -1,14 +1,22 @@
----
-id: ivc-20251030-143000
-title: Android Keystore / Android Keystore
-aliases: [Android Keystore, AndroidKeyStore, Keystore System]
-kind: concept
-summary: Secure hardware-backed key storage system for cryptographic keys
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, encryption, keystore, security]
----
+---\
+id: "20251030-143000"
+title: "Android Keystore / Android Keystore"
+aliases: ["Android Keystore", "AndroidKeyStore", "Keystore System"]
+summary: "Secure hardware-backed key storage system for cryptographic keys"
+topic: "android"
+subtopics: ["encryption", "keystore", "security"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "concept", "encryption", "keystore", "security", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -119,7 +127,7 @@ class KeystoreExample {
 - Enable key attestation to verify hardware-backed storage
 - Use StrongBox Keymaster when available (Android 9+)
 - Bind keys to user authentication for sensitive operations
-- Set appropriate key validity periods
+- `Set` appropriate key validity periods
 
 **Implementation**:
 - Check hardware support: `KeyInfo.isInsideSecureHardware()`

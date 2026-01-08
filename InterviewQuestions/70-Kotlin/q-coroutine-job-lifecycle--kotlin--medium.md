@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-241
 title: "What is a Job and its lifecycle in Kotlin coroutines? / Job и его жизненный цикл"
 aliases: [Job Lifecycle, Job и его жизненный цикл]
@@ -15,7 +15,7 @@ description: "A comprehensive guide to understanding Job and its lifecycle state
 moc: moc-kotlin
 related: [c-coroutines, c-kotlin]
 subtopics: [coroutines, lifecycle]
----
+---\
 # Вопрос (RU)
 
 > Что такое `Job` и как устроен его жизненный цикл в корутинах Kotlin?
@@ -1498,7 +1498,7 @@ fun jobEdgeCases() = runBlocking {
 
 ## References
 
-- [Kotlin Coroutines Guide - Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Kotlin Coroutines Guide - `Coroutine` `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Job - kotlinx.coroutines API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/)
 - [Roman Elizarov - Structured Concurrency](https://medium.com/@elizarov/structured-concurrency-722d765aa952)
 - [Coroutines Guide - Cancellation and Timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)

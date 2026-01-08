@@ -1,4 +1,4 @@
----
+---\
 id: android-271
 title: Fix Slow App Startup Legacy / Исправление медленного запуска приложения
 aliases: [Fix Slow App Startup in Legacy Project, Исправление медленного запуска приложения в легаси-проекте]
@@ -18,7 +18,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android/architecture-modularization, android/monitoring-slo, android/performance-startup, app-startup, difficulty/hard, lazy-init, legacy-code, optimization]
 
----
+---\
 # Вопрос (RU)
 
 > Что делать, если нужно исправить медленный запуск приложения в legacy-проекте?
@@ -139,7 +139,7 @@ class MyApp : Application() {
 }
 ```
 **3. Jetpack App Startup + Lazy Init**
-Используйте App Startup для управления порядком инициализации компонентов и явного описания зависимостей. Не инициируйте компоненты вручную, если за вас это делает библиотека (например, WorkManager).
+Используйте App Startup для управления порядком инициализации компонентов и явного описания зависимостей. Не инициируйте компоненты вручную, если за вас это делает библиотека (например, `WorkManager`).
 ```kotlin
 class NetworkInitializer : Initializer<ApiClient> {
     override fun create(context: Context): ApiClient {
@@ -255,7 +255,7 @@ fun startupBenchmark() = benchmarkRule.measureRepeated(
     startActivityAndWait()
 }
 ```
-Analyze metrics for cold, warm, and hot starts across devices and builds. Set targets based on UX expectations and device class (commonly: cold < 2s, warm < 1s).
+Analyze metrics for cold, warm, and hot starts across devices and builds. `Set` targets based on UX expectations and device class (commonly: cold < 2s, warm < 1s).
 **2. Optimize `Application.onCreate()`**
 Key rule: initialize synchronously only crash reporting/logging, critical security configuration, and the minimal dependencies required to show the first screen.
 ```kotlin
@@ -273,7 +273,7 @@ class MyApp : Application() {
 }
 ```
 **3. Jetpack App Startup + Lazy Init**
-Use App Startup to manage component initialization order and define dependencies explicitly. Avoid manual explicit initialization when the library already integrates via its own Initializer (e.g., WorkManager).
+Use App Startup to manage component initialization order and define dependencies explicitly. Avoid manual explicit initialization when the library already integrates via its own Initializer (e.g., `WorkManager`).
 ```kotlin
 class NetworkInitializer : Initializer<ApiClient> {
     override fun create(context: Context): ApiClient {

@@ -1,27 +1,34 @@
----
-id: ivc-20251030-120000
-title: Retrofit / Retrofit
-aliases: [Retrofit, Retrofit Library, Square Retrofit]
-kind: concept
-summary: Type-safe HTTP client for Android and Java by Square
-links: []
-related: [c-rest-api, c-coroutines, c-okhttp, c-repository-pattern, c-networking]
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, http, networking, rest-api, retrofit]
----
+---\
+id: "20251030-120000"
+title: "Retrofit / Retrofit"
+aliases: ["Retrofit", "Retrofit Library", "Square Retrofit"]
+summary: "Type-safe HTTP client for Android and Java by Square"
+topic: "android"
+subtopics: ["http", "networking", "rest-api"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: ["c-rest-api", "c-coroutines", "c-okhttp", "c-repository-pattern", "c-networking"]
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "concept", "http", "networking", "rest-api", "retrofit", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-Retrofit is a type-safe HTTP client library for Android and Java developed by Square. It transforms HTTP APIs into Java/Kotlin interfaces using annotations, providing compile-time verification and automatic request/response conversion. Built on top of OkHttp, Retrofit integrates seamlessly with modern concurrency patterns (Coroutines, RxJava, Flow) and JSON converters (Gson, Moshi, kotlinx.serialization).
+`Retrofit` is a type-safe HTTP client library for Android and Java developed by Square. It transforms HTTP APIs into Java/Kotlin interfaces using annotations, providing compile-time verification and automatic request/response conversion. Built on top of `OkHttp`, `Retrofit` integrates seamlessly with modern concurrency patterns (Coroutines, RxJava, `Flow`) and JSON converters (`Gson`, `Moshi`, kotlinx.serialization).
 
-**Core Principle**: Declarative API definition - describe your REST API endpoints as interface methods with annotations, and Retrofit generates the implementation.
+**Core Principle**: Declarative API definition - describe your REST API endpoints as interface methods with annotations, and `Retrofit` generates the implementation.
 
 # Сводка (RU)
 
-Retrofit - это типобезопасная HTTP-клиентская библиотека для Android и Java, разработанная Square. Она преобразует HTTP API в Java/Kotlin интерфейсы с помощью аннотаций, обеспечивая проверку во время компиляции и автоматическое преобразование запросов/ответов. Построенная на основе OkHttp, Retrofit легко интегрируется с современными паттернами конкурентности (Coroutines, RxJava, Flow) и JSON-конвертерами (Gson, Moshi, kotlinx.serialization).
+`Retrofit` - это типобезопасная HTTP-клиентская библиотека для Android и Java, разработанная Square. Она преобразует HTTP API в Java/Kotlin интерфейсы с помощью аннотаций, обеспечивая проверку во время компиляции и автоматическое преобразование запросов/ответов. Построенная на основе `OkHttp`, `Retrofit` легко интегрируется с современными паттернами конкурентности (Coroutines, RxJava, `Flow`) и JSON-конвертерами (`Gson`, `Moshi`, kotlinx.serialization).
 
-**Основной принцип**: Декларативное определение API - описываете REST API эндпоинты как методы интерфейса с аннотациями, и Retrofit генерирует реализацию.
+**Основной принцип**: Декларативное определение API - описываете REST API эндпоинты как методы интерфейса с аннотациями, и `Retrofit` генерирует реализацию.
 
 ---
 
@@ -29,7 +36,7 @@ Retrofit - это типобезопасная HTTP-клиентская биб�
 
 ### Declarative API Definition (EN)
 
-Retrofit uses annotations to describe HTTP requests:
+`Retrofit` uses annotations to describe HTTP requests:
 
 ```kotlin
 interface GitHubService {
@@ -48,12 +55,12 @@ interface GitHubService {
 }
 ```
 
-**Request Annotations**: `@GET`, `@POST`, `@PUT`, `@DELETE`, `@PATCH`, `@HEAD`, `@OPTIONS`
+**`Request` Annotations**: `@GET`, `@POST`, `@PUT`, `@DELETE`, `@PATCH`, `@HEAD`, `@OPTIONS`
 **Parameter Annotations**: `@Path`, `@Query`, `@Body`, `@Header`, `@Field`, `@Part`
 
 ### Декларативное Определение API (RU)
 
-Retrofit использует аннотации для описания HTTP-запросов (см. код выше).
+`Retrofit` использует аннотации для описания HTTP-запросов (см. код выше).
 
 **Аннотации запросов**: описывают HTTP-метод и относительный URL
 **Аннотации параметров**: определяют, как параметры метода преобразуются в части HTTP-запроса
@@ -64,7 +71,7 @@ Retrofit использует аннотации для описания HTTP-з
 
 ### Automatic Conversion (EN)
 
-Retrofit automatically converts responses using pluggable converters:
+`Retrofit` automatically converts responses using pluggable converters:
 
 ```kotlin
 val retrofit = Retrofit.Builder()
@@ -75,13 +82,13 @@ val retrofit = Retrofit.Builder()
 val service = retrofit.create(GitHubService::class.java)
 ```
 
-**Popular Converters**: Gson, Moshi, kotlinx.serialization, Jackson, Protobuf
+**Popular Converters**: `Gson`, `Moshi`, kotlinx.serialization, Jackson, Protobuf
 
 ### Автоматическое Преобразование (RU)
 
-Retrofit автоматически конвертирует ответы с помощью подключаемых конвертеров (см. код выше).
+`Retrofit` автоматически конвертирует ответы с помощью подключаемых конвертеров (см. код выше).
 
-**Популярные конвертеры**: Gson, Moshi, kotlinx.serialization, Jackson, Protobuf
+**Популярные конвертеры**: `Gson`, `Moshi`, kotlinx.serialization, Jackson, Protobuf
 
 ### Call Adapters (EN)
 
@@ -110,7 +117,7 @@ fun getUserRx(@Path("id") id: String): Single<User>
 
 ### OkHttp Integration (EN)
 
-Retrofit uses OkHttp for network operations. Customize with interceptors:
+`Retrofit` uses `OkHttp` for network operations. Customize with interceptors:
 
 ```kotlin
 val okHttpClient = OkHttpClient.Builder()
@@ -132,11 +139,11 @@ val retrofit = Retrofit.Builder()
 
 ### Интеграция С OkHttp (RU)
 
-Retrofit использует OkHttp для сетевых операций. Настройка через интерцепторы (см. код выше).
+`Retrofit` использует `OkHttp` для сетевых операций. Настройка через интерцепторы (см. код выше).
 
 ### Coroutines Support (EN)
 
-Native `suspend` function support (Retrofit 2.6+):
+Native `suspend` function support (`Retrofit` 2.6+):
 
 ```kotlin
 interface ApiService {
@@ -159,7 +166,7 @@ viewModelScope.launch {
 
 ### Поддержка Корутин (RU)
 
-Встроенная поддержка `suspend` функций (Retrofit 2.6+), см. код выше.
+Встроенная поддержка `suspend` функций (`Retrofit` 2.6+), см. код выше.
 
 ---
 
@@ -215,13 +222,13 @@ suspend fun fetchUser(): Result<User> {
 ### When to Consider Alternatives
 - GraphQL APIs: Use Apollo Client instead
 - gRPC: Use gRPC-Kotlin
-- Simple HTTP calls: OkHttp alone may suffice
-- WebSocket: Use OkHttp WebSocket directly
+- Simple HTTP calls: `OkHttp` alone may suffice
+- WebSocket: Use `OkHttp` WebSocket directly
 
 ### Trade-offs
 - **Pros**: Type safety, minimal boilerplate, extensive ecosystem, excellent Kotlin support
 - **Cons**: Reflection overhead (mitigated by R8/ProGuard), learning curve for complex configurations
-- **Performance**: Negligible overhead over raw OkHttp in production builds
+- **Performance**: Negligible overhead over raw `OkHttp` in production builds
 
 ---
 

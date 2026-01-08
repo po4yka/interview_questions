@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-162640"
 title: "Layout Types / Layout Types"
 aliases: ["Layout Types"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-constraintlayout, c-framelayout, c-layout-performance]
+moc: "moc-cs"
+related: ["c-constraintlayout", "c-framelayout", "c-layout-performance"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -48,5 +49,5 @@ Layout types describe how data structures and UI components are physically or lo
 ## References
 
 - Microsoft Docs: ".NET StructLayoutAttribute" (memory layout control)
-- Android Developers: "Layout" documentation (LinearLayout, ConstraintLayout, etc.)
+- Android Developers: "Layout" documentation (`LinearLayout`, `ConstraintLayout`, etc.)
 - Apple Developer Documentation: "Auto Layout" (constraint-based UI layout)

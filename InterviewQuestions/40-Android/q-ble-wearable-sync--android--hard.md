@@ -1,4 +1,4 @@
----
+---\
 id: android-489
 title: Design BLE Wearable Sync / Проектирование синхронизации BLE носимых устройств
 aliases: [Design BLE Wearable Sync, Проектирование синхронизации BLE носимых устройств]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-29
 updated: 2025-10-30
 tags: [android/background-execution, android/bluetooth, android/service, difficulty/hard, topic/android]
----
+---\
 # Вопрос (RU)
 
 > Спроектируйте Android-компаньон для BLE носимого трекера здоровья. Требования: pairing & bonding, фоновая синхронизация каждые 10 мин, backfill пропущенных данных за 24ч, бюджет батареи <1%/ч во время активной синхронизации, защита приватности. Включите GATT profile, логику переподключения, модель данных, flow разрешений, наблюдаемость.
@@ -38,7 +38,7 @@ BLE синхронизация носимых устройств требует 
 - **device-manager**: pairing/bonding, device discovery, address caching
 - **gatt-services**: custom GATT profile, characteristic reads/writes/notifications
 - **sync-engine**: orchestration, backfill cursor, deduplication, retry logic
-- **store (Room)**: local persistence, conflict resolution, cursor tracking
+- **store (`Room`)**: local persistence, conflict resolution, cursor tracking
 - **analytics**: connection metrics, sync success rates, battery impact
 - **feature-flags**: gradual rollout of sync strategies
 
@@ -74,7 +74,7 @@ fun createBond(context: Context, device: BluetoothDevice): Flow<BondState> = cal
 
 ### 3. GATT Profile Design
 
-**Пример сервиса** (иллюстративный, не стандартный профиль): использовать собственный vendor-specific UUID вида `0000XXXX-0000-1000-8000-00805F9B34FB`. Обратите внимание, что `0000180D-0000-1000-8000-00805F9B34FB` — это стандартный Heart Rate Service UUID Bluetooth SIG и не должен использоваться как «кастомный».
+**Пример сервиса** (иллюстративный, не стандартный профиль): использовать собственный vendor-specific UUID вида `0000XXXX-0000-1000-8000-00805F9B34FB`. Обратите внимание, что `0000180D-0000-1000-8000-00805F9B34FB` — это стандартный Heart Rate `Service` UUID Bluetooth SIG и не должен использоваться как «кастомный».
 
 **Characteristics (пример)**:
 
@@ -106,8 +106,8 @@ fun requestMtu(gatt: BluetoothGatt, size: Int = 512) {
 
 **Foreground vs Background**:
 
-- **Active sync**: Foreground Service с notification (обязательно для Android 8+ при долгих операциях)
-- **Periodic sync**: WorkManager с `ExistingPeriodicWorkPolicy.KEEP`, constraints на battery/network
+- **Active sync**: Foreground `Service` с notification (обязательно для Android 8+ при долгих операциях)
+- **Periodic sync**: `WorkManager` с `ExistingPeriodicWorkPolicy.KEEP`, constraints на battery/network
 
 ```kotlin
 // ✅ Foreground service for active sync (user-initiated)
@@ -172,13 +172,13 @@ suspend fun connectWithRetry(
 - Notifications > polling: prefer GATT notifications для real-time data
 - Payload compression: gzip или аналогичная схема для bulk history transfers (если поддерживает устройство)
 - Throttle scans: не чаще 1 раз в 10 мин, использовать `ScanSettings.SCAN_MODE_LOW_POWER`
-- Doze alignment: `setRequiresDeviceIdle(false)` + flex windows в WorkManager для согласования с системными окнами
+- Doze alignment: `setRequiresDeviceIdle(false)` + flex windows в `WorkManager` для согласования с системными окнами
 
 **Target**: бюджет <1% battery/hr для активной синхронизации. Для батареи 2000mAh это ≈20mAh/час; при 10-минутном sync window ориентировочно ≤3–4mAh, что требует агрессивной оптимизации соединений.
 
 ### 7. Data Model & Persistence
 
-**Room entities**:
+**`Room` entities**:
 
 ```kotlin
 @Entity(
@@ -214,13 +214,13 @@ data class SyncCursor(
 - `BLUETOOTH_ADVERTISE` — если нужен reverse connection
 - `ACCESS_FINE_LOCATION` — для BLE scan на устройствах до Android 11 (там, где требуется системой)
 
-**Request flow**: показывать rationale UI перед запросом, обрабатывать denial с fallback на manual pairing через Settings и graceful degradation функциональности.
+**`Request` flow**: показывать rationale UI перед запросом, обрабатывать denial с fallback на manual pairing через Settings и graceful degradation функциональности.
 
 ### 9. Privacy & Security
 
 **Safeguards**:
 
-- Encrypt at rest: Room database с SQLCipher или EncryptedSharedPreferences для токенов/ключей (не логировать сырые health данные в открытом виде)
+- Encrypt at rest: `Room` database с SQLCipher или EncryptedSharedPreferences для токенов/ключей (не логировать сырые health данные в открытом виде)
 - Minimize PII: минимизировать идентификаторы, использовать псевдонимизацию/хеширование device IDs
 - User opt-out: позволять отключить cloud sync, поддерживать локальный режим
 - Audit logs: логировать только метаданные доступа (кто/когда/операция) без избыточных health деталей, с учетом требований HIPAA/GDPR по минимуму и срокам хранения
@@ -258,8 +258,8 @@ data class SyncCursor(
 | Notifications vs polling    | Real-time updates, less power       | Requires device support, complex flow    |
 | Foreground service          | Reliable sync, no background limits | User-visible notification always         |
 | Compression                 | 30-50% less data transfer           | CPU overhead, added latency              |
-| WorkManager flex windows    | Aligns with Doze, battery-friendly  | Delayed syncs (up to 10 min late)        |
-| SQLCipher encryption        | Strong at-rest protection           | 10-15% performance penalty on Room reads |
+| `WorkManager` flex windows    | Aligns with Doze, battery-friendly  | Delayed syncs (up to 10 min late)        |
+| SQLCipher encryption        | Strong at-rest protection           | 10-15% performance penalty on `Room` reads |
 
 **Рекомендация**: включать HIGH priority временно (с explicit timeout ~30s), использовать compression только для bulk history (не для real-time metrics).
 
@@ -277,7 +277,7 @@ BLE wearable sync requires an architecture with separated concerns: connection m
 - **device-manager**: pairing/bonding, device discovery, address caching
 - **gatt-services**: custom GATT profile, characteristic reads/writes/notifications
 - **sync-engine**: orchestration, backfill cursor, deduplication, retry logic
-- **store (Room)**: local persistence, conflict resolution, cursor tracking
+- **store (`Room`)**: local persistence, conflict resolution, cursor tracking
 - **analytics**: connection metrics, sync success rates, battery impact
 - **feature-flags**: gradual rollout of sync strategies
 
@@ -313,7 +313,7 @@ fun createBond(context: Context, device: BluetoothDevice): Flow<BondState> = cal
 
 ### 3. GATT Profile Design
 
-**Example service** (illustrative, not a standard profile): use a vendor-specific UUID such as `0000XXXX-0000-1000-8000-00805F9B34FB`. Note that `0000180D-0000-1000-8000-00805F9B34FB` is the standard Heart Rate Service UUID assigned by the Bluetooth SIG and must not be treated as a "custom" service.
+**Example service** (illustrative, not a standard profile): use a vendor-specific UUID such as `0000XXXX-0000-1000-8000-00805F9B34FB`. Note that `0000180D-0000-1000-8000-00805F9B34FB` is the standard Heart Rate `Service` UUID assigned by the Bluetooth SIG and must not be treated as a "custom" service.
 
 **Characteristics (example)**:
 
@@ -345,8 +345,8 @@ fun requestMtu(gatt: BluetoothGatt, size: Int = 512) {
 
 **Foreground vs Background**:
 
-- **Active sync**: Foreground Service with a notification (required on Android 8+ for long-running work)
-- **Periodic sync**: WorkManager with `ExistingPeriodicWorkPolicy.KEEP`, constraints on battery/network
+- **Active sync**: Foreground `Service` with a notification (required on Android 8+ for long-running work)
+- **Periodic sync**: `WorkManager` with `ExistingPeriodicWorkPolicy.KEEP`, constraints on battery/network
 
 ```kotlin
 // ✅ Foreground service for active sync (user-initiated)
@@ -411,13 +411,13 @@ suspend fun connectWithRetry(
 - Notifications > polling: prefer GATT notifications for real-time data
 - Payload compression: gzip or similar for bulk history transfers (only if both sides support it)
 - Throttle scans: no more than once per 10 min, use `ScanSettings.SCAN_MODE_LOW_POWER`
-- Doze alignment: `setRequiresDeviceIdle(false)` + flex windows in WorkManager to align with system maintenance windows
+- Doze alignment: `setRequiresDeviceIdle(false)` + flex windows in `WorkManager` to align with system maintenance windows
 
 **Target**: keep active sync under <1% battery/hr. For a 2000mAh battery, this is about 20mAh per hour; for a 10-minute sync window, the budget is roughly 3–4mAh, so connection efficiency is critical.
 
 ### 7. Data Model & Persistence
 
-**Room entities**:
+**`Room` entities**:
 
 ```kotlin
 @Entity(
@@ -453,13 +453,13 @@ data class SyncCursor(
 - `BLUETOOTH_ADVERTISE` — if reverse connection is needed
 - `ACCESS_FINE_LOCATION` — for BLE scan on legacy Android (<12) where required by the platform
 
-**Request flow**: show rationale UI before requesting, handle denial with fallback to manual pairing via Settings and graceful feature degradation.
+**`Request` flow**: show rationale UI before requesting, handle denial with fallback to manual pairing via Settings and graceful feature degradation.
 
 ### 9. Privacy & Security
 
 **Safeguards**:
 
-- Encrypt at rest: use SQLCipher for Room or EncryptedSharedPreferences for tokens/keys; avoid logging raw health data
+- Encrypt at rest: use SQLCipher for `Room` or EncryptedSharedPreferences for tokens/keys; avoid logging raw health data
 - Minimize PII: anonymize/pseudonymize user and device identifiers before cloud upload
 - User opt-out: allow disabling cloud sync and support local-only mode
 - Audit logs: record only necessary metadata (who/when/what action) for access events, with retention and minimization aligned to HIPAA/GDPR; avoid storing full payloads in logs
@@ -497,8 +497,8 @@ data class SyncCursor(
 | Notifications vs polling | Real-time updates, less power        | Requires device support, complex flow    |
 | Foreground service       | Reliable sync, no BG limits          | User-visible notification always         |
 | Compression              | 30-50% less data transfer            | CPU overhead, added latency              |
-| WorkManager flex windows | Aligns with Doze, battery-friendly   | Delayed syncs (up to 10 min late)        |
-| SQLCipher encryption     | Strong at-rest protection            | 10-15% performance penalty on Room reads |
+| `WorkManager` flex windows | Aligns with Doze, battery-friendly   | Delayed syncs (up to 10 min late)        |
+| SQLCipher encryption     | Strong at-rest protection            | 10-15% performance penalty on `Room` reads |
 
 **Recommendation**: enable HIGH priority only temporarily (with ~30s timeout), and use compression only for bulk history transfers (not for real-time metrics).
 
@@ -528,13 +528,13 @@ data class SyncCursor(
 
 ### Prerequisites (Easier)
 
-- [[q-service-component--android--medium]] - Understanding Service lifecycle and foreground services
+- [[q-service-component--android--medium]] - Understanding `Service` lifecycle and foreground services
 - [[q-service-restrictions-why--android--medium]] - Background execution limits on Android 8+
 
 ### Related (Same Level)
 
 - [[q-service-lifecycle-binding--android--hard]] - Bound services and lifecycle management
-- [[q-polling-implementation--android--medium]] - Alternative sync strategies with WorkManager
+- [[q-polling-implementation--android--medium]] - Alternative sync strategies with `WorkManager`
 
 ### Advanced (Harder)
 

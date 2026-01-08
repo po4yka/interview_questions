@@ -1,16 +1,16 @@
----
+---\
 id: ivm-20251012-140200
 title: Kotlin — MOC
 kind: moc
 created: 2025-10-12
 updated: 2025-10-12
 tags: [moc, topic/kotlin]
----
+---\
 
 # Kotlin — Map of Content
 
 ## Overview
-This MOC covers Kotlin language features, syntax, coroutines, Flow, collection operations, advanced language features, standard library functions, interoperability with Java, and best practices for Kotlin development.
+This MOC covers Kotlin language features, syntax, coroutines, `Flow`, collection operations, advanced language features, standard library functions, interoperability with Java, and best practices for Kotlin development.
 
 ## By Difficulty
 
@@ -45,7 +45,7 @@ LIMIT 100
 
 ### Coroutines
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Fundamentals
 - [[q-what-is-coroutine--kotlin--easy]] - What is a coroutine and how does it work?
@@ -57,7 +57,7 @@ LIMIT 100
 - [[q-coroutine-builders-basics--kotlin--easy]] - launch, async, runBlocking basics
 - [[q-coroutine-scope-basics--kotlin--easy]] - Understanding CoroutineScope
 - [[q-lifecyclescope-viewmodelscope--kotlin--medium]] - Android-specific scopes
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context differences
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `Context` differences
 
 #### Context & Dispatchers
 - [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
@@ -84,7 +84,7 @@ LIMIT 100
 - [[q-debugging-coroutines-techniques--kotlin--medium]] - Debugging strategies
 - [[q-coroutine-profiling--kotlin--hard]] - Performance profiling
 
-**All Coroutine Questions:**
+**All `Coroutine` Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "70-Kotlin"
@@ -94,17 +94,17 @@ SORT difficulty ASC, file.name ASC
 
 ### Flow & Reactive Programming
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Flow Fundamentals
-- [[q-kotlin-flow-basics--kotlin--medium]] - Introduction to Kotlin Flow
-- [[q-flow-basics--kotlin--easy]] - Flow basics and creation
+- [[q-kotlin-flow-basics--kotlin--medium]] - Introduction to Kotlin `Flow`
+- [[q-flow-basics--kotlin--easy]] - `Flow` basics and creation
 - [[q-flow-operators-map-filter--kotlin--medium]] - Basic operators: map, filter, transform
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
 
 #### Hot Vs Cold Flows
-- [[q-hot-cold-flows--kotlin--medium]] - Cold Flow, SharedFlow, StateFlow differences
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow vs SharedFlow detailed
+- [[q-hot-cold-flows--kotlin--medium]] - Cold `Flow`, `SharedFlow`, `StateFlow` differences
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - `StateFlow` vs `SharedFlow` detailed
 - [[q-statein-sharein-flow--kotlin--medium]] - stateIn and shareIn operators
 
 #### Flow Operators
@@ -112,23 +112,23 @@ SORT difficulty ASC, file.name ASC
 - [[q-flow-time-operators--kotlin--medium]] - debounce, throttle, delay, timeout
 - [[q-catch-operator-flow--kotlin--medium]] - catch operator for error handling
 - [[q-flow-completion-oncompletion--kotlin--medium]] - onCompletion and finalization
-- [[q-instant-search-flow-operators--kotlin--medium]] - Building instant search with Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - Building instant search with `Flow`
 
 #### Advanced Flow
 - [[q-channelflow-callbackflow-flow--kotlin--medium]] - channelFlow vs callbackFlow
 - [[q-flow-backpressure--kotlin--hard]] - Backpressure handling strategies
 - [[q-fan-in-fan-out--kotlin--hard]] - Fan-in and fan-out patterns
-- [[q-channel-flow-comparison--kotlin--medium]] - Channels vs Flow comparison
+- [[q-channel-flow-comparison--kotlin--medium]] - Channels vs `Flow` comparison
 
 #### Error Handling
-- [[q-flow-exception-handling--kotlin--medium]] - Exception handling in Flow
+- [[q-flow-exception-handling--kotlin--medium]] - Exception handling in `Flow`
 - [[q-retry-operators-flow--kotlin--medium]] - retry, retryWhen operators
 
 #### Testing
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing hot Flows
-- [[q-turbine-flow-testing--kotlin--medium]] - Using Turbine for Flow testing
+- [[q-turbine-flow-testing--kotlin--medium]] - Using Turbine for `Flow` testing
 
-**All Flow Questions:**
+**All `Flow` Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "70-Kotlin"
@@ -142,9 +142,9 @@ SORT difficulty ASC, file.name ASC
 
 #### Basics
 - [[q-kotlin-collections--kotlin--medium]] - Kotlin collection types overview
-- [[q-list-set-map-differences--programming-languages--easy]] - List, Set, Map differences
+- [[q-list-set-map-differences--programming-languages--easy]] - `List`, `Set`, `Map` differences
 - [[q-collection-implementations--programming-languages--easy]] - Implementation details
-- [[q-array-vs-list-kotlin--kotlin--easy]] - Array vs List in Kotlin
+- [[q-array-vs-list-kotlin--kotlin--easy]] - `Array` vs `List` in Kotlin
 
 #### Operations
 - [[q-associatewith-vs-associateby--kotlin--easy]] - associateWith vs associateBy
@@ -155,7 +155,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-sequences-vs-collections--kotlin--medium]] - When to use sequences
 - [[q-sequences-lazy-evaluation--kotlin--medium]] - Lazy evaluation in sequences
 
-**All Collection Questions:**
+**All `Collection` Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "70-Kotlin"
@@ -169,7 +169,7 @@ SORT difficulty ASC, file.name ASC
 
 #### Channel Basics
 - [[q-channels-basics-types--kotlin--medium]] - Channel types and basics
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow comparison
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow` comparison
 - [[q-channel-buffering-strategies--kotlin--hard]] - Buffering strategies
 
 #### Advanced Patterns
@@ -335,8 +335,8 @@ SORT difficulty ASC, file.name ASC
 - [[q-coroutine-exception-handler--kotlin--medium]] - CoroutineExceptionHandler usage
 
 #### Flow Exception Handling
-- [[q-flow-exception-handling--kotlin--medium]] - Exception handling in Flow
-- [[q-catch-operator-flow--kotlin--medium]] - catch operator for Flow errors
+- [[q-flow-exception-handling--kotlin--medium]] - Exception handling in `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] - catch operator for `Flow` errors
 - [[q-retry-operators-flow--kotlin--medium]] - retry and retryWhen operators
 
 **All Error Handling Questions:**

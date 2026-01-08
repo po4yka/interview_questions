@@ -1,11 +1,11 @@
----
+---\
 name: duplicate-detector
 description: >
   Find duplicate or near-duplicate questions in the vault. Detects exact title
   duplicates, semantically similar questions, and overlapping content. Suggests
   merge candidates and generates deduplication reports. Helps maintain vault
   quality by preventing redundant content.
----
+---\
 
 # Duplicate Detector
 
@@ -468,7 +468,7 @@ Check all duplicate types across vault.
 
 **Comprehensive**: Checks titles, content, and metadata.
 
-**Actionable**: Provides clear merge recommendations.
+**Actionable**: `Provides` clear merge recommendations.
 
 **Safe**: Auto-merge only for obvious cases.
 

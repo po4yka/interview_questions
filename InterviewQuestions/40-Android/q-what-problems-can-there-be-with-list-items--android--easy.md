@@ -1,4 +1,4 @@
----
+---\
 id: android-079
 title: List Items Problems / Проблемы с элементами списка
 aliases: [List Items Problems, Проблемы с элементами списка]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-views, difficulty/easy, listview, memory, performance, recyclerview]
 
----
+---\
 # Вопрос (RU)
 > Проблемы с элементами списка
 
@@ -37,7 +37,7 @@ tags: [android/performance-memory, android/ui-views, difficulty/easy, listview, 
 - Загрузка изображений в полном разрешении вместо миниатюр
 - Утечки памяти в адаптерах
 
-**Решение (пример с RecyclerView и Glide):**
+**Решение (пример с `RecyclerView` и Glide):**
 
 ```kotlin
 // Используем RecyclerView вместо ListView
@@ -173,9 +173,9 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 **Причины:**
 - Изменение списка без уведомления адаптера
 - Многопоточное обновление без синхронизации
-- Переиспользование ViewHolder без полного обновления всех полей
+- Переиспользование `ViewHolder` без полного обновления всех полей
 
-**Решение (DiffUtil):**
+**Решение (`DiffUtil`):**
 
 ```kotlin
 class ItemDiffCallback(
@@ -255,7 +255,7 @@ adapter.submitList(newItems)
 **Причины:**
 - Обновление адаптера из фоновых потоков
 - Гонки между UI и фоновыми операциями
-- Обновление RecyclerView не с главного потока
+- Обновление `RecyclerView` не с главного потока
 
 **Решение (`ViewModel` + `LiveData`):**
 
@@ -326,7 +326,7 @@ class FlowFragment : Fragment() {
 
 **Причины:**
 - Установка листенеров в `onBindViewHolder` без учёта переиспользования
-- Хранение сильных ссылок на `Activity`/`Fragment` внутри ViewHolder
+- Хранение сильных ссылок на `Activity`/`Fragment` внутри `ViewHolder`
 
 **Решение (передача лямбды в адаптер):**
 
@@ -414,11 +414,11 @@ class StableAdapter(
 
 Частые проблемы и решения:
 
-1. OOM → RecyclerView, эффективная загрузка изображений (Glide/Coil/Picasso), отсутствие утечек.
+1. OOM → `RecyclerView`, эффективная загрузка изображений (Glide/Coil/Picasso), отсутствие утечек.
 2. Медленная прокрутка → Лёгкий `onBindViewHolder`, простая разметка, отсутствие тяжёлых операций на UI-потоке, корректное переиспользование `View`.
 3. Некорректные данные → DiffUtil/ListAdapter, полное обновление полей в `bind`.
 4. Многопоточность → Обновления адаптера только с главного потока через `LiveData`/`Flow`/`ViewModel`, коллекция `Flow` в `repeatOnLifecycle`.
-5. Клики → Передача лямбды в адаптер, обработка во ViewHolder без утечек контекста.
+5. Клики → Передача лямбды в адаптер, обработка во `ViewHolder` без утечек контекста.
 6. Позиционирование → Полный rebinding состояния и стабильные ID при сложных обновлениях.
 
 ---
@@ -573,9 +573,9 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 - Not notifying adapter of data changes
 - Modifying data while adapter is using it
 - Race conditions in multi-threaded updates
-- ViewHolder reuse showing stale data
+- `ViewHolder` reuse showing stale data
 
-**Solution (DiffUtil):**
+**Solution (`DiffUtil`):**
 
 ```kotlin
 class ItemDiffCallback(
@@ -655,7 +655,7 @@ adapter.submitList(newItems)
 **Causes:**
 - Updating adapter from background threads
 - Race conditions between UI and background threads
-- Not using main thread for RecyclerView updates
+- Not using main thread for `RecyclerView` updates
 
 **Solution (`LiveData`):**
 
@@ -692,7 +692,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Using Kotlin `Flow` (scoped to Lifecycle):**
+**Using Kotlin `Flow` (scoped to `Lifecycle`):**
 
 ```kotlin
 class FlowViewModel : ViewModel() {
@@ -726,7 +726,7 @@ class FlowFragment : Fragment() {
 
 **Causes:**
 - Setting listeners incorrectly in `onBindViewHolder` without considering reuse
-- Holding strong references to `Activity`/`Fragment` inside ViewHolder
+- Holding strong references to `Activity`/`Fragment` inside `ViewHolder`
 
 **Solution:**
 
@@ -815,7 +815,7 @@ class StableAdapter(
 
 Common problems and solutions:
 
-1. Out of Memory → Use RecyclerView, efficient image loading (Glide/Coil/Picasso), avoid leaks.
+1. Out of Memory → Use `RecyclerView`, efficient image loading (Glide/Coil/Picasso), avoid leaks.
 2. Slow scrolling → Keep `onBindViewHolder` light, simplify layouts, avoid main-thread I/O, ensure proper view recycling.
 3. Data inconsistency → Use DiffUtil/ListAdapter, bind all fields correctly.
 4. Concurrency issues → Perform adapter updates on the main thread via `LiveData`/`Flow`/`ViewModel`, collect `Flow` with lifecycle-aware APIs.
@@ -827,7 +827,7 @@ Common problems and solutions:
 ## Follow-ups
 
 - [[c-performance]] — How would you profile and measure list scrolling performance in a real project?
-- [[c-recyclerview]] — Which RecyclerView-specific tools and patterns (e.g. `ListAdapter`, `ConcatAdapter`, `DiffUtil`) would you choose for large or heterogeneous lists and why?
+- [[c-recyclerview]] — Which `RecyclerView`-specific tools and patterns (e.g. `ListAdapter`, `ConcatAdapter`, `DiffUtil`) would you choose for large or heterogeneous lists and why?
 - Как бы вы диагностировали редкие визуальные артефакты (мигание, скачущие элементы) в списке, используя инструменты профилирования и логи?
 
 ## References

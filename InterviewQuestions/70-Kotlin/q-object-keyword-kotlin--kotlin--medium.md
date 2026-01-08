@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-166
 title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"
 aliases: [Object Declaration, Object Keyword, Object в Kotlin, Singleton]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
 
----
+---\
 # Вопрос (RU)
 > Расскажите про ключевое слово `object` в Kotlin. Каковы его применения и характеристики?
 
@@ -376,7 +376,7 @@ The `object` keyword in Kotlin is one of the most powerful and unique features o
 3. **Object expressions (anonymous objects)** - Create anonymous objects on the fly (similar to anonymous inner classes in Java), allowing you to implement interfaces or extend classes without declaring a separate named class.
 
 **Key characteristics (for object declarations and companion objects):**
-- Thread-safe initialization by default (within the guarantees of Kotlin specification and the target platform)
+- `Thread`-safe initialization by default (within the guarantees of Kotlin specification and the target platform)
 - Initialization happens on first access (lazy with respect to object/member usage)
 - Can implement interfaces and inherit from a single superclass
 - Can have properties, functions, and `init` blocks

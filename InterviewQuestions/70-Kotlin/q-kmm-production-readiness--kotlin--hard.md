@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-138
 title: "KMM Production Readiness / Готовность KMM к production"
 aliases: ["KMM Production Readiness", "Готовность KMM к production"]
@@ -15,7 +15,7 @@ sources: []
 tags: [best-practices, difficulty/hard, kmp, kotlin, production]
 moc: moc-kotlin
 related: [c-kotlin, q-handler-looper-comprehensive--android--medium]
----
+---\
 # Вопрос (RU)
 
 > Каковы ключевые соображения для вывода KMM проекта в production? Как обрабатывать versioning, binary compatibility, crash reporting и performance monitoring на разных платформах? Каковы частые ошибки и как их избегать?
@@ -393,7 +393,7 @@ class FirebaseCrashReporter(
 // iosMain should provide its own actual implementation (e.g., Sentry/Firebase/native reporting)
 ```
 
-**Global Exception Handler** (example):
+**Global Exception `Handler`** (example):
 
 ```kotlin
 expect fun getPlatformName(): String

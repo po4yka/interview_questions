@@ -1,4 +1,4 @@
----
+---\
 id: ui-001
 title: "Material3 Motion Transitions / Движение и переходы Material3"
 aliases: ["Material3 Motion Transitions", "Движение и переходы Material3"]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-11-11
 sources: []
 tags: [difficulty/medium, ui-animation, ui-ux-accessibility]
----
+---\
 # Вопрос (RU)
 
 > Каковы ключевые принципы движения в Material 3? Объясните shared element transitions, анимации предиктивного жеста назад и реализацию плавных переходов между composables в соответствии с рекомендациями Material Design.
@@ -538,7 +538,7 @@ Additionally:
 
 ### Related (Same Level)
 - [[q-navigation-methods-in-android--android--medium]] - Navigation transitions integration
-- Compose lifecycle - Lifecycle-aware animations
+- Compose lifecycle - `Lifecycle`-aware animations
 
 ### Advanced (Harder)
 - Compose performance optimization - Optimizing animation performance

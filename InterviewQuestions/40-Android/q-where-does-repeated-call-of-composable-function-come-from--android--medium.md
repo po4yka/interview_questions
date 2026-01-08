@@ -15,7 +15,7 @@ related: [c-compose-state, c-jetpack-compose, c-viewmodel, q-compose-performance
 sources: []
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android, android/ui-compose, android/ui-state, compose, difficulty/medium, recomposition]
+tags: [android, android/ui-compose, android/ui-state, difficulty/medium, recomposition]
 ---
 # Вопрос (RU)
 

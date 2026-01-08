@@ -1,4 +1,4 @@
----
+---\
 id: "20251012-000000"
 title: "Database Performance Optimization / Оптимизация производительности баз данных"
 aliases: []
@@ -12,15 +12,15 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-performance"
-related: [c-databases, c-performance-optimization]
+related: ["c-databases", "c-performance-optimization"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "difficulty/medium", "indexing", "optimization", "performance", "query-tuning"]
----
+---\
 
 # Summary (EN)
 
-Database performance optimization involves improving query execution speed, reducing resource consumption, and ensuring scalability. Key techniques include proper indexing strategies (B-Tree, partial, covering indexes), query optimization (avoiding N+1 problems, rewriting inefficient queries), batch operations, denormalization for read-heavy workloads, connection pooling, and monitoring with slow query logs.
+`Database` performance optimization involves improving query execution speed, reducing resource consumption, and ensuring scalability. Key techniques include proper indexing strategies (B-Tree, partial, covering indexes), query optimization (avoiding N+1 problems, rewriting inefficient queries), batch operations, denormalization for read-heavy workloads, connection pooling, and monitoring with slow query logs.
 
 # Сводка (RU)
 
@@ -44,7 +44,7 @@ Database performance optimization involves improving query execution speed, redu
 
 ## Overview / Обзор
 
-Database performance optimization involves improving query execution speed, reducing resource consumption, and ensuring scalability. Key areas include indexing, query optimization, caching, and hardware tuning.
+`Database` performance optimization involves improving query execution speed, reducing resource consumption, and ensuring scalability. Key areas include indexing, query optimization, caching, and hardware tuning.
 
 Оптимизация производительности БД включает улучшение скорости выполнения запросов, снижение потребления ресурсов и обеспечение масштабируемости.
 

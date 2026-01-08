@@ -1,4 +1,4 @@
----
+---\
 id: android-266
 title: "Large File Upload App / Загрузка больших файлов в приложении"
 aliases: [File Upload Android, Large File Upload, WorkManager Upload, Загрузка больших файлов]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
 
----
+---\
 # Вопрос (RU)
 
 > Как бы вы реализовали приложение, которое может загружать большие файлы на сервер?
@@ -52,9 +52,9 @@ tags: [android/background-execution, android/coroutines, android/networking-http
 
 **Ключевые компоненты:**
 
-1. **WorkManager** - надёжное планирование и выполнение в фоне (с поддержкой foreground-режима).
-2. **Retrofit + OkHttp** - multipart загрузка с прогрессом.
-3. **Foreground (WorkManager + ForegroundInfo)** - видимая пользователю длительная операция.
+1. **`WorkManager`** - надёжное планирование и выполнение в фоне (с поддержкой foreground-режима).
+2. **`Retrofit` + `OkHttp`** - multipart загрузка с прогрессом.
+3. **Foreground (`WorkManager` + ForegroundInfo)** - видимая пользователю длительная операция.
 4. **Chunked Upload** - разбиение на части для файлов >100MB (по согласованному с backend протоколу).
 5. **Retry Logic** - автоматические повторы при сетевых ошибках.
 
@@ -116,7 +116,7 @@ class CountingSink(
 }
 ```
 
-Пример интеграции с OkHttp:
+Пример интеграции с `OkHttp`:
 
 ```kotlin
 // Пример: оборачиваем исходный RequestBody в ProgressRequestBody перед созданием MultipartBody.Part
@@ -312,8 +312,8 @@ class ChunkedUploadWorker(
 
 ### Лучшие Практики
 
-- Использовать WorkManager для надёжного планирования и выполнения задач с учётом ограничений ОС.
-- Для длительных операций в фоне использовать foreground-режим через WorkManager + ForegroundInfo.
+- Использовать `WorkManager` для надёжного планирования и выполнения задач с учётом ограничений ОС.
+- Для длительных операций в фоне использовать foreground-режим через `WorkManager` + ForegroundInfo.
 - Разбивать большие файлы на chunks при ограничениях по времени/стабильности сети и для поддержки возобновления.
 - Добавлять constraints (сеть, батарея).
 - Реализовать exponential backoff для retry.
@@ -333,8 +333,8 @@ class ChunkedUploadWorker(
 |--------|-------|--------|
 | **Простая загрузка** | Проще реализация | Не подходит для очень больших файлов / нестабильных сетей |
 | **Chunked upload** | Поддержка pause/resume, устойчивость к сбоям | Требует поддержки на backend |
-| **WorkManager** | Надёжное планирование, учет ограничений ОС | Не мгновенный запуск |
-| **Foreground `Service`** | Высокий приоритет, контроль пользователем | Требует уведомление; для фоновых задач предпочтительно использовать через WorkManager |
+| **`WorkManager`** | Надёжное планирование, учет ограничений ОС | Не мгновенный запуск |
+| **Foreground `Service`** | Высокий приоритет, контроль пользователем | Требует уведомление; для фоновых задач предпочтительно использовать через `WorkManager` |
 
 ---
 
@@ -364,9 +364,9 @@ class ChunkedUploadWorker(
 
 **Key Components:**
 
-1. **WorkManager** - robust background scheduling and execution (with foreground support).
-2. **Retrofit + OkHttp** - multipart upload with progress.
-3. **Foreground (WorkManager + ForegroundInfo)** - user-visible long-running operation.
+1. **`WorkManager`** - robust background scheduling and execution (with foreground support).
+2. **`Retrofit` + `OkHttp`** - multipart upload with progress.
+3. **Foreground (`WorkManager` + ForegroundInfo)** - user-visible long-running operation.
 4. **Chunked Upload** - split large files into parts (protocol aligned with backend).
 5. **Retry Logic** - automatic retry on network-related failures.
 
@@ -624,8 +624,8 @@ class ChunkedUploadWorker(
 
 ### Best Practices
 
-- Use WorkManager for robust scheduling that respects OS constraints.
-- Use foreground mode via WorkManager + ForegroundInfo for long-running uploads.
+- Use `WorkManager` for robust scheduling that respects OS constraints.
+- Use foreground mode via `WorkManager` + ForegroundInfo for long-running uploads.
 - Split very large files into chunks when needed for reliability/time limits and to support resume.
 - Add constraints (network, battery).
 - Implement exponential backoff for retry.
@@ -645,8 +645,8 @@ class ChunkedUploadWorker(
 |----------|------|------|
 | **Simple upload** | Easier implementation | Not suitable for very large files / unstable networks |
 | **Chunked upload** | Supports pause/resume, resilient to failures | Requires backend support |
-| **WorkManager** | Robust scheduling, respects OS limits | Not instant start |
-| **Foreground `Service`** | Higher priority, user-visible | Requires notification; for background uploads prefer via WorkManager |
+| **`WorkManager`** | Robust scheduling, respects OS limits | Not instant start |
+| **Foreground `Service`** | Higher priority, user-visible | Requires notification; for background uploads prefer via `WorkManager` |
 
 ---
 
@@ -670,14 +670,14 @@ class ChunkedUploadWorker(
 
 - [[c-android-components]]
 - [[c-coroutines]]
-- Документация Android WorkManager: https://developer.android.com/topic/libraries/architecture/workmanager
-- Документация Retrofit: https://square.github.io/retrofit/
+- Документация Android `WorkManager`: https://developer.android.com/topic/libraries/architecture/workmanager
+- Документация `Retrofit`: https://square.github.io/retrofit/
 
 ## References
 
 - [[c-android-components]]
 - [[c-coroutines]]
-- [Android WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
+- [Android `WorkManager` Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Retrofit Documentation](https://square.github.io/retrofit/)
 
 ## Связанные Вопросы (RU)

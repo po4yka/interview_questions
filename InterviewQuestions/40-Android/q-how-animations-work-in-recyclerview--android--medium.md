@@ -1,4 +1,4 @@
----
+---\
 id: android-201
 title: How Animations Work In RecyclerView / Как работают анимации в RecyclerView
 aliases: [How Animations Work In RecyclerView, Как работают анимации в RecyclerView]
@@ -15,22 +15,22 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 
----
+---\
 # Вопрос (RU)
-> Как работают анимации в RecyclerView
+> Как работают анимации в `RecyclerView`
 
 # Question (EN)
-> How Animations Work In RecyclerView
+> How Animations Work In `RecyclerView`
 
 ---
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько способов реализации анимаций: от простых встроенных до сложных кастомных. Анимации можно применять на разных уровнях: на уровне элементов, адаптера и через пользовательские `ItemAnimator`.
+`RecyclerView` предоставляет несколько способов реализации анимаций: от простых встроенных до сложных кастомных. Анимации можно применять на разных уровнях: на уровне элементов, адаптера и через пользовательские `ItemAnimator`.
 
 Ключевые механизмы:
 - `ItemAnimator`: отвечает за анимации добавления/удаления/перемещения/изменения при уведомлениях адаптера.
-- Анимации во время биндинга (`onBindViewHolder`) и property-анимации: управляют тем, как появляются и меняются `View` при привязке данных (RecyclerView не использует стандартные `LayoutAnimation` для дочерних элементов, поэтому анимации делаются через `ItemAnimator` и анимации свойств).
+- Анимации во время биндинга (`onBindViewHolder`) и property-анимации: управляют тем, как появляются и меняются `View` при привязке данных (`RecyclerView` не использует стандартные `LayoutAnimation` для дочерних элементов, поэтому анимации делаются через `ItemAnimator` и анимации свойств).
 - `ItemTouchHelper` и shared element transitions: для анимаций взаимодействия (свайпы/drag) и переходов между экранами.
 
 ### 1. Использование DefaultItemAnimator
@@ -57,7 +57,7 @@ recyclerView.itemAnimator = DefaultItemAnimator()
 - Вызывать `dispatchAddStarting`/`dispatchAddFinished` и аналогичные методы в нужные моменты.
 - Управлять и отменять анимации в `endAnimation`/`endAnimations`.
 - Возвращать `true` только при реальном запуске анимации.
-- В конечном итоге вызывать `dispatchAnimationFinished(holder)` (напрямую или через базовую реализацию), чтобы RecyclerView знал об окончании анимации.
+- В конечном итоге вызывать `dispatchAnimationFinished(holder)` (напрямую или через базовую реализацию), чтобы `RecyclerView` знал об окончании анимации.
 
 Упрощённый пример анимации появления (для иллюстрации, без полной реализации всех методов и служебной логики управления списками pending/running):
 
@@ -229,7 +229,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 
 ### 6. Использование Сторонних Библиотек
 
-Можно использовать библиотеки (например, RecyclerView Animators) для готовых анимаций элементов:
+Можно использовать библиотеки (например, `RecyclerView` Animators) для готовых анимаций элементов:
 
 ```kotlin
 // Пример использования (подключение зависимости не показано)
@@ -414,16 +414,16 @@ if (!context.isGlobalAnimationsDisabled()) {
 ---
 
 ## Answer (EN)
-RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and via custom `ItemAnimator`s.
+`RecyclerView` provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and via custom `ItemAnimator`s.
 
 Key mechanisms:
 - `ItemAnimator`: handles add/remove/move/change animations when the adapter notifies item changes.
-- View property animations in `onBindViewHolder` and programmatic layout/position changes: control how views appear as they are bound (RecyclerView does not use standard `LayoutAnimation` for its children; animations are driven via `ItemAnimator` and property animations).
+- `View` property animations in `onBindViewHolder` and programmatic layout/position changes: control how views appear as they are bound (`RecyclerView` does not use standard `LayoutAnimation` for its children; animations are driven via `ItemAnimator` and property animations).
 - `ItemTouchHelper` and shared element transitions: for interaction and navigation related animations.
 
 ### 1. Using DefaultItemAnimator
 
-The simplest approach is using the built-in `DefaultItemAnimator` (enabled by default for many RecyclerView setups):
+The simplest approach is using the built-in `DefaultItemAnimator` (enabled by default for many `RecyclerView` setups):
 
 ```kotlin
 val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
@@ -442,10 +442,10 @@ recyclerView.itemAnimator = DefaultItemAnimator()
 
 You can create a custom `ItemAnimator` by extending `SimpleItemAnimator` or `DefaultItemAnimator`. A correct implementation must:
 - Override `animateAdd`/`animateRemove`/`animateMove`/`animateChange` as needed.
-- Call `dispatchAddStarting`/`dispatchAddFinished`, etc., at appropriate times.
+- `Call` `dispatchAddStarting`/`dispatchAddFinished`, etc., at appropriate times.
 - Manage and cancel running animations in `endAnimation`/`endAnimations`.
 - Return `true` only when an animation was started.
-- Eventually call `dispatchAnimationFinished(holder)` (directly or via base helpers) so RecyclerView knows the animation is complete.
+- Eventually call `dispatchAnimationFinished(holder)` (directly or via base helpers) so `RecyclerView` knows the animation is complete.
 
 Conceptual example for a fade-in on add (simplified; production code should also implement other required methods and proper cleanup of pending/running animations):
 
@@ -618,7 +618,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 
 ### 6. Using Third-Party Libraries
 
-You can use libraries like RecyclerView Animators to get ready-made item animators:
+You can use libraries like `RecyclerView` Animators to get ready-made item animators:
 
 ```kotlin
 // Example usage (library dependency not shown here)
@@ -689,7 +689,7 @@ class AnimatedAdapter(private val items: MutableList<String>) :
 
 ### 8. Shared Element Transitions
 
-For transitions between a RecyclerView item and a detail screen, you can use shared element transitions:
+For transitions between a `RecyclerView` item and a detail screen, you can use shared element transitions:
 
 ```kotlin
 class Item(val id: Long)

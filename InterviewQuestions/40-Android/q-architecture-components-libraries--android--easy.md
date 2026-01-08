@@ -1,4 +1,4 @@
----
+---\
 id: android-208
 title: Architecture Components Libraries / Библиотеки Architecture Components
 aliases: [Architecture Components Libraries, Библиотеки Architecture Components]
@@ -16,7 +16,7 @@ created: 2024-10-15
 updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
 
----
+---\
 # Вопрос (RU)
 > Что такое Android Architecture Components и зачем они нужны?
 
@@ -32,7 +32,7 @@ tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/ea
 ### Ключевые Принципы
 
 - **Separation of concerns**: UI не содержит бизнес-логику
-- **Lifecycle-aware**: компоненты автоматически реагируют на lifecycle events
+- **`Lifecycle`-aware**: компоненты автоматически реагируют на lifecycle events
 - **Unidirectional data flow**: `ViewModel` → UI (предсказуемость состояния)
 - **Testability**: слои изолированы через чёткие контракты
 
@@ -76,7 +76,7 @@ lifecycleScope.launch {
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; аннотации (@Entity, @Dao, @Database); поддержка `Flow`/`LiveData`; migration automation.
+Compile-time SQL validation; аннотации (@`Entity`, @`Dao`, @`Database`); поддержка `Flow`/`LiveData`; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -153,7 +153,7 @@ UI Layer (Compose / Views)
 
 **Trade-offs**:
 - ✅ Проверенные решения для типичных проблем
-- ✅ Lifecycle-aware по умолчанию
+- ✅ `Lifecycle`-aware по умолчанию
 - ❌ Boilerplate для простых экранов
 - ❌ Learning curve для junior разработчиков
 
@@ -166,7 +166,7 @@ UI Layer (Compose / Views)
 ### Key Principles
 
 - **Separation of concerns**: UI doesn't contain business logic
-- **Lifecycle-aware**: components automatically react to lifecycle events
+- **`Lifecycle`-aware**: components automatically react to lifecycle events
 - **Unidirectional data flow**: `ViewModel` → UI (state predictability)
 - **Testability**: layers isolated via clear contracts
 
@@ -210,7 +210,7 @@ lifecycleScope.launch {
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; annotations (@Entity, @Dao, @Database); `Flow`/`LiveData` support; migration automation.
+Compile-time SQL validation; annotations (@`Entity`, @`Dao`, @`Database`); `Flow`/`LiveData` support; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -287,7 +287,7 @@ UI Layer (Compose / Views)
 
 **Trade-offs**:
 - ✅ Battle-tested solutions for common problems
-- ✅ Lifecycle-aware by default
+- ✅ `Lifecycle`-aware by default
 - ❌ Boilerplate for simple screens
 - ❌ Learning curve for juniors
 
@@ -297,16 +297,16 @@ UI Layer (Compose / Views)
 
 - Когда стоит использовать `StateFlow` вместо `LiveData` в современном Android?
 - Как `ViewModel` переживает конфигурационные изменения без сохранения в state bundle?
-- В чем разница между запросами Room с `Flow` и с `LiveData`?
-- Когда следует использовать WorkManager, а когда ForegroundService или корутины?
+- В чем разница между запросами `Room` с `Flow` и с `LiveData`?
+- Когда следует использовать `WorkManager`, а когда ForegroundService или корутины?
 - Как заскопить `ViewModel` к графу навигации по сравнению с `Activity`?
 
 ## Follow-ups
 
 - When should you use `StateFlow` vs `LiveData` in modern Android?
 - How does `ViewModel` survive configuration changes without saving state bundle?
-- What's the difference between Room's `Flow` vs `LiveData` queries?
-- When should you use WorkManager vs ForegroundService vs Coroutines?
+- What's the difference between `Room`'s `Flow` vs `LiveData` queries?
+- When should you use `WorkManager` vs ForegroundService vs Coroutines?
 - How do you scope a `ViewModel` to a Navigation graph vs `Activity`?
 
 ## Ссылки (RU)

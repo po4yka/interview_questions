@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-accessibility, c-compose-semantics, c-touch-input, c-material-design, c-theming]
+moc: "moc-cs"
+related: ["c-accessibility", "c-compose-semantics", "c-touch-input", "c-material-design", "c-theming"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

@@ -1,4 +1,4 @@
----
+---\
 id: android-326
 title: "MVI Architecture / Архитектура MVI"
 aliases: [Model-View-Intent, MVI, MVI паттерн, Архитектура MVI]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
 
----
+---\
 # Вопрос (RU)
 > Объясните архитектурный паттерн MVI (Model-`View`-`Intent`). В чем его ключевые отличия от MVVM?
 
@@ -26,7 +26,7 @@ tags: [android/architecture-mvi, android/coroutines, android/ui-state, architect
 
 ## Ответ (RU)
 
-**MVI (Model-`View`-`Intent`)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (`Intent`), обрабатываемые предсказуемым слоем (ViewModel / Store / Processor), который вычисляет новый `Model`.
+**MVI (Model-`View`-`Intent`)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (`Intent`), обрабатываемые предсказуемым слоем (`ViewModel` / Store / Processor), который вычисляет новый `Model`.
 
 ### Компоненты MVI
 
@@ -38,7 +38,7 @@ Intent → Processor/ViewModel → Model (State) → View → Intent
 1. **`Intent`** - намерения пользователя или внешние события (клик, ввод текста, загрузка данных)
 2. **Model** - единое иммутабельное состояние UI (data class)
 3. **`View`** - отрисовывает UI на основе Model и отправляет `Intent`
-4. **Processor / ViewModel / Store** - обрабатывает `Intent` → создает новый Model (Reducer / UseCase / Middleware)
+4. **Processor / `ViewModel` / Store** - обрабатывает `Intent` → создает новый Model (Reducer / UseCase / Middleware)
 
 ### Базовая Реализация
 
@@ -122,7 +122,7 @@ fun UserScreen(
 |--------|------|-----|
 | **State** | Множественные `LiveData`/`StateFlow` | Единое иммутабельное состояние |
 | **Updates** | Прямые вызовы методов | Через `Intent` |
-| **Data flow** | Потенциально двунаправленный (View ↔ ViewModel) | Строго однонаправленный |
+| **Data flow** | Потенциально двунаправленный (`View` ↔ `ViewModel`) | Строго однонаправленный |
 | **Testability** | Хорошая | Отличная (чистые функции для reducer'ов) |
 | **Boilerplate** | Обычно меньше | Обычно больше |
 | **Predictability** | Средняя | Высокая |
@@ -429,7 +429,7 @@ class DebuggableViewModel<I, S>(
 
 ## Answer (EN)
 
-**MVI (Model-`View`-`Intent`)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and updated only through explicit `Intents` handled by a predictable layer (ViewModel / Store / Processor) that computes the next `Model`.
+**MVI (Model-`View`-`Intent`)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and updated only through explicit `Intents` handled by a predictable layer (`ViewModel` / Store / Processor) that computes the next `Model`.
 
 ### MVI Components
 
@@ -441,7 +441,7 @@ Intent → Processor/ViewModel → Model (State) → View → Intent
 1. **`Intent`** - user actions or external events
 2. **Model** - single immutable UI state
 3. **`View`** - renders UI from Model and emits `Intent`s
-4. **Processor / ViewModel / Store** - processes `Intent` → produces new Model (Reducer / UseCase / Middleware)
+4. **Processor / `ViewModel` / Store** - processes `Intent` → produces new Model (Reducer / UseCase / Middleware)
 
 ### Basic Implementation
 
@@ -525,7 +525,7 @@ fun UserScreen(
 |--------|------|-----|
 | **State** | Multiple `LiveData`/`StateFlow` | Single immutable state |
 | **Updates** | Direct method calls | `Intent`-based |
-| **Data flow** | Potentially bi-directional (View ↔ ViewModel) | Strictly unidirectional |
+| **Data flow** | Potentially bi-directional (`View` ↔ `ViewModel`) | Strictly unidirectional |
 | **Testability** | Good | Excellent (pure reducers) |
 | **Boilerplate** | Usually less | Usually more |
 | **Predictability** | Medium | High |

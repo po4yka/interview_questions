@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-002
 title: "SQL vs NoSQL Databases / SQL vs NoSQL базы данных"
 aliases: ["SQL vs NoSQL базы данных", "SQL vs NoSQL"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [databases, difficulty/medium, nosql, scalability, sql, system-design]
 sources: ["https://en.wikipedia.org/wiki/NoSQL"]
 
----
+---\
 # Вопрос (RU)
 > Каковы ключевые различия между SQL и NoSQL базами данных? Когда следует использовать каждый тип, и каковы компромиссы?
 
@@ -284,7 +284,7 @@ class OrderService(
 - High availability and fault tolerance.
 - Performance suitable for target workloads.
 
-**Database Theory:**
+**`Database` Theory:**
 Choosing between SQL and NoSQL is one of the key decisions in system design. SQL (relational DBs) are traditionally associated with ACID transactions and strong consistency models, but horizontal scaling is more complex and usually involves sharding/replication. Many NoSQL systems are designed for horizontal scaling and flexible schemas, often use eventual or tunable consistency, but guarantees vary by engine and configuration. See also [[q-cap-theorem-distributed-systems--system-design--hard]].
 
 ### Architecture

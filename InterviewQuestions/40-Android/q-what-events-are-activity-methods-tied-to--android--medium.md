@@ -1,4 +1,4 @@
----
+---\
 id: android-290
 title: Activity Methods and Events / Методы Activity и события
 aliases: [Activity Methods Events, Методы Activity]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/lifecycle, difficulty/medium, events, lifecycle]
 
----
+---\
 # Вопрос (RU)
 > К каким событиям привязаны методы `Activity`?
 
@@ -417,7 +417,7 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
 ### Многооконный Режим (Android 7.0+)
 
-`onMultiWindowModeChanged(isInMultiWindowMode: `Boolean`)` вызывается при входе/выходе из многооконного режима и дополняет основные методы жизненного цикла.
+`onMultiWindowModeChanged(isInMultiWindowMode: ``Boolean``)` вызывается при входе/выходе из многооконного режима и дополняет основные методы жизненного цикла.
 
 ```kotlin
 override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
@@ -934,7 +934,7 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
 ### Multi-Window Events (Android 7.0+)
 
-`onMultiWindowModeChanged(isInMultiWindowMode: `Boolean`)` is called when the `Activity` enters or exits multi-window mode. It complements (does not replace) the core lifecycle.
+`onMultiWindowModeChanged(isInMultiWindowMode: ``Boolean``)` is called when the `Activity` enters or exits multi-window mode. It complements (does not replace) the core lifecycle.
 
 ```kotlin
 override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
@@ -980,7 +980,7 @@ override fun onPictureInPictureModeChanged(
 - Scenario 1: User Opens App
   - `onCreate()` → `onStart()` → `onResume()` → [User interacts]
 
-- Scenario 2: User Presses Home Button
+- Scenario 2: User Presses Home `Button`
   - `onPause()` → `onStop()` (often with `onSaveInstanceState()` before `onStop()`, but this is not strictly guaranteed for all cases)
 
 - Scenario 3: User Returns to App
@@ -989,7 +989,7 @@ override fun onPictureInPictureModeChanged(
 - Scenario 4: User Rotates Screen (default)
   - `onPause()` → `onSaveInstanceState()` → `onStop()` → `onDestroy()` → `onCreate()` → `onStart()` → `onRestoreInstanceState()` → `onResume()`
 
-- Scenario 5: User Presses Back Button
+- Scenario 5: User Presses Back `Button`
   - `onPause()` → `onStop()` → `onDestroy()` (without guaranteed `onSaveInstanceState()`)
 
 - Scenario 6: Temporary Interruption (e.g., phone call UI)

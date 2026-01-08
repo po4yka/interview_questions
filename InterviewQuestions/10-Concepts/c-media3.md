@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-002
-title: Media3 / Media3
-aliases: [Android Media3, Media3]
-kind: concept
-summary: Unified Jetpack media stack replacing ExoPlayer and legacy media components
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, concept, exoplayer, media, media3]
+id: "20260108-110550"
+title: "Media3 / Media3"
+aliases: ["Android Media3", "Media3"]
+summary: "Unified Jetpack media stack replacing ExoPlayer and legacy media components"
+topic: "android"
+subtopics: ["exoplayer", "media", "media3"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "concept", "exoplayer", "media", "media3", "difficulty/medium"]
 ---
 
 # Summary (EN)

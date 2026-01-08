@@ -1,53 +1,60 @@
----
-id: ivc-20251030-122939
-title: Fragments / Фрагменты
-aliases: [Android Fragment, Fragment, Фрагмент, Фрагменты]
-kind: concept
-summary: Reusable UI component with its own lifecycle, part of an Activity
-links: []
-related: [c-activity-lifecycle, c-fragment-lifecycle, c-navigation, c-viewmodel, c-single-activity-architecture]
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, android-components, concept, fragments, ui]
----
+---\
+id: "20251030-122939"
+title: "Fragments / Фрагменты"
+aliases: ["Android Fragment", "Fragment", "Фрагмент", "Фрагменты"]
+summary: "Reusable UI component with its own lifecycle, part of an Activity"
+topic: "android"
+subtopics: ["android-components", "fragments", "ui"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: ["c-activity-lifecycle", "c-fragment-lifecycle", "c-navigation", "c-viewmodel", "c-single-activity-architecture"]
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "android-components", "concept", "fragments", "ui", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-A **Fragment** is a modular, reusable UI component in Android that represents a portion of the user interface within an Activity. Fragments have their own lifecycle, receive their own input events, and can be added or removed while the Activity is running. They enable flexible UI designs, multi-pane layouts (tablets), and modular navigation patterns.
+A **`Fragment`** is a modular, reusable UI component in Android that represents a portion of the user interface within an `Activity`. Fragments have their own lifecycle, receive their own input events, and can be added or removed while the `Activity` is running. They enable flexible UI designs, multi-pane layouts (tablets), and modular navigation patterns.
 
 **Key Characteristics**:
-- **Lifecycle**: Independent lifecycle nested within Activity lifecycle
-- **Reusability**: Same Fragment can be used in multiple Activities or configurations
+- **`Lifecycle`**: Independent lifecycle nested within `Activity` lifecycle
+- **Reusability**: Same `Fragment` can be used in multiple Activities or configurations
 - **Modularity**: Encapsulates UI logic and behavior
 - **BackStack**: FragmentManager handles transaction history and back navigation
-- **Modern Pattern**: Single-Activity architecture with Fragment-based navigation (Navigation Component)
+- **Modern Pattern**: Single-`Activity` architecture with `Fragment`-based navigation (Navigation `Component`)
 
 **Core Components**:
 - `Fragment`: Base class for UI components
-- `FragmentManager`: Manages Fragment transactions and back stack
+- `FragmentManager`: Manages `Fragment` transactions and back stack
 - `FragmentTransaction`: API for adding, replacing, removing Fragments
 - `FragmentContainerView`: Recommended container for hosting Fragments
 
 # Сводка (RU)
 
-**Fragment** — это модульный, переиспользуемый UI-компонент в Android, представляющий часть пользовательского интерфейса внутри Activity. Фрагменты имеют собственный жизненный цикл, получают собственные события ввода и могут добавляться или удаляться во время работы Activity. Они обеспечивают гибкий дизайн UI, многопанельные макеты (планшеты) и модульную навигацию.
+**`Fragment`** — это модульный, переиспользуемый UI-компонент в Android, представляющий часть пользовательского интерфейса внутри `Activity`. Фрагменты имеют собственный жизненный цикл, получают собственные события ввода и могут добавляться или удаляться во время работы `Activity`. Они обеспечивают гибкий дизайн UI, многопанельные макеты (планшеты) и модульную навигацию.
 
 **Ключевые характеристики**:
-- **Жизненный цикл**: Независимый жизненный цикл, вложенный в жизненный цикл Activity
-- **Переиспользуемость**: Один Fragment можно использовать в нескольких Activity или конфигурациях
+- **Жизненный цикл**: Независимый жизненный цикл, вложенный в жизненный цикл `Activity`
+- **Переиспользуемость**: Один `Fragment` можно использовать в нескольких `Activity` или конфигурациях
 - **Модульность**: Инкапсулирует UI-логику и поведение
 - **BackStack**: FragmentManager управляет историей транзакций и навигацией назад
-- **Современный паттерн**: Архитектура Single-Activity с навигацией на основе Fragment (Navigation Component)
+- **Современный паттерн**: Архитектура Single-`Activity` с навигацией на основе `Fragment` (Navigation `Component`)
 
 **Основные компоненты**:
 - `Fragment`: Базовый класс для UI-компонентов
-- `FragmentManager`: Управляет транзакциями Fragment и стеком назад
-- `FragmentTransaction`: API для добавления, замены, удаления Fragment
-- `FragmentContainerView`: Рекомендуемый контейнер для размещения Fragment
+- `FragmentManager`: Управляет транзакциями `Fragment` и стеком назад
+- `FragmentTransaction`: API для добавления, замены, удаления `Fragment`
+- `FragmentContainerView`: Рекомендуемый контейнер для размещения `Fragment`
 
 ## Fragment Lifecycle
 
-**Lifecycle States** (relative to Activity):
+**`Lifecycle` States** (relative to `Activity`):
 ```
 Activity Created → Fragment:
   onAttach() → onCreate() → onCreateView() → onViewCreated() → onStart() → onResume()
@@ -60,10 +67,10 @@ Activity Destroyed → Fragment:
 ```
 
 **Key Methods**:
-- `onCreateView()`: Inflate Fragment layout
+- `onCreateView()`: Inflate `Fragment` layout
 - `onViewCreated()`: Initialize views after inflation (recommended place for view setup)
 - `onDestroyView()`: Clean up view references (avoid memory leaks)
-- `onAttach()`/`onDetach()`: Fragment attached/detached from Activity
+- `onAttach()`/`onDetach()`: `Fragment` attached/detached from `Activity`
 
 **ViewLifecycleOwner**: Use `viewLifecycleOwner` for observing LiveData/Flow to avoid leaks after view destruction.
 
@@ -96,16 +103,16 @@ supportFragmentManager.commit {
 ## Use Cases / Trade-offs
 
 **Use Cases**:
-- **Single-Activity Architecture**: Modern pattern with Navigation Component (primary use case)
+- **Single-`Activity` Architecture**: Modern pattern with Navigation `Component` (primary use case)
 - **Multi-pane Layouts**: Master-detail UI for tablets (list + detail in same screen)
 - **Modular UI**: Reusable components across multiple screens
 - **ViewPager**: Tab-based navigation with swipeable screens
-- **Dialog Fragments**: Modal dialogs with Fragment lifecycle
+- **Dialog Fragments**: Modal dialogs with `Fragment` lifecycle
 
 **Modern Approach** (2025):
-- **Preferred**: Single Activity + Fragments + Navigation Component
+- **Preferred**: Single `Activity` + Fragments + Navigation `Component`
 - **Jetpack Compose**: Fragments less necessary, but still used for interop and gradual migration
-- **ViewModel Scoping**: Share ViewModels between Activity and Fragments using `activityViewModels()`
+- **`ViewModel` Scoping**: Share ViewModels between `Activity` and Fragments using `activityViewModels()`
 
 **Trade-offs**:
 - **Complexity**: Additional lifecycle layer adds complexity vs simple Activities
@@ -116,7 +123,7 @@ supportFragmentManager.commit {
 **Deprecated Patterns**:
 - Avoid `<fragment>` tag in XML (use `FragmentContainerView`)
 - Avoid `setRetainInstance(true)` (use ViewModels instead)
-- Avoid multiple Activities (prefer Single-Activity + Fragments)
+- Avoid multiple Activities (prefer Single-`Activity` + Fragments)
 
 ## References
 
@@ -124,4 +131,4 @@ supportFragmentManager.commit {
 - [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
 - [FragmentManager](https://developer.android.com/guide/fragments/fragmentmanager)
 - [Navigation Component](https://developer.android.com/guide/navigation)
-- [Single-Activity Architecture](https://www.youtube.com/watch?v=2k8x8V77CrU)
+- [Single-`Activity` Architecture](https://www.youtube.com/watch?v=2k8x8V77CrU)

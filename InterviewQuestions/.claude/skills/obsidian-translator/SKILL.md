@@ -1,11 +1,11 @@
----
+---\
 name: obsidian-translator
 description: >
   Add missing language translations to existing bilingual notes. Identifies
   which language sections (EN or RU) are missing, translates while preserving
   code blocks and links, updates language_tags YAML field, and maintains
   status as draft. Ensures both languages have equivalent content.
----
+---\
 
 # Obsidian Note Translator
 
@@ -278,9 +278,9 @@ fun fibonacci(n: Int): Int {
 ### Technical Terms
 
 **Keep in English when widely understood**:
-- Coroutine, Flow, ViewModel, Compose
+- `Coroutine`, `Flow`, `ViewModel`, Compose
 - Algorithm names (Binary Search, DFS, BFS)
-- Data structures (HashMap, ArrayList)
+- Data structures (`HashMap`, `ArrayList`)
 - Design patterns (MVVM, MVI, Singleton)
 
 **Translate when Russian equivalent is standard**:

@@ -1,4 +1,4 @@
----
+---\
 id: android-635
 title: Play Data Safety Workflow / Процесс Play Data Safety
 aliases: [Play Data Safety Workflow, Процесс Play Data Safety]
@@ -20,7 +20,7 @@ sources:
   - url: "https://support.google.com/googleplay/android-developer/answer/10787478"
     note: "Data safety best practices guide"
 
----
+---\
 # Вопрос (RU)
 > Как организовать процесс заполнения и поддержки Play Data Safety: инвентаризация данных, согласование с командами, автоматизация проверки и обновление формы при релизах?
 
@@ -40,8 +40,8 @@ sources:
 ### 1. Инвентаризация И Моделирование Данных
 
 - Составьте каталог данных: что собираем, зачем, где хранится, как долго.
-- Разделите на категории Play (Data Collection, Sharing, Security Practices) в терминах актуальной формы.
-- Обновляйте модель при изменениях схемы (Room, Proto, network DTO) через статический анализ и code review.
+- Разделите на категории Play (Data `Collection`, Sharing, Security Practices) в терминах актуальной формы.
+- Обновляйте модель при изменениях схемы (`Room`, Proto, network DTO) через статический анализ и code review.
 
 ### 2. Совместная Работа С privacy/compliance
 
@@ -112,8 +112,8 @@ sources:
 ### 1. Data Inventory and Modeling
 
 - Build a data catalog: what is collected, why, where it is stored, and for how long.
-- Explicitly map each item to the Play Data Safety form categories: Data Collection, Data Sharing, Security Practices.
-- Keep the model in sync with implementation by tracking schema artifacts (Room entities, Proto definitions, network DTOs) and enforcing updates via static analysis and code review.
+- Explicitly map each item to the Play Data Safety form categories: Data `Collection`, Data Sharing, Security Practices.
+- Keep the model in sync with implementation by tracking schema artifacts (`Room` entities, Proto definitions, network DTOs) and enforcing updates via static analysis and code review.
 
 ### 2. Collaboration with privacy/compliance
 

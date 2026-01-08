@@ -1,4 +1,4 @@
----
+---\
 id: android-022
 title: "HTTP vs Long-Polling vs WebSocket vs SSE / HTTP против Long-Polling против WebSocket против SSE"
 aliases: [HTTP Protocols Comparison, WebSocket vs HTTP, WebSocket против HTTP, Протоколы HTTP]
@@ -16,7 +16,7 @@ created: 2025-10-06
 updated: 2025-10-28
 tags: [android/networking-http, android/performance-memory, android/websockets, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > В чем разница между HTTP, `Long`-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
 
@@ -270,8 +270,8 @@ class SSEClient(private val client: OkHttpClient) {
 
 | Protocol | Direction | Connection | Latency | Real-time | Use Case |
 |----------|-----------|------------|---------|-----------|----------|
-| HTTP | Request→Response | New/multiplexed | Higher for frequent polling | No | REST API, CRUD |
-| `Long`-Polling | Request→Response | Held | Medium | Near | Notifications (fallback) |
+| HTTP | `Request`→`Response` | New/multiplexed | Higher for frequent polling | No | REST API, CRUD |
+| `Long`-Polling | `Request`→`Response` | Held | Medium | Near | Notifications (fallback) |
 | WebSocket | Bidirectional | Persistent | Low | Yes | Chat, games |
 | SSE | Server→Client | Persistent | Low | Yes | News, tickers |
 
@@ -306,7 +306,7 @@ class UserRepository(private val api: ApiService) {
 
 ### 2. `Long`-Polling
 
-**Model**: Client → long request held until data or timeout → Response → New request.
+**Model**: Client → long request held until data or timeout → `Response` → New request.
 
 **Characteristics:**
 - Server keeps the connection open until data is available or timeout
@@ -365,7 +365,7 @@ class LongPollingClient(
 
 ### 3. WebSocket
 
-**Model**: HTTP handshake → Persistent bidirectional connection → Message exchange.
+**Model**: HTTP handshake → Persistent bidirectional connection → `Message` exchange.
 
 **Characteristics:**
 - Full-duplex communication over a single TCP connection
@@ -532,5 +532,5 @@ class SSEClient(private val client: OkHttpClient) {
 - [[q-network-error-handling-strategies--networking--medium]] - Error handling
 
 ### Advanced (Harder)
-- [[q-okhttp-interceptors-advanced--networking--medium]] - OkHttp patterns
-- [[q-network-request-deduplication--networking--hard]] - Request optimization
+- [[q-okhttp-interceptors-advanced--networking--medium]] - `OkHttp` patterns
+- [[q-network-request-deduplication--networking--hard]] - `Request` optimization

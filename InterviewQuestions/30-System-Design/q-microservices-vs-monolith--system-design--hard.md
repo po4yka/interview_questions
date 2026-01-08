@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-001
 title: "Microservices vs Monolith Architecture / Микросервисы vs Монолитная архитектура"
 aliases: ["Microservices vs Monolith", "Микросервисы vs Монолит"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [architecture, difficulty/hard, distributed-systems, microservices, system-design]
 sources: ["https://en.wikipedia.org/wiki/Microservices"]
 
----
+---\
 # Вопрос (RU)
 > Каковы ключевые различия между микросервисами и монолитной архитектурой? Когда следует использовать каждый подход, и каковы компромиссы?
 
@@ -158,7 +158,7 @@ class OrderService(
 ```
 
 **Микросервисная архитектура:**
-*Теория:* Приложение, состоящее из небольших, независимых сервисов, которые коммуницируют по сети. Каждый сервис — отдельное приложение со своей базой данных (паттерн Database per `Service`), может быть написан на разных языках и развёртывается независимо. ACID-транзакции возможны внутри каждого сервиса и его локальной БД, но не существуют «из коробки» для операций, затрагивающих несколько сервисов и БД.
+*Теория:* Приложение, состоящее из небольших, независимых сервисов, которые коммуницируют по сети. Каждый сервис — отдельное приложение со своей базой данных (паттерн `Database` per `Service`), может быть написан на разных языках и развёртывается независимо. ACID-транзакции возможны внутри каждого сервиса и его локальной БД, но не существуют «из коробки» для операций, затрагивающих несколько сервисов и БД.
 *Архитектура:*
 ```text
 API Gateway/Load Balancer
@@ -229,7 +229,7 @@ class OrderService(
 2. `Service` Discovery
 3. Circuit Breaker
 4. Saga (распределённые транзакции)
-5. Database per `Service`
+5. `Database` per `Service`
 
 **Когда использовать монолит:**
 ✅ Используйте монолит, если:
@@ -290,7 +290,7 @@ Monolithic Application
 - Technology lock-in (one language/framework for everything)
 - Deployment risk (small change requires full redeployment)
 - Development bottleneck (teams stepping on each other)
-- Long build times (large codebase)
+- `Long` build times (large codebase)
 - Hard to understand over time (can become a "big ball of mud")
 *Use cases:* Startups, MVPs, small teams, simple domains, CRUD applications
 ```kotlin
@@ -313,7 +313,7 @@ class OrderService(
 ```
 
 **Microservices Architecture:**
-*Theory:* An application composed of small, independent services communicating over the network. Each service is a separate application with its own database (Database per `Service` pattern), can be written in different languages, and is deployed independently. ACID transactions are possible inside each service and its local DB, but you do not get ACID across multiple services/databases out of the box.
+*Theory:* An application composed of small, independent services communicating over the network. Each service is a separate application with its own database (`Database` per `Service` pattern), can be written in different languages, and is deployed independently. ACID transactions are possible inside each service and its local DB, but you do not get ACID across multiple services/databases out of the box.
 *Architecture:*
 ```text
 API Gateway/Load Balancer
@@ -384,7 +384,7 @@ class OrderService(
 2. `Service` Discovery
 3. Circuit Breaker
 4. Saga (distributed transactions)
-5. Database per `Service`
+5. `Database` per `Service`
 
 **When to Use Monolith:**
 ✅ Use monolith when:

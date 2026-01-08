@@ -1,35 +1,42 @@
----
-id: concept-006
-title: Collections / Коллекции
-aliases: [Collection Framework, Collections, Java Collections, Kotlin Collections, Коллекции]
-kind: concept
-summary: Data structures for storing and manipulating groups of objects, including List, Set, Map, and their implementations in Java and Kotlin.
-links: []
-related: [c-kotlin, c-data-structures, c-functional-programming]
-created: 2025-11-05
-updated: 2025-11-05
-tags: [collections, concept, data-structures, java, kotlin]
----
+---\
+id: "20260108-110549"
+title: "Collections / Коллекции"
+aliases: ["Collection Framework", "Collections", "Java Collections", "Kotlin Collections", "Коллекции"]
+summary: "Data structures for storing and manipulating groups of objects, including List, Set, Map, and their implementations in Java and Kotlin."
+topic: "data-structures"
+subtopics: ["collections", "java", "kotlin"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-algorithms"
+related: ["c-kotlin", "c-data-structures", "c-functional-programming"]
+created: "2025-11-05"
+updated: "2025-11-05"
+tags: ["collections", "concept", "data-structures", "java", "kotlin", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
 **Collections** are data structures that hold and manipulate groups of objects. Both Java and Kotlin provide rich collection frameworks with different interfaces and implementations optimized for various use cases.
 
-**Core Collection Interfaces**:
+**Core `Collection` Interfaces**:
 
-**1. List** (Ordered, allows duplicates):
-- **ArrayList**: Dynamic array, fast random access O(1), slow insertion/deletion O(n)
-- **LinkedList**: Doubly-linked list, fast insertion/deletion O(1), slow random access O(n)
+**1. `List`** (Ordered, allows duplicates):
+- **`ArrayList`**: Dynamic array, fast random access O(1), slow insertion/deletion O(n)
+- **`LinkedList`**: Doubly-linked list, fast insertion/deletion O(1), slow random access O(n)
 - Use case: Maintain insertion order, allow duplicates
 
-**2. Set** (Unordered, unique elements):
-- **HashSet**: Hash table-based, O(1) add/contains/remove, no ordering guarantees
+**2. `Set`** (Unordered, unique elements):
+- **`HashSet`**: Hash table-based, O(1) add/contains/remove, no ordering guarantees
 - **LinkedHashSet**: Hash table + linked list, maintains insertion order
 - **TreeSet**: Red-black tree, O(log n) operations, sorted order
 - Use case: Enforce uniqueness, fast membership testing
 
-**3. Map** (Key-value pairs):
-- **HashMap**: Hash table, O(1) get/put, no ordering guarantees
+**3. `Map`** (Key-value pairs):
+- **`HashMap`**: Hash table, O(1) get/put, no ordering guarantees
 - **LinkedHashMap**: Hash table + linked list, maintains insertion order
 - **TreeMap**: Red-black tree, O(log n) operations, sorted by keys
 - Use case: Associate keys with values, fast lookup by key
@@ -46,7 +53,7 @@ tags: [collections, concept, data-structures, java, kotlin]
 - **Mutable**: `MutableList<T>`, `MutableSet<T>`, `MutableMap<K,V>`
 - Immutability enforced at compile time via interfaces
 
-**Collection Operators**:
+**`Collection` Operators**:
 - `map`, `filter`, `reduce`, `fold`, `groupBy`, `partition`
 - `any`, `all`, `none`, `first`, `last`, `single`
 - Chainable, functional-style operations
@@ -70,19 +77,19 @@ val mutableMap = mutableMapOf("key" to "value")
 
 **Основные интерфейсы коллекций**:
 
-**1. List** (Упорядоченный, допускает дубликаты):
-- **ArrayList**: Динамический массив, быстрый произвольный доступ O(1), медленная вставка/удаление O(n)
-- **LinkedList**: Двусвязный список, быстрая вставка/удаление O(1), медленный произвольный доступ O(n)
+**1. `List`** (Упорядоченный, допускает дубликаты):
+- **`ArrayList`**: Динамический массив, быстрый произвольный доступ O(1), медленная вставка/удаление O(n)
+- **`LinkedList`**: Двусвязный список, быстрая вставка/удаление O(1), медленный произвольный доступ O(n)
 - Применение: Сохранение порядка вставки, разрешение дубликатов
 
-**2. Set** (Неупорядоченный, уникальные элементы):
-- **HashSet**: На основе хеш-таблицы, O(1) добавление/проверка/удаление, без гарантии порядка
+**2. `Set`** (Неупорядоченный, уникальные элементы):
+- **`HashSet`**: На основе хеш-таблицы, O(1) добавление/проверка/удаление, без гарантии порядка
 - **LinkedHashSet**: Хеш-таблица + связный список, сохраняет порядок вставки
 - **TreeSet**: Красно-чёрное дерево, O(log n) операции, отсортированный порядок
 - Применение: Обеспечение уникальности, быстрая проверка принадлежности
 
-**3. Map** (Пары ключ-значение):
-- **HashMap**: Хеш-таблица, O(1) get/put, без гарантии порядка
+**3. `Map`** (Пары ключ-значение):
+- **`HashMap`**: Хеш-таблица, O(1) get/put, без гарантии порядка
 - **LinkedHashMap**: Хеш-таблица + связный список, сохраняет порядок вставки
 - **TreeMap**: Красно-чёрное дерево, O(log n) операции, сортировка по ключам
 - Применение: Связывание ключей со значениями, быстрый поиск по ключу
@@ -121,22 +128,22 @@ val mutableMap = mutableMapOf("key" to "value")
 
 **Choosing the right collection**:
 
-**List vs Set vs Map**:
+**`List` vs `Set` vs `Map`**:
 - Need order and duplicates? → `List`
 - Need uniqueness, no duplicates? → `Set`
 - Need key-value associations? → `Map`
 
-**ArrayList vs LinkedList**:
+**`ArrayList` vs `LinkedList`**:
 - Frequent random access (index-based)? → `ArrayList`
 - Frequent insertions/deletions at beginning/middle? → `LinkedList`
 - Modern advice: Almost always use `ArrayList` (better cache locality)
 
-**HashSet vs TreeSet**:
+**`HashSet` vs TreeSet**:
 - Need sorted order? → `TreeSet`
 - Just need uniqueness and fast operations? → `HashSet`
 - Need insertion order? → `LinkedHashSet`
 
-**HashMap vs TreeMap**:
+**`HashMap` vs TreeMap**:
 - Need sorted keys? → `TreeMap`
 - Just need fast key-value lookup? → `HashMap`
 - Need insertion order? → `LinkedHashMap`
@@ -147,12 +154,12 @@ val mutableMap = mutableMapOf("key" to "value")
 - Read-only collections can still be backed by mutable collections (not true immutability)
 
 **Performance considerations**:
-- **ArrayList**: O(1) get, O(n) add/remove (if resizing or shifting needed)
-- **LinkedList**: O(1) add/remove at ends, O(n) get by index
+- **`ArrayList`**: O(1) get, O(n) add/remove (if resizing or shifting needed)
+- **`LinkedList`**: O(1) add/remove at ends, O(n) get by index
 - **HashSet/HashMap**: O(1) average, O(n) worst case (hash collisions)
 - **TreeSet/TreeMap**: O(log n) for all operations
 
-**Thread safety**:
+**`Thread` safety**:
 - Standard collections are NOT thread-safe
 - Use `Collections.synchronizedList/Set/Map()` for thread-safety (Java)
 - Or use concurrent collections: `ConcurrentHashMap`, `CopyOnWriteArrayList`
@@ -162,5 +169,5 @@ val mutableMap = mutableMapOf("key" to "value")
 - [Java Collections Framework Overview](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/doc-files/coll-overview.html)
 - [Kotlin Collections Overview](https://kotlinlang.org/docs/collections-overview.html)
 - [Effective Java, Chapter 9: Collections](https://www.oreilly.com/library/view/effective-java/9780134686097/)
-- [Java Collection Performance](https://www.baeldung.com/java-collections-complexity)
-- [Kotlin Collection Operations](https://kotlinlang.org/docs/collection-operations.html)
+- [Java `Collection` Performance](https://www.baeldung.com/java-collections-complexity)
+- [Kotlin `Collection` Operations](https://kotlinlang.org/docs/collection-operations.html)

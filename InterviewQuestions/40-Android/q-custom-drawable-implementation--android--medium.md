@@ -1,4 +1,4 @@
----
+---\
 id: android-478
 title: Custom Drawable Implementation / Реализация Custom Drawable
 aliases: [Custom Drawable Implementation, Реализация Custom Drawable]
@@ -16,12 +16,12 @@ updated: 2025-11-10
 tags: [android/ui-graphics, android/ui-views, difficulty/medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
-> Как реализовать Custom Drawable в Android?
+> Как реализовать Custom `Drawable` в Android?
 
 # Question (EN)
-> How to implement a Custom Drawable in Android?
+> How to implement a Custom `Drawable` in Android?
 
 ---
 
@@ -30,13 +30,13 @@ sources: []
 ### Что Такое Custom Drawable
 Легковесный переиспользуемый графический примитив для отображения в нескольких `View`. Эффективнее кастомной `View` для простой неинтерактивной графики — не требует сложного жизненного цикла, управляется системой.
 
-**Когда использовать Drawable**: неинтерактивная графика (иконки, фоны), переиспользование в разных `View`, простые формы и анимации.
+**Когда использовать `Drawable`**: неинтерактивная графика (иконки, фоны), переиспользование в разных `View`, простые формы и анимации.
 
 **Когда использовать Custom `View`**: обработка касаний, сложный жизненный цикл, требования доступности, координация анимаций.
 
 ### Ключевые Методы
 
-**draw(canvas: Canvas)** — основной метод отрисовки, вызывается системой.
+**draw(canvas: `Canvas`)** — основной метод отрисовки, вызывается системой.
 
 **setBounds()** — устанавливает область рисования (координаты и размер).
 
@@ -187,13 +187,13 @@ class PulsingDrawable : Drawable() {
 ### What is Custom Drawable
 Lightweight reusable graphic primitive for display in multiple `View`s. More efficient than Custom `View` for simple non-interactive graphics — no complex lifecycle needed, managed by the system.
 
-**When to use Drawable**: non-interactive graphics (icons, backgrounds), reuse across `View`s, simple shapes and animations.
+**When to use `Drawable`**: non-interactive graphics (icons, backgrounds), reuse across `View`s, simple shapes and animations.
 
 **When to use Custom `View`**: touch handling, complex lifecycle, accessibility requirements, animation coordination.
 
 ### Key Methods
 
-**draw(canvas: Canvas)** — main drawing method called by the system.
+**draw(canvas: `Canvas`)** — main drawing method called by the system.
 
 **setBounds()** — sets drawing area (coordinates and size).
 
@@ -325,7 +325,7 @@ class PulsingDrawable : Drawable() {
 ### Best Practices
 
 1. Cache `Paint` — don't create in `draw()`, causes allocations every frame.
-2. Call `invalidateSelf()` when appearance changes.
+2. `Call` `invalidateSelf()` when appearance changes.
 3. Implement intrinsic sizes for correct `wrap_content` behavior.
 4. Avoid heavy calculations in `draw()` — precompute in `setBounds()` when possible.
 5. Handle `bounds` correctly — system may change them.
@@ -359,7 +359,7 @@ class PulsingDrawable : Drawable() {
 ## Follow-ups
 
 - How to implement compound drawables using LayerDrawable or DrawableContainer?
-- When should you use VectorDrawable vs custom Drawable for scalable graphics?
+- When should you use VectorDrawable vs custom `Drawable` for scalable graphics?
 - How to properly handle density-independent sizing in custom Drawables?
 - What are performance trade-offs of complex `draw()` operations vs bitmap caching?
 - How to implement animated state transitions (StateListAnimator equivalent)?
@@ -380,5 +380,5 @@ class PulsingDrawable : Drawable() {
 
 ### Advanced
 
-- [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas optimization techniques
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced `Canvas` optimization techniques
 - [[q-custom-viewgroup-layout--android--hard]] - Custom `ViewGroup` implementation

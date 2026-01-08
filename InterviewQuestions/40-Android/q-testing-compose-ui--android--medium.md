@@ -1,4 +1,4 @@
----
+---\
 id: android-253
 title: Testing Compose UI / Тестирование Compose UI
 aliases: [Testing Compose UI, Тестирование Compose UI]
@@ -13,9 +13,9 @@ moc: moc-android
 related: [c-jetpack-compose, c-testing, q-compose-core-components--android--medium, q-compose-testing--android--medium, q-compose-ui-testing-advanced--android--hard, q-what-is-diffutil-for--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/testing-ui, android/ui-compose, difficulty/medium, jetpack-compose, testing, ui-testing]
+tags: [android/testing-ui, android/ui-compose, difficulty/medium, testing, ui-testing]
 
----
+---\
 # Вопрос (RU)
 > Тестирование Compose UI
 
@@ -693,7 +693,7 @@ createComposeRule:
 - Creates an isolated Compose test environment.
 - Manages the composition lifecycle.
 - Synchronizes with recompositions and idling resources.
-- Provides finders, assertions, and actions.
+- `Provides` finders, assertions, and actions.
 
 ### Finders - Finding Elements
 
@@ -1322,7 +1322,7 @@ debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
 ### Related (Medium)
 - [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `RecyclerView` in Compose
 - [[q-mutable-state-compose--android--medium]] - MutableState basics
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
 

@@ -14,7 +14,7 @@ related: [c-compose-recomposition, q-compose-performance-optimization--android--
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/hard, recomposition]
+tags: [android, android/performance-rendering, android/ui-compose, difficulty/hard, recomposition]
 ---
 # Вопрос (RU)
 

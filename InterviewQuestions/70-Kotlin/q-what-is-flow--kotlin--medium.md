@@ -1,4 +1,4 @@
----
+---\
 id: lang-076
 title: "What Is Flow / Что такое Flow"
 aliases: [What Is Flow, Что такое Flow]
@@ -14,7 +14,7 @@ related: [c-flow, c-kotlin]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages]
----
+---\
 # Вопрос (RU)
 > Что такое `Flow` в Kotlin?
 
@@ -509,14 +509,14 @@ class FlowBestPractices {
 
 ## Answer (EN)
 
-Flow is a cold asynchronous stream of values built on coroutines. Conceptually, it is similar to a lazy sequence (like `Sequence`/`List`-style operations), but:
+`Flow` is a cold asynchronous stream of values built on coroutines. Conceptually, it is similar to a lazy sequence (like `Sequence`/`List`-style operations), but:
 - it emits values sequentially, one by one;
 - it is non-blocking: it uses suspend functions internally;
 - cancellation is handled via coroutine cancellation of the collector (not a `cancel()` method on `Flow` itself);
 - it supports potentially infinite streams of values;
 - it is suitable for network calls, database observations, UI events, and other reactive use cases.
 
-Flow is cold by default: it starts emitting only when collected and can be transformed using a rich set of operators.
+`Flow` is cold by default: it starts emitting only when collected and can be transformed using a rich set of operators.
 
 ### Basic Concept
 
@@ -975,7 +975,7 @@ class FlowBestPractices {
 
 ### Summary
 
-Flow is ideal for:
+`Flow` is ideal for:
 - async data streams;
 - reactive programming;
 - database observables;

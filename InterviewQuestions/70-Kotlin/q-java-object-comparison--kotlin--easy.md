@@ -1,4 +1,4 @@
----
+---\
 id: lang-011
 title: "Java Object Comparison / Сравнение объектов в Java"
 aliases: ["Java Object Comparison", "Java Object Сравнение"]
@@ -15,7 +15,7 @@ created: 2025-10-13
 updated: 2025-11-11
 tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, programming-languages]
 
----
+---\
 # Вопрос (RU)
 > Как сравниваются объекты в Java?
 
@@ -28,7 +28,7 @@ tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, pro
 
 1. `==` — сравнение ссылок (идентичности объектов)
    - Оператор `==` для объектов проверяет, указывают ли две переменные на один и тот же объект в памяти.
-   - Для строк (`String`) это особенно важно: литералы могут находиться в пуле строк (string pool), поэтому два одинаковых литерала могут давать `true` при `==`, но два `new `String`("...")` — `false`.
+   - Для строк (`String`) это особенно важно: литералы могут находиться в пуле строк (string pool), поэтому два одинаковых литерала могут давать `true` при `==`, но два `new ``String``("...")` — `false`.
 
    ```java
    String str1 = new String("Hello");
@@ -192,7 +192,7 @@ Java provides two main ways to compare objects:
 
 1. Reference Comparison (`==`) - Compares object identity
    - The `==` operator compares references: it checks whether two variables refer to the same object.
-   - For `String`, this is important: literals may be stored in the string pool, so two identical literals may yield `true` with `==`, while two `new `String`("...")` instances yield `false`.
+   - For `String`, this is important: literals may be stored in the string pool, so two identical literals may yield `true` with `==`, while two `new ``String``("...")` instances yield `false`.
 
    ```java
    String str1 = new String("Hello");

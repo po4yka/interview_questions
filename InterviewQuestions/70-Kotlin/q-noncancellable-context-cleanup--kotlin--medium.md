@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-119
 title: "NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций"
 aliases: [Cancellation, Cleanup, NonCancellable, NonCancellable контекст, Resource Management]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-kotlin, q-sealed-class-sealed-interface--kotlin--mediu
 created: 2025-10-12
 updated: 2025-11-09
 tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancellable, resource-management]
----
+---\
 # Вопрос (RU)
 
 > Что такое `NonCancellable` в корутинах Kotlin? Когда следует его использовать? Объясните, как использовать его в блоках `finally` для критической очистки, связанные риски и лучшие практики с реальными примерами.
@@ -333,7 +333,7 @@ suspend fun demonstrateAnalytics() {
 - [[c-coroutines]]
 - [Kotlin Coroutines Guide - Cancellation](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
 - [NonCancellable API Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-non-cancellable/)
-- [Coroutine Context Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Coroutine `Context` Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Roman Elizarov - Cancellation in Coroutines](https://medium.com/@elizarov/cancellation-in-coroutines-aa6b90163629)
 - [Exception Handling in Coroutines](https://kotlinlang.org/docs/exception-handling.html)
 
@@ -343,7 +343,7 @@ suspend fun demonstrateAnalytics() {
 - [[c-coroutines]]
 - [Kotlin Coroutines Guide - Cancellation](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
 - [NonCancellable API Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-non-cancellable/)
-- [Coroutine Context Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Coroutine `Context` Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Roman Elizarov - Cancellation in Coroutines](https://medium.com/@elizarov/cancellation-in-coroutines-aa6b90163629)
 - [Exception Handling in Coroutines](https://kotlinlang.org/docs/exception-handling.html)
 

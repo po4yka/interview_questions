@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-158
 title: "Stateflow Purpose / Назначение StateFlow"
 aliases: [Reactive State, State Management, StateFlow, StateFlow Flow]
@@ -14,7 +14,7 @@ related: [c-kotlin]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management, stateflow]
----
+---\
 # Вопрос (RU)
 > Для чего нужен `StateFlow`?
 
@@ -75,7 +75,7 @@ Key properties:
 ## References
 
 - [[c-kotlin]]
-- [Kotlin StateFlow Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
+- [Kotlin `StateFlow` Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
 
 ## Связанные Вопросы (RU)
 

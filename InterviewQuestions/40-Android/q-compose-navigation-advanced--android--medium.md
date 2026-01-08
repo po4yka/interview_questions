@@ -1,4 +1,4 @@
----
+---\
 id: android-359
 title: Compose Navigation Advanced / Продвинутая навигация Compose
 aliases: [Compose Navigation Advanced, Продвинутая навигация Compose]
@@ -17,7 +17,7 @@ tags: [android/ui-compose, android/ui-navigation, difficulty/medium]
 sources:
   - "https://developer.android.com/jetpack/compose/navigation"
 
----
+---\
 # Вопрос (RU)
 > Как реализовать продвинутую навигацию в Jetpack Compose с аргументами, deep links и контролем back stack?
 
@@ -30,7 +30,7 @@ sources:
 
 ### Типы Аргументов
 
-**Path-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, поддерживают значения по умолчанию, задаются в маршруте как `?key={value}` и описываются через `navArgument`.
+**`Path`-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, поддерживают значения по умолчанию, задаются в маршруте как `?key={value}` и описываются через `navArgument`.
 
 ```kotlin
 // ✅ Path-аргумент (обязательный)
@@ -179,7 +179,7 @@ val data = viewModel.data.collectAsState().value
 
 ### Argument Types
 
-**Path arguments** are required, positional, and part of the URL. **Query arguments** are optional, support defaults, and are defined in the route as `?key={value}` with a corresponding `navArgument`.
+**`Path` arguments** are required, positional, and part of the URL. **Query arguments** are optional, support defaults, and are defined in the route as `?key={value}` with a corresponding `navArgument`.
 
 ```kotlin
 // ✅ Path argument (required)

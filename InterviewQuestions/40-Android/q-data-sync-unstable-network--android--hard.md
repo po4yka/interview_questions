@@ -1,4 +1,4 @@
----
+---\
 id: android-440
 title: Data Sync Unstable Network / Синхронизация данных при нестабильной сети
 aliases: [Data Sync Unstable Network, Синхронизация данных при нестабильной сети]
@@ -16,7 +16,7 @@ updated: 2025-11-02
 tags: [android/architecture-clean, android/networking-http, data-sync, difficulty/hard, networking, offline-first, workmanager]
 sources:
   - https://developer.android.com/guide/background/processing-data/sync
----
+---\
 # Вопрос (RU)
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 
@@ -109,7 +109,7 @@ class ConflictResolver {
 }
 ```
 
-**4. Фоновая синхронизация с WorkManager:**
+**4. Фоновая синхронизация с `WorkManager`:**
 ```kotlin
 class SyncWorker(
     appContext: Context,
@@ -256,7 +256,7 @@ class ConflictResolver {
 }
 ```
 
-**4. Background sync with WorkManager:**
+**4. Background sync with `WorkManager`:**
 ```kotlin
 class SyncWorker(
     appContext: Context,
@@ -336,7 +336,7 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 
 ### Prerequisites (Easier)
 - `WorkManager` basics and constraints configuration
-- Local database implementation with `Room` or SQLite
+- Local database implementation with `Room` or `SQLite`
 - Basic understanding of `Coroutines` and `Flow`
 
 ### Related (Same Level)

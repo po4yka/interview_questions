@@ -1,4 +1,4 @@
----
+---\
 id: android-366
 title: "How To Pass Data From One Activity To Another / Как передать данные из одной Activity в другую"
 aliases: [Intent Extras, Parcelable Android, Pass Data Between Activities, Передача данных между Activity]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, intent, navigation]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Как передать данные из одной `Activity` в другую?
@@ -265,7 +265,7 @@ intent.putExtra(Keys.USER_NAME, name)
 
 - What is the `Intent` transaction buffer size limit?
 - When should you use `Parcelable` vs `Serializable`?
-- How does Navigation Component handle argument passing?
+- How does Navigation `Component` handle argument passing?
 - Can you pass non-serializable objects between Activities?
 - How to handle `Intent` data in multi-process apps?
 

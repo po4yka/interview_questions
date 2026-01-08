@@ -1,4 +1,4 @@
----
+---\
 id: db-004
 title: Database migration purpose / Цель миграции баз данных
 aliases: []
@@ -24,8 +24,8 @@ created: 2025-10-03
 updated: 2025-11-11
 
 # Tags
-tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
----
+tags: [database, migration, schema-evolution, difficulty/medium, kotlin, lang/ru, topic/databases]
+---\
 # Вопрос (RU)
 > Что такое миграция баз данных и для чего она нужна
 
@@ -58,7 +58,7 @@ tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, la
 
 ## Answer (EN)
 
-Database migration is a controlled, repeatable process of changing the structure or data of a database (for example, adding or modifying tables, columns, indexes, constraints, or transforming data) while preserving data integrity and keeping applications working correctly across versions.
+`Database` migration is a controlled, repeatable process of changing the structure or data of a database (for example, adding or modifying tables, columns, indexes, constraints, or transforming data) while preserving data integrity and keeping applications working correctly across versions.
 
 Migrations are usually versioned and applied sequentially so that:
 - any environment (dev, staging, production) can be brought to a specific schema version,

@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-181517"
 title: "Rest Api / Rest Api"
 aliases: ["Rest Api"]
@@ -9,23 +9,24 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-networking, c-http-client, c-okhttp-architecture, c-serialization, c-rest-api]
+moc: "moc-cs"
+related: ["c-networking", "c-http-client", "c-okhttp-architecture", "c-serialization", "c-rest-api"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-REST API (Representational State Transfer Application Programming Interface) is an HTTP-based interface that exposes resources through stateless, uniform endpoints using standard methods like GET, POST, PUT, and DELETE. It is widely used for web and mobile backends, microservices, and integrations because it is simple, scalable, and language-agnostic. REST APIs emphasize clear resource modeling, predictable URLs, and standardized status codes, making them easy to consume and suitable for distributed systems.
+REST API (Representational State Transfer `Application` Programming Interface) is an HTTP-based interface that exposes resources through stateless, uniform endpoints using standard methods like GET, POST, PUT, and DELETE. It is widely used for web and mobile backends, microservices, and integrations because it is simple, scalable, and language-agnostic. REST APIs emphasize clear resource modeling, predictable URLs, and standardized status codes, making them easy to consume and suitable for distributed systems.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-REST API (Representational State Transfer Application Programming Interface) — это HTTP-интерфейс, предоставляющий доступ к ресурсам через статeless-эндпоинты с использованием стандартных методов (GET, POST, PUT, DELETE и др.). Широко применяется для веб- и мобильных backend-сервисов, микросервисов и интеграций благодаря простоте, масштабируемости и независимости от языка реализации. REST API опирается на четкое моделирование ресурсов, предсказуемые URL и стандартизированные коды ответов, что упрощает взаимодействие между распределенными системами.
+REST API (Representational State Transfer `Application` Programming Interface) — это HTTP-интерфейс, предоставляющий доступ к ресурсам через статeless-эндпоинты с использованием стандартных методов (GET, POST, PUT, DELETE и др.). Широко применяется для веб- и мобильных backend-сервисов, микросервисов и интеграций благодаря простоте, масштабируемости и независимости от языка реализации. REST API опирается на четкое моделирование ресурсов, предсказуемые URL и стандартизированные коды ответов, что упрощает взаимодействие между распределенными системами.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 

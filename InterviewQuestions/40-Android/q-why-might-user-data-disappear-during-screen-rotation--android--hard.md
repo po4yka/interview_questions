@@ -1,4 +1,4 @@
----
+---\
 id: android-096
 title: Почему данные пользователя могут исчезать при повороте экрана? / Why might user data disappear during screen rotation?
 aliases: [Configuration change data loss, Screen rotation data loss, Данные исчезают при повороте, Потеря данных при повороте]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/guide/topics/resources/runtime-changes"
   - "https://developer.android.com/topic/libraries/architecture/saving-states"
 
----
+---\
 # Вопрос (RU)
 
 > Почему данные пользователя могут исчезать при повороте экрана и как это предотвратить?
@@ -311,7 +311,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 | Тип данных | Решение | Причина |
 |------------|---------|---------|
-| EditText (с ID) | Автоматически | Поддерживаемый `View` сохраняет сам |
+| `EditText` (с ID) | Автоматически | Поддерживаемый `View` сохраняет сам |
 | Кастомная переменная | `onSaveInstanceState` | Маленькие данные |
 | Большой объект | `ViewModel` | Только config changes |
 | Критические данные | `SavedStateHandle` +/или персистентное хранилище | Config changes + process death для малого состояния; крупное/важное — в БД/файлах |
@@ -657,7 +657,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 | Data Type | Solution | Reason |
 |-----------|----------|--------|
-| EditText (with ID) | Automatic | Supported `View` saves itself |
+| `EditText` (with ID) | Automatic | Supported `View` saves itself |
 | Custom variable | `onSaveInstanceState` | Small data |
 | Large object | `ViewModel` | Config changes only |
 | Critical data | `SavedStateHandle` and/or persistent storage | Config changes + process death for small state; large/critical -> DB/files |

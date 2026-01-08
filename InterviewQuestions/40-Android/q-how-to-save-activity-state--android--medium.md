@@ -1,4 +1,4 @@
----
+---\
 id: android-413
 title: "How To Save Activity State / Как сохранить состояние Activity"
 aliases: ["How To Save Activity State", "Save Activity State", "Как сохранить состояние Activity", "Сохранение состояния Activity"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android, android/activity, android/datastore, android/lifecycle, difficulty/medium, state-management]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Как сохранить состояние `Activity`?
@@ -185,7 +185,7 @@ class SettingsRepository(private val context: Context) {
 }
 ```
 
-**Room (для больших объёмов данных):**
+**`Room` (для больших объёмов данных):**
 
 ```kotlin
 @Entity(tableName = "user_state")
@@ -205,7 +205,7 @@ interface UserStateDao {
 }
 ```
 
-Здесь DataStore и Room выступают как примеры устойчивого хранилища. Аналогичные свойства (переживают закрытие приложения и смерть процесса) имеют и другие постоянные механизмы (например, SharedPreferences, файлы), при условии, что данные были записаны на диск.
+Здесь DataStore и `Room` выступают как примеры устойчивого хранилища. Аналогичные свойства (переживают закрытие приложения и смерть процесса) имеют и другие постоянные механизмы (например, `SharedPreferences`, файлы), при условии, что данные были записаны на диск.
 
 ### 4. Сравнение Подходов
 
@@ -213,9 +213,9 @@ interface UserStateDao {
 |--------|----------------|-----------------|---------------------|------------|
 | **onSaveInstanceState** | ✅ | ⚠️ зависит от сценария, лимит по размеру | ❌ | Легковесное UI-состояние |
 | **`ViewModel` (без SavedState)** | ✅ | ❌ | ❌ | UI-данные во время сессии |
-| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI-состояние, важное для восстановления; *только для явно сохранённых ключей в рамках Bundle-лимитов |
+| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI-состояние, важное для восстановления; *только для явно сохранённых ключей в рамках `Bundle`-лимитов |
 | **DataStore** | ✅ | ✅ | ✅ | Настройки, preferences (как один из вариантов постоянного хранилища) |
-| **Room** | ✅ | ✅ | ✅ | Большие наборы данных, сложные структуры |
+| **`Room`** | ✅ | ✅ | ✅ | Большие наборы данных, сложные структуры |
 
 ### 5. Лучшие Практики
 
@@ -250,7 +250,7 @@ class UserActivity : AppCompatActivity() {
 
 **Рекомендации:**
 - Используйте `ViewModel` + `SavedStateHandle` для большинства важного UI-состояния, которое должно восстановиться после поворота и потенциальной смерти процесса (через механизм сохранённого состояния).
-- Используйте DataStore, Room или другие постоянные механизмы для данных, которые должны переживать закрытие приложения.
+- Используйте DataStore, `Room` или другие постоянные механизмы для данных, которые должны переживать закрытие приложения.
 - Избегайте хранения больших объектов в `onSaveInstanceState` (лимит по размеру `Bundle` ~1 МБ).
 - Не сохраняйте `Context`, `View`, `Activity` в `ViewModel`.
 
@@ -412,7 +412,7 @@ class SettingsRepository(private val context: Context) {
 }
 ```
 
-**Room (for large datasets):**
+**`Room` (for large datasets):**
 
 ```kotlin
 @Entity(tableName = "user_state")
@@ -432,7 +432,7 @@ interface UserStateDao {
 }
 ```
 
-Here DataStore and Room are examples of persistent storage. Other mechanisms (e.g., SharedPreferences, files) also survive app close and process death as long as data is written to disk.
+Here DataStore and `Room` are examples of persistent storage. Other mechanisms (e.g., `SharedPreferences`, files) also survive app close and process death as long as data is written to disk.
 
 ### 4. Comparison of Approaches
 
@@ -440,9 +440,9 @@ Here DataStore and Room are examples of persistent storage. Other mechanisms (e.
 |----------|------------------|------------------------|--------------------|----------|
 | **onSaveInstanceState** | ✅ | ⚠️ scenario-dependent, size-limited | ❌ | Lightweight UI state |
 | **`ViewModel` (no SavedState)** | ✅ | ❌ | ❌ | UI-related data during session |
-| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI state important for restoration; *only for explicitly saved keys within Bundle limits |
+| **`ViewModel` + SavedStateHandle** | ✅ | ✅* | ❌ | UI state important for restoration; *only for explicitly saved keys within `Bundle` limits |
 | **DataStore** | ✅ | ✅ | ✅ | Settings, preferences (one of persistent options) |
-| **Room** | ✅ | ✅ | ✅ | Large datasets, complex data |
+| **`Room`** | ✅ | ✅ | ✅ | Large datasets, complex data |
 
 ### 5. Best Practices
 
@@ -477,7 +477,7 @@ class UserActivity : AppCompatActivity() {
 
 **Recommendations:**
 - Use `ViewModel` + `SavedStateHandle` for most important UI state that should be restored after rotation and potential process death (via the saved-state mechanism).
-- Use DataStore, Room, or other persistent mechanisms for data that must survive app closure.
+- Use DataStore, `Room`, or other persistent mechanisms for data that must survive app closure.
 - Avoid storing large objects in `onSaveInstanceState` (`Bundle` size is limited to about 1 MB).
 - Never store `Context`, `View`, `Activity` in `ViewModel`.
 

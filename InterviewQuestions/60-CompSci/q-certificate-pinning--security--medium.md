@@ -1,4 +1,4 @@
----
+---\
 id: sec-002
 title: Certificate Pinning / Закрепление сертификатов
 aliases: [Certificate Pinning, Закрепление сертификатов]
@@ -14,14 +14,14 @@ updated: 2025-11-11
 original_language: en
 language_tags: [en, ru]
 tags: [difficulty/medium, networking, okhttp, security, tls]
----
+---\
 # Вопрос (RU)
-> Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (OkHttp и Network Security Config)?
+> Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (`OkHttp` и Network Security Config)?
 
 ---
 
 # Question (EN)
-> What is certificate pinning, why use it, and how to implement it safely on Android (OkHttp and Network Security Config)?
+> What is certificate pinning, why use it, and how to implement it safely on Android (`OkHttp` and Network Security Config)?
 
 ---
 

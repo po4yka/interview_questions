@@ -1,4 +1,4 @@
----
+---\
 id: android-373
 title: "What Are Services For / Для чего нужны Service"
 aliases: ["What Are Services For", "Для чего нужны Service"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, background-execution, difficulty/easy, service]
 
----
+---\
 # Вопрос (RU)
 
 > Для чего нужны сервисы (Services)?
@@ -35,7 +35,7 @@ tags: [android/background-execution, android/service, background-execution, diff
 
 **1. Воспроизведение музыки / долгие пользовательские активности**
 
-Для воспроизведения музыки или навигации на современных версиях Android обычно используется Foreground `Service` с постоянным уведомлением (и корректным соблюдением ограничений запуска Foreground Service из фона).
+Для воспроизведения музыки или навигации на современных версиях Android обычно используется Foreground `Service` с постоянным уведомлением (и корректным соблюдением ограничений запуска Foreground `Service` из фона).
 
 ```kotlin
 class MusicService : Service() {
@@ -114,8 +114,8 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - Started `Service` для немедленных, недеферрируемых задач, которые должны завершиться, даже если пользователь покинул `Activity` (с учётом ограничений фонового запуска сервисов на Android 8.0+)
 
 **Когда НЕ использовать:**
-- Простые/отложенные фоновые задачи → WorkManager
-- Периодические задачи → WorkManager с `PeriodicWorkRequest`
+- Простые/отложенные фоновые задачи → `WorkManager`
+- Периодические задачи → `WorkManager` с `PeriodicWorkRequest`
 - Короткие операции, не требующие переживать процесс/закрытие приложения → корутины/потоки в `ViewModel` или других UI-Scoped компонентах
 
 ---
@@ -207,9 +207,9 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - Started `Service` for immediate, non-deferrable work that should continue even if the user leaves the `Activity` (respecting Android 8.0+ background start limits)
 
 **When NOT to use:**
-- Simple/deferrable background tasks → WorkManager
-- Periodic tasks → WorkManager with `PeriodicWorkRequest`
-- Short-lived operations that don’t need to survive process/app death → coroutines/threads in a `ViewModel` or other UI-scoped components
+- Simple/deferrable background tasks → `WorkManager`
+- Periodic tasks → `WorkManager` with `PeriodicWorkRequest`
+- `Short`-lived operations that don’t need to survive process/app death → coroutines/threads in a `ViewModel` or other UI-scoped components
 
 ---
 

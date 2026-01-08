@@ -1,4 +1,4 @@
----
+---\
 id: android-323
 title: "Robolectric Vs Instrumented / Robolectric против Instrumented"
 aliases: ["Robolectric Vs Instrumented", "Robolectric против Instrumented"]
@@ -15,7 +15,7 @@ related: [c-android, q-testing-compose-ui--android--medium, q-testing-viewmodels
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-unit, comparison, difficulty/medium, robolectric, strategy]
----
+---\
 # Вопрос (RU)
 
 > Когда следует использовать Robolectric вместо инструментальных тестов? Какие компромиссы в скорости, надежности и покрытии?
@@ -51,7 +51,7 @@ tags: [android/testing-instrumented, android/testing-unit, comparison, difficult
 **Подходит для:**
 - Тестирование `ViewModel` или другой логики с Android-зависимостями (`Context`, Resources и т.п.)
 - Проверка жизненного цикла `Activity`/`Fragment` на JVM
-- Тестирование Resources, `Context`, SharedPreferences
+- Тестирование Resources, `Context`, `SharedPreferences`
 - Создание `Intent` и навигации на уровне компонентов
 - Быстрая обратная связь в CI
 
@@ -203,7 +203,7 @@ class UserProfileE2ETest {
 **Good for:**
 - Testing ViewModels or other logic that depends on Android APIs (`Context`, Resources, etc.)
 - Verifying `Activity`/`Fragment` lifecycle behavior on the JVM
-- Testing Resources, `Context`, SharedPreferences
+- Testing Resources, `Context`, `SharedPreferences`
 - `Intent` creation and component-level navigation
 - Fast feedback in CI
 

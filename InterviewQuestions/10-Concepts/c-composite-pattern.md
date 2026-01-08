@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-081753"
 title: "Composite Pattern / Composite Pattern"
 aliases: ["Composite Pattern"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-system-design"
-related: [c-design-patterns, c-decorator-pattern, c-adapter-pattern]
+moc: "moc-architecture-patterns"
+related: ["c-design-patterns", "c-decorator-pattern", "c-adapter-pattern"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [architecture-patterns, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ Composite (Компоновщик) — это структурный шабло�
 
 ## Key Points (EN)
 
-- Uniform treatment: Defines a common Component interface so clients work with Leaf and Composite objects without branching logic based on type.
+- Uniform treatment: Defines a common `Component` interface so clients work with Leaf and Composite objects without branching logic based on type.
 - Tree structure: Models hierarchical, recursive structures where a Composite can contain Components (both other Composites and Leafs).
 - Delegation: Composite objects implement operations by delegating to their children, centralizing traversal logic and reducing duplication.
 - Extensibility: New leaf or composite types can be added with minimal changes to client code, improving maintainability.
@@ -39,7 +40,7 @@ Composite (Компоновщик) — это структурный шабло�
 
 ## Ключевые Моменты (RU)
 
-- Единый интерфейс: Общий интерфейс Component позволяет клиентскому коду работать с Leaf и Composite без условных конструкций по типам.
+- Единый интерфейс: Общий интерфейс `Component` позволяет клиентскому коду работать с Leaf и Composite без условных конструкций по типам.
 - Древовидная структура: Моделирует иерархические, рекурсивные структуры, где Composite содержит Components (как другие Composite, так и Leaf).
 - Делегирование: Объекты Composite реализуют операции через делегирование своим дочерним элементам, централизуя обход и снижая дублирование.
 - Расширяемость: Новые типы листьев или композитов добавляются с минимальными изменениями клиентского кода, повышая сопровождаемость.

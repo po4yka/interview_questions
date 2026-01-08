@@ -1,4 +1,4 @@
----
+---\
 id: lang-040
 title: "What Is Job Object / Что такое объект Job"
 aliases: [What Is Job Object, Что такое объект Job]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-kotlin, c-structured-concurrency]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, job, kotlin]
----
+---\
 # Вопрос (RU)
 > Для чего нужен объект Job?
 
@@ -793,7 +793,7 @@ class JobBestPractices {
 ### Summary
 
 Job provides:
-- Lifecycle management: control coroutine execution
+- `Lifecycle` management: control coroutine execution
 - Cancellation: stop coroutines gracefully
 - Completion tracking: wait for coroutines to finish
 - Parent-child relationships: structure concurrency

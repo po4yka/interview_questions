@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-022
-title: Security Hardening / Укрепление безопасности
-aliases: [Security Hardening, Укрепление безопасности Android]
-kind: concept
-summary: Advanced application security practices including data disclosures, network protection, and sensitive data lifecycle controls
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, compliance, concept, privacy, security]
+id: "20260108-110550"
+title: "Security Hardening / Укрепление безопасности"
+aliases: ["Security Hardening", "Укрепление безопасности Android"]
+summary: "Advanced application security practices including data disclosures, network protection, and sensitive data lifecycle controls"
+topic: "android"
+subtopics: ["compliance", "privacy", "security"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "compliance", "concept", "privacy", "security", "difficulty/medium"]
 ---
 
 # Summary (EN)

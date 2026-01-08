@@ -1,4 +1,4 @@
----
+---\
 id: android-219
 title: How To Create Chat Lists From A UI Perspective / Как создать списки чатов с точки зрения UI
 aliases: [How To Create Chat Lists From A UI Perspective, Как создать списки чатов с точки зрения UI]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/hard, recyclerview]
 
----
+---\
 # Вопрос (RU)
 > Как создать списки чатов с точки зрения UI
 
@@ -31,7 +31,7 @@ tags: [android/ui-views, difficulty/hard, recyclerview]
 
 1. Определить модель данных для элемента списка (чат/диалог).
 2. Создать UI-макет элемента списка (аватар, имя, последний текст, время, индикаторы online/typing, бейдж непрочитанного, пин).
-3. Реализовать RecyclerView + Adapter + ViewHolder под эту модель.
+3. Реализовать `RecyclerView` + `Adapter` + `ViewHolder` под эту модель.
 4. Настроить наблюдение за данными (`ViewModel`/`LiveData`/`Flow`) и обновление списка через `ListAdapter`/`DiffUtil`.
 5. Обеспечить сортировку (сначала закреплённые, затем по времени последнего сообщения).
 6. Оптимизировать производительность (`DiffUtil`, пагинация, кеширование изображений).
@@ -556,14 +556,14 @@ Creating chat lists from a UI perspective requires considering usability, clarit
 
 1. Define a data model for chat list items (chat/conversation).
 2. Create a layout for each chat row (avatar, name, last message, timestamp, online/typing indicators, unread badge, pin).
-3. Implement RecyclerView + Adapter + ViewHolder for that model.
+3. Implement `RecyclerView` + `Adapter` + `ViewHolder` for that model.
 4. Wire up data observation (`ViewModel`/`LiveData`/`Flow`) and submit updates via `ListAdapter`/`DiffUtil`.
 5. Ensure proper sorting (pinned first, then by last message time).
-6. Optimize for performance (DiffUtil, pagination, image caching).
+6. Optimize for performance (`DiffUtil`, pagination, image caching).
 
 ### 1. Define Data Models
 
-Keep a clear separation between the chat list model and message models: the list works with a "chat/conversation" entity, while message bubbles belong to the chat detail screen. Message models below are included as context to illustrate a consistent UI/data approach; they are not required to implement the list itself.
+Keep a clear separation between the chat list model and message models: the list works with a "chat/conversation" entity, while message bubbles belong to the chat detail screen. `Message` models below are included as context to illustrate a consistent UI/data approach; they are not required to implement the list itself.
 
 ```kotlin
 // Chat room model for the chat list
@@ -1060,9 +1060,9 @@ class ChatListViewModel : ViewModel() {
 
 ### Best Practices
 
-1. Use RecyclerView for efficient scrolling of chat rows.
+1. Use `RecyclerView` for efficient scrolling of chat rows.
 2. Use an image loading library (Glide/Coil) with caching and placeholders.
-3. Use DiffUtil (or ListAdapter) for efficient updates when chats change.
+3. Use `DiffUtil` (or ListAdapter) for efficient updates when chats change.
 4. Implement pagination or incremental loading for large numbers of chats.
 5. Handle typing/online indicators and unread badges with clear visual hierarchy.
 6. Sort chats by pinned status and last message time (pinned first, then by `lastMessageTime`).

@@ -13,7 +13,7 @@ moc: moc-kotlin
 related: [c-kotlin, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-11-09
-tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, sealed-class]
+tags: [comparison, difficulty/medium, enums, kotlin, oop, programming-languages, sealed-classes]
 ---
 # Вопрос (RU)
 > Каковы отличия sealed и enum классов в Kotlin?

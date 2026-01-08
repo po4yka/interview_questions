@@ -1,4 +1,4 @@
----
+---\
 id: lang-073
 title: "Kotlin Lateinit / lateinit в Kotlin"
 aliases: [Kotlin Lateinit, lateinit в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-map-
 created: 2025-10-15
 updated: 2025-11-11
 tags: [dependency-injection, difficulty/medium, initialization, lateinit, programming-languages, properties]
----
+---\
 # Вопрос (RU)
 > Что известно о `lateinit`?
 
@@ -168,7 +168,7 @@ if (::name.isInitialized) {
 }
 ```
 
-Constraints:
+`Constraints`:
 - Cannot be used with nullable types.
 - Cannot be used in primary constructor parameters.
 - Cannot be used with `val`.

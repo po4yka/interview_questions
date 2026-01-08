@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-013
 title: "Sequences in Kotlin / Последовательности в Kotlin"
 aliases: ["Sequences in Kotlin", "Последовательности в Kotlin"]
@@ -25,22 +25,22 @@ created: 2025-10-05
 updated: 2025-11-09
 
 tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, sequences]
----
+---\
 # Вопрос (RU)
-> Что такое последовательности в Kotlin и чем они отличаются от Iterable?
+> Что такое последовательности в Kotlin и чем они отличаются от `Iterable`?
 
 # Question (EN)
 > What are sequences in Kotlin and how do they differ from Iterables?
 
 ## Ответ (RU)
 
-Последовательности в Kotlin предоставляют схожий набор операций с коллекциями и Iterable, но реализуют другой подход к многоэтапной обработке данных за счёт **ленивого вычисления** и отсутствия промежуточных коллекций.
+Последовательности в Kotlin предоставляют схожий набор операций с коллекциями и `Iterable`, но реализуют другой подход к многоэтапной обработке данных за счёт **ленивого вычисления** и отсутствия промежуточных коллекций.
 
 Важно: `Sequence` и `Iterable` — разные интерфейсы. Коллекции в стандартной библиотеке реализуют `Iterable`, а не `Sequence`. Для использования ленивых операций коллекции нужно явно преобразовать в последовательность через `asSequence()` или создать её с помощью `sequenceOf()` и других фабричных функций.
 
 ### Жадное Vs Ленивое Вычисление
 
-**Iterable (жадное):**
+**`Iterable` (жадное):**
 - Операции над коллекциями (например, `map`, `filter`) выполняются над всей коллекцией и создают промежуточные коллекции на каждом шаге.
 - Каждый этап обработки полностью завершается, затем результат передаётся на следующий этап.
 
@@ -51,7 +51,7 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, seq
 
 ### Порядок Выполнения
 
-**Iterable:** сначала выполняется, например, `filter` для всех элементов, создаётся список отфильтрованных элементов, затем `map` или `forEach` проходят по нему и т.д.
+**`Iterable`:** сначала выполняется, например, `filter` для всех элементов, создаётся список отфильтрованных элементов, затем `map` или `forEach` проходят по нему и т.д.
 
 **Sequence:** для каждого элемента по очереди применяются все промежуточные операции, затем элемент, при необходимости, попадает в результат.
 
@@ -133,7 +133,7 @@ Important: `Sequence` and `Iterable` are different interfaces. Standard Kotlin c
 
 ### Eager Vs Lazy Evaluation
 
-**Iterable / collections (eager):**
+**`Iterable` / collections (eager):**
 - Operations like `map` and `filter` process the entire collection eagerly.
 - Each step produces a new intermediate collection, which becomes input for the next step.
 
@@ -144,7 +144,7 @@ Important: `Sequence` and `Iterable` are different interfaces. Standard Kotlin c
 
 ### Execution Order Difference
 
-**Iterable:** completes each operation for the whole collection, then moves to the next operation.
+**`Iterable`:** completes each operation for the whole collection, then moves to the next operation.
 
 **Sequence:** applies all operations one-by-one for each element as it flows through the pipeline.
 
@@ -215,7 +215,7 @@ However, lazy processing has its own overhead and can be slower for small collec
 **Use Sequence when:**
 - Large collections.
 - Multiple transformation steps.
-- Short-circuiting or partial consumption is expected.
+- `Short`-circuiting or partial consumption is expected.
 - Expensive operations and you want to minimize temporary allocations.
 
 **Use Iterable/collections when:**
@@ -223,7 +223,7 @@ However, lazy processing has its own overhead and can be slower for small collec
 - Simple logic.
 - You want straightforward eager semantics and need all results.
 
-**English Summary**: Sequences use lazy evaluation: operations are applied element-by-element and executed only when a terminal operation is called, without creating intermediate collections. Iterable-based collection operations are eager: each step processes the entire collection and usually creates intermediate collections. Sequences shine for large datasets and long chains of operations, while eager collection operations are often simpler and faster for small data.
+**English Summary**: Sequences use lazy evaluation: operations are applied element-by-element and executed only when a terminal operation is called, without creating intermediate collections. `Iterable`-based collection operations are eager: each step processes the entire collection and usually creates intermediate collections. Sequences shine for large datasets and long chains of operations, while eager collection operations are often simpler and faster for small data.
 
 ## Follow-ups
 

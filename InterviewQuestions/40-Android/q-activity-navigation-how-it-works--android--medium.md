@@ -1,4 +1,4 @@
----
+---\
 id: android-377
 title: Как работает навигация Activity / How Activity Navigation Works
 aliases: [Activity Back Stack, Activity Navigation, Навигация Activity, Стек активностей]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/guide/components/activities/tasks-and-back-stack"
   - "https://developer.android.com/guide/navigation"
 
----
+---\
 # Вопрос (RU)
 
 > Как работает навигация между `Activity` в Android?
@@ -132,7 +132,7 @@ setResult(RESULT_OK, resultIntent)
 finish()
 ```
 
-**Современный подход — Navigation Component:**
+**Современный подход — Navigation `Component`:**
 
 ```kotlin
 // ✅ Навигация через NavController (рекомендуется для фрагментов внутри одной Activity)
@@ -143,7 +143,7 @@ val bundle = bundleOf("userId" to userId)
 findNavController().navigate(R.id.action_home_to_detail, bundle)
 ```
 
-Navigation Component в основном управляет навигацией между фрагментами и графом навигации.
+Navigation `Component` в основном управляет навигацией между фрагментами и графом навигации.
 Для переходов между `Activity` по-прежнему используются `Intent` и back stack задач.
 
 ---
@@ -249,7 +249,7 @@ setResult(RESULT_OK, resultIntent)
 finish()
 ```
 
-**Modern approach — Navigation Component:**
+**Modern approach — Navigation `Component`:**
 
 ```kotlin
 // ✅ Navigate via NavController (recommended for fragments within a single-Activity architecture)
@@ -260,7 +260,7 @@ val bundle = bundleOf("userId" to userId)
 findNavController().navigate(R.id.action_home_to_detail, bundle)
 ```
 
-Navigation Component primarily manages navigation between fragments and the navigation graph.
+Navigation `Component` primarily manages navigation between fragments and the navigation graph.
 For navigation between Activities, Intents and the task back stack are still used.
 
 ---
@@ -270,7 +270,7 @@ For navigation between Activities, Intents and the task back stack are still use
 - Что происходит со стеком `Activity` при повороте экрана?
 - В чём разница между launch modes: `standard`, `singleTop`, `singleTask`, `singleInstance`?
 - Как обрабатывать deep links и навигацию из push-уведомлений?
-- Почему Navigation Component рекомендуется вместо прямой навигации `Activity`?
+- Почему Navigation `Component` рекомендуется вместо прямой навигации `Activity`?
 - Как восстановить стек `Activity` после убийства процесса системой?
 
 ## Follow-ups (EN)
@@ -278,7 +278,7 @@ For navigation between Activities, Intents and the task back stack are still use
 - What happens to the `Activity` back stack on configuration change (e.g., rotation)?
 - What is the difference between launch modes: `standard`, `singleTop`, `singleTask`, `singleInstance`?
 - How to handle deep links and navigation from push notifications?
-- Why is Navigation Component recommended instead of direct `Activity`-to-`Activity` navigation?
+- Why is Navigation `Component` recommended instead of direct `Activity`-to-`Activity` navigation?
 - How can you restore the `Activity` back stack after the system kills the process?
 
 ## References (RU)

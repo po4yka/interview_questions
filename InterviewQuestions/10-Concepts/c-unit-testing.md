@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-110311"
 title: "Unit Testing / Модульное Тестирование"
 aliases: ["JUnit", "Unit Testing", "Unit Tests", "Модульное Тестирование", "Юнит-Тесты"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-testing"
-related: [c-test-doubles, c-mockk, c-junit, c-testing-pyramid, c-testing-strategies]
+related: ["c-test-doubles", "c-mockk", "c-junit", "c-testing-pyramid", "c-testing-strategies"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["concept", "difficulty/medium", "junit", "quality-assurance", "tdd", "testing"]
----
+---\
 
 # Unit Testing / Модульное Тестирование
 
@@ -338,7 +338,7 @@ class DiscountCalculator {
 
 - **UI testing**: Use Espresso or Compose UI tests instead
 - **Integration testing**: Use integration tests for multi-component scenarios
-- **Database operations**: Use instrumented tests on real database
+- **`Database` operations**: Use instrumented tests on real database
 - **Network calls**: Use integration tests or E2E tests
 - **Android framework dependencies**: Requires instrumented tests
 

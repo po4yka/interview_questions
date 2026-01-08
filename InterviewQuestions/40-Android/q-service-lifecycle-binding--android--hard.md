@@ -1,4 +1,4 @@
----
+---\
 id: android-325
 title: Service Lifecycle and Binding / Жизненный цикл и привязка Service
 aliases: [Service Lifecycle and Binding, Жизненный цикл и привязка Service]
@@ -15,7 +15,7 @@ created: 2025-10-10
 updated: 2025-11-11
 tags: [android/service, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 >
 Объясните жизненный цикл `Service`, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между `startService()` и `bindService()`? Как управлять жизненным циклом сервисов в современном Android (12+)?
@@ -28,7 +28,7 @@ Explain the `Service` lifecycle, binding mechanisms, and communication patterns.
 `Service` — фундаментальный Android-компонент для фоновых операций со сложным управлением жизненным циклом и несколькими паттернами binding для IPC.
 
 Ключевое различие (по сути вопроса):
-- `startService()` / `Context.startService()`: запускает started service. Он работает независимо от клиента и должен сам себя остановить через `stopSelf()` / `stopService()`. В современных версиях Android сильно ограничен для фоновых задач — предпочтительнее foreground service, WorkManager, JobScheduler.
+- `startService()` / `Context.startService()`: запускает started service. Он работает независимо от клиента и должен сам себя остановить через `stopSelf()` / `stopService()`. В современных версиях Android сильно ограничен для фоновых задач — предпочтительнее foreground service, `WorkManager`, JobScheduler.
 - `bindService()`: устанавливает привязку к bound service. Жизненный цикл сервиса привязан к клиентам: создается при первой привязке (с `BIND_AUTO_CREATE`), уничтожается, когда все клиенты отвязались (если сервис не был также запущен).
 
 Гибридный сервис может быть и started, и bound: он уничтожается только когда вызван `stopSelf()` / `stopService()` И нет привязанных клиентов.
@@ -842,14 +842,14 @@ class DownloadForegroundService : Service() {
 Services are fundamental Android components for background operations, with complex lifecycle management and multiple binding patterns for inter-process communication.
 
 Key distinction (core to the question):
-- `startService()` / `Context.startService()`: start a started service. It runs independently of the caller; the system keeps it alive until it calls `stopSelf()` / `stopService()` or is killed. On modern Android it is heavily restricted/obsolete for most background work; use foreground services, WorkManager, or job APIs instead.
+- `startService()` / `Context.startService()`: start a started service. It runs independently of the caller; the system keeps it alive until it calls `stopSelf()` / `stopService()` or is killed. On modern Android it is heavily restricted/obsolete for most background work; use foreground services, `WorkManager`, or job APIs instead.
 - `bindService()`: establish a bound service connection. The service lifecycle is tied to bound clients. It is created on first bind (with `BIND_AUTO_CREATE`) and destroyed when no clients remain (unless also started).
 
 Hybrid services may be both started and bound; they are destroyed only when `stopSelf()` / `stopService()` has been called AND no clients remain.
 
 #### `Service` Lifecycle Fundamentals
 
-**1. Started `Service` Lifecycle**
+**1. Started `Service` `Lifecycle`**
 ```kotlin
 class DataSyncService : Service() {
 
@@ -923,7 +923,7 @@ class DataSyncService : Service() {
 }
 ```
 
-**2. Bound `Service` Lifecycle (local binder, same process)**
+**2. Bound `Service` `Lifecycle` (local binder, same process)**
 ```kotlin
 class MusicPlayerService : Service() {
 
@@ -1616,7 +1616,7 @@ class DownloadForegroundService : Service() {
 
 #### Best Practices
 
-1. Lifecycle Management:
+1. `Lifecycle` Management:
    - Always match bind/unbind calls.
    - Handle service death and binder death (`onServiceDisconnected` / `onBindingDied`).
    - Use appropriate `onStartCommand` return values based on desired restart behavior.
@@ -1624,9 +1624,9 @@ class DownloadForegroundService : Service() {
    - Remember: bound-only services are destroyed when all clients unbind; started-only must call `stopSelf`/`stopService`.
 
 2. Foreground Services (Android 12+):
-   - Call `startForeground` within 5 seconds after `startForegroundService`.
+   - `Call` `startForeground` within 5 seconds after `startForegroundService`.
    - Declare `foregroundServiceType` in manifest and request appropriate permissions.
-   - You generally cannot start foreground services from the background on Android 12+; handle `ForegroundServiceStartNotAllowedException` and use alternatives (e.g., WorkManager) where required.
+   - You generally cannot start foreground services from the background on Android 12+; handle `ForegroundServiceStartNotAllowedException` and use alternatives (e.g., `WorkManager`) where required.
 
 3. AIDL Communication:
    - Use `RemoteCallbackList` for managing remote callbacks.
@@ -1647,7 +1647,7 @@ class DownloadForegroundService : Service() {
 
 1. Memory Leaks: forgetting to unbind or unregister callbacks.
 2. ANR: running heavy work on binder or main threads.
-3. Lifecycle Mismatches: binding in `onCreate` but unbinding late or not at all; leaking connections.
+3. `Lifecycle` Mismatches: binding in `onCreate` but unbinding late or not at all; leaking connections.
 4. Foreground Notification Issues: not calling `startForeground` in time or missing required notification/manifest declarations, causing kill on Android 8+ and 12+.
 5. Missing Null Checks: accessing service or binder after unbind.
 
@@ -1684,5 +1684,5 @@ Key considerations: correct started vs bound semantics, modern foreground servic
 ### Prerequisites (Easier)
 
 - [[q-service-component--android--medium]] - `Service`
-- [[q-testing-viewmodels-turbine--android--medium]] - Lifecycle
-- [[q-what-is-viewmodel--android--medium]] - Lifecycle
+- [[q-testing-viewmodels-turbine--android--medium]] - `Lifecycle`
+- [[q-what-is-viewmodel--android--medium]] - `Lifecycle`

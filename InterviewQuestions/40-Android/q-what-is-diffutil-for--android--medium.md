@@ -1,4 +1,4 @@
----
+---\
 id: android-232
 title: DiffUtil / Компонент DiffUtil
 aliases: [DiffUtil, Компонент DiffUtil]
@@ -15,18 +15,18 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-views, difficulty/medium, diffutil, optimization, performance, recyclerview]
 
----
+---\
 # Вопрос (RU)
 
-> Зачем нужен DiffUtil?
+> Зачем нужен `DiffUtil`?
 
 # Question (EN)
 
-> Why do we need DiffUtil?
+> Why do we need `DiffUtil`?
 
 ## Ответ (RU)
 
-**DiffUtil** — это утилитарный класс в Android, который вычисляет разницу между двумя списками и возвращает набор операций обновления для преобразования первого списка во второй. Чаще всего используется с RecyclerView для эффективного обновления только изменившихся элементов вместо перерисовки всего списка.
+**`DiffUtil`** — это утилитарный класс в Android, который вычисляет разницу между двумя списками и возвращает набор операций обновления для преобразования первого списка во второй. Чаще всего используется с `RecyclerView` для эффективного обновления только изменившихся элементов вместо перерисовки всего списка.
 
 ### Зачем Нужен DiffUtil?
 
@@ -443,7 +443,7 @@ class GoodAdapter : ListAdapter<Item, GoodAdapter.ViewHolder>(ItemDiffCallback()
 
 ## Answer (EN)
 
-**DiffUtil** is a utility class in Android that calculates the difference between two lists and produces a list of update operations that convert the first list into the second one. It is primarily used with RecyclerView to efficiently update only changed items instead of refreshing the entire list.
+**`DiffUtil`** is a utility class in Android that calculates the difference between two lists and produces a list of update operations that convert the first list into the second one. It is primarily used with `RecyclerView` to efficiently update only changed items instead of refreshing the entire list.
 
 ### Why Use DiffUtil?
 
@@ -809,11 +809,11 @@ class GoodAdapter : ListAdapter<Item, GoodAdapter.ViewHolder>(ItemDiffCallback()
 
 ### Best Practices (EN)
 
-1. Prefer `ListAdapter` when possible; it integrates DiffUtil for you.
+1. Prefer `ListAdapter` when possible; it integrates `DiffUtil` for you.
 2. Use `AsyncListDiffer` when you need a custom adapter implementation.
 3. Implement `areItemsTheSame` (identity) and `areContentsTheSame` (equality) carefully.
 4. Use payloads for partial updates on complex rows.
-5. Do not call `notifyDataSetChanged()` unnecessarily; let DiffUtil handle fine-grained updates.
+5. Do not call `notifyDataSetChanged()` unnecessarily; let `DiffUtil` handle fine-grained updates.
 6. If manually computing diffs for very large lists, do it off the main thread and apply results on the main thread.
 
 ---

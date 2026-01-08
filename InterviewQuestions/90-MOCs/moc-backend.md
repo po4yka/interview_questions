@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251012-140400
 title: Backend — MOC
 kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/backend]
----
+---\
 
 # Backend — Map of Content
 
@@ -18,7 +18,7 @@ This MOC covers backend development topics including databases, SQL, APIs, serve
 Start with database basics, SQL fundamentals, and simple API concepts. Focus on understanding relational databases, basic queries, and REST API principles.
 
 **Topics to cover:**
-1. **Database Fundamentals**
+1. **`Database` Fundamentals**
    - Relational database concepts
    - Primary keys, unique constraints, foreign keys
    - Basic table design and normalization
@@ -36,8 +36,8 @@ Start with database basics, SQL fundamentals, and simple API concepts. Focus on 
    - Request/response structure
    - Basic authentication
 
-4. **Database Management**
-   - [[q-database-migration-purpose--backend--medium]] - Database migrations
+4. **`Database` Management**
+   - [[q-database-migration-purpose--backend--medium]] - `Database` migrations
    - Schema evolution and versioning
    - Backup and restore basics
 
@@ -53,14 +53,14 @@ Build on fundamentals with query optimization, advanced SQL, API design patterns
 
 2. **Advanced SQL**
    - Subqueries and CTEs (Common Table Expressions)
-   - Window functions
+   - `Window` functions
    - Stored procedures and functions
    - Triggers and constraints
 
 3. **Views & Virtual Tables**
    - [[q-virtual-tables-disadvantages--backend--medium]] - Virtual tables and views
    - Materialized views
-   - View optimization strategies
+   - `View` optimization strategies
 
 4. **API Design Patterns**
    - RESTful API best practices
@@ -78,7 +78,7 @@ Build on fundamentals with query optimization, advanced SQL, API design patterns
 Master database scaling, distributed transactions, microservices architecture, and high-availability systems.
 
 **Topics to cover:**
-1. **Database Scaling**
+1. **`Database` Scaling**
    - Read replicas and replication
    - Sharding strategies (horizontal/vertical)
    - Partitioning techniques
@@ -91,22 +91,22 @@ Master database scaling, distributed transactions, microservices architecture, a
    - Event sourcing and CQRS
 
 3. **Microservices Architecture**
-   - Service decomposition strategies
+   - `Service` decomposition strategies
    - Inter-service communication (sync/async)
-   - Service discovery and load balancing
+   - `Service` discovery and load balancing
    - Circuit breakers and resilience patterns
 
 4. **High Availability & Reliability**
    - Failover and disaster recovery
-   - Database clustering
+   - `Database` clustering
    - Connection pooling optimization
    - Health checks and monitoring
 
 5. **Performance at Scale**
-   - Database connection optimization
+   - `Database` connection optimization
    - Batch processing strategies
    - Asynchronous processing patterns
-   - Queue-based architectures
+   - `Queue`-based architectures
 
 ## By Difficulty
 
@@ -141,11 +141,11 @@ LIMIT 50
 
 ### Databases
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Database Fundamentals (Start Here)
 - [[q-relational-table-unique-data--backend--medium]] - Storing unique data with primary keys and constraints
-- [[q-database-migration-purpose--backend--medium]] - Database migrations and schema evolution
+- [[q-database-migration-purpose--backend--medium]] - `Database` migrations and schema evolution
 - Understanding relational vs non-relational databases
 - CRUD operations and basic SQL syntax
 - Data types and constraints (NOT NULL, CHECK, DEFAULT)
@@ -153,14 +153,14 @@ LIMIT 50
 #### Database Design & Normalization
 - Normalization forms (1NF, 2NF, 3NF, BCNF)
 - Denormalization strategies for performance
-- Entity-Relationship (ER) modeling
+- `Entity`-Relationship (ER) modeling
 - Foreign key relationships and referential integrity
 - Composite keys vs surrogate keys
 
 #### Views & Virtual Tables
 - [[q-virtual-tables-disadvantages--backend--medium]] - Virtual tables and their limitations
 - Regular views vs materialized views
-- View performance characteristics
+- `View` performance characteristics
 - Using views for abstraction and security
 - Updatable views and restrictions
 
@@ -182,7 +182,7 @@ LIMIT 50
 
 #### Transactions & Concurrency Control
 - ACID properties detailed (Atomicity, Consistency, Isolation, Durability)
-- Transaction isolation levels (Read Uncommitted, Read Committed, Repeatable Read, Serializable)
+- Transaction isolation levels (Read Uncommitted, Read Committed, Repeatable Read, `Serializable`)
 - Lock types (row-level, table-level, advisory locks)
 - Pessimistic vs optimistic locking
 - Deadlock detection, prevention, and resolution
@@ -204,7 +204,7 @@ LIMIT 50
 - Prepared statements and query caching
 - Connection timeout configuration
 
-**All Database Questions:**
+**All `Database` Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "50-Backend"
@@ -214,7 +214,7 @@ SORT difficulty ASC, file.name ASC
 
 ### SQL & Query Optimization
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### SQL Basics & Syntax
 - SELECT statements and projection
@@ -236,7 +236,7 @@ SORT difficulty ASC, file.name ASC
 - GROUP BY clause
 - HAVING vs WHERE
 - Grouping sets and ROLLUP
-- Window functions for running totals
+- `Window` functions for running totals
 
 #### Subqueries & CTEs
 - Scalar subqueries
@@ -246,10 +246,10 @@ SORT difficulty ASC, file.name ASC
 - Recursive CTEs for hierarchical queries
 
 #### Advanced SQL Features
-- Window functions (ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD)
+- `Window` functions (ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD)
 - CASE expressions and conditional logic
 - COALESCE and NULL handling
-- String manipulation functions
+- `String` manipulation functions
 - Date/time functions and operations
 - JSON and array operations (PostgreSQL)
 
@@ -287,7 +287,7 @@ SORT difficulty ASC, file.name ASC
 
 ### APIs & Web Services
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### REST API Fundamentals
 - HTTP methods (GET, POST, PUT, PATCH, DELETE)
@@ -300,7 +300,7 @@ SORT difficulty ASC, file.name ASC
 #### REST API Design Best Practices
 - Resource naming conventions
 - Idempotency in API design
-- HATEOAS (Hypermedia as the Engine of Application State)
+- HATEOAS (Hypermedia as the Engine of `Application` State)
 - API versioning strategies (URL, header, media type)
 - Pagination techniques (offset-based, cursor-based)
 - Filtering, sorting, and searching
@@ -327,7 +327,7 @@ SORT difficulty ASC, file.name ASC
 #### API Performance & Optimization
 - Rate limiting strategies (token bucket, leaky bucket, fixed window, sliding window)
 - Throttling and backpressure
-- Response compression (gzip, Brotli)
+- `Response` compression (gzip, Brotli)
 - Caching strategies (ETags, Cache-Control headers)
 - API gateway patterns
 - Connection pooling for backend services
@@ -350,7 +350,7 @@ SORT difficulty ASC, file.name ASC
 
 #### WebSockets & Real-Time APIs
 - WebSocket protocol basics
-- Long polling vs Server-Sent Events (SSE) vs WebSockets
+- `Long` polling vs Server-Sent Events (SSE) vs WebSockets
 - Real-time data streaming
 - Connection management and heartbeats
 - Scaling WebSocket connections
@@ -365,13 +365,13 @@ SORT difficulty ASC, file.name ASC
 
 ### Performance & Optimization
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Performance Measurement
 - Identifying performance bottlenecks
-- Application Performance Monitoring (APM) tools
+- `Application` Performance Monitoring (APM) tools
 - Profiling CPU and memory usage
-- Database query profiling
+- `Database` query profiling
 - Network latency measurement
 - Load testing and stress testing
 
@@ -379,7 +379,7 @@ SORT difficulty ASC, file.name ASC
 - Query optimization techniques
 - Index selection and tuning
 - Connection pooling configuration
-- Database replication for read scaling
+- `Database` replication for read scaling
 - Partitioning and sharding strategies
 - Query result caching
 
@@ -387,7 +387,7 @@ SORT difficulty ASC, file.name ASC
 - Code-level optimization
 - Algorithm complexity reduction
 - Memory management and garbage collection
-- Thread pool sizing
+- `Thread` pool sizing
 - Asynchronous processing patterns
 - Lazy loading and eager loading trade-offs
 
@@ -400,7 +400,7 @@ SORT difficulty ASC, file.name ASC
 - Cache stampede prevention
 
 #### Response Time Optimization
-- Response compression (gzip, Brotli)
+- `Response` compression (gzip, Brotli)
 - Minimizing payload size
 - Reducing number of requests
 - HTTP/2 and HTTP/3 benefits
@@ -411,7 +411,7 @@ SORT difficulty ASC, file.name ASC
 - Async job processing with queues
 - Job scheduling and cron patterns
 - Batch vs stream processing
-- Worker pool management
+- `Worker` pool management
 - Job retry and failure handling
 - Priority queues for job ordering
 
@@ -433,7 +433,7 @@ SORT difficulty ASC, file.name ASC
 
 ### Caching & Data Storage
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Cache Fundamentals
 - What is caching and why use it
@@ -491,7 +491,7 @@ SORT difficulty ASC, file.name ASC
 
 ### Security
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Authentication Fundamentals
 - Username/password authentication
@@ -514,11 +514,11 @@ SORT difficulty ASC, file.name ASC
 #### Common Web Vulnerabilities
 - SQL injection prevention
 - Cross-Site Scripting (XSS) prevention
-- Cross-Site Request Forgery (CSRF) protection
-- Server-Side Request Forgery (SSRF)
-- XML External Entity (XXE) attacks
+- Cross-Site `Request` Forgery (CSRF) protection
+- Server-Side `Request` Forgery (SSRF)
+- XML External `Entity` (XXE) attacks
 - Command injection prevention
-- Path traversal vulnerabilities
+- `Path` traversal vulnerabilities
 
 #### Secure Communication
 - HTTPS and TLS/SSL
@@ -564,7 +564,7 @@ SORT difficulty ASC, file.name ASC
 
 ### Scalability & Architecture
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Horizontal Vs Vertical Scaling
 - Vertical scaling (scale-up) benefits and limits
@@ -572,33 +572,33 @@ SORT difficulty ASC, file.name ASC
 - Auto-scaling based on metrics
 - Stateless vs stateful services
 - Load balancing algorithms
-- Service discovery mechanisms
+- `Service` discovery mechanisms
 
 #### Database Scaling Strategies
 - Read replicas for read scaling
 - Write scaling with sharding
-- Database partitioning (horizontal, vertical, functional)
+- `Database` partitioning (horizontal, vertical, functional)
 - Consistent hashing for data distribution
 - Multi-master replication
 - Cross-region replication
 
 #### Microservices Architecture
 - Monolith vs microservices trade-offs
-- Service decomposition strategies
+- `Service` decomposition strategies
 - Domain-Driven Design (DDD) and bounded contexts
 - Inter-service communication (REST, gRPC, message queues)
-- Service mesh (Istio, Linkerd)
+- `Service` mesh (Istio, Linkerd)
 - API gateway patterns
 - Backend for Frontend (BFF) pattern
 
 #### Message Queues & Event-Driven Architecture
-- Message queue benefits (RabbitMQ, Kafka, SQS)
+- `Message` queue benefits (RabbitMQ, Kafka, SQS)
 - Publisher-subscriber pattern
 - Event sourcing pattern
 - Command Query Responsibility Segregation (CQRS)
 - Saga pattern for distributed transactions
 - Dead letter queues
-- Message ordering and idempotency
+- `Message` ordering and idempotency
 
 #### Load Balancing & High Availability
 - Load balancer types (L4 vs L7)
@@ -629,7 +629,7 @@ SORT difficulty ASC, file.name ASC
 #### Containerization & Orchestration
 - Docker containerization benefits
 - Container orchestration with Kubernetes
-- Service deployment strategies (blue-green, canary, rolling)
+- `Service` deployment strategies (blue-green, canary, rolling)
 - Resource limits and requests
 - Pod autoscaling (HPA, VPA)
 - StatefulSets for stateful applications
@@ -644,7 +644,7 @@ SORT difficulty ASC, file.name ASC
 
 ### Transactions & Consistency
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Transaction Fundamentals
 - ACID properties detailed (Atomicity, Consistency, Isolation, Durability)
@@ -657,7 +657,7 @@ SORT difficulty ASC, file.name ASC
 - Read Uncommitted (dirty reads possible)
 - Read Committed (prevents dirty reads)
 - Repeatable Read (prevents non-repeatable reads)
-- Serializable (full isolation, prevents phantom reads)
+- `Serializable` (full isolation, prevents phantom reads)
 - Isolation level trade-offs (performance vs consistency)
 - Default isolation levels by database
 
@@ -703,7 +703,7 @@ SORT difficulty ASC, file.name ASC
 - Last-write-wins (LWW)
 - Version vectors and vector clocks
 - Conflict-free Replicated Data Types (CRDTs)
-- Application-level conflict resolution
+- `Application`-level conflict resolution
 - Merge strategies for concurrent updates
 
 **All Transaction Questions:**

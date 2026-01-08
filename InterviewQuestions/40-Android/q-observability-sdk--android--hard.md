@@ -1,4 +1,4 @@
----
+---\
 id: android-487
 title: Design Client Observability & Health-Gated Rollouts / Проектирование клиентской
   наблюдаемости и health-gated релизов
@@ -16,7 +16,7 @@ sources: []
 created: 2025-10-29
 updated: 2025-10-29
 tags: [android/analytics, android/logging-tracing, android/performance-startup, difficulty/hard, topic/android]
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать SDK наблюдаемости для Android, который обеспечивает crash/perf метрики и health‑gated staged rollouts?
@@ -43,7 +43,7 @@ SDK наблюдаемости собирает метрики производ�
 
 Модули: metrics-core, trace, crash-anr, sampler, store, uploader (WorkManager/JobScheduler‑based), gates, flags.
 
-SDK должен учитывать ограничения background execution и использовать надёжный, battery‑friendly механизм планирования задач (например, WorkManager) для отправки телеметрии.
+SDK должен учитывать ограничения background execution и использовать надёжный, battery‑friendly механизм планирования задач (например, `WorkManager`) для отправки телеметрии.
 
 ### Data Model
 
@@ -95,7 +95,7 @@ Observability SDK collects performance metrics, crash/ANR data, and enables heal
 
 Modules: metrics-core, trace, crash-anr, sampler, store, uploader (WorkManager/JobScheduler‑based), gates, flags.
 
-The SDK must respect Android background execution limits and use reliable, battery‑friendly scheduling (e.g., WorkManager) for telemetry uploads.
+The SDK must respect Android background execution limits and use reliable, battery‑friendly scheduling (e.g., `WorkManager`) for telemetry uploads.
 
 ### Data Model
 

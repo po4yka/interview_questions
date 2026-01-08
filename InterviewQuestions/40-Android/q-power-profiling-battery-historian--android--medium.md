@@ -1,4 +1,4 @@
----
+---\
 id: android-626
 title: Power Profiling with Battery Historian / Профилирование энергии с Battery Historian
 aliases: [Power Profiling with Battery Historian, Профилирование энергии с Battery Historian]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/monitoring-slo, android/performance-battery, android/profiling, battery, difficulty/medium]
 sources:
   - "https://developer.android.com/topic/performance/power/battery-historian"
----
+---\
 # Вопрос (RU)
 > Как провести анализ энергопотребления приложения с помощью Battery Historian и Energy Profiler: сбор данных, интерпретация wakelock, сетевой активности и план устранения проблем?
 
@@ -50,7 +50,7 @@ sources:
 ### 4. План Действий
 
 - **Wakelock leaks**: убедитесь, что `wakeLock.release()` вызывается гарантированно (например, в `finally` или в коллбэке по завершении работы); не полагайтесь на таймауты/корутины как на автоматическое освобождение.
-- **Network batching**: объединяйте запросы, используйте эффективные протоколы (например, HTTP/2), применяйте WorkManager с `setRequiredNetworkType` для фоновой синхронизации.
+- **Network batching**: объединяйте запросы, используйте эффективные протоколы (например, HTTP/2), применяйте `WorkManager` с `setRequiredNetworkType` для фоновой синхронизации.
 - **Location**: переключите на более экономичные режимы (например, `PRIORITY_BALANCED_POWER_ACCURACY`), используйте геозоны вместо частого polling, пересмотрите частоту обновлений.
 - **Background tasks**: используйте WorkManager/JobScheduler вместо долгоживущих ручных сервисов и нецелевых foreground-сервисов.
 
@@ -89,7 +89,7 @@ sources:
 ### 4. Action Plan
 
 - **Wakelock leaks**: ensure `wakeLock.release()` is always called (e.g., in `finally` or completion callbacks); do not rely on timeouts/coroutines as automatic release mechanisms.
-- **Network batching**: batch requests, use efficient protocols (e.g., HTTP/2), and schedule background sync via WorkManager with `setRequiredNetworkType` (or similar constraints) instead of ad-hoc background work.
+- **Network batching**: batch requests, use efficient protocols (e.g., HTTP/2), and schedule background sync via `WorkManager` with `setRequiredNetworkType` (or similar constraints) instead of ad-hoc background work.
 - **Location**: switch to more power-friendly modes (e.g., `PRIORITY_BALANCED_POWER_ACCURACY`), use geofencing instead of frequent polling, and review update frequency.
 - **Background tasks**: prefer WorkManager/JobScheduler over long-running manual services or unnecessary foreground services.
 

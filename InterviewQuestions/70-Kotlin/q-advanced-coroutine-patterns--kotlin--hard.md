@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-133
 title: "Advanced Coroutine Patterns / Продвинутые паттерны корутин"
 aliases: ["Advanced Coroutine Patterns", "Продвинутые паттерны корутин"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-consumer, semaphore]
----
+---\
 # Вопрос (RU)
 > Что такое продвинутые паттерны корутин в Kotlin? Объясните паттерн pipeline, producer-consumer с несколькими стадиями, пулинг ресурсов с Mutex/Semaphore, кастомные scope builders и паттерны rate limiting.
 
@@ -1104,7 +1104,7 @@ GlobalScope.launch {
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Channels Documentation](https://kotlinlang.org/docs/channels.html)
 - [Shared Mutable State and Concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html)
-- [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Coroutine `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 
 ## Related Questions
 

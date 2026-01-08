@@ -1,4 +1,4 @@
----
+---\
 id: android-023
 title: "React Native vs Flutter comparison / Сравнение React Native и Flutter"
 aliases: ["React Native vs Flutter", "Сравнение React Native и Flutter"]
@@ -16,7 +16,7 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Сравните React Native и Flutter: архитектуру, производительность, экосистему и сценарии использования.
@@ -37,7 +37,7 @@ tags: [android/ui-compose, android/ui-views, difficulty/medium]
 
 **React Native:**
 - JavaScript-движок (Hermes/JSC) выполняет JS-код и взаимодействует с нативными модулями через механизм межъязыкового взаимодействия (исторически JSON Bridge; в новой архитектуре — JSI + Fabric + TurboModules с более эффективной моделью)
-- Использует нативные UI-компоненты платформы (например, `View`, Text, Button на Android/iOS)
+- Использует нативные UI-компоненты платформы (например, `View`, Text, `Button` на Android/iOS)
 - Для доступа к платформенным API требуются нативные модули (Android/iOS), экспортирующие функциональность в JS
 
 ```kotlin
@@ -174,7 +174,7 @@ See also: [[c-cross-platform-development]]
 
 **React Native:**
 - A JavaScript engine (Hermes/JSC) executes JS code and communicates with native modules via a cross-language mechanism (historically a serialized JSON bridge; in the new architecture: JSI + Fabric + TurboModules with a more efficient model)
-- Uses platform-native UI components (e.g., `View`, Text, Button on Android/iOS)
+- Uses platform-native UI components (e.g., `View`, Text, `Button` on Android/iOS)
 - Requires native modules (Android/iOS) to expose platform APIs to JS
 
 ```kotlin

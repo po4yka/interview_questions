@@ -1,4 +1,4 @@
----
+---\
 id: android-053
 title: Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров
 aliases: [Jank Detection and Frame Metrics, Обнаружение рывков и метрики кадров]
@@ -17,7 +17,7 @@ created: 2025-10-11
 updated: 2025-11-11
 tags: [android/monitoring-slo, android/performance-rendering, difficulty/medium, en, ru]
 
----
+---\
 # Вопрос (RU)
 > Реализуйте мониторинг метрик кадров для обнаружения и исправления рывков. Используйте FrameMetricsAggregator, OnFrameMetricsAvailableListener и инструменты трассировки (Systrace/Perfetto) для выявления проблем рендеринга.
 
@@ -1064,10 +1064,10 @@ chrome trace.html
 
 What to look for:
 1. Missed frame deadlines (red/yellow frames)
-2. Long `measure/layout` (> ~8 ms) → complex hierarchy
+2. `Long` `measure/layout` (> ~8 ms) → complex hierarchy
 3. Expensive `draw` (> ~8 ms) → heavy custom rendering/overdraw
 4. GC pauses during rendering
-5. Long-running work on main thread
+5. `Long`-running work on main thread
 
 Example snippet:
 
@@ -1244,7 +1244,7 @@ class FrameMetricsMonitor {
 
 ### Предпосылки (проще)
 
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView`
 
 ### Связанные (средний уровень)
 

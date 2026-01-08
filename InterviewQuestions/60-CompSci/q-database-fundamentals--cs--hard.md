@@ -1,4 +1,4 @@
----
+---\
 id: cs-036
 title: "Database Fundamentals / 4fdff04121"
 aliases: ["04fdff04121", "Database Fundamentals"]
@@ -16,7 +16,7 @@ updated: "2025-11-11"
 tags: [acid, database, difficulty/hard, indexing, normalization, nosql, sql, transactions]
 sources: ["https://en.wikipedia.org/wiki/Database"]
 
----
+---\
 # Вопрос (RU)
 > Объясните фундаментальные концепции баз данных. Что такое ACID, транзакции, индексы, нормализация? Когда использовать SQL vs NoSQL?
 
@@ -81,7 +81,7 @@ data class UserDocument(
 - Isolation (изолированность): конкурентные транзакции (в той или иной степени, в зависимости от уровня изоляции) не видят промежуточных состояний друг друга.
 - Durability (долговечность): после `COMMIT` изменения переживают сбои, как реализовано движком хранения.
 
-Важно: аннотации фреймворков (например, `@Transaction` в Room) лишь используют механизмы конкретной СУБД и не создают дополнительных гарантий долговечности/изоляции сверх того, что поддерживает сам движок.
+Важно: аннотации фреймворков (например, `@Transaction` в `Room`) лишь используют механизмы конкретной СУБД и не создают дополнительных гарантий долговечности/изоляции сверх того, что поддерживает сам движок.
 
 ```kotlin
 // ✅ Атомарный перевод, опирающийся на транзакционную семантику БД
@@ -280,9 +280,9 @@ data class Order(
 )
 ```
 
-**7. Room Database Best Practices:**
+**7. `Room` `Database` Best Practices:**
 
-*Теория:* Room — абстракция над SQLite для Android, используемая как конкретный пример реляционного хранилища в приложениях. Ключевые компоненты: `Entity` (таблицы), `DAO` (Data Access Object), `RoomDatabase`. Рекомендации:
+*Теория:* `Room` — абстракция над `SQLite` для Android, используемая как конкретный пример реляционного хранилища в приложениях. Ключевые компоненты: `Entity` (таблицы), `DAO` (Data Access Object), `RoomDatabase`. Рекомендации:
 - Использовать `Flow`/`LiveData` для реактивных запросов.
 - Использовать `@Transaction` / `withTransaction` для атомарных операций.
 - Настраивать `Migration` для изменений схемы между версиями.
@@ -342,8 +342,8 @@ abstract class AppDatabaseV2 : RoomDatabase() {
 
 ## Answer (EN)
 
-**Database Theory:**
-Database is an organized structure for storing and managing data. Main concepts: ACID (atomicity, consistency, isolation, durability), transactions (atomic units of work), indexes (speed up lookups), normalization (reduce redundancy and anomalies). SQL databases are relational; NoSQL databases are non-relational with various data models.
+**`Database` Theory:**
+`Database` is an organized structure for storing and managing data. Main concepts: ACID (atomicity, consistency, isolation, durability), transactions (atomic units of work), indexes (speed up lookups), normalization (reduce redundancy and anomalies). SQL databases are relational; NoSQL databases are non-relational with various data models.
 
 **1. SQL vs NoSQL:**
 
@@ -396,7 +396,7 @@ data class UserDocument(
 - Isolation: concurrent transactions do not see each other's intermediate states (to the degree provided by the configured isolation level).
 - Durability: once a transaction is committed, its changes survive crashes (as implemented by the underlying storage engine).
 
-Note: Framework annotations (e.g., Room's @Transaction) rely on the underlying DB engine; they do not by themselves create durability or isolation guarantees beyond what the engine provides.
+Note: Framework annotations (e.g., `Room`'s @Transaction) rely on the underlying DB engine; they do not by themselves create durability or isolation guarantees beyond what the engine provides.
 
 ```kotlin
 // Atomic transfer example, relying on DB transactional semantics
@@ -566,7 +566,7 @@ data class Customer3NF(
 )
 ```
 
-**6. Database Design Principles:**
+**6. `Database` Design Principles:**
 
 *Theory:* Core principles:
 - Choose appropriate data types.
@@ -596,9 +596,9 @@ data class Order(
 )
 ```
 
-**7. Room Database Best Practices:**
+**7. `Room` `Database` Best Practices:**
 
-*Theory:* Room is an SQLite abstraction layer for Android used for local persistence and caching. It is included here as a concrete example of relational database usage in applications. Key components: Entity (tables), DAO (data access objects), Database (RoomDatabase). Use:
+*Theory:* `Room` is an `SQLite` abstraction layer for Android used for local persistence and caching. It is included here as a concrete example of relational database usage in applications. Key components: `Entity` (tables), DAO (data access objects), `Database` (RoomDatabase). Use:
 - `Flow`/`LiveData` for reactive queries.
 - @Transaction / withTransaction for atomic operations.
 - Migrations for schema changes across versions.
@@ -696,7 +696,7 @@ abstract class AppDatabaseV2 : RoomDatabase() {
 - [[c-relational-databases]] - Relational database concepts
 
 ### Advanced (Harder)
-- Database sharding and partitioning
+- `Database` sharding and partitioning
 - Distributed database systems
 - Advanced indexing strategies
 

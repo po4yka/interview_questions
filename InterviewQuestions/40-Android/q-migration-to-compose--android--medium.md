@@ -1,4 +1,4 @@
----
+---\
 id: android-262
 title: "Migration To Compose / Миграция на Compose"
 aliases: ["Migration To Compose", "Миграция на Compose"]
@@ -14,9 +14,9 @@ related: [c-jetpack-compose, c-mvvm, q-recyclerview-explained--android--medium, 
 sources: []
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, difficulty/medium, jetpack-compose, migration, xml-to-compose]
+tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, difficulty/medium, migration, xml-to-compose]
 
----
+---\
 # Вопрос (RU)
 
 > Какая стратегия миграции большого проекта на Jetpack Compose?
@@ -91,7 +91,7 @@ app/
 ```
 
 **Этап 5: Гибридная навигация**
-- Navigation Component + ComposeFragment для постепенного перехода
+- Navigation `Component` + ComposeFragment для постепенного перехода
 - Или Compose Navigation с `AndroidViewBinding` для legacy-экранов
 
 **Этап 6: Design System**
@@ -131,7 +131,7 @@ fun HeavyList(items: List<Item>) {
 Включите R8/ProGuard оптимизации: `minifyEnabled = true`, `shrinkResources = true`. По мере миграции удаляйте дублирующиеся XML-ресурсы и старые `View`-библиотеки, чтобы избежать роста размера.
 
 **Риск 3: Сложные кастомные `View`**
-Используйте Canvas API в Compose для полного контроля над отрисовкой.
+Используйте `Canvas` API в Compose для полного контроля над отрисовкой.
 
 ### План Миграции (50+ экранов)
 
@@ -208,7 +208,7 @@ app/
 ```
 
 **Phase 5: Hybrid Navigation**
-- Navigation Component + ComposeFragment for gradual transition
+- Navigation `Component` + ComposeFragment for gradual transition
 - Or Compose Navigation with `AndroidViewBinding` for legacy screens
 
 **Phase 6: Design System**
@@ -248,7 +248,7 @@ fun HeavyList(items: List<Item>) {
 Enable R8/ProGuard optimizations: `minifyEnabled = true`, `shrinkResources = true`. As you migrate, remove duplicate XML resources and old `View`-based libraries to avoid unnecessary size growth.
 
 **Risk 3: Complex Custom `Views`**
-Use Canvas API in Compose for full drawing control.
+Use `Canvas` API in Compose for full drawing control.
 
 ### Migration Plan (50+ screens)
 
@@ -299,7 +299,7 @@ Use Canvas API in Compose for full drawing control.
 
 ### Похожие
 - [[q-how-does-jetpack-compose-work--android--medium]] - внутреннее устройство Compose
-- [[q-recyclerview-explained--android--medium]] - паттерны использования RecyclerView
+- [[q-recyclerview-explained--android--medium]] - паттерны использования `RecyclerView`
 - [[q-mutable-state-compose--android--medium]] - управление состоянием в Compose
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - сохранение состояния
 
@@ -315,7 +315,7 @@ Use Canvas API in Compose for full drawing control.
 
 ### Related
 - [[q-how-does-jetpack-compose-work--android--medium]] - Compose internals
-- [[q-recyclerview-explained--android--medium]] - RecyclerView patterns
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` patterns
 - [[q-mutable-state-compose--android--medium]] - State management in Compose
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - State preservation
 

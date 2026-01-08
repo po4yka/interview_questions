@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-143200"
 title: "Clean Architecture / Чистая Архитектура"
 aliases: ["Clean Architecture", "Clean Code Architecture", "Архитектура Роберта Мартина", "Чистая Архитектура"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-architecture-patterns, c-mvvm, c-repository-pattern, c-dependency-injection, c-software-design]
+related: ["c-architecture-patterns", "c-mvvm", "c-repository-pattern", "c-dependency-injection", "c-software-design"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-patterns", "clean-architecture", "concept", "difficulty/medium", "domain-layer", "repository", "use-cases"]
----
+---\
 
 # Clean Architecture / Чистая Архитектура
 
@@ -585,7 +585,7 @@ object DataModule {
 ### When to Use Clean Architecture
 
 - **Large, complex apps**: Apps with significant business logic
-- **Long-term projects**: Projects expected to be maintained for years
+- **`Long`-term projects**: Projects expected to be maintained for years
 - **Team development**: Large teams with parallel feature development
 - **Testability critical**: Apps requiring comprehensive testing
 - **Framework independence**: Apps that may migrate frameworks/platforms
@@ -596,7 +596,7 @@ object DataModule {
 ### When to Consider Simpler Architecture
 
 - **Small apps**: Single-feature or prototype apps
-- **Short-term projects**: Hackathons, proof-of-concepts
+- **`Short`-term projects**: Hackathons, proof-of-concepts
 - **Solo developers**: Very small teams with simple requirements
 - **Simple CRUD apps**: Apps with minimal business logic
 - **Learning projects**: Beginners learning Android (start simpler)
@@ -611,7 +611,7 @@ object DataModule {
 - **Reusability**: Domain layer can be shared (e.g., KMM)
 - **Team collaboration**: Teams can work on layers independently
 - **Flexibility**: Easy to swap implementations (e.g., change database)
-- **Long-term sustainability**: Architecture scales with project growth
+- **`Long`-term sustainability**: Architecture scales with project growth
 
 **Cons**:
 - **Complexity**: More layers, interfaces, and classes
@@ -634,27 +634,27 @@ object DataModule {
 - **Business rules in entities**: Domain models contain validation logic
 - **Return Result or sealed classes**: Proper error handling
 - **Suspend functions**: Use coroutines for async operations
-- **Flow for streams**: Observable data with Kotlin Flow
+- **`Flow` for streams**: Observable data with Kotlin `Flow`
 
 ### Data Layer
 
 - **Implement Domain interfaces**: Repository implementations
 - **Separate data sources**: Network, database, cache
-- **Use mappers**: Convert DTO ↔ Entity ↔ Domain
+- **Use mappers**: Convert DTO ↔ `Entity` ↔ Domain
 - **Error handling**: Convert data layer errors to domain errors
 - **Caching strategy**: Implement proper caching (network + cache)
 - **Offline support**: Handle offline scenarios gracefully
-- **Use Room for local**: Type-safe database with Flow support
-- **Use Retrofit for network**: Type-safe API calls
+- **Use `Room` for local**: Type-safe database with `Flow` support
+- **Use `Retrofit` for network**: Type-safe API calls
 
 ### Presentation Layer
 
 - **ViewModels depend on Use Cases**: Not directly on repositories
-- **One ViewModel per screen**: Keep ViewModels focused
+- **One `ViewModel` per screen**: Keep ViewModels focused
 - **UI State sealed classes**: Represent all possible UI states
 - **Handle one-time events**: Use Channels or Event wrappers
-- **Lifecycle awareness**: Use viewLifecycleOwner in fragments
-- **Dependency injection**: Use Hilt for all dependencies
+- **`Lifecycle` awareness**: Use viewLifecycleOwner in fragments
+- **Dependency injection**: Use `Hilt` for all dependencies
 - **Keep UI dumb**: No business logic in Activities/Fragments/Composables
 
 ## Common Patterns

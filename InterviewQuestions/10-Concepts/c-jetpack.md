@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-141322"
 title: "Jetpack / Jetpack"
 aliases: ["Jetpack"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-viewmodel, c-livedata, c-room-library, c-navigation-component, c-workmanager]
+moc: "moc-cs"
+related: ["c-viewmodel", "c-livedata", "c-room-library", "c-navigation-component", "c-workmanager"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ Jetpack (Android Jetpack) — это набор библиотек, инстру
 
 ## Key Points (EN)
 
-- Jetpack is modular and backward-compatible: components like Lifecycle, ViewModel, LiveData, Room, Navigation, WorkManager, and Paging can be adopted independently.
+- Jetpack is modular and backward-compatible: components like `Lifecycle`, `ViewModel`, `LiveData`, `Room`, Navigation, `WorkManager`, and Paging can be adopted independently.
 - Encourages clean architecture: simplifies implementing MVVM and separation of concerns, making code easier to test and maintain.
 - Reduces boilerplate: built-in handling for lifecycle-aware components, data persistence, navigation graphs, and background tasks.
 - Aligns with Kotlin-first, modern APIs: many Jetpack libraries are optimized for Kotlin, coroutines, and now Jetpack Compose for declarative UI.
@@ -39,7 +40,7 @@ Jetpack (Android Jetpack) — это набор библиотек, инстру
 
 ## Ключевые Моменты (RU)
 
-- Модульность и обратная совместимость: компоненты Jetpack (Lifecycle, ViewModel, LiveData, Room, Navigation, WorkManager, Paging и др.) можно подключать независимо.
+- Модульность и обратная совместимость: компоненты Jetpack (`Lifecycle`, `ViewModel`, `LiveData`, `Room`, Navigation, `WorkManager`, Paging и др.) можно подключать независимо.
 - Поддержка чистой архитектуры: упрощает внедрение MVVM и разделение ответственности, улучшая тестируемость и сопровождение кода.
 - Сокращение шаблонного кода: встроенная поддержка компонентов с учетом жизненного цикла, навигации, фоновых задач и работы с данными.
 - Современные Kotlin-ориентированные API: многие библиотеки Jetpack оптимизированы для Kotlin, корутин и декларативного UI с Jetpack Compose.

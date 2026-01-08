@@ -1,4 +1,4 @@
----
+---\
 id: android-491
 title: Тестирование ViewModel с Turbine / Testing ViewModels with Turbine
 aliases: [2535414238403e32303d3835 ViewModels, Testing ViewModels, Turbine, Turbine Library]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/testing-unit, coroutines, difficulty/medium, flow, testing, turbine]
 
----
+---\
 # Вопрос (RU)
 > Как тестировать `ViewModel`, которые отдают `Flow`/`StateFlow`, с помощью библиотеки Turbine?
 
@@ -161,7 +161,7 @@ Approach: Turbine is a testing library that simplifies testing Kotlin `Flows` by
 
 Key Concepts:
 - Turbine allows you to assert `Flow` emissions sequentially.
-- Provides the `test {}` extension function for `Flows`.
+- `Provides` the `test {}` extension function for `Flows`.
 - Supports testing multiple emissions, errors, and completion.
 - Works well with coroutine test dispatchers (e.g., `runTest`, `MainDispatcherRule`) so you can control time and execution.
 

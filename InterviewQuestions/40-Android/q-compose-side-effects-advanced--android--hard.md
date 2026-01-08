@@ -1,4 +1,4 @@
----
+---\
 id: android-254
 title: Compose Side Effects (Advanced) / Побочные эффекты Compose (продвинуто)
 aliases: [Compose Side Effects Advanced, Побочные эффекты Compose]
@@ -17,7 +17,7 @@ tags: [android/ui-compose, android/ui-state, difficulty/hard]
 sources:
   - "https://developer.android.com/jetpack/compose/side-effects"
 
----
+---\
 # Вопрос (RU)
 > Как выбирать и правильно использовать API побочных эффектов Compose (LaunchedEffect, DisposableEffect, SideEffect, produceState)?
 
@@ -125,7 +125,7 @@ DisposableEffect(lifecycleOwner) {
 
 ## Answer (EN)
 
-**Short Version**:
+**`Short` Version**:
 
 Use `LaunchedEffect` for async work, `DisposableEffect` for resources that need cleanup, `SideEffect` for syncing state to external systems after recomposition, and `produceState` to turn async sources into `State<T>`.
 

@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-system-design"
-related: [c-design-systems, c-theming, c-material-design]
+related: ["c-design-systems", "c-theming", "c-material-design"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
+tags: [concept, difficulty/medium, system-design]
 ---
 
 # Summary (EN)

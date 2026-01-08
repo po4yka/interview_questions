@@ -1,4 +1,4 @@
----
+---\
 id: android-617
 title: Wear OS Health Integration / Интеграция Health Services и Health Connect
 aliases: [Wear OS Health Integration, Интеграция Health Services и Health Connect]
@@ -18,7 +18,7 @@ sources:
   - "https://developer.android.com/guide/health-and-fitness/health-connect"
   - "https://developer.android.com/training/wearables/health-services"
 
----
+---\
 # Вопрос (RU)
 > Как построить систему сбора и синхронизации данных здоровья на Wear OS: комбинировать Health Services (онлайн измерения, batching) и Health Connect (шаринг на телефон), не нарушая энергобюджет и политику разрешений?
 
@@ -80,7 +80,7 @@ measureClient.registerMeasureCallback(
 
 - Запускайте `ForegroundService` только для активных тренировочных сессий через `ExerciseClient`; остальной сбор переводите в пассивный мониторинг.
 - Избегайте постоянной работы `Activity`; используйте Tiles/Complications для отображения состояния и ключевых метрик на циферблате без пробуждения UI.
-- Для фоновой агрегации/аплоада используйте системно-дружественные механизмы планирования задач (например, WorkManager с ограничениями по батарее/заряду), но не пытайтесь обходить лимиты длительными произвольными задачами.
+- Для фоновой агрегации/аплоада используйте системно-дружественные механизмы планирования задач (например, `WorkManager` с ограничениями по батарее/заряду), но не пытайтесь обходить лимиты длительными произвольными задачами.
 
 ### Health Connect Integration
 
@@ -164,7 +164,7 @@ See also [[c-android]].
 
 - Restrict foreground services to active workout sessions; rely on passive monitoring otherwise.
 - Prefer Tiles/Complications to show key metrics without keeping an `Activity` running.
-- Use system-friendly background scheduling (e.g., WorkManager) for periodic aggregation and upload; do not bypass platform limits.
+- Use system-friendly background scheduling (e.g., `WorkManager`) for periodic aggregation and upload; do not bypass platform limits.
 
 ### Health Connect Integration
 
@@ -177,7 +177,7 @@ See also [[c-android]].
 
 ### Policy and Testing
 
-- Request only necessary health-related permissions and clearly justify their use to comply with Google Play policies.
+- `Request` only necessary health-related permissions and clearly justify their use to comply with Google Play policies.
 - Handle connectivity loss gracefully: buffer locally and sync when the phone/network becomes available.
 - Use Health Services emulator/virtual sensors and Health Connect CLI tooling for automated and manual testing.
 

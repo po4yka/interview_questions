@@ -1,14 +1,22 @@
----
-id: ivc-20251030-120000
-title: Modularization / Модуляризация
-aliases: [Modularization, Multi-Module, Модульность, Модуляризация]
-kind: concept
-summary: Splitting Android app into independent, reusable Gradle modules
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, architecture, concept, gradle, modularization]
----
+---\
+id: "20251030-120000"
+title: "Modularization / Модуляризация"
+aliases: ["Modularization", "Multi-Module", "Модульность", "Модуляризация"]
+summary: "Splitting Android app into independent, reusable Gradle modules"
+topic: "android"
+subtopics: ["architecture", "gradle", "modularization"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "architecture", "concept", "gradle", "modularization", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -16,14 +24,14 @@ tags: [android, architecture, concept, gradle, modularization]
 
 ## Core Concept
 
-**Module Types**:
+**`Module` Types**:
 - **App module** (`com.android.application`): Entry point, depends on feature modules
 - **Library modules** (`com.android.library`): Reusable Android components
 - **Feature modules**: Self-contained user-facing features (e.g., `:feature:login`, `:feature:profile`)
 - **Core/Common modules**: Shared utilities, domain models, base classes (e.g., `:core:ui`, `:core:data`)
 - **Data modules**: Repository implementations, API clients (e.g., `:data:auth`, `:data:user`)
 
-**Module Structure Example**:
+**`Module` Structure Example**:
 ```
 :app
 :feature:home
@@ -78,12 +86,12 @@ tags: [android, architecture, concept, gradle, modularization]
 
 ## Best Practices
 
-**Public API Surface**:
+**Public API `Surface`**:
 - Minimize exposed classes (use `internal` visibility)
 - Define clear module contracts via interfaces
 - Use Kotlin's visibility modifiers effectively
 
-**Module Boundaries**:
+**`Module` Boundaries**:
 - Keep modules focused (Single Responsibility Principle)
 - Avoid tight coupling between modules
 - Use dependency inversion (depend on abstractions, not implementations)

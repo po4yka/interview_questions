@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-android-graphics, c-gpu-rendering, c-canvas-drawing, c-custom-views, c-surfaceview]
+moc: "moc-cs"
+related: ["c-android-graphics", "c-gpu-rendering", "c-canvas-drawing", "c-custom-views", "c-surfaceview"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

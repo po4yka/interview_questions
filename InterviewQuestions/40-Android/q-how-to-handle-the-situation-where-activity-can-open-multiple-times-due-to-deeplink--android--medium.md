@@ -1,4 +1,4 @@
----
+---\
 id: android-274
 title: "How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink / Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"
 aliases: ["How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink", "Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-10-15
 tags: [android, android/activity, android/intents-deeplinks, android/ui-navigation, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Как обработать ситуацию, когда `Activity` может открыться несколько раз из-за deeplink?
@@ -205,9 +205,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**Преимущества Navigation Component**:
+**Преимущества Navigation `Component`**:
 - Автоматическое управление back stack
-- Паттерн Single-Activity
+- Паттерн Single-`Activity`
 - Type-safe аргументы
 
 ### Сравнение Решений
@@ -217,14 +217,14 @@ class MainActivity : AppCompatActivity() {
 | singleTop | Простота, предотвращает дубликаты на вершине | Разрешает дубликаты ниже в стеке | Большинство deeplink сценариев |
 | `Intent` flags | Гибкость, программный контроль | Требует явного применения и понимания поведения task | Динамическая логика |
 | Trampoline | Полный контроль маршрутизации | Дополнительная `Activity`, усложнение и накладные расходы | Сложная централизованная маршрутизация |
-| Navigation Component | Современный, type-safe | Кривая обучения | Новые проекты, Single-Activity подход |
+| Navigation `Component` | Современный, type-safe | Кривая обучения | Новые проекты, Single-`Activity` подход |
 
 ### Best Practices
 
 1. Используйте **singleTop** для большинства deeplink целей (если это соответствует UX и навигации).
-2. Реализуйте **onNewIntent()** для deeplink-целей, если вы ожидаете получать новые intents в уже существующую Activity (например, при `singleTop` или `FLAG_ACTIVITY_SINGLE_TOP`).
+2. Реализуйте **onNewIntent()** для deeplink-целей, если вы ожидаете получать новые intents в уже существующую `Activity` (например, при `singleTop` или `FLAG_ACTIVITY_SINGLE_TOP`).
 3. Вызывайте **setIntent()** в `onNewIntent()` для обновления текущего intent.
-4. Используйте **Navigation Component** для новых проектов и сценариев с Single-Activity архитектурой.
+4. Используйте **Navigation `Component`** для новых проектов и сценариев с Single-`Activity` архитектурой.
 5. Применяйте **Trampoline pattern** только при необходимости сложной маршрутизации и централизованной обработки deeplink.
 6. Тщательно **тестируйте** с различными состояниями навигации, сценариями запуска приложения и конфигурациями task.
 
@@ -406,9 +406,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**Navigation Component benefits**:
+**Navigation `Component` benefits**:
 - Automatic back stack management
-- Single-Activity pattern
+- Single-`Activity` pattern
 - Type-safe arguments
 
 ### Solution Comparison
@@ -418,14 +418,14 @@ class MainActivity : AppCompatActivity() {
 | singleTop | Simple, prevents top duplicates | Allows duplicates below in stack | Most deeplink scenarios |
 | `Intent` flags | Flexible, programmatic control | Requires explicit use and understanding of task behavior | Dynamic logic |
 | Trampoline | Full routing control | Extra activity, overhead and complexity | Complex centralized routing |
-| Navigation Component | Modern, type-safe | Learning curve | New projects, Single-Activity setups |
+| Navigation `Component` | Modern, type-safe | Learning curve | New projects, Single-`Activity` setups |
 
 ### Best Practices
 
 1. Use **singleTop** for most deeplink targets (when aligned with UX and navigation design).
-2. Implement **onNewIntent()** for deeplink targets when you expect to receive new intents in an existing Activity (e.g., with `singleTop` or `FLAG_ACTIVITY_SINGLE_TOP`).
-3. Call **setIntent()** in `onNewIntent()` to update the current intent.
-4. Use **Navigation Component** for new projects and Single-Activity style navigation.
+2. Implement **onNewIntent()** for deeplink targets when you expect to receive new intents in an existing `Activity` (e.g., with `singleTop` or `FLAG_ACTIVITY_SINGLE_TOP`).
+3. `Call` **setIntent()** in `onNewIntent()` to update the current intent.
+4. Use **Navigation `Component`** for new projects and Single-`Activity` style navigation.
 5. Apply the **Trampoline pattern** only when you need complex routing and centralized deeplink handling.
 6. Thoroughly **test** across different navigation states, app launch modes, and task configurations.
 
@@ -437,7 +437,7 @@ class MainActivity : AppCompatActivity() {
 - What happens to the back stack with singleTask vs singleTop?
 - How to test deeplink handling in different navigation states?
 - Can you combine multiple launch modes in the same application?
-- How does Navigation Component handle deeplink conflicts?
+- How does Navigation `Component` handle deeplink conflicts?
 
 ## References
 

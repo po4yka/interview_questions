@@ -1,4 +1,4 @@
----
+---\
 id: lang-081
 title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 aliases: [Flow Flatmap Operator, Оператор flatMap для Flow]
@@ -14,7 +14,7 @@ related: [c-coroutines, c-flow]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languages, reactive]
----
+---\
 # Вопрос (RU)
 > Чем в Kotlin `Flow` воспользоваться, если нужно преобразовать один поток данных в другой поток данных?
 
@@ -41,9 +41,9 @@ flow {
 ```
 
 **Варианты:**
-- `flatMapConcat` — последовательная обработка внутренних Flow в порядке прихода значений.
-- `flatMapMerge` — конкурентная обработка нескольких внутренних Flow с межлевелингом значений.
-- `flatMapLatest` — при поступлении нового значения отменяет предыдущий внутренний Flow и переключается на новый.
+- `flatMapConcat` — последовательная обработка внутренних `Flow` в порядке прихода значений.
+- `flatMapMerge` — конкурентная обработка нескольких внутренних `Flow` с межлевелингом значений.
+- `flatMapLatest` — при поступлении нового значения отменяет предыдущий внутренний `Flow` и переключается на новый.
 
 ## Answer (EN)
 
@@ -65,7 +65,7 @@ flow {
 **Variants:**
 - `flatMapConcat` - sequentially collects inner Flows in order.
 - `flatMapMerge` - collects from multiple inner Flows concurrently, interleaving values.
-- `flatMapLatest` - cancels the previous inner Flow when a new value arrives and switches to the latest.
+- `flatMapLatest` - cancels the previous inner `Flow` when a new value arrives and switches to the latest.
 
 ---
 

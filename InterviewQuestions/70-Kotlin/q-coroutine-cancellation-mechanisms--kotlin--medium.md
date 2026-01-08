@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-205
 title: "Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин"
 aliases: [Coroutine Cancellation, Механизмы отмены корутин]
@@ -15,14 +15,14 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [kotlin, coroutines, cancellation, cooperative, isactive, cancellationexception, difficulty/medium]
 source: Kotlin Coroutines Interview Questions PDF
----
+---\
 # Вопрос (RU)
 > Как работает отмена корутин и чем она отличается от отмены потока?
 
 ---
 
 # Question (EN)
-> How does coroutine cancellation work, and how is it different from canceling a Thread?
+> How does coroutine cancellation work, and how is it different from canceling a `Thread`?
 ## Ответ (RU)
 
 **Отмена корутин является кооперативной**, то есть корутина должна сотрудничать, проверяя отмену в точках приостановки или вручную. Это фундаментально отличается от небезопасного принудительного завершения потока и от устаревших механизмов типа `Thread.stop()`.
@@ -221,7 +221,7 @@ parent.join()
 
 ## Answer (EN)
 
-**Coroutine cancellation is cooperative**, meaning a coroutine must cooperate by checking for cancellation at suspension points or manually. This contrasts with unsafe forced thread termination mechanisms (like the deprecated `Thread.stop()`), and is similar in spirit to cooperative thread interruption.
+**`Coroutine` cancellation is cooperative**, meaning a coroutine must cooperate by checking for cancellation at suspension points or manually. This contrasts with unsafe forced thread termination mechanisms (like the deprecated `Thread.stop()`), and is similar in spirit to cooperative thread interruption.
 
 ### Cooperative Cancellation
 
@@ -385,7 +385,7 @@ job.cancel()
 job.join()
 ```
 
-**NonCancellable Context** (for cleanup that must complete):
+**NonCancellable `Context`** (for cleanup that must complete):
 ```kotlin
 val job = launch {
     try {
@@ -441,7 +441,7 @@ parent.join()
 | **Safety** | Safe, predictable; no forced kill | Forced termination APIs (`stop`) are unsafe and deprecated |
 | **Cleanup** | `finally` runs on completion/cancellation of a coroutine | `finally` runs when thread exits normally or by cooperative interruption |
 
-**Thread Interruption (for comparison)**:
+**`Thread` Interruption (for comparison)**:
 ```kotlin
 // Thread interruption (cooperative)
 val thread = Thread {
@@ -458,7 +458,7 @@ thread.start()
 thread.interrupt() // Signals interruption; thread must cooperate
 ```
 
-**Coroutine Cancellation (modern way)**:
+**`Coroutine` Cancellation (modern way)**:
 ```kotlin
 // Coroutine cancellation (structured & cooperative)
 val job = launch {
@@ -511,7 +511,7 @@ catch (e: CancellationException) {
 
 ### Summary
 
-**Coroutine cancellation** is:
+**`Coroutine` cancellation** is:
 - **Cooperative** — requires the coroutine to check
 - **Safe** — predictable when cancellation points are used correctly
 - **Structured** — parent cancels all children within its scope
@@ -533,7 +533,7 @@ catch (e: CancellationException) {
 ## References
 
 - [Cancellation and Timeouts - Kotlin Docs](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
-- [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Coroutine `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 
 ---
 

@@ -27,12 +27,12 @@ This repository contains a **personal** Obsidian vault designed for building and
 ```
 📄 README.md (root level)
 📁 InterviewQuestions/    # Main content directory
-    ├─ Algorithms/     # coding interview problems, LeetCode-style
-    ├─ Android/        # platform, APIs, patterns, pitfalls
-    ├─ Behavioural/    # non-technical interview questions
-    ├─ CompSci/        # computer science concepts
-    ├─ Data Structures/ # data structure implementations
-    └─ System Design/  # scenarios, components, trade-offs
+    ├─ 20-Algorithms/     # coding interview problems, LeetCode-style
+    ├─ 40-Android/        # platform, APIs, patterns, pitfalls
+    ├─ 10-Concepts/       # reusable theory and concepts
+    ├─ 60-CompSci/        # computer science concepts
+    ├─ 30-System-Design/  # scenarios, components, trade-offs
+    └─ ... (see README for full list)
 ```
 
 **Critical Rules:**
@@ -290,7 +290,7 @@ tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
 **When searching or querying:**
 
 1. Use Dataview syntax for dynamic queries
-2. Reference folder names without numbers (e.g., "Algorithms", not "20-Algorithms")
+2. Reference folder names accurately (e.g., "20-Algorithms", not just "Algorithms")
 3. Use English tags for filtering
 4. Consider both topic folders and cross-cutting tag relationships
 

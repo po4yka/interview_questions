@@ -1,4 +1,4 @@
----
+---\
 id: android-102
 title: Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment и Activity
 aliases: [Fragment Lifecycle Connection, Связь жизненных циклов Fragment и Activity]
@@ -16,7 +16,7 @@ moc: moc-android
 related: [c-activity, q-android-runtime-art--android--medium, q-fragment-vs-activity-lifecycle--android--medium, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-view-composition-strategy-compose--android--medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Как жизненный цикл `Fragment` связан с `Activity`?
@@ -29,7 +29,7 @@ sources: []
 
 ## Ответ (RU)
 
-Жизненный цикл `Fragment` **тесно связан** с жизненным циклом `Activity`. `Fragment` не может находиться в состоянии жизненного цикла **выше**, чем состояние его хост-`Activity` (в терминах AndroidX Lifecycle), но имеет **дополнительные колбэки** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). Переходы состояний `Fragment` инициируются через `FragmentManager` и синхронизируются с состоянием `Activity`.
+Жизненный цикл `Fragment` **тесно связан** с жизненным циклом `Activity`. `Fragment` не может находиться в состоянии жизненного цикла **выше**, чем состояние его хост-`Activity` (в терминах AndroidX `Lifecycle`), но имеет **дополнительные колбэки** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). Переходы состояний `Fragment` инициируются через `FragmentManager` и синхронизируются с состоянием `Activity`.
 
 ### Ключевые Правила Зависимости
 
@@ -207,7 +207,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## Answer (EN)
 
-`Fragment` lifecycle is **tightly coupled** with `Activity` lifecycle. A `Fragment` cannot be in a lifecycle state **higher** than its host `Activity` (in AndroidX Lifecycle terms), but it has **additional callbacks** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). `Fragment` state transitions are driven by the `FragmentManager` and synchronized with the `Activity` state.
+`Fragment` lifecycle is **tightly coupled** with `Activity` lifecycle. A `Fragment` cannot be in a lifecycle state **higher** than its host `Activity` (in AndroidX `Lifecycle` terms), but it has **additional callbacks** (`onAttach`, `onCreateView`, `onViewCreated`, `onDestroyView`, `onDetach`). `Fragment` state transitions are driven by the `FragmentManager` and synchronized with the `Activity` state.
 
 ### Key Dependency Rules
 
@@ -430,7 +430,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## References
 
-- Android Official: `Fragment` Lifecycle — https://developer.android.com/guide/fragments/lifecycle
+- Android Official: `Fragment` `Lifecycle` — https://developer.android.com/guide/fragments/lifecycle
 - Android Official: `ViewLifecycleOwner` — https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner()
 
 ## Related Questions

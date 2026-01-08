@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-219
 title: "Coroutines vs Threads on Android / Корутины vs Потоки на Android"
 aliases: [Coroutines vs Threads, Корутины против потоков]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [kotlin, coroutines, threads, performance, android, comparison, difficulty/easy]
 source: Kotlin Coroutines Interview Questions PDF
----
+---\
 # Вопрос (RU)
 > Каковы ключевые различия между корутинами и потоками в Android разработке?
 
@@ -211,13 +211,13 @@ lifecycleScope.launch {
 |--------|---------|-----------|
 | **Weight** | Heavyweight (typically ~0.5-2 MB stack per thread) | Lightweight (orders of magnitude less memory per coroutine) |
 | **Creation Cost** | Expensive (OS kernel involvement) | Cheap (user-space object allocation) |
-| **Context Switching** | Expensive (kernel-level scheduling) | Cheaper (managed in user-space on top of threads) |
+| **`Context` Switching** | Expensive (kernel-level scheduling) | Cheaper (managed in user-space on top of threads) |
 | **Number** | Practically limited (hundreds/thousands typical) | Can run far more tasks for same resources (tens/hundreds of thousands) |
 | **Cancellation** | Cooperative via interrupt, requires manual handling | Cooperative, built into API (isActive, cancel, cancellation exceptions) |
-| **Main Thread Safety** | Manual switching required | Simplified via dispatchers (Dispatchers.Main, etc.) |
+| **Main `Thread` Safety** | Manual switching required | Simplified via dispatchers (Dispatchers.Main, etc.) |
 | **Memory** | Fixed stack per thread | Dynamic, low per-coroutine overhead |
 | **Exception Handling** | Via UncaughtExceptionHandler and try/catch in threads | Structured via CoroutineScope and SupervisorJob |
-| **Lifecycle** | Manual management | Can be lifecycle-aware when using scopes (viewModelScope, lifecycleScope) |
+| **`Lifecycle`** | Manual management | Can be lifecycle-aware when using scopes (viewModelScope, lifecycleScope) |
 
 ### Weight: Lightweight vs Heavyweight
 
@@ -398,7 +398,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Coroutines - Lifecycle-Aware with Proper Scope**:
+**Coroutines - `Lifecycle`-Aware with Proper Scope**:
 ```kotlin
 // - REDUCED LEAK RISK: lifecycleScope ties coroutines to Activity/Fragment lifecycle
 class MyActivity : AppCompatActivity() {
@@ -449,7 +449,7 @@ suspend fun coroutineBenchmark() {
 
 ### Android-Specific Benefits
 
-**1. Main Thread Safety**:
+**1. Main `Thread` Safety**:
 ```kotlin
 lifecycleScope.launch {
     val data = withContext(Dispatchers.IO) { loadData() }
@@ -457,7 +457,7 @@ lifecycleScope.launch {
 }
 ```
 
-**2. Lifecycle Integration**:
+**2. `Lifecycle` Integration**:
 ```kotlin
 viewModelScope.launch { ... } // Cancelled in onCleared()
 lifecycleScope.launch { ... } // Cancelled when LifecycleOwner is destroyed
@@ -474,7 +474,7 @@ lifecycleScope.launch {
 
 ### Code Comparison: Real Example
 
-**Thread Version**:
+**`Thread` Version**:
 ```kotlin
 // - MORE COMPLEX: Thread-based network call
 class UserRepository {
@@ -504,7 +504,7 @@ repository.getUser { user ->
 }
 ```
 
-**Coroutine Version**:
+**`Coroutine` Version**:
 ```kotlin
 // - SIMPLER: Coroutine-based network call
 class UserRepository {
@@ -537,7 +537,7 @@ lifecycleScope.launch {
 
 **Use Coroutines When** (the default on Android):
 - Network calls
-- Database operations
+- `Database` operations
 - File I/O
 - Image processing
 - Any async work in an Android app
@@ -558,7 +558,7 @@ lifecycleScope.launch {
 - Cheaper, user-space scheduling and context switching
 - Support a far larger number of concurrent tasks
 - Built-in cooperative cancellation and structured concurrency
-- Lifecycle-aware when using viewModelScope/lifecycleScope
+- `Lifecycle`-aware when using viewModelScope/lifecycleScope
 - Clear dispatcher-based main/background switching
 
 **Key Takeaway**: On Android, prefer coroutines (with proper scopes and dispatchers) over manually managed threads for most async operations. They are lighter, safer when used correctly, and integrate seamlessly with Android lifecycle components.
@@ -592,9 +592,9 @@ lifecycleScope.launch {
 - [[q-what-is-coroutine--kotlin--easy]] - Basic coroutine concepts
 - [[q-coroutine-builders-basics--kotlin--easy]] - launch, async, runBlocking
 - [[q-coroutine-scope-basics--kotlin--easy]] - CoroutineScope fundamentals
-- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs Thread.sleep()
+- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs `Thread`.sleep()
 
 ### Next Steps (Medium)
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
+- [[q-coroutine-dispatchers--kotlin--medium]] - `Coroutine` dispatchers overview
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `Context`

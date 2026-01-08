@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-064
 title: "Kotlin Properties / Свойства в Kotlin"
 aliases: ["Kotlin Properties", "Свойства в Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, lateinit, lazy, properties, setters]
----
+---\
 # Вопрос (RU)
 > Что такое свойства в Kotlin? Объясните val vs var, пользовательские геттеры и сеттеры, backing fields, lateinit и основы делегирования свойств.
 
@@ -825,7 +825,7 @@ println(resource.data)  // Prints: Computed result (not recomputed)
 ```
 
 **lazy characteristics**:
-- Thread-safe by default
+- `Thread`-safe by default
 - Initialized only once
 - Must be `val` (not `var`)
 - Initialization block runs on first access

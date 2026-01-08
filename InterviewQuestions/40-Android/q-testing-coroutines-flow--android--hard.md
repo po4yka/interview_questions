@@ -1,4 +1,4 @@
----
+---\
 id: android-312
 title: "Testing Coroutines Flow / Тестирование Coroutines Flow"
 aliases: ["Testing Coroutines Flow", "Тестирование Coroutines Flow"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines, difficulty/hard, flow, test-dispatcher, turbine]
 
----
+---\
 # Вопрос (RU)
 
 > Как тестировать suspend функции, `StateFlow` и `SharedFlow`? Объясните TestDispatcher, runTest и библиотеку turbine.
@@ -543,7 +543,7 @@ fun test() = runTest { /* ... */ }
 fun test() = runBlocking { /* ... */ }
 ```
 
-**2. Set Main dispatcher for UI-related code (`ViewModel`, etc.):**
+**2. `Set` Main dispatcher for UI-related code (`ViewModel`, etc.):**
 
 ```kotlin
 // ✅ DO — a JUnit rule that sets Dispatchers.Main to a test dispatcher

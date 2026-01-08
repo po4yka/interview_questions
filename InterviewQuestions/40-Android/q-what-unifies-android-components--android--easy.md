@@ -1,4 +1,4 @@
----
+---\
 id: android-209
 title: Unified Android Components / Объединение компонентов Android
 aliases: [Unified Components, Объединение компонентов]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/intent, android/service, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 > Объединение компонентов Android
 
@@ -312,7 +312,7 @@ contentResolver.query(
 )
 ```
 
-**Unified Component Diagram (Conceptual):**
+**Unified `Component` Diagram (Conceptual):**
 
 ```text
 
@@ -351,7 +351,7 @@ What unifies the main Android components:
 - [[c-android-components]] — Уточнить роли и взаимодействие отдельных компонентов.
 - [[c-intent]] — Подробнее об типах `Intent`, фильтрах и разрешении.
 - Как система выбирает компонент по неявному `Intent` и что влияет на приоритет?
-- Как ограничения фоновой работы влияют на выбор между `Service`, WorkManager и JobScheduler?
+- Как ограничения фоновой работы влияют на выбор между `Service`, `WorkManager` и JobScheduler?
 - Как безопасно использовать `BroadcastReceiver` и `ContentProvider` с точки зрения безопасности и приватности?
 
 ## Follow-ups
@@ -359,7 +359,7 @@ What unifies the main Android components:
 - [[c-android-components]] — Clarify roles and interactions of individual components.
 - [[c-intent]] — Deep dive into intent types, filters, and resolution.
 - How does the system resolve implicit intents between multiple matching components?
-- How do background execution limits influence the choice between Service, WorkManager, and JobScheduler?
+- How do background execution limits influence the choice between `Service`, `WorkManager`, and JobScheduler?
 - How do you secure BroadcastReceivers and ContentProviders to avoid leaking sensitive data?
 
 ## Ссылки (RU)

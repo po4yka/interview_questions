@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-016
 title: "StateFlow and SharedFlow / StateFlow и SharedFlow"
 aliases: ["StateFlow and SharedFlow", "StateFlow и SharedFlow"]
@@ -17,7 +17,7 @@ created: 2025-10-05
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
 
----
+---\
 # Вопрос (RU)
 > Что такое `StateFlow` и `SharedFlow` в Kotlin? В чем их отличия?
 
@@ -76,7 +76,7 @@ sealed class LatestNewsUiState {
 | Функция | `StateFlow` | `LiveData` |
 |---------|------------|-----------|
 | **Начальное значение** | Обязательно | Необязательно |
-| **Lifecycle awareness** | Нет, нужно собирать в lifecycle scope вручную | Да, автоматическое управление подпиской |
+| **`Lifecycle` awareness** | Нет, нужно собирать в lifecycle scope вручную | Да, автоматическое управление подпиской |
 | **Потокобезопасность** | Встроенная | Встроенная |
 | **Трансформации** | Операторы `Flow` | Трансформации `LiveData` |
 
@@ -219,7 +219,7 @@ sharedFlow.resetReplayCache()
 2. **State holder** - Always represents the latest state.
 3. **Conflates values** - Only emits distinct consecutive values (behavior similar to `distinctUntilChanged`).
 4. **Hot flow** - Active regardless of the presence of collectors.
-5. **Thread-safe** - Can be safely updated from any thread.
+5. **`Thread`-safe** - Can be safely updated from any thread.
 
 #### Example Usage
 
@@ -257,8 +257,8 @@ Both are observable data holder classes with similar patterns:
 | Feature | `StateFlow` | `LiveData` |
 |---------|------------|-----------|
 | **Initial value** | Required | Not required |
-| **Lifecycle awareness** | Not lifecycle-aware by itself; must collect in lifecycle-aware scope | Built-in lifecycle awareness |
-| **Thread safety** | Built-in | Built-in |
+| **`Lifecycle` awareness** | Not lifecycle-aware by itself; must collect in lifecycle-aware scope | Built-in lifecycle awareness |
+| **`Thread` safety** | Built-in | Built-in |
 | **Transformation** | `Flow` operators | `LiveData` transformations |
 
 **Key Difference**: `LiveData.observe()` automatically unregisters when the `LifecycleOwner` goes below the STARTED state, whereas collecting from `StateFlow` does not stop automatically — you must collect it in a lifecycle-aware scope such as `lifecycleScope.launch { repeatOnLifecycle(STARTED) { ... } }`.

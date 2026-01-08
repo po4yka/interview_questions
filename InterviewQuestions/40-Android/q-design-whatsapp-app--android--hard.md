@@ -1,4 +1,4 @@
----
+---\
 id: android-468
 title: Design WhatsApp App / Проектирование приложения WhatsApp
 aliases: [Design WhatsApp App, Проектирование приложения WhatsApp]
@@ -17,7 +17,7 @@ tags: [android/media, android/networking-http, android/service, difficulty/hard,
 sources:
   - "https://signal.org/docs/specifications/doubleratchet/"
 
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать мессенджер WhatsApp для Android?
@@ -88,7 +88,7 @@ Design a complete E2E‑encrypted WhatsApp messenger for Android with the follow
 
 **Technical details (for discussion):**
 - Local data model and indexes (`Room` database)
-- Message ID generation and ordering
+- `Message` ID generation and ordering
 - Delivery/ack states (sent/received/read)
 - Attachment pipeline: encrypt → chunk → resumable upload
 - Notification strategy (Android 13–15, `FCM`, grouping)
@@ -184,7 +184,7 @@ Design a complete E2E‑encrypted WhatsApp messenger for Android with the follow
 **Этапы:**
 1.   **WebSocket получение**: получение зашифрованного сообщения через `WebSocket`
 2.   **Расшифровка**: применение `Signal Protocol` `Double` Ratchet для расшифровки ciphertext в plaintext
-3.   **Room DB сохранение**: запись расшифрованного сообщения в `Room` database с индексами для быстрого поиска
+3.   **`Room` DB сохранение**: запись расшифрованного сообщения в `Room` database с индексами для быстрого поиска
 4.   **UI update**: обновление UI через `Flow`/`LiveData` для реактивного отображения новых сообщений
 5.   **Read receipt**: отправка read receipt при открытии чата или прочтении сообщения
 
@@ -321,9 +321,9 @@ Strong consistency для метаданных пользователей и г�
 
 **S3 (Media):**
 
-Lifecycle management для оптимизации стоимости хранилища:
+`Lifecycle` management для оптимизации стоимости хранилища:
 
-- **Lifecycle policies**: автоматический переход `Standard` → `Glacier` → `Delete` по политике ретенции
+- **`Lifecycle` policies**: автоматический переход `Standard` → `Glacier` → `Delete` по политике ретенции
 - **Pre-signed URLs**: временные подписанные URL для доступа к зашифрованным объектам
 - **CDN caching**: кэширование на edge-серверах для низкой латентности
 
@@ -364,7 +364,7 @@ Lifecycle management для оптимизации стоимости храни
 - **PostgreSQL**: реплики для масштабирования чтений
 - **Cassandra**: RF и multi-DC для чтения из ближайшего DC
 
-**Message queue:**
+**`Message` queue:**
 
 - **Kafka**: async обработка для `push` и analytics
 - **Partitioning**: по `userId`/`threadId` для локального порядка
@@ -392,7 +392,7 @@ Lifecycle management для оптимизации стоимости храни
 
 **Память:**
 
-- **Message pagination**: ленивый скролл
+- **`Message` pagination**: ленивый скролл
 - **Lazy load медиа**: загрузка по требованию
 - **LRU cache**: ограниченный кеш превью
 
@@ -411,7 +411,7 @@ Lifecycle management для оптимизации стоимости храни
 **Синхронизация при онлайне:**
 
 - **Batch sync**: по `last_sync_timestamp`
-- **WorkManager**: надёжная фонова синхронизация
+- **`WorkManager`**: надёжная фонова синхронизация
 
 **Conflict resolution:**
 
@@ -437,14 +437,14 @@ Lifecycle management для оптимизации стоимости храни
 
 **Модель данных:**
 
-**Thread (чат):**
+**`Thread` (чат):**
 - `threadId`
 - `participants`
 - `lastMessageId`
 - `unreadCount`
 - `lastActivityAt`
 
-**Message (сообщение):**
+**`Message` (сообщение):**
 - `localId`: локальный `ULID` до получения `globalId`
 - `globalId`: уникальный ID от сервера
 - `threadId`
@@ -512,8 +512,8 @@ OUTBOX state machine:
 
 **Фоновая работа:**
 
-- **WorkManager**
-- **Constraints**
+- **`WorkManager`**
+- **`Constraints`**
 - **Doze Mode**
 
 **Поиск и гигиена:**
@@ -611,7 +611,7 @@ Microservices architecture with horizontal scaling:
 
 ### Android Client: Key Flows
 
-**1. Send Message**
+**1. Send `Message`**
 
 Multi-step sending process with delivery guarantee and encryption:
 
@@ -623,14 +623,14 @@ Multi-step sending process with delivery guarantee and encryption:
 5.   **Device delivery**: on delivery receipt from recipient device, update status to `delivered`
 6.   **Recipient read**: on read receipt from recipient, update status to `read`
 
-**2. Receive Message**
+**2. Receive `Message`**
 
 Incoming message processing with decryption and synchronization:
 
 **Steps:**
 1.   **WebSocket receive**: receive encrypted message via `WebSocket`
 2.   **Decrypt**: apply `Signal Protocol` `Double` Ratchet to decrypt ciphertext
-3.   **Room DB save**: write decrypted message to `Room` database with indexes for fast search
+3.   **`Room` DB save**: write decrypted message to `Room` database with indexes for fast search
 4.   **UI update**: update UI via `Flow`/`LiveData` for reactive new message display
 5.   **Read receipt**: send read receipt on chat open or message read
 
@@ -728,7 +728,7 @@ Voice/video call establishment with NAT traversal:
 - Pub/Sub for fanout
 
 **S3 (Media):**
-- Lifecycle policies
+- `Lifecycle` policies
 - Pre-signed URLs
 - CDN caching
 
@@ -756,7 +756,7 @@ Voice/video call establishment with NAT traversal:
 
 **Read replicas:** PostgreSQL + Cassandra multi-DC
 
-**Message queue:** Kafka for async processing
+**`Message` queue:** Kafka for async processing
 
 **Auto-scaling:** HPA and queue-based scaling
 
@@ -770,11 +770,11 @@ Voice/video call establishment with NAT traversal:
 
 ### Offline Mode
 
-Local DB, send queue with retries, batch sync, WorkManager, conflict resolution with server-preferred metadata and merged messages.
+Local DB, send queue with retries, batch sync, `WorkManager`, conflict resolution with server-preferred metadata and merged messages.
 
 ### Detailed Implementation (Staff-level)
 
-Module decomposition, robust storage, clear data models, Signal-based crypto, OUTBOX state machine, WebSocket/FCM transport, consistent ordering, encrypted attachments, Android 13-15 notifications, background work compliant with Doze, local-only full-text search, storage hygiene, E2EE-compatible anti-abuse, strong observability, and staged rollout with kill-switch.
+`Module` decomposition, robust storage, clear data models, Signal-based crypto, OUTBOX state machine, WebSocket/FCM transport, consistent ordering, encrypted attachments, Android 13-15 notifications, background work compliant with Doze, local-only full-text search, storage hygiene, E2EE-compatible anti-abuse, strong observability, and staged rollout with kill-switch.
 
 ---
 

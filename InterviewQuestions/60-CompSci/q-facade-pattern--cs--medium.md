@@ -1,4 +1,4 @@
----
+---\
 id: dp-009
 title: "Facade Pattern / Паттерн фасад"
 aliases: [Facade Pattern, Паттерн фасад]
@@ -14,7 +14,7 @@ related: [c-architecture-patterns, c-computer-science, q-adapter-pattern--cs--me
 created: 2023-10-15
 updated: 2025-11-11
 tags: [cs, difficulty/medium, facade, gof-patterns, structural-patterns]
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Facade? Когда и зачем его использовать?
 
@@ -663,13 +663,13 @@ Common examples: home theater system, API facade (network + cache + error handli
 
 ## Дополнительные Вопросы (RU)
 
-- Чем паттерн Facade отличается от паттернов Adapter и Proxy?
+- Чем паттерн Facade отличается от паттернов `Adapter` и Proxy?
 - Когда использование Facade может стать вредным (например, god object, чрезмерное сокрытие деталей)?
 - Как бы вы применили Facade в слоистой архитектуре реального проекта?
 
 ## Follow-ups
 
-- How does Facade differ from Adapter and Proxy patterns?
+- How does Facade differ from `Adapter` and Proxy patterns?
 - When can using a Facade become harmful (e.g., god object, hiding too much)?
 - How would you apply Facade in a layered architecture for a real project?
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-003
 title: ANR (Application Not Responding) / ANR (Приложение не отвечает)
 aliases: [ANR (Application Not Responding), ANR (Приложение не отвечает)]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, debugging, difficulty/medium, performance]
 
----
+---\
 # Вопрос (RU)
 > Что такое ANR (`Application` Not Responding) и как его предотвратить?
 
@@ -104,7 +104,7 @@ if (BuildConfig.DEBUG) {
 **Стратегии предотвращения:**
 
 1. Main thread только для лёгких UI-операций; длительные операции должны выполняться в фоне (лимиты ANR — секунды, но ориентируемся на быструю реакцию и избегаем блокировок).
-2. WorkManager для долгих и отложенных фоновых задач.
+2. `WorkManager` для долгих и отложенных фоновых задач.
 3. Минимум тяжёлой работы в lifecycle callbacks (onCreate, onResume).
 4. Избегать длинных synchronized-блоков и других блокирующих примитивов на main thread.
 5. Использовать Dispatchers.IO для I/O, Dispatchers.Default для CPU-задач.
@@ -190,7 +190,7 @@ if (BuildConfig.DEBUG) {
 **Prevention Strategies:**
 
 1. Use the main thread only for lightweight UI work; move long-running operations off the main thread (ANR limits are in seconds, but you target fast responsiveness and avoid blocking).
-2. Use WorkManager for long-running and deferrable background work.
+2. Use `WorkManager` for long-running and deferrable background work.
 3. Minimize heavy work in lifecycle callbacks (onCreate, onResume).
 4. Avoid long synchronized blocks and other blocking primitives on the main thread.
 5. Use Dispatchers.IO for I/O, Dispatchers.Default for CPU-intensive tasks.
@@ -200,7 +200,7 @@ if (BuildConfig.DEBUG) {
 ## Дополнительные Вопросы (Follow-ups, RU)
 
 - Как анализировать ANR-трейсы из `/data/anr/traces.txt` (или bugreport/Android Vitals), чтобы найти корневую причину блокировки?
-- В чем разница между использованием WorkManager и корутин для предотвращения ANR в долгих задачах?
+- В чем разница между использованием `WorkManager` и корутин для предотвращения ANR в долгих задачах?
 - Чем StrictMode `penaltyDeath()` отличается от `penaltyLog()` в контексте обнаружения проблем, приводящих к ANR?
 - Допустимы ли краткие I/O-операции (< 50 мс) на главном потоке и в каких случаях?
 - Как обрабатывать ANR, вызванные сторонними SDK или системными Binder-вызовами, которые сложно контролировать?
@@ -208,7 +208,7 @@ if (BuildConfig.DEBUG) {
 ## Follow-ups
 
 - How do you analyze ANR traces from `/data/anr/traces.txt` (or bugreports/Android Vitals) to identify the root cause of blocking?
-- What's the difference between WorkManager and coroutines for preventing ANRs in long-running tasks?
+- What's the difference between `WorkManager` and coroutines for preventing ANRs in long-running tasks?
 - How does StrictMode penaltyDeath() differ from penaltyLog() in ANR detection?
 - Can brief I/O operations (< 50ms) ever be acceptable on the main thread, and when?
 - How do you handle ANRs caused by third-party SDKs or system Binder calls beyond your control?

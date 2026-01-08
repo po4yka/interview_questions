@@ -1,4 +1,4 @@
----
+---\
 id: lang-030
 title: "Iterator Concept / Концепция Iterator"
 aliases: [Iterator Concept, Концепция Iterator]
@@ -14,7 +14,7 @@ related: [c-collections]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, design-patterns, difficulty/easy, iterator, kotlin]
----
+---\
 # Вопрос (RU)
 > Что такое итератор?
 
@@ -204,7 +204,7 @@ val filtered = list.filter { it % 2 != 0 }
 
 ## Answer (EN)
 
-**Iterator** is an object that allows **element-by-element traversal** of a collection (list, array, set, etc.). It abstracts the underlying structure and provides a uniform way to iterate.
+**`Iterator`** is an object that allows **element-by-element traversal** of a collection (list, array, set, etc.). It abstracts the underlying structure and provides a uniform way to iterate.
 
 ### Iterator Interface
 
@@ -321,7 +321,7 @@ list.asSequence()
 
 ### Iterator Vs Index-Based Loop
 
-**Iterator approach:**
+**`Iterator` approach:**
 ```kotlin
 val iterator = list.iterator()
 while (iterator.hasNext()) {

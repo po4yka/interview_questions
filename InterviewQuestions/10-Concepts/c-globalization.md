@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-024
-title: Globalization & Localization / Глобализация и локализация
-aliases: [Globalization, Internationalization, Localization]
-kind: concept
-summary: Strategies for building Android apps that adapt to languages, regions, scripts, and cultural conventions
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [accessibility, android, concept, globalization, localization]
+id: "20260108-110550"
+title: "Globalization & Localization / Глобализация и локализация"
+aliases: ["Globalization", "Internationalization", "Localization"]
+summary: "Strategies for building Android apps that adapt to languages, regions, scripts, and cultural conventions"
+topic: "android"
+subtopics: ["accessibility", "globalization", "localization"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["accessibility", "android", "concept", "globalization", "localization", "difficulty/medium"]
 ---
 
 # Summary (EN)

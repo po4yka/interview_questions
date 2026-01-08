@@ -1,4 +1,4 @@
----
+---\
 id: android-282
 title: How Navigation Is Implemented In Android / Как реализована навигация в Android
 aliases: [How Navigation Is Implemented In Android, Navigation Implementation, Как реализована навигация в Android, Реализация навигации]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Каким образом осуществляется навигация в Android?
@@ -278,7 +278,7 @@ onBackPressedDispatcher.addCallback(
 - Как вы обрабатываете восстановление состояния навигации после убийства процесса?
 - В чем различия между флагами `launchMode` и как они влияют на back stack?
 - Как бы вы реализовали кастомный back stack для сложной мультимодульной навигации?
-- Как Navigation Component обрабатывает deep links и передачу аргументов?
+- Как Navigation `Component` обрабатывает deep links и передачу аргументов?
 - Каковы trade-off'ы между архитектурой с одной `Activity` и несколькими `Activity`?
 
 ## Ссылки (RU)
@@ -315,7 +315,7 @@ onBackPressedDispatcher.addCallback(
 - How do you handle navigation state restoration after process death?
 - What are the differences between `launchMode` flags and how do they affect back stack?
 - How would you implement a custom back stack for a complex multi-module navigation?
-- How does Navigation Component handle deep links and argument passing?
+- How does Navigation `Component` handle deep links and argument passing?
 - What are the trade-offs between single-`Activity` architecture and multi-`Activity`?
 
 ## References

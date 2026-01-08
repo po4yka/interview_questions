@@ -1,4 +1,4 @@
----
+---\
 id: android-228
 title: What Is ViewStub / Что такое ViewStub
 aliases: [ViewStub, ViewStub Android]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 sources: []
 tags: [android/performance-rendering, android/ui-views, difficulty/medium, lazy-loading, optimization, viewstub]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое ViewStub и когда его следует использовать?
@@ -33,7 +33,7 @@ tags: [android/performance-rendering, android/ui-views, difficulty/medium, lazy-
 
 ### Основная Концепция
 
-При вызове `inflate()` или `setVisibility(`View`.VISIBLE)` происходит:
+При вызове `inflate()` или `setVisibility(``View``.VISIBLE)` происходит:
 1. Инфляция указанного layout-ресурса
 2. ViewStub **заменяет себя** созданным `View` в родительской иерархии
 3. ViewStub перестает существовать (повторная инфляция невозможна)
@@ -200,7 +200,7 @@ ViewStub — легковесный механизм ленивой инфляц
 
 ### Core Concept
 
-When `inflate()` or `setVisibility(`View`.VISIBLE)` is called:
+When `inflate()` or `setVisibility(``View``.VISIBLE)` is called:
 1. The specified layout resource is inflated
 2. ViewStub **replaces itself** with the inflated `View` in the parent hierarchy
 3. ViewStub ceases to exist (re-inflation is impossible)

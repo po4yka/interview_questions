@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-104
 title: "Flow Basics in Kotlin / Основы Flow в Kotlin"
 aliases: ["Flow Basics in Kotlin", "Основы Flow в Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [cold-flow, coroutines, difficulty/easy, flow, kotlin, reactive, streams]
----
+---\
 # Вопрос (RU)
 > Что такое Kotlin `Flow`? Объясните холодные vs горячие потоки, базовые операторы и когда использовать `Flow`.
 
@@ -433,7 +433,7 @@ hotFlow.collect { println(it) }
 **Hot stream characteristics**:
 - Emissions are produced in the producer's coroutine regardless of active collectors.
 - Multiple collectors share the same stream of values.
-- Conceptually similar to a multi-subscriber `Channel`, but exposed via Flow types like `SharedFlow` and `StateFlow`.
+- Conceptually similar to a multi-subscriber `Channel`, but exposed via `Flow` types like `SharedFlow` and `StateFlow`.
 
 ### Flow Builders
 
@@ -689,8 +689,8 @@ suspend fun getUser(): User  // Prefer this
 
 ## References
 
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
-- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
+- [Kotlin `Flow` Documentation](https://kotlinlang.org/docs/flow.html)
+- [Kotlin `Flow` Guide](https://developer.android.com/kotlin/flow)
 - [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
 
 ## Связанные Вопросы (RU)
@@ -705,12 +705,12 @@ suspend fun getUser(): User  // Prefer this
 - [[q-channels-vs-flow--kotlin--medium]] - Каналы vs `Flow`
 
 ### Продвинутые (Harder)
-- [[q-kotlin-flow-basics--kotlin--medium]] - Введение в Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Оператор catch в Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Операторы Flow
+- [[q-kotlin-flow-basics--kotlin--medium]] - Введение в `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] - Оператор catch в `Flow`
+- [[q-flow-operators-map-filter--kotlin--medium]] - Операторы `Flow`
 
 ### Хаб
-- [[q-kotlin-flow-basics--kotlin--medium]] - Комплексное введение в Flow
+- [[q-kotlin-flow-basics--kotlin--medium]] - Комплексное введение в `Flow`
 
 ## Related Questions
 
@@ -724,12 +724,12 @@ suspend fun getUser(): User  // Prefer this
 - [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow`
 
 ### Advanced (Harder)
-- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-kotlin-flow-basics--kotlin--medium]] - `Flow`
+- [[q-catch-operator-flow--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction
 
 ## MOC Links
 

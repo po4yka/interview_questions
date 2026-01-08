@@ -1,25 +1,33 @@
----
-id: concept-layouts
-title: Android Layouts / Макеты Android
-aliases: [Android Layouts, View Layouts, Макеты Android]
-kind: concept
-summary: Layout systems for arranging UI elements in Android applications
-links: []
-created: 2025-11-06
-updated: 2025-11-06
-tags: [android, concept, layouts, ui]
----
+---\
+id: "20260108-110550"
+title: "Android Layouts / Макеты Android"
+aliases: ["Android Layouts", "View Layouts", "Макеты Android"]
+summary: "Layout systems for arranging UI elements in Android applications"
+topic: "android"
+subtopics: ["layouts", "ui"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-06"
+updated: "2025-11-06"
+tags: ["android", "concept", "layouts", "ui", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-Android layouts define the visual structure for user interfaces. A layout is a ViewGroup that contains and arranges View objects (widgets) on the screen.
+Android layouts define the visual structure for user interfaces. A layout is a `ViewGroup` that contains and arranges `View` objects (widgets) on the screen.
 
 **Common Layout Types**:
 
-1. **ConstraintLayout** - Most flexible, uses constraints to position views
-2. **LinearLayout** - Arranges children in single row or column
-3. **FrameLayout** - Stack views on top of each other
-4. **RelativeLayout** - Position children relative to each other or parent
+1. **`ConstraintLayout`** - Most flexible, uses constraints to position views
+2. **`LinearLayout`** - Arranges children in single row or column
+3. **`FrameLayout`** - `Stack` views on top of each other
+4. **`RelativeLayout`** - Position children relative to each other or parent
 5. **GridLayout** - Arranges children in grid
 6. **CoordinatorLayout** - Advanced coordination between child views
 
@@ -27,20 +35,20 @@ Android layouts define the visual structure for user interfaces. A layout is a V
 
 **Performance Considerations**:
 - Flatten view hierarchy to reduce overdraw
-- Use ConstraintLayout to avoid nested layouts
+- Use `ConstraintLayout` to avoid nested layouts
 - Leverage `<merge>` and `<include>` tags
 - Consider ViewStub for conditional UI
 
 # Сводка (RU)
 
-Макеты Android определяют визуальную структуру пользовательских интерфейсов. Макет — это ViewGroup, который содержит и располагает объекты View (виджеты) на экране.
+Макеты Android определяют визуальную структуру пользовательских интерфейсов. Макет — это `ViewGroup`, который содержит и располагает объекты `View` (виджеты) на экране.
 
 **Распространённые типы макетов**:
 
-1. **ConstraintLayout** - Наиболее гибкий, использует ограничения для позиционирования view
-2. **LinearLayout** - Располагает дочерние элементы в одну строку или столбец
-3. **FrameLayout** - Складывает view друг на друга
-4. **RelativeLayout** - Позиционирует дочерние элементы относительно друг друга или родителя
+1. **`ConstraintLayout`** - Наиболее гибкий, использует ограничения для позиционирования view
+2. **`LinearLayout`** - Располагает дочерние элементы в одну строку или столбец
+3. **`FrameLayout`** - Складывает view друг на друга
+4. **`RelativeLayout`** - Позиционирует дочерние элементы относительно друг друга или родителя
 5. **GridLayout** - Располагает дочерние элементы в сетке
 6. **CoordinatorLayout** - Продвинутая координация между дочерними view
 
@@ -48,25 +56,25 @@ Android layouts define the visual structure for user interfaces. A layout is a V
 
 **Соображения производительности**:
 - Упрощение иерархии view для уменьшения overdraw
-- Использование ConstraintLayout для избежания вложенных макетов
+- Использование `ConstraintLayout` для избежания вложенных макетов
 - Применение тегов `<merge>` и `<include>`
 - Использование ViewStub для условного UI
 
 ## Use Cases / Trade-offs
 
-**ConstraintLayout**:
+**`ConstraintLayout`**:
 - Complex responsive layouts
 - Flat hierarchy for performance
 - Responsive design across screen sizes
 
-**LinearLayout**:
+**`LinearLayout`**:
 - Simple list-like arrangements
 - Easy weight distribution
 - Best for simple vertical/horizontal stacks
 
-**FrameLayout**:
+**`FrameLayout`**:
 - Overlaying views (badges, overlays)
-- Fragment containers
+- `Fragment` containers
 - Simplest layout type
 
 **Jetpack Compose** (Modern):

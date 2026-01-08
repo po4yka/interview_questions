@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-120400"
 title: "Memory Leaks / Утечки памяти"
 aliases: ["Android Memory Leaks", "Memory Leak", "Memory Leaks", "Утечка памяти", "Утечки памяти"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-memory-management, c-memory-profiler, c-weak-references, c-memory-optimization, c-android-profiler]
+related: ["c-memory-management", "c-memory-profiler", "c-weak-references", "c-memory-optimization", "c-android-profiler"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "concept", "debugging", "difficulty/medium", "memory-leaks", "memory-management", "performance", "profiling"]
----
+---\
 
 # Memory Leaks / Утечки Памяти
 
@@ -26,13 +26,13 @@ A memory leak occurs when an object that is no longer needed remains in memory b
 
 ## Краткое Описание (RU)
 
-Утечка памяти происходит, когда объект, который больше не нужен, остается в памяти, потому что на него все еще есть ссылки, что не позволяет сборщику мусора освободить эту память. В Android утечки памяти обычно происходят, когда долгоживущие объекты содержат ссылки на короткоживущие объекты, такие как Activity, Fragment или View. Это приводит к увеличению потребления памяти, снижению производительности и потенциально к сбоям OutOfMemoryError. Понимание распространенных паттернов утечек и методов обнаружения необходимо для создания стабильных Android приложений.
+Утечка памяти происходит, когда объект, который больше не нужен, остается в памяти, потому что на него все еще есть ссылки, что не позволяет сборщику мусора освободить эту память. В Android утечки памяти обычно происходят, когда долгоживущие объекты содержат ссылки на короткоживущие объекты, такие как `Activity`, `Fragment` или `View`. Это приводит к увеличению потребления памяти, снижению производительности и потенциально к сбоям OutOfMemoryError. Понимание распространенных паттернов утечек и методов обнаружения необходимо для создания стабильных Android приложений.
 
 ## Key Points (EN)
 
 - Memory leaks prevent garbage collector from freeing unused memory
 - Common causes: static references, inner classes, listeners, handlers, threads
-- Context leaks are the most common type in Android applications
+- `Context` leaks are the most common type in Android applications
 - Tools like LeakCanary, Android Profiler help detect and diagnose leaks
 - ViewModels should never hold references to Views, Activities, or Fragments
 - Always unregister listeners, callbacks, and observers in lifecycle methods
@@ -42,9 +42,9 @@ A memory leak occurs when an object that is no longer needed remains in memory b
 
 - Утечки памяти не позволяют сборщику мусора освобождать неиспользуемую память
 - Частые причины: статические ссылки, внутренние классы, слушатели, handlers, потоки
-- Утечки Context - самый распространенный тип в Android приложениях
+- Утечки `Context` - самый распространенный тип в Android приложениях
 - Инструменты, такие как LeakCanary, Android Profiler, помогают обнаруживать утечки
-- ViewModel никогда не должны содержать ссылки на View, Activity или Fragment
+- `ViewModel` никогда не должны содержать ссылки на `View`, `Activity` или `Fragment`
 - Всегда отписывайтесь от listeners, callbacks и observers в методах жизненного цикла
 - Handlers и AsyncTasks могут вызывать утечки, если не обрабатывать их правильно
 
@@ -425,7 +425,7 @@ class MyApplication : Application() {
 
 ### When to Watch Out
 
-- **Long-lived objects**: Singletons, application-level managers
+- **`Long`-lived objects**: Singletons, application-level managers
 - **Background operations**: Threads, coroutines, AsyncTask
 - **Event listeners**: Click listeners, broadcast receivers, observers
 - **Static references**: Static collections, static variables
@@ -463,12 +463,12 @@ class MyApplication : Application() {
 
 ## Best Practices
 
-- Use Application Context for long-lived objects (Singletons)
+- Use `Application` `Context` for long-lived objects (Singletons)
 - Always unregister listeners, receivers, and observers
 - Prefer static inner classes or separate classes
 - Use WeakReference for Activity/View references in background tasks
-- Use lifecycle-aware components (ViewModel, LiveData, lifecycleScope)
-- Clear Handler messages in onDestroy()
+- Use lifecycle-aware components (`ViewModel`, `LiveData`, lifecycleScope)
+- Clear `Handler` messages in onDestroy()
 - Use viewLifecycleOwner in Fragments for observers
 - Avoid storing Activity/Fragment references in static fields
 - Test for leaks during development with LeakCanary
@@ -478,15 +478,15 @@ class MyApplication : Application() {
 
 ## Prevention Checklist
 
-- [ ] No static references to Activity, Fragment, or View
+- [ ] No static references to `Activity`, `Fragment`, or `View`
 - [ ] All listeners/callbacks unregistered in onDestroy()
 - [ ] Observers use correct lifecycle owner (viewLifecycleOwner in Fragments)
 - [ ] Inner classes are static or use WeakReference
-- [ ] Handler messages cleared in onDestroy()
-- [ ] ViewModel doesn't reference UI components
-- [ ] Singletons use Application Context
+- [ ] `Handler` messages cleared in onDestroy()
+- [ ] `ViewModel` doesn't reference UI components
+- [ ] Singletons use `Application` `Context`
 - [ ] Coroutines use proper lifecycle scopes
-- [ ] Background threads don't hold Activity references
+- [ ] Background threads don't hold `Activity` references
 - [ ] LeakCanary integrated in debug builds
 
 ## Related Concepts

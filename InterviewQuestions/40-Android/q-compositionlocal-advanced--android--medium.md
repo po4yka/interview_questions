@@ -1,4 +1,4 @@
----
+---\
 id: android-467
 title: CompositionLocal Advanced / CompositionLocal — продвинутый уровень
 aliases: [CompositionLocal — продвинутый уровень, CompositionLocal Advanced]
@@ -15,7 +15,7 @@ sources: []
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Когда использовать `CompositionLocal`? Чем различаются `staticCompositionLocalOf` и `compositionLocalOf`?
 
@@ -32,7 +32,7 @@ tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
 **Когда использовать:**
 - Тема, плотность, локаль
 - Haptics, logger, imageLoader
-- DI-корни (Hilt, Koin)
+- DI-корни (`Hilt`, `Koin`)
 
 **Когда НЕ использовать:**
 - Вместо явных параметров для бизнес-логики
@@ -170,7 +170,7 @@ Passes contextual data (theme, locale, DI objects) through the composition tree 
 **When to use:**
 - Theme, density, locale
 - Haptics, logger, imageLoader
-- DI roots (Hilt, Koin)
+- DI roots (`Hilt`, `Koin`)
 
 **When NOT to use:**
 - Instead of explicit parameters for business logic

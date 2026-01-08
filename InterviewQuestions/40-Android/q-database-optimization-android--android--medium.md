@@ -1,4 +1,4 @@
----
+---\
 id: android-452
 title: Database Optimization Android / Оптимизация базы данных Android
 aliases: [Database Optimization Android, Оптимизация базы данных Android]
@@ -17,7 +17,7 @@ tags: [android/performance-memory, android/room, database, difficulty/medium, in
 sources:
   - "https://developer.android.com/training/data-storage/room"
 
----
+---\
 # Вопрос (RU)
 > Какие лучшие практики и техники для оптимизации базы данных в Android приложениях?
 
@@ -90,7 +90,7 @@ dao.insertUsers(users)
 
 ### 3. Асинхронность И Реактивность
 
-Используйте `suspend`-функции и `Flow` (Room KTX), чтобы не выполнять операции с БД на главном потоке и предотвращать `ANR`:
+Используйте `suspend`-функции и `Flow` (`Room` KTX), чтобы не выполнять операции с БД на главном потоке и предотвращать `ANR`:
 
 ```kotlin
 @Dao
@@ -103,7 +103,7 @@ interface UserDao {
 }
 ```
 
-Room для `suspend`- и `Flow`-методов DAO по умолчанию использует собственные executors (query/transaction executors) и запрещает доступ к БД с главного потока (если явно не разрешено). Однако Room не переключает корутины автоматически на `Dispatchers.IO` — корректный контекст (`Dispatchers.IO` или `viewModelScope` с off-main dispatcher) должен быть обеспечен вызывающим кодом. При необходимости контроля для потоков `Flow` используйте `flowOn(...)`.
+`Room` для `suspend`- и `Flow`-методов DAO по умолчанию использует собственные executors (query/transaction executors) и запрещает доступ к БД с главного потока (если явно не разрешено). Однако `Room` не переключает корутины автоматически на `Dispatchers.IO` — корректный контекст (`Dispatchers.IO` или `viewModelScope` с off-main dispatcher) должен быть обеспечен вызывающим кодом. При необходимости контроля для потоков `Flow` используйте `flowOn(...)`.
 
 ### 4. Оптимизация Запросов
 
@@ -159,14 +159,14 @@ class UserRepository @Inject constructor(
 
 Кратко о других важных техниках:
 
-- Включайте WAL (Write-Ahead Logging) через конфигурацию Room для улучшения параллелизма чтения/записи и производительности в большинстве кейсов.
-- Оптимизируйте поиск: избегайте `LIKE '%term%'` без FTS-индекса; для полнотекстового поиска используйте FTS-таблицы Room.
+- Включайте WAL (Write-Ahead Logging) через конфигурацию `Room` для улучшения параллелизма чтения/записи и производительности в большинстве кейсов.
+- Оптимизируйте поиск: избегайте `LIKE '%term%'` без FTS-индекса; для полнотекстового поиска используйте FTS-таблицы `Room`.
 - Используйте ограничения (`UNIQUE`, `CHECK`, внешние ключи при необходимости) для целостности данных, учитывая их влияние на скорость записи.
 - Избегайте долгоживущих транзакций — они могут блокировать другие операции.
 
 ## Answer (EN)
 
-Database optimization in Android requires a comprehensive approach: proper indexing, batching, asynchronous execution, caching, and correct access patterns/configuration. Main goals: fast UI responsiveness, minimized memory footprint, no `ANR` (`Application` Not Responding), and reduced disk overhead.
+`Database` optimization in Android requires a comprehensive approach: proper indexing, batching, asynchronous execution, caching, and correct access patterns/configuration. Main goals: fast UI responsiveness, minimized memory footprint, no `ANR` (`Application` Not Responding), and reduced disk overhead.
 
 ### 1. Indexing
 
@@ -230,7 +230,7 @@ Performance: bulk inserting many records is usually an order of magnitude faster
 
 ### 3. Asynchronicity and Reactivity
 
-Use `suspend` functions and `Flow` (Room KTX) to avoid doing DB work on the main thread and prevent `ANR`:
+Use `suspend` functions and `Flow` (`Room` KTX) to avoid doing DB work on the main thread and prevent `ANR`:
 
 ```kotlin
 @Dao
@@ -243,7 +243,7 @@ interface UserDao {
 }
 ```
 
-For `suspend` and `Flow` DAO methods, Room uses its own background executors (query/transaction executors) and, by default, disallows main-thread DB access (unless explicitly allowed). However, Room does not automatically switch your coroutine context to `Dispatchers.IO`; choosing an appropriate context (`Dispatchers.IO` or `viewModelScope` with a non-main dispatcher for heavy work) is the caller's responsibility. Use `flowOn(...)` for more explicit control over flow execution context when needed.
+For `suspend` and `Flow` DAO methods, `Room` uses its own background executors (query/transaction executors) and, by default, disallows main-thread DB access (unless explicitly allowed). However, `Room` does not automatically switch your coroutine context to `Dispatchers.IO`; choosing an appropriate context (`Dispatchers.IO` or `viewModelScope` with a non-main dispatcher for heavy work) is the caller's responsibility. Use `flowOn(...)` for more explicit control over flow execution context when needed.
 
 ### 4. Query Optimization
 
@@ -299,8 +299,8 @@ Trade-off: consumes memory (depends on object size). Adjust cache size according
 
 Other important techniques (briefly):
 
-- Enable WAL (Write-Ahead Logging) via Room configuration to improve read/write concurrency and performance for most use cases.
-- Optimize search: avoid `LIKE '%term%'` without FTS; for full-text search, use Room FTS tables.
+- Enable WAL (Write-Ahead Logging) via `Room` configuration to improve read/write concurrency and performance for most use cases.
+- Optimize search: avoid `LIKE '%term%'` without FTS; for full-text search, use `Room` FTS tables.
 - Use constraints (`UNIQUE`, `CHECK`, foreign keys when needed) to enforce data integrity, mindful of their write-time cost.
 - Avoid long-running transactions as they may block other operations.
 
@@ -324,12 +324,12 @@ Other important techniques (briefly):
 
 ## Ссылки (RU)
 
-- Документация Android Room: https://developer.android.com/training/data-storage/room
-- Рекомендации по производительности SQLite: https://sqlite.org/performance.html
+- Документация Android `Room`: https://developer.android.com/training/data-storage/room
+- Рекомендации по производительности `SQLite`: https://sqlite.org/performance.html
 
 ## References
 
-- [Android Room Documentation](https://developer.android.com/training/data-storage/room)
+- [Android `Room` Documentation](https://developer.android.com/training/data-storage/room)
 - [SQLite Performance Best Practices](https://sqlite.org/performance.html)
 
 ## Связанные Вопросы (RU)
@@ -346,7 +346,7 @@ Other important techniques (briefly):
 
 ### Связанные (такой Же уровень)
 
-- [[q-room-vs-sqlite--android--medium]] — Сравнение `Room` и чистого SQLite
+- [[q-room-vs-sqlite--android--medium]] — Сравнение `Room` и чистого `SQLite`
 - [[q-performance-optimization-android--android--medium]] — Общая оптимизация производительности Android
 
 ### Продвинутые (сложнее)
@@ -369,11 +369,11 @@ Other important techniques (briefly):
 
 ### Related (Same Level)
 
-- [[q-room-vs-sqlite--android--medium]] — `Room` vs raw SQLite comparison
+- [[q-room-vs-sqlite--android--medium]] — `Room` vs raw `SQLite` comparison
 - [[q-performance-optimization-android--android--medium]] — General Android performance optimization
 
 ### Advanced (Harder)
 
 - `FTS` (Full-Text Search) implementation with `Room`
 - `Paging 3` integration for efficient pagination patterns
-- Database profiling and query optimization techniques
+- `Database` profiling and query optimization techniques

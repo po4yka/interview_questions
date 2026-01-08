@@ -1,13 +1,21 @@
 ---
-id: ivc-20251030-150000
-title: Recomposition / Рекомпозиция
-aliases: [Recomposition, Рекомпозиция]
-kind: concept
-summary: Core Compose mechanism for updating UI when state changes
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, concept, jetpack-compose, recomposition, ui]
+id: "20251030-150000"
+title: "Recomposition / Рекомпозиция"
+aliases: ["Recomposition", "Рекомпозиция"]
+summary: "Core Compose mechanism for updating UI when state changes"
+topic: "android"
+subtopics: ["jetpack-compose", "recomposition", "ui"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: [android, concept, android/ui-compose, recomposition, ui, difficulty/medium]
 ---
 
 # Summary (EN)

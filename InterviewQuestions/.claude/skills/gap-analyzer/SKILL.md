@@ -1,11 +1,11 @@
----
+---\
 name: gap-analyzer
 description: >
   Identify content gaps and suggest new Q&As to create. Analyzes coverage by topic
   and difficulty, finds topics with missing difficulty levels, suggests new Q&A
   titles based on gaps, compares against TAXONOMY.md categories, and generates
   prioritized content roadmaps for planning content sprints.
----
+---\
 
 # Gap Analyzer
 
@@ -13,7 +13,7 @@ description: >
 
 Identify what's missing from the vault and suggest new content:
 
-1. **Coverage Analysis**: Map existing content by topic and difficulty
+1. **Coverage Analysis**: `Map` existing content by topic and difficulty
 2. **Gap Detection**: Find topics/subtopics with insufficient coverage
 3. **Difficulty Gaps**: Identify missing difficulty levels per topic
 4. **Content Suggestions**: Generate specific Q&A ideas to fill gaps
@@ -42,7 +42,7 @@ Required context:
 
 ### Step 1: Collect Current Coverage
 
-Map all existing content:
+`Map` all existing content:
 
 ```
 By Topic:

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-234
 title: "Object, Companion Object, and Singleton Pattern / object, companion object и паттерн Singleton"
 aliases: ["Object Singleton Companion", "Объект Singleton Companion"]
@@ -15,7 +15,7 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [companion-object, difficulty/medium, kotlin, kotlin-features, object-keyword, singleton-pattern]
 sources: ["https://kotlinlang.org/docs/object-declarations.html"]
----
+---\
 # Вопрос (RU)
 > Как работают object, companion object и паттерн singleton в Kotlin?
 
@@ -151,7 +151,7 @@ In Kotlin, the `object` keyword declares a singleton — a single instance that 
 - **object**: Declares a singleton object (a single instance of that type)
 - **companion object**: Object inside a class, accessible through the class name
 - **Initialization on first use**: Initialized when first referenced
-- **Thread-safe initialization**: Creation of `object` / `companion object` is thread-safe, but mutable state inside is not automatically thread-safe
+- **`Thread`-safe initialization**: Creation of `object` / `companion object` is thread-safe, but mutable state inside is not automatically thread-safe
 
 **Object Singleton:**
 ```kotlin
@@ -211,7 +211,7 @@ class User {
 val user = User.create()
 ```
 
-**Practical Application:**
+**Practical `Application`:**
 ```kotlin
 // ✅ Singleton for settings (shared state access point)
 object SettingsManager {

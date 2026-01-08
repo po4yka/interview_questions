@@ -1,11 +1,4 @@
-# Claude Code Configuration for Interview Questions Vault
-
-**Purpose**: Claude Code Skills and configuration for maintaining this bilingual Obsidian interview questions vault.
-
-**Version**: 2.0
-**Last Updated**: 2025-01-05
-
----
+---\
 
 ## Overview
 
@@ -15,7 +8,7 @@ This directory contains Claude Code configuration for automated vault maintenanc
 - **Skills**: 17 specialized skills for common workflows (`skills/`)
 - **Documentation**: This README
 
----
+---\
 
 ## Directory Structure
 
@@ -484,7 +477,7 @@ filename = generate_qna_filename(slug, topic, difficulty)
 3. Multiple topics in `topic` field
 4. Setting `status: reviewed` or `ready` (AI can't)
 5. Brackets in YAML `moc` field
-6. Double brackets in YAML `related` field
+6. `Double` brackets in YAML `related` field
 7. Emoji anywhere
 8. File in wrong folder
 

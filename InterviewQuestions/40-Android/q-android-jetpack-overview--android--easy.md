@@ -1,4 +1,4 @@
----
+---\
 id: android-103
 title: Android Jetpack Overview / Обзор Android Jetpack
 aliases: [Android Jetpack Overview, Обзор Android Jetpack]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-compose, difficulty/easy, jetpack]
 question_kind: android
 
----
+---\
 # Вопрос (RU)
 > Что такое Android Jetpack и какие его основные компоненты?
 
@@ -33,8 +33,8 @@ Android Jetpack — набор официально поддерживаемых
 ### Architecture Components
 
 **`ViewModel`** — сохраняет UI-данные при конфигурационных изменениях.
-**Room** — type-safe абстракция над SQLite с compile-time проверками (ORM-подобный подход).
-**Lifecycle** — отслеживает жизненный цикл `Activity`/`Fragment` и даёт lifecycle-aware API.
+**`Room`** — type-safe абстракция над `SQLite` с compile-time проверками (ORM-подобный подход).
+**`Lifecycle`** — отслеживает жизненный цикл `Activity`/`Fragment` и даёт lifecycle-aware API.
 **Navigation** — декларативная навигация между экранами.
 
 ```kotlin
@@ -70,7 +70,7 @@ fun UserList(viewModel: UserViewModel = hiltViewModel()) {
 
 ### Background Work
 
-**WorkManager** — надёжное выполнение отложенных задач и задач с условиями, в том числе с возможностью переживать перезагрузку устройства (при соответствующей настройке), с поддержкой ограничений и гибкой политики повторов (включая exponential backoff). Точное время запуска не жёстко гарантируется.
+**`WorkManager`** — надёжное выполнение отложенных задач и задач с условиями, в том числе с возможностью переживать перезагрузку устройства (при соответствующей настройке), с поддержкой ограничений и гибкой политики повторов (включая exponential backoff). Точное время запуска не жёстко гарантируется.
 
 ```kotlin
 class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
@@ -85,8 +85,8 @@ class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
 
 ### Data & Storage
 
-**Room** — SQL с compile-time проверками и удобным DAO-API.
-**DataStore** — современная type-safe альтернатива SharedPreferences с поддержкой корутин.
+**`Room`** — SQL с compile-time проверками и удобным DAO-API.
+**DataStore** — современная type-safe альтернатива `SharedPreferences` с поддержкой корутин.
 **Paging** — эффективная постраничная загрузка больших списков.
 
 ```kotlin
@@ -103,7 +103,7 @@ val cursor = db.rawQuery("SELECT * FROM users WHERE active = 1", null)
 
 **Dependency Injection**
 
-**Hilt** — рекомендуемый DI-фреймворк на базе Dagger с поддержкой Android-компонентов, часто используется совместно с Jetpack-компонентами.
+**`Hilt`** — рекомендуемый DI-фреймворк на базе `Dagger` с поддержкой Android-компонентов, часто используется совместно с Jetpack-компонентами.
 
 ```kotlin
 @HiltViewModel
@@ -122,8 +122,8 @@ Below is a practical grouping of key components.
 ### Architecture Components
 
 **`ViewModel`** — survives configuration changes like screen rotation.
-**Room** — type-safe abstraction over SQLite with compile-time verification (ORM-like approach).
-**Lifecycle** — tracks `Activity`/`Fragment` lifecycle and provides lifecycle-aware APIs.
+**`Room`** — type-safe abstraction over `SQLite` with compile-time verification (ORM-like approach).
+**`Lifecycle`** — tracks `Activity`/`Fragment` lifecycle and provides lifecycle-aware APIs.
 **Navigation** — declarative screen navigation.
 
 ```kotlin
@@ -159,7 +159,7 @@ fun UserList(viewModel: UserViewModel = hiltViewModel()) {
 
 ### Background Work
 
-**WorkManager** — robust execution of deferrable and constraint-based background work, including the ability to survive device reboots when configured, with constraints and flexible retry policies (including exponential backoff). It does not strictly guarantee exact timing.
+**`WorkManager`** — robust execution of deferrable and constraint-based background work, including the ability to survive device reboots when configured, with constraints and flexible retry policies (including exponential backoff). It does not strictly guarantee exact timing.
 
 ```kotlin
 class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
@@ -174,8 +174,8 @@ class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
 
 ### Data & Storage
 
-**Room** — SQL with compile-time verification and a convenient DAO API.
-**DataStore** — modern type-safe alternative to SharedPreferences with coroutine support.
+**`Room`** — SQL with compile-time verification and a convenient DAO API.
+**DataStore** — modern type-safe alternative to `SharedPreferences` with coroutine support.
 **Paging** — efficient paginated loading of large lists.
 
 ```kotlin
@@ -192,7 +192,7 @@ val cursor = db.rawQuery("SELECT * FROM users WHERE active = 1", null)
 
 **Dependency Injection**
 
-**Hilt** — recommended DI framework built on Dagger with first-class Android component support, commonly used together with Jetpack components.
+**`Hilt`** — recommended DI framework built on `Dagger` with first-class Android component support, commonly used together with Jetpack components.
 
 ```kotlin
 @HiltViewModel
@@ -203,19 +203,19 @@ class UserViewModel @Inject constructor(
 
 ## Дополнительные Вопросы (RU)
 
-- Когда использовать WorkManager, а когда AlarmManager или foreground `Service`?
+- Когда использовать `WorkManager`, а когда AlarmManager или foreground `Service`?
 - Как `ViewModel` внутренне переживает конфигурационные изменения?
 - Каков путь миграции с `View`-системы на Jetpack Compose?
-- Чем Hilt отличается от ручной настройки Dagger?
-- Каковы преимущества Room по сравнению с "сырым" SQLite?
+- Чем `Hilt` отличается от ручной настройки `Dagger`?
+- Каковы преимущества `Room` по сравнению с "сырым" `SQLite`?
 
 ## Follow-ups
 
-- When to use WorkManager vs AlarmManager vs Foreground `Service`?
+- When to use `WorkManager` vs AlarmManager vs Foreground `Service`?
 - How does `ViewModel` survive configuration changes internally?
 - What's the migration path from `View` system to Jetpack Compose?
-- How does Hilt differ from manual Dagger setup?
-- What are the benefits of Room over raw SQLite?
+- How does `Hilt` differ from manual `Dagger` setup?
+- What are the benefits of `Room` over raw `SQLite`?
 
 ## Ссылки (RU)
 
@@ -232,7 +232,7 @@ class UserViewModel @Inject constructor(
 
 ### Связанные
 - [[q-viewmodel-pattern--android--easy]] — детали паттерна `ViewModel`
-- [[q-room-library-definition--android--easy]] — детали базы данных Room
+- [[q-room-library-definition--android--easy]] — детали базы данных `Room`
 
 ### Продвинутые
 - [[q-workmanager-decision-guide--android--medium]] — стратегии фоновых задач
@@ -245,7 +245,7 @@ class UserViewModel @Inject constructor(
 
 ### Related
 - [[q-viewmodel-pattern--android--easy]] - `ViewModel` pattern details
-- [[q-room-library-definition--android--easy]] - Room database details
+- [[q-room-library-definition--android--easy]] - `Room` database details
 
 ### Advanced
 - [[q-workmanager-decision-guide--android--medium]] - Background work strategies

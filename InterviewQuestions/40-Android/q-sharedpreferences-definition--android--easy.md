@@ -1,4 +1,4 @@
----
+---\
 id: android-133
 title: "SharedPreferences Definition / Определение SharedPreferences"
 aliases: ["SharedPreferences Definition", "Определение SharedPreferences"]
@@ -15,20 +15,20 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/datastore, datastore, difficulty/easy, key-value, persistence, sharedpreferences]
----
+---\
 # Вопрос (RU)
 
-> Что такое SharedPreferences?
+> Что такое `SharedPreferences`?
 
 # Question (EN)
 
-> What is SharedPreferences?
+> What is `SharedPreferences`?
 
 ---
 
 ## Ответ (RU)
 
-**SharedPreferences** — это механизм для **хранения и получения простых данных** в формате **пар ключ-значение**.
+**`SharedPreferences`** — это механизм для **хранения и получения простых данных** в формате **пар ключ-значение**.
 
 Это один из **простейших способов** сохранения небольших объёмов данных, таких как настройки пользователя или состояние приложения между сессиями.
 
@@ -127,7 +127,7 @@ encryptedPrefs.edit {
 
 ## Answer (EN)
 
-**SharedPreferences** is a mechanism for **storing and retrieving simple data** as **key-value pairs**.
+**`SharedPreferences`** is a mechanism for **storing and retrieving simple data** as **key-value pairs**.
 
 It is one of the **simplest ways** to persist small amounts of data, such as user settings or application state between sessions.
 

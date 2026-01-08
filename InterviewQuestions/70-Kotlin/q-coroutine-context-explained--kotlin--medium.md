@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-039
 title: Coroutine Context Explained / CoroutineContext объяснение
 aliases: [Coroutine Context Explained, CoroutineContext объяснение]
@@ -17,7 +17,7 @@ created: 2025-10-06
 updated: 2025-11-11
 tags: [async-programming, concurrency, coroutine-context, coroutines, difficulty/medium, kotlin]
 
----
+---\
 # Вопрос (RU)
 > Что такое CoroutineContext и какие у него основные элементы?
 
@@ -603,7 +603,7 @@ scope.launch(CoroutineName("DataLoader")) {
 }
 ```
 
-Thread names example:
+`Thread` names example:
 
 ```kotlin
 val scope = CoroutineScope(Dispatchers.IO)

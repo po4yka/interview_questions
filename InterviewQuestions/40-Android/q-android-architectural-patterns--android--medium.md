@@ -1,4 +1,4 @@
----
+---\
 id: android-154
 title: Android Architectural Patterns / Архитектурные паттерны Android
 aliases: [Android Architectural Patterns, Архитектурные паттерны Android]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-mvi, android/architecture-mvvm, difficulty/medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
 
@@ -219,7 +219,7 @@ class GetUserUseCase(private val repo: UserRepository) {
 
 - В каких случаях вы выберете MVI вместо MVVM для управления состоянием?
 - Как Clean Architecture реализует инверсию зависимостей в Android?
-- Как обрабатывать общее состояние между несколькими ViewModel в MVVM?
+- Как обрабатывать общее состояние между несколькими `ViewModel` в MVVM?
 - Каковы особенности тестирования для каждого архитектурного паттерна?
 - Как паттерн Repository интегрируется со слоями Clean Architecture?
 

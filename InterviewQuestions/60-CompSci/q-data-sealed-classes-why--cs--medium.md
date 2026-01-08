@@ -13,7 +13,7 @@ moc: moc-cs
 related: [c-computer-science, q-sealed-classes--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
-tags: [data-class, difficulty/medium, kotlin, programming-languages, sealed-classes]
+tags: [data-classes, difficulty/medium, kotlin, programming-languages, sealed-classes]
 sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
 ---
 # Вопрос (RU)

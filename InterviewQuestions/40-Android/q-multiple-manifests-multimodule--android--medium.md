@@ -1,4 +1,4 @@
----
+---\
 id: android-265
 title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
 aliases: ["Android Manifest Merging", "Multiple Manifests Multimodule", "Множественные манифесты в мультимодульных проектах", "Слияние манифестов Android"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium, manifest-merging, modularization]
 sources: ["https://developer.android.com/build/manage-manifests", "https://developer.android.com/studio/build/manifest-merge"]
 
----
+---\
 # Вопрос (RU)
 
 > Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
@@ -127,7 +127,7 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 In multi-module projects, each module has its own **AndroidManifest.xml** for:
 
 1. **Modular independence** - the module describes its own components, permissions, intent filters, and requirements without polluting the main manifest
-2. **Component encapsulation** - Activities/Services/Providers are declared in and scoped to the module that owns them
+2. **`Component` encapsulation** - Activities/Services/Providers are declared in and scoped to the module that owns them
 3. **Automatic merging** - the build system (Gradle + manifest merger) combines all manifests into a single final manifest
 
 ### How it Works
@@ -162,7 +162,7 @@ project/
 
 **Benefits:**
 - Removing a module → its permissions and components are automatically removed from the final merged manifest
-- Module is easier to move between projects (minimal changes needed)
+- `Module` is easier to move between projects (minimal changes needed)
 - Clear ownership of permissions/components per module
 
 ### Merge Priority

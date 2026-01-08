@@ -1,4 +1,4 @@
----
+---\
 id: "20251018-140002"
 title: "Array / Массив"
 aliases: ["Array", "Arrays", "Fixed-size Array", "Массив", "Массивы", "Фиксированный массив"]
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: [c-data-structures, c-hash-tables, c-hash-map, c-collections, c-collections-android]
+related: ["c-data-structures", "c-hash-tables", "c-hash-map", "c-collections", "c-collections-android"]
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["algorithms", "arrays", "collections", "concept", "data-structures", "difficulty/medium"]
----
+---\
 
 # Summary (EN)
 
@@ -98,7 +98,7 @@ This formula enables O(1) access to any element.
 | **Delete at end** | O(1) | Just decrement logical size |
 | **Delete at position** | O(n) | Must shift elements |
 
-*Note: For dynamic arrays (ArrayList), insert at end is O(1) amortized, but O(n) in worst case when resizing occurs.
+*Note: For dynamic arrays (`ArrayList`), insert at end is O(1) amortized, but O(n) in worst case when resizing occurs.
 
 | Операция | Сложность | Пояснение |
 |----------|-----------|-----------|
@@ -116,7 +116,7 @@ This formula enables O(1) access to any element.
 
 ### Comparison Table (EN)
 
-| Feature | Array | List (Interface) | ArrayList |
+| Feature | `Array` | `List` (Interface) | `ArrayList` |
 |---------|-------|-----------------|-----------|
 | **Size** | Fixed | Fixed (immutable) or Dynamic (mutable) | Dynamic |
 | **Memory** | Contiguous | Implementation-dependent | Contiguous (backed by array) |
@@ -125,12 +125,12 @@ This formula enables O(1) access to any element.
 | **Resizing** | Not possible | Mutable lists only | Automatic (O(n) when occurs) |
 | **Type Safety** | Reified type (can be primitive) | Generic (erased) | Generic (erased) |
 | **Primitives** | IntArray, ByteArray, etc. | Always boxed objects | Always boxed objects |
-| **Null Safety** | Can contain nulls | Can be List<T?> or List<T> | Can contain nulls |
+| **Null Safety** | Can contain nulls | Can be `List`<T?> or `List`<T> | Can contain nulls |
 | **Methods** | Basic (size, get, set) | Rich API (filter, map, etc.) | Rich API + mutability |
 
 ### Таблица Сравнения (RU)
 
-| Характеристика | Array | List (интерфейс) | ArrayList |
+| Характеристика | `Array` | `List` (интерфейс) | `ArrayList` |
 |----------------|-------|------------------|-----------|
 | **Размер** | Фиксированный | Фиксированный или динамический | Динамический |
 | **Память** | Последовательная | Зависит от реализации | Последовательная (на основе массива) |
@@ -429,16 +429,16 @@ val safeWithDefault = array.getOrElse(5) { 0 }  // 0
 ## Performance Characteristics
 
 ### Space Complexity
-- **Array**: O(n) - exactly n elements
-- **ArrayList**: O(n) - capacity ≥ size, typically ~1.5x allocated
+- **`Array`**: O(n) - exactly n elements
+- **`ArrayList`**: O(n) - capacity ≥ size, typically ~1.5x allocated
 
 ### Cache Performance
 Arrays have excellent cache locality due to contiguous memory, making them faster than linked structures for sequential access.
 
 ### Memory Overhead
-- **Primitive Array** (IntArray): 16 bytes (object header) + 4 bytes/element
-- **Object Array** (Array<Int>): 16 bytes + 8 bytes/reference + object overhead per element
-- **ArrayList**: Additional overhead for capacity management
+- **Primitive `Array`** (IntArray): 16 bytes (object header) + 4 bytes/element
+- **Object `Array`** (`Array`<`Int`>): 16 bytes + 8 bytes/reference + object overhead per element
+- **`ArrayList`**: Additional overhead for capacity management
 
 ---
 
@@ -497,16 +497,16 @@ class CircularBuffer(size: Int) {
 
 ### Prerequisites (Easy)
 - [[q-data-structures-overview--algorithms--easy]] - Overview of all data structures
-- [[q-array-vs-list-kotlin--kotlin--easy]] - Array vs List comparison in Kotlin
+- [[q-array-vs-list-kotlin--kotlin--easy]] - `Array` vs `List` comparison in Kotlin
 
 ### Related (Medium)
 - [[q-two-pointers-sliding-window--algorithms--medium]] - Common array algorithms
-- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - List implementations
+- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - `List` implementations
 - [[q-kotlin-collections--kotlin--medium]] - Kotlin collections overview
 
 ### Advanced (Hard)
 - [[q-binary-search-variants--algorithms--medium]] - Binary search on arrays
-- [[q-sorting-algorithms-comparison--algorithms--medium]] - Array sorting algorithms
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - `Array` sorting algorithms
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP with arrays
 
 ---
@@ -526,4 +526,4 @@ class CircularBuffer(size: Int) {
 - [[c-hash-map]] - Hash tables (often implemented with arrays)
 - [[c-data-structures]] - General data structures overview
 - [[c-algorithms]] - Algorithm fundamentals
-- [[moc-algorithms]] - Algorithms Map of Content
+- [[moc-algorithms]] - Algorithms `Map` of Content

@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-005
 title: "Caching Strategies and Patterns / 2240"
 aliases: ["2240", "Caching Strategies"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [caching, difficulty/medium, performance, scalability, system-design]
 sources: ["https://en.wikipedia.org/wiki/Cache_(computing)"]
 
----
+---\
 # Вопрос (RU)
 > Каковы основные стратегии кеширования? Когда следует использовать каждую стратегию, и каковы распространённые паттерны кеширования?
 
@@ -337,7 +337,7 @@ cache.invalidateByTag("electronics")
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-sql-nosql-databases--system-design--medium]] - Database fundamentals
+- [[q-sql-nosql-databases--system-design--medium]] - `Database` fundamentals
 - [[q-load-balancing-strategies--system-design--medium]] - Load balancing
 
 ### Related (Same Level)
@@ -346,7 +346,7 @@ cache.invalidateByTag("electronics")
 
 ### Advanced (Harder)
 - [[q-microservices-vs-monolith--system-design--hard]] - Architecture patterns
-- [[q-database-sharding-partitioning--system-design--hard]] - Database scaling
+- [[q-database-sharding-partitioning--system-design--hard]] - `Database` scaling
 
 ## Дополнительные Вопросы (RU)
 - Что такое cache stampede и как его предотвратить?

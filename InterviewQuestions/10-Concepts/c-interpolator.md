@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-175108"
 title: "Interpolator / Interpolator"
 aliases: ["Interpolator"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-animation, c-value-animator]
+moc: "moc-cs"
+related: ["c-animation", "c-value-animator"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,7 +32,7 @@ An interpolator is a mechanism that replaces placeholders inside a string or exp
 
 ## Key Points (EN)
 
-- String interpolation: Allows embedding variables and expressions directly in strings (e.g., "Hello, $name"), reducing verbosity and concatenation errors.
+- `String` interpolation: Allows embedding variables and expressions directly in strings (e.g., "Hello, $name"), reducing verbosity and concatenation errors.
 - Type and syntax safety: Many interpolators are checked by the compiler or runtime, catching missing variables, invalid expressions, or type mismatches early.
 - Custom interpolators: Some languages (e.g., Scala, Kotlin via extensions/DSLs) let you define custom interpolators for domains like SQL, JSON, logging, or validation.
 - Security and validation: Well-designed interpolators can escape or validate values (e.g., preventing SQL injection or enforcing formats) instead of naive string concatenation.
@@ -47,6 +48,6 @@ An interpolator is a mechanism that replaces placeholders inside a string or exp
 
 ## References
 
-- Kotlin String templates: https://kotlinlang.org/docs/basic-types.html#string-templates
-- Scala String Interpolation: https://docs.scala-lang.org/overviews/core/string-interpolation.html
+- Kotlin `String` templates: https://kotlinlang.org/docs/basic-types.html#string-templates
+- Scala `String` Interpolation: https://docs.scala-lang.org/overviews/core/string-interpolation.html
 - Python f-strings (Formatted string literals): https://docs.python.org/3/reference/lexical_analysis.html#f-strings

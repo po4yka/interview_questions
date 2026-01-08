@@ -1,5 +1,5 @@
----
----
+---\
+---\
 
 # Obsidian Interview Vault
 
@@ -29,7 +29,7 @@ A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical intervi
 | **Quick Validation** | [[00-Administration/AI-Agents/AGENT-CHECKLIST.md\|AGENT-CHECKLIST]] |
 | **Gemini CLI** | See [[GEMINI.md]] for command-line workflows |
 
-**Key Rule**: Set `status: draft` for all LLM-created/modified content until human review.
+**Key Rule**: `Set` `status: draft` for all LLM-created/modified content until human review.
 
 ---
 
@@ -41,7 +41,7 @@ A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical intervi
 2. Name file: `q-<slug>--<topic>--<difficulty>.md`
 3. Place in correct folder based on topic
 4. Fill both EN and RU sections
-5. Set `status: draft`
+5. `Set` `status: draft`
 
 ### File Naming Examples
 
@@ -117,7 +117,7 @@ Use **one** of these canonical values for `topic:` (lower kebab-case):
 | `data-structures` | Arrays, trees, heaps, graphs, hash maps | 20-Algorithms |
 | `system-design` | Scalability, availability, consistency | 30-System-Design |
 | `android` | Platform, lifecycle, Jetpack, Compose | 40-Android |
-| `kotlin` | Coroutines, Flow, syntax, idioms | 70-Kotlin |
+| `kotlin` | Coroutines, `Flow`, syntax, idioms | 70-Kotlin |
 | `architecture-patterns` | MVVM/MVI/Clean, SOLID, modularization | 60-CompSci |
 | `design-patterns` | Creational, structural, behavioral patterns | 60-CompSci |
 | `concurrency` | Threads, synchronization, actors | 60-CompSci |
@@ -145,7 +145,7 @@ When `topic: android`, pick **1-3** subtopics. Mirror each to a tag `android/<su
 |----------|-----------|
 | **UI & UX** | `ui-compose`, `ui-views`, `ui-navigation`, `ui-state`, `ui-animation`, `ui-theming`, `ui-accessibility` |
 | **Architecture** | `architecture-mvvm`, `architecture-mvi`, `architecture-clean`, `architecture-modularization`, `di-hilt`, `di-koin` |
-| **Lifecycle** | `lifecycle`, `activity`, `fragment`, `service`, `broadcast-receiver`, `content-provider` |
+| **`Lifecycle`** | `lifecycle`, `activity`, `fragment`, `service`, `broadcast-receiver`, `content-provider` |
 | **Concurrency** | `coroutines`, `flow`, `threads-sync`, `background-execution` |
 | **Data** | `room`, `sqldelight`, `datastore`, `files-media`, `serialization`, `cache-offline` |
 | **Networking** | `networking-http`, `websockets`, `grpc`, `graphql`, `connectivity-caching` |
@@ -316,7 +316,7 @@ SORT updated DESC
 |------|-------------|
 | **Translate** | Generate RU from EN (or vice versa); keep both; review |
 | **Normalize YAML** | Validate keys/values against taxonomy |
-| **Suggest Links** | Request 3-5 related concepts/questions |
+| **Suggest Links** | `Request` 3-5 related concepts/questions |
 | **Summaries** | Produce 1-2 line TL;DR for answer sections |
 
 **Key Rule**: Keep `status: draft` for LLM-modified notes until human review.

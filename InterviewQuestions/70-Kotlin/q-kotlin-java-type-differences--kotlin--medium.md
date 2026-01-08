@@ -1,4 +1,4 @@
----
+---\
 id: lang-051
 title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"
 aliases: [Kotlin Java Type Differences, Различия типов Kotlin и Java]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-executor-service-java--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-09
 tags: [collections, comparison, difficulty/medium, java, kotlin, null-safety, type-inference, type-system]
----
+---\
 # Вопрос (RU)
 > Чем типы в Kotlin отличаются от типов в Java?
 
@@ -558,7 +558,7 @@ Kotlin and Java type systems differ in several fundamental ways that impact safe
 | **Collections** | Type-level split: `List`/`Set`/`Map` provide read-only APIs; `MutableList`/`MutableSet`/`MutableMap` expose mutating operations. Read-only does not guarantee deep immutability. | Single `List`/`Set`/`Map` types; mutability vs immutability is determined by implementation/wrappers at runtime |
 | **Data Classes** | `data class` auto-generates `equals`/`hashCode`/`toString`/`copy`/`componentN` | Manual boilerplate, or `record` in newer Java versions; different syntax/semantics |
 | **Type Inference** | Broad: locals, expressions, lambdas, many function return types | Narrower: `var` (Java 10+) for local variables only; fields/returns require explicit types |
-| **Smart Casts** | Flow-sensitive typing: automatic casts after `is`/null checks | Historically explicit casts; pattern matching improves this but is less pervasive |
+| **Smart Casts** | `Flow`-sensitive typing: automatic casts after `is`/null checks | Historically explicit casts; pattern matching improves this but is less pervasive |
 | **Primitive Types** | Unified number/type model at language level; compiler chooses primitive vs wrapper representation | Distinct primitive vs wrapper types; autoboxing/unboxing rules and pitfalls exposed |
 | **Functional Types** | Built-in function types `(A, B) -> R`, receiver types, higher-order functions | Functional interfaces (`Function`, `Predicate`, etc.), no native function type syntax |
 

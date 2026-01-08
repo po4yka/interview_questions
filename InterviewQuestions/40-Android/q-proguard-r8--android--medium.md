@@ -1,4 +1,4 @@
----
+---\
 id: android-001
 title: ProGuard and R8 / ProGuard и R8
 aliases: [ProGuard and R8, ProGuard и R8]
@@ -16,7 +16,7 @@ related: [c-gradle, c-memory-management, q-build-optimization-gradle--android--m
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/gradle, android/obfuscation, android/performance-memory, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Что такое ProGuard и R8?
 
@@ -60,7 +60,7 @@ android {
 R8 (как и ProGuard) может удалить код, который используется только неявно, например через:
 - reflection — динамическое создание экземпляров, доступ к методам/полям
 - JNI — вызовы из нативного кода
-- фреймворки сериализации (Gson, Moshi и т.п.)
+- фреймворки сериализации (`Gson`, `Moshi` и т.п.)
 
 ```proguard
 -keep public class com.example.MyClass  # сохраняет класс целиком
@@ -118,7 +118,7 @@ android {
 R8 (like ProGuard) can remove code that is only accessed indirectly, for example via:
 - reflection — dynamic instantiation or reflective access to fields/methods
 - JNI — calls from native code
-- serialization libraries (Gson, Moshi, etc.)
+- serialization libraries (`Gson`, `Moshi`, etc.)
 
 ```proguard
 -keep public class com.example.MyClass  # preserves the entire class

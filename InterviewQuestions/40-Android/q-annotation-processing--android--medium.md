@@ -1,4 +1,4 @@
----
+---\
 id: android-067
 title: Annotation Processing in Android / Обработка аннотаций в Android
 aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
@@ -21,7 +21,7 @@ anki_slugs:
   - 40-android-q-annotation-processing-android-medium-p01-en
   - 40-android-q-annotation-processing-android-medium-p01-ru
 anki_last_sync: '2025-11-27T09:56:33.839728'
----
+---\
 # Вопрос (RU)
 > Что такое обработка аннотаций в Android и чем отличаются kapt и KSP?
 
@@ -34,7 +34,7 @@ anki_last_sync: '2025-11-27T09:56:33.839728'
 
 ## Ответ (RU)
 
-**Обработка аннотаций** — это механизм генерации кода на этапе компиляции, при котором специальные процессоры анализируют аннотации в исходном коде и автоматически создают вспомогательные классы/файлы. Активно используется библиотеками Room, Hilt, Moshi для генерации boilerplate-кода.
+**Обработка аннотаций** — это механизм генерации кода на этапе компиляции, при котором специальные процессоры анализируют аннотации в исходном коде и автоматически создают вспомогательные классы/файлы. Активно используется библиотеками `Room`, `Hilt`, `Moshi` для генерации boilerplate-кода.
 
 ### Принцип Работы
 
@@ -135,7 +135,7 @@ class UserViewModel @Inject constructor(
 | Инкрементальная компиляция | Ограниченная | Полная поддержка (при корректных процессорах) |
 | Будущее | Поддерживается, но без активного развития | Активное развитие, рекомендованный путь |
 
-Примерные цифры (условный проект: Room + Hilt + 50 модулей):
+Примерные цифры (условный проект: `Room` + `Hilt` + 50 модулей):
 ```text
 kapt:  ~45 секунд
 KSP:   ~23 секунды (↓≈48%)
@@ -161,7 +161,7 @@ ksp {
 
 ## Answer (EN)
 
-**Annotation processing** is a compile-time code generation mechanism where processors analyze annotations in source code and automatically generate helper classes/files. Widely used by libraries like Room, Hilt, and Moshi to generate boilerplate code.
+**Annotation processing** is a compile-time code generation mechanism where processors analyze annotations in source code and automatically generate helper classes/files. Widely used by libraries like `Room`, `Hilt`, and `Moshi` to generate boilerplate code.
 
 ### How It Works
 
@@ -262,7 +262,7 @@ class UserViewModel @Inject constructor(
 | Incremental compilation | Limited | Full support (with properly implemented processors) |
 | Future | Supported, but not actively evolved | Actively developed, recommended path |
 
-Example numbers (hypothetical project: Room + Hilt + 50 modules):
+Example numbers (hypothetical project: `Room` + `Hilt` + 50 modules):
 ```text
 kapt:  ~45 seconds
 KSP:   ~23 seconds (↓≈48%)
@@ -298,7 +298,7 @@ ksp {
 
 ## References
 
-- [[c-room]] - Database ORM using annotation processing
+- [[c-room]] - `Database` ORM using annotation processing
 - [[c-hilt]] - Dependency injection with code generation
 - [KSP Official Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [Migrating from kapt to KSP](https://developer.android.com/build/migrate-to-ksp)
@@ -312,8 +312,8 @@ ksp {
 
 ### Related (Same Level)
 - [[q-android-build-optimization--android--medium]] - Build performance optimization strategies
-- [[q-android-modularization--android--medium]] - Module architecture and organization
-- [[q-room-library-definition--android--easy]] - Room ORM basics and usage
+- [[q-android-modularization--android--medium]] - `Module` architecture and organization
+- [[q-room-library-definition--android--easy]] - `Room` ORM basics and usage
 
 ### Advanced (Harder)
  - Writing custom KSP processors

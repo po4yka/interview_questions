@@ -1,4 +1,4 @@
----
+---\
 id: cs-016
 title: "Data Class Component Functions / Компонентные функции Data Class"
 aliases: ["Data Class Component Functions", "Компонентные функции Data Class"]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [component-functions, data-classes, destructuring, difficulty/easy, kotlin]
 sources: ["https://kotlinlang.org/docs/data-classes.html"]
----
+---\
 # Вопрос (RU)
 > Для чего служат `component` функции в `data class`? Как они работают и генерируются?
 
@@ -26,8 +26,8 @@ sources: ["https://kotlinlang.org/docs/data-classes.html"]
 
 ## Ответ (RU)
 
-**Теория Component Functions:**
-Component functions (`component1()`, `component2()`, и т.д.) — автоматически генерируемые функции для `data class`, обеспечивающие `destructuring` declarations. Компилятор Kotlin генерирует `componentN()` функцию для каждого `property` в `primary constructor` по порядку объявления. Component functions позволяют извлекать свойства из объекта в отдельные переменные одной строкой.
+**Теория `Component` Functions:**
+`Component` functions (`component1()`, `component2()`, и т.д.) — автоматически генерируемые функции для `data class`, обеспечивающие `destructuring` declarations. Компилятор Kotlin генерирует `componentN()` функцию для каждого `property` в `primary constructor` по порядку объявления. `Component` functions позволяют извлекать свойства из объекта в отдельные переменные одной строкой.
 
 **Автоматическая генерация:**
 
@@ -124,9 +124,9 @@ points.forEach { (x, y) ->
 }
 ```
 
-**Ограничения Component Functions:**
+**Ограничения `Component` Functions:**
 
-*Теория:* Component functions генерируются только для свойств в `primary constructor`. Свойства в теле класса не получают component functions. Порядок component functions фиксирован порядком в `constructor`. Нельзя переименовать или пропустить component functions при автоматической генерации.
+*Теория:* `Component` functions генерируются только для свойств в `primary constructor`. Свойства в теле класса не получают component functions. Порядок component functions фиксирован порядком в `constructor`. Нельзя переименовать или пропустить component functions при автоматической генерации.
 
 ```kotlin
 // Component functions только для primary constructor
@@ -152,7 +152,7 @@ val (first, second) = person
 // Порядок определяется constructor, а не именами переменных
 ```
 
-**Component Functions для обычных классов:**
+**`Component` Functions для обычных классов:**
 
 *Теория:* Можно вручную определить component functions для обычных (не `data`) классов. Это позволяет использовать destructuring для любых классов и создавать кастомную логику разложения.
 
@@ -217,8 +217,8 @@ fun processCoordinate(coord: Coordinate) = when (coord) {
 
 ## Answer (EN)
 
-**Component Functions Theory:**
-Component functions (`component1()`, `component2()`, etc.) are automatically generated functions for `data class`es, enabling destructuring declarations. The Kotlin compiler generates a `componentN()` function for each property in the primary constructor in declaration order. Component functions allow extracting properties from an object into separate variables in one line.
+**`Component` Functions Theory:**
+`Component` functions (`component1()`, `component2()`, etc.) are automatically generated functions for `data class`es, enabling destructuring declarations. The Kotlin compiler generates a `componentN()` function for each property in the primary constructor in declaration order. `Component` functions allow extracting properties from an object into separate variables in one line.
 
 **Automatic Generation:**
 
@@ -315,9 +315,9 @@ points.forEach { (x, y) ->
 }
 ```
 
-**Component Functions Limitations:**
+**`Component` Functions Limitations:**
 
-*Theory:* Component functions are generated only for properties in the primary constructor. Properties in the class body do not get component functions. The order of component functions is fixed by the constructor order. You cannot rename or skip component functions in automatic generation.
+*Theory:* `Component` functions are generated only for properties in the primary constructor. Properties in the class body do not get component functions. The order of component functions is fixed by the constructor order. You cannot rename or skip component functions in automatic generation.
 
 ```kotlin
 // Component functions only for primary constructor
@@ -343,7 +343,7 @@ val (first, second) = person
 // Order determined by constructor, not variable names
 ```
 
-**Component Functions for Regular Classes:**
+**`Component` Functions for Regular Classes:**
 
 *Theory:* You can manually define component functions for regular (non-data) classes. This allows using destructuring for any classes and implementing custom destructuring logic.
 

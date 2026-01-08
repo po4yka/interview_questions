@@ -1,4 +1,4 @@
----
+---\
 id: android-136
 title: Performance Optimization Android / Performance Оптимизация Android
 aliases: [Performance Optimization Android, Performance Оптимизация Android]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-battery, android/performance-memory, android/performance-rendering, checklist, difficulty/medium, optimization, performance, performance-memory, performance-rendering]
 
----
+---\
 # Вопрос (RU)
 
 > Каков комплексный подход к оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?
@@ -193,7 +193,7 @@ val client = OkHttpClient.Builder()
 - Кэширование HTTP-ответов
 - Пагинация для списков
 - Field filtering (запрос только нужных полей)
-- Сжатие (gzip автоматически поддерживается в OkHttp)
+- Сжатие (gzip автоматически поддерживается в `OkHttp`)
 
 ### 6. Оптимизация Батареи
 
@@ -432,7 +432,7 @@ val client = OkHttpClient.Builder()
 - HTTP response caching
 - Pagination for lists
 - Field filtering (request only needed fields)
-- Compression (gzip is automatically supported in OkHttp)
+- Compression (gzip is automatically supported in `OkHttp`)
 
 ### 6. Battery Optimization
 
@@ -518,7 +518,7 @@ android {
 - How do Baseline Profiles improve startup performance?
 - What are the trade-offs between DiskLruCache and DataStore for caching?
 - How does R8 full-mode differ from standard optimization?
-- When should you use RecyclerView.RecycledViewPool for nested lists?
+- When should you use `RecyclerView`.RecycledViewPool for nested lists?
 - What battery impact metrics should trigger optimization?
 
 ## Ссылки (RU)
@@ -567,7 +567,7 @@ android {
 ### Prerequisites
 
 - Understanding `Activity` and `Fragment` lifecycle is essential for optimization context
-- RecyclerView fundamentals are required for list optimization
+- `RecyclerView` fundamentals are required for list optimization
 
 ### Related
 

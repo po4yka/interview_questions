@@ -1,14 +1,22 @@
----
-id: ivc-20251102-018
-title: Android Surfaces (Tiles, Shortcuts, QS) / Поверхности Android (Tiles, Shortcuts, QS)
-aliases: [Android Surface Integrations, App Shortcuts, Quick Settings Tiles]
-kind: concept
-summary: System surfaces outside the main app UI including Quick Settings tiles, App Shortcuts, Bubbles, and ambient surfaces
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, concept, quick-settings, shortcuts, surfaces]
----
+---\
+id: "20260108-110549"
+title: "Android Surfaces (Tiles, Shortcuts, QS) / Поверхности Android (Tiles, Shortcuts, QS)"
+aliases: ["Android Surface Integrations", "App Shortcuts", "Quick Settings Tiles"]
+summary: "System surfaces outside the main app UI including Quick Settings tiles, App Shortcuts, Bubbles, and ambient surfaces"
+topic: "android"
+subtopics: ["quick-settings", "shortcuts", "surfaces"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "concept", "quick-settings", "shortcuts", "surfaces", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -16,7 +24,7 @@ Android offers multiple system-driven surfaces beyond activities: **Quick Settin
 
 # Сводка (RU)
 
-Android предоставляет несколько системных поверхностей помимо Activity: **плитки шторки (Quick Settings)**, **ярлыки приложений**, **Bubbles**, **Slices** и **ambient-экраны**. Интеграция должна быть лёгкой, реактивной, с безопасными интентами и учётом ограничений фонового выполнения.
+Android предоставляет несколько системных поверхностей помимо `Activity`: **плитки шторки (Quick Settings)**, **ярлыки приложений**, **Bubbles**, **Slices** и **ambient-экраны**. Интеграция должна быть лёгкой, реактивной, с безопасными интентами и учётом ограничений фонового выполнения.
 
 ## Key Components
 

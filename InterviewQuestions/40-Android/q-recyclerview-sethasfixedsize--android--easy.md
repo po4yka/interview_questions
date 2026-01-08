@@ -1,4 +1,4 @@
----
+---\
 id: android-027
 title: What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true) в RecyclerView?
 aliases: [setHasFixedSize in RecyclerView, setHasFixedSize в RecyclerView]
@@ -17,35 +17,35 @@ sources:
   - "https://github.com/amitshekhariitbhu/android-interview-questions"
 tags: [android/performance-memory, android/ui-views, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 
-> Что такое setHasFixedSize(true) в RecyclerView?
+> Что такое setHasFixedSize(true) в `RecyclerView`?
 
 # Question (EN)
 
-> What is setHasFixedSize(true) in RecyclerView?
+> What is setHasFixedSize(true) in `RecyclerView`?
 
 ---
 
 ## Ответ (RU)
 
-`setHasFixedSize(true)` — метод оптимизации RecyclerView, сообщающий, что **размер самого RecyclerView (ширина/высота) не должен меняться** при изменении данных адаптера.
+`setHasFixedSize(true)` — метод оптимизации `RecyclerView`, сообщающий, что **размер самого `RecyclerView` (ширина/высота) не должен меняться** при изменении данных адаптера.
 
-Это позволяет RecyclerView не запрашивать лишние пересчёты своего размера у родителя при notify* вызовах, если изменения не влияют на габариты контейнера.
+Это позволяет `RecyclerView` не запрашивать лишние пересчёты своего размера у родителя при notify* вызовах, если изменения не влияют на габариты контейнера.
 
 ### Как Работает
 
 Когда вызывается `setHasFixedSize(true)`:
-- RecyclerView считает свой размер фиксированным относительно родителя.
-- При изменении элементов (insert/remove/update), если предполагается, что это не меняет общий размер контейнера, RecyclerView может избегать повторных `requestLayout()` для себя/родителя.
+- `RecyclerView` считает свой размер фиксированным относительно родителя.
+- При изменении элементов (insert/remove/update), если предполагается, что это не меняет общий размер контейнера, `RecyclerView` может избегать повторных `requestLayout()` для себя/родителя.
 - Пересчёт выполняется только для затронутых `itemView` и их размещения внутри уже заданной области; иерархия родителей не прогоняется лишний раз.
 
 Важно: это не гарантирует полного отсутствия layout-проходов — дочерние элементы всё равно могут измеряться и раскладываться. Оптимизация касается именно стабильности размеров контейнера.
 
 ### Когда Использовать
 
-**✅ Используйте, когда размер RecyclerView логически фиксирован:**
+**✅ Используйте, когда размер `RecyclerView` логически фиксирован:**
 
 ```kotlin
 // ✅ RecyclerView заполняет родителя, размер задаётся внешним layout'ом
@@ -89,7 +89,7 @@ recyclerView.setHasFixedSize(true)
 recyclerView.setHasFixedSize(true) // Противоречит контракту: размер НЕ фиксирован.
 ```
 
-Технически код не упадёт, но вы даёте RecyclerView ложное обещание, что может привести к некорректному UI (например, контейнер не перерастёт при добавлении элементов).
+Технически код не упадёт, но вы даёте `RecyclerView` ложное обещание, что может привести к некорректному UI (например, контейнер не перерастёт при добавлении элементов).
 
 ### Пример Использования
 
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 | Сценарий | With setHasFixedSize(true) | Without |
 |----------|----------------------------|---------|
 | Поведение при add/remove | Не инициирует перерасчёт размеров контейнера, если он считается фиксированным | Может запрашивать перерасчёт размеров контейнера |
-| Пересчёт родителей | Сокращается, если размер RecyclerView стабилен | Возможен пересчёт родительской иерархии |
+| Пересчёт родителей | Сокращается, если размер `RecyclerView` стабилен | Возможен пересчёт родительской иерархии |
 | Производительность | Потенциально быстрее за счёт уменьшения числа requestLayout для контейнера | Потенциально медленнее при частых изменениях |
 | Использование с wrap_content | Не рекомендуется: может привести к неверному layout'у | Корректно, размеры пересчитываются |
 | Использование с match_parent/фикс. размером | Рекомендуется | Работает, но без оптимизации |
@@ -132,28 +132,28 @@ recyclerView.apply {
 recyclerView.setHasFixedSize(true) // Нарушает предположение о "фиксированном" размере.
 ```
 
-Ключевой момент: `setHasFixedSize(true)` относится к стабильности РАЗМЕРА КОНТЕЙНЕРА RecyclerView, а не к ограничению изменений количества элементов. Вы по-прежнему можете свободно добавлять/удалять/обновлять элементы; вы лишь обещаете, что это не требует изменения измеренной ширины/высоты самого RecyclerView.
+Ключевой момент: `setHasFixedSize(true)` относится к стабильности РАЗМЕРА КОНТЕЙНЕРА `RecyclerView`, а не к ограничению изменений количества элементов. Вы по-прежнему можете свободно добавлять/удалять/обновлять элементы; вы лишь обещаете, что это не требует изменения измеренной ширины/высоты самого `RecyclerView`.
 
 ---
 
 ## Answer (EN)
 
-`setHasFixedSize(true)` is a RecyclerView performance optimization hint that tells it **the RecyclerView's own width/height are not expected to change** when the adapter data changes.
+`setHasFixedSize(true)` is a `RecyclerView` performance optimization hint that tells it **the `RecyclerView`'s own width/height are not expected to change** when the adapter data changes.
 
-This allows RecyclerView to avoid unnecessary size remeasure/layout requests to its parent on notify* calls when changes are not supposed to affect the container bounds.
+This allows `RecyclerView` to avoid unnecessary size remeasure/layout requests to its parent on notify* calls when changes are not supposed to affect the container bounds.
 
 ### How It Works
 
 When you call `setHasFixedSize(true)`:
-- RecyclerView treats its overall size as stable with respect to its parent.
-- On item insert/remove/update, if the container size is logically independent from item count/size, RecyclerView can skip extra `requestLayout()` for itself/parent.
+- `RecyclerView` treats its overall size as stable with respect to its parent.
+- On item insert/remove/update, if the container size is logically independent from item count/size, `RecyclerView` can skip extra `requestLayout()` for itself/parent.
 - It still measures and lays out affected child views, but avoids re-running full parent hierarchy layout for every data change when not needed.
 
-Important: this does NOT eliminate all layout passes. It only optimizes how aggressively RecyclerView asks to re-measure itself and its parents.
+Important: this does NOT eliminate all layout passes. It only optimizes how aggressively `RecyclerView` asks to re-measure itself and its parents.
 
 ### When to Use
 
-**✅ Use when the RecyclerView size is logically fixed:**
+**✅ Use when the `RecyclerView` size is logically fixed:**
 
 ```kotlin
 // ✅ RecyclerView fills parent; size is controlled by parent, not by data
@@ -197,7 +197,7 @@ recyclerView.setHasFixedSize(true)
 recyclerView.setHasFixedSize(true) // Misleading hint: size is not actually fixed.
 ```
 
-Technically this compiles and runs, but you are giving RecyclerView a wrong contract, which can cause incorrect layout (e.g., the view not expanding when items are added).
+Technically this compiles and runs, but you are giving `RecyclerView` a wrong contract, which can cause incorrect layout (e.g., the view not expanding when items are added).
 
 ### Usage Example
 
@@ -240,13 +240,13 @@ recyclerView.apply {
 recyclerView.setHasFixedSize(true) // Violates the "fixed size" assumption.
 ```
 
-Key Point: `setHasFixedSize(true)` is about the stability of the RecyclerView CONTAINER size, not about preventing item count changes. You can still freely add/remove/update items; you just promise that doing so should not require the RecyclerView itself to change its measured width/height.
+Key Point: `setHasFixedSize(true)` is about the stability of the `RecyclerView` CONTAINER size, not about preventing item count changes. You can still freely add/remove/update items; you just promise that doing so should not require the `RecyclerView` itself to change its measured width/height.
 
 ---
 
 ## Follow-ups
 
-- What other RecyclerView optimizations can be combined with `setHasFixedSize(true)`?
+- What other `RecyclerView` optimizations can be combined with `setHasFixedSize(true)`?
 - How does `setHasFixedSize()` interact with `DiffUtil` and `ListAdapter`?
 - What performance metrics should be measured to validate the optimization impact?
 - When should you use `setItemViewCacheSize()` vs `RecycledViewPool`?
@@ -269,9 +269,9 @@ Key Point: `setHasFixedSize(true)` is about the stability of the RecyclerView CO
 
 ### Related (Same Level)
 
-- RecyclerView adapter optimization techniques
-- ViewHolder pattern and recycling mechanism
-- DiffUtil for efficient list updates
+- `RecyclerView` adapter optimization techniques
+- `ViewHolder` pattern and recycling mechanism
+- `DiffUtil` for efficient list updates
 
 ### Advanced (Harder)
 

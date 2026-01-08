@@ -1,4 +1,4 @@
----
+---\
 id: cs-032
 title: "Where to Call Suspend Functions / Где можно вызывать suspend-функции"
 aliases: ["Suspend Functions Call Context", "Контекст вызова suspend-функций"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin, suspend-functions]
 sources: ["https://kotlinlang.org/docs/composing-suspending-functions.html"]
 
----
+---\
 # Вопрос (RU)
 > Где можно вызывать suspend-функции?
 
@@ -187,7 +187,7 @@ fun regularFunctionFixed() {
 
 ## Answer (EN)
 
-**Suspend Functions Call `Context` Theory (Kotlin):**
+**Suspend Functions `Call` `Context` Theory (Kotlin):**
 In Kotlin, suspend functions can be called only from code that already runs in a coroutine (suspending) context: from other suspend functions or from blocks/builders that create or provide such a context. Valid contexts include: other suspend functions, `launch {}`, `async {}`, `runBlocking {}`, `coroutineScope {}`, `supervisorScope {}`, `withContext {}`, `flow {}` builders, and other APIs that accept suspending lambdas. They cannot be called directly from a regular function; you must either make it `suspend` or start a coroutine via a builder.
 
 **Definition:**
@@ -332,7 +332,7 @@ fun regularFunctionFixed() {
 
 **Summary:**
 
-| `Context` | Can Call Suspend? | Blocks Thread? | Use Case |
+| `Context` | Can `Call` Suspend? | Blocks `Thread`? | Use Case |
 |---------|-------------------|----------------|----------|
 | Another suspend function | ✅ Yes | No | Sequential suspend calls |
 | `launch {}` | ✅ Yes | No | Fire-and-forget |

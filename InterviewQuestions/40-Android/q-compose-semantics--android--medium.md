@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-jetpack-compose, q-accessibility-compose--android--medium, q-compose-modifier-system--android--medium, q-compose-testing--android--medium, q-how-does-jetpack-compose-work--android--medium]
 created: 2025-10-06
 updated: 2025-10-30
-tags: [accessibility, android/testing-ui, android/ui-accessibility, android/ui-compose, compose, difficulty/medium, testing]
+tags: [accessibility, android/testing-ui, android/ui-accessibility, android/ui-compose, difficulty/medium, testing]
 sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/semantics

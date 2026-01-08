@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-accessibility, c-compose-ui, c-jetpack-compose, c-ui-testing, c-ui-ux-accessibility]
+moc: "moc-cs"
+related: ["c-accessibility", "c-compose-ui", "c-jetpack-compose", "c-ui-testing", "c-ui-ux-accessibility"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
+tags: [concept, difficulty/medium, programming-languages]
 ---
 
 # Summary (EN)

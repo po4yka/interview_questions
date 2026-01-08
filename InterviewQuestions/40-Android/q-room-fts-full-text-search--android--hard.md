@@ -1,4 +1,4 @@
----
+---\
 id: android-427
 title: "Room Full-Text Search (FTS) / Полнотекстовый поиск FTS в Room"
 aliases: ["Room Full-Text Search", "Полнотекстовый поиск FTS в Room"]
@@ -16,20 +16,20 @@ updated: 2025-10-15
 sources: []
 tags: [android/room, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 
-> Реализуйте полнотекстовый поиск в Room с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?
+> Реализуйте полнотекстовый поиск в `Room` с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?
 
 # Question (EN)
 
-> Implement full-text search in Room using FTS4/FTS5. Optimize search performance for large datasets. When to use FTS instead of LIKE? How to synchronize FTS tables with main tables?
+> Implement full-text search in `Room` using FTS4/FTS5. Optimize search performance for large datasets. When to use FTS instead of LIKE? How to synchronize FTS tables with main tables?
 
 ---
 
 ## Ответ (RU)
 
-**Полнотекстовый поиск (FTS)** в Room обеспечивает эффективный текстовый поиск через расширения FTS SQLite. На больших наборах данных FTS обычно значительно быстрее, чем LIKE-запросы по неиндексированному тексту или LIKE c ведущим `%`, и поддерживает ранжирование (FTS5), префиксный поиск и булевы операторы.
+**Полнотекстовый поиск (FTS)** в `Room` обеспечивает эффективный текстовый поиск через расширения FTS `SQLite`. На больших наборах данных FTS обычно значительно быстрее, чем LIKE-запросы по неиндексированному тексту или LIKE c ведущим `%`, и поддерживает ранжирование (FTS5), префиксный поиск и булевы операторы.
 
 ### Когда Использовать FTS
 
@@ -51,7 +51,7 @@ tags: [android/room, difficulty/hard]
 
 ### Базовая Реализация (пример С FTS5)
 
-Пример ниже показывает FTS-таблицу с внешним содержимым (external content) для FTS5, управляемую Room через `contentEntity`.
+Пример ниже показывает FTS-таблицу с внешним содержимым (external content) для FTS5, управляемую `Room` через `contentEntity`.
 
 ```kotlin
 // ✅ Основная сущность
@@ -85,21 +85,21 @@ data class ArticleFts(
 
 Для них механика синхронизации различается.
 
-1. External content через `contentEntity` (рекомендуемый способ в Room)
+1. External content через `contentEntity` (рекомендуемый способ в `Room`)
 
-- Room генерирует FTS-таблицу, привязанную к `articles` по `id`.
-- Для корректной синхронизации в SQLite требуются специальные FTS-команды (`INSERT`, `DELETE`, `UPDATE`) в FTS-таблицу, а не обычные UPDATE/DELETE строк:
+- `Room` генерирует FTS-таблицу, привязанную к `articles` по `id`.
+- Для корректной синхронизации в `SQLite` требуются специальные FTS-команды (`INSERT`, `DELETE`, `UPDATE`) в FTS-таблицу, а не обычные UPDATE/DELETE строк:
   - `INSERT INTO articles_fts(articles_fts, rowid, title, content) VALUES('insert', new.id, new.title, new.content);`
   - `INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);`
   - `INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);` + `INSERT INTO articles_fts(articles_fts, 'insert', new.id, new.title, new.content);` для UPDATE.
-- Room может управлять этим автоматически в зависимости от конфигурации; если вы создаёте триггеры вручную, их нужно писать в соответствии с документацией SQLite FTS, а не делать обычные `UPDATE articles_fts ...`.
+- `Room` может управлять этим автоматически в зависимости от конфигурации; если вы создаёте триггеры вручную, их нужно писать в соответствии с документацией `SQLite` FTS, а не делать обычные `UPDATE articles_fts ...`.
 
 1. Contentless или дублирующая FTS-таблица
 
 - Вы храните данные как в основной таблице, так и в FTS-таблице.
 - В этом случае вы можете реализовать триггеры, которые используют FTS-специфические команды (например, через управляющий столбец) или инкапсулировать операции в DAO так, чтобы все изменения проходили через один путь и обновляли обе таблицы атомарно.
 
-Ниже — упрощённый пример триггеров для external content FTS5 (демо-идея, проверяйте точный синтаксис под свою схему и версию SQLite):
+Ниже — упрощённый пример триггеров для external content FTS5 (демо-идея, проверяйте точный синтаксис под свою схему и версию `SQLite`):
 
 ```kotlin
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
@@ -140,7 +140,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-Важно: точная схема триггеров и использование управляющего столбца (значения `'insert'`, `'delete'`) зависит от варианта FTS и режима (external content/contentless). Для production-решения нужно строго следовать документации SQLite FTS и актуальной документации Room; не используйте обычные `UPDATE`/`DELETE` над строками FTS-таблицы для external content.
+Важно: точная схема триггеров и использование управляющего столбца (значения `'insert'`, `'delete'`) зависит от варианта FTS и режима (external content/contentless). Для production-решения нужно строго следовать документации `SQLite` FTS и актуальной документации `Room`; не используйте обычные `UPDATE`/`DELETE` над строками FTS-таблицы для external content.
 
 ### Поиск С Ранжированием BM25 (FTS5)
 
@@ -328,7 +328,7 @@ data class ArticleFtsNarrow(
 
 ## Answer (EN)
 
-**Full-Text Search (FTS)** in Room provides efficient text search via SQLite FTS extensions. On large datasets, FTS is typically much faster than naive LIKE scans (especially with leading `%`) over unindexed text, and supports (with FTS5) relevance ranking, prefix search, and boolean operators.
+**Full-Text Search (FTS)** in `Room` provides efficient text search via `SQLite` FTS extensions. On large datasets, FTS is typically much faster than naive LIKE scans (especially with leading `%`) over unindexed text, and supports (with FTS5) relevance ranking, prefix search, and boolean operators.
 
 ### When to Use FTS
 
@@ -346,11 +346,11 @@ data class ArticleFtsNarrow(
 - Better performance for full-text queries vs. sequential LIKE scans
 - Relevance ranking via `bm25()` (FTS5)
 - `highlight()` and `snippet()` helper functions
-- Boolean operators and prefix queries in MATCH expressions
+- `Boolean` operators and prefix queries in MATCH expressions
 
 ### Basic Implementation (FTS5 Example)
 
-The following shows an FTS5 table with external content managed by Room via `contentEntity`.
+The following shows an FTS5 table with external content managed by `Room` via `contentEntity`.
 
 ```kotlin
 // ✅ Main entity
@@ -384,10 +384,10 @@ Two conceptual modes matter here:
 
 They require different sync strategies.
 
-1. External content via `contentEntity` (preferred with Room)
+1. External content via `contentEntity` (preferred with `Room`)
 
-- Room creates the FTS table bound to `articles` by `id`.
-- In SQLite FTS, keeping such a table in sync requires special maintenance statements that target the FTS table:
+- `Room` creates the FTS table bound to `articles` by `id`.
+- In `SQLite` FTS, keeping such a table in sync requires special maintenance statements that target the FTS table:
   - `INSERT INTO articles_fts(articles_fts, rowid, title, content) VALUES('insert', new.id, new.title, new.content);`
   - `INSERT INTO articles_fts(articles_fts, 'delete', old.id, old.title, old.content);`
   - For UPDATE: a `'delete'` for `old.*` followed by an `'insert'` for `new.*`.
@@ -441,7 +441,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-Note: For production, verify trigger syntax against the official SQLite FTS4/FTS5 documentation and the Room version you target. The key point is: do not treat FTS external-content tables like normal tables with arbitrary `UPDATE`/`DELETE` statements.
+Note: For production, verify trigger syntax against the official `SQLite` FTS4/FTS5 documentation and the `Room` version you target. The key point is: do not treat FTS external-content tables like normal tables with arbitrary `UPDATE`/`DELETE` statements.
 
 ### Search with BM25 Ranking (FTS5)
 
@@ -629,7 +629,7 @@ data class ArticleFtsNarrow(
 ## Дополнительные Вопросы (RU)
 
 1. Как FTS5 обрабатывает многоязычный контент (например, английский и русский текст в одном документе), и как выбирать подходящие токенизаторы?
-2. Каковы накладные расходы по хранилищу и последствия для миграций при добавлении FTS-таблиц в существующую схему Room?
+2. Каковы накладные расходы по хранилищу и последствия для миграций при добавлении FTS-таблиц в существующую схему `Room`?
 3. Как можно реализовать нечёткий поиск или устойчивость к опечаткам поверх FTS (например, с вспомогательными таблицами или клиентским ранжированием)?
 4. Как спроектировать синхронизацию и логику восстановления FTS после частичной потери данных или повреждения FTS-индекса?
 5. Как бенчмаркать и профилировать FTS против LIKE для вашего конкретного сценария на Android-устройствах?
@@ -638,9 +638,9 @@ data class ArticleFtsNarrow(
 
 - [[c-android-basics]]
 - [[c-database-performance]]
-- Room FTS документация: https://developer.android.com/training/data-storage/room/defining-data#fts
-- SQLite FTS5 Extension: https://www.sqlite.org/fts5.html
-- Рекомендации по производительности Room: https://developer.android.com/topic/performance/sqlite-performance-best-practices
+- `Room` FTS документация: https://developer.android.com/training/data-storage/room/defining-data#fts
+- `SQLite` FTS5 Extension: https://www.sqlite.org/fts5.html
+- Рекомендации по производительности `Room`: https://developer.android.com/topic/performance/sqlite-performance-best-practices
 
 ## Связанные Вопросы (RU)
 
@@ -651,7 +651,7 @@ data class ArticleFtsNarrow(
 ## Follow-ups
 
 1. How does FTS5 handle multi-language content (e.g., English and Russian text in the same document), and how would you choose tokenizers for that?
-2. What are the storage overhead and migration implications of introducing FTS tables into an existing Room schema?
+2. What are the storage overhead and migration implications of introducing FTS tables into an existing `Room` schema?
 3. How can you implement fuzzy search or typo tolerance on top of FTS (e.g., with auxiliary tables or client-side ranking)?
 4. How would you design FTS synchronization and recovery logic after a partial data loss or corruption of the FTS index?
 5. How can you benchmark and profile FTS vs LIKE for your specific workload on Android devices?

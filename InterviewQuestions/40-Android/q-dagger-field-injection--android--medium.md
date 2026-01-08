@@ -1,4 +1,4 @@
----
+---\
 id: android-469
 title: Dagger Field Injection / Инъекция полей Dagger
 aliases: [Dagger Field Injection, Инъекция полей Dagger]
@@ -16,22 +16,22 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
-> Какие особенности инъекции в поле при помощи Dagger?
+> Какие особенности инъекции в поле при помощи `Dagger`?
 
 # Question (EN)
-> What are the features of field injection using Dagger?
+> What are the features of field injection using `Dagger`?
 
 ## Ответ (RU)
 
-Field injection в Dagger внедряет зависимости в поля класса через `@Inject` **после создания объекта**. Используется для Android-компонентов (`Activity`, `Fragment`, `Service`), где конструктор недоступен для модификации или объект создаётся фреймворком.
+Field injection в `Dagger` внедряет зависимости в поля класса через `@Inject` **после создания объекта**. Используется для Android-компонентов (`Activity`, `Fragment`, `Service`), где конструктор недоступен для модификации или объект создаётся фреймворком.
 
 ### Жизненный Цикл
 
 1. Создание объекта через конструктор по умолчанию / фреймворком
 2. Вызов метода `inject()` соответствующего компонента
-3. Заполнение помеченных `@Inject` полей зависимостями (код, сгенерированный Dagger)
+3. Заполнение помеченных `@Inject` полей зависимостями (код, сгенерированный `Dagger`)
 4. После `inject()` поля готовы к использованию
 
 Важно: доступ к `@Inject`-полям до вызова `inject()` приведёт к ошибке (например, `UninitializedPropertyAccessException` для `lateinit`).
@@ -76,11 +76,11 @@ interface AppComponent {
 @Inject val repository: UserRepository // ❌ Не компилируется (final / val не может быть проинжектирован)
 ```
 
-Ключевое требование: поле должно быть доступно для записи (не `val`), чтобы сгенерированный Dagger-код смог присвоить зависимость.
+Ключевое требование: поле должно быть доступно для записи (не `val`), чтобы сгенерированный `Dagger`-код смог присвоить зависимость.
 
 ### Hilt Упрощение
 
-Hilt автоматизирует field injection для Android-компонентов:
+`Hilt` автоматизирует field injection для Android-компонентов:
 
 ```kotlin
 @AndroidEntryPoint
@@ -112,17 +112,17 @@ class MainActivity : AppCompatActivity() {
 - Усложняет тестирование: нужно отдельно инициализировать или подменять поля (иногда через тестовый компонент или setter), вместо явной передачи в конструктор
 - Чуть больше связность с DI-фреймворком (компонент должен знать о типе для `inject()`)
 
-Важно: Dagger и Hilt используют кодогенерацию, а не reflection, поэтому field injection не несёт значимого reflection-overhead по сравнению с constructor injection. Отличие в основном в явности зависимостей и рисках порядка инициализации.
+Важно: `Dagger` и `Hilt` используют кодогенерацию, а не reflection, поэтому field injection не несёт значимого reflection-overhead по сравнению с constructor injection. Отличие в основном в явности зависимостей и рисках порядка инициализации.
 
 ## Answer (EN)
 
-Field injection in Dagger injects dependencies into class fields via `@Inject` **after the object is created**. It is used for Android components (`Activity`, `Fragment`, `Service`) or other framework-created classes where you cannot modify the constructor.
+Field injection in `Dagger` injects dependencies into class fields via `@Inject` **after the object is created**. It is used for Android components (`Activity`, `Fragment`, `Service`) or other framework-created classes where you cannot modify the constructor.
 
 ### Lifecycle
 
 1. Object is created via default/framework constructor
 2. The appropriate component's `inject()` method is called
-3. Generated Dagger code assigns dependencies to `@Inject`-annotated fields
+3. Generated `Dagger` code assigns dependencies to `@Inject`-annotated fields
 4. After `inject()`, fields are safe to use
 
 Important: accessing `@Inject` fields before `inject()` is called will cause errors (e.g., `UninitializedPropertyAccessException` for `lateinit`).
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Requirements
 
-**Component with inject() method:**
+**`Component` with inject() method:**
 ```kotlin
 @Component(modules = [AppModule::class])
 interface AppComponent {
@@ -167,11 +167,11 @@ interface AppComponent {
 @Inject val repository: UserRepository // ❌ Won't compile (final / val cannot be injected)
 ```
 
-The key requirement is that the field must be writable (not `val`) so generated Dagger code can assign the dependency.
+The key requirement is that the field must be writable (not `val`) so generated `Dagger` code can assign the dependency.
 
 ### Hilt Simplification
 
-Hilt automates field injection for Android framework components:
+`Hilt` automates field injection for Android framework components:
 
 ```kotlin
 @AndroidEntryPoint
@@ -199,17 +199,17 @@ class MainActivity : AppCompatActivity() {
 ### Limitations
 
 - Less explicit contract: dependencies are hidden from the constructor signature → harder to reason about
-- Lifecycle hazards: accessing injected fields before `inject()` causes crashes
+- `Lifecycle` hazards: accessing injected fields before `inject()` causes crashes
 - Testing complexity: requires setting up components or manually assigning/mocking fields instead of passing dependencies via constructor
 - Tighter coupling to DI setup: the component must know about each type needing field injection via `inject()` methods
 
-Note: Dagger and Hilt rely on compile-time code generation rather than reflection, so there is no significant reflection-based performance penalty for field injection compared to constructor injection. The main drawbacks are around clarity, lifecycle ordering, and testability.
+Note: `Dagger` and `Hilt` rely on compile-time code generation rather than reflection, so there is no significant reflection-based performance penalty for field injection compared to constructor injection. The main drawbacks are around clarity, lifecycle ordering, and testability.
 
 ## Follow-ups
 
-- How does Hilt automate inject() calls for Android framework components?
+- How does `Hilt` automate inject() calls for Android framework components?
 - Why is constructor injection preferred for `ViewModel` and Repository classes?
-- What happens if you access an @Inject field before calling inject()?
+- What happens if you access an @`Inject` field before calling inject()?
 - How does field injection affect unit testing and mocking strategies?
 - What are the performance implications of field injection vs constructor injection in Dagger/Hilt?
 
@@ -218,7 +218,7 @@ Note: Dagger and Hilt rely on compile-time code generation rather than reflectio
 - [[c-dagger]]
 - [[c-dependency-injection]]
 - [[c-hilt]]
-- [Dagger Inject Documentation](https://dagger.dev/api/latest/dagger/Inject.html)
+- [Dagger `Inject` Documentation](https://dagger.dev/api/latest/dagger/Inject.html)
 - [Hilt Android Guide](https://developer.android.com/training/dependency-injection/hilt-android)
 
 ## Related Questions

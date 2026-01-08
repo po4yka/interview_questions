@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-084
 title: "StateFlow and SharedFlow in Android / StateFlow и SharedFlow в Android"
 aliases: ["StateFlow and SharedFlow in Android", "StateFlow и SharedFlow в Android"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-09
 
 tags: [android, coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
----
+---\
 # Вопрос (RU)
 > Как использовать `StateFlow` и `SharedFlow` в Android? Объясните разницу, replay cache, когда использовать каждый и паттерны для `ViewModel`.
 
@@ -345,11 +345,11 @@ class GoodEventUsage : ViewModel() {
 ### Related (Medium)
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
-- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
+- [[q-sharedflow-stateflow--kotlin--medium]] - `Flow`
 - [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

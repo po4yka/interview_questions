@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-181434"
 title: "Adapter Pattern / Adapter Pattern"
 aliases: ["Adapter Pattern"]
@@ -9,30 +9,31 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-system-design"
-related: [c-design-patterns, c-facade-pattern, c-decorator-pattern, c-composite-pattern, c-architecture-patterns]
+moc: "moc-architecture-patterns"
+related: ["c-design-patterns", "c-facade-pattern", "c-decorator-pattern", "c-composite-pattern", "c-architecture-patterns"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [architecture-patterns, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
-Adapter Pattern is a structural design pattern that allows incompatible interfaces to work together by introducing an intermediate adapter that translates one interface into another. It helps integrate legacy systems, third-party libraries, or differently designed modules without modifying their existing code. Commonly used in large systems, API integrations, and library/framework boundaries to improve reuse and decouple clients from concrete implementations.
+`Adapter` Pattern is a structural design pattern that allows incompatible interfaces to work together by introducing an intermediate adapter that translates one interface into another. It helps integrate legacy systems, third-party libraries, or differently designed modules without modifying their existing code. Commonly used in large systems, API integrations, and library/framework boundaries to improve reuse and decouple clients from concrete implementations.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-Паттерн Адаптер (Adapter Pattern) — это структурный шаблон проектирования, который позволяет несовместимым интерфейсам работать вместе за счёт промежуточного адаптера, преобразующего один интерфейс в другой. Он помогает интегрировать легаси-системы, сторонние библиотеки или модули с разными интерфейсами без изменения их исходного кода. Широко используется в крупных системах, интеграции API и на границах библиотек/фреймворков для повышения переиспользуемости и ослабления связности.
+Паттерн Адаптер (`Adapter` Pattern) — это структурный шаблон проектирования, который позволяет несовместимым интерфейсам работать вместе за счёт промежуточного адаптера, преобразующего один интерфейс в другой. Он помогает интегрировать легаси-системы, сторонние библиотеки или модули с разными интерфейсами без изменения их исходного кода. Широко используется в крупных системах, интеграции API и на границах библиотек/фреймворков для повышения переиспользуемости и ослабления связности.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
 ## Key Points (EN)
 
 - Defines a wrapper (adapter) that implements the target interface and delegates calls to an existing (adaptee) implementation, translating method signatures or data formats.
-- Supports two common forms: Object Adapter (composition-based, preferred) and Class Adapter (inheritance-based, limited in languages without multiple inheritance).
+- Supports two common forms: Object `Adapter` (composition-based, preferred) and Class `Adapter` (inheritance-based, limited in languages without multiple inheritance).
 - Enables integration with legacy code or third-party components without modifying their source, aligning with the Open/Closed Principle.
 - Localizes conversion logic (protocols, DTOs, formats), simplifying clients and improving maintainability.
 - Frequently appears in real-world APIs (e.g., bridging between different logging, persistence, or messaging abstractions) and is a typical interview example for structural patterns.

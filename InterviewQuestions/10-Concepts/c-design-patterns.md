@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-002737"
 title: "Design Patterns / Design Patterns"
 aliases: ["Design Patterns"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-system-design"
-related: [c-software-design, c-architecture-patterns, c-clean-code]
+related: ["c-software-design", "c-architecture-patterns", "c-clean-code"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
----
+tags: [concept, difficulty/medium, system-design]
+---\
 
 # Summary (EN)
 
@@ -31,17 +32,17 @@ Design patterns (шаблоны проектирования) — это мно�
 
 ## Key Points (EN)
 
-- Categories: Classic patterns are grouped into creational (e.g., Singleton, Factory), structural (e.g., Adapter, Decorator), and behavioral (e.g., Strategy, Observer) based on the type of problem they solve.
+- Categories: Classic patterns are grouped into creational (e.g., Singleton, Factory), structural (e.g., `Adapter`, Decorator), and behavioral (e.g., Strategy, `Observer`) based on the type of problem they solve.
 - Reusability and maintainability: Patterns encapsulate best practices that reduce coupling, improve cohesion, and make systems easier to extend and modify.
-- Communication: Using pattern names provides a concise, shared language in design discussions and interviews ("use a Strategy here", "this is an Observer").
-- Context matters: Patterns are guides, not rules; a correct application depends on constraints such as scalability, performance, complexity, and team skills.
+- Communication: Using pattern names provides a concise, shared language in design discussions and interviews ("use a Strategy here", "this is an `Observer`").
+- `Context` matters: Patterns are guides, not rules; a correct application depends on constraints such as scalability, performance, complexity, and team skills.
 - Interview relevance: Candidates are often expected to recognize patterns in system design scenarios, compare alternatives, and argue for trade-offs rather than recite definitions.
 
 ## Ключевые Моменты (RU)
 
-- Категории: Классические шаблоны делятся на порождающие (например, Singleton, Factory), структурные (например, Adapter, Decorator) и поведенческие (например, Strategy, Observer) в зависимости от типа решаемой задачи.
+- Категории: Классические шаблоны делятся на порождающие (например, Singleton, Factory), структурные (например, `Adapter`, Decorator) и поведенческие (например, Strategy, `Observer`) в зависимости от типа решаемой задачи.
 - Повторное использование и поддерживаемость: Шаблоны фиксируют лучшие практики, уменьшают связность, повышают связность внутри модулей и упрощают расширение и модификацию системы.
-- Коммуникация: Названия шаблонов дают общий язык в обсуждениях дизайна и на собеседованиях («используем Strategy», «это по сути Observer»).
+- Коммуникация: Названия шаблонов дают общий язык в обсуждениях дизайна и на собеседованиях («используем Strategy», «это по сути `Observer`»).
 - Важно учитывать контекст: Шаблоны — это рекомендации, а не догмы; корректность применения зависит от требований к масштабируемости, производительности, сложности и компетенций команды.
 - Актуальность для интервью: От кандидатов ожидают умения узнавать шаблоны в задачах системного дизайна, сравнивать альтернативы и аргументировать выбор, а не просто цитировать определения.
 

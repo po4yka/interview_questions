@@ -1,19 +1,26 @@
----
-id: concept-004
-title: Kotlin Flow / Kotlin Flow
-aliases: [Cold Flow, Flow, Kotlin Flow, Reactive Streams]
-kind: concept
+---\
+id: "20260108-110550"
+title: "Kotlin Flow / Kotlin Flow"
+aliases: ["Cold Flow", "Flow", "Kotlin Flow", "Reactive Streams"]
 summary: "Kotlin Flow is a cold asynchronous data stream that sequentially emits values and completes normally or with an exception. It's part of Kotlin Coroutines and provides a declarative way to work with asynchronous data sequences."
-links: []
-related: [c-coroutines, c-state-flow, c-kotlin, c-concurrency]
-created: 2025-11-05
-updated: 2025-11-05
-tags: [concept, coroutines, flow, kotlin, reactive-programming]
----
+topic: "kotlin"
+subtopics: ["coroutines", "flow", "reactive-programming"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-kotlin"
+related: ["c-coroutines", "c-state-flow", "c-kotlin", "c-concurrency"]
+created: "2025-11-05"
+updated: "2025-11-05"
+tags: ["concept", "coroutines", "flow", "kotlin", "reactive-programming", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
-**Kotlin Flow** is a cold asynchronous stream that sequentially emits values over time. It's built on top of Kotlin Coroutines and provides a declarative, composable API for handling asynchronous data sequences.
+**Kotlin `Flow`** is a cold asynchronous stream that sequentially emits values over time. It's built on top of Kotlin Coroutines and provides a declarative, composable API for handling asynchronous data sequences.
 
 **Key Characteristics**:
 
@@ -27,7 +34,7 @@ tags: [concept, coroutines, flow, kotlin, reactive-programming]
 - Next value is emitted only after previous one is processed
 - Naturally handles backpressure (consumer-driven)
 
-**3. Coroutine-based**:
+**3. `Coroutine`-based**:
 - Uses `suspend` functions for emission and collection
 - Automatically respects coroutine cancellation
 - Integrates with structured concurrency
@@ -36,7 +43,7 @@ tags: [concept, coroutines, flow, kotlin, reactive-programming]
 - **Transformation**: `map`, `filter`, `transform`, `flatMapConcat`, `flatMapMerge`
 - **Combination**: `zip`, `combine`, `merge`
 - **Terminal**: `collect`, `toList`, `first`, `reduce`, `fold`
-- **Context**: `flowOn` (switch dispatcher), `buffer` (control buffering)
+- **`Context`**: `flowOn` (switch dispatcher), `buffer` (control buffering)
 
 **Basic Usage**:
 ```kotlin
@@ -55,15 +62,15 @@ numbersFlow.collect { value ->
 }
 ```
 
-**Flow vs Other Abstractions**:
-- **Flow vs Sequence**: Flow is async (suspend), Sequence is synchronous
-- **Flow vs Channel**: Flow is cold, Channel is hot (always active)
-- **Flow vs LiveData**: Flow is lifecycle-agnostic, LiveData is Android-specific
-- **Flow vs RxJava**: Flow is simpler, coroutine-native, less ceremony
+**`Flow` vs Other Abstractions**:
+- **`Flow` vs Sequence**: `Flow` is async (suspend), Sequence is synchronous
+- **`Flow` vs Channel**: `Flow` is cold, Channel is hot (always active)
+- **`Flow` vs `LiveData`**: `Flow` is lifecycle-agnostic, `LiveData` is Android-specific
+- **`Flow` vs RxJava**: `Flow` is simpler, coroutine-native, less ceremony
 
 # Сводка (RU)
 
-**Kotlin Flow** — это холодный асинхронный поток, последовательно испускающий значения со временем. Он построен на основе Kotlin Coroutines и предоставляет декларативный, композируемый API для работы с асинхронными последовательностями данных.
+**Kotlin `Flow`** — это холодный асинхронный поток, последовательно испускающий значения со временем. Он построен на основе Kotlin Coroutines и предоставляет декларативный, композируемый API для работы с асинхронными последовательностями данных.
 
 **Ключевые характеристики**:
 
@@ -105,24 +112,24 @@ numbersFlow.collect { value ->
 }
 ```
 
-**Flow в сравнении с другими абстракциями**:
-- **Flow vs Sequence**: Flow асинхронный (suspend), Sequence синхронный
-- **Flow vs Channel**: Flow холодный, Channel горячий (всегда активен)
-- **Flow vs LiveData**: Flow не зависит от жизненного цикла, LiveData специфичен для Android
-- **Flow vs RxJava**: Flow проще, встроен в корутины, меньше церемоний
+**`Flow` в сравнении с другими абстракциями**:
+- **`Flow` vs Sequence**: `Flow` асинхронный (suspend), Sequence синхронный
+- **`Flow` vs Channel**: `Flow` холодный, Channel горячий (всегда активен)
+- **`Flow` vs `LiveData`**: `Flow` не зависит от жизненного цикла, `LiveData` специфичен для Android
+- **`Flow` vs RxJava**: `Flow` проще, встроен в корутины, меньше церемоний
 
 ## Use Cases / Trade-offs
 
-**When to use Flow**:
+**When to use `Flow`**:
 - **Repository layer**: Emit database/network data updates reactively
-- **UI state streams**: ViewModel exposes UI state as StateFlow
+- **UI state streams**: `ViewModel` exposes UI state as `StateFlow`
 - **Real-time data**: Server-sent events, WebSocket messages, sensor data
 - **Asynchronous pipelines**: Multi-stage data processing (fetch → transform → emit)
 
 **Common patterns**:
-- **StateFlow**: Hot flow that always has a value, replaces LiveData
-- **SharedFlow**: Hot flow for events/broadcasts
-- **channelFlow**: Bridge between callback-based APIs and Flow
+- **`StateFlow`**: Hot flow that always has a value, replaces `LiveData`
+- **`SharedFlow`**: Hot flow for events/broadcasts
+- **channelFlow**: Bridge between callback-based APIs and `Flow`
 - **callbackFlow**: Similar to channelFlow, better for Android lifecycle
 
 **Advantages**:
@@ -143,8 +150,8 @@ numbersFlow.collect { value ->
 
 ## References
 
-- [Kotlin Flow Official Guide](https://kotlinlang.org/docs/flow.html)
+- [Kotlin `Flow` Official Guide](https://kotlinlang.org/docs/flow.html)
 - [Kotlin Coroutines Guide: Asynchronous Flow](https://kotlinlang.org/docs/coroutines-guide.html#asynchronous-flow)
 - [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-- [Android Developers: Flow in Android](https://developer.android.com/kotlin/flow)
-- [Roman Elizarov on Flow Design](https://medium.com/@elizarov/cold-flows-hot-channels-d74769805f9)
+- [Android Developers: `Flow` in Android](https://developer.android.com/kotlin/flow)
+- [Roman Elizarov on `Flow` Design](https://medium.com/@elizarov/cold-flows-hot-channels-d74769805f9)

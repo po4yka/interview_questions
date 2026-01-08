@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-134
 title: "Kotlin Multiplatform expect/actual / Механизм expect/actual в Kotlin"
 aliases: ["Kotlin Multiplatform expect/actual", "Механизм expect/actual в Kotlin"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-11-10
 
 tags: [cross-platform, difficulty/medium, expect-actual, kmp, kotlin, multiplatform, platform-specific]
----
+---\
 # Вопрос (RU)
 > Что такое механизм expect/actual в Kotlin Multiplatform? Объясните как объявлять платформо-специфичные реализации и приведите практические примеры.
 
@@ -378,7 +378,7 @@ class UserDatabase {
 }
 ```
 
-Платформенные `actual`-реализации должны предоставлять конкретный `DatabaseDriver` в соответствии со своими API для хранения данных (например, SQLite на Android), обычно через инъекцию зависимостей из платформенного кода.
+Платформенные `actual`-реализации должны предоставлять конкретный `DatabaseDriver` в соответствии со своими API для хранения данных (например, `SQLite` на Android), обычно через инъекцию зависимостей из платформенного кода.
 
 ### Распространённые Ошибки
 

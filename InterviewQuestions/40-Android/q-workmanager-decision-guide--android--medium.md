@@ -1,4 +1,4 @@
----
+---\
 id: android-180
 title: "WorkManager Decision Guide / Руководство по выбору WorkManager"
 aliases: ["WorkManager Decision Guide", "Руководство по выбору WorkManager"]
@@ -16,28 +16,28 @@ updated: 2025-11-10
 sources: []
 tags: [android/background-execution, android/coroutines, android/performance-battery, background-work, difficulty/medium, service, workmanager]
 
----
+---\
 # Вопрос (RU)
 
-> Когда использовать WorkManager vs Coroutines vs `Service` для фоновой работы в Android?
+> Когда использовать `WorkManager` vs Coroutines vs `Service` для фоновой работы в Android?
 
 # Question (EN)
 
-> When should you use WorkManager vs Coroutines vs `Service` for background work in Android?
+> When should you use `WorkManager` vs Coroutines vs `Service` for background work in Android?
 
 ---
 
 ## Ответ (RU)
 
-**WorkManager**, **Coroutines** и **`Service`** решают разные задачи фоновой работы в Android.
+**`WorkManager`**, **Coroutines** и **`Service`** решают разные задачи фоновой работы в Android.
 
 ### Критерии Выбора
 
-| Критерий | WorkManager | Coroutines | Foreground `Service` |
+| Критерий | `WorkManager` | Coroutines | Foreground `Service` |
 |----------|-------------|------------|---------------------|
 | **Гарантия выполнения** | Высокая надёжность, переживает reboot и рестарты процесса (но не 100%) | Нет, живут только в процессе | Пока сервис активен и не убит системой, при соблюдении ограничений |
 | **Работает при закрытом приложении** | Да, при корректной конфигурации и ограничениях системы | Нет | Да, если запущен как foreground и соблюдены ограничения запуска |
-| **Constraints** (WiFi, charging) | Да | Нет | Нет |
+| **`Constraints`** (WiFi, charging) | Да | Нет | Нет |
 | **Retry/backoff** | Встроенная поддержка | Вручную | Вручную |
 | **Периодические задачи** | Да (минимальный интервал 15 мин, неточная) | Нет надёжных при убийстве процесса | Только вручную, без гарантий |
 | **Use case** | Отложенная, надёжная, совместимая с ограничениями система работа | Async операции в UI и в рамках жизни процесса | Длительные операции с явным уведомлением |
@@ -258,15 +258,15 @@ class DataSyncManager(
 
 ## Answer (EN)
 
-**WorkManager**, **Coroutines**, and **Services** solve different background work needs in Android.
+**`WorkManager`**, **Coroutines**, and **Services** solve different background work needs in Android.
 
 ### Selection Criteria
 
-| Criterion | WorkManager | Coroutines | Foreground `Service` |
+| Criterion | `WorkManager` | Coroutines | Foreground `Service` |
 |----------|-------------|------------|---------------------|
 | **Execution Guarantee** | High reliability, survives reboot/process restarts (not 100%) | No, tied to process/scope | While service is running and not killed, subject to platform limits |
 | **Works When App Closed** | Yes, when properly configured and allowed by system | No | Yes when started as foreground and launch restrictions are met |
-| **Constraints** (WiFi, charging) | Yes | No | No |
+| **`Constraints`** (WiFi, charging) | Yes | No | No |
 | **Retry/backoff** | Built-in support | Manual | Manual |
 | **Periodic Tasks** | Yes (min 15 min interval, inexact) | No durable periodic tasks across process death | Manual, no strong guarantees |
 | **Use Case** | Deferrable, reliable, system-cooperative work | Async work for UI / within app lifetime | `Long`-running user-visible foreground work |
@@ -488,11 +488,11 @@ Need higher reliability beyond app/process lifetime (including after app close/r
 
 ## Follow-ups
 
-1. How does WorkManager behave under modern background execution limits (Doze, App Standby buckets, restricted apps)?
-2. When should you use expedited WorkManager work vs a foreground service, and what quotas apply?
-3. How can you observe WorkManager state and progress from UI and handle cancellation safely?
+1. How does `WorkManager` behave under modern background execution limits (Doze, App Standby buckets, restricted apps)?
+2. When should you use expedited `WorkManager` work vs a foreground service, and what quotas apply?
+3. How can you observe `WorkManager` state and progress from UI and handle cancellation safely?
 4. What are the differences between `START_STICKY`, `START_NOT_STICKY`, and `START_REDELIVER_INTENT` for services and how do they affect reliability?
-5. How would you migrate legacy `JobScheduler` or `AlarmManager`-based background tasks to WorkManager?
+5. How would you migrate legacy `JobScheduler` or `AlarmManager`-based background tasks to `WorkManager`?
 
 ## References
 

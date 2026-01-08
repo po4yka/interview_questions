@@ -1,4 +1,4 @@
----
+---\
 id: android-018
 title: "Multi-module Architecture Best Practices / Лучшие практики мульти-модульной архитектуры"
 aliases: ["Multi-module Architecture", "Мульти-модульная архитектура"]
@@ -16,7 +16,7 @@ created: 2025-10-06
 updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 > Какие лучшие практики для мульти-модульной архитектуры в Android? Когда и зачем её использовать?
 
@@ -302,7 +302,7 @@ dependencies {
 - Team of ~5+ developers
 - Codebase around 50,000+ LOC or actively growing
 - Multiple apps share code
-- Long build times (e.g., > 5 minutes) slow down development
+- `Long` build times (e.g., > 5 minutes) slow down development
 
 **You may skip complex modularization when:**
 - Small apps (<10,000 LOC)
@@ -361,4 +361,4 @@ dependencies {
 ### Advanced
 - Large-scale multi-module architecture (100+ modules)
 - Automated module dependency validation
-- Module-level performance optimization
+- `Module`-level performance optimization

@@ -1,4 +1,4 @@
----
+---\
 id: android-223
 title: Measure Project Size / Измерение размера проекта
 aliases: [Measure Project Size, Измерение размера проекта]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-modularization, android/gradle, codebase-analysis, difficulty/easy, project-metrics]
 
----
+---\
 # Вопрос (RU)
 
 > Как можно измерить размер проекта?
@@ -206,7 +206,7 @@ find . \( -name "*.kt" -o -name "*.java" \) -print0 | xargs -0 wc -l
 
 1. Install the "Statistic" (or similar) plugin.
 2. Use **Analyze → Statistic**.
-3. View breakdown by language: Kotlin, Java, XML, etc.
+3. `View` breakdown by language: Kotlin, Java, XML, etc.
 
 **Size interpretation (approximate):**
 
@@ -253,7 +253,7 @@ grep -E "include\(" settings.gradle.kts | wc -l
 | Modular | 5-10 | Better separation, parallel builds, clearer ownership |
 | Highly Modular | 10-20+ | Strong isolation; more complex configuration and navigation |
 
-Module count should be evaluated together with boundaries and dependencies, not optimized blindly.
+`Module` count should be evaluated together with boundaries and dependencies, not optimized blindly.
 
 ### 3. APK / AAB Size
 
@@ -327,7 +327,7 @@ Build Time:       ~2 min (incremental)
 ### Best Practices
 
 1. **Monitor growth** — track key metrics (LOC, methods, sizes, build time) over commits/releases.
-2. **Set limits** — enforce thresholds in CI/Gradle (e.g., fail build if APK size or method count exceeds agreed limits).
+2. **`Set` limits** — enforce thresholds in CI/Gradle (e.g., fail build if APK size or method count exceeds agreed limits).
 3. **Regular cleanup** — remove unused dependencies, resources, and dead code.
 4. **Optimize** — use R8/ProGuard shrinking, resource shrinking, ABI/language splits, and optimize images/native libs.
 

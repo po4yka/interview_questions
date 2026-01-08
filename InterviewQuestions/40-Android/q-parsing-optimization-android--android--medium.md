@@ -1,4 +1,4 @@
----
+---\
 id: android-130
 title: Parsing Optimization Android / Оптимизация парсинга Android
 aliases: [Parsing Optimization Android, Оптимизация парсинга Android]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-memory, android/serialization, difficulty/medium, json, optimization, xml]
 
----
+---\
 # Вопрос (RU)
 
 > Где можно оптимизировать парсинг в Android-приложениях?
@@ -73,12 +73,12 @@ val user = gson.fromJson(reader, User::class.java)
 Чем современнее и менее рефлексивна библиотека, тем лучше с точки зрения производительности и аллокаций.
 
 Иллюстративное сравнение (1000 объектов, условные значения, зависят от окружения и конфигурации):
-- **Moshi**: ~15ms (часто одна из самых быстрых)
+- **`Moshi`**: ~15ms (часто одна из самых быстрых)
 - **kotlinx.serialization**: ~18ms (нативная для Kotlin; особенно эффективна с сгенерированными сериализаторами)
-- **Gson**: ~25ms (универсальная, основана на рефлексии по умолчанию)
+- **`Gson`**: ~25ms (универсальная, основана на рефлексии по умолчанию)
 - **org.json**: ~45ms (стандартная Android API, без оптимизаций под большие объёмы)
 
-**Moshi** - хороший выбор для производительности:
+**`Moshi`** - хороший выбор для производительности:
 ```kotlin
 @JsonClass(generateAdapter = true)
 data class User(val id: Int, val name: String)
@@ -115,7 +115,7 @@ fun parseLazy(json: String): Sequence<User> = sequence {
 parseLazy(json).take(10).toList()  // Создаёт только первые 10 объектов
 ```
 
-(Обратите внимание: JSONArray всё равно требует иметь весь JSON в памяти; для настоящего стриминга используйте потоковые API: JsonReader (Gson), Moshi streaming, kotlinx.serialization JSON-streaming и т.п.)
+(Обратите внимание: JSONArray всё равно требует иметь весь JSON в памяти; для настоящего стриминга используйте потоковые API: JsonReader (`Gson`), `Moshi` streaming, kotlinx.serialization JSON-streaming и т.п.)
 
 **6. Фоновые потоки**
 
@@ -130,7 +130,7 @@ viewModelScope.launch(Dispatchers.Default) {
 
 **7. Инкрементальный парсинг**
 
-Для больших JSON-потоков используйте потоковые API, например JsonReader из Gson или аналогичные механизмы в Moshi/kotlinx.serialization.
+Для больших JSON-потоков используйте потоковые API, например JsonReader из `Gson` или аналогичные механизмы в Moshi/kotlinx.serialization.
 
 ```kotlin
 fun parseStream(stream: InputStream) = flow {
@@ -202,12 +202,12 @@ Cache parsed data for reuse, especially for frequently accessed data.
 Prefer modern libraries that minimize reflection and allocations.
 
 Illustrative comparison (1000 objects; rough values, highly environment- and configuration-dependent):
-- **Moshi**: ~15ms (often among the fastest)
+- **`Moshi`**: ~15ms (often among the fastest)
 - **kotlinx.serialization**: ~18ms (Kotlin-native; especially efficient with generated serializers)
-- **Gson**: ~25ms (flexible, reflection-based by default)
+- **`Gson`**: ~25ms (flexible, reflection-based by default)
 - **org.json**: ~45ms (standard Android API, not optimized for large payloads)
 
-**Moshi** - strong choice for performance:
+**`Moshi`** - strong choice for performance:
 ```kotlin
 @JsonClass(generateAdapter = true)
 data class User(val id: Int, val name: String)
@@ -244,7 +244,7 @@ fun parseLazy(json: String): Sequence<User> = sequence {
 parseLazy(json).take(10).toList()  // Only creates first 10 objects
 ```
 
-(Note: JSONArray still requires the full JSON string in memory; for true streaming use streaming APIs such as JsonReader (Gson), Moshi streaming adapters, or kotlinx.serialization streaming.)
+(Note: JSONArray still requires the full JSON string in memory; for true streaming use streaming APIs such as JsonReader (`Gson`), `Moshi` streaming adapters, or kotlinx.serialization streaming.)
 
 **6. Background Threads**
 
@@ -259,7 +259,7 @@ viewModelScope.launch(Dispatchers.Default) {
 
 **7. Incremental Parsing**
 
-For large JSON streams, use streaming APIs such as JsonReader from Gson or equivalent mechanisms in Moshi/kotlinx.serialization.
+For large JSON streams, use streaming APIs such as JsonReader from `Gson` or equivalent mechanisms in Moshi/kotlinx.serialization.
 
 ```kotlin
 fun parseStream(stream: InputStream) = flow {
@@ -288,29 +288,29 @@ fun parseStream(stream: InputStream) = flow {
 ## Дополнительные Вопросы (RU)
 
 - Как бы вы измеряли производительность парсинга для разных JSON-библиотек в боевом приложении?
-- Какие трейд-оффы существуют между компиляционной генерацией кода в Moshi/kotlinx.serialization и рефлексивным подходом Gson?
+- Какие трейд-оффы существуют между компиляционной генерацией кода в Moshi/kotlinx.serialization и рефлексивным подходом `Gson`?
 - Как вы обрабатываете ошибки парсинга и частичные данные при потоковом парсинге?
-- В каких случаях стоит использовать JsonReader напрямую вместо более высокоуровневых библиотек вроде Moshi или Gson?
+- В каких случаях стоит использовать JsonReader напрямую вместо более высокоуровневых библиотек вроде `Moshi` или `Gson`?
 
 ## Follow-ups
 
 - How would you benchmark parsing performance for different JSON libraries in your production app?
-- What trade-offs exist between Moshi's/kotlinx.serialization's compile-time code generation and Gson's reflection-based approach?
+- What trade-offs exist between `Moshi`'s/kotlinx.serialization's compile-time code generation and `Gson`'s reflection-based approach?
 - How do you handle parsing errors and partial data in streaming parsers?
-- When should you use JsonReader directly instead of higher-level libraries like Moshi or Gson?
+- When should you use JsonReader directly instead of higher-level libraries like `Moshi` or `Gson`?
 
 ---
 
 ## Ссылки (RU)
 
-- https://github.com/square/moshi - библиотека Moshi для JSON
-- https://github.com/google/gson - библиотека Gson
+- https://github.com/square/moshi - библиотека `Moshi` для JSON
+- https://github.com/google/gson - библиотека `Gson`
 - https://developer.android.com/topic/performance - руководство по производительности Android
 
 ## References
 
-- https://github.com/square/moshi - Moshi JSON library
-- https://github.com/google/gson - Gson library
+- https://github.com/square/moshi - `Moshi` JSON library
+- https://github.com/google/gson - `Gson` library
 - https://developer.android.com/topic/performance - Android performance guide
 
 ---

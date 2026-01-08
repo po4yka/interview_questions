@@ -1,4 +1,4 @@
----
+---\
 id: lang-050
 title: "What Happens To Unneeded Objects / Что происходит с ненужными объектами"
 aliases: [What Happens To Unneeded Objects, Что происходит с ненужными объектами]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-09
 tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memory-management]
 
----
+---\
 # Вопрос (RU)
 
 > Что происходит с объектами, которые больше не нужны?
@@ -236,7 +236,7 @@ class Example {
 }
 ```
 
-**Background Process (Simplified View):**
+**Background Process (Simplified `View`):**
 
 ```kotlin
 // Developer code:

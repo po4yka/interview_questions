@@ -14,7 +14,7 @@ related: [c-android-ui-composition, q-compositionlocal-advanced--android--medium
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/ui-compose, difficulty/medium, jetpack-compose, setContent]
+tags: [android/ui-compose, difficulty/medium, setContent]
 
 ---
 # Вопрос (RU)

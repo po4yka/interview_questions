@@ -1,4 +1,4 @@
----
+---\
 id: android-063
 title: "Kotlin Context Receivers / Контекстные ресиверы Kotlin"
 aliases: ["Kotlin Context Receivers", "Контекстные ресиверы Kotlin"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
 sources: ["https://kotlinlang.org/docs/whatsnew15.html#context-receivers"]
 
----
+---\
 # Вопрос (RU)
 > Что такое context receivers в Kotlin и когда их использовать в Android?
 
@@ -166,7 +166,7 @@ fun openCamera() {
 
 ## Answer (EN)
 
-**Short version:**
+**`Short` version:**
 `Context` receivers let you declare which contextual types (implicit receivers) must be in scope to call a function/property. This makes dependencies explicit in the type system and supports multiple contexts without threading parameters around or wrapping them.
 
 **Detailed version:**

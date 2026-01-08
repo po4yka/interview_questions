@@ -1,4 +1,4 @@
----
+---\
 id: android-432
 title: "Vector Graphics Animations / Анимации векторной графики"
 aliases: ["Vector Graphics Animations", "Анимации векторной графики"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-animation, android/ui-graphics, animated-vector-drawable, difficulty/medium, vector-graphics]
 
----
+---\
 # Вопрос (RU)
 
 > Как работать с векторной графикой и `AnimatedVectorDrawable` в Android? Каковы лучшие практики для импорта SVG, морфинга путей и оптимизации производительности?
@@ -34,7 +34,7 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
 **VectorDrawable** — это XML-представление векторной графики на основе синтаксиса SVG path. Обеспечивает независимость от разрешения экрана и уменьшает размер APK за счёт отсутствия отдельных bitmap-ресурсов для разных плотностей.
 
 **AnimatedVectorDrawable** позволяет анимировать свойства VectorDrawable:
-- **Path morphing** — трансформация путей (требует совместимых путей: одинаковый набор, порядок и типы команд и сегментов, а не только количество или длина строки)
+- **`Path` morphing** — трансформация путей (требует совместимых путей: одинаковый набор, порядок и типы команд и сегментов, а не только количество или длина строки)
 - **Rotation, scale, translation** — трансформация групп
 - **Trim path** — эффект рисования линии
 - **Fill/stroke alpha** — анимация прозрачности
@@ -135,7 +135,7 @@ class AnimatedVectorManager {
 }
 ```
 
-**4. Path morphing совместимость:**
+**4. `Path` morphing совместимость:**
 
 ```kotlin
 // Несовместимые пути — разное количество/структура команд
@@ -245,8 +245,8 @@ fun AnimatedVectorIcon(
 
 ### Лучшие Практики
 
-1. **Path morphing**: используйте инструменты для нормализации путей (Vector Asset Studio, svg-path-morph); обеспечивайте идентичную структуру команд.
-2. **Производительность**: кешируйте `Drawable` (или их `ConstantState`), при необходимости растеризуйте особо сложные векторы для RecyclerView, выборочно используйте аппаратные слои на основе профилирования.
+1. **`Path` morphing**: используйте инструменты для нормализации путей (Vector Asset Studio, svg-path-morph); обеспечивайте идентичную структуру команд.
+2. **Производительность**: кешируйте `Drawable` (или их `ConstantState`), при необходимости растеризуйте особо сложные векторы для `RecyclerView`, выборочно используйте аппаратные слои на основе профилирования.
 3. **Импорт SVG**: импортируйте через Vector Asset Studio, упрощайте пути, оптимизируйте viewport и удаляйте неподдерживаемые эффекты.
 4. **Анимации**: длительность 200–400 мс для большинства UI-кейсов, используйте FastOutSlowInInterpolator, избегайте избыточного количества одновременно анимируемых путей.
 5. **Совместимость**: используйте VectorDrawableCompat / AnimatedVectorDrawableCompat для поддержки старых версий, при этом на новых API можно использовать нативные классы; тестируйте на API 21+.
@@ -268,7 +268,7 @@ fun AnimatedVectorIcon(
 **VectorDrawable** is an XML representation of vector graphics based on SVG path syntax. It provides resolution independence and helps reduce APK size by avoiding separate bitmap resources for each density.
 
 **AnimatedVectorDrawable** enables animating VectorDrawable properties:
-- **Path morphing** — shape transitions (requires compatible paths: same set, order, and types of commands/segments, not just equal string length)
+- **`Path` morphing** — shape transitions (requires compatible paths: same set, order, and types of commands/segments, not just equal string length)
 - **Rotation, scale, translation** — group transformations
 - **Trim path** — line drawing effects
 - **Fill/stroke alpha** — opacity animations
@@ -369,7 +369,7 @@ class AnimatedVectorManager {
 }
 ```
 
-**4. Path morphing compatibility:**
+**4. `Path` morphing compatibility:**
 
 ```kotlin
 // Incompatible paths - different number/structure of commands
@@ -479,8 +479,8 @@ fun AnimatedVectorIcon(
 
 ### Best Practices
 
-1. Path morphing: use tools to normalize paths; ensure identical command structure.
-2. Performance: cache drawables (or their ConstantState), rasterize very complex vectors for RecyclerView when needed, and apply hardware layers based on profiling.
+1. `Path` morphing: use tools to normalize paths; ensure identical command structure.
+2. Performance: cache drawables (or their ConstantState), rasterize very complex vectors for `RecyclerView` when needed, and apply hardware layers based on profiling.
 3. SVG import: import via Vector Asset Studio, simplify paths, optimize viewport, and remove unsupported effects.
 4. Animation: use 200–400 ms for most UI cases, prefer FastOutSlowInInterpolator, avoid animating too many paths at once.
 5. Compatibility: use VectorDrawableCompat / AnimatedVectorDrawableCompat to support old APIs; on newer APIs native classes are fine. Test on API 21+.

@@ -1,4 +1,4 @@
----
+---\
 id: android-221
 title: "Для чего используются сервисы в Android / What Are Services Used For"
 aliases: ["What Are Services Used For", "Для чего используются Service"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Для чего используются сервисы в Android?
@@ -31,7 +31,7 @@ tags: [android/background-execution, android/service, difficulty/medium]
 
 **`Service`** — это компонент Android для длительных фоновых операций без пользовательского интерфейса.
 
-Важно: сервис сам по себе не гарантирует вечное выполнение; система может его убить. Для длительных задач нужно учитывать ограничения платформы и использовать рекомендованные механизмы (Foreground `Service`, WorkManager и т.п.).
+Важно: сервис сам по себе не гарантирует вечное выполнение; система может его убить. Для длительных задач нужно учитывать ограничения платформы и использовать рекомендованные механизмы (Foreground `Service`, `WorkManager` и т.п.).
 
 ### Основные Типы И Применение
 
@@ -42,7 +42,7 @@ tags: [android/background-execution, android/service, difficulty/medium]
 
 **2. Background `Service`** — обычный запущенный сервис (started service) без уведомления
 - **Ограничения с Android 8.0+**: жесткие "background execution limits". Приложения не могут свободно запускать долгие фоновые сервисы, находясь в фоне; такие попытки часто блокируются или приводят к остановке сервиса
-- **Рекомендация**: для отложенных или периодических фоновых задач использовать **WorkManager** или другие специализированные API, а не полагаться на постоянно работающий background service
+- **Рекомендация**: для отложенных или периодических фоновых задач использовать **`WorkManager`** или другие специализированные API, а не полагаться на постоянно работающий background service
 
 **3. Bound `Service`** — сервис, к которому компоненты привязываются (bind) для получения интерфейса взаимодействия
 - **Применение**: коммуникация между `Activity`/`Fragment` и сервисом, IPC, предоставление общих вычислительных/сетевых ресурсов
@@ -160,12 +160,12 @@ bindService() → onCreate() (при первой привязке, если с�
 
 | Задача | Рекомендация |
 |--------|--------------|
-| Фоновая работа с высокой надежностью выполнения при соблюдении ограничений системы | **WorkManager** |
+| Фоновая работа с высокой надежностью выполнения при соблюдении ограничений системы | **`WorkManager`** |
 | Длительные пользовательски-заметные операции (музыка, навигация и т.п.) | **Foreground `Service`** |
 | Точные запланированные задачи по времени | **AlarmManager** или соответствующие API |
 | Коммуникация между компонентами | **Bound `Service`** |
 
-**Пример замены на WorkManager**:
+**Пример замены на `WorkManager`**:
 ```kotlin
 class DownloadWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
@@ -198,9 +198,9 @@ WorkManager.getInstance(context).enqueue(workRequest)
 1. **Всегда останавливайте сервис**: вызывайте `stopSelf()`/`stopService()` когда работа завершена.
 2. **Используйте Foreground `Service` для длительных пользовательски-заметных операций**: с обязательным уведомлением и учетом требований `startForegroundService()`.
 3. **Очищайте ресурсы в onDestroy()**: освобождайте MediaPlayer, LocationManager и т.д.
-4. **Предпочитайте WorkManager**: для большинства отложенных/гарантируемых системой фоновых задач вместо долгоживущих background services.
+4. **Предпочитайте `WorkManager`**: для большинства отложенных/гарантируемых системой фоновых задач вместо долгоживущих background services.
 5. **Сервисы выполняются в главном потоке по умолчанию**: используйте корутины, потоки или другие механизмы для тяжелой работы.
-6. **Учитывайте ограничения платформы**: начиная с Android 8.0+ запрещены/ограничены длительные background services для фоновых приложений; используйте foreground services, WorkManager и иные API.
+6. **Учитывайте ограничения платформы**: начиная с Android 8.0+ запрещены/ограничены длительные background services для фоновых приложений; используйте foreground services, `WorkManager` и иные API.
 
 ---
 
@@ -208,7 +208,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 A **`Service`** is an Android component used for operations that should continue without a user interface, potentially even when the user is not actively interacting with the app.
 
-Important: a service does not guarantee to run forever; the system may kill it under resource pressure. For long-running work you must respect platform background execution limits and use appropriate mechanisms (Foreground `Service`, WorkManager, etc.).
+Important: a service does not guarantee to run forever; the system may kill it under resource pressure. For long-running work you must respect platform background execution limits and use appropriate mechanisms (Foreground `Service`, `WorkManager`, etc.).
 
 ### Main Types and Use Cases
 
@@ -219,7 +219,7 @@ Important: a service does not guarantee to run forever; the system may kill it u
 
 **2. Background `Service`** — a started service without a foreground notification
 - **Restrictions since Android 8.0+**: strong background execution limits. Apps in the background cannot freely run long-lived background services; such starts are often blocked or the service is stopped shortly
-- **Recommendation**: for deferrable or periodic background tasks, use **WorkManager** or other specialized APIs instead of relying on a constantly running background service
+- **Recommendation**: for deferrable or periodic background tasks, use **`WorkManager`** or other specialized APIs instead of relying on a constantly running background service
 
 **3. Bound `Service`** — a service that components bind to in order to interact via an exposed interface
 - **Use cases**: communication between `Activity`/`Fragment` and a shared service, IPC, sharing network/compute resources
@@ -337,12 +337,12 @@ bindService() → onCreate() (if service not yet created) → onBind() → (mult
 
 | Task | Recommendation |
 |------|----------------|
-| Background work with strong reliability under system constraints | **WorkManager** |
-| Long-running user-visible operations (music, navigation, etc.) | **Foreground `Service`** |
+| Background work with strong reliability under system constraints | **`WorkManager`** |
+| `Long`-running user-visible operations (music, navigation, etc.) | **Foreground `Service`** |
 | Precise scheduled time-based tasks | **AlarmManager** or relevant scheduling APIs |
-| Component communication | **Bound `Service`** |
+| `Component` communication | **Bound `Service`** |
 
-**WorkManager replacement example**:
+**`WorkManager` replacement example**:
 ```kotlin
 class DownloadWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
@@ -375,9 +375,9 @@ WorkManager.getInstance(context).enqueue(workRequest)
 1. **Always stop the service**: call `stopSelf()`/`stopService()` when work is completed.
 2. **Use Foreground `Service` for long-running, user-visible work**: with mandatory ongoing notification and correct use of `startForegroundService()` when starting from background.
 3. **Cleanup resources in onDestroy()**: release MediaPlayer, LocationManager, wake locks, etc.
-4. **Prefer WorkManager**: for most deferrable and system-managed background tasks instead of long-lived background services.
+4. **Prefer `WorkManager`**: for most deferrable and system-managed background tasks instead of long-lived background services.
 5. **Services run on the main thread by default**: move heavy work to coroutines/threads/other async mechanisms.
-6. **Respect platform limits**: from Android 8.0+ there are strict background service restrictions; use foreground services, WorkManager, and dedicated APIs accordingly.
+6. **Respect platform limits**: from Android 8.0+ there are strict background service restrictions; use foreground services, `WorkManager`, and dedicated APIs accordingly.
 
 ---
 
@@ -427,7 +427,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - Android component basics
-- [[q-activity-lifecycle-methods--android--medium]] - Component lifecycle fundamentals
+- [[q-activity-lifecycle-methods--android--medium]] - `Component` lifecycle fundamentals
 
 ### Related (Same Level)
 - [[q-android-services-purpose--android--easy]] - `Service` purpose in Android

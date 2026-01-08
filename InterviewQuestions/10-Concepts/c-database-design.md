@@ -1,4 +1,4 @@
----
+---\
 id: "20251012-000000"
 title: "Database Design Principles / Принципы проектирования баз данных"
 aliases: []
@@ -12,15 +12,15 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: [c-databases, c-database-normalization, c-database-relations, c-system-design]
+related: ["c-databases", "c-database-normalization", "c-database-relations", "c-system-design"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "design", "difficulty/medium", "normalization", "relational", "schema"]
----
+---\
 
 # Summary (EN)
 
-Database design is the process of organizing data according to a database model. Good database design is essential for data integrity, performance, scalability, maintainability, and query efficiency. Key principles include normalization, entity-relationship modeling, proper constraints, and indexing strategies.
+`Database` design is the process of organizing data according to a database model. Good database design is essential for data integrity, performance, scalability, maintainability, and query efficiency. Key principles include normalization, entity-relationship modeling, proper constraints, and indexing strategies.
 
 # Сводка (RU)
 
@@ -31,19 +31,19 @@ Database design is the process of organizing data according to a database model.
 **Use Cases:**
 - Transactional systems (OLTP)
 - Data warehousing (OLAP)
-- Application databases
+- `Application` databases
 - Content management systems
 - E-commerce platforms
 
 **Trade-offs:**
 - **Normalization:** Better data integrity vs. query performance
 - **Denormalization:** Faster reads vs. data redundancy and update complexity
-- **Constraints:** Data integrity vs. insert/update overhead
+- **`Constraints`:** Data integrity vs. insert/update overhead
 - **Indexes:** Query speed vs. storage and write performance
 
 ## Overview / Обзор
 
-Database design is the process of organizing data according to a database model. Good database design is essential for:
+`Database` design is the process of organizing data according to a database model. Good database design is essential for:
 - Data integrity
 - Performance
 - Scalability
@@ -664,9 +664,9 @@ CREATE TABLE orders (
 ## References / Ссылки
 
 - [Database Normalization Explained](https://www.guru99.com/database-normalization.html)
-- [PostgreSQL Documentation - Database Design](https://www.postgresql.org/docs/current/ddl.html)
+- [PostgreSQL Documentation - `Database` Design](https://www.postgresql.org/docs/current/ddl.html)
 - [MySQL Best Practices](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
-- "Database Design for Mere Mortals" by Michael J. Hernandez
+- "`Database` Design for Mere Mortals" by Michael J. Hernandez
 - "SQL Antipatterns" by Bill Karwin
 
 ---

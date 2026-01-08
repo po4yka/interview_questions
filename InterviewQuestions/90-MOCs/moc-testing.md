@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251012-204200
 title: Testing — MOC
 kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/testing]
----
+---\
 
 # Testing — Map of Content
 
@@ -61,7 +61,7 @@ Build on fundamentals with framework-specific testing:
 
 4. **Integration Testing**
    - Testing module interactions
-   - Database testing (Room)
+   - `Database` testing (`Room`)
    - [[q-integration-testing-strategies--testing--medium]] - Integration approaches
 
 ### Advanced Path
@@ -71,9 +71,9 @@ Master complex testing scenarios and strategies:
 1. **Advanced Testing Patterns**
    - TDD/BDD methodologies
    - Testing architecture patterns (MVVM, MVI)
-   - [[q-testing-viewmodels-turbine--testing--medium]] - ViewModel testing with Turbine
+   - [[q-testing-viewmodels-turbine--testing--medium]] - `ViewModel` testing with Turbine
    - [[q-testing-coroutine-cancellation--kotlin--medium]] - Testing cancellation
-   - [[q-testing-flow-operators--kotlin--hard]] - Advanced Flow testing
+   - [[q-testing-flow-operators--kotlin--hard]] - Advanced `Flow` testing
 
 2. **UI Testing Mastery**
    - Advanced Compose testing patterns
@@ -129,7 +129,7 @@ The testing pyramid is a fundamental concept in software testing that guides how
    - Test module interactions
    - Moderate execution time
    - Test data flow between components
-   - Examples: Database + DAO, Repository + API, ViewModel + Repository
+   - Examples: `Database` + DAO, Repository + API, `ViewModel` + Repository
 
 3. **UI Tests (10%)** - Top layer
    - Test critical user flows end-to-end
@@ -158,12 +158,12 @@ Testing a login feature following the pyramid:
 - Password strength checker
 - Login request formatting
 - Error message selection
-- State management in ViewModel
+- State management in `ViewModel`
 
 **Integration Tests (20%)**:
 - Repository calling API service
-- ViewModel + Repository interaction
-- Database caching after login
+- `ViewModel` + Repository interaction
+- `Database` caching after login
 - Token storage
 
 **UI Tests (10%)**:
@@ -231,11 +231,11 @@ This leads to:
 - [[q-unit-testing-coroutines-flow--android--medium]] - Coroutines/Flow testing
 
 **Turbine**
-- Flow testing library
-- Simple, expressive API for testing Flow emissions
+- `Flow` testing library
+- Simple, expressive API for testing `Flow` emissions
 - awaitItem(), awaitComplete(), awaitError()
 - [[q-testing-viewmodels-turbine--testing--medium]] - Turbine usage
-- [[q-flow-testing-turbine--testing--medium]] - Flow testing with Turbine
+- [[q-flow-testing-turbine--testing--medium]] - `Flow` testing with Turbine
 
 ### Android UI Testing
 
@@ -403,9 +403,9 @@ fun tearDown() {
 **Use Proper Async Handling**
 - runTest for coroutines
 - TestDispatcher for virtual time
-- [[q-testing-coroutines-runtest--kotlin--medium]] - Coroutine testing patterns
+- [[q-testing-coroutines-runtest--kotlin--medium]] - `Coroutine` testing patterns
 
-**Avoid Thread.sleep()**
+**Avoid `Thread`.sleep()**
 ```kotlin
 // WRONG
 @Test
@@ -584,7 +584,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-mockk-advanced-features--testing--medium]] - MockK advanced features
 
 #### Coroutines & Flow Testing
-- [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flow basics
+- [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and `Flow` basics
 - [[q-testing-coroutines-flow--testing--hard]] - Advanced coroutines/Flow testing
 - [[q-testing-viewmodels-turbine--testing--medium]] - Testing ViewModels with Turbine
 

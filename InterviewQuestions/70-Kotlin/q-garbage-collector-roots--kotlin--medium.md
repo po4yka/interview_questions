@@ -1,4 +1,4 @@
----
+---\
 id: lang-080
 title: "Garbage Collector Roots / Корни Garbage Collector"
 aliases: [Garbage Collector Roots, Корни Garbage Collector]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, garbage-collection, jvm, memory-management, programming-languages]
 
----
+---\
 # Вопрос (RU)
 > Что такое Garbage Collector Roots?
 
@@ -147,7 +147,7 @@ fun example() {
 // After the method exits, the frame is removed and this reference is no longer part of the root set
 ```
 
-**2. Active Thread `Stack` Frames / Threads**
+**2. Active `Thread` `Stack` Frames / Threads**
 ```kotlin
 Thread.start {
     val data = Data()  // Live references from an active thread stack are considered as part of the GC root set
@@ -212,7 +212,7 @@ object Cache {
 |---------------------|------------------------------------|--------------------------------------|
 | Local variables     | While the stack frame is executing | `val x = User()` in an active method |
 | Static fields       | While the class is loaded          | `companion object { val x = ... }`   |
-| Active threads      | While the thread is running        | Thread stack variables               |
+| Active threads      | While the thread is running        | `Thread` stack variables               |
 | JNI references      | While the JNI ref is not released  | JNI global references                |
 
 **Summary:**

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-246
 title: "What is Dispatchers.Unconfined and when to use it? / Dispatchers.Unconfined применение"
 aliases: [Dispatchers Unconfined, Dispatchers.Unconfined применение]
@@ -16,7 +16,7 @@ moc: moc-kotlin
 related: [c-coroutines, c-kotlin-coroutines-basics, q-coroutine-dispatchers--kotlin--medium]
 subtopics: [coroutines, dispatchers]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое `Dispatchers.Unconfined` в корутинах Kotlin и когда его следует использовать?
@@ -220,7 +220,7 @@ When NOT to use `Dispatchers.Unconfined`:
   - Structured concurrency hierarchies where predictable threading is important.
 - As a default dispatcher for business logic or I/O.
 
-Short interview-style summary:
+`Short` interview-style summary:
 - `Dispatchers.Unconfined` starts a coroutine in the current thread and resumes it on whatever thread each suspension uses. Because it is not confined to a specific thread, it is unpredictable and generally unsuitable for most application-level code, especially UI. It exists mainly for narrow low-level and testing scenarios where you fully understand and control dispatching.
 
 ## Follow-ups

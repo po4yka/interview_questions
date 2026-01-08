@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-098
 title: "Top 10 common Kotlin coroutines mistakes and anti-patterns / 10 частых ошибок с Kotlin корутинами"
 topic: kotlin
@@ -15,7 +15,7 @@ moc: moc-kotlin
 related: [c-coroutines, q-coroutine-exception-handler--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
 subtopics: [anti-patterns, best-practices, coroutines]
 
----
+---\
 # Вопрос (RU)
 > Какие самые распространенные ошибки при использовании Kotlin корутин, и как их исправить?
 
@@ -236,4 +236,4 @@ See also: [[c-coroutines]].
 
 - [[q-coroutine-exception-handler--kotlin--medium|CoroutineExceptionHandler usage]]
 - [[q-debugging-coroutines-techniques--kotlin--medium|Debugging coroutines]]
-- [[q-mutex-synchronized-coroutines--kotlin--medium|Thread-safe coroutines]]
+- [[q-mutex-synchronized-coroutines--kotlin--medium|`Thread`-safe coroutines]]

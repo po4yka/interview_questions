@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-173048"
 title: "Android Frame Budget / Android Frame Budget"
 aliases: ["Android Frame Budget"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-choreographer, c-android-graphics-pipeline, c-performance-optimization, c-android-profiling, c-gpu-rendering]
+related: ["c-choreographer", "c-android-graphics-pipeline", "c-performance-optimization", "c-android-profiling", "c-gpu-rendering"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -32,7 +33,7 @@ Android Frame Budget — это фиксированное временное о
 ## Key Points (EN)
 
 - Fixed per refresh rate: The frame budget is determined by the device refresh rate (e.g., 60/90/120 Hz), defining how many milliseconds your entire frame pipeline has.
-- End-to-end pipeline: Input handling, measure/layout, drawing (View or Compose), GPU work, and SurfaceFlinger composition must all complete within this window.
+- End-to-end pipeline: Input handling, measure/layout, drawing (`View` or Compose), GPU work, and SurfaceFlinger composition must all complete within this window.
 - Jank and dropped frames: If the app or GPU misses the deadline, the previous frame is shown again, causing visible stutter (jank).
 - Performance focus: Heavy work on the main thread, excessive overdraw, complex layouts, or inefficient Compose recompositions frequently cause frame budget violations.
 - Tooling: Use tools like Android Studio Profiler, Layout Inspector, Perfetto, and Macrobenchmark to detect slow frames and optimize rendering.
@@ -40,7 +41,7 @@ Android Frame Budget — это фиксированное временное о
 ## Ключевые Моменты (RU)
 
 - Зависимость от частоты обновления: Frame budget определяется частотой обновления экрана (60/90/120 Гц и др.), задавая количество миллисекунд на полный цикл отрисовки кадра.
-- Конвейер от ввода до дисплея: Обработка ввода, measure/layout, рисование (View или Compose), работа GPU и композиция SurfaceFlinger должны уложиться в этот интервал.
+- Конвейер от ввода до дисплея: Обработка ввода, measure/layout, рисование (`View` или Compose), работа GPU и композиция SurfaceFlinger должны уложиться в этот интервал.
 - Джанк и пропуски кадров: При превышении дедлайна показывается старый кадр, что визуально проявляется как подёргивания и рывки интерфейса (jank).
 - Фокус на производительности: Тяжёлые операции на main thread, избыточная вложенность и перерисовка layout, неэффективные recomposition в Compose часто приводят к выходу за frame budget.
 - Инструменты анализа: Для поиска и устранения проблем используйте Android Studio Profiler, Layout Inspector, Perfetto и Macrobenchmark.

@@ -1,4 +1,4 @@
----
+---\
 id: android-425
 title: "Unit Testing Coroutines and Flow / Юнит-тестирование корутин и Flow"
 aliases: ["Unit Testing Coroutines Flow", "Юнит-тестирование корутин и Flow"]
@@ -14,9 +14,9 @@ related: [c-coroutines, c-flow, c-testing]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []
-tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, mockk, testing, turbine, unit-testing]
+tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, mockk, testing, turbine, testing-unit]
 
----
+---\
 # Вопрос (RU)
 
 > Как писать юнит-тесты для Kotlin Coroutines и `Flow`? Какие есть best practices и распространённые ошибки?
@@ -340,7 +340,7 @@ class MainDispatcherRule(
 
 **✅ Do:**
 - Use `runTest { }` instead of `runBlocking` for coroutine tests.
-- Inject `CoroutineDispatcher` for testability (`Dispatchers.Main`, IO, etc.).
+- `Inject` `CoroutineDispatcher` for testability (`Dispatchers.Main`, IO, etc.).
 - Control virtual time via the `testScheduler` from `runTest` or the associated `TestDispatcher`.
 - Use Turbine for `Flow` tests.
 - Cover error paths and cancellation behavior.

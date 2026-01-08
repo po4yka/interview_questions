@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-131954"
 title: "App Startup / App Startup"
 aliases: ["App Startup"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-performance-optimization, c-android-profiling, c-workmanager, c-lazy-initialization, c-application-class]
+moc: "moc-cs"
+related: ["c-performance-optimization", "c-android-profiling", "c-workmanager", "c-lazy-initialization", "c-application-class"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -48,4 +49,4 @@ App Startup — это последовательность шагов от за
 ## References
 
 - Android Jetpack App Startup library: https://developer.android.com/topic/libraries/app-startup
-- Spring Boot Application Lifecycle: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.spring-application
+- Spring Boot `Application` `Lifecycle`: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.spring-application

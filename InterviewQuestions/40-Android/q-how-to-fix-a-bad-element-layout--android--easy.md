@@ -1,4 +1,4 @@
----
+---\
 id: android-408
 title: "How To Fix A Bad Element Layout / Как исправить плохой layout элемента"
 aliases: ["How To Fix A Bad Element Layout", "Как исправить плохой layout элемента"]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts, performance]
 
----
+---\
 # Вопрос (RU)
 
 > Как можно исправить плохой layout элемента?
@@ -320,7 +320,7 @@ class OptimizedView(context: Context) : View(context) {
 ## Связанные Вопросы (RU)
 
 ### Предпосылки (Проще)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Базовая оптимизация RecyclerView
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Базовая оптимизация `RecyclerView`
 - [[q-viewmodel-pattern--android--easy]] - Разделение ответственности в UI
 
 ### Связанные (Такой Же уровень)
@@ -334,7 +334,7 @@ class OptimizedView(context: Context) : View(context) {
 ## Related Questions (EN)
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization basics
 - [[q-viewmodel-pattern--android--easy]] - Separation of concerns in UI
 
 ### Related (Same Level)

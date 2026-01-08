@@ -1,4 +1,4 @@
----
+---\
 id: android-229
 title: Looper Thread Connection / Связь Looper и потока
 aliases: [Looper Thread Connection, Связь Looper и потока]
@@ -15,28 +15,28 @@ sources: []
 created: 2024-10-15
 updated: 2025-11-11
 tags: [android/coroutines, android/threads-sync, difficulty/medium, handler, looper, message-queue]
----
+---\
 # Вопрос (RU)
 
-> Как Looper связывается с потоком?
+> Как `Looper` связывается с потоком?
 
 # Question (EN)
 
-> How does Looper connect to a thread?
+> How does `Looper` connect to a thread?
 
 ---
 
 ## Ответ (RU)
 
-**Looper** связывается с потоком через два ключевых шага и `ThreadLocal`:
+**`Looper`** связывается с потоком через два ключевых шага и `ThreadLocal`:
 
-1. **`Looper.prepare()`** — создаёт `Looper` и сохраняет его в `ThreadLocal<Looper>` текущего потока, логически привязывая один Looper к этому потоку.
+1. **`Looper.prepare()`** — создаёт `Looper` и сохраняет его в `ThreadLocal<Looper>` текущего потока, логически привязывая один `Looper` к этому потоку.
 2. **`Looper.loop()`** — запускает бесконечный цикл обработки сообщений для `MessageQueue` этого `Looper` (блокирует поток до `quit()`/`quitSafely()`).
 
 ### Механизм Связывания
 
-- `Looper.prepare()` сохраняет Looper в `ThreadLocal<Looper>` текущего потока.
-- `Looper.myLooper()` читает Looper из этого `ThreadLocal`, тем самым обеспечивает доступ только из "своего" потока.
+- `Looper.prepare()` сохраняет `Looper` в `ThreadLocal<Looper>` текущего потока.
+- `Looper.myLooper()` читает `Looper` из этого `ThreadLocal`, тем самым обеспечивает доступ только из "своего" потока.
 - **`Handler`** при создании привязывается к конкретному `Looper` (и его `MessageQueue`), переданному явно или полученному через `Looper.myLooper()`.
 
 ```kotlin
@@ -98,19 +98,19 @@ val handler2 = Handler(Looper.myLooper()!!)
 // Сообщения не обрабатываются, т.к. не запущен цикл Looper!
 ```
 
-**Лучшая практика:** по возможности используйте `HandlerThread` вместо ручной настройки Looper и передавайте Looper явно при создании `Handler`.
+**Лучшая практика:** по возможности используйте `HandlerThread` вместо ручной настройки `Looper` и передавайте `Looper` явно при создании `Handler`.
 
 ## Answer (EN)
 
-**Looper** connects to a thread via two key steps and a `ThreadLocal`:
+**`Looper`** connects to a thread via two key steps and a `ThreadLocal`:
 
-1. **`Looper.prepare()`** — creates a `Looper` and stores it in the current thread's `ThreadLocal<Looper>`, logically binding a single Looper instance to that thread.
+1. **`Looper.prepare()`** — creates a `Looper` and stores it in the current thread's `ThreadLocal<Looper>`, logically binding a single `Looper` instance to that thread.
 2. **`Looper.loop()`** — starts the infinite message-processing loop for that `Looper`'s `MessageQueue` (blocking the thread until `quit()`/`quitSafely()`).
 
 ### Binding Mechanism
 
-- `Looper.prepare()` stores the Looper in the current thread's `ThreadLocal<Looper>`.
-- `Looper.myLooper()` reads the Looper from this `ThreadLocal`, ensuring access only from its owning thread.
+- `Looper.prepare()` stores the `Looper` in the current thread's `ThreadLocal<Looper>`.
+- `Looper.myLooper()` reads the `Looper` from this `ThreadLocal`, ensuring access only from its owning thread.
 - A **`Handler`** is bound to a specific `Looper` (and its `MessageQueue`) at construction time, either passed explicitly or obtained via `Looper.myLooper()`.
 
 ```kotlin
@@ -172,21 +172,21 @@ val handler2 = Handler(Looper.myLooper()!!)
 // Messages won't be processed because the Looper loop is not started!
 ```
 
-**Best practice:** Prefer `HandlerThread` over manual Looper setup where possible, and always bind `Handler` to an explicit `Looper`.
+**Best practice:** Prefer `HandlerThread` over manual `Looper` setup where possible, and always bind `Handler` to an explicit `Looper`.
 
 ---
 
 ## Follow-ups
 
 - What happens if you call `Looper.prepare()` twice on the same thread?
-- How does the main thread get its Looper without calling `prepare()`?
+- How does the main thread get its `Looper` without calling `prepare()`?
 - What's the difference between `quit()` and `quitSafely()`?
-- Can multiple Handlers share the same Looper?
-- How does `HandlerThread` simplify Looper management?
+- Can multiple Handlers share the same `Looper`?
+- How does `HandlerThread` simplify `Looper` management?
 
 ## References
 
-- Android Developer Docs: Looper and Handler
+- Android Developer Docs: `Looper` and `Handler`
 - Android Threading Guide
 
 ## Related Questions
@@ -196,12 +196,12 @@ val handler2 = Handler(Looper.myLooper()!!)
 - [[c-coroutines]]
 
 ### Prerequisites
-- [[q-handler-looper-main-thread--android--medium]] — Understanding Handler-Looper-Thread relationship
+- [[q-handler-looper-main-thread--android--medium]] — Understanding `Handler`-`Looper`-`Thread` relationship
 
 ### Related
-- Handler-Thread interaction patterns
-- Message queue implementation details
+- `Handler`-`Thread` interaction patterns
+- `Message` queue implementation details
 
 ### Advanced
 - Advanced HandlerThread patterns and lifecycle management
-- Custom Looper implementations for specialized use cases
+- Custom `Looper` implementations for specialized use cases

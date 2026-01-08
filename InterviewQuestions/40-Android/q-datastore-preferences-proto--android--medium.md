@@ -1,4 +1,4 @@
----
+---\
 id: android-455
 title: DataStore Preferences и Proto / DataStore Preferences and Proto
 aliases: [DataStore Preferences and Proto, DataStore Preferences и Proto]
@@ -16,7 +16,7 @@ updated: 2025-11-02
 tags: [android/datastore, datastore, difficulty/medium, preferences, proto-datastore, storage]
 sources:
   - https://developer.android.com/topic/libraries/architecture/datastore
----
+---\
 # Вопрос (RU)
 > Что вы знаете о DataStore?
 
@@ -133,8 +133,8 @@ val Context.dataStore by preferencesDataStore(
 |----------|---------|---------|
 | Простые настройки (theme, language) | Preferences | Минимальная конфигурация |
 | Сложные структуры (user profile) | Proto | Type safety, лучшая производительность |
-| Миграция с SharedPreferences | Preferences | Встроенная поддержка миграций |
-| Большой объем данных | Не использовать | Для больших данных → Room или файлы |
+| Миграция с `SharedPreferences` | Preferences | Встроенная поддержка миграций |
+| Большой объем данных | Не использовать | Для больших данных → `Room` или файлы |
 
 **Важно:** `DataStore` не подходит для больших объемов данных (используйте `Room` или файлы) или частых синхронных чтений (асинхронный API по умолчанию). Вместо жесткого лимита по размеру ориентируйтесь на практику: хранить относительно небольшой объем (обычно настройки и связанные с ними данные), а для больших объемов или сложных запросов использовать `Room` или другие механизмы хранения.
 
@@ -248,8 +248,8 @@ val Context.dataStore by preferencesDataStore(
 |----------|----------|--------|
 | Simple settings (theme, language) | Preferences | Minimal configuration |
 | Complex structures (user profile) | Proto | Type safety, better performance |
-| Migration from SharedPreferences | Preferences | Built-in migration support |
-| Large data volumes | Don't use | For large data → Room or files |
+| Migration from `SharedPreferences` | Preferences | Built-in migration support |
+| Large data volumes | Don't use | For large data → `Room` or files |
 
 **Important:** `DataStore` is not suitable for large data volumes (use `Room` or files) or frequent synchronous reads (asynchronous API by default). Rather than a strict documented size limit, follow best practices: keep it for relatively small data sets (typically preferences and related small data), and use `Room` or other storage for large data or complex queries.
 

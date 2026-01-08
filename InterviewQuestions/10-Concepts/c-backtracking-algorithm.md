@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-algorithms"
-related: [c-algorithms, c-dynamic-programming, c-graph-algorithms, c-data-structures]
+related: ["c-algorithms", "c-dynamic-programming", "c-graph-algorithms", "c-data-structures"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["algorithms", "auto-generated", "concept", "difficulty/medium"]
+tags: [algorithms, concept, difficulty/medium]
 ---
 
 # Summary (EN)

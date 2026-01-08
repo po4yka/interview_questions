@@ -1,4 +1,4 @@
----
+---\
 id: dp-002
 title: "Flyweight Pattern / Паттерн легкий вес"
 aliases: [Flyweight Pattern, Паттерн легкий вес]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [cs, difficulty/hard, flyweight, gof-patterns, memory-optimization, structural-patterns]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Flyweight? Когда и зачем его использовать?
 
@@ -378,7 +378,7 @@ This reduces the amount of duplicated data while preserving object-oriented stru
 ### Key Concepts
 
 - Intrinsic state: Shared, stored in Flyweight (e.g., character glyph, icon bitmap, particle appearance).
-- Extrinsic state: Context-dependent, passed by client (e.g., position, color, velocity, current context).
+- Extrinsic state: `Context`-dependent, passed by client (e.g., position, color, velocity, current context).
 
 ### Example: Text Editor Characters
 
@@ -582,7 +582,7 @@ Examples:
 1. Increased complexity: must carefully separate intrinsic and extrinsic state.
 2. CPU trade-off: extra indirection and cache lookups may add overhead.
 3. Immutability constraint: intrinsic shared state should be effectively immutable.
-4. Thread safety: flyweight factory/cache and shared state management must be thread-safe in concurrent environments.
+4. `Thread` safety: flyweight factory/cache and shared state management must be thread-safe in concurrent environments.
 
 ### Best Practices
 

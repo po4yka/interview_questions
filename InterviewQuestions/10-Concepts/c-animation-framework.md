@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-200807"
 title: "Animation Framework / Animation Framework"
 aliases: ["Animation Framework"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-animation, c-value-animator, c-interpolator, c-android-graphics, c-custom-views]
+moc: "moc-cs"
+related: ["c-animation", "c-value-animator", "c-interpolator", "c-android-graphics", "c-custom-views"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -31,9 +32,9 @@ Animation Framework — это набор API и компонентов рант
 
 ## Key Points (EN)
 
-- Time and interpolation: Provides clocks/timelines and interpolators (linear, accelerate/decelerate, spring, easing) to control how values change over time.
+- Time and interpolation: `Provides` clocks/timelines and interpolators (linear, accelerate/decelerate, spring, easing) to control how values change over time.
 - Property-based animation: Animates arbitrary properties (e.g., alpha, translationX, height) instead of relying only on precomputed frames, enabling flexible, dynamic effects.
-- Lifecycle and orchestration: Manages starting, pausing, canceling, sequencing, and running animations in parallel, often with callbacks for start/end/update events.
+- `Lifecycle` and orchestration: Manages starting, pausing, canceling, sequencing, and running animations in parallel, often with callbacks for start/end/update events.
 - Performance optimizations: Integrates with the rendering pipeline (GPU acceleration, frame scheduling, invalidation minimization) to keep animations smooth (e.g., 60fps).
 - Integration with UI state: Tightly couples with view/layout or composable/state systems so that animations react to user input, gestures, and state transitions.
 

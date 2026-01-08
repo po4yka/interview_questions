@@ -1,4 +1,4 @@
----
+---\
 id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
 aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore, security]
 sources:
   - "https://developer.android.com/topic/security/data"
----
+---\
 # Вопрос (RU)
 > Как реализовать зашифрованное хранение файлов с использованием EncryptedFile API?
 
@@ -188,11 +188,11 @@ suspend fun copyEncrypted(source: InputStream, fileName: String) = withContext(D
 
 ### Key Concepts
 
-**AES-256-GCM**: Authenticated encryption mode (256-bit key, typically 96-bit IV). Provides both confidentiality and integrity. When used correctly, GCM allows detection of ciphertext tampering.
+**AES-256-GCM**: Authenticated encryption mode (256-bit key, typically 96-bit IV). `Provides` both confidentiality and integrity. When used correctly, GCM allows detection of ciphertext tampering.
 
 **HKDF**: A cryptographic key derivation function used by the library to derive related key material. An HKDF-based scheme helps separate cryptographic context between files/blocks so that compromise of one does not trivially compromise others.
 
-**Android Keystore**: Provides hardware- or software-backed protection for keys. Non-exportable keys cannot be retrieved as raw key material; cryptographic operations are performed via Keystore APIs. Binding keys to user-auth policies (PIN/biometric) is configured at key generation time.
+**Android Keystore**: `Provides` hardware- or software-backed protection for keys. Non-exportable keys cannot be retrieved as raw key material; cryptographic operations are performed via Keystore APIs. Binding keys to user-auth policies (PIN/biometric) is configured at key generation time.
 
 ```kotlin
 // Example: MasterKey that can be configured with secure defaults.

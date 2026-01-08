@@ -1,4 +1,4 @@
----
+---\
 id: android-436
 title: "Single Activity Approach / Подход Single Activity"
 aliases: ["Single Activity Approach", "Подход Single Activity"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, fragment, jetpack-navigation]
 
----
+---\
 # Вопрос (RU)
 > Что означает в Android-разработке подход Single `Activity`?
 
@@ -33,7 +33,7 @@ tags: [activity, android, android/activity, android/ui-navigation, difficulty/me
 
 **Упрощённое управление состоянием**
 - Один корневой lifecycle-хост (`Activity`) для навигации
-- Удобная передача данных между экранами через Navigation Component (Safe Args) или общий `ViewModel`
+- Удобная передача данных между экранами через Navigation `Component` (Safe Args) или общий `ViewModel`
 - Централизованное восстановление состояния навигации и UI
 
 **Производительность и согласованность поведения**
@@ -43,10 +43,10 @@ tags: [activity, android, android/activity, android/ui-navigation, difficulty/me
 
 **Улучшенная навигация**
 - Навигация описывается Navigation Graph'ами; возможны один или несколько графов и nested graphs для разных feature-модулей
-- Встроенная поддержка Deep Links через Navigation Component
+- Встроенная поддержка Deep Links через Navigation `Component`
 - Единая точка управления BackStack и обработкой системной кнопки "Назад"
 
-Важно: Single `Activity` подход не является строго обязательным только с `Fragment`'ами или только с одним navigation graph — это про централизованный хостинг и навигацию. Реализация возможна без Navigation Component, но библиотека заметно упрощает паттерн.
+Важно: Single `Activity` подход не является строго обязательным только с `Fragment`'ами или только с одним navigation graph — это про централизованный хостинг и навигацию. Реализация возможна без Navigation `Component`, но библиотека заметно упрощает паттерн.
 
 ### Реализация С Navigation Component
 
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
 **Simplified State Management**
 - A single root lifecycle host (`Activity`) for navigation
-- Convenient data passing between screens via Navigation Component (Safe Args) or shared ViewModels
+- Convenient data passing between screens via Navigation `Component` (Safe Args) or shared ViewModels
 - Centralized restoration of navigation and UI state
 
 **Performance and Behavioral Consistency**
@@ -146,10 +146,10 @@ class MainActivity : AppCompatActivity() {
 
 **Enhanced Navigation**
 - Navigation is described via Navigation Graphs; you can have one or multiple (including nested graphs) for different feature modules
-- Built-in Deep Links support via Navigation Component
+- Built-in Deep Links support via Navigation `Component`
 - Single place to control the back stack and system Back button handling
 
-Note: Single `Activity` does not strictly require using only Fragments or a single navigation graph. It is about centralized hosting and navigation. It can be implemented without Navigation Component, though that library greatly simplifies the pattern.
+Note: Single `Activity` does not strictly require using only Fragments or a single navigation graph. It is about centralized hosting and navigation. It can be implemented without Navigation `Component`, though that library greatly simplifies the pattern.
 
 ### Implementation with Navigation Component
 
@@ -250,14 +250,14 @@ Despite Single `Activity` advantages, there are valid cases for multiple Activit
 ## Ссылки (RU)
 
 - [[c-lifecycle]] - основы жизненного цикла `Activity` и `Fragment`
-- [Navigation Component Guide](https://developer.android.com/guide/navigation)
+- [Navigation `Component` Guide](https://developer.android.com/guide/navigation)
 - [Single `Activity` Architecture](https://www.youtube.com/watch?v=2k8x8V77CrU)
 - [Fragments Guide](https://developer.android.com/guide/fragments)
 
 ## References
 
 - [[c-lifecycle]] - `Activity` and `Fragment` lifecycle fundamentals
-- [Navigation Component Guide](https://developer.android.com/guide/navigation)
+- [Navigation `Component` Guide](https://developer.android.com/guide/navigation)
 - [Single `Activity` Architecture](https://www.youtube.com/watch?v=2k8x8V77CrU)
 - [Fragments Guide](https://developer.android.com/guide/fragments)
 

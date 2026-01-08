@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-221
 title: "Jit Compilation Definition / Определение JIT компиляции"
 aliases: ["Jit Compilation Definition, Определение JIT компиляции"]
@@ -14,7 +14,7 @@ related: [q-kotlin-reified-types--kotlin--hard, q-testing-coroutine-cancellation
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
----
+---\
 # Вопрос (RU)
 
 > Что Такое JIT?
@@ -883,14 +883,14 @@ process("hello")
 
 ## When JIT Excels
 
-- Long-running applications (servers, desktop apps)
+- `Long`-running applications (servers, desktop apps)
 - Workloads with hot paths
 - Applications with complex object interactions
 - Cross-platform deployments
 
 ## When AOT is Better
 
-- Short-lived CLI tools
+- `Short`-lived CLI tools
 - Embedded systems (limited resources)
 - Predictable performance requirements
 - Mobile apps (faster startup)
@@ -922,4 +922,4 @@ process("hello")
 - Python (PyPy)
 - Android (ART)
 
-**Best for:** Long-running applications that benefit from runtime profiling and adaptive optimization.
+**Best for:** `Long`-running applications that benefit from runtime profiling and adaptive optimization.

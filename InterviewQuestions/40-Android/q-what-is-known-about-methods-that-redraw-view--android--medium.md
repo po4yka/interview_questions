@@ -1,4 +1,4 @@
----
+---\
 id: android-135
 title: What Is Known About Methods That Redraw View / Что известно о методах перерисовки View
 aliases: [Methods That Redraw View, Методы перерисовки View]
@@ -16,7 +16,7 @@ updated: 2023-10-15
 sources: []
 tags: [android/performance-rendering, android/ui-graphics, android/ui-views, difficulty/medium, postInvalidate, rendering, requestLayout, ui, views]
 
----
+---\
 # Вопрос (RU)
 
 > Что известно про методы, которые перерисовывают `View`?
@@ -381,7 +381,7 @@ fun updateSeparately() {
 
 - [[q-handler-looper-main-thread--android--medium]] — UI thread and message handling
 - Custom `View` rendering pipeline and drawing process
-- Canvas drawing operations in Android
+- `Canvas` drawing operations in Android
 
 ### Advanced
 

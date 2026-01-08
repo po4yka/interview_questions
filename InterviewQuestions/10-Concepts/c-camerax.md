@@ -1,21 +1,29 @@
----
-id: ivc-20251102-001
-title: CameraX / CameraX
-aliases: [Android CameraX, CameraX]
-kind: concept
-summary: Jetpack camera library simplifying camera development with backward compatibility and Camera2 interoperability
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, camera, camerax, concept, imaging]
----
+---\
+id: "20260108-110549"
+title: "CameraX / CameraX"
+aliases: ["Android CameraX", "CameraX"]
+summary: "Jetpack camera library simplifying camera development with backward compatibility and Camera2 interoperability"
+topic: "android"
+subtopics: ["camera", "camerax", "imaging"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "camera", "camerax", "concept", "imaging", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
 **CameraX** is a Jetpack library that wraps the low-level Camera2 API to provide consistent camera behavior across Android devices. It focuses on ease of use, lifecycle awareness, and plug-and-play use cases such as Preview, ImageCapture, ImageAnalysis, and VideoCapture. CameraX also exposes the **Camera2Interop** layer so developers can access advanced controls (exposure, focus, zoom, session configuration) without abandoning its high-level API.
 
 **Key Capabilities**
-- Lifecycle-aware bindings (`ProcessCameraProvider`, `CameraSelector`)
+- `Lifecycle`-aware bindings (`ProcessCameraProvider`, `CameraSelector`)
 - Extensible use cases (Preview, ImageCapture, ImageAnalysis, VideoCapture)
 - Automatic device compatibility (quirk system, vendor extensions)
 - Interoperability with Camera2 for manual controls
@@ -37,7 +45,7 @@ tags: [android, camera, camerax, concept, imaging]
 - `ProcessCameraProvider`: центральная точка подключения use case
 - `CameraSelector`: выбор фронтальной/задней камеры, линз, уровней
 - `UseCase`: декларация контракта (Preview, Capture, Analysis)
-- `Preview.SurfaceProvider`: интеграция с UI (View + Compose)
+- `Preview.SurfaceProvider`: интеграция с UI (`View` + Compose)
 - Quirk механизм и `CameraInfo` для работы с vendor-ограничениями
 
 ## Usage Considerations

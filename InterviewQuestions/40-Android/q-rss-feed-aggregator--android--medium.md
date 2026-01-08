@@ -1,4 +1,4 @@
----
+---\
 id: android-348
 title: RSS Feed Aggregator / Агрегатор RSS лент
 aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/networking-http, android/room, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Агрегатор RSS лент
 
@@ -493,7 +493,7 @@ fun formatDate(timestamp: Long): String {
 
 ### Итог
 
-RU: Архитектура RSS-агрегатора: Jsoup (в примере) для парсинга RSS/XML, Room для локального хранения (ленты и элементы с внешним ключом), WorkManager для периодической синхронизации (с учётом минимального интервала платформы), Repository для координации данных. Реактивный UI на основе `Flow`/`StateFlow`. Возможности: отметка как прочитано, избранное, swipe-to-refresh, очистка старых данных. Пример кода демонстрационный: обработка ошибок и ключи элементов могут быть доработаны в продакшене.
+RU: Архитектура RSS-агрегатора: Jsoup (в примере) для парсинга RSS/XML, `Room` для локального хранения (ленты и элементы с внешним ключом), `WorkManager` для периодической синхронизации (с учётом минимального интервала платформы), Repository для координации данных. Реактивный UI на основе `Flow`/`StateFlow`. Возможности: отметка как прочитано, избранное, swipe-to-refresh, очистка старых данных. Пример кода демонстрационный: обработка ошибок и ключи элементов могут быть доработаны в продакшене.
 
 ---
 
@@ -965,7 +965,7 @@ fun formatDate(timestamp: Long): String {
 
 ### Summary
 
-English: RSS aggregator architecture: Jsoup (in this sample) for XML parsing, Room for local storage (feeds + items with relations), WorkManager for periodic sync (respecting the platform’s 15-minute minimum), Repository pattern for data coordination. Reactive UI with `Flow` + `StateFlow`. Features: mark as read, favorites, swipe-to-refresh, cleanup of old data. Sample code is illustrative; production code should improve error handling and item key strategy.
+English: RSS aggregator architecture: Jsoup (in this sample) for XML parsing, `Room` for local storage (feeds + items with relations), `WorkManager` for periodic sync (respecting the platform’s 15-minute minimum), Repository pattern for data coordination. Reactive UI with `Flow` + `StateFlow`. Features: mark as read, favorites, swipe-to-refresh, cleanup of old data. Sample code is illustrative; production code should improve error handling and item key strategy.
 
 ---
 

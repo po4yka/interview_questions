@@ -1,4 +1,4 @@
----
+---\
 id: android-109
 title: Spannable Text Styling / Стилизация текста Spannable
 aliases: [Spannable Text Styling, Стилизация текста Spannable]
@@ -15,7 +15,7 @@ sources: []
 tags: [android/ui-views, android/ui-widgets, difficulty/medium, spannable, text-styling]
 moc: moc-android
 related: [c-android-components, q-accessibility-text-scaling--android--medium, q-custom-view-attributes--android--medium, q-how-to-break-text-by-screen-width--android--easy, q-how-to-organize-work-with-text-and-images-in-a-delegate--android--easy]
----
+---\
 # Вопрос (RU)
 
 > Что такое Spannable и как его использовать для стилизации текста?
@@ -130,7 +130,7 @@ val styled = SpannableStringBuilder()
 
 1. **SpannableString** — хороший выбор для статического текста: текст неизменяем, можно добавить spans один раз.
 2. **SpannableStringBuilder** — предпочтителен для динамического текста и множественных изменений.
-3. **Кэшировать** стилизованный текст в RecyclerView.
+3. **Кэшировать** стилизованный текст в `RecyclerView`.
 4. **Избегать** избыточных spans — каждый добавляет overhead при layout/отрисовке.
 5. **Осторожно переиспользовать** spans: безопасно для простых, stateless spans (например, цвет/стиль), но не для spans с внутренним состоянием, зависящим от диапазона или view.
 
@@ -240,14 +240,14 @@ val styled = SpannableStringBuilder()
 
 1. **SpannableString** is a good fit for static text: text is immutable; you set spans once.
 2. **SpannableStringBuilder** is better for dynamic text and multiple modifications.
-3. **Cache** styled text in RecyclerView.
+3. **Cache** styled text in `RecyclerView`.
 4. **Avoid** excessive spans — each adds overhead during layout/draw.
 5. **Reuse spans carefully**: safe for simple stateless spans (e.g., color/style), but avoid reusing spans that hold internal state or depend on a specific range/view.
 
 ## Дополнительные Вопросы (RU)
 
 - В чем отличие пользовательских (custom) spans от стандартных spans из фреймворка?
-- Как использование большого количества spans влияет на производительность в RecyclerView?
+- Как использование большого количества spans влияет на производительность в `RecyclerView`?
 - Когда следует использовать `SpannableStringBuilder` вместо `SpannableString`?
 - Как абзацные spans обрабатывают текст, который не заканчивается символом новой строки?
 - Каковы плюсы и минусы использования `Spannable` по сравнению с `Html.fromHtml()`?
@@ -255,7 +255,7 @@ val styled = SpannableStringBuilder()
 ## Follow-ups
 
 - How do custom spans differ from framework spans?
-- What's the performance impact of using many spans in a RecyclerView?
+- What's the performance impact of using many spans in a `RecyclerView`?
 - When should you use SpannableStringBuilder vs SpannableString?
 - How do paragraph spans handle text that doesn't end with newline?
 - What are the trade-offs between Spannable vs HTML.fromHtml()?

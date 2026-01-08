@@ -1,4 +1,4 @@
----
+---\
 name: obsidian-qna-creator
 description: >
   Create bilingual (EN/RU) interview Q&A notes for Obsidian vault
@@ -6,7 +6,7 @@ description: >
   from TAXONOMY.md, and file naming conventions. Handles topic
   classification, folder placement, MOC linking, and bilingual
   content structure.
----
+---\
 
 # Obsidian Q&A Note Creator
 
@@ -111,7 +111,7 @@ tags: [topic, subtopic1, subtopic2, difficulty/[level]]
 **CRITICAL YAML Rules**:
 - `topic`: Single value, NO array, NO brackets
 - `moc`: NO brackets (just `moc-kotlin`, NOT `[[moc-kotlin]]`)
-- `related`: Array WITHOUT double brackets (`[item1, item2]`, NOT `[[item1]], [[item2]]`)
+- `related`: `Array` WITHOUT double brackets (`[item1, item2]`, NOT `[[item1]], [[item2]]`)
 - `tags`: English only, MUST include `difficulty/[level]`
 - `status`: ALWAYS `draft` (AI cannot set reviewed/ready)
 
@@ -241,7 +241,7 @@ Before finalizing, verify:
 
 ### Example 1: Kotlin Coroutine Question
 
-**User Request**: "Create a note about Kotlin coroutine context"
+**User `Request`**: "Create a note about Kotlin coroutine context"
 
 **Classification**:
 - Topic: `kotlin`
@@ -283,7 +283,7 @@ tags: [kotlin, coroutines, concurrency, coroutine-context, difficulty/medium]
 
 ### Example 2: Android Compose Question
 
-**User Request**: "Create a note about remember in Compose"
+**User `Request`**: "Create a note about remember in Compose"
 
 **Classification**:
 - Topic: `android`
@@ -327,7 +327,7 @@ tags: [android/ui-compose, android/ui-state, compose, state-management, jetpack,
 
 ### Example 3: Algorithm Question
 
-**User Request**: "Create note for Two Sum problem"
+**User `Request`**: "Create note for Two Sum problem"
 
 **Classification**:
 - Topic: `algorithms`
@@ -375,7 +375,7 @@ tags: [algorithms, arrays, hash-map, leetcode, difficulty/easy]
 
 **Solution**:
 1. Report the error
-2. List similar valid topics from TAXONOMY.md
+2. `List` similar valid topics from TAXONOMY.md
 3. Ask user to confirm or choose different topic
 4. Do NOT proceed until valid topic confirmed
 

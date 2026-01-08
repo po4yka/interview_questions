@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-228
 title: "Data Class Purpose / Назначение data class"
 aliases: [Data Class Purpose, Назначение data class]
@@ -14,7 +14,7 @@ related: [c-kotlin, c-kotlin-features]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [code-generation, data-classes, difficulty/easy, kotlin]
----
+---\
 # Вопрос (RU)
 > Что такое data class в Kotlin и для чего он нужен?
 
@@ -105,7 +105,7 @@ println("$name is $age years old")
 - Reduces boilerplate code.
 - Simplifies creating data models and DTOs.
 - Improves code readability.
-- Provides predictable behavior when used in collections and data structures that rely on `equals()`/`hashCode()` (e.g., `Set`, `Map`).
+- `Provides` predictable behavior when used in collections and data structures that rely on `equals()`/`hashCode()` (e.g., `Set`, `Map`).
 
 ## Дополнительные Вопросы
 

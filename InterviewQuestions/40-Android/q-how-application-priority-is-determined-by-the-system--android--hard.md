@@ -1,4 +1,4 @@
----
+---\
 id: android-124
 title: How Application Priority Is Determined By The System / Как система определяет приоритет приложения
 aliases: [How Application Priority Is Determined, Как система определяет приоритет приложения]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/lifecycle, android/performance-memory, android/processes, difficulty/hard, lifecycle, performance-memory, processes]
 
----
+---\
 # Вопрос (RU)
 
 > Как система определяет приоритет приложения?
@@ -121,7 +121,7 @@ class PriorityChecker(private val context: Context) {
 ### Дополнительные Вопросы (RU)
 
 - Как `oom_adj`/importance-оценка динамически меняется при переходах состояний `Activity`?
-- В чем компромиссы между использованием foreground-сервисов и WorkManager для фоновых задач?
+- В чем компромиссы между использованием foreground-сервисов и `WorkManager` для фоновых задач?
 - Как привязанные (`bound`) сервисы могут влиять на приоритет процессов между разными приложениями?
 
 ### Ссылки (RU)
@@ -225,7 +225,7 @@ Notes:
 
 ### Influencing Factors
 
-1. **Component state** - a resumed `Activity` promotes the process to foreground.
+1. **`Component` state** - a resumed `Activity` promotes the process to foreground.
 2. **`Service` type** - a foreground service (`startForeground()`) raises the process to foreground-level priority; regular background services are heavily restricted on modern Android and may run at lower priority or be disallowed.
 3. **Bound services** - a service bound to a foreground/visible component gets higher priority.
 4. **Process dependencies** - if process A depends on process B via critical binder bindings, the system may raise B's priority closer to A's.
@@ -246,7 +246,7 @@ Decisions consider not only the category, but also actual memory usage, recency,
 ## Follow-ups
 
 - How does the oom_adj/importance score dynamically change during `Activity` lifecycle transitions?
-- What are the trade-offs between using foreground Services versus WorkManager for background tasks?
+- What are the trade-offs between using foreground Services versus `WorkManager` for background tasks?
 - How can bound Services affect the priority of processes across different applications?
 
 ## References

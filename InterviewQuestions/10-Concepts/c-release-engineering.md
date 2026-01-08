@@ -1,14 +1,22 @@
----
-id: ivc-20251102-023
-title: Release Engineering / Инженерия релизов
-aliases: [Release Engineering, Инженерия релизов Android]
-kind: concept
-summary: Processes, tooling, and automation that move Android builds from CI to staged production with quality gates and compliance checks
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, ci-cd, concept, quality, release-engineering]
----
+---\
+id: "20260108-110550"
+title: "Release Engineering / Инженерия релизов"
+aliases: ["Release Engineering", "Инженерия релизов Android"]
+summary: "Processes, tooling, and automation that move Android builds from CI to staged production with quality gates and compliance checks"
+topic: "android"
+subtopics: ["ci-cd", "quality", "release-engineering"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "ci-cd", "concept", "quality", "release-engineering", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -22,7 +30,7 @@ Android release engineering coordinates build automation, distribution channels,
 
 - CI/CD pipelines (Gradle, GitHub Actions, Jenkins, GitLab) и управление артефактами
 - Play Console Publishing API, Play Vitals мониторинг, rollback & staged rollout автоматизация
-- App Bundle + Play Asset Delivery оптимизация, split builds, targeted device delivery
+- App `Bundle` + Play Asset Delivery оптимизация, split builds, targeted device delivery
 - Quality gates: automated tests, lint, static analysis, security/compliance checks перед релизом
 - Observability & release KPIs, incident response и пост-релизные процессы
 

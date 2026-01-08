@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-215
 title: "Lazy Initialization / Ленивая инициализация"
 aliases: [Lazy Delegate, Lazy Initialization, Lazy Property, Ленивая инициализация]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium, q-corou
 created: 2025-10-15
 updated: 2025-11-09
 tags: [delegates, difficulty/easy, initialization, kotlin, lazy, performance]
----
+---\
 # Вопрос (RU)
 > Какая функция в Kotlin используется для ленивой инициализации свойства?
 
@@ -298,7 +298,7 @@ See also: [[c-kotlin]]
 **Key characteristics:**
 - Property is initialized only when first accessed
 - Value is computed and cached on first access
-- Thread-safe by default (can be configured)
+- `Thread`-safe by default (can be configured)
 - Must be used with `val` (read-only property)
 - Returns a delegate that implements lazy initialization
 - Reduces memory footprint and improves startup performance

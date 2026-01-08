@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-112
 title: "Dispatcher Performance and Selection / Производительность и выбор диспетчеров"
 aliases: ["Dispatcher Performance and Selection", "Производительность и выбор диспетчеров"]
@@ -25,7 +25,7 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [coroutines, difficulty/hard, kotlin]
----
+---\
 # Вопрос (RU)
 
 Как выбрать правильный dispatcher для задачи в Kotlin корутинах? Объясните модели пула потоков различных dispatcher-ов (Default, IO, Main), паттерны производительности, использование limitedParallelism, создание кастомных dispatcher-ов и как избежать чрезмерных переключений контекста и блокировок.
@@ -115,7 +115,7 @@ Dispatcher performance involves choosing the right dispatcher for the task, unde
 
 **Dispatchers.Default**
 - For CPU-intensive work
-- Thread pool is bounded by the number of available CPU cores to avoid excessive contention (implementation is not a strict "size = cores" constant)
+- `Thread` pool is bounded by the number of available CPU cores to avoid excessive contention (implementation is not a strict "size = cores" constant)
 ```kotlin
 withContext(Dispatchers.Default) {
     computeIntensiveOperation()

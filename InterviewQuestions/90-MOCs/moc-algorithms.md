@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251012-140300
 title: Algorithms — MOC
 kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/algorithms]
----
+---\
 
 # Algorithms — Map of Content
 
@@ -196,7 +196,7 @@ This MOC covers algorithms, data structures, complexity analysis, algorithm desi
 **When to use:**
 - Topological sort
 - Cycle detection
-- Path finding (not necessarily shortest)
+- `Path` finding (not necessarily shortest)
 - Connected components
 - Backtracking problems
 
@@ -236,7 +236,7 @@ This MOC covers algorithms, data structures, complexity analysis, algorithm desi
 **When to use:**
 - Generate all permutations/combinations/subsets
 - Constraint satisfaction (N-Queens, Sudoku)
-- Path finding with constraints
+- `Path` finding with constraints
 - Combinatorial search
 
 **Time:** O(2^n) or O(n!) typically | **Space:** O(n) for recursion
@@ -289,7 +289,7 @@ This MOC covers algorithms, data structures, complexity analysis, algorithm desi
 
 **When to use:**
 - Local optimal choice leads to global optimum
-- Activity selection, interval scheduling
+- `Activity` selection, interval scheduling
 - Huffman coding, Dijkstra's algorithm
 
 **Time:** Varies | **Space:** O(1) typically
@@ -312,11 +312,11 @@ This MOC covers algorithms, data structures, complexity analysis, algorithm desi
 - [[q-two-pointers-sliding-window--algorithms--medium]]
 
 ### Sliding Window
-- Longest Substring Without Repeating, Minimum Window Substring
+- Longest Substring Without Repeating, Minimum `Window` Substring
 - [[q-two-pointers-sliding-window--algorithms--medium]]
 
 ### Binary Search
-- Search in Rotated Array, Find Peak Element, Koko Eating Bananas
+- Search in Rotated `Array`, Find Peak Element, Koko Eating Bananas
 - [[q-binary-search-variants--algorithms--medium]]
 
 ### Stack
@@ -413,7 +413,7 @@ SORT difficulty ASC, file.name ASC
 - In-place modifications (remove duplicates)
 - Cycle detection (fast & slow pointers)
 
-**When to use Sliding Window:**
+**When to use Sliding `Window`:**
 - Substring/subarray problems
 - Fixed or variable window size
 - "Longest/shortest/maximum" problems
@@ -580,7 +580,7 @@ SORT difficulty ASC, file.name ASC
 **Advanced structures:**
 - Segment trees: Range queries
 - Fenwick trees: Prefix sums
-- Tries: String prefix matching
+- Tries: `String` prefix matching
 
 **All Tree Questions:**
 ```dataview
@@ -607,7 +607,7 @@ SORT difficulty ASC, file.name ASC
 **Common applications:**
 - Generate all permutations/combinations/subsets
 - Constraint satisfaction (N-Queens, Sudoku)
-- Path finding with constraints (word search)
+- `Path` finding with constraints (word search)
 - Combinatorial optimization
 
 **Time complexity:** Often O(2^n) or O(n!)
@@ -663,7 +663,7 @@ SORT difficulty ASC, file.name ASC
 - Trie for prefix matching
 - KMP for pattern matching
 
-**All String Questions:**
+**All `String` Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "20-Algorithms"
@@ -680,7 +680,7 @@ SORT difficulty ASC, file.name ASC
 
 **When to use:**
 - Local optimal choice leads to global optimum
-- Activity selection, interval scheduling
+- `Activity` selection, interval scheduling
 - Huffman coding
 
 **Warning:** Greedy doesn't always work - verify correctness!

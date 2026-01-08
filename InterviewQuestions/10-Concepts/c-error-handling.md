@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-025739"
 title: "Error Handling / Error Handling"
 aliases: ["Error Handling"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-kotlin-coroutines, c-flow, c-sealed-classes]
+moc: "moc-cs"
+related: ["c-kotlin-coroutines", "c-flow", "c-sealed-classes"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -47,5 +48,5 @@ Error handling is the set of language constructs and design techniques used to d
 
 ## References
 
-- "Exceptional Control Flow" — Computer Systems: A Programmer's Perspective (Bryant, O'Hallaron)
+- "Exceptional Control `Flow`" — Computer Systems: A Programmer's Perspective (Bryant, O'Hallaron)
 - Language-specific docs on exceptions and error handling (e.g., Java Tutorials: Exceptions; Kotlin docs: Exception Handling; Go blog: Error handling and Go)

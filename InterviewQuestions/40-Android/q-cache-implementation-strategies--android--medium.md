@@ -1,4 +1,4 @@
----
+---\
 id: android-074
 title: Cache Implementation Strategies / Стратегии реализации кэша
 aliases: [Cache Implementation Strategies, Стратегии реализации кэша]
@@ -14,7 +14,7 @@ related: [c-performance, c-room, q-android-performance-measurement-tools--androi
 created: 2024-10-13
 updated: 2025-11-10
 tags: [android/cache-offline, android/networking-http, android/room, difficulty/medium]
----
+---\
 # Вопрос (RU)
 > Какие существуют стратегии реализации кэша в Android?
 
@@ -33,7 +33,7 @@ tags: [android/cache-offline, android/networking-http, android/room, difficulty/
 
 **Write-Through**: синхронная запись в кэш и источник. Хорошая консистентность, но дополнительная задержка.
 
-**Write-Back**: запись в кэш с отложенной синхронизацией с источником (например, через WorkManager или другой надежный фоновой механизм). Меньше задержка, но риск потери изменений / расхождения данных.
+**Write-Back**: запись в кэш с отложенной синхронизацией с источником (например, через `WorkManager` или другой надежный фоновой механизм). Меньше задержка, но риск потери изменений / расхождения данных.
 
 **Refresh-Ahead**: проактивное обновление до истечения TTL.
 
@@ -79,10 +79,10 @@ val client = OkHttpClient.Builder()
 **TTL**: по типу данных (новости 5м, профиль 1ч).
 **Вытеснение**:
 - LruCache для памяти (LRU по размеру).
-- Для диска стратегия зависит от реализации: OkHttp использует size-based LRU, для Room вы реализуете свою (например, по времени/размеру), а не обязаны использовать FIFO.
+- Для диска стратегия зависит от реализации: `OkHttp` использует size-based LRU, для `Room` вы реализуете свою (например, по времени/размеру), а не обязаны использовать FIFO.
 **Инвалидация**: при мутациях, смене пользователя, pull-to-refresh.
 
-**Инструменты**: LruCache (память), Room (диск), DataStore (настройки), OkHttp Cache (HTTP), Glide/Coil (изображения).
+**Инструменты**: LruCache (память), `Room` (диск), DataStore (настройки), `OkHttp` Cache (HTTP), Glide/Coil (изображения).
 
 ## Answer (EN)
 
@@ -94,7 +94,7 @@ val client = OkHttpClient.Builder()
 
 **Write-Through**: synchronous write to cache and source. Good consistency but added latency.
 
-**Write-Back**: write to cache with deferred synchronization to the source (e.g., via WorkManager or another reliable background mechanism). Lower latency but risk of lost updates / inconsistency.
+**Write-Back**: write to cache with deferred synchronization to the source (e.g., via `WorkManager` or another reliable background mechanism). Lower latency but risk of lost updates / inconsistency.
 
 **Refresh-Ahead**: proactive refresh before TTL expiration.
 
@@ -140,10 +140,10 @@ val client = OkHttpClient.Builder()
 **TTL**: by data type (e.g., news 5m, profile 1h).
 **Eviction**:
 - LruCache for memory (size-based LRU).
-- For disk, strategy depends on implementation: OkHttp uses size-based LRU; with Room you implement your own (e.g., by time/size) and are not required to use FIFO.
+- For disk, strategy depends on implementation: `OkHttp` uses size-based LRU; with `Room` you implement your own (e.g., by time/size) and are not required to use FIFO.
 **Invalidation**: on mutations, user switch, pull-to-refresh.
 
-**Tools**: LruCache (memory), Room (disk), DataStore (settings), OkHttp Cache (HTTP), Glide/Coil (images).
+**Tools**: LruCache (memory), `Room` (disk), DataStore (settings), `OkHttp` Cache (HTTP), Glide/Coil (images).
 
 ## Дополнительные Вопросы (RU)
 - Как балансировать TTL с серверными заголовками кэша (`Cache-Control`, `max-age`)?

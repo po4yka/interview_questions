@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-151752"
 title: "Android Manifest / Android Manifest"
 aliases: ["Android Manifest"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-basics, c-permissions, c-intent, c-deep-linking, c-app-signing]
+related: ["c-android-basics", "c-permissions", "c-intent", "c-deep-linking", "c-app-signing"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -31,11 +32,11 @@ AndroidManifest.xml — это основной конфигурационный
 
 ## Key Points (EN)
 
-- Component declarations: Lists all app components (`<activity>`, `<service>`, `<receiver>`, `<provider>`) and their intent filters, enabling the system to discover entry points like the launcher activity.
+- `Component` declarations: Lists all app components (`<activity>`, `<service>`, `<receiver>`, `<provider>`) and their intent filters, enabling the system to discover entry points like the launcher activity.
 - Permissions and security: Declares permissions the app requests (`<uses-permission>`) and exposes or restricts components, directly impacting app security and access control.
 - App identity and metadata: Defines `package`, `applicationId` (via Gradle), app label, icons, themes, `minSdkVersion`, `targetSdkVersion`, and custom `<meta-data>` used by libraries and services.
 - System and hardware features: Specifies required hardware and software capabilities (`<uses-feature>`, `<uses-sdk>`), affecting installation eligibility and visibility on Google Play.
-- Intent filters and deep links: Configures how activities respond to specific actions, data schemes, and URLs, enabling implicit intents and app links.
+- `Intent` filters and deep links: Configures how activities respond to specific actions, data schemes, and URLs, enabling implicit intents and app links.
 
 ## Ключевые Моменты (RU)
 
@@ -43,7 +44,7 @@ AndroidManifest.xml — это основной конфигурационный
 - Разрешения и безопасность: Определяет разрешения, запрашиваемые приложением (`<uses-permission>`), и уровень доступа к компонентам, напрямую влияя на безопасность и контроль взаимодействия.
 - Идентичность приложения и метаданные: Задает `package`, связанный `applicationId` (через Gradle), название, иконки, темы, `minSdkVersion`, `targetSdkVersion`, а также `<meta-data>`, используемые библиотеками и сервисами.
 - Системные и аппаратные требования: Описывает необходимые функции устройства и системы (`<uses-feature>`, `<uses-sdk>`), что влияет на возможность установки и видимость приложения в Google Play.
-- Intent-фильтры и deep links: Настраивает реакцию activity на определенные действия, схемы и URL, обеспечивая работу неявных intent'ов и app links.
+- `Intent`-фильтры и deep links: Настраивает реакцию activity на определенные действия, схемы и URL, обеспечивая работу неявных intent'ов и app links.
 
 ## References
 

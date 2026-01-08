@@ -1,4 +1,4 @@
----
+---\
 id: android-628
 title: ARCore Shared Experiences / Совместные ARCore-сцены
 aliases: [ARCore Shared Experiences, Совместные ARCore-сцены]
@@ -18,7 +18,7 @@ sources:
   - "https://developers.google.com/ar/develop/depth"
   - "https://developers.google.com/ar/develop/java/cloud-anchors/overview"
   - "https://developers.google.com/ar/reference/java"
----
+---\
 # Вопрос (RU)
 > Как построить многопользовательский AR-опыт на ARCore: синхронизировать Cloud Anchors, использовать Depth API для окклюзии, совмещать Sceneform/Filament рендеринг и гарантировать стабильность трекинга?
 
@@ -188,7 +188,7 @@ session.configure(config)
 ```
 
 - Ensure ARCore is supported (Availability API) and Google Play Services for AR is installed before creating the `Session`.
-- Request and confirm camera permission before starting the AR session.
+- `Request` and confirm camera permission before starting the AR session.
 - Properly handle `session.resume()` / `pause()` in the lifecycle.
 - Check support for Depth, Cloud Anchors, and Augmented Images per device and disable unsupported features.
 

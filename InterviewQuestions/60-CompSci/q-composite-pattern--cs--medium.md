@@ -1,4 +1,4 @@
----
+---\
 id: cs-025
 title: "Composite Pattern / Паттерн Composite"
 aliases: ["Composite Pattern", "Паттерн Composite"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [composite, design-patterns, difficulty/medium, gof-patterns, structural-patterns, tree-structure]
 sources: ["https://en.wikipedia.org/wiki/Composite_pattern"]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Composite? Когда и зачем его использовать?
 
@@ -42,7 +42,7 @@ Composite (Компоновщик) - структурный паттерн пр�
 
 **Структура паттерна:**
 
-- **Component** (интерфейс) - объявляет общие операции для Leaf и Composite
+- **`Component`** (интерфейс) - объявляет общие операции для Leaf и Composite
 - **Leaf** - конечный элемент (не имеет детей), реализует `Component`
 - **Composite** - контейнер, содержит детей (Leaf или Composite), реализует `Component`, делегирует операции детям
 - **Client** - работает с `Component`, не различая Leaf и Composite
@@ -240,7 +240,7 @@ class Manager(
 
 **Связанные паттерны:**
 
-- **Iterator** - для обхода Composite структуры
+- **`Iterator`** - для обхода Composite структуры
 - **Visitor** - для операций над Composite структурой
 - **Decorator** - похожая рекурсивная структура, но другая цель
 - **Chain of Responsibility** - может использовать Composite для организации цепочки
@@ -271,7 +271,7 @@ Composite is a structural design pattern that allows composing objects into tree
 
 **Pattern Structure:**
 
-- **Component** (interface) - declares common operations for `Leaf` and `Composite`
+- **`Component`** (interface) - declares common operations for `Leaf` and `Composite`
 - **Leaf** - leaf element (no children), implements `Component`
 - **Composite** - container, holds children (`Leaf` or `Composite`), implements `Component`, delegates operations to children
 - **Client** - works with `Component` without distinguishing `Leaf` and `Composite`
@@ -469,7 +469,7 @@ class Manager(
 
 **Related Patterns:**
 
-- **Iterator** - for traversing Composite structures
+- **`Iterator`** - for traversing Composite structures
 - **Visitor** - for operations on Composite structures
 - **Decorator** - similar recursive structure, but different intent
 - **Chain of Responsibility** - can be combined with Composite to organize chains

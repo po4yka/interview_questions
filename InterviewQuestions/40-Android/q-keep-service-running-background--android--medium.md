@@ -1,4 +1,4 @@
----
+---\
 id: android-194
 title: Keep Service Running Background / Удержание Service в фоне
 aliases: [Background Service, Keep Service Running Background, Удержание Service в фоне, Фоновый сервис]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-10-28
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium, foreground-service, jobscheduler, workmanager]
 
----
+---\
 # Вопрос (RU)
 
 > Что делать если нужно чтобы сервис продолжал работу в фоне?
@@ -136,9 +136,9 @@ WorkManager.getInstance(this).enqueue(uploadRequest)
 **Когда использовать:**
 - Задача требует специфических условий (сеть, зарядка, idle)
 - Задача не критична по времени
-- Не нужны функции WorkManager (chaining, unique work)
+- Не нужны функции `WorkManager` (chaining, unique work)
 
-**Примечание:** WorkManager использует JobScheduler внутри на Android 6.0+, поэтому WorkManager обычно предпочтительнее.
+**Примечание:** `WorkManager` использует JobScheduler внутри на Android 6.0+, поэтому `WorkManager` обычно предпочтительнее.
 
 ```kotlin
 class SyncJobService : JobService() {
@@ -165,12 +165,12 @@ class SyncJobService : JobService() {
 
 ### Сравнение Подходов
 
-| Критерий | Foreground `Service` | WorkManager | JobScheduler |
+| Критерий | Foreground `Service` | `WorkManager` | JobScheduler |
 |----------|-------------------|-------------|--------------|
 | **Уведомление пользователя** | Требуется | Опционально / требуется при foreground-работе | Не требуется |
 | **Приоритет** | Высокий (но не абсолютный) | Средний | Низкий |
 | **Время выполнения** | Немедленное | Отложенное | Отложенное |
-| **Constraints** | Нет встроенных (решаются вручную) | Сеть, батарея, хранилище | Сеть, зарядка, idle |
+| **`Constraints`** | Нет встроенных (решаются вручную) | Сеть, батарея, хранилище | Сеть, зарядка, idle |
 | **Переживает перезагрузку** | Нет (если явно не обработан BOOT_COMPLETED) | Да | Да (если persisted) |
 | **Случай использования** | Музыка, навигация | Фоновая синхронизация | Периодическая очистка |
 
@@ -336,9 +336,9 @@ WorkManager.getInstance(this).enqueue(uploadRequest)
 **When to use:**
 - Task requires specific conditions (network, charging, idle)
 - Task is not time-critical
-- You don't need WorkManager features (chaining, unique work)
+- You don't need `WorkManager` features (chaining, unique work)
 
-**Note:** WorkManager uses JobScheduler internally on Android 6.0+, so WorkManager is usually preferred.
+**Note:** `WorkManager` uses JobScheduler internally on Android 6.0+, so `WorkManager` is usually preferred.
 
 ```kotlin
 class SyncJobService : JobService() {
@@ -365,12 +365,12 @@ class SyncJobService : JobService() {
 
 ### Comparison
 
-| Criteria | Foreground `Service` | WorkManager | JobScheduler |
+| Criteria | Foreground `Service` | `WorkManager` | JobScheduler |
 |----------|-------------------|-------------|--------------|
 | **User notification** | Required | Optional / required for foreground work | Not required |
 | **Priority** | High (but not absolute) | Medium | Low |
 | **Execution timing** | Immediate | Deferred | Deferred |
-| **Constraints** | None built-in (handled manually) | Network, battery, storage | Network, charging, idle |
+| **`Constraints`** | None built-in (handled manually) | Network, battery, storage | Network, charging, idle |
 | **Survives reboot** | No (unless BOOT_COMPLETED is handled) | Yes | Yes (if persisted) |
 | **Use case** | Music, navigation | Background sync | Periodic cleanup |
 
@@ -431,9 +431,9 @@ Is task user-initiated and time-sensitive?
 
 - How to handle battery optimization restrictions (Doze mode, App Standby)?
 - What happens if foreground service doesn't call `startForeground()` within 5 seconds?
-- How to chain multiple WorkManager tasks sequentially or in parallel?
+- How to chain multiple `WorkManager` tasks sequentially or in parallel?
 - What are the differences between `START_STICKY`, `START_NOT_STICKY`, and `START_REDELIVER_INTENT`?
-- How to test background services and WorkManager in unit tests?
+- How to test background services and `WorkManager` in unit tests?
 
 ## References
 

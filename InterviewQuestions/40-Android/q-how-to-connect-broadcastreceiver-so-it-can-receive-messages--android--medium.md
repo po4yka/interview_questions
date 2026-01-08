@@ -1,4 +1,4 @@
----
+---\
 id: android-280
 title: How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений
 aliases: [How To Connect BroadcastReceiver So It Can Receive Messages, Как подключить BroadcastReceiver для получения сообщений]
@@ -15,7 +15,7 @@ created: 2024-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как подключить `BroadcastReceiver` для получения сообщений
 
@@ -457,7 +457,7 @@ class BestPracticesActivity : AppCompatActivity() {
 | Manifest             | Некоторые системные broadcast'ы; может запускать приложение | Между перезапусками     | Системные события, `BOOT_COMPLETED` и т.п.   |
 | Dynamic              | Только пока зарегистрирован                | Жизнь компонента         | Обновление UI, implicit broadcasts           |
 | LocalBroadcastManager| Только пока зарегистрирован (deprecated)   | Жизнь компонента         | Устаревшая внутренняя коммуникация           |
-| WorkManager          | При выполнении условий/расписания          | Управляется системой     | Отложенная фоновая работа (предпочтительно)  |
+| `WorkManager`          | При выполнении условий/расписания          | Управляется системой     | Отложенная фоновая работа (предпочтительно)  |
 
 ### Современные Альтернативы
 
@@ -919,17 +919,17 @@ class BestPracticesActivity : AppCompatActivity() {
 
 Key points:
 - Always match registration and unregistration to the appropriate lifecycle callbacks.
-- Avoid long-running work in `onReceive()`; offload to WorkManager, a foreground service, or other async mechanisms.
+- Avoid long-running work in `onReceive()`; offload to `WorkManager`, a foreground service, or other async mechanisms.
 - For new code, prefer modern APIs (`NetworkCallback`, `WorkManager`, in-app event buses, reactive streams) over global broadcasts where appropriate.
 
 ### Comparison Table
 
-| Method               | When Receives                              | Lifecycle              | Use Case                               |
+| Method               | When Receives                              | `Lifecycle`              | Use Case                               |
 |----------------------|--------------------------------------------|------------------------|-----------------------------------------|
 | Manifest             | Certain system broadcasts; app may be started | Across app restarts | System events, BOOT_COMPLETED, etc.    |
-| Dynamic              | Only when registered                      | Component lifetime     | UI updates, implicit broadcasts        |
-| LocalBroadcastManager| Only when registered (deprecated)         | Component lifetime     | Legacy internal communication          |
-| WorkManager          | When constraints met / scheduled          | Managed by OS          | Deferrable background work (preferred) |
+| Dynamic              | Only when registered                      | `Component` lifetime     | UI updates, implicit broadcasts        |
+| LocalBroadcastManager| Only when registered (deprecated)         | `Component` lifetime     | Legacy internal communication          |
+| `WorkManager`          | When constraints met / scheduled          | Managed by OS          | Deferrable background work (preferred) |
 
 ### Modern Alternatives
 
@@ -973,7 +973,7 @@ class EventBus {
 - `Intent` and IntentFilter
 - AndroidManifest.xml
 - System broadcasts
-- WorkManager (modern alternative)
+- `WorkManager` (modern alternative)
 - LocalBroadcastManager
 
 ---

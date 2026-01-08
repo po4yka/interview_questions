@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-095
 title: "Converting callbacks with suspendCancellableCoroutine / Преобразование callback с suspendCancellableCoroutine"
 topic: kotlin
@@ -14,7 +14,7 @@ moc: moc-kotlin
 related: [c-coroutines, q-channelflow-callbackflow-flow--kotlin--medium, q-continuation-cps-internals--kotlin--hard, q-coroutine-exception-handler--kotlin--medium]
 subtopics: [callbacks, cancellation, coroutines]
 question_kind: coding
----
+---\
 # Вопрос (RU)
 > Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
 
@@ -25,7 +25,7 @@ question_kind: coding
 
 ## Ответ (RU)
 
-Многие Android и Java библиотеки используют callback-ориентированные API (Retrofit callbacks, Firebase listeners, Location updates, OkHttp calls). Чтобы идиоматично использовать их с корутинами, нужно преобразовать callback в `suspend`-функции с помощью `suspendCancellableCoroutine`. Это критический навык для интеграции легаси-кода с корутинами с корректной обработкой отмены, ошибок и гонок. См. также [[c-coroutines]].
+Многие Android и Java библиотеки используют callback-ориентированные API (`Retrofit` callbacks, Firebase listeners, Location updates, `OkHttp` calls). Чтобы идиоматично использовать их с корутинами, нужно преобразовать callback в `suspend`-функции с помощью `suspendCancellableCoroutine`. Это критический навык для интеграции легаси-кода с корутинами с корректной обработкой отмены, ошибок и гонок. См. также [[c-coroutines]].
 
 ### `suspendCoroutine` Против `suspendCancellableCoroutine`
 
@@ -483,7 +483,7 @@ class SuspendTest {
 
 ## Answer (EN)
 
-Many Android and Java libraries use callback-based APIs (Retrofit callbacks, Firebase listeners, Location updates, OkHttp calls). To use them idiomatically with coroutines, you need to convert callbacks to suspend functions using `suspendCancellableCoroutine`. This is a critical skill for integrating legacy code with coroutines while handling cancellation, errors, and race conditions correctly.
+Many Android and Java libraries use callback-based APIs (`Retrofit` callbacks, Firebase listeners, Location updates, `OkHttp` calls). To use them idiomatically with coroutines, you need to convert callbacks to suspend functions using `suspendCancellableCoroutine`. This is a critical skill for integrating legacy code with coroutines while handling cancellation, errors, and race conditions correctly.
 
 See also [[c-coroutines]].
 
@@ -907,7 +907,7 @@ class SuspendTest {
 
 ### Common Mistakes and Pitfalls
 
-- Double resume due to racing callbacks and cancellation — guard with `isActive` and/or an atomic flag.
+- `Double` resume due to racing callbacks and cancellation — guard with `isActive` and/or an atomic flag.
 - Forgetting to cancel/cleanup underlying operations in `invokeOnCancellation` when possible.
 - Resuming after cancellation — always check `cont.isActive` or use an atomic guard.
 - Poor error mapping from callback errors to meaningful exceptions or `Result`.
@@ -937,7 +937,7 @@ class SuspendTest {
 6. Test cancellation behaviour and cleanup.
 7. Do not call `resume`/`resumeWithException` after cancellation; use `isActive` and/or guards.
 8. Perform cleanup both in `invokeOnCancellation` and in terminal callbacks where appropriate.
-9. Map errors properly (domain exceptions or `Result`).
+9. `Map` errors properly (domain exceptions or `Result`).
 10. Document suspend function behaviour: cancellation, timeouts, and error semantics.
 
 ---

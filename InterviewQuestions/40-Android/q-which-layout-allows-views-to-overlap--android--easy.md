@@ -1,4 +1,4 @@
----
+---\
 id: android-304
 title: Which Layout Allows Views To Overlap / Какой layout позволяет View перекрываться
 aliases: [Which Layout Allows Views To Overlap, Какой layout позволяет View перекрываться]
@@ -14,11 +14,11 @@ related: [c-compose-state, c-jetpack-compose, q-jetpack-compose-lazy-column--and
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android, android/ui-compose, android/ui-views, compose, difficulty/easy, framelayout, layouts]
----
+tags: [android, android/ui-compose, android/ui-views, difficulty/easy, framelayout, layouts]
+---\
 # Вопрос (RU)
 
-> Какой layout в Android позволяет View перекрываться друг с другом?
+> Какой layout в Android позволяет `View` перекрываться друг с другом?
 
 # Question (EN)
 
@@ -32,7 +32,7 @@ tags: [android, android/ui-compose, android/ui-views, compose, difficulty/easy, 
 
 ### FrameLayout (Система View)
 
-**FrameLayout** — простейший контейнер для наложения views. Дочерние элементы размещаются один поверх другого, последний добавленный отображается сверху.
+**`FrameLayout`** — простейший контейнер для наложения views. Дочерние элементы размещаются один поверх другого, последний добавленный отображается сверху.
 
 **Ключевые особенности**:
 - Дочерние элементы рисуются в порядке добавления
@@ -97,7 +97,7 @@ val frameLayout = FrameLayout(context).apply {
 
 ### Box (Jetpack Compose)
 
-**Box** — Compose-эквивалент FrameLayout с декларативным API.
+**Box** — Compose-эквивалент `FrameLayout` с декларативным API.
 
 **Ключевые особенности**:
 - Дочерние composables накладываются в порядке объявления
@@ -174,9 +174,9 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ### Сравнение: FrameLayout Vs Box
 
-| Критерий | FrameLayout | Box |
+| Критерий | `FrameLayout` | Box |
 |----------|-------------|-----|
-| **Система** | View System | Jetpack Compose |
+| **Система** | `View` System | Jetpack Compose |
 | **Определение** | XML/Kotlin | @Composable функция |
 | **Выравнивание** | `layout_gravity` | `Modifier.align()` |
 | **Z-контроль** | Порядок добавления (+ `elevation`/`translationZ`) | Порядок + `zIndex()` |
@@ -185,7 +185,7 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 ---
 
 **Резюме**:
-- **FrameLayout** — для View System, простое наложение views
+- **`FrameLayout`** — для `View` System, простое наложение views
 - **Box** — для Compose, декларативное наложение composables
 - Оба по умолчанию используют принцип "последний сверху"
 - Box предоставляет более гибкий контроль через модификаторы
@@ -199,7 +199,7 @@ In Android, there are two main simple approaches for creating layouts where UI e
 
 ### FrameLayout (View System)
 
-**FrameLayout** is the simplest container for overlaying views. Child views are stacked on top of each other, with the last added view drawn on top.
+**`FrameLayout`** is the simplest container for overlaying views. Child views are stacked on top of each other, with the last added view drawn on top.
 
 **Key characteristics**:
 - Children are drawn in the order they're added
@@ -264,7 +264,7 @@ val frameLayout = FrameLayout(context).apply {
 
 ### Box (Jetpack Compose)
 
-**Box** is the Compose equivalent of FrameLayout with a declarative API.
+**Box** is the Compose equivalent of `FrameLayout` with a declarative API.
 
 **Key characteristics**:
 - Child composables are stacked in declaration order
@@ -341,9 +341,9 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ### Comparison: FrameLayout Vs Box
 
-| Criterion | FrameLayout | Box |
+| Criterion | `FrameLayout` | Box |
 |-----------|-------------|-----|
-| **System** | View System | Jetpack Compose |
+| **System** | `View` System | Jetpack Compose |
 | **Definition** | XML/Kotlin | @Composable function |
 | **Alignment** | `layout_gravity` | `Modifier.align()` |
 | **Z-control** | Addition order (+ `elevation`/`translationZ`) | Order + `zIndex()` |
@@ -352,7 +352,7 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 ---
 
 **Summary**:
-- **FrameLayout** — for the View System, simple view overlay
+- **`FrameLayout`** — for the `View` System, simple view overlay
 - **Box** — for Compose, declarative composable overlay
 - Both use "last on top" principle by default
 - Box provides more flexible control via modifiers
@@ -366,14 +366,14 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 - What's the performance impact of deeply nested `Box` composables in Compose?
 - How do `zIndex()` and drawing order interact in Compose?
 - When should you use `Box` with `Modifier.offset()` vs `ConstraintLayout` for complex positioning?
-- How do you prevent click events from propagating through overlays in both View System and Compose?
+- How do you prevent click events from propagating through overlays in both `View` System and Compose?
 
 ---
 
 ## References
 
 - [[q-what-is-layout-types-and-when-to-use--android--easy]] — Overview of Android layout types
-- [[q-viewgroup-vs-view-differences--android--easy]] — View hierarchy fundamentals
+- [[q-viewgroup-vs-view-differences--android--easy]] — `View` hierarchy fundamentals
 - [Android Layouts Documentation](https://developer.android.com/develop/ui/views/layout/declaring-layout)
 - [Jetpack Compose Layout Documentation](https://developer.android.com/jetpack/compose/layouts/basics)
 
@@ -387,16 +387,16 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 - [[c-jetpack-compose]]
 
 ### Prerequisites (Easier)
-- [[q-viewgroup-vs-view-differences--android--easy]] — Understanding View hierarchy
+- [[q-viewgroup-vs-view-differences--android--easy]] — Understanding `View` hierarchy
 - [[q-what-is-layout-types-and-when-to-use--android--easy]] — Layout types overview
 - [[q-how-to-choose-layout-for-fragment--android--easy]] — Choosing the right layout
 
 ### Related (Same Level)
-- [[q-which-layout-for-large-list--android--easy]] — RecyclerView for lists
+- [[q-which-layout-for-large-list--android--easy]] — `RecyclerView` for lists
 - [[q-how-to-fix-a-bad-element-layout--android--easy]] — Layout debugging
 
 ### Advanced (Harder)
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]] — LayoutInflater internals
 - [[q-what-is-layout-performance-measured-in--android--medium]] — Layout performance
 - [[q-compose-custom-layout--android--hard]] — Custom Compose layouts
-- [[q-custom-viewgroup-layout--android--hard]] — Custom ViewGroup creation
+- [[q-custom-viewgroup-layout--android--hard]] — Custom `ViewGroup` creation

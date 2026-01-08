@@ -1,4 +1,4 @@
----
+---\
 id: android-401
 title: Activity Lifecycle on New Activity / Жизненный цикл при запуске новой Activity
 aliases: [Activity Lifecycle on New Activity, Жизненный цикл при запуске новой Activity]
@@ -15,12 +15,12 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/lifecycle, difficulty/hard, lifecycle, memory]
 
----
+---\
 # Вопрос (RU)
 > Жизненный цикл при запуске новой `Activity`
 
 # Question (EN)
-> `Activity` Lifecycle on New `Activity`
+> `Activity` `Lifecycle` on New `Activity`
 
 ---
 
@@ -122,7 +122,7 @@ When the system starts a new `Activity` in Android, what happens to the previous
 
 Assume `Activity` A is visible and starts `Activity` B in the same task without special flags.
 
-1. Lifecycle transitions when B fully covers A:
+1. `Lifecycle` transitions when B fully covers A:
    - A: `onPause()` is called.
    - A: `onStop()` is called (if B fully obscures A).
    - A remains in the back stack (stopped, not destroyed).

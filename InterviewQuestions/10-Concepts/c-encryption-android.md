@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-155632"
 title: "Encryption Android / Encryption Android"
 aliases: ["Encryption Android"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-encryption, c-security, c-sharedpreferences, c-datastore]
+related: ["c-encryption", "c-security", "c-sharedpreferences", "c-datastore"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -35,7 +36,7 @@ Encryption on Android refers to the mechanisms and APIs used to protect data con
 - Android Keystore: Secrets (keys, tokens) should be generated and stored using the Android Keystore, which can provide hardware-backed, non-exportable keys and enforce usage constraints (purpose, block modes, user auth).
 - App-level encryption: Apps should use strong, modern algorithms (e.g., AES-GCM, ChaCha20-Poly1305) via official libraries (e.g., Jetpack Security Crypto) instead of implementing custom crypto.
 - Key management and user auth: Proper binding of keys to biometric/PIN/password and using features like setUserAuthenticationRequired helps limit key usage if the device is stolen or unlocked.
-- Common pitfalls: Storing keys in plain SharedPreferences, using deprecated/weak algorithms (e.g., AES in ECB, MD5/SHA1 for password storage), or hardcoding keys in APKs undermines security and is frequently probed in interviews.
+- Common pitfalls: Storing keys in plain `SharedPreferences`, using deprecated/weak algorithms (e.g., AES in ECB, MD5/SHA1 for password storage), or hardcoding keys in APKs undermines security and is frequently probed in interviews.
 
 ## Ключевые Моменты (RU)
 
@@ -43,7 +44,7 @@ Encryption on Android refers to the mechanisms and APIs used to protect data con
 - Android Keystore: Секреты (ключи, токены) следует генерировать и хранить через Android Keystore, который может обеспечивать аппаратно защищённые, неэкспортируемые ключи и политики использования (назначение, режимы, требования аутентификации).
 - Шифрование в приложении: Приложения должны использовать современные алгоритмы (например, AES-GCM, ChaCha20-Poly1305) и официальные библиотеки (например, Jetpack Security Crypto) вместо самодельных криптографических решений.
 - Управление ключами и аутентификация: Привязка ключей к биометрии/PIN/паролю и использование опций вроде setUserAuthenticationRequired помогают ограничить использование ключей при краже устройства или его разблокировке злоумышленником.
-- Типичные ошибки: Хранение ключей в открытом виде в SharedPreferences, использование устаревших/слабых алгоритмов (AES-ECB, MD5/SHA1 для паролей) или хардкод ключей в APK серьёзно снижает безопасность и часто обсуждается на собеседованиях.
+- Типичные ошибки: Хранение ключей в открытом виде в `SharedPreferences`, использование устаревших/слабых алгоритмов (AES-ECB, MD5/SHA1 для паролей) или хардкод ключей в APK серьёзно снижает безопасность и часто обсуждается на собеседованиях.
 
 ## References
 

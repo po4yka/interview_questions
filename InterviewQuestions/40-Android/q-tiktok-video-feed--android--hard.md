@@ -1,4 +1,4 @@
----
+---\
 id: android-486
 title: Design TikTok-style Short-Video Feed / Проектирование коротких видео (TikTok-стиль)
 aliases: [Design TikTok-style Short-Video Feed, Проектирование коротких видео (TikTok-стиль)]
@@ -16,7 +16,7 @@ created: 2025-10-29
 updated: 2025-11-11
 tags: [android/media, android/performance-rendering, android/service, difficulty/hard, topic/android]
 
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать ленту коротких видео (TikTok-стиль) для Android?
@@ -41,7 +41,7 @@ Design a short‑video feed for Android. Targets: cold start <2.0s (p95), first 
 
 ### Архитектура
 
-Модули: feed-ui, player-core (ExoPlayer), media-cache, prefetcher, uploader, analytics, flags. MVVM + UDF; Hilt DI; feature flags для размера сегмента, лестницы битрейтов, глубины prefetch.
+Модули: feed-ui, player-core (ExoPlayer), media-cache, prefetcher, uploader, analytics, flags. MVVM + UDF; `Hilt` DI; feature flags для размера сегмента, лестницы битрейтов, глубины prefetch.
 
 ### Воспроизведение
 
@@ -61,11 +61,11 @@ LRU по last‑played и возрасту с лимитом 300MB. Исполь
 
 Hardware MediaCodec H.264 (HEVC под флагом); GOP=1с; CBR‑biased VBR. Чанки 4–8MB с SHA‑256; возобновление с offset negotiation; TLS; опционально клиентское AES‑GCM шифрование.
 
-Для длинных/критичных загрузок использовать Foreground `Service` + WorkManager (expedited / с ограничениями) в соответствии с требованиями Android 11–15, с видимым уведомлением для пользователя. Генерация poster frame + blur превью на устройстве; отправка pre‑upload metadata.
+Для длинных/критичных загрузок использовать Foreground `Service` + `WorkManager` (expedited / с ограничениями) в соответствии с требованиями Android 11–15, с видимым уведомлением для пользователя. Генерация poster frame + blur превью на устройстве; отправка pre‑upload metadata.
 
 ### Фон/Питание
 
-WorkManager для отложенных загрузок с constraints; backoff с server hints. Prefetch ограничивать только foreground-воспроизведением, без долгоживущих фоновых задач, чтобы не нарушать ограничения ОС.
+`WorkManager` для отложенных загрузок с constraints; backoff с server hints. Prefetch ограничивать только foreground-воспроизведением, без долгоживущих фоновых задач, чтобы не нарушать ограничения ОС.
 
 Воспроизведение адаптирует bitrate и (при необходимости) frame rate при термальных событиях через callbacks thermal API/PerformanceHint и настройки ExoPlayer (ограничение резолюции/bitrate).
 
@@ -91,11 +91,11 @@ A short-video feed includes autoplay, prefetch, caching, and content upload.
 
 ### Architecture
 
-Modules: feed-ui, player-core (ExoPlayer), media-cache, prefetcher, uploader, analytics, flags. MVVM + UDF; Hilt DI; feature flags for segment size, bitrate ladder, prefetch depth.
+Modules: feed-ui, player-core (ExoPlayer), media-cache, prefetcher, uploader, analytics, flags. MVVM + UDF; `Hilt` DI; feature flags for segment size, bitrate ladder, prefetch depth.
 
 ### Playback
 
-Use HLS/DASH with ~1s segments; enable low-latency mode where available. Configure ExoPlayer for fast startup, using CacheDataSource/MediaSource for segment-level caching and partial segment reuse; reuse the same Surface to avoid GL churn. Disable seek pre-roll if not required by the product.
+Use HLS/DASH with ~1s segments; enable low-latency mode where available. Configure ExoPlayer for fast startup, using CacheDataSource/MediaSource for segment-level caching and partial segment reuse; reuse the same `Surface` to avoid GL churn. Disable seek pre-roll if not required by the product.
 
 ABR: constrain variants based on device/network profiles; align prefetch with the current/likely bitrate to avoid wasting bandwidth and cache.
 
@@ -111,11 +111,11 @@ Use an LRU policy by last-played and age with a 300MB cap. Rely on ExoPlayer's s
 
 Use hardware MediaCodec for H.264 (HEVC behind a flag); GOP=1s; CBR-biased VBR. Chunk uploads into 4–8MB pieces with SHA-256; support resumable uploads with offset negotiation; use TLS; optionally encrypt chunks client-side with AES-GCM.
 
-For long/critical uploads, use a Foreground `Service` combined with WorkManager (expedited/with constraints) per Android 11–15 requirements, with a visible notification so the OS does not kill the job silently. Generate a poster frame + blurred preview on-device; send pre-upload metadata.
+For long/critical uploads, use a Foreground `Service` combined with `WorkManager` (expedited/with constraints) per Android 11–15 requirements, with a visible notification so the OS does not kill the job silently. Generate a poster frame + blurred preview on-device; send pre-upload metadata.
 
 ### Background/Power
 
-Use WorkManager for deferred uploads with constraints; apply backoff with server hints. Restrict prefetch to foreground playback (no long-running background prefetch loops) to comply with OS limits.
+Use `WorkManager` for deferred uploads with constraints; apply backoff with server hints. Restrict prefetch to foreground playback (no long-running background prefetch loops) to comply with OS limits.
 
 Handle thermal events by adapting bitrate and, if needed, frame rate using thermal/PerformanceHint APIs and ExoPlayer configuration (e.g., cap resolution/bitrate on high thermal states).
 
@@ -133,7 +133,7 @@ MVP (basic playback + simple upload) → Prefetch/cache → ABR/LL-HLS → Therm
 
 ### Tradeoffs
 
-Short segments improve startup but add overhead; mitigate via HTTP/2 and tuned prefetch. HEVC saves bandwidth but has compatibility risks—protect behind flags.
+`Short` segments improve startup but add overhead; mitigate via HTTP/2 and tuned prefetch. HEVC saves bandwidth but has compatibility risks—protect behind flags.
 
 ---
 

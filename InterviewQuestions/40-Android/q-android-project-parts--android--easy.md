@@ -1,4 +1,4 @@
----
+---\
 id: android-216
 title: Android Project Parts / Части Android проекта
 aliases: [Android Project Parts, Части Android проекта]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/build-variants, android/gradle, build-system, difficulty/easy, project-structure]
 sources: []
----
+---\
 # Вопрос (RU)
 > Из каких основных частей состоит Android проект?
 
@@ -189,7 +189,7 @@ android {
 
 **Key Differences:**
 
-| Component | Purpose | Access |
+| `Component` | Purpose | Access |
 |-----------|---------|--------|
 | **res/** | Compiled resources | via `R.*` (compiler validates presence and type) |
 | **assets/** | Raw files | `assets.open("file.json")` (string path, not type-safe) |

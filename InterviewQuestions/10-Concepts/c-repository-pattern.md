@@ -1,14 +1,22 @@
----
-id: ivc-20251030-140000
-title: Repository Pattern / Паттерн Repository
-aliases: [Repository, Repository Pattern, Паттерн Repository]
-kind: concept
-summary: Abstraction layer that mediates between data sources and business logic
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [architecture-patterns, clean-architecture, concept, data-layer, repository]
----
+---\
+id: "20251030-140000"
+title: "Repository Pattern / Паттерн Repository"
+aliases: ["Repository", "Repository Pattern", "Паттерн Repository"]
+summary: "Abstraction layer that mediates between data sources and business logic"
+topic: "architecture-patterns"
+subtopics: ["clean-architecture", "data-layer", "repository"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-architecture-patterns"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["architecture-patterns", "clean-architecture", "concept", "data-layer", "repository", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -78,7 +86,7 @@ Data Sources (Network API, Local DB, SharedPreferences)
 ```
 
 **Repository Pattern Benefits**:
-- ViewModels don't know about Retrofit, Room, or other implementation details
+- ViewModels don't know about `Retrofit`, `Room`, or other implementation details
 - Easy to switch data sources without changing business logic
 - Centralized place for offline-first strategy
 - Single place to add logging, analytics, or monitoring
@@ -95,7 +103,7 @@ Data Sources (Network API, Local DB, SharedPreferences)
 ```
 
 **Преимущества паттерна Repository**:
-- ViewModels не знают о Retrofit, Room или других деталях реализации
+- ViewModels не знают о `Retrofit`, `Room` или других деталях реализации
 - Легко менять источники данных без изменения бизнес-логики
 - Централизованное место для offline-first стратегии
 - Единое место для добавления логирования, аналитики или мониторинга
@@ -189,7 +197,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 2. **Offline-first strategy**: Return cached data immediately, then fetch fresh data
 3. **Single Responsibility**: Repository only handles data access, not business logic
 4. **Interface over implementation**: Expose repository as interface for easy testing
-5. **Coroutines for async**: Use suspend functions and Flow for reactive data streams
+5. **Coroutines for async**: Use suspend functions and `Flow` for reactive data streams
 6. **Error mapping**: Convert low-level exceptions to domain-specific errors
 
 **RU**:
@@ -197,7 +205,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 2. **Offline-first стратегия**: Возвращайте кэшированные данные сразу, затем загружайте свежие
 3. **Единая ответственность**: Репозиторий только управляет доступом к данным, не бизнес-логикой
 4. **Интерфейс вместо реализации**: Предоставляйте репозиторий как интерфейс для лёгкого тестирования
-5. **Корутины для асинхронности**: Используйте suspend функции и Flow для реактивных потоков данных
+5. **Корутины для асинхронности**: Используйте suspend функции и `Flow` для реактивных потоков данных
 6. **Преобразование ошибок**: Конвертируйте низкоуровневые исключения в ошибки уровня домена
 
 ---
@@ -234,4 +242,4 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 - [Android Architecture Components - Repository Pattern](https://developer.android.com/topic/architecture/data-layer)
 - [Guide to app architecture - Data layer](https://developer.android.com/topic/architecture/data-layer)
-- Martin Fowler - Patterns of Enterprise Application Architecture
+- Martin Fowler - Patterns of Enterprise `Application` Architecture

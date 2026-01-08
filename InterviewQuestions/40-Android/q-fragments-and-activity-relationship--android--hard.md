@@ -1,4 +1,4 @@
----
+---\
 id: android-386
 title: Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity
 aliases: [Fragment Lifecycle Dependency, Fragments And Activity Relationship, Взаимосвязь Фрагментов И Activity, Зависимость жизненного цикла фрагмента]
@@ -19,7 +19,7 @@ sources:
   - "https://developer.android.com/guide/fragments/lifecycle"
 tags: [android/fragment, android/lifecycle, difficulty/hard]
 
----
+---\
 # Вопрос (RU)
 > Как существуют и к чему привязаны фрагменты в `Activity`?
 
@@ -149,7 +149,7 @@ class DetailFragment : Fragment() {
 
 ### Типичные Ошибки
 
-- **Неправильный LifecycleOwner** — использование `this` (фрагмента) вместо `viewLifecycleOwner` для UI-наблюдений, что переживают пересоздание `View`.
+- **Неправильный `LifecycleOwner`** — использование `this` (фрагмента) вместо `viewLifecycleOwner` для UI-наблюдений, что переживают пересоздание `View`.
 - **Неверный scope `ViewModel`** — использование `activityViewModels()` там, где нужен `viewModels()` (или наоборот), что приводит к неожиданному времени жизни и разделению состояния, а не прямой "утечке" памяти.
 - **Потеря состояния навигации** — некорректное использование `add()`/`replace()` и `addToBackStack()` (например, ожидание back-навигации без добавления в back stack).
 - **Проблемы с контекстом** — доступ к `Activity`/`Context` после `onDetach()` или удержание ссылок на него.
@@ -174,7 +174,7 @@ A `Fragment`:
 Fragments depend on their host (usually an `Activity`) for:
 - **`Context`**: accessed via `requireContext()`, `requireActivity()` (or nullable `context`/`activity` with checks)
 - **Resources**: strings, drawables, system services
-- **Lifecycle**: the host `Activity` lifecycle defines the upper bound; a `Fragment` cannot live longer than its host
+- **`Lifecycle`**: the host `Activity` lifecycle defines the upper bound; a `Fragment` cannot live longer than its host
 - **`ViewGroup`**: the physical placement point in the UI (for UI fragments)
 
 ```kotlin
@@ -276,7 +276,7 @@ class DetailFragment : Fragment() {
 
 ### Common Pitfalls
 
-- **Wrong LifecycleOwner** — using the `Fragment` itself instead of `viewLifecycleOwner` for UI observers that should respect view recreation.
+- **Wrong `LifecycleOwner`** — using the `Fragment` itself instead of `viewLifecycleOwner` for UI observers that should respect view recreation.
 - **Incorrect `ViewModel` scope** — using `activityViewModels()` when a `Fragment`-scoped `viewModels()` is needed (or vice versa), leading to unexpected state sharing or lifetime, rather than a literal memory leak.
 - **State loss / navigation bugs** — relying on back navigation without calling `addToBackStack()` where appropriate; misusing `add()` vs `replace()`.
 - **`Context` issues** — accessing `Activity`/`Context` after `onDetach()` or keeping hard references to it.
@@ -342,7 +342,7 @@ class DetailFragment : Fragment() {
 ### Related
 
 - [[q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]] - `Fragment` history and rationale
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Lifecycle callbacks differences
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - `Lifecycle` callbacks differences
 
 ### Advanced
 

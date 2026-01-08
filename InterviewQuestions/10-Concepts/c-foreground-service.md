@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-151905"
 title: "Foreground Service / Foreground Service"
 aliases: ["Foreground Service"]
@@ -9,23 +9,24 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-service, c-notification, c-workmanager, c-jobscheduler]
+moc: "moc-cs"
+related: ["c-service", "c-notification", "c-workmanager", "c-jobscheduler"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-A Foreground Service in Android is a long-running service that performs an ongoing operation visible to the user via a non-dismissible status bar notification. It is used when work must continue even if the user is not actively interacting with the app (e.g., music playback, fitness tracking, active navigation) and should not be arbitrarily killed by the system. Foreground services have elevated process priority but must clearly communicate their activity and often require special permissions (e.g., foreground service types) on recent Android versions.
+A Foreground `Service` in Android is a long-running service that performs an ongoing operation visible to the user via a non-dismissible status bar notification. It is used when work must continue even if the user is not actively interacting with the app (e.g., music playback, fitness tracking, active navigation) and should not be arbitrarily killed by the system. Foreground services have elevated process priority but must clearly communicate their activity and often require special permissions (e.g., foreground service types) on recent Android versions.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-Foreground Service (служба переднего плана) в Android — это долгоживущая служба, выполняющая продолжающуюся операцию, явно видимую пользователю через несбрасываемое уведомление в статус-баре. Она используется, когда работа должна продолжаться даже при отсутствии активного взаимодействия с приложением (например, проигрывание музыки, трекинг активности, навигация) и не должна произвольно завершаться системой. Службы переднего плана имеют повышенный приоритет процесса, но обязаны прозрачно информировать пользователя о своей активности и на современных версиях Android часто требуют специальных разрешений и указания типа службы.
+Foreground `Service` (служба переднего плана) в Android — это долгоживущая служба, выполняющая продолжающуюся операцию, явно видимую пользователю через несбрасываемое уведомление в статус-баре. Она используется, когда работа должна продолжаться даже при отсутствии активного взаимодействия с приложением (например, проигрывание музыки, трекинг активности, навигация) и не должна произвольно завершаться системой. Службы переднего плана имеют повышенный приоритет процесса, но обязаны прозрачно информировать пользователя о своей активности и на современных версиях Android часто требуют специальных разрешений и указания типа службы.
 
 ## Key Points (EN)
 

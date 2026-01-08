@@ -1,11 +1,11 @@
----
+---\
 id: moc-start-here-20251006
 title: Interview Questions Vault — Start Here
 kind: moc
 created: 2025-10-06
 updated: 2025-10-06
 tags: [index, moc, start-here]
----
+---\
 
 # Interview Questions Vault — Start Here
 
@@ -20,7 +20,7 @@ Welcome to your comprehensive interview questions knowledge base! This vault con
 | Topic | Questions | Focus Area |
 |-------|-----------|------------|
 | [[moc-android|Android]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "40-Android")))` | Android development, Jetpack, Compose |
-| [[moc-kotlin|Kotlin]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "70-Kotlin")))` | Kotlin language, coroutines, Flow |
+| [[moc-kotlin|Kotlin]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "70-Kotlin")))` | Kotlin language, coroutines, `Flow` |
 | [[moc-algorithms|Algorithms]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "20-Algorithms")))` | Data structures, algorithms, coding |
 | [[moc-architecture-patterns|Architecture]] | `= length(filter(file.lists.file, (f) => contains(f.path, "60-CompSci")))` | MVVM, MVI, design patterns |
 | [[moc-backend|Backend]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "50-Backend")))` | Databases, SQL, APIs |
@@ -105,7 +105,7 @@ LIMIT 20
 
 **Focus**: Fundamentals across all topics
 
-1. **Start with**: [[moc-kotlin#Junior Developer Path|Kotlin Basics]]
+1. **Start with**: [[moc-kotlin#Junior Developer `Path`|Kotlin Basics]]
 2. **Then**: [[moc-android#Junior Android Developer|Android Fundamentals]]
 3. **Practice**: [[moc-algorithms#Fundamentals|Basic Algorithms]]
 4. **Tools**: [[moc-git#Beginner Git User|Git Basics]]
@@ -116,9 +116,9 @@ LIMIT 20
 
 **Focus**: Deep knowledge in specific areas
 
-1. **Core**: [[moc-kotlin#Mid-Level Developer Path|Kotlin Advanced]]
+1. **Core**: [[moc-kotlin#Mid-Level Developer `Path`|Kotlin Advanced]]
 2. **Architecture**: [[moc-android#Mid-Level Android Developer|Android Patterns]]
-3. **Patterns**: [[moc-architecture-patterns#Intermediate Path|Design Patterns]]
+3. **Patterns**: [[moc-architecture-patterns#Intermediate `Path`|Design Patterns]]
 4. **Backend**: [[moc-backend#Backend Development|APIs & Databases]]
 
 **Recommended difficulty**: Medium → Hard
@@ -127,7 +127,7 @@ LIMIT 20
 
 **Focus**: System design and leadership
 
-1. **Advanced**: [[moc-kotlin#Senior Developer Path|Kotlin Internals]]
+1. **Advanced**: [[moc-kotlin#Senior Developer `Path`|Kotlin Internals]]
 2. **Architecture**: [[moc-android#Senior Android Developer|System Design]]
 3. **Scalability**: [[moc-backend#Advanced Backend|Distributed Systems]]
 4. **Algorithms**: [[moc-algorithms#Advanced|Complex Problems]]

@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-143100"
 title: "MVVM Pattern / Паттерн MVVM"
 aliases: ["Model-View-ViewModel", "MVVM Pattern", "MVVM", "Архитектура MVVM", "Паттерн MVVM"]
@@ -12,41 +12,41 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-viewmodel, c-state-flow, c-clean-architecture, c-repository-pattern, c-dependency-injection]
+related: ["c-viewmodel", "c-state-flow", "c-clean-architecture", "c-repository-pattern", "c-dependency-injection"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-patterns", "concept", "databinding", "difficulty/medium", "livedata", "mvvm", "viewmodel"]
----
+---\
 
 # MVVM Pattern / Паттерн MVVM
 
 ## Summary (EN)
 
-MVVM (Model-View-ViewModel) is an architectural pattern that separates the user interface (View) from business logic (Model) using an intermediary component called ViewModel. The ViewModel exposes observable data and commands that the View can bind to, enabling automatic UI updates when data changes. This pattern promotes testability by isolating business logic from Android framework dependencies, supports reactive programming with LiveData/Flow, and survives configuration changes like screen rotations. MVVM is the recommended architecture pattern for Android development, integrated deeply with Android Architecture Components.
+MVVM (Model-`View`-`ViewModel`) is an architectural pattern that separates the user interface (`View`) from business logic (Model) using an intermediary component called `ViewModel`. The `ViewModel` exposes observable data and commands that the `View` can bind to, enabling automatic UI updates when data changes. This pattern promotes testability by isolating business logic from Android framework dependencies, supports reactive programming with LiveData/Flow, and survives configuration changes like screen rotations. MVVM is the recommended architecture pattern for Android development, integrated deeply with Android Architecture Components.
 
 ## Краткое Описание (RU)
 
-MVVM (Model-View-ViewModel) - это архитектурный паттерн, который разделяет пользовательский интерфейс (View) от бизнес-логики (Model) с помощью промежуточного компонента ViewModel. ViewModel предоставляет наблюдаемые данные и команды, к которым View может привязаться, обеспечивая автоматическое обновление UI при изменении данных. Этот паттерн способствует тестируемости, изолируя бизнес-логику от зависимостей Android framework, поддерживает реактивное программирование с LiveData/Flow и переживает изменения конфигурации, такие как поворот экрана. MVVM - рекомендуемый архитектурный паттерн для разработки Android, глубоко интегрированный с Android Architecture Components.
+MVVM (Model-`View`-`ViewModel`) - это архитектурный паттерн, который разделяет пользовательский интерфейс (`View`) от бизнес-логики (Model) с помощью промежуточного компонента `ViewModel`. `ViewModel` предоставляет наблюдаемые данные и команды, к которым `View` может привязаться, обеспечивая автоматическое обновление UI при изменении данных. Этот паттерн способствует тестируемости, изолируя бизнес-логику от зависимостей Android framework, поддерживает реактивное программирование с LiveData/Flow и переживает изменения конфигурации, такие как поворот экрана. MVVM - рекомендуемый архитектурный паттерн для разработки Android, глубоко интегрированный с Android Architecture Components.
 
 ## Key Points (EN)
 
-- Separates concerns: View (UI), ViewModel (presentation logic), Model (data/business logic)
-- View observes ViewModel data via LiveData, StateFlow, or Data Binding
-- ViewModel has no reference to View (avoids memory leaks, enables testing)
-- ViewModel survives configuration changes (screen rotation)
+- Separates concerns: `View` (UI), `ViewModel` (presentation logic), Model (data/business logic)
+- `View` observes `ViewModel` data via `LiveData`, `StateFlow`, or Data Binding
+- `ViewModel` has no reference to `View` (avoids memory leaks, enables testing)
+- `ViewModel` survives configuration changes (screen rotation)
 - Model represents data layer (repositories, network, database)
-- Unidirectional data flow: View → ViewModel → Model → ViewModel → View
+- Unidirectional data flow: `View` → `ViewModel` → Model → `ViewModel` → `View`
 - Supports reactive programming and declarative UI
 - Recommended by Google for Android apps
 
 ## Ключевые Моменты (RU)
 
-- Разделение обязанностей: View (UI), ViewModel (логика представления), Model (данные/бизнес-логика)
-- View наблюдает за данными ViewModel через LiveData, StateFlow или Data Binding
-- ViewModel не имеет ссылок на View (избегает утечек памяти, позволяет тестирование)
-- ViewModel переживает изменения конфигурации (поворот экрана)
+- Разделение обязанностей: `View` (UI), `ViewModel` (логика представления), Model (данные/бизнес-логика)
+- `View` наблюдает за данными `ViewModel` через `LiveData`, `StateFlow` или Data Binding
+- `ViewModel` не имеет ссылок на `View` (избегает утечек памяти, позволяет тестирование)
+- `ViewModel` переживает изменения конфигурации (поворот экрана)
 - Model представляет слой данных (репозитории, сеть, база данных)
-- Однонаправленный поток данных: View → ViewModel → Model → ViewModel → View
+- Однонаправленный поток данных: `View` → `ViewModel` → Model → `ViewModel` → `View`
 - Поддерживает реактивное программирование и декларативный UI
 - Рекомендован Google для Android-приложений
 
@@ -89,9 +89,9 @@ MVVM (Model-View-ViewModel) - это архитектурный паттерн, 
 ### 1. View (Activity/Fragment/Compose)
 
 **Responsibilities**:
-- Render UI based on ViewModel state
-- Observe ViewModel LiveData/StateFlow
-- Forward user interactions to ViewModel
+- Render UI based on `ViewModel` state
+- Observe `ViewModel` LiveData/StateFlow
+- Forward user interactions to `ViewModel`
 - Handle navigation
 - Show dialogs, toasts, snackbars
 
@@ -99,7 +99,7 @@ MVVM (Model-View-ViewModel) - это архитектурный паттерн, 
 - Business logic
 - Direct database/network access
 - Complex calculations
-- Hold references to ViewModel in static fields
+- Hold references to `ViewModel` in static fields
 
 ```kotlin
 // View example (Fragment)
@@ -169,8 +169,8 @@ class UserFragment : Fragment() {
 - Survive configuration changes
 
 **What NOT to do**:
-- Hold references to View, Activity, Fragment, Context
-- Access View components directly
+- Hold references to `View`, `Activity`, `Fragment`, `Context`
+- Access `View` components directly
 - Perform lifecycle-dependent operations
 
 ```kotlin
@@ -243,7 +243,7 @@ sealed class UserUiState {
 
 **What NOT to do**:
 - UI logic
-- Android framework dependencies (Activity, Context)
+- Android framework dependencies (`Activity`, `Context`)
 - Direct UI updates
 
 ```kotlin
@@ -441,11 +441,11 @@ class UserFragment : Fragment() {
 ## Trade-offs
 
 **Pros**:
-- **Testability**: ViewModel has no Android dependencies, easy to unit test
+- **Testability**: `ViewModel` has no Android dependencies, easy to unit test
 - **Separation of concerns**: Clear boundaries between UI, presentation, and data layers
-- **Configuration change handling**: ViewModel survives rotations automatically
+- **Configuration change handling**: `ViewModel` survives rotations automatically
 - **Reactive programming**: Built-in support for LiveData/Flow
-- **Reusability**: ViewModel can be shared between fragments
+- **Reusability**: `ViewModel` can be shared between fragments
 - **Official support**: Recommended by Google, excellent documentation
 - **Tool integration**: Android Studio, Jetpack libraries all support MVVM
 - **Compose integration**: Works seamlessly with Jetpack Compose
@@ -453,20 +453,20 @@ class UserFragment : Fragment() {
 **Cons**:
 - **Learning curve**: Requires understanding of lifecycle, observers, coroutines
 - **Boilerplate**: Can require significant boilerplate for simple UIs
-- **View complexity**: Views can become large with many observer bindings
+- **`View` complexity**: Views can become large with many observer bindings
 - **State management**: Managing complex state trees can be challenging
 - **Debugging**: Reactive flows can be harder to debug than imperative code
 - **Potential over-engineering**: Simple apps may not need this architecture
 - **Data binding overhead**: XML data binding adds build time and complexity
-- **Memory overhead**: ViewModel instances persist across config changes
+- **Memory overhead**: `ViewModel` instances persist across config changes
 
 ## Best Practices
 
 ### ViewModel
 
-- Never hold references to View, Activity, Fragment, or Context
-- Use Application Context if context is absolutely needed (via dependency injection)
-- Expose immutable state (LiveData/StateFlow) to View
+- Never hold references to `View`, `Activity`, `Fragment`, or `Context`
+- Use `Application` `Context` if context is absolutely needed (via dependency injection)
+- Expose immutable state (LiveData/StateFlow) to `View`
 - Keep mutable state private
 - Use sealed classes for UI state representation
 - Handle one-time events properly (Event wrapper, Channels)
@@ -475,10 +475,10 @@ class UserFragment : Fragment() {
 
 ### View
 
-- Observe ViewModel state in lifecycle-aware manner
-- Don't implement business logic in View
+- Observe `ViewModel` state in lifecycle-aware manner
+- Don't implement business logic in `View`
 - Use viewLifecycleOwner for fragments (not 'this')
-- Handle navigation in View, not ViewModel
+- Handle navigation in `View`, not `ViewModel`
 - Keep Views dumb - only render and forward events
 - Use Compose for new UIs (simpler than XML + Data Binding)
 
@@ -486,7 +486,7 @@ class UserFragment : Fragment() {
 
 - Keep repositories pure Kotlin (no Android dependencies)
 - Use suspend functions for async operations
-- Return Flow for observable data
+- Return `Flow` for observable data
 - Implement caching strategies in repositories
 - Use Kotlin Result or sealed classes for error handling
 - Separate data sources (network, database, cache)

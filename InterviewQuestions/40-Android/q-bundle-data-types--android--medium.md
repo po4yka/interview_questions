@@ -1,4 +1,4 @@
----
+---\
 id: android-387
 title: Типы данных Bundle / Bundle Data Types
 aliases: [Bundle Data Types, Типы данных Bundle]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/serialization, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Какие типы данных поддерживает `Bundle`?
 
@@ -203,7 +203,7 @@ val url = intent.getStringExtra("url")
 - В чем внутренние различия между сериализацией в `Parcel` и хранением данных в `Bundle`?
 - Как `Bundle` ведет себя при изменении полей в `Parcelable` (добавление/удаление) с точки зрения совместимости?
 - Почему нельзя класть `Context` и `View` в `Bundle` и какие утечки памяти это может вызвать?
-- Как Navigation Component Safe Args генерирует типобезопасные обертки над `Bundle` на этапе компиляции?
+- Как Navigation `Component` Safe Args генерирует типобезопасные обертки над `Bundle` на этапе компиляции?
 
 ## Follow-ups
 
@@ -211,7 +211,7 @@ val url = intent.getStringExtra("url")
 - What's the internal difference between Parcel and `Bundle` serialization mechanisms?
 - How does `Bundle` handle versioning when adding/removing fields in `Parcelable` objects?
 - Why are `Context` and `View` references forbidden in `Bundle`, and what are memory leak implications?
-- How does Navigation Component's Safe Args generate type-safe `Bundle` accessors at compile time?
+- How does Navigation `Component`'s Safe Args generate type-safe `Bundle` accessors at compile time?
 
 ## Ссылки (RU)
 

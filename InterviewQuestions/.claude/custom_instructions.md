@@ -1,14 +1,10 @@
-# Obsidian Interview Questions Vault - Claude Code Context
-
-**Auto-loaded brief context for Claude Code sessions**
-
----
+---\
 
 ## Vault Type
 
 Bilingual (EN/RU) Obsidian vault for technical interview questions organized by topic.
 
----
+---\
 
 ## Core Principles (Non-Negotiable)
 
@@ -30,7 +26,7 @@ Bilingual (EN/RU) Obsidian vault for technical interview questions organized by 
 3. Multiple topics in `topic` field
 4. Setting `status: reviewed` or `status: ready` (only humans can)
 5. Brackets in YAML `moc` field: `[[moc-name]]` is wrong, `moc-name` is correct
-6. Double brackets in YAML `related` field: `[[item]]` is wrong, use array `[item1, item2]`
+6. `Double` brackets in YAML `related` field: `[[item]]` is wrong, use array `[item1, item2]`
 7. Emoji anywhere in vault notes
 8. File in wrong folder (not matching topic)
 
@@ -166,7 +162,7 @@ Skills automatically activate based on user requests.
 
 1. Check TAXONOMY.md for valid topics/subtopics
 2. Check templates in `_templates/`
-3. Set `status: draft` and let human review
+3. `Set` `status: draft` and let human review
 4. Ask user if requirements ambiguous
 5. Review AGENTS.md for detailed rules
 6. Use obsidian-validator skill for validation

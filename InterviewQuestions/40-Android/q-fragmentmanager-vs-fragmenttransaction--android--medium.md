@@ -1,4 +1,4 @@
----
+---\
 id: android-306
 title: FragmentManager vs FragmentTransaction / FragmentManager против FragmentTransaction
 aliases: [FragmentManager vs FragmentTransaction, FragmentManager против FragmentTransaction]
@@ -17,7 +17,7 @@ tags: [android/fragment, android/lifecycle, difficulty/medium, fragmentmanager, 
 sources:
   - "https://developer.android.com/guide/fragments/fragmentmanager"
 
----
+---\
 # Вопрос (RU)
 > В чем разница между FragmentManager и FragmentTransaction?
 
@@ -146,7 +146,7 @@ tx.replace(R.id.container, MyFragment())
 
 ### Продвинутые (сложнее)
 - `Fragment` result API и паттерны коммуникации между фрагментами
-- Архитектура с `Fragment` и Navigation Component
+- Архитектура с `Fragment` и Navigation `Component`
 - Пользовательские переходы и анимации фрагментов
 
 ## Related Questions
@@ -167,5 +167,5 @@ tx.replace(R.id.container, MyFragment())
 
 ### Advanced (Harder)
 - `Fragment` result API and communication patterns
-- `Fragment` architecture with Navigation Component
+- `Fragment` architecture with Navigation `Component`
 - Custom fragment transitions and animations

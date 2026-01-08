@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-153
 title: "Dispatchers IO Vs Default / Dispatchers.IO против Default"
 aliases: ["Dispatchers IO vs Default", "Dispatchers.IO против Default"]
@@ -15,7 +15,7 @@ created: 2024-10-15
 updated: 2025-11-09
 tags: [concurrency, coroutines, difficulty/medium, dispatchers, kotlin, threading]
 
----
+---\
 # Вопрос (RU)
 > В чём разница между Dispatchers.IO и Dispatchers.Default? Когда использовать каждый из них?
 
@@ -40,7 +40,7 @@ tags: [concurrency, coroutines, difficulty/medium, dispatchers, kotlin, threadin
 | **Размер пула** | Существенно больше числа ядер; реализация использует разделённый пул с ограничением, зависящим от версии (детали не стабильны) | Примерно = числу CPU ядер |
 | **Тип задач** | Блокирующие I/O операции | Парсинг, сортировка, шифрование |
 | **Пример** | `readFile()`, `apiCall()` | `sortList()`, `parseJson()` |
-| **Thread starvation** | Менее чувствителен (больше потоков) | Высокий риск при блокирующем I/O |
+| **`Thread` starvation** | Менее чувствителен (больше потоков) | Высокий риск при блокирующем I/O |
 
 ### Сводка
 
@@ -529,12 +529,12 @@ Dispatchers.IO and Dispatchers.Default are two built-in coroutine dispatchers ba
 
 - Dispatchers.IO:
   - Target: I/O-bound operations (network, disk, database, blocking system calls).
-  - Thread pool: shared pool that may use significantly more threads than CPU cores; the exact max size is implementation-specific and may change between kotlinx.coroutines versions.
+  - `Thread` pool: shared pool that may use significantly more threads than CPU cores; the exact max size is implementation-specific and may change between kotlinx.coroutines versions.
   - Rationale: many tasks are blocked waiting for I/O, so having more threads is acceptable.
 
 - Dispatchers.Default:
   - Target: CPU-bound work (parsing, sorting, image processing, encryption, heavy calculations).
-  - Thread pool: approximately equal to the number of CPU cores.
+  - `Thread` pool: approximately equal to the number of CPU cores.
   - Rationale: threads are busy doing computations; too many threads cause context switches and reduce throughput.
 
 Summary:
@@ -567,8 +567,8 @@ suspend fun saveUser(user: User) = withContext(Dispatchers.IO) {
 Use IO for:
 - Network calls when the client is blocking or library recommends IO.
 - File read/write.
-- Database access.
-- SharedPreferences commit.
+- `Database` access.
+- `SharedPreferences` commit.
 - Other blocking or slow system calls (examples using `Thread.sleep` are for demonstration; prefer suspend-friendly APIs).
 
 ### Dispatchers.Default – For CPU-bound Work

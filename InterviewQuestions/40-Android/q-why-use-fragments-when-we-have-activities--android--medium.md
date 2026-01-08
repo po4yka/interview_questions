@@ -1,4 +1,4 @@
----
+---\
 id: android-390
 title: "Why Use Fragments When We Have Activities / Зачем использовать Fragment когда есть Activity"
 aliases: ["Why Use Fragments When We Have Activities", "Зачем использовать Fragment когда есть Activity"]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > Зачем использовать Fragments, если есть Activities?
@@ -149,7 +149,7 @@ Important: fragments are not mandatory (especially with Jetpack Compose and simp
 
 ### Core Reasons
 
-**1. Component Reusability**
+**1. `Component` Reusability**
 
 ```kotlin
 class UserProfileFragment : Fragment() {
@@ -259,7 +259,7 @@ class DetailFragment : Fragment() {
 
 - Как соотносится жизненный цикл `Fragment` и `Activity`?
 - Каковы производственные последствия использования вложенных фрагментов?
-- Как Navigation Component упрощает управление транзакциями фрагментов?
+- Как Navigation `Component` упрощает управление транзакциями фрагментов?
 - Каковы лучшие практики паттернов коммуникации между фрагментами?
 - Когда следует избегать использования фрагментов?
 
@@ -267,7 +267,7 @@ class DetailFragment : Fragment() {
 
 - How does `Fragment` lifecycle relate to `Activity` lifecycle?
 - What are the performance implications of nested fragments?
-- How does Navigation Component simplify fragment transactions?
+- How does Navigation `Component` simplify fragment transactions?
 - What are best practices for fragment communication patterns?
 - When should you avoid using fragments?
 
@@ -300,7 +300,7 @@ class DetailFragment : Fragment() {
 - [[q-what-is-intent--android--easy]] - `Intent` basics
 
 ### Related (Same Level)
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
 
 ### Advanced (Harder)
 - [[q-android-architectural-patterns--android--medium]] - Android architectural approaches

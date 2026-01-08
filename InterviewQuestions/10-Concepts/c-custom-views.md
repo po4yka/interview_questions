@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-120200"
 title: "Custom Views / Пользовательские View"
 aliases: ["Android Custom Views", "Custom View", "Custom Views", "Кастомные View", "Пользовательские View"]
@@ -12,26 +12,26 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-views, c-android-view-system, c-canvas-drawing, c-touch-events, c-view-hierarchy]
+related: ["c-android-views", "c-android-view-system", "c-canvas-drawing", "c-touch-events", "c-view-hierarchy"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "canvas", "concept", "custom-views", "difficulty/medium", "drawing", "ui", "view-lifecycle"]
----
+---\
 
 # Custom Views / Пользовательские View
 
 ## Summary (EN)
 
-Custom Views in Android are created by extending the View or ViewGroup classes to implement unique visual elements and interactions that aren't available in standard Android UI components. This involves overriding key methods like onDraw(), onMeasure(), and onLayout() to control how the view renders, sizes itself, and positions child views. Custom views are essential for creating complex, reusable UI components with custom drawing, animations, and user interactions.
+Custom Views in Android are created by extending the `View` or `ViewGroup` classes to implement unique visual elements and interactions that aren't available in standard Android UI components. This involves overriding key methods like onDraw(), onMeasure(), and onLayout() to control how the view renders, sizes itself, and positions child views. Custom views are essential for creating complex, reusable UI components with custom drawing, animations, and user interactions.
 
 ## Краткое Описание (RU)
 
-Пользовательские View в Android создаются путем расширения классов View или ViewGroup для реализации уникальных визуальных элементов и взаимодействий, которые недоступны в стандартных компонентах Android UI. Это включает переопределение ключевых методов, таких как onDraw(), onMeasure() и onLayout(), для управления тем, как view отрисовывается, определяет свой размер и позиционирует дочерние view. Пользовательские view необходимы для создания сложных, переиспользуемых UI компонентов с кастомной отрисовкой, анимациями и взаимодействием с пользователем.
+Пользовательские `View` в Android создаются путем расширения классов `View` или `ViewGroup` для реализации уникальных визуальных элементов и взаимодействий, которые недоступны в стандартных компонентах Android UI. Это включает переопределение ключевых методов, таких как onDraw(), onMeasure() и onLayout(), для управления тем, как view отрисовывается, определяет свой размер и позиционирует дочерние view. Пользовательские view необходимы для создания сложных, переиспользуемых UI компонентов с кастомной отрисовкой, анимациями и взаимодействием с пользователем.
 
 ## Key Points (EN)
 
-- Extend View for simple custom drawing or ViewGroup for container layouts
-- Override onDraw() to perform custom drawing using Canvas and Paint
+- Extend `View` for simple custom drawing or `ViewGroup` for container layouts
+- Override onDraw() to perform custom drawing using `Canvas` and `Paint`
 - Override onMeasure() to determine the view's size based on constraints
 - Override onTouchEvent() to handle custom touch interactions
 - Use invalidate() to trigger redraw and requestLayout() for size changes
@@ -40,8 +40,8 @@ Custom Views in Android are created by extending the View or ViewGroup classes t
 
 ## Ключевые Моменты (RU)
 
-- Расширяйте View для простой отрисовки или ViewGroup для контейнерных layout'ов
-- Переопределяйте onDraw() для выполнения кастомной отрисовки с помощью Canvas и Paint
+- Расширяйте `View` для простой отрисовки или `ViewGroup` для контейнерных layout'ов
+- Переопределяйте onDraw() для выполнения кастомной отрисовки с помощью `Canvas` и `Paint`
 - Переопределяйте onMeasure() для определения размера view на основе ограничений
 - Переопределяйте onTouchEvent() для обработки пользовательских touch-взаимодействий
 - Используйте invalidate() для перерисовки и requestLayout() для изменения размера
@@ -195,7 +195,7 @@ override fun onDraw(canvas: Canvas) {
 ```
 
 ### onLayout()
-For ViewGroup, positions child views.
+For `ViewGroup`, positions child views.
 
 ```kotlin
 override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -333,9 +333,9 @@ private fun Int.dpToPx(context: Context): Int {
 ### When to Avoid
 
 - **Standard UI components**: Use built-in views when possible
-- **Jetpack Compose projects**: Use Compose Canvas instead
+- **Jetpack Compose projects**: Use Compose `Canvas` instead
 - **Simple styling changes**: Use themes, styles, or drawables
-- **Complex layouts**: Use ConstraintLayout or other layout managers
+- **Complex layouts**: Use `ConstraintLayout` or other layout managers
 - **Rapid prototyping**: Standard components are faster to implement
 
 ## Trade-offs
@@ -345,12 +345,12 @@ private fun Int.dpToPx(context: Context): Int {
 - Optimal performance through custom drawing
 - Reusable across projects and screens
 - Can create unique, branded UI elements
-- Direct access to Canvas for complex graphics
+- Direct access to `Canvas` for complex graphics
 - Hardware-accelerated rendering support
 - Full control over touch handling and gestures
 
 **Cons**:
-- Requires understanding of Canvas, Paint, and measurement
+- Requires understanding of `Canvas`, `Paint`, and measurement
 - More code to write and maintain than standard views
 - Need to handle accessibility manually
 - Potential performance issues if not optimized
@@ -396,8 +396,8 @@ class OptimizedCustomView(context: Context) : View(context) {
 
 ## Best Practices
 
-- Reuse Paint, Path, and other objects; don't create them in onDraw()
-- Call invalidate() only when necessary to trigger redraw
+- Reuse `Paint`, `Path`, and other objects; don't create them in onDraw()
+- `Call` invalidate() only when necessary to trigger redraw
 - Use hardware acceleration unless you need specific software-only features
 - Implement proper measurement in onMeasure() respecting parent constraints
 - Override performClick() when handling touch events for accessibility
@@ -420,7 +420,7 @@ class OptimizedCustomView(context: Context) : View(context) {
 
 ## References
 
-- [Android Developer Guide: Custom View Components](https://developer.android.com/guide/topics/ui/custom-components)
-- [Android Developer Guide: Canvas and Drawables](https://developer.android.com/guide/topics/graphics/2d-graphics)
+- [Android Developer Guide: Custom `View` Components](https://developer.android.com/guide/topics/ui/custom-components)
+- [Android Developer Guide: `Canvas` and Drawables](https://developer.android.com/guide/topics/graphics/2d-graphics)
 - [Android Developer Training: Creating Custom Views](https://developer.android.com/training/custom-views)
-- [Custom View Performance](https://developer.android.com/topic/performance/rendering)
+- [Custom `View` Performance](https://developer.android.com/topic/performance/rendering)

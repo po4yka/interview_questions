@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-032402"
 title: "Iterators / Iterators"
 aliases: ["Iterators"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-collections, c-data-structures, c-functional-programming]
+moc: "moc-cs"
+related: ["c-collections", "c-data-structures", "c-functional-programming"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -47,6 +48,6 @@ Iterators are objects or constructs that provide a standard way to traverse elem
 
 ## References
 
-- Java Iterator interface: https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
+- Java `Iterator` interface: https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
 - C++ Iterators (cppreference): https://en.cppreference.com/w/cpp/iterator
-- Python Iterator Protocol: https://docs.python.org/3/library/stdtypes.html#typeiter
+- Python `Iterator` Protocol: https://docs.python.org/3/library/stdtypes.html#typeiter

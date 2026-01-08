@@ -1,4 +1,4 @@
----
+---\
 id: android-100
 title: "List Elements Problems / Проблемы элементов списка"
 aliases: ["List Elements Problems", "RecyclerView Issues", "Проблемы RecyclerView", "Проблемы элементов списка"]
@@ -16,7 +16,7 @@ moc: moc-android
 related: [c-android, q-android-app-components--android--easy, q-android-lint-tool--android--medium]
 sources: []
 
----
+---\
 # Вопрос (RU)
 
 > Какие могут быть проблемы с элементами списка в Android и как их решать?
@@ -49,7 +49,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Решение:** RecyclerView (или корректно настроенный ListView) + библиотеки изображений
+**Решение:** `RecyclerView` (или корректно настроенный ListView) + библиотеки изображений
 ```kotlin
 // ✅ GOOD - Glide управляет памятью и кэшем
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -65,7 +65,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 - RecyclerView/Adapter используют переиспользование `ViewHolder`, снижая число аллокаций
 - Glide/Coil автоматически изменяют размер изображений и переиспользуют ресурсы
 - Memory + disk cache предотвращают повторную загрузку
-- Lifecycle awareness помогает корректно освобождать память
+- `Lifecycle` awareness помогает корректно освобождать память
 
 ### 2. Медленная Прокрутка
 
@@ -120,7 +120,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 ### 3. Несогласованность Данных
 
-**Проблема:** Adapter показывает неверные или устаревшие данные.
+**Проблема:** `Adapter` показывает неверные или устаревшие данные.
 
 **Причины:**
 ```kotlin
@@ -136,7 +136,7 @@ fun updateItem(position: Int, item: Item) {
 }
 ```
 
-**Решение:** DiffUtil для точных обновлений
+**Решение:** `DiffUtil` для точных обновлений
 ```kotlin
 // ✅ GOOD - ListAdapter с DiffUtil
 class ItemAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
@@ -206,7 +206,7 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 
 **Преимущества:**
 - Доставка обновлений UI на main thread
-- Lifecycle-aware (меньше утечек памяти, корректная отписка)
+- `Lifecycle`-aware (меньше утечек памяти, корректная отписка)
 - Меньше шансов получить concurrent modification за счет единого потока обновлений
 
 ### Лучшие Практики
@@ -256,7 +256,7 @@ override fun onViewRecycled(holder: ViewHolder) {
 |---------|---------|---------|
 | Out of Memory | Большие изображения, некорректное использование битмапов, нет recycling/масштабирования | RecyclerView/ListView с переиспользованием view + Glide/Coil |
 | Медленная прокрутка | Тяжелые операции в onBindViewHolder | Предобработка данных, вынос тяжелой работы в `ViewModel`/Repository |
-| Несогласованность | Неправильные adapter updates | DiffUtil, ListAdapter |
+| Несогласованность | Неправильные adapter updates | `DiffUtil`, ListAdapter |
 | Многопоточность | Multi-threaded updates без синхронизации/обновлений на main | `LiveData`, `Flow` (обновления UI на main thread) |
 | Утечки памяти | Удержание ссылок на `Activity`/`Context`, ресурсы не очищаются | ViewBinding, lifecycle components, очистка в onViewRecycled/onViewDetached |
 | Неверные клики | Position меняется async | Stable IDs (при необходимости), item callbacks с bindingAdapterPosition |
@@ -285,7 +285,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Solution:** RecyclerView (or properly configured ListView) + image loading libraries
+**Solution:** `RecyclerView` (or properly configured ListView) + image loading libraries
 ```kotlin
 // ✅ GOOD - Glide manages memory and caching
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -301,7 +301,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 - RecyclerView/Adapter use `ViewHolder` recycling, reducing allocations
 - Glide/Coil automatically resize images and reuse resources
 - Memory + disk cache prevent redundant loading
-- Lifecycle awareness helps free memory correctly
+- `Lifecycle` awareness helps free memory correctly
 
 ### 2. Lagging Scrolling
 
@@ -356,7 +356,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 ### 3. Data Inconsistency
 
-**Problem:** Adapter displays wrong or outdated data.
+**Problem:** `Adapter` displays wrong or outdated data.
 
 **Causes:**
 ```kotlin
@@ -372,7 +372,7 @@ fun updateItem(position: Int, item: Item) {
 }
 ```
 
-**Solution:** DiffUtil for accurate updates
+**Solution:** `DiffUtil` for accurate updates
 ```kotlin
 // ✅ GOOD - ListAdapter with DiffUtil
 class ItemAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
@@ -442,7 +442,7 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 
 **Benefits:**
 - UI updates dispatched on the main thread
-- Lifecycle-aware (fewer memory leaks, proper unsubscribing)
+- `Lifecycle`-aware (fewer memory leaks, proper unsubscribing)
 - Reduced risk of concurrent modification via a single source of truth
 
 ### Best Practices
@@ -492,7 +492,7 @@ Also see official `RecyclerView` and `DiffUtil` documentation for more details, 
 |---------|-------|----------|
 | Out of Memory | Large images, incorrect bitmap usage, no recycling/downscaling | RecyclerView/ListView with view recycling + Glide/Coil |
 | Lagging scroll | Heavy operations in onBindViewHolder | Pre-process data, move heavy work to `ViewModel`/Repository |
-| Data inconsistency | Incorrect adapter updates | DiffUtil, ListAdapter |
+| Data inconsistency | Incorrect adapter updates | `DiffUtil`, ListAdapter |
 | Concurrency | Multi-threaded updates without proper main-thread dispatch | `LiveData`, `Flow` (UI updates on main thread) |
 | Memory leaks | Holding `Activity`/`Context` references, not clearing resources | ViewBinding, lifecycle components, cleanup in onViewRecycled/onViewDetached |
 | Wrong clicks | Position changes async | Stable IDs (when needed), item callbacks with bindingAdapterPosition |
@@ -501,10 +501,10 @@ Also see official `RecyclerView` and `DiffUtil` documentation for more details, 
 
 ## Follow-ups
 
-1. How does RecyclerView's `ViewHolder` pattern reduce memory allocations compared to `ListView`?
+1. How does `RecyclerView`'s `ViewHolder` pattern reduce memory allocations compared to `ListView`?
 2. When should you use `notifyItemChanged(position)` vs `submitList()` with a `DiffUtil`-backed `ListAdapter`?
 3. What's the difference between `DiffUtil.ItemCallback` methods `areItemsTheSame()` and `areContentsTheSame()` and how does this influence item change animations?
-4. How can you detect and fix ANR ("Application Not Responding") issues caused by heavy work inside `onBindViewHolder` or other adapter callbacks?
+4. How can you detect and fix ANR ("`Application` Not Responding") issues caused by heavy work inside `onBindViewHolder` or other adapter callbacks?
 5. How would you design a `ViewModel` + `Flow` pipeline to safely update a paginated `RecyclerView` from multiple data sources (e.g., network + cache)?
 
 ## References

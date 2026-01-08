@@ -1,14 +1,22 @@
----
-id: concept-003
-title: Kotlin Language Features / Особенности языка Kotlin
-aliases: [Kotlin Features, Kotlin язык, Особенности Kotlin]
-kind: concept
-summary: Overview of key Kotlin language features that distinguish it from Java, including null safety, extension functions, coroutines, data classes, and more.
-links: []
-created: 2025-11-05
-updated: 2025-11-05
-tags: [concept, kotlin, language-features, programming-languages]
----
+---\
+id: "20260108-110550"
+title: "Kotlin Language Features / Особенности языка Kotlin"
+aliases: ["Kotlin Features", "Kotlin язык", "Особенности Kotlin"]
+summary: "Overview of key Kotlin language features that distinguish it from Java, including null safety, extension functions, coroutines, data classes, and more."
+topic: "kotlin"
+subtopics: ["language-features", "programming-languages"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-kotlin"
+related: []
+created: "2025-11-05"
+updated: "2025-11-05"
+tags: ["concept", "kotlin", "language-features", "programming-languages", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -31,7 +39,7 @@ tags: [concept, kotlin, language-features, programming-languages]
 
 **4. Coroutines**:
 - Built-in support for asynchronous, non-blocking programming
-- `suspend` functions, structured concurrency, Flow API
+- `suspend` functions, structured concurrency, `Flow` API
 
 **5. Smart Casts**:
 - Automatic type casting after null or type checks
@@ -42,13 +50,13 @@ tags: [concept, kotlin, language-features, programming-languages]
 - Compile-time guarantee that all cases are handled
 
 **7. Concise Syntax**:
-- Type inference: `val name = "John"` (infers String)
+- Type inference: `val name = "John"` (infers `String`)
 - Single-expression functions: `fun double(x: Int) = x * 2`
 - Named and default parameters
 
 **8. Functional Programming**:
 - First-class functions, lambdas, higher-order functions
-- Collection operators: `map`, `filter`, `reduce`, `fold`
+- `Collection` operators: `map`, `filter`, `reduce`, `fold`
 
 **9. Property Delegates**:
 - Delegate property implementation to another object
@@ -79,7 +87,7 @@ tags: [concept, kotlin, language-features, programming-languages]
 
 **4. Корутины**:
 - Встроенная поддержка асинхронного неблокирующего программирования
-- `suspend`-функции, структурированная конкурентность, Flow API
+- `suspend`-функции, структурированная конкурентность, `Flow` API
 
 **5. Умные касты (Smart Casts)**:
 - Автоматическое приведение типов после проверки на null или тип
@@ -90,7 +98,7 @@ tags: [concept, kotlin, language-features, programming-languages]
 - Гарантия на этапе компиляции, что все случаи обработаны
 
 **7. Лаконичный синтаксис**:
-- Вывод типов: `val name = "John"` (выводит String)
+- Вывод типов: `val name = "John"` (выводит `String`)
 - Однострочные функции: `fun double(x: Int) = x * 2`
 - Именованные параметры и параметры по умолчанию
 

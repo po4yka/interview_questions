@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-202524"
 title: "Android Navigation / Android Navigation"
 aliases: ["Android Navigation"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-navigation-component, c-fragments, c-deep-linking, c-intent, c-single-activity-architecture]
+related: ["c-navigation-component", "c-fragments", "c-deep-linking", "c-intent", "c-single-activity-architecture"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -33,17 +34,17 @@ Android Navigation описывает, как пользователь пере�
 
 - Navigation graph: Central definition of destinations and actions (including nested graphs) that describes valid flows and simplifies navigation logic.
 - Back stack management: Correct handling of system back, up navigation, and back stack operations (pop, inclusive pops) to avoid broken flows or duplicated screens.
-- Argument passing: Safe transfer of data between destinations (e.g., via Safe Args or typed APIs), avoiding manual Bundle errors and improving type safety.
+- Argument passing: Safe transfer of data between destinations (e.g., via Safe Args or typed APIs), avoiding manual `Bundle` errors and improving type safety.
 - Deep links and global actions: Support opening specific screens from notifications, links, or other apps, and navigating from anywhere to key destinations.
-- Single-activity pattern: Common modern approach where one Activity hosts multiple Fragments/Composable destinations managed by Navigation, improving consistency and lifecycle handling.
+- Single-activity pattern: Common modern approach where one `Activity` hosts multiple Fragments/Composable destinations managed by Navigation, improving consistency and lifecycle handling.
 
 ## Ключевые Моменты (RU)
 
 - Граф навигации: Центральное описание экранов (destinations) и переходов (actions), включая вложенные графы, которое задаёт допустимые пользовательские потоки и упрощает логику переходов.
 - Управление back stack: Корректная обработка системной «Назад», up-навигации и операций со стеком (pop, включающие pop), чтобы избежать «ломанных» сценариев и дублирования экранов.
-- Передача аргументов: Безопасная передача данных между экранами (например, через Safe Args или типизированные API), снижает количество ошибок с Bundle и повышает типобезопасность.
+- Передача аргументов: Безопасная передача данных между экранами (например, через Safe Args или типизированные API), снижает количество ошибок с `Bundle` и повышает типобезопасность.
 - Deep links и глобальные действия: Поддержка открытия конкретных экранов из уведомлений, ссылок или других приложений, а также переходов к ключевым разделам из любой точки приложения.
-- Паттерн одной Activity: Распространённый современный подход, при котором одна Activity содержит несколько Fragment/Composable-экранов под управлением Navigation, что улучшает согласованность и управление жизненным циклом.
+- Паттерн одной `Activity`: Распространённый современный подход, при котором одна `Activity` содержит несколько Fragment/Composable-экранов под управлением Navigation, что улучшает согласованность и управление жизненным циклом.
 
 ## References
 

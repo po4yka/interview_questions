@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-016
-title: On-device ML (TensorFlow Lite) / On-device ML (TensorFlow Lite)
-aliases: [NNAPI Acceleration, On-device ML, TensorFlow Lite Android]
-kind: concept
-summary: Deploying and accelerating machine learning models on Android with TensorFlow Lite, GPU/NNAPI delegates, and model management
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, concept, ml, nnapi, tflite]
+id: "20260108-110550"
+title: "On-device ML (TensorFlow Lite) / On-device ML (TensorFlow Lite)"
+aliases: ["NNAPI Acceleration", "On-device ML", "TensorFlow Lite Android"]
+summary: "Deploying and accelerating machine learning models on Android with TensorFlow Lite, GPU/NNAPI delegates, and model management"
+topic: "android"
+subtopics: ["ml", "nnapi", "tflite"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "concept", "ml", "nnapi", "tflite", "difficulty/medium"]
 ---
 
 # Summary (EN)

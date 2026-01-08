@@ -1,4 +1,4 @@
----
+---\
 id: android-291
 title: Fragments vs Activity / Фрагменты vs Activity
 aliases: [Fragments vs Activity, Фрагменты vs Activity]
@@ -14,7 +14,7 @@ related: [c-activity-lifecycle, c-fragments, q-fragments-and-activity-relationsh
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium]
----
+---\
 # Вопрос (RU)
 
 > Для чего нужны фрагменты, если есть `Activity`?
@@ -200,7 +200,7 @@ class MainActivity : AppCompatActivity() {
 
 ### 7. Взаимодействие Между Компонентами
 
-Фрагменты удобно связывать через общий `ViewModel`, интерфейсы, реализуемые `Activity`, или Navigation Component.
+Фрагменты удобно связывать через общий `ViewModel`, интерфейсы, реализуемые `Activity`, или Navigation `Component`.
 
 ```kotlin
 // Общий ViewModel между фрагментами
@@ -269,7 +269,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-В продакшене обычно сохраняют экземпляры фрагментов или используют Navigation Component, чтобы не пересоздавать их при каждом переключении.
+В продакшене обычно сохраняют экземпляры фрагментов или используют Navigation `Component`, чтобы не пересоздавать их при каждом переключении.
 
 ### Ключевые Преимущества Фрагментов (сравнение)
 
@@ -302,7 +302,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Современный Подход: Single-`Activity` Архитектура
 
-Распространённая модель: одна главная `Activity` + набор фрагментов в `NavHostFragment`, навигация через Navigation Component.
+Распространённая модель: одна главная `Activity` + набор фрагментов в `NavHostFragment`, навигация через Navigation `Component`.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -521,7 +521,7 @@ class DetailsFragment : Fragment() {
 }
 ```
 
-Fragments can communicate via shared ViewModels, interfaces implemented by the host `Activity`, or the Navigation Component, which is often cleaner than passing data between Activities via Intents for tightly coupled UI parts.
+Fragments can communicate via shared ViewModels, interfaces implemented by the host `Activity`, or the Navigation `Component`, which is often cleaner than passing data between Activities via Intents for tightly coupled UI parts.
 
 #### 8. Bottom Navigation Example
 
@@ -558,7 +558,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Note: In production, you may want to retain and show/hide existing fragments or use the Navigation Component to avoid recreating fragments on each tab selection.
+Note: In production, you may want to retain and show/hide existing fragments or use the Navigation `Component` to avoid recreating fragments on each tab selection.
 
 ### Key Advantages of Fragments
 
@@ -566,7 +566,7 @@ Note: In production, you may want to retain and show/hide existing fragments or 
 |---------|-----------|-----------|
 | **Reusability** | Limited, whole-screen units | High - can be reused in different Activities/layouts |
 | **Memory/Resources** | Separate windows, more overhead per screen | Share `Activity` resources; can be more efficient for related screens |
-| **Lifecycle** | Independent component lifecycle | Lifecycle tied to `Activity` but with dedicated callbacks |
+| **`Lifecycle`** | Independent component lifecycle | `Lifecycle` tied to `Activity` but with dedicated callbacks |
 | **Navigation** | Typically involves switching Activities | In-place replacement within one `Activity` |
 | **Back `Stack`** | Managed by system `Activity` stack | Managed via FragmentManager within `Activity` |
 | **UI Modularity** | Full-screen scope | Portion of screen / composable blocks |

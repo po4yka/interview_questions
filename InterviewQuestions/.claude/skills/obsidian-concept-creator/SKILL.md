@@ -1,11 +1,11 @@
----
+---\
 name: obsidian-concept-creator
 description: >
   Create reusable concept notes in 10-Concepts/ directory. Generates
   bilingual concept documentation with summary, use cases, trade-offs,
   and references. Uses c-[concept-name].md naming pattern and
   _tpl-concept.md template structure.
----
+---\
 
 # Obsidian Concept Note Creator
 
@@ -41,15 +41,15 @@ Required context:
 ### Step 1: Identify Concept
 
 Determine:
-- **Concept name**: Clear, specific name (e.g., "ViewModel", "Coroutines", "MVVM Pattern")
+- **Concept name**: Clear, specific name (e.g., "`ViewModel`", "Coroutines", "MVVM Pattern")
 - **Topic area**: Which domain (Android, Kotlin, algorithms, etc.)
 - **Scope**: What the concept covers and what it doesn't
 
 Good concept candidates:
 - Architectural patterns (MVVM, MVI, Clean Architecture)
-- Language features (Coroutines, Flow, Generics)
-- Data structures (HashMap, Binary Tree, Graph)
-- Android components (ViewModel, LiveData, Compose State)
+- Language features (Coroutines, `Flow`, Generics)
+- Data structures (`HashMap`, Binary Tree, Graph)
+- Android components (`ViewModel`, `LiveData`, Compose State)
 - Algorithms (Binary Search, DFS, Dynamic Programming)
 
 ### Step 2: Generate Metadata
@@ -93,7 +93,7 @@ updated: YYYY-MM-DD
 **YAML Fields**:
 - `id`: Format `concept-XXX` (e.g., concept-001, concept-042)
 - `title`: Bilingual (EN / RU)
-- `aliases`: List alternative names, acronyms, translations (4-8 items recommended)
+- `aliases`: `List` alternative names, acronyms, translations (4-8 items recommended)
 - `summary`: One-sentence English description (for quick reference)
 - `tags`: Start with `concept`, add topic areas (e.g., kotlin, android, algorithms)
 - `created`/`updated`: YYYY-MM-DD format
@@ -249,7 +249,7 @@ Before finalizing:
 
 ### Example 1: Android ViewModel Concept
 
-**User Request**: "Create concept note for Android ViewModel"
+**User `Request`**: "Create concept note for Android `ViewModel`"
 
 **Generated**:
 - Filename: `c-viewmodel.md`
@@ -347,7 +347,7 @@ ViewModel — это компонент архитектуры Android, пред
 
 ### Example 2: Kotlin Coroutines Concept
 
-**User Request**: "Create concept for Kotlin coroutines"
+**User `Request`**: "Create concept for Kotlin coroutines"
 
 **Generated**:
 - Filename: `c-coroutines.md`

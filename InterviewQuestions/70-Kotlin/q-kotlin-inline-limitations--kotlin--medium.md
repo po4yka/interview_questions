@@ -1,4 +1,4 @@
----
+---\
 id: lang-054
 title: "Kotlin Inline Limitations / Ограничения inline в Kotlin"
 aliases: [Kotlin Inline Limitations, Ограничения inline в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-context-receivers--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, inline, kotlin, lambdas, optimization, performance]
----
+---\
 # Вопрос (RU)
 > Бывают ли случаи, когда нельзя использовать inline?
 
@@ -371,7 +371,7 @@ Prefer normal functions for abstract/virtual designs.
 inline fun <reified T> isInstanceOf(value: Any): Boolean = value is T
 ```
 
-Constraints:
+`Constraints`:
 - `reified` only works in `inline` functions.
 - If you use `reified T` inside an escaping lambda (e.g., a returned function), the concrete `T` is baked into the generated lambda at the call site; this is correct but fixed for that lambda instance and may not match expectations of per-call-site variability.
 

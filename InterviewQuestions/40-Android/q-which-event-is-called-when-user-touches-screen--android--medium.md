@@ -1,4 +1,4 @@
----
+---\
 id: android-155
 title: Which Event Is Called When User Touches Screen / Какое событие вызывается когда пользователь касается экрана
 aliases: [Touch Events, События касания]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-views, difficulty/medium, touch-events, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Какое событие вызывается, когда пользователь касается экрана?
@@ -257,7 +257,7 @@ Box(modifier = Modifier.pointerInput(Unit) {
 - Return `true` from `onTouchEvent()` (typically on `ACTION_DOWN`) if the `View` intends to handle the rest of the gesture.
 - `onClick()` is fired only when the touch sequence is recognized as a click (usually `DOWN` → `UP` without significant movement/cancel).
 - A `ViewGroup` may intercept child events via `onInterceptTouchEvent()`; interception behavior depends on the intended gesture handling.
-- Call `performClick()` on `ACTION_UP` when the interaction should be treated as a click; this is important for accessibility and consistent behavior.
+- `Call` `performClick()` on `ACTION_UP` when the interaction should be treated as a click; this is important for accessibility and consistent behavior.
 
 ## Follow-ups
 

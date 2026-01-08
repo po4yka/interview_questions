@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-compose-recomposition, c-jetpack-compose, q-android-jetpack-overview--android--easy, q-compose-custom-animations--android--medium, q-compose-gesture-detection--android--medium, q-compose-semantics--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
-tags: [android/ui-animation, android/ui-compose, animation, compose, difficulty/medium]
+tags: [android/ui-animation, android/ui-compose, animation, difficulty/medium]
 sources: []
 ---
 # Вопрос (RU)

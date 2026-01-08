@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-190649"
 title: "Layout Performance / Layout Performance"
 aliases: ["Layout Performance"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-layout-types, c-constraintlayout, c-performance-optimization, c-view-hierarchy]
+moc: "moc-cs"
+related: ["c-layout-types", "c-constraintlayout", "c-performance-optimization", "c-view-hierarchy"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -47,5 +48,5 @@ Layout performance описывает, насколько эффективно U
 
 ## References
 
-- Android Developers: Performance tips for Jetpack Compose and View layouts (developer.android.com)
+- Android Developers: Performance tips for Jetpack Compose and `View` layouts (developer.android.com)
 - iOS Developer Documentation: Optimizing view hierarchies and Auto Layout performance (developer.apple.com)

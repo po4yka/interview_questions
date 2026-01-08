@@ -1,4 +1,4 @@
----
+---\
 id: android-378
 title: Touch Event Handling Custom Views / Обработка касаний в пользовательских View
 aliases: [Touch Event Handling Custom Views, Обработка касаний в пользовательских View]
@@ -16,7 +16,7 @@ updated: 2025-10-28
 sources: []
 tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events, views]
 
----
+---\
 # Вопрос (RU)
 > Как обрабатывать события касания в пользовательских `View`? Объясните механизм диспетчеризации, разницу между `onTouchEvent()` и `onInterceptTouchEvent()`, и как реализовать пользовательские жесты.
 
@@ -651,7 +651,7 @@ class FlingView @JvmOverloads constructor(
 
 ## Follow-ups
 
-- How do you handle touch events in nested scrollable views (e.g., RecyclerView inside ScrollView)?
+- How do you handle touch events in nested scrollable views (e.g., `RecyclerView` inside ScrollView)?
 - How would you implement a custom pinch-to-zoom with rotation gesture?
 - What is the difference between `actionMasked` and `action` in multi-touch scenarios?
 - How do you prevent touch event conflicts between multiple gesture detectors?
@@ -704,7 +704,7 @@ class FlingView @JvmOverloads constructor(
 
 ### Related (Same Level)
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` invalidation
-- [[q-what-does-itemdecoration-do--android--medium]] - Custom drawing in RecyclerView
+- [[q-what-does-itemdecoration-do--android--medium]] - Custom drawing in `RecyclerView`
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layouts in Compose

@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-223452"
 title: "Caching Strategies / Caching Strategies"
 aliases: ["Caching Strategies"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-performance-optimization, c-memory-management, c-databases, c-networking, c-offline-first-architecture]
+moc: "moc-cs"
+related: ["c-performance-optimization", "c-memory-management", "c-databases", "c-networking", "c-offline-first-architecture"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -34,7 +35,7 @@ Caching strategies define how, where, and for how long data is stored closer to 
 - Placement: Caching can occur at multiple layers (client, CDN, application, database, in-memory) and the strategy defines which layer owns which data.
 - Invalidation and TTL: Time-to-live (TTL), cache expiration, and explicit invalidation policies determine how stale data is tolerated and refreshed.
 - Read vs write patterns: Strategies differ for read-heavy vs write-heavy workloads (e.g., cache-aside for flexible reads, write-through/write-back for controlled writes).
-- Cache-aside (lazy loading): Application reads from cache first and loads from the source on miss; simple and popular, but requires manual invalidation.
+- Cache-aside (lazy loading): `Application` reads from cache first and loads from the source on miss; simple and popular, but requires manual invalidation.
 - Write-through vs write-back: Write-through updates cache and source synchronously (safer, slower), while write-back writes to cache first and flushes to source later (faster, riskier).
 
 ## Ключевые Моменты (RU)

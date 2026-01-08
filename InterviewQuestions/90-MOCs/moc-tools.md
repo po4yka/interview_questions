@@ -1,11 +1,11 @@
----
+---\
 id: ivm-20251012-140500
 title: Tools — MOC
 kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/tools]
----
+---\
 
 # Tools — Map of Content
 
@@ -231,7 +231,7 @@ LIMIT 50
 
 ### Git & Version Control
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Fundamentals (Easy)
 - [[q-git-pull-vs-fetch--tools--easy]] - Understanding the difference between pull and fetch
@@ -270,7 +270,7 @@ SORT difficulty ASC, file.name ASC
 
 ### Build Systems
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### Gradle Fundamentals (Easy)
 - Learn: What is Gradle and build automation
@@ -309,7 +309,7 @@ SORT difficulty ASC, file.name ASC
 
 ### CI/CD
 
-**Key Questions** (Curated Learning Path):
+**Key Questions** (Curated Learning `Path`):
 
 #### CI/CD Basics (Easy)
 - Learn: What is Continuous Integration
@@ -407,8 +407,8 @@ SORT difficulty ASC, file.name ASC
 - Learn: Breakpoints (line, conditional, exception)
 - Learn: Step execution (step over, into, out)
 - Learn: Watch expressions and evaluate
-- Learn: Call stack navigation
-- Learn: Thread debugging
+- Learn: `Call` stack navigation
+- Learn: `Thread` debugging
 
 #### Profiling
 - Learn: CPU profiling and flame graphs

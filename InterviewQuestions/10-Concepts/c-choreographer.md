@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-173028"
 title: "Choreographer / Choreographer"
 aliases: ["Choreographer"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-android-graphics-pipeline, c-android-frame-budget, c-main-thread, c-android-graphics]
+moc: "moc-cs"
+related: ["c-android-graphics-pipeline", "c-android-frame-budget", "c-main-thread", "c-android-graphics"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -33,7 +34,7 @@ Choreographer (в Android/Kotlin) — это компонент фреймвор
 
 - Frame synchronization: Choreographer triggers callbacks (e.g., via `postFrameCallback`) aligned with the display vsync signal, ensuring rendering happens at the optimal time for the next frame.
 - Smooth animations: By running animation and layout updates in these callbacks, it reduces dropped frames and visible jank in complex UI or scrolling.
-- Centralized timing: Provides a single timing source for multiple subsystems (views, animations, input), simplifying coordination of visual updates.
+- Centralized timing: `Provides` a single timing source for multiple subsystems (views, animations, input), simplifying coordination of visual updates.
 - Performance awareness: Misusing Choreographer (heavy work in callbacks, blocking the main thread) directly impacts FPS and user-perceived smoothness, making it an important concept for performance tuning.
 - Typical usage: Used when implementing custom rendering loops, advanced animations, or integrating game/graphics engines with the Android UI thread.
 

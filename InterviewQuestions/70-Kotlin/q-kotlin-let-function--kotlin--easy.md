@@ -1,4 +1,4 @@
----
+---\
 id: lang-097
 title: "Kotlin Let Function / Функция let в Kotlin"
 aliases: [Kotlin Let Function, Функция let в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-ty
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, kotlin, let, null-safety, scope-functions]
----
+---\
 # Вопрос (RU)
 > Для чего нужна функция `let` в Kotlin?
 
@@ -95,7 +95,7 @@ val result = computeValue().let { value ->
 }
 ```
 
-3. **Call chaining and value transformation**: apply successive transformations.
+3. **`Call` chaining and value transformation**: apply successive transformations.
 ```kotlin
 value
     .let { it.trim() }

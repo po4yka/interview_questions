@@ -1,4 +1,4 @@
----
+---\
 id: android-120
 title: Integration Testing Strategies / Стратегии интеграционного тестирования
 aliases: [Integration Testing Strategies, Стратегии интеграционного тестирования]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/testing-instrumented, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Стратегии интеграционного тестирования
 
@@ -42,9 +42,9 @@ tags: [android/testing-instrumented, difficulty/medium]
 
 ### Стратегия Тестирования
 
-1. `ViewModel` + Repository + локальная БД (Room):
+1. `ViewModel` + Repository + локальная БД (`Room`):
    - Мокаем/фейкаем только сетевой слой.
-   - Реальными являются `ViewModel`, Repository, Room.
+   - Реальными являются `ViewModel`, Repository, `Room`.
 
 2. Repository + сеть + кеш:
    - Минимизируем мокинг (например, используем `OkHttp MockWebServer` или фейковый API).
@@ -318,9 +318,9 @@ Integration Tests (Multiple Layers)
 
 ### Testing Strategy
 
-**1. `ViewModel` + Repository + Local Database**
+**1. `ViewModel` + Repository + Local `Database`**
 - Mock/Fake: Network API
-- Real: `ViewModel`, Repository, Room Database
+- Real: `ViewModel`, Repository, `Room` `Database`
 
 **2. Repository + Network + Cache**
 - Mock/Fake: Prefer minimal mocking (e.g., use `OkHttp MockWebServer` or a fake API)

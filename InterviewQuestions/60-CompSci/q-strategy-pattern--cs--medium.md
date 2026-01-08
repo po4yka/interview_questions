@@ -1,4 +1,4 @@
----
+---\
 id: dp-004
 title: "Strategy Pattern / Strategy Паттерн"
 aliases: [Strategy Pattern, Strategy Паттерн]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, policy-pattern, strategy]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Strategy? Когда и зачем его следует использовать?
 
@@ -362,7 +362,7 @@ The Strategy Design Pattern can be useful in various scenarios:
 1. **Sorting algorithms** - Different sorting algorithms encapsulated into strategies
 2. **Validation rules** - Different validation rules as separate strategies
 3. **Text formatting** - Different formatting strategies
-4. **Database access** - Different database access strategies
+4. **`Database` access** - Different database access strategies
 5. **Payment strategy** - Different payment methods as strategies
 6. **Navigation apps** - Different routes based on travel mode (driving, biking, walking)
 7. **Image compression** - Users can choose different compression algorithms

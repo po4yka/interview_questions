@@ -1,4 +1,4 @@
----
+---\
 id: android-435
 title: "KMM Architecture / Архитектура KMM"
 aliases: ["KMM Architecture", "Kotlin Multiplatform Mobile", "Архитектура KMM"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 sources: []
 tags: [android, android/architecture-clean, android/kmp, difficulty/hard, kmm, kotlin, multiplatform]
 
----
+---\
 # Вопрос (RU)
 
 > Объясните архитектуру Kotlin Multiplatform Mobile (KMM) и структуру проекта. Как организовать shared код между Android и iOS? Что такое expect/actual механизмы? Как обрабатывать platform-specific реализации максимизируя переиспользование кода?
@@ -54,7 +54,7 @@ KMM позволяет делиться бизнес-логикой, сетью 
 
 Высокоуровневая схема:
 - `shared` модуль (KMM): домен, дата-слой, use-case, кросс-платформенные сервисы.
-- `androidApp`: Android UI (Compose/Views), DI (Hilt и т.п.), навигация, интеграция с `shared`.
+- `androidApp`: Android UI (Compose/Views), DI (`Hilt` и т.п.), навигация, интеграция с `shared`.
 - `iosApp`: iOS UI (SwiftUI/UIKit), DI/композиция зависимостей на стороне iOS, интеграция с экспортируемым `shared` фреймворком.
 - Тонкие `expect/actual` адаптеры для платформенных API.
 
@@ -148,7 +148,7 @@ actual fun generateUUID(): String = platform.Foundation.NSUUID().UUIDString()
 ```
 
 **Применение:**
-- Database drivers (например, SQLDelight)
+- `Database` drivers (например, SQLDelight)
 - Логирование (Logcat vs NSLog)
 - Доступ к файловой системе
 - Доступ к системным API, недоступным в `commonMain`
@@ -236,7 +236,7 @@ class CreateTaskUseCase(private val repository: TaskRepository) {
 
 ### Platform Integration
 
-**Android (Compose + Hilt):**
+**Android (Compose + `Hilt`):**
 ```kotlin
 @Composable
 fun TaskListScreen(viewModel: TaskListViewModel = hiltViewModel()) {
@@ -333,7 +333,7 @@ object SharedDi {
 }
 ```
 
-Здесь Koin используется в shared коде через multiplatform-совместимые артефакты и инициализируется в платформенных entry points, а Hilt — только в Android-слое для интеграции Android-компонентов (`ViewModel`, `Activity` и т.п.). Не стоит использовать JVM-only API (например, `KoinJavaComponent`) в iOS-коде.
+Здесь `Koin` используется в shared коде через multiplatform-совместимые артефакты и инициализируется в платформенных entry points, а `Hilt` — только в Android-слое для интеграции Android-компонентов (`ViewModel`, `Activity` и т.п.). Не стоит использовать JVM-only API (например, `KoinJavaComponent`) в iOS-коде.
 
 ### Best Practices (RU)
 
@@ -392,7 +392,7 @@ KMM lets you share business logic, networking, and data layers between Android a
 
 High-level design:
 - `shared` module (KMM): domain, data, use cases, cross-platform services.
-- `androidApp`: Android UI (Compose/Views), DI (Hilt etc.), navigation, integration with `shared`.
+- `androidApp`: Android UI (Compose/Views), DI (`Hilt` etc.), navigation, integration with `shared`.
 - `iosApp`: iOS UI (SwiftUI/UIKit), dependency composition on the iOS side, integration with the exported `shared` framework.
 - Thin `expect/actual` adapters for platform APIs.
 
@@ -486,7 +486,7 @@ actual fun generateUUID(): String = platform.Foundation.NSUUID().UUIDString()
 ```
 
 **Use Cases:**
-- Database drivers (e.g., SQLDelight)
+- `Database` drivers (e.g., SQLDelight)
 - Logging (Logcat vs NSLog)
 - File system access
 - Access to system APIs unavailable in `commonMain`
@@ -574,7 +574,7 @@ class CreateTaskUseCase(private val repository: TaskRepository) {
 
 ### Platform Integration
 
-**Android (Compose + Hilt):**
+**Android (Compose + `Hilt`):**
 ```kotlin
 @Composable
 fun TaskListScreen(viewModel: TaskListViewModel = hiltViewModel()) {
@@ -671,7 +671,7 @@ object SharedDi {
 }
 ```
 
-Koin (or a similar library) is used in shared code via multiplatform-compatible artifacts and initialized from platform entry points, while Hilt remains an Android-only DI framework. JVM-only APIs (e.g., `KoinJavaComponent`) must not be used in iOS code.
+`Koin` (or a similar library) is used in shared code via multiplatform-compatible artifacts and initialized from platform entry points, while `Hilt` remains an Android-only DI framework. JVM-only APIs (e.g., `KoinJavaComponent`) must not be used in iOS code.
 
 ### Best Practices (EN)
 
@@ -705,7 +705,7 @@ Koin (or a similar library) is used in shared code via multiplatform-compatible 
 
 ## Follow-ups (RU)
 
-- Как вы обрабатываете отмену корутин в shared ViewModel, к которой обращается iOS?
+- Как вы обрабатываете отмену корутин в shared `ViewModel`, к которой обращается iOS?
 - Какие стратегии вы используете для отладки shared-кода на iOS-устройствах?
 - Как вы эффективно тестируете платформенно-специфичные реализации (`expect/actual`)?
 - Каковы последствия для памяти при удержании ссылок на Kotlin-объекты из Swift?

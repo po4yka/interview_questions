@@ -1,4 +1,4 @@
----
+---\
 id: android-235
 title: "Why Are Fragments Needed If There Is Activity / Зачем нужны Fragment если есть Activity"
 aliases: [Fragment Architecture, Fragments vs Activity, Зачем Fragment, Фрагменты против Activity]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/fragment, android/lifecycle, architecture, difficulty/hard, fragment, ui]
 
----
+---\
 # Вопрос (RU)
 
 > Для чего нужны фрагменты если есть `Activity`?
@@ -123,7 +123,7 @@ class VideoFragment : Fragment() {
 
 **5. Изоляция навигации**
 
-Navigation Component позволяет выносить навигационную логику в отдельные графы и NavHost-ы, размещённые во фрагментах:
+Navigation `Component` позволяет выносить навигационную логику в отдельные графы и NavHost-ы, размещённые во фрагментах:
 
 ```kotlin
 // ✅ Модульная навигация через NavHostFragment
@@ -249,7 +249,7 @@ fun showDetails(itemId: String) {
 }
 ```
 
-**4. Independent Lifecycle Management**
+**4. Independent `Lifecycle` Management**
 
 Each fragment manages its own resources:
 
@@ -271,7 +271,7 @@ class VideoFragment : Fragment() {
 
 **5. Navigation Isolation**
 
-Navigation Component allows putting navigation logic into separate graphs and NavHosts hosted in fragments:
+Navigation `Component` allows putting navigation logic into separate graphs and NavHosts hosted in fragments:
 
 ```kotlin
 // ✅ Modular navigation via NavHostFragment

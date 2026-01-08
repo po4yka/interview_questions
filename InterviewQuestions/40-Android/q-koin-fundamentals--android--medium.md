@@ -1,4 +1,4 @@
----
+---\
 id: android-160
 title: Koin Fundamentals / Основы Koin
 aliases: [Koin DI, Koin Framework, Koin внедрение зависимостей, Service Locator, Основы Koin]
@@ -16,24 +16,24 @@ updated: 2025-10-28
 sources: []
 tags: [android/architecture-clean, android/di-koin, android/lifecycle, architecture, difficulty/medium, injection, koin, service-locator]
 
----
+---\
 # Вопрос (RU)
 
-> Чем Koin отличается от Dagger/Hilt? Реализуйте полный Koin модуль с определениями factory, single и viewModel.
+> Чем `Koin` отличается от Dagger/Hilt? Реализуйте полный `Koin` модуль с определениями factory, single и viewModel.
 
 # Question (EN)
 
-> How does Koin differ from Dagger/Hilt? Implement a complete Koin module with factory, single, and viewModel definitions.
+> How does `Koin` differ from Dagger/Hilt? Implement a complete `Koin` module with factory, single, and viewModel definitions.
 
 ---
 
 ## Ответ (RU)
 
-**Koin** — легковесный DI-фреймворк для Kotlin, использующий контейнер зависимостей с DSL и runtime-резолвингом, без code generation. Часто описывается как DI-контейнер с `Service Locator`-стилем API (получение зависимостей по типу/имени), но в типичном использовании остаётся DI через конструктор и модули. Разрешает зависимости в runtime через простой DSL.
+**`Koin`** — легковесный DI-фреймворк для Kotlin, использующий контейнер зависимостей с DSL и runtime-резолвингом, без code generation. Часто описывается как DI-контейнер с `Service Locator`-стилем API (получение зависимостей по типу/имени), но в типичном использовании остаётся DI через конструктор и модули. Разрешает зависимости в runtime через простой DSL.
 
 ### Koin Vs Dagger/Hilt
 
-| Aspect | Koin | Dagger/Hilt |
+| Aspect | `Koin` | Dagger/Hilt |
 |--------|------|-------------|
 | **Подход** | DI-контейнер с `Service Locator`-стилем API, runtime-резолвинг | DI c compile-time графом и генерацией кода |
 | **Разрешение** | Runtime | Compile-time |
@@ -43,11 +43,11 @@ tags: [android/architecture-clean, android/di-koin, android/lifecycle, architect
 | **Порог входа** | ✅ Более простой | ❌ Более высокий |
 | **Производительность** | ❌ Хуже в рантайме для большого графа | ✅ Лучше (меньше overhead) |
 | **Тестирование** | ✅ Гибкая конфигурация модулей | ⚠️ Требует больше boilerplate с компонентами/аннотациями |
-| **Multiplatform** | ✅ Есть поддержка KMM | ⚠️ Hilt ориентирован на Android; Dagger как таковой не только для Android |
+| **Multiplatform** | ✅ Есть поддержка KMM | ⚠️ `Hilt` ориентирован на Android; `Dagger` как таковой не только для Android |
 
 ### Основные Определения
 
-**Module** - контейнер зависимостей
+**`Module`** - контейнер зависимостей
 **Factory** - новый экземпляр при каждом запросе
 **Single** - singleton (один экземпляр на контейнер)
 **`ViewModel`** - интеграция с Android `ViewModel` и её lifecycle (через артефакты `koin-androidx-viewmodel` / `koin-androidx-navigation` / `koin-androidx-compose`)
@@ -97,7 +97,7 @@ class UserViewModel(
 }
 ```
 
-**Koin модули**:
+**`Koin` модули**:
 
 ```kotlin
 // ✅ Network module
@@ -310,7 +310,7 @@ class UserRepositoryTest : KoinTest {
 
 ### Когда Выбирать Koin
 
-**✅ Koin:**
+**✅ `Koin`:**
 - Kotlin Multiplatform проекты
 - Важна скорость сборки и простота конфигурации
 - Команда новичок в DI или не хочет сложного codegen-пайплайна
@@ -321,18 +321,18 @@ class UserRepositoryTest : KoinTest {
 - Критична compile-time безопасность графа
 - Требуется максимальная runtime-производительность
 - Большая кодовая база
-- Команда опытна с Dagger
-- Проект ориентирован на Android и хорошо вписывается в Hilt
+- Команда опытна с `Dagger`
+- Проект ориентирован на Android и хорошо вписывается в `Hilt`
 
 ---
 
 ## Answer (EN)
 
-**Koin** is a lightweight DI framework for Kotlin that uses a dependency container with a Kotlin DSL and runtime resolution instead of code generation. It is often described as a DI container with a `Service Locator`-style API (retrieving by type/name), but in typical usage it is still constructor-injection driven via modules. Dependencies are resolved at runtime via a simple DSL.
+**`Koin`** is a lightweight DI framework for Kotlin that uses a dependency container with a Kotlin DSL and runtime resolution instead of code generation. It is often described as a DI container with a `Service Locator`-style API (retrieving by type/name), but in typical usage it is still constructor-injection driven via modules. Dependencies are resolved at runtime via a simple DSL.
 
 ### Koin Vs Dagger/Hilt
 
-| Aspect | Koin | Dagger/Hilt |
+| Aspect | `Koin` | Dagger/Hilt |
 |--------|------|-------------|
 | **Approach** | DI container with `Service Locator`-style API, runtime resolution | DI with compile-time graph and code generation |
 | **Resolution** | Runtime | Compile-time |
@@ -342,13 +342,13 @@ class UserRepositoryTest : KoinTest {
 | **Learning Curve** | ✅ Gentler | ❌ Steeper |
 | **Performance** | ❌ More overhead for large graphs | ✅ Less overhead, faster in practice |
 | **Testing** | ✅ Flexible module redefinition | ⚠️ Requires more boilerplate with components/annotations |
-| **Multiplatform** | ✅ KMM support available | ⚠️ Hilt is Android-focused; Dagger itself is not Android-only |
+| **Multiplatform** | ✅ KMM support available | ⚠️ `Hilt` is Android-focused; `Dagger` itself is not Android-only |
 
 ### Core Definitions
 
-**Module** - dependency container
+**`Module`** - dependency container
 **Factory** - new instance on each request
-**Single** - singleton instance per Koin container
+**Single** - singleton instance per `Koin` container
 **`ViewModel`** - Android `ViewModel` integration with lifecycle awareness (via `koin-androidx-viewmodel` / `koin-androidx-navigation` / `koin-androidx-compose` artifacts)
 
 ### Complete Koin Setup
@@ -396,7 +396,7 @@ class UserViewModel(
 }
 ```
 
-**Koin modules**:
+**`Koin` modules**:
 
 ```kotlin
 // ✅ Network module
@@ -609,7 +609,7 @@ class UserRepositoryTest : KoinTest {
 
 ### When to Choose Koin
 
-**✅ Koin:**
+**✅ `Koin`:**
 - Kotlin Multiplatform projects
 - Fast build times and simple configuration are important
 - Team is new to DI or wants to avoid complex codegen pipelines
@@ -620,24 +620,24 @@ class UserRepositoryTest : KoinTest {
 - Compile-time safety of the graph is critical
 - Maximum runtime performance is required
 - Large codebase
-- Team is experienced with Dagger
-- Android-focused project that fits well with Hilt
+- Team is experienced with `Dagger`
+- Android-focused project that fits well with `Hilt`
 
 ---
 
 ## Follow-ups
 
-- How to implement custom Koin scopes for feature modules?
-- What happens if circular dependencies exist in Koin?
-- How to migrate from Dagger/Hilt to Koin?
-- How to test Koin modules with checkModules()?
-- What's the performance overhead of Koin's runtime resolution?
+- How to implement custom `Koin` scopes for feature modules?
+- What happens if circular dependencies exist in `Koin`?
+- How to migrate from Dagger/Hilt to `Koin`?
+- How to test `Koin` modules with checkModules()?
+- What's the performance overhead of `Koin`'s runtime resolution?
 
 ## References
 
-- Official Koin documentation: https://insert-koin.io/docs/reference/koin-android/start
-- Koin vs Dagger comparison: https://insert-koin.io/docs/reference/koin-core/dsl
-- Koin on GitHub: https://github.com/InsertKoinIO/koin
+- Official `Koin` documentation: https://insert-koin.io/docs/reference/koin-android/start
+- `Koin` vs `Dagger` comparison: https://insert-koin.io/docs/reference/koin-core/dsl
+- `Koin` on GitHub: https://github.com/InsertKoinIO/koin
 
 ## Related Questions
 

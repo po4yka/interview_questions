@@ -1,4 +1,4 @@
----
+---\
 id: android-038
 title: Compose Gesture Detection / Обработка жестов в Compose
 aliases: [Compose Gesture Detection, Обработка жестов в Compose]
@@ -14,8 +14,8 @@ related: [c-compose-state, c-jetpack-compose, q-compose-semantics--android--medi
 sources: []
 created: 2025-10-11
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gestures]
----
+tags: [android/ui-compose, android/ui-state, difficulty/medium, gestures]
+---\
 # Вопрос (RU)
 > Как обрабатывать жесты в Jetpack Compose?
 
@@ -222,7 +222,7 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 - Use high-level modifiers (`clickable`, `draggable`) for standard gestures
 - Avoid allocations inside `pointerInput` — hoist state via `remember`
 - Account for touch slop — the system ignores very small movements (around 8dp) to prevent accidental triggers
-- Call `change.consume()` (or appropriate consume method) in `detectDragGestures` when you want to mark the event as handled by that gesture
+- `Call` `change.consume()` (or appropriate consume method) in `detectDragGestures` when you want to mark the event as handled by that gesture
 
 ## Дополнительные Вопросы (RU)
 

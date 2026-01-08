@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-testing, c-unit-testing, c-ui-testing, c-espresso-testing, c-testing-pyramid]
+related: ["c-android-testing", "c-unit-testing", "c-ui-testing", "c-espresso-testing", "c-testing-pyramid"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
+tags: [android, concept, difficulty/medium]
 ---
 
 # Summary (EN)

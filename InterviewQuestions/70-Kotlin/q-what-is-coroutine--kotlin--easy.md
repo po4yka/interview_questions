@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-072
 title: "What is a Coroutine? Basic Concepts / Что такое корутина? Основные концепции"
 aliases: ["What is a Coroutine? Basic Concepts", "Что такое корутина? Основные концепции"]
@@ -17,7 +17,7 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
 
----
+---\
 # Вопрос (RU)
 > Что такое корутина в Kotlin? Объясните её основные концепции и чем она отличается от потока.
 
@@ -93,13 +93,13 @@ See also: [[c-kotlin]], [[c-coroutines]].
 
 ### Coroutine vs. Thread
 
-| Feature | Coroutine | Thread |
+| Feature | `Coroutine` | `Thread` |
 | :--- | :--- | :--- |
 | **Resource Cost** | Very cheap (lightweight) | Expensive (heavyweight) |
 | **Blocking** | Non-blocking style (uses suspension instead of blocking for async APIs/operations) | Often blocking (operations block the thread) |
 | **Management** | Scheduled and managed by the coroutine dispatcher/runtime on top of OS threads | Managed by the Operating System |
 | **Creation** | Fast | Slow |
-| **Context Switching**| Fast (between coroutines in-process) | Slow (OS-level) |
+| **`Context` Switching**| Fast (between coroutines in-process) | Slow (OS-level) |
 
 ### Example
 

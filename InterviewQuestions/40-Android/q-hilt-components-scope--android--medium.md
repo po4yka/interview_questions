@@ -1,4 +1,4 @@
----
+---\
 id: android-403
 title: Hilt Components Scope / Компоненты и скоупы Hilt
 aliases: [Hilt Components Scope, Компоненты и скоупы Hilt]
@@ -15,17 +15,17 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/di-hilt, dependency-injection, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
-> Компоненты и скоупы Hilt
+> Компоненты и скоупы `Hilt`
 
 # Question (EN)
-> Hilt Components Scope
+> `Hilt` Components Scope
 
 ---
 
 ## Ответ (RU)
-Hilt предоставляет готовые компоненты для основных уровней Android-жизненного цикла: `Application`, `Activity`, `Fragment`, `ViewModel`, `View` и `Service`.
+`Hilt` предоставляет готовые компоненты для основных уровней Android-жизненного цикла: `Application`, `Activity`, `Fragment`, `ViewModel`, `View` и `Service`.
 
 Чтобы добавить модуль в граф зависимостей, используется аннотация `@InstallIn(ComponentName::class)`.
 
@@ -475,7 +475,7 @@ ServiceComponent (Service)
 ---
 
 ## Answer (EN)
-Hilt provides predefined components for common Android lifecycle containers such as `Application`, `Activity`, `Fragment`, `ViewModel`, `View`, and `Service`.
+`Hilt` provides predefined components for common Android lifecycle containers such as `Application`, `Activity`, `Fragment`, `ViewModel`, `View`, and `Service`.
 
 To add a module to a graph, use the `@InstallIn(ComponentName::class)` annotation.
 
@@ -483,7 +483,7 @@ To add a module to a graph, use the `@InstallIn(ComponentName::class)` annotatio
 
 ## Hilt Components and Scopes
 
-| Component | Scope | Lifetime | Android Class |
+| `Component` | Scope | Lifetime | Android Class |
 |-----------|-------|----------|---------------|
 | **SingletonComponent** | `@Singleton` | Entire app process | `Application` |
 | **ActivityRetainedComponent** | `@ActivityRetainedScoped` | Survives configuration changes while the logical `Activity` exists | Backing scope for `@HiltViewModel` / retained ViewModels |
@@ -926,10 +926,10 @@ Dependencies flow down within each hierarchy: child components can access bindin
 
 ## Summary (RU)
 
-Кратко по компонентам Hilt:
+Кратко по компонентам `Hilt`:
 
 - `SingletonComponent` + `@Singleton` — зависимости на весь процесс приложения.
-- `ActivityRetainedComponent` + `@ActivityRetainedScoped` — объекты, переживающие конфигурационные изменения и привязанные к логическому жизненному циклу Activity (граф для `@HiltViewModel`).
+- `ActivityRetainedComponent` + `@ActivityRetainedScoped` — объекты, переживающие конфигурационные изменения и привязанные к логическому жизненному циклу `Activity` (граф для `@HiltViewModel`).
 - `ViewModelComponent` + `@ViewModelScoped` — зависимости конкретного `ViewModel`.
 - `ActivityComponent` + `@ActivityScoped` — зависимости уровня `Activity`.
 - `FragmentComponent` + `@FragmentScoped` — зависимости уровня `Fragment`.
@@ -947,9 +947,9 @@ Dependencies flow down within each hierarchy: child components can access bindin
 
 ## Summary (EN)
 
-Hilt Components:
+`Hilt` Components:
 
-| Component | Scope | Use For |
+| `Component` | Scope | Use For |
 |-----------|-------|---------|
 | SingletonComponent | `@Singleton` | App-wide singletons |
 | ActivityRetainedComponent | `@ActivityRetainedScoped` | Retained objects across config changes (backing graph for `@HiltViewModel`) |

@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-086
 title: "Structured concurrency violations and escape hatches / Нарушения структурной конкурентности"
 aliases: [Anti-Patterns, Escape Hatches, Structured Concurrency Violations, Нарушения конкурентности]
@@ -15,7 +15,7 @@ created: 2025-10-12
 updated: 2025-11-09
 tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard, kotlin, lifecycle, scope, structured-concurrency, violations]
 
----
+---\
 # Вопрос (RU)
 
 > Нарушения структурной конкурентности в корутинах Kotlin: какие типичные анти-паттерны (GlobalScope, неуправляемые Job/CoroutineScope, утечки через архитектурные границы и т.п.), почему они опасны, и какие допустимые escape hatches существуют для работы вне строгой структуры?
@@ -2008,7 +2008,7 @@ class MyApplicationCrashEn : android.app.Application() {
 Why acceptable:
 - Last-chance critical reporting.
 - Explicit `NonCancellable` usage.
-- Short, well-defined work.
+- `Short`, well-defined work.
 
 ### Escape Hatch Patterns
 

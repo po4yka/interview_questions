@@ -1,4 +1,4 @@
----
+---\
 id: "20251012-000000"
 title: "SQL Queries / SQL запросы"
 aliases: []
@@ -12,11 +12,11 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-cs"
-related: [c-sqlite, c-sqlite-indexes, c-database-performance, c-database-design, c-relational-databases]
+related: ["c-sqlite", "c-sqlite-indexes", "c-database-performance", "c-database-design", "c-relational-databases"]
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "ctes", "difficulty/medium", "joins", "queries", "sql", "subqueries"]
----
+---\
 
 # Summary (EN)
 
@@ -39,7 +39,7 @@ SQL (Structured Query Language) - это стандартный язык для 
 - **JOINs:** Flexibility vs. performance with large datasets
 - **Subqueries:** Readability vs. potential performance issues
 - **CTEs:** Code clarity vs. materialization overhead
-- **Window Functions:** Powerful analytics vs. complexity
+- **`Window` Functions:** Powerful analytics vs. complexity
 
 ## Overview
 

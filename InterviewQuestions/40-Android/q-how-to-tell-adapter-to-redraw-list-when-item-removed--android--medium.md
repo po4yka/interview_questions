@@ -1,4 +1,4 @@
----
+---\
 id: android-374
 title: How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру
   перерисовать список когда элемент удален
@@ -16,14 +16,14 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [adapter, android/ui-views, difficulty/medium, diffutil, recyclerview]
----
+---\
 # Вопрос (RU)
 
-> Как правильно сообщить адаптеру RecyclerView о том, что элемент был удален из списка?
+> Как правильно сообщить адаптеру `RecyclerView` о том, что элемент был удален из списка?
 
 # Question (EN)
 
-> How to tell a RecyclerView adapter that an item has been removed from the list?
+> How to tell a `RecyclerView` adapter that an item has been removed from the list?
 
 ---
 
@@ -304,7 +304,7 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 1. Use `ListAdapter` with `DiffUtil` for automatic diff calculation.
 2. Avoid `notifyDataSetChanged()` when you can use more specific calls — it skips animations and causes unnecessary redraws.
 3. Update data BEFORE calling `notify*` to avoid index issues (`IndexOutOfBoundsException`, desync).
-4. Call `notifyItemRangeChanged()` only when necessary, e.g., when subsequent items render content based on their `adapterPosition` (such as ordinal numbers).
+4. `Call` `notifyItemRangeChanged()` only when necessary, e.g., when subsequent items render content based on their `adapterPosition` (such as ordinal numbers).
 5. Provide undo for critical deletions (via `Snackbar` or similar UX pattern).
 
 | Method | Animation | Performance | Use Case |
@@ -351,7 +351,7 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 ### Предпосылки (Проще)
 
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Основы оптимизации RecyclerView
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Основы оптимизации `RecyclerView`
 
 ### Связанные (Средний уровень)
 
@@ -359,8 +359,8 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 ### Продвинутые (Сложнее)
 
-- Вопросы об оптимизации производительности RecyclerView с большими наборами данных
-- Вопросы о реализации кастомного `ItemAnimator` для RecyclerView
+- Вопросы об оптимизации производительности `RecyclerView` с большими наборами данных
+- Вопросы о реализации кастомного `ItemAnimator` для `RecyclerView`
 - Вопросы о `ConcatAdapter` для нескольких типов представлений
 
 ## Related Questions
@@ -370,12 +370,12 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 - [[c-custom-views]]
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization basics
 
 ### Related (Same Level)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
 
 ### Advanced (Harder)
-- Questions about RecyclerView performance optimization with large datasets
-- Questions about implementing custom ItemAnimator for RecyclerView
+- Questions about `RecyclerView` performance optimization with large datasets
+- Questions about implementing custom ItemAnimator for `RecyclerView`
 - Questions about ConcatAdapter for multiple view types

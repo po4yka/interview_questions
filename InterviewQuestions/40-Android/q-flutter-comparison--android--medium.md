@@ -1,4 +1,4 @@
----
+---\
 id: android-252
 title: KMM vs Flutter Comparison / Сравнение KMM и Flutter
 aliases: [KMM vs Flutter, Kotlin Multiplatform Mobile vs Flutter, Сравнение KMM и Flutter]
@@ -18,7 +18,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, flutter, multiplatform]
 
----
+---\
 # Вопрос (RU)
 
 > Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки.
@@ -334,7 +334,7 @@ Flutter's platform channels introduce serialization and IPC overhead compared to
 **Maintenance:**
 - KMM: Средняя сложность — shared логика + два UI.
 - Flutter: Ниже при условии, что все платформы поддерживаются одной кодовой базой.
-**Long-term:**
+**`Long`-term:**
 - KMM: Близость к платформам упрощает адаптацию к изменениям iOS/Android; при этом Kotlin Multiplatform уже стабилен, но экосистема и tooling продолжают активно развиваться.
 - Flutter: Зависимость от развития Flutter SDK и экосистемы; стабильность хорошая, но некоторые новые платформенные фичи требуют времени/плагинов.
 ### Cost Analysis
@@ -344,7 +344,7 @@ Flutter's platform channels introduce serialization and IPC overhead compared to
 **Maintenance:**
 - KMM: Medium — shared logic plus separate UIs per platform.
 - Flutter: Lower if all platforms share one codebase.
-**Long-term:**
+**`Long`-term:**
 - KMM: Close to platforms, good for tracking OS changes; Kotlin Multiplatform is stable, while ecosystem and tooling continue to evolve.
 - Flutter: Depends on Flutter SDK evolution and ecosystem; very capable but one more layer between you and the platforms.
 ### Decision Framework

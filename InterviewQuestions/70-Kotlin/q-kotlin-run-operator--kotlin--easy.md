@@ -1,4 +1,4 @@
----
+---\
 id: lang-017
 title: "Kotlin Run Operator / Оператор run в Kotlin"
 aliases: [Kotlin Run Operator, Оператор run в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, c-kotlin-features, q-compose-side-effects-coroutines--kotlin
 created: 2025-10-15
 updated: 2025-11-09
 tags: [also, apply, difficulty/easy, kotlin, let, run, scope-functions, with]
----
+---\
 # Вопрос (RU)
 > Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
 
@@ -185,7 +185,7 @@ println(user.age)  // 26 (modified)
 ```
 
 **Characteristics:**
-- Context object: `this`
+- `Context` object: `this`
 - Returns: Lambda result
 - Usage: Transform object and return a value
 

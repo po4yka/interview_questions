@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-180038"
 title: "Material Design / Material Design"
 aliases: ["Material Design"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-system-design"
-related: [c-material-3, c-design-systems, c-theming, c-design-tokens, c-android-themes]
+related: ["c-material-3", "c-design-systems", "c-theming", "c-design-tokens", "c-android-themes"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "system-design"]
----
+tags: [concept, difficulty/medium, system-design]
+---\
 
 # Summary (EN)
 
@@ -31,8 +32,8 @@ Material Design — это дизайн-язык и компонентная с�
 
 ## Key Points (EN)
 
-- Defined design system: Provides guidelines for layout, color, typography, elevation, motion, and components, enabling consistent UI across platforms and teams.
-- Component libraries: Implemented in frameworks like Android Views/Compose, Flutter, Angular, React, and web libraries, accelerating development and reducing design drift.
+- Defined design system: `Provides` guidelines for layout, color, typography, elevation, motion, and components, enabling consistent UI across platforms and teams.
+- `Component` libraries: Implemented in frameworks like Android Views/Compose, Flutter, Angular, React, and web libraries, accelerating development and reducing design drift.
 - Material as metaphor: Uses the idea of "digital material" with depth, elevation, and shadows to communicate hierarchy, affordances, and interaction feedback.
 - Accessibility and usability: Emphasizes readable contrast, touch targets, motion guidelines, and predictable patterns, improving UX quality at scale.
 - System design relevance: Encourages reusable components, theming, and design tokens, which align with scalable front-end architecture and multi-platform systems.

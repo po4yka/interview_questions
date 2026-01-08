@@ -1,4 +1,4 @@
----
+---\
 id: android-316
 title: Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что в нем происходит
 aliases: [ViewModel Purpose, ViewModel Responsibilities, Назначение ViewModel, Обязанности ViewModel]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, difficulty/medium, jetpack, mvvm, viewmodel]
 
----
+---\
 # Вопрос (RU)
 
 > Зачем нужен `ViewModel` и что в нем происходит?
@@ -28,7 +28,7 @@ tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, difficult
 
 ## Ответ (RU)
 
-**`ViewModel`** - это Android Architecture Component, который хранит UI-состояние и бизнес-логику отдельно от `Activity`/`Fragment`, переживая изменения конфигурации (поворот экрана).
+**`ViewModel`** - это Android Architecture `Component`, который хранит UI-состояние и бизнес-логику отдельно от `Activity`/`Fragment`, переживая изменения конфигурации (поворот экрана).
 
 ### Зачем Нужен `ViewModel`
 
@@ -297,7 +297,7 @@ Activity/Fragment создан
 
 ## Answer (EN)
 
-**`ViewModel`** is an Android Architecture Component that stores UI state and business logic separately from `Activity`/`Fragment`, surviving configuration changes (screen rotation).
+**`ViewModel`** is an Android Architecture `Component` that stores UI state and business logic separately from `Activity`/`Fragment`, surviving configuration changes (screen rotation).
 
 ### Why `ViewModel` is Needed
 
@@ -620,7 +620,7 @@ Activity/Fragment Created
 
 - [[q-mvi-architecture--android--hard]] - Архитектура MVI
 - [[q-offline-first-architecture--android--hard]] - Offline-first с использованием `ViewModel`
-- [[q-modularization-patterns--android--hard]] - ViewModel в модульной архитектуре
+- [[q-modularization-patterns--android--hard]] - `ViewModel` в модульной архитектуре
 
 ## Related Questions
 

@@ -1,4 +1,4 @@
----
+---\
 id: dp-008
 title: "Singleton Pattern / Singleton Паттерн"
 aliases: [Singleton Pattern, Singleton Паттерн]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [creational-patterns, design-patterns, difficulty/easy, singleton]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Singleton? Когда и зачем его использовать?
 
@@ -215,7 +215,7 @@ class MyRepository(private val api: ApiService) // Внедрён, не singleto
 // DON'T: Не храните прямые ссылки на Activity/Context в singleton (утечки памяти!)
 ```
 
-Singleton — это порождающий паттерн проектирования, который гарантирует, что класс имеет только один экземпляр (или контролируемое число экземпляров) и предоставляет глобальную точку доступа к нему. **Проблема**: Нужно гарантировать существование только одного экземпляра и обеспечить к нему удобный доступ. **Решение**: Приватный конструктор, статический экземпляр и статический фабричный метод с корректной синхронизацией. **Использовать когда**: (1) Нужен ровно один (или фиксированно ограниченный) экземпляр, (2) Экземпляр должен быть глобально доступен, (3) Требуется ленивая инициализация или контролируемый жизненный цикл. **Kotlin**: Используйте `object` declaration или companion object с ленивой инициализацией. **Плюсы**: контролируемый доступ, уменьшение дублирования, глобальный доступ. **Минусы**: глобальное состояние, скрытые зависимости, сложность тестирования, риск проблем с ресурсами и жизненным циклом. **Примеры**: Database helper (c application context), network manager, конфигурация, analytics tracker.
+Singleton — это порождающий паттерн проектирования, который гарантирует, что класс имеет только один экземпляр (или контролируемое число экземпляров) и предоставляет глобальную точку доступа к нему. **Проблема**: Нужно гарантировать существование только одного экземпляра и обеспечить к нему удобный доступ. **Решение**: Приватный конструктор, статический экземпляр и статический фабричный метод с корректной синхронизацией. **Использовать когда**: (1) Нужен ровно один (или фиксированно ограниченный) экземпляр, (2) Экземпляр должен быть глобально доступен, (3) Требуется ленивая инициализация или контролируемый жизненный цикл. **Kotlin**: Используйте `object` declaration или companion object с ленивой инициализацией. **Плюсы**: контролируемый доступ, уменьшение дублирования, глобальный доступ. **Минусы**: глобальное состояние, скрытые зависимости, сложность тестирования, риск проблем с ресурсами и жизненным циклом. **Примеры**: `Database` helper (c application context), network manager, конфигурация, analytics tracker.
 
 ---
 
@@ -242,7 +242,7 @@ To create the singleton class, we typically use:
 
 - **Static member**: Holds the singleton instance and is initialized once for the class loader.
 - **Private constructor**: Prevents instantiation of the Singleton class from outside the class.
-- **Static factory method**: Provides the global point of access to the Singleton object and returns the instance to the caller.
+- **Static factory method**: `Provides` the global point of access to the Singleton object and returns the instance to the caller.
 
 ### Example: Classic (Non-Thread-Safe) Singleton
 
@@ -360,18 +360,18 @@ Common uses:
 - The **abstract factory, factory method, builder, and prototype** patterns can use singletons in their implementation.
 - **Facade objects** are often singletons because only one facade object is required.
 - **State objects** are sometimes implemented as singletons.
-- **Database connections, network managers, configuration managers** (carefully, with proper lifecycle) in Android.
+- **`Database` connections, network managers, configuration managers** (carefully, with proper lifecycle) in Android.
 - **`Application`-wide repositories, analytics trackers, logging utilities**.
 
 ### Pros and Cons
 
 #### Pros
 
-1. **Controlled access** - Provides controlled access to the sole instance.
+1. **Controlled access** - `Provides` controlled access to the sole instance.
 2. **Potential reduction of duplication** - Avoids creating multiple identical heavy objects when only one is needed.
 3. **Global access point** - Easy access from anywhere in the application.
 4. **Lazy initialization** - Instance can be created when first needed.
-5. **Thread safety** - Can be implemented to be thread-safe.
+5. **`Thread` safety** - Can be implemented to be thread-safe.
 
 #### Cons
 
@@ -381,7 +381,7 @@ Common uses:
 4. **Difficult to test** - Hard to mock and reset in unit tests.
 5. **Concurrency issues** - Requires careful synchronization in multithreaded environments.
 6. **Violates Dependency Inversion** - Encourages tight coupling to a concrete implementation.
-7. **Lifetime and memory** - Long-lived singletons can accidentally retain resources longer than needed.
+7. **Lifetime and memory** - `Long`-lived singletons can accidentally retain resources longer than needed.
 
 ### Best Practices
 
@@ -414,7 +414,7 @@ class MyRepository(private val api: ApiService) // Injected, not a singleton
 // DON'T: Store Activity/Context references directly in singletons (memory leaks!)
 ```
 
-Singleton is a creational design pattern that ensures a class has only one instance (or a strictly limited number of instances) and provides global access to it. **Problem**: Need to ensure only one instance exists and provide easy access. **Solution**: Private constructor, static instance, and static factory method with appropriate thread safety. **Use when**: (1) Exactly one instance is needed, (2) Instance must be accessible globally, (3) Lazy initialization or controlled lifecycle is desired. **Kotlin**: Use `object` declaration or companion object with lazy initialization. **Pros**: controlled access, reduced duplication when a single instance is sufficient, global access. **Cons**: global state, hidden dependencies, difficult to test, potential resource/lifecycle issues. **Examples**: Database helper (using application context), network manager, configuration, analytics tracker.
+Singleton is a creational design pattern that ensures a class has only one instance (or a strictly limited number of instances) and provides global access to it. **Problem**: Need to ensure only one instance exists and provide easy access. **Solution**: Private constructor, static instance, and static factory method with appropriate thread safety. **Use when**: (1) Exactly one instance is needed, (2) Instance must be accessible globally, (3) Lazy initialization or controlled lifecycle is desired. **Kotlin**: Use `object` declaration or companion object with lazy initialization. **Pros**: controlled access, reduced duplication when a single instance is sufficient, global access. **Cons**: global state, hidden dependencies, difficult to test, potential resource/lifecycle issues. **Examples**: `Database` helper (using application context), network manager, configuration, analytics tracker.
 
 ---
 

@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-003
 title: "Проектирование REST API / REST API Design Best Practices"
 aliases: ["REST API Design", "Проектирование REST API"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [api-design, difficulty/medium, http, rest-api, system-design]
 sources: ["https://en.wikipedia.org/wiki/Representational_state_transfer"]
 
----
+---\
 # Вопрос (RU)
 > Каковы лучшие практики проектирования RESTful API? Как структурировать endpoints, обрабатывать ошибки и обеспечивать качество API?
 
@@ -121,7 +121,7 @@ class UserController(private val userService: UserService) {
 
 *Теория:* Каждый HTTP метод имеет семантику. GET - безопасный (safe) и идемпотентный. POST - не идемпотентный (обычно используется для операций, которые могут иметь побочные эффекты, например создание ресурса). PUT/DELETE - идемпотентные (повторный вызов даёт тот же наблюдаемый результат). PATCH обычно не гарантируется как идемпотентный.
 
-| Метод | Назначение | Идемпотентный | Safe | Request Body | Response Body |
+| Метод | Назначение | Идемпотентный | Safe | `Request` Body | `Response` Body |
 |-------|-----------|---------------|------|--------------|---------------|
 | GET | Получить ресурс | Да | Да | Обычно нет | Да |
 | POST | Создать ресурс / выполнить команду | Нет | Нет | Да | Да |
@@ -149,7 +149,7 @@ class UserController(private val userService: UserService) {
 
 **Серверные ошибки (5xx):**
 - `500 Internal Server Error` - ошибка сервера
-- `503 `Service` Unavailable` - сервис временно недоступен
+- `503 ``Service`` Unavailable` - сервис временно недоступен
 
 ```kotlin
 // Стандартизированный формат ошибок
@@ -436,7 +436,7 @@ class UserController(private val userService: UserService) {
 
 *Theory:* Each HTTP method has defined semantics. GET - safe and idempotent. POST - not idempotent (commonly used for operations that may have side effects, such as creating resources). PUT/DELETE - idempotent (repeated call results in the same observed state). PATCH is generally not guaranteed to be idempotent.
 
-| Method | Purpose | Idempotent | Safe | Request Body | Response Body |
+| Method | Purpose | Idempotent | Safe | `Request` Body | `Response` Body |
 |--------|---------|------------|------|--------------|---------------|
 | GET | Retrieve resource | Yes | Yes | Typically No | Yes |
 | POST | Create resource / perform command | No | No | Yes | Yes |
@@ -464,7 +464,7 @@ class UserController(private val userService: UserService) {
 
 **Server Errors (5xx):**
 - `500 Internal Server Error` - server error
-- `503 `Service` Unavailable` - service temporarily unavailable
+- `503 ``Service`` Unavailable` - service temporarily unavailable
 
 ```kotlin
 // Standardized error format

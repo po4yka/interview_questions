@@ -1,4 +1,4 @@
----
+---\
 id: "20251023-120400"
 title: "Dagger / Dagger DI"
 aliases: ["Dagger 2", "Dagger DI", "Dagger", "Dependency Injection Framework"]
@@ -12,28 +12,28 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-dependency-injection, c-hilt, c-koin, c-architecture-patterns]
+related: ["c-dependency-injection", "c-hilt", "c-koin", "c-architecture-patterns"]
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "architecture", "concept", "dagger", "dependency-injection", "difficulty/medium"]
----
+---\
 
 # Dagger / Dagger DI
 
 ## Summary (EN)
 
-Dagger is a fully compile-time dependency injection framework for Java and Android that uses annotation processing to generate code for dependency injection. Unlike runtime DI frameworks, Dagger validates dependencies at compile-time and generates efficient code without using reflection, resulting in excellent runtime performance. While Dagger has a steep learning curve due to its concepts (Components, Modules, Scopes), it provides type-safe and performant dependency injection.
+`Dagger` is a fully compile-time dependency injection framework for Java and Android that uses annotation processing to generate code for dependency injection. Unlike runtime DI frameworks, `Dagger` validates dependencies at compile-time and generates efficient code without using reflection, resulting in excellent runtime performance. While `Dagger` has a steep learning curve due to its concepts (Components, Modules, Scopes), it provides type-safe and performant dependency injection.
 
 ## Краткое Описание (RU)
 
-Dagger — это полностью компилируемый фреймворк внедрения зависимостей для Java и Android, который использует обработку аннотаций для генерации кода инъекции зависимостей. В отличие от runtime DI-фреймворков, Dagger проверяет зависимости во время компиляции и генерирует эффективный код без использования рефлексии, что обеспечивает отличную производительность. Хотя Dagger имеет крутую кривую обучения из-за своих концепций (Components, Modules, Scopes), он обеспечивает типобезопасное и производительное внедрение зависимостей.
+`Dagger` — это полностью компилируемый фреймворк внедрения зависимостей для Java и Android, который использует обработку аннотаций для генерации кода инъекции зависимостей. В отличие от runtime DI-фреймворков, `Dagger` проверяет зависимости во время компиляции и генерирует эффективный код без использования рефлексии, что обеспечивает отличную производительность. Хотя `Dagger` имеет крутую кривую обучения из-за своих концепций (Components, Modules, Scopes), он обеспечивает типобезопасное и производительное внедрение зависимостей.
 
 ## Key Points (EN)
 
 - **Compile-time**: Generates code during compilation, no runtime overhead
 - **Type-safe**: Compile-time verification of dependency graphs
 - **Components**: Define injection points and dependency scope
-- **Modules**: Provide dependencies through @Provides or @Binds
+- **Modules**: Provide dependencies through @`Provides` or @Binds
 - **Scopes**: Control lifetime of dependencies (@Singleton, custom scopes)
 - **Subcomponents**: Hierarchical component structure for nested scopes
 
@@ -42,7 +42,7 @@ Dagger — это полностью компилируемый фреймвор
 - **Время компиляции**: Генерирует код во время компиляции, нет накладных расходов во время выполнения
 - **Типобезопасность**: Проверка графа зависимостей во время компиляции
 - **Компоненты**: Определяют точки инъекции и область видимости зависимостей
-- **Модули**: Предоставляют зависимости через @Provides или @Binds
+- **Модули**: Предоставляют зависимости через @`Provides` или @Binds
 - **Области видимости**: Управление жизненным циклом зависимостей (@Singleton, кастомные scope)
 - **Подкомпоненты**: Иерархическая структура компонентов для вложенных областей
 
@@ -118,7 +118,7 @@ class UserRepository @Inject constructor(
 
 ### 4. @Binds For Interfaces
 
-More efficient way to bind interface implementations (compared to @Provides).
+More efficient way to bind interface implementations (compared to @`Provides`).
 
 ```kotlin
 @Module
@@ -320,8 +320,8 @@ abstract class FragmentModule {
 
 - Simple applications with few dependencies
 - Rapid prototyping (setup overhead)
-- Teams new to dependency injection (use Hilt instead)
-- Android-only projects (Hilt is simpler)
+- Teams new to dependency injection (use `Hilt` instead)
+- Android-only projects (`Hilt` is simpler)
 - Projects requiring fast onboarding (steep learning curve)
 
 ## Trade-offs
@@ -340,11 +340,11 @@ abstract class FragmentModule {
 - **Build time**: Increases build time (annotation processing)
 - **Error messages**: Can be cryptic and hard to understand
 - **Complexity**: Overengineering for simple projects
-- **Android specifics**: Requires custom setup for Android components (Hilt solves this)
+- **Android specifics**: Requires custom setup for Android components (`Hilt` solves this)
 
 ## Dagger Vs Hilt Vs Koin
 
-| Feature | Dagger | Hilt | Koin |
+| Feature | `Dagger` | `Hilt` | `Koin` |
 |---------|--------|------|------|
 | **Type** | Compile-time | Compile-time | Runtime |
 | **Android integration** | Manual | Built-in | Good |
@@ -356,7 +356,7 @@ abstract class FragmentModule {
 
 ## Migration to Hilt
 
-Hilt is built on top of Dagger, making migration straightforward.
+`Hilt` is built on top of `Dagger`, making migration straightforward.
 
 ```kotlin
 // Before (Dagger)
@@ -390,8 +390,8 @@ object AppModule {
 ## Best Practices
 
 ### DO:
-- Use @Inject constructor whenever possible
-- Use @Binds for interface implementations (more efficient than @Provides)
+- Use @`Inject` constructor whenever possible
+- Use @Binds for interface implementations (more efficient than @`Provides`)
 - Keep modules focused (single responsibility)
 - Use custom scopes for lifecycle management
 - Document complex component hierarchies
@@ -400,8 +400,8 @@ object AppModule {
 - Mix scoped and unscoped dependencies carelessly
 - Create circular dependencies
 - Over-scope dependencies (use narrowest scope possible)
-- Ignore Dagger error messages (they usually point to real issues)
-- Use Dagger for trivial projects (overkill)
+- Ignore `Dagger` error messages (they usually point to real issues)
+- Use `Dagger` for trivial projects (overkill)
 
 ## Related Questions
 
@@ -413,7 +413,7 @@ object AppModule {
 ## Related Concepts
 
 - [[c-dependency-injection]] - General DI pattern
-- [[c-hilt]] - Android-specific DI built on Dagger
+- [[c-hilt]] - Android-specific DI built on `Dagger`
 - [[c-architecture-patterns]] - DI often used with MVVM, MVP
 - [[c-testing]] - DI improves testability
 
@@ -421,6 +421,6 @@ object AppModule {
 
 - [Dagger Official Documentation](https://dagger.dev/)
 - [Dagger 2 User's Guide](https://dagger.dev/dev-guide/)
-- [Square's Dagger Tutorial](https://github.com/google/dagger)
-- [Android Developers: Dagger Basics](https://developer.android.com/training/dependency-injection/dagger-basics)
-- [Migration from Dagger to Hilt](https://developer.android.com/training/dependency-injection/hilt-migration)
+- [Square's `Dagger` Tutorial](https://github.com/google/dagger)
+- [Android Developers: `Dagger` Basics](https://developer.android.com/training/dependency-injection/dagger-basics)
+- [Migration from `Dagger` to Hilt](https://developer.android.com/training/dependency-injection/hilt-migration)

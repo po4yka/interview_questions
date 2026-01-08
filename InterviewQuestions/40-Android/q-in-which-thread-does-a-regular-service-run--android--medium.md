@@ -1,4 +1,4 @@
----
+---\
 id: android-335
 title: In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service
 aliases: [Main Thread Service, Service Thread, Поток Service, Сервис в главном потоке]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/lifecycle, android/service, android/threads-sync, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 
 > В каком потоке работает обычный `Service` по умолчанию?
@@ -138,21 +138,21 @@ val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
-> WorkManager подходит для гарантированного, отложенного/периодического фонового выполнения с учётом системных ограничений, а не для строго интерактивных или real-time задач.
+> `WorkManager` подходит для гарантированного, отложенного/периодического фонового выполнения с учётом системных ограничений, а не для строго интерактивных или real-time задач.
 
 ### Сравнение Типов `Service`
 
 | Тип `Service`        | Поток по умолчанию | Нужен фоновый поток         | Рекомендация                                                                 |
 |--------------------|--------------------|-----------------------------|-------------------------------------------------------------------------------|
-| Regular `Service`    | Главный            | Да, вручную (потоки/корутины) | Использовать для контролируемых задач (особенно как foreground/bound); не полагаться на него для отложенных задач, где лучше WorkManager |
-| IntentService      | Фоновый (авто)     | Обычно нет                  | Deprecated с API 30 (использовать WorkManager или свои потоки/корутины)      |
+| Regular `Service`    | Главный            | Да, вручную (потоки/корутины) | Использовать для контролируемых задач (особенно как foreground/bound); не полагаться на него для отложенных задач, где лучше `WorkManager` |
+| IntentService      | Фоновый (авто)     | Обычно нет                  | Deprecated с API 30 (использовать `WorkManager` или свои потоки/корутины)      |
 | Foreground `Service` | Главный            | Да, фон/корутины рекомендуются | Для длительной видимой работы (музыка, навигация и т.п.)                      |
-| WorkManager        | Фоновый (авто)     | Нет для своей задачи        | Рекомендуется для гарантированных, отложенных и периодических фоновых задач  |
+| `WorkManager`        | Фоновый (авто)     | Нет для своей задачи        | Рекомендуется для гарантированных, отложенных и периодических фоновых задач  |
 
 ### Best Practices
 
 1. **Никогда не предполагайте, что `Service` работает в фоновом потоке** — Всегда помните, что колбэки идут в главный поток, и явно переносите тяжёлую работу в фон.
-2. **Используйте WorkManager для отложенных фоновых задач** — Подходит для задач, которые должны быть гарантированно выполнены с учётом ограничений системы.
+2. **Используйте `WorkManager` для отложенных фоновых задач** — Подходит для задач, которые должны быть гарантированно выполнены с учётом ограничений системы.
 3. **Используйте Foreground `Service` для длительной пользовательски-видимой работы** — Например, музыка, навигация, трекинг, где требуется постоянное уведомление.
 4. **Всегда используйте корутины/потоки для длительных операций** — Предотвращает ANR и блокировку UI.
 5. **Останавливайте сервис, когда он больше не нужен** — Вызывайте `stopSelf()` (или `stopSelf(startId)`) для started service.
@@ -270,31 +270,31 @@ val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
-> WorkManager is intended for guaranteed, deferred/periodic background work that respects system constraints, not for strictly interactive or real-time operations.
+> `WorkManager` is intended for guaranteed, deferred/periodic background work that respects system constraints, not for strictly interactive or real-time operations.
 
 ### `Service` Types Comparison
 
-| `Service` Type       | Default Thread | Background Required                | Recommendation                                                                 |
+| `Service` Type       | Default `Thread` | Background Required                | Recommendation                                                                 |
 |--------------------|----------------|------------------------------------|---------------------------------------------------------------------------------|
-| Regular `Service`    | Main           | Yes, via manual threads/coroutines | Use for controlled tasks (especially as foreground/bound); for deferred tasks prefer WorkManager |
-| IntentService      | Background (auto) | Typically no                     | Deprecated as of API 30 (use WorkManager or your own threading/coroutines)      |
+| Regular `Service`    | Main           | Yes, via manual threads/coroutines | Use for controlled tasks (especially as foreground/bound); for deferred tasks prefer `WorkManager` |
+| IntentService      | Background (auto) | Typically no                     | Deprecated as of API 30 (use `WorkManager` or your own threading/coroutines)      |
 | Foreground `Service` | Main           | Yes, background/coroutines recommended | For long-running user-visible work (music, navigation, tracking, etc.)         |
-| WorkManager        | Background (auto) | No for its own work              | Recommended for guaranteed, deferred and periodic background tasks              |
+| `WorkManager`        | Background (auto) | No for its own work              | Recommended for guaranteed, deferred and periodic background tasks              |
 
 ### Best Practices
 
 1. **Never assume a `Service` runs on a background thread** — Remember callbacks are on the main thread; explicitly move heavy work off the main thread.
-2. **Use WorkManager for deferred background tasks** — Suitable when work must be guaranteed and respect system constraints (battery, network, etc.).
+2. **Use `WorkManager` for deferred background tasks** — Suitable when work must be guaranteed and respect system constraints (battery, network, etc.).
 3. **Use Foreground `Service` for long-running user-visible work** — E.g., music playback, navigation, tracking that requires a persistent notification.
 4. **Always use coroutines/threads for long operations** — Prevents ANRs and keeps the UI responsive.
-5. **Stop the service when it's no longer needed** — Call `stopSelf()` (or `stopSelf(startId)`) for a started service to release resources.
+5. **Stop the service when it's no longer needed** — `Call` `stopSelf()` (or `stopSelf(startId)`) for a started service to release resources.
 
 ---
 
 ## Дополнительные Вопросы (RU)
 
 - Что произойдет, если заблокировать главный поток внутри `Service`?
-- Когда следует использовать Foreground `Service` вместо WorkManager?
+- Когда следует использовать Foreground `Service` вместо `WorkManager`?
 - Чем `IntentService` отличается от обычного `Service`?
 - Какова роль `stopSelf()` по сравнению с `stopService()`?
 - Как обрабатывать жизненный цикл `Service` при использовании корутин?
@@ -302,7 +302,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 ## Follow-ups
 
 - What happens if you block the main thread in a `Service`?
-- When should you use Foreground `Service` vs WorkManager?
+- When should you use Foreground `Service` vs `WorkManager`?
 - How does IntentService differ from regular `Service`?
 - What is the role of `stopSelf()` vs `stopService()`?
 - How do you handle `Service` lifecycle with coroutines?

@@ -1,4 +1,4 @@
----
+---\
 id: android-049
 title: Hilt Assisted Injection / Hilt Ассистированный инжект
 aliases: [Hilt Assisted Injection, Hilt Ассистированный инжект]
@@ -17,7 +17,7 @@ tags: [android/architecture-mvvm, android/di-hilt, assisted-inject, dagger, depe
 sources:
   - "https://dagger.dev/hilt/assisted-injection.html"
 
----
+---\
 # Вопрос (RU)
 > Что такое Assisted Injection в Hilt/Dagger? Когда использовать `@AssistedInject` и `@AssistedFactory`?
 
@@ -159,7 +159,7 @@ interface TransferProcessorFactory {
 }
 ```
 
-**WorkManager интеграция (Hilt 2.31+):**
+**`WorkManager` интеграция (`Hilt` 2.31+):**
 ```kotlin
 @HiltWorker
 class DataSyncWorker @AssistedInject constructor(
@@ -208,9 +208,9 @@ class DataSyncWorker @AssistedInject constructor(
 }
 ```
 
-Для полноты при реальной интеграции с WorkManager через Hilt необходимо использовать сгенерированный `HiltWorkerFactory` (Hilt конфигурирует его автоматически при подключении соответствующих зависимостей и аннотаций). В примере выше фокус сделан на Assisted-конструкторе worker-а.
+Для полноты при реальной интеграции с `WorkManager` через `Hilt` необходимо использовать сгенерированный `HiltWorkerFactory` (`Hilt` конфигурирует его автоматически при подключении соответствующих зависимостей и аннотаций). В примере выше фокус сделан на Assisted-конструкторе worker-а.
 
-**ViewHolder с зависимостями:**
+**`ViewHolder` с зависимостями:**
 ```kotlin
 class ProductViewHolder @AssistedInject constructor(
     // Внедрённые зависимости
@@ -392,7 +392,7 @@ interface TransferProcessorFactory {
 }
 ```
 
-**WorkManager integration (Hilt 2.31+):**
+**`WorkManager` integration (`Hilt` 2.31+):**
 ```kotlin
 @HiltWorker
 class DataSyncWorker @AssistedInject constructor(
@@ -441,9 +441,9 @@ class DataSyncWorker @AssistedInject constructor(
 }
 ```
 
-For full WorkManager integration in a real project, you rely on the generated `HiltWorkerFactory` (Hilt wires this when you add the appropriate dependencies and annotations). The example above focuses on the Assisted constructor pattern for the worker.
+For full `WorkManager` integration in a real project, you rely on the generated `HiltWorkerFactory` (`Hilt` wires this when you add the appropriate dependencies and annotations). The example above focuses on the Assisted constructor pattern for the worker.
 
-**ViewHolder with dependencies:**
+**`ViewHolder` with dependencies:**
 ```kotlin
 class ProductViewHolder @AssistedInject constructor(
     // Injected dependencies

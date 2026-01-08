@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-224811"
 title: "Message Queues / Message Queues"
 aliases: ["Message Queues"]
@@ -9,17 +9,18 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-microservices, c-system-design, c-scaling-strategies, c-load-balancing, c-real-time-communication]
+moc: "moc-cs"
+related: ["c-microservices", "c-system-design", "c-scaling-strategies", "c-load-balancing", "c-real-time-communication"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-Message queues are middleware components that enable asynchronous communication between services or processes by storing messages until they are processed. They decouple senders and consumers in time and space, improving scalability, reliability, and fault tolerance of distributed systems. Commonly used in microservices, event-driven architectures, background job processing, and integrating heterogeneous systems.
+`Message` queues are middleware components that enable asynchronous communication between services or processes by storing messages until they are processed. They decouple senders and consumers in time and space, improving scalability, reliability, and fault tolerance of distributed systems. Commonly used in microservices, event-driven architectures, background job processing, and integrating heterogeneous systems.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
@@ -32,7 +33,7 @@ Message queues are middleware components that enable asynchronous communication 
 ## Key Points (EN)
 
 - Decoupling: Producers and consumers do not need to be online simultaneously; messages are buffered in the queue until processed.
-- Asynchronous processing: Long-running or non-critical tasks (emails, reports, data processing) are offloaded from request-response paths, reducing latency.
+- Asynchronous processing: `Long`-running or non-critical tasks (emails, reports, data processing) are offloaded from request-response paths, reducing latency.
 - Reliability and durability: Messages can be persisted to ensure delivery even if services fail; supports at-least-once or at-most-once delivery semantics.
 - Scalability: Multiple consumers can read from the same queue in parallel, enabling horizontal scaling and load leveling.
 - Ordering and semantics: Some systems preserve message order (FIFO), and support features like dead-letter queues, retries, and visibility timeouts.

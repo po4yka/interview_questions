@@ -1,4 +1,4 @@
----
+---\
 id: android-146
 title: "How To Change Number Of Columns In RecyclerView Based On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации"
 aliases: ["Change RecyclerView Columns by Orientation", "Изменить количество колонок RecyclerView по ориентации"]
@@ -16,14 +16,14 @@ updated: 2025-11-10
 sources: []
 tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, grid-layout, recyclerview]
 
----
+---\
 # Вопрос (RU)
 
-> Как изменить количество колонок в RecyclerView в зависимости от ориентации устройства?
+> Как изменить количество колонок в `RecyclerView` в зависимости от ориентации устройства?
 
 # Question (EN)
 
-> How do you change the number of columns in RecyclerView based on device orientation?
+> How do you change the number of columns in `RecyclerView` based on device orientation?
 
 ---
 
@@ -248,23 +248,23 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 ## Связанные Вопросы (RU)
 
 ### Предварительные Знания
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Базовые концепции RecyclerView
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Базовые концепции `RecyclerView`
 
 ### Связанные
 - [[q-looper-empty-queue-behavior--android--medium]] - Обработка конфигурационных изменений
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Альтернатива на Compose
 
 ### Продвинутые
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Продвинутые паттерны RecyclerView
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Продвинутые паттерны `RecyclerView`
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` basics
 
 ### Related
 - [[q-looper-empty-queue-behavior--android--medium]] - Configuration handling
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
 
 ### Advanced
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Advanced RecyclerView patterns
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Advanced `RecyclerView` patterns

@@ -1,4 +1,4 @@
----
+---\
 id: android-311
 title: Compose remember/derivedStateOf / remember и derivedStateOf в Compose
 aliases: [Compose remember and derivedStateOf, remember и derivedStateOf]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Что такое remember и derivedStateOf в Jetpack Compose? Когда и как их использовать?
 
@@ -31,7 +31,7 @@ tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
 **`remember`** — кеширует значения в композиции; переживает рекомпозицию, но не пересоздание активити/хоста композиции.
 
-**`rememberSaveable`** — сохраняет значения через изменения конфигурации и может быть восстановлен после смерти процесса за счет механизма `SavedInstanceState` (использует `Bundle`/`Saver`), если хост (Activity / NavBackStackEntry и т.п.) правильно интегрирован с SavedState и восстанавливает состояние.
+**`rememberSaveable`** — сохраняет значения через изменения конфигурации и может быть восстановлен после смерти процесса за счет механизма `SavedInstanceState` (использует `Bundle`/`Saver`), если хост (`Activity` / NavBackStackEntry и т.п.) правильно интегрирован с SavedState и восстанавливает состояние.
 
 **`derivedStateOf`** — описывает производное состояние на основе других состояний. Инвалидируется при изменении зависимостей и сравнивает новое значение с предыдущим: только при фактическом изменении производного значения уведомляются его потребители. Это уменьшает лишние обновления для тех, кто подписан именно на производное состояние.
 
@@ -123,7 +123,7 @@ val showFabDirect = listState.firstVisibleItemIndex > 0
 
 **`remember`** — caches values in the composition; survives recomposition but not `Activity`/composition host recreation.
 
-**`rememberSaveable`** — persists values across configuration changes and can be restored after process death via the `SavedInstanceState` mechanism (uses `Bundle`/`Saver`), provided the host (Activity / NavBackStackEntry, etc.) is properly integrated with SavedState and restores that state.
+**`rememberSaveable`** — persists values across configuration changes and can be restored after process death via the `SavedInstanceState` mechanism (uses `Bundle`/`Saver`), provided the host (`Activity` / NavBackStackEntry, etc.) is properly integrated with SavedState and restores that state.
 
 **`derivedStateOf`** — describes derived state based on other states. It is invalidated when its dependencies change and compares the new value to the previous one; only when the derived value actually changes are its consumers notified. This reduces unnecessary updates for observers of that derived state.
 

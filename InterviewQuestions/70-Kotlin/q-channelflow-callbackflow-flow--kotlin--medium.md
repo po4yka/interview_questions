@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-061
 title: "channelFlow vs callbackFlow vs flow: when to use each / channelFlow vs callbackFlow vs flow: когда использовать"
 topic: kotlin
@@ -14,7 +14,7 @@ aliases: ["channelFlow vs callbackFlow vs flow: когда использова�
 question_kind: coding
 related: [c-coroutines, c-flow, c-kotlin, q-channels-vs-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 subtopics: [builders, coroutines, flow]
----
+---\
 # Вопрос (RU)
 > В чем разница между `flow{}`, `channelFlow{}`, и `callbackFlow{}`? Когда следует использовать каждый билдер?
 
@@ -41,7 +41,7 @@ Kotlin `Flow` предоставляет несколько билдеров (`f
 
 Характеристики:
 - Холодный: выполнение начинается только при запуске терминального оператора; каждый новый коллектор заново запускает блок.
-- Последовательный: `emit()` — приостанавливающая функция, вызывать её можно только из той же корутины, конкурентные эмиссии запрещены (иначе нарушение инварианта Flow).
+- Последовательный: `emit()` — приостанавливающая функция, вызывать её можно только из той же корутины, конкурентные эмиссии запрещены (иначе нарушение инварианта `Flow`).
 - Back-pressure: реализуется через приостановку `emit()` до готовности downstream.
 - Без дополнительной буферизации: значения идут напрямую коллекторам (если явно не добавить `buffer`).
 
@@ -91,7 +91,7 @@ fetchPages().collect { items ->
 }
 ```
 
-Нельзя эмитить конкурентно (инвариант Flow):
+Нельзя эмитить конкурентно (инвариант `Flow`):
 
 ```kotlin
 // ОШИБКА: нарушение инварианта Flow
@@ -715,11 +715,11 @@ Kotlin `Flow` provides multiple builders (`flow{}`, `channelFlow{}`, `callbackFl
 
 ### Overview of Flow Builders
 
-| Builder | Flow nature | Concurrency | Buffering | Primary use case |
+| Builder | `Flow` nature | Concurrency | Buffering | Primary use case |
 |---------|------------|-------------|-----------|------------------|
 | `flow{}` | Cold | Sequential emissions only (single coroutine) | No extra buffer (direct backpressure via suspension) | Simple sequential suspending emissions, transformations |
-| `channelFlow{}` | Cold Flow using a Channel internally | Concurrent producers inside the builder | Buffered channel (configurable) | Merge/coordinate multiple concurrent sources |
-| `callbackFlow{}` | Cold Flow using a Channel internally | Safe from callbacks + coroutines | Buffered + requires proper `awaitClose` cleanup | Wrapping callback/listener-style APIs |
+| `channelFlow{}` | Cold `Flow` using a Channel internally | Concurrent producers inside the builder | Buffered channel (configurable) | Merge/coordinate multiple concurrent sources |
+| `callbackFlow{}` | Cold `Flow` using a Channel internally | Safe from callbacks + coroutines | Buffered + requires proper `awaitClose` cleanup | Wrapping callback/listener-style APIs |
 
 Note: All three builders create cold Flows. For `channelFlow{}` and `callbackFlow{}`, the producer logic is started per collection and uses an internal Channel. This can make them resemble hot sources (concurrent producers, buffering), but their lifecycle is still scoped to the collector; they do not become globally hot on their own.
 
@@ -777,7 +777,7 @@ fetchPages().collect { items ->
 }
 ```
 
-Cannot emit concurrently (Flow invariant):
+Cannot emit concurrently (`Flow` invariant):
 
 ```kotlin
 // ERROR: Flow invariant is violated
@@ -795,7 +795,7 @@ fun concurrentFlow(): Flow<Int> = flow {
 ### channelFlow{} - Concurrent Producers with Channel
 
 Characteristics:
-- Cold Flow whose block runs in a `ProducerScope` backed by a Channel.
+- Cold `Flow` whose block runs in a `ProducerScope` backed by a Channel.
 - Concurrent: You can launch multiple coroutines inside the block and `send`/`emit` from any of them.
 - Buffered: Uses a Channel; default capacity is `Channel.BUFFERED` (typically 64) unless changed.
 - Backpressure: Achieved via suspending `send`/`emit` when the buffer is full.
@@ -823,10 +823,10 @@ fun concurrentFlow(): Flow<Int> = channelFlow {
 ```
 
 When to use:
-- Multiple concurrent data sources that should be merged into a single Flow.
+- Multiple concurrent data sources that should be merged into a single `Flow`.
 - Parallel data processing where producers may emit independently.
 - Need explicit buffering between producer(s) and consumer.
-- Bridging existing channels or fan-in patterns into a Flow.
+- Bridging existing channels or fan-in patterns into a `Flow`.
 
 Example: Parallel API calls
 
@@ -863,7 +863,7 @@ fun bufferedFlow(): Flow<Int> = channelFlow {
 ### callbackFlow{} - Wrapping Callback-Based APIs
 
 Characteristics:
-- Cold Flow whose block runs in a `ProducerScope` with a Channel.
+- Cold `Flow` whose block runs in a `ProducerScope` with a Channel.
 - Designed for callback/listener-style APIs.
 - Can safely use `send()` from coroutines in the scope and `trySend()` from non-suspending callbacks.
 - Requires `awaitClose {}` to unregister listeners / close resources correctly.
@@ -1157,7 +1157,7 @@ flow {
 ```
 
 `channelFlow{}` / `callbackFlow{}`:
-- Use `awaitClose {}` (and/or `try/finally`) to clean up resources when the Flow is cancelled.
+- Use `awaitClose {}` (and/or `try/finally`) to clean up resources when the `Flow` is cancelled.
 
 ```kotlin
 callbackFlow {
@@ -1345,9 +1345,9 @@ callbackFlow {
 
 - Need to emit values sequentially from suspend code in a single coroutine?
   - Use `flow{}`.
-- Need to combine emissions from multiple concurrent coroutines in one Flow?
+- Need to combine emissions from multiple concurrent coroutines in one `Flow`?
   - Use `channelFlow{}`.
-- Need to turn callbacks/listeners or external push APIs into a Flow?
+- Need to turn callbacks/listeners or external push APIs into a `Flow`?
   - Use `callbackFlow{}`.
 
 Examples:
@@ -1392,8 +1392,8 @@ fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
 ### Key Takeaways
 
 1. `flow{}` — default choice, cold, sequential, minimal overhead.
-2. `channelFlow{}` — cold Flow backed by Channel; supports concurrent producers and configurable buffering.
-3. `callbackFlow{}` — cold Flow backed by Channel; ideal for callback/listener APIs; requires `awaitClose {}` for proper cleanup.
+2. `channelFlow{}` — cold `Flow` backed by Channel; supports concurrent producers and configurable buffering.
+3. `callbackFlow{}` — cold `Flow` backed by Channel; ideal for callback/listener APIs; requires `awaitClose {}` for proper cleanup.
 4. Use `emit()` in regular `flow{}` and in producer scopes when appropriate; use `send()` for suspending channel sends; use `trySend()` for non-suspending callbacks.
 5. Remember that backpressure is handled by suspension; buffering strategies affect behavior for fast producers.
 6. All three builders are cold; to get truly shared hot behavior, use `shareIn`, `stateIn`, or explicit shared sources (`StateFlow`, `SharedFlow`).
@@ -1424,13 +1424,13 @@ fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
 
 ## Ссылки (RU)
 
-- Документация по Kotlin Flow: https://kotlinlang.org/docs/flow.html
+- Документация по Kotlin `Flow`: https://kotlinlang.org/docs/flow.html
 - `channelFlow` и `callbackFlow` в kotlinx.coroutines: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html
 - Статья Романа Елизарова о callback-ах и Flows: https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf
 
 ## References
 
-- Kotlin Flow Documentation: https://kotlinlang.org/docs/flow.html
+- Kotlin `Flow` Documentation: https://kotlinlang.org/docs/flow.html
 - channelFlow vs callbackFlow: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html
 - Callbacks and Kotlin Flows (Elizarov): https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf
 
@@ -1454,13 +1454,13 @@ fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
 ## Related Questions
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction
 
 ### Related (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow`
 - [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
 
 ### Advanced (Harder)

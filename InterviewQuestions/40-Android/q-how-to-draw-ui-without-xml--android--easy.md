@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-android-ui-composition-basics, c-jetpack-compose, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
-tags: [android/ui-compose, android/ui-views, compose, difficulty/easy, ui, views]
+tags: [android/ui-compose, android/ui-views, difficulty/easy, ui, views]
 sources: []
 
 ---

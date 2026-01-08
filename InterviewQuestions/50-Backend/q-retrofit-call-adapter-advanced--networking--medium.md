@@ -1,4 +1,4 @@
----
+---\
 id: net-002
 title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
 aliases: ["Retrofit Call Adapter Advanced", "Продвинутый CallAdapter для Retrofit"]
@@ -16,22 +16,22 @@ updated: 2025-11-11
 sources: []
 tags: [backend, call-adapter, difficulty/medium, networking, result, retrofit]
 
----
+---\
 # Вопрос (RU)
 
-> Как реализовать кастомный Retrofit CallAdapter для типа `Result<T>`? Как централизованно обрабатывать разные типы ошибок с помощью sealed классов?
+> Как реализовать кастомный `Retrofit` CallAdapter для типа `Result<T>`? Как централизованно обрабатывать разные типы ошибок с помощью sealed классов?
 
 # Question (EN)
 
-> How to implement custom Retrofit CallAdapter for `Result<T>` type? How to centrally handle different response types and errors with sealed classes?
+> How to implement custom `Retrofit` CallAdapter for `Result<T>` type? How to centrally handle different response types and errors with sealed classes?
 
 ---
 
 ## Ответ (RU)
 
-**Retrofit CallAdapter** - механизм трансформации HTTP-ответов в кастомные типы. Позволяет централизовать обработку ошибок, стандартизировать работу с API и интегрироваться с разными моделями вызовов (Call, suspend и т.п.). См. также [[c-backend]].
+**`Retrofit` CallAdapter** - механизм трансформации HTTP-ответов в кастомные типы. Позволяет централизовать обработку ошибок, стандартизировать работу с API и интегрироваться с разными моделями вызовов (`Call`, suspend и т.п.). См. также [[c-backend]].
 
-Важно: приведённая реализация адаптера ниже работает для методов, которые возвращают `Call<Result<T>>`. Для `suspend`-функций Retrofit использует встроенную поддержку корутин; чтобы применить этот подход к `suspend fun`, сигнатуры методов должны быть согласованы с тем, что ожидает `CallAdapter` (см. пример ниже).
+Важно: приведённая реализация адаптера ниже работает для методов, которые возвращают `Call<Result<T>>`. Для `suspend`-функций `Retrofit` использует встроенную поддержку корутин; чтобы применить этот подход к `suspend fun`, сигнатуры методов должны быть согласованы с тем, что ожидает `CallAdapter` (см. пример ниже).
 
 ### Зачем Нужен CallAdapter?
 
@@ -312,9 +312,9 @@ override fun adapt(call: Call<T>): Call<Result<T>> {
 
 ## Answer (EN)
 
-A **Retrofit CallAdapter** is a mechanism for transforming HTTP responses into custom types. It centralizes error handling, standardizes API interaction, and can integrate with different calling models (Call, suspend, etc.). See also [[c-backend]].
+A **`Retrofit` CallAdapter** is a mechanism for transforming HTTP responses into custom types. It centralizes error handling, standardizes API interaction, and can integrate with different calling models (`Call`, suspend, etc.). See also [[c-backend]].
 
-Important: the implementation below targets methods that return `Call<Result<T>>`. For `suspend` functions Retrofit uses its built-in coroutine support; to apply this pattern directly to `suspend fun` you need a CallAdapter that adapts to coroutine return types. In this example we focus on `Call<Result<T>>` for clarity and correctness.
+Important: the implementation below targets methods that return `Call<Result<T>>`. For `suspend` functions `Retrofit` uses its built-in coroutine support; to apply this pattern directly to `suspend fun` you need a CallAdapter that adapts to coroutine return types. In this example we focus on `Call<Result<T>>` for clarity and correctness.
 
 ### Why Custom CallAdapter?
 
@@ -598,19 +598,19 @@ override fun adapt(call: Call<T>): Call<Result<T>> {
 - How to support `Flow<Result<T>>` return type in CallAdapter?
 - How to handle multipart/form-data uploads with Result wrapper?
 - What is the performance overhead of wrapping every response?
-- How to integrate custom CallAdapter with OkHttp interceptors?
+- How to integrate custom CallAdapter with `OkHttp` interceptors?
 - How to handle 401 token refresh automatically in CallAdapter?
 
 ## References
 
-- Official Retrofit documentation
+- Official `Retrofit` documentation
 - Community articles on custom CallAdapter implementations
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
-- Basic Retrofit usage and setup
+- Basic `Retrofit` usage and setup
 - Sealed classes fundamentals
 - Coroutines and suspend functions
 
@@ -621,5 +621,5 @@ override fun adapt(call: Call<T>): Call<Result<T>> {
 
 ### Advanced (Harder)
 
-- Custom Retrofit converters
+- Custom `Retrofit` converters
 - Advanced type reflection patterns

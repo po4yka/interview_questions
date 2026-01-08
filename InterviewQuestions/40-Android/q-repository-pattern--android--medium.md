@@ -1,4 +1,4 @@
----
+---\
 id: android-070
 title: Repository Pattern in Android / Паттерн Repository в Android
 aliases: [Repository Pattern in Android, Паттерн Repository в Android]
@@ -17,7 +17,7 @@ created: 2025-10-12
 updated: 2025-11-11
 tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium, en, ru]
 
----
+---\
 # Вопрос (RU)
 > Что такое паттерн Repository в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
 
@@ -1414,7 +1414,7 @@ class CheckoutRepository(
 4. **Prefer a clear single source of truth** - Often the database; sync network into it.
 5. **Handle errors explicitly** - Prefer returning Result/Resource or domain errors instead of swallowing exceptions.
 6. **Use interfaces** - For testability and swapping implementations.
-7. **Inject repositories** - Use DI rather than manual construction deep in the UI.
+7. **`Inject` repositories** - Use DI rather than manual construction deep in the UI.
 8. **Keep repository focused** - Coordination of data sources; move complex business rules to use cases/interactors.
 9. **Cache strategically** - Only where it provides value.
 10. **Test thoroughly** - Unit tests with fakes/mocks; integration tests with real DB/network stubs.

@@ -14,7 +14,7 @@ moc: moc-android
 related: [c-compose-state, c-jetpack-compose, c-viewmodel, q-api-file-upload-server--android--medium, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium, q-reduce-app-size--android--medium, q-where-is-composition-created-for-calling-composable-function--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, jetpack-compose, modifiers]
+tags: [android/ui-compose, android/ui-state, difficulty/medium, modifiers]
 ---
 # Вопрос (RU)
 

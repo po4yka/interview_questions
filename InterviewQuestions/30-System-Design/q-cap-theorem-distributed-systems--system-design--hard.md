@@ -1,4 +1,4 @@
----
+---\
 id: sysdes-004
 title: "CAP Theorem and Distributed Systems / CAP теорема и распределённые системы"
 aliases: ["CAP Theorem", "CAP теорема"]
@@ -16,7 +16,7 @@ updated: 2025-11-11
 tags: [cap-theorem, consistency, difficulty/hard, distributed-systems, system-design]
 sources: ["https://en.wikipedia.org/wiki/CAP_theorem"]
 
----
+---\
 # Вопрос (RU)
 > Что такое CAP теорема? Какие компромиссы делают разные системы, и как выбрать между CP и AP системами?
 
@@ -31,7 +31,7 @@ sources: ["https://en.wikipedia.org/wiki/CAP_theorem"]
 
 ## Answer (EN)
 
-See "Short Version" and "Detailed Version" sections below for the complete answer.
+See "`Short` Version" and "Detailed Version" sections below for the complete answer.
 
 ## Follow-ups
 
@@ -51,11 +51,11 @@ See "Short Version" and "Detailed Version" sections below for the complete answe
 
 ### Adjacent (same level)
 - [[q-horizontal-vertical-scaling--system-design--medium]] - Scaling strategies
-- [[q-message-queues-event-driven--system-design--medium]] - Message queues and event-driven systems
+- [[q-message-queues-event-driven--system-design--medium]] - `Message` queues and event-driven systems
 
 ### Advanced (harder)
 - [[q-microservices-vs-monolith--system-design--hard]] - Architectural approaches
-- [[q-database-sharding-partitioning--system-design--hard]] - Database sharding and partitioning
+- [[q-database-sharding-partitioning--system-design--hard]] - `Database` sharding and partitioning
 
 ## Краткая Версия
 В условиях реального сетевого разделения распределённая система не может одновременно обеспечить строгую консистентность и полную доступность, сохраняя устойчивость к разделению. Практически P считается обязательным, а реальный выбор идёт между CP и AP-поведением, исходя из требований бизнеса и допустимых рисков.

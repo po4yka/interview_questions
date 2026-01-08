@@ -1,4 +1,4 @@
----
+---\
 id: android-085
 title: RecyclerView ViewTypes Delegation / Делегирование ViewTypes в RecyclerView
 aliases: [RecyclerView ViewTypes Delegation, Делегирование ViewTypes в RecyclerView]
@@ -17,19 +17,19 @@ tags: [adapter, android/ui-views, design-patterns, difficulty/medium, view-types
 sources:
   - "https://developer.android.com/guide/topics/ui/layout/recyclerview"
 
----
+---\
 # Вопрос (RU)
-> Как обрабатывать множественные типы view в RecyclerView?
+> Как обрабатывать множественные типы view в `RecyclerView`?
 
 # Question (EN)
-> How to handle multiple view types in RecyclerView?
+> How to handle multiple view types in `RecyclerView`?
 
 ---
 
 ## Ответ (RU)
 
 **Теория ViewTypes:**
-ViewTypes позволяют отображать разные макеты в одном RecyclerView (заголовки, элементы, футеры, реклама). Правильная реализация критична для производительности и поддерживаемости гетерогенных списков. Важно, чтобы `getItemViewType(position)` устойчиво и однозначно соответствовал типу данных, иначе возможны артефакты из-за некорректного ресайклинга.
+ViewTypes позволяют отображать разные макеты в одном `RecyclerView` (заголовки, элементы, футеры, реклама). Правильная реализация критична для производительности и поддерживаемости гетерогенных списков. Важно, чтобы `getItemViewType(position)` устойчиво и однозначно соответствовал типу данных, иначе возможны артефакты из-за некорректного ресайклинга.
 
 **Основные компоненты:**
 - `getItemViewType(position)` — определяет тип view для позиции; его результат используется фреймворком при вызове `onCreateViewHolder(parent, viewType)` и должен быть стабилен для данного элемента
@@ -92,8 +92,8 @@ sealed class ListItem {
 }
 ```
 
-**Adapter Delegation Pattern:**
-Делегирование позволяет разделить логику разных типов элементов на отдельные делегаты и тем самым упростить адаптер. Каждый делегат отвечает за свой viewType и используется адаптером для создания и биндинга соответствующих ViewHolder.
+**`Adapter` Delegation Pattern:**
+Делегирование позволяет разделить логику разных типов элементов на отдельные делегаты и тем самым упростить адаптер. Каждый делегат отвечает за свой viewType и используется адаптером для создания и биндинга соответствующих `ViewHolder`.
 
 ```kotlin
 // Пример контракта делегата (упрощённо)
@@ -130,7 +130,7 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 ## Answer (EN)
 
 **ViewTypes Theory:**
-ViewTypes allow displaying different layouts in the same RecyclerView (headers, items, footers, ads). Proper implementation is critical for performance and maintainability of heterogeneous lists. It is important that `getItemViewType(position)` consistently and uniquely reflects the data type; otherwise you may get visual artifacts due to incorrect view recycling.
+ViewTypes allow displaying different layouts in the same `RecyclerView` (headers, items, footers, ads). Proper implementation is critical for performance and maintainability of heterogeneous lists. It is important that `getItemViewType(position)` consistently and uniquely reflects the data type; otherwise you may get visual artifacts due to incorrect view recycling.
 
 **Main components:**
 - `getItemViewType(position)` - determines view type for a position; its result is used by the framework when calling `onCreateViewHolder(parent, viewType)` and must be stable for the given item
@@ -193,8 +193,8 @@ sealed class ListItem {
 }
 ```
 
-**Adapter Delegation Pattern:**
-Delegation allows separating logic for different item types into dedicated delegates, simplifying the main adapter. Each delegate handles its own viewType and is used by the adapter to create and bind the corresponding ViewHolder.
+**`Adapter` Delegation Pattern:**
+Delegation allows separating logic for different item types into dedicated delegates, simplifying the main adapter. Each delegate handles its own viewType and is used by the adapter to create and bind the corresponding `ViewHolder`.
 
 ```kotlin
 // Example of a delegate contract (simplified)
@@ -260,7 +260,7 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 - [[q-android-app-components--android--easy]] - Компоненты приложения
 
 ### Связанные (Того Же уровня)
-- [[q-recyclerview-explained--android--medium]] - Объяснение RecyclerView
+- [[q-recyclerview-explained--android--medium]] - Объяснение `RecyclerView`
 
 ### Продвинутые (Сложнее)
 - [[q-android-runtime-internals--android--hard]] - Внутреннее устройство Runtime
@@ -273,7 +273,7 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
-- [[q-recyclerview-explained--android--medium]] - RecyclerView explanation
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` explanation
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

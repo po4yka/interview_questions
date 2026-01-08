@@ -1,4 +1,4 @@
----
+---\
 id: android-261
 title: How To Stop Service / Остановка Service
 aliases: [How To Stop Service, Остановка Service]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/service, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Остановка `Service`
 
@@ -888,7 +888,7 @@ class MyService : Service() {
 }
 ```
 
-Lifecycle (purely bound):
+`Lifecycle` (purely bound):
 
 ```text
 bindService() → onCreate() → onBind() → Service running
@@ -1044,7 +1044,7 @@ class HybridService : Service() {
 }
 ```
 
-Lifecycle scenarios (conceptual):
+`Lifecycle` scenarios (conceptual):
 
 ```text
 Scenario 1: Started only

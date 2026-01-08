@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-072950"
 title: "Facade Pattern / Facade Pattern"
 aliases: ["Facade Pattern"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-system-design"
-related: [c-adapter-pattern, c-decorator-pattern, c-design-patterns, c-clean-architecture, c-repository-pattern]
+moc: "moc-architecture-patterns"
+related: ["c-adapter-pattern", "c-decorator-pattern", "c-design-patterns", "c-clean-architecture", "c-repository-pattern"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["architecture-patterns", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [architecture-patterns, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -35,7 +36,7 @@ The Facade Pattern is a structural design pattern that provides a simplified, un
 - Reduced coupling: Clients depend on the facade instead of multiple subsystem classes, improving modularity and easing refactoring.
 - Encapsulation of orchestration: Coordination of multiple operations (e.g., validation, logging, external calls) is centralized inside the facade.
 - Backward compatibility: Changes inside the subsystem can often be made without impacting clients as long as the facade contract remains stable.
-- Difference from Adapter: Facade simplifies access to a system; Adapter converts one specific interface to another—interviewers often ask to distinguish them.
+- Difference from `Adapter`: Facade simplifies access to a system; `Adapter` converts one specific interface to another—interviewers often ask to distinguish them.
 
 ## Ключевые Моменты (RU)
 

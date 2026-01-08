@@ -1,4 +1,4 @@
----
+---\
 id: android-358
 title: Main Android Components / Основные компоненты Android
 aliases: [Main Android Components, Основные компоненты Android]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/activity, android/content-provider, android/service, components, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 
 > Какие основные компоненты Android-приложения?
@@ -151,7 +151,7 @@ class NetworkReceiver : BroadcastReceiver() {
 
 **4. `ContentProvider`** - data management and sharing
 - Centralized data storage for application
-- Provides controlled access to data from other apps
+- `Provides` controlled access to data from other apps
 - Example: Contacts, MediaStore
 
 ```kotlin
@@ -196,12 +196,12 @@ class MyContentProvider : ContentProvider() {
 ## Ссылки (RU)
 
 - [[moc-android]] - Обзор разработки под Android
-- [Android Developer Guide - Application Fundamentals](https://developer.android.com/guide/components/fundamentals)
+- [Android Developer Guide - `Application` Fundamentals](https://developer.android.com/guide/components/fundamentals)
 
 ## References
 
 - [[moc-android]] - Android development overview
-- [Android Developer Guide - Application Fundamentals](https://developer.android.com/guide/components/fundamentals)
+- [Android Developer Guide - `Application` Fundamentals](https://developer.android.com/guide/components/fundamentals)
 
 ## Связанные Вопросы (RU)
 
@@ -233,12 +233,12 @@ class MyContentProvider : ContentProvider() {
 
 ### Prerequisites
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread fundamentals
-- [[q-what-unifies-android-components--android--easy]] - Component foundation
+- [[q-what-unifies-android-components--android--easy]] - `Component` foundation
 
 ### Related
 - [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle details
 - [[q-android-components-besides-activity--android--easy]] - Other component types
 
 ### Advanced
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Component architecture
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - `Component` architecture
 - [[q-hilt-components-scope--android--medium]] - Dependency injection with components

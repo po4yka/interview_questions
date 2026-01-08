@@ -1,4 +1,4 @@
----
+---\
 id: android-445
 title: Design Uber App / Проектирование приложения Uber
 aliases: [Design Uber App, Проектирование приложения Uber]
@@ -15,7 +15,7 @@ created: 2025-10-20
 updated: 2025-11-10
 tags: [android/location, android/networking-http, android/service, architecture, difficulty/hard, location, maps, networking, performance, realtime, system-design, websocket]
 
----
+---\
 # Вопрос (RU)
 
 > Как спроектировать приложение Uber для Android?
@@ -379,13 +379,13 @@ rideRepo.observeRide(rideId)
 
 ### Staff-level Model Answer (RU)
 
-Архитектура: модули feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI по экранам; TripRepository объединяет Room + сеть; флаги для протоколов и частоты семплинга.
+Архитектура: модули feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI по экранам; TripRepository объединяет `Room` + сеть; флаги для протоколов и частоты семплинга.
 
 Карта/перф: бюджет кадра 16ms, интерполяции и кластеризацию выполнять вне UI‑потока.
 
 Локация: FusedLocationProvider; без Play Services — GNSS+сенсоры. Семплинг: idle 0.2–0.5 Гц (significant‑motion), в пути 1 Гц с батчингом 5–10с; сглаживание (Kalman), физпроверки против спуфинга. FG‑сервис при активной поездке.
 
-Машина состояний: IDLE→REQUESTING→MATCHING→DRIVER_EN_ROUTE→PICKUP→ON_TRIP→DROPOFF→RECEIPT. Персист в Room (vectorClock/lastServerVersion) на случай смерти процесса.
+Машина состояний: IDLE→REQUESTING→MATCHING→DRIVER_EN_ROUTE→PICKUP→ON_TRIP→DROPOFF→RECEIPT. Персист в `Room` (vectorClock/lastServerVersion) на случай смерти процесса.
 
 Realtime: FCM‑nudges + WebSocket; heartbeat, backoff, обновление токена; в фоне — редкие дельты по push. Идемпотентность и порядковые номера.
 
@@ -491,7 +491,7 @@ fusedLocationClient.requestLocationUpdates(req, callback, Looper.getMainLooper()
 
 Efficient coordinate synchronization with debounce and batching (`Flow`-style pseudocode) to minimize network requests and support offline mode.
 
-**Debounce and batching (Flow-style pseudocode):**
+**Debounce and batching (`Flow`-style pseudocode):**
 
 - **Debounce**: delay send by 3 seconds after last update — prevents excessive requests on frequent location changes
 - **Batching**: accumulate coordinates in a buffer and send in 5-10 second batches — reduces HTTP request count and overhead
@@ -549,11 +549,11 @@ repo.getNearbyDrivers(
 - **Marker clustering**: group driver markers on zoom out to reduce displayed elements — improves map rendering performance
 - **Lazy loading**: load only drivers in visible map area — reduces network traffic and rendering load
 
-**4. Request Ride**
+**4. `Request` Ride**
 
 Multi-step process for creating ride request with optimistic UI and reliable error handling.
 
-**Request flow:**
+**`Request` flow:**
 
 1.   **Fare estimate**: preliminary cost calculation via `Pricing Service` with surge multiplier — user sees price before confirmation
 2.   **Create ride**: create ride record in `Ride Service` with unique `requestId` for idempotency
@@ -694,13 +694,13 @@ Cache incomplete actions, sync queue, auto-resend on network restore.
 
 ### Staff-level Model Answer (EN)
 
-Architecture overview: feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI; TripRepository orchestrates Room + network; feature flags for protocols and sampling.
+Architecture overview: feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI; TripRepository orchestrates `Room` + network; feature flags for protocols and sampling.
 
 `Map` performance: frame budget <16ms; offload interpolation/clustering; keep main-thread work minimal.
 
 Location strategy: FusedLocationProvider; fallback to GNSS+sensor fusion. Sampling idle 0.2–0.5 Hz with significant‑motion; en‑route 1 Hz with 5–10s batching; Kalman smoothing; spoofing checks. Foreground service during active trip.
 
-Trip state machine: IDLE→REQUESTING→MATCHING→DRIVER_EN_ROUTE→PICKUP→ON_TRIP→DROPOFF→RECEIPT. Persist in Room with vectorClock/lastServerVersion.
+Trip state machine: IDLE→REQUESTING→MATCHING→DRIVER_EN_ROUTE→PICKUP→ON_TRIP→DROPOFF→RECEIPT. Persist in `Room` with vectorClock/lastServerVersion.
 
 Realtime updates: FCM nudge → WebSocket; heartbeat, backoff, token refresh; background relies on push with sparse deltas. Apply updates by sequence number; drop dups/out-of-order.
 

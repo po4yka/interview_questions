@@ -1,4 +1,4 @@
----
+---\
 id: android-283
 title: "Network Operations Android / Сетевые операции в Android"
 aliases: ["Network Operations Android", "Сетевые операции в Android"]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/networking-http, difficulty/medium, http, networking]
----
+---\
 # Вопрос (RU)
 
 > Какие инструменты используются для сетевых операций в Android?
@@ -34,9 +34,9 @@ tags: [android/networking-http, difficulty/medium, http, networking]
 
 **HttpURLConnection** — встроенный низкоуровневый HTTP-клиент. Требует много шаблонного кода, не имеет встроенного маппинга JSON и выполняет блокирующие вызовы, которые нельзя делать на главном потоке.
 
-**OkHttp** — мощный HTTP-клиент от Square. Обеспечивает эффективный пул соединений, обработку редиректов/повторов, поддержку HTTP/2 и WebSocket, гибкую систему интерсепторов. Часто используется как транспортный слой для `Retrofit`.
+**`OkHttp`** — мощный HTTP-клиент от Square. Обеспечивает эффективный пул соединений, обработку редиректов/повторов, поддержку HTTP/2 и WebSocket, гибкую систему интерсепторов. Часто используется как транспортный слой для `Retrofit`.
 
-**Retrofit** — популярный type-safe REST-клиент. Предоставляет декларативный API через аннотации, интеграцию с `Kotlin coroutines`/suspend-функциями, автоматическую (де)сериализацию.
+**`Retrofit`** — популярный type-safe REST-клиент. Предоставляет декларативный API через аннотации, интеграцию с `Kotlin coroutines`/suspend-функциями, автоматическую (де)сериализацию.
 
 ```kotlin
 // Интерфейс API для Retrofit
@@ -170,15 +170,15 @@ fun isNetworkAvailable(context: Context): Boolean {
 
 ## Answer (EN)
 
-Android uses several libraries for network operations: from built-in HttpURLConnection to modern solutions like Retrofit and Ktor (see also [[c-android-components]]).
+Android uses several libraries for network operations: from built-in HttpURLConnection to modern solutions like `Retrofit` and Ktor (see also [[c-android-components]]).
 
 ### Core Tools
 
 **HttpURLConnection** is the built-in low-level HTTP client. Requires a lot of boilerplate, no built-in JSON mapping, and blocking calls must be off the main thread.
 
-**OkHttp** is a powerful HTTP client from Square. Efficient connection pooling, robust redirect/retry handling, HTTP/2 and WebSocket support, rich interceptor system. Commonly used as the transport layer for Retrofit.
+**`OkHttp`** is a powerful HTTP client from Square. Efficient connection pooling, robust redirect/retry handling, HTTP/2 and WebSocket support, rich interceptor system. Commonly used as the transport layer for `Retrofit`.
 
-**Retrofit** is the most popular type-safe REST client. Declarative API via annotations, integration with Kotlin coroutines/suspend functions, automatic serialization/deserialization.
+**`Retrofit`** is the most popular type-safe REST client. Declarative API via annotations, integration with Kotlin coroutines/suspend functions, automatic serialization/deserialization.
 
 ```kotlin
 // Retrofit API interface
@@ -302,9 +302,9 @@ fun isNetworkAvailable(context: Context): Boolean {
 
 ### Recommendations
 
-**For most apps**: Retrofit + OkHttp + Gson/Moshi + Coroutines
+**For most apps**: `Retrofit` + `OkHttp` + Gson/Moshi + Coroutines
 
-**For simple requests**: OkHttp directly
+**For simple requests**: `OkHttp` directly
 
 **For Kotlin Multiplatform**: Ktor Client
 
@@ -313,7 +313,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 ## Дополнительные Вопросы (RU)
 
 - Как реализовать retry-логику с экспоненциальной задержкой?
-- В чем разница между интерсепторами OkHttp и конвертерами Retrofit?
+- В чем разница между интерсепторами `OkHttp` и конвертерами `Retrofit`?
 - Как настроить certificate pinning для усиления безопасности?
 - Как реализовать дедупликацию запросов при параллельных одинаковых запросах?
 - Каковы лучшие практики кэширования сетевых ответов?
@@ -321,7 +321,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 ## Follow-ups
 
 - How to implement retry logic with exponential backoff?
-- What's the difference between OkHttp interceptors and Retrofit converters?
+- What's the difference between `OkHttp` interceptors and `Retrofit` converters?
 - How to handle certificate pinning for security?
 - How to implement request deduplication for concurrent identical requests?
 - What are the best practices for caching network responses?
@@ -344,7 +344,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 - [[q-android-app-components--android--easy]] — компоненты Android
 
 ### Средний Уровень
-- [[q-what-does-the-lifecycle-library-do--android--medium]] — использование Lifecycle для сетевых операций
+- [[q-what-does-the-lifecycle-library-do--android--medium]] — использование `Lifecycle` для сетевых операций
 
 ## Related Questions
 
@@ -352,4 +352,4 @@ fun isNetworkAvailable(context: Context): Boolean {
 - [[q-android-app-components--android--easy]] - Understanding Android components
 
 ### Related (Medium)
-- [[q-what-does-the-lifecycle-library-do--android--medium]] - Lifecycle-aware networking
+- [[q-what-does-the-lifecycle-library-do--android--medium]] - `Lifecycle`-aware networking

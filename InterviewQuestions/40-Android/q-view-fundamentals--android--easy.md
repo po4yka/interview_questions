@@ -1,4 +1,4 @@
----
+---\
 id: android-225
 title: "View Fundamentals / Основы View"
 aliases: ["View Fundamentals", "Основы View"]
@@ -16,7 +16,7 @@ created: 2024-10-15
 updated: 2025-11-10
 tags: [android/ui-views, android/ui-widgets, difficulty/easy, view, view-hierarchy]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое `View` в Android?
@@ -191,7 +191,7 @@ class CustomView @JvmOverloads constructor(
 1. **XML для статических макетов** — проще визуализировать и поддерживать
 2. **`View` Binding** вместо прямого `findViewById` — типобезопасность и меньше шаблонного кода
 3. **UI обновления в main thread** — используйте корутины/Handlers/RunOnUiThread
-4. **ConstraintLayout** — помогает минимизировать глубину вложенности
+4. **`ConstraintLayout`** — помогает минимизировать глубину вложенности
 5. **Очистка listeners** — предотвращает утечки памяти (особенно при привязке к жизненному циклу `Activity`/`Fragment`)
 
 ### Резюме
@@ -368,7 +368,7 @@ class CustomView @JvmOverloads constructor(
 1. **Use XML for static layouts** — easier to visualize and maintain
 2. **Prefer `View` Binding over raw findViewById** — type safety and less boilerplate
 3. **Update UI on main thread** — use coroutines/Handlers/runOnUiThread
-4. **Use ConstraintLayout** — helps reduce hierarchy depth
+4. **Use `ConstraintLayout`** — helps reduce hierarchy depth
 5. **Clean up listeners** — prevents memory leaks (especially with `Activity`/`Fragment` references)
 
 ### Summary
@@ -413,7 +413,7 @@ class CustomView @JvmOverloads constructor(
 - [[q-what-is-the-main-application-execution-thread--android--easy]] — основы UI-потока
 
 ### Связанные (тот Же уровень)
-- [[q-recyclerview-sethasfixedsize--android--easy]] — оптимизация RecyclerView
+- [[q-recyclerview-sethasfixedsize--android--easy]] — оптимизация `RecyclerView`
 - [[q-viewmodel-pattern--android--easy]] — паттерн `ViewModel`
 
 ### Продвинутое (сложнее)
@@ -426,7 +426,7 @@ class CustomView @JvmOverloads constructor(
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - UI thread basics
 
 ### Related (Same Level)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization
 - [[q-viewmodel-pattern--android--easy]] - `ViewModel` pattern
 
 ### Advanced (Harder)

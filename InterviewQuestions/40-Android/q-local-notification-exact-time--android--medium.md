@@ -1,4 +1,4 @@
----
+---\
 id: android-032
 title: How to schedule local notifications at exact time? / Как запланировать локальные уведомления на точное время?
 aliases: ["How to schedule local notifications at exact time?", "Как запланировать локальные уведомления на точное время?"]
@@ -17,7 +17,7 @@ created: 2025-10-06
 updated: 2025-11-11
 tags: [android/background-execution, android/notifications, difficulty/medium]
 
----
+---\
 
 # Вопрос (RU)
 > Как запланировать локальные уведомления на точное время?
@@ -108,7 +108,7 @@ fun scheduleExactReminder(context: Context, triggerAtMillis: Long) {
   - Для некоторых приложений требуется permission `SCHEDULE_EXACT_ALARM` или принадлежность к льготным категориям (часы, календарь и т.п.). Актуальные требования смотрите в документации к вашей целевой версии Android.
   - На Android 13+ пользователь может управлять доступом приложения к точным будильникам и запретить их использование.
 - AlarmManager только запускает ваш код (через PendingIntent); само уведомление нужно создать и показать внутри обработчика (например, в `BroadcastReceiver`).
-- Не используйте точные будильники для частых фоновых задач; вместо этого применяйте WorkManager или неточные будильники.
+- Не используйте точные будильники для частых фоновых задач; вместо этого применяйте `WorkManager` или неточные будильники.
 - После перезагрузки устройства будильники сбрасываются. Если напоминания должны сохраняться:
   - Обрабатывайте `BOOT_COMPLETED` в `BroadcastReceiver`.
   - Восстанавливайте будильники из сохранённых данных.
@@ -196,7 +196,7 @@ Important considerations:
   - Some apps must declare the `SCHEDULE_EXACT_ALARM` permission or belong to exempt categories (e.g., clock, calendar). Check the official docs for your target API level.
   - On Android 13+, the user can control and revoke an app's ability to use exact alarms.
 - AlarmManager only triggers your PendingIntent; you must build and post the notification in the handler (e.g., in the `BroadcastReceiver`).
-- Do not use exact alarms for frequent background work; use WorkManager or inexact alarms instead.
+- Do not use exact alarms for frequent background work; use `WorkManager` or inexact alarms instead.
 - After device reboot, scheduled alarms are lost. If reminders must persist:
   - Listen for `BOOT_COMPLETED` in a `BroadcastReceiver`.
   - Re-schedule alarms from persisted data.

@@ -1,4 +1,4 @@
----
+---\
 id: android-084
 title: "Memory Leak vs OOM / Утечка памяти vs OOM"
 aliases: ["Memory Leak vs OOM", "Утечка памяти vs OOM"]
@@ -16,7 +16,7 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android, android/performance-battery, android/performance-memory, difficulty/medium, leakcanary, memory-leak, oom]
 
----
+---\
 # Вопрос (RU)
 > В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
 
@@ -400,7 +400,7 @@ class MemoryMonitor {
 **Memory Leaks:**
 - Do not keep `Activity`/`Fragment`/`View` references in static fields or long-lived singletons.
 - Properly unregister listeners/observers/callbacks in onDestroy/onCleared/etc.
-- Use lifecycle-aware components (`ViewModel`, lifecycleScope, `LiveData`/`Flow` tied to a LifecycleOwner).
+- Use lifecycle-aware components (`ViewModel`, lifecycleScope, `LiveData`/`Flow` tied to a `LifecycleOwner`).
 - Use `Application` context only when an application-wide context is appropriate; avoid leaking `Activity` context.
 - Correctly cancel coroutines/jobs and other async work.
 

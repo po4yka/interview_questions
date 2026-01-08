@@ -11,7 +11,7 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-15
 updated: 2025-11-11
-tags: [android, coroutines, difficulty/medium, jetpack-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
+tags: [android, coroutines, difficulty/medium, android/ui-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
 moc: moc-kotlin
 related: [q-testing-stateflow-sharedflow--kotlin--medium]
 

@@ -1,4 +1,4 @@
----
+---\
 id: android-122
 title: Room Code Generation Timing / Время генерации кода Room
 aliases: [Room Code Generation Timing, Время генерации кода Room]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 sources: []
 tags: [android/room, difficulty/medium]
----
+---\
 # Вопрос (RU)
 
 > В какой момент генерируется код при использовании SQLite/Room?
@@ -26,11 +26,11 @@ tags: [android/room, difficulty/medium]
 
 ## Ответ (RU)
 
-**Room** генерирует код **на этапе компиляции** в процессе сборки Gradle через процессоры аннотаций (`kapt` или `KSP`). Генерация выполняется во время соответствующих задач сборки (annotation processing), до упаковки APK/AAB, а не в рантайме приложения.
+**`Room`** генерирует код **на этапе компиляции** в процессе сборки Gradle через процессоры аннотаций (`kapt` или `KSP`). Генерация выполняется во время соответствующих задач сборки (annotation processing), до упаковки APK/AAB, а не в рантайме приложения.
 
-**SQLite** — это встраиваемый движок базы данных, а не фреймворк кодогенерации и не annotation processor. Он не генерирует код за вас; с ним вы либо пишете SQL вручную, либо используете библиотеки-обертки (такие как Room), которые уже занимаются генерацией вспомогательного кода на этапе сборки.
+**`SQLite`** — это встраиваемый движок базы данных, а не фреймворк кодогенерации и не annotation processor. Он не генерирует код за вас; с ним вы либо пишете SQL вручную, либо используете библиотеки-обертки (такие как `Room`), которые уже занимаются генерацией вспомогательного кода на этапе сборки.
 
-Room как слой абстракции над SQLite использует annotation processing для генерации реализаций DAO и Database классов и для compile-time валидации сущностей и запросов на основе известных ему моделей.
+`Room` как слой абстракции над `SQLite` использует annotation processing для генерации реализаций DAO и `Database` классов и для compile-time валидации сущностей и запросов на основе известных ему моделей.
 
 ### Процесс Генерации
 
@@ -65,7 +65,7 @@ dependencies {
 }
 ```
 
-> На практике KSP для Room обычно быстрее и лучше интегрируется с Kotlin и инкрементальной компиляцией, но выигрыш в производительности зависит от проекта и не является гарантированным фиксированным "2x".
+> На практике KSP для `Room` обычно быстрее и лучше интегрируется с Kotlin и инкрементальной компиляцией, но выигрыш в производительности зависит от проекта и не является гарантированным фиксированным "2x".
 
 1. **Генерируемая реализация** (примерно, в `build/generated/`) — упрощённый псевдокод
 ```kotlin
@@ -92,7 +92,7 @@ class UserDao_Impl : UserDao {
 | Скорость | Обычно медленнее для Kotlin-heavy проектов | Как правило быстрее за счёт работы с Kotlin-символами |
 | Инкрементальная компиляция | Ограниченная поддержка | Лучшая поддержка, более точная инкрементальность |
 
-**Рекомендация:** использовать KSP для новых проектов и при миграции, если это поддерживается версиями Room и Gradle.
+**Рекомендация:** использовать KSP для новых проектов и при миграции, если это поддерживается версиями `Room` и Gradle.
 
 ### Валидация На Этапе Компиляции
 
@@ -105,19 +105,19 @@ fun getAll(): List<User>
 ```
 
 **Преимущества:**
-- Ошибки в SQL и несоответствия схемы (по информации, известной Room на этапе компиляции) обнаруживаются до запуска приложения.
+- Ошибки в SQL и несоответствия схемы (по информации, известной `Room` на этапе компиляции) обнаруживаются до запуска приложения.
 - Type safety: сопоставление типов Kotlin/Java и колонок проверяется на этапе генерации кода.
 - Нет runtime reflection — выше предсказуемость и, как правило, лучшая производительность.
 
-> Ограничение: проверки основаны на описанных `@Entity`/`@Dao` и известных миграциях; динамически создаваемые таблицы или изменения вне модели Room могут привести к ошибкам уже в рантайме.
+> Ограничение: проверки основаны на описанных `@Entity`/`@Dao` и известных миграциях; динамически создаваемые таблицы или изменения вне модели `Room` могут привести к ошибкам уже в рантайме.
 
 ## Answer (EN)
 
-**Room** generates code **at compile time** during the Gradle build via annotation processors (`kapt` or `KSP`). Generation happens in the relevant build tasks (annotation processing) before the APK/AAB is packaged, not at application runtime.
+**`Room`** generates code **at compile time** during the Gradle build via annotation processors (`kapt` or `KSP`). Generation happens in the relevant build tasks (annotation processing) before the APK/AAB is packaged, not at application runtime.
 
-**SQLite** is an embedded database engine, not a code generation framework or annotation processor. It does not generate code for you; you either write SQL manually or use wrapper libraries (such as Room) that perform helper code generation at build time.
+**`SQLite`** is an embedded database engine, not a code generation framework or annotation processor. It does not generate code for you; you either write SQL manually or use wrapper libraries (such as `Room`) that perform helper code generation at build time.
 
-Room, as an abstraction layer over SQLite, uses annotation processing to generate implementations of DAO and Database classes, and to perform compile-time validation of entities and queries based on its known schema model.
+`Room`, as an abstraction layer over `SQLite`, uses annotation processing to generate implementations of DAO and `Database` classes, and to perform compile-time validation of entities and queries based on its known schema model.
 
 ### Generation Process
 
@@ -152,7 +152,7 @@ dependencies {
 }
 ```
 
-> In practice, Room with KSP is typically faster and integrates better with Kotlin and incremental builds, but the "2x faster" figure is project-dependent and not a guaranteed constant.
+> In practice, `Room` with KSP is typically faster and integrates better with Kotlin and incremental builds, but the "2x faster" figure is project-dependent and not a guaranteed constant.
 
 1. **Generated Implementation** (roughly, in `build/generated/`) — simplified pseudocode
 ```kotlin
@@ -192,39 +192,39 @@ fun getAll(): List<User>
 ```
 
 **Benefits:**
-- SQL and schema mismatch errors (based on Room's model) are caught before the app runs.
+- SQL and schema mismatch errors (based on `Room`'s model) are caught before the app runs.
 - Type safety: mapping between columns and Kotlin/Java types is checked during code generation.
 - No runtime reflection, leading to more predictable and often better performance.
 
-> Limitation: validation is based on `@Entity`/`@Dao` definitions and known migrations; dynamic schema changes or objects created outside Room can still cause runtime errors.
+> Limitation: validation is based on `@Entity`/`@Dao` definitions and known migrations; dynamic schema changes or objects created outside `Room` can still cause runtime errors.
 
 ---
 
 ## Дополнительные Вопросы (RU)
 
-- Как Room обрабатывает миграции схемы с использованием сгенерированного кода?
+- Как `Room` обрабатывает миграции схемы с использованием сгенерированного кода?
 - Каковы компромиссы между инкрементальной компиляцией `kapt` и `KSP`?
-- Чем compile-time валидация Room отличается от runtime-ошибок при работе с "сырым" SQLite?
+- Чем compile-time валидация `Room` отличается от runtime-ошибок при работе с "сырым" `SQLite`?
 - Могут ли annotation processors получать доступ к схеме базы данных на этапе компиляции?
 - Как KSP достигает улучшения производительности по сравнению с `kapt` на практике?
 
 ## Follow-ups
 
-- How does Room handle schema migrations with generated code?
+- How does `Room` handle schema migrations with generated code?
 - What are the trade-offs between `kapt` and `KSP` incremental compilation?
-- How does Room's compile-time validation differ from raw SQLite runtime errors?
+- How does `Room`'s compile-time validation differ from raw `SQLite` runtime errors?
 - Can annotation processors access database schema at compile time?
 - How does KSP achieve performance improvements over `kapt` in practice?
 
 ## Ссылки (RU)
 
 - [[c-room]]
-- Официальная документация по Room (developer.android.com)
+- Официальная документация по `Room` (developer.android.com)
 
 ## References
 
 - [[c-room]]
-- Official Android Room documentation (developer.android.com)
+- Official Android `Room` documentation (developer.android.com)
 
 ## Связанные Вопросы (RU)
 
@@ -246,7 +246,7 @@ fun getAll(): List<User>
 ### Продвинутое
 
 - Реализация собственного annotation processor
-- Архитектура Room в multi-module проектах
+- Архитектура `Room` в multi-module проектах
 
 ## Related Questions
 
@@ -268,4 +268,4 @@ fun getAll(): List<User>
 ### Advanced
 
 - Custom annotation processor implementation
-- Multi-module Room database architecture
+- Multi-module `Room` database architecture

@@ -1,4 +1,4 @@
----
+---\
 id: android-394
 title: How To Create Animations In Android / Как создавать анимации в Android
 aliases: [How To Create Animations In Android, Как создавать анимации в Android]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-animation, animations, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Как создавать анимации в Android
 
@@ -25,7 +25,7 @@ tags: [android/ui-animation, animations, difficulty/medium]
 ---
 
 ## Ответ (RU)
-Android предоставляет несколько мощных механизмов для создания анимаций под разные сценарии: Property Animations, `View` Animations, Drawable Animations, Animated Vector Drawables, MotionLayout, Transitions и физические (spring/fling) анимации.
+Android предоставляет несколько мощных механизмов для создания анимаций под разные сценарии: Property Animations, `View` Animations, `Drawable` Animations, Animated Vector Drawables, MotionLayout, Transitions и физические (spring/fling) анимации.
 
 ### 1. Property Animations (современный подход)
 
@@ -194,7 +194,7 @@ frameAnimation.start()
 
 ### 4. MotionLayout
 
-- Расширение ConstraintLayout для сложных, декларативных анимаций и переходов между состояниями.
+- Расширение `ConstraintLayout` для сложных, декларативных анимаций и переходов между состояниями.
 - Логика описывается в MotionScene (обычно в res/xml), а сам MotionLayout в layout.
 
 ```xml
@@ -348,7 +348,7 @@ override fun onDestroyView() {
 ---
 
 ## Answer (EN)
-Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, `View` Animations, Drawable Animations, Animated Vector Drawables, MotionLayout, the Transitions framework, and physics-based (spring/fling) animations.
+Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, `View` Animations, `Drawable` Animations, Animated Vector Drawables, MotionLayout, the Transitions framework, and physics-based (spring/fling) animations.
 
 ### 1. Property Animations (Modern Approach)
 
@@ -511,7 +511,7 @@ frameAnimation.stop()
 
 ### 4. MotionLayout (Advanced Declarative Animations)
 
-MotionLayout (from ConstraintLayout library) is a layout that helps create complex, declarative motion and widget animations using a separate MotionScene.
+MotionLayout (from `ConstraintLayout` library) is a layout that helps create complex, declarative motion and widget animations using a separate MotionScene.
 
 ```xml
 <!-- Example MotionScene: typically placed in res/xml/ -->

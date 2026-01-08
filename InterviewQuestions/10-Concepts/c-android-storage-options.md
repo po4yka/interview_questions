@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-155654"
 title: "Android Storage Options / Android Storage Options"
 aliases: ["Android Storage Options"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-room, c-datastore, c-sharedpreferences, c-scoped-storage, c-sqlite]
+related: ["c-room", "c-datastore", "c-sharedpreferences", "c-scoped-storage", "c-sqlite"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -33,7 +34,7 @@ Android Storage Options обозначает набор механизмов, к
 
 - Internal app storage: Private directories (e.g., `context.getFilesDir()`, `context.getCacheDir()`) accessible только текущему приложению; данные удаляются при удалении приложения.
 - External/shared storage: Области (например, `MediaStore`, `getExternalFilesDir()`), используемые для медиа и файлов, доступных пользователю и, при необходимости, другим приложениям с учетом scoped storage и разрешений (`READ_MEDIA_*`).
-- Databases (SQLite / Room): Подход для структурированных данных с запросами, транзакциями и миграциями; хранятся внутри внутреннего хранилища приложения.
+- Databases (`SQLite` / `Room`): Подход для структурированных данных с запросами, транзакциями и миграциями; хранятся внутри внутреннего хранилища приложения.
 - Key-value storage: `SharedPreferences` или `DataStore` для небольших настроек и флагов конфигурации, не предназначены для больших объёмов данных или бинарных файлов.
 - Security and privacy: Выбор хранилища зависит от чувствительности данных; для конфиденциальной информации используют приватные директории, шифрование (например, EncryptedFile, EncryptedSharedPreferences) и минимизацию прав доступа.
 
@@ -41,7 +42,7 @@ Android Storage Options обозначает набор механизмов, к
 
 - Внутреннее хранилище приложения: Приватные директории (например, `context.getFilesDir()`, `context.getCacheDir()`), доступные только текущему приложению; данные удаляются при удалении приложения.
 - Внешнее/общее хранилище: Области (например, `MediaStore`, `getExternalFilesDir()`), используемые для медиа и файлов, доступных пользователю и, при необходимости, другим приложениям с учётом scoped storage и разрешений (`READ_MEDIA_*`).
-- Базы данных (SQLite / Room): Используются для структурированных данных с поддержкой запросов, транзакций и миграций; физически размещаются во внутреннем хранилище приложения.
+- Базы данных (`SQLite` / `Room`): Используются для структурированных данных с поддержкой запросов, транзакций и миграций; физически размещаются во внутреннем хранилище приложения.
 - Key-value хранилище: `SharedPreferences` или `DataStore` для небольших настроек и конфигураций, не подходят для больших объёмов данных или тяжёлых бинарных файлов.
 - Безопасность и приватность: Выбор варианта хранения зависит от чувствительности данных; для чувствительных данных используют приватные директории, шифрование (EncryptedFile, EncryptedSharedPreferences) и принцип минимальных разрешений.
 
@@ -49,5 +50,5 @@ Android Storage Options обозначает набор механизмов, к
 
 - Android official docs: Data and file storage overview — https://developer.android.com/training/data-storage
 - Android official docs: Scoped storage — https://developer.android.com/training/data-storage/shared/media
-- Android official docs: Room persistence library — https://developer.android.com/training/data-storage/room
+- Android official docs: `Room` persistence library — https://developer.android.com/training/data-storage/room
 - Android official docs: DataStore — https://developer.android.com/topic/libraries/architecture/datastore

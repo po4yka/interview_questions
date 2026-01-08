@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-140548"
 title: "Android Advanced"
 aliases: ["Android Advanced"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-lifecycle, c-performance-optimization, c-memory-management, c-clean-architecture, c-android-profiling]
+related: ["c-android-lifecycle", "c-performance-optimization", "c-memory-management", "c-clean-architecture", "c-android-profiling"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
----
+tags: [android, concept, difficulty/medium]
+---\
 
 # Summary (EN)
 
@@ -32,16 +33,16 @@ tags: ["android", "auto-generated", "concept", "difficulty/medium"]
 ## Key Points (EN)
 
 - Deep understanding of Android app architecture: components (Activities, Services, BroadcastReceivers, ContentProviders), modularization, Clean Architecture, MVVM/MVI, and separation of concerns.
-- Concurrency and threading: Handler/Looper, coroutines/Flow, RxJava, WorkManager, avoiding ANRs, correct use of background execution APIs and synchronization primitives.
-- Memory and performance: memory leaks (contexts, static refs, lifecycle), profiling with Android Studio tools, optimizing layouts, RecyclerView, overdraw, startup time, and battery usage.
+- Concurrency and threading: Handler/Looper, coroutines/Flow, RxJava, `WorkManager`, avoiding ANRs, correct use of background execution APIs and synchronization primitives.
+- Memory and performance: memory leaks (contexts, static refs, lifecycle), profiling with Android Studio tools, optimizing layouts, `RecyclerView`, overdraw, startup time, and battery usage.
 - System internals and constraints: app sandboxing, processes, Binder/IPC basics, permissions model, foreground services, background limits, Doze/App Standby, and behavior changes across Android versions.
 - Reliability and tooling: crash analysis (Logcat, Crashlytics), debugging difficult issues, writing robust tests (unit, instrumentation, UI tests), and safe use of Jetpack libraries in complex scenarios.
 
 ## Ключевые Моменты (RU)
 
-- Глубокое понимание архитектуры Android-приложений: компоненты (Activity, Service, BroadcastReceiver, ContentProvider), модульность, Clean Architecture, MVVM/MVI и грамотное разделение ответственности.
-- Конкурентность и потоки: Handler/Looper, корутины/Flow, RxJava, WorkManager, предотвращение ANR, корректное использование фоновых API и примитивов синхронизации.
-- Память и производительность: утечки памяти (Context, статические ссылки, жизненный цикл), профилирование в Android Studio, оптимизация разметок, RecyclerView, overdraw, времени старта и потребления батареи.
+- Глубокое понимание архитектуры Android-приложений: компоненты (`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`), модульность, Clean Architecture, MVVM/MVI и грамотное разделение ответственности.
+- Конкурентность и потоки: Handler/Looper, корутины/Flow, RxJava, `WorkManager`, предотвращение ANR, корректное использование фоновых API и примитивов синхронизации.
+- Память и производительность: утечки памяти (`Context`, статические ссылки, жизненный цикл), профилирование в Android Studio, оптимизация разметок, `RecyclerView`, overdraw, времени старта и потребления батареи.
 - Внутреннее устройство и ограничения системы: sandbox приложений, процессы, основы Binder/IPC, модель разрешений, foreground services, ограничения фоновой работы, Doze/App Standby и изменения поведения между версиями Android.
 - Надежность и инструменты: анализ падений (Logcat, Crashlytics), отладка сложных проблем, написание устойчивых тестов (unit, instrumentation, UI), безопасное использование Jetpack-библиотек в сложных кейсах.
 
@@ -49,5 +50,5 @@ tags: ["android", "auto-generated", "concept", "difficulty/medium"]
 
 - Android Developers official documentation: https://developer.android.com
 - Android Performance Patterns and performance guides: https://developer.android.com/topic/performance
-- Background work and WorkManager docs: https://developer.android.com/topic/libraries/architecture/workmanager
+- Background work and `WorkManager` docs: https://developer.android.com/topic/libraries/architecture/workmanager
 - Guide to app architecture (Android): https://developer.android.com/topic/architecture

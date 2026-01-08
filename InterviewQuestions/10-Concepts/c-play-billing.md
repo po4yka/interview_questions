@@ -1,20 +1,28 @@
----
-id: ivc-20251102-005
-title: Google Play Billing / Платежи Google Play
-aliases: [Google Play Billing v6, Play Billing]
-kind: concept
-summary: Google Play Billing client and server flow for in-app purchases and subscriptions
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, billing, concept, monetization]
----
+---\
+id: "20260108-110550"
+title: "Google Play Billing / Платежи Google Play"
+aliases: ["Google Play Billing v6", "Play Billing"]
+summary: "Google Play Billing client and server flow for in-app purchases and subscriptions"
+topic: "android"
+subtopics: ["billing", "monetization"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "billing", "concept", "monetization", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
 **Google Play Billing** handles in-app products, subscriptions, and offers via the Play Store. Version 5/6 introduces billing as a service, multi-line items, new subscription flexibility, and server verification requirements.
 
-**Flow**
+**`Flow`**
 1. Query products (`BillingClient.queryProductDetailsAsync`)
 2. Launch billing UI (`BillingFlowParams`)
 3. Receive `Purchase` via `PurchasesUpdatedListener`

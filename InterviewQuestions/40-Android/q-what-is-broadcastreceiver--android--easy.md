@@ -1,4 +1,4 @@
----
+---\
 id: android-395
 title: BroadcastReceiver / Компонент BroadcastReceiver
 aliases: [BroadcastReceiver, Компонент BroadcastReceiver]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/broadcast-receiver, difficulty/easy, intent, system-events]
 
----
+---\
 # Вопрос (RU)
 
 > Что такое `BroadcastReceiver`?
@@ -310,7 +310,7 @@ class NetworkChangeReceiver : BroadcastReceiver() {
 2. Использовать `JobScheduler` / `WorkManager` для отложенной фоновой работы.
 3. Использовать foreground service для долгих операций, инициированных broadcast-ами.
 
-Пример с WorkManager:
+Пример с `WorkManager`:
 
 ```kotlin
 val constraints = Constraints.Builder()
@@ -653,7 +653,7 @@ Recommended approaches:
 2. Use `JobScheduler` / `WorkManager` for deferred background work.
 3. Use foreground services for long-running work triggered by broadcasts.
 
-Example with WorkManager:
+Example with `WorkManager`:
 
 ```kotlin
 val constraints = Constraints.Builder()
@@ -699,7 +699,7 @@ override fun onDestroy() {
 
 1. Use in-app mechanisms (callbacks, shared ViewModels, coroutines, etc.) instead of global broadcasts when possible. Only use broadcasts when you truly need the decoupled, system-level pattern.
 
-2. Set `android:exported` correctly:
+2. `Set` `android:exported` correctly:
 
 ```xml
 <!-- Not accessible by other apps -->

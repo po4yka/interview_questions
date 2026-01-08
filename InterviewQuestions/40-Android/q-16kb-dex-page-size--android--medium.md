@@ -72,7 +72,7 @@ android {
 ```
 
 **Лучшие практики**:
-- Использовать App Bundle вместо монолитного APK, чтобы уменьшить итоговый размер загружаемого пользователю пакета.
+- Использовать App `Bundle` вместо монолитного APK, чтобы уменьшить итоговый размер загружаемого пользователю пакета.
 - Мониторить размер DEX и финальных артефактов в CI/CD и сравнивать сборки при изменении конфигурации R8/AGP, чтобы вовремя заметить регрессии, связанные с выравниванием.
 
 ---
@@ -141,7 +141,7 @@ android {
 - [[c-gradle]] - Build system
 - [[c-app-bundle]] - App distribution format
 - [R8 Optimization](https://developer.android.com/studio/build/shrink-code)
-- [App Bundle Guide](https://developer.android.com/guide/app-bundle)
+- [App `Bundle` Guide](https://developer.android.com/guide/app-bundle)
 - [DEX Format Specification](https://source.android.com/docs/core/runtime/dex-format)
 
 ## Related Questions

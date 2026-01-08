@@ -1,4 +1,4 @@
----
+---\
 id: android-167
 title: GraphQL with Apollo Android / GraphQL с Apollo Android
 aliases: [GraphQL with Apollo Android, GraphQL с Apollo Android]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/graphql, difficulty/medium, graphql]
 
----
+---\
 # Вопрос (RU)
 > GraphQL с Apollo Android
 
@@ -182,7 +182,7 @@ class ApolloClientProvider(
 ```
 
 Примечания:
-- Используйте OkHttp через `OkHttpEngine` (или актуальный движок из документации Apollo для используемой версии).
+- Используйте `OkHttp` через `OkHttpEngine` (или актуальный движок из документации Apollo для используемой версии).
 - Зависимость `apollo-websocket-network-transport` используется для реализации подписок через WebSocket.
 
 ### Пример Запроса
@@ -529,7 +529,7 @@ class ApolloClientProvider(
 ```
 
 Notes:
-- Use OkHttp via `OkHttpEngine` (or the current engine recommended by Apollo docs for your version).
+- Use `OkHttp` via `OkHttpEngine` (or the current engine recommended by Apollo docs for your version).
 - Use `apollo-websocket-network-transport` (or equivalent) for subscriptions.
 
 ### Queries Example

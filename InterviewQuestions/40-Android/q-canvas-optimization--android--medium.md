@@ -1,4 +1,4 @@
----
+---\
 id: android-088
 title: Canvas Optimization / Оптимизация Canvas
 aliases: [Canvas Optimization, Оптимизация Canvas]
@@ -16,12 +16,12 @@ created: 2025-10-13
 updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-graphics, android/ui-views, custom-views, difficulty/medium, performance]
 
----
+---\
 # Вопрос (RU)
-> Как оптимизировать отрисовку Canvas для достижения 60 FPS?
+> Как оптимизировать отрисовку `Canvas` для достижения 60 FPS?
 
 # Question (EN)
-> How do you optimize Canvas drawing to achieve 60 FPS?
+> How do you optimize `Canvas` drawing to achieve 60 FPS?
 
 ---
 
@@ -295,18 +295,18 @@ Analyze via Android Studio Profiler → CPU → System Trace, and inspect render
 
 ## Дополнительные Вопросы (RU)
 
-- Как овердроу влияет на производительность Canvas и как его обнаружить?
+- Как овердроу влияет на производительность `Canvas` и как его обнаружить?
 - Когда следует использовать `LAYER_TYPE_SOFTWARE` vs `LAYER_TYPE_HARDWARE`?
-- Как реализовать эффективное переиспользование представлений для прокручиваемых списков на основе Canvas?
-- Каковы последствия по памяти при использовании Bitmap-кеширования для больших представлений?
+- Как реализовать эффективное переиспользование представлений для прокручиваемых списков на основе `Canvas`?
+- Каковы последствия по памяти при использовании `Bitmap`-кеширования для больших представлений?
 - Как оптимизировать операции с `Path` для сложной векторной графики?
 
 ## Follow-ups
 
-- How does overdraw affect Canvas performance and how to detect it?
+- How does overdraw affect `Canvas` performance and how to detect it?
 - When should you use `LAYER_TYPE_SOFTWARE` vs `LAYER_TYPE_HARDWARE`?
 - How to implement efficient view recycling for scrollable canvas-based lists?
-- What are the memory implications of Bitmap caching for large views?
+- What are the memory implications of `Bitmap` caching for large views?
 - How to optimize `Path` operations for complex vector graphics?
 
 ## Ссылки (RU)
@@ -329,10 +329,10 @@ Analyze via Android Studio Profiler → CPU → System Trace, and inspect render
 
 ### Похожие (средний уровень)
 - [[q-android-app-lag-analysis--android--medium]] - анализ просадок кадров
-- [[q-canvas-drawing-optimization--android--hard]] - продвинутые техники Canvas
+- [[q-canvas-drawing-optimization--android--hard]] - продвинутые техники `Canvas`
 
 ### Продвинутые (сложнее)
-- [[q-canvas-drawing-optimization--android--hard]] - продвинутая оптимизация отрисовки Canvas
+- [[q-canvas-drawing-optimization--android--hard]] - продвинутая оптимизация отрисовки `Canvas`
 
 ## Related Questions
 
@@ -342,7 +342,7 @@ Analyze via Android Studio Profiler → CPU → System Trace, and inspect render
 
 ### Related (Same Level)
 - [[q-android-app-lag-analysis--android--medium]] - Frame drop analysis
-- [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas techniques
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced `Canvas` techniques
 
 ### Advanced (Harder)
-- [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas techniques
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced `Canvas` techniques

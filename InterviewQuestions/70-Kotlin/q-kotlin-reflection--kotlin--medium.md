@@ -1,4 +1,4 @@
----
+---\
 id: lang-022
 title: "Kotlin Reflection / Рефлексия в Kotlin"
 aliases: [Kotlin Reflection, Рефлексия в Kotlin]
@@ -14,7 +14,7 @@ related: [c-kotlin, q-object-companion-object--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, kotlin-reflect, metaprogramming, programming-languages, reflection, runtime]
----
+---\
 # Вопрос (RU)
 > Что такое рефлексия?
 
@@ -304,7 +304,7 @@ val viaReflection = nameProp?.get(person)
 
 - **Используйте рефлексию для:**
 - Библиотек сериализации (например, библиотеки, использующие `kotlin-reflect`)
-- Runtime-based DI фреймворков (например, Koin)
+- Runtime-based DI фреймворков (например, `Koin`)
 - Фреймворков тестирования
 - ORM библиотек
 - Универсальных утилит, где нужна работа с неизвестными заранее типами
@@ -328,7 +328,7 @@ val viaReflection = nameProp?.get(person)
 **Reflection** is a mechanism that allows a program to **inspect and (in limited cases) modify its own structure** (classes, methods, fields, annotations) at runtime.
 
 In Kotlin (using `kotlin-reflect` and/or Java Reflection API), it allows you to:
-- Call private methods
+- `Call` private methods
 - Create class instances by name
 - Access/modify private fields
 - Inspect annotations
@@ -604,7 +604,7 @@ val viaReflection = nameProp?.get(person)
 
 - **Use reflection for:**
 - Serialization libraries that rely on runtime introspection
-- Runtime-based DI frameworks (e.g., Koin)
+- Runtime-based DI frameworks (e.g., `Koin`)
 - Testing frameworks
 - ORM libraries
 - Generic utilities that must work with unknown types

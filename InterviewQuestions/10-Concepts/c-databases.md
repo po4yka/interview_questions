@@ -1,4 +1,4 @@
----
+---\
 id: "20251111-223432"
 title: "Databases / Databases"
 aliases: ["Databases"]
@@ -9,17 +9,18 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-database-design, c-relational-databases, c-room, c-sqlite]
+moc: "moc-cs"
+related: ["c-database-design", "c-relational-databases", "c-room", "c-sqlite"]
 created: "2025-11-11"
 updated: "2025-11-11"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-A database is an organized collection of structured or semi-structured data that is stored, managed, and accessed electronically, typically through a Database Management System (DBMS). Databases enable reliable data persistence, efficient querying, and concurrent access, making them critical for backend systems, mobile/desktop apps, analytics, and distributed services. Common models include relational (SQL) and non-relational (NoSQL) databases, each optimized for different access patterns, scalability needs, and consistency requirements.
+A database is an organized collection of structured or semi-structured data that is stored, managed, and accessed electronically, typically through a `Database` Management System (DBMS). Databases enable reliable data persistence, efficient querying, and concurrent access, making them critical for backend systems, mobile/desktop apps, analytics, and distributed services. Common models include relational (SQL) and non-relational (NoSQL) databases, each optimized for different access patterns, scalability needs, and consistency requirements.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
@@ -60,4 +61,4 @@ A database is an organized collection of structured or semi-structured data that
 - PostgreSQL Documentation: https://www.postgresql.org/docs/
 - MySQL Documentation: https://dev.mysql.com/doc/
 - MongoDB Manual: https://www.mongodb.com/docs/manual/
-- SQLite Documentation: https://www.sqlite.org/docs.html
+- `SQLite` Documentation: https://www.sqlite.org/docs.html

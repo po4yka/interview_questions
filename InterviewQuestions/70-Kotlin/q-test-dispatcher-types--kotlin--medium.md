@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-067
 title: "StandardTestDispatcher vs UnconfinedTestDispatcher / StandardTestDispatcher против UnconfinedTestDispatcher"
 aliases: ["StandardTestDispatcher vs UnconfinedTestDispatcher", "StandardTestDispatcher против UnconfinedTestDispatcher"]
@@ -14,7 +14,7 @@ tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 moc: moc-kotlin
 related: [c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
 subtopics: [coroutines, runtest, testing]
----
+---\
 # Вопрос (RU)
 > В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
 
@@ -625,7 +625,7 @@ Testing coroutines requires dedicated test dispatchers and a scheduler that cont
 | Feature | StandardTestDispatcher | UnconfinedTestDispatcher |
 |---------|------------------------|--------------------------|
 | Execution start | Enqueues tasks; executes via scheduler | Runs immediately until first suspension |
-| Thread confinement | Confined to the scheduler's execution | Unconfined (may resume in different contexts) |
+| `Thread` confinement | Confined to the scheduler's execution | Unconfined (may resume in different contexts) |
 | Control | Deterministic, queued | Eager before first suspension, then scheduled |
 | Virtual time | Uses TestCoroutineScheduler | Uses same TestCoroutineScheduler |
 | Default in runTest | Yes (since 1.6) | No |
@@ -777,7 +777,7 @@ fun testVirtualTime() = runTest {
 
 ### Testing Delays and Timeouts
 
-Long delays are executed instantly via virtual time:
+`Long` delays are executed instantly via virtual time:
 
 ```kotlin
 import kotlin.time.Duration.Companion.hours
@@ -1261,4 +1261,4 @@ Use `UnconfinedTestDispatcher` when:
 
 - [[q-debugging-coroutines-techniques--kotlin--medium|Debugging coroutines]]
 - [[q-common-coroutine-mistakes--kotlin--medium|Common coroutine mistakes]]
-- [[q-channelflow-callbackflow-flow--kotlin--medium|Flow builders]]
+- [[q-channelflow-callbackflow-flow--kotlin--medium|`Flow` builders]]

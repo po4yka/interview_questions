@@ -1,4 +1,4 @@
----
+---\
 id: android-009
 title: Fragment Basics / Основы Fragment
 aliases: [Fragment Basics, Основы Fragment]
@@ -17,7 +17,7 @@ tags: [android/fragment, android/ui-navigation, difficulty/easy, ui-component]
 moc: moc-android
 related: [c-compose-navigation, c-fragments, q-android-build-optimization--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-save-data-outside-fragment--android--medium, q-what-each-android-component-represents--android--easy]
 
----
+---\
 # Вопрос (RU)
 > Что такое `Fragment` в Android и для чего он используется?
 
@@ -48,7 +48,7 @@ related: [c-compose-navigation, c-fragments, q-android-build-optimization--andro
     android:layout_height="match_parent" />
 ```
 
-На практике сейчас чаще используется `FragmentContainerView` и/или Navigation Component.
+На практике сейчас чаще используется `FragmentContainerView` и/или Navigation `Component`.
 
 **2. Динамическое добавление** — через `FragmentManager`:
 
@@ -68,14 +68,14 @@ supportFragmentManager.beginTransaction()
 - `add()` — добавляет новый фрагмент в указанный контейнер. Уже добавленные фрагменты в этом контейнере не удаляются автоматически; результат ("поверх" или нет) зависит от разметки и контейнеров
 - `replace()` — удаляет (detach/remove) существующие фрагменты из указанного контейнера и добавляет новый
 
-**3. Navigation Component** — современный подход для управления навигацией между фрагментами и экранами через `NavHostFragment` / `FragmentContainerView`, при котором навигация описывается в графе, а framework сам выполняет соответствующие транзакции.
+**3. Navigation `Component`** — современный подход для управления навигацией между фрагментами и экранами через `NavHostFragment` / `FragmentContainerView`, при котором навигация описывается в графе, а framework сам выполняет соответствующие транзакции.
 
 ### Основные Сценарии Использования
 
 1. **Модульность UI** — разделение экрана на переиспользуемые компоненты
 2. **Адаптивный дизайн** — комбинирование фрагментов для планшетов, разделение для телефонов
 3. **Динамическое изменение UI** — добавление, замена, удаление во время выполнения
-4. **Back stack** — управление историей навигации (через `FragmentManager` или Navigation Component)
+4. **Back stack** — управление историей навигации (через `FragmentManager` или Navigation `Component`)
 
 ### Пример Простого `Fragment`
 
@@ -103,7 +103,7 @@ class ProfileFragment : Fragment() {
 - Используйте `ViewModel` для связи с `Activity`/другими фрагментами вместо прямых жёстких ссылок
 - Учитывайте жизненный цикл: экземпляр `Fragment` может переживать свою `View`; создавайте/очищайте `View` в `onCreateView`/`onDestroyView`, не держите утечки контекста или ссылок на `View`
 - Избегайте глубокой вложенности фрагментов
-- Для сложной навигации используйте Navigation Component поверх `NavHostFragment` / `FragmentContainerView`
+- Для сложной навигации используйте Navigation `Component` поверх `NavHostFragment` / `FragmentContainerView`
 
 ---
 
@@ -129,7 +129,7 @@ A **`Fragment`** is a reusable portion of UI and behavior in an Android app. A f
     android:layout_height="match_parent" />
 ```
 
-In modern projects, `FragmentContainerView` and/or Navigation Component are generally preferred.
+In modern projects, `FragmentContainerView` and/or Navigation `Component` are generally preferred.
 
 **2. Dynamic addition** — via `FragmentManager`:
 
@@ -149,14 +149,14 @@ supportFragmentManager.beginTransaction()
 - `add()` — adds a new fragment into the specified container. Existing fragments in that container are not automatically removed; whether it visually appears "on top" depends on your layout/containers
 - `replace()` — removes (detach/remove) existing fragments from the specified container and adds the new one
 
-**3. Navigation Component** — a modern approach for managing navigation between fragments and screens via `NavHostFragment` / `FragmentContainerView`, where navigation is defined in a graph and the framework performs the underlying fragment transactions.
+**3. Navigation `Component`** — a modern approach for managing navigation between fragments and screens via `NavHostFragment` / `FragmentContainerView`, where navigation is defined in a graph and the framework performs the underlying fragment transactions.
 
 ### Main Use Cases
 
 1. **UI Modularity** — dividing screens into reusable components
 2. **Adaptive Design** — combining fragments for tablets, separating for phones
 3. **Dynamic UI Changes** — adding, replacing, removing at runtime
-4. **Back stack** — managing navigation history (via `FragmentManager` or Navigation Component)
+4. **Back stack** — managing navigation history (via `FragmentManager` or Navigation `Component`)
 
 ### Simple `Fragment` Example
 
@@ -184,7 +184,7 @@ class ProfileFragment : Fragment() {
 - Use `ViewModel` for communication with the `Activity`/other fragments instead of holding strong direct references
 - Be lifecycle-aware: the `Fragment` instance may outlive its view hierarchy; create/clean up views in `onCreateView`/`onDestroyView` and avoid leaking `Context` or `View` references
 - Avoid deep fragment nesting
-- Use Navigation Component with `NavHostFragment` / `FragmentContainerView` for complex navigation
+- Use Navigation `Component` with `NavHostFragment` / `FragmentContainerView` for complex navigation
 
 ---
 

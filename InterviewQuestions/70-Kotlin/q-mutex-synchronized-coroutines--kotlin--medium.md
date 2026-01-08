@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-081
 title: "Mutex vs synchronized in Kotlin coroutines / Mutex vs synchronized в Kotlin корутинах"
 topic: kotlin
@@ -14,7 +14,7 @@ tags: [concurrency, coroutines, difficulty/medium, kotlin, mutex, synchronizatio
 moc: moc-kotlin
 related: [c-kotlin, q-channelflow-callbackflow-flow--kotlin--medium, q-debounce-throttle-flow--kotlin--medium, q-race-conditions-coroutines--kotlin--hard, q-semaphore-rate-limiting--kotlin--medium]
 subtopics: [concurrency, coroutines, mutex]
----
+---\
 # Вопрос (RU)
 > В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
 
@@ -655,10 +655,10 @@ suspend fun incrementCounter() {
 |---------|-------|--------------|
 | **Blocking** | With `withLock`, suspends coroutine instead of blocking the thread | Blocks the thread |
 | **Usage** | Best used in `suspend` code (`withLock`); also has non-suspend APIs (`tryLock`, `unlock`) | Any function |
-| **Thread efficiency** | High with many coroutines (threads stay free while coroutines wait) | Lower under high contention (threads can be parked/blocked) |
+| **`Thread` efficiency** | High with many coroutines (threads stay free while coroutines wait) | Lower under high contention (threads can be parked/blocked) |
 | **Reentrant** | NOT reentrant for its owner: re-acquiring without unlock will cause a logical deadlock | Reentrant per thread: same thread can enter the same monitor multiple times |
 | **Fairness** | Unfair by default; strict fairness not guaranteed | JVM-dependent; strict fairness not guaranteed |
-| **Cancellation** | Integrated with coroutine cancellation: `withLock` releases on cancellation | Coroutine cancellation does not release a `synchronized` monitor; thread stays blocked until exit |
+| **Cancellation** | Integrated with coroutine cancellation: `withLock` releases on cancellation | `Coroutine` cancellation does not release a `synchronized` monitor; thread stays blocked until exit |
 | **Try lock** | `tryLock()` available | No direct equivalent for `synchronized` |
 | **Performance** | Better scalability for coroutine-based concurrency | Can be very fast under low contention and few threads; benchmarks are workload-specific |
 
@@ -894,7 +894,7 @@ class RequestCounter {
 }
 ```
 
-Pattern 2: Thread-Safe Cache
+Pattern 2: `Thread`-Safe Cache
 
 ```kotlin
 class CacheWithMutex<K, V> {
@@ -1280,7 +1280,7 @@ Use atomic types when:
 
 Use `Channel`/Actor when:
 - Managing complex or stateful workflows.
-- Message-passing fits naturally.
+- `Message`-passing fits naturally.
 - Producer-consumer or actor-style concurrency is desired.
 
 ### Key Takeaways

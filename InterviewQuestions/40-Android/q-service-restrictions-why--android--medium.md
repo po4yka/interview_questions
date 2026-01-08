@@ -1,4 +1,4 @@
----
+---\
 id: android-205
 title: Service Restrictions / Ограничения Service
 aliases: [Service Restrictions, Ограничения Service]
@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/service, difficulty/medium]
 
----
+---\
 # Вопрос (RU)
 > Ограничения `Service`
 
@@ -294,7 +294,7 @@ alarmManager.setWindow(
 
 ### Современные Альтернативы Фоновых `Service`
 
-1. **WorkManager (рекомендуется)** — для отложенных, гарантированных задач.
+1. **`WorkManager` (рекомендуется)** — для отложенных, гарантированных задач.
 
    ```kotlin
    val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
@@ -427,7 +427,7 @@ alarmManager.setWindow(
 
 Key reasons:
 
-1. Long-running background services drain battery.
+1. `Long`-running background services drain battery.
 2. Many services increase memory pressure and CPU load.
 3. Too much hidden background work degrades device performance.
 4. Malicious or opaque services can abuse permissions and user data.
@@ -597,7 +597,7 @@ Allowed (with limits) even under Doze/standby:
 
 ### Modern Alternatives to Background Services
 
-1. WorkManager — deferrable, guaranteed background work.
+1. `WorkManager` — deferrable, guaranteed background work.
 
 ```kotlin
 val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()

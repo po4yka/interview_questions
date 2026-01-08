@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-180017"
 title: "Material 3 / Material 3"
 aliases: ["Material 3"]
@@ -9,13 +9,14 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-material-design, c-compose-ui, c-theming, c-design-systems, c-android-themes]
+moc: "moc-cs"
+related: ["c-material-design", "c-compose-ui", "c-theming", "c-design-systems", "c-android-themes"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
@@ -33,7 +34,7 @@ Material 3 (M3) — актуальное поколение дизайн-сис�
 
 - Design system generation: Material 3 evolves Material Design with updated guidelines for color, typography, shape, elevation, and motion aligned with modern platforms and devices.
 - Dynamic color: Integrates with sources like Android 12+ system palettes (Material You) to generate harmonious, branded color schemes per user/device while keeping accessibility in mind.
-- Component libraries: Provides ready-to-use, themable UI components (buttons, navigation bars, dialogs, cards, etc.) via Material Components and Jetpack Compose Material 3.
+- `Component` libraries: `Provides` ready-to-use, themable UI components (buttons, navigation bars, dialogs, cards, etc.) via Material Components and Jetpack Compose Material 3.
 - Accessibility and theming: Encourages high contrast, scalable typography, and consistent theming so apps look cohesive in light/dark modes and across screen sizes.
 - Migration relevance: Many Android and cross-platform projects are moving from Material 2 to 3; candidates should know key differences, migration considerations, and how to configure M3 themes.
 

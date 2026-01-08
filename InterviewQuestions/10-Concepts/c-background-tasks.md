@@ -1,14 +1,22 @@
----
-id: ivc-20251030-122941
-title: Background Tasks / Фоновые задачи
-aliases: [Background Tasks, Background Work, Фоновые задачи]
-kind: concept
-summary: Android mechanisms for executing work outside main thread
-links: []
-created: 2025-10-30
-updated: 2025-10-30
-tags: [android, background-tasks, concept, performance, workmanager]
----
+---\
+id: "20251030-122941"
+title: "Background Tasks / Фоновые задачи"
+aliases: ["Background Tasks", "Background Work", "Фоновые задачи"]
+summary: "Android mechanisms for executing work outside main thread"
+topic: "android"
+subtopics: ["background-tasks", "performance", "workmanager"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-30"
+updated: "2025-10-30"
+tags: ["android", "background-tasks", "concept", "performance", "workmanager", "difficulty/medium"]
+---\
 
 # Summary (EN)
 
@@ -22,7 +30,7 @@ Background tasks are operations that execute outside the main (UI) thread in And
 
 ## Core Concept
 
-**Battery Optimization Constraints**:
+**Battery Optimization `Constraints`**:
 - **Doze Mode**: Device idle, network/CPU restricted, periodic maintenance windows
 - **App Standby**: Apps unused for period, network and job restrictions
 - **Background Execution Limits** (API 26+): Background services terminated after app enters background
@@ -103,7 +111,7 @@ class MusicService : Service() {
 - Use sparingly (battery impact)
 
 ### 4. JobScheduler (Low-level)
-**Use for**: Custom scheduling logic (rare, prefer WorkManager)
+**Use for**: Custom scheduling logic (rare, prefer `WorkManager`)
 
 ---
 
@@ -111,23 +119,23 @@ class MusicService : Service() {
 
 | Requirement | Solution |
 |-------------|----------|
-| Deferrable, guaranteed | WorkManager |
-| User-visible, long-running | Foreground Service |
-| Exact time execution | AlarmManager + WorkManager |
-| Immediate one-time | WorkManager (expedited) |
+| Deferrable, guaranteed | `WorkManager` |
+| User-visible, long-running | Foreground `Service` |
+| Exact time execution | AlarmManager + `WorkManager` |
+| Immediate one-time | `WorkManager` (expedited) |
 | In-app only | Coroutines/Threads |
 
 ---
 
 ## Best Practices
 
-1. **Prefer WorkManager**: Handles all edge cases (Doze, battery, constraints)
+1. **Prefer `WorkManager`**: Handles all edge cases (Doze, battery, constraints)
 2. **Minimize exact alarms**: Use inexact timing when possible
 3. **Use constraints**: Network, battery, storage requirements
 4. **Foreground service = visible work**: Only for user-aware operations
 5. **Test Doze/Standby**: `adb shell dumpsys deviceidle force-idle`
 6. **Handle failures**: Implement retry logic with exponential backoff
-7. **API 31+ permissions**: Request exact alarm permission explicitly
+7. **API 31+ permissions**: `Request` exact alarm permission explicitly
 
 ---
 
@@ -143,11 +151,11 @@ class MusicService : Service() {
 
 ## Use Cases / Trade-offs
 
-**WorkManager**:
+**`WorkManager`**:
 - USE: Data sync, uploads, periodic cleanup, database migrations
 - TRADE-OFF: Not exact timing (can be delayed by hours in Doze)
 
-**Foreground Service**:
+**Foreground `Service`**:
 - USE: Music, navigation, download with progress, live location
 - TRADE-OFF: Requires notification, user can stop service
 

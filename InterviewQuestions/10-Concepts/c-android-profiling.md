@@ -9,12 +9,13 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-android-profiler, c-memory-profiler, c-performance-optimization, c-perfetto, c-systrace]
+related: ["c-android-profiler", "c-memory-profiler", "c-performance-optimization", "c-perfetto", "c-systrace"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["android", "auto-generated", "concept", "difficulty/medium"]
+tags: [android, concept, difficulty/medium]
 ---
 
 # Summary (EN)

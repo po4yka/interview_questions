@@ -1,4 +1,4 @@
----
+---\
 id: kotlin-117
 title: "Creating custom CoroutineDispatchers with limitedParallelism / Создание пользовательских CoroutineDispatchers с limitedParallelism"
 aliases: ["Custom Dispatchers", "limitedParallelism"]
@@ -16,7 +16,7 @@ tags: ["concurrency", "difficulty/hard", "dispatchers", "limitedparallelism", "p
 description: "Deep dive into creating custom dispatchers, limitedParallelism API, thread pool sizing, and resource-specific dispatchers"
 moc: moc-kotlin
 related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
----
+---\
 # Вопрос (RU)
 
 Когда и как следует создавать пользовательские CoroutineDispatchers в Kotlin? Объясните API `limitedParallelism()`, интеграцию с ExecutorService, стратегии определения размера пула потоков и реальные сценарии для dispatcher-ов специфичных ресурсов.
@@ -39,7 +39,7 @@ Custom dispatchers are needed when:
 
 1. **Resource Protection**: Limiting concurrent access to shared resources (database, camera, file system)
 2. **Concurrency Limiting / Rate Limiting Integration**: Controlling how many operations run at once and coordinating with external rate limits
-3. **Thread Pool Customization**: Specific thread pool characteristics for your workload
+3. **`Thread` Pool Customization**: Specific thread pool characteristics for your workload
 4. **Priority Execution**: Different priority levels for certain classes of work
 5. **Legacy Integration**: Bridging existing ExecutorService or thread pools with coroutines
 6. **Testing**: Providing a controlled execution environment
@@ -234,7 +234,7 @@ Sizing decision table (heuristic):
 
 #### Custom Dispatcher for Specific Resources
 
-Example 1: Database dispatcher (single writer pattern)
+Example 1: `Database` dispatcher (single writer pattern)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -669,7 +669,7 @@ Custom dispatchers are typically created using `limitedParallelism()` (preferred
 
 ## References
 
-- [Kotlin Coroutines Guide - Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Kotlin Coroutines Guide - `Coroutine` `Context` and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [limitedParallelism Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-dispatcher/limited-parallelism.html)
 - [ExecutorCoroutineDispatcher API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-executor-coroutine-dispatcher/)
 - [Roman Elizarov - Explicit Concurrency](https://medium.com/@elizarov/explicit-concurrency-67a8e8fd9b25)

@@ -1,11 +1,11 @@
----
+---\
 id: moc-architecture-patterns-20251006
 title: Architecture Patterns — Map of Content
 kind: moc
 created: 2025-10-06
 updated: 2025-10-06
 tags: [architecture-patterns, design-patterns, moc]
----
+---\
 
 # Architecture Patterns & Design Patterns — Map of Content
 
@@ -85,7 +85,7 @@ WHERE contains(tags, "mvvm") OR contains(tags, "mvi") OR contains(tags, "mvp")
 SORT difficulty ASC
 ```
 
-**Service Layer Patterns**:
+**`Service` Layer Patterns**:
 
 ```dataview
 TABLE WITHOUT ID
@@ -226,7 +226,7 @@ LIMIT 10
 Understanding basic patterns:
 
 1. **Start with**: MVC, MVP basics
-2. **Then learn**: Observer pattern, Strategy pattern
+2. **Then learn**: `Observer` pattern, Strategy pattern
 3. **Finally**: MVVM fundamentals
 
 ### Intermediate Path

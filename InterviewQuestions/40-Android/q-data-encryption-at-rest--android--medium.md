@@ -1,4 +1,4 @@
----
+---\
 id: android-466
 title: Data Encryption At Rest / Шифрование данных в покое
 aliases: [Data Encryption At Rest, Шифрование данных в покое]
@@ -16,12 +16,12 @@ updated: 2025-11-11
 tags: [android/files-media, android/keystore-crypto, difficulty/medium, encryption]
 sources:
   - "https://developer.android.com/guide/topics/security/encryption"
----
+---\
 # Вопрос (RU)
-> Как реализовать шифрование данных в покое с помощью EncryptedSharedPreferences и SQLCipher для Room? Сравните подходы, влияние на производительность и стратегии управления ключами.
+> Как реализовать шифрование данных в покое с помощью EncryptedSharedPreferences и SQLCipher для `Room`? Сравните подходы, влияние на производительность и стратегии управления ключами.
 
 # Question (EN)
-> Implement data encryption at rest using EncryptedSharedPreferences and SQLCipher for Room. Compare approaches, performance impact, and key management strategies.
+> Implement data encryption at rest using EncryptedSharedPreferences and SQLCipher for `Room`. Compare approaches, performance impact, and key management strategies.
 
 ## Ответ (RU)
 
@@ -253,7 +253,7 @@ val masterKey = MasterKey.Builder(context)
 
 **Approximate (device- and workload-dependent):**
 - `EncryptedSharedPreferences`: typically +1–2 ms per read/write vs plain `SharedPreferences`.
-- `SQLCipher`: overhead on queries and writes; often within tens of percent vs plain SQLite but must be profiled for your access patterns.
+- `SQLCipher`: overhead on queries and writes; often within tens of percent vs plain `SQLite` but must be profiled for your access patterns.
 - `EncryptedFile`: overhead scales with file size and I/O; a ~1MB file may add tens of ms.
 
 **Optimizations:**

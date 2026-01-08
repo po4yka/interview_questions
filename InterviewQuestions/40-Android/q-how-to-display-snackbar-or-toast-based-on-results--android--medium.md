@@ -1,4 +1,4 @@
----
+---\
 id: android-426
 title: "How To Display Snackbar Or Toast Based On Results / Как отобразить Snackbar или Toast в зависимости от результатов"
 aliases: ["How To Display Snackbar Or Toast", "Как отобразить Snackbar или Toast"]
@@ -16,7 +16,7 @@ created: 2024-10-15
 updated: 2024-10-15
 tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-views, difficulty/medium, notifications, snackbar, toast]
 
----
+---\
 # Вопрос (RU)
 
 > Как правильно отображать Toast и Snackbar в зависимости от результатов операций в Android-приложении?
@@ -147,7 +147,7 @@ fun MyScreen(viewModel: MyViewModel) {
 - ✅ **Snackbar для действий**: Используйте, когда нужно взаимодействие (Undo, Retry)
 - ✅ **Toast для информации**: Простые уведомления без действий
 - ✅ **`SharedFlow` для одноразовых событий**: Сконфигурируйте без `replay`, чтобы избежать повторного показа при пересоздании UI
-- ✅ **Lifecycle-aware**: Собирайте `Flow` в `repeatOnLifecycle` или аналогичных API, привязанных к жизненному циклу
+- ✅ **`Lifecycle`-aware**: Собирайте `Flow` в `repeatOnLifecycle` или аналогичных API, привязанных к жизненному циклу
 - ❌ **Не используйте Toast из фоновых потоков**: Только из главного потока
 - ❌ **Не злоупотребляйте**: Критичные ошибки лучше показывать через Dialog
 
@@ -273,7 +273,7 @@ fun MyScreen(viewModel: MyViewModel) {
 - ✅ **Snackbar for actions**: Use when interaction is needed (Undo, Retry)
 - ✅ **Toast for information**: Simple notifications without actions
 - ✅ **`SharedFlow` for one-off events**: Configure without `replay` to avoid re-showing events on UI recreation
-- ✅ **Lifecycle-aware**: Collect `Flow` in `repeatOnLifecycle` or equivalent lifecycle-aware scopes
+- ✅ **`Lifecycle`-aware**: Collect `Flow` in `repeatOnLifecycle` or equivalent lifecycle-aware scopes
 - ❌ **Don't use Toast from background threads**: Main thread only
 - ❌ **Don't overuse**: Critical errors are better shown via Dialog
 

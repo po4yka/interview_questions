@@ -1,5 +1,5 @@
----
----
+---\
+---\
 
 # File Naming Rules
 
@@ -106,7 +106,7 @@ hard      # Complex, advanced concepts
 
 | Russian Question | English Slug |
 |------------------|--------------|
-| Che takoe ViewModel | what-is-viewmodel |
+| Che takoe `ViewModel` | what-is-viewmodel |
 | Kak sozdat korutinu | how-to-create-coroutine |
 | Raznitsa mezhdu MVI i MVVM | difference-between-mvi-mvvm |
 

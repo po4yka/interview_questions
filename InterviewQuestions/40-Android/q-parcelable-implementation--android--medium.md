@@ -1,4 +1,4 @@
----
+---\
 id: android-101
 title: "Parcelable Implementation / Реализация Parcelable"
 aliases: [Android Parcelable, Parcelable, Parcelable Implementation, Реализация Parcelable]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 tags: [android/intents-deeplinks, android/performance-memory, android/serialization, bundle, difficulty/medium, ipc, parcelable]
 sources: ["https://developer.android.com/reference/android/os/Parcelable", "https://kotlinlang.org/docs/compiler-plugins.html#parcelable-implementations-generator"]
 
----
+---\
 # Вопрос (RU)
 
 > Что вы знаете о `Parcelable`?
@@ -131,7 +131,7 @@ object DateParceler : Parceler<Date> {
 ### Когда Использовать
 
 - Передача данных через `Intent` между `Activity`
-- Аргументы `Fragment` (`setArguments(`Bundle`)` / Safe Args)
+- Аргументы `Fragment` (`setArguments(``Bundle``)` / Safe Args)
 - Сохранение состояния в `onSaveInstanceState`
 - Межпроцессное взаимодействие (AIDL, Messenger), где AIDL типы должны быть `Parcelable`
 
@@ -239,7 +239,7 @@ object DateParceler : Parceler<Date> {
 ### When to Use
 
 - Passing data via `Intent` between Activities
-- `Fragment` arguments (`setArguments(`Bundle`)` / Safe Args)
+- `Fragment` arguments (`setArguments(``Bundle``)` / Safe Args)
 - Saving state in `onSaveInstanceState`
 - Inter-process communication (AIDL, Messenger), where AIDL types must be `Parcelable`
 

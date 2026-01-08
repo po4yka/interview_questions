@@ -1,4 +1,4 @@
----
+---\
 id: android-143
 title: Android Async Primitives / Примитивы асинхронности Android
 aliases: [Android Async Primitives, Примитивы асинхронности Android]
@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-11-10
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
 
----
+---\
 # Вопрос (RU)
 > Какие примитивы асинхронности предоставляет Android?
 
@@ -34,10 +34,10 @@ Android предоставляет несколько уровней прими�
 **Современные (рекомендуемые, более высокоуровневые):**
 - **[[c-coroutines|Корутины]]** — легковесная конкурентность с lifecycle-aware отменой
 - **`Flow`** — реактивные потоки данных (cold streams + hot `StateFlow`/`SharedFlow`) поверх корутин
-- **WorkManager** — надёжное планирование фоновых задач, переживающих смерть процесса (best effort при соблюдении ограничений)
+- **`WorkManager`** — надёжное планирование фоновых задач, переживающих смерть процесса (best effort при соблюдении ограничений)
 
 **Базовые/Legacy (низкоуровневые или устаревшие):**
-- **Thread / HandlerThread / Handler/Looper** — низкоуровневая работа с потоками и передача сообщений между ними (включая основной поток)
+- **`Thread` / HandlerThread / Handler/Looper** — низкоуровневая работа с потоками и передача сообщений между ними (включая основной поток)
 - **ExecutorService** — Java thread pool без интеграции с Android lifecycle
 - **RxJava** — функциональное реактивное программирование (требует дисциплины управления подписками и ручной привязки к lifecycle)
 - **AsyncTask** — DEPRECATED из-за проблем с lifecycle, управлением потоками, предсказуемостью очередности и частыми утечками памяти при неправильном использовании
@@ -137,7 +137,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 **Выбор примитива:**
 - **Корутины** — UI-связанные операции с коротким или контролируемым временем выполнения (API calls, DB queries, параллельные запросы)
 - **`Flow`** — непрерывные/подписочные потоки данных (sensors, DB observations, WebSocket)
-- **WorkManager** — критичные задачи, которые должны быть надежно запланированы и выполниться даже после закрытия app/смерти процесса (upload, sync) при соблюдении системных ограничений
+- **`WorkManager`** — критичные задачи, которые должны быть надежно запланированы и выполниться даже после закрытия app/смерти процесса (upload, sync) при соблюдении системных ограничений
 - **Handler/Executor/Thread** — низкоуровневый контроль потоков и очередей, когда нужна тонкая настройка
 
 ---
@@ -149,10 +149,10 @@ Android provides several levels of async primitives:
 **Modern (recommended, higher-level):**
 - **[[c-coroutines|Coroutines]]** — lightweight concurrency with lifecycle-aware cancellation
 - **`Flow`** — reactive data streams (cold streams + hot `StateFlow`/`SharedFlow`) built on top of coroutines
-- **WorkManager** — robust scheduling for background tasks that can survive process death (best-effort under given constraints)
+- **`WorkManager`** — robust scheduling for background tasks that can survive process death (best-effort under given constraints)
 
 **Low-level/Legacy (basic or outdated):**
-- **Thread / HandlerThread / Handler/Looper** — low-level threading and message passing (including the main thread)
+- **`Thread` / HandlerThread / Handler/Looper** — low-level threading and message passing (including the main thread)
 - **ExecutorService** — Java thread pool without built-in Android lifecycle integration
 - **RxJava** — functional reactive programming (requires disciplined subscription management and manual lifecycle handling)
 - **AsyncTask** — DEPRECATED due to lifecycle issues, threading behavior, ordering guarantees, and common memory leaks when misused
@@ -252,7 +252,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 **Choosing the right primitive:**
 - **Coroutines** — UI-bound operations with short or controlled execution time (API calls, DB queries, parallel calls)
 - **`Flow`** — continuous/subscribed data streams (sensors, DB observations, WebSocket)
-- **WorkManager** — critical tasks that must be reliably scheduled and run even after app closure/process death (upload, sync) under system constraints
+- **`WorkManager`** — critical tasks that must be reliably scheduled and run even after app closure/process death (upload, sync) under system constraints
 - **Handler/Executor/Thread** — low-level control of threads and queues when fine-grained behavior is needed
 
 ---
@@ -262,7 +262,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - Как `viewModelScope` обеспечивает автоматическую отмену при очистке `ViewModel`?
 - В чем разница между `StateFlow` и `SharedFlow` с точки зрения буферизации и `replay`?
 - В каких случаях вы предпочтете `ExecutorService` вместо корутин, несмотря на рекомендации?
-- Как WorkManager сохраняет и переназначает задачи при смерти процесса и перезагрузке устройства?
+- Как `WorkManager` сохраняет и переназначает задачи при смерти процесса и перезагрузке устройства?
 - Каковы последствия для памяти при использовании `Handler` с долгоживущими ссылками на `Activity`?
 - Почему `AsyncTask` устарел и какие конкретные проблемы у него были с lifecycle и потоками?
 - Как диспетчеры корутин отображаются на модель потоков Android (Main, IO, Default)?
@@ -272,8 +272,8 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - How does `viewModelScope` ensure automatic cancellation when `ViewModel` is cleared?
 - What's the difference between `StateFlow` and `SharedFlow` in terms of buffering and replay?
 - When would you prefer `ExecutorService` over coroutines despite the recommendation?
-- How does WorkManager persist and reschedule work across process death and device reboot?
-- What are the memory implications of using Handler with long-lived `Activity` references?
+- How does `WorkManager` persist and reschedule work across process death and device reboot?
+- What are the memory implications of using `Handler` with long-lived `Activity` references?
 - Why is `AsyncTask` deprecated and what specific issues did it have with lifecycle management and threading?
 - How do coroutine dispatchers map to Android's threading model (Main, IO, Default)?
 
@@ -282,7 +282,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - [[c-coroutines]] — основы корутин
 - Руководство по корутинам Kotlin на Android: https://developer.android.com/kotlin/coroutines
 - Документация по `Flow`: https://kotlinlang.org/docs/flow.html
-- Руководство по WorkManager: https://developer.android.com/topic/libraries/architecture/workmanager
+- Руководство по `WorkManager`: https://developer.android.com/topic/libraries/architecture/workmanager
 - Обзор фоновых задач: https://developer.android.com/develop/background-work/background-tasks
 
 ## References
@@ -301,11 +301,11 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 
 ### Связанные
 - [[q-flow-operators--kotlin--medium]] — операторы `Flow`
-- [[q-what-is-workmanager--android--medium]] — основы WorkManager
+- [[q-what-is-workmanager--android--medium]] — основы `WorkManager`
 
 ### Продвинутые
 - [[q-advanced-coroutine-patterns--kotlin--hard]] — продвинутые паттерны корутин
-- [[q-workmanager-execution-guarantee--android--medium]] — гарантии выполнения WorkManager
+- [[q-workmanager-execution-guarantee--android--medium]] — гарантии выполнения `WorkManager`
 
 ## Related Questions
 
@@ -315,8 +315,8 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 
 ### Related
 - [[q-flow-operators--kotlin--medium]] — `Flow` operators
-- [[q-what-is-workmanager--android--medium]] — WorkManager basics
+- [[q-what-is-workmanager--android--medium]] — `WorkManager` basics
 
 ### Advanced
 - [[q-advanced-coroutine-patterns--kotlin--hard]] — Advanced coroutines
-- [[q-workmanager-execution-guarantee--android--medium]] — WorkManager guarantees
+- [[q-workmanager-execution-guarantee--android--medium]] — `WorkManager` guarantees

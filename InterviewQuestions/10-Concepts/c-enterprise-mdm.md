@@ -1,13 +1,21 @@
 ---
-id: ivc-20251102-011
-title: Android Enterprise & MDM / Android Enterprise и MDM
-aliases: [Android Enterprise, Mobile Device Management Android, Work Profile APIs]
-kind: concept
-summary: Android management APIs for work profiles, device owner, and zero-touch enrollment
-links: []
-created: 2025-11-02
-updated: 2025-11-02
-tags: [android, concept, enterprise, mdm, security]
+id: "20260108-110550"
+title: "Android Enterprise & MDM / Android Enterprise и MDM"
+aliases: ["Android Enterprise", "Mobile Device Management Android", "Work Profile APIs"]
+summary: "Android management APIs for work profiles, device owner, and zero-touch enrollment"
+topic: "android"
+subtopics: ["enterprise", "mdm", "security"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-11-02"
+updated: "2025-11-02"
+tags: ["android", "concept", "enterprise", "mdm", "security", "difficulty/medium"]
 ---
 
 # Summary (EN)

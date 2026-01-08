@@ -1,4 +1,4 @@
----
+---\
 id: android-344
 title: "Navigation Methods In Kotlin / Методы навигации в Kotlin"
 aliases: [Android Navigation, Navigation Methods, Методы навигации]
@@ -16,7 +16,7 @@ updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navigation]
 
----
+---\
 # Вопрос (RU)
 
 > Какие есть способы навигации в Android-приложениях на Kotlin?
@@ -31,9 +31,9 @@ tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navi
 
 **Основные подходы**:
 
-Android предлагает несколько способов навигации — от традиционных `Intent` до современного Navigation Component. Выбор зависит от архитектуры (single-`Activity`/multi-`Activity`), UI-стека (Views/Compose) и требований к глубоким ссылкам и BackStack.
+Android предлагает несколько способов навигации — от традиционных `Intent` до современного Navigation `Component`. Выбор зависит от архитектуры (single-`Activity`/multi-`Activity`), UI-стека (Views/Compose) и требований к глубоким ссылкам и BackStack.
 
-**1. Jetpack Navigation Component (Рекомендуемый для фрагментов и многомодульных приложений)**
+**1. Jetpack Navigation `Component` (Рекомендуемый для фрагментов и многомодульных приложений)**
 
 Современный подход с графом навигации, поддержкой deep link, анимаций и безопасной передачей аргументов (Safe Args для `View`-based UI, `Bundle`/`Parcelable` и др. для Compose destinations):
 
@@ -94,7 +94,7 @@ if (viewIntent.resolveActivity(packageManager) != null) {
 
 **3. FragmentTransaction (Ручное управление фрагментами)**
 
-Используется при навигации внутри одной `Activity` без Navigation Component. Вызов `supportFragmentManager` выполняется из `AppCompatActivity`, из фрагмента — через `requireActivity().supportFragmentManager`.
+Используется при навигации внутри одной `Activity` без Navigation `Component`. Вызов `supportFragmentManager` выполняется из `AppCompatActivity`, из фрагмента — через `requireActivity().supportFragmentManager`.
 
 ```kotlin
 // ✅ Корректная замена с добавлением в BackStack
@@ -110,7 +110,7 @@ supportFragmentManager.beginTransaction()
 ```
 
 **Кратко про выбор**:
-- Navigation Component — предпочтителен для новых проектов, сложной навигации, deep links, single-`Activity` архитектуры, но может быть внедрён и постепенно.
+- Navigation `Component` — предпочтителен для новых проектов, сложной навигации, deep links, single-`Activity` архитектуры, но может быть внедрён и постепенно.
 - `Intent` — базовый механизм для перехода между `Activity` (как внутри приложения, так и между приложениями).
 - Ручные `FragmentTransaction` — уместны для простых сценариев или легаси-кода, но требуют ручного управления BackStack.
 
@@ -120,9 +120,9 @@ supportFragmentManager.beginTransaction()
 
 **Key Approaches**:
 
-Android provides several navigation methods — from traditional Intents to the modern Navigation Component. The choice depends on architecture (single-`Activity` vs multi-`Activity`), UI stack (Views/Compose), and deep-link/back stack requirements.
+Android provides several navigation methods — from traditional Intents to the modern Navigation `Component`. The choice depends on architecture (single-`Activity` vs multi-`Activity`), UI stack (Views/Compose), and deep-link/back stack requirements.
 
-**1. Jetpack Navigation Component (Recommended for fragments and modular apps)**
+**1. Jetpack Navigation `Component` (Recommended for fragments and modular apps)**
 
 Modern approach with a navigation graph, deep link support, animations, and type-safe arguments (Safe Args for `View`-based UI, `Bundle`/`Parcelable` etc. for Compose destinations):
 
@@ -183,7 +183,7 @@ if (viewIntent.resolveActivity(packageManager) != null) {
 
 **3. FragmentTransaction (Manual fragment management)**
 
-Used for navigation inside a single `Activity` without Navigation Component. `supportFragmentManager` is called from an AppCompatActivity; from a `Fragment` you would use `requireActivity().supportFragmentManager`.
+Used for navigation inside a single `Activity` without Navigation `Component`. `supportFragmentManager` is called from an AppCompatActivity; from a `Fragment` you would use `requireActivity().supportFragmentManager`.
 
 ```kotlin
 // ✅ Correct replacement with BackStack
@@ -199,7 +199,7 @@ supportFragmentManager.beginTransaction()
 ```
 
 **Summary of choices**:
-- Navigation Component: preferred for new projects, complex navigation graphs, deep links, and single-`Activity` setups; can be adopted incrementally.
+- Navigation `Component`: preferred for new projects, complex navigation graphs, deep links, and single-`Activity` setups; can be adopted incrementally.
 - Intents: fundamental mechanism for `Activity`-to-`Activity` navigation (both intra-app and inter-app).
 - Manual FragmentTransactions: fine for simple or legacy flows but require manual back stack management.
 
@@ -207,7 +207,7 @@ supportFragmentManager.beginTransaction()
 
 ## Дополнительные Вопросы (RU)
 
-- Как обрабатывать deep links с помощью Navigation Component?
+- Как обрабатывать deep links с помощью Navigation `Component`?
 - В чем разница между `popBackStack()` и `popUpTo`?
 - Как безопасно передавать сложные объекты между фрагментами?
 - Когда лучше использовать архитектуру с одной `Activity` против нескольких `Activity`?
@@ -215,7 +215,7 @@ supportFragmentManager.beginTransaction()
 
 ## Follow-ups
 
-- How to handle deep links with Navigation Component?
+- How to handle deep links with Navigation `Component`?
 - What are the differences between `popBackStack()` and `popUpTo`?
 - How to pass complex objects between fragments safely?
 - When to use single `Activity` architecture vs multiple Activities?

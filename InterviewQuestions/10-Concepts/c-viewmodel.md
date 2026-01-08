@@ -1,4 +1,4 @@
----
+---\
 id: "20251025-120300"
 title: "ViewModel / ViewModel"
 aliases: ["AAC ViewModel", "Android ViewModel", "ViewModel компонент", "ViewModel"]
@@ -12,41 +12,41 @@ language_tags: ["en", "ru"]
 sources: []
 status: "draft"
 moc: "moc-android"
-related: [c-lifecycle, c-activity-lifecycle, c-mvvm, c-state-flow, c-savedstatehandle]
+related: ["c-lifecycle", "c-activity-lifecycle", "c-mvvm", "c-state-flow", "c-savedstatehandle"]
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-components", "concept", "difficulty/medium", "jetpack", "lifecycle", "mvvm", "viewmodel"]
----
+---\
 
 # ViewModel / ViewModel
 
 ## Summary (EN)
 
-ViewModel is an Android Architecture Component designed to store and manage UI-related data in a lifecycle-conscious way. ViewModels survive configuration changes such as screen rotations, allowing data to persist across Activity or Fragment recreation. They provide a clear separation between UI logic and business logic, making code more testable and maintainable. ViewModels should never hold references to Views, Activities, or Fragments to prevent memory leaks.
+`ViewModel` is an Android Architecture `Component` designed to store and manage UI-related data in a lifecycle-conscious way. ViewModels survive configuration changes such as screen rotations, allowing data to persist across `Activity` or `Fragment` recreation. They provide a clear separation between UI logic and business logic, making code more testable and maintainable. ViewModels should never hold references to Views, Activities, or Fragments to prevent memory leaks.
 
 ## Краткое Описание (RU)
 
-ViewModel - это компонент Android Architecture Component, предназначенный для хранения и управления данными, связанными с UI, с учетом жизненного цикла. ViewModel переживает изменения конфигурации, такие как поворот экрана, позволяя данным сохраняться при пересоздании Activity или Fragment. Они обеспечивают четкое разделение между UI-логикой и бизнес-логикой, делая код более тестируемым и поддерживаемым. ViewModel никогда не должны содержать ссылки на View, Activity или Fragment, чтобы предотвратить утечки памяти.
+`ViewModel` - это компонент Android Architecture `Component`, предназначенный для хранения и управления данными, связанными с UI, с учетом жизненного цикла. `ViewModel` переживает изменения конфигурации, такие как поворот экрана, позволяя данным сохраняться при пересоздании `Activity` или `Fragment`. Они обеспечивают четкое разделение между UI-логикой и бизнес-логикой, делая код более тестируемым и поддерживаемым. `ViewModel` никогда не должны содержать ссылки на `View`, `Activity` или `Fragment`, чтобы предотвратить утечки памяти.
 
 ## Key Points (EN)
 
 - Survives configuration changes (screen rotation, language change, etc.)
-- Scoped to the lifecycle of Activity or Fragment
+- Scoped to the lifecycle of `Activity` or `Fragment`
 - Automatically cleared when associated lifecycle is destroyed
-- Should never reference View, Activity, Fragment, or Context
-- Works seamlessly with LiveData, StateFlow, and other observables
+- Should never reference `View`, `Activity`, `Fragment`, or `Context`
+- Works seamlessly with `LiveData`, `StateFlow`, and other observables
 - Enables separation of concerns in MVVM architecture
-- Can be shared between multiple Fragments within the same Activity
+- Can be shared between multiple Fragments within the same `Activity`
 
 ## Ключевые Моменты (RU)
 
 - Переживает изменения конфигурации (поворот экрана, смена языка и т.д.)
-- Привязан к жизненному циклу Activity или Fragment
+- Привязан к жизненному циклу `Activity` или `Fragment`
 - Автоматически очищается при уничтожении связанного lifecycle
-- Никогда не должен ссылаться на View, Activity, Fragment или Context
-- Бесшовно работает с LiveData, StateFlow и другими observable
+- Никогда не должен ссылаться на `View`, `Activity`, `Fragment` или `Context`
+- Бесшовно работает с `LiveData`, `StateFlow` и другими observable
 - Обеспечивает разделение ответственности в MVVM архитектуре
-- Может быть разделен между несколькими Fragment в одной Activity
+- Может быть разделен между несколькими `Fragment` в одной `Activity`
 
 ## Basic ViewModel Implementation
 
@@ -277,18 +277,18 @@ Activity/Fragment Finally Destroyed
 - **UI state management**: Store data displayed in UI (lists, forms, selections)
 - **Configuration changes**: Preserve data across screen rotations
 - **Asynchronous operations**: Manage coroutines and background tasks
-- **Fragment communication**: Share data between fragments in same activity
+- **`Fragment` communication**: Share data between fragments in same activity
 - **Caching**: Cache data to avoid redundant network calls
 - **Form handling**: Maintain form state during lifecycle events
 - **Business logic**: Coordinate repository and use case calls
 
 ### When to Avoid
 
-- **Holding Context references**: Never store Activity, Fragment, or View references
-- **Long-lived operations**: Use WorkManager for operations that outlive app
-- **Cross-Activity data**: Use Repository, DataStore, or Navigation arguments instead
-- **Simple data passing**: Use Bundle for simple one-time data transfer
-- **No UI logic**: If no UI state to manage, ViewModel may be unnecessary
+- **Holding `Context` references**: Never store `Activity`, `Fragment`, or `View` references
+- **`Long`-lived operations**: Use `WorkManager` for operations that outlive app
+- **Cross-`Activity` data**: Use Repository, DataStore, or Navigation arguments instead
+- **Simple data passing**: Use `Bundle` for simple one-time data transfer
+- **No UI logic**: If no UI state to manage, `ViewModel` may be unnecessary
 
 ## Trade-offs
 
@@ -296,30 +296,30 @@ Activity/Fragment Finally Destroyed
 - Survives configuration changes automatically
 - Promotes separation of concerns (UI vs business logic)
 - Makes unit testing easier (no Android dependencies)
-- Provides clear lifecycle-aware scope for coroutines
+- `Provides` clear lifecycle-aware scope for coroutines
 - Enables sharing data between fragments easily
-- Integrates with LiveData, Flow, and other reactive streams
+- Integrates with `LiveData`, `Flow`, and other reactive streams
 - Reduces boilerplate for state management
 - Supports SavedStateHandle for process death scenarios
 
 **Cons**:
-- Cannot hold references to View, Activity, or Fragment
+- Cannot hold references to `View`, `Activity`, or `Fragment`
 - Requires ViewModelProvider or dependency injection setup
 - Additional abstraction layer increases complexity
-- Must use Application Context for context-dependent operations
+- Must use `Application` `Context` for context-dependent operations
 - Learning curve for developers new to MVVM pattern
 - Potential over-engineering for very simple screens
 - Need to handle navigation and events carefully (one-time events)
 
 ## Best Practices
 
-- Never pass Activity, Fragment, or View references to ViewModel
-- Use Application Context if context is needed (via dependency injection)
+- Never pass `Activity`, `Fragment`, or `View` references to `ViewModel`
+- Use `Application` `Context` if context is needed (via dependency injection)
 - Expose immutable state (LiveData/StateFlow) to UI layer
-- Keep mutable state private within ViewModel
-- Use viewModelScope for coroutines tied to ViewModel lifecycle
+- Keep mutable state private within `ViewModel`
+- Use viewModelScope for coroutines tied to `ViewModel` lifecycle
 - Handle one-time events properly (using Event wrappers or Channels)
-- Inject dependencies via constructor (supports testing)
+- `Inject` dependencies via constructor (supports testing)
 - Use SavedStateHandle for data that should survive process death
 - Clear resources in onCleared() if needed
 - Keep ViewModels focused on single responsibility
@@ -441,7 +441,7 @@ class UserViewModelTest {
 
 ## References
 
-- [Android Developer Guide: ViewModel Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [Android Developer Guide: `ViewModel` Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [ViewModel Documentation](https://developer.android.com/reference/androidx/lifecycle/ViewModel)
-- [ViewModels and LiveData: Patterns + AntiPatterns](https://medium.com/androiddevelopers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54)
+- [ViewModels and `LiveData`: Patterns + AntiPatterns](https://medium.com/androiddevelopers/viewmodels-and-livedata-patterns-antipatterns-21efaef74a54)
 - [Guide to App Architecture](https://developer.android.com/topic/architecture)

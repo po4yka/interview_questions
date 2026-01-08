@@ -1,4 +1,4 @@
----
+---\
 id: "20251110-162430"
 title: "Okhttp Architecture / Okhttp Architecture"
 aliases: ["Okhttp Architecture"]
@@ -9,23 +9,24 @@ question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
 language_tags: ["en", "ru"]
+sources: []
 status: "draft"
-moc: "moc-kotlin"
-related: [c-okhttp-interceptors, c-networking, c-http-client, c-https-tls, c-caching-strategies]
+moc: "moc-cs"
+related: ["c-okhttp-interceptors", "c-networking", "c-http-client", "c-https-tls", "c-caching-strategies"]
 created: "2025-11-10"
 updated: "2025-11-10"
-tags: ["auto-generated", "concept", "difficulty/medium", "programming-languages"]
----
+tags: [concept, difficulty/medium, programming-languages]
+---\
 
 # Summary (EN)
 
-OkHttp architecture is the internal design of the OkHttp HTTP client that structures how connections, requests, responses, and interceptors are organized to provide an efficient, reliable, and extensible networking stack for Java/Kotlin (often used on Android). It separates concerns into layers (client configuration, interceptor chain, connection management, HTTP/HTTPS codec) to enable features like connection pooling, transparent retries, caching, and protocol support (HTTP/1.1, HTTP/2, WebSocket). Understanding this architecture helps developers debug networking issues, extend behavior (e.g., custom interceptors), and build performant, resilient client-server communication.
+`OkHttp` architecture is the internal design of the `OkHttp` HTTP client that structures how connections, requests, responses, and interceptors are organized to provide an efficient, reliable, and extensible networking stack for Java/Kotlin (often used on Android). It separates concerns into layers (client configuration, interceptor chain, connection management, HTTP/HTTPS codec) to enable features like connection pooling, transparent retries, caching, and protocol support (HTTP/1.1, HTTP/2, WebSocket). Understanding this architecture helps developers debug networking issues, extend behavior (e.g., custom interceptors), and build performant, resilient client-server communication.
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
 # Краткое Описание (RU)
 
-Архитектура OkHttp — это внутренняя организация HTTP-клиента OkHttp, определяющая, как устроены соединения, запросы, ответы и интерцепторы для обеспечения эффективного, надежного и расширяемого сетевого стека для Java/Kotlin (часто на Android). Она разделяет ответственность по слоям (настройка клиента, цепочка интерцепторов, управление соединениями, HTTP/HTTPS кодеки), что позволяет реализовать пул соединений, прозрачные ретраи, кэширование и поддержку протоколов (HTTP/1.1, HTTP/2, WebSocket). Понимание архитектуры помогает лучше отлаживать сеть, настраивать поведение (например, через кастомные интерцепторы) и строить производительное, устойчивое взаимодействие с сервером.
+Архитектура `OkHttp` — это внутренняя организация HTTP-клиента `OkHttp`, определяющая, как устроены соединения, запросы, ответы и интерцепторы для обеспечения эффективного, надежного и расширяемого сетевого стека для Java/Kotlin (часто на Android). Она разделяет ответственность по слоям (настройка клиента, цепочка интерцепторов, управление соединениями, HTTP/HTTPS кодеки), что позволяет реализовать пул соединений, прозрачные ретраи, кэширование и поддержку протоколов (HTTP/1.1, HTTP/2, WebSocket). Понимание архитектуры помогает лучше отлаживать сеть, настраивать поведение (например, через кастомные интерцепторы) и строить производительное, устойчивое взаимодействие с сервером.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 

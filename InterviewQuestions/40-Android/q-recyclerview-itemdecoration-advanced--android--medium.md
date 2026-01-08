@@ -1,4 +1,4 @@
----
+---\
 id: android-081
 title: RecyclerView ItemDecoration Advanced / Продвинутый ItemDecoration для RecyclerView
 aliases: [RecyclerView ItemDecoration Advanced, Продвинутый ItemDecoration для RecyclerView]
@@ -16,22 +16,22 @@ updated: 2025-11-10
 tags: [android/ui-graphics, android/ui-views, custom-drawing, difficulty/medium, itemdecoration, ui]
 sources:
   - "https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration"
----
+---\
 # Вопрос (RU)
-> Как создать пользовательские ItemDecorations для RecyclerView?
+> Как создать пользовательские ItemDecorations для `RecyclerView`?
 
 # Question (EN)
-> How to create custom ItemDecorations for RecyclerView?
+> How to create custom ItemDecorations for `RecyclerView`?
 
 ---
 
 ## Ответ (RU)
 
 **Теория ItemDecoration:**
-ItemDecoration позволяет добавлять пользовательскую отрисовку и отступы к элементам RecyclerView без изменения самих элементов. Подходит для разделителей, отступов, sticky headers и визуальных эффектов. См. также [[c-android-graphics]] для понимания основ отрисовки.
+ItemDecoration позволяет добавлять пользовательскую отрисовку и отступы к элементам `RecyclerView` без изменения самих элементов. Подходит для разделителей, отступов, sticky headers и визуальных эффектов. См. также [[c-android-graphics]] для понимания основ отрисовки.
 
 **Фазы отрисовки (хуки декораций):**
-RecyclerView вызывает декорации вокруг собственной отрисовки элементов:
+`RecyclerView` вызывает декорации вокруг собственной отрисовки элементов:
 1. `onDraw()` — вызывается ДО отрисовки дочерних `View`, рисует ПОД элементами (фоновые украшения).
 2. Отрисовка самих элементов.
 3. `onDrawOver()` — вызывается ПОСЛЕ отрисовки элементов, рисует НАД элементами (передние украшения, sticky headers и т.п.).
@@ -174,10 +174,10 @@ recyclerView.addItemDecoration(
 ## Answer (EN)
 
 **ItemDecoration Theory:**
-ItemDecoration allows adding custom drawing and layout offsets to RecyclerView items without modifying the item views themselves. It is commonly used for dividers, spacing, sticky headers, and visual effects. See also [[c-android-graphics]] for drawing fundamentals.
+ItemDecoration allows adding custom drawing and layout offsets to `RecyclerView` items without modifying the item views themselves. It is commonly used for dividers, spacing, sticky headers, and visual effects. See also [[c-android-graphics]] for drawing fundamentals.
 
 **Drawing phases (decoration hooks):**
-RecyclerView calls decorations around its own item drawing:
+`RecyclerView` calls decorations around its own item drawing:
 1. `onDraw()` — called BEFORE child `View`s are drawn; draw UNDER items (background decorations).
 2. Item views are drawn.
 3. `onDrawOver()` — called AFTER item views are drawn; draw OVER items (foreground decorations, sticky headers, etc.).
@@ -351,7 +351,7 @@ recyclerView.addItemDecoration(
 - [[q-android-app-components--android--easy]] - Базовые компоненты приложения
 
 ### Связанные (того Же уровня)
-- [[q-canvas-drawing-optimization--android--hard]] - Оптимизация рисования на Canvas (сложнее, но по теме отрисовки)
+- [[q-canvas-drawing-optimization--android--hard]] - Оптимизация рисования на `Canvas` (сложнее, но по теме отрисовки)
 
 ## Related Questions
 
@@ -363,4 +363,4 @@ recyclerView.addItemDecoration(
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
-- [[q-canvas-drawing-optimization--android--hard]] - Canvas optimization (harder, but drawing-related)
+- [[q-canvas-drawing-optimization--android--hard]] - `Canvas` optimization (harder, but drawing-related)

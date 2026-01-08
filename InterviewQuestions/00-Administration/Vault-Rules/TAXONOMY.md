@@ -1,5 +1,5 @@
----
----
+---\
+---\
 
 # Controlled Vocabularies & Taxonomy
 
@@ -15,7 +15,7 @@
 ## 1. Topic (Single Value Required)
 
 **Field**: `topic`
-**Type**: String (single value only)
+**Type**: `String` (single value only)
 
 ### Valid Topics
 
@@ -73,7 +73,7 @@ cs                      # General computer science fundamentals
 ## 2. Subtopics (1-3 Values)
 
 **Field**: `subtopics`
-**Type**: Array of strings
+**Type**: `Array` of strings
 
 ### General Subtopics
 
@@ -106,7 +106,7 @@ query-optimization, replication, sharding
 ## 3. Difficulty
 
 **Field**: `difficulty`
-**Type**: String (single value)
+**Type**: `String` (single value)
 
 ```yaml
 easy      # Straightforward, basic concepts, simple implementation
@@ -119,7 +119,7 @@ hard      # Complex, advanced concepts, tricky edge cases
 ## 4. Question Kind
 
 **Field**: `question_kind`
-**Type**: String (single value)
+**Type**: `String` (single value)
 
 ```yaml
 coding          # Implement algorithm/function, write code solution
@@ -131,7 +131,7 @@ android         # Android-specific implementation or theory
 ## 5. Status
 
 **Field**: `status`
-**Type**: String (single value)
+**Type**: `String` (single value)
 
 ```yaml
 draft      # Created by LLM or human, not yet reviewed
@@ -147,7 +147,7 @@ retired    # Deprecated, moved to archive
 ### Original Language
 
 **Field**: `original_language`
-**Type**: String (single value)
+**Type**: `String` (single value)
 
 ```yaml
 en    # Originally in English
@@ -157,7 +157,7 @@ ru    # Originally in Russian
 ### Language Tags
 
 **Field**: `language_tags`
-**Type**: Array of strings
+**Type**: `Array` of strings
 
 ```yaml
 [en]        # Only English sections present
@@ -168,7 +168,7 @@ ru    # Originally in Russian
 ## 7. MOC (Single Link)
 
 **Field**: `moc`
-**Type**: String (WITHOUT brackets)
+**Type**: `String` (WITHOUT brackets)
 
 ```yaml
 moc-algorithms        # For algorithms, data-structures topics
@@ -192,7 +192,7 @@ moc: [[moc-algorithms]]
 ## 8. Related (Array of Links)
 
 **Field**: `related`
-**Type**: Array of strings (2-5 recommended, WITHOUT brackets)
+**Type**: `Array` of strings (2-5 recommended, WITHOUT brackets)
 
 ```yaml
 # CORRECT
@@ -205,7 +205,7 @@ related: []], [[c-array]]
 ## 9. Tags (English Only)
 
 **Field**: `tags`
-**Type**: Array of strings
+**Type**: `Array` of strings
 
 ### Required Tags
 

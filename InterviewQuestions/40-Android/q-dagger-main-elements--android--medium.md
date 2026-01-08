@@ -1,4 +1,4 @@
----
+---\
 id: android-449
 title: Dagger Main Elements / Основные элементы Dagger
 aliases: [Dagger Main Elements, Основные элементы Dagger]
@@ -15,20 +15,20 @@ created: 2025-10-20
 updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium]
 sources: []
----
+---\
 # Вопрос (RU)
-> Из каких основных элементов состоит Dagger?
+> Из каких основных элементов состоит `Dagger`?
 
 # Question (EN)
-> What are the main elements of Dagger?
+> What are the main elements of `Dagger`?
 
 ## Ответ (RU)
 
-Dagger (имеется в виду классический Dagger 2 с ручной конфигурацией под Android) обычно связывают с четырьмя ключевыми концепциями (это не исчерпывающий список, а базовый набор для понимания):
+`Dagger` (имеется в виду классический `Dagger` 2 с ручной конфигурацией под Android) обычно связывают с четырьмя ключевыми концепциями (это не исчерпывающий список, а базовый набор для понимания):
 
 ### 1. @Component — Граф Зависимостей
 
-Интерфейс, для которого Dagger генерирует реализацию, связывающую модули с точками инъекции:
+Интерфейс, для которого `Dagger` генерирует реализацию, связывающую модули с точками инъекции:
 
 ```kotlin
 @Component(modules = [NetworkModule::class])
@@ -94,11 +94,11 @@ abstract class RepositoryModule {
 
 ## Answer (EN)
 
-Dagger (here we mean classic Dagger 2 with manual setup for Android) is usually introduced with four key concepts (this is a focused core set, not an exhaustive list):
+`Dagger` (here we mean classic `Dagger` 2 with manual setup for Android) is usually introduced with four key concepts (this is a focused core set, not an exhaustive list):
 
 ### 1. @Component — Dependency Graph
 
-Interface for which Dagger generates an implementation to wire modules with injection points:
+Interface for which `Dagger` generates an implementation to wire modules with injection points:
 
 ```kotlin
 @Component(modules = [NetworkModule::class])
@@ -164,7 +164,7 @@ abstract class RepositoryModule {
 
 ## Дополнительные Вопросы (RU)
 
-- Как Dagger решает проблему циклических зависимостей?
+- Как `Dagger` решает проблему циклических зависимостей?
 - В чем разница жизненных циклов между `@Singleton` и `@ActivityScoped`?
 - Когда `@Binds` неприменим?
 - Как подкомпоненты расширяют графы родительских компонентов?
@@ -172,7 +172,7 @@ abstract class RepositoryModule {
 
 ## Follow-ups
 
-- How does Dagger resolve circular dependencies?
+- How does `Dagger` resolve circular dependencies?
 - What's the lifecycle difference between `@Singleton` and `@ActivityScoped`?
 - When is `@Binds` not applicable?
 - How do subcomponents extend parent component graphs?
@@ -199,13 +199,13 @@ abstract class RepositoryModule {
 
 ### Связанные
 - [[q-dagger-field-injection--android--medium]] — Стратегии внедрения
-- Настройка компонентов и модулей Dagger
-- Понимание областей видимости и иерархии компонентов Dagger
+- Настройка компонентов и модулей `Dagger`
+- Понимание областей видимости и иерархии компонентов `Dagger`
 
 ### Продвинутое
 - [[q-dagger-framework-overview--android--hard]] — Общая архитектура
 - Реализация пользовательских областей видимости с подкомпонентами
-- Multi-binding и опциональные зависимости в Dagger
+- Multi-binding и опциональные зависимости в `Dagger`
 
 ## Related Questions
 
@@ -214,10 +214,10 @@ abstract class RepositoryModule {
 
 ### Related
 - [[q-dagger-field-injection--android--medium]] — Injection strategies
-- Setting up Dagger components and modules
-- Understanding Dagger scopes and component hierarchy
+- Setting up `Dagger` components and modules
+- Understanding `Dagger` scopes and component hierarchy
 
 ### Advanced
 - [[q-dagger-framework-overview--android--hard]] — Full architecture
 - Implementing custom scopes with subcomponents
-- Dagger multi-binding and optional dependencies
+- `Dagger` multi-binding and optional dependencies

@@ -1,4 +1,4 @@
----
+---\
 id: android-241
 title: When to Use PNG, WebP, or SVG / Когда использовать PNG, WebP или SVG
 aliases: [Image Formats Android, PNG vs WebP vs SVG, Форматы изображений Android]
@@ -25,7 +25,7 @@ updated: 2025-11-10
 
 # Tags (EN only; no leading #)
 tags: [android/performance-rendering, android/ui-graphics, difficulty/easy, image-formats, ui]
----
+---\
 # Вопрос (RU)
 > Когда лучше использовать PNG и WebP, а когда SVG?
 
@@ -177,7 +177,7 @@ Image format choice affects app performance, APK size, and visual quality. The r
 - Scales without quality loss
 - Single resource for all screen densities
 - Very small for simple graphics
-- Programmatic tinting via the tint attribute / ImageView tint
+- Programmatic tinting via the tint attribute / `ImageView` tint
 
 **Example:**
 ```xml
@@ -259,7 +259,7 @@ res/drawable-xhdpi/icon.png
 | Criteria | Vector | WebP | PNG |
 |----------|--------|------|-----|
 | **Size** | Small for simple graphics | Typically smaller than PNG | Typically larger |
-| **Scalability** | ✅ Yes (vector) | ❌ Bitmap (needs proper sizes/densities) | ❌ Bitmap (needs proper sizes/densities) |
+| **Scalability** | ✅ Yes (vector) | ❌ `Bitmap` (needs proper sizes/densities) | ❌ `Bitmap` (needs proper sizes/densities) |
 | **Photos** | ❌ No | ✅ Yes | ⚠️ Yes (large) |
 | **Icons** | ✅ Yes | ⚠️ Yes (often larger than vector) | ⚠️ Yes (requires multiple densities) |
 | **Transparency** | ✅ Yes | ✅ Yes (lossless and modern support) | ✅ Yes |
