@@ -1,5 +1,4 @@
----
-id: kotlin-047
+---id: kotlin-047
 title: Anonymous Class in Inline Function / Анонимный класс в inline функции
 aliases: [Anonymous Class in Inline Function, Анонимный класс в inline функции]
 
@@ -18,7 +17,7 @@ source_note: ""
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-timeout-withtimeout--kotlin--medium, q-delegates-compilation--kotlin--hard, q-structured-concurrency-kotlin--kotlin--medium]
+related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, q-coroutine-timeout-withtimeout--kotlin--medium, q-delegates-compilation--kotlin--hard, q-structured-concurrency-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06

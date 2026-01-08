@@ -1,5 +1,4 @@
----
-id: android-388
+---id: android-388
 title: "Topics API в Privacy Sandbox / Privacy Sandbox Topics API"
 aliases: ["Privacy Sandbox Topics API", "Topics API"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, q-android-security-best-practices--android--medium]
+related: [c-android, c-scoped-storage-security, c-security-hardening, q-android-security-best-practices--android--medium]
 sources: []
 created: 2024-10-10
 updated: 2025-11-10

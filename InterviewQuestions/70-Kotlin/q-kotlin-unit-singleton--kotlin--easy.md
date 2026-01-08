@@ -1,5 +1,4 @@
----
-id: kotlin-183
+---id: kotlin-183
 title: "Kotlin Unit Singleton / Unit как синглтон в Kotlin"
 aliases: [Kotlin Unit, Unit, Unit Singleton, Unit Объект]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-channel-buffer-strategies-comparison--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
+related: [c-kotlin, q-channel-buffer-strategies-comparison--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]

@@ -1,5 +1,4 @@
----
-id: android-098
+---id: android-098
 title: Android Performance Measurement Tools / Инструменты измерения производительности Android
 aliases: [Android Performance Measurement Tools, Инструменты измерения производительности Android]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-basics, c-performance, q-android-app-lag-analysis--android--medium, q-multithreading-tools-android--android--medium, q-optimize-memory-usage-android--android--medium, q-performance-monitoring-jank-compose--android--medium]
+related: [c-android-basics, c-compose-recomposition, c-perfetto, c-performance, c-power-profiling, q-android-app-lag-analysis--android--medium, q-multithreading-tools-android--android--medium, q-optimize-memory-usage-android--android--medium, q-performance-monitoring-jank-compose--android--medium]
 sources: []
 created: 2025-10-13
 updated: 2025-11-10

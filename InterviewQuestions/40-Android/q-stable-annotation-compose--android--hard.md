@@ -1,5 +1,4 @@
----
-id: android-429
+---id: android-429
 title: "Stable Annotation Compose / Stable Compose"
 aliases: ["Stable Annotation Compose", "Stable Compose"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, q-compose-stability-skippability--android--hard]
+related: [c-compose-recomposition, c-compose-state, c-recomposition, q-compose-stability-skippability--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

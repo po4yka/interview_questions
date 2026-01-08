@@ -1,5 +1,4 @@
----
-id: lang-201
+---id: lang-201
 title: "Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin"
 aliases: ["Kotlin Default Access Modifier", "Модификатор доступа по умолчанию в Kotlin"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance--kotlin--hard]
+related: [c-kotlin, q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin, kotlin/access-modifiers]

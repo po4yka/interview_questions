@@ -1,5 +1,4 @@
----
-id: android-064
+---id: android-064
 title: Jetpack Compose Basics / Основы Jetpack Compose
 aliases: [Jetpack Compose Basics, Основы Jetpack Compose]
 topic: android
@@ -12,7 +11,7 @@ source: internal
 source_note: Created for vault completeness
 status: draft
 moc: moc-android
-related: [c-compose-state, q-compose-modifier-system--android--medium, q-compose-remember-derived-state--android--medium, q-compose-semantics--android--medium, q-how-does-jetpack-compose-work--android--medium, q-how-does-jetpackcompose-work--android--medium, q-how-jetpack-compose-works--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-recomposition, q-compose-modifier-system--android--medium, q-compose-remember-derived-state--android--medium, q-compose-semantics--android--medium, q-how-does-jetpack-compose-work--android--medium, q-how-does-jetpackcompose-work--android--medium, q-how-jetpack-compose-works--android--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [android/ui-compose, android/ui-state, android/ui-theming, difficulty/medium, en, ru]

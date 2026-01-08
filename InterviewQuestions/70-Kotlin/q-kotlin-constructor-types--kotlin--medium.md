@@ -1,5 +1,4 @@
----
-id: lang-211
+---id: lang-211
 title: "Kotlin Constructor Types / Типы конструкторов Kotlin"
 aliases: ["Kotlin constructor types", "Типы конструкторов Kotlin"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-abstract-class-vs-interface--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/type-system]

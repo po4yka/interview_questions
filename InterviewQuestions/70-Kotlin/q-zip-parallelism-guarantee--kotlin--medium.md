@@ -1,5 +1,4 @@
----
-id: kotlin-163
+---id: kotlin-163
 title: "Zip Parallelism Guarantee / Гарантия параллелизма zip"
 aliases: [Flow Zip, Parallelism, Zip Operator, Zip в Flow]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-flow, q-partition-function--kotlin--easy]
+related: [c-coroutines, c-flow, c-stateflow, q-partition-function--kotlin--easy]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]

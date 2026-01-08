@@ -1,5 +1,4 @@
----
-id: android-078
+---id: android-078
 title: Material3 Components / Компоненты Material3
 aliases: [Material3 Components, Компоненты Material3]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-compose-core-components--android--medium, q-material3-dynamic-color-theming--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-recomposition, q-compose-core-components--android--medium, q-material3-dynamic-color-theming--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-theming, design-system, difficulty/easy, material3]

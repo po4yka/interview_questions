@@ -1,5 +1,4 @@
----
-id: android-368
+---id: android-368
 title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
 aliases: [Compose UI, Declarative UI, Jetpack Compose, Декларативный UI]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, q-mutable-state-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related: [c-android, c-compose-recomposition, c-declarative-programming-patterns, c-recomposition, q-mutable-state-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

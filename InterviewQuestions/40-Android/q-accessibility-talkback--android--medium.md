@@ -1,5 +1,4 @@
----
-id: android-055
+---id: android-055
 title: Accessibility TalkBack / Доступность и TalkBack
 aliases: [TalkBack Accessibility, Доступность TalkBack]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-accessibility, q-accessibility-color-contrast--android--medium, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
+related: [c-accessibility, c-globalization, q-accessibility-color-contrast--android--medium, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
 created: 2025-10-11
 updated: 2025-11-10
 tags: [accessibility, android/ui-accessibility, android/ui-navigation, difficulty/medium, talkback]

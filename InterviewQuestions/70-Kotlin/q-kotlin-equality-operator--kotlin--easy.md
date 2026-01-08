@@ -1,5 +1,4 @@
----
-id: lang-208
+---id: lang-208
 title: "Kotlin Equality Operator / Оператор равенства в Kotlin"
 aliases: []
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-callback-to-coroutine-conversion--kotlin--medium]
+related: [c-kotlin, q-callback-to-coroutine-conversion--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy]

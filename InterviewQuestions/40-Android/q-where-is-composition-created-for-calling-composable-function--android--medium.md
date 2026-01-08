@@ -1,5 +1,4 @@
----
-id: android-410
+---id: android-410
 title: "Где создается Composition для вызова composable функции / Where Is Composition Created For Calling Composable Function"
 aliases: ["Where Is Composition Created", "Где создается Composition"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-ui-composition, q-compositionlocal-advanced--android--medium, q-how-does-jetpackcompose-work--android--medium]
+related: [c-android-ui-composition, c-compose-recomposition, c-recomposition, q-compositionlocal-advanced--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

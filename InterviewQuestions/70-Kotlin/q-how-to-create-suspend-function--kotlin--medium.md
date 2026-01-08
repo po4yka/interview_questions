@@ -1,5 +1,4 @@
----
-id: lang-063
+---id: lang-063
 title: "How To Create Suspend Function / Как создать suspend функцию"
 aliases: [How To Create Suspend Function, Как создать suspend функцию]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin]
+related: [c-coroutines, c-kotlin, c-stateflow]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, functions, kotlin]

@@ -1,5 +1,4 @@
----
-id: kotlin-242
+---id: kotlin-242
 title: "Parent-child relationships in structured concurrency / Отношения родитель-дитя"
 aliases: [Parent-Child Relationships, Отношения родитель-дитя]
 topic: kotlin
@@ -13,7 +12,7 @@ updated: "2025-11-10"
 tags: ["coroutines", "difficulty/medium", "hierarchy", "job", "kotlin", "structured-concurrency"]
 description: "Note stub: to be expanded into a guide on parent-child relationships in structured concurrency in Kotlin coroutines"
 moc: moc-kotlin
-related: [c-coroutines, q-coroutine-performance-optimization--kotlin--hard, q-retry-operators-flow--kotlin--medium]
+related: [c-concurrency, c-coroutines, c-stateflow, q-coroutine-performance-optimization--kotlin--hard, q-retry-operators-flow--kotlin--medium]
 subtopics: [coroutines]
 ---
 # Вопрос (RU)

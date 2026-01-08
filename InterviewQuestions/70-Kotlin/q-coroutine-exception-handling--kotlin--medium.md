@@ -1,5 +1,4 @@
----
-id: kotlin-042
+---id: kotlin-042
 title: "Coroutine Exception Handling / Обработка исключений в корутинах"
 aliases: ["Coroutine Exception Handling", "Обработка исключений в корутинах"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
+related: [c-concurrency, c-stateflow, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin]

@@ -1,5 +1,4 @@
----
-id: lang-202
+---id: lang-202
 title: "Kotlin Class Initializers / Инициализаторы классов Kotlin"
 aliases: ["Kotlin Class Initializers", "Инициализаторы классов Kotlin"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-actor-pattern--kotlin--hard]
+related: [c-kotlin, q-actor-pattern--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin]

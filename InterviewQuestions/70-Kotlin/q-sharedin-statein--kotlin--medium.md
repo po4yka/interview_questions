@@ -1,5 +1,4 @@
----
-id: kotlin-094
+---id: kotlin-094
 title: "shareIn and stateIn Operators / Операторы shareIn и stateIn"
 aliases: ["shareIn and stateIn Operators", "Операторы shareIn и stateIn"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140019
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-statein-sharein-flow--kotlin--medium]
+related: [c-flow, c-kotlin, c-stateflow, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin]

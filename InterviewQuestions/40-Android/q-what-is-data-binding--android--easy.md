@@ -1,5 +1,4 @@
----
-id: android-141
+---id: android-141
 title: What Is Data Binding / Что такое Data Binding
 aliases: [Android Data Binding, Data Binding, Что такое Data Binding]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-mvvm, q-data-sync-unstable-network--android--hard, q-save-data-outside-fragment--android--medium, q-view-binding--android--medium, q-what-is-known-about-recyclerview--android--easy, q-which-event-is-called-when-user-touches-screen--android--medium]
+related: [c-compose-recomposition, c-mvvm, c-recomposition, c-wear-compose, q-data-sync-unstable-network--android--hard, q-save-data-outside-fragment--android--medium, q-view-binding--android--medium, q-what-is-known-about-recyclerview--android--easy, q-which-event-is-called-when-user-touches-screen--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

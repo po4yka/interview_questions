@@ -1,5 +1,4 @@
----
-id: android-361
+---id: android-361
 title: "What Design Systems In Android Have You Worked With / С какими дизайн-системами Android вы работали"
 aliases: ["What Design Systems In Android Have You Worked With", "С какими дизайн-системами Android вы работали"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-themes, c-android-ui-composition, q-android-jetpack-overview--android--easy]
+related: [c-android-themes, c-android-ui-composition, c-compose-recomposition, c-recomposition, c-wear-compose, q-android-jetpack-overview--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

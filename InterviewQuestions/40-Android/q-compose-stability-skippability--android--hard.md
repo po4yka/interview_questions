@@ -1,5 +1,4 @@
----
-id: android-142
+---id: android-142
 title: Compose Stability Skippability / Стабильность и пропускаемость Compose
 aliases: [Compose Stability Skippability, Стабильность и пропускаемость Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, q-compose-compiler-plugin--android--hard, q-compose-lazy-layout-optimization--android--hard, q-compose-performance-optimization--android--hard]
+related: [c-compose-recomposition, c-recomposition, q-compose-compiler-plugin--android--hard, q-compose-lazy-layout-optimization--android--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]

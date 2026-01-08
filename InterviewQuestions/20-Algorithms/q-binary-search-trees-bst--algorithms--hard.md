@@ -1,5 +1,4 @@
----
-id: algo-007
+---id: algo-007
 title: "Binary Search Trees and AVL Trees / Бинарные деревья поиска и AVL деревья"
 aliases: ["AVL Trees", "AVL деревья", "Binary Search Trees", "Бинарные деревья поиска"]
 topic: algorithms
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, q-binary-search-variants--algorithms--medium]
+related: [c-algorithms, c-binary-search, c-binary-search-tree, q-binary-search-variants--algorithms--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [algorithms, avl, bst, data-structures, difficulty/hard, trees]

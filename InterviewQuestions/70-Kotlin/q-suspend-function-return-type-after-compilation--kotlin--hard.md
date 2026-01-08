@@ -1,5 +1,4 @@
----
-id: lang-023
+---id: lang-023
 title: "Suspend Function Return Type After Compilation / suspend"
 aliases: [suspend, Suspend Function Return Type After Compilation]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin]
+related: [c-coroutines, c-kotlin, c-stateflow]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, kotlin]

@@ -1,5 +1,4 @@
----
-id: kotlin-049
+---id: kotlin-049
 title: "How to convert callback-based APIs to coroutines? / Как конвертировать callback-based API в корутины?"
 aliases: ["How to convert callback-based APIs to coroutines?", "Как конвертировать callback-based API в корутины?"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-what-is-coroutine--kotlin--easy]
+related: [c-coroutines, c-kotlin, c-stateflow, q-what-is-coroutine--kotlin--easy]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [async, callbacks, coroutines, difficulty/medium, kotlin, migration, suspendcoroutine]

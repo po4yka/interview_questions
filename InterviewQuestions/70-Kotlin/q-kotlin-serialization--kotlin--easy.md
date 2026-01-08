@@ -1,5 +1,4 @@
----
-id: lang-042
+---id: lang-042
 title: "Kotlin Serialization / Сериализация в Kotlin"
 aliases: [Kotlin Serialization, Сериализация в Kotlin]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-functional-interfaces-vs-type-aliases--kotlin--medium]
+related: [c-kotlin, c-serialization, q-functional-interfaces-vs-type-aliases--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-persistence, difficulty/easy, json, kotlin, serialization]

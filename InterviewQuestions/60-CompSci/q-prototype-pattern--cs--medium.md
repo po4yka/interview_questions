@@ -1,5 +1,4 @@
----
-id: cs-024
+---id: cs-024
 title: "Prototype Pattern / Паттерн Прототип"
 aliases: ["Prototype Pattern", "Паттерн Прототип"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-abstract-factory-pattern--cs--medium, q-adapter-pattern--cs--medium]
+related: [c-dao-pattern, q-abstract-factory-pattern--cs--medium, q-adapter-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [creational-patterns, design-patterns, difficulty/medium, object-cloning, prototype]

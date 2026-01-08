@@ -1,5 +1,4 @@
----
-id: cs-031
+---id: cs-031
 title: "Interpreter Pattern / Паттерн Интерпретатор"
 aliases: ["Interpreter Pattern", "Паттерн Интерпретатор"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-software-design-patterns, q-abstract-factory-pattern--cs--medium]
+related: [c-architecture-patterns, c-dao-pattern, c-software-design-patterns, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/hard, expression-evaluation, interpreter, language-processing]

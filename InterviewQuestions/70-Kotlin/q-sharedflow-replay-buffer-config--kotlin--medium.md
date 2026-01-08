@@ -1,5 +1,4 @@
----
-id: kotlin-080
+---id: kotlin-080
 title: "SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера"
 aliases: [Hot Flow, Replay Buffer, SharedFlow, SharedFlow Configuration]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-channels-vs-flow--kotlin--medium]
+related: [c-flow, c-kotlin, c-stateflow, q-channels-vs-flow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [backpressure, buffer, configuration, coroutines, difficulty/medium, flow, hot-flow, kotlin, replay, sharedflow]

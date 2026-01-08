@@ -1,5 +1,4 @@
----
-id: kotlin-077
+---id: kotlin-077
 title: "Coroutine Profiling and Debugging / Профилирование и отладка корутин"
 aliases: ["Coroutine Profiling and Debugging", "Профилирование и отладка корутин"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140025
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-coroutines, c-debugging, c-kotlin, c-stateflow, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/hard, kotlin]

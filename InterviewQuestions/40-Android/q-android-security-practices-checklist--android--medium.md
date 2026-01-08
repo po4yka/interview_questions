@@ -1,5 +1,4 @@
----
-id: android-002
+---id: android-002
 title: Android Security Practices Checklist / Чек-лист практик безопасности Android
 aliases: [Android Security Practices Checklist, Чек-лист практик безопасности Android]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-keystore, c-encryption, q-android-security-best-practices--android--medium, q-app-security-best-practices--android--medium, q-database-encryption-android--android--medium]
+related: [c-android-keystore, c-encryption, c-enterprise-mdm, c-play-integrity, c-scoped-storage-security, c-security, c-security-hardening, q-android-security-best-practices--android--medium, q-app-security-best-practices--android--medium, q-database-encryption-android--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, security]

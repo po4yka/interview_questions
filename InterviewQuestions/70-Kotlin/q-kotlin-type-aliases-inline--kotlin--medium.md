@@ -1,5 +1,4 @@
----
-id: kotlin-164
+---id: kotlin-164
 title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
 aliases: [Inline Classes, Inline Functions, Type Aliases, Type Aliases и inline]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
+related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, inline-classes, kotlin, performance, type-aliases, type-safety]

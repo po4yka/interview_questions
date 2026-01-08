@@ -1,5 +1,4 @@
----
-id: android-472
+---id: android-472
 title: Compose Testing / Тестирование Compose
 aliases: [Compose Testing, Тестирование Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-testing, q-accessibility-compose--android--medium, q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium, q-compose-ui-testing-advanced--android--hard]
+related: [c-android-testing, c-compose-recomposition, c-recomposition, q-accessibility-compose--android--medium, q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium, q-compose-ui-testing-advanced--android--hard]
 created: 2024-10-20
 updated: 2025-11-10
 tags: [android/testing-ui, android/ui-compose, difficulty/medium, semantics, testing]

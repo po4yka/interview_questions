@@ -1,5 +1,4 @@
----
-id: android-050
+---id: android-050
 title: Доступность в Compose / Accessibility in Compose
 aliases: [Accessibility in Compose, Доступность в Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-accessibility, q-accessibility-talkback--android--medium, q-accessibility-testing--android--medium, q-compose-semantics--android--medium, q-compose-testing--android--medium]
+related: [c-accessibility, c-compose-recomposition, c-globalization, c-recomposition, q-accessibility-talkback--android--medium, q-accessibility-testing--android--medium, q-compose-semantics--android--medium, q-compose-testing--android--medium]
 created: 2025-10-11
 updated: 2025-11-10
 sources:

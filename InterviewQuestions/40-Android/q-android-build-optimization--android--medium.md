@@ -1,5 +1,4 @@
----
-id: android-158
+---id: android-158
 title: Android Build Optimization / Оптимизация сборки Android
 aliases: [Android Build Optimization, Оптимизация сборки Android]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-gradle, c-modularization, q-annotation-processing-android--android--medium, q-dagger-build-time-optimization--android--medium, q-optimize-memory-usage-android--android--medium]
+related: [c-compose-recomposition, c-gradle, c-modularization, c-perfetto, c-power-profiling, q-annotation-processing-android--android--medium, q-dagger-build-time-optimization--android--medium, q-optimize-memory-usage-android--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10

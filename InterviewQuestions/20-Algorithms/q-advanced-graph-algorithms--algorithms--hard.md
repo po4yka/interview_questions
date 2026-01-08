@@ -1,5 +1,4 @@
----
-id: algo-004
+---id: algo-004
 title: "Advanced Graph Algorithms (Dijkstra, MST, Floyd-Warshall) / Продвинутые алгоритмы на графах"
 aliases: ["Advanced Graph Algorithms", "Продвинутые алгоритмы на графах"]
 topic: algorithms
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, q-graph-algorithms-bfs-dfs--algorithms--hard]
+related: [c-algorithms, c-graph-algorithms, q-graph-algorithms-bfs-dfs--algorithms--hard]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [algorithms, bellman-ford, difficulty/hard, dijkstra, floyd-warshall, graph, mst, shortest-path]

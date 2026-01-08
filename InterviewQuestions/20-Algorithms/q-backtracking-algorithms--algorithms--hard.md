@@ -1,5 +1,4 @@
----
-id: algo-006
+---id: algo-006
 title: "Backtracking Algorithms (N-Queens, Sudoku, Subsets) / Алгоритмы с откатом"
 aliases: ["Backtracking Algorithms", "Алгоритмы с откатом"]
 topic: algorithms
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, q-advanced-graph-algorithms--algorithms--hard]
+related: [c-algorithms, c-backtracking-algorithm, q-advanced-graph-algorithms--algorithms--hard]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [algorithms, backtracking, combinations, difficulty/hard, n-queens, permutations, recursion, sudoku]

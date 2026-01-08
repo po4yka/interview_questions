@@ -1,5 +1,4 @@
----
-id: cs-027
+---id: cs-027
 title: "Zip Operator Parallel Requests / Оператор zip для параллельных запросов"
 aliases: ["Zip Operator", "Оператор zip"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-concurrency]
+related: [c-concurrency, c-stateflow]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [concurrency, coroutines, difficulty/medium, flow, kotlin, parallel-requests, zip-operator]

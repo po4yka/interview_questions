@@ -1,5 +1,4 @@
----
-id: kotlin-026
+---id: kotlin-026
 title: "Kotlin Channels / Каналы в Kotlin"
 aliases: ["Kotlin Channels", "Каналы в Kotlin"]
 
@@ -18,7 +17,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-coroutine-dispatchers--kotlin--medium]
+related: [c-coroutines, c-kotlin, c-stateflow, q-coroutine-dispatchers--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

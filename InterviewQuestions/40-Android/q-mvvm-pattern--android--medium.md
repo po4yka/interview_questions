@@ -1,5 +1,4 @@
----
-id: android-125
+---id: android-125
 title: "MVVM Pattern / Паттерн MVVM"
 aliases: ["Model-View-ViewModel", "MVVM Pattern", "Паттерн MVVM"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-mvvm-pattern, c-viewmodel, q-what-is-viewmodel--android--medium]
+related: [c-builder-pattern, c-ci-cd-patterns, c-command-pattern, c-dao-pattern, c-declarative-programming-patterns, c-decorator-pattern, c-factory-pattern, c-mvvm-pattern, c-viewmodel, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

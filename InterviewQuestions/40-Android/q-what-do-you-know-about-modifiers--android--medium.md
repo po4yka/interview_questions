@@ -1,5 +1,4 @@
----
-id: android-202
+---id: android-202
 title: "What Do You Know About Modifiers / Что вы знаете о модификаторах"
 aliases: ["Compose Modifiers", "Модификаторы Compose"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-compose-modifier-system--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-recomposition, q-compose-modifier-system--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

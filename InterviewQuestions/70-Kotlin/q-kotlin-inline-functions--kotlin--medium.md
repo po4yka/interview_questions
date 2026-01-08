@@ -1,5 +1,4 @@
----
-id: lang-034
+---id: lang-034
 title: "Kotlin Inline Functions / Kotlin Inline Функции"
 aliases: [Kotlin Inline Functions, Kotlin Inline Функции]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-dsl-creation--kotlin--hard]
+related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, q-kotlin-dsl-creation--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium, higher-order-functions, inline, inline-functions, lambda-expressions, performance]

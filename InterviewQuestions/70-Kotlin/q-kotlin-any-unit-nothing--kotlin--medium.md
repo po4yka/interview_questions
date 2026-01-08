@@ -1,5 +1,4 @@
----
-id: lang-203
+---id: lang-203
 title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 aliases: []
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-supervisorjob-use-cases--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
+related: [c-kotlin, q-coroutine-supervisorjob-use-cases--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]

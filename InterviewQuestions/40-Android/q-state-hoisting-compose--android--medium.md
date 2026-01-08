@@ -1,5 +1,4 @@
----
-id: android-371
+---id: android-371
 title: State Hoisting in Compose / Поднятие состояния в Compose
 aliases: [State Hoisting in Compose, Поднятие состояния в Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, q-compose-core-components--android--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-how-does-jetpackcompose-work--android--medium, q-separate-ui-business-logic--android--easy, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-what-is-hilt--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-recomposition, q-compose-core-components--android--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-how-does-jetpackcompose-work--android--medium, q-separate-ui-business-logic--android--easy, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-what-is-hilt--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/medium]

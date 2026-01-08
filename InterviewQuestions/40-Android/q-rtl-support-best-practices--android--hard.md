@@ -1,5 +1,4 @@
----
-id: android-642
+---id: android-642
 title: RTL Support Best Practices / 1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL
 aliases: [1b4347483835 3f40303a42383a38 3f3e34343540363a38 RTL, RTL Support Best Practices]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, c-android-resources, q-app-security-best-practices--android--medium, q-multi-module-best-practices--android--hard, q-runtime-permissions-best-practices--android--medium]
+related: [c-accessibility, c-android, c-android-resources, c-globalization, q-app-security-best-practices--android--medium, q-multi-module-best-practices--android--hard, q-runtime-permissions-best-practices--android--medium]
 created: 2025-10-02
 updated: 2025-11-11
 tags: [accessibility, android/i18n-l10n, android/ui-views, difficulty/hard]

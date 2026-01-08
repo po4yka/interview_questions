@@ -1,5 +1,4 @@
----
-id: android-013
+---id: android-013
 title: Notification Channels / Каналы уведомлений
 aliases: [Notification Channels, Каналы уведомлений]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-permissions, q-android-app-components--android--easy, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-push-notification-navigation--android--medium]
+related: [c-communication-surfaces, c-permissions, q-android-app-components--android--easy, q-dagger-build-time-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-push-notification-navigation--android--medium]
 created: 2025-10-05
 updated: 2025-11-10
 tags: [android/notifications, android/ui-widgets, android8, difficulty/medium, importance, notification-channels, notifications]

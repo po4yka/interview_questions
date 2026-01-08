@@ -1,5 +1,4 @@
----
-id: lang-019
+---id: lang-019
 title: "SharedFlow Vs StateFlow / SharedFlow против StateFlow"
 aliases: [SharedFlow Vs StateFlow, SharedFlow против StateFlow]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concurrency]
+related: [c-concurrency, c-stateflow]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/easy, flow, kotlin, sharedflow, stateflow]

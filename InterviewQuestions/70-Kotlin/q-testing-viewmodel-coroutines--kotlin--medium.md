@@ -1,5 +1,4 @@
----
-id: kotlin-068
+---id: kotlin-068
 title: "Testing ViewModels with Coroutines / Тестирование ViewModel с корутинами"
 aliases: ["Testing ViewModels with Coroutines", "Тестирование ViewModel с корутинами"]
 
@@ -18,7 +17,7 @@ source_note: Guide to testing coroutines in ViewModels
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
+related: [c-coroutines, c-kotlin, c-stateflow, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

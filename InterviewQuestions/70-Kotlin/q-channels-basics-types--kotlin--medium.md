@@ -1,5 +1,4 @@
----
-id: kotlin-124
+---id: kotlin-124
 title: "Channels Basics and Types / Основы и типы каналов"
 aliases: ["Channels Basics and Types", "Основы и типы каналов"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Channel Guide
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-channel-buffering-strategies--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-channel-buffering-strategies--kotlin--hard]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [buffered, channel-types, channels, coroutines, difficulty/medium, kotlin, rendezvous]

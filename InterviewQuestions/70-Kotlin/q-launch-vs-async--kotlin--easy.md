@@ -1,5 +1,4 @@
----
-id: kotlin-135
+---id: kotlin-135
 title: "launch vs async: When to Use Each / launch против async: когда использовать"
 aliases: ["launch vs async: When to Use Each", "launch против async: когда использовать"]
 
@@ -18,7 +17,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140027
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-coroutine-context-elements--kotlin--hard, q-kotlin-multiplatform-overview--kotlin--hard]
+related: [c-kotlin, c-kotlin-coroutines-basics, c-stateflow, q-coroutine-context-elements--kotlin--hard, q-kotlin-multiplatform-overview--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12

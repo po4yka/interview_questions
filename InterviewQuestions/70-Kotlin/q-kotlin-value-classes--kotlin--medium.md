@@ -1,5 +1,4 @@
----
-id: android-647
+---id: android-647
 title: Kotlin Value Classes (Inline Classes) / Value классы в Kotlin
 aliases: [Kotlin Value Classes (Inline Classes), Value классы в Kotlin]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-android-runtime-art--android--medium, q-inline-classes-value-classes--kotlin--medium, q-inline-value-classes-performance--kotlin--medium, q-value-classes-inline-classes--kotlin--medium]
+related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, c-value-classes, q-android-runtime-art--android--medium, q-inline-classes-value-classes--kotlin--medium, q-inline-value-classes-performance--kotlin--medium, q-value-classes-inline-classes--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-10
 tags: [difficulty/medium, inline-classes, kotlin/types, performance, type-safety, value-classes]

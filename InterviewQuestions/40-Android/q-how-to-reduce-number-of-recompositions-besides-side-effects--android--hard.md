@@ -1,5 +1,4 @@
----
-id: android-281
+---id: android-281
 title: "How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
 aliases: ["Compose Performance", "Reduce Recompositions", "Производительность Compose", "Уменьшить рекомпозиции"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
+related: [c-compose-recomposition, c-recomposition, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

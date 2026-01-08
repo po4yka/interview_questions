@@ -1,5 +1,4 @@
----
-id: android-029
+---id: android-029
 title: remember vs rememberSaveable in Compose / remember vs rememberSaveable в Compose
 aliases: [remember vs rememberSaveable in Compose, remember vs rememberSaveable в Compose]
 topic: android
@@ -12,7 +11,7 @@ source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-android
-related: [c-compose-state, q-compose-core-components--android--medium, q-compose-remember-derived-state--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-transaction-too-large-exception--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-recomposition, q-compose-core-components--android--medium, q-compose-remember-derived-state--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-transaction-too-large-exception--android--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [android/ui-compose, android/ui-state, difficulty/medium, en, ru]

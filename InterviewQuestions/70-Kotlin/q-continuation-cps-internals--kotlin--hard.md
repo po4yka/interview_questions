@@ -1,5 +1,4 @@
----
-id: kotlin-122
+---id: kotlin-122
 title: "Continuation and CPS: how suspend functions work internally / Continuation и CPS: как работают suspend функции внутри"
 topic: kotlin
 difficulty: hard
@@ -12,7 +11,7 @@ tags: [advanced, continuation, coroutines, cps, difficulty/hard, internals, kotl
 aliases: ["Continuation and CPS internals in Kotlin", "Continuation и CPS: внутренняя работа suspend-функций"]
 question_kind: theory
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 subtopics: [continuation, coroutines, state-machine]
 
 ---

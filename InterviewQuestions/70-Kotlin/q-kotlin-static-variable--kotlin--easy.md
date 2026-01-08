@@ -1,5 +1,4 @@
----
-id: lang-093
+---id: lang-093
 title: "Kotlin Static Variable / Статические переменные в Kotlin"
 aliases: [Kotlin Static Variable, Статические переменные в Kotlin]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-enum-class-advanced--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, c-variable, q-enum-class-advanced--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [companion-object, const, difficulty/easy, jvmstatic, kotlin, static]

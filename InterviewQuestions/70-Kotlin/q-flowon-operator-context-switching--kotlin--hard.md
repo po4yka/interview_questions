@@ -1,5 +1,4 @@
----
-id: kotlin-125
+---id: kotlin-125
 title: "Оператор flowOn и переключение контекста во Flow / flowOn operator and context switching in flows"
 aliases: [flow-context-switching, flowon-operator, flowon-vs-withcontext, kotlin-flowon]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-flow, q-coroutine-context-elements--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
+related: [c-compose-recomposition, c-coroutines, c-flow, c-perfetto, c-power-profiling, c-stateflow, q-coroutine-context-elements--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: ["buffer", "context-switching", "coroutines", "difficulty/hard", "dispatchers", "flow-operators", "flow", "flowon", "kotlin", "performance"]

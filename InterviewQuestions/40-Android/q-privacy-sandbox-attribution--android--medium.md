@@ -1,5 +1,4 @@
----
-id: android-238
+---id: android-238
 title: "Privacy Sandbox Attribution / Attribution Reporting API в Privacy Sandbox"
 aliases: ["Attribution Reporting API в Privacy Sandbox", "Attribution Reporting API", "Privacy Sandbox Attribution"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, q-privacy-sandbox-topics-api--android--medium]
+related: [c-android, c-scoped-storage-security, c-security-hardening, q-privacy-sandbox-topics-api--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10

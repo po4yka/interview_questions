@@ -1,5 +1,4 @@
----
-id: android-638
+---id: android-638
 title: Play Console Automation / Автоматизация Play Console
 aliases: [Play Console Automation, Автоматизация Play Console]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, q-android-release-pipeline-cicd--android--hard, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium, q-play-integrity-attestation--android--hard]
+related: [c-android, c-gradle, c-play-console, q-android-release-pipeline-cicd--android--hard, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium, q-play-integrity-attestation--android--hard]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/play-console, automation, difficulty/hard]

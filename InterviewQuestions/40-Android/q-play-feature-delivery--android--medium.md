@@ -1,5 +1,4 @@
----
-id: android-189
+---id: android-189
 title: Play Feature Delivery / Play Feature Delivery
 aliases: [App Bundle, Dynamic Feature Modules, Play Feature Delivery, Динамические модули]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-bundle, c-gradle, q-android-build-optimization--android--medium]
+related: [c-app-bundle, c-gradle, c-play-feature-delivery, q-android-build-optimization--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/app-bundle, android/build-variants, android/gradle, app-bundle, difficulty/medium, dynamic-modules]

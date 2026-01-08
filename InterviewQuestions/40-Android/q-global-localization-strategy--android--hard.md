@@ -1,5 +1,4 @@
----
-id: android-641
+---id: android-641
 title: Global Localization Strategy / Стратегия глобальной локализации
 aliases: [Global Localization Strategy, Стратегия глобальной локализации]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, q-android-architectural-patterns--android--medium, q-media3-migration-strategy--android--hard, q-play-asset-delivery-strategy--android--hard, q-scoped-storage-migration-strategy--android--hard]
+related: [c-android, c-globalization, q-android-architectural-patterns--android--medium, q-media3-migration-strategy--android--hard, q-play-asset-delivery-strategy--android--hard, q-scoped-storage-migration-strategy--android--hard]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/i18n-l10n, difficulty/hard]

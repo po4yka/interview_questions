@@ -1,5 +1,4 @@
----
-id: dp-003
+---id: dp-003
 title: "Template Method Pattern / Template Method Паттерн"
 aliases: [Template Method Pattern, Template Method Паттерн]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns]
+related: [c-architecture-patterns, c-dao-pattern]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, hook-method, template-method]

@@ -1,5 +1,4 @@
----
-id: kotlin-110
+---id: kotlin-110
 title: "Structured Concurrency Patterns / Паттерны структурированной конкурентности"
 aliases: ["Structured Concurrency Patterns", "Паттерны структурированной конкурентности"]
 
@@ -18,7 +17,7 @@ source_note: Comprehensive Kotlin Structured Concurrency Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-structured-concurrency, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-concurrency, c-coroutines, c-stateflow, c-structured-concurrency, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12

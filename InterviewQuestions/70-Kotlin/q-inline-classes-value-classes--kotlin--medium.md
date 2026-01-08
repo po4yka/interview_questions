@@ -1,5 +1,4 @@
----
-id: kotlin-018
+---id: kotlin-018
 title: "Inline Classes (Value Classes) / Встроенные классы (Value классы)"
 aliases: ["Inline Classes (Value Classes)", "Встроенные классы (Value классы)"]
 
@@ -18,7 +17,7 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
+related: [c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, c-value-classes, q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

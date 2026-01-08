@@ -1,5 +1,4 @@
----
-id: android-630
+---id: android-630
 title: Wear Compose UX Patterns / UX-паттерны Wear Compose
 aliases: [UX-паттерны Wear Compose, Wear Compose UX Patterns]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-android-tv-compose-leanback--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium]
+related: [c-compose-recomposition, c-jetpack-compose, c-recomposition, q-android-tv-compose-leanback--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/ui-compose, android/wear, difficulty/hard, ux]

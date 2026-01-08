@@ -1,5 +1,4 @@
----
-id: lang-027
+---id: lang-027
 title: "Flow Shopping Cart Implementation / Реализация корзины покупок с Flow"
 aliases: [Flow Shopping Cart Implementation, Реализация корзины покупок с Flow]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin]
+related: [c-flow, c-kotlin, c-stateflow]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management]

@@ -1,5 +1,4 @@
----
-id: kotlin-165
+---id: kotlin-165
 title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"
 aliases: [Lifecycle Scopes, LifecycleScope, ViewModelScope]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
 created: 2023-10-15
 updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]

@@ -1,5 +1,4 @@
----
-id: kotlin-223
+---id: kotlin-223
 title: "coroutineScope vs supervisorScope / coroutineScope против supervisorScope"
 aliases: ["coroutineScope vs supervisorScope", "coroutineScope против supervisorScope"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, q-channel-pipelines--kotlin--hard]
+related: [c-concurrency, c-stateflow, q-channel-pipelines--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scope]

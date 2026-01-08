@@ -1,5 +1,4 @@
----
-id: android-632
+---id: android-632
 title: Scoped Storage Migration Strategy / Стратегия миграции на Scoped Storage
 aliases: [Scoped Storage Migration Strategy, Стратегия миграции на Scoped Storage]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-storage-options, q-android-storage-types--android--medium, q-global-localization-strategy--android--hard, q-media3-migration-strategy--android--hard]
+related: [c-android-storage-options, c-scoped-storage, q-android-storage-types--android--medium, q-global-localization-strategy--android--hard, q-media3-migration-strategy--android--hard]
 created: 2025-11-02
 updated: 2025-11-10
 tags: [android/files-media, android/permissions, difficulty/hard]

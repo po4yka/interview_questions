@@ -1,5 +1,4 @@
----
-id: kotlin-126
+---id: kotlin-126
 title: "Testing Coroutine Cancellation Scenarios / Тестирование сценариев отмены корутин"
 aliases: ["Testing Coroutine Cancellation Scenarios", "Тестирование сценариев отмены корутин"]
 
@@ -18,7 +17,7 @@ source_note: Coroutine Cancellation Testing Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, q-coroutine-cancellation-cooperation--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
+related: [c-coroutines, c-stateflow, q-coroutine-cancellation-cooperation--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

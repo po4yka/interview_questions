@@ -1,5 +1,4 @@
----
-id: kotlin-162
+---id: kotlin-162
 title: "Launch Vs Async Vs Runblocking / Launch против Async против Runblocking"
 aliases: [Async, Coroutine Builders, Launch, RunBlocking]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-coroutine-memory-leak-detection--kotlin--hard, q-executor-service-java--kotlin--medium, q-list-vs-sequence--kotlin--medium]
+related: [c-coroutines, c-kotlin, c-stateflow, q-coroutine-memory-leak-detection--kotlin--hard, q-executor-service-java--kotlin--medium, q-list-vs-sequence--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblocking]

@@ -1,5 +1,4 @@
----
-id: db-001
+---id: db-001
 title: Virtual tables disadvantages / Недостатки виртуальных таблиц
 aliases: []
 
@@ -17,7 +16,7 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-backend
-related: [c-database-performance, c-views]
+related: [c-compose-recomposition, c-database-performance, c-perfetto, c-power-profiling, c-views]
 
 # Timestamps
 created: 2025-10-03

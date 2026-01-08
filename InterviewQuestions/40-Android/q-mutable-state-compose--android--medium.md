@@ -1,5 +1,4 @@
----
-id: android-204
+---id: android-204
 title: "MutableState в Compose / MutableState in Compose"
 aliases: ["Compose State Management", "MutableState in Compose", "MutableState в Compose", "Изменяемое состояние Compose"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-compose-remember-derived-state--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-state-hoisting-compose--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-mutablestate, c-recomposition, q-compose-remember-derived-state--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/medium, recomposition, state-management]

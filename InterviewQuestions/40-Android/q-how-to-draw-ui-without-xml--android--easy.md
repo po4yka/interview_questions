@@ -1,5 +1,4 @@
----
-id: android-342
+---id: android-342
 title: "How To Draw UI Without XML / Как рисовать UI без XML"
 aliases: [Draw UI Without XML, Jetpack Compose, Programmatic Views, Рисовать UI без XML]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-ui-composition-basics, c-jetpack-compose, q-what-each-android-component-represents--android--easy]
+related: [c-android-ui-composition-basics, c-compose-recomposition, c-jetpack-compose, c-recomposition, c-views, c-wear-compose, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, difficulty/easy, ui, views]

@@ -1,5 +1,4 @@
----
-id: kotlin-038
+---id: kotlin-038
 title: "Back Pressure в Kotlin Flow / Back Pressure in Kotlin Flow"
 aliases: ["Back Pressure in Kotlin Flow", "Back Pressure в Kotlin Flow"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-debounce-throttle-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related: [c-flow, c-kotlin, c-stateflow, q-debounce-throttle-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [backpressure, buffer, conflate, difficulty/medium, flow, kotlin, operators]

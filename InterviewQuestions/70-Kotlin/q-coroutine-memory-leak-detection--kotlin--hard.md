@@ -1,5 +1,4 @@
----
-topic: kotlin
+---topic: kotlin
 id: kotlin-131
 title: "Detecting and preventing coroutine memory leaks / Обнаружение и предотвращение утечек памяти"
 aliases: [Coroutine Memory Leaks, Утечки памяти в корутинах]
@@ -9,7 +8,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 moc: moc-kotlin
-related: [c-android-profiling, c-concurrency, q-coroutine-resource-cleanup--kotlin--medium]
+related: [c-android-profiling, c-concurrency, c-stateflow, q-coroutine-resource-cleanup--kotlin--medium]
 status: draft
 created: 2025-10-12
 updated: 2025-11-11

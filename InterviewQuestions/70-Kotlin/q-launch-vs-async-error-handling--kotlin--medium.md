@@ -1,5 +1,4 @@
----
-id: lang-031
+---id: lang-031
 title: "Launch Vs Async Error Handling / Launch против Async: обработка ошибок"
 aliases: ["Launch Vs Async Error Handling", "Launch против Async Обработка"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-kotlin]
+related: [c-concurrency, c-kotlin, c-stateflow]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin]

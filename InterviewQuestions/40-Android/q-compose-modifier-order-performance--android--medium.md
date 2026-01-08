@@ -1,5 +1,4 @@
----
-id: android-317
+---id: android-317
 title: Compose Modifier Order Performance / Порядок модификаторов и производительность
 aliases: [Compose Modifier Order Performance, Modifier Chain Optimization, Оптимизация цепочки модификаторов, Порядок модификаторов и производительность Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, q-compose-modifier-system--android--medium, q-compose-performance-optimization--android--hard, q-performance-monitoring-jank-compose--android--medium]
+related: [c-compose-recomposition, c-recomposition, q-compose-modifier-system--android--medium, q-compose-performance-optimization--android--hard, q-performance-monitoring-jank-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, difficulty/medium, optimization]

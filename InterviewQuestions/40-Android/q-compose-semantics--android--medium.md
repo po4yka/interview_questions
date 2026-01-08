@@ -1,5 +1,4 @@
----
-id: android-026
+---id: android-026
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
 aliases: [Semantics in Jetpack Compose, Семантика в Jetpack Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-accessibility-compose--android--medium, q-compose-modifier-system--android--medium, q-compose-testing--android--medium, q-how-does-jetpack-compose-work--android--medium]
+related: [c-accessibility, c-compose-recomposition, c-globalization, c-jetpack-compose, c-recomposition, q-accessibility-compose--android--medium, q-compose-modifier-system--android--medium, q-compose-testing--android--medium, q-how-does-jetpack-compose-work--android--medium]
 created: 2025-10-06
 updated: 2025-10-30
 tags: [accessibility, android/testing-ui, android/ui-accessibility, android/ui-compose, difficulty/medium, testing]

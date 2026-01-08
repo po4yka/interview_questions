@@ -1,5 +1,4 @@
----
-id: kotlin-073
+---id: kotlin-073
 title: "Virtual Time in Coroutine Testing / Виртуальное время в тестировании корутин"
 aliases: ["Virtual Time in Coroutine Testing", "Виртуальное время в тестировании корутин"]
 
@@ -18,7 +17,7 @@ source_note: Virtual Time Testing Deep Dive
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12

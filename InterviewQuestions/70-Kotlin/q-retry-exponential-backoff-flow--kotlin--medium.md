@@ -1,5 +1,4 @@
----
-id: kotlin-191
+---id: kotlin-191
 title: "Retry and exponential Backoff Patterns in Flow / Retry и exponential backoff паттерны в Flow"
 aliases: [Error Handling, Exponential Backoff, Resilience, Retry, Retry Patterns]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-flow, c-kotlin, c-stateflow, q-advanced-coroutine-patterns--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [circuit-breaker, coroutines, difficulty/medium, error-handling, exponential-backoff, flow, kotlin, production, resilience, retry]

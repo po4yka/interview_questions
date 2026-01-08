@@ -1,5 +1,4 @@
----
-id: kotlin-203
+---id: kotlin-203
 title: "Interface Properties / Свойства интерфейсов"
 aliases: ["Interface Properties", "Свойства интерфейсов"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, c-properties, q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]

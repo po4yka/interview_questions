@@ -1,5 +1,4 @@
----
-id: cs-034
+---id: cs-034
 title: "Command Pattern / Паттерн Command"
 aliases: ["Command Pattern", "Паттерн Command"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
+related: [c-architecture-patterns, c-command-pattern, c-dao-pattern, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral, command, design-patterns, difficulty/medium, gof-patterns]

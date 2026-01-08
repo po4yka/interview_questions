@@ -1,5 +1,4 @@
----
-id: android-165
+---id: android-165
 title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
 aliases: ["Recomposition Choreographer", "Рекомпозиция и Choreographer"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
+related: [c-compose-recomposition, c-jetpack-compose, c-recomposition, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

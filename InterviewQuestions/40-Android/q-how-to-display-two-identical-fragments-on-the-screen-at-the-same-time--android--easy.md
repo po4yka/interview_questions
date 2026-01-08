@@ -1,5 +1,4 @@
----
-id: android-245
+---id: android-245
 title: How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно
 aliases: [Display Two Identical Fragments, Multiple Fragment Instances, Два одинаковых фрагмента, Несколько экземпляров Fragment]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, c-lifecycle, q-dagger-build-time-optimization--android--medium, q-fragment-basics--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-save-data-outside-fragment--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-why-use-fragments-when-we-have-activities--android--medium]
+related: [c-compose-recomposition, c-fragments, c-lifecycle, c-recomposition, c-wear-compose, q-dagger-build-time-optimization--android--medium, q-fragment-basics--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-save-data-outside-fragment--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-why-use-fragments-when-we-have-activities--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 sources: []

@@ -1,5 +1,4 @@
----
-id: android-620
+---id: android-620
 title: Nearby, NFC & UWB Integration / Интеграция Nearby, NFC и UWB
 aliases: [Nearby NFC UWB Integration, NFC и UWB, Интеграция Nearby]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, c-android-ipc, q-android-auto-guidelines--android--hard, q-integration-testing-strategies--android--medium, q-room-paging3-integration--android--medium, q-wearos-health-connect-integration--android--hard]
+related: [c-android, c-android-ipc, c-nearby-uwb, q-android-auto-guidelines--android--hard, q-integration-testing-strategies--android--medium, q-room-paging3-integration--android--medium, q-wearos-health-connect-integration--android--hard]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/networking-http, android/nfc, android/sensors, difficulty/hard]

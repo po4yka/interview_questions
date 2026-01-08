@@ -1,5 +1,4 @@
----
-id: android-211
+---id: android-211
 title: "Performance Monitoring Jank Compose / Мониторинг производительности и джанка в Compose"
 aliases: [Compose Performance, Jank Detection, Performance Monitoring Jank Compose, Мониторинг производительности и джанка в Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-performance-optimization, q-compose-lazy-layout-optimization--android--hard, q-compose-performance-optimization--android--hard]
+related: [c-compose-recomposition, c-jetpack-compose, c-perfetto, c-performance-optimization, c-power-profiling, c-recomposition, q-compose-lazy-layout-optimization--android--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-rendering, android/profiling, android/ui-compose, difficulty/medium, jank, optimization, performance, recomposition]

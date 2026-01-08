@@ -1,5 +1,4 @@
----
-id: kotlin-150
+---id: kotlin-150
 title: "Serialization Basics / Основы сериализации"
 aliases: [Data Serialization, JSON Serialization, Serialization, Сериализация]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-kotlin-extension-functions--kotlin--medium]
+related: [c-kotlin, c-serialization, q-kotlin-extension-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [data-formats, difficulty/medium, json, kotlin, serialization]

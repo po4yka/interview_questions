@@ -1,5 +1,4 @@
----
-id: cs-023
+---id: cs-023
 title: "Service Locator Pattern / Паттерн Локатор Служб"
 aliases: ["Service Locator", "Локатор Служб"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, q-abstract-factory-pattern--cs--medium]
+related: [c-computer-science, c-dao-pattern, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [dependency-management, design-patterns, difficulty/medium, service-discovery, service-locator]

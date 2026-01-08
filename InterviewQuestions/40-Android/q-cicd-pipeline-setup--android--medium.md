@@ -1,5 +1,4 @@
----
-id: android-046
+---id: android-046
 title: CI/CD Pipeline Setup for Android / Настройка CI/CD пайплайна для Android
 aliases: [CI/CD Pipeline Setup for Android, Настройка CI/CD пайплайна для Android]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-ci-cd, q-android-build-optimization--android--medium]
+related: [c-ci-cd, c-gradle, q-android-build-optimization--android--medium]
 sources: []
 created: 2025-10-11
 updated: 2025-11-11

@@ -1,5 +1,4 @@
----
-id: kotlin-056
+---id: kotlin-056
 title: "Advanced Flow Testing / Продвинутое тестирование Flow"
 aliases: ["Advanced Flow Testing", "Продвинутое тестирование Flow"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-flow, q-kotlin-flow-basics--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
+related: [c-flow, c-stateflow, q-kotlin-flow-basics--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
 created: 2025-10-11
 updated: 2025-11-11
 tags: [async, difficulty/hard, flow, kotlin, testing, testscope]

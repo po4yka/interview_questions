@@ -1,5 +1,4 @@
----
-id: cs-015
+---id: cs-015
 title: "Builder Pattern / Builder Паттерн"
 aliases: ["Builder Pattern", "Паттерн Builder"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-factory-method-pattern--cs--medium]
+related: [c-builder-pattern, c-dao-pattern, q-factory-method-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [builder, creational-patterns, design-patterns, difficulty/medium, gof-patterns]

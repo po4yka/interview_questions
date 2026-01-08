@@ -1,5 +1,4 @@
----
-id: android-284
+---id: android-284
 title: "Где создается композиция / Where Is Composition Created"
 aliases: [ComposeView, Composition Creation, setContent]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-ui-composition, q-is-layoutinflater-a-singleton-and-why--android--medium, q-network-error-handling-strategies--networking--medium]
+related: [c-android-ui-composition, c-compose-recomposition, c-recomposition, q-is-layoutinflater-a-singleton-and-why--android--medium, q-network-error-handling-strategies--networking--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, difficulty/medium]

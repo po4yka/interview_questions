@@ -1,5 +1,4 @@
----
-id: kotlin-243
+---id: kotlin-243
 title: "SupervisorJob: when and why to use it? / SupervisorJob и его применение"
 aliases: [SupervisorJob Use Cases, SupervisorJob применение]
 topic: kotlin
@@ -13,7 +12,7 @@ updated: "2025-11-11"
 tags: ["coroutines", "difficulty/medium", "error-handling", "job", "kotlin", "supervisorjob"]
 description: "Key use cases for SupervisorJob in Kotlin coroutines: independent failures, differences from Job, and Android patterns"
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-structured-concurrency--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-structured-concurrency--kotlin--hard]
 subtopics: [coroutines, supervisorjob]
 
 ---

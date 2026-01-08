@@ -1,5 +1,4 @@
----
-id: lang-215
+---id: lang-215
 title: "Kotlin Default Inheritance Type / Тип наследования по умолчанию в Kotlin"
 aliases: []
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-abstract-class-vs-interface--kotlin--medium]
+related: [c-inheritance, c-kotlin, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes]

@@ -1,5 +1,4 @@
----
-id: kotlin-041
+---id: kotlin-041
 title: "stateIn and shareIn operators in Flow / Операторы stateIn и shareIn во Flow"
 aliases: ["stateIn and shareIn operators in Flow", "Операторы stateIn и shareIn во Flow"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-kotlin-type-aliases-inline--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
+related: [c-flow, c-kotlin, c-stateflow, q-kotlin-type-aliases-inline--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
 created: 2025-10-06
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharein, statein]

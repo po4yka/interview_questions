@@ -1,5 +1,4 @@
----
-id: tools-003
+---id: tools-003
 title: "Git Merge vs Rebase / Git Merge vs Rebase"
 aliases: [Git Merge, Git Rebase, Merge vs Rebase, Version Control]
 topic: tools
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-tools
-related: [q-git-pull-vs-fetch--tools--easy, q-git-squash-commits--tools--medium]
+related: [c-git, c-version-control, q-git-pull-vs-fetch--tools--easy, q-git-squash-commits--tools--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, git, merge, rebase, tools, version-control, workflow]

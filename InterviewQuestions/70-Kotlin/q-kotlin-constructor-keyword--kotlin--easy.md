@@ -1,5 +1,4 @@
----
-id: lang-209
+---id: lang-209
 title: "Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin"
 aliases: []
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-abstract-class-vs-interface--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related: [c-kotlin, q-abstract-class-vs-interface--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy, kotlin/classes, kotlin/functions]

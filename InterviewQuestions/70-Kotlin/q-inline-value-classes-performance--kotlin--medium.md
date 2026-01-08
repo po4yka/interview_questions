@@ -1,5 +1,4 @@
----
-id: kotlin-145
+---id: kotlin-145
 title: "Inline Value Classes Performance / Производительность value-классов"
 aliases: [Classes, Inline, Performance, Value]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-expect-actual-kotlin--kotlin--medium]
+related: [c-kotlin, c-value-classes, q-expect-actual-kotlin--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]

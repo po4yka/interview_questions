@@ -1,5 +1,4 @@
----
-id: kotlin-090
+---id: kotlin-090
 title: "Coroutine Memory Leaks and Prevention / Утечки памяти в корутинах и их предотвращение"
 aliases: ["Coroutine Memory Leaks and Prevention", "Утечки памяти в корутинах и их предотвращение"]
 
@@ -18,7 +17,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140024
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-kotlin-sam-interfaces--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
+related: [c-coroutines, c-kotlin, c-stateflow, q-kotlin-sam-interfaces--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

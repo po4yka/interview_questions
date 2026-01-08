@@ -1,5 +1,4 @@
----
-id: android-336
+---id: android-336
 title: Типы запуска приложения в Android / App Start Types Android
 aliases: ["App Start Types Android", "Типы запуска приложения в Android"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-startup, q-android-performance-measurement-tools--android--medium]
+related: [c-app-startup, c-compose-recomposition, c-perfetto, c-power-profiling, q-android-performance-measurement-tools--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10

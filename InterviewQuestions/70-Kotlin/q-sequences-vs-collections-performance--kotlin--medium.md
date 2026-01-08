@@ -1,5 +1,4 @@
----
-id: kotlin-176
+---id: kotlin-176
 title: "Sequences Vs Collections Performance / Sequences vs Collections Performance"
 aliases: [Collections Performance, Lazy Evaluation, Performance Comparison, Sequences]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-collections, c-kotlin, q-callsuper-annotation--kotlin--medium]
+related: [c-collections, c-compose-recomposition, c-kotlin, c-perfetto, c-power-profiling, q-callsuper-annotation--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [collections, difficulty/medium, kotlin, lazy-evaluation, optimization, performance, sequences]

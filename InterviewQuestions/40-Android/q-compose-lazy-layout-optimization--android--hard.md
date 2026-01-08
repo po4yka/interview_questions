@@ -1,5 +1,4 @@
----
-id: android-381
+---id: android-381
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
 aliases: [Compose Lazy Layout Optimization, LazyColumn optimization, LazyRow optimization, Оптимизация Lazy‑layout в Compose, Оптимизация LazyColumn]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android, q-android-performance-measurement-tools--android--medium, q-compose-compiler-plugin--android--hard, q-compose-custom-layout--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
+related: [c-android, c-compose-recomposition, c-recomposition, q-android-performance-measurement-tools--android--medium, q-compose-compiler-plugin--android--hard, q-compose-custom-layout--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

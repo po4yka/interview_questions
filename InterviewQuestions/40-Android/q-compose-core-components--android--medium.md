@@ -1,5 +1,4 @@
----
-id: android-072
+---id: android-072
 title: Compose Core Components / Основные компоненты Compose
 aliases: [Compose Components, Jetpack Compose Architecture, Архитектура Jetpack Compose, Основные компоненты Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-compose-state, c-mvvm-pattern, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard, q-how-jetpack-compose-works--android--medium, q-migration-to-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-mvvm-pattern, c-recomposition, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard, q-how-jetpack-compose-works--android--medium, q-migration-to-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium]

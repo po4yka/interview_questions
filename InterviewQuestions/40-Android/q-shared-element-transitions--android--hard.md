@@ -1,5 +1,4 @@
----
-id: android-420
+---id: android-420
 title: "Shared Element Transitions / Переходы с общими элементами"
 aliases: [Hero Animations, Shared Element Transitions, Анимация героя, Переходы с общими элементами]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium]
+related: [c-compose-recomposition, c-jetpack-compose, c-recomposition, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium]
 created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/jetpack/compose/animation/overview]

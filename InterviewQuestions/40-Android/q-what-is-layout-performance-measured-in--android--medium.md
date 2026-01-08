@@ -1,5 +1,4 @@
----
-id: android-249
+---id: android-249
 title: "What Is Layout Performance Measured In / В чем измеряется производительность layout"
 aliases: ["Layout Performance Measurement", "Измерение производительности layout"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-compose-modifier-order-performance--android--medium, q-macrobenchmark-startup--android--medium, q-performance-optimization-android--android--medium]
+related: [c-compose-recomposition, c-jetpack-compose, c-perfetto, c-power-profiling, q-compose-modifier-order-performance--android--medium, q-macrobenchmark-startup--android--medium, q-performance-optimization-android--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-views, difficulty/medium, performance, rendering]

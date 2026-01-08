@@ -1,5 +1,4 @@
----
-id: kotlin-087
+---id: kotlin-087
 title: "lifecycleScope vs viewModelScope / lifecycleScope против viewModelScope"
 aliases: ["lifecycleScope vs viewModelScope", "lifecycleScope против viewModelScope"]
 
@@ -18,7 +17,7 @@ source_note: Comprehensive Kotlin Android Lifecycle Scopes Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-lifecycle-aware-coroutines--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-lifecycle-aware-coroutines--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12

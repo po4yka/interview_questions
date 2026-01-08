@@ -1,5 +1,4 @@
----
-id: android-113
+---id: android-113
 title: UI Setup in Android Project / Настройка UI в проекте Android
 aliases: [UI Setup, Настройка UI]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-android-view-system-basics, q-android-project-parts--android--easy, q-cicd-pipeline-setup--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
+related: [c-activity-lifecycle, c-android-view-system-basics, c-compose-recomposition, c-recomposition, c-wear-compose, q-android-project-parts--android--easy, q-cicd-pipeline-setup--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/activity, android/ui-views, difficulty/easy, layout, manifest, ui]

@@ -1,5 +1,4 @@
----
-id: kotlin-053
+---id: kotlin-053
 title: "supervisorScope vs coroutineScope / supervisorScope против coroutineScope"
 aliases: ["supervisorScope vs coroutineScope"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-vs-supervisorjob--kotlin--medium]
+related: [c-stateflow, q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-vs-supervisorjob--kotlin--medium]
 created: 2025-10-11
 updated: 2025-10-11
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scopes, supervisor]

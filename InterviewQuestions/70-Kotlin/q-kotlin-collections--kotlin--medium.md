@@ -1,5 +1,4 @@
----
-id: kotlin-100
+---id: kotlin-100
 title: "Kotlin Collections / Коллекции в Kotlin"
 aliases: ["Kotlin Collections", "Коллекции в Kotlin"]
 
@@ -18,7 +17,7 @@ source_note: Comprehensive guide on Kotlin Collections
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-collections, q-expect-actual-kotlin--kotlin--medium, q-flow-basics--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
+related: [c-collections, c-kotlin, q-expect-actual-kotlin--kotlin--medium, q-flow-basics--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12

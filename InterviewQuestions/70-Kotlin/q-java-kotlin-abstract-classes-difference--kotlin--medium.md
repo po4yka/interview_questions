@@ -1,5 +1,4 @@
----
-id: kotlin-300
+---id: kotlin-300
 title: "Java Kotlin Abstract Classes Difference / Главное отличие абстрактных классов в Java и Kotlin"
 aliases: ["Java Kotlin Abstract Classes Difference"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-function-limitations--kotlin--medium]
+related: [c-kotlin, q-inline-function-limitations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]

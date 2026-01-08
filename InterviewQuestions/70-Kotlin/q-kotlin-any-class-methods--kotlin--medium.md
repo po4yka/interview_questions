@@ -1,5 +1,4 @@
----
-id: lang-216
+---id: lang-216
 title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
 aliases: ["Kotlin Any methods", "Методы Any в Kotlin"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-computer-science, q-debugging-coroutines-techniques--kotlin--medium]
+related: [c-computer-science, c-kotlin, q-debugging-coroutines-techniques--kotlin--medium]
 created: 2024-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/classes, kotlin/functions, kotlin/types]

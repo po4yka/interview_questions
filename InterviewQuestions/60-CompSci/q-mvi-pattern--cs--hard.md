@@ -1,5 +1,4 @@
----
-id: cs-014
+---id: cs-014
 title: "MVI Pattern / Паттерн MVI (Model-View-Intent)"
 aliases: ["MVI Pattern", "Паттерн MVI"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-android-architectural-patterns--android--medium]
+related: [c-architecture-patterns, c-builder-pattern, c-ci-cd-patterns, c-command-pattern, c-dao-pattern, c-declarative-programming-patterns, c-decorator-pattern, c-factory-pattern, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]

@@ -1,5 +1,4 @@
----
-topic: kotlin
+---topic: kotlin
 id: kotlin-063
 title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"
 aliases: [Deferred Async Patterns, Deferred и async паттерны]
@@ -15,7 +14,7 @@ category: "coroutines-advanced"
 tags: ["async", "await", "concurrency", "coroutines", "deferred", "difficulty/medium", "parallel-execution", "performance"]
 description: "Complete guide to `Deferred<T>`, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
 moc: moc-kotlin
-related: [c-concurrency, q-lifecyclescope-viewmodelscope--kotlin--medium]
+related: [c-compose-recomposition, c-concurrency, c-perfetto, c-power-profiling, c-stateflow, q-lifecyclescope-viewmodelscope--kotlin--medium]
 
 ---
 # Вопрос (RU)

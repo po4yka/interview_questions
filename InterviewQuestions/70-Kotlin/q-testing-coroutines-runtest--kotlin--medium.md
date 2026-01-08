@@ -1,5 +1,4 @@
----
-id: kotlin-106
+---id: kotlin-106
 title: "Testing Coroutines with runTest and TestDispatcher / Тестирование корутин с runTest и TestDispatcher"
 aliases: ["Testing Coroutines with runTest and TestDispatcher", "Тестирование корутин с runTest и TestDispatcher"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Testing Guide
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-testing-coroutine-cancellation--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
+related: [c-coroutines, c-kotlin, c-stateflow, q-testing-coroutine-cancellation--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]

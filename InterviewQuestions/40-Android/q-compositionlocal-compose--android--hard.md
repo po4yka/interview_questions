@@ -1,5 +1,4 @@
----
-id: android-307
+---id: android-307
 title: CompositionLocal in Compose / CompositionLocal в Compose
 aliases: [CompositionLocal in Compose, CompositionLocal в Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-gesture-detection--android--medium, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-compose-stability-skippability--android--hard, q-compositionlocal-advanced--android--medium]
+related: [c-compose-recomposition, c-recomposition, q-compose-gesture-detection--android--medium, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-compose-stability-skippability--android--hard, q-compositionlocal-advanced--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/hard]

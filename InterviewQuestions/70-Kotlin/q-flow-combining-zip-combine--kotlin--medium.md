@@ -1,5 +1,4 @@
----
-id: kotlin-101
+---id: kotlin-101
 title: "Flow Combining: zip, combine, merge / Комбинирование Flow: zip, combine, merge"
 aliases: []
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Guide - Question 140020
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-kotlin-collections--kotlin--easy]
+related: [c-flow, c-kotlin, c-stateflow, q-kotlin-collections--kotlin--easy]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [coroutines, difficulty/medium, kotlin]

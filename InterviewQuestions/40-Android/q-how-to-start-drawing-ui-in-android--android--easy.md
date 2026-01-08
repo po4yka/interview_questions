@@ -1,5 +1,4 @@
----
-id: android-137
+---id: android-137
 title: "How To Start Drawing UI In Android / Как начать рисовать UI в Android"
 aliases: ["How To Start Drawing UI In Android", "Как начать рисовать UI в Android"]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-activity, q-fragment-vs-activity-lifecycle--android--medium, q-retrofit-library--android--medium]
+related: [c-activity, c-compose-recomposition, c-recomposition, c-wear-compose, q-fragment-vs-activity-lifecycle--android--medium, q-retrofit-library--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 tags: [android, android/activity, android/ui-views, difficulty/easy, ui]

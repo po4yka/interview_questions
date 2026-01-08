@@ -1,5 +1,4 @@
----
-id: lang-205
+---id: lang-205
 title: "Kotlin crossinline / crossinline в Kotlin"
 aliases: ["crossinline в Kotlin", "Kotlin crossinline"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
+related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/hard, kotlin/functions]

@@ -1,5 +1,4 @@
----
-id: android-471
+---id: android-471
 title: Advanced Compose UI Testing / Продвинутое тестирование Compose UI
 aliases: [Advanced Compose UI Testing, Продвинутое тестирование Compose UI]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 sources: []
 status: draft
-related: [c-accessibility, q-compose-semantics--android--medium, q-compose-side-effects-advanced--android--hard, q-compose-testing--android--medium]
+related: [c-accessibility, c-compose-recomposition, c-globalization, c-recomposition, c-ui-testing, q-compose-semantics--android--medium, q-compose-side-effects-advanced--android--hard, q-compose-testing--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [accessibility, android/testing-ui, android/ui-compose, compose-testing, difficulty/hard, semantics]

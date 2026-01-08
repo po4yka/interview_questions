@@ -1,5 +1,4 @@
----
-id: android-376
+---id: android-376
 title: "Which Event Is Triggered When User Presses Screen / Какое событие срабатывает когда пользователь нажимает на экран"
 aliases: ["Touch Events in Android", "События касания в Android"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-custom-views, q-16kb-dex-page-size--android--medium, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-primitive-maps-android--android--medium]
+related: [c-compose-recomposition, c-custom-views, c-recomposition, q-16kb-dex-page-size--android--medium, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-primitive-maps-android--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-11-10

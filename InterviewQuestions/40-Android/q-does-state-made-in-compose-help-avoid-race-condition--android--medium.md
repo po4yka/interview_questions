@@ -1,5 +1,4 @@
----
-id: android-444
+---id: android-444
 title: Does State in Compose Help Avoid Race Conditions / Помогает ли State в Compose избежать состояния гонки
 aliases: [Compose State Thread Safety, Does State Made In Compose Help Avoid Race Condition, Thread Safety в Compose State, Помогает ли State в Compose избежать состояния гонки]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-compose-core-components--android--medium, q-derived-state-snapshot-system--android--hard, q-how-does-jetpackcompose-work--android--medium, q-state-hoisting-compose--android--medium]
+related: [c-compose-recomposition, c-compose-state, c-jetpack-compose, c-recomposition, q-compose-core-components--android--medium, q-derived-state-snapshot-system--android--hard, q-how-does-jetpackcompose-work--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-20
 updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/medium]

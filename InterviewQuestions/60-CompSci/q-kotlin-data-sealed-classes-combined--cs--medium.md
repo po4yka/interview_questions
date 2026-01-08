@@ -1,5 +1,4 @@
----
-id: lang-210
+---id: lang-210
 title: "Kotlin Data Sealed Classes Combined / Kotlin Data и Sealed классы вместе"
 aliases: []
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science, q-channels-basics-types--kotlin--medium]
+related: [c-computer-science, c-kotlin, q-channels-basics-types--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium]

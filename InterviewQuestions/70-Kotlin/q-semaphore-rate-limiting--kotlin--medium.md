@@ -1,5 +1,4 @@
----
-id: kotlin-107
+---id: kotlin-107
 title: "Semaphore for rate limiting and resource pooling / Semaphore для ограничения скорости и пулов ресурсов"
 topic: kotlin
 difficulty: medium
@@ -12,7 +11,7 @@ tags: [concurrency, coroutines, difficulty/medium, kotlin, rate-limiting, resour
 aliases: ["Semaphore rate limiting and resource pooling in Kotlin", "Semaphore для ограничения скорости и пулов ресурсов в Kotlin"]
 moc: moc-kotlin
 question_kind: coding
-related: [c-coroutines, c-kotlin, q-channelflow-callbackflow-flow--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-channelflow-callbackflow-flow--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
 subtopics: [concurrency, coroutines, semaphore]
 ---
 # Вопрос (RU)

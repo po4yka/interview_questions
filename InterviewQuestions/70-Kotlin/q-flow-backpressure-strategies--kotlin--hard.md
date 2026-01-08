@@ -1,5 +1,4 @@
----
-id: kotlin-055
+---id: kotlin-055
 title: "Flow Backpressure Strategies / Стратегии противодавления Flow"
 aliases: ["Flow Backpressure Strategies", "Стратегии противодавления Flow"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Phase 1 Coroutines & Flow Advanced Questions
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-kotlin, q-kotlin-flow-basics--kotlin--medium]
+related: [c-compose-recomposition, c-concurrency, c-kotlin, c-perfetto, c-power-profiling, c-stateflow, q-kotlin-flow-basics--kotlin--medium]
 created: 2023-10-11
 updated: 2025-11-09
 tags: [concurrency, difficulty/hard, flow, kotlin, performance]

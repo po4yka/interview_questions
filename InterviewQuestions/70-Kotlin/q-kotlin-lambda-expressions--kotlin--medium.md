@@ -1,5 +1,4 @@
----
-id: kotlin-007
+---id: kotlin-007
 title: "Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin"
 aliases: ["Lambda Expressions in Kotlin", "Лямбда-выражения в Kotlin"]
 
@@ -18,7 +17,7 @@ source_note: Kirchhoff Android Interview Questions repository - adapted from fun
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, c-kotlin-features, q-kotlin-higher-order-functions--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, c-lambda-expressions, q-kotlin-higher-order-functions--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

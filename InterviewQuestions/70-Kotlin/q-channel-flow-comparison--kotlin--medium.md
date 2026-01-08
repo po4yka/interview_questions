@@ -1,5 +1,4 @@
----
-id: kotlin-085
+---id: kotlin-085
 title: "Channel vs Flow Comparison / Сравнение Channel и Flow"
 aliases: ["Channel vs Flow Comparison", "Сравнение Channel и Flow"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Comprehensive Kotlin Coroutines Channel vs Flow Guide
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related: [c-concurrency, c-stateflow, q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [channels, cold-stream, concurrency, coroutines, difficulty/medium, flow, hot-stream, kotlin]

@@ -1,5 +1,4 @@
----
-id: lang-212
+---id: lang-212
 title: "Kotlin Double Bang Operator / Оператор !! в Kotlin"
 aliases: ["Kotlin Double Bang Operator", "Оператор !! в Kotlin"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-dispatchers-main-immediate--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
+related: [c-kotlin, q-dispatchers-main-immediate--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/medium, kotlin/null-safety]

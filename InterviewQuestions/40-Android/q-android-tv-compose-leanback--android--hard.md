@@ -1,5 +1,4 @@
----
-id: android-623
+---id: android-623
 title: Android TV Compose & Leanback / Android TV на Compose и Leanback
 aliases: [Android TV Compose & Leanback, Android TV на Compose и Leanback]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-tv, q-android-auto-guidelines--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium]
+related: [c-android-tv, c-compose-recomposition, c-recomposition, q-android-auto-guidelines--android--hard, q-compose-core-components--android--medium, q-compose-custom-animations--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/tv, android/ui-compose, difficulty/hard]

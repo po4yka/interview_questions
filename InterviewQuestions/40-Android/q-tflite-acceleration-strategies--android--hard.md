@@ -1,5 +1,4 @@
----
-id: android-629
+---id: android-629
 title: TFLite Acceleration Strategies / Стратегии ускорения TFLite
 aliases: [TFLite Acceleration Strategies, Стратегии ускорения TFLite]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-profiling, q-android-performance-measurement-tools--android--medium, q-android-testing-strategies--android--medium, q-cache-implementation-strategies--android--medium, q-integration-testing-strategies--android--medium]
+related: [c-android-profiling, c-compose-recomposition, c-perfetto, c-power-profiling, q-android-performance-measurement-tools--android--medium, q-android-testing-strategies--android--medium, q-cache-implementation-strategies--android--medium, q-integration-testing-strategies--android--medium]
 created: 2025-11-02
 updated: 2025-11-11
 tags: [android/performance-battery, android/performance-memory, android/threads-sync, difficulty/hard, performance]

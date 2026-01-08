@@ -1,5 +1,4 @@
----
-id: kotlin-011
+---id: kotlin-011
 title: "Kotlin Collections / Коллекции в Kotlin"
 aliases: ["Kotlin Collections", "Коллекции в Kotlin"]
 
@@ -18,7 +17,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-collections, q-coroutine-profiling--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
+related: [c-collections, c-kotlin, q-coroutine-profiling--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05

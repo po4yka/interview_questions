@@ -1,5 +1,4 @@
----
-id: cs-005
+---id: cs-005
 title: "When Inheritance Useful / Когда полезно наследование"
 aliases: ["Inheritance Use Cases", "Когда использовать наследование"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-computer-science]
+related: [c-computer-science, c-inheritance]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]

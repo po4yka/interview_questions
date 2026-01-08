@@ -1,5 +1,4 @@
----
-id: android-263
+---id: android-263
 title: "Stable Classes Compose / Stable Классы Compose"
 aliases: ["Stable Classes Compose", "Stable Классы Compose"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, q-compose-stability-skippability--android--hard]
+related: [c-compose-recomposition, c-recomposition, q-compose-stability-skippability--android--hard]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

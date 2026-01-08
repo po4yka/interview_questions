@@ -1,5 +1,4 @@
----
-id: android-474
+---id: android-474
 title: Fast Chat Rendering / Быстрый рендеринг чата
 aliases: [Fast Chat Rendering, Быстрый рендеринг чата]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-performance-optimization, c-recyclerview, q-compose-compiler-plugin--android--hard, q-diffutil-background-calculation-issues--android--medium, q-list-elements-problems--android--medium, q-why-diffutil-needed--android--medium]
+related: [c-compose-recomposition, c-perfetto, c-performance-optimization, c-power-profiling, c-recomposition, c-recyclerview, q-compose-compiler-plugin--android--hard, q-diffutil-background-calculation-issues--android--medium, q-list-elements-problems--android--medium, q-why-diffutil-needed--android--medium]
 sources:
   - https://developer.android.com/jetpack/compose/performance
   - https://developer.android.com/topic/libraries/architecture/paging/v3-overview

@@ -1,5 +1,4 @@
----
-id: cs-002
+---id: cs-002
 title: "OOP Principles Deep Dive / Глубокое погружение в принципы ООП"
 aliases: ["OOP Principles", "Принципы ООП"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns]
+related: [c-architecture-patterns, c-oop-principles]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [abstraction, composition, difficulty/medium, encapsulation, inheritance, oop, polymorphism]

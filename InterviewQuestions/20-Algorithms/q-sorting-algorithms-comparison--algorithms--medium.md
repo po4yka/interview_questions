@@ -1,5 +1,4 @@
----
-id: algo-008
+---id: algo-008
 title: "Sorting Algorithms Comparison / Сравнение алгоритмов сортировки"
 aliases: ["Sorting Algorithms", "Сравнение алгоритмов сортировки"]
 topic: algorithms
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-algorithms, q-binary-search-variants--algorithms--medium, q-graph-algorithms-bfs-dfs--algorithms--hard]
+related: [c-algorithms, c-sorting-algorithms, q-binary-search-variants--algorithms--medium, q-graph-algorithms-bfs-dfs--algorithms--hard]
 created: 2025-10-12
 updated: 2025-11-11
 tags: [algorithms, complexity, difficulty/medium, mergesort, quicksort, sorting]

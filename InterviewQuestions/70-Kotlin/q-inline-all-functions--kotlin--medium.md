@@ -1,5 +1,4 @@
----
-id: lang-069
+---id: lang-069
 title: "Inline All Functions / Inline функции"
 aliases: [Inline All Functions, Inline functions, Inline функции]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features, c-performance]
+related: [c-compose-recomposition, c-kotlin, c-kotlin-features, c-perfetto, c-performance, c-power-profiling]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [compiler-optimization, difficulty/medium, inline, inline-functions, kotlin, performance]

@@ -1,5 +1,4 @@
----
-id: kotlin-062
+---id: kotlin-062
 title: "Testing StateFlow and SharedFlow in ViewModels / Тестирование StateFlow и SharedFlow в ViewModels"
 aliases: ["Testing StateFlow and SharedFlow in ViewModels", "Тестирование StateFlow и SharedFlow в ViewModels"]
 topic: kotlin
@@ -12,7 +11,7 @@ source: internal
 source_note: Comprehensive Kotlin Flow Testing Guide
 status: draft
 moc: moc-kotlin
-related: [c-flow, c-kotlin, q-stateflow-sharedflow-differences--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
+related: [c-flow, c-kotlin, c-stateflow, q-stateflow-sharedflow-differences--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, sharedflow, stateflow, testing, viewmodel]

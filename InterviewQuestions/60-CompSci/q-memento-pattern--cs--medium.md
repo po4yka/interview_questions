@@ -1,5 +1,4 @@
----
-id: cs-012
+---id: cs-012
 title: "Memento Pattern / Паттерн Хранитель"
 aliases: ["Memento Pattern", "Паттерн Хранитель"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-memento-pattern--cs--medium]
+related: [c-architecture-patterns, c-dao-pattern, q-memento-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral-patterns, design-patterns, difficulty/medium, memento, state-management, undo-redo]

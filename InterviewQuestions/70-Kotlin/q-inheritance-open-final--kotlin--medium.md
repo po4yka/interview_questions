@@ -1,5 +1,4 @@
----
-id: kotlin-232
+---id: kotlin-232
 title: "Inheritance in Kotlin: open, final, abstract, override / Наследование в Kotlin: open, final, abstract, override"
 aliases: ["Inheritance in Kotlin", "Наследование в Kotlin"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium]
+related: [c-inheritance, c-kotlin, q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium]
 created: 2025-10-12
 updated: 2025-11-10
 tags: [abstract, classes, difficulty/medium, inheritance, kotlin, kotlin-features, open-final]

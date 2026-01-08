@@ -1,5 +1,4 @@
----
-id: android-149
+---id: android-149
 title: Which Class To Catch Gestures / Какой класс для ловли жестов
 aliases: [Which Class To Catch Gestures, Какой класс для ловли жестов]
 topic: android
@@ -10,7 +9,7 @@ language_tags: [en, ru]
 status: draft
 question_kind: android
 moc: moc-android
-related: [c-android-components, q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-how-does-jetpack-compose-work--android--medium, q-which-class-can-be-used-to-detect-different-gestures--android--easy, q-which-class-to-use-for-detecting-gestures--android--medium, q-which-event-is-called-when-user-touches-screen--android--medium]
+related: [c-android-components, c-compose-recomposition, c-recomposition, c-wear-compose, q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-how-does-jetpack-compose-work--android--medium, q-which-class-can-be-used-to-detect-different-gestures--android--easy, q-which-class-to-use-for-detecting-gestures--android--medium, q-which-event-is-called-when-user-touches-screen--android--medium]
 created: 2025-10-15
 updated: 2025-11-10
 sources: []

@@ -1,5 +1,4 @@
----
-id: android-111
+---id: android-111
 title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect"
 aliases: [Compose LaunchedEffect vs DisposableEffect, Compose Side Effects, DisposableEffect, LaunchedEffect, Побочные эффекты Compose]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]
+related: [c-compose-recomposition, c-recomposition, q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-side-effects-advanced--android--hard, q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-compose, difficulty/hard, side-effects]

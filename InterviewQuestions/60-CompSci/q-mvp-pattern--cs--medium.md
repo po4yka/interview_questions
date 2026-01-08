@@ -1,5 +1,4 @@
----
-id: cs-029
+---id: cs-029
 title: "MVP Pattern / Паттерн MVP (Model-View-Presenter)"
 aliases: ["MVP Pattern", "Паттерн MVP"]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium, q-adapter-pattern--cs--medium]
+related: [c-architecture-patterns, c-builder-pattern, c-ci-cd-patterns, c-command-pattern, c-dao-pattern, c-declarative-programming-patterns, c-decorator-pattern, c-factory-pattern, q-abstract-factory-pattern--cs--medium, q-adapter-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, difficulty/medium, mvi, mvp, mvvm, separation-of-concerns, testability]

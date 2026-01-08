@@ -1,5 +1,4 @@
----
-id: kotlin-238
+---id: kotlin-238
 title: "Comparison of all coroutine builders / Сравнение всех builders корутин"
 aliases: [Coroutine Builders Comparison, Сравнение coroutine builders]
 topic: kotlin
@@ -14,7 +13,7 @@ subtopics: [builders, coroutines]
 tags: ["async", "builders", "coroutines", "difficulty/medium", "kotlin", "launch", "runblocking"]
 description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-dispatcher-performance--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-stateflow, q-dispatcher-performance--kotlin--hard]
 
 ---
 # Вопрос (RU)

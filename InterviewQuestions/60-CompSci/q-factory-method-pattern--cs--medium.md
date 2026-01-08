@@ -1,5 +1,4 @@
----
-id: dp-005
+---id: dp-005
 title: "Factory Method Pattern / Паттерн фабричный метод"
 aliases: [Factory Method Pattern, Паттерн фабричный метод]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
+related: [c-architecture-patterns, c-builder-pattern, c-ci-cd-patterns, c-command-pattern, c-dao-pattern, c-declarative-programming-patterns, c-decorator-pattern, c-factory-pattern, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [architecture-patterns, creational-patterns, difficulty/medium, factory-method, gof-patterns]

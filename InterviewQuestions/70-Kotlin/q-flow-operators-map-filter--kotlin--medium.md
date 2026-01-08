@@ -1,5 +1,4 @@
----
-id: kotlin-074
+---id: kotlin-074
 title: "Операторы Flow: map, filter, transform / Flow Operators: map, filter, transform"
 aliases: []
 
@@ -18,7 +17,7 @@ source_note: "Comprehensive Kotlin Coroutines Guide - Question 140018"
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-flow, q-flow-operators--kotlin--medium]
+related: [c-coroutines, c-flow, c-stateflow, q-flow-operators--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

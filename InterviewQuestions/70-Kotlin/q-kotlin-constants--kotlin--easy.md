@@ -1,5 +1,4 @@
----
-id: lang-207
+---id: lang-207
 title: "Kotlin Constants / Константы в Kotlin"
 aliases: []
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-function-limitations--kotlin--medium, q-kotlin-native--kotlin--hard]
+related: [c-kotlin, q-inline-function-limitations--kotlin--medium, q-kotlin-native--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [difficulty/easy]

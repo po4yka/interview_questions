@@ -1,5 +1,4 @@
----
-id: kotlin-194
+---id: kotlin-194
 title: "Kotlin Coroutines Overview / Обзор корутин Kotlin"
 aliases: ["Kotlin Coroutines Overview", "Обзор корутин Kotlin"]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, q-debounce-throttle-flow--kotlin--medium, q-flow-performance--kotlin--hard]
+related: [c-coroutines, c-kotlin, c-kotlin-coroutines, q-debounce-throttle-flow--kotlin--medium, q-flow-performance--kotlin--hard]
 created: 2025-10-15
 updated: 2025-11-09
 tags: [difficulty/medium]

@@ -1,5 +1,4 @@
----
-id: oop-001
+---id: oop-001
 title: "Inheritance Vs Composition / Наследование против композиции"
 aliases: [Inheritance Vs Composition, Наследование против композиции]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, c-computer-science, q-when-inheritance-useful--cs--medium]
+related: [c-architecture-patterns, c-computer-science, c-inheritance, q-when-inheritance-useful--cs--medium]
 created: 2025-10-13
 updated: 2025-11-11
 tags: [cs, difficulty/medium]

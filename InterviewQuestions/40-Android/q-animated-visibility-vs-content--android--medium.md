@@ -1,5 +1,4 @@
----
-id: android-076
+---id: android-076
 title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против AnimatedContent против Crossfade
 aliases: [AnimatedVisibility vs AnimatedContent vs Crossfade, AnimatedVisibility против AnimatedContent против Crossfade]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-recomposition, c-jetpack-compose, q-android-jetpack-overview--android--easy, q-compose-custom-animations--android--medium, q-compose-gesture-detection--android--medium, q-compose-semantics--android--medium]
+related: [c-compose-recomposition, c-jetpack-compose, c-recomposition, q-android-jetpack-overview--android--easy, q-compose-custom-animations--android--medium, q-compose-gesture-detection--android--medium, q-compose-semantics--android--medium]
 created: 2025-10-13
 updated: 2025-11-10
 tags: [android/ui-animation, android/ui-compose, animation, difficulty/medium]

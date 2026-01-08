@@ -1,5 +1,4 @@
----
-id: kotlin-071
+---id: kotlin-071
 title: "select Expression with Channels / Выражение select с каналами"
 aliases: ["select Expression with Channels", "Выражение select с каналами"]
 
@@ -18,7 +17,7 @@ source_note: Comprehensive Kotlin Coroutines select Expression Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-concurrency, c-kotlin, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-concurrency, c-kotlin, c-stateflow, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12

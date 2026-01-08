@@ -1,5 +1,4 @@
----
-id: android-062
+---id: android-062
 title: "WindowInsets & Edge-to-Edge / WindowInsets и Edge-to-Edge"
 aliases: ["WindowInsets & Edge-to-Edge", "WindowInsets и Edge-to-Edge"]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-android-lifecycle, c-compose-lifecycle]
+related: [c-android-lifecycle, c-compose-lifecycle, c-compose-recomposition, c-jetpack-compose, c-recomposition, c-windowinsets]
 created: 2025-10-12
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, difficulty/medium, edge-to-edge, immersive, system-ui, windowinsets]

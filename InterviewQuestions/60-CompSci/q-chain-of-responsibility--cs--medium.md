@@ -1,5 +1,4 @@
----
-id: dp-012
+---id: dp-012
 title: "Chain Of Responsibility / Цепочка обязанностей"
 aliases: [Chain Of Responsibility, Цепочка обязанностей]
 topic: cs
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-architecture-patterns, q-abstract-factory-pattern--cs--medium]
+related: [c-architecture-patterns, c-dao-pattern, q-abstract-factory-pattern--cs--medium]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [behavioral, chain-of-responsibility, design-patterns, difficulty/medium]

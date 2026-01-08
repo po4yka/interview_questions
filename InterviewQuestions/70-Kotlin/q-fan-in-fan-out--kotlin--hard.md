@@ -1,5 +1,4 @@
----
-id: kotlin-092
+---id: kotlin-092
 title: "Fan-in Fan-out Pattern / Паттерн Fan-in Fan-out"
 
 # Classification
@@ -17,7 +16,7 @@ source_note: Comprehensive guide on Fan-in Fan-out patterns
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-kotlin, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
+related: [c-kotlin, c-stateflow, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12

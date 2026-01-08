@@ -1,5 +1,4 @@
----
-id: lang-089
+---id: lang-089
 title: "Suspend Functions Under The Hood / Suspend функции в подробностях"
 aliases: [Suspend Functions Under The Hood, Suspend функции в подробностях]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin]
+related: [c-coroutines, c-kotlin, c-stateflow]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [compiler, coroutines, difficulty/hard, kotlin]

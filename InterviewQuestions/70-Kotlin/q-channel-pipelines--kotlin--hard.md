@@ -1,5 +1,4 @@
----
-id: kotlin-060
+---id: kotlin-060
 title: "Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin"
 aliases: ["Channel Pipelines in Kotlin", "Конвейеры каналов в Kotlin"]
 
@@ -18,7 +17,7 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin, q-flow-backpressure-strategies--kotlin--hard, q-kotlin-channels--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium]
+related: [c-coroutines, c-kotlin, c-kotlin-coroutines-basics, c-stateflow, q-flow-backpressure-strategies--kotlin--hard, q-kotlin-channels--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

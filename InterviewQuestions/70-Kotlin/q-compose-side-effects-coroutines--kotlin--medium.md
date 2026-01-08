@@ -1,5 +1,4 @@
----
-id: kotlin-170
+---id: kotlin-170
 title: "Coroutines and side effects in Jetpack Compose / Корутины и side effects в Jetpack Compose"
 aliases: [Coroutines Side Effects Compose, Корутины side effects Jetpack Compose]
 topic: kotlin
@@ -13,7 +12,7 @@ created: 2025-10-15
 updated: 2025-11-11
 tags: [android, coroutines, difficulty/medium, android/ui-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
 moc: moc-kotlin
-related: [q-testing-stateflow-sharedflow--kotlin--medium]
+related: [c-compose-recomposition, c-recomposition, c-stateflow, q-testing-stateflow-sharedflow--kotlin--medium]
 
 ---
 # Вопрос (RU)

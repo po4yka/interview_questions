@@ -1,5 +1,4 @@
----
-id: android-007
+---id: android-007
 title: Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули
 aliases: [Play Feature Delivery and Dynamic Modules, Play Feature Delivery и динамические модули]
 topic: android
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-bundle, q-android-app-bundles--android--easy, q-play-asset-delivery-strategy--android--hard, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium]
+related: [c-app-bundle, c-play-feature-delivery, q-android-app-bundles--android--easy, q-play-asset-delivery-strategy--android--hard, q-play-billing-v6-architecture--android--hard, q-play-feature-delivery--android--medium]
 created: 2025-10-05
 updated: 2025-11-11
 tags: [android/app-bundle, android/architecture-modularization, app-bundle, difficulty/medium, dynamic-modules, modularization, play-feature-delivery]

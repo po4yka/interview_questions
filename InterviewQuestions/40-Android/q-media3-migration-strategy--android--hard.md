@@ -1,5 +1,4 @@
----
-id: android-615
+---id: android-615
 title: Media3 Migration Strategy / Стратегия миграции на Media3
 aliases: [Media3 Migration Strategy, Стратегия миграции на Media3]
 topic: android
@@ -10,7 +9,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-surfaces, c-android-tv, q-global-localization-strategy--android--hard, q-media3-transformer-workflows--android--hard, q-scoped-storage-migration-strategy--android--hard]
+related: [c-android-surfaces, c-android-tv, c-media3, q-global-localization-strategy--android--hard, q-media3-transformer-workflows--android--hard, q-scoped-storage-migration-strategy--android--hard]
 created: 2024-11-02
 updated: 2025-11-10
 tags: [android/media, difficulty/hard]

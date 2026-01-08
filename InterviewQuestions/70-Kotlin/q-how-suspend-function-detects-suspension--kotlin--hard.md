@@ -1,5 +1,4 @@
----
-id: lang-056
+---id: lang-056
 title: "How Suspend Function Detects Suspension / Как suspend функция определяет приостановку"
 aliases: [How Suspend Function Detects Suspension, Как suspend функция определяет приостановку]
 topic: kotlin
@@ -10,7 +9,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-kotlin]
+related: [c-coroutines, c-kotlin, c-stateflow]
 created: 2025-10-15
 updated: 2025-11-11
 tags: [concurrency, coroutines, difficulty/hard, kotlin, suspension]
